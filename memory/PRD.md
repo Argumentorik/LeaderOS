@@ -13,6 +13,7 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - **Future Payments:** Polar.sh (linked in CTAs)
 
 ### API Endpoints
+- `GET /api/health` – Health check
 - `POST /api/user/create` – Lead capture (Name, Email, Role)
 - `POST /api/quiz/generate-report` – Process 50 quiz answers + Claude report
 - `GET /api/report/{session_id}` – Fetch report
@@ -37,7 +38,7 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 
 ## Core Requirements (Static)
 1. German language throughout
-2. Cinematic Modern Noir design (Cold Blue #3B82F6, Warm Amber #D97706)
+2. Cinematic Modern Noir design (Cold Blue #3B82F6, Warm Amber #F59E0B)
 3. 50-question diagnostic covering 6 areas (Rhetorik, Kritisches Denken, Entscheidung, Führung, EQ, Strategie)
 4. 3-Layer scoring model (AI Literacy, Boardroom-Rhetorik, Strategisches EQ)
 5. Claude AI-generated personalized German report
@@ -47,24 +48,79 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 9. Upsell to "AI Learn Space" platform
 10. Future Polar.sh integration for payment
 
-## What's Been Implemented (as of initial build - February 2026)
+## What's Been Implemented (Updated: December 2025)
 
 ### ✅ Completed Features
-- **Hero Page:** Full cinematic design, brutal reality stats (71%, 40%, 3.7x), 3-Layer model showcase, dual CTAs
-- **User Form:** Role selection (5 roles) → Name/Email form → API save
-- **50-Question Quiz:** All 50 German scenarios across 6 categories, one-at-a-time placement-test style, progress bar, back navigation, auto-advance on selection
-- **Analyzing Page:** Loading animation with phase messages, real Claude API call, email report sent on completion
-- **Report Page:** Profile title, executive summary, 3-layer score cards, Recharts radar chart, ROI metrics (hours saved, decision speed, performance boost), 3 recommendations, Daily Intelligence Hub mockup, urgency message
-- **Roadmap Page:** 4-phase structure (Master Yourself → Communication → Leadership+AI → Strategic Dominance), all 7 course categories, module details
-- **High-Ticket Close:** "Wir automatisieren keine Leader. Wir upgraden sie." headline, comparison table (Without System vs With EMERGENT), 3 CTA options (AI Learn Space, PDF, Strategy Call), Polar.sh link
-- **AI Coach:** Floating chat panel, Claude-powered, knows user profile, 4 preset prompts, works on /report, /roadmap, /close
-- **Email:** Full HTML email template with report data, Claude analysis, ROI metrics, upsell CTA (needs Resend API key)
-- **Navbar:** Fixed dark navbar with funnel progress indicator
+
+#### UI/UX Redesign (December 2025)
+- **Complete UI overhaul** based on communicaire.framer.ai reference
+- **New Design System:**
+  - Background: #030303 (pure dark)
+  - Primary Blue: #3B82F6
+  - Accent Amber: #F59E0B
+  - Pill-shaped buttons (border-radius: 100px)
+  - Glassmorphism cards (backdrop-blur: 20px)
+  - Modern hover effects with transform and shadows
+- **Typography:** Manrope for headings, Inter for body
+- **Animations:** fadeInUp, slideUp, scale effects with staggered delays
+
+#### Hero Page
+- Centered layout with animated content
+- Badge with pulse indicator
+- Main headline with amber gradient
+- Dual CTAs (Primary + Secondary)
+- Dashboard preview mockup
+- Statistics section with glassmorphism cards
+- 3-Layer model feature cards
+- "What you get" section
+- Footer
+
+#### User Form (/diagnose)
+- 5 role options with modern card design
+- Rounded icon containers
+- Two-step form (Role → Name/Email)
+- Modern input fields with glass effect
+
+#### Quiz (/quiz)
+- Fixed progress bar with gradient
+- Category badge
+- Scenario card with glass effect
+- Option buttons with check animation
+- Navigation (Back/Forward)
+
+#### Report Page (/report)
+- Profile title card with amber glow
+- 3-layer score cards with progress rings
+- Radar chart for 6 dimensions
+- ROI metrics section
+- Recommendations
+- Daily Intelligence Hub preview
+
+#### Roadmap (/roadmap)
+- Phase cards with accent color bars
+- Module cards with outcomes
+- Course categories grid
+
+#### High-Ticket Close (/close)
+- Comparison section (Without vs With)
+- Three pricing options
+- Feature lists with icons
+
+#### AI Coach
+- Floating chat button with gradient
+- Rounded chat panel
+- Message bubbles with modern styling
+- Preset prompts as badges
+
+#### Navbar
+- Clean minimal design
+- Progress steps indicator
+- Mobile hamburger menu
 
 ### Infrastructure
-- MongoDB: `emergent_diagnostic` database, `users` + `reports` collections
-- API: All endpoints tested and working (100% backend pass)
-- Design: Manrope + Inter fonts, glass cards, glow effects, CSS animations
+- MongoDB: `emergent_diagnostic` database
+- API: All endpoints tested (100% pass rate)
+- Health check endpoint added
 
 ## Prioritized Backlog
 
@@ -84,6 +140,13 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - [ ] Multi-language toggle (DE/EN)
 - [ ] Progress saving (resume quiz after refresh)
 - [ ] LinkedIn sharing of results
+
+## Test Reports
+- `/app/test_reports/iteration_2.json` - Latest test results (100% pass)
+
+## Design Reference
+- Figma: https://www.figma.com/design/8Lr9zUQsHZhnkedNvKzTmj/wladbot---main-homepage
+- Reference: https://communicaire.framer.ai/
 
 ## Next Tasks
 1. Provide Resend API key (`re_...` from resend.com) → email delivery active
