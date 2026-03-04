@@ -21,7 +21,7 @@ function AppContent() {
   const showCoach = ["/report", "/roadmap", "/close"].includes(location.pathname);
 
   return (
-    <div className="App min-h-screen bg-noir-bg">
+    <div className="App min-h-screen bg-[#030303]">
       <Navbar />
       <Routes>
         <Route path="/" element={<Hero />} />

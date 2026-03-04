@@ -57,6 +57,10 @@ class EmailSend(BaseModel):
 
 # --- Endpoints ---
 
+@api_router.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "EMERGENT Diagnostic Hub"}
+
 @api_router.post("/user/create")
 async def create_user(data: UserCreate):
     session_id = str(uuid.uuid4())
@@ -349,7 +353,7 @@ def build_email_html(user, report):
   </div>
 
   <div style="text-align:center;margin:0 0 32px;">
-    <a href="https://emergent-diagnostic.preview.emergentagent.com/roadmap"
+    <a href="https://decision-speed.preview.emergentagent.com/roadmap"
        style="display:inline-block;background:#FFFFFF;color:#000000;padding:14px 36px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:2px;">
       JETZT 30-TAGE-PLAN STARTEN
     </a>
@@ -359,7 +363,7 @@ def build_email_html(user, report):
     <p style="color:#D97706;font-size:9px;letter-spacing:4px;margin:0 0 8px;text-transform:uppercase;">EXKLUSIV FUR DICH</p>
     <p style="color:#FFFFFF;font-size:18px;font-weight:700;margin:0 0 6px;">Kostenloser Zugang zum AI Learn Space</p>
     <p style="color:#94A3B8;font-size:12px;margin:0 0 16px;">7 Kurse. KI-Coach 24/7. Strategische Dominanz.</p>
-    <a href="https://emergent-diagnostic.preview.emergentagent.com/close"
+    <a href="https://decision-speed.preview.emergentagent.com/close"
        style="display:inline-block;background:#D97706;color:#000000;padding:12px 28px;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:2px;">
       KOSTENLOS STARTEN
     </a>

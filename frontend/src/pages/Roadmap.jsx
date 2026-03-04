@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Play, CheckCircle } from "lucide-react";
+import { ArrowRight, Play, CheckCircle, Sparkles } from "lucide-react";
 
 const phases = [
   {
@@ -7,8 +7,7 @@ const phases = [
     days: "Tage 1–7",
     title: "Master Yourself",
     subtitle: "Dein Fundament klären",
-    color: "border-blue-500/30 text-blue-400",
-    bg: "bg-cold-dim",
+    color: "#3B82F6",
     modules: [
       {
         number: "Modul 1",
@@ -31,22 +30,21 @@ const phases = [
     days: "Tage 8–14",
     title: "Master Communication",
     subtitle: "Rhetorik & Einfluss",
-    color: "border-blue-400/30 text-blue-300",
-    bg: "bg-cold-dim",
+    color: "#60A5FA",
     modules: [
       {
         number: "Modul 2",
         title: "Communication Mastery",
         subtitle: "Kommunikations-Meisterschaft",
         desc: "Boardroom-Präsenz entwickeln. Rhetorik und Überzeugung auf Elite-Niveau.",
-        outcomes: ["60-Sekunden-Executive-Format", "Boardroom Rhetorik-Framework", "Krisenkommmunikation meistern"],
+        outcomes: ["60-Sekunden-Executive-Format", "Boardroom Rhetorik-Framework", "Krisenkommunikation meistern"],
       },
       {
         number: "Modul 3",
         title: "Emotional Intelligence",
         subtitle: "Emotionale Intelligenz als Geschäftsvorteil",
         desc: "EQ als strategisches Businesswerkzeug. Vertrauen aufbauen, Autorität sichern.",
-        outcomes: ["Emotionale Kalibrierung", "Konflikt-Mastery", "Authorität unter Druck"],
+        outcomes: ["Emotionale Kalibrierung", "Konflikt-Mastery", "Autorität unter Druck"],
       },
     ],
   },
@@ -55,8 +53,7 @@ const phases = [
     days: "Tage 15–21",
     title: "Master Leadership & Integrate AI",
     subtitle: "Führungspsychologie + KI-Hebel",
-    color: "border-white/20 text-white",
-    bg: "bg-noir-surface",
+    color: "#8B5CF6",
     modules: [
       {
         number: "Modul 5",
@@ -79,8 +76,7 @@ const phases = [
     days: "Tage 22–30",
     title: "Strategic Dominance",
     subtitle: "Strategisch anwenden",
-    color: "border-warm-DEFAULT/30 text-amber-400",
-    bg: "bg-warm-dim",
+    color: "#F59E0B",
     modules: [
       {
         number: "Modul 7",
@@ -94,38 +90,37 @@ const phases = [
 ];
 
 const courseCategories = [
-  { title: "Communication Mastery", desc: "Rhetorik & Überzeugungskraft", color: "text-blue-400", borderColor: "border-blue-500/20" },
-  { title: "Leadership Fundamentals", desc: "Psychologie der Führung", color: "text-blue-300", borderColor: "border-blue-400/20" },
-  { title: "Emotional Intelligence", desc: "EQ als Geschäftsvorteil", color: "text-amber-400", borderColor: "border-amber-500/20" },
-  { title: "Critical Thinking", desc: "Klarere Entscheidungen", color: "text-white", borderColor: "border-white/10" },
-  { title: "Business Strategy AI", desc: "KI-Transformation navigieren", color: "text-blue-400", borderColor: "border-blue-500/20" },
-  { title: "Productivity & Life Mgmt", desc: "Effizienz für Führungskräfte", color: "text-slate-300", borderColor: "border-white/10" },
-  { title: "AI Literacy", desc: "KI sinnvoll integrieren", color: "text-blue-300", borderColor: "border-blue-400/20" },
+  { title: "Communication Mastery", desc: "Rhetorik & Überzeugungskraft", color: "#3B82F6" },
+  { title: "Leadership Fundamentals", desc: "Psychologie der Führung", color: "#60A5FA" },
+  { title: "Emotional Intelligence", desc: "EQ als Geschäftsvorteil", color: "#F59E0B" },
+  { title: "Critical Thinking", desc: "Klarere Entscheidungen", color: "#ffffff" },
+  { title: "Business Strategy AI", desc: "KI-Transformation navigieren", color: "#3B82F6" },
+  { title: "Productivity & Life Mgmt", desc: "Effizienz für Führungskräfte", color: "#94A3B8" },
+  { title: "AI Literacy", desc: "KI sinnvoll integrieren", color: "#8B5CF6" },
 ];
 
 export default function Roadmap() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-noir-bg pb-24" data-testid="roadmap-page">
-      {/* Glow */}
-      <div className="fixed top-1/4 right-0 w-[400px] h-[400px] bg-amber-600/3 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-[#030303] pb-24" data-testid="roadmap-page">
+      {/* Background Effects */}
+      <div className="fixed top-1/4 right-0 w-[500px] h-[500px] bg-amber-500/3 rounded-full blur-[150px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="w-8 h-px bg-amber-500" />
-            <span className="font-manrope text-xs font-medium tracking-[0.3em] uppercase text-amber-500">
-              Dein persönlicher Aktionsplan
-            </span>
+        <div className="text-center mb-14">
+          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+            <Sparkles className="w-4 h-4" />
+            Dein persönlicher Aktionsplan
           </div>
-          <h1 className="font-manrope font-black text-4xl md:text-6xl text-white leading-none mb-4">
+          <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4">
             30-Tage zur
             <br />
             <span className="text-gradient-amber">strategischen Dominanz</span>
           </h1>
-          <p className="font-inter text-slate-500 text-lg max-w-2xl">
+          <p className="font-inter text-slate-500 text-lg max-w-2xl mx-auto">
             Die Intentional Sequence: Von Selbst-Meisterschaft zur strategischen Führungsdominanz im KI-Zeitalter.
           </p>
         </div>
@@ -133,77 +128,72 @@ export default function Roadmap() {
         {/* Phases */}
         <div className="space-y-6 mb-16" data-testid="roadmap-phases">
           {phases.map((phase, phaseIdx) => (
-            <div key={phaseIdx} className={`border ${phase.color} ${phase.bg} p-6 md:p-8`} data-testid={`phase-${phaseIdx + 1}`}>
-              {/* Phase header */}
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <span className="font-manrope font-black text-4xl opacity-20 text-white">
+            <div key={phaseIdx} className="glass-card overflow-hidden" data-testid={`phase-${phaseIdx + 1}`}>
+              {/* Phase header with accent line */}
+              <div className="h-1" style={{ background: phase.color }} />
+              <div className="p-6 md:p-8">
+                <div className="flex items-start gap-6 mb-6">
+                  <span className="font-manrope font-extrabold text-5xl opacity-10 text-white shrink-0">
                     {phase.number}
                   </span>
                   <div>
-                    <div className={`font-manrope text-xs font-medium tracking-[0.3em] uppercase mb-1 ${phase.color.split(" ")[1]}`}>
+                    <div className="font-inter text-xs tracking-widest mb-1" style={{ color: phase.color }}>
                       {phase.days}
                     </div>
-                    <h2 className="font-manrope font-black text-xl md:text-2xl text-white">
+                    <h2 className="font-manrope font-extrabold text-2xl text-white">
                       {phase.title}
                     </h2>
                     <p className="font-inter text-sm text-slate-500">{phase.subtitle}</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Modules */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {phase.modules.map((mod, modIdx) => (
-                  <div key={modIdx} className="border border-white/5 bg-noir-bg p-5" data-testid={`module-${mod.number.replace(" ", "-")}`}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="font-manrope text-xs font-medium tracking-[0.2em] uppercase text-slate-600">
+                {/* Modules */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {phase.modules.map((mod, modIdx) => (
+                    <div key={modIdx} className="glass-card-subtle p-5 hover-card" data-testid={`module-${mod.number.replace(" ", "-")}`}>
+                      <div className="font-inter text-xs text-slate-600 mb-2">
                         {mod.number}
-                      </span>
-                    </div>
-                    <h3 className="font-manrope font-bold text-sm text-white mb-1">{mod.title}</h3>
-                    <p className="font-inter text-xs text-slate-500 mb-4 leading-relaxed">{mod.desc}</p>
-                    <div className="space-y-2">
-                      {mod.outcomes.map((outcome, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <CheckCircle className="w-3 h-3 text-blue-400 shrink-0" />
-                          <span className="font-inter text-xs text-slate-400">{outcome}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-white/5">
-                      <div className="flex items-center gap-2 text-slate-600">
+                      </div>
+                      <h3 className="font-manrope font-bold text-white mb-1">{mod.title}</h3>
+                      <p className="font-inter text-xs text-slate-500 mb-4 leading-relaxed">{mod.desc}</p>
+                      <div className="space-y-2">
+                        {mod.outcomes.map((outcome, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                            <span className="font-inter text-xs text-slate-400">{outcome}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-white/5 flex items-center gap-2 text-slate-600">
                         <Play className="w-3 h-3" />
-                        <span className="font-inter text-xs">Video-Kurs verfügbar im AI Learn Space</span>
+                        <span className="font-inter text-xs">Video-Kurs verfügbar</span>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         {/* Course Categories */}
-        <div className="border border-white/5 bg-noir-surface p-8 mb-12" data-testid="course-categories">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="w-6 h-px bg-blue-500" />
-            <span className="font-manrope text-xs font-medium tracking-[0.3em] uppercase text-slate-500">
-              Kurs-Kategorien im AI Learn Space
-            </span>
+        <div className="glass-card p-8 mb-14" data-testid="course-categories">
+          <div className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+            <Sparkles className="w-4 h-4" />
+            Kurs-Kategorien im AI Learn Space
           </div>
-          <h3 className="font-manrope font-bold text-xl text-white mb-6">
+          <h3 className="font-manrope font-extrabold text-2xl text-white mb-6">
             7 Kurse. Ein modernes Leadership-System.
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {courseCategories.map((cat, i) => (
-              <div key={i} className={`border ${cat.borderColor} bg-noir-bg p-4 hover:bg-noir-highlight transition-all`}>
-                <div className={`font-manrope font-bold text-sm mb-1 ${cat.color}`}>{cat.title}</div>
+              <div key={i} className="glass-card-subtle p-4 hover-card">
+                <div className="font-manrope font-bold mb-1" style={{ color: cat.color }}>{cat.title}</div>
                 <div className="font-inter text-xs text-slate-500">{cat.desc}</div>
               </div>
             ))}
           </div>
-          <div className="mt-6 border border-white/5 bg-noir-bg p-4">
+          <div className="mt-6 glass-card-subtle p-4">
             <p className="font-inter text-sm text-slate-400">
               <span className="text-white font-medium">Ziel:</span> Menschen nicht nur KI beibringen —
               sondern sie zu klareren Entscheidern machen. Die Reihenfolge entscheidet.
@@ -211,9 +201,9 @@ export default function Roadmap() {
           </div>
         </div>
 
-        {/* CTAs */}
+        {/* Final CTA */}
         <div className="text-center">
-          <h2 className="font-manrope font-black text-2xl md:text-3xl text-white mb-3">
+          <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
             Bereit für strategische Dominanz?
           </h2>
           <p className="font-inter text-slate-500 mb-8">
@@ -222,7 +212,7 @@ export default function Roadmap() {
           <button
             data-testid="roadmap-cta"
             onClick={() => navigate("/close")}
-            className="btn-amber px-10 py-4 font-manrope text-sm tracking-widest uppercase inline-flex items-center gap-3"
+            className="btn-amber px-10 py-4 font-semibold inline-flex items-center gap-3"
           >
             Jetzt Vollzugang freischalten
             <ArrowRight className="w-4 h-4" />

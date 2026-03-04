@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Send, Bot, ChevronDown, MessageSquare } from "lucide-react";
+import { X, Send, Bot, ChevronDown } from "lucide-react";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const presets = [
-  "Wie verbessere ich meine Boardroom-Rhetorik?",
-  "Wie integriere ich KI als Führungshebel?",
-  "Wie stärke ich mein strategisches EQ?",
-  "Was sind meine wichtigsten nächsten Schritte?",
+  "Boardroom-Rhetorik verbessern",
+  "KI als Führungshebel nutzen",
+  "Strategisches EQ stärken",
+  "Meine nächsten Schritte",
 ];
 
 export default function AICoach() {
@@ -66,7 +66,11 @@ export default function AICoach() {
       <button
         data-testid="ai-coach-toggle"
         onClick={() => setOpen(o => !o)}
-        className="fixed bottom-20 right-6 z-50 w-14 h-14 bg-blue-500 border border-blue-400/30 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:bg-blue-400 transition-colors"
+        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+          open 
+            ? "bg-white/10 border border-white/20" 
+            : "bg-gradient-to-br from-blue-500 to-blue-600 shadow-[0_8px_30px_rgba(59,130,246,0.4)] hover:shadow-[0_8px_40px_rgba(59,130,246,0.6)]"
+        }`}
         aria-label="AI Coach öffnen"
       >
         {open ? <ChevronDown className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-white" />}
@@ -76,41 +80,41 @@ export default function AICoach() {
       {open && (
         <div
           data-testid="ai-coach-panel"
-          className="coach-panel fixed bottom-36 right-6 z-50 w-80 md:w-96 flex flex-col bg-[#090909] border border-white/10 shadow-[0_0_60px_-10px_rgba(59,130,246,0.3)]"
-          style={{ height: "480px" }}
+          className="coach-panel fixed bottom-24 right-6 z-50 w-80 md:w-96 flex flex-col bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.8)]"
+          style={{ height: "500px" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/8">
+          <div className="flex items-center justify-between p-4 border-b border-white/5">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-blue-400" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <div className="font-manrope font-bold text-sm text-white">KI-Leadership-Coach</div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                  <span className="font-inter text-xs text-slate-500">Online · 24/7 verfügbar</span>
+                <div className="font-manrope font-bold text-white">KI-Leadership-Coach</div>
+                <div className="flex items-center gap-2">
+                  <span className="dot-pulse" style={{ width: 6, height: 6 }} />
+                  <span className="font-inter text-xs text-slate-500">Online · 24/7</span>
                 </div>
               </div>
             </div>
             <button
               data-testid="ai-coach-close"
               onClick={() => setOpen(false)}
-              className="text-slate-600 hover:text-white transition-colors"
+              className="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 glass-scrollbar">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[85%] p-3 text-sm font-inter leading-relaxed ${
+                  className={`max-w-[85%] px-4 py-3 text-sm font-inter leading-relaxed rounded-2xl ${
                     msg.role === "user"
-                      ? "bg-blue-500/15 border border-blue-500/20 text-white"
-                      : "bg-noir-surface border border-white/8 text-slate-300"
+                      ? "bg-blue-500 text-white rounded-br-md"
+                      : "bg-white/5 text-slate-300 border border-white/5 rounded-bl-md"
                   }`}
                   data-testid={`coach-message-${msg.role}`}
                 >
@@ -120,12 +124,12 @@ export default function AICoach() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-noir-surface border border-white/8 p-3 flex items-center gap-2">
+                <div className="bg-white/5 border border-white/5 px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-2">
                   {[0, 1, 2].map(i => (
                     <span
                       key={i}
-                      className="analyzing-dot w-1.5 h-1.5 rounded-full bg-blue-500"
-                      style={{ animationDelay: `${i * 0.2}s` }}
+                      className="analyzing-dot w-2 h-2 rounded-full bg-blue-500"
+                      style={{ animationDelay: `${i * 0.15}s` }}
                     />
                   ))}
                 </div>
@@ -135,24 +139,24 @@ export default function AICoach() {
           </div>
 
           {/* Preset prompts */}
-          <div className="px-4 pb-2 border-t border-white/5 pt-3">
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <div className="px-4 py-2 border-t border-white/5">
+            <div className="flex gap-2 overflow-x-auto pb-1 glass-scrollbar">
               {presets.map((p, i) => (
                 <button
                   key={i}
                   data-testid={`preset-${i}`}
                   onClick={() => sendMessage(p)}
                   disabled={loading}
-                  className="shrink-0 border border-white/10 text-slate-400 hover:text-white hover:border-white/20 px-3 py-1.5 font-inter text-xs transition-colors whitespace-nowrap"
+                  className="shrink-0 badge-blue px-3 py-1.5 text-xs hover:bg-blue-500/20 transition-colors whitespace-nowrap disabled:opacity-50"
                 >
-                  {p.length > 25 ? p.slice(0, 25) + "..." : p}
+                  {p}
                 </button>
               ))}
             </div>
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-white/8">
+          <div className="p-3 border-t border-white/5">
             <div className="flex items-center gap-2">
               <input
                 data-testid="ai-coach-input"
@@ -162,13 +166,13 @@ export default function AICoach() {
                 onKeyDown={handleKeyDown}
                 placeholder="Frage stellen..."
                 disabled={loading}
-                className="flex-1 bg-noir-surface border border-white/10 text-white placeholder:text-slate-700 focus:border-blue-500/40 focus:outline-none h-9 px-3 font-inter text-sm"
+                className="flex-1 input-modern h-10 px-4 font-inter text-sm text-white placeholder:text-slate-600"
               />
               <button
                 data-testid="ai-coach-send"
                 onClick={() => sendMessage(input)}
                 disabled={loading || !input.trim()}
-                className="w-9 h-9 bg-blue-500 flex items-center justify-center hover:bg-blue-400 transition-colors disabled:opacity-40"
+                className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4 text-white" />
               </button>

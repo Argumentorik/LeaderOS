@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 const steps = [
   { path: "/diagnose", label: "Profil" },
@@ -13,38 +14,41 @@ const steps = [
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const currentStep = steps.findIndex(s => s.path === location.pathname);
+  const isHome = location.pathname === "/";
 
   return (
     <nav
       data-testid="navbar"
-      className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5"
+      className="fixed top-0 left-0 right-0 z-50 bg-[#030303]/80 backdrop-blur-xl border-b border-white/5"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <button
           data-testid="navbar-logo"
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-3 group"
         >
-          <span className="font-manrope font-black text-lg tracking-widest text-white group-hover:text-blue-400 transition-colors">
+          <span className="font-manrope font-bold text-lg text-white group-hover:text-blue-400 transition-colors">
             EMERGENT
           </span>
-          <span className="font-manrope font-medium text-xs tracking-[0.3em] text-warm-DEFAULT hidden sm:block">
-            DIAGNOSTIC HUB
+          <span className="hidden sm:block h-4 w-px bg-white/10" />
+          <span className="font-inter text-sm text-slate-500 hidden sm:block">
+            Diagnostic Hub
           </span>
         </button>
 
-        {/* Progress Steps */}
-        {currentStep >= 0 && (
-          <div className="hidden md:flex items-center gap-1" data-testid="navbar-progress">
+        {/* Desktop Progress Steps */}
+        {currentStep >= 0 && !isHome && (
+          <div className="hidden lg:flex items-center gap-1" data-testid="navbar-progress">
             {steps.map((step, idx) => (
               <div key={step.path} className="flex items-center gap-1">
                 <span
-                  className={`font-manrope text-xs font-medium tracking-wider uppercase transition-colors ${
+                  className={`font-inter text-xs font-medium transition-colors px-2 py-1 rounded-full ${
                     idx === currentStep
-                      ? "text-white"
+                      ? "text-white bg-white/10"
                       : idx < currentStep
                       ? "text-blue-400"
                       : "text-slate-600"
@@ -60,17 +64,64 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* CTA */}
-        {location.pathname === "/" && (
+        {/* Desktop CTA */}
+        {isHome && (
           <button
             data-testid="navbar-cta"
             onClick={() => navigate("/diagnose")}
-            className="btn-primary text-xs font-manrope tracking-widest uppercase px-5 py-2"
+            className="hidden md:flex btn-primary text-sm font-medium px-5 py-2.5"
           >
             Diagnose starten
           </button>
         )}
+
+        {/* Mobile menu button */}
+        <button 
+          className="md:hidden p-2 text-white"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#0a0a0a] border-t border-white/5 py-4 px-4">
+          {isHome ? (
+            <button
+              onClick={() => {
+                navigate("/diagnose");
+                setMobileOpen(false);
+              }}
+              className="w-full btn-primary py-3 text-sm font-medium"
+            >
+              Diagnose starten
+            </button>
+          ) : (
+            <div className="space-y-2">
+              {steps.map((step, idx) => (
+                <button
+                  key={step.path}
+                  onClick={() => {
+                    if (idx <= currentStep) navigate(step.path);
+                    setMobileOpen(false);
+                  }}
+                  disabled={idx > currentStep}
+                  className={`w-full text-left px-4 py-3 rounded-xl transition-colors ${
+                    idx === currentStep
+                      ? "bg-white/10 text-white"
+                      : idx < currentStep
+                      ? "text-blue-400"
+                      : "text-slate-600 cursor-not-allowed"
+                  }`}
+                >
+                  <span className="font-inter text-sm">{step.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
