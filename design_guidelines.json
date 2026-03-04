@@ -1,0 +1,135 @@
+{
+  "project_name": "EMERGENT Diagnostic Hub",
+  "identity": {
+    "persona": "E1: The Anti-AI Designer",
+    "aesthetic": "Cinematic Modern Noir",
+    "core_philosophy": "AI Changes Speed. Leadership Decides Direction.",
+    "emotional_tone": "Authoritative, Mysterious, Premium, High-Stakes",
+    "theme_strategy": "Dark Mode Only (Noir)"
+  },
+  "typography": {
+    "font_family_headings": "Manrope, sans-serif",
+    "font_family_body": "Inter, sans-serif",
+    "google_fonts_import": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@400;600;800&display=swap",
+    "styles": {
+      "h1": "font-manrope font-extrabold text-5xl md:text-7xl tracking-tight leading-none text-white",
+      "h2": "font-manrope font-bold text-3xl md:text-5xl tracking-tight text-white/90",
+      "h3": "font-manrope font-semibold text-xl md:text-2xl tracking-normal text-white/80",
+      "body": "font-inter text-base md:text-lg text-slate-400 leading-relaxed",
+      "label": "font-manrope font-medium text-xs tracking-widest uppercase text-slate-500",
+      "stat_number": "font-manrope font-black text-4xl md:text-6xl text-white",
+      "nav_link": "font-manrope text-sm font-medium text-slate-400 hover:text-white transition-colors"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#050505",
+      "surface": "#0A0A0B",
+      "surface_highlight": "#121214",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#94A3B8",
+      "border": "#27272A",
+      "accent_cold": "#3B82F6",
+      "accent_warm": "#D97706",
+      "success": "#10B981",
+      "error": "#EF4444"
+    },
+    "tailwind_config_extension": {
+      "colors": {
+        "noir": {
+          "bg": "#050505",
+          "surface": "#0A0A0B",
+          "border": "#27272A"
+        },
+        "cold": {
+          "DEFAULT": "#3B82F6",
+          "glow": "#60A5FA"
+        },
+        "warm": {
+          "DEFAULT": "#D97706",
+          "glow": "#FBBF24"
+        }
+      }
+    },
+    "usage_rules": {
+      "gradients": "Avoid full gradients. Use subtle radial gradients for spotlights (glows) only.",
+      "glassmorphism": "bg-white/5 backdrop-blur-xl border-white/10",
+      "text_contrast": "Ensure pure white text on dark backgrounds. Use slate-400 for secondary text."
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Use subtle noise overlays (opacity 0.03) to prevent banding and add film grain texture.",
+    "shadows": "shadow-[0_0_40px_-10px_rgba(59,130,246,0.15)] for Cold elements, shadow-[0_0_40px_-10px_rgba(217,119,6,0.15)] for Warm elements.",
+    "borders": "1px solid border-white/10. Active states get border-white/20.",
+    "motion": {
+      "page_transition": "opacity-0 to opacity-100 duration-500 ease-out",
+      "hover_lift": "transform -translate-y-1 transition-transform duration-300 ease-out",
+      "glow_pulse": "animate-pulse"
+    }
+  },
+  "layout_strategy": {
+    "grid_system": "Bento Grid (CSS Grid). Gaps: gap-4 (mobile), gap-6 (desktop).",
+    "spacing": "Generous. p-8 to p-24 for sections. p-6 for cards.",
+    "container_width": "max-w-7xl mx-auto px-4 md:px-8",
+    "z_index_layers": {
+      "background": "-10",
+      "texture": "-5",
+      "content": "10",
+      "overlays": "50",
+      "nav": "100"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-white text-black font-bold px-8 py-3 rounded-none hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]",
+      "secondary": "bg-transparent border border-white/20 text-white px-8 py-3 rounded-none hover:bg-white/5 transition-all",
+      "ghost": "text-slate-400 hover:text-white transition-colors"
+    },
+    "cards": {
+      "glass": "bg-noir-surface/60 backdrop-blur-xl border border-white/10 p-6 rounded-none",
+      "solid": "bg-noir-surface border border-white/5 p-6 rounded-none"
+    },
+    "inputs": {
+      "default": "bg-black/50 border border-white/10 text-white placeholder:text-slate-600 focus:border-white/40 focus:ring-0 rounded-none h-12 px-4"
+    },
+    "navigation": {
+      "style": "Fixed top, glassmorphic (bg-black/80 backdrop-blur-md), border-b border-white/5"
+    }
+  },
+  "images": {
+    "hero_background": {
+      "url": "https://images.pexels.com/photos/7319478/pexels-photo-7319478.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Cinematic Noir Executive",
+      "usage": "Hero section background with dark overlay (bg-black/60)"
+    },
+    "ai_abstract": {
+      "url": "https://images.unsplash.com/photo-1764336312138-14a5368a6cd3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGJsdWUlMjBuZXVyYWwlMjBuZXR3b3JrJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3NzI2MTgyNjJ8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Abstract AI Neural Network",
+      "usage": "Background for 'Cold Blue' AI sections (AI Coach, Logic metrics)"
+    },
+    "human_warmth": {
+      "url": "https://images.unsplash.com/photo-1674498084430-496a246a06ff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwzfHx3YXJtJTIwYW1iZXIlMjBsaWdodCUyMGFic3RyYWN0JTIwZ2VvbWV0cmljJTIwc2hhcGVzfGVufDB8fHx8MTc3MjYxODI2Mnww&ixlib=rb-4.1.0&q=85",
+      "alt": "Warm Amber Light",
+      "usage": "Background/Accent for 'Warm Amber' Human/EQ sections"
+    },
+    "berlin_architecture": {
+      "url": "https://images.unsplash.com/photo-1665846589489-5856db428a85?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiZXJsaW4lMjBhcmNoaXRlY3R1cmUlMjBuaWdodCUyMGNpbmVtYXRpY3xlbnwwfHx8fDE3NzI2MTgyNjN8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Modern Berlin Architecture",
+      "usage": "Dashboard background or Roadmap section"
+    },
+    "icons": "Use Lucide React icons. Stroke width: 1.5px (thin/elegant)."
+  },
+  "instructions_to_main_agent": [
+    "INSTALL_DEPENDENCIES: npm install recharts framer-motion lucide-react clsx tailwind-merge",
+    "SETUP_FONTS: Add Google Fonts link to public/index.html immediately.",
+    "THEME_SETUP: Apply 'dark' class to html element by default. Hardcode dark mode.",
+    "LAYOUT_RULE: Do not center everything. Use asymmetry. Hero text left-aligned, image/graphic right-aligned or background.",
+    "INTERACTIVITY: Add hover states to all cards (border color change, slight lift).",
+    "CHARTS: Use Recharts for the Radar Chart (Spider Chart). Customize colors to use Cold Blue and Warm Amber.",
+    "TEST_IDS: Add data-testid to all interactive elements (buttons, inputs, quiz options)."
+  ],
+  "accessibility": {
+    "contrast_check": "Ensure text is readable on dark backgrounds. Increase font weight if needed.",
+    "focus_states": "Visible focus ring (ring-2 ring-white/50) for keyboard navigation."
+  }
+}
