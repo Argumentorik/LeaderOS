@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Hero from "./pages/Hero";
+import Login from "./pages/Login";
+import AuthCallback from "./pages/AuthCallback";
 import UserForm from "./pages/UserForm";
 import Quiz from "./pages/Quiz";
 import Analyzing from "./pages/Analyzing";
@@ -19,13 +21,17 @@ export { API };
 function AppContent() {
   const location = useLocation();
   const showCoach = ["/report", "/roadmap", "/close"].includes(location.pathname);
+  const hideNavbar = ["/login", "/auth/callback"].includes(location.pathname);
 
   return (
     <div className="App min-h-screen bg-[#030303]">
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Hero />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/diagnose" element={<UserForm />} />
+        <Route path="/diagnose-guest" element={<UserForm />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/analyzing" element={<Analyzing />} />
         <Route path="/report" element={<Report />} />

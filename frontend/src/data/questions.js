@@ -4,7 +4,7 @@ export const CATEGORIES = {
   entscheidung: 'Entscheidungsfindung',
   fuehrung: 'Führungskompetenz',
   eq: 'Emotionale Intelligenz',
-  strategie: 'Business-Strategie'
+  strategie: 'KI-Strategie'
 };
 
 export const CATEGORY_COLORS = {
@@ -13,7 +13,7 @@ export const CATEGORY_COLORS = {
   entscheidung: '#D97706',
   fuehrung: '#2563EB',
   eq: '#F59E0B',
-  strategie: '#93C5FD'
+  strategie: '#8B5CF6'
 };
 
 export const LAYERS = {
@@ -22,566 +22,493 @@ export const LAYERS = {
   strategic_eq: 'Strategisches EQ'
 };
 
-export const questions = [
-  // === RHETORIK & KOMMUNIKATION (1–8) ===
+// Voice questions are marked with isVoice: true (Questions 26-30)
+// Each role has slightly different scenarios but same core competencies
+
+const baseQuestions = [
+  // === RHETORIK & KOMMUNIKATION (1–5) ===
   {
     id: 1, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Ein KI-Modell empfiehlt eine 20%ige Personalreduzierung. Du präsentierst das Ergebnis dem Vorstand.",
-    question: "Wie gehst du vor?",
+    scenarios: {
+      selbststaendige: "Ein großer Kunde zweifelt öffentlich an deinem Produkt auf LinkedIn.",
+      angestellte: "Dein Vorgesetzter kritisiert deine Abteilung in einem Meeting vor dem gesamten Management.",
+      senior_manager: "Ein wichtiger Stakeholder stellt deine Projektentscheidung in einer Vorstandssitzung infrage.",
+      high_potential: "Ein erfahrener Kollege untergräbt deine Ideen subtil in Teammeetings."
+    },
+    question: "Wie reagierst du?",
     options: [
-      { id: 'a', text: "KI-Daten unkommentiert präsentieren und Vorstand entscheiden lassen", score: 0 },
-      { id: 'b', text: "Mit klarer eigener Haltung präsentieren, Kontext erklären und Diskussion strategisch führen", score: 3 },
-      { id: 'c', text: "Externe Beratungsfirma mit der Kommunikation beauftragen", score: 1 },
-      { id: 'd', text: "Nur die positiven Aspekte der KI-Empfehlung zeigen", score: 1 }
+      { id: 'a', text: "Situation ignorieren und hoffen, dass es sich von selbst klärt", score: 0 },
+      { id: 'b', text: "Direkte, sachliche Konfrontation mit Fakten und klarer Körpersprache", score: 4 },
+      { id: 'c', text: "Schriftliche Stellungnahme vorbereiten und später versenden", score: 2 },
+      { id: 'd', text: "Verbündete suchen, die für dich sprechen", score: 1 }
     ]
   },
   {
     id: 2, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Dein größter Investor zweifelt öffentlich an deiner Strategie.",
-    question: "Wie reagierst du?",
+    scenarios: {
+      selbststaendige: "Du pitchst vor Investoren und einer unterbricht dich ständig mit kritischen Fragen.",
+      angestellte: "In einer wichtigen Präsentation unterbricht dich die Geschäftsführung mit Gegenfragen.",
+      senior_manager: "Der CEO unterbricht deinen Strategievortrag mit einer völlig unerwarteten Frage.",
+      high_potential: "Ein Senior Manager hinterfragt deine Analyse aggressiv vor dem Team."
+    },
+    question: "Was tust du in diesem Moment?",
     options: [
-      { id: 'a', text: "Konflikt vermeiden, schriftliches Statement senden", score: 0 },
-      { id: 'b', text: "Persönliches Gespräch suchen, aktiv zuhören, Bedenken direkt und sachlich adressieren", score: 3 },
-      { id: 'c', text: "Mit Fakten per E-Mail antworten", score: 1 },
-      { id: 'd', text: "CFO die Situation klären lassen", score: 2 }
+      { id: 'a', text: "Unterbrecher höflich ignorieren und weiter präsentieren", score: 1 },
+      { id: 'b', text: "Frage aufgreifen, kurz beantworten, dann elegant zum Hauptpunkt zurückführen", score: 4 },
+      { id: 'c', text: "Alle Fragen auf die Q&A-Session am Ende verschieben", score: 2 }
     ]
   },
   {
     id: 3, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Krisensituation: Das Team verlangt sofortige Antworten, aber die Informationen sind noch unvollständig.",
-    question: "Was kommunizierst du?",
+    scenarios: {
+      selbststaendige: "Dein wichtigster Mitarbeiter möchte kündigen. Du hast 30 Minuten für ein Gespräch.",
+      angestellte: "Ein Teammitglied hat einen schweren Fehler gemacht, der das Projekt gefährdet.",
+      senior_manager: "Ein High Performer in deinem Team ist demotiviert und zeigt erste Anzeichen von Burnout.",
+      high_potential: "Ein Kollege, mit dem du eng zusammenarbeitest, macht Fehler, die auf dich zurückfallen."
+    },
+    question: "Wie strukturierst du das Gespräch?",
     options: [
-      { id: 'a', text: "Warten bis alle Informationen vorliegen", score: 0 },
-      { id: 'b', text: "Transparent kommunizieren: was bekannt ist, was noch fehlt und wie das Vorgehen sein wird", score: 3 },
-      { id: 'c', text: "Team mit unbestätigten Informationen beruhigen", score: 1 },
-      { id: 'd', text: "Kommunikation an einen Sprecher delegieren", score: 2 }
+      { id: 'a', text: "Direkt mit Lösungsvorschlägen einsteigen, um Zeit zu sparen", score: 1 },
+      { id: 'b', text: "Erst aktiv zuhören, dann gemeinsam Ursachen identifizieren, zuletzt konkrete nächste Schritte vereinbaren", score: 4 },
+      { id: 'c', text: "HR oder einen Coach hinzuziehen", score: 2 },
+      { id: 'd', text: "Schriftliche Dokumentation erstellen und dann besprechen", score: 1 }
     ]
   },
   {
     id: 4, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Ein Top-Performer liefert seit Wochen unterdurchschnittliche Ergebnisse.",
-    question: "Wie führst du das Gespräch?",
+    scenarios: {
+      selbststaendige: "Du musst einem langjährigen Kunden mitteilen, dass du die Preise um 40% erhöhst.",
+      angestellte: "Du musst deinem Team mitteilen, dass Bonuszahlungen dieses Jahr gestrichen werden.",
+      senior_manager: "Du musst Entlassungen in deiner Abteilung kommunizieren.",
+      high_potential: "Du musst einem Teamkollegen mitteilen, dass sein Projekt nicht weiterverfolgt wird."
+    },
+    question: "Wie kommunizierst du die schlechte Nachricht?",
     options: [
-      { id: 'a', text: "Formelle E-Mail mit den Leistungsproblemen senden", score: 0 },
-      { id: 'b', text: "Privates Gespräch mit konkreten Beobachtungen, offenen Fragen und echtem Interesse an der Ursache", score: 3 },
-      { id: 'c', text: "Abwarten und auf Verbesserung hoffen", score: 1 },
-      { id: 'd', text: "Direkt an HR verweisen", score: 1 }
+      { id: 'a', text: "Per E-Mail mit ausführlicher Begründung", score: 1 },
+      { id: 'b', text: "Persönlich, direkt, mit Empathie – zuerst die Nachricht, dann der Kontext, dann der Ausblick", score: 4 },
+      { id: 'c', text: "Nachricht abschwächen und positiv verpacken", score: 0 },
+      { id: 'd', text: "Jemand anderen bitten, es zu kommunizieren", score: 0 }
     ]
   },
   {
     id: 5, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Eine strategische Veränderung steht an, die das Team verunsichern wird.",
-    question: "Wie und wann kommunizierst du?",
+    scenarios: {
+      selbststaendige: "Ein Journalist fragt dich unerwartet zu einem Datenschutz-Vorfall in deinem Unternehmen.",
+      angestellte: "In einem internen Town Hall fragst jemand öffentlich nach den echten Gründen für kürzliche Entlassungen.",
+      senior_manager: "Ein Vorstandsmitglied fragt nach Details zu einem Projekt, das du erst seit 2 Wochen kennst.",
+      high_potential: "In einem Meeting wirst du nach deiner Meinung zu einer Entscheidung gefragt, die politisch heikel ist."
+    },
+    question: "Wie gehst du mit der unerwarteten Frage um?",
     options: [
-      { id: 'a', text: "Alles auf einmal per E-Mail", score: 0 },
-      { id: 'b', text: "Team-Meeting: zuerst das Warum, dann das Was, dann Raum für Fragen", score: 3 },
-      { id: 'c', text: "Nur direkte Reports informieren – der Rest erfährt es durch Flurfunk", score: 0 },
-      { id: 'd', text: "Ankündigung so lange wie möglich aufschieben", score: 0 }
+      { id: 'a', text: "Ehrlich sagen, dass du die Antwort nicht kennst, und Rückmeldung versprechen", score: 3 },
+      { id: 'b', text: "Souverän mit dem antworten, was du weißt, Grenzen klar benennen, Kompetenz zeigen", score: 4 },
+      { id: 'c', text: "Frage an jemand anderen weiterleiten", score: 2 },
+      { id: 'd', text: "Antwort improvisieren, um kompetent zu wirken", score: 0 }
+    ]
+  },
+
+  // === KRITISCHES DENKEN (6–10) ===
+  {
+    id: 6, category: 'kritisches_denken', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Dein KI-Tool empfiehlt, 3 deiner 5 Dienstleistungen einzustellen. Die Datenbasis: 6 Monate.",
+      angestellte: "Ein KI-Dashboard zeigt, dass dein Bereich 30% unter Budget performt. Das Management fordert Erklärungen.",
+      senior_manager: "Ein McKinsey-Bericht empfiehlt eine Restrukturierung, die deiner Intuition widerspricht.",
+      high_potential: "Dein Teamleiter präsentiert Daten, die deine Projektidee scheinbar widerlegen."
+    },
+    question: "Wie bewertest du die Empfehlung?",
+    options: [
+      { id: 'a', text: "Daten blind vertrauen – sie basieren auf Fakten", score: 0 },
+      { id: 'b', text: "Datenqualität prüfen, Annahmen hinterfragen, Kontext einbeziehen, eigene Perspektive formulieren", score: 4 },
+      { id: 'c', text: "Zweite Meinung von extern einholen", score: 2 },
+      { id: 'd', text: "Empfehlung ignorieren und eigener Intuition folgen", score: 1 }
     ]
   },
   {
-    id: 6, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "In einer Investor-Verhandlung verliert das Gespräch plötzlich an Energie.",
-    question: "Was tust du?",
+    id: 7, category: 'kritisches_denken', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Zwei deiner wichtigsten Berater geben dir komplett widersprüchliche Empfehlungen.",
+      angestellte: "Dein direkter Vorgesetzter und die Fachabteilung haben völlig unterschiedliche Erwartungen an dich.",
+      senior_manager: "Der CFO und der CMO fordern gegensätzliche Prioritäten von deinem Bereich.",
+      high_potential: "Zwei Senior Mentoren geben dir gegensätzliche Karriereratschläge."
+    },
+    question: "Wie triffst du eine Entscheidung?",
     options: [
-      { id: 'a', text: "Vorbereitete Präsentation einfach fortführen", score: 1 },
-      { id: 'b', text: "Stoppen, echte Bedenken erfragen und Gespräch auf gemeinsame Ziele reframen", score: 3 },
-      { id: 'c', text: "Meeting frühzeitig beenden und Fortsetzung planen", score: 2 },
-      { id: 'd', text: "Tempo erhöhen und mit mehr Daten überzeugen", score: 0 }
+      { id: 'a', text: "Die Meinung der Person mit mehr Einfluss wählen", score: 1 },
+      { id: 'b', text: "Beiden recht geben und einen Kompromiss finden", score: 2 },
+      { id: 'c', text: "Eigene Analyse durchführen, beide Perspektiven integrieren, begründete eigene Position entwickeln", score: 4 },
+      { id: 'd', text: "Entscheidung aufschieben, bis sich die Situation klärt", score: 0 }
     ]
   },
   {
-    id: 7, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Allhands-Präsentation für ein kulturell diverses internationales Team.",
-    question: "Wie gestaltest du sie?",
+    id: 8, category: 'kritisches_denken', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Dein Geschäftsmodell funktioniert gut, aber ein Wettbewerber disruptiert den Markt mit KI.",
+      angestellte: "Dein Unternehmen führt ein neues KI-System ein, das deinen Arbeitsbereich stark verändert.",
+      senior_manager: "Eine neue Technologie macht 30% der Prozesse in deinem Verantwortungsbereich obsolet.",
+      high_potential: "KI-Tools automatisieren zunehmend Aufgaben, die bisher dein Alleinstellungsmerkmal waren."
+    },
+    question: "Wie reagierst du auf diese Disruption?",
     options: [
-      { id: 'a', text: "Bewährte Kommunikationsstrategie beibehalten", score: 0 },
-      { id: 'b', text: "Sprache, Beispiele und Stil bewusst an die Diversität des Teams anpassen", score: 3 },
-      { id: 'c', text: "Kollegen die Präsentation übernehmen lassen", score: 1 },
-      { id: 'd', text: "Kurz halten und Informationsdichte reduzieren", score: 1 }
+      { id: 'a', text: "Abwarten und beobachten, wie sich der Markt entwickelt", score: 0 },
+      { id: 'b', text: "Sofort das Gleiche kopieren wie der Wettbewerber", score: 1 },
+      { id: 'c', text: "Disruption analysieren, eigene Stärken identifizieren, strategisch neu positionieren", score: 4 },
+      { id: 'd', text: "Auf bewährte Stärken konzentrieren und Nische verteidigen", score: 2 }
     ]
   },
   {
-    id: 8, category: 'rhetorik', layer: 'rhetoric',
-    scenario: "Nach einer fehlgeschlagenen Initiative fordert ein Vorstandsmitglied eine öffentliche Erklärung.",
+    id: 9, category: 'kritisches_denken', layer: 'rhetoric',
+    scenarios: {
+      selbststaendige: "Ein Branchenexperte bezeichnet dein Geschäftsmodell öffentlich als veraltet.",
+      angestellte: "Ein bekannter Analyst kritisiert die Strategie deines Unternehmens scharf.",
+      senior_manager: "Ein externes Audit identifiziert schwere Mängel in deinem Verantwortungsbereich.",
+      high_potential: "Dein 360-Grad-Feedback enthält überraschend kritische Kommentare."
+    },
+    question: "Wie gehst du mit dieser Kritik um?",
+    options: [
+      { id: 'a', text: "Kritik öffentlich widerlegen mit Gegenargumenten", score: 1 },
+      { id: 'b', text: "Kritik ernst nehmen, valide Punkte identifizieren, selektiv integrieren, klar kommunizieren", score: 4 },
+      { id: 'c', text: "Kritik ignorieren – Kritiker verstehen den Kontext nicht", score: 0 },
+      { id: 'd', text: "PR-Agentur mit Damage Control beauftragen", score: 1 }
+    ]
+  },
+  {
+    id: 10, category: 'kritisches_denken', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Dein Team ist überzeugt von einer Strategie, die du für falsch hältst.",
+      angestellte: "Die Mehrheit deiner Abteilung unterstützt einen Ansatz, den du für riskant hältst.",
+      senior_manager: "Dein gesamtes Leadership-Team empfiehlt eine Richtung, gegen die du starke Bedenken hast.",
+      high_potential: "Alle in deinem Projektteam sind für Option A, du bist überzeugt von Option B."
+    },
+    question: "Wie gehst du vor?",
+    options: [
+      { id: 'a', text: "Der Mehrheit folgen – das Team muss hinter der Entscheidung stehen", score: 2 },
+      { id: 'b', text: "Deine Meinung durchsetzen – du trägst die Verantwortung", score: 1 },
+      { id: 'c', text: "Bedenken klar artikulieren, Dialog führen, dann gemeinsam entscheiden", score: 4 },
+      { id: 'd', text: "Externe Meinung einholen, um zu entscheiden", score: 2 }
+    ]
+  },
+
+  // === ENTSCHEIDUNGSFINDUNG (11–15) ===
+  {
+    id: 11, category: 'entscheidung', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Ein KI-System gibt dir eine Investitionsempfehlung mit 73% Konfidenz. Du hast 24h Zeit.",
+      angestellte: "Ein Analytics-Dashboard zeigt einen Trend, der sofortige Budgetumverteilung nahelegt.",
+      senior_manager: "KI-gestützte Prognosen empfehlen eine große strategische Wette mit mittlerer Sicherheit.",
+      high_potential: "Ein Tool empfiehlt eine Herangehensweise, die schneller wäre, aber riskanter."
+    },
+    question: "Wie triffst du die Entscheidung?",
+    options: [
+      { id: 'a', text: "Der KI-Empfehlung folgen – die Daten sind objektiver als Intuition", score: 1 },
+      { id: 'b', text: "KI-Output als Input nutzen, aber mit Marktkenntnis, Timing und Risikotoleranz abgleichen", score: 4 },
+      { id: 'c', text: "Mehr Daten anfordern, bis Konfidenz höher ist", score: 2 },
+      { id: 'd', text: "Entscheidung delegieren an jemanden mit mehr Erfahrung", score: 0 }
+    ]
+  },
+  {
+    id: 12, category: 'entscheidung', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Du musst zwischen zwei Großkunden wählen – beide fordern Exklusivität.",
+      angestellte: "Du musst dich zwischen zwei internen Projekten entscheiden – du kannst nur eines übernehmen.",
+      senior_manager: "Zwei Abteilungen wollen dieselben Ressourcen – du musst priorisieren.",
+      high_potential: "Zwei Karrierepfade liegen vor dir – beide haben Vor- und Nachteile."
+    },
+    question: "Wie näherst du dich dieser Entscheidung?",
+    options: [
+      { id: 'a', text: "Pro-Contra-Listen erstellen und rational abwägen", score: 2 },
+      { id: 'b', text: "Langfristige strategische Ziele als Filter nutzen, nicht kurzfristigen Gewinn", score: 4 },
+      { id: 'c', text: "Mit Vertrauensperson besprechen", score: 2 },
+      { id: 'd', text: "Die Option wählen, die mehr Menschen zufriedenstellt", score: 1 }
+    ]
+  },
+  {
+    id: 13, category: 'entscheidung', layer: 'rhetoric',
+    scenarios: {
+      selbststaendige: "Du hast eine wichtige Entscheidung getroffen, die sich als falsch herausstellt.",
+      angestellte: "Ein Projekt, für das du gekämpft hast, scheitert spektakulär.",
+      senior_manager: "Eine Initiative unter deiner Verantwortung verfehlt alle Ziele.",
+      high_potential: "Dein erster eigenverantwortlicher Vorschlag wird abgelehnt."
+    },
+    question: "Wie kommunizierst du das Ergebnis?",
+    options: [
+      { id: 'a', text: "Externe Faktoren betonen, die zur Situation beigetragen haben", score: 0 },
+      { id: 'b', text: "Volle Verantwortung übernehmen, Learnings benennen, konkret korrigieren", score: 4 },
+      { id: 'c', text: "Situation erstmal analysieren, bevor du dich äußerst", score: 2 },
+      { id: 'd', text: "Team um Feedback bitten, was schiefgelaufen ist", score: 2 }
+    ]
+  },
+  {
+    id: 14, category: 'entscheidung', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Ein Konkurrent bietet dir eine Übernahme an. Du hast eine Woche Bedenkzeit.",
+      angestellte: "Dir wird eine Beförderung angeboten, aber in einem Bereich außerhalb deiner Expertise.",
+      senior_manager: "Du erhältst ein Angebot für eine C-Level-Position bei einem Startup.",
+      high_potential: "Dir wird ein schneller Aufstieg angeboten, aber mit Umzug in eine andere Stadt."
+    },
+    question: "Wie strukturierst du deine Entscheidungsfindung?",
+    options: [
+      { id: 'a', text: "Intuition vertrauen – große Entscheidungen trifft man aus dem Bauch", score: 1 },
+      { id: 'b', text: "Systematischer Framework: Werte, langfristige Ziele, Risiken, Stakeholder-Impact", score: 4 },
+      { id: 'c', text: "Meinungen von möglichst vielen Menschen einholen", score: 2 },
+      { id: 'd', text: "Finanzielle Analyse als Hauptkriterium", score: 2 }
+    ]
+  },
+  {
+    id: 15, category: 'entscheidung', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Dein bester Freund ist auch dein Geschäftspartner. Die Partnerschaft funktioniert nicht mehr.",
+      angestellte: "Dein Mentor und Freund im Unternehmen macht einen schweren ethischen Fehler.",
+      senior_manager: "Ein Teammitglied, das du eingestellt und gefördert hast, performt dauerhaft schlecht.",
+      high_potential: "Ein enger Kollege und Freund bewirbt sich auf dieselbe Position wie du."
+    },
+    question: "Wie gehst du mit dem Konflikt zwischen Beziehung und Business um?",
+    options: [
+      { id: 'a', text: "Freundschaft hat Priorität – berufliche Dinge können warten", score: 0 },
+      { id: 'b', text: "Beide Ebenen klar trennen, aber beide Aspekte transparent ansprechen", score: 4 },
+      { id: 'c', text: "Business hat Priorität – persönliche Gefühle dürfen nicht im Weg stehen", score: 2 },
+      { id: 'd', text: "Vermittler einschalten, um den Konflikt zu lösen", score: 2 }
+    ]
+  },
+
+  // === FÜHRUNGSKOMPETENZ (16–20) ===
+  {
+    id: 16, category: 'fuehrung', layer: 'rhetoric',
+    scenarios: {
+      selbststaendige: "Dein Startup wächst von 5 auf 25 Mitarbeiter. Die Kultur verändert sich.",
+      angestellte: "Durch eine Reorganisation verantwortest du plötzlich ein viel größeres Team.",
+      senior_manager: "Du übernimmst eine Abteilung mit niedriger Moral und hoher Fluktuation.",
+      high_potential: "Du wirst erstmals Teamleiter – deine bisherigen Kollegen sind jetzt deine Mitarbeiter."
+    },
+    question: "Wie etablierst du deine Führungsrolle?",
+    options: [
+      { id: 'a', text: "Schnell Autorität zeigen durch klare Ansagen und Entscheidungen", score: 2 },
+      { id: 'b', text: "Erst zuhören, dann Vision kommunizieren, dann gemeinsam Regeln etablieren", score: 4 },
+      { id: 'c', text: "Bestehende Strukturen weitgehend beibehalten", score: 1 },
+      { id: 'd', text: "Erfahrene Führungskraft als Coach engagieren", score: 2 }
+    ]
+  },
+  {
+    id: 17, category: 'fuehrung', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Zwei deiner Schlüsselmitarbeiter haben einen offenen Konflikt.",
+      angestellte: "In deinem Team gibt es Grüppchenbildung und unterschwellige Konflikte.",
+      senior_manager: "Zwei deiner direkten Berichte konkurrieren aggressiv um die gleiche Beförderung.",
+      high_potential: "Du bist zwischen zwei Fraktionen in deinem Team gefangen."
+    },
+    question: "Wie gehst du mit dem Konflikt um?",
+    options: [
+      { id: 'a', text: "Beide zu einem klärenden Gespräch zusammenbringen", score: 3 },
+      { id: 'b', text: "Einzelgespräche führen, Ursachen verstehen, dann moderieren", score: 4 },
+      { id: 'c', text: "HR oder externe Mediation einschalten", score: 2 },
+      { id: 'd', text: "Klare Ansage machen, dass persönliche Konflikte im Job nichts verloren haben", score: 1 }
+    ]
+  },
+  {
+    id: 18, category: 'fuehrung', layer: 'ai_literacy',
+    scenarios: {
+      selbststaendige: "Ein Mitarbeiter hat Angst, dass KI seinen Job überflüssig macht.",
+      angestellte: "Dein Team ist skeptisch gegenüber neuen KI-Tools, die eingeführt werden sollen.",
+      senior_manager: "Widerstand gegen KI-Transformation in deinem Verantwortungsbereich.",
+      high_potential: "Ältere Kollegen lehnen technologische Veränderungen ab, die du befürwortest."
+    },
+    question: "Wie führst du durch diese Unsicherheit?",
+    options: [
+      { id: 'a', text: "KI-Vorteile rational erklären und auf Effizienzgewinne verweisen", score: 2 },
+      { id: 'b', text: "Ängste ernst nehmen, gemeinsam Zukunftsszenarien entwickeln, Weiterbildung anbieten", score: 4 },
+      { id: 'c', text: "KI-Einführung verlangsamen, bis das Team bereit ist", score: 1 },
+      { id: 'd', text: "Entscheidung top-down durchsetzen – Veränderung ist unvermeidlich", score: 1 }
+    ]
+  },
+  {
+    id: 19, category: 'fuehrung', layer: 'rhetoric',
+    scenarios: {
+      selbststaendige: "Du musst deinem Team eine schwierige Transformation kommunizieren.",
+      angestellte: "Du sollst Veränderungen kommunizieren, hinter denen du selbst nicht 100% stehst.",
+      senior_manager: "Dein Team muss einen schmerzhaften Kurswechsel der Geschäftsführung mittragen.",
+      high_potential: "Du sollst eine Entscheidung deines Chefs vertreten, die du für falsch hältst."
+    },
+    question: "Wie kommunizierst du Veränderungen, die nicht von dir kommen?",
+    options: [
+      { id: 'a', text: "Distanzieren: 'Die Geschäftsführung hat entschieden...'", score: 0 },
+      { id: 'b', text: "Ownership zeigen, Kontext erklären, eigene Rolle klar machen, Raum für Fragen geben", score: 4 },
+      { id: 'c', text: "Fakten neutral präsentieren ohne eigene Bewertung", score: 2 },
+      { id: 'd', text: "Positive Aspekte hervorheben, schwierige Teile minimieren", score: 1 }
+    ]
+  },
+  {
+    id: 20, category: 'fuehrung', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Du bist am Limit. 80-Stunden-Wochen, Familie beschwert sich, Gesundheit leidet.",
+      angestellte: "Du merkst erste Burnout-Anzeichen, aber das Projekt ist in einer kritischen Phase.",
+      senior_manager: "Dein Kalender ist zu 150% gefüllt. Du schaffst nicht mehr alles.",
+      high_potential: "Du arbeitest mehr als alle anderen, aber deine Performance sinkt."
+    },
+    question: "Wie gehst du mit deinen eigenen Grenzen um?",
+    options: [
+      { id: 'a', text: "Durchhalten – die kritische Phase ist bald vorbei", score: 0 },
+      { id: 'b', text: "Selbstreflexion, klare Grenzen setzen, strategisch delegieren, transparent kommunizieren", score: 4 },
+      { id: 'c', text: "Urlaub nehmen, sobald es möglich ist", score: 2 },
+      { id: 'd', text: "Effizienter arbeiten und Zeitmanagement verbessern", score: 2 }
+    ]
+  },
+
+  // === EMOTIONALE INTELLIGENZ (21–25) ===
+  {
+    id: 21, category: 'eq', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Ein Mitarbeiter teilt dir mit, dass er unter starkem privatem Stress steht.",
+      angestellte: "Ein Teammitglied weint in einem 1:1 über persönliche Probleme.",
+      senior_manager: "Ein Senior-Leader in deinem Bereich zeigt Anzeichen einer persönlichen Krise.",
+      high_potential: "Ein Kollege vertraut dir eine schwierige persönliche Situation an."
+    },
     question: "Wie reagierst du?",
     options: [
-      { id: 'a', text: "Schaden durch strategisch formulierte Unterstatements minimieren", score: 1 },
-      { id: 'b', text: "Klare Verantwortung übernehmen, Lerneffekte erklären, nächsten Schritt zeigen", score: 3 },
-      { id: 'c', text: "Schuld auf externe Faktoren verlagern", score: 0 },
-      { id: 'd', text: "Kommunikationsberater das Statement verfassen lassen, ohne selbst aufzutreten", score: 1 }
+      { id: 'a', text: "Empathisch zuhören, aber klare Grenze zwischen Arbeit und Privat ziehen", score: 2 },
+      { id: 'b', text: "Präsent sein, aktiv zuhören, Unterstützung anbieten, gemeinsam pragmatische Lösungen finden", score: 4 },
+      { id: 'c', text: "An HR oder EAP (Employee Assistance Program) verweisen", score: 2 },
+      { id: 'd', text: "Situation ernst nehmen, aber schnell zu Arbeitsfragen überleiten", score: 1 }
+    ]
+  },
+  {
+    id: 22, category: 'eq', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Du bist wütend über eine unfaire Entscheidung eines Partners.",
+      angestellte: "Eine ungerechte Entscheidung deines Vorgesetzten macht dich richtig wütend.",
+      senior_manager: "Der Vorstand trifft eine Entscheidung, die dich persönlich betrifft und frustriert.",
+      high_potential: "Du wirst bei einer Beförderung übergangen – jemand mit weniger Erfahrung bekommt den Job."
+    },
+    question: "Wie gehst du mit deiner Wut um?",
+    options: [
+      { id: 'a', text: "Emotion runterschlucken und professionell bleiben", score: 1 },
+      { id: 'b', text: "Erst durchatmen, dann sachlich ansprechen, dabei eigene Emotionen benennen ohne zu beschuldigen", score: 4 },
+      { id: 'c', text: "Mit Vertrauensperson darüber sprechen, bevor du handelst", score: 3 },
+      { id: 'd', text: "Situation akzeptieren – kämpfen bringt nichts", score: 1 }
+    ]
+  },
+  {
+    id: 23, category: 'eq', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Du hast einen großen Erfolg erzielt. Dein Team hat maßgeblich beigetragen.",
+      angestellte: "Dein Projekt ist ein voller Erfolg. Dein Chef lobt dich öffentlich.",
+      senior_manager: "Deine Abteilung wird für herausragende Ergebnisse ausgezeichnet.",
+      high_potential: "Du bekommst öffentliches Lob für ein Projekt, an dem viele mitgearbeitet haben."
+    },
+    question: "Wie gehst du mit dem Erfolg um?",
+    options: [
+      { id: 'a', text: "Bescheiden sein und den Erfolg hauptsächlich dem Team zuschreiben", score: 3 },
+      { id: 'b', text: "Erfolg feiern, Team sichtbar würdigen, eigene Rolle authentisch einordnen", score: 4 },
+      { id: 'c', text: "Auf die nächste Herausforderung fokussieren – Erfolg ist vergänglich", score: 1 },
+      { id: 'd', text: "Erfolg als Sprungbrett für die nächste Forderung nutzen", score: 2 }
+    ]
+  },
+  {
+    id: 24, category: 'eq', layer: 'rhetoric',
+    scenarios: {
+      selbststaendige: "Ein schwieriger Kunde wird am Telefon laut und beleidigend.",
+      angestellte: "Ein Kollege greift dich in einem Meeting persönlich an.",
+      senior_manager: "Ein Vorstandsmitglied kritisiert dich öffentlich und unfair.",
+      high_potential: "Ein Senior-Kollege macht eine abwertende Bemerkung über dich vor anderen."
+    },
+    question: "Wie reagierst du im Moment?",
+    options: [
+      { id: 'a', text: "Ruhig bleiben und nicht reagieren – Angriff ins Leere laufen lassen", score: 2 },
+      { id: 'b', text: "Sachlich, aber bestimmt Grenze setzen: 'So sprechen wir nicht miteinander'", score: 4 },
+      { id: 'c', text: "Situation deeskalieren und später unter vier Augen klären", score: 3 },
+      { id: 'd', text: "Gleiche Energie zurückgeben – sonst wirst du nicht ernst genommen", score: 0 }
+    ]
+  },
+  {
+    id: 25, category: 'eq', layer: 'strategic_eq',
+    scenarios: {
+      selbststaendige: "Du weißt, dass ein Mitbewerber unethische Praktiken anwendet – und damit erfolgreich ist.",
+      angestellte: "Du erfährst von fragwürdigen Praktiken in einer anderen Abteilung.",
+      senior_manager: "Dir wird nahegelegt, Zahlen 'kreativer' darzustellen.",
+      high_potential: "Du siehst, wie jemand befördert wird, der Erfolge anderer als seine eigenen verkauft."
+    },
+    question: "Wie gehst du mit diesem ethischen Dilemma um?",
+    options: [
+      { id: 'a', text: "Nicht dein Problem – fokussiere dich auf deine eigene Arbeit", score: 0 },
+      { id: 'b', text: "Eigene Werte als Kompass nutzen, Konsequenzen abwägen, dann handeln", score: 4 },
+      { id: 'c', text: "Anonym melden oder Whistleblower-Kanal nutzen", score: 3 },
+      { id: 'd', text: "Mit Vertrauensperson besprechen, bevor du handelst", score: 2 }
     ]
   },
 
-  // === KRITISCHES DENKEN (9–16) ===
+  // === KI-STRATEGIE (26–30) - VOICE QUESTIONS ===
   {
-    id: 9, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Ein umfangreicher KI-Report empfiehlt, dein Kernprodukt einzustellen. Die Daten wirken überzeugend.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Sofort der KI-Empfehlung folgen und das Produkt einstellen", score: 0 },
-      { id: 'b', text: "Report-Annahmen analysieren, weitere Perspektiven einholen und dann eigenständig entscheiden", score: 3 },
-      { id: 'c', text: "Report vollständig ignorieren", score: 0 },
-      { id: 'd', text: "Eine zweite KI-Analyse beauftragen", score: 1 }
-    ]
+    id: 26, category: 'strategie', layer: 'ai_literacy', isVoice: true,
+    scenarios: {
+      selbststaendige: "Wie würdest du KI in deinem Unternehmen einsetzen, um einen echten Wettbewerbsvorteil zu schaffen?",
+      angestellte: "Wie würdest du KI nutzen, um deine Produktivität und die deines Teams zu steigern?",
+      senior_manager: "Wie würdest du KI-Transformation in deinem Verantwortungsbereich strategisch vorantreiben?",
+      high_potential: "Wie würdest du KI-Kompetenz nutzen, um dich von anderen High Potentials abzuheben?"
+    },
+    question: "Beantworte diese Frage per Sprachaufnahme (30-60 Sekunden):",
+    options: [],
+    voicePrompt: true
   },
   {
-    id: 10, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Zwei Marktberichte liefern gegensätzliche Prognosen für deine Branche.",
-    question: "Wie gehst du damit um?",
-    options: [
-      { id: 'a', text: "Den optimistischeren Bericht wählen", score: 0 },
-      { id: 'b', text: "Methodiken beider Berichte analysieren, Kernunterschiede identifizieren, eigene fundierte Einschätzung bilden", score: 3 },
-      { id: 'c', text: "Auf einen dritten Bericht warten, der Klarheit schafft", score: 1 },
-      { id: 'd', text: "Team-Mehrheitsentscheidung einholen", score: 2 }
-    ]
+    id: 27, category: 'strategie', layer: 'rhetoric', isVoice: true,
+    scenarios: {
+      selbststaendige: "Stell dir vor, du pitchst dein wichtigstes Produkt vor kritischen Investoren. Was sagst du in 60 Sekunden?",
+      angestellte: "Du hast 60 Sekunden im Aufzug mit dem CEO. Wie präsentierst du deine wichtigste Idee?",
+      senior_manager: "Du hast 60 Sekunden, um den Vorstand von einer großen strategischen Initiative zu überzeugen. Was sagst du?",
+      high_potential: "Du hast 60 Sekunden, um dich für eine Beförderung zu empfehlen. Was sagst du?"
+    },
+    question: "Nimm deinen Elevator Pitch auf (max 60 Sekunden):",
+    options: [],
+    voicePrompt: true
   },
   {
-    id: 11, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Das Unternehmen wächst stark, aber die Profitabilität sinkt parallel.",
-    question: "Wie analysierst du die Situation?",
-    options: [
-      { id: 'a', text: "Weiteres Wachstum fokussieren – Profitabilität kommt durch Skalierung", score: 1 },
-      { id: 'b', text: "Systematisch alle Kostentreiber analysieren, Ineffizienzen identifizieren, Wachstumshebel von Kostenstrukturen trennen", score: 3 },
-      { id: 'c', text: "Sofort alle Ausgaben kürzen", score: 0 },
-      { id: 'd', text: "Externe Unternehmensberatung beauftragen", score: 2 }
-    ]
+    id: 28, category: 'strategie', layer: 'strategic_eq', isVoice: true,
+    scenarios: {
+      selbststaendige: "Was war die schwierigste Führungsentscheidung, die du je treffen musstest? Wie hast du sie getroffen?",
+      angestellte: "Beschreibe eine Situation, in der du gegen den Strom schwimmen musstest. Was ist passiert?",
+      senior_manager: "Erzähle von einer Entscheidung, bei der Kopf und Bauch unterschiedlicher Meinung waren. Was hast du getan?",
+      high_potential: "Beschreibe einen Moment, in dem du Verantwortung übernommen hast, obwohl es nicht dein Job war."
+    },
+    question: "Reflektiere und antworte per Sprachaufnahme (60-90 Sekunden):",
+    options: [],
+    voicePrompt: true
   },
   {
-    id: 12, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Ein neuer Branchentrend gewinnt Medienaufmerksamkeit. Alle reden darüber.",
-    question: "Soll dein Unternehmen folgen?",
-    options: [
-      { id: 'a', text: "Sofort dem Trend folgen", score: 0 },
-      { id: 'b', text: "Analysieren ob strukturell oder Hype, dann strategische Relevanz für das eigene Modell bewerten", score: 3 },
-      { id: 'c', text: "Warten bis Wettbewerber sich positioniert haben", score: 1 },
-      { id: 'd', text: "Branchentrends grundsätzlich ignorieren", score: 0 }
-    ]
+    id: 29, category: 'strategie', layer: 'ai_literacy', isVoice: true,
+    scenarios: {
+      selbststaendige: "Wie stellst du sicher, dass du als Unternehmer auch in 5 Jahren noch relevant bist?",
+      angestellte: "Wie entwickelst du dich weiter, um in einer Welt mit zunehmender KI wertvoll zu bleiben?",
+      senior_manager: "Was tust du konkret, um deine Führungsfähigkeiten kontinuierlich weiterzuentwickeln?",
+      high_potential: "Was unterscheidet dich von anderen, die denselben Karriereweg anstreben?"
+    },
+    question: "Beantworte diese Zukunftsfrage per Sprachaufnahme (30-60 Sekunden):",
+    options: [],
+    voicePrompt: true
   },
   {
-    id: 13, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Dein Bauchgefühl widerspricht den vorliegenden Analysedaten eindeutig.",
-    question: "Wem folgst du?",
-    options: [
-      { id: 'a', text: "Immer den Daten folgen – sie sind objektiver", score: 1 },
-      { id: 'b', text: "Untersuchen warum die Intuition abweicht – sie zeigt oft blinde Flecken der Daten auf", score: 3 },
-      { id: 'c', text: "Immer der Intuition folgen", score: 0 },
-      { id: 'd', text: "Externe Validierung einholen", score: 2 }
-    ]
-  },
-  {
-    id: 14, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Ein Experten-Panel ist sich einig, dass deine aktuelle Strategie falsch ist.",
-    question: "Wie reagierst du?",
-    options: [
-      { id: 'a', text: "Strategie sofort revidieren", score: 1 },
-      { id: 'b', text: "Panel-Prämissen kritisch hinterfragen, eigene blinde Flecken prüfen, dann eigenständig entscheiden", score: 3 },
-      { id: 'c', text: "Strategie ohne weitere Analyse verteidigen", score: 0 },
-      { id: 'd', text: "Dem Panel zustimmen um Konflikte zu vermeiden", score: 0 }
-    ]
-  },
-  {
-    id: 15, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Dein bestes Produkt hat seit 3 Monaten sinkende NPS-Werte. Das Team sieht keinen Handlungsbedarf.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Die Einschätzung des Teams akzeptieren", score: 0 },
-      { id: 'b', text: "Eigenständig Ursachen untersuchen, Kunden direkt befragen, eigene Schlussfolgerungen ziehen", score: 3 },
-      { id: 'c', text: "Sofort ein Produkt-Redesign starten", score: 1 },
-      { id: 'd', text: "Weitere 3 Monate abwarten um einen Trend zu erkennen", score: 1 }
-    ]
-  },
-  {
-    id: 16, category: 'kritisches_denken', layer: 'ai_literacy',
-    scenario: "Eine neue Regulierung tritt in 18 Monaten in Kraft und betrifft dein Geschäftsmodell.",
-    question: "Wie reagierst du jetzt?",
-    options: [
-      { id: 'a', text: "Warten bis die Regulierung konkreter wird", score: 0 },
-      { id: 'b', text: "Auswirkungen analysieren, strategische Optionen identifizieren, proaktiv für Szenarien planen", score: 3 },
-      { id: 'c', text: "Sofort eine Anwaltskanzlei für Compliance-Arbeit beauftragen", score: 2 },
-      { id: 'd', text: "Ignorieren – Regulierungen ändern sich oft noch", score: 0 }
-    ]
-  },
-
-  // === ENTSCHEIDUNGSFINDUNG (17–25) ===
-  {
-    id: 17, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Eine unternehmensweite Entscheidung ist nötig. Du hast 60% der benötigten Informationen.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Auf vollständige Informationen warten", score: 0 },
-      { id: 'b', text: "Kritische Informationen identifizieren, fundierte Entscheidung treffen, Korrektiv-Mechanismen einbauen", score: 3 },
-      { id: 'c', text: "Entscheidung vollständig delegieren", score: 1 },
-      { id: 'd', text: "Rein intuitiv entscheiden", score: 1 }
-    ]
-  },
-  {
-    id: 18, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Eine KI-Analyse empfiehlt eine strategische Richtung, die deiner Erfahrung widerspricht.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "KI folgen – sie ist objektiver als menschliche Erfahrung", score: 1 },
-      { id: 'b', text: "KI als Startpunkt nutzen, Annahmen hinterfragen, eigene Erfahrung als zusätzliche Datenschicht integrieren", score: 3 },
-      { id: 'c', text: "Erfahrung folgen – KI versteht keine strategischen Nuancen", score: 1 },
-      { id: 'd', text: "Das Team entscheiden lassen", score: 0 }
-    ]
-  },
-  {
-    id: 19, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Vor dir liegt eine schwer revidierbare Entscheidung mit großem Potenzial, aber erheblichem Risiko.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Nicht-reversible Entscheidungen grundsätzlich meiden", score: 0 },
-      { id: 'b', text: "Asymmetrisch analysieren: Downside-Risiken stärker gewichten, kritische Variablen absichern bevor entschieden wird", score: 3 },
-      { id: 'c', text: "Schnell entscheiden bevor die Gelegenheit verpasst ist", score: 1 },
-      { id: 'd', text: "Auf mehr Marktdaten warten", score: 1 }
-    ]
-  },
-  {
-    id: 20, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Das Team ist gespalten. Die Mehrheit bevorzugt Option A, du siehst Option B klar als besser.",
-    question: "Wie entscheidest du?",
-    options: [
-      { id: 'a', text: "Mehrheit folgen um den Teamfrieden zu wahren", score: 0 },
-      { id: 'b', text: "Perspektive zu Option B erklären, Argumente für A aktiv anhören, dann begründete Endentscheidung treffen", score: 3 },
-      { id: 'c', text: "Option B ohne weitere Diskussion erzwingen", score: 1 },
-      { id: 'd', text: "Externe Berater entscheiden lassen", score: 0 }
-    ]
-  },
-  {
-    id: 21, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Ein Projekt mit €500k Investment zeigt kaum Fortschritt. Das Team will durchhalten.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Fortsetzen – ihr habt bereits so viel investiert", score: 0 },
-      { id: 'b', text: "Projekt nach zukünftigen Aussichten bewerten, nicht vergangenen Kosten – stoppen wenn nötig", score: 3 },
-      { id: 'c', text: "Budget um 50% kürzen und fortsetzen", score: 2 },
-      { id: 'd', text: "Noch 3 Monate warten bevor entschieden wird", score: 1 }
-    ]
-  },
-  {
-    id: 22, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Eine komplexe Entscheidung ist nötig, aber du leidest unter Entscheidungslähmung.",
-    question: "Wie überwindest du sie?",
-    options: [
-      { id: 'a', text: "Warten bis die Lähmung von selbst verschwindet", score: 0 },
-      { id: 'b', text: "Klare Deadline setzen, 3 Kernkriterien definieren und entscheiden – auch unvollkommene Entscheidungen sind besser als keine", score: 3 },
-      { id: 'c', text: "Entscheidung vollständig delegieren", score: 1 },
-      { id: 'd', text: "Nach dem zuletzt Gelesenem entscheiden", score: 0 }
-    ]
-  },
-  {
-    id: 23, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Eine schnelle Entscheidung ist gefragt. Du hast exakt 15 Minuten.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Rein intuitiv entscheiden", score: 1 },
-      { id: 'b', text: "Wichtigstes Kriterium identifizieren, 2 Minuten für Kerndaten, klare Entscheidung mit kommuniziertem Entscheidungspfad", score: 3 },
-      { id: 'c', text: "Mehr Zeit verlangen und Entscheidung verschieben", score: 0 },
-      { id: 'd', text: "Jemand anderen entscheiden lassen", score: 0 }
-    ]
-  },
-  {
-    id: 24, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Eine Entscheidung birgt ethische Graubereiche.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Rein wirtschaftlich entscheiden", score: 0 },
-      { id: 'b', text: "Ethische Überlegungen explizit in den Entscheidungsrahmen integrieren – Vertrauen und Reputation sind wirtschaftliche Faktoren", score: 3 },
-      { id: 'c', text: "Nur prüfen ob es legal ist", score: 1 },
-      { id: 'd', text: "Entscheidungen mit ethischen Graubereichen grundsätzlich meiden", score: 1 }
-    ]
-  },
-  {
-    id: 25, category: 'entscheidung', layer: 'strategic_eq',
-    scenario: "Du erkennst, dass eine vergangene Entscheidung falsch war. Das Team hat sich bereits darauf ausgerichtet.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Entscheidung aufrechterhalten um Glaubwürdigkeit zu wahren", score: 0 },
-      { id: 'b', text: "Transparent kommunizieren was gelernt wurde, Kurskorrektur erklären, Situation als Leadership-Moment nutzen", score: 3 },
-      { id: 'c', text: "Still ohne Erklärung revidieren", score: 1 },
-      { id: 'd', text: "Verantwortung auf geänderte Umstände schieben", score: 0 }
-    ]
-  },
-
-  // === FÜHRUNGSKOMPETENZ (26–34) ===
-  {
-    id: 26, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Dein bestes Talent droht das Unternehmen zu verlassen.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Gehalt erhöhen", score: 1 },
-      { id: 'b', text: "Tiefgreifende Einzelgespräche führen, wahre Motivatoren verstehen, individuelle Entwicklungspfade schaffen", score: 3 },
-      { id: 'c', text: "Geschehenlassen – gute Leute ziehen weiter", score: 0 },
-      { id: 'd', text: "HR über Retention-Pakete sprechen", score: 2 }
-    ]
-  },
-  {
-    id: 27, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Zwei deiner Top-Manager haben einen eskalierenden Konflikt.",
-    question: "Was ist dein Ansatz?",
-    options: [
-      { id: 'a', text: "Ignorieren – sie sind Erwachsene", score: 0 },
-      { id: 'b', text: "Strukturiertes Gespräch moderieren, Kernursachen adressieren, klare Erwartungen für professionelle Zusammenarbeit setzen", score: 3 },
-      { id: 'c', text: "Beide physisch voneinander trennen", score: 1 },
-      { id: 'd', text: "Beide schriftlich verwarnen", score: 1 }
-    ]
-  },
-  {
-    id: 28, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Ein hochpotentieller Mitarbeiter leistet dauerhaft unterdurchschnittlich.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Schnell kündigen bevor das Team demotiviert wird", score: 1 },
-      { id: 'b', text: "Can't-Do vs Won't-Do Problem analysieren, entsprechend mit klarer Erwartungsführung und Support handeln", score: 3 },
-      { id: 'c', text: "Problem ignorieren und auf Verbesserung hoffen", score: 0 },
-      { id: 'd', text: "In eine andere Abteilung versetzen", score: 1 }
-    ]
-  },
-  {
-    id: 29, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Das Unternehmen durchläuft einen massiven Kulturwandel. Das Team widersteht.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Wandel von oben erzwingen", score: 0 },
-      { id: 'b', text: "Das Warum des Wandels erklären, Multiplikatoren einbinden, Übergang gemeinsam mit dem Team gestalten", score: 3 },
-      { id: 'c', text: "Wandel verlangsamen um Widerstand zu reduzieren", score: 1 },
-      { id: 'd', text: "Team mehr Zeit zur Anpassung geben", score: 2 }
-    ]
-  },
-  {
-    id: 30, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Du delegierst eine kritische Aufgabe. Der Mitarbeiter liefert nicht die erwartete Qualität.",
-    question: "Was machst du?",
-    options: [
-      { id: 'a', text: "Aufgabe selbst übernehmen", score: 0 },
-      { id: 'b', text: "Briefing-Klarheit prüfen, konkretes Feedback geben, Verbesserung als Coaching-Moment begleiten", score: 3 },
-      { id: 'c', text: "Mitarbeiter formal tadeln", score: 1 },
-      { id: 'd', text: "Aufgabe an jemand anderen delegieren", score: 1 }
-    ]
-  },
-  {
-    id: 31, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Du übernimmst eine Remote-Führungsrolle. Das Team fühlt sich disconnected.",
-    question: "Wie baust du Verbindung auf?",
-    options: [
-      { id: 'a', text: "Anzahl der Video-Meetings erhöhen", score: 1 },
-      { id: 'b', text: "Bewusste Check-in-Rituale einbauen, asynchrone Kommunikation fördern, Raum für persönliche Verbindung jenseits von Aufgaben schaffen", score: 3 },
-      { id: 'c', text: "Team selbst Verbindung aufbauen lassen", score: 0 },
-      { id: 'd', text: "Offsite-Event planen", score: 2 }
-    ]
-  },
-  {
-    id: 32, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Du erkennst einen toxischen Top-Performer im Team.",
-    question: "Was ist dein Leadership-Ansatz?",
-    options: [
-      { id: 'a', text: "Toxisches Verhalten wegen der Performance ignorieren", score: 0 },
-      { id: 'b', text: "Klares, privates Gespräch: kulturellen Schaden erklären, klare Grenzen setzen, faire Chance zur Veränderung geben", score: 3 },
-      { id: 'c', text: "Sofort entlassen", score: 1 },
-      { id: 'd', text: "Hoffen dass das Team selbst damit umgeht", score: 0 }
-    ]
-  },
-  {
-    id: 33, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Noch kein Nachfolger identifiziert. Du erhältst ein plötzlich attraktives externes Angebot.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Angebot annehmen – das Unternehmen ist nicht für immer deine Verantwortung", score: 1 },
-      { id: 'b', text: "Angebot evaluieren und Zeit für einen Übergabeplan nehmen bevor entschieden wird", score: 3 },
-      { id: 'c', text: "Sofort ablehnen – Loyalität gehört dem Unternehmen", score: 1 },
-      { id: 'd', text: "Angebot als Gehaltsverhandlungs-Hebel nutzen", score: 0 }
-    ]
-  },
-  {
-    id: 34, category: 'fuehrung', layer: 'rhetoric',
-    scenario: "Eine externe Krise bedroht deinen Markt. Das Team ist verängstigt.",
-    question: "Wie führst du?",
-    options: [
-      { id: 'a', text: "Keine Schwäche zeigen, bedingungslose Zuversicht kommunizieren", score: 1 },
-      { id: 'b', text: "Authentisch über Unsicherheit sein, Stärke durch klare Denkweise und nächste Schritte zeigen, Team fokussiert halten", score: 3 },
-      { id: 'c', text: "Team-Kommunikation reduzieren um Panik zu vermeiden", score: 0 },
-      { id: 'd', text: "Auf interne Prozesse konzentrieren, externe Faktoren ignorieren", score: 0 }
-    ]
-  },
-
-  // === EMOTIONALE INTELLIGENZ (35–42) ===
-  {
-    id: 35, category: 'eq', layer: 'strategic_eq',
-    scenario: "Ein Vorstandsmitglied greift deine Idee in einem Meeting öffentlich und direkt an.",
-    question: "Wie reagierst du?",
-    options: [
-      { id: 'a', text: "Sofort emotional verteidigen", score: 0 },
-      { id: 'b', text: "Ruhig bleiben, für die Perspektive danken, spezifische Bedenken erfragen, sachlich adressieren", score: 3 },
-      { id: 'c', text: "Schweigen und es persönlich nehmen", score: 0 },
-      { id: 'd', text: "Das Meeting abbrechen", score: 0 }
-    ]
-  },
-  {
-    id: 36, category: 'eq', layer: 'strategic_eq',
-    scenario: "Das Team wirkt trotz guter Ergebnisse dauerhaft demotiviert.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Abwarten ob es sich von selbst reguliert", score: 0 },
-      { id: 'b', text: "Einzelne Check-ins führen, aktiv ohne Wertung zuhören, unausgesprochene Ursachen identifizieren", score: 3 },
-      { id: 'c', text: "Ein Team-Event zur Stimmungsverbesserung ankündigen", score: 1 },
-      { id: 'd', text: "Ziele und Boni erhöhen", score: 1 }
-    ]
-  },
-  {
-    id: 37, category: 'eq', layer: 'strategic_eq',
-    scenario: "Du gerätst persönlich in eine stressige Phase und merkst, dass du reaktiver wirst.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Einfach härter durch die Phase arbeiten", score: 0 },
-      { id: 'b', text: "Zustand bewusst erkennen, Regenerationsraum schaffen, offen mit engen Vertrauenspersonen kommunizieren", score: 3 },
-      { id: 'c', text: "Stress vor dem Team verbergen", score: 0 },
-      { id: 'd', text: "Alle unwichtigen Aufgaben delegieren", score: 2 }
-    ]
-  },
-  {
-    id: 38, category: 'eq', layer: 'strategic_eq',
-    scenario: "In einer Verhandlung spürst du, dass die andere Seite nervös und unter Druck wird.",
-    question: "Was machst du?",
-    options: [
-      { id: 'a', text: "Den Vorteil aggressiv ausnutzen", score: 0 },
-      { id: 'b', text: "Druck strategisch reduzieren, psychologische Sicherheit schaffen, Empathie für eine nachhaltige Einigung nutzen", score: 3 },
-      { id: 'c', text: "Signale ignorieren und die Strategie fortführen", score: 1 },
-      { id: 'd', text: "Sofort Zugeständnisse anbieten", score: 1 }
-    ]
-  },
-  {
-    id: 39, category: 'eq', layer: 'strategic_eq',
-    scenario: "Ein Kollege auf Augenhöhe verbreitet negative Gerüchte über dich.",
-    question: "Wie reagierst du?",
-    options: [
-      { id: 'a', text: "Gegendarstellungen verbreiten", score: 0 },
-      { id: 'b', text: "Direktes, ruhiges Gespräch suchen, Ursache verstehen, Situation ohne Drama klären", score: 3 },
-      { id: 'c', text: "Vollständig ignorieren", score: 1 },
-      { id: 'd', text: "Beim gemeinsamen Vorgesetzten beschweren", score: 1 }
-    ]
-  },
-  {
-    id: 40, category: 'eq', layer: 'strategic_eq',
-    scenario: "Eine emotionale Entlassungswelle muss angekündigt werden.",
-    question: "Wie bereitest du dich vor?",
-    options: [
-      { id: 'a', text: "Kommunikation vollständig an HR delegieren", score: 0 },
-      { id: 'b', text: "Emotional vorbereiten, Gespräche persönlich führen, echte Empathie zeigen, Unterstützungsressourcen bereitstellen", score: 3 },
-      { id: 'c', text: "Standardisierte E-Mail versenden", score: 0 },
-      { id: 'd', text: "Externen Berater die Nachrichten überbringen lassen", score: 1 }
-    ]
-  },
-  {
-    id: 41, category: 'eq', layer: 'strategic_eq',
-    scenario: "Das Team feiert einen großen Erfolg, du bist aber unzufrieden mit dem Prozess.",
-    question: "Wie verhältst du dich?",
-    options: [
-      { id: 'a', text: "Kritik am Prozess sofort teilen", score: 0 },
-      { id: 'b', text: "Erfolg aufrichtig feiern, Leistung anerkennen, Prozessthema separat in einem ruhigen Moment adressieren", score: 3 },
-      { id: 'c', text: "Die Feier frühzeitig verlassen", score: 0 },
-      { id: 'd', text: "Unzufriedenheit schweigend für sich behalten", score: 1 }
-    ]
-  },
-  {
-    id: 42, category: 'eq', layer: 'strategic_eq',
-    scenario: "Ein wichtiger Stakeholder kommuniziert nie emotional, aber du erkennst nonverbale Spannungssignale.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Signale ignorieren und sachlich weiterkommunizieren", score: 1 },
-      { id: 'b', text: "Unausgesprochene Spannung direkt aber taktvoll ansprechen, Raum für offene Kommunikation schaffen", score: 3 },
-      { id: 'c', text: "Kontakt reduzieren um Reibung zu minimieren", score: 0 },
-      { id: 'd', text: "Formelle E-Mail zur Klärung von Missverständnissen senden", score: 1 }
-    ]
-  },
-
-  // === BUSINESS-STRATEGIE (43–50) ===
-  {
-    id: 43, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Deine Branche wird durch KI massiv disruptiert.",
-    question: "Wie positionierst du dein Unternehmen strategisch?",
-    options: [
-      { id: 'a', text: "Auf mehr Marktklarheit warten", score: 0 },
-      { id: 'b', text: "Analysieren wo KI die Wertschöpfung ergänzen kann, wo sie bedroht, und eine aktive Transformationsstrategie entwickeln", score: 3 },
-      { id: 'c', text: "Ignorieren – das Geschäftsmodell ist KI-resistent", score: 0 },
-      { id: 'd', text: "Sofort alle verfügbaren KI-Tools adoptieren", score: 1 }
-    ]
-  },
-  {
-    id: 44, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Ein Konkurrent integriert KI deutlich schneller als ihr.",
-    question: "Was ist deine strategische Reaktion?",
-    options: [
-      { id: 'a', text: "KI-Investitionen sofort verdoppeln um aufzuholen", score: 1 },
-      { id: 'b', text: "Analysieren ob der Konkurrent wirklich profitiert, eigenen KI-Hebel identifizieren, differenzierte Strategie entwickeln", score: 3 },
-      { id: 'c', text: "Wettbewerbsaktivitäten ignorieren", score: 0 },
-      { id: 'd', text: "Den Vorstand überzeugen, dass KI ein Hype ist", score: 0 }
-    ]
-  },
-  {
-    id: 45, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Der Vorstand fragt nach dem ROI eurer KI-Investitionen. Du hast keine genauen Zahlen.",
-    question: "Wie antwortest du?",
-    options: [
-      { id: 'a', text: "Grobe Schätzungen als Fakten präsentieren", score: 0 },
-      { id: 'b', text: "Transparent über die Datenlage sein, qualitative Fortschritte zeigen, KI-ROI-Framework für die Zukunft etablieren", score: 3 },
-      { id: 'c', text: "Genaue Zahlen für nächstes Quartal versprechen", score: 1 },
-      { id: 'd', text: "Das Thema auf andere Investitionen wechseln", score: 0 }
-    ]
-  },
-  {
-    id: 46, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Ein KI-Tool schlägt eine kurzfristig profitable aber ethisch fragwürdige Empfehlung vor.",
-    question: "Was tust du?",
-    options: [
-      { id: 'a', text: "Empfehlung folgen da sie profitabel ist", score: 0 },
-      { id: 'b', text: "Ablehnen, ethische Überlegung dokumentieren, Chance für KI-Governance-Richtlinien nutzen", score: 3 },
-      { id: 'c', text: "Rechtsabteilung prüfen lassen ob es legal ist", score: 1 },
-      { id: 'd', text: "Empfehlung ohne weitere Reflexion ignorieren", score: 1 }
-    ]
-  },
-  {
-    id: 47, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Soll dein Unternehmen KI-Fähigkeiten intern aufbauen oder eine KI-Partnerschaft eingehen?",
-    question: "Was ist dein Ansatz?",
-    options: [
-      { id: 'a', text: "Immer extern einkaufen – Technologie ist nicht eure Kernkompetenz", score: 1 },
-      { id: 'b', text: "Strategisch analysieren: Kernkompetenz, Wettbewerbsvorteil durch eigenes KI-Wissen und Make-or-Buy-Kipp-Punkt", score: 3 },
-      { id: 'c', text: "Immer intern aufbauen – strategische Abhängigkeiten sind gefährlich", score: 1 },
-      { id: 'd', text: "Nach dem niedrigsten Preis entscheiden", score: 0 }
-    ]
-  },
-  {
-    id: 48, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Die digitale Transformation soll starten. Das mittlere Management widersteht.",
-    question: "Wie gehst du vor?",
-    options: [
-      { id: 'a', text: "Mittleres Management übergehen", score: 0 },
-      { id: 'b', text: "Schlüsselpersonen als Transformations-Champions identifizieren, aktiv einbinden und zu Mitgestaltern machen", score: 3 },
-      { id: 'c', text: "Transformation verlangsamen", score: 1 },
-      { id: 'd', text: "Widerständige Manager ersetzen", score: 1 }
-    ]
-  },
-  {
-    id: 49, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Begrenzte Budget-Ressourcen müssen zwischen KI-Innovation und Kerngeschäft-Optimierung aufgeteilt werden.",
-    question: "Wie allokierst du?",
-    options: [
-      { id: 'a', text: "Alles in KI investieren – das ist die Zukunft", score: 0 },
-      { id: 'b', text: "Strategischen Wert beider Bereiche bewerten, minimales Kerngeschäft-Investment definieren, dynamisch basierend auf Lernkurven allokieren", score: 3 },
-      { id: 'c', text: "An beiden sparen und auf besseren Zeitpunkt warten", score: 0 },
-      { id: 'd', text: "Den Berater-Empfehlungen für die Budget-Aufteilung folgen", score: 1 }
-    ]
-  },
-  {
-    id: 50, category: 'strategie', layer: 'ai_literacy',
-    scenario: "Du erkennst: In 3 Jahren werden KI-Agenten viele Aufgaben deines Teams übernehmen.",
-    question: "Wie handelst du jetzt?",
-    options: [
-      { id: 'a', text: "Auf Klarheit warten bevor gehandelt wird", score: 0 },
-      { id: 'b', text: "Proaktiv Upskilling starten, Rollen auf menschliche Stärken ausrichten, Human-AI-Collaboration-Strategie entwickeln", score: 3 },
-      { id: 'c', text: "Still mit Headcount-Reduktion beginnen", score: 0 },
-      { id: 'd', text: "Kommunizieren dass sich nichts ändern wird um Unruhe zu vermeiden", score: 0 }
-    ]
+    id: 30, category: 'strategie', layer: 'rhetoric', isVoice: true,
+    scenarios: {
+      selbststaendige: "Wenn du eine Botschaft an alle Führungskräfte senden könntest – was wäre sie?",
+      angestellte: "Was würdest du anderen raten, die eine Führungskarriere anstreben?",
+      senior_manager: "Was ist die wichtigste Lektion, die du als Führungskraft gelernt hast?",
+      high_potential: "Was treibt dich an? Was ist dein 'Warum' für eine Karriere in der Führung?"
+    },
+    question: "Deine persönliche Leadership-Message (30-60 Sekunden):",
+    options: [],
+    voicePrompt: true
   }
 ];
+
+// Function to get questions for a specific role
+export function getQuestionsForRole(role) {
+  const roleKey = role?.toLowerCase().replace(/[-\s]/g, '_') || 'selbststaendige';
+  const validRoles = ['selbststaendige', 'angestellte', 'senior_manager', 'high_potential'];
+  const selectedRole = validRoles.includes(roleKey) ? roleKey : 'selbststaendige';
+  
+  return baseQuestions.map(q => ({
+    ...q,
+    scenario: q.scenarios[selectedRole] || q.scenarios.selbststaendige
+  }));
+}
+
+// Export default questions (for backwards compatibility)
+export const questions = getQuestionsForRole('selbststaendige');

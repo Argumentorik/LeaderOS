@@ -1,4 +1,4 @@
-/* EMERGENT Diagnostic Hub – Cinematic Modern Noir Design System */
+/* WLADHUB Leadership Diagnose – Cinematic Modern Noir Design System */
 
 /* Base Reset */
 .App {
@@ -11,26 +11,45 @@
 .font-manrope { font-family: 'Manrope', sans-serif; }
 .font-inter { font-family: 'Inter', sans-serif; }
 
-/* Hero gradient backdrop */
+/* Hero gradient backdrop - Enhanced Orange/Amber */
 .hero-glow-center {
   position: absolute;
-  width: 900px;
-  height: 600px;
+  width: 1000px;
+  height: 700px;
   left: 50%;
-  top: 30%;
+  top: 25%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse, rgba(59, 130, 246, 0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.04) 40%, transparent 70%);
   pointer-events: none;
+  animation: glow-pulse 8s ease-in-out infinite;
 }
 
 .hero-glow-amber {
   position: absolute;
-  width: 600px;
-  height: 600px;
-  right: 0;
+  width: 700px;
+  height: 700px;
+  right: -100px;
   bottom: -200px;
-  background: radial-gradient(circle, rgba(217, 119, 6, 0.04) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.06) 0%, rgba(217, 119, 6, 0.03) 50%, transparent 70%);
   pointer-events: none;
+  animation: glow-pulse 10s ease-in-out infinite 2s;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Scroll reveal animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Progress bar animation */

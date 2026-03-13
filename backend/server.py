@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, UploadFile, File, Depends
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,12 +7,14 @@ from pathlib import Path
 import os
 import logging
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Dict, Any, Optional
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+from emergentintegrations.llm.openai import OpenAISpeechToText
 import asyncio
 import json
+import httpx
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -36,12 +39,16 @@ class UserCreate(BaseModel):
     name: str
     email: EmailStr
     role: str
+    custom_role: Optional[str] = None
+    consent_privacy: bool = True
+    consent_marketing: bool = False
 
 class QuizAnswer(BaseModel):
     question_id: int
     category: str
     layer: str
     score: int
+    voice_transcript: Optional[str] = None
 
 class QuizSubmit(BaseModel):
     session_id: str
@@ -54,21 +61,225 @@ class CoachMessage(BaseModel):
 class EmailSend(BaseModel):
     session_id: str
 
+class AuthSession(BaseModel):
+    session_id: str
 
-# --- Endpoints ---
+
+# --- Auth Helper ---
+async def get_current_user(request: Request) -> Optional[dict]:
+    """Get current user from session token cookie or Authorization header"""
+    session_token = request.cookies.get("session_token")
+    if not session_token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            session_token = auth_header[7:]
+    
+    if not session_token:
+        return None
+    
+    session = await db.user_sessions.find_one({"session_token": session_token}, {"_id": 0})
+    if not session:
+        return None
+    
+    # Check expiry
+    expires_at = session.get("expires_at")
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
+        return None
+    
+    user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
+    return user
+
+
+# --- Auth Endpoints ---
+
+@api_router.post("/auth/session")
+async def exchange_session(data: AuthSession, response: Response):
+    """Exchange Emergent OAuth session_id for session_token"""
+    # REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    try:
+        async with httpx.AsyncClient() as http_client:
+            resp = await http_client.get(
+                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+                headers={"X-Session-ID": data.session_id}
+            )
+            if resp.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid session")
+            
+            auth_data = resp.json()
+    except Exception as e:
+        logger.error(f"Auth error: {e}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+    
+    email = auth_data.get("email")
+    name = auth_data.get("name")
+    picture = auth_data.get("picture", "")
+    emergent_session_token = auth_data.get("session_token")
+    
+    # Check if user exists
+    existing_user = await db.users.find_one({"email": email}, {"_id": 0})
+    
+    if existing_user:
+        user_id = existing_user["user_id"]
+        # Update name/picture if changed
+        await db.users.update_one(
+            {"user_id": user_id},
+            {"$set": {"name": name, "picture": picture, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    else:
+        # Create new user
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        await db.users.insert_one({
+            "user_id": user_id,
+            "email": email,
+            "name": name,
+            "picture": picture,
+            "role": None,
+            "consent_privacy": True,
+            "consent_marketing": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    # Create session
+    session_token = f"sess_{uuid.uuid4().hex}"
+    expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+    
+    await db.user_sessions.insert_one({
+        "user_id": user_id,
+        "session_token": session_token,
+        "expires_at": expires_at.isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Set httpOnly cookie
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        path="/",
+        max_age=7 * 24 * 60 * 60
+    )
+    
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    return user
+
+
+@api_router.get("/auth/me")
+async def get_me(request: Request):
+    """Get current authenticated user"""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return user
+
+
+@api_router.post("/auth/logout")
+async def logout(request: Request, response: Response):
+    """Logout and clear session"""
+    session_token = request.cookies.get("session_token")
+    if session_token:
+        await db.user_sessions.delete_one({"session_token": session_token})
+    
+    response.delete_cookie(key="session_token", path="/", secure=True, samesite="none")
+    return {"message": "Logged out"}
+
+
+@api_router.post("/auth/update-profile")
+async def update_profile(request: Request):
+    """Update user profile (role, consent, etc.)"""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    data = await request.json()
+    update_fields = {}
+    
+    if "role" in data:
+        update_fields["role"] = data["role"]
+    if "custom_role" in data:
+        update_fields["custom_role"] = data["custom_role"]
+    if "consent_privacy" in data:
+        update_fields["consent_privacy"] = data["consent_privacy"]
+    if "consent_marketing" in data:
+        update_fields["consent_marketing"] = data["consent_marketing"]
+    
+    if update_fields:
+        update_fields["updated_at"] = datetime.now(timezone.utc).isoformat()
+        await db.users.update_one(
+            {"user_id": user["user_id"]},
+            {"$set": update_fields}
+        )
+    
+    updated_user = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return updated_user
+
+
+# --- Voice Transcription ---
+
+@api_router.post("/voice/transcribe")
+async def transcribe_voice(file: UploadFile = File(...)):
+    """Transcribe voice recording using OpenAI Whisper"""
+    try:
+        # Read file content
+        content = await file.read()
+        
+        # Check file size (max 25MB)
+        if len(content) > 25 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File too large. Maximum 25MB allowed.")
+        
+        # Initialize Whisper
+        stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
+        
+        # Create temp file for transcription
+        import tempfile
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
+            tmp.write(content)
+            tmp_path = tmp.name
+        
+        try:
+            with open(tmp_path, "rb") as audio_file:
+                response = await stt.transcribe(
+                    file=audio_file,
+                    model="whisper-1",
+                    response_format="json",
+                    language="de"  # German
+                )
+            
+            return {"transcript": response.text, "success": True}
+        finally:
+            # Clean up temp file
+            os.unlink(tmp_path)
+            
+    except Exception as e:
+        logger.error(f"Transcription error: {e}")
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
+
+
+# --- Health & Basic Endpoints ---
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "EMERGENT Diagnostic Hub"}
+    return {"status": "healthy", "service": "WLADHUB Leadership Diagnose"}
+
 
 @api_router.post("/user/create")
 async def create_user(data: UserCreate):
+    """Create user for non-OAuth flow (legacy support)"""
     session_id = str(uuid.uuid4())
     doc = {
         "session_id": session_id,
+        "user_id": f"user_{uuid.uuid4().hex[:12]}",
         "name": data.name,
         "email": data.email,
         "role": data.role,
+        "custom_role": data.custom_role,
+        "consent_privacy": data.consent_privacy,
+        "consent_marketing": data.consent_marketing,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(doc)
@@ -79,310 +290,258 @@ async def create_user(data: UserCreate):
 async def generate_report(data: QuizSubmit):
     user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
     if not user:
-        raise HTTPException(404, "Session nicht gefunden")
+        # Try finding by user_id
+        user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
 
-    cats = {c: {"total": 0, "max": 0} for c in ["rhetorik", "kritisches_denken", "entscheidung", "fuehrung", "eq", "strategie"]}
-    layers = {l: {"total": 0, "count": 0} for l in ["ai_literacy", "rhetoric", "strategic_eq"]}
+    # Calculate scores per category and layer
+    cat_scores = {}
+    layer_scores = {"ai_literacy": [], "rhetoric": [], "strategic_eq": []}
 
-    for a in data.answers:
-        if a.category in cats:
-            cats[a.category]["total"] += a.score
-            cats[a.category]["max"] += 3
-        if a.layer in layers:
-            layers[a.layer]["total"] += a.score
-            layers[a.layer]["count"] += 1
+    for ans in data.answers:
+        cat = ans.category
+        if cat not in cat_scores:
+            cat_scores[cat] = []
+        cat_scores[cat].append(ans.score)
 
-    cat_scores = {c: round(v["total"] / v["max"] * 100) if v["max"] else 0 for c, v in cats.items()}
-    layer_scores = {l: round(v["total"] / (v["count"] * 3) * 100) if v["count"] else 0 for l, v in layers.items()}
-    avg = round(sum(cat_scores.values()) / len(cat_scores))
+        layer = ans.layer
+        if layer in layer_scores:
+            layer_scores[layer].append(ans.score)
 
+    # Average per category (out of 100)
+    cat_avg = {k: int(sum(v) / len(v) * 25) for k, v in cat_scores.items() if v}
+    layer_avg = {k: int(sum(v) / len(v) * 25) for k, v in layer_scores.items() if v}
+    total_avg = int(sum(cat_avg.values()) / len(cat_avg)) if cat_avg else 50
+
+    # Collect voice transcripts for analysis
+    voice_answers = [a for a in data.answers if a.voice_transcript]
+    voice_context = ""
+    if voice_answers:
+        voice_context = "\n\nVoice responses from the user:\n" + "\n".join([
+            f"- Question {a.question_id}: {a.voice_transcript}" for a in voice_answers
+        ])
+
+    # Generate AI narrative
+    narrative = {}
+    if EMERGENT_LLM_KEY:
+        try:
+            chat = LlmChat(api_key=EMERGENT_LLM_KEY, model="claude-sonnet-4-20250514")
+            prompt = f"""Du bist ein Executive Leadership Coach. Analysiere dieses Leadership-Profil auf Deutsch.
+
+Benutzer: {user.get('name', 'Leader')}, Rolle: {user.get('role', 'Führungskraft')}
+
+KATEGORIE-SCORES (0-100):
+{json.dumps(cat_avg, indent=2)}
+
+LAYER-SCORES (0-100):
+- KI-Kompetenz (ai_literacy): {layer_avg.get('ai_literacy', 50)}
+- Boardroom-Rhetorik (rhetoric): {layer_avg.get('rhetoric', 50)}
+- Strategisches EQ (strategic_eq): {layer_avg.get('strategic_eq', 50)}
+
+GESAMT: {total_avg}%
+{voice_context}
+
+Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant, max 2-3 Sätze pro Abschnitt):
+
+1. profile_title: Ein passender Titel für dieses Führungsprofil (z.B. "Der strategische Visionär")
+2. executive_summary: Kernaussage über die Stärken und das Potenzial
+3. ai_literacy_analysis: Bewertung der KI-Kompetenz
+4. rhetoric_analysis: Bewertung der Kommunikationsstärke
+5. eq_analysis: Bewertung der emotionalen Intelligenz
+6. top_strength: Die größte Stärke
+7. growth_priority: Die wichtigste Entwicklungspriorität
+8. recommendation_1: {{title, description}} - Erste Empfehlung
+9. recommendation_2: {{title, description}} - Zweite Empfehlung
+10. recommendation_3: {{title, description}} - Dritte Empfehlung
+11. urgency_message: Warum jetzt handeln? (motivierend, nicht bedrohlich)
+12. closing_statement: Ein inspirierender Abschlusssatz
+
+Antworte NUR mit validem JSON."""
+
+            response = await chat.send_message(UserMessage(content=prompt))
+            text = response.content.strip()
+            if text.startswith("```"):
+                text = text.split("```")[1]
+                if text.startswith("json"):
+                    text = text[4:]
+            narrative = json.loads(text)
+        except Exception as e:
+            logger.error(f"AI narrative error: {e}")
+            narrative = {
+                "profile_title": "Leadership-Profil",
+                "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."
+            }
+
+    # ROI estimates
     roi = {
-        "hours_saved": max(2, round(avg / 100 * 10 + 2)),
-        "decision_speed": round((avg / 100 * 2.5 + 1.5) * 10) / 10,
-        "performance_boost": min(85, round(avg * 0.6 + 15))
+        "hours_saved": min(12, max(3, int(layer_avg.get('ai_literacy', 50) / 10))),
+        "decision_speed": round(1 + (total_avg / 50), 1),
+        "performance_boost": min(35, max(10, int(total_avg / 3)))
     }
-
-    narrative = await build_narrative(user, cat_scores, layer_scores, avg)
 
     report = {
         "session_id": data.session_id,
-        "cat_scores": cat_scores,
-        "layer_scores": layer_scores,
-        "avg_total": avg,
+        "user": {"name": user.get("name"), "role": user.get("role"), "email": user.get("email")},
+        "cat_scores": cat_avg,
+        "layer_scores": layer_avg,
+        "avg_total": total_avg,
         "roi": roi,
         "narrative": narrative,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
-    await db.reports.replace_one({"session_id": data.session_id}, report, upsert=True)
-    return {**report, "user": {"name": user["name"], "role": user["role"], "email": user["email"]}}
 
-
-async def build_narrative(user, cat_scores, layer_scores, avg):
-    if not EMERGENT_LLM_KEY:
-        return default_narrative(user["name"], user["role"])
-
-    prompt = f"""Analysiere dieses Leadership-Diagnose-Profil und erstelle einen personalisierten Report auf Deutsch.
-
-Name: {user['name']}, Rolle: {user['role']}, Gesamtscore: {avg}%
-
-Kategorie-Scores:
-- Rhetorik & Kommunikation: {cat_scores.get('rhetorik', 0)}%
-- Kritisches Denken: {cat_scores.get('kritisches_denken', 0)}%
-- Entscheidungsfindung: {cat_scores.get('entscheidung', 0)}%
-- Führungskompetenz: {cat_scores.get('fuehrung', 0)}%
-- Emotionale Intelligenz: {cat_scores.get('eq', 0)}%
-- Business-Strategie: {cat_scores.get('strategie', 0)}%
-
-Layer-Scores:
-- KI-Kompetenz: {layer_scores.get('ai_literacy', 0)}%
-- Boardroom-Rhetorik: {layer_scores.get('rhetoric', 0)}%
-- Strategisches EQ: {layer_scores.get('strategic_eq', 0)}%
-
-Antworte NUR mit valid JSON (kein anderer Text, kein Markdown):
-{{
-  "profile_title": "Prägnanter Leadership-Profil-Titel (3-5 Wörter)",
-  "executive_summary": "3 kraftvolle Sätze über das Leadership-Profil von {user['name']} basierend auf den Scores. Sehr direkt und spezifisch.",
-  "ai_literacy_analysis": "2 prägnante Sätze zur KI-Kompetenz und was zu verbessern ist.",
-  "rhetoric_analysis": "2 prägnante Sätze zur Boardroom-Rhetorik-Kompetenz.",
-  "eq_analysis": "2 prägnante Sätze zum Strategischen EQ.",
-  "top_strength": "Die stärkste Führungskompetenz in einem prägnanten Satz.",
-  "growth_priority": "Die wichtigste Wachstumszone in einem Satz.",
-  "recommendation_1": {{"title": "Empfehlungstitel", "description": "2 konkrete, handlungsorientierte Sätze."}},
-  "recommendation_2": {{"title": "Empfehlungstitel", "description": "2 konkrete, handlungsorientierte Sätze."}},
-  "recommendation_3": {{"title": "Empfehlungstitel", "description": "2 konkrete, handlungsorientierte Sätze."}},
-  "closing_statement": "1-2 kraftvolle, motivierende Abschlusssätze.",
-  "urgency_message": "Eine Dringlichkeitsbotschaft basierend auf dem niedrigsten Score-Bereich."
-}}"""
-
-    try:
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"rpt-{uuid.uuid4()}",
-            system_message="Du bist ein Elite-Leadership-Coach. Antworte immer auf Deutsch. Nur valid JSON, kein anderer Text."
-        ).with_model("anthropic", "claude-4-sonnet-20250514")
-        response = await chat.send_message(UserMessage(text=prompt))
-
-        text = response.strip()
-        if "```" in text:
-            parts = text.split("```")
-            for part in parts:
-                part = part.replace("json", "").strip()
-                if part.startswith("{"):
-                    text = part
-                    break
-        return json.loads(text)
-    except Exception as e:
-        logger.error(f"Claude error: {e}")
-        return default_narrative(user["name"], user["role"])
-
-
-def default_narrative(name, role="Leader"):
-    return {
-        "profile_title": "Der strategische Führungspionier",
-        "executive_summary": f"{name} zeigt ein ausgeprägtes Führungsprofil mit klarem Potenzial für strategische Dominanz im KI-Zeitalter. Die Diagnose zeigt solide Grundlagen in mehreren Dimensionen, die mit gezielter Entwicklung zu außergewöhnlichen Ergebnissen führen werden. Besonders die Kombination aus analytischem Denken und menschlicher Führungskompetenz ist die Basis für nachhaltige Irreplaceability.",
-        "ai_literacy_analysis": "Die KI-Kompetenz bietet erhebliches Ausbaupotenzial. Der strategische Einsatz von KI als Führungshebel ist der nächste entscheidende Schritt zur strategischen Dominanz.",
-        "rhetoric_analysis": "Die Boardroom-Rhetorik zeigt solide Grundlagen. Mit gezieltem Kommunikationstraining wird die Leadership-Präsenz in High-Stakes-Situationen deutlich wachsen.",
-        "eq_analysis": "Das Strategische EQ ist ein bedeutender Differenziator. Die Vertiefung in emotionaler Kalibrierung und Autoritätssicherung wird die Führungseffektivität signifikant steigern.",
-        "top_strength": "Strukturiertes analytisches Denken unter Druck und die Fähigkeit, komplexe Entscheidungen strukturiert zu treffen.",
-        "growth_priority": "Integration von KI-Tools als strategischer Hebel in die tägliche Führungspraxis.",
-        "recommendation_1": {
-            "title": "Boardroom-Rhetorik schärfen",
-            "description": "Trainiere gezielt die Kommunikation komplexer Ideen in 90-Sekunden-Formaten für Boardroom-Situationen. Nutze High-Stakes-Gespräche bewusst als Trainingsfeld für strategische Überzeugungskraft."
-        },
-        "recommendation_2": {
-            "title": "KI als strategischen Hebel nutzen",
-            "description": "Identifiziere 3 konkrete Use Cases, in denen KI deine Entscheidungsgeschwindigkeit verdreifachen kann. Baue ein persönliches KI-Toolkit für Investor-Gespräche und strategische Analysen."
-        },
-        "recommendation_3": {
-            "title": "Strategisches EQ vertiefen",
-            "description": "Entwickle ein persönliches Energie-Management-System für High-Pressure-Situationen. Emotionale Kalibrierung ist dein stärkster Hebel gegen Replaceability im KI-Zeitalter."
-        },
-        "closing_statement": "Du stehst am Beginn einer transformativen Leadership-Journey. Der Unterschied zwischen einem guten und einem unverzichtbaren Leader liegt in den nächsten 30 Tagen gezielter Entwicklung.",
-        "urgency_message": "Unternehmen ohne aktive Führungsentwicklung verzeichnen 3.7x mehr Resignationen. Jeder Tag ohne gezieltes Leadership-Upgrade ist ein strategischer Rückschritt."
-    }
+    await db.reports.insert_one({**report, "report_id": str(uuid.uuid4())})
+    return report
 
 
 @api_router.get("/report/{session_id}")
 async def get_report(session_id: str):
     report = await db.reports.find_one({"session_id": session_id}, {"_id": 0})
     if not report:
-        raise HTTPException(404, "Report nicht gefunden")
-    user = await db.users.find_one({"session_id": session_id}, {"_id": 0})
-    if user:
-        return {**report, "user": {"name": user["name"], "role": user["role"], "email": user["email"]}}
+        raise HTTPException(status_code=404, detail="Report not found")
     return report
 
 
 @api_router.post("/coach/chat")
 async def coach_chat(data: CoachMessage):
+    if not EMERGENT_LLM_KEY:
+        return {"response": "Der WLADBOT ist derzeit nicht verfügbar."}
+
+    # Get user context
     user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
+    if not user:
+        user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
+    
     report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
 
-    context = ""
-    if user:
-        context = f"Nutzer: {user['name']}, Rolle: {user['role']}"
-    if report:
-        context += f", Gesamtscore: {report.get('avg_total', '?')}%"
-        n = report.get("narrative", {})
-        if n.get("profile_title"):
-            context += f", Profil: {n['profile_title']}"
+    context = f"""Du bist der WLADBOT, ein professioneller KI-Leadership-Coach.
+Kommuniziere auf Deutsch, direkt und präzise. Keine langen Einleitungen.
 
-    if not EMERGENT_LLM_KEY:
-        return {"response": "Der AI-Coach ist nicht konfiguriert. Bitte kontaktiere uns für persönliches Coaching."}
+Benutzer: {user.get('name', 'Leader') if user else 'Leader'}
+Rolle: {user.get('role', 'Führungskraft') if user else 'Führungskraft'}
+"""
+    if report:
+        context += f"""
+Profil-Score: {report.get('avg_total', 50)}%
+Stärke: {report.get('narrative', {}).get('top_strength', 'unbekannt')}
+Wachstumspriorität: {report.get('narrative', {}).get('growth_priority', 'unbekannt')}
+"""
 
     try:
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"coach-{data.session_id}",
-            system_message=f"""Du bist ein Elite KI-Leadership-Coach bei EMERGENT. Du gibst präzises, direktes und transformatives Coaching auf Deutsch.
-
-Kontext: {context}
-
-Regeln:
-- Antworte immer auf Deutsch
-- Sei direkt, klar und handlungsorientiert  
-- Max 150 Wörter pro Antwort
-- Fokus auf sofort anwendbare Ratschläge
-- Referenziere den Nutzerkontext wenn relevant
-- Nie allgemein - immer spezifisch für Leadership im KI-Zeitalter"""
-        ).with_model("anthropic", "claude-4-sonnet-20250514")
-        response = await chat.send_message(UserMessage(text=data.message))
-        return {"response": response}
+        chat = LlmChat(api_key=EMERGENT_LLM_KEY, model="claude-sonnet-4-20250514")
+        response = await chat.send_message(UserMessage(content=f"{context}\n\nBenutzer fragt: {data.message}"))
+        return {"response": response.content}
     except Exception as e:
         logger.error(f"Coach error: {e}")
-        return {"response": "Der AI-Coach ist momentan überlastet. Bitte versuche es in einem Moment erneut."}
+        return {"response": "Ein Fehler ist aufgetreten. Bitte versuche es erneut."}
 
 
 @api_router.post("/email/send-report")
-async def send_email(data: EmailSend):
+async def send_report_email(data: EmailSend):
     report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
-    user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    
+    if not RESEND_API_KEY or RESEND_API_KEY == "your_resend_api_key_here":
+        return {"success": False, "message": "Email service not configured"}
 
-    if not report or not user:
-        raise HTTPException(404, "Daten nicht gefunden")
+    user = report.get("user", {})
+    email = user.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="No email found")
 
-    if not RESEND_API_KEY or RESEND_API_KEY in ("your_resend_api_key_here", "", "placeholder"):
-        logger.info("Resend not configured - skipping email")
-        return {"status": "skipped", "message": "Email-Service nicht konfiguriert"}
+    narrative = report.get("narrative", {})
+    html = generate_email_html(report, user, narrative)
 
     try:
         import resend
         resend.api_key = RESEND_API_KEY
-
-        html = build_email_html(user, report)
-        narrative = report.get("narrative", {})
-        params = {
+        resp = resend.Emails.send({
             "from": SENDER_EMAIL,
-            "to": [user["email"]],
-            "subject": f"Dein EMERGENT Leadership-Report | {narrative.get('profile_title', 'Persönlicher Report')}",
+            "to": [email],
+            "subject": f"Dein WLADHUB Leadership-Report | {narrative.get('profile_title', 'Leadership-Profil')}",
             "html": html
-        }
-        result = await asyncio.to_thread(resend.Emails.send, params)
-        return {"status": "success", "id": result.get("id")}
+        })
+        return {"success": True, "id": resp.get("id")}
     except Exception as e:
         logger.error(f"Email error: {e}")
-        return {"status": "error", "message": str(e)}
+        return {"success": False, "error": str(e)}
 
 
-def build_email_html(user, report):
-    n = report.get("narrative", {})
-    ls = report.get("layer_scores", {})
-    roi = report.get("roi", {})
-    r1 = n.get("recommendation_1", {})
-    r2 = n.get("recommendation_2", {})
-    r3 = n.get("recommendation_3", {})
-
+def generate_email_html(report, user, narrative):
     return f"""<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#050505;font-family:Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#050505">
-<tr><td align="center" style="padding:40px 20px;">
-<table width="580" cellpadding="0" cellspacing="0" style="background:#0A0A0B;border:1px solid #27272A;max-width:580px;">
-<tr><td style="padding:32px 40px;border-bottom:1px solid #27272A;">
-  <span style="color:#3B82F6;font-size:18px;font-weight:900;letter-spacing:3px;">EMERGENT</span>
-  <span style="color:#D97706;font-size:10px;font-weight:700;letter-spacing:4px;margin-left:10px;">DIAGNOSTIC HUB</span>
-  <p style="color:#94A3B8;font-size:11px;margin:8px 0 0;letter-spacing:1px;">AI CHANGES SPEED. LEADERSHIP DECIDES DIRECTION.</p>
-</td></tr>
-<tr><td style="padding:40px;">
-  <h1 style="color:#FFFFFF;font-size:22px;margin:0 0 8px;">Liebe/r {user['name']},</h1>
-  <p style="color:#94A3B8;font-size:13px;margin:0 0 28px;">dein persönlicher Leadership-Diagnose Report ist bereit.</p>
+<html><head><meta charset="UTF-8"></head>
+<body style="font-family: Arial, sans-serif; background: #030303; color: #ffffff; padding: 40px;">
+<div style="max-width: 600px; margin: 0 auto;">
+<h1 style="color: #F59E0B;">WLADHUB Leadership-Report</h1>
+<p>Hallo {user.get('name', 'Leader')},</p>
+<p>Dein persönlicher Leadership-Report ist fertig.</p>
 
-  <div style="background:#0D1829;border:1px solid #1E3A5F;border-left:4px solid #D97706;padding:20px;margin:0 0 28px;">
-    <p style="color:#D97706;font-size:9px;letter-spacing:4px;margin:0 0 6px;text-transform:uppercase;">DEIN FÜHRUNGSPROFIL</p>
-    <h2 style="color:#FFFFFF;font-size:20px;font-weight:900;margin:0;">{n.get('profile_title', 'Leadership Profil')}</h2>
-  </div>
+<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin: 20px 0;">
+<h2 style="color: #F59E0B; margin-top: 0;">{narrative.get('profile_title', 'Dein Profil')}</h2>
+<p>{narrative.get('executive_summary', '')}</p>
+</div>
 
-  <p style="color:#CBD5E1;font-size:14px;line-height:1.8;margin:0 0 32px;">{n.get('executive_summary', '')}</p>
+<h3>Deine Scores</h3>
+<p><strong>Gesamt:</strong> {report.get('avg_total', 50)}%</p>
+<p><strong>KI-Kompetenz:</strong> {report.get('layer_scores', {}).get('ai_literacy', 50)}%</p>
+<p><strong>Boardroom-Rhetorik:</strong> {report.get('layer_scores', {}).get('rhetoric', 50)}%</p>
+<p><strong>Strategisches EQ:</strong> {report.get('layer_scores', {}).get('strategic_eq', 50)}%</p>
 
-  <table width="100%" cellpadding="0" cellspacing="6" style="margin:0 0 28px;">
-    <tr>
-      <td align="center" style="background:#0D1829;border:1px solid #1E3A5F;padding:14px;width:33%;">
-        <p style="color:#3B82F6;font-size:8px;letter-spacing:3px;margin:0 0 4px;text-transform:uppercase;">KI-KOMPETENZ</p>
-        <p style="color:#FFFFFF;font-size:24px;font-weight:900;margin:0;">{ls.get('ai_literacy', 0)}%</p>
-      </td>
-      <td align="center" style="background:#0D1829;border:1px solid #1E3A5F;padding:14px;width:33%;">
-        <p style="color:#3B82F6;font-size:8px;letter-spacing:3px;margin:0 0 4px;text-transform:uppercase;">BOARDROOM-RHETORIK</p>
-        <p style="color:#FFFFFF;font-size:24px;font-weight:900;margin:0;">{ls.get('rhetoric', 0)}%</p>
-      </td>
-      <td align="center" style="background:#0D1829;border:1px solid #7C4A00;padding:14px;width:33%;">
-        <p style="color:#D97706;font-size:8px;letter-spacing:3px;margin:0 0 4px;text-transform:uppercase;">STRATEGISCHES EQ</p>
-        <p style="color:#FFFFFF;font-size:24px;font-weight:900;margin:0;">{ls.get('strategic_eq', 0)}%</p>
-      </td>
-    </tr>
-  </table>
+<div style="margin-top: 30px;">
+<a href="https://wladhub.com" style="background: #F59E0B; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 100px; font-weight: bold;">
+Zur WLADBOT Plattform
+</a>
+</div>
 
-  <div style="background:#0D1829;border:1px solid #1E3A5F;padding:20px;margin:0 0 28px;">
-    <p style="color:#FFFFFF;font-size:14px;font-weight:700;margin:0 0 12px;">Dein ROI-Potential:</p>
-    <p style="color:#10B981;font-size:13px;margin:0 0 6px;">+ {roi.get('hours_saved', 5)} Stunden gesparte Arbeitszeit pro Woche</p>
-    <p style="color:#10B981;font-size:13px;margin:0 0 6px;">{roi.get('decision_speed', 2.0)}x schnellere Entscheidungsgeschwindigkeit</p>
-    <p style="color:#10B981;font-size:13px;margin:0;">+ {roi.get('performance_boost', 35)}% Team-Performance-Steigerung</p>
-  </div>
-
-  <p style="color:#FFFFFF;font-size:14px;font-weight:700;margin:0 0 16px;">Top 3 Empfehlungen:</p>
-  <div style="border-left:3px solid #3B82F6;padding-left:16px;margin:0 0 14px;">
-    <p style="color:#FFFFFF;font-size:13px;font-weight:700;margin:0 0 4px;">{r1.get('title','')}</p>
-    <p style="color:#94A3B8;font-size:12px;margin:0;">{r1.get('description','')}</p>
-  </div>
-  <div style="border-left:3px solid #3B82F6;padding-left:16px;margin:0 0 14px;">
-    <p style="color:#FFFFFF;font-size:13px;font-weight:700;margin:0 0 4px;">{r2.get('title','')}</p>
-    <p style="color:#94A3B8;font-size:12px;margin:0;">{r2.get('description','')}</p>
-  </div>
-  <div style="border-left:3px solid #D97706;padding-left:16px;margin:0 0 32px;">
-    <p style="color:#FFFFFF;font-size:13px;font-weight:700;margin:0 0 4px;">{r3.get('title','')}</p>
-    <p style="color:#94A3B8;font-size:12px;margin:0;">{r3.get('description','')}</p>
-  </div>
-
-  <div style="text-align:center;margin:0 0 32px;">
-    <a href="https://decision-speed.preview.emergentagent.com/roadmap"
-       style="display:inline-block;background:#FFFFFF;color:#000000;padding:14px 36px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:2px;">
-      JETZT 30-TAGE-PLAN STARTEN
-    </a>
-  </div>
-
-  <div style="background:#0D1829;border:1px solid #7C4A00;padding:24px;text-align:center;">
-    <p style="color:#D97706;font-size:9px;letter-spacing:4px;margin:0 0 8px;text-transform:uppercase;">EXKLUSIV FUR DICH</p>
-    <p style="color:#FFFFFF;font-size:18px;font-weight:700;margin:0 0 6px;">Kostenloser Zugang zum AI Learn Space</p>
-    <p style="color:#94A3B8;font-size:12px;margin:0 0 16px;">7 Kurse. KI-Coach 24/7. Strategische Dominanz.</p>
-    <a href="https://decision-speed.preview.emergentagent.com/close"
-       style="display:inline-block;background:#D97706;color:#000000;padding:12px 28px;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:2px;">
-      KOSTENLOS STARTEN
-    </a>
-  </div>
-</td></tr>
-<tr><td style="padding:20px 40px;border-top:1px solid #27272A;">
-  <p style="color:#374151;font-size:11px;margin:0;text-align:center;">
-    EMERGENT Diagnostic Hub &nbsp;|&nbsp; Leadership in the Age of AI
-  </p>
-</td></tr>
-</table>
-</td></tr>
-</table>
+<p style="margin-top: 40px; color: #666; font-size: 12px;">
+© 2025 WLADHUB. Alle Rechte vorbehalten.<br>
+Du erhältst diese E-Mail, weil du die WLADHUB Leadership-Diagnose durchgeführt hast.
+</p>
+</div>
 </body></html>"""
+
+
+# --- Privacy & Legal ---
+
+@api_router.get("/privacy-policy")
+async def privacy_policy():
+    return {
+        "title": "Datenschutzerklärung",
+        "last_updated": "2025-01-01",
+        "content": {
+            "data_collection": "Wir erheben Name, E-Mail und Diagnose-Antworten.",
+            "data_usage": "Daten werden zur Erstellung deines Leadership-Reports verwendet.",
+            "data_storage": "Daten werden sicher auf EU-Servern gespeichert.",
+            "data_deletion": "Du kannst jederzeit die Löschung deiner Daten anfordern.",
+            "cookies": "Wir verwenden notwendige Session-Cookies für die Authentifizierung.",
+            "third_parties": "Wir teilen keine Daten mit Dritten ohne deine Zustimmung.",
+            "contact": "Datenschutz-Anfragen: datenschutz@wladhub.com"
+        }
+    }
+
+
+@api_router.delete("/user/delete-data")
+async def delete_user_data(request: Request):
+    """GDPR: Delete all user data"""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    user_id = user["user_id"]
+    
+    # Delete all user data
+    await db.users.delete_one({"user_id": user_id})
+    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.reports.delete_many({"session_id": user_id})
+    
+    return {"message": "All your data has been deleted"}
 
 
 @api_router.get("/")
 async def root():
-    return {"message": "EMERGENT Diagnostic Hub API"}
+    return {"message": "WLADHUB Leadership Diagnose API"}
 
 app.include_router(api_router)
 

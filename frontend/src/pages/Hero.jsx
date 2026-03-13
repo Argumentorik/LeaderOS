@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle } from "lucide-react";
+import { ScrollReveal } from "../hooks/useScrollReveal";
 
 const layers = [
   {
@@ -9,7 +10,7 @@ const layers = [
     subtitle: "Layer 1",
     desc: "KI als strategischen Hebel nutzen.",
     points: ["Entscheidungen schneller treffen", "Prozesse automatisieren", "Wettbewerbsvorteile schaffen"],
-    color: "#3B82F6"
+    color: "#F59E0B" // Changed to amber
   },
   {
     num: "02",
@@ -18,7 +19,7 @@ const layers = [
     subtitle: "Layer 2",
     desc: "Autorität zeigen, wenn es darauf ankommt.",
     points: ["Argumentationsstruktur", "Klare Kommunikation", "Souveräne Präsenz"],
-    color: "#60A5FA"
+    color: "#F97316" // Orange
   },
   {
     num: "03",
@@ -27,7 +28,7 @@ const layers = [
     subtitle: "Layer 3",
     desc: "Empathie als Führungskraft-Verstärker.",
     points: ["Teamdynamiken verstehen", "Vertrauen aufbauen", "Konflikte strategisch lösen"],
-    color: "#F59E0B"
+    color: "#D97706" // Darker amber
   }
 ];
 
@@ -45,12 +46,12 @@ const diagnoseSteps = [
 ];
 
 const platformFeatures = [
-  { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#3B82F6" },
-  { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#60A5FA" },
-  { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
+  { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#F59E0B" },
+  { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#F97316" },
+  { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#D97706" },
   { icon: BookOpen, title: "Playbooks", desc: "Bewährte Strategien", color: "#F59E0B" },
-  { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#10B981" },
-  { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#EC4899" },
+  { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#F97316" },
+  { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#D97706" },
 ];
 
 const wladbotFeatures = [
@@ -158,46 +159,52 @@ export default function Hero() {
         {/* ===== SECTION 2: PROBLEM ===== */}
         <section className="py-20 border-t border-white/5">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-12">
-              <span className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-4 block">
-                Die Realität moderner Führung
-              </span>
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Viele Führungskräfte sind in einem Bereich stark –
-                <br className="hidden md:block" />
-                <span className="text-slate-500">aber nicht in allen.</span>
-              </h2>
-            </div>
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <span className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-4 block">
+                  Die Realität moderner Führung
+                </span>
+                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
+                  Viele Führungskräfte sind in einem Bereich stark –
+                  <br className="hidden md:block" />
+                  <span className="text-slate-500">aber nicht in allen.</span>
+                </h2>
+              </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Problems */}
-              <div className="glass-card-subtle p-8">
-                <div className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-6">
-                  Typische Muster
+              <ScrollReveal delay={100}>
+                <div className="glass-card-subtle p-8">
+                  <div className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-6">
+                    Typische Muster
+                  </div>
+                  <div className="space-y-4">
+                    {problems.map((problem, i) => (
+                      <div key={i} className="flex items-start gap-4">
+                        <X className="w-5 h-5 text-red-500/70 shrink-0 mt-0.5" />
+                        <span className="font-inter text-slate-400">{problem}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  {problems.map((problem, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <X className="w-5 h-5 text-red-500/70 shrink-0 mt-0.5" />
-                      <span className="font-inter text-slate-400">{problem}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </ScrollReveal>
 
               {/* Consequences */}
-              <div className="glass-card p-8 card-glow-amber">
-                <div className="font-inter text-xs tracking-widest text-amber-500/80 uppercase mb-6">
-                  Das Ergebnis
+              <ScrollReveal delay={200}>
+                <div className="glass-card p-8 card-glow-amber">
+                  <div className="font-inter text-xs tracking-widest text-amber-500/80 uppercase mb-6">
+                    Das Ergebnis
+                  </div>
+                  <div className="space-y-3">
+                    {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
+                      <div key={i} className="font-manrope font-bold text-xl text-white">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-3">
-                  {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
-                    <div key={i} className="font-manrope font-bold text-xl text-white">
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
