@@ -103,56 +103,54 @@ export default function Hero() {
 
       <div className="relative z-10">
         {/* ===== SECTION 1: HERO ===== */}
-        <section className="max-w-6xl mx-auto px-4 md:px-8 pt-28 pb-20">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Pre-headline */}
-            <p className="font-inter text-sm md:text-base text-slate-500 mb-6 opacity-0 anim-fade-up">
-              Werde der Leader, den KI nicht ersetzen kann.
-            </p>
+        <section className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pt-32 pb-24">
+          {/* Pre-headline */}
+          <p className="font-inter text-sm md:text-base text-slate-500 mb-8 opacity-0 anim-fade-up text-center">
+            Werde der Leader, den KI nicht ersetzen kann.
+          </p>
 
-            {/* Main Headline */}
-            <h1
-              className="font-manrope font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-white mb-6 opacity-0 anim-fade-up delay-1"
-              data-testid="hero-headline"
+          {/* Main Headline — full width, dominant */}
+          <h1
+            className="font-manrope font-extrabold text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.05] tracking-[-0.03em] text-white mb-8 opacity-0 anim-fade-up delay-1 text-center"
+            data-testid="hero-headline"
+          >
+            KI skaliert Intelligenz.
+            <br />
+            <span className="text-gradient-amber">Leadership bestimmt</span>
+            <br />
+            die Richtung.
+          </h1>
+
+          {/* Three Skills */}
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5 mb-10 opacity-0 anim-fade-up delay-2">
+            <span className="badge-blue px-5 py-2.5 text-sm font-semibold tracking-wide">KI-Kompetenz</span>
+            <span className="badge-blue px-5 py-2.5 text-sm font-semibold tracking-wide">Boardroom-Rhetorik</span>
+            <span className="badge-amber px-5 py-2.5 text-sm font-semibold tracking-wide">Strategisches EQ</span>
+          </div>
+
+          {/* Subheadline */}
+          <p
+            className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-12 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
+            data-testid="hero-subheadline"
+          >
+            Die <span className="text-white font-semibold">WLADHUB Diagnose</span> zeigt dir in{" "}
+            <span className="text-white font-semibold">7 Minuten</span>, wo du stehst – 
+            und was dich von den <span className="text-gradient-amber font-semibold">Top 3 % der Leader</span> trennt.
+          </p>
+
+          {/* CTA */}
+          <div className="opacity-0 anim-fade-up delay-4 text-center">
+            <button
+              data-testid="hero-cta-primary"
+              onClick={() => navigate("/diagnose")}
+              className="btn-primary inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold mb-5"
             >
-              Die neue Elite der Führungskräfte
-              <br />
-              <span className="text-gradient-amber">beherrscht drei Fähigkeiten</span>
-              <br />
-              gleichzeitig.
-            </h1>
-
-            {/* Three Skills */}
-            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-8 opacity-0 anim-fade-up delay-2">
-              <span className="badge-blue px-4 py-2 text-sm font-medium">KI-Kompetenz</span>
-              <span className="badge-blue px-4 py-2 text-sm font-medium">Boardroom-Rhetorik</span>
-              <span className="badge-amber px-4 py-2 text-sm font-medium">Strategisches EQ</span>
-            </div>
-
-            {/* Subheadline */}
-            <p
-              className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-10 max-w-2xl mx-auto opacity-0 anim-fade-up delay-3"
-              data-testid="hero-subheadline"
-            >
-              Mit der <span className="text-white font-semibold">WLADHUB Diagnose</span> findest du in nur{" "}
-              <span className="text-white font-semibold">7 Minuten</span> heraus, wo du heute stehst – 
-              und wie du zu den <span className="text-gradient-amber font-semibold">Top 3 % der Leader</span> gehörst.
+              Kostenlose Leadership-Diagnose starten
+              <ArrowRight className="w-5 h-5" />
+            </button>
+            <p className="font-inter text-sm text-slate-600">
+              7 Minuten · Sofortiger Report · Persönlicher Aktionsplan
             </p>
-
-            {/* CTA */}
-            <div className="opacity-0 anim-fade-up delay-4">
-              <button
-                data-testid="hero-cta-primary"
-                onClick={() => navigate("/diagnose")}
-                className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold mx-auto mb-4"
-              >
-                Kostenlose Leadership-Diagnose starten
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <p className="font-inter text-sm text-slate-600">
-                7 Minuten · Sofortiger Report · Persönlicher Aktionsplan
-              </p>
-            </div>
           </div>
         </section>
 

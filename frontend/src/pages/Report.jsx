@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip
 } from "recharts";
-import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle } from "lucide-react";
+import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle, Download } from "lucide-react";
+import { generateReportPDF } from "../utils/generatePDF";
 
 const catLabels = {
   rhetorik: "Rhetorik",
@@ -111,11 +112,21 @@ export default function Report() {
             </h1>
             <p className="font-inter text-slate-500">{displayUser?.role}</p>
           </div>
-          <div className="text-right">
-            <div className="font-inter text-sm text-slate-600 mb-2">Gesamtscore</div>
-            <div className="font-manrope font-extrabold text-5xl md:text-6xl" style={{ color: scoreColor }} data-testid="report-total-score">
-              {avg_total}%
+          <div className="flex flex-col items-end gap-3">
+            <div>
+              <div className="font-inter text-sm text-slate-600 mb-2 text-right">Gesamtscore</div>
+              <div className="font-manrope font-extrabold text-5xl md:text-6xl" style={{ color: scoreColor }} data-testid="report-total-score">
+                {avg_total}%
+              </div>
             </div>
+            <button
+              data-testid="report-download-pdf"
+              onClick={() => generateReportPDF(report, displayUser)}
+              className="btn-secondary px-5 py-2.5 text-sm font-medium inline-flex items-center gap-2 hover:border-amber-500/40 transition-all"
+            >
+              <Download className="w-4 h-4" />
+              Report herunterladen
+            </button>
           </div>
         </div>
 
