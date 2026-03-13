@@ -1,69 +1,60 @@
 # WLADHUB - Product Requirements Document
 
 ## Original Problem Statement
-Eine High-End-Web-Applikation namens "WLADHUB" (Leadership-Diagnostic Hub). Die Anwendung bewertet Führungskräfte anhand eines 3-Layer-Modells (AI Literacy, Real-World Rhetoric, Strategic EQ) mit "Cinematic Modern Noir"-Ästhetik.
+WLADHUB (Leadership-Diagnostic Hub) – bewertet Führungskräfte anhand eines 3-Layer-Modells + 5+1 Leadership-Rollen mit "Cinematic Modern Noir"-Ästhetik.
 
 ## Architecture
 ```
 /app
 ├── backend/
-│   ├── server.py         # FastAPI: Auth, Quiz, Report (5 Roles), Coach, Email
-│   └── .env              # MONGO_URL, DB_NAME, EMERGENT_LLM_KEY
+│   ├── server.py              # FastAPI: Auth, Quiz, Report (6 Roles), Coach, Email
+│   └── .env
 ├── frontend/
 │   ├── src/
 │   │   ├── App.js             # Router + ScrollToTop
 │   │   ├── data/questions.js  # 30 MC-Fragen, 4 Rollen
 │   │   ├── utils/
-│   │   │   ├── generatePDF.js          # Report PDF (5 Roles)
+│   │   │   ├── generatePDF.js          # Report PDF (6 Roles)
 │   │   │   └── generateCurriculumPDF.js # Curriculum PDF
 │   │   ├── pages/
-│   │   │   ├── Hero.jsx          # Landing (A/B Headlines)
+│   │   │   ├── Hero.jsx          # Landing (A/B Headlines, "5+1 Rollen")
 │   │   │   ├── UserForm.jsx      # Rollenauswahl + Name/Email + DSGVO
-│   │   │   ├── Quiz.jsx          # 30 MC + WladBot at Q30
-│   │   │   ├── Analyzing.jsx     # Progress Animation
-│   │   │   ├── Report.jsx        # 5 Roles + Credo + AI Report
-│   │   │   ├── Roadmap.jsx       # 30-Tage-Plan
+│   │   │   ├── Quiz.jsx          # 30 MC + WladBot Chat at Q30
+│   │   │   ├── Analyzing.jsx     # 10 Phasen mit Icons
+│   │   │   ├── Report.jsx        # 6 Rollen + Credo + AI Report
+│   │   │   ├── Roadmap.jsx       # "30 Tage zur strat. Dominanz" + 8 Kurse
 │   │   │   └── HighTicketClose.jsx # Upsell + Curriculum PDF
 │   │   └── components/
 │   │       ├── Navbar.jsx
-│   │       └── AICoach.jsx       # WladBot (Wlad personality)
+│   │       └── AICoach.jsx       # Wlad (nahbar, persönlich)
 │   └── .env
 └── memory/PRD.md
 ```
 
 ## What's Implemented
-- [x] Landing Page (10 Sektionen, Cinematic Modern Noir, A/B Headlines)
-- [x] WLADHUB Branding
-- [x] Headline A/B Testing (3 Varianten, sessionStorage)
-- [x] Rollenauswahl (5 Optionen) mit individuellen Fragen
-- [x] Name/Email-Formular (Google-Login entfernt)
+- [x] Landing Page (A/B Headlines, "5+1 Rollen", "5 Minuten")
 - [x] DSGVO-Vertrauenssiegel (DSGVO-konform, SSL, Serverstandort DE)
-- [x] 30 Multiple-Choice-Fragen (szenario-basiert)
-- [x] WladBot AI Chat nach Frage 30 (ChatGPT-Style)
-- [x] WladBot Persönlichkeit = Wlad, nahbar, direkt
-- [x] 5 Leadership-Rollen Scoring (Communicator, Manager, Team Leader, Psychologist, Problem Solver)
-- [x] Stärkste/Schwächste Rolle Analyse (TOP/FOCUS Badges)
-- [x] Credo-Sektion: "Mastering the 5 Roles of the Ideal Leader"
-- [x] AI-Narrative via Claude Sonnet
-- [x] Report: Radar-Chart, 6 Dimensionen, 3 Layer-Scores, ROI, Empfehlungen
-- [x] PDF Report Download (personalisiert, 3 Seiten, 5 Rollen)
-- [x] Curriculum PDF Download
-- [x] Scroll-to-Top bei allen Navigationen
-- [x] Roadmap (30-Tage-Plan, 4 Phasen)
-- [x] Close/Upgrade-Seite mit Social Links
+- [x] Google-Login entfernt
+- [x] 30 MC-Fragen (szenario-basiert, rollenspezifisch)
+- [x] WladBot AI Chat nach Q30 (ChatGPT-Style, heller/besser)
+- [x] Analyzing: 10 Phasen mit Icons, animated Grid
+- [x] 5+1 Leadership-Rollen (Kommunikator, Manager, Team Leader, Psychologe, Problemlöser, Innovator)
+- [x] Report: TOP/FOCUS Badges, Stärken/Schwächen-Analyse
+- [x] Credo: "Mastering the 5+1 Roles of the Ideal Leader"
+- [x] Roadmap: "30 Tage zur strategischen Dominanz", 8 Kurse, Events, AI Guidance
+- [x] AI Basics als KEY Startpunkt
+- [x] 1:1 Gespräch, Live Events, Special Event Tab
+- [x] CTAs: "Jetzt Zugang freischalten"
+- [x] PDF Report + Curriculum Download
+- [x] ScrollToTop bei allen Navigationen
+- [x] Claude Sonnet AI-Narrative
 
 ## Prioritized Backlog
-
 ### P1
-- [ ] Resend Integration: Report per E-Mail versenden
-- [ ] polar.sh Integration: Bezahlung / Upsell
-- [ ] A/B Testing Analytics (welche Headline konvertiert besser)
-
+- [ ] Resend Integration: Report per E-Mail
+- [ ] polar.sh Integration: Bezahlung/Upsell
 ### P2
-- [ ] Voice Question Feature neu konzipieren
-- [ ] LinkedIn-Login
-- [ ] Daily Intelligence Hub
-
+- [ ] Voice Feature, LinkedIn-Login
+- [ ] A/B Analytics Dashboard
 ### P3
-- [ ] AI Coach interaktive Demo mit mehr Datenerfassung
-- [ ] Erweiterte Analytics Dashboard
+- [ ] Extended AI Coach, Daily Intelligence Hub
