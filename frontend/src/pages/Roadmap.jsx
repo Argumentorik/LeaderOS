@@ -226,7 +226,7 @@ export default function Roadmap() {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* CTA - blocked until journal complete */}
         <div className="text-center pt-6 border-t border-white/5">
           <h3 className="font-manrope font-bold text-xl text-white mb-3">
             Bereit für die strategische Dominanz?
@@ -234,14 +234,24 @@ export default function Roadmap() {
           <p className="font-inter text-sm text-slate-500 mb-8 max-w-lg mx-auto">
             8 Kurse · 1:1 Gespräch · Live Events · AI Guidance · Community
           </p>
-          <button
-            data-testid="roadmap-cta-btn"
-            onClick={() => navigate("/close")}
-            className="btn-amber px-10 py-4 font-semibold text-base inline-flex items-center gap-3"
-          >
-            Jetzt Zugang freischalten
-            <ArrowRight className="w-5 h-5" />
-          </button>
+          {filledCount < 6 ? (
+            <div data-testid="journal-gate">
+              <button disabled className="px-10 py-4 rounded-xl bg-white/5 border border-white/10 text-slate-500 font-manrope font-semibold text-base inline-flex items-center gap-3 cursor-not-allowed">
+                <Lock className="w-5 h-5" />
+                Beantworte zuerst alle 6 Journal-Fragen
+              </button>
+              <p className="font-inter text-xs text-slate-600 mt-3">Noch {6 - filledCount} Fragen offen</p>
+            </div>
+          ) : (
+            <button
+              data-testid="roadmap-cta-btn"
+              onClick={() => navigate("/close")}
+              className="btn-amber px-10 py-4 font-semibold text-base inline-flex items-center gap-3"
+            >
+              Jetzt Zugang freischalten
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
 
