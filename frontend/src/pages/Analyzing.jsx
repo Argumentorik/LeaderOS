@@ -97,7 +97,7 @@ export default function Analyzing() {
         <div className="mb-12 flex justify-center">
           <div className="relative w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 flex items-center justify-center">
             <div className="absolute inset-0 rounded-3xl border border-blue-500/5 animate-ping" style={{ animationDuration: "2s" }} />
-            <span className="font-manrope font-extrabold text-2xl text-white tracking-[0.2em]">E</span>
+            <span className="font-manrope font-extrabold text-2xl text-white tracking-[0.2em]">W</span>
           </div>
         </div>
 

@@ -134,7 +134,7 @@ export default function UserForm() {
           </h1>
           <p className="font-inter text-slate-500">
             {step === 1
-              ? "Deine Rolle bestimmt den Kontext deiner WLADHUB Diagnose."
+              ? "Deine Rolle bestimmt den Kontext deiner WLADHUB Diagnose. Alle 30 Fragen werden individuell auf dein Profil zugeschnitten."
               : "Damit wir deinen personalisierten Report erstellen können."}
           </p>
         </div>

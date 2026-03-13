@@ -177,7 +177,7 @@ export default function Quiz() {
               onClick={handleSubmit}
               className="btn-amber px-6 py-3 font-medium flex items-center gap-2"
             >
-              Diagnose abschließen
+              Deinen 30-Tage-Plan aktivieren
               <ChevronRight className="w-4 h-4" />
             </button>
           )}
