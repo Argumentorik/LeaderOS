@@ -1,67 +1,41 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ExternalLink, Download, Brain, Shield, Zap, Sparkles, Share2 } from "lucide-react";
+import { ArrowRight, Download, Brain, Shield, Zap, Sparkles, Share2, Users, BookOpen, Video, Star, Lock, Check, X, Award, Target, Lightbulb, MessageSquare, Bot, Rocket } from "lucide-react";
 import { generateCurriculumPDF } from "../utils/generateCurriculumPDF";
 
-const stats = [
-  { value: "3.7x", label: "mehr Resignationen ohne aktive Führungsentwicklung" },
-  { value: "65%", label: "höheres Team-Engagement in Coaching-Kulturen" },
-  { value: "40%", label: "der Führungskräfte erwägen Kündigung durch Überlastung" },
+const included = [
+  { icon: Video, title: "23 Video-Kurse", desc: "8 sofort frei + 15 Premium-Kurse freischalten", highlight: true },
+  { icon: Brain, title: "WLADHUB Plattform", desc: "Vollständiger Zugang zu allen Tools & Features" },
+  { icon: Bot, title: "WladBot AI Coach", desc: "Dein persönlicher KI-Leadership-Coach, 24/7" },
+  { icon: Users, title: "AI Leadership Community", desc: "Austausch mit gleichgesinnten Führungskräften" },
+  { icon: Target, title: "Personalized Learning Journey", desc: "Auf dein Profil zugeschnittener Lernpfad" },
+  { icon: Rocket, title: "Fast Results", desc: "Sofort anwendbare Strategien, kein Theorie-Overload" },
+  { icon: BookOpen, title: "Leadership Playbooks", desc: "Bewährte Frameworks für jede Situation" },
+  { icon: MessageSquare, title: "1:1 mit AI Experte", desc: "Optional: Persönliches Strategy-Gespräch", optional: true },
 ];
 
-const options = [
-  {
-    badge: "EMPFOHLEN",
-    badgeStyle: "bg-gradient-to-r from-amber-500 to-amber-400 text-black",
-    title: "Vollzugang: WLADBOT Plattform",
-    subtitle: "Das komplette Leadership-System",
-    price: "Kostenloser Einstieg",
-    cta: "Jetzt Zugang freischalten",
-    ctaStyle: "btn-amber",
-    href: "https://polar.sh",
-    external: true,
-    features: [
-      "AI Coach + Tasks + Simulation",
-      "Playbooks & Events",
-      "Community-Zugang",
-      "Strategy Canvas & Decision-Frameworks",
-    ],
-    icon: Brain,
-    highlight: true,
-  },
-  {
-    badge: "PDF",
-    badgeStyle: "badge-blue",
-    title: "Curriculum PDF",
-    subtitle: "Vollständiger Kurs-Überblick",
-    price: "Kostenlos",
-    cta: "Curriculum herunterladen",
-    ctaStyle: "btn-secondary",
-    href: "#",
-    external: false,
-    features: [
-      "Alle 7 Module im Überblick",
-      "Lernziele pro Modul",
-      "30-Tage-Fahrplan als Dokument",
-      "Leadership-Framework-Referenz",
-    ],
-    icon: Download,
-    highlight: false,
-  },
+const dontsList = [
+  "KI als Ersatz für echte Führung nutzen – sie ist ein Werkzeug, kein Autopilot",
+  "Blind ChatGPT-Outputs kopieren, ohne eigene Perspektive einzubringen",
+  "KI-generierte Inhalte ohne menschliche Qualitätskontrolle veröffentlichen",
+  "Empathie durch Automatisierung ersetzen – dein Team spürt den Unterschied",
+  "KI-Tools sammeln statt sie strategisch einzusetzen – weniger ist mehr",
+  "Entscheidungen komplett an Algorithmen delegieren – du bleibst der Leader",
+  "Glauben, KI-Kompetenz allein macht dich zum besseren Leader",
+  "Die menschliche Komponente vergessen: Vertrauen, Kultur, Beziehungen",
 ];
 
-// Social icons as SVG components
+// Social icons
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
   </svg>
 );
-
 const FacebookIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
   </svg>
 );
-
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -69,313 +43,263 @@ const LinkedInIcon = () => (
 );
 
 const socialLinks = [
-  { 
-    name: "Instagram", 
-    icon: InstagramIcon, 
-    href: "https://instagram.com/wladhub", 
-    color: "from-pink-500 via-red-500 to-yellow-500",
-    hoverGlow: "hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]",
-    label: "Folge uns"
-  },
-  { 
-    name: "Facebook Gruppe", 
-    icon: FacebookIcon, 
-    href: "https://facebook.com/groups/wladhub", 
-    color: "from-blue-600 to-blue-400",
-    hoverGlow: "hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]",
-    label: "Gruppe beitreten"
-  },
-  { 
-    name: "LinkedIn", 
-    icon: LinkedInIcon, 
-    href: "https://linkedin.com", 
-    color: "from-blue-700 to-blue-500",
-    hoverGlow: "hover:shadow-[0_0_30px_rgba(29,78,216,0.4)]",
-    label: "Diagnose teilen"
-  },
+  { name: "Instagram", icon: InstagramIcon, href: "https://instagram.com/wladhub", color: "from-pink-500 via-red-500 to-yellow-500" },
+  { name: "Facebook Gruppe", icon: FacebookIcon, href: "https://facebook.com/groups/wladhub", color: "from-blue-600 to-blue-400" },
+  { name: "LinkedIn", icon: LinkedInIcon, href: "https://linkedin.com", color: "from-blue-700 to-blue-500" },
 ];
 
 export default function HighTicketClose() {
   const navigate = useNavigate();
-
-  const shareOnLinkedIn = () => {
-    const url = encodeURIComponent(window.location.origin);
-    const title = encodeURIComponent("Ich habe gerade meine WLADHUB Leadership-Diagnose gemacht! 🚀");
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
-  };
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#030303] pb-24 overflow-hidden" data-testid="close-page">
-      {/* Enhanced Background Effects with Depth */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Primary amber glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-br from-amber-500/8 via-orange-500/4 to-transparent rounded-full blur-[200px] animate-pulse" style={{ animationDuration: '8s' }} />
-        {/* Secondary blue glow */}
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-blue-600/6 via-cyan-500/3 to-transparent rounded-full blur-[180px] animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
-        {/* Accent purple glow */}
-        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-gradient-to-bl from-purple-500/5 to-transparent rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
-        {/* Floating particles effect */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-amber-400/40 rounded-full animate-float" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-blue-400/40 rounded-full animate-float" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 bg-purple-400/40 rounded-full animate-float" style={{ animationDelay: '2s' }} />
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#030303] pb-24" data-testid="close-page">
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-amber-500/4 rounded-full blur-[200px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
-        {/* Header with enhanced animation */}
-        <div className="text-center mb-14 opacity-0 anim-fade-up">
-          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6 animate-pulse" style={{ animationDuration: '3s' }}>
+        {/* Header */}
+        <div className="text-center mb-14">
+          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
             <Sparkles className="w-4 h-4" />
             Deine Leadership-Transformation
           </div>
-          <h1
-            className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4"
-            data-testid="close-headline"
-          >
-            Wir automatisieren
+          <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4" data-testid="close-headline">
+            Du hast dein Profil.
             <br />
-            keine Leader.
-            <br />
-            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 bg-clip-text text-transparent animate-gradient-x">
-              Wir upgraden sie.
-            </span>
+            Jetzt hol dir den <span className="text-gradient-amber">Vorsprung.</span>
           </h1>
-          <p className="font-inter text-lg text-slate-500 max-w-2xl mx-auto mt-6">
-            Die Zukunft gehört nicht den Intelligentesten. Sie gehört den Klarsten,
-            den Komponiertesten und den strategisch Empathischsten.
+          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
+            23 Video-Kurse. Persönliche Learning Journey. AI Leadership Community.
+            Alles, was du brauchst, um in der KI-Ära zu führen – nicht zu folgen.
           </p>
         </div>
 
-        {/* The Comparison with enhanced depth */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-14 opacity-0 anim-fade-up delay-1" data-testid="close-comparison">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="glass-card-subtle p-6 relative">
-              <div className="font-inter text-xs tracking-widest text-slate-600 mb-4">
-                OHNE SYSTEM
-              </div>
-              <div className="space-y-3">
-                {["KI übernimmt Entscheidungsprozesse", "Autorität erodiert langsam", "Team sucht Führung bei Tools", "3.7x höhere Resignationsrate"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-slate-500 font-inter text-sm group/item hover:text-slate-400 transition-colors">
-                    <span className="w-5 h-px bg-gradient-to-r from-red-500/50 to-transparent shrink-0 group-hover/item:w-8 transition-all duration-300" />
-                    {item}
-                  </div>
-                ))}
-              </div>
+        {/* Main CTA Card */}
+        <div className="glass-card p-8 md:p-10 mb-10 border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent" data-testid="main-offer">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div>
+              <div className="px-3 py-1 rounded-full bg-amber-500 text-black text-xs font-bold inline-block mb-3">VOLLZUGANG</div>
+              <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-2">
+                WLADHUB Leadership System
+              </h2>
+              <p className="font-inter text-slate-400">
+                Plattform + 23 Kurse + Community + AI Coach
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="font-inter text-sm text-slate-500 mb-1">Einmalig</div>
+              <div className="font-manrope font-extrabold text-5xl text-white" data-testid="price">€997</div>
+              <div className="font-inter text-xs text-slate-500 mt-1">inkl. License Key</div>
             </div>
           </div>
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 rounded-2xl blur opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="glass-card p-6 relative card-glow-amber">
-              <div className="font-inter text-xs tracking-widest text-amber-400 mb-4">
-                MIT WLADHUB
-              </div>
-              <div className="space-y-3">
-                {["KI als strategischen Hebel nutzen", "Boardroom-Autorität stärken", "Team folgt deiner Richtung", "65% höheres Team-Engagement"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-slate-300 font-inter text-sm group/item hover:text-white transition-colors">
-                    <Shield className="w-4 h-4 text-amber-500 shrink-0 group-hover/item:scale-110 transition-transform" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Stats with enhanced animation */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14 opacity-0 anim-fade-up delay-2" data-testid="close-stats">
-          {stats.map((s, i) => (
-            <div key={i} className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="glass-card-subtle p-6 text-center hover-card relative">
-                <div className="font-manrope font-extrabold text-3xl md:text-4xl bg-gradient-to-br from-white via-slate-200 to-slate-400 bg-clip-text text-transparent mb-2">
-                  {s.value}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+            {included.map((item, i) => (
+              <div key={i} className={`flex items-start gap-3 p-3 rounded-xl ${item.highlight ? "bg-amber-500/10 border border-amber-500/15" : "bg-white/[0.02]"}`}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: item.highlight ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.05)" }}>
+                  <item.icon className="w-4 h-4" style={{ color: item.highlight ? "#F59E0B" : "#64748B" }} />
                 </div>
-                <div className="font-inter text-sm text-slate-500 leading-relaxed">{s.label}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Options - 2 columns now */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14 opacity-0 anim-fade-up delay-3" data-testid="close-options">
-          {options.map((opt, i) => (
-            <div 
-              key={i} 
-              className={`relative group flex flex-col p-6 rounded-2xl transition-all duration-500 ${
-                opt.highlight 
-                  ? "glass-card border border-amber-500/20" 
-                  : "glass-card-subtle"
-              }`} 
-              data-testid={`close-option-${i}`}
-            >
-              {/* Glow effect for highlighted card */}
-              {opt.highlight && (
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/30 via-orange-500/20 to-amber-500/30 rounded-2xl blur-lg opacity-60 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-              )}
-              
-              {/* Badge */}
-              <div className={`inline-flex self-start text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full mb-4 ${opt.badgeStyle}`}>
-                {opt.badge}
-              </div>
-
-              {/* Icon with glow */}
-              <div className={`relative w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${
-                opt.highlight ? "bg-gradient-to-br from-amber-500/20 to-orange-500/10" : "bg-white/5"
-              }`}>
-                {opt.highlight && (
-                  <div className="absolute inset-0 bg-amber-500/20 rounded-xl blur-md animate-pulse" style={{ animationDuration: '2s' }} />
-                )}
-                <opt.icon className={`relative w-6 h-6 ${opt.highlight ? "text-amber-400" : "text-slate-400"}`} />
-              </div>
-
-              {/* Title */}
-              <h3 className="font-manrope font-bold text-xl text-white mb-1">{opt.title}</h3>
-              <p className="font-inter text-sm text-slate-500 mb-2">{opt.subtitle}</p>
-              <div className="font-manrope font-bold text-white mb-5">{opt.price}</div>
-
-              {/* Features */}
-              <div className="space-y-2 mb-6 flex-1">
-                {opt.features.map((f, fi) => (
-                  <div key={fi} className="flex items-start gap-2 group/feature">
-                    <Zap className={`w-3 h-3 shrink-0 mt-1 transition-transform group-hover/feature:scale-125 ${opt.highlight ? "text-amber-500" : "text-slate-600"}`} />
-                    <span className="font-inter text-sm text-slate-400 leading-relaxed">{f}</span>
+                <div>
+                  <div className="font-manrope font-bold text-sm text-white flex items-center gap-2">
+                    {item.title}
+                    {item.optional && <span className="text-[9px] text-slate-500 font-normal">(optional)</span>}
                   </div>
-                ))}
+                  <div className="font-inter text-xs text-slate-500">{item.desc}</div>
+                </div>
               </div>
+            ))}
+          </div>
 
-              {/* CTA */}
-              {opt.external ? (
-                <a
-                  data-testid={`close-cta-${i}`}
-                  href={opt.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${opt.ctaStyle} w-full py-3.5 font-medium flex items-center justify-center gap-2 group/btn`}
-                >
-                  {opt.cta}
-                  <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </a>
-              ) : (
-                <button
-                  data-testid={`close-cta-${i}`}
-                  onClick={() => generateCurriculumPDF()}
-                  className={`${opt.ctaStyle} w-full py-3.5 font-medium flex items-center justify-center gap-2 group/btn`}
-                >
-                  {opt.cta}
-                  <Download className="w-4 h-4 group-hover/btn:translate-y-0.5 transition-transform" />
-                </button>
-              )}
+          <button
+            data-testid="close-buy-cta"
+            onClick={() => setShowPopup(true)}
+            className="w-full py-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold text-lg flex items-center justify-center gap-3 hover:from-amber-400 hover:to-orange-400 transition-all shadow-lg shadow-amber-500/20"
+          >
+            Alles freischalten – €997
+            <ArrowRight className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Shield className="w-3 h-3" /> SSL-verschlüsselt</span>
+            <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Sichere Zahlung</span>
+            <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Check className="w-3 h-3" /> Sofort-Zugang</span>
+          </div>
+        </div>
+
+        {/* Bonus: Don'ts List */}
+        <div className="glass-card p-8 md:p-10 mb-10" data-testid="bonus-donts">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="px-3 py-1 rounded-full bg-red-500/15 border border-red-500/20 text-red-400 text-xs font-bold">BONUS</span>
+            <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold">GRATIS IM REPORT</span>
+          </div>
+          <h3 className="font-manrope font-extrabold text-xl md:text-2xl text-white mb-2 mt-4">
+            Die KI Don'ts List
+          </h3>
+          <p className="font-inter text-sm text-slate-400 mb-6">
+            KI richtig einsetzen, um dich abzuheben – nicht um unterzugehen. Diese Fehler machen 90% der Führungskräfte.
+          </p>
+          <div className="space-y-3">
+            {dontsList.map((item, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/8" data-testid={`dont-${i}`}>
+                <div className="w-7 h-7 rounded-lg bg-red-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <X className="w-3.5 h-3.5 text-red-400" />
+                </div>
+                <span className="font-inter text-sm text-slate-300 leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 p-4 rounded-xl bg-amber-500/5 border border-amber-500/15">
+            <p className="font-inter text-sm text-amber-300 leading-relaxed">
+              <strong>Der Unterschied?</strong> Wer KI als Werkzeug versteht und Leadership als Superkraft einsetzt, wird gesehen, gehört und befördert. Die Don'ts List ist dein Kompass.
+            </p>
+          </div>
+        </div>
+
+        {/* What you get: Free vs Full */}
+        <div className="glass-card p-8 mb-10" data-testid="comparison">
+          <h3 className="font-manrope font-bold text-xl text-white mb-6 text-center">Was du bekommst</h3>
+          <div className="grid grid-cols-3 gap-4 text-center mb-4">
+            <div />
+            <div className="font-inter text-xs text-slate-500 uppercase tracking-wider">Kostenlos</div>
+            <div className="font-inter text-xs text-amber-400 uppercase tracking-wider font-bold">Vollzugang</div>
+          </div>
+          {[
+            ["Leadership-Diagnose", true, true],
+            ["AI Leadership Report", true, true],
+            ["8 Starter-Kurse", true, true],
+            ["30-Tage-Plan (6 Einträge)", true, true],
+            ["15 Premium-Kurse", false, true],
+            ["WLADHUB Plattform", false, true],
+            ["WladBot AI Coach", false, true],
+            ["AI Leadership Community", false, true],
+            ["Personalized Learning Journey", false, true],
+            ["License Key", false, true],
+          ].map(([label, free, full], i) => (
+            <div key={i} className="grid grid-cols-3 gap-4 py-2.5 border-b border-white/5 items-center">
+              <span className="font-inter text-sm text-slate-300 text-left">{label}</span>
+              <div className="flex justify-center">
+                {free ? <Check className="w-4 h-4 text-green-400" /> : <X className="w-4 h-4 text-slate-600" />}
+              </div>
+              <div className="flex justify-center">
+                {full ? <Check className="w-4 h-4 text-amber-400" /> : <X className="w-4 h-4 text-slate-600" />}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Social Section - NEW */}
-        <div className="mb-14 opacity-0 anim-fade-up delay-4">
-          <div className="text-center mb-8">
-            <div className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-4">
-              <Share2 className="w-4 h-4" />
-              Werde Teil der Community
+        {/* Curriculum Download */}
+        <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="curriculum-download">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center shrink-0">
+              <Download className="w-5 h-5 text-blue-400" />
             </div>
-            <h3 className="font-manrope font-bold text-2xl text-white">
-              Vernetze dich mit anderen Leadern
-            </h3>
+            <div>
+              <div className="font-manrope font-bold text-white">Curriculum PDF</div>
+              <div className="font-inter text-xs text-slate-500">Alle 23 Kurse + 30-Tage-Plan als Dokument</div>
+            </div>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {socialLinks.map((social, i) => (
+          <button
+            data-testid="curriculum-download-btn"
+            onClick={() => generateCurriculumPDF()}
+            className="btn-secondary px-6 py-3 text-sm font-medium flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Herunterladen
+          </button>
+        </div>
+
+        {/* Social */}
+        <div className="text-center mb-14" data-testid="social-section">
+          <h3 className="font-manrope font-bold text-lg text-white mb-4">Teile deine Diagnose</h3>
+          <div className="flex justify-center gap-4">
+            {socialLinks.map((link) => (
               <a
-                key={i}
-                href={social.href}
+                key={link.name}
+                href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={social.name === "LinkedIn" ? (e) => { e.preventDefault(); shareOnLinkedIn(); } : undefined}
-                className={`group relative flex flex-col items-center p-6 rounded-2xl glass-card-subtle transition-all duration-300 ${social.hoverGlow} hover:scale-[1.02]`}
-                data-testid={`social-${social.name.toLowerCase().replace(' ', '-')}`}
+                data-testid={`social-${link.name.toLowerCase().replace(' ', '-')}`}
+                className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/20 transition-all"
               >
-                {/* Gradient border on hover */}
-                <div className={`absolute -inset-0.5 bg-gradient-to-r ${social.color} rounded-2xl opacity-0 group-hover:opacity-30 blur transition-opacity duration-300`} />
-                
-                <div className={`relative w-14 h-14 rounded-full bg-gradient-to-br ${social.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <social.icon />
-                </div>
-                
-                <span className="font-manrope font-bold text-white mb-1">{social.name}</span>
-                <span className="font-inter text-sm text-slate-500 group-hover:text-slate-400 transition-colors">
-                  {social.label}
-                </span>
+                <link.icon />
               </a>
             ))}
           </div>
         </div>
 
-        {/* Philosophy with enhanced depth */}
-        <div className="relative mb-12 opacity-0 anim-fade-up delay-5">
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-amber-500/10 rounded-3xl blur-xl" />
-          <div className="glass-card p-10 text-center relative">
-            <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-6">
-              Die nächste Generation von Leadern wird nicht durch Intelligenz definiert.
-            </h2>
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              {["Klarheit unter Druck", "Ethisches Urteilsvermögen", "Überzeugende Kommunikation", "Emotionale Regulation", "Strategische Richtung"].map((q, i) => (
-                <div 
-                  key={i} 
-                  className="badge-white px-4 py-2 text-sm hover:bg-white/10 transition-colors cursor-default"
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  {q}
-                </div>
-              ))}
-            </div>
-            <p className="font-inter text-slate-500">
-              KI kann Intelligenz assistieren. <span className="text-white font-medium">Nur du kannst Leadership verkörpern.</span>
-            </p>
-          </div>
-        </div>
-
-        {/* Final CTA with enhanced glow */}
-        <div className="text-center opacity-0 anim-fade-up delay-6">
-          <p className="font-manrope font-bold text-sm tracking-widest text-slate-500 mb-6">
-            SCHLIESSE DICH DEN LEADERN AN, DIE SICH WEIGERN, ERSETZBAR ZU WERDEN
+        {/* Second CTA */}
+        <div className="text-center border-t border-white/5 pt-10">
+          <button
+            data-testid="close-final-cta"
+            onClick={() => setShowPopup(true)}
+            className="btn-amber px-10 py-4 font-semibold text-base inline-flex items-center gap-3 mb-4"
+          >
+            Alles freischalten – €997
+            <ArrowRight className="w-5 h-5" />
+          </button>
+          <p className="font-inter text-xs text-slate-600">
+            Einmalige Zahlung · Sofort-Zugang · License Key per E-Mail
           </p>
-          <div className="relative inline-block group">
-            {/* Animated glow behind button */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" style={{ animationDuration: '2s' }} />
-            <a
-              data-testid="close-final-cta"
-              href="https://polar.sh"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative btn-amber px-12 py-4 font-semibold inline-flex items-center gap-3"
-            >
-              Jetzt Vollzugang sichern
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div>
         </div>
       </div>
 
-      {/* Animated gradient keyframes */}
-      <style>{`
-        @keyframes gradient-x {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 3s ease infinite;
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0) translateX(0); }
-          25% { transform: translateY(-20px) translateX(10px); }
-          50% { transform: translateY(0) translateX(20px); }
-          75% { transform: translateY(20px) translateX(10px); }
-        }
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-      `}</style>
+      {/* Upsell Pop-Up */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" data-testid="upsell-popup">
+          <div className="w-full max-w-md glass-card p-8 relative border border-amber-500/20">
+            <button
+              data-testid="popup-close"
+              onClick={() => setShowPopup(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-amber-400" />
+              </div>
+              <h3 className="font-manrope font-extrabold text-2xl text-white mb-2">
+                Vollzugang aktivieren
+              </h3>
+              <p className="font-inter text-sm text-slate-400">
+                Werde Teil der AI Leadership Community und schalte alle 23 Kurse frei.
+              </p>
+            </div>
+
+            <div className="space-y-2 mb-6">
+              {["23 Video-Kurse", "WLADHUB Plattform", "AI Leadership Community", "Personalized Learning Journey", "License Key per E-Mail"].map((item, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span className="font-inter text-sm text-slate-300">{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mb-4">
+              <div className="font-manrope font-extrabold text-4xl text-white">€997</div>
+              <div className="font-inter text-xs text-slate-500">einmalig</div>
+            </div>
+
+            <button
+              data-testid="popup-buy"
+              onClick={() => {
+                setShowPopup(false);
+                alert("Vollzugang wird aktiviert! Du erhältst deinen License Key per E-Mail.");
+              }}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold flex items-center justify-center gap-2 hover:from-amber-400 hover:to-orange-400 transition-all"
+            >
+              Jetzt freischalten
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <p className="font-inter text-[10px] text-slate-600 text-center mt-3">
+              Sichere Zahlung · SSL-verschlüsselt · Sofort-Zugang
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

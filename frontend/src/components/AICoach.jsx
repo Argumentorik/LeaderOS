@@ -16,7 +16,7 @@ export default function AICoach() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hey, ich bin Wlad. Ich hab deinen Report gesehen – starkes Profil. Frag mich alles rund um Leadership, KI-Strategie oder deinen nächsten Karriereschritt. Ich bin direkt und ehrlich – versprochen.",
+      text: "Hi, ich bin der WladBot! Ich hab deinen Report gesehen – starkes Profil. Frag mich alles rund um Leadership, KI-Strategie oder deinen nächsten Karriereschritt. Ich bin direkt und ehrlich – versprochen.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -90,10 +90,10 @@ export default function AICoach() {
                 <Bot className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <div className="font-manrope font-bold text-white">Wlad</div>
+                <div className="font-manrope font-bold text-white">WladBot</div>
                 <div className="flex items-center gap-2">
                   <span className="dot-pulse" style={{ width: 6, height: 6 }} />
-                  <span className="font-inter text-xs text-slate-500">Dein Leadership-Coach</span>
+                  <span className="font-inter text-xs text-slate-500">Dein AI Leadership-Coach</span>
                 </div>
               </div>
             </div>
