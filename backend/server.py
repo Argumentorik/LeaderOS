@@ -1,5 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, UploadFile, File, Depends
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,11 +7,9 @@ import os
 import logging
 import uuid
 from datetime import datetime, timezone, timedelta
-from pydantic import BaseModel, EmailStr, Field
-from typing import List, Dict, Any, Optional
+from pydantic import BaseModel, EmailStr
+from typing import List, Optional
 from emergentintegrations.llm.chat import LlmChat, UserMessage
-from emergentintegrations.llm.openai import OpenAISpeechToText
-import asyncio
 import json
 import httpx
 
@@ -48,7 +45,6 @@ class QuizAnswer(BaseModel):
     category: str
     layer: str
     score: int
-    voice_transcript: Optional[str] = None
 
 class QuizSubmit(BaseModel):
     session_id: str
@@ -219,47 +215,6 @@ async def update_profile(request: Request):
     return updated_user
 
 
-# --- Voice Transcription ---
-
-@api_router.post("/voice/transcribe")
-async def transcribe_voice(file: UploadFile = File(...)):
-    """Transcribe voice recording using OpenAI Whisper"""
-    try:
-        # Read file content
-        content = await file.read()
-        
-        # Check file size (max 25MB)
-        if len(content) > 25 * 1024 * 1024:
-            raise HTTPException(status_code=400, detail="File too large. Maximum 25MB allowed.")
-        
-        # Initialize Whisper
-        stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
-        
-        # Create temp file for transcription
-        import tempfile
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
-            tmp.write(content)
-            tmp_path = tmp.name
-        
-        try:
-            with open(tmp_path, "rb") as audio_file:
-                response = await stt.transcribe(
-                    file=audio_file,
-                    model="whisper-1",
-                    response_format="json",
-                    language="de"  # German
-                )
-            
-            return {"transcript": response.text, "success": True}
-        finally:
-            # Clean up temp file
-            os.unlink(tmp_path)
-            
-    except Exception as e:
-        logger.error(f"Transcription error: {e}")
-        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
-
-
 # --- Health & Basic Endpoints ---
 
 @api_router.get("/health")
@@ -314,20 +269,13 @@ async def generate_report(data: QuizSubmit):
     layer_avg = {k: int(sum(v) / len(v) * 25) for k, v in layer_scores.items() if v}
     total_avg = int(sum(cat_avg.values()) / len(cat_avg)) if cat_avg else 50
 
-    # Collect voice transcripts for analysis
-    voice_answers = [a for a in data.answers if a.voice_transcript]
-    voice_context = ""
-    if voice_answers:
-        voice_context = "\n\nVoice responses from the user:\n" + "\n".join([
-            f"- Question {a.question_id}: {a.voice_transcript}" for a in voice_answers
-        ])
-
     # Generate AI narrative
     narrative = {}
     if EMERGENT_LLM_KEY:
         try:
-            chat = LlmChat(api_key=EMERGENT_LLM_KEY, model="claude-sonnet-4-20250514")
-            prompt = f"""Du bist ein Executive Leadership Coach. Analysiere dieses Leadership-Profil auf Deutsch.
+            chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"report_{data.session_id}", system_message="Du bist ein Executive Leadership Coach.")
+            chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
+            prompt = f"""Analysiere dieses Leadership-Profil auf Deutsch.
 
 Benutzer: {user.get('name', 'Leader')}, Rolle: {user.get('role', 'Führungskraft')}
 
@@ -340,7 +288,6 @@ LAYER-SCORES (0-100):
 - Strategisches EQ (strategic_eq): {layer_avg.get('strategic_eq', 50)}
 
 GESAMT: {total_avg}%
-{voice_context}
 
 Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant, max 2-3 Sätze pro Abschnitt):
 
@@ -359,8 +306,8 @@ Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant,
 
 Antworte NUR mit validem JSON."""
 
-            response = await chat.send_message(UserMessage(content=prompt))
-            text = response.content.strip()
+            response = await chat.send_message(UserMessage(text=prompt))
+            text = response.strip()
             if text.startswith("```"):
                 text = text.split("```")[1]
                 if text.startswith("json"):
@@ -429,9 +376,10 @@ Wachstumspriorität: {report.get('narrative', {}).get('growth_priority', 'unbeka
 """
 
     try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, model="claude-sonnet-4-20250514")
-        response = await chat.send_message(UserMessage(content=f"{context}\n\nBenutzer fragt: {data.message}"))
-        return {"response": response.content}
+        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"coach_{data.session_id}", system_message=context)
+        chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
+        response = await chat.send_message(UserMessage(text=data.message))
+        return {"response": response}
     except Exception as e:
         logger.error(f"Coach error: {e}")
         return {"response": "Ein Fehler ist aufgetreten. Bitte versuche es erneut."}

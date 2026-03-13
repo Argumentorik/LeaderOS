@@ -284,7 +284,7 @@ export default function UserForm() {
             </button>
 
             <p className="font-inter text-sm text-slate-600 text-center">
-              30 Fragen · ca. 10 Minuten · inkl. 5 Sprachfragen
+              30 Fragen · ca. 10 Minuten · Szenario-basiert
             </p>
           </form>
         )}

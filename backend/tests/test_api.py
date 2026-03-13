@@ -25,6 +25,14 @@ def session_id(client):
 
 
 class TestHealthAndRoot:
+    def test_health(self, client):
+        """Test /api/health returns healthy status"""
+        resp = client.get(f"{BASE_URL}/api/health")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["status"] == "healthy"
+        assert "service" in data
+        
     def test_root(self, client):
         resp = client.get(f"{BASE_URL}/api/")
         assert resp.status_code == 200
@@ -56,10 +64,11 @@ class TestUserCreate:
 
 class TestGenerateReport:
     def _make_answers(self):
+        """Create 30 test answers (matching new quiz design)"""
         answers = []
         categories = ["rhetorik", "kritisches_denken", "entscheidung", "fuehrung", "eq", "strategie"]
         layers = ["ai_literacy", "rhetoric", "strategic_eq"]
-        for i in range(50):
+        for i in range(30):
             answers.append({
                 "question_id": i + 1,
                 "category": categories[i % len(categories)],
@@ -119,12 +128,17 @@ class TestCoachChat:
 class TestEmailSend:
     def test_email_send_no_key(self, client, session_id):
         """Email should be skipped gracefully without Resend key"""
-        # First create a report
-        answers = [{"question_id": i+1, "category": "rhetorik", "layer": "ai_literacy", "score": 2} for i in range(50)]
+        # First create a report with 30 questions (per new quiz design)
+        categories = ["rhetorik", "kritisches_denken", "entscheidung", "fuehrung", "eq", "strategie"]
+        layers = ["ai_literacy", "rhetoric", "strategic_eq"]
+        answers = [{"question_id": i+1, "category": categories[i % 6], "layer": layers[i % 3], "score": 2} for i in range(30)]
         client.post(f"{BASE_URL}/api/quiz/generate-report", json={
             "session_id": session_id, "answers": answers
         }, timeout=60)
         resp = client.post(f"{BASE_URL}/api/email/send-report", json={"session_id": session_id})
         assert resp.status_code == 200
         data = resp.json()
-        assert data["status"] in ("skipped", "success", "error")
+        # Response has 'success' field (bool) and 'message' or 'id' depending on result
+        assert "success" in data
+        assert data["success"] == False  # No Resend key configured
+        assert "message" in data
