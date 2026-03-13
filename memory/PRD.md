@@ -11,65 +11,59 @@ Eine High-End-Web-Applikation namens "WLADHUB" (Leadership-Diagnostic Hub). Die 
 5. **High-Ticket Close:** Upsell-Seite mit Social-Media-Sharing
 6. **Design:** Cinematic Modern Noir mit Orange/Amber-Akzenten
 
-## User Personas
-- **Selbstständige** - Unternehmer mit eigenem Business
-- **Angestellte** - Führungskräfte in Unternehmen
-- **Senior Manager** - C-Level/VP-Positionen
-- **High Potentials** - Aufstrebende Führungskräfte
-
 ## Architecture
 ```
 /app
 ├── backend/
-│   ├── server.py         # FastAPI mit Auth, Quiz, Report, Coach, Email Endpoints
-│   ├── .env              # MONGO_URL, DB_NAME, EMERGENT_LLM_KEY
-│   └── requirements.txt
+│   ├── server.py         # FastAPI: Auth, Quiz, Report, Coach, Email
+│   └── .env              # MONGO_URL, DB_NAME, EMERGENT_LLM_KEY
 ├── frontend/
 │   ├── src/
-│   │   ├── App.js        # Router
+│   │   ├── App.js
 │   │   ├── data/questions.js  # 30 MC-Fragen, 4 Rollen
 │   │   ├── pages/
-│   │   │   ├── Hero.jsx          # Landing Page (10 Sektionen)
-│   │   │   ├── UserForm.jsx      # Rollenauswahl + Name/Email
-│   │   │   ├── Quiz.jsx          # 30 MC-Fragen
-│   │   │   ├── Analyzing.jsx     # Fortschrittsanimation
-│   │   │   ├── Report.jsx        # AI-Report mit Charts
-│   │   │   ├── Roadmap.jsx       # 30-Tage-Plan
-│   │   │   ├── HighTicketClose.jsx # Upsell
-│   │   │   └── AuthCallback.jsx  # Google Auth
+│   │   │   ├── Hero.jsx, UserForm.jsx, Quiz.jsx
+│   │   │   ├── Analyzing.jsx, Report.jsx
+│   │   │   ├── Roadmap.jsx, HighTicketClose.jsx
+│   │   │   └── AuthCallback.jsx
 │   │   └── components/
-│   │       ├── Navbar.jsx
-│   │       └── AICoach.jsx
+│   │       ├── Navbar.jsx, AICoach.jsx
+│   │       └── ui/  (Shadcn)
 │   └── .env
-└── memory/
-    └── PRD.md
+└── memory/PRD.md
 ```
 
 ## What's Implemented (as of 2026-03-13)
-- [x] Landing Page mit 10 Sektionen, Cinematic Modern Noir Design
-- [x] Rebranding zu WLADHUB
-- [x] Rollenauswahl (5 Optionen inkl. "Andere Rolle")
+- [x] Landing Page (10 Sektionen, Cinematic Modern Noir)
+- [x] WLADHUB Branding
+- [x] Rollenauswahl (5 Optionen) mit Hinweis auf individuelle Fragen
 - [x] Name/Email-Formular + optionaler Google-Login
 - [x] 30 Multiple-Choice-Fragen (szenario-basiert, 4 Rollen)
-- [x] Quiz-UI ohne Voice-Funktionalität (Voice wurde entfernt)
-- [x] Quiz-Logik: Fortschrittsbalken, Auto-Advance, Navigation
+- [x] Quiz-Logik: Fortschritt, Auto-Advance, Navigation
+- [x] Submit-Button "Deinen 30-Tage-Plan aktivieren"
 - [x] Backend: User-Erstellung, Quiz-Auswertung, Report-Generierung
 - [x] KI-Narrative via Claude Sonnet (emergentintegrations)
-- [x] Report-Seite: Radar-Chart, Layer-Scores, ROI, Empfehlungen
+- [x] Report: Radar-Chart, Layer-Scores, ROI, Empfehlungen
 - [x] AI Coach (WLADBOT) Endpoint
-- [x] DSGVO: Datenschutzerklärung, Daten-Löschung
-- [x] Analyzing-Seite mit Fortschrittsanimation
+- [x] Analyzing-Seite mit W-Logo und Animation
+- [x] Roadmap (30-Tage-Plan, 4 Phasen, 7 Module)
+- [x] Close/Upgrade-Seite mit Social Links
+- [x] Navbar mit Progress-Breadcrumbs
+- [x] DSGVO: Datenschutz, Daten-Löschung
+- [x] Voice-Feature entfernt (Ship First Funnel)
+- [x] UX-Polish: Alle Klicks getestet und verifiziert
 
 ## Prioritized Backlog
 
 ### P1 - Content & Polish
-- [ ] Content Refinement: Platzhalterfragen durch noch anspruchsvollere Szenarien ersetzen
-- [ ] Report-Seite: 30-Tage-Aktionsplan detaillierter gestalten
+- [ ] Leadership-Typen (5 Rollen) basierend auf Quiz-Ergebnis zuweisen
+- [ ] Methodenbank pro Typ (Eisenhower, ALPEN, Pareto, etc.)
+- [ ] Social Sharing mit Leadership-Typ auf LinkedIn
 
 ### P2 - Integrations
 - [ ] Resend Integration: E-Mail-Versand des Reports
 - [ ] polar.sh Integration: Bezahlung / Upsell
-- [ ] Voice Question Feature: Neu konzipieren und implementieren
+- [ ] Voice Question Feature: Neu konzipieren
 
 ### P3 - Advanced Features
 - [ ] AI Coach interaktive Demo
