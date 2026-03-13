@@ -1,60 +1,61 @@
 # WLADHUB - Product Requirements Document
 
 ## Original Problem Statement
-WLADHUB (Leadership-Diagnostic Hub) – bewertet Führungskräfte anhand eines 3-Layer-Modells + 5+1 Leadership-Rollen mit "Cinematic Modern Noir"-Ästhetik.
+WLADHUB (Leadership-Diagnostic Hub) – bewertet Führungskräfte anhand eines 3-Layer-Modells + 5+1 Leadership-Rollen. "Cinematic Modern Noir"-Ästhetik. Funnel: Diagnose → 30-Tage Plan → Video-Plattform/Upsell.
 
 ## Architecture
 ```
 /app
 ├── backend/
-│   ├── server.py              # FastAPI: Auth, Quiz, Report (6 Roles), Coach, Email
+│   ├── server.py              # FastAPI: Auth, Quiz, Report (6 Roles), WladBot Coach
 │   └── .env
 ├── frontend/
 │   ├── src/
 │   │   ├── App.js             # Router + ScrollToTop
-│   │   ├── data/questions.js  # 30 MC-Fragen, 4 Rollen
+│   │   ├── data/questions.js  # 30 MC-Fragen
 │   │   ├── utils/
 │   │   │   ├── generatePDF.js          # Report PDF (6 Roles)
 │   │   │   └── generateCurriculumPDF.js # Curriculum PDF
 │   │   ├── pages/
-│   │   │   ├── Hero.jsx          # Landing (A/B Headlines, "5+1 Rollen")
-│   │   │   ├── UserForm.jsx      # Rollenauswahl + Name/Email + DSGVO
-│   │   │   ├── Quiz.jsx          # 30 MC + WladBot Chat at Q30
-│   │   │   ├── Analyzing.jsx     # 10 Phasen mit Icons
-│   │   │   ├── Report.jsx        # 6 Rollen + Credo + AI Report
-│   │   │   ├── Roadmap.jsx       # "30 Tage zur strat. Dominanz" + 8 Kurse
-│   │   │   └── HighTicketClose.jsx # Upsell + Curriculum PDF
+│   │   │   ├── Hero.jsx          # A/B Headlines
+│   │   │   ├── UserForm.jsx      # Name/Email + DSGVO
+│   │   │   ├── Quiz.jsx          # 30 MC + WladBot Q30
+│   │   │   ├── Analyzing.jsx     # 10 Phasen
+│   │   │   ├── Report.jsx        # 6 Rollen + Credo
+│   │   │   ├── Roadmap.jsx       # Journal + 8 Kurse + Upsell
+│   │   │   └── HighTicketClose.jsx # €997 + Don'ts List
 │   │   └── components/
 │   │       ├── Navbar.jsx
-│   │       └── AICoach.jsx       # Wlad (nahbar, persönlich)
+│   │       └── AICoach.jsx       # WladBot
 │   └── .env
-└── memory/PRD.md
 ```
 
-## What's Implemented
-- [x] Landing Page (A/B Headlines, "5+1 Rollen", "5 Minuten")
-- [x] DSGVO-Vertrauenssiegel (DSGVO-konform, SSL, Serverstandort DE)
-- [x] Google-Login entfernt
-- [x] 30 MC-Fragen (szenario-basiert, rollenspezifisch)
-- [x] WladBot AI Chat nach Q30 (ChatGPT-Style, heller/besser)
-- [x] Analyzing: 10 Phasen mit Icons, animated Grid
-- [x] 5+1 Leadership-Rollen (Kommunikator, Manager, Team Leader, Psychologe, Problemlöser, Innovator)
-- [x] Report: TOP/FOCUS Badges, Stärken/Schwächen-Analyse
-- [x] Credo: "Mastering the 5+1 Roles of the Ideal Leader"
-- [x] Roadmap: "30 Tage zur strategischen Dominanz", 8 Kurse, Events, AI Guidance
-- [x] AI Basics als KEY Startpunkt
-- [x] 1:1 Gespräch, Live Events, Special Event Tab
-- [x] CTAs: "Jetzt Zugang freischalten"
-- [x] PDF Report + Curriculum Download
-- [x] ScrollToTop bei allen Navigationen
-- [x] Claude Sonnet AI-Narrative
+## Implemented Features
+- [x] 3-Layer Funnel: Diagnose → 30-Tage Plan → Upsell
+- [x] WladBot Tone: "Hi, ich bin der WladBot!", nahbar, motivierend
+- [x] 5+1 Leadership-Rollen (inkl. Innovator)
+- [x] €997 Vollzugang (License Key, Community, 23 Kurse)
+- [x] KI Don'ts List (Bonus)
+- [x] Interactive 6-Entry Journal + WladBot Motivation
+- [x] Upsell Pop-Ups (nach Journal + auf Close-Seite)
+- [x] Free vs Vollzugang Vergleichstabelle
+- [x] Report + Curriculum PDF Download
+- [x] A/B Headline Testing
+- [x] DSGVO-Vertrauenssiegel
+- [x] 10-Phasen Analyzing Animation
+- [x] 8 Kurse mit AI Basics als KEY
+- [x] Social Sharing Links
+- [x] ScrollToTop, "5 Minuten", alle CTAs korrekt
 
-## Prioritized Backlog
+## Mocked
+- Payment: €997 CTA zeigt Alert statt echte Zahlung
+
+## Backlog
 ### P1
-- [ ] Resend Integration: Report per E-Mail
-- [ ] polar.sh Integration: Bezahlung/Upsell
+- [ ] polar.sh / Stripe für echte Zahlung
+- [ ] Resend E-Mail: Report + License Key
 ### P2
-- [ ] Voice Feature, LinkedIn-Login
 - [ ] A/B Analytics Dashboard
+- [ ] Voice Feature
 ### P3
 - [ ] Extended AI Coach, Daily Intelligence Hub
