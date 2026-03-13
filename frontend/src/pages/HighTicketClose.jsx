@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ExternalLink, Download, Brain, Shield, Zap, Sparkles, Share2 } from "lucide-react";
+import { generateCurriculumPDF } from "../utils/generateCurriculumPDF";
 
 const stats = [
   { value: "3.7x", label: "mehr Resignationen ohne aktive Führungsentwicklung" },
@@ -259,6 +260,7 @@ export default function HighTicketClose() {
               ) : (
                 <button
                   data-testid={`close-cta-${i}`}
+                  onClick={() => generateCurriculumPDF()}
                   className={`${opt.ctaStyle} w-full py-3.5 font-medium flex items-center justify-center gap-2 group/btn`}
                 >
                   {opt.cta}

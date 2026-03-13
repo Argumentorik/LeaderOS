@@ -320,6 +320,28 @@ Antworte NUR mit validem JSON."""
                 "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."
             }
 
+    # Calculate 5 Leadership Roles from category scores
+    leadership_roles = {
+        "communicator": cat_avg.get("rhetorik", 50),
+        "manager": cat_avg.get("entscheidung", 50),
+        "team_leader": cat_avg.get("fuehrung", 50),
+        "psychologist": cat_avg.get("eq", 50),
+        "problem_solver": int((cat_avg.get("kritisches_denken", 50) + cat_avg.get("strategie", 50)) / 2),
+    }
+    
+    # Determine strongest and weakest roles
+    sorted_roles = sorted(leadership_roles.items(), key=lambda x: x[1], reverse=True)
+    strongest_role = sorted_roles[0][0]
+    weakest_role = sorted_roles[-1][0]
+    
+    role_labels = {
+        "communicator": "Kommunikator",
+        "manager": "Manager",
+        "team_leader": "Team Leader",
+        "psychologist": "Psychologe",
+        "problem_solver": "Problemlöser"
+    }
+
     # ROI estimates
     roi = {
         "hours_saved": min(12, max(3, int(layer_avg.get('ai_literacy', 50) / 10))),
@@ -332,6 +354,9 @@ Antworte NUR mit validem JSON."""
         "user": {"name": user.get("name"), "role": user.get("role"), "email": user.get("email")},
         "cat_scores": cat_avg,
         "layer_scores": layer_avg,
+        "leadership_roles": leadership_roles,
+        "strongest_role": {"key": strongest_role, "label": role_labels[strongest_role], "score": leadership_roles[strongest_role]},
+        "weakest_role": {"key": weakest_role, "label": role_labels[weakest_role], "score": leadership_roles[weakest_role]},
         "avg_total": total_avg,
         "roi": roi,
         "narrative": narrative,
@@ -362,8 +387,10 @@ async def coach_chat(data: CoachMessage):
     
     report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
 
-    context = f"""Du bist der WLADBOT, ein professioneller KI-Leadership-Coach.
-Kommuniziere auf Deutsch, direkt und präzise. Keine langen Einleitungen.
+    context = f"""Du bist Wlad – ein erfahrener Leadership-Coach und Unternehmer. 
+Du sprichst auf Deutsch. Du bist nahbar, direkt und ehrlich wie ein guter Freund, der zufällig auch Leadership-Experte ist.
+Du duzt den Benutzer. Halte deine Antworten kurz (2-4 Sätze). Sei konkret, nicht generisch.
+Wenn der Benutzer persönliche Herausforderungen teilt, zeige Empathie, aber gib immer einen konkreten nächsten Schritt.
 
 Benutzer: {user.get('name', 'Leader') if user else 'Leader'}
 Rolle: {user.get('role', 'Führungskraft') if user else 'Führungskraft'}

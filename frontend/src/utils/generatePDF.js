@@ -27,6 +27,22 @@ const layerLabels = {
   strategic_eq: "Strategisches EQ",
 };
 
+const roleLabels = {
+  communicator: "Kommunikator",
+  manager: "Manager",
+  team_leader: "Team Leader",
+  psychologist: "Psychologe",
+  problem_solver: "Problemloser",
+};
+
+const roleColors = {
+  communicator: [245, 158, 11],
+  manager: [59, 130, 246],
+  team_leader: [16, 185, 129],
+  psychologist: [139, 92, 246],
+  problem_solver: [236, 72, 153],
+};
+
 function drawRoundedRect(doc, x, y, w, h, r, fillColor) {
   doc.setFillColor(...fillColor);
   doc.roundedRect(x, y, w, h, r, r, "F");
@@ -48,7 +64,7 @@ export function generateReportPDF(report, user) {
   const cw = pw - margin * 2;
   let y = 0;
 
-  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {} } = report;
+  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {}, leadership_roles = {}, strongest_role = {}, weakest_role = {} } = report;
   const userName = user?.name || "Leadership Report";
   const userRole = user?.role || "";
 
@@ -152,8 +168,49 @@ export function generateReportPDF(report, user) {
     }
   }
 
+  // 5 Leadership Roles
+  if (Object.keys(leadership_roles).length > 0) {
+    y = 230;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(...COLORS.accent);
+    doc.text("5 LEADERSHIP-ROLLEN", margin, y);
+    y += 7;
+    
+    const rw = (cw - 8) / 5;
+    Object.entries(roleLabels).forEach(([key, label], i) => {
+      const score = leadership_roles[key] || 0;
+      const rx = margin + i * (rw + 2);
+      const color = roleColors[key] || COLORS.blue;
+      const isStrong = strongest_role?.key === key;
+      const isWeak = weakest_role?.key === key;
+      
+      drawRoundedRect(doc, rx, y, rw, 22, 2, COLORS.cardBg);
+      if (isStrong) {
+        doc.setFillColor(...COLORS.green);
+        doc.roundedRect(rx, y, rw, 1, 0.5, 0.5, "F");
+      }
+      if (isWeak) {
+        doc.setFillColor(...COLORS.red);
+        doc.roundedRect(rx, y, rw, 1, 0.5, 0.5, "F");
+      }
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(6.5);
+      doc.setTextColor(...COLORS.white);
+      doc.text(label, rx + rw/2, y + 7, { align: "center" });
+      
+      drawProgressBar(doc, rx + 3, y + 11, rw - 6, 2.5, score, color);
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...color);
+      doc.text(`${score}%`, rx + rw/2, y + 20, { align: "center" });
+    });
+  }
+
   // 6 Dimensions
-  y = 235;
+  y = 262;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(...COLORS.white);

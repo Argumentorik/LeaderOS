@@ -1,6 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle } from "lucide-react";
 import { ScrollReveal } from "../hooks/useScrollReveal";
+import { useState, useEffect } from "react";
+
+const headlines = [
+  {
+    pre: "Werde der Leader, den KI nicht ersetzen kann.",
+    lines: ["KI skaliert Intelligenz.", "{Leadership bestimmt}", "die Richtung."],
+  },
+  {
+    pre: "Die KI-Ära braucht eine neue Art von Führung.",
+    lines: ["Beherrschst du die", "{5 Rollen des modernen}", "Leaders?"],
+  },
+  {
+    pre: "Dein Leadership-Profil in 7 Minuten.",
+    lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
+  },
+];
 
 const layers = [
   {
@@ -86,6 +102,14 @@ const audiences = [
 
 export default function Hero() {
   const navigate = useNavigate();
+  const [headlineIdx] = useState(() => {
+    const stored = sessionStorage.getItem("wladhub_ab");
+    if (stored !== null) return parseInt(stored, 10);
+    const idx = Math.floor(Math.random() * headlines.length);
+    sessionStorage.setItem("wladhub_ab", idx);
+    return idx;
+  });
+  const hl = headlines[headlineIdx];
 
   return (
     <div className="relative min-h-screen bg-[#030303] overflow-hidden" data-testid="hero-page">
@@ -106,19 +130,24 @@ export default function Hero() {
         <section className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pt-32 pb-24">
           {/* Pre-headline */}
           <p className="font-inter text-sm md:text-base text-slate-500 mb-8 opacity-0 anim-fade-up text-center">
-            Werde der Leader, den KI nicht ersetzen kann.
+            {hl.pre}
           </p>
 
-          {/* Main Headline — full width, dominant */}
+          {/* Main Headline — A/B tested */}
           <h1
             className="font-manrope font-extrabold text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.05] tracking-[-0.03em] text-white mb-8 opacity-0 anim-fade-up delay-1 text-center"
             data-testid="hero-headline"
           >
-            KI skaliert Intelligenz.
-            <br />
-            <span className="text-gradient-amber">Leadership bestimmt</span>
-            <br />
-            die Richtung.
+            {hl.lines.map((line, i) => {
+              const isAccent = line.startsWith("{") && line.endsWith("}");
+              const text = isAccent ? line.slice(1, -1) : line;
+              return (
+                <span key={i}>
+                  {isAccent ? <span className="text-gradient-amber">{text}</span> : text}
+                  {i < hl.lines.length - 1 && <br />}
+                </span>
+              );
+            })}
           </h1>
 
           {/* Three Skills */}
