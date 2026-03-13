@@ -1,130 +1,77 @@
-# WLADHUB Leadership Diagnose – PRD
+# WLADHUB - Product Requirements Document
 
 ## Original Problem Statement
-Build a high-end German-language web application "WLADHUB Leadership Diagnose" based on the 3-Layer Leadership Model (KI-Kompetenz, Boardroom-Rhetorik, Strategisches EQ). A conversion funnel for leadership assessment with AI-generated personalized reports.
+Eine High-End-Web-Applikation namens "WLADHUB" (Leadership-Diagnostic Hub). Die Anwendung bewertet Führungskräfte anhand eines 3-Layer-Modells (AI Literacy, Real-World Rhetoric, Strategic EQ) mit "Cinematic Modern Noir"-Ästhetik.
 
-## Brand
-- **Name:** WLADHUB
-- **Product:** Leadership Diagnose
-- **AI Coach:** WLADBOT
-- **Platform:** WLADBOT Plattform
+## Core Requirements
+1. **Landing Page:** 10 Sektionen mit Problem, Lösung (3-Layer-Modell), Diagnose, WLADHUB-Plattform, WLADBOT (KI-Coach)
+2. **Diagnostic Tool:** 30 szenario-basierte Multiple-Choice-Fragen, rollenspezifisch
+3. **Benutzererfassung:** Name/E-Mail + optionaler Google-Login
+4. **Ergebnis-Report:** Dynamischer Report mit KI-generierter Narrative, Radar-Chart, Layer-Scores, Empfehlungen
+5. **High-Ticket Close:** Upsell-Seite mit Social-Media-Sharing
+6. **Design:** Cinematic Modern Noir mit Orange/Amber-Akzenten
+
+## User Personas
+- **Selbstständige** - Unternehmer mit eigenem Business
+- **Angestellte** - Führungskräfte in Unternehmen
+- **Senior Manager** - C-Level/VP-Positionen
+- **High Potentials** - Aufstrebende Führungskräfte
 
 ## Architecture
+```
+/app
+├── backend/
+│   ├── server.py         # FastAPI mit Auth, Quiz, Report, Coach, Email Endpoints
+│   ├── .env              # MONGO_URL, DB_NAME, EMERGENT_LLM_KEY
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── App.js        # Router
+│   │   ├── data/questions.js  # 30 MC-Fragen, 4 Rollen
+│   │   ├── pages/
+│   │   │   ├── Hero.jsx          # Landing Page (10 Sektionen)
+│   │   │   ├── UserForm.jsx      # Rollenauswahl + Name/Email
+│   │   │   ├── Quiz.jsx          # 30 MC-Fragen
+│   │   │   ├── Analyzing.jsx     # Fortschrittsanimation
+│   │   │   ├── Report.jsx        # AI-Report mit Charts
+│   │   │   ├── Roadmap.jsx       # 30-Tage-Plan
+│   │   │   ├── HighTicketClose.jsx # Upsell
+│   │   │   └── AuthCallback.jsx  # Google Auth
+│   │   └── components/
+│   │       ├── Navbar.jsx
+│   │       └── AICoach.jsx
+│   └── .env
+└── memory/
+    └── PRD.md
+```
 
-### Stack
-- **Frontend:** React + Tailwind CSS + Recharts
-- **Backend:** FastAPI + MongoDB
-- **AI:** Claude Sonnet 4.5 via Emergent LLM Key
-- **Voice:** OpenAI Whisper via Emergent LLM Key
-- **Auth:** Emergent-managed Google OAuth
-- **Email:** Resend (configured, awaiting API key)
-
-### API Endpoints
-- `GET /api/health` – Health check
-- `POST /api/auth/session` – Exchange Emergent OAuth session for app session
-- `GET /api/auth/me` – Get current user
-- `POST /api/auth/logout` – Logout
-- `POST /api/auth/update-profile` – Update user profile
-- `POST /api/user/create` – Lead capture (guest flow)
-- `POST /api/voice/transcribe` – Transcribe audio with Whisper
-- `POST /api/quiz/generate-report` – Process quiz answers + Claude report
-- `GET /api/report/{session_id}` – Fetch report
-- `POST /api/coach/chat` – WLADBOT chat (Claude)
-- `POST /api/email/send-report` – Send HTML email report
-- `GET /api/privacy-policy` – Privacy policy
-- `DELETE /api/user/delete-data` – GDPR data deletion
-
-### Frontend Routes
-- `/` – Hero page (10 sections landing page)
-- `/login` – Login page with Google Auth
-- `/auth/callback` – OAuth callback handler
-- `/diagnose` – User form (role selection)
-- `/diagnose-guest` – Guest flow (without login)
-- `/quiz` – 30-question diagnostic (5 with voice)
-- `/analyzing` – Loading + API call
-- `/report` – Personal Potential Report
-- `/roadmap` – 30-Day Action Plan
-- `/close` – High-Ticket Close page with Social Links
-
-## What's Been Implemented (Updated: December 2025)
-
-### ✅ Authentication
-- **Google OAuth** via Emergent-managed Auth
-- Session-based auth with httpOnly cookies
-- Login page with privacy consent checkboxes
-- Logout functionality
-- Guest flow for users who prefer not to login
-
-### ✅ Voice Recording (5 Questions)
-- Browser MediaRecorder API for audio capture
-- Audio upload to backend
-- **OpenAI Whisper** transcription via Emergent LLM Key
-- Voice questions for strategic/reflective answers
-
-### ✅ Dynamic Questions (30 per Role)
-- **5 roles:** Selbstständige, Angestellte, Senior Manager, High Potential, Custom
-- Role-specific scenarios for each question
-- 25 multiple choice + 5 voice questions
-- Categories: Rhetorik, Kritisches Denken, Entscheidung, Führung, EQ, Strategie
-
-### ✅ Enhanced Orange/Amber Theme
-- Primary color: #F59E0B (Amber)
-- Secondary: #F97316 (Orange)
-- Accent: #D97706 (Dark Amber)
-- Gradient logo, buttons, badges
-- Glow effects with orange tones
-
-### ✅ Scroll Animations
-- ScrollReveal component for fade-in effects
-- Staggered animations on section entry
-- Smooth transitions on scroll
-
-### ✅ Social Integration (Close Page)
-- Instagram (Follow link)
-- Facebook Group (Join link)
-- LinkedIn (Share Diagnosis)
-
-### ✅ GDPR Compliance
-- Privacy consent checkbox (required)
-- Marketing consent checkbox (optional)
-- Privacy policy modal
-- Data deletion endpoint
-- No tracking cookies
-
-### ✅ UI/UX Design
-- Cinematic Modern Noir aesthetic
-- Glassmorphism cards
-- Pill-shaped buttons
-- Modern hover effects
-- Mobile responsive
+## What's Implemented (as of 2026-03-13)
+- [x] Landing Page mit 10 Sektionen, Cinematic Modern Noir Design
+- [x] Rebranding zu WLADHUB
+- [x] Rollenauswahl (5 Optionen inkl. "Andere Rolle")
+- [x] Name/Email-Formular + optionaler Google-Login
+- [x] 30 Multiple-Choice-Fragen (szenario-basiert, 4 Rollen)
+- [x] Quiz-UI ohne Voice-Funktionalität (Voice wurde entfernt)
+- [x] Quiz-Logik: Fortschrittsbalken, Auto-Advance, Navigation
+- [x] Backend: User-Erstellung, Quiz-Auswertung, Report-Generierung
+- [x] KI-Narrative via Claude Sonnet (emergentintegrations)
+- [x] Report-Seite: Radar-Chart, Layer-Scores, ROI, Empfehlungen
+- [x] AI Coach (WLADBOT) Endpoint
+- [x] DSGVO: Datenschutzerklärung, Daten-Löschung
+- [x] Analyzing-Seite mit Fortschrittsanimation
 
 ## Prioritized Backlog
 
-### P0 (Critical)
-- [ ] Add Resend API key for email delivery
-- [ ] Test full 30-question flow with voice in production
-- [ ] Add actual Instagram/Facebook/LinkedIn URLs
+### P1 - Content & Polish
+- [ ] Content Refinement: Platzhalterfragen durch noch anspruchsvollere Szenarien ersetzen
+- [ ] Report-Seite: 30-Tage-Aktionsplan detaillierter gestalten
 
-### P1 (High Priority)
-- [ ] Polar.sh payment integration
-- [ ] Report PDF download generation
-- [ ] Session refresh persistence
+### P2 - Integrations
+- [ ] Resend Integration: E-Mail-Versand des Reports
+- [ ] polar.sh Integration: Bezahlung / Upsell
+- [ ] Voice Question Feature: Neu konzipieren und implementieren
 
-### P2 (Nice to Have)
-- [ ] Admin dashboard for lead management
-- [ ] A/B testing for hero CTAs
-- [ ] Multi-language (DE/EN)
-
-## Test Reports
-- `/app/test_reports/` - Test results
-
-## Design Reference
-- Figma: https://www.figma.com/design/8Lr9zUQsHZhnkedNvKzTmj/wladbot---main-homepage
-- Reference: https://communicaire.framer.ai/
-
-## Key Files
-- `/app/backend/server.py` - FastAPI server with all endpoints
-- `/app/frontend/src/pages/Login.jsx` - Login with Google OAuth
-- `/app/frontend/src/pages/Quiz.jsx` - Quiz with voice recording
-- `/app/frontend/src/data/questions.js` - 30 role-specific questions
-- `/app/frontend/src/hooks/useScrollReveal.js` - Scroll animation hook
+### P3 - Advanced Features
+- [ ] AI Coach interaktive Demo
+- [ ] LinkedIn-Login
+- [ ] Daily Intelligence Hub
