@@ -27,6 +27,7 @@ const roleConfig = [
   { key: "team_leader", label: "Team Leader", icon: Users, color: "#10B981", desc: "Motivation & Teamkultur" },
   { key: "psychologist", label: "Psychologe", icon: UserCheck, color: "#8B5CF6", desc: "Empathie & Menschenverständnis" },
   { key: "problem_solver", label: "Problemlöser", icon: Lightbulb, color: "#EC4899", desc: "Entscheidung & Konfliktlösung" },
+  { key: "innovator", label: "Innovator", icon: Sparkles, color: "#06B6D4", desc: "KI-Vorsprung & Sichtbarkeit" },
 ];
 
 function ScoreRing({ score, color, size = 96 }) {
@@ -127,9 +128,9 @@ export default function Report() {
           <div className="mb-10" data-testid="leadership-roles">
             <h3 className="font-manrope font-bold text-xl text-white mb-6 flex items-center gap-3">
               <Award className="w-5 h-5 text-amber-400" />
-              Deine 5 Leadership-Rollen
+              Deine 5+1 Leadership-Rollen
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {roleConfig.map((role) => {
                 const score = leadership_roles[role.key] || 0;
                 const isStrongest = strongest_role?.key === role.key;
@@ -349,10 +350,10 @@ export default function Report() {
             THE IDEAL LEADER
           </div>
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-6">
-            Mastering the 5 Roles of the Ideal Leader
+            Mastering the 5+1 Roles of the Ideal Leader
           </h2>
           <p className="font-inter text-slate-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Moderne Führung erfordert die Beherrschung aller fünf Rollen. Nicht perfekt in jeder einzelnen – aber bewusst und gezielt einsetzbar.
+            Moderne Führung erfordert die Beherrschung aller sechs Rollen. Die 6. Rolle – der Innovator – befähigt dich, schneller zu lösen, gesehen zu werden und dir einen entscheidenden Vorteil auf dem Arbeitsmarkt zu schaffen.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {roleConfig.map((role) => (

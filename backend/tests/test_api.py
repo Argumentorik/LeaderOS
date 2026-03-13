@@ -125,7 +125,7 @@ class TestGenerateReport:
         print(f"Report generated: {data['narrative'].get('profile_title', 'N/A')}")
 
     def test_generate_report_has_leadership_roles(self, client, session_id):
-        """Test report contains 5 Leadership Roles (Communicator, Manager, Team Leader, Psychologist, Problem Solver)"""
+        """Test report contains 5+1 Leadership Roles (Communicator, Manager, Team Leader, Psychologist, Problem Solver, Innovator)"""
         resp = client.post(f"{BASE_URL}/api/quiz/generate-report", json={
             "session_id": session_id,
             "answers": self._make_answers()
@@ -133,18 +133,20 @@ class TestGenerateReport:
         assert resp.status_code == 200
         data = resp.json()
         
-        # NEW: Leadership roles must be present
+        # Leadership roles must be present
         assert "leadership_roles" in data, "leadership_roles missing from report"
         leadership_roles = data["leadership_roles"]
         
-        # Check all 5 roles exist
-        expected_roles = ["communicator", "manager", "team_leader", "psychologist", "problem_solver"]
+        # Check all 6 roles exist (5+1 with innovator)
+        expected_roles = ["communicator", "manager", "team_leader", "psychologist", "problem_solver", "innovator"]
         for role in expected_roles:
             assert role in leadership_roles, f"Role '{role}' missing from leadership_roles"
             assert isinstance(leadership_roles[role], (int, float)), f"Role '{role}' score is not numeric"
             assert 0 <= leadership_roles[role] <= 100, f"Role '{role}' score out of bounds"
         
-        print(f"Leadership roles: {leadership_roles}")
+        # Verify total of 6 roles
+        assert len(leadership_roles) == 6, f"Expected 6 leadership roles, got {len(leadership_roles)}"
+        print(f"Leadership roles (5+1): {leadership_roles}")
 
     def test_generate_report_has_strongest_and_weakest_role(self, client, session_id):
         """Test report contains strongest_role and weakest_role"""

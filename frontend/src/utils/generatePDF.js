@@ -33,6 +33,7 @@ const roleLabels = {
   team_leader: "Team Leader",
   psychologist: "Psychologe",
   problem_solver: "Problemloser",
+  innovator: "Innovator",
 };
 
 const roleColors = {
@@ -41,6 +42,7 @@ const roleColors = {
   team_leader: [16, 185, 129],
   psychologist: [139, 92, 246],
   problem_solver: [236, 72, 153],
+  innovator: [6, 182, 212],
 };
 
 function drawRoundedRect(doc, x, y, w, h, r, fillColor) {
@@ -168,49 +170,53 @@ export function generateReportPDF(report, user) {
     }
   }
 
-  // 5 Leadership Roles
+  // 5+1 Leadership Roles
   if (Object.keys(leadership_roles).length > 0) {
-    y = 230;
+    y = 228;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.accent);
-    doc.text("5 LEADERSHIP-ROLLEN", margin, y);
+    doc.text("5+1 LEADERSHIP-ROLLEN", margin, y);
     y += 7;
     
-    const rw = (cw - 8) / 5;
-    Object.entries(roleLabels).forEach(([key, label], i) => {
+    const rw = (cw - 4) / 3;
+    const entries = Object.entries(roleLabels);
+    entries.forEach(([key, label], i) => {
       const score = leadership_roles[key] || 0;
-      const rx = margin + i * (rw + 2);
+      const row = Math.floor(i / 3);
+      const col = i % 3;
+      const rx = margin + col * (rw + 2);
+      const ry = y + row * 22;
       const color = roleColors[key] || COLORS.blue;
       const isStrong = strongest_role?.key === key;
       const isWeak = weakest_role?.key === key;
       
-      drawRoundedRect(doc, rx, y, rw, 22, 2, COLORS.cardBg);
+      drawRoundedRect(doc, rx, ry, rw, 18, 2, COLORS.cardBg);
       if (isStrong) {
         doc.setFillColor(...COLORS.green);
-        doc.roundedRect(rx, y, rw, 1, 0.5, 0.5, "F");
+        doc.roundedRect(rx, ry, rw, 1, 0.5, 0.5, "F");
       }
       if (isWeak) {
         doc.setFillColor(...COLORS.red);
-        doc.roundedRect(rx, y, rw, 1, 0.5, 0.5, "F");
+        doc.roundedRect(rx, ry, rw, 1, 0.5, 0.5, "F");
       }
       
       doc.setFont("helvetica", "bold");
       doc.setFontSize(6.5);
       doc.setTextColor(...COLORS.white);
-      doc.text(label, rx + rw/2, y + 7, { align: "center" });
+      doc.text(label, rx + rw/2, ry + 6, { align: "center" });
       
-      drawProgressBar(doc, rx + 3, y + 11, rw - 6, 2.5, score, color);
+      drawProgressBar(doc, rx + 3, ry + 9, rw - 6, 2, score, color);
       
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setTextColor(...color);
-      doc.text(`${score}%`, rx + rw/2, y + 20, { align: "center" });
+      doc.text(`${score}%`, rx + rw/2, ry + 16, { align: "center" });
     });
   }
 
   // 6 Dimensions
-  y = 262;
+  y = 276;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(...COLORS.white);

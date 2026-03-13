@@ -320,13 +320,14 @@ Antworte NUR mit validem JSON."""
                 "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."
             }
 
-    # Calculate 5 Leadership Roles from category scores
+    # Calculate 5+1 Leadership Roles from category scores
     leadership_roles = {
         "communicator": cat_avg.get("rhetorik", 50),
         "manager": cat_avg.get("entscheidung", 50),
         "team_leader": cat_avg.get("fuehrung", 50),
         "psychologist": cat_avg.get("eq", 50),
         "problem_solver": int((cat_avg.get("kritisches_denken", 50) + cat_avg.get("strategie", 50)) / 2),
+        "innovator": cat_avg.get("strategie", 50),
     }
     
     # Determine strongest and weakest roles
@@ -339,7 +340,8 @@ Antworte NUR mit validem JSON."""
         "manager": "Manager",
         "team_leader": "Team Leader",
         "psychologist": "Psychologe",
-        "problem_solver": "Problemlöser"
+        "problem_solver": "Problemlöser",
+        "innovator": "Innovator"
     }
 
     # ROI estimates

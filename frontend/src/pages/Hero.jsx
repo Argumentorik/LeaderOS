@@ -10,10 +10,10 @@ const headlines = [
   },
   {
     pre: "Die KI-Ära braucht eine neue Art von Führung.",
-    lines: ["Beherrschst du die", "{5 Rollen des modernen}", "Leaders?"],
+    lines: ["Beherrschst du die", "{5+1 Rollen des modernen}", "Leaders?"],
   },
   {
-    pre: "Dein Leadership-Profil in 7 Minuten.",
+    pre: "Dein Leadership-Profil in 5 Minuten.",
     lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
   },
 ];
@@ -163,7 +163,7 @@ export default function Hero() {
             data-testid="hero-subheadline"
           >
             Die <span className="text-white font-semibold">WLADHUB Diagnose</span> zeigt dir in{" "}
-            <span className="text-white font-semibold">7 Minuten</span>, wo du stehst – 
+            <span className="text-white font-semibold">5 Minuten</span>, wo du stehst – 
             und was dich von den <span className="text-gradient-amber font-semibold">Top 3 % der Leader</span> trennt.
           </p>
 
@@ -178,7 +178,7 @@ export default function Hero() {
               <ArrowRight className="w-5 h-5" />
             </button>
             <p className="font-inter text-sm text-slate-600">
-              7 Minuten · Sofortiger Report · Persönlicher Aktionsplan
+              5 Minuten · Sofortiger Report · Persönlicher Aktionsplan
             </p>
           </div>
         </section>
@@ -301,7 +301,7 @@ export default function Hero() {
             <div className="text-center mb-14">
               <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
                 <Clock className="w-4 h-4" />
-                In nur 7 Minuten
+                In nur 5 Minuten
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                 Dein persönlicher Leadership-Report
@@ -502,7 +502,7 @@ export default function Hero() {
               statt von ihr ersetzt zu werden?
             </h2>
             <p className="font-inter text-lg text-slate-500 mb-10">
-              Finde es heraus. <span className="text-white">Kostenlos. In nur 7 Minuten.</span>
+              Finde es heraus. <span className="text-white">Kostenlos. In nur 5 Minuten.</span>
             </p>
             <button
               data-testid="hero-cta-bottom"

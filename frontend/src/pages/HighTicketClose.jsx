@@ -15,7 +15,7 @@ const options = [
     title: "Vollzugang: WLADBOT Plattform",
     subtitle: "Das komplette Leadership-System",
     price: "Kostenloser Einstieg",
-    cta: "Jetzt kostenlos starten",
+    cta: "Jetzt Zugang freischalten",
     ctaStyle: "btn-amber",
     href: "https://polar.sh",
     external: true,
