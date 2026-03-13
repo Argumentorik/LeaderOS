@@ -1,7 +1,13 @@
-# EMERGENT Diagnostic Hub – PRD
+# WLADHUB Leadership Diagnose – PRD
 
 ## Original Problem Statement
-Build a high-end German-language web application "EMERGENT Diagnostic Hub" based on the 3-Layer Leadership Model (AI Literacy, Real-World Rhetoric, Strategic EQ). A conversion funnel for leadership assessment with AI-generated personalized reports.
+Build a high-end German-language web application "WLADHUB Leadership Diagnose" based on the 3-Layer Leadership Model (KI-Kompetenz, Boardroom-Rhetorik, Strategisches EQ). A conversion funnel for leadership assessment with AI-generated personalized reports.
+
+## Brand
+- **Name:** WLADHUB
+- **Product:** Leadership Diagnose
+- **AI Coach:** WLADBOT
+- **Platform:** WLADHUB Plattform
 
 ## Architecture
 
@@ -17,11 +23,11 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - `POST /api/user/create` – Lead capture (Name, Email, Role)
 - `POST /api/quiz/generate-report` – Process 50 quiz answers + Claude report
 - `GET /api/report/{session_id}` – Fetch report
-- `POST /api/coach/chat` – AI Coach chat (Claude)
+- `POST /api/coach/chat` – WLADBOT chat (Claude)
 - `POST /api/email/send-report` – Send HTML email report (Resend)
 
 ### Frontend Routes
-- `/` – Hero page (landing)
+- `/` – Hero page (10 sections landing page)
 - `/diagnose` – User form (role + name/email)
 - `/quiz` – 50-question diagnostic
 - `/analyzing` – Loading + API call
@@ -29,32 +35,48 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - `/roadmap` – 30-Day Action Plan
 - `/close` – High-Ticket Close page
 
+## Landing Page Sections (Implemented)
+1. **Hero:** "Die neue Elite der Führungskräfte beherrscht drei Fähigkeiten gleichzeitig"
+2. **Problem:** Typische Muster + Konsequenzen
+3. **3-Layer-Modell:** KI-Kompetenz, Boardroom-Rhetorik, Strategisches EQ
+4. **Diagnose:** Was du erhältst (5+1 Dimensionen, 3-Layer Score, 30-Tage-Plan, ROI)
+5. **WLADHUB Plattform:** Platform preview + features
+6. **WLADBOT:** AI Coach preview + use cases
+7. **Leadership Kurs:** Bonus course access
+8. **Zielgruppe:** Selbstständige, Angestellte, Senior Manager, High Potentials
+9. **Final CTA:** "Gehörst du zu den 3% der Leader..."
+10. **Footer:** WLADHUB branding
+
 ## User Personas
-- **Gründer / CEO:** Want to navigate AI era without losing authority
-- **C-Level Executive:** Need boardroom presence in AI transformation
-- **Senior Manager:** Want to become indispensable leadership
-- **Investor:** Evaluate leadership quality in portfolio companies
-- **High-Potential:** Accelerate to elite leadership
+- **Selbstständige:** Die KI-Transformation steuern – ohne persönliche Autorität zu verlieren
+- **Angestellte:** Boardroom-Entscheidungen mit strategischem EQ beschleunigen
+- **Senior Manager:** Von der Führungskraft zur unverzichtbaren Schlüsselperson werden
+- **High Potentials:** Den Aufstieg in die Elite-Leadership gezielt beschleunigen
 
 ## Core Requirements (Static)
 1. German language throughout
 2. Cinematic Modern Noir design (Cold Blue #3B82F6, Warm Amber #F59E0B)
 3. 50-question diagnostic covering 6 areas (Rhetorik, Kritisches Denken, Entscheidung, Führung, EQ, Strategie)
-4. 3-Layer scoring model (AI Literacy, Boardroom-Rhetorik, Strategisches EQ)
+4. 3-Layer scoring model (KI-Kompetenz, Boardroom-Rhetorik, Strategisches EQ)
 5. Claude AI-generated personalized German report
 6. Report delivery via email (Resend)
 7. 30-Day roadmap with 7 course categories
-8. AI Coach sidebar (24/7, knows user profile)
-9. Upsell to "AI Learn Space" platform
+8. WLADBOT sidebar (24/7, knows user profile)
+9. Upsell to WLADHUB Plattform
 10. Future Polar.sh integration for payment
 
 ## What's Been Implemented (Updated: December 2025)
 
 ### ✅ Completed Features
 
-#### UI/UX Redesign (December 2025)
-- **Complete UI overhaul** based on communicaire.framer.ai reference
-- **New Design System:**
+#### Landing Page Content Update (December 2025)
+- Complete 10-section landing page with user-provided content
+- WLADHUB branding throughout
+- WLADBOT as the AI Coach name
+- All sections from user specification implemented
+
+#### UI/UX Design (December 2025)
+- **Design System:**
   - Background: #030303 (pure dark)
   - Primary Blue: #3B82F6
   - Accent Amber: #F59E0B
@@ -64,63 +86,14 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - **Typography:** Manrope for headings, Inter for body
 - **Animations:** fadeInUp, slideUp, scale effects with staggered delays
 
-#### Hero Page
-- Centered layout with animated content
-- Badge with pulse indicator
-- Main headline with amber gradient
-- Dual CTAs (Primary + Secondary)
-- Dashboard preview mockup
-- Statistics section with glassmorphism cards
-- 3-Layer model feature cards
-- "What you get" section
-- Footer
-
-#### User Form (/diagnose)
-- 5 role options with modern card design
-- Rounded icon containers
-- Two-step form (Role → Name/Email)
-- Modern input fields with glass effect
-
-#### Quiz (/quiz)
-- Fixed progress bar with gradient
-- Category badge
-- Scenario card with glass effect
-- Option buttons with check animation
-- Navigation (Back/Forward)
-
-#### Report Page (/report)
-- Profile title card with amber glow
-- 3-layer score cards with progress rings
-- Radar chart for 6 dimensions
-- ROI metrics section
-- Recommendations
-- Daily Intelligence Hub preview
-
-#### Roadmap (/roadmap)
-- Phase cards with accent color bars
-- Module cards with outcomes
-- Course categories grid
-
-#### High-Ticket Close (/close)
-- Comparison section (Without vs With)
-- Three pricing options
-- Feature lists with icons
-
-#### AI Coach
-- Floating chat button with gradient
-- Rounded chat panel
-- Message bubbles with modern styling
-- Preset prompts as badges
-
-#### Navbar
-- Clean minimal design
-- Progress steps indicator
-- Mobile hamburger menu
+#### Full User Flow
+- Hero → UserForm → Quiz → Analyzing → Report → Roadmap → Close
+- AI Coach (WLADBOT) available on Report, Roadmap, Close pages
 
 ### Infrastructure
 - MongoDB: `emergent_diagnostic` database
 - API: All endpoints tested (100% pass rate)
-- Health check endpoint added
+- Health check endpoint working
 
 ## Prioritized Backlog
 
@@ -129,8 +102,8 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 - [ ] Test full 50-question flow in production
 
 ### P1 (High Priority)
-- [ ] Polar.sh payment integration for AI Learn Space
-- [ ] Actual video course player/links for 7 course categories
+- [ ] Polar.sh payment integration for WLADHUB Plattform
+- [ ] Actual WLADHUB Plattform links/redirects
 - [ ] Report PDF download generation
 - [ ] Session refresh persistence (currently localStorage only)
 
@@ -150,6 +123,6 @@ Build a high-end German-language web application "EMERGENT Diagnostic Hub" based
 
 ## Next Tasks
 1. Provide Resend API key (`re_...` from resend.com) → email delivery active
-2. Connect Polar.sh for AI Learn Space upsell
-3. Add real video content links to course categories
+2. Connect Polar.sh for WLADHUB Plattform upsell
+3. Add actual links to WLADHUB Plattform
 4. Consider session persistence for quiz progress

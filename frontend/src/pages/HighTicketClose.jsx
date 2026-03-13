@@ -11,7 +11,7 @@ const options = [
   {
     badge: "EMPFOHLEN",
     badgeStyle: "bg-gradient-to-r from-amber-500 to-amber-400 text-black",
-    title: "Vollzugang: AI Learn Space",
+    title: "Vollzugang: WLADHUB Plattform",
     subtitle: "Das komplette Leadership-System",
     price: "Kostenloser Einstieg",
     cta: "Jetzt kostenlos starten",
@@ -20,7 +20,7 @@ const options = [
     external: true,
     features: [
       "7 vollständige Kurse nach Intentional Sequence",
-      "24/7 KI-Leadership-Coach mit deinem Profil",
+      "24/7 WLADBOT als KI-Leadership-Coach",
       "Daily Intelligence Hub (3h → 15min)",
       "Persönliches Entscheidungs-Journal",
       "Strategy Canvas & Decision-Frameworks",
@@ -118,7 +118,7 @@ export default function HighTicketClose() {
           </div>
           <div className="glass-card p-6 card-glow-amber">
             <div className="font-inter text-xs tracking-widest text-amber-400 mb-4">
-              MIT EMERGENT
+              MIT WLADHUB
             </div>
             <div className="space-y-3">
               {["KI als strategischen Hebel nutzen", "Boardroom-Autorität stärken", "Team folgt deiner Richtung", "65% höheres Team-Engagement"].map((item, i) => (

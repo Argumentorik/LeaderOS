@@ -32,11 +32,11 @@ export default function Navbar() {
           className="flex items-center gap-3 group"
         >
           <span className="font-manrope font-bold text-lg text-white group-hover:text-blue-400 transition-colors">
-            EMERGENT
+            WLADHUB
           </span>
           <span className="hidden sm:block h-4 w-px bg-white/10" />
           <span className="font-inter text-sm text-slate-500 hidden sm:block">
-            Diagnostic Hub
+            Leadership Diagnose
           </span>
         </button>
 

@@ -104,7 +104,7 @@ export default function Report() {
           <div>
             <div className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4" />
-              Dein persönlicher Report
+              Dein WLADHUB Leadership-Report
             </div>
             <h1 className="font-manrope font-extrabold text-4xl md:text-5xl text-white mb-2" data-testid="report-name">
               {displayUser?.name || "Leadership Report"}
@@ -319,7 +319,7 @@ export default function Report() {
           <div className="mt-6 flex items-center gap-3 glass-card-subtle p-4">
             <span className="dot-pulse" />
             <span className="font-inter text-sm text-slate-400">
-              Mit dem KI-Coach täglich gecoacht — 24/7 verfügbar, kennt dein Profil und deine Ziele
+              Mit dem WLADBOT täglich gecoacht — 24/7 verfügbar, kennt dein Profil und deine Ziele
             </span>
           </div>
         </div>
