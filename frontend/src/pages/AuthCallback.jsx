@@ -20,7 +20,7 @@ export default function AuthCallback() {
         
         if (!sessionIdMatch) {
           console.error("No session_id found in URL");
-          navigate('/login');
+          navigate('/diagnose');
           return;
         }
 
@@ -40,31 +40,20 @@ export default function AuthCallback() {
 
         const user = await response.json();
 
-        // Update user with consent data from localStorage
-        const consentData = localStorage.getItem('wladhub_consent');
-        if (consentData) {
-          const consent = JSON.parse(consentData);
-          await fetch(`${API}/api/auth/update-profile`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-              consent_privacy: consent.privacy,
-              consent_marketing: consent.marketing
-            })
-          });
-          localStorage.removeItem('wladhub_consent');
-        }
+        // Store user data for the form
+        localStorage.setItem('emergent_user', JSON.stringify({
+          session_id: user.user_id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }));
 
-        // Store user in localStorage for quick access
-        localStorage.setItem('wladhub_user', JSON.stringify(user));
-
-        // Navigate to diagnose page with user data
+        // Navigate to diagnose page with pre-filled user data
         navigate('/diagnose', { state: { user } });
 
       } catch (error) {
         console.error("Auth callback error:", error);
-        navigate('/login');
+        navigate('/diagnose');
       }
     };
 
@@ -80,7 +69,7 @@ export default function AuthCallback() {
             <span className="font-manrope font-extrabold text-xl text-white">W</span>
           </div>
         </div>
-        <p className="font-inter text-slate-500">Anmeldung wird verarbeitet...</p>
+        <p className="font-inter text-slate-500">Daten werden übernommen...</p>
       </div>
     </div>
   );
