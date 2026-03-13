@@ -119,11 +119,11 @@ async def exchange_session(data: AuthSession, response: Response):
     existing_user = await db.users.find_one({"email": email}, {"_id": 0})
     
     if existing_user:
-        user_id = existing_user["user_id"]
+        user_id = existing_user.get("user_id") or existing_user.get("session_id")
         # Update name/picture if changed
         await db.users.update_one(
-            {"user_id": user_id},
-            {"$set": {"name": name, "picture": picture, "updated_at": datetime.now(timezone.utc).isoformat()}}
+            {"email": email},
+            {"$set": {"name": name, "picture": picture, "user_id": user_id, "updated_at": datetime.now(timezone.utc).isoformat()}}
         )
     else:
         # Create new user
