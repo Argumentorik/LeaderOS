@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check } from "lucide-react";
+import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle } from "lucide-react";
 
 const layers = [
   {
@@ -45,10 +45,12 @@ const diagnoseSteps = [
 ];
 
 const platformFeatures = [
-  "Leadership Playbooks",
-  "Simulationen für schwierige Gespräche",
-  "KI-gestützte Trainings",
-  "Fortschrittsanalyse deiner Leadership Skills"
+  { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#3B82F6" },
+  { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#60A5FA" },
+  { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
+  { icon: BookOpen, title: "Playbooks", desc: "Bewährte Strategien", color: "#F59E0B" },
+  { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#10B981" },
+  { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#EC4899" },
 ];
 
 const wladbotFeatures = [
@@ -303,47 +305,34 @@ export default function Hero() {
         {/* ===== SECTION 5: WLADHUB PLATTFORM ===== */}
         <section className="py-20 border-t border-white/5">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-              <div>
-                <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                  <Sparkles className="w-4 h-4" />
-                  WLADHUB Plattform
-                </span>
-                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                  Nach deiner Diagnose erhältst du Zugang zur
-                  <span className="text-gradient-blue"> WLADHUB Plattform.</span>
-                </h2>
-                <p className="font-inter text-slate-500 mb-6">
-                  Dort findest du:
-                </p>
-                <div className="space-y-3">
-                  {platformFeatures.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-blue-400 shrink-0" />
-                      <span className="font-inter text-slate-300">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="text-center mb-12">
+              <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+                <Sparkles className="w-4 h-4" />
+                WLADBOT Plattform
+              </span>
+              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
+                Nach deiner Diagnose erhältst du Zugang zur
+                <span className="text-gradient-blue"> WLADBOT Plattform.</span>
+              </h2>
+              <p className="font-inter text-slate-500 max-w-2xl mx-auto">
+                Alles, was du für deinen Aufstieg brauchst – an einem Ort.
+              </p>
+            </div>
 
-              {/* Platform Preview */}
-              <div className="dashboard-frame p-1">
-                <div className="bg-[#0a0a0a] rounded-[20px] p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/60" />
+            {/* Platform Features Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {platformFeatures.map((feature, i) => (
+                <div key={i} className="feature-card p-5 text-center hover-card">
+                  <div 
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
+                    style={{ backgroundColor: `${feature.color}15` }}
+                  >
+                    <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
                   </div>
-                  <div className="space-y-3">
-                    {["Leadership Playbook: Boardroom-Vorbereitung", "Simulation: Schwieriges Feedbackgespräch", "Training: KI-gestützte Argumentation"].map((item, i) => (
-                      <div key={i} className="glass-card-subtle p-3 flex items-center gap-3">
-                        <Play className="w-4 h-4 text-blue-400" />
-                        <span className="font-inter text-sm text-slate-400">{item}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="font-manrope font-bold text-white mb-1">{feature.title}</h3>
+                  <p className="font-inter text-sm text-slate-500">{feature.desc}</p>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>

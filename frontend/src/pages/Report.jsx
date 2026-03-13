@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip
 } from "recharts";
-import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle } from "lucide-react";
 
 const catLabels = {
   rhetorik: "Rhetorik",
@@ -285,32 +285,36 @@ export default function Report() {
           </div>
         )}
 
-        {/* Daily Intelligence Hub Preview */}
-        <div className="glass-card p-8 mb-10 card-glow-blue" data-testid="intelligence-hub">
+        {/* WLADBOT Platform Preview */}
+        <div className="glass-card p-8 mb-10 card-glow-blue" data-testid="wladbot-platform">
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="badge-blue px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
                 <Sparkles className="w-3 h-3" />
-                Preview: Daily Intelligence Hub
+                WLADBOT Plattform
               </div>
               <h3 className="font-manrope font-bold text-xl text-white mb-1">
-                3 Stunden Recherche. In 15 Minuten.
+                Dein Leadership-Toolkit
               </h3>
-              <p className="font-inter text-sm text-slate-500">So sieht dein KI-gestützter Leadership-Arbeitsalltag aus</p>
+              <p className="font-inter text-sm text-slate-500">Alles, was du für deinen Aufstieg brauchst – an einem Ort</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { time: "07:15", title: "Board-Briefing generiert", desc: "Automatisches Tages-Briefing aus 12 Quellen", badge: "Rhetorik", icon: MessageSquare },
-              { time: "08:30", title: "Entscheidungs-Journal", desc: "KI analysiert gestrige Entscheidungsmuster", badge: "EQ-Score", icon: Brain },
-              { time: "09:00", title: "Marktlage zusammengefasst", desc: "Wettbewerber-Updates in 3 Sätzen", badge: "Strategie", icon: TrendingUp },
+              { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#3B82F6" },
+              { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#60A5FA" },
+              { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
+              { icon: BookOpen, title: "Playbooks", desc: "Bewährte Strategien", color: "#F59E0B" },
+              { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#10B981" },
+              { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#EC4899" },
             ].map((item, i) => (
-              <div key={i} className="hub-card glass-card-subtle p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-xs text-slate-600">{item.time}</span>
-                  <span className="badge-blue px-2 py-0.5 text-xs">{item.badge}</span>
+              <div key={i} className="hub-card glass-card-subtle p-4 hover-card">
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
+                  style={{ backgroundColor: `${item.color}15` }}
+                >
+                  <item.icon className="w-5 h-5" style={{ color: item.color }} />
                 </div>
-                <item.icon className="w-4 h-4 text-blue-400 mb-2" />
                 <h4 className="font-manrope font-semibold text-sm text-white mb-1">{item.title}</h4>
                 <p className="font-inter text-xs text-slate-500">{item.desc}</p>
               </div>
@@ -319,7 +323,7 @@ export default function Report() {
           <div className="mt-6 flex items-center gap-3 glass-card-subtle p-4">
             <span className="dot-pulse" />
             <span className="font-inter text-sm text-slate-400">
-              Mit dem WLADBOT täglich gecoacht — 24/7 verfügbar, kennt dein Profil und deine Ziele
+              WLADBOT ist dein persönlicher KI-Leadership-Coach — kennt dein Profil und deine Ziele
             </span>
           </div>
         </div>
