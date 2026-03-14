@@ -47,7 +47,7 @@ await page.context.add_cookies([{
     "secure": True,
     "sameSite": "None"
 }])
-await page.goto("https://exec-eval.preview.emergentagent.com/diagnose")
+await page.goto("https://role-assessment-lab.preview.emergentagent.com/diagnose")
 ```
 
 ## Quick Debug
