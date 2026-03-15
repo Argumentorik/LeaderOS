@@ -18,12 +18,24 @@ const phases = [
   { icon: Sparkles, label: "30-Tage-Plan generieren", color: "#10B981" },
 ];
 
+const leaderQuotes = [
+  { text: "Die Aufgabe der Führung ist es, mehr Leader zu schaffen, nicht mehr Follower.", author: "Ralph Nader" },
+  { text: "Ein Leader ist am besten, wenn die Menschen kaum wissen, dass er existiert.", author: "Laozi" },
+  { text: "Innovation unterscheidet einen Leader von einem Follower.", author: "Steve Jobs" },
+  { text: "Bevor du andere führst, lerne dich selbst zu führen.", author: "Peter Drucker" },
+  { text: "Die Kunst der Führung besteht darin, Nein zu sagen. Nicht Ja.", author: "Tony Blair" },
+  { text: "Wer andere kennt, ist klug. Wer sich selbst kennt, ist weise.", author: "Laozi" },
+  { text: "Führung ist nicht Titel, Position oder Organigramm. Es ist Einfluss.", author: "John C. Maxwell" },
+  { text: "Die besten Leader sind die, die bereit sind, die härtesten Entscheidungen zu treffen.", author: "Colin Powell" },
+];
+
 export default function Analyzing() {
   const navigate = useNavigate();
   const location = useLocation();
   const [activePhase, setActivePhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const [quote] = useState(() => leaderQuotes[Math.floor(Math.random() * leaderQuotes.length)]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,9 +77,9 @@ export default function Analyzing() {
 
       <div className="relative z-10 w-full max-w-lg text-center">
         {/* Logo Pulse */}
-        <div className="relative mx-auto mb-10 w-24 h-24">
+        <div className="relative mx-auto mb-8 w-20 h-20">
           <div className="absolute inset-0 rounded-2xl bg-amber-500/20 animate-ping" style={{ animationDuration: "2s" }} />
-          <div className="relative w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-500/30 to-orange-500/10 border border-amber-500/30 flex items-center justify-center">
+          <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500/30 to-orange-500/10 border border-amber-500/30 flex items-center justify-center">
             <span className="font-manrope font-extrabold text-3xl text-white">W</span>
           </div>
         </div>
@@ -75,12 +87,20 @@ export default function Analyzing() {
         <h1 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3" data-testid="analyzing-title">
           Dein Leadership-Profil wird erstellt
         </h1>
-        <p className="font-inter text-sm text-slate-500 mb-10">
-          10 Analyse-Dimensionen werden ausgewertet
+        <p className="font-inter text-sm text-slate-500 mb-8">
+          10 Analyse-Dimensionen · 6 KI-Agenten arbeiten für dich
         </p>
 
+        {/* Leadership Quote */}
+        <div className="glass-card-subtle p-5 mb-8 text-center" data-testid="leadership-quote">
+          <p className="font-inter text-sm text-slate-300 italic leading-relaxed mb-2">
+            "{quote.text}"
+          </p>
+          <p className="font-inter text-xs text-slate-500">— {quote.author}</p>
+        </div>
+
         {/* Progress Bar */}
-        <div className="h-2 rounded-full bg-white/5 mb-10 overflow-hidden">
+        <div className="h-2 rounded-full bg-white/5 mb-8 overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 transition-all duration-700 ease-out"
             style={{ width: `${progress}%` }}
@@ -88,7 +108,7 @@ export default function Analyzing() {
         </div>
 
         {/* 10 Phases Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-10" data-testid="analyzing-phases">
+        <div className="grid grid-cols-2 gap-3 mb-8" data-testid="analyzing-phases">
           {phases.map((phase, i) => {
             const isActive = i === activePhase;
             const isDone = i < activePhase;
@@ -113,7 +133,7 @@ export default function Analyzing() {
                 }`}>
                   {phase.label}
                 </span>
-                {isDone && <span className="ml-auto text-green-400 text-[10px]">✓</span>}
+                {isDone && <span className="ml-auto text-green-400 text-[10px]">&#10003;</span>}
               </div>
             );
           })}

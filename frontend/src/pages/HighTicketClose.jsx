@@ -66,7 +66,10 @@ export default function HighTicketClose() {
             Jetzt hol dir den <span className="text-gradient-amber">Vorsprung.</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
-            Wähle deinen Weg zur strategischen Dominanz. Beide Pakete geben dir sofortigen Zugang zur WLADHUB Plattform.
+            Wähle deinen Weg zur strategischen Dominanz. Der kostenlose Zugang bleibt bestehen – beide Premium-Pakete geben dir zusätzlich sofortigen Vollzugang.
+          </p>
+          <p className="font-inter text-sm text-green-400/80 mt-3">
+            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung nötig.
           </p>
         </div>
 

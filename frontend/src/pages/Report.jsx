@@ -22,12 +22,12 @@ const layerConfig = [
 ];
 
 const roleConfig = [
-  { key: "communicator", label: "Kommunikator", icon: MessageSquare, color: "#F59E0B", desc: "Überzeugungskraft & Klarheit" },
+  { key: "communicator", label: "Kommunikator", icon: MessageSquare, color: "#F97316", desc: "Überzeugungskraft & Klarheit" },
   { key: "manager", label: "Manager", icon: Target, color: "#3B82F6", desc: "Struktur & Produktivität" },
   { key: "team_leader", label: "Team Leader", icon: Users, color: "#10B981", desc: "Motivation & Teamkultur" },
-  { key: "psychologist", label: "Psychologe", icon: UserCheck, color: "#8B5CF6", desc: "Empathie & Menschenverständnis" },
+  { key: "psychologist", label: "Psychologe", icon: UserCheck, color: "#38BDF8", desc: "Empathie & Menschenverständnis" },
   { key: "problem_solver", label: "Problemlöser", icon: Lightbulb, color: "#EC4899", desc: "Entscheidung & Konfliktlösung" },
-  { key: "innovator", label: "Innovator", icon: Sparkles, color: "#06B6D4", desc: "KI-Vorsprung & Sichtbarkeit" },
+  { key: "innovator", label: "Innovator", icon: Sparkles, color: "#EAB308", desc: "KI-Vorsprung & Sichtbarkeit" },
 ];
 
 function ScoreRing({ score, color, size = 96 }) {
@@ -298,26 +298,26 @@ export default function Report() {
           </div>
         )}
 
-        {/* WLADBOT Platform Preview */}
+        {/* AI Agent Ecosystem */}
         <div className="glass-card p-8 mb-10 card-glow-blue" data-testid="wladbot-platform">
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="badge-blue px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
                 <Sparkles className="w-3 h-3" />
-                WLADBOT Plattform
+                6 KI-Agenten für deinen Aufstieg
               </div>
-              <h3 className="font-manrope font-bold text-xl text-white mb-1">Dein Leadership-Toolkit</h3>
-              <p className="font-inter text-sm text-slate-500">Alles, was du für deinen Aufstieg brauchst – an einem Ort</p>
+              <h3 className="font-manrope font-bold text-xl text-white mb-1">Dein Leadership-Ökosystem</h3>
+              <p className="font-inter text-sm text-slate-500">Mehrere spezialisierte Agenten, die das Leben eines Leaders erleichtern</p>
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#3B82F6" },
-              { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#60A5FA" },
-              { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
-              { icon: BookOpen, title: "Playbooks", desc: "Bewährte Strategien", color: "#F59E0B" },
-              { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#10B981" },
-              { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#EC4899" },
+              { icon: Bot, title: "Coach-Agent", desc: "24/7 persönliches Coaching", color: "#F59E0B" },
+              { icon: CheckSquare, title: "Task-Agent", desc: "Tägliche Leadership-Aufgaben", color: "#F97316" },
+              { icon: Users, title: "Simulations-Agent", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
+              { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks", color: "#3B82F6" },
+              { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions & Workshops", color: "#10B981" },
+              { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Leadern", color: "#EC4899" },
             ].map((item, i) => (
               <div key={i} className="hub-card glass-card-subtle p-4 hover-card">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: `${item.color}15` }}>

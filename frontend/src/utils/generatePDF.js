@@ -37,12 +37,12 @@ const roleLabels = {
 };
 
 const roleColors = {
-  communicator: [245, 158, 11],
+  communicator: [249, 115, 22],
   manager: [59, 130, 246],
   team_leader: [16, 185, 129],
-  psychologist: [139, 92, 246],
+  psychologist: [56, 189, 248],
   problem_solver: [236, 72, 153],
-  innovator: [6, 182, 212],
+  innovator: [234, 179, 8],
 };
 
 function drawRoundedRect(doc, x, y, w, h, r, fillColor) {

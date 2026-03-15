@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, MessageSquare, Users, Target, Lightbulb, Zap, Shield, Sparkles, Calendar, BookOpen, Video, Headphones, Award, Star, TrendingUp, Bot, Check, Lock, Rocket, X } from "lucide-react";
+import { ArrowRight, Brain, MessageSquare, Users, Target, Lightbulb, Zap, Shield, Sparkles, Calendar, BookOpen, Video, Headphones, Award, Star, TrendingUp, Bot, Check, Lock, Rocket, X, ChevronRight, Play, CheckCircle2 } from "lucide-react";
 
 const courses = [
   { num: "01", icon: Brain, title: "AI Basics – Dein Startpunkt", desc: "Verstehe KI richtig und ordne es für deine Führung ein. Das Fundament für alles Weitere.", color: "#F59E0B", tag: "KEY" },
-  { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Überzeuge in Meetings, Verhandlungen und Konflikten.", color: "#3B82F6" },
+  { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Überzeuge in Meetings, Verhandlungen und Konflikten.", color: "#F97316" },
   { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART – bewährte Methoden.", color: "#3B82F6" },
   { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#10B981" },
   { num: "05", icon: Shield, title: "Psychologische Führung", desc: "Empathie als Wettbewerbsvorteil.", color: "#8B5CF6" },
@@ -22,15 +22,84 @@ const journalPrompts = [
   "Welche Gewohnheit hält mich davon ab, mein volles Potential zu entfalten?",
 ];
 
-const phases = [
-  { week: "WOCHE 1", title: "Awareness & Foundation", color: "#3B82F6",
-    items: ["Baseline deiner 6 Führungsdimensionen", "AI Basics: KI richtig verstehen", "Kommunikationsmuster identifizieren", "EQ-Selbstreflexion: Stärken & Trigger"] },
-  { week: "WOCHE 2", title: "Skill Building & Methoden", color: "#3B82F6",
-    items: ["KI-Entscheidungsframework implementieren", "Boardroom-Rhetorik aufbauen", "Eisenhower + ALPEN anwenden", "Aktives Zuhören in 3 Gesprächen"] },
-  { week: "WOCHE 3", title: "Integration & Praxis", color: "#F59E0B",
-    items: ["KI + Rhetorik in Präsentation kombinieren", "SMART-Formel für Quartalsziele", "Schwierige Gespräche mit EQ-Framework", "Feedback-Loop mit Team starten"] },
-  { week: "WOCHE 4", title: "Strategic Dominance", color: "#F59E0B",
-    items: ["30-Tage-Review: Fortschritt messen", "Leadership-Signatur definieren", "90-Tage-Plan mit Meilensteinen", "Personal Brand schärfen"] },
+const weeklyPlan = [
+  {
+    week: "01",
+    title: "Awareness & Foundation",
+    subtitle: "Dein Standort. Dein Startpunkt.",
+    accent: "#3B82F6",
+    gradient: "from-blue-500/10 to-blue-600/5",
+    borderGlow: "shadow-blue-500/5",
+    icon: Brain,
+    focus: "Selbstanalyse",
+    items: [
+      { task: "Baseline deiner 6 Führungsdimensionen", agent: "Diagnose-Agent" },
+      { task: "AI Basics: KI richtig verstehen & einordnen", agent: "Strategie-Agent" },
+      { task: "Kommunikationsmuster identifizieren", agent: "Coach-Agent" },
+      { task: "EQ-Selbstreflexion: Stärken & Trigger", agent: "Simulations-Agent" },
+    ],
+    milestone: "Du weißt, wo du stehst – und wo die Hebel liegen."
+  },
+  {
+    week: "02",
+    title: "Skill Building & Methoden",
+    subtitle: "Neue Werkzeuge. Erste Anwendung.",
+    accent: "#8B5CF6",
+    gradient: "from-violet-500/10 to-violet-600/5",
+    borderGlow: "shadow-violet-500/5",
+    icon: Target,
+    focus: "Methodenkompetenz",
+    items: [
+      { task: "KI-Entscheidungsframework implementieren", agent: "Strategie-Agent" },
+      { task: "Boardroom-Rhetorik aufbauen", agent: "Coach-Agent" },
+      { task: "Eisenhower + ALPEN + SMART anwenden", agent: "Task-Agent" },
+      { task: "Aktives Zuhören in 3 Gesprächen üben", agent: "Simulations-Agent" },
+    ],
+    milestone: "Du hast dein erstes Toolkit – und nutzt es bereits."
+  },
+  {
+    week: "03",
+    title: "Integration & Praxis",
+    subtitle: "Theorie trifft Realität.",
+    accent: "#F59E0B",
+    gradient: "from-amber-500/10 to-amber-600/5",
+    borderGlow: "shadow-amber-500/5",
+    icon: Zap,
+    focus: "Praxistransfer",
+    items: [
+      { task: "KI + Rhetorik in einer Präsentation kombinieren", agent: "Coach-Agent" },
+      { task: "SMART-Formel für deine Quartalsziele", agent: "Task-Agent" },
+      { task: "Schwierige Gespräche mit EQ-Framework", agent: "Simulations-Agent" },
+      { task: "Feedback-Loop mit deinem Team starten", agent: "Community-Agent" },
+    ],
+    milestone: "Du wendest alles an – und dein Umfeld bemerkt den Unterschied."
+  },
+  {
+    week: "04",
+    title: "Strategic Dominance",
+    subtitle: "Dein neues Level. Dein System.",
+    accent: "#F97316",
+    gradient: "from-orange-500/10 to-orange-600/5",
+    borderGlow: "shadow-orange-500/5",
+    icon: Award,
+    focus: "Leadership-Signatur",
+    items: [
+      { task: "30-Tage-Review: Fortschritt messen", agent: "Diagnose-Agent" },
+      { task: "Leadership-Signatur definieren", agent: "Coach-Agent" },
+      { task: "90-Tage-Plan mit Meilensteinen erstellen", agent: "Strategie-Agent" },
+      { task: "Personal Brand schärfen & positionieren", agent: "Community-Agent" },
+    ],
+    milestone: "Du bist nicht mehr derselbe Leader wie vor 30 Tagen."
+  },
+];
+
+const agentCards = [
+  { icon: Brain, name: "Diagnose-Agent", desc: "Analysiert dein Profil & trackt Fortschritt", color: "#3B82F6" },
+  { icon: Bot, name: "Coach-Agent", desc: "Persönliches Coaching, 24/7 verfügbar", color: "#F59E0B" },
+  { icon: Target, name: "Task-Agent", desc: "Tägliche Aufgaben, angepasst an dein Level", color: "#F97316" },
+  { icon: Users, name: "Simulations-Agent", desc: "Übe schwierige Gespräche & Szenarien", color: "#8B5CF6" },
+  { icon: Lightbulb, name: "Strategie-Agent", desc: "Frameworks, Playbooks & Entscheidungshilfen", color: "#10B981" },
+  { icon: MessageSquare, name: "Community-Agent", desc: "Vernetzung & Austausch mit anderen Leadern", color: "#EC4899" },
 ];
 
 export default function Roadmap() {
@@ -38,6 +107,7 @@ export default function Roadmap() {
   const [entries, setEntries] = useState(Array(6).fill(""));
   const [showWladBot, setShowWladBot] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [activeWeek, setActiveWeek] = useState(0);
   const filledCount = entries.filter(e => e.trim()).length;
 
   const handleEntry = (i, val) => {
@@ -49,9 +119,22 @@ export default function Roadmap() {
     }
   };
 
+  // Popup only once per session, with 30s delay
+  useEffect(() => {
+    if (!showWladBot) return;
+    const alreadyShown = sessionStorage.getItem("wladhub_popup_shown");
+    if (alreadyShown) return;
+    const timer = setTimeout(() => {
+      sessionStorage.setItem("wladhub_popup_shown", "true");
+      setShowPopup(true);
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, [showWladBot]);
+
   return (
     <div className="min-h-screen bg-[#030303] pb-24" data-testid="roadmap-page">
       <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-amber-500/3 rounded-full blur-[200px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
@@ -64,8 +147,147 @@ export default function Roadmap() {
             30 Tage zur <span className="text-gradient-amber">strategischen Dominanz</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
-            8 Kurse. Events. Persönliches Gespräch. KI-gestütztes Coaching. Alles, was du brauchst, um die 5+1 Rollen zu meistern.
+            6 spezialisierte KI-Agenten. 8 Kurse. Live Events. Persönliches Coaching.
+            <br className="hidden md:block" />
+            Alles, was du brauchst, um die 5+1 Rollen zu meistern.
           </p>
+        </div>
+
+        {/* Agent Ecosystem */}
+        <div className="mb-14" data-testid="agent-ecosystem">
+          <div className="flex items-center gap-3 mb-6">
+            <Bot className="w-5 h-5 text-amber-400" />
+            <h2 className="font-manrope font-bold text-xl text-white">Deine KI-Agenten</h2>
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-[10px] font-bold">6 AGENTEN</span>
+          </div>
+          <p className="font-inter text-sm text-slate-500 mb-6">
+            Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert. Zusammen bilden sie dein persönliches Leadership-System.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {agentCards.map((agent, i) => (
+              <div key={i} className="glass-card-subtle p-4 hover-card group" data-testid={`agent-card-${i}`}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${agent.color}12` }}>
+                    <agent.icon className="w-4 h-4" style={{ color: agent.color }} />
+                  </div>
+                  <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: agent.color }} />
+                </div>
+                <div className="font-manrope font-bold text-sm text-white mb-1">{agent.name}</div>
+                <div className="font-inter text-xs text-slate-500">{agent.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===== 30-TAGE WOCHENPLAN – HIGH LEVEL DESIGN ===== */}
+        <div className="mb-14" data-testid="plan-section">
+          <div className="flex items-center gap-3 mb-2">
+            <Calendar className="w-5 h-5 text-amber-400" />
+            <h2 className="font-manrope font-bold text-xl text-white">Dein 30-Tage-Fahrplan</h2>
+          </div>
+          <p className="font-inter text-sm text-slate-500 mb-8">4 Wochen. 4 Phasen. Von Awareness zur strategischen Dominanz.</p>
+
+          {/* Week Tabs */}
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2" data-testid="week-tabs">
+            {weeklyPlan.map((week, i) => (
+              <button
+                key={i}
+                data-testid={`week-tab-${i}`}
+                onClick={() => setActiveWeek(i)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium whitespace-nowrap transition-all ${
+                  activeWeek === i
+                    ? "border-white/20 bg-white/[0.06] text-white"
+                    : "border-white/5 bg-transparent text-slate-500 hover:text-slate-300 hover:border-white/10"
+                }`}
+              >
+                <span className="font-manrope font-bold text-xs tracking-wider" style={{ color: activeWeek === i ? week.accent : undefined }}>
+                  W{week.week}
+                </span>
+                <span className="hidden sm:inline">{week.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Week Card */}
+          {weeklyPlan.map((week, i) => (
+            activeWeek === i && (
+              <div
+                key={i}
+                data-testid={`phase-${i}`}
+                className={`rounded-2xl border border-white/8 bg-gradient-to-br ${week.gradient} backdrop-blur-sm overflow-hidden shadow-2xl ${week.borderGlow}`}
+              >
+                {/* Week Header */}
+                <div className="p-6 md:p-8 border-b border-white/5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${week.accent}15` }}>
+                        <week.icon className="w-6 h-6" style={{ color: week.accent }} />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-manrope text-xs font-bold tracking-widest" style={{ color: week.accent }}>WOCHE {week.week}</span>
+                          {i === 3 && <Star className="w-3.5 h-3.5 text-amber-400" />}
+                        </div>
+                        <h3 className="font-manrope font-extrabold text-xl text-white">{week.title}</h3>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 rounded-full border text-xs font-medium" style={{ borderColor: `${week.accent}30`, color: week.accent, backgroundColor: `${week.accent}08` }}>
+                      {week.focus}
+                    </span>
+                  </div>
+                  <p className="font-inter text-sm text-slate-400">{week.subtitle}</p>
+                </div>
+
+                {/* Tasks */}
+                <div className="p-6 md:p-8 space-y-3">
+                  {week.items.map((item, j) => (
+                    <div
+                      key={j}
+                      className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all group"
+                    >
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${week.accent}10` }}>
+                        <span className="font-manrope font-bold text-xs" style={{ color: week.accent }}>{j + 1}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-inter text-sm text-white mb-1">{item.task}</div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: week.accent }} />
+                          <span className="font-inter text-[10px] text-slate-500">{item.agent}</span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors shrink-0 mt-1" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Milestone */}
+                <div className="px-6 md:px-8 pb-6 md:pb-8">
+                  <div className="p-4 rounded-xl border border-dashed" style={{ borderColor: `${week.accent}25`, backgroundColor: `${week.accent}05` }}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle2 className="w-4 h-4" style={{ color: week.accent }} />
+                      <span className="font-manrope font-bold text-xs tracking-wider" style={{ color: week.accent }}>MEILENSTEIN</span>
+                    </div>
+                    <p className="font-inter text-sm text-slate-300">{week.milestone}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          ))}
+
+          {/* Week Progress Indicator */}
+          <div className="flex items-center gap-2 mt-6 justify-center">
+            {weeklyPlan.map((week, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveWeek(i)}
+                className="h-1.5 rounded-full transition-all"
+                style={{
+                  width: activeWeek === i ? 32 : 12,
+                  backgroundColor: activeWeek === i ? week.accent : "rgba(255,255,255,0.1)"
+                }}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Special Events */}
@@ -183,56 +405,16 @@ export default function Roadmap() {
           </div>
         </div>
 
-        {/* 30-Tage-Plan */}
-        <div className="mb-14" data-testid="plan-section">
-          <h2 className="font-manrope font-bold text-xl text-white mb-2 flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-amber-400" />
-            Dein 30-Tage-Fahrplan
-          </h2>
-          <p className="font-inter text-sm text-slate-500 mb-8">Von Awareness zur strategischen Dominanz in 4 Wochen.</p>
-          <div className="space-y-4">
-            {phases.map((phase, i) => (
-              <div key={i} className="glass-card p-6 border-l-2" style={{ borderLeftColor: phase.color }} data-testid={`phase-${i}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="font-inter text-xs font-bold tracking-wider" style={{ color: phase.color }}>{phase.week}</span>
-                  <span className="font-manrope font-bold text-white">{phase.title}</span>
-                  {i === 3 && <Star className="w-4 h-4 text-amber-400" />}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {phase.items.map((item, j) => (
-                    <div key={j} className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: phase.color }} />
-                      <span className="font-inter text-sm text-slate-400">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Special Event */}
-          <div className="mt-4 glass-card p-6 border-l-2 border-amber-500 bg-gradient-to-r from-amber-500/5 to-transparent" data-testid="special-event">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold">SPECIAL EVENT</span>
-            </div>
-            <p className="font-inter text-sm text-slate-400 mb-3">
-              1:1 mit einem AI Experten – 30 Min. persönliches Coaching. Plus: Live-Events und Community-Zugang.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {["1:1 Gespräch", "Live Events", "Community", "AI Guidance"].map(t => (
-                <span key={t} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/8 text-slate-300 text-xs font-medium">{t}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* CTA - blocked until journal complete */}
         <div className="text-center pt-6 border-t border-white/5">
           <h3 className="font-manrope font-bold text-xl text-white mb-3">
             Bereit für die strategische Dominanz?
           </h3>
-          <p className="font-inter text-sm text-slate-500 mb-8 max-w-lg mx-auto">
-            8 Kurse · 1:1 Gespräch · Live Events · AI Guidance · Community
+          <p className="font-inter text-sm text-slate-500 mb-4 max-w-lg mx-auto">
+            8 Kurse · 6 KI-Agenten · 1:1 Gespräch · Live Events · Community
+          </p>
+          <p className="font-inter text-xs text-green-400/80 mb-6">
+            Kostenlos testen – keine Zahlung nötig
           </p>
           {filledCount < 6 ? (
             <div data-testid="journal-gate">
@@ -255,15 +437,11 @@ export default function Roadmap() {
         </div>
       </div>
 
-      {/* Upsell Pop-Up (after 6 entries + 10sec delay) */}
-      {showWladBot && !showPopup && (
-        <PopupTrigger onShow={() => setShowPopup(true)} />
-      )}
-
+      {/* Upsell Pop-Up – only once per session, 30s delay */}
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" data-testid="upsell-popup">
           <div className="w-full max-w-md glass-card p-8 relative border border-amber-500/20">
-            <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white">
+            <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white" data-testid="popup-close">
               <X className="w-4 h-4" />
             </button>
             <div className="text-center mb-6">
@@ -271,27 +449,24 @@ export default function Roadmap() {
                 <Rocket className="w-7 h-7 text-amber-400" />
               </div>
               <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Du bist bereit für mehr!</h3>
-              <p className="font-inter text-sm text-slate-400">Schalte jetzt alle 23 Kurse, die WLADHUB Plattform und die AI Leadership Community frei.</p>
+              <p className="font-inter text-sm text-slate-400">Schalte alle 23 Kurse, die WLADHUB Plattform und alle 6 KI-Agenten frei.</p>
             </div>
             <div className="text-center mb-4">
-              <div className="font-manrope font-extrabold text-3xl text-white">€997</div>
+              <div className="font-manrope font-extrabold text-3xl text-white">ab €997</div>
               <div className="font-inter text-xs text-slate-500">einmalig · License Key per E-Mail</div>
             </div>
             <button onClick={() => { setShowPopup(false); navigate("/close"); }}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold flex items-center justify-center gap-2">
-              Alles freischalten – €997 <ArrowRight className="w-4 h-4" />
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold flex items-center justify-center gap-2"
+              data-testid="popup-cta"
+            >
+              Pakete ansehen <ArrowRight className="w-4 h-4" />
+            </button>
+            <button onClick={() => setShowPopup(false)} className="w-full py-3 mt-2 text-center font-inter text-xs text-slate-500 hover:text-slate-300 transition-colors" data-testid="popup-dismiss">
+              Nein danke, ich bleibe beim kostenlosen Zugang
             </button>
           </div>
         </div>
       )}
     </div>
   );
-}
-
-function PopupTrigger({ onShow }) {
-  useState(() => {
-    const timer = setTimeout(onShow, 15000);
-    return () => clearTimeout(timer);
-  });
-  return null;
 }

@@ -13,7 +13,7 @@ const headlines = [
     lines: ["Beherrschst du die", "{5+1 Rollen des modernen}", "Leaders?"],
   },
   {
-    pre: "Dein Leadership-Profil in 5 Minuten.",
+    pre: "Dein Leadership-Profil in 10 Minuten.",
     lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
   },
 ];
@@ -62,12 +62,12 @@ const diagnoseSteps = [
 ];
 
 const platformFeatures = [
-  { icon: Bot, title: "AI Coach", desc: "24/7 persönliches Coaching", color: "#F59E0B" },
-  { icon: CheckSquare, title: "Tasks", desc: "Tägliche Leadership-Aufgaben", color: "#F97316" },
-  { icon: Users, title: "Simulation", desc: "Schwierige Gespräche üben", color: "#D97706" },
-  { icon: BookOpen, title: "Playbooks", desc: "Bewährte Strategien", color: "#F59E0B" },
-  { icon: Calendar, title: "Events", desc: "Live-Sessions & Workshops", color: "#F97316" },
-  { icon: MessageCircle, title: "Community", desc: "Coaching-Community-Zugang", color: "#D97706" },
+  { icon: Bot, title: "Leadership Coach", desc: "Dein persönlicher KI-Coach, der dein Profil kennt", color: "#F59E0B" },
+  { icon: CheckSquare, title: "Task Agent", desc: "Tägliche Aufgaben, angepasst an deine Schwächen", color: "#F97316" },
+  { icon: Users, title: "Simulations-Agent", desc: "Übe schwierige Gespräche mit KI-Gegenüber", color: "#D97706" },
+  { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks auf Abruf", color: "#F59E0B" },
+  { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions, passend zu deinem Level", color: "#F97316" },
+  { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Führungskräften deiner Stufe", color: "#D97706" },
 ];
 
 const wladbotFeatures = [
@@ -163,7 +163,7 @@ export default function Hero() {
             data-testid="hero-subheadline"
           >
             Die <span className="text-white font-semibold">WLADHUB Diagnose</span> zeigt dir in{" "}
-            <span className="text-white font-semibold">5 Minuten</span>, wo du stehst – 
+            <span className="text-white font-semibold">10 Minuten</span>, wo du stehst – 
             und was dich von den <span className="text-gradient-amber font-semibold">Top 3 % der Leader</span> trennt.
           </p>
 
@@ -178,7 +178,7 @@ export default function Hero() {
               <ArrowRight className="w-5 h-5" />
             </button>
             <p className="font-inter text-sm text-slate-600">
-              5 Minuten · Sofortiger Report · Persönlicher Aktionsplan
+              10 Minuten · Sofortiger Report · Persönlicher Aktionsplan
             </p>
           </div>
         </section>
@@ -301,7 +301,7 @@ export default function Hero() {
             <div className="text-center mb-14">
               <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
                 <Clock className="w-4 h-4" />
-                In nur 5 Minuten
+                In nur 10 Minuten
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                 Dein persönlicher Leadership-Report
@@ -342,14 +342,14 @@ export default function Hero() {
             <div className="text-center mb-12">
               <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
                 <Sparkles className="w-4 h-4" />
-                WLADBOT Plattform
+                6 KI-Agenten für deinen Aufstieg
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Nach deiner Diagnose erhältst du Zugang zur
-                <span className="text-gradient-blue"> WLADBOT Plattform.</span>
+                Mehrere spezialisierte Agenten,
+                <span className="text-gradient-blue"> die das Leben eines Leaders erleichtern.</span>
               </h2>
               <p className="font-inter text-slate-500 max-w-2xl mx-auto">
-                Alles, was du für deinen Aufstieg brauchst – an einem Ort.
+                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert – zusammen bilden sie dein persönliches Leadership-Ökosystem.
               </p>
             </div>
 
@@ -502,7 +502,7 @@ export default function Hero() {
               statt von ihr ersetzt zu werden?
             </h2>
             <p className="font-inter text-lg text-slate-500 mb-10">
-              Finde es heraus. <span className="text-white">Kostenlos. In nur 5 Minuten.</span>
+              Finde es heraus. <span className="text-white">Kostenlos. In nur 10 Minuten.</span>
             </p>
             <button
               data-testid="hero-cta-bottom"
