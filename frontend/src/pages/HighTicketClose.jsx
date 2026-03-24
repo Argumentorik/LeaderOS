@@ -25,8 +25,8 @@ const socialLinks = [
 ];
 
 const standardFeatures = [
-  "23 Video-Kurse (8 frei + 15 Premium)",
-  "WLADHUB Plattform Zugang",
+  "6 Video-Kurse (5 Leadership + 1 AI)",
+  "WLADHUB Plattform · 1 Jahr Zugang",
   "WladBot AI Coach 24/7",
   "AI Leadership Community",
   "Personalized Learning Journey",
@@ -36,12 +36,12 @@ const standardFeatures = [
 
 const fastTrackExtras = [
   "Alles aus dem Standardpaket",
-  "1:1 Strategy-Session mit AI Experte (60 Min.)",
-  "Persönlicher Leadership-Entwicklungsplan",
-  "Priority Support & Fast-Track Onboarding",
+  "6x 1:1 Calls mit AI & Leadership Experte",
+  "Persönliches Onboarding-Gespräch",
+  "Quartals-Reviews (4x pro Jahr)",
+  "Abschluss-Call mit Strategie-Update",
   "Exklusive Mastermind-Gruppe",
-  "Quartals-Review Call",
-  "Lifetime Updates & neue Kurse",
+  "Priority Support & Fast-Track Zugang",
 ];
 
 export default function HighTicketClose() {
@@ -91,7 +91,7 @@ export default function HighTicketClose() {
               </div>
               <div className="text-right">
                 <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-standard">€997</div>
-                <div className="font-inter text-xs text-slate-500">einmalig</div>
+                <div className="font-inter text-xs text-slate-500">1 Jahr · Verlängerbar</div>
               </div>
             </div>
 
@@ -122,11 +122,11 @@ export default function HighTicketClose() {
               }`}
             >
               {selectedPlan === "standard" ? <Check className="w-4 h-4" /> : null}
-              Standard wählen – €997
+              Standard wählen – €997/Jahr
             </button>
           </div>
 
-          {/* Fast Track – €6.000 */}
+          {/* Fast Track – €4.997 */}
           <div
             data-testid="plan-fasttrack"
             onClick={() => setSelectedPlan("fasttrack")}
@@ -145,8 +145,8 @@ export default function HighTicketClose() {
                 <h2 className="font-manrope font-extrabold text-2xl text-white">Leadership Accelerator</h2>
               </div>
               <div className="text-right">
-                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">€6.000</div>
-                <div className="font-inter text-xs text-slate-500">einmalig</div>
+                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">€4.997</div>
+                <div className="font-inter text-xs text-slate-500">1 Jahr · 6x 1:1 Calls inkl.</div>
               </div>
             </div>
 
@@ -169,7 +169,7 @@ export default function HighTicketClose() {
               }`}
             >
               {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
-              Fast Track wählen – €6.000
+              Fast Track wählen – €4.997
             </button>
           </div>
         </div>
@@ -179,10 +179,10 @@ export default function HighTicketClose() {
           <div className="glass-card p-8 mb-10 border border-amber-500/20" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
               <h3 className="font-manrope font-bold text-xl text-white mb-2">
-                {selectedPlan === "fasttrack" ? "Fast Track – €6.000" : "Standard – €997"}
+                {selectedPlan === "fasttrack" ? "Fast Track – €4.997/Jahr" : "Standard – €997/Jahr"}
               </h3>
               <p className="font-inter text-sm text-slate-400">
-                Sichere dir jetzt deinen Zugang zur WLADHUB Plattform
+                14 Tage kostenlos testen · Jederzeit kündbar
               </p>
             </div>
 
@@ -217,17 +217,18 @@ export default function HighTicketClose() {
           {[
             ["Leadership-Diagnose", true, true, true],
             ["AI Leadership Report", true, true, true],
-            ["8 Starter-Kurse", true, true, true],
+            ["6 Starter-Kurse", true, true, true],
             ["30-Tage-Plan", true, true, true],
-            ["15 Premium-Kurse", false, true, true],
-            ["WLADHUB Plattform", false, true, true],
-            ["WladBot AI Coach", false, true, true],
+            ["Kostenloses Buch (PDF)", true, true, true],
+            ["Premium-Kurse", false, true, true],
+            ["WLADHUB Plattform (1 Jahr)", false, true, true],
+            ["WladBot AI Coach 24/7", false, true, true],
             ["Community-Zugang", false, true, true],
             ["Learning Journey", false, true, true],
-            ["1:1 Strategy-Session", false, false, true],
+            ["6x 1:1 Calls mit Experte", false, false, true],
             ["Mastermind-Gruppe", false, false, true],
-            ["Quartals-Review", false, false, true],
-            ["Lifetime Updates", false, false, true],
+            ["Quartals-Reviews", false, false, true],
+            ["Persönliches Onboarding", false, false, true],
           ].map(([label, free, standard, fast], i) => (
             <div key={i} className="grid grid-cols-4 gap-4 py-2.5 border-b border-white/5 items-center">
               <span className="font-inter text-sm text-slate-300 text-left">{label}</span>
@@ -267,12 +268,42 @@ export default function HighTicketClose() {
             <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-blue-400" /></div>
             <div>
               <div className="font-manrope font-bold text-white">Curriculum PDF</div>
-              <div className="font-inter text-xs text-slate-500">Alle 23 Kurse + 30-Tage-Plan</div>
+              <div className="font-inter text-xs text-slate-500">Alle Kurse + 30-Tage-Plan</div>
             </div>
           </div>
           <button data-testid="curriculum-download-btn" onClick={() => generateCurriculumPDF()} className="btn-secondary px-6 py-3 text-sm font-medium flex items-center gap-2">
             <Download className="w-4 h-4" /> Herunterladen
           </button>
+        </div>
+
+        {/* Book Funnel – Kostenloses Buch */}
+        <div className="glass-card p-8 mb-10 border border-green-500/20 bg-gradient-to-r from-green-500/5 to-transparent" data-testid="book-funnel">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="w-32 h-44 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
+              <BookOpen className="w-12 h-12 text-amber-400" />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <div className="px-3 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-xs font-bold inline-block mb-3">GRATIS BELOHNUNG</div>
+              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">
+                "Die 5 Rollen einer Führungskraft"
+              </h3>
+              <p className="font-inter text-sm text-slate-400 mb-1">von Wladislaw Jachtchenko</p>
+              <p className="font-inter text-sm text-slate-400 mb-4">
+                Deine Belohnung, dass du den Test gemacht hast. Lerne die 5+1 Rollen, die jede Führungskraft meistern muss – direkt vom SPIEGEL-Bestseller-Autor.
+              </p>
+              <a
+                href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="book-cta"
+                className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
+              >
+                <BookOpen className="w-4 h-4" />
+                Kostenloses Buch sichern
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Social */}
@@ -290,26 +321,33 @@ export default function HighTicketClose() {
 
         {/* Final CTA */}
         <div className="text-center border-t border-white/5 pt-10" data-testid="final-cta-section">
-          <p className="font-inter text-sm text-slate-500 mb-6">Wähle deinen Weg. Beide starten sofort.</p>
+          <p className="font-inter text-sm text-slate-500 mb-6">Wähle deinen Weg. Oder starte kostenlos.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              data-testid="close-final-free"
+              onClick={() => navigate("/roadmap")}
+              className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2 border-green-500/30 text-green-400 hover:border-green-500/50"
+            >
+              Kostenlos starten
+            </button>
             <button
               data-testid="close-final-standard"
               onClick={() => { setSelectedPlan("standard"); document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2"
             >
-              Standard – €997
+              Standard – €997/Jahr
             </button>
             <button
               data-testid="close-final-fasttrack"
               onClick={() => { setSelectedPlan("fasttrack"); document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-amber px-8 py-4 font-semibold inline-flex items-center gap-3"
             >
-              Fast Track – €6.000
+              Fast Track – €4.997
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
           <p className="font-inter text-xs text-slate-600 mt-4">
-            Einmalige Zahlung · Sofort-Zugang · License Key per E-Mail
+            14 Tage kostenlos testen · 1 Jahr Mitgliedschaft · Verlängerbar · License Key per E-Mail
           </p>
         </div>
       </div>

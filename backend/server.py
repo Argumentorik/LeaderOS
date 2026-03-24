@@ -320,15 +320,21 @@ Antworte NUR mit validem JSON."""
                 "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."
             }
 
-    # Calculate 5+1 Leadership Roles from category scores
-    leadership_roles = {
-        "communicator": cat_avg.get("rhetorik", 50),
-        "manager": cat_avg.get("entscheidung", 50),
-        "team_leader": cat_avg.get("fuehrung", 50),
-        "psychologist": cat_avg.get("eq", 50),
-        "problem_solver": int((cat_avg.get("kritisches_denken", 50) + cat_avg.get("strategie", 50)) / 2),
-        "innovator": cat_avg.get("strategie", 50),
+    # Improved 5+1 Leadership Roles Scoring Matrix
+    # Each category contributes to multiple roles with weighted coefficients
+    role_weights = {
+        "communicator": {"rhetorik": 0.50, "fuehrung": 0.15, "eq": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
+        "manager": {"entscheidung": 0.40, "kritisches_denken": 0.20, "fuehrung": 0.15, "strategie": 0.15, "rhetorik": 0.05, "eq": 0.05},
+        "team_leader": {"fuehrung": 0.40, "eq": 0.25, "rhetorik": 0.15, "entscheidung": 0.10, "kritisches_denken": 0.05, "strategie": 0.05},
+        "psychologist": {"eq": 0.45, "fuehrung": 0.20, "rhetorik": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
+        "problem_solver": {"kritisches_denken": 0.35, "entscheidung": 0.25, "strategie": 0.15, "fuehrung": 0.10, "rhetorik": 0.10, "eq": 0.05},
+        "innovator": {"strategie": 0.45, "kritisches_denken": 0.20, "entscheidung": 0.15, "rhetorik": 0.10, "fuehrung": 0.05, "eq": 0.05},
     }
+    
+    leadership_roles = {}
+    for role, weights in role_weights.items():
+        score = sum(cat_avg.get(cat, 50) * weight for cat, weight in weights.items())
+        leadership_roles[role] = int(round(score))
     
     # Determine strongest and weakest roles
     sorted_roles = sorted(leadership_roles.items(), key=lambda x: x[1], reverse=True)

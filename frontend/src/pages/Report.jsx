@@ -98,7 +98,14 @@ export default function Report() {
             </div>
             <button
               data-testid="report-download-pdf"
-              onClick={() => generateReportPDF(report, displayUser)}
+              onClick={() => {
+                try {
+                  generateReportPDF(report, displayUser);
+                } catch (err) {
+                  console.error("PDF generation error:", err);
+                  alert("PDF-Fehler: " + err.message);
+                }
+              }}
               className="btn-secondary px-5 py-2.5 text-sm font-medium inline-flex items-center gap-2 hover:border-amber-500/40 transition-all"
             >
               <Download className="w-4 h-4" />
@@ -379,6 +386,64 @@ export default function Report() {
             </p>
           </div>
         )}
+
+        {/* Personalized 30-Day Learning Plan */}
+        <div className="glass-card p-8 md:p-10 mb-10" data-testid="report-30day-plan">
+          <div className="flex items-center gap-3 mb-2">
+            <Calendar className="w-5 h-5 text-amber-400" />
+            <h3 className="font-manrope font-bold text-xl text-white">Dein persönlicher 30-Tage-Lernplan</h3>
+          </div>
+          <p className="font-inter text-sm text-slate-500 mb-6">
+            Basierend auf deinem Profil – fokussiert auf dein größtes Wachstumspotenzial.
+          </p>
+          <div className="space-y-4">
+            {roleConfig
+              .sort((a, b) => ((leadership_roles[a.key] ?? 50) - (leadership_roles[b.key] ?? 50)))
+              .slice(0, 3)
+              .map((role, i) => (
+                <div key={role.key} className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${role.color}15` }}>
+                    <span className="font-manrope font-bold text-sm" style={{ color: role.color }}>W{i + 1}</span>
+                  </div>
+                  <div>
+                    <div className="font-manrope font-bold text-sm text-white mb-1">
+                      {i === 0 ? "Priorität" : i === 1 ? "Aufbau" : "Vertiefung"}: {role.label}
+                    </div>
+                    <p className="font-inter text-xs text-slate-500">{role.desc} – Fokus-Woche mit täglichen Mikro-Aufgaben</p>
+                  </div>
+                </div>
+              ))}
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/15">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
+                <span className="font-manrope font-bold text-sm text-amber-400">W4</span>
+              </div>
+              <div>
+                <div className="font-manrope font-bold text-sm text-white mb-1">Strategic Dominance: Alles zusammenführen</div>
+                <p className="font-inter text-xs text-slate-500">Leadership-Signatur definieren · 90-Tage-Plan erstellen · Review</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Book Upsell */}
+        <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center gap-6 border border-green-500/15" data-testid="report-book-upsell">
+          <div className="w-20 h-28 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <BookOpen className="w-8 h-8 text-amber-400" />
+          </div>
+          <div className="flex-1 text-center sm:text-left">
+            <div className="px-2.5 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-[10px] font-bold inline-block mb-2">GRATIS BELOHNUNG</div>
+            <div className="font-manrope font-bold text-white mb-1">"Die 5 Rollen einer Führungskraft"</div>
+            <div className="font-inter text-xs text-slate-500">von Wladislaw Jachtchenko · SPIEGEL-Bestseller</div>
+          </div>
+          <a
+            href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary px-5 py-2.5 text-sm font-medium inline-flex items-center gap-2 shrink-0"
+          >
+            <BookOpen className="w-4 h-4" /> Buch sichern
+          </a>
+        </div>
 
         {/* CTAs */}
         <div className="border-t border-white/5 pt-10 flex flex-col sm:flex-row gap-4 justify-center" data-testid="report-ctas">

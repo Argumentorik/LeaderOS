@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, MessageSquare, Users, Target, Lightbulb, Zap, Shield, Sparkles, Calendar, BookOpen, Video, Headphones, Award, Star, TrendingUp, Bot, Check, Lock, Rocket, X, ChevronRight, Play, CheckCircle2 } from "lucide-react";
 
+const roleLabels = {
+  communicator: "Kommunikation",
+  manager: "Management",
+  team_leader: "Team Leadership",
+  psychologist: "Psychologische Führung",
+  problem_solver: "Problemlösung",
+  innovator: "Innovation & KI",
+};
+
 const courses = [
   { num: "01", icon: Brain, title: "AI Basics – Dein Startpunkt", desc: "Verstehe KI richtig und ordne es für deine Führung ein. Das Fundament für alles Weitere.", color: "#F59E0B", tag: "KEY" },
   { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Überzeuge in Meetings, Verhandlungen und Konflikten.", color: "#F97316" },
@@ -9,8 +18,6 @@ const courses = [
   { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#10B981" },
   { num: "05", icon: Shield, title: "Psychologische Führung", desc: "Empathie als Wettbewerbsvorteil.", color: "#8B5CF6" },
   { num: "06", icon: Lightbulb, title: "Problemlösung & Entscheidung", desc: "Datengestützte Entscheidungen unter Druck.", color: "#EC4899" },
-  { num: "07", icon: Zap, title: "Innovation & KI-Strategie", desc: "KI als strategischer Hebel für Sichtbarkeit.", color: "#06B6D4" },
-  { num: "08", icon: Award, title: "Leadership Mastery", desc: "Definiere deine Leadership-Signatur.", color: "#F59E0B" },
 ];
 
 const journalPrompts = [
@@ -110,6 +117,29 @@ export default function Roadmap() {
   const [activeWeek, setActiveWeek] = useState(0);
   const filledCount = entries.filter(e => e.trim()).length;
 
+  // Dynamic: Read report results to personalize the plan
+  const [weakestRole, setWeakestRole] = useState(null);
+  const [strongestRole, setStrongestRole] = useState(null);
+
+  useEffect(() => {
+    try {
+      const report = JSON.parse(localStorage.getItem("emergent_report") || "{}");
+      const roles = report?.roles || report?.report?.roles;
+      if (roles) {
+        const roleEntries = Object.entries(roles).filter(([_, v]) => typeof v === "number" || typeof v?.score === "number");
+        if (roleEntries.length > 0) {
+          const sorted = roleEntries.sort((a, b) => {
+            const scoreA = typeof a[1] === "number" ? a[1] : a[1]?.score || 0;
+            const scoreB = typeof b[1] === "number" ? b[1] : b[1]?.score || 0;
+            return scoreA - scoreB;
+          });
+          setWeakestRole(sorted[0]?.[0]);
+          setStrongestRole(sorted[sorted.length - 1]?.[0]);
+        }
+      }
+    } catch {}
+  }, []);
+
   const handleEntry = (i, val) => {
     const next = [...entries];
     next[i] = val;
@@ -147,10 +177,18 @@ export default function Roadmap() {
             30 Tage zur <span className="text-gradient-amber">strategischen Dominanz</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
-            6 spezialisierte KI-Agenten. 8 Kurse. Live Events. Persönliches Coaching.
+            6 spezialisierte KI-Agenten. 6 Kurse. Live Events. Persönliches Coaching.
             <br className="hidden md:block" />
             Alles, was du brauchst, um die 5+1 Rollen zu meistern.
           </p>
+          {weakestRole && (
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20" data-testid="personalized-hint">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="font-inter text-sm text-amber-300">
+                Dein Plan priorisiert <strong>{roleLabels[weakestRole] || weakestRole}</strong> – dein größtes Wachstumspotenzial
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Agent Ecosystem */}
@@ -383,7 +421,7 @@ export default function Roadmap() {
         <div className="mb-14" data-testid="courses-section">
           <h2 className="font-manrope font-bold text-xl text-white mb-2 flex items-center gap-3">
             <BookOpen className="w-5 h-5 text-amber-400" />
-            8 Kurse für das Modern Leadership System
+            6 Kurse für das Modern Leadership System
           </h2>
           <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt – dann baust du Schritt für Schritt auf.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -411,7 +449,7 @@ export default function Roadmap() {
             Bereit für die strategische Dominanz?
           </h3>
           <p className="font-inter text-sm text-slate-500 mb-4 max-w-lg mx-auto">
-            8 Kurse · 6 KI-Agenten · 1:1 Gespräch · Live Events · Community
+            6 Kurse · 6 KI-Agenten · 1:1 Gespräch · Live Events · Community
           </p>
           <p className="font-inter text-xs text-green-400/80 mb-6">
             Kostenlos testen – keine Zahlung nötig

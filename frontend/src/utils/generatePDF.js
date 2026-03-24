@@ -326,6 +326,7 @@ export function generateReportPDF(report, user) {
 
   [narrative.recommendation_1, narrative.recommendation_2, narrative.recommendation_3].forEach((rec, i) => {
     if (!rec) return;
+    if (y > 260) return; // prevent page overflow
     drawRoundedRect(doc, margin, y, cw, 22, 3, COLORS.cardBg);
 
     // Number circle
@@ -336,16 +337,21 @@ export function generateReportPDF(report, user) {
     doc.setTextColor(...COLORS.bg);
     doc.text(`${i + 1}`, margin + 6.5, y + 13.5);
 
+    const title = typeof rec === "string" ? rec : (rec.title || "Empfehlung");
+    const desc = typeof rec === "string" ? "" : (rec.description || "");
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.white);
-    doc.text(rec.title, margin + 18, y + 9);
+    doc.text(title, margin + 18, y + 9);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
-    doc.setTextColor(...COLORS.gray);
-    const rLines = doc.splitTextToSize(rec.description, cw - 26);
-    doc.text(rLines.slice(0, 1), margin + 18, y + 16);
+    if (desc) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7);
+      doc.setTextColor(...COLORS.gray);
+      const rLines = doc.splitTextToSize(desc, cw - 26);
+      doc.text(rLines.slice(0, 1), margin + 18, y + 16);
+    }
 
     y += 26;
   });

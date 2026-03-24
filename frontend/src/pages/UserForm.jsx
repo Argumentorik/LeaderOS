@@ -217,7 +217,7 @@ export default function UserForm() {
             </button>
 
             <p className="font-inter text-sm text-slate-600 text-center">
-              30 Fragen · ca. 5 Minuten · Szenario-basiert
+              30 Fragen · ca. 10 Minuten · Szenario-basiert
             </p>
 
             {/* DSGVO Trust Section */}
