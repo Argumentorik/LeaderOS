@@ -199,16 +199,16 @@ export default function Hero() {
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
-              {/* Problems – 3 cols */}
-              <ScrollReveal delay={100}>
-                <div className="md:col-span-3 rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8">
+            <ScrollReveal delay={100}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Problems */}
+                <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8">
                   <div className="font-inter text-[10px] tracking-[0.2em] text-slate-600 uppercase mb-6">
                     Typische Muster
                   </div>
                   <div className="space-y-5">
                     {problems.map((problem, i) => (
-                      <div key={i} className="flex items-start gap-4 group">
+                      <div key={`problem-${i}`} className="flex items-start gap-4 group">
                         <div className="w-7 h-7 rounded-lg bg-red-500/8 flex items-center justify-center shrink-0 mt-0.5">
                           <X className="w-3.5 h-3.5 text-red-400/60" />
                         </div>
@@ -217,17 +217,15 @@ export default function Hero() {
                     ))}
                   </div>
                 </div>
-              </ScrollReveal>
 
-              {/* Consequences – 2 cols */}
-              <ScrollReveal delay={200}>
-                <div className="md:col-span-2 rounded-2xl border border-amber-500/10 bg-amber-500/[0.02] p-8">
+                {/* Consequences */}
+                <div className="rounded-2xl border border-amber-500/10 bg-amber-500/[0.02] p-8">
                   <div className="font-inter text-[10px] tracking-[0.2em] text-amber-500/60 uppercase mb-6">
                     Das Ergebnis
                   </div>
                   <div className="space-y-4">
                     {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
-                      <div key={i} className="font-manrope font-bold text-lg text-white/90">
+                      <div key={`result-${i}`} className="font-manrope font-bold text-lg text-white/90">
                         {item}
                       </div>
                     ))}
@@ -238,8 +236,8 @@ export default function Hero() {
                     </p>
                   </div>
                 </div>
-              </ScrollReveal>
-            </div>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
 
