@@ -64,7 +64,7 @@ export default function AuthCallback() {
     <div className="min-h-screen bg-[#030303] flex items-center justify-center" data-testid="auth-callback">
       <div className="text-center">
         <div className="relative w-16 h-16 mx-auto mb-6">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 animate-pulse" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#C8FF00]/20 to-[#C8FF00]/10 animate-pulse" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="font-manrope font-extrabold text-xl text-white">W</span>
           </div>

@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <nav
       data-testid="navbar"
-      className="fixed top-0 left-0 right-0 z-50 bg-[#030303]/80 backdrop-blur-xl border-b border-white/5"
+      className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/[0.04]"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -31,10 +31,10 @@ export default function Navbar() {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 group"
         >
-          <span className="font-manrope font-bold text-lg bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent group-hover:from-amber-300 group-hover:to-orange-400 transition-all">
+          <span className="font-manrope font-bold text-lg text-[#C8FF00] group-hover:text-[#d4ff33] transition-all">
             WLADHUB
           </span>
-          <span className="hidden sm:block h-4 w-px bg-white/10" />
+          <span className="hidden sm:block h-4 w-px bg-white/[0.08]" />
           <span className="font-inter text-sm text-slate-500 hidden sm:block">
             Leadership Diagnose
           </span>
@@ -48,16 +48,16 @@ export default function Navbar() {
                 <span
                   className={`font-inter text-xs font-medium transition-colors px-2 py-1 rounded-full ${
                     idx === currentStep
-                      ? "text-amber-400 bg-amber-500/10"
+                      ? "text-[#C8FF00] bg-[#C8FF00]/10"
                       : idx < currentStep
-                      ? "text-amber-500"
+                      ? "text-[#C8FF00]/70"
                       : "text-slate-600"
                   }`}
                 >
                   {step.label}
                 </span>
                 {idx < steps.length - 1 && (
-                  <ChevronRight className={`w-3 h-3 ${idx < currentStep ? "text-amber-500" : "text-slate-700"}`} />
+                  <ChevronRight className={`w-3 h-3 ${idx < currentStep ? "text-[#C8FF00]/70" : "text-slate-700"}`} />
                 )}
               </div>
             ))}
@@ -86,7 +86,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-[#0a0a0a] border-t border-white/5 py-4 px-4">
+        <div className="md:hidden bg-[#0a0a0a] border-t border-white/[0.04] py-4 px-4">
           {isHome ? (
             <button
               onClick={() => {
@@ -109,9 +109,9 @@ export default function Navbar() {
                   disabled={idx > currentStep}
                   className={`w-full text-left px-4 py-3 rounded-xl transition-colors ${
                     idx === currentStep
-                      ? "bg-amber-500/10 text-amber-400"
+                      ? "bg-[#C8FF00]/10 text-[#C8FF00]"
                       : idx < currentStep
-                      ? "text-amber-500"
+                      ? "text-[#C8FF00]/70"
                       : "text-slate-600 cursor-not-allowed"
                   }`}
                 >

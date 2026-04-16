@@ -16,18 +16,18 @@ const catLabels = {
 };
 
 const layerConfig = [
-  { key: "ai_literacy", label: "KI-Kompetenz", subtitle: "Layer 1: AI Literacy", desc: "Nutzung von KI als strategischer Führungshebel", color: "#3B82F6", narrativeKey: "ai_literacy_analysis" },
-  { key: "rhetoric", label: "Boardroom-Rhetorik", subtitle: "Layer 2: Real-World Rhetoric", desc: "Autorität, Überzeugung und Boardroom-Präsenz", color: "#60A5FA", narrativeKey: "rhetoric_analysis" },
-  { key: "strategic_eq", label: "Strategisches EQ", subtitle: "Layer 3: Strategic EQ", desc: "Empathie als Wettbewerbsvorteil und Autoritätssicherung", color: "#F59E0B", narrativeKey: "eq_analysis" },
+  { key: "ai_literacy", label: "KI-Kompetenz", subtitle: "Layer 1: AI Literacy", desc: "Nutzung von KI als strategischer Fuhrungshebel", color: "#C8FF00", narrativeKey: "ai_literacy_analysis" },
+  { key: "rhetoric", label: "Boardroom-Rhetorik", subtitle: "Layer 2: Real-World Rhetoric", desc: "Autoritat, Uberzeugung und Boardroom-Prasenz", color: "#C8FF00", narrativeKey: "rhetoric_analysis" },
+  { key: "strategic_eq", label: "Strategisches EQ", subtitle: "Layer 3: Strategic EQ", desc: "Empathie als Wettbewerbsvorteil und Autoritatssicherung", color: "#C8FF00", narrativeKey: "eq_analysis" },
 ];
 
 const roleConfig = [
-  { key: "communicator", label: "Kommunikator", icon: MessageSquare, color: "#F97316", desc: "Überzeugungskraft & Klarheit" },
-  { key: "manager", label: "Manager", icon: Target, color: "#3B82F6", desc: "Struktur & Produktivität" },
+  { key: "communicator", label: "Kommunikator", icon: MessageSquare, color: "#C8FF00", desc: "Uberzeugungskraft & Klarheit" },
+  { key: "manager", label: "Manager", icon: Target, color: "#94A3B8", desc: "Struktur & Produktivitat" },
   { key: "team_leader", label: "Team Leader", icon: Users, color: "#10B981", desc: "Motivation & Teamkultur" },
-  { key: "psychologist", label: "Psychologe", icon: UserCheck, color: "#38BDF8", desc: "Empathie & Menschenverständnis" },
-  { key: "problem_solver", label: "Problemlöser", icon: Lightbulb, color: "#EC4899", desc: "Entscheidung & Konfliktlösung" },
-  { key: "innovator", label: "Innovator", icon: Sparkles, color: "#EAB308", desc: "KI-Vorsprung & Sichtbarkeit" },
+  { key: "psychologist", label: "Psychologe", icon: UserCheck, color: "#67E8F9", desc: "Empathie & Menschenverstandnis" },
+  { key: "problem_solver", label: "Problemloser", icon: Lightbulb, color: "#F472B6", desc: "Entscheidung & Konfliktlosung" },
+  { key: "innovator", label: "Innovator", icon: Sparkles, color: "#C8FF00", desc: "KI-Vorsprung & Sichtbarkeit" },
 ];
 
 function ScoreRing({ score, color, size = 96 }) {
@@ -78,12 +78,12 @@ export default function Report() {
     subject: label, score: cat_scores[key] || 0, fullMark: 100,
   }));
 
-  const scoreColor = avg_total >= 70 ? "#10B981" : avg_total >= 50 ? "#F59E0B" : "#EF4444";
+  const scoreColor = avg_total >= 70 ? "#C8FF00" : avg_total >= 50 ? "#C8FF00" : "#EF4444";
 
   return (
-    <div className="min-h-screen bg-[#030303] pb-24" data-testid="report-page">
-      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-blue-500/3 rounded-full blur-[200px] pointer-events-none" />
-      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-amber-500/3 rounded-full blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0a0a0a] pb-24" data-testid="report-page">
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#C8FF00]/[0.02] rounded-full blur-[200px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
@@ -115,7 +115,7 @@ export default function Report() {
                   alert("PDF-Fehler: " + err.message);
                 }
               }}
-              className="btn-secondary px-5 py-2.5 text-sm font-medium inline-flex items-center gap-2 hover:border-amber-500/40 transition-all"
+              className="btn-secondary px-5 py-2.5 text-sm font-medium inline-flex items-center gap-2 hover:border-[#C8FF00]/30 transition-all"
             >
               <Download className="w-4 h-4" />
               Report herunterladen
@@ -125,8 +125,8 @@ export default function Report() {
 
         {/* Profile Title Card */}
         {narrative.profile_title && (
-          <div className="glass-card p-8 mb-10 card-glow-amber" data-testid="report-profile-title">
-            <div className="badge-amber px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
+          <div className="glass-card p-8 mb-10 card-glow-lime" data-testid="report-profile-title">
+            <div className="badge-lime px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
               <Star className="w-3 h-3" />
               Dein Führungsprofil
             </div>
@@ -143,7 +143,7 @@ export default function Report() {
         {Object.keys(leadership_roles).length > 0 && (
           <div className="mb-10" data-testid="leadership-roles">
             <h3 className="font-manrope font-bold text-xl text-white mb-6 flex items-center gap-3">
-              <Award className="w-5 h-5 text-amber-400" />
+              <Award className="w-5 h-5 text-[#C8FF00]" />
               Deine 5+1 Leadership-Rollen
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -236,8 +236,8 @@ export default function Report() {
                 <RadarChart data={radarData}>
                   <PolarGrid stroke="rgba(255,255,255,0.1)" />
                   <PolarAngleAxis dataKey="subject" tick={{ fill: "#64748B", fontSize: 11, fontFamily: "Inter" }} />
-                  <Radar name="Score" dataKey="score" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.2} strokeWidth={2} />
-                  <Tooltip contentStyle={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} itemStyle={{ color: "#ffffff", fontFamily: "Inter", fontSize: 12 }} formatter={(val) => [`${val}%`, "Score"]} />
+                  <Radar name="Score" dataKey="score" stroke="#C8FF00" fill="#C8FF00" fillOpacity={0.15} strokeWidth={2} />
+                  <Tooltip contentStyle={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12 }} itemStyle={{ color: "#ffffff", fontFamily: "Inter", fontSize: 12 }} formatter={(val) => [`${val}%`, "Score"]} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -245,8 +245,8 @@ export default function Report() {
               {Object.entries(catLabels).map(([key, label]) => (
                 <div key={key} className="flex items-center gap-3">
                   <span className="font-inter text-xs text-slate-500 w-24 shrink-0">{label}</span>
-                  <div className="flex-1 h-1 rounded-full bg-white/5">
-                    <div className="h-full rounded-full bg-blue-500" style={{ width: `${cat_scores[key] || 0}%` }} />
+                    <div className="flex-1 h-1 rounded-full bg-white/[0.04]">
+                    <div className="h-full rounded-full bg-[#C8FF00]" style={{ width: `${cat_scores[key] || 0}%` }} />
                   </div>
                   <span className="font-manrope text-xs font-bold text-white w-10 text-right">{cat_scores[key] || 0}%</span>
                 </div>
@@ -260,9 +260,9 @@ export default function Report() {
               <p className="font-inter text-sm text-slate-500 mb-6">Nach 30 Tagen im Programm</p>
               <div className="space-y-5">
                 {[
-                  { icon: Clock, value: `${roi.hours_saved}h`, label: "gesparte Stunden pro Woche", color: "#3B82F6" },
-                  { icon: Zap, value: `${roi.decision_speed}x`, label: "schnellere Entscheidungen", color: "#3B82F6" },
-                  { icon: TrendingUp, value: `+${roi.performance_boost}%`, label: "Team-Performance-Steigerung", color: "#F59E0B" }
+                  { icon: Clock, value: `${roi.hours_saved}h`, label: "gesparte Stunden pro Woche", color: "#C8FF00" },
+                  { icon: Zap, value: `${roi.decision_speed}x`, label: "schnellere Entscheidungen", color: "#C8FF00" },
+                  { icon: TrendingUp, value: `+${roi.performance_boost}%`, label: "Team-Performance-Steigerung", color: "#C8FF00" }
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${item.color}15` }}>
@@ -278,14 +278,14 @@ export default function Report() {
             </div>
 
             {narrative.top_strength && (
-              <div className="glass-card-subtle p-5 border-l-2 border-green-500">
-                <div className="font-inter text-xs text-green-400 mb-2 uppercase tracking-wider">Deine stärkste Kompetenz</div>
+              <div className="glass-card-subtle p-5 border-l-2 border-[#C8FF00]">
+                <div className="font-inter text-xs text-[#C8FF00] mb-2 uppercase tracking-wider">Deine starkste Kompetenz</div>
                 <p className="font-inter text-sm text-slate-300 leading-relaxed">{narrative.top_strength}</p>
               </div>
             )}
             {narrative.growth_priority && (
-              <div className="glass-card-subtle p-5 border-l-2 border-amber-500">
-                <div className="font-inter text-xs text-amber-400 mb-2 uppercase tracking-wider">Wachstumspriorität</div>
+              <div className="glass-card-subtle p-5 border-l-2 border-white/20">
+                <div className="font-inter text-xs text-slate-400 mb-2 uppercase tracking-wider">Wachstumsprioritat</div>
                 <p className="font-inter text-sm text-slate-300 leading-relaxed">{narrative.growth_priority}</p>
               </div>
             )}
@@ -301,7 +301,7 @@ export default function Report() {
                 rec && (
                   <div key={i} className="flex gap-5">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-manrope font-bold ${
-                      i === 2 ? "bg-amber-500/15 text-amber-400" : "bg-blue-500/15 text-blue-400"
+                      i === 2 ? "bg-[#C8FF00]/10 text-[#C8FF00]" : "bg-white/[0.04] text-white"
                     }`}>{i + 1}</div>
                     <div>
                       <h4 className="font-manrope font-bold text-white mb-1">{rec.title}</h4>
@@ -315,10 +315,10 @@ export default function Report() {
         )}
 
         {/* AI Agent Ecosystem */}
-        <div className="glass-card p-8 mb-10 card-glow-blue" data-testid="wladbot-platform">
+        <div className="glass-card p-8 mb-10 card-glow-lime" data-testid="wladbot-platform">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <div className="badge-blue px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
+              <div className="badge-lime px-3 py-1.5 text-xs inline-flex items-center gap-2 mb-4">
                 <Sparkles className="w-3 h-3" />
                 6 KI-Agenten für deinen Aufstieg
               </div>
@@ -328,12 +328,12 @@ export default function Report() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { icon: Bot, title: "Coach-Agent", desc: "24/7 persönliches Coaching", color: "#F59E0B" },
-              { icon: CheckSquare, title: "Task-Agent", desc: "Tägliche Leadership-Aufgaben", color: "#F97316" },
-              { icon: Users, title: "Simulations-Agent", desc: "Schwierige Gespräche üben", color: "#8B5CF6" },
-              { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks", color: "#3B82F6" },
-              { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions & Workshops", color: "#10B981" },
-              { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Leadern", color: "#EC4899" },
+              { icon: Bot, title: "Coach-Agent", desc: "24/7 personliches Coaching", color: "#C8FF00" },
+              { icon: CheckSquare, title: "Task-Agent", desc: "Tagliche Leadership-Aufgaben", color: "#C8FF00" },
+              { icon: Users, title: "Simulations-Agent", desc: "Schwierige Gesprache uben", color: "#C8FF00" },
+              { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks", color: "#C8FF00" },
+              { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions & Workshops", color: "#C8FF00" },
+              { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Leadern", color: "#C8FF00" },
             ].map((item, i) => (
               <div key={i} className="hub-card glass-card-subtle p-4 hover-card">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: `${item.color}15` }}>
@@ -361,7 +361,7 @@ export default function Report() {
 
         {/* CREDO: Mastering the 5 Roles */}
         <div className="glass-card p-8 md:p-10 mb-10 text-center" data-testid="report-credo">
-          <div className="badge-amber px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 mb-6">
+          <div className="badge-lime px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 mb-6">
             <Shield className="w-3 h-3" />
             THE IDEAL LEADER
           </div>
@@ -399,7 +399,7 @@ export default function Report() {
         {/* Personalized 30-Day Learning Plan */}
         <div className="glass-card p-8 md:p-10 mb-10" data-testid="report-30day-plan">
           <div className="flex items-center gap-3 mb-2">
-            <Calendar className="w-5 h-5 text-amber-400" />
+            <Calendar className="w-5 h-5 text-[#C8FF00]" />
             <h3 className="font-manrope font-bold text-xl text-white">Dein persönlicher 30-Tage-Lernplan</h3>
           </div>
           <p className="font-inter text-sm text-slate-500 mb-6">
@@ -419,9 +419,9 @@ export default function Report() {
                   </div>
                 </div>
               ))}
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/15">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-                <span className="font-manrope font-bold text-sm text-amber-400">W4</span>
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-[#C8FF00]/[0.03] border border-[#C8FF00]/10">
+              <div className="w-10 h-10 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
+                <span className="font-manrope font-bold text-sm text-[#C8FF00]">W4</span>
               </div>
               <div>
                 <div className="font-manrope font-bold text-sm text-white mb-1">Strategic Dominance: Alles zusammenführen</div>
@@ -432,12 +432,12 @@ export default function Report() {
         </div>
 
         {/* Book Upsell */}
-        <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center gap-6 border border-green-500/15" data-testid="report-book-upsell">
-          <div className="w-20 h-28 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
-            <BookOpen className="w-8 h-8 text-amber-400" />
+        <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center gap-6 border border-[#C8FF00]/10" data-testid="report-book-upsell">
+          <div className="w-20 h-28 rounded-lg bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
+            <BookOpen className="w-8 h-8 text-[#C8FF00]" />
           </div>
           <div className="flex-1 text-center sm:text-left">
-            <div className="px-2.5 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-[10px] font-bold inline-block mb-2">GRATIS BELOHNUNG</div>
+            <div className="px-2.5 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] text-[10px] font-bold inline-block mb-2">GRATIS BELOHNUNG</div>
             <div className="font-manrope font-bold text-white mb-1">"Die 5 Rollen einer Führungskraft"</div>
             <div className="font-inter text-xs text-slate-500">von Wladislaw Jachtchenko · SPIEGEL-Bestseller</div>
           </div>

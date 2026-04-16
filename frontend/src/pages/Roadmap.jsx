@@ -12,12 +12,12 @@ const roleLabels = {
 };
 
 const courses = [
-  { num: "01", icon: Brain, title: "AI Basics – Dein Startpunkt", desc: "Verstehe KI richtig und ordne es für deine Führung ein. Das Fundament für alles Weitere.", color: "#F59E0B", tag: "KEY" },
-  { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Überzeuge in Meetings, Verhandlungen und Konflikten.", color: "#F97316" },
-  { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART – bewährte Methoden.", color: "#3B82F6" },
-  { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#10B981" },
-  { num: "05", icon: Shield, title: "Psychologische Führung", desc: "Empathie als Wettbewerbsvorteil.", color: "#8B5CF6" },
-  { num: "06", icon: Lightbulb, title: "Problemlösung & Entscheidung", desc: "Datengestützte Entscheidungen unter Druck.", color: "#EC4899" },
+  { num: "01", icon: Brain, title: "AI Basics – Dein Startpunkt", desc: "Verstehe KI richtig und ordne es fur deine Fuhrung ein. Das Fundament fur alles Weitere.", color: "#C8FF00", tag: "KEY" },
+  { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Uberzeuge in Meetings, Verhandlungen und Konflikten.", color: "#C8FF00" },
+  { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART – bewahrte Methoden.", color: "#C8FF00" },
+  { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#C8FF00" },
+  { num: "05", icon: Shield, title: "Psychologische Fuhrung", desc: "Empathie als Wettbewerbsvorteil.", color: "#C8FF00" },
+  { num: "06", icon: Lightbulb, title: "Problemlosung & Entscheidung", desc: "Datengestutzte Entscheidungen unter Druck.", color: "#C8FF00" },
 ];
 
 const journalPrompts = [
@@ -34,49 +34,49 @@ const weeklyPlan = [
     week: "01",
     title: "Awareness & Foundation",
     subtitle: "Dein Standort. Dein Startpunkt.",
-    accent: "#3B82F6",
-    gradient: "from-blue-500/10 to-blue-600/5",
-    borderGlow: "shadow-blue-500/5",
+    accent: "#C8FF00",
+    gradient: "from-[#C8FF00]/[0.04] to-[#C8FF00]/[0.01]",
+    borderGlow: "shadow-[#C8FF00]/5",
     icon: Brain,
     focus: "Selbstanalyse",
     items: [
-      { task: "Baseline deiner 6 Führungsdimensionen", agent: "Diagnose-Agent" },
+      { task: "Baseline deiner 6 Fuhrungsdimensionen", agent: "Diagnose-Agent" },
       { task: "AI Basics: KI richtig verstehen & einordnen", agent: "Strategie-Agent" },
       { task: "Kommunikationsmuster identifizieren", agent: "Coach-Agent" },
-      { task: "EQ-Selbstreflexion: Stärken & Trigger", agent: "Simulations-Agent" },
+      { task: "EQ-Selbstreflexion: Starken & Trigger", agent: "Simulations-Agent" },
     ],
-    milestone: "Du weißt, wo du stehst – und wo die Hebel liegen."
+    milestone: "Du weisst, wo du stehst – und wo die Hebel liegen."
   },
   {
     week: "02",
     title: "Skill Building & Methoden",
     subtitle: "Neue Werkzeuge. Erste Anwendung.",
-    accent: "#8B5CF6",
-    gradient: "from-violet-500/10 to-violet-600/5",
-    borderGlow: "shadow-violet-500/5",
+    accent: "#C8FF00",
+    gradient: "from-[#C8FF00]/[0.03] to-transparent",
+    borderGlow: "shadow-[#C8FF00]/3",
     icon: Target,
     focus: "Methodenkompetenz",
     items: [
       { task: "KI-Entscheidungsframework implementieren", agent: "Strategie-Agent" },
       { task: "Boardroom-Rhetorik aufbauen", agent: "Coach-Agent" },
       { task: "Eisenhower + ALPEN + SMART anwenden", agent: "Task-Agent" },
-      { task: "Aktives Zuhören in 3 Gesprächen üben", agent: "Simulations-Agent" },
+      { task: "Aktives Zuhoren in 3 Gesprachen uben", agent: "Simulations-Agent" },
     ],
     milestone: "Du hast dein erstes Toolkit – und nutzt es bereits."
   },
   {
     week: "03",
     title: "Integration & Praxis",
-    subtitle: "Theorie trifft Realität.",
-    accent: "#F59E0B",
-    gradient: "from-amber-500/10 to-amber-600/5",
-    borderGlow: "shadow-amber-500/5",
+    subtitle: "Theorie trifft Realitat.",
+    accent: "#C8FF00",
+    gradient: "from-[#C8FF00]/[0.03] to-transparent",
+    borderGlow: "shadow-[#C8FF00]/3",
     icon: Zap,
     focus: "Praxistransfer",
     items: [
-      { task: "KI + Rhetorik in einer Präsentation kombinieren", agent: "Coach-Agent" },
-      { task: "SMART-Formel für deine Quartalsziele", agent: "Task-Agent" },
-      { task: "Schwierige Gespräche mit EQ-Framework", agent: "Simulations-Agent" },
+      { task: "KI + Rhetorik in einer Prasentation kombinieren", agent: "Coach-Agent" },
+      { task: "SMART-Formel fur deine Quartalsziele", agent: "Task-Agent" },
+      { task: "Schwierige Gesprache mit EQ-Framework", agent: "Simulations-Agent" },
       { task: "Feedback-Loop mit deinem Team starten", agent: "Community-Agent" },
     ],
     milestone: "Du wendest alles an – und dein Umfeld bemerkt den Unterschied."
@@ -85,28 +85,28 @@ const weeklyPlan = [
     week: "04",
     title: "Strategic Dominance",
     subtitle: "Dein neues Level. Dein System.",
-    accent: "#F97316",
-    gradient: "from-orange-500/10 to-orange-600/5",
-    borderGlow: "shadow-orange-500/5",
+    accent: "#C8FF00",
+    gradient: "from-[#C8FF00]/[0.04] to-[#C8FF00]/[0.01]",
+    borderGlow: "shadow-[#C8FF00]/5",
     icon: Award,
     focus: "Leadership-Signatur",
     items: [
       { task: "30-Tage-Review: Fortschritt messen", agent: "Diagnose-Agent" },
       { task: "Leadership-Signatur definieren", agent: "Coach-Agent" },
       { task: "90-Tage-Plan mit Meilensteinen erstellen", agent: "Strategie-Agent" },
-      { task: "Personal Brand schärfen & positionieren", agent: "Community-Agent" },
+      { task: "Personal Brand scharfen & positionieren", agent: "Community-Agent" },
     ],
     milestone: "Du bist nicht mehr derselbe Leader wie vor 30 Tagen."
   },
 ];
 
 const agentCards = [
-  { icon: Brain, name: "Diagnose-Agent", desc: "Analysiert dein Profil & trackt Fortschritt", color: "#3B82F6" },
-  { icon: Bot, name: "Coach-Agent", desc: "Persönliches Coaching, 24/7 verfügbar", color: "#F59E0B" },
-  { icon: Target, name: "Task-Agent", desc: "Tägliche Aufgaben, angepasst an dein Level", color: "#F97316" },
-  { icon: Users, name: "Simulations-Agent", desc: "Übe schwierige Gespräche & Szenarien", color: "#8B5CF6" },
-  { icon: Lightbulb, name: "Strategie-Agent", desc: "Frameworks, Playbooks & Entscheidungshilfen", color: "#10B981" },
-  { icon: MessageSquare, name: "Community-Agent", desc: "Vernetzung & Austausch mit anderen Leadern", color: "#EC4899" },
+  { icon: Brain, name: "Diagnose-Agent", desc: "Analysiert dein Profil & trackt Fortschritt", color: "#C8FF00" },
+  { icon: Bot, name: "Coach-Agent", desc: "Personliches Coaching, 24/7 verfugbar", color: "#C8FF00" },
+  { icon: Target, name: "Task-Agent", desc: "Tagliche Aufgaben, angepasst an dein Level", color: "#C8FF00" },
+  { icon: Users, name: "Simulations-Agent", desc: "Ube schwierige Gesprache & Szenarien", color: "#C8FF00" },
+  { icon: Lightbulb, name: "Strategie-Agent", desc: "Frameworks, Playbooks & Entscheidungshilfen", color: "#C8FF00" },
+  { icon: MessageSquare, name: "Community-Agent", desc: "Vernetzung & Austausch mit anderen Leadern", color: "#C8FF00" },
 ];
 
 export default function Roadmap() {
@@ -164,19 +164,19 @@ export default function Roadmap() {
   }, [showWladBot]);
 
   return (
-    <div className="min-h-screen bg-[#030303] pb-24" data-testid="roadmap-page">
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-amber-500/3 rounded-full blur-[200px] pointer-events-none" />
-      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0a0a0a] pb-24" data-testid="roadmap-page">
+      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-[#C8FF00]/[0.02] rounded-full blur-[200px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
         <div className="text-center mb-14">
-          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+          <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
             <Sparkles className="w-4 h-4" />
             Dein Weg zur Führungsstärke
           </div>
           <h1 className="font-manrope font-extrabold text-4xl md:text-5xl text-white mb-4" data-testid="roadmap-title">
-            30 Tage zur <span className="text-gradient-amber">strategischen Dominanz</span>
+            30 Tage zur <span className="text-gradient-lime">strategischen Dominanz</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             6 spezialisierte KI-Agenten. 6 Kurse. Live Events. Persönliches Coaching.
@@ -184,9 +184,9 @@ export default function Roadmap() {
             Alles, was du brauchst, um die 5+1 Rollen zu meistern.
           </p>
           {weakestRole && (
-            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20" data-testid="personalized-hint">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="font-inter text-sm text-amber-300">
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15" data-testid="personalized-hint">
+              <Sparkles className="w-4 h-4 text-[#C8FF00]" />
+              <span className="font-inter text-sm text-[#C8FF00]/80">
                 Dein Plan priorisiert <strong>{roleLabels[weakestRole] || weakestRole}</strong> – dein größtes Wachstumspotenzial
               </span>
             </div>
@@ -196,9 +196,9 @@ export default function Roadmap() {
         {/* Agent Ecosystem */}
         <div className="mb-14" data-testid="agent-ecosystem">
           <div className="flex items-center gap-3 mb-6">
-            <Bot className="w-5 h-5 text-amber-400" />
+            <Bot className="w-5 h-5 text-[#C8FF00]" />
             <h2 className="font-manrope font-bold text-xl text-white">Deine KI-Agenten</h2>
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-[10px] font-bold">6 AGENTEN</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-[10px] font-bold">6 AGENTEN</span>
           </div>
           <p className="font-inter text-sm text-slate-500 mb-6">
             Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert. Zusammen bilden sie dein persönliches Leadership-System.
@@ -222,7 +222,7 @@ export default function Roadmap() {
         {/* ===== 30-TAGE WOCHENPLAN – HIGH LEVEL DESIGN ===== */}
         <div className="mb-14" data-testid="plan-section">
           <div className="flex items-center gap-3 mb-2">
-            <Calendar className="w-5 h-5 text-amber-400" />
+            <Calendar className="w-5 h-5 text-[#C8FF00]" />
             <h2 className="font-manrope font-bold text-xl text-white">Dein 30-Tage-Fahrplan</h2>
           </div>
           <p className="font-inter text-sm text-slate-500 mb-8">4 Wochen. 4 Phasen. Von Awareness zur strategischen Dominanz.</p>
@@ -266,7 +266,7 @@ export default function Roadmap() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-manrope text-xs font-bold tracking-widest" style={{ color: week.accent }}>WOCHE {week.week}</span>
-                          {i === 3 && <Star className="w-3.5 h-3.5 text-amber-400" />}
+                          {i === 3 && <Star className="w-3.5 h-3.5 text-[#C8FF00]" />}
                         </div>
                         <h3 className="font-manrope font-extrabold text-xl text-white">{week.title}</h3>
                       </div>
@@ -332,27 +332,27 @@ export default function Roadmap() {
 
         {/* Special Events */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14" data-testid="special-events">
-          <div className="glass-card p-5 border-l-2 border-amber-500 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-              <Headphones className="w-5 h-5 text-amber-400" />
+          <div className="glass-card p-5 border-l-2 border-[#C8FF00] flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
+              <Headphones className="w-5 h-5 text-[#C8FF00]" />
             </div>
             <div>
               <div className="font-manrope font-bold text-sm text-white">1:1 mit AI Experte</div>
               <div className="font-inter text-xs text-slate-500">Optionales persönliches Strategy-Gespräch</div>
             </div>
           </div>
-          <div className="glass-card p-5 border-l-2 border-blue-500 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center shrink-0">
-              <Video className="w-5 h-5 text-blue-400" />
+          <div className="glass-card p-5 border-l-2 border-white/20 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+              <Video className="w-5 h-5 text-slate-400" />
             </div>
             <div>
               <div className="font-manrope font-bold text-sm text-white">Live Events</div>
               <div className="font-inter text-xs text-slate-500">Workshops & Q&A Sessions</div>
             </div>
           </div>
-          <div className="glass-card p-5 border-l-2 border-green-500 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-green-500/15 flex items-center justify-center shrink-0">
-              <Brain className="w-5 h-5 text-green-400" />
+          <div className="glass-card p-5 border-l-2 border-white/20 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+              <Brain className="w-5 h-5 text-slate-400" />
             </div>
             <div>
               <div className="font-manrope font-bold text-sm text-white">AI Guidance</div>
@@ -364,7 +364,7 @@ export default function Roadmap() {
         {/* Interactive Journal – 6 Entries */}
         <div className="glass-card p-8 mb-14" data-testid="journal-section">
           <div className="flex items-center gap-3 mb-2">
-            <BookOpen className="w-5 h-5 text-amber-400" />
+            <BookOpen className="w-5 h-5 text-[#C8FF00]" />
             <h2 className="font-manrope font-bold text-xl text-white">Dein Leadership-Journal</h2>
           </div>
           <p className="font-inter text-sm text-slate-500 mb-6">
@@ -384,25 +384,25 @@ export default function Roadmap() {
                   onChange={e => handleEntry(i, e.target.value)}
                   placeholder="Schreib hier..."
                   rows={2}
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 font-inter text-sm text-white placeholder:text-slate-600 focus:border-amber-500/30 focus:outline-none resize-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white/[0.02] border border-white/[0.06] font-inter text-sm text-white placeholder:text-slate-600 focus:border-[#C8FF00]/20 focus:outline-none resize-none transition-colors"
                 />
               </div>
             ))}
           </div>
           <div className="mt-4 flex items-center justify-between">
             <span className="font-inter text-xs text-slate-500">{filledCount} / 6 beantwortet</span>
-            <div className="h-1.5 flex-1 mx-4 rounded-full bg-white/5">
-              <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500" style={{ width: `${(filledCount / 6) * 100}%` }} />
+              <div className="h-1.5 flex-1 mx-4 rounded-full bg-white/[0.04]">
+              <div className="h-full rounded-full bg-[#C8FF00] transition-all duration-500" style={{ width: `${(filledCount / 6) * 100}%` }} />
             </div>
           </div>
         </div>
 
         {/* WladBot Motivation after 6 entries */}
         {showWladBot && (
-          <div className="glass-card p-6 mb-14 border border-amber-500/15 bg-gradient-to-r from-amber-500/5 to-transparent" data-testid="wladbot-motivation">
+          <div className="glass-card p-6 mb-14 border border-[#C8FF00]/10 bg-[#C8FF00]/[0.02]" data-testid="wladbot-motivation">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-                <Bot className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
+                <Bot className="w-6 h-6 text-[#C8FF00]" />
               </div>
               <div>
                 <div className="font-manrope font-bold text-white mb-1">WladBot</div>
@@ -411,7 +411,7 @@ export default function Roadmap() {
                   Jetzt kommt der spannende Teil: Nimm dir die nächsten 30 Tage und arbeite die Kurse durch.
                   Nicht perfekt, sondern konsequent. Jeden Tag ein kleiner Schritt. Die Transformation passiert nicht über Nacht – aber sie passiert, wenn du dranbleibst.
                 </p>
-                <p className="font-inter text-sm text-amber-300 font-medium">
+                <p className="font-inter text-sm text-[#C8FF00]/80 font-medium">
                   Bereit, den nächsten Schritt zu machen? Die Kurse und die Community warten auf dich.
                 </p>
               </div>
@@ -422,8 +422,8 @@ export default function Roadmap() {
         {/* 8 Kurse */}
         <div className="mb-14" data-testid="courses-section">
           <h2 className="font-manrope font-bold text-xl text-white mb-2 flex items-center gap-3">
-            <BookOpen className="w-5 h-5 text-amber-400" />
-            6 Kurse für das Modern Leadership System
+            <BookOpen className="w-5 h-5 text-[#C8FF00]" />
+            6 Kurse fur das Modern Leadership System
           </h2>
           <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt – dann baust du Schritt für Schritt auf.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -435,7 +435,7 @@ export default function Roadmap() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-inter text-[10px] font-bold tracking-wider" style={{ color: course.color }}>{course.num}</span>
-                    {course.tag && <span className="px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-[9px] font-bold">{course.tag}</span>}
+                    {course.tag && <span className="px-2 py-0.5 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] text-[9px] font-bold">{course.tag}</span>}
                   </div>
                   <h3 className="font-manrope font-bold text-sm text-white mb-1">{course.title}</h3>
                   <p className="font-inter text-xs text-slate-500">{course.desc}</p>
@@ -453,8 +453,8 @@ export default function Roadmap() {
           <p className="font-inter text-sm text-slate-500 mb-4 max-w-lg mx-auto">
             6 Kurse · 6 KI-Agenten · 1:1 Gespräch · Live Events · Community
           </p>
-          <p className="font-inter text-xs text-green-400/80 mb-6">
-            Kostenlos testen – keine Zahlung nötig
+          <p className="font-inter text-xs text-[#C8FF00]/60 mb-6">
+            Kostenlos testen – keine Zahlung notig
           </p>
           {filledCount < 6 ? (
             <div data-testid="journal-gate">
@@ -480,13 +480,13 @@ export default function Roadmap() {
       {/* Upsell Pop-Up – only once per session, 30s delay */}
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" data-testid="upsell-popup">
-          <div className="w-full max-w-md glass-card p-8 relative border border-amber-500/20">
+          <div className="w-full max-w-md glass-card p-8 relative border border-[#C8FF00]/15">
             <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white" data-testid="popup-close">
               <X className="w-4 h-4" />
             </button>
             <div className="text-center mb-6">
-              <div className="w-14 h-14 rounded-xl bg-amber-500/15 flex items-center justify-center mx-auto mb-4">
-                <Rocket className="w-7 h-7 text-amber-400" />
+              <div className="w-14 h-14 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-4">
+                <Rocket className="w-7 h-7 text-[#C8FF00]" />
               </div>
               <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Du bist bereit für mehr!</h3>
               <p className="font-inter text-sm text-slate-400">Schalte alle 23 Kurse, die WLADHUB Plattform und alle 6 KI-Agenten frei.</p>
@@ -496,7 +496,7 @@ export default function Roadmap() {
               <div className="font-inter text-xs text-slate-500">einmalig · License Key per E-Mail</div>
             </div>
             <button onClick={() => { setShowPopup(false); navigate("/close"); }}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold flex items-center justify-center gap-2"
               data-testid="popup-cta"
             >
               Pakete ansehen <ArrowRight className="w-4 h-4" />

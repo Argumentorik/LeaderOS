@@ -75,14 +75,14 @@ export default function HighTicketClose() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] pb-24" data-testid="close-page">
-      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-amber-500/4 rounded-full blur-[200px] pointer-events-none" />
-      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0a0a0a] pb-24" data-testid="close-page">
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#C8FF00]/[0.02] rounded-full blur-[200px] pointer-events-none" />
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
         <div className="text-center mb-14">
-          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+          <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
             <Sparkles className="w-4 h-4" />
             Deine Leadership-Transformation
           </div>
@@ -94,8 +94,8 @@ export default function HighTicketClose() {
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             Wähle deinen Weg zur strategischen Dominanz. Der kostenlose Zugang bleibt bestehen – beide Premium-Pakete geben dir zusätzlich sofortigen Vollzugang.
           </p>
-          <p className="font-inter text-sm text-green-400/80 mt-3">
-            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung nötig.
+          <p className="font-inter text-sm text-[#C8FF00]/60 mt-3">
+            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung notig.
           </p>
         </div>
 
@@ -106,22 +106,22 @@ export default function HighTicketClose() {
           <div
             data-testid="plan-free"
             onClick={() => setSelectedPlan("free")}
-            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] border-green-500/25 ${
-              selectedPlan === "free" ? "ring-1 ring-green-500/30 border-green-500/40" : ""
+            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] border-[#C8FF00]/20 ${
+              selectedPlan === "free" ? "ring-1 ring-[#C8FF00]/25 border-[#C8FF00]/30" : ""
             }`}
           >
             <div className="mb-5">
-              <div className="px-3 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-xs font-bold inline-block mb-3">KOSTENLOS</div>
+              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">KOSTENLOS</div>
               <h2 className="font-manrope font-extrabold text-xl text-white">Free Access</h2>
             </div>
             <div className="mb-5">
-              <div className="font-manrope font-extrabold text-4xl text-green-400" data-testid="price-free">€0</div>
+              <div className="font-manrope font-extrabold text-4xl text-[#C8FF00]" data-testid="price-free">0 EUR</div>
               <div className="font-inter text-xs text-slate-500">Für immer · Keine Kreditkarte</div>
             </div>
             <div className="space-y-3 mb-6">
               {["Leadership-Diagnose & Report", "6 Starter-Kurse", "30-Tage-Plan", "Kostenloses Buch (PDF)", "Leadership-Journal"].map((f, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-green-400 shrink-0" />
+                  <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
                   <span className="font-inter text-sm text-slate-300">{f}</span>
                 </div>
               ))}
@@ -135,7 +135,7 @@ export default function HighTicketClose() {
             <button
               data-testid="cta-free"
               onClick={(e) => { e.stopPropagation(); navigate("/roadmap"); }}
-              className="w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all bg-green-500/10 border border-green-500/25 text-green-400 hover:bg-green-500/20 hover:border-green-500/40"
+              className="w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 text-[#C8FF00] hover:bg-[#C8FF00]/10 hover:border-[#C8FF00]/30"
             >
               Kostenlos starten
             </button>
@@ -146,11 +146,11 @@ export default function HighTicketClose() {
             data-testid="plan-standard"
             onClick={() => setSelectedPlan("standard")}
             className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
-              selectedPlan === "standard" ? "border-amber-500/40 ring-1 ring-amber-500/20" : "border-white/10"
+              selectedPlan === "standard" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-white/[0.06]"
             }`}
           >
             <div className="mb-5">
-              <div className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/20 text-blue-400 text-xs font-bold inline-block mb-3">STANDARD</div>
+              <div className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-xs font-bold inline-block mb-3">STANDARD</div>
               <h2 className="font-manrope font-extrabold text-xl text-white">Leadership System</h2>
             </div>
             <div className="mb-5">
@@ -161,7 +161,7 @@ export default function HighTicketClose() {
             <div className="space-y-3 mb-6">
               {standardFeatures.map((f, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
+                  <Check className="w-4 h-4 text-white shrink-0" />
                   <span className="font-inter text-sm text-slate-300">{f}</span>
                 </div>
               ))}
@@ -176,12 +176,12 @@ export default function HighTicketClose() {
               onClick={(e) => { e.stopPropagation(); setSelectedPlan("standard"); }}
               className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
                 selectedPlan === "standard"
-                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg shadow-amber-500/20"
-                  : "bg-white/5 border border-white/10 text-white hover:border-white/20"
+                  ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
+                  : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
               }`}
             >
               {selectedPlan === "standard" ? <Check className="w-4 h-4" /> : null}
-              Standard – €997/Jahr
+              Standard – 997 EUR/Jahr
             </button>
           </div>
 
@@ -190,15 +190,15 @@ export default function HighTicketClose() {
             data-testid="plan-fasttrack"
             onClick={() => setSelectedPlan("fasttrack")}
             className={`relative glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
-              selectedPlan === "fasttrack" ? "border-amber-500/40 ring-1 ring-amber-500/20" : "border-white/10"
+              selectedPlan === "fasttrack" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-white/[0.06]"
             }`}
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-bold">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-lg bg-[#C8FF00] text-[#0a0a0a] text-xs font-bold">
               EMPFOHLEN
             </div>
 
             <div className="mb-5 mt-2">
-              <div className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold inline-block mb-3">FAST TRACK</div>
+              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">FAST TRACK</div>
               <h2 className="font-manrope font-extrabold text-xl text-white">Leadership Accelerator</h2>
             </div>
             <div className="mb-5">
@@ -209,7 +209,7 @@ export default function HighTicketClose() {
             <div className="space-y-3 mb-6">
               {fastTrackExtras.map((f, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-amber-400 shrink-0" />
+                  <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
                   <span className="font-inter text-sm text-slate-300">{f}</span>
                 </div>
               ))}
@@ -220,19 +220,19 @@ export default function HighTicketClose() {
               onClick={(e) => { e.stopPropagation(); setSelectedPlan("fasttrack"); }}
               className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
                 selectedPlan === "fasttrack"
-                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg shadow-amber-500/20"
-                  : "bg-white/5 border border-white/10 text-white hover:border-white/20"
+                  ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
+                  : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
               }`}
             >
               {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
-              Fast Track – €4.997
+              Fast Track – 4.997 EUR
             </button>
           </div>
         </div>
 
         {/* Stripe Checkout Section */}
         {selectedPlan && selectedPlan !== "free" && (
-          <div className="glass-card p-8 mb-10 border border-amber-500/20" data-testid="payment-section" id="payment-section">
+          <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
               <h3 className="font-manrope font-bold text-xl text-white mb-2">
                 {selectedPlan === "fasttrack" ? "Fast Track – €4.997/Jahr" : "Standard – €997/Jahr"}
@@ -249,8 +249,8 @@ export default function HighTicketClose() {
                   onClick={() => setBillingOption("yearly")}
                   className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
                     billingOption === "yearly"
-                      ? "bg-amber-500/15 border border-amber-500/30 text-amber-400"
-                      : "bg-white/[0.03] border border-white/8 text-slate-400 hover:border-white/15"
+                      ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]"
+                      : "bg-white/[0.02] border border-white/[0.06] text-slate-400 hover:border-white/10"
                   }`}
                   data-testid="billing-yearly"
                 >
@@ -261,8 +261,8 @@ export default function HighTicketClose() {
                   onClick={() => setBillingOption("monthly")}
                   className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
                     billingOption === "monthly"
-                      ? "bg-amber-500/15 border border-amber-500/30 text-amber-400"
-                      : "bg-white/[0.03] border border-white/8 text-slate-400 hover:border-white/15"
+                      ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]"
+                      : "bg-white/[0.02] border border-white/[0.06] text-slate-400 hover:border-white/10"
                   }`}
                   data-testid="billing-monthly"
                 >
@@ -281,7 +281,7 @@ export default function HighTicketClose() {
                 else if (billingOption === "monthly") handleCheckout("standard_monthly");
                 else handleCheckout("standard_yearly");
               }}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold text-base flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-amber-500/20 transition-all disabled:opacity-50 mb-4"
+              className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-base flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-[#C8FF00]/15 transition-all disabled:opacity-50 mb-4"
             >
               {isLoading ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Wird geladen...</>
@@ -304,8 +304,8 @@ export default function HighTicketClose() {
           <div className="grid grid-cols-4 gap-4 text-center mb-4">
             <div />
             <div className="font-inter text-xs text-slate-500 uppercase tracking-wider">Kostenlos</div>
-            <div className="font-inter text-xs text-blue-400 uppercase tracking-wider font-bold">Standard</div>
-            <div className="font-inter text-xs text-amber-400 uppercase tracking-wider font-bold">Fast Track</div>
+            <div className="font-inter text-xs text-white uppercase tracking-wider font-bold">Standard</div>
+            <div className="font-inter text-xs text-[#C8FF00] uppercase tracking-wider font-bold">Fast Track</div>
           </div>
           {[
             ["Leadership-Diagnose", true, true, true],
@@ -325,9 +325,9 @@ export default function HighTicketClose() {
           ].map(([label, free, standard, fast], i) => (
             <div key={i} className="grid grid-cols-4 gap-4 py-2.5 border-b border-white/5 items-center">
               <span className="font-inter text-sm text-slate-300 text-left">{label}</span>
-              <div className="flex justify-center">{free ? <Check className="w-4 h-4 text-green-400" /> : <X className="w-4 h-4 text-slate-600" />}</div>
-              <div className="flex justify-center">{standard ? <Check className="w-4 h-4 text-blue-400" /> : <X className="w-4 h-4 text-slate-600" />}</div>
-              <div className="flex justify-center">{fast ? <Check className="w-4 h-4 text-amber-400" /> : <X className="w-4 h-4 text-slate-600" />}</div>
+              <div className="flex justify-center">{free ? <Check className="w-4 h-4 text-[#C8FF00]" /> : <X className="w-4 h-4 text-slate-600" />}</div>
+              <div className="flex justify-center">{standard ? <Check className="w-4 h-4 text-white" /> : <X className="w-4 h-4 text-slate-600" />}</div>
+              <div className="flex justify-center">{fast ? <Check className="w-4 h-4 text-[#C8FF00]" /> : <X className="w-4 h-4 text-slate-600" />}</div>
             </div>
           ))}
         </div>
@@ -335,8 +335,8 @@ export default function HighTicketClose() {
         {/* Bonus: Don'ts List */}
         <div className="glass-card p-8 md:p-10 mb-10" data-testid="bonus-donts">
           <div className="flex items-center gap-3 mb-2">
-            <span className="px-3 py-1 rounded-full bg-red-500/15 border border-red-500/20 text-red-400 text-xs font-bold">BONUS</span>
-            <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold">GRATIS IM REPORT</span>
+            <span className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold">BONUS</span>
+            <span className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-xs font-bold">GRATIS IM REPORT</span>
           </div>
           <h3 className="font-manrope font-extrabold text-xl md:text-2xl text-white mb-2 mt-4">Die KI Don'ts List</h3>
           <p className="font-inter text-sm text-slate-400 mb-6">KI richtig einsetzen, um dich abzuheben – nicht um unterzugehen. Diese Fehler machen 90% der Führungskräfte.</p>
@@ -348,8 +348,8 @@ export default function HighTicketClose() {
               </div>
             ))}
           </div>
-          <div className="mt-6 p-4 rounded-xl bg-amber-500/5 border border-amber-500/15">
-            <p className="font-inter text-sm text-amber-300 leading-relaxed">
+          <div className="mt-6 p-4 rounded-xl bg-[#C8FF00]/[0.03] border border-[#C8FF00]/10">
+            <p className="font-inter text-sm text-[#C8FF00]/80 leading-relaxed">
               <strong>Der Unterschied?</strong> Wer KI als Werkzeug versteht und Leadership als Superkraft einsetzt, wird gesehen, gehört und befördert. Die Don'ts List ist dein Kompass.
             </p>
           </div>
@@ -358,7 +358,7 @@ export default function HighTicketClose() {
         {/* Curriculum Download */}
         <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="curriculum-download">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-blue-400" /></div>
+            <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-slate-400" /></div>
             <div>
               <div className="font-manrope font-bold text-white">Curriculum PDF</div>
               <div className="font-inter text-xs text-slate-500">Alle Kurse + 30-Tage-Plan</div>
@@ -370,13 +370,13 @@ export default function HighTicketClose() {
         </div>
 
         {/* Book Funnel – Kostenloses Buch */}
-        <div className="glass-card p-8 mb-10 border border-green-500/20 bg-gradient-to-r from-green-500/5 to-transparent" data-testid="book-funnel">
+        <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]" data-testid="book-funnel">
           <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-32 h-44 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <BookOpen className="w-12 h-12 text-amber-400" />
+            <div className="w-32 h-44 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
+              <BookOpen className="w-12 h-12 text-[#C8FF00]" />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <div className="px-3 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-xs font-bold inline-block mb-3">GRATIS BELOHNUNG</div>
+              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">GRATIS BELOHNUNG</div>
               <h3 className="font-manrope font-extrabold text-xl text-white mb-2">
                 "Die 5 Rollen einer Führungskraft"
               </h3>
@@ -419,7 +419,7 @@ export default function HighTicketClose() {
             <button
               data-testid="close-final-free"
               onClick={() => navigate("/roadmap")}
-              className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2 border-green-500/30 text-green-400 hover:border-green-500/50"
+              className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2 border-[#C8FF00]/20 text-[#C8FF00] hover:border-[#C8FF00]/40"
             >
               Kostenlos starten
             </button>

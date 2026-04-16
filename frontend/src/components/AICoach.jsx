@@ -68,12 +68,12 @@ export default function AICoach() {
         onClick={() => setOpen(o => !o)}
         className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 ${
           open 
-            ? "bg-white/10 border border-white/20" 
-            : "bg-gradient-to-br from-blue-500 to-blue-600 shadow-[0_8px_30px_rgba(59,130,246,0.4)] hover:shadow-[0_8px_40px_rgba(59,130,246,0.6)]"
+            ? "bg-white/10 border border-white/15" 
+            : "bg-[#C8FF00] shadow-[0_8px_30px_rgba(200,255,0,0.25)] hover:shadow-[0_8px_40px_rgba(200,255,0,0.4)]"
         }`}
-        aria-label="AI Coach öffnen"
+        aria-label="AI Coach offnen"
       >
-        {open ? <ChevronDown className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-white" />}
+        {open ? <ChevronDown className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-[#0a0a0a]" />}
       </button>
 
       {/* Panel */}
@@ -84,10 +84,10 @@ export default function AICoach() {
           style={{ height: "500px" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/5">
+          <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 rounded-xl bg-[#C8FF00]/[0.08] border border-[#C8FF00]/15 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-[#C8FF00]" />
               </div>
               <div>
                 <div className="font-manrope font-bold text-white">WladBot</div>
@@ -113,7 +113,7 @@ export default function AICoach() {
                 <div
                   className={`max-w-[85%] px-4 py-3 text-sm font-inter leading-relaxed rounded-2xl ${
                     msg.role === "user"
-                      ? "bg-blue-500 text-white rounded-br-md"
+                      ? "bg-[#C8FF00] text-[#0a0a0a] font-medium rounded-br-md"
                       : "bg-white/5 text-slate-300 border border-white/5 rounded-bl-md"
                   }`}
                   data-testid={`coach-message-${msg.role}`}
@@ -128,7 +128,7 @@ export default function AICoach() {
                   {[0, 1, 2].map(i => (
                     <span
                       key={i}
-                      className="analyzing-dot w-2 h-2 rounded-full bg-blue-500"
+                      className="analyzing-dot w-2 h-2 rounded-full bg-[#C8FF00]"
                       style={{ animationDelay: `${i * 0.15}s` }}
                     />
                   ))}
@@ -147,7 +147,7 @@ export default function AICoach() {
                   data-testid={`preset-${i}`}
                   onClick={() => sendMessage(p)}
                   disabled={loading}
-                  className="shrink-0 badge-blue px-3 py-1.5 text-xs hover:bg-blue-500/20 transition-colors whitespace-nowrap disabled:opacity-50"
+                  className="shrink-0 badge-lime px-3 py-1.5 text-xs hover:bg-[#C8FF00]/15 transition-colors whitespace-nowrap disabled:opacity-50"
                 >
                   {p}
                 </button>
@@ -172,9 +172,9 @@ export default function AICoach() {
                 data-testid="ai-coach-send"
                 onClick={() => sendMessage(input)}
                 disabled={loading || !input.trim()}
-                className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-10 h-10 rounded-xl bg-[#C8FF00] flex items-center justify-center hover:bg-[#d4ff33] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <Send className="w-4 h-4 text-white" />
+                <Send className="w-4 h-4 text-[#0a0a0a]" />
               </button>
             </div>
           </div>

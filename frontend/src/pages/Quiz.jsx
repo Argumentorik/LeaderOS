@@ -45,18 +45,18 @@ function WladBotChat({ onContinue }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#0d0d14] to-[#0a0a0f]" data-testid="wladbot-q30">
+    <div className="min-h-screen bg-[#0a0a0a]" data-testid="wladbot-q30">
       <div className="max-w-2xl mx-auto px-5 pt-28 pb-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-5">
-            <Bot className="w-10 h-10 text-amber-400" />
+          <div className="w-20 h-20 rounded-2xl bg-[#C8FF00]/[0.08] border border-[#C8FF00]/15 flex items-center justify-center mx-auto mb-5">
+            <Bot className="w-10 h-10 text-[#C8FF00]" />
           </div>
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-2">
             WladBot möchte dich kennenlernen
           </h2>
           <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#C8FF00] animate-pulse" />
             <span className="font-inter text-sm text-slate-400">Wlad ist online</span>
           </div>
           <p className="font-inter text-sm text-slate-500 max-w-md mx-auto">
@@ -70,14 +70,14 @@ function WladBotChat({ onContinue }) {
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 {msg.role === "assistant" && (
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <Bot className="w-4 h-4 text-amber-400" />
+                  <div className="w-9 h-9 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
+                    <Bot className="w-4 h-4 text-[#C8FF00]" />
                   </div>
                 )}
                 <div className={`max-w-[80%] px-4 py-3 font-inter text-sm leading-relaxed rounded-2xl ${
                   msg.role === "user"
-                    ? "bg-amber-500/15 text-white border border-amber-500/15 rounded-tr-md"
-                    : "bg-white/[0.06] text-slate-200 border border-white/8 rounded-tl-md"
+                    ? "bg-[#C8FF00]/10 text-white border border-[#C8FF00]/15 rounded-tr-md"
+                    : "bg-white/[0.04] text-slate-200 border border-white/[0.06] rounded-tl-md"
                 }`}>
                   {msg.text}
                 </div>
@@ -85,12 +85,12 @@ function WladBotChat({ onContinue }) {
             ))}
             {loading && (
               <div className="flex gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-                  <Bot className="w-4 h-4 text-amber-400" />
+                <div className="w-9 h-9 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center shrink-0">
+                  <Bot className="w-4 h-4 text-[#C8FF00]" />
                 </div>
-                <div className="bg-white/[0.06] border border-white/8 px-5 py-3.5 rounded-2xl rounded-tl-md flex items-center gap-1.5">
+                <div className="bg-white/[0.04] border border-white/[0.06] px-5 py-3.5 rounded-2xl rounded-tl-md flex items-center gap-1.5">
                   {[0, 1, 2].map(i => (
-                    <span key={i} className="w-2 h-2 rounded-full bg-amber-400 analyzing-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <span key={i} className="w-2 h-2 rounded-full bg-[#C8FF00] analyzing-dot" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
               </div>
@@ -109,13 +109,13 @@ function WladBotChat({ onContinue }) {
             onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
             placeholder="Schreib Wlad etwas..."
             disabled={loading}
-            className="flex-1 h-14 px-5 rounded-xl bg-white/[0.05] border border-white/10 font-inter text-sm text-white placeholder:text-slate-600 focus:border-amber-500/40 focus:outline-none transition-colors"
+            className="flex-1 h-14 px-5 rounded-xl bg-white/[0.03] border border-white/[0.08] font-inter text-sm text-white placeholder:text-slate-600 focus:border-[#C8FF00]/30 focus:outline-none transition-colors"
           />
           <button
             data-testid="wladbot-send"
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
-            className="w-14 h-14 rounded-xl bg-amber-500 flex items-center justify-center hover:bg-amber-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-14 h-14 rounded-xl bg-[#C8FF00] flex items-center justify-center hover:bg-[#d4ff33] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <Send className="w-5 h-5 text-black" />
           </button>
@@ -125,7 +125,7 @@ function WladBotChat({ onContinue }) {
         <button
           data-testid="wladbot-continue"
           onClick={onContinue}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold text-base flex items-center justify-center gap-3 hover:from-amber-400 hover:to-orange-400 transition-all shadow-lg shadow-amber-500/20"
+          className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-base flex items-center justify-center gap-3 hover:bg-[#d4ff33] transition-all shadow-lg shadow-[#C8FF00]/15"
         >
           <Sparkles className="w-5 h-5" />
           Deinen 30-Tage-Plan aktivieren
@@ -192,16 +192,16 @@ export default function Quiz() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030303] pt-20 px-4 pb-12" data-testid="quiz-page">
-      <div className="fixed top-16 left-0 right-0 z-40 bg-[#030303]/95 backdrop-blur-md border-b border-white/5">
+    <div className="min-h-screen bg-[#0a0a0a] pt-20 px-4 pb-12" data-testid="quiz-page">
+      <div className="fixed top-16 left-0 right-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.04]">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <span className="font-inter text-xs text-slate-500">Frage {current + 1} von {questions.length}</span>
           <span className="badge-blue px-3 py-1 text-xs" style={{ borderColor: `${catColor}30`, background: `${catColor}10`, color: catColor }}>
             {CATEGORIES[question.category]}
           </span>
         </div>
-        <div className="h-1 bg-white/5">
-          <div className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+        <div className="h-1 bg-white/[0.04]">
+          <div className="h-full bg-[#C8FF00] transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
@@ -216,8 +216,8 @@ export default function Quiz() {
             const isSelected = selected === option.id;
             return (
               <button key={option.id} data-testid={`option-${option.id}`} onClick={() => handleSelect(option)} disabled={selected !== null}
-                className={`quiz-option w-full flex items-start gap-4 p-5 border text-left ${isSelected ? "border-amber-500/50 bg-amber-500/10" : "border-white/8 bg-white/[0.02]"}`}>
-                <span className={`font-manrope font-bold text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-amber-500 text-black" : "bg-white/5 text-slate-500 border border-white/10"}`}>
+                className={`quiz-option w-full flex items-start gap-4 p-5 border text-left ${isSelected ? "border-[#C8FF00]/40 bg-[#C8FF00]/[0.06]" : "border-white/[0.06] bg-white/[0.02]"}`}>
+                <span className={`font-manrope font-bold text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-[#C8FF00] text-[#0a0a0a]" : "bg-white/[0.04] text-slate-500 border border-white/[0.08]"}`}>
                   {isSelected ? <Check className="w-4 h-4" /> : option.id.toUpperCase()}
                 </span>
                 <span className={`font-inter text-sm leading-relaxed pt-1 ${isSelected ? "text-white" : "text-slate-300"}`}>{option.text}</span>

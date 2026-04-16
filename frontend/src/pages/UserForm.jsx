@@ -71,8 +71,8 @@ export default function UserForm() {
   const displayRole = roles.find(r => r.id === selectedRole)?.label || customRole;
 
   return (
-    <div className="min-h-screen bg-[#030303] flex items-center justify-center px-4 pt-20 pb-12" data-testid="user-form-page">
-      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-br from-amber-500/6 via-orange-500/4 to-transparent rounded-full blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 pt-20 pb-12" data-testid="user-form-page">
+      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#C8FF00]/[0.03] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-xl">
         {step === 2 && (
@@ -87,8 +87,8 @@ export default function UserForm() {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+          <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00]" />
             Schritt {step} von 2
           </div>
           <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
@@ -111,14 +111,14 @@ export default function UserForm() {
                   onClick={() => handleRoleSelect(role.id)}
                   className={`w-full flex items-center gap-4 p-5 rounded-2xl border text-left transition-all duration-200 group ${
                     selectedRole === role.id
-                      ? "border-amber-500/50 bg-amber-500/10"
-                      : "border-white/8 bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]"
+                      ? "border-[#C8FF00]/30 bg-[#C8FF00]/[0.06]"
+                      : "border-white/[0.06] bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.03]"
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                     selectedRole === role.id
-                      ? "bg-amber-500/20 text-amber-400"
-                      : "bg-white/5 text-slate-500 group-hover:text-white"
+                      ? "bg-[#C8FF00]/10 text-[#C8FF00]"
+                      : "bg-white/[0.04] text-slate-500 group-hover:text-white"
                   }`}>
                     <role.icon className="w-5 h-5" />
                   </div>
@@ -128,7 +128,7 @@ export default function UserForm() {
                   </div>
                   <ArrowRight className={`w-5 h-5 shrink-0 transition-all ${
                     selectedRole === role.id
-                      ? "text-amber-400 opacity-100"
+                      ? "text-[#C8FF00] opacity-100"
                       : "text-slate-600 opacity-0 group-hover:opacity-100"
                   }`} />
                 </button>
@@ -161,7 +161,7 @@ export default function UserForm() {
         {/* Step 2: Name & Email */}
         {step === 2 && (
           <form onSubmit={handleSubmit} className="space-y-6" data-testid="user-info-form">
-            <div className="badge-amber px-4 py-2 inline-flex items-center gap-2">
+            <div className="badge-lime px-4 py-2 inline-flex items-center gap-2">
               <span className="font-inter text-sm">{displayRole}</span>
             </div>
 
@@ -232,8 +232,8 @@ export default function UserForm() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-                  <Lock className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+                  <Lock className="w-5 h-5 text-slate-400" />
                 </div>
                 <div>
                   <p className="font-manrope font-bold text-sm text-white">SSL-verschlüsselt</p>
@@ -241,8 +241,8 @@ export default function UserForm() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <FileCheck className="w-5 h-5 text-amber-400" />
+                <div className="w-10 h-10 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+                  <FileCheck className="w-5 h-5 text-slate-400" />
                 </div>
                 <div>
                   <p className="font-manrope font-bold text-sm text-white">Serverstandort Deutschland</p>

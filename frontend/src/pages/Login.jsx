@@ -63,8 +63,8 @@ export default function Login() {
     <div className="min-h-screen bg-[#030303] flex items-center justify-center px-4 py-12" data-testid="login-page">
       {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-br from-amber-500/6 via-orange-500/4 to-transparent rounded-full blur-[180px]" />
-        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-blue-500/4 rounded-full blur-[150px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-br from-[#C8FF00]/6 via-[#C8FF00]/4 to-transparent rounded-full blur-[180px]" />
+        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-[#C8FF00]/[0.02] rounded-full blur-[150px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
@@ -129,7 +129,7 @@ export default function Login() {
                 />
                 <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
                   consentPrivacy 
-                    ? "bg-amber-500 border-amber-500" 
+                    ? "bg-[#C8FF00] border-[#C8FF00]" 
                     : "border-white/20 group-hover:border-white/40"
                 }`}>
                   {consentPrivacy && <Check className="w-3 h-3 text-black" />}
@@ -139,7 +139,7 @@ export default function Login() {
                 Ich akzeptiere die{" "}
                 <button 
                   onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}
-                  className="text-amber-400 hover:text-amber-300 underline"
+                  className="text-[#C8FF00] hover:text-[#d4ff33] underline"
                 >
                   Datenschutzerklärung
                 </button>
@@ -159,7 +159,7 @@ export default function Login() {
                 />
                 <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
                   consentMarketing 
-                    ? "bg-blue-500 border-blue-500" 
+                    ? "bg-white border-white" 
                     : "border-white/20 group-hover:border-white/40"
                 }`}>
                   {consentMarketing && <Check className="w-3 h-3 text-white" />}

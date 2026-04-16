@@ -46,16 +46,16 @@ export default function PaymentSuccess() {
   }, [sessionId]);
 
   return (
-    <div className="min-h-screen bg-[#030303] flex items-center justify-center px-4" data-testid="payment-success-page">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4" data-testid="payment-success-page">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[200px]" />
+        <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-[#C8FF00]/[0.03] rounded-full blur-[200px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-lg text-center">
         {status === "loading" && (
           <div data-testid="payment-loading">
-            <div className="w-20 h-20 rounded-2xl bg-amber-500/15 flex items-center justify-center mx-auto mb-6">
-              <Loader2 className="w-10 h-10 text-amber-400 animate-spin" />
+            <div className="w-20 h-20 rounded-2xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-6">
+              <Loader2 className="w-10 h-10 text-[#C8FF00] animate-spin" />
             </div>
             <h1 className="font-manrope font-extrabold text-2xl text-white mb-3">Zahlung wird verarbeitet...</h1>
             <p className="font-inter text-sm text-slate-500">Bitte warte einen Moment. Schließe dieses Fenster nicht.</p>
@@ -64,10 +64,10 @@ export default function PaymentSuccess() {
 
         {status === "success" && (
           <div data-testid="payment-success">
-            <div className="w-20 h-20 rounded-2xl bg-green-500/15 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10 text-green-400" />
+            <div className="w-20 h-20 rounded-2xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-10 h-10 text-[#C8FF00]" />
             </div>
-            <div className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+            <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
               <Sparkles className="w-4 h-4" />
               Willkommen im WLADHUB
             </div>
@@ -77,13 +77,13 @@ export default function PaymentSuccess() {
             <p className="font-inter text-base text-slate-400 mb-2">
               Dein {paymentData?.metadata?.plan === "fasttrack" ? "Fast Track" : "Standard"}-Zugang ist jetzt aktiv.
             </p>
-            <p className="font-inter text-sm text-green-400/80 mb-8">
+            <p className="font-inter text-sm text-[#C8FF00]/60 mb-8">
               14 Tage kostenlos testen · Danach automatische Verlängerung
             </p>
 
             <div className="glass-card p-6 mb-8 text-left">
               <h3 className="font-manrope font-bold text-white mb-4 flex items-center gap-2">
-                <Bot className="w-5 h-5 text-amber-400" />
+                <Bot className="w-5 h-5 text-[#C8FF00]" />
                 Was passiert jetzt?
               </h3>
               <div className="space-y-3">
@@ -94,7 +94,7 @@ export default function PaymentSuccess() {
                   "Bei Fragen ist der WladBot 24/7 für dich da",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#C8FF00] shrink-0" />
                     <span className="font-inter text-sm text-slate-300">{item}</span>
                   </div>
                 ))}
@@ -145,8 +145,8 @@ export default function PaymentSuccess() {
 
         {status === "pending" && (
           <div data-testid="payment-pending">
-            <div className="w-20 h-20 rounded-2xl bg-amber-500/15 flex items-center justify-center mx-auto mb-6">
-              <Loader2 className="w-10 h-10 text-amber-400" />
+            <div className="w-20 h-20 rounded-2xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-6">
+              <Loader2 className="w-10 h-10 text-[#C8FF00]" />
             </div>
             <h1 className="font-manrope font-extrabold text-2xl text-white mb-3">Zahlung ausstehend</h1>
             <p className="font-inter text-sm text-slate-500 mb-6">

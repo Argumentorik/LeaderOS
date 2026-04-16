@@ -1,14 +1,14 @@
 import jsPDF from "jspdf";
 
 const COLORS = {
-  bg: [3, 3, 3],
-  cardBg: [12, 12, 15],
-  accent: [245, 158, 11],
-  blue: [59, 130, 246],
+  bg: [10, 10, 10],
+  cardBg: [18, 18, 20],
+  accent: [200, 255, 0],
+  blue: [200, 255, 0],
   white: [255, 255, 255],
   gray: [148, 163, 184],
   darkGray: [51, 65, 85],
-  green: [16, 185, 129],
+  green: [200, 255, 0],
   red: [239, 68, 68],
 };
 
@@ -37,12 +37,12 @@ const roleLabels = {
 };
 
 const roleColors = {
-  communicator: [249, 115, 22],
-  manager: [59, 130, 246],
+  communicator: [200, 255, 0],
+  manager: [148, 163, 184],
   team_leader: [16, 185, 129],
-  psychologist: [56, 189, 248],
-  problem_solver: [236, 72, 153],
-  innovator: [234, 179, 8],
+  psychologist: [103, 232, 249],
+  problem_solver: [244, 114, 182],
+  innovator: [200, 255, 0],
 };
 
 function drawRoundedRect(doc, x, y, w, h, r, fillColor) {
