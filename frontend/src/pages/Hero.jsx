@@ -183,15 +183,15 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 2: PROBLEM ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 2: PROBLEM – Clean Dashboard Style ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <ScrollReveal>
-              <div className="text-center mb-12">
-                <span className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-4 block">
+              <div className="text-center mb-16">
+                <span className="inline-block px-3 py-1 rounded-full border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold tracking-[0.2em] text-slate-500 uppercase mb-5">
                   Die Realität moderner Führung
                 </span>
-                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
+                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4 leading-tight">
                   Viele Führungskräfte sind in einem Bereich stark –
                   <br className="hidden md:block" />
                   <span className="text-slate-500">aber nicht in allen.</span>
@@ -199,36 +199,43 @@ export default function Hero() {
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Problems */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
+              {/* Problems – 3 cols */}
               <ScrollReveal delay={100}>
-                <div className="glass-card-subtle p-8">
-                  <div className="font-inter text-xs tracking-widest text-slate-600 uppercase mb-6">
+                <div className="md:col-span-3 rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8">
+                  <div className="font-inter text-[10px] tracking-[0.2em] text-slate-600 uppercase mb-6">
                     Typische Muster
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     {problems.map((problem, i) => (
-                      <div key={i} className="flex items-start gap-4">
-                        <X className="w-5 h-5 text-red-500/70 shrink-0 mt-0.5" />
-                        <span className="font-inter text-slate-400">{problem}</span>
+                      <div key={i} className="flex items-start gap-4 group">
+                        <div className="w-7 h-7 rounded-lg bg-red-500/8 flex items-center justify-center shrink-0 mt-0.5">
+                          <X className="w-3.5 h-3.5 text-red-400/60" />
+                        </div>
+                        <span className="font-inter text-[15px] text-slate-400 leading-relaxed">{problem}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </ScrollReveal>
 
-              {/* Consequences */}
+              {/* Consequences – 2 cols */}
               <ScrollReveal delay={200}>
-                <div className="glass-card p-8 card-glow-amber">
-                  <div className="font-inter text-xs tracking-widest text-amber-500/80 uppercase mb-6">
+                <div className="md:col-span-2 rounded-2xl border border-amber-500/10 bg-amber-500/[0.02] p-8">
+                  <div className="font-inter text-[10px] tracking-[0.2em] text-amber-500/60 uppercase mb-6">
                     Das Ergebnis
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
-                      <div key={i} className="font-manrope font-bold text-xl text-white">
+                      <div key={i} className="font-manrope font-bold text-lg text-white/90">
                         {item}
                       </div>
                     ))}
+                  </div>
+                  <div className="mt-6 pt-5 border-t border-white/[0.04]">
+                    <p className="font-inter text-xs text-slate-600 leading-relaxed">
+                      Die WLADHUB Diagnose zeigt dir in 10 Minuten, welche Rolle du vernachlässigst.
+                    </p>
                   </div>
                 </div>
               </ScrollReveal>
@@ -236,13 +243,12 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 3: 3-LAYER MODEL ===== */}
-        <section id="model" className="py-20 border-t border-white/5">
+        {/* ===== SECTION 3: 3-LAYER MODEL – Clean ===== */}
+        <section id="model" className="py-24 border-t border-white/[0.04]">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-14">
-              <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                <Sparkles className="w-4 h-4" />
-                Das 3-Layer-Modell der Elite-Leader
+            <div className="text-center mb-16">
+              <span className="inline-block px-3 py-1 rounded-full border border-blue-500/15 bg-blue-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-blue-400 uppercase mb-5">
+                Das 3-Layer-Modell
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4">
                 Die besten Führungskräfte kombinieren
@@ -251,40 +257,36 @@ export default function Hero() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" data-testid="hero-layers">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="hero-layers">
               {layers.map((layer, i) => (
                 <div
                   key={i}
-                  className="feature-card p-6 md:p-8"
+                  className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-7 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]"
                   data-testid={`hero-layer-${i}`}
                 >
-                  {/* Layer Number */}
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="font-manrope text-xs font-semibold tracking-widest text-slate-600">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="font-inter text-[10px] font-medium tracking-[0.2em] text-slate-600 uppercase">
                       {layer.subtitle.toUpperCase()}
                     </span>
-                    <span className="font-manrope font-extrabold text-3xl text-white/10">
+                    <span className="font-manrope font-extrabold text-2xl text-white/[0.06]">
                       {layer.num}
                     </span>
                   </div>
                   
-                  {/* Icon */}
                   <div 
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
-                    style={{ backgroundColor: `${layer.color}15` }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
+                    style={{ backgroundColor: `${layer.color}10` }}
                   >
-                    <layer.icon className="w-6 h-6" style={{ color: layer.color }} />
+                    <layer.icon className="w-5 h-5" style={{ color: layer.color }} />
                   </div>
                   
-                  {/* Title & Description */}
-                  <h3 className="font-manrope font-bold text-xl text-white mb-2">{layer.title}</h3>
-                  <p className="font-inter text-sm text-slate-500 mb-5">{layer.desc}</p>
+                  <h3 className="font-manrope font-bold text-lg text-white mb-2">{layer.title}</h3>
+                  <p className="font-inter text-sm text-slate-500 mb-5 leading-relaxed">{layer.desc}</p>
                   
-                  {/* Points */}
-                  <div className="space-y-2">
+                  <div className="space-y-2.5 pt-4 border-t border-white/[0.04]">
                     {layer.points.map((point, pi) => (
                       <div key={pi} className="flex items-center gap-3">
-                        <Check className="w-4 h-4 shrink-0" style={{ color: layer.color }} />
+                        <div className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: layer.color }} />
                         <span className="font-inter text-sm text-slate-400">{point}</span>
                       </div>
                     ))}
@@ -295,38 +297,32 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 4: DIE DIAGNOSE ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 4: DIE DIAGNOSE – Clean ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-14">
-              <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                <Clock className="w-4 h-4" />
-                In nur 10 Minuten
+            <div className="text-center mb-16">
+              <span className="inline-block px-3 py-1 rounded-full border border-amber-500/15 bg-amber-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-amber-400 uppercase mb-5">
+                10 Minuten
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                 Dein persönlicher Leadership-Report
               </h2>
-              <p className="font-inter text-slate-500 max-w-2xl mx-auto">
+              <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
                 Die WLADHUB Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.
               </p>
             </div>
 
-            {/* What you get */}
-            <div className="font-inter text-sm text-slate-500 mb-6 text-center">Du erhältst:</div>
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-testid="diagnose-steps">
               {diagnoseSteps.map((step, i) => (
-                <div key={i} className="glass-card p-6 hover-card">
+                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 transition-all hover:border-white/[0.08]">
                   <div className="flex items-start gap-4">
-                    <span 
-                      className="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center font-manrope font-bold shrink-0"
-                    >
+                    <span className="w-9 h-9 rounded-lg bg-blue-500/8 text-blue-400 flex items-center justify-center font-manrope font-bold text-sm shrink-0">
                       {step.num}
                     </span>
                     <div>
-                      <h4 className="font-manrope font-bold text-white mb-1">{step.title}</h4>
+                      <h4 className="font-manrope font-bold text-white text-[15px] mb-1">{step.title}</h4>
                       {step.desc && (
-                        <p className="font-inter text-sm text-slate-500">{step.desc}</p>
+                        <p className="font-inter text-sm text-slate-500 leading-relaxed">{step.desc}</p>
                       )}
                     </div>
                   </div>
@@ -336,66 +332,67 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 5: WLADHUB PLATTFORM ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 5: 6 KI-AGENTEN – Dashboard Style ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-12">
-              <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                <Sparkles className="w-4 h-4" />
-                6 KI-Agenten für deinen Aufstieg
+            <div className="text-center mb-16">
+              <span className="inline-block px-3 py-1 rounded-full border border-blue-500/15 bg-blue-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-blue-400 uppercase mb-5">
+                6 KI-Agenten
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                 Mehrere spezialisierte Agenten,
                 <span className="text-gradient-blue"> die das Leben eines Leaders erleichtern.</span>
               </h2>
-              <p className="font-inter text-slate-500 max-w-2xl mx-auto">
-                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert – zusammen bilden sie dein persönliches Leadership-Ökosystem.
+              <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
+                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert.
               </p>
             </div>
 
-            {/* Platform Features Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {platformFeatures.map((feature, i) => (
-                <div key={i} className="feature-card p-5 text-center hover-card">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
-                    style={{ backgroundColor: `${feature.color}15` }}
-                  >
-                    <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
+                <div key={i} className="group rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div 
+                      className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{ backgroundColor: `${feature.color}08` }}
+                    >
+                      <feature.icon className="w-5 h-5" style={{ color: feature.color }} />
+                    </div>
+                    <div className="w-1.5 h-1.5 rounded-full opacity-60 animate-pulse" style={{ backgroundColor: feature.color }} />
                   </div>
-                  <h3 className="font-manrope font-bold text-white mb-1">{feature.title}</h3>
-                  <p className="font-inter text-sm text-slate-500">{feature.desc}</p>
+                  <h3 className="font-manrope font-bold text-sm text-white mb-1">{feature.title}</h3>
+                  <p className="font-inter text-xs text-slate-500 leading-relaxed">{feature.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ===== SECTION 6: WLADBOT ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 6: WLADBOT – Clean ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               {/* WLADBOT Preview */}
-              <div className="glass-card p-6 card-glow-blue order-2 lg:order-1">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-                    <Bot className="w-6 h-6 text-blue-400" />
+              <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 order-2 lg:order-1">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/[0.04]">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/8 flex items-center justify-center">
+                    <Bot className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <div className="font-manrope font-bold text-white">WLADBOT</div>
+                    <div className="font-manrope font-bold text-sm text-white">WLADBOT</div>
                     <div className="flex items-center gap-2">
-                      <span className="dot-pulse" style={{ width: 6, height: 6 }} />
-                      <span className="font-inter text-xs text-slate-500">KI-Leadership-Coach</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                      <span className="font-inter text-xs text-slate-500">Online</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <div className="bg-white/5 border border-white/5 px-4 py-3 rounded-2xl rounded-bl-md">
+                  <div className="bg-white/[0.03] border border-white/[0.04] px-4 py-3 rounded-2xl rounded-bl-md">
                     <p className="font-inter text-sm text-slate-300">
                       "Wie kann ich mich auf ein schwieriges Feedbackgespräch mit meinem Team vorbereiten?"
                     </p>
                   </div>
-                  <div className="bg-blue-500 px-4 py-3 rounded-2xl rounded-br-md ml-8">
+                  <div className="bg-blue-500/90 px-4 py-3 rounded-2xl rounded-br-md ml-8">
                     <p className="font-inter text-sm text-white">
                       Lass uns das strukturiert angehen. Zunächst: Was ist der konkrete Anlass?
                     </p>
@@ -404,28 +401,27 @@ export default function Hero() {
               </div>
 
               <div className="order-1 lg:order-2">
-                <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                  <Bot className="w-4 h-4" />
+                <span className="inline-block px-3 py-1 rounded-full border border-amber-500/15 bg-amber-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-amber-400 uppercase mb-5">
                   Der WLADBOT
                 </span>
                 <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                   Dein persönlicher
                   <span className="text-gradient-amber"> KI-Leadership-Coach.</span>
                 </h2>
-                <p className="font-inter text-slate-500 mb-6">
+                <p className="font-inter text-sm text-slate-500 mb-6">
                   Du kannst ihn nutzen für:
                 </p>
                 <div className="space-y-3 mb-8">
                   {wladbotFeatures.map((feature, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-amber-400 shrink-0" />
-                      <span className="font-inter text-slate-300">{feature}</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                      <span className="font-inter text-sm text-slate-300">{feature}</span>
                     </div>
                   ))}
                 </div>
-                <div className="glass-card-subtle p-4">
-                  <p className="font-inter text-sm text-slate-500">
-                    Der WLADBOT kombiniert: <span className="text-slate-300">KI-Analyse</span> · <span className="text-slate-300">Leadership-Modelle</span> · <span className="text-slate-300">Rhetorik-Training</span>
+                <div className="rounded-xl border border-white/[0.05] bg-white/[0.015] p-4">
+                  <p className="font-inter text-xs text-slate-500">
+                    Kombiniert: <span className="text-slate-400">KI-Analyse</span> · <span className="text-slate-400">Leadership-Modelle</span> · <span className="text-slate-400">Rhetorik-Training</span>
                   </p>
                 </div>
               </div>
@@ -433,18 +429,17 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 7: LEADERSHIP KURS ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 7: LEADERSHIP KURS – Clean ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
-            <span className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-              <BookOpen className="w-4 h-4" />
+            <span className="inline-block px-3 py-1 rounded-full border border-blue-500/15 bg-blue-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-blue-400 uppercase mb-5">
               Bonus
             </span>
             <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
               Zugang zu ausgewählten Modulen des
               <span className="text-gradient-blue"> WLAD Leadership Programms.</span>
             </h2>
-            <p className="font-inter text-slate-500 mb-8 max-w-2xl mx-auto">
+            <p className="font-inter text-sm text-slate-500 mb-8 max-w-xl mx-auto">
               Im Kurs lernst du:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -453,24 +448,24 @@ export default function Hero() {
                 { icon: MessageSquare, text: "Überzeugend argumentieren" },
                 { icon: Users, text: "Teams mit strategischem EQ führen" }
               ].map((item, i) => (
-                <div key={i} className="glass-card-subtle p-5 hover-card">
-                  <item.icon className="w-6 h-6 text-blue-400 mx-auto mb-3" />
+                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-5 transition-all hover:border-white/[0.08]">
+                  <item.icon className="w-5 h-5 text-blue-400 mx-auto mb-3" />
                   <p className="font-inter text-sm text-slate-400">{item.text}</p>
                 </div>
               ))}
             </div>
-            <div className="glass-card-subtle p-4 inline-block">
-              <p className="font-inter text-sm text-slate-500">
-                Die Inhalte verbinden <span className="text-white font-medium">Rhetorik</span>, <span className="text-white font-medium">Strategie</span> und <span className="text-white font-medium">KI-Kompetenz</span> in einem strukturierten System.
+            <div className="rounded-xl border border-white/[0.04] bg-white/[0.01] p-4 inline-block">
+              <p className="font-inter text-xs text-slate-500">
+                Die Inhalte verbinden <span className="text-slate-400 font-medium">Rhetorik</span>, <span className="text-slate-400 font-medium">Strategie</span> und <span className="text-slate-400 font-medium">KI-Kompetenz</span> in einem strukturierten System.
               </p>
             </div>
           </div>
         </section>
 
-        {/* ===== SECTION 8: ZIELGRUPPE ===== */}
-        <section className="py-20 border-t border-white/5">
+        {/* ===== SECTION 8: ZIELGRUPPE – Clean ===== */}
+        <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-12">
+            <div className="text-center mb-14">
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
                 Für wen ist diese Diagnose gedacht?
               </h2>
@@ -478,24 +473,23 @@ export default function Hero() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-testid="audience-cards">
               {audiences.map((audience, i) => (
-                <div key={i} className="feature-card p-6 text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <audience.icon className="w-6 h-6 text-slate-400" />
+                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center transition-all hover:border-white/[0.08]">
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
+                    <audience.icon className="w-5 h-5 text-slate-400" />
                   </div>
-                  <h3 className="font-manrope font-bold text-white mb-2">{audience.title}</h3>
-                  <p className="font-inter text-sm text-slate-500">{audience.desc}</p>
+                  <h3 className="font-manrope font-bold text-sm text-white mb-2">{audience.title}</h3>
+                  <p className="font-inter text-xs text-slate-500 leading-relaxed">{audience.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ===== SECTION 9: SOCIAL PROOF + SCARCITY ===== */}
-        <section className="py-20 border-t border-white/5" data-testid="scarcity-section">
+        {/* ===== SECTION 9: SOCIAL PROOF + SCARCITY – Clean ===== */}
+        <section className="py-24 border-t border-white/[0.04]" data-testid="scarcity-section">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-12">
-              <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-                <Zap className="w-4 h-4" />
+            <div className="text-center mb-14">
+              <span className="inline-block px-3 py-1 rounded-full border border-amber-500/15 bg-amber-500/[0.04] text-[10px] font-semibold tracking-[0.2em] text-amber-400 uppercase mb-5">
                 Limitiert in 2026
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
@@ -508,23 +502,23 @@ export default function Hero() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-              <div className="glass-card p-6 text-center card-glow-amber">
-                <div className="font-manrope font-extrabold text-4xl text-amber-400 mb-2">2.847+</div>
-                <div className="font-inter text-sm text-slate-400">Leader haben die Diagnose bereits gemacht</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+              <div className="rounded-2xl border border-amber-500/10 bg-amber-500/[0.02] p-6 text-center">
+                <div className="font-manrope font-extrabold text-3xl text-amber-400 mb-2">2.847+</div>
+                <div className="font-inter text-xs text-slate-500">Leader haben die Diagnose bereits gemacht</div>
               </div>
-              <div className="glass-card p-6 text-center">
-                <div className="font-manrope font-extrabold text-4xl text-white mb-2">94%</div>
-                <div className="font-inter text-sm text-slate-400">sagen: "Hat mir die Augen geöffnet"</div>
+              <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
+                <div className="font-manrope font-extrabold text-3xl text-white mb-2">94%</div>
+                <div className="font-inter text-xs text-slate-500">sagen: "Hat mir die Augen geöffnet"</div>
               </div>
-              <div className="glass-card p-6 text-center">
-                <div className="font-manrope font-extrabold text-4xl text-white mb-2">10 Min</div>
-                <div className="font-inter text-sm text-slate-400">für Klarheit, die andere in Monaten nicht bekommen</div>
+              <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
+                <div className="font-manrope font-extrabold text-3xl text-white mb-2">10 Min</div>
+                <div className="font-inter text-xs text-slate-500">für Klarheit, die andere in Monaten nicht bekommen</div>
               </div>
             </div>
 
-            <div className="glass-card-subtle p-6 text-center">
-              <p className="font-inter text-sm text-slate-400">
+            <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
+              <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
                 "Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert."
               </p>
               <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
