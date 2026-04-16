@@ -9,6 +9,7 @@ import Analyzing from "./pages/Analyzing";
 import Report from "./pages/Report";
 import Roadmap from "./pages/Roadmap";
 import HighTicketClose from "./pages/HighTicketClose";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import AICoach from "./components/AICoach";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -40,6 +41,7 @@ function AppContent() {
         <Route path="/report" element={<Report />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/close" element={<HighTicketClose />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
       {showCoach && <AICoach />}
     </div>

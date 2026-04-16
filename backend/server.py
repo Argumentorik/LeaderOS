@@ -10,6 +10,7 @@ from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 import json
 import httpx
 
@@ -23,6 +24,7 @@ db = client[os.environ['DB_NAME']]
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', '')
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -521,6 +523,128 @@ async def delete_user_data(request: Request):
     await db.reports.delete_many({"session_id": user_id})
     
     return {"message": "All your data has been deleted"}
+
+
+# --- Stripe Payment Packages (server-side only, never from frontend) ---
+PACKAGES = {
+    "standard_yearly": {"name": "Standard – Leadership System", "amount": 997.00, "currency": "eur", "plan": "standard", "billing": "yearly"},
+    "standard_monthly": {"name": "Standard – Leadership System (Monatsrate)", "amount": 83.08, "currency": "eur", "plan": "standard", "billing": "monthly"},
+    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator", "amount": 4997.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
+}
+
+class CreateCheckoutRequest(BaseModel):
+    package_id: str
+    origin_url: str
+    email: Optional[str] = None
+
+@api_router.post("/payments/create-checkout")
+async def create_checkout(req: CreateCheckoutRequest, http_request: Request):
+    if req.package_id not in PACKAGES:
+        raise HTTPException(status_code=400, detail="Ungültiges Paket")
+    
+    package = PACKAGES[req.package_id]
+    
+    host_url = str(http_request.base_url).rstrip("/")
+    webhook_url = f"{host_url}/api/webhook/stripe"
+    
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    
+    success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+    cancel_url = f"{req.origin_url}/close"
+    
+    metadata = {
+        "package_id": req.package_id,
+        "plan": package["plan"],
+        "billing": package["billing"],
+        "email": req.email or "",
+    }
+    
+    checkout_request = CheckoutSessionRequest(
+        amount=package["amount"],
+        currency=package["currency"],
+        success_url=success_url,
+        cancel_url=cancel_url,
+        metadata=metadata,
+    )
+    
+    session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
+    
+    # Store transaction in DB
+    await db.payment_transactions.insert_one({
+        "session_id": session.session_id,
+        "package_id": req.package_id,
+        "package_name": package["name"],
+        "amount": package["amount"],
+        "currency": package["currency"],
+        "plan": package["plan"],
+        "billing": package["billing"],
+        "email": req.email or "",
+        "payment_status": "initiated",
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    })
+    
+    return {"url": session.url, "session_id": session.session_id}
+
+@api_router.get("/payments/status/{session_id}")
+async def get_payment_status(session_id: str, http_request: Request):
+    host_url = str(http_request.base_url).rstrip("/")
+    webhook_url = f"{host_url}/api/webhook/stripe"
+    
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    
+    checkout_status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+    
+    # Update transaction in DB (only once)
+    existing = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+    if existing and existing.get("payment_status") != "paid":
+        await db.payment_transactions.update_one(
+            {"session_id": session_id},
+            {"$set": {
+                "payment_status": checkout_status.payment_status,
+                "status": checkout_status.status,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }}
+        )
+    
+    return {
+        "status": checkout_status.status,
+        "payment_status": checkout_status.payment_status,
+        "amount_total": checkout_status.amount_total,
+        "currency": checkout_status.currency,
+        "metadata": checkout_status.metadata,
+    }
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    body = await request.body()
+    signature = request.headers.get("Stripe-Signature", "")
+    
+    host_url = str(request.base_url).rstrip("/")
+    webhook_url = f"{host_url}/api/webhook/stripe"
+    
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    
+    try:
+        webhook_response = await stripe_checkout.handle_webhook(body, signature)
+        
+        if webhook_response.payment_status == "paid":
+            await db.payment_transactions.update_one(
+                {"session_id": webhook_response.session_id},
+                {"$set": {
+                    "payment_status": "paid",
+                    "status": "complete",
+                    "event_type": webhook_response.event_type,
+                    "event_id": webhook_response.event_id,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                }}
+            )
+        
+        return {"status": "ok"}
+    except Exception as e:
+        logger.error(f"Webhook error: {e}")
+        return {"status": "error", "message": str(e)}
 
 
 @api_router.get("/")

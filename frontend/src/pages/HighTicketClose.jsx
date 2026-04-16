@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Download, Brain, Shield, Zap, Sparkles, Users, BookOpen, Video, Star, Lock, Check, X, Award, Target, Lightbulb, MessageSquare, Bot, Rocket } from "lucide-react";
+import { ArrowRight, Download, Brain, Shield, Zap, Sparkles, Users, BookOpen, Video, Star, Lock, Check, X, Award, Target, Lightbulb, MessageSquare, Bot, Rocket, CreditCard, Loader2 } from "lucide-react";
 import { generateCurriculumPDF } from "../utils/generateCurriculumPDF";
+
+const API = process.env.REACT_APP_BACKEND_URL;
 
 const dontsList = [
   "KI als Ersatz für echte Führung nutzen – sie ist ein Werkzeug, kein Autopilot",
@@ -47,6 +49,30 @@ const fastTrackExtras = [
 export default function HighTicketClose() {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [billingOption, setBillingOption] = useState("yearly");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCheckout = async (packageId) => {
+    setIsLoading(true);
+    try {
+      const originUrl = window.location.origin;
+      const res = await fetch(`${API}/api/payments/create-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ package_id: packageId, origin_url: originUrl }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Fehler beim Erstellen der Zahlungssitzung.");
+      }
+    } catch {
+      alert("Verbindungsfehler. Bitte versuche es erneut.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#030303] pb-24" data-testid="close-page">
@@ -204,7 +230,7 @@ export default function HighTicketClose() {
           </div>
         </div>
 
-        {/* Stripe Embed Section (placeholder for user to connect) */}
+        {/* Stripe Checkout Section */}
         {selectedPlan && selectedPlan !== "free" && (
           <div className="glass-card p-8 mb-10 border border-amber-500/20" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
@@ -216,21 +242,58 @@ export default function HighTicketClose() {
               </p>
             </div>
 
-            {/* Stripe Embed Placeholder */}
-            <div className="rounded-xl border border-dashed border-white/15 bg-white/[0.02] p-10 text-center mb-6" data-testid="stripe-embed-area">
-              <Lock className="w-8 h-8 text-slate-500 mx-auto mb-3" />
-              <p className="font-inter text-sm text-slate-400 mb-1">
-                Stripe Payment Embed
-              </p>
-              <p className="font-inter text-xs text-slate-600">
-                Zahlungsformular wird hier eingebettet
-              </p>
-            </div>
+            {/* Billing Options for Standard */}
+            {selectedPlan === "standard" && (
+              <div className="flex gap-3 justify-center mb-6" data-testid="billing-options">
+                <button
+                  onClick={() => setBillingOption("yearly")}
+                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
+                    billingOption === "yearly"
+                      ? "bg-amber-500/15 border border-amber-500/30 text-amber-400"
+                      : "bg-white/[0.03] border border-white/8 text-slate-400 hover:border-white/15"
+                  }`}
+                  data-testid="billing-yearly"
+                >
+                  <div className="font-manrope font-bold text-lg">{billingOption === "yearly" ? "€997" : "€997"}</div>
+                  <div className="text-xs opacity-70">Einmalig / Jahr</div>
+                </button>
+                <button
+                  onClick={() => setBillingOption("monthly")}
+                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
+                    billingOption === "monthly"
+                      ? "bg-amber-500/15 border border-amber-500/30 text-amber-400"
+                      : "bg-white/[0.03] border border-white/8 text-slate-400 hover:border-white/15"
+                  }`}
+                  data-testid="billing-monthly"
+                >
+                  <div className="font-manrope font-bold text-lg">€83,08</div>
+                  <div className="text-xs opacity-70">12 Monatsraten</div>
+                </button>
+              </div>
+            )}
+
+            {/* Checkout Button */}
+            <button
+              data-testid="stripe-checkout-btn"
+              disabled={isLoading}
+              onClick={() => {
+                if (selectedPlan === "fasttrack") handleCheckout("fasttrack_yearly");
+                else if (billingOption === "monthly") handleCheckout("standard_monthly");
+                else handleCheckout("standard_yearly");
+              }}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-manrope font-bold text-base flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-amber-500/20 transition-all disabled:opacity-50 mb-4"
+            >
+              {isLoading ? (
+                <><Loader2 className="w-5 h-5 animate-spin" /> Wird geladen...</>
+              ) : (
+                <><CreditCard className="w-5 h-5" /> Jetzt sicher bezahlen</>
+              )}
+            </button>
 
             <div className="flex items-center justify-center gap-6">
               <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Shield className="w-3 h-3" /> SSL-verschlüsselt</span>
-              <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Sichere Zahlung</span>
-              <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Check className="w-3 h-3" /> Sofort-Zugang</span>
+              <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Powered by Stripe</span>
+              <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Check className="w-3 h-3" /> 14 Tage Trial</span>
             </div>
           </div>
         )}
