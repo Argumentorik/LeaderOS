@@ -7,22 +7,21 @@ export function generateCurriculumPDF() {
   const cw = pw - m * 2;
   let y = 0;
 
-  const BG = [3, 3, 3];
-  const CARD = [12, 12, 15];
-  const AMBER = [245, 158, 11];
-  const BLUE = [59, 130, 246];
+  const BG = [10, 10, 10];
+  const CARD = [18, 18, 20];
+  const LIME = [200, 255, 0];
   const WHITE = [255, 255, 255];
   const GRAY = [148, 163, 184];
 
   // === PAGE 1: Cover ===
   doc.setFillColor(...BG);
   doc.rect(0, 0, pw, 297, "F");
-  doc.setFillColor(...AMBER);
+  doc.setFillColor(...);
   doc.rect(0, 0, pw, 2, "F");
 
   // Logo
   y = 30;
-  doc.setFillColor(...AMBER);
+  doc.setFillColor(...);
   doc.roundedRect(m, y, 14, 14, 3, 3, "F");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
@@ -38,7 +37,7 @@ export function generateCurriculumPDF() {
   y = 70;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.setTextColor(...AMBER);
+  doc.setTextColor(...);
   doc.text("CURRICULUM", m, y);
   y += 12;
   doc.setFontSize(28);
@@ -54,13 +53,13 @@ export function generateCurriculumPDF() {
 
   // Modules
   const modules = [
-    { num: "01", title: "KI-Kompetenz", desc: "KI als strategischen Fuhrungshebel einsetzen. Entscheidungsprozesse automatisieren und optimieren.", color: BLUE },
-    { num: "02", title: "Boardroom-Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz.", color: BLUE },
-    { num: "03", title: "Strategisches EQ", desc: "Empathie als Wettbewerbsvorteil nutzen. Teamdynamiken verstehen und Vertrauen aufbauen.", color: AMBER },
-    { num: "04", title: "Entscheidungsfindung", desc: "Datengestutzte Entscheidungen unter Druck. Risikobewertung und strategische Priorisierung.", color: BLUE },
-    { num: "05", title: "Team-Leadership", desc: "High-Performance-Teams aufbauen. Delegation, Motivation und Kultur gestalten.", color: AMBER },
-    { num: "06", title: "Kritisches Denken", desc: "Komplexe Probleme strukturiert losen. Bias erkennen und objektiv analysieren.", color: BLUE },
-    { num: "07", title: "Strategische Planung", desc: "Langfristige Vision entwickeln. OKRs, Roadmaps und Meilensteine setzen.", color: AMBER },
+    { num: "01", title: "KI-Kompetenz", desc: "KI als strategischen Fuhrungshebel einsetzen. Entscheidungsprozesse automatisieren und optimieren.", color: LIME },
+    { num: "02", title: "Boardroom-Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz.", color: LIME },
+    { num: "03", title: "Strategisches EQ", desc: "Empathie als Wettbewerbsvorteil nutzen. Teamdynamiken verstehen und Vertrauen aufbauen.", color: LIME },
+    { num: "04", title: "Entscheidungsfindung", desc: "Datengestutzte Entscheidungen unter Druck. Risikobewertung und strategische Priorisierung.", color: LIME },
+    { num: "05", title: "Team-Leadership", desc: "High-Performance-Teams aufbauen. Delegation, Motivation und Kultur gestalten.", color: LIME },
+    { num: "06", title: "Kritisches Denken", desc: "Komplexe Probleme strukturiert losen. Bias erkennen und objektiv analysieren.", color: LIME },
+    { num: "07", title: "Strategische Planung", desc: "Langfristige Vision entwickeln. OKRs, Roadmaps und Meilensteine setzen.", color: LIME },
   ];
 
   y = 130;
@@ -95,20 +94,20 @@ export function generateCurriculumPDF() {
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
   doc.text("WLADHUB Curriculum | Confidential", m, 290);
-  doc.setFillColor(...AMBER);
+  doc.setFillColor(...);
   doc.rect(0, 295, pw, 2, "F");
 
   // === PAGE 2: 30-Day Plan ===
   doc.addPage();
   doc.setFillColor(...BG);
   doc.rect(0, 0, pw, 297, "F");
-  doc.setFillColor(...AMBER);
+  doc.setFillColor(...);
   doc.rect(0, 0, pw, 1, "F");
 
   y = 20;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.setTextColor(...AMBER);
+  doc.setTextColor(...);
   doc.text("30-TAGE LEADERSHIP FAHRPLAN", m, y);
 
   const phases = [
@@ -144,7 +143,7 @@ export function generateCurriculumPDF() {
 
   y += 10;
   phases.forEach((phase, pi) => {
-    const color = pi < 2 ? BLUE : AMBER;
+    const color = pi < 2 ? LIME : LIME;
     doc.setFillColor(...CARD);
     doc.roundedRect(m, y, cw, 44, 3, 3, "F");
     doc.setFillColor(...color);
@@ -177,7 +176,7 @@ export function generateCurriculumPDF() {
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
   doc.text("WLADHUB Curriculum | Confidential", m, 290);
-  doc.setFillColor(...AMBER);
+  doc.setFillColor(...);
   doc.rect(0, 295, pw, 2, "F");
 
   doc.save("WladHub - Leadership Curriculum.pdf");
