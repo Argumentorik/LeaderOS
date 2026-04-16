@@ -62,6 +62,7 @@ export default function Analyzing() {
         localStorage.setItem("emergent_report", JSON.stringify(res.data));
         navigate("/report");
       } catch (err) {
+        console.error("Report generation failed:", err);
         setError("Report-Generierung fehlgeschlagen. Bitte versuche es erneut.");
       }
     }, 9000);

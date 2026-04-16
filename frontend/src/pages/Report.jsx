@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip
@@ -60,9 +60,18 @@ export default function Report() {
     if (data.user) setUser(prev => ({ ...prev, ...data.user }));
   }, [navigate]);
 
+  const leadership_roles = useMemo(() => report?.leadership_roles || {}, [report]);
+
+  const weakestRoles = useMemo(() =>
+    [...roleConfig]
+      .sort((a, b) => (leadership_roles[a.key] ?? 50) - (leadership_roles[b.key] ?? 50))
+      .slice(0, 3),
+    [leadership_roles]
+  );
+
   if (!report) return null;
 
-  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {}, leadership_roles = {}, strongest_role = {}, weakest_role = {} } = report;
+  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {}, strongest_role = {}, weakest_role = {} } = report;
   const displayUser = user || report.user || {};
 
   const radarData = Object.entries(catLabels).map(([key, label]) => ({
@@ -397,10 +406,7 @@ export default function Report() {
             Basierend auf deinem Profil – fokussiert auf dein größtes Wachstumspotenzial.
           </p>
           <div className="space-y-4">
-            {roleConfig
-              .sort((a, b) => ((leadership_roles[a.key] ?? 50) - (leadership_roles[b.key] ?? 50)))
-              .slice(0, 3)
-              .map((role, i) => (
+            {weakestRoles.map((role, i) => (
                 <div key={role.key} className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${role.color}15` }}>
                     <span className="font-manrope font-bold text-sm" style={{ color: role.color }}>W{i + 1}</span>

@@ -137,7 +137,9 @@ export default function Roadmap() {
           setStrongestRole(sorted[sorted.length - 1]?.[0]);
         }
       }
-    } catch {}
+    } catch (err) {
+      console.error("Failed to parse report from localStorage:", err);
+    }
   }, []);
 
   const handleEntry = (i, val) => {

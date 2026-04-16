@@ -94,75 +94,69 @@ async def get_current_user(request: Request) -> Optional[dict]:
 
 # --- Auth Endpoints ---
 
-@api_router.post("/auth/session")
-async def exchange_session(data: AuthSession, response: Response):
-    """Exchange Emergent OAuth session_id for session_token"""
-    # REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    try:
-        async with httpx.AsyncClient() as http_client:
-            resp = await http_client.get(
-                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-                headers={"X-Session-ID": data.session_id}
-            )
-            if resp.status_code != 200:
-                raise HTTPException(status_code=401, detail="Invalid session")
-            
-            auth_data = resp.json()
-    except Exception as e:
-        logger.error(f"Auth error: {e}")
-        raise HTTPException(status_code=401, detail="Authentication failed")
-    
+async def fetch_auth_data(session_id: str):
+    """Fetch user data from Emergent OAuth."""
+    async with httpx.AsyncClient() as http_client:
+        resp = await http_client.get(
+            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+            headers={"X-Session-ID": session_id}
+        )
+        if resp.status_code != 200:
+            raise HTTPException(status_code=401, detail="Invalid session")
+        return resp.json()
+
+
+async def upsert_user(auth_data: dict) -> str:
+    """Create or update user from auth data, returns user_id."""
     email = auth_data.get("email")
     name = auth_data.get("name")
     picture = auth_data.get("picture", "")
-    emergent_session_token = auth_data.get("session_token")
-    
-    # Check if user exists
+
     existing_user = await db.users.find_one({"email": email}, {"_id": 0})
-    
     if existing_user:
         user_id = existing_user.get("user_id") or existing_user.get("session_id")
-        # Update name/picture if changed
         await db.users.update_one(
             {"email": email},
             {"$set": {"name": name, "picture": picture, "user_id": user_id, "updated_at": datetime.now(timezone.utc).isoformat()}}
         )
     else:
-        # Create new user
         user_id = f"user_{uuid.uuid4().hex[:12]}"
         await db.users.insert_one({
-            "user_id": user_id,
-            "email": email,
-            "name": name,
-            "picture": picture,
-            "role": None,
-            "consent_privacy": True,
-            "consent_marketing": False,
+            "user_id": user_id, "email": email, "name": name, "picture": picture,
+            "role": None, "consent_privacy": True, "consent_marketing": False,
             "created_at": datetime.now(timezone.utc).isoformat()
         })
-    
-    # Create session
+    return user_id
+
+
+async def create_session(user_id: str, response: Response) -> str:
+    """Create a new session and set cookie."""
     session_token = f"sess_{uuid.uuid4().hex}"
     expires_at = datetime.now(timezone.utc) + timedelta(days=7)
-    
     await db.user_sessions.insert_one({
-        "user_id": user_id,
-        "session_token": session_token,
-        "expires_at": expires_at.isoformat(),
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "user_id": user_id, "session_token": session_token,
+        "expires_at": expires_at.isoformat(), "created_at": datetime.now(timezone.utc).isoformat()
     })
-    
-    # Set httpOnly cookie
     response.set_cookie(
-        key="session_token",
-        value=session_token,
-        httponly=True,
-        secure=True,
-        samesite="none",
-        path="/",
-        max_age=7 * 24 * 60 * 60
+        key="session_token", value=session_token, httponly=True,
+        secure=True, samesite="none", path="/", max_age=7 * 24 * 60 * 60
     )
-    
+    return session_token
+
+
+@api_router.post("/auth/session")
+async def exchange_session(data: AuthSession, response: Response):
+    """Exchange Emergent OAuth session_id for session_token"""
+    # REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    try:
+        auth_data = await fetch_auth_data(data.session_id)
+    except Exception as e:
+        logger.error(f"Auth error: {e}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+    user_id = await upsert_user(auth_data)
+    await create_session(user_id, response)
+
     user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     return user
 
@@ -243,41 +237,67 @@ async def create_user(data: UserCreate):
     return {"session_id": session_id, "name": data.name, "email": data.email, "role": data.role}
 
 
-@api_router.post("/quiz/generate-report")
-async def generate_report(data: QuizSubmit):
-    user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
-    if not user:
-        # Try finding by user_id
-        user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    # Calculate scores per category and layer
+def calculate_category_scores(answers):
+    """Calculate average scores per category and layer."""
     cat_scores = {}
     layer_scores = {"ai_literacy": [], "rhetoric": [], "strategic_eq": []}
 
-    for ans in data.answers:
+    for ans in answers:
         cat = ans.category
         if cat not in cat_scores:
             cat_scores[cat] = []
         cat_scores[cat].append(ans.score)
-
         layer = ans.layer
         if layer in layer_scores:
             layer_scores[layer].append(ans.score)
 
-    # Average per category (out of 100)
     cat_avg = {k: int(sum(v) / len(v) * 25) for k, v in cat_scores.items() if v}
     layer_avg = {k: int(sum(v) / len(v) * 25) for k, v in layer_scores.items() if v}
     total_avg = int(sum(cat_avg.values()) / len(cat_avg)) if cat_avg else 50
+    return cat_avg, layer_avg, total_avg
 
-    # Generate AI narrative
-    narrative = {}
-    if EMERGENT_LLM_KEY:
-        try:
-            chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"report_{data.session_id}", system_message="Du bist ein Executive Leadership Coach.")
-            chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
-            prompt = f"""Analysiere dieses Leadership-Profil auf Deutsch.
+
+ROLE_WEIGHTS = {
+    "communicator": {"rhetorik": 0.50, "fuehrung": 0.15, "eq": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
+    "manager": {"entscheidung": 0.40, "kritisches_denken": 0.20, "fuehrung": 0.15, "strategie": 0.15, "rhetorik": 0.05, "eq": 0.05},
+    "team_leader": {"fuehrung": 0.40, "eq": 0.25, "rhetorik": 0.15, "entscheidung": 0.10, "kritisches_denken": 0.05, "strategie": 0.05},
+    "psychologist": {"eq": 0.45, "fuehrung": 0.20, "rhetorik": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
+    "problem_solver": {"kritisches_denken": 0.35, "entscheidung": 0.25, "strategie": 0.15, "fuehrung": 0.10, "rhetorik": 0.10, "eq": 0.05},
+    "innovator": {"strategie": 0.45, "kritisches_denken": 0.20, "entscheidung": 0.15, "rhetorik": 0.10, "fuehrung": 0.05, "eq": 0.05},
+}
+
+ROLE_LABELS = {
+    "communicator": "Kommunikator",
+    "manager": "Manager",
+    "team_leader": "Team Leader",
+    "psychologist": "Psychologe",
+    "problem_solver": "Problemlöser",
+    "innovator": "Innovator"
+}
+
+
+def calculate_leadership_roles(cat_avg):
+    """Calculate 5+1 leadership roles from category scores using weighted matrix."""
+    roles = {}
+    for role, weights in ROLE_WEIGHTS.items():
+        score = sum(cat_avg.get(cat, 50) * weight for cat, weight in weights.items())
+        roles[role] = int(round(score))
+
+    sorted_roles = sorted(roles.items(), key=lambda x: x[1], reverse=True)
+    strongest = sorted_roles[0][0]
+    weakest = sorted_roles[-1][0]
+    return roles, strongest, weakest
+
+
+async def generate_ai_narrative(session_id, user, cat_avg, layer_avg, total_avg):
+    """Generate AI narrative using Claude."""
+    if not EMERGENT_LLM_KEY:
+        return {"profile_title": "Leadership-Profil", "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."}
+
+    try:
+        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"report_{session_id}", system_message="Du bist ein Executive Leadership Coach.")
+        chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
+        prompt = f"""Analysiere dieses Leadership-Profil auf Deutsch.
 
 Benutzer: {user.get('name', 'Leader')}, Rolle: {user.get('role', 'Führungskraft')}
 
@@ -308,56 +328,39 @@ Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant,
 
 Antworte NUR mit validem JSON."""
 
-            response = await chat.send_message(UserMessage(text=prompt))
-            text = response.strip()
-            if text.startswith("```"):
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            narrative = json.loads(text)
-        except Exception as e:
-            logger.error(f"AI narrative error: {e}")
-            narrative = {
-                "profile_title": "Leadership-Profil",
-                "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."
-            }
+        response = await chat.send_message(UserMessage(text=prompt))
+        text = response.strip()
+        if text.startswith("```"):
+            text = text.split("```")[1]
+            if text.startswith("json"):
+                text = text[4:]
+        return json.loads(text)
+    except Exception as e:
+        logger.error(f"AI narrative error: {e}")
+        return {"profile_title": "Leadership-Profil", "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."}
 
-    # Improved 5+1 Leadership Roles Scoring Matrix
-    # Each category contributes to multiple roles with weighted coefficients
-    role_weights = {
-        "communicator": {"rhetorik": 0.50, "fuehrung": 0.15, "eq": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
-        "manager": {"entscheidung": 0.40, "kritisches_denken": 0.20, "fuehrung": 0.15, "strategie": 0.15, "rhetorik": 0.05, "eq": 0.05},
-        "team_leader": {"fuehrung": 0.40, "eq": 0.25, "rhetorik": 0.15, "entscheidung": 0.10, "kritisches_denken": 0.05, "strategie": 0.05},
-        "psychologist": {"eq": 0.45, "fuehrung": 0.20, "rhetorik": 0.15, "kritisches_denken": 0.10, "entscheidung": 0.05, "strategie": 0.05},
-        "problem_solver": {"kritisches_denken": 0.35, "entscheidung": 0.25, "strategie": 0.15, "fuehrung": 0.10, "rhetorik": 0.10, "eq": 0.05},
-        "innovator": {"strategie": 0.45, "kritisches_denken": 0.20, "entscheidung": 0.15, "rhetorik": 0.10, "fuehrung": 0.05, "eq": 0.05},
-    }
-    
-    leadership_roles = {}
-    for role, weights in role_weights.items():
-        score = sum(cat_avg.get(cat, 50) * weight for cat, weight in weights.items())
-        leadership_roles[role] = int(round(score))
-    
-    # Determine strongest and weakest roles
-    sorted_roles = sorted(leadership_roles.items(), key=lambda x: x[1], reverse=True)
-    strongest_role = sorted_roles[0][0]
-    weakest_role = sorted_roles[-1][0]
-    
-    role_labels = {
-        "communicator": "Kommunikator",
-        "manager": "Manager",
-        "team_leader": "Team Leader",
-        "psychologist": "Psychologe",
-        "problem_solver": "Problemlöser",
-        "innovator": "Innovator"
-    }
 
-    # ROI estimates
-    roi = {
+def calculate_roi(layer_avg, total_avg):
+    """Calculate ROI estimates."""
+    return {
         "hours_saved": min(12, max(3, int(layer_avg.get('ai_literacy', 50) / 10))),
         "decision_speed": round(1 + (total_avg / 50), 1),
         "performance_boost": min(35, max(10, int(total_avg / 3)))
     }
+
+
+@api_router.post("/quiz/generate-report")
+async def generate_report(data: QuizSubmit):
+    user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
+    if not user:
+        user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    cat_avg, layer_avg, total_avg = calculate_category_scores(data.answers)
+    narrative = await generate_ai_narrative(data.session_id, user, cat_avg, layer_avg, total_avg)
+    leadership_roles, strongest_role, weakest_role = calculate_leadership_roles(cat_avg)
+    roi = calculate_roi(layer_avg, total_avg)
 
     report = {
         "session_id": data.session_id,
@@ -365,8 +368,8 @@ Antworte NUR mit validem JSON."""
         "cat_scores": cat_avg,
         "layer_scores": layer_avg,
         "leadership_roles": leadership_roles,
-        "strongest_role": {"key": strongest_role, "label": role_labels[strongest_role], "score": leadership_roles[strongest_role]},
-        "weakest_role": {"key": weakest_role, "label": role_labels[weakest_role], "score": leadership_roles[weakest_role]},
+        "strongest_role": {"key": strongest_role, "label": ROLE_LABELS[strongest_role], "score": leadership_roles[strongest_role]},
+        "weakest_role": {"key": weakest_role, "label": ROLE_LABELS[weakest_role], "score": leadership_roles[weakest_role]},
         "avg_total": total_avg,
         "roi": roi,
         "narrative": narrative,

@@ -30,7 +30,7 @@ export default function Login() {
           navigate('/diagnose');
         }
       } catch (error) {
-        // Not authenticated, stay on login page
+        console.error("Auth check failed:", error);
       }
     };
     
