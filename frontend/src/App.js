@@ -10,6 +10,8 @@ import Report from "./pages/Report";
 import Roadmap from "./pages/Roadmap";
 import HighTicketClose from "./pages/HighTicketClose";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import Login from "./pages/Login";
+import AuthCallback from "./pages/AuthCallback";
 import AICoach from "./components/AICoach";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -42,6 +44,8 @@ function AppContent() {
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/close" element={<HighTicketClose />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
       {showCoach && <AICoach />}
     </div>
