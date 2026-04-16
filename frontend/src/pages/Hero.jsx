@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle } from "lucide-react";
+import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle, Download } from "lucide-react";
 import { ScrollReveal } from "../hooks/useScrollReveal";
 import { useState, useEffect } from "react";
 
@@ -164,7 +164,7 @@ export default function Hero() {
           >
             Die <span className="text-white font-semibold">WLADHUB Diagnose</span> zeigt dir in{" "}
             <span className="text-white font-semibold">10 Minuten</span>, wo du stehst – 
-            und was dich von den <span className="text-gradient-amber font-semibold">Top 3 % der Leader</span> trennt.
+            und was dich von den <span className="text-gradient-amber font-semibold">Top 1 % der Leader</span> trennt.
           </p>
 
           {/* CTA */}
@@ -490,26 +490,175 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 9: FINAL CTA ===== */}
+        {/* ===== SECTION 9: SOCIAL PROOF + SCARCITY ===== */}
+        <section className="py-20 border-t border-white/5" data-testid="scarcity-section">
+          <div className="max-w-5xl mx-auto px-4 md:px-8">
+            <div className="text-center mb-12">
+              <span className="badge-amber px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
+                <Zap className="w-4 h-4" />
+                Limitiert in 2026
+              </span>
+              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
+                Nur <span className="text-gradient-amber">1 % der Führungskräfte</span> nutzen
+                <br className="hidden md:block" />
+                KI wirklich strategisch.
+              </h2>
+              <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto">
+                Die anderen 99 % lesen darüber. Du könntest es heute noch ändern – in 10 Minuten weißt du genau, wo du stehst.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+              <div className="glass-card p-6 text-center card-glow-amber">
+                <div className="font-manrope font-extrabold text-4xl text-amber-400 mb-2">2.847+</div>
+                <div className="font-inter text-sm text-slate-400">Leader haben die Diagnose bereits gemacht</div>
+              </div>
+              <div className="glass-card p-6 text-center">
+                <div className="font-manrope font-extrabold text-4xl text-white mb-2">94%</div>
+                <div className="font-inter text-sm text-slate-400">sagen: "Hat mir die Augen geöffnet"</div>
+              </div>
+              <div className="glass-card p-6 text-center">
+                <div className="font-manrope font-extrabold text-4xl text-white mb-2">10 Min</div>
+                <div className="font-inter text-sm text-slate-400">für Klarheit, die andere in Monaten nicht bekommen</div>
+              </div>
+            </div>
+
+            <div className="glass-card-subtle p-6 text-center">
+              <p className="font-inter text-sm text-slate-400">
+                "Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert."
+              </p>
+              <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== SECTION 10: FREE CREDITS + LEADER-OS.DE ===== */}
+        <section className="py-20 border-t border-white/5" data-testid="free-credits-section">
+          <div className="max-w-5xl mx-auto px-4 md:px-8">
+            <div className="glass-card p-8 md:p-10 border border-green-500/15 bg-gradient-to-br from-green-500/5 via-transparent to-amber-500/5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <div className="px-3 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-xs font-bold inline-block mb-4">
+                    GRATIS NACH COMPLETION
+                  </div>
+                  <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
+                    50 Free Credits für die
+                    <span className="text-gradient-amber"> beste KI-Plattform.</span>
+                  </h2>
+                  <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
+                    Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> für
+                    {" "}<span className="text-amber-400 font-medium">leader-os.de</span> – das intelligenteste Leadership-Betriebssystem auf dem Markt.
+                    Nutze KI-Agenten, die speziell für Führungskräfte gebaut wurden.
+                  </p>
+                  <div className="space-y-3 mb-6">
+                    {[
+                      "KI-Coach für schwierige Gespräche & Entscheidungen",
+                      "Simulations-Agent für Boardroom-Szenarien",
+                      "Persönlicher Report als PDF herunterladen",
+                      "30-Tage-Aktionsplan sofort starten",
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <Check className="w-4 h-4 text-green-400 shrink-0" />
+                        <span className="font-inter text-sm text-slate-300">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      data-testid="hero-cta-credits"
+                      onClick={() => navigate("/diagnose")}
+                      className="btn-primary px-8 py-4 text-base font-semibold inline-flex items-center gap-2"
+                    >
+                      Diagnose starten & Credits sichern
+                      <ArrowRight className="w-5 h-5" />
+                    </button>
+                    <a
+                      href="https://leader-os.de"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary px-6 py-4 text-sm font-medium inline-flex items-center gap-2"
+                      data-testid="leader-os-link"
+                    >
+                      leader-os.de entdecken
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <div className="glass-card-subtle p-5 hover-card">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                        <Brain className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <div className="font-manrope font-bold text-sm text-white">Leadership OS</div>
+                        <div className="font-inter text-xs text-slate-500">KI-Agenten für Führungskräfte</div>
+                      </div>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-white/5">
+                      <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-amber-500 to-orange-500" />
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <span className="font-inter text-[10px] text-slate-600">50 Credits</span>
+                      <span className="font-inter text-[10px] text-green-400">Kostenlos</span>
+                    </div>
+                  </div>
+
+                  <div className="glass-card-subtle p-5 hover-card">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/15 flex items-center justify-center">
+                        <Download className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div>
+                        <div className="font-manrope font-bold text-sm text-white">Dein Report als PDF</div>
+                        <div className="font-inter text-xs text-slate-500">Personalisiert · Sofort verfügbar</div>
+                      </div>
+                    </div>
+                    <p className="font-inter text-xs text-slate-500">Vollständige Analyse deiner 6 Führungsrollen mit individuellem 30-Tage-Lernplan.</p>
+                  </div>
+
+                  <div className="glass-card-subtle p-5 hover-card">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-xl bg-green-500/15 flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-green-400" />
+                      </div>
+                      <div>
+                        <div className="font-manrope font-bold text-sm text-white">0 € · Für immer</div>
+                        <div className="font-inter text-xs text-slate-500">Keine Kreditkarte nötig</div>
+                      </div>
+                    </div>
+                    <p className="font-inter text-xs text-slate-500">Diagnose, Report und 50 Credits – komplett kostenlos. Versprochen.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== SECTION 11: FINAL CTA ===== */}
         <section className="py-24 border-t border-white/5">
           <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
             <span className="font-inter text-sm text-slate-600 mb-4 block">Die entscheidende Frage</span>
             <h2 className="font-manrope font-extrabold text-3xl md:text-5xl text-white mb-6 leading-tight">
-              Gehörst du zu den <span className="text-gradient-amber">3 % der Leader</span>,
+              Gehörst du zu den <span className="text-gradient-amber">Top 1 %</span>,
               <br className="hidden md:block" />
-              die KI strategisch beherrschen –
+              die KI als strategischen Vorteil nutzen –
               <br className="hidden md:block" />
-              statt von ihr ersetzt zu werden?
+              oder zu den 99 %, die zusehen?
             </h2>
-            <p className="font-inter text-lg text-slate-500 mb-10">
+            <p className="font-inter text-lg text-slate-500 mb-4">
               Finde es heraus. <span className="text-white">Kostenlos. In nur 10 Minuten.</span>
+            </p>
+            <p className="font-inter text-sm text-green-400/80 mb-10">
+              + 50 Free Credits für leader-os.de · Report als PDF · 30-Tage-Plan
             </p>
             <button
               data-testid="hero-cta-bottom"
               onClick={() => navigate("/diagnose")}
               className="btn-primary px-10 py-4 text-base font-semibold inline-flex items-center gap-3"
             >
-              Leadership-Diagnose starten
+              Jetzt Diagnose starten – Kostenlos
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
@@ -525,7 +674,7 @@ export default function Hero() {
                 <span className="font-inter text-sm text-slate-500">Leadership Diagnose</span>
               </div>
               <div className="font-inter text-sm text-slate-600">
-                © 2025 WLADHUB. Alle Rechte vorbehalten.
+                © 2026 WLADHUB. Alle Rechte vorbehalten.
               </div>
             </div>
           </div>
