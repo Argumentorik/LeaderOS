@@ -73,26 +73,63 @@ export default function HighTicketClose() {
           </p>
         </div>
 
-        {/* PRICE STACK */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-14" data-testid="price-stack">
+        {/* PRICE STACK – 3 Tiers */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14" data-testid="price-stack">
+
+          {/* KOSTENLOS */}
+          <div
+            data-testid="plan-free"
+            onClick={() => setSelectedPlan("free")}
+            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] border-green-500/25 ${
+              selectedPlan === "free" ? "ring-1 ring-green-500/30 border-green-500/40" : ""
+            }`}
+          >
+            <div className="mb-5">
+              <div className="px-3 py-1 rounded-full bg-green-500/15 border border-green-500/20 text-green-400 text-xs font-bold inline-block mb-3">KOSTENLOS</div>
+              <h2 className="font-manrope font-extrabold text-xl text-white">Free Access</h2>
+            </div>
+            <div className="mb-5">
+              <div className="font-manrope font-extrabold text-4xl text-green-400" data-testid="price-free">€0</div>
+              <div className="font-inter text-xs text-slate-500">Für immer · Keine Kreditkarte</div>
+            </div>
+            <div className="space-y-3 mb-6">
+              {["Leadership-Diagnose & Report", "6 Starter-Kurse", "30-Tage-Plan", "Kostenloses Buch (PDF)", "Leadership-Journal"].map((f, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-400 shrink-0" />
+                  <span className="font-inter text-sm text-slate-300">{f}</span>
+                </div>
+              ))}
+              {["WladBot AI Coach", "Premium-Kurse", "1:1 Calls"].map((f, i) => (
+                <div key={i} className="flex items-center gap-3 opacity-40">
+                  <X className="w-4 h-4 text-slate-600 shrink-0" />
+                  <span className="font-inter text-sm text-slate-500">{f}</span>
+                </div>
+              ))}
+            </div>
+            <button
+              data-testid="cta-free"
+              onClick={(e) => { e.stopPropagation(); navigate("/roadmap"); }}
+              className="w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all bg-green-500/10 border border-green-500/25 text-green-400 hover:bg-green-500/20 hover:border-green-500/40"
+            >
+              Kostenlos starten
+            </button>
+          </div>
 
           {/* Standard – €997 */}
           <div
             data-testid="plan-standard"
             onClick={() => setSelectedPlan("standard")}
-            className={`glass-card p-8 cursor-pointer transition-all hover:scale-[1.01] ${
+            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
               selectedPlan === "standard" ? "border-amber-500/40 ring-1 ring-amber-500/20" : "border-white/10"
             }`}
           >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <div className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/20 text-blue-400 text-xs font-bold inline-block mb-3">STANDARD</div>
-                <h2 className="font-manrope font-extrabold text-2xl text-white">Leadership System</h2>
-              </div>
-              <div className="text-right">
-                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-standard">€997</div>
-                <div className="font-inter text-xs text-slate-500">1 Jahr · Verlängerbar</div>
-              </div>
+            <div className="mb-5">
+              <div className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/20 text-blue-400 text-xs font-bold inline-block mb-3">STANDARD</div>
+              <h2 className="font-manrope font-extrabold text-xl text-white">Leadership System</h2>
+            </div>
+            <div className="mb-5">
+              <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-standard">€997</div>
+              <div className="font-inter text-xs text-slate-500">1 Jahr · Verlängerbar</div>
             </div>
 
             <div className="space-y-3 mb-6">
@@ -102,13 +139,9 @@ export default function HighTicketClose() {
                   <span className="font-inter text-sm text-slate-300">{f}</span>
                 </div>
               ))}
-              <div className="flex items-center gap-3 opacity-50">
+              <div className="flex items-center gap-3 opacity-40">
                 <X className="w-4 h-4 text-slate-600 shrink-0" />
-                <span className="font-inter text-sm text-slate-500">1:1 Strategy-Session</span>
-              </div>
-              <div className="flex items-center gap-3 opacity-50">
-                <X className="w-4 h-4 text-slate-600 shrink-0" />
-                <span className="font-inter text-sm text-slate-500">Mastermind-Gruppe</span>
+                <span className="font-inter text-sm text-slate-500">1:1 Calls mit Experte</span>
               </div>
             </div>
 
@@ -122,7 +155,7 @@ export default function HighTicketClose() {
               }`}
             >
               {selectedPlan === "standard" ? <Check className="w-4 h-4" /> : null}
-              Standard wählen – €997/Jahr
+              Standard – €997/Jahr
             </button>
           </div>
 
@@ -130,24 +163,21 @@ export default function HighTicketClose() {
           <div
             data-testid="plan-fasttrack"
             onClick={() => setSelectedPlan("fasttrack")}
-            className={`relative glass-card p-8 cursor-pointer transition-all hover:scale-[1.01] ${
+            className={`relative glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
               selectedPlan === "fasttrack" ? "border-amber-500/40 ring-1 ring-amber-500/20" : "border-white/10"
             }`}
           >
-            {/* Best Value Badge */}
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-bold">
               EMPFOHLEN
             </div>
 
-            <div className="flex items-center justify-between mb-6 mt-2">
-              <div>
-                <div className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold inline-block mb-3">FAST TRACK</div>
-                <h2 className="font-manrope font-extrabold text-2xl text-white">Leadership Accelerator</h2>
-              </div>
-              <div className="text-right">
-                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">€4.997</div>
-                <div className="font-inter text-xs text-slate-500">1 Jahr · 6x 1:1 Calls inkl.</div>
-              </div>
+            <div className="mb-5 mt-2">
+              <div className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-bold inline-block mb-3">FAST TRACK</div>
+              <h2 className="font-manrope font-extrabold text-xl text-white">Leadership Accelerator</h2>
+            </div>
+            <div className="mb-5">
+              <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">€4.997</div>
+              <div className="font-inter text-xs text-slate-500">1 Jahr · 6x 1:1 Calls inkl.</div>
             </div>
 
             <div className="space-y-3 mb-6">
@@ -169,13 +199,13 @@ export default function HighTicketClose() {
               }`}
             >
               {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
-              Fast Track wählen – €4.997
+              Fast Track – €4.997
             </button>
           </div>
         </div>
 
         {/* Stripe Embed Section (placeholder for user to connect) */}
-        {selectedPlan && (
+        {selectedPlan && selectedPlan !== "free" && (
           <div className="glass-card p-8 mb-10 border border-amber-500/20" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
               <h3 className="font-manrope font-bold text-xl text-white mb-2">
