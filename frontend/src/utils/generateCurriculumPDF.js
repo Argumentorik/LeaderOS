@@ -16,12 +16,12 @@ export function generateCurriculumPDF() {
   // === PAGE 1: Cover ===
   doc.setFillColor(...BG);
   doc.rect(0, 0, pw, 297, "F");
-  doc.setFillColor(...);
+  doc.setFillColor(...LIME);
   doc.rect(0, 0, pw, 2, "F");
 
   // Logo
   y = 30;
-  doc.setFillColor(...);
+  doc.setFillColor(...LIME);
   doc.roundedRect(m, y, 14, 14, 3, 3, "F");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
@@ -37,7 +37,7 @@ export function generateCurriculumPDF() {
   y = 70;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.setTextColor(...);
+  doc.setTextColor(...LIME);
   doc.text("CURRICULUM", m, y);
   y += 12;
   doc.setFontSize(28);
@@ -53,13 +53,13 @@ export function generateCurriculumPDF() {
 
   // Modules
   const modules = [
-    { num: "01", title: "KI-Kompetenz", desc: "KI als strategischen Fuhrungshebel einsetzen. Entscheidungsprozesse automatisieren und optimieren.", color: LIME },
-    { num: "02", title: "Boardroom-Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz.", color: LIME },
-    { num: "03", title: "Strategisches EQ", desc: "Empathie als Wettbewerbsvorteil nutzen. Teamdynamiken verstehen und Vertrauen aufbauen.", color: LIME },
-    { num: "04", title: "Entscheidungsfindung", desc: "Datengestutzte Entscheidungen unter Druck. Risikobewertung und strategische Priorisierung.", color: LIME },
-    { num: "05", title: "Team-Leadership", desc: "High-Performance-Teams aufbauen. Delegation, Motivation und Kultur gestalten.", color: LIME },
-    { num: "06", title: "Kritisches Denken", desc: "Komplexe Probleme strukturiert losen. Bias erkennen und objektiv analysieren.", color: LIME },
-    { num: "07", title: "Strategische Planung", desc: "Langfristige Vision entwickeln. OKRs, Roadmaps und Meilensteine setzen.", color: LIME },
+    { num: "01", title: "KI-Kompetenz", desc: "KI als strategischen Fuhrungshebel einsetzen. Entscheidungsprozesse automatisieren und optimieren." },
+    { num: "02", title: "Boardroom-Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz." },
+    { num: "03", title: "Strategisches EQ", desc: "Empathie als Wettbewerbsvorteil nutzen. Teamdynamiken verstehen und Vertrauen aufbauen." },
+    { num: "04", title: "Entscheidungsfindung", desc: "Datengestutzte Entscheidungen unter Druck. Risikobewertung und strategische Priorisierung." },
+    { num: "05", title: "Team-Leadership", desc: "High-Performance-Teams aufbauen. Delegation, Motivation und Kultur gestalten." },
+    { num: "06", title: "Kritisches Denken", desc: "Komplexe Probleme strukturiert losen. Bias erkennen und objektiv analysieren." },
+    { num: "07", title: "Strategische Planung", desc: "Langfristige Vision entwickeln. OKRs, Roadmaps und Meilensteine setzen." },
   ];
 
   y = 130;
@@ -72,12 +72,12 @@ export function generateCurriculumPDF() {
   modules.forEach((mod) => {
     doc.setFillColor(...CARD);
     doc.roundedRect(m, y, cw, 18, 3, 3, "F");
-    doc.setFillColor(...mod.color);
+    doc.setFillColor(...LIME);
     doc.roundedRect(m, y, 2, 18, 1, 1, "F");
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8);
-    doc.setTextColor(...mod.color);
+    doc.setTextColor(...LIME);
     doc.text(mod.num, m + 7, y + 7);
     doc.setFontSize(9);
     doc.setTextColor(...WHITE);
@@ -94,20 +94,20 @@ export function generateCurriculumPDF() {
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
   doc.text("WLADHUB Curriculum | Confidential", m, 290);
-  doc.setFillColor(...);
+  doc.setFillColor(...LIME);
   doc.rect(0, 295, pw, 2, "F");
 
   // === PAGE 2: 30-Day Plan ===
   doc.addPage();
   doc.setFillColor(...BG);
   doc.rect(0, 0, pw, 297, "F");
-  doc.setFillColor(...);
+  doc.setFillColor(...LIME);
   doc.rect(0, 0, pw, 1, "F");
 
   y = 20;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.setTextColor(...);
+  doc.setTextColor(...LIME);
   doc.text("30-TAGE LEADERSHIP FAHRPLAN", m, y);
 
   const phases = [
@@ -142,16 +142,15 @@ export function generateCurriculumPDF() {
   ];
 
   y += 10;
-  phases.forEach((phase, pi) => {
-    const color = pi < 2 ? LIME : LIME;
+  phases.forEach((phase) => {
     doc.setFillColor(...CARD);
     doc.roundedRect(m, y, cw, 44, 3, 3, "F");
-    doc.setFillColor(...color);
+    doc.setFillColor(...LIME);
     doc.roundedRect(m, y, 2, 44, 1, 1, "F");
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7);
-    doc.setTextColor(...color);
+    doc.setTextColor(...LIME);
     doc.text(phase.week, m + 7, y + 8);
     doc.setFontSize(10);
     doc.setTextColor(...WHITE);
@@ -176,7 +175,7 @@ export function generateCurriculumPDF() {
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
   doc.text("WLADHUB Curriculum | Confidential", m, 290);
-  doc.setFillColor(...);
+  doc.setFillColor(...LIME);
   doc.rect(0, 295, pw, 2, "F");
 
   doc.save("WladHub - Leadership Curriculum.pdf");

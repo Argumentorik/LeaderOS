@@ -9,12 +9,12 @@ const headlines = [
     lines: ["KI skaliert Intelligenz.", "{Leadership bestimmt}", "die Richtung."],
   },
   {
-    pre: "Die KI-Ara braucht eine neue Art von Fuhrung.",
+    pre: "Die KI-Ära braucht eine neue Art von Führung.",
     lines: ["Beherrschst du die", "{5+1 Rollen des modernen}", "Leaders?"],
   },
   {
     pre: "Dein Leadership-Profil in 10 Minuten.",
-    lines: ["Entdecke, welche", "{Fuhrungsrolle}", "dich definiert."],
+    lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
   },
 ];
 
@@ -33,8 +33,8 @@ const layers = [
     icon: MessageSquare,
     title: "Boardroom-Rhetorik",
     subtitle: "Layer 2",
-    desc: "Autoritat zeigen, wenn es darauf ankommt.",
-    points: ["Argumentationsstruktur", "Klare Kommunikation", "Souverane Prasenz"],
+    desc: "Autorität zeigen, wenn es darauf ankommt.",
+    points: ["Argumentationsstruktur", "Klare Kommunikation", "Souveräne Präsenz"],
     color: "#C8FF00"
   },
   {
@@ -42,46 +42,46 @@ const layers = [
     icon: TrendingUp,
     title: "Strategisches EQ",
     subtitle: "Layer 3",
-    desc: "Empathie als Fuhrungskraft-Verstarker.",
-    points: ["Teamdynamiken verstehen", "Vertrauen aufbauen", "Konflikte strategisch losen"],
+    desc: "Empathie als Führungskraft-Verstärker.",
+    points: ["Teamdynamiken verstehen", "Vertrauen aufbauen", "Konflikte strategisch lösen"],
     color: "#C8FF00"
   }
 ];
 
 const problems = [
-  "Gute Strategen ohne Uberzeugungskraft",
+  "Gute Strategen ohne Überzeugungskraft",
   "Rhetorisch stark, aber ohne KI-Kompetenz",
-  "Empathisch – aber ohne klare Entscheidungsfahigkeit"
+  "Empathisch – aber ohne klare Entscheidungsfähigkeit"
 ];
 
 const diagnoseSteps = [
-  { num: "1", title: "Diagnose deiner 5+1 Fuhrungsdimensionen", desc: "" },
-  { num: "2", title: "Deinen personlichen 3-Layer Score", desc: "KI-Kompetenz · Boardroom-Rhetorik · Strategisches EQ" },
-  { num: "3", title: "Personalisierter 30-Tage-Aktionsplan", desc: "Klare Schritte, um deine Fuhrungswirkung zu erhohen." },
-  { num: "4", title: "ROI-Prognose", desc: "Eingesparte Stunden · Schnellere Entscheidungen · Hohere Wirkung" }
+  { num: "1", title: "Diagnose deiner 5+1 Führungsdimensionen", desc: "" },
+  { num: "2", title: "Deinen persönlichen 3-Layer Score", desc: "KI-Kompetenz · Boardroom-Rhetorik · Strategisches EQ" },
+  { num: "3", title: "Personalisierter 30-Tage-Aktionsplan", desc: "Klare Schritte, um deine Führungswirkung zu erhöhen." },
+  { num: "4", title: "ROI-Prognose", desc: "Eingesparte Stunden · Schnellere Entscheidungen · Höhere Wirkung" }
 ];
 
 const platformFeatures = [
-  { icon: Bot, title: "Leadership Coach", desc: "Dein personlicher KI-Coach, der dein Profil kennt", color: "#C8FF00" },
-  { icon: CheckSquare, title: "Task Agent", desc: "Tagliche Aufgaben, angepasst an deine Schwachen", color: "#C8FF00" },
-  { icon: Users, title: "Simulations-Agent", desc: "Ube schwierige Gesprache mit KI-Gegenuber", color: "#C8FF00" },
+  { icon: Bot, title: "Leadership Coach", desc: "Dein persönlicher KI-Coach, der dein Profil kennt", color: "#C8FF00" },
+  { icon: CheckSquare, title: "Task Agent", desc: "Tägliche Aufgaben, angepasst an deine Schwächen", color: "#C8FF00" },
+  { icon: Users, title: "Simulations-Agent", desc: "Übe schwierige Gespräche mit KI-Gegenüber", color: "#C8FF00" },
   { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks auf Abruf", color: "#C8FF00" },
   { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions, passend zu deinem Level", color: "#C8FF00" },
-  { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Fuhrungskraften deiner Stufe", color: "#C8FF00" },
+  { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Führungskräften deiner Stufe", color: "#C8FF00" },
 ];
 
 const wladbotFeatures = [
-  "Vorbereitung schwieriger Gesprache",
+  "Vorbereitung schwieriger Gespräche",
   "Strukturierung von Argumentationen",
-  "Analyse von Fuhrungssituationen",
+  "Analyse von Führungssituationen",
   "Simulation von Boardroom-Diskussionen"
 ];
 
 const audiences = [
   {
     icon: Target,
-    title: "Selbststandige",
-    desc: "Die KI-Transformation steuern – ohne ihre personliche Autoritat zu verlieren."
+    title: "Selbstständige",
+    desc: "Die KI-Transformation steuern – ohne ihre persönliche Autorität zu verlieren."
   },
   {
     icon: Briefcase,
@@ -91,7 +91,7 @@ const audiences = [
   {
     icon: TrendingUp,
     title: "Senior Manager",
-    desc: "Den Schritt machen von der Fuhrungskraft zur unverzichtbaren Schlusselperson."
+    desc: "Den Schritt machen von der Führungskraft zur unverzichtbaren Schlüsselperson."
   },
   {
     icon: User,
@@ -178,21 +178,21 @@ export default function Hero() {
               <ArrowRight className="w-5 h-5" />
             </button>
             <p className="font-inter text-sm text-slate-600">
-              10 Minuten · Sofortiger Report · Personlicher Aktionsplan
+              10 Minuten · Sofortiger Report · Persönlicher Aktionsplan
             </p>
           </div>
         </section>
 
         {/* ===== SECTION 2: PROBLEM ===== */}
-        <section className="py-24 border-t border-white/[0.04]">
+        <section className="py-28 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <ScrollReveal>
-              <div className="text-center mb-16">
-                <span className="inline-block px-3 py-1 rounded-lg border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold tracking-[0.2em] text-slate-500 uppercase mb-5">
-                  Die Realitat moderner Fuhrung
+              <div className="text-center mb-20">
+                <span className="inline-block px-4 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold tracking-[0.25em] text-slate-500 uppercase mb-6">
+                  Die Realität moderner Führung
                 </span>
-                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4 leading-tight">
-                  Viele Fuhrungskrafte sind in einem Bereich stark –
+                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4 leading-tight">
+                  Viele Führungskräfte sind in einem Bereich stark –
                   <br className="hidden md:block" />
                   <span className="text-slate-500">aber nicht in allen.</span>
                 </h2>
@@ -201,39 +201,50 @@ export default function Hero() {
 
             <ScrollReveal delay={100}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Problems */}
-                <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8">
-                  <div className="font-inter text-[10px] tracking-[0.2em] text-slate-600 uppercase mb-6">
-                    Typische Muster
-                  </div>
-                  <div className="space-y-5">
-                    {problems.map((problem, i) => (
-                      <div key={`problem-${i}`} className="flex items-start gap-4 group">
-                        <div className="w-7 h-7 rounded-lg bg-red-500/8 flex items-center justify-center shrink-0 mt-0.5">
-                          <X className="w-3.5 h-3.5 text-red-400/60" />
+                {/* Problems - Left Card */}
+                <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 md:p-10 overflow-hidden group hover:border-white/[0.1] transition-all duration-500">
+                  {/* Subtle corner accent */}
+                  <div className="absolute top-0 left-0 w-20 h-20 bg-red-500/[0.03] rounded-full blur-[40px]" />
+                  <div className="relative">
+                    <div className="font-inter text-[10px] tracking-[0.25em] text-red-400/50 uppercase mb-8 flex items-center gap-3">
+                      <span className="w-8 h-px bg-red-400/30" />
+                      Typische Muster
+                    </div>
+                    <div className="space-y-6">
+                      {problems.map((problem, i) => (
+                        <div key={`problem-${i}`} className="flex items-start gap-4 group/item">
+                          <div className="w-8 h-8 rounded-lg bg-red-500/[0.06] border border-red-500/10 flex items-center justify-center shrink-0 mt-0.5 group-hover/item:bg-red-500/10 transition-colors">
+                            <X className="w-3.5 h-3.5 text-red-400/70" />
+                          </div>
+                          <span className="font-inter text-[15px] text-slate-300 leading-relaxed">{problem}</span>
                         </div>
-                        <span className="font-inter text-[15px] text-slate-400 leading-relaxed">{problem}</span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* Consequences */}
-                <div className="rounded-2xl border border-[#C8FF00]/10 bg-[#C8FF00]/[0.02] p-8">
-                  <div className="font-inter text-[10px] tracking-[0.2em] text-[#C8FF00]/60 uppercase mb-6">
-                    Das Ergebnis
-                  </div>
-                  <div className="space-y-4">
-                    {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
-                      <div key={`result-${i}`} className="font-manrope font-bold text-lg text-white/90">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 pt-5 border-t border-white/[0.04]">
-                    <p className="font-inter text-xs text-slate-600 leading-relaxed">
-                      Die WLADHUB Diagnose zeigt dir in 10 Minuten, welche Rolle du vernachlassigst.
-                    </p>
+                {/* Consequences - Right Card with Lime accent */}
+                <div className="relative rounded-2xl border border-[#C8FF00]/[0.12] bg-[#C8FF00]/[0.02] p-8 md:p-10 overflow-hidden group hover:border-[#C8FF00]/20 transition-all duration-500">
+                  {/* Corner glow */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#C8FF00]/[0.04] rounded-full blur-[60px]" />
+                  <div className="relative">
+                    <div className="font-inter text-[10px] tracking-[0.25em] text-[#C8FF00]/50 uppercase mb-8 flex items-center gap-3">
+                      <span className="w-8 h-px bg-[#C8FF00]/30" />
+                      Das Ergebnis
+                    </div>
+                    <div className="space-y-5">
+                      {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
+                        <div key={`result-${i}`} className="font-manrope font-bold text-xl text-white/90 flex items-center gap-3">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00]/60 shrink-0" />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-8 pt-6 border-t border-[#C8FF00]/[0.08]">
+                      <p className="font-inter text-sm text-slate-500 leading-relaxed">
+                        Die WLADHUB Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Rolle du vernachlässigst.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -249,7 +260,7 @@ export default function Hero() {
                 Das 3-Layer-Modell
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4">
-                Die besten Fuhrungskrafte kombinieren
+                Die besten Führungskräfte kombinieren
                 <br />
                 <span className="text-gradient-lime">drei Ebenen gleichzeitig.</span>
               </h2>
@@ -303,10 +314,10 @@ export default function Hero() {
                 10 Minuten
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Dein personlicher Leadership-Report
+                Dein persönlicher Leadership-Report
               </h2>
               <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
-                Die WLADHUB Diagnose analysiert deine Fuhrungskompetenzen anhand eines strukturierten Modells.
+                Die WLADHUB Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.
               </p>
             </div>
 
@@ -342,7 +353,7 @@ export default function Hero() {
                 <span className="text-gradient-lime"> die das Leben eines Leaders erleichtern.</span>
               </h2>
               <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
-                Jeder Agent ist auf einen Bereich deiner Fuhrungsentwicklung spezialisiert.
+                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert.
               </p>
             </div>
 
@@ -402,7 +413,7 @@ export default function Hero() {
                   Der WLADBOT
                 </span>
                 <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                  Dein personlicher
+                  Dein persönlicher
                   <span className="text-gradient-lime"> KI-Leadership-Coach.</span>
                 </h2>
                 <p className="font-inter text-sm text-slate-500 mb-6">
@@ -441,9 +452,9 @@ export default function Hero() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               {[
-                { icon: Brain, text: "KI strategisch im Fuhrungsalltag einsetzen" },
-                { icon: MessageSquare, text: "Uberzeugend argumentieren" },
-                { icon: Users, text: "Teams mit strategischem EQ fuhren" }
+                { icon: Brain, text: "KI strategisch im Führungsalltag einsetzen" },
+                { icon: MessageSquare, text: "Überzeugend argumentieren" },
+                { icon: Users, text: "Teams mit strategischem EQ führen" }
               ].map((item, i) => (
                 <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-5 transition-all hover:border-[#C8FF00]/10">
                   <item.icon className="w-5 h-5 text-[#C8FF00] mx-auto mb-3" />
@@ -464,7 +475,7 @@ export default function Hero() {
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="text-center mb-14">
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Fur wen ist diese Diagnose gedacht?
+                Für wen ist diese Diagnose gedacht?
               </h2>
             </div>
 
@@ -490,12 +501,12 @@ export default function Hero() {
                 Limitiert in 2026
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Nur <span className="text-[#C8FF00]">1 % der Fuhrungskrafte</span> nutzen
+                Nur <span className="text-[#C8FF00]">1 % der Führungskräfte</span> nutzen
                 <br className="hidden md:block" />
                 KI wirklich strategisch.
               </h2>
               <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto">
-                Die anderen 99 % lesen daruber. Du konntest es heute noch andern – in 10 Minuten weisst du genau, wo du stehst.
+                Die anderen 99 % lesen darüber. Du könntest es heute noch ändern – in 10 Minuten weißt du genau, wo du stehst.
               </p>
             </div>
 
@@ -506,17 +517,17 @@ export default function Hero() {
               </div>
               <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
                 <div className="font-manrope font-extrabold text-3xl text-white mb-2">94%</div>
-                <div className="font-inter text-xs text-slate-500">sagen: "Hat mir die Augen geoffnet"</div>
+                <div className="font-inter text-xs text-slate-500">sagen: "Hat mir die Augen geöffnet"</div>
               </div>
               <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
                 <div className="font-manrope font-extrabold text-3xl text-white mb-2">10 Min</div>
-                <div className="font-inter text-xs text-slate-500">fur Klarheit, die andere in Monaten nicht bekommen</div>
+                <div className="font-inter text-xs text-slate-500">für Klarheit, die andere in Monaten nicht bekommen</div>
               </div>
             </div>
 
             <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
               <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
-                "Ich dachte, ich ware ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verandert."
+                "Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert."
               </p>
               <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
             </div>
@@ -533,19 +544,19 @@ export default function Hero() {
                     GRATIS NACH COMPLETION
                   </div>
                   <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
-                    50 Free Credits fur die
+                    50 Free Credits für die
                     <span className="text-gradient-lime"> beste KI-Plattform.</span>
                   </h2>
                   <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
-                    Als Belohnung fur deine Diagnose erhaltst du <span className="text-white font-medium">50 kostenlose Credits</span> fur
+                    Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> fur
                     {" "}<span className="text-[#C8FF00] font-medium">leader-os.de</span> – das intelligenteste Leadership-Betriebssystem auf dem Markt.
-                    Nutze KI-Agenten, die speziell fur Fuhrungskrafte gebaut wurden.
+                    Nutze KI-Agenten, die speziell für Führungskräfte gebaut wurden.
                   </p>
                   <div className="space-y-3 mb-6">
                     {[
-                      "KI-Coach fur schwierige Gesprache & Entscheidungen",
-                      "Simulations-Agent fur Boardroom-Szenarien",
-                      "Personlicher Report als PDF herunterladen",
+                      "KI-Coach für schwierige Gespräche & Entscheidungen",
+                      "Simulations-Agent für Boardroom-Szenarien",
+                      "Persönlicher Report als PDF herunterladen",
                       "30-Tage-Aktionsplan sofort starten",
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
@@ -584,7 +595,7 @@ export default function Hero() {
                       </div>
                       <div>
                         <div className="font-manrope font-bold text-sm text-white">Leadership OS</div>
-                        <div className="font-inter text-xs text-slate-500">KI-Agenten fur Fuhrungskrafte</div>
+                        <div className="font-inter text-xs text-slate-500">KI-Agenten für Führungskräfte</div>
                       </div>
                     </div>
                     <div className="h-1.5 rounded-full bg-white/5">
@@ -603,10 +614,10 @@ export default function Hero() {
                       </div>
                       <div>
                         <div className="font-manrope font-bold text-sm text-white">Dein Report als PDF</div>
-                        <div className="font-inter text-xs text-slate-500">Personalisiert · Sofort verfugbar</div>
+                        <div className="font-inter text-xs text-slate-500">Personalisiert · Sofort verfügbar</div>
                       </div>
                     </div>
-                    <p className="font-inter text-xs text-slate-500">Vollstandige Analyse deiner 6 Fuhrungsrollen mit individuellem 30-Tage-Lernplan.</p>
+                    <p className="font-inter text-xs text-slate-500">Vollständige Analyse deiner 6 Führungsrollen mit individuellem 30-Tage-Lernplan.</p>
                   </div>
 
                   <div className="glass-card-subtle p-5 hover-card">
@@ -615,8 +626,8 @@ export default function Hero() {
                         <Sparkles className="w-5 h-5 text-[#C8FF00]" />
                       </div>
                       <div>
-                        <div className="font-manrope font-bold text-sm text-white">0 EUR · Fur immer</div>
-                        <div className="font-inter text-xs text-slate-500">Keine Kreditkarte notig</div>
+                        <div className="font-manrope font-bold text-sm text-white">0 EUR · Für immer</div>
+                        <div className="font-inter text-xs text-slate-500">Keine Kreditkarte nötig</div>
                       </div>
                     </div>
                     <p className="font-inter text-xs text-slate-500">Diagnose, Report und 50 Credits – komplett kostenlos. Versprochen.</p>
@@ -642,7 +653,7 @@ export default function Hero() {
               Finde es heraus. <span className="text-white">Kostenlos. In nur 10 Minuten.</span>
             </p>
             <p className="font-inter text-sm text-[#C8FF00]/70 mb-10">
-              + 50 Free Credits fur leader-os.de · Report als PDF · 30-Tage-Plan
+              + 50 Free Credits für leader-os.de · Report als PDF · 30-Tage-Plan
             </p>
             <button
               data-testid="hero-cta-bottom"
