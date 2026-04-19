@@ -923,6 +923,108 @@ async def revoke_license_key(key: str):
 async def root():
     return {"message": "WLADHUB Leadership Diagnose API"}
 
+
+# --- Admin Dashboard Endpoints ---
+
+@api_router.get("/admin/stats")
+async def admin_stats():
+    """Dashboard statistics for admin panel."""
+    from datetime import timedelta as td
+
+    now = datetime.now(timezone.utc)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+
+    total_users = await db.users.count_documents({})
+    total_reports = await db.reports.count_documents({})
+    total_keys = await db.license_keys.count_documents({})
+    active_keys = await db.license_keys.count_documents({"status": "active"})
+    used_keys = await db.license_keys.count_documents({"status": "used"})
+
+    # Today's stats
+    users_today = await db.users.count_documents({"created_at": {"$gte": today_start}})
+    reports_today = await db.reports.count_documents({"created_at": {"$gte": today_start}})
+
+    # Emails sent
+    total_emails = await db.email_log.count_documents({})
+    emails_today = await db.email_log.count_documents({"sent_at": {"$gte": today_start}})
+
+    # Transactions
+    total_transactions = await db.payment_transactions.count_documents({})
+    paid_transactions = await db.payment_transactions.count_documents({"payment_status": "paid"})
+
+    # Revenue
+    pipeline = [
+        {"$match": {"payment_status": "paid"}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]
+    revenue_result = await db.payment_transactions.aggregate(pipeline).to_list(1)
+    total_revenue = revenue_result[0]["total"] if revenue_result else 0
+
+    # Conversion rates
+    diagnosis_to_report = (total_reports / total_users * 100) if total_users > 0 else 0
+    report_to_payment = (paid_transactions / total_reports * 100) if total_reports > 0 else 0
+
+    # Last 7 days data
+    seven_days_ago = (now - td(days=7)).isoformat()
+    users_7d = await db.users.count_documents({"created_at": {"$gte": seven_days_ago}})
+    reports_7d = await db.reports.count_documents({"created_at": {"$gte": seven_days_ago}})
+
+    return {
+        "overview": {
+            "total_users": total_users,
+            "total_reports": total_reports,
+            "total_revenue": total_revenue,
+            "total_keys": total_keys,
+        },
+        "today": {
+            "users": users_today,
+            "reports": reports_today,
+            "emails": emails_today,
+        },
+        "keys": {
+            "total": total_keys,
+            "active": active_keys,
+            "used": used_keys,
+        },
+        "conversions": {
+            "diagnosis_to_report": round(diagnosis_to_report, 1),
+            "report_to_payment": round(report_to_payment, 1),
+        },
+        "emails": {
+            "total": total_emails,
+            "today": emails_today,
+        },
+        "transactions": {
+            "total": total_transactions,
+            "paid": paid_transactions,
+        },
+        "last_7_days": {
+            "users": users_7d,
+            "reports": reports_7d,
+        },
+    }
+
+
+@api_router.get("/admin/users")
+async def admin_users():
+    """List all users for admin panel."""
+    users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return {"users": users, "total": len(users)}
+
+
+@api_router.get("/admin/transactions")
+async def admin_transactions():
+    """List all transactions for admin panel."""
+    txs = await db.payment_transactions.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return {"transactions": txs, "total": len(txs)}
+
+
+@api_router.get("/admin/emails")
+async def admin_emails():
+    """List all sent emails for admin panel."""
+    emails = await db.email_log.find({}, {"_id": 0}).sort("sent_at", -1).to_list(200)
+    return {"emails": emails, "total": len(emails)}
+
 app.include_router(api_router)
 
 app.add_middleware(

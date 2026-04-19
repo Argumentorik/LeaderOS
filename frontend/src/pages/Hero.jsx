@@ -475,6 +475,16 @@ export default function Hero() {
                 Die Inhalte verbinden <span className="text-slate-400 font-medium">Rhetorik</span>, <span className="text-slate-400 font-medium">Strategie</span> und <span className="text-slate-400 font-medium">KI-Kompetenz</span> in einem strukturierten System.
               </p>
             </div>
+            <div className="mt-6">
+              <button
+                onClick={() => navigate("/kurse")}
+                className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
+                data-testid="hero-kurse-cta"
+              >
+                Alle 6 Kurse ansehen
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </section>
 
