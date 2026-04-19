@@ -156,7 +156,7 @@ export default function Report() {
           <div className="mb-10" data-testid="leadership-roles">
             <h3 className="font-manrope font-bold text-xl text-white mb-6 flex items-center gap-3">
               <Award className="w-5 h-5 text-[#C8FF00]" />
-              Deine 5+1 Leadership-Rollen
+              Deine 6 Leadership-Rollen
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {roleConfig.map((role) => {
@@ -378,7 +378,7 @@ export default function Report() {
             THE IDEAL LEADER
           </div>
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-6">
-            Mastering the 5+1 Roles of the Ideal Leader
+            Mastering the 6 Roles of the Ideal Leader
           </h2>
           <p className="font-inter text-slate-400 leading-relaxed mb-8 max-w-2xl mx-auto">
             Moderne Führung erfordert die Beherrschung aller sechs Rollen. Die 6. Rolle – der Innovator – befähigt dich, schneller zu lösen, gesehen zu werden und dir einen entscheidenden Vorteil auf dem Arbeitsmarkt zu schaffen.

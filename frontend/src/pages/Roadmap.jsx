@@ -181,7 +181,7 @@ export default function Roadmap() {
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             6 spezialisierte KI-Agenten. 6 Kurse. Live Events. Persönliches Coaching.
             <br className="hidden md:block" />
-            Alles, was du brauchst, um die 5+1 Rollen zu meistern.
+            Alles, was du brauchst, um die 6 Rollen zu meistern.
           </p>
           {weakestRole && (
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15" data-testid="personalized-hint">

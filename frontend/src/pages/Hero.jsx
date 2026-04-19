@@ -10,7 +10,7 @@ const headlines = [
   },
   {
     pre: "Die KI-Ära braucht eine neue Art von Führung.",
-    lines: ["Beherrschst du die", "{5+1 Rollen des modernen}", "Leaders?"],
+    lines: ["Beherrschst du die", "{6 Rollen des modernen}", "Leaders?"],
   },
   {
     pre: "Dein Leadership-Profil in 10 Minuten.",
@@ -63,7 +63,7 @@ const problems = [
 ];
 
 const diagnoseSteps = [
-  { num: "1", title: "Diagnose deiner 5+1 Führungsdimensionen", desc: "" },
+  { num: "1", title: "Diagnose deiner 6 Führungsdimensionen", desc: "" },
   { num: "2", title: "Deinen persönlichen 3-Layer Score", desc: "KI-Kompetenz · Boardroom-Rhetorik · Strategisches EQ" },
   { num: "3", title: "Personalisierter 30-Tage-Aktionsplan", desc: "Klare Schritte, um deine Führungswirkung zu erhöhen." },
   { num: "4", title: "ROI-Prognose", desc: "Eingesparte Stunden · Schnellere Entscheidungen · Höhere Wirkung" }

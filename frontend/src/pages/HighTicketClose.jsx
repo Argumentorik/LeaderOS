@@ -38,6 +38,7 @@ const standardFeatures = [
 
 const fastTrackExtras = [
   "Alles aus dem Standardpaket",
+  "AI Learning Path — personalisierte KI-Lernstrecke",
   "6x 1:1 Calls mit AI & Leadership Experte",
   "Persönliches Onboarding-Gespräch",
   "Quartals-Reviews (4x pro Jahr)",
@@ -192,48 +193,71 @@ export default function HighTicketClose() {
             </button>
           </div>
 
-          {/* Fast Track – €4.997 */}
+          {/* Fast Track – AI Learning Path – 4.797 EUR */}
           <div
             data-testid="plan-fasttrack"
             onClick={() => setSelectedPlan("fasttrack")}
-            className={`relative glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
+            className={`relative glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] overflow-hidden ${
               selectedPlan === "fasttrack" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-white/[0.06]"
             }`}
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-lg bg-[#C8FF00] text-[#0a0a0a] text-xs font-bold">
+            {/* Glow effect */}
+            <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[#C8FF00]/[0.06] via-transparent to-transparent pointer-events-none" />
+
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-lg bg-[#C8FF00] text-[#0a0a0a] text-xs font-bold tracking-wide">
               EMPFOHLEN
             </div>
 
-            <div className="mb-5 mt-2">
-              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">FAST TRACK</div>
-              <h2 className="font-manrope font-extrabold text-xl text-white">Leadership Accelerator</h2>
-            </div>
-            <div className="mb-5">
-              <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">€4.997</div>
-              <div className="font-inter text-xs text-slate-500">1 Jahr · 6x 1:1 Calls inkl.</div>
-            </div>
-
-            <div className="space-y-3 mb-6">
-              {fastTrackExtras.map((f, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
-                  <span className="font-inter text-sm text-slate-300">{f}</span>
+            <div className="relative">
+              <div className="mb-5 mt-2">
+                <div className="flex items-center gap-2 flex-wrap mb-3">
+                  <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold">FAST TRACK</div>
+                  <div className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-[10px] font-bold tracking-wider animate-pulse">AI LEARNING PATH</div>
                 </div>
-              ))}
-            </div>
+                <h2 className="font-manrope font-extrabold text-xl text-white">Leadership Accelerator</h2>
+                <p className="font-inter text-xs text-slate-500 mt-1">Das komplette System + persönliche Betreuung</p>
+              </div>
 
-            <button
-              data-testid="cta-fasttrack"
-              onClick={(e) => { e.stopPropagation(); setSelectedPlan("fasttrack"); }}
-              className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
-                selectedPlan === "fasttrack"
-                  ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
-                  : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
-              }`}
-            >
-              {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
-              Fast Track – 4.997 EUR
-            </button>
+              <div className="mb-5 flex items-end gap-3">
+                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">4.797 EUR</div>
+              </div>
+              <div className="font-inter text-xs text-slate-500 -mt-3 mb-5">1 Jahr · 6x 1:1 Calls inkl.</div>
+
+              {/* AI Learning Path highlight card */}
+              <div className="mb-5 p-3.5 rounded-xl bg-[#C8FF00]/[0.04] border border-[#C8FF00]/10">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
+                    <Zap className="w-4 h-4 text-[#C8FF00]" />
+                  </div>
+                  <span className="font-manrope font-bold text-sm text-[#C8FF00]">AI Learning Path</span>
+                </div>
+                <p className="font-inter text-xs text-slate-400 leading-relaxed">
+                  Personalisierte KI-Lernstrecke basierend auf deinem Leadership-Profil. WladBot + 6 Agenten + wöchentliche Challenges.
+                </p>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {fastTrackExtras.map((f, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
+                    <span className="font-inter text-sm text-slate-300">{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                data-testid="cta-fasttrack"
+                onClick={(e) => { e.stopPropagation(); setSelectedPlan("fasttrack"); }}
+                className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
+                  selectedPlan === "fasttrack"
+                    ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
+                    : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
+                }`}
+              >
+                {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
+                Fast Track – 4.797 EUR
+              </button>
+            </div>
           </div>
         </div>
 
@@ -242,7 +266,7 @@ export default function HighTicketClose() {
           <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
               <h3 className="font-manrope font-bold text-xl text-white mb-2">
-                {selectedPlan === "fasttrack" ? "Fast Track – €4.997/Jahr" : "Standard – €997/Jahr"}
+                {selectedPlan === "fasttrack" ? "Fast Track · AI Learning Path – 4.797 EUR/Jahr" : "Standard – 997 EUR/Jahr"}
               </h3>
               <p className="font-inter text-sm text-slate-400">
                 14 Tage kostenlos testen · Jederzeit kündbar
@@ -389,7 +413,7 @@ export default function HighTicketClose() {
               </h3>
               <p className="font-inter text-sm text-slate-400 mb-1">von Wladislaw Jachtchenko</p>
               <p className="font-inter text-sm text-slate-400 mb-4">
-                Deine Belohnung, dass du den Test gemacht hast. Lerne die 5+1 Rollen, die jede Führungskraft meistern muss – direkt vom SPIEGEL-Bestseller-Autor.
+                Deine Belohnung, dass du den Test gemacht hast. Lerne die 6 Rollen, die jede Führungskraft meistern muss – direkt vom SPIEGEL-Bestseller-Autor.
               </p>
               <a
                 href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft"
@@ -442,7 +466,7 @@ export default function HighTicketClose() {
               onClick={() => { setSelectedPlan("fasttrack"); document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-amber px-8 py-4 font-semibold inline-flex items-center gap-3"
             >
-              Fast Track – €4.997
+              Fast Track · AI Learning Path – 4.797 EUR
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

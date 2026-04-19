@@ -104,7 +104,7 @@ Ob das bei dir auch so ist? Keine Ahnung. Aber in 10 Minuten weißt du es.
 </td>
 <td style="padding-left:14px;">
 <span style="font-size:14px;color:{BRAND['white']};font-weight:600;">KI-Report</span>
-<span style="font-size:13px;color:{BRAND['gray']};"> — dein Profil über 5+1 Führungsrollen</span>
+<span style="font-size:13px;color:{BRAND['gray']};"> — dein Profil über 6 Führungsrollen</span>
 </td>
 </tr></table>
 </td></tr>

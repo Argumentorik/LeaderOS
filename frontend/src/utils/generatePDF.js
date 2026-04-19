@@ -170,13 +170,13 @@ export function generateReportPDF(report, user) {
     }
   }
 
-  // 5+1 Leadership Roles
+  // 6 Leadership Roles
   if (Object.keys(leadership_roles).length > 0) {
     y = 228;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.accent);
-    doc.text("5+1 LEADERSHIP-ROLLEN", margin, y);
+    doc.text("6 LEADERSHIP-ROLLEN", margin, y);
     y += 7;
     
     const rw = (cw - 4) / 3;

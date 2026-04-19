@@ -296,7 +296,7 @@ ROLE_LABELS = {
 
 
 def calculate_leadership_roles(cat_avg):
-    """Calculate 5+1 leadership roles from category scores using weighted matrix."""
+    """Calculate 6 leadership roles from category scores using weighted matrix."""
     roles = {}
     for role, weights in ROLE_WEIGHTS.items():
         score = sum(cat_avg.get(cat, 50) * weight for cat, weight in weights.items())
@@ -626,7 +626,7 @@ async def delete_user_data(request: Request):
 PACKAGES = {
     "standard_yearly": {"name": "Standard – Leadership System", "amount": 997.00, "currency": "eur", "plan": "standard", "billing": "yearly"},
     "standard_monthly": {"name": "Standard – Leadership System (Monatsrate)", "amount": 83.08, "currency": "eur", "plan": "standard", "billing": "monthly"},
-    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator", "amount": 4997.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
+    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "amount": 4797.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
 }
 
 class CreateCheckoutRequest(BaseModel):
@@ -821,7 +821,7 @@ async def create_license_key_endpoint(data: LicenseKeyCreate):
     if data.email and RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
         try:
             from email_templates import payment_confirmation_email
-            amount = 4997.0 if data.plan == "fasttrack" else 997.0
+            amount = 4797.0 if data.plan == "fasttrack" else 997.0
             email_data = payment_confirmation_email(data.name or "Leader", data.plan, amount)
             # Add the license key to the email subject
             await asyncio.to_thread(resend.Emails.send, {
