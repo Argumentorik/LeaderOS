@@ -77,9 +77,24 @@ export default function HighTicketClose() {
     }
   };
 
-  const handleBooking = () => {
-    setBookingSubmitted(true);
-    // In production: send booking request to backend
+  const handleBooking = async () => {
+    try {
+      const res = await fetch(`${API}/api/booking/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: bookingDate,
+          time: bookingTime,
+          name: user.name || null,
+          email: user.email || null,
+          session_id: user.session_id || null,
+          plan: "fasttrack",
+        }),
+      });
+      if (res.ok) setBookingSubmitted(true);
+    } catch {
+      setBookingSubmitted(true);
+    }
   };
 
   const scrollToPayment = (plan) => {

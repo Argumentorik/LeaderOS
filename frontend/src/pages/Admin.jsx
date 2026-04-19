@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, FileText, CreditCard, Key, Mail, TrendingUp, ArrowRight, Plus, X, Check, Loader2, RefreshCw, Trash2 } from "lucide-react";
+import { Users, FileText, CreditCard, Key, Mail, TrendingUp, ArrowRight, Plus, X, Check, Loader2, RefreshCw, Trash2, Calendar } from "lucide-react";
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -13,6 +13,7 @@ export default function Admin() {
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [emails, setEmails] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [tab, setTab] = useState("overview");
   const [loading, setLoading] = useState(false);
   const [showCreateKey, setShowCreateKey] = useState(false);
@@ -31,18 +32,20 @@ export default function Admin() {
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
-      const [s, k, u, t, em] = await Promise.all([
+      const [s, k, u, t, em, bk] = await Promise.all([
         fetch(`${API}/api/admin/stats`).then(r => r.json()),
         fetch(`${API}/api/license/list`).then(r => r.json()),
         fetch(`${API}/api/admin/users`).then(r => r.json()),
         fetch(`${API}/api/admin/transactions`).then(r => r.json()),
         fetch(`${API}/api/admin/emails`).then(r => r.json()),
+        fetch(`${API}/api/booking/list`).then(r => r.json()),
       ]);
       setStats(s);
       setKeys(k.keys || []);
       setUsers(u.users || []);
       setTransactions(t.transactions || []);
       setEmails(em.emails || []);
+      setBookings(bk.bookings || []);
     } catch (e) { console.error(e); }
     setLoading(false);
   }, []);
@@ -91,6 +94,7 @@ export default function Admin() {
     { id: "keys", label: "License Keys", icon: Key },
     { id: "users", label: "Users", icon: Users },
     { id: "transactions", label: "Transactions", icon: CreditCard },
+    { id: "bookings", label: "Bookings", icon: Calendar },
     { id: "emails", label: "E-Mails", icon: Mail },
   ];
 
@@ -338,6 +342,46 @@ export default function Admin() {
                   ))}
                   {transactions.length === 0 && (
                     <tr><td colSpan={7} className="px-4 py-8 text-center font-inter text-sm text-slate-600">Keine Transaktionen</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Bookings Tab */}
+        {tab === "bookings" && (
+          <div className="glass-card overflow-hidden">
+            <div className="px-4 py-3 border-b border-white/[0.04]">
+              <h3 className="font-manrope font-bold text-white">Termin-Anfragen ({bookings.length})</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/[0.04]">
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Datum</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Uhrzeit</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Name</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">E-Mail</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Plan</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Status</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Erstellt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookings.map((b, i) => (
+                    <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.01]">
+                      <td className="px-4 py-3 font-inter text-sm text-white font-medium">{b.date}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-white">{b.time} Uhr</td>
+                      <td className="px-4 py-3 font-inter text-sm text-slate-300">{b.name || "—"}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-slate-400">{b.email || "—"}</td>
+                      <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-md text-xs font-medium bg-[#C8FF00]/10 text-[#C8FF00]">{b.plan}</span></td>
+                      <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded-md text-xs font-medium ${b.status === "confirmed" ? "bg-[#C8FF00]/10 text-[#C8FF00]" : "bg-white/[0.04] text-slate-400"}`}>{b.status}</span></td>
+                      <td className="px-4 py-3 font-inter text-xs text-slate-600">{b.created_at?.slice(0, 16)}</td>
+                    </tr>
+                  ))}
+                  {bookings.length === 0 && (
+                    <tr><td colSpan={7} className="px-4 py-8 text-center font-inter text-sm text-slate-600">Keine Termine</td></tr>
                   )}
                 </tbody>
               </table>

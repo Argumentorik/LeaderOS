@@ -71,9 +71,18 @@ class LicenseKeyActivate(BaseModel):
     email: Optional[str] = None
 
 class LicenseKeyCreate(BaseModel):
-    plan: str  # "standard" or "fasttrack"
+    plan: str
     email: Optional[str] = None
     name: Optional[str] = None
+    notes: Optional[str] = None
+
+class BookingRequest(BaseModel):
+    date: str
+    time: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    session_id: Optional[str] = None
+    plan: Optional[str] = "fasttrack"
     notes: Optional[str] = None
 
 class AuthSession(BaseModel):
@@ -925,6 +934,93 @@ async def revoke_license_key(key: str):
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Key nicht gefunden")
     return {"success": True, "message": f"Key {key} wurde deaktiviert"}
+
+
+# --- Booking Endpoint ---
+
+@api_router.post("/booking/create")
+async def create_booking(data: BookingRequest):
+    """Create a consultation booking and notify expert via email."""
+    booking = {
+        "date": data.date,
+        "time": data.time,
+        "name": data.name or "",
+        "email": data.email or "",
+        "session_id": data.session_id or "",
+        "plan": data.plan or "fasttrack",
+        "notes": data.notes or "",
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.bookings.insert_one(booking)
+    logger.info(f"Booking created: {data.date} {data.time} for {data.email}")
+
+    # Send notification email to expert
+    if RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
+        try:
+            expert_html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="font-family:sans-serif;background:#0a0a0a;color:#fff;padding:40px;">
+<div style="max-width:500px;margin:0 auto;">
+<h1 style="color:#C8FF00;font-size:20px;">Neuer Termin-Anfrage</h1>
+<div style="background:#141414;border:1px solid #1e1e1e;border-radius:12px;padding:24px;margin:16px 0;">
+<p><strong>Datum:</strong> {data.date}</p>
+<p><strong>Uhrzeit:</strong> {data.time}</p>
+<p><strong>Name:</strong> {data.name or '–'}</p>
+<p><strong>E-Mail:</strong> {data.email or '–'}</p>
+<p><strong>Plan:</strong> {data.plan}</p>
+{f'<p><strong>Notiz:</strong> {data.notes}</p>' if data.notes else ''}
+</div>
+<p style="color:#94A3B8;font-size:12px;">Bitte innerhalb von 24h bestätigen.</p>
+</div></body></html>"""
+
+            await asyncio.to_thread(resend.Emails.send, {
+                "from": f"WLADHUB System <{SENDER_EMAIL}>",
+                "to": ["start@aiporate.com"],
+                "subject": f"Neue Termin-Anfrage: {data.name or 'Neuer Kunde'} — {data.date} {data.time}",
+                "html": expert_html,
+            })
+            logger.info(f"Booking notification sent to expert")
+
+            # Confirmation to user
+            if data.email:
+                user_html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="font-family:sans-serif;background:#0a0a0a;color:#fff;padding:40px;">
+<div style="max-width:500px;margin:0 auto;">
+<h1 style="color:#C8FF00;font-size:22px;">Dein Termin ist angefragt!</h1>
+<p style="color:#94A3B8;">Hey {data.name or 'Leader'},</p>
+<div style="background:#141414;border:1px solid #1e1e1e;border-radius:12px;padding:24px;margin:16px 0;">
+<p style="color:#fff;"><strong>Datum:</strong> {data.date}</p>
+<p style="color:#fff;"><strong>Uhrzeit:</strong> {data.time} Uhr</p>
+<p style="color:#fff;"><strong>Typ:</strong> Kostenlose AI Integrity Consultation</p>
+</div>
+<p style="color:#94A3B8;">Wir bestätigen deinen Termin innerhalb von 24 Stunden per E-Mail. Sollte der Zeitslot bereits vergeben sein, schlagen wir dir eine Alternative vor.</p>
+<p style="color:#C8FF00;font-weight:bold;margin-top:20px;">Bis bald!</p>
+<p style="color:#64748B;font-size:11px;margin-top:30px;">WLADHUB · Fast Track Leadership Accelerator</p>
+</div></body></html>"""
+
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+                    "to": [data.email],
+                    "subject": f"Dein Termin: {data.date} um {data.time} Uhr — WLADHUB",
+                    "html": user_html,
+                })
+
+            await db.email_log.insert_one({
+                "type": "booking", "email": data.email or "expert",
+                "sent_at": datetime.now(timezone.utc).isoformat(),
+            })
+        except Exception as e:
+            logger.error(f"Booking email error: {e}")
+
+    return {"success": True, "message": "Termin-Anfrage erhalten. Bestätigung folgt per E-Mail.", "booking_date": data.date, "booking_time": data.time}
+
+
+@api_router.get("/booking/list")
+async def list_bookings():
+    """Admin: List all bookings."""
+    bookings = await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return {"bookings": bookings, "total": len(bookings)}
+
 
 
 @api_router.get("/")
