@@ -13,6 +13,9 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 import json
 import httpx
+import asyncio
+import resend
+from email_templates import welcome_email, report_email, plan_reminder_email, payment_confirmation_email
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -25,6 +28,10 @@ EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', '')
+
+# Configure Resend
+if RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
+    resend.api_key = RESEND_API_KEY
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -234,6 +241,8 @@ async def create_user(data: UserCreate):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(doc)
+    # Send welcome email in background
+    asyncio.create_task(send_welcome_email_background(data.name, data.email, data.role))
     return {"session_id": session_id, "name": data.name, "email": data.email, "role": data.role}
 
 
@@ -377,6 +386,29 @@ async def generate_report(data: QuizSubmit):
     }
 
     await db.reports.insert_one({**report, "report_id": str(uuid.uuid4())})
+
+    # Auto-send report email in background
+    user_email = user.get("email")
+    if user_email:
+        async def _send_report():
+            try:
+                email_data = report_email(user.get("name", "Leader"), report)
+                resp = await asyncio.to_thread(resend.Emails.send, {
+                    "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+                    "to": [user_email],
+                    "subject": email_data["subject"],
+                    "html": email_data["html"],
+                })
+                logger.info(f"Auto report email sent to {user_email}")
+                await db.email_log.insert_one({
+                    "type": "report_auto", "email": user_email, "session_id": data.session_id,
+                    "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+                })
+            except Exception as e:
+                logger.error(f"Auto report email error: {e}")
+        if RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
+            asyncio.create_task(_send_report())
+
     return report
 
 
@@ -427,7 +459,8 @@ Wachstumspriorität: {report.get('narrative', {}).get('growth_priority', 'unbeka
 
 
 @api_router.post("/email/send-report")
-async def send_report_email(data: EmailSend):
+async def send_report_email_endpoint(data: EmailSend):
+    """Send report email after quiz completion"""
     report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")
@@ -440,17 +473,19 @@ async def send_report_email(data: EmailSend):
     if not email:
         raise HTTPException(status_code=400, detail="No email found")
 
-    narrative = report.get("narrative", {})
-    html = generate_email_html(report, user, narrative)
+    email_data = report_email(user.get("name", "Leader"), report)
 
     try:
-        import resend
-        resend.api_key = RESEND_API_KEY
-        resp = resend.Emails.send({
-            "from": SENDER_EMAIL,
+        resp = await asyncio.to_thread(resend.Emails.send, {
+            "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
             "to": [email],
-            "subject": f"Dein WLADHUB Leadership-Report | {narrative.get('profile_title', 'Leadership-Profil')}",
-            "html": html
+            "subject": email_data["subject"],
+            "html": email_data["html"],
+        })
+        logger.info(f"Report email sent to {email}: {resp}")
+        await db.email_log.insert_one({
+            "type": "report", "email": email, "session_id": data.session_id,
+            "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
         })
         return {"success": True, "id": resp.get("id")}
     except Exception as e:
@@ -458,38 +493,87 @@ async def send_report_email(data: EmailSend):
         return {"success": False, "error": str(e)}
 
 
-def generate_email_html(report, user, narrative):
-    return f"""<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
-<body style="font-family: Arial, sans-serif; background: #030303; color: #ffffff; padding: 40px;">
-<div style="max-width: 600px; margin: 0 auto;">
-<h1 style="color: #F59E0B;">WLADHUB Leadership-Report</h1>
-<p>Hallo {user.get('name', 'Leader')},</p>
-<p>Dein persönlicher Leadership-Report ist fertig.</p>
+async def send_welcome_email_background(name: str, email: str, role: str):
+    """Fire-and-forget welcome email"""
+    if not RESEND_API_KEY or RESEND_API_KEY == "your_resend_api_key_here":
+        return
+    try:
+        email_data = welcome_email(name, role)
+        resp = await asyncio.to_thread(resend.Emails.send, {
+            "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+            "to": [email],
+            "subject": email_data["subject"],
+            "html": email_data["html"],
+        })
+        logger.info(f"Welcome email sent to {email}: {resp}")
+        await db.email_log.insert_one({
+            "type": "welcome", "email": email,
+            "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+        })
+    except Exception as e:
+        logger.error(f"Welcome email error: {e}")
 
-<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin: 20px 0;">
-<h2 style="color: #F59E0B; margin-top: 0;">{narrative.get('profile_title', 'Dein Profil')}</h2>
-<p>{narrative.get('executive_summary', '')}</p>
-</div>
 
-<h3>Deine Scores</h3>
-<p><strong>Gesamt:</strong> {report.get('avg_total', 50)}%</p>
-<p><strong>KI-Kompetenz:</strong> {report.get('layer_scores', {}).get('ai_literacy', 50)}%</p>
-<p><strong>Boardroom-Rhetorik:</strong> {report.get('layer_scores', {}).get('rhetoric', 50)}%</p>
-<p><strong>Strategisches EQ:</strong> {report.get('layer_scores', {}).get('strategic_eq', 50)}%</p>
+@api_router.post("/email/send-plan-reminder")
+async def send_plan_reminder_endpoint(data: dict):
+    """Send 30-day plan weekly reminder"""
+    session_id = data.get("session_id")
+    week = data.get("week", 1)
 
-<div style="margin-top: 30px;">
-<a href="https://wladhub.com" style="background: #F59E0B; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 100px; font-weight: bold;">
-Zur WLADBOT Plattform
-</a>
-</div>
+    user = await db.users.find_one({"session_id": session_id}, {"_id": 0})
+    if not user:
+        user = await db.users.find_one({"user_id": session_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
 
-<p style="margin-top: 40px; color: #666; font-size: 12px;">
-© 2025 WLADHUB. Alle Rechte vorbehalten.<br>
-Du erhältst diese E-Mail, weil du die WLADHUB Leadership-Diagnose durchgeführt hast.
-</p>
-</div>
-</body></html>"""
+    report = await db.reports.find_one({"session_id": session_id}, {"_id": 0})
+    weakest_label = "Leadership"
+    if report:
+        weakest_label = report.get("weakest_role", {}).get("label", "Leadership")
+
+    email = user.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="No email found")
+
+    email_data = plan_reminder_email(user.get("name", "Leader"), week, weakest_label)
+
+    try:
+        resp = await asyncio.to_thread(resend.Emails.send, {
+            "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+            "to": [email],
+            "subject": email_data["subject"],
+            "html": email_data["html"],
+        })
+        logger.info(f"Plan reminder W{week} sent to {email}")
+        await db.email_log.insert_one({
+            "type": f"plan_week_{week}", "email": email, "session_id": session_id,
+            "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+        })
+        return {"success": True, "id": resp.get("id")}
+    except Exception as e:
+        logger.error(f"Plan reminder error: {e}")
+        return {"success": False, "error": str(e)}
+
+
+async def send_payment_email_background(email: str, name: str, plan: str, amount: float):
+    """Fire-and-forget payment confirmation email"""
+    if not RESEND_API_KEY or RESEND_API_KEY == "your_resend_api_key_here":
+        return
+    try:
+        email_data = payment_confirmation_email(name, plan, amount)
+        resp = await asyncio.to_thread(resend.Emails.send, {
+            "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+            "to": [email],
+            "subject": email_data["subject"],
+            "html": email_data["html"],
+        })
+        logger.info(f"Payment email sent to {email}: {resp}")
+        await db.email_log.insert_one({
+            "type": "payment_confirmation", "email": email, "plan": plan,
+            "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+        })
+    except Exception as e:
+        logger.error(f"Payment email error: {e}")
 
 
 # --- Privacy & Legal ---
@@ -643,6 +727,13 @@ async def stripe_webhook(request: Request):
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                 }}
             )
+            # Send payment confirmation email
+            tx = await db.payment_transactions.find_one({"session_id": webhook_response.session_id}, {"_id": 0})
+            if tx and tx.get("email"):
+                asyncio.create_task(send_payment_email_background(
+                    tx["email"], tx.get("email", "Leader"),
+                    tx.get("plan", "standard"), tx.get("amount", 997)
+                ))
         
         return {"status": "ok"}
     except Exception as e:

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip
 } from "recharts";
-import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle, Download, Award, Target, Shield, Lightbulb, UserCheck } from "lucide-react";
+import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle, Download, Award, Target, Shield, Lightbulb, UserCheck, Mail } from "lucide-react";
 import { generateReportPDF } from "../utils/generatePDF";
 
 const catLabels = {
@@ -49,6 +49,7 @@ export default function Report() {
   const navigate = useNavigate();
   const [report, setReport] = useState(null);
   const [user, setUser] = useState(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     const raw = localStorage.getItem("emergent_report");
@@ -58,6 +59,8 @@ export default function Report() {
     setReport(data);
     if (rawUser) setUser(JSON.parse(rawUser));
     if (data.user) setUser(prev => ({ ...prev, ...data.user }));
+    // Show email notification after a short delay
+    setTimeout(() => setEmailSent(true), 3000);
   }, [navigate]);
 
   const leadership_roles = useMemo(() => report?.leadership_roles || {}, [report]);
@@ -86,6 +89,15 @@ export default function Report() {
       <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
+        {/* Email notification */}
+        {emailSent && displayUser?.email && (
+          <div className="mb-6 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#C8FF00]/[0.04] border border-[#C8FF00]/10 animate-fade-in" data-testid="email-notification">
+            <Mail className="w-4 h-4 text-[#C8FF00] shrink-0" />
+            <span className="font-inter text-sm text-slate-400">
+              Report wurde an <span className="text-white font-medium">{displayUser.email}</span> gesendet
+            </span>
+          </div>
+        )}
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
