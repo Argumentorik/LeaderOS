@@ -624,9 +624,10 @@ async def delete_user_data(request: Request):
 
 # --- Stripe Payment Packages (server-side only, never from frontend) ---
 PACKAGES = {
+    "starter": {"name": "Starter – Video Lessons + Credits", "amount": 199.00, "currency": "eur", "plan": "starter", "billing": "one_time"},
     "standard_yearly": {"name": "Standard – Leadership System", "amount": 997.00, "currency": "eur", "plan": "standard", "billing": "yearly"},
     "standard_monthly": {"name": "Standard – Leadership System (Monatsrate)", "amount": 83.08, "currency": "eur", "plan": "standard", "billing": "monthly"},
-    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "amount": 4797.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
+    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "amount": 6970.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
 }
 
 class CreateCheckoutRequest(BaseModel):
@@ -781,8 +782,9 @@ async def create_license_key_internal(plan: str, email: str = None, name: str = 
         key = generate_license_key()
 
     plan_config = {
+        "starter": {"name": "Starter – Video Lessons + Credits", "duration_days": 365, "includes_calls": False},
         "standard": {"name": "Standard – Leadership System", "duration_days": 365, "includes_calls": False},
-        "fasttrack": {"name": "Fast Track – Leadership Accelerator", "duration_days": 365, "includes_calls": True},
+        "fasttrack": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "duration_days": 365, "includes_calls": True},
     }
     config = plan_config.get(plan, plan_config["standard"])
 

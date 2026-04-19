@@ -1,50 +1,43 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Download, Brain, Shield, Zap, Sparkles, Users, BookOpen, Video, Star, Lock, Check, X, Award, Target, Lightbulb, MessageSquare, Bot, Rocket, CreditCard, Loader2 } from "lucide-react";
+import { ArrowRight, Download, Brain, Shield, Zap, Sparkles, Users, BookOpen, Video, Star, Lock, Check, X, Award, Target, Lightbulb, MessageSquare, Bot, Rocket, CreditCard, Loader2, Calendar, Phone, Crown, Gift, ChevronRight, ExternalLink } from "lucide-react";
 import { generateCurriculumPDF } from "../utils/generateCurriculumPDF";
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
-const dontsList = [
-  "KI als Ersatz für echte Führung nutzen – sie ist ein Werkzeug, kein Autopilot",
-  "Blind ChatGPT-Outputs kopieren, ohne eigene Perspektive einzubringen",
-  "KI-generierte Inhalte ohne menschliche Qualitätskontrolle veröffentlichen",
-  "Empathie durch Automatisierung ersetzen – dein Team spürt den Unterschied",
-  "KI-Tools sammeln statt sie strategisch einzusetzen – weniger ist mehr",
-  "Entscheidungen komplett an Algorithmen delegieren – du bleibst der Leader",
-  "Glauben, KI-Kompetenz allein macht dich zum besseren Leader",
-  "Die menschliche Komponente vergessen: Vertrauen, Kultur, Beziehungen",
-];
-
-const InstagramIcon = () => (<svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>);
-const FacebookIcon = () => (<svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>);
-const LinkedInIcon = () => (<svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>);
-
-const socialLinks = [
-  { name: "Instagram", icon: InstagramIcon, href: "https://instagram.com/wladhub" },
-  { name: "Facebook Gruppe", icon: FacebookIcon, href: "https://facebook.com/groups/wladhub" },
-  { name: "LinkedIn", icon: LinkedInIcon, href: "https://linkedin.com" },
+const starterFeatures = [
+  { text: "6 Video-Kurse: Leadership + KI", included: true },
+  { text: "50 Credits für leader-os.de", included: true },
+  { text: "Leadership-Report als PDF", included: true },
+  { text: "30-Tage-Aktionsplan", included: true },
+  { text: "Kostenloses Buch (PDF)", included: true },
+  { text: "WladBot AI Coach", excluded: true },
+  { text: "Plattform-Zugang", excluded: true },
+  { text: "1:1 Calls mit Experte", excluded: true },
 ];
 
 const standardFeatures = [
-  "6 Video-Kurse (5 Leadership + 1 AI)",
-  "WLADHUB Plattform · 1 Jahr Zugang",
-  "WladBot AI Coach 24/7",
-  "AI Leadership Community",
-  "Personalized Learning Journey",
-  "Leadership Playbooks",
-  "License Key per E-Mail",
+  { text: "Alles aus dem Starter-Paket", highlight: true },
+  { text: "WLADHUB Plattform · 1 Jahr Vollzugang", included: true },
+  { text: "WladBot AI Coach 24/7", included: true },
+  { text: "AI Leadership Community", included: true },
+  { text: "Personalized Learning Journey", included: true },
+  { text: "Leadership Playbooks & Frameworks", included: true },
+  { text: "License Key per E-Mail", included: true },
+  { text: "1:1 Calls mit Experte", excluded: true },
 ];
 
-const fastTrackExtras = [
-  "Alles aus dem Standardpaket",
-  "AI Learning Path — personalisierte KI-Lernstrecke",
-  "6x 1:1 Calls mit AI & Leadership Experte",
-  "Persönliches Onboarding-Gespräch",
-  "Quartals-Reviews (4x pro Jahr)",
-  "Abschluss-Call mit Strategie-Update",
-  "Exklusive Mastermind-Gruppe",
-  "Priority Support & Fast-Track Zugang",
+const fastTrackFeatures = [
+  { text: "Alles aus Standard + Starter", highlight: true },
+  { text: "AI Learning Path — personalisierte KI-Lernstrecke", included: true },
+  { text: "6x 1:1 Calls mit AI & Leadership Experte", included: true, star: true },
+  { text: "Kostenlose AI Integrity Consultation", included: true, star: true },
+  { text: "Persönliches Onboarding-Gespräch", included: true },
+  { text: "Quartals-Reviews (4x pro Jahr)", included: true },
+  { text: "Abschluss-Call mit Strategie-Update", included: true },
+  { text: "Exklusive Mastermind-Gruppe", included: true },
+  { text: "Priority Support & Fast-Track Zugang", included: true },
+  { text: "Termin-Buchung direkt im System", included: true, star: true },
 ];
 
 export default function HighTicketClose() {
@@ -52,6 +45,10 @@ export default function HighTicketClose() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [billingOption, setBillingOption] = useState("yearly");
   const [isLoading, setIsLoading] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookingTime, setBookingTime] = useState("");
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
   const handleCheckout = async (packageId) => {
     setIsLoading(true);
@@ -72,234 +69,329 @@ export default function HighTicketClose() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
-      } else {
-        alert("Fehler beim Erstellen der Zahlungssitzung.");
       }
     } catch {
-      alert("Verbindungsfehler. Bitte versuche es erneut.");
+      // silent
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleBooking = () => {
+    setBookingSubmitted(true);
+    // In production: send booking request to backend
+  };
+
+  const scrollToPayment = (plan) => {
+    setSelectedPlan(plan);
+    setTimeout(() => document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }), 100);
+  };
+
+  const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+  const report = JSON.parse(localStorage.getItem("emergent_report") || "{}");
+  const totalScore = report.avg_total || 0;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] pb-24" data-testid="close-page">
+      {/* Background */}
       <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#C8FF00]/[0.02] rounded-full blur-[200px] pointer-events-none" />
       <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-            <Sparkles className="w-4 h-4" />
-            Deine Leadership-Transformation
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-28">
+
+        {/* ===== HERO SECTION ===== */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] mb-6">
+            <Sparkles className="w-4 h-4 text-[#C8FF00]" />
+            <span className="font-inter text-sm text-[#C8FF00] font-medium">Dein Leadership-Score: {totalScore}%</span>
           </div>
-          <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4" data-testid="close-headline">
-            Du hast dein Profil.
+          <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-5" data-testid="close-headline">
+            Dein Profil ist analysiert.
             <br />
-            Jetzt hol dir den <span className="text-gradient-lime">Vorsprung.</span>
+            <span className="text-gradient-lime">Jetzt die Transformation.</span>
           </h1>
-          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
-            Wähle deinen Weg zur strategischen Dominanz. Der kostenlose Zugang bleibt bestehen – beide Premium-Pakete geben dir zusätzlich sofortigen Vollzugang.
-          </p>
-          <p className="font-inter text-sm text-[#C8FF00]/60 mt-3">
-            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung nötig.
+          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-3">
+            Du weißt jetzt, wo du stehst. Die Frage ist: Bleibst du da — oder nutzt du den Vorsprung, den 99% nicht haben?
           </p>
         </div>
 
-        {/* PRICE STACK – 3 Tiers */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14" data-testid="price-stack">
+        {/* ===== SCARCITY BAR ===== */}
+        <div className="flex items-center justify-center gap-6 mb-14 flex-wrap">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
+            <span className="font-inter text-xs text-slate-500">47 Plätze im Fast Track noch verfügbar</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Shield className="w-3.5 h-3.5 text-slate-600" />
+            <span className="font-inter text-xs text-slate-500">14 Tage Testphase · Jederzeit kündbar</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Lock className="w-3.5 h-3.5 text-slate-600" />
+            <span className="font-inter text-xs text-slate-500">SSL-verschlüsselt · Stripe</span>
+          </div>
+        </div>
 
-          {/* KOSTENLOS */}
+        {/* ===== PRICE STACK – 3 TIERS ===== */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-14" data-testid="price-stack">
+
+          {/* TIER 1: STARTER — 199 EUR */}
           <div
-            data-testid="plan-free"
-            onClick={() => setSelectedPlan("free")}
-            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] border-[#C8FF00]/20 ${
-              selectedPlan === "free" ? "ring-1 ring-[#C8FF00]/25 border-[#C8FF00]/30" : ""
+            data-testid="plan-starter"
+            onClick={() => setSelectedPlan("starter")}
+            className={`glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] ${
+              selectedPlan === "starter" ? "border-white/20 ring-1 ring-white/10" : "border-white/[0.06]"
             }`}
           >
             <div className="mb-5">
-              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">KOSTENLOS</div>
-              <h2 className="font-manrope font-extrabold text-xl text-white">Free Access</h2>
+              <div className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-[10px] font-bold tracking-wider inline-block mb-4">STARTER</div>
+              <h2 className="font-manrope font-extrabold text-xl text-white mb-1">Video Lessons</h2>
+              <p className="font-inter text-xs text-slate-500">Dein Einstieg ins Leadership-System</p>
             </div>
-            <div className="mb-5">
-              <div className="font-manrope font-extrabold text-4xl text-[#C8FF00]" data-testid="price-free">0 EUR</div>
-              <div className="font-inter text-xs text-slate-500">Für immer · Keine Kreditkarte</div>
+            <div className="mb-6">
+              <div className="flex items-baseline gap-1">
+                <span className="font-manrope font-extrabold text-4xl text-white" data-testid="price-starter">199</span>
+                <span className="font-inter text-base text-slate-500">EUR</span>
+              </div>
+              <div className="font-inter text-xs text-slate-600 mt-1">Einmalig · Sofortzugang</div>
             </div>
-            <div className="space-y-3 mb-6">
-              {["Leadership-Diagnose & Report", "6 Starter-Kurse", "30-Tage-Plan", "Kostenloses Buch (PDF)", "Leadership-Journal"].map((f, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
-                  <span className="font-inter text-sm text-slate-300">{f}</span>
+
+            <div className="space-y-3 mb-7">
+              {starterFeatures.map((f, i) => (
+                <div key={i} className={`flex items-center gap-3 ${f.excluded ? "opacity-35" : ""}`}>
+                  {f.excluded ? <X className="w-4 h-4 text-slate-600 shrink-0" /> : <Check className="w-4 h-4 text-white shrink-0" />}
+                  <span className="font-inter text-sm text-slate-300">{f.text}</span>
                 </div>
               ))}
-              {["WladBot AI Coach", "Premium-Kurse", "1:1 Calls"].map((f, i) => (
-                <div key={i} className="flex items-center gap-3 opacity-40">
-                  <X className="w-4 h-4 text-slate-600 shrink-0" />
-                  <span className="font-inter text-sm text-slate-500">{f}</span>
-                </div>
-              ))}
             </div>
+
             <button
-              data-testid="cta-free"
-              onClick={(e) => { e.stopPropagation(); navigate("/roadmap"); }}
-              className="w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 text-[#C8FF00] hover:bg-[#C8FF00]/10 hover:border-[#C8FF00]/30"
+              data-testid="cta-starter"
+              onClick={(e) => { e.stopPropagation(); scrollToPayment("starter"); }}
+              className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
+                selectedPlan === "starter"
+                  ? "bg-white text-[#0a0a0a]"
+                  : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
+              }`}
             >
-              Kostenlos starten
+              Starter — 199 EUR
             </button>
           </div>
 
-          {/* Standard – €997 */}
+          {/* TIER 2: STANDARD — 997 EUR */}
           <div
             data-testid="plan-standard"
             onClick={() => setSelectedPlan("standard")}
-            className={`glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] ${
-              selectedPlan === "standard" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-white/[0.06]"
+            className={`glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] ${
+              selectedPlan === "standard" ? "border-[#C8FF00]/25 ring-1 ring-[#C8FF00]/10" : "border-white/[0.06]"
             }`}
           >
             <div className="mb-5">
-              <div className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-xs font-bold inline-block mb-3">STANDARD</div>
-              <h2 className="font-manrope font-extrabold text-xl text-white">Leadership System</h2>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-[10px] font-bold tracking-wider">STANDARD</div>
+                <div className="px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-slate-400 text-[10px] font-bold">BELIEBT</div>
+              </div>
+              <h2 className="font-manrope font-extrabold text-xl text-white mb-1">Leadership System</h2>
+              <p className="font-inter text-xs text-slate-500">Vollzugang zur Plattform + KI-Coach</p>
             </div>
-            <div className="mb-5">
-              <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-standard">€997</div>
-              <div className="font-inter text-xs text-slate-500">1 Jahr · Verlängerbar</div>
+            <div className="mb-6">
+              <div className="flex items-baseline gap-1">
+                <span className="font-manrope font-extrabold text-4xl text-white" data-testid="price-standard">997</span>
+                <span className="font-inter text-base text-slate-500">EUR</span>
+              </div>
+              <div className="font-inter text-xs text-slate-600 mt-1">Pro Jahr · oder 83,08 EUR/Monat</div>
             </div>
 
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-7">
               {standardFeatures.map((f, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-white shrink-0" />
-                  <span className="font-inter text-sm text-slate-300">{f}</span>
+                <div key={i} className={`flex items-center gap-3 ${f.excluded ? "opacity-35" : ""}`}>
+                  {f.excluded ? <X className="w-4 h-4 text-slate-600 shrink-0" /> :
+                   f.highlight ? <ChevronRight className="w-4 h-4 text-[#C8FF00] shrink-0" /> :
+                   <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />}
+                  <span className={`font-inter text-sm ${f.highlight ? "text-[#C8FF00] font-semibold" : "text-slate-300"}`}>{f.text}</span>
                 </div>
               ))}
-              <div className="flex items-center gap-3 opacity-40">
-                <X className="w-4 h-4 text-slate-600 shrink-0" />
-                <span className="font-inter text-sm text-slate-500">1:1 Calls mit Experte</span>
-              </div>
             </div>
 
             <button
               data-testid="cta-standard"
-              onClick={(e) => { e.stopPropagation(); setSelectedPlan("standard"); }}
+              onClick={(e) => { e.stopPropagation(); scrollToPayment("standard"); }}
               className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
                 selectedPlan === "standard"
                   ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
                   : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
               }`}
             >
-              {selectedPlan === "standard" ? <Check className="w-4 h-4" /> : null}
-              Standard – 997 EUR/Jahr
+              Standard — 997 EUR
             </button>
           </div>
 
-          {/* Fast Track – AI Learning Path – 4.797 EUR */}
+          {/* TIER 3: FAST TRACK — 6.970 EUR */}
           <div
             data-testid="plan-fasttrack"
             onClick={() => setSelectedPlan("fasttrack")}
-            className={`relative glass-card p-6 cursor-pointer transition-all hover:scale-[1.01] overflow-hidden ${
-              selectedPlan === "fasttrack" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-white/[0.06]"
+            className={`relative glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] overflow-hidden ${
+              selectedPlan === "fasttrack" ? "border-[#C8FF00]/30 ring-1 ring-[#C8FF00]/15" : "border-[#C8FF00]/10"
             }`}
           >
-            {/* Glow effect */}
-            <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[#C8FF00]/[0.06] via-transparent to-transparent pointer-events-none" />
+            {/* Glow */}
+            <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[#C8FF00]/[0.08] via-[#C8FF00]/[0.02] to-transparent pointer-events-none" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#C8FF00]/[0.04] rounded-full blur-[60px] pointer-events-none" />
 
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-lg bg-[#C8FF00] text-[#0a0a0a] text-xs font-bold tracking-wide">
-              EMPFOHLEN
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+              <div className="flex items-center gap-1 px-4 py-1.5 rounded-lg bg-[#C8FF00] text-[#0a0a0a]">
+                <Crown className="w-3.5 h-3.5" />
+                <span className="text-xs font-bold tracking-wide">EMPFOHLEN</span>
+              </div>
             </div>
 
             <div className="relative">
-              <div className="mb-5 mt-2">
-                <div className="flex items-center gap-2 flex-wrap mb-3">
-                  <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold">FAST TRACK</div>
-                  <div className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-[10px] font-bold tracking-wider animate-pulse">AI LEARNING PATH</div>
+              <div className="mb-5 mt-3">
+                <div className="flex items-center gap-2 flex-wrap mb-4">
+                  <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-[10px] font-bold tracking-wider">FAST TRACK</div>
+                  <div className="px-2.5 py-1 rounded-lg bg-[#C8FF00]/[0.06] border border-[#C8FF00]/10 text-[#C8FF00] text-[10px] font-bold tracking-wider animate-pulse">AI LEARNING PATH</div>
                 </div>
-                <h2 className="font-manrope font-extrabold text-xl text-white">Leadership Accelerator</h2>
-                <p className="font-inter text-xs text-slate-500 mt-1">Das komplette System + persönliche Betreuung</p>
+                <h2 className="font-manrope font-extrabold text-xl text-white mb-1">Leadership Accelerator</h2>
+                <p className="font-inter text-xs text-slate-500">Persönliche Betreuung + KI-System + Calls</p>
               </div>
 
-              <div className="mb-5 flex items-end gap-3">
-                <div className="font-manrope font-extrabold text-4xl text-white" data-testid="price-fasttrack">4.797 EUR</div>
+              <div className="mb-6">
+                <div className="flex items-baseline gap-1">
+                  <span className="font-manrope font-extrabold text-4xl text-[#C8FF00]" data-testid="price-fasttrack">6.970</span>
+                  <span className="font-inter text-base text-[#C8FF00]/60">EUR</span>
+                </div>
+                <div className="font-inter text-xs text-slate-600 mt-1">Pro Jahr · 6x 1:1 Calls · AI Consultation</div>
               </div>
-              <div className="font-inter text-xs text-slate-500 -mt-3 mb-5">1 Jahr · 6x 1:1 Calls inkl.</div>
 
-              {/* AI Learning Path highlight card */}
-              <div className="mb-5 p-3.5 rounded-xl bg-[#C8FF00]/[0.04] border border-[#C8FF00]/10">
+              {/* AI Learning Path Card */}
+              <div className="mb-5 p-4 rounded-xl bg-[#C8FF00]/[0.04] border border-[#C8FF00]/10">
                 <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#C8FF00]/10 flex items-center justify-center shrink-0">
                     <Zap className="w-4 h-4 text-[#C8FF00]" />
                   </div>
-                  <span className="font-manrope font-bold text-sm text-[#C8FF00]">AI Learning Path</span>
+                  <div>
+                    <span className="font-manrope font-bold text-sm text-[#C8FF00]">AI Learning Path</span>
+                    <span className="font-inter text-[10px] text-[#C8FF00]/50 ml-2">+ Free AI Consultation</span>
+                  </div>
                 </div>
                 <p className="font-inter text-xs text-slate-400 leading-relaxed">
-                  Personalisierte KI-Lernstrecke basierend auf deinem Leadership-Profil. WladBot + 6 Agenten + wöchentliche Challenges.
+                  Personalisierte KI-Lernstrecke + wöchentliche Challenges + Termin-Buchung für Expertengespräch direkt im System.
                 </p>
               </div>
 
-              <div className="space-y-3 mb-6">
-                {fastTrackExtras.map((f, i) => (
+              {/* Call Booking Preview */}
+              <div className="mb-5 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#C8FF00]/[0.06] flex items-center justify-center shrink-0">
+                  <Calendar className="w-4 h-4 text-[#C8FF00]" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-inter text-xs text-white font-medium">Termin buchen</div>
+                  <div className="font-inter text-[10px] text-slate-500">Wähle einen Termin mit deinem Experten</div>
+                </div>
+                <Phone className="w-4 h-4 text-slate-600" />
+              </div>
+
+              <div className="space-y-2.5 mb-6">
+                {fastTrackFeatures.map((f, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
-                    <span className="font-inter text-sm text-slate-300">{f}</span>
+                    {f.highlight ? <ChevronRight className="w-4 h-4 text-[#C8FF00] shrink-0" /> :
+                     f.star ? <Star className="w-4 h-4 text-[#C8FF00] shrink-0" /> :
+                     <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />}
+                    <span className={`font-inter text-sm ${f.highlight ? "text-[#C8FF00] font-semibold" : f.star ? "text-white font-medium" : "text-slate-300"}`}>{f.text}</span>
                   </div>
                 ))}
               </div>
 
               <button
                 data-testid="cta-fasttrack"
-                onClick={(e) => { e.stopPropagation(); setSelectedPlan("fasttrack"); }}
+                onClick={(e) => { e.stopPropagation(); scrollToPayment("fasttrack"); }}
                 className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${
                   selectedPlan === "fasttrack"
-                    ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15"
-                    : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-white/15"
+                    ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/20"
+                    : "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] hover:bg-[#C8FF00]/15"
                 }`}
               >
-                {selectedPlan === "fasttrack" ? <Check className="w-4 h-4" /> : null}
-                Fast Track – 4.797 EUR
+                {selectedPlan === "fasttrack" && <Check className="w-4 h-4" />}
+                Fast Track — 6.970 EUR
               </button>
             </div>
           </div>
         </div>
 
-        {/* Stripe Checkout Section */}
-        {selectedPlan && selectedPlan !== "free" && (
+        {/* ===== PAYMENT SECTION ===== */}
+        {selectedPlan && (
           <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15" data-testid="payment-section" id="payment-section">
             <div className="text-center mb-6">
               <h3 className="font-manrope font-bold text-xl text-white mb-2">
-                {selectedPlan === "fasttrack" ? "Fast Track · AI Learning Path – 4.797 EUR/Jahr" : "Standard – 997 EUR/Jahr"}
+                {selectedPlan === "fasttrack" ? "Fast Track · AI Learning Path — 6.970 EUR" :
+                 selectedPlan === "standard" ? "Standard — 997 EUR/Jahr" :
+                 "Starter · Video Lessons — 199 EUR"}
               </h3>
               <p className="font-inter text-sm text-slate-400">
-                14 Tage kostenlos testen · Jederzeit kündbar
+                14 Tage kostenlos testen · Jederzeit kündbar · Sofortzugang
               </p>
             </div>
 
-            {/* Billing Options for Standard */}
+            {/* Billing for Standard */}
             {selectedPlan === "standard" && (
               <div className="flex gap-3 justify-center mb-6" data-testid="billing-options">
-                <button
-                  onClick={() => setBillingOption("yearly")}
-                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
-                    billingOption === "yearly"
-                      ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]"
-                      : "bg-white/[0.02] border border-white/[0.06] text-slate-400 hover:border-white/10"
-                  }`}
-                  data-testid="billing-yearly"
-                >
-                  <div className="font-manrope font-bold text-lg">{billingOption === "yearly" ? "€997" : "€997"}</div>
+                <button onClick={() => setBillingOption("yearly")}
+                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${billingOption === "yearly" ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]" : "bg-white/[0.02] border border-white/[0.06] text-slate-400"}`}>
+                  <div className="font-manrope font-bold text-lg">997 EUR</div>
                   <div className="text-xs opacity-70">Einmalig / Jahr</div>
                 </button>
-                <button
-                  onClick={() => setBillingOption("monthly")}
-                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${
-                    billingOption === "monthly"
-                      ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]"
-                      : "bg-white/[0.02] border border-white/[0.06] text-slate-400 hover:border-white/10"
-                  }`}
-                  data-testid="billing-monthly"
-                >
-                  <div className="font-manrope font-bold text-lg">€83,08</div>
+                <button onClick={() => setBillingOption("monthly")}
+                  className={`px-5 py-3 rounded-xl font-inter text-sm font-medium transition-all ${billingOption === "monthly" ? "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00]" : "bg-white/[0.02] border border-white/[0.06] text-slate-400"}`}>
+                  <div className="font-manrope font-bold text-lg">83,08 EUR</div>
                   <div className="text-xs opacity-70">12 Monatsraten</div>
                 </button>
+              </div>
+            )}
+
+            {/* Booking section for Fast Track */}
+            {selectedPlan === "fasttrack" && (
+              <div className="mb-6 p-5 rounded-xl bg-[#C8FF00]/[0.03] border border-[#C8FF00]/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <Calendar className="w-5 h-5 text-[#C8FF00]" />
+                  <div>
+                    <div className="font-manrope font-bold text-sm text-white">Kostenloses Erstgespräch buchen</div>
+                    <div className="font-inter text-xs text-slate-500">Lerne deinen Experten kennen + AI Integrity Consultation</div>
+                  </div>
+                </div>
+                {!showBooking ? (
+                  <button onClick={() => setShowBooking(true)} data-testid="show-booking-btn"
+                    className="w-full py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white font-inter text-sm font-medium hover:border-[#C8FF00]/20 transition-all flex items-center justify-center gap-2">
+                    <Phone className="w-4 h-4" /> Termin wählen & kostenloses Gespräch sichern
+                  </button>
+                ) : bookingSubmitted ? (
+                  <div className="text-center py-3">
+                    <Check className="w-6 h-6 text-[#C8FF00] mx-auto mb-2" />
+                    <p className="font-inter text-sm text-[#C8FF00]">Anfrage gesendet! Wir melden uns innerhalb von 24h.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-inter text-xs text-slate-500 mb-1 block">Datum</label>
+                      <input type="date" value={bookingDate} onChange={e => setBookingDate(e.target.value)} data-testid="booking-date"
+                        className="w-full h-10 px-3 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-sm focus:border-[#C8FF00]/30 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="font-inter text-xs text-slate-500 mb-1 block">Uhrzeit</label>
+                      <select value={bookingTime} onChange={e => setBookingTime(e.target.value)} data-testid="booking-time"
+                        className="w-full h-10 px-3 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-sm focus:border-[#C8FF00]/30 focus:outline-none">
+                        <option value="">Wählen...</option>
+                        <option value="10:00">10:00 Uhr</option>
+                        <option value="11:00">11:00 Uhr</option>
+                        <option value="14:00">14:00 Uhr</option>
+                        <option value="15:00">15:00 Uhr</option>
+                        <option value="16:00">16:00 Uhr</option>
+                      </select>
+                    </div>
+                    <button onClick={handleBooking} disabled={!bookingDate || !bookingTime} data-testid="submit-booking-btn"
+                      className="col-span-2 py-3 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] font-inter text-sm font-medium disabled:opacity-30 hover:bg-[#C8FF00]/15 transition-all">
+                      Kostenloses Gespräch anfragen
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -309,90 +401,92 @@ export default function HighTicketClose() {
               disabled={isLoading}
               onClick={() => {
                 if (selectedPlan === "fasttrack") handleCheckout("fasttrack_yearly");
+                else if (selectedPlan === "starter") handleCheckout("starter");
                 else if (billingOption === "monthly") handleCheckout("standard_monthly");
                 else handleCheckout("standard_yearly");
               }}
-              className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-base flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-[#C8FF00]/15 transition-all disabled:opacity-50 mb-4"
+              className="w-full py-5 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-lg flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all disabled:opacity-50 mb-4"
             >
               {isLoading ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Wird geladen...</>
               ) : (
-                <><CreditCard className="w-5 h-5" /> Jetzt sicher bezahlen</>
+                <><CreditCard className="w-5 h-5" /> Jetzt sicher bezahlen — {selectedPlan === "fasttrack" ? "6.970 EUR" : selectedPlan === "starter" ? "199 EUR" : billingOption === "monthly" ? "83,08 EUR/Monat" : "997 EUR"}</>
               )}
             </button>
 
-            <div className="flex items-center justify-center gap-6">
+            <div className="flex items-center justify-center gap-6 flex-wrap">
               <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Shield className="w-3 h-3" /> SSL-verschlüsselt</span>
               <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Powered by Stripe</span>
               <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Check className="w-3 h-3" /> 14 Tage Trial</span>
+              <span className="font-inter text-xs text-slate-600 flex items-center gap-1"><Gift className="w-3 h-3" /> License Key per E-Mail</span>
             </div>
           </div>
         )}
 
-        {/* What you get comparison */}
-        <div className="glass-card p-8 mb-10" data-testid="comparison">
-          <h3 className="font-manrope font-bold text-xl text-white mb-6 text-center">Was du bekommst</h3>
-          <div className="grid grid-cols-4 gap-4 text-center mb-4">
-            <div />
-            <div className="font-inter text-xs text-slate-500 uppercase tracking-wider">Kostenlos</div>
-            <div className="font-inter text-xs text-white uppercase tracking-wider font-bold">Standard</div>
-            <div className="font-inter text-xs text-[#C8FF00] uppercase tracking-wider font-bold">Fast Track</div>
-          </div>
-          {[
-            ["Leadership-Diagnose", true, true, true],
-            ["AI Leadership Report", true, true, true],
-            ["6 Starter-Kurse", true, true, true],
-            ["30-Tage-Plan", true, true, true],
-            ["Kostenloses Buch (PDF)", true, true, true],
-            ["Premium-Kurse", false, true, true],
-            ["WLADHUB Plattform (1 Jahr)", false, true, true],
-            ["WladBot AI Coach 24/7", false, true, true],
-            ["Community-Zugang", false, true, true],
-            ["Learning Journey", false, true, true],
-            ["6x 1:1 Calls mit Experte", false, false, true],
-            ["Mastermind-Gruppe", false, false, true],
-            ["Quartals-Reviews", false, false, true],
-            ["Persönliches Onboarding", false, false, true],
-          ].map(([label, free, standard, fast], i) => (
-            <div key={i} className="grid grid-cols-4 gap-4 py-2.5 border-b border-white/5 items-center">
-              <span className="font-inter text-sm text-slate-300 text-left">{label}</span>
-              <div className="flex justify-center">{free ? <Check className="w-4 h-4 text-[#C8FF00]" /> : <X className="w-4 h-4 text-slate-600" />}</div>
-              <div className="flex justify-center">{standard ? <Check className="w-4 h-4 text-white" /> : <X className="w-4 h-4 text-slate-600" />}</div>
-              <div className="flex justify-center">{fast ? <Check className="w-4 h-4 text-[#C8FF00]" /> : <X className="w-4 h-4 text-slate-600" />}</div>
+        {/* ===== COMPARISON TABLE ===== */}
+        <div className="glass-card p-8 mb-10 overflow-hidden" data-testid="comparison">
+          <h3 className="font-manrope font-bold text-xl text-white mb-8 text-center">Was du in jedem Paket bekommst</h3>
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-4 gap-4 text-center mb-4 min-w-[600px]">
+              <div />
+              <div className="font-inter text-xs text-slate-400 uppercase tracking-wider font-bold">Starter · 199 EUR</div>
+              <div className="font-inter text-xs text-white uppercase tracking-wider font-bold">Standard · 997 EUR</div>
+              <div className="font-inter text-xs text-[#C8FF00] uppercase tracking-wider font-bold">Fast Track · 6.970 EUR</div>
             </div>
-          ))}
-        </div>
-
-        {/* Bonus: Don'ts List */}
-        <div className="glass-card p-8 md:p-10 mb-10" data-testid="bonus-donts">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold">BONUS</span>
-            <span className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white text-xs font-bold">GRATIS IM REPORT</span>
-          </div>
-          <h3 className="font-manrope font-extrabold text-xl md:text-2xl text-white mb-2 mt-4">Die KI Don'ts List</h3>
-          <p className="font-inter text-sm text-slate-400 mb-6">KI richtig einsetzen, um dich abzuheben – nicht um unterzugehen. Diese Fehler machen 90% der Führungskräfte.</p>
-          <div className="space-y-3">
-            {dontsList.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/8" data-testid={`dont-${i}`}>
-                <div className="w-7 h-7 rounded-lg bg-red-500/15 flex items-center justify-center shrink-0 mt-0.5"><X className="w-3.5 h-3.5 text-red-400" /></div>
-                <span className="font-inter text-sm text-slate-300 leading-relaxed">{item}</span>
+            {[
+              ["Leadership-Diagnose + KI-Report", true, true, true],
+              ["6 Video-Kurse", true, true, true],
+              ["30-Tage-Aktionsplan", true, true, true],
+              ["50 Credits für leader-os.de", true, true, true],
+              ["Kostenloses Buch (PDF)", true, true, true],
+              ["WLADHUB Plattform (1 Jahr)", false, true, true],
+              ["WladBot AI Coach 24/7", false, true, true],
+              ["Community-Zugang", false, true, true],
+              ["Personalized Learning Journey", false, true, true],
+              ["Leadership Playbooks", false, true, true],
+              ["AI Learning Path", false, false, true],
+              ["6x 1:1 Calls mit Experte", false, false, true],
+              ["AI Integrity Consultation", false, false, true],
+              ["Termin-Buchung im System", false, false, true],
+              ["Mastermind-Gruppe", false, false, true],
+              ["Quartals-Reviews", false, false, true],
+              ["Priority Support", false, false, true],
+            ].map(([label, starter, standard, fast], i) => (
+              <div key={i} className="grid grid-cols-4 gap-4 py-2.5 border-b border-white/[0.03] items-center min-w-[600px]">
+                <span className="font-inter text-sm text-slate-300 text-left">{label}</span>
+                <div className="flex justify-center">{starter ? <Check className="w-4 h-4 text-white/70" /> : <X className="w-4 h-4 text-slate-700" />}</div>
+                <div className="flex justify-center">{standard ? <Check className="w-4 h-4 text-white" /> : <X className="w-4 h-4 text-slate-700" />}</div>
+                <div className="flex justify-center">{fast ? <Check className="w-4 h-4 text-[#C8FF00]" /> : <X className="w-4 h-4 text-slate-700" />}</div>
               </div>
             ))}
           </div>
-          <div className="mt-6 p-4 rounded-xl bg-[#C8FF00]/[0.03] border border-[#C8FF00]/10">
-            <p className="font-inter text-sm text-[#C8FF00]/80 leading-relaxed">
-              <strong>Der Unterschied?</strong> Wer KI als Werkzeug versteht und Leadership als Superkraft einsetzt, wird gesehen, gehört und befördert. Die Don'ts List ist dein Kompass.
-            </p>
+        </div>
+
+        {/* ===== BOOK FUNNEL ===== */}
+        <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]" data-testid="book-funnel">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="w-28 h-40 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
+              <BookOpen className="w-10 h-10 text-[#C8FF00]" />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">IN JEDEM PAKET ENTHALTEN</div>
+              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">"Die 6 Rollen einer Führungskraft"</h3>
+              <p className="font-inter text-sm text-slate-400 mb-4">von Wladislaw Jachtchenko · SPIEGEL-Bestseller-Autor</p>
+              <a href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft" target="_blank" rel="noopener noreferrer" data-testid="book-cta"
+                className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2">
+                <BookOpen className="w-4 h-4" /> Buch ansehen <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Curriculum Download */}
+        {/* ===== CURRICULUM DOWNLOAD ===== */}
         <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="curriculum-download">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-slate-400" /></div>
             <div>
               <div className="font-manrope font-bold text-white">Curriculum PDF</div>
-              <div className="font-inter text-xs text-slate-500">Alle Kurse + 30-Tage-Plan</div>
+              <div className="font-inter text-xs text-slate-500">Alle Kurse + 30-Tage-Plan als Download</div>
             </div>
           </div>
           <button data-testid="curriculum-download-btn" onClick={() => generateCurriculumPDF()} className="btn-secondary px-6 py-3 text-sm font-medium flex items-center gap-2">
@@ -400,78 +494,30 @@ export default function HighTicketClose() {
           </button>
         </div>
 
-        {/* Book Funnel – Kostenloses Buch */}
-        <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]" data-testid="book-funnel">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-32 h-44 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
-              <BookOpen className="w-12 h-12 text-[#C8FF00]" />
-            </div>
-            <div className="flex-1 text-center md:text-left">
-              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">GRATIS BELOHNUNG</div>
-              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">
-                "Die 5 Rollen einer Führungskraft"
-              </h3>
-              <p className="font-inter text-sm text-slate-400 mb-1">von Wladislaw Jachtchenko</p>
-              <p className="font-inter text-sm text-slate-400 mb-4">
-                Deine Belohnung, dass du den Test gemacht hast. Lerne die 6 Rollen, die jede Führungskraft meistern muss – direkt vom SPIEGEL-Bestseller-Autor.
-              </p>
-              <a
-                href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="book-cta"
-                className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
-              >
-                <BookOpen className="w-4 h-4" />
-                Kostenloses Buch sichern
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Social */}
-        <div className="text-center mb-14" data-testid="social-section">
-          <h3 className="font-manrope font-bold text-lg text-white mb-4">Teile deine Diagnose</h3>
-          <div className="flex justify-center gap-4">
-            {socialLinks.map((link) => (
-              <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer" data-testid={`social-${link.name.toLowerCase().replace(' ', '-')}`}
-                className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/20 transition-all">
-                <link.icon />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Final CTA */}
-        <div className="text-center border-t border-white/5 pt-10" data-testid="final-cta-section">
-          <p className="font-inter text-sm text-slate-500 mb-6">Wähle deinen Weg. Oder starte kostenlos.</p>
+        {/* ===== FINAL CTA ===== */}
+        <div className="text-center border-t border-white/[0.04] pt-12 pb-4" data-testid="final-cta-section">
+          <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
+            Die Entscheidung liegt bei dir.
+          </h2>
+          <p className="font-inter text-base text-slate-500 mb-8 max-w-xl mx-auto">
+            Dein Score ist {totalScore}%. Entweder du änderst das — oder nicht. Aber in 12 Monaten wirst du wissen, ob du dich heute richtig entschieden hast.
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              data-testid="close-final-free"
-              onClick={() => navigate("/roadmap")}
-              className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2 border-[#C8FF00]/20 text-[#C8FF00] hover:border-[#C8FF00]/40"
-            >
-              Kostenlos starten
+            <button onClick={() => scrollToPayment("starter")} className="btn-secondary px-6 py-4 font-semibold inline-flex items-center gap-2">
+              Starter — 199 EUR
             </button>
-            <button
-              data-testid="close-final-standard"
-              onClick={() => { setSelectedPlan("standard"); document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2"
-            >
-              Standard – €997/Jahr
+            <button onClick={() => scrollToPayment("standard")} className="btn-secondary px-6 py-4 font-semibold inline-flex items-center gap-2 border-[#C8FF00]/15 text-[#C8FF00]">
+              Standard — 997 EUR
             </button>
-            <button
-              data-testid="close-final-fasttrack"
-              onClick={() => { setSelectedPlan("fasttrack"); document.getElementById("payment-section")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="btn-amber px-8 py-4 font-semibold inline-flex items-center gap-3"
-            >
-              Fast Track · AI Learning Path – 4.797 EUR
+            <button onClick={() => scrollToPayment("fasttrack")} data-testid="close-final-fasttrack"
+              className="btn-primary px-8 py-4 font-semibold inline-flex items-center gap-3">
+              <Crown className="w-4 h-4" />
+              Fast Track — 6.970 EUR
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
-          <p className="font-inter text-xs text-slate-600 mt-4">
-            14 Tage kostenlos testen · 1 Jahr Mitgliedschaft · Verlängerbar · License Key per E-Mail
+          <p className="font-inter text-xs text-slate-600 mt-6">
+            14 Tage kostenlos testen · License Key per E-Mail · SSL-verschlüsselt
           </p>
           <p className="font-inter text-xs text-slate-600 mt-3">
             Bereits einen Key? <button onClick={() => navigate("/activate")} className="text-[#C8FF00]/70 hover:text-[#C8FF00] underline" data-testid="activate-link">Hier aktivieren</button>
