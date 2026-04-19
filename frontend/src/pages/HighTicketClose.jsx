@@ -70,8 +70,8 @@ export default function HighTicketClose() {
       if (data.url) {
         window.location.href = data.url;
       }
-    } catch {
-      // silent
+    } catch (err) {
+      console.error("Checkout error:", err);
     } finally {
       setIsLoading(false);
     }

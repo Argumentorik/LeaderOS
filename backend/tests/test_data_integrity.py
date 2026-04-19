@@ -286,7 +286,7 @@ class TestLicenseKeyActivation:
         assert activate_response.status_code == 200, f"Activation failed: {activate_response.text}"
         
         data = activate_response.json()
-        assert data["success"] == True, "Activation should succeed"
+        assert data["success"] is True, "Activation should succeed"
         assert "redirect_url" in data, "redirect_url missing from response"
         assert data["redirect_url"] == "https://leader-os.de", f"redirect_url should be leader-os.de, got: {data['redirect_url']}"
         assert "plan" in data
@@ -448,7 +448,7 @@ class TestFullUserJourney:
                 break
         
         assert test_user is not None, f"Test user not found in admin users list"
-        assert test_user["has_report"] == True, f"has_report should be True for user with report"
+        assert test_user["has_report"] is True, f"has_report should be True for user with report"
         assert test_user["name"] == user_payload["name"]
         
         print(f"Step 3: User found in admin with has_report=True")

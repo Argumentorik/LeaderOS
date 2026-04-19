@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, FileText, CreditCard, Key, Mail, TrendingUp, ArrowRight, Plus, X, Check, Loader2, RefreshCw, Trash2 } from "lucide-react";
 
@@ -28,7 +28,7 @@ export default function Admin() {
     if (password === ADMIN_PASS) setAuthenticated(true);
   };
 
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
       const [s, k, u, t, em] = await Promise.all([
@@ -45,9 +45,9 @@ export default function Admin() {
       setEmails(em.emails || []);
     } catch (e) { console.error(e); }
     setLoading(false);
-  };
+  }, []);
 
-  useEffect(() => { if (authenticated) fetchAll(); }, [authenticated]);
+  useEffect(() => { if (authenticated) fetchAll(); }, [authenticated, fetchAll]);
 
   const createKey = async () => {
     const res = await fetch(`${API}/api/license/create`, {

@@ -43,6 +43,7 @@ export default function PaymentSuccess() {
       }
     };
     poll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
   return (

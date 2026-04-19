@@ -138,7 +138,7 @@ export default function Roadmap() {
         }
       }
     } catch (err) {
-      console.error("Failed to parse report from localStorage:", err);
+      // Report parsing is non-critical, continue with defaults
     }
   }, []);
 

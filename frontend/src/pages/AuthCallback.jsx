@@ -58,10 +58,11 @@ export default function AuthCallback() {
     };
 
     processAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-[#030303] flex items-center justify-center" data-testid="auth-callback">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center" data-testid="auth-callback">
       <div className="text-center">
         <div className="relative w-16 h-16 mx-auto mb-6">
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#C8FF00]/20 to-[#C8FF00]/10 animate-pulse" />

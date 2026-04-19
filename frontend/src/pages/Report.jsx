@@ -59,9 +59,8 @@ export default function Report() {
     setReport(data);
     if (rawUser) setUser(JSON.parse(rawUser));
     if (data.user) setUser(prev => ({ ...prev, ...data.user }));
-    // Show email notification after a short delay
     setTimeout(() => setEmailSent(true), 3000);
-  }, [navigate]);
+  }, [navigate, setReport, setUser, setEmailSent]);
 
   const leadership_roles = useMemo(() => report?.leadership_roles || {}, [report]);
 

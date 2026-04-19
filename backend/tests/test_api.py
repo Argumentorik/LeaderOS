@@ -233,7 +233,7 @@ class TestEmailSend:
         assert resp.status_code == 200
         data = resp.json()
         assert "success" in data
-        assert data["success"] == False  # No Resend key configured
+        assert data["success"] is False  # No Resend key configured
         assert "message" in data
 
 

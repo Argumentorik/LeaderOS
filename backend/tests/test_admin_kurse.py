@@ -238,7 +238,7 @@ class TestLicenseKeyEndpoints:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["success"] == True
+        assert data["success"] is True
         print(f"PASSED: Revoked license key: {key}")
 
 

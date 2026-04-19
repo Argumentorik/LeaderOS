@@ -150,9 +150,9 @@ export default function Quiz() {
   const [showWladBot, setShowWladBot] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("emergent_user");
-    if (!user) { navigate("/diagnose"); return; }
-    const userData = JSON.parse(user);
+    const stored = localStorage.getItem("emergent_user");
+    if (!stored) { navigate("/diagnose"); return; }
+    const userData = JSON.parse(stored);
     const role = userData.role || 'selbststaendige';
     setQuestions(getQuestionsForRole(role));
   }, [navigate]);
