@@ -442,6 +442,9 @@ export default function HighTicketClose() {
           <p className="font-inter text-xs text-slate-600 mt-4">
             14 Tage kostenlos testen · 1 Jahr Mitgliedschaft · Verlängerbar · License Key per E-Mail
           </p>
+          <p className="font-inter text-xs text-slate-600 mt-3">
+            Bereits einen Key? <button onClick={() => navigate("/activate")} className="text-[#C8FF00]/70 hover:text-[#C8FF00] underline" data-testid="activate-link">Hier aktivieren</button>
+          </p>
         </div>
       </div>
     </div>

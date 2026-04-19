@@ -10,6 +10,7 @@ import Report from "./pages/Report";
 import Roadmap from "./pages/Roadmap";
 import HighTicketClose from "./pages/HighTicketClose";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import ActivateKey from "./pages/ActivateKey";
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
 import AICoach from "./components/AICoach";
@@ -44,6 +45,7 @@ function AppContent() {
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/close" element={<HighTicketClose />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/activate" element={<ActivateKey />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>

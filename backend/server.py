@@ -66,6 +66,16 @@ class CoachMessage(BaseModel):
 class EmailSend(BaseModel):
     session_id: str
 
+class LicenseKeyActivate(BaseModel):
+    license_key: str
+    email: Optional[str] = None
+
+class LicenseKeyCreate(BaseModel):
+    plan: str  # "standard" or "fasttrack"
+    email: Optional[str] = None
+    name: Optional[str] = None
+    notes: Optional[str] = None
+
 class AuthSession(BaseModel):
     session_id: str
 
@@ -727,18 +737,186 @@ async def stripe_webhook(request: Request):
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                 }}
             )
-            # Send payment confirmation email
+            # Auto-generate license key + send email
             tx = await db.payment_transactions.find_one({"session_id": webhook_response.session_id}, {"_id": 0})
-            if tx and tx.get("email"):
-                asyncio.create_task(send_payment_email_background(
-                    tx["email"], tx.get("email", "Leader"),
-                    tx.get("plan", "standard"), tx.get("amount", 997)
-                ))
+            if tx:
+                plan = tx.get("plan", "standard")
+                email = tx.get("email")
+                key = await create_license_key_internal(plan=plan, email=email, source="stripe")
+                # Update transaction with key
+                await db.payment_transactions.update_one(
+                    {"session_id": webhook_response.session_id},
+                    {"$set": {"license_key": key}}
+                )
+                if email:
+                    asyncio.create_task(send_payment_email_background(email, email, plan, tx.get("amount", 997)))
         
         return {"status": "ok"}
     except Exception as e:
         logger.error(f"Webhook error: {e}")
         return {"status": "error", "message": str(e)}
+
+
+import secrets
+import string
+
+
+def generate_license_key() -> str:
+    """Generate a WLAD-XXXX-XXXX-XXXX format license key."""
+    chars = string.ascii_uppercase + string.digits
+    parts = [''.join(secrets.choice(chars) for _ in range(4)) for _ in range(3)]
+    return f"WLAD-{parts[0]}-{parts[1]}-{parts[2]}"
+
+
+async def create_license_key_internal(plan: str, email: str = None, name: str = None, source: str = "stripe", notes: str = None) -> str:
+    """Create a license key and store in DB. Returns the key."""
+    key = generate_license_key()
+    # Ensure uniqueness
+    while await db.license_keys.find_one({"key": key}):
+        key = generate_license_key()
+
+    plan_config = {
+        "standard": {"name": "Standard – Leadership System", "duration_days": 365, "includes_calls": False},
+        "fasttrack": {"name": "Fast Track – Leadership Accelerator", "duration_days": 365, "includes_calls": True},
+    }
+    config = plan_config.get(plan, plan_config["standard"])
+
+    doc = {
+        "key": key,
+        "plan": plan,
+        "plan_name": config["name"],
+        "status": "active",  # active, used, revoked, expired
+        "email": email,
+        "name": name,
+        "source": source,
+        "notes": notes,
+        "includes_calls": config["includes_calls"],
+        "duration_days": config["duration_days"],
+        "activated_by": None,
+        "activated_at": None,
+        "expires_at": None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.license_keys.insert_one(doc)
+    logger.info(f"License key created: {key} ({plan}) for {email or 'unassigned'}")
+    return key
+
+
+# --- License Key Endpoints ---
+
+@api_router.post("/license/create")
+async def create_license_key_endpoint(data: LicenseKeyCreate):
+    """Admin: Create a license key manually."""
+    key = await create_license_key_internal(
+        plan=data.plan, email=data.email, name=data.name,
+        source="manual", notes=data.notes
+    )
+
+    # Send license key email if email provided
+    if data.email and RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
+        try:
+            from email_templates import payment_confirmation_email
+            amount = 4997.0 if data.plan == "fasttrack" else 997.0
+            email_data = payment_confirmation_email(data.name or "Leader", data.plan, amount)
+            # Add the license key to the email subject
+            await asyncio.to_thread(resend.Emails.send, {
+                "from": f"Wlad von WLADHUB <{SENDER_EMAIL}>",
+                "to": [data.email],
+                "subject": f"Dein License Key: {key} — WLADHUB",
+                "html": email_data["html"].replace("Sofort aktiv", f"Key: <strong>{key}</strong>"),
+            })
+            logger.info(f"License key email sent to {data.email}")
+        except Exception as e:
+            logger.error(f"License key email error: {e}")
+
+    return {"key": key, "plan": data.plan, "status": "active"}
+
+
+@api_router.post("/license/activate")
+async def activate_license_key(data: LicenseKeyActivate):
+    """User: Activate a license key and get redirected to leader-os.de."""
+    key_doc = await db.license_keys.find_one({"key": data.license_key.upper().strip()}, {"_id": 0})
+
+    if not key_doc:
+        raise HTTPException(status_code=404, detail="Ungültiger License Key. Bitte prüfe deine Eingabe.")
+
+    if key_doc["status"] == "used":
+        raise HTTPException(status_code=400, detail="Dieser Key wurde bereits aktiviert.")
+
+    if key_doc["status"] == "revoked":
+        raise HTTPException(status_code=400, detail="Dieser Key wurde deaktiviert.")
+
+    if key_doc["status"] == "expired":
+        raise HTTPException(status_code=400, detail="Dieser Key ist abgelaufen.")
+
+    # Activate the key
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(days=key_doc.get("duration_days", 365))
+
+    await db.license_keys.update_one(
+        {"key": data.license_key.upper().strip()},
+        {"$set": {
+            "status": "used",
+            "activated_by": data.email or key_doc.get("email"),
+            "activated_at": now.isoformat(),
+            "expires_at": expires_at.isoformat(),
+        }}
+    )
+
+    logger.info(f"License key activated: {data.license_key} by {data.email}")
+
+    return {
+        "success": True,
+        "plan": key_doc["plan"],
+        "plan_name": key_doc["plan_name"],
+        "includes_calls": key_doc.get("includes_calls", False),
+        "expires_at": expires_at.isoformat(),
+        "redirect_url": "https://leader-os.de",
+        "message": "Key erfolgreich aktiviert! Du wirst zu leader-os.de weitergeleitet.",
+    }
+
+
+@api_router.get("/license/validate/{key}")
+async def validate_license_key(key: str):
+    """Check if a license key is valid."""
+    key_doc = await db.license_keys.find_one({"key": key.upper().strip()}, {"_id": 0})
+    if not key_doc:
+        return {"valid": False, "message": "Key nicht gefunden"}
+
+    if key_doc["status"] == "active":
+        return {"valid": True, "status": "active", "plan": key_doc["plan"], "message": "Key ist gültig und bereit zur Aktivierung"}
+
+    if key_doc["status"] == "used":
+        expires_at = key_doc.get("expires_at")
+        if expires_at:
+            exp = datetime.fromisoformat(expires_at)
+            if exp.tzinfo is None:
+                exp = exp.replace(tzinfo=timezone.utc)
+            if exp < datetime.now(timezone.utc):
+                await db.license_keys.update_one({"key": key.upper().strip()}, {"$set": {"status": "expired"}})
+                return {"valid": False, "status": "expired", "message": "Key ist abgelaufen"}
+        return {"valid": True, "status": "used", "plan": key_doc["plan"], "activated_by": key_doc.get("activated_by"), "expires_at": expires_at}
+
+    return {"valid": False, "status": key_doc["status"], "message": f"Key Status: {key_doc['status']}"}
+
+
+@api_router.get("/license/list")
+async def list_license_keys():
+    """Admin: List all license keys."""
+    keys = await db.license_keys.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return {"keys": keys, "total": len(keys)}
+
+
+@api_router.post("/license/revoke/{key}")
+async def revoke_license_key(key: str):
+    """Admin: Revoke a license key."""
+    result = await db.license_keys.update_one(
+        {"key": key.upper().strip()},
+        {"$set": {"status": "revoked", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Key nicht gefunden")
+    return {"success": True, "message": f"Key {key} wurde deaktiviert"}
 
 
 @api_router.get("/")

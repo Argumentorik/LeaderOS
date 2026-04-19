@@ -16,6 +16,14 @@ const headlines = [
     pre: "Dein Leadership-Profil in 10 Minuten.",
     lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
   },
+  {
+    pre: "97% der Führungskräfte überschätzen sich in mindestens einer Rolle.",
+    lines: ["{10 Minuten.}", "6 Rollen. 1 Score.", "Keine Ausreden."],
+  },
+  {
+    pre: "Es gibt ein Geheimnis, das die Top 1% der Leader kennen — und du noch nicht.",
+    lines: ["Die {verborgene Rolle},", "die über deinen", "Aufstieg entscheidet."],
+  },
 ];
 
 const layers = [

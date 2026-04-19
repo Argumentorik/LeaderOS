@@ -102,20 +102,20 @@ export default function PaymentSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                data-testid="go-to-roadmap"
-                onClick={() => navigate("/roadmap")}
-                className="btn-amber px-8 py-4 font-semibold inline-flex items-center gap-2"
+              <a
+                data-testid="go-to-leader-os"
+                href="https://leader-os.de"
+                className="btn-primary px-8 py-4 font-semibold inline-flex items-center gap-2"
               >
-                Zum 30-Tage-Plan
+                Zu leader-os.de
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </a>
               <button
-                data-testid="go-to-report"
-                onClick={() => navigate("/report")}
+                data-testid="go-to-activate"
+                onClick={() => navigate("/activate")}
                 className="btn-secondary px-8 py-4 font-semibold inline-flex items-center gap-2"
               >
-                Zum Report
+                Key aktivieren
               </button>
             </div>
           </div>
