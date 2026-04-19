@@ -8,12 +8,12 @@ export const CATEGORIES = {
 };
 
 export const CATEGORY_COLORS = {
-  rhetorik: '#F59E0B',
-  kritisches_denken: '#F97316',
-  entscheidung: '#D97706',
-  fuehrung: '#F59E0B',
-  eq: '#F97316',
-  strategie: '#D97706'
+  rhetorik: '#C8FF00',
+  kritisches_denken: '#C8FF00',
+  entscheidung: '#C8FF00',
+  fuehrung: '#C8FF00',
+  eq: '#C8FF00',
+  strategie: '#C8FF00'
 };
 
 export const LAYERS = {

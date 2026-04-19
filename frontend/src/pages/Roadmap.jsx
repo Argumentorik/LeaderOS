@@ -102,9 +102,9 @@ const weeklyPlan = [
 
 const agentCards = [
   { icon: Brain, name: "Diagnose-Agent", desc: "Analysiert dein Profil & trackt Fortschritt", color: "#C8FF00" },
-  { icon: Bot, name: "Coach-Agent", desc: "Personliches Coaching, 24/7 verfugbar", color: "#C8FF00" },
-  { icon: Target, name: "Task-Agent", desc: "Tagliche Aufgaben, angepasst an dein Level", color: "#C8FF00" },
-  { icon: Users, name: "Simulations-Agent", desc: "Ube schwierige Gesprache & Szenarien", color: "#C8FF00" },
+  { icon: Bot, name: "Coach-Agent", desc: "Persönliches Coaching, 24/7 verfügbar", color: "#C8FF00" },
+  { icon: Target, name: "Task-Agent", desc: "Tägliche Aufgaben, angepasst an dein Level", color: "#C8FF00" },
+  { icon: Users, name: "Simulations-Agent", desc: "Übe schwierige Gespräche & Szenarien", color: "#C8FF00" },
   { icon: Lightbulb, name: "Strategie-Agent", desc: "Frameworks, Playbooks & Entscheidungshilfen", color: "#C8FF00" },
   { icon: MessageSquare, name: "Community-Agent", desc: "Vernetzung & Austausch mit anderen Leadern", color: "#C8FF00" },
 ];
@@ -120,25 +120,30 @@ export default function Roadmap() {
   // Dynamic: Read report results to personalize the plan
   const [weakestRole, setWeakestRole] = useState(null);
   const [strongestRole, setStrongestRole] = useState(null);
+  const [userScore, setUserScore] = useState(0);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     try {
       const report = JSON.parse(localStorage.getItem("emergent_report") || "{}");
-      const roles = report?.roles || report?.report?.roles;
-      if (roles) {
-        const roleEntries = Object.entries(roles).filter(([_, v]) => typeof v === "number" || typeof v?.score === "number");
-        if (roleEntries.length > 0) {
-          const sorted = roleEntries.sort((a, b) => {
-            const scoreA = typeof a[1] === "number" ? a[1] : a[1]?.score || 0;
-            const scoreB = typeof b[1] === "number" ? b[1] : b[1]?.score || 0;
-            return scoreA - scoreB;
-          });
-          setWeakestRole(sorted[0]?.[0]);
-          setStrongestRole(sorted[sorted.length - 1]?.[0]);
+      const usr = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+      if (usr.name) setUserName(usr.name);
+      if (report.avg_total) setUserScore(report.avg_total);
+
+      // Use pre-computed strongest/weakest from backend
+      if (report.weakest_role?.key) setWeakestRole(report.weakest_role.key);
+      if (report.strongest_role?.key) setStrongestRole(report.strongest_role.key);
+
+      // Fallback: compute from leadership_roles
+      if (!report.weakest_role?.key && report.leadership_roles) {
+        const sorted = Object.entries(report.leadership_roles).sort((a, b) => a[1] - b[1]);
+        if (sorted.length > 0) {
+          setWeakestRole(sorted[0][0]);
+          setStrongestRole(sorted[sorted.length - 1][0]);
         }
       }
     } catch (err) {
-      // Report parsing is non-critical, continue with defaults
+      // Report parsing is non-critical
     }
   }, []);
 
@@ -169,19 +174,21 @@ export default function Roadmap() {
       <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
-        {/* Header */}
+        {/* Header — Personalized */}
         <div className="text-center mb-14">
           <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
             <Sparkles className="w-4 h-4" />
-            Dein Weg zur Führungsstärke
+            {userName ? `${userName}, dein Weg zur Führungsstärke` : "Dein Weg zur Führungsstärke"}
           </div>
           <h1 className="font-manrope font-extrabold text-4xl md:text-5xl text-white mb-4" data-testid="roadmap-title">
             30 Tage zur <span className="text-gradient-lime">strategischen Dominanz</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
-            6 spezialisierte KI-Agenten. 6 Kurse. Live Events. Persönliches Coaching.
-            <br className="hidden md:block" />
-            Alles, was du brauchst, um die 6 Rollen zu meistern.
+            {userScore > 0 ? (
+              <>Dein Score: <span className="text-white font-semibold">{userScore}%</span>. {userScore >= 70 ? "Stark — jetzt die letzten Prozente herausholen." : userScore >= 50 ? "Solide Basis — mit dem richtigen Plan wird daraus Exzellenz." : "Großes Wachstumspotenzial — genau dafür ist dieser Plan gemacht."}</>
+            ) : (
+              <>6 spezialisierte KI-Agenten. 6 Kurse. Persönliches Coaching.</>
+            )}
           </p>
           {weakestRole && (
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15" data-testid="personalized-hint">

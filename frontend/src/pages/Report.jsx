@@ -393,7 +393,7 @@ export default function Report() {
           <div className="border-t border-white/5 pt-8 max-w-lg mx-auto">
             <p className="font-inter text-slate-500 mb-3">Technisches Wissen schafft Experten.</p>
             <p className="font-manrope font-bold text-xl text-white">
-              Leadership Mastery schafft <span className="text-gradient-amber">Impact.</span>
+              Leadership Mastery schafft <span className="text-gradient-lime">Impact.</span>
             </p>
           </div>
         </div>

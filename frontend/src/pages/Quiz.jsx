@@ -184,7 +184,7 @@ export default function Quiz() {
   };
 
   if (!question) return null;
-  const catColor = CATEGORY_COLORS[question.category] || "#F59E0B";
+  const catColor = CATEGORY_COLORS[question.category] || "#C8FF00";
   const answeredCount = Object.keys(answers).length;
 
   if (showWladBot) {

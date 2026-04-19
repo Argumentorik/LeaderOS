@@ -50,7 +50,7 @@ class UserCreate(BaseModel):
     consent_marketing: bool = False
 
 class QuizAnswer(BaseModel):
-    question_id: int
+    question_id: str
     category: str
     layer: str
     score: int
@@ -384,6 +384,7 @@ async def generate_report(data: QuizSubmit):
     report = {
         "session_id": data.session_id,
         "user": {"name": user.get("name"), "role": user.get("role"), "email": user.get("email")},
+        "answers_raw": [{"question_id": a.question_id, "category": a.category, "layer": a.layer, "score": a.score} for a in data.answers],
         "cat_scores": cat_avg,
         "layer_scores": layer_avg,
         "leadership_roles": leadership_roles,
@@ -1017,13 +1018,13 @@ async def admin_users():
     """List all users with enriched data (report status, keys)."""
     users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
 
-    # Batch-fetch report session_ids and license key emails for matching
+    # Batch-fetch report session_ids and license key emails for matching (limited for performance)
     report_sessions = set()
-    async for r in db.reports.find({}, {"session_id": 1, "_id": 0}):
+    async for r in db.reports.find({}, {"session_id": 1, "_id": 0}).limit(500):
         report_sessions.add(r["session_id"])
 
     key_map = {}
-    async for k in db.license_keys.find({}, {"_id": 0, "key": 1, "email": 1, "status": 1, "plan": 1}):
+    async for k in db.license_keys.find({}, {"_id": 0, "key": 1, "email": 1, "status": 1, "plan": 1}).limit(500):
         if k.get("email"):
             key_map[k["email"]] = {"key": k["key"], "status": k["status"], "plan": k["plan"]}
 
