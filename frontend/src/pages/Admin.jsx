@@ -269,6 +269,8 @@ export default function Admin() {
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Name</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">E-Mail</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Rolle</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Report</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">License Key</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Erstellt</th>
                   </tr>
                 </thead>
@@ -278,6 +280,18 @@ export default function Admin() {
                       <td className="px-4 py-3 font-inter text-sm text-white">{u.name}</td>
                       <td className="px-4 py-3 font-inter text-sm text-slate-400">{u.email}</td>
                       <td className="px-4 py-3 font-inter text-xs text-slate-500">{u.role}</td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded-md text-xs font-medium ${
+                          u.has_report ? "bg-[#C8FF00]/10 text-[#C8FF00]" : "bg-white/[0.03] text-slate-600"
+                        }`}>{u.has_report ? "Ja" : "Nein"}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {u.license_key ? (
+                          <span className="font-mono text-xs text-[#C8FF00]/70">{u.license_key.key}</span>
+                        ) : (
+                          <span className="text-slate-700 text-xs">—</span>
+                        )}
+                      </td>
                       <td className="px-4 py-3 font-inter text-xs text-slate-600">{u.created_at?.slice(0, 16)}</td>
                     </tr>
                   ))}
@@ -297,6 +311,8 @@ export default function Admin() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/[0.04]">
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Name</th>
+                    <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">E-Mail</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Plan</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Betrag</th>
                     <th className="text-left px-4 py-3 font-inter text-xs text-slate-500 uppercase">Status</th>
@@ -307,8 +323,10 @@ export default function Admin() {
                 <tbody>
                   {transactions.map((tx, i) => (
                     <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.01]">
-                      <td className="px-4 py-3 font-inter text-sm text-white">{tx.plan}</td>
-                      <td className="px-4 py-3 font-inter text-sm text-[#C8FF00]">€{tx.amount}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-white">{tx.name || "—"}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-slate-400">{tx.email || "—"}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-slate-400">{tx.plan}</td>
+                      <td className="px-4 py-3 font-inter text-sm text-[#C8FF00]">{tx.amount} EUR</td>
                       <td className="px-4 py-3">
                         <span className={`px-2 py-0.5 rounded-md text-xs font-medium ${
                           tx.payment_status === "paid" ? "bg-[#C8FF00]/10 text-[#C8FF00]" : "bg-white/[0.04] text-slate-400"
@@ -319,7 +337,7 @@ export default function Admin() {
                     </tr>
                   ))}
                   {transactions.length === 0 && (
-                    <tr><td colSpan={5} className="px-4 py-8 text-center font-inter text-sm text-slate-600">Keine Transaktionen</td></tr>
+                    <tr><td colSpan={7} className="px-4 py-8 text-center font-inter text-sm text-slate-600">Keine Transaktionen</td></tr>
                   )}
                 </tbody>
               </table>

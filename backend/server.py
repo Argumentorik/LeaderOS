@@ -633,6 +633,8 @@ class CreateCheckoutRequest(BaseModel):
     package_id: str
     origin_url: str
     email: Optional[str] = None
+    user_name: Optional[str] = None
+    user_session_id: Optional[str] = None
 
 @api_router.post("/payments/create-checkout")
 async def create_checkout(req: CreateCheckoutRequest, http_request: Request):
@@ -676,6 +678,8 @@ async def create_checkout(req: CreateCheckoutRequest, http_request: Request):
         "plan": package["plan"],
         "billing": package["billing"],
         "email": req.email or "",
+        "name": req.user_name or "",
+        "user_session_id": req.user_session_id or "",
         "payment_status": "initiated",
         "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -742,14 +746,15 @@ async def stripe_webhook(request: Request):
             if tx:
                 plan = tx.get("plan", "standard")
                 email = tx.get("email")
-                key = await create_license_key_internal(plan=plan, email=email, source="stripe")
+                name = tx.get("name") or email or "Leader"
+                key = await create_license_key_internal(plan=plan, email=email, name=name, source="stripe")
                 # Update transaction with key
                 await db.payment_transactions.update_one(
                     {"session_id": webhook_response.session_id},
                     {"$set": {"license_key": key}}
                 )
                 if email:
-                    asyncio.create_task(send_payment_email_background(email, email, plan, tx.get("amount", 997)))
+                    asyncio.create_task(send_payment_email_background(email, name, plan, tx.get("amount", 997)))
         
         return {"status": "ok"}
     except Exception as e:
@@ -1007,9 +1012,28 @@ async def admin_stats():
 
 @api_router.get("/admin/users")
 async def admin_users():
-    """List all users for admin panel."""
+    """List all users with enriched data (report status, keys)."""
     users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
-    return {"users": users, "total": len(users)}
+
+    # Batch-fetch report session_ids and license key emails for matching
+    report_sessions = set()
+    async for r in db.reports.find({}, {"session_id": 1, "_id": 0}):
+        report_sessions.add(r["session_id"])
+
+    key_map = {}
+    async for k in db.license_keys.find({}, {"_id": 0, "key": 1, "email": 1, "status": 1, "plan": 1}):
+        if k.get("email"):
+            key_map[k["email"]] = {"key": k["key"], "status": k["status"], "plan": k["plan"]}
+
+    enriched = []
+    for u in users:
+        sid = u.get("session_id") or u.get("user_id")
+        email = u.get("email", "")
+        u["has_report"] = sid in report_sessions
+        u["license_key"] = key_map.get(email)
+        enriched.append(u)
+
+    return {"users": enriched, "total": len(enriched)}
 
 
 @api_router.get("/admin/transactions")

@@ -56,10 +56,17 @@ export default function HighTicketClose() {
     setIsLoading(true);
     try {
       const originUrl = window.location.origin;
+      const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
       const res = await fetch(`${API}/api/payments/create-checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ package_id: packageId, origin_url: originUrl }),
+        body: JSON.stringify({
+          package_id: packageId,
+          origin_url: originUrl,
+          email: user.email || null,
+          user_name: user.name || null,
+          user_session_id: user.session_id || null,
+        }),
       });
       const data = await res.json();
       if (data.url) {
@@ -89,13 +96,13 @@ export default function HighTicketClose() {
           <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4" data-testid="close-headline">
             Du hast dein Profil.
             <br />
-            Jetzt hol dir den <span className="text-gradient-amber">Vorsprung.</span>
+            Jetzt hol dir den <span className="text-gradient-lime">Vorsprung.</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             Wähle deinen Weg zur strategischen Dominanz. Der kostenlose Zugang bleibt bestehen – beide Premium-Pakete geben dir zusätzlich sofortigen Vollzugang.
           </p>
           <p className="font-inter text-sm text-[#C8FF00]/60 mt-3">
-            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung notig.
+            Du kannst die Diagnose und den 30-Tage-Plan auch kostenlos nutzen – keine Zahlung nötig.
           </p>
         </div>
 
