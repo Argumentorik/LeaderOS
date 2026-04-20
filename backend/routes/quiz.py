@@ -58,12 +58,31 @@ def calculate_roi(layer_avg, total_avg):
     }
 
 
-async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, total_avg):
+async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, total_avg, chat_context=None):
     if not llm_key:
         return {"profile_title": "Leadership-Profil", "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."}
     try:
         chat = LlmChat(api_key=llm_key, session_id=f"report_{session_id}", system_message="Du bist ein Executive Leadership Coach.")
         chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
+
+        # Weave user's own voice (WladBot chat at Q30) into the narrative
+        user_voice_block = ""
+        if chat_context:
+            turns = []
+            for t in chat_context:
+                role = getattr(t, "role", None) or (t.get("role") if isinstance(t, dict) else None)
+                text = getattr(t, "text", None) or (t.get("text") if isinstance(t, dict) else None)
+                if role == "user" and text:
+                    turns.append(text.strip())
+            if turns:
+                user_voice_block = (
+                    "\n\nZUSATZLICH - EIGENE WORTE DES NUTZERS (aus dem Pre-Report-Gespräch mit WladBot):\n"
+                    + "\n".join(f'- "{t}"' for t in turns[:6])
+                    + "\n\nWICHTIG: Beziehe dich DIREKT und KONKRET auf diese selbst geschilderten Herausforderungen. "
+                    "Verwende den Namen der Herausforderung oder das Thema wörtlich in mindestens einem Satz des executive_summary "
+                    "und in einer der Empfehlungen. Der Nutzer muss SPÜREN, dass wir zugehört haben."
+                )
+
         prompt = f"""Analysiere dieses Leadership-Profil auf Deutsch.
 
 Benutzer: {user.get('name', 'Leader')}, Rolle: {user.get('role', 'Führungskraft')}
@@ -76,22 +95,23 @@ LAYER-SCORES (0-100):
 - Boardroom-Rhetorik (rhetoric): {layer_avg.get('rhetoric', 50)}
 - Strategisches EQ (strategic_eq): {layer_avg.get('strategic_eq', 50)}
 
-GESAMT: {total_avg}%
+GESAMT: {total_avg}%{user_voice_block}
 
 Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant, max 2-3 Sätze pro Abschnitt):
 
 1. profile_title: Ein passender Titel für dieses Führungsprofil (z.B. "Der strategische Visionär")
-2. executive_summary: Kernaussage über die Stärken und das Potenzial
+2. executive_summary: Kernaussage über die Stärken und das Potenzial{' - MUSS die vom Nutzer geschilderte Herausforderung direkt adressieren' if user_voice_block else ''}
 3. ai_literacy_analysis: Bewertung der KI-Kompetenz
 4. rhetoric_analysis: Bewertung der Kommunikationsstärke
 5. eq_analysis: Bewertung der emotionalen Intelligenz
 6. top_strength: Die größte Stärke
 7. growth_priority: Die wichtigste Entwicklungspriorität
-8. recommendation_1: {{title, description}} - Erste Empfehlung
+8. recommendation_1: {{title, description}} - Erste Empfehlung{' - MUSS konkret auf die genannte Herausforderung eingehen' if user_voice_block else ''}
 9. recommendation_2: {{title, description}} - Zweite Empfehlung
 10. recommendation_3: {{title, description}} - Dritte Empfehlung
 11. urgency_message: Warum jetzt handeln? (motivierend, nicht bedrohlich)
-12. closing_statement: Ein inspirierender Abschlusssatz
+12. closing_statement: Ein inspirierender Abschlusssatz{' - sollte auf die Herausforderung des Nutzers Bezug nehmen' if user_voice_block else ''}
+{'13. personal_response: Ein empathischer 2-Satz-Gruß an den Nutzer, der seine konkrete Herausforderung WÖRTLICH aufgreift und Verständnis zeigt (wie ein Coach, der wirklich zugehört hat)' if user_voice_block else ''}
 
 Antworte NUR mit validem JSON."""
         response = await chat.send_message(UserMessage(text=prompt))
@@ -117,9 +137,14 @@ def register_quiz_routes(router: APIRouter, db, config):
             raise HTTPException(status_code=404, detail="User not found")
 
         cat_avg, layer_avg, total_avg = calculate_category_scores(data.answers)
-        narrative = await generate_ai_narrative(config["llm_key"], data.session_id, user, cat_avg, layer_avg, total_avg)
+        narrative = await generate_ai_narrative(config["llm_key"], data.session_id, user, cat_avg, layer_avg, total_avg, data.chat_context)
         leadership_roles, strongest_role, weakest_role = calculate_leadership_roles(cat_avg)
         roi = calculate_roi(layer_avg, total_avg)
+
+        # Serialize chat_context for storage + downstream use
+        chat_serialized = []
+        if data.chat_context:
+            chat_serialized = [{"role": t.role, "text": t.text} for t in data.chat_context]
 
         report = {
             "session_id": data.session_id,
@@ -130,6 +155,8 @@ def register_quiz_routes(router: APIRouter, db, config):
             "strongest_role": {"key": strongest_role, "label": ROLE_LABELS[strongest_role], "score": leadership_roles[strongest_role]},
             "weakest_role": {"key": weakest_role, "label": ROLE_LABELS[weakest_role], "score": leadership_roles[weakest_role]},
             "avg_total": total_avg, "roi": roi, "narrative": narrative,
+            "chat_context": chat_serialized,
+            "user_challenge": next((t["text"] for t in chat_serialized if t["role"] == "user"), None),
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         await db.reports.insert_one({**report, "report_id": str(uuid.uuid4())})

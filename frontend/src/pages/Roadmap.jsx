@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, MessageSquare, Users, Target, Lightbulb, Zap, Shield, Sparkles, Calendar, BookOpen, Video, Headphones, Award, Star, TrendingUp, Bot, Check, Lock, Rocket, X, ChevronRight, Play, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Brain, MessageSquare, Users, Target, Lightbulb, Zap, Shield, Sparkles, Calendar, BookOpen, Video, Headphones, Award, Star, TrendingUp, Bot, Check, Lock, Rocket, X, ChevronRight, Play, CheckCircle2, Download } from "lucide-react";
+import { generateRoadmapPDF } from "../utils/generatePDF";
 
 const roleLabels = {
   communicator: "Kommunikation",
@@ -199,6 +200,27 @@ export default function Roadmap() {
               </span>
             </div>
           )}
+
+          {/* Download personalized 30-day plan */}
+          <div className="mt-6 flex justify-center">
+            <button
+              data-testid="roadmap-download-pdf"
+              onClick={() => {
+                try {
+                  const report = JSON.parse(localStorage.getItem("emergent_report") || "{}");
+                  const usr = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+                  generateRoadmapPDF(report, usr, entries);
+                } catch (err) {
+                  console.error("Roadmap PDF error:", err);
+                  alert("PDF-Fehler: " + err.message);
+                }
+              }}
+              className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2 hover:border-[#C8FF00]/30 transition-all"
+            >
+              <Download className="w-4 h-4" />
+              30-Tage-Plan als PDF herunterladen
+            </button>
+          </div>
         </div>
 
         {/* Agent Ecosystem */}

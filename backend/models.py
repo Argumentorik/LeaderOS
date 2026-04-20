@@ -18,9 +18,16 @@ class QuizAnswer(BaseModel):
     score: int
 
 
+class ChatTurn(BaseModel):
+    role: str
+    text: str
+
+
 class QuizSubmit(BaseModel):
     session_id: str
     answers: List[QuizAnswer]
+    chat_context: Optional[List[ChatTurn]] = None
+    journal_entries: Optional[List[str]] = None
 
 
 class CoachMessage(BaseModel):

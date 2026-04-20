@@ -1,5 +1,26 @@
 import jsPDF from "jspdf";
 
+// jsPDF helvetica uses WinAnsi (cp1252). Umlauts work, but em-dashes, smart quotes,
+// and other chars the AI might produce don't. Normalize to safe ASCII/latin-1.
+function sanitize(text) {
+  if (text === null || text === undefined) return "";
+  return String(text)
+    .replace(/[\u2018\u2019\u201A\u2032]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u2033]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\u2026/g, "...")
+    .replace(/\u00A0/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "");
+}
+
+function sText(doc, text, x, y, opts) {
+  doc.text(sanitize(text), x, y, opts);
+}
+
+function sSplit(doc, text, width) {
+  return doc.splitTextToSize(sanitize(text), width);
+}
+
 const COLORS = {
   bg: [10, 10, 10],
   cardBg: [18, 18, 20],
@@ -66,7 +87,7 @@ export function generateReportPDF(report, user) {
   const cw = pw - margin * 2;
   let y = 0;
 
-  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {}, leadership_roles = {}, strongest_role = {}, weakest_role = {} } = report;
+  const { cat_scores = {}, layer_scores = {}, avg_total = 0, roi = {}, narrative = {}, leadership_roles = {}, strongest_role = {}, weakest_role = {}, user_challenge = null } = report;
   const userName = user?.name || "Leadership Report";
   const userRole = user?.role || "";
 
@@ -104,14 +125,14 @@ export function generateReportPDF(report, user) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(32);
   doc.setTextColor(...COLORS.white);
-  doc.text(userName, margin, y);
+  sText(doc, userName, margin, y);
 
   y += 10;
   if (userRole) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
     doc.setTextColor(...COLORS.gray);
-    doc.text(userRole, margin, y);
+    sText(doc, userRole, margin, y);
   }
 
   // Score circle
@@ -159,13 +180,13 @@ export function generateReportPDF(report, user) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(...COLORS.white);
-    doc.text(narrative.profile_title, margin + 8, y + 20);
+    sText(doc, narrative.profile_title, margin + 8, y + 20);
 
     if (narrative.executive_summary) {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       doc.setTextColor(...COLORS.gray);
-      const lines = doc.splitTextToSize(narrative.executive_summary, cw - 16);
+      const lines = sSplit(doc, narrative.executive_summary, cw - 16);
       doc.text(lines.slice(0, 2), margin + 8, y + 28);
     }
   }
@@ -278,7 +299,7 @@ export function generateReportPDF(report, user) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.setTextColor(...COLORS.gray);
-    const lines = doc.splitTextToSize(narrative[key], cw - 14);
+    const lines = sSplit(doc, narrative[key], cw - 14);
     doc.text(lines.slice(0, 3), margin + 7, y + 15);
     y += 35;
   });
@@ -296,7 +317,7 @@ export function generateReportPDF(report, user) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7);
     doc.setTextColor(...COLORS.gray);
-    const sLines = doc.splitTextToSize(narrative.top_strength, cw / 2 - 16);
+    const sLines = sSplit(doc, narrative.top_strength, cw / 2 - 16);
     doc.text(sLines.slice(0, 3), margin + 7, y + 14);
   }
 
@@ -343,13 +364,13 @@ export function generateReportPDF(report, user) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.white);
-    doc.text(title, margin + 18, y + 9);
+    sText(doc, title, margin + 18, y + 9);
 
     if (desc) {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
       doc.setTextColor(...COLORS.gray);
-      const rLines = doc.splitTextToSize(desc, cw - 26);
+      const rLines = sSplit(doc, desc, cw - 26);
       doc.text(rLines.slice(0, 1), margin + 18, y + 16);
     }
 
@@ -485,7 +506,7 @@ export function generateReportPDF(report, user) {
     doc.setFont("helvetica", "italic");
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.white);
-    const closingLines = doc.splitTextToSize(`"${narrative.closing_statement}"`, cw - 20);
+    const closingLines = sSplit(doc, `"${narrative.closing_statement}"`, cw - 20);
     doc.text(closingLines, pw / 2, y, { align: "center" });
   }
 
@@ -502,4 +523,344 @@ export function generateReportPDF(report, user) {
   // Save
   const safeName = userName.replace(/[^a-zA-Z0-9\s\-]/g, "").trim();
   doc.save(`WladHub - ${safeName} AI Report.pdf`);
+}
+
+
+// =====================================================================================
+// PERSONALIZED 30-DAY ROADMAP PDF (based on report + user's weakest role + journal entries)
+// =====================================================================================
+export function generateRoadmapPDF(report, user, journalEntries = []) {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const pw = 210;
+  const ph = 297;
+  const m = 18;
+  const cw = pw - m * 2;
+  let y = 0;
+
+  const userName = user?.name || report?.user?.name || "Leader";
+  const userRole = user?.role || report?.user?.role || "";
+  const weakest = report?.weakest_role || {};
+  const strongest = report?.strongest_role || {};
+  const score = report?.avg_total || 0;
+  const narrative = report?.narrative || {};
+  const challenge = report?.user_challenge || "";
+
+  const roleFocus = {
+    communicator: {
+      title: "Kommunikator-Fokus",
+      why: "Deine Uberzeugungskraft und Boardroom-Prasenz sind dein starkster Hebel fur die nachsten 30 Tage.",
+      weekly: [
+        ["Baseline: 3 kritische Gesprachssituationen aus der letzten Woche dokumentieren", "Kernaussagen-Framework uben (1 Satz, 3 Belege, 1 Call-to-Action)", "Storytelling-Bibliothek anlegen: 5 eigene Leadership-Geschichten", "Stimm- und Korperarbeit: 10 Min. taglich vor der Kamera sprechen"],
+        ["Boardroom-Rhetorik: Argumentationspyramide in 2 Meetings anwenden", "Einwandbehandlung uben: 'Ja und...' statt 'Ja aber...'", "Aktives Zuhoren: 1 Gesprach komplett ohne Unterbrechung fuhren", "Feedback von 3 Kollegen zu deiner Kommunikation einholen"],
+        ["Schwieriges Gesprach fuhren: klar, direkt, wertschatzend", "Prasentation halten mit maximal 3 Kern-Botschaften", "KI-Prompt-Bibliothek fur E-Mails & Briefings bauen", "Non-verbale Signale bewusst setzen (Pause, Blickkontakt)"],
+        ["30-Tage-Review: Welche Gesprache liefen jetzt anders?", "Kommunikations-Signature definieren (dein Stil in 3 Satzen)", "Next-90-Days: 3 Keynote-Momente vorbereiten", "Eine Leader-Story offentlich teilen (LinkedIn/Team)"],
+      ],
+    },
+    manager: {
+      title: "Manager-Fokus",
+      why: "Struktur und Entscheidungsgeschwindigkeit sind dein Wachstumshebel Nr. 1.",
+      weekly: [
+        ["Eisenhower-Matrix auf deine nachsten 20 Tasks anwenden", "Not-to-Do-Liste erstellen (5 Dinge, die du sofort stoppst)", "Zeitaudit: Wo gehen wirklich deine 40h hin?", "ALPEN-Methode 7 Tage testen"],
+        ["Entscheidungs-Framework: 2-Wege-vs-1-Wege-Turen unterscheiden", "Delegations-Matrix: Was kann weg, was muss rotieren?", "Wochenreview mit 3 Fragen (Win, Learn, Next)", "Pareto: Welche 20% deiner Arbeit bringen 80% Wirkung?"],
+        ["SMART-Ziele fur dein Quartal scharfen", "KI-gestutzte Priorisierung einfuhren (Prompt-Template)", "1:1-Struktur fur dein Team standardisieren", "Decision-Log starten (jede grose Entscheidung + Grund)"],
+        ["Review: Entscheidungsgeschwindigkeit vs. Baseline", "Meeting-Hygiene: 30% der Meetings streichen oder kurzen", "OKR-Draft fur nachstes Quartal", "Energiemanagement: tagliche Peak-Zeit identifizieren"],
+      ],
+    },
+    team_leader: {
+      title: "Team-Leader-Fokus",
+      why: "Die Motivation und Kultur deines Teams ist dein starkster Hebel - hier liegt deine Wachstumszone.",
+      weekly: [
+        ["1:1 mit jedem Direct Report (fokus: 'Was brauchst du?')", "Teamrollen klar mappen (Wer ist fur was verantwortlich?)", "Anerkennung: 3 spezifische Danke-Nachrichten pro Tag", "Vertrauensmetrik: anonyme 3-Fragen-Umfrage"],
+        ["Delegation ohne Micromanagement: 2 Projekte komplett abgeben", "Konflikte fruh adressieren (innerhalb 48h)", "Coaching-Fragen statt Antworten geben (GROW-Modell)", "Team-Ritual etablieren (Weekly-Win, Retros)"],
+        ["Kultur-Manifest mit dem Team co-creieren", "Feedback-Schleife: 360-Grad-Input in einem Bereich", "Schwache Performance anpacken: klare Erwartung + Support", "Team-Lernbudget aktivieren (jeder 1 Kurs/Buch)"],
+        ["Teamklima-Messung vs. Monat 0", "High-Performer identifizieren + Wachstumspfad definieren", "Nachfolge-Planung starten (wer kann welche Rolle?)", "Leader-Signature im Team verankern"],
+      ],
+    },
+    psychologist: {
+      title: "Empathie-Fokus",
+      why: "Strategisches EQ und Menschenverstandnis sind dein grosster Hebel - Empathie als Wettbewerbsvorteil.",
+      weekly: [
+        ["Emotionales Tagebuch: 5 Min taglich Trigger + Reaktion", "Aktives Zuhoren in allen 1:1s ueben", "Pause vor Antwort - 3 Sekunden Atmen in kritischen Gesprachen", "Perspektiven-Ubung: In 3 Konflikten die andere Seite schreiben"],
+        ["Psychologische Sicherheit: Fehler offen zugeben im Team", "Stress-Trigger bei dir + 3 wichtigen Personen identifizieren", "Nonverbale Signale trainieren (Spiegelneuronen nutzen)", "Empathie-Map fur 1 kritischen Stakeholder erstellen"],
+        ["Schwierige Emotionen im Team adressieren (nicht wegmoderieren)", "Radikale Offenheit x Empathie in einem Feedback-Gesprach", "Selbstmitgefuhl-Ubung: Wie wurdest du einen Freund beraten?", "Vertrauenskonto bei Key-People aktiv auffullen"],
+        ["EQ-Progress vs. Baseline messen", "Leader-Prasenz: ruhig, klar, menschlich in Druck-Situationen", "Emotionales Repertoire erweitern (mindestens 10 Gefuhle benennen)", "Mentoring oder Coaching bieten (1 Person)"],
+      ],
+    },
+    problem_solver: {
+      title: "Problemloser-Fokus",
+      why: "Kritisches Denken und Entscheidungsklarheit sind dein Hebel - hier wirst du am schnellsten wachsen.",
+      weekly: [
+        ["First-Principles: 1 komplexes Problem komplett runterbrechen", "Bias-Check: eigene Entscheidungen der letzten Woche hinterfragen", "Problem-Framing ueben (Was ist das echte Problem?)", "Premortem: Was konnte scheitern? fur 1 Projekt"],
+        ["MECE-Prinzip: Optionen sauber strukturieren", "Entscheidungs-Matrix mit Gewichtung anwenden", "5-Why-Analyse auf 1 wiederkehrendes Problem", "Second-Order-Thinking: Welche Folgen hat die Folge?"],
+        ["Unter Druck entscheiden: 3 Entscheidungen in unter 24h", "Externe Perspektive einholen (3 Experten zu einem Problem)", "Gegenthesen-Ubung: eigene These 3x bewusst widerlegen", "Hypothesen-Baum fuer grose Initiative bauen"],
+        ["Review: Entscheidungsqualitat vs. Baseline", "Playbook fur wiederkehrende Probleme dokumentieren", "Strategische Hebel identifizieren (1 Zahl andern = 10x Effekt)", "Next-Quarter Top-3 Probleme priorisieren"],
+      ],
+    },
+    innovator: {
+      title: "Innovator-Fokus",
+      why: "KI-Vorsprung und strategische Weitsicht sind dein Hebel - hier baust du deinen Wettbewerbsvorteil.",
+      weekly: [
+        ["KI-Stack-Audit: welche Tools nutzt du vs. sollte nutzen?", "Prompt-Bibliothek fur deine 10 haufigsten Aufgaben", "1 Prozess vollstandig mit KI neu denken", "Trend-Radar: 5 Signale in deiner Branche wochentlich tracken"],
+        ["Copilot-Setup fur dein Team standardisieren", "KI-Entscheidungsframework: wann Mensch, wann Maschine?", "Experiment starten: 1 mutige Hypothese in 7 Tagen testen", "Cross-Industry-Inspiration: 2 Branchen-fremde Innovationen"],
+        ["Strategische Roadmap mit KI-Werkzeugen bauen", "Prototype shippen (auch wenn unfertig)", "Innovation-Budget definieren (Zeit + Geld)", "Netzwerk aktivieren: 3 Gesprache mit Innovatoren"],
+        ["Review: Was wurde durch KI messbar schneller/besser?", "Innovation-Narrative: deine Vision in 1 Absatz", "90-Tage-Wette: 1 mutige Entscheidung mit Asymmetrie", "Leadership-Positionierung als KI-First-Leader sichtbar machen"],
+      ],
+    },
+  };
+
+  const focus = roleFocus[weakest?.key] || roleFocus.communicator;
+
+  // ============ PAGE 1: COVER ============
+  doc.setFillColor(...COLORS.bg);
+  doc.rect(0, 0, pw, ph, "F");
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(0, 0, pw, 2, "F");
+
+  // Logo
+  y = 28;
+  doc.setFillColor(...COLORS.accent);
+  doc.roundedRect(m, y, 12, 12, 2, 2, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(...COLORS.bg);
+  doc.text("W", m + 4, y + 8.5);
+  doc.setFontSize(11);
+  doc.setTextColor(...COLORS.white);
+  doc.text("WLADHUB", m + 17, y + 5);
+  doc.setFontSize(7);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("30-DAY LEADERSHIP UPGRADE", m + 17, y + 10);
+
+  y = 74;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("PERSONALISIERTER 30-TAGE-PLAN", m, y);
+
+  y += 12;
+  doc.setFontSize(32);
+  doc.setTextColor(...COLORS.white);
+  sText(doc, userName, m, y);
+
+  y += 10;
+  if (userRole) {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(...COLORS.gray);
+    sText(doc, userRole, m, y);
+  }
+
+  // Score + Focus card
+  y = 128;
+  drawRoundedRect(doc, m, y, cw, 42, 4, COLORS.cardBg);
+  doc.setFillColor(...COLORS.accent);
+  doc.roundedRect(m, y, 2, 42, 1, 1, "F");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(7);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("DEIN FOKUS FUR 30 TAGE", m + 8, y + 9);
+
+  doc.setFontSize(16);
+  doc.setTextColor(...COLORS.white);
+  sText(doc, focus.title, m + 8, y + 20);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(...COLORS.gray);
+  const focusLines = sSplit(doc, focus.why, cw - 16);
+  doc.text(focusLines.slice(0, 3), m + 8, y + 28);
+
+  // Stats bar
+  y = 180;
+  const stats = [
+    { label: "Gesamtscore", val: `${score}%` },
+    { label: "Starkste Rolle", val: strongest?.label || "-" },
+    { label: "Wachstum", val: weakest?.label || "-" },
+  ];
+  const sw = cw / 3;
+  stats.forEach((s, i) => {
+    const sx = m + i * sw;
+    drawRoundedRect(doc, sx + 2, y, sw - 4, 26, 3, COLORS.cardBg);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6.5);
+    doc.setTextColor(...COLORS.gray);
+    doc.text(s.label.toUpperCase(), sx + sw / 2, y + 9, { align: "center" });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(...COLORS.accent);
+    sText(doc, s.val, sx + sw / 2, y + 20, { align: "center" });
+  });
+
+  // Challenge box (THE PROOF THAT WE LISTENED)
+  if (challenge) {
+    y = 218;
+    drawRoundedRect(doc, m, y, cw, 42, 4, COLORS.cardBg);
+    doc.setFillColor(...COLORS.accent);
+    doc.roundedRect(m, y, 2, 42, 1, 1, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7);
+    doc.setTextColor(...COLORS.accent);
+    doc.text("DEINE HERAUSFORDERUNG (DEINE WORTE)", m + 8, y + 9);
+
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(9);
+    doc.setTextColor(...COLORS.white);
+    const chLines = sSplit(doc, `"${challenge}"`, cw - 16);
+    doc.text(chLines.slice(0, 4), m + 8, y + 18);
+  }
+
+  // Footer
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(6);
+  doc.setTextColor(60, 60, 70);
+  doc.text("WLADHUB Confidential | 30-Day Roadmap", m, 290);
+  sText(doc, `${userName} | ${new Date().toLocaleDateString("de-DE")}`, pw - m, 290, { align: "right" });
+
+  // ============ PAGE 2: 4-Week Plan ============
+  doc.addPage();
+  doc.setFillColor(...COLORS.bg);
+  doc.rect(0, 0, pw, ph, "F");
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(0, 0, pw, 1, "F");
+
+  y = 18;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("DEIN 4-WOCHEN-FAHRPLAN", m, y);
+  y += 5;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...COLORS.gray);
+  sText(doc, `Personalisiert fur ${userName} - Priorisiert auf ${focus.title}`, m, y);
+  y += 8;
+
+  const weeks = ["WOCHE 1 - Foundation", "WOCHE 2 - Skill Building", "WOCHE 3 - Integration", "WOCHE 4 - Mastery"];
+  focus.weekly.forEach((items, wi) => {
+    const boxH = 58;
+    drawRoundedRect(doc, m, y, cw, boxH, 3, COLORS.cardBg);
+    doc.setFillColor(...COLORS.accent);
+    doc.roundedRect(m, y, 2, boxH, 1, 1, "F");
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(...COLORS.accent);
+    doc.text(weeks[wi], m + 7, y + 9);
+
+    items.forEach((item, ii) => {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(...COLORS.white);
+      doc.text(`${ii + 1}.`, m + 8, y + 18 + ii * 10);
+      doc.setTextColor(...COLORS.gray);
+      const lines = sSplit(doc, item, cw - 22);
+      doc.text(lines.slice(0, 2), m + 14, y + 18 + ii * 10);
+    });
+
+    y += boxH + 4;
+  });
+
+  doc.setFontSize(6);
+  doc.setTextColor(60, 60, 70);
+  doc.text("WLADHUB Confidential | 30-Day Roadmap", m, 290);
+  sText(doc, `${userName} | ${new Date().toLocaleDateString("de-DE")}`, pw - m, 290, { align: "right" });
+
+  // ============ PAGE 3: Journal + Recommendations ============
+  if ((journalEntries && journalEntries.filter(Boolean).length > 0) || narrative.recommendation_1) {
+    doc.addPage();
+    doc.setFillColor(...COLORS.bg);
+    doc.rect(0, 0, pw, ph, "F");
+    doc.setFillColor(...COLORS.accent);
+    doc.rect(0, 0, pw, 1, "F");
+
+    y = 18;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(...COLORS.accent);
+    doc.text("DEINE COMMITMENTS & EMPFEHLUNGEN", m, y);
+    y += 10;
+
+    const journalFilled = (journalEntries || []).filter(Boolean);
+    if (journalFilled.length > 0) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...COLORS.white);
+      doc.text("Deine Commitments", m, y);
+      y += 6;
+      journalFilled.slice(0, 6).forEach((entry, i) => {
+        drawRoundedRect(doc, m, y, cw, 14, 2, COLORS.cardBg);
+        doc.setFillColor(...COLORS.accent);
+        doc.roundedRect(m, y, 1.5, 14, 0.5, 0.5, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7);
+        doc.setTextColor(...COLORS.accent);
+        doc.text(`${i + 1}`, m + 5, y + 9);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(...COLORS.white);
+        const lines = sSplit(doc, entry, cw - 14);
+        doc.text(lines.slice(0, 1), m + 10, y + 9);
+        y += 17;
+      });
+      y += 4;
+    }
+
+    // Top 3 recommendations from report
+    const recs = [narrative.recommendation_1, narrative.recommendation_2, narrative.recommendation_3].filter(Boolean);
+    if (recs.length > 0) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...COLORS.white);
+      doc.text("Strategische Empfehlungen aus deinem Report", m, y);
+      y += 6;
+      recs.forEach((rec, i) => {
+        if (y > 260) return;
+        drawRoundedRect(doc, m, y, cw, 22, 3, COLORS.cardBg);
+        doc.setFillColor(...COLORS.accent);
+        doc.circle(m + 8, y + 11, 5, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(...COLORS.bg);
+        doc.text(`${i + 1}`, m + 6.5, y + 13.5);
+
+        const title = typeof rec === "string" ? rec : rec.title || "Empfehlung";
+        const desc = typeof rec === "string" ? "" : rec.description || "";
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(...COLORS.white);
+        sText(doc, title, m + 18, y + 9);
+        if (desc) {
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7);
+          doc.setTextColor(...COLORS.gray);
+          const rLines = sSplit(doc, desc, cw - 26);
+          doc.text(rLines.slice(0, 2), m + 18, y + 15);
+        }
+        y += 26;
+      });
+    }
+
+    // Closing
+    y = Math.max(y, 250);
+    if (narrative.closing_statement) {
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(10);
+      doc.setTextColor(...COLORS.white);
+      const closing = sSplit(doc, `"${narrative.closing_statement}"`, cw - 20);
+      doc.text(closing.slice(0, 3), pw / 2, y, { align: "center" });
+    }
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6);
+    doc.setTextColor(60, 60, 70);
+    doc.text("WLADHUB Confidential | 30-Day Roadmap", m, 290);
+    sText(doc, `${userName} | ${new Date().toLocaleDateString("de-DE")}`, pw - m, 290, { align: "right" });
+  }
+
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(0, 295, pw, 2, "F");
+
+  const safe = userName.replace(/[^a-zA-Z0-9\s\-]/g, "").trim() || "Leader";
+  doc.save(`WladHub - ${safe} 30-Tage-Plan.pdf`);
 }

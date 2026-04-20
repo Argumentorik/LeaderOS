@@ -150,6 +150,38 @@ export default function Report() {
           </div>
         )}
 
+        {/* Personal Response: PROOF that WladBot listened */}
+        {report.user_challenge && (
+          <div className="glass-card p-6 md:p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.03]" data-testid="report-personal-response">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-[#C8FF00]/[0.08] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
+                <Bot className="w-5 h-5 text-[#C8FF00]" />
+              </div>
+              <div className="flex-1">
+                <div className="badge-lime px-3 py-1 text-xs inline-flex items-center gap-2 mb-3">
+                  <MessageCircle className="w-3 h-3" />
+                  Wlad hat dir zugehört
+                </div>
+                <div className="mb-4 pl-4 border-l-2 border-[#C8FF00]/30">
+                  <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
+                    „{report.user_challenge}"
+                  </p>
+                </div>
+                {narrative.personal_response && (
+                  <p className="font-inter text-slate-200 leading-relaxed">
+                    {narrative.personal_response}
+                  </p>
+                )}
+                {!narrative.personal_response && narrative.urgency_message && (
+                  <p className="font-inter text-slate-200 leading-relaxed">
+                    {narrative.urgency_message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 5 Leadership Roles */}
         {Object.keys(leadership_roles).length > 0 && (
           <div className="mb-10" data-testid="leadership-roles">

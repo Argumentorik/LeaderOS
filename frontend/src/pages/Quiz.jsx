@@ -25,7 +25,8 @@ function WladBotChat({ onContinue }) {
 
   const sendMessage = async (text) => {
     if (!text.trim() || loading) return;
-    setMessages(prev => [...prev, { role: "user", text }]);
+    const userMsg = { role: "user", text };
+    setMessages(prev => [...prev, userMsg]);
     setInput("");
     setLoading(true);
 
@@ -42,6 +43,12 @@ function WladBotChat({ onContinue }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleContinue = () => {
+    // Only pass the real, non-intro turns to the report generator
+    const chatContext = messages.filter((m, i) => !(i === 0 && m.role === "assistant"));
+    onContinue(chatContext);
   };
 
   return (
@@ -124,7 +131,7 @@ function WladBotChat({ onContinue }) {
         {/* Continue */}
         <button
           data-testid="wladbot-continue"
-          onClick={onContinue}
+          onClick={handleContinue}
           className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-base flex items-center justify-center gap-3 hover:bg-[#d4ff33] transition-all shadow-lg shadow-[#C8FF00]/15"
         >
           <Sparkles className="w-5 h-5" />
@@ -177,10 +184,16 @@ export default function Quiz() {
     }, 400);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (chatContext) => {
     const answersArray = Object.values(answers);
     const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
-    navigate("/analyzing", { state: { answers: answersArray, session_id: user.session_id || user.user_id } });
+    navigate("/analyzing", {
+      state: {
+        answers: answersArray,
+        session_id: user.session_id || user.user_id,
+        chat_context: Array.isArray(chatContext) ? chatContext : null,
+      },
+    });
   };
 
   if (!question) return null;

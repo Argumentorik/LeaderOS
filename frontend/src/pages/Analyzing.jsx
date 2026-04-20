@@ -53,12 +53,16 @@ export default function Analyzing() {
   }, [activePhase]);
 
   useEffect(() => {
-    const { answers, session_id } = location.state || {};
+    const { answers, session_id, chat_context } = location.state || {};
     if (!answers) { navigate("/quiz"); return; }
 
     const generateReport = async () => {
       try {
-        const res = await axios.post(`${API}/quiz/generate-report`, { session_id, answers }, { timeout: 60000 });
+        const res = await axios.post(
+          `${API}/quiz/generate-report`,
+          { session_id, answers, chat_context: chat_context || null },
+          { timeout: 60000 }
+        );
         localStorage.setItem("emergent_report", JSON.stringify(res.data));
         navigate("/report");
       } catch (err) {
