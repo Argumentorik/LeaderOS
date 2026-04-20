@@ -179,7 +179,7 @@ def register_payment_routes(router: APIRouter, db, app_config):
             expires_at = key_doc.get("expires_at")
             if expires_at:
                 exp = datetime.fromisoformat(expires_at)
-                if exp.tzinfo == None:
+                if exp.tzinfo is None:
                     exp = exp.replace(tzinfo=timezone.utc)
                 if exp < datetime.now(timezone.utc):
                     await db.license_keys.update_one({"key": key.upper().strip()}, {"$set": {"status": "expired"}})

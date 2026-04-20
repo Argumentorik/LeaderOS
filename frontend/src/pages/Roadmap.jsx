@@ -142,9 +142,10 @@ export default function Roadmap() {
           setStrongestRole(sorted[sorted.length - 1][0]);
         }
       }
-    } catch (err) {
-      // Report parsing is non-critical
+    } catch {
+      // Non-critical: report data enhances UX but page works without it
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEntry = (i, val) => {
