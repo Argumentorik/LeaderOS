@@ -21,6 +21,18 @@ function sSplit(doc, text, width) {
   return doc.splitTextToSize(sanitize(text), width);
 }
 
+function transliterate(s) {
+  return String(s || "")
+    .replace(/ä/g, "ae").replace(/Ä/g, "Ae")
+    .replace(/ö/g, "oe").replace(/Ö/g, "Oe")
+    .replace(/ü/g, "ue").replace(/Ü/g, "Ue")
+    .replace(/ß/g, "ss");
+}
+
+function safeFilename(name) {
+  return transliterate(name).replace(/[^a-zA-Z0-9\s\-]/g, "").trim() || "Leader";
+}
+
 const COLORS = {
   bg: [10, 10, 10],
   cardBg: [18, 18, 20],
@@ -521,7 +533,7 @@ export function generateReportPDF(report, user) {
   doc.rect(0, 295, pw, 2, "F");
 
   // Save
-  const safeName = userName.replace(/[^a-zA-Z0-9\s\-]/g, "").trim();
+  const safeName = safeFilename(userName);
   doc.save(`WladHub - ${safeName} AI Report.pdf`);
 }
 
@@ -861,6 +873,6 @@ export function generateRoadmapPDF(report, user, journalEntries = []) {
   doc.setFillColor(...COLORS.accent);
   doc.rect(0, 295, pw, 2, "F");
 
-  const safe = userName.replace(/[^a-zA-Z0-9\s\-]/g, "").trim() || "Leader";
+  const safe = safeFilename(userName);
   doc.save(`WladHub - ${safe} 30-Tage-Plan.pdf`);
 }
