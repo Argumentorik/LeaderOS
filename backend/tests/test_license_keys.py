@@ -97,7 +97,7 @@ class TestLicenseKeyValidate:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["valid"] is True
+        assert data["valid"]
         assert data["status"] == "active"
         assert data["plan"] == "standard"
         assert "message" in data
@@ -110,7 +110,7 @@ class TestLicenseKeyValidate:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["valid"] is False
+        assert not data["valid"]
         assert "message" in data
         print(f"✓ Non-existent key validation returned valid=false")
 
@@ -131,7 +131,7 @@ class TestLicenseKeyActivate:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["success"] is True
+        assert data["success"]
         assert data["plan"] == "fasttrack"
         assert "plan_name" in data
         assert data["redirect_url"] == "https://leader-os.de"
@@ -186,7 +186,7 @@ class TestLicenseKeyActivate:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["success"] is True
+        assert data["success"]
         assert data["redirect_url"] == "https://leader-os.de"
         print(f"✓ Lowercase key activation worked")
 
@@ -230,7 +230,7 @@ class TestLicenseKeyRevoke:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["success"] is True
+        assert data["success"]
         assert "message" in data
         print(f"✓ Key revoked successfully: {key}")
     
@@ -273,7 +273,7 @@ class TestLicenseKeyValidateAfterActivation:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["valid"] is True
+        assert data["valid"]
         assert data["status"] == "used"
         assert "activated_by" in data
         assert "expires_at" in data
@@ -289,7 +289,7 @@ class TestLicenseKeyValidateAfterActivation:
         assert response.status_code == 200
         data = response.json()
         
-        assert data["valid"] is False
+        assert not data["valid"]
         assert data["status"] == "revoked"
         print(f"✓ Revoked key validation shows valid=false")
 

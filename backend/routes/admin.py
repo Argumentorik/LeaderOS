@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import asyncio
 import resend
 import logging
@@ -15,7 +15,7 @@ def register_admin_routes(router: APIRouter, db, config):
     async def admin_stats():
         now = datetime.now(timezone.utc)
         today_start = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
-        seven_days_ago = (now - __import__('datetime').timedelta(days=7)).isoformat()
+        seven_days_ago = (now - timedelta(days=7)).isoformat()
 
         total_users = await db.users.count_documents({})
         total_reports = await db.reports.count_documents({})

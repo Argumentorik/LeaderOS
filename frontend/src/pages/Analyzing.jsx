@@ -70,6 +70,7 @@ export default function Analyzing() {
     // Start API call after 3s animation delay (report generation runs while phases animate)
     const timer = setTimeout(generateReport, 3000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state, navigate]);
 
   return (
