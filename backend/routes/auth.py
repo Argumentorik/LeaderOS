@@ -26,7 +26,7 @@ async def get_current_user(db, request: Request) -> Optional[dict]:
     expires_at = session.get("expires_at")
     if isinstance(expires_at, str):
         expires_at = datetime.fromisoformat(expires_at)
-    if expires_at.tzinfo is None:
+    if expires_at.tzinfo == None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     if expires_at < datetime.now(timezone.utc):
         return None
