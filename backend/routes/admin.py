@@ -5,11 +5,25 @@ import resend
 import logging
 
 from models import BookingRequest
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 
+class AdminLogin(BaseModel):
+    password: str
+
+
 def register_admin_routes(router: APIRouter, db, config):
+
+    @router.post("/admin/login")
+    async def admin_login(data: AdminLogin):
+        expected = config.get("admin_password", "")
+        if not expected:
+            raise HTTPException(status_code=500, detail="Admin password not configured")
+        if data.password != expected:
+            raise HTTPException(status_code=401, detail="Invalid password")
+        return {"ok": True}
 
     @router.get("/admin/stats")
     async def admin_stats():

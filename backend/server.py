@@ -37,6 +37,7 @@ config = {
     "stripe_key": os.environ.get('STRIPE_API_KEY', ''),
     "resend_key": RESEND_API_KEY if RESEND_API_KEY != "your_resend_api_key_here" else "",
     "sender_email": SENDER_EMAIL,
+    "admin_password": os.environ.get('ADMIN_PASSWORD', ''),
 }
 
 # --- App Setup ---

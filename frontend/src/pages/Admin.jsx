@@ -5,7 +5,6 @@ import { KeysTable } from "../components/admin/KeysTable";
 import { UsersTable, TransactionsTable, BookingsTable, EmailsTable } from "../components/admin/DataTables";
 
 const API = process.env.REACT_APP_BACKEND_URL;
-const ADMIN_PASS = "wladhub2026";
 
 const TABS = [
   { id: "overview", label: "Overview", icon: TrendingUp },
@@ -19,6 +18,8 @@ const TABS = [
 export default function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
   const [stats, setStats] = useState(null);
   const [keys, setKeys] = useState([]);
   const [users, setUsers] = useState([]);
@@ -63,14 +64,39 @@ export default function Admin() {
     fetchAll();
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setAuthError("");
+    setAuthLoading(true);
+    try {
+      const res = await fetch(`${API}/api/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setAuthenticated(true);
+      } else {
+        setAuthError("Falsches Passwort");
+      }
+    } catch {
+      setAuthError("Login fehlgeschlagen. Bitte erneut versuchen.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4" data-testid="admin-login">
-        <form onSubmit={(e) => { e.preventDefault(); if (password === ADMIN_PASS) setAuthenticated(true); }} className="glass-card p-8 w-full max-w-sm">
+        <form onSubmit={handleLogin} className="glass-card p-8 w-full max-w-sm">
           <h1 className="font-manrope font-bold text-xl text-white mb-6 text-center">Admin Login</h1>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passwort" data-testid="admin-password"
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passwort" data-testid="admin-password" autoFocus
             className="w-full h-12 px-4 rounded-xl bg-white/[0.03] border border-white/[0.08] font-inter text-sm text-white placeholder:text-slate-600 focus:border-[#C8FF00]/30 focus:outline-none mb-4" />
-          <button type="submit" data-testid="admin-login-btn" className="w-full py-3 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-bold">Login</button>
+          {authError && <div className="mb-4 text-sm text-red-400 font-inter" data-testid="admin-login-error">{authError}</div>}
+          <button type="submit" disabled={authLoading || !password} data-testid="admin-login-btn" className="w-full py-3 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+            {authLoading ? "Pruefe..." : "Login"}
+          </button>
         </form>
       </div>
     );
