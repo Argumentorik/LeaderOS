@@ -56,16 +56,19 @@ export default function Analyzing() {
     const { answers, session_id } = location.state || {};
     if (!answers) { navigate("/quiz"); return; }
 
-    const timer = setTimeout(async () => {
+    const generateReport = async () => {
       try {
-        const res = await axios.post(`${API}/quiz/generate-report`, { session_id, answers });
+        const res = await axios.post(`${API}/quiz/generate-report`, { session_id, answers }, { timeout: 60000 });
         localStorage.setItem("emergent_report", JSON.stringify(res.data));
         navigate("/report");
       } catch (err) {
         console.error("Report generation failed:", err);
         setError("Report-Generierung fehlgeschlagen. Bitte versuche es erneut.");
       }
-    }, 9000);
+    };
+
+    // Start API call after 3s animation delay (report generation runs while phases animate)
+    const timer = setTimeout(generateReport, 3000);
     return () => clearTimeout(timer);
   }, [location.state, navigate]);
 

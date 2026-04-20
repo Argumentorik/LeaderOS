@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 class UserCreate(BaseModel):
@@ -12,7 +12,7 @@ class UserCreate(BaseModel):
 
 
 class QuizAnswer(BaseModel):
-    question_id: str
+    question_id: Union[str, int]
     category: str
     layer: str
     score: int
