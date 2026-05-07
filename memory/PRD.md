@@ -14,19 +14,25 @@
 │   └── admin.py      # Dashboard Stats, Users, Transactions, Bookings
 ```
 
-## Pricing
-- Starter: 199 EUR | Standard: 997 EUR/Jahr | Fast Track: 6.970 EUR/Jahr
+## Pricing (Feb 2026 — Komplettoverhaul)
+- **Leadership OS** — 997€/Jahr · 14-Tage-Trial · 12 Videokurse (1/Monat)
+  - Einmalzahlung 997€
+  - 2 Raten à 550€ = 1.100€ (+103€ Aufschlag)
+  - 12 Raten à 99€ = 1.188€ (+191€ Aufschlag)
+- **Leadership OS PLUS** — 4.447€/Jahr Einmalzahlung · inkl. 12 Einzelcoachings (à 299€ Wert)
+- **Leadership OS ENTERPRISE** — Preis auf Anfrage · B2B-Volumen-Rabatte (5 MA→10%, 10→15%, 20→20%, 50→30%, 100→40%, 200→50%)
 
 ## Implemented
 - [x] Full Funnel mit Hyperpersonalisierung
-- [x] 3-Tier Pricing (199/997/6.970)
-- [x] Admin Dashboard + Bookings + License Keys
-- [x] Resend E-Mail (5 Flows)
+- [x] **Feb 2026 — Pricing Overhaul**: 3 neue Tiers (Leadership OS / OS PLUS / Enterprise) — alte Starter/Fast Track entfernt; Enterprise-Rabatt-Rechner mit Live-Update + Inquiry-Form (Backend `/api/enterprise/calculate` + `/api/enterprise/inquire`); Resend-E-Mails an Admin und Interessent
+- [x] Admin Dashboard + Bookings + License Keys + Enterprise Inquiries
+- [x] Resend E-Mail (6 Flows: Welcome/Report/Reminder/Payment/Booking/Enterprise)
 - [x] Video-Plattform (/kurse)
 - [x] Backend-Refactoring: 1165 → 101 Zeilen server.py
 - [x] **Feb 2026 — WladBot Chat fließt in Report ein**: Q30-Chat wird als `chat_context` an `/api/quiz/generate-report` gesendet, fließt in AI-Prompt, erzeugt neues Feld `narrative.personal_response` + speichert `user_challenge` im Report-Dokument
-- [x] **Feb 2026 — Personalisierter 30-Tage-Plan PDF**: Neue `generateRoadmapPDF()` Funktion + Download-Button auf `/roadmap`, generiert 3-seitigen PDF-Plan basierend auf weakest_role, Score, Commitments, User-Challenge und Top-3-Empfehlungen. Umlauts werden sauber transliteriert (ä→ae etc.) im Dateinamen.
-- [x] **Feb 2026 — Report UI "Wlad hat dir zugehört"-Card**: Zeigt User-Challenge als Zitat + AI-Personal-Response in Report.jsx (`data-testid=report-personal-response`)
+- [x] **Feb 2026 — Personalisierter 30-Tage-Plan PDF**: Neue `generateRoadmapPDF()` Funktion + Download-Button auf `/roadmap`
+- [x] **Feb 2026 — Report UI "Wlad hat dir zugehört"-Card**
+- [x] **Feb 2026 — Admin-Login serverseitig**: `ADMIN_PASSWORD` Env-Var + `/api/admin/login` Endpoint (Deployment-Readiness)
 
 ## Routes
 / | /diagnose | /quiz | /analyzing | /report | /roadmap | /close | /payment-success | /activate | /kurse | /admin
