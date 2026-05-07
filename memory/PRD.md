@@ -24,6 +24,8 @@
 
 ## Implemented
 - [x] Full Funnel mit Hyperpersonalisierung
+- [x] **Feb 2026 — Cleanup & Refactoring**: Alle Legacy-Referenzen (Starter/Fast Track/€199/€6.970) aus aktiven Code-Pfaden entfernt (KeysTable, PaymentSuccess, email_templates, models, admin booking, Roadmap, Kurse). HighTicketClose.jsx 633→257 Zeilen via Component-Splitting nach `/components/pricing/*`: pricingConstants.js + 5 fokussierte Subkomponenten (PriceCards, PaymentSection, EnterpriseSection, ComparisonTable, FeatureRow).
+- [x] **Feb 2026 — Stripe-Subscription-Wiring (P3)**: Backend unterstützt jetzt echten Subscription-Mode (`mode='subscription'` in PACKAGES) für Ratenzahlung — wird automatisch aktiviert, sobald ein echter Stripe-Key (sk_live_ oder sk_test_<hash>) gesetzt wird. Mit aktuellem Emergent-Test-Key fällt das System sauber auf Einmalzahlung des Gesamtbetrags zurück (`fallback_from_subscription=true`). Helper `_is_real_stripe_key` + `_create_subscription_checkout`. Frontend zeigt transparenten Hinweis-Banner bei Wahl einer Ratenzahlung im Test-Modus.
 - [x] **Feb 2026 — Pricing Overhaul**: 3 neue Tiers (Leadership OS / OS PLUS / Enterprise) — alte Starter/Fast Track entfernt; Enterprise-Rabatt-Rechner mit Live-Update + Inquiry-Form (Backend `/api/enterprise/calculate` + `/api/enterprise/inquire`); Resend-E-Mails an Admin und Interessent
 - [x] Admin Dashboard + Bookings + License Keys + Enterprise Inquiries
 - [x] Resend E-Mail (6 Flows: Welcome/Report/Reminder/Payment/Booking/Enterprise)
