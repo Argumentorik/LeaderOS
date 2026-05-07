@@ -24,17 +24,18 @@
 
 ## Implemented
 - [x] Full Funnel mit Hyperpersonalisierung
-- [x] **Feb 2026 — Cleanup & Refactoring**: Alle Legacy-Referenzen (Starter/Fast Track/€199/€6.970) aus aktiven Code-Pfaden entfernt (KeysTable, PaymentSuccess, email_templates, models, admin booking, Roadmap, Kurse). HighTicketClose.jsx 633→257 Zeilen via Component-Splitting nach `/components/pricing/*`: pricingConstants.js + 5 fokussierte Subkomponenten (PriceCards, PaymentSection, EnterpriseSection, ComparisonTable, FeatureRow).
-- [x] **Feb 2026 — Stripe-Subscription-Wiring (P3)**: Backend unterstützt jetzt echten Subscription-Mode (`mode='subscription'` in PACKAGES) für Ratenzahlung — wird automatisch aktiviert, sobald ein echter Stripe-Key (sk_live_ oder sk_test_<hash>) gesetzt wird. Mit aktuellem Emergent-Test-Key fällt das System sauber auf Einmalzahlung des Gesamtbetrags zurück (`fallback_from_subscription=true`). Helper `_is_real_stripe_key` + `_create_subscription_checkout`. Frontend zeigt transparenten Hinweis-Banner bei Wahl einer Ratenzahlung im Test-Modus.
-- [x] **Feb 2026 — Pricing Overhaul**: 3 neue Tiers (Leadership OS / OS PLUS / Enterprise) — alte Starter/Fast Track entfernt; Enterprise-Rabatt-Rechner mit Live-Update + Inquiry-Form (Backend `/api/enterprise/calculate` + `/api/enterprise/inquire`); Resend-E-Mails an Admin und Interessent
+- [x] **Feb 2026 — Code Quality Refactoring**: Routes-Komplexität dramatisch reduziert. `register_admin_routes` (CC 34 → grade A), `register_payment_routes` (CC 44 → split in checkout/license registrar), `generate_ai_narrative` (CC 19 → grade B mit 4 Helpers). Alle Funktionen laut radon jetzt grade B (CC≤10). Neuer `services/`-Layer (`admin_emails.py`, `enterprise_pricing.py`, `license_keys.py`) — Logik raus aus Routes. `admin.py` split in 3 Registrare (`register_admin_routes`, `register_booking_routes`, `register_enterprise_routes`). 29/29 Backend-Regressionstests PASS.
+- [x] **Feb 2026 — Cleanup & Refactoring**: Alle Legacy-Referenzen aus aktiven Code-Pfaden entfernt. HighTicketClose.jsx 633→257 Zeilen via Component-Splitting nach `/components/pricing/*`.
+- [x] **Feb 2026 — Stripe-Subscription-Wiring (P3)**: Backend wired für echte Subscription-Mode. Helper `_is_real_stripe_key` schaltet automatisch um, sobald echter Stripe-Key gesetzt wird. Mit Emergent-Test-Key sauber Fallback auf Einmalzahlung des Gesamtbetrags.
+- [x] **Feb 2026 — Pricing Overhaul**: 3 neue Tiers (Leadership OS / OS PLUS / Enterprise) mit Live-Rabatt-Rechner + Inquiry-Form + Resend-E-Mails
 - [x] Admin Dashboard + Bookings + License Keys + Enterprise Inquiries
-- [x] Resend E-Mail (6 Flows: Welcome/Report/Reminder/Payment/Booking/Enterprise)
+- [x] Resend E-Mail (6 Flows)
 - [x] Video-Plattform (/kurse)
 - [x] Backend-Refactoring: 1165 → 101 Zeilen server.py
-- [x] **Feb 2026 — WladBot Chat fließt in Report ein**: Q30-Chat wird als `chat_context` an `/api/quiz/generate-report` gesendet, fließt in AI-Prompt, erzeugt neues Feld `narrative.personal_response` + speichert `user_challenge` im Report-Dokument
-- [x] **Feb 2026 — Personalisierter 30-Tage-Plan PDF**: Neue `generateRoadmapPDF()` Funktion + Download-Button auf `/roadmap`
+- [x] **Feb 2026 — WladBot Chat fließt in Report ein**: Q30-Chat als `chat_context` → AI-Prompt → `personal_response`-Feld
+- [x] **Feb 2026 — Personalisierter 30-Tage-Plan PDF**
 - [x] **Feb 2026 — Report UI "Wlad hat dir zugehört"-Card**
-- [x] **Feb 2026 — Admin-Login serverseitig**: `ADMIN_PASSWORD` Env-Var + `/api/admin/login` Endpoint (Deployment-Readiness)
+- [x] **Feb 2026 — Admin-Login serverseitig**: ENV-Var + `/api/admin/login`
 
 ## Routes
 / | /diagnose | /quiz | /analyzing | /report | /roadmap | /close | /payment-success | /activate | /kurse | /admin
