@@ -86,7 +86,7 @@ export default function Kurse() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.25em] text-[#C8FF00] uppercase mb-5">
-            6 Starter-Kurse · Kostenlos
+            6 Free Lessons · Kostenlos
           </span>
           <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
             Leadership Upgrade Programm

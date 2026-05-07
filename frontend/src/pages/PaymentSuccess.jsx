@@ -76,7 +76,10 @@ export default function PaymentSuccess() {
               Zahlung erfolgreich!
             </h1>
             <p className="font-inter text-base text-slate-400 mb-2">
-              Dein {paymentData?.metadata?.plan === "fasttrack" ? "Fast Track" : "Standard"}-Zugang ist jetzt aktiv.
+              Dein {paymentData?.metadata?.plan === "leader_os_plus" ? "Leadership OS PLUS" :
+                    paymentData?.metadata?.plan === "leader_os_enterprise" ? "Leadership OS ENTERPRISE" :
+                    paymentData?.metadata?.plan === "fasttrack" ? "Fast Track" :
+                    "Leadership OS"}-Zugang ist jetzt aktiv.
             </p>
             <p className="font-inter text-sm text-[#C8FF00]/60 mb-8">
               14 Tage kostenlos testen · Danach automatische Verlängerung

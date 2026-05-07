@@ -296,7 +296,12 @@ def _payment_features(plan: str) -> str:
         "Dein persönlicher 30-Tage-Plan startet heute",
         "WladBot kennt dein Profil und ist 24/7 für dich da",
     ]
-    if plan == "fasttrack":
+    if plan == "leader_os_plus":
+        items.append("12 Einzelcoachings werden separat per E-Mail terminiert")
+        items.append("Dedizierter Coach meldet sich innerhalb von 48h")
+    elif plan == "leader_os_enterprise":
+        items.append("Onboarding-Workshop wird mit deinem Account Manager geplant")
+    elif plan == "fasttrack":
         items.append("1:1 Calls werden separat per E-Mail terminiert")
     rows = "".join([f"""<tr><td style="padding:8px 0;">
 <span style="color:{BRAND['lime']};font-size:14px;">✓</span>
@@ -306,7 +311,15 @@ def _payment_features(plan: str) -> str:
 
 
 def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
-    plan_name = "Fast Track – Leadership Accelerator" if plan == "fasttrack" else "Standard – Leadership System" if plan == "standard" else "Starter – Video Lessons"
+    plan_name_map = {
+        "leader_os": "Leadership OS — 1 Jahr Vollzugang",
+        "leader_os_plus": "Leadership OS PLUS — inkl. 12 Coachings",
+        "leader_os_enterprise": "Leadership OS ENTERPRISE — B2B-Lizenz",
+        "fasttrack": "Fast Track – Leadership Accelerator",
+        "standard": "Leadership OS — 1 Jahr Vollzugang",
+        "starter": "Starter – Video Lessons",
+    }
+    plan_name = plan_name_map.get(plan, "Leadership OS — 1 Jahr Vollzugang")
 
     content = f"""
 <tr><td>{_section_label("Zahlung bestätigt", BRAND['lime'])}</td></tr>

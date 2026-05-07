@@ -1,0 +1,30 @@
+{
+  "summary": "Iteration 24 — Stripe subscription wiring, P2 component splitting & legacy cleanup verified. Backend: 15/15 pytest cases passed (PACKAGES rejects starter/fasttrack/unknown=400; create-checkout for leader_os_full=997 EUR one-time, leader_os_2rate fallback charging 1100 EUR with fallback_from_subscription=true, leader_os_12rate fallback charging 1188 EUR with fallback_from_subscription=true, leader_os_plus=4447 EUR, standard_yearly legacy alias still routes to mode=payment; /payments/status returns persisted tx with all expected fields; /license/create works for leader_os, leader_os_plus, leader_os_enterprise; /booking/create with no plan defaults to 'leader_os_plus' (verified via /booking/list); /enterprise/calculate at 5 employees=10% and 50 employees=30% per_seat=697.90 total=34895.00; /enterprise/inquire stores doc OK). Frontend E2E on /close: 3-tier card layout with plan-leader-os, plan-leader-os-plus, plan-leader-os-enterprise testids; NO Starter / Fast Track / 6970 text on page; cta-leader-os shows payment-section with all 3 toggles + installment-info banner mentioning Stripe-Live-Modus + stripe-checkout-btn; cta-leader-os-plus shows payment-section with 0 toggles and 4.447 EUR button; cta-leader-os-enterprise shows enterprise-section, calculator with employees=50 yields ent-discount=−30%, ent-per-seat=697,90 EUR, ent-total=34.895,00 EUR; enterprise inquiry form submits successfully (ent-inq-success card appears). Admin: POST /api/admin/login with password 'wladhub2026' returns 200 (server-validated, no client-side hardcode). KeysTable 'Key erstellen' dropdown shows ONLY new plan options: leader_os / leader_os_plus / leader_os_enterprise. HighTicketClose.jsx is 257 lines and properly imports from /components/pricing/* (PriceCards, PaymentSection, EnterpriseSection, ComparisonTable, pricingConstants).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter24_pricing_subs.py",
+    "/app/test_reports/pytest/pytest_results_iter24.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Old license keys with plans 'starter' / 'fasttrack' / 'standard' remain in DB from previous test seed data; UI displays them correctly but they look like legacy artifacts in admin LicenseKeys table. Consider a one-time DB cleanup or admin migration to map starter→leader_os, fasttrack→leader_os_plus for visual consistency. Code-level cleanup is complete.",
+    "payments.py PACKAGES still keeps legacy alias 'standard_yearly' (matches iter23 note). Once the real Stripe key is provisioned, the dormant subscription path (_create_subscription_checkout) should be exercised with a webhook simulation test — current iteration only validates the fallback path.",
+    "_is_real_stripe_key correctly excludes 'sk_test_emergent' placeholder; logic looks robust (sk_live_ OR sk_test_<long-hash>). Edge: Stripe Restricted Keys (rk_live_) are not detected — likely intentional but worth a comment.",
+    "create_license_key_internal still has legacy plan_config entries for 'starter' / 'standard' / 'fasttrack'. Useful for back-compat but consider deprecation comments so future devs don't accidentally re-introduce them as new plans."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter24_pricing_subs.py"
+  ],
+  "success_rate": {"backend": "100% (15/15)", "frontend": "100% (all critical flows)"},
+  "test_credentials": "admin password 'wladhub2026' — verified via /api/admin/login HTTP 200",
+  "seed_data_creation": "Created several TEST_-prefixed payment_transactions, license keys (TEST_K1/K2/K3), 1 booking and 1 enterprise inquiry during regression. All clearly tagged TEST_ for cleanup.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter24 fully validates: (a) legacy Starter/Fast Track refs purged from active code paths (PACKAGES rejects them, KeysTable creator dropdown only has 3 new plans, /close has no legacy text). (b) HighTicketClose component splitting works without regressions. (c) Stripe subscription mode is correctly wired but FALLS BACK to one-time charge of total_amount in current Emergent test env (sk_test_emergent placeholder). The fallback path is intended behavior — flagged via 'fallback_from_subscription=true' on tx records. The real subscription path (_create_subscription_checkout via stripe SDK) is dormant and untested in this env; recommend a follow-up integration test once a real sk_test_<hash> or sk_live_ key is provisioned. Reusable regression file: /app/backend/tests/test_iter24_pricing_subs.py.",
+  "rca of the issue": "N/A — no failures."
+}

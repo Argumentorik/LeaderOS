@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export function KeysTable({ keys, onCreateKey, onRevokeKey }) {
   const [showCreate, setShowCreate] = useState(false);
-  const [plan, setPlan] = useState("standard");
+  const [plan, setPlan] = useState("leader_os");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [createdKey, setCreatedKey] = useState(null);
@@ -34,9 +34,9 @@ export function KeysTable({ keys, onCreateKey, onRevokeKey }) {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <select value={plan} onChange={e => setPlan(e.target.value)} className="h-10 px-3 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-sm">
-                <option value="standard">Standard (€997)</option>
-                <option value="fasttrack">Fast Track (€6.970)</option>
-                <option value="starter">Starter (€199)</option>
+                <option value="leader_os">Leadership OS (€997)</option>
+                <option value="leader_os_plus">Leadership OS PLUS (€4.447)</option>
+                <option value="leader_os_enterprise">Leadership OS ENTERPRISE</option>
               </select>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Name (optional)" className="h-10 px-3 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-sm placeholder:text-slate-600" />
               <input value={email} onChange={e => setEmail(e.target.value)} placeholder="E-Mail (optional)" className="h-10 px-3 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-sm placeholder:text-slate-600" />

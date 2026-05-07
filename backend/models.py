@@ -57,7 +57,7 @@ class BookingRequest(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
     session_id: Optional[str] = None
-    plan: Optional[str] = "fasttrack"
+    plan: Optional[str] = "leader_os_plus"
     notes: Optional[str] = None
 
 

@@ -519,11 +519,11 @@ export default function Roadmap() {
                 <Rocket className="w-7 h-7 text-[#C8FF00]" />
               </div>
               <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Du bist bereit für mehr!</h3>
-              <p className="font-inter text-sm text-slate-400">Schalte alle 23 Kurse, die WLADHUB Plattform und alle 6 KI-Agenten frei.</p>
+              <p className="font-inter text-sm text-slate-400">Schalte alle 12 Premium-Kurse, die WLADHUB Plattform und alle 6 KI-Agenten frei.</p>
             </div>
             <div className="text-center mb-4">
-              <div className="font-manrope font-extrabold text-3xl text-white">ab €997</div>
-              <div className="font-inter text-xs text-slate-500">einmalig · License Key per E-Mail</div>
+              <div className="font-manrope font-extrabold text-3xl text-white">ab €997 / Jahr</div>
+              <div className="font-inter text-xs text-slate-500">Leadership OS · 14 Tage Trial · Ratenzahlung möglich</div>
             </div>
             <button onClick={() => { setShowPopup(false); navigate("/close"); }}
               className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold flex items-center justify-center gap-2"

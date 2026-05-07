@@ -1,24 +1,52 @@
 from fastapi import APIRouter, HTTPException, Request
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionRequest, CheckoutStatusResponse
 import asyncio
 import logging
 import secrets
 import string
+import stripe as stripe_sdk
 
 from models import CreateCheckoutRequest, LicenseKeyActivate, LicenseKeyCreate
 
 logger = logging.getLogger(__name__)
 
 PACKAGES = {
-    # Leadership OS — 3 payment options (totals incl. installment surcharge)
-    "leader_os_full": {"name": "Leadership OS — Einmalzahlung", "amount": 997.00, "currency": "eur", "plan": "leader_os", "billing": "one_time"},
-    "leader_os_2rate": {"name": "Leadership OS — 2 Raten", "amount": 1100.00, "currency": "eur", "plan": "leader_os", "billing": "2_rates"},
-    "leader_os_12rate": {"name": "Leadership OS — 12 Raten", "amount": 1188.00, "currency": "eur", "plan": "leader_os", "billing": "12_rates"},
-    # Leadership OS PLUS — Einmalzahlung
-    "leader_os_plus": {"name": "Leadership OS PLUS — inkl. 12 Coachings", "amount": 4447.00, "currency": "eur", "plan": "leader_os_plus", "billing": "one_time"},
-    # Legacy aliases (backward compatibility for any cached frontend)
-    "standard_yearly": {"name": "Leadership OS — Einmalzahlung", "amount": 997.00, "currency": "eur", "plan": "leader_os", "billing": "one_time"},
+    # Leadership OS — 3 payment options
+    # Einmalzahlung: one-time charge of full amount
+    "leader_os_full": {
+        "name": "Leadership OS — Einmalzahlung",
+        "amount": 997.00, "currency": "eur", "plan": "leader_os",
+        "billing": "one_time", "mode": "payment",
+    },
+    # 2 Raten (every 6 months × 2 cycles = 1 year)
+    "leader_os_2rate": {
+        "name": "Leadership OS — 2 Raten à 550 EUR",
+        "amount": 550.00, "currency": "eur", "plan": "leader_os",
+        "billing": "2_rates", "mode": "subscription",
+        "interval": "month", "interval_count": 6, "cycles": 2,
+        "total_amount": 1100.00,
+    },
+    # 12 Monatsraten (every month × 12 cycles)
+    "leader_os_12rate": {
+        "name": "Leadership OS — 12 Monatsraten à 99 EUR",
+        "amount": 99.00, "currency": "eur", "plan": "leader_os",
+        "billing": "12_rates", "mode": "subscription",
+        "interval": "month", "interval_count": 1, "cycles": 12,
+        "total_amount": 1188.00,
+    },
+    # OS PLUS — Einmalzahlung
+    "leader_os_plus": {
+        "name": "Leadership OS PLUS — inkl. 12 Coachings",
+        "amount": 4447.00, "currency": "eur", "plan": "leader_os_plus",
+        "billing": "one_time", "mode": "payment",
+    },
+    # Legacy alias (backward compatibility)
+    "standard_yearly": {
+        "name": "Leadership OS — Einmalzahlung",
+        "amount": 997.00, "currency": "eur", "plan": "leader_os",
+        "billing": "one_time", "mode": "payment",
+    },
 }
 
 
@@ -54,38 +82,161 @@ async def create_license_key_internal(db, plan, email=None, name=None, source="s
     return key
 
 
+def _is_real_stripe_key(key: str) -> bool:
+    """Detect real Stripe keys (sk_live_... or sk_test_<long-hash>) vs the
+    Emergent platform placeholder 'sk_test_emergent'. Subscription mode
+    requires direct Stripe SDK access which only works with real keys.
+    """
+    if not key:
+        return False
+    if key == "sk_test_emergent":
+        return False
+    return key.startswith("sk_live_") or (key.startswith("sk_test_") and len(key) > 20)
+
+
 def register_payment_routes(router: APIRouter, db, app_config):
+
+    # Set Stripe SDK key once (subscriptions only work with real Stripe keys)
+    stripe_sdk.api_key = app_config.get("stripe_key", "")
+
+    async def _create_subscription_checkout(package, req, http_request):
+        """Create a Stripe Checkout in subscription mode for installment plans.
+
+        Uses Stripe SDK directly (emergentintegrations only supports one-time).
+        Sets cancel_at to 1 year from now so the subscription auto-cancels after
+        all installments are collected (12 months total for both 2-rate and 12-rate plans).
+        """
+        success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{req.origin_url}/close"
+        cancel_at = int((datetime.now(timezone.utc) + timedelta(days=370)).timestamp())  # +5 days buffer
+
+        metadata = {
+            "package_id": req.package_id,
+            "plan": package["plan"],
+            "billing": package["billing"],
+            "cycles": str(package["cycles"]),
+            "total_amount": str(package["total_amount"]),
+            "user_email": req.email or "",
+            "user_name": req.user_name or "",
+            "user_session_id": req.user_session_id or "",
+        }
+
+        # Inline price_data — no need to pre-create Stripe Products
+        session = await asyncio.to_thread(
+            stripe_sdk.checkout.Session.create,
+            mode="subscription",
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": package["currency"],
+                    "product_data": {"name": package["name"]},
+                    "unit_amount": int(package["amount"] * 100),
+                    "recurring": {
+                        "interval": package["interval"],
+                        "interval_count": package["interval_count"],
+                    },
+                },
+                "quantity": 1,
+            }],
+            subscription_data={
+                "cancel_at": cancel_at,
+                "metadata": metadata,
+            },
+            customer_email=req.email or None,
+            success_url=success_url,
+            cancel_url=cancel_url,
+            metadata=metadata,
+        )
+        return session
 
     @router.post("/payments/create-checkout")
     async def create_checkout(req: CreateCheckoutRequest, http_request: Request):
         package = PACKAGES.get(req.package_id)
         if not package:
             raise HTTPException(status_code=400, detail=f"Unknown package: {req.package_id}")
+
+        mode = package.get("mode", "payment")
+        use_real_subscription = mode == "subscription" and _is_real_stripe_key(app_config.get("stripe_key", ""))
+
+        if use_real_subscription:
+            try:
+                session = await _create_subscription_checkout(package, req, http_request)
+            except Exception as e:
+                logger.error(f"Subscription checkout error: {e}")
+                raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
+
+            await db.payment_transactions.insert_one({
+                "session_id": session.id, "package_id": req.package_id,
+                "package_name": package["name"],
+                "amount": package["amount"],  # per-installment amount
+                "total_amount": package.get("total_amount", package["amount"]),
+                "currency": package["currency"], "plan": package["plan"],
+                "billing": package["billing"], "mode": "subscription",
+                "cycles": package.get("cycles", 1),
+                "stripe_subscription_id": getattr(session, "subscription", None),
+                "email": req.email or "",
+                "name": req.user_name or "", "user_session_id": req.user_session_id or "",
+                "payment_status": "initiated", "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            })
+            return {"url": session.url, "session_id": session.id, "mode": "subscription"}
+
+        # One-time payment via emergentintegrations.
+        # For installment plans WITHOUT real Stripe key: charge total_amount upfront as fallback
+        # so the platform stays usable in test/preview environments.
         stripe = StripeCheckout(api_key=app_config["stripe_key"])
-        amount_cents = int(package["amount"] * 100)
+        charge_amount = package.get("total_amount") if mode == "subscription" else package["amount"]
+        amount_cents = int(charge_amount * 100)
         success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
         cancel_url = f"{req.origin_url}/close"
         checkout_req = CheckoutSessionRequest(
             amount=amount_cents, currency=package["currency"],
             success_url=success_url, cancel_url=cancel_url,
-            metadata={"package_id": req.package_id, "plan": package["plan"], "billing": package["billing"]}
+            metadata={
+                "package_id": req.package_id,
+                "plan": package["plan"],
+                "billing": package["billing"],
+                "fallback_from_subscription": "true" if mode == "subscription" else "false",
+            }
         )
         session = await stripe.create_checkout_session(checkout_req)
         await db.payment_transactions.insert_one({
             "session_id": session.session_id, "package_id": req.package_id,
-            "package_name": package["name"], "amount": package["amount"],
+            "package_name": package["name"],
+            "amount": charge_amount,
+            "total_amount": charge_amount,
             "currency": package["currency"], "plan": package["plan"],
-            "billing": package["billing"], "email": req.email or "",
+            "billing": package["billing"], "mode": "payment",
+            "fallback_from_subscription": mode == "subscription",
+            "email": req.email or "",
             "name": req.user_name or "", "user_session_id": req.user_session_id or "",
             "payment_status": "initiated", "status": "pending",
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat(),
         })
-        return {"url": session.url, "session_id": session.session_id}
+        return {"url": session.url, "session_id": session.session_id, "mode": "payment"}
 
     @router.get("/payments/status/{session_id}")
     async def get_payment_status(session_id: str, http_request: Request):
         tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+        if tx and tx.get("mode") == "subscription":
+            # For subscriptions: check Stripe directly (emergentintegrations doesn't handle subs)
+            try:
+                session = await asyncio.to_thread(stripe_sdk.checkout.Session.retrieve, session_id)
+                return {
+                    "session_id": session_id,
+                    "payment_status": session.payment_status,
+                    "status": session.status,
+                    "subscription_id": session.subscription,
+                    "mode": "subscription",
+                    "amount_per_cycle": tx.get("amount"),
+                    "total_amount": tx.get("total_amount"),
+                    "cycles": tx.get("cycles"),
+                }
+            except Exception as e:
+                logger.error(f"Stripe subscription status error: {e}")
+                return tx
         if tx:
             return tx
         try:

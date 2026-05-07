@@ -97,7 +97,7 @@ def register_admin_routes(router: APIRouter, db, config):
         booking = {
             "date": data.date, "time": data.time,
             "name": data.name or "", "email": data.email or "",
-            "session_id": data.session_id or "", "plan": data.plan or "fasttrack",
+            "session_id": data.session_id or "", "plan": data.plan or "leader_os_plus",
             "notes": data.notes or "", "status": "pending",
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -139,7 +139,7 @@ def register_admin_routes(router: APIRouter, db, config):
 </div>
 <p style="color:#94A3B8;">Wir bestätigen deinen Termin innerhalb von 24 Stunden per E-Mail.</p>
 <p style="color:#C8FF00;font-weight:bold;margin-top:20px;">Bis bald!</p>
-<p style="color:#64748B;font-size:11px;margin-top:30px;">WLADHUB · Fast Track Leadership Accelerator</p>
+<p style="color:#64748B;font-size:11px;margin-top:30px;">WLADHUB · Leadership OS PLUS</p>
 </div></body></html>"""
                     await asyncio.to_thread(resend.Emails.send, {
                         "from": f"Wlad von WLADHUB <{config['sender_email']}>",
