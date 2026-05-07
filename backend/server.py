@@ -15,7 +15,7 @@ from routes.auth import register_auth_routes
 from routes.quiz import register_quiz_routes
 from routes.payments import register_payment_routes
 from routes.email import register_email_routes, send_welcome_email_background
-from routes.admin import register_admin_routes
+from routes.admin import register_admin_routes, register_booking_routes, register_enterprise_routes
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -62,6 +62,8 @@ register_quiz_routes(api_router, db, config)
 register_payment_routes(api_router, db, config)
 register_email_routes(api_router, db, config)
 register_admin_routes(api_router, db, config)
+register_booking_routes(api_router, db, config)
+register_enterprise_routes(api_router, db, config)
 
 
 # --- Core Endpoints (kept in server.py) ---

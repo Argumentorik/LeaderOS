@@ -58,32 +58,45 @@ def calculate_roi(layer_avg, total_avg):
     }
 
 
-async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, total_avg, chat_context=None):
-    if not llm_key:
-        return {"profile_title": "Leadership-Profil", "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."}
-    try:
-        chat = LlmChat(api_key=llm_key, session_id=f"report_{session_id}", system_message="Du bist ein Executive Leadership Coach.")
-        chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
+_NARRATIVE_FALLBACK = {
+    "profile_title": "Leadership-Profil",
+    "executive_summary": "Dein individuelles Führungsprofil wurde analysiert.",
+}
 
-        # Weave user's own voice (WladBot chat at Q30) into the narrative
-        user_voice_block = ""
-        if chat_context:
-            turns = []
-            for t in chat_context:
-                role = getattr(t, "role", None) or (t.get("role") if isinstance(t, dict) else None)
-                text = getattr(t, "text", None) or (t.get("text") if isinstance(t, dict) else None)
-                if role == "user" and text:
-                    turns.append(text.strip())
-            if turns:
-                user_voice_block = (
-                    "\n\nZUSATZLICH - EIGENE WORTE DES NUTZERS (aus dem Pre-Report-Gespräch mit WladBot):\n"
-                    + "\n".join(f'- "{t}"' for t in turns[:6])
-                    + "\n\nWICHTIG: Beziehe dich DIREKT und KONKRET auf diese selbst geschilderten Herausforderungen. "
-                    "Verwende den Namen der Herausforderung oder das Thema wörtlich in mindestens einem Satz des executive_summary "
-                    "und in einer der Empfehlungen. Der Nutzer muss SPÜREN, dass wir zugehört haben."
-                )
 
-        prompt = f"""Analysiere dieses Leadership-Profil auf Deutsch.
+def _extract_user_voice(chat_context) -> list:
+    """Pull only the user's own messages from the WladBot chat transcript."""
+    if not chat_context:
+        return []
+    turns = []
+    for t in chat_context:
+        role = getattr(t, "role", None) or (t.get("role") if isinstance(t, dict) else None)
+        text = getattr(t, "text", None) or (t.get("text") if isinstance(t, dict) else None)
+        if role == "user" and text:
+            turns.append(text.strip())
+    return turns[:6]
+
+
+def _build_voice_block(turns: list) -> str:
+    if not turns:
+        return ""
+    return (
+        "\n\nZUSATZLICH - EIGENE WORTE DES NUTZERS (aus dem Pre-Report-Gespräch mit WladBot):\n"
+        + "\n".join(f'- "{t}"' for t in turns)
+        + "\n\nWICHTIG: Beziehe dich DIREKT und KONKRET auf diese selbst geschilderten Herausforderungen. "
+        "Verwende den Namen der Herausforderung oder das Thema wörtlich in mindestens einem Satz des executive_summary "
+        "und in einer der Empfehlungen. Der Nutzer muss SPÜREN, dass wir zugehört haben."
+    )
+
+
+def _build_narrative_prompt(user, cat_avg, layer_avg, total_avg, voice_block) -> str:
+    has_voice = bool(voice_block)
+    extra_summary = " - MUSS die vom Nutzer geschilderte Herausforderung direkt adressieren" if has_voice else ""
+    extra_rec = " - MUSS konkret auf die genannte Herausforderung eingehen" if has_voice else ""
+    extra_close = " - sollte auf die Herausforderung des Nutzers Bezug nehmen" if has_voice else ""
+    extra_personal = "13. personal_response: Ein empathischer 2-Satz-Gruß an den Nutzer, der seine konkrete Herausforderung WÖRTLICH aufgreift und Verständnis zeigt (wie ein Coach, der wirklich zugehört hat)" if has_voice else ""
+
+    return f"""Analysiere dieses Leadership-Profil auf Deutsch.
 
 Benutzer: {user.get('name', 'Leader')}, Rolle: {user.get('role', 'Führungskraft')}
 
@@ -95,35 +108,56 @@ LAYER-SCORES (0-100):
 - Boardroom-Rhetorik (rhetoric): {layer_avg.get('rhetoric', 50)}
 - Strategisches EQ (strategic_eq): {layer_avg.get('strategic_eq', 50)}
 
-GESAMT: {total_avg}%{user_voice_block}
+GESAMT: {total_avg}%{voice_block}
 
 Erstelle eine professionelle Analyse mit diesen Abschnitten (kurz und prägnant, max 2-3 Sätze pro Abschnitt):
 
 1. profile_title: Ein passender Titel für dieses Führungsprofil (z.B. "Der strategische Visionär")
-2. executive_summary: Kernaussage über die Stärken und das Potenzial{' - MUSS die vom Nutzer geschilderte Herausforderung direkt adressieren' if user_voice_block else ''}
+2. executive_summary: Kernaussage über die Stärken und das Potenzial{extra_summary}
 3. ai_literacy_analysis: Bewertung der KI-Kompetenz
 4. rhetoric_analysis: Bewertung der Kommunikationsstärke
 5. eq_analysis: Bewertung der emotionalen Intelligenz
 6. top_strength: Die größte Stärke
 7. growth_priority: Die wichtigste Entwicklungspriorität
-8. recommendation_1: {{title, description}} - Erste Empfehlung{' - MUSS konkret auf die genannte Herausforderung eingehen' if user_voice_block else ''}
+8. recommendation_1: {{title, description}} - Erste Empfehlung{extra_rec}
 9. recommendation_2: {{title, description}} - Zweite Empfehlung
 10. recommendation_3: {{title, description}} - Dritte Empfehlung
 11. urgency_message: Warum jetzt handeln? (motivierend, nicht bedrohlich)
-12. closing_statement: Ein inspirierender Abschlusssatz{' - sollte auf die Herausforderung des Nutzers Bezug nehmen' if user_voice_block else ''}
-{'13. personal_response: Ein empathischer 2-Satz-Gruß an den Nutzer, der seine konkrete Herausforderung WÖRTLICH aufgreift und Verständnis zeigt (wie ein Coach, der wirklich zugehört hat)' if user_voice_block else ''}
+12. closing_statement: Ein inspirierender Abschlusssatz{extra_close}
+{extra_personal}
 
 Antworte NUR mit validem JSON."""
+
+
+def _parse_narrative_response(raw: str) -> dict:
+    """Strip optional ```json fences and parse the JSON body."""
+    text = raw.strip()
+    if text.startswith("```"):
+        text = text.split("```")[1]
+        if text.startswith("json"):
+            text = text[4:]
+    return json.loads(text)
+
+
+async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, total_avg, chat_context=None):
+    if not llm_key:
+        return dict(_NARRATIVE_FALLBACK)
+    try:
+        turns = _extract_user_voice(chat_context)
+        voice_block = _build_voice_block(turns)
+        prompt = _build_narrative_prompt(user, cat_avg, layer_avg, total_avg, voice_block)
+
+        chat = LlmChat(
+            api_key=llm_key,
+            session_id=f"report_{session_id}",
+            system_message="Du bist ein Executive Leadership Coach.",
+        )
+        chat.with_model("anthropic", "claude-sonnet-4-5-20250929")
         response = await chat.send_message(UserMessage(text=prompt))
-        text = response.strip()
-        if text.startswith("```"):
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-        return json.loads(text)
+        return _parse_narrative_response(response)
     except Exception as e:
         logger.error(f"AI narrative error: {e}")
-        return {"profile_title": "Leadership-Profil", "executive_summary": "Dein individuelles Führungsprofil wurde analysiert."}
+        return dict(_NARRATIVE_FALLBACK)
 
 
 def register_quiz_routes(router: APIRouter, db, config):

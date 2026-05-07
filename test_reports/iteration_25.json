@@ -1,0 +1,25 @@
+{
+  "summary": "Iteration 25 — Pure refactoring regression (services/ split + 3 admin registrars + payments split into checkout/license + quiz narrative helpers). All 29 backend pytest cases PASS. No behavior changes detected vs iter24 baseline. Endpoints validated: GET /api/health (healthy); POST /api/admin/login (200 with wladhub2026, 401 wrong); GET /api/admin/{stats,users,transactions,emails} (correct shape — overview/today/keys/conversions/emails/transactions/bookings/last_7_days present; users[] has has_report+license_key); POST /api/booking/create (success:true, default plan='leader_os_plus' confirmed via /booking/list); GET /api/enterprise/calculate at 4→0%, 5→10%, 10→15%, 20→20%, 50→30%, 100→40%, 200→50% (parametrized); POST /api/enterprise/inquire (success:true with pricing field); POST /api/payments/create-checkout: leader_os_full→mode=payment amount=997 EUR, leader_os_2rate→fallback amount=1100, leader_os_12rate→fallback 1188, leader_os_plus→4447, invalid→400; GET /api/payments/status/{sid} returns persisted tx; POST /api/license/create works for leader_os, leader_os_plus, leader_os_enterprise — all keys match WLADHUB-XXXX-XXXX-XXXX regex (prefix changed from WLAD- to WLADHUB- as documented); full lifecycle CREATE→VALIDATE→ACTIVATE(status:'used')→REVOKE(status:'revoked') verified via /license/list; POST /api/quiz/generate-report with chat_context produces narrative.personal_response and report.user_challenge (regression after generate_ai_narrative split into 4 helpers). Backward compat confirmed: server.py still imports register_payment_routes which umbrella-registers both checkout + license routes; Stripe SDK key initialization inside register_checkout_routes works (no init-order issues).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter25_refactor_regression.py",
+    "/app/test_reports/pytest/pytest_results_iter25.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "services/license_keys.py PLAN_CONFIG still keeps legacy plans 'starter'/'standard'/'fasttrack' for back-compat with old DB rows. A deprecation comment is present but consider a follow-up cleanup once admin DB is migrated.",
+    "services/license_keys.py PLAN_AMOUNT_MAP duplicates plan→amount mapping that also lives in routes/payments.py PACKAGES. Currently both are correct, but two sources of truth for pricing is a future-bug magnet — recommend consolidating PLAN_AMOUNT_MAP into a single canonical pricing module.",
+    "routes/payments.py register_payment_routes umbrella is purely a backward-compat shim; safe today but worth flagging for removal once server.py is updated to call register_checkout_routes + register_license_routes explicitly (parallel to how admin.py was split into 3 explicit registrars).",
+    "License key prefix changed from WLAD- to WLADHUB- (verified). No production keys existed under WLAD- per task notes, so safe — but worth a one-line comment in services/license_keys.py:generate_key explaining the migration so future devs don't 'fix' it back.",
+    "routes/quiz.py generate_ai_narrative now grades B per radon — _extract_user_voice/_build_voice_block/_build_narrative_prompt/_parse_narrative_response are correctly wired and produce identical narrative payloads as before (personal_response + user_challenge confirmed in regression test)."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter25_refactor_regression.py"],
+  "success_rate": {"backend": "100% (29/29)", "frontend": "skipped (no UI changes per task)"},
+  "test_credentials": "admin password 'wladhub2026' verified via /api/admin/login HTTP 200 returning {ok: true}",
+  "seed_data_creation": "Created TEST_-prefixed: ~5 payment_transactions, 4 license keys (TEST_iter25_K1/K2/K3 + TEST_iter25_LIFE which is now revoked), 1 booking, 1 enterprise inquiry, 1 quiz user. All clearly TEST_ tagged for cleanup.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter25 confirms the routes/services refactoring is behavior-neutral. Reusable regression file: /app/backend/tests/test_iter25_refactor_regression.py (29 tests, ~36s). For future iterations: (1) license-key WLADHUB- prefix is now the standard, regex ^WLADHUB-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$. (2) /api/admin/login response shape is {ok: true}, not {success: true}. (3) /api/license/activate body uses field name 'license_key' (NOT 'key'). (4) /api/quiz/generate-report requires answers[*].category, answers[*].layer, and chat_context as List[{role, text}]. (5) Stripe subscription path still falls back to one-time payment in Emergent test env (sk_test_emergent placeholder) — fallback_from_subscription=true on tx records is the documented contract.",
+  "rca of the issue": "N/A — no production failures. The 3 initial test failures during my first run were test-script issues (wrong field names on my side, not backend bugs); fixed and rerun: 29/29 PASS."
+}
