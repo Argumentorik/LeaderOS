@@ -173,11 +173,11 @@ def _build_enterprise_doc(data: EnterpriseInquiry, pricing: dict) -> dict:
 
 # ---------- Route registrars ----------
 
-def register_admin_routes(router: APIRouter, db, config):
+def register_admin_routes(router: APIRouter, db, config: dict) -> None:
     """Admin dashboard: login, stats, users, transactions, email logs."""
 
     @router.post("/admin/login")
-    async def admin_login(data: AdminLogin):
+    async def admin_login(data: AdminLogin) -> dict:
         expected = config.get("admin_password", "")
         if not expected:
             raise HTTPException(status_code=500, detail="Admin password not configured")
@@ -186,30 +186,30 @@ def register_admin_routes(router: APIRouter, db, config):
         return {"ok": True}
 
     @router.get("/admin/stats")
-    async def admin_stats():
+    async def admin_stats() -> dict:
         return await _build_overview_stats(db)
 
     @router.get("/admin/users")
-    async def admin_users():
+    async def admin_users() -> dict:
         users = await _build_users_with_status(db)
         return {"users": users, "total": len(users)}
 
     @router.get("/admin/transactions")
-    async def admin_transactions():
+    async def admin_transactions() -> dict:
         txs = await db.payment_transactions.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"transactions": txs, "total": len(txs)}
 
     @router.get("/admin/emails")
-    async def admin_emails():
+    async def admin_emails() -> dict:
         emails = await db.email_log.find({}, {"_id": 0}).sort("sent_at", -1).to_list(200)
         return {"emails": emails, "total": len(emails)}
 
 
-def register_booking_routes(router: APIRouter, db, config):
+def register_booking_routes(router: APIRouter, db, config: dict) -> None:
     """Free consultation booking flow."""
 
     @router.post("/booking/create")
-    async def create_booking(data: BookingRequest):
+    async def create_booking(data: BookingRequest) -> dict:
         booking = _build_booking_doc(data)
         await db.bookings.insert_one(booking)
         logger.info(f"Booking created: {data.date} {data.time} for {data.email}")
@@ -222,23 +222,23 @@ def register_booking_routes(router: APIRouter, db, config):
         }
 
     @router.get("/booking/list")
-    async def list_bookings():
+    async def list_bookings() -> dict:
         bookings = await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"bookings": bookings, "total": len(bookings)}
 
 
-def register_enterprise_routes(router: APIRouter, db, config):
+def register_enterprise_routes(router: APIRouter, db, config: dict) -> None:
     """B2B Enterprise tier: pricing calculator + inquiry form."""
 
     @router.get("/enterprise/calculate")
-    async def enterprise_calculate(employees: int):
+    async def enterprise_calculate(employees: int) -> dict:
         try:
             return calc_enterprise_discount(employees)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
 
     @router.post("/enterprise/inquire")
-    async def enterprise_inquire(data: EnterpriseInquiry):
+    async def enterprise_inquire(data: EnterpriseInquiry) -> dict:
         if data.employee_count < 1:
             raise HTTPException(status_code=400, detail="Mitarbeiter-Zahl muss >= 1 sein")
         pricing = calc_enterprise_discount(data.employee_count)
@@ -253,6 +253,6 @@ def register_enterprise_routes(router: APIRouter, db, config):
         }
 
     @router.get("/enterprise/list")
-    async def list_enterprise_inquiries():
+    async def list_enterprise_inquiries() -> dict:
         inquiries = await db.enterprise_inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"inquiries": inquiries, "total": len(inquiries)}

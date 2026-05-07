@@ -15,51 +15,22 @@ import logging
 import resend
 import stripe as stripe_sdk
 
+from typing import Optional
+
 from models import CreateCheckoutRequest, LicenseKeyActivate, LicenseKeyCreate
-from services.license_keys import build_license_doc, PLAN_AMOUNT_MAP
+from services.license_keys import build_license_doc
+from services.pricing import PACKAGES, PLAN_AMOUNT_MAP
 
 logger = logging.getLogger(__name__)
 
 
-# --------- Package Catalog ---------
-
-PACKAGES = {
-    "leader_os_full": {
-        "name": "Leadership OS — Einmalzahlung",
-        "amount": 997.00, "currency": "eur", "plan": "leader_os",
-        "billing": "one_time", "mode": "payment",
-    },
-    "leader_os_2rate": {
-        "name": "Leadership OS — 2 Raten à 550 EUR",
-        "amount": 550.00, "currency": "eur", "plan": "leader_os",
-        "billing": "2_rates", "mode": "subscription",
-        "interval": "month", "interval_count": 6, "cycles": 2,
-        "total_amount": 1100.00,
-    },
-    "leader_os_12rate": {
-        "name": "Leadership OS — 12 Monatsraten à 99 EUR",
-        "amount": 99.00, "currency": "eur", "plan": "leader_os",
-        "billing": "12_rates", "mode": "subscription",
-        "interval": "month", "interval_count": 1, "cycles": 12,
-        "total_amount": 1188.00,
-    },
-    "leader_os_plus": {
-        "name": "Leadership OS PLUS — inkl. 12 Coachings",
-        "amount": 4447.00, "currency": "eur", "plan": "leader_os_plus",
-        "billing": "one_time", "mode": "payment",
-    },
-    # Legacy alias
-    "standard_yearly": {
-        "name": "Leadership OS — Einmalzahlung",
-        "amount": 997.00, "currency": "eur", "plan": "leader_os",
-        "billing": "one_time", "mode": "payment",
-    },
-}
+# Re-export for any external test that imports PACKAGES from this module
+__all__ = ["PACKAGES", "register_payment_routes", "register_checkout_routes", "register_license_routes", "create_license_key_internal"]
 
 
 # --------- License Key Service ---------
 
-async def create_license_key_internal(db, plan, email=None, name=None, source="stripe", notes=None):
+async def create_license_key_internal(db, plan: str, email: Optional[str] = None, name: Optional[str] = None, source: str = "stripe", notes: Optional[str] = None) -> str:
     """Insert a new license key, retrying on the (extremely rare) collision."""
     doc = build_license_doc(plan, email or "", name or "", source, notes or "")
     while await db.license_keys.find_one({"key": doc["key"]}):
@@ -79,7 +50,7 @@ def _is_real_stripe_key(key: str) -> bool:
     return key.startswith("sk_live_") or (key.startswith("sk_test_") and len(key) > 20)
 
 
-def _build_subscription_metadata(req: CreateCheckoutRequest, package: dict) -> dict:
+def _build_subscription_metadata(req: CreateCheckoutRequest, package: dict) -> dict[str, str]:
     return {
         "package_id": req.package_id,
         "plan": package["plan"],
@@ -140,7 +111,7 @@ async def _create_one_time_session(stripe_key: str, req: CreateCheckoutRequest, 
     return await stripe_client.create_checkout_session(checkout_req)
 
 
-def _build_subscription_tx(session, req, package) -> dict:
+def _build_subscription_tx(session, req: CreateCheckoutRequest, package: dict) -> dict:
     return {
         "session_id": session.id, "package_id": req.package_id,
         "package_name": package["name"],
@@ -158,7 +129,7 @@ def _build_subscription_tx(session, req, package) -> dict:
     }
 
 
-def _build_one_time_tx(session, req, package, charge_amount, was_subscription) -> dict:
+def _build_one_time_tx(session, req: CreateCheckoutRequest, package: dict, charge_amount: float, was_subscription: bool) -> dict:
     return {
         "session_id": session.session_id, "package_id": req.package_id,
         "package_name": package["name"],
@@ -271,7 +242,7 @@ def register_checkout_routes(router: APIRouter, db, app_config):
             return {"session_id": session_id, "payment_status": "unknown", "status": "unknown"}
 
     @router.post("/webhook/stripe")
-    async def stripe_webhook(request: Request):
+    async def stripe_webhook(request: Request) -> dict:
         try:
             body = await request.json()
             webhook_response = CheckoutStatusResponse(**body)
@@ -301,17 +272,17 @@ def register_checkout_routes(router: APIRouter, db, app_config):
             return {"status": "error", "message": str(e)}
 
 
-def register_license_routes(router: APIRouter, db, app_config):
+def register_license_routes(router: APIRouter, db, app_config: dict) -> None:
     """License key lifecycle: create / activate / validate / list / revoke."""
 
     @router.post("/license/create")
-    async def create_license_key_endpoint(data: LicenseKeyCreate):
+    async def create_license_key_endpoint(data: LicenseKeyCreate) -> dict:
         key = await create_license_key_internal(db, plan=data.plan, email=data.email, name=data.name, source="manual", notes=data.notes)
         await _send_license_key_email(app_config, data.email or "", data.name or "", data.plan, key)
         return {"key": key, "plan": data.plan, "status": "active"}
 
     @router.post("/license/activate")
-    async def activate_license_key(data: LicenseKeyActivate):
+    async def activate_license_key(data: LicenseKeyActivate) -> dict:
         key_doc = await db.license_keys.find_one({"key": data.license_key.upper().strip()}, {"_id": 0})
         if not key_doc:
             raise HTTPException(status_code=404, detail="Ungültiger License Key. Bitte prüfe deine Eingabe.")
@@ -360,12 +331,12 @@ def register_license_routes(router: APIRouter, db, app_config):
         return {"valid": False, "status": status, "message": f"Key Status: {status}"}
 
     @router.get("/license/list")
-    async def list_license_keys():
+    async def list_license_keys() -> dict:
         keys = await db.license_keys.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"keys": keys, "total": len(keys)}
 
     @router.post("/license/revoke/{key}")
-    async def revoke_license_key(key: str):
+    async def revoke_license_key(key: str) -> dict:
         result = await db.license_keys.update_one(
             {"key": key.upper().strip()},
             {"$set": {"status": "revoked", "updated_at": datetime.now(timezone.utc).isoformat()}},
@@ -375,7 +346,7 @@ def register_license_routes(router: APIRouter, db, app_config):
         return {"success": True, "message": f"Key {key} wurde deaktiviert"}
 
 
-def register_payment_routes(router: APIRouter, db, app_config):
+def register_payment_routes(router: APIRouter, db, app_config: dict) -> None:
     """Backward-compatible umbrella registrar — keeps server.py untouched."""
     register_checkout_routes(router, db, app_config)
     register_license_routes(router, db, app_config)

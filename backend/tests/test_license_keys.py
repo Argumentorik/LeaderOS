@@ -312,7 +312,7 @@ class TestLicenseKeyFullFlow:
         # Step 2: Validate (should be active)
         validate_resp = requests.get(f"{BASE_URL}/api/license/validate/{key}")
         assert validate_resp.status_code == 200
-        assert validate_resp.json()["valid"] is True
+        assert validate_resp.json()["valid"]
         assert validate_resp.json()["status"] == "active"
         print(f"  Step 2: Validated key - status=active")
         
@@ -322,7 +322,7 @@ class TestLicenseKeyFullFlow:
             "email": "start@aiporate.com"
         })
         assert activate_resp.status_code == 200
-        assert activate_resp.json()["success"] is True
+        assert activate_resp.json()["success"]
         assert activate_resp.json()["redirect_url"] == "https://leader-os.de"
         print(f"  Step 3: Activated key - redirect to leader-os.de")
         
@@ -337,7 +337,7 @@ class TestLicenseKeyFullFlow:
         # Step 5: Validate again (should be used)
         validate2_resp = requests.get(f"{BASE_URL}/api/license/validate/{key}")
         assert validate2_resp.status_code == 200
-        assert validate2_resp.json()["valid"] is True
+        assert validate2_resp.json()["valid"]
         assert validate2_resp.json()["status"] == "used"
         print(f"  Step 5: Validated key - status=used")
         

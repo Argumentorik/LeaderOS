@@ -42,7 +42,7 @@ class TestBookingCreate:
         data = response.json()
         
         # Verify response structure
-        assert data["success"] == True
+        assert data["success"]
         assert "message" in data
         assert data["booking_date"] == "2026-06-15"
         assert data["booking_time"] == "11:00"
@@ -60,7 +60,7 @@ class TestBookingCreate:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["success"] == True
+        assert data["success"]
         assert data["booking_date"] == "2026-07-01"
         assert data["booking_time"] == "14:00"
         print(f"✓ Minimal booking created: {data}")
@@ -82,7 +82,7 @@ class TestBookingCreate:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["success"] == True
+        assert data["success"]
         print(f"✓ Booking with notes created: {data}")
     
     def test_create_booking_returns_correct_response_fields(self):

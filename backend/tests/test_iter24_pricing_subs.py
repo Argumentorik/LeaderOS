@@ -92,7 +92,7 @@ class TestCheckoutEndpoints:
         assert st.get("amount") == 1100.0  # charge_amount = total_amount
         assert st.get("plan") == "leader_os"
         assert st.get("billing") == "2_rates"
-        assert st.get("fallback_from_subscription") is True
+        assert st.get("fallback_from_subscription")
 
     def test_leader_os_12rate_fallback(self, s):
         r = self._checkout(s, "leader_os_12rate")
@@ -105,7 +105,7 @@ class TestCheckoutEndpoints:
         assert st.get("amount") == 1188.0
         assert st.get("plan") == "leader_os"
         assert st.get("billing") == "12_rates"
-        assert st.get("fallback_from_subscription") is True
+        assert st.get("fallback_from_subscription")
 
     def test_leader_os_plus(self, s):
         r = self._checkout(s, "leader_os_plus")

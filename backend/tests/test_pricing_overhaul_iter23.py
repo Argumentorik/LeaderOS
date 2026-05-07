@@ -70,7 +70,7 @@ class TestEnterpriseInquiry:
         r = client.post(f"{API}/enterprise/inquire", json=payload)
         assert r.status_code == 200, r.text
         data = r.json()
-        assert data["success"] is True
+        assert data["success"]
         pricing = data["pricing"]
         assert pricing["discount_pct"] == 30
         assert pricing["per_seat"] == 697.9
@@ -86,7 +86,7 @@ class TestEnterpriseInquiry:
         m = match[0]
         assert m["employee_count"] == 50
         assert m["pricing"]["discount_pct"] == 30
-        assert m["include_coaching"] is True
+        assert m["include_coaching"]
 
     def test_inquire_missing_fields(self, client):
         # Missing company → 422

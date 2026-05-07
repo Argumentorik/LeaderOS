@@ -309,7 +309,7 @@ class TestLicenseKeys:
         response = requests.get(f"{BASE_URL}/api/license/validate/{key}")
         assert response.status_code == 200
         data = response.json()
-        assert data["valid"] == True
+        assert data["valid"]
         assert data["status"] == "active"
         print(f"✓ License key validated: {key}")
     
@@ -318,7 +318,7 @@ class TestLicenseKeys:
         response = requests.get(f"{BASE_URL}/api/license/validate/WLAD-FAKE-KEY1-TEST")
         assert response.status_code == 200
         data = response.json()
-        assert data["valid"] == False
+        assert not (data["valid"])
         print("✓ Invalid key validation works")
     
     def test_activate_license_key(self):
@@ -337,7 +337,7 @@ class TestLicenseKeys:
         })
         assert response.status_code == 200
         data = response.json()
-        assert data["success"] == True
+        assert data["success"]
         assert data["plan"] == "fasttrack"
         assert "expires_at" in data
         print(f"✓ License key activated: {key}")
@@ -397,7 +397,7 @@ class TestBookings:
         response = requests.post(f"{BASE_URL}/api/booking/create", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["success"] == True
+        assert data["success"]
         assert data["booking_date"] == "2026-02-15"
         assert data["booking_time"] == "14:00"
         print(f"✓ Booking created: {data}")

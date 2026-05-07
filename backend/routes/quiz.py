@@ -160,10 +160,10 @@ async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, t
         return dict(_NARRATIVE_FALLBACK)
 
 
-def register_quiz_routes(router: APIRouter, db, config):
+def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
 
     @router.post("/quiz/generate-report")
-    async def generate_report(data: QuizSubmit):
+    async def generate_report(data: QuizSubmit) -> dict:
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
         if not user:
             user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
@@ -202,14 +202,14 @@ def register_quiz_routes(router: APIRouter, db, config):
         return report
 
     @router.get("/report/{session_id}")
-    async def get_report(session_id: str):
+    async def get_report(session_id: str) -> dict:
         report = await db.reports.find_one({"session_id": session_id}, {"_id": 0})
         if not report:
             raise HTTPException(status_code=404, detail="Report not found")
         return report
 
     @router.post("/coach/chat")
-    async def coach_chat(data: CoachMessage):
+    async def coach_chat(data: CoachMessage) -> dict:
         if not config["llm_key"]:
             return {"response": "Der WLADBOT ist derzeit nicht verfügbar."}
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})

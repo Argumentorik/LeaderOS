@@ -51,7 +51,7 @@ class TestAdminAuth:
         # API normally returns success indicator
         d = r.json()
         # Server returns {"ok": True} on success
-        assert (d.get("ok") is True or d.get("success") is True
+        assert (d.get("ok") or d.get("success") is True
                 or d.get("status") == "ok" or "token" in d or d.get("authenticated") is True), d
 
     def test_login_wrong(self, s):
@@ -107,7 +107,7 @@ class TestBooking:
         })
         assert r.status_code == 200, r.text
         d = r.json()
-        assert d.get("success") is True
+        assert d.get("success")
         # verify via list
         lr = s.get(f"{API}/booking/list")
         assert lr.status_code == 200
@@ -152,7 +152,7 @@ class TestEnterprise:
         })
         assert r.status_code in (200, 201), r.text
         d = r.json()
-        assert d.get("success") is True
+        assert d.get("success")
         assert "pricing" in d
 
     def test_list(self, s):
@@ -248,14 +248,14 @@ class TestLicense:
         # VALIDATE active
         vr = s.get(f"{API}/license/validate/{key}")
         assert vr.status_code == 200
-        assert vr.json().get("valid") is True
+        assert vr.json().get("valid")
 
         # ACTIVATE — schema requires `license_key` + optional `email`
         ar = s.post(f"{API}/license/activate", json={
             "license_key": key, "email": "TEST_iter25_act@example.com",
         })
         assert ar.status_code == 200, ar.text
-        assert ar.json().get("success") is True
+        assert ar.json().get("success")
 
         # confirm status used in list
         lr = s.get(f"{API}/license/list")
@@ -268,7 +268,7 @@ class TestLicense:
         # REVOKE
         rr = s.post(f"{API}/license/revoke/{key}")
         assert rr.status_code == 200, rr.text
-        assert rr.json().get("success") is True
+        assert rr.json().get("success")
 
         # confirm revoked
         lr2 = s.get(f"{API}/license/list")
