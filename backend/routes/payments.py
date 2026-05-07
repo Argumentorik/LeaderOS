@@ -11,10 +11,14 @@ from models import CreateCheckoutRequest, LicenseKeyActivate, LicenseKeyCreate
 logger = logging.getLogger(__name__)
 
 PACKAGES = {
-    "starter": {"name": "Starter – Video Lessons + Credits", "amount": 199.00, "currency": "eur", "plan": "starter", "billing": "one_time"},
-    "standard_yearly": {"name": "Standard – Leadership System", "amount": 997.00, "currency": "eur", "plan": "standard", "billing": "yearly"},
-    "standard_monthly": {"name": "Standard – Leadership System (Monatsrate)", "amount": 83.08, "currency": "eur", "plan": "standard", "billing": "monthly"},
-    "fasttrack_yearly": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "amount": 6970.00, "currency": "eur", "plan": "fasttrack", "billing": "yearly"},
+    # Leadership OS — 3 payment options (totals incl. installment surcharge)
+    "leader_os_full": {"name": "Leadership OS — Einmalzahlung", "amount": 997.00, "currency": "eur", "plan": "leader_os", "billing": "one_time"},
+    "leader_os_2rate": {"name": "Leadership OS — 2 Raten", "amount": 1100.00, "currency": "eur", "plan": "leader_os", "billing": "2_rates"},
+    "leader_os_12rate": {"name": "Leadership OS — 12 Raten", "amount": 1188.00, "currency": "eur", "plan": "leader_os", "billing": "12_rates"},
+    # Leadership OS PLUS — Einmalzahlung
+    "leader_os_plus": {"name": "Leadership OS PLUS — inkl. 12 Coachings", "amount": 4447.00, "currency": "eur", "plan": "leader_os_plus", "billing": "one_time"},
+    # Legacy aliases (backward compatibility for any cached frontend)
+    "standard_yearly": {"name": "Leadership OS — Einmalzahlung", "amount": 997.00, "currency": "eur", "plan": "leader_os", "billing": "one_time"},
 }
 
 
@@ -29,11 +33,15 @@ async def create_license_key_internal(db, plan, email=None, name=None, source="s
     while await db.license_keys.find_one({"key": key}):
         key = generate_license_key()
     plan_config = {
+        "leader_os": {"name": "Leadership OS — 1 Jahr Vollzugang + 12 Videokurse", "duration_days": 365, "includes_calls": False},
+        "leader_os_plus": {"name": "Leadership OS PLUS — 1 Jahr inkl. 12 Einzelcoachings", "duration_days": 365, "includes_calls": True},
+        "leader_os_enterprise": {"name": "Leadership OS ENTERPRISE — B2B-Lizenz", "duration_days": 365, "includes_calls": False},
+        # Legacy support
         "starter": {"name": "Starter – Video Lessons + Credits", "duration_days": 365, "includes_calls": False},
-        "standard": {"name": "Standard – Leadership System", "duration_days": 365, "includes_calls": False},
-        "fasttrack": {"name": "Fast Track – Leadership Accelerator · AI Learning Path", "duration_days": 365, "includes_calls": True},
+        "standard": {"name": "Leadership OS — 1 Jahr Vollzugang", "duration_days": 365, "includes_calls": False},
+        "fasttrack": {"name": "Fast Track – Leadership Accelerator", "duration_days": 365, "includes_calls": True},
     }
-    config = plan_config.get(plan, plan_config["standard"])
+    config = plan_config.get(plan, plan_config["leader_os"])
     doc = {
         "key": key, "plan": plan, "plan_name": config["name"], "status": "active",
         "email": email, "name": name, "source": source, "notes": notes,
@@ -132,7 +140,8 @@ def register_payment_routes(router: APIRouter, db, app_config):
             try:
                 import resend
                 from email_templates import payment_confirmation_email
-                amount = 6970.0 if data.plan == "fasttrack" else 997.0 if data.plan == "standard" else 199.0
+                amount_map = {"leader_os": 997.0, "leader_os_plus": 4447.0, "leader_os_enterprise": 997.0, "fasttrack": 6970.0, "standard": 997.0, "starter": 199.0}
+                amount = amount_map.get(data.plan, 997.0)
                 email_data = payment_confirmation_email(data.name or "Leader", data.plan, amount)
                 await asyncio.to_thread(resend.Emails.send, {
                     "from": f"Wlad von WLADHUB <{app_config['sender_email']}>",

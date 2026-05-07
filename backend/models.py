@@ -61,6 +61,16 @@ class BookingRequest(BaseModel):
     notes: Optional[str] = None
 
 
+class EnterpriseInquiry(BaseModel):
+    company: str
+    contact_name: str
+    email: EmailStr
+    employee_count: int
+    phone: Optional[str] = None
+    message: Optional[str] = None
+    include_coaching: Optional[bool] = False
+
+
 class AuthSession(BaseModel):
     session_id: str
 

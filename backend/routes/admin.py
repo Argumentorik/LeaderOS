@@ -4,7 +4,7 @@ import asyncio
 import resend
 import logging
 
-from models import BookingRequest
+from models import BookingRequest, EnterpriseInquiry
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -161,3 +161,111 @@ def register_admin_routes(router: APIRouter, db, config):
     async def list_bookings():
         bookings = await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"bookings": bookings, "total": len(bookings)}
+
+    # --- Enterprise B2B Inquiries ---
+
+    def calc_enterprise_discount(emp: int):
+        """Volume discount on 997 EUR per seat. Tiers as defined in PRD."""
+        tiers = [(200, 0.50), (100, 0.40), (50, 0.30), (20, 0.20), (10, 0.15), (5, 0.10), (1, 0.0)]
+        discount = 0.0
+        for threshold, pct in tiers:
+            if emp >= threshold:
+                discount = pct
+                break
+        seat_price = 997.0
+        per_seat = round(seat_price * (1 - discount), 2)
+        total = round(per_seat * emp, 2)
+        return {"seats": emp, "discount_pct": int(discount * 100), "per_seat": per_seat, "total": total, "seat_price_full": seat_price}
+
+    @router.get("/enterprise/calculate")
+    async def enterprise_calculate(employees: int):
+        if employees < 1:
+            raise HTTPException(status_code=400, detail="employees muss >= 1 sein")
+        return calc_enterprise_discount(employees)
+
+    @router.post("/enterprise/inquire")
+    async def enterprise_inquire(data: EnterpriseInquiry):
+        if data.employee_count < 1:
+            raise HTTPException(status_code=400, detail="Mitarbeiter-Zahl muss >= 1 sein")
+        pricing = calc_enterprise_discount(data.employee_count)
+        doc = {
+            "company": data.company.strip(),
+            "contact_name": data.contact_name.strip(),
+            "email": str(data.email).lower().strip(),
+            "phone": data.phone or "",
+            "employee_count": data.employee_count,
+            "include_coaching": bool(data.include_coaching),
+            "message": data.message or "",
+            "pricing": pricing,
+            "status": "new",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        await db.enterprise_inquiries.insert_one(doc)
+        logger.info(f"Enterprise inquiry: {data.company} — {data.employee_count} MA — {pricing['total']} EUR")
+
+        # Send notification e-mails
+        if config.get("resend_key"):
+            try:
+                admin_html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="font-family:sans-serif;background:#0a0a0a;color:#fff;padding:40px;">
+<div style="max-width:560px;margin:0 auto;">
+<h1 style="color:#C8FF00;font-size:22px;">Neue Enterprise-Anfrage</h1>
+<div style="background:#141414;border:1px solid #1e1e1e;border-radius:12px;padding:24px;margin:16px 0;">
+<p><strong>Firma:</strong> {data.company}</p>
+<p><strong>Kontakt:</strong> {data.contact_name}</p>
+<p><strong>E-Mail:</strong> {data.email}</p>
+{f'<p><strong>Telefon:</strong> {data.phone}</p>' if data.phone else ''}
+<p><strong>Mitarbeiter:</strong> {data.employee_count}</p>
+<p><strong>Coaching gewuenscht:</strong> {'Ja' if data.include_coaching else 'Nein'}</p>
+{f'<p><strong>Nachricht:</strong> {data.message}</p>' if data.message else ''}
+</div>
+<div style="background:#0d1f00;border:1px solid #C8FF00;border-radius:12px;padding:20px;margin:16px 0;">
+<p style="color:#C8FF00;margin:0 0 8px;"><strong>Berechneter Preis</strong></p>
+<p style="color:#fff;margin:4px 0;">Rabatt: <strong>{pricing['discount_pct']}%</strong></p>
+<p style="color:#fff;margin:4px 0;">Pro Lizenz: <strong>{pricing['per_seat']:.2f} EUR</strong></p>
+<p style="color:#C8FF00;font-size:18px;margin:8px 0 0;"><strong>Gesamt: {pricing['total']:.2f} EUR / Jahr</strong></p>
+</div>
+</div></body></html>"""
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": f"WLADHUB Enterprise <{config['sender_email']}>",
+                    "to": ["start@aiporate.com"],
+                    "subject": f"Enterprise-Anfrage: {data.company} ({data.employee_count} MA) — {pricing['total']:.0f} EUR",
+                    "html": admin_html,
+                })
+                user_html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="font-family:sans-serif;background:#0a0a0a;color:#fff;padding:40px;">
+<div style="max-width:520px;margin:0 auto;">
+<h1 style="color:#C8FF00;font-size:24px;">Deine Enterprise-Anfrage ist da, {data.contact_name}!</h1>
+<p style="color:#94A3B8;">Hi {data.contact_name},</p>
+<p style="color:#94A3B8;">vielen Dank fuer dein Interesse an Leadership OS ENTERPRISE fuer <strong style="color:#fff;">{data.company}</strong>. Wir haben deine Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einem persoenlichen Angebot.</p>
+<div style="background:#0d1f00;border:1px solid #C8FF00;border-radius:12px;padding:24px;margin:24px 0;">
+<p style="color:#C8FF00;margin:0 0 12px;"><strong>Deine Vorab-Kalkulation</strong></p>
+<p style="color:#fff;margin:6px 0;">{data.employee_count} Mitarbeiter</p>
+<p style="color:#fff;margin:6px 0;">Volumen-Rabatt: <strong>{pricing['discount_pct']}%</strong></p>
+<p style="color:#fff;margin:6px 0;">Pro Lizenz: {pricing['per_seat']:.2f} EUR / Jahr</p>
+<p style="color:#C8FF00;font-size:20px;margin:12px 0 0;"><strong>Gesamtinvestition: {pricing['total']:.0f} EUR / Jahr</strong></p>
+</div>
+<p style="color:#94A3B8;font-size:13px;">Das finale Angebot kann je nach individuellen Anforderungen abweichen — z.B. mit zusaetzlichen Coaching-Modulen.</p>
+<p style="color:#C8FF00;font-weight:bold;margin-top:24px;">Bis bald,<br/>Wlad</p>
+<p style="color:#64748B;font-size:11px;margin-top:32px;">WLADHUB Leadership Diagnostic Platform</p>
+</div></body></html>"""
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+                    "to": [str(data.email)],
+                    "subject": f"Deine Enterprise-Anfrage fuer {data.company} — WLADHUB",
+                    "html": user_html,
+                })
+                await db.email_log.insert_one({
+                    "type": "enterprise_inquiry",
+                    "email": str(data.email),
+                    "sent_at": datetime.now(timezone.utc).isoformat(),
+                })
+            except Exception as e:
+                logger.error(f"Enterprise inquiry email error: {e}")
+
+        return {"success": True, "message": "Anfrage erhalten. Wir melden uns innerhalb von 24 Stunden.", "pricing": pricing}
+
+    @router.get("/enterprise/list")
+    async def list_enterprise_inquiries():
+        inquiries = await db.enterprise_inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+        return {"inquiries": inquiries, "total": len(inquiries)}
