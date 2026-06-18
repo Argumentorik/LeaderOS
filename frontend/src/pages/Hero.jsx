@@ -136,10 +136,14 @@ export default function Hero() {
       <div className="relative z-10">
         {/* ===== SECTION 1: HERO ===== */}
         <section className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 pt-32 pb-24">
-          {/* Pre-headline */}
-          <p className="font-inter text-sm md:text-base text-slate-500 mb-8 opacity-0 anim-fade-up text-center">
-            {hl.pre}
-          </p>
+          {/* Design-system section label (Leader-OS bracket prefix style) */}
+          <div className="flex justify-center mb-10 opacity-0 anim-fade-up">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
+              <span className="font-mono text-[10px] tracking-[0.25em] text-[#C8FF00] font-bold">
+                ▸ § 01 / 07 · DIAGNOSE · KOSTENLOS · BIB · 0001
+              </span>
+            </div>
+          </div>
 
           {/* Main Headline */}
           <h1
@@ -405,7 +409,7 @@ export default function Hero() {
                 <div className="space-y-3">
                   <div className="bg-white/[0.03] border border-white/[0.04] px-4 py-3 rounded-2xl rounded-bl-md">
                     <p className="font-inter text-sm text-slate-300">
-                      "Wie kann ich mich auf ein schwieriges Feedbackgesprach mit meinem Team vorbereiten?"
+                      &laquo;Wie kann ich mich auf ein schwieriges Feedbackgesprach mit meinem Team vorbereiten?&raquo;
                     </p>
                   </div>
                   <div className="bg-[#C8FF00] px-4 py-3 rounded-2xl rounded-br-md ml-8">
@@ -535,7 +539,7 @@ export default function Hero() {
               </div>
               <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
                 <div className="font-manrope font-extrabold text-3xl text-white mb-2">94%</div>
-                <div className="font-inter text-xs text-slate-500">sagen: "Hat mir die Augen geöffnet"</div>
+                <div className="font-inter text-xs text-slate-500">sagen: &laquo;Hat mir die Augen geöffnet&raquo;</div>
               </div>
               <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
                 <div className="font-manrope font-extrabold text-3xl text-white mb-2">10 Min</div>
@@ -545,7 +549,7 @@ export default function Hero() {
 
             <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
               <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
-                "Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert."
+                &laquo;Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
               </p>
               <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
             </div>
