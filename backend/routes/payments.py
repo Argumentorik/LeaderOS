@@ -99,6 +99,14 @@ async def _create_one_time_session(stripe_key: str, req: CreateCheckoutRequest, 
     library handles the cent conversion internally. (The direct Stripe SDK call
     in _create_subscription_session uses raw cents, which is a different API.)
     """
+    # Defense-in-depth: sanity-check the amount to prevent future config typos
+    # from silently producing 99,700 EUR or 0.01 EUR Stripe sessions.
+    if not (1 <= charge_amount <= 100000):
+        raise HTTPException(
+            status_code=500,
+            detail=f"Invalid charge amount {charge_amount} EUR (must be 1–100000)"
+        )
+
     stripe_client = StripeCheckout(api_key=stripe_key)
     success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{req.origin_url}/close"
