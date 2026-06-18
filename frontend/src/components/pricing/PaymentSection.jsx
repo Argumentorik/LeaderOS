@@ -61,7 +61,7 @@ export function PaymentSection({
         data-testid="stripe-checkout-btn"
         disabled={isLoading}
         onClick={() => onCheckout(isPlus ? "leader_os_plus" : paymentOption)}
-        className="w-full py-5 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-lg flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all disabled:opacity-50 mb-4"
+        className="w-full py-5 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-lg flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all disabled:opacity-50 mb-3"
       >
         {isLoading ? (
           <><Loader2 className="w-5 h-5 animate-spin" /> Wird geladen...</>
@@ -69,6 +69,17 @@ export function PaymentSection({
           <><CreditCard className="w-5 h-5" /> Jetzt sicher bezahlen — {ctaPrice}</>
         )}
       </button>
+
+      <div className="mb-4 px-4 py-3 rounded-xl bg-[#C8FF00]/[0.04] border border-[#C8FF00]/15" data-testid="email-hint">
+        <p className="font-inter text-xs text-[#C8FF00]/90 leading-relaxed flex items-start gap-2">
+          <span className="font-mono text-[#C8FF00] shrink-0">▸</span>
+          <span>
+            <strong>Wichtig:</strong> Stripe übernimmt deine E-Mail automatisch.
+            Nutze für die Zahlung <strong>dieselbe E-Mail</strong>, mit der du Leader-OS aktivierst —
+            so wird dein License Key sofort dem richtigen Account zugeordnet.
+          </span>
+        </p>
+      </div>
 
       <div className="flex items-center justify-center gap-6 flex-wrap">
         <Trust icon={Shield} text="SSL-verschlüsselt" />

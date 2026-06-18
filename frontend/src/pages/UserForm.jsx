@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, User, Briefcase, TrendingUp, Target, ChevronLeft, Edit3, Mail, Shield, Lock, FileCheck } from "lucide-react";
+import { ArrowRight, User, Briefcase, TrendingUp, Target, ChevronLeft, Edit3, Mail, Shield, Lock, FileCheck, Phone } from "lucide-react";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -13,12 +13,16 @@ const roles = [
   { id: "custom", label: "Andere Rolle", icon: Edit3, desc: "Ich beschreibe meine Rolle selbst" },
 ];
 
+// Permissive intl phone — accepts +49 0151 ..., 0049, 0151..., spaces/dashes/parens.
+// Final normalization happens on the backend; here we only block obvious typos.
+const PHONE_RE = /^[+\d][\d\s\-/().]{5,24}$/;
+
 export default function UserForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState("");
   const [customRole, setCustomRole] = useState("");
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,8 +41,12 @@ export default function UserForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim()) {
-      setError("Bitte fülle alle Felder aus.");
+    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
+      setError("Bitte fülle alle Felder aus – Telefonnummer inklusive.");
+      return;
+    }
+    if (!PHONE_RE.test(form.phone.trim())) {
+      setError("Bitte gib eine gültige Telefonnummer ein (z.B. +49 151 1234 5678).");
       return;
     }
     setLoading(true);
@@ -47,7 +55,8 @@ export default function UserForm() {
     try {
       const res = await axios.post(`${API}/user/create`, {
         name: form.name.trim(),
-        email: form.email.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
         role: selectedRole === 'custom' ? 'custom' : selectedRole,
         custom_role: selectedRole === 'custom' ? customRole : null,
         consent_privacy: true,
@@ -58,12 +67,14 @@ export default function UserForm() {
         session_id: res.data.session_id,
         name: res.data.name,
         email: res.data.email,
+        phone: form.phone.trim(),
         role: selectedRole === 'custom' ? customRole : selectedRole,
       }));
 
       navigate("/quiz");
     } catch (err) {
-      setError("Fehler beim Speichern. Bitte versuche es erneut.");
+      const detail = err?.response?.data?.detail;
+      setError(typeof detail === "string" ? detail : "Fehler beim Speichern. Bitte versuche es erneut.");
       setLoading(false);
     }
   };
@@ -85,19 +96,20 @@ export default function UserForm() {
           </button>
         )}
 
-        {/* Header */}
+        {/* Header — leader-os.de bracket-prefix style */}
         <div className="text-center mb-10">
-          <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00]" />
-            Schritt {step} von 2
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
+            <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
+              ▸ SCHRITT {step} VON 2 · BIB · 0001
+            </span>
           </div>
           <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
             {step === 1 ? "Was beschreibt dich am besten?" : "Fast geschafft!"}
           </h1>
           <p className="font-inter text-slate-500">
             {step === 1
-              ? "Deine Rolle bestimmt den Kontext deiner WLADHUB Diagnose. Alle 30 Fragen werden individuell auf dein Profil zugeschnitten."
-              : "Damit wir deinen personalisierten Report erstellen können."}
+              ? "Deine Rolle bestimmt den Kontext deiner Diagnose. 30 Fragen, individuell auf dein Profil zugeschnitten."
+              : "Damit wir deinen personalisierten Report erstellen und dich auf Wunsch persönlich begleiten können."}
           </p>
         </div>
 
@@ -158,7 +170,7 @@ export default function UserForm() {
           </div>
         )}
 
-        {/* Step 2: Name & Email */}
+        {/* Step 2: Name & Email & Phone */}
         {step === 2 && (
           <form onSubmit={handleSubmit} className="space-y-6" data-testid="user-info-form">
             <div className="badge-lime px-4 py-2 inline-flex items-center gap-2">
@@ -167,10 +179,13 @@ export default function UserForm() {
 
             <div className="glass-card p-6 space-y-5">
               <div>
-                <label className="font-inter text-sm text-slate-400 mb-2 block">Dein Name</label>
+                <label className="font-inter text-sm text-slate-400 mb-2 block">
+                  Dein Name <span className="text-[#C8FF00]">*</span>
+                </label>
                 <input
                   data-testid="input-name"
                   type="text"
+                  required
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="Vorname Nachname"
@@ -178,17 +193,43 @@ export default function UserForm() {
                 />
               </div>
               <div>
-                <label className="font-inter text-sm text-slate-400 mb-2 block">E-Mail-Adresse</label>
+                <label className="font-inter text-sm text-slate-400 mb-2 block">
+                  E-Mail-Adresse <span className="text-[#C8FF00]">*</span>
+                </label>
                 <input
                   data-testid="input-email"
                   type="email"
+                  required
                   value={form.email}
                   onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                   placeholder="deine@email.com"
                   className="w-full input-modern h-12 px-4 font-inter text-white placeholder:text-slate-600"
                 />
+                <p className="font-inter text-xs text-[#C8FF00]/70 mt-2 flex items-start gap-1.5">
+                  <span>▸</span>
+                  <span><strong>Wichtig:</strong> Nutze diese E-Mail auch für Leader-OS – so wird dein Report automatisch mit deinem späteren OS-Account verknüpft.</span>
+                </p>
+              </div>
+              <div>
+                <label className="font-inter text-sm text-slate-400 mb-2 block">
+                  Telefonnummer <span className="text-[#C8FF00]">*</span>
+                </label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-600 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    data-testid="input-phone"
+                    type="tel"
+                    required
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={form.phone}
+                    onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                    placeholder="+49 151 1234 5678"
+                    className="w-full input-modern h-12 pl-11 pr-4 font-inter text-white placeholder:text-slate-600"
+                  />
+                </div>
                 <p className="font-inter text-xs text-slate-600 mt-2">
-                  Dein Report wird an diese Adresse gesendet.
+                  Wird ausschließlich für Coaching-Termine und WhatsApp-Erinnerungen genutzt. Keine Werbung.
                 </p>
               </div>
             </div>
@@ -217,10 +258,9 @@ export default function UserForm() {
             </button>
 
             <p className="font-inter text-sm text-slate-600 text-center">
-              30 Fragen · ca. 10 Minuten · Szenario-basiert
+              30 Fragen · ca. 10 Minuten · Szenario-basiert · BIB · 0001
             </p>
 
-            {/* DSGVO Trust Section */}
             <div className="glass-card-subtle p-5 space-y-4" data-testid="trust-section">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
@@ -228,7 +268,7 @@ export default function UserForm() {
                 </div>
                 <div>
                   <p className="font-manrope font-bold text-sm text-white">DSGVO-konform</p>
-                  <p className="font-inter text-xs text-slate-500">Deine Daten werden nach EU-Datenschutzgrundverordnung verarbeitet</p>
+                  <p className="font-inter text-xs text-slate-500">Deine Daten werden nach EU-DSGVO verarbeitet</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -252,8 +292,8 @@ export default function UserForm() {
               <div className="border-t border-white/5 pt-3 text-center">
                 <p className="font-inter text-[10px] text-slate-600 leading-relaxed">
                   Mit dem Start der Diagnose erklärst du dich mit unserer Datenschutzerklärung einverstanden.
-                  Deine Daten werden ausschließlich zur Erstellung deines Leadership-Reports verwendet
-                  und niemals an Dritte weitergegeben. Du kannst die Löschung jederzeit anfordern.
+                  Daten werden ausschließlich für die Erstellung deines Leadership-Reports verwendet
+                  und niemals an Dritte weitergegeben. Löschung jederzeit möglich.
                 </p>
               </div>
             </div>
@@ -263,3 +303,4 @@ export default function UserForm() {
     </div>
   );
 }
+

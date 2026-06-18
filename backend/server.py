@@ -79,7 +79,7 @@ async def create_user(data: UserCreate):
     doc = {
         "session_id": session_id,
         "user_id": f"user_{uuid.uuid4().hex[:12]}",
-        "name": data.name, "email": data.email, "role": data.role,
+        "name": data.name, "email": data.email, "phone": data.phone, "role": data.role,
         "custom_role": data.custom_role,
         "consent_privacy": data.consent_privacy,
         "consent_marketing": data.consent_marketing,

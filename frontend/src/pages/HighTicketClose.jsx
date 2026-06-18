@@ -200,7 +200,7 @@ export default function HighTicketClose() {
             </div>
             <div className="flex-1 text-center md:text-left">
               <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">IN JEDEM PAKET ENTHALTEN</div>
-              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">"Die 6 Rollen einer Führungskraft"</h3>
+              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">&laquo;Die 6 Rollen einer Führungskraft&raquo;</h3>
               <p className="font-inter text-sm text-slate-400 mb-4">von Wladislaw Jachtchenko · SPIEGEL-Bestseller-Autor</p>
               <a href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft" target="_blank" rel="noopener noreferrer" data-testid="book-cta"
                 className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2">
@@ -224,29 +224,53 @@ export default function HighTicketClose() {
           </button>
         </div>
 
-        {/* FINAL CTA */}
+        {/* FINAL CTA — direct purchase from the last section */}
         <div className="text-center border-t border-white/[0.04] pt-12 pb-4" data-testid="final-cta-section">
-          <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
+            <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
+              ▸ § 03 / 03 · ENTSCHEIDUNG
+            </span>
+          </div>
+          <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
             Die Entscheidung liegt bei dir.
           </h2>
-          <p className="font-inter text-base text-slate-500 mb-8 max-w-xl mx-auto">
+          <p className="font-inter text-base text-slate-500 mb-2 max-w-xl mx-auto">
             {totalScore > 0 ? `Dein Score ist ${totalScore}%. ` : ""}Drei Wege, ein Ziel: Leadership-Souveränität in 12 Monaten.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={() => scrollToPayment("leader_os")} className="btn-secondary px-6 py-4 font-semibold inline-flex items-center gap-2">
-              Leadership OS — 997 EUR
+          <p className="font-inter text-sm text-[#C8FF00]/80 mb-8 max-w-xl mx-auto">
+            ▸ Klicke direkt auf dein Paket — du wirst zu Stripe weitergeleitet und kannst sofort bezahlen.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-3xl mx-auto">
+            <button
+              data-testid="close-final-os"
+              onClick={() => handleCheckout("leader_os_full")}
+              disabled={isLoading}
+              className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white font-manrope font-bold hover:border-[#C8FF00]/30 hover:bg-white/[0.06] transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
+            >
+              <span>Leadership OS</span>
+              <span className="text-[#C8FF00]">997 EUR</span>
             </button>
-            <button onClick={() => scrollToPayment("leader_os_plus")} data-testid="close-final-os-plus"
-              className="btn-primary px-8 py-4 font-semibold inline-flex items-center gap-3">
+            <button
+              data-testid="close-final-os-plus"
+              onClick={() => handleCheckout("leader_os_plus")}
+              disabled={isLoading}
+              className="flex-1 px-6 py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
+            >
               <Crown className="w-4 h-4" />
-              OS PLUS — 4.447 EUR
+              <span>OS PLUS</span>
+              <span>4.447 EUR</span>
               <ArrowRight className="w-4 h-4" />
             </button>
-            <button onClick={scrollToEnterprise} className="btn-secondary px-6 py-4 font-semibold inline-flex items-center gap-2">
-              <Building2 className="w-4 h-4" /> Enterprise anfragen
+            <button
+              data-testid="close-final-enterprise"
+              onClick={scrollToEnterprise}
+              className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white font-manrope font-bold hover:border-white/20 transition-all inline-flex items-center justify-center gap-2"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Enterprise anfragen</span>
             </button>
           </div>
-          <p className="font-inter text-xs text-slate-600 mt-6">14 Tage Testphase · License Key per E-Mail · SSL-verschlüsselt</p>
+          <p className="font-inter text-xs text-slate-600 mt-6">14 Tage Testphase · License Key per E-Mail · SSL-verschlüsselt · Powered by Stripe</p>
           <p className="font-inter text-xs text-slate-600 mt-3">
             Bereits einen Key? <button onClick={() => navigate("/activate")} className="text-[#C8FF00]/70 hover:text-[#C8FF00] underline" data-testid="activate-link">Hier aktivieren</button>
           </p>

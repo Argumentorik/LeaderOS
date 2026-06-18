@@ -1,0 +1,7 @@
+# https://leader-check.de robots
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://leader-check.de/sitemap.xml

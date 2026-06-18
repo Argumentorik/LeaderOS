@@ -5,6 +5,7 @@ from typing import List, Optional, Union
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
+    phone: str  # Required for high-ticket follow-up & SMS reminders
     role: str
     custom_role: Optional[str] = None
     consent_privacy: bool = True

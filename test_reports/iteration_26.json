@@ -1,0 +1,52 @@
+{
+  "summary": "Iteration 26 — Validated phone-required UserForm, SEO meta/Schema.org, robots.txt, sitemap.xml, favicons (ICO + 16/32/180 PNG), email-hint banner, and 3 direct-purchase buttons on /close final-cta-section. 10/10 backend & asset pytest cases PASS. Frontend UserForm flow PASS end-to-end (3 fields with red asterisks, phone validation messages, navigation to /quiz, phone persisted in localStorage). Direct-purchase button close-final-os FIRES /api/payments/create-checkout with package_id=leader_os_full and redirects to Stripe ✓. HOWEVER while clicking through to Stripe checkout, discovered a CRITICAL pricing bug — Stripe page shows €99,700.00 for the 997 EUR Leader-OS plan — a 100x overcharge. Backend passes `int(charge_amount * 100)` to emergentintegrations.StripeCheckout(), but the library appears to multiply by 100 internally as well (or expects MAJOR currency units). DB stores correct 997 EUR but customer-facing checkout shows 99,700 EUR. THIS IS A DEPLOYMENT BLOCKER.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/payments/create-checkout",
+        "issue": "Stripe Checkout displays 100x the intended amount. leader_os_full (997 EUR in DB) → Stripe page shows €99,700.00. Root cause likely in /app/backend/routes/payments.py:100 where `amount=int(charge_amount * 100)` is sent to emergentintegrations.StripeCheckout, but library already converts to cents internally (or expects major units). Reproduced by clicking close-final-os button → Stripe URL cs_test_a1pPjxN6... shows €99,700.00. Same bug almost certainly affects leader_os_plus (4447 EUR → would show €444,700) and all other one-time packages.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/user/create",
+        "issue": "phone field accepts empty string '' (status 200). Backend model is `phone: str` (no min_length); frontend regex /^[+\\d][\\d\\s\\-/().]{5,24}$/ enforces non-empty client-side. Consider adding pydantic min_length=6 or Field(..., min_length=6) for defense-in-depth."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "/close → close-final-os direct-purchase button → Stripe Checkout",
+        "issue": "Stripe page displays €99,700.00 instead of €997 (100x). See backend critical issue above; UI fires correct payload and navigation, but downstream price is wrong.",
+        "affected_selectors": ["[data-testid=\"close-final-os\"]", "[data-testid=\"close-final-os-plus\"]", "[data-testid=\"stripe-checkout-btn\"]"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter26_phone_seo.py",
+    "/app/test_reports/pytest/pytest_results_iter26.xml"
+  ],
+  "action_items": [
+    "CRITICAL BLOCKER for redeploy: Fix /app/backend/routes/payments.py — remove the *100 multiplication in `_create_one_time_session` (`amount=int(charge_amount * 100)` → `amount=int(charge_amount)`). Verify by hitting /api/payments/create-checkout for leader_os_full and confirming the Stripe checkout page shows €997, not €99,700. Also re-verify leader_os_plus → €4,447 (not €444,700), and leader_os_2rate/12rate fallback amounts.",
+    "Optional hardening: add pydantic min_length=6 to UserCreate.phone so backend rejects empty strings too (currently accepts '')."
+  ],
+  "critical_code_review_comments": [
+    "PRICING BUG: /app/backend/routes/payments.py line 100 — `amount=int(charge_amount * 100)` looks correct in isolation (Stripe wants cents) but emergentintegrations.StripeCheckout appears to add another *100, producing a 100x overcharge in production. This needs immediate verification against the emergentintegrations contract — likely the library expects major-unit amounts.",
+    "Two sources of truth concern raised in iter25 (PLAN_AMOUNT_MAP duplication) still applies — would not have caused this bug, but increases blast-radius of any pricing fix.",
+    "frontend/src/pages/UserForm.jsx — PHONE_RE allows 6–25 char inputs starting with + or digit. Permissive by design (matches comment in code). Consider also stripping whitespace before regex test for users who paste with leading/trailing spaces (currently .trim() handles it).",
+    "frontend/public/index.html — Schema.org JSON-LD includes Organization + WebSite + Service with valid @context. Good. Consider adding `BreadcrumbList` for /diagnose, /quiz, /close pages.",
+    "frontend/public/index.html — og:image and twitter:image both point to apple-touch-icon.png (180x180). Social previews work but are small; consider a dedicated 1200x630 OG image for richer link previews on LinkedIn/X."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter26_phone_seo.py"],
+  "success_rate": {"backend": "100% (10/10 pytest pass)", "frontend": "92% (12/13 — phone form, SEO, favicons, email-hint, direct-purchase buttons all PASS; downstream Stripe amount is 100x off)"},
+  "test_credentials": "admin password 'wladhub2026' (unchanged from iter25)",
+  "seed_data_creation": "Created in DB: 3 TEST_-prefixed users (test_nophone — rejected 422; test_withphone@example.com — persisted with phone='+49 151 1234 5678' verified; test_emptyphone@example.com), plus 2 TEST payment_transactions for leader_os_full + a quiz user via /diagnose flow (TEST Frontend, +49 151 9999 1111). All TEST_-tagged for cleanup.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter26 verified phone-required, SEO, favicons, email-hint, and direct-purchase buttons all work as specified. The CRITICAL finding is the Stripe 100x pricing bug — uncovered ONLY by actually clicking the new direct-purchase button on /close and observing the Stripe checkout page. This is a pre-existing bug (DB always stored 997, but Stripe page was likely always displaying €99,700) that iter25's API-only tests could not detect. After main agent fixes line 100 of routes/payments.py, please retest by (a) calling /api/payments/create-checkout for leader_os_full and (b) opening the returned `url` in a browser and confirming the displayed amount equals 997 EUR (not 99,700). Same check for leader_os_plus (expect 4,447 EUR). Reusable test file: /app/backend/tests/test_iter26_phone_seo.py.",
+  "rca of the issue": "Stripe checkout shows €99,700.00 for the 997 EUR Leader-OS plan. RCA: /app/backend/routes/payments.py:_create_one_time_session passes `amount=int(charge_amount * 100)` to emergentintegrations.StripeCheckout.create_checkout_session(). The DB record shows amount=997 EUR (correct), but the Stripe session created via emergentintegrations ends up with unit_amount = 9,970,000 cents → €99,700 displayed. This means emergentintegrations.CheckoutSessionRequest expects amount in MAJOR currency units (EUR), not cents — and the *100 multiplication in backend code is the bug. REPRO: 1) Open /close in browser with localStorage.emergent_user set. 2) Scroll to final-cta-section. 3) Click [data-testid=close-final-os]. 4) Observe Stripe page shows €99,700.00 instead of €997. MITIGATION: change line 100 to `amount=int(charge_amount)` (or `amount=round(charge_amount, 2)` if library accepts floats). Re-verify with /api/payments/create-checkout for all packages (leader_os_full, leader_os_plus, leader_os_2rate, leader_os_12rate) — amounts should match displayed Stripe price. Same pattern at line 81 for subscription mode uses `unit_amount` which IS native Stripe API (cents required) — that one should stay. Only the emergentintegrations call needs fixing."
+}
