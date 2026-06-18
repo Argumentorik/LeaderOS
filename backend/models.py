@@ -1,11 +1,11 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional, Union
 
 
 class UserCreate(BaseModel):
-    name: str
+    name: str = Field(min_length=2)
     email: EmailStr
-    phone: str  # Required for high-ticket follow-up & SMS reminders
+    phone: str = Field(min_length=6, max_length=30)  # Required; defense-in-depth against empty strings
     role: str
     custom_role: Optional[str] = None
     consent_privacy: bool = True

@@ -92,12 +92,18 @@ async def _create_subscription_session(req: CreateCheckoutRequest, package: dict
 
 
 async def _create_one_time_session(stripe_key: str, req: CreateCheckoutRequest, package: dict, charge_amount: float, was_subscription: bool):
-    """One-time Stripe Checkout via emergentintegrations."""
+    """One-time Stripe Checkout via emergentintegrations.
+
+    IMPORTANT: emergentintegrations.CheckoutSessionRequest expects the amount in
+    MAJOR currency units (EUR), NOT cents. Do NOT multiply by 100 here — the
+    library handles the cent conversion internally. (The direct Stripe SDK call
+    in _create_subscription_session uses raw cents, which is a different API.)
+    """
     stripe_client = StripeCheckout(api_key=stripe_key)
     success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{req.origin_url}/close"
     checkout_req = CheckoutSessionRequest(
-        amount=int(charge_amount * 100),
+        amount=round(float(charge_amount), 2),
         currency=package["currency"],
         success_url=success_url,
         cancel_url=cancel_url,

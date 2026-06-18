@@ -1,0 +1,27 @@
+{
+  "summary": "Iteration 27 — CRITICAL pricing fix verification. The 100x overcharge bug from iter26 is FULLY RESOLVED. Verified end-to-end by (a) calling /api/payments/create-checkout for all 4 packages, (b) navigating Playwright to each returned Stripe URL, and (c) inspecting the displayed amount on checkout.stripe.com. All 4 packages now show the correct EUR price (€997.00 / €4,447.00 / €1,100.00 / €1,188.00 — NOT €99,700 / €444,700 / €110,000 / €118,800). Also verified the /close → close-final-os click flow lands on a Stripe page showing €997.00. Phone validation (min_length=6) works: empty string and '123' both rejected with 422, '+49 151 1234 5678' accepted with 200. 8/8 backend pytest cases pass. Deployment is UNBLOCKED.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter27_pricing_fix.py",
+    "/app/test_reports/pytest/pytest_results_iter27.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Pricing fix is correctly scoped: only _create_one_time_session (emergentintegrations path) was changed to pass EUR major units. _create_subscription_session still uses int(amount*100) for the native Stripe SDK — that is correct and untouched. Good surgical fix.",
+    "Defense-in-depth opportunity: consider also asserting amount range (e.g., 1 <= amount <= 100000) before passing to Stripe, so future plan-config typos can't silently send 99700 EUR or 0.01 EUR.",
+    "PLAN_AMOUNT_MAP / PACKAGES duplication observation from iter25/26 still applies but is now mitigated by services/pricing.py being the single source of truth — keep frontend/src/components/pricing/pricingConstants.js in sync via a CI check or unit test.",
+    "models.py UserCreate.phone now Field(min_length=6, max_length=30) — solid. Note that whitespace-only strings of 6+ chars would still pass; if that's a concern add a validator with .strip() check (low priority, frontend regex already blocks).",
+    "Consider adding a recurring backend test (already added in test_iter27_pricing_fix.py) that asserts each PACKAGES entry produces a Stripe session with the expected EUR amount — would have caught the 100x bug in CI."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter27_pricing_fix.py (NEW — 8 tests covering all 4 packages + phone validation)"
+  ],
+  "success_rate": {"backend": "100% (8/8 pytest pass)", "frontend": "100% (4/4 Stripe pages display correct EUR amount; /close close-final-os click flow lands on €997.00 Stripe page)"},
+  "test_credentials": "admin password 'wladhub2026' (unchanged)",
+  "seed_data_creation": "Created TEST-prefixed payment_transactions in DB via 8 backend tests (4 in test_iter27 + reused fixtures) plus 4 Playwright-initiated checkout sessions (TEST_pw_*, TEST_pw2_*, TEST_pw_close@example.com). Also 3 user_create attempts (TEST_iter27_empty / _short rejected, _valid persisted). All tagged TEST_ for cleanup.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "PRICING BUG RESOLVED. Verified on actual checkout.stripe.com pages via Playwright cross-domain navigation. The pattern for cross-domain Stripe verification: (1) start on backend origin, (2) POST via page.evaluate fetch, (3) page.goto stripe_url, (4) wait 3-4s for render, (5) read document.body.innerText and regex for €X,XXX.XX. NOTE: after navigating to checkout.stripe.com, any subsequent page.evaluate fetch to backend will be blocked by CSP — return to backend origin before the next API call. Reusable test files: /app/backend/tests/test_iter27_pricing_fix.py (backend), /app/backend/tests/test_iter26_phone_seo.py (SEO/assets).",
+  "rca of the issue": "ROOT CAUSE (from iter26): emergentintegrations.payments.stripe.checkout.CheckoutSessionRequest expects `amount` in MAJOR currency units (EUR, not cents). The library handles cent conversion internally for the underlying Stripe API. Previous code multiplied by 100 (cents-style) which caused a 100x overcharge on the hosted Stripe page (DB stored 997 EUR correctly, but Stripe displayed €99,700.00). FIX APPLIED in /app/backend/routes/payments.py:_create_one_time_session — changed to amount=round(float(charge_amount), 2). VERIFICATION (this iteration): Playwright opened each Stripe checkout URL and read the displayed amount. All 4 packages now show the correct EUR price. The direct Stripe SDK path in _create_subscription_session (line 81, unit_amount=int(amount*100)) was correctly left untouched — that path uses Stripe's native API which DOES require cents. NO REGRESSION."
+}
