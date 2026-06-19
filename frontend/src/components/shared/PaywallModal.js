@@ -102,7 +102,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
                 data-testid="paywall-cta-fast-track"
               >
                 <div className="absolute top-0 right-0 bg-[#BFFF00] text-[#0A0A0A] text-[6px] font-black px-1.5 py-0.5 rounded-bl-md">VIP</div>
-                <p className="text-lg font-black text-[#BFFF00] leading-none">€4.447</p>
+                <p className="text-lg font-black text-[#BFFF00] leading-none">€4.797</p>
                 <p className="text-[8px] text-white/50 mt-1">Leadership OS PLUS</p>
                 <p className="text-[7px] text-white/30 mt-0.5">+ 12× Coaching</p>
               </button>

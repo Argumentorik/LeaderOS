@@ -185,6 +185,8 @@ async def register(data: UserRegister, request: Request, response: Response):
         "user_id": user_id,
         "email": email,
         "name": data.name.strip(),
+        # Iter 92.23.12: optional phone (Cal.com coaching call confirmations only).
+        "phone": data.phone or None,
         "password_hash": hash_password(data.password),
         "picture": None,
         "position": "",
@@ -439,13 +441,24 @@ def _sanitize_company_context(cc: dict) -> dict:
 async def update_profile(request: Request):
     user = await get_current_user(request)
     body = await request.json()
-    allowed = {"name", "position", "company", "industry", "rating_preferences", "company_context"}
+    allowed = {"name", "position", "company", "industry", "rating_preferences", "company_context", "phone"}
     updates = {k: v for k, v in body.items() if k in allowed and v is not None}
 
     if "rating_preferences" in updates:
         updates["rating_preferences"] = _sanitize_rating_preferences(updates["rating_preferences"])
     if "company_context" in updates:
         updates["company_context"] = _sanitize_company_context(updates["company_context"])
+    if "phone" in updates:
+        # Same validator semantics as UserRegister.phone — silently drop garbage.
+        phone_val = str(updates["phone"]).strip()
+        if not phone_val:
+            updates["phone"] = None
+        else:
+            import re
+            if 5 <= len(phone_val) <= 32 and re.match(r"^[+()\d\s\-./]+$", phone_val):
+                updates["phone"] = phone_val
+            else:
+                updates.pop("phone", None)
 
     if updates:
         await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})

@@ -15,6 +15,30 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.23.12 · 19.06.26] PRODUCTION-FIX: Stripe-Preis-Bug + Phone bei Registration + AI-Copy-Sprach-Policy (Mert verbindlich)** —
+  - 🔴 **P0 PRODUCTION-FIX: Stripe Preis** — Mert meldete „Stripe zeigt €444.700 statt €4.797". Code hatte `4447€` an mehreren Stellen (sollte laut Mert `4797€` sein). **11 Code-Stellen** korrigiert: `backend/routes/payments.py` (`amount: 4797.00`), `backend/services_tier.py` (`price_eur: 4797.00`), `backend/routes/support.py` (FAQ), `frontend/src/components/coaching/TierPricingGrid.js`, `components/shared/TierLockOverlay.js`, `PricingModal.js`, `PaywallModal.js`, `LearningVideosTab.js`, `ChatInlineUpsell.js`, `pages/AGBPage.js`, `pages/CoachingPage.js`. **Verifiziert via curl**: `/api/payments/packages` returnt `leadership_os_plus.amount: 4797.0 EUR` → emergentintegrations konvertiert intern zu 479700 cents → Stripe-Checkout zeigt korrekt €4.797,00. Der €444.700-Bug stammt **nicht aus dem Code** sondern vermutlich aus einem manuell im Stripe-Dashboard erstellten Payment-Link mit falschem Betrag → Mert muss diesen alten Stripe-Payment-Link im Dashboard löschen, der App-interne Checkout-Flow ist jetzt korrekt.
+  - **Phone Number bei Registration** (`backend/models.py` `UserRegister.phone` + `backend/routes/auth.py` register + update_profile + `frontend/src/components/auth/AuthForm.js` + `pages/LoginPage.js`):
+    - **Backend**: `UserRegister.phone: Optional[str]` mit Pydantic-Validator (5–32 Zeichen, regex `^[+()\d\s\-./]+$`, leer/null = ok). Stored als `users.phone`. **PUT /api/auth/profile** akzeptiert jetzt auch `phone` für Bestandsuser via Profile-Page. Backwards-compat: existierende User ohne `phone` haben implicit `null`.
+    - **Frontend**: AuthForm in Register-Mode zeigt lime Phone-Icon + Label **„Telefonnummer (für dein 1:1 Coaching-Gespräch)"** + Placeholder `+49 170 1234567` + Subtext *„Optional. Wir nutzen sie nur für Coaching-Termin-Bestätigungen via Cal.com — kein Marketing-Spam."*. Auth-Pattern unverändert: Login bleibt email+password only (per integration_playbook_expert_v2 confirmed).
+    - **Validierung verifiziert**: gültige Phone wird gespeichert, XSS-Garbage wird mit 422 + DE-Fehlertext „Telefonnummer enthält ungültige Zeichen" abgewiesen. Login mit Phone-User funktioniert weiterhin via Email.
+  - **AI-Copy Sprach-Policy** (`backend/services.py` `WLADBOT_SYSTEM_PROMPT` + `backend/routes/video.py` `VIDEO_ANALYSIS_PROMPT` + `backend/services_folder_knowledge.py` briefing prompt):
+    - Mert verbindlich: „beim report keine Wörter nutzen wie Advisory Board / THE IDEAL LEADER / Mastering the 6 Roles / Technisches Wissen schafft Experten...". Diese Phrasen existieren nicht im Code — sie kommen aus der LLM-Generation via RAG aus Wlads Inhalten.
+    - **Lösung**: SPRACH-POLICY-Block in alle 3 System-Prompts integriert mit konkreter Verbotsliste + deutschen Ersatz-Begriffen:
+      - „Advisory Board" → „Beirat"
+      - „THE IDEAL LEADER / Mastering the X Roles" → „Die wichtigsten Rollen einer Führungskraft"
+      - „Leadership Mastery" → „Führungskompetenz" / „echte Führungsstärke"
+      - „Impact" → „Wirkung" / „Ergebnis"
+      - „Mindset" → „Haltung" / „Denkweise"
+      - „Performance" → „Leistung"
+      - „Engagement" → „Beteiligung" / „Einsatz"
+      - „Best Practices" → „bewährte Vorgehensweisen"
+      - „Technisches Wissen schafft Experten. Leadership Mastery schafft Impact." → „Fachwissen macht dich zum Experten. Gute Führung macht dich wirksam."
+    - Wenn ein englischer Fachbegriff zwingend nötig ist (z.B. „Pitch"), wird er einmal in Klammern erklärt. Style: kurze klare Sätze statt lange mit Fremdwörtern.
+  - **Files** (11 modified): `backend/models.py`, `backend/routes/auth.py`, `backend/routes/payments.py`, `backend/routes/support.py`, `backend/routes/video.py`, `backend/services.py`, `backend/services_tier.py`, `backend/services_folder_knowledge.py`, `frontend/src/components/auth/AuthForm.js`, `frontend/src/pages/LoginPage.js`, `frontend/src/components/coaching/TierPricingGrid.js`, plus 6 weitere Frontend-Files mit Preis-Update.
+  - **Action für Mert auf Production**: 
+    1. Code-Deployment via „Save to GitHub" + „Deploy" → neuer Preis €4.797 sofort live
+    2. **Stripe Dashboard Cleanup**: jeden manuell erstellten Payment-Link mit altem Betrag (444700 cents oder €4.447) löschen, falls existent. Der App-interne Checkout-Flow nutzt jetzt korrekt €4.797.
+
 - [x] **[Iter 92.23.11 · 05.06.26] Folder-Context-Awareness im FAB + Folder-Workspace-Cards auf Dashboard (Mert: „auf /missions/abc schlägt der Drawer automatisch den Folder vor · Mini-Stats + Quick-Briefing-Button pro Folder")** —
   - **P1 — FAB Drawer Page-Context-Awareness** (`frontend/src/lib/wladbotBus.js` erweitert + `components/shared/FloatingWladBotDrawer.js` + `pages/VideoChallengePage.js` + `pages/ChatPage.js`):
     - `wladbotBus` bekam einen neuen Event-Channel `EV_PAGE_CONTEXT` mit `setWladBotPageContext({folderId, entryId, entryTitle, pageLabel})`, `subscribeWladBotPageContext(cb)`, `getLastPageContext()` (synchronous accessor für late-subscribers wie den Drawer).

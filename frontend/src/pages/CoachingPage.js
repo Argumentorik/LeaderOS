@@ -82,7 +82,7 @@ export default function CoachingPage() {
             </h1>
             <p className="text-base text-muted-foreground mt-2 max-w-xl">
               {de
-                ? 'Drei Wege zum KI-nativen Leader: Leadership OS für Solo-Leader (€997/Jahr), OS PLUS mit 12× 1:1 Coaching durch Argumentorik-Coaches (€4.447/Jahr), oder Enterprise mit bis zu 50% Volume-Discount für Teams.'
+                ? 'Drei Wege zum KI-nativen Leader: Leadership OS für Solo-Leader (€997/Jahr), OS PLUS mit 12× 1:1 Coaching durch Argumentorik-Coaches (€4.797/Jahr), oder Enterprise mit bis zu 50% Volume-Discount für Teams.'
                 : 'Three paths to AI-native leadership: Leadership OS for solo leaders (€997/year), OS PLUS with 12× 1:1 coaching by Argumentorik coaches (€4,447/year), or Enterprise with up to 50% volume discount for teams.'}
             </p>
           </div>

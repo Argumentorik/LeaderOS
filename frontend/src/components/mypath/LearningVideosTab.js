@@ -246,7 +246,7 @@ export default function LearningVideosTab() {
             <div className="flex items-center gap-2 mb-1">
               <Crown size={10} className="text-[#BFFF00]" />
               <span className="text-[9px] font-black uppercase tracking-widest text-[#BFFF00]">PLUS exklusiv</span>
-              <span className="text-[9px] font-bold text-muted-foreground/50">· €4.447 / Jahr inkl. 12× Coaching</span>
+              <span className="text-[9px] font-bold text-muted-foreground/50">· €4.797 / Jahr inkl. 12× Coaching</span>
             </div>
             <h2 className="text-xl font-black tracking-tight">Master-Programme</h2>
             <p className="text-xs text-muted-foreground mt-0.5">4 Masterclasses · {data.accelerator_videos.reduce((s, v) => s + v.episodes, 0)} Folgen · 1 Jahr Zugang</p>

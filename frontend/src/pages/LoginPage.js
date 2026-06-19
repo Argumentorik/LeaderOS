@@ -38,7 +38,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' });
   const [lastAccount, setLastAccount] = useState(getLastLogin());
   const { data: providers } = useAuthProviders();
   const de = lang === 'de';

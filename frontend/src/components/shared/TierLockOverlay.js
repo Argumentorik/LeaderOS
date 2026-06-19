@@ -115,7 +115,7 @@ export const TierLockOverlay = ({
             </div>
             <div className="flex-1 p-3 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/30 text-center">
               <p className="text-[9px] font-bold uppercase tracking-wider text-[#BFFF00]">OS PLUS</p>
-              <p className="text-xl font-black text-[#BFFF00] mt-0.5">€4.447</p>
+              <p className="text-xl font-black text-[#BFFF00] mt-0.5">€4.797</p>
               <p className="text-[9px] text-white/40">+ 12× Coaching</p>
             </div>
           </div>

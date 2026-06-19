@@ -25,6 +25,9 @@ class UserRegister(BaseModel):
     email: str
     password: str
     name: str
+    # Iter 92.23.12 (Mert): optional phone collected at signup for Cal.com
+    # coaching call confirmations. NOT used for auth — login remains email-only.
+    phone: Optional[str] = None
 
     @field_validator("email")
     @classmethod
@@ -48,6 +51,26 @@ class UserRegister(BaseModel):
             raise ValueError("Name is required")
         if len(v) > 100:
             raise ValueError("Name too long")
+        return v
+
+    @field_validator("phone")
+    @classmethod
+    def _validate_phone(cls, v):
+        # Optional: empty/null is fine. When provided, sanity-check:
+        #   - strip whitespace
+        #   - allow + digits spaces hyphens parens slash dots, common in DE/EU/US
+        #   - 5..32 chars after strip — too short = junk, too long = spam
+        if v is None:
+            return None
+        v = str(v).strip()
+        if not v:
+            return None
+        if len(v) < 5 or len(v) > 32:
+            raise ValueError("Telefonnummer muss zwischen 5 und 32 Zeichen lang sein")
+        # very loose phone regex — just enough to reject obvious garbage
+        import re
+        if not re.match(r"^[+()\d\s\-./]+$", v):
+            raise ValueError("Telefonnummer enthält ungültige Zeichen")
         return v
 
 

@@ -11,7 +11,7 @@ import { EnterpriseQuoteModal } from './EnterpriseQuoteModal';
  * TierPricingGrid — 3-Tier-Pricing: Leadership OS | Leadership OS PLUS | Enterprise
  *
  * • Leadership OS €997/Jahr · 12 Videokurse Drip · 30-Tage Money-Back · Raten möglich (2× oder 12×)
- * • Leadership OS PLUS €4.447/Jahr · OS + 12 Einzelcoachings (je 299€)
+ * • Leadership OS PLUS €4.797/Jahr · OS + 12 Einzelcoachings (je 299€)
  * • Enterprise · B2B · Volume-Discount auf 997€ Basis (10-50%)
  */
 
@@ -52,7 +52,7 @@ const TIERS = [
     tierKey: 'accelerator',
     name: 'Leadership OS PLUS',
     subtitle: '1 Jahr · mit Coaches',
-    price: 4447,
+    price: 4797,
     priceUnit: 'Jahr',
     icon: Crown,
     accent: 'border-[#BFFF00]/40 bg-gradient-to-b from-[#0A0A0A] to-[#1A1A2E] text-white',

@@ -13,7 +13,7 @@ export const ChatInlineUpsell = ({ onNavigate, de }) => (
         </button>
         <span className="text-white/20">|</span>
         <button onClick={onNavigate} className="text-[10px] font-bold text-[#BFFF00]/60 hover:text-[#BFFF00] transition-colors">
-          PLUS €4.447
+          PLUS €4.797
         </button>
       </div>
     </div>

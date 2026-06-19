@@ -73,7 +73,7 @@ async def stripe_mode():
 
 
 # Fixed packages — amounts defined server-side only (security).
-# 3-Tier Structure: Free | Leadership OS €997 | Leadership OS PLUS €4.447 | Enterprise (quote)
+# 3-Tier Structure: Free | Leadership OS €997 | Leadership OS PLUS €4.797 | Enterprise (quote)
 PACKAGES = {
     # Leadership OS (€997/Jahr) — one-time
     "leadership_os": {
@@ -106,11 +106,11 @@ PACKAGES = {
         "installment_plan_id": "leadership_os_12x",
         "installments_total": 12,
     },
-    # Leadership OS PLUS (€4.447/Jahr) — alles aus OS + 12 Einzelcoachings
+    # Leadership OS PLUS (€4.797/Jahr) — alles aus OS + 12 Einzelcoachings
     "leadership_os_plus": {
         "name": "Leadership OS PLUS (1 Jahr)",
         "tier": "accelerator",
-        "amount": 4447.00,
+        "amount": 4797.00,
         "currency": "eur",
         "description": "Alles aus Leadership OS + 12 Einzelcoachings (je 299€, Wert 3.588€) mit Argumentorik-Leadership-Coaches · Video-Analyse · Mastermind · Priority Support",
         "billing": "one_time",

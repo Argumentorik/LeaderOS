@@ -63,7 +63,7 @@ const PACKAGES = [
     name: 'Leadership OS PLUS',
     badge: 'VIP · meist gebucht',
     headline: '1 Jahr · inkl. 1:1 Coaching',
-    price: '4.447',
+    price: '4.797',
     suffix: '€',
     sub: 'einmalig · 30 Tage Geld-zurück',
     bullets: [

@@ -1,4 +1,4 @@
-import { Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, Loader2, Phone } from 'lucide-react';
 
 const inputClass = "h-12 w-full rounded-xl bg-white/[0.03] border border-white/[0.08] text-white placeholder-white/20 px-4 text-sm transition-all outline-none focus:border-[#BFFF00]/50 focus:ring-1 focus:ring-[#BFFF00]/20 focus:bg-white/[0.05] autofill:bg-white/[0.05]";
 
@@ -50,6 +50,33 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
           className={inputClass}
         />
       </div>
+
+      {isRegister && (
+        <div>
+          <label htmlFor="auth-phone" className="block mb-2 text-sm font-medium text-white/70 flex items-center gap-1.5">
+            <Phone size={13} className="text-[#BFFF00]" /> {de ? 'Telefonnummer' : 'Phone number'}
+            <span className="text-[10px] font-normal text-white/30 ml-1">{de ? '(für dein 1:1 Coaching-Gespräch)' : '(for your 1:1 coaching call)'}</span>
+          </label>
+          <input
+            id="auth-phone"
+            data-testid="register-phone-input"
+            type="tel"
+            name="phone"
+            inputMode="tel"
+            autoComplete="tel"
+            spellCheck={false}
+            placeholder="+49 170 1234567"
+            value={form.phone || ''}
+            onChange={e => setForm({ ...form, phone: e.target.value })}
+            className={inputClass}
+          />
+          <p className="text-[10.5px] text-white/35 mt-1.5 leading-snug">
+            {de
+              ? 'Optional. Wir nutzen sie nur für Coaching-Termin-Bestätigungen via Cal.com — kein Marketing-Spam.'
+              : 'Optional. Used only for Cal.com coaching call confirmations — no marketing spam.'}
+          </p>
+        </div>
+      )}
 
       <div>
         <label htmlFor="auth-password" className="block mb-2 text-sm font-medium text-white/70">
