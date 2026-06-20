@@ -1,7 +1,6 @@
 """Iter 92.5 — Backend tests for GDPR Email Unsubscribe + A/B + lifecycle/cron."""
 import os
 import sys
-import asyncio
 import pytest
 import requests
 

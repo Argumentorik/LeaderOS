@@ -31,9 +31,9 @@ import requests
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/")
 
 PRIMARY_EMAIL = "accelerator@wladbot.test"
-PRIMARY_PASSWORD = "test123"
+PRIMARY_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
 OTHER_EMAIL = "test@test.com"
-OTHER_PASSWORD = "test123"
+OTHER_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
 
 
 def _login(email: str, password: str) -> str:

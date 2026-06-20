@@ -18,7 +18,7 @@ import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://command-center-229.preview.emergentagent.com").rstrip("/")
 TEST_EMAIL = "test@test.com"
-TEST_PASSWORD = "test123"
+TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────

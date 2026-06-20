@@ -16,7 +16,12 @@ Each test creates fresh users with timestamped emails to avoid collisions.
 import os
 import time
 import random
+import sys
 import requests
+
+# Inherit TEST_PASSWORD from conftest.py (env-driven, no hardcoded secrets).
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_PASSWORD  # noqa: E402
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001").rstrip("/")
 
@@ -36,12 +41,14 @@ def _register(email, password, name, phone=None, origin=None):
     return requests.post(f"{BASE_URL}/api/auth/register", json=payload, headers=headers, timeout=20)
 
 
-def _login(identifier=None, password="test123", legacy_email=None):
-    """Send login. If `legacy_email` is set, posts {email,password} for backwards-compat."""
+def _login(identifier=None, password=None, legacy_email=None):
+    """Send login. If `legacy_email` is set, posts {email,password} for backwards-compat.
+    `password` defaults to the env-driven TEST_PASSWORD so credentials are never hardcoded."""
+    pw = password if password is not None else TEST_PASSWORD
     if legacy_email is not None:
-        payload = {"email": legacy_email, "password": password}
+        payload = {"email": legacy_email, "password": pw}
     else:
-        payload = {"identifier": identifier, "password": password}
+        payload = {"identifier": identifier, "password": pw}
     return requests.post(f"{BASE_URL}/api/auth/login", json=payload, timeout=20)
 
 
@@ -51,7 +58,7 @@ def _login(identifier=None, password="test123", legacy_email=None):
 
 def test_register_from_leadercheck_origin_tags_leader_check():
     u = _uniq()
-    r = _register(f"sp_lc_{u}@test.com", "test123", "LC User",
+    r = _register(f"sp_lc_{u}@test.com", TEST_PASSWORD, "LC User",
                   origin="https://leadercheck.de")
     assert r.status_code == 200, r.text
     user = r.json()["user"]
@@ -60,7 +67,7 @@ def test_register_from_leadercheck_origin_tags_leader_check():
 
 def test_register_from_leader_os_origin_tags_leader_os():
     u = _uniq()
-    r = _register(f"sp_lo_{u}@test.com", "test123", "LO User",
+    r = _register(f"sp_lo_{u}@test.com", TEST_PASSWORD, "LO User",
                   origin="https://leader-os.de")
     assert r.status_code == 200, r.text
     user = r.json()["user"]
@@ -69,7 +76,7 @@ def test_register_from_leader_os_origin_tags_leader_os():
 
 def test_register_without_origin_defaults_to_leader_os():
     u = _uniq()
-    r = _register(f"sp_default_{u}@test.com", "test123", "Default User")
+    r = _register(f"sp_default_{u}@test.com", TEST_PASSWORD, "Default User")
     assert r.status_code == 200, r.text
     assert r.json()["user"]["source_platform"] == "leader-os"
 
@@ -84,22 +91,22 @@ def test_register_and_login_via_email_and_phone():
     phone = f"+49 170 88{u[-4:]}"  # 4 unique digits in phone
 
     # Register with phone
-    r = _register(email, "test123", "Phone Tester", phone=phone)
+    r = _register(email, TEST_PASSWORD, "Phone Tester", phone=phone)
     assert r.status_code == 200, r.text
 
     # Login via email (identifier field)
-    r1 = _login(identifier=email, password="test123")
+    r1 = _login(identifier=email)
     assert r1.status_code == 200, r1.text
     assert r1.json()["user"]["email"] == email
 
     # Login via phone — original spaced format
-    r2 = _login(identifier=phone, password="test123")
+    r2 = _login(identifier=phone)
     assert r2.status_code == 200, r2.text
     assert r2.json()["user"]["email"] == email
 
     # Login via phone — digits-only normalized form should also match
     digits_only = "".join(c for c in phone if c.isdigit() or c == "+")
-    r3 = _login(identifier=digits_only, password="test123")
+    r3 = _login(identifier=digits_only)
     assert r3.status_code == 200, r3.text
     assert r3.json()["user"]["email"] == email
 
@@ -107,12 +114,12 @@ def test_register_and_login_via_email_and_phone():
 def test_register_without_phone_still_works():
     u = _uniq()
     email = f"nophone_{u}@test.com"
-    r = _register(email, "test123", "No Phone User")
+    r = _register(email, TEST_PASSWORD, "No Phone User")
     assert r.status_code == 200, r.text
     user = r.json()["user"]
     assert user["phone"] in (None, "")  # absent or null
     # Login still works via email
-    r2 = _login(identifier=email, password="test123")
+    r2 = _login(identifier=email)
     assert r2.status_code == 200
 
 
@@ -120,10 +127,10 @@ def test_login_legacy_email_payload_still_works():
     """Old frontend builds POST {email, password} — must not break."""
     u = _uniq()
     email = f"legacy_{u}@test.com"
-    r = _register(email, "test123", "Legacy User")
+    r = _register(email, TEST_PASSWORD, "Legacy User")
     assert r.status_code == 200, r.text
     # Use the LEGACY shape — {email, password}, no `identifier`
-    r2 = _login(legacy_email=email, password="test123")
+    r2 = _login(legacy_email=email)
     assert r2.status_code == 200, r2.text
     assert r2.json()["user"]["email"] == email
 
@@ -134,10 +141,10 @@ def test_duplicate_phone_rejected_at_registration():
     email_a = f"duplicate_a_{u}@test.com"
     email_b = f"duplicate_b_{u}@test.com"
 
-    r1 = _register(email_a, "test123", "User A", phone=phone)
+    r1 = _register(email_a, TEST_PASSWORD, "User A", phone=phone)
     assert r1.status_code == 200, r1.text
 
-    r2 = _register(email_b, "test123", "User B", phone=phone)
+    r2 = _register(email_b, TEST_PASSWORD, "User B", phone=phone)
     assert r2.status_code == 400, r2.text
     assert "Telefonnummer" in r2.json().get("detail", "")
 
@@ -148,7 +155,7 @@ def test_wrong_password_returns_generic_401_for_both_paths():
     u = _uniq()
     email = f"enum_{u}@test.com"
     phone = f"+49 172 7{u[-5:]}"
-    _register(email, "test123", "Enum User", phone=phone)
+    _register(email, TEST_PASSWORD, "Enum User", phone=phone)
 
     # Wrong password on EXISTING email
     r1 = _login(identifier=email, password="wrong-password")
@@ -174,5 +181,5 @@ def test_wrong_password_returns_generic_401_for_both_paths():
 def test_login_without_identifier_is_422():
     """Empty payload should fail Pydantic validation, not crash."""
     r = requests.post(f"{BASE_URL}/api/auth/login",
-                      json={"password": "test123"}, timeout=20)
+                      json={"password": TEST_PASSWORD}, timeout=20)
     assert r.status_code == 422, r.text

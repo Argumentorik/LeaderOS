@@ -24,9 +24,9 @@ import requests
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/")
 
 PRIMARY_EMAIL = "test@test.com"
-PRIMARY_PASSWORD = "test123"
+PRIMARY_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
 OTHER_EMAIL = "accelerator@wladbot.test"
-OTHER_PASSWORD = "test123"
+OTHER_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
 
 # Context-summary chosen so the AI insight should mention these tokens.
 FOLDER_NAME = "TEST_iter92238_boardpitch"
