@@ -15,6 +15,16 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.26 · 20.06.26] Architektur-Rules Locked-In + Production-CORS-Safeguard (Mert's verbindliche Architecture Brief)** —
+  - **Vercel-only Deployment**: Mert hat die Multi-Domain-SaaS-Architektur final dokumentiert. 4 Production-Domains (leaderos.de [Haupt-App], leadercheck.de [Funnel], leader-os.de + leader-check.de [Landing-Pages]) teilen sich EIN Backend + EINE MongoDB. Alle Conversion-Events (Signup, Login, Checkout) finden auf leaderos.de statt.
+  - **Production-CORS-Safeguard** (`backend/server.py`): Backend-Startup raised jetzt `RuntimeError` wenn `ENV=production` UND `CORS_ORIGINS` ist `*` oder leer. Verhindert silently-exposed APIs durch Misconfig. Dev/Preview darf weiterhin Wildcard nutzen (regex-form mit credentials). Verifiziert in beiden Branches via isolierten Python-Tests.
+  - **`.env.example` Doc-Update**: Explicit CORS-Whitelist-Beispiel für Production hinzugefügt (8 Origins: 4 Domains × 2 mit/ohne www).
+  - **Architecture-Doc** (`/app/docs/ARCHITECTURE.md`): Single-Source-of-Truth für alle zukünftigen Agents/Forks erstellt. Enthält: Domain-Map, CORS-Whitelist, Funnel-Flow (leadercheck.de → leaderos.de single conversion path), Serverless-Compat-Constraints (asyncio.create_task Tracking für Vercel-Migration), Logging/Debug-Rules (nie Internal-Traces in API-Responses), MAN-DARF/MAN-NIE-Reference, Iter-Trail.
+  - **Backlog für Vercel-Migration getrackt**: aktuelle `asyncio.create_task` fire-and-forget Patterns (services_supabase_sync, services_crm, auth.py welcome-mail/wladhub-sync, oauth.py welcome-mail) müssen bei Migration zu Vercel-Serverless refactored werden — entweder `await` synchron ODER externes Queue-Webhook. Im aktuellen Long-Running-Container ist's fine.
+  - **Files**: MODIFIED: `backend/server.py` (production-guard), `backend/.env.example` (+CORS prod-whitelist Kommentar). NEW: `/app/docs/ARCHITECTURE.md` (107-Zeilen Architekturdoku).
+  - **Bedeutung**: zukünftige Forks/Agents lesen erst `/app/docs/ARCHITECTURE.md` — keine Migrations-Vorschläge zu anderen Hostings, keine Wildcard-CORS-Drift, keine Auth-Duplikation auf Funnel-Domains, keine Long-Running-Tasks die auf Vercel kaputt gehen würden.
+
+
 - [x] **[Iter 92.24 · 20.06.26] Phone-OR-Email Login + Cross-Platform `source_platform` Attribution + Cross-Domain Funnel (Mert: „leadercheck.de und leaderos.de werden von hier deployed · Leute kommen über leadercheck.de und werden zu leaderos.de gepusht · Login & Register mit Telefonnummer ermöglichen · GODMODE")** —
   - **P0 — Source-Platform Attribution (Launch-Handoff Step 5)** (`backend/routes/auth.py` `detect_source_platform()` + `services_supabase_sync.py` + `services_crm.py` + `routes/oauth.py`):
     - Neuer Helper `detect_source_platform(request)` liest `Origin → Referer → Host` (in dieser Reihenfolge) und matcht `leader-check` ODER `leadercheck` substring → returnt `'leader-check'`, sonst Default `'leader-os'`.

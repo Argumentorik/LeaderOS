@@ -191,14 +191,26 @@ async def rag_health() -> dict:
 # with `allow_origins=["*"]` per the CORS spec — browsers block credentialed requests.
 # Strategy: if CORS_ORIGINS="*", use allow_origin_regex=".*" which works WITH credentials.
 # Otherwise: split env list into explicit origins (production-safe).
+#
+# Iter 92.26 (Mert architecture brief, Jun 2026): production whitelist is locked to
+# 4 domains + www variants (leaderos.de, leadercheck.de, leader-os.de, leader-check.de).
+# When ENV=production AND CORS_ORIGINS is `*`/empty, we REFUSE to start so a
+# misconfigured deploy fails loudly instead of silently exposing the API.
 _raw_cors = os.environ.get("CORS_ORIGINS", "").strip()
+_env_name = os.environ.get("ENV", os.environ.get("ENVIRONMENT", "")).lower()
+if _env_name == "production" and _raw_cors in ("", "*"):
+    raise RuntimeError(
+        "CORS_ORIGINS must be an explicit comma-separated whitelist in production "
+        "(wildcard `*` is forbidden per architecture rules). Set it to the 4 "
+        "production domains (+ optional www) in Vercel env. See backend/.env.example."
+    )
 _cors_kwargs: dict = {
     "allow_credentials": True,
     "allow_methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
 }
 if _raw_cors in ("", "*"):
-    # Wildcard with credentials: must use regex form
+    # Wildcard with credentials: must use regex form. Dev/Preview only.
     _cors_kwargs["allow_origin_regex"] = r".*"
 else:
     _cors_kwargs["allow_origins"] = [o.strip() for o in _raw_cors.split(",") if o.strip()]
