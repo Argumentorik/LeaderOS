@@ -31,7 +31,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { subscribeWladBotOpen, subscribeWladBotClose, subscribeWladBotPageContext, getLastPageContext } from '../../lib/wladbotBus';
 
 // Hide the FAB on these routes — onboarding, auth, public, etc.
-const HIDDEN_ROUTES = ['/login', '/signup', '/onboarding', '/m/', '/f/', '/leader-os/welcome', '/leader-os/diagnose', '/auth-callback', '/auth/magic', '/chat'];
+const HIDDEN_ROUTES = ['/login', '/signup', '/register', '/onboarding', '/m/', '/f/', '/leader-os/welcome', '/leader-os/diagnose', '/auth-callback', '/auth/magic', '/chat'];
 
 const QUICK_PROMPTS_DE = [
   { label: 'Heute fokussieren', q: 'Was sollte ich heute als Priorität angehen, gegeben mein aktueller Kontext?' },

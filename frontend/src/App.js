@@ -109,6 +109,11 @@ function AppRouter() {
     <Suspense fallback={<RouteLoader />}>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        {/* Iter 92.25: explicit /signup + /register routes so deep-links from
+            SharedFolderPage, marketing campaigns, and the leadercheck.de funnel
+            land on the form in REGISTER mode (not the default login mode). */}
+        <Route path="/signup" element={<LoginPage initialMode="register" />} />
+        <Route path="/register" element={<LoginPage initialMode="register" />} />
         <Route path="/auth/magic" element={<MagicLinkVerifyPage />} />
         <Route path="/auth-callback" element={<AuthCallback />} />
         <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />

@@ -1,0 +1,101 @@
+{
+  "summary": "Comprehensive LINK/ROUTE sweep for LeaderOS Iter 92.25 (post /signup + /register addition). Tested 18 authenticated routes, 5 redirect routes, wildcard catch-all (auth + unauth), 4 public legal pages, 8 auth-gated unauth redirects, FloatingWladBotDrawer visibility on 7 routes, footer legal hrefs on 4 authed pages, and Stripe pricing regression (€444.700 must NOT appear; €4.797 expected). Result: ALL 18 authenticated routes resolve to a non-blank, error-free page (no white-screens, no chunk-404, no error boundaries, 0 page errors). /signup + /register correctly render register form with 'Account erstellen' heading. Phone-OR-email field shows 'E-Mail oder Telefon' label. Auth-gated routes correctly redirect to /login when unauth. Wildcard /this-does-not-exist-xyz → /login (unauth) / /dashboard (auth). FloatingWladBotDrawer (data-testid='wladbot-fab') correctly HIDDEN on /chat (only separate 'wladhelp-fab' present there) and SHOWN on dashboard, coaching, lern-videos, profile, community, missions. Stripe regression PASS: €4.797 present on /coaching, €444.700 absent everywhere. ONE MINOR DEVIATION from spec: /referrals does NOT redirect to /referral — it has its own ProtectedRoute rendering ReferralPage at /referrals URL (App.js:149); functionally identical page but URL not normalized.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "route_issues": [
+      {
+        "route": "/referrals",
+        "expected": "Navigate redirect to /referral (per test request)",
+        "actual": "Renders ReferralPage at /referrals URL directly (App.js line 149 is a ProtectedRoute, not a Navigate)",
+        "severity": "MINOR",
+        "user_impact": "None — page renders correctly, link is not broken. Only URL normalization differs from spec.",
+        "fix_hint": "Replace App.js:149 `<Route path=\"/referrals\" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />` with `<Route path=\"/referrals\" element={<Navigate to=\"/referral\" replace />} />` to match /settings, /progress, /video-challenge, /learning-videos redirect pattern."
+      }
+    ]
+  },
+  "tests_executed": {
+    "unauth_routes": {
+      "/signup_renders_register": "PASS (Account erstellen + Login + 1:1 Coaching labels present)",
+      "/register_renders_register": "PASS",
+      "public_legal_pages": "PASS (impressum/datenschutz/widerruf/agb all render H1 without auth)",
+      "auth_gated_redirect_to_login": "PASS (/chat, /missions, /coaching, /community, /tasks, /profile, /playbooks, /events all → /login)",
+      "wildcard_unauth": "PASS (/this-does-not-exist-xyz → /login)"
+    },
+    "auth_routes_loaded": {
+      "/dashboard": "OK (h='Willkommen bei WladBot!')",
+      "/chat": "OK (h='WladBot')",
+      "/missions": "OK",
+      "/missions/archive": "OK",
+      "/tools": "OK (h='Geführte Workflows')",
+      "/simulations": "OK (h='Leadership Simulationen')",
+      "/playbooks": "OK (h='Leadership Playbooks')",
+      "/events": "OK (h='Events & Execution')",
+      "/community": "OK",
+      "/coaching": "OK (h='Dein Coaching Hub')",
+      "/my-path": "OK",
+      "/lern-videos": "OK (h='Wlads Leadership Library')",
+      "/tasks": "OK (h='Aufgaben')",
+      "/profile": "OK",
+      "/challenge": "OK",
+      "/referral": "OK",
+      "/downloads": "OK (h='Deine Leadership-Bibliothek')",
+      "/enterprise": "OK (h='KI-Leadership für Ihr gesamtes Team')"
+    },
+    "redirects": {
+      "/learning-videos → /lern-videos": "PASS",
+      "/video-challenge → /missions": "PASS",
+      "/settings → /profile": "PASS",
+      "/progress → /community": "PASS",
+      "/referrals → /referral": "FAIL (renders at /referrals instead — see route_issues)"
+    },
+    "wildcard_auth": "PASS (/this-does-not-exist-xyz → /dashboard)",
+    "floating_wladbot_drawer_data_testid_wladbot_fab": {
+      "/dashboard": "SHOWN (correct)",
+      "/coaching": "SHOWN (correct)",
+      "/lern-videos": "SHOWN (correct)",
+      "/profile": "SHOWN (correct)",
+      "/community": "SHOWN (correct)",
+      "/missions": "SHOWN (correct)",
+      "/chat": "HIDDEN (correct — only separate 'wladhelp-fab' WladHelp button present, NOT WladBot)"
+    },
+    "footer_legal_hrefs_on_authed_pages": {
+      "/dashboard": "all 4 present (/impressum, /datenschutz, /widerruf, /agb)",
+      "/coaching": "all 4 present",
+      "/community": "all 4 present",
+      "/profile": "all 4 present"
+    },
+    "stripe_pricing_regression": {
+      "€444.700_anywhere": "ABSENT (PASS — P0 regression check)",
+      "€4.797_on_coaching": "PRESENT ('durch Argumentorik-Coaches (€4.797/Jahr)') — PASS"
+    },
+    "login_test_at_test_dot_com": "PASS (200 OK on /api/auth/login, navigated to /dashboard, auth persists across all 18 authed routes via httpOnly cookie)"
+  },
+  "console_errors_observed": [
+    "401 on /api/some/endpoint and 403 on a different one during auth-route sweep — NOT chunk-load or routing errors; appear to be feature-data 401/403 noise unrelated to routing. Did not cause white-screens or break navigation."
+  ],
+  "chunk_load_errors": 0,
+  "page_errors": 0,
+  "white_screens_found": 0,
+  "error_boundaries_triggered": 0,
+  "test_report_links": [],
+  "action_items": [
+    "MINOR: Convert /referrals from `<Route>` rendering ReferralPage to `<Navigate to='/referral' replace />` in App.js:149 to match spec (and the consistent pattern used for /settings, /progress, /video-challenge, /learning-videos). Currently page renders correctly so user impact is zero, but URL is not normalized as test request specified."
+  ],
+  "critical_code_review_comments": [
+    "App.js currently has 200+ lines and many lazy-loaded routes — clean. ProtectedRoute pattern correct. /signup + /register addition (App.js:115-116) correctly passes initialMode='register' to LoginPage.",
+    "FloatingWladBotDrawer hidden-routes filter correctly suppresses on /chat (uses separate 'wladhelp-fab' there). No conflict between the two FABs.",
+    "Public legal routes (impressum/datenschutz/widerruf/agb) correctly placed ABOVE the wildcard `<Route path='*' element={<Navigate to='/dashboard' replace />} />` at App.js:165 so they remain accessible without auth. Verified — all 4 render their H1 unauthenticated.",
+    "Consider normalizing /referrals (App.js:149) to a Navigate redirect for URL hygiene and consistency with other aliases."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (frontend-only request)", "frontend": "97% — 35/36 link assertions pass; only /referrals URL normalization differs from spec"},
+  "test_credentials": "test@test.com / test123 (admin, auth via httpOnly cookie working — token NOT in localStorage which is correct per Iter 92.24 security design)",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.25 link sweep — all 18 protected routes, redirects, wildcards, public legal pages, FAB visibility, footer links, and Stripe pricing regression verified. Only deviation: /referrals not normalized to /referral (App.js:149). data-testids in use: login-email-input, login-password-input, login-submit-btn, register-email-input, register-phone-input, register-submit-btn, wladbot-fab (FloatingWladBotDrawer), wladhelp-fab (separate WladHelp button, present on /chat). Phone-OR-Email login confirmed via 'E-Mail oder Telefon' label on /login.",
+  "rca_of_the_issue": "N/A — no critical bugs found. Sole deviation (/referrals not redirecting) is a missed alias-normalization in App.js:149 where the developer added a parallel ProtectedRoute instead of a `<Navigate replace>` like the other 4 redirect aliases. One-line fix as noted in action_items."
+}

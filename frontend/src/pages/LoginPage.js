@@ -28,13 +28,13 @@ const getFeatures = (de) => (de ? [
   { t: 'Daily AI Business Briefing', s: 'Trends, leader quotes, strategic insights' },
 ]);
 
-export default function LoginPage() {
+export default function LoginPage({ initialMode = 'login' }) {
   const { login } = useAuth();
   const { lang, toggleLang } = useLanguage();
   const navigate = useNavigate();
-  // Default to 'login' — most traffic is returning users in pre-launch phase.
-  // New users see a clear "Account erstellen" link to switch into register mode.
-  const [mode, setMode] = useState('login');
+  // Iter 92.25: when the route is /signup or /register, mount directly in
+  // register mode. Default '/login' route keeps the existing behaviour.
+  const [mode, setMode] = useState(initialMode);
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
