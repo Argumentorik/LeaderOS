@@ -146,7 +146,7 @@ function AppRouter() {
         <Route path="/downloads" element={<ProtectedRoute><DownloadsPage /></ProtectedRoute>} />
         <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
         <Route path="/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
-        <Route path="/referrals" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
+        <Route path="/referrals" element={<Navigate to="/referral" replace />} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         {/* /settings is a semantic alias of /profile. Users (and the testing
             agent in iter 91) expected /settings to resolve, not catch-all
