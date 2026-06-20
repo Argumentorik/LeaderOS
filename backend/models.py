@@ -1,5 +1,6 @@
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from typing import Optional
+import re
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -19,6 +20,39 @@ def _normalize_email(v: str) -> str:
     except EmailNotValidError as e:
         raise ValueError(str(e))
     return result.normalized
+
+
+# Iter 92.24 (Mert): phone-OR-email login. Helpers to normalize/detect identifier.
+def normalize_phone(v: str | None) -> str | None:
+    """Strip whitespace, dashes, parens, dots, slashes. Preserve leading '+'.
+    Returns canonical E.164-ish string ('+491701234567') or None when input
+    is empty/None. Does NOT validate country code — that's loose by design so
+    legacy German users can enter '0170…' or '+49170…'.
+    """
+    if v is None:
+        return None
+    v = str(v).strip()
+    if not v:
+        return None
+    has_plus = v.startswith("+")
+    digits = re.sub(r"[^\d]", "", v)
+    if not digits:
+        return None
+    return ("+" + digits) if has_plus else digits
+
+
+def looks_like_phone(v: str) -> bool:
+    """True when the identifier looks like a phone number (starts with '+',
+    or is mostly digits with no '@'). Used to route login lookup."""
+    if not v:
+        return False
+    if "@" in v:
+        return False
+    if v.startswith("+"):
+        return True
+    digits = re.sub(r"[^\d]", "", v)
+    # Mostly digits + at least 5 of them = phone candidate
+    return len(digits) >= 5 and (len(digits) / max(len(v), 1)) >= 0.6
 
 
 class UserRegister(BaseModel):
@@ -75,15 +109,24 @@ class UserRegister(BaseModel):
 
 
 class UserLogin(BaseModel):
-    email: str
+    # Iter 92.24 (Mert): accept EITHER email OR phone as login identifier.
+    # `identifier` is the canonical field; `email` kept for backwards-compat
+    # (old frontend builds still POST {email, password}). At least one must be set.
+    identifier: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
     password: str
 
-    @field_validator("email")
-    @classmethod
-    def _v_email(cls, v: str) -> str:
-        # Login: lenient — just lowercase+strip, no strict format check,
-        # so legacy accounts with unusual formats aren't locked out.
-        return (v or "").strip().lower()
+    @model_validator(mode="after")
+    def _ensure_identifier(self):
+        # Coalesce email/phone into identifier so handlers only read one field.
+        # Priority: explicit `identifier` > `phone` > `email`.
+        if not self.identifier:
+            self.identifier = self.phone or self.email or ""
+        self.identifier = (self.identifier or "").strip()
+        if not self.identifier:
+            raise ValueError("E-Mail oder Telefonnummer ist erforderlich")
+        return self
 
 
 class UserOut(BaseModel):

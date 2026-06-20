@@ -7,7 +7,7 @@ import httpx
 from datetime import datetime, timezone, timedelta
 
 from config import db, OAUTH_SESSION_URL, logger
-from models import UserRegister, UserLogin
+from models import UserRegister, UserLogin, normalize_phone, looks_like_phone
 from services import create_jwt_token, hash_password, verify_password, get_current_user, update_user_scores
 from services_actions import record_user_action
 from services_login_security import (
@@ -18,6 +18,28 @@ from services_login_security import (
 )
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
+
+
+def detect_source_platform(request: Request) -> str:
+    """Iter 92.24 (Mert): detect funnel-of-origin for cross-platform attribution.
+
+    Both `leadercheck.de`/`leader-check.de` (anonymous diagnostic funnel) and
+    `leaderos.de`/`leader-os.de` (authenticated coaching app) run from this
+    backend. The funnel-of-origin is needed by the Supabase `users.source_platform`
+    column ('leader-check' | 'leader-os' | 'manual') for first-touch attribution.
+
+    Looks at Origin → Referer → Host (in that order). Defaults to 'leader-os'
+    because that's the auth app and the dominant entry path.
+    """
+    sources = [
+        request.headers.get("origin", ""),
+        request.headers.get("referer", ""),
+        request.headers.get("host", ""),
+    ]
+    blob = " ".join(sources).lower()
+    if "leader-check" in blob or "leadercheck" in blob:
+        return "leader-check"
+    return "leader-os"
 
 
 async def _send_signup_welcome(email: str, name: str) -> None:
@@ -181,12 +203,27 @@ async def register(data: UserRegister, request: Request, response: Response):
 
     user_id = f"user_{uuid.uuid4().hex[:12]}"
     history_entry = _login_history_entry(ctx, method="register")
+    # Iter 92.24: normalize phone + dedupe globally (sparse unique index in server.py).
+    phone_raw = (data.phone or "").strip() or None
+    phone_normalized = normalize_phone(phone_raw)
+    if phone_normalized:
+        existing_phone = await db.users.find_one(
+            {"phone_normalized": phone_normalized},
+            {"_id": 0, "user_id": 1},
+        )
+        if existing_phone:
+            raise HTTPException(status_code=400, detail="Telefonnummer ist bereits registriert")
+
+    source_platform = detect_source_platform(request)
     user_doc = {
         "user_id": user_id,
         "email": email,
         "name": data.name.strip(),
         # Iter 92.23.12: optional phone (Cal.com coaching call confirmations only).
-        "phone": data.phone or None,
+        # Iter 92.24: phone is now ALSO a login identifier — `phone_normalized`
+        # (E.164-ish) is the queryable key, `phone` keeps the user's original
+        # display formatting for receipts/confirmations.
+        "phone": phone_raw,
         "password_hash": hash_password(data.password),
         "picture": None,
         "position": "",
@@ -198,6 +235,9 @@ async def register(data: UserRegister, request: Request, response: Response):
         "level": "Emerging Leader",
         "xp": 0,
         "premium": False,
+        # Iter 92.24: first-touch attribution — never overwritten on subsequent
+        # logins. Matches the Supabase `users.source_platform` enum.
+        "source_platform": source_platform,
         "signup_ip": ip_address,
         "signup_geo": ctx["geo"],
         "signup_ua": ctx["ua"],
@@ -207,10 +247,18 @@ async def register(data: UserRegister, request: Request, response: Response):
         "login_history": [history_entry],
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
+    # Sparse unique index on phone_normalized only ignores DOCS WITHOUT the field;
+    # explicit nulls still conflict. Only attach the field when we have a real value.
+    if phone_normalized:
+        user_doc["phone_normalized"] = phone_normalized
     try:
         await db.users.insert_one(user_doc)
-    except DuplicateKeyError:
-        # Race-safe: unique index catches parallel duplicate registrations
+    except DuplicateKeyError as dup:
+        # Race-safe: unique indexes catch parallel duplicate registrations.
+        # Detect which constraint fired so we can return a precise message.
+        msg = str(dup).lower()
+        if "phone" in msg:
+            raise HTTPException(status_code=400, detail="Telefonnummer ist bereits registriert")
         raise HTTPException(status_code=400, detail="Email already registered")
     except Exception as e:
         logger.error(f"Register insert failed: {e}")
@@ -227,6 +275,7 @@ async def register(data: UserRegister, request: Request, response: Response):
         email=email,
         full_name=data.name.strip(),
         event="user.created",
+        source_platform=source_platform,
     )
 
     # Auto-sync leader-check.de diagnosis if user already exists in Supabase
@@ -253,20 +302,37 @@ async def register(data: UserRegister, request: Request, response: Response):
 
 @router.post("/login")
 async def login(data: UserLogin, request: Request, response: Response):
-    email = (data.email or "").strip().lower()
+    # Iter 92.24 (Mert): accept EITHER email OR phone as login identifier.
+    # `identifier` is coalesced server-side in UserLogin.model_validator.
+    identifier_raw = (data.identifier or "").strip()
     ctx = await _capture_login_context(request)
     ip_address = ctx["ip"]
 
-    # Enterprise: brute-force protection
-    await _check_rate_limit(email, ip_address)
+    # Detect identifier type → build appropriate Mongo query
+    if looks_like_phone(identifier_raw):
+        phone_normalized = normalize_phone(identifier_raw)
+        rate_key = f"phone:{phone_normalized or identifier_raw.lower()}"
+        user_query = {"phone_normalized": phone_normalized} if phone_normalized else None
+        method = "phone"
+    else:
+        email = identifier_raw.lower()
+        rate_key = email
+        user_query = {"email": email}
+        method = "email"
 
-    user = await db.users.find_one({"email": email}, {"_id": 0})
+    # Enterprise: brute-force protection (keyed on normalized identifier + IP)
+    await _check_rate_limit(rate_key, ip_address)
+
+    user = await db.users.find_one(user_query, {"_id": 0}) if user_query else None
     if not user or not verify_password(data.password, user.get("password_hash", "")):
-        await _log_login_attempt(email, ip_address, success=False)
+        await _log_login_attempt(rate_key, ip_address, success=False)
+        # Generic message — never confirms which identifier exists (enumeration-safe)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    await _log_login_attempt(email, ip_address, success=True)
-    history_entry = _login_history_entry(ctx, method="email")
+    # email below references the actual stored email — even when login was via phone
+    email = user.get("email", "")
+    await _log_login_attempt(rate_key, ip_address, success=True)
+    history_entry = _login_history_entry(ctx, method=method)
     await db.users.update_one({"user_id": user["user_id"]}, {
         "$set": {
             "last_login_ip": ip_address,
@@ -286,11 +352,11 @@ async def login(data: UserLogin, request: Request, response: Response):
         geo=ctx["geo"],
         fingerprint=ctx["fingerprint"],
         login_history=(user.get("login_history") or []) + [history_entry],
-        method="email",
+        method=method,
     )
 
     token = create_jwt_token(user["user_id"])
-    await _create_session(user["user_id"], ip_address, response, method="email")
+    await _create_session(user["user_id"], ip_address, response, method=method)
 
     return {"token": token, "user": _safe_user_output(user)}
 
@@ -351,10 +417,12 @@ async def google_session(request: Request, response: Response):
         )
     else:
         user_id = f"user_{uuid.uuid4().hex[:12]}"
+        source_platform = detect_source_platform(request)
         await db.users.insert_one({
             "user_id": user_id, "email": email, "name": google_data.get("name", "User"),
             "picture": google_data.get("picture"), "leadership_score": 0, "eq_score": 0,
             "communication_score": 0, "level": "Emerging Leader", "xp": 0,
+            "source_platform": source_platform,
             "signup_ip": ip_address, "signup_geo": ctx["geo"], "signup_ua": ctx["ua"],
             "last_login_ip": ip_address, "last_login_geo": ctx["geo"], "last_login_ua": ctx["ua"],
             "login_history": [history_entry],
@@ -379,6 +447,7 @@ async def google_session(request: Request, response: Response):
         full_name=user.get("name") or "",
         event=sync_event,
         extra={"auth_method": "google"},
+        source_platform=user.get("source_platform") or detect_source_platform(request),
     )
 
     return {"user": _safe_user_output(user), "token": token}
@@ -453,15 +522,38 @@ async def update_profile(request: Request):
         phone_val = str(updates["phone"]).strip()
         if not phone_val:
             updates["phone"] = None
+            updates["phone_normalized"] = None
         else:
             import re
             if 5 <= len(phone_val) <= 32 and re.match(r"^[+()\d\s\-./]+$", phone_val):
                 updates["phone"] = phone_val
+                # Iter 92.24: keep phone_normalized in sync for phone-login lookups.
+                phone_norm = normalize_phone(phone_val)
+                if phone_norm:
+                    # Conflict check — another user already owns this phone
+                    other = await db.users.find_one(
+                        {"phone_normalized": phone_norm, "user_id": {"$ne": user["user_id"]}},
+                        {"_id": 0, "user_id": 1},
+                    )
+                    if other:
+                        raise HTTPException(status_code=400, detail="Telefonnummer ist bereits einem anderen Konto zugeordnet")
+                updates["phone_normalized"] = phone_norm
             else:
                 updates.pop("phone", None)
 
-    if updates:
-        await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})
+    # Iter 92.24: handle phone_normalized via $unset when null (sparse index quirk).
+    unset = {}
+    if "phone" in updates and updates.get("phone") is None:
+        unset["phone_normalized"] = ""
+        updates.pop("phone_normalized", None)
+
+    if updates or unset:
+        mongo_op = {}
+        if updates:
+            mongo_op["$set"] = updates
+        if unset:
+            mongo_op["$unset"] = unset
+        await db.users.update_one({"user_id": user["user_id"]}, mongo_op)
     user = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
     return _safe_user_output(user)
 

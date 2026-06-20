@@ -65,9 +65,12 @@ export default function LoginPage() {
     setError('');
     try {
       const endpoint = mode === 'register' ? '/auth/register' : '/auth/login';
+      const trimmedId = (form.email || '').trim();
+      // Iter 92.24 (Mert): login accepts EITHER email OR phone in the same field.
+      // Send as `identifier`; backend coalesces `identifier|phone|email` to one value.
       const payload = mode === 'register'
-        ? { ...form, email: (form.email || '').trim() }
-        : { email: (form.email || '').trim(), password: form.password };
+        ? { ...form, email: trimmedId }
+        : { identifier: trimmedId, password: form.password };
       const res = await api.post(endpoint, payload);
       login(res.data.user, 'email');
       navigate('/dashboard');

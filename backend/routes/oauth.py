@@ -114,6 +114,9 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
 
     # New user — create
     user_id = f"user_{uuid.uuid4().hex[:12]}"
+    # Iter 92.24 (Mert): tag funnel-of-origin for cross-platform attribution.
+    from routes.auth import detect_source_platform
+    source_platform = detect_source_platform(request)
     user_doc = {
         "user_id": user_id,
         "email": email,
@@ -128,6 +131,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
         "level": "Emerging Leader",
         "xp": 0,
         "premium": False,
+        "source_platform": source_platform,
         "oauth_providers": {provider: {"sub": profile["sub"], "linked_at": now_iso}},
         "last_login_provider": provider,
         "signup_ip": ctx["ip"],
@@ -151,6 +155,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
             full_name=user_doc["name"],
             event="user.created",
             extra={"auth_method": provider},
+            source_platform=source_platform,
         )
     except Exception as e:
         logger.warning("Supabase mirror failed (non-blocking): %s", e)

@@ -89,6 +89,9 @@ async def _emit_async(event_type: str, user: dict | None, data: dict | None) -> 
         "email": (user or {}).get("email"),
         "tier": (user or {}).get("tier", "free"),
         "name": (user or {}).get("name"),
+        # Iter 92.24 (Mert): include funnel-of-origin so Wingman can route
+        # leader-check vs leader-os leads into different campaigns.
+        "platform": (user or {}).get("source_platform") or "leader-os",
         "data": data or {},
     }
     body_bytes = json.dumps(payload, default=str).encode("utf-8")

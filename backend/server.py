@@ -246,6 +246,18 @@ async def startup() -> None:
         except Exception as idx_err:
             logger.warning(f"users.email unique index deferred (possible legacy dupes): {idx_err}")
 
+        # Iter 92.24 (Mert): phone-OR-email login. Sparse unique index so users
+        # without a phone (the majority pre-92.23.12) tolerate the null while
+        # newly-registered users get global uniqueness on phone_normalized.
+        try:
+            await db.users.create_index(
+                "phone_normalized", unique=True, sparse=True,
+                name="phone_normalized_unique_sparse",
+            )
+            logger.info("Sparse unique index on users.phone_normalized created/verified")
+        except Exception as idx_err:
+            logger.warning(f"users.phone_normalized unique index deferred: {idx_err}")
+
         # Rate-limit tracking: TTL on login_attempts
         await db.login_attempts.create_index("expires_at", expireAfterSeconds=0)
         await db.login_attempts.create_index([("email", 1), ("ip", 1)])
