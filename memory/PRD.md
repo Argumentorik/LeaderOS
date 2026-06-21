@@ -15,6 +15,28 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.27 · 20.06.26] Multi-Project Vercel Deploy-Ready — Pro-Project `FRONTEND_BASE_URL` für Emails/Links/OG (Mert hat seine Vercel-Production-Env-Vars geliefert)** —
+  - **Problem**: Mert deployt das gleiche Backend in 2 Vercel-Projekten (`leaderos` → leaderos.de, `leadercheck` → leadercheck.de). Beide haben ihre eigene `FRONTEND_BASE_URL` env, aber `services_email.py` + `routes/og.py` + `services_magic_link.py` + `routes/events.py` + `routes/unsubscribe.py` + `services_login_security.py` + `routes/referral.py` hatten überall `https://leader-os.de` (alte Domain mit Bindestrich) hardcoded — Emails von der leadercheck.de-Deploy hätten User auf die falsche Domain geschickt.
+  - **Fix**: Neuer Helper `services_email._frontend_url()` liest `FRONTEND_BASE_URL` zur Call-Time (nicht Import-Time), Fallback `https://leaderos.de` (neue Primärdomain, ohne Bindestrich). Alle 3 Email-Call-Sites (`auth.py::_send_signup_welcome`, `payments.py::tier_welcome`, `lifecycle_emails.py::drip_funcs`) injizieren `app_url=_frontend_url()`. Gleiches Pattern in 6 weiteren Stellen:
+    - `routes/og.py` `OG_BASE_URL`: prefer FRONTEND_BASE_URL → fallback LEADER_OS_PUBLIC_URL → default leaderos.de
+    - `services_magic_link.py` `_BASE_URL_DEFAULT`: → leaderos.de
+    - `routes/events.py` Google-Calendar-Detail-URL: env-driven
+    - `routes/unsubscribe.py::unsubscribe_url`: `app_url=None` Sentinel + env-resolve
+    - `services_login_security.py` New-Device-Alert: env-driven (Link + Footer-Domain dynamisch)
+    - `routes/referral.py` Share-URL: neue `REFERRAL_FUNNEL_URL` env (Default `leadercheck.de` da Referrals immer in Funnel → max Conversion)
+  - **Test-Verifikation**:
+    ```
+    FRONTEND_BASE_URL=https://leadercheck.de → _frontend_url() = "https://leadercheck.de"
+    (no env)                                  → "https://leaderos.de"
+    ```
+  - **9/9 Phone-Login/Source-Platform-Tests bleiben GREEN.** Backend-Restart ohne Errors.
+  - **Mert's Vercel-Env-Setup**: dieses Code-Update macht seine 2-Projekt-Architektur sauber funktionsfähig:
+    - `leaderos` Vercel Project: `FRONTEND_BASE_URL=https://leaderos.de` → alle Outgoing-Emails/Links→leaderos.de
+    - `leadercheck` Vercel Project: `FRONTEND_BASE_URL=https://leadercheck.de` → alle Outgoing-Emails/Links→leadercheck.de
+    - Beide Projekte teilen sich denselben CORS-Whitelist (8 Domains), aber jeder Deploy "sieht" nur sein eigenes Frontend in seinen ausgehenden Emails.
+  - **Files**: MODIFIED: `services_email.py` (+_frontend_url helper, default→leaderos.de), `services_magic_link.py` (default→leaderos.de), `services_login_security.py` (env-driven New-Device alert), `routes/auth.py` (inject _frontend_url to signup_welcome), `routes/payments.py` (inject to tier_welcome), `routes/lifecycle_emails.py` (inject to drip templates), `routes/og.py` (FRONTEND_BASE_URL preferred), `routes/events.py` (+os import + env-driven calendar URL), `routes/unsubscribe.py` (Sentinel app_url + env-resolve), `routes/referral.py` (+os import + REFERRAL_FUNNEL_URL env, default leadercheck.de).
+
+
 - [x] **[Iter 92.26 · 20.06.26] Architektur-Rules Locked-In + Production-CORS-Safeguard (Mert's verbindliche Architecture Brief)** —
   - **Vercel-only Deployment**: Mert hat die Multi-Domain-SaaS-Architektur final dokumentiert. 4 Production-Domains (leaderos.de [Haupt-App], leadercheck.de [Funnel], leader-os.de + leader-check.de [Landing-Pages]) teilen sich EIN Backend + EINE MongoDB. Alle Conversion-Events (Signup, Login, Checkout) finden auf leaderos.de statt.
   - **Production-CORS-Safeguard** (`backend/server.py`): Backend-Startup raised jetzt `RuntimeError` wenn `ENV=production` UND `CORS_ORIGINS` ist `*` oder leer. Verhindert silently-exposed APIs durch Misconfig. Dev/Preview darf weiterhin Wildcard nutzen (regex-form mit credentials). Verifiziert in beiden Branches via isolierten Python-Tests.

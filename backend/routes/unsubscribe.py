@@ -78,8 +78,15 @@ def verify_unsubscribe_token(token: str) -> dict | None:
         return None
 
 
-def unsubscribe_url(user_id: str, category: str, app_url: str = "https://leader-os.de") -> str:
-    """Helper used by email templates to embed one-click unsubscribe links."""
+def unsubscribe_url(user_id: str, category: str, app_url: str | None = None) -> str:
+    """Helper used by email templates to embed one-click unsubscribe links.
+
+    Iter 92.27: when `app_url` is omitted, resolve from `FRONTEND_BASE_URL` env
+    (per-Vercel-project) so the unsubscribe link points back to the same domain
+    the email was sent FROM.
+    """
+    if not app_url:
+        app_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de")
     token = make_unsubscribe_token(user_id, category)
     return f"{app_url.rstrip('/')}/email/unsubscribe?token={token}"
 

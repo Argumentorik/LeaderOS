@@ -202,7 +202,10 @@ async def _activate_from_package(user_id: str, package_id: str):
                     })
 
                 # 2. Tier welcome email (the celebratory one)
-                subject, html = tier_welcome_email(tier, name)
+                # Iter 92.27: env-driven app_url so emails from each Vercel project
+                # (leaderos vs leadercheck) link back to their own domain.
+                from services_email import _frontend_url
+                subject, html = tier_welcome_email(tier, name, app_url=_frontend_url())
                 await send_email(user["email"], subject, html)
                 await db.email_log.insert_one({
                     "user_id": user_id, "type": f"welcome_{tier}", "sent_at": datetime.now(timezone.utc).isoformat(),

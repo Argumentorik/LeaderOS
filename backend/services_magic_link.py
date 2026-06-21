@@ -32,7 +32,7 @@ from config import db
 logger = logging.getLogger("wladbot.magic_link")
 
 MAGIC_LINK_TTL_MIN = int(os.environ.get("MAGIC_LINK_TTL_MIN", "15"))
-_BASE_URL_DEFAULT = "https://leader-os.de"
+_BASE_URL_DEFAULT = "https://leaderos.de"  # Iter 92.27: primary prod domain (no dash)
 
 
 def _hash_token(token: str) -> str:

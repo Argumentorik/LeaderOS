@@ -396,7 +396,14 @@ async def og_mission_share(slug: str):
 # For now we expose it under /api/og/mission-html/{slug} so the rewrite can
 # proxy to it cleanly.
 
-OG_BASE_URL = os.environ.get("LEADER_OS_PUBLIC_URL", "https://leader-os.de").rstrip("/")
+# Iter 92.27: prefer FRONTEND_BASE_URL (set per-Vercel-project to leaderos.de
+# or leadercheck.de) over the legacy LEADER_OS_PUBLIC_URL env. The latter is
+# kept as fallback for any deployment that still uses the old name.
+OG_BASE_URL = (
+    os.environ.get("FRONTEND_BASE_URL")
+    or os.environ.get("LEADER_OS_PUBLIC_URL")
+    or "https://leaderos.de"
+).rstrip("/")
 
 
 @router.get("/mission-html/{slug}")

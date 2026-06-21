@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import logging
+import os
 import re
 from typing import Optional
 
@@ -162,6 +163,10 @@ def is_known_device(login_history: list, fingerprint: str) -> bool:
 def _format_email_html(user_name: str, browser: str, os_name: str,
                       location: str, ip: str, at_iso: str) -> str:
     """Render a clean, branded HTML email body for the security alert."""
+    # Iter 92.27: env-driven URL so per-Vercel-project deploys (leaderos vs
+    # leadercheck) link back to the SAME domain the user logged in on.
+    _app_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    _app_domain = _app_url.replace("https://", "").replace("http://", "").rstrip("/")
     return f"""
 <!DOCTYPE html>
 <html lang="de">
@@ -184,11 +189,11 @@ def _format_email_html(user_name: str, browser: str, os_name: str,
     </div>
     <div style="padding:0 32px 24px;color:#cbd5e1;font-size:14px;line-height:1.6;">
       <p style="margin:0 0 12px;">Warst du das <strong>nicht</strong>? Dann ändere sofort dein Passwort:</p>
-      <a href="https://leader-os.de/profile?tab=security" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Konto sichern →</a>
+      <a href="{_app_url}/profile?tab=security" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Konto sichern →</a>
     </div>
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
       Diese Benachrichtigung wurde automatisch von WladBot · Leader-OS gesendet.<br/>
-      Argumentorik-Akademie GmbH · leader-os.de
+      Argumentorik-Akademie GmbH · {_app_domain}
     </div>
   </div>
 </body>

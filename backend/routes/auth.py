@@ -45,7 +45,7 @@ def detect_source_platform(request: Request) -> str:
 async def _send_signup_welcome(email: str, name: str) -> None:
     """Send the post-signup welcome email. Silently no-ops if Resend isn't configured."""
     try:
-        from services_email import send_email, signup_welcome_email, is_enabled
+        from services_email import send_email, signup_welcome_email, is_enabled, _frontend_url
         if not is_enabled() or not email:
             return
         # Dedup: don't send the same welcome twice if signup race / replays
@@ -54,7 +54,9 @@ async def _send_signup_welcome(email: str, name: str) -> None:
         )
         if already:
             return
-        subject, html = signup_welcome_email(name or email.split("@")[0])
+        # Iter 92.27: respect per-deploy FRONTEND_BASE_URL env so emails from the
+        # leadercheck.de Vercel project link to leadercheck.de, leaderos.de project → leaderos.de.
+        subject, html = signup_welcome_email(name or email.split("@")[0], app_url=_frontend_url())
         r = await send_email(email, subject, html)
         await db.email_log.insert_one({
             "user_email": email, "type": "signup_welcome",

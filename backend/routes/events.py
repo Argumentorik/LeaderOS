@@ -1,4 +1,5 @@
 """Events & Focus Time routes — Premium Event Hub for LeaderOS."""
+import os
 from fastapi import APIRouter, HTTPException, Request, BackgroundTasks
 from pydantic import BaseModel
 from typing import Optional
@@ -44,7 +45,9 @@ def _build_google_calendar_url(event: dict) -> str:
     end = start + timedelta(minutes=duration)
     fmt = "%Y%m%dT%H%M%SZ"
     dates = f"{start.strftime(fmt)}/{end.strftime(fmt)}"
-    details = f"{desc}\n\nJoin via LeaderOS: https://leader-os.de/events"
+    # Iter 92.27: env-driven prod URL (FRONTEND_BASE_URL set per Vercel project).
+    _events_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    details = f"{desc}\n\nJoin via LeaderOS: {_events_url}/events"
 
     return (
         f"https://www.google.com/calendar/render?action=TEMPLATE"

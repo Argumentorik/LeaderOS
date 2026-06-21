@@ -185,7 +185,9 @@ async def cron_drip_sequence(request: Request):
             if already:
                 continue
 
-            subject, html = template_fn(name)
+            # Iter 92.27: env-driven app_url so drip emails link to the right domain per Vercel project.
+            from services_email import _frontend_url
+            subject, html = template_fn(name, app_url=_frontend_url())
             result = await send_email(u["email"], subject, html)
             await db.email_log.insert_one({
                 "user_id": u["user_id"], "type": log_type,
