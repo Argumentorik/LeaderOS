@@ -41,6 +41,8 @@ const VideoChallengePage = lazyWithRetry(() => import("./pages/VideoChallengePag
 const VideoArchivePage = lazyWithRetry(() => import("./pages/VideoArchivePage"));
 // Iter 92.28 (Mert): WladUniversePage removed — feature deprecated, route now 410-redirects to /missions.
 const LeaderDiagnosePage = lazyWithRetry(() => import("./pages/LeaderDiagnosePage"));
+// Iter 92.29 (Mert): public Changelog drives curiosity & SEO ("build-in-public" surface).
+const ChangelogPage = lazyWithRetry(() => import("./pages/ChangelogPage"));
 const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
@@ -128,6 +130,9 @@ function AppRouter() {
             (Wlad-grounded video-coaching surface, same intent). */}
         <Route path="/wlad-universe" element={<Navigate to="/missions" replace />} />
         <Route path="/leader-diagnose" element={<ProtectedRoute><LeaderDiagnosePage /></ProtectedRoute>} />
+        {/* Iter 92.29: public changelog — no auth, indexable, build-in-public */}
+        <Route path="/changelog" element={<ChangelogPage />} />
+        <Route path="/whats-new" element={<Navigate to="/changelog" replace />} />
         <Route path="/video-challenge" element={<Navigate to="/missions" replace />} />
         <Route path="/challengers" element={<ProtectedRoute><ChallengersPage /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
