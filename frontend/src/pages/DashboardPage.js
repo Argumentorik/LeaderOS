@@ -16,6 +16,7 @@ import { EventReminderBanner } from '../components/dashboard/EventReminder';
 import { WladMotivationCard } from '../components/dashboard/WladMotivationCard';
 import { DashboardLearningVideos } from '../components/dashboard/DashboardLearningVideos';
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
+import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import api from '../lib/api';
 import { useCredits } from '../contexts/CreditContext';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
@@ -142,6 +143,13 @@ export default function DashboardPage() {
 
         {/* ── Event Reminder ── */}
         <EventReminderBanner de={de} />
+
+        {/* Iter 92.28 (Mert): tier-aware Beratungs-Banner — big-CTA for free,
+            softer "Strategy Call" for standard, slim bar for accelerator,
+            hidden for enterprise. Dismissible per session, auto-rearms after 7 days. */}
+        <div className="mb-5">
+          <SmartConsultationBanner placement="dashboard-top" />
+        </div>
 
         {/* Wlad's Daily Motivation — click to hear Wlad speak via ElevenLabs */}
         <div className="mb-5">

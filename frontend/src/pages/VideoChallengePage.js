@@ -11,6 +11,7 @@ import { ChallengeList } from '../components/video/ChallengeList';
 import { RecordingStudio } from '../components/video/RecordingStudio';
 import { VideoUpsellModal } from '../components/video/VideoUpsellModal';
 import { VideoStudioSidebar } from '../components/video/VideoStudioSidebar';
+import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import api from '../lib/api';
 import { downloadHTMLReport } from '../lib/reportGenerator';
 import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
@@ -363,6 +364,10 @@ export default function VideoChallengePage() {
 
         <div className="flex-1 min-w-0 p-6 lg:p-10 max-w-4xl mx-auto bg-gradient-mesh" data-testid="video-challenge-page">
           {showUpsell && <VideoUpsellModal onClose={() => setShowUpsell(false)} lang={lang} />}
+          {/* Iter 92.28: slim Beratungs-Bar above the studio — non-intrusive but always one tap away */}
+          <div className="mb-5">
+            <SmartConsultationBanner placement="missions-top" compact />
+          </div>
 
           {/* Trial banner — visible for Free/Standard users with active trial */}
           {!isAccelerator && trial?.eligible && (

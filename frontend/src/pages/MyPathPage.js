@@ -4,6 +4,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Progress } from '../components/ui/progress';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import LearningVideosTab from '../components/mypath/LearningVideosTab';
+import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
@@ -200,6 +201,11 @@ export default function MyPathPage() {
       </div>
     }>
       <div className="p-6 lg:p-8 max-w-5xl" data-testid="my-path-page">
+        {/* Iter 92.28: Beratungs-Banner — tier-aware, fits naturally with the "Path" framing */}
+        <div className="mb-6">
+          <SmartConsultationBanner placement="mypath-top" />
+        </div>
+
         <div className="mb-6" data-anim="mypath-header">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles size={14} className="text-[#6B8A00] dark:text-[#BFFF00]" />

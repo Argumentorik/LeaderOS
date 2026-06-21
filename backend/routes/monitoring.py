@@ -19,6 +19,11 @@ ADMIN_EMAILS = {
     "test@test.com",
     "start@aiporate.com",
     "mert@aiporate.com",
+    "mert@wladbot.com",
+    "mertzafermutlu@gmail.com",
+    # Iter 92.28 (Mert): single source of truth — must mirror routes/admin.py::ADMIN_EMAILS
+    "stefan@argumentorik.com",
+    "stefan.bachmann123@gmail.com",
 }
 
 

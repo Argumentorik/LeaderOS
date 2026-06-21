@@ -39,7 +39,7 @@ const CoachingPage = lazyWithRetry(() => import("./pages/CoachingPage"));
 const ToolsPage = lazyWithRetry(() => import("./pages/ToolsPage"));
 const VideoChallengePage = lazyWithRetry(() => import("./pages/VideoChallengePage"));
 const VideoArchivePage = lazyWithRetry(() => import("./pages/VideoArchivePage"));
-const WladUniversePage = lazyWithRetry(() => import("./pages/WladUniversePage"));
+// Iter 92.28 (Mert): WladUniversePage removed — feature deprecated, route now 410-redirects to /missions.
 const LeaderDiagnosePage = lazyWithRetry(() => import("./pages/LeaderDiagnosePage"));
 const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
@@ -124,7 +124,9 @@ function AppRouter() {
         <Route path="/simulations" element={<ProtectedRoute><SimulationsPage /></ProtectedRoute>} />
         <Route path="/missions" element={<ProtectedRoute><VideoChallengePage /></ProtectedRoute>} />
         <Route path="/missions/archive" element={<ProtectedRoute><VideoArchivePage /></ProtectedRoute>} />
-        <Route path="/wlad-universe" element={<ProtectedRoute><WladUniversePage /></ProtectedRoute>} />
+        {/* Iter 92.28 (Mert): /wlad-universe deprecated → permanent redirect to /missions
+            (Wlad-grounded video-coaching surface, same intent). */}
+        <Route path="/wlad-universe" element={<Navigate to="/missions" replace />} />
         <Route path="/leader-diagnose" element={<ProtectedRoute><LeaderDiagnosePage /></ProtectedRoute>} />
         <Route path="/video-challenge" element={<Navigate to="/missions" replace />} />
         <Route path="/challengers" element={<ProtectedRoute><ChallengersPage /></ProtectedRoute>} />
