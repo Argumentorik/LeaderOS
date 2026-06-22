@@ -56,7 +56,7 @@ const catLabels = {
 
 const layerLabels = {
   ai_literacy: "KI-Kompetenz",
-  rhetoric: "Boardroom-Rhetorik",
+  rhetoric: "Rhetorik",
   strategic_eq: "Strategisches EQ",
 };
 
@@ -292,7 +292,7 @@ export function generateReportPDF(report, user) {
   // Layer analysis boxes
   const analyses = [
     { key: "ai_literacy_analysis", title: "KI-Kompetenz", color: COLORS.blue },
-    { key: "rhetoric_analysis", title: "Boardroom-Rhetorik", color: COLORS.blue },
+    { key: "rhetoric_analysis", title: "Rhetorik", color: COLORS.blue },
     { key: "eq_analysis", title: "Strategisches EQ", color: COLORS.accent },
   ];
 
@@ -459,7 +459,7 @@ export function generateReportPDF(report, user) {
       color: COLORS.blue,
       items: [
         "KI-Entscheidungsframework implementieren",
-        "Boardroom-Rhetorik: Argumentationsstruktur aufbauen",
+        "Rhetorik: Argumentationsstruktur aufbauen",
         "Aktives Zuhoren in 3 kritischen Gesprachen uben",
         "Erste KI-gestutzte Prozessoptimierung starten",
       ],
@@ -563,7 +563,7 @@ export function generateRoadmapPDF(report, user, journalEntries = []) {
       why: "Deine Uberzeugungskraft und Boardroom-Prasenz sind dein starkster Hebel fur die nachsten 30 Tage.",
       weekly: [
         ["Baseline: 3 kritische Gesprachssituationen aus der letzten Woche dokumentieren", "Kernaussagen-Framework uben (1 Satz, 3 Belege, 1 Call-to-Action)", "Storytelling-Bibliothek anlegen: 5 eigene Leadership-Geschichten", "Stimm- und Korperarbeit: 10 Min. taglich vor der Kamera sprechen"],
-        ["Boardroom-Rhetorik: Argumentationspyramide in 2 Meetings anwenden", "Einwandbehandlung uben: 'Ja und...' statt 'Ja aber...'", "Aktives Zuhoren: 1 Gesprach komplett ohne Unterbrechung fuhren", "Feedback von 3 Kollegen zu deiner Kommunikation einholen"],
+        ["Rhetorik: Argumentationspyramide in 2 Meetings anwenden", "Einwandbehandlung uben: 'Ja und...' statt 'Ja aber...'", "Aktives Zuhoren: 1 Gesprach komplett ohne Unterbrechung fuhren", "Feedback von 3 Kollegen zu deiner Kommunikation einholen"],
         ["Schwieriges Gesprach fuhren: klar, direkt, wertschatzend", "Prasentation halten mit maximal 3 Kern-Botschaften", "KI-Prompt-Bibliothek fur E-Mails & Briefings bauen", "Non-verbale Signale bewusst setzen (Pause, Blickkontakt)"],
         ["30-Tage-Review: Welche Gesprache liefen jetzt anders?", "Kommunikations-Signature definieren (dein Stil in 3 Satzen)", "Next-90-Days: 3 Keynote-Momente vorbereiten", "Eine Leader-Story offentlich teilen (LinkedIn/Team)"],
       ],

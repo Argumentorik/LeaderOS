@@ -635,7 +635,7 @@ export default function Hero() {
                         <Brain className="w-5 h-5 text-[#C8FF00]" />
                       </div>
                       <div>
-                        <div className="font-manrope font-bold text-sm text-white">Leadership OS</div>
+                        <div className="font-manrope font-bold text-sm text-white">Leader OS · Sprint</div>
                         <div className="font-inter text-xs text-slate-500">KI-Agenten für Führungskräfte</div>
                       </div>
                     </div>

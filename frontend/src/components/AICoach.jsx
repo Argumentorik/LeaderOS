@@ -5,7 +5,7 @@ import axios from "axios";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const presets = [
-  "Boardroom-Rhetorik verbessern",
+  "Rhetorik schärfen",
   "KI als Führungshebel nutzen",
   "Strategisches EQ stärken",
   "Meine nächsten Schritte",

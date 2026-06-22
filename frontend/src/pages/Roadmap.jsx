@@ -59,7 +59,7 @@ const weeklyPlan = [
     focus: "Methodenkompetenz",
     items: [
       { task: "KI-Entscheidungsframework implementieren", agent: "Strategie-Agent" },
-      { task: "Boardroom-Rhetorik aufbauen", agent: "Coach-Agent" },
+      { task: "Rhetorik aufbauen", agent: "Coach-Agent" },
       { task: "Eisenhower + ALPEN + SMART anwenden", agent: "Task-Agent" },
       { task: "Aktives Zuhoren in 3 Gesprachen uben", agent: "Simulations-Agent" },
     ],

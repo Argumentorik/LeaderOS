@@ -185,7 +185,7 @@ export default function HighTicketClose() {
           enterpriseFeatures={ENTERPRISE_FEATURES}
         />
 
-        {/* PAYMENT SECTION (OS / OS PLUS) */}
+        {/* PAYMENT SECTION (Sprint / Plus-Plus) */}
         <PaymentSection
           selectedPlan={selectedPlan}
           paymentOption={paymentOption}

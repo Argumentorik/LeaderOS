@@ -18,7 +18,7 @@ export const CATEGORY_COLORS = {
 
 export const LAYERS = {
   ai_literacy: 'KI-Kompetenz',
-  rhetoric: 'Boardroom-Rhetorik',
+  rhetoric: 'Rhetorik',
   strategic_eq: 'Strategisches EQ'
 };
 

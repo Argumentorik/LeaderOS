@@ -16,9 +16,9 @@ const catLabels = {
 };
 
 const layerConfig = [
-  { key: "ai_literacy", label: "KI-Kompetenz", subtitle: "Layer 1: AI Literacy", desc: "Nutzung von KI als strategischer Fuhrungshebel", color: "#C8FF00", narrativeKey: "ai_literacy_analysis" },
-  { key: "rhetoric", label: "Boardroom-Rhetorik", subtitle: "Layer 2: Real-World Rhetoric", desc: "Autoritat, Uberzeugung und Boardroom-Prasenz", color: "#C8FF00", narrativeKey: "rhetoric_analysis" },
-  { key: "strategic_eq", label: "Strategisches EQ", subtitle: "Layer 3: Strategic EQ", desc: "Empathie als Wettbewerbsvorteil und Autoritatssicherung", color: "#C8FF00", narrativeKey: "eq_analysis" },
+  { key: "ai_literacy", label: "KI", subtitle: "Ebene 01", desc: "Du nutzt KI im Alltag · nicht für Memes.", color: "#C8FF00", narrativeKey: "ai_literacy_analysis" },
+  { key: "rhetoric", label: "Rhetorik", subtitle: "Ebene 02", desc: "Du sprichst klar · andere folgen.", color: "#C8FF00", narrativeKey: "rhetoric_analysis" },
+  { key: "strategic_eq", label: "EQ", subtitle: "Ebene 03", desc: "Du verstehst dein Team · sie vertrauen dir.", color: "#C8FF00", narrativeKey: "eq_analysis" },
 ];
 
 const roleConfig = [

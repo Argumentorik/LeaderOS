@@ -18,7 +18,7 @@ export function EnterpriseSection({
           <Building2 className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h3 className="font-manrope font-bold text-xl text-white">Leadership OS Enterprise · Rabatt-Rechner</h3>
+          <h3 className="font-manrope font-bold text-xl text-white">Sprint Enterprise · Rabatt-Rechner</h3>
           <p className="font-inter text-xs text-slate-500">Wähle die Mitarbeiter-Anzahl und sieh deinen individuellen Preis sofort.</p>
         </div>
       </div>

@@ -54,7 +54,7 @@ export function generateCurriculumPDF() {
   // Modules
   const modules = [
     { num: "01", title: "KI-Kompetenz", desc: "KI als strategischen Fuhrungshebel einsetzen. Entscheidungsprozesse automatisieren und optimieren." },
-    { num: "02", title: "Boardroom-Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz." },
+    { num: "02", title: "Rhetorik", desc: "Uberzeugungskraft in kritischen Situationen. Argumentationsstruktur und souverane Prasenz." },
     { num: "03", title: "Strategisches EQ", desc: "Empathie als Wettbewerbsvorteil nutzen. Teamdynamiken verstehen und Vertrauen aufbauen." },
     { num: "04", title: "Entscheidungsfindung", desc: "Datengestutzte Entscheidungen unter Druck. Risikobewertung und strategische Priorisierung." },
     { num: "05", title: "Team-Leadership", desc: "High-Performance-Teams aufbauen. Delegation, Motivation und Kultur gestalten." },
@@ -120,7 +120,7 @@ export function generateCurriculumPDF() {
     ]},
     { week: "WOCHE 2", title: "Skill Building & Methoden", items: [
       "KI-Entscheidungsframework implementieren",
-      "Boardroom-Rhetorik: Argumentationsstruktur aufbauen",
+      "Rhetorik: Argumentationsstruktur aufbauen",
       "Eisenhower-Matrix fur Priorisierung einsetzen",
       "ALPEN-Methode fur Tagesplanung testen",
       "Aktives Zuhoren in 3 kritischen Gesprachen"

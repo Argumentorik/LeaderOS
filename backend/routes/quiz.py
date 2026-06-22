@@ -105,7 +105,7 @@ KATEGORIE-SCORES (0-100):
 
 LAYER-SCORES (0-100):
 - KI-Kompetenz (ai_literacy): {layer_avg.get('ai_literacy', 50)}
-- Boardroom-Rhetorik (rhetoric): {layer_avg.get('rhetoric', 50)}
+- Rhetorik (rhetoric): {layer_avg.get('rhetoric', 50)}
 - Strategisches EQ (strategic_eq): {layer_avg.get('strategic_eq', 50)}
 
 GESAMT: {total_avg}%{voice_block}

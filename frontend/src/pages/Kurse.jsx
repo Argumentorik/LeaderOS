@@ -18,7 +18,7 @@ const courses = [
     num: "02",
     icon: MessageSquare,
     title: "Kommunikation & Argumentation",
-    desc: "Überzeuge in Meetings, Verhandlungen und Konflikten. Boardroom-Rhetorik, die wirkt.",
+    desc: "Überzeuge in Meetings, Verhandlungen und Konflikten. Klare Worte, die wirken.",
     duration: "60 Min",
     lessons: 6,
     topics: ["Die 5 Säulen der Überzeugungskraft", "Argumentationsstruktur aufbauen", "Einwände souverän entkräften", "Körpersprache & Stimme", "Schwierige Gespräche führen", "Boardroom-Präsenz entwickeln"],
