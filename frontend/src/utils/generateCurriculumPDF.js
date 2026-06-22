@@ -26,10 +26,10 @@ export function generateCurriculumPDF() {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.setTextColor(...BG);
-  doc.text("W", m + 4.5, y + 10);
+  doc.text("L", m + 4.5, y + 10);
   doc.setFontSize(12);
   doc.setTextColor(...WHITE);
-  doc.text("WLADHUB", m + 19, y + 6);
+  doc.text("LEADER/OS", m + 19, y + 6);
   doc.setFontSize(7);
   doc.setTextColor(...GRAY);
   doc.text("LEADERSHIP DIAGNOSTIC PLATFORM", m + 19, y + 12);
@@ -93,7 +93,7 @@ export function generateCurriculumPDF() {
   // Footer
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
-  doc.text("WLADHUB Curriculum | Confidential", m, 290);
+  doc.text("LEADER/OS Curriculum | Confidential", m, 290);
   doc.setFillColor(...LIME);
   doc.rect(0, 295, pw, 2, "F");
 
@@ -174,7 +174,7 @@ export function generateCurriculumPDF() {
 
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);
-  doc.text("WLADHUB Curriculum | Confidential", m, 290);
+  doc.text("LEADER/OS Curriculum | Confidential", m, 290);
   doc.setFillColor(...LIME);
   doc.rect(0, 295, pw, 2, "F");
 

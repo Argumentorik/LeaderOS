@@ -187,9 +187,9 @@ async def _send_license_key_email(app_config, email: str, name: str, plan: str, 
         amount = PLAN_AMOUNT_MAP.get(plan, 997.0)
         email_data = payment_confirmation_email(name or "Leader", plan, amount)
         await asyncio.to_thread(resend.Emails.send, {
-            "from": f"Wlad von WLADHUB <{app_config['sender_email']}>",
+            "from": f"Wlad von Leader OS <{app_config['sender_email']}>",
             "to": [email],
-            "subject": f"Dein License Key: {key} — WLADHUB",
+            "subject": f"Dein License Key: {key} — Leader OS",
             "html": email_data["html"].replace("Sofort aktiv", f"Key: <strong>{key}</strong>"),
         })
     except Exception as e:
@@ -320,8 +320,8 @@ def register_license_routes(router: APIRouter, db, app_config: dict) -> None:
             "success": True, "plan": key_doc["plan"], "plan_name": key_doc["plan_name"],
             "includes_calls": key_doc.get("includes_calls", False),
             "expires_at": expires_at.isoformat(),
-            "redirect_url": "https://leader-os.de",
-            "message": "Key erfolgreich aktiviert! Du wirst zu leader-os.de weitergeleitet.",
+            "redirect_url": "https://leaderos.de",
+            "message": "Key erfolgreich aktiviert! Du wirst zu leaderos.de weitergeleitet.",
         }
 
     @router.get("/license/validate/{key}")

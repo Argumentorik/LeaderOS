@@ -102,7 +102,7 @@ export default function Report() {
           <div>
             <div className="badge-blue px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4" />
-              Dein WLADHUB Leadership-Report
+              Dein Leader OS Leadership-Report
             </div>
             <h1 className="font-manrope font-extrabold text-4xl md:text-5xl text-white mb-2" data-testid="report-name">
               {displayUser?.name || "Leadership Report"}

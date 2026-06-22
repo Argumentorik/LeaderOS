@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, Lock, Check, ArrowRight } from "lucide-react";
+import { Shield, Lock, Check, Phone, Mail, ArrowRight, Loader2 } from "lucide-react";
+import LeaderOSLogo from "../components/LeaderOSLogo";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // Google SVG Icon
 const GoogleIcon = () => (
@@ -18,6 +21,52 @@ export default function Login() {
   const [consentMarketing, setConsentMarketing] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Quick login state (phone or email)
+  const [quickIdentifier, setQuickIdentifier] = useState("");
+  const [quickLoading, setQuickLoading] = useState(false);
+  const [quickError, setQuickError] = useState("");
+
+  const handleQuickLogin = async (e) => {
+    e.preventDefault();
+    if (!consentPrivacy) {
+      setQuickError("Bitte akzeptiere die Datenschutzerklärung.");
+      return;
+    }
+    const id = quickIdentifier.trim();
+    if (!id) {
+      setQuickError("Bitte gib deine E-Mail oder Telefonnummer ein.");
+      return;
+    }
+    setQuickLoading(true);
+    setQuickError("");
+    try {
+      const res = await fetch(`${API}/auth/quick-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: id }),
+      });
+      if (res.status === 404) {
+        // No account yet — route into the diagnosis funnel with prefill
+        localStorage.setItem("leaderos_prefill", JSON.stringify({ identifier: id }));
+        navigate("/diagnose");
+        return;
+      }
+      if (!res.ok) throw new Error("login_failed");
+      const data = await res.json();
+      localStorage.setItem("emergent_user", JSON.stringify({
+        session_id: data.session_id || data.user_id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+      }));
+      navigate(data.has_report ? "/report" : "/diagnose");
+    } catch {
+      setQuickError("Login fehlgeschlagen. Versuche es erneut oder starte eine neue Diagnose.");
+    } finally {
+      setQuickLoading(false);
+    }
+  };
 
   // Check if already authenticated
   useEffect(() => {
@@ -49,7 +98,7 @@ export default function Login() {
     setLoading(true);
     
     // Store consent in localStorage for after OAuth redirect
-    localStorage.setItem('wladhub_consent', JSON.stringify({
+    localStorage.setItem('leaderos_consent', JSON.stringify({
       privacy: consentPrivacy,
       marketing: consentMarketing
     }));
@@ -70,9 +119,9 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="font-manrope font-extrabold text-3xl text-white mb-2">
-            WLADHUB
-          </h1>
+          <div className="inline-flex justify-center mb-2">
+            <LeaderOSLogo variant="default" size="xl" />
+          </div>
           <p className="font-inter text-slate-500">Leadership Diagnose</p>
         </div>
 
@@ -96,7 +145,7 @@ export default function Login() {
             data-testid="google-login-btn"
             onClick={handleGoogleLogin}
             disabled={loading || !consentPrivacy}
-            className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-full border transition-all duration-300 mb-6 ${
+            className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-full border transition-all duration-300 mb-4 ${
               consentPrivacy 
                 ? "bg-white text-black hover:bg-slate-100 border-white cursor-pointer" 
                 : "bg-white/10 text-slate-500 border-white/10 cursor-not-allowed"
@@ -107,6 +156,60 @@ export default function Login() {
               {loading ? "Wird verbunden..." : "Mit Google anmelden"}
             </span>
           </button>
+
+          {/* Divider OR */}
+          <div className="flex items-center gap-4 my-4">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="font-inter text-xs text-slate-600 uppercase tracking-wider">oder</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          {/* Quick Login with Phone or Email */}
+          <form onSubmit={handleQuickLogin} className="space-y-3 mb-6" data-testid="quick-login-form">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-1 text-slate-600">
+                <Phone className="w-4 h-4" />
+                <span className="text-slate-700">/</span>
+                <Mail className="w-4 h-4" />
+              </div>
+              <input
+                data-testid="quick-login-input"
+                type="text"
+                value={quickIdentifier}
+                onChange={(e) => setQuickIdentifier(e.target.value)}
+                placeholder="E-Mail oder +49 151 ..."
+                className="w-full input-modern h-12 pl-20 pr-4 font-inter text-white placeholder:text-slate-600"
+                autoComplete="username"
+              />
+            </div>
+            {quickError && (
+              <p data-testid="quick-login-error" className="font-inter text-xs text-red-400">
+                {quickError}
+              </p>
+            )}
+            <button
+              data-testid="quick-login-btn"
+              type="submit"
+              disabled={quickLoading || !consentPrivacy}
+              className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all font-medium ${
+                consentPrivacy
+                  ? "bg-[#C8FF00] text-black hover:bg-[#d4ff33] cursor-pointer"
+                  : "bg-[#C8FF00]/20 text-[#C8FF00]/50 cursor-not-allowed"
+              }`}
+            >
+              {quickLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  Weiter
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+            <p className="font-inter text-[11px] text-slate-600 text-center">
+              Du hast schon eine Diagnose gestartet? Mit derselben Telefonnummer oder E-Mail einloggen.
+            </p>
+          </form>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
@@ -244,7 +347,7 @@ export default function Login() {
               
               <div>
                 <h3 className="font-semibold text-white mb-2">8. Kontakt</h3>
-                <p>Bei Fragen zum Datenschutz: datenschutz@wladhub.com</p>
+                <p>Bei Fragen zum Datenschutz: datenschutz@leaderos.de</p>
               </div>
             </div>
 

@@ -158,7 +158,7 @@ export default function Analyzing() {
         )}
 
         <p className="font-inter text-xs text-slate-600">
-          KI-gestützte Analyse · Powered by WLADHUB
+          KI-gestützte Analyse · Powered by Leader OS
         </p>
       </div>
     </div>

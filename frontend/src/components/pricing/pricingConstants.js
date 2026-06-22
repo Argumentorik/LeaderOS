@@ -18,7 +18,7 @@ export const ENTERPRISE_TIERS = [
 
 export const OS_FEATURES = [
   { text: "14 Tage Testphase · jederzeit kündbar", highlight: true },
-  { text: "Vollzugang zur WLADHUB Plattform · 1 Jahr", included: true },
+  { text: "Vollzugang zur Leader OS Plattform · 1 Jahr", included: true },
   { text: "12 Premium-Videokurse (1 neuer Kurs jeden Monat)", included: true, star: true },
   { text: "Wert pro Kurs: 199 EUR · Gesamtwert: 2.388 EUR", subline: true },
   { text: "WladBot AI Coach 24/7", included: true },
@@ -53,7 +53,7 @@ export const COMPARISON_ROWS = [
   ["12 Premium-Videokurse (1 pro Monat)", true, true, true],
   ["Personalisierter 30-Tage-Plan", true, true, true],
   ["WladBot AI Coach 24/7", true, true, true],
-  ["WLADHUB Plattform-Vollzugang", true, true, true],
+  ["Leader OS Plattform-Vollzugang", true, true, true],
   ["Leadership Playbooks & Frameworks", true, true, true],
   ["License Key per E-Mail", true, true, true],
   ["Ratenzahlung möglich", true, false, true],

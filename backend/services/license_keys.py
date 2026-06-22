@@ -12,13 +12,13 @@ __all__ = ["PLAN_CONFIG", "PLAN_AMOUNT_MAP", "generate_key", "build_license_doc"
 
 
 def generate_key() -> str:
-    """Generate a license key in WLADHUB-XXXX-XXXX-XXXX format.
+    """Generate a license key in LEADEROS-XXXX-XXXX-XXXX format.
 
-    Note: prefix changed from WLAD- to WLADHUB- in Feb 2026; both are
-    accepted at activation time via direct DB lookup.
+    Note: prefix evolved over time (WLAD- → WLADHUB- → LEADEROS-).
+    Legacy keys are still accepted at activation time via direct DB lookup.
     """
     chunks = ["".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(4)) for _ in range(3)]
-    return f"WLADHUB-{'-'.join(chunks)}"
+    return f"LEADEROS-{'-'.join(chunks)}"
 
 
 def build_license_doc(plan: str, email: str = "", name: str = "", source: str = "manual", notes: str = "") -> dict:

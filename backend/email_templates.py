@@ -1,5 +1,5 @@
 """
-WLADHUB E-Mail Templates — Leader-OS Branding
+Leader OS E-Mail Templates — Leader-OS Branding
 Cool, persönlich, Defensive Backward Pressure
 
 Structure: Shared helpers + 4 template functions
@@ -25,7 +25,7 @@ def _logo_block() -> str:
 <span style="font-size:16px;font-weight:800;color:{BRAND['bg']};letter-spacing:0.05em;">W</span>
 </td>
 <td style="padding-left:12px;">
-<span style="font-size:16px;font-weight:700;color:{BRAND['lime']};letter-spacing:0.03em;">WLADHUB</span>
+<span style="font-size:16px;font-weight:700;color:{BRAND['lime']};letter-spacing:0.03em;">LEADER/OS</span>
 </td>
 </tr></table>
 </td></tr>"""
@@ -34,11 +34,11 @@ def _logo_block() -> str:
 def _footer_block() -> str:
     return f"""<tr><td style="padding:40px 0 0 0;border-top:1px solid {BRAND['border']};">
 <p style="font-size:11px;color:{BRAND['muted']};line-height:1.6;margin:0;">
-Du erhältst diese E-Mail, weil du die WLADHUB Leadership-Diagnose gestartet hast.<br>
-<a href="https://leader-os.de" style="color:{BRAND['lime']};text-decoration:none;">leader-os.de</a> · 
-<a href="https://wladhub.com" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
+Du erhältst diese E-Mail, weil du die Leader OS Leadership-Diagnose gestartet hast.<br>
+<a href="https://leaderos.de" style="color:{BRAND['lime']};text-decoration:none;">leaderos.de</a> · 
+<a href="https://leader-check.de" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
 </p>
-<p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 WLADHUB. Alle Rechte vorbehalten.</p>
+<p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS. Alle Rechte vorbehalten.</p>
 </td></tr>"""
 
 
@@ -101,7 +101,7 @@ def _base_wrapper(content: str, preheader: str = "") -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WLADHUB</title>
+<title>LEADER/OS</title>
 <span style="display:none!important;font-size:0;line-height:0;max-height:0;max-width:0;opacity:0;overflow:hidden;">{preheader}</span>
 </head>
 <body style="margin:0;padding:0;background-color:{BRAND['bg']};font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:{BRAND['white']};">
@@ -127,7 +127,7 @@ def _welcome_body(name: str, role: str) -> str:
 {_heading(f"Hey {name}.<br><span style='color:{BRAND['lime']}'>Mal sehen, was du draufhast.</span>")}
 </td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:28px 24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Die meisten Führungskräfte glauben, sie wüssten, wo sie stehen. Dann machen sie die WLADHUB Diagnose – und merken, dass sie in einer von sechs Rollen massiv unterschätzt werden.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Die meisten Führungskräfte glauben, sie wüssten, wo sie stehen. Dann machen sie die Leader OS Diagnose – und merken, dass sie in einer von sechs Rollen massiv unterschätzt werden.</p>
 <p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;font-weight:500;">Ob das bei dir auch so ist? Keine Ahnung. Aber in 10 Minuten weißt du es.</p>
 </td></tr>
 <tr><td style="padding:28px 0;">
@@ -141,7 +141,7 @@ def _welcome_body(name: str, role: str) -> str:
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border-left:3px solid {BRAND['lime']};">
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Kleiner Hinweis:</strong> Du musst das hier nicht machen. Die meisten machen es nicht. Sie lesen lieber <em>über</em> Leadership, statt wirklich reinzuschauen. Wenn du anders tickst – dann starte jetzt.</p>
 </td></tr>
-{_cta_button("Diagnose starten →", "https://wladhub.com/diagnose")}"""
+{_cta_button("Diagnose starten →", "https://leader-check.de/diagnose")}"""
 
 
 def welcome_email(name: str, role: str) -> dict:
@@ -202,11 +202,11 @@ def report_email(name: str, report: dict) -> dict:
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Ehrlich?</strong> Die meisten schauen sich ihren Report an, nicken – und machen weiter wie bisher. Der Score ändert sich nicht von alleine. Wenn du wirklich willst, dass sich was bewegt, dann starte den 30-Tage-Plan. Aber nur, wenn du es ernst meinst.</p>
 </td></tr>
-{_cta_button("30-Tage-Plan ansehen →", "https://wladhub.com/roadmap")}
-{_ps_block(f'Du hast außerdem 50 kostenlose Credits für <a href="https://leader-os.de" style="color:{BRAND["lime"]};text-decoration:none;font-weight:600;">leader-os.de</a> freigeschaltet.')}"""
+{_cta_button("30-Tage-Plan ansehen →", "https://leader-check.de/roadmap")}
+{_ps_block(f'Du hast außerdem 50 kostenlose Credits für <a href="https://leaderos.de" style="color:{BRAND["lime"]};text-decoration:none;font-weight:600;">leaderos.de</a> freigeschaltet.')}"""
 
     return {
-        "subject": f"{name}: {profile_title} — dein WLADHUB Report",
+        "subject": f"{name}: {profile_title} — dein Leader OS Report",
         "html": _base_wrapper(content, f"Dein Score: {total}% — {profile_title}."),
     }
 
@@ -262,11 +262,11 @@ def plan_reminder_email(name: str, week: int, weakest_role: str) -> dict:
 {_task_list(w['tasks'])}
 </table>
 </td></tr>
-{_cta_button("Zum Fahrplan →", "https://wladhub.com/roadmap")}
+{_cta_button("Zum Fahrplan →", "https://leader-check.de/roadmap")}
 {_ps_block("Du musst nicht perfekt sein. Du musst nur dranbleiben. Jeden Tag ein Schritt.")}"""
 
     return {
-        "subject": f"Woche {week}: {w['title']} — WLADHUB",
+        "subject": f"Woche {week}: {w['title']} — Leader OS",
         "html": _base_wrapper(content, f"Woche {week} deines 30-Tage-Plans. 3 Aufgaben warten."),
     }
 
@@ -333,12 +333,12 @@ def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
 {_payment_features(plan)}
 </table>
 </td></tr>
-{_cta_button("Jetzt loslegen →", "https://wladhub.com/roadmap")}
+{_cta_button("Jetzt loslegen →", "https://leader-check.de/roadmap")}
 <tr><td>
 <p style="font-size:13px;color:{BRAND['gray']};line-height:1.7;margin:0;"><strong style="color:{BRAND['white']};">Noch was:</strong> Du hast jetzt Zugang zum kompletten System. Aber das System funktioniert nur, wenn du es nutzt. Mach was draus.</p>
 </td></tr>"""
 
     return {
-        "subject": f"Zugang aktiviert: {plan_name} — WLADHUB",
+        "subject": f"Zugang aktiviert: {plan_name} — Leader OS",
         "html": _base_wrapper(content, f"Du bist drin, {name}. Dein Zugang ist aktiv."),
     }

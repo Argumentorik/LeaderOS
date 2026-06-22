@@ -135,7 +135,7 @@ def register_auth_routes(router: APIRouter, db):
                 "data_deletion": "Du kannst jederzeit die Löschung deiner Daten anfordern.",
                 "cookies": "Wir verwenden notwendige Session-Cookies für die Authentifizierung.",
                 "third_parties": "Wir teilen keine Daten mit Dritten ohne deine Zustimmung.",
-                "contact": "Datenschutz-Anfragen: datenschutz@wladhub.com"
+                "contact": "Datenschutz-Anfragen: datenschutz@leaderos.de"
             }
         }
 
@@ -149,3 +149,48 @@ def register_auth_routes(router: APIRouter, db):
         await db.user_sessions.delete_many({"user_id": user_id})
         await db.reports.delete_many({"session_id": user_id})
         return {"message": "All your data has been deleted"}
+
+    @router.post("/auth/quick-login")
+    async def quick_login(payload: dict):
+        """Lightweight returning-user login by phone OR email.
+        Lowers signup friction: existing users skip Google OAuth and resume
+        their session. Unknown identifiers return 404 so the frontend can
+        route into the diagnosis funnel with a prefill.
+        """
+        identifier = (payload or {}).get("identifier", "").strip()
+        if not identifier:
+            raise HTTPException(status_code=400, detail="Identifier required")
+
+        looks_like_email = "@" in identifier
+        if looks_like_email:
+            query = {"email": identifier.lower()}
+        else:
+            # Match phone loosely: stored values may contain spaces/+/etc.
+            digits = "".join(ch for ch in identifier if ch.isdigit())
+            if len(digits) < 6:
+                raise HTTPException(status_code=400, detail="Invalid identifier")
+            # Match last 8 digits (handles +49 / 0049 / 0151 variants)
+            tail = digits[-8:]
+            query = {"phone": {"$regex": tail}}
+
+        user = await db.users.find_one(query, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=404, detail="No account found")
+
+        # Check if user already has a report
+        report = await db.reports.find_one(
+            {"$or": [
+                {"session_id": user.get("session_id")},
+                {"session_id": user.get("user_id")},
+            ]},
+            {"_id": 0, "session_id": 1},
+        )
+
+        return {
+            "session_id": user.get("session_id") or user.get("user_id"),
+            "user_id": user.get("user_id"),
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "phone": user.get("phone"),
+            "has_report": bool(report),
+        }

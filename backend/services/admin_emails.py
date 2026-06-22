@@ -34,7 +34,7 @@ def booking_user_html(name: Optional[str], date: str, time: str) -> str:
 </div>
 <p style="color:#94A3B8;">Wir bestätigen deinen Termin innerhalb von 24 Stunden per E-Mail.</p>
 <p style="color:#C8FF00;font-weight:bold;margin-top:20px;">Bis bald!</p>
-<p style="color:#64748B;font-size:11px;margin-top:30px;">WLADHUB · Leadership OS PLUS</p>
+<p style="color:#64748B;font-size:11px;margin-top:30px;">Leader OS · Leadership OS PLUS</p>
 </div></body></html>"""
 
 
@@ -79,5 +79,5 @@ def enterprise_user_html(contact_name: str, company: str, employee_count: int, p
 </div>
 <p style="color:#94A3B8;font-size:13px;">Das finale Angebot kann je nach individuellen Anforderungen abweichen — z.B. mit zusaetzlichen Coaching-Modulen.</p>
 <p style="color:#C8FF00;font-weight:bold;margin-top:24px;">Bis bald,<br/>Wlad</p>
-<p style="color:#64748B;font-size:11px;margin-top:32px;">WLADHUB Leadership Diagnostic Platform</p>
+<p style="color:#64748B;font-size:11px;margin-top:32px;">Leader OS Leadership Diagnostic Platform</p>
 </div></body></html>"""

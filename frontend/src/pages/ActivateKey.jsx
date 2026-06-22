@@ -59,9 +59,9 @@ export default function ActivateKey() {
       setStatus("success");
       setResult(data);
 
-      // Redirect to leader-os.de after 4 seconds
+      // Redirect to leaderos.de after 4 seconds
       setTimeout(() => {
-        window.location.href = data.redirect_url || "https://leader-os.de";
+        window.location.href = data.redirect_url || "https://leaderos.de";
       }, 4000);
     } catch (err) {
       setStatus("error");
@@ -94,7 +94,7 @@ export default function ActivateKey() {
 
             <div className="glass-card p-6 mb-8 text-left">
               <p className="font-inter text-sm text-slate-400 leading-relaxed mb-4">
-                Dein Vollzugang ist jetzt aktiv. Du wirst in wenigen Sekunden automatisch zu <strong className="text-[#C8FF00]">leader-os.de</strong> weitergeleitet.
+                Dein Vollzugang ist jetzt aktiv. Du wirst in wenigen Sekunden automatisch zu <strong className="text-[#C8FF00]">leaderos.de</strong> weitergeleitet.
               </p>
               <div className="h-1 rounded-full bg-white/[0.04] overflow-hidden">
                 <div className="h-full bg-[#C8FF00] rounded-full animate-[expandWidth_4s_ease-out_forwards]" />
@@ -102,11 +102,11 @@ export default function ActivateKey() {
             </div>
 
             <a
-              href="https://leader-os.de"
+              href="https://leaderos.de"
               data-testid="redirect-link"
               className="btn-primary px-8 py-4 text-base font-semibold inline-flex items-center gap-3"
             >
-              Jetzt zu leader-os.de
+              Jetzt zu leaderos.de
               <ExternalLink className="w-4 h-4" />
             </a>
           </div>
@@ -121,7 +121,7 @@ export default function ActivateKey() {
                 License Key aktivieren
               </h1>
               <p className="font-inter text-sm text-slate-500">
-                Gib deinen Key ein, um Vollzugang zu WLADHUB + leader-os.de freizuschalten.
+                Gib deinen Key ein, um Vollzugang zu Leader OS + leaderos.de freizuschalten.
               </p>
             </div>
 

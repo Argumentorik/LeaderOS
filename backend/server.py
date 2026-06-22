@@ -70,7 +70,7 @@ register_enterprise_routes(api_router, db, config)
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "WLADHUB Leadership Diagnose"}
+    return {"status": "healthy", "service": "Leader OS Leadership Diagnose"}
 
 
 @api_router.post("/user/create")
@@ -92,7 +92,7 @@ async def create_user(data: UserCreate):
 
 @api_router.get("/")
 async def root():
-    return {"message": "WLADHUB Leadership Diagnose API"}
+    return {"message": "Leader OS Leadership Diagnose API"}
 
 
 # --- Mount Router ---

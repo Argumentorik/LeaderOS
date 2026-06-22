@@ -259,7 +259,7 @@ class TestLicenseKeyCreation:
 
 
 class TestLicenseKeyActivation:
-    """Test POST /api/license/activate returns redirect_url to leader-os.de"""
+    """Test POST /api/license/activate returns redirect_url to leaderos.de"""
     
     def test_activate_license_key_returns_redirect(self):
         """Create and activate license key, verify redirect_url"""
@@ -288,7 +288,7 @@ class TestLicenseKeyActivation:
         data = activate_response.json()
         assert data["success"], "Activation should succeed"
         assert "redirect_url" in data, "redirect_url missing from response"
-        assert data["redirect_url"] == "https://leader-os.de", f"redirect_url should be leader-os.de, got: {data['redirect_url']}"
+        assert data["redirect_url"] == "https://leaderos.de", f"redirect_url should be leaderos.de, got: {data['redirect_url']}"
         assert "plan" in data
         assert "plan_name" in data
         assert "expires_at" in data

@@ -1,0 +1,52 @@
+{
+  "summary": "Iteration 28 — LeaderOS rebrand + Quick-Login + 5s redirect-countdown verification. All 14 backend pytest cases pass (TestHealth, TestLicenseKey, TestQuickLogin x9, TestStripeCheckoutRegression, TestResendFromFields). Frontend verified: /login renders typographic LEADER/OS logo in both Navbar and hero (no 'WLADHUB' literal anywhere on /login, /diagnose, /quiz, /analyzing, /report, /roadmap, /close, /activate, /admin). Quick-login form works end-to-end: empty submit shows German error, unknown identifier routes to /diagnose, consent checkbox gates both Google and Quick-Login buttons (verified disabled state before consent, enabled after). Payment-success countdown verified via seeded paid transaction: countdown displays 'Du wirst in Xs zu leaderos.de weitergeleitet…', ticks down 5→3 in 2.2s, Abbrechen (pause) button correctly freezes countdown and disappears after click. Navbar logo click navigates to /. License keys generate with LEADEROS-XXXX-XXXX-XXXX format. Resend 'from' fields in routes/email.py all use 'Wlad von Leader OS' branding (no WLADHUB literal). Stripe regression: POST /api/payments/create-checkout with package_id='leader_os_full' still returns valid stripe.com URL — no regression from rebrand.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/quick-login", "issue": "Email lookup uses identifier.lower() but stored user emails are not normalized to lowercase. If a user was created via Google OAuth with mixed-case email (e.g., Foo@Example.com), quick-login by 'foo@example.com' will return 404. Recommend: store all emails lower-cased on upsert (routes/auth.py:upsert_user) OR change query to {'email': {'$regex': f'^{re.escape(identifier)}$', '$options': 'i'}}."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ActivateKey.jsx", "issue": "Visible mailto link still says 'support@wladhub.com' (line 179) — leaks legacy WLADHUB brand to end user. Should be 'support@leaderos.de'.", "selector": "a[href='mailto:support@wladhub.com']", "priority": "MEDIUM"},
+      {"component": "PaymentSuccess.jsx", "issue": "User-facing copy on success page still mentions 'WladBot' (line 149: 'Bei Fragen ist der WladBot 24/7 für dich da'). Likely intentional (Wlad is founder), but worth confirming with PM if full rebrand is required.", "selector": "[data-testid='payment-success']", "priority": "LOW"},
+      {"component": "utils/generatePDF.js + generateCurriculumPDF.js", "issue": "PDF download filenames still start with 'WladHub - ...' (e.g., 'WladHub - {name} AI Report.pdf', 'WladHub - {name} 30-Tage-Plan.pdf', 'WladHub - Leadership Curriculum.pdf'). End-user-visible in downloads folder.", "selector": "n/a (file save)", "priority": "MEDIUM"},
+      {"component": "Hero.jsx + Roadmap.jsx", "issue": "sessionStorage keys 'wladhub_ab' and 'wladhub_popup_shown' still use legacy name. Not user-visible but inconsistent — rename to 'leaderos_ab' / 'leaderos_popup_shown' for cleanliness.", "selector": "n/a (storage)", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter28_leaderos_rebrand.py",
+    "/app/test_reports/pytest/pytest_results_iter28.xml"
+  ],
+  "action_items": [
+    "Replace 'support@wladhub.com' → 'support@leaderos.de' in /app/frontend/src/pages/ActivateKey.jsx:179",
+    "Rebrand PDF filename prefixes in /app/frontend/src/utils/generatePDF.js (lines 537, 877) and /app/frontend/src/utils/generateCurriculumPDF.js:181 from 'WladHub' to 'Leader OS'",
+    "(Low) Rename sessionStorage keys 'wladhub_ab' & 'wladhub_popup_shown' to leaderos_* in Hero.jsx + Roadmap.jsx",
+    "(Optional) Decide whether 'WladBot' chat persona text on PaymentSuccess should be rebranded — leave as-is if intentional",
+    "(Backend hardening) Normalize stored email to lower-case in routes/auth.py:upsert_user so quick-login email lookup is truly case-insensitive across all users"
+  ],
+  "critical_code_review_comments": [
+    "LeaderOSLogo component is clean, dependency-free SVG/CSS — great for crisp scaling and no asset breakage. data-testid='leader-os-logo' present on every variant — good for tests.",
+    "Quick-login phone regex matches last 8 digits via {'$regex': tail} — works but is unanchored, meaning '11223344' would also match a phone like '+49 151 11223344000' (extra trailing digits). For your DSGVO-sized DB this is fine, but consider anchoring with {'$regex': f'{tail}$'} so the tail must be at the END of the stored phone string. Lowers false-positive collisions as the user base grows.",
+    "The quick-login endpoint returns 404 for unknown users — frontend correctly uses this signal to deep-link into /diagnose with a localStorage prefill. Clever UX. However, the 404 response can be timing-side-channeled to enumerate registered emails/phones. For a high-converting funnel this is acceptable, but flag for security review pre-public launch.",
+    "Email-vs-phone branch in quick-login keys solely on '@' presence. Edge case: an identifier like 'user@123' (no TLD) would be treated as email. Acceptable — DB lookup will simply 404.",
+    "PaymentSuccess countdown logic is clean (useEffect dependency [status, countdown, redirectPaused], setTimeout returns cleanup). Pause button disappears after pause via {!redirectPaused && ...} — no way to resume, only fully cancel. UX-wise this is fine for the 'I want to stay' use case.",
+    "Brand cleanup is 95% done: 5 legacy WLADHUB references remain (3 PDF filenames, 1 mailto, 2 sessionStorage keys). None are blocking, all are in the action_items above.",
+    "services/license_keys.py:generate_key uses secrets.choice — cryptographically strong randomness, good. Comment correctly notes legacy prefix history (WLAD- → WLADHUB- → LEADEROS-) so admins know to accept legacy keys via direct DB lookup."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter28_leaderos_rebrand.py (NEW — 14 pytest cases, all PASS)"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 pytest pass)",
+    "frontend": "100% (login/quick-login/countdown/branding verified). 5 minor non-blocking legacy 'WLADHUB' references found, listed in ui_bugs."
+  },
+  "test_credentials": "admin password 'wladhub2026' (unchanged, kept in /app/memory/test_credentials.md)",
+  "seed_data_creation": "Seeded 1 paid payment_transaction (TEST_iter28_paid_*) and 1 user (TEST Iter28 User w/ email + phone +49 151 11223344) via pytest fixture. Both cleaned up after run.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All P0 LeaderOS rebrand features verified working end-to-end on the public preview URL. Reusable backend regression: /app/backend/tests/test_iter28_leaderos_rebrand.py (14 tests, requires load_dotenv from backend/.env to access MONGO_URL/DB_NAME). For PaymentSuccess countdown E2E, seed a payment_transactions doc with payment_status='paid' and navigate to /payment-success?session_id=<that-id>; countdown widget has data-testid='redirect-countdown' and pause button data-testid='pause-redirect'. Quick-login bypasses CORS/cookies — it's a stateless POST returning user payload + has_report bool; frontend then stores in localStorage 'emergent_user'. Legacy 'wladhub' strings still exist in: ActivateKey.jsx (mailto), generatePDF.js + generateCurriculumPDF.js (filenames), Hero.jsx + Roadmap.jsx (sessionStorage keys), App.css (header comment only).",
+  "rca of the issue": "N/A — no bug to RCA. This iteration only verifies the rebrand + new features. Caveat: the quick-login email lookup is technically case-insensitive only on the INPUT side (identifier.lower()) — it relies on stored emails being already lower-case. Recommend lower-casing emails at write-time in upsert_user() to make the case-insensitivity bidirectional."
+}

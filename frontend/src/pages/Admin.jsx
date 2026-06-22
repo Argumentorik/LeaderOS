@@ -107,7 +107,7 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-manrope font-extrabold text-2xl text-white">WLADHUB Admin</h1>
+            <h1 className="font-manrope font-extrabold text-2xl text-white">Leader OS Admin</h1>
             <p className="font-inter text-sm text-slate-500">Funnel Analytics & Management</p>
           </div>
           <button onClick={fetchAll} disabled={loading} className="btn-secondary px-4 py-2 text-sm inline-flex items-center gap-2">

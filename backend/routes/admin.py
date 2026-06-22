@@ -101,16 +101,16 @@ async def _send_booking_emails(config, db, data: BookingRequest):
         return
     try:
         await asyncio.to_thread(resend.Emails.send, {
-            "from": f"WLADHUB System <{config['sender_email']}>",
+            "from": f"Leader OS System <{config['sender_email']}>",
             "to": ["start@aiporate.com"],
             "subject": f"Neue Termin-Anfrage: {data.name or 'Neuer Kunde'} — {data.date} {data.time}",
             "html": booking_expert_html(data.date, data.time, data.name, data.email, data.plan, data.notes),
         })
         if data.email:
             await asyncio.to_thread(resend.Emails.send, {
-                "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+                "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [data.email],
-                "subject": f"Dein Termin: {data.date} um {data.time} Uhr — WLADHUB",
+                "subject": f"Dein Termin: {data.date} um {data.time} Uhr — Leader OS",
                 "html": booking_user_html(data.name, data.date, data.time),
             })
         await db.email_log.insert_one({
@@ -126,15 +126,15 @@ async def _send_enterprise_emails(config, db, data: EnterpriseInquiry, pricing: 
         return
     try:
         await asyncio.to_thread(resend.Emails.send, {
-            "from": f"WLADHUB Enterprise <{config['sender_email']}>",
+            "from": f"Leader OS Enterprise <{config['sender_email']}>",
             "to": ["start@aiporate.com"],
             "subject": f"Enterprise-Anfrage: {data.company} ({data.employee_count} MA) — {pricing['total']:.0f} EUR",
             "html": enterprise_admin_html(data.company, data.contact_name, str(data.email), data.phone, data.employee_count, bool(data.include_coaching), data.message, pricing),
         })
         await asyncio.to_thread(resend.Emails.send, {
-            "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+            "from": f"Wlad von Leader OS <{config['sender_email']}>",
             "to": [str(data.email)],
-            "subject": f"Deine Enterprise-Anfrage fuer {data.company} — WLADHUB",
+            "subject": f"Deine Enterprise-Anfrage fuer {data.company} — Leader OS",
             "html": enterprise_user_html(data.contact_name, data.company, data.employee_count, pricing),
         })
         await db.email_log.insert_one({

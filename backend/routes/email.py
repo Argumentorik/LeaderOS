@@ -19,7 +19,7 @@ async def send_auto_report_email(db, config, user, report, session_id):
         try:
             email_data = report_email(user.get("name", "Leader"), report)
             resp = await asyncio.to_thread(resend.Emails.send, {
-                "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+                "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [email],
                 "subject": email_data["subject"],
                 "html": email_data["html"],
@@ -41,7 +41,7 @@ async def send_welcome_email_background(db, config, name, email, role):
     try:
         email_data = welcome_email(name, role)
         resp = await asyncio.to_thread(resend.Emails.send, {
-            "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+            "from": f"Wlad von Leader OS <{config['sender_email']}>",
             "to": [email],
             "subject": email_data["subject"],
             "html": email_data["html"],
@@ -62,7 +62,7 @@ async def send_payment_email_background(db, config, email, name, plan, amount):
     try:
         email_data = payment_confirmation_email(name, plan, amount)
         resp = await asyncio.to_thread(resend.Emails.send, {
-            "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+            "from": f"Wlad von Leader OS <{config['sender_email']}>",
             "to": [email],
             "subject": email_data["subject"],
             "html": email_data["html"],
@@ -92,7 +92,7 @@ def register_email_routes(router: APIRouter, db, config):
         email_data = report_email(user.get("name", "Leader"), report)
         try:
             resp = await asyncio.to_thread(resend.Emails.send, {
-                "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+                "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [email],
                 "subject": email_data["subject"],
                 "html": email_data["html"],
@@ -123,7 +123,7 @@ def register_email_routes(router: APIRouter, db, config):
         email_data = plan_reminder_email(user.get("name", "Leader"), week, weakest_label)
         try:
             resp = await asyncio.to_thread(resend.Emails.send, {
-                "from": f"Wlad von WLADHUB <{config['sender_email']}>",
+                "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [email],
                 "subject": email_data["subject"],
                 "html": email_data["html"],

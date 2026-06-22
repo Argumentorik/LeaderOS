@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronRight, Menu, X } from "lucide-react";
 import { useState } from "react";
+import LeaderOSLogo from "./LeaderOSLogo";
 
 const steps = [
   { path: "/diagnose", label: "Profil" },
@@ -31,13 +32,7 @@ export default function Navbar() {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 group"
         >
-          <span className="font-manrope font-bold text-lg text-[#C8FF00] group-hover:text-[#d4ff33] transition-all">
-            WLADHUB
-          </span>
-          <span className="hidden sm:block h-4 w-px bg-white/[0.08]" />
-          <span className="font-inter text-sm text-slate-500 hidden sm:block">
-            Leadership Diagnose
-          </span>
+          <LeaderOSLogo variant="default" size="md" showTagline />
         </button>
 
         {/* Desktop Progress Steps */}

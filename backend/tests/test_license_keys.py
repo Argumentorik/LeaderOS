@@ -134,7 +134,7 @@ class TestLicenseKeyActivate:
         assert data["success"]
         assert data["plan"] == "fasttrack"
         assert "plan_name" in data
-        assert data["redirect_url"] == "https://leader-os.de"
+        assert data["redirect_url"] == "https://leaderos.de"
         assert "expires_at" in data
         assert "message" in data
         print(f"✓ Key activated successfully, redirect_url: {data['redirect_url']}")
@@ -187,7 +187,7 @@ class TestLicenseKeyActivate:
         data = response.json()
         
         assert data["success"]
-        assert data["redirect_url"] == "https://leader-os.de"
+        assert data["redirect_url"] == "https://leaderos.de"
         print(f"✓ Lowercase key activation worked")
 
 
@@ -323,8 +323,8 @@ class TestLicenseKeyFullFlow:
         })
         assert activate_resp.status_code == 200
         assert activate_resp.json()["success"]
-        assert activate_resp.json()["redirect_url"] == "https://leader-os.de"
-        print(f"  Step 3: Activated key - redirect to leader-os.de")
+        assert activate_resp.json()["redirect_url"] == "https://leaderos.de"
+        print(f"  Step 3: Activated key - redirect to leaderos.de")
         
         # Step 4: Try re-activate (should fail)
         reactivate_resp = requests.post(f"{BASE_URL}/api/license/activate", json={

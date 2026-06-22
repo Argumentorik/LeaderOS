@@ -195,23 +195,23 @@ export default function Kurse() {
               </div>
             </div>
 
-            {/* CTA to leader-os.de */}
+            {/* CTA to leaderos.de */}
             <div className="glass-card p-6 border border-[#C8FF00]/10 bg-[#C8FF00]/[0.02]">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="flex-1">
                   <p className="font-manrope font-bold text-white mb-1">Bereit für das volle System?</p>
                   <p className="font-inter text-sm text-slate-500">
-                    Diese 6 Module sind nur der Anfang. Das komplette Leadership-OS mit KI-Agenten, persönlichem Coaching und Community findest du auf leader-os.de.
+                    Diese 6 Module sind nur der Anfang. Das komplette Leadership-OS mit KI-Agenten, persönlichem Coaching und Community findest du auf leaderos.de.
                   </p>
                 </div>
                 <a
-                  href="https://leader-os.de"
+                  href="https://leaderos.de"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary px-6 py-3.5 text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0"
                   data-testid="leader-os-cta"
                 >
-                  Zu leader-os.de
+                  Zu leaderos.de
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
@@ -238,12 +238,12 @@ export default function Kurse() {
                 <ArrowRight className="w-5 h-5" />
               </button>
               <a
-                href="https://leader-os.de"
+                href="https://leaderos.de"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary px-6 py-4 text-sm font-medium inline-flex items-center gap-2"
               >
-                leader-os.de entdecken
+                leaderos.de entdecken
                 <ExternalLink className="w-4 h-4" />
               </a>
             </div>

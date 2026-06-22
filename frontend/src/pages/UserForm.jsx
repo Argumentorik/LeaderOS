@@ -96,7 +96,7 @@ export default function UserForm() {
           </button>
         )}
 
-        {/* Header — leader-os.de bracket-prefix style */}
+        {/* Header — leaderos.de bracket-prefix style */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
             <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">

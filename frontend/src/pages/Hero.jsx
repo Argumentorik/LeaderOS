@@ -174,7 +174,7 @@ export default function Hero() {
             className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-12 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
             data-testid="hero-subheadline"
           >
-            Die <span className="text-white font-semibold">WLADHUB Diagnose</span> zeigt dir in{" "}
+            Die <span className="text-white font-semibold">Leader OS Diagnose</span> zeigt dir in{" "}
             <span className="text-white font-semibold">10 Minuten</span>, wo du stehst – 
             und was dich von den <span className="text-[#C8FF00] font-semibold">Top 1 % der Leader</span> trennt.
           </p>
@@ -254,7 +254,7 @@ export default function Hero() {
                     </div>
                     <div className="mt-8 pt-6 border-t border-[#C8FF00]/[0.08]">
                       <p className="font-inter text-sm text-slate-500 leading-relaxed">
-                        Die WLADHUB Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Rolle du vernachlässigst.
+                        Die Leader OS Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Rolle du vernachlässigst.
                       </p>
                     </div>
                   </div>
@@ -329,7 +329,7 @@ export default function Hero() {
                 Dein persönlicher Leadership-Report
               </h2>
               <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
-                Die WLADHUB Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.
+                Die Leader OS Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.
               </p>
             </div>
 
@@ -549,7 +549,7 @@ export default function Hero() {
 
             <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
               <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
-                &laquo;Ich dachte, ich wäre ein guter Kommunikator – bis WLADHUB mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
+                &laquo;Ich dachte, ich wäre ein guter Kommunikator – bis Leader OS mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
               </p>
               <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
             </div>
@@ -571,7 +571,7 @@ export default function Hero() {
                   </h2>
                   <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
                     Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> fur
-                    {" "}<span className="text-[#C8FF00] font-medium">leader-os.de</span> – das intelligenteste Leadership-Betriebssystem auf dem Markt.
+                    {" "}<span className="text-[#C8FF00] font-medium">leaderos.de</span> – das intelligenteste Leadership-Betriebssystem auf dem Markt.
                     Nutze KI-Agenten, die speziell für Führungskräfte gebaut wurden.
                   </p>
                   <div className="space-y-3 mb-6">
@@ -597,13 +597,13 @@ export default function Hero() {
                       <ArrowRight className="w-5 h-5" />
                     </button>
                     <a
-                      href="https://leader-os.de"
+                      href="https://leaderos.de"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-secondary px-6 py-4 text-sm font-medium inline-flex items-center gap-2"
                       data-testid="leader-os-link"
                     >
-                      leader-os.de entdecken
+                      leaderos.de entdecken
                       <ArrowRight className="w-4 h-4" />
                     </a>
                   </div>
@@ -675,7 +675,7 @@ export default function Hero() {
               Finde es heraus. <span className="text-white">Kostenlos. In nur 10 Minuten.</span>
             </p>
             <p className="font-inter text-sm text-[#C8FF00]/70 mb-10">
-              + 50 Free Credits für leader-os.de · Report als PDF · 30-Tage-Plan
+              + 50 Free Credits für leaderos.de · Report als PDF · 30-Tage-Plan
             </p>
             <button
               data-testid="hero-cta-bottom"
@@ -693,12 +693,16 @@ export default function Hero() {
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2">
-                <span className="font-manrope font-bold text-[#C8FF00]">WLADHUB</span>
+                <span className="font-manrope font-extrabold tracking-tight">
+                  <span className="text-white">LEADER</span>
+                  <span className="text-[#C8FF00]">/</span>
+                  <span className="text-white">OS</span>
+                </span>
                 <span className="text-slate-700">|</span>
                 <span className="font-inter text-sm text-slate-500">Leadership Diagnose</span>
               </div>
               <div className="font-inter text-sm text-slate-600">
-                2026 WLADHUB. Alle Rechte vorbehalten.
+                2026 Leader OS. Alle Rechte vorbehalten.
               </div>
             </div>
           </div>
