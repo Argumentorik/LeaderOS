@@ -93,7 +93,7 @@ class TestPublicAssets:
         assert "<urlset" in r.text
         # Key URLs
         for path in ["/", "/diagnose", "/quiz", "/close", "/kurse", "/activate"]:
-            assert f"leader-check.de{path}" in r.text, f"Missing {path}"
+            assert f"leadercheck.de{path}" in r.text, f"Missing {path}"
 
     def test_favicon_ico_served(self, session):
         r = session.get(f"{BASE_URL}/favicon.ico", timeout=10)
@@ -125,7 +125,7 @@ class TestPublicAssets:
         # Description + canonical + OG + Twitter + JSON-LD
         assert 'name="description"' in html
         assert 'name="keywords"' in html
-        assert 'rel="canonical"' in html and 'leader-check.de' in html
+        assert 'rel="canonical"' in html and 'leadercheck.de' in html
         assert 'property="og:image"' in html
         assert 'name="twitter:card"' in html
         assert 'application/ld+json' in html

@@ -36,7 +36,7 @@ def _footer_block() -> str:
 <p style="font-size:11px;color:{BRAND['muted']};line-height:1.6;margin:0;">
 Du erhältst diese E-Mail, weil du die Leader OS Leadership-Diagnose gestartet hast.<br>
 <a href="https://leaderos.de" style="color:{BRAND['lime']};text-decoration:none;">leaderos.de</a> · 
-<a href="https://leader-check.de" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
+<a href="https://leadercheck.de" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
 </p>
 <p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS. Alle Rechte vorbehalten.</p>
 </td></tr>"""
@@ -141,7 +141,7 @@ def _welcome_body(name: str, role: str) -> str:
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border-left:3px solid {BRAND['lime']};">
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Kleiner Hinweis:</strong> Du musst das hier nicht machen. Die meisten machen es nicht. Sie lesen lieber <em>über</em> Leadership, statt wirklich reinzuschauen. Wenn du anders tickst – dann starte jetzt.</p>
 </td></tr>
-{_cta_button("Diagnose starten →", "https://leader-check.de/diagnose")}"""
+{_cta_button("Diagnose starten →", "https://leadercheck.de/diagnose")}"""
 
 
 def welcome_email(name: str, role: str) -> dict:
@@ -202,7 +202,7 @@ def report_email(name: str, report: dict) -> dict:
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Ehrlich?</strong> Die meisten schauen sich ihren Report an, nicken – und machen weiter wie bisher. Der Score ändert sich nicht von alleine. Wenn du wirklich willst, dass sich was bewegt, dann starte den 30-Tage-Plan. Aber nur, wenn du es ernst meinst.</p>
 </td></tr>
-{_cta_button("30-Tage-Plan ansehen →", "https://leader-check.de/roadmap")}
+{_cta_button("30-Tage-Plan ansehen →", "https://leadercheck.de/roadmap")}
 {_ps_block(f'Du hast außerdem 50 kostenlose Credits für <a href="https://leaderos.de" style="color:{BRAND["lime"]};text-decoration:none;font-weight:600;">leaderos.de</a> freigeschaltet.')}"""
 
     return {
@@ -262,7 +262,7 @@ def plan_reminder_email(name: str, week: int, weakest_role: str) -> dict:
 {_task_list(w['tasks'])}
 </table>
 </td></tr>
-{_cta_button("Zum Fahrplan →", "https://leader-check.de/roadmap")}
+{_cta_button("Zum Fahrplan →", "https://leadercheck.de/roadmap")}
 {_ps_block("Du musst nicht perfekt sein. Du musst nur dranbleiben. Jeden Tag ein Schritt.")}"""
 
     return {
@@ -333,7 +333,7 @@ def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
 {_payment_features(plan)}
 </table>
 </td></tr>
-{_cta_button("Jetzt loslegen →", "https://leader-check.de/roadmap")}
+{_cta_button("Jetzt loslegen →", "https://leadercheck.de/roadmap")}
 <tr><td>
 <p style="font-size:13px;color:{BRAND['gray']};line-height:1.7;margin:0;"><strong style="color:{BRAND['white']};">Noch was:</strong> Du hast jetzt Zugang zum kompletten System. Aber das System funktioniert nur, wenn du es nutzt. Mach was draus.</p>
 </td></tr>"""
