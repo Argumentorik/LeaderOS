@@ -13,15 +13,15 @@ export function PaymentSection({
 
   const isPlus = selectedPlan === "leader_os_plus";
   const currentOption = PAYMENT_OPTIONS.find(o => o.id === paymentOption);
-  const ctaPrice = isPlus ? "4.447 EUR" : currentOption?.per;
+  const ctaPrice = isPlus ? "4.797 EUR" : currentOption?.per;
 
   return (
     <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15" data-testid="payment-section" id="payment-section">
       <div className="text-center mb-6">
         <h3 className="font-manrope font-bold text-xl text-white mb-2">
-          {isPlus ? "Leadership OS PLUS — 4.447 EUR / Jahr" : "Leadership OS — 1 Jahr Vollzugang"}
+          {isPlus ? "Plus-Plus · OS-Jahr · 4.797 EUR" : "Sprint · 30 Tage + 12 Monate Plattform"}
         </h3>
-        <p className="font-inter text-sm text-slate-400">14 Tage Testphase · Sofortzugang · License Key per E-Mail</p>
+        <p className="font-inter text-sm text-slate-400">14 Tage Geld-zurück · Sofortzugang · License Key per E-Mail</p>
       </div>
 
       {!isPlus && (

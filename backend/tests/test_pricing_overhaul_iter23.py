@@ -112,7 +112,7 @@ class TestPaymentCheckout:
         ("leader_os_full", 997.00, "leader_os"),
         ("leader_os_2rate", 1100.00, "leader_os"),
         ("leader_os_12rate", 1188.00, "leader_os"),
-        ("leader_os_plus", 4447.00, "leader_os_plus"),
+        ("leader_os_plus", 4797.00, "leader_os_plus"),
     ])
     def test_create_checkout(self, client, package_id, expected_amount, expected_plan):
         payload = {

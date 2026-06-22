@@ -1,10 +1,15 @@
 // Pricing-Konstanten — Single source of truth für die Preise & Features
-// Halte diese im Sync mit /app/backend/routes/payments.py PACKAGES und /app/backend/routes/admin.py ENTERPRISE tiers
+// Halte diese im Sync mit /app/backend/services/pricing.py
 
 export const PAYMENT_OPTIONS = [
   { id: "leader_os_full",   label: "Einmalzahlung",  total: 997,  per: "997 EUR",     note: "Bester Preis",       surcharge: 0 },
   { id: "leader_os_2rate",  label: "2 Raten",        total: 1100, per: "2 × 550 EUR", note: "+103 EUR Aufschlag", surcharge: 103 },
   { id: "leader_os_12rate", label: "12 Monatsraten", total: 1188, per: "12 × 99 EUR", note: "+191 EUR Aufschlag", surcharge: 191 },
+];
+
+export const PAYMENT_OPTIONS_PLUS = [
+  { id: "leader_os_plus",       label: "Einmalzahlung", total: 4797, per: "4.797 EUR",     note: "Bester Preis", surcharge: 0 },
+  { id: "leader_os_plus_3rate", label: "3 Raten",       total: 4797, per: "3 × 1.599 EUR", note: "Zinsfrei",     surcharge: 0 },
 ];
 
 export const ENTERPRISE_TIERS = [
@@ -16,54 +21,57 @@ export const ENTERPRISE_TIERS = [
   { from: 200, discount: 50 },
 ];
 
+// Sprint = 30 Tage + 12 Monate Plattform
 export const OS_FEATURES = [
-  { text: "14 Tage Testphase · jederzeit kündbar", highlight: true },
-  { text: "Vollzugang zur Leader OS Plattform · 1 Jahr", included: true },
-  { text: "12 Premium-Videokurse (1 neuer Kurs jeden Monat)", included: true, star: true },
-  { text: "Wert pro Kurs: 199 EUR · Gesamtwert: 2.388 EUR", subline: true },
-  { text: "WladBot AI Coach 24/7", included: true },
-  { text: "Personalisierte Learning Journey", included: true },
-  { text: "Leadership Playbooks & Frameworks", included: true },
-  { text: "License Key per E-Mail · Sofortzugang", included: true },
+  { text: "14 Tage Geld-zurück-Garantie", highlight: true },
+  { text: "30-Tage-Sprint mit Wlad · 1 Aufgabe / Tag", included: true, star: true },
+  { text: "11 Wlad-Frameworks · sofort einsetzbar", included: true },
+  { text: "WladBot 24/7 · in Wlads Stimme", included: true },
+  { text: "12 Monate Plattform-Zugang inkludiert", included: true },
+  { text: "91 Lektionen + 30 Drills + 12 Videokurse", included: true },
+  { text: "Zertifikat 0001 · LinkedIn-ready", included: true },
+  { text: "Sofortzugang per License Key", included: true },
 ];
 
+// Plus-Plus = Sprint + monatliche Live mit Wlad
 export const OS_PLUS_FEATURES = [
-  { text: "Alles aus Leadership OS", highlight: true },
-  { text: "12 Einzelcoachings mit Argumentorik-Leadership Coaches", included: true, star: true },
-  { text: "Wert pro Coaching: 299 EUR · Gesamt: 3.588 EUR", subline: true },
-  { text: "Persönliche Lernbegleitung über 12 Monate", included: true },
-  { text: "Direkter Zugang zu Top-Coaches", included: true },
-  { text: "Quartals-Reviews mit Strategie-Update", included: true },
-  { text: "Priority Support · 24h Response", included: true },
+  { text: "Alles aus dem Sprint", highlight: true },
+  { text: "12× monatlich Live mit Wlad · ungeschnitten · 90 Min", included: true, star: true },
+  { text: "Drill-Channel · Theorie sofort am echten Fall", included: true },
+  { text: "Sprint-Historie als Kontext für WladBot", included: true },
+  { text: "Vorrang auf 1:1-Mentoring-Warteliste", included: true },
+  { text: "Klasse 0001 Peer-Kreis · Lifetime-Zugang", included: true },
+  { text: "Quartals-Review mit Strategie-Update", included: true },
+  { text: "Vorzugs-Zugang Klasse 0002 (AI Agents Builder)", included: true },
 ];
 
 export const ENTERPRISE_FEATURES = [
   { text: "B2B-Lizenzen für dein Unternehmen", highlight: true },
-  { text: "Volumen-Rabatte: 10% – 50% je nach Mitarbeiterzahl", included: true, star: true },
+  { text: "Volumen-Rabatte: 10 % – 50 % je nach Team-Größe", included: true, star: true },
   { text: "Zentrales Admin-Dashboard für alle Lizenzen", included: true },
-  { text: "Onboarding-Workshop mit Wlad", included: true },
+  { text: "Onboarding-Workshop mit Wlad persönlich", included: true },
   { text: "Coachings optional zubuchbar", included: true },
   { text: "Individuelle Vertrags- und Rechnungsstellung", included: true },
   { text: "Dedizierter Account Manager", included: true },
 ];
 
 export const COMPARISON_ROWS = [
-  ["14 Tage Testphase", true, true, true],
-  ["Leadership-Diagnose + KI-Report", true, true, true],
-  ["12 Premium-Videokurse (1 pro Monat)", true, true, true],
-  ["Personalisierter 30-Tage-Plan", true, true, true],
-  ["WladBot AI Coach 24/7", true, true, true],
-  ["Leader OS Plattform-Vollzugang", true, true, true],
-  ["Leadership Playbooks & Frameworks", true, true, true],
-  ["License Key per E-Mail", true, true, true],
-  ["Ratenzahlung möglich", true, false, true],
-  ["12 Einzelcoachings (à 299 EUR Wert)", false, true, "optional"],
-  ["Persönliche Lernbegleitung 12 Monate", false, true, true],
-  ["Quartals-Reviews", false, true, true],
-  ["Priority Support", false, true, true],
-  ["Volumen-Rabatte (10–50%)", false, false, true],
+  ["14 Tage Geld-zurück-Garantie", true, true, true],
+  ["Diagnose + KI-Report", true, true, true],
+  ["11 Wlad-Frameworks", true, true, true],
+  ["30-Tage-Sprint mit täglichem Drill", true, true, true],
+  ["WladBot 24/7", true, true, true],
+  ["12 Monate Plattform-Zugang", true, true, true],
+  ["91 Lektionen + 12 Videokurse", true, true, true],
+  ["Zertifikat 0001 (LinkedIn-ready)", true, true, true],
+  ["Ratenzahlung möglich", true, true, true],
+  ["12× Live mit Wlad (monatlich, 90 Min)", false, true, "optional"],
+  ["Drill-Channel · echte Fälle", false, true, true],
+  ["Quartals-Review", false, true, true],
+  ["Vorrang 1:1-Mentoring", false, true, true],
+  ["Klasse 0001 Peer-Kreis Lifetime", false, true, true],
+  ["Volumen-Rabatte (10–50 %)", false, false, true],
   ["Zentrales Admin-Dashboard", false, false, true],
   ["Onboarding-Workshop mit Wlad", false, false, true],
   ["Dedizierter Account Manager", false, false, true],
-  ["Individuelle Vertragsgestaltung", false, false, true],
 ];

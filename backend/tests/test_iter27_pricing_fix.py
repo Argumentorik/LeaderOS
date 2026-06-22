@@ -32,7 +32,7 @@ def session():
 PACKAGE_EXPECTATIONS = [
     # package_id, expected charge amount (EUR major units), mode
     ("leader_os_full",   997.0,  "payment"),
-    ("leader_os_plus",   4447.0, "payment"),
+    ("leader_os_plus",   4797.0, "payment"),
     ("leader_os_2rate",  1100.0, "payment"),   # falls back to one-time in dev (no real stripe key)
     ("leader_os_12rate", 1188.0, "payment"),
 ]

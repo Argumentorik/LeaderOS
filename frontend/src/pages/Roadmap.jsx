@@ -477,14 +477,14 @@ export default function Roadmap() {
 
         {/* CTA - blocked until journal complete */}
         <div className="text-center pt-6 border-t border-white/5">
-          <h3 className="font-manrope font-bold text-xl text-white mb-3">
-            Bereit für die strategische Dominanz?
+          <h3 className="font-manrope font-bold text-2xl text-white mb-2">
+            Plan steht. Zeit für den Sprint.
           </h3>
-          <p className="font-inter text-sm text-slate-500 mb-4 max-w-lg mx-auto">
-            6 Kurse · 6 KI-Agenten · 1:1 Gespräch · Live Events · Community
+          <p className="font-inter text-sm text-slate-500 mb-2 max-w-lg mx-auto">
+            30 Tage Sprint · 11 Frameworks · WladBot 24/7 · 12 Monate Plattform
           </p>
           <p className="font-inter text-xs text-[#C8FF00]/60 mb-6">
-            Kostenlos testen – keine Zahlung notig
+            ▸ Klasse 0001 · noch 18 von 30 Plätzen frei · 14 Tage Geld-zurück
           </p>
           {filledCount < 6 ? (
             <div data-testid="journal-gate">
@@ -495,14 +495,25 @@ export default function Roadmap() {
               <p className="font-inter text-xs text-slate-600 mt-3">Noch {6 - filledCount} Fragen offen</p>
             </div>
           ) : (
-            <button
-              data-testid="roadmap-cta-btn"
-              onClick={() => navigate("/close")}
-              className="btn-amber px-10 py-4 font-semibold text-base inline-flex items-center gap-3"
-            >
-              Jetzt Zugang freischalten
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-2xl mx-auto">
+              <button
+                data-testid="roadmap-cta-sprint"
+                onClick={() => navigate("/close")}
+                className="flex-1 px-6 py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all inline-flex items-center justify-center gap-2"
+              >
+                <span>Sprint sichern</span>
+                <span>997 EUR</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                data-testid="roadmap-cta-plusplus"
+                onClick={() => navigate("/close")}
+                className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-[#C8FF00]/20 text-white font-manrope font-bold hover:border-[#C8FF00]/40 hover:bg-[#C8FF00]/[0.04] transition-all inline-flex items-center justify-center gap-2"
+              >
+                <span>Plus-Plus mit Wlad live</span>
+                <span className="text-[#C8FF00]">4.797 EUR</span>
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -518,21 +529,21 @@ export default function Roadmap() {
               <div className="w-14 h-14 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-4">
                 <Rocket className="w-7 h-7 text-[#C8FF00]" />
               </div>
-              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Du bist bereit für mehr!</h3>
-              <p className="font-inter text-sm text-slate-400">Schalte alle 12 Premium-Kurse, die Leader OS Plattform und alle 6 KI-Agenten frei.</p>
+              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Klasse 0001 · 18 von 30 Plätzen frei.</h3>
+              <p className="font-inter text-sm text-slate-400">30-Tage-Sprint mit Wlad. 11 Frameworks. WladBot 24/7. 12 Monate Plattform inkludiert.</p>
             </div>
             <div className="text-center mb-4">
-              <div className="font-manrope font-extrabold text-3xl text-white">ab €997 / Jahr</div>
-              <div className="font-inter text-xs text-slate-500">Leadership OS · 14 Tage Trial · Ratenzahlung möglich</div>
+              <div className="font-manrope font-extrabold text-3xl text-white">997 EUR <span className="text-slate-500 text-base font-normal">einmalig</span></div>
+              <div className="font-inter text-xs text-slate-500">oder Ratenzahlung · 14 Tage Geld-zurück</div>
             </div>
             <button onClick={() => { setShowPopup(false); navigate("/close"); }}
               className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold flex items-center justify-center gap-2"
               data-testid="popup-cta"
             >
-              Pakete ansehen <ArrowRight className="w-4 h-4" />
+              Sprint sichern <ArrowRight className="w-4 h-4" />
             </button>
             <button onClick={() => setShowPopup(false)} className="w-full py-3 mt-2 text-center font-inter text-xs text-slate-500 hover:text-slate-300 transition-colors" data-testid="popup-dismiss">
-              Nein danke, ich bleibe beim kostenlosen Zugang
+              Spaeter
             </button>
           </div>
         </div>

@@ -313,7 +313,7 @@ def _payment_features(plan: str) -> str:
 def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
     plan_name_map = {
         "leader_os": "Leadership OS — 1 Jahr Vollzugang",
-        "leader_os_plus": "Leadership OS PLUS — inkl. 12 Coachings",
+        "leader_os_plus": "Plus-Plus — OS-Jahr inkl. monatliche Live mit Wlad",
         "leader_os_enterprise": "Leadership OS ENTERPRISE — B2B-Lizenz",
         "fasttrack": "Fast Track – Leadership Accelerator",
         "standard": "Leadership OS — 1 Jahr Vollzugang",

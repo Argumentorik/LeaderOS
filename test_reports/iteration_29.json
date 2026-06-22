@@ -1,0 +1,52 @@
+{
+  "summary": "Iter 29 — Sprint/Plus-Plus rebrand + 4447→4797 final pre-deploy push. ALL 18 backend pytest cases PASS (test_iter29_sprint_plus_plus.py:10 + test_iter27_pricing_fix.py:8 regression). Critical Stripe path verified live: POST /api/payments/create-checkout?package_id=leader_os_plus returns a real https://checkout.stripe.com URL and the Stripe sandbox page renders '€4,797.00' as the charge amount (visual confirmation). Sprint 997 EUR + Plus-Plus 4.797 EUR + leader_os_plus_3rate (3×1.599=4.797) all in PACKAGES with correct mode/cycles. No 4447 anywhere in PACKAGES/PLAN_AMOUNT_MAP. License key flow: /api/license/create returns LEADEROS-XXXX-XXXX-XXXX, /api/license/activate returns redirect_url='https://leaderos.de'. FRONTEND verified live on preview URL: /close shows SPRINT/PLUS-PLUS/ENTERPRISE cards with prices 997/4.797 EUR, scarcity bar 'KLASSE 0001 · NOCH 18 VON 30 CHARTER-PLÄTZEN FREI' (uppercased via CSS), final CTAs (close-final-os '997 EUR' + close-final-os-plus '4.797 EUR') both initiate Stripe checkout and redirect to checkout.stripe.com. Comparison table headers correctly SPRINT/PLUS-PLUS/ENTERPRISE (no 'Leadership OS' or 'OS PLUS' visible on /close). Homepage hero shows new 'Drei Ebenen' section + KI/Rhetorik/EQ badges + scarcity + '10 Min' CTA. /roadmap: journal-gate works as designed — after filling all 6 textareas, gate dismisses and both roadmap-cta-sprint (Sprint sichern 997 EUR) + roadmap-cta-plusplus (Plus-Plus mit Wlad live 4.797 EUR) render and navigate to /close.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Hero.jsx", "issue": "Line 638 still hardcodes 'Leadership OS' inside an agent progress widget (below the visible hero fold). Not user-facing on first scroll but still leaks legacy brand string. Rebrand to 'Leader OS' or 'Sprint' for consistency.", "selector": "div.font-manrope.font-bold.text-sm.text-white (line 638)", "priority": "LOW"},
+      {"component": "Report.jsx", "issue": "Lines 19-21 still show 'Layer 1: AI Literacy / Layer 2: Real-World Rhetoric / Layer 3: Strategic EQ' subtitles. User explicitly asked: no 'Layer 1/2/3' jargon in Wlad-Sprache. Replace subtitles with simpler labels (e.g., '01 · KI im Alltag').", "selector": "ROLE_META subtitles in Report.jsx", "priority": "MEDIUM"},
+      {"component": "Multiple (Report.jsx, Roadmap.jsx, Kurse.jsx, AICoach.jsx, generatePDF.js)", "issue": "'Boardroom-Rhetorik' jargon still appears in many places. User said remove this term in favor of simple Wlad-Sprache (e.g., just 'Rhetorik' or 'Klare Worte'). Homepage hero already uses 'Rhetorik' badge (good). Sweep remaining occurrences for consistency.", "selector": "n/a (grep 'Boardroom-Rhetorik')", "priority": "MEDIUM"},
+      {"component": "pricing/EnterpriseSection.jsx:21", "issue": "Heading 'Leadership OS Enterprise · Rabatt-Rechner' still uses legacy brand 'Leadership OS'. Should be 'Sprint Enterprise · Rabatt-Rechner' or 'Leader OS Enterprise'.", "selector": "h3 inside EnterpriseSection", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter29_sprint_plus_plus.py",
+    "/app/backend/tests/test_iter27_pricing_fix.py",
+    "/app/test_reports/pytest/pytest_results_iter29.xml"
+  ],
+  "action_items": [
+    "(LOW) Rebrand 'Leadership OS' label inside Hero.jsx:638 to 'Leader OS' or 'Sprint'",
+    "(MEDIUM) Remove 'Layer 1/2/3' subtitles from Report.jsx ROLE_META (lines 19-21) — replace with Wlad-style simple labels",
+    "(MEDIUM) Sweep remaining 'Boardroom-Rhetorik' jargon (Report.jsx, Roadmap.jsx, AICoach.jsx, Kurse.jsx, generatePDF.js, data/questions.js) → 'Rhetorik' or 'Klare Worte' per Wlad-Sprache guidance",
+    "(MEDIUM) Rebrand pricing/EnterpriseSection.jsx:21 heading 'Leadership OS Enterprise' → 'Sprint Enterprise' (or 'Leader OS Enterprise')",
+    "(VERIFICATION) Main agent: self-test /report CTAs (report-cta-roadmap + report-cta-close) by completing a real diagnose flow — testids exist in code (Report.jsx:518/526) but only render when localStorage has 'emergent_report' populated. Without a report, /report falls back to Hero content."
+  ],
+  "critical_code_review_comments": [
+    "pricing.py is a clean single-source-of-truth — PACKAGES + PLAN_AMOUNT_MAP both reflect 4797.0 for leader_os_plus; the new leader_os_plus_3rate is correctly structured as a subscription with total_amount=4797, amount=1599, cycles=3, interval=month. Frontend pricingConstants.js is in sync.",
+    "Stripe subscription path (_create_subscription_session) uses cents (unit_amount=int(amount*100)) while one-time path via emergentintegrations uses EUR major units (no *100) — both are correct per their respective SDK contracts and have clear comments. Iter27 regression test prevents the *100 bug from returning.",
+    "Defense-in-depth amount guard (1≤charge_amount≤100000 in _create_one_time_session) catches both cents-bug (would be ~479700) and 0.01 typos. Good.",
+    "_handle_paid_webhook hard-codes 997 fallback for tx amount in payment email — if a Plus-Plus customer's tx record somehow loses its amount field, they'd get a 997 EUR confirmation email. Minor edge case but worth tracking.",
+    "Frontend testids are excellent on /close: close-final-os, close-final-os-plus, plan-leader-os, plan-leader-os-plus, price-leader-os, price-leader-os-plus, cta-leader-os, cta-leader-os-plus, comparison — fully testable.",
+    "Report.jsx CTAs (lines 518, 526) are inside the main report content block which only renders when localStorage 'emergent_report' is present. Without seeded report data, /report falls back to the Hero (visible in test: body starts with 'Entdecke, welche Führungsrolle…'). Consider rendering at least the scarcity bar + CTAs even in the empty-report fallback so cold-traffic visitors to /report see conversion paths.",
+    "/roadmap journal-gate is state-only (useState entries array, not localStorage), so it cannot be bypassed via localStorage prefill. After typing in all 6 textareas filledCount becomes 6 and both CTAs render correctly — verified live.",
+    "Comparison table component uses tailwind text-white/text-[#C8FF00]/text-slate-500 — PLUS-PLUS header is lime-green to highlight the recommended tier. Good contrast."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter29_sprint_plus_plus.py (NEW — 10 tests, all PASS)"
+  ],
+  "success_rate": {
+    "backend": "100% (18/18 pytest pass — 10 new iter29 + 8 iter27 regression)",
+    "frontend": "95% (all /close + homepage + /roadmap CTAs verified live; /report CTAs untestable without report-data seed, but code is in place)"
+  },
+  "test_credentials": "admin password 'wladhub2026' (per /app/memory/test_credentials.md, unchanged)",
+  "seed_data_creation": "Created (and revoked/cleaned up) 1 TEST_ license key (LEADEROS-XXXX-XXXX-XXXX). Created 4 TEST_ payment_transactions (leader_os_full, leader_os_plus, leader_os_2rate, leader_os_12rate) via Stripe sandbox — left in DB as pending/initiated, no real charges.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All P0 conversion-push functionality verified live on https://role-assessment-lab.preview.emergentagent.com. Key reusable regression file: /app/backend/tests/test_iter29_sprint_plus_plus.py (10 tests: 5 pricing constants + 4 checkout endpoint + 1 license activate). Combined with iter27 regression (4 packages × create-checkout + 3 phone validation) gives 18-test pre-deploy gate. Stripe sandbox confirmed €4,797.00 charge amount for leader_os_plus. The /report page falls back to Hero content when no report exists in localStorage — to verify report-cta-roadmap/report-cta-close test-IDs, must complete a real diagnose (Quiz → Analyzing → Report) or seed localStorage['emergent_report'] with a valid report JSON. /roadmap journal-gate requires typing in 6 textareas (state-based, not storage-based) — pure-API users cannot bypass via localStorage. Outstanding non-blocking copy issues: 'Leadership OS' in Hero.jsx:638 + EnterpriseSection.jsx:21, 'Layer 1/2/3' jargon in Report.jsx:19-21, 'Boardroom-Rhetorik' still present in ~6 files.",
+  "rca of the issue": "N/A — pre-deploy verification iteration. No blocking bugs. Minor copy/branding cleanup items listed in action_items for non-blocking post-deploy polish."
+}

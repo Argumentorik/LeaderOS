@@ -205,7 +205,7 @@ class TestPayments:
         sid = d["session_id"]
         time.sleep(0.4)
         st = s.get(f"{API}/payments/status/{sid}").json()
-        assert st.get("amount") == 4447.0
+        assert st.get("amount") == 4797.0
 
     def test_invalid_package(self, s):
         r = self._checkout(s, "totally_unknown_xyz")

@@ -495,22 +495,46 @@ export default function Report() {
         </div>
 
         {/* CTAs */}
-        <div className="border-t border-white/5 pt-10 flex flex-col sm:flex-row gap-4 justify-center" data-testid="report-ctas">
-          <button
-            data-testid="report-cta-roadmap"
-            onClick={() => navigate("/roadmap")}
-            className="btn-primary px-8 py-4 font-semibold flex items-center justify-center gap-3"
-          >
-            30-Tage-Aktionsplan ansehen
-            <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            data-testid="report-cta-close"
-            onClick={() => navigate("/close")}
-            className="btn-secondary px-8 py-4 font-medium"
-          >
-            Vollzugang freischalten
-          </button>
+        <div className="border-t border-white/5 pt-10" data-testid="report-ctas">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-3 px-4 py-2 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.03] mb-4">
+              <span className="relative flex w-2 h-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#C8FF00] opacity-75 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
+              </span>
+              <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
+                Klasse 0001 · noch <span className="text-[#C8FF00]">18 von 30</span> Plätzen frei
+              </span>
+            </div>
+            <h3 className="font-manrope font-extrabold text-2xl text-white mb-2">
+              Du weisst jetzt wo du stehst.
+            </h3>
+            <p className="font-inter text-sm text-slate-500 max-w-lg mx-auto">
+              Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-2xl mx-auto">
+            <button
+              data-testid="report-cta-roadmap"
+              onClick={() => navigate("/roadmap")}
+              className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white font-manrope font-bold hover:border-[#C8FF00]/30 hover:bg-white/[0.06] transition-all inline-flex items-center justify-center gap-2"
+            >
+              30-Tage-Plan ansehen
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              data-testid="report-cta-close"
+              onClick={() => navigate("/close")}
+              className="flex-1 px-6 py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all inline-flex items-center justify-center gap-2"
+            >
+              <span>Sprint sichern</span>
+              <span>997 EUR</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="font-inter text-xs text-slate-600 text-center mt-4">
+            14 Tage Geld-zurück · 12 Monate Plattform · WladBot 24/7 · Zertifikat 0001
+          </p>
         </div>
       </div>
     </div>

@@ -20,12 +20,12 @@ export function PriceCards({
         onClick={onSelectOS}
         className={`glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] ${selectedPlan === "leader_os" ? "border-[#C8FF00]/25 ring-1 ring-[#C8FF00]/10" : "border-white/[0.06]"}`}
       >
-        <CardHeader badge="LEADERSHIP OS" subBadge="EINSTIEG" title="Self-Driven Leadership" desc="Plattform + 12 Videokurse + KI-Coach" />
+        <CardHeader badge="SPRINT" subBadge="30 TAGE + 12 MONATE" title="Sprint mit Wlad." desc="11 Frameworks · WladBot 24/7 · Zertifikat 0001" />
         <PriceBlock
           price="997"
           accent="white"
-          subtitle="Ratenzahlung möglich · 14 Tage Trial"
-          valueBadge="Wert der 12 Kurse: 2.388 EUR"
+          subtitle="Einmalig · Ratenzahlung möglich · 14 Tage Geld-zurück"
+          valueBadge="Wert inkl. 12 Monate Plattform"
           testidPrice="price-leader-os"
         />
         <div className="space-y-3 mb-7">
@@ -36,12 +36,12 @@ export function PriceCards({
           onClick={(e) => { e.stopPropagation(); onSelectOS(); }}
           className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${selectedPlan === "leader_os" ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/15" : "bg-white/[0.04] border border-white/[0.08] text-white hover:border-[#C8FF00]/30"}`}
         >
-          Jetzt starten — ab 997 EUR
+          Sprint sichern · 997 EUR
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* TIER 2 — Leadership OS PLUS (recommended) */}
+      {/* TIER 2 — Plus-Plus (recommended) */}
       <div
         data-testid="plan-leader-os-plus"
         onClick={onSelectPlus}
@@ -56,12 +56,12 @@ export function PriceCards({
           </div>
         </div>
         <div className="relative">
-          <CardHeader badge="OS PLUS" subBadge="+ 12 COACHINGS" title="Coach-Powered Leadership" desc="Plattform + 12 Coachings mit Top-Coaches" extraClass="mt-3" />
+          <CardHeader badge="PLUS-PLUS" subBadge="+ 12x LIVE MIT WLAD" title="Sprint + OS-Jahr." desc="Sprint + monatliche Live-Sessions · 12 Monate" extraClass="mt-3" />
           <PriceBlock
-            price="4.447"
+            price="4.797"
             accent="lime"
-            subtitle="Einmalzahlung · 14 Tage Trial"
-            valueBadge="Coach-Wert: 3.588 EUR · Gesamtwert: 5.976 EUR"
+            subtitle="Einmalig oder 3 x 1.599 EUR · 14 Tage Geld-zurück"
+            valueBadge="Live mit Wlad · ungeschnitten · 90 Min"
             testidPrice="price-leader-os-plus"
           />
           <div className="space-y-3 mb-7">
@@ -73,7 +73,7 @@ export function PriceCards({
             className={`w-full py-4 rounded-xl font-manrope font-bold text-base flex items-center justify-center gap-2 transition-all ${selectedPlan === "leader_os_plus" ? "bg-[#C8FF00] text-[#0a0a0a] shadow-lg shadow-[#C8FF00]/20" : "bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] hover:bg-[#C8FF00]/15"}`}
           >
             {selectedPlan === "leader_os_plus" && <Check className="w-4 h-4" />}
-            OS PLUS — 4.447 EUR
+            Plus-Plus sichern · 4.797 EUR
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -85,13 +85,13 @@ export function PriceCards({
         onClick={onSelectEnterprise}
         className={`glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] ${showInquiry ? "border-white/15 ring-1 ring-white/10" : "border-white/[0.06]"}`}
       >
-        <CardHeader badge="ENTERPRISE" subBadge="B2B" title="Team Leadership" desc="Volumen-Lizenzen für dein Unternehmen" />
+        <CardHeader badge="ENTERPRISE" subBadge="B2B" title="Sprint für dein Team." desc="Volumen-Lizenzen für dein Unternehmen" />
         <div className="mb-6">
           <div className="flex items-baseline gap-1">
             <span className="font-manrope font-extrabold text-3xl text-white">Preis</span>
             <span className="font-inter text-base text-slate-500 ml-2">auf Anfrage</span>
           </div>
-          <div className="font-inter text-xs text-slate-600 mt-1">10% – 50% Volumen-Rabatt · ab 5 Mitarbeiter</div>
+          <div className="font-inter text-xs text-slate-600 mt-1">10 % – 50 % Volumen-Rabatt · ab 5 Mitarbeitern</div>
           <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06]">
             <Building2 className="w-3 h-3 text-slate-400" />
             <span className="font-inter text-[10px] text-slate-400 font-semibold">Zentrale Lizenzverwaltung</span>
@@ -134,7 +134,7 @@ function PriceBlock({ price, accent, subtitle, valueBadge, testidPrice }) {
       <div className="flex items-baseline gap-1">
         <span className={`font-manrope font-extrabold text-4xl ${priceColor}`} data-testid={testidPrice}>{price}</span>
         <span className={`font-inter text-base ${eurColor}`}>EUR</span>
-        <span className="font-inter text-xs text-slate-600 ml-2">/ 1 Jahr</span>
+        <span className="font-inter text-xs text-slate-600 ml-2">einmalig</span>
       </div>
       <div className="font-inter text-xs text-slate-600 mt-1">{subtitle}</div>
       {valueBadge && (

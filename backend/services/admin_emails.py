@@ -34,7 +34,7 @@ def booking_user_html(name: Optional[str], date: str, time: str) -> str:
 </div>
 <p style="color:#94A3B8;">Wir bestätigen deinen Termin innerhalb von 24 Stunden per E-Mail.</p>
 <p style="color:#C8FF00;font-weight:bold;margin-top:20px;">Bis bald!</p>
-<p style="color:#64748B;font-size:11px;margin-top:30px;">Leader OS · Leadership OS PLUS</p>
+<p style="color:#64748B;font-size:11px;margin-top:30px;">Leader OS · Plus-Plus</p>
 </div></body></html>"""
 
 

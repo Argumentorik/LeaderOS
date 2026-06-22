@@ -130,27 +130,47 @@ export default function HighTicketClose() {
 
         {/* HERO */}
         <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-5 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
+            <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
+              ▸ § 03 / 03 · ENTSCHEIDUNG · BIB · 0001
+            </span>
+          </div>
           {totalScore > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] mb-6 ml-2">
               <Sparkles className="w-4 h-4 text-[#C8FF00]" />
-              <span className="font-inter text-sm text-[#C8FF00] font-medium">Dein Leadership-Score: {totalScore}%</span>
+              <span className="font-inter text-sm text-[#C8FF00] font-medium">Dein Score: {totalScore} %</span>
             </div>
           )}
           <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-5" data-testid="close-headline">
-            Dein Profil ist analysiert.
+            Diagnose ist durch.
             <br />
-            <span className="text-gradient-lime">Jetzt die Transformation.</span>
+            <span className="text-gradient-lime">Jetzt der Sprint.</span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-3">
-            Wähle das Programm, das zu dir passt — von individuellem Self-Learning bis zur Enterprise-Lösung für dein gesamtes Team.
+            30 Tage Sprint mit Wlad. 12 Monate Plattform. Ein KI-Coach der dich kennt.
+            <br className="hidden md:block" />
+            Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
           </p>
+        </div>
+
+        {/* SCARCITY-BAR */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex items-center gap-3 px-4 py-2 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.03]">
+            <span className="relative flex w-2 h-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[#C8FF00] opacity-75 animate-ping" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
+            </span>
+            <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
+              Klasse 0001 · noch <span className="text-[#C8FF00]">18 von 30</span> Charter-Plätzen frei
+            </span>
+          </div>
         </div>
 
         {/* TRUST BAR */}
         <div className="flex items-center justify-center gap-6 mb-14 flex-wrap">
-          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" /><span className="font-inter text-xs text-slate-500">14 Tage Testphase auf alle Pakete</span></div>
-          <div className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-slate-600" /><span className="font-inter text-xs text-slate-500">SSL-verschlüsselt · Stripe</span></div>
-          <div className="flex items-center gap-2"><Lock className="w-3.5 h-3.5 text-slate-600" /><span className="font-inter text-xs text-slate-500">DSGVO-konform</span></div>
+          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" /><span className="font-inter text-xs text-slate-500">14 Tage Geld-zurück auf den Sprint</span></div>
+          <div className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-slate-600" /><span className="font-inter text-xs text-slate-500">SSL · Stripe · DSGVO</span></div>
+          <div className="flex items-center gap-2"><Lock className="w-3.5 h-3.5 text-slate-600" /><span className="font-inter text-xs text-slate-500">400 000+ Klienten · 3x SPIEGEL-Bestseller</span></div>
         </div>
 
         {/* 3-TIER PRICE STACK */}
@@ -232,13 +252,15 @@ export default function HighTicketClose() {
             </span>
           </div>
           <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
-            Die Entscheidung liegt bei dir.
+            Wer heute zögert,
+            <br/>
+            <span className="text-slate-500">führt morgen unter jemandem, der nicht gezögert hat.</span>
           </h2>
           <p className="font-inter text-base text-slate-500 mb-2 max-w-xl mx-auto">
-            {totalScore > 0 ? `Dein Score ist ${totalScore}%. ` : ""}Drei Wege, ein Ziel: Leadership-Souveränität in 12 Monaten.
+            {totalScore > 0 ? `Dein Score: ${totalScore} %. ` : ""}Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
           </p>
           <p className="font-inter text-sm text-[#C8FF00]/80 mb-8 max-w-xl mx-auto">
-            ▸ Klicke direkt auf dein Paket — du wirst zu Stripe weitergeleitet und kannst sofort bezahlen.
+            ▸ Klick direkt auf dein Paket · weiter zu Stripe · Sofort-Zugang per Key
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-3xl mx-auto">
             <button
@@ -247,7 +269,7 @@ export default function HighTicketClose() {
               disabled={isLoading}
               className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white font-manrope font-bold hover:border-[#C8FF00]/30 hover:bg-white/[0.06] transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
             >
-              <span>Leadership OS</span>
+              <span>Sprint sichern</span>
               <span className="text-[#C8FF00]">997 EUR</span>
             </button>
             <button
@@ -257,8 +279,8 @@ export default function HighTicketClose() {
               className="flex-1 px-6 py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
             >
               <Crown className="w-4 h-4" />
-              <span>OS PLUS</span>
-              <span>4.447 EUR</span>
+              <span>Plus-Plus sichern</span>
+              <span>4.797 EUR</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
@@ -270,7 +292,7 @@ export default function HighTicketClose() {
               <span>Enterprise anfragen</span>
             </button>
           </div>
-          <p className="font-inter text-xs text-slate-600 mt-6">14 Tage Testphase · License Key per E-Mail · SSL-verschlüsselt · Powered by Stripe</p>
+          <p className="font-inter text-xs text-slate-600 mt-6">14 Tage Geld-zurück · License Key per E-Mail · SSL · Stripe</p>
           <p className="font-inter text-xs text-slate-600 mt-3">
             Bereits einen Key? <button onClick={() => navigate("/activate")} className="text-[#C8FF00]/70 hover:text-[#C8FF00] underline" data-testid="activate-link">Hier aktivieren</button>
           </p>

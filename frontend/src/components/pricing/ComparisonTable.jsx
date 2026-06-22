@@ -4,13 +4,13 @@ import { COMPARISON_ROWS } from "./pricingConstants";
 export function ComparisonTable() {
   return (
     <div className="glass-card p-8 mb-10 overflow-hidden" data-testid="comparison">
-      <h3 className="font-manrope font-bold text-xl text-white mb-8 text-center">Was du in jedem Paket bekommst</h3>
+      <h3 className="font-manrope font-bold text-xl text-white mb-8 text-center">Was steckt in jedem Paket</h3>
       <div className="overflow-x-auto">
         <div className="grid grid-cols-4 gap-4 text-center mb-4 min-w-[600px]">
           <div />
-          <Header title="Leadership OS" sub="997 EUR" color="text-white" />
-          <Header title="OS PLUS" sub="4.447 EUR" color="text-[#C8FF00]" />
-          <Header title="Enterprise" sub="auf Anfrage" color="text-white" />
+          <Header title="SPRINT" sub="997 EUR" color="text-white" />
+          <Header title="PLUS-PLUS" sub="4.797 EUR" color="text-[#C8FF00]" />
+          <Header title="ENTERPRISE" sub="auf Anfrage" color="text-white" />
         </div>
         {COMPARISON_ROWS.map(([label, os, plus, ent], i) => (
           <div key={i} className="grid grid-cols-4 gap-4 py-2.5 border-b border-white/[0.03] items-center min-w-[600px]">

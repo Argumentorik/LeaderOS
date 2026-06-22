@@ -32,20 +32,20 @@ class PackageConfig(TypedDict, total=False):
 
 PLAN_CONFIG: dict[str, PlanConfig] = {
     "leader_os": {
-        "name": "Leadership OS — 1 Jahr Vollzugang + 12 Videokurse",
+        "name": "Sprint — 30 Tage + 12 Monate Mitgliedschaft",
         "duration_days": 365, "includes_calls": False,
     },
     "leader_os_plus": {
-        "name": "Leadership OS PLUS — 1 Jahr inkl. 12 Einzelcoachings",
+        "name": "Plus-Plus — OS-Jahr inkl. monatliche Live-Sessions mit Wlad",
         "duration_days": 365, "includes_calls": True,
     },
     "leader_os_enterprise": {
-        "name": "Leadership OS ENTERPRISE — B2B-Lizenz",
+        "name": "Leader OS Enterprise — B2B-Lizenz",
         "duration_days": 365, "includes_calls": False,
     },
     # Legacy support — DO NOT introduce new plans here.
     "starter": {"name": "Starter – Video Lessons + Credits", "duration_days": 365, "includes_calls": False},
-    "standard": {"name": "Leadership OS — 1 Jahr Vollzugang", "duration_days": 365, "includes_calls": False},
+    "standard": {"name": "Sprint — 30 Tage + 12 Monate Mitgliedschaft", "duration_days": 365, "includes_calls": False},
     "fasttrack": {"name": "Fast Track – Leadership Accelerator", "duration_days": 365, "includes_calls": True},
 }
 
@@ -54,32 +54,39 @@ PLAN_CONFIG: dict[str, PlanConfig] = {
 
 PACKAGES: dict[str, PackageConfig] = {
     "leader_os_full": {
-        "name": "Leadership OS — Einmalzahlung",
+        "name": "Sprint — Einmalzahlung",
         "amount": 997.00, "currency": "eur", "plan": "leader_os",
         "billing": "one_time", "mode": "payment",
     },
     "leader_os_2rate": {
-        "name": "Leadership OS — 2 Raten à 550 EUR",
+        "name": "Sprint — 2 Raten à 550 EUR",
         "amount": 550.00, "currency": "eur", "plan": "leader_os",
         "billing": "2_rates", "mode": "subscription",
         "interval": "month", "interval_count": 6, "cycles": 2,
         "total_amount": 1100.00,
     },
     "leader_os_12rate": {
-        "name": "Leadership OS — 12 Monatsraten à 99 EUR",
+        "name": "Sprint — 12 Monatsraten à 99 EUR",
         "amount": 99.00, "currency": "eur", "plan": "leader_os",
         "billing": "12_rates", "mode": "subscription",
         "interval": "month", "interval_count": 1, "cycles": 12,
         "total_amount": 1188.00,
     },
     "leader_os_plus": {
-        "name": "Leadership OS PLUS — inkl. 12 Coachings",
-        "amount": 4447.00, "currency": "eur", "plan": "leader_os_plus",
+        "name": "Plus-Plus — OS-Jahr · inkl. monatliche Live mit Wlad",
+        "amount": 4797.00, "currency": "eur", "plan": "leader_os_plus",
         "billing": "one_time", "mode": "payment",
+    },
+    "leader_os_plus_3rate": {
+        "name": "Plus-Plus — 3 Raten à 1.599 EUR",
+        "amount": 1599.00, "currency": "eur", "plan": "leader_os_plus",
+        "billing": "3_rates", "mode": "subscription",
+        "interval": "month", "interval_count": 1, "cycles": 3,
+        "total_amount": 4797.00,
     },
     # Legacy alias — points to leader_os
     "standard_yearly": {
-        "name": "Leadership OS — Einmalzahlung",
+        "name": "Sprint — Einmalzahlung",
         "amount": 997.00, "currency": "eur", "plan": "leader_os",
         "billing": "one_time", "mode": "payment",
     },

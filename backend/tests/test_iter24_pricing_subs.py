@@ -115,7 +115,7 @@ class TestCheckoutEndpoints:
         sid = data["session_id"]
         time.sleep(0.5)
         st = self._status(s, sid).json()
-        assert st.get("amount") == 4447.0
+        assert st.get("amount") == 4797.0
         assert st.get("plan") == "leader_os_plus"
 
     def test_standard_yearly_legacy_alias(self, s):
