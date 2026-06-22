@@ -213,7 +213,7 @@ class TestPayments:
 
 
 # ---------- License keys ----------
-KEY_RX = re.compile(r"^WLADHUB-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
+KEY_RX = re.compile(r"^LEADEROS-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
 
 
 class TestLicense:
@@ -292,6 +292,7 @@ class TestQuizNarrative:
             "role": "ceo",
             "consent_privacy": True,
             "consent_marketing": False,
+            "phone": "+49 151 12345678",
         })
         assert ur.status_code == 200, ur.text
         sid = ur.json()["session_id"]

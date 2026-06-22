@@ -143,8 +143,9 @@ export default function Roadmap() {
           setStrongestRole(sorted[sorted.length - 1][0]);
         }
       }
-    } catch {
+    } catch (err) {
       // Non-critical: report data enhances UX but page works without it
+      if (process.env.NODE_ENV !== "production") console.warn("Roadmap report parse:", err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
