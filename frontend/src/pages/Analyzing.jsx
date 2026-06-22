@@ -6,7 +6,7 @@ import axios from "axios";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const phases = [
-  { icon: Brain, label: "KI-Kompetenz scannen", color: "#C8FF00" },
+  { icon: Brain, label: "KI im Alltag scannen", color: "#C8FF00" },
   { icon: MessageSquare, label: "Kommunikationsstarke messen", color: "#C8FF00" },
   { icon: Target, label: "Management-Effizienz analysieren", color: "#C8FF00" },
   { icon: Users, label: "Team-Leadership bewerten", color: "#C8FF00" },

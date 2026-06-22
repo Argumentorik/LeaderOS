@@ -31,43 +31,43 @@ const layers = [
   {
     num: "01",
     icon: Brain,
-    title: "KI-Kompetenz",
-    subtitle: "Layer 1",
-    desc: "KI als strategischen Hebel nutzen.",
-    points: ["Entscheidungen schneller treffen", "Prozesse automatisieren", "Wettbewerbsvorteile schaffen"],
+    title: "KI",
+    subtitle: "Ebene 01",
+    desc: "Du nutzt KI im Alltag · nicht für Memes.",
+    points: ["Schneller entscheiden", "Routine automatisch", "Vorsprung sichtbar"],
     color: "#C8FF00"
   },
   {
     num: "02",
     icon: MessageSquare,
-    title: "Boardroom-Rhetorik",
-    subtitle: "Layer 2",
-    desc: "Autorität zeigen, wenn es darauf ankommt.",
-    points: ["Argumentationsstruktur", "Klare Kommunikation", "Souveräne Präsenz"],
+    title: "Rhetorik",
+    subtitle: "Ebene 02",
+    desc: "Du sprichst klar · andere folgen.",
+    points: ["Klarer Aufbau", "Echte Worte", "Ruhige Präsenz"],
     color: "#C8FF00"
   },
   {
     num: "03",
     icon: TrendingUp,
-    title: "Strategisches EQ",
-    subtitle: "Layer 3",
-    desc: "Empathie als Führungskraft-Verstärker.",
-    points: ["Teamdynamiken verstehen", "Vertrauen aufbauen", "Konflikte strategisch lösen"],
+    title: "EQ",
+    subtitle: "Ebene 03",
+    desc: "Du verstehst dein Team · sie vertrauen dir.",
+    points: ["Stimmung lesen", "Vertrauen aufbauen", "Konflikte ruhig lösen"],
     color: "#C8FF00"
   }
 ];
 
 const problems = [
-  "Gute Strategen ohne Überzeugungskraft",
-  "Rhetorisch stark, aber ohne KI-Kompetenz",
-  "Empathisch – aber ohne klare Entscheidungsfähigkeit"
+  "Gute Strategen · aber niemand hört zu",
+  "Stark im Reden · aber KI noch nicht im Alltag",
+  "Verstehen Menschen · entscheiden zu langsam"
 ];
 
 const diagnoseSteps = [
-  { num: "1", title: "Diagnose deiner 6 Führungsdimensionen", desc: "" },
-  { num: "2", title: "Deinen persönlichen 3-Layer Score", desc: "KI-Kompetenz · Boardroom-Rhetorik · Strategisches EQ" },
-  { num: "3", title: "Personalisierter 30-Tage-Aktionsplan", desc: "Klare Schritte, um deine Führungswirkung zu erhöhen." },
-  { num: "4", title: "ROI-Prognose", desc: "Eingesparte Stunden · Schnellere Entscheidungen · Höhere Wirkung" }
+  { num: "1", title: "30 Fragen · 6 Führungsdimensionen", desc: "" },
+  { num: "2", title: "Dein Score in drei Ebenen", desc: "KI · Rhetorik · EQ" },
+  { num: "3", title: "Dein persönlicher 30-Tage-Plan", desc: "Konkret · Schritt für Schritt · jeden Tag eine Aufgabe." },
+  { num: "4", title: "ROI-Prognose", desc: "Wieviel Zeit du sparst · wie viel Wirkung du gewinnst" }
 ];
 
 const platformFeatures = [
@@ -80,22 +80,22 @@ const platformFeatures = [
 ];
 
 const wladbotFeatures = [
-  "Vorbereitung schwieriger Gespräche",
-  "Strukturierung von Argumentationen",
-  "Analyse von Führungssituationen",
-  "Simulation von Boardroom-Diskussionen"
+  "Schwierige Gespräche vorher durchspielen",
+  "Argumente strukturieren · in Wlads Sprache",
+  "Führungssituation in 30 Sekunden einordnen",
+  "Schwierige Meetings durchspielen · bevor sie passieren"
 ];
 
 const audiences = [
   {
     icon: Target,
     title: "Selbstständige",
-    desc: "Die KI-Transformation steuern – ohne ihre persönliche Autorität zu verlieren."
+    desc: "KI nutzen · ohne dich selbst zu verlieren."
   },
   {
     icon: Briefcase,
     title: "Angestellte",
-    desc: "Boardroom-Entscheidungen mit strategischem EQ beschleunigen."
+    desc: "Schneller entscheiden · mit klarem Kopf und Bauchgefühl."
   },
   {
     icon: TrendingUp,
@@ -163,22 +163,37 @@ export default function Hero() {
             })}
           </h1>
 
-          {/* Three Skills */}
+          {/* Three Skills — einfache Wörter, keine Jargon */}
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5 mb-10 opacity-0 anim-fade-up delay-2">
-            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">KI-Kompetenz</span>
-            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">Boardroom-Rhetorik</span>
-            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">Strategisches EQ</span>
+            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">KI</span>
+            <span className="font-mono text-xs text-slate-700">·</span>
+            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">Rhetorik</span>
+            <span className="font-mono text-xs text-slate-700">·</span>
+            <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">EQ</span>
           </div>
 
-          {/* Subheadline */}
+          {/* Subheadline — einfache Sprache */}
           <p
-            className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-12 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
+            className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-10 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
             data-testid="hero-subheadline"
           >
-            Die <span className="text-white font-semibold">Leader OS Diagnose</span> zeigt dir in{" "}
-            <span className="text-white font-semibold">10 Minuten</span>, wo du stehst – 
-            und was dich von den <span className="text-[#C8FF00] font-semibold">Top 1 % der Leader</span> trennt.
+            <span className="text-white font-semibold">Zehn Minuten · 30 Fragen · ehrlich beantwortet.</span>{" "}
+            Du bekommst sofort deinen Score in drei Ebenen plus konkreten 30-Tage-Plan.{" "}
+            Kein Login. Kein Spam. <span className="text-[#C8FF00] font-semibold">Sofort umsetzbar.</span>
           </p>
+
+          {/* Scarcity-Bar — wie auf leaderos.de */}
+          <div className="flex justify-center mb-8 opacity-0 anim-fade-up delay-3">
+            <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/[0.08] bg-white/[0.02]">
+              <span className="relative flex w-2 h-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#C8FF00] opacity-75 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
+              </span>
+              <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
+                Klasse 0001 · noch <span className="text-[#C8FF00]">18 von 30</span> Charter-Plätzen frei
+              </span>
+            </div>
+          </div>
 
           {/* CTA */}
           <div className="opacity-0 anim-fade-up delay-4 text-center">
@@ -187,11 +202,11 @@ export default function Hero() {
               onClick={() => navigate("/diagnose")}
               className="btn-primary inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold mb-5"
             >
-              Kostenlose Leadership-Diagnose starten
+              Jetzt Diagnose starten · 10 Min
               <ArrowRight className="w-5 h-5" />
             </button>
             <p className="font-inter text-sm text-slate-600">
-              10 Minuten · Sofortiger Report · Persönlicher Aktionsplan
+              Kostenlos · ohne Login · DSGVO · 100 % anonym
             </p>
           </div>
         </section>
@@ -202,12 +217,12 @@ export default function Hero() {
             <ScrollReveal>
               <div className="text-center mb-20">
                 <span className="inline-block px-4 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold tracking-[0.25em] text-slate-500 uppercase mb-6">
-                  Die Realität moderner Führung
+                  ▸ Das echte Problem
                 </span>
                 <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4 leading-tight">
-                  Viele Führungskräfte sind in einem Bereich stark –
+                  Du bist in einer Sache gut.
                   <br className="hidden md:block" />
-                  <span className="text-slate-500">aber nicht in allen.</span>
+                  <span className="text-slate-500">In zwei wird's eng. In drei selten.</span>
                 </h2>
               </div>
             </ScrollReveal>
@@ -221,7 +236,7 @@ export default function Hero() {
                   <div className="relative">
                     <div className="font-inter text-[10px] tracking-[0.25em] text-red-400/50 uppercase mb-8 flex items-center gap-3">
                       <span className="w-8 h-px bg-red-400/30" />
-                      Typische Muster
+                      ▸ Klingt vertraut?
                     </div>
                     <div className="space-y-6">
                       {problems.map((problem, i) => (
@@ -243,10 +258,10 @@ export default function Hero() {
                   <div className="relative">
                     <div className="font-inter text-[10px] tracking-[0.25em] text-[#C8FF00]/50 uppercase mb-8 flex items-center gap-3">
                       <span className="w-8 h-px bg-[#C8FF00]/30" />
-                      Das Ergebnis
+                      ▸ Das kostet dich
                     </div>
                     <div className="space-y-5">
-                      {["Langsame Entscheidungen.", "Verpasste Chancen.", "Sinkender Einfluss."].map((item, i) => (
+                      {["Langsame Entscheidungen.", "Verpasste Chancen.", "Weniger Einfluss."].map((item, i) => (
                         <div key={`result-${i}`} className="font-manrope font-bold text-xl text-white/90 flex items-center gap-3">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00]/60 shrink-0" />
                           {item}
@@ -255,7 +270,7 @@ export default function Hero() {
                     </div>
                     <div className="mt-8 pt-6 border-t border-[#C8FF00]/[0.08]">
                       <p className="font-inter text-sm text-slate-500 leading-relaxed">
-                        Die Leader OS Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Rolle du vernachlässigst.
+                        Die Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Ebene du vernachlässigst · ohne Bullshit.
                       </p>
                     </div>
                   </div>
@@ -265,18 +280,21 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 3: 3-LAYER MODEL ===== */}
+        {/* ===== SECTION 3: 3-EBENEN-MODELL ===== */}
         <section id="model" className="py-24 border-t border-white/[0.04]">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="text-center mb-16">
               <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-                Das 3-Layer-Modell
+                ▸ Drei Ebenen
               </span>
               <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4">
-                Die besten Führungskräfte kombinieren
+                Top-Führungskräfte können
                 <br />
-                <span className="text-gradient-lime">drei Ebenen gleichzeitig.</span>
+                <span className="text-gradient-lime">alle drei · gleichzeitig.</span>
               </h2>
+              <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto mt-4">
+                KI · Rhetorik · EQ. Wer eine Ebene weglässt, verliert das Spiel · auch wenn er es nicht merkt.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="hero-layers">
@@ -477,7 +495,7 @@ export default function Hero() {
             </div>
             <div className="rounded-xl border border-white/[0.04] bg-white/[0.01] p-4 inline-block">
               <p className="font-inter text-xs text-slate-500">
-                Die Inhalte verbinden <span className="text-slate-400 font-medium">Rhetorik</span>, <span className="text-slate-400 font-medium">Strategie</span> und <span className="text-slate-400 font-medium">KI-Kompetenz</span> in einem strukturierten System.
+                Die Inhalte verbinden <span className="text-slate-400 font-medium">Rhetorik</span>, <span className="text-slate-400 font-medium">Strategie</span> und <span className="text-slate-400 font-medium">KI im Alltag</span> in einem strukturierten System.
               </p>
             </div>
             <div className="mt-6">
@@ -578,7 +596,7 @@ export default function Hero() {
                   <div className="space-y-3 mb-6">
                     {[
                       "KI-Coach für schwierige Gespräche & Entscheidungen",
-                      "Simulations-Agent für Boardroom-Szenarien",
+                      "Schwierige Meetings durchspielen · bevor sie passieren",
                       "Persönlicher Report als PDF herunterladen",
                       "30-Tage-Aktionsplan sofort starten",
                     ].map((item, i) => (
