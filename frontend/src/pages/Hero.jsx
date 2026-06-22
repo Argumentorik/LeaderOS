@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Users, Target, Briefcase, User, Bot, BookOpen, Play, X, Check, CheckSquare, Calendar, MessageCircle, Download } from "lucide-react";
 import { ScrollReveal } from "../hooks/useScrollReveal";
 import { useState, useEffect } from "react";
+import LeaderOSLogo from "../components/LeaderOSLogo";
 
 const headlines = [
   {
@@ -692,12 +693,8 @@ export default function Hero() {
         <footer className="border-t border-white/[0.04] py-8">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="font-manrope font-extrabold tracking-tight">
-                  <span className="text-white">LEADER</span>
-                  <span className="text-[#C8FF00]">/</span>
-                  <span className="text-white">OS</span>
-                </span>
+              <div className="flex items-center gap-3">
+                <LeaderOSLogo variant="default" size="md" />
                 <span className="text-slate-700">|</span>
                 <span className="font-inter text-sm text-slate-500">Leadership Diagnose</span>
               </div>

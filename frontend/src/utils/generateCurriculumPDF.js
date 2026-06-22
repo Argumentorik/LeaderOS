@@ -26,10 +26,10 @@ export function generateCurriculumPDF() {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.setTextColor(...BG);
-  doc.text("L", m + 4.5, y + 10);
+  doc.text("W", m + 4.5, y + 10);
   doc.setFontSize(12);
   doc.setTextColor(...WHITE);
-  doc.text("LEADER/OS", m + 19, y + 6);
+  doc.text("Leader·OS", m + 19, y + 6);
   doc.setFontSize(7);
   doc.setTextColor(...GRAY);
   doc.text("LEADERSHIP DIAGNOSTIC PLATFORM", m + 19, y + 12);

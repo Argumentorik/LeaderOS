@@ -1,12 +1,24 @@
 /**
- * LeaderOSLogo — typographic mark in the Leader OS design system.
- * Pure CSS/SVG (no asset dependency) so it scales crisply at any size.
+ * LeaderOSLogo — official Leader·OS brand mark.
+ *
+ * Assets live in /public:
+ *   - leaderos-logo-dark.png (white wordmark on lime W-pill) → for dark UI
+ *   - leaderos-logo.png      (black wordmark on lime W-pill) → for light UI / PDFs
+ *   - leaderos-mark.png      (just the W-pill mark)           → favicon-like contexts
  *
  * Variants:
- *   - "default": full wordmark "LEADER/OS" inline
- *   - "stacked": LEADER over OS with bracket prefix (used on hero panels)
- *   - "mark": compact "/OS" mark only (favicon-like)
+ *   - "default":  full horizontal wordmark, white text (used on dark navbars)
+ *   - "light":    full horizontal wordmark, black text (light backgrounds)
+ *   - "stacked":  wordmark + tagline underneath
+ *   - "mark":     compact pill mark only
  */
+const SIZES = {
+  sm: 24,
+  md: 32,
+  lg: 48,
+  xl: 64,
+};
+
 export default function LeaderOSLogo({
   variant = "default",
   size = "md",
@@ -14,57 +26,35 @@ export default function LeaderOSLogo({
   className = "",
   testId = "leader-os-logo",
 }) {
-  const sizes = {
-    sm: { text: "text-base", slash: "text-base", tag: "text-[10px]" },
-    md: { text: "text-lg", slash: "text-lg", tag: "text-xs" },
-    lg: { text: "text-2xl", slash: "text-2xl", tag: "text-xs" },
-    xl: { text: "text-3xl md:text-4xl", slash: "text-3xl md:text-4xl", tag: "text-sm" },
-  };
-  const s = sizes[size] || sizes.md;
+  const h = SIZES[size] || SIZES.md;
 
   if (variant === "mark") {
     return (
-      <span
+      <img
         data-testid={testId}
-        className={`inline-flex items-center font-manrope font-extrabold tracking-tight ${s.text} ${className}`}
-      >
-        <span className="text-[#C8FF00]">/</span>
-        <span className="text-white">OS</span>
-      </span>
+        src="/leaderos-mark.png"
+        alt="Leader OS"
+        style={{ height: h, width: "auto" }}
+        className={`inline-block select-none ${className}`}
+        draggable={false}
+      />
     );
   }
 
-  if (variant === "stacked") {
-    return (
-      <div data-testid={testId} className={`inline-flex flex-col ${className}`}>
-        <span className={`font-mono ${s.tag} tracking-[0.25em] text-[#C8FF00]/70 font-bold uppercase`}>
-          ▸ LEADER · OS
-        </span>
-        <span className={`font-manrope font-extrabold tracking-tight ${s.text}`}>
-          <span className="text-white">LEADER</span>
-          <span className="text-[#C8FF00]">/</span>
-          <span className="text-white">OS</span>
-        </span>
-        {showTagline && (
-          <span className="font-inter text-xs text-slate-500 mt-0.5">
-            Leadership Operating System
-          </span>
-        )}
-      </div>
-    );
-  }
+  const src = variant === "light" ? "/leaderos-logo.png" : "/leaderos-logo-dark.png";
 
-  // default — inline wordmark
   return (
     <span
       data-testid={testId}
-      className={`inline-flex items-center gap-2 ${className}`}
+      className={`inline-flex items-center gap-3 select-none ${className}`}
     >
-      <span className={`font-manrope font-extrabold tracking-tight ${s.text}`}>
-        <span className="text-white">LEADER</span>
-        <span className="text-[#C8FF00]">/</span>
-        <span className="text-white">OS</span>
-      </span>
+      <img
+        src={src}
+        alt="Leader OS"
+        style={{ height: h, width: "auto" }}
+        className="inline-block"
+        draggable={false}
+      />
       {showTagline && (
         <>
           <span className="hidden sm:block h-4 w-px bg-white/[0.08]" />

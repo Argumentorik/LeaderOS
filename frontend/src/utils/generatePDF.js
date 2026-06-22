@@ -118,11 +118,11 @@ export function generateReportPDF(report, user) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
   doc.setTextColor(...COLORS.bg);
-  doc.text("L", margin + 4, y + 8.5);
+  doc.text("W", margin + 4, y + 8.5);
 
   doc.setFontSize(11);
   doc.setTextColor(...COLORS.white);
-  doc.text("LEADER/OS", margin + 17, y + 5);
+  doc.text("Leader·OS", margin + 17, y + 5);
   doc.setFontSize(7);
   doc.setTextColor(...COLORS.gray);
   doc.text("LEADERSHIP DIAGNOSTIC PLATFORM", margin + 17, y + 10);
@@ -635,10 +635,10 @@ export function generateRoadmapPDF(report, user, journalEntries = []) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
   doc.setTextColor(...COLORS.bg);
-  doc.text("L", m + 4, y + 8.5);
+  doc.text("W", m + 4, y + 8.5);
   doc.setFontSize(11);
   doc.setTextColor(...COLORS.white);
-  doc.text("LEADER/OS", m + 17, y + 5);
+  doc.text("Leader·OS", m + 17, y + 5);
   doc.setFontSize(7);
   doc.setTextColor(...COLORS.gray);
   doc.text("30-DAY LEADERSHIP UPGRADE", m + 17, y + 10);
