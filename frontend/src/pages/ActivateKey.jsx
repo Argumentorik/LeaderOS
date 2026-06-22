@@ -176,7 +176,7 @@ export default function ActivateKey() {
             <div className="text-center">
               <p className="font-inter text-xs text-slate-600 leading-relaxed">
                 Du hast deinen Key per E-Mail erhalten nach dem Kauf.<br />
-                Bei Problemen: <a href="mailto:support@wladhub.com" className="text-[#C8FF00]/60 hover:text-[#C8FF00]">support@wladhub.com</a>
+                Bei Problemen: <a href="mailto:support@leaderos.de" className="text-[#C8FF00]/60 hover:text-[#C8FF00]">support@leaderos.de</a>
               </p>
             </div>
           </>

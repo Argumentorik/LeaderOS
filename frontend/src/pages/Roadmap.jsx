@@ -161,10 +161,10 @@ export default function Roadmap() {
   // Popup only once per session, with 30s delay
   useEffect(() => {
     if (!showWladBot) return;
-    const alreadyShown = sessionStorage.getItem("wladhub_popup_shown");
+    const alreadyShown = sessionStorage.getItem("leaderos_popup_shown");
     if (alreadyShown) return;
     const timer = setTimeout(() => {
-      sessionStorage.setItem("wladhub_popup_shown", "true");
+      sessionStorage.setItem("leaderos_popup_shown", "true");
       setShowPopup(true);
     }, 30000);
     return () => clearTimeout(timer);

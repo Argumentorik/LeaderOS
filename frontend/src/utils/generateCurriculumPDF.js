@@ -178,5 +178,5 @@ export function generateCurriculumPDF() {
   doc.setFillColor(...LIME);
   doc.rect(0, 295, pw, 2, "F");
 
-  doc.save("WladHub - Leadership Curriculum.pdf");
+  doc.save("Leader OS - Leadership Curriculum.pdf");
 }

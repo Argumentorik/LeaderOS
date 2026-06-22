@@ -111,10 +111,10 @@ const audiences = [
 export default function Hero() {
   const navigate = useNavigate();
   const [headlineIdx] = useState(() => {
-    const stored = sessionStorage.getItem("wladhub_ab");
+    const stored = sessionStorage.getItem("leaderos_ab");
     if (stored !== null) return parseInt(stored, 10);
     const idx = Math.floor(Math.random() * headlines.length);
-    sessionStorage.setItem("wladhub_ab", idx);
+    sessionStorage.setItem("leaderos_ab", idx);
     return idx;
   });
   const hl = headlines[headlineIdx];

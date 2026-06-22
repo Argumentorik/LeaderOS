@@ -46,7 +46,7 @@ async def fetch_auth_data(session_id: str):
 
 
 async def upsert_user(db, auth_data: dict) -> str:
-    email = auth_data.get("email")
+    email = (auth_data.get("email") or "").lower().strip()
     name = auth_data.get("name")
     picture = auth_data.get("picture", "")
     existing_user = await db.users.find_one({"email": email}, {"_id": 0})
@@ -169,9 +169,9 @@ def register_auth_routes(router: APIRouter, db):
             digits = "".join(ch for ch in identifier if ch.isdigit())
             if len(digits) < 6:
                 raise HTTPException(status_code=400, detail="Invalid identifier")
-            # Match last 8 digits (handles +49 / 0049 / 0151 variants)
+            # Match last 8 digits at the END of stored phone (handles +49 / 0049 / 0151 variants)
             tail = digits[-8:]
-            query = {"phone": {"$regex": tail}}
+            query = {"phone": {"$regex": f"{tail}$"}}
 
         user = await db.users.find_one(query, {"_id": 0})
         if not user:

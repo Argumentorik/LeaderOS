@@ -534,7 +534,7 @@ export function generateReportPDF(report, user) {
 
   // Save
   const safeName = safeFilename(userName);
-  doc.save(`WladHub - ${safeName} AI Report.pdf`);
+  doc.save(`Leader OS - ${safeName} AI Report.pdf`);
 }
 
 
@@ -874,5 +874,5 @@ export function generateRoadmapPDF(report, user, journalEntries = []) {
   doc.rect(0, 295, pw, 2, "F");
 
   const safe = safeFilename(userName);
-  doc.save(`WladHub - ${safe} 30-Tage-Plan.pdf`);
+  doc.save(`Leader OS - ${safe} 30-Tage-Plan.pdf`);
 }
