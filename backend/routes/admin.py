@@ -243,9 +243,11 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
         expected = config.get("admin_password", "")
         if not expected:
             raise HTTPException(status_code=500, detail="Admin password not configured")
-        if not hmac.compare_digest(data.password, expected):
-            # uniform-latency to mitigate timing attacks
-            await asyncio.sleep(0.3)
+        # Constant-time password compare + uniform 300ms latency on BOTH branches
+        # mitigates timing-side-channel attacks against the admin login.
+        valid = hmac.compare_digest(data.password, expected)
+        await asyncio.sleep(0.3)
+        if not valid:
             raise HTTPException(status_code=401, detail="Invalid password")
         token = issue_admin_token()
         return {"ok": True, "token": token, "expires_in_hours": ADMIN_TOKEN_TTL_HOURS}

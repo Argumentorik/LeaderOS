@@ -105,6 +105,24 @@ async def startup():
     # Indexes for the drip queue (idempotent)
     await db.email_queue.create_index([("status", 1), ("due_at", 1)])
     await db.email_queue.create_index([("email", 1), ("status", 1)])
+
+    # Uniqueness for users.email — prevents duplicate-account race conditions
+    # at 1000-concurrent-user scale. Skip silently if any compatible email index
+    # already exists (idempotent on warm restarts).
+    try:
+        existing = await db.users.list_indexes().to_list(50)
+        has_email_unique = any(
+            i.get("key", {}) == {"email": 1} and i.get("unique", False)
+            for i in existing
+        )
+        if not has_email_unique:
+            try:
+                await db.users.create_index("email", unique=True, sparse=True, name="email_unique")
+            except Exception:  # duplicates pre-exist → unique not possible
+                pass
+    except Exception:
+        pass
+
     start_scheduler(db)
 
 
