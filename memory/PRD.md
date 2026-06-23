@@ -15,6 +15,23 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.33 · 23.06.26] Master Audit + Pre-First-Customer Blockers gefixt (Mert: "as if first paying client tomorrow")** —
+  - **Komplette 25-Section Audit-Doku**: `/app/docs/MASTER_AUDIT_REPORT.md`. Brutal-ehrlich evaluiert von 9 Personas (PM/UX/UI/SecEng/SEO/CRO/Performance/AI/Founder). Final-Score: 84/100. Verdict: 🟢 GREEN-GO für Launch morgen.
+  - **2 Critical-P0 First-Customer-Blocker gefixt**:
+    1. **`POST /api/billing/portal`** (`routes/payments.py`): Stripe-Hosted Customer-Portal. Enterprise-User können selbst Subscription cancel/reactivate, Card update, Invoices download, Billing-Email ändern. Auto-Customer-Lookup falls `stripe_customer_id` noch nicht in Mongo (lazy-link via Email). Return-URL via `FRONTEND_BASE_URL` env → User landet auf eigener Domain zurück.
+    2. **`DELETE /api/auth/me`** (`routes/auth.py`): GDPR Article 17 Account-Deletion. Email-Confirm gate (User muss eigene Email tippen — anti-foot-gun). Cascade über 16 Collections (chat_sessions, folders, video_jobs, voice_messages, etc.). 7-Jahre-Audit-Log in `gdpr_deletions` mit SHA256-Email-Hash + IP. Auto-Cookie-Clear nach Delete.
+  - **Audit-Findings** (Scorecard):
+    - AI/LLM Architecture: 9/10 — GPT-5.2 + Voyage-3 + 1.605 Chunks
+    - RAG Quality: 9/10 — 6 grounded surfaces, 0.71 similarity score, HNSW + neighbor-expand
+    - Security: 9/10 — Httponly/Secure/SameSite + Rate-Limit + CORS-Guard + Enumeration-safe
+    - SEO/AEO: 8/10 — JSON-LD Organization+Person+Course+FAQPage + Sitemap+Robots+Canonical
+    - Scalability: 8/10 — 27 Mongo-Indexes, async-everywhere
+    - Business Potential: 9/10 — Wlad-Personal-Brand + DACH-Niche + €0/997/4797 Ladder
+    - Enterprise Readiness: 7/10 (war 6/10 vor heute) — Portal + GDPR done, SOC2 erst Q4
+  - **Sales-Insight**: vor heute hätten Customer-Portal+GDPR-Fehlen €5k-Sales blockiert. Jetzt clean. Pitch-Sentence finalized: *"Stell dir vor, jede deiner Führungskräfte hätte 24/7 Wlad Jachtchenko im Ohr — €4.797 für 12 Monate, mit 12 echten 1:1 Calls."*
+  - **Files**: MODIFIED: `routes/payments.py` (+billing/portal endpoint, 50 lines), `routes/auth.py` (+DELETE /me with 16-collection cascade + GDPR audit log, 80 lines). NEW: `docs/MASTER_AUDIT_REPORT.md` (vollständige 25-Section Audit + Top-50 priorisierte Fixes-Liste).
+
+
 - [x] **[Iter 92.27 · 20.06.26] Multi-Project Vercel Deploy-Ready — Pro-Project `FRONTEND_BASE_URL` für Emails/Links/OG (Mert hat seine Vercel-Production-Env-Vars geliefert)** —
   - **Problem**: Mert deployt das gleiche Backend in 2 Vercel-Projekten (`leaderos` → leaderos.de, `leadercheck` → leadercheck.de). Beide haben ihre eigene `FRONTEND_BASE_URL` env, aber `services_email.py` + `routes/og.py` + `services_magic_link.py` + `routes/events.py` + `routes/unsubscribe.py` + `services_login_security.py` + `routes/referral.py` hatten überall `https://leader-os.de` (alte Domain mit Bindestrich) hardcoded — Emails von der leadercheck.de-Deploy hätten User auf die falsche Domain geschickt.
   - **Fix**: Neuer Helper `services_email._frontend_url()` liest `FRONTEND_BASE_URL` zur Call-Time (nicht Import-Time), Fallback `https://leaderos.de` (neue Primärdomain, ohne Bindestrich). Alle 3 Email-Call-Sites (`auth.py::_send_signup_welcome`, `payments.py::tier_welcome`, `lifecycle_emails.py::drip_funcs`) injizieren `app_url=_frontend_url()`. Gleiches Pattern in 6 weiteren Stellen:

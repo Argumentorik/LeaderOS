@@ -701,6 +701,65 @@ async def cron_monthly_scorecard(request: Request) -> dict:
     return {"sent": sent, "scanned": len(accelerator_users), "month": month_key}
 
 
+# ── Stripe Customer Portal — Iter 92.33 (Mert pre-first-customer audit) ──
+# Enterprise buyers (€4.797) DEMAND self-service: cancel, update card, view
+# invoices, change billing email. Without this we look like a hobby project.
+# Returns a short-lived URL that the frontend redirects to.
+
+@router.post("/billing/portal")
+async def create_billing_portal_session(request: Request):
+    """Create a Stripe Billing Portal session for the logged-in user.
+    The portal handles: subscription cancel/reactivate, card update, invoice
+    download, billing-address edit. We never touch this UI ourselves — Stripe
+    hosts + handles all PCI/VAT concerns.
+    """
+    user = await get_current_user(request)
+    if not STRIPE_API_KEY:
+        raise HTTPException(status_code=503, detail="Billing system not configured")
+
+    stripe_customer_id = (user or {}).get("stripe_customer_id")
+    if not stripe_customer_id:
+        # Fallback: try to find the customer by email (lazy-link if Stripe Checkout
+        # was completed before we stored the customer_id back to Mongo).
+        email = (user or {}).get("email", "").strip().lower()
+        if not email:
+            raise HTTPException(status_code=400, detail="No Stripe customer linked to this account.")
+        try:
+            import stripe
+            stripe.api_key = STRIPE_API_KEY
+            search = stripe.Customer.list(email=email, limit=1)
+            if search.data:
+                stripe_customer_id = search.data[0].id
+                await db.users.update_one(
+                    {"user_id": user["user_id"]},
+                    {"$set": {"stripe_customer_id": stripe_customer_id}},
+                )
+            else:
+                raise HTTPException(status_code=400, detail="No active subscription found.")
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Stripe customer lookup failed: {e}")
+            raise HTTPException(status_code=502, detail="Could not reach Stripe.")
+
+    # Return-URL = same domain the request came from (per FRONTEND_BASE_URL env).
+    return_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/") + "/profile?tab=billing"
+
+    try:
+        import stripe
+        stripe.api_key = STRIPE_API_KEY
+        session = stripe.billing_portal.Session.create(
+            customer=stripe_customer_id,
+            return_url=return_url,
+        )
+        return {"url": session.url}
+    except Exception as e:
+        logger.error(f"Stripe Portal session failed for {user.get('user_id')}: {e}")
+        raise HTTPException(status_code=502, detail="Could not create billing portal session.")
+
+
+
+
 
 # ── Enterprise Quote + Lead Form ──────────────────────────────────────────
 
