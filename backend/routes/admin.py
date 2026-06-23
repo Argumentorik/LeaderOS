@@ -5,7 +5,7 @@
 
 Email templates and pricing logic live in /backend/services/.
 """
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, Request
 from datetime import datetime, timezone, timedelta
 import asyncio
 import os
@@ -15,6 +15,7 @@ import base64
 import json
 import resend
 import logging
+from collections import defaultdict
 
 from models import BookingRequest, EnterpriseInquiry
 from pydantic import BaseModel
@@ -88,6 +89,28 @@ async def require_admin(authorization: str | None = Header(default=None)) -> Non
     token = authorization[7:]
     if not _verify_admin_token(token):
         raise HTTPException(status_code=401, detail="Invalid or expired admin token")
+
+
+# ─── Brute-force protection: in-memory sliding window ─────
+
+_LOGIN_ATTEMPTS: dict[str, list[float]] = defaultdict(list)
+_MAX_ATTEMPTS_PER_15MIN = 5
+
+
+def _check_login_rate(ip: str) -> bool:
+    """True if allowed. False if rate-limited. 5 failed attempts / 15 min / IP."""
+    now = datetime.now(timezone.utc).timestamp()
+    cutoff = now - 900  # 15 min
+    _LOGIN_ATTEMPTS[ip] = [t for t in _LOGIN_ATTEMPTS[ip] if t > cutoff]
+    if len(_LOGIN_ATTEMPTS[ip]) >= _MAX_ATTEMPTS_PER_15MIN:
+        return False
+    _LOGIN_ATTEMPTS[ip].append(now)
+    return True
+
+
+def _reset_login_rate(ip: str) -> None:
+    """Clear counter on successful login (prevents lockout of legit admin)."""
+    _LOGIN_ATTEMPTS.pop(ip, None)
 
 
 
@@ -239,7 +262,12 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
     """Admin dashboard: login, stats, users, transactions, email logs."""
 
     @router.post("/admin/login")
-    async def admin_login(data: AdminLogin) -> dict:
+    async def admin_login(data: AdminLogin, request: Request) -> dict:
+        # Resolve real client IP through K8s ingress (X-Forwarded-For chain).
+        xff = request.headers.get("x-forwarded-for", "")
+        client_ip = xff.split(",")[0].strip() if xff else (request.client.host if request.client else "unknown")
+        if not _check_login_rate(client_ip):
+            raise HTTPException(status_code=429, detail="Too many login attempts. Try again in 15 min.")
         expected = config.get("admin_password", "")
         if not expected:
             raise HTTPException(status_code=500, detail="Admin password not configured")
@@ -249,6 +277,7 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
         await asyncio.sleep(0.3)
         if not valid:
             raise HTTPException(status_code=401, detail="Invalid password")
+        _reset_login_rate(client_ip)
         token = issue_admin_token()
         return {"ok": True, "token": token, "expires_in_hours": ADMIN_TOKEN_TTL_HOURS}
 

@@ -157,8 +157,12 @@ def register_auth_routes(router: APIRouter, db):
         their session. Unknown identifiers return 404 so the frontend can
         route into the diagnosis funnel with a prefill.
         """
-        identifier = (payload or {}).get("identifier", "").strip()
-        if not identifier:
+        raw = (payload or {}).get("identifier")
+        # NoSQL-injection guard: reject non-string identifiers (e.g. {"$ne": null})
+        if not isinstance(raw, str):
+            raise HTTPException(status_code=400, detail="Identifier must be a string")
+        identifier = raw.strip()
+        if not identifier or len(identifier) > 254:
             raise HTTPException(status_code=400, detail="Identifier required")
 
         looks_like_email = "@" in identifier

@@ -74,21 +74,37 @@ async def health_check():
     return {"status": "healthy", "service": "Leader OS Leadership Diagnose"}
 
 
+import html as html_lib
+
+
+def _sanitize_user_input(s: str | None, max_len: int = 200) -> str:
+    """Strip HTML/script tags + length limit. Used for user-supplied fields
+    that get embedded in HTML emails. React UI is safe by default; emails are
+    raw HTML templates and need escaping at input time.
+    """
+    if not s:
+        return ""
+    return html_lib.escape(s.strip()[:max_len], quote=True)
+
+
 @api_router.post("/user/create")
 async def create_user(data: UserCreate):
     session_id = str(uuid.uuid4())
+    safe_name = _sanitize_user_input(data.name, 100)
+    safe_email = (data.email or "").lower().strip()[:254]
+    safe_phone = _sanitize_user_input(data.phone, 30)
     doc = {
         "session_id": session_id,
         "user_id": f"user_{uuid.uuid4().hex[:12]}",
-        "name": data.name, "email": data.email, "phone": data.phone, "role": data.role,
-        "custom_role": data.custom_role,
+        "name": safe_name, "email": safe_email, "phone": safe_phone, "role": data.role,
+        "custom_role": _sanitize_user_input(data.custom_role, 100) if data.custom_role else None,
         "consent_privacy": data.consent_privacy,
         "consent_marketing": data.consent_marketing,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(doc)
-    asyncio.create_task(send_welcome_email_background(db, config, data.name, data.email, data.role))
-    return {"session_id": session_id, "name": data.name, "email": data.email, "role": data.role}
+    asyncio.create_task(send_welcome_email_background(db, config, safe_name, safe_email, data.role))
+    return {"session_id": session_id, "name": safe_name, "email": safe_email, "role": data.role}
 
 
 @api_router.get("/")
