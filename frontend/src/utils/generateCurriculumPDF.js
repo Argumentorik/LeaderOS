@@ -170,7 +170,7 @@ export function generateCurriculumPDF() {
   doc.setFont("helvetica", "italic");
   doc.setFontSize(9);
   doc.setTextColor(...WHITE);
-  doc.text('"Technisches Wissen schafft Experten. Leadership Mastery schafft Impact."', pw / 2, y, { align: "center" });
+  doc.text('"Wissen macht dich zum Experten. Anwendung macht dich zum Leader."', pw / 2, y, { align: "center" });
 
   doc.setFontSize(6);
   doc.setTextColor(60, 60, 70);

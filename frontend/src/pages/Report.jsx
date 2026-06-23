@@ -402,17 +402,19 @@ export default function Report() {
           </div>
         )}
 
-        {/* CREDO: Mastering the 5 Roles */}
+        {/* CREDO — einfache Wlad-Sprache, kein Boilerplate-Englisch */}
         <div className="glass-card p-8 md:p-10 mb-10 text-center" data-testid="report-credo">
           <div className="badge-lime px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 mb-6">
             <Shield className="w-3 h-3" />
-            THE IDEAL LEADER
+            DIE 6 ROLLEN · WLAD-METHODIK
           </div>
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-6">
-            Mastering the 6 Roles of the Ideal Leader
+            Top-Führungskräfte können alle 6 Rollen.
+            <br />
+            <span className="text-slate-500">Nicht eine. Nicht zwei. Alle.</span>
           </h2>
           <p className="font-inter text-slate-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Moderne Führung erfordert die Beherrschung aller sechs Rollen. Die 6. Rolle – der Innovator – befähigt dich, schneller zu lösen, gesehen zu werden und dir einen entscheidenden Vorteil auf dem Arbeitsmarkt zu schaffen.
+            Kommunikator · Manager · Team Leader · Psychologe · Problemlöser · Innovator. Die 6. Rolle — der Innovator — ist die, die dich heute vom Mittelfeld trennt. Wer KI als Hebel nutzt, statt sie zu fürchten, führt in 12 Monaten den ganzen Bereich.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {roleConfig.map((role) => (
@@ -423,9 +425,9 @@ export default function Report() {
             ))}
           </div>
           <div className="border-t border-white/5 pt-8 max-w-lg mx-auto">
-            <p className="font-inter text-slate-500 mb-3">Technisches Wissen schafft Experten.</p>
+            <p className="font-inter text-slate-500 mb-3">Wissen macht dich zum Experten.</p>
             <p className="font-manrope font-bold text-xl text-white">
-              Leadership Mastery schafft <span className="text-gradient-lime">Impact.</span>
+              Anwendung macht dich zum <span className="text-gradient-lime">Leader.</span>
             </p>
           </div>
         </div>
