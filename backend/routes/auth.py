@@ -655,21 +655,40 @@ async def magic_link_request(data: MagicLinkRequest, request: Request):
     email = data.email.strip().lower()
     ip = _get_client_ip(request)
 
-    # Reuse brute-force collection as a soft cap (max 5 magic links per email per 15min)
-    recent = await db.login_attempts.count_documents({
+    # Iter 92.31 (Mert pre-launch hardening): tightened rate-limit per
+    # Pre-Launch-Checkliste — magic-link is the most-abused passwordless
+    # surface, so we cap at:
+    #   (1) 3 emails per HOUR per (email, ip) combo
+    #   (2) 10 emails per HOUR per IP across ALL emails (anti-spray)
+    # Both rules emit identical "Zu viele Anfragen" so we never leak which
+    # one tripped — preserves email-enumeration safety.
+    now = datetime.now(timezone.utc)
+    one_hour_ago = now - timedelta(hours=1)
+
+    # Rule 1: same email + ip
+    same_pair = await db.login_attempts.count_documents({
         "email": f"magic:{email}",
         "ip": ip,
-        "created_at": {"$gte": datetime.now(timezone.utc) - timedelta(minutes=15)},
+        "created_at": {"$gte": one_hour_ago},
     })
-    if recent >= 5:
-        raise HTTPException(status_code=429, detail="Zu viele Magic-Link-Anfragen. Bitte warte 15 Minuten.")
+    if same_pair >= 3:
+        raise HTTPException(status_code=429, detail="Zu viele Magic-Link-Anfragen. Bitte warte 1 Stunde.")
+
+    # Rule 2: same ip across all magic-link emails (anti-spray / bot)
+    any_email_same_ip = await db.login_attempts.count_documents({
+        "email": {"$regex": "^magic:"},
+        "ip": ip,
+        "created_at": {"$gte": one_hour_ago},
+    })
+    if any_email_same_ip >= 10:
+        raise HTTPException(status_code=429, detail="Zu viele Magic-Link-Anfragen. Bitte warte 1 Stunde.")
 
     await db.login_attempts.insert_one({
         "email": f"magic:{email}",
         "ip": ip,
         "success": True,
-        "created_at": datetime.now(timezone.utc),
-        "expires_at": datetime.now(timezone.utc) + timedelta(hours=1),
+        "created_at": now,
+        "expires_at": now + timedelta(hours=2),  # TTL — auto-purge old entries
     })
 
     token = await create_token(email, ip)
