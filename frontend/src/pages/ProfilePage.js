@@ -8,6 +8,7 @@ import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import { ProfileAccountTab } from '../components/profile/ProfileAccountTab';
+import { BillingSection } from '../components/profile/BillingSection';
 import { ProfileSecurityTab } from '../components/profile/ProfileSecurityTab';
 import { GdprSection } from '../components/profile/GdprSection';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -434,6 +435,7 @@ export default function ProfilePage() {
 
           <TabsContent value="account" className="mt-4 space-y-4">
             <ProfileAccountTab de={de} />
+            <BillingSection de={de} />
             <GdprSection de={de} />
           </TabsContent>
 
