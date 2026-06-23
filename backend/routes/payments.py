@@ -5,7 +5,7 @@
 Heavy logic (key generation, plan→amount mapping, subscription params) lives in
 /backend/services/license_keys.py to keep route handlers small and testable.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
 from datetime import datetime, timezone, timedelta
 from emergentintegrations.payments.stripe.checkout import (
     StripeCheckout, CheckoutSessionRequest, CheckoutStatusResponse
@@ -294,8 +294,9 @@ def register_checkout_routes(router: APIRouter, db, app_config):
 
 def register_license_routes(router: APIRouter, db, app_config: dict) -> None:
     """License key lifecycle: create / activate / validate / list / revoke."""
+    from routes.admin import require_admin
 
-    @router.post("/license/create")
+    @router.post("/license/create", dependencies=[Depends(require_admin)])
     async def create_license_key_endpoint(data: LicenseKeyCreate) -> dict:
         key = await create_license_key_internal(db, plan=data.plan, email=data.email, name=data.name, source="manual", notes=data.notes)
         await _send_license_key_email(app_config, data.email or "", data.name or "", data.plan, key)
@@ -350,12 +351,12 @@ def register_license_routes(router: APIRouter, db, app_config: dict) -> None:
             return {"valid": True, "status": "used", "plan": key_doc["plan"], "activated_by": key_doc.get("activated_by"), "expires_at": expires_at}
         return {"valid": False, "status": status, "message": f"Key Status: {status}"}
 
-    @router.get("/license/list")
+    @router.get("/license/list", dependencies=[Depends(require_admin)])
     async def list_license_keys() -> dict:
         keys = await db.license_keys.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"keys": keys, "total": len(keys)}
 
-    @router.post("/license/revoke/{key}")
+    @router.post("/license/revoke/{key}", dependencies=[Depends(require_admin)])
     async def revoke_license_key(key: str) -> dict:
         result = await db.license_keys.update_one(
             {"key": key.upper().strip()},

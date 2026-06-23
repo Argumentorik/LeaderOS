@@ -16,7 +16,8 @@ const TABS = [
 ];
 
 export default function Admin() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState(() => localStorage.getItem("leaderos_admin_token") || "");
+  const [authenticated, setAuthenticated] = useState(!!localStorage.getItem("leaderos_admin_token"));
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -29,38 +30,56 @@ export default function Admin() {
   const [tab, setTab] = useState("overview");
   const [loading, setLoading] = useState(false);
 
+  const authHeaders = useCallback(() => ({
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  }), [token]);
+
+  const handleAuthFailure = useCallback(() => {
+    localStorage.removeItem("leaderos_admin_token");
+    setToken("");
+    setAuthenticated(false);
+  }, []);
+
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
+      const headers = { "Authorization": `Bearer ${token}` };
+      const fetchJson = async (url) => {
+        const r = await fetch(url, { headers });
+        if (r.status === 401) { handleAuthFailure(); throw new Error("auth_expired"); }
+        return r.json();
+      };
       const [s, k, u, t, em, bk] = await Promise.all([
-        fetch(`${API}/api/admin/stats`).then(r => r.json()),
-        fetch(`${API}/api/license/list`).then(r => r.json()),
-        fetch(`${API}/api/admin/users`).then(r => r.json()),
-        fetch(`${API}/api/admin/transactions`).then(r => r.json()),
-        fetch(`${API}/api/admin/emails`).then(r => r.json()),
-        fetch(`${API}/api/booking/list`).then(r => r.json()),
+        fetchJson(`${API}/api/admin/stats`),
+        fetchJson(`${API}/api/license/list`),
+        fetchJson(`${API}/api/admin/users`),
+        fetchJson(`${API}/api/admin/transactions`),
+        fetchJson(`${API}/api/admin/emails`),
+        fetchJson(`${API}/api/booking/list`),
       ]);
       setStats(s); setKeys(k.keys || []); setUsers(u.users || []);
       setTransactions(t.transactions || []); setEmails(em.emails || []);
       setBookings(bk.bookings || []);
     } catch (e) { console.error(e); }
     setLoading(false);
-  }, []);
+  }, [token, handleAuthFailure]);
 
-  useEffect(() => { if (authenticated) fetchAll(); }, [authenticated, fetchAll]);
+  useEffect(() => { if (authenticated && token) fetchAll(); }, [authenticated, token, fetchAll]);
 
   const createKey = async (plan, email, name) => {
     const res = await fetch(`${API}/api/license/create`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
+      method: "POST", headers: authHeaders(),
       body: JSON.stringify({ plan, email, name }),
     });
+    if (res.status === 401) { handleAuthFailure(); return null; }
     const data = await res.json();
     fetchAll();
     return data.key;
   };
 
   const revokeKey = async (key) => {
-    await fetch(`${API}/api/license/revoke/${key}`, { method: "POST" });
+    await fetch(`${API}/api/license/revoke/${key}`, { method: "POST", headers: authHeaders() });
     fetchAll();
   };
 
@@ -75,6 +94,14 @@ export default function Admin() {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
+        const data = await res.json();
+        const t = data?.token || "";
+        if (!t) {
+          setAuthError("Login response invalid.");
+          return;
+        }
+        localStorage.setItem("leaderos_admin_token", t);
+        setToken(t);
         setAuthenticated(true);
       } else {
         setAuthError("Falsches Passwort");

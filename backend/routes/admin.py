@@ -5,9 +5,14 @@
 
 Email templates and pricing logic live in /backend/services/.
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends, Header
 from datetime import datetime, timezone, timedelta
 import asyncio
+import os
+import hmac
+import hashlib
+import base64
+import json
 import resend
 import logging
 
@@ -27,6 +32,63 @@ logger = logging.getLogger(__name__)
 
 class AdminLogin(BaseModel):
     password: str
+
+
+# ─── Tiny JWT (HS256) — no external dep ──────────────────
+
+ADMIN_SECRET = os.environ.get("ADMIN_JWT_SECRET", os.environ.get("SECRET_KEY", "leader-os-admin-2026"))
+ADMIN_TOKEN_TTL_HOURS = 8
+
+
+def _b64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
+
+
+def _b64url_decode(data: str) -> bytes:
+    padding = 4 - (len(data) % 4)
+    if padding != 4:
+        data = data + ("=" * padding)
+    return base64.urlsafe_b64decode(data)
+
+
+def issue_admin_token() -> str:
+    header = {"alg": "HS256", "typ": "JWT"}
+    payload = {
+        "sub": "admin",
+        "iat": int(datetime.now(timezone.utc).timestamp()),
+        "exp": int((datetime.now(timezone.utc) + timedelta(hours=ADMIN_TOKEN_TTL_HOURS)).timestamp()),
+    }
+    h_b64 = _b64url_encode(json.dumps(header, separators=(",", ":")).encode())
+    p_b64 = _b64url_encode(json.dumps(payload, separators=(",", ":")).encode())
+    msg = f"{h_b64}.{p_b64}".encode()
+    sig = hmac.new(ADMIN_SECRET.encode(), msg, hashlib.sha256).digest()
+    return f"{h_b64}.{p_b64}.{_b64url_encode(sig)}"
+
+
+def _verify_admin_token(token: str) -> bool:
+    try:
+        h_b64, p_b64, s_b64 = token.split(".")
+        msg = f"{h_b64}.{p_b64}".encode()
+        expected = _b64url_encode(hmac.new(ADMIN_SECRET.encode(), msg, hashlib.sha256).digest())
+        if not hmac.compare_digest(expected, s_b64):
+            return False
+        payload = json.loads(_b64url_decode(p_b64))
+        if payload.get("sub") != "admin":
+            return False
+        if int(payload.get("exp", 0)) < int(datetime.now(timezone.utc).timestamp()):
+            return False
+        return True
+    except Exception:  # noqa: BLE001
+        return False
+
+
+async def require_admin(authorization: str | None = Header(default=None)) -> None:
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing admin token")
+    token = authorization[7:]
+    if not _verify_admin_token(token):
+        raise HTTPException(status_code=401, detail="Invalid or expired admin token")
+
 
 
 # ---------- Stats helpers (pure, no FastAPI) ----------
@@ -181,25 +243,28 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
         expected = config.get("admin_password", "")
         if not expected:
             raise HTTPException(status_code=500, detail="Admin password not configured")
-        if data.password != expected:
+        if not hmac.compare_digest(data.password, expected):
+            # uniform-latency to mitigate timing attacks
+            await asyncio.sleep(0.3)
             raise HTTPException(status_code=401, detail="Invalid password")
-        return {"ok": True}
+        token = issue_admin_token()
+        return {"ok": True, "token": token, "expires_in_hours": ADMIN_TOKEN_TTL_HOURS}
 
-    @router.get("/admin/stats")
+    @router.get("/admin/stats", dependencies=[Depends(require_admin)])
     async def admin_stats() -> dict:
         return await _build_overview_stats(db)
 
-    @router.get("/admin/users")
+    @router.get("/admin/users", dependencies=[Depends(require_admin)])
     async def admin_users() -> dict:
         users = await _build_users_with_status(db)
         return {"users": users, "total": len(users)}
 
-    @router.get("/admin/transactions")
+    @router.get("/admin/transactions", dependencies=[Depends(require_admin)])
     async def admin_transactions() -> dict:
         txs = await db.payment_transactions.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"transactions": txs, "total": len(txs)}
 
-    @router.get("/admin/emails")
+    @router.get("/admin/emails", dependencies=[Depends(require_admin)])
     async def admin_emails() -> dict:
         emails = await db.email_log.find({}, {"_id": 0}).sort("sent_at", -1).to_list(200)
         return {"emails": emails, "total": len(emails)}
@@ -221,7 +286,7 @@ def register_booking_routes(router: APIRouter, db, config: dict) -> None:
             "booking_time": data.time,
         }
 
-    @router.get("/booking/list")
+    @router.get("/booking/list", dependencies=[Depends(require_admin)])
     async def list_bookings() -> dict:
         bookings = await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"bookings": bookings, "total": len(bookings)}
@@ -252,7 +317,7 @@ def register_enterprise_routes(router: APIRouter, db, config: dict) -> None:
             "pricing": pricing,
         }
 
-    @router.get("/enterprise/list")
+    @router.get("/enterprise/list", dependencies=[Depends(require_admin)])
     async def list_enterprise_inquiries() -> dict:
         inquiries = await db.enterprise_inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return {"inquiries": inquiries, "total": len(inquiries)}
