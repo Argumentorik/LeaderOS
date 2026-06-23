@@ -300,6 +300,61 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
         emails = await db.email_log.find({}, {"_id": 0}).sort("sent_at", -1).to_list(200)
         return {"emails": emails, "total": len(emails)}
 
+    @router.get("/admin/funnel-chart", dependencies=[Depends(require_admin)])
+    async def admin_funnel_chart(days: int = 7) -> dict:
+        """7-day (or N-day) funnel breakdown — leads vs reports vs payments per day.
+        Counts:
+          - leads:    users.created_at
+          - reports:  reports (uniquely by session_id)
+          - payments: payment_transactions where payment_status == "paid"
+        """
+        days = max(1, min(days, 90))
+        end = datetime.now(timezone.utc)
+        start = end - timedelta(days=days)
+        start_iso = start.isoformat()
+
+        # Aggregations grouped by date (ISO 'YYYY-MM-DD' prefix)
+        def _pipe(match):
+            return [
+                {"$match": match},
+                {"$group": {"_id": {"$substr": ["$created_at", 0, 10]}, "n": {"$sum": 1}}},
+                {"$sort": {"_id": 1}},
+            ]
+        leads = await db.users.aggregate(_pipe({"created_at": {"$gte": start_iso}})).to_list(100)
+        reports_agg = await db.reports.aggregate(_pipe({"created_at": {"$gte": start_iso}})).to_list(100)
+        payments_agg = await db.payment_transactions.aggregate(
+            _pipe({"created_at": {"$gte": start_iso}, "payment_status": "paid"})
+        ).to_list(100)
+
+        def to_map(rows):
+            return {r["_id"]: r["n"] for r in rows if r.get("_id")}
+
+        leads_map, reports_map, payments_map = to_map(leads), to_map(reports_agg), to_map(payments_agg)
+
+        # Build day-by-day series (fills in zero-days)
+        series = []
+        for i in range(days):
+            d = (start + timedelta(days=i)).strftime("%Y-%m-%d")
+            series.append({
+                "date": d,
+                "leads": leads_map.get(d, 0),
+                "reports": reports_map.get(d, 0),
+                "payments": payments_map.get(d, 0),
+            })
+
+        totals = {
+            "leads": sum(s["leads"] for s in series),
+            "reports": sum(s["reports"] for s in series),
+            "payments": sum(s["payments"] for s in series),
+        }
+        # Conversion rates
+        rates = {
+            "lead_to_report": round(100 * totals["reports"] / totals["leads"], 1) if totals["leads"] else 0,
+            "report_to_paid": round(100 * totals["payments"] / totals["reports"], 1) if totals["reports"] else 0,
+            "lead_to_paid":   round(100 * totals["payments"] / totals["leads"], 1) if totals["leads"] else 0,
+        }
+        return {"series": series, "totals": totals, "rates": rates, "days": days}
+
 
 def register_booking_routes(router: APIRouter, db, config: dict) -> None:
     """Free consultation booking flow."""

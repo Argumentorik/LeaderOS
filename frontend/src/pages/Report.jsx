@@ -5,6 +5,7 @@ import {
 } from "recharts";
 import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle, Download, Award, Target, Shield, Lightbulb, UserCheck, Mail } from "lucide-react";
 import { generateReportPDF } from "../utils/generatePDF";
+import ExitIntentPopup from "../components/ExitIntentPopup";
 
 const catLabels = {
   rhetorik: "Rhetorik",
@@ -539,6 +540,7 @@ export default function Report() {
           </p>
         </div>
       </div>
+      <ExitIntentPopup />
     </div>
   );
 }

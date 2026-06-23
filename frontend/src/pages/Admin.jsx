@@ -3,6 +3,7 @@ import { Users, FileText, CreditCard, Key, Mail, TrendingUp, Calendar, RefreshCw
 import { KpiCards, ConversionFunnel } from "../components/admin/StatsCards";
 import { KeysTable } from "../components/admin/KeysTable";
 import { UsersTable, TransactionsTable, BookingsTable, EmailsTable } from "../components/admin/DataTables";
+import FunnelChart from "../components/admin/FunnelChart";
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -156,6 +157,7 @@ export default function Admin() {
         {tab === "overview" && stats && (
           <div className="space-y-6">
             <KpiCards stats={stats} />
+            <FunnelChart apiBase={API} token={token} days={7} />
             <ConversionFunnel stats={stats} />
           </div>
         )}
