@@ -18,10 +18,11 @@ import { useEffect, useRef, useState } from 'react';
 import { X, PlayCircle, Calendar, ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { useBookConsultation } from '../brand/BookConsultationButton';
-import { VideoPlayer } from '../shared/VideoPlayer';
+// Iter 92.32 (Mert): Vimeo embed entfernt — Privacy-Settings konnten den
+// Player blockieren ("Sorry, this video cannot be played here"). Stattdessen
+// beautiful benefit-cards die immer funktionieren.
 
 const STORAGE_KEY = 'wlad_onboarding_video_seen_v1';
-const VIMEO_ID = process.env.REACT_APP_ONBOARDING_VIMEO_ID || '1197728183';
 
 const HEADLINE_WORDS = ['Schau', 'dir', 'kurz', 'an,', 'wie', 'du', 'startest.'];
 
@@ -38,7 +39,12 @@ export const OnboardingVideoModal = () => {
 
   useEffect(() => {
     try {
-      if (localStorage.getItem(STORAGE_KEY)) return;
+      // Iter 92.32: don't fire the welcome modal while the 9-step OnboardingTour
+      // is still running — otherwise users get TWO overlapping welcomes on first
+      // login (Tour wraps onboarding-modal). Tour-completion sets `wladbot_onboarding_done`.
+      const tourDone = !!localStorage.getItem('wladbot_onboarding_done');
+      const modalSeen = !!localStorage.getItem(STORAGE_KEY);
+      if (!tourDone || modalSeen) return;
       const t = setTimeout(() => setOpen(true), 1100);
       return () => clearTimeout(t);
     } catch {
@@ -171,14 +177,33 @@ export const OnboardingVideoModal = () => {
           </p>
         </div>
 
-        {/* Vimeo Player */}
-        <div ref={videoRef} className="relative px-6 sm:px-8" style={{ opacity: 0 }}>
-          <div className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
-            <VideoPlayer
-              vimeoId={VIMEO_ID}
-              autoplay
-              title="Wlads Onboarding-Video"
-            />
+        {/* ── Hero Benefits (Iter 92.32 launch-safe — replaces fragile Vimeo embed) ──
+            Vimeo "Privacy settings" konnten Embed blockieren → catastrophic UX.
+            Stattdessen: 3 Benefit-Cards die in 5 Sekunden zeigen WAS Leader-OS kann.
+            Wlad-Video bleibt zugänglich über die "Wlad hören" Card auf dem Dashboard. */}
+        <div ref={videoRef} className="relative px-6 sm:px-8 pb-2" style={{ opacity: 0 }}>
+          <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#BFFF00]/[0.08] via-white/[0.02] to-transparent border border-[#BFFF00]/20 p-6 sm:p-7">
+            <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full bg-[#BFFF00]/15 blur-[60px] pointer-events-none" aria-hidden />
+
+            <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { icon: '🤖', title: '24/7 KI-Coach', desc: 'Stell deine Frage, erhalte Antworten aus Wlads 1.605 Wissens-Chunks.' },
+                { icon: '🎯', title: '16 Video-Missionen', desc: '60 Sek Pitch aufnehmen → KI bewertet nach 3-Säulen-Framework.' },
+                { icon: '👤', title: '1:1 Coaching', desc: 'Mit Wlads Expertenteam — direkt einen Slot wählen.' },
+              ].map((b, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col items-start gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#BFFF00]/30 transition-colors"
+                  data-testid={`onboarding-benefit-${i}`}
+                >
+                  <span className="text-2xl leading-none" aria-hidden>{b.icon}</span>
+                  <p className="text-[13px] font-bold text-white leading-tight" style={{ fontFamily: 'Outfit, Inter, sans-serif' }}>
+                    {b.title}
+                  </p>
+                  <p className="text-[11.5px] text-white/55 leading-snug">{b.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
