@@ -136,3 +136,31 @@ def register_email_routes(router: APIRouter, db, config):
         except Exception as e:
             logger.error(f"Plan reminder error: {e}")
             return {"success": False, "error": str(e)}
+
+    @router.get("/email/unsubscribe")
+    async def unsubscribe(email: str):
+        """Public unsubscribe link target. Stops drip + transactional broadcasts."""
+        if not email:
+            raise HTTPException(status_code=400, detail="email required")
+        now = datetime.now(timezone.utc).isoformat()
+        await db.users.update_one(
+            {"email": email.lower().strip()},
+            {"$set": {"unsubscribed_at": now}},
+            upsert=False,
+        )
+        from services.email_scheduler import cancel_drip
+        cancelled = await cancel_drip(db, email, reason="unsubscribed")
+        return {"success": True, "cancelled_drip_count": cancelled}
+
+    @router.get("/email/drip-preview")
+    async def drip_preview(slug: str, name: str = "Hey", weakest_label: str = "Rhetorik",
+                            weakest_score: int = 50):
+        """Render a single drip email by slug (for QA / admin preview)."""
+        from services.email_sequence import render_email
+        out = render_email(slug, {
+            "name": name, "weakest_label": weakest_label,
+            "weakest_score": weakest_score, "seats_left": 18,
+        })
+        if not out:
+            raise HTTPException(status_code=404, detail="unknown slug")
+        return out

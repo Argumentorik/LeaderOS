@@ -199,6 +199,19 @@ def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
         from routes.email import send_auto_report_email
         await send_auto_report_email(db, config, user, report, data.session_id)
 
+        # Enqueue 10-email nurture sequence for non-buyers
+        try:
+            from services.email_scheduler import enqueue_drip_sequence
+            await enqueue_drip_sequence(
+                db,
+                email=user.get("email", ""),
+                name=user.get("name", "Hey"),
+                weakest_label=ROLE_LABELS.get(weakest_role, "Rhetorik"),
+                weakest_score=leadership_roles.get(weakest_role, 50),
+            )
+        except Exception:  # noqa: BLE001
+            pass  # nurture is non-critical
+
         return report
 
     @router.get("/report/{session_id}")

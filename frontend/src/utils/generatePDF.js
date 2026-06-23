@@ -49,15 +49,15 @@ const catLabels = {
   rhetorik: "Rhetorik",
   kritisches_denken: "Krit. Denken",
   entscheidung: "Entscheidung",
-  fuehrung: "Fuhrung",
-  eq: "Strateg. EQ",
+  fuehrung: "Fuehrung",
+  eq: "EQ · Team",
   strategie: "KI-Strategie",
 };
 
 const layerLabels = {
-  ai_literacy: "KI-Kompetenz",
+  ai_literacy: "KI im Alltag",
   rhetoric: "Rhetorik",
-  strategic_eq: "Strategisches EQ",
+  strategic_eq: "EQ · Teamfuehrung",
 };
 
 const roleLabels = {
@@ -65,7 +65,7 @@ const roleLabels = {
   manager: "Manager",
   team_leader: "Team Leader",
   psychologist: "Psychologe",
-  problem_solver: "Problemloser",
+  problem_solver: "Problemloeser",
   innovator: "Innovator",
 };
 
@@ -122,10 +122,20 @@ export function generateReportPDF(report, user) {
 
   doc.setFontSize(11);
   doc.setTextColor(...COLORS.white);
-  doc.text("Leader·OS", margin + 17, y + 5);
+  doc.text("Leader-OS", margin + 17, y + 5);
   doc.setFontSize(7);
   doc.setTextColor(...COLORS.gray);
   doc.text("LEADERSHIP DIAGNOSTIC PLATFORM", margin + 17, y + 10);
+
+  // Charter badge (top-right)
+  const badgeText = "KLASSE 0001 / 30";
+  const badgeWidth = doc.getTextWidth(badgeText) + 8;
+  doc.setDrawColor(...COLORS.accent);
+  doc.setLineWidth(0.25);
+  doc.rect(pw - margin - badgeWidth, y + 1, badgeWidth, 10);
+  doc.setFontSize(7);
+  doc.setTextColor(...COLORS.accent);
+  doc.text(badgeText, pw - margin - badgeWidth / 2, y + 7.5, { align: "center" });
 
   // Main title section
   y = 70;
@@ -529,6 +539,141 @@ export function generateReportPDF(report, user) {
   doc.text(`${userName} | ${new Date().toLocaleDateString("de-DE")}`, pw - margin, 290, { align: "right" });
 
   // Bottom branding
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(0, 295, pw, 2, "F");
+
+  // ===== PAGE 4: NEXT STEP — Sprint vs. Plus-Plus =====
+  doc.addPage();
+  doc.setFillColor(...COLORS.bg);
+  doc.rect(0, 0, pw, 297, "F");
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(0, 0, pw, 1.5, "F");
+
+  // Header on page 4
+  y = 28;
+  doc.setFillColor(...COLORS.accent);
+  doc.roundedRect(margin, y, 12, 12, 2, 2, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(...COLORS.bg);
+  doc.text("W", margin + 4, y + 8.5);
+  doc.setFontSize(11);
+  doc.setTextColor(...COLORS.white);
+  doc.text("Leader-OS", margin + 17, y + 5);
+  doc.setFontSize(7);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("DEIN NAECHSTER SCHRITT", margin + 17, y + 10);
+
+  // Section title
+  y = 58;
+  doc.setFontSize(9);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("KLASSE 0001 - 18 / 30 CHARTER-PLAETZE FREI", margin, y);
+  y += 12;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(28);
+  doc.setTextColor(...COLORS.white);
+  doc.text("Du weisst, wo du stehst.", margin, y);
+  y += 11;
+  doc.setTextColor(...COLORS.accent);
+  doc.text("Jetzt der Sprint.", margin, y);
+
+  // Sprint card
+  y += 18;
+  drawRoundedRect(doc, margin, y, cw, 58, 4, COLORS.cardBg);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("SPRINT  ·  30 TAGE + 12 MONATE", margin + 8, y + 11);
+  doc.setFontSize(22);
+  doc.setTextColor(...COLORS.white);
+  doc.text("997 EUR", margin + 8, y + 24);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("einmalig - Ratenzahlung moeglich - 14 Tage Geld-zurueck", margin + 8, y + 31);
+
+  const sprintBullets = [
+    "11 Wlad-Frameworks sofort einsetzbar",
+    "WladBot 24/7 - in Wlads Stimme",
+    "12 Monate Plattform-Zugang inkludiert",
+    "Zertifikat 0001 - LinkedIn-ready",
+  ];
+  sprintBullets.forEach((b, i) => {
+    doc.setFontSize(8);
+    doc.setTextColor(...COLORS.accent);
+    doc.text(">", margin + 8, y + 42 + i * 4);
+    doc.setTextColor(...COLORS.white);
+    doc.text(b, margin + 13, y + 42 + i * 4);
+  });
+
+  // Plus-Plus card
+  y += 66;
+  doc.setFillColor(20, 24, 8);
+  doc.setDrawColor(...COLORS.accent);
+  doc.setLineWidth(0.5);
+  doc.roundedRect(margin, y, cw, 58, 4, 4, "FD");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...COLORS.bg);
+  doc.setFillColor(...COLORS.accent);
+  doc.rect(margin + cw - 30, y, 30, 6, "F");
+  doc.text("EMPFOHLEN", margin + cw - 15, y + 4.3, { align: "center" });
+  doc.setFontSize(10);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("PLUS-PLUS  ·  + 12x LIVE MIT WLAD", margin + 8, y + 13);
+  doc.setFontSize(22);
+  doc.setTextColor(...COLORS.accent);
+  doc.text("4.797 EUR", margin + 8, y + 26);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("einmalig oder 3 x 1.599 EUR", margin + 8, y + 33);
+
+  const plusBullets = [
+    "Alles aus dem Sprint",
+    "12x monatlich Live mit Wlad - 90 Min - ungeschnitten",
+    "Drill-Channel - Theorie sofort am echten Fall",
+    "Klasse 0001 Peer-Kreis - Lifetime",
+  ];
+  plusBullets.forEach((b, i) => {
+    doc.setFontSize(8);
+    doc.setTextColor(...COLORS.accent);
+    doc.text(">", margin + 8, y + 42 + i * 4);
+    doc.setTextColor(...COLORS.white);
+    doc.text(b, margin + 13, y + 42 + i * 4);
+  });
+
+  // Manifest line
+  y += 70;
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(11);
+  doc.setTextColor(...COLORS.white);
+  doc.text("Wer heute zoegert,", pw / 2, y, { align: "center" });
+  doc.setTextColor(...COLORS.gray);
+  doc.text("fuehrt morgen unter jemandem, der nicht gezoegert hat.", pw / 2, y + 6, { align: "center" });
+
+  // Big CTA box
+  y += 16;
+  doc.setFillColor(...COLORS.accent);
+  doc.roundedRect(margin, y, cw, 16, 3, 3, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...COLORS.bg);
+  doc.text("Jetzt sichern  >  leadercheck.de/close", pw / 2, y + 10, { align: "center" });
+
+  // Trust line
+  y += 22;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("14 Tage Geld-zurueck  -  SSL  -  Stripe  -  License Key per E-Mail", pw / 2, y, { align: "center" });
+
+  // Footer page 4
+  doc.setFontSize(6);
+  doc.setTextColor(60, 60, 70);
+  doc.text("LEADER/OS Confidential | Generated by AI", margin, 290);
+  doc.text(`${userName} | ${new Date().toLocaleDateString("de-DE")}`, pw - margin, 290, { align: "right" });
   doc.setFillColor(...COLORS.accent);
   doc.rect(0, 295, pw, 2, "F");
 

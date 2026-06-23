@@ -16,6 +16,7 @@ from routes.quiz import register_quiz_routes
 from routes.payments import register_payment_routes
 from routes.email import register_email_routes, send_welcome_email_background
 from routes.admin import register_admin_routes, register_booking_routes, register_enterprise_routes
+from services.email_scheduler import start_scheduler, stop_scheduler
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -99,6 +100,15 @@ async def root():
 app.include_router(api_router)
 
 
+@app.on_event("startup")
+async def startup():
+    # Indexes for the drip queue (idempotent)
+    await db.email_queue.create_index([("status", 1), ("due_at", 1)])
+    await db.email_queue.create_index([("email", 1), ("status", 1)])
+    start_scheduler(db)
+
+
 @app.on_event("shutdown")
 async def shutdown():
+    stop_scheduler()
     client.close()

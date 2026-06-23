@@ -175,6 +175,12 @@ async def _handle_paid_webhook(db, app_config, session_id):
     )
     if email:
         asyncio.create_task(send_payment_email_background(db, app_config, email, name, plan, tx.get("amount", 997)))
+        # Stop drip nurture for this buyer
+        try:
+            from services.email_scheduler import cancel_drip
+            await cancel_drip(db, email, reason="purchased")
+        except Exception:  # noqa: BLE001
+            pass
 
 
 # --------- License email helper ---------

@@ -36,9 +36,10 @@ def _footer_block() -> str:
 <p style="font-size:11px;color:{BRAND['muted']};line-height:1.6;margin:0;">
 Du erhältst diese E-Mail, weil du die Leader OS Leadership-Diagnose gestartet hast.<br>
 <a href="https://leaderos.de" style="color:{BRAND['lime']};text-decoration:none;">leaderos.de</a> · 
-<a href="https://leadercheck.de" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
+<a href="https://leadercheck.de/api/email/unsubscribe?email=unknown" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a> · 
+<a href="https://leadercheck.de" style="color:{BRAND['muted']};text-decoration:none;">leadercheck.de</a>
 </p>
-<p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS. Alle Rechte vorbehalten.</p>
+<p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS · Wlad Jachtchenko · 3× SPIEGEL-Bestseller. Alle Rechte vorbehalten.</p>
 </td></tr>"""
 
 
@@ -155,9 +156,9 @@ def welcome_email(name: str, role: str) -> dict:
 
 def _report_scores(layers: dict) -> str:
     return f"""<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-{_score_bar("KI-Kompetenz", layers.get('ai_literacy', 50))}
+{_score_bar("KI im Alltag", layers.get('ai_literacy', 50))}
 {_score_bar("Rhetorik", layers.get('rhetoric', 50))}
-{_score_bar("Strategisches EQ", layers.get('strategic_eq', 50))}
+{_score_bar("EQ · Teamführung", layers.get('strategic_eq', 50))}
 </table>"""
 
 
@@ -195,7 +196,7 @@ def report_email(name: str, report: dict) -> dict:
 <p style="font-size:56px;font-weight:800;color:{score_color};margin:0;line-height:1;">{total}%</p>
 </td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:20px 24px;border:1px solid {BRAND['border']};">
-<p style="font-size:11px;color:{BRAND['muted']};margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.12em;">3-Layer Score</p>
+<p style="font-size:11px;color:{BRAND['muted']};margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.12em;">▸ Score · 3 Ebenen</p>
 {_report_scores(layers)}
 </td></tr>
 <tr><td style="padding:20px 0;">{_report_roles(strongest, weakest)}</td></tr>
@@ -292,13 +293,14 @@ def _payment_details(plan_name: str, amount: float, plan: str) -> str:
 
 def _payment_features(plan: str) -> str:
     items = [
-        "Alle Kurse & KI-Agenten sind freigeschaltet",
-        "Dein persönlicher 30-Tage-Plan startet heute",
-        "WladBot kennt dein Profil und ist 24/7 für dich da",
+        "WladBot 24/7 ist freigeschaltet · in Wlads Stimme",
+        "30-Tage-Sprint startet heute · 1 Aufgabe pro Tag",
+        "11 Wlad-Frameworks sofort einsetzbar",
+        "12 Monate Plattform-Zugang auf leaderos.de",
     ]
     if plan == "leader_os_plus":
-        items.append("12 Einzelcoachings werden separat per E-Mail terminiert")
-        items.append("Dedizierter Coach meldet sich innerhalb von 48h")
+        items.append("12× Live mit Wlad · monatlich 90 Min · ungeschnitten")
+        items.append("Klasse 0001 Peer-Kreis · Lifetime-Zugang")
     elif plan == "leader_os_enterprise":
         items.append("Onboarding-Workshop wird mit deinem Account Manager geplant")
     elif plan == "fasttrack":
@@ -312,14 +314,14 @@ def _payment_features(plan: str) -> str:
 
 def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
     plan_name_map = {
-        "leader_os": "Leadership OS — 1 Jahr Vollzugang",
+        "leader_os": "Sprint — 30 Tage + 12 Monate Plattform",
         "leader_os_plus": "Plus-Plus — OS-Jahr inkl. monatliche Live mit Wlad",
-        "leader_os_enterprise": "Leadership OS ENTERPRISE — B2B-Lizenz",
+        "leader_os_enterprise": "Sprint Enterprise — B2B-Lizenz",
         "fasttrack": "Fast Track – Leadership Accelerator",
-        "standard": "Leadership OS — 1 Jahr Vollzugang",
+        "standard": "Sprint — 30 Tage + 12 Monate Plattform",
         "starter": "Starter – Video Lessons",
     }
-    plan_name = plan_name_map.get(plan, "Leadership OS — 1 Jahr Vollzugang")
+    plan_name = plan_name_map.get(plan, "Sprint — 30 Tage + 12 Monate Plattform")
 
     content = f"""
 <tr><td>{_section_label("Zahlung bestätigt", BRAND['lime'])}</td></tr>
