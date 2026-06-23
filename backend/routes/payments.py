@@ -64,10 +64,23 @@ def _build_subscription_metadata(req: CreateCheckoutRequest, package: dict) -> d
 
 
 async def _create_subscription_session(req: CreateCheckoutRequest, package: dict):
-    """Real Stripe Subscription Checkout (12 monthly or 2 bi-annual installments)."""
+    """Real Stripe Subscription Checkout — auto-cancels after exactly N cycles.
+
+    cancel_at is computed dynamically from cycles * interval_count months, so that:
+      - leader_os_2rate    (2 cycles, every 6 months) → cancels after 12 months
+      - leader_os_12rate   (12 monthly cycles)        → cancels after 12 months
+      - leader_os_plus_3rate (3 monthly cycles)       → cancels after 3 months
+    """
     success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{req.origin_url}/close"
-    cancel_at = int((datetime.now(timezone.utc) + timedelta(days=370)).timestamp())
+
+    # cycles * interval_count months → days; +7 days grace buffer for clock skew
+    cycles = int(package.get("cycles", 1))
+    interval_count = int(package.get("interval_count", 1))
+    interval = package.get("interval", "month")
+    days_per_unit = {"day": 1, "week": 7, "month": 30, "year": 365}.get(interval, 30)
+    total_days = cycles * interval_count * days_per_unit + 7
+    cancel_at = int((datetime.now(timezone.utc) + timedelta(days=total_days)).timestamp())
     metadata = _build_subscription_metadata(req, package)
 
     return await asyncio.to_thread(
