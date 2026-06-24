@@ -100,7 +100,7 @@ export default function UserForm() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
             <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
-              ▸ SCHRITT {step} VON 2 · BIB · 0001
+              ▸ SCHRITT {step} VON 2 
             </span>
           </div>
           <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
@@ -258,7 +258,7 @@ export default function UserForm() {
             </button>
 
             <p className="font-inter text-sm text-slate-600 text-center">
-              30 Fragen · ca. 10 Minuten · Szenario-basiert · BIB · 0001
+              30 Fragen · ca. 10 Minuten · Szenario-basiert 
             </p>
 
             <div className="glass-card-subtle p-5 space-y-4" data-testid="trust-section">

@@ -141,7 +141,7 @@ export default function Hero() {
           <div className="flex justify-center mb-10 opacity-0 anim-fade-up">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
               <span className="font-mono text-[10px] tracking-[0.25em] text-[#C8FF00] font-bold">
-                ▸ § 01 / 07 · DIAGNOSE · KOSTENLOS · BIB · 0001
+                ▸ § 01 / 07 · DIAGNOSE · KOSTENLOS 
               </span>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function Hero() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
               </span>
               <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
-                Klasse 0001 · noch <span className="text-[#C8FF00]">18 von 30</span> Charter-Plätzen frei
+                Sei Teil der Leader-OS Bewegung · <span className="text-[#C8FF00]">KI · Rhetorik · EQ</span> meistern
               </span>
             </div>
           </div>

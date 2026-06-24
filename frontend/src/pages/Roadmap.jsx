@@ -485,7 +485,7 @@ export default function Roadmap() {
             30 Tage Sprint · 11 Frameworks · WladBot 24/7 · 12 Monate Plattform
           </p>
           <p className="font-inter text-xs text-[#C8FF00]/60 mb-6">
-            ▸ Klasse 0001 · noch 18 von 30 Plätzen frei · 14 Tage Geld-zurück
+            ▸ Volle Plattform · 11 Frameworks · WladBot 24/7 · 14 Tage Geld-zurück
           </p>
           {filledCount < 6 ? (
             <div data-testid="journal-gate">
@@ -530,7 +530,7 @@ export default function Roadmap() {
               <div className="w-14 h-14 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center mx-auto mb-4">
                 <Rocket className="w-7 h-7 text-[#C8FF00]" />
               </div>
-              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Klasse 0001 · 18 von 30 Plätzen frei.</h3>
+              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Werde Teil der Leader-OS Bewegung.</h3>
               <p className="font-inter text-sm text-slate-400">30-Tage-Sprint mit Wlad. 11 Frameworks. WladBot 24/7. 12 Monate Plattform inkludiert.</p>
             </div>
             <div className="text-center mb-4">

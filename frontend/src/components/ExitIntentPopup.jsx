@@ -80,31 +80,31 @@ export default function ExitIntentPopup() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
           </span>
           <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-semibold uppercase">
-            ▸ Warte kurz · 1 letztes Angebot
+            ▸ Bevor du gehst · 1 Angebot
           </span>
         </div>
 
         <h3 className="font-manrope font-extrabold text-2xl text-white leading-tight mb-3">
           Bevor du gehst —<br />
-          <span className="text-[#C8FF00]">reservier dir den Platz.</span>
+          <span className="text-[#C8FF00]">starte dein Leadership.</span>
         </h3>
 
         <p className="font-inter text-sm text-slate-400 leading-relaxed mb-5">
-          Klasse 0001 ist fast voll. Mit einem Klick reservierst du dir <span className="text-white font-medium">24 Stunden</span> einen Charter-Platz · keine Zahlung, keine Verpflichtung. Du entscheidest danach in Ruhe.
+          Du hast deinen Score. Jetzt der nächste Schritt: Teil der Leader-OS Bewegung werden. Volle Plattform · 11 Wlad-Frameworks · WladBot 24/7 · KI-Tools. <span className="text-white font-medium">14 Tage Geld-zurück</span> · ohne Diskussion.
         </p>
 
         <div className="flex items-center justify-center gap-3 mb-5 p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
           <Clock className="w-4 h-4 text-[#C8FF00]" />
           <span className="font-mono text-sm text-white">
-            <span className="text-[#C8FF00] font-bold">{mm}:{ss}</span> · noch verfügbar
+            <span className="text-[#C8FF00] font-bold">{mm}:{ss}</span> · Angebot aktiv
           </span>
         </div>
 
         <div className="space-y-2 mb-6">
           {[
             "Sprint 997 EUR · 30 Tage + 12 Monate Plattform",
+            "11 Wlad-Frameworks · WladBot · 91 Lektionen",
             "14 Tage Geld-zurück · ohne Diskussion",
-            "Charter-Preis · später regulär 1.497 EUR",
           ].map((line) => (
             <div key={line} className="flex items-start gap-2">
               <span className="text-[#C8FF00] text-sm font-bold">▸</span>
@@ -121,7 +121,7 @@ export default function ExitIntentPopup() {
           }}
           className="w-full px-6 py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold hover:shadow-xl hover:shadow-[#C8FF00]/20 transition-all inline-flex items-center justify-center gap-2 mb-3"
         >
-          Charter-Platz sichern · 997 EUR
+          Sprint sichern · 997 EUR
           <ArrowRight className="w-4 h-4" />
         </button>
 

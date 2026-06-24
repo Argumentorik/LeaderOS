@@ -127,8 +127,8 @@ export function generateReportPDF(report, user) {
   doc.setTextColor(...COLORS.gray);
   doc.text("LEADERSHIP DIAGNOSTIC PLATFORM", margin + 17, y + 10);
 
-  // Charter badge (top-right)
-  const badgeText = "KLASSE 0001 / 30";
+  // Brand badge (top-right)
+  const badgeText = "LEADER · OS";
   const badgeWidth = doc.getTextWidth(badgeText) + 8;
   doc.setDrawColor(...COLORS.accent);
   doc.setLineWidth(0.25);
@@ -568,7 +568,7 @@ export function generateReportPDF(report, user) {
   y = 58;
   doc.setFontSize(9);
   doc.setTextColor(...COLORS.accent);
-  doc.text("KLASSE 0001 - 18 / 30 CHARTER-PLAETZE FREI", margin, y);
+  doc.text("DEIN POTENZIAL · IN 3 EBENEN ERKANNT", margin, y);
   y += 12;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(28);

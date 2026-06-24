@@ -132,7 +132,7 @@ export default function HighTicketClose() {
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-5 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
             <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
-              ▸ § 03 / 03 · ENTSCHEIDUNG · BIB · 0001
+              ▸ § 03 / 03 · ENTSCHEIDUNG 
             </span>
           </div>
           {totalScore > 0 && (
@@ -161,7 +161,7 @@ export default function HighTicketClose() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
             </span>
             <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
-              Klasse 0001 · noch <span className="text-[#C8FF00]">18 von 30</span> Charter-Plätzen frei
+              Werde Teil von Wlads Leader-Movement · <span className="text-[#C8FF00]">KI · Rhetorik · EQ</span>
             </span>
           </div>
         </div>
