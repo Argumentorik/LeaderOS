@@ -1,64 +1,68 @@
-# Leader OS (vormals WLADHUB) - Product Requirements Document
+# Leader OS / Leader-Check — Product Requirements
 
-## Architecture (Feb 2026)
+## Vision
+Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
+
+## Stack
+- Frontend: React, TailwindCSS, Framer Motion
+- Backend: FastAPI, Pydantic, MongoDB, Service-Layer-Architecture
+- Payments: Stripe Checkout (Subscriptions + Einmalzahlungen)
+- Email: Resend SDK (Drip + Transactional)
+- AI: Emergent LLM Key (Claude für Report-Narrative)
+
+## Pricing
+- Sprint: 997 € einmalig oder 2×499 € / 12×99 € Raten
+- Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
+- Enterprise: Custom
+
+## Live Status (26.06.2026)
+✅ Funnel komplett funktional und production-ready
+✅ Resend LIVE Key aktiv → wlad@leaderos.de (verifizierte Domain)
+✅ Admin Dashboard JWT-secured, Live Funnel-Chart
+✅ 10-teilige Drip-E-Mail-Sequenz in Wlad-Sprache
+✅ Premium PDF-Report (Executive Brochure Design, jsPDF clientseitig)
+✅ SEO + AEO Meta Tags (JSON-LD: Organization, Person, FAQPage, HowTo, WebApplication, Service)
+✅ Per-Route document.title via RouteMeta in App.js
+✅ robots.txt mit AI-Crawler Allow (GPTBot, ClaudeBot, PerplexityBot, etc.)
+✅ Wlad Portrait Trust Section auf Landing (initials W als Fallback bis Portrait-JPG hochgeladen)
+✅ Quiz Auto-Save (localStorage)
+✅ Admin Token in sessionStorage (XSS-Mitigation)
+✅ Hardcoded Secrets aus Tests entfernt
+
+## ⚠️ OFFENE GO-LIVE-RISIKEN
+- **STRIPE IN TEST-MODE**: Aktueller Key ist `sk_test_emergent`. Vor echten Kunden-Zahlungen MUSS auf Live-Key umgestellt werden, sonst sind Checkouts nur Sandbox.
+- **Wlad-Portrait JPG**: `/app/frontend/public/wlad-portrait.jpg` fehlt → derzeit "W"-Initials-Fallback. Sobald JPG dort liegt, wird automatisch das Foto gezeigt.
+- **Cloudflare Managed Robots**: leadercheck.de hat in Cloudflare Security → Bots → "AI Scrapers and Crawlers" möglicherweise aktiv → das überschreibt unsere Allow-Regeln für GPTBot/ClaudeBot/Perplexity. Manuell im Dashboard ausschalten für volles AEO.
+
+## Architektur
 ```
-/app/backend/
-├── server.py          # 101 Zeilen — App Setup, Config, Health, User/Create
-├── models.py          # 11 Pydantic Models
-├── email_templates.py # 4 E-Mail Templates (Leader OS Branding)
-├── routes/
-│   ├── auth.py       # Auth, Privacy, GDPR, Quick-Login (Phone/Email)
-│   ├── quiz.py       # Quiz, Report, Coach (6-Rollen-Scoring)
-│   ├── payments.py   # Stripe, License Keys (LEADEROS-XXXX)
-│   ├── email.py      # Resend E-Mails (Welcome, Report, Plan, Payment)
-│   └── admin.py      # Dashboard Stats, Users, Transactions, Bookings
-└── services/         # pricing, license_keys, enterprise_pricing, admin_emails
+/app
+├── backend/
+│   ├── .env (RESEND_API_KEY, SENDER_EMAIL=wlad@leaderos.de, ADMIN_PASSWORD, ADMIN_JWT_SECRET, STRIPE_API_KEY, MONGO_URL)
+│   ├── server.py
+│   ├── models.py
+│   ├── email_templates.py
+│   ├── routes/ (admin, auth, email, payments, quiz)
+│   ├── services/ (pricing, email_sequence, email_scheduler, admin_emails, license_keys)
+│   └── tests/ (test_iter27..32 — ~75 pytest tests, 100% pass)
+├── frontend/
+│   ├── public/ (index.html SEO/AEO, robots.txt, sitemap.xml, manifest.json)
+│   └── src/
+│       ├── App.js (RouteMeta für per-Route titles)
+│       ├── pages/ (Hero, HighTicketClose, Kurse, Report, Roadmap, Quiz, Admin, UserForm, Login, ActivateKey, PaymentSuccess)
+│       ├── components/ (pricing, ui, admin, ExitIntentPopup, LeaderOSLogo)
+│       └── utils/ (generatePDF.js)
+└── memory/
+    ├── PRD.md (this file)
+    └── test_credentials.md
 ```
 
-## Implemented (Latest first)
-- [x] **Feb 2026 (Iter 28) — Leader OS Rebrand + Quick-Login + Auto-Redirect**:
-  - **Typographic Logo**: Neue `LeaderOSLogo.jsx` Komponente (variants: default/stacked/mark, sizes sm→xl) — pure CSS/SVG, kein Asset. Integration in Navbar + Login + Hero-Footer.
-  - **Globale Rebrand**: Alle user-facing "WLADHUB"-Texte ersetzt durch "Leader OS" (Hero, Login, Analyzing, Report, Roadmap, Admin, ActivateKey, PaymentSuccess, Pricing, PDFs, E-Mails, index.html SEO, Resend "from"-Felder, ActivateKey mailto-Link).
-  - **License-Key Prefix**: Neue Keys generieren als `LEADEROS-XXXX-XXXX-XXXX` (Legacy `WLAD-` und `WLADHUB-` Keys bleiben via DB-Lookup gültig).
-  - **Auto-Redirect nach Stripe-Kauf**: PaymentSuccess.jsx zeigt animierten 5-Sekunden-Countdown (Kreis-Progress + Live-Sekunden-Text) und leitet automatisch zu `https://leaderos.de` weiter. "Abbrechen"-Button stoppt Auto-Redirect.
-  - **Phone/Email Quick-Login**: Neue `POST /api/auth/quick-login` (Phone-Match via Tail-Regex `{digits}$`, Email case-insensitive durch Lower-Case-Normalisierung in `upsert_user`). Frontend: Login.jsx hat neues Quick-Login-Formular zusätzlich zu Google-OAuth. Unbekannte Identifier → Routing in `/diagnose` mit Prefill (max. Registrierungsrate).
-  - **Test-Verifikation**: Iteration 28 — 14/14 Backend-Pytest PASS, Frontend voll verifiziert (Logo, Quick-Login, Countdown, Branding-Cleanup).
-- [x] **Feb 2026 — Production Polish**: SEO, Schema.org, Favicon, Phone-Pflicht, Stripe Email-Hint, Direct-Purchase-Buttons, Bracket-Style Design-System
-- [x] **Feb 2026 — CRITICAL Stripe-Pricing-Bug**: 100x-Bug (Cents/EUR-Verwechslung in emergentintegrations) gefixt + Range-Assertion 1–100000
-- [x] **Feb 2026 — P2 Polish**: Single Source of Truth Pricing (`services/pricing.py`), Type-Hints, Test-Cleanup
-- [x] **Feb 2026 — Code Quality**: Routes-Komplexität alle grade B (CC≤10), Service-Layer eingeführt
-- [x] **Feb 2026 — Component Splitting**: HighTicketClose.jsx 633→257 Zeilen
-- [x] **Feb 2026 — Stripe-Subscription-Wiring (P3)** + Auto-Switch via `_is_real_stripe_key`
-- [x] **Feb 2026 — Pricing Overhaul**: 3 Tiers (997€ / 4.447€ / Enterprise) + Enterprise-Rabatt-Rechner
-- [x] Admin Dashboard + Bookings + License Keys + Enterprise Inquiries
-- [x] Resend E-Mail (6 Flows) + Video-Plattform (/kurse)
-- [x] Backend-Refactoring: server.py modularisiert (1165 → 101 Zeilen)
-- [x] WladBot Chat fließt in Report ein + Personalisierter 30-Tage-Plan PDF
-- [x] Admin-Login serverseitig (echtes JWT/Passwort-Hashing)
-- [x] Full Funnel mit Hyperpersonalisierung (30 Fragen → 6-Rollen-Scoring → KI-Report)
+## Backlog (P2/P3)
+- React component splitting (Hero 805 lines, Report, Roadmap)
+- Python route refactoring (move business logic to services)
+- Sentry/Datadog Production Error Tracking
+- Stripe Webhook Signature Verification (aktuell Polling)
+- Quiz "Speichern & per Mail erinnert werden"-Option für Drop-Offs bei Frage 15-20
 
-## Pricing (Feb 2026)
-- **Leadership OS** — 997€/Jahr · 14-Tage-Trial · 12 Videokurse
-  - Einmal 997€ · 2 Raten à 550€ · 12 Raten à 99€ (= 1.188€)
-- **Leadership OS PLUS** — 4.447€/Jahr · inkl. 12 Einzelcoachings
-- **Leadership OS ENTERPRISE** — Custom · B2B-Volumen-Rabatte (5 MA→10%, …, 200→50%)
-
-## Backlog / Next
-- **P1**: Live-Funnel-Chart im Admin-Dashboard (7-Tage-Konversion-Grafik)
-- **P1**: Echte Vimeo Video-IDs in `Kurse.jsx` (aktuell Dummy-Platzhalter — MOCKED)
-- **P2**: Component-Splitting: Hero.jsx, Report.jsx, Roadmap.jsx (groß)
-- **P2**: WladBot Sprach-Coach (Mobile/Audio)
-- **P3 / Security-Hardening**:
-  - Quick-Login 404 ist enumerable (User-Erkennung möglich) — vor Public-Launch ggf. Rate-Limit + uniform-Latency
-  - Quick-Login Email-Lookup nutzt jetzt normalisierte Lower-Case-Emails (in upsert_user); Phone-Regex ist via `tail$` verankert
-
-## Routes
-/ | /login | /diagnose | /diagnose-guest | /quiz | /analyzing | /report | /roadmap | /close | /payment-success | /activate | /kurse | /admin
-
-## Key APIs
-- `POST /api/auth/quick-login` — Phone or Email returning-user login (NEW)
-- `POST /api/auth/session` — Google OAuth exchange
-- `POST /api/payments/create-checkout-session` — Stripe (one-time + subscriptions)
-- `GET /api/payments/status/{session_id}` — Stripe payment status (used by PaymentSuccess)
-- `POST /api/license/activate` — Aktiviert Key + liefert `redirect_url: https://leaderos.de`
-- `POST /api/user/create` — Funnel-Start-User (Phone Pflicht)
+## Test Credentials
+Siehe `/app/memory/test_credentials.md`
