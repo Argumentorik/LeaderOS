@@ -1,0 +1,45 @@
+{
+  "summary": "Iteration 33 — FINAL Pre-Deploy GO-LIVE check. Stripe LIVE mode CONFIRMED (✓), Wlad portrait rendering CONFIRMED (✓), PDF generator unit test PASSES (✓), but Resend PDF attachment E2E FAILS in real flow — backend log shows `PDF generation failed: 'dict' object has no attribute 'replace'` at /app/backend/services/pdf_report.py:157, so all auto-report + /api/email/send-report calls emit emails WITHOUT the LeaderCheck-Diagnose.pdf attachment. 8/10 pytest tests pass; 2 are pdf-attachment failures with identical root cause. Email_log proves emails ARE sending live via Resend (resend_id returned), but `has_pdf=false`. Frontend wlad-trust-landing renders the real wlad-portrait.png (naturalWidth=1376, fallback hidden, all stats + media-strip + pull-quote intact).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/quiz/generate-report + /api/email/send-report",
+        "issue": "PDF attachment NOT attached. services/pdf_report.py:157 crashes with `'dict' object has no attribute 'replace'` because `report['narrative']` is a dict (from quiz.py _parse_narrative_response / _NARRATIVE_FALLBACK = {'profile_title': ..., 'executive_summary': ...}) but pdf_report.py treats it as a string and calls .replace() on it. Result: generate_diagnostic_pdf returns None → _build_pdf_attachment returns [] → emails sent without PDF. has_pdf=false in email_log, pdf_attached=false on /api/email/send-report response.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter33_golive_final.py",
+    "/app/test_reports/pytest/pytest_results_iter33.xml"
+  ],
+  "action_items": [
+    "CRITICAL — Fix /app/backend/services/pdf_report.py line 157: `narrative` may be a dict (it IS in the live flow) or a string. Suggested fix: at the top of generate_diagnostic_pdf, normalize: `narrative_raw = report.get('narrative') or ''; if isinstance(narrative_raw, dict): narrative_raw = ' '.join(str(v) for v in narrative_raw.values() if v); narrative = narrative_raw.replace('\\n\\n','<br/><br/>').replace('\\n',' ')`. Without this fix, NO customer will receive the PDF attachment after Go-Live — defeating the entire point of iter33.",
+    "After fix, re-run /app/backend/tests/test_iter33_golive_final.py to confirm has_pdf=true and pdf_attached=true."
+  ],
+  "critical_code_review_comments": [
+    "pdf_report.py treats `report['narrative']` as a string but the upstream contract from routes/quiz.py is a dict (`_parse_narrative_response` returns a dict with profile_title/executive_summary). This is an interface contract mismatch between the report producer (quiz.py) and the PDF consumer (pdf_report.py). Either: (a) normalize narrative to string before storing in report dict, or (b) make pdf_report.py defensive about the type. The unit test passed because the test used a string narrative; recommend adding a unit test for the dict-narrative shape.",
+    "_build_pdf_attachment swallows the PDF generation error silently (returns []) and the auto report email logs `(pdf=no)` without surfacing why. Recommend logging the PDF failure cause inside _build_pdf_attachment so operators see immediately that PDF gen failed (not just `pdf=no`).",
+    "Stripe LIVE mode is fully active: cs_live_ session ids returned for both leader_os_full (997 €) and leader_os_plus (4797 €). Be aware: any test transaction now is a REAL charge.",
+    "Resend LIVE confirmed sending (resend_id returned, e.g. 538c83a3-0d1a-4d3e-bcac-6f5a8a520d5c, 5e76076f-115a-41dd-b950-bea088dfb196). Domain leaderos.de verified, recipient start@aiporate.com OK."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter33_golive_final.py (NEW — 10 tests covering Stripe LIVE, PDF unit, Resend PDF E2E, Wlad portrait asset, backend health + admin)"
+  ],
+  "success_rate": {
+    "backend": "80% (8/10 pytest: 2× Stripe LIVE checkout PASS with cs_live_, PDF unit gen PASS, Wlad portrait PNG served PASS, /api/health PASS, admin login PASS, admin stats with token PASS, admin stats without token rejected PASS — FAIL: quiz E2E has_pdf=false, FAIL: /email/send-report pdf_attached=false)",
+    "frontend": "100% (Landing /: wlad-trust-landing present, wlad-portrait-img visible naturalW=1376 naturalH=768, fallback display=none, pull-quote 'Leadership ist nicht, was du sagst' rendered, all 6 stats 400k+/3×/500+/91/10+/4.9 visible, all 7 media logos ARD/ZDF/NTV/WELT/WIRTSCHAFTSWOCHE/HANDELSBLATT/FAZ present)"
+  },
+  "test_credentials": "admin password 'wladhub2026' (from /app/backend/.env::ADMIN_PASSWORD); Resend-verified recipient start@aiporate.com",
+  "seed_data_creation": "Each E2E test creates 1 TEST user (name='TEST Iter33', email=start@aiporate.com) + 1 report + drip queue entries via real Resend. Not auto-cleaned because Resend rate-limit (10/sec) shared with prod traffic; safe in dev DB.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes pdf_report.py:157 dict-vs-string narrative handling, re-run: `pytest /app/backend/tests/test_iter33_golive_final.py -v`. Both failing tests will pass once `generate_diagnostic_pdf` does not crash on dict narrative. Backend log to monitor: tail -f /var/log/supervisor/backend.err.log — must NOT see 'PDF generation failed' anymore and SHOULD see 'Auto report email sent to ... (pdf=yes)'. iter32 + iter33 backend regression suite combined: /app/backend/tests/test_iter32_resend_live.py + /app/backend/tests/test_iter33_golive_final.py. Frontend portrait already confirmed live — no need to re-test unless main agent edits Hero.jsx.",
+  "rca of the issue": "ROOT CAUSE: services/pdf_report.py line 157 `narrative = (report.get('narrative') or '').replace('\\n\\n','<br/><br/>').replace('\\n',' ')` assumes narrative is a string. But routes/quiz.py builds the report with `report['narrative'] = narrative` where `narrative` is the return value of `generate_ai_narrative()` → `_parse_narrative_response()` / `_NARRATIVE_FALLBACK` — both DICTS like `{'profile_title': '...', 'executive_summary': '...'}`. Calling `.replace()` on a dict raises AttributeError, the except block in generate_diagnostic_pdf catches it and returns None, _build_pdf_attachment returns [], email is sent without attachment. REPRODUCTION: (1) POST /api/user/create with valid name+email+phone+role → get session_id. (2) POST /api/quiz/generate-report with the QuizSubmit answer list. (3) Watch /var/log/supervisor/backend.err.log → 'PDF generation failed: dict object has no attribute replace' + 'Auto report email sent to X (pdf=no)'. (4) Query db.email_log → has_pdf=false. MITIGATION: Normalize narrative in pdf_report.py before .replace(): if isinstance(narrative_raw, dict): collapse dict values into a single HTML-friendly string (e.g. '<b>Profile</b>: ... <br/><br/> <b>Summary</b>: ...'). Alternative: change quiz.py to flatten narrative dict to string before saving to report doc. The first option is safer because (a) it is non-breaking for downstream consumers expecting a dict narrative and (b) it future-proofs the PDF against any AI-generated shape change."
+}

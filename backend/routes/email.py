@@ -6,28 +6,50 @@ import logging
 
 from models import EmailSend
 from email_templates import welcome_email, report_email, plan_reminder_email, payment_confirmation_email
+from services.pdf_report import generate_diagnostic_pdf, pdf_to_base64
 
 logger = logging.getLogger(__name__)
 
 
+def _build_pdf_attachment(user_name: str, report: dict) -> list:
+    """Build the Resend attachment payload list for a given report. Returns [] on failure."""
+    try:
+        pdf_bytes = generate_diagnostic_pdf(user_name, report)
+        if not pdf_bytes:
+            return []
+        return [{
+            "filename": "LeaderCheck-Diagnose.pdf",
+            "content": pdf_to_base64(pdf_bytes),
+        }]
+    except Exception as e:
+        logger.error(f"PDF attachment build failed: {e}")
+        return []
+
+
 async def send_auto_report_email(db, config, user, report, session_id):
-    """Auto-send report email after generation (fire-and-forget)."""
+    """Auto-send report email after generation (fire-and-forget) — with PDF attachment."""
     email = user.get("email")
     if not email or not config.get("resend_key"):
         return
     async def _send():
         try:
-            email_data = report_email(user.get("name", "Leader"), report)
-            resp = await asyncio.to_thread(resend.Emails.send, {
+            user_name = user.get("name", "Leader")
+            email_data = report_email(user_name, report)
+            attachments = await asyncio.to_thread(_build_pdf_attachment, user_name, report)
+            payload = {
                 "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [email],
                 "subject": email_data["subject"],
                 "html": email_data["html"],
-            })
-            logger.info(f"Auto report email sent to {email}")
+            }
+            if attachments:
+                payload["attachments"] = attachments
+            resp = await asyncio.to_thread(resend.Emails.send, payload)
+            logger.info(f"Auto report email sent to {email} (pdf={'yes' if attachments else 'no'})")
             await db.email_log.insert_one({
                 "type": "report_auto", "email": email, "session_id": session_id,
-                "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+                "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id"),
+                "has_pdf": bool(attachments),
             })
         except Exception as e:
             logger.error(f"Auto report email error: {e}")
@@ -89,19 +111,25 @@ def register_email_routes(router: APIRouter, db, config):
         email = user.get("email")
         if not email:
             raise HTTPException(status_code=400, detail="No email found")
-        email_data = report_email(user.get("name", "Leader"), report)
+        user_name = user.get("name", "Leader")
+        email_data = report_email(user_name, report)
         try:
-            resp = await asyncio.to_thread(resend.Emails.send, {
+            attachments = await asyncio.to_thread(_build_pdf_attachment, user_name, report)
+            payload = {
                 "from": f"Wlad von Leader OS <{config['sender_email']}>",
                 "to": [email],
                 "subject": email_data["subject"],
                 "html": email_data["html"],
-            })
+            }
+            if attachments:
+                payload["attachments"] = attachments
+            resp = await asyncio.to_thread(resend.Emails.send, payload)
             await db.email_log.insert_one({
                 "type": "report", "email": email, "session_id": data.session_id,
-                "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id")
+                "sent_at": datetime.now(timezone.utc).isoformat(), "resend_id": resp.get("id"),
+                "has_pdf": bool(attachments),
             })
-            return {"success": True, "id": resp.get("id")}
+            return {"success": True, "id": resp.get("id"), "pdf_attached": bool(attachments)}
         except Exception as e:
             logger.error(f"Email error: {e}")
             return {"success": False, "error": str(e)}

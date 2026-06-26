@@ -34,10 +34,9 @@ def _logo_block() -> str:
 def _footer_block() -> str:
     return f"""<tr><td style="padding:40px 0 0 0;border-top:1px solid {BRAND['border']};">
 <p style="font-size:11px;color:{BRAND['muted']};line-height:1.6;margin:0;">
-Du erhältst diese E-Mail, weil du die Leader OS Leadership-Diagnose gestartet hast.<br>
-<a href="https://leaderos.de" style="color:{BRAND['lime']};text-decoration:none;">leaderos.de</a> · 
-<a href="https://leadercheck.de/api/email/unsubscribe?email=unknown" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a> · 
-<a href="https://leadercheck.de" style="color:{BRAND['muted']};text-decoration:none;">leadercheck.de</a>
+Du erhältst diese E-Mail, weil du die Leader-Check Leadership-Diagnose gestartet hast.<br>
+<a href="https://leadercheck.de" style="color:{BRAND['lime']};text-decoration:none;">leadercheck.de</a> · 
+<a href="https://leadercheck.de/api/email/unsubscribe?email=unknown" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
 </p>
 <p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS · Wlad Jachtchenko · 3× SPIEGEL-Bestseller. Alle Rechte vorbehalten.</p>
 </td></tr>"""
@@ -204,7 +203,13 @@ def report_email(name: str, report: dict) -> dict:
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Ehrlich?</strong> Die meisten schauen sich ihren Report an, nicken – und machen weiter wie bisher. Der Score ändert sich nicht von alleine. Wenn du wirklich willst, dass sich was bewegt, dann starte den 30-Tage-Plan. Aber nur, wenn du es ernst meinst.</p>
 </td></tr>
 {_cta_button("30-Tage-Plan ansehen →", "https://leadercheck.de/roadmap")}
-{_ps_block(f'Du hast außerdem 50 kostenlose Credits für <a href="https://leaderos.de" style="color:{BRAND["lime"]};text-decoration:none;font-weight:600;">leaderos.de</a> freigeschaltet.')}"""
+<tr><td style="padding:0 0 8px 0;">
+<div style="background:{BRAND['card']};border-radius:12px;padding:18px 22px;border-left:3px solid {BRAND['lime']};">
+<p style="font-size:11px;color:{BRAND['lime']};margin:0 0 6px 0;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;">▸ Anhang in dieser E-Mail</p>
+<p style="font-size:14px;color:{BRAND['white']};margin:0;line-height:1.6;"><strong>LeaderCheck-Diagnose.pdf</strong> · Deine komplette Executive-Diagnose als PDF · damit du sie auch offline lesen, ausdrucken oder mit deinem Coach teilen kannst.</p>
+</div>
+</td></tr>
+{_ps_block('Du hast außerdem 50 kostenlose Credits für deinen <strong style="color:' + BRAND['lime'] + '">WladBot</strong> freigeschaltet · dein persönlicher KI-Coach in Wlads Sprache.')}"""
 
     return {
         "subject": f"{name}: {profile_title} — dein Leader OS Report",
