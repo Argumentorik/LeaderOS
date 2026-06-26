@@ -1,0 +1,42 @@
+{
+  "summary": "Iter 32 — LIVE-GO pre-deploy verification (Resend LIVE key, leaderos.de outbound removal, Wlad Trust section, 50 Free Credits hook reframed, /close curriculum-download removed, em-dash purge). Backend 8/8 pytest tests PASS (test_iter32_resend_live.py): admin login + JWT, /api/admin/stats and /api/admin/users gated correctly (401 without bearer, 200 with), Stripe checkout returns valid https URL for leader_os_full / leader_os_plus / leader_os_plus_3rate, /api/user/create + /api/quiz/generate-report run end-to-end with NO 'API key is invalid' and NO 'Welcome email error' in backend logs. Live Resend confirmed in backend.err.log: 'Welcome email sent to start@aiporate.com: {id: 34345065-3ab1-44ac-839d-d278ad32be91}' and 'Enqueued 10 drip emails for start@aiporate.com'. SENDER_EMAIL=wlad@leaderos.de verified in /app/backend/.env. Frontend live verification: Landing (/) — wlad-trust-landing renders with all required content (Eine Methodik, 10 Jahre verdichtet, stats 400k+/3×/500+/91/10+/4.9 and media-strip ARD/ZDF/NTV/WELT/WIRTSCHAFTSWOCHE/HANDELSBLATT/FAZ); zero leaderos.de outbound links; free-credits-section reframed to WladBot/KI-Coach (no leaderos.de mention); hero-cta-credits clicks → /diagnose; wlad-portrait-img + wlad-portrait-fallback both present (fallback active because /wlad-portrait.jpg returns non-image). /close — curriculum-download REMOVED (confirmed missing), wlad-trust present, all 3 final CTAs (close-final-os/os-plus/enterprise) clickable, prices 997 + 4.797 visible, price-leader-os click expands payment-section, 50 Free Credits mentioned inside Wlad block. /kurse — zero leaderos.de links, both kurse-diagnose-cta and diagnose-cta present. Em-dash sweep AFTER fix: 0 em-dashes on /, /diagnose, /quiz, /close, /report. Per-route meta titles unique in ROUTE_META (/diagnose ≠ /quiz ≠ /close ≠ /kurse ≠ /).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter32_resend_live.py",
+    "/app/test_reports/pytest/pytest_results_iter32.xml"
+  ],
+  "action_items": [
+    "OPTIONAL: /report public title is currently 'Dein Leadership-Report · Leader-Check' (defined in ROUTE_META) but /quiz redirects to /diagnose when no session exists, so visitors arriving at /quiz directly see '/diagnose' title. This is correct behaviour (guard) — no action needed unless main agent wants /quiz to show the 30-Fragen title even mid-redirect.",
+    "OPTIONAL: /wlad-portrait.jpg is not present in /app/frontend/public/, so the initials fallback (data-testid='wlad-portrait-fallback') is always shown on Landing. If a real Wlad portrait is desired, drop the JPG into /app/frontend/public/wlad-portrait.jpg — onError will then defer to <img> automatically."
+  ],
+  "critical_code_review_comments": [
+    "Em-dashes (U+2013) found and FIXED by testing agent on /close (3 instances in /app/frontend/src/components/pricing/pricingConstants.js and /app/frontend/src/components/pricing/PriceCards.jsx — replaced '10 % – 50 %' / '10–50 %' with '10 % bis 50 %'). All other main pages were already clean.",
+    "ROUTE_META in App.js defines unique title for /quiz but the /quiz component likely redirects to /diagnose if no in-progress session — so direct visits to /quiz inherit /diagnose title. Functionally correct, just note for SEO indexing that /quiz canonical likely never gets indexed standalone.",
+    "Resend LIVE key currently works (confirmed via 200 + Resend message id 34345065-... in logs). Rate limit headers show 'ratelimit-remaining: 9' / 'x-resend-monthly-quota: 93' — be aware of the 10/sec policy under bulk drip-cancel + welcome bursts at launch peak.",
+    "Stripe in test mode still (sk_test_emergent) — confirm switch to live key BEFORE accepting real customer payments. /api/payments/create-checkout returns 200 + URL but those URLs are sandbox.",
+    "Pre-existing iter30 observations still stand: ADMIN_JWT_SECRET set in .env (good), but timing-attack mitigation is asymmetric (slow on fail, fast on success). Not a launch blocker."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter32_resend_live.py (NEW — 8 tests, 100% pass)",
+    "/app/frontend/src/components/pricing/pricingConstants.js (em-dash → 'bis' in 2 lines)",
+    "/app/frontend/src/components/pricing/PriceCards.jsx (em-dash → 'bis' in 1 line)"
+  ],
+  "success_rate": {
+    "backend": "100% (8/8: admin login + JWT-gated stats/users + 3 Stripe tiers + user/create→quiz/generate-report no Resend invalid-key error + SENDER_EMAIL env check)",
+    "frontend": "100% (Landing wlad-trust + media-strip + free-credits reframe + 0 leaderos.de + hero-cta nav; /close curriculum removed + wlad-trust + 3 final CTAs + payment-section expand + 0 em-dashes after fix; /kurse 0 leaderos.de + diagnose CTAs; em-dash sweep clean across /, /diagnose, /quiz, /close, /report)"
+  },
+  "test_credentials": "admin password 'wladhub2026' (loaded from /app/backend/.env::ADMIN_PASSWORD); test recipient start@aiporate.com (Resend-verified)",
+  "seed_data_creation": "test_quiz_generate_report_triggers_email_no_invalid_key creates 1 TEST user (name='TEST Iter32', email=start@aiporate.com) + 1 report + 10 email_queue entries. Not auto-cleaned because it shares email with real Resend verified-recipient — safe to leave in dev DB or remove via admin dashboard.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Reusable iter32 regression: /app/backend/tests/test_iter32_resend_live.py. Combined regression suite at this stage: iter27 + iter29 + iter30 + iter32 (≈75 pytest tests). For frontend, the data-testids relied on: wlad-trust-landing, wlad-trust, free-credits-section, hero-cta-credits, wlad-portrait-img, wlad-portrait-fallback, kurse-diagnose-cta, diagnose-cta, close-final-os/os-plus/enterprise, price-leader-os, price-leader-os-plus, payment-section, curriculum-download (must NOT exist). Em-dash regression: re-run document.body.innerText.match(/–/g) on each main route, must equal 0. Resend LIVE: verify backend logs contain 'Welcome email sent to' + Resend id AND absence of 'API key is invalid' / 'Welcome email error' after a user/create POST.",
+  "rca of the issue": "No blocker bugs. The 3 em-dashes on /close were inside pricing range copy ('10 % – 50 %'). Root cause: when iter30 swept em-dashes across copy, the pricingConstants.js + PriceCards.jsx range expressions were missed because en-dash (U+2013) is the canonical numeric-range separator and was easy to overlook. Mitigation applied: replace with 'bis' (Wlad-Sprache, lesbarer Deutsch). Resend issue from iter30 ('API key is invalid') is FULLY RESOLVED with the new LIVE key — backend logs now show 200 OK + Resend message id for welcome emails."
+}

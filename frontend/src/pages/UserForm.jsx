@@ -42,7 +42,7 @@ export default function UserForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
-      setError("Bitte fülle alle Felder aus – Telefonnummer inklusive.");
+      setError("Bitte fülle alle Felder aus · Telefonnummer inklusive.");
       return;
     }
     if (!PHONE_RE.test(form.phone.trim())) {
@@ -207,7 +207,7 @@ export default function UserForm() {
                 />
                 <p className="font-inter text-xs text-[#C8FF00]/70 mt-2 flex items-start gap-1.5">
                   <span>▸</span>
-                  <span><strong>Wichtig:</strong> Nutze diese E-Mail auch für Leader-OS – so wird dein Report automatisch mit deinem späteren OS-Account verknüpft.</span>
+                  <span><strong>Wichtig:</strong> Nutze diese E-Mail auch für Leader-OS · so wird dein Report automatisch mit deinem späteren OS-Account verknüpft.</span>
                 </p>
               </div>
               <div>

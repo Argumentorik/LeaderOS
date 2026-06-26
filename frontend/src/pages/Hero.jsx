@@ -182,7 +182,7 @@ export default function Hero() {
             Kein Login. Kein Spam. <span className="text-[#C8FF00] font-semibold">Sofort umsetzbar.</span>
           </p>
 
-          {/* Scarcity-Bar — wie auf leaderos.de */}
+          {/* Scarcity-Bar — wie auf der Plattform */}
           <div className="flex justify-center mb-8 opacity-0 anim-fade-up delay-3">
             <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/[0.08] bg-white/[0.02]">
               <span className="relative flex w-2 h-2">
@@ -547,7 +547,7 @@ export default function Hero() {
                 KI wirklich strategisch.
               </h2>
               <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto">
-                Die anderen 99 % lesen darüber. Du könntest es heute noch ändern – in 10 Minuten weißt du genau, wo du stehst.
+                Die anderen 99 % lesen darüber. Du könntest es heute noch ändern · in 10 Minuten weißt du genau, wo du stehst.
               </p>
             </div>
 
@@ -568,14 +568,102 @@ export default function Hero() {
 
             <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
               <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
-                &laquo;Ich dachte, ich wäre ein guter Kommunikator – bis Leader OS mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
+                &laquo;Ich dachte, ich wäre ein guter Kommunikator · bis Leader OS mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
               </p>
               <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
             </div>
           </div>
         </section>
 
-        {/* ===== SECTION 10: FREE CREDITS + LEADER-OS.DE ===== */}
+        {/* ===== SECTION 9.5: WLAD PORTRAIT TRUST ===== */}
+        <section className="py-24 border-t border-white/[0.04]" data-testid="wlad-trust-landing">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 lg:gap-14 items-center">
+              {/* Portrait */}
+              <div className="relative">
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-[#C8FF00]/15 bg-gradient-to-br from-[#C8FF00]/[0.04] to-transparent">
+                  <img
+                    src="/wlad-portrait.jpg"
+                    alt="Wladislaw Jachtchenko · Gründer Leader OS"
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextElementSibling.style.display = "flex"; }}
+                    data-testid="wlad-portrait-img"
+                  />
+                  {/* Fallback when image not yet uploaded */}
+                  <div className="absolute inset-0 hidden items-center justify-center flex-col gap-3" data-testid="wlad-portrait-fallback">
+                    <div className="w-32 h-32 rounded-full bg-[#C8FF00] flex items-center justify-center">
+                      <span className="font-manrope font-extrabold text-6xl text-[#0a0a0a]">W</span>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-manrope font-bold text-white text-lg">Wladislaw</div>
+                      <div className="font-manrope font-bold text-[#C8FF00] text-lg">Jachtchenko</div>
+                    </div>
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent">
+                    <div className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-semibold uppercase mb-1">▸ Gründer · Leader OS</div>
+                    <div className="font-manrope font-bold text-white text-base">Wladislaw Jachtchenko</div>
+                  </div>
+                </div>
+                {/* Floating credentials chip */}
+                <div className="absolute -right-3 -bottom-3 px-3 py-2 rounded-lg bg-[#0a0a0a] border border-[#C8FF00]/30 shadow-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
+                    <span className="font-mono text-[10px] text-white font-semibold">3× SPIEGEL-BESTSELLER</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust content */}
+              <div>
+                <span className="inline-block px-3 py-1 mb-4 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04] font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] uppercase font-semibold">
+                  ▸ Hinter Leader · OS
+                </span>
+                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-5 leading-tight">
+                  Eine Methodik.
+                  <br />
+                  <span className="text-gradient-lime">10 Jahre verdichtet.</span>
+                </h2>
+                <p className="font-inter text-base text-slate-400 leading-relaxed mb-4">
+                  Alles, was Wlad in über 10 Jahren in Coachings, Frameworks und Büchern entwickelt hat · steckt heute in Leader OS. Nicht als Kurs-Bibliothek, sondern als tägliches System.
+                </p>
+                <p className="font-inter text-sm text-slate-500 leading-relaxed mb-7">
+                  3× SPIEGEL-Bestseller-Autor · über 400.000 Klienten in Rhetorik, Verhandlung und KI ausgebildet · Top-Speaker auf über 500 Bühnen · regelmäßig bei ARD, ZDF, ntv, Welt, Wirtschaftswoche.
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-7">
+                  {[
+                    ["400k+", "Klienten ausgebildet"],
+                    ["3×", "SPIEGEL-Bestseller"],
+                    ["500+", "Bühnen weltweit"],
+                    ["91", "Premium-Lektionen"],
+                    ["10+", "Jahre Praxis"],
+                    ["4.9", "Speaker-Rating / 5"],
+                  ].map(([num, label]) => (
+                    <div key={label} className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                      <div className="font-manrope font-extrabold text-xl text-[#C8FF00] leading-none mb-1">{num}</div>
+                      <div className="font-inter text-[11px] text-slate-500 leading-tight">{label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-5 border-t border-white/[0.05]">
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-slate-600 uppercase mb-3">▸ Als Autor zu Gast bei</p>
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-manrope font-bold text-sm text-slate-400">
+                    <span>ARD</span><span className="text-slate-700">·</span>
+                    <span>ZDF</span><span className="text-slate-700">·</span>
+                    <span>NTV</span><span className="text-slate-700">·</span>
+                    <span>WELT</span><span className="text-slate-700">·</span>
+                    <span>WIRTSCHAFTSWOCHE</span><span className="text-slate-700">·</span>
+                    <span>HANDELSBLATT</span><span className="text-slate-700">·</span>
+                    <span>FAZ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== SECTION 10: 50 FREE CREDITS — Bonus für Diagnose ===== */}
         <section className="py-20 border-t border-white/[0.04]" data-testid="free-credits-section">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="glass-card p-8 md:p-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]">
@@ -585,17 +673,15 @@ export default function Hero() {
                     GRATIS NACH COMPLETION
                   </div>
                   <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
-                    50 Free Credits für die
-                    <span className="text-gradient-lime"> beste KI-Plattform.</span>
+                    50 Free Credits für deinen
+                    <span className="text-gradient-lime"> WladBot &amp; KI-Coach.</span>
                   </h2>
                   <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
-                    Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> fur
-                    {" "}<span className="text-[#C8FF00] font-medium">leaderos.de</span> – das intelligenteste Leadership-Betriebssystem auf dem Markt.
-                    Nutze KI-Agenten, die speziell für Führungskräfte gebaut wurden.
+                    Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> für den WladBot und alle KI-Tools innerhalb von Leader OS. Schwierige Gespräche durchspielen, Argumente strukturieren, Entscheidungen schärfen · in Wlads Sprache.
                   </p>
                   <div className="space-y-3 mb-6">
                     {[
-                      "KI-Coach für schwierige Gespräche & Entscheidungen",
+                      "WladBot · dein KI-Coach für schwierige Gespräche",
                       "Schwierige Meetings durchspielen · bevor sie passieren",
                       "Persönlicher Report als PDF herunterladen",
                       "30-Tage-Aktionsplan sofort starten",
@@ -612,19 +698,9 @@ export default function Hero() {
                       onClick={() => navigate("/diagnose")}
                       className="btn-primary px-8 py-4 text-base font-semibold inline-flex items-center gap-2"
                     >
-                      Diagnose starten & Credits sichern
+                      Diagnose starten &amp; Credits sichern
                       <ArrowRight className="w-5 h-5" />
                     </button>
-                    <a
-                      href="https://leaderos.de"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary px-6 py-4 text-sm font-medium inline-flex items-center gap-2"
-                      data-testid="leader-os-link"
-                    >
-                      leaderos.de entdecken
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
                   </div>
                 </div>
 
@@ -632,11 +708,11 @@ export default function Hero() {
                   <div className="glass-card-subtle p-5 hover-card">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-xl bg-[#C8FF00]/10 flex items-center justify-center">
-                        <Brain className="w-5 h-5 text-[#C8FF00]" />
+                        <Bot className="w-5 h-5 text-[#C8FF00]" />
                       </div>
                       <div>
-                        <div className="font-manrope font-bold text-sm text-white">Leader OS · Sprint</div>
-                        <div className="font-inter text-xs text-slate-500">KI-Agenten für Führungskräfte</div>
+                        <div className="font-manrope font-bold text-sm text-white">WladBot · 50 Credits</div>
+                        <div className="font-inter text-xs text-slate-500">KI-Coach in Wlads Sprache</div>
                       </div>
                     </div>
                     <div className="h-1.5 rounded-full bg-white/5">
@@ -671,7 +747,7 @@ export default function Hero() {
                         <div className="font-inter text-xs text-slate-500">Keine Kreditkarte nötig</div>
                       </div>
                     </div>
-                    <p className="font-inter text-xs text-slate-500">Diagnose, Report und 50 Credits – komplett kostenlos. Versprochen.</p>
+                    <p className="font-inter text-xs text-slate-500">Diagnose, Report und 50 Credits · komplett kostenlos. Versprochen.</p>
                   </div>
                 </div>
               </div>
@@ -686,7 +762,7 @@ export default function Hero() {
             <h2 className="font-manrope font-extrabold text-3xl md:text-5xl text-white mb-6 leading-tight">
               Gehorst du zu den <span className="text-[#C8FF00]">Top 1 %</span>,
               <br className="hidden md:block" />
-              die KI als strategischen Vorteil nutzen –
+              die KI als strategischen Vorteil nutzen ·
               <br className="hidden md:block" />
               oder zu den 99 %, die zusehen?
             </h2>
@@ -694,14 +770,14 @@ export default function Hero() {
               Finde es heraus. <span className="text-white">Kostenlos. In nur 10 Minuten.</span>
             </p>
             <p className="font-inter text-sm text-[#C8FF00]/70 mb-10">
-              + 50 Free Credits für leaderos.de · Report als PDF · 30-Tage-Plan
+              + 50 Free Credits für deinen WladBot · Report als PDF · 30-Tage-Plan
             </p>
             <button
               data-testid="hero-cta-bottom"
               onClick={() => navigate("/diagnose")}
               className="btn-primary px-10 py-4 text-base font-semibold inline-flex items-center gap-3"
             >
-              Jetzt Diagnose starten – Kostenlos
+              Jetzt Diagnose starten · Kostenlos
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
@@ -726,3 +802,4 @@ export default function Hero() {
     </div>
   );
 }
+

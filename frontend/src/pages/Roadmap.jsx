@@ -13,9 +13,9 @@ const roleLabels = {
 };
 
 const courses = [
-  { num: "01", icon: Brain, title: "AI Basics – Dein Startpunkt", desc: "Verstehe KI richtig und ordne es fur deine Fuhrung ein. Das Fundament fur alles Weitere.", color: "#C8FF00", tag: "KEY" },
+  { num: "01", icon: Brain, title: "AI Basics · Dein Startpunkt", desc: "Verstehe KI richtig und ordne es fur deine Fuhrung ein. Das Fundament fur alles Weitere.", color: "#C8FF00", tag: "KEY" },
   { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Uberzeuge in Meetings, Verhandlungen und Konflikten.", color: "#C8FF00" },
-  { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART – bewahrte Methoden.", color: "#C8FF00" },
+  { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART · bewahrte Methoden.", color: "#C8FF00" },
   { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#C8FF00" },
   { num: "05", icon: Shield, title: "Psychologische Fuhrung", desc: "Empathie als Wettbewerbsvorteil.", color: "#C8FF00" },
   { num: "06", icon: Lightbulb, title: "Problemlosung & Entscheidung", desc: "Datengestutzte Entscheidungen unter Druck.", color: "#C8FF00" },
@@ -23,10 +23,10 @@ const courses = [
 
 const journalPrompts = [
   "Was ist mein wichtigstes Leadership-Ziel für die nächsten 30 Tage?",
-  "Welche KI-Tools nutze ich bereits – und welche will ich testen?",
+  "Welche KI-Tools nutze ich bereits · und welche will ich testen?",
   "In welcher Situation habe ich mich als Leader zuletzt unwohl gefühlt?",
   "Was würde ich tun, wenn ich keine Angst vor Fehlern hätte?",
-  "Wer in meinem Umfeld fordert mich am meisten heraus – und warum?",
+  "Wer in meinem Umfeld fordert mich am meisten heraus · und warum?",
   "Welche Gewohnheit hält mich davon ab, mein volles Potential zu entfalten?",
 ];
 
@@ -46,7 +46,7 @@ const weeklyPlan = [
       { task: "Kommunikationsmuster identifizieren", agent: "Coach-Agent" },
       { task: "EQ-Selbstreflexion: Starken & Trigger", agent: "Simulations-Agent" },
     ],
-    milestone: "Du weisst, wo du stehst – und wo die Hebel liegen."
+    milestone: "Du weisst, wo du stehst · und wo die Hebel liegen."
   },
   {
     week: "02",
@@ -63,7 +63,7 @@ const weeklyPlan = [
       { task: "Eisenhower + ALPEN + SMART anwenden", agent: "Task-Agent" },
       { task: "Aktives Zuhoren in 3 Gesprachen uben", agent: "Simulations-Agent" },
     ],
-    milestone: "Du hast dein erstes Toolkit – und nutzt es bereits."
+    milestone: "Du hast dein erstes Toolkit · und nutzt es bereits."
   },
   {
     week: "03",
@@ -80,7 +80,7 @@ const weeklyPlan = [
       { task: "Schwierige Gesprache mit EQ-Framework", agent: "Simulations-Agent" },
       { task: "Feedback-Loop mit deinem Team starten", agent: "Community-Agent" },
     ],
-    milestone: "Du wendest alles an – und dein Umfeld bemerkt den Unterschied."
+    milestone: "Du wendest alles an · und dein Umfeld bemerkt den Unterschied."
   },
   {
     week: "04",
@@ -197,7 +197,7 @@ export default function Roadmap() {
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15" data-testid="personalized-hint">
               <Sparkles className="w-4 h-4 text-[#C8FF00]" />
               <span className="font-inter text-sm text-[#C8FF00]/80">
-                Dein Plan priorisiert <strong>{roleLabels[weakestRole] || weakestRole}</strong> – dein größtes Wachstumspotenzial
+                Dein Plan priorisiert <strong>{roleLabels[weakestRole] || weakestRole}</strong> · dein größtes Wachstumspotenzial
               </span>
             </div>
           )}
@@ -250,7 +250,7 @@ export default function Roadmap() {
           </div>
         </div>
 
-        {/* ===== 30-TAGE WOCHENPLAN – HIGH LEVEL DESIGN ===== */}
+        {/* ===== 30-TAGE WOCHENPLAN · HIGH LEVEL DESIGN ===== */}
         <div className="mb-14" data-testid="plan-section">
           <div className="flex items-center gap-3 mb-2">
             <Calendar className="w-5 h-5 text-[#C8FF00]" />
@@ -387,12 +387,12 @@ export default function Roadmap() {
             </div>
             <div>
               <div className="font-manrope font-bold text-sm text-white">AI Guidance</div>
-              <div className="font-inter text-xs text-slate-500">How to use AI – Schritt für Schritt</div>
+              <div className="font-inter text-xs text-slate-500">How to use AI · Schritt für Schritt</div>
             </div>
           </div>
         </div>
 
-        {/* Interactive Journal – 6 Entries */}
+        {/* Interactive Journal · 6 Entries */}
         <div className="glass-card p-8 mb-14" data-testid="journal-section">
           <div className="flex items-center gap-3 mb-2">
             <BookOpen className="w-5 h-5 text-[#C8FF00]" />
@@ -438,9 +438,9 @@ export default function Roadmap() {
               <div>
                 <div className="font-manrope font-bold text-white mb-1">WladBot</div>
                 <p className="font-inter text-sm text-slate-300 leading-relaxed mb-3">
-                  Stark! Du hast dir die Zeit genommen und ehrlich reflektiert – das machen die wenigsten.
+                  Stark! Du hast dir die Zeit genommen und ehrlich reflektiert · das machen die wenigsten.
                   Jetzt kommt der spannende Teil: Nimm dir die nächsten 30 Tage und arbeite die Kurse durch.
-                  Nicht perfekt, sondern konsequent. Jeden Tag ein kleiner Schritt. Die Transformation passiert nicht über Nacht – aber sie passiert, wenn du dranbleibst.
+                  Nicht perfekt, sondern konsequent. Jeden Tag ein kleiner Schritt. Die Transformation passiert nicht über Nacht · aber sie passiert, wenn du dranbleibst.
                 </p>
                 <p className="font-inter text-sm text-[#C8FF00]/80 font-medium">
                   Bereit, den nächsten Schritt zu machen? Die Kurse und die Community warten auf dich.
@@ -456,7 +456,7 @@ export default function Roadmap() {
             <BookOpen className="w-5 h-5 text-[#C8FF00]" />
             6 Kurse fur das Modern Leadership System
           </h2>
-          <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt – dann baust du Schritt für Schritt auf.</p>
+          <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt · dann baust du Schritt für Schritt auf.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {courses.map((course, i) => (
               <div key={i} className="glass-card-subtle p-5 hover-card flex gap-4 group" data-testid={`course-${i}`}>
@@ -519,7 +519,7 @@ export default function Roadmap() {
         </div>
       </div>
 
-      {/* Upsell Pop-Up – only once per session, 30s delay */}
+      {/* Upsell Pop-Up · only once per session, 30s delay */}
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" data-testid="upsell-popup">
           <div className="w-full max-w-md glass-card p-8 relative border border-[#C8FF00]/15">

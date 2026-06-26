@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Download, Shield, Sparkles, Lock, Crown, Building2, BookOpen } from "lucide-react";
-import { generateCurriculumPDF } from "../utils/generateCurriculumPDF";
+import { ArrowRight, Shield, Sparkles, Lock, Crown, Building2 } from "lucide-react";
 import { PriceCards } from "../components/pricing/PriceCards";
 import { PaymentSection } from "../components/pricing/PaymentSection";
 import { EnterpriseSection } from "../components/pricing/EnterpriseSection";
@@ -271,21 +270,7 @@ export default function HighTicketClose() {
           </div>
         </div>
 
-        {/* CURRICULUM DOWNLOAD — Executive-Brochure */}
-        <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="curriculum-download">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15 flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-[#C8FF00]" /></div>
-            <div>
-              <div className="font-manrope font-bold text-white">Executive Curriculum</div>
-              <div className="font-inter text-xs text-slate-500 leading-relaxed mt-1">
-                Komplette Communication-Roadmap · alle Lern-Module · 30-Tage-Plan · Frameworks · Playbooks · Executive-Checkliste · als Premium-PDF.
-              </div>
-            </div>
-          </div>
-          <button data-testid="curriculum-download-btn" onClick={() => generateCurriculumPDF()} className="btn-secondary px-6 py-3 text-sm font-medium flex items-center gap-2">
-            <Download className="w-4 h-4" /> Herunterladen
-          </button>
-        </div>
+        {/* CURRICULUM DOWNLOAD section removed — Wlad-Trust above replaces it. */}
 
         {/* FINAL CTA — direct purchase from the last section */}
         <div className="text-center border-t border-white/[0.04] pt-12 pb-4" data-testid="final-cta-section">

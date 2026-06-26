@@ -85,7 +85,7 @@ export function PriceCards({
             <span className="font-manrope font-extrabold text-3xl text-white">Preis</span>
             <span className="font-inter text-base text-slate-500 ml-2">auf Anfrage</span>
           </div>
-          <div className="font-inter text-xs text-slate-600 mt-1">10 % – 50 % Volumen-Rabatt · ab 5 Mitarbeitern</div>
+          <div className="font-inter text-xs text-slate-600 mt-1">10 % bis 50 % Volumen-Rabatt · ab 5 Mitarbeitern</div>
           <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06]">
             <Building2 className="w-3 h-3 text-slate-400" />
             <span className="font-inter text-[10px] text-slate-400 font-semibold">Zentrale Lizenzverwaltung</span>

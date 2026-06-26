@@ -449,7 +449,7 @@ export default function Report() {
             <h3 className="font-manrope font-bold text-xl text-white">Dein persönlicher 30-Tage-Lernplan</h3>
           </div>
           <p className="font-inter text-sm text-slate-500 mb-6">
-            Basierend auf deinem Profil – fokussiert auf dein größtes Wachstumspotenzial.
+            Basierend auf deinem Profil · fokussiert auf dein größtes Wachstumspotenzial.
           </p>
           <div className="space-y-4">
             {weakestRoles.map((role, i) => (
@@ -461,7 +461,7 @@ export default function Report() {
                     <div className="font-manrope font-bold text-sm text-white mb-1">
                       {i === 0 ? "Priorität" : i === 1 ? "Aufbau" : "Vertiefung"}: {role.label}
                     </div>
-                    <p className="font-inter text-xs text-slate-500">{role.desc} – Fokus-Woche mit täglichen Mikro-Aufgaben</p>
+                    <p className="font-inter text-xs text-slate-500">{role.desc} · Fokus-Woche mit täglichen Mikro-Aufgaben</p>
                   </div>
                 </div>
               ))}

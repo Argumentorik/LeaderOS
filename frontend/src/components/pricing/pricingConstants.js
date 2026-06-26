@@ -47,7 +47,7 @@ export const OS_PLUS_FEATURES = [
 
 export const ENTERPRISE_FEATURES = [
   { text: "B2B-Lizenzen für dein Unternehmen", highlight: true },
-  { text: "Volumen-Rabatte: 10 % – 50 % je nach Team-Größe", included: true, star: true },
+  { text: "Volumen-Rabatte: 10 % bis 50 % je nach Team-Größe", included: true, star: true },
   { text: "Zentrales Admin-Dashboard für alle Lizenzen", included: true },
   { text: "Onboarding-Workshop mit Wlad persönlich", included: true },
   { text: "Coachings optional zubuchbar", included: true },
@@ -70,7 +70,7 @@ export const COMPARISON_ROWS = [
   ["Quartals-Review", false, true, true],
   ["Vorrang 1:1-Mentoring", false, true, true],
   ["Klasse 0001 Peer-Kreis Lifetime", false, true, true],
-  ["Volumen-Rabatte (10–50 %)", false, false, true],
+  ["Volumen-Rabatte (10 bis 50 %)", false, false, true],
   ["Zentrales Admin-Dashboard", false, false, true],
   ["Onboarding-Workshop mit Wlad", false, false, true],
   ["Dedizierter Account Manager", false, false, true],

@@ -10,7 +10,7 @@ function WladBotChat({ onContinue }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, ich bin der WladBot! Glückwunsch – du hast gerade alle 30 Fragen durchgezogen. Respekt. Bevor ich deinen Report erstelle, wollte ich kurz mit dir sprechen. Was ist gerade deine größte Leadership-Herausforderung?"
+      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 30 Fragen durchgezogen. Respekt. Bevor ich deinen Report erstelle, wollte ich kurz mit dir sprechen. Was ist gerade deine größte Leadership-Herausforderung?"
     }
   ]);
   const [input, setInput] = useState("");
@@ -38,7 +38,7 @@ function WladBotChat({ onContinue }) {
       setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
       setExchangeCount(c => c + 1);
     } catch {
-      setMessages(prev => [...prev, { role: "assistant", text: "Danke fürs Teilen. Lass uns jetzt deinen Report anschauen – ich bin gespannt!" }]);
+      setMessages(prev => [...prev, { role: "assistant", text: "Danke fürs Teilen. Lass uns jetzt deinen Report anschauen · ich bin gespannt!" }]);
       setExchangeCount(c => c + 1);
     } finally {
       setLoading(false);
@@ -140,7 +140,7 @@ function WladBotChat({ onContinue }) {
         </button>
 
         <p className="font-inter text-xs text-slate-600 text-center mt-4">
-          Du kannst auch direkt fortfahren – das Gespräch ist optional
+          Du kannst auch direkt fortfahren · das Gespräch ist optional
         </p>
       </div>
     </div>

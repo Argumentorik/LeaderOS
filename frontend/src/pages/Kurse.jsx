@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Brain, MessageSquare, Target, Users, Shield, Lightbulb, Play, Lock, ArrowRight, ExternalLink, Clock, CheckCircle } from "lucide-react";
+import { Brain, MessageSquare, Target, Users, Shield, Lightbulb, Play, Lock, ArrowRight, Clock, CheckCircle } from "lucide-react";
 
 const courses = [
   {
     num: "01",
     icon: Brain,
-    title: "AI Basics – Dein Startpunkt",
+    title: "AI Basics · Dein Startpunkt",
     desc: "KI richtig verstehen und für deine Führung einsetzen. Das Fundament für alles Weitere.",
     duration: "45 Min",
     lessons: 5,
@@ -29,7 +29,7 @@ const courses = [
     num: "03",
     icon: Target,
     title: "Management-Systeme",
-    desc: "Eisenhower, ALPEN, Pareto, SMART – bewährte Methoden, die deine Produktivität verdoppeln.",
+    desc: "Eisenhower, ALPEN, Pareto, SMART · bewährte Methoden, die deine Produktivität verdoppeln.",
     duration: "50 Min",
     lessons: 5,
     topics: ["Eisenhower-Matrix für Prioritäten", "ALPEN-Methode für Tagesplanung", "Pareto-Prinzip in der Praxis", "SMART-Ziele formulieren", "OKRs für dein Quartal"],
@@ -51,7 +51,7 @@ const courses = [
     num: "05",
     icon: Shield,
     title: "Psychologische Führung",
-    desc: "Empathie als Wettbewerbsvorteil. Verstehe, was Menschen antreibt – und nutze es ethisch.",
+    desc: "Empathie als Wettbewerbsvorteil. Verstehe, was Menschen antreibt · und nutze es ethisch.",
     duration: "50 Min",
     lessons: 5,
     topics: ["Emotionale Intelligenz vertiefen", "Bedürfnisse erkennen & adressieren", "Vertrauen systematisch aufbauen", "Konflikte als Wachstumschance", "Psychologische Sicherheit schaffen"],
@@ -121,7 +121,7 @@ export default function Kurse() {
                       {c.num}
                     </span>
                     <span className={`font-inter text-sm font-medium truncate ${activeCourse === i ? "text-white" : "text-slate-300"}`}>
-                      {c.title.split("–")[0].trim()}
+                      {c.title.split("·")[0].trim()}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 mt-1">
@@ -195,25 +195,23 @@ export default function Kurse() {
               </div>
             </div>
 
-            {/* CTA to leaderos.de */}
+            {/* CTA — Diagnose */}
             <div className="glass-card p-6 border border-[#C8FF00]/10 bg-[#C8FF00]/[0.02]">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="flex-1">
-                  <p className="font-manrope font-bold text-white mb-1">Bereit für das volle System?</p>
+                  <p className="font-manrope font-bold text-white mb-1">Bereit für deinen persönlichen Plan?</p>
                   <p className="font-inter text-sm text-slate-500">
-                    Diese 6 Module sind nur der Anfang. Das komplette Leadership-OS mit KI-Agenten, persönlichem Coaching und Community findest du auf leaderos.de.
+                    Diese 6 Module sind nur der Anfang. Starte mit der kostenlosen Diagnose · in 10 Minuten weißt du, welcher Pfad zu dir passt.
                   </p>
                 </div>
-                <a
-                  href="https://leaderos.de"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => navigate("/diagnose")}
                   className="btn-primary px-6 py-3.5 text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0"
-                  data-testid="leader-os-cta"
+                  data-testid="kurse-diagnose-cta"
                 >
-                  Zu leaderos.de
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+                  Diagnose starten
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
@@ -237,15 +235,6 @@ export default function Kurse() {
                 Kostenlose Diagnose starten
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <a
-                href="https://leaderos.de"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary px-6 py-4 text-sm font-medium inline-flex items-center gap-2"
-              >
-                leaderos.de entdecken
-                <ExternalLink className="w-4 h-4" />
-              </a>
             </div>
           </div>
         </div>
