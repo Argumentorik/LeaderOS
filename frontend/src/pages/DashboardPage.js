@@ -57,7 +57,10 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('wladbot_onboarding_done')) setShowOnboarding(true);
+    // Iter 92.34 (Mert Go-Live): "alle PopUps bitte erstmal weglassen" →
+    // 9-step Tour disabled. Auto-mark done so it never re-fires post-launch.
+    try { localStorage.setItem('wladbot_onboarding_done', '1'); } catch { /* noop */ }
+    setShowOnboarding(false);
     loadDashboard();
   }, [loadDashboard]);
 

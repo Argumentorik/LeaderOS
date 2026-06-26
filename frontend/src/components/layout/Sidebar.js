@@ -10,11 +10,22 @@ import {
   IconCrown, IconLayers, IconLens, IconFlow, IconGraph,
   IconEvent, IconDiamond, IconFlame, IconChev, SBolt, STarget, SBrain,
 } from './SidebarIcons';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Iter 92.34 (Mert Go-Live §C): items locked for Free tier — render with 🔒
+// icon and redirect to /coaching (upgrade page) when clicked.
+const FREE_TIER_LOCKED = new Set([
+  '/simulations', '/playbooks', '/tasks', '/tools',
+  '/lern-videos', '/events',
+]);
 
 
 export const Sidebar = () => {
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang, t } = useLanguage();
+  const { user } = useAuth();
+  const userTier = (user?.tier || 'free').toLowerCase();
+  const isLockedPath = (path) => userTier === 'free' && FREE_TIER_LOCKED.has(path);
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
@@ -56,7 +67,11 @@ export const Sidebar = () => {
         { path: '/coaching', label: t('nav.coaching'), icon: IconDiamond },
       ]
     }
-  ].filter(section => section.items.length > 0);
+  ].filter(section => section.items.length > 0)
+   .map(section => ({
+     ...section,
+     items: section.items.map(it => ({ ...it, locked: isLockedPath(it.path) })),
+   }));
 
   const activeSection = navSections.find(s => s.items.some(i => location.pathname === i.path))?.id || 'today';
 

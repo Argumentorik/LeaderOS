@@ -347,7 +347,10 @@ export default function VideoChallengePage() {
     <DashboardLayout>
       {!canAccess && !tierCtx.loading && <TierLockOverlay feature="video_analysis" requiredTier="accelerator" de={de} />}
       <LoadingOverlay isOpen={analyzing} flow="video" de={de} />
-      <div className="flex flex-col lg:flex-row min-h-screen" data-testid="video-studio-shell">
+      {/* Iter 92.34 (Mert Go-Live §B): Video Studio Sidebar nach RECHTS. Reverse
+          row order on desktop so the studio (mission list/history) sits far right
+          and the main player+analysis takes the prime left/center reading slot. */}
+      <div className="flex flex-col lg:flex-row-reverse min-h-screen" data-testid="video-studio-shell">
         <VideoStudioSidebar
           entries={archive}
           challenges={challenges}

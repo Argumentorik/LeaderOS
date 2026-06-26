@@ -18,6 +18,29 @@ from data import LEADERSHIP_QUOTES
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
+
+# Iter 92.34 (Mert Go-Live §A=b): standalone classification endpoint for the
+# frontend to call BEFORE sending the message to /chat. Two-call pattern lets
+# the UI render the intent-badge ("Erkannt: 🎤 Speech Coaching") with override
+# button immediately, then route the actual chat call with the resolved intent.
+from services_classifier import classify_intent
+
+from pydantic import BaseModel
+
+
+class IntentClassifyIn(BaseModel):
+    message: str
+    override: Optional[str] = None
+
+
+@router.post("/chat/classify-intent")
+async def classify_intent_endpoint(payload: IntentClassifyIn, request: Request):
+    user = await get_current_user(request)
+    _ = user  # auth-only; no per-user state needed for classification
+    return await classify_intent(payload.message, override=payload.override)
+
+
+
 # Max sizes
 MAX_PDF_SIZE = 15 * 1024 * 1024   # 15 MB
 MAX_DOC_SIZE = 10 * 1024 * 1024   # 10 MB

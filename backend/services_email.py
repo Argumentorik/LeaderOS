@@ -443,29 +443,31 @@ def drip_day7_email(name: str, app_url: str = "https://leaderos.de") -> tuple[st
     """Day 7 drip: Conversion — pitch Leadership OS Standard."""
     subject = f"Tag 7 · Was sich nach 30 Tagen ändert, {name}"
     coaching_url = f"{app_url.rstrip('/')}/coaching"
+    # Iter 92.34 (Mert Go-Live §D3): hype-Sprache durch trust-building copy ersetzt.
+    # Fokus: Executive Communication + Personal Development + Structured Learning.
     body = f"""
-<div style="background:linear-gradient(135deg,rgba(191,255,0,0.14),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.24);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
-  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tag 7 · Decision Point</div>
-  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">Bereit, das Spiel hochzuziehen?</div>
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.10),rgba(154,204,0,0.02));border:1px solid rgba(191,255,0,0.18);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
+  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tag 7 · Zwischenstand</div>
+  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">Wie war deine erste Woche mit Wlad?</div>
 </div>
 <p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 18px;">
-Eine Woche im System. Wenn du WladBot ernsthaft genutzt hast, hast du schon <b>3–5 konkrete Erkenntnisse</b> gewonnen, die du in deinem nächsten Mitarbeitergespräch direkt einsetzen kannst.<br><br>
-Aber das ist erst die Spitze. <b>Leadership OS Standard</b> öffnet das volle System:
+Sieben Tage. Du hast einen Eindruck bekommen, wie sich strukturierte Kommunikations-Arbeit anfühlt. Vielleicht hast du eine Wlad-Übung in einem Gespräch ausprobiert, eine Mission aufgenommen, oder eine Idee aus einem Playbook umgesetzt.<br><br>
+Wenn du das Gefühl hast, dass diese Art zu arbeiten zu dir passt, lohnt sich ein Blick auf <b>Leadership OS</b> — der strukturierte Lernweg über 12 Monate:
 </p>
 <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">12 Videokurse</b> · 1/Monat freigeschaltet · Wert 2.388€</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">30-Tage Sprint</b> · KI-personalisiert auf deine Diagnose</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Alle Frameworks</b> · Schwierige Gespräche, Verhandlung, Rhetorik, 5 Rollen</p>
-  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">Video-Analyse Bonus</b> · 5 frische Analysen direkt nach Kauf</p>
+  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">12 Videokurse</b> — ein neues Modul pro Monat zu Executive Communication, Verhandlung & Strategie</p>
+  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Strukturierter Lernpfad</b> — KI-Coach passt sich deinen Ergebnissen und Zielen an</p>
+  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Praxis-Frameworks</b> — Mitarbeitergespräche, Verhandlung, Rhetorik, 5 Führungsrollen</p>
+  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">Video-Feedback</b> — du nimmst auf, die KI bewertet nach Wlads SEXIER-Modell</p>
 </div>
 <p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 20px;">
-<b>1 Jahr Vollzugang für 997€</b> — oder in 2 bzw. 12 Raten. 30 Tage Geld-zurück.
+Du kannst dir den Plan in Ruhe ansehen — bei Fragen sprich gern ein 30-Min-Strategiegespräch mit uns durch, ohne Verkaufsdruck.
 </p>
 <div style="text-align:center;padding:6px 0 4px;">
-  <a href="{coaching_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Leadership OS freischalten</a>
+  <a href="{coaching_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Pläne ansehen</a>
 </div>
 <p style="font-size:11px;color:rgba(255,255,255,0.4);margin:20px 0 0;line-height:1.6;text-align:center;">
-Kein Risiko: 30 Tage Geld-zurück, ohne Wenn und Aber.
+30 Tage Geld-zurück-Garantie · keine Kreditkarte für Probezeit nötig.
 </p>
 """
     return subject, _base_layout(body, preheader="Was sich nach 30 Tagen Leader-OS ändert.")

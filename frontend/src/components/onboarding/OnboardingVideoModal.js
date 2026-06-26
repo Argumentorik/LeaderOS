@@ -38,18 +38,9 @@ export const OnboardingVideoModal = () => {
   const subRef = useRef(null);
 
   useEffect(() => {
-    try {
-      // Iter 92.32: don't fire the welcome modal while the 9-step OnboardingTour
-      // is still running — otherwise users get TWO overlapping welcomes on first
-      // login (Tour wraps onboarding-modal). Tour-completion sets `wladbot_onboarding_done`.
-      const tourDone = !!localStorage.getItem('wladbot_onboarding_done');
-      const modalSeen = !!localStorage.getItem(STORAGE_KEY);
-      if (!tourDone || modalSeen) return;
-      const t = setTimeout(() => setOpen(true), 1100);
-      return () => clearTimeout(t);
-    } catch {
-      return undefined;
-    }
+    // Iter 92.34 (Mert Go-Live): "alle PopUps bitte erstmal weglassen" →
+    // Onboarding-Modal komplett disabled für Launch-Phase. Re-enable via flag.
+    return undefined;
   }, []);
 
   // GSAP entrance choreography — runs when `open` flips true
