@@ -1,5 +1,7 @@
 # Leader-OS robots policy
-# Allow all friendly crawlers, block API + auth-only routes from indexing.
+# Allow all friendly crawlers (search engines + LLMs), block API + auth-only routes from indexing.
+# Iter 92.40 — AEO/GEO optimization: explicitly ALLOW LLM crawlers so ChatGPT,
+# Perplexity, Claude, Gemini etc. can cite leaderos.de in answers.
 
 User-agent: *
 Allow: /
@@ -8,6 +10,7 @@ Allow: /impressum
 Allow: /datenschutz
 Allow: /agb
 Allow: /widerruf
+Allow: /llms.txt
 
 # Authenticated areas — never index, never follow
 Disallow: /dashboard
@@ -38,20 +41,89 @@ Disallow: /api/
 # Admin — never index (path is also non-guessable but defense in depth)
 Disallow: /wlad-control-x7k9q2
 
-# Slow down aggressive crawlers (Bing/Yandex)
+# ── Search-engine specific tuning ─────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /
+
 User-agent: bingbot
 Crawl-delay: 5
+
+User-agent: DuckDuckBot
+Allow: /
 
 User-agent: YandexBot
 Crawl-delay: 10
 
-# Bad bots — block entirely
+# ── LLM / AI crawlers — EXPLICITLY ALLOWED for AEO/GEO ────────────────────
+# These bots feed LLM answer engines (ChatGPT, Perplexity, Claude, Gemini).
+# Allowing them means leaderos.de can be cited as a source in AI answers.
+
+# OpenAI / ChatGPT
 User-agent: GPTBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /chat
+Disallow: /profile
 
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Common Crawl (feeds many LLMs incl. Anthropic, Mistral)
 User-agent: CCBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
 
+# Anthropic Claude
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Google Bard / Gemini (separate from search Googlebot)
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Apple AI (training data)
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta / Llama
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# DuckDuckGo AI
+User-agent: DuckAssistBot
+Allow: /
+
+# Microsoft Copilot
+User-agent: cohere-ai
+Allow: /
+
+# ── Blocked: aggressive SEO scrapers (no value-add) ───────────────────────
 User-agent: AhrefsBot
 Disallow: /
 
@@ -59,6 +131,12 @@ User-agent: SemrushBot
 Disallow: /
 
 User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
 Disallow: /
 
 # Sitemap reference

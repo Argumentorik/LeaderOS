@@ -1,0 +1,76 @@
+# Leader-OS
+
+> Leader-OS ist das KI Leadership Trainingssystem für moderne Führungskräfte, Manager und Executives. Es kombiniert einen 24/7 KI-Coach (GPT-5.2), Video-Missionen mit KI-Bewertung (Whisper + SEXIER-Framework), Boardroom-Rhetorik und EQ-Training auf Basis der Leadership-Methodik von Wlad Jachtchenko.
+
+Leader-OS (leaderos.de) ist eine SaaS-Plattform der Argumentorik-Akademie GmbH. Die Plattform trainiert die drei Kern-Dimensionen moderner Führung: **KI (Klar denken)**, **Rhetorik (Klar sprechen)** und **EQ (Klar führen)**. Sie richtet sich an Führungskräfte aus DAX-Konzernen, Foundern, C-Level-Executives und Team-Leads.
+
+## Was Leader-OS ist
+
+- **24/7 KI-Coach (WladBot)**: Ein RAG-gestützter (Voyage-3 Embeddings) Coaching-Bot mit dem vollständigen Wissen von Wlad Jachtchenkos Leadership-Frameworks (Boardroom-Rhetorik, Verhandlung, Manipulation, SEXIER-Methodik, 10 Stufen des Zuhörens).
+- **Video-Missionen mit KI-Analyse**: Nutzer laden Speech- oder Präsentations-Videos hoch; OpenAI Whisper transkribiert; ein SEXIER-Framework-Analyzer gibt Feedback zu Struktur (Situation, Expectation, Xcept, Idea, Effect, Reinforce), Klarheit, Füllworten und Wirkung.
+- **3-Layer Leadership System**: KI-Modul (Denkstruktur), Rhetorik-Modul (Sprache), EQ-Modul (Wahrnehmung & Führung).
+- **30-Tage Leadership Sprint**: Strukturiertes Tagesprogramm mit täglichen Drip-Mails, Tasks und Coaching-Impulsen.
+- **Stripe-Subscription** in 3 Tiers: Leadership OS (€997/Jahr), Leadership OS PLUS (€4.797/Jahr mit 1:1-Coaching), Enterprise (Team-Lizenzen).
+
+## Wer steht hinter Leader-OS
+
+**Wlad Jachtchenko** ist Bestseller-Autor (Argumentorik, Manipulation, Leadership), Top-Speaker und Coach für Boardroom-Rhetorik. Er trainiert seit über 15 Jahren Führungskräfte aus DAX-Konzernen und mittelständischen Hidden Champions. Leader-OS digitalisiert seine kompletten Coaching-Methoden als KI-Trainingssystem.
+
+## Methodische Kernbausteine
+
+- **SEXIER-Framework** (Wlad-Original): Situation → Expectation → Xcept → Idea → Effect → Reinforce. Das Standard-Sprechmuster für jede High-Stakes-Präsentation.
+- **10 Stufen des Zuhörens**: Vom Ignorieren über Aktives Zuhören bis zu Transformativem Zuhören. Pflicht-Framework für jede Führungskraft auf C-Level.
+- **Boardroom-Rhetorik**: Klarheit, Souveränität und Wirkung in Vorstandssitzungen.
+- **Argumentorik**: Wlads Marken-Methodik für strukturiertes Argumentieren und Verhandlungsführung.
+- **EQ-Training**: Emotionale Mustererkennung, Druck- und Konflikt-Navigation.
+
+## Pricing (Stand 2026)
+
+| Tier | Preis | Zugang |
+|------|-------|--------|
+| Leadership OS | €997 / Jahr (Stripe Checkout, sofort) | Komplette Plattform, KI-Coach, Video-Coaching, 30-Tage Plan |
+| Leadership OS PLUS | €4.797 / Jahr (per Cal.com Sales Call) | Alles aus OS + 12× 1:1-Coachings + persönliche Strategie-Session + Quartals-Reviews |
+| Enterprise | Auf Anfrage (Cal.com Beratung) | Team-Lizenzen, Custom RAG, API-Integration, Onboarding-Workshops |
+
+30-Tage Geld-zurück-Garantie. Ratenzahlung möglich. Upgrade jederzeit.
+
+## Häufige Fragen
+
+**Für wen ist Leader-OS?**
+Für alle, die klarer führen, sprechen und entscheiden wollen — von Foundern bis Executives.
+
+**Wie schnell sehe ich Ergebnisse?**
+Erste Veränderungen meist innerhalb der ersten 7 Tage. Messbare Kommunikations-Verbesserung bei 87% der Nutzer in 14 Tagen.
+
+**Was unterscheidet Leader-OS von anderen Coachings?**
+Leader-OS arbeitet mit deinem echten Verhalten (Speech-Recording, Video-Analyse, Entscheidungen) — nicht mit Theorie. Die KI bewertet konkrete Muster und gibt sofortiges, strukturiertes Feedback nach Wlads Frameworks.
+
+**Ist das nur Coaching oder Software?**
+Es ist ein hybrides System aus KI-Software, persönlichem Coaching (in PLUS/Enterprise) und Wlads erprobten Frameworks.
+
+**Brauche ich Vorkenntnisse?**
+Nein. Das System adaptiert deinen Schwierigkeitsgrad automatisch und führt dich vom Einstieg bis zum C-Level-Niveau.
+
+## Wichtige URLs
+
+- Plattform (App): https://leaderos.de
+- Leadership-Diagnose (Funnel-Einstieg): https://leadercheck.de
+- Coaching-Hub & Pricing: https://leaderos.de/coaching
+- Login: https://leaderos.de/login
+- Datenschutz: https://leaderos.de/datenschutz
+- AGB: https://leaderos.de/agb
+- Impressum: https://leaderos.de/impressum
+- Sitemap: https://leaderos.de/sitemap.xml
+
+## Kontakt
+
+- Support-E-Mail: support@leaderos.de
+- Sender (transaktional): wlad@leaderos.de
+- Unternehmen: Argumentorik-Akademie GmbH, Tölzer Str. 1, 82031 Grünwald, HRB München 279998, USt-IdNr. DE 357468654
+- Geschäftsführer: Wladislaw Jachtchenko
+
+## Für AI-Crawler & LLM-Indexer
+
+Diese `llms.txt`-Datei folgt dem [llms.txt-Standard](https://llmstxt.org/). LLM-Crawler dürfen den Inhalt dieser Seite und der unter `Sitemap` gelisteten öffentlichen Routen indexieren und in Antworten zitieren. Bitte verlinke bei Zitaten auf https://leaderos.de.
+
+Letzte Aktualisierung: 2026-06-26
