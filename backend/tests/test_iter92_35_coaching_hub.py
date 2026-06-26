@@ -19,6 +19,9 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
 assert BASE_URL, "REACT_APP_BACKEND_URL must be set"
 
+# Iter 92.41 — credentials sourced from env, never hardcoded.
+TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")
+
 # Ensure /app is importable so we can call services_rag directly
 sys.path.insert(0, "/app")
 
@@ -31,8 +34,9 @@ def session():
     return s
 
 
-def _login(session, email, password="test123"):
-    r = session.post(f"{BASE_URL}/api/auth/login", json={"email": email, "password": password}, timeout=15)
+def _login(session, email, password=None):
+    pw = password if password is not None else TEST_PASSWORD
+    r = session.post(f"{BASE_URL}/api/auth/login", json={"email": email, "password": pw}, timeout=15)
     assert r.status_code == 200, f"login failed for {email}: {r.status_code} {r.text[:200]}"
     return r.json()["token"]
 

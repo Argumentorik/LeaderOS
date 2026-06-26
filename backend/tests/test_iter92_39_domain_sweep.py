@@ -35,19 +35,19 @@ class TestDomainSweep:
             "/app/backend/services_wladhub_autosync.py",
             "/app/backend/services_tier.py",
         ])
-        assert lines == [], f"Found dashed leader-os.de:\n" + "\n".join(lines)
+        assert lines == [], "Found dashed leader-os.de:\n" + "\n".join(lines)
 
     def test_backend_routes_no_dashed_domain(self):
         lines = _grep_dashed(["/app/backend/routes/"])
-        assert lines == [], f"Found dashed leader-os.de:\n" + "\n".join(lines)
+        assert lines == [], "Found dashed leader-os.de:\n" + "\n".join(lines)
 
     def test_frontend_src_no_dashed_domain(self):
         lines = _grep_dashed(["/app/frontend/src/"])
-        assert lines == [], f"Found dashed leader-os.de:\n" + "\n".join(lines)
+        assert lines == [], "Found dashed leader-os.de:\n" + "\n".join(lines)
 
     def test_frontend_public_no_dashed_domain(self):
         lines = _grep_dashed(["/app/frontend/public/"])
-        assert lines == [], f"Found dashed leader-os.de:\n" + "\n".join(lines)
+        assert lines == [], "Found dashed leader-os.de:\n" + "\n".join(lines)
 
     def test_cors_comment_preserved_in_server(self):
         """server.py:196 must STILL reference leader-os.de in CORS comment."""
@@ -66,9 +66,11 @@ class TestSenderAndShare:
     def test_sender_email_no_dash(self):
         from backend import services_email  # type: ignore
         # import via path
-        import importlib.util, sys
+        import importlib.util
+        import sys
         spec = importlib.util.spec_from_file_location("services_email", "/app/backend/services_email.py")
-        mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
         assert mod.SENDER_EMAIL == "wlad@leaderos.de", f"got {mod.SENDER_EMAIL!r}"
 
     def test_share_js_prod_origin(self):
@@ -98,12 +100,13 @@ class TestEmailTemplates:
     def email_mod(self):
         import importlib.util
         spec = importlib.util.spec_from_file_location("services_email", "/app/backend/services_email.py")
-        mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
         return mod
 
     def _check(self, html: str, subj: str):
-        assert "leader-os.de" not in html, f"dashed found in html"
-        assert "leader-os.de" not in subj, f"dashed found in subject"
+        assert "leader-os.de" not in html, "dashed found in html"
+        assert "leader-os.de" not in subj, "dashed found in subject"
 
     def test_signup_welcome(self, email_mod):
         subj, html = email_mod.signup_welcome_email("Mert")

@@ -162,8 +162,8 @@ export default function ChangelogPage() {
                 </h2>
 
                 <ul className="space-y-1.5">
-                  {entry.bullets.map((b, i) => (
-                    <li key={i} className="text-[14px] text-white/65 leading-relaxed pl-4 relative">
+                  {entry.bullets.map((b) => (
+                    <li key={b} className="text-[14px] text-white/65 leading-relaxed pl-4 relative">
                       <span className="absolute left-0 top-2 w-1 h-1 rounded-full bg-white/30" />
                       {b}
                     </li>
@@ -181,7 +181,7 @@ export default function ChangelogPage() {
           </p>
           <div className="space-y-3">
             {COMING.map((c, i) => (
-              <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-colors" data-testid={`changelog-coming-${i}`}>
+              <div key={c.title} className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-colors" data-testid={`changelog-coming-${i}`}>
                 <span className="text-[10px] font-bold tracking-wider text-amber-300/80 mt-0.5 w-16 flex-shrink-0">{c.quarter}</span>
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-white/85">{c.title}</p>

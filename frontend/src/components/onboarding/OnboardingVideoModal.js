@@ -183,7 +183,7 @@ export const OnboardingVideoModal = () => {
                 { icon: '👤', title: '1:1 Coaching', desc: 'Mit Wlads Expertenteam — direkt einen Slot wählen.' },
               ].map((b, i) => (
                 <div
-                  key={i}
+                  key={b.title}
                   className="flex flex-col items-start gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#BFFF00]/30 transition-colors"
                   data-testid={`onboarding-benefit-${i}`}
                 >

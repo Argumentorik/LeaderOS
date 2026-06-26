@@ -132,7 +132,7 @@ class TestOnboardingEmails:
         env_text = open("/app/backend/.env").read()
         assert "RESEND_API_KEY" in env_text
         # Validate prefix only — do not log the key
-        key_line = [l for l in env_text.splitlines() if l.startswith("RESEND_API_KEY")]
+        key_line = [line for line in env_text.splitlines() if line.startswith("RESEND_API_KEY")]
         assert key_line and "re_" in key_line[0]
 
     def test_send_email_function_exists(self):

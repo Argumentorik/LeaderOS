@@ -25,6 +25,11 @@ from conftest import TEST_PASSWORD  # noqa: E402
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001").rstrip("/")
 
+# Iter 92.41 — explicitly-labelled non-secret literals used to test the
+# rejection paths (so static analysers don't flag them as hardcoded secrets).
+WRONG_PASSWORD_LITERAL = "intentionally-wrong-pwd-for-test"  # noqa: S105 — test sentinel
+SHORT_INVALID_PASSWORD = "x"  # noqa: S105 — minimal-length sentinel
+
 
 def _uniq() -> str:
     """Unique numeric+lowercase suffix for emails (digits-only for phone tests)."""
@@ -158,22 +163,22 @@ def test_wrong_password_returns_generic_401_for_both_paths():
     _register(email, TEST_PASSWORD, "Enum User", phone=phone)
 
     # Wrong password on EXISTING email
-    r1 = _login(identifier=email, password="wrong-password")
+    r1 = _login(identifier=email, password=WRONG_PASSWORD_LITERAL)
     assert r1.status_code == 401
     assert r1.json().get("detail") == "Invalid credentials"
 
     # Wrong password on EXISTING phone
-    r2 = _login(identifier=phone, password="wrong-password")
+    r2 = _login(identifier=phone, password=WRONG_PASSWORD_LITERAL)
     assert r2.status_code == 401
     assert r2.json().get("detail") == "Invalid credentials"
 
     # NON-EXISTING email → same shape
-    r3 = _login(identifier=f"never_existed_{u}@nowhere.test", password="x")
+    r3 = _login(identifier=f"never_existed_{u}@nowhere.test", password=SHORT_INVALID_PASSWORD)
     assert r3.status_code == 401
     assert r3.json().get("detail") == "Invalid credentials"
 
     # NON-EXISTING phone → same shape
-    r4 = _login(identifier=f"+49 999 0{u[-5:]}", password="x")
+    r4 = _login(identifier=f"+49 999 0{u[-5:]}", password=SHORT_INVALID_PASSWORD)
     assert r4.status_code == 401
     assert r4.json().get("detail") == "Invalid credentials"
 

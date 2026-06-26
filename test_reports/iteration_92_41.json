@@ -1,0 +1,59 @@
+{
+  "summary": "Iter 92.41 — Code-Quality surgical-fix verification. All 5 targeted surgical changes verified WORKING: (1) test_iter92_35 imports cleanly with env-driven TEST_PASSWORD via conftest fallback ('test123' default). (2) test_iter92_24 imports cleanly with WRONG_PASSWORD_LITERAL + SHORT_INVALID_PASSWORD named constants. (3) ChangelogPage.js uses key={b} for bullets and key={c.title} for COMING items — /changelog renders 7 entries + 4 COMING with ZERO React key warnings in console. (4) OnboardingVideoModal uses key={b.title} for benefit cards (modal currently disabled via early-return in iter92.34 — code path inspected and verified correct). (5) test_iter92_37 line 135 uses `line` (ambiguous-l renamed) and test_iter92_39 multi-statement lines split. mcp_lint_python /app/backend/ → ZERO errors. pytest --co on the 4 surgical-fix files collects 78 tests cleanly. Backend lint clean. POST /api/auth/login {email:test@test.com,password:test123} → 200 with token+user. Frontend /login + /changelog render without console-errors. One PRE-EXISTING (NOT iter92.41) test_iter92_39 domain-sweep test fails because an HTML comment in /app/frontend/public/index.html:12 references 'leader-os.de' as a documentation note about the separate Vercel landing page — same intentional-whitelist pattern as server.py:196 CORS comment but test doesn't whitelist HTML comments. test_iter92_24 + test_iter92_37 phone-related tests fail because phone is now MANDATORY at signup (Iter 92.34 change), unrelated to iter92.41.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "test_iter92_39_domain_sweep.py::test_frontend_public_no_dashed_domain", "issue": "Test fails because /app/frontend/public/index.html:12 contains an HTML comment <!-- leader-os.de is the Vercel landing-page only ... --> which is an INTENTIONAL documentation note about the separate Vercel codebase. Same pattern as the whitelisted CORS comment in server.py:196 and .env.example:46 but the test only whitelists those two paths, not index.html. Out-of-scope of iter92.41 (which only touched literal constants/lint). Fix: add index.html to the test's intentional-whitelist OR remove the leader-os.de from the HTML comment."},
+      {"endpoint": "test_iter92_24_phone_login_and_source_platform.py (multiple tests) + test_iter92_37_pre_release_regression.py::TestAuth", "issue": "PRE-EXISTING failures unrelated to iter92.41. Iter 92.34 made phone REQUIRED at signup (models.py:66 → `phone: str`). These tests were written under iter 92.24 when phone was optional. The register endpoint returns 422 'Field required'. Tests need updating to pass a phone value, OR the iter92.34 phone-required decision needs reverting (latter is product decision, NOT testing scope)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verified_behaviours": [
+    "mcp_lint_python /app/backend/ → No lint errors found (ruff clean).",
+    "Imports clean for all 4 surgical-fix files (test_iter92_35, test_iter92_24, test_iter92_37, test_iter92_39).",
+    "conftest.py exports TEST_PASSWORD='test123' (env-driven fallback) — test_iter92_24 imports it correctly.",
+    "test_iter92_35 _login() default password derived from os.environ.get('TEST_PASSWORD', 'test123') — verified at line 23+37-38.",
+    "test_iter92_24 WRONG_PASSWORD_LITERAL='intentionally-wrong-pwd-for-test' and SHORT_INVALID_PASSWORD='x' constants present with noqa S105 markers (lines 30-31).",
+    "ChangelogPage.js: line 165 `entry.bullets.map((b) => (<li key={b}`; line 184 `COMING.map((c, i) => (<div key={c.title}` — both fixes in place.",
+    "OnboardingVideoModal.js: line 184-188 benefit cards use `key={b.title}` (verified by inspection — modal currently early-returns via iter92.34 launch-disable flag, so cannot be triggered at runtime, but key syntax is correct).",
+    "test_iter92_37 line 135: variable renamed from `l` to `line` (verified). test_iter92_39 lines 72/103 multi-statement properly split.",
+    "pytest --co -q on surgical-fix files: 78 tests collected, 0 errors.",
+    "pytest --co -q on ALL test_iter92_*.py: 174 tests collected, 0 errors.",
+    "POST /api/auth/login {email:test@test.com,password:test123} → 200, returns valid token + user.email='test@test.com'.",
+    "Frontend /login: renders cleanly, Magic Link tab + Google OAuth button + identifier/password inputs visible. [Google OAuth] init console-log present (iter92.36 diagnostic regression intact).",
+    "Frontend /changelog: renders 7 changelog entries + 4 COMING items, h1='Wir bauen Leader-OS in der Öffentlichkeit'. ZERO React key warnings in browser console. ZERO Reach errors.",
+    "Cookie banner dismissable. Sync banner pattern still works (iter92.39 verified)."
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_35_coaching_hub.py",
+    "/app/backend/tests/test_iter92_24_phone_login_and_source_platform.py",
+    "/app/backend/tests/test_iter92_37_pre_release_regression.py",
+    "/app/backend/tests/test_iter92_39_domain_sweep.py",
+    "/app/test_reports/pytest/iter92_41.xml"
+  ],
+  "action_items": [
+    "OPTIONAL — Either remove the 'leader-os.de' reference from the HTML comment in /app/frontend/public/index.html:12 OR add index.html to the intentional-whitelist in test_iter92_39_domain_sweep.py to fix the single domain-sweep test failure. Comment is non-customer-facing (HTML comment, not rendered).",
+    "PRE-EXISTING (NOT iter92.41 scope) — Update test_iter92_24_phone_login_and_source_platform.py + test_iter92_37_pre_release_regression.py register calls to include `phone` field. Iter 92.34 made phone mandatory but these tests were written before that change. This is technical debt, not a regression from iter92.41."
+  ],
+  "critical_code_review_comments": [
+    "Iter 92.41 surgical fixes are clean and well-documented: (a) env-first credentials pattern in conftest.py is the right approach, (b) named constants WRONG_PASSWORD_LITERAL/SHORT_INVALID_PASSWORD with explicit noqa S105 comments correctly document intent for static analysers, (c) React key fixes use stable content-based keys instead of array indexes which is the correct React idiom.",
+    "DEFERRED items (170 React hook deps warnings, complexity refactors, file splits, localStorage migration) appropriately deferred — main agent's risk assessment is sound: touching auth/admin pre-deploy or fixing hook deps without careful render-loop analysis would be high-risk.",
+    "test_iter92_24 + test_iter92_37 are stale relative to iter92.34 phone-required change. Recommend a small follow-up iter to refresh those tests, OR mark them with pytest.mark.skip until the phone-required policy is finalized.",
+    "test_iter92_39 domain-sweep test would benefit from a single explicit whitelist constant ALLOWED_DASHED_LOCATIONS rather than path-scoped greps, so future intentional doc-comments don't break it."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% on iter92.41 scope (78/78 collect, lint clean, auth 200, surgical fixes verified). Out-of-scope pre-existing failures: 14 (iter92.24 + iter92.37 phone-required) + 1 (iter92.39 HTML comment).",
+    "frontend": "100% on iter92.41 scope (/changelog + /login render, ZERO React key warnings, ZERO console errors related to surgical fixes)."
+  },
+  "test_credentials": "test@test.com / test123 (admin, verified 200 OK). TEST_PASSWORD env var defaults to test123 for legacy compat.",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.41 surgical code-quality cleanup is COMPLETE and VERIFIED. All 5 explicit surgical changes work. Three issues remain that are NOT iter92.41 regressions: (1) /app/frontend/public/index.html:12 HTML comment trips test_iter92_39_domain_sweep — either remove the comment ref or whitelist index.html in that test, (2) test_iter92_24 + iter92_37 phone-related tests are stale relative to iter92.34 phone-required register-API change, (3) OnboardingVideoModal is launch-disabled via early-return so its key fix is verified-by-inspection only (cannot trigger modal at runtime). Backend lint is fully clean. Auth (test@test.com/test123) works. /changelog renders without any React warnings.",
+  "rca of the issue": "No iter92.41 regression. The only test failure attributable to recent changes (index.html HTML comment) is in a pre-existing iter92.39 test that doesn't whitelist HTML comments — but the comment itself is INTENTIONAL documentation that matches the same backward-compat pattern already whitelisted in server.py:196 and .env.example:46. Phone-related test failures predate iter92.41 by 7 iterations (iter92.34 phone-required change)."
+}
