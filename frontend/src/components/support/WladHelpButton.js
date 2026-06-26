@@ -131,8 +131,8 @@ export const WladHelpButton = () => {
       logger.error('WladHelp send failed', err);
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        text: 'Sorry — gerade gabs einen Fehler. Schreib uns auf support@leader-os.de und wir melden uns innerhalb 24h.',
-        actions: [{ label: 'Email an Support', type: 'mailto', value: 'support@leader-os.de' }],
+        text: 'Sorry — gerade gabs einen Fehler. Schreib uns auf support@leaderos.de und wir melden uns innerhalb 24h.',
+        actions: [{ label: 'Email an Support', type: 'mailto', value: 'support@leaderos.de' }],
       }]);
     } finally {
       setSending(false);
@@ -294,7 +294,7 @@ export const WladHelpButton = () => {
               </button>
             </div>
             <p className="text-[9px] text-white/25 mt-1.5 text-center">
-              Bei dringenden Anliegen: <a href="mailto:support@leader-os.de" className="text-white/40 hover:text-white/70 underline">support@leader-os.de</a>
+              Bei dringenden Anliegen: <a href="mailto:support@leaderos.de" className="text-white/40 hover:text-white/70 underline">support@leaderos.de</a>
             </p>
           </div>
         </div>

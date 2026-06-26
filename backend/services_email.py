@@ -27,7 +27,7 @@ def _frontend_url() -> str:
     both projects share this same backend service code.
 
     Fallback `https://leaderos.de` matches Mert's primary production domain
-    (Jun 2026 launch). Old hardcoded `leader-os.de` (with dash) is deprecated.
+    (Jun 2026 launch). Old hardcoded `leaderos.de` (with dash) is deprecated.
     """
     return (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
 

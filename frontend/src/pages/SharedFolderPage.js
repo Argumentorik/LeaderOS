@@ -169,7 +169,7 @@ export default function SharedFolderPage() {
         </section>
 
         <footer className="text-center text-[10px] text-white/30 pt-4">
-          Geteilt am {(share?.created_at || '').slice(0, 10)} · <Link to="/" className="hover:text-[#BFFF00]">leader-os.de</Link>
+          Geteilt am {(share?.created_at || '').slice(0, 10)} · <Link to="/" className="hover:text-[#BFFF00]">leaderos.de</Link>
         </footer>
       </div>
     </div>

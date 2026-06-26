@@ -1,7 +1,7 @@
 """Dynamic OG image generation for shareable Leader-Score cards.
 
 Renders premium dark (Apple-style) PNGs on the fly for LinkedIn / X / Slack
-previews. Score → giant lime number, tier label, dezent "leader-os.de" footer.
+previews. Score → giant lime number, tier label, dezent "leaderos.de" footer.
 
 URL pattern:
   GET /api/og/leader-score/{user_id}
@@ -134,7 +134,7 @@ def _render_leader_score_card(
 
     # Bottom-right footer — discreet domain
     f_footer = _font(22, weight="regular")
-    footer = "leader-os.de"
+    footer = "leaderos.de"
     footer_bbox = draw.textbbox((0, 0), footer, font=f_footer)
     footer_w = footer_bbox[2] - footer_bbox[0]
     draw.text((WIDTH - 60 - footer_w, HEIGHT - 60), footer, font=f_footer, fill=NEON_LIME)
@@ -176,7 +176,7 @@ def _render_default_card() -> bytes:
 
     # Footer
     f_footer = _font(22, weight="regular")
-    footer = "leader-os.de"
+    footer = "leaderos.de"
     footer_bbox = draw.textbbox((0, 0), footer, font=f_footer)
     footer_w = footer_bbox[2] - footer_bbox[0]
     draw.text((WIDTH - 60 - footer_w, HEIGHT - 60), footer, font=f_footer, fill=NEON_LIME)
@@ -321,7 +321,7 @@ def _render_mission_share_card(
 
     # Footer
     f_footer = _font(22, weight="regular")
-    footer = "leader-os.de"
+    footer = "leaderos.de"
     footer_bbox = draw.textbbox((0, 0), footer, font=f_footer)
     footer_w = footer_bbox[2] - footer_bbox[0]
     draw.text((WIDTH - 60 - footer_w, HEIGHT - 60), footer, font=f_footer, fill=NEON_LIME)

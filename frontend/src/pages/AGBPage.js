@@ -39,13 +39,13 @@ export default function AGBPage() {
 
         <Section num="1" title="Geltungsbereich">
           <p>
-            Diese AGB gelten für sämtliche Verträge zwischen der <strong>Argumentorik-Akademie GmbH</strong>, Tölzer Str. 1, 82031 Grünwald, vertreten durch den Geschäftsführer Wladislaw Jachtchenko (HRB München 279998, USt-IdNr. DE 357468654), nachfolgend „Anbieter" und seinen Kunden („Kunde") über die Nutzung der Plattform Leader-OS (leader-os.de). Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.
+            Diese AGB gelten für sämtliche Verträge zwischen der <strong>Argumentorik-Akademie GmbH</strong>, Tölzer Str. 1, 82031 Grünwald, vertreten durch den Geschäftsführer Wladislaw Jachtchenko (HRB München 279998, USt-IdNr. DE 357468654), nachfolgend „Anbieter" und seinen Kunden („Kunde") über die Nutzung der Plattform Leader-OS (leaderos.de). Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.
           </p>
         </Section>
 
         <Section num="2" title="Vertragsgegenstand">
           <p>
-            Leader-OS ist eine SaaS-Plattform für Leadership-Coaching, basierend auf KI-Technologien und Wlad Jachtchenkos Methodik. Der Funktionsumfang ergibt sich aus der jeweiligen Tier-Beschreibung auf leader-os.de/pricing.
+            Leader-OS ist eine SaaS-Plattform für Leadership-Coaching, basierend auf KI-Technologien und Wlad Jachtchenkos Methodik. Der Funktionsumfang ergibt sich aus der jeweiligen Tier-Beschreibung auf leaderos.de/pricing.
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li><strong className="text-white">Leadership OS</strong> (997,00 €): 12-monatiger Zugriff auf Coaching-Bot, Workflows, Daily Check-ins.</li>

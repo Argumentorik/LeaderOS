@@ -3,44 +3,44 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://leader-os.de/</loc>
+    <loc>https://leaderos.de/</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="de" href="https://leader-os.de/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leader-os.de/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://leaderos.de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/" />
   </url>
 
   <url>
-    <loc>https://leader-os.de/login</loc>
+    <loc>https://leaderos.de/login</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/impressum</loc>
+    <loc>https://leaderos.de/impressum</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/datenschutz</loc>
+    <loc>https://leaderos.de/datenschutz</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/agb</loc>
+    <loc>https://leaderos.de/agb</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/widerruf</loc>
+    <loc>https://leaderos.de/widerruf</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

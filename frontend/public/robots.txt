@@ -62,4 +62,4 @@ User-agent: MJ12bot
 Disallow: /
 
 # Sitemap reference
-Sitemap: https://leader-os.de/sitemap.xml
+Sitemap: https://leaderos.de/sitemap.xml

@@ -38,13 +38,13 @@ export const CoachingRightPanel = ({ de, onCheckout }) => {
           {de ? 'Hilfe & Support' : 'Help & Support'}
         </h3>
         <div className="space-y-2">
-          <button onClick={() => window.open('mailto:support@leader-os.de')} className="flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-muted/50 transition-colors" data-testid="support-faq">
+          <button onClick={() => window.open('mailto:support@leaderos.de')} className="flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-muted/50 transition-colors" data-testid="support-faq">
             <HelpCircle size={13} className="text-muted-foreground" />
             <span className="text-xs">{de ? 'FAQ & Support' : 'FAQ & Support'}</span>
           </button>
-          <button onClick={() => window.open('mailto:support@leader-os.de')} className="flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-muted/50 transition-colors" data-testid="support-email">
+          <button onClick={() => window.open('mailto:support@leaderos.de')} className="flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-muted/50 transition-colors" data-testid="support-email">
             <Mail size={13} className="text-muted-foreground" />
-            <span className="text-xs">support@leader-os.de</span>
+            <span className="text-xs">support@leaderos.de</span>
           </button>
         </div>
       </div>

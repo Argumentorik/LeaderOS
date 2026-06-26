@@ -122,7 +122,7 @@ def _format_email_html(user_name: str, link: str) -> str:
     </div>
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
       Wenn du diesen Link nicht angefordert hast, kannst du diese E-Mail ignorieren — niemand kann ohne sie auf dein Konto zugreifen.<br/>
-      Argumentorik-Akademie GmbH · leader-os.de
+      Argumentorik-Akademie GmbH · leaderos.de
     </div>
   </div>
 </body>

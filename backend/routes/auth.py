@@ -24,7 +24,7 @@ def detect_source_platform(request: Request) -> str:
     """Iter 92.24 (Mert): detect funnel-of-origin for cross-platform attribution.
 
     Both `leadercheck.de`/`leader-check.de` (anonymous diagnostic funnel) and
-    `leaderos.de`/`leader-os.de` (authenticated coaching app) run from this
+    `leaderos.de`/`leaderos.de` (authenticated coaching app) run from this
     backend. The funnel-of-origin is needed by the Supabase `users.source_platform`
     column ('leader-check' | 'leader-os' | 'manual') for first-touch attribution.
 

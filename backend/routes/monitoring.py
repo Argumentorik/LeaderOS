@@ -3,7 +3,7 @@
 Admin-only. Use during launch to confirm both observability pipelines are live
 before the first real user hits the app.
 
-  curl -b cookie -X POST https://leader-os.de/api/monitoring/test
+  curl -b cookie -X POST https://leaderos.de/api/monitoring/test
   # → 200 with {sentry_event_id, posthog_dispatched, dsn_present, ph_key_present}
 """
 import os

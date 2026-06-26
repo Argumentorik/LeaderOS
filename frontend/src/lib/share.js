@@ -4,17 +4,17 @@
  * Every share uses the dynamic OG image route on our own domain so:
  *  - No "Built with Emergent" leakage in previews
  *  - LinkedIn/X auto-fetches /api/og/leader-score/{user_id}.png as preview
- *  - All share counts attribute to leader-os.de
+ *  - All share counts attribute to leaderos.de
  *
  * Usage:
  *   shareLeaderScore({ userId, score, tierLabel, platform: 'linkedin' });
  */
 
-const PROD_ORIGIN = 'https://leader-os.de';
+const PROD_ORIGIN = 'https://leaderos.de';
 
 /**
  * Build the canonical share URL for a user's leader-score.
- * Always returns a leader-os.de URL — never a preview/staging origin.
+ * Always returns a leaderos.de URL — never a preview/staging origin.
  */
 export const buildLeaderScoreShareUrl = (userId) => {
   const base = PROD_ORIGIN;

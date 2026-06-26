@@ -104,7 +104,7 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
       </div>
       <footer class="cover-foot">
         <span>${userName ? escapeHtml(userName) : 'Leader'} · ${escapeHtml(dateStr)}</span>
-        <span>leader-os.de · Wlad Jachtchenko Methodik</span>
+        <span>leaderos.de · Wlad Jachtchenko Methodik</span>
       </footer>
     </section>
 
@@ -267,7 +267,7 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
           <p class="cta-title">Strategiegespräch mit Wlads Expertenteam</p>
           <p class="cta-sub">15 Min · Unverbindlich · Persönliches Feedback zu deiner Analyse</p>
         </div>
-        <span class="cta-link">leader-os.de/coaching</span>
+        <span class="cta-link">leaderos.de/coaching</span>
       </div>
     </section>`;
 

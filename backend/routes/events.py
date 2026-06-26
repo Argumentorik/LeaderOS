@@ -72,7 +72,7 @@ def _build_ics_content(event: dict) -> str:
 
     end = start + timedelta(minutes=duration)
     fmt = "%Y%m%dT%H%M%SZ"
-    uid = f"{event.get('event_id', uuid.uuid4().hex)}@leader-os.de"
+    uid = f"{event.get('event_id', uuid.uuid4().hex)}@leaderos.de"
 
     return (
         "BEGIN:VCALENDAR\r\n"

@@ -71,7 +71,7 @@ export const VideoPlayer = ({
 
   if (source.type === 'vimeo') {
     // Iter 92.22: Vimeo Embed mit allen Features (clipboard-write + web-share)
-    // damit der Player auf leader-os.de ohne 403 läuft. dnt=1 = privacy mode,
+    // damit der Player auf leaderos.de ohne 403 läuft. dnt=1 = privacy mode,
     // badge=0 + autopause=0 matchen den canonical embed-code von Vimeo.
     const vimeoSrc = `https://player.vimeo.com/video/${source.id}?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1&title=0&byline=0&portrait=0${autoplay ? '&autoplay=1' : ''}`;
     return (

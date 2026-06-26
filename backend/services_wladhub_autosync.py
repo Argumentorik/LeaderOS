@@ -1,6 +1,6 @@
 """Auto-sync leader-check.de diagnosis on user signup.
 
-When a user registers on leader-os.de, we attempt to find their existing
+When a user registers on leaderos.de, we attempt to find their existing
 Leader-Diagnose in the Supabase `leadership_insights` table by email match.
 If found → import scores into the new user's MongoDB profile so they see
 their existing 3-Layer score immediately on the dashboard.

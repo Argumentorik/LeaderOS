@@ -14,7 +14,7 @@ import { toast } from 'sonner';
  *   - user already has a synced WladHub diagnosis (`last_sync` set)
  *   - user dismissed the banner this session (sessionStorage)
  *
- * Iter 92.35 (Mert P1): bridge between leader-check.de and leader-os.de.
+ * Iter 92.35 (Mert P1): bridge between leader-check.de and leaderos.de.
  */
 const SS_DISMISS_KEY = 'sync_diagnose_banner_dismissed';
 

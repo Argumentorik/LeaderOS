@@ -303,11 +303,11 @@ export default function CoachingPage() {
           <p className="text-sm text-muted-foreground">
             {de ? 'Noch Fragen? ' : 'Questions? '}
             <a
-              href="mailto:support@leader-os.de"
+              href="mailto:support@leaderos.de"
               className="text-[#4A6200] dark:text-[#BFFF00] font-bold hover:underline"
               data-testid="support-email"
             >
-              support@leader-os.de
+              support@leaderos.de
             </a>
           </p>
         </div>

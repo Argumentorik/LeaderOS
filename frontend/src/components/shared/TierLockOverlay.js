@@ -162,7 +162,7 @@ export const TierLockOverlay = ({
 
         <p className="text-[10px] text-white/30">
           {de ? 'Bereits OS PLUS?' : 'Already OS PLUS?'}{' '}
-          <a href="mailto:support@leader-os.de" className="text-[#BFFF00]/70 hover:text-[#BFFF00] underline">
+          <a href="mailto:support@leaderos.de" className="text-[#BFFF00]/70 hover:text-[#BFFF00] underline">
             <Mail size={10} className="inline -mt-0.5" /> {de ? 'Support kontaktieren' : 'contact support'}
           </a>
         </p>
