@@ -37,7 +37,7 @@ export default function Admin() {
   }), [token]);
 
   const handleAuthFailure = useCallback(() => {
-    localStorage.removeItem("leaderos_admin_token");
+    sessionStorage.removeItem("leaderos_admin_token");
     setToken("");
     setAuthenticated(false);
   }, []);
@@ -101,7 +101,7 @@ export default function Admin() {
           setAuthError("Login response invalid.");
           return;
         }
-        localStorage.setItem("leaderos_admin_token", t);
+        sessionStorage.setItem("leaderos_admin_token", t);
         setToken(t);
         setAuthenticated(true);
       } else {

@@ -16,10 +16,16 @@ import pytest
 import requests
 from pymongo import MongoClient
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://role-assessment-lab.preview.emergentagent.com").rstrip("/")
-ADMIN_PASSWORD = "wladhub2026"
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "emergent_diagnostic")
+
+if not BASE_URL or not ADMIN_PASSWORD:
+    pytest.skip(
+        "Set REACT_APP_BACKEND_URL and ADMIN_PASSWORD env vars to run this suite",
+        allow_module_level=True,
+    )
 
 DRIP_SLUGS = [
     "score_meaning", "quickwin", "social_proof", "scarcity", "loss",
