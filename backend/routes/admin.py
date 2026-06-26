@@ -144,7 +144,12 @@ async def _count_rate_limit_triggers(cutoff_24h: datetime) -> int:
 
 @router.get("/auth-health")
 async def auth_health(request: Request) -> dict:
-    """Auth metrics for launch monitoring — last 24h."""
+    """Auth metrics + config-state snapshot for launch monitoring (last 24h).
+
+    Iter 92.34 (Mert deploy-smoke-test): adds `enabled.*` + `config.*` blocks
+    so the launch-day curl shows ENV is wired correctly without having to
+    SSH into the box. NEVER leaks secrets — only booleans + first-4-chars.
+    """
     await require_admin(request)
     now = datetime.now(timezone.utc)
     cutoff_24h = now - timedelta(hours=24)
@@ -155,13 +160,50 @@ async def auth_health(request: Request) -> dict:
     top_offenders = await _gather_top_offenders(cutoff_24h)
     rate_limit_triggers = await _count_rate_limit_triggers(cutoff_24h)
 
+    # Config-snapshot (Iter 92.34): which auth surfaces are wired live?
+    import os as _os
+    _google_id = _os.environ.get("GOOGLE_CLIENT_ID") or ""
+    _apple_id = _os.environ.get("APPLE_SERVICE_ID") or _os.environ.get("APPLE_CLIENT_ID") or ""
+    _msft_id = _os.environ.get("MICROSOFT_CLIENT_ID") or ""
+    _sentry = _os.environ.get("SENTRY_DSN") or ""
+    _stripe = _os.environ.get("STRIPE_API_KEY") or ""
+    _resend = _os.environ.get("RESEND_API_KEY") or ""
+    _voyage = _os.environ.get("VOYAGE_API_KEY") or ""
+    _supabase = _os.environ.get("SUPABASE_URL") or ""
+    _front = _os.environ.get("FRONTEND_BASE_URL") or ""
+    _env_name = (_os.environ.get("ENV") or _os.environ.get("ENVIRONMENT") or "").lower()
+
     return {
         "window_hours": 24,
         **regs,
         "logins_24h": logins,
         "rate_limit_triggers_24h": rate_limit_triggers,
-        "duplicate_email_blocks_24h": 0,  # placeholder — future: explicit error log
+        "duplicate_email_blocks_24h": 0,
         "top_offenders": top_offenders,
+        # Which auth providers are LIVE (env-keys present)?
+        "enabled": {
+            "email_password": True,
+            "magic_link": bool(_resend),
+            "google": bool(_google_id),
+            "apple": bool(_apple_id),
+            "microsoft": bool(_msft_id),
+            "phone": True,  # phone-OR-email login (Iter 92.24)
+        },
+        # Boolean / fingerprint hints — NEVER full secrets
+        "config": {
+            "environment": _env_name or "unknown",
+            "frontend_base_url": _front or "(missing)",
+            "google_client_id_set": bool(_google_id),
+            "google_client_id_prefix": (_google_id.split("-")[0] if "-" in _google_id else _google_id[:8]) if _google_id else None,
+            "apple_service_id_set": bool(_apple_id),
+            "microsoft_client_id_set": bool(_msft_id),
+            "sentry_dsn_set": bool(_sentry),
+            "stripe_api_key_set": bool(_stripe),
+            "stripe_mode": "live" if _stripe.startswith("sk_live_") else ("test" if _stripe.startswith("sk_test_") else "unknown"),
+            "resend_api_key_set": bool(_resend),
+            "voyage_api_key_set": bool(_voyage),
+            "supabase_url_set": bool(_supabase),
+        },
         "computed_at": now.isoformat(),
     }
 

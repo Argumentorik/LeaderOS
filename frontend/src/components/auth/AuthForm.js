@@ -79,7 +79,7 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
         <div>
           <label htmlFor="auth-phone" className="block mb-2 text-sm font-medium text-white/70 flex items-center gap-1.5">
             <Phone size={13} className="text-[#BFFF00]" /> {de ? 'Telefonnummer' : 'Phone number'}
-            <span className="text-[10px] font-normal text-white/30 ml-1">{de ? '(Login + 1:1 Coaching)' : '(Login + 1:1 coaching)'}</span>
+            <span className="text-[10px] font-normal text-[#BFFF00]/70 ml-1">{de ? '(erforderlich)' : '(required)'}</span>
           </label>
           <input
             id="auth-phone"
@@ -92,12 +92,13 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
             placeholder="+49 170 1234567"
             value={form.phone || ''}
             onChange={e => setForm({ ...form, phone: e.target.value })}
+            required
             className={inputClass}
           />
           <p className="text-[10.5px] text-white/35 mt-1.5 leading-snug">
             {de
-              ? 'Optional. Du kannst dich später wahlweise mit E-Mail oder Telefon einloggen. Wir nutzen sie sonst nur für Cal.com Coaching-Bestätigungen — kein Marketing-Spam.'
-              : 'Optional. You can later sign in with email OR phone. Used only for Cal.com coaching confirmations — no marketing spam.'}
+              ? 'Pflichtfeld. Login per Telefonnummer möglich + Bestätigung deiner 1:1 Coaching-Termine (Cal.com).'
+              : 'Required. Used for phone-login and Cal.com coaching confirmations.'}
           </p>
         </div>
       )}

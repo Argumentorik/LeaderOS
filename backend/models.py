@@ -59,9 +59,11 @@ class UserRegister(BaseModel):
     email: str
     password: str
     name: str
-    # Iter 92.23.12 (Mert): optional phone collected at signup for Cal.com
-    # coaching call confirmations. NOT used for auth — login remains email-only.
-    phone: Optional[str] = None
+    # Iter 92.34 (Mert Go-Live Checklist §10): phone now REQUIRED at signup.
+    # Used for Cal.com coaching confirmations + as a secondary login identifier
+    # (Iter 92.24 phone-OR-email login). Required = friction trade-off accepted
+    # for higher data quality + Cal.com pipeline reliability.
+    phone: str
 
     @field_validator("email")
     @classmethod
@@ -89,19 +91,15 @@ class UserRegister(BaseModel):
 
     @field_validator("phone")
     @classmethod
-    def _validate_phone(cls, v):
-        # Optional: empty/null is fine. When provided, sanity-check:
-        #   - strip whitespace
-        #   - allow + digits spaces hyphens parens slash dots, common in DE/EU/US
-        #   - 5..32 chars after strip — too short = junk, too long = spam
+    def _validate_phone(cls, v: str) -> str:
+        # Iter 92.34: phone is now MANDATORY — empty/null no longer allowed.
         if v is None:
-            return None
+            raise ValueError("Telefonnummer ist erforderlich")
         v = str(v).strip()
         if not v:
-            return None
+            raise ValueError("Telefonnummer ist erforderlich")
         if len(v) < 5 or len(v) > 32:
             raise ValueError("Telefonnummer muss zwischen 5 und 32 Zeichen lang sein")
-        # very loose phone regex — just enough to reject obvious garbage
         import re
         if not re.match(r"^[+()\d\s\-./]+$", v):
             raise ValueError("Telefonnummer enthält ungültige Zeichen")
