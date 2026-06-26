@@ -1,0 +1,56 @@
+{
+  "summary": "Iter 92.35 — Coaching Hub Redesign + SyncDiagnoseBanner + RAG Manual Chunk. Full backend pytest (9/10 pass) and Playwright UI tests for /coaching + /dashboard. All P0/P1 features verified working. Only failure is an EXPIRED Stripe API key (env config issue, not code).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "/api/payments/checkout", "issue": "Stripe API key is EXPIRED (sk_live_...YP1Wr6) — every checkout returns 500 'Expired API Key provided'. Tier 1 Stripe flow is wired correctly in code but the live key is dead. This blocks ALL paid conversions.", "priority": "CRITICAL"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_35_coaching_hub.py",
+    "/app/test_reports/pytest/iter92_35.xml"
+  ],
+  "action_items": [
+    "URGENT: Rotate STRIPE_API_KEY in /app/backend/.env — current key is expired (sk_live_*YP1Wr6). Until rotated, Tier 1 (€997 Leadership OS) checkout returns 500. Use a fresh sk_test_... or sk_live_... key.",
+    "Optional: Add data-testid='sync-banner-title' to make banner text assertions more robust."
+  ],
+  "critical_code_review_comments": [
+    "openStrategyCall() uses inline Cal.com modal when window.Cal.ns.beratung is available — this means popup interception via page.on('popup') OR window.open spy will NOT fire. Future tests should check for the Cal iframe/dialog OR assert API absence + DOM mutation.",
+    "CoachingPage.js is 318 lines — getting long. Consider splitting Hero / SocialProof / FAQ into separate components for maintainability.",
+    "Backend services_rag.py MANUAL_CHUNKS approach is solid — deterministic keyword matching + prepend before Voyage results gives reliable RAG injection for known questions."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_35_coaching_hub.py (new)"
+  ],
+  "success_rate": {"backend": "90% (9/10 — only failure is expired Stripe key)", "frontend": "100% (all P0/P1 testids + behaviors verified)"},
+  "test_credentials": "test@test.com / test123 (admin, synced); free@wladbot.test / test123 (banner shows); accelerator@wladbot.test / test123 (for chat RAG test)",
+  "seed_data_creation": "None — used existing seeded users",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.35 verified complete. Backend test file at /app/backend/tests/test_iter92_35_coaching_hub.py covers health, login, wladhub/3layer, wladhub/sync, payments/checkout, RAG manual-chunk (both direct python import and via /api/chat). UI behaviors verified: hero CTAs (scroll + /chat route), all data-testids present, 3 tier cards render correctly, Tier 1 calls /api/payments/checkout, Tier 2 PLUS and Enterprise open Cal.com modal (no Stripe call, no quote modal), SyncDiagnoseBanner shows for free@wladbot.test (last_sync=null) and successfully POSTs /api/wladhub/sync. ONE env issue: STRIPE_API_KEY is expired — flag for ops/main agent.",
+  "verified_behaviors": [
+    "P0 Hero: eyebrow 'DEIN LEADERSHIP COACHING SYSTEM', headline 'klar denkt/klar spricht/klar führt', subhead mentions 'KI-gestütztes Coaching-System', primary CTA 'Coaching starten' scrolls to pricing-section, secondary CTA 'Demo ansehen' navigates to /chat",
+    "P0 hero-glass-stack visible on lg viewport (1920×1080 test)",
+    "P0 3-Layer cards: KI/Rhetorik/EQ all render with bullets",
+    "P0 Pricing Tier 1 (leadership_os €997, 'Jetzt starten') → POST /api/payments/checkout fired (Stripe)",
+    "P0 Pricing Tier 2 (leadership_os_plus €4.797, 'Gespräch buchen') → Cal.com modal opens, NO /api/payments/checkout call",
+    "P0 Pricing Tier 3 (enterprise, 'Beratung anfragen') → Cal.com flow, NO enterprise quote modal, NO checkout call",
+    "P0 Social Proof: 2.500+, 87%, +42%, 4.9/5 visible; testimonial-0/1/2 with all 3 quotes",
+    "P0 FAQ section with 5+ items (10 buttons detected)",
+    "P1 SyncDiagnoseBanner: hidden for synced admin (test@test.com), visible for free@wladbot.test with last_sync=null. Sync button POSTs /api/wladhub/sync correctly. No console errors.",
+    "P1 RAG Manual Chunk: _match_manual_chunks('zuhören')==1; retrieve_context returns rag_active=True with chunks_count>=1; /api/chat with the 10 Stufen question returns rag.active=true, chunks=7, response includes 14 'Stufe N' references covering Ignorieren → Transformatives Zuhören"
+  ],
+  "rca_of_the_issue": {
+    "stripe_expired_key": {
+      "symptom": "Tier 1 (€997 Leadership OS) checkout returns 500 with 'Expired API Key provided: sk_live_*****YP1Wr6'.",
+      "root_cause": "STRIPE_API_KEY env var in /app/backend/.env is a live key that has expired/been revoked by Stripe.",
+      "reproduction": "POST /api/payments/checkout with {package_id: 'leadership_os', origin_url: 'https://example.com'} as any auth'd user → 500.",
+      "mitigation": "Replace STRIPE_API_KEY in /app/backend/.env with a fresh sk_test_... (or valid live) key, then `sudo supervisorctl restart backend`. Code path in CoachingPage.handleStripeCheckout and TierPricingGrid is correct — only the env secret needs rotation."
+    }
+  }
+}

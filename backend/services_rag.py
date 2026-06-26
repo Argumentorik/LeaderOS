@@ -50,6 +50,64 @@ CACHE_MAX_ENTRIES = 1024
 _query_cache: dict[str, tuple[float, list[dict]]] = {}
 
 
+# ── Manual high-priority knowledge chunks (Iter 92.35, Mert P1) ──────────────
+# Deterministic keyword-triggered chunks that are injected ALONGSIDE the
+# Voyage/Supabase retrieval. Use this when a framework is too important to
+# rely on semantic search alone (e.g. core Wlad models that must always be
+# grounded verbatim). Each entry: {keywords, content, metadata}.
+MANUAL_CHUNKS: list[dict] = [
+    {
+        "keywords": ["zuhören", "zuhoeren", "zuhoren", "listening", "10 stufen", "zehn stufen", "stufen des zuhörens", "stages of listening", "aktives zuhören", "empathisches zuhören"],
+        "metadata": {
+            "course": "Wlad Leadership Frameworks",
+            "topic": "10 Stufen des Zuhörens",
+            "framework": "listening_10_stages",
+            "source": "manual_chunk",
+        },
+        "content": (
+            "10 Stufen des Zuhörens (Wlad Jachtchenko) — vom oberflächlichen Hören zum tiefen, transformativen Zuhören:\n\n"
+            "Stufe 1 – Ignorieren: Der Sprecher wird wahrgenommen, aber die Botschaft nicht aufgenommen. Die Aufmerksamkeit ist woanders.\n"
+            "Stufe 2 – Pseudo-Zuhören: Man tut so, als würde man zuhören (Nicken, 'mhm'), die Botschaft erreicht aber nicht das Bewusstsein.\n"
+            "Stufe 3 – Selektives Zuhören: Man pickt nur Teile heraus, die zum eigenen Weltbild oder zur eigenen Agenda passen.\n"
+            "Stufe 4 – Aufmerksames Zuhören: Man hört die Worte, fokussiert auf die Sachebene, aber bewertet noch im Stillen.\n"
+            "Stufe 5 – Aktives Zuhören: Man stellt klärende Rückfragen, paraphrasiert und spiegelt — der Sprecher fühlt sich gehört.\n"
+            "Stufe 6 – Empathisches Zuhören: Man hört auch die Emotion hinter den Worten und benennt sie ('Das klingt frustrierend für dich.').\n"
+            "Stufe 7 – Bedürfnis-orientiertes Zuhören: Man erkennt das unausgesprochene Bedürfnis hinter der Aussage (Anerkennung, Sicherheit, Autonomie).\n"
+            "Stufe 8 – Resonantes Zuhören: Man schwingt emotional mit dem Sprecher — Vertrauen und Verbindung entstehen auf einer tieferen Ebene.\n"
+            "Stufe 9 – Generatives Zuhören: Man hört nicht nur, was gesagt wird, sondern was möglich werden könnte — der Sprecher entdeckt durch das Zuhören neue Gedanken.\n"
+            "Stufe 10 – Transformatives Zuhören: Das Zuhören wird zum Coaching-Akt. Der Sprecher denkt klarer, fühlt sich vollständig verstanden, und der Raum für echte Veränderung entsteht.\n\n"
+            "Leadership-Anwendung:\n"
+            "• Stufen 1–4 sind defensiv. Sie sichern das eigene Ego, aber kosten Vertrauen im Team.\n"
+            "• Stufen 5–7 sind die Pflicht für jede Führungskraft — ohne sie keine echte 1:1-Kommunikation.\n"
+            "• Stufen 8–10 sind die Kür — der C-Level-Edge. Hier entsteht der 'Coach-as-Leader'-Effekt: Mitarbeiter denken besser, weil du besser zuhörst.\n\n"
+            "Praxis: Vor jedem schwierigen Gespräch eine Stufe definieren — z.B. 'In diesem Gespräch will ich auf Stufe 7 (Bedürfnis) zuhören.' Dann bewusst auf das Bedürfnis hinter dem Gesagten achten."
+        ),
+    },
+]
+
+
+def _match_manual_chunks(query: str) -> list[dict]:
+    """Return MANUAL_CHUNKS whose keywords appear in the (lowercased) query.
+
+    Each match is shaped like a Supabase chunk so it slots into
+    `_format_chunks_for_prompt` unchanged. similarity is set to 1.0 so manual
+    chunks always appear first in the formatted block.
+    """
+    if not query:
+        return []
+    q = query.lower()
+    matched: list[dict] = []
+    for chunk in MANUAL_CHUNKS:
+        if any(kw in q for kw in chunk["keywords"]):
+            matched.append({
+                "id": f"manual_{chunk['metadata']['framework']}",
+                "content": chunk["content"],
+                "metadata": chunk["metadata"],
+                "similarity": 1.0,
+            })
+    return matched
+
+
 def _is_configured() -> bool:
     """Both Voyage AND Supabase must be set for RAG to function."""
     return bool(os.environ.get("VOYAGE_API_KEY")) and bool(os.environ.get("SUPABASE_URL")) \
@@ -268,25 +326,39 @@ async def retrieve_context(query: str) -> dict[str, Any]:
     empty = {"context_block": "", "chunks_count": 0, "rag_active": False}
     if not query or len(query.strip()) < 3:
         return empty
+
+    # ── Manual chunks (deterministic, keyword-triggered) — always evaluated.
+    manual = _match_manual_chunks(query)
+
     if not _is_configured():
-        # Silent — this is the expected state before keys are configured.
+        # No Voyage/Supabase configured — but we can still serve manual chunks.
+        if manual:
+            ctx_block = _format_chunks_for_prompt(manual)
+            logger.info("RAG: injected %d manual chunk(s) (Voyage/Supabase off)", len(manual))
+            return {"context_block": ctx_block, "chunks_count": len(manual), "rag_active": bool(ctx_block)}
         return empty
 
     # Cache check
     cached = _cache_get(query)
     if cached is not None:
-        ctx_block = _format_chunks_for_prompt(cached)
-        return {"context_block": ctx_block, "chunks_count": len(cached), "rag_active": bool(ctx_block)}
+        combined = manual + cached
+        ctx_block = _format_chunks_for_prompt(combined)
+        return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
 
     embedding = await _embed_query(query)
     if not embedding:
+        if manual:
+            ctx_block = _format_chunks_for_prompt(manual)
+            return {"context_block": ctx_block, "chunks_count": len(manual), "rag_active": bool(ctx_block)}
         return empty
     chunks = await _match_documents(embedding)
     _cache_put(query, chunks)
-    ctx_block = _format_chunks_for_prompt(chunks)
+    combined = manual + chunks
+    ctx_block = _format_chunks_for_prompt(combined)
     if ctx_block:
-        logger.info("RAG: injected %d chunks for query (len=%d)", len(chunks), len(query))
-    return {"context_block": ctx_block, "chunks_count": len(chunks), "rag_active": bool(ctx_block)}
+        logger.info("RAG: injected %d chunks (%d manual + %d retrieved) for query (len=%d)",
+                    len(combined), len(manual), len(chunks), len(query))
+    return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
 
 
 def rag_status() -> dict[str, Any]:

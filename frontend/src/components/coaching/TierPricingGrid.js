@@ -5,45 +5,46 @@ import { Crown, Rocket, Building2 } from 'lucide-react';
 import { useTier } from '../../contexts/TierContext';
 import { TierCardBadge, TierCardHeader, TierPrice, TierFeatureList, TierCTA } from './tier/TierCardParts';
 import { LeadershipOSInstallmentModal } from './LeadershipOSInstallmentModal';
-import { EnterpriseQuoteModal } from './EnterpriseQuoteModal';
+import { openStrategyCall } from '../../lib/calendly';
 
 /**
- * TierPricingGrid — 3-Tier-Pricing: Leadership OS | Leadership OS PLUS | Enterprise
+ * TierPricingGrid — 3-Tier Funnel Architecture (Iter 92.35, Mert):
  *
- * • Leadership OS €997/Jahr · 12 Videokurse Drip · 30-Tage Money-Back · Raten möglich (2× oder 12×)
- * • Leadership OS PLUS €4.797/Jahr · OS + 12 Einzelcoachings (je 299€)
- * • Enterprise · B2B · Volume-Discount auf 997€ Basis (10-50%)
+ *   Tier 1  Leadership OS    € 997 / Jahr   →  Stripe Checkout  (SOFORT Conversion)
+ *   Tier 2  Leadership OS+   € 4.797 / Jahr →  Cal.com Sales Call  (High-Ticket Close)
+ *   Tier 3  Enterprise       Auf Anfrage    →  Cal.com Sales Call  (Lead Qualifier)
+ *
+ * Bullets are user-supplied final landing-page copy.
  */
-
 const TIERS = [
   {
     id: 'leadership_os',
     pkgId: 'leadership_os',
     tierKey: 'standard',
     name: 'Leadership OS',
-    subtitle: '1 Jahr · Solo-Leader',
+    subtitle: 'Dein Einstieg ins Leadership System',
     price: 997,
     priceUnit: 'Jahr',
     icon: Rocket,
     accent: 'border-[#BFFF00]/30 shadow-lg shadow-[#BFFF00]/5',
-    cta: 'Leadership OS holen',
+    cta: 'Jetzt starten',
     ctaVariant: 'primary',
     badge: 'BELIEBT',
     hasInstallments: true,
-    valueHint: '12 Videokurse à 199€ = 2.388€ Wert · KI quasi geschenkt',
+    flow: 'stripe',
+    valueHint: '12 Monate Zugang · 30-Tage Geld-zurück · Raten möglich',
     features: [
-      { label: '12 Premium-Videokurse (1/Monat freigeschaltet)', has: true, bold: true },
-      { label: 'WladBot KI-Coach 24/7 (GPT-5.2)', has: true, highlight: true },
-      { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true, highlight: true },
-      { label: '30-Tage Leadership Sprint komplett', has: true },
+      { label: 'Zugriff auf alle Coaching-Module', has: true, bold: true },
+      { label: 'KI-gestützte Analyse & Feedback', has: true, highlight: true },
+      { label: 'Video- & Speech-Coaching', has: true, highlight: true },
+      { label: '30-Tage Leadership Plan', has: true },
+      { label: 'Wlad RAG System Basiszugang', has: true },
+      { label: 'WladBot KI-Coach 24/7 (GPT-5.2)', has: true },
+      { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true },
       { label: 'Alle Frameworks & Playbooks', has: true },
-      { label: 'AI Leadership Community', has: true },
-      { label: 'Personalized Learning Journey', has: true },
-      { label: 'Leadership Reports als PDF', has: true },
       { label: 'License Key per E-Mail', has: true },
-      { label: '30-Tage Geld-zurück-Garantie', has: true, highlight: true },
-      { label: 'Video-Analyse mit KI-Feedback', has: false },
       { label: '12× Einzelcoaching mit Coaches', has: false },
+      { label: 'Persönliche Strategie-Session', has: false },
     ],
   },
   {
@@ -51,28 +52,27 @@ const TIERS = [
     pkgId: 'leadership_os_plus',
     tierKey: 'accelerator',
     name: 'Leadership OS PLUS',
-    subtitle: '1 Jahr · mit Coaches',
+    subtitle: 'Für Leader, die echte Transformation wollen',
     price: 4797,
     priceUnit: 'Jahr',
     icon: Crown,
     accent: 'border-[#BFFF00]/40 bg-gradient-to-b from-[#0A0A0A] to-[#1A1A2E] text-white',
-    cta: 'PLUS jetzt holen',
+    cta: 'Gespräch buchen',
     ctaVariant: 'accelerator',
     badge: 'VIP',
     isDark: true,
-    valueHint: '12 Coachings à 299€ = 3.588€ Wert + 997€ OS · Spar-Wert: 138€',
+    flow: 'cal',
+    valueHint: 'Persönliches Sales-Gespräch · 1:1 mit Wlads Head-Coach',
     features: [
       { label: 'Alles aus Leadership OS', has: true, bold: true },
-      { label: '12× Einzelcoachings mit Argumentorik-Coaches', has: true, highlight: true },
-      { label: 'Coaching-Wert: 12 × 299€ = 3.588€', has: true, highlight: true },
-      { label: 'Video-Analyse & Missionen EXKLUSIV', has: true, highlight: true },
-      { label: 'Unbegrenzte AI-Credits', has: true },
-      { label: 'AI Learning Path personalisiert', has: true },
+      { label: 'Persönliche Strategie-Session', has: true, highlight: true },
+      { label: 'Individuelle Coaching-Pfade', has: true, highlight: true },
+      { label: 'Priority AI Feedback System', has: true, highlight: true },
+      { label: 'Erweiterte Wlad-Frameworks', has: true },
+      { label: '12× Einzelcoachings mit Argumentorik-Coaches', has: true },
       { label: 'Mastermind-Gruppe Zugang', has: true },
-      { label: 'Priority Support · Fast-Track', has: true },
       { label: 'Quartals-Reviews (4×/Jahr)', has: true },
-      { label: 'Persönliches Onboarding-Gespräch', has: true },
-      { label: '30-Tage Geld-zurück-Garantie', has: true, highlight: true },
+      { label: '30-Tage Geld-zurück-Garantie', has: true },
     ],
   },
   {
@@ -80,27 +80,24 @@ const TIERS = [
     pkgId: 'enterprise',
     tierKey: 'enterprise',
     name: 'Leadership OS Enterprise',
-    subtitle: 'B2B · Team-Lizenz',
-    price: null,            // quote-based
+    subtitle: 'Für Teams & Organisationen',
+    price: null,
     priceLabel: 'Auf Anfrage',
-    priceUnit: 'pro Seat/Jahr',
+    priceUnit: 'pro Seat / Jahr',
     icon: Building2,
     accent: 'border-[#BFFF00]/30',
-    cta: 'Angebot anfordern',
+    cta: 'Beratung anfragen',
     ctaVariant: 'outline',
-    isQuote: true,
-    valueHint: 'Volume-Discount: 10% ab 5 MA · 50% ab 200 MA',
+    flow: 'cal',
+    valueHint: 'B2B Lead Qualifier · Volume-Discount: 10–50% ab 5 Seats',
     features: [
-      { label: 'Alles aus Leadership OS für jeden Mitarbeiter', has: true, bold: true },
-      { label: 'Team-Dashboard für Admins', has: true, highlight: true },
-      { label: 'Volume-Rabatte: 10–50% auf 997€', has: true, highlight: true },
-      { label: 'ab 5 MA: 10% Rabatt', has: true },
-      { label: 'ab 10 MA: 15% Rabatt', has: true },
-      { label: 'ab 20 MA: 20% Rabatt', has: true },
-      { label: 'ab 50 MA: 30% Rabatt', has: true },
-      { label: 'ab 100 MA: 40% Rabatt', has: true },
-      { label: 'ab 200 MA: 50% Rabatt', has: true, highlight: true },
-      { label: 'Coaches-Pakete optional buchbar', has: true },
+      { label: 'Full System Integration', has: true, bold: true },
+      { label: 'Team Communication Training', has: true, highlight: true },
+      { label: 'Custom RAG / Playbooks', has: true, highlight: true },
+      { label: 'Onboarding Workshops', has: true, highlight: true },
+      { label: 'API / Workflow Integration', has: true, highlight: true },
+      { label: 'Team-Dashboard für Admins', has: true },
+      { label: 'Volume-Rabatte 10–50% auf 997€', has: true },
       { label: 'SSO Optional · Dedizierter Support', has: true },
     ],
   },
@@ -109,10 +106,13 @@ const TIERS = [
 export const TierPricingGrid = ({ onCheckout, checkoutLoading, de = true }) => {
   const { tier: currentTier } = useTier();
   const [showInstallmentModal, setShowInstallmentModal] = useState(false);
-  const [showEnterpriseModal, setShowEnterpriseModal] = useState(false);
 
   const handleTierClick = (tier) => {
-    if (tier.isQuote) { setShowEnterpriseModal(true); return; }
+    // Iter 92.35: PLUS + Enterprise route to Cal.com sales-call (high-ticket close).
+    if (tier.flow === 'cal') {
+      openStrategyCall(`coaching-tier-${tier.id}`);
+      return;
+    }
     onCheckout(tier.pkgId);
   };
 
@@ -145,7 +145,7 @@ export const TierPricingGrid = ({ onCheckout, checkoutLoading, de = true }) => {
               <TierCardBadge badge={tier.badge} />
               <CardContent className="p-6 space-y-5">
                 <TierCardHeader tier={tier} />
-                {tier.isQuote ? (
+                {tier.price === null ? (
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl font-black">{tier.priceLabel}</span>
@@ -170,7 +170,7 @@ export const TierPricingGrid = ({ onCheckout, checkoutLoading, de = true }) => {
                 <TierFeatureList features={tier.features} isDark={tier.isDark} />
                 <TierCTA
                   tier={tier}
-                  isCurrent={isCurrent && !tier.isQuote}
+                  isCurrent={isCurrent && tier.flow === 'stripe'}
                   ctaLoading={ctaLoading}
                   anyLoading={Boolean(checkoutLoading)}
                   onCheckout={() => handleTierClick(tier)}
@@ -187,12 +187,6 @@ export const TierPricingGrid = ({ onCheckout, checkoutLoading, de = true }) => {
         onClose={() => setShowInstallmentModal(false)}
         onConfirm={(planPkgId) => { setShowInstallmentModal(false); onCheckout(planPkgId); }}
         checkoutLoading={checkoutLoading}
-        de={de}
-      />
-
-      <EnterpriseQuoteModal
-        open={showEnterpriseModal}
-        onClose={() => setShowEnterpriseModal(false)}
         de={de}
       />
     </div>
