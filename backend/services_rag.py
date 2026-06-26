@@ -27,7 +27,7 @@ from typing import Any
 
 import httpx
 
-logger = logging.getLogger("leader-os.rag")
+logger = logging.getLogger("leaderos.rag")
 
 VOYAGE_API_URL = "https://api.voyageai.com/v1/embeddings"
 # IMPORTANT: must match the model used to embed `wladbot_documents` (voyage-3, dim=1024).
