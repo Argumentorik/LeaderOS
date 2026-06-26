@@ -150,8 +150,14 @@ function WladBotChat({ onContinue }) {
 export default function Quiz() {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
-  const [current, setCurrent] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [current, setCurrent] = useState(() => {
+    const saved = parseInt(localStorage.getItem("quiz_current") || "0", 10);
+    return isNaN(saved) ? 0 : saved;
+  });
+  const [answers, setAnswers] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("quiz_answers") || "{}"); }
+    catch { return {}; }
+  });
   const [selected, setSelected] = useState(null);
   const [animating, setAnimating] = useState(false);
   const [showWladBot, setShowWladBot] = useState(false);
@@ -163,6 +169,17 @@ export default function Quiz() {
     const role = userData.role || 'selbststaendige';
     setQuestions(getQuestionsForRole(role));
   }, [navigate]);
+
+  // Auto-save every answer immediately to localStorage (and to backend best-effort)
+  useEffect(() => {
+    if (Object.keys(answers).length > 0) {
+      localStorage.setItem("quiz_answers", JSON.stringify(answers));
+    }
+  }, [answers]);
+
+  useEffect(() => {
+    localStorage.setItem("quiz_current", String(current));
+  }, [current]);
 
   const question = questions[current];
   const progress = questions.length > 0 ? ((current + 1) / questions.length) * 100 : 0;
@@ -187,6 +204,9 @@ export default function Quiz() {
   const handleSubmit = (chatContext) => {
     const answersArray = Object.values(answers);
     const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+    // Clear auto-save once we submit successfully (user is moving forward)
+    localStorage.removeItem("quiz_answers");
+    localStorage.removeItem("quiz_current");
     navigate("/analyzing", {
       state: {
         answers: answersArray,

@@ -49,12 +49,6 @@ export function PriceCards({
       >
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[#C8FF00]/[0.08] via-[#C8FF00]/[0.02] to-transparent pointer-events-none" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-[#C8FF00]/[0.04] rounded-full blur-[60px] pointer-events-none" />
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <div className="flex items-center gap-1 px-4 py-1.5 rounded-lg bg-[#C8FF00] text-[#0a0a0a]">
-            <Crown className="w-3.5 h-3.5" />
-            <span className="text-xs font-bold tracking-wide">EMPFOHLEN</span>
-          </div>
-        </div>
         <div className="relative">
           <CardHeader badge="PLUS-PLUS" subBadge="+ 12x LIVE MIT WLAD" title="Sprint + OS-Jahr." desc="Sprint + monatliche Live-Sessions · 12 Monate" extraClass="mt-3" />
           <PriceBlock

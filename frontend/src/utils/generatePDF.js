@@ -614,11 +614,6 @@ export function generateReportPDF(report, user) {
   doc.setLineWidth(0.5);
   doc.roundedRect(margin, y, cw, 58, 4, 4, "FD");
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...COLORS.bg);
-  doc.setFillColor(...COLORS.accent);
-  doc.rect(margin + cw - 30, y, 30, 6, "F");
-  doc.text("EMPFOHLEN", margin + cw - 15, y + 4.3, { align: "center" });
   doc.setFontSize(10);
   doc.setTextColor(...COLORS.accent);
   doc.text("PLUS-PLUS  ·  + 12x LIVE MIT WLAD", margin + 8, y + 13);

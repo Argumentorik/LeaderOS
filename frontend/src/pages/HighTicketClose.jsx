@@ -212,31 +212,74 @@ export default function HighTicketClose() {
         {/* COMPARISON TABLE */}
         <ComparisonTable />
 
-        {/* BOOK FUNNEL */}
-        <div className="glass-card p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]" data-testid="book-funnel">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-28 h-40 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
-              <BookOpen className="w-10 h-10 text-[#C8FF00]" />
+        {/* WLAD TRUST SECTION — Der Mensch hinter Leader OS */}
+        <div className="glass-card p-8 md:p-10 mb-10 border border-[#C8FF00]/15" data-testid="wlad-trust">
+          <div className="text-center mb-8">
+            <span className="inline-block px-3 py-1 mb-4 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04] font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] uppercase font-semibold">
+              ▸ Hinter Leader · OS
+            </span>
+            <h3 className="font-manrope font-extrabold text-3xl md:text-4xl text-white leading-tight mb-3">
+              Wlad <span className="text-[#C8FF00]">Jachtchenko.</span>
+            </h3>
+            <p className="font-inter text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              3× SPIEGEL-Bestseller-Autor. Über 400.000 Klienten in Rhetorik, Verhandlung und KI ausgebildet. Gründer der Argumentorik-Akademie, Top-Speaker auf über 500 Bühnen, regelmäßiger Gast in ARD, ZDF, ntv, Welt und Wirtschaftswoche.
+            </p>
+            <p className="font-inter text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed mt-3">
+              Alles was Wlad in über 10 Jahren in Coachings, Frameworks und Büchern entwickelt hat · und noch viel mehr · steckt heute in Leader-OS. Nicht als Kurs-Bibliothek, sondern als tägliches System.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {[
+              ["01", "3× SPIEGEL-Bestseller", "\"Dunkle Rhetorik\", \"Schwarze Rhetorik\", \"Manipulationstechniken\" · die meistverkauften Rhetorik-Sachbücher Deutschlands seit 2018."],
+              ["02", "400.000+ Klienten ausgebildet", "Vom Engineering-Lead über CEOs bis zu Vertriebsteams · Live-Workshops, Online-Akademie, persönliche Coachings über mehr als ein Jahrzehnt."],
+              ["03", "Gründer Argumentorik-Akademie", "Größte Online-Akademie für Rhetorik & Verhandlung im DACH-Raum. Über 100 Online-Kurse, 50 Mio. Minuten Lernzeit ausgeliefert."],
+              ["04", "Funk, TV & Podcasts", "Regelmäßig in ARD, ZDF, ntv, Welt, Wirtschaftswoche, Handelsblatt · plus eigene Podcasts zu Rhetorik, KI und KI-natives Führen."],
+              ["05", "Top-Speaker auf 500+ Bühnen", "Hauptredner auf Konferenzen für Coca-Cola, Allianz, SAP, BMW, Bosch. Bewertungsdurchschnitt 4.9 / 5.0 über 500+ Engagements."],
+              ["06", "10+ Jahre Wissen verdichtet", "Alles aus Wlads Coachings, Frameworks und Büchern · plus vieles mehr aus über 10 Jahren Praxis · steckt heute in Leader-OS drin."],
+            ].map(([num, title, desc]) => (
+              <div key={num} className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-[#C8FF00]/20 transition-colors">
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">▸ {num}</span>
+                  <h4 className="font-manrope font-bold text-base text-white">{title}</h4>
+                </div>
+                <p className="font-inter text-sm text-slate-400 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-white/[0.05] pt-6">
+            <p className="font-mono text-[10px] tracking-[0.2em] text-slate-500 uppercase text-center mb-4">▸ Als Autor zu Gast bei</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-manrope font-bold text-sm text-slate-400">
+              <span>ARD</span><span className="text-slate-700">·</span>
+              <span>ZDF</span><span className="text-slate-700">·</span>
+              <span>NTV</span><span className="text-slate-700">·</span>
+              <span>WELT</span><span className="text-slate-700">·</span>
+              <span>WIRTSCHAFTSWOCHE</span><span className="text-slate-700">·</span>
+              <span>HANDELSBLATT</span><span className="text-slate-700">·</span>
+              <span>FAZ</span>
             </div>
-            <div className="flex-1 text-center md:text-left">
-              <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/15 text-[#C8FF00] text-xs font-bold inline-block mb-3">IN JEDEM PAKET ENTHALTEN</div>
-              <h3 className="font-manrope font-extrabold text-xl text-white mb-2">&laquo;Die 6 Rollen einer Führungskraft&raquo;</h3>
-              <p className="font-inter text-sm text-slate-400 mb-4">von Wladislaw Jachtchenko · SPIEGEL-Bestseller-Autor</p>
-              <a href="https://www.remote-verlag.de/pages/5-rollen-fuehrungskraft" target="_blank" rel="noopener noreferrer" data-testid="book-cta"
-                className="btn-secondary px-6 py-3 text-sm font-medium inline-flex items-center gap-2">
-                <BookOpen className="w-4 h-4" /> Buch ansehen <ArrowRight className="w-4 h-4" />
-              </a>
+          </div>
+
+          <div className="mt-8 p-5 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/20 text-center">
+            <div className="font-manrope font-bold text-base text-white mb-1">
+              ▸ <span className="text-[#C8FF00]">50 Free Credits</span> beim Start
             </div>
+            <p className="font-inter text-xs text-slate-400">
+              Jedes Paket startet mit 50 Free Credits für WladBot, KI-Tools & Simulationen · risikofrei testen, dann entscheiden.
+            </p>
           </div>
         </div>
 
-        {/* CURRICULUM DOWNLOAD */}
+        {/* CURRICULUM DOWNLOAD — Executive-Brochure */}
         <div className="glass-card-subtle p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="curriculum-download">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-slate-400" /></div>
+            <div className="w-12 h-12 rounded-xl bg-[#C8FF00]/[0.06] border border-[#C8FF00]/15 flex items-center justify-center shrink-0"><Download className="w-5 h-5 text-[#C8FF00]" /></div>
             <div>
-              <div className="font-manrope font-bold text-white">Curriculum PDF</div>
-              <div className="font-inter text-xs text-slate-500">Alle Kurse + 30-Tage-Plan als Download</div>
+              <div className="font-manrope font-bold text-white">Executive Curriculum</div>
+              <div className="font-inter text-xs text-slate-500 leading-relaxed mt-1">
+                Komplette Communication-Roadmap · alle Lern-Module · 30-Tage-Plan · Frameworks · Playbooks · Executive-Checkliste · als Premium-PDF.
+              </div>
             </div>
           </div>
           <button data-testid="curriculum-download-btn" onClick={() => generateCurriculumPDF()} className="btn-secondary px-6 py-3 text-sm font-medium flex items-center gap-2">
