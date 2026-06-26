@@ -15,6 +15,23 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.35 · 26.06.26] Coaching Hub Redesign → High-Converting Landing + P1-Funnel-Upgrades** —
+  - **CoachingPage.js komplett neu** (`/app/frontend/src/pages/CoachingPage.js`, 318 LoC). Apple/Tesla-Stil:
+    - Hero: Eyebrow `DEIN LEADERSHIP COACHING SYSTEM`, Headline `Werde der Leader, der klar denkt, klar spricht und klar führt.`, 3-Layer-Glass-Stack-Visual rechts (staggered Cards mit `backdrop-blur-xl` + rotate), Primary-CTA `Coaching starten` (scroll to pricing), Secondary `Demo ansehen` → /chat.
+    - 3-Layer-System neu: **KI** (Klar denken — 5 Bullets), **Rhetorik** (Klar sprechen + SEXIER), **EQ** (Klar führen + C-Level-Wahrnehmung). Copy 1:1 user-supplied.
+    - 1:1-Strategy-Call-Bridge-Card: dunkles Hero-Style-Card mit `book-call-btn` → Cal.com via `openStrategyCall('coaching-strategy-cta')`.
+    - Social Proof: 4 Stat-Cards (2.500+ Leader · 87% in 14 Tagen · +42% Präsentationsscores · 4.9/5) + 3 Testimonial-Cards (Founder Berlin, Team Lead Tech, Consultant Strategy).
+    - FAQ: 5 user-supplied Fragen.
+  - **TierPricingGrid.js Funnel-Architektur (Hybrid)**:
+    - Tier 1 `leadership_os` €997 → **Stripe Checkout** (`flow: 'stripe'`, SOFORT Conversion) — CTA `Jetzt starten`.
+    - Tier 2 `leadership_os_plus` €4.797 → **Cal.com Sales Call** (`flow: 'cal'`, NICHT mehr Stripe — High-Ticket Close) — CTA `Gespräch buchen`.
+    - Tier 3 `enterprise` Auf Anfrage → **Cal.com Beratung** (`flow: 'cal'`, kein Modal mehr) — CTA `Beratung anfragen`. `EnterpriseQuoteModal` entfernt (Lead-Qualifier via Cal.com strukturierter).
+    - Tier-Bullets 1:1 user-supplied. data-testids für CTAs + Cards.
+  - **SyncDiagnoseBanner.js** (NEU, `/app/frontend/src/components/dashboard/`): Bridge zwischen `leader-check.de` und `leader-os.de`. Preflight `GET /api/wladhub/3layer`, zeigt prominenten CTA "Diagnose synchronisieren" wenn `!connected || !last_sync`. POST `/api/wladhub/sync` on click, Toast + Soft-Reload bei Success, `Später` dismissible (SessionStorage). Eingebaut in `DashboardPage.js` direkt unter `EventReminderBanner`.
+  - **Wlad-RAG MANUAL_CHUNKS** (`/app/backend/services_rag.py`): Deterministische Keyword-getriggerte Chunks die ZUSÄTZLICH zu Voyage/Supabase eingespeist werden. Erste Chunk: **10 Stufen des Zuhörens** (Ignorieren → Transformatives Zuhören, mit Leadership-Anwendung). Trigger-Keywords: `zuhören/listening/10 stufen/aktives zuhören/empathisches zuhören`. Funktioniert auch ohne Voyage/Supabase. Manual-Chunks haben `similarity=1.0` und werden vor Retrieval-Chunks prepended.
+  - **Testing**: `testing_agent_v3_fork` Iter 92.35 → 9/10 Backend Tests pass, 100% Frontend P0/P1 verified. Test-File: `/app/backend/tests/test_iter92_35_coaching_hub.py`. Verifizierte Behaviors: Hero CTAs, Glass-Stack-Visual, 3-Layer-Rendering, Pricing-Funnel (Tier 1 → Stripe / Tier 2+3 → Cal.com mit KEINEM Checkout-Call), Social Proof + FAQ, SyncDiagnoseBanner für free-user, RAG `/api/chat` mit "10 Stufen" liefert alle 10 Stufen + chunks_count=7 + rag_active=true.
+  - **🔴 KRITISCH ENTDECKT — STRIPE_API_KEY ist ABGELAUFEN** (`sk_live_*****YP1Wr6`): Tier 1 (€997) Checkout returns HTTP 500 "Expired API Key provided". BLOCKER für ALLE Conversions. Code ist korrekt — nur ENV-Secret muss rotiert werden via Profil → Universal Key oder direktes Update `/app/backend/.env`. Anschließend `sudo supervisorctl restart backend`.
+
 - [x] **[Iter 92.33 · 23.06.26] Master Audit + Pre-First-Customer Blockers gefixt (Mert: "as if first paying client tomorrow")** —
   - **Komplette 25-Section Audit-Doku**: `/app/docs/MASTER_AUDIT_REPORT.md`. Brutal-ehrlich evaluiert von 9 Personas (PM/UX/UI/SecEng/SEO/CRO/Performance/AI/Founder). Final-Score: 84/100. Verdict: 🟢 GREEN-GO für Launch morgen.
   - **2 Critical-P0 First-Customer-Blocker gefixt**:
