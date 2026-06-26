@@ -797,7 +797,7 @@ export default function Hero() {
                 die KI als <span className="italic font-semibold text-white/95">strategischen Vorteil</span> nutzen
               </span>
               <span className="block text-2xl md:text-4xl lg:text-5xl mt-5 text-slate-400 font-bold">
-                · oder zu den <span className="text-white">99 %</span>, die zusehen?
+                oder zu den <span className="text-white">99 %</span>, die zusehen?
               </span>
             </h2>
             <p className="font-inter text-lg text-slate-400 mb-3 max-w-2xl mx-auto">
