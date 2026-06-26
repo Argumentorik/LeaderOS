@@ -16,13 +16,15 @@ def _build_pdf_attachment(user_name: str, report: dict) -> list:
     try:
         pdf_bytes = generate_diagnostic_pdf(user_name, report)
         if not pdf_bytes:
+            logger.error("PDF attachment NOT created — generate_diagnostic_pdf returned None")
             return []
+        logger.info(f"PDF attachment built: {len(pdf_bytes)} bytes for {user_name}")
         return [{
             "filename": "LeaderCheck-Diagnose.pdf",
             "content": pdf_to_base64(pdf_bytes),
         }]
     except Exception as e:
-        logger.error(f"PDF attachment build failed: {e}")
+        logger.error(f"PDF attachment build failed: {e}", exc_info=True)
         return []
 
 
