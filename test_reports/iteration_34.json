@@ -1,0 +1,41 @@
+{
+  "summary": "Iter34 Wlad-Style Design Upgrade verification. Backend regression (iter33 suite) 10/10 PASS — Stripe LIVE checkout, PDF unit gen, Resend PDF E2E with attachment, Wlad portrait asset, /api/health, admin JWT all GREEN. Frontend Wlad-Style Headlines verified across Landing (Sections 2-10), /diagnose (Step1+Step2), /close (Hero + Wlad Trust + Final CTA), /kurse: 14 eyebrows '▸' counted on landing, 10 italic emphasis spans in headings, all H1/H2 are multi-line span structures with lime+italic+slate-contrast combination. NO console errors on /, /diagnose, /quiz, /close, /kurse. ALL 3 final-CTA buttons on /close (close-final-os, close-final-os-plus, close-final-enterprise) visible+enabled with PriceCards (997 EUR / 4.797 EUR / Enterprise) intact. HOWEVER, Typo-Sanity FAILS on / + /report (Hero.jsx ships 'Zunachst' + 'ausgewahlten') and /roadmap (Roadmap.jsx ships 3× 'fur' bare without umlaut, plus 'Fuhrung'). Em-Dash-Sanity FAILS on / + /report (2× U+2014 em-dash rendered: '— Senior Manager, DAX 40 Unternehmen' and '— Wlad Jachtchenko' attribution dashes still present, not replaced by · or -).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Hero.jsx Bonus section H2 (Line 497)", "issue": "Renders typo 'Zugang zu ausgewahlten Modulen des WLAD Leadership Programms.' — missing umlaut ä. Additionally this H2 is NOT in Wlad multi-line span style — it's a single-line H2 while spec requires multi-line lime+italic+slate structure.", "selector": "/app/frontend/src/pages/Hero.jsx:497", "priority": "MEDIUM"},
+      {"component": "Hero.jsx WladBot chat dialog (Line 451)", "issue": "Renders typo 'Zunachst: Was ist der konkrete Anlass?' — missing umlaut ä, should be 'Zunächst'.", "selector": "/app/frontend/src/pages/Hero.jsx:451", "priority": "MEDIUM"},
+      {"component": "Roadmap.jsx", "issue": "3× visible 'fur' without umlaut on /roadmap: (a) '6 Kurse fur das Modern Leadership System' (Line 457), (b) 'ordne es fur deine Fuhrung ein. Das Fundament fur alles Weitere' (Line 16). Also 'Fuhrung' instead of 'Führung'.", "selector": "/app/frontend/src/pages/Roadmap.jsx:16,457", "priority": "MEDIUM"},
+      {"component": "Em-Dash on landing + /report", "issue": "2× em-dash (U+2014) rendered: '— Senior Manager, DAX 40 Unternehmen' pull-quote attribution and '— Wlad Jachtchenko' bonus attribution. Spec requires em-dashes replaced by · or -.", "selector": "Likely in Hero.jsx social-proof pull-quote (Section 10) + Bonus section attribution", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter33_golive_final.py",
+    "/app/test_reports/pytest/pytest_results_iter34.xml"
+  ],
+  "action_items": [
+    "Fix Hero.jsx:451 — change 'Zunachst' → 'Zunächst'",
+    "Fix Hero.jsx:497 — change 'ausgewahlten' → 'ausgewählten' AND restructure this Bonus H2 into the Wlad multi-line span style (eyebrow ▸ + multi-line H2 with lime+italic+slate contrast) so it matches the other 9 sections",
+    "Fix Roadmap.jsx — replace all bare 'fur' → 'für' and 'Fuhrung' → 'Führung' (Lines 16, 457 confirmed; suggest grep-replace across the file)",
+    "Replace 2× em-dash (U+2014 '—') on landing + /report attribution lines with · or - per the Em-Dash Sanity rule"
+  ],
+  "critical_code_review_comments": [
+    "Wlad-Style headline implementation is consistent and well-executed across 4 files (Hero/HighTicketClose/UserForm/Kurse). 14 eyebrows '▸' + 10 italic emphasis spans counted on landing alone — design rhythm holds.",
+    "Hero.jsx Bonus-Kurs section H2 (line 497) is the ONE remaining landing-section H2 that has NOT been refactored to multi-line Wlad-style. It currently reads as a single-line H2 and breaks the rhythm vs. sections 2,3,4,5,6,8,9,10.",
+    "There is no centralized umlaut-sanity lint step — strongly recommend adding a pre-commit grep guard for /ausgewahlten|Feedbackgesprach|Zunachst|\\bfur\\b|Fuhrung/ to prevent regressions like this slipping in on every iteration. Hero.jsx + Roadmap.jsx are recurring culprits.",
+    "Em-dash usage in pull-quote attribution is a stylistic choice but violates explicit iter34 spec; consider building an ESLint custom rule that bans U+2014 in JSX literals."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% (10/10 iter33 pytest GREEN)",
+    "frontend": "85% (Wlad-Style headlines ✓, Multi-line spans ✓, Eyebrows ✓, Final-CTA buttons ✓, PriceCards ✓, Step-switching ✓, NO console errors ✓ — but Typo Sanity FAIL on /+/report+/roadmap, Em-Dash Sanity FAIL on /+/report, 1 Bonus H2 not refactored)"
+  },
+  "test_credentials": "admin password 'wladhub2026' (ADMIN_PASSWORD env), Resend-verified recipient start@aiporate.com",
+  "seed_data_creation": "iter33 E2E tests created 1 TEST user (start@aiporate.com) + 1 quiz report + 1 drip queue + 2 Stripe LIVE cs_live_ checkout sessions (NO charges, just session-id creation). Not auto-cleaned due to Resend rate-limit.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Wlad-Style design system is verified working end-to-end across 4 pages. Backend iter33 suite is regression-stable; just re-run `pytest /app/backend/tests/test_iter33_golive_final.py -v` — should stay 10/10. Re-test focus after main-agent fix: (1) curl page /, /report and confirm document.body.innerText match /Zunachst|ausgewahlten/ returns null; (2) /roadmap match /\\bfur\\b/ returns null; (3) em-dash count via body.innerText.split('—').length-1 === 0 on / and /report; (4) Hero.jsx Bonus-Kurs section H2 now renders as multi-line span with eyebrow ▸ prefix + lime+italic emphasis. All other Wlad-Style work is locked in and does NOT need re-verification.",
+  "rca of the issue": "Typos 'Zunachst' (Hero.jsx:451) and 'ausgewahlten' (Hero.jsx:497) are leftover ASCII-fallbacks from a previous editing pass where umlauts were stripped (possibly an encoding hiccup on copy-paste). Same root cause in Roadmap.jsx where 'fur' + 'Fuhrung' appear repeatedly. Em-dashes were missed in the / + /report attribution lines because the prior typography sweep focused on body copy but not on pull-quote attribution lines (the dashes are intentionally used as attribution markers — but spec explicitly forbids them). MITIGATION: (1) sed/perl replace umlauts in Hero.jsx + Roadmap.jsx, (2) grep -n '—' src/pages/*.jsx and convert each to '·' or '-' or '— ' → '· ', (3) add pre-commit hook to enforce no ASCII-fallback umlauts AND no em-dash in committed JSX."
+}

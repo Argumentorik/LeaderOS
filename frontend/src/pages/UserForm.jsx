@@ -96,17 +96,33 @@ export default function UserForm() {
           </button>
         )}
 
-        {/* Header — leaderos.de bracket-prefix style */}
+        {/* Header — Wlad-Style */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
-            <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
-              ▸ SCHRITT {step} VON 2 
-            </span>
-          </div>
-          <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
-            {step === 1 ? "Was beschreibt dich am besten?" : "Fast geschafft!"}
+          <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+            ▸ Schritt {step} von 2
+          </span>
+          <h1 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-5">
+            {step === 1 ? (
+              <>
+                <span className="block text-3xl md:text-5xl">
+                  Was beschreibt dich
+                </span>
+                <span className="block text-3xl md:text-5xl mt-2 text-[#C8FF00] italic font-semibold">
+                  am besten?
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="block text-3xl md:text-5xl">
+                  Fast <span className="italic font-semibold">geschafft</span>.
+                </span>
+                <span className="block text-2xl md:text-4xl mt-2 text-slate-400 font-bold">
+                  Letzter Schritt vor deiner Diagnose.
+                </span>
+              </>
+            )}
           </h1>
-          <p className="font-inter text-slate-500">
+          <p className="font-inter text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
             {step === 1
               ? "Deine Rolle bestimmt den Kontext deiner Diagnose. 30 Fragen, individuell auf dein Profil zugeschnitten."
               : "Damit wir deinen personalisierten Report erstellen und dich auf Wunsch persönlich begleiten können."}

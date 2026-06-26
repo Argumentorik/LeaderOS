@@ -85,14 +85,19 @@ export default function Kurse() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-28">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.25em] text-[#C8FF00] uppercase mb-5">
-            6 Free Lessons · Kostenlos
+          <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+            ▸ 6 Free Lessons · Kostenlos
           </span>
-          <h1 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-            Leadership Upgrade Programm
+          <h1 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-5">
+            <span className="block text-3xl md:text-5xl lg:text-6xl">
+              Das Leadership
+            </span>
+            <span className="block text-3xl md:text-5xl lg:text-6xl mt-2 text-[#C8FF00] italic font-semibold">
+              Upgrade Programm.
+            </span>
           </h1>
-          <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto">
-            Sechs kompakte Module, die dich in den wichtigsten Führungsdimensionen weiterbringen. Kostenlos. Ohne Anmeldung.
+          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            <span className="text-white">Sechs kompakte Module</span>, die dich in den wichtigsten Führungsdimensionen weiterbringen. Kostenlos. Ohne Anmeldung.
           </p>
         </div>
 

@@ -140,13 +140,16 @@ export default function HighTicketClose() {
               <span className="font-inter text-sm text-[#C8FF00] font-medium">Dein Score: {totalScore} %</span>
             </div>
           )}
-          <h1 className="font-manrope font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-5" data-testid="close-headline">
-            Diagnose ist durch.
-            <br />
-            <span className="text-gradient-lime">Jetzt der Sprint.</span>
+          <h1 className="font-manrope font-extrabold text-white leading-[1.1] tracking-tight mb-6" data-testid="close-headline">
+            <span className="block text-4xl md:text-6xl lg:text-7xl">
+              Diagnose ist <span className="italic font-semibold">durch</span>.
+            </span>
+            <span className="block text-4xl md:text-6xl lg:text-7xl mt-2 text-[#C8FF00]">
+              Jetzt der Sprint.
+            </span>
           </h1>
-          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-3">
-            30 Tage Sprint mit Wlad. 12 Monate Plattform. Ein KI-Coach der dich kennt.
+          <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-3 leading-relaxed">
+            <span className="text-white font-medium">30 Tage Sprint mit Wlad.</span> 12 Monate Plattform. Ein KI-Coach der dich kennt.
             <br className="hidden md:block" />
             Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
           </p>
@@ -214,17 +217,22 @@ export default function HighTicketClose() {
         {/* WLAD TRUST SECTION — Der Mensch hinter Leader OS */}
         <div className="glass-card p-8 md:p-10 mb-10 border border-[#C8FF00]/15" data-testid="wlad-trust">
           <div className="text-center mb-8">
-            <span className="inline-block px-3 py-1 mb-4 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04] font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] uppercase font-semibold">
+            <span className="inline-block mb-5 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
               ▸ Hinter Leader · OS
             </span>
-            <h3 className="font-manrope font-extrabold text-3xl md:text-4xl text-white leading-tight mb-3">
-              Wlad <span className="text-[#C8FF00]">Jachtchenko.</span>
+            <h3 className="font-manrope font-extrabold text-white leading-[1.1] tracking-tight mb-4">
+              <span className="block text-3xl md:text-5xl">
+                Wlad <span className="text-[#C8FF00]">Jachtchenko</span>.
+              </span>
+              <span className="block text-2xl md:text-4xl mt-2 text-slate-400 font-bold italic">
+                Drei SPIEGEL-Bestseller. Eine Methodik.
+              </span>
             </h3>
-            <p className="font-inter text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              3× SPIEGEL-Bestseller-Autor. Über 400.000 Klienten in Rhetorik, Verhandlung und KI ausgebildet. Gründer der Argumentorik-Akademie, Top-Speaker auf über 500 Bühnen, regelmäßiger Gast in ARD, ZDF, ntv, Welt und Wirtschaftswoche.
+            <p className="font-inter text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed mt-5">
+              <span className="text-white">Über 400.000 Klienten</span> in Rhetorik, Verhandlung und KI ausgebildet. Gründer der Argumentorik-Akademie, Top-Speaker auf über 500 Bühnen, regelmäßiger Gast in ARD, ZDF, ntv, Welt und Wirtschaftswoche.
             </p>
             <p className="font-inter text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed mt-3">
-              Alles was Wlad in über 10 Jahren in Coachings, Frameworks und Büchern entwickelt hat · und noch viel mehr · steckt heute in Leader-OS. Nicht als Kurs-Bibliothek, sondern als tägliches System.
+              Alles was Wlad in über 10 Jahren in Coachings, Frameworks und Büchern entwickelt hat · und noch viel mehr · steckt heute in Leader-OS. Nicht als Kurs-Bibliothek, sondern als <span className="text-white">tägliches System</span>.
             </p>
           </div>
 
@@ -274,17 +282,19 @@ export default function HighTicketClose() {
 
         {/* FINAL CTA — direct purchase from the last section */}
         <div className="text-center border-t border-white/[0.04] pt-12 pb-4" data-testid="final-cta-section">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-[#C8FF00]/20 bg-[#C8FF00]/[0.04]">
-            <span className="font-mono text-[10px] tracking-[0.2em] text-[#C8FF00] font-bold">
-              ▸ § 03 / 03 · ENTSCHEIDUNG
+          <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+            ▸ § 03 / 03 · Entscheidung
+          </span>
+          <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-5">
+            <span className="block text-3xl md:text-5xl lg:text-6xl">
+              Wer heute <span className="italic font-semibold">zögert</span>,
             </span>
-          </div>
-          <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-3">
-            Wer heute zögert,
-            <br/>
-            <span className="text-slate-500">führt morgen unter jemandem, der nicht gezögert hat.</span>
+            <span className="block text-2xl md:text-4xl lg:text-5xl mt-4 text-slate-400 font-bold">
+              führt morgen unter jemandem, <br className="hidden md:block" />
+              <span className="text-white">der nicht gezögert hat</span>.
+            </span>
           </h2>
-          <p className="font-inter text-base text-slate-500 mb-2 max-w-xl mx-auto">
+          <p className="font-inter text-base text-slate-400 mb-2 max-w-xl mx-auto leading-relaxed">
             {totalScore > 0 ? `Dein Score: ${totalScore} %. ` : ""}Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
           </p>
           <p className="font-inter text-sm text-[#C8FF00]/80 mb-8 max-w-xl mx-auto">

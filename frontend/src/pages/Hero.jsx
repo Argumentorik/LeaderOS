@@ -216,13 +216,16 @@ export default function Hero() {
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <ScrollReveal>
               <div className="text-center mb-20">
-                <span className="inline-block px-4 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold tracking-[0.25em] text-slate-500 uppercase mb-6">
+                <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
                   ▸ Das echte Problem
                 </span>
-                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4 leading-tight">
-                  Du bist in einer Sache gut.
-                  <br className="hidden md:block" />
-                  <span className="text-slate-500">In zwei wird's eng. In drei selten.</span>
+                <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                  <span className="block text-3xl md:text-5xl lg:text-6xl">
+                    Du bist in einer Sache <span className="text-[#C8FF00]">gut</span>.
+                  </span>
+                  <span className="block text-2xl md:text-4xl lg:text-5xl mt-4 text-slate-400 font-bold">
+                    In <span className="italic font-semibold">zwei</span> wird&apos;s eng. In <span className="italic font-semibold">drei</span> selten.
+                  </span>
                 </h2>
               </div>
             </ScrollReveal>
@@ -284,16 +287,19 @@ export default function Hero() {
         <section id="model" className="py-24 border-t border-white/[0.04]">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="text-center mb-16">
-              <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
+              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
                 ▸ Drei Ebenen
               </span>
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl lg:text-5xl text-white mb-4">
-                Top-Führungskräfte können
-                <br />
-                <span className="text-gradient-lime">alle drei · gleichzeitig.</span>
+              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                <span className="block text-3xl md:text-5xl lg:text-6xl">
+                  Top-Führungskräfte können
+                </span>
+                <span className="block text-3xl md:text-5xl lg:text-6xl mt-2">
+                  <span className="text-[#C8FF00]">alle drei</span> <span className="italic font-semibold text-white/95">gleichzeitig</span>.
+                </span>
               </h2>
-              <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto mt-4">
-                KI · Rhetorik · EQ. Wer eine Ebene weglässt, verliert das Spiel · auch wenn er es nicht merkt.
+              <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mt-6 leading-relaxed">
+                KI · Rhetorik · EQ. <span className="text-white font-medium">Wer eine Ebene weglässt</span>, verliert das Spiel · auch wenn er es nicht merkt.
               </p>
             </div>
 
@@ -341,13 +347,18 @@ export default function Hero() {
         <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="text-center mb-16">
-              <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-                10 Minuten
+              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                ▸ 10 Minuten · Sofort-Klarheit
               </span>
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Dein persönlicher Leadership-Report
+              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                <span className="block text-3xl md:text-5xl lg:text-6xl">
+                  Dein <span className="italic font-semibold text-white/95">persönlicher</span>
+                </span>
+                <span className="block text-3xl md:text-5xl lg:text-6xl mt-2 text-[#C8FF00]">
+                  Leadership-Report.
+                </span>
               </h2>
-              <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
+              <p className="font-inter text-base text-slate-400 max-w-xl mx-auto mt-6 leading-relaxed">
                 Die Leader OS Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.
               </p>
             </div>
@@ -376,14 +387,18 @@ export default function Hero() {
         <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="text-center mb-16">
-              <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-                6 KI-Agenten
+              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                ▸ 6 KI-Agenten
               </span>
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Mehrere spezialisierte Agenten,
-                <span className="text-gradient-lime"> die das Leben eines Leaders erleichtern.</span>
+              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                <span className="block text-3xl md:text-5xl lg:text-6xl">
+                  Sechs spezialisierte Agenten,
+                </span>
+                <span className="block text-2xl md:text-4xl lg:text-5xl mt-3 text-[#C8FF00] italic font-semibold">
+                  die dir als Leader Arbeit abnehmen.
+                </span>
               </h2>
-              <p className="font-inter text-sm text-slate-500 max-w-xl mx-auto">
+              <p className="font-inter text-base text-slate-400 max-w-xl mx-auto mt-6 leading-relaxed">
                 Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert.
               </p>
             </div>
@@ -428,7 +443,7 @@ export default function Hero() {
                 <div className="space-y-3">
                   <div className="bg-white/[0.03] border border-white/[0.04] px-4 py-3 rounded-2xl rounded-bl-md">
                     <p className="font-inter text-sm text-slate-300">
-                      &laquo;Wie kann ich mich auf ein schwieriges Feedbackgesprach mit meinem Team vorbereiten?&raquo;
+                      &laquo;Wie kann ich mich auf ein schwieriges Feedbackgespräch mit meinem Team vorbereiten?&raquo;
                     </p>
                   </div>
                   <div className="bg-[#C8FF00] px-4 py-3 rounded-2xl rounded-br-md ml-8">
@@ -440,15 +455,19 @@ export default function Hero() {
               </div>
 
               <div className="order-1 lg:order-2">
-                <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-                  Der WLADBOT
+                <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                  ▸ Der WladBot
                 </span>
-                <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                  Dein persönlicher
-                  <span className="text-gradient-lime"> KI-Leadership-Coach.</span>
+                <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-6">
+                  <span className="block text-3xl md:text-4xl lg:text-5xl">
+                    Dein <span className="italic font-semibold">persönlicher</span>
+                  </span>
+                  <span className="block text-3xl md:text-4xl lg:text-5xl mt-2 text-[#C8FF00]">
+                    KI-Leadership-Coach.
+                  </span>
                 </h2>
-                <p className="font-inter text-sm text-slate-500 mb-6">
-                  Du kannst ihn nutzen fur:
+                <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
+                  Du kannst ihn nutzen für:
                 </p>
                 <div className="space-y-3 mb-8">
                   {wladbotFeatures.map((feature, i) => (
@@ -515,8 +534,16 @@ export default function Hero() {
         <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="text-center mb-14">
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Für wen ist diese Diagnose gedacht?
+              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                ▸ Für wen
+              </span>
+              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                <span className="block text-3xl md:text-5xl lg:text-6xl">
+                  Für wen ist diese
+                </span>
+                <span className="block text-3xl md:text-5xl lg:text-6xl mt-2 text-[#C8FF00] italic font-semibold">
+                  Diagnose gedacht?
+                </span>
               </h2>
             </div>
 
@@ -538,16 +565,19 @@ export default function Hero() {
         <section className="py-24 border-t border-white/[0.04]" data-testid="scarcity-section">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="text-center mb-14">
-              <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-                Limitiert in 2026
+              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                ▸ Limitiert in 2026
               </span>
-              <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-                Nur <span className="text-[#C8FF00]">1 % der Führungskräfte</span> nutzen
-                <br className="hidden md:block" />
-                KI wirklich strategisch.
+              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+                <span className="block text-3xl md:text-5xl lg:text-6xl">
+                  Nur <span className="text-[#C8FF00]">1 % der Führungskräfte</span>
+                </span>
+                <span className="block text-2xl md:text-4xl lg:text-5xl mt-4 text-slate-400 font-bold">
+                  nutzen KI <span className="italic font-semibold text-white/95">wirklich</span> strategisch.
+                </span>
               </h2>
-              <p className="font-inter text-base text-slate-500 max-w-2xl mx-auto">
-                Die anderen 99 % lesen darüber. Du könntest es heute noch ändern · in 10 Minuten weißt du genau, wo du stehst.
+              <p className="font-inter text-base text-slate-400 max-w-2xl mx-auto mt-6 leading-relaxed">
+                Die anderen 99 % lesen darüber. <span className="text-white">Du könntest es heute noch ändern</span> · in 10 Minuten weißt du genau, wo du stehst.
               </p>
             </div>
 
@@ -697,12 +727,16 @@ export default function Hero() {
             <div className="glass-card p-8 md:p-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
-                  <div className="px-3 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] text-xs font-bold inline-block mb-4">
-                    GRATIS NACH COMPLETION
-                  </div>
-                  <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3">
-                    50 Free Credits für deinen
-                    <span className="text-gradient-lime"> WladBot &amp; KI-Coach.</span>
+                  <span className="inline-block mb-5 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+                    ▸ Gratis nach Completion
+                  </span>
+                  <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-5">
+                    <span className="block text-2xl md:text-4xl">
+                      50 Free Credits für deinen
+                    </span>
+                    <span className="block text-2xl md:text-4xl mt-1 text-[#C8FF00] italic font-semibold">
+                      WladBot &amp; KI-Coach.
+                    </span>
                   </h2>
                   <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
                     Als Belohnung für deine Diagnose erhältst du <span className="text-white font-medium">50 kostenlose Credits</span> für den WladBot und alle KI-Tools innerhalb von Leader OS. Schwierige Gespräche durchspielen, Argumente strukturieren, Entscheidungen schärfen · in Wlads Sprache.
