@@ -64,11 +64,25 @@ const loadGoogleScript = () => {
 export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, label }) => {
   const [loading, setLoading] = useState(false);
   const [scriptStatus, setScriptStatus] = useState('loading'); // loading | ready | failed
+  // Iter 92.36 (Mert origin_mismatch debug): if Google blocks our origin we set
+  // this to show a clear fallback hint to the user (and surface the origin in
+  // DevTools so Support can verify the Cloud-Console whitelist).
+  const [originBlocked, setOriginBlocked] = useState(false);
   const initialized = useRef(false);
   const hiddenButtonRef = useRef(null);  // For Google's official renderButton fallback
 
   const initGoogle = (resolveCallback) => {
     if (!window.google?.accounts?.id) return;
+    // Iter 92.36: clear DevTools diagnostic so we can match the origin we send
+    // vs. the "Authorized JavaScript origins" list in Google Cloud Console.
+    try {
+      const maskedId = clientId ? `${clientId.slice(0, 12)}…${clientId.slice(-30)}` : '(none)';
+      console.info(
+        '%c[Google OAuth] init',
+        'color:#4285F4;font-weight:bold',
+        { origin: window.location.origin, host: window.location.host, clientId: maskedId }
+      );
+    } catch { /* noop */ }
     window.google.accounts.id.initialize({
       client_id: clientId,
       callback: async (resp) => {
@@ -123,7 +137,6 @@ export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, la
     if (!clientId || initialized.current) return;
     initialized.current = true;
     tryLoadScript();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientId]);
 
   const handleClick = () => {
@@ -138,11 +151,32 @@ export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, la
     }
     // First try One-Tap prompt
     window.google.accounts.id.prompt((notification) => {
+      // Iter 92.36: detect "unregistered_origin" = origin_mismatch from Google.
+      // GSI returns one of: browser_not_supported, invalid_client,
+      // missing_client_id, opt_out_or_no_session, secure_http_required,
+      // suppressed_by_user, unregistered_origin, unknown_reason.
+      const notDisplayedReason = notification?.getNotDisplayedReason?.();
+      if (notDisplayedReason === 'unregistered_origin' || notDisplayedReason === 'invalid_client') {
+        console.error(
+          '%c[Google OAuth] BLOCKED',
+          'color:#EA4335;font-weight:bold;font-size:13px',
+          {
+            reason: notDisplayedReason,
+            origin: window.location.origin,
+            fix: 'Add this exact origin to "Authorized JavaScript origins" in Google Cloud Console for the active OAuth Client ID.',
+          }
+        );
+        setOriginBlocked(true);
+        onError?.(de
+          ? `Google blockiert diesen Origin (${window.location.origin}). Bitte Magic-Link nutzen.`
+          : `Google blocked this origin (${window.location.origin}). Please use Magic Link.`);
+        return;
+      }
       if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
         // One-Tap suppressed (user dismissed previously, FedCM blocked, etc.)
         // → fall back to clicking the hidden official Google button which
         // opens a popup directly. This is Google's recommended fallback.
-        logger.info('Google One Tap suppressed; falling back to popup');
+        logger.info('Google One Tap suppressed; falling back to popup', { reason: notDisplayedReason });
         const realBtn = hiddenButtonRef.current?.querySelector('div[role="button"]');
         if (realBtn) {
           realBtn.click();
@@ -174,6 +208,23 @@ export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, la
         {loading ? <Loader2 size={16} className="animate-spin" /> : <GoogleBrand />}
         <span>{buttonText}</span>
       </button>
+      {/* Iter 92.36: origin_mismatch fallback hint — only shown if Google
+          explicitly told us our origin is not on the whitelist. */}
+      {originBlocked && (
+        <div
+          className="mt-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] leading-relaxed"
+          data-testid="google-origin-mismatch-hint"
+        >
+          <p className="font-bold text-amber-200 mb-1">
+            {de ? 'Google-Login ist gerade nicht verfügbar' : 'Google sign-in is currently unavailable'}
+          </p>
+          <p className="text-amber-100/80">
+            {de
+              ? 'Bitte nutze stattdessen den Magic-Link unten — du erhältst eine Login-E-Mail in wenigen Sekunden.'
+              : 'Please use the Magic Link below — you will receive a sign-in email within seconds.'}
+          </p>
+        </div>
+      )}
       {/* Hidden Google-rendered button — used as click-target fallback when
           One-Tap is suppressed. Off-screen but in DOM so we can click() it. */}
       <div

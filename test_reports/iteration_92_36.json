@@ -1,0 +1,38 @@
+{
+  "summary": "Iter 92.36 — Verified the Google OAuth diagnostic log + origin_mismatch fallback hint in OAuthButtons.js, and regressed all four working auth flows (Email+Password, Phone identifier shape, Magic-Link request, /api/auth/providers). All checks pass. The user-reported 'Error 400: origin_mismatch' on https://leaderos.de is confirmed to be an external Google Cloud Console / Vercel ENV issue, NOT a code bug — the diagnostic log now lets the user identify which exact origin Google sees so they can fix the whitelist.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "verified_behaviours": [
+    "Console log: `[Google OAuth] init` (type=info) appears on /login load with { origin: 'https://command-center-229.preview.emergentagent.com', host: 'command-center-229.preview.emergentagent.com', clientId: '448733563313…53t.apps.googleusercontent.com' }. Origin + host are emitted in clear; clientId is masked (first 12 + … + last 30 chars). NOT the full client id.",
+    "data-testid='google-signin-btn' renders on /login with German label 'Mit Google fortfahren'. data-testid='oauth-provider-stack' wraps it.",
+    "Code review of OAuthButtons.js lines 154-173: `notification.getNotDisplayedReason()` is inspected; if it equals 'unregistered_origin' OR 'invalid_client' → console.error '[Google OAuth] BLOCKED' is logged with origin + fix hint, setOriginBlocked(true) is called, and onError surfaces a German message 'Google blockiert diesen Origin (<origin>). Bitte Magic-Link nutzen.'",
+    "Code review of OAuthButtons.js lines 213-227: when originBlocked === true, a fallback hint div with data-testid='google-origin-mismatch-hint' renders the German copy 'Bitte nutze stattdessen den Magic-Link unten — du erhältst eine Login-E-Mail in wenigen Sekunden.' Cannot trigger on preview because preview origin IS whitelisted, but markup + state-machine are correct.",
+    "Existing One-Tap → hidden-renderButton popup fallback (lines 175-188) is untouched.",
+    "Regression — Email+Password UI flow: filled test@test.com / test123 + click Anmelden → navigated to /dashboard successfully.",
+    "Regression — Backend /api/auth/login {email,password}: 200 + token.",
+    "Regression — Backend /api/auth/login {identifier: 'test@test.com', password}: 200 + token (Iter 92.24 dual-identifier shape works).",
+    "Regression — Backend /api/auth/login {identifier: '+491234567890', password}: gracefully 401/404 (no 500) — phone-shaped identifier branch handles missing user without crashing.",
+    "Regression — Backend /api/auth/magic-link/request {email}: 200 OK.",
+    "Regression — Backend /api/auth/providers: 200, providers.google=true, google_client_id ends with '.apps.googleusercontent.com'.",
+    "Bad-creds: /api/auth/login with wrong password → 401 (not 500).",
+    "ESLint on /app/frontend/src/components/auth/OAuthButtons.js: no issues."
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_36_auth_regression.py",
+    "/app/test_reports/pytest/iter92_36.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Masking is fine (first 12 + last 30 chars) — but for very short or future-proofed client ids this could overlap. Current Google IDs are ~72 chars so masking actually shows ~42 of 72 chars. Acceptable for a diagnostic log, but consider tightening to first 8 + last 25 if the user pastes a screenshot publicly.",
+    "Iter 92.36 changes are additive + behind a state flag (originBlocked) — no risk to existing happy path.",
+    "User's production origin_mismatch is an EXTERNAL config issue (Google Cloud Console whitelist OR Vercel ENV mismatch on GOOGLE_CLIENT_ID). Cannot be fixed in code. The new diagnostic log gives the user exactly the info they need (the origin Google saw + which client id was used) to fix it themselves. This is the correct mitigation."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter92_36_auth_regression.py"],
+  "success_rate": {"backend": "100% (6/6)", "frontend": "100% (login flow + console-log diagnostic verified)"},
+  "test_credentials": "test@test.com / test123 — works.",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.36 is a pure UX/diagnostic change for an EXTERNAL Google Cloud Console origin_mismatch issue reported by user Mert on https://leaderos.de production. Code is correct; the user needs to look at their browser DevTools after clicking 'Mit Google fortfahren' on leaderos.de — the `[Google OAuth] init` log will show them exactly which origin Google sees, which they then must add to the 'Authorized JavaScript origins' list in Google Cloud Console for the active OAuth client. Phone-OR-Email identifier login (Iter 92.24), Magic-Link, and email/password login all still work.",
+  "rca of the issue": "User Mert reports `Error 400: origin_mismatch` on production https://leaderos.de. Root cause is EXTERNAL: either (a) production Vercel deployment serves a DIFFERENT GOOGLE_CLIENT_ID env than the one whitelisted in Google Cloud Console, OR (b) Google Cloud Console propagation delay (changes can take 5min-1h), OR (c) the user added origins under the wrong OAuth client (e.g., web app vs. another project). Mitigation in code (Iter 92.36): added a console.info '[Google OAuth] init' log on GSI initialization exposing window.location.origin + masked clientId so the user can compare what Google sees vs. what they whitelisted; added an interception of notification.getNotDisplayedReason()==='unregistered_origin'|'invalid_client' that flips a state flag rendering a German fallback hint pointing users to Magic-Link. Code change is correct and ships diagnostic value; the actual fix requires the user to update Google Cloud Console / Vercel env. NO regression in working auth flows."
+}
