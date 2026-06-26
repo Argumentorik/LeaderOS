@@ -10,7 +10,7 @@ const phases = [
   { icon: MessageSquare, label: "Kommunikationsstarke messen", color: "#C8FF00" },
   { icon: Target, label: "Management-Effizienz analysieren", color: "#C8FF00" },
   { icon: Users, label: "Team-Leadership bewerten", color: "#C8FF00" },
-  { icon: Shield, label: "Psychologische Fuhrung prufen", color: "#C8FF00" },
+  { icon: Shield, label: "Psychologische Führung prüfen", color: "#C8FF00" },
   { icon: Lightbulb, label: "Problemlosungs-DNA erkennen", color: "#C8FF00" },
   { icon: Zap, label: "Innovationspotential berechnen", color: "#C8FF00" },
   { icon: TrendingUp, label: "Strategische Dominanz bewerten", color: "#C8FF00" },

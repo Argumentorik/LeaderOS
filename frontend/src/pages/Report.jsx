@@ -391,7 +391,7 @@ export default function Report() {
           <div className="mt-6 flex items-center gap-3 glass-card-subtle p-4">
             <span className="dot-pulse" />
             <span className="font-inter text-sm text-slate-400">
-              Wlad ist dein persönlicher KI-Leadership-Coach — kennt dein Profil und deine Ziele
+              Wlad ist dein persönlicher KI-Leadership-Coach · kennt dein Profil und deine Ziele
             </span>
           </div>
         </div>
@@ -403,7 +403,7 @@ export default function Report() {
           </div>
         )}
 
-        {/* CREDO — einfache Wlad-Sprache, kein Boilerplate-Englisch */}
+        {/* CREDO · einfache Wlad-Sprache, kein Boilerplate-Englisch */}
         <div className="glass-card p-8 md:p-10 mb-10 text-center" data-testid="report-credo">
           <div className="badge-lime px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 mb-6">
             <Shield className="w-3 h-3" />
@@ -415,7 +415,7 @@ export default function Report() {
             <span className="text-slate-500">Nicht eine. Nicht zwei. Alle.</span>
           </h2>
           <p className="font-inter text-slate-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Kommunikator · Manager · Team Leader · Psychologe · Problemlöser · Innovator. Die 6. Rolle — der Innovator — ist die, die dich heute vom Mittelfeld trennt. Wer KI als Hebel nutzt, statt sie zu fürchten, führt in 12 Monaten den ganzen Bereich.
+            Kommunikator · Manager · Team Leader · Psychologe · Problemlöser · Innovator. Die 6. Rolle · der Innovator · ist die, die dich heute vom Mittelfeld trennt. Wer KI als Hebel nutzt, statt sie zu fürchten, führt in 12 Monaten den ganzen Bereich.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {roleConfig.map((role) => (

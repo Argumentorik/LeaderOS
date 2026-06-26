@@ -13,11 +13,11 @@ const roleLabels = {
 };
 
 const courses = [
-  { num: "01", icon: Brain, title: "AI Basics · Dein Startpunkt", desc: "Verstehe KI richtig und ordne es fur deine Fuhrung ein. Das Fundament fur alles Weitere.", color: "#C8FF00", tag: "KEY" },
+  { num: "01", icon: Brain, title: "AI Basics · Dein Startpunkt", desc: "Verstehe KI richtig und ordne es für deine Führung ein. Das Fundament für alles Weitere.", color: "#C8FF00", tag: "KEY" },
   { num: "02", icon: MessageSquare, title: "Kommunikation & Argumentation", desc: "Uberzeuge in Meetings, Verhandlungen und Konflikten.", color: "#C8FF00" },
   { num: "03", icon: Target, title: "Management-Systeme", desc: "Eisenhower, ALPEN, Pareto, SMART · bewahrte Methoden.", color: "#C8FF00" },
   { num: "04", icon: Users, title: "Team Leadership & Delegation", desc: "Baue High-Performance-Teams auf.", color: "#C8FF00" },
-  { num: "05", icon: Shield, title: "Psychologische Fuhrung", desc: "Empathie als Wettbewerbsvorteil.", color: "#C8FF00" },
+  { num: "05", icon: Shield, title: "Psychologische Führung", desc: "Empathie als Wettbewerbsvorteil.", color: "#C8FF00" },
   { num: "06", icon: Lightbulb, title: "Problemlosung & Entscheidung", desc: "Datengestutzte Entscheidungen unter Druck.", color: "#C8FF00" },
 ];
 
@@ -41,7 +41,7 @@ const weeklyPlan = [
     icon: Brain,
     focus: "Selbstanalyse",
     items: [
-      { task: "Baseline deiner 6 Fuhrungsdimensionen", agent: "Diagnose-Agent" },
+      { task: "Baseline deiner 6 Führungsdimensionen", agent: "Diagnose-Agent" },
       { task: "AI Basics: KI richtig verstehen & einordnen", agent: "Strategie-Agent" },
       { task: "Kommunikationsmuster identifizieren", agent: "Coach-Agent" },
       { task: "EQ-Selbstreflexion: Starken & Trigger", agent: "Simulations-Agent" },
@@ -76,7 +76,7 @@ const weeklyPlan = [
     focus: "Praxistransfer",
     items: [
       { task: "KI + Rhetorik in einer Prasentation kombinieren", agent: "Coach-Agent" },
-      { task: "SMART-Formel fur deine Quartalsziele", agent: "Task-Agent" },
+      { task: "SMART-Formel für deine Quartalsziele", agent: "Task-Agent" },
       { task: "Schwierige Gesprache mit EQ-Framework", agent: "Simulations-Agent" },
       { task: "Feedback-Loop mit deinem Team starten", agent: "Community-Agent" },
     ],
@@ -177,7 +177,7 @@ export default function Roadmap() {
       <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#C8FF00]/[0.015] rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-28">
-        {/* Header — Personalized */}
+        {/* Header · Personalized */}
         <div className="text-center mb-14">
           <div className="badge-lime px-4 py-2 text-sm font-medium inline-flex items-center gap-2 mb-6">
             <Sparkles className="w-4 h-4" />
@@ -188,7 +188,7 @@ export default function Roadmap() {
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             {userScore > 0 ? (
-              <>Dein Score: <span className="text-white font-semibold">{userScore}%</span>. {userScore >= 70 ? "Stark — jetzt die letzten Prozente herausholen." : userScore >= 50 ? "Solide Basis — mit dem richtigen Plan wird daraus Exzellenz." : "Großes Wachstumspotenzial — genau dafür ist dieser Plan gemacht."}</>
+              <>Dein Score: <span className="text-white font-semibold">{userScore}%</span>. {userScore >= 70 ? "Stark · jetzt die letzten Prozente herausholen." : userScore >= 50 ? "Solide Basis · mit dem richtigen Plan wird daraus Exzellenz." : "Großes Wachstumspotenzial · genau dafür ist dieser Plan gemacht."}</>
             ) : (
               <>6 spezialisierte KI-Agenten. 6 Kurse. Persönliches Coaching.</>
             )}
@@ -454,7 +454,7 @@ export default function Roadmap() {
         <div className="mb-14" data-testid="courses-section">
           <h2 className="font-manrope font-bold text-xl text-white mb-2 flex items-center gap-3">
             <BookOpen className="w-5 h-5 text-[#C8FF00]" />
-            6 Kurse fur das Modern Leadership System
+            6 Kurse für das Modern Leadership System
           </h2>
           <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt · dann baust du Schritt für Schritt auf.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

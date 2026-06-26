@@ -22,7 +22,7 @@ const headlines = [
     lines: ["{10 Minuten.}", "6 Rollen. 1 Score.", "Keine Ausreden."],
   },
   {
-    pre: "Es gibt ein Geheimnis, das die Top 1% der Leader kennen — und du noch nicht.",
+    pre: "Es gibt ein Geheimnis, das die Top 1% der Leader kennen · und du noch nicht.",
     lines: ["Die {verborgene Rolle},", "die über deinen", "Aufstieg entscheidet."],
   },
 ];
@@ -448,7 +448,7 @@ export default function Hero() {
                   </div>
                   <div className="bg-[#C8FF00] px-4 py-3 rounded-2xl rounded-br-md ml-8">
                     <p className="font-inter text-sm text-[#0a0a0a] font-medium">
-                      Lass uns das strukturiert angehen. Zunachst: Was ist der konkrete Anlass?
+                      Lass uns das strukturiert angehen. Zunächst: Was ist der konkrete Anlass?
                     </p>
                   </div>
                 </div>
@@ -490,14 +490,18 @@ export default function Hero() {
         {/* ===== SECTION 7: LEADERSHIP KURS ===== */}
         <section className="py-24 border-t border-white/[0.04]">
           <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
-            <span className="inline-block px-3 py-1 rounded-lg border border-[#C8FF00]/15 bg-[#C8FF00]/[0.04] text-[10px] font-semibold tracking-[0.2em] text-[#C8FF00] uppercase mb-5">
-              Bonus
+            <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+              ▸ Bonus für Diagnose-Absolventen
             </span>
-            <h2 className="font-manrope font-extrabold text-3xl md:text-4xl text-white mb-4">
-              Zugang zu ausgewahlten Modulen des
-              <span className="text-gradient-lime"> WLAD Leadership Programms.</span>
+            <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
+              <span className="block text-3xl md:text-5xl lg:text-6xl">
+                Zugang zu <span className="italic font-semibold">ausgewählten</span> Modulen
+              </span>
+              <span className="block text-3xl md:text-5xl lg:text-6xl mt-2 text-[#C8FF00]">
+                des Wlad Leadership Programms.
+              </span>
             </h2>
-            <p className="font-inter text-sm text-slate-500 mb-8 max-w-xl mx-auto">
+            <p className="font-inter text-base text-slate-400 mt-6 mb-10 max-w-xl mx-auto leading-relaxed">
               Im Kurs lernst du:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -600,7 +604,7 @@ export default function Hero() {
               <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
                 &laquo;Ich dachte, ich wäre ein guter Kommunikator · bis Leader OS mir gezeigt hat, dass mein eigentlicher Hebel im strategischen EQ liegt. Das hat alles verändert.&raquo;
               </p>
-              <p className="font-inter text-xs text-slate-600 mt-3">— Senior Manager, DAX 40 Unternehmen</p>
+              <p className="font-inter text-xs text-slate-600 mt-3">· Senior Manager, DAX 40 Unternehmen</p>
             </div>
           </div>
         </section>
@@ -678,7 +682,7 @@ export default function Hero() {
                   <p className="font-manrope font-medium text-lg md:text-xl text-white leading-snug mb-3">
                     «Leadership ist nicht, was du sagst, sondern wie du in den schwierigen Momenten entscheidest. Genau dafür habe ich Leader · OS gebaut.»
                   </p>
-                  <p className="font-inter text-xs text-slate-500">— Wlad Jachtchenko</p>
+                  <p className="font-inter text-xs text-slate-500">· Wlad Jachtchenko</p>
                 </div>
 
                 <p className="font-inter text-base text-slate-400 leading-relaxed mb-4">
