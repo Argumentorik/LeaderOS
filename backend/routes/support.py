@@ -34,14 +34,14 @@ ROLLE: Du beantwortest Support-Fragen in 2-4 Sätzen, freundlich aber prägnant.
 KERN-MISSION:
 • Fokussiere auf AI-Weiterbildung und Upgrade-Möglichkeiten
 • Hilf dem User schnell zu seinem nächsten Wert (Mission starten, Coach buchen, AI-Sprint fortsetzen)
-• Refund-/Cancel-Anliegen NIEMALS direkt anleiten — IMMER zu support@leader-os.de leiten (persönlicher Save)
+• Refund-/Cancel-Anliegen NIEMALS direkt anleiten — IMMER zu support@leaderos.de leiten (persönlicher Save)
 
 WAS DU WEISST:
 • Tiers: Free (limitiert) · Leadership OS €997/Jahr · OS PLUS €4.797/Jahr (mit 12 Einzelcoachings durch Wlads Expertenteam)
 • Bezahlung: Stripe, einmalig oder Rate (2x oder 12x). 30-Tage-Geld-zurück-Garantie EXISTIERT, aber NICHT proaktiv erwähnen.
 • Features: WladBot Chat 24/7 · 30-Tage AI-Sprint mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
 • AI-Mastery Track: 16 strukturierte Missionen die zeigen wie man GPT/Claude/Gemini als Leadership-Multiplier nutzt
-• Support-Email: support@leader-os.de
+• Support-Email: support@leaderos.de
 • Strategiegespräch buchen: cal.com/leaderos/beratung (15 Min · 1:1 · unverbindlich)
 
 WIE DU ANTWORTEST:
@@ -51,7 +51,7 @@ WIE DU ANTWORTEST:
 • Bei „Wie funktioniert X?" → kurze Erklärung + Link zur betroffenen Page
 • Bei „Was bringt mir das?" → Value-Story + Upgrade-Hinweis (OS PLUS featuring)
 • Bei Bug-Reports → kurz bestätigen + „leiten wir an Engineering" + Strategiegespräch-CTA als Alternative
-• Bei Bezahlfragen → support@leader-os.de für persönliche Klärung
+• Bei Bezahlfragen → support@leaderos.de für persönliche Klärung
 
 NIEMALS:
 • Refund-Anleitung im UI (auch wenn explizit gefragt → IMMER zu support@email leiten)
@@ -91,9 +91,9 @@ FAQ_SHORTCUTS = [
         # User-Retention: bei Cancel/Refund-Intent NICHT direkt Refund-Anleitung,
         # sondern Hinweis auf persönlichen Support → Conversion-Save.
         "triggers": ["refund", "rückerstattung", "geld zurück", "geld-zurück", "money back", "cancel", "kündigen"],
-        "answer": "Schreib uns direkt an support@leader-os.de mit deinem Anliegen — wir melden uns innerhalb 24h persönlich. Häufig finden wir eine bessere Lösung als Cancel (z.B. Pause, Tier-Wechsel, oder eine kurze Coaching-Session die dich weiterbringt).",
+        "answer": "Schreib uns direkt an support@leaderos.de mit deinem Anliegen — wir melden uns innerhalb 24h persönlich. Häufig finden wir eine bessere Lösung als Cancel (z.B. Pause, Tier-Wechsel, oder eine kurze Coaching-Session die dich weiterbringt).",
         "actions": [
-            {"label": "Email an Support", "type": "mailto", "value": "support@leader-os.de"},
+            {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
             {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
         ],
     },
@@ -120,12 +120,12 @@ FAQ_SHORTCUTS = [
     },
     {
         "triggers": ["passwort", "password reset", "login fail", "kann mich nicht einloggen", "kann mich nicht anmelden"],
-        "answer": "Passwort-Reset via Magic-Link: auf /login → 'Magic Link' Tab → E-Mail eingeben. Falls die Mail nicht kommt: Spam-Folder checken, sonst support@leader-os.de.",
+        "answer": "Passwort-Reset via Magic-Link: auf /login → 'Magic Link' Tab → E-Mail eingeben. Falls die Mail nicht kommt: Spam-Folder checken, sonst support@leaderos.de.",
         "actions": [{"label": "Zur Login-Page", "type": "internal", "value": "/login"}],
     },
     {
         "triggers": ["unsubscribe", "abmelden", "keine emails mehr"],
-        "answer": "Klick in jeder Email auf den 'Abmelden'-Link am Ende — wir entfernen dich sofort aus dem Verteiler. Oder direkt: support@leader-os.de.",
+        "answer": "Klick in jeder Email auf den 'Abmelden'-Link am Ende — wir entfernen dich sofort aus dem Verteiler. Oder direkt: support@leaderos.de.",
         "actions": [],
     },
     {
@@ -188,16 +188,16 @@ async def support_ask(data: SupportAskIn, request: Request):
             # Always offer book-a-call + email as fallback actions
             suggested = [
                 {"label": "15 Min Strategiegespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
-                {"label": "Email an Support", "type": "mailto", "value": "support@leader-os.de"},
+                {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
             ]
             source = "llm"
         except Exception as e:
             logger.error(f"WladHelp LLM error: {e}")
             answer = ("Ich konnte deine Frage gerade nicht beantworten. "
-                      "Schreib uns kurz auf support@leader-os.de oder buch ein 15-Min Strategiegespräch — "
+                      "Schreib uns kurz auf support@leaderos.de oder buch ein 15-Min Strategiegespräch — "
                       "wir melden uns innerhalb von 24h.")
             suggested = [
-                {"label": "Email an Support", "type": "mailto", "value": "support@leader-os.de"},
+                {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
                 {"label": "15 Min Strategiegespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
             ]
             source = "fallback"

@@ -122,10 +122,11 @@ class TestOnboardingEmails:
         assert isinstance(subj, str) and isinstance(html, str)
         assert "vimeo" not in html.lower(), f"Vimeo embed must NOT be present in {fn_name}"
 
-    def test_sender_email_uses_dashed_domain(self):
-        """SENDER_EMAIL must be reminders@leader-os.de (with dash)."""
-        sender = os.environ.get("SENDER_EMAIL") or open("/app/backend/.env").read()
-        assert "reminders@leader-os.de" in sender, "SENDER_EMAIL must be reminders@leader-os.de (with dash)"
+    def test_sender_email_uses_no_dash_domain(self):
+        """Iter 92.38 — SENDER_EMAIL must now be wlad@leaderos.de (NO dash, verified Resend domain)."""
+        env_text = open("/app/backend/.env").read()
+        assert "wlad@leaderos.de" in env_text, "SENDER_EMAIL must be wlad@leaderos.de (no dash) in .env"
+        assert "reminders@leader-os.de" not in env_text, "Old dashed sender must be removed"
 
     def test_resend_api_key_set(self):
         env_text = open("/app/backend/.env").read()
