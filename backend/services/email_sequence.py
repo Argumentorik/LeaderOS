@@ -91,7 +91,7 @@ def email_1_score_meaning(name: str, weakest_label: str, weakest_score: int) -> 
 <tr><td>{_section_label("Tag 1 · Aktivier dein WladBot", BRAND['lime'])}</td></tr>
 <tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine <span style='color:{BRAND['lime']}'>50 Free Credits</span><br>sind freigeschaltet.")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Dein Account auf <strong style="color:{BRAND['white']}">leaderos.de</strong> wurde automatisch erstellt. Die 50 Credits liegen bereit · <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · das reicht für 15–25 echte WladBot-Sparring-Sessions.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Dein Account auf <a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;font-weight:700;">leaderos.de</a> wurde automatisch erstellt. Die 50 Credits liegen bereit · <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · das reicht für 15–25 echte WladBot-Sparring-Sessions.</p>
 <p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Dein größter Hebel laut Diagnose: <strong style="color:{BRAND['lime']}">{weakest_label} ({weakest_score} %)</strong>. Stell WladBot heute Abend deine erste Frage dazu.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
@@ -179,7 +179,7 @@ def email_4_scarcity(name: str, seats_left: int = 14) -> dict:
 <tr><td>{_section_label("Tag 7 · Credit-Check", BRAND['lime'])}</td></tr>
 <tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine 50 Credits liegen<br><span style='color:{BRAND['lime']}'>seit 7 Tagen ungenutzt.</span>")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Eine ehrliche Beobachtung: Die meisten machen die Diagnose, lesen den Report · und melden sich nie auf <strong style="color:{BRAND['white']}">leaderos.de</strong> an. Schade · denn da liegt der eigentliche Hebel.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Eine ehrliche Beobachtung: Die meisten machen die Diagnose, lesen den Report · und melden sich nie auf <a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;font-weight:700;">leaderos.de</a> an. Schade · denn da liegt der eigentliche Hebel.</p>
 <p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Falls dich Login + WladBot abschreckt: <strong style="color:{BRAND['lime']}">3 Klicks, 1 Frage, 2–3 Credits</strong>. Mehr ist es nicht.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">

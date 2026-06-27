@@ -25,14 +25,25 @@ import logging
 from datetime import datetime
 from typing import Optional, Union
 
+import os
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
 
 logger = logging.getLogger(__name__)
+
+# ════════════════════════════════════════════════════════════════════
+# ASSETS
+# ════════════════════════════════════════════════════════════════════
+_ASSETS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+LOGO_DARK_PATH = os.path.join(_ASSETS_DIR, "leaderos-logo-dark.png")
+LOGO_MARK_PATH = os.path.join(_ASSETS_DIR, "leaderos-mark.png")
+_LOGO_DARK = ImageReader(LOGO_DARK_PATH) if os.path.exists(LOGO_DARK_PATH) else None
+_LOGO_MARK = ImageReader(LOGO_MARK_PATH) if os.path.exists(LOGO_MARK_PATH) else None
 
 # ════════════════════════════════════════════════════════════════════
 # BRAND
@@ -176,16 +187,26 @@ def _page_bg(c: canvas.Canvas):
 
 def _page_chrome(c: canvas.Canvas, page_num: int, total_pages: int, section_label: str = ""):
     w, h = A4
-    # Top-left lime tick + brand
+    # Top-left lime tick
     c.setFillColor(LIME)
     c.rect(20 * mm, h - 14 * mm, 6 * mm, 0.5 * mm, fill=1, stroke=0)
-    c.setFillColor(WHITE)
-    c.setFont("Helvetica-Bold", 8)
-    c.drawString(20 * mm, h - 18 * mm, "LEADER / OS")
+    # Logo (real PNG · falls back to text wordmark if file missing)
+    if _LOGO_DARK is not None:
+        try:
+            c.drawImage(_LOGO_DARK, 20 * mm, h - 22 * mm, height=7 * mm, width=30 * mm,
+                        preserveAspectRatio=True, mask='auto', anchor='sw')
+        except Exception:
+            c.setFillColor(WHITE)
+            c.setFont("Helvetica-Bold", 8)
+            c.drawString(20 * mm, h - 18 * mm, "LEADER / OS")
+    else:
+        c.setFillColor(WHITE)
+        c.setFont("Helvetica-Bold", 8)
+        c.drawString(20 * mm, h - 18 * mm, "LEADER / OS")
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 7.5)
     if section_label:
-        c.drawString(50 * mm, h - 18 * mm, section_label.upper())
+        c.drawString(60 * mm, h - 18 * mm, section_label.upper())
     c.drawRightString(w - 20 * mm, h - 18 * mm, f"{page_num:02d} / {total_pages:02d}")
 
     # Bottom footer
@@ -799,7 +820,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.drawString(30 * mm, hero_y + hero_h - 33 * mm, "Jede Anfrage kostet 2–3 Credits · je nach Tiefe.")
     c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "WladBot ist online · 24/7 · in Wlads Sprache.")
 
-    # Primary CTA pill inside hero
+    # Primary CTA pill inside hero — CLICKABLE
     cta_w = 80 * mm
     cta_x = 30 * mm
     cta_y_btn = hero_y + 10 * mm
@@ -808,6 +829,10 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.setFillColor(BG)
     c.setFont("Helvetica-Bold", 10.5)
     c.drawCentredString(cta_x + cta_w / 2, cta_y_btn + 3.8 * mm, "→  LEADEROS.DE LOGIN")
+    # Clickable link region
+    c.linkURL("https://leaderos.de/login",
+              (cta_x, cta_y_btn, cta_x + cta_w, cta_y_btn + 11 * mm),
+              relative=0, thickness=0)
 
     # Right-side url note
     c.setFillColor(LIME)
@@ -892,7 +917,13 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.drawCentredString(w / 2, sec_y, "Speichere diesen Report · komm wieder, wann du willst · die Tür bleibt offen.")
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 8.5)
-    c.drawCentredString(w / 2, sec_y - 6 * mm, "leadercheck.de   ·   leaderos.de/login   ·   wlad@leaderos.de")
+    footer_text = "leadercheck.de   ·   leaderos.de/login   ·   wlad@leaderos.de"
+    c.drawCentredString(w / 2, sec_y - 6 * mm, footer_text)
+    # Make the whole footer clickable to leaderos.de/login (primary goal)
+    text_w = c.stringWidth(footer_text, "Helvetica-Bold", 8.5)
+    c.linkURL("https://leaderos.de/login",
+              (w / 2 - text_w / 2, sec_y - 8 * mm, w / 2 + text_w / 2, sec_y - 4 * mm),
+              relative=0, thickness=0)
 
     c.showPage()
 

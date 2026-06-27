@@ -16,29 +16,36 @@ BRAND = {
 }
 
 
+LOGO_URL = "https://leadercheck.de/leaderos-logo-dark.png"
+LOGO_MARK_URL = "https://leadercheck.de/leaderos-mark.png"
+
+
 # ─── Shared HTML Helpers ───────────────────────────────────
 
 def _logo_block() -> str:
     return f"""<tr><td style="padding:0 0 32px 0;">
-<table role="presentation" cellspacing="0" cellpadding="0"><tr>
-<td style="background:{BRAND['lime']};border-radius:8px;padding:6px 12px;">
-<span style="font-size:16px;font-weight:800;color:{BRAND['bg']};letter-spacing:0.05em;">W</span>
-</td>
-<td style="padding-left:12px;">
-<span style="font-size:16px;font-weight:700;color:{BRAND['lime']};letter-spacing:0.03em;">LEADER/OS</span>
-</td>
-</tr></table>
+<a href="https://leadercheck.de" style="text-decoration:none;display:inline-block;">
+<img src="{LOGO_URL}" alt="Leader OS" height="32" style="height:32px;width:auto;display:block;border:0;outline:none;" />
+</a>
 </td></tr>"""
 
 
 def _footer_block() -> str:
     return f"""<tr><td style="padding:40px 0 0 0;border-top:1px solid {BRAND['border']};">
+<table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 16px 0;">
+<tr><td>
+<a href="https://leadercheck.de" style="text-decoration:none;display:inline-block;">
+<img src="{LOGO_MARK_URL}" alt="Leader OS" height="22" style="height:22px;width:auto;display:block;border:0;outline:none;" />
+</a>
+</td></tr></table>
 <p style="font-size:11px;color:{BRAND['muted']};line-height:1.6;margin:0;">
 Du erhältst diese E-Mail, weil du die Leader-Check Leadership-Diagnose gestartet hast.<br>
-<a href="https://leadercheck.de" style="color:{BRAND['lime']};text-decoration:none;">leadercheck.de</a> · 
-<a href="https://leadercheck.de/api/email/unsubscribe?email=unknown" style="color:{BRAND['muted']};text-decoration:none;">Abmelden</a>
+<a href="https://leadercheck.de" style="color:{BRAND['lime']};text-decoration:underline;">leadercheck.de</a> &nbsp;·&nbsp;
+<a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;">leaderos.de Login</a> &nbsp;·&nbsp;
+<a href="mailto:wlad@leaderos.de" style="color:{BRAND['lime']};text-decoration:underline;">wlad@leaderos.de</a> &nbsp;·&nbsp;
+<a href="https://leadercheck.de/api/email/unsubscribe?email=unknown" style="color:{BRAND['muted']};text-decoration:underline;">Abmelden</a>
 </p>
-<p style="font-size:10px;color:#333;margin:12px 0 0 0;">© 2026 Leader OS · Wlad Jachtchenko · 3× SPIEGEL-Bestseller. Alle Rechte vorbehalten.</p>
+<p style="font-size:10px;color:#444;margin:12px 0 0 0;">© 2026 Leader OS · Wlad Jachtchenko · 3× SPIEGEL-Bestseller. Alle Rechte vorbehalten.</p>
 </td></tr>"""
 
 
@@ -207,7 +214,7 @@ def report_email(name: str, report: dict) -> dict:
 <div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.03));border-radius:14px;padding:22px 26px;border:1px solid rgba(200,255,0,0.30);">
 <p style="font-size:10px;color:{BRAND['lime']};margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.18em;font-weight:700;">▸ Dein Bonus · Sofort aktivierbar</p>
 <p style="font-size:18px;color:{BRAND['white']};margin:0 0 6px 0;line-height:1.4;font-weight:700;">50 Free Credits für deinen <span style="color:{BRAND['lime']}">WladBot</span> warten.</p>
-<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <strong style="color:{BRAND['white']}">leaderos.de</strong> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · je nach Tiefe. Stelle WladBot deine erste schwere Frage.</p>
+<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;font-weight:700;">leaderos.de</a> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · je nach Tiefe. Stelle WladBot deine erste schwere Frage.</p>
 <a href="https://leaderos.de/login" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['bg']};font-size:13px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">→ Auf leaderos.de einloggen</a>
 </div>
 </td></tr>
