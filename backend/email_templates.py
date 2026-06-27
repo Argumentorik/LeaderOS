@@ -203,13 +203,21 @@ def report_email(name: str, report: dict) -> dict:
 <p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Ehrlich?</strong> Die meisten schauen sich ihren Report an, nicken – und machen weiter wie bisher. Der Score ändert sich nicht von alleine. Wenn du wirklich willst, dass sich was bewegt, dann starte den 30-Tage-Plan. Aber nur, wenn du es ernst meinst.</p>
 </td></tr>
 {_cta_button("30-Tage-Plan ansehen →", "https://leadercheck.de/roadmap")}
+<tr><td style="padding:8px 0 8px 0;">
+<div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.03));border-radius:14px;padding:22px 26px;border:1px solid rgba(200,255,0,0.30);">
+<p style="font-size:10px;color:{BRAND['lime']};margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.18em;font-weight:700;">▸ Dein Bonus · Sofort aktivierbar</p>
+<p style="font-size:18px;color:{BRAND['white']};margin:0 0 6px 0;line-height:1.4;font-weight:700;">50 Free Credits für deinen <span style="color:{BRAND['lime']}">WladBot</span> warten.</p>
+<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <strong style="color:{BRAND['white']}">leaderos.de</strong> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. Stelle WladBot deine erste schwere Frage.</p>
+<a href="https://leaderos.de/login" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['bg']};font-size:13px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">→ Auf leaderos.de einloggen</a>
+</div>
+</td></tr>
 <tr><td style="padding:0 0 8px 0;">
 <div style="background:{BRAND['card']};border-radius:12px;padding:18px 22px;border-left:3px solid {BRAND['lime']};">
 <p style="font-size:11px;color:{BRAND['lime']};margin:0 0 6px 0;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;">▸ Anhang in dieser E-Mail</p>
-<p style="font-size:14px;color:{BRAND['white']};margin:0;line-height:1.6;"><strong>LeaderCheck-Diagnose.pdf</strong> · Deine komplette Executive-Diagnose als PDF · damit du sie auch offline lesen, ausdrucken oder mit deinem Coach teilen kannst.</p>
+<p style="font-size:14px;color:{BRAND['white']};margin:0;line-height:1.6;"><strong>LeaderCheck-Diagnose.pdf</strong> · Deine komplette 7-Seiten-Diagnose als PDF · damit du sie auch offline lesen, ausdrucken oder mit deinem Coach teilen kannst.</p>
 </div>
 </td></tr>
-{_ps_block('Du hast außerdem 50 kostenlose Credits für deinen <strong style="color:' + BRAND['lime'] + '">WladBot</strong> freigeschaltet · dein persönlicher KI-Coach in Wlads Sprache.')}"""
+{_ps_block('Diese E-Mail ist nur der Anfang. In den nächsten 30 Tagen schicken wir dir 1× pro Woche einen <strong style="color:' + BRAND['lime'] + '">Wlad-Framework Quick-Win</strong> · um deine 50 Credits maximal zu nutzen.')}"""
 
     return {
         "subject": f"{name}: {profile_title} — dein Leader OS Report",

@@ -27,8 +27,23 @@ from email_templates import (
     _cta_button, _ps_block,
 )
 
+LEADEROS_LOGIN = "https://leaderos.de/login"
+LEADEROS_HOME = "https://leaderos.de"
+
 
 # ─── Shared CTA Builders ──────────────────────────────────
+
+def _leaderos_cta(label: str = "→ Auf leaderos.de einloggen", sub: str = "50 Free Credits warten · WladBot · 24/7") -> str:
+    """Hero CTA driving to the LeaderOS platform with the Free Credits hook."""
+    return f"""<tr><td align="center" style="padding:24px 0 8px 0;">
+<div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.02));border-radius:14px;padding:24px 28px;border:1px solid rgba(200,255,0,0.30);">
+<p style="font-size:10px;color:{BRAND['lime']};margin:0 0 6px 0;text-transform:uppercase;letter-spacing:0.20em;font-weight:700;">▸ Dein Bonus aktiv</p>
+<p style="font-size:18px;color:{BRAND['white']};margin:0 0 14px 0;line-height:1.4;font-weight:700;">50 Free Credits · <span style="color:{BRAND['lime']}">WladBot ist online</span></p>
+<a href="{LEADEROS_LOGIN}" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['bg']};font-size:14px;font-weight:700;padding:13px 28px;border-radius:10px;text-decoration:none;">{label}</a>
+<p style="font-size:11px;color:{BRAND['muted']};margin:14px 0 0 0;">{sub}</p>
+</div>
+</td></tr>"""
+
 
 def _dual_cta(primary_text: str, primary_url: str, secondary_text: str, secondary_url: str) -> str:
     """Sprint (primary, lime) + Plus-Plus (secondary, outline) buttons side-by-side."""
@@ -69,43 +84,42 @@ def _bullet_list(items: list[str]) -> str:
     return f"""<table role="presentation" width="100%" cellspacing="0" cellpadding="0">{rows}</table>"""
 
 
-# ─── Email 1 (T+1d): Was dein Score wirklich bedeutet ─────
+# ─── Email 1 (T+1d): Activate your 50 Free Credits ────────
 
 def email_1_score_meaning(name: str, weakest_label: str, weakest_score: int) -> dict:
     content = f"""
-<tr><td>{_section_label("Dein Score · Tag 1 nach Diagnose", BRAND['lime'])}</td></tr>
-<tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, dein <span style='color:{BRAND['lime']}'>{weakest_label}-Wert ist {weakest_score}%</span>.<br>Hier ist, was das wirklich heißt.")}</td></tr>
+<tr><td>{_section_label("Tag 1 · Aktivier dein WladBot", BRAND['lime'])}</td></tr>
+<tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine <span style='color:{BRAND['lime']}'>50 Free Credits</span><br>sind freigeschaltet.")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Ein Score von {weakest_score}% in {weakest_label} bedeutet konkret eins: Du lässt jeden Tag Wirkung liegen, die du haben könntest.</p>
-<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Nicht weil du schlecht bist. Sondern weil dir das Werkzeug fehlt, das die Top 1 % der Führungskräfte schon haben.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Dein Account auf <strong style="color:{BRAND['white']}">leaderos.de</strong> wurde automatisch erstellt. Die 50 Credits liegen bereit · damit kannst du WladBot ca. 50× zu echten Führungs-Situationen befragen.</p>
+<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Dein größter Hebel laut Diagnose: <strong style="color:{BRAND['lime']}">{weakest_label} ({weakest_score} %)</strong>. Stell WladBot heute Abend deine erste Frage dazu.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
-{_section_label("Was du jetzt tun könntest")}
+{_section_label("3 Fragen, die du WladBot heute stellen kannst")}
 {_bullet_list([
-    f"Mit dem 30-Tage-Sprint deinen {weakest_label}-Wert in 4 Wochen verdoppeln",
-    "Die 11 Wlad-Frameworks anwenden, die exakt diese Lücke schließen",
-    "WladBot fragen, der dich auf deine Situation antwortet — 24/7",
+    f"«Wo ist mein {weakest_label}-Hebel am größten · in meiner aktuellen Rolle?»",
+    "«Bereite mich auf das schwierigste Gespräch der Woche vor.»",
+    "«Was würde Wlad an meiner Stelle anders machen?»",
 ])}
 </td></tr>
-{_scarcity_bar()}
-{_cta_button("Sprint sichern · 997 EUR →", "https://leadercheck.de/close")}
-{_ps_block(f"Deine Diagnose verschwindet nicht. Aber ehrlich? In 6 Monaten wirst du sie vergessen haben. Außer du machst jetzt was draus.")}"""
+{_leaderos_cta("→ Jetzt auf leaderos.de einloggen", "Einmal-Login · gleiche E-Mail wie bei der Diagnose")}
+{_ps_block("Wlad sagt: «Wer 50 Credits hat und sie nicht nutzt, hat noch keine Idee, was er verpasst. Deine erste Frage entscheidet, ob die nächsten 30 Tage anders werden.»")}"""
     return {
-        "subject": f"{name}: Dein {weakest_label}-Score ist {weakest_score}%. Hier ist, was das heißt.",
-        "html": _base_wrapper(content, f"Tag 1 nach deiner Diagnose · der echte Befund."),
+        "subject": f"{name}, deine 50 Free Credits sind aktiv · leaderos.de",
+        "html": _base_wrapper(content, "Tag 1 · WladBot ist online, deine Credits warten."),
     }
 
 
-# ─── Email 2 (T+3d): Wlad-Framework Quick-Win ─────────────
+# ─── Email 2 (T+3d): Wlad-Framework live in WladBot ───────
 
 def email_2_quickwin(name: str) -> dict:
     content = f"""
-<tr><td>{_section_label("Quick-Win · 1 Wlad-Framework", BRAND['lime'])}</td></tr>
-<tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, hier ist 1 Framework,<br><span style='color:{BRAND['lime']}'>das du heute noch nutzt.</span>")}</td></tr>
+<tr><td>{_section_label("Tag 3 · Erstes Wlad-Framework", BRAND['lime'])}</td></tr>
+<tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, dieses Framework<br><span style='color:{BRAND['lime']}'>nutzt du heute Abend.</span>")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
 <p style="font-size:11px;color:{BRAND['lime']};margin:0 0 8px 0;letter-spacing:0.15em;text-transform:uppercase;">▸ Framework 01 · SEXIER</p>
 <p style="font-size:17px;color:{BRAND['white']};line-height:1.5;margin:0 0 16px 0;font-weight:700;">Die Argumentations-Pyramide.</p>
-<p style="font-size:14px;color:{BRAND['gray']};line-height:1.7;margin:0;">Wenn du das nächste Mal jemanden überzeugen willst — Boss, Team, Kunde — bau dein Argument so auf:</p>
+<p style="font-size:14px;color:{BRAND['gray']};line-height:1.7;margin:0;">Bevor du das nächste Mal überzeugen willst (Boss, Team, Kunde) · bau dein Argument so auf:</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
 {_bullet_list([
@@ -118,83 +132,69 @@ def email_2_quickwin(name: str) -> dict:
 ])}
 </td></tr>
 <tr><td style="background:rgba(200,255,0,0.04);border:1px solid rgba(200,255,0,0.15);border-radius:12px;padding:20px 24px;">
-<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Probier's heute aus.</strong> Im nächsten Meeting. Du wirst merken, wie viel klarer du wirkst.</p>
-<p style="font-size:13px;color:{BRAND['gray']};line-height:1.7;margin:12px 0 0 0;">Das ist 1 von 11 Frameworks im Sprint. Die anderen 10 zeigen dir, wie du in jeder Führungs-Situation den richtigen Hebel findest.</p>
+<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Probier's heute mit WladBot:</strong> Logge dich auf leaderos.de ein · sag «Wende SEXIER auf folgendes Argument an: [dein Argument]» · und du bekommst das aufgeräumte Statement zurück. <span style="color:{BRAND['lime']}">1 Credit kostet das.</span></p>
 </td></tr>
-{_scarcity_bar()}
-{_cta_button("Alle 11 Frameworks · Sprint 997 EUR →", "https://leadercheck.de/close")}
-{_ps_block("SEXIER ist nur die Einstiegs-Methode. Im Sprint kombinierst du sie mit den anderen 10 — und auf einmal funktioniert auch das schwierige Gespräch, vor dem du dich immer gedrückt hast.")}"""
+{_leaderos_cta("→ SEXIER mit WladBot ausprobieren", "Direkt zum Chat · noch 50 von 50 Credits frei")}
+{_ps_block("Diese eine Anwendung lohnt schon allein die Anmeldung. SEXIER ist 1 von 11 Frameworks · und WladBot kennt sie alle. Klingt unfair? Ist es nicht · für 30 Tage hast du Zugriff drauf.")}"""
     return {
-        "subject": f"{name}, hier ist 1 Wlad-Framework · sofort nutzbar.",
-        "html": _base_wrapper(content, "Die SEXIER-Pyramide — Wlads Argumentations-Methode."),
+        "subject": f"{name}, dieses Framework nutzt du heute Abend (1 Credit).",
+        "html": _base_wrapper(content, "Die SEXIER-Pyramide · live in WladBot ausprobieren."),
     }
 
 
-# ─── Email 3 (T+5d): Klienten-Story / Social Proof ────────
+# ─── Email 3 (T+5d): Maria-Story · sie hat leaderos.de gelebt ─
 
 def email_3_social_proof(name: str) -> dict:
     content = f"""
-<tr><td>{_section_label("400.000 Klienten · 1 Story", BRAND['lime'])}</td></tr>
+<tr><td>{_section_label("Tag 5 · 1 Klientin · 1 Story", BRAND['lime'])}</td></tr>
 <tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, das war Maria<br><span style='color:{BRAND['lime']}'>vor 6 Monaten.</span>")}</td></tr>
 {_quote_block(
-    "Ich war im Boardroom die fachlich Beste. Aber wenn unser CFO redete, hörten alle ihm zu. Nach dem Sprint hat mein Team mich gefragt, ob ich Coaching genommen hätte. Habe ich nicht. Ich habe Wlad genommen.",
+    "Ich war im Boardroom die fachlich Beste. Aber wenn unser CFO redete, hörten alle ihm zu. Ich habe mich auf leaderos.de eingeloggt, WladBot 30 Tage am Stück genutzt, und am Tag 31 hat mein Team mich gefragt, ob ich Coaching genommen hätte. Habe ich nicht. Ich habe Wlad genommen.",
     "Maria K. · Head of Engineering · TecConsult AG"
 )}
 <tr><td style="padding:24px 0;">
-{_section_label("Was Maria konkret gemacht hat")}
+{_section_label("Was Maria mit ihren Credits gemacht hat")}
 {_bullet_list([
-    "Tag 1–7: SEXIER-Pyramide in jedem Meeting · «Hat sich nach Tag 3 schon natürlich angefühlt»",
-    "Tag 8–14: Schulz von Thun Kommunikations-Quadrant im 1:1 mit Direct Reports",
-    "Tag 15–21: WladBot als Sparring vor jedem CFO-Meeting · «In Wlads Stimme antwortet, krass»",
-    "Tag 22–30: Harvard Verhandlungs-Methode in einer Budget-Verhandlung · +180k EUR durchgesetzt",
+    "Tag 1–7: SEXIER-Pyramide vor jedem Meeting via WladBot durchgespielt · «Tag 3 schon natürlich»",
+    "Tag 8–14: Kommunikations-Quadrant im 1:1 mit Direct Reports · WladBot als Vor-Sparring",
+    "Tag 15–21: Vor jedem CFO-Meeting WladBot in Wlads Stimme · «Krass»",
+    "Tag 22–30: Harvard-Methode in Budget-Verhandlung · +180k EUR durchgesetzt",
 ])}
 </td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:20px 24px;border-left:3px solid {BRAND['lime']};">
-<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>3× SPIEGEL-Bestseller. 400.000+ Klienten. 14 Mio. Views.</strong> Wlad zeigt dir nicht, was funktionieren könnte — sondern was bei ihm und seinen Klienten funktioniert hat.</p>
+<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Maria hat 50 Credits genutzt. Du hast 50 freigeschaltet.</strong> Logge dich heute Abend ein und probiere ihre Mo-Mi-Routine.</p>
 </td></tr>
-{_scarcity_bar()}
-{_dual_cta(
-    "Sprint sichern · 997 EUR",
-    "https://leadercheck.de/close",
-    "Plus-Plus · 4.797 EUR",
-    "https://leadercheck.de/close",
-)}
-{_ps_block("Maria's Story ist 1 von Hunderten. Wenn du wissen willst, was dich konkret von ihrem Ergebnis trennt — der Sprint zeigt dir's Tag für Tag.")}"""
+{_leaderos_cta("→ Marias Routine in WladBot starten", "leaderos.de · gleiche E-Mail wie hier")}
+{_ps_block("Maria's Story ist 1 von Hunderten. Aber sie hat eines gemeinsam mit allen: Sie hat sich eingeloggt und die Credits genutzt. Der Rest passiert von alleine.")}"""
     return {
-        "subject": f"{name}, das war Maria vor 6 Monaten.",
+        "subject": f"{name}, das war Maria · mit denselben 50 Credits wie du.",
         "html": _base_wrapper(content, "1 Klientin · 1 Sprint · +180k EUR Budget durchgesetzt."),
     }
 
 
-# ─── Email 4 (T+7d): Charter-Scarcity Update ──────────────
+# ─── Email 4 (T+7d): Credit-Check · noch nicht eingeloggt? ─
 
 def email_4_scarcity(name: str, seats_left: int = 14) -> dict:
     content = f"""
-<tr><td>{_section_label("Charter-Update · Woche 1", BRAND['lime'])}</td></tr>
-<tr><td style="padding:8px 0 24px 0;">{_heading(f"Klasse 0001<br><span style='color:{BRAND['lime']}'>noch {seats_left} von 30.</span>")}</td></tr>
+<tr><td>{_section_label("Tag 7 · Credit-Check", BRAND['lime'])}</td></tr>
+<tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine 50 Credits liegen<br><span style='color:{BRAND['lime']}'>seit 7 Tagen ungenutzt.</span>")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">{name}, in den letzten 7 Tagen sind {30-seats_left} Plätze in der Charter-Klasse 0001 weggegangen. Stand jetzt: <strong style='color:{BRAND['lime']}'>noch {seats_left} von 30 frei</strong>.</p>
-<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Wenn 0001 voll ist, schließt sie. Die nächste Klasse (0002 · AI Agents Builder) öffnet frühestens Q3. Charter-Mitglieder bekommen dort Vorzugs-Zugang.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Eine ehrliche Beobachtung: Die meisten machen die Diagnose, lesen den Report · und melden sich nie auf <strong style="color:{BRAND['white']}">leaderos.de</strong> an. Schade · denn da liegt der eigentliche Hebel.</p>
+<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Falls dich Login + WladBot abschreckt: <strong style="color:{BRAND['lime']}">3 Klicks, 1 Frage, Antwort in 8 Sekunden</strong>. Mehr ist es nicht.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
-{_section_label("Was Charter-Status konkret bedeutet")}
+{_section_label("3 Fragen für deinen ersten Credit")}
 {_bullet_list([
-    "Lifetime-Zugang zum Klasse-0001-Peer-Kreis · 30 hand-picked Charter",
-    "Vorzugs-Aufnahme in alle weiteren Klassen (0002, 0003, 0004)",
-    "1:1-Onboarding mit Wlad persönlich",
-    "Charter-Preis: 997 EUR · später regulär höher",
+    "«Wie strukturiere ich das Feedback-Gespräch morgen früh?»",
+    "«Schreib mir eine 3-Satz-Begründung für [Entscheidung].»",
+    "«Wo bin ich als Leader gerade unscharf?»",
 ])}
 </td></tr>
-{_dual_cta(
-    "Charter-Platz sichern · 997 EUR",
-    "https://leadercheck.de/close",
-    "Plus-Plus + Live mit Wlad",
-    "https://leadercheck.de/close",
-)}
-{_ps_block("Charter ist eine einmalige Sache. Nach 0001 wirst du nie wieder Charter-Status haben können — egal wie viel du bezahlst.")}"""
+{_leaderos_cta("→ Heute deinen 1. Credit einlösen", "Login mit deiner Diagnose-E-Mail · sofortiger Zugriff")}
+{_ps_block("Wlad sagt: «Credits, die du nicht einsetzt, sind teurer als die, die du verbrauchst. Weil sie dich daran erinnern, was du nicht gemacht hast.»")}"""
     return {
-        "subject": f"Noch {seats_left} Charter-Plätze. Dann ist Klasse 0001 zu.",
-        "html": _base_wrapper(content, f"Charter 0001 · noch {seats_left} von 30 frei."),
+        "subject": f"{name}, deine 50 Credits warten · seit 7 Tagen.",
+        "html": _base_wrapper(content, "Tag 7 · Credit-Reminder · 3 Klicks, 1 Frage, los."),
     }
 
 

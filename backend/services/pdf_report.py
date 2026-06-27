@@ -767,79 +767,132 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     _page_bg(c)
     _page_chrome(c, 7, total, "Your Leadership Journey")
 
-    _eyebrow(c, "Section 07 · Roadmap", 20 * mm, h - 32 * mm)
+    _eyebrow(c, "Section 07 · Dein nächster Schritt", 20 * mm, h - 32 * mm)
 
+    # Hero headline
     c.setFillColor(WHITE)
-    c.setFont("Helvetica-Bold", 28)
-    c.drawString(20 * mm, h - 50 * mm, "Deine Leadership-")
+    c.setFont("Helvetica-Bold", 30)
+    c.drawString(20 * mm, h - 52 * mm, "Deine Journey")
     c.setFillColor(LIME)
-    c.setFont("Helvetica-Bold", 28)
-    c.drawString(20 * mm, h - 62 * mm, "Journey beginnt jetzt.")
+    c.setFont("Helvetica-Bold", 30)
+    c.drawString(20 * mm, h - 64 * mm, "beginnt jetzt.")
 
-    # Roadmap nodes
-    nodes = [
-        ("Diagnose", True, "Du bist hier."),
-        ("Persönliches Dashboard", False, "Dein Profil, live."),
-        ("KI-Leadership-Coach", False, "WladBot, dein 24/7-Sparring."),
-        ("Wöchentliche Missions", False, "Skills installieren · in Echt."),
-        ("Leadership Academy", False, "91 Lektionen · 11 Frameworks."),
-        ("Community", False, "Andere Top-Leader · echter Austausch."),
-        ("Progress Tracking", False, "Misst, was wirklich passiert."),
-        ("Re-Diagnose", False, "Delta sehen · neu kalibrieren."),
-    ]
-    node_y = h - 82 * mm
-    node_h = 13 * mm
-    for label, done, sub in nodes:
-        # Connector line (top)
-        if label != nodes[0][0]:
-            c.setStrokeColor(BORDER_LIME)
-            c.setLineWidth(1)
-            c.setDash(1, 2)
-            c.line(50 * mm, node_y + node_h + 0.5 * mm, 50 * mm, node_y + node_h + 4 * mm)
-            c.setDash()
-        # Dot
-        c.setFillColor(LIME if done else BORDER)
-        c.circle(50 * mm, node_y + node_h / 2, 2.2 * mm, fill=1, stroke=0)
-        if done:
-            c.setFillColor(BG)
-            c.setFont("Helvetica-Bold", 8)
-            c.drawCentredString(50 * mm, node_y + node_h / 2 - 1.5 * mm, "✓")
-        # Label
-        c.setFillColor(WHITE if done else SLATE)
-        c.setFont("Helvetica-Bold", 10.5)
-        c.drawString(58 * mm, node_y + node_h / 2 + 1 * mm, label)
-        c.setFillColor(SLATE_MUTED)
-        c.setFont("Helvetica", 8.5)
-        c.drawString(58 * mm, node_y + node_h / 2 - 4 * mm, sub)
-        if done:
-            c.setFillColor(LIME)
-            c.setFont("Helvetica-Bold", 7.5)
-            c.drawRightString(w - 22 * mm, node_y + node_h / 2 + 1 * mm, "DU BIST HIER")
-        node_y -= node_h
-
-    # Manifesto
-    manifesto_y = 70 * mm
-    c.setFillColor(WHITE)
-    c.setFont("Helvetica-Bold", 14)
-    c.drawCentredString(w / 2, manifesto_y, "Leadership wird nicht durch eine Diagnose gemessen.")
+    # ─── HERO CTA BLOCK · 50 Free Credits + leaderos.de ──────────
+    hero_y = h - 134 * mm
+    hero_h = 62 * mm
     c.setFillColor(LIME)
-    c.setFont("Helvetica-BoldOblique", 14)
-    c.drawCentredString(w / 2, manifesto_y - 8 * mm, "Es wird durch konsequentes Handeln gebaut.")
-
-    # Primary CTA
-    btn_w = 100 * mm
-    btn_x = (w - btn_w) / 2
-    btn_y = 38 * mm
-    c.setFillColor(LIME)
-    c.roundRect(btn_x, btn_y, btn_w, 12 * mm, 6 * mm, fill=1, stroke=0)
+    c.roundRect(20 * mm, hero_y, w - 40 * mm, hero_h, 4 * mm, fill=1, stroke=0)
+    # Inner dark inset
+    inset_pad = 1.5 * mm
     c.setFillColor(BG)
-    c.setFont("Helvetica-Bold", 11)
-    c.drawCentredString(w / 2, btn_y + 4 * mm, "→  IN LEADEROS WEITERMACHEN")
+    c.roundRect(20 * mm + inset_pad, hero_y + inset_pad, w - 40 * mm - 2 * inset_pad,
+                hero_h - 2 * inset_pad, 3.5 * mm, fill=1, stroke=0)
+    # Content
+    c.setFillColor(LIME)
+    c.setFont("Helvetica-Bold", 9)
+    c.drawString(30 * mm, hero_y + hero_h - 11 * mm, "▸  DEIN BONUS · AKTIV")
+    c.setFillColor(WHITE)
+    c.setFont("Helvetica-Bold", 26)
+    c.drawString(30 * mm, hero_y + hero_h - 25 * mm, "50 Free Credits.")
+    c.setFillColor(SLATE)
+    c.setFont("Helvetica", 10.5)
+    c.drawString(30 * mm, hero_y + hero_h - 33 * mm, "WladBot ist online · 24/7 · in Wlads Sprache.")
+    c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "Stelle deine erste schwere Frage · 8 Sekunden zur Antwort.")
 
-    # Secondary
+    # Primary CTA pill inside hero
+    cta_w = 80 * mm
+    cta_x = 30 * mm
+    cta_y_btn = hero_y + 10 * mm
+    c.setFillColor(LIME)
+    c.roundRect(cta_x, cta_y_btn, cta_w, 11 * mm, 5.5 * mm, fill=1, stroke=0)
+    c.setFillColor(BG)
+    c.setFont("Helvetica-Bold", 10.5)
+    c.drawCentredString(cta_x + cta_w / 2, cta_y_btn + 3.8 * mm, "→  LEADEROS.DE LOGIN")
+
+    # Right-side url note
+    c.setFillColor(LIME)
+    c.setFont("Helvetica-Bold", 9)
+    c.drawRightString(w - 30 * mm, hero_y + 19 * mm, "leaderos.de/login")
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
-    c.drawCentredString(w / 2, btn_y - 5 * mm, "Speichere diesen Report · komm wieder, wann du willst.")
+    c.drawRightString(w - 30 * mm, hero_y + 13 * mm, "Login-Mail · gleiche Adresse")
+
+    # ─── COMPACT JOURNEY MAP ──────────────────────────────────────
+    jy = hero_y - 14 * mm
+    c.setFillColor(WHITE)
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(20 * mm, jy, "Dein Weg durch LeaderOS")
+    c.setStrokeColor(LIME)
+    c.setLineWidth(1.5)
+    c.line(20 * mm, jy - 2.5 * mm, 56 * mm, jy - 2.5 * mm)
+
+    # Horizontal 4-step compact journey
+    steps = [
+        ("01", "Diagnose", True),
+        ("02", "Dashboard", False),
+        ("03", "WladBot · Daily", False),
+        ("04", "30-Tage-Plan", False),
+    ]
+    step_w = (w - 50 * mm) / 4
+    sx = 20 * mm
+    sy = jy - 22 * mm
+    for i, (num, label, done) in enumerate(steps):
+        x = sx + i * step_w + 2 * mm
+        # Step number
+        c.setFillColor(LIME if done else BORDER)
+        c.circle(x + 5 * mm, sy + 5 * mm, 4 * mm, fill=1, stroke=0)
+        if done:
+            c.setFillColor(BG)
+            c.setFont("Helvetica-Bold", 9)
+            c.drawCentredString(x + 5 * mm, sy + 3.5 * mm, "✓")
+        else:
+            c.setFillColor(SLATE_MUTED)
+            c.setFont("Helvetica-Bold", 8)
+            c.drawCentredString(x + 5 * mm, sy + 3.5 * mm, num)
+        # Label
+        c.setFillColor(WHITE if done else SLATE)
+        c.setFont("Helvetica-Bold", 9.5)
+        c.drawString(x + 12 * mm, sy + 6 * mm, label)
+        c.setFillColor(LIME if done else SLATE_MUTED)
+        c.setFont("Helvetica", 7.5)
+        c.drawString(x + 12 * mm, sy + 1.5 * mm, "DU BIST HIER" if done else "")
+        # Connector arrow
+        if i < len(steps) - 1:
+            c.setFillColor(BORDER)
+            c.setFont("Helvetica-Bold", 9)
+            c.drawString(x + step_w - 4 * mm, sy + 3.5 * mm, "→")
+
+    # ─── EMAIL SERIES PROMISE ────────────────────────────────────
+    promise_y = sy - 14 * mm
+    promise_h = 26 * mm
+    _card(c, 20 * mm, promise_y - promise_h, w - 40 * mm, promise_h, lime_border=True)
+    c.setFillColor(LIME)
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(26 * mm, promise_y - 7 * mm, "▸  WAS DICH JETZT ERWARTET")
+    c.setFillColor(WHITE)
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(26 * mm, promise_y - 13 * mm, "10 Wochen Wlad · 1× pro Woche · direkt in deinen Posteingang.")
+    c.setFillColor(SLATE)
+    c.setFont("Helvetica", 9)
+    c.drawString(26 * mm, promise_y - 19 * mm, "Frameworks · Klienten-Stories · Praxis-Drills · alle für deine 50 Credits.")
+
+    # ─── MANIFESTO ──────────────────────────────────────────────
+    manifest_y = promise_y - promise_h - 14 * mm
+    c.setFillColor(SLATE)
+    c.setFont("Helvetica-Bold", 11.5)
+    c.drawCentredString(w / 2, manifest_y, "Leadership wird nicht durch eine Diagnose gemessen.")
+    c.setFillColor(LIME)
+    c.setFont("Helvetica-BoldOblique", 12.5)
+    c.drawCentredString(w / 2, manifest_y - 8 * mm, "Es wird durch konsequentes Handeln gebaut.")
+
+    # ─── SECONDARY LINKS ────────────────────────────────────────
+    sec_y = 28 * mm
+    c.setFillColor(SLATE_MUTED)
+    c.setFont("Helvetica", 8.5)
+    c.drawCentredString(w / 2, sec_y, "Speichere diesen Report · komm wieder, wann du willst · die Tür bleibt offen.")
+    c.setFillColor(LIME)
+    c.setFont("Helvetica-Bold", 8.5)
+    c.drawCentredString(w / 2, sec_y - 6 * mm, "leadercheck.de   ·   leaderos.de/login   ·   wlad@leaderos.de")
 
     c.showPage()
 
