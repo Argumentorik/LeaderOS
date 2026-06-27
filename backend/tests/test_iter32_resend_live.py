@@ -18,8 +18,12 @@ def _read_frontend_env():
     raise RuntimeError("REACT_APP_BACKEND_URL not found")
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", _read_frontend_env()).rstrip("/")
-ADMIN_PASSWORD = "wladhub2026"
-TEST_EMAIL = "start@aiporate.com"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+TEST_EMAIL = os.environ.get("TEST_EMAIL", "start@aiporate.com")
+
+import pytest
+if not ADMIN_PASSWORD:
+    pytest.skip("ADMIN_PASSWORD env var required", allow_module_level=True)
 
 
 # ---------- Admin auth ----------

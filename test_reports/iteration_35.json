@@ -1,0 +1,40 @@
+{
+  "summary": "Iter35 FINAL Pre-Deploy verification — Stripe cancel_at deprecation fix + ADMIN_PASSWORD env migration. 36/36 tests GREEN (18 new iter35 + 18 iter32+iter33 regression). All 5 Stripe packages (leader_os_full, leader_os_2rate, leader_os_12rate, leader_os_plus, leader_os_plus_3rate) return 200 + cs_live_ checkout URL (LIVE mode). The 3 previously-500-erroring subscription packages now work via the new _apply_subscription_cancel_at helper. Score-Cap @ 85 verified (all-4s -> 85, all-3s -> 75 unchanged). Static assets (/wlad-portrait.png, /leaderos-logo-dark.png, /leaderos-mark.png) served as image/png. Both iter32 + iter33 test files no longer contain the hardcoded 'wladhub2026' password — they read ADMIN_PASSWORD from env and pytest.skip when missing.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter35_stripe_cancel_at_fix.py",
+    "/app/backend/tests/test_iter32_resend_live.py",
+    "/app/backend/tests/test_iter33_golive_final.py",
+    "/app/test_reports/pytest/pytest_results_iter35.xml",
+    "/app/test_reports/pytest/pytest_results_iter35_regression.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "_apply_subscription_cancel_at() in routes/payments.py:111-131 is well-designed: idempotent (checks sub.cancel_at before modifying), tolerant of missing sub_id, and silently skips when metadata.cancel_at_ts is absent. Logger captures both success and failure paths.",
+    "_create_subscription_session correctly stashes cancel_at_ts into subscription metadata (line 88) and ONLY passes subscription_data={'metadata': sub_metadata} (line 103) — no deprecated cancel_at kwarg. Defensive math (line 81-83) handles all 3 interval types (month/year/day) with a +7-day grace buffer for clock skew.",
+    "get_payment_status route (line 283-284) calls _apply_subscription_cancel_at on every status poll — this is the right place since /payment-success polls until paid. Idempotency makes this safe for repeated polls.",
+    "Both test files (test_iter32_resend_live.py:21-26 and test_iter33_golive_final.py:45-50) correctly use os.environ.get('ADMIN_PASSWORD', '') + module-level pytest.skip when missing — secrets no longer hardcoded.",
+    "Minor observation: in routes/payments.py:131 the bare except logs and swallows errors. Consider raising on subscription not-found vs. transient Stripe-API errors to surface real bugs (currently a permanently broken subscription would only show in logs)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter35_stripe_cancel_at_fix.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (36/36 — 18 iter35 new + 18 iter32+iter33 regression)",
+    "frontend": "not tested (testing_type=backend only)"
+  },
+  "test_credentials": "ADMIN_PASSWORD=wladhub2026 (env), TEST_EMAIL=start@aiporate.com",
+  "seed_data_creation": "iter33 E2E reused: 2 TEST users (start@aiporate.com) for quiz + send-report flow; 5 Stripe LIVE cs_live_ checkout sessions created via API (NO charges — session creation only). Not auto-cleaned (Resend rate-limit safe).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter35 fixes the 2026 Stripe subscription_data[cancel_at] deprecation and migrates hardcoded admin password to env. All 5 package_ids verified end-to-end with cs_live_ URLs. _apply_subscription_cancel_at is the canonical post-creation cancel_at applier — it's invoked from /api/payments/status/{session_id} polling. For next iter, only re-run pytest /app/backend/tests/test_iter35_stripe_cancel_at_fix.py with ADMIN_PASSWORD=wladhub2026 env — expect 18/18 GREEN. Score-Cap @ 85 logic is in routes/quiz.py:40-42. Stripe is in LIVE mode — DO NOT click through any Stripe UI from the URLs returned; only create sessions via API.",
+  "rca of the issue": "ROOT CAUSE (resolved by main agent): Stripe deprecated the subscription_data[cancel_at] kwarg in Checkout.Session.create in 2026 Q1. Old code passed cancel_at directly inside subscription_data → API now rejects with 500. FIX: cancel_at_ts is now stashed in subscription.metadata at session-creation time, then applied post-creation via Subscription.modify(cancel_at=...) when the /payments/status endpoint is polled. Idempotency is guaranteed by checking sub.cancel_at before modifying. Verified via source inspection (test_create_subscription_session_no_cancel_at_kwarg) + live API call returning 200 for all 3 subscription packages (leader_os_2rate, leader_os_12rate, leader_os_plus_3rate). Hardcoded admin password is now env-driven across all test files; pytest.skip cleanly bypasses tests when env missing — no more secrets in repo."
+}

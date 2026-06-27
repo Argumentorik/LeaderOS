@@ -82,6 +82,10 @@ async def _create_subscription_session(req: CreateCheckoutRequest, package: dict
     total_days = cycles * interval_count * days_per_unit + 7
     cancel_at = int((datetime.now(timezone.utc) + timedelta(days=total_days)).timestamp())
     metadata = _build_subscription_metadata(req, package)
+    # Stripe deprecated subscription_data[cancel_at] in 2026 — we stash the target
+    # cancel-at timestamp in subscription metadata and apply it post-creation via
+    # Subscription.modify() (see _apply_subscription_cancel_at below).
+    sub_metadata = {**metadata, "cancel_at_ts": str(cancel_at)}
 
     return await asyncio.to_thread(
         stripe_sdk.checkout.Session.create,
@@ -96,12 +100,35 @@ async def _create_subscription_session(req: CreateCheckoutRequest, package: dict
             },
             "quantity": 1,
         }],
-        subscription_data={"cancel_at": cancel_at, "metadata": metadata},
+        subscription_data={"metadata": sub_metadata},
         customer_email=req.email or None,
         success_url=success_url,
         cancel_url=cancel_url,
         metadata=metadata,
     )
+
+
+async def _apply_subscription_cancel_at(sub_id: str) -> None:
+    """Apply the deferred cancel_at to a Stripe subscription if not already set.
+
+    Stripe deprecated subscription_data[cancel_at] inside Checkout Session creation
+    in 2026, so we apply it post-creation. Idempotent · safe to call repeatedly
+    from the /payments/status polling endpoint.
+    """
+    if not sub_id:
+        return
+    try:
+        sub = await asyncio.to_thread(stripe_sdk.Subscription.retrieve, sub_id)
+        if sub.get("cancel_at"):
+            return
+        target_ts_str = (sub.get("metadata") or {}).get("cancel_at_ts")
+        if not target_ts_str:
+            return
+        target_ts = int(target_ts_str)
+        await asyncio.to_thread(stripe_sdk.Subscription.modify, sub_id, cancel_at=target_ts)
+        logger.info(f"Subscription {sub_id} cancel_at applied → {target_ts}")
+    except Exception as e:
+        logger.error(f"apply cancel_at failed for {sub_id}: {e}")
 
 
 async def _create_one_time_session(stripe_key: str, req: CreateCheckoutRequest, package: dict, charge_amount: float, was_subscription: bool):
@@ -252,6 +279,9 @@ def register_checkout_routes(router: APIRouter, db, app_config):
         if tx and tx.get("mode") == "subscription":
             try:
                 session = await asyncio.to_thread(stripe_sdk.checkout.Session.retrieve, session_id)
+                # Defer-apply cancel_at to the subscription if not already set
+                if session.subscription:
+                    await _apply_subscription_cancel_at(session.subscription)
                 return {
                     "session_id": session_id,
                     "payment_status": session.payment_status,

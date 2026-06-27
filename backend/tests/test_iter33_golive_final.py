@@ -42,9 +42,12 @@ def _load_backend_url() -> str:
 
 
 BASE_URL = _load_backend_url()
-ADMIN_PASSWORD = "wladhub2026"
-TEST_EMAIL = "start@aiporate.com"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+TEST_EMAIL = os.environ.get("TEST_EMAIL", "start@aiporate.com")
 PUBLIC_FRONTEND_FILE = "/wlad-portrait.png"
+
+if not ADMIN_PASSWORD:
+    pytest.skip("ADMIN_PASSWORD env var required for this suite", allow_module_level=True)
 
 
 # -------------------- Fixtures --------------------
