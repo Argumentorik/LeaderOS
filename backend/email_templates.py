@@ -207,7 +207,7 @@ def report_email(name: str, report: dict) -> dict:
 <div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.03));border-radius:14px;padding:22px 26px;border:1px solid rgba(200,255,0,0.30);">
 <p style="font-size:10px;color:{BRAND['lime']};margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.18em;font-weight:700;">▸ Dein Bonus · Sofort aktivierbar</p>
 <p style="font-size:18px;color:{BRAND['white']};margin:0 0 6px 0;line-height:1.4;font-weight:700;">50 Free Credits für deinen <span style="color:{BRAND['lime']}">WladBot</span> warten.</p>
-<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <strong style="color:{BRAND['white']}">leaderos.de</strong> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. Stelle WladBot deine erste schwere Frage.</p>
+<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <strong style="color:{BRAND['white']}">leaderos.de</strong> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · je nach Tiefe. Stelle WladBot deine erste schwere Frage.</p>
 <a href="https://leaderos.de/login" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['bg']};font-size:13px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">→ Auf leaderos.de einloggen</a>
 </div>
 </td></tr>

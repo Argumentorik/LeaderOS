@@ -35,9 +35,11 @@ def calculate_category_scores(answers):
         layer = ans.layer
         if layer in layer_scores:
             layer_scores[layer].append(ans.score)
-    cat_avg = {k: int(sum(v) / len(v) * 25) for k, v in cat_scores.items() if v}
-    layer_avg = {k: int(sum(v) / len(v) * 25) for k, v in layer_scores.items() if v}
-    total_avg = int(sum(cat_avg.values()) / len(cat_avg)) if cat_avg else 50
+    # Score-Cap @ 85: kein LeaderCheck-Tester soll > 85 % bekommen.
+    # (Lower scores bleiben identisch · nur Topscore wird gedeckelt.)
+    cat_avg = {k: min(85, int(sum(v) / len(v) * 25)) for k, v in cat_scores.items() if v}
+    layer_avg = {k: min(85, int(sum(v) / len(v) * 25)) for k, v in layer_scores.items() if v}
+    total_avg = min(85, int(sum(cat_avg.values()) / len(cat_avg))) if cat_avg else 50
     return cat_avg, layer_avg, total_avg
 
 

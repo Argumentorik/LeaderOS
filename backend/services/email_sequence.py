@@ -33,7 +33,7 @@ LEADEROS_HOME = "https://leaderos.de"
 
 # ─── Shared CTA Builders ──────────────────────────────────
 
-def _leaderos_cta(label: str = "→ Auf leaderos.de einloggen", sub: str = "50 Free Credits warten · WladBot · 24/7") -> str:
+def _leaderos_cta(label: str = "→ Auf leaderos.de einloggen", sub: str = "50 Free Credits · 2–3 Credits pro Anfrage · WladBot 24/7") -> str:
     """Hero CTA driving to the LeaderOS platform with the Free Credits hook."""
     return f"""<tr><td align="center" style="padding:24px 0 8px 0;">
 <div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.02));border-radius:14px;padding:24px 28px;border:1px solid rgba(200,255,0,0.30);">
@@ -91,7 +91,7 @@ def email_1_score_meaning(name: str, weakest_label: str, weakest_score: int) -> 
 <tr><td>{_section_label("Tag 1 · Aktivier dein WladBot", BRAND['lime'])}</td></tr>
 <tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine <span style='color:{BRAND['lime']}'>50 Free Credits</span><br>sind freigeschaltet.")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
-<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Dein Account auf <strong style="color:{BRAND['white']}">leaderos.de</strong> wurde automatisch erstellt. Die 50 Credits liegen bereit · damit kannst du WladBot ca. 50× zu echten Führungs-Situationen befragen.</p>
+<p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Dein Account auf <strong style="color:{BRAND['white']}">leaderos.de</strong> wurde automatisch erstellt. Die 50 Credits liegen bereit · <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · das reicht für 15–25 echte WladBot-Sparring-Sessions.</p>
 <p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Dein größter Hebel laut Diagnose: <strong style="color:{BRAND['lime']}">{weakest_label} ({weakest_score} %)</strong>. Stell WladBot heute Abend deine erste Frage dazu.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
@@ -132,12 +132,12 @@ def email_2_quickwin(name: str) -> dict:
 ])}
 </td></tr>
 <tr><td style="background:rgba(200,255,0,0.04);border:1px solid rgba(200,255,0,0.15);border-radius:12px;padding:20px 24px;">
-<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Probier's heute mit WladBot:</strong> Logge dich auf leaderos.de ein · sag «Wende SEXIER auf folgendes Argument an: [dein Argument]» · und du bekommst das aufgeräumte Statement zurück. <span style="color:{BRAND['lime']}">1 Credit kostet das.</span></p>
+<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Probier's heute mit WladBot:</strong> Logge dich auf leaderos.de ein · sag «Wende SEXIER auf folgendes Argument an: [dein Argument]» · und du bekommst das aufgeräumte Statement zurück. <span style="color:{BRAND['lime']}">2–3 Credits pro Anfrage · je nachdem wie tief du gehst.</span></p>
 </td></tr>
 {_leaderos_cta("→ SEXIER mit WladBot ausprobieren", "Direkt zum Chat · noch 50 von 50 Credits frei")}
 {_ps_block("Diese eine Anwendung lohnt schon allein die Anmeldung. SEXIER ist 1 von 11 Frameworks · und WladBot kennt sie alle. Klingt unfair? Ist es nicht · für 30 Tage hast du Zugriff drauf.")}"""
     return {
-        "subject": f"{name}, dieses Framework nutzt du heute Abend (1 Credit).",
+        "subject": f"{name}, dieses Framework nutzt du heute Abend (2–3 Credits).",
         "html": _base_wrapper(content, "Die SEXIER-Pyramide · live in WladBot ausprobieren."),
     }
 
@@ -162,7 +162,7 @@ def email_3_social_proof(name: str) -> dict:
 ])}
 </td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:20px 24px;border-left:3px solid {BRAND['lime']};">
-<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Maria hat 50 Credits genutzt. Du hast 50 freigeschaltet.</strong> Logge dich heute Abend ein und probiere ihre Mo-Mi-Routine.</p>
+<p style="font-size:14px;color:{BRAND['white']};line-height:1.7;margin:0;"><strong>Maria hat 50 Credits genutzt. Du hast 50 freigeschaltet.</strong> Mit <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> reicht das für 15–25 echte Sparring-Runden. Logge dich heute Abend ein und probiere ihre Mo–Mi-Routine.</p>
 </td></tr>
 {_leaderos_cta("→ Marias Routine in WladBot starten", "leaderos.de · gleiche E-Mail wie hier")}
 {_ps_block("Maria's Story ist 1 von Hunderten. Aber sie hat eines gemeinsam mit allen: Sie hat sich eingeloggt und die Credits genutzt. Der Rest passiert von alleine.")}"""
@@ -180,7 +180,7 @@ def email_4_scarcity(name: str, seats_left: int = 14) -> dict:
 <tr><td style="padding:8px 0 24px 0;">{_heading(f"{name}, deine 50 Credits liegen<br><span style='color:{BRAND['lime']}'>seit 7 Tagen ungenutzt.</span>")}</td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:24px;border:1px solid {BRAND['border']};">
 <p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Eine ehrliche Beobachtung: Die meisten machen die Diagnose, lesen den Report · und melden sich nie auf <strong style="color:{BRAND['white']}">leaderos.de</strong> an. Schade · denn da liegt der eigentliche Hebel.</p>
-<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Falls dich Login + WladBot abschreckt: <strong style="color:{BRAND['lime']}">3 Klicks, 1 Frage, Antwort in 8 Sekunden</strong>. Mehr ist es nicht.</p>
+<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;">Falls dich Login + WladBot abschreckt: <strong style="color:{BRAND['lime']}">3 Klicks, 1 Frage, 2–3 Credits</strong>. Mehr ist es nicht.</p>
 </td></tr>
 <tr><td style="padding:24px 0;">
 {_section_label("3 Fragen für deinen ersten Credit")}

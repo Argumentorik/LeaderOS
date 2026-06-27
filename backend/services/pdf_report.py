@@ -792,12 +792,12 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.setFont("Helvetica-Bold", 9)
     c.drawString(30 * mm, hero_y + hero_h - 11 * mm, "▸  DEIN BONUS · AKTIV")
     c.setFillColor(WHITE)
-    c.setFont("Helvetica-Bold", 26)
+    c.setFont("Helvetica-Bold", 24)
     c.drawString(30 * mm, hero_y + hero_h - 25 * mm, "50 Free Credits.")
     c.setFillColor(SLATE)
-    c.setFont("Helvetica", 10.5)
-    c.drawString(30 * mm, hero_y + hero_h - 33 * mm, "WladBot ist online · 24/7 · in Wlads Sprache.")
-    c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "Stelle deine erste schwere Frage · 8 Sekunden zur Antwort.")
+    c.setFont("Helvetica", 10)
+    c.drawString(30 * mm, hero_y + hero_h - 33 * mm, "Jede Anfrage kostet 2–3 Credits · je nach Tiefe.")
+    c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "WladBot ist online · 24/7 · in Wlads Sprache.")
 
     # Primary CTA pill inside hero
     cta_w = 80 * mm
