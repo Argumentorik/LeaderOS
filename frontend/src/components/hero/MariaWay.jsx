@@ -5,6 +5,7 @@ import {
   Shield, TrendingUp, Clock, Trophy,
 } from "lucide-react";
 import ClientStoriesCarousel from "../shared/ClientStoriesCarousel";
+import { DottedGlowBackground } from "../ui/dotted-glow-background";
 
 const SEVEN_DAYS = [
   { num: "Tag 1", Icon: Zap,           title: "In 3 Minuten souveräner auftreten." },
@@ -39,10 +40,22 @@ export default function MariaWay() {
 
   return (
     <section
-      className="py-20 md:py-28 border-t border-white/[0.04]"
+      className="relative py-20 md:py-28 border-t border-white/[0.04] overflow-hidden"
       data-testid="maria-way-section"
     >
-      <div className="max-w-[1200px] mx-auto px-4 md:px-8">
+      {/* Premium ambient dotted-glow background */}
+      <DottedGlowBackground
+        className="pointer-events-none [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        gap={28}
+        radius={1.2}
+        opacity={0.55}
+        color="rgba(200,255,0,0.32)"
+        glowColor="rgba(200,255,0,0.85)"
+        speedMin={0.25}
+        speedMax={0.9}
+        speedScale={0.8}
+      />
+      <div className="relative max-w-[1200px] mx-auto px-4 md:px-8">
         {/* Eyebrow strip */}
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-2.5">
@@ -210,7 +223,19 @@ export default function MariaWay() {
         </div>
 
         {/* TRANSFORMATION ARROWS */}
-        <div className="mb-20 rounded-3xl bg-gradient-to-br from-[#C8FF00]/[0.06] to-transparent border border-[#C8FF00]/15 p-8 md:p-14 text-center">
+        <div className="relative mb-20 rounded-3xl bg-gradient-to-br from-[#C8FF00]/[0.06] to-transparent border border-[#C8FF00]/15 p-8 md:p-14 text-center overflow-hidden">
+          <DottedGlowBackground
+            className="pointer-events-none [mask-image:radial-gradient(ellipse_at_top,black_15%,transparent_70%)]"
+            gap={20}
+            radius={1.4}
+            opacity={0.6}
+            color="rgba(200,255,0,0.45)"
+            glowColor="rgba(200,255,0,1)"
+            speedMin={0.35}
+            speedMax={1.2}
+            speedScale={1}
+          />
+          <div className="relative z-10">
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
             Marias Routine · Ab heute Abend.
           </p>
@@ -246,6 +271,7 @@ export default function MariaWay() {
           <p className="text-xs text-slate-500 mt-5">
             <a href="https://leaderos.de/login" className="text-[#C8FF00] underline">leaderos.de</a> · mit derselben E-Mail wie hier
           </p>
+          </div>
         </div>
 
         {/* 7-Tage-Plan Strip */}
@@ -323,7 +349,18 @@ export default function MariaWay() {
           </div>
 
           <div className="md:col-span-5">
-            <div className="rounded-2xl border border-[#C8FF00]/30 bg-gradient-to-br from-[#C8FF00]/[0.08] to-transparent p-7 md:p-8">
+            <div className="relative rounded-2xl border border-[#C8FF00]/30 bg-gradient-to-br from-[#C8FF00]/[0.08] to-transparent p-7 md:p-8 overflow-hidden">
+              <DottedGlowBackground
+                className="pointer-events-none [mask-image:radial-gradient(ellipse_at_top_right,black_10%,transparent_70%)]"
+                gap={14}
+                radius={1.1}
+                opacity={0.5}
+                color="rgba(200,255,0,0.55)"
+                glowColor="rgba(200,255,0,1)"
+                speedMin={0.4}
+                speedMax={1.4}
+              />
+              <div className="relative z-10">
               <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-3">
                 🎁 Dein Bonus ist aktiv
               </p>
@@ -352,6 +389,7 @@ export default function MariaWay() {
               <p className="text-[11px] text-slate-500 mt-4">
                 Mit 2-3 Credits pro Session reicht das für 15-25 echte Führungssituationen.
               </p>
+              </div>
             </div>
           </div>
         </div>

@@ -16,6 +16,13 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## 🌟 DottedGlow Premium-Tiefe (Feb 2026)
+- Aceternity UI `DottedGlowBackground` als JSX-Komponente integriert (`/app/frontend/src/components/ui/dotted-glow-background.jsx`)
+- Canvas-based animierter Dot-Grid mit shimmer/glow (HiDPI, ResizeObserver, IntersectionObserver für Performance)
+- Eingebaut in 3 Hot-Spots auf der Landing (MariaWay-Section, Transformation-Block, Bonus-Card) + 1× im `/close` Final-CTA
+- Per-Spot konfiguriert (verschiedene gap/opacity/speed Werte für unterschiedliche Intensitäten)
+- Mit Radial-Mask gemilkt damit es nie aufdringlich wirkt
+
 ## ✍️ Hormozi-Copy Refactor + Apple-Cards Carousel (Feb 2026)
 - **EP03 + MariaWay Copy** komplett im Hormozi/StoryBrand/VSL-Stil neu geschrieben: kurze Sätze, harte Kontraste ("Vor 30 Tagen war Maria unsichtbar"), klare Transformations-Arrows (2 Min Training → Mehr Klarheit → Mehr Präsenz → Bessere Entscheidungen → Bessere Ergebnisse)
 - **Apple-Cards Carousel** (`/app/frontend/src/components/ui/apple-cards-carousel.jsx`, JSX-Port von Aceternity UI mit framer-motion 12.42) + Shared Story-Karussell `/app/frontend/src/components/shared/ClientStoriesCarousel.jsx` mit 5 Klient:innen-Stories (Maria · Engineering · 30T, Andreas · Sales · 21T, Lena · GF · 14T, Thomas · Ops · 30T, Sandra · Konzern · 6M)

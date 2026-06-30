@@ -6,6 +6,7 @@ import { PaymentSection } from "../components/pricing/PaymentSection";
 import { EnterpriseSection } from "../components/pricing/EnterpriseSection";
 import { ComparisonTable } from "../components/pricing/ComparisonTable";
 import ClientStoriesCarousel from "../components/shared/ClientStoriesCarousel";
+import { DottedGlowBackground } from "../components/ui/dotted-glow-background";
 import {
   ENTERPRISE_TIERS,
   OS_FEATURES,
@@ -291,7 +292,18 @@ export default function HighTicketClose() {
         {/* CURRICULUM DOWNLOAD section removed — Wlad-Trust above replaces it. */}
 
         {/* FINAL CTA — direct purchase from the last section */}
-        <div className="text-center border-t border-white/[0.04] pt-12 pb-4" data-testid="final-cta-section">
+        <div className="relative text-center border-t border-white/[0.04] pt-12 pb-4 overflow-hidden rounded-3xl" data-testid="final-cta-section">
+          <DottedGlowBackground
+            className="pointer-events-none [mask-image:radial-gradient(ellipse_at_center,black_15%,transparent_75%)]"
+            gap={22}
+            radius={1.3}
+            opacity={0.55}
+            color="rgba(200,255,0,0.4)"
+            glowColor="rgba(200,255,0,0.95)"
+            speedMin={0.3}
+            speedMax={1.0}
+          />
+          <div className="relative z-10">
           <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
             ▸ § 03 / 03 · Entscheidung
           </span>
@@ -344,6 +356,7 @@ export default function HighTicketClose() {
           <p className="font-inter text-xs text-slate-600 mt-3">
             Bereits einen Key? <button onClick={() => navigate("/activate")} className="text-[#C8FF00]/70 hover:text-[#C8FF00] underline" data-testid="activate-link">Hier aktivieren</button>
           </p>
+          </div>
         </div>
       </div>
     </div>
