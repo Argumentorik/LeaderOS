@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import LeaderOSLogo from "../components/LeaderOSLogo";
 import MariaWay from "../components/hero/MariaWay";
 import { FocusCards } from "../components/ui/focus-cards";
+import { Carousel, Card as AppleCard } from "../components/ui/apple-cards-carousel";
+import EncryptedText from "../components/ui/encrypted-text";
 
 const headlines = [
   {
@@ -73,12 +75,84 @@ const diagnoseSteps = [
 ];
 
 const platformFeatures = [
-  { icon: Bot, title: "Leadership Coach", desc: "Dein persönlicher KI-Coach, der dein Profil kennt", color: "#C8FF00" },
-  { icon: CheckSquare, title: "Task Agent", desc: "Tägliche Aufgaben, angepasst an deine Schwächen", color: "#C8FF00" },
-  { icon: Users, title: "Simulations-Agent", desc: "Übe schwierige Gespräche mit KI-Gegenüber", color: "#C8FF00" },
-  { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks auf Abruf", color: "#C8FF00" },
-  { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions, passend zu deinem Level", color: "#C8FF00" },
-  { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Führungskräften deiner Stufe", color: "#C8FF00" },
+  {
+    id: "agent-coach",
+    icon: Bot,
+    category: "Agent 01",
+    title: "Leadership Coach",
+    desc: "Dein persönlicher KI-Coach, der dein Profil kennt",
+    src: "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "Kennt deinen Score in KI · Rhetorik · EQ",
+      "Antwortet in Wlads Sprache · kein Bullshit",
+      "Verfügbar 24/7 · in jeder Führungs-Situation",
+    ],
+  },
+  {
+    id: "agent-task",
+    icon: CheckSquare,
+    category: "Agent 02",
+    title: "Task Agent",
+    desc: "Tägliche Aufgaben, angepasst an deine Schwächen",
+    src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "Jeden Morgen 1 konkrete Mikro-Aufgabe",
+      "Adaptiv · trainiert genau deine schwächste Ebene",
+      "Streak-System · macht Wachstum sichtbar",
+    ],
+  },
+  {
+    id: "agent-sim",
+    icon: Users,
+    category: "Agent 03",
+    title: "Simulations-Agent",
+    desc: "Übe schwierige Gespräche mit KI-Gegenüber",
+    src: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "Realistische Gegenüber · CFO · Team · Investor",
+      "Live-Feedback zu Argumentation und Wirkung",
+      "Schwierige Meetings durchspielen · bevor sie passieren",
+    ],
+  },
+  {
+    id: "agent-strategy",
+    icon: BookOpen,
+    category: "Agent 04",
+    title: "Strategie-Agent",
+    desc: "Playbooks & Frameworks auf Abruf",
+    src: "https://images.unsplash.com/photo-1551836022-aadb801c60ae?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "Wlads 11 Frameworks · in einer Konsole",
+      "Situations-Diagnose in unter 60 Sekunden",
+      "Direkt umsetzbar · keine Theorie-Wolken",
+    ],
+  },
+  {
+    id: "agent-event",
+    icon: Calendar,
+    category: "Agent 05",
+    title: "Event-Agent",
+    desc: "Live-Sessions, passend zu deinem Level",
+    src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "6× Live-Q&A pro Jahr mit KI-Experten",
+      "Empfehlung passend zu deinem aktuellen Score",
+      "Aufzeichnungen · jederzeit nachholbar",
+    ],
+  },
+  {
+    id: "agent-community",
+    icon: MessageCircle,
+    category: "Agent 06",
+    title: "Community-Agent",
+    desc: "Vernetzung mit Führungskräften deiner Stufe",
+    src: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=1200&q=85&auto=format&fit=crop",
+    bullets: [
+      "Matching mit Peers auf gleichem Level",
+      "Closed-Loop · keine Selbstdarsteller",
+      "Direkt-Sparring · keine LinkedIn-Phrasen",
+    ],
+  },
 ];
 
 const wladbotFeatures = [
@@ -162,8 +236,25 @@ export default function Hero() {
               const isAccent = line.startsWith("{") && line.endsWith("}");
               const text = isAccent ? line.slice(1, -1) : line;
               return (
-                <span key={i}>
-                  {isAccent ? <span className="text-gradient-lime">{text}</span> : text}
+                <span key={`hl-${headlineIdx}-${i}`}>
+                  {isAccent ? (
+                    <EncryptedText
+                      text={text}
+                      as="span"
+                      className="text-gradient-lime"
+                      trigger="mount"
+                      duration={1400}
+                      data-testid={`hero-headline-accent-${i}`}
+                    />
+                  ) : (
+                    <EncryptedText
+                      text={text}
+                      as="span"
+                      trigger="mount"
+                      duration={1100 + i * 200}
+                      data-testid={`hero-headline-line-${i}`}
+                    />
+                  )}
                   {i < hl.lines.length - 1 && <br />}
                 </span>
               );
@@ -315,7 +406,7 @@ export default function Hero() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6" data-testid="hero-layers">
               {layers.map((layer, i) => (
                 <div
-                  key={i}
+                  key={layer.num}
                   data-testid={`hero-layer-${i}`}
                   className="group relative rounded-3xl bg-[#0d0d0d] border border-white/[0.06] p-7 md:p-9 transition-all duration-500 hover:border-[#C8FF00]/40 hover:bg-[#0f0f0f] overflow-hidden"
                 >
@@ -356,8 +447,8 @@ export default function Hero() {
 
                   {/* Points list with checkmarks */}
                   <ul className="relative space-y-3">
-                    {layer.points.map((point, pi) => (
-                      <li key={pi} className="flex items-center gap-3">
+                    {layer.points.map((point) => (
+                      <li key={point} className="flex items-center gap-3">
                         <div className="w-4 h-4 rounded-full bg-[#C8FF00] flex items-center justify-center shrink-0">
                           <svg width="9" height="9" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.5 6L5 8.5L9.5 4" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -406,8 +497,8 @@ export default function Hero() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-testid="diagnose-steps">
-              {diagnoseSteps.map((step, i) => (
-                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 transition-all hover:border-[#C8FF00]/10">
+              {diagnoseSteps.map((step) => (
+                <div key={`step-${step.num}`} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 transition-all hover:border-[#C8FF00]/10">
                   <div className="flex items-start gap-4">
                     <span className="w-9 h-9 rounded-lg bg-[#C8FF00]/8 text-[#C8FF00] flex items-center justify-center font-manrope font-bold text-sm shrink-0">
                       {step.num}
@@ -425,42 +516,76 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 5: 6 KI-AGENTEN ===== */}
-        <section className="py-24 border-t border-white/[0.04]">
-          <div className="max-w-5xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-16">
+        {/* ===== SECTION 5: 6 KI-AGENTEN · Apple Cards Carousel ===== */}
+        <section className="py-24 border-t border-white/[0.04]" data-testid="agents-section">
+          <div className="max-w-[1200px] mx-auto px-4 md:px-8">
+            <div className="mb-4 md:mb-6 max-w-[920px]">
               <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
                 ▸ 6 KI-Agenten
               </span>
-              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
-                <span className="block text-3xl md:text-5xl lg:text-6xl">
-                  Sechs spezialisierte Agenten,
-                </span>
-                <span className="block text-2xl md:text-4xl lg:text-5xl mt-3 text-[#C8FF00] italic font-semibold">
-                  die dir als Leader Arbeit abnehmen.
-                </span>
+              <h2
+                className="font-manrope font-extrabold text-white"
+                style={{ fontSize: "clamp(34px, 5.4vw, 68px)", lineHeight: 1.04, letterSpacing: "-0.045em" }}
+              >
+                <EncryptedText
+                  text="Sechs spezialisierte Agenten."
+                  as="span"
+                  className="block"
+                  trigger="view"
+                  duration={1300}
+                  data-testid="agents-headline-line-1"
+                />
+                <EncryptedText
+                  text="Eine Mission · dein Aufstieg."
+                  as="span"
+                  className="block mt-2 text-[#C8FF00]"
+                  trigger="view"
+                  duration={1500}
+                  data-testid="agents-headline-line-2"
+                />
               </h2>
-              <p className="font-inter text-base text-slate-400 max-w-xl mx-auto mt-6 leading-relaxed">
-                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert.
+              <p className="mt-7 text-slate-400 leading-relaxed max-w-[640px]" style={{ fontSize: "18px", letterSpacing: "-0.011em" }}>
+                Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert. <span className="text-white">Klick eine Karte · sieh, was er für dich übernimmt.</span>
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {platformFeatures.map((feature, i) => (
-                <div key={i} className="group rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 transition-all duration-300 hover:border-[#C8FF00]/15 hover:bg-white/[0.025]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#C8FF00]/[0.06]"
-                    >
-                      <feature.icon className="w-5 h-5 text-[#C8FF00]" />
-                    </div>
-                    <div className="w-1.5 h-1.5 rounded-full opacity-60 animate-pulse bg-[#C8FF00]" />
-                  </div>
-                  <h3 className="font-manrope font-bold text-sm text-white mb-1">{feature.title}</h3>
-                  <p className="font-inter text-xs text-slate-500 leading-relaxed">{feature.desc}</p>
-                </div>
+            <Carousel
+              items={platformFeatures.map((agent, i) => (
+                <AppleCard
+                  key={agent.id}
+                  index={i}
+                  layout
+                  card={{
+                    category: agent.category,
+                    title: agent.title,
+                    src: agent.src,
+                    content: (
+                      <div className="space-y-7">
+                        <p className="font-inter text-base md:text-lg text-slate-300 leading-relaxed">
+                          {agent.desc}
+                        </p>
+                        <div className="space-y-3">
+                          {agent.bullets.map((b) => (
+                            <div key={b} className="flex items-start gap-3">
+                              <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#C8FF00] shrink-0" />
+                              <span className="font-inter text-sm md:text-base text-slate-300 leading-relaxed">{b}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="pt-4 border-t border-white/[0.06] flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 flex items-center justify-center shrink-0">
+                            <agent.icon className="w-4 h-4 text-[#C8FF00]" />
+                          </div>
+                          <p className="font-mono text-[11px] tracking-[0.2em] text-slate-500 uppercase">
+                            Teil von Leader · OS
+                          </p>
+                        </div>
+                      </div>
+                    ),
+                  }}
+                />
               ))}
-            </div>
+            />
           </div>
         </section>
 
@@ -512,8 +637,8 @@ export default function Hero() {
                   Du kannst ihn nutzen für:
                 </p>
                 <div className="space-y-3 mb-8">
-                  {wladbotFeatures.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
+                  {wladbotFeatures.map((feature) => (
+                    <div key={feature} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] shrink-0" />
                       <span className="font-inter text-sm text-slate-300">{feature}</span>
                     </div>
@@ -551,8 +676,8 @@ export default function Hero() {
                 { icon: Brain, text: "KI strategisch im Führungsalltag einsetzen" },
                 { icon: MessageSquare, text: "Überzeugend argumentieren" },
                 { icon: Users, text: "Teams mit strategischem EQ führen" }
-              ].map((item, i) => (
-                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-5 transition-all hover:border-[#C8FF00]/10">
+              ].map((item) => (
+                <div key={item.text} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-5 transition-all hover:border-[#C8FF00]/10">
                   <item.icon className="w-5 h-5 text-[#C8FF00] mx-auto mb-3" />
                   <p className="font-inter text-sm text-slate-400">{item.text}</p>
                 </div>
@@ -788,8 +913,8 @@ export default function Hero() {
                       "Schwierige Meetings durchspielen · bevor sie passieren",
                       "Persönlicher Report als PDF herunterladen",
                       "30-Tage-Aktionsplan sofort starten",
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-3">
+                    ].map((item) => (
+                      <div key={item} className="flex items-center gap-3">
                         <Check className="w-4 h-4 text-[#C8FF00] shrink-0" />
                         <span className="font-inter text-sm text-slate-300">{item}</span>
                       </div>

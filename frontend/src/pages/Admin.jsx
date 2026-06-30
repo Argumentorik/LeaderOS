@@ -17,8 +17,8 @@ const TABS = [
 ];
 
 export default function Admin() {
-  const [token, setToken] = useState(() => localStorage.getItem("leaderos_admin_token") || "");
-  const [authenticated, setAuthenticated] = useState(!!localStorage.getItem("leaderos_admin_token"));
+  const [token, setToken] = useState(() => sessionStorage.getItem("leaderos_admin_token") || "");
+  const [authenticated, setAuthenticated] = useState(!!sessionStorage.getItem("leaderos_admin_token"));
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);

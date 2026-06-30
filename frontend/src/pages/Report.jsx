@@ -165,7 +165,7 @@ export default function Report() {
                 </div>
                 <div className="mb-4 pl-4 border-l-2 border-[#C8FF00]/30">
                   <p className="font-inter text-sm text-slate-400 italic leading-relaxed">
-                    „{report.user_challenge}"
+                    „{report.user_challenge}&ldquo;
                   </p>
                 </div>
                 {narrative.personal_response && (
@@ -437,7 +437,7 @@ export default function Report() {
         {narrative.closing_statement && (
           <div className="text-center mb-12">
             <p className="font-manrope font-bold text-xl md:text-2xl text-white leading-relaxed max-w-2xl mx-auto">
-              "{narrative.closing_statement}"
+              &ldquo;{narrative.closing_statement}&rdquo;
             </p>
           </div>
         )}
@@ -484,7 +484,7 @@ export default function Report() {
           </div>
           <div className="flex-1 text-center sm:text-left">
             <div className="px-2.5 py-1 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 text-[#C8FF00] text-[10px] font-bold inline-block mb-2">GRATIS BELOHNUNG</div>
-            <div className="font-manrope font-bold text-white mb-1">"Die 5 Rollen einer Führungskraft"</div>
+            <div className="font-manrope font-bold text-white mb-1">&ldquo;Die 5 Rollen einer Führungskraft&rdquo;</div>
             <div className="font-inter text-xs text-slate-500">von Wladislaw Jachtchenko · SPIEGEL-Bestseller</div>
           </div>
           <a

@@ -45,7 +45,6 @@ export default function ExitIntentPopup() {
       setSecondsLeft((s) => (s > 1 ? s - 1 : 60));
     }, 1000);
     return () => { document.removeEventListener("keydown", onEsc); clearInterval(interval); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   const dismiss = () => {

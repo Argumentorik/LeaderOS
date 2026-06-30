@@ -74,7 +74,6 @@ export default function Analyzing() {
     // Start API call after 3s animation delay (report generation runs while phases animate)
     const timer = setTimeout(generateReport, 3000);
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state, navigate]);
 
   return (
@@ -103,7 +102,7 @@ export default function Analyzing() {
         {/* Leadership Quote */}
         <div className="glass-card-subtle p-5 mb-8 text-center" data-testid="leadership-quote">
           <p className="font-inter text-sm text-slate-300 italic leading-relaxed mb-2">
-            "{quote.text}"
+            &ldquo;{quote.text}&rdquo;
           </p>
           <p className="font-inter text-xs text-slate-500">— {quote.author}</p>
         </div>

@@ -21,7 +21,7 @@ function WladBotChat({ onContinue }) {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   const sendMessage = async (text) => {
     if (!text.trim() || loading) return;
