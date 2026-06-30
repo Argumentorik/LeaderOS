@@ -1,20 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Check, ArrowRight, Zap, MessageCircle, Users,
-  Shield, TrendingUp, Clock, Trophy,
-} from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import ClientStoriesCarousel from "../shared/ClientStoriesCarousel";
 import { DottedGlowBackground } from "../ui/dotted-glow-background";
+import { Timeline } from "../ui/timeline";
+import {
+  Card as SkCard,
+  CardTitle as SkCardTitle,
+  CardDescription as SkCardDescription,
+  CardSkeletonContainer,
+  AIStackSkeleton,
+} from "../ui/skeleton-card";
 
-const SEVEN_DAYS = [
-  { num: "Tag 1", Icon: Zap,           title: "In 3 Minuten souveräner auftreten." },
-  { num: "Tag 2", Icon: MessageCircle, title: "Antworten, die Menschen überzeugen." },
-  { num: "Tag 3", Icon: Users,         title: "Warum gute Ideen endlich gehört werden." },
-  { num: "Tag 4", Icon: Shield,        title: "Der Satz, der schwierige Meetings dreht." },
-  { num: "Tag 5", Icon: TrendingUp,    title: "Der CFO-Test." },
-  { num: "Tag 6", Icon: Clock,         title: "Die 3-Minuten-Routine vor jedem Gespräch." },
-  { num: "Tag 7", Icon: Trophy,        title: "Executive Mode." },
+const THIRTY_DAY_PLAN = [
+  { num: "01", week: "Woche 1", label: "SEXIER-Pyramide vor jedem Meeting." },
+  { num: "02", week: "Woche 2", label: "Schwierige Gespräche · vorher simuliert." },
+  { num: "03", week: "Woche 3", label: "5 Min CFO-Sparring · Argument vor Argument." },
+  { num: "04", week: "Woche 4", label: "Harvard-Verhandlung · +180k freigegeben." },
 ];
 
 const BULLETS = [
@@ -167,60 +169,169 @@ export default function MariaWay() {
           ))}
         </div>
 
-        {/* 4-WEEK TIMELINE */}
-        <div className="mb-20">
-          <p className="font-mono text-[11px] tracking-[0.22em] uppercase font-bold text-slate-500 mb-4">
-            ↳ Was in diesen 30 Tagen passiert ist
-          </p>
-          <h3 className="font-manrope font-extrabold text-white text-3xl md:text-5xl tracking-tight leading-tight mb-12">
-            Vier Wochen. Vier Hebel.
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {[
+        {/* 4-WEEK TIMELINE · Aceternity-Style (sticky-scroll, animated lime line) */}
+        <div className="mb-20 -mx-4 md:-mx-8">
+          <Timeline
+            heading={<>Vier Wochen.<br /><span className="text-[#C8FF00]">Vier Hebel.</span></>}
+            subheading="Was in Marias 30 Tagen passiert ist. Jede Woche ein neuer Hebel. Jeden Tag 10 Minuten Sparring."
+            data={[
               {
-                week: "Woche 1",
-                title: "SEXIER vor jedem Meeting.",
-                body: "Maria trainierte mit WladBot die SEXIER-Methode. Vor jedem Meeting.",
-                quote: "Ab Tag 3 fühlte es sich völlig natürlich an.",
+                title: "Woche 1",
+                content: (
+                  <div data-testid="maria-week-1">
+                    <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
+                      Tag 1 → 7 · Klarheit
+                    </p>
+                    <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
+                      SEXIER-Pyramide vor jedem Meeting.
+                    </p>
+                    <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
+                      Maria trainierte mit WladBot die SEXIER-Methode. Vor jedem Meeting. 6 Buchstaben. Ein klares Statement. Kein "vielleicht" mehr.
+                    </p>
+                    <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
+                      <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
+                        «Ab Tag 3 fühlte es sich völlig natürlich an.»
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {["Statement", "Explanation", "eXample", "Implication", "Evidence", "Recap"].map((s) => (
+                        <div key={s} className="rounded-lg bg-[#0d0d0d] border border-white/[0.06] px-4 py-3 text-sm text-slate-300 font-medium">
+                          <span className="text-[#C8FF00] font-extrabold mr-2">{s[0]}</span>{s.slice(1)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
               },
               {
-                week: "Woche 2",
-                title: "Schwierige Gespräche · simuliert.",
-                body: "Mitarbeiter-1:1s vorher mit WladBot durchgespielt. Keine Ausreden. Keine Unsicherheit.",
-                quote: "Ich wusste, was kommt. Bevor es kam.",
+                title: "Woche 2",
+                content: (
+                  <div data-testid="maria-week-2">
+                    <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
+                      Tag 8 → 14 · Mut
+                    </p>
+                    <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
+                      Schwierige Gespräche · vorher simuliert.
+                    </p>
+                    <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
+                      Mitarbeiter-1:1s vorher mit WladBot durchgespielt. Drei Szenarien. Drei Antworten. Keine Ausreden. Keine Unsicherheit.
+                    </p>
+                    <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
+                      <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
+                        «Ich wusste, was kommt. Bevor es kam.»
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { v: "3", l: "Szenarien" },
+                        { v: "0", l: "Ausreden" },
+                        { v: "1", l: "Antwort" },
+                      ].map((s) => (
+                        <div key={s.l} className="rounded-lg bg-[#0d0d0d] border border-white/[0.06] p-4 text-center">
+                          <p className="font-manrope text-2xl font-extrabold text-[#C8FF00] leading-none">{s.v}</p>
+                          <p className="text-[11px] text-slate-500 mt-2">{s.l}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
               },
               {
-                week: "Woche 3",
-                title: "5 Minuten CFO-Sparring.",
-                body: "Vor jedem Gespräch mit dem CFO 5 Minuten mit WladBot. Argument vor Argument.",
-                quote: "Plötzlich wusste ich genau, was ich sagen werde.",
+                title: "Woche 3",
+                content: (
+                  <div data-testid="maria-week-3">
+                    <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
+                      Tag 15 → 21 · Präsenz
+                    </p>
+                    <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
+                      5 Minuten CFO-Sparring.
+                    </p>
+                    <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
+                      Vor jedem Gespräch mit dem CFO 5 Minuten mit WladBot. Argument vor Argument. Einwand vor Einwand.
+                    </p>
+                    <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
+                      <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
+                        «Plötzlich wusste ich genau, was ich sagen werde.»
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {["Argument", "Gegenargument", "Antwort", "Beispiel", "Zahl"].map((s, i, arr) => (
+                        <React.Fragment key={s}>
+                          <div className="rounded-lg bg-[#0d0d0d] border border-[#C8FF00]/20 px-4 py-2 text-sm text-white font-medium">{s}</div>
+                          {i < arr.length - 1 && <span className="text-[#C8FF00] font-extrabold">→</span>}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                ),
               },
               {
-                week: "Woche 4",
-                title: "Harvard-Verhandlung.",
-                body: "Budgetverhandlung nach Harvard-Methode mit WladBot vorbereitet. Drei Szenarien.",
-                quote: "+180.000 € Budget. Freigegeben.",
+                title: "Woche 4",
+                content: (
+                  <div data-testid="maria-week-4">
+                    <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
+                      Tag 22 → 30 · Ergebnis
+                    </p>
+                    <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
+                      Harvard-Verhandlung · +180.000 € freigegeben.
+                    </p>
+                    <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
+                      Budgetverhandlung nach Harvard-Methode mit WladBot vorbereitet. Drei Szenarien, ein BATNA, eine ZOPA. Das Meeting war Routine.
+                    </p>
+                    <div className="rounded-xl bg-gradient-to-br from-[#C8FF00]/[0.12] to-transparent border border-[#C8FF00]/30 p-6 md:p-8 text-center">
+                      <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-3">Ergebnis Tag 31</p>
+                      <p className="font-manrope text-4xl md:text-6xl font-extrabold text-[#C8FF00] tracking-tight leading-none">+180.000 €</p>
+                      <p className="text-sm text-white/85 mt-3 font-semibold">Budget für ihr Team. Freigegeben.</p>
+                    </div>
+                  </div>
+                ),
               },
-            ].map((w, i) => (
-              <div
-                key={w.week}
-                className="rounded-2xl border border-white/[0.06] bg-[#0d0d0d] p-7 md:p-8 hover:border-[#C8FF00]/30 transition"
-                data-testid={`maria-week-${i + 1}`}
-              >
-                <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-3">
-                  {w.week}
-                </p>
-                <p className="font-manrope text-xl md:text-2xl font-extrabold text-white tracking-tight leading-tight mb-4">
-                  {w.title}
-                </p>
-                <p className="font-inter text-sm text-slate-400 leading-relaxed mb-4">{w.body}</p>
-                <p className="font-inter text-sm italic text-white/80 border-l-2 border-[#C8FF00]/40 pl-3">
-                  «{w.quote}»
-                </p>
-              </div>
-            ))}
+            ]}
+          />
+        </div>
+
+        {/* SPARRING WITH AI STACK · Skeleton-Card */}
+        <div className="mb-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+          <div className="md:col-span-6">
+            <p className="font-mono text-[11px] tracking-[0.22em] uppercase font-bold text-slate-500 mb-5">
+              ↳ Was unter der Haube läuft
+            </p>
+            <h3 className="font-manrope font-extrabold text-white text-3xl md:text-5xl tracking-tight leading-[1.05] mb-6">
+              Sparring mit den<br />
+              <span className="text-[#C8FF00]">besten KI-Hebeln</span>.
+            </h3>
+            <p className="text-base md:text-lg text-slate-400 leading-relaxed mb-6 max-w-[520px]">
+              WladBot orchestriert mehrere KI-Modelle und Frameworks im Hintergrund. Du tippst eine Situation rein, WladBot wählt das richtige Modell, antwortet im Wlad-Stil.
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                "Multi-Model: Claude, GPT, Gemini · WladBot wählt selbst.",
+                "11 Frameworks aus Wlads Praxis (SEXIER, Harvard, EQ-Quadrant).",
+                "Antworten im Wlad-Stil. Nicht generisch.",
+                "Privacy: deine Sessions bleiben deine.",
+              ].map((b, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm md:text-base text-white/85" data-testid={`ai-bullet-${i}`}>
+                  <div className="w-5 h-5 rounded-full bg-[#C8FF00] flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-3 h-3 text-black" strokeWidth={3} />
+                  </div>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="md:col-span-6">
+            <SkCard className="max-w-md md:ml-auto" data-testid="ai-stack-card">
+              <CardSkeletonContainer>
+                <AIStackSkeleton />
+              </CardSkeletonContainer>
+              <SkCardTitle>WladBot · der Stack hinter dem Sparring.</SkCardTitle>
+              <SkCardDescription>
+                Claude, GPT, Gemini und Wlads 11 Frameworks · orchestriert in einer Oberfläche. Du chattest. WladBot übersetzt.
+              </SkCardDescription>
+            </SkCard>
           </div>
         </div>
+
 
         {/* TRANSFORMATION ARROWS */}
         <div className="relative mb-20 rounded-3xl bg-gradient-to-br from-[#C8FF00]/[0.06] to-transparent border border-[#C8FF00]/15 p-8 md:p-14 text-center overflow-hidden">
@@ -274,33 +385,37 @@ export default function MariaWay() {
           </div>
         </div>
 
-        {/* 7-Tage-Plan Strip */}
+        {/* 30-Tage-Check · 4 Phasen-Strip */}
         <div className="mb-20">
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase font-bold text-slate-500 mb-5">
-            ↳ Dein 7-Tage-Plan
+            ↳ Dein 30-Tage-Check · 4 Phasen · 1 Routine
           </p>
           <h3 className="font-manrope font-extrabold text-white text-3xl md:text-5xl tracking-tight leading-tight mb-10">
-            Sieben Tage. Sieben Hebel.
+            30 Tage. <span className="text-[#C8FF00]">Vier Hebel.</span>
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3">
-            {SEVEN_DAYS.map(({ num, Icon, title }, i) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {THIRTY_DAY_PLAN.map(({ num, week, label }, i) => {
               const isActive = i === 0;
               return (
                 <div
                   key={num}
-                  data-testid={`day-card-${i + 1}`}
-                  className={`rounded-xl p-5 transition-all bg-[#0d0d0d] border ${
-                    isActive ? "border-[#C8FF00]" : "border-white/[0.08]"
+                  data-testid={`phase-card-${i + 1}`}
+                  className={`relative rounded-2xl p-6 md:p-7 transition-all bg-[#0d0d0d] border ${
+                    isActive ? "border-[#C8FF00]" : "border-white/[0.08] hover:border-[#C8FF00]/30"
                   }`}
                 >
-                  <p className={`font-mono text-[10px] tracking-[0.18em] uppercase font-bold ${
-                    isActive ? "text-[#C8FF00]" : "text-slate-500"
-                  }`}>{num}</p>
-                  <Icon className={`w-5 h-5 my-4 ${isActive ? "text-[#C8FF00]" : "text-slate-600"}`} />
-                  <p className={`font-inter text-xs leading-snug ${
-                    isActive ? "text-white" : "text-slate-400"
+                  <div className="flex items-center justify-between mb-6">
+                    <p className={`font-mono text-[10px] tracking-[0.22em] uppercase font-bold ${
+                      isActive ? "text-[#C8FF00]" : "text-slate-500"
+                    }`}>{week}</p>
+                    <p className={`font-manrope text-3xl md:text-4xl font-extrabold leading-none tracking-tight ${
+                      isActive ? "text-[#C8FF00]" : "text-slate-700"
+                    }`}>{num}</p>
+                  </div>
+                  <p className={`font-manrope font-bold text-base md:text-lg leading-snug tracking-tight ${
+                    isActive ? "text-white" : "text-slate-300"
                   }`}>
-                    {title}
+                    {label}
                   </p>
                 </div>
               );

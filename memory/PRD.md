@@ -16,6 +16,15 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## 🎯 30-Tage-Check + Aceternity Timeline + AI-Stack Skeleton (Feb 2026)
+- **7-Tage-Plan komplett entfernt** (Verwechslungs-Risiko mit Leader-OS 30-Tage-Check). Stattdessen: **4-Phasen-Strip "30 Tage. Vier Hebel."** mit Woche 1-4 Cards (01/02/03/04 Lime-Numbers)
+- **Aceternity Timeline-Component** als JSX-Port (`/app/frontend/src/components/ui/timeline.jsx`) mit Sticky-Sidebar + animierter Lime-Gradient-Linie + Scroll-getriggertem Progress
+- **Skeleton-Card mit AI-Stack** (`/app/frontend/src/components/ui/skeleton-card.jsx`): Claude/OpenAI/WladBot-Pixel/Meta/Gemini Logo-Circles + Sparkle-Animation + Vertical-Line · zeigt "Sparring mit den besten KI-Hebeln"
+- MariaWay-Timeline nutzt jetzt 4 Wochen mit eigenen Detail-Content: Woche 1 SEXIER-Grid, Woche 2 Stat-Trio, Woche 3 Argument-Flow, Woche 4 Ergebnis-Crown "+180.000 € Budget freigegeben"
+- Backend: `SEVEN_DAY_PLAN` → `THIRTY_DAY_PLAN` (4 Phasen), `_seven_day_strip` Funktionsname behalten für Backward-Compat (mappt active_day 1-7 → 4 Phasen)
+- Live-Send v4 aller 7 Episoden an `start@aiporate.com` (Resend, Feb 2026)
+- Tests: 16/16 Email + 12/12 MariaWay + 10/10 Hormozi = 38/38 PASS
+
 ## 🌟 DottedGlow Premium-Tiefe (Feb 2026)
 - Aceternity UI `DottedGlowBackground` als JSX-Komponente integriert (`/app/frontend/src/components/ui/dotted-glow-background.jsx`)
 - Canvas-based animierter Dot-Grid mit shimmer/glow (HiDPI, ResizeObserver, IntersectionObserver für Performance)

@@ -41,52 +41,53 @@ LEADEROS_LOGIN = "https://leaderos.de/login"
 LEADERCHECK_HOME = "https://leadercheck.de"
 
 
-# ─── 7-Day Plan Strip Data (used across all episodes) ─────
+# ─── 30-Day Plan Strip Data (used across all episodes) ────
 
-SEVEN_DAY_PLAN = [
-    ("1", "Heute",      "Erstes Sparring in 3 Minuten"),
-    ("2", "Morgen",     "Die Antwort, die überzeugt"),
-    ("3", "Übermorgen", "Warum Maria plötzlich gehört wurde"),
-    ("4", "Tag 4",      "Der schwierigste Satz im Meeting"),
-    ("5", "Tag 5",      "Der CFO-Test"),
-    ("6", "Tag 6",      "Deine 3-Minuten-Routine"),
-    ("7", "Tag 7",      "Executive Mode"),
+THIRTY_DAY_PLAN = [
+    ("Woche 1", "Klarheit",  "SEXIER vor jedem Meeting · Argument klar."),
+    ("Woche 2", "Mut",       "Schwierige Gespräche · vorher simuliert."),
+    ("Woche 3", "Präsenz",   "5 Min CFO-Sparring · Argument vor Argument."),
+    ("Woche 4", "Ergebnis",  "Harvard-Verhandlung · Ergebnis verhandelt."),
 ]
 
-DAY_ICONS = ["⚡", "💬", "👥", "🛡", "📈", "⏱", "🏆"]
 
-
-# ─── NEW: 7-Day Plan Strip ────────────────────────────────
+# ─── NEW: 30-Day-Plan Strip (4 phase cards) ──────────────
 
 def _seven_day_strip(active_day: int = 1) -> str:
-    """Bottom 7-card strip ("Dein 7-Tage-Plan für den ersten Unterschied")."""
+    """30-Tage-Check als 4-Phasen-Strip. Name beibehalten für Backward-Compat.
+    `active_day` 1-7 wird auf 4 Phasen gemappt (1-2 → Phase 1, 3-4 → 2, 5 → 3, 6-7 → 4).
+    """
+    phase_map = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4}
+    active_phase = phase_map.get(active_day, 1)
     cards = ""
-    for i, ((num, day_label, title), icon) in enumerate(zip(SEVEN_DAY_PLAN, DAY_ICONS)):
-        is_active = (i + 1) == active_day
+    for i, (week, focus, label) in enumerate(THIRTY_DAY_PLAN):
+        is_active = (i + 1) == active_phase
         border = BRAND["lime"] if is_active else "#222"
-        num_color = BRAND["lime"] if is_active else "#666"
-        title_color = BRAND["white"] if is_active else "#777"
-        icon_color = BRAND["lime"] if is_active else "#555"
-        dot_active = BRAND["lime"] if is_active else "#333"
-        dots_row = ""
-        for j in range(6):
-            dot_bg = dot_active if j == 0 else "#222"
-            dots_row += f'<td style="padding:0 2px;"><div style="width:5px;height:5px;border-radius:3px;background:{dot_bg};"></div></td>'
-        cards += f"""<td valign="top" width="14%" style="padding:0 4px;">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {border};border-radius:10px;">
-<tr><td style="padding:12px 10px 12px 10px;text-align:center;">
-<p style="font-size:22px;font-weight:800;color:{num_color};margin:0;line-height:1;letter-spacing:-0.02em;">{num}</p>
-<p style="font-size:10px;color:#888;margin:4px 0 10px 0;letter-spacing:0.05em;font-weight:600;">{day_label}</p>
-<div style="font-size:18px;color:{icon_color};line-height:1;margin:0 0 10px 0;">{icon}</div>
-<p style="font-size:10px;color:{title_color};line-height:1.35;margin:0 0 10px 0;font-weight:500;min-height:26px;">{title}</p>
-<table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto;"><tr>{dots_row}</tr></table>
+        focus_color = BRAND["lime"] if is_active else "#777"
+        num_color = BRAND["lime"] if is_active else "#444"
+        label_color = BRAND["white"] if is_active else "#999"
+        num = f"0{i+1}"
+        cards += f"""<td valign="top" width="25%" style="padding:0 6px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {border};border-radius:12px;">
+<tr><td style="padding:18px 16px 18px 16px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" style="font-size:10px;color:{focus_color};letter-spacing:0.18em;text-transform:uppercase;font-weight:800;">{week}</td>
+<td valign="top" align="right" style="font-size:22px;font-weight:800;color:{num_color};line-height:1;letter-spacing:-0.02em;">{num}</td>
+</tr></table>
+<p style="font-size:11px;color:{focus_color};margin:16px 0 6px 0;letter-spacing:0.02em;font-weight:700;">{focus}</p>
+<p style="font-size:12px;color:{label_color};line-height:1.4;margin:0;font-weight:500;min-height:34px;">{label}</p>
 </td></tr></table>
 </td>"""
     return f"""<tr><td style="background:{BRAND['bg_dark']};padding:48px 24px 56px 24px;border-top:1px solid {BRAND['border_dark']};">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-<tr><td style="padding:0 16px 24px 16px;">
-<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0;letter-spacing:0.02em;font-weight:500;">
-<span style="color:{BRAND['lime']};font-size:16px;">↳</span> &nbsp; Dein 7-Tage-Plan für den ersten Unterschied
+<tr><td style="padding:0 12px 18px 12px;">
+<p style="font-size:12px;color:{BRAND['gray_dark']};margin:0;letter-spacing:0.02em;font-weight:500;">
+<span style="color:{BRAND['lime']};font-size:16px;">↳</span> &nbsp; Dein 30-Tage-Check · 4 Phasen · 1 Routine
+</p>
+</td></tr>
+<tr><td style="padding:0 12px 0 12px;">
+<p style="font-size:22px;color:{BRAND['white']};margin:0 0 20px 0;font-weight:800;letter-spacing:-0.02em;line-height:1.15;">
+30 Tage. <span style="color:{BRAND['lime']}">Vier Hebel.</span>
 </p>
 </td></tr>
 <tr><td>
@@ -481,7 +482,7 @@ def _footer(email_for_unsub: str = "") -> str:
 </td></tr>
 <tr><td>
 <p style="font-size:11px;color:{BRAND['muted_dark']};line-height:1.7;margin:0;">
-Du erhältst diese Mail, weil du die Leader-Check Diagnose gemacht hast. 7 Episoden · 1 pro Woche · dann Schluss.<br>
+Du erhältst diese Mail, weil du die Leader-Check Diagnose gemacht hast. 7 Episoden über 30 Tage · dein Leader-OS-Check.<br>
 <a href="{LEADERCHECK_HOME}" style="color:{BRAND['lime']};text-decoration:none;">leadercheck.de</a> &nbsp;·&nbsp;
 <a href="{LEADEROS_LOGIN}" style="color:{BRAND['lime']};text-decoration:none;">leaderos.de Login</a> &nbsp;·&nbsp;
 <a href="mailto:wlad@leaderos.de" style="color:{BRAND['lime']};text-decoration:none;">Antworten an Wlad</a> &nbsp;·&nbsp;
@@ -704,7 +705,7 @@ def episode_03_maria(name: str, email: str = "") -> dict:
     body = hero + middle + seven_day + what_is + ps_line + _footer(email)
     return {
         "subject": f"{name}, vor 30 Tagen war Maria unsichtbar.",
-        "html": _wrap("Tag 5 · Eine Geschichte, die alles verändert. Marias 30 Tage. Dein 7-Tage-Plan.", body),
+        "html": _wrap("Tag 5 · Eine Geschichte, die alles verändert. Marias 30 Tage. Dein 30-Tage-Check.", body),
     }
 
 
