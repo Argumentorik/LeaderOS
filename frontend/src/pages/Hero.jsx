@@ -152,10 +152,11 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Main Headline */}
+          {/* Main Headline · ClickUp-style tight tracking (Plus-Jakarta-feel) */}
           <h1
-            className="font-manrope font-extrabold text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.05] tracking-[-0.03em] text-white mb-8 opacity-0 anim-fade-up delay-1 text-center"
+            className="font-manrope font-extrabold text-white mb-8 opacity-0 anim-fade-up delay-1 text-center"
             data-testid="hero-headline"
+            style={{ fontSize: "clamp(40px, 7vw, 84px)", lineHeight: 1.03, letterSpacing: "-0.05em" }}
           >
             {hl.lines.map((line, i) => {
               const isAccent = line.startsWith("{") && line.endsWith("}");
@@ -178,10 +179,11 @@ export default function Hero() {
             <span className="badge-lime px-5 py-2.5 text-sm font-semibold tracking-wide">EQ</span>
           </div>
 
-          {/* Subheadline — einfache Sprache */}
+          {/* Subheadline · ClickUp-style 18px tight tracking */}
           <p
-            className="font-inter text-base md:text-lg text-slate-400 leading-relaxed mb-10 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
+            className="font-inter text-slate-400 mb-10 max-w-3xl mx-auto opacity-0 anim-fade-up delay-3 text-center"
             data-testid="hero-subheadline"
+            style={{ fontSize: "19px", lineHeight: 1.5, letterSpacing: "-0.018em" }}
           >
             <span className="text-white font-semibold">Zehn Minuten · 30 Fragen · ehrlich beantwortet.</span>{" "}
             Du bekommst sofort deinen Score in drei Ebenen plus konkreten 30-Tage-Plan.{" "}
@@ -289,62 +291,96 @@ export default function Hero() {
           </div>
         </section>
 
-        {/* ===== SECTION 3: 3-EBENEN-MODELL ===== */}
-        <section id="model" className="py-24 border-t border-white/[0.04]">
-          <div className="max-w-6xl mx-auto px-4 md:px-8">
-            <div className="text-center mb-16">
-              <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
+        {/* ===== SECTION 3: 3-EBENEN-MODELL (ClickUp-inspired premium re-design) ===== */}
+        <section id="model" className="relative py-28 md:py-36 border-t border-white/[0.04] overflow-hidden" data-testid="three-layers-section">
+          <div className="max-w-[1200px] mx-auto px-4 md:px-8">
+            {/* Eyebrow + display headline · Plus Jakarta Sans -0.05em tight */}
+            <div className="mb-16 md:mb-20 max-w-[920px]">
+              <span className="inline-block mb-7 font-mono text-[11px] tracking-[0.22em] text-[#C8FF00] uppercase font-semibold">
                 ▸ Drei Ebenen
               </span>
-              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
-                <span className="block text-3xl md:text-5xl lg:text-6xl">
-                  Top-Führungskräfte können
-                </span>
-                <span className="block text-3xl md:text-5xl lg:text-6xl mt-2">
-                  <span className="text-[#C8FF00]">alle drei</span> <span className="italic font-semibold text-white/95">gleichzeitig</span>.
-                </span>
+              <h2
+                className="font-manrope font-extrabold text-white"
+                style={{ fontSize: "clamp(40px, 6.2vw, 76px)", lineHeight: 1.04, letterSpacing: "-0.045em" }}
+              >
+                Top-Führungskräfte können<br />
+                <span className="text-[#C8FF00]">alle drei gleichzeitig</span>.
               </h2>
-              <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mt-6 leading-relaxed">
-                KI · Rhetorik · EQ. <span className="text-white font-medium">Wer eine Ebene weglässt</span>, verliert das Spiel · auch wenn er es nicht merkt.
+              <p className="mt-8 text-slate-400 leading-relaxed max-w-[640px]" style={{ fontSize: "18px", letterSpacing: "-0.011em" }}>
+                <span className="text-white">KI · Rhetorik · EQ.</span> Wer eine Ebene weglässt, verliert das Spiel · auch wenn er es nicht merkt. Hier ist, was Top-1 % heute trainieren.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="hero-layers">
+            {/* 3-Column Card Grid · Premium product-card style */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6" data-testid="hero-layers">
               {layers.map((layer, i) => (
                 <div
                   key={i}
-                  className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-7 transition-all duration-300 hover:border-[#C8FF00]/15 hover:bg-white/[0.025]"
                   data-testid={`hero-layer-${i}`}
+                  className="group relative rounded-3xl bg-[#0d0d0d] border border-white/[0.06] p-7 md:p-9 transition-all duration-500 hover:border-[#C8FF00]/40 hover:bg-[#0f0f0f] overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="font-inter text-[10px] font-medium tracking-[0.2em] text-slate-600 uppercase">
-                      {layer.subtitle.toUpperCase()}
-                    </span>
-                    <span className="font-manrope font-extrabold text-2xl text-white/[0.06]">
-                      {layer.num}
-                    </span>
-                  </div>
-                  
-                  <div 
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
-                    style={{ backgroundColor: `${layer.color}10` }}
+                  {/* Decorative giant number watermark */}
+                  <div
+                    aria-hidden
+                    className="absolute -top-4 -right-2 font-manrope font-extrabold text-[#C8FF00]/[0.04] select-none pointer-events-none transition-opacity duration-500 group-hover:text-[#C8FF00]/[0.08]"
+                    style={{ fontSize: "180px", lineHeight: 1, letterSpacing: "-0.06em" }}
                   >
-                    <layer.icon className="w-5 h-5" style={{ color: layer.color }} />
+                    {layer.num}
                   </div>
-                  
-                  <h3 className="font-manrope font-bold text-lg text-white mb-2">{layer.title}</h3>
-                  <p className="font-inter text-sm text-slate-500 mb-5 leading-relaxed">{layer.desc}</p>
-                  
-                  <div className="space-y-2.5 pt-4 border-t border-white/[0.04]">
+
+                  {/* Eyebrow (mono) */}
+                  <div className="relative flex items-center justify-between mb-8">
+                    <span className="font-mono text-[10px] tracking-[0.22em] text-[#C8FF00] uppercase font-bold">
+                      Ebene {layer.num}
+                    </span>
+                    <div className="w-10 h-10 rounded-lg bg-[#C8FF00]/10 border border-[#C8FF00]/20 flex items-center justify-center">
+                      <layer.icon className="w-5 h-5 text-[#C8FF00]" strokeWidth={2.2} />
+                    </div>
+                  </div>
+
+                  {/* Title · large display */}
+                  <h3
+                    className="relative font-manrope font-extrabold text-white mb-3"
+                    style={{ fontSize: "44px", lineHeight: 1.05, letterSpacing: "-0.035em" }}
+                  >
+                    {layer.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="relative text-slate-400 leading-relaxed mb-7 max-w-[280px]" style={{ fontSize: "16px", letterSpacing: "-0.011em" }}>
+                    {layer.desc}
+                  </p>
+
+                  {/* Divider line */}
+                  <div className="relative h-px bg-gradient-to-r from-white/[0.08] via-white/[0.04] to-transparent mb-5" />
+
+                  {/* Points list with checkmarks */}
+                  <ul className="relative space-y-3">
                     {layer.points.map((point, pi) => (
-                      <div key={pi} className="flex items-center gap-3">
-                        <div className="w-1 h-1 rounded-full shrink-0 bg-[#C8FF00]" />
-                        <span className="font-inter text-sm text-slate-400">{point}</span>
-                      </div>
+                      <li key={pi} className="flex items-center gap-3">
+                        <div className="w-4 h-4 rounded-full bg-[#C8FF00] flex items-center justify-center shrink-0">
+                          <svg width="9" height="9" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.5 6L5 8.5L9.5 4" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                        <span className="text-white/90 font-medium" style={{ fontSize: "15px", letterSpacing: "-0.011em" }}>
+                          {point}
+                        </span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               ))}
+            </div>
+
+            {/* Bottom annotation strip */}
+            <div className="mt-10 md:mt-14 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 pt-8 border-t border-white/[0.04]">
+              <span className="font-mono text-[10px] tracking-[0.22em] text-slate-500 uppercase font-bold shrink-0">
+                ▸ Dein Score
+              </span>
+              <p className="text-slate-400 leading-relaxed" style={{ fontSize: "15px", letterSpacing: "-0.011em" }}>
+                Die Diagnose misst dich auf allen drei Ebenen einzeln. <span className="text-white">10 Minuten · 30 Fragen · ein klares Profil.</span> So weißt du nach dem Test, wo du stärkst · und wo du nachschärfst.
+              </p>
             </div>
           </div>
         </section>

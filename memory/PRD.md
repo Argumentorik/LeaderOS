@@ -16,6 +16,12 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## 🎨 ClickUp-Premium Polishing · ATF + Drei Ebenen (Feb 2026)
+- **ATF Hero**: Plus-Jakarta-Style Display-Typografie (clamp 40-84px, letter-spacing -0.05em, line-height 1.03) mit tighter Compression. Sub-Headline auf 19px mit -0.018em Tracking.
+- **Drei-Ebenen-Section komplett neu**: ClickUp-inspired asymmetric Layout · linksbündige 76px Display-Headline "Top-Führungskräfte können alle drei gleichzeitig." · 3 Premium-Cards mit riesigem 180px Number-Watermark, Mono-Eyebrow "EBENE 01-03", Icon-Tile, 44px Display-Title (KI/Rhetorik/EQ), Lime-Round-Checkmark-Liste, Bottom-Annotation-Strip "▸ DEIN SCORE".
+- Adaptiert für Leader-OS Branding (Schwarz/Lime statt Weiß/Violet) bei voller Übernahme der ClickUp-Typografie-Disziplin und Density.
+- Tests bleiben grün, Lint clean.
+
 ## 🎯 FocusCards Personas + Generischere 30-Tage-Story (Feb 2026)
 - **Aceternity FocusCards** als JSX-Port (`/app/frontend/src/components/ui/focus-cards.jsx`) mit Hover-Focus, Blur+Scale auf nicht-fokussierte Cards, Gradient-Eyebrow oben + Title unten
 - **"Für wen"-Section** komplett refactored zu "Vier Personas. Ein Hebel." mit 4 großen Foto-Cards (Selbstständige · Angestellte · Senior Manager · High Potentials)
