@@ -3,15 +3,16 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
-## 🃏 DraggableCard Diagnose-Section + Hormozi Persona-Eyebrows (Feb 2026)
-- **Aceternity `DraggableCard`** als JSX-Port (`/app/frontend/src/components/ui/draggable-card.jsx`, framer-motion 12.42 statt `motion/react`): 3D-Tilt-on-mouse-move + Drag-Physics mit Spring-Bounce on release + animated glare overlay (opacity follows tilt magnitude).
-- **DiagnoseStepsSection.jsx komplett neu**: Die 4 Diagnose-Schritte (01-04) leben jetzt als gestreute, 3D-gekippte, draggable Karten um eine zentrale EncryptedText-Headline „Dein persönlicher · Leadership-Report." (Fight-Club-Demo-Pattern). Jede Karte: Lime-Watermark-Number (180px), Mono-Eyebrow „SCHRITT 01-04", Lime-Icon-Tile, 26px Display-Title, Subline + „● DRAG ME · 3D" Footer mit Pulsing-Dot.
-- **Personas-Eyebrows** umgeschrieben auf Hormozi/Steve-Jobs-Sales-Style (statt „Persona 01/02/03/04"):
-  - Selbstständige → **„Solo-CEO ohne Burnout."**
-  - Angestellte → **„Vom Mitarbeiter zur Schlüsselperson."**
-  - Senior Manager → **„Vom Manager zum Macher."**
-  - High Potentials → **„Vom Talent zum Top 1 %."**
-- Verifiziert via Playwright Drag-Test: Card 01 lässt sich von Position A nach Position B ziehen, Spring-Bounce on release, Headline wird beim Wegziehen sauber freigelegt. 0 Console-Errors.
+## 🎴 Aceternity Features-Bento Diagnose-Section (Feb 2026)
+- **DiagnoseStepsSection.jsx** komplett ersetzt durch das Aceternity „Features-Section"-Pattern (6-col asymmetric bento grid, port von TS→JSX mit framer-motion statt `motion/react`, ohne cobe-Dep).
+- **4 Bento-Cards** mit individuellen Skeleton-Visuals:
+  - **Card 1 (col-span-4)** „30 Fragen · 6 Führungsdimensionen" — animated Quiz-Mockup mit Progress-Bar bei 47%, echter Frage „Wenn der CFO im Meeting widerspricht …" + 5 Antwort-Optionen (Trifft eher zu in lime aktiv), Staggered-Entry Fade-In pro Option
+  - **Card 2 (col-span-2)** „Score in drei Ebenen" — 3 tilted Score-Tiles (KI 78%, Rhetorik 64%, EQ 82%) mit animierten Lime-Progress-Bars, hover entrotiert auf 0°
+  - **Card 3 (col-span-3)** „Dein 30-Tage-Plan" — Kalender-Grid 30 Tage (10×3), Tag 1-11 active (Lime), Tag 12 als „today" highlighted, Play-Button-Pill top-right, Heute-Task „Lass den CFO ausreden …"
+  - **Card 4 (col-span-3)** „ROI-Prognose" — 3 gestaffelte radial SVG-Rings (88%/64%/100%) mit Stroke-Dash-Animation, „+184 %" Center-Score + 3 Sub-Stats (6.4h/Woche, +42 %, 30 T)
+- Alle Skeletons **CSS-only** (keine zusätzlichen Stock-Photos) → preserves „16 unique images, 0 duplicates"-Regel.
+- DraggableCard-Komponente bleibt im Codebase (für späteren Einsatz auf `/payment-success` License-Key-Reveal etc.).
+- Verifiziert: 4/4 skeleton-testids rendern, 0 Console-Errors, headlines mit EncryptedText.
 
 ## 🖼️ Unique Images Pass · 16 distinct premium photos · Maria-Portrait Premium-Frame (Feb 2026)
 - **Problem**: 4 verschiedene Bilder wurden 2-4× wiederverwendet — vor allem Marias Photo erschien 4× auf der Landing (MariaWay + Agent 01 Coach + Persona 01 Selbstständige + ClientStories Maria).
