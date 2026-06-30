@@ -3,18 +3,27 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🧹 Hero.jsx Split + Stripe Service + Self-Heal Cronjob (Feb 2026)
+- **P1 Hero.jsx Refactor**: 1039 Zeilen → 59 Zeilen schlanker Orchestrator. Gesplittet in 13 Section-Komponenten unter `/app/frontend/src/components/hero/`:
+  - `HeroATF.jsx`, `ProblemSection.jsx`, `ThreeLayersSection.jsx`, `DiagnoseStepsSection.jsx`, `AgentsCarouselSection.jsx`, `WladBotSection.jsx`, `LeadershipKursSection.jsx`, `AudiencesSection.jsx`, `SocialProofSection.jsx`, `WladTrustSection.jsx`, `FreeCreditsSection.jsx`, `FinalCTASection.jsx`, `HeroFooter.jsx`
+  - `heroData.js` (228 Z.) — alle statischen Inhalte (headlines, layers, problems, diagnoseSteps, platformFeatures, wladbotFeatures, audiences, kursTopics, freeCreditsBullets, wladStats)
+- **P2 Stripe Service Extraction**: `routes/payments.py` 416 → 267 Zeilen. Neue `services/stripe_checkout.py` (264 Z.) enthält: `is_real_stripe_key`, `create_subscription_session`, `apply_subscription_cancel_at`, `create_one_time_session`, `build_*_tx`, sowie der neue Self-Heal-Job.
+- **P3 Self-Healing Cronjob** für stale Stripe-Checkouts: `start_self_healing_loop` läuft 1×/h im Hintergrund (asyncio.create_task auf FastAPI startup, cancel on shutdown). `cancel_stale_pending_checkouts` scannt pending Transactions > 26h alt, reconciled gegen Stripe API (paid → complete, expired/unreachable → expired). **Erster Live-Lauf: 53 alte stale Checkouts automatisch bereinigt.**
+- **Tests**: 7 neue Unit-Tests in `/app/backend/tests/test_stripe_self_heal.py` (FakeDB-Pattern, 0.09s, 7/7 PASS). Backend-Regression: 51/51 PASS auf iter36-iter38 + neue Stripe Tests.
+- **Test-Status (iter39)**: Backend 100% + Frontend 100% PASS — keine Regressionen, alle 13 Sections rendern, Apple Cards Modal + ESC + Carousel-Nav funktionieren, self-heal Loop confirmed via Backend-Logs.
+
 ## 🔐 EncryptedText + 6-Agent Apple Cards · Godmode (Feb 2026)
 - **Aceternity `EncryptedText`-Komponente** (`/app/frontend/src/components/ui/encrypted-text.jsx`, 153 Z.): RAF-driven scramble/decode-Effekt mit `mount`/`view`/`hover` Trigger, honors `prefers-reduced-motion`. Eingebaut im ATF (`<h1 data-testid="hero-headline">` mit 1100-1500ms staggered duration) und in der "6 KI-Agenten"-Sektion (`agents-headline-line-1/2`, trigger="view").
 - **"6 KI-Agenten"-Section komplett umgebaut** auf Apple Cards Carousel: 6 Image-Karten (Unsplash Portraits) mit `category` ("Agent 01-06"), `title` (Leadership Coach · Task · Simulations · Strategie · Event · Community) und `content` (desc + 3 bullets + Lime-Icon-Tile "Teil von Leader OS"). Klick öffnet Modal-Overlay mit blur backdrop, ESC schließt.
 - **Admin localStorage → sessionStorage Migration**: `Admin.jsx` liest/schreibt Token jetzt konsistent aus `sessionStorage["leaderos_admin_token"]` (XSS-Mitigation, Session-Scope).
 - **React Cleanup**: Array-Index-Keys in Hero.jsx durch stabile IDs ersetzt (layer.num, step.num, point, feature.text, item.text). Unescaped quotes in Report.jsx + Analyzing.jsx auf `&ldquo;` / `&rdquo;` umgestellt. 4× Unused `eslint-disable react-hooks/exhaustive-deps` Directives entfernt (Roadmap, Quiz, PaymentSuccess, Analyzing, AuthCallback, ExitIntentPopup).
 - **Lint-Status**: Alle pages clean, nur vendored Aceternity/Shadcn-Files haben verbleibende Warnings.
-- **Test-Status (iteration_38)**: Backend 6/6 + Frontend 8/8 PASS — EncryptedText scramble→final · 6× Apple-Cards rendered · Modal open/close · carousel-next/prev scroll · sessionStorage token verified · 0 React-Console-Warnings.
+- **Test-Status (iteration_38)**: Backend 6/6 + Frontend 8/8 PASS.
 - **Deployment-Check (deployment_agent)**: `status: pass` · keine Blocker · CORS ok · env-driven · supervisor config valid.
 
 ## Stack
 - Frontend: React, TailwindCSS, Framer Motion (12.42), motion, @tabler/icons-react
-- Backend: FastAPI, Pydantic, MongoDB, Service-Layer
+- Backend: FastAPI, Pydantic, MongoDB, Service-Layer (incl. Self-healing Stripe Loop)
 - Payments: Stripe Checkout (**LIVE Mode aktiv** · `sk_live_…`)
 - Email: Resend SDK · Sender: `wlad@leaderos.de` (verifizierte Domain)
 - AI: Emergent LLM Key (Claude Sonnet 4.5 für Report-Narrative)
