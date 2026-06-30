@@ -3,6 +3,15 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🎯 EncryptedText im Report + leader_os Alias (Feb 2026)
+- **EncryptedText auf `/report`**: 3 Moments-of-Truth bekommen den scramble→decode-Effekt:
+  - **Gesamtscore** (`data-testid="report-total-score"`) · trigger=`mount`, duration=1800ms, charset=Ziffern-Only (`0123456789%`)
+  - **Profile-Title-Headline** (`data-testid="report-profile-title-headline"`) · trigger=`view`, duration=1600ms, ABC-Charset
+  - **3× Layer ScoreRings** (KI · Rhetorik · EQ) · trigger=`view`, duration=1500ms, Ziffern-Charset · sync mit der SVG-Ring-Animation
+  - `EncryptedText` erweitert um optionalen `style` Prop für inline-color (Gesamtscore-Color je nach Score-Range)
+  - Verifiziert via Playwright mit localStorage-Injection: Frame 200ms zeigt scrambled state, Frame 2.5s den finalen decoded Text · 0 Console-Errors.
+- **`leader_os` Alias in PACKAGES**: Bare `package_id="leader_os"` resolved jetzt auf den Sprint-One-Time (997 €, mode=payment) statt 400 zurückzugeben. Verifiziert via `curl POST /api/payments/create-checkout` → liefert `cs_live_*` Session-URL.
+
 ## 🧹 Hero.jsx Split + Stripe Service + Self-Heal Cronjob (Feb 2026)
 - **P1 Hero.jsx Refactor**: 1039 Zeilen → 59 Zeilen schlanker Orchestrator. Gesplittet in 13 Section-Komponenten unter `/app/frontend/src/components/hero/`:
   - `HeroATF.jsx`, `ProblemSection.jsx`, `ThreeLayersSection.jsx`, `DiagnoseStepsSection.jsx`, `AgentsCarouselSection.jsx`, `WladBotSection.jsx`, `LeadershipKursSection.jsx`, `AudiencesSection.jsx`, `SocialProofSection.jsx`, `WladTrustSection.jsx`, `FreeCreditsSection.jsx`, `FinalCTASection.jsx`, `HeroFooter.jsx`

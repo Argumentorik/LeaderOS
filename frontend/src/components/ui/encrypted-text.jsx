@@ -22,6 +22,7 @@ export function EncryptedText({
   text,
   as: Tag = "span",
   className = "",
+  style,
   duration = 1100,
   trigger = "mount",
   chars = DEFAULT_CHARS,
@@ -140,6 +141,7 @@ export function EncryptedText({
     <Tag
       ref={elRef}
       className={className}
+      style={style}
       onMouseEnter={handleHover}
       data-testid={testId}
       aria-label={safeText}

@@ -6,6 +6,10 @@ import {
 import { ArrowRight, Clock, Zap, TrendingUp, Brain, MessageSquare, Sparkles, Star, Bot, CheckSquare, Users, BookOpen, Calendar, MessageCircle, Download, Award, Target, Shield, Lightbulb, UserCheck, Mail } from "lucide-react";
 import { generateReportPDF } from "../utils/generatePDF";
 import ExitIntentPopup from "../components/ExitIntentPopup";
+import EncryptedText from "../components/ui/encrypted-text";
+
+// Digit-only scramble charset → feels "numerical decode", not random typography.
+const NUMERIC_SCRAMBLE = "0123456789%";
 
 const catLabels = {
   rhetorik: "Rhetorik",
@@ -41,7 +45,15 @@ function ScoreRing({ score, color, size = 96 }) {
         <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
         <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke={color} strokeWidth="4" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1.5s ease" }} />
       </svg>
-      <span className="font-manrope font-bold text-xl text-white relative z-10">{score}%</span>
+      <EncryptedText
+        text={`${score}%`}
+        as="span"
+        className="font-manrope font-bold text-xl text-white relative z-10"
+        trigger="view"
+        duration={1500}
+        speed={45}
+        chars={NUMERIC_SCRAMBLE}
+      />
     </div>
   );
 }
@@ -113,9 +125,17 @@ export default function Report() {
           <div className="flex flex-col items-end gap-3">
             <div>
               <div className="font-inter text-sm text-slate-600 mb-2 text-right">Gesamtscore</div>
-              <div className="font-manrope font-extrabold text-5xl md:text-6xl" style={{ color: scoreColor }} data-testid="report-total-score">
-                {avg_total}%
-              </div>
+              <EncryptedText
+                text={`${avg_total}%`}
+                as="div"
+                className="font-manrope font-extrabold text-5xl md:text-6xl"
+                style={{ color: scoreColor }}
+                trigger="mount"
+                duration={1800}
+                speed={50}
+                chars={NUMERIC_SCRAMBLE}
+                data-testid="report-total-score"
+              />
             </div>
             <button
               data-testid="report-download-pdf"
@@ -142,9 +162,14 @@ export default function Report() {
               <Star className="w-3 h-3" />
               Dein Führungsprofil
             </div>
-            <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-4">
-              {narrative.profile_title}
-            </h2>
+            <EncryptedText
+              text={narrative.profile_title}
+              as="h2"
+              className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-4"
+              trigger="view"
+              duration={1600}
+              data-testid="report-profile-title-headline"
+            />
             {narrative.executive_summary && (
               <p className="font-inter text-slate-300 leading-relaxed">{narrative.executive_summary}</p>
             )}

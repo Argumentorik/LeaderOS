@@ -90,6 +90,12 @@ PACKAGES: dict[str, PackageConfig] = {
         "amount": 997.00, "currency": "eur", "plan": "leader_os",
         "billing": "one_time", "mode": "payment",
     },
+    # DX alias — bare 'leader_os' resolves to the headline Sprint one-time package
+    "leader_os": {
+        "name": "Sprint — Einmalzahlung",
+        "amount": 997.00, "currency": "eur", "plan": "leader_os",
+        "billing": "one_time", "mode": "payment",
+    },
 }
 
 
