@@ -20,8 +20,9 @@ export const MagicLinkForm = ({ de = true }) => {
       const detail = err?.response?.data?.detail;
       if (status === 429) {
         setError(de
-          ? 'Zu viele Anfragen. Bitte warte 15 Minuten.'
-          : 'Too many requests. Please wait 15 minutes.');
+          // Iter 92.42: align with backend's actual cooldown (1h rolling window).
+          ? 'Zu viele Anfragen. Bitte warte 1 Stunde.'
+          : 'Too many requests. Please wait 1 hour.');
       } else if (status === 422 || detail) {
         setError(de
           ? 'Bitte gib eine gültige E-Mail-Adresse ein.'
