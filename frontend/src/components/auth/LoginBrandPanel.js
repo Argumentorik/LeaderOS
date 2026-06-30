@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import { WladMark } from '../brand/WladMark';
+import { ProductPreviewLoop } from './ProductPreviewLoop';
 
 const BG_IMG = 'https://images.unsplash.com/photo-1633602114554-be8c2c5d6828?crop=entropy&cs=srgb&fm=jpg&w=1200&q=80';
 
@@ -45,17 +46,22 @@ export const LoginBrandPanel = ({ features, de }) => {
             )}
           </h1>
 
-          <div className="space-y-5 mt-12 cascade">
-            {features.map(item => (
+          <div className="space-y-3.5 mt-10 cascade">
+            {features.slice(0, 3).map(item => (
               <div key={item.t} className="flex items-start gap-3">
-                <CheckCircle2 size={16} className="text-[#BFFF00] mt-0.5 shrink-0" />
+                <CheckCircle2 size={15} className="text-[#BFFF00] mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-white/80">{item.t}</p>
-                  <p className="text-xs text-white/30 mt-0.5">{item.s}</p>
+                  <p className="text-[13px] font-medium text-white/85 leading-tight">{item.t}</p>
+                  <p className="text-[11px] text-white/35 mt-0.5">{item.s}</p>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Iter 92.44 (Mert · GODMODE): animated product preview loop —
+              Chat-Burst → KI-Score → Video-Frame. Auto-cycle every 4.5s.
+              Conversion booster: "try-before-login" effect from Stripe/Linear. */}
+          <ProductPreviewLoop de={de} />
         </div>
 
         <div className="mt-16">

@@ -1,4 +1,4 @@
-import { Shield } from 'lucide-react';
+import { Shield, UserPlus, LogIn, ArrowRight } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -30,31 +30,52 @@ export const TrustBadges = () => (
   </div>
 );
 
+/**
+ * ModeSwitch — Iter 92.44 (Mert · GODMODE): turned the weak "click to switch"
+ * text-link into a proper outlined CTA-style toggle with icon + arrow. This
+ * is the #2 most-clicked element on the auth page (after the primary CTA)
+ * and deserves visual weight equivalent to a secondary button — Stripe /
+ * Linear / Vercel pattern.
+ */
 export const ModeSwitch = ({ mode, onSwitchMode, de }) => {
   if (mode === 'register') {
     return (
       <>
-        <p className="text-[11px] text-white/20 mb-4">
+        <p className="text-[11px] text-white/25 mb-5 leading-relaxed">
           {de ? 'Mit der Erstellung akzeptierst du unsere ' : 'By creating an account, you agree to our '}
-          <span className="text-white/40 font-medium hover:text-[#BFFF00] transition-colors cursor-pointer">{de ? 'Nutzungsbedingungen' : 'Terms'}</span>
+          <a href="/agb" className="text-white/50 font-semibold hover:text-[#BFFF00] underline-offset-2 hover:underline transition-colors">{de ? 'Nutzungsbedingungen' : 'Terms'}</a>
           {de ? ' und ' : ' and '}
-          <span className="text-white/40 font-medium hover:text-[#BFFF00] transition-colors cursor-pointer">{de ? 'Datenschutz' : 'Privacy'}</span>
+          <a href="/datenschutz" className="text-white/50 font-semibold hover:text-[#BFFF00] underline-offset-2 hover:underline transition-colors">{de ? 'Datenschutz' : 'Privacy'}</a>
         </p>
-        <p className="text-sm text-white/40">
-          {de ? 'Bereits registriert? ' : 'Already have an account? '}
-          <button onClick={() => onSwitchMode('login')} className="font-bold text-white hover:text-[#BFFF00] transition-colors" data-testid="login-tab">
-            {de ? 'Anmelden' : 'Sign in'}
-          </button>
-        </p>
+        <button
+          type="button"
+          onClick={() => onSwitchMode('login')}
+          data-testid="login-tab"
+          className="group w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-[#BFFF00]/40 hover:bg-white/[0.05] transition-all font-bold text-[13px] text-white/70 hover:text-white"
+        >
+          <LogIn size={14} className="opacity-60 group-hover:opacity-100 transition-opacity" />
+          <span>
+            {de ? 'Bereits registriert? ' : 'Already have an account? '}
+            <span className="text-[#BFFF00]">{de ? 'Anmelden' : 'Sign in'}</span>
+          </span>
+          <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+        </button>
       </>
     );
   }
   return (
-    <p className="text-sm text-white/40">
-      {de ? 'Noch kein Account? ' : "Don't have an account? "}
-      <button onClick={() => onSwitchMode('register')} className="font-bold text-white hover:text-[#BFFF00] transition-colors" data-testid="register-tab">
-        {de ? 'Registrieren' : 'Sign up'}
-      </button>
-    </p>
+    <button
+      type="button"
+      onClick={() => onSwitchMode('register')}
+      data-testid="register-tab"
+      className="group w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-gradient-to-r from-white/[0.03] via-[#BFFF00]/[0.04] to-white/[0.03] border border-[#BFFF00]/25 hover:border-[#BFFF00]/55 hover:from-[#BFFF00]/[0.06] hover:via-[#BFFF00]/[0.10] hover:to-[#BFFF00]/[0.06] transition-all font-bold text-[13px] text-white/80 hover:text-white shadow-sm hover:shadow-[#BFFF00]/10"
+    >
+      <UserPlus size={14} className="text-[#BFFF00]" />
+      <span>
+        {de ? 'Noch kein Account? ' : "Don't have an account? "}
+        <span className="text-[#BFFF00]">{de ? 'Kostenlos starten' : 'Start free'}</span>
+      </span>
+      <ArrowRight size={13} className="text-[#BFFF00] opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+    </button>
   );
 };
