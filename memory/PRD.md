@@ -3,8 +3,17 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🔐 EncryptedText + 6-Agent Apple Cards · Godmode (Feb 2026)
+- **Aceternity `EncryptedText`-Komponente** (`/app/frontend/src/components/ui/encrypted-text.jsx`, 153 Z.): RAF-driven scramble/decode-Effekt mit `mount`/`view`/`hover` Trigger, honors `prefers-reduced-motion`. Eingebaut im ATF (`<h1 data-testid="hero-headline">` mit 1100-1500ms staggered duration) und in der "6 KI-Agenten"-Sektion (`agents-headline-line-1/2`, trigger="view").
+- **"6 KI-Agenten"-Section komplett umgebaut** auf Apple Cards Carousel: 6 Image-Karten (Unsplash Portraits) mit `category` ("Agent 01-06"), `title` (Leadership Coach · Task · Simulations · Strategie · Event · Community) und `content` (desc + 3 bullets + Lime-Icon-Tile "Teil von Leader OS"). Klick öffnet Modal-Overlay mit blur backdrop, ESC schließt.
+- **Admin localStorage → sessionStorage Migration**: `Admin.jsx` liest/schreibt Token jetzt konsistent aus `sessionStorage["leaderos_admin_token"]` (XSS-Mitigation, Session-Scope).
+- **React Cleanup**: Array-Index-Keys in Hero.jsx durch stabile IDs ersetzt (layer.num, step.num, point, feature.text, item.text). Unescaped quotes in Report.jsx + Analyzing.jsx auf `&ldquo;` / `&rdquo;` umgestellt. 4× Unused `eslint-disable react-hooks/exhaustive-deps` Directives entfernt (Roadmap, Quiz, PaymentSuccess, Analyzing, AuthCallback, ExitIntentPopup).
+- **Lint-Status**: Alle pages clean, nur vendored Aceternity/Shadcn-Files haben verbleibende Warnings.
+- **Test-Status (iteration_38)**: Backend 6/6 + Frontend 8/8 PASS — EncryptedText scramble→final · 6× Apple-Cards rendered · Modal open/close · carousel-next/prev scroll · sessionStorage token verified · 0 React-Console-Warnings.
+- **Deployment-Check (deployment_agent)**: `status: pass` · keine Blocker · CORS ok · env-driven · supervisor config valid.
+
 ## Stack
-- Frontend: React, TailwindCSS, Framer Motion
+- Frontend: React, TailwindCSS, Framer Motion (12.42), motion, @tabler/icons-react
 - Backend: FastAPI, Pydantic, MongoDB, Service-Layer
 - Payments: Stripe Checkout (**LIVE Mode aktiv** · `sk_live_…`)
 - Email: Resend SDK · Sender: `wlad@leaderos.de` (verifizierte Domain)

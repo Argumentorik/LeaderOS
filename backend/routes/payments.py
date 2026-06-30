@@ -2,13 +2,14 @@
 - register_checkout_routes (create checkout, status, webhook)
 - register_license_routes  (create/activate/validate/list/revoke)
 
-Heavy logic (key generation, plan→amount mapping, subscription params) lives in
-/backend/services/license_keys.py to keep route handlers small and testable.
+Heavy logic (key generation, plan→amount mapping, Stripe session creation,
+cancel_at apply, self-healing) lives in /backend/services/* to keep route
+handlers small and testable.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends
 from datetime import datetime, timezone, timedelta
 from emergentintegrations.payments.stripe.checkout import (
-    StripeCheckout, CheckoutSessionRequest, CheckoutStatusResponse
+    StripeCheckout, CheckoutStatusResponse,
 )
 import asyncio
 import logging
@@ -20,6 +21,14 @@ from typing import Optional
 from models import CreateCheckoutRequest, LicenseKeyActivate, LicenseKeyCreate
 from services.license_keys import build_license_doc
 from services.pricing import PACKAGES, PLAN_AMOUNT_MAP
+from services.stripe_checkout import (
+    is_real_stripe_key,
+    create_subscription_session,
+    apply_subscription_cancel_at,
+    create_one_time_session,
+    build_subscription_tx,
+    build_one_time_tx,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +37,7 @@ logger = logging.getLogger(__name__)
 __all__ = ["PACKAGES", "register_payment_routes", "register_checkout_routes", "register_license_routes", "create_license_key_internal"]
 
 
-# --------- License Key Service ---------
+# --------- License Key helper (kept here because it crosses route concerns) ---------
 
 async def create_license_key_internal(db, plan: str, email: Optional[str] = None, name: Optional[str] = None, source: str = "stripe", notes: Optional[str] = None) -> str:
     """Insert a new license key, retrying on the (extremely rare) collision."""
@@ -39,164 +48,6 @@ async def create_license_key_internal(db, plan: str, email: Optional[str] = None
     doc.update({"activated_by": None, "activated_at": None, "expires_at": None})
     await db.license_keys.insert_one(doc)
     return doc["key"]
-
-
-# --------- Stripe Helpers ---------
-
-def _is_real_stripe_key(key: str) -> bool:
-    """Detect real Stripe keys vs the Emergent placeholder 'sk_test_emergent'."""
-    if not key or key == "sk_test_emergent":
-        return False
-    return key.startswith("sk_live_") or (key.startswith("sk_test_") and len(key) > 20)
-
-
-def _build_subscription_metadata(req: CreateCheckoutRequest, package: dict) -> dict[str, str]:
-    return {
-        "package_id": req.package_id,
-        "plan": package["plan"],
-        "billing": package["billing"],
-        "cycles": str(package["cycles"]),
-        "total_amount": str(package["total_amount"]),
-        "user_email": req.email or "",
-        "user_name": req.user_name or "",
-        "user_session_id": req.user_session_id or "",
-    }
-
-
-async def _create_subscription_session(req: CreateCheckoutRequest, package: dict):
-    """Real Stripe Subscription Checkout — auto-cancels after exactly N cycles.
-
-    cancel_at is computed dynamically from cycles * interval_count months, so that:
-      - leader_os_2rate    (2 cycles, every 6 months) → cancels after 12 months
-      - leader_os_12rate   (12 monthly cycles)        → cancels after 12 months
-      - leader_os_plus_3rate (3 monthly cycles)       → cancels after 3 months
-    """
-    success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
-    cancel_url = f"{req.origin_url}/close"
-
-    # cycles * interval_count months → days; +7 days grace buffer for clock skew
-    cycles = int(package.get("cycles", 1))
-    interval_count = int(package.get("interval_count", 1))
-    interval = package.get("interval", "month")
-    days_per_unit = {"day": 1, "week": 7, "month": 30, "year": 365}.get(interval, 30)
-    total_days = cycles * interval_count * days_per_unit + 7
-    cancel_at = int((datetime.now(timezone.utc) + timedelta(days=total_days)).timestamp())
-    metadata = _build_subscription_metadata(req, package)
-    # Stripe deprecated subscription_data[cancel_at] in 2026 — we stash the target
-    # cancel-at timestamp in subscription metadata and apply it post-creation via
-    # Subscription.modify() (see _apply_subscription_cancel_at below).
-    sub_metadata = {**metadata, "cancel_at_ts": str(cancel_at)}
-
-    return await asyncio.to_thread(
-        stripe_sdk.checkout.Session.create,
-        mode="subscription",
-        payment_method_types=["card"],
-        line_items=[{
-            "price_data": {
-                "currency": package["currency"],
-                "product_data": {"name": package["name"]},
-                "unit_amount": int(package["amount"] * 100),
-                "recurring": {"interval": package["interval"], "interval_count": package["interval_count"]},
-            },
-            "quantity": 1,
-        }],
-        subscription_data={"metadata": sub_metadata},
-        customer_email=req.email or None,
-        success_url=success_url,
-        cancel_url=cancel_url,
-        metadata=metadata,
-    )
-
-
-async def _apply_subscription_cancel_at(sub_id: str) -> None:
-    """Apply the deferred cancel_at to a Stripe subscription if not already set.
-
-    Stripe deprecated subscription_data[cancel_at] inside Checkout Session creation
-    in 2026, so we apply it post-creation. Idempotent · safe to call repeatedly
-    from the /payments/status polling endpoint.
-    """
-    if not sub_id:
-        return
-    try:
-        sub = await asyncio.to_thread(stripe_sdk.Subscription.retrieve, sub_id)
-        if sub.get("cancel_at"):
-            return
-        target_ts_str = (sub.get("metadata") or {}).get("cancel_at_ts")
-        if not target_ts_str:
-            return
-        target_ts = int(target_ts_str)
-        await asyncio.to_thread(stripe_sdk.Subscription.modify, sub_id, cancel_at=target_ts)
-        logger.info(f"Subscription {sub_id} cancel_at applied → {target_ts}")
-    except Exception as e:
-        logger.error(f"apply cancel_at failed for {sub_id}: {e}")
-
-
-async def _create_one_time_session(stripe_key: str, req: CreateCheckoutRequest, package: dict, charge_amount: float, was_subscription: bool):
-    """One-time Stripe Checkout via emergentintegrations.
-
-    IMPORTANT: emergentintegrations.CheckoutSessionRequest expects the amount in
-    MAJOR currency units (EUR), NOT cents. Do NOT multiply by 100 here — the
-    library handles the cent conversion internally. (The direct Stripe SDK call
-    in _create_subscription_session uses raw cents, which is a different API.)
-    """
-    # Defense-in-depth: sanity-check the amount to prevent future config typos
-    # from silently producing 99,700 EUR or 0.01 EUR Stripe sessions.
-    if not (1 <= charge_amount <= 100000):
-        raise HTTPException(
-            status_code=500,
-            detail=f"Invalid charge amount {charge_amount} EUR (must be 1–100000)"
-        )
-
-    stripe_client = StripeCheckout(api_key=stripe_key)
-    success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
-    cancel_url = f"{req.origin_url}/close"
-    checkout_req = CheckoutSessionRequest(
-        amount=round(float(charge_amount), 2),
-        currency=package["currency"],
-        success_url=success_url,
-        cancel_url=cancel_url,
-        metadata={
-            "package_id": req.package_id,
-            "plan": package["plan"],
-            "billing": package["billing"],
-            "fallback_from_subscription": "true" if was_subscription else "false",
-        },
-    )
-    return await stripe_client.create_checkout_session(checkout_req)
-
-
-def _build_subscription_tx(session, req: CreateCheckoutRequest, package: dict) -> dict:
-    return {
-        "session_id": session.id, "package_id": req.package_id,
-        "package_name": package["name"],
-        "amount": package["amount"],
-        "total_amount": package.get("total_amount", package["amount"]),
-        "currency": package["currency"], "plan": package["plan"],
-        "billing": package["billing"], "mode": "subscription",
-        "cycles": package.get("cycles", 1),
-        "stripe_subscription_id": getattr(session, "subscription", None),
-        "email": req.email or "", "name": req.user_name or "",
-        "user_session_id": req.user_session_id or "",
-        "payment_status": "initiated", "status": "pending",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
-
-
-def _build_one_time_tx(session, req: CreateCheckoutRequest, package: dict, charge_amount: float, was_subscription: bool) -> dict:
-    return {
-        "session_id": session.session_id, "package_id": req.package_id,
-        "package_name": package["name"],
-        "amount": charge_amount, "total_amount": charge_amount,
-        "currency": package["currency"], "plan": package["plan"],
-        "billing": package["billing"], "mode": "payment",
-        "fallback_from_subscription": was_subscription,
-        "email": req.email or "", "name": req.user_name or "",
-        "user_session_id": req.user_session_id or "",
-        "payment_status": "initiated", "status": "pending",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
 
 
 # --------- Webhook helper ---------
@@ -256,21 +107,21 @@ def register_checkout_routes(router: APIRouter, db, app_config):
             raise HTTPException(status_code=400, detail=f"Unknown package: {req.package_id}")
 
         mode = package.get("mode", "payment")
-        use_real_subscription = mode == "subscription" and _is_real_stripe_key(app_config.get("stripe_key", ""))
+        use_real_subscription = mode == "subscription" and is_real_stripe_key(app_config.get("stripe_key", ""))
 
         if use_real_subscription:
             try:
-                session = await _create_subscription_session(req, package)
+                session = await create_subscription_session(req, package)
             except Exception as e:
                 logger.error(f"Subscription checkout error: {e}")
                 raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
-            await db.payment_transactions.insert_one(_build_subscription_tx(session, req, package))
+            await db.payment_transactions.insert_one(build_subscription_tx(session, req, package))
             return {"url": session.url, "session_id": session.id, "mode": "subscription"}
 
         # Fallback / one-time payment path
         charge_amount = package.get("total_amount") if mode == "subscription" else package["amount"]
-        session = await _create_one_time_session(app_config["stripe_key"], req, package, charge_amount, mode == "subscription")
-        await db.payment_transactions.insert_one(_build_one_time_tx(session, req, package, charge_amount, mode == "subscription"))
+        session = await create_one_time_session(app_config["stripe_key"], req, package, charge_amount, mode == "subscription")
+        await db.payment_transactions.insert_one(build_one_time_tx(session, req, package, charge_amount, mode == "subscription"))
         return {"url": session.url, "session_id": session.session_id, "mode": "payment"}
 
     @router.get("/payments/status/{session_id}")
@@ -281,7 +132,7 @@ def register_checkout_routes(router: APIRouter, db, app_config):
                 session = await asyncio.to_thread(stripe_sdk.checkout.Session.retrieve, session_id)
                 # Defer-apply cancel_at to the subscription if not already set
                 if session.subscription:
-                    await _apply_subscription_cancel_at(session.subscription)
+                    await apply_subscription_cancel_at(session.subscription)
                 return {
                     "session_id": session_id,
                     "payment_status": session.payment_status,

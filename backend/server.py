@@ -141,8 +141,21 @@ async def startup():
 
     start_scheduler(db)
 
+    # Stripe self-healing background loop — expires stale pending checkouts
+    # (> 26h old) every hour. Reconciles paid/expired status against Stripe
+    # so the admin dashboard and conversion-funnel math stay accurate.
+    import asyncio
+    from services.stripe_checkout import start_self_healing_loop
+    app.state.stripe_healer_task = asyncio.create_task(
+        start_self_healing_loop(db, interval_seconds=3600)
+    )
+
 
 @app.on_event("shutdown")
 async def shutdown():
     stop_scheduler()
+    # Cancel the self-healing loop cleanly
+    healer = getattr(app.state, "stripe_healer_task", None)
+    if healer:
+        healer.cancel()
     client.close()
