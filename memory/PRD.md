@@ -16,6 +16,13 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## 🎯 FocusCards Personas + Generischere 30-Tage-Story (Feb 2026)
+- **Aceternity FocusCards** als JSX-Port (`/app/frontend/src/components/ui/focus-cards.jsx`) mit Hover-Focus, Blur+Scale auf nicht-fokussierte Cards, Gradient-Eyebrow oben + Title unten
+- **"Für wen"-Section** komplett refactored zu "Vier Personas. Ein Hebel." mit 4 großen Foto-Cards (Selbstständige · Angestellte · Senior Manager · High Potentials)
+- **30-Tage-Story generischer**: keine spezifische CFO/Engineering-Maria mehr, sondern Transformation im Arbeitsalltag · Woche 1 Klarheit, Woche 2 Gespräche mit Kollegen, Woche 3 KI richtig anwenden, Woche 4 Wirkung die man spürt
+- Backend `THIRTY_DAY_PLAN` aktualisiert: Klarheit / Gespräche / KI-Hebel / Wirkung statt SEXIER/CFO/Harvard
+- Live-Send v5 aller 7 Episoden an `start@aiporate.com`
+
 ## 🎯 30-Tage-Check + Aceternity Timeline + AI-Stack Skeleton (Feb 2026)
 - **7-Tage-Plan komplett entfernt** (Verwechslungs-Risiko mit Leader-OS 30-Tage-Check). Stattdessen: **4-Phasen-Strip "30 Tage. Vier Hebel."** mit Woche 1-4 Cards (01/02/03/04 Lime-Numbers)
 - **Aceternity Timeline-Component** als JSX-Port (`/app/frontend/src/components/ui/timeline.jsx`) mit Sticky-Sidebar + animierter Lime-Gradient-Linie + Scroll-getriggertem Progress

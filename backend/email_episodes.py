@@ -44,10 +44,10 @@ LEADERCHECK_HOME = "https://leadercheck.de"
 # ─── 30-Day Plan Strip Data (used across all episodes) ────
 
 THIRTY_DAY_PLAN = [
-    ("Woche 1", "Klarheit",  "SEXIER vor jedem Meeting · Argument klar."),
-    ("Woche 2", "Mut",       "Schwierige Gespräche · vorher simuliert."),
-    ("Woche 3", "Präsenz",   "5 Min CFO-Sparring · Argument vor Argument."),
-    ("Woche 4", "Ergebnis",  "Harvard-Verhandlung · Ergebnis verhandelt."),
+    ("Woche 1", "Klarheit",   "Den Lärm abstellen · den Hebel finden."),
+    ("Woche 2", "Gespräche",  "Die Gespräche, vor denen du dich gedrückt hast."),
+    ("Woche 3", "KI-Hebel",   "KI richtig führen · nicht nur fragen."),
+    ("Woche 4", "Wirkung",    "Andere merken es, bevor du es sagst."),
 ]
 
 

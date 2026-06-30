@@ -13,10 +13,10 @@ import {
 } from "../ui/skeleton-card";
 
 const THIRTY_DAY_PLAN = [
-  { num: "01", week: "Woche 1", label: "SEXIER-Pyramide vor jedem Meeting." },
-  { num: "02", week: "Woche 2", label: "Schwierige Gespräche · vorher simuliert." },
-  { num: "03", week: "Woche 3", label: "5 Min CFO-Sparring · Argument vor Argument." },
-  { num: "04", week: "Woche 4", label: "Harvard-Verhandlung · +180k freigegeben." },
+  { num: "01", week: "Woche 1", label: "Klarheit im Kopf · ohne Überforderung." },
+  { num: "02", week: "Woche 2", label: "Gespräche mit Kollegen leichter führen." },
+  { num: "03", week: "Woche 3", label: "KI als zweiter Hebel · richtig genutzt." },
+  { num: "04", week: "Woche 4", label: "Selbstvertrauen, das man spürt." },
 ];
 
 const BULLETS = [
@@ -172,31 +172,36 @@ export default function MariaWay() {
         {/* 4-WEEK TIMELINE · Aceternity-Style (sticky-scroll, animated lime line) */}
         <div className="mb-20 -mx-4 md:-mx-8">
           <Timeline
-            heading={<>Vier Wochen.<br /><span className="text-[#C8FF00]">Vier Hebel.</span></>}
-            subheading="Was in Marias 30 Tagen passiert ist. Jede Woche ein neuer Hebel. Jeden Tag 10 Minuten Sparring."
+            heading={<>Vier Wochen.<br /><span className="text-[#C8FF00]">Vier Hebel im Alltag.</span></>}
+            subheading="Nicht Theorie. Nicht Meeting-Tricks. Echte Transformation in deinem Arbeitsalltag · mit Kollegen, im Kopf, in der Wirkung."
             data={[
               {
                 title: "Woche 1",
                 content: (
                   <div data-testid="maria-week-1">
                     <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
-                      Tag 1 → 7 · Klarheit
+                      Tag 1 → 7 · Klarheit im Kopf
                     </p>
                     <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
-                      SEXIER-Pyramide vor jedem Meeting.
+                      Den Lärm abstellen.<br />Den Hebel finden.
                     </p>
                     <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
-                      Maria trainierte mit WladBot die SEXIER-Methode. Vor jedem Meeting. 6 Buchstaben. Ein klares Statement. Kein "vielleicht" mehr.
+                      Erste Woche: jeden Morgen 3 Minuten Sparring mit WladBot. Was ist heute wirklich wichtig? Wo fließt deine Energie hin · und wo sollte sie hinfließen? Plötzlich entscheidest du schneller. Mit weniger Selbstzweifeln.
                     </p>
                     <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
                       <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
-                        «Ab Tag 3 fühlte es sich völlig natürlich an.»
+                        «Ab Tag 3 wusste ich morgens, was zählt. Und was Lärm war.»
                       </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {["Statement", "Explanation", "eXample", "Implication", "Evidence", "Recap"].map((s) => (
-                        <div key={s} className="rounded-lg bg-[#0d0d0d] border border-white/[0.06] px-4 py-3 text-sm text-slate-300 font-medium">
-                          <span className="text-[#C8FF00] font-extrabold mr-2">{s[0]}</span>{s.slice(1)}
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { v: "3 Min", l: "tägliche Routine" },
+                        { v: "1", l: "Fokus pro Tag" },
+                        { v: "0", l: "Mental-Klutter" },
+                      ].map((s) => (
+                        <div key={s.l} className="rounded-lg bg-[#0d0d0d] border border-white/[0.06] p-4 text-center">
+                          <p className="font-manrope text-xl md:text-2xl font-extrabold text-[#C8FF00] leading-none">{s.v}</p>
+                          <p className="text-[11px] text-slate-500 mt-2">{s.l}</p>
                         </div>
                       ))}
                     </div>
@@ -208,27 +213,27 @@ export default function MariaWay() {
                 content: (
                   <div data-testid="maria-week-2">
                     <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
-                      Tag 8 → 14 · Mut
+                      Tag 8 → 14 · Kommunikation mit Kollegen
                     </p>
                     <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
-                      Schwierige Gespräche · vorher simuliert.
+                      Die Gespräche, vor denen<br />du dich gedrückt hast.
                     </p>
                     <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
-                      Mitarbeiter-1:1s vorher mit WladBot durchgespielt. Drei Szenarien. Drei Antworten. Keine Ausreden. Keine Unsicherheit.
+                      Es gibt dieses eine Gespräch, das du seit Wochen aufschiebst. Das schwierige Feedback. Der konstruktive Konflikt. Das «Nein» an die Kollegin. Du übst es 5 Minuten mit WladBot. Drei Varianten. Du gehst rein. Es läuft.
                     </p>
                     <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
                       <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
-                        «Ich wusste, was kommt. Bevor es kam.»
+                        «Mein Team merkt einen Unterschied. Ich auch.»
                       </p>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { v: "3", l: "Szenarien" },
-                        { v: "0", l: "Ausreden" },
-                        { v: "1", l: "Antwort" },
+                        { v: "3", l: "Gesprächs-Varianten" },
+                        { v: "5 Min", l: "Vor-Sparring" },
+                        { v: "1", l: "klare Entscheidung" },
                       ].map((s) => (
                         <div key={s.l} className="rounded-lg bg-[#0d0d0d] border border-white/[0.06] p-4 text-center">
-                          <p className="font-manrope text-2xl font-extrabold text-[#C8FF00] leading-none">{s.v}</p>
+                          <p className="font-manrope text-xl md:text-2xl font-extrabold text-[#C8FF00] leading-none">{s.v}</p>
                           <p className="text-[11px] text-slate-500 mt-2">{s.l}</p>
                         </div>
                       ))}
@@ -241,21 +246,16 @@ export default function MariaWay() {
                 content: (
                   <div data-testid="maria-week-3">
                     <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
-                      Tag 15 → 21 · Präsenz
+                      Tag 15 → 21 · KI richtig anwenden
                     </p>
                     <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
-                      5 Minuten CFO-Sparring.
+                      Nicht «mal kurz fragen».<br />Sondern <span className="text-[#C8FF00]">richtig denken lassen</span>.
                     </p>
                     <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
-                      Vor jedem Gespräch mit dem CFO 5 Minuten mit WladBot. Argument vor Argument. Einwand vor Einwand.
+                      Die meisten nutzen KI wie eine Suchmaschine. Du lernst sie als Sparringspartner zu führen. Frameworks, Rollenspiele, Pre-Mortems, Decision-Trees. Du fragst nicht mehr «was meinst du?». Du sagst «zerleg das in 3 Optionen mit jeweils 2 Risiken». Anderes Level.
                     </p>
-                    <div className="rounded-xl border-l-2 border-[#C8FF00] bg-white/[0.02] pl-5 py-4 mb-6">
-                      <p className="font-inter italic text-base md:text-lg text-white/85 leading-snug">
-                        «Plötzlich wusste ich genau, was ich sagen werde.»
-                      </p>
-                    </div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      {["Argument", "Gegenargument", "Antwort", "Beispiel", "Zahl"].map((s, i, arr) => (
+                      {["Frage stellen", "Rolle definieren", "Framework wählen", "Antwort prüfen", "Anwenden"].map((s, i, arr) => (
                         <React.Fragment key={s}>
                           <div className="rounded-lg bg-[#0d0d0d] border border-[#C8FF00]/20 px-4 py-2 text-sm text-white font-medium">{s}</div>
                           {i < arr.length - 1 && <span className="text-[#C8FF00] font-extrabold">→</span>}
@@ -270,18 +270,29 @@ export default function MariaWay() {
                 content: (
                   <div data-testid="maria-week-4">
                     <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-4">
-                      Tag 22 → 30 · Ergebnis
+                      Tag 22 → 30 · Wirkung, die man spürt
                     </p>
                     <p className="font-manrope text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-5">
-                      Harvard-Verhandlung · +180.000 € freigegeben.
+                      Andere merken es,<br />bevor du es selbst sagst.
                     </p>
                     <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-5 max-w-[640px]">
-                      Budgetverhandlung nach Harvard-Methode mit WladBot vorbereitet. Drei Szenarien, ein BATNA, eine ZOPA. Das Meeting war Routine.
+                      Nach 4 Wochen sitzt du anders in Meetings. Du sprichst weniger und triffst mehr. Du bittest weniger und entscheidest mehr. Kollegen fragen, ob du Coaching machst. Du sagst «nein, ich trainiere jeden Morgen 3 Minuten».
                     </p>
-                    <div className="rounded-xl bg-gradient-to-br from-[#C8FF00]/[0.12] to-transparent border border-[#C8FF00]/30 p-6 md:p-8 text-center">
-                      <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-3">Ergebnis Tag 31</p>
-                      <p className="font-manrope text-4xl md:text-6xl font-extrabold text-[#C8FF00] tracking-tight leading-none">+180.000 €</p>
-                      <p className="text-sm text-white/85 mt-3 font-semibold">Budget für ihr Team. Freigegeben.</p>
+                    <div className="rounded-xl bg-gradient-to-br from-[#C8FF00]/[0.12] to-transparent border border-[#C8FF00]/30 p-6 md:p-8">
+                      <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-bold text-[#C8FF00] mb-3">Tag 31 · Was sich geändert hat</p>
+                      <ul className="space-y-3">
+                        {[
+                          "Du entscheidest schneller · mit klarem Kopf.",
+                          "Du führst schwierige Gespräche · ohne Bauchschmerzen.",
+                          "Du nutzt KI als Hebel · nicht als Krücke.",
+                          "Du wirkst · ohne dich anzustrengen.",
+                        ].map((b, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm md:text-base text-white/90">
+                            <Check className="w-4 h-4 text-[#C8FF00] mt-1 shrink-0" strokeWidth={3} />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 ),

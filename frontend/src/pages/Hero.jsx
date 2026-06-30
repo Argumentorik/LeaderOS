@@ -4,6 +4,7 @@ import { ScrollReveal } from "../hooks/useScrollReveal";
 import { useState, useEffect } from "react";
 import LeaderOSLogo from "../components/LeaderOSLogo";
 import MariaWay from "../components/hero/MariaWay";
+import { FocusCards } from "../components/ui/focus-cards";
 
 const headlines = [
   {
@@ -89,25 +90,29 @@ const wladbotFeatures = [
 
 const audiences = [
   {
-    icon: Target,
     title: "Selbstständige",
-    desc: "KI nutzen · ohne dich selbst zu verlieren."
+    eyebrow: "Persona 01",
+    desc: "KI nutzen · ohne dich selbst zu verlieren.",
+    src: "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=1200&q=85&auto=format&fit=crop",
   },
   {
-    icon: Briefcase,
     title: "Angestellte",
-    desc: "Schneller entscheiden · mit klarem Kopf und Bauchgefühl."
+    eyebrow: "Persona 02",
+    desc: "Schneller entscheiden · mit klarem Kopf und Bauchgefühl.",
+    src: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&q=85&auto=format&fit=crop",
   },
   {
-    icon: TrendingUp,
     title: "Senior Manager",
-    desc: "Den Schritt machen von der Führungskraft zur unverzichtbaren Schlüsselperson."
+    eyebrow: "Persona 03",
+    desc: "Den Schritt machen von der Führungskraft zur unverzichtbaren Schlüsselperson.",
+    src: "https://images.unsplash.com/photo-1551836022-aadb801c60ae?w=1200&q=85&auto=format&fit=crop",
   },
   {
-    icon: User,
     title: "High Potentials",
-    desc: "Den Aufstieg in die Elite-Leadership gezielt beschleunigen."
-  }
+    eyebrow: "Persona 04",
+    desc: "Den Aufstieg in die Elite-Leadership gezielt beschleunigen.",
+    src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=1200&q=85&auto=format&fit=crop",
+  },
 ];
 
 export default function Hero() {
@@ -536,33 +541,26 @@ export default function Hero() {
         </section>
 
         {/* ===== SECTION 8: ZIELGRUPPE ===== */}
-        <section className="py-24 border-t border-white/[0.04]">
-          <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <section className="py-24 border-t border-white/[0.04]" data-testid="for-whom-section">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="text-center mb-14">
               <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
                 ▸ Für wen
               </span>
-              <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight">
-                <span className="block text-3xl md:text-5xl lg:text-6xl">
-                  Für wen ist diese
+              <h2 className="font-manrope font-extrabold text-white leading-[1.05] tracking-tight">
+                <span className="block text-4xl md:text-6xl lg:text-7xl">
+                  Vier Personas.
                 </span>
-                <span className="block text-3xl md:text-5xl lg:text-6xl mt-2 text-[#C8FF00] italic font-semibold">
-                  Diagnose gedacht?
+                <span className="block text-4xl md:text-6xl lg:text-7xl mt-2">
+                  <span className="text-[#C8FF00]">Ein Hebel.</span>
                 </span>
               </h2>
+              <p className="font-inter text-base md:text-lg text-slate-400 max-w-xl mx-auto mt-7 leading-relaxed">
+                Egal wo du heute stehst · die Diagnose findet den nächsten Schritt für dich. Hover auf deine Persona.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-testid="audience-cards">
-              {audiences.map((audience, i) => (
-                <div key={i} className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center transition-all hover:border-[#C8FF00]/10">
-                  <div className="w-10 h-10 rounded-xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
-                    <audience.icon className="w-5 h-5 text-slate-400" />
-                  </div>
-                  <h3 className="font-manrope font-bold text-sm text-white mb-2">{audience.title}</h3>
-                  <p className="font-inter text-xs text-slate-500 leading-relaxed">{audience.desc}</p>
-                </div>
-              ))}
-            </div>
+            <FocusCards cards={audiences} />
           </div>
         </section>
 
