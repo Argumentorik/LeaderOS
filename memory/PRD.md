@@ -3,6 +3,21 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🖼️ Unique Images Pass · 16 distinct premium photos · Maria-Portrait Premium-Frame (Feb 2026)
+- **Problem**: 4 verschiedene Bilder wurden 2-4× wiederverwendet — vor allem Marias Photo erschien 4× auf der Landing (MariaWay + Agent 01 Coach + Persona 01 Selbstständige + ClientStories Maria).
+- **Fix**: Komplette Image-Map auf **16 unique Unsplash-IDs** umgestellt (verifiziert: jede ID erscheint exakt 1× im gesamten Frontend, `grep | sort | uniq -c` = alle 1).
+  - **Maria-Portrait neu** in `MariaWay.jsx` (`photo-1494790108377-be9c29b29330`) und aus ClientStoriesCarousel entfernt
+  - 5. ClientStory **Anna L. · HR-Direktorin** mit eigener unique ID hinzugefügt (HR-Konflikt-Story)
+  - 6 Agent-Karten, 4 Persona-Karten, 5 Client-Stories — **alle mit individuellem Foto**
+- **Maria-Portrait Premium-Frame** in `MariaWay.jsx`:
+  - **Lime Corner-Brackets** top-left + bottom-right (Apple-style framing cue)
+  - **Soft Lime-Glow** hinter dem Frame (opacity 60→100 on hover)
+  - **Hover-Zoom** Bild scaliert 1.04× über 1.2s ease-out
+  - **Dual-Tone Gradient** bottom-to-top + **Lime-Hairline** als bottom-border
+  - **Pulsing-Dot-Caption** "● MARIA · REAL STORY" mit Head-of-Engineering Subline
+  - **Play-Button** mit hover-scale 1.1 + shadow-2xl
+- Verifiziert via Playwright auf `/` + `/close`: 16 distinct sources, alle Bilder laden, 0 duplicates, 0 Console-Errors.
+
 ## 🎯 EncryptedText im Report + leader_os Alias (Feb 2026)
 - **EncryptedText auf `/report`**: 3 Moments-of-Truth bekommen den scramble→decode-Effekt:
   - **Gesamtscore** (`data-testid="report-total-score"`) · trigger=`mount`, duration=1800ms, charset=Ziffern-Only (`0123456789%`)

@@ -136,7 +136,7 @@ export const platformFeatures = [
     category: "Agent 04",
     title: "Strategie-Agent",
     desc: "Playbooks & Frameworks auf Abruf",
-    src: "https://images.unsplash.com/photo-1551836022-aadb801c60ae?w=1200&q=85&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200&q=85&auto=format&fit=crop",
     bullets: [
       "Wlads 11 Frameworks · in einer Konsole",
       "Situations-Diagnose in unter 60 Sekunden",
@@ -183,25 +183,25 @@ export const audiences = [
     title: "Selbstständige",
     eyebrow: "Persona 01",
     desc: "KI nutzen · ohne dich selbst zu verlieren.",
-    src: "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=1200&q=85&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "Angestellte",
     eyebrow: "Persona 02",
     desc: "Schneller entscheiden · mit klarem Kopf und Bauchgefühl.",
-    src: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&q=85&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "Senior Manager",
     eyebrow: "Persona 03",
     desc: "Den Schritt machen von der Führungskraft zur unverzichtbaren Schlüsselperson.",
-    src: "https://images.unsplash.com/photo-1551836022-aadb801c60ae?w=1200&q=85&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "High Potentials",
     eyebrow: "Persona 04",
     desc: "Den Aufstieg in die Elite-Leadership gezielt beschleunigen.",
-    src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=1200&q=85&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=85&auto=format&fit=crop",
   },
 ];
 

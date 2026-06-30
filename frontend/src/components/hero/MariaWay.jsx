@@ -119,31 +119,60 @@ export default function MariaWay() {
           </div>
 
           <div className="md:col-span-5 md:sticky md:top-24">
-            <div className="rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0d0d0d]">
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=900&q=85&auto=format&fit=crop"
-                  alt="Maria K."
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-2xl">
-                    <div className="ml-1 w-0 h-0 border-y-[10px] border-y-transparent border-l-[16px] border-l-black" />
+            {/* Premium frame · lime corner brackets · hover zoom · soft glow */}
+            <div className="relative group">
+              {/* Lime corner accents (top-left + bottom-right) */}
+              <div className="absolute -top-3 -left-3 w-14 h-14 border-t-2 border-l-2 border-[#C8FF00] rounded-tl-2xl pointer-events-none z-20" />
+              <div className="absolute -bottom-3 -right-3 w-14 h-14 border-b-2 border-r-2 border-[#C8FF00] rounded-br-2xl pointer-events-none z-20" />
+              {/* Soft lime glow behind */}
+              <div className="absolute -inset-2 bg-[#C8FF00]/[0.06] rounded-2xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+              <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0d0d0d] shadow-2xl shadow-black/40">
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  {/* Shimmer placeholder while loading */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#141414] to-[#0d0d0d] animate-pulse" aria-hidden />
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=85&auto=format&fit=crop"
+                    alt="Maria K. · Head of Engineering"
+                    loading="lazy"
+                    decoding="async"
+                    className="relative w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                    data-testid="maria-portrait-img"
+                  />
+                  {/* Dual-tone bottom-gradient · lime hint */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C8FF00]/60 to-transparent" />
+
+                  {/* Play overlay · premium pill button */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-2xl shadow-black/60 transition-transform duration-300 group-hover:scale-110">
+                      <div className="ml-1 w-0 h-0 border-y-[10px] border-y-transparent border-l-[16px] border-l-black" />
+                    </div>
+                  </div>
+
+                  {/* Caption pinned to bottom */}
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="font-mono text-[10px] tracking-[0.22em] text-[#C8FF00] font-semibold uppercase mb-1.5 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
+                      Maria · Real Story
+                    </div>
+                    <div className="font-manrope font-bold text-white text-base leading-tight">Head of Engineering</div>
+                    <div className="font-inter text-[11px] text-slate-300 mt-0.5">TecConsult AG · 30-Tage Resultat</div>
                   </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-3 divide-x divide-white/[0.06] py-5 px-2">
-                {[
-                  { v: "30", l: "Tage" },
-                  { v: "50", l: "Credits" },
-                  { v: "+180k €", l: "verhandelt" },
-                ].map((s, i) => (
-                  <div key={i} className="text-center px-2" data-testid={`maria-stat-${i}`}>
-                    <p className="font-manrope text-xl md:text-2xl font-extrabold text-white tracking-tight leading-none">{s.v}</p>
-                    <p className="font-inter text-[10px] md:text-[11px] text-slate-400 mt-2 tracking-wide">{s.l}</p>
-                  </div>
-                ))}
+
+                <div className="grid grid-cols-3 divide-x divide-white/[0.06] py-5 px-2 relative">
+                  {[
+                    { v: "30", l: "Tage" },
+                    { v: "50", l: "Credits" },
+                    { v: "+180k €", l: "verhandelt" },
+                  ].map((s, i) => (
+                    <div key={`maria-stat-${s.l}`} className="text-center px-2" data-testid={`maria-stat-${i}`}>
+                      <p className="font-manrope text-xl md:text-2xl font-extrabold text-white tracking-tight leading-none">{s.v}</p>
+                      <p className="font-inter text-[10px] md:text-[11px] text-slate-400 mt-2 tracking-wide">{s.l}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
