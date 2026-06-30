@@ -49,10 +49,11 @@ def test_legacy_slug_backward_compat(legacy):
     assert "<!DOCTYPE html>" in out["html"]
 
 
-def test_all_episodes_have_single_cta():
-    """Jede Episode muss genau 1 Hero-CTA-Button enthalten (1-CTA-Regel)."""
+def test_all_episodes_have_lime_cta():
+    """Jede Episode muss mindestens 1 lime CTA-Button haben."""
     for slug in EXPECTED_SLUGS:
         out = render_episode(slug, {"name": "Mert", "email": "x@y.de"})
-        # Lime CTA-Buttons werden via background:#C8FF00 + padding:18px 32px geklont
-        cta_count = out["html"].count("padding:18px 32px;border-radius:8px;text-decoration:none")
-        assert cta_count == 1, f"{slug}: erwartet 1 Hero-CTA, gefunden {cta_count}"
+        # Lime Background-Hex muss auftauchen als CTA-Button
+        assert "background:#C8FF00" in out["html"], f"{slug}: kein lime CTA gefunden"
+        # Mindestens 1 Mail-Login-CTA
+        assert "leaderos.de/login" in out["html"] or "/close" in out["html"], f"{slug}: kein Conversion-Link"

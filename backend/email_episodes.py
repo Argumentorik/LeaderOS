@@ -35,8 +35,214 @@ BRAND = {
 
 LOGO_URL = "https://leadercheck.de/leaderos-logo-dark.png"
 LOGO_MARK_URL = "https://leadercheck.de/leaderos-mark.png"
+WLADBOT_PIXEL_URL = "https://leadercheck.de/wladbot.png"
+WLADBOT_3D_URL = "https://leadercheck.de/wladbot-3d.png"
 LEADEROS_LOGIN = "https://leaderos.de/login"
 LEADERCHECK_HOME = "https://leadercheck.de"
+
+
+# ─── 7-Day Plan Strip Data (used across all episodes) ─────
+
+SEVEN_DAY_PLAN = [
+    ("1", "Heute",      "Erstes Sparring in 3 Minuten"),
+    ("2", "Morgen",     "Die Antwort, die überzeugt"),
+    ("3", "Übermorgen", "Warum Maria plötzlich gehört wurde"),
+    ("4", "Tag 4",      "Der schwierigste Satz im Meeting"),
+    ("5", "Tag 5",      "Der CFO-Test"),
+    ("6", "Tag 6",      "Deine 3-Minuten-Routine"),
+    ("7", "Tag 7",      "Executive Mode"),
+]
+
+DAY_ICONS = ["⚡", "💬", "👥", "🛡", "📈", "⏱", "🏆"]
+
+
+# ─── NEW: 7-Day Plan Strip ────────────────────────────────
+
+def _seven_day_strip(active_day: int = 1) -> str:
+    """Bottom 7-card strip ("Dein 7-Tage-Plan für den ersten Unterschied")."""
+    cards = ""
+    for i, ((num, day_label, title), icon) in enumerate(zip(SEVEN_DAY_PLAN, DAY_ICONS)):
+        is_active = (i + 1) == active_day
+        border = BRAND["lime"] if is_active else "#222"
+        num_color = BRAND["lime"] if is_active else "#666"
+        title_color = BRAND["white"] if is_active else "#777"
+        icon_color = BRAND["lime"] if is_active else "#555"
+        dot_active = BRAND["lime"] if is_active else "#333"
+        dots_row = ""
+        for j in range(6):
+            dot_bg = dot_active if j == 0 else "#222"
+            dots_row += f'<td style="padding:0 2px;"><div style="width:5px;height:5px;border-radius:3px;background:{dot_bg};"></div></td>'
+        cards += f"""<td valign="top" width="14%" style="padding:0 4px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {border};border-radius:10px;">
+<tr><td style="padding:12px 10px 12px 10px;text-align:center;">
+<p style="font-size:22px;font-weight:800;color:{num_color};margin:0;line-height:1;letter-spacing:-0.02em;">{num}</p>
+<p style="font-size:10px;color:#888;margin:4px 0 10px 0;letter-spacing:0.05em;font-weight:600;">{day_label}</p>
+<div style="font-size:18px;color:{icon_color};line-height:1;margin:0 0 10px 0;">{icon}</div>
+<p style="font-size:10px;color:{title_color};line-height:1.35;margin:0 0 10px 0;font-weight:500;min-height:26px;">{title}</p>
+<table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto;"><tr>{dots_row}</tr></table>
+</td></tr></table>
+</td>"""
+    return f"""<tr><td style="background:{BRAND['bg_dark']};padding:48px 24px 56px 24px;border-top:1px solid {BRAND['border_dark']};">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+<tr><td style="padding:0 16px 24px 16px;">
+<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0;letter-spacing:0.02em;font-weight:500;">
+<span style="color:{BRAND['lime']};font-size:16px;">↳</span> &nbsp; Dein 7-Tage-Plan für den ersten Unterschied
+</p>
+</td></tr>
+<tr><td>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>{cards}</tr></table>
+</td></tr>
+</table>
+</td></tr>"""
+
+
+# ─── NEW: WladBot Bot Card (Right column, dark, with flow) ─
+
+def _wladbot_card(headline: str, body: str, flow_steps: list[str] = None, cta_label: str = "→ Marias Routine in WladBot starten", cta_url: str = None) -> str:
+    if cta_url is None:
+        cta_url = LEADEROS_LOGIN
+    flow_html = ""
+    if flow_steps:
+        cells = ""
+        for i, step in enumerate(flow_steps):
+            cells += f"""<td valign="middle" style="padding:0 4px;">
+<div style="background:{BRAND['lime']};color:{BRAND['ink']};font-size:11px;font-weight:800;padding:10px 12px;border-radius:8px;text-align:center;line-height:1.25;letter-spacing:-0.01em;">{step}</div>
+</td>"""
+            if i < len(flow_steps) - 1:
+                cells += f'<td valign="middle" style="padding:0 2px;color:{BRAND["lime"]};font-size:14px;font-weight:800;">→</td>'
+        flow_html = f"""<tr><td style="padding:18px 0 22px 0;">
+<table role="presentation" cellspacing="0" cellpadding="0"><tr>{cells}</tr></table>
+</td></tr>"""
+    return f"""<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {BRAND['border_dark']};border-radius:18px;">
+<tr><td style="padding:24px 24px 24px 24px;">
+<table role="presentation" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" style="width:80px;">
+<img src="{WLADBOT_3D_URL}" alt="WladBot" width="64" style="display:block;border:0;outline:none;width:64px;height:auto;" />
+</td>
+<td valign="top" style="padding-left:6px;">
+<p style="font-size:11px;color:{BRAND['lime']};margin:0 0 6px 0;letter-spacing:0.16em;text-transform:uppercase;font-weight:800;">WladBot ist online</p>
+<p style="font-size:18px;color:{BRAND['white']};margin:0;line-height:1.35;font-weight:700;letter-spacing:-0.01em;">{headline}</p>
+</td></tr></table>
+<p style="font-size:14px;color:{BRAND['gray_dark']};line-height:1.65;margin:18px 0 0 0;">{body}</p>
+{flow_html}
+<table role="presentation" cellspacing="0" cellpadding="0"><tr><td>
+<a href="{cta_url}" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['ink']};font-size:14px;font-weight:800;padding:14px 22px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;">{cta_label}</a>
+</td></tr></table>
+<p style="font-size:11px;color:{BRAND['muted_dark']};margin:14px 0 0 0;"><a href="{LEADEROS_LOGIN}" style="color:{BRAND['lime']};text-decoration:underline;">leaderos.de</a> &nbsp;·&nbsp; gleiche E-Mail wie hier</p>
+</td></tr></table>"""
+
+
+# ─── NEW: Two-Column Hero (Headline + Portrait/Stats card) ─
+
+def _two_col_hero(eyebrow_left: str, eyebrow_right: str, headline_html: str, quote: str, attribution: str,
+                  portrait_url: str, stats: list[tuple[str, str]], episode_num: int) -> str:
+    """Mock-style hero: left column copy + right column portrait with stats overlay."""
+    stat_cells = ""
+    for i, (val, lbl) in enumerate(stats):
+        sep = '<td style="padding:0 8px;color:#333;">|</td>' if i > 0 else ''
+        stat_cells += sep + f"""<td valign="top" align="center" style="padding:0 4px;">
+<p style="font-size:22px;font-weight:800;color:{BRAND['white']};margin:0;line-height:1;letter-spacing:-0.02em;">{val}</p>
+<p style="font-size:11px;color:{BRAND['gray_dark']};margin:6px 0 0 0;letter-spacing:0.02em;">{lbl}</p>
+</td>"""
+    return f"""<tr><td style="background:{BRAND['bg_dark']};padding:36px 32px 40px 32px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+<tr><td style="padding:0 0 28px 0;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="middle">
+<table role="presentation" cellspacing="0" cellpadding="0"><tr>
+<td valign="middle" style="background:{BRAND['lime']};width:24px;height:24px;border-radius:6px;text-align:center;line-height:24px;font-weight:800;color:{BRAND['ink']};font-size:13px;">W</td>
+<td valign="middle" style="padding-left:9px;color:{BRAND['white']};font-size:14px;font-weight:700;letter-spacing:-0.01em;">Leader OS</td>
+</tr></table>
+</td>
+<td align="right" style="color:{BRAND['lime']};font-size:11px;letter-spacing:0.04em;font-weight:600;">{eyebrow_right}</td>
+</tr></table>
+</td></tr>
+<tr><td style="padding:0 0 0 0;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" width="52%" style="padding-right:18px;">
+<h1 class="h1" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:36px;line-height:1.06;letter-spacing:-0.025em;font-weight:800;color:{BRAND['white']};margin:0 0 22px 0;">{headline_html}</h1>
+<p style="font-size:13px;color:{BRAND['gray_dark']};line-height:1.7;font-style:italic;margin:0 0 14px 0;">«{quote}»</p>
+<p style="font-size:11px;color:{BRAND['muted_dark']};margin:0;letter-spacing:0.02em;">· {attribution}</p>
+</td>
+<td valign="top" width="48%">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {BRAND['border_dark']};border-radius:18px;overflow:hidden;">
+<tr><td style="padding:0;">
+<img src="{portrait_url}" alt="Maria K." width="100%" style="display:block;border:0;outline:none;width:100%;height:auto;border-radius:18px 18px 0 0;" />
+</td></tr>
+<tr><td style="padding:16px 18px 18px 18px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>{stat_cells}</tr></table>
+</td></tr>
+</table>
+</td>
+</tr></table>
+</td></tr>
+</table>
+</td></tr>"""
+
+
+# ─── NEW: Maria Timeline (left column, vertical with icons) ─
+
+def _maria_timeline(phases: list[tuple[str, str, str]]) -> str:
+    """phases: list of (day_range, icon_glyph, description)"""
+    rows = ""
+    for i, (day_range, icon, desc) in enumerate(phases):
+        is_last = (i == len(phases) - 1)
+        connector = "" if is_last else f"""<tr><td style="width:40px;text-align:center;padding:4px 0;"><div style="width:1px;height:24px;background:{BRAND['border_dark']};margin:0 auto;"></div></td><td></td></tr>"""
+        rows += f"""<tr>
+<td valign="top" style="width:40px;text-align:center;padding-top:2px;">
+<div style="width:34px;height:34px;border-radius:50%;border:1px solid {BRAND['lime']};line-height:32px;text-align:center;color:{BRAND['lime']};font-size:15px;">{icon}</div>
+</td>
+<td valign="top" style="padding:2px 0 6px 14px;">
+<p style="font-size:13px;color:{BRAND['lime']};margin:0 0 4px 0;font-weight:700;letter-spacing:0.02em;">{day_range}</p>
+<p style="font-size:13px;color:{BRAND['white']};line-height:1.55;margin:0;font-weight:500;">{desc}</p>
+</td>
+</tr>{connector}"""
+    return f"""<table role="presentation" cellspacing="0" cellpadding="0" width="100%">{rows}</table>"""
+
+
+# ─── NEW: "Was ist Leader OS" Two-Col Footer Block ────────
+
+def _what_is_leaderos_block() -> str:
+    bullets = [
+        "Sparring mit WladBot in Sekunden",
+        "Für echte Meetings. Nicht für Theorie.",
+        "Von Top Leadern entwickelt.",
+        "Für Ergebnisse, die man sieht.",
+    ]
+    bullet_rows = ""
+    for b in bullets:
+        bullet_rows += f"""<tr><td style="padding:6px 0;">
+<table role="presentation" cellspacing="0" cellpadding="0"><tr>
+<td valign="middle" style="width:22px;">
+<div style="width:18px;height:18px;border-radius:50%;background:{BRAND['lime']};text-align:center;line-height:18px;color:{BRAND['ink']};font-size:11px;font-weight:800;">✓</div>
+</td>
+<td valign="middle" style="padding-left:10px;font-size:13px;color:{BRAND['white']};font-weight:500;">{b}</td>
+</tr></table>
+</td></tr>"""
+    return f"""<tr><td style="background:{BRAND['bg_dark']};padding:48px 32px 40px 32px;border-top:1px solid {BRAND['border_dark']};">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" width="52%" style="padding-right:20px;">
+<p style="font-size:11px;color:{BRAND['muted_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 14px 0;">Was ist Leader OS?</p>
+<h2 class="h2" style="font-size:26px;line-height:1.15;letter-spacing:-0.02em;font-weight:800;color:{BRAND['white']};margin:0 0 22px 0;">Dein tägliches <span style="color:{BRAND['lime']}">Training</span> für bessere Führung.</h2>
+<table role="presentation" cellspacing="0" cellpadding="0">{bullet_rows}</table>
+</td>
+<td valign="top" width="48%">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {BRAND['border_dark']};border-radius:16px;">
+<tr><td style="padding:22px 22px 22px 22px;">
+<p style="font-size:10px;color:{BRAND['gray_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 8px 0;">Dein Bonus aktiv</p>
+<p style="font-size:20px;color:{BRAND['white']};font-weight:800;margin:0 0 4px 0;letter-spacing:-0.015em;line-height:1.2;"><span style="color:{BRAND['lime']}">50 Free Credits</span></p>
+<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0 0 16px 0;line-height:1.5;">WladBot ist online</p>
+<table role="presentation" cellspacing="0" cellpadding="0"><tr>
+<td valign="middle">
+<a href="{LEADEROS_LOGIN}" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['ink']};font-size:13px;font-weight:800;padding:11px 18px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;">Jetzt starten →</a>
+</td>
+<td valign="middle" style="padding-left:14px;">
+<img src="{WLADBOT_PIXEL_URL}" alt="WladBot" width="48" style="width:48px;height:auto;display:block;border:0;outline:none;" />
+</td>
+</tr></table>
+</td></tr></table>
+</td></tr></table>
+</td></tr>"""
 
 
 # ─── Atom: WladBot Avatar (lime circle with mark) ─────────
@@ -153,7 +359,6 @@ def _story_quote(text: str, author: str, on_dark: bool = True) -> str:
 # ─── Atom: Stat Row (3 cells) ─────────────────────────────
 
 def _stat_row(stats: list[tuple[str, str]], on_dark: bool = True) -> str:
-    fg = BRAND["white"] if on_dark else BRAND["ink"]
     sub = BRAND["gray_dark"] if on_dark else BRAND["gray_light"]
     cells = ""
     for value, label in stats:
@@ -326,7 +531,7 @@ def episode_01_first_win(name: str, weakest_label: str = "Rhetorik", email: str 
     hero = _dark_hero(
         eyebrow="Episode 01 · Der erste Sieg",
         headline=f"{name}.<br>Kurze Frage.",
-        opener=f"Du hast die Diagnose gemacht. Stark. Jetzt kommt der Teil, den 90 % überspringen: dein erster echter Sieg. Heute. In 3 Minuten. Kein Workshop. Keine Theorie.",
+        opener="Du hast die Diagnose gemacht. Stark. Jetzt kommt der Teil, den 90 % überspringen: dein erster echter Sieg. Heute. In 3 Minuten. Kein Workshop. Keine Theorie.",
         episode_num=1,
     )
 
@@ -368,10 +573,10 @@ def episode_01_first_win(name: str, weakest_label: str = "Rhetorik", email: str 
         xp_reward=50,
     )
 
-    body = hero + light + story + cta + _footer(email)
+    body = hero + light + story + cta + _seven_day_strip(active_day=1) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, dein erster Sieg. Heute. 3 Minuten.",
-        "html": _wrap(f"Episode 01 · Mission 01 · Dein erster Sieg in 3 Minuten. +50 XP warten.", body),
+        "html": _wrap("Episode 01 · Mission 01 · Dein erster Sieg in 3 Minuten. +50 XP warten.", body),
     }
 
 
@@ -425,7 +630,7 @@ def episode_02_boss_answer(name: str, email: str = "") -> dict:
         xp_reward=50,
     )
 
-    body = hero + light + story + cta + _footer(email)
+    body = hero + light + story + cta + _seven_day_strip(active_day=2) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, dieser Satz räumt jedes Meeting auf.",
         "html": _wrap("Episode 02 · S·E·X·I·E·R Framework · Mission 02 wartet. +50 XP.", body),
@@ -433,60 +638,71 @@ def episode_02_boss_answer(name: str, email: str = "") -> dict:
 
 
 # ─── EP 03 · T+6d · Warum Maria plötzlich jeder zuhörte ───
+# NEW DESIGN · Following the Mock Screenshot (Maria portrait + Timeline + WladBot card + 7-Day Strip + What-is-LeaderOS)
 
 def episode_03_maria(name: str, email: str = "") -> dict:
-    hero = _dark_hero(
-        eyebrow="Episode 03 · 1 Klientin · 1 Story",
-        headline=f"{name}.<br>Warum Maria<br>plötzlich jeder<br>zuhörte.",
-        opener="Maria war im Boardroom die fachlich Beste. Aber wenn der CFO sprach, schauten alle ihn an. Sie hat etwas geändert. Du kennst es schon. Sie hat's nur konsequent gemacht.",
+    maria_portrait = "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=800&q=80&auto=format&fit=crop"
+
+    hero = _two_col_hero(
+        eyebrow_left="Episode 03",
+        eyebrow_right="Tag 5 · 1 Klientin · 1 Story",
+        headline_html=f"{name}, das war Maria<br>vor <span style='color:{BRAND['lime']}'>6 Monaten</span>.",
+        quote=(
+            "Ich war im Boardroom die fachlich Beste. Aber wenn unser CFO redete, "
+            "hörten alle ihm zu. Ich habe mich auf "
+            f"<a href='{LEADEROS_LOGIN}' style='color:{BRAND['white']};text-decoration:underline;'>leaderos.de</a> "
+            "eingeloggt, WladBot 30 Tage am Stück genutzt, und am Tag 31 hat mein Team mich gefragt, "
+            "ob ich Coaching genommen hätte. Habe ich nicht. Ich habe Wlad genommen."
+        ),
+        attribution="Maria K. · Head of Engineering · TecConsult AG",
+        portrait_url=maria_portrait,
+        stats=[("30", "Tage"), ("50", "Credits"), ("+180k", "EUR verhandelt")],
         episode_num=3,
     )
 
-    story = _dark_section(f"""
-<tr><td>
-{_story_quote(
-    "Ich habe 30 Tage lang vor jedem Meeting WladBot in Wlads Stimme gefragt: 'Wie würdest du das sagen?'. Am Tag 31 hat mein Team mich gefragt, ob ich heimlich Coaching nehme. Habe ich nicht. Ich hatte Wlad in der Hosentasche.",
-    "Maria K. · Head of Engineering · TecConsult AG",
-    on_dark=True,
+    # Two-column section: Maria-Timeline left, WladBot card right
+    timeline_phases = [
+        ("Tag 1–7",   "△", "SEXIER-Pyramide vor jedem Meeting via WladBot durchgespielt · «Tag 3 schon natürlich»"),
+        ("Tag 8–14",  "💬", "Kommunikations-Quadrant im 1:1 mit Direct Reports · WladBot als Vor-Sparring"),
+        ("Tag 15–21", "≋", "Vor jedem CFO-Meeting WladBot in Wlads Stimme · «Krass»"),
+        ("Tag 22–30", "♛", "Harvard-Methode in Budget-Verhandlung · +180k EUR durchgesetzt"),
+    ]
+
+    middle = f"""<tr><td style="background:{BRAND['bg_dark']};padding:40px 32px 32px 32px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" width="52%" style="padding-right:18px;">
+<p style="font-size:11px;color:{BRAND['muted_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 18px 0;">Was Maria mit ihren Credits gemacht hat</p>
+{_maria_timeline(timeline_phases)}
+</td>
+<td valign="top" width="48%">
+{_wladbot_card(
+    headline=f"Maria hat <span style='color:{BRAND['lime']}'>50 Credits</span> genutzt.<br>Du hast <span style='color:{BRAND['lime']}'>50 freigeschaltet</span>.",
+    body="Mit 2-3 Credits pro Anfrage reicht das für 15-25 echte Sparring-Runden. Logge dich heute Abend ein und probiere ihre Mo-Mi-Routine.",
+    flow_steps=["2-3 Credits", "1 Sparring", "Besseres Meeting"],
+    cta_label="→ Marias Routine starten",
+    cta_url=LEADEROS_LOGIN,
 )}
-</td></tr>
-<tr><td style="padding:40px 0 0 0;">
-{_stat_row([
-    ("+180k", "EUR Budget"),
-    ("30", "Tage Routine"),
-    ("1", "Hosentasche"),
-], on_dark=True)}
-</td></tr>
-""")
+</td>
+</tr></table>
+</td></tr>"""
 
-    light = _light_section(f"""
-<tr><td style="padding:0 0 24px 0;">{_eyebrow("Marias Move", on_dark=False)}</td></tr>
-<tr><td style="padding:0 0 32px 0;">
-<h2 class="h2" style="font-size:34px;line-height:1.1;letter-spacing:-0.02em;font-weight:800;color:{BRAND['ink']};margin:0;">Nicht das Tool.<br>Die Routine.</h2>
-</td></tr>
-<tr><td>
-{_mission_card(
-    num=3,
-    title="Plane heute dein nächstes wichtiges Meeting in WladBot.",
-    body="Sag: «Ich habe morgen ein Meeting mit X über Y. Spiel mir die 3 schwierigsten Einwände durch und gib mir je eine Antwort.» · Das war Marias Tag-1-Move. Hat 6 Monate gehalten.",
-    time_label="5 min",
-)}
-</td></tr>
-""")
+    seven_day = _seven_day_strip(active_day=3)
+    what_is = _what_is_leaderos_block()
 
-    cta = _cta_section(
-        eyebrow="Mission 03 · +50 XP",
-        headline="Dein nächstes Meeting. Vorgespielt. Gewonnen.",
-        cta_label="→ Mission starten",
-        cta_url=LEADEROS_LOGIN,
-        hint="Marias Routine als Vorlage in WladBot · 50 Credits aktiv",
-        xp_reward=50,
-    )
+    # P.S. line
+    ps_line = f"""<tr><td style="background:{BRAND['bg_dark']};padding:0 32px 32px 32px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
+<td valign="top" style="font-size:12px;color:{BRAND['gray_dark']};line-height:1.7;">
+<strong style="color:{BRAND['white']};">P.S.</strong> &nbsp; Marias Story ist 1 von Hunderten. Aber sie hat eines gemeinsam mit allen: Sie hat sich eingeloggt und die Credits genutzt. Der Rest passiert von alleine.
+</td>
+<td align="right" valign="top" style="width:30px;color:{BRAND['lime']};font-size:18px;">♡</td>
+</tr></table>
+</td></tr>"""
 
-    body = hero + story + light + cta + _footer(email)
+    body = hero + middle + seven_day + what_is + ps_line + _footer(email)
     return {
-        "subject": f"{name}, warum hat Maria plötzlich jeder zugehört?",
-        "html": _wrap("Episode 03 · Marias Move · Wlad in der Hosentasche. Mission 03.", body),
+        "subject": f"{name}, das war Maria vor 6 Monaten.",
+        "html": _wrap("Tag 5 · 1 Klientin · 1 Story · Marias 30 Tage. Dein 7-Tage-Plan startet heute.", body),
     }
 
 
@@ -534,7 +750,7 @@ def episode_04_hardest_sentence(name: str, email: str = "") -> dict:
         xp_reward=75,
     )
 
-    body = hero + light + cta + _footer(email)
+    body = hero + light + cta + _seven_day_strip(active_day=4) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, der Satz, den keiner sagt.",
         "html": _wrap("Episode 04 · Defensive Backward Pressure · Mission 04. +75 XP.", body),
@@ -589,7 +805,7 @@ def episode_05_cfo_test(name: str, email: str = "") -> dict:
         xp_reward=100,
     )
 
-    body = hero + dark + light + cta + _footer(email)
+    body = hero + dark + light + cta + _seven_day_strip(active_day=5) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, bestehst du den CFO-Test?",
         "html": _wrap("Episode 05 · Der CFO-Test · 3 Sätze · Outcome · Hebel · Zahl. +100 XP.", body),
@@ -645,7 +861,7 @@ def episode_06_three_min(name: str, email: str = "") -> dict:
         xp_reward=150,
     )
 
-    body = hero + light + cta + _footer(email)
+    body = hero + light + cta + _seven_day_strip(active_day=6) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, 3 Minuten. Jeden Morgen. Reicht.",
         "html": _wrap("Episode 06 · Die 3-Minuten-Routine · 7-Tage-Streak · +25 Credits Bonus.", body),
@@ -713,7 +929,7 @@ def episode_07_executive_mode(name: str, email: str = "") -> dict:
         xp_reward=500,
     )
 
-    body = hero + light + dark + cta + _footer(email)
+    body = hero + light + dark + cta + _seven_day_strip(active_day=7) + _what_is_leaderos_block() + _footer(email)
     return {
         "subject": f"{name}, letzte Episode. Solo oder Sprint?",
         "html": _wrap("Episode 07 · Executive Mode · Sprint vs. Solo · 500 XP Unlock.", body),

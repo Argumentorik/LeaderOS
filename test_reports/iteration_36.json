@@ -1,0 +1,24 @@
+{
+  "summary": "Iter36 — End-to-end verification of MariaWay landing-page section + EP03 (Mock-1:1) email + 7-episode drip preview backend. Backend: 12/12 PASS (test_iter36_maria_way.py): all 7 episode slugs return 200 with subject+html, ep03_maria HTML contains 'Maria K.' / '50 Credits' / '+180k' / 'leaderos.de', legacy slug 'score_meaning' correctly maps to ep01_first_win (same subject), unknown slug -> 404, both /wladbot.png + /wladbot-3d.png served with image/* content-type. Frontend (Playwright on preview URL): maria-way-section visible, maria-headline contains 'Maria' + 'vor 6 Monaten' with lime-highlight span on '6 Monaten', all 3 maria-stat-0..2 cards (30/50/+180k), all 7 day-card-1..7 cards render with Day-1 having lime border (others slate), all 4 leaderos-bullet-0..3 visible, /wladbot.png + /wladbot-3d.png both load (naturalWidth > 0). CTAs maria-cta-bot, leaderos-cta-start, hero-cta-credits ALL navigate to /diagnose. Mobile @ 375px: 2-col grids collapse to vertical stack (portrait positioned below headline y+height).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter36_maria_way.py",
+    "/app/test_reports/pytest/pytest_results_iter36.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "MariaWay.jsx is a single 271-line component — clean Tailwind, no inline styles, well-structured with data-testid coverage on every interactive/key element (section, headline, 3 stat cards, 4 phase rows, 7 day-cards, 4 bullets, 3 CTAs).",
+    "email_episodes.py is 964 lines — approaching the 700-line guideline ceiling. Consider splitting helpers (_two_col_hero, _wladbot_card, _maria_timeline, _what_is_leaderos_block, _seven_day_strip) into email_atoms.py vs. episode bodies into email_episodes_v2/ submodule. Not blocking, but maintainability will degrade as more episodes are added.",
+    "render_email legacy_map in services/email_sequence.py:57-68 correctly preserves backward-compat for all 10 old slugs -> new 7 episodes. No silent fallback to None on unknown slug (returns None -> route raises 404). Good.",
+    "MariaWay portrait uses Unsplash CDN (photo-1573497019418-b400bb3ab074). Acceptable, but for production resilience consider self-hosting or attribution per Unsplash license."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter36_maria_way.py (new)"],
+  "success_rate": {"backend": "100% (12/12)", "frontend": "100% (12/12 assertions: section, headline+lime, 3 stats, 7 day-cards + active border, 4 bullets, 2 imgs, 3 CTAs->/diagnose, mobile stack)"},
+  "test_credentials": "none required",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "MariaWay component lives at /app/frontend/src/components/hero/MariaWay.jsx and is imported by /app/frontend/src/pages/Hero.jsx line 6 and rendered at line 730 between Wlad-Trust and Free-Credits sections. Backend EP03 redesign is in email_episodes.py episode_03_maria(). Drip preview endpoint: /api/email/drip-preview?slug={slug}. Legacy slug-mapping in services/email_sequence.py:57-68. Pixel-WladBot @ /wladbot.png, 3D @ /wladbot-3d.png (both confirmed 200, image/png). Regression command: pytest /app/backend/tests/test_iter36_maria_way.py -v",
+  "rca of the issue": "N/A — fresh feature build, no bugs detected. All 12 backend + 12 frontend assertions pass on first run."
+}

@@ -3,6 +3,7 @@ import { ArrowRight, Brain, MessageSquare, TrendingUp, Sparkles, Clock, Zap, Use
 import { ScrollReveal } from "../hooks/useScrollReveal";
 import { useState, useEffect } from "react";
 import LeaderOSLogo from "../components/LeaderOSLogo";
+import MariaWay from "../components/hero/MariaWay";
 
 const headlines = [
   {
@@ -726,6 +727,8 @@ export default function Hero() {
         </section>
 
         {/* ===== SECTION 10: 50 FREE CREDITS — Bonus für Diagnose ===== */}
+        <MariaWay />
+
         <section className="py-20 border-t border-white/[0.04]" data-testid="free-credits-section">
           <div className="max-w-5xl mx-auto px-4 md:px-8">
             <div className="glass-card p-8 md:p-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.02]">
