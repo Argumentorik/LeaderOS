@@ -16,6 +16,18 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## 📨 Email Drip v2 (Feb 2026)
+- **7 Episoden** statt 10 Mails · Apple/Linear/Notion + Duolingo Vibe
+- Files: `/app/backend/email_episodes.py` (Design System v2) + `/app/backend/services/email_sequence.py` (SEQUENCE)
+- Day-Offsets: T+1d · T+3d · T+6d · T+10d · T+15d · T+21d · T+28d
+- Gamification: Leader Level Progress (n/7), XP-Pills (+50 / +75 / +100 / +150 / +500), Streak Dots, Mission Cards
+- 1 CTA pro Mail · "→ Mission starten" / "→ Executive Mode entsperren"
+- WladBot-Avatar = Lime-Kreis mit `leaderos-mark.png` (statt nicht-existierendem `wladbot-pixel.png`)
+- Backward-Compat: alte Slugs (`score_meaning`, `quickwin`, `last_call` …) werden auf neue Episoden gemappt
+- Live-Send: alle 7 Episoden an `start@aiporate.com` verschickt (Resend, Feb 2026)
+- Tests: `/app/backend/tests/test_email_episodes.py` · 16/16 PASS
+- Helper-Script: `/app/backend/scripts/send_all_episodes.py <to> <name>`
+
 ## ✅ Live Status (26.06.2026)
 - Funnel komplett funktional + production-ready
 - **Stripe LIVE Mode aktiv** (cs_live_ Checkout-URLs verifiziert)
