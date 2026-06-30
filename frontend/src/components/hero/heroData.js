@@ -181,25 +181,25 @@ export const wladbotFeatures = [
 export const audiences = [
   {
     title: "Selbstständige",
-    eyebrow: "Persona 01",
+    eyebrow: "Solo-CEO ohne Burnout.",
     desc: "KI nutzen · ohne dich selbst zu verlieren.",
     src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "Angestellte",
-    eyebrow: "Persona 02",
+    eyebrow: "Vom Mitarbeiter zur Schlüsselperson.",
     desc: "Schneller entscheiden · mit klarem Kopf und Bauchgefühl.",
     src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "Senior Manager",
-    eyebrow: "Persona 03",
+    eyebrow: "Vom Manager zum Macher.",
     desc: "Den Schritt machen von der Führungskraft zur unverzichtbaren Schlüsselperson.",
     src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1200&q=85&auto=format&fit=crop",
   },
   {
     title: "High Potentials",
-    eyebrow: "Persona 04",
+    eyebrow: "Vom Talent zum Top 1 %.",
     desc: "Den Aufstieg in die Elite-Leadership gezielt beschleunigen.",
     src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=85&auto=format&fit=crop",
   },

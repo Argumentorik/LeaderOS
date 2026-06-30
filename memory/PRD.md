@@ -3,6 +3,16 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🃏 DraggableCard Diagnose-Section + Hormozi Persona-Eyebrows (Feb 2026)
+- **Aceternity `DraggableCard`** als JSX-Port (`/app/frontend/src/components/ui/draggable-card.jsx`, framer-motion 12.42 statt `motion/react`): 3D-Tilt-on-mouse-move + Drag-Physics mit Spring-Bounce on release + animated glare overlay (opacity follows tilt magnitude).
+- **DiagnoseStepsSection.jsx komplett neu**: Die 4 Diagnose-Schritte (01-04) leben jetzt als gestreute, 3D-gekippte, draggable Karten um eine zentrale EncryptedText-Headline „Dein persönlicher · Leadership-Report." (Fight-Club-Demo-Pattern). Jede Karte: Lime-Watermark-Number (180px), Mono-Eyebrow „SCHRITT 01-04", Lime-Icon-Tile, 26px Display-Title, Subline + „● DRAG ME · 3D" Footer mit Pulsing-Dot.
+- **Personas-Eyebrows** umgeschrieben auf Hormozi/Steve-Jobs-Sales-Style (statt „Persona 01/02/03/04"):
+  - Selbstständige → **„Solo-CEO ohne Burnout."**
+  - Angestellte → **„Vom Mitarbeiter zur Schlüsselperson."**
+  - Senior Manager → **„Vom Manager zum Macher."**
+  - High Potentials → **„Vom Talent zum Top 1 %."**
+- Verifiziert via Playwright Drag-Test: Card 01 lässt sich von Position A nach Position B ziehen, Spring-Bounce on release, Headline wird beim Wegziehen sauber freigelegt. 0 Console-Errors.
+
 ## 🖼️ Unique Images Pass · 16 distinct premium photos · Maria-Portrait Premium-Frame (Feb 2026)
 - **Problem**: 4 verschiedene Bilder wurden 2-4× wiederverwendet — vor allem Marias Photo erschien 4× auf der Landing (MariaWay + Agent 01 Coach + Persona 01 Selbstständige + ClientStories Maria).
 - **Fix**: Komplette Image-Map auf **16 unique Unsplash-IDs** umgestellt (verifiziert: jede ID erscheint exakt 1× im gesamten Frontend, `grep | sort | uniq -c` = alle 1).
