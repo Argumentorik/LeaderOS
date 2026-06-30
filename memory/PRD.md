@@ -16,6 +16,15 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Plus-Plus: 4.797 € einmalig oder 3×1.599 € Raten
 - Enterprise: Custom
 
+## ✍️ Hormozi-Copy Refactor + Apple-Cards Carousel (Feb 2026)
+- **EP03 + MariaWay Copy** komplett im Hormozi/StoryBrand/VSL-Stil neu geschrieben: kurze Sätze, harte Kontraste ("Vor 30 Tagen war Maria unsichtbar"), klare Transformations-Arrows (2 Min Training → Mehr Klarheit → Mehr Präsenz → Bessere Entscheidungen → Bessere Ergebnisse)
+- **Apple-Cards Carousel** (`/app/frontend/src/components/ui/apple-cards-carousel.jsx`, JSX-Port von Aceternity UI mit framer-motion 12.42) + Shared Story-Karussell `/app/frontend/src/components/shared/ClientStoriesCarousel.jsx` mit 5 Klient:innen-Stories (Maria · Engineering · 30T, Andreas · Sales · 21T, Lena · GF · 14T, Thomas · Ops · 30T, Sandra · Konzern · 6M)
+- **Sticky Maria-Portrait** rechts, VSL-Hero links · Stat-Tiles 30/50/+180k €, 4-Wochen-Verlaufs-Cards, Transformation-Arrow-Stack, 7-Tage-Plan, „Was ist Leader OS?" Block
+- Carousel auch in `/close` als "Echte Klienten. Echte Ergebnisse." Trust-Layer eingebaut
+- **"Live mit Wlad" entfernt** (PricingConstants, PriceCards, generatePDF, Roadmap, Report, HighTicketClose, email_templates, services/pricing, EP07-Hint) → ersetzt durch "6× Live-Q&A mit KI-Experten"
+- Live-Send aller 7 Episoden v3 (Hormozi) an `start@aiporate.com` (Resend, Feb 2026)
+- Tests: `test_email_episodes.py` 16/16 + `test_iter36_maria_way.py` 12/12 + `test_iter37_hormozi_carousel.py` 10/10 = 38/38 PASS
+
 ## 📨 Email Drip v2 (Feb 2026)
 - **7 Episoden** statt 10 Mails · Apple/Linear/Notion + Duolingo + "Mock-Style"
 - Files: `/app/backend/email_episodes.py` (Design v2 + EP03 1:1 nach Mock) + `/app/backend/services/email_sequence.py` (SEQUENCE)

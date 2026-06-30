@@ -50,7 +50,7 @@ export function PriceCards({
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[#C8FF00]/[0.08] via-[#C8FF00]/[0.02] to-transparent pointer-events-none" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-[#C8FF00]/[0.04] rounded-full blur-[60px] pointer-events-none" />
         <div className="relative">
-          <CardHeader badge="PLUS-PLUS" subBadge="+ 12x LIVE MIT WLAD" title="Sprint + OS-Jahr." desc="Sprint + monatliche Live-Sessions · 12 Monate" extraClass="mt-3" />
+          <CardHeader badge="PLUS-PLUS" subBadge="+ 6× LIVE-Q&A KI-EXPERTEN" title="Sprint + OS-Jahr." desc="Sprint + 6× Live-Q&A mit KI-Experten · 12 Monate" extraClass="mt-3" />
           <PriceBlock
             price="4.797"
             accent="lime"

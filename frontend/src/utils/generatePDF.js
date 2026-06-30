@@ -616,7 +616,7 @@ export function generateReportPDF(report, user) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(...COLORS.accent);
-  doc.text("PLUS-PLUS  ·  + 12x LIVE MIT WLAD", margin + 8, y + 13);
+  doc.text("PLUS-PLUS  ·  + 6x LIVE-Q&A KI-EXPERTEN", margin + 8, y + 13);
   doc.setFontSize(22);
   doc.setTextColor(...COLORS.accent);
   doc.text("4.797 EUR", margin + 8, y + 26);
