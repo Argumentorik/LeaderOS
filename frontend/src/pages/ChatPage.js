@@ -156,11 +156,15 @@ export default function ChatPage() {
     setAttachedPdf(null);
     setLoading(true);
     try {
-      const body = { message: fullMsg, session_id: currentSession };
+      const body = { message: fullMsg, session_id: currentSession, modality: 'text' };
       if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
       const res = await api.post('/chat', body);
       if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
-      setMessages(prev => [...prev, { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response }]);
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        { ...prev[prev.length - 1], modality: res.data.modality || 'text' },
+        { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response, modality: res.data.modality || 'text' },
+      ]);
       reloadCredits();
     } catch (err) {
       if (err.response?.status === 402) {

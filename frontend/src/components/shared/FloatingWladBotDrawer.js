@@ -142,18 +142,18 @@ export const FloatingWladBotDrawer = () => {
   const activeFolder = folders.find(f => f.folder_id === activeFolderId);
   const isContextSuggested = activeFolderId && pageContext?.folderId === activeFolderId;
 
-  const send = async (overrideText) => {
+  const send = async (overrideText, modality = 'text') => {
     const text = (overrideText || input).trim();
     if (!text || sending) return;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: text }]);
+    setMessages(prev => [...prev, { role: 'user', content: text, modality }]);
     setSending(true);
     try {
-      const body = { message: text, session_id: sessionId };
+      const body = { message: text, session_id: sessionId, modality };
       if (activeFolderId) body.folder_id = activeFolderId;
       const res = await api.post('/chat', body);
       if (!sessionId) setSessionId(res.data.session_id);
-      setMessages(prev => [...prev, { role: 'assistant', content: '', parsed: res.data.response }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: '', parsed: res.data.response, modality: res.data.modality || modality }]);
     } catch (err) {
       logger.error('drawer chat failed:', err);
       setMessages(prev => [...prev, { role: 'assistant', content: de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.' }]);

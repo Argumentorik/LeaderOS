@@ -49,15 +49,22 @@ async def send_email(
     subject: str,
     html: str,
     from_email: Optional[str] = None,
+    max_retries: int = 3,
 ) -> dict:
-    """Send an email via Resend (async, non-blocking).
+    """Send an email via Resend (async, non-blocking) with exponential-backoff retry.
 
-    Returns {"sent": bool, "email_id": str|None, "error": str|None}.
+    Returns {"sent": bool, "email_id": str|None, "error": str|None, "attempts": int}.
     Silent if API key missing — logs warning and returns sent=False.
+
+    Iter 92.42 (Mert · Vibe-Security): retry transient Resend failures up to
+    `max_retries` times with exponential backoff (0.5s · 1s · 2s). Permanent
+    errors (domain-not-verified, invalid-recipient) are NOT retried — we look
+    for keywords in the error message and short-circuit. Final failures emit a
+    structured logger.error which Sentry/Cloud-logging will pick up for alerting.
     """
     if not _init_resend():
         logger.warning("RESEND_API_KEY not set — skipping email to %s", to)
-        return {"sent": False, "email_id": None, "error": "RESEND_API_KEY not configured"}
+        return {"sent": False, "email_id": None, "error": "RESEND_API_KEY not configured", "attempts": 0}
 
     params = {
         "from": from_email or f"{BRAND_NAME} <{SENDER_EMAIL}>",
@@ -65,12 +72,51 @@ async def send_email(
         "subject": subject,
         "html": html,
     }
-    try:
-        result = await asyncio.to_thread(resend.Emails.send, params)
-        return {"sent": True, "email_id": result.get("id"), "error": None}
-    except Exception as e:
-        logger.error("Resend send failed to %s: %s", to, e)
-        return {"sent": False, "email_id": None, "error": str(e)}
+    # Permanent-fail markers — Resend will keep returning these forever; no point retrying.
+    PERMANENT_ERROR_HINTS = (
+        "domain is not verified",
+        "domain_not_verified",
+        "invalid_to_address",
+        "invalid recipient",
+        "validation_error",
+    )
+    last_err: Optional[str] = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            result = await asyncio.to_thread(resend.Emails.send, params)
+            email_id = result.get("id")
+            if attempt > 1:
+                logger.info("Resend send SUCCEEDED for %s on attempt %d (id=%s)", to, attempt, email_id)
+            else:
+                # Iter 92.42: log every successful send so Mert can grep delivery in prod.
+                logger.info("Resend send OK → %s (id=%s, subject=%r)", to, email_id, subject[:60])
+            return {"sent": True, "email_id": email_id, "error": None, "attempts": attempt}
+        except Exception as e:
+            err_text = str(e)
+            last_err = err_text
+            err_lower = err_text.lower()
+            is_permanent = any(hint in err_lower for hint in PERMANENT_ERROR_HINTS)
+            if is_permanent:
+                logger.error(
+                    "Resend PERMANENT failure to %s on attempt %d (no retry): %s",
+                    to, attempt, err_text,
+                )
+                return {"sent": False, "email_id": None, "error": err_text, "attempts": attempt}
+            if attempt < max_retries:
+                # Exponential backoff: 0.5s, 1s, 2s
+                wait_s = 0.5 * (2 ** (attempt - 1))
+                logger.warning(
+                    "Resend send to %s failed (attempt %d/%d): %s — retrying in %.1fs",
+                    to, attempt, max_retries, err_text, wait_s,
+                )
+                await asyncio.sleep(wait_s)
+            else:
+                # Final failure — emit a high-priority log for alerting/Sentry.
+                logger.error(
+                    "Resend send to %s FAILED after %d attempts: %s",
+                    to, max_retries, err_text,
+                )
+    return {"sent": False, "email_id": None, "error": last_err, "attempts": max_retries}
 
 
 # ── Email Templates ─────────────────────────────────────────────

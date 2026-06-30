@@ -149,6 +149,11 @@ class ChatMessageIn(BaseModel):
     # frontend forwards the folder_id so the backend can prepend the folder's
     # context_summary to the system prompt — "agent always next to you".
     folder_id: Optional[str] = None
+    # Iter 92.42 (Mert · Vibe-Security): client-declared input modality so the
+    # backend can stamp every chat response with what the user actually used.
+    # 'text' (default), 'speech' (audio transcribed via Whisper), 'video'
+    # (clip transcribed + SEXIER-analysed). Server still re-validates.
+    modality: Optional[str] = "text"
 
 
 class ChatSessionCreate(BaseModel):

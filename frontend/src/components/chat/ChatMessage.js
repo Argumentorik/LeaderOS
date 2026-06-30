@@ -1,11 +1,19 @@
 import { Badge } from '../ui/badge';
 import { Lightbulb, Target, ListChecks, CheckCircle2 } from 'lucide-react';
 import SmartText from '../shared/SmartText';
+import { ModalityBadge } from './ModalityBadge';
 
-const UserMessage = ({ content }) => (
+const UserMessage = ({ content, modality }) => (
   <div className="flex justify-end mb-4 animate-fade-in" data-testid="chat-user-message">
-    <div className="max-w-[70%] bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">
-      <p className="text-sm text-white whitespace-pre-wrap">{content}</p>
+    <div className="flex flex-col items-end gap-1 max-w-[70%]">
+      <div className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">
+        <p className="text-sm text-white whitespace-pre-wrap">{content}</p>
+      </div>
+      {/* Iter 92.42 (Vibe-Security): per-message modality badge so user
+          always knows whether their input was registered as text/speech/video. */}
+      {modality && modality !== 'text' && (
+        <ModalityBadge modality={modality} size="sm" />
+      )}
     </div>
   </div>
 );
@@ -19,7 +27,7 @@ const PlainAssistantMessage = ({ content }) => (
 );
 
 export const ChatMessage = ({ msg, de }) => {
-  if (msg.role === 'user') return <UserMessage content={msg.content} />;
+  if (msg.role === 'user') return <UserMessage content={msg.content} modality={msg.modality} />;
 
   let parsed = msg.parsed;
   if (!parsed && typeof msg.content === 'string') {

@@ -331,9 +331,16 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
 
     session_id = await _ensure_session(data.session_id, user["user_id"], data.message, data.agent, data.folder_id)
 
+    # Iter 92.42 (Vibe-Security): normalize modality early so persistence + response agree.
+    VALID_MODALITIES = ("text", "speech", "video")
+    msg_modality = (data.modality or "text").lower()
+    if msg_modality not in VALID_MODALITIES:
+        msg_modality = "text"
+
     await db.chat_messages.insert_one({
         "message_id": f"msg_{uuid.uuid4().hex[:12]}", "session_id": session_id,
         "user_id": user["user_id"], "role": "user", "content": data.message,
+        "modality": msg_modality,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
@@ -378,6 +385,8 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         await db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
         await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "agent": data.agent})
 
+        # Iter 92.42: re-use the validated modality computed above so response
+        # always agrees with what we persisted on the user message.
         return {
             "session_id": session_id,
             "message_id": msg_id,
@@ -385,6 +394,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
             "raw": ai_response,
             "rag": {"active": rag_ctx["rag_active"], "chunks": rag_ctx["chunks_count"]},
             "folder_context_used": bool(folder_context),
+            "modality": msg_modality,
         }
     except Exception as e:
         logger.error(f"Chat error: {e}")
