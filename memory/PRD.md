@@ -17,16 +17,24 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 - Enterprise: Custom
 
 ## 📨 Email Drip v2 (Feb 2026)
-- **7 Episoden** statt 10 Mails · Apple/Linear/Notion + Duolingo Vibe
-- Files: `/app/backend/email_episodes.py` (Design System v2) + `/app/backend/services/email_sequence.py` (SEQUENCE)
+- **7 Episoden** statt 10 Mails · Apple/Linear/Notion + Duolingo + "Mock-Style"
+- Files: `/app/backend/email_episodes.py` (Design v2 + EP03 1:1 nach Mock) + `/app/backend/services/email_sequence.py` (SEQUENCE)
 - Day-Offsets: T+1d · T+3d · T+6d · T+10d · T+15d · T+21d · T+28d
-- Gamification: Leader Level Progress (n/7), XP-Pills (+50 / +75 / +100 / +150 / +500), Streak Dots, Mission Cards
-- 1 CTA pro Mail · "→ Mission starten" / "→ Executive Mode entsperren"
-- WladBot-Avatar = Lime-Kreis mit `leaderos-mark.png` (statt nicht-existierendem `wladbot-pixel.png`)
-- Backward-Compat: alte Slugs (`score_meaning`, `quickwin`, `last_call` …) werden auf neue Episoden gemappt
-- Live-Send: alle 7 Episoden an `start@aiporate.com` verschickt (Resend, Feb 2026)
-- Tests: `/app/backend/tests/test_email_episodes.py` · 16/16 PASS
+- Gamification: Leader Level Progress (n/7), XP-Pills (+50…+500), Streak Dots, Mission Cards
+- Mock-Layout (alle Episoden ab v2): **7-Tage-Plan Strip** (7 Cards mit Lime-Active) + **"Was ist Leader OS?"** Bottom-Block (Bullets + Pixel-WladBot + Bonus-Box)
+- **EP03 Maria** komplett im Mock-Design (2-Col Hero mit Portrait, Stats 30/50/+180k, Maria-Timeline mit Icons, WladBot-Card mit Flow-Diagramm 2-3 Credits→1 Sparring→Besseres Meeting)
+- WladBot-Assets: `/wladbot.png` (Pixel, 7KB) + `/wladbot-3d.png` (3D-Render, 363KB)
+- Backward-Compat: alte Slugs (`score_meaning`, `quickwin`, …) werden auf neue Episoden gemappt
+- Live-Send: 2× alle 7 Episoden an `start@aiporate.com` verschickt (Resend, Feb 2026)
+- Tests: `/app/backend/tests/test_email_episodes.py` 16/16 + `/app/backend/tests/test_iter36_maria_way.py` 12/12 PASS
 - Helper-Script: `/app/backend/scripts/send_all_episodes.py <to> <name>`
+
+## 🏠 Landing Page · MariaWay-Section (Feb 2026)
+- Neue Komponente `/app/frontend/src/components/hero/MariaWay.jsx` (271 Zeilen)
+- Eingebunden in `/app/frontend/src/pages/Hero.jsx` zwischen Wlad-Trust und Free-Credits
+- Bildet das identische Mock-Design ab: Headline "Das war Maria vor 6 Monaten" · Maria-Portrait mit Play-Overlay · Stats 30/50/+180k · 4-Phasen-Timeline mit Icons · WladBot-Card mit Flow-Diagramm · 7-Tage-Plan Strip · "Was ist Leader OS?" Block mit Pixel-WladBot + Speech-Bubble "Ich bin bereit. Und du?"
+- Mobile responsive (2-Col → 1-Col @ 375px verifiziert)
+- 3 CTAs (maria-cta-bot, leaderos-cta-start, hero-cta-credits) → `/diagnose`
 
 ## ✅ Live Status (26.06.2026)
 - Funnel komplett funktional + production-ready
