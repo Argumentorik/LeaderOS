@@ -55,7 +55,7 @@ export function PriceCards({
             price="4.797"
             accent="lime"
             subtitle="Einmalig oder 3 x 1.599 EUR · 14 Tage Geld-zurück"
-            valueBadge="Live mit Wlad · ungeschnitten · 90 Min"
+            valueBadge="Live-Q&A mit KI-Experten · 6×/Jahr · 90 Min"
             testidPrice="price-leader-os-plus"
           />
           <div className="space-y-3 mb-7">

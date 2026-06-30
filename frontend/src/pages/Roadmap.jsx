@@ -511,7 +511,7 @@ export default function Roadmap() {
                 onClick={() => navigate("/close")}
                 className="flex-1 px-6 py-4 rounded-xl bg-white/[0.04] border border-[#C8FF00]/20 text-white font-manrope font-bold hover:border-[#C8FF00]/40 hover:bg-[#C8FF00]/[0.04] transition-all inline-flex items-center justify-center gap-2"
               >
-                <span>Plus-Plus mit Wlad live</span>
+                <span>Plus-Plus mit KI-Experten Live-Q&As</span>
                 <span className="text-[#C8FF00]">4.797 EUR</span>
               </button>
             </div>

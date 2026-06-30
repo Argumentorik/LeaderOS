@@ -204,10 +204,11 @@ def _maria_timeline(phases: list[tuple[str, str, str]]) -> str:
 
 def _what_is_leaderos_block() -> str:
     bullets = [
-        "Sparring mit WladBot in Sekunden",
-        "Für echte Meetings. Nicht für Theorie.",
-        "Von Top Leadern entwickelt.",
-        "Für Ergebnisse, die man sieht.",
+        "Meetings vorbereiten.",
+        "Schwierige Gespräche trainieren.",
+        "Feedback üben.",
+        "Verhandlungen simulieren.",
+        "Mehr Wirkung erzielen.",
     ]
     bullet_rows = ""
     for b in bullets:
@@ -223,15 +224,16 @@ def _what_is_leaderos_block() -> str:
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
 <td valign="top" width="52%" style="padding-right:20px;">
 <p style="font-size:11px;color:{BRAND['muted_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 14px 0;">Was ist Leader OS?</p>
-<h2 class="h2" style="font-size:26px;line-height:1.15;letter-spacing:-0.02em;font-weight:800;color:{BRAND['white']};margin:0 0 22px 0;">Dein tägliches <span style="color:{BRAND['lime']}">Training</span> für bessere Führung.</h2>
+<h2 class="h2" style="font-size:26px;line-height:1.15;letter-spacing:-0.02em;font-weight:800;color:{BRAND['white']};margin:0 0 14px 0;">Dein tägliches Sparring für <span style="color:{BRAND['lime']}">echte Führung</span>.</h2>
+<p style="font-size:13px;color:{BRAND['gray_dark']};line-height:1.65;margin:0 0 20px 0;">Keine Theorie. Keine langen Kurse. Nur Situationen, die morgen auf dich warten.</p>
 <table role="presentation" cellspacing="0" cellpadding="0">{bullet_rows}</table>
 </td>
 <td valign="top" width="48%">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0d0d0d;border:1px solid {BRAND['border_dark']};border-radius:16px;">
 <tr><td style="padding:22px 22px 22px 22px;">
-<p style="font-size:10px;color:{BRAND['gray_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 8px 0;">Dein Bonus aktiv</p>
-<p style="font-size:20px;color:{BRAND['white']};font-weight:800;margin:0 0 4px 0;letter-spacing:-0.015em;line-height:1.2;"><span style="color:{BRAND['lime']}">50 Free Credits</span></p>
-<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0 0 16px 0;line-height:1.5;">WladBot ist online</p>
+<p style="font-size:10px;color:{BRAND['gray_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 8px 0;">🎁 Dein Bonus ist aktiv</p>
+<p style="font-size:22px;color:{BRAND['white']};font-weight:800;margin:0 0 4px 0;letter-spacing:-0.015em;line-height:1.2;"><span style="color:{BRAND['lime']}">50 kostenlose</span><br>Credits.</p>
+<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0 0 16px 0;line-height:1.5;">WladBot ist online. Jetzt starten.</p>
 <table role="presentation" cellspacing="0" cellpadding="0"><tr>
 <td valign="middle">
 <a href="{LEADEROS_LOGIN}" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['ink']};font-size:13px;font-weight:800;padding:11px 18px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;">Jetzt starten →</a>
@@ -645,40 +647,40 @@ def episode_03_maria(name: str, email: str = "") -> dict:
 
     hero = _two_col_hero(
         eyebrow_left="Episode 03",
-        eyebrow_right="Tag 5 · 1 Klientin · 1 Story",
-        headline_html=f"{name}, das war Maria<br>vor <span style='color:{BRAND['lime']}'>6 Monaten</span>.",
+        eyebrow_right="Tag 5 · Eine Geschichte, die alles verändert",
+        headline_html=f"Vor 30 Tagen<br>war Maria <span style='color:{BRAND['lime']}'>unsichtbar</span>.",
         quote=(
-            "Ich war im Boardroom die fachlich Beste. Aber wenn unser CFO redete, "
-            "hörten alle ihm zu. Ich habe mich auf "
-            f"<a href='{LEADEROS_LOGIN}' style='color:{BRAND['white']};text-decoration:underline;'>leaderos.de</a> "
-            "eingeloggt, WladBot 30 Tage am Stück genutzt, und am Tag 31 hat mein Team mich gefragt, "
-            "ob ich Coaching genommen hätte. Habe ich nicht. Ich habe Wlad genommen."
+            "Sie war fachlich die Beste im Raum. Trotzdem hörten alle zu, sobald der CFO sprach. "
+            "Sie wusste die Antworten. Aber niemand wartete auf ihre Meinung. "
+            "Dann loggte sie sich bei Leader OS ein. 30 Tage. 50 Credits. Jeden Tag 10 Minuten Sparring mit WladBot. "
+            "Am Tag 31 fragte ihr Team: «Hast du heimlich ein Executive Coaching gemacht?». "
+            "Ihre Antwort: «Nein. Ich habe einfach jeden Tag mit Wlad trainiert.»"
         ),
         attribution="Maria K. · Head of Engineering · TecConsult AG",
         portrait_url=maria_portrait,
-        stats=[("30", "Tage"), ("50", "Credits"), ("+180k", "EUR verhandelt")],
+        stats=[("30", "Tage"), ("50", "Credits"), ("+180k €", "verhandelt")],
         episode_num=3,
     )
 
     # Two-column section: Maria-Timeline left, WladBot card right
     timeline_phases = [
-        ("Tag 1–7",   "△", "SEXIER-Pyramide vor jedem Meeting via WladBot durchgespielt · «Tag 3 schon natürlich»"),
-        ("Tag 8–14",  "💬", "Kommunikations-Quadrant im 1:1 mit Direct Reports · WladBot als Vor-Sparring"),
-        ("Tag 15–21", "≋", "Vor jedem CFO-Meeting WladBot in Wlads Stimme · «Krass»"),
-        ("Tag 22–30", "♛", "Harvard-Methode in Budget-Verhandlung · +180k EUR durchgesetzt"),
+        ("Woche 1",  "△",  "SEXIER vor jedem Meeting · «Ab Tag 3 fühlte es sich natürlich an»"),
+        ("Woche 2",  "💬", "Schwierige Mitarbeiter-Gespräche vorher simuliert · keine Unsicherheit mehr"),
+        ("Woche 3",  "≋",  "5 Min CFO-Sparring vor jedem Meeting · «Ich wusste, was ich sagen werde»"),
+        ("Woche 4",  "♛",  "Budgetverhandlung nach Harvard-Methode · +180.000 € freigegeben"),
     ]
 
     middle = f"""<tr><td style="background:{BRAND['bg_dark']};padding:40px 32px 32px 32px;">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
 <td valign="top" width="52%" style="padding-right:18px;">
-<p style="font-size:11px;color:{BRAND['muted_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 18px 0;">Was Maria mit ihren Credits gemacht hat</p>
+<p style="font-size:11px;color:{BRAND['muted_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 18px 0;">Was in diesen 30 Tagen passiert ist</p>
 {_maria_timeline(timeline_phases)}
 </td>
 <td valign="top" width="48%">
 {_wladbot_card(
-    headline=f"Maria hat <span style='color:{BRAND['lime']}'>50 Credits</span> genutzt.<br>Du hast <span style='color:{BRAND['lime']}'>50 freigeschaltet</span>.",
-    body="Mit 2-3 Credits pro Anfrage reicht das für 15-25 echte Sparring-Runden. Logge dich heute Abend ein und probiere ihre Mo-Mi-Routine.",
-    flow_steps=["2-3 Credits", "1 Sparring", "Besseres Meeting"],
+    headline=f"WladBot ist online.<br>Deine <span style='color:{BRAND['lime']}'>50 Credits</span> warten.",
+    body="Maria hat ihre 50 Credits genutzt. Deine warten bereits auf dich. Mit 2-3 Credits pro Session reichen sie für 15-25 echte Führungssituationen. Nicht zum Lernen. Zum Trainieren. Für Meetings, die morgen stattfinden.",
+    flow_steps=["2-3 Credits", "1 Session", "Bessere Ergebnisse"],
     cta_label="→ Marias Routine starten",
     cta_url=LEADEROS_LOGIN,
 )}
@@ -689,11 +691,11 @@ def episode_03_maria(name: str, email: str = "") -> dict:
     seven_day = _seven_day_strip(active_day=3)
     what_is = _what_is_leaderos_block()
 
-    # P.S. line
+    # P.S. line · Hormozi-style
     ps_line = f"""<tr><td style="background:{BRAND['bg_dark']};padding:0 32px 32px 32px;">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
-<td valign="top" style="font-size:12px;color:{BRAND['gray_dark']};line-height:1.7;">
-<strong style="color:{BRAND['white']};">P.S.</strong> &nbsp; Marias Story ist 1 von Hunderten. Aber sie hat eines gemeinsam mit allen: Sie hat sich eingeloggt und die Credits genutzt. Der Rest passiert von alleine.
+<td valign="top" style="font-size:13px;color:{BRAND['gray_dark']};line-height:1.7;">
+<strong style="color:{BRAND['white']};">P.S.</strong> &nbsp; Maria ist keine Ausnahme. Sie hat nichts Besonderes gemacht. Sie hat sich eingeloggt. Die Credits genutzt. Und jeden Tag ein bisschen trainiert. <strong style="color:{BRAND['white']};">Genau dort beginnt Veränderung.</strong>
 </td>
 <td align="right" valign="top" style="width:30px;color:{BRAND['lime']};font-size:18px;">♡</td>
 </tr></table>
@@ -701,8 +703,8 @@ def episode_03_maria(name: str, email: str = "") -> dict:
 
     body = hero + middle + seven_day + what_is + ps_line + _footer(email)
     return {
-        "subject": f"{name}, das war Maria vor 6 Monaten.",
-        "html": _wrap("Tag 5 · 1 Klientin · 1 Story · Marias 30 Tage. Dein 7-Tage-Plan startet heute.", body),
+        "subject": f"{name}, vor 30 Tagen war Maria unsichtbar.",
+        "html": _wrap("Tag 5 · Eine Geschichte, die alles verändert. Marias 30 Tage. Dein 7-Tage-Plan.", body),
     }
 
 
@@ -925,7 +927,7 @@ def episode_07_executive_mode(name: str, email: str = "") -> dict:
         headline="Sprint ansehen. 2 Minuten reichen.",
         cta_label="→ Executive Mode entsperren",
         cta_url=f"{LEADERCHECK_HOME}/close",
-        hint="Klasse 0001 · 14 Tage Geld-zurück · Wlad antwortet persönlich",
+        hint="Klasse 0001 · 14 Tage Geld-zurück · Antwort vom Team in 24h",
         xp_reward=500,
     )
 

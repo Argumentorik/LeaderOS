@@ -5,6 +5,7 @@ import { PriceCards } from "../components/pricing/PriceCards";
 import { PaymentSection } from "../components/pricing/PaymentSection";
 import { EnterpriseSection } from "../components/pricing/EnterpriseSection";
 import { ComparisonTable } from "../components/pricing/ComparisonTable";
+import ClientStoriesCarousel from "../components/shared/ClientStoriesCarousel";
 import {
   ENTERPRISE_TIERS,
   OS_FEATURES,
@@ -149,9 +150,9 @@ export default function HighTicketClose() {
             </span>
           </h1>
           <p className="font-inter text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-3 leading-relaxed">
-            <span className="text-white font-medium">30 Tage Sprint mit Wlad.</span> 12 Monate Plattform. Ein KI-Coach der dich kennt.
+            <span className="text-white font-medium">30 Tage Sprint.</span> 12 Monate Plattform. Ein KI-Coach der dich kennt.
             <br className="hidden md:block" />
-            Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
+            Sprint zuerst, immer. Plus-Plus wenn du 6×/Jahr Live-Q&As mit unseren KI-Experten willst.
           </p>
         </div>
 
@@ -213,6 +214,15 @@ export default function HighTicketClose() {
 
         {/* COMPARISON TABLE */}
         <ComparisonTable />
+
+        {/* CLIENT STORIES CAROUSEL · Apple-Cards Style · Premium Trust Layer */}
+        <div className="mb-14" data-testid="client-stories-section">
+          <ClientStoriesCarousel
+            eyebrow="↳ Sie haben es gemacht. Du kannst auch."
+            headline={<>Echte Klienten.<br /><span className="text-[#C8FF00]">Echte Ergebnisse.</span></>}
+            subline="Fünf Menschen. Fünf Branchen. Ein Pattern: Sie haben sich eingeloggt und 10 Minuten am Tag trainiert. Tippe auf eine Karte und lies, was passiert ist."
+          />
+        </div>
 
         {/* WLAD TRUST SECTION — Der Mensch hinter Leader OS */}
         <div className="glass-card p-8 md:p-10 mb-10 border border-[#C8FF00]/15" data-testid="wlad-trust">
@@ -295,7 +305,7 @@ export default function HighTicketClose() {
             </span>
           </h2>
           <p className="font-inter text-base text-slate-400 mb-2 max-w-xl mx-auto leading-relaxed">
-            {totalScore > 0 ? `Dein Score: ${totalScore} %. ` : ""}Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
+            {totalScore > 0 ? `Dein Score: ${totalScore} %. ` : ""}Sprint zuerst, immer. Plus-Plus wenn du 6×/Jahr Live-Q&As mit KI-Experten willst.
           </p>
           <p className="font-inter text-sm text-[#C8FF00]/80 mb-8 max-w-xl mx-auto">
             ▸ Klick direkt auf dein Paket · weiter zu Stripe · Sofort-Zugang per Key

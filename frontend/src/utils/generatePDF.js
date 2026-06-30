@@ -627,7 +627,7 @@ export function generateReportPDF(report, user) {
 
   const plusBullets = [
     "Alles aus dem Sprint",
-    "12x monatlich Live mit Wlad - 90 Min - ungeschnitten",
+    "6x im Jahr Live-Q&A mit KI-Experten - 90 Min",
     "Drill-Channel - Theorie sofort am echten Fall",
     "Klasse 0001 Peer-Kreis - Lifetime",
   ];

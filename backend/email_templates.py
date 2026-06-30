@@ -319,7 +319,7 @@ def _payment_features(plan: str) -> str:
         "12 Monate Plattform-Zugang auf leaderos.de",
     ]
     if plan == "leader_os_plus":
-        items.append("12× Live mit Wlad · monatlich 90 Min · ungeschnitten")
+        items.append("6× im Jahr Live-Q&A mit unseren KI-Experten · 90 Min")
         items.append("Klasse 0001 Peer-Kreis · Lifetime-Zugang")
     elif plan == "leader_os_enterprise":
         items.append("Onboarding-Workshop wird mit deinem Account Manager geplant")
@@ -335,7 +335,7 @@ def _payment_features(plan: str) -> str:
 def payment_confirmation_email(name: str, plan: str, amount: float) -> dict:
     plan_name_map = {
         "leader_os": "Sprint — 30 Tage + 12 Monate Plattform",
-        "leader_os_plus": "Plus-Plus — OS-Jahr inkl. monatliche Live mit Wlad",
+        "leader_os_plus": "Plus-Plus — OS-Jahr inkl. 6× Live-Q&A mit KI-Experten",
         "leader_os_enterprise": "Sprint Enterprise — B2B-Lizenz",
         "fasttrack": "Fast Track – Leadership Accelerator",
         "standard": "Sprint — 30 Tage + 12 Monate Plattform",

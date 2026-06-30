@@ -513,7 +513,7 @@ export default function Report() {
               Du weisst jetzt wo du stehst.
             </h3>
             <p className="font-inter text-sm text-slate-500 max-w-lg mx-auto">
-              Sprint zuerst, immer. Plus-Plus wenn du Live mit Wlad willst.
+              Sprint zuerst, immer. Plus-Plus wenn du Live-Q&As mit unseren KI-Experten willst.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-2xl mx-auto">

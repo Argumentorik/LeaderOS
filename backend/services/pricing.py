@@ -73,7 +73,7 @@ PACKAGES: dict[str, PackageConfig] = {
         "total_amount": 1188.00,
     },
     "leader_os_plus": {
-        "name": "Plus-Plus — OS-Jahr · inkl. monatliche Live mit Wlad",
+        "name": "Plus-Plus — OS-Jahr · inkl. 6× Live-Q&A mit KI-Experten",
         "amount": 4797.00, "currency": "eur", "plan": "leader_os_plus",
         "billing": "one_time", "mode": "payment",
     },

@@ -33,10 +33,10 @@ export const OS_FEATURES = [
   { text: "Sofortzugang per License Key", included: true },
 ];
 
-// Plus-Plus = Sprint + monatliche Live mit Wlad
+// Plus-Plus = Sprint + Live-Q&As mit KI-Experten
 export const OS_PLUS_FEATURES = [
   { text: "Alles aus dem Sprint", highlight: true },
-  { text: "12× monatlich Live mit Wlad · ungeschnitten · 90 Min", included: true, star: true },
+  { text: "6× im Jahr Live-Q&A mit unseren KI-Experten · 90 Min", included: true, star: true },
   { text: "Drill-Channel · Theorie sofort am echten Fall", included: true },
   { text: "Sprint-Historie als Kontext für WladBot", included: true },
   { text: "Vorrang auf 1:1-Mentoring-Warteliste", included: true },
@@ -65,7 +65,7 @@ export const COMPARISON_ROWS = [
   ["91 Lektionen + 12 Videokurse", true, true, true],
   ["Zertifikat 0001 (LinkedIn-ready)", true, true, true],
   ["Ratenzahlung möglich", true, true, true],
-  ["12× Live mit Wlad (monatlich, 90 Min)", false, true, "optional"],
+  ["6× Live-Q&A mit KI-Experten (jährlich, 90 Min)", false, true, "optional"],
   ["Drill-Channel · echte Fälle", false, true, true],
   ["Quartals-Review", false, true, true],
   ["Vorrang 1:1-Mentoring", false, true, true],

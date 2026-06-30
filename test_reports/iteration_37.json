@@ -1,0 +1,53 @@
+{
+  "summary": "Iter37 — Hormozi-Copy refactor (MariaWay) + Apple-Cards client-stories carousel + 'Live mit Wlad'-removal verification. Backend 38/38 PASS (16 test_email_episodes + 12 test_iter36_maria_way + 10 NEW test_iter37_hormozi_carousel). EP03 subject contains 'unsichtbar' & 'Maria'; EP03 HTML contains '30 Tage' + '+180k'; EP07 HTML free of 'Wlad antwortet persönlich' / 'Live mit Wlad' / '12x live'. Cross-episode scan (ep01–ep07): NO 'Live mit Wlad' present. Frontend (Playwright preview URL): landing renders maria-way-section, headline 'Vor 30 Tagen war Maria unsichtbar', client-stories-carousel with 5 apple-card-0..4, carousel-next button scrolls (0→360), apple-card-0 click opens modal containing 'Hast du heimlich…' text, Escape closes modal cleanly. /close renders carousel + 6× Live-Q&A KI-Experten copy. Mobile @ 390px: section + carousel render, carousel horizontally scrollable (scrollWidth=1259 > clientWidth=390). HOWEVER: 1 remaining 'Live mit Wlad' leftover detected in DOM of /close inside the PLUS-PLUS Pricing-Card subBadge.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "PriceCards.jsx (PLUS-PLUS card)",
+        "issue": "subBadge prop still hard-codes '+ 12x LIVE MIT WLAD'. Renders on /close (and anywhere pricing cards appear). User explicitly wanted ALL 'Live mit Wlad' mentions replaced with the new 6× Live-Q&A with KI-Experten copy.",
+        "selector": "/app/frontend/src/components/pricing/PriceCards.jsx:53 → <CardHeader badge=\"PLUS-PLUS\" subBadge=\"+ 12x LIVE MIT WLAD\" ...>",
+        "priority": "HIGH"
+      },
+      {
+        "component": "generatePDF.js (PDF export)",
+        "issue": "PDF report still prints 'PLUS-PLUS  ·  + 12x LIVE MIT WLAD' on the pricing summary page",
+        "selector": "/app/frontend/src/utils/generatePDF.js:619",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter37_hormozi_carousel.py",
+    "/app/backend/tests/test_iter36_maria_way.py",
+    "/app/backend/tests/test_email_episodes.py",
+    "/app/test_reports/pytest/pytest_results_iter37.xml"
+  ],
+  "action_items": [
+    "Replace `subBadge=\"+ 12x LIVE MIT WLAD\"` in /app/frontend/src/components/pricing/PriceCards.jsx:53 with `subBadge=\"+ 6× LIVE-Q&A KI-EXPERTEN\"` (or whatever matches pricingConstants.js wording).",
+    "Update /app/frontend/src/utils/generatePDF.js:619 text 'PLUS-PLUS  ·  + 12x LIVE MIT WLAD' to '+ 6× LIVE-Q&A KI-EXPERTEN' to keep PDF export consistent.",
+    "Optional: extend test_iter37 with a frontend smoke-grep that fails if 'Live mit Wlad' appears anywhere in the / or /close DOM, so this regression never returns."
+  ],
+  "critical_code_review_comments": [
+    "ClientStoriesCarousel.jsx (104 lines) — clean shared component, correctly typed CLIENT_STORIES array, good data-testid coverage. No issues.",
+    "apple-cards-carousel.jsx — port from Aceternity UI is faithful; uses framer-motion (already in deps), correctly cleans up keyboard listener and body-overflow on unmount. One minor: handleCardClose recalculates cardWidth on resize using window.innerWidth, but it's only triggered on close so acceptable.",
+    "MariaWay.jsx — now 362 lines, still under 700 line guideline. Good separation: ClientStoriesCarousel extracted.",
+    "Carousel-prev/-next buttons are inside the carousel's wrapper but the wrapper itself is `-mx-4 md:-mx-8` (full-bleed). On very narrow viewports the buttons sit on the right edge — verified scrollable. OK.",
+    "PriceCards.jsx PLUS-PLUS subBadge bug is the ONLY remaining 'Live mit Wlad' string in the rendered app. Once that single line is fixed the entire copy-refactor will be 100% complete."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter37_hormozi_carousel.py (new — 10 tests)"
+  ],
+  "success_rate": {
+    "backend": "100% (38/38 — 16 email episodes + 12 iter36 + 10 NEW iter37)",
+    "frontend": "92% (12/13 assertions: section/headline/carousel/5cards/next-scroll/modal-open/modal-text/Escape-close/landing-no-LMW/close-carousel/close-KI-experten/mobile-scrollable PASS; /close still contains 1× 'Live mit Wlad' in PriceCards subBadge FAIL)"
+  },
+  "test_credentials": "none required",
+  "seed_data_creation": "none",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes PriceCards.jsx:53 subBadge + generatePDF.js:619, re-run: (1) curl /close & grep -ci 'live mit wlad' → MUST be 0, (2) pytest /app/backend/tests/test_iter37_hormozi_carousel.py -v → still 10/10, (3) optional Playwright re-scan of /close DOM. Carousel data-testids: client-stories-carousel, apple-card-0..4, carousel-prev, carousel-next. Modal close via Escape verified working. Mobile carousel has scrollWidth=1259/clientWidth=390 (3.2× scroll range).",
+  "rca of the issue": "User requested ALL 'Live mit Wlad' mentions be removed and replaced with '6× im Jahr Live-Q&A mit KI-Experten'. Most files were updated (pricingConstants.js, HighTicketClose.jsx body+CTA, Roadmap.jsx, Report.jsx, email_episodes.py — all clean). MISSED: (a) PriceCards.jsx line 53 hard-codes the subBadge string '+ 12x LIVE MIT WLAD' as a prop literal, separate from pricingConstants. (b) generatePDF.js line 619 hard-codes the same string in PDF output. Reproduction: open /close in browser, scroll to pricing → 'PLUS-PLUS · + 12x LIVE MIT WLAD' is the small lime-on-black ribbon above the Plus-Plus card. Mitigation: change subBadge prop value (1 line) and PDF text (1 line)."
+}
