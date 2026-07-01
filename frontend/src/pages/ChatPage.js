@@ -245,7 +245,10 @@ export default function ChatPage() {
           )}
           {messages.map((msg, i) => (
             <div key={`msg-${msg.role}-${i}`}>
-              <ChatMessage msg={msg} de={de} />
+              <ChatMessage
+                msg={msg} de={de} sessionId={currentSession}
+                onSuggest={i === messages.length - 1 && !loading ? (q) => handleSend(q) : undefined}
+              />
               {msg.role === 'assistant' && !isPremium && (i + 1) % 10 === 0 && (
                 <ChatInlineUpsell onNavigate={() => openPricing('leadership_os')} de={de} />
               )}

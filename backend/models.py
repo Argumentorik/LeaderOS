@@ -178,6 +178,8 @@ class TaskUpdate(BaseModel):
 class SimulationStart(BaseModel):
     scenario: str
     difficulty: Optional[str] = "medium"
+    counterpart_style: Optional[str] = None
+    training_goal: Optional[str] = None
 
 
 class SimulationMessage(BaseModel):

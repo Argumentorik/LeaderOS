@@ -309,7 +309,6 @@ async def _ensure_session(session_id: str, user_id: str, message: str, agent: st
 
 
 async def _save_ai_tasks(tasks: list, user_id: str, session_id: str):
-    """Persist AI-generated tasks to DB."""
     for task in tasks:
         await db.tasks.insert_one({
             "task_id": f"task_{uuid.uuid4().hex[:12]}", "user_id": user_id,
@@ -318,6 +317,22 @@ async def _save_ai_tasks(tasks: list, user_id: str, session_id: str):
             "source": "ai_coach", "session_id": session_id,
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
+
+
+class TasksAcceptIn(BaseModel):
+    tasks: list
+    session_id: str = ""
+
+
+@router.post("/chat/tasks/accept")
+async def accept_suggested_tasks(data: TasksAcceptIn, request: Request):
+    """Iter 92.58: tasks suggested by WladBot are created only on user click."""
+    user = await get_current_user(request)
+    clean = [t for t in (data.tasks or []) if isinstance(t, dict) and t.get("title")][:5]
+    if not clean:
+        raise HTTPException(status_code=400, detail="no_tasks")
+    await _save_ai_tasks(clean, user["user_id"], data.session_id or "")
+    return {"created": len(clean)}
 
 
 @router.post("/chat")
@@ -383,9 +398,9 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
 
         try:
             from services_ai_parse import parse_ai_json
-            parsed = parse_ai_json(ai_response) or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "agent_used": data.agent or "General"}
+            parsed = parse_ai_json(ai_response) or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
         except Exception:
-            parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "agent_used": data.agent or "General"}
+            parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
 
         msg_id = f"msg_{uuid.uuid4().hex[:12]}"
         await db.chat_messages.insert_one({
@@ -394,8 +409,8 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
 
-        if parsed.get("tasks"):
-            await _save_ai_tasks(parsed["tasks"], user["user_id"], session_id)
+        # Iter 92.58 (Mert): tasks are SUGGESTIONS now — persisted only after
+        # the user clicks "übernehmen" (POST /chat/tasks/accept). No auto-save.
 
         await db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
         await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "agent": data.agent})

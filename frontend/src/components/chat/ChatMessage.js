@@ -1,8 +1,73 @@
+import { useState } from 'react';
 import { Badge } from '../ui/badge';
-import { Lightbulb, Target, ListChecks, CheckCircle2 } from 'lucide-react';
+import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight } from 'lucide-react';
 import SmartText from '../shared/SmartText';
+import api from '../../lib/api';
+import logger from '../../lib/logger';
 import { ModalityBadge } from './ModalityBadge';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
+
+/* Iter 92.58: tasks are opt-in — WladBot suggests, the user clicks to accept. */
+const TasksSuggestion = ({ tasks, sessionId, de }) => {
+  const [state, setState] = useState('idle'); // idle | saving | done
+  const accept = async () => {
+    setState('saving');
+    try {
+      await api.post('/chat/tasks/accept', { tasks, session_id: sessionId || '' });
+      setState('done');
+    } catch (err) { logger.error('task accept failed:', err); setState('idle'); }
+  };
+  if (state === 'done') {
+    return (
+      <div className="flex items-center gap-2 px-1" data-testid="chat-tasks-created">
+        <CheckCircle2 size={12} className="text-green-500" />
+        <span className="text-[11px] text-muted-foreground font-medium">{tasks.length} {de ? 'Aufgabe(n) erstellt' : 'task(s) created'}</span>
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-2xl border border-[#BFFF00]/25 bg-[#BFFF00]/[0.05] px-4 py-3" data-testid="chat-tasks-suggestion">
+      <div className="flex items-center gap-2 mb-2">
+        <ListChecks size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{de ? 'Vorschlag: Aufgaben' : 'Suggested tasks'}</span>
+      </div>
+      <ul className="space-y-1 mb-3">
+        {tasks.slice(0, 3).map((t, i) => (
+          <li key={`tsk-${i}`} className="text-[12.5px] font-medium flex items-start gap-2">
+            <span className="w-1 h-1 rounded-full bg-[#BFFF00] mt-2 shrink-0" />{t.title}
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={accept}
+        disabled={state === 'saving'}
+        className="inline-flex items-center gap-1.5 px-3.5 h-8 rounded-full bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[11.5px] font-bold transition-all hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50"
+        data-testid="chat-tasks-accept-btn"
+      >
+        {state === 'saving' ? <Loader2 size={12} className="animate-spin" /> : <Plus size={12} strokeWidth={3} />}
+        {de ? 'Als Aufgaben übernehmen' : 'Add as tasks'}
+      </button>
+    </div>
+  );
+};
+
+/* Iter 92.58 (Grok-style): clickable follow-up questions — one click deepens
+   the conversation, WladBot has already "prepared" the direction. */
+const FollowUpChips = ({ questions, onSuggest, de }) => (
+  <div className="flex flex-wrap gap-2 pt-1" data-testid="chat-followup-chips">
+    {questions.slice(0, 3).map((q, i) => (
+      <button
+        key={`fu-${i}`}
+        onClick={() => onSuggest?.(q)}
+        className="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/70 dark:bg-white/[0.04] text-[12px] font-semibold text-foreground/80 hover:border-[#BFFF00]/60 hover:bg-[#BFFF00]/[0.08] hover:text-foreground transition-all hover:-translate-y-0.5"
+        data-testid={`chat-followup-${i}`}
+      >
+        <CornerDownRight size={11} className="text-[#6B8A00] dark:text-[#BFFF00] group-hover:translate-x-0.5 transition-transform" />
+        {q}
+      </button>
+    ))}
+  </div>
+);
 
 const UserMessage = ({ content, modality }) => (
   <div className="flex justify-end mb-4 animate-fade-in" data-testid="chat-user-message">
@@ -28,7 +93,7 @@ const PlainAssistantMessage = ({ content }) => (
   </div>
 );
 
-export const ChatMessage = ({ msg, de }) => {
+export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
   if (msg.role === 'user') return <UserMessage content={msg.content} modality={msg.modality} />;
 
   let parsed = msg.parsed;
@@ -86,10 +151,10 @@ export const ChatMessage = ({ msg, de }) => {
           </div>
         )}
         {parsed.tasks?.length > 0 && (
-          <div className="flex items-center gap-2 px-1">
-            <CheckCircle2 size={12} className="text-green-500" />
-            <span className="text-[11px] text-muted-foreground font-medium">{parsed.tasks.length} {de ? 'Aufgabe(n) erstellt' : 'task(s) created'}</span>
-          </div>
+          <TasksSuggestion tasks={parsed.tasks} sessionId={sessionId} de={de} />
+        )}
+        {parsed.follow_up_questions?.length > 0 && onSuggest && (
+          <FollowUpChips questions={parsed.follow_up_questions} onSuggest={onSuggest} de={de} />
         )}
       </div>
     </div>

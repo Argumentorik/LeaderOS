@@ -27,9 +27,19 @@ async def start_simulation(data: SimulationStart, request: Request):
     if not scenario:
         scenario = {"title": data.scenario, "character": "An employee", "description": data.scenario}
 
+    # Iter 92.58 (Mert): pre-simulation briefing — user clicks counterpart
+    # style + training goal BEFORE start, so the AI persona is prepared and
+    # gives targeted practice instead of a generic roleplay.
+    setup_block = ""
+    if data.counterpart_style:
+        setup_block += f"\nCounterpart behavior: {data.counterpart_style}. Stay consistently in this behavioral style."
+    if data.training_goal:
+        setup_block += f"\nThe manager wants to train: {data.training_goal}. Create realistic moments that give them exactly this practice opportunity."
+
     doc = {
         "simulation_id": sim_id, "user_id": user["user_id"], "scenario": scenario,
         "difficulty": data.difficulty, "status": "active", "messages": [], "scores": None,
+        "setup_block": setup_block,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.simulations.insert_one(doc)
@@ -37,7 +47,7 @@ async def start_simulation(data: SimulationStart, request: Request):
     try:
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
-            system_message=SIMULATION_SYSTEM_PROMPT + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}\nDifficulty: {data.difficulty}",
+            system_message=SIMULATION_SYSTEM_PROMPT + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}\nDifficulty: {data.difficulty}" + setup_block,
         )
         chat.with_model("openai", "gpt-5.2")
         ai_response = await chat.send_message(UserMessage(text="Start the simulation. Introduce yourself as the employee and set the scene."))
@@ -120,6 +130,7 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
             system_message=(
                 SIMULATION_SYSTEM_PROMPT
                 + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}"
+                + sim.get("setup_block", "")
                 + rag_block
             ),
         )

@@ -60,10 +60,10 @@ export const ChatInputBar = ({
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); } }}
         placeholder={attachedPdf
           ? (de ? 'Was möchtest du zu dem PDF wissen?' : 'What do you want to know about the PDF?')
-          : (de ? 'Beschreibe deine Leadership-Herausforderung...' : 'Describe your leadership challenge...')}
-        className="resize-none min-h-[44px] max-h-32 bg-gray-50 dark:bg-muted/30 border-black/[0.06] dark:border-white/[0.06] rounded-xl" rows={1} />
+          : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
+        className="resize-none min-h-[46px] max-h-32 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}
-        className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] hover:from-blue-700 hover:to-violet-700 text-white px-4 shrink-0 shadow-lg shadow-blue-500/15">
+        className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
         {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
       </Button>
     </div>
