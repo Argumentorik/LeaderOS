@@ -249,10 +249,11 @@ export default function OnboardingPage() {
             <div className="text-center pt-2">
               <button
                 onClick={next}
-                className="text-xs text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] font-semibold transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] border border-black/[0.06] dark:border-white/[0.06] hover:border-[#BFFF00]/40 bg-white/60 dark:bg-card/40 hover:bg-[#BFFF00]/[0.06] transition-all"
                 data-testid="heard-skip"
               >
-                {de ? 'Überspringen →' : 'Skip →'}
+                {de ? 'Überspringen' : 'Skip'}
+                <ChevronRight size={12} />
               </button>
             </div>
           </div>
