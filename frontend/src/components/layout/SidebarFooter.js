@@ -70,7 +70,7 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
               ? 'justify-center h-9 w-9 mx-auto bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:scale-105 shadow-lg shadow-[#BFFF00]/25'
               : 'px-3 py-2.5 bg-gradient-to-r from-[#BFFF00] via-[#B0E600] to-[#9ACC00] text-[#0A0A0A] hover:shadow-xl hover:shadow-[#BFFF00]/30 hover:scale-[1.02] shadow-md shadow-[#BFFF00]/20'
           }`}
-          title={tier === 'free' ? 'Leadership OS aktivieren' : 'Auf OS PLUS upgraden'}
+          title={tier === 'free' ? 'Leadership OS holen' : 'Auf OS PLUS upgraden'}
         >
           <span className={collapsed ? '' : 'flex items-center justify-center w-6 h-6 rounded-md bg-[#0A0A0A]/12'}>
             <Crown size={collapsed ? 15 : 13} strokeWidth={2.5} fill={collapsed ? 'none' : 'currentColor'} />
