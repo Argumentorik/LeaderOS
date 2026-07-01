@@ -15,6 +15,9 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.54 · 01.07.26] Challengers Meeting-Experience (11x.ai-Style)** —
+  - **Meeting-Stage** in `ChallengersPage.js`: Video-Call-Bühne über dem Chat — großes Challenger-Portrait (Farb-Ring, Breathing, Ping-Ring beim Denken), „LIVE MEETING"-Badge (roter Pulse), Name-Plate mit Status („im Gespräch"/„denkt nach…"), Self-Tile mit User-Initialen („Du"). Screenshot-verifiziert mit Bezos.
+  - **Stimmen verifiziert**: Jeder Challenger hat eigene ElevenLabs-Stimme (Bezos=Liam calm/commanding, Musk=Daniel präzise, Oprah=Bella warm, Jobs=Antoni intense, Branson=Arnold energetisch, Sandberg=Rachel, Page=Bill, Hastings=George) — Mapping korrekt, Audio-Test erst nach ElevenLabs-Key-Erneuerung möglich.
 - [x] **[Iter 92.53 · 01.07.26] Chat-Speed + Output-Qualität + Magic-Link-Avatar** —
   - **Chat parallelisiert** (`chat.py`): History/Memory/Folder-Context/RAG liefen seriell → jetzt `asyncio.gather` (spart 1–3s). Gemessen: kurze Frage 5,4s E2E inkl. 6 RAG-Chunks.
   - **Prompt-Duplikat-Bug gefixt**: History wurde NACH dem Insert der User-Message geladen → Nachricht stand doppelt im Prompt (Qualitätsverlust). Jetzt History vor Insert → sauberer Kontext. Multi-Turn verifiziert (Folge-Frage referenziert SEXIER korrekt).

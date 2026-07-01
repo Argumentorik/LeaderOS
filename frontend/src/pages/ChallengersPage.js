@@ -10,6 +10,7 @@ import { Textarea } from '../components/ui/textarea';
 import { VoiceRecorder } from '../components/shared/VoiceRecorder';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import { openStrategyCall } from '../lib/calendly';
 import {
@@ -67,6 +68,7 @@ const DIFF = {
 
 export default function ChallengersPage() {
   const { lang } = useLanguage();
+  const { user } = useAuth();
   const [challengers, setChallengers] = useState([]);
   const [activeChallenge, setActiveChallenge] = useState(null);
   const [activeChallengerData, setActiveChallengerData] = useState(null);
@@ -258,6 +260,66 @@ export default function ChallengersPage() {
               </>
             )}
           </div>
+
+          {/* ── MEETING STAGE (Iter 92.54 · 11x.ai-style): big "camera on" view ── */}
+          {activeChallengerData && (
+            <div className="px-4 pt-3" data-testid="challenger-meeting-stage">
+              <div
+                className="relative max-w-2xl mx-auto h-44 sm:h-56 rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]"
+                style={{ background: `linear-gradient(135deg, #0A0A0A 30%, ${activeChallengerData.color}33 130%)` }}
+              >
+                {/* Subtle grid — video-call backdrop */}
+                <div aria-hidden className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
+
+                {/* Challenger "camera feed" — large portrait */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    <span
+                      aria-hidden
+                      className="absolute -inset-2 rounded-full"
+                      style={{
+                        border: `2px solid ${activeChallengerData.color}`,
+                        opacity: loading ? 0.9 : 0.45,
+                        animation: loading ? 'ping 1.6s cubic-bezier(0,0,0.2,1) infinite' : 'none',
+                      }}
+                    />
+                    <img
+                      src={activeChallengerData.avatar}
+                      alt={activeChallengerData.name}
+                      className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover shadow-2xl"
+                      style={{ border: `3px solid ${activeChallengerData.color}`, animation: 'wladBreath 4.5s ease-in-out infinite' }}
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  </div>
+                </div>
+
+                {/* LIVE badge */}
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <span className="text-[9px] font-black tracking-[0.14em] text-white/80">LIVE MEETING</span>
+                </div>
+
+                {/* Name plate */}
+                <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-black/55 backdrop-blur-md border border-white/10">
+                  <p className="text-[12px] font-bold text-white leading-tight flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    {activeChallengerData.name}
+                  </p>
+                  <p className="text-[9.5px] text-white/50">
+                    {activeChallengerData.company} · {loading ? (lang === 'de' ? 'denkt nach…' : 'thinking…') : (lang === 'de' ? 'im Gespräch' : 'in conversation')}
+                  </p>
+                </div>
+
+                {/* Self tile — "your camera" */}
+                <div className="absolute bottom-3 right-3 w-16 h-11 sm:w-20 sm:h-14 rounded-lg bg-[#141414] border border-white/15 shadow-lg flex items-center justify-center overflow-hidden" data-testid="meeting-self-tile">
+                  <span className="text-[13px] font-black text-[#BFFF00]">
+                    {(user?.name || 'Du').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()}
+                  </span>
+                  <span className="absolute bottom-1 left-1.5 text-[7px] font-bold text-white/40 uppercase tracking-wider">{lang === 'de' ? 'Du' : 'You'}</span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Messages */}
           <ScrollArea className="flex-1 px-4 py-4">
