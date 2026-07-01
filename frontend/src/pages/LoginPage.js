@@ -294,6 +294,8 @@ export default function LoginPage({ initialMode = 'login' }) {
             <a href="/agb" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-agb">AGB</a>
             <span className="opacity-30">·</span>
             <a href="/widerruf" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-widerruf">{de ? 'Widerruf' : 'Withdrawal'}</a>
+            <span className="opacity-30">·</span>
+            <a href="/changelog" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-changelog">Changelog</a>
           </div>
         </div>
       </div>

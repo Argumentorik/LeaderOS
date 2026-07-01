@@ -638,7 +638,10 @@ async def change_password(data: PasswordChangeRequest, request: Request):
 # ========== MAGIC LINK (passwordless) ==========
 
 class MagicLinkRequest(BaseModel):
-    email: EmailStr
+    # Iter 92.49: plain str (not EmailStr) — email-validator rejects reserved
+    # TLDs (.test) with 422, leaking structural info. Endpoint is already
+    # anti-enumeration: unknown/invalid emails silently no-op with 200.
+    email: str
 
 
 class MagicLinkVerify(BaseModel):

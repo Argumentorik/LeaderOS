@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.49 · 01.07.26] Godmode: Lock-Popup, Changelog-Discovery, Magic-Link-Hardening, Tagline-Flow** —
+  - **LockedFeatureModal** (`components/shared/LockedFeatureModal.js`): Klick auf 🔒-Sidebar-Items (Free-Tier: Simulationen/Playbooks/Aufgaben/Workflows/Lern-Videos/Events) öffnet Premium-Popup (Feature-Teaser + Benefits + €997 + „Jetzt freischalten" → PricingModal + „Alle Pläne vergleichen" → /coaching) statt Hard-Redirect. Escape/Backdrop/X schließen.
+  - **Changelog-Discovery**: Sidebar-Footer „Was ist neu?"-Button mit Lime-Pulse-Dot bis v92.49 gesehen (`lib/changelogMeta.js`, localStorage `changelog_seen`). Neuer Changelog-Eintrag v92.49. Login-Footer Changelog-Link (`footer-changelog`). Hover-Polish auf Timeline (Glow-Dot + Title-Lime).
+  - **Magic-Link**: Preview-Versand via Resend verifiziert („Resend send OK"). `MagicLinkRequest.email` von EmailStr → str (email-validator blockte .test-TLDs mit 422; Endpoint ist ohnehin anti-enumeration). Domain-Sweep bestätigt: `_BASE_URL_DEFAULT=https://leaderos.de`, `SENDER_EMAIL=wlad@leaderos.de`. ⚠️ PRODUKTION: Redeploy nötig, damit prod den RESEND_API_KEY erhält.
+  - **Taglines mit Flow**: LoginPage Subheadings + Feature-Sublines, LoginBrandPanel „Klarheit ist kein Talent — sie ist ein System.", CoachingPage Hero-Subline („Es hört, wie du sprichst...").
+  - **Testing** (Iter 92.49 → `/app/test_reports/iteration_92_49.json`): Backend 100% (6/6), Frontend 95% → beide Minor-Findings gefixt + curl-verifiziert (.test-Mail → 200 + Resend OK, footer-changelog re-added).
 - [x] **[Iter 92.48 · 01.07.26] WladBot Avatar überall + AI Speed Hybrid + Challengers Voice-Warm-Cache** —
   - **WladBotAvatar global ausgerollt** (Mert: "avatar überall intelligent nutzen"):
     - `ChatMessage.js` — beide Assistant-Message-Layouts (plain + structured) haben jetzt `<WladBotAvatar size={28}>` links neben der Bubble
