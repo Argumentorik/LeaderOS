@@ -50,13 +50,7 @@ export default function HeroATF({ onCtaClick }) {
                   data-testid={`hero-headline-accent-${i}`}
                 />
               ) : (
-                <EncryptedText
-                  text={text}
-                  as="span"
-                  trigger="mount"
-                  duration={1100 + i * 200}
-                  data-testid={`hero-headline-line-${i}`}
-                />
+                <span data-testid={`hero-headline-line-${i}`}>{text}</span>
               )}
               {i < hl.lines.length - 1 && <br />}
             </span>
