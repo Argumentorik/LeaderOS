@@ -12,17 +12,18 @@ import {
   ArrowRight, Sparkles, Users, Target, Brain,
   MessageSquareText, Zap, Shield, ChevronRight,
   ExternalLink, CheckCircle2, Crown, Briefcase,
-  GraduationCap, Building, TrendingUp, Calendar, Phone, Clock
+  GraduationCap, Building, TrendingUp, Calendar, Phone, Clock,
+  Youtube, Instagram, Linkedin, Search, Mic, MessageCircle, Newspaper, HelpCircle
 } from 'lucide-react';
 
-const STEPS = ['welcome', 'profile', 'role', 'goal', 'wladhub', 'call', 'done'];
+const STEPS = ['welcome', 'profile', 'role', 'goal', 'heard', 'wladhub', 'call', 'done'];
 
 export default function OnboardingPage() {
   const { user, setUser } = useAuth();
   const { lang } = useLanguage();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const [data, setData] = useState({ role: '', team_size: '', primary_goal: '', experience_level: '', has_wladhub_diagnosis: false });
+  const [data, setData] = useState({ role: '', team_size: '', primary_goal: '', experience_level: '', has_wladhub_diagnosis: false, heard_from: '' });
   const [profileData, setProfileData] = useState({ position: '', company: '', industry: '' });
   const [loading, setLoading] = useState(false);
   const [wladhubScores, setWladhubScores] = useState({ ki_kompetenz: '', boardroom_rhetorik: '', strategisches_eq: '' });
@@ -44,6 +45,24 @@ export default function OnboardingPage() {
     { id: 'strategy', icon: Brain, label: de ? 'Strategischer denken' : 'Think Strategically', desc: de ? 'Bessere Entscheidungen treffen' : 'Make better decisions' },
     { id: 'career', icon: TrendingUp, label: de ? 'Karriere beschleunigen' : 'Accelerate Career', desc: de ? 'Nächste Befoerderung vorbereiten' : 'Prepare next promotion' },
     { id: 'eq', icon: Sparkles, label: de ? 'EQ entwickeln' : 'Develop EQ', desc: de ? 'Emotionale Intelligenz stärken' : 'Strengthen emotional intelligence' },
+  ];
+
+  // Iter 92.45 (Mert · Riverside-style): marketing attribution channels.
+  // Grid of ~12 sources — auto-advance on click, "Sonst" as free-text is
+  // omitted for simplicity (we can add if attribution insight demands it).
+  const heardSources = [
+    { id: 'youtube',     icon: Youtube,       label: 'YouTube' },
+    { id: 'instagram',   icon: Instagram,     label: 'Instagram' },
+    { id: 'linkedin',    icon: Linkedin,      label: 'LinkedIn' },
+    { id: 'google',      icon: Search,        label: 'Google' },
+    { id: 'podcast',     icon: Mic,           label: 'Podcast' },
+    { id: 'friend',      icon: MessageCircle, label: de ? 'Freund/Kollege' : 'Friend/Colleague' },
+    { id: 'wlad_book',   icon: Newspaper,     label: de ? 'Wlads Buch' : 'Wlad\'s Book' },
+    { id: 'leadercheck', icon: CheckCircle2,  label: 'leader-check.de' },
+    { id: 'event',       icon: Calendar,      label: de ? 'Event/Konferenz' : 'Event/Conference' },
+    { id: 'tiktok',      icon: Zap,           label: 'TikTok' },
+    { id: 'chatgpt',     icon: Sparkles,      label: de ? 'ChatGPT / KI' : 'ChatGPT / AI' },
+    { id: 'other',       icon: HelpCircle,    label: de ? 'Sonst wie' : 'Other' },
   ];
 
   const next = () => setStep(s => Math.min(s + 1, STEPS.length - 1));
@@ -199,8 +218,48 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 4: WladHub */}
+        {/* Step 4: How did you hear about us? — Iter 92.45 (Riverside-style attribution) */}
         {step === 4 && (
+          <div className="space-y-5 animate-fade-in">
+            <div className="text-center">
+              <h2 className="text-2xl font-black">{de ? 'Wie hast du von uns gehört?' : 'How did you hear about us?'}</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {de ? 'Hilft uns, mehr Menschen wie dich zu erreichen.' : 'Helps us reach more people like you.'}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              {heardSources.map((src) => (
+                <button
+                  key={src.id}
+                  onClick={() => { setData((d) => ({ ...d, heard_from: src.id })); next(); }}
+                  data-testid={`heard-${src.id}`}
+                  className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-[#BFFF00]/40 ${
+                    data.heard_from === src.id
+                      ? 'border-[#BFFF00] bg-[#BFFF00]/[0.08]'
+                      : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/60'
+                  }`}
+                >
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-sm">
+                    <src.icon size={16} className="text-[#0A0A0A]" strokeWidth={2.5} />
+                  </div>
+                  <p className="text-[11px] font-bold text-center leading-tight">{src.label}</p>
+                </button>
+              ))}
+            </div>
+            <div className="text-center pt-2">
+              <button
+                onClick={next}
+                className="text-xs text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] font-semibold transition-colors"
+                data-testid="heard-skip"
+              >
+                {de ? 'Überspringen →' : 'Skip →'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 5: WladHub */}
+        {step === 5 && (
           <div className="space-y-5 animate-fade-in">
             <div className="text-center">
               <h2 className="text-2xl font-black">{de ? 'Hast du die WladHub-Diagnose gemacht?' : 'Have you done the WladHub Diagnosis?'}</h2>
@@ -258,8 +317,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 5: Strategy Call CTA — Cal.com (Iter 92.10: no "Free" wording, premium positioning) */}
-        {step === 5 && (
+        {/* Step 6: Strategy Call CTA — Cal.com (Iter 92.10: no "Free" wording, premium positioning) */}
+        {step === 6 && (
           <div className="space-y-5 animate-fade-in" data-testid="onboarding-call-step">
             <div className="text-center">
               <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-black uppercase tracking-wider px-3 py-1 mb-3">
@@ -325,8 +384,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 6: Done */}
-        {step === 6 && (
+        {/* Step 7: Done */}
+        {step === 7 && (
           <div className="text-center space-y-6 animate-fade-in">
             <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mx-auto shadow-2xl shadow-green-500/30">
               <CheckCircle2 size={36} className="text-white" />

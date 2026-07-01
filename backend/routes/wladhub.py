@@ -49,6 +49,9 @@ class OnboardingData(BaseModel):
     primary_goal: Optional[str] = None
     experience_level: Optional[str] = None
     has_wladhub_diagnosis: bool = False
+    # Iter 92.45 (Mert · Riverside-style): where did the user hear about
+    # Leader-OS? Feeds marketing attribution + `source_platform` refinement.
+    heard_from: Optional[str] = None
 
 
 # ========== SUPABASE HELPERS ==========
@@ -395,13 +398,20 @@ async def check_supabase_status(request: Request):
 async def save_onboarding_data(data: OnboardingData, request: Request):
     """Save user's onboarding preferences and goals."""
     user = await get_current_user(request)
-    await db.users.update_one({"user_id": user["user_id"]}, {"$set": {
+    update_fields = {
         "onboarding_completed": True,
         "role": data.role,
         "team_size": data.team_size,
         "primary_goal": data.primary_goal,
         "experience_level": data.experience_level,
         "has_wladhub_diagnosis": data.has_wladhub_diagnosis,
-    }})
-    await record_user_action(user["user_id"], "onboarding_completed", metadata={"goal": data.primary_goal})
+    }
+    # Iter 92.45: persist marketing attribution (Riverside pattern)
+    if data.heard_from:
+        update_fields["heard_from"] = data.heard_from
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": update_fields})
+    await record_user_action(
+        user["user_id"], "onboarding_completed",
+        metadata={"goal": data.primary_goal, "heard_from": data.heard_from},
+    )
     return {"message": "Onboarding abgeschlossen", "xp_earned": 5}

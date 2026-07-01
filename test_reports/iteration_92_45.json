@@ -1,0 +1,46 @@
+{
+  "summary": "Iter 92.45 — Onboarding heard_from step: 14/14 backend tests passed, both frontend flows (auto-advance on click + skip) passed. STEPS array now 8-long, heard-* buttons all 12 render, progress shows 5/8 highlighted, backend persists heard_from to MongoDB and activity_log metadata, full onboarding completes to /dashboard.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "OnboardingPage step 4 (heard) — Skip link vs Cookie banner",
+        "issue": "Cookie consent banner (fixed bottom, z-9999) overlaps and intercepts pointer events for the [data-testid='heard-skip'] text link at 1440x900. The banner's outer wrapper is pointer-events-none but the inner card 'p-5 sm:p-6' intercepts. Users on a fresh session (banner not dismissed) cannot click the small text-only Skip link. Card grid buttons (heard-youtube..heard-other) are above the banner and work fine.",
+        "selector": "[data-testid='heard-skip']",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Onboarding /heard step",
+        "issues": ["Skip link is a small muted text link far below 12 card grid — inconsistent with other steps (WladHub uses full-width outline button, Call step uses same muted-text style so this is consistent with Call). Consider promoting Skip to a subtle button to avoid cookie-banner overlap."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_45_heard_from.py",
+    "/app/test_reports/pytest/iter92_45.xml"
+  ],
+  "action_items": [
+    "OPTIONAL: Consider auto-dismissing cookie banner on /onboarding route (post-login) or raising Skip link above banner z-index; card clicks unaffected so this is low priority — user can still complete flow via card click or by dismissing banner first."
+  ],
+  "critical_code_review_comments": [
+    "OnboardingPage.js line 26: initial `heard_from: ''` in data state — sends empty string when Skip is clicked; backend correctly handles because `if data.heard_from` is falsy for empty string, so no overwrite. Verified via test_onboarding_without_heard_from + Flow 2 verification (heard_from remains NOT_SET). OK.",
+    "backend/routes/wladhub.py line 410-411: correct conditional write on heard_from (only updates when truthy). Passes all 14 pytest cases including 10 parameterized sources.",
+    "lucide-react icons Youtube, Instagram, Linkedin, Search, Mic, MessageCircle, Newspaper, CheckCircle2, Calendar, Zap, Sparkles, HelpCircle — all render without React errors (verified 12/12 buttons visible + no pageerror captured)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_45_heard_from.py (new)"
+  ],
+  "success_rate": {"backend": "100% (14/14)", "frontend": "100% (both flows complete to /dashboard)"},
+  "test_credentials": "accelerator@wladbot.test / test123 (linkedin auto-advance flow), standard@wladbot.test / test123 (skip flow)",
+  "seed_data_creation": "None. Used existing seeded accelerator+standard accounts. accelerator user now has heard_from='linkedin' persisted (last parameterized run left heard_from='other' — that's expected).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Test file /app/backend/tests/test_iter92_45_heard_from.py loads REACT_APP_BACKEND_URL from /app/frontend/.env then /app/backend/.env with override=False. activity_log collection stores user actions (NOT user_actions). Cookie banner testid='cookie-consent-banner' at z-9999 — pre-set localStorage `wladbot_cookie_consent` JSON or click 'Nur notwendige' to dismiss before testing bottom-of-viewport interactions.",
+  "rca of the issue": "N/A — no bugs to RCA. Feature works as specified. The cookie-banner overlap is pre-existing behavior surfaced now because the new heard step has its Skip element positioned at the bottom of the viewport where the banner sits."
+}
