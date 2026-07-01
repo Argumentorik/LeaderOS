@@ -17,6 +17,13 @@ import {
   ArrowRight, Sparkles, PlayCircle, HelpCircle, Quote, TrendingUp, Users, Star
 } from 'lucide-react';
 
+// Iter 92.46 · module-scope constant so React doesn't recreate on every render.
+const TESTIMONIAL_AVATARS = [
+  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&q=80',
+  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&crop=faces&q=80',
+  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&q=80',
+];
+
 /**
  * CoachingPage — high-converting landing-style hub (Iter 92.35, Mert).
  *
@@ -276,14 +283,7 @@ export default function CoachingPage() {
 
           {/* Testimonials — Iter 92.46 GODMODE: real Unsplash professional face images */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, idx) => {
-              // Curated professional Unsplash headshots (Founder / Team Lead / Consultant)
-              const AVATARS = [
-                'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&q=80',
-                'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&crop=faces&q=80',
-                'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&q=80',
-              ];
-              return (
+            {testimonials.map((t, idx) => (
                 <Card
                   key={t.author + idx}
                   className="group border-black/[0.04] dark:border-white/[0.06] hover:shadow-2xl hover:-translate-y-1 transition-all"
@@ -302,7 +302,7 @@ export default function CoachingPage() {
                     </p>
                     <div className="flex items-center gap-3 pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
                       <img
-                        src={AVATARS[idx]}
+                        src={TESTIMONIAL_AVATARS[idx]}
                         alt={t.author}
                         className="w-11 h-11 rounded-full object-cover ring-2 ring-[#BFFF00]/30 group-hover:ring-[#BFFF00]/60 transition-all"
                         loading="lazy"
@@ -315,8 +315,7 @@ export default function CoachingPage() {
                     </div>
                   </CardContent>
                 </Card>
-              );
-            })}
+              ))}
           </div>
         </section>
 
