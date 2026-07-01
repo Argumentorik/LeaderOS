@@ -1,6 +1,5 @@
 import { CheckCircle2 } from 'lucide-react';
 import { WladMark } from '../brand/WladMark';
-import { WladBotAvatar } from '../brand/WladBotAvatar';
 import { ProductPreviewLoop } from './ProductPreviewLoop';
 
 const BG_IMG = 'https://images.unsplash.com/photo-1633602114554-be8c2c5d6828?crop=entropy&cs=srgb&fm=jpg&w=1200&q=80';
@@ -72,18 +71,6 @@ export const LoginBrandPanel = ({ features, de }) => {
         </div>
 
         <div className="mt-16">
-          {/* WladBot 3.0 — trust anchor with live presence (Iter 92.50) */}
-          <div className="flex items-start gap-3 mb-5 max-w-sm" data-testid="brandpanel-wladbot-trust">
-            <WladBotAvatar size={46} live />
-            <div className="flex-1 rounded-2xl rounded-tl-md bg-white/[0.04] border border-white/[0.08] px-4 py-3 backdrop-blur-md">
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]/80 mb-1">WladBot 3.0 · Online</p>
-              <p className="text-[12px] text-white/60 leading-relaxed">
-                {de
-                  ? '„Ich bin auf Wlads komplette Methodik trainiert — und zeige dir jeden Tag die Richtung."'
-                  : '"I\'m trained on Wlad\'s complete methodology — and I show you the direction every day."'}
-              </p>
-            </div>
-          </div>
           <p className="text-[11px] text-white/15 tracking-wide">
             {de ? '2.500+ Führungskräfte trainieren bereits mit Leader-OS — von Startups bis DAX.' : '2,500+ leaders already train with Leader-OS — from startups to Fortune 500.'}
           </p>

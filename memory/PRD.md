@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.51 · 01.07.26] Detail-Pass: Login kompakt, W-Logo schwarz (SVG-ID-Bug), Profil-Polish** —
+  - **Login**: WladBot-Quote-Bubble links unten entfernt (Seite kompakter, Fokus Signup). Trust-Strip rechts („WladBot 3.0 · Online") bleibt.
+  - **WladMark SVG-Bug gefixt**: Alle Instanzen teilten Gradient-ID `wm-stroke` → erste DOM-Instanz gewann, W wirkte weiß/lime statt schwarz. Fix: direkter `stroke={glyphFill}`, defs entfernt. W ist jetzt überall schwarz auf Lime.
+  - **ProfilePage Detail-Polish**: Tier-Chip als Pill mit Crown, Hero mit Border/Schatten/zweitem Glow, StatTiles + Dimension-Cards mit farbigen Icon-Tiles und Hover-Lift, Avatar-Hover-Ring.
+  - Screenshot-verifiziert (Login + Profil).
 - [x] **[Iter 92.50 · 01.07.26] WladBot 3.0 Trust-Anker + Fabulous-Level Onboarding** —
   - **Echtes Avatar-Bild live**: `/app/frontend/public/wladbot-avatar.png` (512px, aus User-Asset) — vorher fehlte die Datei komplett → überall Sparkles-Fallback. Z-Index-Bug gefixt (Fallback lag ÜBER dem Bild). E-Mails referenzieren denselben Pfad (`{frontend_url}/wladbot-avatar.png`).
   - **`live`-Variante in `WladBotAvatar.js`**: Atmen (4.5s), rotierender Conic-Lime-Ring (7s), Emerald-Online-Dot mit Ping. CSS-Keyframes in index.css (`wladBreath`, `wladRingSpin`, `wladCaretBlink`), respektiert reduced-motion.

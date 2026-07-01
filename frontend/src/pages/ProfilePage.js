@@ -57,7 +57,7 @@ const ProfileAvatar = ({ picture, name, onUpload, uploading }) => {
 
   return (
     <div className="relative group shrink-0">
-      <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-[#BFFF00] to-[#6B8A00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20 ring-4 ring-white dark:ring-[#0A0A0A]">
+      <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-[#BFFF00] to-[#6B8A00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20 ring-4 ring-white dark:ring-[#0A0A0A] transition-all duration-300 group-hover:ring-[#BFFF00]/50 group-hover:shadow-[#BFFF00]/40">
         {imgUrl ? (
           <img src={imgUrl} alt={name} className="w-full h-full object-cover" />
         ) : (
@@ -83,9 +83,11 @@ const ProfileAvatar = ({ picture, name, onUpload, uploading }) => {
 };
 
 const StatTile = ({ icon: Icon, label, value, color = '#BFFF00', testid }) => (
-  <div className="p-3 rounded-xl bg-white/70 dark:bg-card/60 backdrop-blur border border-black/[0.04] dark:border-white/[0.06]" data-testid={testid}>
-    <div className="flex items-center gap-1.5 mb-1">
-      <Icon size={11} style={{ color }} />
+  <div className="group p-3 rounded-xl bg-white/70 dark:bg-card/60 backdrop-blur border border-black/[0.04] dark:border-white/[0.06] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-black/[0.08] dark:hover:border-white/[0.12]" data-testid={testid}>
+    <div className="flex items-center gap-2 mb-1.5">
+      <span className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ background: `${color}1F` }}>
+        <Icon size={12} style={{ color }} strokeWidth={2.5} />
+      </span>
       <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{label}</span>
     </div>
     <p className="text-xl font-black tabular-nums">{value}</p>
@@ -276,17 +278,19 @@ export default function ProfilePage() {
       <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-6" data-testid="profile-page">
 
         {/* ─── HERO ─── */}
-        <div className="relative rounded-3xl overflow-hidden" style={{
-          background: 'linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%)',
+        <div className="relative rounded-3xl overflow-hidden border border-white/[0.06] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)]" style={{
+          background: 'linear-gradient(135deg, #0A0A0A 0%, #161616 100%)',
         }}>
-          <div className="absolute inset-0 opacity-[0.08]" style={{
+          <div className="absolute inset-0 opacity-[0.10]" style={{
             backgroundImage: 'radial-gradient(circle at 25% 20%, #BFFF00 0%, transparent 55%)',
           }} />
+          <div aria-hidden className="absolute -bottom-20 -right-10 h-56 w-56 rounded-full bg-emerald-500/[0.07] blur-[80px] pointer-events-none" />
           <div className="relative p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
             <ProfileAvatar picture={profile.picture} name={profile.name} onUpload={uploadPicture} uploading={uploading} />
             <div className="flex-1 min-w-0 text-white">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#BFFF00]">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#BFFF00]/12 border border-[#BFFF00]/25 text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">
+                  <Crown size={9} strokeWidth={2.8} />
                   {profile.tier} Member {joinedYears >= 1 ? `· ${joinedYears}+ ${de ? 'Jahre' : 'yrs'}` : ''}
                 </span>
               </div>
@@ -353,10 +357,12 @@ export default function ProfilePage() {
             { label: de ? 'Kommunikation' : 'Communication', value: profile.communication_score, color: '#00AAFF', icon: MessageCircle },
             { label: 'EQ', value: profile.eq_score, color: '#FFB800', icon: Sparkles },
           ].map(d => (
-            <Card key={d.label} className="border-black/[0.04] dark:border-white/[0.06]">
+            <Card key={d.label} className="group border-black/[0.04] dark:border-white/[0.06] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <d.icon size={14} style={{ color: d.color }} />
+                  <span className="w-7 h-7 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover:scale-110" style={{ background: `${d.color}1F` }}>
+                    <d.icon size={14} style={{ color: d.color }} strokeWidth={2.5} />
+                  </span>
                   <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{d.label}</span>
                 </div>
                 <p className="text-2xl font-black tabular-nums">{d.value}<span className="text-sm text-muted-foreground font-bold">/100</span></p>
