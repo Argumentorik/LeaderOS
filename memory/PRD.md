@@ -3,6 +3,50 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🛡️ Godmode Security Hardening · Fund-Ready (Feb 2026)
+Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden ALLE P0/P1/P2/P3 Findings gefixt. Verifiziert via testing_agent Iter40: **17/17 Unit-Tests + 16/16 Integration-Tests PASS**, 0 critical/minor Code-Bugs.
+
+**Zentraler Security-Service** (`services/security.py`, 190 Z.):
+- **Report/Sync JWT** (HS256, `REPORT_JWT_SECRET` env-required, kein Default) — 30-Tage-Token für Report-Ownership, 10-Min-Sync-Token für Leader-OS-Handoff, unterschiedliche `aud`-Claims blockieren Cross-Replay
+- **OTP** (6-stellig, 10-Min-TTL, 5-Attempts-Lockout, sha256+per-record-salt) für passwortlose Logins
+- **`secure_client_ip(request)`** nutzt rightmost XFF-Hop (spoof-resistant)
+- **`escape_for_email()`** mit html.escape + length-cap (300 chars default)
+
+**SEC-001 · Stripe Webhook** — `stripe.Webhook.construct_event` + `db.stripe_webhook_events` mit unique-index-Idempotenz auf `event.id`. Unsigned/wrong-sig → 400. Ohne konfigurierten `STRIPE_WEBHOOK_SECRET` → 503 fail-safe (User muss nach Redeploy in Stripe-Dashboard-Webhook den `whsec_…` in .env eintragen).
+
+**SEC-002 · Report/Coach ACL + Passwordless OTP**
+- `GET /api/report/{sid}` + `POST /api/coach/chat` (post-report) fordern `Authorization: Bearer <report_token>` mit `sid`-Match; ohne/falsch → 401
+- Pre-report Coach-Chat (Session ohne Report) bleibt anonym (kein PII zum Schutz-Bedarf)
+- `POST /api/auth/quick-login/request` sendet 6-stelligen OTP per Resend; Response **enumeration-resistant** (`{status:'otp_sent_if_registered', masked_email}` egal ob Account existiert)
+- `POST /api/auth/quick-login/verify` gegen konstant-time-Hash; 401 auf Fehler
+- Legacy `/auth/quick-login` gibt jetzt gleiche No-PII-Shape zurück (kein session_id/name/phone-Leak mehr)
+- `POST /api/auth/leader-os-sync` liefert 10-Min-Sync-Token für Product-Handoff
+
+**SEC-003 · CORS-Allowlist** — Wildcard aus `CORS_ORIGINS` env gefiltert. Explizit erlaubt: `exec-eval.emergent.host`, `role-assessment-lab.preview.emergentagent.com`, `localhost:3000` + Regex `*.preview.emergentagent.com`. Fixe `allow_methods` + `allow_headers`. Startup-Log confirmed: `[cors] allowlist = [...]` ohne `*`.
+
+**SEC-004 · Rate-Limiting** (`slowapi` mit `secure_client_ip` als key_func):
+- `/user/create` 10/min · `/quiz/generate-report` 6/min · `/coach/chat` 20/min · `/report/{sid}` 30/min
+- `/auth/quick-login/*` 5-10/min · `/enterprise/inquire` 5/min · `/enterprise/calculate` 30/min · `/email/*` 6-30/min
+
+**P3 Hardening**:
+- `ADMIN_JWT_SECRET` kein Fallback mehr — Backend refused start ohne env
+- Admin-Login nutzt rightmost-XFF-Hop (Spoof-Fix)
+- `services/admin_emails.py` escaped ALLE User-Felder via `escape_for_email` (Booking + Enterprise HTML-Mails)
+- DB-Indexes on startup: `stripe_webhook_events.event_id` unique + `auth_otp.email` unique
+
+**Sync-Flow (Landing → Leader-OS-Produkt):**
+1. User schließt Quiz ab → Backend gibt `{report, report_token, sync_token}` zurück
+2. Frontend speichert Tokens in localStorage
+3. User klickt „Weiter zu Leader OS" → Frontend fetch `POST /api/auth/leader-os-sync` mit `Bearer <report_token>` → bekommt neuen `sync_token` (10min TTL)
+4. Redirect zu Product mit `?sync_token=…` → Product exchange gegen eigene Session
+
+**Neue Tests**:
+- `/app/backend/tests/test_security_service.py` (10 tests · JWT, OTP, IP, HTML-escape)
+- `/app/backend/tests/test_stripe_self_heal.py` (7 tests)
+- `/app/backend/tests/test_iter40_security_hardening.py` (18 integration tests, Test-Agent-erstellt)
+
+**Info-Finding (Infra, kein Code-Bug):** Cloudflare/K8s-Ingress am Preview-URL überschreibt ACAO auf `*`. Backend-CORS ist korrekt. Browser-CSRF ist trotzdem geblockt (ACAO:* + credentials=true wird von allen Browsern verworfen). Nach Deploy auf eigene Domain nicht mehr relevant.
+
 ## 🎴 Aceternity Features-Bento Diagnose-Section (Feb 2026)
 - **DiagnoseStepsSection.jsx** komplett ersetzt durch das Aceternity „Features-Section"-Pattern (6-col asymmetric bento grid, port von TS→JSX mit framer-motion statt `motion/react`, ohne cobe-Dep).
 - **4 Bento-Cards** mit individuellen Skeleton-Visuals:
