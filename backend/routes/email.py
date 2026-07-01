@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime, timezone
 import asyncio
 import resend
@@ -100,10 +100,15 @@ async def send_payment_email_background(db, config, email, name, plan, amount):
         logger.error(f"Payment email error: {e}")
 
 
-def register_email_routes(router: APIRouter, db, config):
+def register_email_routes(router: APIRouter, db, config, limiter=None):
+    def _rl(spec: str):
+        if limiter:
+            return limiter.limit(spec)
+        return lambda fn: fn
 
     @router.post("/email/send-report")
-    async def send_report_email_endpoint(data: EmailSend):
+    @_rl("6/minute")
+    async def send_report_email_endpoint(request: Request, data: EmailSend):
         report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
         if not report:
             raise HTTPException(status_code=404, detail="Report not found")
@@ -137,7 +142,8 @@ def register_email_routes(router: APIRouter, db, config):
             return {"success": False, "error": str(e)}
 
     @router.post("/email/send-plan-reminder")
-    async def send_plan_reminder_endpoint(data: dict):
+    @_rl("10/minute")
+    async def send_plan_reminder_endpoint(request: Request, data: dict):
         session_id = data.get("session_id")
         week = data.get("week", 1)
         user = await db.users.find_one({"session_id": session_id}, {"_id": 0})
@@ -168,7 +174,8 @@ def register_email_routes(router: APIRouter, db, config):
             return {"success": False, "error": str(e)}
 
     @router.get("/email/unsubscribe")
-    async def unsubscribe(email: str):
+    @_rl("30/minute")
+    async def unsubscribe(request: Request, email: str):
         """Public unsubscribe link target. Stops drip + transactional broadcasts."""
         if not email:
             raise HTTPException(status_code=400, detail="email required")

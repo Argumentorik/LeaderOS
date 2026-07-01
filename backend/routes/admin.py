@@ -37,7 +37,11 @@ class AdminLogin(BaseModel):
 
 # ─── Tiny JWT (HS256) — no external dep ──────────────────
 
-ADMIN_SECRET = os.environ.get("ADMIN_JWT_SECRET", os.environ.get("SECRET_KEY", "leader-os-admin-2026"))
+# ADMIN_JWT_SECRET must come from env — no fallback. Startup fails fast if
+# missing so an unset secret can never silently sign real tokens.
+ADMIN_SECRET = os.environ.get("ADMIN_JWT_SECRET", "")
+if not ADMIN_SECRET:
+    raise RuntimeError("ADMIN_JWT_SECRET is not set in backend/.env — refusing to start")
 ADMIN_TOKEN_TTL_HOURS = 8
 
 
@@ -263,9 +267,12 @@ def register_admin_routes(router: APIRouter, db, config: dict) -> None:
 
     @router.post("/admin/login")
     async def admin_login(data: AdminLogin, request: Request) -> dict:
-        # Resolve real client IP through K8s ingress (X-Forwarded-For chain).
-        xff = request.headers.get("x-forwarded-for", "")
-        client_ip = xff.split(",")[0].strip() if xff else (request.client.host if request.client else "unknown")
+        # SEC-P3 fix — use RIGHTMOST X-Forwarded-For hop (real remote-addr set
+        # by the trusted ingress). Old code used the LEFT hop which any
+        # attacker could inject to bypass the 5/15min lockout by rotating
+        # spoofed IPs. Rightmost is the last proxy in the chain, not spoofable.
+        from services.security import secure_client_ip
+        client_ip = secure_client_ip(request)
         if not _check_login_rate(client_ip):
             raise HTTPException(status_code=429, detail="Too many login attempts. Try again in 15 min.")
         expected = config.get("admin_password", "")
@@ -378,18 +385,25 @@ def register_booking_routes(router: APIRouter, db, config: dict) -> None:
         return {"bookings": bookings, "total": len(bookings)}
 
 
-def register_enterprise_routes(router: APIRouter, db, config: dict) -> None:
+def register_enterprise_routes(router: APIRouter, db, config: dict, limiter=None) -> None:
     """B2B Enterprise tier: pricing calculator + inquiry form."""
 
+    def _rl(spec: str):
+        if limiter:
+            return limiter.limit(spec)
+        return lambda fn: fn
+
     @router.get("/enterprise/calculate")
-    async def enterprise_calculate(employees: int) -> dict:
+    @_rl("30/minute")
+    async def enterprise_calculate(request: Request, employees: int) -> dict:
         try:
             return calc_enterprise_discount(employees)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
 
     @router.post("/enterprise/inquire")
-    async def enterprise_inquire(data: EnterpriseInquiry) -> dict:
+    @_rl("5/minute")
+    async def enterprise_inquire(request: Request, data: EnterpriseInquiry) -> dict:
         if data.employee_count < 1:
             raise HTTPException(status_code=400, detail="Mitarbeiter-Zahl muss >= 1 sein")
         pricing = calc_enterprise_discount(data.employee_count)

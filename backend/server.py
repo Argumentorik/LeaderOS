@@ -1,14 +1,26 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Request
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 from pathlib import Path
 import os
+
+# Load env BEFORE any route module imports — several modules read env vars at
+# import time (admin JWT secret, security service). If dotenv runs later, those
+# reads return empty and the module raises RuntimeError at import.
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+from starlette.middleware.cors import CORSMiddleware
+from motor.motor_asyncio import AsyncIOMotorClient
 import logging
 import uuid
 import asyncio
 from datetime import datetime, timezone
 import resend
+
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from starlette.responses import JSONResponse
 
 from models import UserCreate
 from routes.auth import register_auth_routes
@@ -17,9 +29,9 @@ from routes.payments import register_payment_routes
 from routes.email import register_email_routes, send_welcome_email_background
 from routes.admin import register_admin_routes, register_booking_routes, register_enterprise_routes
 from services.email_scheduler import start_scheduler, stop_scheduler
+from services.security import secure_client_ip
 
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
 
 # --- Database ---
 mongo_url = os.environ['MONGO_URL']
@@ -39,6 +51,7 @@ config = {
     "resend_key": RESEND_API_KEY if RESEND_API_KEY != "your_resend_api_key_here" else "",
     "sender_email": SENDER_EMAIL,
     "admin_password": os.environ.get('ADMIN_PASSWORD', ''),
+    "stripe_webhook_secret": os.environ.get('STRIPE_WEBHOOK_SECRET', ''),
 }
 
 # --- App Setup ---
@@ -48,23 +61,59 @@ api_router = APIRouter(prefix="/api")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# --- CORS ---
+# --- Rate limiter (global · used as decorator on expensive routes) ---
+limiter = Limiter(key_func=secure_client_ip, default_limits=[])
+app.state.limiter = limiter
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": f"Rate limit exceeded · try again in a moment ({exc.detail})"},
+    )
+
+
+app.add_middleware(SlowAPIMiddleware)
+
+# --- CORS · production hardened ---
+# Wildcard + allow_credentials=True was reflected by Starlette on any Origin,
+# letting attacker sites read logged-in users' data. Now: explicit allowlist,
+# extendable via CORS_ORIGINS env (comma-separated).
+_default_origins = [
+    "https://exec-eval.emergent.host",                               # production
+    "https://role-assessment-lab.preview.emergentagent.com",         # preview
+    "http://localhost:3000",                                         # dev
+]
+# Explicit override via CORS_ORIGINS env — comma-separated list. Wildcards ("*")
+# are FILTERED OUT because with allow_credentials=True Starlette reflects any
+# Origin and defeats CSRF/data-exfil protections (SEC-003).
+_env_raw = os.environ.get("CORS_ORIGINS", "")
+_env_origins = [
+    o.strip().strip('"').strip("'")
+    for o in _env_raw.split(",")
+    if o.strip() and o.strip() != "*"
+]
+CORS_ORIGINS = list({*_default_origins, *_env_origins})
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"^https://.*\.preview\.emergentagent\.com$",  # allow preview subdomains
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Requested-With"],
 )
+logger.info(f"[cors] allowlist = {CORS_ORIGINS}")
 
 # --- Register Routes ---
-register_auth_routes(api_router, db)
-register_quiz_routes(api_router, db, config)
+register_auth_routes(api_router, db, config, limiter)
+register_quiz_routes(api_router, db, config, limiter)
 register_payment_routes(api_router, db, config)
-register_email_routes(api_router, db, config)
+register_email_routes(api_router, db, config, limiter)
 register_admin_routes(api_router, db, config)
 register_booking_routes(api_router, db, config)
-register_enterprise_routes(api_router, db, config)
+register_enterprise_routes(api_router, db, config, limiter)
 
 
 # --- Core Endpoints (kept in server.py) ---
@@ -88,7 +137,8 @@ def _sanitize_user_input(s: str | None, max_len: int = 200) -> str:
 
 
 @api_router.post("/user/create")
-async def create_user(data: UserCreate):
+@limiter.limit("10/minute")
+async def create_user(request: Request, data: UserCreate):
     session_id = str(uuid.uuid4())
     safe_name = _sanitize_user_input(data.name, 100)
     safe_email = (data.email or "").lower().strip()[:254]
@@ -121,6 +171,21 @@ async def startup():
     # Indexes for the drip queue (idempotent)
     await db.email_queue.create_index([("status", 1), ("due_at", 1)])
     await db.email_queue.create_index([("email", 1), ("status", 1)])
+
+    # SEC-001 idempotency guard · unique event_id prevents duplicate Stripe
+    # webhook fulfillment on retries (Stripe delivers each event 2-3× within
+    # seconds; without this we'd mint license keys N times).
+    try:
+        await db.stripe_webhook_events.create_index("event_id", unique=True, name="event_id_unique")
+    except Exception:
+        pass
+
+    # OTP lookup + auto-expiry (Mongo TTL). auth_otp entries auto-purge 15min
+    # after `expires_at` (OTP TTL is 10min · buffer 5min for clock skew).
+    try:
+        await db.auth_otp.create_index("email", unique=True, name="otp_email_unique")
+    except Exception:
+        pass
 
     # Uniqueness for users.email — prevents duplicate-account race conditions
     # at 1000-concurrent-user scale. Skip silently if any compatible email index

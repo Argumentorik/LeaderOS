@@ -1,11 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request, Header
 from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 import json
 import uuid
 import logging
+from typing import Optional
 
 from models import QuizSubmit, CoachMessage
+from services.security import issue_report_token, verify_report_token, issue_sync_token
 
 logger = logging.getLogger(__name__)
 
@@ -162,10 +164,26 @@ async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, t
         return dict(_NARRATIVE_FALLBACK)
 
 
-def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
+def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> None:
+
+    def _rl(spec: str):
+        """Return a route-decorator that applies slowapi limits when limiter is
+        wired in. Falls back to identity in dev/tests where limiter is None."""
+        if limiter:
+            return limiter.limit(spec)
+        return lambda fn: fn
+
+    def _bearer_token(authorization: Optional[str]) -> str:
+        if not authorization:
+            return ""
+        parts = authorization.split(" ", 1)
+        if len(parts) == 2 and parts[0].lower() == "bearer":
+            return parts[1].strip()
+        return authorization.strip()
 
     @router.post("/quiz/generate-report")
-    async def generate_report(data: QuizSubmit) -> dict:
+    @_rl("6/minute")
+    async def generate_report(request: Request, data: QuizSubmit) -> dict:
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
         if not user:
             user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
@@ -177,7 +195,6 @@ def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
         leadership_roles, strongest_role, weakest_role = calculate_leadership_roles(cat_avg)
         roi = calculate_roi(layer_avg, total_avg)
 
-        # Serialize chat_context for storage + downstream use
         chat_serialized = []
         if data.chat_context:
             chat_serialized = [{"role": t.role, "text": t.text} for t in data.chat_context]
@@ -197,11 +214,9 @@ def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
         }
         await db.reports.insert_one({**report, "report_id": str(uuid.uuid4())})
 
-        # Auto-send report email (imported lazily to avoid circular)
         from routes.email import send_auto_report_email
         await send_auto_report_email(db, config, user, report, data.session_id)
 
-        # Enqueue 10-email nurture sequence for non-buyers
         try:
             from services.email_scheduler import enqueue_drip_sequence
             await enqueue_drip_sequence(
@@ -212,25 +227,42 @@ def register_quiz_routes(router: APIRouter, db, config: dict) -> None:
                 weakest_score=leadership_roles.get(weakest_role, 50),
             )
         except Exception:  # noqa: BLE001
-            pass  # nurture is non-critical
+            pass
 
-        return report
+        # Issue signed report_token so subsequent /report/{sid} + /coach/chat
+        # requests can be authenticated as the quiz owner. Also embed a fresh
+        # sync_token for the Leader-OS product handoff.
+        report_token = issue_report_token(data.session_id, user.get("email", ""))
+        sync_token = issue_sync_token(data.session_id, user.get("email", ""))
+        return {**report, "report_token": report_token, "sync_token": sync_token}
 
     @router.get("/report/{session_id}")
-    async def get_report(session_id: str) -> dict:
+    @_rl("30/minute")
+    async def get_report(request: Request, session_id: str, authorization: Optional[str] = Header(None)) -> dict:
+        # SEC-002 fix — only the owner (verified via report_token) can read.
+        token = _bearer_token(authorization)
+        verify_report_token(token, expected_sid=session_id)
         report = await db.reports.find_one({"session_id": session_id}, {"_id": 0})
         if not report:
             raise HTTPException(status_code=404, detail="Report not found")
         return report
 
     @router.post("/coach/chat")
-    async def coach_chat(data: CoachMessage) -> dict:
+    @_rl("20/minute")
+    async def coach_chat(request: Request, data: CoachMessage, authorization: Optional[str] = Header(None)) -> dict:
+        # Auth model:
+        #  · pre-report warmup chat (no report exists yet)  → allowed anonymously
+        #  · post-report chat (report exists = leaks profile) → requires token
+        report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
+        if report:
+            token = _bearer_token(authorization)
+            verify_report_token(token, expected_sid=data.session_id)
+
         if not config["llm_key"]:
             return {"response": "Der WLADBOT ist derzeit nicht verfügbar."}
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
         if not user:
             user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
-        report = await db.reports.find_one({"session_id": data.session_id}, {"_id": 0})
 
         context = f"""Du bist der WladBot – ein motivierender AI Leadership-Coach. 
 Du sprichst auf Deutsch. Du bist nahbar, direkt und ehrlich. Du duzt den Benutzer. Halte deine Antworten kurz (2-4 Sätze).

@@ -157,33 +157,83 @@ def register_checkout_routes(router: APIRouter, db, app_config):
 
     @router.post("/webhook/stripe")
     async def stripe_webhook(request: Request) -> dict:
+        """Stripe webhook with signature verification + event idempotency.
+
+        SEC-001 fix: previous version parsed `request.json()` and trusted
+        `payment_status=='paid'` without any authentication, so anyone with a
+        valid session_id could mint free license keys. Now:
+        1. Verify signature via `stripe.Webhook.construct_event`
+        2. De-dupe on `event.id` (Stripe retries webhooks · we may see the
+           same event 2-3× within seconds; idempotency prevents duplicate key
+           mints and duplicate confirmation emails).
+        """
+        webhook_secret = app_config.get("stripe_webhook_secret", "")
+        if not webhook_secret:
+            logger.error("[webhook] STRIPE_WEBHOOK_SECRET not configured — refusing to process")
+            raise HTTPException(status_code=503, detail="Webhook not configured")
+
+        payload = await request.body()
+        sig_header = request.headers.get("stripe-signature", "")
+        if not sig_header:
+            logger.warning("[webhook] Missing Stripe-Signature header — request rejected")
+            raise HTTPException(status_code=400, detail="Missing signature header")
+
         try:
-            body = await request.json()
-            webhook_response = CheckoutStatusResponse(**body)
-            if webhook_response.payment_status == "paid":
-                await db.payment_transactions.update_one(
-                    {"session_id": webhook_response.session_id},
-                    {"$set": {
-                        "payment_status": "paid", "status": "complete",
-                        "event_type": webhook_response.event_type,
-                        "event_id": webhook_response.event_id,
-                        "updated_at": datetime.now(timezone.utc).isoformat(),
-                    }},
-                )
-                await _handle_paid_webhook(db, app_config, webhook_response.session_id)
-            else:
-                await db.payment_transactions.update_one(
-                    {"session_id": webhook_response.session_id},
-                    {"$set": {
-                        "payment_status": webhook_response.payment_status,
-                        "status": "failed",
-                        "updated_at": datetime.now(timezone.utc).isoformat(),
-                    }},
-                )
-            return {"status": "ok"}
-        except Exception as e:
-            logger.error(f"Webhook error: {e}")
-            return {"status": "error", "message": str(e)}
+            event = stripe_sdk.Webhook.construct_event(payload, sig_header, webhook_secret)
+        except stripe_sdk.error.SignatureVerificationError:
+            logger.warning("[webhook] Signature verification FAILED — request rejected")
+            raise HTTPException(status_code=400, detail="Invalid signature")
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid payload")
+
+        event_id = event.get("id")
+        event_type = event.get("type", "")
+        now_iso = datetime.now(timezone.utc).isoformat()
+
+        # Idempotency guard — record every processed event id, refuse duplicates
+        already = await db.stripe_webhook_events.find_one({"event_id": event_id}, {"_id": 0})
+        if already:
+            logger.info(f"[webhook] Duplicate event {event_id} — skipping")
+            return {"status": "duplicate", "event_id": event_id}
+        try:
+            await db.stripe_webhook_events.insert_one({
+                "event_id": event_id, "event_type": event_type,
+                "processed_at": now_iso,
+            })
+        except Exception as e:  # possible unique-index race — treat as duplicate
+            logger.info(f"[webhook] Race on event {event_id}: {e} — treating as duplicate")
+            return {"status": "duplicate", "event_id": event_id}
+
+        # Extract session_id — for both checkout.session.* and legacy shapes
+        data_obj = event.get("data", {}).get("object", {}) or {}
+        session_id = data_obj.get("id") or data_obj.get("session_id")
+        payment_status = data_obj.get("payment_status", "unknown")
+
+        if not session_id:
+            return {"status": "ok", "note": "no session_id in payload"}
+
+        if event_type in ("checkout.session.completed", "checkout.session.async_payment_succeeded") and payment_status == "paid":
+            await db.payment_transactions.update_one(
+                {"session_id": session_id},
+                {"$set": {
+                    "payment_status": "paid", "status": "complete",
+                    "event_type": event_type, "event_id": event_id,
+                    "updated_at": now_iso,
+                }},
+            )
+            await _handle_paid_webhook(db, app_config, session_id)
+        else:
+            await db.payment_transactions.update_one(
+                {"session_id": session_id},
+                {"$set": {
+                    "payment_status": payment_status,
+                    "status": "failed" if payment_status in ("failed", "canceled") else "pending",
+                    "event_type": event_type, "event_id": event_id,
+                    "updated_at": now_iso,
+                }},
+            )
+
+        return {"status": "ok", "event_id": event_id}
 
 
 def register_license_routes(router: APIRouter, db, app_config: dict) -> None:

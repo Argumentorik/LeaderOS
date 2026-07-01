@@ -38,10 +38,11 @@ export default function AICoach() {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem("leaderos_report_token") || "";
       const res = await axios.post(`${API}/coach/chat`, {
         session_id: user.session_id || "demo",
         message: text,
-      });
+      }, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
     } catch {
       setMessages(prev => [...prev, {

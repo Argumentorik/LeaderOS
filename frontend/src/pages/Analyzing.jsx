@@ -63,7 +63,15 @@ export default function Analyzing() {
           { session_id, answers, chat_context: chat_context || null },
           { timeout: 60000 }
         );
+        // Persist report + tokens. report_token gates future /report + /coach
+        // requests, sync_token is used for Leader-OS product handoff.
         localStorage.setItem("emergent_report", JSON.stringify(res.data));
+        if (res.data?.report_token) {
+          localStorage.setItem("leaderos_report_token", res.data.report_token);
+        }
+        if (res.data?.sync_token) {
+          localStorage.setItem("leaderos_sync_token", res.data.sync_token);
+        }
         navigate("/report");
       } catch (err) {
         console.error("Report generation failed:", err);
