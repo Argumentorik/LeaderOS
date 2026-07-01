@@ -23,6 +23,8 @@ Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden AL
   - Directional Cue: Bot links → CTA rechts (Desktop) / Bot unten → CTA oben (Mobile Stack)
   - data-testid `hero-wladbot`, `hero-wladbot-bubble`
 
+**Design-Entscheidung (Feb 2026)**: "August Health"-Rebrand (Cream/Indigo/Reckless Serif) **verworfen**. User bestätigt: "wir behalten die aestethic". Dark/Lime-Premium-Ästhetik (`#0a0a0a` Canvas, `#C8FF00` Lime, Manrope/Inter) ist final.
+
 
 **Zentraler Security-Service** (`services/security.py`, 190 Z.):
 - **Report/Sync JWT** (HS256, `REPORT_JWT_SECRET` env-required, kein Default) — 30-Tage-Token für Report-Ownership, 10-Min-Sync-Token für Leader-OS-Handoff, unterschiedliche `aud`-Claims blockieren Cross-Replay
