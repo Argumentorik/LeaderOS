@@ -8,6 +8,7 @@ import { parseAuthError } from '../lib/authErrors';
 import { Globe, WifiOff, KeyRound, Sparkles } from 'lucide-react';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
+import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { AuthForm } from '../components/auth/AuthForm';
 import { TrustBadges, ModeSwitch } from '../components/auth/LoginExtras';
 import { MagicLinkForm } from '../components/auth/MagicLinkForm';
@@ -166,6 +167,19 @@ export default function LoginPage({ initialMode = 'login' }) {
         </div>
 
         <div className="w-full max-w-md lg:max-w-[400px]">
+          {/* WladBot 3.0 trust anchor — he's here, live (Iter 92.50) */}
+          <div className="flex items-center gap-3 mb-5" data-testid="login-wladbot-trust">
+            <WladBotAvatar size={42} live />
+            <div className="leading-tight">
+              <p className="text-[12.5px] font-bold text-white flex items-center gap-1.5">
+                WladBot <span className="px-1.5 py-px rounded-md bg-[#BFFF00]/15 text-[#BFFF00] text-[9px] font-black tracking-wider">3.0</span>
+              </p>
+              <p className="text-[10.5px] text-white/40 mt-0.5">
+                {de ? 'Online · zeigt dir jeden Tag die Richtung' : 'Online · shows you the direction every day'}
+              </p>
+            </div>
+          </div>
+
           <div className="mb-6 lg:mb-7">
             <h2 className="text-[28px] sm:text-[32px] leading-[1.1] tracking-tight text-white" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 500 }}>
               {heading}

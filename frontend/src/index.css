@@ -582,3 +582,20 @@
   .btn-shine::after, .card-lift, .glow-lime { transition: none !important; }
   .card-lift:hover, .glow-lime:hover { transform: none !important; }
 }
+
+/* Iter 92.50 — WladBot "Live" presence (breathing + rotating aura ring) */
+@keyframes wladBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+@keyframes wladRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wladCaretBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wlad-breath, .wlad-ring-spin { animation: none !important; }
+}

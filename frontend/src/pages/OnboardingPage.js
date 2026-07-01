@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { WladMark } from '../components/brand/WladMark';
+import { WladBotAvatar } from '../components/brand/WladBotAvatar';
+import { WladGuide } from '../components/onboarding/WladGuide';
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
 import {
@@ -29,6 +30,7 @@ export default function OnboardingPage() {
   const [wladhubScores, setWladhubScores] = useState({ ki_kompetenz: '', boardroom_rhetorik: '', strategisches_eq: '' });
   const de = lang === 'de';
   const openBooking = useBookConsultation();
+  const firstName = user?.name?.split(' ')[0] || (de ? 'Leader' : 'Leader');
 
   const roles = [
     { id: 'team-lead', icon: Users, label: de ? 'Team Lead' : 'Team Lead', desc: de ? '3-10 Mitarbeiter' : '3-10 reports' },
@@ -47,9 +49,6 @@ export default function OnboardingPage() {
     { id: 'eq', icon: Sparkles, label: de ? 'EQ entwickeln' : 'Develop EQ', desc: de ? 'Emotionale Intelligenz stärken' : 'Strengthen emotional intelligence' },
   ];
 
-  // Iter 92.45 (Mert · Riverside-style): marketing attribution channels.
-  // Grid of ~12 sources — auto-advance on click, "Sonst" as free-text is
-  // omitted for simplicity (we can add if attribution insight demands it).
   const heardSources = [
     { id: 'youtube',     icon: Youtube,       label: 'YouTube' },
     { id: 'instagram',   icon: Instagram,     label: 'Instagram' },
@@ -67,16 +66,37 @@ export default function OnboardingPage() {
 
   const next = () => setStep(s => Math.min(s + 1, STEPS.length - 1));
 
+  // ── WladBot speaks — reacts to previous answers (Fabulous-style guide) ──
+  const roleLabel = roles.find(r => r.id === data.role)?.label;
+  const goalLabel = goals.find(g => g.id === data.primary_goal)?.label;
+  const guideMessages = de ? {
+    1: `${firstName}, damit ich dich richtig coache, brauche ich Kontext. Wer bist du im Business?`,
+    2: 'Verstanden. Und welche Rolle beschreibt dich am besten? Danach kalibriere ich mein Coaching.',
+    3: roleLabel
+      ? `${roleLabel} — ich kenne deine Baustellen. Woran arbeiten wir zuerst?`
+      : 'Woran arbeiten wir zuerst? Ein Fokus schlägt zehn Vorsätze.',
+    4: 'Kurz aus Neugier — wie hast du von uns gehört? Das hilft uns, mehr Leader wie dich zu finden.',
+    5: 'Hast du schon eine Leader-Diagnose gemacht? Deine Scores machen mein Coaching von Tag 1 an präziser.',
+    6: 'Mein Tipp: 15 Minuten mit einem echten Coach — danach kennst du deinen schnellsten Weg. Kein Muss.',
+  } : {
+    1: `${firstName}, to coach you properly I need context. Who are you in business?`,
+    2: 'Got it. Which role describes you best? I calibrate my coaching to it.',
+    3: roleLabel
+      ? `${roleLabel} — I know your pain points. What do we tackle first?`
+      : 'What do we tackle first? One focus beats ten resolutions.',
+    4: 'Quick curiosity — how did you hear about us? It helps us find more leaders like you.',
+    5: 'Done a leader diagnosis yet? Your scores make my coaching sharper from day one.',
+    6: 'My tip: 15 minutes with a real coach — then you know your fastest path. No pressure.',
+  };
+
   const finish = async () => {
     setLoading(true);
     try {
-      // Save profile data (position, company, industry)
       if (profileData.position || profileData.company || profileData.industry) {
         await api.put('/auth/profile', profileData);
       }
       await api.post('/wladhub/onboarding', data);
 
-      // Import WladHub scores if provided
       const ki = parseInt(wladhubScores.ki_kompetenz);
       const br = parseInt(wladhubScores.boardroom_rhetorik);
       const eq = parseInt(wladhubScores.strategisches_eq);
@@ -88,7 +108,6 @@ export default function OnboardingPage() {
         });
       }
 
-      // Refresh user data
       const res = await api.get('/auth/me');
       setUser(res.data);
       navigate('/dashboard');
@@ -99,30 +118,62 @@ export default function OnboardingPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-mesh p-4" data-testid="onboarding-page">
-      <div className="w-full max-w-xl animate-fade-in">
+  const progressPct = Math.round((step / (STEPS.length - 1)) * 100);
 
-        {/* Progress */}
-        <div className="flex items-center justify-center gap-2 mb-8">
-          {STEPS.map((_, i) => (
-            <div key={`step-${i}`} className={`h-1.5 rounded-full transition-all duration-500 ${i <= step ? 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] w-10' : 'bg-gray-200 dark:bg-muted w-6'}`} />
-          ))}
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-mesh p-4 relative overflow-hidden" data-testid="onboarding-page">
+      {/* Cinematic aurora depth */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 -right-24 h-[30rem] w-[30rem] rounded-full bg-[#BFFF00]/[0.06] blur-[130px]" />
+        <div className="absolute -bottom-24 -left-24 h-[26rem] w-[26rem] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
+      </div>
+
+      <div className="w-full max-w-xl animate-fade-in relative z-10">
+
+        {/* Progress — bar + step counter + % */}
+        <div className="mb-8" data-testid="onboarding-progress">
+          <div className="flex items-center justify-between mb-2 px-0.5">
+            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-muted-foreground/60">
+              {de ? `Schritt ${step + 1} von ${STEPS.length}` : `Step ${step + 1} of ${STEPS.length}`}
+            </span>
+            <span className="text-[10px] font-black text-[#4A6200] dark:text-[#BFFF00] tabular-nums">{progressPct}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-black/[0.06] dark:bg-white/[0.06] overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] shadow-[0_0_10px_rgba(191,255,0,0.5)] transition-all duration-700 ease-out"
+              style={{ width: `${Math.max(progressPct, 4)}%` }}
+            />
+          </div>
         </div>
 
-        {/* Step 0: Welcome */}
+        {/* WladBot guides every step (1-6) */}
+        {step >= 1 && step <= 6 && (
+          <div className="mb-6">
+            <WladGuide message={guideMessages[step]} />
+          </div>
+        )}
+
+        {/* Step 0: Welcome — WladBot introduces himself */}
         {step === 0 && (
           <div className="text-center space-y-6 motion-fade-in-up">
-            <div className="mx-auto inline-flex animate-pulse-glow rounded-3xl">
-              <WladMark size={88} animated />
+            <div className="mx-auto inline-flex">
+              <WladBotAvatar size={104} live />
             </div>
             <div>
-              <h1 className="text-3xl font-black tracking-tight">{de ? `Willkommen, ${user?.name?.split(' ')[0] || 'Leader'}!` : `Welcome, ${user?.name?.split(' ')[0] || 'Leader'}!`}</h1>
-              <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto">
-                {de ? 'Lass uns dein persönliches Leadership-Profil einrichten. Das dauert nur 60 Sekunden.' : "Let's set up your personal leadership profile. Takes only 60 seconds."}
+              <h1 className="text-3xl font-black tracking-tight">
+                {de ? `Hi ${firstName} — ich bin WladBot.` : `Hi ${firstName} — I'm WladBot.`}
+              </h1>
+              <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
+                {de
+                  ? 'Dein persönlicher Leadership-Coach, trainiert auf Wlads komplette Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
+                  : "Your personal leadership coach, trained on Wlad's complete methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
               </p>
+              <div className="flex items-center justify-center gap-1.5 mt-3 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                {de ? 'Online · antwortet in Sekunden' : 'Online · replies in seconds'}
+              </div>
             </div>
-            <Button onClick={next} className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-12 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-start-btn">
+            <Button onClick={next} className="glow-lime btn-shine bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-12 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-start-btn">
               {de ? "Los geht's" : "Let's Go"} <ArrowRight size={16} className="ml-2" />
             </Button>
           </div>
@@ -131,10 +182,6 @@ export default function OnboardingPage() {
         {/* Step 1: Profile (Position, Company, Industry) */}
         {step === 1 && (
           <div className="space-y-5 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-2xl font-black">{de ? 'Erzähl uns mehr über dich' : 'Tell us more about you'}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{de ? 'Damit wir alles hyper-personalisieren können.' : 'So we can hyper-personalize everything.'}</p>
-            </div>
             <div className="space-y-3 max-w-md mx-auto">
               <div>
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">{de ? 'Deine Position' : 'Your Position'} *</label>
@@ -160,80 +207,65 @@ export default function OnboardingPage() {
             </div>
             <div className="flex justify-center pt-2">
               <Button onClick={next} disabled={!profileData.position.trim()}
-                className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-11 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-profile-next">
+                className="glow-lime bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-11 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-profile-next">
                 {de ? 'Weiter' : 'Continue'} <ArrowRight size={14} className="ml-1.5" />
               </Button>
             </div>
           </div>
         )}
 
-        {/* Step 2: Role */}
+        {/* Step 2: Role — staggered entrance */}
         {step === 2 && (
-          <div className="space-y-5 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-2xl font-black">{de ? 'Was beschreibt dich am besten?' : 'What best describes you?'}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{de ? 'Damit dein KI-Coach optimal auf dich eingestellt wird.' : 'So your AI coach is optimally calibrated for you.'}</p>
-            </div>
-            <div className="space-y-2">
-              {roles.map((role) => (
-                <button key={role.id} onClick={() => { setData(d => ({ ...d, role: role.id })); next(); }}
-                  className={`flex items-center gap-4 w-full p-4 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 text-left ${data.role === role.id ? 'border-[#BFFF00] bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/10' : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/80'}`}
-                  data-testid={`role-${role.id}`}>
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shrink-0 shadow-sm">
-                    <role.icon size={18} className="text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold">{role.label}</p>
-                    <p className="text-xs text-muted-foreground">{role.desc}</p>
-                  </div>
-                  <ChevronRight size={16} className="text-muted-foreground" />
-                </button>
-              ))}
-            </div>
+          <div className="space-y-2 animate-fade-in">
+            {roles.map((role, idx) => (
+              <button key={role.id} onClick={() => { setData(d => ({ ...d, role: role.id })); next(); }}
+                style={{ animationDelay: `${idx * 60}ms` }}
+                className={`animate-fade-in flex items-center gap-4 w-full p-4 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-[#BFFF00]/50 text-left ${data.role === role.id ? 'border-[#BFFF00] bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/10' : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/80'}`}
+                data-testid={`role-${role.id}`}>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shrink-0 shadow-sm">
+                  <role.icon size={18} className="text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold">{role.label}</p>
+                  <p className="text-xs text-muted-foreground">{role.desc}</p>
+                </div>
+                <ChevronRight size={16} className="text-muted-foreground" />
+              </button>
+            ))}
           </div>
         )}
 
-        {/* Step 3: Goal */}
+        {/* Step 3: Goal — staggered grid */}
         {step === 3 && (
-          <div className="space-y-5 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-2xl font-black">{de ? 'Was ist dein wichtigstes Ziel?' : "What's your most important goal?"}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{de ? 'Wir personalisieren deine Erfahrung basierend darauf.' : "We'll personalize your experience based on this."}</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {goals.map((goal) => (
-                <button key={goal.id} onClick={() => { setData(d => ({ ...d, primary_goal: goal.id })); next(); }}
-                  className={`flex flex-col items-start gap-3 p-4 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 text-left ${data.primary_goal === goal.id ? 'border-[#BFFF00] bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/10' : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/80'}`}
-                  data-testid={`goal-${goal.id}`}>
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-sm">
-                    <goal.icon size={18} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold">{goal.label}</p>
-                    <p className="text-xs text-muted-foreground">{goal.desc}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
+            {goals.map((goal, idx) => (
+              <button key={goal.id} onClick={() => { setData(d => ({ ...d, primary_goal: goal.id })); next(); }}
+                style={{ animationDelay: `${idx * 55}ms` }}
+                className={`animate-fade-in flex flex-col items-start gap-3 p-4 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-[#BFFF00]/50 text-left ${data.primary_goal === goal.id ? 'border-[#BFFF00] bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/10' : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/80'}`}
+                data-testid={`goal-${goal.id}`}>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-sm">
+                  <goal.icon size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold">{goal.label}</p>
+                  <p className="text-xs text-muted-foreground">{goal.desc}</p>
+                </div>
+              </button>
+            ))}
           </div>
         )}
 
-        {/* Step 4: How did you hear about us? — Iter 92.45 (Riverside-style attribution) */}
+        {/* Step 4: How did you hear about us? */}
         {step === 4 && (
           <div className="space-y-5 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-2xl font-black">{de ? 'Wie hast du von uns gehört?' : 'How did you hear about us?'}</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                {de ? 'Hilft uns, mehr Menschen wie dich zu erreichen.' : 'Helps us reach more people like you.'}
-              </p>
-            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              {heardSources.map((src) => (
+              {heardSources.map((src, idx) => (
                 <button
                   key={src.id}
                   onClick={() => { setData((d) => ({ ...d, heard_from: src.id })); next(); }}
                   data-testid={`heard-${src.id}`}
-                  className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-[#BFFF00]/40 ${
+                  style={{ animationDelay: `${idx * 35}ms` }}
+                  className={`animate-fade-in flex flex-col items-center gap-2 p-3 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-[#BFFF00]/40 ${
                     data.heard_from === src.id
                       ? 'border-[#BFFF00] bg-[#BFFF00]/[0.08]'
                       : 'border-black/[0.06] dark:border-white/[0.06] bg-white/80 dark:bg-card/60'
@@ -262,11 +294,6 @@ export default function OnboardingPage() {
         {/* Step 5: WladHub */}
         {step === 5 && (
           <div className="space-y-5 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-2xl font-black">{de ? 'Hast du die WladHub-Diagnose gemacht?' : 'Have you done the WladHub Diagnosis?'}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{de ? 'Deine Diagnose-Ergebnisse fließen direkt in deinen KI-Coach ein.' : 'Your diagnosis results flow directly into your AI coach.'}</p>
-            </div>
-
             <Card className="border-amber-200/50 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-500/5 dark:to-orange-500/5">
               <CardContent className="p-5">
                 <div className="flex items-center gap-3 mb-4">
@@ -318,19 +345,13 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 6: Strategy Call CTA — Cal.com (Iter 92.10: no "Free" wording, premium positioning) */}
+        {/* Step 6: Strategy Call CTA — Cal.com */}
         {step === 6 && (
           <div className="space-y-5 animate-fade-in" data-testid="onboarding-call-step">
             <div className="text-center">
-              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-black uppercase tracking-wider px-3 py-1 mb-3">
+              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-black uppercase tracking-wider px-3 py-1">
                 {de ? '15 Min · Unverbindlich · 1:1' : '15 min · No strings · 1:1'}
               </Badge>
-              <h2 className="text-2xl font-black tracking-tight">{de ? 'Sicher den schnellsten Weg.' : 'Lock in the fastest path.'}</h2>
-              <p className="text-sm text-muted-foreground mt-1.5 max-w-md mx-auto">
-                {de
-                  ? 'Bevor du loslegst — sichere dir einen Termin mit unserem Argumentorik-Berater. 15 Min, in denen du klar bekommst: wo stehst du, wo blockierst du, was sind deine nächsten 30 Tage.'
-                  : 'Before you dive in — book a slot with our Argumentorik consultant. 15 min to find out where you stand, where you block yourself, what your next 30 days should be.'}
-              </p>
             </div>
 
             <Card className="overflow-hidden border-emerald-200/40 dark:border-emerald-500/20 bg-gradient-to-br from-emerald-50/40 to-[#BFFF00]/[0.04] dark:from-emerald-500/[0.04] dark:to-[#BFFF00]/[0.03]">
@@ -385,21 +406,41 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 7: Done */}
+        {/* Step 7: Done — WladBot confirms, personalized summary */}
         {step === 7 && (
           <div className="text-center space-y-6 animate-fade-in">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mx-auto shadow-2xl shadow-green-500/30">
-              <CheckCircle2 size={36} className="text-white" />
+            <div className="relative mx-auto inline-flex">
+              <WladBotAvatar size={88} live />
+              <span className="absolute -top-1 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/40 border-2 border-white dark:border-[#0A0A0A]">
+                <CheckCircle2 size={16} className="text-white" />
+              </span>
             </div>
             <div>
-              <h2 className="text-2xl font-black">{de ? 'Alles eingerichtet!' : 'All set!'}</h2>
-              <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto">
-                {de ? 'Dein persönlicher KI-Coach ist jetzt auf dich kalibriert. Starte mit deinem ersten Daily Check-in oder erkunde das Dashboard.' : 'Your personal AI coach is now calibrated for you. Start with your first daily check-in or explore the dashboard.'}
+              <h2 className="text-2xl font-black">{de ? `Perfekt kalibriert, ${firstName}.` : `Perfectly calibrated, ${firstName}.`}</h2>
+              <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
+                {de
+                  ? 'Ab jetzt zeige ich dir jeden Tag die Richtung — mit Challenges, Feedback und Wlads Methodik im Rücken.'
+                  : "From now on I'll show you the direction every day — with challenges, feedback and Wlad's methodology behind you."}
               </p>
+              {/* Personalized profile chips */}
+              {(roleLabel || goalLabel) && (
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-4" data-testid="onboarding-summary-chips">
+                  {roleLabel && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#BFFF00]/10 text-[#4A6200] dark:text-[#BFFF00] border border-[#BFFF00]/25">
+                      <Briefcase size={11} /> {roleLabel}
+                    </span>
+                  )}
+                  {goalLabel && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25">
+                      <Target size={11} /> {goalLabel}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-3 max-w-xs mx-auto">
               <Button onClick={finish} disabled={loading}
-                className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold h-12 shadow-lg shadow-[#BFFF00]/15"
+                className="glow-lime btn-shine bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold h-12 shadow-lg shadow-[#BFFF00]/15"
                 data-testid="finish-onboarding-btn">
                 {loading ? (de ? 'Wird eingerichtet...' : 'Setting up...') : (de ? 'Zum Dashboard' : 'Go to Dashboard')} <ArrowRight size={16} className="ml-2" />
               </Button>
