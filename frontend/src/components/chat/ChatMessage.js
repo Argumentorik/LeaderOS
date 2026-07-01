@@ -2,6 +2,7 @@ import { Badge } from '../ui/badge';
 import { Lightbulb, Target, ListChecks, CheckCircle2 } from 'lucide-react';
 import SmartText from '../shared/SmartText';
 import { ModalityBadge } from './ModalityBadge';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 
 const UserMessage = ({ content, modality }) => (
   <div className="flex justify-end mb-4 animate-fade-in" data-testid="chat-user-message">
@@ -19,7 +20,8 @@ const UserMessage = ({ content, modality }) => (
 );
 
 const PlainAssistantMessage = ({ content }) => (
-  <div className="flex mb-4 animate-fade-in" data-testid="chat-ai-message">
+  <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
+    <WladBotAvatar size={28} className="mt-1" />
     <div className="max-w-[80%] bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
       <SmartText text={content} variant="inline" accent="#BFFF00" icon={Lightbulb} />
     </div>
@@ -36,8 +38,9 @@ export const ChatMessage = ({ msg, de }) => {
   if (!parsed) return <PlainAssistantMessage content={msg.content} />;
 
   return (
-    <div className="flex mb-6 animate-fade-in" data-testid="chat-ai-message">
-      <div className="max-w-[85%] space-y-2.5">
+    <div className="flex mb-6 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
+      <WladBotAvatar size={28} className="mt-1" />
+      <div className="max-w-[85%] space-y-2.5 flex-1 min-w-0">
         {parsed.agent_used && (
           <Badge className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white text-[10px] font-semibold border-0">
             {parsed.agent_used}

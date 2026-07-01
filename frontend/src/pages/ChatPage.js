@@ -16,6 +16,7 @@ import { ChatInputBar } from '../components/chat/ChatInputBar';
 import { ChatInlineUpsell } from '../components/chat/ChatInlineUpsell';
 import { VoiceModeOverlay } from '../components/chat/VoiceModeOverlay';
 import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
+import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 
 const buildFullMessage = ({ text, messages, userContext, attachedPdf }) => {
   let fullMsg = text;
@@ -251,7 +252,8 @@ export default function ChatPage() {
             </div>
           ))}
           {loading && (
-            <div className="flex mb-4">
+            <div className="flex mb-4 items-start gap-2.5" data-testid="chat-typing-indicator">
+              <WladBotAvatar size={28} pulse className="mt-1" />
               <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl px-4 py-3 flex gap-1 shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" />
                 <div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" />

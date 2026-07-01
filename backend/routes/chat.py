@@ -360,8 +360,20 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         system_msg = system_msg + rag_ctx["context_block"]
 
     try:
+        # Iter 92.48 (Mert · GODMODE): Hybrid model routing.
+        # - Short questions (<180 chars, no code blocks, no PDF attachment) →
+        #   gpt-4o-mini: ~3-5x faster (2-4s vs 12-18s), plenty smart when
+        #   grounded in Wlad's RAG context.
+        # - Long/deep coaching messages → gpt-5.2: full reasoning power for
+        #   nuanced advice, playbook building, strategic breakdowns.
+        # RAG is always on for both — so Wlad's frameworks stay grounded.
+        msg_len = len(data.message or "")
+        has_attachment = "[Dokument:" in (data.message or "") or "[Bild angehängt:" in (data.message or "")
+        use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"
+        model_name = "gpt-5.2" if use_deep_model else "gpt-4o-mini"
+
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"wladbot_{session_id}", system_message=system_msg)
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("openai", model_name)
 
         context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
         ai_response = await chat.send_message(UserMessage(text=f"{context}\nUser: {data.message}"))

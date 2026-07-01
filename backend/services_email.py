@@ -122,7 +122,15 @@ async def send_email(
 # ── Email Templates ─────────────────────────────────────────────
 
 def _base_layout(body_html: str, preheader: str = "") -> str:
-    """Wrap content in WladBot branded email shell."""
+    """Wrap content in WladBot branded email shell.
+
+    Iter 92.48 (Mert · GODMODE): the header now uses the actual WladBot avatar
+    image so users see the same face across chat AND email — reinforcing that
+    they're talking to ONE persona. If the PNG fails to load in a stricter
+    email client (Outlook desktop, plain-text preview), the `alt="W"` renders
+    on the lime background so the mark still reads as a branded tile.
+    """
+    avatar_url = f"{_frontend_url()}/wladbot-avatar.png"
     return f"""<!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -135,8 +143,8 @@ def _base_layout(body_html: str, preheader: str = "") -> str:
   <tr><td style="padding:28px 32px 0;">
     <table role="presentation" width="100%"><tr>
       <td style="vertical-align:middle;">
-        <div style="display:inline-block;width:42px;height:42px;border-radius:12px;background:{BRAND_COLOR};text-align:center;line-height:42px;font-weight:900;font-size:20px;color:{BRAND_DARK};">W</div>
-        <span style="font-weight:900;color:#fff;font-size:16px;margin-left:10px;letter-spacing:-0.02em;">WladBot</span>
+        <img src="{avatar_url}" alt="W" width="42" height="42" style="display:inline-block;vertical-align:middle;width:42px;height:42px;border-radius:12px;background:{BRAND_COLOR};color:{BRAND_DARK};font-weight:900;font-size:20px;text-align:center;line-height:42px;border:0;" />
+        <span style="font-weight:900;color:#fff;font-size:16px;margin-left:10px;letter-spacing:-0.02em;vertical-align:middle;">WladBot</span>
       </td>
       <td style="text-align:right;font-size:10px;color:rgba(255,255,255,0.35);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Leadership OS</td>
     </tr></table>

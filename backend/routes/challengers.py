@@ -32,6 +32,21 @@ async def start_challenge(challenger_id: str, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.challenges.insert_one(doc)
+
+    # Iter 92.48 (Mert · GODMODE): Use STATIC canonical intro instead of firing
+    # a GPT-5.2 call. Saves 3-5s of latency + is voice-cache-hittable so the
+    # ElevenLabs TTS plays in <200ms on the first click. Mert: "vorab catchen
+    # ist ja sowieso immer der selbe start". If a challenger has no static
+    # intro (safety net), fall back to LLM-generated intro.
+    static_intro = challenger.get("initial_message")
+    if static_intro:
+        clean_intro = clean_ai_text(static_intro)
+        await db.challenges.update_one(
+            {"challenge_id": challenge_id},
+            {"$push": {"messages": {"role": "assistant", "content": clean_intro, "timestamp": datetime.now(timezone.utc).isoformat()}}},
+        )
+        return {"challenge_id": challenge_id, "challenger": challenger, "initial_message": clean_intro}
+
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"chal_{challenge_id}", system_message=challenger["test_prompt"])
         chat.with_model("openai", "gpt-5.2")
@@ -44,6 +59,27 @@ async def start_challenge(challenger_id: str, request: Request):
     except Exception as e:
         logger.error(f"Challenge start error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/challengers/intros")
+async def get_challenger_intros(request: Request):
+    """Iter 92.48 (Mert · GODMODE): Return each challenger's canonical intro
+    message + persona key so the frontend can pre-warm the ElevenLabs TTS
+    cache BEFORE the user clicks a card. Result: voice plays instantly.
+
+    Auth-required so we don't leak the app's coaching corpus to scrapers.
+    """
+    await get_current_user(request)
+    return [
+        {
+            "challenger_id": c["challenger_id"],
+            "name": c["name"],
+            "avatar": c.get("avatar"),
+            "initial_message": c.get("initial_message") or "",
+        }
+        for c in LEADERSHIP_CHALLENGERS
+        if c.get("initial_message")
+    ]
 
 
 def _parse_challenge_result(ai_response: str) -> dict | None:

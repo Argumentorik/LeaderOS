@@ -87,6 +87,47 @@ export default function ChallengersPage() {
     try { const res = await api.get('/challengers/history'); setHistory(res.data); } catch (err) { logger.error(err); }
   }, []);
 
+  // Iter 92.48 (Mert · GODMODE): Warm-cache everything the moment the user
+  // hits this page — so the first click feels INSTANT.
+  //
+  // 1) Prefetch avatar images (browser cache) — no more slow image pop-in.
+  // 2) Prefetch ElevenLabs TTS for each challenger's static intro. On the
+  //    first visit this actually synthesises (~2-4s per persona, kicked off
+  //    in parallel); on repeat visits the audio is already cached server-side
+  //    and returns as a base64 data-URL in <200ms → the voice plays the
+  //    instant the user picks a challenger. "Vorab catchen ist ja sowieso
+  //    immer der selbe start" — exactly what Mert asked for.
+  const warmedRef = useRef(false);
+  useEffect(() => {
+    if (warmedRef.current || challengers.length === 0) return;
+    warmedRef.current = true;
+    // (a) Image preload — via Image() so browser puts them in the disk cache
+    // without rendering them yet.
+    challengers.forEach((c) => {
+      if (!c?.avatar) return;
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = c.avatar;
+    });
+    // (b) Voice warm-cache — fetch static intros then hit /voice/tts in
+    // parallel. Fire-and-forget: any failure just means the user hears the
+    // voice ~2s later on first click. No UI feedback, no toast.
+    (async () => {
+      try {
+        const res = await api.get('/challengers/intros');
+        const intros = res.data || [];
+        await Promise.all(intros.map((it) =>
+          api.post('/voice/tts', {
+            text: it.initial_message,
+            persona: it.challenger_id,
+          }).catch(() => null)
+        ));
+      } catch (err) {
+        logger.warn?.('Challenger warm-cache skipped:', err?.message);
+      }
+    })();
+  }, [challengers]);
+
   useEffect(() => { loadChallengers(); loadHistory(); }, [loadChallengers, loadHistory]);
   useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
   useEffect(() => () => stopSpeaking(), []);
@@ -154,6 +195,7 @@ export default function ChallengersPage() {
                     <div className="flex items-stretch">
                       <div className="relative w-28 sm:w-32 shrink-0">
                         <img src={c.avatar} alt={c.name} className="w-full h-full object-cover min-h-[160px]"
+                          loading="eager" decoding="async" fetchpriority="high"
                           onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
                         <div className="hidden w-full h-full items-center justify-center text-2xl font-black text-white min-h-[160px]" style={{ backgroundColor: c.color || '#6366F1' }}>
                           {c.name.split(' ').map(n => n[0]).join('')}

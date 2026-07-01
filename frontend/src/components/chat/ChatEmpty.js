@@ -1,5 +1,6 @@
-import { MessageSquareText, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { WLAD_TOPIC_PILLARS } from '../../data/wladTopics';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 
 const SUGGESTIONS_DE = [
   'Hilf mir, eine schwierige Botschaft überzeugend zu vermitteln',
@@ -57,8 +58,8 @@ export const ChatEmpty = ({ setInput, lang, de }) => {
   const suggestions = de ? SUGGESTIONS_DE : SUGGESTIONS_EN;
   return (
     <div className="flex flex-col items-center justify-center text-center py-12" data-testid="chat-empty">
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center mb-5 shadow-xl shadow-black/10">
-        <MessageSquareText size={28} className="text-white" />
+      <div className="mb-5">
+        <WladBotAvatar size={72} ring />
       </div>
       <h3 className="text-xl font-black mb-2">{de ? 'Worüber willst du sprechen?' : 'What do you want to talk about?'}</h3>
       <p className="text-sm text-muted-foreground max-w-md mb-7">
