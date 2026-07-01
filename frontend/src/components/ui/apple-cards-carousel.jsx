@@ -169,10 +169,16 @@ export const Card = ({ card, index, layout = false }) => {
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
         data-testid={`apple-card-${index}`}
-        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-neutral-900 md:h-[34rem] md:w-96 group"
+        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-neutral-900 md:h-[34rem] md:w-96 group cursor-pointer"
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/70 via-black/20 to-black/80" />
-        <div className="relative z-40 p-7 md:p-8">
+        {/* Base gradient — visible when idle */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/70 via-black/20 to-black/80 transition-opacity duration-500 group-hover:opacity-0" />
+
+        {/* Hover gradient — deep dark bg to keep text legible */}
+        <div className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-b from-black/50 via-black/70 to-black/95 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+        {/* Category + Title (idle, top-left) */}
+        <div className="relative z-40 p-7 md:p-8 transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-2">
           <motion.p className="text-left font-mono text-[10px] md:text-[11px] tracking-[0.18em] uppercase font-bold text-[#C8FF00]">
             {card.category}
           </motion.p>
@@ -180,12 +186,31 @@ export const Card = ({ card, index, layout = false }) => {
             {card.title}
           </motion.p>
         </div>
+
+        {/* HOVER OVERLAY — full card content, fades in smoothly */}
+        {card.content && (
+          <div
+            data-testid={`apple-card-hover-${index}`}
+            className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-end p-6 md:p-8 opacity-0 translate-y-4 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0 text-left"
+          >
+            <motion.p className="font-mono text-[10px] md:text-[11px] tracking-[0.18em] uppercase font-bold text-[#C8FF00]">
+              {card.category}
+            </motion.p>
+            <motion.p className="mt-2 mb-4 text-lg md:text-2xl font-extrabold text-white leading-tight tracking-tight">
+              {card.title}
+            </motion.p>
+            <div className="text-slate-200 text-sm md:text-[15px] leading-relaxed max-h-[60%] overflow-hidden [mask-image:linear-gradient(to_bottom,black_75%,transparent)]">
+              {card.content}
+            </div>
+          </div>
+        )}
+
         <img
           src={card.src}
           alt={card.title}
           loading="lazy"
           decoding="async"
-          className="absolute inset-0 z-10 object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 z-10 object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
         />
       </motion.button>
     </>

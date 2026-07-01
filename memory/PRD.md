@@ -6,6 +6,17 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 ## 🛡️ Godmode Security Hardening · Fund-Ready (Feb 2026)
 Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden ALLE P0/P1/P2/P3 Findings gefixt. Verifiziert via testing_agent Iter40: **17/17 Unit-Tests + 16/16 Integration-Tests PASS**, 0 critical/minor Code-Bugs.
 
+## 🎯 UX-Polish · Apple Cards Hover-Overlay (Feb 2026)
+- `components/ui/apple-cards-carousel.jsx` Card-Komponente jetzt mit **Smooth Hover-Overlay**:
+  - Idle: Kategorie + Titel top-left auf Bild sichtbar (dunkler Top→Bottom-Gradient)
+  - Hover: Base-Gradient fadet aus, Deep-Dark-Gradient (`from-black/50 via-black/70 to-black/95`) fadet ein, `card.content` (Beschreibung + Bullets) slidet smooth von unten rein (500ms, ease-out)
+  - Bild zoomt weiter (`scale-110`), Text bekommt `mask-image` Fadeout bei Overflow
+  - Klick-to-Modal weiterhin verfügbar für Power-User; kein Klick mehr nötig für Verkaufsargumente
+- data-testid `apple-card-hover-{index}` für Testbarkeit
+- AgentsCarouselSection Paragraph: "Klick eine Karte" → "Hover eine Karte"
+- WladBot-Bild-Swap auf `/wladbot-3.png` in allen aktiven Referenzen (MariaWay, skeleton-card) bestätigt.
+
+
 **Zentraler Security-Service** (`services/security.py`, 190 Z.):
 - **Report/Sync JWT** (HS256, `REPORT_JWT_SECRET` env-required, kein Default) — 30-Tage-Token für Report-Ownership, 10-Min-Sync-Token für Leader-OS-Handoff, unterschiedliche `aud`-Claims blockieren Cross-Replay
 - **OTP** (6-stellig, 10-Min-TTL, 5-Attempts-Lockout, sha256+per-record-salt) für passwortlose Logins

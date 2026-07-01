@@ -24,7 +24,7 @@ export default function AgentsCarouselSection() {
             style={{ fontSize: "18px", letterSpacing: "-0.011em" }}
           >
             Jeder Agent ist auf einen Bereich deiner Führungsentwicklung spezialisiert.{" "}
-            <span className="text-white">Klick eine Karte · sieh, was er für dich übernimmt.</span>
+            <span className="text-white">Hover eine Karte · sieh, was er für dich übernimmt.</span>
           </p>
         </div>
 
