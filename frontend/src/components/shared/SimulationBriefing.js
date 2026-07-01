@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, Play, Swords, ArrowRight } from 'lucide-react';
 
 const COUNTERPARTS = (de) => [
@@ -48,6 +48,12 @@ export const SimulationBriefing = ({ scenario, onStart, onClose, loading, de }) 
   const counterparts = COUNTERPARTS(de);
   const goals = GOALS(de);
 
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-5 bg-[#0A0A0A]/75 backdrop-blur-md animate-fade-in" onClick={onClose} data-testid="simulation-briefing">
       <div
@@ -55,7 +61,7 @@ export const SimulationBriefing = ({ scenario, onStart, onClose, loading, de }) 
         onClick={(e) => e.stopPropagation()}
       >
         <div aria-hidden className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-44 w-72 rounded-full bg-rose-500/[0.10] blur-[70px]" />
-        <button onClick={onClose} className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-white/40 hover:text-white z-10" data-testid="briefing-close" aria-label="close">
+        <button onClick={onClose} className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-white/40 hover:text-white z-10" data-testid="briefing-close" aria-label={de ? 'Schließen' : 'Close'}>
           <X size={13} />
         </button>
 

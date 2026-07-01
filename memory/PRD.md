@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.58 · 02.07.26] Godmode: Simulations-Briefing, Grok-Chat, Task-Opt-in** — Testing-Agent 100 % (iteration_92_58.json)
+  - **Simulations-Briefing-Wizard** (`SimulationBriefing.js`): Klick auf Szenario öffnet 10-Sek-Briefing (Gegenüber-Stil: emotional/rational/dominant + Trainingsziel: Klarheit/Empathie/Ergebnis) → fließt in KI-Persona-Prompt (`setup_block` in simulations.py, auch bei Folgeturns). Start erst nach beiden Klicks. ESC/Backdrop/X schließen.
+  - **Chat Follow-up-Chips**: Schema `follow_up_questions` (services.py, genau 2 kontextuelle Fragen aus User-Sicht) → klickbare Chips unter der letzten Antwort (`chat-followup-chips`), Klick sendet direkt.
+  - **Tasks = Opt-in**: Kein Auto-Save mehr. Vorschlagskarte + „Als Aufgaben übernehmen" → `POST /api/chat/tasks/accept` (max 5, validiert).
+  - **Design**: Lime-Send-Button, Lime-Focus-Ring, neuer Placeholder, Szenario-Card-Hover mit Icon-Rotation.
 - [x] **[Iter 92.57 · 01.07.26] Branding + Trust-Pass: Magic-Mail, Drawer, Dashboard-Event-Banner** —
   - **Magic-Link-E-Mail**: Trust-Row (🔒 SSL · 🇩🇪 DSGVO · Einmal-Link), „WladBot 3.0"-Badge im Header, gebrandeter Footer (Argumentorik GmbH · leaderos.de), **dynamischer Event-Teaser** („🔴 NICHT VERPASSEN · Nächstes Live-Event" mit Datum + „Platz sichern →", zieht nächstes freies Event aus DB). Versand verifiziert.
   - **FloatingWladBotDrawer**: echtes Avatar (live) statt W-Tile im Header + Empty-State, „3.0"-Badge, personalisierte Begrüßung („Was beschäftigt dich gerade, {Vorname}?").
