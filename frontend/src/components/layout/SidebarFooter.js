@@ -4,9 +4,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTier } from '../../contexts/TierContext';
 import { usePricing } from '../../contexts/PricingContext';
 import { TierBadge } from '../shared/TierBadge';
-import { Crown, Settings } from 'lucide-react';
+import { Crown, Settings, Sparkles } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { hasUnseenChangelog } from '../../lib/changelogMeta';
 import {
   IconGlobe, IconSun, IconMoon, IconLogout, IconCamera,
 } from './SidebarIcons';
@@ -40,6 +41,22 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
 
   return (
     <div className="border-t border-black/[0.03] dark:border-white/[0.03] p-2 space-y-0.5">
+      {/* Iter 92.49: "Was ist neu?" → /changelog. Lime pulse-dot until the
+          latest version was seen (localStorage, see lib/changelogMeta). */}
+      <button data-testid="sidebar-changelog-btn" onClick={() => navigate('/changelog')}
+        className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-gray-600 dark:text-muted-foreground/50 dark:hover:text-[#BFFF00] hover:bg-gray-50/50 dark:hover:bg-[#BFFF00]/[0.04] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
+        <span className="relative flex shrink-0">
+          <Sparkles size={14} />
+          {hasUnseenChangelog() && (
+            <span className="absolute -top-0.5 -right-1 w-[7px] h-[7px] rounded-full bg-[#BFFF00] shadow-[0_0_6px_rgba(191,255,0,0.8)] animate-pulse" data-testid="changelog-new-dot" />
+          )}
+        </span>
+        {!collapsed && (
+          <span className="flex items-center gap-1.5 flex-1">
+            <span className="font-medium">{lang === 'de' ? 'Was ist neu?' : "What's new?"}</span>
+          </span>
+        )}
+      </button>
       <button data-testid="lang-toggle-btn" onClick={toggleLang}
         className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-gray-600 dark:text-muted-foreground/50 dark:hover:text-foreground/70 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
         <IconGlobe size={14} />

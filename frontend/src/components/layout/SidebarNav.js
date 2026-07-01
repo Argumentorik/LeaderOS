@@ -1,20 +1,16 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Lock } from 'lucide-react';
+import { LockedFeatureModal } from '../shared/LockedFeatureModal';
 
 /**
- * Iter 92.34 (Mert Go-Live §C): items with `locked: true` (Free tier on premium
- * sections) render a 🔒 icon AND redirect to /coaching (upgrade page) instead
- * of opening the locked surface. Premium UX expectation: lock = upgrade gate,
- * not a 404. Applies to Simulations, Playbooks, Tasks, Workflows, Lern-Videos,
- * Events.
+ * Iter 92.49 (Mert Godmode): locked items (Free tier on premium sections) open
+ * a premium LockedFeatureModal (feature teaser + upgrade CTA) instead of a
+ * hard redirect. Applies to Simulations, Playbooks, Tasks, Workflows,
+ * Lern-Videos, Events.
  */
 export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
-  const navigate = useNavigate();
-
-  const handleLockedClick = (e) => {
-    e.preventDefault();
-    navigate('/coaching');
-  };
+  const [lockedItem, setLockedItem] = useState(null);
 
   return (
     <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-hide" data-testid="sidebar-nav">
@@ -34,22 +30,26 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
             // ── Locked item: render as a clickable div that routes to /coaching ──
             if (item.locked) {
               return (
-                <a
+                <button
                   key={item.path}
-                  href="/coaching"
-                  onClick={handleLockedClick}
+                  type="button"
+                  onClick={() => setLockedItem(item)}
                   data-testid={`nav-locked-${item.path.replace('/', '')}`}
-                  className={`${baseCls} text-gray-400/70 dark:text-muted-foreground/40 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50/40 dark:hover:bg-amber-500/[0.05] cursor-pointer`}
-                  title={`${item.label} — Upgrade required`}
+                  className={`${baseCls} group w-full text-left text-gray-400/70 dark:text-muted-foreground/40 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50/40 dark:hover:bg-amber-500/[0.05] cursor-pointer`}
+                  title={`${item.label} — mit Leadership OS freischalten`}
                 >
                   <item.icon size={16} className="shrink-0 opacity-70" />
                   {!collapsed && (
                     <>
                       <span className="opacity-80">{item.label}</span>
-                      <Lock size={11} className="ml-auto shrink-0 text-amber-500/80" data-testid={`lock-${item.path.replace('/', '')}`} />
+                      <Lock
+                        size={11}
+                        className="ml-auto shrink-0 text-amber-500/80 transition-transform duration-200 group-hover:scale-125 group-hover:-rotate-12"
+                        data-testid={`lock-${item.path.replace('/', '')}`}
+                      />
                     </>
                   )}
-                </a>
+                </button>
               );
             }
 
@@ -69,6 +69,9 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
           })}
         </div>
       ))}
+      {lockedItem && (
+        <LockedFeatureModal item={lockedItem} onClose={() => setLockedItem(null)} />
+      )}
     </nav>
   );
 };

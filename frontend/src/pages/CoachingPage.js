@@ -102,8 +102,8 @@ export default function CoachingPage() {
               </h1>
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
                 {de
-                  ? 'Ein KI-gestütztes Coaching-System auf Basis von Wlad, das deine Kommunikation, Wirkung und Entscheidungsfähigkeit in Echtzeit trainiert.'
-                  : 'An AI-powered coaching system based on Wlad — training your communication, impact and decision-making in real time.'}
+                  ? <>Dein KI-Coaching-System auf Basis von Wlads Methodik: Es hört, wie du sprichst. Es versteht, wie du denkst. Und es trainiert dich Tag für Tag zu dem Leader, dem Menschen <em className="not-italic font-semibold text-foreground">folgen wollen</em>.</>
+                  : <>Your AI coaching system built on Wlad&rsquo;s methodology: it hears how you speak, understands how you think — and trains you, day by day, into the leader people <em className="not-italic font-semibold text-foreground">want</em> to follow.</>}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Button

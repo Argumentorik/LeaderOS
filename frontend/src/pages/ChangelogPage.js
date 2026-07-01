@@ -11,10 +11,23 @@
  * Newest at top. Hand-curated — NOT auto-generated from git, because
  * raw commit messages are noisy and unconvincing to humans.
  */
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Zap, Wrench, Rocket } from 'lucide-react';
+import { markChangelogSeen } from '../lib/changelogMeta';
 
 const ENTRIES = [
+  {
+    date: '1. Juli 2026',
+    version: 'v92.49',
+    tag: 'SHIP',
+    title: 'Godmode Design-Pass: WladBot überall, Speed-Hybrid & Premium Lock-Popups',
+    bullets: [
+      'WladBot-Avatar jetzt im Chat, in jeder E-Mail und bei den Challengers — ein Gesicht, eine Stimme, überall.',
+      'Hybrid AI-Routing: kurze Fragen in unter 2 Sekunden beantwortet, tiefe Fragen mit vollem RAG-Kontext.',
+      'Gesperrte Bereiche öffnen ein Premium-Popup mit klarem Upgrade-Pfad — kein Umleiten mehr, nur Klarheit.',
+    ],
+  },
   {
     date: '20. Juni 2026',
     version: 'v92.28',
@@ -109,6 +122,7 @@ const TAG_STYLE = {
 };
 
 export default function ChangelogPage() {
+  useEffect(() => { markChangelogSeen(); }, []);
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* ── Header ── */}
@@ -143,9 +157,9 @@ export default function ChangelogPage() {
             const tag = TAG_STYLE[entry.tag] || TAG_STYLE.FEATURE;
             const TagIcon = tag.icon;
             return (
-              <article key={entry.version} className="relative pl-7" data-testid={`changelog-${entry.version}`}>
+              <article key={entry.version} className="group relative pl-7 transition-transform duration-300 hover:translate-x-1" data-testid={`changelog-${entry.version}`}>
                 {/* Lime tick on the timeline */}
-                <span className="absolute left-0 top-1.5 w-2.5 h-2.5 rounded-full bg-[#BFFF00] shadow-[0_0_12px_rgba(191,255,0,0.4)]" />
+                <span className="absolute left-0 top-1.5 w-2.5 h-2.5 rounded-full bg-[#BFFF00] shadow-[0_0_12px_rgba(191,255,0,0.4)] transition-shadow duration-300 group-hover:shadow-[0_0_20px_rgba(191,255,0,0.75)]" />
                 <span className="absolute left-[5px] top-[26px] bottom-[-40px] w-px bg-white/[0.06]" />
 
                 <header className="flex items-center gap-2 mb-1.5">
@@ -157,7 +171,7 @@ export default function ChangelogPage() {
                   </span>
                 </header>
 
-                <h2 className="text-xl font-bold mb-3 leading-snug" style={{ fontFamily: 'Outfit, Inter, system-ui' }}>
+                <h2 className="text-xl font-bold mb-3 leading-snug transition-colors duration-200 group-hover:text-[#BFFF00]" style={{ fontFamily: 'Outfit, Inter, system-ui' }}>
                   {entry.title}
                 </h2>
 

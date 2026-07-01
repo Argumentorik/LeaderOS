@@ -30,7 +30,7 @@ export const LoginBrandPanel = ({ features, de }) => {
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl tracking-tighter leading-[1.08] text-white mb-8" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 500, letterSpacing: '-0.035em' }}>
+          <h1 className="text-4xl sm:text-5xl tracking-tighter leading-[1.08] text-white mb-5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 500, letterSpacing: '-0.035em' }}>
             {de ? (
               <>
                 <span className="block">Die Zukunft gehört</span>
@@ -45,6 +45,12 @@ export const LoginBrandPanel = ({ features, de }) => {
               </>
             )}
           </h1>
+
+          <p className="text-[13.5px] text-white/40 leading-relaxed max-w-sm mb-2">
+            {de
+              ? 'Klarheit ist kein Talent — sie ist ein System. Wlads Methodik als KI, rund um die Uhr an deiner Seite.'
+              : "Clarity isn't a talent — it's a system. Wlad's methodology as AI, by your side around the clock."}
+          </p>
 
           <div className="space-y-3.5 mt-10 cascade">
             {features.slice(0, 3).map(item => (
@@ -66,7 +72,7 @@ export const LoginBrandPanel = ({ features, de }) => {
 
         <div className="mt-16">
           <p className="text-[11px] text-white/15 tracking-wide">
-            {de ? '2.500+ Führungskräfte — von Startups bis DAX.' : '2,500+ leaders — from startups to Fortune 500.'}
+            {de ? '2.500+ Führungskräfte trainieren bereits mit Leader-OS — von Startups bis DAX.' : '2,500+ leaders already train with Leader-OS — from startups to Fortune 500.'}
           </p>
         </div>
       </div>

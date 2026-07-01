@@ -1,0 +1,40 @@
+{
+  "summary": "Iter 92.49 Godmode Design-Pass: FULL PASS. Locked feature modal, changelog discoverability, magic link, taglines all verified. Backend 6/6, Frontend ~95% (only minor gap: 'footer-changelog' testid missing on LoginPage).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/magic-link/request", "issue": "Pydantic EmailStr rejects .test TLD with 422 → seeded users like free@wladbot.test cannot use magic link at all. Only .com/.de emails work. RCA: FastAPI's default EmailStr validator uses email-validator which flags .test/.invalid/.localhost as reserved. Real .com users work (test@test.com → 'Resend send OK' confirmed in backend log). Fix option: switch schema to plain `str` with a lightweight regex, or configure email-validator to allow test/special domains, or replace seed emails with .de. Not blocking prod users but blocks internal QA of magic-link for seeded test tiers."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "LoginPage footer", "issue": "Expected 'footer-changelog' testid/link is NOT present on /login page. Grep of frontend/src returns 0 hits for 'footer-changelog'. Feature spec calls for a Changelog link in login footer but implementation is missing.", "selector": "[data-testid='footer-changelog']", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_49_godmode.py",
+    "/app/test_reports/pytest/iter92_49_results.xml"
+  ],
+  "action_items": [
+    "LOW: Add Changelog link with data-testid='footer-changelog' to LoginPage footer (currently missing).",
+    "LOW/OPTIONAL: Loosen magic-link email schema so *.test seeded users can request magic links during QA (or document that only real TLDs are supported)."
+  ],
+  "critical_code_review_comments": [
+    "LockedFeatureModal.js is clean: portal-less overlay uses z-[120], Escape key handled via useEffect cleanup, backdrop click closes, stopPropagation on inner card. All 6 nav-locked items map to a FEATURES config with tagline+benefits — good separation. ✓",
+    "SidebarNav.js correctly renders locked items as <button> (not NavLink) → no accidental route on click, only setLockedItem opens modal. testid 'nav-locked-<path>' matches spec. ✓",
+    "changelogMeta.js localStorage guard uses try/catch → safe against private mode. hasUnseenChangelog and markChangelogSeen contract is clean. ✓",
+    "SidebarFooter.js: 'Was ist neu?' button pulses lime dot only while hasUnseenChangelog() is true. After /changelog visit, dot reliably disappears (verified in DOM: element absent post-visit). ✓",
+    "services_magic_link.py: _BASE_URL_DEFAULT correctly points to https://leaderos.de (no dash). Token stored as sha256 hash (never raw), atomic find_and_update on consume prevents replay, TTL index on expires_at cleans up. Solid. ✓",
+    "MINOR: /api/auth/magic-link/request response body always identical ('Falls die E-Mail... existiert') — good anti-enumeration, but pydantic EmailStr's 422 for .test TLD LEAKS existence-independent structural info that a real user typing 'foo@example.test' would hit. Consider accepting broader inputs then silently no-op on invalid."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter92_49_godmode.py"],
+  "success_rate": {"backend": "100% (6/6 relevant tests)", "frontend": "95% (19/20 assertions — only footer-changelog on login missing)"},
+  "test_credentials": "free@wladbot.test / test123 (Free — shows locks), standard@wladbot.test / test123 (Standard — no locks), test@test.com / test123 (used for magic-link because real .com TLD).",
+  "seed_data_creation": "None. Used existing seed users.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All Iter 92.49 Godmode acceptance criteria verified end-to-end on desktop 1920×1080. Test suite at /app/backend/tests/test_iter92_49_godmode.py. Verified: (a) 6 locked nav items (tasks/simulations/playbooks/tools/lern-videos/events) for free tier — clicking opens LockedFeatureModal with €997 label, 'Jetzt freischalten' opens PricingModal, 'Alle Pläne vergleichen' navigates /coaching, close via X + Escape + backdrop all work; (b) standard tier: 0 locked buttons, nav-simulations navigates to /simulations directly; (c) sidebar 'Was ist neu?' button + lime pulse dot present pre-visit, /changelog shows data-testid='changelog-v92.49' entry, localStorage['changelog_seen']='v92.49' after visit, dot disappears on return; (d) login page shows new 'Schön, dich wiederzusehen' subheading + Magic Link tab → magic-link-sent state renders after submit; (e) backend /api/auth/magic-link/request returns 200 for real emails, backend log shows 'Resend send OK' for test@test.com; (f) /coaching hero renders new 'Dein KI-Coaching-System auf Basis von Wlads Methodik: Es hört, wie du sprichst...' tagline. Only miss: 'footer-changelog' testid on LoginPage.",
+  "rca_of_the_issue": "N/A — no critical bugs. Only 2 minor issues: (1) missing footer-changelog link on LoginPage (implementation gap — main agent needs to add), (2) pydantic EmailStr rejects .test TLD → seeded internal test emails cannot request magic-link (design choice, real users unaffected)."
+}

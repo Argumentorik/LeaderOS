@@ -17,10 +17,10 @@ import { useAuthProviders } from '../lib/authProviders';
 import { getLastLogin, forgetLogin } from '../lib/recentLogins';
 
 const getFeatures = (de) => (de ? [
-  { t: '30-Tage KI-Leadership Sprint', s: '300 Fragen, tägliche Challenges, AI Roleplays' },
-  { t: '16 Video-Missionen mit KI-Analyse', s: 'Kamera an, Rede halten, sofort KI-Bewertung' },
-  { t: 'Persönlicher KI-Coach — 24/7', s: 'Dein WladBot kennt Wlads Methodik in- und auswendig' },
-  { t: 'Täglich KI-Business Briefing', s: 'Trends, Leader-Zitate, strategische Insights' },
+  { t: '30-Tage KI-Leadership Sprint', s: 'Jeden Tag eine Challenge, die dich als Leader schärft — 300 Fragen, AI-Roleplays, echtes Momentum' },
+  { t: '16 Video-Missionen mit KI-Analyse', s: 'Kamera an, 60 Sekunden Rede — Wlads Framework bewertet dich in 18 Sekunden' },
+  { t: 'Persönlicher KI-Coach — 24/7', s: 'WladBot kennt Wlads Methodik in- und auswendig — und ab Tag 1 auch dich' },
+  { t: 'Täglich KI-Business Briefing', s: 'Trends, Leader-Zitate und strategische Insights — bevor dein erstes Meeting startet' },
 ] : [
   { t: '30-Day AI Leadership Sprint', s: '300 questions, daily challenges, AI roleplays' },
   { t: '16 Video Missions with AI Analysis', s: 'Camera on, give speech, instant AI scoring' },
@@ -131,9 +131,9 @@ export default function LoginPage({ initialMode = 'login' }) {
   }, [isMagic, isRegister, de]);
 
   const subheading = useMemo(() => {
-    if (isMagic) return de ? 'Gib deine E-Mail ein — wir senden dir einen sicheren 1-Klick-Link.' : 'Enter your email — we\'ll send a secure 1-click link.';
-    if (isRegister) return de ? 'Starte deinen KI-Leadership Sprint — 3 Sessions kostenlos.' : 'Start your AI Leadership sprint — 3 sessions free.';
-    return de ? 'Schön dich wiederzusehen.' : 'Good to see you again.';
+    if (isMagic) return de ? 'Gib deine E-Mail ein — wir senden dir einen sicheren 1-Klick-Link. Kein Passwort, kein Aufwand.' : 'Enter your email — we\'ll send a secure 1-click link. No password, no friction.';
+    if (isRegister) return de ? 'Starte deinen KI-Leadership Sprint — 3 Sessions kostenlos, keine Kreditkarte, voller Zugriff auf WladBot.' : 'Start your AI leadership sprint — 3 sessions free, no credit card, full WladBot access.';
+    return de ? 'Schön, dich wiederzusehen. Dein Fortschritt wartet genau dort, wo du aufgehört hast.' : 'Good to see you again. Your progress is waiting right where you left off.';
   }, [isMagic, isRegister, de]);
 
   return (
