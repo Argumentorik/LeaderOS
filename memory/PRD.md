@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.50 · 01.07.26] WladBot 3.0 Trust-Anker + Fabulous-Level Onboarding** —
+  - **Echtes Avatar-Bild live**: `/app/frontend/public/wladbot-avatar.png` (512px, aus User-Asset) — vorher fehlte die Datei komplett → überall Sparkles-Fallback. Z-Index-Bug gefixt (Fallback lag ÜBER dem Bild). E-Mails referenzieren denselben Pfad (`{frontend_url}/wladbot-avatar.png`).
+  - **`live`-Variante in `WladBotAvatar.js`**: Atmen (4.5s), rotierender Conic-Lime-Ring (7s), Emerald-Online-Dot mit Ping. CSS-Keyframes in index.css (`wladBreath`, `wladRingSpin`, `wladCaretBlink`), respektiert reduced-motion.
+  - **Login-Trust**: „WladBot 3.0 · Online"-Strip über dem Formular (`login-wladbot-trust`), Avatar-Quote-Bubble im Brand-Panel (`brandpanel-wladbot-trust`).
+  - **Onboarding Godmode** (`OnboardingPage.js` rewrite, alle Testids erhalten): WladBot begrüßt persönlich (Step 1 Hero live-Avatar), `WladGuide.js` Typewriter-Bubble auf Steps 2–7, Nachrichten reagieren auf Rollen-Wahl, Fortschritt „Schritt X von 8" + %, gestaffelte Card-Entrances, Finale „Perfekt kalibriert, {Name}" mit Rolle+Ziel-Chips (`onboarding-summary-chips`).
+  - **Testing** (Iter 92.50 → `/app/test_reports/iteration_92_50.json`): Frontend 100 %, alle 8 Steps + Regression (Chat-Avatare, Lock-Modal) grün.
 - [x] **[Iter 92.49 · 01.07.26] Godmode: Lock-Popup, Changelog-Discovery, Magic-Link-Hardening, Tagline-Flow** —
   - **LockedFeatureModal** (`components/shared/LockedFeatureModal.js`): Klick auf 🔒-Sidebar-Items (Free-Tier: Simulationen/Playbooks/Aufgaben/Workflows/Lern-Videos/Events) öffnet Premium-Popup (Feature-Teaser + Benefits + €997 + „Jetzt freischalten" → PricingModal + „Alle Pläne vergleichen" → /coaching) statt Hard-Redirect. Escape/Backdrop/X schließen.
   - **Changelog-Discovery**: Sidebar-Footer „Was ist neu?"-Button mit Lime-Pulse-Dot bis v92.49 gesehen (`lib/changelogMeta.js`, localStorage `changelog_seen`). Neuer Changelog-Eintrag v92.49. Login-Footer Changelog-Link (`footer-changelog`). Hover-Polish auf Timeline (Glow-Dot + Title-Lime).
