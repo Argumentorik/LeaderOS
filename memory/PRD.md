@@ -15,6 +15,10 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.57 · 01.07.26] Branding + Trust-Pass: Magic-Mail, Drawer, Dashboard-Event-Banner** —
+  - **Magic-Link-E-Mail**: Trust-Row (🔒 SSL · 🇩🇪 DSGVO · Einmal-Link), „WladBot 3.0"-Badge im Header, gebrandeter Footer (Argumentorik GmbH · leaderos.de), **dynamischer Event-Teaser** („🔴 NICHT VERPASSEN · Nächstes Live-Event" mit Datum + „Platz sichern →", zieht nächstes freies Event aus DB). Versand verifiziert.
+  - **FloatingWladBotDrawer**: echtes Avatar (live) statt W-Tile im Header + Empty-State, „3.0"-Badge, personalisierte Begrüßung („Was beschäftigt dich gerade, {Vorname}?").
+  - **Dashboard**: Neuer FOMO-Banner (`event-reminder-banner` Branded-Variante) — dunkler Hero-Strip mit WladBot-Avatar, rotem Pulse, „LIVE KI Call mit Wlad #1 · in X Tagen", CTA „Platz sichern" → /events. Screenshot-verifiziert.
 - [x] **[Iter 92.56 · 01.07.26] Events-Season ab Mitte August + Conversion-Sections (Fable 5)** —
   - **Events ab 13.08.2026**: `_compute_weekly_thursday_dates` cohort_start + `cohort_floor` auf 2026-08-13. Seed-Dates verschoben (Live-Events Aug/Sept, Focus Sessions ab 14.08., Mastermind 21.08.). Auto-Migration bumpt Alt-Daten → Prod migriert nach Redeploy selbst. Voll getestet: Registrierung ✅ → Google-Calendar-Link ✅ → Bestätigungs-Mail via Resend ✅ → Reminder-Feed (`next_event`) ✅.
   - **3 Conversion-Sections mit WladBot 3.0** (alle screenshot-verifiziert): (1) CoachingPage Hero-Strip (`coaching-wladbot-strip`, „Starte kostenlos — keine Kreditkarte, kein Risiko"), (2) Login Social-Proof-Chip (`login-social-proof`, 4,9★ · 2.500+ Leader), (3) Challenger-Result-Nudge (`result-wladbot-nudge`, Strategiegespräch-CTA am emotionalen Peak).

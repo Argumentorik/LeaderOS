@@ -102,7 +102,22 @@ async def consume_token(raw_token: str) -> Optional[dict]:
     return user
 
 
-def _format_email_html(user_name: str, link: str) -> str:
+def _format_email_html(user_name: str, link: str, next_event: dict | None = None) -> str:
+    event_block = ""
+    if next_event:
+        try:
+            dt = datetime.fromisoformat(str(next_event.get("date", "")).replace("Z", "+00:00"))
+            date_label = dt.strftime("%d.%m.%Y · %H:%M Uhr")
+        except Exception:
+            date_label = ""
+        event_block = f"""
+    <div style="margin:0 32px 24px;padding:16px 18px;background:#0F1607;border:1px solid #2d3d0f;border-radius:12px;">
+      <div style="font-size:9px;font-weight:800;letter-spacing:0.14em;color:#BFFF00;margin-bottom:6px;">🔴 NICHT VERPASSEN · NÄCHSTES LIVE-EVENT</div>
+      <div style="font-size:14px;font-weight:700;color:#fafafa;">{next_event.get('title', '')}</div>
+      <div style="font-size:12px;color:#94a3b8;margin-top:4px;">{date_label} · {next_event.get('duration', '')} · mit {next_event.get('host', 'Wlad Jachtchenko')}</div>
+      <a href="{_frontend_base()}/events" style="display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#BFFF00;text-decoration:none;">Platz sichern →</a>
+    </div>"""
+
     return f"""
 <!DOCTYPE html>
 <html lang="de">
@@ -115,8 +130,8 @@ def _format_email_html(user_name: str, link: str) -> str:
             <img src="{_frontend_base()}/wladbot-avatar.png" alt="WladBot" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
           </td>
           <td style="vertical-align:middle;">
-            <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WladBot</div>
-            <div style="font-weight:700;font-size:10px;letter-spacing:0.14em;color:#BFFF00;margin-top:3px;">MAGIC LINK</div>
+            <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WladBot <span style="font-size:9px;font-weight:800;color:#BFFF00;background:#1c2a08;padding:2px 6px;border-radius:6px;vertical-align:middle;">3.0</span></div>
+            <div style="font-weight:700;font-size:10px;letter-spacing:0.14em;color:#BFFF00;margin-top:3px;">LEADER-OS · MAGIC LINK</div>
           </td>
         </tr>
       </table>
@@ -126,13 +141,21 @@ def _format_email_html(user_name: str, link: str) -> str:
       <p style="margin:0 0 16px;">Hi {user_name},</p>
       <p style="margin:0 0 24px;">klicke auf den Button, um dich ohne Passwort einzuloggen. Der Link ist <strong style="color:#BFFF00;">{MAGIC_LINK_TTL_MIN} Minuten</strong> gültig und kann nur <strong style="color:#BFFF00;">einmal</strong> verwendet werden.</p>
       <p style="margin:0 0 24px;text-align:center;">
-        <a href="{link}" style="display:inline-block;padding:14px 28px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;font-size:16px;">In WladBot einloggen →</a>
+        <a href="{link}" style="display:inline-block;padding:14px 28px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;font-size:16px;">In Leader-OS einloggen →</a>
       </p>
-      <p style="margin:24px 0 0;font-size:12px;color:#64748b;">Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:<br/><code style="word-break:break-all;color:#94a3b8;">{link}</code></p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 8px;">
+        <tr>
+          <td align="center" style="font-size:10.5px;color:#64748b;padding:8px 0;border-top:1px solid #1f2937;">
+            🔒 SSL-verschlüsselt&nbsp;&nbsp;·&nbsp;&nbsp;🇩🇪 DSGVO-konform&nbsp;&nbsp;·&nbsp;&nbsp;✓ Einmal-Link, läuft automatisch ab
+          </td>
+        </tr>
+      </table>
+      <p style="margin:12px 0 0;font-size:12px;color:#64748b;">Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:<br/><code style="word-break:break-all;color:#94a3b8;">{link}</code></p>
     </div>
+{event_block}
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
       Wenn du diesen Link nicht angefordert hast, kannst du diese E-Mail ignorieren — niemand kann ohne sie auf dein Konto zugreifen.<br/>
-      Argumentorik-Akademie GmbH · leaderos.de
+      <strong style="color:#94a3b8;">Argumentorik-Akademie GmbH</strong> · <a href="https://leaderos.de" style="color:#BFFF00;text-decoration:none;">leaderos.de</a> · Dein Leadership Operating System
     </div>
   </div>
 </body>
@@ -153,8 +176,20 @@ async def send_magic_link_email(email: str, raw_token: str) -> bool:
     user = await db.users.find_one({"email": email}, {"name": 1, "_id": 0})
     user_name = (user or {}).get("name") or "there"
 
+    # Branding + FOMO (Iter 92.57): tease the next upcoming live event.
+    next_event = None
+    try:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        next_event = await db.events.find_one(
+            {"event_type": {"$nin": ["replay"]}, "date": {"$gt": now_iso}, "access_level": "free"},
+            {"_id": 0, "title": 1, "date": 1, "duration": 1, "host": 1},
+            sort=[("date", 1)],
+        )
+    except Exception:
+        next_event = None
+
     link = f"{_frontend_base()}/auth/magic?token={raw_token}"
-    html = _format_email_html(user_name, link)
+    html = _format_email_html(user_name, link, next_event)
     result = await send_email(
         to=email,
         subject="Dein 1-Klick-Login für WladBot",

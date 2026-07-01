@@ -22,7 +22,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Sparkles, X, Send, Loader2, Folder, MessageSquareText, ChevronDown, Lightbulb, Target } from 'lucide-react';
+import { Sparkles, X, Send, Loader2, Folder, ChevronDown, Lightbulb, Target } from 'lucide-react';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import SmartText from './SmartText';
@@ -197,14 +198,9 @@ export const FloatingWladBotDrawer = () => {
             <header className="px-4 pt-4 pb-3 border-b border-white/[0.06]">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5">
-                  <div className="relative">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-md shadow-[#BFFF00]/30">
-                      <span className="text-[14px] font-black text-[#0A0A0A]" style={{ fontFamily: 'Outfit, sans-serif' }}>W</span>
-                    </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 ring-2 ring-[#0A0A0A]" aria-hidden />
-                  </div>
+                  <WladBotAvatar size={36} live />
                   <div>
-                    <p className="text-[13px] font-black text-white leading-tight">WladBot</p>
+                    <p className="text-[13px] font-black text-white leading-tight">WladBot <span className="px-1 py-px rounded bg-[#BFFF00]/15 text-[#BFFF00] text-[8px] font-black tracking-wider align-middle">3.0</span></p>
                     <p className="text-[9px] text-white/40 uppercase tracking-[0.18em] font-bold">{de ? 'IMMER NEBEN DIR' : 'ALWAYS WITH YOU'}</p>
                   </div>
                 </div>
@@ -273,10 +269,10 @@ export const FloatingWladBotDrawer = () => {
               {messages.length === 0 ? (
                 <div className="space-y-4 py-6" data-testid="wladbot-drawer-empty">
                   <div className="text-center space-y-2">
-                    <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-[#BFFF00]/15 to-[#BFFF00]/5 ring-1 ring-[#BFFF00]/20 items-center justify-center mb-1">
-                      <MessageSquareText size={18} className="text-[#BFFF00]" />
+                    <div className="inline-flex mb-1">
+                      <WladBotAvatar size={60} live />
                     </div>
-                    <p className="text-[13px] font-black text-white">{de ? 'Was beschäftigt dich gerade?' : "What's on your mind?"}</p>
+                    <p className="text-[13px] font-black text-white">{de ? `Was beschäftigt dich gerade${user?.name ? `, ${user.name.split(' ')[0]}` : ''}?` : "What's on your mind?"}</p>
                     <p className="text-[11px] text-white/40 leading-relaxed max-w-[280px] mx-auto">
                       {activeFolder
                         ? (de ? `Ich kenne deinen Kontext "${activeFolder.name}". Frag mich alles dazu.` : `I know your "${activeFolder.name}" context. Ask anything about it.`)
