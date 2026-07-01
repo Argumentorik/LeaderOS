@@ -57,24 +57,33 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
         {!collapsed && <span className="font-medium">{theme === 'dark' ? t('nav.lightMode') : t('nav.darkMode')}</span>}
       </button>
 
-      {/* Upgrade CTA — hidden for OS PLUS users */}
+      {/* Upgrade CTA — Iter 92.47 (Mert · GODMODE): premium mobile-safe layout.
+          Icon-only in collapsed sidebar, full label+chevron everywhere else.
+          Fixes: previously the mobile-drawer rendered a full-width lime bar
+          with no label because `collapsed` was inherited incorrectly. */}
       {user && !isAccelerator && (
         <button
           onClick={() => openPricing(tier === 'standard' ? 'leadership_os_plus' : 'leadership_os')}
           data-testid="sidebar-upgrade-btn"
-          className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] font-bold transition-all mt-1 ${
+          className={`group flex items-center gap-2.5 w-full rounded-xl text-[12px] font-black transition-all mt-1 ${
             collapsed
-              ? 'justify-center px-2 bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#9ACC00]'
-              : 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20'
+              ? 'justify-center h-9 w-9 mx-auto bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:scale-105 shadow-lg shadow-[#BFFF00]/25'
+              : 'px-3 py-2.5 bg-gradient-to-r from-[#BFFF00] via-[#B0E600] to-[#9ACC00] text-[#0A0A0A] hover:shadow-xl hover:shadow-[#BFFF00]/30 hover:scale-[1.02] shadow-md shadow-[#BFFF00]/20'
           }`}
           title={tier === 'free' ? 'Leadership OS aktivieren' : 'Auf OS PLUS upgraden'}
         >
-          <Crown size={14} strokeWidth={2.5} />
+          <span className={collapsed ? '' : 'flex items-center justify-center w-6 h-6 rounded-md bg-[#0A0A0A]/12'}>
+            <Crown size={collapsed ? 15 : 13} strokeWidth={2.5} fill={collapsed ? 'none' : 'currentColor'} />
+          </span>
           {!collapsed && (
-            <span className="truncate">
-              {tier === 'free' && 'Leadership OS holen'}
-              {tier === 'standard' && 'Auf OS PLUS upgraden'}
-            </span>
+            <>
+              <span className="flex-1 text-left tracking-tight">
+                {tier === 'free' ? 'Leadership OS holen' : 'Auf OS PLUS upgraden'}
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-80 group-hover:translate-x-0.5 transition-transform">
+                →
+              </span>
+            </>
           )}
         </button>
       )}
