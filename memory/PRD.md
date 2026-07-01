@@ -15,6 +15,10 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.53 · 01.07.26] Chat-Speed + Output-Qualität + Magic-Link-Avatar** —
+  - **Chat parallelisiert** (`chat.py`): History/Memory/Folder-Context/RAG liefen seriell → jetzt `asyncio.gather` (spart 1–3s). Gemessen: kurze Frage 5,4s E2E inkl. 6 RAG-Chunks.
+  - **Prompt-Duplikat-Bug gefixt**: History wurde NACH dem Insert der User-Message geladen → Nachricht stand doppelt im Prompt (Qualitätsverlust). Jetzt History vor Insert → sauberer Kontext. Multi-Turn verifiziert (Folge-Frage referenziert SEXIER korrekt).
+  - **Magic-Link-E-Mail**: Header zeigt jetzt echtes WladBot-Avatar-Bild (rund, Lime-Ring) statt Blitz-Badge. Resend-Versand verifiziert.
 - [x] **[Iter 92.52 · 01.07.26] Voice-VAD-Fix, Account-Cleanup, Admin-Delete-Endpoint** —
   - **Voice-Bug gefixt** (`useVoiceMode.js`): VAD feuerte nach 1,4s Stille auch ohne dass jemand gesprochen hatte → „Thinking" ohne Input. Jetzt: Speech-Gate (`SPEECH_THRESHOLD=0.02`, min. 4 Frames) — Auto-Stop nur NACH echter Sprache; ohne Sprache geduldiges Zuhören mit stillem 15s-Mic-Refresh, kein API-Call.
   - **Wlad-Wissen verifiziert**: `/api/chat` live getestet → „RAG: injected 6 chunks", Antwort mit Wlads Feedbackformel. Voice-Route nutzt denselben `retrieve_context` (voice_tts.py L358-372) — Wissen auch beim Sprechen aktiv.

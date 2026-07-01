@@ -109,7 +109,17 @@ def _format_email_html(user_name: str, link: str) -> str:
 <body style="margin:0;padding:0;background:#0A0A0A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fafafa;">
   <div style="max-width:560px;margin:40px auto;background:#111;border:1px solid #1f2937;border-radius:16px;overflow:hidden;">
     <div style="padding:32px 32px 24px;border-bottom:1px solid #1f2937;">
-      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLADBOT · MAGIC LINK</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+          <td style="padding-right:14px;vertical-align:middle;">
+            <img src="{_frontend_base()}/wladbot-avatar.png" alt="WladBot" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
+          </td>
+          <td style="vertical-align:middle;">
+            <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WladBot</div>
+            <div style="font-weight:700;font-size:10px;letter-spacing:0.14em;color:#BFFF00;margin-top:3px;">MAGIC LINK</div>
+          </td>
+        </tr>
+      </table>
       <h1 style="margin:20px 0 0;font-size:28px;line-height:1.2;font-weight:700;">Dein 1-Klick-Login</h1>
     </div>
     <div style="padding:24px 32px;color:#cbd5e1;font-size:15px;line-height:1.6;">

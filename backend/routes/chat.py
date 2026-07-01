@@ -337,6 +337,20 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     if msg_modality not in VALID_MODALITIES:
         msg_modality = "text"
 
+    # Iter 92.53 (Speed): fetch history BEFORE inserting the new user message
+    # and run history | memory | folder-context | RAG in PARALLEL (saves 1-3s).
+    # Side-effect fix: history no longer contains the just-sent message, so the
+    # prompt does not duplicate it anymore (was hurting output quality).
+    import asyncio as _asyncio
+    from services_rag import retrieve_context
+    history, user_memory, folder_res, rag_ctx = await _asyncio.gather(
+        db.chat_messages.find({"session_id": session_id}, {"_id": 0}).sort("created_at", 1).to_list(20),
+        get_user_memory(user["user_id"]),
+        _resolve_folder_context(data.folder_id, user["user_id"]),
+        retrieve_context(data.message),
+    )
+    folder_context, _folder_doc = folder_res
+
     await db.chat_messages.insert_one({
         "message_id": f"msg_{uuid.uuid4().hex[:12]}", "session_id": session_id,
         "user_id": user["user_id"], "role": "user", "content": data.message,
@@ -344,18 +358,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    # Iter 92.23.8: resolve folder context. Falls quietly if no folder.
-    folder_context, _folder_doc = await _resolve_folder_context(data.folder_id, user["user_id"])
-
-    history = await db.chat_messages.find({"session_id": session_id}, {"_id": 0}).sort("created_at", 1).to_list(20)
-    user_memory = await get_user_memory(user["user_id"])
     system_msg = _build_system_message(data.agent, user_memory, folder_context)
-
-    # RAG: retrieve Wlad-specific knowledge chunks based on the user's question.
-    # Graceful — if Voyage/Supabase keys are missing or fail, chat continues
-    # normally with just the base system prompt.
-    from services_rag import retrieve_context
-    rag_ctx = await retrieve_context(data.message)
     if rag_ctx["context_block"]:
         system_msg = system_msg + rag_ctx["context_block"]
 
