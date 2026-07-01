@@ -1,5 +1,4 @@
 import { Carousel, Card as AppleCard } from "../ui/apple-cards-carousel";
-import EncryptedText from "../ui/encrypted-text";
 import { platformFeatures } from "./heroData";
 
 /**
@@ -17,22 +16,8 @@ export default function AgentsCarouselSection() {
             className="font-manrope font-extrabold text-white"
             style={{ fontSize: "clamp(34px, 5.4vw, 68px)", lineHeight: 1.04, letterSpacing: "-0.045em" }}
           >
-            <EncryptedText
-              text="Sechs spezialisierte Agenten."
-              as="span"
-              className="block"
-              trigger="view"
-              duration={1300}
-              data-testid="agents-headline-line-1"
-            />
-            <EncryptedText
-              text="Eine Mission · dein Aufstieg."
-              as="span"
-              className="block mt-2 text-[#C8FF00]"
-              trigger="view"
-              duration={1500}
-              data-testid="agents-headline-line-2"
-            />
+            <span className="block" data-testid="agents-headline-line-1">Sechs spezialisierte Agenten.</span>
+            <span className="block mt-2 text-[#C8FF00]" data-testid="agents-headline-line-2">Eine Mission · dein Aufstieg.</span>
           </h2>
           <p
             className="mt-7 text-slate-400 leading-relaxed max-w-[640px]"

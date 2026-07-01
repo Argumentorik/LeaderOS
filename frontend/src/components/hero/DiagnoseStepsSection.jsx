@@ -16,7 +16,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FileText, Brain, Sparkles, TrendingUp, Play } from "lucide-react";
 import { cn } from "../../lib/utils";
-import EncryptedText from "../ui/encrypted-text";
 
 // ─── Skeleton 1 · Quiz-Preview Mock ──────────────────────────────
 function SkeletonQuiz() {
@@ -303,22 +302,8 @@ export default function DiagnoseStepsSection() {
           className="font-manrope font-extrabold text-white mx-auto max-w-4xl"
           style={{ fontSize: "clamp(36px, 5.4vw, 72px)", lineHeight: 1.04, letterSpacing: "-0.045em" }}
         >
-          <EncryptedText
-            text="Dein persönlicher"
-            as="span"
-            className="block"
-            trigger="view"
-            duration={1300}
-            data-testid="diagnose-headline-l1"
-          />
-          <EncryptedText
-            text="Leadership-Report."
-            as="span"
-            className="block text-[#C8FF00] mt-2"
-            trigger="view"
-            duration={1600}
-            data-testid="diagnose-headline-l2"
-          />
+          <span className="block" data-testid="diagnose-headline-l1">Dein persönlicher</span>
+          <span className="block text-[#C8FF00] mt-2" data-testid="diagnose-headline-l2">Leadership-Report.</span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl font-inter text-base md:text-lg text-slate-400 leading-relaxed">
           Die Leader OS Diagnose analysiert deine Führungskompetenzen anhand eines strukturierten Modells.{" "}
