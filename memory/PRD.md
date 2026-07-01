@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.56 · 01.07.26] Events-Season ab Mitte August + Conversion-Sections (Fable 5)** —
+  - **Events ab 13.08.2026**: `_compute_weekly_thursday_dates` cohort_start + `cohort_floor` auf 2026-08-13. Seed-Dates verschoben (Live-Events Aug/Sept, Focus Sessions ab 14.08., Mastermind 21.08.). Auto-Migration bumpt Alt-Daten → Prod migriert nach Redeploy selbst. Voll getestet: Registrierung ✅ → Google-Calendar-Link ✅ → Bestätigungs-Mail via Resend ✅ → Reminder-Feed (`next_event`) ✅.
+  - **3 Conversion-Sections mit WladBot 3.0** (alle screenshot-verifiziert): (1) CoachingPage Hero-Strip (`coaching-wladbot-strip`, „Starte kostenlos — keine Kreditkarte, kein Risiko"), (2) Login Social-Proof-Chip (`login-social-proof`, 4,9★ · 2.500+ Leader), (3) Challenger-Result-Nudge (`result-wladbot-nudge`, Strategiegespräch-CTA am emotionalen Peak).
+- [x] **[Iter 92.55 · 01.07.26] Stripe-Live-Key rotiert — alle Zahlungen verifiziert** —
+  - Alter `STRIPE_API_KEY` war expired („Expired API Key" beim Checkout). Neuer Live-Key (von Mert) in `backend/.env` gesetzt.
+  - **Alle 4 Pakete live getestet**: `leadership_os`, `leadership_os_2x`, `leadership_os_12x` (99€/Mo Raten), `leadership_os_plus` (4.797€ VIP) → alle erzeugen gültige `checkout.stripe.com`-Sessions. ✅
+  - Aktivierung doppelt abgesichert: Webhook `/api/webhook/stripe` + Client-Status-Polling nach Redirect (Tier wird auch ohne Webhook aktiviert).
+  - ⚠️ PRODUKTION: Redeploy nötig, damit leaderos.de den neuen Key erhält (Fehler trat auf Prod auf).
 - [x] **[Iter 92.54 · 01.07.26] Challengers Meeting-Experience (11x.ai-Style)** —
   - **Meeting-Stage** in `ChallengersPage.js`: Video-Call-Bühne über dem Chat — großes Challenger-Portrait (Farb-Ring, Breathing, Ping-Ring beim Denken), „LIVE MEETING"-Badge (roter Pulse), Name-Plate mit Status („im Gespräch"/„denkt nach…"), Self-Tile mit User-Initialen („Du"). Screenshot-verifiziert mit Bezos.
   - **Stimmen verifiziert**: Jeder Challenger hat eigene ElevenLabs-Stimme (Bezos=Liam calm/commanding, Musk=Daniel präzise, Oprah=Bella warm, Jobs=Antoni intense, Branson=Arnold energetisch, Sandberg=Rachel, Page=Bill, Hastings=George) — Mapping korrekt, Audio-Test erst nach ElevenLabs-Key-Erneuerung möglich.

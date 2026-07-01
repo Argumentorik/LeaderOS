@@ -11,6 +11,7 @@ import { VoiceRecorder } from '../components/shared/VoiceRecorder';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import api from '../lib/api';
 import { openStrategyCall } from '../lib/calendly';
 import {
@@ -422,6 +423,18 @@ export default function ChallengersPage() {
                 <ul className="space-y-1.5">{result.improvements.map((s, i) => <li key={`imp-${i}`} className="text-xs flex gap-1.5"><span className="text-amber-500 shrink-0">-</span>{cleanText(s)}</li>)}</ul>
               </CardContent></Card>
             )}
+          </div>
+          {/* WladBot 3.0 — conversion nudge at the emotional peak (Iter 92.56) */}
+          <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]" data-testid="result-wladbot-nudge">
+            <WladBotAvatar size={40} live />
+            <div className="flex-1 min-w-0">
+              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WladBot 3.0</p>
+              <p className="text-[12px] text-white/70 leading-relaxed">
+                {lang === 'de'
+                  ? '„Stark, dass du dich der Challenge gestellt hast. Leader, die jetzt ein Strategiegespräch buchen, setzen ihr Feedback 3× schneller um — 15 Minuten, die sich lohnen."'
+                  : '"Strong move taking the challenge. Leaders who book a strategy call now act on their feedback 3× faster — 15 minutes well spent."'}
+              </p>
+            </div>
           </div>
           <div className="flex gap-3">
             <Button onClick={resetChallenge} variant="outline" className="flex-1 font-semibold h-11" data-testid="try-another-btn">{lang === 'de' ? 'Anderen Challenger' : 'Try Another'}</Button>

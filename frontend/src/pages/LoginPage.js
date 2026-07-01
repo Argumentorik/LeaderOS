@@ -178,6 +178,10 @@ export default function LoginPage({ initialMode = 'login' }) {
                 {de ? 'Online · zeigt dir jeden Tag die Richtung' : 'Online · shows you the direction every day'}
               </p>
             </div>
+            <div className="ml-auto text-right leading-tight" data-testid="login-social-proof">
+              <p className="text-[11px] font-black text-[#BFFF00]">4,9 ★</p>
+              <p className="text-[9.5px] text-white/35">2.500+ Leader</p>
+            </div>
           </div>
 
           <div className="mb-6 lg:mb-7">

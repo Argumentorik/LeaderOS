@@ -6,6 +6,7 @@ import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { LayerCard } from '../components/coaching/LayerCard';
+import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { FAQItem } from '../components/coaching/FAQItem';
 import { TierPricingGrid } from '../components/coaching/TierPricingGrid';
 import { CoachingRightPanel } from '../components/coaching/CoachingRightPanel';
@@ -139,10 +140,22 @@ export default function CoachingPage() {
                   {de ? 'Upgrade jederzeit' : 'Upgrade anytime'}
                 </span>
               </div>
-            </div>
 
-            {/* Right: 3-Layer Glass Stack visual — Iter 92.46 rebuilt for
-                real 3-card staggered peek (not overlap). */}
+              {/* WladBot 3.0 — conversion anchor (Iter 92.56) */}
+              <div className="flex items-start gap-3 mt-5 p-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)] max-w-xl" data-testid="coaching-wladbot-strip">
+                <WladBotAvatar size={46} live />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00] mb-1">
+                    {de ? 'WladBot 3.0 · Dein Coach ab Tag 1' : 'WladBot 3.0 · Your coach from day one'}
+                  </p>
+                  <p className="text-[12.5px] text-white/70 leading-relaxed">
+                    {de
+                      ? '„Starte kostenlos — ich kalibriere mich in 60 Sekunden auf dich. Keine Kreditkarte, kein Risiko."'
+                      : '"Start free — I calibrate to you in 60 seconds. No credit card, no risk."'}
+                  </p>
+                </div>
+              </div>
+            </div>
             <div className="relative h-[500px] hidden lg:block" data-testid="hero-glass-stack">
               {/* Ambient gradient */}
               <div className="absolute inset-8 bg-gradient-to-br from-[#BFFF00]/[0.14] via-transparent to-purple-500/[0.10] rounded-[3rem] blur-3xl pointer-events-none" />

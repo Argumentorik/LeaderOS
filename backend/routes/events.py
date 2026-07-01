@@ -137,12 +137,12 @@ EVENTS_SEED_V2 = [
         for i in range(8)
     ],
 
-    # LIVE EVENTS (alle Thursday in Juli/August 2026 — Wlad's Cohort Launch)
+    # LIVE EVENTS (Season ab Mitte August 2026 — Wlad's Cohort Launch)
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "KI-gestützte Führung: Die Zukunft des Managements",
         "description": "Erfahre, wie du KI als strategisches Werkzeug in deinem Führungsalltag einsetzt.",
         "outcomes": ["KI-Tools für den Führungsalltag kennen", "Eigene KI-Strategie entwickeln", "Konkrete Workflows mitnehmen"],
-        "event_type": "live", "date": "2026-07-02T18:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "live", "date": "2026-08-18T18:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 200, "registered": 127, "host": "Wlad Jachtchenko",
         "tags": ["KI", "Strategie", "Innovation"], "access_level": "free", "featured": True,
         "category": "leadership", "status": "upcoming",
@@ -151,7 +151,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Executive Communication Masterclass",
         "description": "Überzeuge auf C-Level: Strukturierte Kommunikation, Storytelling und Präsenz.",
         "outcomes": ["Board-Ready Präsentationen bauen", "Storytelling-Framework anwenden", "Executive Presence steigern"],
-        "event_type": "workshop", "date": "2026-07-09T19:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "workshop", "date": "2026-08-25T19:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 50, "registered": 34, "host": "Wlad Jachtchenko",
         "tags": ["Kommunikation", "C-Level", "Präsentation"], "access_level": "standard", "featured": True,
         "category": "communication",
@@ -160,7 +160,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Schwierige Gespräche meistern",
         "description": "Feedback geben, Konflikte ansprechen, Kündigungen aussprechen — mit Struktur und Empathie.",
         "outcomes": ["Die Feedbackformel anwenden", "Schwierige Botschaften klar formulieren", "Emotionale Reaktionen managen"],
-        "event_type": "live", "date": "2026-07-16T18:30:00Z", "duration": "75 min", "duration_minutes": 75,
+        "event_type": "live", "date": "2026-09-01T18:30:00Z", "duration": "75 min", "duration_minutes": 75,
         "max_participants": 120, "registered": 64, "host": "Wlad Jachtchenko",
         "tags": ["Konflikt", "EQ", "Gespräche"], "access_level": "free",
         "category": "eq",
@@ -169,7 +169,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Leadership Scorecard: Deine Zahlen als Führungskraft",
         "description": "Lerne, wie du deinen Leadership-Score interpretierst und gezielt an Schwächen arbeitest.",
         "outcomes": ["Score-System verstehen", "Persönliche Wachstumsbereiche identifizieren", "90-Tage-Entwicklungsplan erstellen"],
-        "event_type": "live", "date": "2026-07-23T19:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "live", "date": "2026-09-08T19:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 100, "registered": 41, "host": "Wlad Jachtchenko",
         "tags": ["Daten", "Score", "Wachstum"], "access_level": "standard",
         "category": "leadership",
@@ -178,7 +178,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Delegation Deep Dive Workshop",
         "description": "Aufgaben richtig abgeben, Verantwortung übertragen und Mikromanagement überwinden.",
         "outcomes": ["Delegations-Matrix anwenden", "Mikromanagement erkennen und stoppen", "Team-Autonomie aufbauen"],
-        "event_type": "workshop", "date": "2026-07-30T14:00:00Z", "duration": "120 min", "duration_minutes": 120,
+        "event_type": "workshop", "date": "2026-09-15T14:00:00Z", "duration": "120 min", "duration_minutes": 120,
         "max_participants": 25, "registered": 14, "host": "Wlad Jachtchenko",
         "tags": ["Delegation", "Management", "Praxis"], "access_level": "standard",
         "category": "management",
@@ -187,7 +187,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Vision & Strategie Workshop",
         "description": "Entwickle deine 90-Tage-Vision mit dem WladBot Vision Framework.",
         "outcomes": ["Eigene Vision formulieren", "Strategische Prioritäten setzen", "Action-Plan für 90 Tage mitnehmen"],
-        "event_type": "workshop", "date": "2026-08-06T10:00:00Z", "duration": "150 min", "duration_minutes": 150,
+        "event_type": "workshop", "date": "2026-09-22T10:00:00Z", "duration": "150 min", "duration_minutes": 150,
         "max_participants": 20, "registered": 11, "host": "Wlad Jachtchenko",
         "tags": ["Vision", "Strategie"], "access_level": "standard",
         "category": "strategy",
@@ -197,7 +197,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Accelerator Mastermind: Q3 Strategy Call",
         "description": "Exklusiver Strategy Call für Accelerator-Mitglieder. Peer-Coaching, Hot Seats, direktes Feedback von Wlad.",
         "outcomes": ["Direktes Feedback auf deine Strategie", "Peer-Insights von Top-Leadern", "Accountability-Partner finden"],
-        "event_type": "mastermind", "date": "2026-08-13T17:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "mastermind", "date": "2026-08-21T17:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 12, "registered": 8, "host": "Wlad Jachtchenko",
         "tags": ["Mastermind", "Strategie", "Exklusiv"], "access_level": "accelerator", "featured": True,
         "category": "exclusive",
@@ -206,7 +206,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "1:1 Coaching-Slot: Executive Sparring",
         "description": "30 Minuten 1:1 mit Wlads Expertenteam. Bringe dein wichtigstes Thema mit — Karriere, Konflikt, Strategie.",
         "outcomes": ["Persönliches Executive Coaching", "Konkreter Aktionsplan", "Follow-up Roadmap"],
-        "event_type": "coaching", "date": "2026-08-20T10:00:00Z", "duration": "30 min", "duration_minutes": 30,
+        "event_type": "coaching", "date": "2026-08-26T10:00:00Z", "duration": "30 min", "duration_minutes": 30,
         "max_participants": 1, "registered": 0, "host": "Wlad Jachtchenko",
         "tags": ["1:1", "Coaching", "Executive"], "access_level": "accelerator",
         "category": "exclusive",
@@ -248,12 +248,12 @@ EVENTS_SEED_V2 = [
         "tags": ["EQ", "Empathie", "Authentizität"], "access_level": "free",
         "category": "eq", "replay_url": "#",
     },
-    # FOCUS SESSIONS (recurring concept — Thursday in Juli 2026)
+    # FOCUS SESSIONS (Season ab Mitte August 2026)
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: Deep Work Leadership",
         "description": "90 Minuten geführte Deep-Work-Session. Gemeinsam fokussiert an deinen Leadership-Aufgaben arbeiten.",
         "outcomes": ["Fokussierte Arbeitszeit", "Accountability durch Gruppe", "Konkrete Ergebnisse in 90 min"],
-        "event_type": "focus_session", "date": "2026-07-02T09:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "focus_session", "date": "2026-08-14T09:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 30, "registered": 18, "host": "LeaderOS System",
         "tags": ["Deep Work", "Fokus", "Produktivität"], "access_level": "standard", "recurring": True,
         "category": "execution",
@@ -262,7 +262,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: Wochenplanung & Reflexion",
         "description": "Strukturierte Session: Woche reflektieren, nächste Woche planen, Prioritäten setzen.",
         "outcomes": ["Woche reflektiert", "Prioritäten für nächste Woche gesetzt", "Klarheit über nächste Schritte"],
-        "event_type": "focus_session", "date": "2026-07-09T08:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "focus_session", "date": "2026-08-17T08:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 50, "registered": 24, "host": "LeaderOS System",
         "tags": ["Planung", "Reflexion", "Woche"], "access_level": "free", "recurring": True,
         "category": "execution",
@@ -271,7 +271,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: KI-Workflow Sprint",
         "description": "60 Minuten: Gemeinsam KI-Workflows durcharbeiten und in den Führungsalltag integrieren.",
         "outcomes": ["1 neuen KI-Workflow implementiert", "Praxis-Erfahrung gesammelt", "Peer-Austausch"],
-        "event_type": "focus_session", "date": "2026-07-16T14:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "focus_session", "date": "2026-08-19T14:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 30, "registered": 12, "host": "LeaderOS System",
         "tags": ["KI", "Workflow", "Praxis"], "access_level": "standard", "recurring": True,
         "category": "execution",
@@ -281,9 +281,9 @@ EVENTS_SEED_V2 = [
 
 def _compute_weekly_thursday_dates(count: int = 8, hour_utc: int = 18) -> list:
     """Return ISO date strings for `count` consecutive Thursdays at hour_utc,
-    starting from the first Thursday in July 2026 (or the next Thursday if we
-    are already past it). User-requested cohort schedule: weekly, every Thursday."""
-    cohort_start = datetime(2026, 7, 1, hour_utc, 0, 0, tzinfo=timezone.utc)
+    starting mid-August 2026 (Mert: season/cohort launch "ab Mitte August").
+    Rolls forward past Thursdays so the list always starts in the future."""
+    cohort_start = datetime(2026, 8, 13, hour_utc, 0, 0, tzinfo=timezone.utc)
     # advance to first Thursday on/after cohort_start (weekday(): Mon=0, Thu=3)
     days_until_thu = (3 - cohort_start.weekday()) % 7
     first_thu = cohort_start + timedelta(days=days_until_thu)
