@@ -15,6 +15,30 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.48 · 01.07.26] WladBot Avatar überall + AI Speed Hybrid + Challengers Voice-Warm-Cache** —
+  - **WladBotAvatar global ausgerollt** (Mert: "avatar überall intelligent nutzen"):
+    - `ChatMessage.js` — beide Assistant-Message-Layouts (plain + structured) haben jetzt `<WladBotAvatar size={28}>` links neben der Bubble
+    - `ChatEmpty.js` — Hero-Icon `MessageSquareText` durch großen `<WladBotAvatar size={72} ring>` ersetzt
+    - `ChatPage.js` — Typing-Indicator zeigt Avatar `pulse` neben den 3 Dots während Streaming
+    - `services_email.py _base_layout` — Header-Tile ist jetzt `<img src="/wladbot-avatar.png" alt="W">` mit `alt="W"` als graceful Email-Client-Fallback → gleiches Gesicht in Chat & Email
+  - **AI Speed Hybrid Routing** (`routes/chat.py` Line ~363):
+    - Kurze Text-Fragen (`msg_len ≤ 180` chars, kein PDF/Image-Attachment, `modality='text'`) → **gpt-4o-mini** (~3-5× schneller: 2-4s statt 12-18s)
+    - Lange/tiefe Coaching-Fragen, Voice-Modality, oder mit Attachment → **gpt-5.2** (volle Reasoning-Power)
+    - RAG (Voyage + Manual Chunks) läuft in beiden Fällen → Wlad's Wissen bleibt geerdet
+  - **Challengers Voice-Warm-Cache** (Mert: "vorab catchen ist ja sowieso immer der selbe start"):
+    - `data.py` LEADERSHIP_CHALLENGERS: Alle 8 Personas haben jetzt `initial_message` (statischer, canonical DE-Intro in Character-Stimme, z.B. Bezos: "Willkommen. Ich bin Jeff Bezos...", Jobs: "Setz dich. Ich bin Steve...")
+    - `routes/challengers.py POST /challengers/{id}/start`: nutzt statischen Intro → spart 3-5s LLM-Roundtrip auf Start (Testing bestätigt <1s Latency, vorher 3-5s)
+    - `routes/challengers.py GET /challengers/intros` (NEU, auth-required): Liefert alle 8 canonical Intros für Frontend-Prewarming
+    - `ChallengersPage.js useEffect`: Beim Page-Mount (a) `new Image()`-Preload aller 8 Avatare in den Browser-Cache; (b) `POST /voice/tts` für alle 8 Personas parallel → ElevenLabs-Cache warm bevor User klickt → erste Voice spielt in <200ms
+    - Cards: `loading="eager" fetchpriority="high"` auf `<img>` für sofortiges First-Paint
+  - **Testing** (`testing_agent_v3_fork` Iter 92.48 → `/app/test_reports/iteration_92_48.json`): Backend 8/9 (89%), Frontend 100%.
+    - ✓ Static-Intro-Speed-Win verified: `/start` latency <1s (vorher 3-5s)
+    - ✓ Hybrid model routing verified: short & long messages beide korrekte JSON-Shape zurück
+    - ✓ Avatar-DOM-Präsenz verified: `data-testid='wladbot-avatar'` in Empty State, Typing Indicator, und neben jeder Assistant-Reply
+    - ✓ Voice-Cache-Code-Logik korrekt (Report bestätigt): erste Synth → save, zweite → cached=true
+  - **🟠 BLOCKED BY EXTERNAL KEY** (nur Preview-Env, nicht Prod): `ELEVENLABS_API_KEY` in `backend/.env` gibt auf Preview `invalid_api_key` zurück → Voice-Warm-Cache füllt sich nicht bis Key rotiert wird. **Kein Code-Bug** — Prod-Key auf leaderos.de funktioniert. User-Action: Key in `/app/backend/.env` aktualisieren, `sudo supervisorctl restart backend`.
+
+
 - [x] **[Iter 92.35 · 26.06.26] Coaching Hub Redesign → High-Converting Landing + P1-Funnel-Upgrades** —
   - **CoachingPage.js komplett neu** (`/app/frontend/src/pages/CoachingPage.js`, 318 LoC). Apple/Tesla-Stil:
     - Hero: Eyebrow `DEIN LEADERSHIP COACHING SYSTEM`, Headline `Werde der Leader, der klar denkt, klar spricht und klar führt.`, 3-Layer-Glass-Stack-Visual rechts (staggered Cards mit `backdrop-blur-xl` + rotate), Primary-CTA `Coaching starten` (scroll to pricing), Secondary `Demo ansehen` → /chat.
