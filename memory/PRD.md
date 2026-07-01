@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.52 · 01.07.26] Voice-VAD-Fix, Account-Cleanup, Admin-Delete-Endpoint** —
+  - **Voice-Bug gefixt** (`useVoiceMode.js`): VAD feuerte nach 1,4s Stille auch ohne dass jemand gesprochen hatte → „Thinking" ohne Input. Jetzt: Speech-Gate (`SPEECH_THRESHOLD=0.02`, min. 4 Frames) — Auto-Stop nur NACH echter Sprache; ohne Sprache geduldiges Zuhören mit stillem 15s-Mic-Refresh, kein API-Call.
+  - **Wlad-Wissen verifiziert**: `/api/chat` live getestet → „RAG: injected 6 chunks", Antwort mit Wlads Feedbackformel. Voice-Route nutzt denselben `retrieve_context` (voice_tts.py L358-372) — Wissen auch beim Sprechen aktiv.
+  - **Admin-Delete-Endpoint**: `DELETE /api/admin/users/by-email/{email}` (admin-gated, Guards: kein Admin-/eigener Account). Löscht User + 15 Related-Collections. `wj@argumentorik.com` in Preview gelöscht + Guard verifiziert. ⚠️ Für Produktions-Löschung: erst REDEPLOY, dann Endpoint auf leaderos.de nutzen.
+  - VAD-Fix braucht echtes Mikrofon → USER-VERIFIKATION beim Test morgen.
 - [x] **[Iter 92.51 · 01.07.26] Detail-Pass: Login kompakt, W-Logo schwarz (SVG-ID-Bug), Profil-Polish** —
   - **Login**: WladBot-Quote-Bubble links unten entfernt (Seite kompakter, Fokus Signup). Trust-Strip rechts („WladBot 3.0 · Online") bleibt.
   - **WladMark SVG-Bug gefixt**: Alle Instanzen teilten Gradient-ID `wm-stroke` → erste DOM-Instanz gewann, W wirkte weiß/lime statt schwarz. Fix: direkter `stroke={glyphFill}`, defs entfernt. W ist jetzt überall schwarz auf Lime.

@@ -23,6 +23,13 @@ const SILENCE_DURATION_MS = 1400;
 const MIN_RECORDING_MS = 600;
 const MAX_RECORDING_MS = 30000;
 const MAX_EMPTY_RETRIES = 3;
+// Iter 92.52 (Mert): VAD must WAIT for real speech before it may auto-stop.
+// Bug was: 1.4s of ambient silence triggered send → "thinking" fired although
+// nobody had spoken. Now we require >= SPEECH_MIN_FRAMES frames above
+// SPEECH_THRESHOLD before the silence-timer is allowed to end the recording.
+const SPEECH_THRESHOLD = 0.02;
+const SPEECH_MIN_FRAMES = 4;
+const NO_SPEECH_RESTART_MS = 15000;
 const MIME_CANDIDATES = [
   'audio/webm;codecs=opus',
   'audio/webm',
@@ -66,6 +73,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const emptyRetryCountRef = useRef(0);
   const recordedMimeRef = useRef('audio/webm');
   const pausedRef = useRef(false);
+  const speechDetectedRef = useRef(false);
+  const speechFramesRef = useRef(0);
 
   useEffect(() => { sessionIdRef.current = initialSessionId; }, [initialSessionId]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
@@ -112,9 +121,25 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     const now = Date.now();
     const elapsed = now - recordingStartRef.current;
 
+    // Track real speech: only after sustained voice activity may silence end the turn
+    if (rms > SPEECH_THRESHOLD) {
+      speechFramesRef.current += 1;
+      if (speechFramesRef.current >= SPEECH_MIN_FRAMES) speechDetectedRef.current = true;
+    }
+
     if (rms < SILENCE_THRESHOLD) {
       if (silenceStartRef.current === null) silenceStartRef.current = now;
-      if (elapsed > MIN_RECORDING_MS && now - silenceStartRef.current > SILENCE_DURATION_MS) {
+      if (
+        speechDetectedRef.current &&
+        elapsed > MIN_RECORDING_MS &&
+        now - silenceStartRef.current > SILENCE_DURATION_MS
+      ) {
+        stopRecording();
+        return;
+      }
+      // Nobody spoke yet → keep listening patiently; soft-restart after 15s
+      // to keep the mic stream fresh (no API call, no "thinking" state).
+      if (!speechDetectedRef.current && elapsed > NO_SPEECH_RESTART_MS) {
         stopRecording();
         return;
       }
@@ -135,6 +160,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     setReply('');
     stoppedRef.current = false;
     silenceStartRef.current = null;
+    speechDetectedRef.current = false;
+    speechFramesRef.current = 0;
     chunksRef.current = [];
 
     const mime = pickSupportedMime();

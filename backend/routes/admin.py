@@ -27,6 +27,45 @@ async def require_admin(request: Request) -> dict:
     return user
 
 
+# Collections that hold per-user data (keyed by user_id or email).
+_USER_DATA_COLLECTIONS = [
+    "user_sessions", "magic_links", "chat_sessions", "chat_messages",
+    "daily_checkins", "activity_log", "video_attempts", "email_log",
+    "wladhub_profiles", "tasks", "community_posts", "community_comments",
+    "login_attempts", "folders", "referrals",
+]
+
+
+@router.delete("/users/by-email/{email}")
+async def admin_delete_user(email: str, request: Request) -> dict:
+    """Hard-delete a user + all related data (Iter 92.52: clean re-test accounts).
+
+    Admin-only. Never deletes another admin account (safety guard).
+    """
+    admin = await require_admin(request)
+    email = email.strip().lower()
+    if email in {e.lower() for e in ADMIN_EMAILS}:
+        raise HTTPException(status_code=400, detail="cannot_delete_admin_account")
+    if email == (admin.get("email") or "").lower():
+        raise HTTPException(status_code=400, detail="cannot_delete_own_account")
+
+    user = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1})
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    uid = user.get("user_id")
+
+    related: dict = {}
+    for col in _USER_DATA_COLLECTIONS:
+        try:
+            res = await db[col].delete_many({"$or": [{"user_id": uid}, {"email": email}]})
+            if res.deleted_count:
+                related[col] = res.deleted_count
+        except Exception:  # noqa: BLE001 — best-effort cleanup per collection
+            continue
+    await db.users.delete_one({"email": email})
+    return {"deleted_user": email, "user_id": uid, "related": related}
+
+
 async def _compute_user_stats(last_30: str, last_7: str) -> dict:
     return {
         "total": await db.users.count_documents({}),
