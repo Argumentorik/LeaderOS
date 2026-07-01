@@ -91,16 +91,46 @@ export default function HeroATF({ onCtaClick }) {
         </div>
       </div>
 
-      {/* CTA */}
+      {/* CTA · WladBot pushes you to click */}
       <div className="opacity-0 anim-fade-up delay-4 text-center">
-        <button
-          data-testid="hero-cta-primary"
-          onClick={onCtaClick}
-          className="btn-primary inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold mb-5"
-        >
-          Jetzt Diagnose starten · 10 Min
-          <ArrowRight className="w-5 h-5" />
-        </button>
+        <div className="relative inline-flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-5">
+          {/* WladBot Magic — no bg, floating with lime aura */}
+          <div className="relative group order-2 md:order-1" data-testid="hero-wladbot">
+            {/* Lime glow aura */}
+            <div
+              className="absolute inset-0 rounded-full blur-3xl scale-90 pointer-events-none"
+              style={{
+                background: "radial-gradient(circle, rgba(200,255,0,0.35) 0%, rgba(200,255,0,0) 70%)",
+                animation: "float 4s ease-in-out infinite",
+              }}
+            />
+            {/* Speech bubble — points right toward CTA */}
+            <div
+              className="absolute -top-2 left-1/2 -translate-x-1/2 md:-top-4 md:left-auto md:right-full md:mr-3 md:translate-x-0 bg-white text-black text-[11px] font-bold px-3 py-1.5 rounded-md whitespace-nowrap shadow-xl z-20 anim-fade delay-5"
+              data-testid="hero-wladbot-bubble"
+            >
+              Ich bin bereit. Und du?
+              {/* Mobile: arrow points down; Desktop: arrow points right toward CTA */}
+              <div className="absolute -bottom-[5px] left-1/2 -translate-x-1/2 md:hidden w-0 h-0 border-x-[5px] border-x-transparent border-t-[6px] border-t-white" />
+              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 -right-[5px] w-0 h-0 border-y-[5px] border-y-transparent border-l-[6px] border-l-white" />
+            </div>
+            <img
+              src="/wladbot-3-nobg.png"
+              alt="WladBot — dein KI-Leadership-Coach"
+              className="relative w-28 md:w-36 h-auto anim-float"
+              style={{ filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.4)) drop-shadow(0 0 30px rgba(200,255,0,0.2))" }}
+            />
+          </div>
+
+          <button
+            data-testid="hero-cta-primary"
+            onClick={onCtaClick}
+            className="btn-primary inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold order-1 md:order-2"
+          >
+            Jetzt Diagnose starten · 10 Min
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
         <p className="font-inter text-sm text-slate-600">
           Kostenlos · ohne Login · DSGVO · 100 % anonym
         </p>

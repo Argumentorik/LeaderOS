@@ -6,7 +6,7 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 ## 🛡️ Godmode Security Hardening · Fund-Ready (Feb 2026)
 Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden ALLE P0/P1/P2/P3 Findings gefixt. Verifiziert via testing_agent Iter40: **17/17 Unit-Tests + 16/16 Integration-Tests PASS**, 0 critical/minor Code-Bugs.
 
-## 🎯 UX-Polish · Apple Cards Hover-Overlay (Feb 2026)
+## 🎯 UX-Polish · Apple Cards Hover-Overlay + WladBot Magic ATF (Feb 2026)
 - `components/ui/apple-cards-carousel.jsx` Card-Komponente jetzt mit **Smooth Hover-Overlay**:
   - Idle: Kategorie + Titel top-left auf Bild sichtbar (dunkler Top→Bottom-Gradient)
   - Hover: Base-Gradient fadet aus, Deep-Dark-Gradient (`from-black/50 via-black/70 to-black/95`) fadet ein, `card.content` (Beschreibung + Bullets) slidet smooth von unten rein (500ms, ease-out)
@@ -14,7 +14,14 @@ Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden AL
   - Klick-to-Modal weiterhin verfügbar für Power-User; kein Klick mehr nötig für Verkaufsargumente
 - data-testid `apple-card-hover-{index}` für Testbarkeit
 - AgentsCarouselSection Paragraph: "Klick eine Karte" → "Hover eine Karte"
-- WladBot-Bild-Swap auf `/wladbot-3.png` in allen aktiven Referenzen (MariaWay, skeleton-card) bestätigt.
+
+**WladBot 3.0 Transparent + Magic ATF**:
+- Neue transparente Version `/wladbot-3-nobg.png` (removebg) ersetzt in `MariaWay.jsx` und `skeleton-card.jsx` das gerahmte Bild — kein Border/Box mehr, freistehend mit Drop-Shadow + Lime-Glow.
+- **HeroATF**: WladBot magisch neben CTA-Button platziert
+  - Floating (`anim-float` 4s Loop) + Lime Radial-Glow-Aura (blur-3xl, pulsing)
+  - Speech-Bubble "Ich bin bereit. Und du?" → visueller Pfeil vom Bot auf den "Diagnose starten"-Button
+  - Directional Cue: Bot links → CTA rechts (Desktop) / Bot unten → CTA oben (Mobile Stack)
+  - data-testid `hero-wladbot`, `hero-wladbot-bubble`
 
 
 **Zentraler Security-Service** (`services/security.py`, 190 Z.):

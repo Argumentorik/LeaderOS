@@ -534,7 +534,12 @@ export default function MariaWay() {
                   Jetzt starten <ArrowRight className="w-4 h-4" />
                 </button>
                 <div className="relative">
-                  <img src="/wladbot-3.png" alt="WladBot" className="w-24 md:w-28 h-auto rounded-2xl shadow-2xl shadow-black/40 border border-white/[0.06]" />
+                  <img
+                    src="/wladbot-3-nobg.png"
+                    alt="WladBot"
+                    className="w-28 md:w-32 h-auto anim-float"
+                    style={{ filter: "drop-shadow(0 20px 25px rgba(0,0,0,0.5)) drop-shadow(0 0 40px rgba(200,255,0,0.15))" }}
+                  />
                   <div className="absolute -top-3 -left-[120px] bg-white text-black text-[10px] font-bold px-2.5 py-1.5 rounded-md whitespace-nowrap shadow-lg">
                     Ich bin bereit. Und du?
                     <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-l-[6px] border-l-white" />

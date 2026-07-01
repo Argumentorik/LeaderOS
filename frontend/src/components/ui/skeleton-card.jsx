@@ -95,7 +95,7 @@ export const MetaIconOutline = ({ className }) => (
 );
 
 const WladBotPixel = ({ className }) => (
-  <img src="/wladbot-3.png" alt="WladBot" className={className} />
+  <img src="/wladbot-3-nobg.png" alt="WladBot" className={className} />
 );
 
 const Sparkles = () => {
