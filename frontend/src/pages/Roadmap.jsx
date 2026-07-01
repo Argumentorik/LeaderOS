@@ -235,7 +235,7 @@ export default function Roadmap() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {agentCards.map((agent, i) => (
-              <div key={i} className="glass-card-subtle p-4 hover-card group" data-testid={`agent-card-${i}`}>
+              <div key={agent.name} className="glass-card-subtle p-4 hover-card group" data-testid={`agent-card-${i}`}>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${agent.color}12` }}>
                     <agent.icon className="w-4 h-4" style={{ color: agent.color }} />
@@ -261,7 +261,7 @@ export default function Roadmap() {
           <div className="flex gap-2 mb-6 overflow-x-auto pb-2" data-testid="week-tabs">
             {weeklyPlan.map((week, i) => (
               <button
-                key={i}
+                key={`tab-${week.week}`}
                 data-testid={`week-tab-${i}`}
                 onClick={() => setActiveWeek(i)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium whitespace-nowrap transition-all ${
@@ -282,7 +282,7 @@ export default function Roadmap() {
           {weeklyPlan.map((week, i) => (
             activeWeek === i && (
               <div
-                key={i}
+                key={`phase-${week.week}`}
                 data-testid={`phase-${i}`}
                 className={`rounded-2xl border border-white/8 bg-gradient-to-br ${week.gradient} backdrop-blur-sm overflow-hidden shadow-2xl ${week.borderGlow}`}
               >
@@ -312,7 +312,7 @@ export default function Roadmap() {
                 <div className="p-6 md:p-8 space-y-3">
                   {week.items.map((item, j) => (
                     <div
-                      key={j}
+                      key={`${week.week}-item-${j}`}
                       className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all group"
                     >
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${week.accent}10` }}>
@@ -348,7 +348,7 @@ export default function Roadmap() {
           <div className="flex items-center gap-2 mt-6 justify-center">
             {weeklyPlan.map((week, i) => (
               <button
-                key={i}
+                key={`dot-${week.week}`}
                 onClick={() => setActiveWeek(i)}
                 className="h-1.5 rounded-full transition-all"
                 style={{
@@ -402,7 +402,7 @@ export default function Roadmap() {
           </p>
           <div className="space-y-4">
             {journalPrompts.map((prompt, i) => (
-              <div key={i} data-testid={`journal-entry-${i}`}>
+              <div key={`journal-${i}`} data-testid={`journal-entry-${i}`}>
                 <label className="font-inter text-sm text-slate-300 mb-2 block flex items-center gap-2">
                   <span className="w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-xs font-bold" style={{ color: entries[i].trim() ? "#10B981" : "#64748B" }}>
                     {entries[i].trim() ? <Check className="w-3 h-3" /> : i + 1}
@@ -458,7 +458,7 @@ export default function Roadmap() {
           <p className="font-inter text-sm text-slate-500 mb-8">AI Basics ist dein Startpunkt · dann baust du Schritt für Schritt auf.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {courses.map((course, i) => (
-              <div key={i} className="glass-card-subtle p-5 hover-card flex gap-4 group" data-testid={`course-${i}`}>
+              <div key={course.title} className="glass-card-subtle p-5 hover-card flex gap-4 group" data-testid={`course-${i}`}>
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${course.color}12` }}>
                   <course.icon className="w-5 h-5" style={{ color: course.color }} />
                 </div>

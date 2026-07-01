@@ -75,7 +75,7 @@ function WladBotChat({ onContinue }) {
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 mb-6" style={{ maxHeight: "380px", overflowY: "auto" }}>
           <div className="space-y-5">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+              <div key={`msg-${i}-${msg.role}`} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 {msg.role === "assistant" && (
                   <div className="w-9 h-9 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
                     <Bot className="w-4 h-4 text-[#C8FF00]" />

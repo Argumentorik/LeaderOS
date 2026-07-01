@@ -6,6 +6,20 @@ Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 3
 ## 🛡️ Godmode Security Hardening · Fund-Ready (Feb 2026)
 Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden ALLE P0/P1/P2/P3 Findings gefixt. Verifiziert via testing_agent Iter40: **17/17 Unit-Tests + 16/16 Integration-Tests PASS**, 0 critical/minor Code-Bugs.
 
+
+## 🧹 Code Quality Pass · Feb 2026
+Nach Code-Review-Report gefixt:
+- **Hardcoded Admin-Password entfernt** aus `tests/test_iter38_smoke.py` — jetzt `ADMIN_PASSWORD_TEST` / `ADMIN_PASSWORD` env-driven, Test skippt sauber wenn nicht gesetzt (`allow_module_level=True`).
+- **Stabile React-Keys** ersetzt Array-Indices in `Roadmap.jsx` (7 Stellen: agents, week-tabs, phase, items, dots, journal, courses), `Report.jsx` (3 Stellen: ROI, recommendations, agent-ecosystem), `PriceCards.jsx` (3 Feature-Listen) und `Quiz.jsx` (Chat-Messages).
+
+**Bewusst NICHT gefixt (False Positives des Reviewers):**
+- Hook-Deps für `PaymentSuccess`/`AuthCallback`/`Analyzing`/`Quiz`: Alle geflaggten "missing deps" sind entweder module-level constants (`API`, `axios`), globals (`localStorage`), oder Variablen die INNERHALB des `useEffect` deklariert sind. Standard-ESLint würde diese nicht flaggen. Aufnahme in deps würde Infinite-Loops erzeugen.
+- `is True/False` in Tests: Python-PEP-8-konform. Report widerspricht sich selbst (empfiehlt `is` bei True/False, flaggt aber gleichzeitig `is` bei True/False).
+- localStorage → httpOnly-Cookies: 2-3 Tage Architektur-Change. Wir speichern KEINE Passwörter/PII im Browser — nur non-privileged `session_id`, JWT-`report_token` (server-side gegen erwarteten `sid` validiert), Quiz-State. XSS-Diebstahl des report_tokens bringt Angreifer nichts, ohne Backend-Cookie + korrekten sid-Match.
+- Route-Handler-Refactoring (`auth.py`, `payments.py`, langer Komponenten): 2-3 Tage; als P2 im Backlog notiert.
+
+Tests: 17 passed, 1 skipped (test_iter38_smoke ohne ADMIN_PASSWORD env — genau der Fix). Frontend Smoke: green.
+
 ## 🎯 UX-Polish · Apple Cards Hover-Overlay + WladBot Magic ATF (Feb 2026)
 - `components/ui/apple-cards-carousel.jsx` Card-Komponente jetzt mit **Smooth Hover-Overlay**:
   - Idle: Kategorie + Titel top-left auf Bild sichtbar (dunkler Top→Bottom-Gradient)

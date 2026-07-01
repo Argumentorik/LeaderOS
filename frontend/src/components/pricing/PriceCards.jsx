@@ -29,7 +29,7 @@ export function PriceCards({
           testidPrice="price-leader-os"
         />
         <div className="space-y-3 mb-7">
-          {osFeatures.map((f, i) => <FeatureRow key={i} feature={f} accent="lime" />)}
+          {osFeatures.map((f) => <FeatureRow key={f} feature={f} accent="lime" />)}
         </div>
         <button
           data-testid="cta-leader-os"
@@ -59,7 +59,7 @@ export function PriceCards({
             testidPrice="price-leader-os-plus"
           />
           <div className="space-y-3 mb-7">
-            {osPlusFeatures.map((f, i) => <FeatureRow key={i} feature={f} accent="lime" />)}
+            {osPlusFeatures.map((f) => <FeatureRow key={f} feature={f} accent="lime" />)}
           </div>
           <button
             data-testid="cta-leader-os-plus"
@@ -92,7 +92,7 @@ export function PriceCards({
           </div>
         </div>
         <div className="space-y-3 mb-7">
-          {enterpriseFeatures.map((f, i) => <FeatureRow key={i} feature={f} accent="white" />)}
+          {enterpriseFeatures.map((f) => <FeatureRow key={f} feature={f} accent="white" />)}
         </div>
         <button
           data-testid="cta-leader-os-enterprise"

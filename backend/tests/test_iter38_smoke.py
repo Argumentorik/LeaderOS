@@ -4,7 +4,14 @@ import requests
 import pytest
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://role-assessment-lab.preview.emergentagent.com").rstrip("/")
-ADMIN_PASSWORD = "wladhub2026"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD_TEST") or os.environ.get("ADMIN_PASSWORD")
+
+if not ADMIN_PASSWORD:
+    pytest.skip(
+        "ADMIN_PASSWORD env var not set — skipping admin smoke tests. "
+        "Export ADMIN_PASSWORD_TEST or ADMIN_PASSWORD before running.",
+        allow_module_level=True,
+    )
 
 
 @pytest.fixture(scope="module")

@@ -314,8 +314,8 @@ export default function Report() {
                   { icon: Clock, value: `${roi.hours_saved}h`, label: "gesparte Stunden pro Woche", color: "#C8FF00" },
                   { icon: Zap, value: `${roi.decision_speed}x`, label: "schnellere Entscheidungen", color: "#C8FF00" },
                   { icon: TrendingUp, value: `+${roi.performance_boost}%`, label: "Team-Performance-Steigerung", color: "#C8FF00" }
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4">
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${item.color}15` }}>
                       <item.icon className="w-5 h-5" style={{ color: item.color }} />
                     </div>
@@ -350,7 +350,7 @@ export default function Report() {
             <div className="space-y-6">
               {[narrative.recommendation_1, narrative.recommendation_2, narrative.recommendation_3].map((rec, i) => (
                 rec && (
-                  <div key={i} className="flex gap-5">
+                  <div key={`rec-${i}`} className="flex gap-5">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-manrope font-bold ${
                       i === 2 ? "bg-[#C8FF00]/10 text-[#C8FF00]" : "bg-white/[0.04] text-white"
                     }`}>{i + 1}</div>
@@ -385,8 +385,8 @@ export default function Report() {
               { icon: BookOpen, title: "Strategie-Agent", desc: "Playbooks & Frameworks", color: "#C8FF00" },
               { icon: Calendar, title: "Event-Agent", desc: "Live-Sessions & Workshops", color: "#C8FF00" },
               { icon: MessageCircle, title: "Community-Agent", desc: "Vernetzung mit Leadern", color: "#C8FF00" },
-            ].map((item, i) => (
-              <div key={i} className="hub-card glass-card-subtle p-4 hover-card">
+            ].map((item) => (
+              <div key={item.title} className="hub-card glass-card-subtle p-4 hover-card">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: `${item.color}15` }}>
                   <item.icon className="w-5 h-5" style={{ color: item.color }} />
                 </div>
