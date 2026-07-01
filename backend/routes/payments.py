@@ -131,7 +131,25 @@ LEGACY_PACKAGES = {
 
 
 def _resolve_package(package_id: str) -> dict | None:
-    return PACKAGES.get(package_id) or LEGACY_PACKAGES.get(package_id)
+    return PACKAGES.get(package_id) or LEGACY_PACKAGES.get(package_id) or TEST_PACKAGES.get(package_id)
+
+
+# Iter 92.59 (Mert): internal 1€ end-to-end LIVE test of the full purchase
+# flow (Stripe live key → webhook/polling → tier activation → welcome mails).
+# NEVER listed in /payments/packages. Checkout is double-gated: activation
+# code (sent per email) AND allow-listed buyer email.
+TEST_PACKAGES = {
+    "leadership_os_1eur_test": {
+        "name": "Leadership OS · Live-Test (1€)",
+        "tier": "standard",
+        "amount": 1.00,
+        "currency": "eur",
+        "description": "Interner 1€-Livetest — aktiviert den vollen Leadership-OS-Plan.",
+        "billing": "one_time",
+    },
+}
+TEST_ACTIVATION_CODE = "WLAD-1EURO-2026"
+TEST_ALLOWED_EMAILS = {"wj@argumentorik.com", "mert@wladbot.com", "test@test.com"}
 
 
 async def _activate_from_package(user_id: str, package_id: str):
@@ -287,6 +305,13 @@ async def create_checkout(data: CheckoutRequest, request: Request):
     package = _resolve_package(data.package_id)
     if not package:
         raise HTTPException(status_code=400, detail="Ungültiges Paket")
+
+    # 1€-Livetest gate: correct code AND allow-listed email required.
+    if data.package_id in TEST_PACKAGES:
+        if (data.discount_code or "").strip().upper() != TEST_ACTIVATION_CODE:
+            raise HTTPException(status_code=403, detail="Ungültiger Aktivierungscode")
+        if (user.get("email") or "").lower() not in TEST_ALLOWED_EMAILS:
+            raise HTTPException(status_code=403, detail="Nicht freigeschaltet für den Livetest")
 
     # Discount codes — currently single hardcoded "WLAD10" earned via the
     # Fake-Wlad-Call A/B bribe variant. Applied server-side so users can't

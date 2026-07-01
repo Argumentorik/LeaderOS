@@ -41,15 +41,18 @@ export default function CoachingPage() {
   const navigate = useNavigate();
   const de = lang === 'de';
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [testCode, setTestCode] = useState(null);
   const pricingRef = useRef(null);
 
-  const handleStripeCheckout = async (packageId) => {
+  const handleStripeCheckout = async (packageId, discountCode = null) => {
     setCheckoutLoading(packageId);
     try {
       const endpoint = packageId === 'accelerator_installment_followup'
         ? '/payments/installment/next'
         : '/payments/checkout';
-      const res = await api.post(endpoint, { package_id: packageId, origin_url: window.location.origin });
+      const payload = { package_id: packageId, origin_url: window.location.origin };
+      if (discountCode) payload.discount_code = discountCode;
+      const res = await api.post(endpoint, payload);
       if (res.data.url) window.location.href = res.data.url;
     } catch (err) {
       logger.error('Checkout error:', err);
@@ -57,7 +60,8 @@ export default function CoachingPage() {
     } finally { setCheckoutLoading(false); }
   };
 
-  // Auto-start installment checkout if ?installment=next query param present
+  // Auto-start installment checkout if ?installment=next query param present.
+  // Iter 92.59: ?code=WLAD-… shows the 1€ live-test activation banner.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('installment') === 'next') {
@@ -66,6 +70,8 @@ export default function CoachingPage() {
       url.searchParams.delete('installment');
       window.history.replaceState({}, '', url.toString());
     }
+    const code = params.get('code');
+    if (code && code.toUpperCase().startsWith('WLAD-1EURO')) setTestCode(code.toUpperCase());
   }, []);
 
   const scrollToPricing = () => {
@@ -85,6 +91,29 @@ export default function CoachingPage() {
   return (
     <DashboardLayout rightPanel={<CoachingRightPanel de={de} onCheckout={handleStripeCheckout} />}>
       <div className="p-6 lg:p-8 max-w-5xl space-y-16" data-testid="coaching-page">
+
+        {/* ── 1€ LIVE-TEST ACTIVATION (Iter 92.59, code-gated) ── */}
+        {testCode && (
+          <div className="relative rounded-2xl overflow-hidden border border-[#BFFF00]/30 bg-gradient-to-r from-[#0A0A0A] to-[#16210A] shadow-[0_16px_40px_-16px_rgba(191,255,0,0.25)] animate-fade-in" data-testid="test-activation-banner">
+            <div aria-hidden className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#BFFF00]/[0.14] blur-[40px] pointer-events-none" />
+            <div className="relative flex flex-wrap items-center gap-4 p-5">
+              <WladBotAvatar size={44} live />
+              <div className="flex-1 min-w-[220px]">
+                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">{de ? 'Aktivierungscode erkannt' : 'Activation code detected'} · {testCode}</p>
+                <p className="text-[14px] font-bold text-white mt-0.5">{de ? 'Live-Test: Leadership OS für 1 € aktivieren' : 'Live test: activate Leadership OS for €1'}</p>
+                <p className="text-[11px] text-white/45">{de ? 'Voller Standard-Zugang · echter Stripe-Checkout · nur für freigeschaltete Accounts' : 'Full standard access · real Stripe checkout · allow-listed accounts only'}</p>
+              </div>
+              <button
+                onClick={() => handleStripeCheckout('leadership_os_1eur_test', testCode)}
+                disabled={checkoutLoading === 'leadership_os_1eur_test'}
+                className="px-5 h-11 rounded-xl bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[13px] font-bold transition-all shadow-lg shadow-[#BFFF00]/25 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50"
+                data-testid="test-activation-btn"
+              >
+                {checkoutLoading === 'leadership_os_1eur_test' ? (de ? 'Wird geladen…' : 'Loading…') : (de ? 'Für 1 € aktivieren →' : 'Activate for €1 →')}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── HERO ── Apple/Tesla style: bold typo + 3-Layer Glass Stack ── */}
         <section className="relative pt-4 animate-fade-in" data-testid="coaching-hero">
