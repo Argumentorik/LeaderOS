@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.59 · 02.07.26] 1€-Livetest-Paket + Final-Deploy-Check (PASS)** —
+  - **`leadership_os_1eur_test`** (1€ → standard-Tier, `TEST_PACKAGES` in payments.py): NIE in öffentlicher Paketliste. Doppelt gegated: Aktivierungscode `WLAD-1EURO-2026` (via `discount_code`-Feld) + E-Mail-Allowlist (wj@argumentorik.com, mert@wladbot.com, test@test.com). Getestet: hidden ✅, falscher Code 403 ✅, fremde E-Mail 403 ✅, korrekt → Stripe-Live-Session ✅.
+  - **CoachingPage**: `?code=WLAD-1EURO...` → dunkler Aktivierungs-Banner (`test-activation-banner`) mit „Für 1 € aktivieren"-Button. Screenshot-verifiziert.
+  - **wj@argumentorik.com neu angelegt** (Preview, Zufalls-Passwort — Login via Magic Link). 2 Mails versendet: Magic-Link-Login + „Dein 1€-Testzugang" mit Code & Anleitung. ⚠️ Magic-Link-Token liegt in Preview-DB, Link zeigt auf leaderos.de → auf Prod nach Redeploy NEU anfordern (leaderos.de/login → Magic Link).
+  - **deployment_agent Final-Check: PASS** — keine Blocker, bereit für 400-Kunden-Onboarding.
 - [x] **[Iter 92.58 · 02.07.26] Godmode: Simulations-Briefing, Grok-Chat, Task-Opt-in** — Testing-Agent 100 % (iteration_92_58.json)
   - **Simulations-Briefing-Wizard** (`SimulationBriefing.js`): Klick auf Szenario öffnet 10-Sek-Briefing (Gegenüber-Stil: emotional/rational/dominant + Trainingsziel: Klarheit/Empathie/Ergebnis) → fließt in KI-Persona-Prompt (`setup_block` in simulations.py, auch bei Folgeturns). Start erst nach beiden Klicks. ESC/Backdrop/X schließen.
   - **Chat Follow-up-Chips**: Schema `follow_up_questions` (services.py, genau 2 kontextuelle Fragen aus User-Sicht) → klickbare Chips unter der letzten Antwort (`chat-followup-chips`), Klick sendet direkt.
