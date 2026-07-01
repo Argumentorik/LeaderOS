@@ -134,41 +134,57 @@ export default function CoachingPage() {
               </div>
             </div>
 
-            {/* Right: 3-Layer Glass Stack visual */}
-            <div className="relative h-[440px] hidden lg:block" data-testid="hero-glass-stack">
+            {/* Right: 3-Layer Glass Stack visual — Iter 92.46 rebuilt for
+                real 3-card staggered peek (not overlap). */}
+            <div className="relative h-[500px] hidden lg:block" data-testid="hero-glass-stack">
               {/* Ambient gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#BFFF00]/[0.08] via-transparent to-purple-500/[0.06] rounded-3xl blur-3xl pointer-events-none" />
-              {/* Stack cards — staggered, rotated, glass-morphism */}
+              <div className="absolute inset-8 bg-gradient-to-br from-[#BFFF00]/[0.14] via-transparent to-purple-500/[0.10] rounded-[3rem] blur-3xl pointer-events-none" />
+              {/* Stack cards — staggered on both axes for real depth */}
               {layers.map((layer, idx) => {
-                const offset = idx * 56;
-                const rotate = (idx - 1) * 3;
+                // idx 0 top-left, idx 1 center, idx 2 bottom-right
+                const positions = [
+                  { x: -110, y: -155, rotate: -8, z: 10 },
+                  { x:    0, y:  -20, rotate:  0, z: 20 },
+                  { x: 110,  y:  130, rotate:  8, z: 30 },
+                ];
+                const pos = positions[idx];
                 const gradientCss = `linear-gradient(135deg, ${layer.gradient})`;
                 return (
                   <div
                     key={layer.number}
-                    className="absolute left-1/2 top-1/2 w-72 rounded-3xl backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl animate-fade-in"
+                    className="absolute left-1/2 top-1/2 w-[300px] rounded-[28px] backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] animate-fade-in transition-transform duration-500 hover:scale-[1.03] hover:z-40"
                     style={{
-                      transform: `translate(-50%, calc(-50% + ${offset - 56}px)) rotate(${rotate}deg)`,
-                      background: 'rgba(255,255,255,0.65)',
-                      animationDelay: `${idx * 120}ms`,
-                      zIndex: 10 + idx,
+                      transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rotate}deg)`,
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.75))',
+                      animationDelay: `${idx * 140}ms`,
+                      zIndex: pos.z,
                     }}
                   >
-                    <div className="p-6 dark:bg-[#0A0A0A]/40 rounded-3xl">
-                      <div className="flex items-start gap-3">
+                    <div className="p-6 dark:bg-[#0A0A0A]/60 rounded-[28px]">
+                      <div className="flex items-start gap-4">
                         <div
-                          className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
-                          style={{ background: gradientCss }}
+                          className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-xl"
+                          style={{ background: gradientCss, boxShadow: `0 12px 30px -8px ${layer.gradient.split(',')[0]}80` }}
                         >
-                          <layer.icon size={20} className="text-white" />
+                          <layer.icon size={26} className="text-white" strokeWidth={2.2} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/70">
+                          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-black/40 dark:text-white/50">
                             Layer {layer.number}
                           </p>
-                          <p className="text-sm font-black leading-tight mt-0.5">{layer.title}</p>
-                          <p className="text-[11px] text-muted-foreground mt-1 line-clamp-2">{layer.description}</p>
+                          <p className="text-[15px] font-black leading-tight mt-1 text-[#0A0A0A] dark:text-white">{layer.title}</p>
+                          <p className="text-[11.5px] leading-relaxed text-black/55 dark:text-white/55 mt-1.5 line-clamp-2">{layer.description}</p>
                         </div>
+                      </div>
+                      {/* Mini feature-dots */}
+                      <div className="mt-4 pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex gap-1">
+                        {[0,1,2,3,4].map((i) => (
+                          <span
+                            key={i}
+                            className="h-1 flex-1 rounded-full"
+                            style={{ background: i < 4 ? layer.gradient.split(',')[0] : 'rgba(0,0,0,0.06)' }}
+                          />
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -238,16 +254,19 @@ export default function CoachingPage() {
 
         {/* ── SOCIAL PROOF ── stats + testimonials ── */}
         <section className="space-y-8 animate-fade-in stagger-5" data-testid="social-proof-section">
-          {/* Stats */}
+          {/* Stats — Iter 92.46 GODMODE polish: bigger gradient tiles, better shadows */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.map((stat) => (
-              <Card key={stat.label} className="bg-white/60 dark:bg-card/50 backdrop-blur-sm border-black/[0.04] dark:border-white/[0.06]">
-                <CardContent className="p-5 text-center">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <stat.icon size={18} className="text-[#0A0A0A]" />
+              <Card key={stat.label} className="group bg-white dark:bg-card/60 border-black/[0.04] dark:border-white/[0.06] hover:border-[#BFFF00]/40 transition-all hover:-translate-y-1 hover:shadow-2xl">
+                <CardContent className="p-6 text-center">
+                  <div className="relative w-14 h-14 mx-auto mb-4">
+                    <div className="absolute inset-0 rounded-2xl bg-[#BFFF00] blur-lg opacity-40 group-hover:opacity-70 transition-opacity" />
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#BFFF00] via-[#B0E600] to-[#9ACC00] flex items-center justify-center shadow-[0_8px_24px_-6px_rgba(191,255,0,0.5)]">
+                      <stat.icon size={22} className="text-[#0A0A0A]" strokeWidth={2.6} />
+                    </div>
                   </div>
-                  <p className="text-2xl font-black">{stat.value}</p>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold mt-0.5 leading-tight">
+                  <p className="text-3xl font-black tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>{stat.value}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-[0.12em] font-bold mt-1.5 leading-tight">
                     {stat.label}
                   </p>
                 </CardContent>
@@ -255,29 +274,49 @@ export default function CoachingPage() {
             ))}
           </div>
 
-          {/* Testimonials */}
+          {/* Testimonials — Iter 92.46 GODMODE: real Unsplash professional face images */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, idx) => (
-              <Card
-                key={t.author + idx}
-                className="border-black/[0.04] dark:border-white/[0.06] hover:shadow-xl transition-shadow"
-                data-testid={`testimonial-${idx}`}
-              >
-                <CardContent className="p-6 space-y-4">
-                  <Quote size={20} className="text-[#BFFF00]" />
-                  <p className="text-sm font-semibold leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="flex items-center gap-2 pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center text-[#0A0A0A] font-black text-xs">
-                      {t.author[0]}
+            {testimonials.map((t, idx) => {
+              // Curated professional Unsplash headshots (Founder / Team Lead / Consultant)
+              const AVATARS = [
+                'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&q=80',
+                'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&crop=faces&q=80',
+                'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&q=80',
+              ];
+              return (
+                <Card
+                  key={t.author + idx}
+                  className="group border-black/[0.04] dark:border-white/[0.06] hover:shadow-2xl hover:-translate-y-1 transition-all"
+                  data-testid={`testimonial-${idx}`}
+                >
+                  <CardContent className="p-6 space-y-4">
+                    {/* 5-star rating */}
+                    <div className="flex items-center gap-0.5">
+                      {[1,2,3,4,5].map((s) => (
+                        <Star key={s} size={13} className="fill-[#BFFF00] text-[#BFFF00]" />
+                      ))}
                     </div>
-                    <div>
-                      <p className="text-xs font-bold">{t.author}</p>
-                      <p className="text-[10px] text-muted-foreground">{t.role}</p>
+                    <Quote size={22} className="text-[#BFFF00]/70" />
+                    <p className="text-[14px] font-medium leading-relaxed text-foreground">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                    <div className="flex items-center gap-3 pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
+                      <img
+                        src={AVATARS[idx]}
+                        alt={t.author}
+                        className="w-11 h-11 rounded-full object-cover ring-2 ring-[#BFFF00]/30 group-hover:ring-[#BFFF00]/60 transition-all"
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                      <div>
+                        <p className="text-[13px] font-black">{t.author}</p>
+                        <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </section>
 
