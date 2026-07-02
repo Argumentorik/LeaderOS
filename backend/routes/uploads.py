@@ -87,25 +87,12 @@ async def upload_profile_picture(request: Request, file: UploadFile = File(...))
 
 
 @router.get("/files/{path:path}")
-async def serve_file(path: str, request: Request, auth: str = Query(None)):
-    # Auth check - try cookie first, then query param
-    try:
-        await get_current_user(request)
-    except HTTPException:
-        if not auth:
-            raise HTTPException(status_code=401, detail="Not authenticated")
-        # Try query param auth
-        from services import get_current_user as gcu
-        class FakeRequest:
-            def __init__(self, token):
-                self.cookies = {}
-                self.headers = {"Authorization": f"Bearer {token}"}
-        try:
-            await gcu(FakeRequest(auth))
-        except Exception:
-            raise HTTPException(status_code=401, detail="Not authenticated")
-
-    record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
+async def serve_file(path: str, request: Request):
+    # SEC-004: cookie/header auth only (no token in URL) + owner-scoped lookup.
+    user = await get_current_user(request)
+    record = await db.files.find_one(
+        {"storage_path": path, "is_deleted": False, "user_id": user["user_id"]}, {"_id": 0}
+    )
     if not record:
         raise HTTPException(status_code=404, detail="File not found")
 

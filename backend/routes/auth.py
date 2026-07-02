@@ -182,13 +182,9 @@ def _login_history_entry(ctx: dict, method: str) -> dict:
 def _safe_user_output(user: dict) -> dict:
     """Strip sensitive fields from user document before sending to client.
 
-    Computes `is_admin` server-side (DB flag OR email allowlist) so the frontend
-    never has to know the allowlist itself.
+    Computes `is_admin` server-side from the trusted DB flag only (SEC-003).
     """
-    # Lazy import to avoid circular dep at module-load
-    from routes.admin import ADMIN_EMAILS
-    email = (user.get("email") or "").lower()
-    is_admin = bool(user.get("is_admin")) or email in {e.lower() for e in ADMIN_EMAILS}
+    is_admin = bool(user.get("is_admin"))
     safe = {k: v for k, v in user.items() if k not in ("password_hash", "_id", "login_history", "signup_ip", "last_login_ip")}
     safe["is_admin"] = is_admin
     return safe

@@ -15,21 +15,8 @@ from services import get_current_user
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
 
-ADMIN_EMAILS = {
-    "test@test.com",
-    "start@aiporate.com",
-    "mert@aiporate.com",
-    "mert@wladbot.com",
-    "mertzafermutlu@gmail.com",
-    # Iter 92.28 (Mert): single source of truth — must mirror routes/admin.py::ADMIN_EMAILS
-    "stefan@argumentorik.com",
-    "stefan.bachmann123@gmail.com",
-}
-
-
 async def _require_admin(user: dict) -> None:
-    email = (user.get("email") or "").lower()
-    if not (user.get("is_admin") or email in ADMIN_EMAILS):
+    if not user.get("is_admin"):
         raise HTTPException(status_code=403, detail="admin_only")
 
 

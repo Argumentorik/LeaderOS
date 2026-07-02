@@ -228,6 +228,13 @@ async def startup() -> None:
     except Exception as e:
         logger.warning(f"Storage init deferred: {e}")
 
+    # SEC-003: promote allowlisted EXISTING users to is_admin (runtime auth = DB flag only)
+    try:
+        from routes.admin import seed_admin_flags
+        await seed_admin_flags()
+    except Exception as e:
+        logger.warning(f"Admin seed failed: {e}")
+
     # MongoDB TTL index — auto-delete expired sessions
     try:
         from pymongo import ASCENDING

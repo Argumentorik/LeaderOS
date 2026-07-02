@@ -317,7 +317,9 @@ async def get_three_layer_score(request: Request) -> dict:
 async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
     """Sync data from Supabase WladHub database into LeaderOS."""
     user = await get_current_user(request)
-    email = data.wladhub_email or user.get("email", "")
+    # SEC-002: always sync the caller's own verified account email — a
+    # client-supplied email would allow reading other people's diagnoses.
+    email = user.get("email", "")
 
     # Log the sync attempt
     await db.wladhub_sync_log.insert_one({

@@ -2,27 +2,39 @@
 from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime, timezone, timedelta
 
-from config import db
+from config import db, logger
 from services import get_current_user
 from services_tier import TIER_CONFIG
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
-# Admin emails (expand as needed)
-ADMIN_EMAILS = {
-    "test@test.com",
+# SEC-003: Bootstrap seed list — used ONLY at startup to set the is_admin DB
+# flag for EXISTING users. Runtime authorization is the DB flag alone; a
+# generic/claimable email must never grant admin at request time.
+ADMIN_SEED_EMAILS = {
     "start@aiporate.com",
+    "mert@aiporate.com",
     "mert@wladbot.com",
     "mertzafermutlu@gmail.com",
-    # Iter 92.28 (Mert): Wlad-Team-Beraters auch admin (Coaching-Bookings, Lead-Review)
     "stefan@argumentorik.com",
     "stefan.bachmann123@gmail.com",
 }
 
 
+async def seed_admin_flags() -> None:
+    """Idempotent startup seed: promote existing allowlisted users to is_admin."""
+    emails = [e.lower() for e in ADMIN_SEED_EMAILS]
+    res = await db.users.update_many(
+        {"$or": [{"email_lower": {"$in": emails}}, {"email": {"$in": emails}}], "is_admin": {"$ne": True}},
+        {"$set": {"is_admin": True}},
+    )
+    if res.modified_count:
+        logger.info(f"Admin seed: promoted {res.modified_count} user(s) to is_admin")
+
+
 async def require_admin(request: Request) -> dict:
     user = await get_current_user(request)
-    if user.get("email", "").lower() not in {e.lower() for e in ADMIN_EMAILS} and not user.get("is_admin"):
+    if not user.get("is_admin"):
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
 
@@ -44,12 +56,12 @@ async def admin_delete_user(email: str, request: Request) -> dict:
     """
     admin = await require_admin(request)
     email = email.strip().lower()
-    if email in {e.lower() for e in ADMIN_EMAILS}:
-        raise HTTPException(status_code=400, detail="cannot_delete_admin_account")
     if email == (admin.get("email") or "").lower():
         raise HTTPException(status_code=400, detail="cannot_delete_own_account")
 
-    user = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1})
+    user = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1, "is_admin": 1})
+    if user and user.get("is_admin"):
+        raise HTTPException(status_code=400, detail="cannot_delete_admin_account")
     if not user:
         raise HTTPException(status_code=404, detail="user_not_found")
     uid = user.get("user_id")

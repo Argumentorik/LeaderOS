@@ -102,8 +102,9 @@ async def dismiss_soft_pause(request: Request):
 
 @router.post("/reset")
 async def reset_credits(request: Request):
-    """Reset user credits to FREE_CREDITS (admin/debug)."""
-    user = await get_current_user(request)
+    """Reset caller's credits to FREE_CREDITS. SEC-001: admin only."""
+    from routes.admin import require_admin
+    user = await require_admin(request)
     await db.credits.update_one(
         {"user_id": user["user_id"]},
         {"$set": {"balance": FREE_CREDITS, "total_used": 0}},

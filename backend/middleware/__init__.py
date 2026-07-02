@@ -24,9 +24,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self._cleanup_counter = 0
 
     def _get_ip(self, request: Request) -> str:
+        # SEC hardening: first XFF hop is client-spoofable. Prefer the
+        # Cloudflare-verified header, then the last (proxy-appended) XFF hop.
+        cf_ip = request.headers.get("cf-connecting-ip")
+        if cf_ip:
+            return cf_ip.strip()
         forwarded = request.headers.get("x-forwarded-for", "")
         if forwarded:
-            return forwarded.split(",")[0].strip()
+            return forwarded.split(",")[-1].strip()
         return request.client.host if request.client else "unknown"
 
     def _get_limit(self, path: str) -> tuple[int, int]:
