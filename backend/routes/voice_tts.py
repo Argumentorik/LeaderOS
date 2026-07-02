@@ -270,7 +270,7 @@ async def clear_voice_cache(request: Request, persona: Optional[str] = None) -> 
     cached audio is cleared — useful after changing just one voice_id mapping).
     Without the query param, the entire cache is wiped.
     """
-    await require_admin(request)  # honours ADMIN_EMAILS whitelist + is_admin flag
+    await require_admin(request)  # trusted is_admin DB flag only
 
     query: dict = {}
     if persona:

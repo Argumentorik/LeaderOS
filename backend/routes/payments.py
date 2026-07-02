@@ -149,7 +149,6 @@ TEST_PACKAGES = {
     },
 }
 TEST_ACTIVATION_CODE = "WLAD-1EURO-2026"
-TEST_ALLOWED_EMAILS = {"wj@argumentorik.com", "mert@wladbot.com", "test@test.com"}
 
 
 async def _activate_from_package(user_id: str, package_id: str):
@@ -306,11 +305,12 @@ async def create_checkout(data: CheckoutRequest, request: Request):
     if not package:
         raise HTTPException(status_code=400, detail="Ungültiges Paket")
 
-    # 1€-Livetest gate: correct code AND allow-listed email required.
+    # 1€-Livetest gate: correct code AND trusted is_admin DB flag required
+    # (SEC re-audit: email allowlists are claimable — same root cause as SEC-003).
     if data.package_id in TEST_PACKAGES:
         if (data.discount_code or "").strip().upper() != TEST_ACTIVATION_CODE:
             raise HTTPException(status_code=403, detail="Ungültiger Aktivierungscode")
-        if (user.get("email") or "").lower() not in TEST_ALLOWED_EMAILS:
+        if not user.get("is_admin"):
             raise HTTPException(status_code=403, detail="Nicht freigeschaltet für den Livetest")
 
     # Discount codes — currently single hardcoded "WLAD10" earned via the
