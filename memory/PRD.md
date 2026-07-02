@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.62–92.63e · 02.07.26] leadercheck.de↔Leader-OS Sync — FINAL TEST BESTANDEN (100 % sync-relevante Tests)** —
+  - **Autosync bei JEDEM Login** (`_maybe_autosync_wladhub` in auth.py): password-login, magic-link, Google (neu + bestehend) — vorher nur bei Register. User, die die Diagnose NACH dem Signup machen, werden jetzt gesynct.
+  - **SECURITY-FIX**: `_fetch_supabase_insights` fiel bei unbekannter E-Mail auf ungefiltertes Query zurück → Cross-User-Datenleck. Jetzt strikt: keine Zeile ohne User-Match.
+  - **Push-to-Supabase FK-Kette gelöst** (4 Supabase-Constraints nacheinander: FK 23503 public.users, NOT NULL source_platform, generated email_lower, CHECK source_platform): finale Logik = public.users-id per `email_lower`-Lookup auflösen (Zeilen existieren oft mit eigener id via CRM-Mirror), nur bei Fehlen auth-User + public.users-Zeile (`source_platform:'leader-os'`) anlegen, Re-Lookup-Fallback. Lesepfad nutzt dieselbe public-id.
+  - **E2E bewiesen** (iteration_92_63e.json, retest_needed=false): Register→Import(81/67/74)→Push 200→Mongo-Reset→Login→Autosync→Dashboard/3layer zeigt Scores→Chat-Memory enthält Zahlen. Testfiles: `tests/test_iter92_62_*.py`, `tests/test_iter92_63_*.py`.
+  - Weitere Fixes: 502→409 (Cloudflare fraß JSON-Detail), ERROR-Logging bei Supabase-Fails, Score-Echo-Instruktion in `_build_wladhub_section`, ObjectId-Leak in `_save_diagnosis_to_mongo` (via Testing-Agent).
 - [x] **[Iter 92.61 · 02.07.26] ATF-Upgrade: Leadership-Score-Teaser im Hero** —
   - Hero rechts: Glass-Stack ersetzt durch `ScoreTeaser` (ConversionSections.js) — dunkles Dashboard-Mock: 62 % Leadership Score (+9 ▲), 3 Dimension-Bars (Kommunikation 71/Entscheidungsstärke 58/Konfliktlösung 43), 2 geblurrte Locked-Rows + „🔒 Vollständiges Profil freischalten" (scrollt zu Pricing), WladBot-Avatar + LIVE-Badge, leichte Rotation mit Hover-Straighten. Unfinished-Progress-Psychologie (Duolingo/Netflix-Prinzip). Screenshot-verifiziert.
   - **leader-check.de geprüft** (Crawl): Seite lädt sauber (Hero, Diagnose-CTA, 3 Dimensionen, Score-Beispiel, Testimonials, DSGVO, Cross-Link zu leaderos.de). ⚠️ FUND: 2 untere CTAs verlinken auf `leadercheck.de` (ohne Bindestrich) statt `leader-check.de` — liegt auf Vercel, nicht in diesem Repo; Mert muss das dort fixen.
