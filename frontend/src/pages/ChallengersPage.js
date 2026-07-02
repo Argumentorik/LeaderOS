@@ -112,19 +112,19 @@ export default function ChallengersPage() {
       img.decoding = 'async';
       img.src = c.avatar;
     });
-    // (b) Voice warm-cache — fetch static intros then hit /voice/tts in
-    // parallel. Fire-and-forget: any failure just means the user hears the
-    // voice ~2s later on first click. No UI feedback, no toast.
+    // (b) Voice warm-cache — fetch static intros then hit /voice/tts
+    // SEQUENTIALLY (ElevenLabs caps concurrent requests at 3). Fire-and-forget:
+    // any failure just means the user hears the voice ~2s later on first click.
     (async () => {
       try {
         const res = await api.get('/challengers/intros');
         const intros = res.data || [];
-        await Promise.all(intros.map((it) =>
-          api.post('/voice/tts', {
+        for (const it of intros) {
+          await api.post('/voice/tts', {
             text: it.initial_message,
             persona: it.challenger_id,
-          }).catch(() => null)
-        ));
+          }).catch(() => null);
+        }
       } catch (err) {
         logger.warn?.('Challenger warm-cache skipped:', err?.message);
       }
@@ -198,7 +198,7 @@ export default function ChallengersPage() {
                     <div className="flex items-stretch">
                       <div className="relative w-28 sm:w-32 shrink-0">
                         <img src={c.avatar} alt={c.name} className="w-full h-full object-cover min-h-[160px]"
-                          loading="eager" decoding="async" fetchpriority="high"
+                          loading="eager" decoding="async" fetchPriority="high"
                           onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
                         <div className="hidden w-full h-full items-center justify-center text-2xl font-black text-white min-h-[160px]" style={{ backgroundColor: c.color || '#6366F1' }}>
                           {c.name.split(' ').map(n => n[0]).join('')}

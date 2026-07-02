@@ -88,7 +88,7 @@ VOICE_REGISTRY: dict[str, dict] = {
         "name": "Richard Branson", "stability": 0.50, "similarity_boost": 0.75, "style": 0.55, "language": "de",
     },
     "sandberg": {
-        "voice_id": "21m00Tcm4Tlm7axTlAzs",  # "Rachel" — strong, professional female
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",  # "Sarah" — mature, reassuring, confident female
         "name": "Sheryl Sandberg", "stability": 0.60, "similarity_boost": 0.75, "style": 0.35, "language": "de",
     },
     "page": {
@@ -222,13 +222,12 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
             "voice_id": voice_config["voice_id"],
         }
 
-    # 2. Synthesize
+    # 2. Synthesize — graceful degrade: quota/rate/voice errors return empty
+    #    audio_url instead of 502 (mirrors /voice/conversation behaviour).
     audio_bytes: bytes = b""  # pre-init to satisfy strict static analysis
     try:
         from fastapi.concurrency import run_in_threadpool
         audio_bytes = await run_in_threadpool(_synthesize, text, voice_config)
-    except HTTPException:
-        raise
     except Exception as e:
         err_msg = str(e)
         # On 401 Unauthorized from ElevenLabs, drop cached client so next request
@@ -236,9 +235,14 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
         if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             logger.warning(f"ElevenLabs 401 — resetting client for next request: {e}")
             _reset_client()
-            raise HTTPException(status_code=502, detail="Voice service authentication failed — key may have rotated")
-        logger.error(f"ElevenLabs synthesis failed: {e}")
-        raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {e}")
+        else:
+            logger.warning(f"ElevenLabs synthesis unavailable — returning empty audio: {e}")
+        return {
+            "audio_url": "",
+            "cached": False,
+            "persona": persona_key,
+            "voice_id": voice_config["voice_id"],
+        }
 
     audio_b64 = base64.b64encode(audio_bytes).decode("ascii")
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -125,9 +125,11 @@ export default function DownloadsPage() {
   const [user, setUser] = useState(null);
 
   // Lazy-load user info for personalization
-  useState(() => {
-    api.get('/auth/me').then((r) => setUser(r.data)).catch((e) => logger.error('me err', e));
-  });
+  useEffect(() => {
+    let mounted = true;
+    api.get('/auth/me').then((r) => { if (mounted) setUser(r.data); }).catch((e) => logger.error('me err', e));
+    return () => { mounted = false; };
+  }, []);
 
   const handleDownload = async (resource) => {
     if (resource.requiresTier && tier === 'free') {

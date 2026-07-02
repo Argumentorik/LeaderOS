@@ -68,6 +68,11 @@ export default function VoicePlayButton({
     if (onStart) onStart();
     try {
       const res = await api.post('/voice/tts', { text: text.slice(0, 800), persona });
+      if (!res.data.audio_url) {
+        setLoading(false);
+        if (onEnd) onEnd();
+        return;
+      }
       const audio = new Audio(res.data.audio_url);
       audio.playbackRate = getTtsSpeed();
       audio.preservesPitch = false; // browsers default to true; false = "cooler" pitched-up feel
