@@ -48,6 +48,23 @@ _USER_DATA_COLLECTIONS = [
 ]
 
 
+@router.post("/users/set-tier/{email}")
+async def admin_set_tier(email: str, request: Request, tier: str = "accelerator"):
+    """Grant a user full paid-tier access (admin panel / founder testing)."""
+    await require_admin(request)
+    email = email.strip().lower()
+    if tier not in TIER_CONFIG or tier == "free":
+        raise HTTPException(status_code=400, detail=f"Ungültiger Tier. Erlaubt: {[t for t in TIER_CONFIG if t != 'free']}")
+    user = await db.users.find_one(
+        {"$or": [{"email_lower": email}, {"email": email}]}, {"_id": 0, "user_id": 1}
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    from services_tier import activate_tier
+    await activate_tier(user["user_id"], tier)
+    return {"email": email, "tier": tier, "activated": True}
+
+
 @router.delete("/users/by-email/{email}")
 async def admin_delete_user(email: str, request: Request) -> dict:
     """Hard-delete a user + all related data (Iter 92.52: clean re-test accounts).
