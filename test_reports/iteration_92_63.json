@@ -1,0 +1,50 @@
+{
+  "summary": "Iter 92.63 RETEST — 8/10 pass. AUTOSYNC-ON-LOGIN and SECURITY-FIX both VERIFIED working. Push-to-Supabase FK bug is NOT fully fixed: the Iter 92.62 patch resolves the correct auth.users id (auto-creates if missing) but Supabase still rejects the leadership_insights write with FK code 23503 — 'Key (user_id)=(<uuid>) is not present in table users'. Root cause: `leadership_insights.user_id` FK references public.users but the admin API POST /auth/v1/admin/users only inserts into auth.users; the corresponding row in public.users is never created (no trigger installed / disabled). Endpoint returns 502 which Cloudflare replaces with its own Bad Gateway HTML — user never sees the real backend detail.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "FK 23503 still fires. Backend log: `Supabase write: status=409 body={\"code\":\"23503\",\"details\":\"Key (user_id)=(e8322cda-9170-4ebe-bcc0-99536d633754) is not present in table \\\"users\\\"\"...}`. The auto-created auth.users id is not mirrored into public.users, so the leadership_insights FK breaks. Fix options: (a) run SQL to add trigger `on auth.user created → insert public.users`, (b) drop the FK constraint if not needed, (c) after admin/users create, explicitly `INSERT INTO public.users (id, email) VALUES (sb_uid, email)` via PostgREST before the leadership_insights write.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "When Supabase write fails, endpoint raises HTTPException(502). Cloudflare intercepts 5xx and replaces the JSON detail with its own HTML error page (`<title>preview.emergentagent.com | 502: Bad gateway</title>`), so users/clients never see the real error. Use 409/422/500 with detail or 200+{status:'error'} to bypass CDN interception.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "The Supabase error body is logged as `INFO` at wladbot logger — should be `ERROR` for FK-fail cases so operators notice."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py",
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py",
+    "/app/test_reports/pytest/iter92_63_results.xml"
+  ],
+  "action_items": [
+    "Add public.users row insert (or install auth-hook trigger) inside push-to-supabase so leadership_insights FK is satisfied. Suggested: after admin/users POST returns 201, do `POST {SUPABASE_URL}/rest/v1/users` with {id: sb_uid, email: user.email} + Prefer: resolution=merge-duplicates before calling _write_supabase_insight.",
+    "Change push-to-supabase failure status from 502 to 409 or 422 so Cloudflare does not swallow the JSON detail. Include supabase_error_body in the detail for easier debugging.",
+    "Consider seeding public.users when Supabase mirroring happens on register (services_wladhub_autosync.mirror_user_event_fire_and_forget) — currently only auth.users may be touched.",
+    "Optional: consolidate services._build_wladhub_diagnosis_section to also inject explicit score numbers (already noted in Iter 92.62)."
+  ],
+  "critical_code_review_comments": [
+    "routes/wladhub.py L390-403 correctly resolves supabase_user_id but assumes admin/users POST also populates public.users — that assumption is FALSE in this Supabase project (confirmed by FK 23503).",
+    "routes/wladhub.py L131 logs write result at INFO level even when status is 4xx/5xx. Consider `logger.error(...)` for non-2xx to surface FK issues.",
+    "routes/wladhub.py L411-413 masks the real Supabase error behind a generic 502. Include `resp.text` in the HTTPException detail (already logged, but not returned)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py (new — 3 tests: push200, full-E2E, security-no-leak)"
+  ],
+  "success_rate": {"backend": "80% (8/10 tests pass)", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "accelerator@wladbot.test / test123 (from /app/memory/test_credentials.md). Test users synctest92r-* / noleak-* auto-created and cleaned up (Mongo + Supabase auth.users).",
+  "seed_data_creation": "Per-run: 1 E2E user (synctest92r-<ts>@wladbot.test) + 1 no-leak user (noleak-<ts>@wladbot.test). Both cleaned up in Mongo + Supabase auth.users at test-module teardown.",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "After main agent fixes the public.users mirroring (see action_items #1), re-run pytest on both test_iter92_62_*.py and test_iter92_63_*.py. Expected: all 10 tests pass. Two tests currently failing: test_A_push_to_supabase_now_succeeds and test_B_full_e2e_leaderos_to_supabase_to_login_autosync. Both fail on the same root cause (public.users FK). The security test test_C passes — confirming _fetch_supabase_insights fix is solid.",
+  "rca_of_the_issue": "The Iter 92.62 push-to-supabase fix addressed the WRONG UUID (SHA256-derived → real auth.users id) but did NOT address the WRONG TABLE. Supabase project has a FK `leadership_insights.user_id → public.users.id` (NOT `auth.users.id`). `POST /auth/v1/admin/users` only inserts into `auth.users`. Without a `handle_new_user` trigger that mirrors auth.users → public.users (a very common Supabase pattern that is apparently missing/disabled here), the FK will keep failing. Two possible fixes: (1) enable the standard `on auth.users insert → insert public.users(id, email)` trigger inside Supabase Studio, or (2) inside push-to-supabase, after creating the auth user, also POST to `/rest/v1/users` with the same id — using `Prefer: resolution=merge-duplicates` so it's idempotent."
+}

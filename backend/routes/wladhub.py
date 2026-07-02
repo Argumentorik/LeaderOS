@@ -56,30 +56,46 @@ class OnboardingData(BaseModel):
 
 # ========== SUPABASE HELPERS ==========
 
+async def _resolve_supabase_user_id(client: httpx.AsyncClient, supabase_url: str, service_key: str, email: str) -> str | None:
+    """Resolve the Supabase auth user id for an email (paginated, max 1000 users)."""
+    email_l = (email or "").lower()
+    headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}"}
+    for page in range(1, 6):
+        resp = await client.get(
+            f"{supabase_url}/auth/v1/admin/users",
+            headers=headers,
+            params={"page": page, "per_page": 200},
+        )
+        if resp.status_code != 200:
+            break
+        users = resp.json().get("users", [])
+        for u in users:
+            if (u.get("email") or "").lower() == email_l:
+                return u["id"]
+        if len(users) < 200:
+            break
+    return None
+
+
 async def _fetch_supabase_insights(user_email: str) -> list:
-    """Fetch leadership_insights from Supabase for a given user email."""
+    """Fetch leadership_insights from Supabase for a given user email.
+
+    Iter 92.62 SECURITY FIX: if the email has no Supabase account we return []
+    — NEVER fall back to an unfiltered query (that leaked other users' data).
+    """
     supabase_url, service_key = _get_supabase_config()
     if not supabase_url or not service_key:
         return []
     try:
         async with httpx.AsyncClient(timeout=10) as client:
-            auth_resp = await client.get(
-                f"{supabase_url}/auth/v1/admin/users",
-                headers={"apikey": service_key, "Authorization": f"Bearer {service_key}"},
-                params={"per_page": 100},
+            supabase_user_id = await _resolve_supabase_user_id(client, supabase_url, service_key, user_email)
+            if not supabase_user_id:
+                logger.info(f"Supabase: no account for {user_email} — skipping insights fetch")
+                return []
+            query = (
+                f"{supabase_url}/rest/v1/leadership_insights"
+                f"?select=*&order=assessed_at.desc&limit=5&user_id=eq.{supabase_user_id}"
             )
-            supabase_user_id = None
-            if auth_resp.status_code == 200:
-                users = auth_resp.json().get("users", [])
-                for u in users:
-                    if u.get("email", "").lower() == user_email.lower():
-                        supabase_user_id = u["id"]
-                        break
-
-            query = f"{supabase_url}/rest/v1/leadership_insights?select=*&order=assessed_at.desc&limit=5"
-            if supabase_user_id:
-                query += f"&user_id=eq.{supabase_user_id}"
-
             resp = await client.get(query, headers={"apikey": service_key, "Authorization": f"Bearer {service_key}"})
             if resp.status_code == 200:
                 return resp.json()
@@ -354,27 +370,47 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
 
 @router.post("/push-to-supabase")
 async def push_scores_to_supabase(request: Request):
-    """Push LeaderOS scores back to Supabase for cross-platform sync."""
+    """Push LeaderOS scores back to Supabase for cross-platform sync.
+
+    Iter 92.62 FK-FIX: use the REAL Supabase auth user id (resolved by email,
+    auto-created if missing) instead of a SHA256-derived UUID that violated
+    the leadership_insights.user_id foreign key.
+    """
     user = await get_current_user(request)
     scores = user.get("wladhub_scores", {})
     if not scores:
         raise HTTPException(status_code=400, detail="No WladHub scores to push")
 
-    # Supabase expects UUID for user_id — generate a deterministic one from our user_id.
-    # SHA-256 is used here as a one-way hash for deterministic ID mapping (not for security/auth).
-    import hashlib
-    digest = hashlib.sha256(user["user_id"].encode()).hexdigest()[:32]
-    user_uuid = str(uuid.UUID(digest))
+    supabase_url, service_key = _get_supabase_config()
+    if not supabase_url or not service_key:
+        raise HTTPException(status_code=502, detail="Supabase not configured")
+
+    headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}", "Content-Type": "application/json"}
+    async with httpx.AsyncClient(timeout=15) as client:
+        sb_uid = await _resolve_supabase_user_id(client, supabase_url, service_key, user["email"])
+        if not sb_uid:
+            # leaderos-first user: create the Supabase account so the FK holds
+            create = await client.post(
+                f"{supabase_url}/auth/v1/admin/users",
+                headers=headers,
+                json={"email": user["email"], "email_confirm": True},
+            )
+            if create.status_code in (200, 201):
+                sb_uid = create.json().get("id")
+            else:
+                logger.error(f"Supabase user create failed: {create.status_code} {create.text[:200]}")
+        if not sb_uid:
+            raise HTTPException(status_code=409, detail="Kein leadercheck.de-Konto für diese E-Mail — Push nicht möglich")
 
     success = await _write_supabase_insight(
-        user_id=user_uuid,
+        user_id=sb_uid,
         campaign_id=f"leaderos_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
         scores=scores,
     )
 
     if success:
         return {"message": "Scores erfolgreich zu WladHub gepusht", "status": "success"}
-    raise HTTPException(status_code=502, detail="Supabase connection failed")
+    raise HTTPException(status_code=502, detail="Supabase write failed — siehe Backend-Log")
 
 
 @router.get("/supabase-status")
