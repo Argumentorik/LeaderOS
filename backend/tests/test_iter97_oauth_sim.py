@@ -6,6 +6,8 @@ import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/") or "https://command-center-229.preview.emergentagent.com"
 EXPECTED_GOOGLE_CID = "482961656741-v4s56r8fe4figdjfukhhpbv53rn2f3ff.apps.googleusercontent.com"
+TEST_EMAIL = os.environ.get("E2E_TEST_EMAIL", "test@test.com")
+TEST_PASSWORD = os.environ.get("E2E_TEST_PASSWORD", "test123")  # noqa: S105 — preview fixture, overridable via env
 
 
 @pytest.fixture(scope="module")
@@ -17,7 +19,7 @@ def s():
 
 @pytest.fixture(scope="module")
 def token(s):
-    r = s.post(f"{BASE_URL}/api/auth/login", json={"email": "test@test.com", "password": "test123"})
+    r = s.post(f"{BASE_URL}/api/auth/login", json={"email": TEST_EMAIL, "password": TEST_PASSWORD})
     assert r.status_code == 200, r.text
     return r.json()["token"]
 
@@ -45,7 +47,7 @@ def test_google_callback_missing_credential(s):
 
 # ─── Auth regression ─────────────────────────────────────
 def test_login_regression(s):
-    r = s.post(f"{BASE_URL}/api/auth/login", json={"email": "test@test.com", "password": "test123"})
+    r = s.post(f"{BASE_URL}/api/auth/login", json={"email": TEST_EMAIL, "password": TEST_PASSWORD})
     assert r.status_code == 200
     assert "token" in r.json()
 
@@ -53,11 +55,11 @@ def test_login_regression(s):
 def test_auth_me(s, token):
     r = s.get(f"{BASE_URL}/api/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert r.status_code == 200
-    assert r.json().get("email") == "test@test.com"
+    assert r.json().get("email") == TEST_EMAIL
 
 
 def test_magic_link_request(s):
-    r = s.post(f"{BASE_URL}/api/auth/magic-link/request", json={"email": "test@test.com"})
+    r = s.post(f"{BASE_URL}/api/auth/magic-link/request", json={"email": TEST_EMAIL})
     assert r.status_code == 200
 
 

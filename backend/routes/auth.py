@@ -196,6 +196,13 @@ def _safe_user_output(user: dict) -> dict:
 async def register(data: UserRegister, request: Request, response: Response):
     # Normalize email (case-insensitive uniqueness)
     email = data.email.strip().lower()
+    # SEC (audit): enforce a minimum password strength so no more weak/guessable
+    # accounts (e.g. "test123") can be created. Existing accounts are unaffected.
+    pw = data.password or ""
+    if len(pw) < 8:
+        raise HTTPException(status_code=400, detail="Passwort muss mindestens 8 Zeichen lang sein.")
+    if pw.isdigit() or pw.isalpha():
+        raise HTTPException(status_code=400, detail="Passwort muss Buchstaben und Zahlen enthalten.")
     ctx = await _capture_login_context(request)
     ip_address = ctx["ip"]
 
