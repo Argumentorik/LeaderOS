@@ -1,0 +1,48 @@
+{
+  "summary": "Iter 92.63b FINAL RETEST — 6/10 pass, 1 skipped, 3 failed. The FIX PART 2 (public.users mirror in push-to-supabase) is IMPLEMENTED CORRECTLY but STILL FAILS because Supabase public.users table has additional NOT NULL columns beyond {id,email}. Exact error captured from backend log: `Supabase public.users mirror failed: 400 {\"code\":\"23502\",\"details\":\"Failing row contains (<uuid>, <email>, <email>, null, {}, f, {}, null, ...)\",\"message\":\"null value in column \\\"source_platform\\\" of relation \\\"users\\\" violates not-null constraint\"}`. Root cause is a SINGLE missing column: `source_platform` is NOT NULL. Existing rows use values like `emergent`. Fix is trivial: add `source_platform: 'leaderos'` (or similar) to the mirror POST payload. The 502→409 change works: Cloudflare now passes the JSON detail through and _write_supabase_insight logs at ERROR level as designed. Autosync-on-login and security-no-leak still pass 100%.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "public.users mirror POST fails with Postgres 23502 (NOT NULL). Missing column: `source_platform`. Full body: `{\"code\":\"23502\",\"details\":\"Failing row contains (034592ea-ab05-4b1a-af45-21d60324fc0a, synctest92r-<ts>@wladbot.test, synctest92r-<ts>@wladbot.test, null, {}, f, {}, null, 2026-07-02 01:03:...+00, 2026-07-02 01:03:...+00, null, null, null, null, pending, free, null, null, null)\",\"message\":\"null value in column \\\"source_platform\\\" of relation \\\"users\\\" violates not-null constraint\"}`. FIX (routes/wladhub.py ~L415): change payload to `{\"id\": sb_uid, \"email\": user['email'], \"email_lower\": user['email'].lower(), \"source_platform\": \"leaderos\"}` (existing rows use `emergent`). This is a PAYLOAD fix, NOT a Supabase schema change. After the mirror insert succeeds, the leadership_insights FK 23503 will resolve on its own.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "409 detail message `Supabase write failed — siehe Backend-Log (leadership_insights)` is NOT the clear German user-facing message required by test_A (`leadercheck.de` / `Push nicht möglich`). Since the true cause is now a payload bug (fixable), the 409 will disappear after the source_platform fix. If it must remain generic, add supabase_error_body to the detail for observability."
+      },
+      {
+        "endpoint": "/api/chat",
+        "issue": "test_5_chat_has_diagnosis_context fails: LLM response does not contain any of the diagnosis vocabulary (ki-kompetenz, boardroom, rhetorik, eq, 3-layer, kompetenz). This suggests the _build_wladhub_section() injection may no longer reach the system prompt, OR the LLM is being over-generalized. Response body: 'Deine Leader-Check Scores geben Aufschluss über deine Stärken...' — talks about scores in general but never mentions the injected dimensions. Verify services.py L497-508 injection is still wired to chat handler system prompt."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py",
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py",
+    "/app/test_reports/pytest/iter92_63b_results.xml"
+  ],
+  "action_items": [
+    "PRIMARY FIX — In /app/backend/routes/wladhub.py ~L412-416, extend the public.users mirror payload from `{id, email}` to include `source_platform` (NOT NULL). Suggested: `json={'id': sb_uid, 'email': user['email'], 'email_lower': user['email'].lower(), 'source_platform': 'leaderos'}`. This unblocks both test_A and test_B.",
+    "SECONDARY — test_5 (chat diagnosis context) regressed. Investigate whether _build_wladhub_section() is still injected into /api/chat's system prompt. LLM response no longer echoes 3-Layer / KI-Kompetenz / Boardroom / EQ terminology at all.",
+    "COSMETIC — Consider surfacing the raw supabase_error_body in the 409 HTTPException detail so future FK/NOT-NULL bugs are visible without SSH-tailing backend logs. Or return 200 + {status:'error', supabase:{code,message}} to bypass any CDN error-page override entirely.",
+    "COSMETIC — Old test_iter92_62 test_7 hard-asserts status in (400,500,502); now it's 409. Update the acceptable-status set to (400,409,500,502) once the FK fix lands — currently red for the RIGHT reason (status changed as designed)."
+  ],
+  "critical_code_review_comments": [
+    "routes/wladhub.py L412-418: mirror payload only sends {id,email} — real public.users schema requires source_platform NOT NULL. Also email_lower is present as separate column in schema (sample GET returns `email_lower`) — safer to send it too.",
+    "routes/wladhub.py L417 tolerates 409 in mirror-success set — good (idempotent). But 400 (schema) is NOT tolerated → propagates to leadership_insights FK failure. That is correct behavior for now; do not swallow 400.",
+    "routes/wladhub.py L430 raises 409 with a generic detail. The real Supabase error body IS in the logs at ERROR level (mirror + write) — good — but not returned to client. Consider echoing a truncated `supabase_error` field in the JSON detail for API consumers/tests.",
+    "routes/wladhub.py L131 (_write_supabase_insight) now logs at ERROR for non-2xx — verified working: log shows `Supabase write FAILED: status=409 body={...23503...}`."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "60% (6/10 pass, 1 skipped, 3 failed)", "frontend": "n/a"},
+  "test_credentials": "accelerator@wladbot.test / test123 (unchanged). Test users synctest92r-<ts>@wladbot.test and noleak-<ts>@wladbot.test auto-created + cleaned per module.",
+  "seed_data_creation": "Per-run: 1 E2E user + 1 no-leak user (Mongo + Supabase auth.users cleaned at fixture teardown). accelerator@wladbot.test's auth.users mirror also created (persistent, safe).",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "After main agent adds `source_platform: 'leaderos'` (and ideally `email_lower`) to the /rest/v1/users mirror POST in /app/backend/routes/wladhub.py L412-416, re-run pytest on both test_iter92_62_*.py and test_iter92_63_*.py. Expected result on next run: test_A returns 200 (push success), test_B completes full E2E (skip removed), test_C still passes (security). test_5 (chat vocabulary) is UNRELATED to this fix — treat as separate LLM/prompt-injection regression. test_7 (documented KNOWN failure) will need its expected-status set updated to include 409 or converted to a proper positive test.",
+  "rca_of_the_issue": "Iter 92.63b confirms FIX PART 2 (public.users mirror block) executes and hits Supabase, but Supabase rejects it with 23502 NOT NULL on `source_platform`. Backend log line (verified in /var/log/supervisor/backend.err.log at 2026-07-02 01:03:44): `Supabase public.users mirror failed: 400 {\"code\":\"23502\",\"details\":\"Failing row contains (e8322cda-9170-4ebe-bcc0-99536d633754, accelerator@wladbot.test, accelerator@wladbot.test, null, {}, f, {}, null, 2026-07-02 01:03:44.523596+00, ...)\",\"message\":\"null value in column \\\"source_platform\\\" of relation \\\"users\\\" violates not-null constraint\"}`. Because mirror fails, public.users row is never created, and the subsequent leadership_insights insert still raises FK 23503 — the endpoint then correctly returns 409. Fix is a 1-line payload extension, NOT a schema change. Direct probe (`GET {SUPABASE_URL}/rest/v1/users?limit=1`) confirms existing rows contain `source_platform: \"emergent\"` and `email_lower` — both should be provided in the mirror INSERT."
+}

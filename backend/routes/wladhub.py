@@ -128,8 +128,11 @@ async def _write_supabase_insight(user_id: str, campaign_id: str, scores: dict):
                     "assessed_at": datetime.now(timezone.utc).isoformat(),
                 },
             )
-            logger.info(f"Supabase write: status={resp.status_code} body={resp.text[:200]}")
-            return resp.status_code in (200, 201)
+            if resp.status_code in (200, 201):
+                logger.info(f"Supabase write OK: status={resp.status_code}")
+                return True
+            logger.error(f"Supabase write FAILED: status={resp.status_code} body={resp.text[:300]}")
+            return False
     except Exception as e:
         logger.error(f"Supabase write error: {e}")
     return False
@@ -402,6 +405,18 @@ async def push_scores_to_supabase(request: Request):
         if not sb_uid:
             raise HTTPException(status_code=409, detail="Kein leadercheck.de-Konto für diese E-Mail — Push nicht möglich")
 
+        # Iter 92.63 FK-FIX (Teil 2): leadership_insights.user_id → public.users
+        # (NICHT auth.users). Der Auth-Admin-Endpoint befüllt public.users nicht
+        # (kein handle_new_user-Trigger im Projekt) → Zeile explizit + idempotent
+        # spiegeln, sonst FK 23503.
+        mirror = await client.post(
+            f"{supabase_url}/rest/v1/users",
+            headers={**headers, "Prefer": "resolution=merge-duplicates,return=minimal"},
+            json={"id": sb_uid, "email": user["email"]},
+        )
+        if mirror.status_code not in (200, 201, 204, 409):
+            logger.error(f"Supabase public.users mirror failed: {mirror.status_code} {mirror.text[:200]}")
+
     success = await _write_supabase_insight(
         user_id=sb_uid,
         campaign_id=f"leaderos_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
@@ -410,7 +425,9 @@ async def push_scores_to_supabase(request: Request):
 
     if success:
         return {"message": "Scores erfolgreich zu WladHub gepusht", "status": "success"}
-    raise HTTPException(status_code=502, detail="Supabase write failed — siehe Backend-Log")
+    # 409 statt 502: Cloudflare ersetzt 5xx durch eigene HTML-Seite und
+    # verschluckt das JSON-Detail. Fehlkonfiguration ist ein Konflikt, kein Gateway-Fehler.
+    raise HTTPException(status_code=409, detail="Supabase write failed — siehe Backend-Log (leadership_insights)")
 
 
 @router.get("/supabase-status")
