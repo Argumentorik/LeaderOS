@@ -1,7 +1,7 @@
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { MessageSquareText, Building, Plus } from 'lucide-react';
-
+import { Building, Plus } from 'lucide-react';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 const ContextPanel = ({ userContext, setUserContext, de }) => (
   <div className="flex gap-2 pb-3 animate-fade-in" data-testid="context-panel">
     <Input value={userContext.role} onChange={e => setUserContext(p => ({ ...p, role: e.target.value }))}
@@ -24,9 +24,7 @@ export const ChatRolesHeader = ({
       <div className="px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center shadow-sm">
-              <MessageSquareText size={16} className="text-white" />
-            </div>
+            <WladBotAvatar size={38} live />
             <div>
               <h2 className="text-lg font-black">WladBot</h2>
               <p className="text-[11px] text-muted-foreground font-medium">{de ? 'Dein KI Leadership Coach' : 'Your AI Leadership Coach'}</p>

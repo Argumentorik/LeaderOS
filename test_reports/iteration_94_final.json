@@ -1,0 +1,72 @@
+{
+  "summary": "Iter 94 FINAL GODMODE pre-deploy — 14/14 backend PASS + full frontend regression PASS. Login (test@test.com/test123) with cookie banner works, all 8 protected pages (/chat, /downloads, /my-path, /simulations, /challengers, /events, /tasks, /progress) render cleanly with substantial content and no blank screens. BRANDING confirmed on /chat: wladbot-avatar-live=1, wladbot-avatar=3, wladbot-online-dot=1 (real photo + rotating ring + online dot rendering — screenshot captured). Chat E2E multi-turn works: structured reply (LEADERSHIP-ERKENNTNIS / STRATEGIE / NÄCHSTE SCHRITTE) with follow-up suggestion chips rendered. PDF download from /downloads triggers real download event (LeaderOS_Report_Leadership_Report_2026-07-02.pdf) with 0 console errors. Voice TTS with RENEWED ElevenLabs key returns real base64 mpeg audio for wlad/bezos/musk/jobs personas (verified >1KB decoded audio). Stripe checkout for leadership_os returns valid checkout.stripe.com URL (LIVE — not paid). PAID_TIERS bypass now honours is_admin AND tier∈{standard,accelerator,plus,leadership_os,...} — admin returns is_premium=true balance=-1 correctly (iter93 code review comment addressed). Security headers (CSP/HSTS preload/COOP) all present. Auth refresh extends same session token.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "/api/voice/tts (persona=sandberg)",
+        "issue": "ElevenLabs returns 404 voice_not_found for voice_id '21m00Tcm4Tlm7axTlAzs' (Rachel). The voice has been removed/rotated by ElevenLabs. Sandberg persona TTS is permanently broken until VOICE_REGISTRY['sandberg'].voice_id is updated to a currently-available library voice."
+      },
+      {
+        "endpoint": "/api/voice/tts (burst on /challengers page load)",
+        "issue": "/challengers page fires multiple parallel TTS requests on mount → ElevenLabs plan has concurrent_limit=3 → requests 4+ fail with 429 concurrent_limit_exceeded → backend wraps as 502. Suggestion: either serialize the challenger card TTS requests (queue with max 3 concurrent), lazy-load only on hover/click, or catch 429 in routes/voice_tts.py L241 and return graceful 200 with audio_url='' like the conversation endpoint already does."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "/challengers page voice previews",
+        "issue": "5x /api/voice/tts return 502 on page load (root cause: ElevenLabs 429 concurrent_limit + sandberg voice_id 404). User experience degrades gracefully (no audio), but browser console shows 502 errors.",
+        "affected_selectors": ["/api/voice/tts network calls"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "/downloads",
+        "issues": ["React warning: 'Can\\'t perform a React state update on a component that hasn\\'t mounted yet' — indicates a useEffect without a mounted-guard/cleanup somewhere in DownloadsPage.js or a child. Non-blocking but should be cleaned up."]
+      },
+      {
+        "screen": "/challengers",
+        "issues": ["React 18 warning: 'Invalid DOM property fetchpriority. Did you mean fetchPriority' — needs camelCase in JSX prop. Non-blocking."]
+      },
+      {
+        "screen": "Login (preview URL only)",
+        "issues": ["Google Sign-In: 'GSI_LOGGER: The given origin is not allowed for the given client ID' — preview URL command-center-229.preview.emergentagent.com not whitelisted in Google Cloud Console. Expected — production leaderos.de is presumably whitelisted. Verify before switching to prod domain."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter94_final.py",
+    "/app/test_reports/pytest/iter94_final.xml"
+  ],
+  "action_items": [
+    "OPTIONAL (pre-launch polish): Update VOICE_REGISTRY['sandberg'].voice_id in /app/backend/routes/voice_tts.py — current '21m00Tcm4Tlm7axTlAzs' (Rachel) returns 404 from ElevenLabs. Pick a currently-listed female voice from https://elevenlabs.io/app/voice-library.",
+    "OPTIONAL: Add 429 handling in /app/backend/routes/voice_tts.py L237-241 to return graceful {audio_url:''} instead of 502 when ElevenLabs concurrent_limit hit (mirror pattern from /voice/conversation route).",
+    "OPTIONAL: Serialize or lazy-load challenger persona voice previews on /challengers to avoid burst >3 concurrent TTS requests.",
+    "OPTIONAL: Fix React 'unmounted component state update' warning on /downloads (add cleanup/AbortController in DownloadsPage.js useEffect).",
+    "OPTIONAL: Fix `fetchpriority` → `fetchPriority` JSX prop on /challengers.",
+    "REMINDER: Whitelist production origin https://leaderos.de in Google Cloud Console for client_id 482961656741-... before enabling Google Sign-In on prod."
+  ],
+  "critical_code_review_comments": [
+    "routes/credits.py L26-34 — PAID_TIERS bypass now correctly honours is_admin OR tier∈{standard,accelerator,enterprise,plus,starter} OR premium=true. Prior iter93 concern RESOLVED. Admin test account no longer hits 402 no_credits.",
+    "routes/voice_tts.py L237-241 — synthesis error handler raises HTTPException 502 for ANY non-200 including 429 (rate limit) and 404 (voice_not_found). The /voice/conversation endpoint already degrades gracefully (returns 200 with empty audio_url); the /voice/tts endpoint should do the same to prevent browser-console 502 spam on /challengers.",
+    "components/brand/WladBotAvatar.js — data-testid attributes verified live in DOM (wladbot-avatar-live, wladbot-avatar, wladbot-online-dot all present on /chat). ChatRolesHeader.js correctly uses <WladBotAvatar size={38} live />.",
+    "Stripe checkout URL creation verified LIVE (checkout.stripe.com URL returned) — did NOT complete payment.",
+    "Bundle appears code-split — all page navigations completed in <5s during Playwright run. No hangs, no timeouts."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter94_final.py (created — 14 tests covering full pre-deploy scope: auth, credits, voice TTS 4 personas, chat multi-turn, Stripe checkout, security headers, branding asset)"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 including 4 real-audio voice TTS personas, Stripe checkout URL, refresh-extends-same-token, PAID_TIERS admin bypass, security headers)",
+    "frontend": "100% on primary flows (login + cookie banner + 8/8 page navigation + branding data-testids + chat multi-turn structured reply + PDF download event fired). Minor React warnings and /challengers 502 burst noted as non-blockers."
+  },
+  "test_credentials": "test@test.com / test123 (Admin, tier=plus) — verified working end-to-end. Credits now correctly report is_premium=true balance=-1 (iter93 credit-gate concern resolved).",
+  "seed_data_creation": "None — no DB mutations required this iteration.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Full pre-deploy regression PASS. If sandberg voice_id is updated in VOICE_REGISTRY, add sandberg to the parametrize list in TestVoiceTTS::test_tts_returns_real_audio in test_iter94_final.py. If /voice/tts is updated to gracefully degrade on 429, add a burst-test that fires 5 concurrent /api/voice/tts calls and asserts all return 200 with either audio or empty audio_url (never 502). The Playwright regression flow (login → 8 pages → branding → chat multi-turn → PDF) is stable and can be re-run verbatim.",
+  "rca_of_the_issue": "The 502s on /challengers are two orthogonal issues surfacing together: (a) sandberg persona voice_id 21m00Tcm4Tlm7axTlAzs no longer exists in ElevenLabs library → deterministic 404 → 502; (b) /challengers page fires 5 parallel TTS requests on mount but ElevenLabs plan caps concurrent at 3 → requests 4-5 return 429 concurrent_limit_exceeded → wrapped as 502. Both are outside the launch-critical path (chat, downloads, payments, auth all work) but produce visible 502s in browser network tab. Fix priority: LOW — cosmetic. Neither blocks the leaderos.de launch."
+}

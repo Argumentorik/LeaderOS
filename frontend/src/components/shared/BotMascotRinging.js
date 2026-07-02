@@ -1,4 +1,5 @@
-import { Phone, PhoneOff, Zap } from 'lucide-react';
+import { Phone, PhoneOff } from 'lucide-react';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 
 export const BotMascotRinging = ({ de, onAccept, onDecline }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center wlad-fade-in" data-testid="bot-mascot-call-screen">
@@ -7,8 +8,8 @@ export const BotMascotRinging = ({ de, onAccept, onDecline }) => (
       <div className="relative">
         <div className="absolute inset-0 -m-4 rounded-full border-2 border-[#30D158]/30 wlad-ring-1" />
         <div className="absolute inset-0 -m-8 rounded-full border border-[#30D158]/15 wlad-ring-2" />
-        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-2xl shadow-[#BFFF00]/30 border-[3px] border-[#30D158]">
-          <Zap size={48} className="text-[#0A0A0A]" strokeWidth={2.5} />
+        <div className="w-28 h-28 rounded-full flex items-center justify-center shadow-2xl shadow-[#BFFF00]/30 border-[3px] border-[#30D158] overflow-hidden">
+          <WladBotAvatar size={106} />
         </div>
       </div>
       <div className="text-center space-y-1">

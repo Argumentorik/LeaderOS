@@ -220,15 +220,10 @@ export const FakeWladCall = () => {
           <div className="relative shrink-0">
             <span className="absolute inset-0 rounded-full bg-[#BFFF00]/25 animate-ping" aria-hidden />
             <div
-              className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#BFFF00]/45 bg-gradient-to-br from-[#1f2913] to-[#0a0a0a] flex items-center justify-center"
+              className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#BFFF00]/45"
               data-testid="fake-call-avatar"
             >
-              <span
-                className="text-[20px] font-black leading-none text-[#BFFF00] select-none"
-                style={{ fontFamily: 'Outfit, Inter, sans-serif', letterSpacing: '-0.04em' }}
-              >
-                W
-              </span>
+              <img src="/wladbot-avatar.png" alt="Wlad" className="w-full h-full object-cover" />
             </div>
           </div>
 
