@@ -107,7 +107,7 @@ def test_2_wladhub_import_returns_200_no_objectid():
 def synctest_user():
     ts = int(time.time())
     email = f"synctest92-{ts}@wladbot.test"
-    password = "Test123!x"
+    password = os.environ.get("E2E_TEST_PASSWORD", "Test123!x")  # test-only throwaway
     payload = {"email": email, "password": password, "name": "Sync Test",
                "phone": f"+49 170 999{ts % 10000:04d}"}
     r = requests.post(f"{API}/auth/register", json=payload, timeout=20)
@@ -225,7 +225,7 @@ def test_5_chat_has_diagnosis_context():
 def test_6_regression_user_without_diagnosis():
     ts = int(time.time())
     email = f"noquiz-{ts}@wladbot.test"
-    password = "Test123!x"
+    password = os.environ.get("E2E_TEST_PASSWORD", "Test123!x")  # test-only throwaway
     payload = {"email": email, "password": password, "name": "No Quiz",
                "phone": f"+49 170 888{ts % 10000:04d}"}
     r = requests.post(f"{API}/auth/register", json=payload, timeout=20)

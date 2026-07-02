@@ -20,7 +20,7 @@ MONGO_URL = os.environ.get("MONGO_URL")
 DB_NAME = os.environ.get("DB_NAME")
 
 EMAIL = "accelerator@wladbot.test"
-PASSWORD = "test123"
+PASSWORD = os.environ.get("E2E_TEST_PASSWORD", "test123")  # seeded test account
 
 
 @pytest.fixture(scope="module")

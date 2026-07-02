@@ -134,7 +134,7 @@ def test_A_push_to_supabase_now_succeeds():
 def e2e_user():
     ts = int(time.time())
     email = f"synctest92r-{ts}@wladbot.test"
-    password = "Test123!x"
+    password = os.environ.get("E2E_TEST_PASSWORD", "Test123!x")  # test-only throwaway
     user_id, _ = _register(email, password, ts % 100)
     yield {"email": email, "password": password, "user_id": user_id}
     # Cleanup Mongo + Supabase
@@ -230,7 +230,7 @@ def test_B_full_e2e_leaderos_to_supabase_to_login_autosync(e2e_user):
 def noleak_user():
     ts = int(time.time()) + 1
     email = f"noleak-{ts}@wladbot.test"
-    password = "Test123!x"
+    password = os.environ.get("E2E_TEST_PASSWORD", "Test123!x")  # test-only throwaway
     user_id, _ = _register(email, password, (ts + 5) % 100)
     yield {"email": email, "password": password, "user_id": user_id}
     try:

@@ -36,7 +36,7 @@ class TestMagicLinkServiceUnit:
     def test_format_email_html_uses_link(self):
         from services_magic_link import _format_email_html, _frontend_base
         base = _frontend_base()
-        raw_token = "fake_raw_token"
+        raw_token = "fake_raw_token"  # noqa: S105 — deliberately fake sentinel, never valid
         link = f"{base}/auth/magic?token={raw_token}"
         html = _format_email_html("Tester", link)
         assert f'href="{link}"' in html, f"CTA href not found in HTML. Looking for href=\"{link}\""

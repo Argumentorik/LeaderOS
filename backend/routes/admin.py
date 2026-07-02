@@ -193,14 +193,44 @@ async def _count_rate_limit_triggers(cutoff_24h: datetime) -> int:
     return result[0]["rate_limited"] if result else 0
 
 
+def _auth_config_snapshot() -> tuple[dict, dict]:
+    """Env-driven provider flags + config fingerprints. NEVER leaks secrets."""
+    import os as _os
+    google_id = _os.environ.get("GOOGLE_CLIENT_ID") or ""
+    apple_id = _os.environ.get("APPLE_SERVICE_ID") or _os.environ.get("APPLE_CLIENT_ID") or ""
+    msft_id = _os.environ.get("MICROSOFT_CLIENT_ID") or ""
+    stripe = _os.environ.get("STRIPE_API_KEY") or ""
+    resend = _os.environ.get("RESEND_API_KEY") or ""
+    env_name = (_os.environ.get("ENV") or _os.environ.get("ENVIRONMENT") or "").lower()
+
+    enabled = {
+        "email_password": True,
+        "magic_link": bool(resend),
+        "google": bool(google_id),
+        "apple": bool(apple_id),
+        "microsoft": bool(msft_id),
+        "phone": True,  # phone-OR-email login (Iter 92.24)
+    }
+    config = {
+        "environment": env_name or "unknown",
+        "frontend_base_url": (_os.environ.get("FRONTEND_BASE_URL") or "") or "(missing)",
+        "google_client_id_set": bool(google_id),
+        "google_client_id_prefix": (google_id.split("-")[0] if "-" in google_id else google_id[:8]) if google_id else None,
+        "apple_service_id_set": bool(apple_id),
+        "microsoft_client_id_set": bool(msft_id),
+        "sentry_dsn_set": bool(_os.environ.get("SENTRY_DSN")),
+        "stripe_api_key_set": bool(stripe),
+        "stripe_mode": "live" if stripe.startswith("sk_live_") else ("test" if stripe.startswith("sk_test_") else "unknown"),
+        "resend_api_key_set": bool(resend),
+        "voyage_api_key_set": bool(_os.environ.get("VOYAGE_API_KEY")),
+        "supabase_url_set": bool(_os.environ.get("SUPABASE_URL")),
+    }
+    return enabled, config
+
+
 @router.get("/auth-health")
 async def auth_health(request: Request) -> dict:
-    """Auth metrics + config-state snapshot for launch monitoring (last 24h).
-
-    Iter 92.34 (Mert deploy-smoke-test): adds `enabled.*` + `config.*` blocks
-    so the launch-day curl shows ENV is wired correctly without having to
-    SSH into the box. NEVER leaks secrets — only booleans + first-4-chars.
-    """
+    """Auth metrics + config-state snapshot for launch monitoring (last 24h)."""
     await require_admin(request)
     now = datetime.now(timezone.utc)
     cutoff_24h = now - timedelta(hours=24)
@@ -210,19 +240,7 @@ async def auth_health(request: Request) -> dict:
     logins = await _gather_login_stats(cutoff_24h)
     top_offenders = await _gather_top_offenders(cutoff_24h)
     rate_limit_triggers = await _count_rate_limit_triggers(cutoff_24h)
-
-    # Config-snapshot (Iter 92.34): which auth surfaces are wired live?
-    import os as _os
-    _google_id = _os.environ.get("GOOGLE_CLIENT_ID") or ""
-    _apple_id = _os.environ.get("APPLE_SERVICE_ID") or _os.environ.get("APPLE_CLIENT_ID") or ""
-    _msft_id = _os.environ.get("MICROSOFT_CLIENT_ID") or ""
-    _sentry = _os.environ.get("SENTRY_DSN") or ""
-    _stripe = _os.environ.get("STRIPE_API_KEY") or ""
-    _resend = _os.environ.get("RESEND_API_KEY") or ""
-    _voyage = _os.environ.get("VOYAGE_API_KEY") or ""
-    _supabase = _os.environ.get("SUPABASE_URL") or ""
-    _front = _os.environ.get("FRONTEND_BASE_URL") or ""
-    _env_name = (_os.environ.get("ENV") or _os.environ.get("ENVIRONMENT") or "").lower()
+    enabled, config = _auth_config_snapshot()
 
     return {
         "window_hours": 24,
@@ -231,30 +249,8 @@ async def auth_health(request: Request) -> dict:
         "rate_limit_triggers_24h": rate_limit_triggers,
         "duplicate_email_blocks_24h": 0,
         "top_offenders": top_offenders,
-        # Which auth providers are LIVE (env-keys present)?
-        "enabled": {
-            "email_password": True,
-            "magic_link": bool(_resend),
-            "google": bool(_google_id),
-            "apple": bool(_apple_id),
-            "microsoft": bool(_msft_id),
-            "phone": True,  # phone-OR-email login (Iter 92.24)
-        },
-        # Boolean / fingerprint hints — NEVER full secrets
-        "config": {
-            "environment": _env_name or "unknown",
-            "frontend_base_url": _front or "(missing)",
-            "google_client_id_set": bool(_google_id),
-            "google_client_id_prefix": (_google_id.split("-")[0] if "-" in _google_id else _google_id[:8]) if _google_id else None,
-            "apple_service_id_set": bool(_apple_id),
-            "microsoft_client_id_set": bool(_msft_id),
-            "sentry_dsn_set": bool(_sentry),
-            "stripe_api_key_set": bool(_stripe),
-            "stripe_mode": "live" if _stripe.startswith("sk_live_") else ("test" if _stripe.startswith("sk_test_") else "unknown"),
-            "resend_api_key_set": bool(_resend),
-            "voyage_api_key_set": bool(_voyage),
-            "supabase_url_set": bool(_supabase),
-        },
+        "enabled": enabled,
+        "config": config,
         "computed_at": now.isoformat(),
     }
 
@@ -355,41 +351,17 @@ async def community_leaderboard(request: Request, limit: int = 10):
 # Critical tool to spot knowledge gaps in the 609-chunk corpus before users do.
 # ─────────────────────────────────────────────────────────────────────────
 
-@router.post("/rag-debug")
-async def rag_debug(request: Request):
-    """For a given query, return top-N chunks + similarity + metadata coverage.
-
-    Body: { "query": str, "match_count": int=10, "match_threshold": float=0.0 }
-    Returns:
-      {
-        query, model, embedding_dim,
-        chunks: [{ id, content, similarity, metadata: {course, section, themes, layer} }],
-        coverage: { courses, sections, themes, layers, top_score, avg_score, low_score_warning },
-      }
-    """
-    await require_admin(request)
-    body = await request.json()
-    query = (body.get("query") or "").strip()
-    if not query or len(query) < 3:
-        raise HTTPException(status_code=400, detail="Query must be at least 3 characters")
-    match_count = max(1, min(int(body.get("match_count", 10)), 30))
-    match_threshold = max(0.0, min(float(body.get("match_threshold", 0.0)), 1.0))
-
-    from services_rag import _embed_query, VOYAGE_MODEL, EMBEDDING_DIM
+async def _rag_fetch_chunks(embedding: list, match_threshold: float, match_count: int) -> list:
+    """Supabase vector RPC with PGRST002 retry + metadata backfill."""
     import os
+    import asyncio
     import httpx
-
-    embedding = await _embed_query(query)
-    if not embedding:
-        raise HTTPException(status_code=503, detail="Embedding service unavailable (Voyage)")
 
     url = os.environ.get("SUPABASE_URL")
     key = os.environ.get("SUPABASE_SERVICE_KEY")
     if not (url and key):
         raise HTTPException(status_code=503, detail="Supabase keys not configured")
 
-    # Iter 92.16: retry on PGRST002 (Supabase schema cache transient).
-    import asyncio
     async with httpx.AsyncClient(timeout=12) as client:
         chunks_raw = []
         last_err = None
@@ -413,13 +385,15 @@ async def rag_debug(request: Request):
                         f"This is a transient Supabase platform issue — try again in ~30s. Last: {last_err}")
             )
 
-        # Backfill metadata for any chunk where the RPC returned NULL (known RPC bug).
         missing_ids = [c["id"] for c in chunks_raw if c.get("metadata") in (None, {})]
         if missing_ids:
             from services_rag import _backfill_metadata
             await _backfill_metadata(client, url, key, chunks_raw, missing_ids)
+    return chunks_raw
 
-    # Build coverage breakdown
+
+def _rag_build_coverage(chunks_raw: list) -> tuple[list, dict]:
+    """Aggregate chunk metadata into UI-ready chunks + coverage breakdown."""
     courses: dict[str, int] = {}
     sections: dict[str, int] = {}
     themes: dict[str, int] = {}
@@ -446,25 +420,55 @@ async def rag_debug(request: Request):
             "id": c.get("id"),
             "similarity": round(sim, 4),
             "content": (c.get("content") or "")[:400],
-            "metadata": {
-                "course": course,
-                "section": section,
-                "layer": layer,
-                "themes": chunk_themes,
-            },
+            "metadata": {"course": course, "section": section, "layer": layer, "themes": chunk_themes},
         })
 
     top_score = max(similarities) if similarities else 0
     avg_score = (sum(similarities) / len(similarities)) if similarities else 0
+    coverage = {
+        "courses": dict(sorted(courses.items(), key=lambda x: -x[1])),
+        "sections": dict(sorted(sections.items(), key=lambda x: -x[1])[:8]),
+        "themes": dict(sorted(themes.items(), key=lambda x: -x[1])[:15]),
+        "layers": dict(sorted(layers.items(), key=lambda x: -x[1])),
+        "top_score": round(top_score, 4),
+        "avg_score": round(avg_score, 4),
+        "chunks_returned": len(chunks_out),
+    }
+    return chunks_out, coverage
 
-    # Heuristic warnings
-    warnings = []
+
+def _rag_warnings(chunks_out: list, top_score: float) -> list[str]:
     if not chunks_out:
-        warnings.append("ZERO_CHUNKS: query returned 0 chunks even at threshold=0.0 — embedding may be malformed.")
-    elif top_score < 0.40:
-        warnings.append(f"LOW_RELEVANCE: top similarity is only {top_score:.2f} — corpus likely lacks content for this topic. Consider adding source material.")
-    elif top_score < 0.55:
-        warnings.append(f"MEDIUM_RELEVANCE: top similarity {top_score:.2f} — answers will be loosely grounded. Stronger coverage would help.")
+        return ["ZERO_CHUNKS: query returned 0 chunks even at threshold=0.0 — embedding may be malformed."]
+    if top_score < 0.40:
+        return [f"LOW_RELEVANCE: top similarity is only {top_score:.2f} — corpus likely lacks content for this topic. Consider adding source material."]
+    if top_score < 0.55:
+        return [f"MEDIUM_RELEVANCE: top similarity {top_score:.2f} — answers will be loosely grounded. Stronger coverage would help."]
+    return []
+
+
+@router.post("/rag-debug")
+async def rag_debug(request: Request):
+    """For a given query, return top-N chunks + similarity + metadata coverage.
+
+    Body: { "query": str, "match_count": int=10, "match_threshold": float=0.0 }
+    """
+    await require_admin(request)
+    body = await request.json()
+    query = (body.get("query") or "").strip()
+    if not query or len(query) < 3:
+        raise HTTPException(status_code=400, detail="Query must be at least 3 characters")
+    match_count = max(1, min(int(body.get("match_count", 10)), 30))
+    match_threshold = max(0.0, min(float(body.get("match_threshold", 0.0)), 1.0))
+
+    from services_rag import _embed_query, VOYAGE_MODEL, EMBEDDING_DIM
+
+    embedding = await _embed_query(query)
+    if not embedding:
+        raise HTTPException(status_code=503, detail="Embedding service unavailable (Voyage)")
+
+    chunks_raw = await _rag_fetch_chunks(embedding, match_threshold, match_count)
+    chunks_out, coverage = _rag_build_coverage(chunks_raw)
 
     return {
         "query": query,
@@ -473,16 +477,8 @@ async def rag_debug(request: Request):
         "match_count": match_count,
         "match_threshold": match_threshold,
         "chunks": chunks_out,
-        "coverage": {
-            "courses": dict(sorted(courses.items(), key=lambda x: -x[1])),
-            "sections": dict(sorted(sections.items(), key=lambda x: -x[1])[:8]),
-            "themes": dict(sorted(themes.items(), key=lambda x: -x[1])[:15]),
-            "layers": dict(sorted(layers.items(), key=lambda x: -x[1])),
-            "top_score": round(top_score, 4),
-            "avg_score": round(avg_score, 4),
-            "chunks_returned": len(chunks_out),
-        },
-        "warnings": warnings,
+        "coverage": coverage,
+        "warnings": _rag_warnings(chunks_out, coverage["top_score"]),
     }
 
 
