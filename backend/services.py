@@ -505,6 +505,7 @@ def _build_wladhub_section(user: dict) -> str:
     lines.append(f"- Gesamt: {wladhub.get('overall_score', 0)}/100\n")
     if user.get("wladhub_leader_typ"):
         lines.append(f"- Leader-Typ: {user['wladhub_leader_typ']}\n")
+    lines.append("Wenn der User nach seinen Leader-Check/WladHub/Diagnose-Scores fragt, nenne IMMER die konkreten Zahlen und Dimensionen von oben.\n")
     return "".join(lines)
 
 

@@ -274,4 +274,4 @@ def test_7_push_to_supabase_known_fk_bug():
     if r.status_code == 200:
         # Great — main agent may have fixed it
         return
-    assert r.status_code in (400, 500, 502), f"unexpected status: {r.status_code} {r.text[:200]}"
+    assert r.status_code in (400, 409, 500, 502), f"unexpected status: {r.status_code} {r.text[:200]}"

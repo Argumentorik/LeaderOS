@@ -412,7 +412,12 @@ async def push_scores_to_supabase(request: Request):
         mirror = await client.post(
             f"{supabase_url}/rest/v1/users",
             headers={**headers, "Prefer": "resolution=merge-duplicates,return=minimal"},
-            json={"id": sb_uid, "email": user["email"]},
+            json={
+                "id": sb_uid,
+                "email": user["email"],
+                "email_lower": user["email"].lower(),
+                "source_platform": "leaderos",
+            },
         )
         if mirror.status_code not in (200, 201, 204, 409):
             logger.error(f"Supabase public.users mirror failed: {mirror.status_code} {mirror.text[:200]}")
