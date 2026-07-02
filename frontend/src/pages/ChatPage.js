@@ -15,8 +15,10 @@ import { ChatUpsellModal } from '../components/chat/ChatUpsellModal';
 import { ChatInputBar } from '../components/chat/ChatInputBar';
 import { ChatInlineUpsell } from '../components/chat/ChatInlineUpsell';
 import { VoiceModeOverlay } from '../components/chat/VoiceModeOverlay';
+import { WladThinking } from '../components/chat/WladThinking';
+import { ChatHistoryPanel } from '../components/chat/ChatHistoryPanel';
 import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
-import { WladBotAvatar } from '../components/brand/WladBotAvatar';
+import { ListChecks } from 'lucide-react';
 
 const buildFullMessage = ({ text, messages, userContext, attachedPdf }) => {
   let fullMsg = text;
@@ -61,6 +63,8 @@ export default function ChatPage() {
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [audioMode, setAudioMode] = useState(false);
   const [coachMode, setCoachMode] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [folders, setFolders] = useState([]);
   // Iter 92.23.8 (Mert): folder context — chat injected with folder.context_summary
   const [activeFolder, setActiveFolder] = useState(null);
   const { isPremium, totalUsed, reload: reloadCredits } = useCredits();
@@ -72,6 +76,7 @@ export default function ChatPage() {
   const loadSessions = useCallback(async () => {
     try {
       const res = await api.get('/chat/sessions');
+      setSessions(res.data || []);
       if (res.data.length > 0 && !currentSession) setCurrentSession(res.data[0].session_id);
     } catch (err) { logger.error('Failed to load sessions:', err); }
   }, [currentSession]);
@@ -82,6 +87,9 @@ export default function ChatPage() {
   }, []);
 
   useEffect(() => { loadSessions(); }, [loadSessions]);
+  useEffect(() => {
+    api.get('/folders').then((res) => setFolders(res.data || [])).catch(() => {});
+  }, []);
   useEffect(() => { if (currentSession) loadHistory(currentSession); }, [currentSession, loadHistory]);
   useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
@@ -146,7 +154,7 @@ export default function ChatPage() {
     } catch (err) { logger.error('Failed to create session:', err); }
   };
 
-  const handleSend = async (overrideMsg) => {
+  const handleSend = async (overrideMsg, overrideMode) => {
     const text = (overrideMsg || input).trim();
     if (!text || loading) return;
     setInput('');
@@ -158,10 +166,11 @@ export default function ChatPage() {
     setAttachedPdf(null);
     setLoading(true);
     try {
-      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: coachMode ? 'coach' : 'chat' };
+      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: overrideMode || (coachMode ? 'coach' : 'chat') };
       if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
       const res = await api.post('/chat', body);
       if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
+      else { loadSessions(); }
       setMessages(prev => [
         ...prev.slice(0, -1),
         { ...prev[prev.length - 1], modality: res.data.modality || 'text' },
@@ -208,7 +217,8 @@ export default function ChatPage() {
   return (
     <DashboardLayout>
       {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} creditsUsed={totalUsed} />}
-      <div className="flex flex-col h-screen" data-testid="chat-page">
+      <div className="flex h-screen" data-testid="chat-page">
+        <div className="flex flex-col flex-1 min-w-0">
         {showUpsell && <ChatUpsellModal onClose={() => setShowUpsell(false)} de={de} />}
 
         <ChatRolesHeader
@@ -255,14 +265,20 @@ export default function ChatPage() {
               )}
             </div>
           ))}
-          {loading && (
-            <div className="flex mb-4 items-start gap-2.5" data-testid="chat-typing-indicator">
-              <WladBotAvatar size={28} pulse className="mt-1" />
-              <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl px-4 py-3 flex gap-1 shadow-sm">
-                <div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" />
-                <div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" />
-                <div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" />
-              </div>
+          {loading && <WladThinking de={de} />}
+          {!loading && messages.filter((m) => m.role === 'assistant').length >= 2 && (
+            <div className="flex justify-center mb-4 animate-fade-in">
+              <button
+                onClick={() => handleSend(
+                  de ? 'Fasse unser Gespräch kurz zusammen und erstelle daraus konkrete Aufgaben.' : 'Summarize our conversation briefly and create concrete tasks from it.',
+                  'coach'
+                )}
+                data-testid="chat-create-tasks-btn"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#BFFF00]/30 bg-[#BFFF00]/[0.06] text-[12px] font-semibold text-foreground/70 hover:bg-[#BFFF00]/[0.14] hover:text-foreground hover:-translate-y-0.5 transition-all"
+              >
+                <ListChecks size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+                {de ? 'Aufgaben aus dem Gespräch erstellen' : 'Create tasks from this chat'}
+              </button>
             </div>
           )}
           <div ref={scrollRef} />
@@ -276,6 +292,22 @@ export default function ChatPage() {
           isPremium={isPremium} onOpenUpsell={() => openPricing('leadership_os')}
           onOpenAudioMode={() => setAudioMode(true)}
           coachMode={coachMode} setCoachMode={setCoachMode}
+          de={de}
+        />
+        </div>
+
+        <ChatHistoryPanel
+          sessions={sessions}
+          folders={folders}
+          currentSession={currentSession}
+          activeFolder={activeFolder}
+          onSelectSession={(sid) => setCurrentSession(sid)}
+          onSelectFolder={(f) => setActiveFolder(f)}
+          onNewChat={handleNewSession}
+          onDeleted={(sid) => {
+            setSessions((prev) => prev.filter((s) => s.session_id !== sid));
+            if (sid === currentSession) { setCurrentSession(null); setMessages([]); }
+          }}
           de={de}
         />
       </div>

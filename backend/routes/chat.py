@@ -226,6 +226,18 @@ async def list_chat_sessions(request: Request, folder_id: Optional[str] = None):
     ).sort("updated_at", -1).to_list(50)
 
 
+@router.delete("/chat/sessions/{session_id}")
+async def delete_chat_session(session_id: str, request: Request):
+    """Delete a chat session + all its messages (owner-guarded)."""
+    user = await get_current_user(request)
+    res = await db.chat_sessions.delete_one({"session_id": session_id, "user_id": user["user_id"]})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Session nicht gefunden.")
+    await db.chat_messages.delete_many({"session_id": session_id, "user_id": user["user_id"]})
+    await db.folder_items.delete_many({"source_id": session_id, "user_id": user["user_id"], "item_type": "chat_session"})
+    return {"deleted": True}
+
+
 ROLE_MAP = {
     "Kommunikator": "Du agierst als KOMMUNIKATOR-Rolle. Fokus: Charismatisch auftreten und überzeugen. Nutze die 3 Säulen der Überzeugung (Logos, Ethos, Pathos), den Kommunikationsquadrant und die Feedbackformel.",
     "Manager": "Du agierst als MANAGER-Rolle. Fokus: Effektiver und effizienter arbeiten. Nutze die Entscheidungsmatrix, Delegations-Framework und Priorisierung nach Impact.",
@@ -407,6 +419,15 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
                 parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
         else:
             text_reply = (ai_response or "").strip()
+            # Extract follow-up questions marker → clickable chips in the UI.
+            followups = []
+            if "###WEITER###" in text_reply:
+                text_reply, _, tail = text_reply.partition("###WEITER###")
+                text_reply = text_reply.strip()
+                try:
+                    followups = [q for q in json.loads(tail.strip()) if isinstance(q, str) and q.strip()][:2]
+                except Exception:
+                    followups = []
             # Defensive: if the model slipped into JSON anyway, unwrap it.
             if text_reply.startswith("{"):
                 try:
@@ -414,9 +435,10 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
                     maybe = parse_ai_json(text_reply)
                     if maybe and maybe.get("insight"):
                         text_reply = "\n\n".join(p for p in [maybe.get("insight", ""), maybe.get("strategy", "")] if p)
+                        followups = followups or (maybe.get("follow_up_questions") or [])[:2]
                 except Exception:
                     pass
-            parsed = {"text": text_reply}
+            parsed = {"text": text_reply, "follow_up_questions": followups}
 
         msg_id = f"msg_{uuid.uuid4().hex[:12]}"
         await db.chat_messages.insert_one({

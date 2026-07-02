@@ -102,13 +102,19 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
   }
   if (!parsed) return <PlainAssistantMessage content={msg.content} />;
 
-  // Iter 96: normal conversational reply (ChatGPT/Grok style) — plain flowing text.
+  // Iter 96: normal conversational reply (ChatGPT/Grok style) — plain flowing text
+  // + clickable follow-up chips that deepen the conversation step by step.
   if (parsed.text) {
     return (
       <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
         <WladBotAvatar size={28} className="mt-1" />
-        <div className="max-w-[80%] bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-          <SmartText text={parsed.text} variant="inline" accent="#BFFF00" />
+        <div className="max-w-[80%] space-y-2 min-w-0">
+          <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+            <SmartText text={parsed.text} variant="inline" accent="#BFFF00" />
+          </div>
+          {parsed.follow_up_questions?.length > 0 && onSuggest && (
+            <FollowUpChips questions={parsed.follow_up_questions} onSuggest={onSuggest} de={de} />
+          )}
         </div>
       </div>
     );

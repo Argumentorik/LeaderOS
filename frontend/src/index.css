@@ -188,6 +188,20 @@
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
+/* Iter 96: Claude-style thinking status — soft text shimmer sweep */
+.wlad-thinking-shimmer {
+  background: linear-gradient(90deg, currentColor 0%, currentColor 40%, rgba(191, 255, 0, 0.95) 50%, currentColor 60%, currentColor 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wladThinkingSweep 2.2s linear infinite;
+}
+@keyframes wladThinkingSweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .stagger-1 { animation-delay: 0.1s; }
 .stagger-2 { animation-delay: 0.2s; }
 .stagger-3 { animation-delay: 0.3s; }
