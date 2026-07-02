@@ -101,8 +101,19 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         # Permissions policy — disable unused browser features
         response.headers["Permissions-Policy"] = "camera=(), microphone=(self), geolocation=(), payment=()"
 
-        # HSTS — force HTTPS for 1 year (only on HTTPS responses)
+        # HSTS — force HTTPS for 2 years, preload-list eligible
         if request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https":
-            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+            response.headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload"
+
+        # CSP (safe baseline for an API): no plugins, no framing, no base hijack
+        response.headers["Content-Security-Policy"] = (
+            "frame-ancestors 'self'; object-src 'none'; base-uri 'self'"
+        )
+
+        # Allow OAuth popups (Google Sign-In) while isolating the browsing context
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups"
+
+        # Block Flash/PDF cross-domain policy files
+        response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
 
         return response
