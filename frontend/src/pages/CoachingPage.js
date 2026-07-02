@@ -15,7 +15,7 @@ import { useAuth } from '../contexts/AuthContext';
 import {
   CostSection, IdentityShift, WhyCoursesFail, EngineLoop, MondayMorning,
   ProofNumbers, ValueIntro, CoffeeLine, ComparisonTable, RoiCalculator,
-  RiskReversal, PersonalBlock, FinalClose,
+  RiskReversal, PersonalBlock, FinalClose, ScoreTeaser,
 } from '../components/coaching/ConversionSections';
 import api from '../lib/api';
 import logger from '../lib/logger';
@@ -197,61 +197,7 @@ export default function CoachingPage() {
                 </div>
               </div>
             </div>
-            <div className="relative h-[500px] hidden lg:block" data-testid="hero-glass-stack">
-              {/* Ambient gradient */}
-              <div className="absolute inset-8 bg-gradient-to-br from-[#BFFF00]/[0.14] via-transparent to-purple-500/[0.10] rounded-[3rem] blur-3xl pointer-events-none" />
-              {/* Stack cards — staggered on both axes for real depth */}
-              {layers.map((layer, idx) => {
-                // idx 0 top-left, idx 1 center, idx 2 bottom-right
-                const positions = [
-                  { x: -110, y: -155, rotate: -8, z: 10 },
-                  { x:    0, y:  -20, rotate:  0, z: 20 },
-                  { x: 110,  y:  130, rotate:  8, z: 30 },
-                ];
-                const pos = positions[idx];
-                const gradientCss = `linear-gradient(135deg, ${layer.gradient})`;
-                return (
-                  <div
-                    key={layer.number}
-                    className="absolute left-1/2 top-1/2 w-[300px] rounded-[28px] backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] animate-fade-in transition-transform duration-500 hover:scale-[1.03] hover:z-40"
-                    style={{
-                      transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rotate}deg)`,
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.75))',
-                      animationDelay: `${idx * 140}ms`,
-                      zIndex: pos.z,
-                    }}
-                  >
-                    <div className="p-6 dark:bg-[#0A0A0A]/60 rounded-[28px]">
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-xl"
-                          style={{ background: gradientCss, boxShadow: `0 12px 30px -8px ${layer.gradient.split(',')[0]}80` }}
-                        >
-                          <layer.icon size={26} className="text-white" strokeWidth={2.2} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-black/40 dark:text-white/50">
-                            Layer {layer.number}
-                          </p>
-                          <p className="text-[15px] font-black leading-tight mt-1 text-[#0A0A0A] dark:text-white">{layer.title}</p>
-                          <p className="text-[11.5px] leading-relaxed text-black/55 dark:text-white/55 mt-1.5 line-clamp-2">{layer.description}</p>
-                        </div>
-                      </div>
-                      {/* Mini feature-dots */}
-                      <div className="mt-4 pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex gap-1">
-                        {[0,1,2,3,4].map((i) => (
-                          <span
-                            key={i}
-                            className="h-1 flex-1 rounded-full"
-                            style={{ background: i < 4 ? layer.gradient.split(',')[0] : 'rgba(0,0,0,0.06)' }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <ScoreTeaser de={de} onCta={scrollToPricing} />
           </div>
         </section>
 

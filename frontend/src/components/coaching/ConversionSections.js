@@ -9,6 +9,72 @@ const H2 = ({ children }) => (
   <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight text-center">{children}</h2>
 );
 
+/* ── 1b. ATF Score-Teaser — "unfinished profile" hook (Hero rechts) ── */
+export const ScoreTeaser = ({ de, onCta }) => {
+  const dims = de
+    ? [['Kommunikation', 71, '#BFFF00'], ['Entscheidungsstärke', 58, '#34d399'], ['Konfliktlösung', 43, '#f59e0b']]
+    : [['Communication', 71, '#BFFF00'], ['Decision Making', 58, '#34d399'], ['Conflict Resolution', 43, '#f59e0b']];
+  return (
+    <div className="relative hidden lg:flex items-center justify-center" data-testid="hero-score-teaser">
+      <div aria-hidden className="absolute inset-8 bg-gradient-to-br from-[#BFFF00]/[0.16] via-transparent to-emerald-500/[0.10] rounded-[3rem] blur-3xl pointer-events-none" />
+      <div className="relative w-[380px] rounded-[28px] border border-white/[0.09] bg-gradient-to-b from-[#141414] to-[#0B0B0B] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] p-7 rotate-[1.5deg] hover:rotate-0 transition-transform duration-500">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2.5">
+            <WladBotAvatar size={30} live />
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/50">{de ? 'Dein Leadership-Profil' : 'Your leadership profile'}</p>
+          </div>
+          <span className="px-2 py-0.5 rounded-md bg-[#BFFF00]/12 border border-[#BFFF00]/25 text-[8.5px] font-black tracking-wider text-[#BFFF00]">LIVE</span>
+        </div>
+
+        <div className="flex items-end gap-3 mb-6">
+          <p className="text-6xl font-black text-white tabular-nums leading-none">62<span className="text-2xl text-white/40">%</span></p>
+          <div className="pb-1">
+            <p className="text-[11px] font-bold text-white">Leadership Score</p>
+            <p className="text-[10px] text-emerald-400 font-bold">▲ +9 {de ? 'diesen Monat' : 'this month'}</p>
+          </div>
+        </div>
+
+        <div className="space-y-3.5">
+          {dims.map(([label, val, color]) => (
+            <div key={label}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[11px] font-semibold text-white/60">{label}</span>
+                <span className="text-[11px] font-black text-white tabular-nums">{val}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.07] overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${val}%`, background: color, boxShadow: `0 0 8px ${color}66` }} />
+              </div>
+            </div>
+          ))}
+          {/* Locked rows — unfinished-progress psychology */}
+          <div className="relative pt-1">
+            <div className="space-y-3.5 blur-[5px] select-none opacity-60" aria-hidden>
+              {[[de ? 'Delegation' : 'Delegation', 66], [de ? 'Strategisches Denken' : 'Strategic Thinking', 51]].map(([l, v]) => (
+                <div key={l}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] font-semibold text-white/60">{l}</span>
+                    <span className="text-[11px] font-black text-white">{v}%</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-white/[0.07]"><div className="h-full rounded-full bg-white/30" style={{ width: `${v}%` }} /></div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button onClick={onCta} className="px-4 h-9 rounded-full bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[11px] font-black shadow-lg shadow-[#BFFF00]/30 transition-all hover:scale-[1.04] active:scale-[0.96]" data-testid="score-teaser-unlock">
+                🔒 {de ? 'Vollständiges Profil freischalten' : 'Unlock complete profile'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-5 pt-4 border-t border-white/[0.07] text-[10px] text-white/35 text-center">
+          {de ? 'Dein Dashboard ist nicht statisch — es kennt dich bereits.' : 'Your dashboard isn\'t static — it already knows you.'}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 /* ── 2. Der Preis des Bleibens ── */
 export const CostSection = ({ de }) => {
   const items = de
