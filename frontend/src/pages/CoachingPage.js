@@ -11,6 +11,12 @@ import { FAQItem } from '../components/coaching/FAQItem';
 import { TierPricingGrid } from '../components/coaching/TierPricingGrid';
 import { CoachingRightPanel } from '../components/coaching/CoachingRightPanel';
 import { getLayers, getFaqs, getTestimonials } from '../components/coaching/coachingData';
+import { useAuth } from '../contexts/AuthContext';
+import {
+  CostSection, IdentityShift, WhyCoursesFail, EngineLoop, MondayMorning,
+  ProofNumbers, ValueIntro, CoffeeLine, ComparisonTable, RoiCalculator,
+  RiskReversal, PersonalBlock, FinalClose,
+} from '../components/coaching/ConversionSections';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { openStrategyCall } from '../lib/calendly';
@@ -38,6 +44,7 @@ const TESTIMONIAL_AVATARS = [
  */
 export default function CoachingPage() {
   const { lang } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const de = lang === 'de';
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -125,15 +132,20 @@ export default function CoachingPage() {
               </Badge>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
                 {de ? (
-                  <>Werde der Leader, der <span className="gradient-text">klar denkt</span>, klar spricht und klar führt.</>
+                  <>Du bist <span className="gradient-text">näher dran</span>, als du denkst.</>
                 ) : (
-                  <>Become the leader who <span className="gradient-text">thinks clearly</span>, speaks clearly, and leads clearly.</>
+                  <>You&rsquo;re <span className="gradient-text">closer</span> than you think.</>
                 )}
               </h1>
+              <div className="space-y-1.5 text-[15px] sm:text-[16px] font-semibold text-foreground/80 max-w-xl">
+                <p>{de ? 'Jedes Gespräch, das du vermeidest …' : 'Every conversation you avoid …'}</p>
+                <p>{de ? 'Jede Entscheidung, die du aufschiebst …' : 'Every decision you delay …'}</p>
+                <p>{de ? 'Jedes Meeting, nach dem du denkst: „Das hätte ich anders sagen sollen" …' : 'Every meeting you leave wishing you\'d said it differently …'}</p>
+              </div>
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
                 {de
-                  ? <>Dein KI-Coaching-System auf Basis von Wlads Methodik: Es hört, wie du sprichst. Es versteht, wie du denkst. Und es trainiert dich Tag für Tag zu dem Leader, dem Menschen <em className="not-italic font-semibold text-foreground">folgen wollen</em>.</>
-                  : <>Your AI coaching system built on Wlad&rsquo;s methodology: it hears how you speak, understands how you think — and trains you, day by day, into the leader people <em className="not-italic font-semibold text-foreground">want</em> to follow.</>}
+                  ? <>… kostet dich Einfluss. Leader-OS — auf Basis von Wlads Methodik — trainiert dich zu dem Leader, dem Menschen <em className="not-italic font-semibold text-foreground">von selbst folgen</em>.</>
+                  : <>… is costing you influence. Leader-OS — built on Wlad&rsquo;s methodology — trains you into the leader people <em className="not-italic font-semibold text-foreground">naturally follow</em>.</>}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Button
@@ -141,7 +153,7 @@ export default function CoachingPage() {
                   className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-12 px-6 shadow-lg shadow-[#BFFF00]/20"
                   data-testid="hero-primary-cta"
                 >
-                  {de ? 'Coaching starten' : 'Start Coaching'}
+                  {de ? 'Starte deine Leadership-Journey' : 'Start My Leadership Journey'}
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
                 <Button
@@ -243,6 +255,10 @@ export default function CoachingPage() {
           </div>
         </section>
 
+        {/* ── 2+3. AGITATE + IDENTITY (Iter 92.60 Conversion-Engine) ── */}
+        <CostSection de={de} />
+        <IdentityShift de={de} />
+
         {/* ── 3-LAYER SYSTEM ── full breakdown ── */}
         <section className="animate-fade-in stagger-2" data-testid="three-layer-section">
           <div className="text-center space-y-2 max-w-2xl mx-auto mb-8">
@@ -263,10 +279,23 @@ export default function CoachingPage() {
           </div>
         </section>
 
+        {/* ── 4-6. MECHANISM + VISION + PROOF ── */}
+        <WhyCoursesFail de={de} />
+        <EngineLoop de={de} />
+        <MondayMorning de={de} />
+        <ProofNumbers de={de} />
+
         {/* ── PRICING ── 3-Tier Funnel ── */}
         <section ref={pricingRef} className="animate-fade-in stagger-3 scroll-mt-8" data-testid="pricing-section">
+          <ValueIntro de={de} />
           <TierPricingGrid onCheckout={handleStripeCheckout} checkoutLoading={checkoutLoading} de={de} />
+          <CoffeeLine de={de} />
         </section>
+
+        {/* ── 11-13. COMPARISON + ROI + RISK REVERSAL ── */}
+        <ComparisonTable de={de} />
+        <RoiCalculator de={de} />
+        <RiskReversal de={de} onCta={scrollToPricing} />
 
         {/* ── 1:1 COACHING CTA ── strategy-call bridge ── */}
         <section className="animate-fade-in stagger-4" data-testid="strategy-call-section">
@@ -377,6 +406,12 @@ export default function CoachingPage() {
             </CardContent>
           </Card>
         </section>
+
+        {/* ── SECRET: Behavioral Personalization (nur Free-Tier) + Identity Close ── */}
+        {(user?.tier === 'free' || !user?.tier) && (
+          <PersonalBlock de={de} user={user} onCta={scrollToPricing} />
+        )}
+        <FinalClose de={de} onCta={scrollToPricing} />
 
         {/* ── Support Footer ── */}
         <div className="text-center py-4 animate-fade-in stagger-6">

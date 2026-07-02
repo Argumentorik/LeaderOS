@@ -15,6 +15,9 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 92.60 · 02.07.26] /coaching = Conversion-Engine (Hormozi-Formel)** — alle 13 Sections screenshot-verifiziert
+  - Neue Datei `components/coaching/ConversionSections.js` + CoachingPage-Rebuild. Reihenfolge: Hero-Hook („Du bist näher dran, als du denkst." + 3 Kosten-Zeilen) → CostSection (5 ❌-Cards) → IdentityShift (Heute→Morgen→Irgendwann→Am Ende) → 3-Layer → WhyCoursesFail (Kurse vs. LeaderOS) → EngineLoop (Lernen→Üben→KI-Feedback→Simulation→Reflexion→Praxis ↻) → MondayMorning-Story → ProofNumbers (140k+/82%/94%/4,9★) → ValueIntro („Was zahlt bessere Führung wirklich?") → Pricing → CoffeeLine (< 2,73 €/Tag) → ComparisonTable (Ohne/Mit) → ROI-Rechner (interaktiver Slider, Teamgröße→ROI %) → RiskReversal („Teste alles.") → Social Proof → FAQ → **PersonalBlock** (nur Free-Tier: Name + XP + „Hör jetzt nicht auf") → FinalClose („In einem Jahr ab heute…").
+  - Bestehendes erhalten: 1€-Banner, TierPricingGrid, Strategy-Call, FAQ, WladBot-Strip.
 - [x] **[Iter 92.59 · 02.07.26] 1€-Livetest-Paket + Final-Deploy-Check (PASS)** —
   - **`leadership_os_1eur_test`** (1€ → standard-Tier, `TEST_PACKAGES` in payments.py): NIE in öffentlicher Paketliste. Doppelt gegated: Aktivierungscode `WLAD-1EURO-2026` (via `discount_code`-Feld) + E-Mail-Allowlist (wj@argumentorik.com, mert@wladbot.com, test@test.com). Getestet: hidden ✅, falscher Code 403 ✅, fremde E-Mail 403 ✅, korrekt → Stripe-Live-Session ✅.
   - **CoachingPage**: `?code=WLAD-1EURO...` → dunkler Aktivierungs-Banner (`test-activation-banner`) mit „Für 1 € aktivieren"-Button. Screenshot-verifiziert.
