@@ -171,11 +171,12 @@ export default function ChatPage() {
       const res = await api.post('/chat', body);
       if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
       else { loadSessions(); }
-      setMessages(prev => [
-        ...prev.slice(0, -1),
-        { ...prev[prev.length - 1], modality: res.data.modality || 'text' },
-        { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response, modality: res.data.modality || 'text' },
-      ]);
+      setMessages(prev => {
+        const base = prev.length
+          ? [...prev.slice(0, -1), { ...prev[prev.length - 1], modality: res.data.modality || 'text' }]
+          : [];
+        return [...base, { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response, modality: res.data.modality || 'text' }];
+      });
       reloadCredits();
     } catch (err) {
       if (err.response?.status === 402) {

@@ -1,5 +1,5 @@
 """File upload routes - Profile picture + file storage."""
-from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Query
+from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 from fastapi.responses import Response
 import uuid
 import os

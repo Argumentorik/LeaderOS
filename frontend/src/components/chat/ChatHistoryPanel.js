@@ -148,11 +148,14 @@ export const ChatHistoryPanel = ({
               const active = s.session_id === currentSession;
               const folder = folders.find((f) => f.folder_id === s.folder_id);
               return (
-                <button
+                <div
                   key={s.session_id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => onSelectSession?.(s.session_id)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onSelectSession?.(s.session_id); }}
                   data-testid={`chat-history-item-${s.session_id}`}
-                  className={`group w-full text-left px-2.5 py-2 rounded-xl mb-0.5 flex items-center gap-2 transition-colors ${active
+                  className={`group w-full text-left px-2.5 py-2 rounded-xl mb-0.5 flex items-center gap-2 cursor-pointer transition-colors ${active
                     ? 'bg-[#BFFF00]/[0.12] border border-[#BFFF00]/30'
                     : 'border border-transparent hover:bg-black/[0.03] dark:hover:bg-white/[0.05]'}`}
                 >
@@ -160,17 +163,16 @@ export const ChatHistoryPanel = ({
                   <span className={`flex-1 min-w-0 truncate text-[12px] ${active ? 'font-bold' : 'font-medium text-foreground/75'}`}>
                     {s.title || (de ? 'Neues Gespräch' : 'New conversation')}
                   </span>
-                  <span
-                    role="button"
-                    tabIndex={-1}
+                  <button
+                    type="button"
                     onClick={(e) => handleDelete(e, s.session_id)}
                     data-testid={`chat-history-delete-${s.session_id}`}
                     title={de ? 'Chat löschen' : 'Delete chat'}
                     className={`shrink-0 w-6 h-6 rounded-md items-center justify-center text-muted-foreground/50 hover:text-rose-500 hover:bg-rose-500/10 transition-colors ${deleting === s.session_id ? 'flex opacity-50' : 'hidden group-hover:flex'}`}
                   >
                     <Trash2 size={12} />
-                  </span>
-                </button>
+                  </button>
+                </div>
               );
             })}
           </div>

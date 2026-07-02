@@ -4,6 +4,7 @@ import uuid
 import json
 import io
 import base64
+import asyncio
 from datetime import datetime, timezone
 from typing import Optional
 from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
@@ -409,7 +410,10 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         chat.with_model("openai", model_name)
 
         context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
-        ai_response = await chat.send_message(UserMessage(text=f"{context}\nUser: {data.message}"))
+        ai_response = await asyncio.wait_for(
+            chat.send_message(UserMessage(text=f"{context}\nUser: {data.message}")),
+            timeout=120,
+        )
 
         if structured:
             try:
@@ -466,6 +470,13 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         }
     except Exception as e:
         logger.error(f"Chat error: {e}")
+        # Refund the credit — the user paid but got no answer.
+        if not credit_result.get("is_premium"):
+            try:
+                from routes.credits import refund_credit
+                await refund_credit(user["user_id"])
+            except Exception as refund_err:
+                logger.warning(f"Credit refund failed: {refund_err}")
         raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
 
 

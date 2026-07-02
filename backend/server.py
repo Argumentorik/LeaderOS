@@ -251,6 +251,11 @@ async def startup() -> None:
         await db.user_sessions.create_index("expires_at", expireAfterSeconds=0)
         logger.info("TTL index on user_sessions.expires_at created/verified")
 
+        # Hot-path indexes: session lookup on every authed request + chat history
+        await db.user_sessions.create_index("session_token", unique=True)
+        await db.chat_messages.create_index([("session_id", 1), ("created_at", 1)])
+        await db.chat_sessions.create_index([("user_id", 1), ("updated_at", -1)])
+
         # Enterprise-grade: case-insensitive unique email index (prevents duplicate accounts)
         # First, normalize existing emails to lowercase so the index can be built cleanly
         async for user in db.users.find({"email": {"$regex": "[A-Z]"}}, {"_id": 1, "email": 1}):

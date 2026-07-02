@@ -157,7 +157,13 @@ export const FloatingWladBotDrawer = () => {
       setMessages(prev => [...prev, { role: 'assistant', content: '', parsed: res.data.response, modality: res.data.modality || modality }]);
     } catch (err) {
       logger.error('drawer chat failed:', err);
-      setMessages(prev => [...prev, { role: 'assistant', content: de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.' }]);
+      const noCredits = err?.response?.status === 402;
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: noCredits
+          ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad. 🚀' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad. 🚀')
+          : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.'),
+      }]);
     } finally {
       setSending(false);
     }

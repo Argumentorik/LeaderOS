@@ -38,7 +38,7 @@ class WladHubDiagnosis(BaseModel):
 
 
 class WladHubSyncRequest(BaseModel):
-    wladhub_email: Optional[str] = None
+    # SEC-002: sync is always bound to the caller's own account email.
     sync_scores: bool = True
     sync_action_plan: bool = True
 

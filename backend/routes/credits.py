@@ -66,6 +66,14 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
     return {"allowed": True, "remaining": balance - cost, "is_premium": False}
 
 
+async def refund_credit(user_id: str) -> None:
+    """Refund one deducted credit (compensation when the AI call fails)."""
+    await db.credits.update_one(
+        {"user_id": user_id},
+        {"$inc": {"balance": 1, "total_used": -1}},
+    )
+
+
 @router.get("")
 async def get_credits(request: Request):
     """Get user's credit balance and usage info."""

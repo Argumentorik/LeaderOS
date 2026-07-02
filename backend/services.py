@@ -60,6 +60,19 @@ def _extract_bearer_token(request: Request) -> str | None:
     return None
 
 
+_renewal_tasks: set = set()
+
+
+async def _renew_session(token: str) -> None:
+    try:
+        await db.user_sessions.update_one(
+            {"session_token": token},
+            {"$set": {"expires_at": datetime.now(timezone.utc) + timedelta(days=30)}},
+        )
+    except Exception as e:
+        logger.warning(f"Session sliding renewal failed: {e}")
+
+
 async def _authenticate_via_session(token: str) -> dict | None:
     session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
     if not session:
@@ -73,10 +86,9 @@ async def _authenticate_via_session(token: str) -> dict | None:
         return None
     # Sliding renewal: keep active users logged in indefinitely
     if expires_at < datetime.now(timezone.utc) + timedelta(days=15):
-        asyncio.ensure_future(db.user_sessions.update_one(
-            {"session_token": token},
-            {"$set": {"expires_at": datetime.now(timezone.utc) + timedelta(days=30)}},
-        ))
+        task = asyncio.create_task(_renew_session(token))
+        _renewal_tasks.add(task)
+        task.add_done_callback(_renewal_tasks.discard)
     return await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
 
 

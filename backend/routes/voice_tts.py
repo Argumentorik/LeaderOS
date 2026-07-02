@@ -503,6 +503,13 @@ async def voice_conversation(
         reply_text = await _voice_llm_reply(session_id, user["user_id"], transcript, user_memory)
     except Exception as e:
         logger.error(f"Voice LLM reply failed: {e}")
+        # Refund the credit — the user paid but got no answer.
+        if not credit_result.get("is_premium"):
+            try:
+                from routes.credits import refund_credit
+                await refund_credit(user["user_id"])
+            except Exception as refund_err:
+                logger.warning(f"Credit refund failed: {refund_err}")
         raise HTTPException(status_code=502, detail=f"AI reply failed: {e}")
     reply_text = _cap_reply_length(reply_text)
     reply_text = _normalize_wlad_name(reply_text)
