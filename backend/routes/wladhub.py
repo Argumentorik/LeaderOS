@@ -88,7 +88,18 @@ async def _fetch_supabase_insights(user_email: str) -> list:
         return []
     try:
         async with httpx.AsyncClient(timeout=10) as client:
-            supabase_user_id = await _resolve_supabase_user_id(client, supabase_url, service_key, user_email)
+            # leadercheck.de schreibt insights mit der public.users-id → diese
+            # per E-Mail auflösen (Iter 92.63d); Auth-id nur als Fallback.
+            headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}"}
+            pub = await client.get(
+                f"{supabase_url}/rest/v1/users",
+                headers=headers,
+                params={"select": "id", "email_lower": f"eq.{(user_email or '').lower()}", "limit": "1"},
+            )
+            rows = pub.json() if pub.status_code == 200 else []
+            supabase_user_id = rows[0]["id"] if rows else None
+            if not supabase_user_id:
+                supabase_user_id = await _resolve_supabase_user_id(client, supabase_url, service_key, user_email)
             if not supabase_user_id:
                 logger.info(f"Supabase: no account for {user_email} — skipping insights fetch")
                 return []
@@ -96,7 +107,7 @@ async def _fetch_supabase_insights(user_email: str) -> list:
                 f"{supabase_url}/rest/v1/leadership_insights"
                 f"?select=*&order=assessed_at.desc&limit=5&user_id=eq.{supabase_user_id}"
             )
-            resp = await client.get(query, headers={"apikey": service_key, "Authorization": f"Bearer {service_key}"})
+            resp = await client.get(query, headers=headers)
             if resp.status_code == 200:
                 return resp.json()
     except Exception as e:
@@ -390,39 +401,58 @@ async def push_scores_to_supabase(request: Request):
 
     headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}", "Content-Type": "application/json"}
     async with httpx.AsyncClient(timeout=15) as client:
-        sb_uid = await _resolve_supabase_user_id(client, supabase_url, service_key, user["email"])
-        if not sb_uid:
-            # leaderos-first user: create the Supabase account so the FK holds
-            create = await client.post(
-                f"{supabase_url}/auth/v1/admin/users",
-                headers=headers,
-                json={"email": user["email"], "email_confirm": True},
-            )
-            if create.status_code in (200, 201):
-                sb_uid = create.json().get("id")
-            else:
-                logger.error(f"Supabase user create failed: {create.status_code} {create.text[:200]}")
-        if not sb_uid:
+        # Iter 92.63d: leadership_insights.user_id → public.users.id. Die Zeile
+        # kann bereits mit EIGENER id existieren (Auth-Trigger/CRM-Mirror) →
+        # IMMER zuerst per E-Mail auflösen, nur bei Fehlen anlegen.
+        insight_uid = None
+        pub = await client.get(
+            f"{supabase_url}/rest/v1/users",
+            headers=headers,
+            params={"select": "id", "email_lower": f"eq.{user['email'].lower()}", "limit": "1"},
+        )
+        rows = pub.json() if pub.status_code == 200 else []
+        if rows:
+            insight_uid = rows[0]["id"]
+        else:
+            sb_uid = await _resolve_supabase_user_id(client, supabase_url, service_key, user["email"])
+            if not sb_uid:
+                create = await client.post(
+                    f"{supabase_url}/auth/v1/admin/users",
+                    headers=headers,
+                    json={"email": user["email"], "email_confirm": True},
+                )
+                if create.status_code in (200, 201):
+                    sb_uid = create.json().get("id")
+                else:
+                    logger.error(f"Supabase user create failed: {create.status_code} {create.text[:200]}")
+            if sb_uid:
+                mirror = await client.post(
+                    f"{supabase_url}/rest/v1/users",
+                    headers={**headers, "Prefer": "return=representation"},
+                    json={
+                        "id": sb_uid,
+                        "email": user["email"],
+                        "source_platform": "leader-os",
+                    },
+                )
+                if mirror.status_code in (200, 201):
+                    insight_uid = sb_uid
+                else:
+                    logger.error(f"Supabase public.users mirror failed: {mirror.status_code} {mirror.text[:200]}")
+                    # Race/Trigger kann die Zeile inzwischen angelegt haben → re-lookup
+                    pub2 = await client.get(
+                        f"{supabase_url}/rest/v1/users",
+                        headers=headers,
+                        params={"select": "id", "email_lower": f"eq.{user['email'].lower()}", "limit": "1"},
+                    )
+                    rows2 = pub2.json() if pub2.status_code == 200 else []
+                    if rows2:
+                        insight_uid = rows2[0]["id"]
+        if not insight_uid:
             raise HTTPException(status_code=409, detail="Kein leadercheck.de-Konto für diese E-Mail — Push nicht möglich")
 
-        # Iter 92.63 FK-FIX (Teil 2): leadership_insights.user_id → public.users
-        # (NICHT auth.users). Der Auth-Admin-Endpoint befüllt public.users nicht
-        # (kein handle_new_user-Trigger im Projekt) → Zeile explizit + idempotent
-        # spiegeln, sonst FK 23503.
-        mirror = await client.post(
-            f"{supabase_url}/rest/v1/users",
-            headers={**headers, "Prefer": "resolution=merge-duplicates,return=minimal"},
-            json={
-                "id": sb_uid,
-                "email": user["email"],
-                "source_platform": "leaderos",
-            },
-        )
-        if mirror.status_code not in (200, 201, 204, 409):
-            logger.error(f"Supabase public.users mirror failed: {mirror.status_code} {mirror.text[:200]}")
-
     success = await _write_supabase_insight(
-        user_id=sb_uid,
+        user_id=insight_uid,
         campaign_id=f"leaderos_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
         scores=scores,
     )

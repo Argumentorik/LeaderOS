@@ -1,0 +1,35 @@
+{
+  "summary": "Iter 92.63e FINAL RETEST — sync fix CONFIRMED working. 9/10 pass, 1 flaky. The three sync-critical assertions from the review request are ALL GREEN: (a) test_7 & test_A: POST /api/wladhub/push-to-supabase → 200 success (both accelerator and a fresh e2e user); (b) test_B FULL E2E: register→import(81/67/74/74)→push→wipe Mongo state→login→autosync fires from log→GET /api/wladhub/diagnosis returns 81/67/74 back AND has_wladhub_diagnosis=true in Mongo AND /api/wladhub/3layer source=wladhub with the same numbers; (c) test_C SECURITY: fresh user with no Supabase account gets no diagnosis leak (connected!=true, no wladhub flags in Mongo, autosync-skip log seen). The public-id-by-email lookup (lines 407-450 of routes/wladhub.py) plus source_platform='leader-os' (dash, CHECK-allowed) both applied correctly. Chat score-echo probe run manually with the EXACT review-request message: response text mentions the dimensions 'KI-Kompetenz', 'Boardroom-Rhetorik', 'Strategisches EQ' (dim_hit=True) but not the raw numbers 81/67/74 (num_hit=False). get_user_memory() output verified to contain the full 'WLADHUB 3-LAYER DIAGNOSE' block with 81/67/74 and the 'nenne IMMER die konkreten Zahlen' instruction — so the system prompt is correct; the LLM structured-JSON schema just varies run-to-run whether it echoes numbers explicitly. test_5's strict '≥2 keywords' assertion is therefore FLAKY (passed on isolated run, failed on suite run) — not a sync-fix regression. Per the review-request pass criterion 'mentions a dimension OR a number', the chat probe PASSES (dimensions are mentioned).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "/api/chat",
+        "issue": "test_5_chat_has_diagnosis_context is flaky under LLM variance. Same session run in isolation → PASS. Run inside the full suite → sometimes 0-1 keywords hit vs the ≥2 threshold. The get_user_memory() output is deterministic and DOES contain 'WLADHUB 3-LAYER DIAGNOSE / KI-Kompetenz: 81/100 / Boardroom-Rhetorik: 67/100 / Strategisches EQ: 74/100 / nenne IMMER die konkreten Zahlen' — so root cause is the structured-JSON output schema (insight/strategy/action_steps/reflection) which sometimes returns purely generic template text without echoing dimension names. Consider adding a `dimensions` field to the chat response schema OR loosening test_5 to accept dim_hit≥1 (the review-request criterion). This is NOT a sync bug."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py",
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py",
+    "/app/test_reports/pytest/iter92_63e_results.xml"
+  ],
+  "action_items": [
+    "OPTIONAL — Stabilise test_5: either loosen assertion to `dim_hit≥1 OR num_hit≥1` (matches the review-request criterion exactly), or extend the /api/chat response schema with a `dimensions:{ki_kompetenz,boardroom_rhetorik,strategisches_eq,overall_score}` field the model is instructed to populate whenever the user's message contains score/Zahlen/Leader-Check.",
+    "NONE for sync — leadercheck.de↔Leader-OS Supabase sync is confirmed working end-to-end and can be marked CLOSED."
+  ],
+  "critical_code_review_comments": [
+    "routes/wladhub.py L407-450: the email-first public.users lookup pattern is applied on both write (push) and read (_fetch_supabase_insights) paths — clean symmetric fix. Consider extracting `_resolve_public_users_id_by_email(client, url, headers, email)` to a helper to avoid the duplicated GET/select code block.",
+    "routes/wladhub.py L441-450: mirror-conflict re-lookup fallback is good defensive coding. Suggest also logging the `insight_uid` value at INFO level once resolved so future push-vs-read mismatches (e.g., insights written under different uids) are traceable from a single log grep.",
+    "services.py _build_wladhub_section: verified via direct asyncio.run(get_user_memory(uid)) — output contains the full WLADHUB block with numbers and echo instruction. No changes needed here."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "90% (9/10 pass, 1 flaky-on-LLM). SYNC-scoped tests: 100% (7/7 relevant to the review-request criteria).", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "accelerator@wladbot.test / test123 (from /app/memory/test_credentials.md). Ephemeral users synctest92-<ts>, synctest92r-<ts>, noquiz-<ts>, noleak-<ts>@wladbot.test cleaned up per module (Mongo + Supabase auth+public.users best-effort).",
+  "seed_data_creation": "Per-run: 4 ephemeral users created & auto-cleaned. Accelerator wladhub_scores re-imported as 81/67/74/74 for the probe.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Sync test CLOSED. Only remaining item is optional test_5 stability improvement — the fix landed in services.py is correct (verified by direct get_user_memory() call showing WLADHUB block + numbers + echo instruction) but the chat structured-JSON schema is LLM-variance-prone. If revisited, either loosen the test or add a `dimensions` field to the chat response schema. All Supabase Push/Pull/Autosync/Security assertions are stably green across the pytest suite.",
+  "rca_of_the_issue": "The Iter 92.63e fix (routes/wladhub.py) is the definitive solution: (1) push path resolves public.users.id by email first — handles the pre-existing row from CRM-mirror/trigger, eliminating the 23505 conflict from 92.63d; (2) only creates auth+public row when missing, using source_platform='leader-os' (dash, CHECK-allowed) instead of 'leaderos'; (3) re-lookup fallback on mirror conflict handles trigger race conditions. Read path _fetch_supabase_insights also resolves public.users.id by email first, matching the id space that leadercheck.de writes insights under. Full E2E (test_B) now passes: pushed 81/67/74 → wiped local state → login autosync pulled them back from Supabase → available in /diagnosis, /3layer, Mongo user flag. Security (test_C) still holds: users without a Supabase account get [] insights, autosync skips them, no leak."
+}
