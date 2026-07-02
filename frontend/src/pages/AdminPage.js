@@ -16,6 +16,7 @@ import { SyncHealthWidget } from '../components/admin/SyncHealthWidget';
 import { UserManageCard } from '../components/admin/UserManageCard';
 import { RagDebugStudio } from '../components/admin/RagDebugStudio';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
+import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -298,6 +299,21 @@ export default function AdminPage() {
             </p>
           </div>
           <LearningVideosManager />
+        </div>
+
+        {/* License Keys — 16-digit activation codes for sales-sold packages */}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? 'Lizenz-Keys · Sales-Aktivierung' : 'License Keys · Sales Activation'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Generiere 16-stellige Aktivierungscodes für telefonisch verkaufte Pakete. Kunde löst den Key auf der Login-Seite ein — Paket wird sofort freigeschaltet.'
+                : 'Generate 16-character activation codes for phone-sold packages. The customer redeems the key on the login page — package unlocks instantly.'}
+            </p>
+          </div>
+          <LicenseKeysManager de={de} />
         </div>
       </div>
     </DashboardLayout>

@@ -109,6 +109,7 @@ from routes.voice_tts import router as voice_tts_router
 from routes.monitoring import router as monitoring_router
 from routes.gdpr import router as gdpr_router
 from routes.oauth import router as oauth_router
+from routes.license import router as license_router
 from routes.support import router as support_router
 from routes.folders import router as folders_router
 
@@ -117,6 +118,7 @@ app = FastAPI(title="WladBot API", version="5.0")
 # Include all route modules
 app.include_router(auth_router)
 app.include_router(oauth_router)
+app.include_router(license_router)
 app.include_router(chat_router)
 app.include_router(tasks_router)
 app.include_router(simulations_router)

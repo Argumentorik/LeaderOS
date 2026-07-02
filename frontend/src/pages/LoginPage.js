@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../lib/api';
 import { parseAuthError } from '../lib/authErrors';
-import { Globe, WifiOff, KeyRound, Sparkles } from 'lucide-react';
+import { Globe, WifiOff, KeyRound, Sparkles, Ticket } from 'lucide-react';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { AuthForm } from '../components/auth/AuthForm';
 import { TrustBadges, ModeSwitch } from '../components/auth/LoginExtras';
 import { MagicLinkForm } from '../components/auth/MagicLinkForm';
+import { LicenseKeyForm } from '../components/auth/LicenseKeyForm';
 import { OAuthProviderStack } from '../components/auth/OAuthButtons';
 import { ContinueAsCard, useContinueAs } from '../components/auth/ContinueAsCard';
 import { useAuthProviders } from '../lib/authProviders';
@@ -122,20 +123,23 @@ export default function LoginPage({ initialMode = 'login' }) {
   };
 
   const isMagic = mode === 'magic';
+  const isLicense = mode === 'license';
   const isRegister = mode === 'register';
-  const showContinueAs = !!lastAccount && !isRegister && !isMagic;
+  const showContinueAs = !!lastAccount && !isRegister && !isMagic && !isLicense;
 
   const heading = useMemo(() => {
     if (isMagic) return de ? 'Login ohne Passwort' : 'Sign in without a password';
+    if (isLicense) return de ? 'Lizenz-Key einlösen' : 'Redeem license key';
     if (isRegister) return de ? 'Account erstellen' : 'Create account';
     return de ? 'Willkommen zurück' : 'Welcome back';
-  }, [isMagic, isRegister, de]);
+  }, [isMagic, isLicense, isRegister, de]);
 
   const subheading = useMemo(() => {
     if (isMagic) return de ? 'Gib deine E-Mail ein — wir senden dir einen sicheren 1-Klick-Link. Kein Passwort, kein Aufwand.' : 'Enter your email — we\'ll send a secure 1-click link. No password, no friction.';
+    if (isLicense) return de ? 'Du hast einen 16-stelligen Aktivierungscode gekauft? Löse ihn hier ein — dein Paket wird sofort freigeschaltet.' : 'Bought a 16-character activation code? Redeem it here — your package unlocks instantly.';
     if (isRegister) return de ? 'Starte deinen KI-Leadership Sprint — 3 Sessions kostenlos, keine Kreditkarte, voller Zugriff auf WladBot.' : 'Start your AI leadership sprint — 3 sessions free, no credit card, full WladBot access.';
     return de ? 'Schön, dich wiederzusehen. Dein Fortschritt wartet genau dort, wo du aufgehört hast.' : 'Good to see you again. Your progress is waiting right where you left off.';
-  }, [isMagic, isRegister, de]);
+  }, [isMagic, isLicense, isRegister, de]);
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-[#0A0A0A] relative overflow-hidden" data-testid="login-page">
@@ -242,11 +246,23 @@ export default function LoginPage({ initialMode = 'login' }) {
               >
                 <Sparkles size={12} /> Magic Link
               </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={isLicense}
+                onClick={() => switchMode('license')}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                  isLicense ? 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' : 'text-white/45 hover:text-white/70'
+                }`}
+                data-testid="tab-license-key"
+              >
+                <Ticket size={12} /> {de ? 'Lizenz-Key' : 'License Key'}
+              </button>
             </div>
           )}
 
-          {/* OAuth providers (only show if any configured AND we're not in magic mode) */}
-          {!isMagic && providers && (
+          {/* OAuth providers (only show if any configured AND we're not in magic/license mode) */}
+          {!isMagic && !isLicense && providers && (
             <OAuthProviderStack
               providers={providers}
               onSuccess={handleOAuthSuccess}
@@ -255,7 +271,7 @@ export default function LoginPage({ initialMode = 'login' }) {
             />
           )}
 
-          {!isMagic && providers?.providers && (providers.providers.google || providers.providers.apple || providers.providers.microsoft) && (
+          {!isMagic && !isLicense && providers?.providers && (providers.providers.google || providers.providers.apple || providers.providers.microsoft) && (
             <div className="relative my-5">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/[0.08]" /></div>
               <div className="relative flex justify-center">
@@ -275,6 +291,8 @@ export default function LoginPage({ initialMode = 'login' }) {
 
           {isMagic ? (
             <MagicLinkForm de={de} />
+          ) : isLicense ? (
+            <LicenseKeyForm de={de} />
           ) : (
             <>
               <AuthForm
@@ -297,7 +315,7 @@ export default function LoginPage({ initialMode = 'login' }) {
 
           <div className="mt-6 lg:mt-7 text-center">
             <ModeSwitch
-              mode={isMagic ? 'login' : mode}
+              mode={isMagic || isLicense ? 'login' : mode}
               onSwitchMode={switchMode}
               de={de}
             />
