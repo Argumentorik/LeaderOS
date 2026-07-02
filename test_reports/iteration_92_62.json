@@ -1,0 +1,49 @@
+{
+  "summary": "Iter 92.62 backend-only verification of WladHub autosync-on-login fix. All 7 tests PASS. Core bug fix verified: _maybe_autosync_wladhub() correctly fires on POST /api/auth/login and POST /api/auth/magic-link/verify (Google branch confirmed via code inspection at routes/auth.py L420). Along the way discovered + FIXED a 500 error on /api/wladhub/import (ObjectId leak). Identified 3 additional bugs that main agent should address (push-to-supabase FK mismatch, cross-user data leak in _fetch_supabase_insights fallback, and incomplete score-number injection in chat prompt).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "Returns 502 with Supabase FK violation. Body: 'Key (user_id)=(<sha256-uuid>) is not present in table users'. routes/wladhub.py L363 generates a deterministic UUID via SHA256(user_id) but Supabase leadership_insights.user_id has a FK to Supabase's public.users table. The mirror_user_event_fire_and_forget uses a DIFFERENT UUID mapping, so the row never exists in Supabase.users. Blocks the full leaderos→leadercheck.de round-trip.",
+        "priority": "HIGH"
+      },
+      {
+        "endpoint": "/api/wladhub/* autosync fallback (routes/wladhub.py L79-88 _fetch_supabase_insights)",
+        "issue": "SECURITY: When user email is NOT found in Supabase auth.users, the code REMOVES the user_id filter and returns 'latest 5 rows across ALL users' from leadership_insights. This means a fresh signup could inherit another user's diagnosis scores. Currently masked because the test env's leadership_insights table happens to be empty, but with real traffic this WILL cause cross-user contamination. Fix: return [] when supabase_user_id is None instead of falling back to unfiltered query.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "services.py _build_wladhub_diagnosis_section L511",
+        "issue": "Only injects strengths/improvements — NOT the actual score numbers. Score numbers ARE injected via _build_wladhub_section (from user.wladhub_scores). Chat still has scores in system prompt so this is not blocking, but the function name is misleading. Consider consolidating."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py",
+    "/app/test_reports/pytest/iter92_62_results.xml"
+  ],
+  "action_items": [
+    "Fix /api/wladhub/push-to-supabase FK mismatch — reuse the Supabase user_id created by mirror_user_event, not a SHA256-derived UUID (routes/wladhub.py L362-364).",
+    "SECURITY: Fix _fetch_supabase_insights to return [] when supabase_user_id lookup fails, instead of falling back to unfiltered latest-5 query (routes/wladhub.py L79-88). Currently could leak other users' diagnoses.",
+    "Consider extending _build_wladhub_diagnosis_section (services.py L511) to include the score numbers so chat responses more reliably reference them when users ask 'Nenne die Zahlen'."
+  ],
+  "critical_code_review_comments": [
+    "Fire-and-forget autosync task uses asyncio.create_task without holding a reference — Python garbage collector may cancel it under memory pressure. Consider storing task refs in a background-task set (Iter 92.5 pattern used elsewhere in this codebase).",
+    "routes/wladhub.py L91 _write_supabase_insight silently returns False on 4xx — the caller (push-to-supabase) raises 502 which is misleading. Consider surfacing the Supabase error body to help debugging FK issues.",
+    "Test env accelerator@wladbot.test does not exist in Supabase auth.users, which is why full E2E autosync couldn't be exercised even after fixing push-to-supabase would help — need seed step that pre-creates the accelerator row in Supabase.users."
+  ],
+  "updated_files": [
+    "/app/backend/routes/wladhub.py (fixed ObjectId leak in _save_diagnosis_to_mongo — pop _id after motor's insert_one mutates the dict)",
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py (new — 7 pytest cases)"
+  ],
+  "success_rate": {"backend": "100% (7/7 tests pass after fix)", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "accelerator@wladbot.test / test123 (unlimited credits). Test users synctest92-* and noquiz-* auto-created and auto-cleaned per test.",
+  "seed_data_creation": "Per-run: 1 synctest user + 1 noquiz user (both auto-deleted). Accelerator's wladhub_diagnoses gets re-imported (idempotent — overwrites existing row).",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "The AUTOSYNC-ON-LOGIN fix itself is verified working (backend log inspection confirms _maybe_autosync_wladhub fires on login for existing users). Full E2E (leaderos user quiz → Supabase → login autosync → dashboard) is BLOCKED by push-to-supabase FK bug. To unblock full E2E: main agent must (a) fix the SHA256-UUID→Supabase.users mismatch in push-to-supabase, and (b) fix the _fetch_supabase_insights cross-user leak. After both fixes, re-run this test file — it will automatically verify the full flow (test_7 will start passing with 200 instead of 502).",
+  "rca_of_the_issue": "ROOT CAUSE of autosync-on-login bug: _maybe_autosync_wladhub was only wired to /register in Iter 92.61. Users who signed up on leaderos.de BEFORE taking the leadercheck.de quiz never triggered another autosync attempt. Fix (main agent, Iter 92.62): call _maybe_autosync_wladhub() on password login (L372), magic-link verify (L757), and google-session existing branch (L420). VERIFIED WORKING via backend log 'autosync: no leader-check.de diagnosis for <email>' firing on each login. SEPARATE BUG discovered during testing: /wladhub/import 500'd due to motor.insert_one mutating diagnosis_doc with ObjectId. FIXED by testing agent — pop('_id', None) after insert."
+}

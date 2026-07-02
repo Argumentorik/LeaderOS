@@ -146,6 +146,9 @@ async def _save_diagnosis_to_mongo(user_id: str, scores: dict, source: str = "ma
         await db.wladhub_diagnoses.update_one({"user_id": user_id}, {"$set": diagnosis_doc})
     else:
         await db.wladhub_diagnoses.insert_one(diagnosis_doc)
+    # motor.insert_one mutates the dict to include ObjectId `_id` — strip it
+    # so the endpoint response stays JSON-serializable.
+    diagnosis_doc.pop("_id", None)
 
     await db.users.update_one({"user_id": user_id}, {"$set": {
         "wladhub_connected": True,

@@ -302,6 +302,16 @@ async def register(data: UserRegister, request: Request, response: Response):
 
 # ========== LOGIN ==========
 
+def _maybe_autosync_wladhub(user: dict) -> None:
+    """Iter 92.62: pull leadercheck.de diagnosis on ANY login (not just
+    register) so users who took the quiz AFTER signup still get synced."""
+    if user.get("has_wladhub_diagnosis") or not user.get("email"):
+        return
+    import asyncio as _asyncio
+    from services_wladhub_autosync import auto_sync_wladhub_on_signup
+    _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user["user_id"], email=user["email"]))
+
+
 @router.post("/login")
 async def login(data: UserLogin, request: Request, response: Response):
     # Iter 92.24 (Mert): accept EITHER email OR phone as login identifier.
@@ -359,6 +369,7 @@ async def login(data: UserLogin, request: Request, response: Response):
 
     token = create_jwt_token(user["user_id"])
     await _create_session(user["user_id"], ip_address, response, method=method)
+    _maybe_autosync_wladhub(user)
 
     return {"token": token, "user": _safe_user_output(user)}
 
@@ -406,6 +417,7 @@ async def google_session(request: Request, response: Response):
             "$push": {"login_history": {"$each": [history_entry], "$slice": -50}}
         })
         sync_event = "user.updated"
+        _maybe_autosync_wladhub(existing)
         # New-device email for existing Google user
         fire_and_forget_new_device_alert(
             user_email=email,
@@ -431,8 +443,12 @@ async def google_session(request: Request, response: Response):
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
         sync_event = "user.created"
-        # Fire welcome email for new Google user (fire-and-forget)
+        # Autosync leadercheck.de diagnosis for Google signups too (Iter 92.62 —
+        # was only wired for classic register before).
         import asyncio as _asyncio
+        from services_wladhub_autosync import auto_sync_wladhub_on_signup
+        _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user_id, email=email))
+        # Fire welcome email for new Google user (fire-and-forget)
         _asyncio.create_task(_send_signup_welcome(email, google_data.get("name") or email.split("@")[0]))
 
     # Generate a real JWT token (not the session_token)
@@ -738,6 +754,7 @@ async def magic_link_verify(data: MagicLinkVerify, request: Request, response: R
 
     token = create_jwt_token(user["user_id"])
     await _create_session(user["user_id"], ctx["ip"], response, method="magic_link")
+    _maybe_autosync_wladhub(user)
     return {"token": token, "user": _safe_user_output(user)}
 
 
