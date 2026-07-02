@@ -48,6 +48,32 @@ _USER_DATA_COLLECTIONS = [
 ]
 
 
+@router.get("/sync-health")
+async def sync_health(request: Request) -> dict:
+    """leadercheck.de ↔ Leader-OS sync activity (last 24h) for the admin panel."""
+    await require_admin(request)
+    now = datetime.now(timezone.utc)
+    cutoff = (now - timedelta(hours=24)).isoformat()
+
+    logs = await db.wladhub_sync_log.find(
+        {"created_at": {"$gte": cutoff}}, {"_id": 0}
+    ).sort("created_at", -1).to_list(200)
+    completed = sum(1 for entry in logs if entry.get("status") == "completed")
+    records = sum(int(entry.get("records_imported") or 0) for entry in logs)
+
+    return {
+        "window_hours": 24,
+        "syncs_24h": len(logs),
+        "completed_24h": completed,
+        "incomplete_24h": len(logs) - completed,
+        "records_imported_24h": records,
+        "total_diagnoses": await db.wladhub_diagnoses.count_documents({}),
+        "connected_users": len(await db.wladhub_diagnoses.distinct("user_id")),
+        "recent": logs[:10],
+        "computed_at": now.isoformat(),
+    }
+
+
 @router.post("/users/set-tier/{email}")
 async def admin_set_tier(email: str, request: Request, tier: str = "accelerator"):
     """Grant a user full paid-tier access (admin panel / founder testing)."""

@@ -12,6 +12,8 @@ import {
   Loader2, ShieldAlert, Euro, Activity, MessageCircle,
 } from 'lucide-react';
 import { AuthHealthWidget } from '../components/admin/AuthHealthWidget';
+import { SyncHealthWidget } from '../components/admin/SyncHealthWidget';
+import { UserManageCard } from '../components/admin/UserManageCard';
 import { RagDebugStudio } from '../components/admin/RagDebugStudio';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
 
@@ -143,6 +145,8 @@ export default function AdminPage() {
         {/* Auth-Health Monitoring (launch priority) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
           <AuthHealthWidget health={authHealth} de={de} />
+          <SyncHealthWidget de={de} />
+          <UserManageCard de={de} />
           <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="community-stats">
             <CardContent className="p-5">
               <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-1.5"><MessageCircle size={11} /> Community</h3>
