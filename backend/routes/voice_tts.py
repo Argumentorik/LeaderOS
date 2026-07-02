@@ -512,8 +512,13 @@ async def voice_conversation(
         {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
     )
 
-    # 6. TTS (cached)
-    audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+    # 6. TTS (cached) — graceful: if TTS fails (e.g. quota), still return the text reply
+    try:
+        audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+        audio_url = f"data:audio/mpeg;base64,{audio_b64}"
+    except HTTPException as e:
+        logger.warning(f"TTS unavailable — returning text-only voice reply: {e.detail}")
+        audio_url = ""
 
     try:
         await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "mode": "voice"})
@@ -524,6 +529,6 @@ async def voice_conversation(
         session_id=session_id,
         transcript=transcript,
         response_text=reply_text,
-        audio_url=f"data:audio/mpeg;base64,{audio_b64}",
+        audio_url=audio_url,
         persona=persona_key,
     )

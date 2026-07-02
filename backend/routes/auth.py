@@ -74,7 +74,7 @@ COOKIE_CONFIG = {
     "httponly": True,
     "samesite": "lax",
     "secure": True,
-    "max_age": 7 * 24 * 3600,  # 7 days
+    "max_age": 30 * 24 * 3600,  # 30 days — stay logged in
     "path": "/",
 }
 
@@ -129,7 +129,7 @@ async def _create_session(user_id: str, ip_address: str, response: Response, met
         "user_id": user_id,
         "ip_address": ip_address,
         "method": method,
-        "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=30),
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
@@ -481,11 +481,24 @@ async def auth_me(request: Request):
 
 @router.post("/refresh")
 async def refresh_token(request: Request, response: Response):
-    """Refresh an expiring JWT token. Returns a fresh token if current session is valid."""
+    """Refresh an expiring JWT token. Extends the current session instead of
+    creating a new one (avoids evicting sessions on other devices)."""
     user = await get_current_user(request)
-    ip_address = _get_client_ip(request)
     token = create_jwt_token(user["user_id"])
-    await _create_session(user["user_id"], ip_address, response, method="refresh")
+
+    existing_token = request.cookies.get("session_token")
+    session = None
+    if existing_token:
+        session = await db.user_sessions.find_one({"session_token": existing_token}, {"_id": 1})
+    if session:
+        await db.user_sessions.update_one(
+            {"session_token": existing_token},
+            {"$set": {"expires_at": datetime.now(timezone.utc) + timedelta(days=30)}},
+        )
+        response.set_cookie(value=existing_token, **COOKIE_CONFIG)
+    else:
+        ip_address = _get_client_ip(request)
+        await _create_session(user["user_id"], ip_address, response, method="refresh")
     return {"token": token, "user": _safe_user_output(user)}
 
 

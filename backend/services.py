@@ -1,6 +1,7 @@
 """Authentication, AI prompts, and helper services."""
 import re
 import jwt
+import asyncio
 import bcrypt
 import httpx
 import uuid
@@ -15,7 +16,7 @@ from config import db, JWT_SECRET, EMERGENT_LLM_KEY, OAUTH_SESSION_URL, logger
 def create_jwt_token(user_id: str) -> str:
     payload = {
         "user_id": user_id,
-        "exp": datetime.now(timezone.utc) + timedelta(days=7),
+        "exp": datetime.now(timezone.utc) + timedelta(days=30),
         "iat": datetime.now(timezone.utc),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
@@ -70,6 +71,12 @@ async def _authenticate_via_session(token: str) -> dict | None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     if expires_at <= datetime.now(timezone.utc):
         return None
+    # Sliding renewal: keep active users logged in indefinitely
+    if expires_at < datetime.now(timezone.utc) + timedelta(days=15):
+        asyncio.ensure_future(db.user_sessions.update_one(
+            {"session_token": token},
+            {"$set": {"expires_at": datetime.now(timezone.utc) + timedelta(days=30)}},
+        ))
     return await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
 
 

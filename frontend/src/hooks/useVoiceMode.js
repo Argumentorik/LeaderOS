@@ -285,6 +285,15 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
 
   // ── Playback ─────────────────────────────────────────────────────────
   const playReply = useCallback((audioUrl) => new Promise((resolve) => {
+    if (!audioUrl) {
+      // TTS unavailable — reply text is shown in the overlay; keep the loop alive
+      setState(VOICE_STATES.IDLE);
+      if (!cancelledRef.current && !pausedRef.current) {
+        setTimeout(() => { if (!cancelledRef.current && !pausedRef.current) startRecording(); }, 2600);
+      }
+      resolve();
+      return;
+    }
     setState(VOICE_STATES.SPEAKING);
     const audio = new Audio(audioUrl);
     audio.muted = muted;
