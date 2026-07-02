@@ -304,6 +304,11 @@ export const FloatingWladBotDrawer = () => {
                       </div>
                     ) : (
                       <div className="max-w-[88%] space-y-2">
+                        {m.parsed?.text && (
+                          <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-tl-sm px-3 py-2.5">
+                            <div className="[&_*]:!text-white/90"><SmartText text={m.parsed.text} variant="inline" accent="#BFFF00" /></div>
+                          </div>
+                        )}
                         {m.parsed?.insight && (
                           <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-tl-sm px-3 py-2.5">
                             <div className="flex items-center gap-1.5 mb-1.5">

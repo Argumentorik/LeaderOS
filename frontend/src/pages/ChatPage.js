@@ -60,6 +60,7 @@ export default function ChatPage() {
   const [attachedPdf, setAttachedPdf] = useState(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [audioMode, setAudioMode] = useState(false);
+  const [coachMode, setCoachMode] = useState(false);
   // Iter 92.23.8 (Mert): folder context — chat injected with folder.context_summary
   const [activeFolder, setActiveFolder] = useState(null);
   const { isPremium, totalUsed, reload: reloadCredits } = useCredits();
@@ -157,7 +158,7 @@ export default function ChatPage() {
     setAttachedPdf(null);
     setLoading(true);
     try {
-      const body = { message: fullMsg, session_id: currentSession, modality: 'text' };
+      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: coachMode ? 'coach' : 'chat' };
       if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
       const res = await api.post('/chat', body);
       if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
@@ -274,6 +275,7 @@ export default function ChatPage() {
           uploadingPdf={uploadingPdf} onPdfUpload={handlePdfUpload}
           isPremium={isPremium} onOpenUpsell={() => openPricing('leadership_os')}
           onOpenAudioMode={() => setAudioMode(true)}
+          coachMode={coachMode} setCoachMode={setCoachMode}
           de={de}
         />
       </div>

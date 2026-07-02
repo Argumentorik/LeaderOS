@@ -12,7 +12,7 @@ import docx
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import ChatMessageIn, ChatSessionCreate
-from services import get_current_user, clean_ai_text, update_user_scores, get_user_memory, WLADBOT_SYSTEM_PROMPT
+from services import get_current_user, clean_ai_text, update_user_scores, get_user_memory, WLADBOT_SYSTEM_PROMPT, WLADBOT_CHAT_STYLE, WLADBOT_JSON_FORMAT
 from services_actions import record_user_action
 from data import LEADERSHIP_QUOTES
 
@@ -235,13 +235,12 @@ ROLE_MAP = {
 }
 
 
-def _build_system_message(agent: str, user_memory: str, folder_context: str = "") -> str:
+def _build_system_message(agent: str, user_memory: str, folder_context: str = "", structured: bool = False) -> str:
     """Build AI system message with agent role, user memory, and folder context.
 
-    Iter 92.23.8 (Mert): when a chat happens inside a folder the folder's
-    context_summary travels with every turn so the agent "remembers" the
-    real-world goal/stakeholders/constraints without the user repeating
-    themselves. This is the Wingman/OpenClaw "agent next to you" pattern.
+    Iter 96 (Mert): default is a natural conversational style (ChatGPT/Grok
+    feel). The structured JSON coach format is opt-in — active only when the
+    user picks an agent or enables Coach-Modus.
     """
     agent_context = ""
     if agent and agent != "auto":
@@ -254,7 +253,8 @@ def _build_system_message(agent: str, user_memory: str, folder_context: str = ""
             "alle Antworten sollen diesen Kontext beruecksichtigen) ---\n"
             f"{folder_context}\n---"
         )
-    return WLADBOT_SYSTEM_PROMPT + agent_context + memory_context + folder_block
+    style_block = WLADBOT_JSON_FORMAT if structured else WLADBOT_CHAT_STYLE
+    return WLADBOT_SYSTEM_PROMPT + style_block + agent_context + memory_context + folder_block
 
 
 async def _resolve_folder_context(folder_id: Optional[str], user_id: str) -> tuple[str, Optional[dict]]:
@@ -373,7 +373,10 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    system_msg = _build_system_message(data.agent, user_memory, folder_context)
+    # Iter 96 (Mert): normal conversational chat is the DEFAULT. Structured
+    # coach output only when the user picked an agent or Coach-Modus.
+    structured = (data.mode == "coach") or bool(data.agent and data.agent != "auto")
+    system_msg = _build_system_message(data.agent, user_memory, folder_context, structured)
     if rag_ctx["context_block"]:
         system_msg = system_msg + rag_ctx["context_block"]
 
@@ -396,11 +399,24 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
         context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
         ai_response = await chat.send_message(UserMessage(text=f"{context}\nUser: {data.message}"))
 
-        try:
-            from services_ai_parse import parse_ai_json
-            parsed = parse_ai_json(ai_response) or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
-        except Exception:
-            parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
+        if structured:
+            try:
+                from services_ai_parse import parse_ai_json
+                parsed = parse_ai_json(ai_response) or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
+            except Exception:
+                parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
+        else:
+            text_reply = (ai_response or "").strip()
+            # Defensive: if the model slipped into JSON anyway, unwrap it.
+            if text_reply.startswith("{"):
+                try:
+                    from services_ai_parse import parse_ai_json
+                    maybe = parse_ai_json(text_reply)
+                    if maybe and maybe.get("insight"):
+                        text_reply = "\n\n".join(p for p in [maybe.get("insight", ""), maybe.get("strategy", "")] if p)
+                except Exception:
+                    pass
+            parsed = {"text": text_reply}
 
         msg_id = f"msg_{uuid.uuid4().hex[:12]}"
         await db.chat_messages.insert_one({

@@ -145,6 +145,9 @@ class ChatMessageIn(BaseModel):
     message: str
     session_id: Optional[str] = None
     agent: Optional[str] = None
+    # Iter 96 (Mert): 'chat' (default, natural ChatGPT/Grok-style conversation)
+    # or 'coach' (structured insight/strategy/steps output).
+    mode: Optional[str] = None
     # Iter 92.23.8 (Mert): when a chat is started from inside a folder, the
     # frontend forwards the folder_id so the backend can prepend the folder's
     # context_summary to the system prompt — "agent always next to you".

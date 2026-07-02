@@ -1,7 +1,7 @@
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { VoiceRecorder } from '../shared/VoiceRecorder';
-import { Send, Loader2, Paperclip, FileText, X, Zap, Headphones } from 'lucide-react';
+import { Send, Loader2, Paperclip, FileText, X, Zap, Headphones, Target } from 'lucide-react';
 
 const AttachedPreview = ({ attachedPdf, onRemove, de }) => (
   <div className="max-w-4xl mx-auto mb-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#BFFF00]/8 border border-[#BFFF00]/20" data-testid="pdf-attached">
@@ -26,6 +26,7 @@ export const ChatInputBar = ({
   input, setInput, loading, onSend, onVoice,
   attachedPdf, setAttachedPdf, uploadingPdf, onPdfUpload,
   isPremium, onOpenUpsell, onOpenAudioMode, de,
+  coachMode, setCoachMode,
 }) => (
   <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
     {attachedPdf && <AttachedPreview attachedPdf={attachedPdf} onRemove={() => setAttachedPdf(null)} de={de} />}
@@ -56,11 +57,29 @@ export const ChatInputBar = ({
           onChange={onPdfUpload}
         />
       </label>
+      {setCoachMode && (
+        <button
+          type="button"
+          onClick={() => setCoachMode(!coachMode)}
+          disabled={loading}
+          data-testid="coach-mode-toggle"
+          title={de
+            ? (coachMode ? 'Coach-Modus aktiv: strukturierte Antworten mit Strategie & Schritten' : 'Coach-Modus: strukturierte Antworten mit Strategie & Schritten')
+            : (coachMode ? 'Coach mode on: structured replies with strategy & steps' : 'Coach mode: structured replies with strategy & steps')}
+          className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all shrink-0 ${coachMode
+            ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-lg shadow-[#BFFF00]/30'
+            : 'bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border-[#BFFF00]/20 text-[#6B8A00] dark:text-[#BFFF00]'} ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+        >
+          <Target size={15} strokeWidth={2.5} />
+        </button>
+      )}
       <Textarea data-testid="chat-input" value={input} onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); } }}
         placeholder={attachedPdf
           ? (de ? 'Was möchtest du zu dem PDF wissen?' : 'What do you want to know about the PDF?')
-          : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
+          : coachMode
+            ? (de ? 'Coach-Modus: Wlad antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
+            : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
         className="resize-none min-h-[46px] max-h-32 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}
         className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
