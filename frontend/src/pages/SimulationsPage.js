@@ -303,7 +303,7 @@ export default function SimulationsPage() {
                 <div className="flex items-center justify-center gap-3 mt-2">
                   <p className="text-[11px] text-muted-foreground">{lang === 'de' ? 'Reagiere natürlich — per Stimme oder Text.' : 'Respond naturally — voice or text.'}</p>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.07] text-muted-foreground" data-testid="sim-round-counter">
-                    {lang === 'de' ? 'Runde' : 'Round'} {Math.max(1, messages.filter((m) => m.role === 'user').length)}
+                    {lang === 'de' ? 'Runde' : 'Round'} {messages.filter((m) => m.role === 'user').length + 1}
                   </span>
                 </div>
                 <p className="text-[10px] text-rose-500 dark:text-rose-400 font-bold mt-2 flex items-center justify-center gap-1">
