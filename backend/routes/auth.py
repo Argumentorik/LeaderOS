@@ -116,6 +116,16 @@ async def _create_session(user_id: str, ip_address: str, response: Response, met
     """Create a server-side session, set cookie, and clean up old sessions."""
     session_token = f"sess_{uuid.uuid4().hex}"
 
+    # Late-seed admin flag: allowlisted emails (ADMIN_SEED_EMAILS) get is_admin
+    # on ANY login — covers accounts created AFTER server startup (prod deploys).
+    from routes.admin import ADMIN_SEED_EMAILS
+    seed_emails = [e.lower() for e in ADMIN_SEED_EMAILS]
+    await db.users.update_one(
+        {"user_id": user_id, "is_admin": {"$ne": True},
+         "$or": [{"email_lower": {"$in": seed_emails}}, {"email": {"$in": seed_emails}}]},
+        {"$set": {"is_admin": True}},
+    )
+
     # Limit sessions per user to 10 (prevents session table bloat)
     existing = await db.user_sessions.find(
         {"user_id": user_id}, {"_id": 1}
