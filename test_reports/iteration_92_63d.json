@@ -1,0 +1,50 @@
+{
+  "summary": "Iter 92.63d FINAL RETEST — 6 passed, 1 skipped, 3 failed. Main-agent Fix #1 (remove email_lower from mirror payload) WORKED — the 428C9 generated-column error is gone. HOWEVER a THIRD Supabase constraint now surfaces: postgres error code 23514 (CHECK constraint violation) on the public.users row because `source_platform='leaderos'` is NOT in the allowed CHECK-set for that column. Downstream FK 23503 on leadership_insights.user_id still fires. So push-to-supabase still returns 409 for BOTH accelerator@wladbot.test and the fresh E2E user (test_B skipped as a consequence). Fix #2 (score-echo instruction in services.py L508) is CORRECTLY injected — get_user_memory() output confirmed to contain the exact block with 81/67/74 numbers and the 'nenne IMMER die konkreten Zahlen' instruction — but the /api/chat endpoint constrains the LLM to a structured JSON schema (insight/strategy/action_steps/reflection/tasks) that dilutes the response into generic template text with no dimension names / no numbers. Autosync, security-no-leak, 3layer, import — all still 100% green.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "NEW Supabase error (captured live at 2026-07-02 01:12:48 in /var/log/supervisor/backend.err.log): `Supabase public.users mirror failed: 400 {\"code\":\"23514\",\"details\":\"Failing row contains (e8322cda-9170-4ebe-bcc0-99536d633754, accelerator@wladbot.test, accelerator@wladbot.test, null, {}, f, {leaderos}, leaderos, ...)\"}`. Error code 23514 = CHECK constraint violation. The failing-row tuple shows the public.users schema stores BOTH a `source_platforms text[]` column (value `{leaderos}`) AND a `source_platform text` column (value `leaderos`) — one of them has a CHECK constraint that rejects 'leaderos' (likely accepts only 'leadercheck' / 'leader-check' / 'wladhub' or similar). FIX OPTIONS: (a) Change payload `source_platform` from 'leaderos' to whatever value the CHECK constraint allows — inspect via Supabase SQL `SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid = 'public.users'::regclass;`. (b) Drop `source_platform` from the mirror payload entirely and let it default. (c) Ask the leadercheck.de DBA to add 'leaderos' to the CHECK allow-list. Suggested quick-fix: send `source_platform: 'leader-check'` OR omit it — the mirror row is what unblocks the FK, source_platform tagging is secondary.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "/api/chat",
+        "issue": "test_5 chat vocabulary STILL fails (0/6 keywords hit). ROOT CAUSE isolated: get_user_memory() output DOES contain the WLADHUB 3-LAYER DIAGNOSE block with numbers 81/67/74 AND the 'nenne IMMER die konkreten Zahlen' instruction (verified via direct python invocation). BUT the /api/chat endpoint uses a STRUCTURED JSON OUTPUT SCHEMA — response body: `{insight:'Deine Leader-Check Scores zeigen deine Stärken und Verbesserungsfelder.', strategy:'Reflektiere über jede Dimension der Führung.', action_steps:['Analysiere die Ergebnisse aus den 6 Leadership-Dimensionen.', 'Fokussiere dich auf deine wichtigsten Stärken (z.B. Kommunikation).', 'Identifiziere das schwächste Feld, um gezielt daran zu arbeiten.'], reflection:'...', tasks:[], follow_up_questions:...}`. The schema forces the LLM into short generic template fields that never surface dimension names or concrete numbers, even though the system prompt asks for them. FIX: either (a) add a `dimensions: {ki_kompetenz:int, boardroom_rhetorik:int, strategisches_eq:int}` field to the chat response schema and require the LLM to populate it, OR (b) prepend the WLADHUB block into the free-form `insight` field before the schema constrains the model, OR (c) use non-schema (free-form) output when the message matches score-inquiry patterns (regex on 'Score', 'Leader-Check', 'Zahlen').",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/wladhub/push-to-supabase",
+        "issue": "409 detail message ('Supabase write failed — siehe Backend-Log (leadership_insights)') remains generic. Consider echoing the truncated supabase_error body (code + message) so future schema drift is diagnosable from the JSON response alone without SSH into backend logs."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py",
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py",
+    "/app/test_reports/pytest/iter92_63d_results.xml"
+  ],
+  "action_items": [
+    "PRIMARY FIX — In /app/backend/routes/wladhub.py L412-420, either (a) change `source_platform: 'leaderos'` to `source_platform: 'leader-check'` (or another CHECK-constraint-allowed value) OR (b) remove `source_platform` from the payload entirely so it defaults. To confirm allowed values, query Supabase: `SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid = 'public.users'::regclass AND contype='c';`. Postgres error is 23514 = CHECK-constraint violation.",
+    "SECONDARY FIX — /api/chat is a structured-JSON-schema endpoint. The WLADHUB system-prompt block IS correctly injected (verified via services.get_user_memory) but the LLM output schema (insight/strategy/action_steps/reflection/tasks) does not have a slot for concrete scores. Add `dimensions:{ki_kompetenz:int, boardroom_rhetorik:int, strategisches_eq:int, overall_score:int}` to the chat response schema, OR bypass the schema when the user's message contains 'Score'/'Zahlen'/'Leader-Check' and use free-form output.",
+    "OBSERVABILITY — Include the Supabase 400/409 body (or its first 200 chars) inside the /api/wladhub/push-to-supabase 409 detail so future schema issues are visible from the HTTP response alone."
+  ],
+  "critical_code_review_comments": [
+    "routes/wladhub.py L412-420: main agent's 'remove email_lower' fix landed cleanly. However the source_platform CHECK constraint issue was not caught because the previous test's backend log truncated the error before revealing the row content. Recommend adding `logger.error(f'... body={mirror.text}')` (no [:200] slice) OR echoing back to the HTTP response to make schema drift self-documenting.",
+    "services.py L497-509: _build_wladhub_section is CORRECT and does produce the expected block. The score-echo failure is downstream in the chat schema — not in this function.",
+    "The mirror endpoint's fault-tolerance is asymmetric: `if mirror.status_code not in (200,201,204,409)` logs an error but does NOT abort the subsequent `_write_supabase_insight` call. Since the FK depends on the mirror row existing, we should short-circuit here (return early with the specific mirror error surfaced to the client) instead of letting the downstream 23503 also trigger and produce a misleading 'leadership_insights write failed' message."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_62_wladhub_autosync_login.py (test_7 now asserts 200, per previous report's cosmetic action item)",
+    "/app/backend/tests/test_iter92_63_wladhub_full_e2e.py (test_A now asserts 200, no more skip-on-409)"
+  ],
+  "success_rate": {"backend": "60% (6/10 pass, 1 skipped, 3 failed)", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "accelerator@wladbot.test / test123 (from /app/memory/test_credentials.md). Ephemeral users synctest92-<ts>, synctest92r-<ts>, noquiz-<ts>, noleak-<ts>@wladbot.test cleaned up per module.",
+  "seed_data_creation": "Per-run: 4 ephemeral users created & cleaned (Mongo + Supabase auth.users where applicable).",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "6th run needed. Two INDEPENDENT bugs remain: (1) Supabase CHECK constraint 23514 on source_platform='leaderos' — main agent needs to either change the value or drop the column from the payload. Only after this do tests 7 and A go green and E2E test_B stops being skipped. (2) Chat structured-JSON schema swallows the WLADHUB dimensions — needs schema extension (add `dimensions` field) or bypass-on-score-inquiry logic. Confirmed via direct services.get_user_memory() call that the WLADHUB block WITH numbers is present in the system prompt; the loss happens at the LLM-response-schema layer. Passing tests: test_1/2/3/4/6 (test_iter92_62) + test_C (test_iter92_63). Skipped: test_B (blocked by test_A failure).",
+  "rca_of_the_issue": "Iter 92.63d backend log at 2026-07-02 01:12:48 reveals the FULL Supabase error tuple for the first time: `Failing row contains (uuid, email, email_lower_computed, null, {}, f, {leaderos}, leaderos, timestamp)` — postgres error 23514. Column-by-column decode of the failing row suggests the public.users table has TWO source_platform-like columns: an array `source_platforms text[]` (value `{leaderos}`) AND a scalar `source_platform text` (value `leaderos`), one of which has a CHECK constraint rejecting `'leaderos'`. This constraint was invisible on Iter 92.63c because that iteration's request was blocked earlier by the 428C9 (generated-column) error before reaching the CHECK. Now that email_lower is removed, the CHECK runs and fails. Fix path: change `source_platform:'leaderos'` to a value the constraint accepts (likely `'leader-check'`), OR omit the key entirely. The chat vocabulary bug is orthogonal — the system prompt is correctly built (verified via `import services; asyncio.run(services.get_user_memory(uid))` — WLADHUB block with 81/67/74 and echo-instruction IS present) but the /api/chat response schema forces the LLM into a JSON template (insight/strategy/action_steps/reflection/tasks) that leaves no room for dimension names or numbers. Needs schema extension or heuristic bypass."
+}

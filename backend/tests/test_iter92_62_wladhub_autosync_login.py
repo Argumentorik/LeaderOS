@@ -268,10 +268,10 @@ def test_7_push_to_supabase_known_fk_bug():
         "ki_kompetenz": 88, "boardroom_rhetorik": 72, "strategisches_eq": 79,
         "overall_score": 80, "strengths": [], "improvements": [], "action_plan": [],
     }, timeout=15)
-    r = s.post(f"{API}/wladhub/push-to-supabase", timeout=25)
-    # We EXPECT this to fail with 502 until main agent fixes the UUID→Supabase
-    # user_id mapping. If it starts succeeding, this test becomes an alarm.
-    if r.status_code == 200:
-        # Great — main agent may have fixed it
-        return
-    assert r.status_code in (400, 409, 500, 502), f"unexpected status: {r.status_code} {r.text[:200]}"
+    r = s.post(f"{API}/wladhub/push-to-supabase", timeout=30)
+    # Iter 92.63d — after removing email_lower (generated column) from the
+    # public.users mirror payload, this endpoint should now succeed (200).
+    print(f"push-to-supabase status={r.status_code} body={r.text[:400]}")
+    assert r.status_code == 200, f"expected 200 after 92.63d fix, got {r.status_code}: {r.text[:300]}"
+    body = r.json()
+    assert body.get("status") == "success", f"expected status=success, got {body}"

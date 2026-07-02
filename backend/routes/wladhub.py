@@ -415,7 +415,6 @@ async def push_scores_to_supabase(request: Request):
             json={
                 "id": sb_uid,
                 "email": user["email"],
-                "email_lower": user["email"].lower(),
                 "source_platform": "leaderos",
             },
         )

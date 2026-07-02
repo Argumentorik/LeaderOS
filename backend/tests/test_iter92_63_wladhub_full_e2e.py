@@ -115,14 +115,9 @@ def test_A_push_to_supabase_now_succeeds():
     r = s.post(f"{API}/wladhub/push-to-supabase", timeout=30)
     print(f"push-to-supabase status={r.status_code} body={r.text[:400]}")
 
-    if r.status_code == 409:
-        # Acceptable per spec if Supabase user creation was disallowed;
-        # verify the German error message is clear.
-        detail = r.json().get("detail", "")
-        assert "leadercheck.de" in detail or "leader-check.de" in detail or "Push nicht möglich" in detail, \
-            f"409 message must be clear German: {detail}"
-        pytest.skip(f"push returned 409 (Supabase user create disallowed): {detail}")
-    assert r.status_code == 200, f"push should succeed or 409, got {r.status_code}: {r.text[:300]}"
+    # Iter 92.63d — after removing email_lower (generated column) from the
+    # public.users mirror payload, this endpoint should now succeed with 200.
+    assert r.status_code == 200, f"expected 200 after 92.63d fix, got {r.status_code}: {r.text[:300]}"
     body = r.json()
     assert body.get("status") == "success"
 
