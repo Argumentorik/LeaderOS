@@ -23,12 +23,15 @@ CREDIT_COSTS = {
 }
 
 
+PAID_TIERS = {"standard", "accelerator", "enterprise", "plus", "starter"}
+
+
 async def check_and_deduct_credit(user: dict, action: str) -> dict:
     """Check if user has credits. Deduct 1 if free user. Returns status dict."""
     user_id = user["user_id"]
 
-    # Premium users = unlimited
-    if user.get("premium"):
+    # Premium flag, paid tier, or admin = unlimited
+    if user.get("premium") or user.get("is_admin") or user.get("tier") in PAID_TIERS:
         return {"allowed": True, "remaining": -1, "is_premium": True}
 
     # Get or initialize credit balance
@@ -68,7 +71,7 @@ async def get_credits(request: Request):
     """Get user's credit balance and usage info."""
     user = await get_current_user(request)
 
-    if user.get("premium"):
+    if user.get("premium") or user.get("is_admin") or user.get("tier") in PAID_TIERS:
         return {"balance": -1, "is_premium": True, "total_used": 0, "limit": -1, "soft_pause": False}
 
     credit_doc = await db.credits.find_one({"user_id": user["user_id"]}, {"_id": 0})
