@@ -45,9 +45,10 @@ async def list_providers():
     NOT secrets; they're embedded in the OAuth redirect anyway).
     """
     import os
+    from services_oauth import google_client_id
     return {
         "providers": available_providers(),
-        "google_client_id": os.environ.get("GOOGLE_CLIENT_ID") or "",
+        "google_client_id": google_client_id() or "",
         "apple_service_id": os.environ.get("APPLE_SERVICE_ID") or os.environ.get("APPLE_CLIENT_ID") or "",
         "microsoft_client_id": os.environ.get("MICROSOFT_CLIENT_ID") or "",
         "microsoft_tenant": os.environ.get("MICROSOFT_TENANT", "common"),

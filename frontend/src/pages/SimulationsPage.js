@@ -21,23 +21,27 @@ import { useNavigate } from 'react-router-dom';
 import { SimulationBriefing } from '../components/shared/SimulationBriefing';
 
 const difficultyConfig = {
-  easy: { gradient: 'from-green-500 to-emerald-500', text: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-500/10', border: 'border-green-200/40 dark:border-green-500/20' },
-  medium: { gradient: 'from-amber-500 to-orange-500', text: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200/40 dark:border-amber-500/20' },
-  hard: { gradient: 'from-red-500 to-pink-500', text: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-500/10', border: 'border-red-200/40 dark:border-red-500/20' },
+  easy: { gradient: 'from-green-500 to-emerald-500', text: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-500/10', border: 'border-green-200/40 dark:border-green-500/20', label: 'Leicht', labelEn: 'Easy', minutes: '~5 Min' },
+  medium: { gradient: 'from-amber-500 to-orange-500', text: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200/40 dark:border-amber-500/20', label: 'Mittel', labelEn: 'Medium', minutes: '~8 Min' },
+  hard: { gradient: 'from-red-500 to-pink-500', text: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-500/10', border: 'border-red-200/40 dark:border-red-500/20', label: 'Schwer', labelEn: 'Hard', minutes: '~10 Min' },
 };
 
-const ScenarioCard = ({ scenario, onStart, loading }) => {
+const ScenarioCard = ({ scenario, onStart, loading, de = true }) => {
   const diff = difficultyConfig[scenario.difficulty] || difficultyConfig.medium;
   return (
-    <Card className={`hover:shadow-xl hover:shadow-black/[0.06] hover:-translate-y-1 hover:border-[#BFFF00]/40 transition-all duration-300 group cursor-pointer border-black/[0.04] dark:border-white/[0.06]`} onClick={() => onStart(scenario)} data-testid={`scenario-${scenario.scenario_id}`}>
-      <CardContent className="p-5">
+    <Card className={`hover:shadow-xl hover:shadow-black/[0.06] hover:-translate-y-1 hover:border-[#BFFF00]/40 transition-all duration-300 group cursor-pointer border-black/[0.04] dark:border-white/[0.06] overflow-hidden`} onClick={() => onStart(scenario)} data-testid={`scenario-${scenario.scenario_id}`}>
+      <CardContent className="p-5 relative">
+        <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${diff.gradient} opacity-70`} />
         <div className="flex items-start justify-between mb-3">
           <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${diff.gradient} flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
             <Swords size={18} className="text-white" />
           </div>
-          <Badge className={`${diff.bg} ${diff.text} text-[10px] font-bold border-0`}>{scenario.difficulty}</Badge>
+          <div className="flex items-center gap-1.5">
+            <Badge className={`${diff.bg} ${diff.text} text-[10px] font-bold border-0`}>{de ? diff.label : diff.labelEn}</Badge>
+            <Badge className="bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground text-[10px] font-bold border-0">{diff.minutes}</Badge>
+          </div>
         </div>
-        <h3 className="text-[15px] font-bold mb-1">{scenario.title}</h3>
+        <h3 className="text-[15px] font-bold mb-1 group-hover:text-[#6B8A00] dark:group-hover:text-[#BFFF00] transition-colors">{scenario.title}</h3>
         <p className="text-[12px] text-muted-foreground mb-3 line-clamp-2">{scenario.description}</p>
         <div className="flex items-center justify-between">
           <p className="text-[11px] text-muted-foreground flex items-center gap-1"><Mic size={10} /> Voice + Text</p>
@@ -50,7 +54,19 @@ const ScenarioCard = ({ scenario, onStart, loading }) => {
   );
 };
 
-const ScoreDisplay = ({ scores, messages, navigate }) => {
+const ScenarioSkeleton = () => (
+  <div className="rounded-xl border border-black/[0.04] dark:border-white/[0.06] p-5 space-y-3 animate-pulse">
+    <div className="flex items-start justify-between">
+      <div className="w-10 h-10 rounded-xl bg-black/[0.06] dark:bg-white/[0.08]" />
+      <div className="w-16 h-5 rounded-full bg-black/[0.05] dark:bg-white/[0.07]" />
+    </div>
+    <div className="h-4 w-3/4 rounded bg-black/[0.06] dark:bg-white/[0.08]" />
+    <div className="h-3 w-full rounded bg-black/[0.04] dark:bg-white/[0.06]" />
+    <div className="h-3 w-2/3 rounded bg-black/[0.04] dark:bg-white/[0.06]" />
+  </div>
+);
+
+const ScoreDisplay = ({ scores, messages, navigate, onRestart }) => {
   const [showUpsell, setShowUpsell] = useState(false);
 
   const downloadReport = () => {
@@ -141,6 +157,11 @@ const ScoreDisplay = ({ scores, messages, navigate }) => {
         <Download size={14} className="mr-2" /> Vollständigen Bericht herunterladen
       </Button>
 
+      {/* Back to arena */}
+      <Button onClick={onRestart} className="w-full bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-black h-11 shadow-md shadow-[#BFFF00]/20" data-testid="sim-restart-btn">
+        <Swords size={15} className="mr-2" /> Neue Simulation starten
+      </Button>
+
       {/* Upsell */}
       <div className="upsell-border">
         <div className="p-5 flex items-center gap-4" data-testid="sim-upsell-banner">
@@ -163,7 +184,9 @@ const ScoreDisplay = ({ scores, messages, navigate }) => {
 export default function SimulationsPage() {
   const { lang } = useLanguage();
   const [scenarios, setScenarios] = useState([]);
+  const [scenariosLoading, setScenariosLoading] = useState(true);
   const [activeSim, setActiveSim] = useState(null);
+  const [activeScenario, setActiveScenario] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -172,7 +195,11 @@ export default function SimulationsPage() {
   const scrollRef = useRef(null);
   const navigate = useNavigate();
 
-  const loadScenarios = useCallback(async () => { try { const res = await api.get('/simulations/scenarios'); setScenarios(res.data); } catch (err) { logger.error('Failed to load scenarios:', err); } }, []);
+  const loadScenarios = useCallback(async () => {
+    try { const res = await api.get('/simulations/scenarios'); setScenarios(res.data); }
+    catch (err) { logger.error('Failed to load scenarios:', err); }
+    finally { setScenariosLoading(false); }
+  }, []);
   useEffect(() => { loadScenarios(); }, [loadScenarios]);
   useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
@@ -181,6 +208,7 @@ export default function SimulationsPage() {
     try {
       const res = await api.post('/simulations', { scenario: scenarioId, ...setup });
       setActiveSim(res.data.simulation_id);
+      setActiveScenario(briefingScenario);
       setMessages([{ role: 'assistant', content: res.data.initial_message }]);
       setScores(null);
       setBriefingScenario(null);
@@ -239,12 +267,27 @@ export default function SimulationsPage() {
         <ScrollArea className="flex-1 px-6 py-6 bg-gradient-mesh">
           {!activeSim && !scores && (
             <div className="space-y-6 max-w-4xl mx-auto">
-              <div>
-                <h3 className="text-2xl font-black mb-1">{lang === 'de' ? 'Leadership Training Arena' : 'Leadership Training Arena'}</h3>
-                <p className="text-sm text-muted-foreground">{lang === 'de' ? 'Übe reale Szenarien mit KI. Nutze deine Stimme für ein realistisches Erlebnis.' : 'Practice real-world scenarios with AI. Use your voice for a realistic experience.'}</p>
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] p-6 sm:p-8 text-white">
+                <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-[#BFFF00]/10 blur-3xl" />
+                <Badge className="bg-[#BFFF00] text-[#0A0A0A] border-0 text-[10px] font-black mb-3">TRAINING ARENA</Badge>
+                <h3 className="text-2xl sm:text-3xl font-black mb-1.5">{lang === 'de' ? 'Übe die Gespräche, die zählen.' : 'Practice the conversations that matter.'}</h3>
+                <p className="text-sm text-white/60 max-w-lg">{lang === 'de' ? 'Reale Leadership-Szenarien mit KI-Gegenüber. Sprich oder schreibe — am Ende bekommst du eine ehrliche Bewertung mit konkretem Feedback.' : 'Real leadership scenarios with an AI counterpart. Speak or type — at the end you get an honest score with concrete feedback.'}</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {[
+                    { icon: Swords, label: lang === 'de' ? `${scenarios.length || '…'} Szenarien` : `${scenarios.length || '…'} scenarios` },
+                    { icon: Mic, label: lang === 'de' ? 'Voice + Text' : 'Voice + text' },
+                    { icon: Trophy, label: lang === 'de' ? 'KI-Bewertung + Report' : 'AI score + report' },
+                  ].map((c) => (
+                    <span key={c.label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/[0.1] text-[11px] font-bold">
+                      <c.icon size={11} className="text-[#BFFF00]" /> {c.label}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {scenarios.map((s) => <ScenarioCard key={s.scenario_id} scenario={s} onStart={() => setBriefingScenario(s)} loading={loading} />)}
+                {scenariosLoading
+                  ? [1, 2, 3, 4, 5, 6].map((i) => <ScenarioSkeleton key={i} />)
+                  : scenarios.map((s) => <ScenarioCard key={s.scenario_id} scenario={s} onStart={() => setBriefingScenario(s)} loading={loading} de={lang === 'de'} />)}
               </div>
             </div>
           )}
@@ -252,15 +295,29 @@ export default function SimulationsPage() {
             <div className="max-w-3xl mx-auto space-y-3">
               {/* Immersive simulation header */}
               <div className="text-center mb-6">
-                <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white border-0 text-xs font-bold px-3 py-1">{lang === 'de' ? 'LIVE SIMULATION' : 'LIVE SIMULATION'}</Badge>
-                <p className="text-[11px] text-muted-foreground mt-2">{lang === 'de' ? 'Reagiere natürlich. Nutze Stimme oder Text. Die KI reagiert dynamisch.' : 'Respond naturally. Use voice or text. The AI reacts dynamically.'}</p>
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  {lang === 'de' ? 'LIVE SIMULATION' : 'LIVE SIMULATION'}
+                  {activeScenario?.title ? ` · ${activeScenario.title}` : ''}
+                </span>
+                <div className="flex items-center justify-center gap-3 mt-2">
+                  <p className="text-[11px] text-muted-foreground">{lang === 'de' ? 'Reagiere natürlich — per Stimme oder Text.' : 'Respond naturally — voice or text.'}</p>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.07] text-muted-foreground" data-testid="sim-round-counter">
+                    {lang === 'de' ? 'Runde' : 'Round'} {Math.max(1, messages.filter((m) => m.role === 'user').length)}
+                  </span>
+                </div>
                 <p className="text-[10px] text-rose-500 dark:text-rose-400 font-bold mt-2 flex items-center justify-center gap-1">
                   <Square size={10} fill="currentColor" />
                   {lang === 'de' ? 'Wenn fertig: oben rechts auf "JETZT BEENDEN" klicken' : 'When done: click "END NOW" in top right corner'}
                 </p>
               </div>
               {messages.map((msg, i) => (
-                <div key={`sim-msg-${msg.role}-${i}`} className={`flex ${msg.role === 'user' ? 'justify-end' : ''} animate-fade-in`}>
+                <div key={`sim-msg-${msg.role}-${i}`} className={`flex ${msg.role === 'user' ? 'justify-end' : 'items-start gap-2'} animate-fade-in`}>
+                  {msg.role !== 'user' && (
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center shrink-0 mt-1 shadow-sm">
+                      <span className="text-[10px] font-black text-white select-none">{(activeScenario?.title || 'KI').slice(0, 1).toUpperCase()}</span>
+                    </div>
+                  )}
                   <div className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${
                     msg.role === 'user'
                       ? 'bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white rounded-tr-sm'
@@ -270,11 +327,29 @@ export default function SimulationsPage() {
                   </div>
                 </div>
               ))}
-              {loading && <div className="flex"><div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl px-4 py-3 flex gap-1 shadow-sm"><div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" /><div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" /><div className="w-2 h-2 rounded-full bg-sky-50 dark:bg-sky-500/100 typing-dot" /></div></div>}
+              {loading && (
+                <div className="flex items-start gap-2" data-testid="sim-typing-indicator">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center shrink-0 mt-1 shadow-sm">
+                    <span className="text-[10px] font-black text-white select-none">{(activeScenario?.title || 'KI').slice(0, 1).toUpperCase()}</span>
+                  </div>
+                  <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1 shadow-sm">
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-400 typing-dot" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-400 typing-dot" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-400 typing-dot" />
+                  </div>
+                </div>
+              )}
               <div ref={scrollRef} />
             </div>
           )}
-          {scores && <ScoreDisplay scores={scores} messages={messages} navigate={navigate} />}
+          {scores && (
+            <ScoreDisplay
+              scores={scores}
+              messages={messages}
+              navigate={navigate}
+              onRestart={() => { setScores(null); setMessages([]); setActiveScenario(null); }}
+            />
+          )}
         </ScrollArea>
 
         {briefingScenario && (

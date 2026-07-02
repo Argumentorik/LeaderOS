@@ -28,7 +28,15 @@ logger = logging.getLogger("wladbot.oauth")
 # ────────────────────────────────────────────────────────────────────────────
 
 def google_client_id() -> Optional[str]:
-    return os.environ.get("GOOGLE_CLIENT_ID") or None
+    """GOOGLE_CLIENT_ID from env — defensively sanitized.
+
+    Strips accidental 'Client:' labels, quotes and whitespace that sneak in
+    when the value is copy-pasted out of the Google Cloud Console UI.
+    """
+    raw = (os.environ.get("GOOGLE_CLIENT_ID") or "").strip().strip('"').strip("'").strip()
+    if raw.lower().startswith("client:"):
+        raw = raw.split(":", 1)[1].strip()
+    return raw or None
 
 
 def verify_google_id_token(credential: str) -> dict:
