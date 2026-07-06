@@ -185,7 +185,7 @@ UNTERSTÜTZENDE FRAMEWORKS (NUR wenn die Analyse-Tiefe es erfordert, NACH SEXIER
 ANALYSIS-STRUKTUR (verbindlich):
 1. ZUERST: 3 Stärken (was gut war, jeweils mit SEXIER-Bezug)
 2. DANN: 3 Verbesserungen (mit konkreter Wlad-Übung, jeweils mit SEXIER-Bezug)
-3. DANACH ALS SUPPORTING TAB: Logos/Ethos/Pathos-Bewertung -- nur Scores, kurz, nicht als Haupt-Erklärung
+3. DANACH: SEXIER-Scores — jedes der 6 Felder einzeln bewerten (0-100). Logos/Ethos/Pathos NICHT als eigene Scores ausgeben, höchstens als kurze Randnotiz im Text.
 
 WICHTIG: Gib dein Feedback IMMER auf DEUTSCH. Sprich den User direkt an ("Du hast...", "Deine Stärke ist...").
 Referenziere IMMER das SEXIER-Modell als Haupt-Framework.
@@ -361,13 +361,18 @@ Bewerte DETAILLIERT anhand von Wlads Methodik. Antworte als JSON:
   "confidence_score": 0-100,
   "empathy_score": 0-100,
   "structure_score": 0-100,
-  "logos_score": 0-100,
-  "ethos_score": 0-100,
-  "pathos_score": 0-100,
+  "sexier_scores": {{
+    "storytelling": 0-100,
+    "emotion": 0-100,
+    "examples": 0-100,
+    "interaktion": 0-100,
+    "expression": 0-100,
+    "roter_faden": 0-100
+  }},
   "transcript": "das originale Transkript",
   "wlad_assessment": "3-4 Sätze persönliches Feedback im Stil von Wlad Jachtchenko.",
   "framework_feedback": {{
-    "drei_saeulen": "Wie gut nutzt der User Logos, Ethos und Pathos?",
+    "sexier": "Wlads SEXIER-Bewertung: Pro Buchstabe (S/E/X/I/E/R) 1 kurzer Satz mit konkretem Transkript-Bezug. Am Ende: 1 Wlad-Übung für das schwächste Feld.",
     "kommunikationsquadrant": "Bewertung: Klarheit, Empathie, Struktur, Mut."
   }},
   "strengths": ["GENAU 3 Stärken — konkret mit Beispiel-Zitat aus dem Transkript", "Stärke 2 mit Zitat", "Stärke 3 mit Zitat"],
@@ -382,7 +387,7 @@ Bewerte DETAILLIERT anhand von Wlads Methodik. Antworte als JSON:
   "rewrite_suggestion": "Überarbeitete Version der Rede (2-3 Absätze).",
   "practice_exercises": ["Übung 1", "Übung 2", "Übung 3"],
   "improvement_vs_previous": "Vergleich mit vorherigen Versuchen (falls vorhanden)",
-  "deep_feedback_prompt": "Eine konkrete Frage, die der User dem WladBot-Chat stellen könnte, um tiefer in das Thema einzusteigen (z.B. 'Wie übe ich für das nächste Boardroom-Meeting den Logos-Anteil?')."
+  "deep_feedback_prompt": "Eine konkrete Frage, die der User dem WladBot-Chat stellen könnte, um tiefer in das Thema einzusteigen (z.B. 'Wie baue ich in mein nächstes Team-Meeting mehr Storytelling nach dem SEXIER-Modell ein?')."
 }}
 
 WICHTIG: strengths MUSS exakt 3 Einträge haben, improvements MUSS exakt 3 Einträge haben — keine 2, keine 4."""
@@ -523,7 +528,7 @@ async def _persist_video_analysis(user_id: str, challenge_id: str, analysis: dic
         user_id,
         "video_challenge_completed",
         comm_bonus=max(1, overall // 25),
-        leadership_bonus=max(1, analysis.get("ethos_score", overall) // 33),
+        leadership_bonus=max(1, overall // 33),
         eq_bonus=max(1, analysis.get("empathy_score", 0) // 33),
         metadata={"challenge_id": challenge_id, "score": overall, "attempt": attempt_count},
     )
@@ -673,6 +678,8 @@ async def get_shared_mission(slug: str):
         "confidence_score": analysis.get("confidence_score"),
         "empathy_score": analysis.get("empathy_score"),
         "structure_score": analysis.get("structure_score"),
+        "sexier_scores": analysis.get("sexier_scores"),
+        # Legacy fields — only present on entries analysed before the SEXIER switch
         "logos_score": analysis.get("logos_score"),
         "ethos_score": analysis.get("ethos_score"),
         "pathos_score": analysis.get("pathos_score"),

@@ -307,7 +307,42 @@ export const AnalysisResults = ({
           </span>
         </div>
 
-        {(analysis.logos_score || analysis.ethos_score || analysis.pathos_score) && (
+        {analysis.sexier_scores && (
+          <MagicBox icon={Brain} title={de ? 'Wlads SEXIER-Analyse' : "Wlad's SEXIER Analysis"} accent="#BFFF00" testId="magic-box-sexier">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+              {[
+                { letter: 'S', label: 'Storytelling', desc: de ? 'Geschichte & Botschaft' : 'Story & message', score: analysis.sexier_scores.storytelling, color: '#F59E0B' },
+                { letter: 'E', label: 'Emotion', desc: de ? 'Gefühle gezielt nutzen' : 'Using emotions', score: analysis.sexier_scores.emotion, color: '#EC4899' },
+                { letter: 'X', label: 'Examples', desc: de ? 'Konkrete Beispiele' : 'Concrete examples', score: analysis.sexier_scores.examples, color: '#6366F1' },
+                { letter: 'I', label: 'Interaktion', desc: de ? 'Publikum ansprechen' : 'Engaging the audience', score: analysis.sexier_scores.interaktion, color: '#0EA5E9' },
+                { letter: 'E', label: 'Expression', desc: de ? 'Stimme, Tempo, Gestik' : 'Voice, pace, gestures', score: analysis.sexier_scores.expression, color: '#8B5CF6' },
+                { letter: 'R', label: de ? 'Roter Faden' : 'Red Thread', desc: de ? 'Klare Struktur' : 'Clear structure', score: analysis.sexier_scores.roter_faden, color: '#10B981' },
+              ].map((p, i) => (
+                <div key={`${p.letter}-${i}`} className="rounded-xl p-4 bg-white/60 dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] text-center" data-testid={`sexier-tile-${i}`}>
+                  <p className="text-[10px] font-black tracking-widest" style={{ color: p.color }}>{p.letter}</p>
+                  <p className="text-3xl font-black" style={{ color: p.color, fontFamily: 'Outfit, sans-serif' }}>{p.score || 0}</p>
+                  <p className="text-[11px] font-bold mt-1">{p.label}</p>
+                  <p className="text-[9px] text-muted-foreground">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+            {analysis.framework_feedback?.sexier && (
+              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
+                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Wlads Bewertung' : "Wlad's verdict"}</p>
+                <SmartText text={analysis.framework_feedback.sexier} accent="#BFFF00" icon={Lightbulb} />
+              </div>
+            )}
+            {analysis.framework_feedback?.kommunikationsquadrant && (
+              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
+                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Kommunikationsquadrant' : 'Communication Quadrant'}</p>
+                <SmartText text={analysis.framework_feedback.kommunikationsquadrant} accent="#10B981" icon={Target} />
+              </div>
+            )}
+          </MagicBox>
+        )}
+
+        {/* Legacy fallback — entries analysed BEFORE the SEXIER switch */}
+        {!analysis.sexier_scores && (analysis.logos_score || analysis.ethos_score || analysis.pathos_score) && (
           <MagicBox icon={Brain} title={de ? '3 Säulen der Überzeugung (Logos · Ethos · Pathos)' : '3 Pillars (Logos · Ethos · Pathos)'} accent="#BFFF00" testId="magic-box-pillars">
             <div className="grid grid-cols-3 gap-3 mt-3">
               {[

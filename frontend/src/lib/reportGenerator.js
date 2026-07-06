@@ -151,10 +151,33 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
       ` : ''}
     </section>`;
 
-  // ── PAGE 2 — 3 Säulen + Kommunikationsquadrant ───────────────────────────
-  const page2 = analysis?.framework_feedback || analysis?.logos_score ? `
+  // ── PAGE 2 — Wlads SEXIER-Modell (Fallback: 3 Säulen für Alt-Analysen) ───
+  const sexier = analysis?.sexier_scores;
+  const page2 = analysis?.framework_feedback || sexier || analysis?.logos_score ? `
     <section class="page">
       ${HEADER_BAND('02 · Wlad-Frameworks')}
+      ${sexier ? `
+      <h2 class="page-h2">Wlads SEXIER-Modell.</h2>
+      <p class="page-lead">Storytelling · Emotion · Examples · Interaktion · Expression · Roter Faden — die 6 Hebel überzeugender Kommunikation.</p>
+
+      <div class="pillar-grid">
+        ${[
+          { name: 'S · Storytelling', short: 'Geschichte & Botschaft', score: sexier.storytelling, color: BRAND.warning },
+          { name: 'E · Emotion', short: 'Gefühle gezielt nutzen', score: sexier.emotion, color: BRAND.pink },
+          { name: 'X · Examples', short: 'Konkrete Beispiele', score: sexier.examples, color: BRAND.blue },
+          { name: 'I · Interaktion', short: 'Publikum ansprechen', score: sexier.interaktion, color: BRAND.blue },
+          { name: 'E · Expression', short: 'Stimme, Tempo, Gestik', score: sexier.expression, color: BRAND.violet },
+          { name: 'R · Roter Faden', short: 'Klare Struktur', score: sexier.roter_faden, color: BRAND.success || BRAND.violet },
+        ].map(p => `
+          <div class="pillar-card">
+            <p class="pillar-name">${p.name}</p>
+            <p class="pillar-num" style="color:${scoreColor(p.score || 0)}">${p.score || 0}</p>
+            <p class="pillar-cap">${p.short}</p>
+            <div class="pillar-bar"><div style="width:${p.score || 0}%;background:${p.color}"></div></div>
+          </div>
+        `).join('')}
+      </div>
+      ` : `
       <h2 class="page-h2">3 Säulen der Überzeugung.</h2>
       <p class="page-lead">Aristoteles' Logos · Ethos · Pathos — von Wlad operationalisiert. Jede Säule braucht Aufmerksamkeit.</p>
 
@@ -172,7 +195,13 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
           </div>
         `).join('')}
       </div>
+      `}
 
+      ${analysis?.framework_feedback?.sexier ? `
+        <div class="quote-card">
+          <p class="quote-eyebrow">SEXIER-Analyse</p>
+          <p class="quote-body">${escapeHtml(analysis.framework_feedback.sexier)}</p>
+        </div>` : ''}
       ${analysis?.framework_feedback?.drei_saeulen ? `
         <div class="quote-card">
           <p class="quote-eyebrow">3-Säulen Analyse</p>

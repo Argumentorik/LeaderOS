@@ -165,8 +165,24 @@ export default function SharedMissionPage() {
           </CardContent>
         </Card>
 
-        {/* 3 Pillars */}
-        {(data.logos_score || data.ethos_score || data.pathos_score) > 0 && (
+        {/* SEXIER (neu) — Fallback: 3 Säulen für Alt-Analysen */}
+        {data.sexier_scores ? (
+          <Card className="border-[#BFFF00]/15 bg-white/[0.02]">
+            <CardContent className="p-6">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#BFFF00] mb-4">
+                Wlads SEXIER-Analyse
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <ScoreTile label="S · Storytelling" value={data.sexier_scores.storytelling} color="#F59E0B" />
+                <ScoreTile label="E · Emotion" value={data.sexier_scores.emotion} color="#EC4899" />
+                <ScoreTile label="X · Examples" value={data.sexier_scores.examples} color="#6366F1" />
+                <ScoreTile label="I · Interaktion" value={data.sexier_scores.interaktion} color="#0EA5E9" />
+                <ScoreTile label="E · Expression" value={data.sexier_scores.expression} color="#8B5CF6" />
+                <ScoreTile label="R · Roter Faden" value={data.sexier_scores.roter_faden} color="#10B981" />
+              </div>
+            </CardContent>
+          </Card>
+        ) : (data.logos_score || data.ethos_score || data.pathos_score) > 0 && (
           <Card className="border-[#BFFF00]/15 bg-white/[0.02]">
             <CardContent className="p-6">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#BFFF00] mb-4">

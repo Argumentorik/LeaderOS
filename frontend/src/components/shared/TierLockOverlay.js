@@ -7,9 +7,9 @@ import { PricingModal } from './PricingModal';
 const FEATURE_LABELS = {
   video_analysis: {
     title: 'Video-Analyse ist exklusiv in Leadership OS PLUS',
-    subtitle: 'Nimm deine Rede auf · KI analysiert Rhetorik, Struktur, Pathos · Pro-Level Report',
+    subtitle: 'Nimm deine Rede auf · KI analysiert nach Wlads SEXIER-Modell · Pro-Level Report',
     benefits: [
-      'KI-basierte Redner-Analyse (Logos/Ethos/Pathos)',
+      'KI-Redner-Analyse nach Wlads SEXIER-Modell',
       'Füllwort-, Tempo- & Struktur-Check',
       'Persönliches Feedback von Wlad-Methodik',
       'Pro-Level Report als PDF-Download',

@@ -31,7 +31,7 @@ const FLOWS_DE = {
     title: 'Dein Check-in wird analysiert',
     agents: [
       { name: 'Kontext-Agent', status: 'Deine Check-in Historie wird gelesen' },
-      { name: 'Wlad-Methodik Engine', status: 'Passende Frameworks werden gewählt (SBI, Logos/Ethos/Pathos)' },
+      { name: 'Wlad-Methodik Engine', status: 'Passende Frameworks werden gewählt (SEXIER, SBI)' },
       { name: 'Emotions-Analyse', status: 'Dein mentaler Zustand wird erfasst' },
       { name: 'Personalisierungs-Agent', status: 'Mikro-Tipp für morgen wird generiert' },
       { name: 'Scoring-Agent', status: 'XP-Impact wird berechnet' },
@@ -62,7 +62,7 @@ const FLOWS_DE = {
     agents: [
       { name: 'Whisper-Agent', status: 'Audio wird in Text transkribiert' },
       { name: 'Kontext-Agent', status: 'Deine bisherigen Versuche werden geladen' },
-      { name: 'Rhetorik-Analyse', status: 'Klarheit, Struktur, Logos/Ethos/Pathos' },
+      { name: 'Rhetorik-Analyse', status: 'SEXIER-Modell: Storytelling, Emotion, Examples, Interaktion, Expression, Roter Faden' },
       { name: 'Sprach-Analyse', status: 'Füllwörter, Tempo, Schlüsselphrasen' },
       { name: 'Wlad-Assessment', status: 'Persönliches Feedback wird erstellt' },
       { name: 'Report-Generator', status: 'Übungs-Plan wird generiert' },
@@ -134,7 +134,7 @@ const FLOWS_EN = {
     agents: [
       { name: 'Whisper Agent', status: 'Transcribing audio to text' },
       { name: 'Context Agent', status: 'Loading previous attempts' },
-      { name: 'Rhetoric Analysis', status: 'Clarity, structure, Logos/Ethos/Pathos' },
+      { name: 'Rhetoric Analysis', status: 'SEXIER model: storytelling, emotion, examples, interaction, expression, red thread' },
       { name: 'Speech Analysis', status: 'Filler words, pace, key phrases' },
       { name: 'Wlad Assessment', status: 'Crafting personal feedback' },
       { name: 'Report Generator', status: 'Generating practice plan' },
