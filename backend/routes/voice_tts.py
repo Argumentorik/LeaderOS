@@ -63,7 +63,7 @@ VOICE_REGISTRY: dict[str, dict] = {
     "wlad": {
         "voice_id": os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "pNInz6obpgDQGcFmaJgB"),  # "Adam" — deep, neutral male (standard AI sound)
         "name": "Wlad Jachtchenko",
-        "stability": 0.55, "similarity_boost": 0.75, "style": 0.30,
+        "stability": 0.72, "similarity_boost": 0.80, "style": 0.12,
         "language": "de",
     },
     # 8 Challengers

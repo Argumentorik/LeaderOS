@@ -80,6 +80,11 @@ const VideoCard = ({ video, onPlay, onUpgrade, newlyUnlocked }) => {
             <Crown size={9} /> Accelerator
           </div>
         )}
+        {!unlocked && (
+          <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white/90 text-[9px] font-black uppercase tracking-wider" data-testid={`video-locked-badge-${video.id}`}>
+            <Lock size={9} /> Gesperrt
+          </div>
+        )}
         {!exclusive && unlocked && (
           <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30">
             Gratis

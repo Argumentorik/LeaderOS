@@ -4,6 +4,24 @@ import { Button } from '../ui/button';
 import { User, Briefcase, Users, Target, TrendingUp, ShieldCheck, Download, Video, Star, ArrowRight } from 'lucide-react';
 import { ResultCards } from './ResultCards';
 import SmartText from '../shared/SmartText';
+import VoicePlayButton from '../shared/VoicePlayButton';
+
+// Compose a spoken summary from whatever fields the workflow returned (max ~800 chars)
+const buildSpeechText = (result) => {
+  const parts = [];
+  if (result.event_concept) parts.push(result.event_concept);
+  if (result.decision_summary) parts.push(result.decision_summary);
+  if (typeof result.recommendation === 'string') parts.push(`Meine Empfehlung: ${result.recommendation}`);
+  if (result.optimized_text) parts.push(result.optimized_text);
+  if (typeof result.result === 'string') parts.push(result.result);
+  if (Array.isArray(result.tips) && result.tips.length) {
+    parts.push('Meine wichtigsten Tipps: ' + result.tips.slice(0, 3).map(t => (typeof t === 'string' ? t : '')).filter(Boolean).join('. '));
+  }
+  if (Array.isArray(result.next_steps) && result.next_steps.length) {
+    parts.push('Deine nächsten Schritte: ' + result.next_steps.slice(0, 3).map(t => (typeof t === 'string' ? t : t?.action || '')).filter(Boolean).join('. '));
+  }
+  return parts.filter(Boolean).join(' ').slice(0, 790);
+};
 
 const PersonaSummary = ({ persona, de }) => (
   <Card className="bg-gradient-to-r from-[#BFFF00]/[0.06] to-[#BFFF00]/[0.04] dark:from-[#BFFF00]/[0.04] dark:to-[#BFFF00]/[0.03] border-[#BFFF00]/20 dark:border-[#BFFF00]/10">
@@ -61,11 +79,29 @@ export const WorkflowResultPanel = ({
   result, persona, onDownloadPDF, onNavigateVideo, onOpenUpsell, de,
 }) => (
   <div className="space-y-5 animate-fade-in">
-    <div className="text-center py-2">
+    <div className="text-center py-2 space-y-3">
       <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 text-xs font-bold px-3 py-1">
         {de ? 'WORKFLOW ABGESCHLOSSEN' : 'WORKFLOW COMPLETE'}
       </Badge>
+      {buildSpeechText(result) && (
+        <div className="flex justify-center">
+          <VoicePlayButton
+            text={buildSpeechText(result)}
+            persona="wlad"
+            variant="primary"
+            size="md"
+            label={de ? 'Ergebnis anhören' : 'Listen to result'}
+            testId="workflow-audio-btn"
+          />
+        </div>
+      )}
     </div>
+
+    {result.format_error && result.raw_text && (
+      <div className="p-5 rounded-2xl bg-white/60 dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08]" data-testid="workflow-raw-fallback">
+        <SmartText text={result.raw_text} accent="#BFFF00" />
+      </div>
+    )}
 
     {(persona.role || persona.goals) && <PersonaSummary persona={persona} de={de} />}
 

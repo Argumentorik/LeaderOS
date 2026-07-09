@@ -173,12 +173,12 @@ export default function SharedMissionPage() {
                 Wlads SEXIER-Analyse
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <ScoreTile label="S · Storytelling" value={data.sexier_scores.storytelling} color="#F59E0B" />
-                <ScoreTile label="E · Emotion" value={data.sexier_scores.emotion} color="#EC4899" />
-                <ScoreTile label="X · Examples" value={data.sexier_scores.examples} color="#6366F1" />
-                <ScoreTile label="I · Interaktion" value={data.sexier_scores.interaktion} color="#0EA5E9" />
-                <ScoreTile label="E · Expression" value={data.sexier_scores.expression} color="#8B5CF6" />
-                <ScoreTile label="R · Roter Faden" value={data.sexier_scores.roter_faden} color="#10B981" />
+                <ScoreTile label="S · Statement" value={data.sexier_scores.statement} color="#F59E0B" />
+                <ScoreTile label="E · Explanation" value={data.sexier_scores.explanation} color="#EC4899" />
+                <ScoreTile label="X · eXample" value={data.sexier_scores.example} color="#6366F1" />
+                <ScoreTile label="I · Impact" value={data.sexier_scores.impact} color="#0EA5E9" />
+                <ScoreTile label="E · Expl. of Impact" value={data.sexier_scores.impact_explanation} color="#8B5CF6" />
+                <ScoreTile label="R · Rebuttal" value={data.sexier_scores.rebuttal} color="#10B981" />
               </div>
             </CardContent>
           </Card>

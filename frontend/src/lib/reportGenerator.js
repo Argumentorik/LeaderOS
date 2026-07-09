@@ -158,16 +158,16 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
       ${HEADER_BAND('02 · Wlad-Frameworks')}
       ${sexier ? `
       <h2 class="page-h2">Wlads SEXIER-Modell.</h2>
-      <p class="page-lead">Storytelling · Emotion · Examples · Interaktion · Expression · Roter Faden — die 6 Hebel überzeugender Kommunikation.</p>
+      <p class="page-lead">Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal — die 6 Bausteine eines unwiderstehlichen Arguments.</p>
 
       <div class="pillar-grid">
         ${[
-          { name: 'S · Storytelling', short: 'Geschichte & Botschaft', score: sexier.storytelling, color: BRAND.warning },
-          { name: 'E · Emotion', short: 'Gefühle gezielt nutzen', score: sexier.emotion, color: BRAND.pink },
-          { name: 'X · Examples', short: 'Konkrete Beispiele', score: sexier.examples, color: BRAND.blue },
-          { name: 'I · Interaktion', short: 'Publikum ansprechen', score: sexier.interaktion, color: BRAND.blue },
-          { name: 'E · Expression', short: 'Stimme, Tempo, Gestik', score: sexier.expression, color: BRAND.violet },
-          { name: 'R · Roter Faden', short: 'Klare Struktur', score: sexier.roter_faden, color: BRAND.success || BRAND.violet },
+          { name: 'S · Statement', short: 'Klare These', score: sexier.statement, color: BRAND.warning },
+          { name: 'E · Explanation', short: 'Tiefe Begründung', score: sexier.explanation, color: BRAND.pink },
+          { name: 'X · eXample', short: 'Konkretes Beispiel', score: sexier.example, color: BRAND.blue },
+          { name: 'I · Impact', short: 'Relevanz fürs Gegenüber', score: sexier.impact, color: BRAND.blue },
+          { name: 'E · Expl. of Impact', short: 'Warum es wichtig ist', score: sexier.impact_explanation, color: BRAND.violet },
+          { name: 'R · Rebuttal', short: 'Einwand entkräftet', score: sexier.rebuttal, color: BRAND.success || BRAND.violet },
         ].map(p => `
           <div class="pillar-card">
             <p class="pillar-name">${p.name}</p>

@@ -27,46 +27,63 @@ export async function generatePDF(reportData, filename = 'WladBot-Report') {
   const addSection = (title, items, color = brand) => {
     if (!items?.length) return;
     checkNewPage(30);
-    doc.setTextColor(...brand);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text(title, margin, y);
-    y += 6;
+    // Section header: colored chip + title + hairline
+    doc.setFillColor(...color);
+    doc.roundedRect(margin, y - 4, 3, 5.5, 1, 1, 'F');
     doc.setTextColor(...dark);
+    doc.setFontSize(11.5);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title.toUpperCase(), margin + 6, y);
+    doc.setDrawColor(230, 230, 236);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y + 2.5, margin + contentWidth, y + 2.5);
+    y += 8;
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     items.forEach((item, i) => {
       checkNewPage();
-      const text = typeof item === 'string' ? item : `${item.task || item.goal || item.topic || ''}: ${item.why || item.action || item.duration || ''}`;
-      const lines = doc.splitTextToSize(`${i + 1}. ${text}`, contentWidth - 8);
-      doc.text(lines, margin + 4, y);
-      y += lines.length * 4.5 + 1.5;
+      const text = typeof item === 'string'
+        ? item
+        : [item.time, item.activity || item.task || item.goal || item.topic || item.action, item.duration ? `(${item.duration})` : '', item.why]
+            .filter(Boolean).join(' — ');
+      const lines = doc.splitTextToSize(text, contentWidth - 12);
+      doc.setTextColor(...color);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${String(i + 1).padStart(2, '0')}`, margin + 1, y);
+      doc.setTextColor(...dark);
+      doc.setFont('helvetica', 'normal');
+      doc.text(lines, margin + 10, y);
+      y += lines.length * 4.5 + 2.5;
     });
     y += 5;
   };
 
-  // Header gradient bar
-  doc.setFillColor(...brand);
-  doc.rect(0, 0, pageWidth, 40, 'F');
-  doc.setFillColor(...brand);
-  doc.rect(pageWidth * 0.55, 0, pageWidth * 0.45, 40, 'F');
+  // ── Premium cover header: deep-black band + lime accent (100M-App look) ──
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, pageWidth, 48, 'F');
+  doc.setFillColor(191, 255, 0);
+  doc.rect(0, 48, pageWidth, 1.4, 'F');
+
+  doc.setTextColor(191, 255, 0);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('L E A D E R · O S   —   P O W E R E D   B Y   W L A D B O T   3 . 0', margin, 14);
 
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
-  doc.text('WladBot', margin, 18);
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.text('LEADERSHIP OS', margin, 26);
-
-  doc.setFontSize(11);
+  doc.setFontSize(19);
   const titleText = reportData.title || 'Leadership Report';
-  const titleLines = doc.splitTextToSize(titleText, contentWidth * 0.5);
-  doc.text(titleLines, pageWidth - margin, 18, { align: 'right' });
-  doc.setFontSize(8);
-  doc.text(new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' }), pageWidth - margin, 26 + (titleLines.length - 1) * 4, { align: 'right' });
+  const titleLines = doc.splitTextToSize(titleText, contentWidth);
+  doc.text(titleLines, margin, 26);
 
-  y = 52;
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(160, 160, 170);
+  doc.text(
+    `${new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' })}  ·  Basierend auf Wlad Jachtchenkos Frameworks  ·  leaderos.de`,
+    margin, 26 + titleLines.length * 8 + 2
+  );
+
+  y = 60;
 
   // Overall Assessment
   if (reportData.overall_assessment) {
@@ -281,16 +298,21 @@ export async function generatePDF(reportData, filename = 'WladBot-Report') {
     y += 5;
   }
 
-  // Footer on all pages
+  // Footer on all pages — dark band + lime page marker
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
-    doc.setFillColor(...brand);
-    doc.rect(0, 287, pageWidth, 10, 'F');
-    doc.setTextColor(255, 255, 255);
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 286, pageWidth, 11, 'F');
+    doc.setFillColor(191, 255, 0);
+    doc.rect(0, 286, pageWidth, 0.8, 'F');
+    doc.setTextColor(200, 200, 210);
     doc.setFontSize(7);
-    doc.text('WladBot Leadership OS — Basierend auf Wlad Jachtchenkos Methodik', margin, 293);
-    doc.text(`Seite ${i}/${pageCount}`, pageWidth - margin, 293, { align: 'right' });
+    doc.text('Leader·OS — Dein Leadership Operating System · Basierend auf Wlad Jachtchenkos Methodik', margin, 292.5);
+    doc.setTextColor(191, 255, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${i} / ${pageCount}`, pageWidth - margin, 292.5, { align: 'right' });
+    doc.setFont('helvetica', 'normal');
   }
 
   doc.save(`${filename}.pdf`);

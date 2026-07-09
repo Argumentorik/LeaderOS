@@ -62,7 +62,7 @@ const FLOWS_DE = {
     agents: [
       { name: 'Whisper-Agent', status: 'Audio wird in Text transkribiert' },
       { name: 'Kontext-Agent', status: 'Deine bisherigen Versuche werden geladen' },
-      { name: 'Rhetorik-Analyse', status: 'SEXIER-Modell: Storytelling, Emotion, Examples, Interaktion, Expression, Roter Faden' },
+      { name: 'Rhetorik-Analyse', status: 'SEXIER-Modell: Statement, Explanation, eXample, Impact, Rebuttal' },
       { name: 'Sprach-Analyse', status: 'Füllwörter, Tempo, Schlüsselphrasen' },
       { name: 'Wlad-Assessment', status: 'Persönliches Feedback wird erstellt' },
       { name: 'Report-Generator', status: 'Übungs-Plan wird generiert' },
@@ -134,7 +134,7 @@ const FLOWS_EN = {
     agents: [
       { name: 'Whisper Agent', status: 'Transcribing audio to text' },
       { name: 'Context Agent', status: 'Loading previous attempts' },
-      { name: 'Rhetoric Analysis', status: 'SEXIER model: storytelling, emotion, examples, interaction, expression, red thread' },
+      { name: 'Rhetoric Analysis', status: 'SEXIER model: statement, explanation, example, impact, rebuttal' },
       { name: 'Speech Analysis', status: 'Filler words, pace, key phrases' },
       { name: 'Wlad Assessment', status: 'Crafting personal feedback' },
       { name: 'Report Generator', status: 'Generating practice plan' },

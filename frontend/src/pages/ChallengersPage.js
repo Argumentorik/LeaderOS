@@ -164,6 +164,18 @@ export default function ChallengersPage() {
     } catch (err) { logger.error(err); } finally { setLoading(false); }
   };
 
+  const endChallenge = async () => {
+    if (loading || !activeChallenge) return;
+    setLoading(true);
+    stopSpeaking();
+    try {
+      const res = await api.post(`/challengers/${activeChallengerData.challenger_id}/message`, {
+        message: '', challenge_id: activeChallenge, finish: true
+      });
+      if (res.data.result) setResult(res.data.result);
+    } catch (err) { logger.error(err); } finally { setLoading(false); }
+  };
+
   const resetChallenge = () => {
     stopSpeaking();
     setActiveChallenge(null); setActiveChallengerData(null); setMessages([]); setResult(null);
@@ -257,6 +269,17 @@ export default function ChallengersPage() {
                   className="p-2 rounded-lg hover:bg-muted/50 transition-colors" data-testid="tts-toggle">
                   {ttsEnabled ? <Volume2 size={16} className="text-[#6B8A00] dark:text-[#BFFF00]" /> : <VolumeX size={16} className="text-muted-foreground" />}
                 </button>
+                {messages.filter(m => m.role === 'user').length >= 1 && (
+                  <Button
+                    size="sm"
+                    onClick={endChallenge}
+                    disabled={loading}
+                    className="h-8 px-3 bg-[#BFFF00] hover:bg-[#d4ff4d] text-[#0A0A0A] text-[11px] font-black shrink-0"
+                    data-testid="end-challenge-btn"
+                  >
+                    {lang === 'de' ? 'Beenden & Feedback' : 'End & Feedback'}
+                  </Button>
+                )}
                 <Badge variant="outline" className="text-[9px] font-bold border-amber-300 text-amber-600 shrink-0"><Zap size={8} className="mr-0.5" /> LIVE</Badge>
               </>
             )}
@@ -424,6 +447,30 @@ export default function ChallengersPage() {
               </CardContent></Card>
             )}
           </div>
+          {result?.detailed_analysis && (
+            <Card className="bg-white/80 dark:bg-card/80" data-testid="challenge-detailed-analysis"><CardContent className="p-5">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">{lang === 'de' ? 'Detail-Analyse' : 'Detailed Analysis'}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  { key: 'kommunikation', label: lang === 'de' ? 'Kommunikation' : 'Communication', color: '#0EA5E9' },
+                  { key: 'fuehrung', label: lang === 'de' ? 'Führung' : 'Leadership', color: '#BFFF00' },
+                  { key: 'strategie', label: lang === 'de' ? 'Strategie' : 'Strategy', color: '#8B5CF6' },
+                  { key: 'authentizitaet', label: lang === 'de' ? 'Authentizität' : 'Authenticity', color: '#EC4899' },
+                ].filter(d => result.detailed_analysis[d.key]).map(d => (
+                  <div key={d.key} className="p-3 rounded-xl bg-muted/30 border-l-[3px]" style={{ borderLeftColor: d.color }}>
+                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: d.color }}>{d.label}</p>
+                    <p className="text-xs leading-relaxed">{cleanText(result.detailed_analysis[d.key])}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent></Card>
+          )}
+          {result?.next_steps?.length > 0 && (
+            <Card className="border-l-[3px] border-l-[#BFFF00]" data-testid="challenge-next-steps"><CardContent className="p-4">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B8A00] dark:text-[#BFFF00] mb-2">{lang === 'de' ? 'Deine nächsten 7 Tage' : 'Your Next 7 Days'}</p>
+              <ul className="space-y-1.5">{result.next_steps.map((s, i) => <li key={`ns-${i}`} className="text-xs flex gap-2"><span className="font-black text-[#6B8A00] dark:text-[#BFFF00] shrink-0">{i + 1}.</span>{cleanText(s)}</li>)}</ul>
+            </CardContent></Card>
+          )}
           {/* WladBot 3.0 — conversion nudge at the emotional peak (Iter 92.56) */}
           <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]" data-testid="result-wladbot-nudge">
             <WladBotAvatar size={40} live />

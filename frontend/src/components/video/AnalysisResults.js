@@ -311,12 +311,12 @@ export const AnalysisResults = ({
           <MagicBox icon={Brain} title={de ? 'Wlads SEXIER-Analyse' : "Wlad's SEXIER Analysis"} accent="#BFFF00" testId="magic-box-sexier">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
               {[
-                { letter: 'S', label: 'Storytelling', desc: de ? 'Geschichte & Botschaft' : 'Story & message', score: analysis.sexier_scores.storytelling, color: '#F59E0B' },
-                { letter: 'E', label: 'Emotion', desc: de ? 'Gefühle gezielt nutzen' : 'Using emotions', score: analysis.sexier_scores.emotion, color: '#EC4899' },
-                { letter: 'X', label: 'Examples', desc: de ? 'Konkrete Beispiele' : 'Concrete examples', score: analysis.sexier_scores.examples, color: '#6366F1' },
-                { letter: 'I', label: 'Interaktion', desc: de ? 'Publikum ansprechen' : 'Engaging the audience', score: analysis.sexier_scores.interaktion, color: '#0EA5E9' },
-                { letter: 'E', label: 'Expression', desc: de ? 'Stimme, Tempo, Gestik' : 'Voice, pace, gestures', score: analysis.sexier_scores.expression, color: '#8B5CF6' },
-                { letter: 'R', label: de ? 'Roter Faden' : 'Red Thread', desc: de ? 'Klare Struktur' : 'Clear structure', score: analysis.sexier_scores.roter_faden, color: '#10B981' },
+                { letter: 'S', label: 'Statement', desc: de ? 'Klare These' : 'Clear thesis', score: analysis.sexier_scores.statement, color: '#F59E0B' },
+                { letter: 'E', label: 'Explanation', desc: de ? 'Tiefe Begründung' : 'Deep reasoning', score: analysis.sexier_scores.explanation, color: '#EC4899' },
+                { letter: 'X', label: 'eXample', desc: de ? 'Konkretes Beispiel' : 'Concrete example', score: analysis.sexier_scores.example, color: '#6366F1' },
+                { letter: 'I', label: 'Impact', desc: de ? 'Relevanz fürs Gegenüber' : 'Relevance shown', score: analysis.sexier_scores.impact, color: '#0EA5E9' },
+                { letter: 'E', label: de ? 'Expl. of Impact' : 'Expl. of Impact', desc: de ? 'Warum es wichtig ist' : 'Why it matters', score: analysis.sexier_scores.impact_explanation, color: '#8B5CF6' },
+                { letter: 'R', label: 'Rebuttal', desc: de ? 'Einwand entkräftet' : 'Objection rebutted', score: analysis.sexier_scores.rebuttal, color: '#10B981' },
               ].map((p, i) => (
                 <div key={`${p.letter}-${i}`} className="rounded-xl p-4 bg-white/60 dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] text-center" data-testid={`sexier-tile-${i}`}>
                   <p className="text-[10px] font-black tracking-widest" style={{ color: p.color }}>{p.letter}</p>

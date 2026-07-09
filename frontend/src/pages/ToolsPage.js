@@ -9,6 +9,7 @@ import { toolsDe, toolsEn } from '../lib/toolsData';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
+import { toast } from 'sonner';
 import { PersonaStep, StepContent } from '../components/tools/WorkflowSteps';
 import { DeepAssistModal } from '../components/tools/DeepAssistModal';
 import { ToolsUpsellModal } from '../components/tools/ToolsUpsellModal';
@@ -40,19 +41,29 @@ export default function ToolsPage() {
   const [result, setResult] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showDeepAssist, setShowDeepAssist] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmitWorkflow = async () => {
     if (loading || !activeTool) return;
     setLoading(true);
     setResult(null);
+    setError('');
     const inputText = activeTool.steps.map((step, i) => `${step.q}: ${answers[i] || 'Nicht angegeben'}`).join('\n');
     try {
       const res = await api.post(`/tools/${activeTool.id}`, { input: inputText, persona: buildPersonaText(persona) });
       setResult(res.data.result);
       setCurrentStep(activeTool.steps.length);
-    } catch (err) { logger.error('Workflow error:', err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      logger.error('Workflow error:', err);
+      const detail = err?.response?.status === 402
+        ? (de ? 'Deine Credits sind aufgebraucht — bitte upgrade dein Paket.' : 'You are out of credits — please upgrade your plan.')
+        : (err?.response?.data?.detail || (de
+            ? 'Dein Ergebnis konnte nicht erstellt werden. Bitte klicke auf „Erneut versuchen" — deine Antworten sind gespeichert.'
+            : 'Your result could not be generated. Please click "Try again" — your answers are saved.'));
+      setError(detail);
+      toast.error(detail, { duration: 6000 });
+    } finally { setLoading(false); }
   };
 
   const handleDownloadPDF = async () => {
@@ -68,6 +79,11 @@ export default function ToolsPage() {
       recommendation: result.recommendation, counter_check: result.counter_check,
       high_impact: result.high_impact, development_plan: result.development_plan,
       agenda: result.agenda, next_steps: result.next_steps,
+      location_suggestions: result.location_suggestions,
+      location_tips: result.location_tips,
+      materials_needed: result.materials_needed,
+      budget_estimate: result.budget_estimate,
+      tips: result.tips,
       strengths: result.strengths, improvements: result.improvements || result.weaknesses,
     }, `WladBot-${activeTool.title.replace(/\s+/g, '-')}`);
   };
@@ -140,6 +156,15 @@ export default function ToolsPage() {
             )}
 
             {loading && <LoadingOverlay isOpen={loading} de={de} title={de ? 'Dein Leadership-Muster wird analysiert' : 'Analyzing your leadership pattern'} />}
+
+            {error && !loading && (
+              <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 space-y-3" data-testid="workflow-error-box">
+                <p className="text-sm font-semibold text-red-500">{error}</p>
+                <Button onClick={handleSubmitWorkflow} className="bg-[#BFFF00] text-[#0A0A0A] font-bold h-10" data-testid="workflow-retry-btn">
+                  {de ? 'Erneut versuchen' : 'Try again'}
+                </Button>
+              </div>
+            )}
 
             {isComplete && result && !loading && (
               <WorkflowResultPanel
