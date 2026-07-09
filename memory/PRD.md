@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 100 · 06.07.26] Godmode-Batch: SEXIER-Korrektur · Workflow-Bugfix · Challenger-Gesprächsmodus · Audio · Locks · PDF · Stimme** — Testing-Agent 100 % (iteration_100.json)
+  - **SEXIER-Definition korrigiert (Wlads Original!)**: S=Statement, E=Explanation, X=eXample, I=Impact, E=Explanation of Impact, R=Rebuttal — Prompt + `sexier_scores`-Schema (`statement/explanation/example/impact/impact_explanation/rebuttal`) + alle UI-Labels (AnalysisResults, PDF-Report, Share-Seite, Overlays). NICHT Storytelling/Emotion-Variante!
+  - **Workflow-Bug behoben** (Team-Event-Planer wiederholte letzte Frage): Ursache = verschluckter API-Fehler in `ToolsPage.js` → jetzt Error-Box (`workflow-error-box`) + „Erneut versuchen"-Button + Toast; `WorkflowResultPanel` mit `format_error`-Raw-Text-Fallback.
+  - **Challenger = echtes Gespräch** (`challengers.py`): `NO_SELF_END_INSTRUCTION` verhindert KI-Selbstabbruch; User beendet via „Beenden & Feedback"-Button (`end-challenge-btn`) → `finish:true` → DETAILLIERTES Feedback (5 Stärken, 5 Verbesserungen, Detail-Analyse Kommunikation/Führung/Strategie/Authentizität, 3 Next Steps) mit Reformat-Retry.
+  - **Audio (TTS)**: `workflow-audio-btn` auf Workflow-Ergebnis (buildSpeechText, max 790 chars) + `playbook-msg-audio-btn` auf jeder Wlad-Playbook-Nachricht (VoicePlayButton, persona wlad).
+  - **Wlads Stimme weicher**: stability 0.55→0.72, style 0.30→0.12 (`voice_tts.py`).
+  - **Lock-Badges**: Gesperrte Lern-Videos zeigen „Gesperrt"-Badge (`video-locked-badge-{id}`, LearningVideosTab). Endpoint: `/api/my-path/videos`.
+  - **PDF-Upgrade** (`pdfGenerator.js`): Dark-Premium-Header (Leader·OS Band + Lime-Akzent), nummerierte Sektionen mit Farbchips, dunkler Footer mit Lime-Seitenzahl; Agenda-Objekte (time/activity/duration) korrekt gerendert; Team-Event-Felder (locations/budget/materials/tips) im PDF.
 - [x] **[Iter 100 · 06.07.26] Video-Feedback auf Wlads SEXIER-Modell umgestellt (statt Logos·Ethos·Pathos)** — UI-verifiziert via Screenshot
   - **Backend `routes/video.py`**: Analyse-Schema liefert jetzt `sexier_scores` (storytelling/emotion/examples/interaktion/expression/roter_faden je 0-100) statt logos/ethos/pathos; `framework_feedback.sexier` (pro Buchstabe 1 Satz + Übung fürs schwächste Feld) ersetzt `drei_saeulen`; Share-Endpoint liefert sexier_scores mit; XP-Bonus nutzt overall statt ethos_score.
   - **Frontend**: `AnalysisResults.js` neue MagicBox „Wlads SEXIER-Analyse" mit 6 Score-Kacheln (`magic-box-sexier`, `sexier-tile-0..5`); `reportGenerator.js` PDF-Page-2 = SEXIER-Grid; `SharedMissionPage.js` SEXIER-Tiles; Copy-Fixes in `TierLockOverlay.js` + `LoadingOverlay.js` (Logos/Ethos/Pathos → SEXIER).
