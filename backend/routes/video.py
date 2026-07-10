@@ -14,7 +14,7 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 from emergentintegrations.llm.openai import OpenAISpeechToText
 
 from config import db, EMERGENT_LLM_KEY, logger
-from services import get_current_user, update_user_scores, get_user_memory
+from services import get_current_user, update_user_scores, get_user_memory, clean_ai_text
 from services_actions import record_user_action
 from services_tier import require_feature, resolve_user_tier
 from services_video_trial import get_video_trial_status, consume_video_trial
@@ -369,10 +369,14 @@ Bewerte DETAILLIERT anhand von Wlads Methodik. Antworte als JSON:
     "impact_explanation": 0-100,
     "rebuttal": 0-100
   }},
+  "logos_score": 0-100,
+  "ethos_score": 0-100,
+  "pathos_score": 0-100,
   "transcript": "das originale Transkript",
   "wlad_assessment": "3-4 Sätze persönliches Feedback im Stil von Wlad Jachtchenko.",
   "framework_feedback": {{
     "sexier": "Wlads SEXIER-Bewertung: Pro Buchstabe (S/E/X/I/E/R) 1 kurzer Satz mit konkretem Transkript-Bezug. Am Ende: 1 Wlad-Übung für das schwächste Feld.",
+    "drei_saeulen": "Kurze Vertiefung (2-3 Sätze): Wie stehen Logos, Ethos, Pathos in dieser Rede? Nur als sekundäre Ergänzung zu SEXIER.",
     "kommunikationsquadrant": "Bewertung: Klarheit, Empathie, Struktur, Mut."
   }},
   "strengths": ["GENAU 3 Stärken — konkret mit Beispiel-Zitat aus dem Transkript", "Stärke 2 mit Zitat", "Stärke 3 mit Zitat"],
@@ -411,6 +415,70 @@ async def get_video_challenges():
     return VIDEO_CHALLENGES
 
 
+async def _classify_video_transcript(transcript: str) -> str:
+    """Classification bot: 'speech' (practice delivery) vs 'theory_question'.
+
+    Short recordings that are actually knowledge questions ("Was sind die 10
+    Stufen des Zuhörens?") must NOT get speech feedback — they get an answer.
+    """
+    if len(transcript.split()) > 130:
+        return "speech"
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"vidcls_{uuid.uuid4().hex[:6]}",
+            system_message=(
+                "Klassifiziere das Transkript einer Video-Aufnahme in EXAKT eine Kategorie:\n"
+                "- speech: Der Sprecher hält eine Rede, übt einen Pitch, beantwortet eine Übungsaufgabe, "
+                "präsentiert oder spricht zu einem Publikum.\n"
+                "- theory_question: Der Sprecher stellt eine Wissens-/Theoriefrage oder bittet um eine Erklärung "
+                "(z.B. 'Was sind die 10 Stufen des Zuhörens?', 'Erklär mir das SEXIER-Modell', 'Wie funktioniert Framing?').\n"
+                'Antworte NUR mit JSON: {"type": "speech"} oder {"type": "theory_question"}'
+            ),
+        )
+        chat.with_model("openai", "gpt-4o-mini")
+        raw = await chat.send_message(UserMessage(text=transcript[:800]))
+        from services_ai_parse import parse_ai_json
+        parsed = parse_ai_json(raw) or {}
+        t = parsed.get("type", "speech")
+        return t if t in ("speech", "theory_question") else "speech"
+    except Exception as e:
+        logger.warning(f"Video transcript classification failed, defaulting to speech: {e}")
+        return "speech"
+
+
+async def _answer_theory_question(transcript: str) -> dict:
+    """RAG-grounded Wlad answer for a theory question spoken into the camera."""
+    rag_block = ""
+    try:
+        from services_rag import retrieve_context
+        rag_ctx = await retrieve_context(transcript[:400])
+        if rag_ctx.get("rag_active"):
+            rag_block = "\n\n" + rag_ctx["context_block"]
+    except Exception as e:
+        logger.warning(f"Theory-answer RAG fetch failed (proceeding without): {e}")
+
+    chat = LlmChat(
+        api_key=EMERGENT_LLM_KEY,
+        session_id=f"vidqa_{uuid.uuid4().hex[:8]}",
+        system_message=(
+            "Du bist WladBot — Wlad Jachtchenkos digitaler Zwilling und Leadership-Experte. "
+            "Der User hat dir per Video eine Wissens-Frage gestellt. Beantworte sie klar, strukturiert und "
+            "im Stil von Wlad: direkt, praxisnah, mit nummerierten Listen wo sinnvoll. Deutsch. Max 300 Wörter. "
+            "Kein Rede-Feedback, keine Bewertung — nur die inhaltliche Antwort." + rag_block
+        ),
+    )
+    chat.with_model("openai", "gpt-5.2")
+    answer = await chat.send_message(UserMessage(text=transcript))
+    return {
+        "type": "theory_answer",
+        "question": transcript,
+        "answer": clean_ai_text(answer),
+        "transcript": transcript,
+    }
+
+
+
 async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts: list, user_memory, rating_context: str) -> dict:
     """Call GPT-5.2 to analyse transcript and return structured feedback.
 
@@ -424,6 +492,11 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
     Wlad's actual frameworks (3 Säulen, Kommunikationsquadrant, etc.) rather
     than generic coaching language.
     """
+    # Classification bot: theory questions get an answer, not speech feedback.
+    if await _classify_video_transcript(transcript) == "theory_question":
+        logger.info("Video transcript classified as theory_question — returning Wlad answer")
+        return await _answer_theory_question(transcript)
+
     prompt_text = _build_analysis_prompt(challenge, transcript, prev_attempts, user_memory, rating_context)
 
     # Pull Wlad-specific RAG context. Best-effort — falls back to base prompt
@@ -512,10 +585,12 @@ def _safe_parse_json(text: str) -> dict | None:
 async def _persist_video_analysis(user_id: str, challenge_id: str, analysis: dict, rating: dict, attempt_count: int) -> str:
     """Save video analysis entry + trigger XP/action recording. Returns entry_id."""
     entry_id = f"vid_{uuid.uuid4().hex[:12]}"
+    is_theory = analysis.get("type") == "theory_answer"
     await db.video_challenges.insert_one({
         "entry_id": entry_id,
         "user_id": user_id,
         "challenge_id": challenge_id,
+        "custom_title": (f"Frage: {analysis.get('question', '')[:60]}" if is_theory else None),
         "analysis": analysis,
         "rating_context": rating,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -523,6 +598,8 @@ async def _persist_video_analysis(user_id: str, challenge_id: str, analysis: dic
     # Attach entry_id back onto the analysis dict so the UI can offer a
     # share-link CTA without an extra round-trip to find the record.
     analysis["entry_id"] = entry_id
+    if is_theory:
+        return entry_id  # knowledge answers don't earn mission XP
     overall = analysis.get("overall_score", 0)
     await record_user_action(
         user_id,

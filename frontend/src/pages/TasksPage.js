@@ -12,7 +12,8 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { useLanguage } from '../contexts/LanguageContext';
 import api from '../lib/api';
-import { ListChecks, Plus, Trash2, Sparkles, Target, CheckCircle2, Clock, Quote, CalendarDays, ArrowRight, Flame } from 'lucide-react';
+import { ListChecks, Plus, Trash2, Sparkles, Target, CheckCircle2, Clock, Quote, CalendarDays, ArrowRight, Flame, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { toast } from 'sonner';
 
 const QUOTES = [
   { q: 'Wer Menschen bewegen will, muss zuerst sich selbst bewegen.', a: 'Wlad Jachtchenko' },
@@ -28,6 +29,8 @@ export default function TasksPage() {
   const [showDialog, setShowDialog] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium', category: 'general', due_date: '' });
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+  const [generating, setGenerating] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const loadTasks = useCallback(async () => {
     try { const res = await api.get('/tasks'); setTasks(res.data); } catch (err) { logger.error(err); }
@@ -52,6 +55,26 @@ export default function TasksPage() {
   const deleteTask = async (taskId) => {
     try { await api.delete(`/tasks/${taskId}`); loadTasks(); } catch (err) { logger.error(err); }
   };
+
+  const generateAiTasks = async () => {
+    if (generating) return;
+    setGenerating(true);
+    try {
+      const res = await api.post('/tasks/generate');
+      toast.success(lang === 'de' ? `${res.data.created} KI-Aufgaben von WladBot erstellt` : `${res.data.created} AI tasks created by WladBot`);
+      loadTasks();
+    } catch (err) {
+      logger.error(err);
+      toast.error(err.response?.data?.detail || (lang === 'de' ? 'Generierung fehlgeschlagen' : 'Generation failed'));
+    } finally { setGenerating(false); }
+  };
+
+  // "Heute im Fokus" — top 3 open tasks: high priority first, then nearest due date
+  const PRIO_ORDER = { high: 0, medium: 1, low: 2 };
+  const focusTasks = [...tasks.filter(t => t.status === 'pending')]
+    .sort((a, b) => (PRIO_ORDER[a.priority] ?? 1) - (PRIO_ORDER[b.priority] ?? 1) || (a.due_date || '9999').localeCompare(b.due_date || '9999'))
+    .slice(0, 3);
+  const focusIds = new Set(focusTasks.map(t => t.task_id));
 
   const filtered = tasks.filter(t => filter === 'all' || t.status === filter);
   const pending = tasks.filter(t => t.status === 'pending');
@@ -128,6 +151,15 @@ export default function TasksPage() {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button
+              onClick={generateAiTasks}
+              disabled={generating}
+              className="bg-[#BFFF00] hover:bg-[#d4ff4d] text-[#0A0A0A] font-black shadow-sm btn-interactive"
+              data-testid="generate-ai-tasks-btn"
+            >
+              {generating ? <Loader2 size={15} className="mr-1 animate-spin" /> : <Sparkles size={15} className="mr-1" />}
+              {lang === 'de' ? 'KI-Aufgaben' : 'AI Tasks'}
+            </Button>
             <Select value={filter} onValueChange={setFilter}>
               <SelectTrigger className="w-28 h-9" data-testid="task-filter"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -171,15 +203,58 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Task List */}
+        {/* Heute im Fokus — die Top 3, mit denen ein Leader operiert */}
+        {filter !== 'completed' && focusTasks.length > 0 && (
+          <div data-testid="focus-tasks-section">
+            <div className="flex items-center gap-2 mb-3">
+              <Flame size={14} className="text-[#BFFF00]" />
+              <h2 className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                {lang === 'de' ? 'Heute im Fokus' : "Today's Focus"}
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {focusTasks.map((task, i) => (
+                <Card key={task.task_id} className="border-[#BFFF00]/25 bg-gradient-to-br from-[#BFFF00]/[0.05] to-transparent card-glow" data-testid={`focus-task-${i}`}>
+                  <CardContent className="p-4 flex flex-col gap-2 h-full">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[18px] font-black text-[#BFFF00]/60" style={{ fontFamily: 'Outfit, sans-serif' }}>{i + 1}</span>
+                      <Badge variant="outline" className={`text-[8px] px-1.5 py-0 h-4 ${priorityColor(task.priority)}`}>{priorityLabel(task.priority)}</Badge>
+                    </div>
+                    <p className="text-[13px] font-bold leading-snug flex-1">{task.title}</p>
+                    {task.description && <p className="text-[10.5px] text-muted-foreground line-clamp-2">{task.description}</p>}
+                    <Button
+                      size="sm"
+                      onClick={() => toggleTask(task)}
+                      className="h-8 mt-1 bg-[#0A0A0A] hover:bg-[#1A1A2E] text-white text-[11px] font-bold w-full"
+                      data-testid={`focus-done-${i}`}
+                    >
+                      <CheckCircle2 size={12} className="mr-1.5" /> {lang === 'de' ? 'Erledigt' : 'Done'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Task List — compact: 5 visible, rest collapsible */}
         <div className="space-y-2">
+          {filtered.length > 0 && (
+            <h2 className="text-[11px] font-black uppercase tracking-widest text-muted-foreground pt-2">
+              {lang === 'de' ? 'Alle Aufgaben' : 'All Tasks'} <span className="opacity-50">({filtered.length})</span>
+            </h2>
+          )}
           {filtered.length === 0 && (
             <div className="text-center py-16 text-muted-foreground">
               <ListChecks size={40} className="mx-auto mb-3 opacity-20" />
-              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Starte eine KI-Coaching-Session!' : 'No tasks yet. Start an AI coaching session!'}</p>
+              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Lass WladBot welche für dich generieren!' : 'No tasks yet. Let WladBot generate some for you!'}</p>
+              <Button onClick={generateAiTasks} disabled={generating} className="mt-4 bg-[#BFFF00] text-[#0A0A0A] font-black" data-testid="empty-generate-btn">
+                {generating ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                {lang === 'de' ? 'KI-Aufgaben generieren' : 'Generate AI tasks'}
+              </Button>
             </div>
           )}
-          {filtered.map((task) => (
+          {(showAll ? filtered : filtered.slice(0, 5)).map((task) => (
             <Card key={task.task_id} className={`transition-all duration-200 card-glow ${task.status === 'completed' ? 'opacity-60' : ''}`} data-testid={`task-${task.task_id}`}>
               <CardContent className="p-4 flex items-center gap-4">
                 <Checkbox checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
@@ -209,6 +284,17 @@ export default function TasksPage() {
               </CardContent>
             </Card>
           ))}
+          {filtered.length > 5 && (
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="w-full py-2.5 rounded-xl border border-dashed border-black/10 dark:border-white/10 text-[11.5px] font-bold text-muted-foreground hover:text-foreground hover:border-[#BFFF00]/40 transition-colors flex items-center justify-center gap-1.5"
+              data-testid="toggle-all-tasks-btn"
+            >
+              {showAll
+                ? <><ChevronUp size={13} /> {lang === 'de' ? 'Weniger anzeigen' : 'Show less'}</>
+                : <><ChevronDown size={13} /> {lang === 'de' ? `Alle ${filtered.length} anzeigen` : `Show all ${filtered.length}`}</>}
+            </button>
+          )}
         </div>
       </div>
     </DashboardLayout>

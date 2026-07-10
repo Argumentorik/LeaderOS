@@ -114,6 +114,66 @@ export const AnalysisResults = ({
     navigate(`/chat?prefill=${encodeURIComponent(prefill)}`);
   };
 
+  // ── Theory question detected — render Wlad's answer instead of speech feedback ──
+  if (analysis?.type === 'theory_answer') {
+    return (
+      <div className="space-y-5 animate-fade-in" data-testid="theory-answer-view">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <Button variant="ghost" size="sm" onClick={resetChallenge} className="font-semibold">
+            <ArrowLeft size={16} className="mr-1" /> {de ? 'Zurück' : 'Back'}
+          </Button>
+          <Badge className="bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] border-0 text-[10px] font-black uppercase tracking-wider">
+            {de ? 'Wissens-Frage erkannt' : 'Theory question detected'}
+          </Badge>
+        </div>
+
+        <Card className="overflow-hidden border-0 bg-gradient-to-br from-[#0A0A0A] via-[#0F0F1A] to-[#1A1A2E] text-white">
+          <CardContent className="p-6 space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WladBot 3.0</p>
+                <p className="text-[12px] text-white/50">
+                  {de
+                    ? 'Das war eine Wissens-Frage — hier ist Wlads Antwort statt eines Rede-Feedbacks:'
+                    : "That was a theory question — here's Wlad's answer instead of speech feedback:"}
+                </p>
+              </div>
+              <VoicePlayButton
+                text={(analysis.answer || '').slice(0, 790)}
+                persona="wlad"
+                variant="primary"
+                size="md"
+                label={de ? 'Antwort anhören' : 'Listen to answer'}
+                testId="theory-answer-audio-btn"
+              />
+            </div>
+            <div className="pt-2 border-t border-white/10">
+              <SmartText text={analysis.answer} accent="#BFFF00" icon={Lightbulb} />
+            </div>
+          </CardContent>
+        </Card>
+
+        <MagicBox icon={MessageSquareText} title={de ? 'Deine Frage (Transkript)' : 'Your question (transcript)'} accent="#94A3B8" testId="theory-question-transcript">
+          <p className="text-[13px] text-muted-foreground italic mt-2">"{analysis.question || analysis.transcript}"</p>
+        </MagicBox>
+
+        <div className="flex gap-3">
+          <Button
+            onClick={() => navigate(`/chat?prefill=${encodeURIComponent(analysis.question || '')}`)}
+            variant="outline"
+            className="flex-1 font-semibold h-11"
+            data-testid="theory-deep-chat-btn"
+          >
+            <MessageSquareText size={14} className="mr-2" /> {de ? 'Im Chat vertiefen' : 'Deep-dive in chat'}
+          </Button>
+          <Button onClick={resetChallenge} className="flex-1 bg-[#BFFF00] text-[#0A0A0A] font-bold h-11" data-testid="theory-new-mission-btn">
+            <RotateCcw size={14} className="mr-2" /> {de ? 'Neue Mission starten' : 'Start new mission'}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5 animate-fade-in" data-testid="video-results">
       {/* Top bar */}
@@ -341,36 +401,7 @@ export const AnalysisResults = ({
           </MagicBox>
         )}
 
-        {/* Legacy fallback — entries analysed BEFORE the SEXIER switch */}
-        {!analysis.sexier_scores && (analysis.logos_score || analysis.ethos_score || analysis.pathos_score) && (
-          <MagicBox icon={Brain} title={de ? '3 Säulen der Überzeugung (Logos · Ethos · Pathos)' : '3 Pillars (Logos · Ethos · Pathos)'} accent="#BFFF00" testId="magic-box-pillars">
-            <div className="grid grid-cols-3 gap-3 mt-3">
-              {[
-                { label: 'Logos', desc: de ? 'Logik & Daten' : 'Logic & Data', score: analysis.logos_score, color: '#6366F1' },
-                { label: 'Ethos', desc: de ? 'Glaubwürdigkeit' : 'Credibility', score: analysis.ethos_score, color: '#8B5CF6' },
-                { label: 'Pathos', desc: de ? 'Emotion' : 'Emotion', score: analysis.pathos_score, color: '#A78BFA' },
-              ].map((p) => (
-                <div key={p.label} className="rounded-xl p-4 bg-white/60 dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] text-center">
-                  <p className="text-3xl font-black" style={{ color: p.color, fontFamily: 'Outfit, sans-serif' }}>{p.score || 0}</p>
-                  <p className="text-[11px] font-bold mt-1">{p.label}</p>
-                  <p className="text-[9px] text-muted-foreground">{p.desc}</p>
-                </div>
-              ))}
-            </div>
-            {analysis.framework_feedback?.drei_saeulen && (
-              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
-                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Wlads Bewertung' : "Wlad's verdict"}</p>
-                <SmartText text={analysis.framework_feedback.drei_saeulen} accent="#BFFF00" icon={Lightbulb} />
-              </div>
-            )}
-            {analysis.framework_feedback?.kommunikationsquadrant && (
-              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
-                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Kommunikationsquadrant' : 'Communication Quadrant'}</p>
-                <SmartText text={analysis.framework_feedback.kommunikationsquadrant} accent="#10B981" icon={Target} />
-              </div>
-            )}
-          </MagicBox>
-        )}
+        {/* Legacy fallback moved below — see bottom of stack */}
 
         {analysis.speech_analysis && (
           <MagicBox icon={Mic} title={de ? 'Rede-Analyse (Füllwörter, Tempo, Phrasen)' : 'Speech Analysis (Fillers, Pace, Phrases)'} accent="#F59E0B" testId="magic-box-speech">
@@ -453,6 +484,37 @@ export const AnalysisResults = ({
         {analysis.improvement_vs_previous && analysis.improvement_vs_previous !== 'null' && (
           <MagicBox icon={TrendingUp} title={de ? 'Vergleich mit vorherigen Versuchen' : 'vs. Previous Attempts'} accent="#10B981" testId="magic-box-progress">
             <div className="mt-3"><SmartText text={analysis.improvement_vs_previous} accent="#10B981" icon={TrendingUp} /></div>
+          </MagicBox>
+        )}
+
+        {/* Vertiefung: klassische 3 Säulen — bewusst GANZ UNTEN (SEXIER ist das Haupt-Framework) */}
+        {(analysis.logos_score || analysis.ethos_score || analysis.pathos_score) && (
+          <MagicBox icon={Brain} title={de ? 'Vertiefung: 3 Säulen der Überzeugung (Logos · Ethos · Pathos)' : 'Deep-dive: 3 Pillars (Logos · Ethos · Pathos)'} accent="#8B5CF6" testId="magic-box-pillars">
+            <div className="grid grid-cols-3 gap-3 mt-3">
+              {[
+                { label: 'Logos', desc: de ? 'Logik & Daten' : 'Logic & Data', score: analysis.logos_score, color: '#6366F1' },
+                { label: 'Ethos', desc: de ? 'Glaubwürdigkeit' : 'Credibility', score: analysis.ethos_score, color: '#8B5CF6' },
+                { label: 'Pathos', desc: de ? 'Emotion' : 'Emotion', score: analysis.pathos_score, color: '#A78BFA' },
+              ].map((p) => (
+                <div key={p.label} className="rounded-xl p-4 bg-white/60 dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] text-center">
+                  <p className="text-3xl font-black" style={{ color: p.color, fontFamily: 'Outfit, sans-serif' }}>{p.score || 0}</p>
+                  <p className="text-[11px] font-bold mt-1">{p.label}</p>
+                  <p className="text-[9px] text-muted-foreground">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+            {analysis.framework_feedback?.drei_saeulen && (
+              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
+                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Wlads Bewertung' : "Wlad's verdict"}</p>
+                <SmartText text={analysis.framework_feedback.drei_saeulen} accent="#BFFF00" icon={Lightbulb} />
+              </div>
+            )}
+            {!analysis.sexier_scores && analysis.framework_feedback?.kommunikationsquadrant && (
+              <div className="mt-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
+                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Kommunikationsquadrant' : 'Communication Quadrant'}</p>
+                <SmartText text={analysis.framework_feedback.kommunikationsquadrant} accent="#10B981" icon={Target} />
+              </div>
+            )}
           </MagicBox>
         )}
       </div>

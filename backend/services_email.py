@@ -512,7 +512,7 @@ Wenn du das Gefühl hast, dass diese Art zu arbeiten zu dir passt, lohnt sich ei
   <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">12 Videokurse</b> — ein neues Modul pro Monat zu Executive Communication, Verhandlung & Strategie</p>
   <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Strukturierter Lernpfad</b> — KI-Coach passt sich deinen Ergebnissen und Zielen an</p>
   <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Praxis-Frameworks</b> — Mitarbeitergespräche, Verhandlung, Rhetorik, 5 Führungsrollen</p>
-  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">Video-Feedback</b> — du nimmst auf, die KI bewertet nach Wlads SEXIER-Modell</p>
+  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">Video-Feedback</b> — du nimmst auf, die KI bewertet nach Wlads SEXIER-Modell (Statement · Explanation · eXample · Impact · Rebuttal)</p>
 </div>
 <p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 20px;">
 Du kannst dir den Plan in Ruhe ansehen — bei Fragen sprich gern ein 30-Min-Strategiegespräch mit uns durch, ohne Verkaufsdruck.
