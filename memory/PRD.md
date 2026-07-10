@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 101 · 10.07.26] Klassifikations-Bot für Video · SEXIER-oben/L·E·P-unten · KI-Task-Page · Account-Cleanup · E-Mail-Fix** — Testing-Agent pass (iteration_101.json)
+  - **Video-Klassifikations-Bot** (`video.py`): `_classify_video_transcript` (gpt-4o-mini, >130 Wörter = auto-speech) erkennt Theorie-Fragen (z.B. „Was sind die 10 Stufen des Zuhörens?") → `_answer_theory_question` liefert RAG-gestützte Wlad-Antwort (`type: theory_answer`) statt Rede-Feedback; kein Missions-XP; Archiv-Titel „Frage: …". Frontend: `theory-answer-view` mit „Wissens-Frage erkannt"-Badge, Antwort-Karte, **„Antwort anhören" TTS-Button** (Audio-Mode!), „Im Chat vertiefen" + „Neue Mission".
+  - **Analyse-Reihenfolge**: SEXIER-Box GANZ OBEN; Logos/Ethos/Pathos wieder im Schema (sekundär) und als „Vertiefung: 3 Säulen"-Box GANZ UNTEN (DOM-Reihenfolge getestet).
+  - **TasksPage-Upgrade**: „Heute im Fokus" (Top 3 nach Priorität/Fälligkeit, Erledigt-Button), „KI-Aufgaben"-Button → `POST /api/tasks/generate` (gpt-5.2, 5 personalisierte Tasks aus Profil-Scores, Cap: max 10 offene KI-Tasks → 400), Liste kompakt (5 sichtbar + „Alle X anzeigen"-Toggle).
+  - **wj@argumentorik.com gelöscht** (Preview; Prod: via Admin-Panel löschen) → neue Accounts sehen Lock-Badges (free tier). ADMIN_SEED_EMAILS behält wj (Admin-Rechte bei Neuanmeldung via Late-Seed).
+  - **E-Mail-Audit**: Drip-Day-7 nennt jetzt die korrekte SEXIER-Kurzform (Statement · Explanation · eXample · Impact · Rebuttal); übrige Mails inhaltlich geprüft, konsistent.
 - [x] **[Iter 100 · 06.07.26] Godmode-Batch: SEXIER-Korrektur · Workflow-Bugfix · Challenger-Gesprächsmodus · Audio · Locks · PDF · Stimme** — Testing-Agent 100 % (iteration_100.json)
   - **SEXIER-Definition korrigiert (Wlads Original!)**: S=Statement, E=Explanation, X=eXample, I=Impact, E=Explanation of Impact, R=Rebuttal — Prompt + `sexier_scores`-Schema (`statement/explanation/example/impact/impact_explanation/rebuttal`) + alle UI-Labels (AnalysisResults, PDF-Report, Share-Seite, Overlays). NICHT Storytelling/Emotion-Variante!
   - **Workflow-Bug behoben** (Team-Event-Planer wiederholte letzte Frage): Ursache = verschluckter API-Fehler in `ToolsPage.js` → jetzt Error-Box (`workflow-error-box`) + „Erneut versuchen"-Button + Toast; `WorkflowResultPanel` mit `format_error`-Raw-Text-Fallback.
