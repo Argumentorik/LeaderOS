@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 104 · 13.07.26] FINALE PRE-DEPLOYMENT-QA + ROOT-CAUSE-FIX des Workflow-Bugs** — Testing-Agent iteration_102 + Deployment-Agent PASS
+  - **🔴 ECHTER Root Cause des „letzte Frage wiederholt sich"-Bugs gefunden & gefixt**: Globaler axios-Timeout war 30_000ms (`api.js`) — LLM-Workflows brauchen 30-60s → Frontend-Timeout, Backend arbeitete weiter, Antwort verworfen. Fix: Timeout → **120_000ms**. Browser-verifiziert: Entscheidungshilfe kompletter E2E-Flow (Persona → 3 Steps inkl. Options-Step → Loading mit Wlad-Zitat → WORKFLOW ABGESCHLOSSEN + Audio-Button, Ergebnis nach ~30s, KEINE wiederholte Frage).
+  - **Magic Link E2E bestätigt** (iteration_102): Request 200 → Token → Verify → Dashboard → Session überlebt Reload. Härtung: `useRef`-Single-Shot-Guard in MagicLinkVerifyPage (StrictMode-Doppel-Verify konsumierte Single-Use-Token doppelt).
+  - **Regression PASS**: Login (3 Tabs + Google), Dashboard, Chat, Tasks, Missions, Challengers, Playbooks, /sicherheit, Admin-Panel, Logout.
+  - **Deployment-Agent: PASS, 0 Blocker** (env-Integrität, keine hardcoded URLs, CORS, Supervisor, Auth-Redirects via window.location.origin).
 - [x] **[Iter 103 · 13.07.26] File & Media Storage verifiziert + DSGVO-Löschung + Trust-Center-Seite** — self-tested E2E
   - **Object Storage (Emergent, uploads.py) komplett E2E getestet**: `POST /api/upload/profile-picture` (5MB-Limit, MIME-Whitelist) → db.files → user.picture; `GET /api/files/{path}` (Cookie-Auth, owner-scoped) → 200 image/png; NEU: `DELETE /api/files/{path}` (Soft-Delete, setzt picture zurück, Audit-Log) → Serve danach 404 ✅. Upload-Audit via record_user_action. Avatar-UI in ProfilePage + SidebarFooter existierte bereits.
   - **DSGVO-Kaskade**: `files` zur GDPR-Export/Delete-Kaskade ergänzt (gdpr.py) — Konto-Löschung erfasst jetzt auch Datei-Metadaten.
