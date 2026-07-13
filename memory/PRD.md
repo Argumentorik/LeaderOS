@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 103 · 13.07.26] File & Media Storage verifiziert + DSGVO-Löschung + Trust-Center-Seite** — self-tested E2E
+  - **Object Storage (Emergent, uploads.py) komplett E2E getestet**: `POST /api/upload/profile-picture` (5MB-Limit, MIME-Whitelist) → db.files → user.picture; `GET /api/files/{path}` (Cookie-Auth, owner-scoped) → 200 image/png; NEU: `DELETE /api/files/{path}` (Soft-Delete, setzt picture zurück, Audit-Log) → Serve danach 404 ✅. Upload-Audit via record_user_action. Avatar-UI in ProfilePage + SidebarFooter existierte bereits.
+  - **DSGVO-Kaskade**: `files` zur GDPR-Export/Delete-Kaskade ergänzt (gdpr.py) — Konto-Löschung erfasst jetzt auch Datei-Metadaten.
+  - **Trust-Center-Seite `/sicherheit`** (TrustPage.js, public route): 6 Framework-Karten mit EHRLICHEN Status-Labels — SOC 2 (Audit-ready), ISO 27001 (Aligned), DSGVO (Konform), NIST AI RMF (Aligned), ISO 42001 (Aligned), HIPAA (Nicht im Scope — keine PHI). Plus „Gelebte Praxis"-Sektion + Betroffenenrechte-Box. Link auf Login-Seite (LoginExtras „Sicherheit"). WICHTIG: Keine falschen Zertifizierungs-Claims — formale SOC-2/ISO-Attestierung nur durch externe Auditoren.
+  - Storage bereit für Ausbau: Video-Persistenz (b) und Chat-Datei-Upload (c) können auf put_object/get_object aufsetzen.
 - [x] **[Iter 102 · 13.07.26] Google Sign-In auf Emergent-managed OAuth umgestellt — origin_mismatch DAUERHAFT GELÖST** — Mechanik browser-verifiziert
   - **Kein Google Cloud Console Setup mehr nötig!** Der alte GIS-Popup-Flow (eigene GOOGLE_CLIENT_ID, 3× wiederkehrender origin_mismatch auf leaderos.de) wurde ersetzt: `GoogleSignInButton` (OAuthButtons.js) macht jetzt Redirect zu `https://auth.emergentagent.com/?redirect={window.location.origin}/dashboard` (NIEMALS hardcoden!).
   - Rückweg: `/dashboard#session_id=…` → App.js Hash-Check → `AuthCallback.js` → `POST /api/auth/google-session` (existierte bereits; tauscht session_id via OAUTH_SESSION_URL gegen User-Daten) → eigene Session + JWT.

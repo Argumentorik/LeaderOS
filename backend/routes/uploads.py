@@ -79,11 +79,32 @@ async def upload_profile_picture(request: Request, file: UploadFile = File(...))
         })
 
         await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"picture": storage_path}})
+        from services_actions import record_user_action
+        await record_user_action(user["user_id"], "file_uploaded", metadata={"type": "profile_picture", "size": len(data)})
 
         return {"path": storage_path, "size": len(data)}
     except Exception as e:
         logger.error(f"Profile picture upload failed: {e}")
         raise HTTPException(status_code=500, detail=f"Upload fehlgeschlagen: {str(e)}")
+
+
+@router.delete("/files/{path:path}")
+async def delete_file(path: str, request: Request):
+    """GDPR Art. 17 — soft-delete an owned file (storage has no hard-delete API)."""
+    user = await get_current_user(request)
+    res = await db.files.update_one(
+        {"storage_path": path, "user_id": user["user_id"], "is_deleted": False},
+        {"$set": {"is_deleted": True, "deleted_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    if not res.modified_count:
+        raise HTTPException(status_code=404, detail="File not found")
+    # If it was the active profile picture, clear it
+    await db.users.update_one(
+        {"user_id": user["user_id"], "picture": path}, {"$set": {"picture": None}}
+    )
+    from services_actions import record_user_action
+    await record_user_action(user["user_id"], "file_deleted", metadata={"path_prefix": path.split("/")[0]})
+    return {"ok": True}
 
 
 @router.get("/files/{path:path}")

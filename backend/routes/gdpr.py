@@ -17,6 +17,7 @@ router = APIRouter(prefix="/api/gdpr", tags=["gdpr"])
 
 _EXPORTABLE_COLLECTIONS = [
     "users",
+    "files",
     "daily_checkins",
     "chat_sessions",
     "chat_messages",

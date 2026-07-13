@@ -50,6 +50,7 @@ const EnterprisePage = lazyWithRetry(() => import("./pages/EnterprisePage"));
 const Challenge30Page = lazyWithRetry(() => import("./pages/Challenge30Page"));
 const DownloadsPage = lazyWithRetry(() => import("./pages/DownloadsPage"));
 const ImpressumPage = lazyWithRetry(() => import("./pages/ImpressumPage"));
+const TrustPage = lazyWithRetry(() => import("./pages/TrustPage"));
 const DatenschutzPage = lazyWithRetry(() => import("./pages/DatenschutzPage"));
 const WiderrufPage = lazyWithRetry(() => import("./pages/WiderrufPage"));
 const AGBPage = lazyWithRetry(() => import("./pages/AGBPage"));
@@ -163,6 +164,7 @@ function AppRouter() {
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />
+        <Route path="/sicherheit" element={<TrustPage />} />
         <Route path="/datenschutz" element={<DatenschutzPage />} />
         <Route path="/widerruf" element={<WiderrufPage />} />
         <Route path="/agb" element={<AGBPage />} />
