@@ -21,7 +21,9 @@ export const API_BASE = (IS_LOCAL_DEV && RAW_BACKEND_URL && RAW_BACKEND_URL !== 
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
-  timeout: 30000,
+  // 120s: LLM endpoints (workflows, challenger finish, video jobs) regularly
+  // take 30-90s — a 30s timeout made them fail while the backend kept working.
+  timeout: 120000,
 });
 
 // ——— Response Interceptor ———

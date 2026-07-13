@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Loader2, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,6 +10,7 @@ export default function MagicLinkVerifyPage() {
   const { login } = useAuth();
   const [state, setState] = useState('verifying'); // verifying | success | error
   const [errorMsg, setErrorMsg] = useState('');
+  const firedRef = useRef(false); // single-shot: token is single-use, StrictMode double-invoke must not consume it twice
 
   useEffect(() => {
     const token = params.get('token');
@@ -18,6 +19,8 @@ export default function MagicLinkVerifyPage() {
       setErrorMsg('Kein Token im Link gefunden.');
       return;
     }
+    if (firedRef.current) return;
+    firedRef.current = true;
 
     let cancelled = false;
     (async () => {
