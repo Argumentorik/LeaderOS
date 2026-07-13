@@ -42,199 +42,38 @@ const MicrosoftBrand = ({ size = 18 }) => (
 const buttonClass = "group relative flex items-center justify-center gap-3 h-12 w-full rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] transition-all font-semibold text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed";
 
 // ────────────────────────────────────────────────────────────────────────────
-// Google — Sign in with Google JS, rendered as our own button
+// Google — Emergent-managed OAuth. No Google Cloud Console config needed:
+// the user is redirected to auth.emergentagent.com, signs in with Google and
+// returns to {origin}/dashboard#session_id=… which AuthCallback exchanges via
+// POST /api/auth/google-session. This permanently fixes the origin_mismatch
+// problem of the old GIS popup flow.
+// REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 // ────────────────────────────────────────────────────────────────────────────
 
-let _googleScriptPromise = null;
-const loadGoogleScript = () => {
-  if (_googleScriptPromise) return _googleScriptPromise;
-  _googleScriptPromise = new Promise((resolve, reject) => {
-    if (window.google?.accounts?.id) return resolve();
-    const s = document.createElement('script');
-    s.src = 'https://accounts.google.com/gsi/client';
-    s.async = true;
-    s.defer = true;
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('Failed to load Google Identity Services'));
-    document.head.appendChild(s);
-  });
-  return _googleScriptPromise;
-};
-
-export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, label }) => {
+export const GoogleSignInButton = ({ de = true, label }) => {
   const [loading, setLoading] = useState(false);
-  const [scriptStatus, setScriptStatus] = useState('loading'); // loading | ready | failed
-  // Iter 92.36 (Mert origin_mismatch debug): if Google blocks our origin we set
-  // this to show a clear fallback hint to the user (and surface the origin in
-  // DevTools so Support can verify the Cloud-Console whitelist).
-  const [originBlocked, setOriginBlocked] = useState(false);
-  const initialized = useRef(false);
-  const hiddenButtonRef = useRef(null);  // For Google's official renderButton fallback
-
-  const initGoogle = (resolveCallback) => {
-    if (!window.google?.accounts?.id) return;
-    // Iter 92.36: clear DevTools diagnostic so we can match the origin we send
-    // vs. the "Authorized JavaScript origins" list in Google Cloud Console.
-    try {
-      const maskedId = clientId ? `${clientId.slice(0, 12)}…${clientId.slice(-30)}` : '(none)';
-      console.info(
-        '%c[Google OAuth] init',
-        'color:#4285F4;font-weight:bold',
-        { origin: window.location.origin, host: window.location.host, clientId: maskedId }
-      );
-    } catch { /* noop */ }
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: async (resp) => {
-        if (!resp?.credential) return;
-        setLoading(true);
-        try {
-          const res = await api.post('/auth/google/callback', { credential: resp.credential });
-          onSuccess?.(res.data.user, 'google');
-        } catch (err) {
-          logger.error('Google sign-in backend error', err);
-          // Distinguish network vs auth vs server errors for clearer UX
-          let msg;
-          if (!err?.response) {
-            msg = de ? 'Keine Verbindung — bitte Internet prüfen.' : 'Network error — check your connection.';
-          } else if (err.response.status >= 500) {
-            msg = de ? 'Server-Fehler — bitte erneut versuchen.' : 'Server error — please retry.';
-          } else {
-            msg = err.response.data?.detail || (de ? 'Google-Login fehlgeschlagen.' : 'Google sign-in failed.');
-          }
-          onError?.(msg);
-        } finally {
-          setLoading(false);
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: true,
-      use_fedcm_for_prompt: true,
-    });
-    // Pre-render an invisible Google button — used as fallback when One-Tap is suppressed
-    if (hiddenButtonRef.current) {
-      try {
-        window.google.accounts.id.renderButton(hiddenButtonRef.current, {
-          type: 'standard', theme: 'outline', size: 'large', width: 320,
-        });
-      } catch (e) { logger.warn('Google renderButton failed', e); }
-    }
-    setScriptStatus('ready');
-    resolveCallback?.();
-  };
-
-  const tryLoadScript = () => {
-    setScriptStatus('loading');
-    loadGoogleScript()
-      .then(() => initGoogle())
-      .catch((e) => {
-        logger.warn('Google script load failed', e);
-        setScriptStatus('failed');
-      });
-  };
-
-  useEffect(() => {
-    if (!clientId || initialized.current) return;
-    initialized.current = true;
-    tryLoadScript();
-  }, [clientId]);
 
   const handleClick = () => {
-    if (scriptStatus === 'failed') {
-      // Retry script load
-      tryLoadScript();
-      return;
-    }
-    if (!window.google?.accounts?.id) {
-      onError?.(de ? 'Google-Login lädt noch — bitte einen Moment.' : 'Google sign-in is still loading…');
-      return;
-    }
-    // First try One-Tap prompt
-    window.google.accounts.id.prompt((notification) => {
-      // Iter 92.36: detect "unregistered_origin" = origin_mismatch from Google.
-      // GSI returns one of: browser_not_supported, invalid_client,
-      // missing_client_id, opt_out_or_no_session, secure_http_required,
-      // suppressed_by_user, unregistered_origin, unknown_reason.
-      const notDisplayedReason = notification?.getNotDisplayedReason?.();
-      if (notDisplayedReason === 'unregistered_origin' || notDisplayedReason === 'invalid_client') {
-        console.error(
-          '%c[Google OAuth] BLOCKED',
-          'color:#EA4335;font-weight:bold;font-size:13px',
-          {
-            reason: notDisplayedReason,
-            origin: window.location.origin,
-            fix: 'Add this exact origin to "Authorized JavaScript origins" in Google Cloud Console for the active OAuth Client ID.',
-          }
-        );
-        setOriginBlocked(true);
-        onError?.(de
-          ? `Google blockiert diesen Origin (${window.location.origin}). Bitte Magic-Link nutzen.`
-          : `Google blocked this origin (${window.location.origin}). Please use Magic Link.`);
-        return;
-      }
-      if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
-        // One-Tap suppressed (user dismissed previously, FedCM blocked, etc.)
-        // → fall back to clicking the hidden official Google button which
-        // opens a popup directly. This is Google's recommended fallback.
-        logger.info('Google One Tap suppressed; falling back to popup', { reason: notDisplayedReason });
-        const realBtn = hiddenButtonRef.current?.querySelector('div[role="button"]');
-        if (realBtn) {
-          realBtn.click();
-        } else {
-          onError?.(de
-            ? 'Google-Login wurde vom Browser blockiert. Bitte E-Mail-Login verwenden oder Cookies erlauben.'
-            : 'Google login was blocked by the browser. Please use email login or allow cookies.');
-        }
-      }
-    });
+    setLoading(true);
+    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    const redirectUrl = window.location.origin + '/dashboard';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
-  if (!clientId) return null;
-
-  // Different button states for clarity
-  const buttonText = scriptStatus === 'failed'
-    ? (de ? 'Google nicht erreichbar — Erneut versuchen' : 'Google unavailable — Retry')
-    : (label || (de ? 'Mit Google fortfahren' : 'Continue with Google'));
-
   return (
-    <>
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={loading || scriptStatus === 'loading'}
-        className={buttonClass}
-        data-testid="google-signin-btn"
-      >
-        {loading ? <Loader2 size={16} className="animate-spin" /> : <GoogleBrand />}
-        <span>{buttonText}</span>
-      </button>
-      {/* Iter 92.36: origin_mismatch fallback hint — only shown if Google
-          explicitly told us our origin is not on the whitelist. */}
-      {originBlocked && (
-        <div
-          className="mt-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] leading-relaxed"
-          data-testid="google-origin-mismatch-hint"
-        >
-          <p className="font-bold text-amber-200 mb-1">
-            {de ? 'Google-Login ist gerade nicht verfügbar' : 'Google sign-in is currently unavailable'}
-          </p>
-          <p className="text-amber-100/80">
-            {de
-              ? 'Bitte nutze stattdessen den Magic-Link unten — du erhältst eine Login-E-Mail in wenigen Sekunden.'
-              : 'Please use the Magic Link below — you will receive a sign-in email within seconds.'}
-          </p>
-        </div>
-      )}
-      {/* Hidden Google-rendered button — used as click-target fallback when
-          One-Tap is suppressed. Off-screen but in DOM so we can click() it. */}
-      <div
-        ref={hiddenButtonRef}
-        style={{ position: 'absolute', left: -10000, top: 'auto', width: 1, height: 1, overflow: 'hidden' }}
-        aria-hidden="true"
-      />
-    </>
+    <button
+      type="button"
+      onClick={handleClick}
+      disabled={loading}
+      className={buttonClass}
+      data-testid="google-signin-btn"
+    >
+      {loading ? <Loader2 size={16} className="animate-spin" /> : <GoogleBrand />}
+      <span>{label || (de ? 'Mit Google fortfahren' : 'Continue with Google')}</span>
+    </button>
   );
 };
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Apple — Sign In with Apple JS
@@ -408,7 +247,7 @@ export const OAuthProviderStack = ({ providers, onSuccess, onError, de = true })
   return (
     <div className="space-y-2.5" data-testid="oauth-provider-stack">
       {avail.google && (
-        <GoogleSignInButton clientId={google_client_id} onSuccess={onSuccess} onError={onError} de={de} />
+        <GoogleSignInButton de={de} />
       )}
       {avail.apple && (
         <AppleSignInButton serviceId={apple_service_id} onSuccess={onSuccess} onError={onError} de={de} />

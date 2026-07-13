@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 102 · 13.07.26] Google Sign-In auf Emergent-managed OAuth umgestellt — origin_mismatch DAUERHAFT GELÖST** — Mechanik browser-verifiziert
+  - **Kein Google Cloud Console Setup mehr nötig!** Der alte GIS-Popup-Flow (eigene GOOGLE_CLIENT_ID, 3× wiederkehrender origin_mismatch auf leaderos.de) wurde ersetzt: `GoogleSignInButton` (OAuthButtons.js) macht jetzt Redirect zu `https://auth.emergentagent.com/?redirect={window.location.origin}/dashboard` (NIEMALS hardcoden!).
+  - Rückweg: `/dashboard#session_id=…` → App.js Hash-Check → `AuthCallback.js` → `POST /api/auth/google-session` (existierte bereits; tauscht session_id via OAUTH_SESSION_URL gegen User-Daten) → eigene Session + JWT.
+  - `OAUTH_SESSION_URL` in backend/.env ergänzt (war der Grund für 503). `available_providers()` meldet google=true wenn OAUTH_SESSION_URL ODER GOOGLE_CLIENT_ID gesetzt. ReAuthModal-Google-Teil auf neue Signatur angepasst.
+  - Getestet: Button → echte Google-Login-Seite ✅ · invalid session_id → 401 ✅ · fake Hash → Bounce zu /login ✅. Echten Google-Account-Login bitte durch User verifizieren (Preview + nach Redeploy auf Prod).
+  - Testing-Playbook: `/app/auth_testing.md`.
 - [x] **[Iter 101 · 10.07.26] Klassifikations-Bot für Video · SEXIER-oben/L·E·P-unten · KI-Task-Page · Account-Cleanup · E-Mail-Fix** — Testing-Agent pass (iteration_101.json)
   - **Video-Klassifikations-Bot** (`video.py`): `_classify_video_transcript` (gpt-4o-mini, >130 Wörter = auto-speech) erkennt Theorie-Fragen (z.B. „Was sind die 10 Stufen des Zuhörens?") → `_answer_theory_question` liefert RAG-gestützte Wlad-Antwort (`type: theory_answer`) statt Rede-Feedback; kein Missions-XP; Archiv-Titel „Frage: …". Frontend: `theory-answer-view` mit „Wissens-Frage erkannt"-Badge, Antwort-Karte, **„Antwort anhören" TTS-Button** (Audio-Mode!), „Im Chat vertiefen" + „Neue Mission".
   - **Analyse-Reihenfolge**: SEXIER-Box GANZ OBEN; Logos/Ethos/Pathos wieder im Schema (sekundär) und als „Vertiefung: 3 Säulen"-Box GANZ UNTEN (DOM-Reihenfolge getestet).
