@@ -9,6 +9,7 @@
  * Stored payload is intentionally minimal (NO tokens, NO PII beyond what is
  * already visible in the SPA): name, email, picture, provider, savedAt.
  */
+import logger from './logger';
 const KEY = 'wladbot_recent_logins_v1';
 const MAX_ACCOUNTS = 3;
 const STALE_AFTER_DAYS = 60;
@@ -21,7 +22,7 @@ const read = () => {
     return Array.isArray(arr) ? arr : [];
   } catch (err) {
     // localStorage unavailable (private mode / quota) OR corrupted JSON — start fresh.
-    if (typeof console !== 'undefined') console.warn('[recentLogins] read failed:', err?.message);
+    logger.warn('[recentLogins] read failed:', err?.message);
     return [];
   }
 };
@@ -29,7 +30,7 @@ const read = () => {
 const write = (arr) => {
   try { localStorage.setItem(KEY, JSON.stringify(arr.slice(0, MAX_ACCOUNTS))); }
   catch (err) {
-    if (typeof console !== 'undefined') console.warn('[recentLogins] write failed:', err?.message);
+    logger.warn('[recentLogins] write failed:', err?.message);
   }
 };
 
@@ -78,6 +79,6 @@ export const forgetLogin = (email) => {
 export const forgetAllLogins = () => {
   try { localStorage.removeItem(KEY); }
   catch (err) {
-    if (typeof console !== 'undefined') console.warn('[recentLogins] clear failed:', err?.message);
+    logger.warn('[recentLogins] clear failed:', err?.message);
   }
 };

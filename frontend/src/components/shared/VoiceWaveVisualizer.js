@@ -10,6 +10,7 @@
  * Falls back to a clean SVG idle wave when `active={false}`.
  */
 import { useEffect, useRef } from 'react';
+import logger from '../../lib/logger';
 
 const BARS = 48;
 const BAR_GAP = 2;
@@ -42,7 +43,7 @@ const getAnalyser = (audioEl) => {
     analyser.connect(ctx.destination);
     return analyser;
   } catch (err) {
-    if (typeof console !== 'undefined') console.warn('[VoiceWave] analyser setup failed:', err?.message);
+    logger.warn('[VoiceWave] analyser setup failed:', err?.message);
     return null;
   }
 };

@@ -12,6 +12,7 @@
  * is available globally. These helpers are defensive: they no-op if PostHog
  * isn't loaded (e.g. local dev, ad-blocked).
  */
+import logger from './logger';
 
 function getPosthog() {
   if (typeof window === 'undefined') return null;
@@ -31,7 +32,7 @@ export function identifyByUser(user) {
     // as distinct_id (which would re-introduce identity drift).
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
-      console.warn('[analytics] identifyByUser called without user_id — skipping');
+      logger.warn('[analytics] identifyByUser called without user_id — skipping');
     }
     return;
   }
@@ -50,7 +51,7 @@ export function identifyByUser(user) {
 export function identifyByEmail(email) {
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
-    console.warn('[analytics] identifyByEmail is deprecated — use identifyByUser(user)');
+    logger.warn('[analytics] identifyByEmail is deprecated — use identifyByUser(user)');
   }
   const ph = getPosthog();
   if (!ph || !email) return;

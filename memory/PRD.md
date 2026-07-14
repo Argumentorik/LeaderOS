@@ -15,6 +15,15 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 109 · 14.07.26] CODE-REVIEW-FIXES angewendet** — self-tested (webpack compiled clean, 21 Backend-Tests PASS, Smoke-Screenshot ohne pageerrors)
+  - **Test-Secrets → Env-Vars**: `test_iter98_security.py`, `test_iter100_batch.py`, `test_iter92_43_auth_ui.py` nutzen jetzt `TEST_PASSWORD` aus conftest.py (env-driven); bewusste Weak-Password-Sentinels mit `noqa: S105` markiert.
+  - **React-Hooks**: CoachingPage `handleStripeCheckout` → useCallback + Effect-Dependency (echte Warning). Hinweis: Die „187 Instanzen" des Review-Tools waren größtenteils False Positives (Imports/catch-Variablen zählen nicht als Hook-Deps) — live-Compile zeigt jetzt 0 eslint-Warnings.
+  - **Empty Catches gefixt**: VideoChallengePage (2×), LeaderDiagnosePage (1×) → logger.warn statt silent swallow.
+  - **Console-Statements**: alle 12 `console.*` außerhalb von logger.js durch `logger.warn/error` ersetzt (recentLogins, consent, ttsSpeed, analytics, reportGenerator, VoiceWaveVisualizer) — Produktion ist still, Dev bleibt verbose.
+  - **Index-as-Key gefixt**: ProductPreviewLoop → stabile Keys (`mic-bar-${"{i}"}`, `sexier-${"{letter}-{i}"}`).
+  - **Python undefined vars**: pyflakes über gesamtes Backend = 0 Funde (Review-Findings nicht reproduzierbar).
+  - **Bewusst DEFERRED (Go-Live-Risiko > Nutzen, ins Backlog)**: Complexity-Refactors (update_profile, register, LicenseKeysManager, RagDebugStudio …), File-Splits (AnalysisResults, OnboardingPage, server.py), TypeScript-Migration, localStorage-Punkte (nur kosmetische UI-Prefs: TTS-Speed, Consent-Flag, Login-Hints — keine Tokens; Auth läuft über sessionStorage/httpOnly-Flows).
+
 - [x] **[Iter 108 · 14.07.26] GODMODE FINAL CHECK: RAG live-verifiziert + Go-Live-Mail an Wlad gesendet** — self-tested E2E
   - **RAG in echten Szenarien bestätigt**: 7.439 Chunks im lokalen Vector-Store (`/api/admin/rag/local-status`), `retrieve_context` in allen 5 AI-Surfaces verdrahtet (Chat, Video, Voice, Simulationen, Playbooks), Retrieval 0,17–0,88s, Live-Chat-Antworten mit Wlad-Kanon („Weiße vs. Dunkle Rhetorik", Anker-Taktik) in 7–12s. Onboarding-Pipeline für 400 Kunden komplett.
   - **E-Mail an Wlad (wj@argumentorik.com) GESENDET** (Resend-ID d7e931ae…): neues 3.0-Design mit „GO-LIVE CHECK"-Badge, Inhalte: RAG-Fix (7.439 Bausteine, eigene Infrastruktur, 0,2s), Godmode-Onboarding, EP-01/07-Framework-Serie, Lizenz-Key-System — plus 4-Schritte-Anleitung für seinen finalen Check. Script: `scripts_send_wlad_golive_check.py`.

@@ -205,7 +205,7 @@ export default function VideoChallengePage() {
       try {
         const { toast } = await import('sonner');
         toast.error(de ? 'Umbenennen fehlgeschlagen' : 'Rename failed');
-      } catch (_) { /* safe-noop */ }
+      } catch (toastErr) { logger.warn('Toast unavailable after rename failure', toastErr); }
     }
   };
 
@@ -222,7 +222,7 @@ export default function VideoChallengePage() {
       try {
         const { toast } = await import('sonner');
         toast.error(de ? 'Löschen fehlgeschlagen' : 'Delete failed');
-      } catch (_) { /* safe-noop */ }
+      } catch (toastErr) { logger.warn('Toast unavailable after delete failure', toastErr); }
     }
   };
 

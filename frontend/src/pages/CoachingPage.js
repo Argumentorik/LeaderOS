@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -51,7 +51,7 @@ export default function CoachingPage() {
   const [testCode, setTestCode] = useState(null);
   const pricingRef = useRef(null);
 
-  const handleStripeCheckout = async (packageId, discountCode = null) => {
+  const handleStripeCheckout = useCallback(async (packageId, discountCode = null) => {
     setCheckoutLoading(packageId);
     try {
       const endpoint = packageId === 'accelerator_installment_followup'
@@ -65,7 +65,7 @@ export default function CoachingPage() {
       logger.error('Checkout error:', err);
       alert(de ? 'Checkout fehlgeschlagen. Bitte versuche es erneut.' : 'Checkout failed. Please try again.');
     } finally { setCheckoutLoading(false); }
-  };
+  }, [de]);
 
   // Auto-start installment checkout if ?installment=next query param present.
   // Iter 92.59: ?code=WLAD-… shows the 1€ live-test activation banner.
@@ -79,7 +79,7 @@ export default function CoachingPage() {
     }
     const code = params.get('code');
     if (code && code.toUpperCase().startsWith('WLAD-1EURO')) setTestCode(code.toUpperCase());
-  }, []);
+  }, [handleStripeCheckout]);
 
   const scrollToPricing = () => {
     pricingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });

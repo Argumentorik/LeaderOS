@@ -133,7 +133,7 @@ const VideoPreview = ({ de }) => (
       <div className="absolute bottom-2 left-2 right-2 flex items-end gap-0.5 h-5">
         {[3,5,8,4,9,6,7,5,8,4,6,9,5,7,4,8,5,3,6,4].map((h, i) => (
           <span
-            key={i}
+            key={`mic-bar-${i}`}
             className="flex-1 rounded-sm bg-[#BFFF00]/70"
             style={{ height: `${h * 11}%`, animation: 'micBar 0.9s ease-in-out infinite', animationDelay: `${i * 40}ms` }}
           />
@@ -154,7 +154,7 @@ const VideoPreview = ({ de }) => (
       <div className="flex gap-1">
         {['S','E','X','I','E','R'].map((letter, i) => (
           <div
-            key={i}
+            key={`sexier-${letter}-${i}`}
             className="flex-1 aspect-square rounded-md bg-[#BFFF00]/15 border border-[#BFFF00]/25 flex items-center justify-center text-[9px] font-black text-[#BFFF00]"
             style={{ animation: 'sexierPop 0.5s ease-out forwards', animationDelay: `${i * 80}ms`, opacity: 0 }}
           >

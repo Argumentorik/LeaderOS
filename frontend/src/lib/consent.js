@@ -13,6 +13,7 @@
  * `replays`  gates Sentry session-replay (alias kept for back-compat with
  *            older banners that wrote `session_replay`).
  */
+import logger from './logger';
 
 const KEY = "lo_consent_v1";
 
@@ -37,7 +38,7 @@ export const readConsent = () => {
     return p;
   } catch (err) {
     // localStorage unavailable / corrupted JSON — treat as no consent given.
-    if (typeof console !== 'undefined') console.warn('[consent] read failed:', err?.message);
+    logger.warn('[consent] read failed:', err?.message);
     return null;
   }
 };
@@ -56,7 +57,7 @@ export const writeConsent = (partial) => {
   } catch (err) {
     // localStorage unavailable (private mode, SSR) — payload still returned so
     // callers can use it in-memory for the rest of the session.
-    if (typeof console !== 'undefined') console.warn('[consent] write failed:', err?.message);
+    logger.warn('[consent] write failed:', err?.message);
   }
   return payload;
 };

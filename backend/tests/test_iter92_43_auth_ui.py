@@ -12,6 +12,9 @@ import sys
 import time
 import uuid
 import pytest
+
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_PASSWORD  # noqa: E402 — env-driven, no hardcoded secrets
 import requests
 
 sys.path.insert(0, "/app/backend")
@@ -54,7 +57,7 @@ class TestMagicLinkServiceUnit:
 class TestAuthRegression:
     def test_login_existing_user(self):
         r = requests.post(f"{BASE_URL}/api/auth/login",
-                          json={"email": "test@test.com", "password": "test123"}, timeout=15)
+                          json={"email": "test@test.com", "password": TEST_PASSWORD}, timeout=15)
         assert r.status_code == 200, f"login failed: {r.status_code} {r.text[:200]}"
         data = r.json()
         assert "token" in data and len(data["token"]) > 0
@@ -63,13 +66,13 @@ class TestAuthRegression:
 
     def test_login_accelerator(self):
         r = requests.post(f"{BASE_URL}/api/auth/login",
-                          json={"email": "accelerator@wladbot.test", "password": "test123"}, timeout=15)
+                          json={"email": "accelerator@wladbot.test", "password": TEST_PASSWORD}, timeout=15)
         assert r.status_code == 200, r.text[:200]
         return r.json()["token"]
 
     def test_me_endpoint(self):
         login = requests.post(f"{BASE_URL}/api/auth/login",
-                              json={"email": "test@test.com", "password": "test123"}, timeout=15)
+                              json={"email": "test@test.com", "password": TEST_PASSWORD}, timeout=15)
         assert login.status_code == 200
         token = login.json()["token"]
         r = requests.get(f"{BASE_URL}/api/auth/me",
@@ -108,7 +111,7 @@ class TestChatModality:
     @pytest.fixture(scope="class")
     def token(self):
         r = requests.post(f"{BASE_URL}/api/auth/login",
-                          json={"email": "accelerator@wladbot.test", "password": "test123"}, timeout=15)
+                          json={"email": "accelerator@wladbot.test", "password": TEST_PASSWORD}, timeout=15)
         if r.status_code != 200:
             pytest.skip(f"login failed: {r.text[:200]}")
         return r.json()["token"]

@@ -10,6 +10,7 @@
  *  - Detailed sub-pages with badged headers and consistent card styling.
  *  - Footer with mission slug + page number.
  */
+import logger from './logger';
 const BRAND = {
   bg: '#0A0A0A',
   bgSoft: '#111118',
@@ -494,7 +495,7 @@ async function generatePDFFromHTML(html, filename, fallbackBlob) {
     pdf.save(filename);
     return true;
   } catch (e) {
-    console.error('PDF generation failed, falling back to HTML download:', e);
+    logger.error('PDF generation failed, falling back to HTML download:', e);
     if (fallbackBlob) {
       const url = URL.createObjectURL(fallbackBlob);
       const a = document.createElement('a');

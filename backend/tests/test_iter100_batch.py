@@ -1,13 +1,17 @@
 """Iter 100 batch smoke tests: tasks/generate + my-path videos lock badges."""
 import os
+import sys
 import requests
 import pytest
+
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_PASSWORD  # noqa: E402 — env-driven, no hardcoded secrets
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL") or open("/app/frontend/.env").read().split("REACT_APP_BACKEND_URL=")[1].split()[0]
 BASE_URL = BASE_URL.rstrip("/")
 
 
-def _login(identifier, password="test123"):
+def _login(identifier, password=TEST_PASSWORD):
     r = requests.post(f"{BASE_URL}/api/auth/login", json={"identifier": identifier, "password": password}, timeout=30)
     assert r.status_code == 200, f"login failed {identifier}: {r.status_code} {r.text[:200]}"
     j = r.json()

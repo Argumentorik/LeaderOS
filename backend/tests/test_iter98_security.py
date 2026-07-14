@@ -7,8 +7,12 @@ import pytest
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://command-center-229.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-ADMIN_EMAIL = "test@test.com"
-ADMIN_PASSWORD = "test123"
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_EMAIL, TEST_PASSWORD  # noqa: E402 — env-driven, no hardcoded secrets
+
+ADMIN_EMAIL = TEST_EMAIL
+ADMIN_PASSWORD = TEST_PASSWORD
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +26,7 @@ def admin_session():
 @pytest.fixture(scope="module")
 def nonadmin_session():
     s = requests.Session()
-    r = s.post(f"{API}/auth/login", json={"email": "free@wladbot.test", "password": "test123"}, timeout=15)
+    r = s.post(f"{API}/auth/login", json={"email": "free@wladbot.test", "password": TEST_PASSWORD}, timeout=15)
     assert r.status_code == 200, f"non-admin login failed: {r.status_code} {r.text}"
     return s
 
@@ -46,7 +50,8 @@ def _register(pw, email=None, phone=None, name="Test User"):
 
 class TestPasswordStrength:
     def test_weak_short_password_rejected(self):
-        r, _ = _register("test123")
+        weak_input = "test123"  # noqa: S105 — intentionally weak test sentinel (7 chars, must be rejected)
+        r, _ = _register(weak_input)
         assert r.status_code == 400, r.text
         assert "mindestens 8 Zeichen" in r.text
 

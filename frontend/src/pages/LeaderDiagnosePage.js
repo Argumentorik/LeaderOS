@@ -204,7 +204,7 @@ export default function LeaderDiagnosePage() {
     if (platform === 'linkedin') shareToLinkedIn(params);
     else if (platform === 'x') shareToX(params);
     else await shareNative(params);
-    try { await api.post('/share', { platform, content_type: 'leader_diagnose' }); } catch {/* analytics best-effort */}
+    try { await api.post('/share', { platform, content_type: 'leader_diagnose' }); } catch (shareErr) { logger.warn('Share analytics failed (best-effort)', shareErr); }
   };
 
   if (loading) {
