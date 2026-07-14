@@ -190,7 +190,7 @@ async def _match_documents(embedding: list[float]) -> list[dict]:
     last_err: str | None = None
     for attempt in range(3):
         try:
-            async with httpx.AsyncClient(timeout=8) as client:
+            async with httpx.AsyncClient(timeout=12) as client:
                 r = await client.post(
                     f"{url}/rest/v1/rpc/match_wladbot_documents",
                     headers={
@@ -227,6 +227,49 @@ async def _match_documents(embedding: list[float]) -> list[dict]:
             await asyncio.sleep(0.5 * (attempt + 1))
     logger.error("RAG: match_documents FAILED after 3 attempts — last error: %s", last_err)
     return []
+
+
+# ── Local vector store (MongoDB `rag_chunks` + in-memory numpy matrix) ──────
+# Primary retrieval path since Iter 105: Supabase's vector RPC proved flaky
+# (60-90s stalls after DB cold starts). The full corpus lives in Mongo and is
+# matched in-process in <50ms. Supabase remains a fallback only.
+_LOCAL_CACHE: dict[str, Any] = {"matrix": None, "docs": None, "count": 0, "loaded_at": 0.0}
+
+
+async def _match_local(embedding: list[float]) -> list[dict]:
+    import numpy as np
+    from config import db
+    try:
+        count = await db.rag_chunks.estimated_document_count()
+        if count == 0:
+            return []
+        now = time.time()
+        if (_LOCAL_CACHE["matrix"] is None or _LOCAL_CACHE["count"] != count
+                or now - _LOCAL_CACHE["loaded_at"] > 3600):
+            docs = await db.rag_chunks.find(
+                {}, {"_id": 0, "content": 1, "metadata": 1, "embedding": 1}
+            ).to_list(60000)
+            if not docs:
+                return []
+            mat = np.array([d["embedding"] for d in docs], dtype=np.float32)
+            mat /= (np.linalg.norm(mat, axis=1, keepdims=True) + 1e-9)
+            _LOCAL_CACHE.update(
+                matrix=mat,
+                docs=[{"content": d["content"], "metadata": d.get("metadata") or {}} for d in docs],
+                count=count, loaded_at=now,
+            )
+            logger.info("RAG: local vector cache loaded (%d chunks)", len(docs))
+        q = np.array(embedding, dtype=np.float32)
+        q /= (np.linalg.norm(q) + 1e-9)
+        sims = _LOCAL_CACHE["matrix"] @ q
+        top = np.argsort(-sims)[:MATCH_COUNT]
+        return [
+            {**_LOCAL_CACHE["docs"][int(i)], "similarity": float(sims[int(i)])}
+            for i in top if float(sims[int(i)]) >= MATCH_THRESHOLD
+        ]
+    except Exception as e:
+        logger.warning("RAG: local match failed: %s", e)
+        return []
 
 
 async def _backfill_metadata(client, url: str, key: str,
@@ -351,7 +394,9 @@ async def retrieve_context(query: str) -> dict[str, Any]:
             ctx_block = _format_chunks_for_prompt(manual)
             return {"context_block": ctx_block, "chunks_count": len(manual), "rag_active": bool(ctx_block)}
         return empty
-    chunks = await _match_documents(embedding)
+    chunks = await _match_local(embedding)
+    if not chunks:
+        chunks = await _match_documents(embedding)
     _cache_put(query, chunks)
     combined = manual + chunks
     ctx_block = _format_chunks_for_prompt(combined)

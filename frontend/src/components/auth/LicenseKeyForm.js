@@ -5,6 +5,7 @@ import { Loader2, Ticket, Sparkles } from 'lucide-react';
 import api from '../../lib/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { parseAuthError } from '../../lib/authErrors';
+import { postLoginRoute } from '../../lib/postLoginRoute';
 
 // Format raw input as XXXX-XXXX-XXXX-XXXX while typing
 const formatKey = (raw) => {
@@ -43,7 +44,7 @@ export const LicenseKeyForm = ({ de = true }) => {
       toast.success(de
         ? `${pkg} aktiviert! Willkommen an Bord 🚀`
         : `${pkg} activated! Welcome aboard 🚀`);
-      navigate('/dashboard');
+      navigate(postLoginRoute(res.data.user));
     } catch (err) {
       setError(parseAuthError(err, de ? 'Aktivierung fehlgeschlagen' : 'Activation failed'));
     } finally {

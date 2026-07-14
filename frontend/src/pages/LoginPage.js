@@ -54,7 +54,7 @@ export default function LoginPage({ initialMode = 'login' }) {
   const handleOAuthSuccess = (user, method) => {
     login(user, method);
     toast.success(de ? `Willkommen zurück, ${user.name || user.email}!` : `Welcome back, ${user.name || user.email}!`);
-    navigate('/dashboard');
+    navigate(postLoginRoute(user));
   };
 
   const handleOAuthError = (msg) => {
@@ -75,7 +75,7 @@ export default function LoginPage({ initialMode = 'login' }) {
         : { identifier: trimmedId, password: form.password };
       const res = await api.post(endpoint, payload);
       login(res.data.user, 'email');
-      navigate('/dashboard');
+      navigate(postLoginRoute(res.data.user));
     } catch (err) {
       if (!err.response) {
         setError(de

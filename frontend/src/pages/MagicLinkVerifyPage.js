@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Loader2, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
+import { postLoginRoute } from '../lib/postLoginRoute';
 
 export default function MagicLinkVerifyPage() {
   const [params] = useSearchParams();
@@ -29,7 +30,7 @@ export default function MagicLinkVerifyPage() {
         if (cancelled) return;
         login(res.data.user);
         setState('success');
-        setTimeout(() => navigate('/dashboard', { replace: true }), 700);
+        setTimeout(() => navigate(postLoginRoute(res.data.user), { replace: true }), 700);
       } catch (err) {
         if (cancelled) return;
         setState('error');

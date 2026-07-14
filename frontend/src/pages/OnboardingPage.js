@@ -14,10 +14,11 @@ import {
   MessageSquareText, Zap, Shield, ChevronRight,
   ExternalLink, CheckCircle2, Crown, Briefcase,
   GraduationCap, Building, TrendingUp, Calendar, Phone, Clock,
-  Youtube, Instagram, Linkedin, Search, Mic, MessageCircle, Newspaper, HelpCircle
+  Youtube, Instagram, Linkedin, Search, Mic, MessageCircle, Newspaper, HelpCircle,
+  Video, Smartphone, Lock, BookOpen, Flame
 } from 'lucide-react';
 
-const STEPS = ['welcome', 'profile', 'role', 'goal', 'heard', 'wladhub', 'call', 'done'];
+const STEPS = ['welcome', 'features', 'profile', 'role', 'goal', 'heard', 'wladhub', 'call', 'done'];
 
 export default function OnboardingPage() {
   const { user, setUser } = useAuth();
@@ -70,23 +71,23 @@ export default function OnboardingPage() {
   const roleLabel = roles.find(r => r.id === data.role)?.label;
   const goalLabel = goals.find(g => g.id === data.primary_goal)?.label;
   const guideMessages = de ? {
-    1: `${firstName}, damit ich dich richtig coache, brauche ich Kontext. Wer bist du im Business?`,
-    2: 'Verstanden. Und welche Rolle beschreibt dich am besten? Danach kalibriere ich mein Coaching.',
-    3: roleLabel
+    2: `${firstName}, damit ich dich richtig coache, brauche ich Kontext. Wer bist du im Business?`,
+    3: 'Verstanden. Und welche Rolle beschreibt dich am besten? Danach kalibriere ich mein Coaching.',
+    4: roleLabel
       ? `${roleLabel} — ich kenne deine Baustellen. Woran arbeiten wir zuerst?`
       : 'Woran arbeiten wir zuerst? Ein Fokus schlägt zehn Vorsätze.',
-    4: 'Kurz aus Neugier — wie hast du von uns gehört? Das hilft uns, mehr Leader wie dich zu finden.',
-    5: 'Hast du schon eine Leader-Diagnose gemacht? Deine Scores machen mein Coaching von Tag 1 an präziser.',
-    6: 'Mein Tipp: 15 Minuten mit einem echten Coach — danach kennst du deinen schnellsten Weg. Kein Muss.',
+    5: 'Kurz aus Neugier — wie hast du von uns gehört? Das hilft uns, mehr Leader wie dich zu finden.',
+    6: 'Hast du schon eine Leader-Diagnose gemacht? Deine Scores machen mein Coaching von Tag 1 an präziser.',
+    7: 'Mein Tipp: 15 Minuten mit einem echten Coach — danach kennst du deinen schnellsten Weg. Kein Muss.',
   } : {
-    1: `${firstName}, to coach you properly I need context. Who are you in business?`,
-    2: 'Got it. Which role describes you best? I calibrate my coaching to it.',
-    3: roleLabel
+    2: `${firstName}, to coach you properly I need context. Who are you in business?`,
+    3: 'Got it. Which role describes you best? I calibrate my coaching to it.',
+    4: roleLabel
       ? `${roleLabel} — I know your pain points. What do we tackle first?`
       : 'What do we tackle first? One focus beats ten resolutions.',
-    4: 'Quick curiosity — how did you hear about us? It helps us find more leaders like you.',
-    5: 'Done a leader diagnosis yet? Your scores make my coaching sharper from day one.',
-    6: 'My tip: 15 minutes with a real coach — then you know your fastest path. No pressure.',
+    5: 'Quick curiosity — how did you hear about us? It helps us find more leaders like you.',
+    6: 'Done a leader diagnosis yet? Your scores make my coaching sharper from day one.',
+    7: 'My tip: 15 minutes with a real coach — then you know your fastest path. No pressure.',
   };
 
   const finish = async () => {
@@ -146,8 +147,8 @@ export default function OnboardingPage() {
           </div>
         </div>
 
-        {/* WladBot guides every step (1-6) */}
-        {step >= 1 && step <= 6 && (
+        {/* WladBot guides every step (2-7) */}
+        {step >= 2 && step <= 7 && (
           <div className="mb-6">
             <WladGuide message={guideMessages[step]} />
           </div>
@@ -179,8 +180,90 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 1: Profile (Position, Company, Industry) */}
+        {/* Step 1: GODMODE Showcase — why this is not a normal chatbot */}
         {step === 1 && (
+          <div className="animate-fade-in" data-testid="onboarding-features-step">
+            <div className="relative rounded-3xl overflow-hidden bg-[#0A0A0A] border border-white/[0.08] shadow-[0_50px_140px_-30px_rgba(191,255,0,0.25)] p-5 sm:p-7">
+              {/* Aurora glow layers */}
+              <div className="pointer-events-none absolute -top-32 -left-32 w-80 h-80 rounded-full bg-[#BFFF00]/15 blur-3xl" aria-hidden />
+              <div className="pointer-events-none absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-emerald-500/15 blur-3xl" aria-hidden />
+
+              <div className="relative">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-[#BFFF00] font-black mb-2 animate-fade-in">
+                  {de ? 'Das ist kein gewöhnlicher ChatBot' : 'This is not an ordinary chatbot'}
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-[1.08] animate-fade-in" style={{ letterSpacing: '-0.03em' }}>
+                  {de ? 'Wlad — immer an deiner Seite.' : 'Wlad — always by your side.'}
+                </h2>
+                <p className="text-[13px] text-white/55 mt-2 max-w-md animate-fade-in" style={{ animationDelay: '100ms' }}>
+                  {de
+                    ? 'Zum Weiterbilden, Reflektieren und Wachsen — mit Wlads kompletter Methodik im Rücken.'
+                    : "To learn, reflect and grow — backed by Wlad's complete methodology."}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+                  {[
+                    {
+                      icon: BookOpen,
+                      title: de ? 'Wlads gesamtes Wissen' : "Wlad's entire knowledge",
+                      desc: de ? 'Jede Antwort basiert auf Wlads Büchern, Vorträgen & Coaching-Praxis — in Sekunden bei dir.' : "Every answer draws on Wlad's books, talks & coaching practice — with you in seconds.",
+                    },
+                    {
+                      icon: Video,
+                      title: de ? 'Video-Feedback wie im 1:1' : 'Video feedback like a 1:1',
+                      desc: de ? 'Rede aufnehmen → präzises Feedback nach Wlads Methodik. Plus Lernvideos on demand.' : "Record a speech → precise feedback via Wlad's methodology. Plus learning videos on demand.",
+                    },
+                    {
+                      icon: Flame,
+                      title: de ? 'Jeden Tag besser werden' : 'Get better every day',
+                      desc: de ? 'Challenges, Reflexions-Check-ins & dein persönlicher Wachstumspfad — kein Stillstand.' : 'Challenges, reflection check-ins & your personal growth path — no standing still.',
+                    },
+                    {
+                      icon: Smartphone,
+                      title: de ? 'Immer dabei — auch mobil' : 'Always with you — mobile too',
+                      desc: de ? 'Desktop, Tablet oder Smartphone: Wlad ist da, wann und wo du ihn brauchst.' : "Desktop, tablet or phone: Wlad is there whenever and wherever you need him.",
+                    },
+                  ].map((f, i) => (
+                    <div
+                      key={f.title}
+                      style={{ animationDelay: `${150 + i * 90}ms` }}
+                      className="animate-fade-in flex flex-col items-start gap-2 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-[#BFFF00]/35 hover:bg-white/[0.05] transition-all"
+                      data-testid={`feature-card-${i}`}
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-[0_0_18px_rgba(191,255,0,0.25)]">
+                        <f.icon size={16} className="text-[#0A0A0A]" strokeWidth={2.4} />
+                      </div>
+                      <p className="text-[13.5px] font-bold text-white leading-tight">{f.title}</p>
+                      <p className="text-[11.5px] text-white/55 leading-snug">{f.desc}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Trust & community strip */}
+                <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5 mt-5 pt-4 border-t border-white/[0.07]" data-testid="onboarding-trust-strip">
+                  {[
+                    { icon: Shield, label: de ? 'DSGVO-konform' : 'GDPR compliant' },
+                    { icon: Lock, label: de ? 'Sichere Zahlung (Stripe)' : 'Secure payments (Stripe)' },
+                    { icon: Users, label: de ? 'Teil der Leader-Community' : 'Part of the leader community' },
+                  ].map((t) => (
+                    <span key={t.label} className="flex items-center gap-1.5 text-[10px] font-bold text-white/45">
+                      <t.icon size={11} className="text-[#BFFF00]/80" /> {t.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center mt-6">
+              <Button onClick={next} className="glow-lime btn-shine bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-12 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-features-next">
+                {de ? 'Ja, das will ich' : "Yes, I want this"} <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Profile (Position, Company, Industry) */}
+        {step === 2 && (
           <div className="space-y-5 animate-fade-in">
             <div className="space-y-3 max-w-md mx-auto">
               <div>
@@ -214,8 +297,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 2: Role — staggered entrance */}
-        {step === 2 && (
+        {/* Step 3: Role — staggered entrance */}
+        {step === 3 && (
           <div className="space-y-2 animate-fade-in">
             {roles.map((role, idx) => (
               <button key={role.id} onClick={() => { setData(d => ({ ...d, role: role.id })); next(); }}
@@ -235,8 +318,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 3: Goal — staggered grid */}
-        {step === 3 && (
+        {/* Step 4: Goal — staggered grid */}
+        {step === 4 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
             {goals.map((goal, idx) => (
               <button key={goal.id} onClick={() => { setData(d => ({ ...d, primary_goal: goal.id })); next(); }}
@@ -255,8 +338,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 4: How did you hear about us? */}
-        {step === 4 && (
+        {/* Step 5: How did you hear about us? */}
+        {step === 5 && (
           <div className="space-y-5 animate-fade-in">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {heardSources.map((src, idx) => (
@@ -291,8 +374,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 5: WladHub */}
-        {step === 5 && (
+        {/* Step 6: WladHub */}
+        {step === 6 && (
           <div className="space-y-5 animate-fade-in">
             <Card className="border-amber-200/50 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-500/5 dark:to-orange-500/5">
               <CardContent className="p-5">
@@ -345,8 +428,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 6: Strategy Call CTA — Cal.com */}
-        {step === 6 && (
+        {/* Step 7: Strategy Call CTA — Cal.com */}
+        {step === 7 && (
           <div className="space-y-5 animate-fade-in" data-testid="onboarding-call-step">
             <div className="text-center">
               <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-black uppercase tracking-wider px-3 py-1">
@@ -406,8 +489,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 7: Done — WladBot confirms, personalized summary */}
-        {step === 7 && (
+        {/* Step 8: Done — WladBot confirms, personalized summary */}
+        {step === 8 && (
           <div className="text-center space-y-6 animate-fade-in">
             <div className="relative mx-auto inline-flex">
               <WladBotAvatar size={88} live />

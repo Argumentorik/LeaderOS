@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import { WladMark } from '../components/brand/WladMark';
+import { postLoginRoute } from '../lib/postLoginRoute';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function AuthCallback() {
       try {
         const res = await api.post('/auth/google-session', { session_id: sessionId });
         login(res.data.user);
-        navigate('/dashboard', { replace: true, state: { user: res.data.user } });
+        navigate(postLoginRoute(res.data.user), { replace: true, state: { user: res.data.user } });
       } catch (err) {
         logger.error('Google auth callback failed:', err);
         navigate('/login');
