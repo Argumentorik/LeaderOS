@@ -34,7 +34,7 @@ CATEGORIES = {
 
 CATEGORY_LABELS = {
     "video_drip": "Lernvideo-Sequence (Woche 1-6)",
-    "drip": "Onboarding-Emails (Tag 1/3/7)",
+    "drip": "Wlads Framework-Serie (EP 01–07)",
     "reminders": "Trial- & Termin-Reminder",
     "all": "ALLE Marketing-Emails",
 }

@@ -114,13 +114,13 @@ class TestOnboardingEmails:
         assert len(html) > 100
         assert "vimeo" not in html.lower(), f"Vimeo embed must NOT be present in tier_welcome_email({tier})"
 
-    @pytest.mark.parametrize("fn_name", ["drip_day1_email", "drip_day3_email", "drip_day7_email"])
-    def test_drip_emails_render(self, fn_name):
+    @pytest.mark.parametrize("ep_idx", range(7))
+    def test_drip_emails_render(self, ep_idx):
         import services_email
-        fn = getattr(services_email, fn_name)
-        subj, html = fn(name="Test", app_url="https://leader-os.de")
+        episode = services_email.FRAMEWORK_EPISODES[ep_idx]
+        subj, html = services_email.framework_episode_email(name="Test", episode=episode, app_url="https://leader-os.de")
         assert isinstance(subj, str) and isinstance(html, str)
-        assert "vimeo" not in html.lower(), f"Vimeo embed must NOT be present in {fn_name}"
+        assert "vimeo" not in html.lower(), f"Vimeo embed must NOT be present in EP {ep_idx + 1}"
 
     def test_sender_email_uses_no_dash_domain(self):
         """Iter 92.38 — SENDER_EMAIL must now be wlad@leaderos.de (NO dash, verified Resend domain)."""

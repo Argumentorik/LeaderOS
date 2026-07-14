@@ -121,39 +121,63 @@ async def send_email(
 
 # ── Email Templates ─────────────────────────────────────────────
 
-def _base_layout(body_html: str, preheader: str = "") -> str:
-    """Wrap content in WladBot branded email shell.
+def _base_layout(body_html: str, preheader: str = "", badge: str = "") -> str:
+    """Wrap content in the WladBot 3.0 branded email shell.
 
-    Iter 92.48 (Mert · GODMODE): the header now uses the actual WladBot avatar
-    image so users see the same face across chat AND email — reinforcing that
-    they're talking to ONE persona. If the PNG fails to load in a stricter
-    email client (Outlook desktop, plain-text preview), the `alt="W"` renders
-    on the lime background so the mark still reads as a branded tile.
+    Iter 107 (Mert · GODMODE): round WladBot 3.0 avatar with lime ring, "3.0"
+    pill, optional episode badge (e.g. "EP 07 / 07") top-right with guaranteed
+    spacing to the logo, divider line, and mobile media-queries for small
+    screens. `alt="WladBot"` keeps the tile branded if images are blocked.
     """
     avatar_url = f"{_frontend_url()}/wladbot-avatar.png"
+    badge_html = (
+        f'<span style="display:inline-block;border:1px solid rgba(191,255,0,0.4);background:rgba(191,255,0,0.08);color:{BRAND_COLOR};font-size:10px;font-weight:900;letter-spacing:0.16em;padding:7px 14px;border-radius:999px;white-space:nowrap;">{badge}</span>'
+        if badge else
+        '<span style="font-size:10px;color:rgba(255,255,255,0.35);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;">Leadership&nbsp;OS</span>'
+    )
     return f"""<!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WladBot</title></head>
+<title>WladBot</title>
+<style>
+  @media only screen and (max-width:480px) {{
+    .wb-outer {{ padding: 16px 8px !important; }}
+    .wb-card {{ border-radius: 16px !important; }}
+    .wb-header {{ padding: 22px 20px 0 !important; }}
+    .wb-body {{ padding: 22px 20px 28px !important; }}
+    .wb-footer {{ padding: 16px 20px 22px !important; }}
+    .wb-badge-cell {{ padding-left: 12px !important; }}
+    h1 {{ font-size: 24px !important; }}
+  }}
+</style>
+</head>
 <body style="margin:0;padding:0;background:#F4F4F4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
 <div style="display:none;max-height:0;overflow:hidden;">{preheader}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F4F4;padding:40px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="wb-outer" style="background:#F4F4F4;padding:40px 16px;">
 <tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:{BRAND_DARK};border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.12);">
-  <tr><td style="padding:28px 32px 0;">
-    <table role="presentation" width="100%"><tr>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="wb-card" style="width:100%;max-width:600px;background:{BRAND_DARK};border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.12);">
+  <tr><td class="wb-header" style="padding:30px 32px 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
       <td style="vertical-align:middle;">
-        <img src="{avatar_url}" alt="W" width="42" height="42" style="display:inline-block;vertical-align:middle;width:42px;height:42px;border-radius:12px;background:{BRAND_COLOR};color:{BRAND_DARK};font-weight:900;font-size:20px;text-align:center;line-height:42px;border:0;" />
-        <span style="font-weight:900;color:#fff;font-size:16px;margin-left:10px;letter-spacing:-0.02em;vertical-align:middle;">WladBot</span>
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td style="vertical-align:middle;">
+            <img src="{avatar_url}" alt="WladBot" width="46" height="46" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid {BRAND_COLOR};background:{BRAND_COLOR};" />
+          </td>
+          <td style="vertical-align:middle;padding-left:12px;">
+            <div style="font-weight:900;color:#fff;font-size:16px;letter-spacing:-0.02em;line-height:1.1;">WladBot&nbsp;<span style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};font-size:9px;font-weight:900;padding:2px 6px;border-radius:6px;vertical-align:middle;letter-spacing:0.04em;">3.0</span></div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.4);font-weight:600;margin-top:3px;">Dein Leadership-Coach · immer an deiner Seite</div>
+          </td>
+        </tr></table>
       </td>
-      <td style="text-align:right;font-size:10px;color:rgba(255,255,255,0.35);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Leadership OS</td>
+      <td class="wb-badge-cell" style="text-align:right;vertical-align:middle;padding-left:24px;">{badge_html}</td>
     </tr></table>
+    <div style="height:1px;background:rgba(255,255,255,0.07);margin-top:22px;"></div>
   </td></tr>
-  <tr><td style="padding:24px 32px 32px;color:#fff;">{body_html}</td></tr>
-  <tr><td style="padding:20px 32px 28px;border-top:1px solid rgba(255,255,255,0.06);">
-    <p style="font-size:10px;color:rgba(255,255,255,0.35);margin:0;line-height:1.6;">
-      Du erhältst diese Email, weil du dich für ein WladBot-Event registriert hast.<br>
-      WladBot · Leadership Operating System · Powered by Wlad Jachtchenko's methods.
+  <tr><td class="wb-body" style="padding:26px 32px 34px;color:#fff;">{body_html}</td></tr>
+  <tr><td class="wb-footer" style="padding:20px 32px 28px;border-top:1px solid rgba(255,255,255,0.06);">
+    <p style="font-size:10px;color:rgba(255,255,255,0.35);margin:0;line-height:1.7;">
+      Du erhältst diese E-Mail, weil du ein Leader-OS Konto hast.<br>
+      WladBot · Leadership Operating System · basiert auf den Frameworks von Wlad Jachtchenko.
     </p>
   </td></tr>
 </table></td></tr></table></body></html>"""
@@ -436,96 +460,166 @@ Du hast noch <b style="color:{BRAND_COLOR};">{remaining} von {total} kostenlosen
     return subject, _base_layout(body, preheader=f"⏰ {days_left} Tage · {remaining} Analysen verfügbar")
 
 
-# ── 7-Tage Drip Sequence (Day 1, Day 3, Day 7) ───────────────────────────────
+# ── Framework-Serie: EP 01/07 – EP 07/07 (Onboarding, framework-first) ────────
+# Iter 107 (Mert): replaces the old Day-1/3/7 drip. NO invented stories (no
+# "CFO-Test") — every episode teaches ONE real Wlad framework and shows the
+# user exactly where to practice it inside Leader-OS. Perfect for onboarding
+# the 400 masterclass clients.
 
-def drip_day1_email(name: str, app_url: str = "https://leaderos.de") -> tuple[str, str]:
-    """Day 1 drip: Education — explain the system."""
-    subject = "Tag 1 · Die Wlad-Formel kurz erklärt"
-    chat_url = f"{app_url.rstrip('/')}/chat"
+FRAMEWORK_EPISODES = [
+    {
+        "ep": 1, "day": 1,
+        "framework": "Die 3 Säulen",
+        "subject": "EP 01/07 · Die 3 Säulen: So funktioniert Wlads System",
+        "tagline": "Das Fundament, auf dem alles andere aufbaut.",
+        "what": "Wlads gesamtes Leadership-System ruht auf 3 Säulen: <b>Rhetorik</b> (wie du in 30 Sekunden Vertrauen gewinnst), <b>EQ</b> (wie du erkennst, was dein Gegenüber wirklich denkt) und <b>KI-Kompetenz</b> (wie du KI als Co-Pilot statt als Krücke nutzt). Jede Lektion, jedes Feedback und jede Übung in Leader-OS zahlt auf eine dieser Säulen ein.",
+        "steps": [
+            "Ordne deine größte aktuelle Baustelle einer Säule zu — Kommunikation, Menschen lesen oder KI nutzen?",
+            "Formuliere sie als konkrete Frage (nicht „Wie werde ich besser?“, sondern „Wie eröffne ich das Gehaltsgespräch mit Lisa?“).",
+            "Hol dir Wlads Antwort — präzise, aus seiner Methodik, in Sekunden.",
+        ],
+        "practice": "Stell WladBot jetzt deine echte Führungsfrage. Er kennt Wlads komplette Methodik — und ab heute auch dich.",
+        "cta_label": "Erste Frage an WladBot stellen",
+        "cta_path": "/chat",
+    },
+    {
+        "ep": 2, "day": 2,
+        "framework": "Das SEXIER-Modell",
+        "subject": "EP 02/07 · SEXIER: Wlads Formel für unwiderlegbare Argumente",
+        "tagline": "6 Bausteine, mit denen jedes Argument sitzt.",
+        "what": "SEXIER ist Wlads Argumentationsstruktur: <b>S</b>tatement (klare These), <b>E</b>xplanation (Begründung), e<b>X</b>ample (konkretes Beispiel), <b>I</b>mpact (Relevanz für den Zuhörer), <b>E</b>xplanation of Impact (warum dieser Impact zählt), <b>R</b>ebuttal (den größten Einwand vorwegnehmen und entkräften).",
+        "steps": [
+            "Starte jede wichtige Aussage mit einem klaren Statement — ein Satz, keine Einleitung.",
+            "Begründe und belege mit EINEM konkreten Beispiel statt drei vagen.",
+            "Nimm den stärksten Einwand deines Gegenübers vorweg — bevor er ihn ausspricht.",
+        ],
+        "practice": "Nimm eine 60-Sekunden Video-Mission auf. Die KI bewertet jedes SEXIER-Feld einzeln (1–10) und gibt dir zu jedem eine konkrete Wlad-Übung.",
+        "cta_label": "Video-Mission starten",
+        "cta_path": "/missions",
+    },
+    {
+        "ep": 3, "day": 4,
+        "framework": "Die Feedback-Formel",
+        "subject": "EP 03/07 · Feedback, das ankommt: SBI + WWW",
+        "tagline": "Kritik so platzieren, dass sie etwas verändert.",
+        "what": "Zwei Formate, ein Prinzip: <b>SBI</b> (Situation → Behavior → Impact) beschreibt sachlich, was wann welche Wirkung hatte. <b>WWW</b> (Wahrnehmung → Wirkung → Wunsch) ergänzt den konstruktiven Ausblick. Beide trennen Beobachtung von Bewertung — der Grund, warum dein Gegenüber zuhört statt sich zu verteidigen.",
+        "steps": [
+            "Benenne die konkrete Situation („Im Standup am Dienstag…“) — nie „immer“ oder „nie“.",
+            "Beschreibe das beobachtbare Verhalten und seine Wirkung auf dich/das Team.",
+            "Schließe mit einem konkreten Wunsch — eine Verhaltensänderung, nicht drei.",
+        ],
+        "practice": "Simuliere dein nächstes Feedback-Gespräch in einer Simulation — mit einem KI-Gegenüber, das realistisch reagiert. Risikofrei üben, bevor es zählt.",
+        "cta_label": "Feedback-Gespräch simulieren",
+        "cta_path": "/simulations",
+    },
+    {
+        "ep": 4, "day": 6,
+        "framework": "Die Delegations-Matrix",
+        "subject": "EP 04/07 · Die Delegations-Matrix: Was du abgibst — und was nie",
+        "tagline": "Delegation ist Befähigung, keine Arbeitsverteilung.",
+        "what": "Wlads Delegations-Matrix sortiert jede Aufgabe nach zwei Fragen: <b>Kann es jemand anderes zu 80% so gut?</b> und <b>Entwickelt es die Person weiter?</b> Was beides erfüllt, gibst du ab — mit Kontext (warum es wichtig ist), klarem Ergebnisbild und vereinbartem Check-in. Was nur du kannst und strategisch ist, bleibt bei dir.",
+        "steps": [
+            "Liste deine Top-10-Aufgaben dieser Woche und markiere, was die 80%-Regel erfüllt.",
+            "Delegiere mit Kontext: Warum ist es wichtig? Wie sieht „fertig“ aus? Wann sprechen wir?",
+            "Kontrolliere Ergebnisse, nicht Methoden — sonst delegierst du nur zum Schein.",
+        ],
+        "practice": "Beschreib WladBot deine aktuelle Aufgabenliste — er wendet die Matrix mit dir an und erstellt daraus direkt deine Aufgaben in Leader-OS.",
+        "cta_label": "Delegations-Check mit WladBot",
+        "cta_path": "/chat",
+    },
+    {
+        "ep": 5, "day": 8,
+        "framework": "Die DESC-Methode",
+        "subject": "EP 05/07 · DESC: Schwierige Gespräche ohne Drama",
+        "tagline": "Der Vier-Schritt für Konflikt, Kritik und klare Kante.",
+        "what": "<b>D</b>escribe (die Situation sachlich beschreiben), <b>E</b>xpress (die Wirkung auf dich ausdrücken), <b>S</b>pecify (eine konkrete Bitte formulieren), <b>C</b>onsequences (die positive Konsequenz bei Veränderung benennen). DESC hält dich im schwierigsten Gespräch auf Kurs — auch wenn dein Gegenüber emotional wird.",
+        "steps": [
+            "Schreibe die 4 DESC-Sätze VOR dem Gespräch auf — je ein Satz pro Buchstabe.",
+            "Bleib bei D strikt bei Fakten — jede Bewertung im ersten Satz zerstört das Gespräch.",
+            "Ende mit der positiven Konsequenz, nicht mit einer Drohung.",
+        ],
+        "practice": "Übe das unbequemste Gespräch, das du gerade vor dir herschiebst, in einer Simulation — so oft du willst, bis DESC sitzt.",
+        "cta_label": "Schwieriges Gespräch üben",
+        "cta_path": "/simulations",
+    },
+    {
+        "ep": 6, "day": 11,
+        "framework": "Boardroom-Storytelling",
+        "subject": "EP 06/07 · Storytelling + 20-Sekunden-Regel: Meetings gewinnen",
+        "tagline": "Komplexe Ideen in 2 Minuten verkaufen.",
+        "what": "Wlads Boardroom-Dramaturgie: <b>3 Akte</b> (Status quo → Konflikt/Chance → Lösung mit klarem Call-to-Action) in maximal 2 Minuten. Dazu die <b>20-Sekunden-Regel</b>: Deine ersten 20 Sekunden im Meeting entscheiden, ob du den Raum führst oder ihm folgst — deshalb eröffnest du mit dem Ergebnis, nie mit dem Weg dorthin.",
+        "steps": [
+            "Baue deine nächste Präsentation rückwärts: Erst der eine Satz, den alle erinnern sollen.",
+            "Eröffne mit dem Ergebnis („Wir sparen 200k, wenn…“) — Details kommen danach.",
+            "Ein Konflikt, eine Lösung, ein Call-to-Action. Alles andere streichst du.",
+        ],
+        "practice": "Nutze ein Playbook als Schritt-für-Schritt-Vorlage für deine nächste wichtige Präsentation oder dein nächstes Stakeholder-Meeting.",
+        "cta_label": "Playbook öffnen",
+        "cta_path": "/playbooks",
+    },
+    {
+        "ep": 7, "day": 14,
+        "framework": "Dein 30-Tage-System",
+        "subject": "EP 07/07 · Das Finale: Dein 30-Tage-System für messbaren Fortschritt",
+        "tagline": "Alle 7 Frameworks. Ein täglicher Loop.",
+        "what": "Frameworks kennen ist Stufe 1 — sie zur Gewohnheit machen ist Leadership. Wlads Loop: <b>Leader-Diagnose</b> (wo stehst du auf 0–100?), <b>Daily Check-in</b> (5 Minuten Reflexion pro Tag), <b>Challenges & Missionen</b> (bewusste Praxis mit Feedback). Wer den Loop 30 Tage fährt, führt messbar anders — nicht gefühlt, gemessen.",
+        "steps": [
+            "Mach deine Leader-Diagnose — sie ist dein Ausgangswert für die nächsten 30 Tage.",
+            "Blocke dir 5 Minuten täglich für den Check-in — gleiche Zeit, jeden Tag.",
+            "Wende pro Woche EIN Framework aus dieser Serie bewusst in einem echten Gespräch an.",
+        ],
+        "practice": "Du hast jetzt alle 7 Frameworks. Dein Dashboard zeigt dir ab heute jeden Tag den nächsten Schritt — Wlad bleibt an deiner Seite.",
+        "cta_label": "Meinen 30-Tage-Loop starten",
+        "cta_path": "/dashboard",
+    },
+]
+
+
+def framework_episode_email(name: str, episode: dict, app_url: str = "https://leaderos.de",
+                            unsubscribe_link: str | None = None) -> tuple[str, str]:
+    """Render one episode of the EP 01/07 – EP 07/07 framework series."""
+    ep = episode["ep"]
+    cta_url = f"{app_url.rstrip('/')}{episode['cta_path']}"
+    steps_html = "".join(
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;"><tr>'
+        f'<td style="width:28px;vertical-align:top;"><div style="width:22px;height:22px;border-radius:50%;background:rgba(191,255,0,0.12);border:1px solid rgba(191,255,0,0.3);color:{BRAND_COLOR};font-size:11px;font-weight:900;text-align:center;line-height:22px;">{i}</div></td>'
+        f'<td style="vertical-align:top;padding-left:10px;font-size:13.5px;color:rgba(255,255,255,0.85);line-height:1.55;">{step}</td>'
+        f'</tr></table>'
+        for i, step in enumerate(episode["steps"], start=1)
+    )
+    unsub = (
+        f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:22px 0 0;text-align:center;">'
+        f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);text-decoration:underline;">Framework-Serie abbestellen</a>'
+        f'</p>' if unsubscribe_link else ''
+    )
     body = f"""
-<div style="background:linear-gradient(135deg,rgba(191,255,0,0.10),rgba(154,204,0,0.02));border:1px solid rgba(191,255,0,0.18);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
-  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tag 1 · Foundation</div>
-  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">{name}, das ist das System hinter Leader-OS.</div>
+<div style="font-size:9px;color:{BRAND_COLOR};letter-spacing:0.18em;font-weight:900;text-transform:uppercase;margin-bottom:10px;">Wlads Framework-Serie · Episode {ep} von 7</div>
+<h1 style="font-size:28px;line-height:1.12;font-weight:900;margin:0 0 6px;letter-spacing:-0.025em;color:#fff;">{episode['framework']}</h1>
+<p style="font-size:13px;color:rgba(255,255,255,0.55);margin:0 0 22px;">{episode['tagline']}</p>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.9);line-height:1.6;margin:0 0 18px;">Hallo {name},</p>
+
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px 22px;margin-bottom:22px;">
+  <div style="font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.45);font-weight:900;text-transform:uppercase;margin-bottom:8px;">Das Framework</div>
+  <p style="font-size:14px;color:rgba(255,255,255,0.88);margin:0;line-height:1.65;">{episode['what']}</p>
 </div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 18px;">
-Wlad Jachtchenko hat über 15 Jahre 5.000+ Führungskräfte trainiert. Sein System ruht auf <b>3 Säulen</b>:
-</p>
-<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">1. Rhetorik</b> — Wie du das Vertrauen in 30 Sekunden gewinnst.</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">2. EQ</b> — Wie du erkennst, was dein Gegenüber wirklich denkt.</p>
-  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">3. KI-Kompetenz</b> — Wie du KI als Co-Pilot, nicht als Krücke nutzt.</p>
+
+<div style="margin-bottom:22px;">
+  <div style="font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.45);font-weight:900;text-transform:uppercase;margin-bottom:12px;">So wendest du es an</div>
+  {steps_html}
 </div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 20px;">
-<b>Heute machst du nur eine Sache:</b> Frag WladBot eine echte Frage, die dich aktuell als Führungskraft beschäftigt. Probier es:
-</p>
-<div style="text-align:center;padding:6px 0 4px;">
-  <a href="{chat_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Zu WladBot</a>
+
+<div style="background:rgba(191,255,0,0.06);border:1px solid rgba(191,255,0,0.2);border-radius:14px;padding:18px 22px;margin-bottom:6px;">
+  <div style="font-size:9px;letter-spacing:0.18em;color:{BRAND_COLOR};font-weight:900;text-transform:uppercase;margin-bottom:6px;">Übe es jetzt in Leader-OS</div>
+  <p style="font-size:14px;color:#fff;margin:0 0 16px;line-height:1.6;">{episode['practice']}</p>
+  <div style="text-align:center;">
+    <a href="{cta_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 30px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13.5px;letter-spacing:-0.01em;">{episode['cta_label']} →</a>
+  </div>
 </div>
+{unsub}
 """
-    return subject, _base_layout(body, preheader="3 Säulen, 1 System: Wie Leader-OS funktioniert.")
-
-
-def drip_day3_email(name: str, app_url: str = "https://leaderos.de") -> tuple[str, str]:
-    """Day 3 drip: Quick win — drive an action."""
-    subject = f"Tag 3 · Dein erstes Mini-Win, {name}"
-    diag_url = f"{app_url.rstrip('/')}/leader-diagnose"
-    body = f"""
-<div style="background:linear-gradient(135deg,rgba(0,170,255,0.12),rgba(0,170,255,0.02));border:1px solid rgba(0,170,255,0.22);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
-  <div style="font-size:10px;letter-spacing:0.2em;color:#00AAFF;font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tag 3 · Quick Win</div>
-  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">3 Minuten. 1 Diagnose. 0 Ausreden.</div>
-</div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 18px;">
-Du hast deinen Account. Du hast WladBot. Jetzt fehlt nur noch eins: deine <b>Leader-Diagnose</b>.<br><br>
-Sie zeigt dir auf einer Skala von 0–100, wo deine drei Führungsdimensionen heute stehen:
-</p>
-<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
-  <p style="font-size:13px;color:#fff;margin:0 0 8px;line-height:1.55;">📊 <b>Leadership-Score</b> — wie souverän führst du?</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 8px;line-height:1.55;">💬 <b>Kommunikations-Score</b> — wie klar wirkst du?</p>
-  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;">❤️ <b>EQ-Score</b> — wie gut liest du Menschen?</p>
-</div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 20px;">
-Danach generiert die KI deinen <b>personalisierten 30-Tage-Aktionsplan</b>. Kein Bullshit, kein Newsletter — direkt umsetzbar.
-</p>
-<div style="text-align:center;padding:6px 0 4px;">
-  <a href="{diag_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Jetzt Leader-Diagnose machen</a>
-</div>
-"""
-    return subject, _base_layout(body, preheader="3 Minuten Diagnose · 30 Tage Aktionsplan")
-
-
-def drip_day7_email(name: str, app_url: str = "https://leaderos.de") -> tuple[str, str]:
-    """Day 7 drip: Conversion — pitch Leadership OS Standard."""
-    subject = f"Tag 7 · Was sich nach 30 Tagen ändert, {name}"
-    coaching_url = f"{app_url.rstrip('/')}/coaching"
-    # Iter 92.34 (Mert Go-Live §D3): hype-Sprache durch trust-building copy ersetzt.
-    # Fokus: Executive Communication + Personal Development + Structured Learning.
-    body = f"""
-<div style="background:linear-gradient(135deg,rgba(191,255,0,0.10),rgba(154,204,0,0.02));border:1px solid rgba(191,255,0,0.18);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
-  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tag 7 · Zwischenstand</div>
-  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">Wie war deine erste Woche mit Wlad?</div>
-</div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 18px;">
-Sieben Tage. Du hast einen Eindruck bekommen, wie sich strukturierte Kommunikations-Arbeit anfühlt. Vielleicht hast du eine Wlad-Übung in einem Gespräch ausprobiert, eine Mission aufgenommen, oder eine Idee aus einem Playbook umgesetzt.<br><br>
-Wenn du das Gefühl hast, dass diese Art zu arbeiten zu dir passt, lohnt sich ein Blick auf <b>Leadership OS</b> — der strukturierte Lernweg über 12 Monate:
-</p>
-<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">12 Videokurse</b> — ein neues Modul pro Monat zu Executive Communication, Verhandlung & Strategie</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Strukturierter Lernpfad</b> — KI-Coach passt sich deinen Ergebnissen und Zielen an</p>
-  <p style="font-size:13px;color:#fff;margin:0 0 10px;line-height:1.55;"><b style="color:{BRAND_COLOR};">Praxis-Frameworks</b> — Mitarbeitergespräche, Verhandlung, Rhetorik, 5 Führungsrollen</p>
-  <p style="font-size:13px;color:#fff;margin:0;line-height:1.55;"><b style="color:{BRAND_COLOR};">Video-Feedback</b> — du nimmst auf, die KI bewertet nach Wlads SEXIER-Modell (Statement · Explanation · eXample · Impact · Rebuttal)</p>
-</div>
-<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;margin:0 0 20px;">
-Du kannst dir den Plan in Ruhe ansehen — bei Fragen sprich gern ein 30-Min-Strategiegespräch mit uns durch, ohne Verkaufsdruck.
-</p>
-<div style="text-align:center;padding:6px 0 4px;">
-  <a href="{coaching_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Pläne ansehen</a>
-</div>
-<p style="font-size:11px;color:rgba(255,255,255,0.4);margin:20px 0 0;line-height:1.6;text-align:center;">
-30 Tage Geld-zurück-Garantie · keine Kreditkarte für Probezeit nötig.
-</p>
-"""
-    return subject, _base_layout(body, preheader="Was sich nach 30 Tagen Leader-OS ändert.")
-
+    badge = f"EP&nbsp;0{ep}&nbsp;/&nbsp;07"
+    return episode["subject"], _base_layout(body, preheader=f"{episode['framework']} — {episode['tagline']}", badge=badge)
 
 # ── Monthly Leadership Scorecard (Accelerator-only) ─────────────────────────
 
@@ -693,5 +787,5 @@ Hallo {name},
 </p>
 {unsub}
 """
-    return subject, _base_layout(body, preheader=f"Woche {week}: {subtitle} · {duration}")
+    return subject, _base_layout(body, preheader=f"Woche {week}: {subtitle} · {duration}", badge=f"WOCHE&nbsp;{week}&nbsp;/&nbsp;6")
 

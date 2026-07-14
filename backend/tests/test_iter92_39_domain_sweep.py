@@ -118,9 +118,9 @@ class TestEmailTemplates:
         subj, html = email_mod.tier_welcome_email(tier, "Mert")
         self._check(html, subj)
 
-    @pytest.mark.parametrize("fn", ["drip_day1_email", "drip_day3_email", "drip_day7_email"])
-    def test_drip(self, email_mod, fn):
-        subj, html = getattr(email_mod, fn)("Mert")
+    @pytest.mark.parametrize("ep_idx", range(7))
+    def test_drip(self, email_mod, ep_idx):
+        subj, html = email_mod.framework_episode_email("Mert", email_mod.FRAMEWORK_EPISODES[ep_idx])
         self._check(html, subj)
 
     def test_magic_link_template(self):

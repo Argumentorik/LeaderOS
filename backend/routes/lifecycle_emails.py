@@ -17,7 +17,7 @@ from config import db, logger
 from services import require_cron_auth
 from services_email import (
     send_email, trial_reminder_email,
-    drip_day1_email, drip_day3_email, drip_day7_email,
+    framework_episode_email, FRAMEWORK_EPISODES,
     video_drip_email, VIDEO_DRIP_VIDEOS,
     is_enabled as email_enabled,
 )
@@ -33,12 +33,9 @@ router = APIRouter(prefix="/api", tags=["lifecycle-emails"])
 # Reminder windows for the 14-day video-trial.
 TRIAL_REMINDER_DAYS_BEFORE = (3,)   # ping 3 days before deadline
 
-# Drip sequence: days since signup → drip stage
-DRIP_STAGES = [
-    (1, "drip_day1", drip_day1_email),
-    (3, "drip_day3", drip_day3_email),
-    (7, "drip_day7", drip_day7_email),
-]
+# Framework-Serie: days since signup → episode (EP 01/07 … EP 07/07)
+DRIP_STAGES = [(e["day"], f"drip_ep{e['ep']}", e) for e in FRAMEWORK_EPISODES]
+LEGACY_DRIP_TYPES = ["drip_day1", "drip_day3", "drip_day7"]
 
 
 def _days_since(iso_str: str | None) -> float | None:
@@ -135,10 +132,12 @@ async def cron_trial_reminders(request: Request):
 
 @router.post("/cron/drip-sequence")
 async def cron_drip_sequence(request: Request):
-    """Send Day 1, Day 3, Day 7 drip emails to all users based on their signup age.
+    """Send the EP 01/07 – EP 07/07 framework series based on signup age.
 
-    Each user gets each drip exactly once. Skips paid (standard/accelerator) users
-    after Day 1 — they already get a tier_welcome flow.
+    Each user gets each episode exactly once (email_log dedup), max ONE
+    episode per cron run (no mail-bombing). Users mid-way through the old
+    Day-1/3/7 drip are excluded to avoid double-onboarding during transition.
+    Respects `unsubscribed_drip` / `unsubscribed_all`.
     """
     require_cron_auth(request)
     if not email_enabled():
@@ -149,14 +148,16 @@ async def cron_drip_sequence(request: Request):
     sent_by_stage = {}
     scanned = 0
 
-    # Pull every user created in the past 14 days (drip ends at day 7 + buffer)
-    cutoff = (now - timedelta(days=14)).isoformat()
+    # Series ends at day 14 → scan users created in the past 21 days (buffer)
+    cutoff = (now - timedelta(days=21)).isoformat()
     candidates = await db.users.find(
         {
             "email": {"$exists": True, "$ne": ""},
             "created_at": {"$gte": cutoff},
+            "unsubscribed_drip": {"$ne": True},
+            "unsubscribed_all": {"$ne": True},
         },
-        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "created_at": 1, "tier": 1},
+        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "created_at": 1},
     ).to_list(5000)
 
     for u in candidates:
@@ -165,18 +166,17 @@ async def cron_drip_sequence(request: Request):
         if days is None:
             continue
         name = u.get("name") or u["email"].split("@")[0]
-        try:
-            tier_info = await resolve_user_tier(u)
-            user_tier = tier_info["tier"]
-        except Exception:
-            user_tier = u.get("tier") or "free"
 
-        for stage_days, log_type, template_fn in DRIP_STAGES:
+        # Transition safety: users already in the legacy Day-1/3/7 funnel
+        legacy = await db.email_log.find_one(
+            {"user_id": u["user_id"], "type": {"$in": LEGACY_DRIP_TYPES}}, {"_id": 1}
+        )
+        if legacy:
+            continue
+
+        for stage_days, log_type, episode in DRIP_STAGES:
             # Trigger if user crossed the stage threshold (≥ stage_days)
             if days < stage_days - 0.25:
-                continue
-            # Don't send the conversion-focused Day 7 mail to users who already paid
-            if log_type == "drip_day7" and user_tier in ("standard", "accelerator", "enterprise"):
                 continue
 
             already = await db.email_log.find_one(
@@ -185,9 +185,11 @@ async def cron_drip_sequence(request: Request):
             if already:
                 continue
 
-            # Iter 92.27: env-driven app_url so drip emails link to the right domain per Vercel project.
             from services_email import _frontend_url
-            subject, html = template_fn(name, app_url=_frontend_url())
+            unsub_link = unsubscribe_url(u["user_id"], "drip")
+            subject, html = framework_episode_email(
+                name, episode, app_url=_frontend_url(), unsubscribe_link=unsub_link
+            )
             result = await send_email(u["email"], subject, html)
             await db.email_log.insert_one({
                 "user_id": u["user_id"], "type": log_type,
@@ -198,6 +200,7 @@ async def cron_drip_sequence(request: Request):
             if result["sent"]:
                 sent_total += 1
                 sent_by_stage[log_type] = sent_by_stage.get(log_type, 0) + 1
+            break  # max one episode per user per run
 
     return {"sent": sent_total, "scanned": scanned, "by_stage": sent_by_stage}
 

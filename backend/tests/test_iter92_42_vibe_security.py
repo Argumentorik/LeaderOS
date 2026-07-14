@@ -167,14 +167,14 @@ class TestEmailTemplatesLinks:
         for h in [x for x in self._hrefs(html) if x.startswith("http")]:
             assert "leaderos.de" in h and "leader-os" not in h
 
-    @pytest.mark.parametrize("fn", ["drip_day1_email", "drip_day3_email", "drip_day7_email"])
-    def test_drip_links(self, fn):
+    @pytest.mark.parametrize("ep_idx", range(7))
+    def test_drip_links(self, ep_idx):
         import sys, importlib
         sys.path.insert(0, "/app/backend")
         m = importlib.import_module("services_email")
-        _, html = getattr(m, fn)("Mert")
+        _, html = m.framework_episode_email("Mert", m.FRAMEWORK_EPISODES[ep_idx])
         for h in [x for x in self._hrefs(html) if x.startswith("http")]:
-            assert h.startswith("https://leaderos.de"), f"{fn}: {h}"
+            assert h.startswith("https://leaderos.de"), f"EP {ep_idx + 1}: {h}"
 
     def test_stripe_receipt_links(self):
         import sys; sys.path.insert(0, "/app/backend")

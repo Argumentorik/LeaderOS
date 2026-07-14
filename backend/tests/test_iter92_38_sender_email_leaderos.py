@@ -88,12 +88,13 @@ class TestServicesEmailModule:
         assert "Mert" in subj, f"tier={tier} subject={subj!r}"
         assert len(html) > 1000, f"tier={tier} html len={len(html)}"
 
-    @pytest.mark.parametrize("fn", ["drip_day1_email", "drip_day3_email", "drip_day7_email"])
-    def test_drip_emails_render(self, fn):
+    @pytest.mark.parametrize("ep_idx", range(7))
+    def test_drip_emails_render(self, ep_idx):
         import services_email
-        subj, html = getattr(services_email, fn)(name="Mert")
+        episode = services_email.FRAMEWORK_EPISODES[ep_idx]
+        subj, html = services_email.framework_episode_email("Mert", episode)
         assert subj and isinstance(subj, str)
-        assert len(html) > 1000, f"{fn} html len={len(html)}"
+        assert len(html) > 1000, f"EP {ep_idx + 1} html len={len(html)}"
 
 
 # ───────── routes/support.py mailto links ─────────
