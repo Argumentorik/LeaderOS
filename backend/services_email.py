@@ -544,10 +544,10 @@ FRAMEWORK_EPISODES = [
     },
     {
         "ep": 6, "day": 11,
-        "framework": "Boardroom-Storytelling",
+        "framework": "Storytelling für Entscheider",
         "subject": "EP 06/07 · Storytelling + 20-Sekunden-Regel: Meetings gewinnen",
         "tagline": "Komplexe Ideen in 2 Minuten verkaufen.",
-        "what": "Wlads Boardroom-Dramaturgie: <b>3 Akte</b> (Status quo → Konflikt/Chance → Lösung mit klarem Call-to-Action) in maximal 2 Minuten. Dazu die <b>20-Sekunden-Regel</b>: Deine ersten 20 Sekunden im Meeting entscheiden, ob du den Raum führst oder ihm folgst — deshalb eröffnest du mit dem Ergebnis, nie mit dem Weg dorthin.",
+        "what": "Wlads Präsentations-Dramaturgie: <b>3 Akte</b> (Status quo → Konflikt/Chance → Lösung mit klarem Call-to-Action) in maximal 2 Minuten. Dazu die <b>20-Sekunden-Regel</b>: Deine ersten 20 Sekunden im Meeting entscheiden, ob du den Raum führst oder ihm folgst — deshalb eröffnest du mit dem Ergebnis, nie mit dem Weg dorthin.",
         "steps": [
             "Baue deine nächste Präsentation rückwärts: Erst der eine Satz, den alle erinnern sollen.",
             "Eröffne mit dem Ergebnis („Wir sparen 200k, wenn…“) — Details kommen danach.",
