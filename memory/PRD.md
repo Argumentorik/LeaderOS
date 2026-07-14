@@ -15,6 +15,13 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 106 · 14.07.26] GODMODE-Onboarding für neue User + KRITISCHER Login-Navigation-Fix** — Testing-Agent iteration_103 (Backend 8/8) + iteration_104 (Frontend 100%)
+  - **Post-Login-Routing NEU**: `lib/postLoginRoute.js` — neue User (ohne `onboarding_completed`) landen nach Register/Login/Google/Magic-Link/Lizenz-Key auf `/onboarding` statt `/dashboard` (vorher wurde die OnboardingPage NIE getriggert!). Verdrahtet in LoginPage, AuthCallback, MagicLinkVerifyPage, LicenseKeyForm.
+  - **🔴 KRITISCHER BUG GEFIXT (Testing-Agent-Fund)**: `ReferenceError: postLoginRoute is not defined` in LoginPage — Import-Zeile ging bei einem Edit verloren → JEDER Login/Register zeigte fälschlich „Keine Verbindung zum Server" und navigierte nie. Import restauriert, E2E verifiziert.
+  - **Neuer Showcase-Step (Step 2/9)**: Cinematic Dark-Card „Das ist kein gewöhnlicher ChatBot / Wlad — immer an deiner Seite" mit 4 Feature-Cards (Wlads gesamtes Wissen · Video-Feedback wie im 1:1 · Jeden Tag besser werden · Immer dabei — auch mobil) + Trust-Strip (DSGVO · Sichere Zahlung Stripe · Leader-Community). Kein RAG-Jargon. Mobil (390px) 1-spaltig verifiziert. data-testids: onboarding-features-step, feature-card-0..3, onboarding-trust-strip, onboarding-features-next.
+  - **Onboarding jetzt 9 Steps**: welcome → features(NEU) → profile → role → goal → heard → wladhub → call → done. Nach Abschluss setzt `POST /api/wladhub/onboarding` das Flag → Re-Login geht direkt zu /dashboard (E2E-verifiziert).
+  - **Go-Live-Speed-Check**: Chat mit RAG 3.5-4.5s ✅ · Stripe live+configured ✅ · /api/payments/packages 0.09s ✅ · Magic-Link/Lizenz-Tabs regression-free ✅.
+
 - [x] **[Iter 105 · 14.07.26] RAG-Wissen komplett: Lokaler Vector-Store (unchunked.zip, 53 Dateien → 7.439 Chunks) — Supabase-Ausfall-sicher** — self-tested E2E
   - **Root Cause gefunden**: Supabase-Vector-RPC hing 60-90s+ nach DB-Cold-Start (Projekt schläft ein) → RAG lieferte 0 Chunks in Chat/Voice/Video! Tabelle heißt `wladbot_documents` (nicht `documents`).
   - **Lösung: Lokaler Vector-Store** — Mongo-Collection `rag_chunks` (content, metadata{course, type: course|live_call, source_file}, embedding voyage-3 1024-dim) + `_match_local()` in services_rag.py: in-memory numpy-Matrix-Cache (Auto-Reload bei Count-Änderung/1h), Cosine-Match in **0.2s statt 90s**. Supabase-RPC nur noch Fallback (Timeout 12s).
