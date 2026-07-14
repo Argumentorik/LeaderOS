@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Test Security Fixes for WladBot Leadership OS
 - httpOnly cookies for session_token
@@ -53,7 +53,8 @@ class TestAuthSecurityFixes:
         response = session.post(f"{BASE_URL}/api/auth/register", json={
             "email": unique_email,
             "password": "testpass123",
-            "name": "Security Test User"
+            "name": "Security Test User",
+            "phone": f"+49157{uuid.uuid4().int % 10**8:08d}"
         })
         
         # Status assertion

@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Iteration 42 - Backend Tests for:
 1. /api/payments/packages - returns 3 packages including 'fast_track' at €6970

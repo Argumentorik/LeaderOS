@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Test suite for quiz_bank.py and /api/challenge30 endpoints
 Tests: 300 questions across 30 days, correct structure, valid types, unique content

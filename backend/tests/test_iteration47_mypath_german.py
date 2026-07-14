@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Iteration 47 - My Path German Personality-Based Levels Testing
 Tests the renamed levels after famous leadership personalities (German):

@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 110 · 14.07.26] GO-LIVE-AUDIT (objektiv, gegen Checkliste)** — Ergebnis: Preview = GO-ready · **PROD = NO-GO bis Re-Deploy + Reingest**
+  - ✅ Prod-Build: `yarn build` Compiled successfully, 0 Errors, 0 Warnings.
+  - ✅ Backend-Tests: kritische Suiten standalone grün (mvp_final 16/16, iteration63_voice 21/21, iter98_security 18/18, iter100 3/3). Full-Suite-One-Shot (901 Tests) scheitert strukturell am Login-Rate-Limit (10/15min) — ALLE Fehler waren „Too many requests"-Kaskaden, kein App-Defekt. 3 Stale-Tests gefixt: 9 alte Dateien `from tests.conftest` → `from conftest`, register-Test ohne Pflichtfeld `phone`, „Expected 4 challenges" → `>= 4` (App hat 16).
+  - ✅ RAG Preview: Grounding bestätigt (rag.active=true, 6 Chunks pro Antwort, SEXIER kanon-exakt) · Halluzinations-Check bestanden (erfundenes „QUANTUM-LEADER-Framework" ehrlich abgelehnt, echte „5 Rollen einer Führungskraft" angeboten).
+  - ✅ Rate-Limits nachweislich aktiv · Health ok · Stripe live · E-Mail-Versand live bestätigt (Resend) · Monitoring: Sentry (FE+BE DSN) + PostHog konfiguriert · deployment_agent: PASS, 0 Blocker.
+  - 🔴 **KRITISCH — PROD (leaderos.de) läuft auf ALTEM Stand**: Login/HTTPS ok, ABER `/api/admin/rag/*` = 404, drip_stages [1,3,7] (alte Serie), Chat: rag.active=false, 0 Chunks, 30s Antwortzeit, **Bot kennt SEXIER nicht**. → Alle Arbeiten seit RAG-Migration sind nicht deployed.
+  - **GO-Pfad (3 Schritte)**: 1) Re-Deploy des aktuellen Stands via Emergent Deploy-Button. 2) Danach als Admin: `POST https://leaderos.de/api/admin/rag/reingest` (lädt ZIP von persistenter Asset-URL, braucht VOYAGE_API_KEY aus .env; Fortschritt via `GET /api/admin/rag/local-status` bis chunks=7439). 3) Prod-E2E: Chat-Frage „Was ist das SEXIER-Modell?" → muss rag.active=true + Kanon-Antwort in <10s liefern.
+
 - [x] **[Iter 109 · 14.07.26] CODE-REVIEW-FIXES angewendet** — self-tested (webpack compiled clean, 21 Backend-Tests PASS, Smoke-Screenshot ohne pageerrors)
   - **Test-Secrets → Env-Vars**: `test_iter98_security.py`, `test_iter100_batch.py`, `test_iter92_43_auth_ui.py` nutzen jetzt `TEST_PASSWORD` aus conftest.py (env-driven); bewusste Weak-Password-Sentinels mit `noqa: S105` markiert.
   - **React-Hooks**: CoachingPage `handleStripeCheckout` → useCallback + Effect-Dependency (echte Warning). Hinweis: Die „187 Instanzen" des Review-Tools waren größtenteils False Positives (Imports/catch-Variablen zählen nicht als Hook-Deps) — live-Compile zeigt jetzt 0 eslint-Warnings.
