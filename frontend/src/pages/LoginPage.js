@@ -17,6 +17,7 @@ import { OAuthProviderStack } from '../components/auth/OAuthButtons';
 import { ContinueAsCard, useContinueAs } from '../components/auth/ContinueAsCard';
 import { useAuthProviders } from '../lib/authProviders';
 import { getLastLogin, forgetLogin } from '../lib/recentLogins';
+import { postLoginRoute } from '../lib/postLoginRoute';
 
 const getFeatures = (de) => (de ? [
   { t: '30-Tage KI-Leadership Sprint', s: 'Jeden Tag eine Challenge, die dich als Leader schärft — 300 Fragen, AI-Roleplays, echtes Momentum' },
