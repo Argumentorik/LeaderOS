@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 112 · 16.07.26] KOMPLETTER WISSENS-TEST + VOICE-RAG + MOBILE-UPGRADE** — getestet: 28/28 pytest PASS, Voice-E2E, Mobile-Screenshots + Overlap-Check
+  - **Wissens-Abdeckung KOMPLETT**: neue `tests/test_knowledge_coverage.py` — 21 Fragen über ALLE 25 Kurse (bessere Chef, Weiße Rhetorik, 4 Farbtypen, Sales, 5 Rollen, Charisma-8, Anker, Bewerbung, Lernen, Ethos/Pathos/Logos, Homeoffice, Körpersprache, Präsentation, schwierige Gespräche, Motivation, 6P-Storytelling, digitale Rhetorik, 30 Schlagfertigkeitstechniken, 10 Stufen Zuhören, SEXIER) → **21/21 PASS in 5,3s**. Plus golden_questions 7/7.
+  - **Voice + RAG verifiziert**: `_voice_llm_reply` nutzt Hybrid-Retrieval (10-Stufen-Antwort grounded ✅), TTS `POST /api/voice/tts` (persona: "wlad", ElevenLabs) liefert 40KB Audio in 1,7s ✅, STT via Whisper im /conversation-Flow.
+  - **Mobile-Design-Fixes (390px)**: 1) Dashboard-Header: horizontaler Overflow behoben (flex-wrap für Greeting + Badge-Reihe). 2) Chat-Eingabeleiste: kompaktere Gaps/Buttons (w-9→sm:w-10, gap-1.5→sm:gap-3, p-3→sm:p-4), Textarea flex-1 min-w-0. 3) **WladHelp-FAB überdeckte den Senden-Button** → auf /chat mobil `bottom-28 sm:bottom-6`, Overlap-Check per DOM: False ✅.
+  - **⚠️ REDEPLOY NÖTIG** für alle Iter-111+112-Fixes (Hybrid-RAG, golden-check-Endpoint, Mobile). Nach Deploy: `GET /api/admin/rag/golden-check` als Admin → PASS 7/7 erwartet.
+
 - [x] **[Iter 111 · 14.07.26] RAG GODMODE: Hybrid-Retrieval (Vektor + Keyword RRF) + Golden-Question-Selbsttest** — getestet: pytest 7/7 PASS + E2E-Chat-Verifikation der 3 roten User-Fragen
   - **Problem (User-Report mit Screenshot)**: 3 von 5 Golden Questions auf Prod ROT (SEXIER-Beispiel, 10 Stufen des Zuhörens, Charisma-8-Elemente). Root Cause: reine Vektor-Suche verfehlt Eigenbegriffe (SEXIER-Chunks rankten bei 0.42, generische Chunks gewannen). Daten waren ALLE da (51× SEXIER, 453× Zuhör, 131× Charisma) — reines Ranking-Problem.
   - **Fix in `services_rag.py`**: `_match_keyword` (Regex-Scan über rag_chunks.content mit Salient-Term-Extraktion: deutsche Stopwords + Domain-Noise-Filter, Suffix-Stripping für Plurale/Genitive) läuft PARALLEL zur Vektor-Suche, `_fuse_rrf` (Reciprocal Rank Fusion, k=60) fusioniert beide → top 8 (`RAG_FUSED_COUNT`). Bonus-Resilienz: Keyword-Pfad braucht KEINE externen Keys → RAG funktioniert selbst bei Voyage-Ausfall.

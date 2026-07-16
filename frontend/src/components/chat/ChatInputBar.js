@@ -28,9 +28,9 @@ export const ChatInputBar = ({
   isPremium, onOpenUpsell, onOpenAudioMode, de,
   coachMode, setCoachMode,
 }) => (
-  <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
+  <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-3 sm:p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
     {attachedPdf && <AttachedPreview attachedPdf={attachedPdf} onRemove={() => setAttachedPdf(null)} de={de} />}
-    <div className="flex gap-3 max-w-4xl mx-auto">
+    <div className="flex items-end gap-1.5 sm:gap-3 max-w-4xl mx-auto">
       <VoiceRecorder onTranscription={onVoice} disabled={loading} />
       <button
         type="button"
@@ -38,12 +38,12 @@ export const ChatInputBar = ({
         disabled={loading}
         data-testid="audio-mode-btn"
         title={de ? 'Audio-Modus (Hands-free Voice Chat)' : 'Audio Mode (Hands-free Voice Chat)'}
-        className={`flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#BFFF00] to-[#9FE000] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/30 transition-all shrink-0 ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#BFFF00] to-[#9FE000] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/30 transition-all shrink-0 ${loading ? 'opacity-50 pointer-events-none' : ''}`}
       >
         <Headphones size={15} strokeWidth={2.5} />
       </button>
       <label
-        className={`cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border border-[#BFFF00]/20 transition-colors shrink-0 ${(loading || uploadingPdf) ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`cursor-pointer flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border border-[#BFFF00]/20 transition-colors shrink-0 ${(loading || uploadingPdf) ? 'opacity-50 pointer-events-none' : ''}`}
         data-testid="pdf-upload-btn"
         title={de ? 'Dokument anhängen (PDF, Word, TXT, Bild)' : 'Attach document (PDF, Word, TXT, image)'}
       >
@@ -66,7 +66,7 @@ export const ChatInputBar = ({
           title={de
             ? (coachMode ? 'Coach-Modus aktiv: strukturierte Antworten mit Strategie & Schritten' : 'Coach-Modus: strukturierte Antworten mit Strategie & Schritten')
             : (coachMode ? 'Coach mode on: structured replies with strategy & steps' : 'Coach mode: structured replies with strategy & steps')}
-          className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all shrink-0 ${coachMode
+          className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition-all shrink-0 ${coachMode
             ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-lg shadow-[#BFFF00]/30'
             : 'bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border-[#BFFF00]/20 text-[#6B8A00] dark:text-[#BFFF00]'} ${loading ? 'opacity-50 pointer-events-none' : ''}`}
         >
@@ -80,7 +80,7 @@ export const ChatInputBar = ({
           : coachMode
             ? (de ? 'Coach-Modus: Wlad antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
             : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
-        className="resize-none min-h-[46px] max-h-32 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
+        className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}
         className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
         {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}

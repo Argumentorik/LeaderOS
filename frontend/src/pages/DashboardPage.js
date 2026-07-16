@@ -110,10 +110,10 @@ export default function DashboardPage() {
         <OnboardingVideoModal />
 
         {/* ── Greeting ── */}
-        <div className="flex items-center justify-between mb-8" data-anim="dash-header">
+        <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-8" data-anim="dash-header">
           <div>
             <p className="text-sm text-muted-foreground">{de ? 'Willkommen zurück,' : 'Welcome back,'}</p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{ud.name || 'Leader'}</h1>
               <TierBadge size="sm" />
               {tierInfo?.inGracePeriod && (
@@ -123,7 +123,7 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button variant="outline" size="sm" onClick={() => navigate('/chat')} className="font-semibold text-xs h-9 gap-1.5" data-testid="talk-coach-btn">
               <MessageSquareText size={14} /> {de ? 'KI-Coach' : 'AI Coach'}
             </Button>
