@@ -69,3 +69,41 @@ async def reingest(body: ReingestBody, request: Request):
     asyncio.create_task(_run_ingest(body.zip_url))
     logger.info(f"RAG re-ingest started by {admin.get('email')}")
     return {"started": True, "note": "Läuft im Hintergrund (~15-20 Min wegen Voyage-Rate-Limit). Status: GET /api/admin/rag/local-status"}
+
+
+# ── Golden-Question self-test (Iter 111 · Mert: "nie wieder ein Fehler") ─────
+# Runs the canonical Wlad questions through the LIVE retrieval pipeline and
+# checks that the expected framework content is actually in the context block.
+GOLDEN_QUESTIONS = [
+    {"q": "Erklär mir das SEXIER Modell von Wlad anhand eines Beispiels", "expect_any": ["SEXIER", "sexier"]},
+    {"q": "Was sind die 30 Schlagfertigkeitstechniken von Wlad?", "expect_any": ["chlagfertig"]},
+    {"q": "Es gibt doch irgendein 6P-Modell zum Thema Storytelling bei Wlad. Was ist das genau?", "expect_any": ["6P", "6 P"]},
+    {"q": "Was sind die zehn Stufen des Zuhörens?", "expect_any": ["Stufen des Zuhörens", "Zuhör"]},
+    {"q": "Wlad hat ein Charisma-Modell aus acht Elementen. Was sind diese acht?", "expect_any": ["harisma"]},
+    {"q": "Was ist die Weiße Rhetorik?", "expect_any": ["eiße Rhetorik", "eisse Rhetorik", "Rhetorik"]},
+    {"q": "Wie setze ich einen Anker in der Gehaltsverhandlung?", "expect_any": ["nker", "erhandl"]},
+]
+
+
+@router.get("/golden-check")
+async def golden_check(request: Request):
+    from routes.admin import require_admin
+    await require_admin(request)
+    from services_rag import retrieve_context
+    results = []
+    for g in GOLDEN_QUESTIONS:
+        ctx = await retrieve_context(g["q"])
+        block = ctx["context_block"]
+        hit = any(term in block for term in g["expect_any"])
+        results.append({
+            "question": g["q"],
+            "pass": bool(hit and ctx["rag_active"]),
+            "chunks": ctx["chunks_count"],
+        })
+    passed = sum(1 for r in results if r["pass"])
+    return {
+        "status": "PASS" if passed == len(results) else "FAIL",
+        "passed": f"{passed}/{len(results)}",
+        "chunks_in_store": await db.rag_chunks.estimated_document_count(),
+        "results": results,
+    }

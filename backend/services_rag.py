@@ -108,6 +108,100 @@ def _match_manual_chunks(query: str) -> list[dict]:
     return matched
 
 
+# ── Hybrid keyword retrieval (Iter 111 · Mert GODMODE) ──────────────────────
+# Pure vector search misses Wlad's proper-noun frameworks ("SEXIER", "6P",
+# "Charisma-Modell") because rare tokens embed poorly. We therefore run a
+# parallel keyword scan over `rag_chunks.content` and fuse both result lists
+# with Reciprocal Rank Fusion. Needs NO external service — Mongo only.
+_STOPWORDS = {
+    "der", "die", "das", "und", "oder", "was", "wie", "wer", "wann", "warum", "wieso",
+    "welche", "welcher", "welches", "sind", "ist", "sein", "seine", "eines", "einer",
+    "einem", "einen", "eine", "ein", "mir", "mich", "dir", "dich", "von", "vom", "zum",
+    "zur", "mit", "bei", "aus", "für", "auf", "doch", "gibt", "den", "dem", "des",
+    "hat", "habe", "haben", "kann", "kannst", "können", "soll", "sollte", "bitte",
+    "mal", "denn", "dann", "also", "über", "unter", "nach", "vor", "anhand", "thema",
+    "genau", "irgendein", "irgendwas", "noch", "nur", "auch", "sehr", "dass", "nicht",
+    "kein", "keine", "diese", "dieser", "dieses", "acht", "zehn", "mein", "meine",
+    # domain-generic (appear in almost every chunk → noise)
+    "wlad", "wlads", "jachtchenko", "modell", "modells", "modelle", "framework",
+    "frameworks", "beispiel", "beispiels", "beispiele", "beispielen", "erklär",
+    "erkläre", "erklären", "methode", "methoden", "sagt", "sage", "nenne", "stufen",
+}
+
+
+def _salient_terms(query: str) -> list[str]:
+    """Extract rare/framework-ish terms worth an exact keyword lookup."""
+    import re as _re
+    tokens = _re.findall(r"[A-Za-zÄÖÜäöüß0-9\-]+", query.lower())
+    terms = []
+    for t in tokens:
+        if t in _STOPWORDS:
+            continue
+        if len(t) < 4 and not any(ch.isdigit() for ch in t):
+            continue
+        terms.append(t)
+    return list(dict.fromkeys(terms))[:6]
+
+
+def _term_variants(term: str) -> list[str]:
+    """Substring variants: raw + suffix-stripped (German plurals/genitives)."""
+    v = {term[:14]}
+    stripped = term.rstrip("sne")
+    if len(stripped) >= 4:
+        v.add(stripped[:14])
+    return list(v)
+
+
+async def _match_keyword(query: str) -> list[dict]:
+    """Regex keyword scan over rag_chunks, scored by distinct-term coverage."""
+    import re as _re
+    from config import db
+    terms = _salient_terms(query)
+    if not terms:
+        return []
+    try:
+        variants_per_term = [_term_variants(t) for t in terms]
+        pattern = "|".join(_re.escape(v) for vs in variants_per_term for v in vs)
+        docs = await db.rag_chunks.find(
+            {"content": {"$regex": pattern, "$options": "i"}},
+            {"_id": 0, "content": 1, "metadata": 1},
+        ).limit(500).to_list(500)
+        scored = []
+        for d in docs:
+            lc = d["content"].lower()
+            distinct = sum(1 for vs in variants_per_term if any(v in lc for v in vs))
+            freq = sum(lc.count(vs[0]) for vs in variants_per_term)
+            score = distinct * 100 + min(freq, 30)
+            scored.append((score, d))
+        scored.sort(key=lambda x: -x[0])
+        top = scored[:10]
+        return [
+            {**d, "similarity": min(0.95, 0.55 + 0.08 * (s // 100))}
+            for s, d in top if s >= 100
+        ]
+    except Exception as e:
+        logger.warning("RAG: keyword match failed: %s", e)
+        return []
+
+
+FUSED_COUNT = int(os.environ.get("RAG_FUSED_COUNT", "8"))
+
+
+def _fuse_rrf(result_lists: list[list[dict]], k: int = 60, top: int | None = None) -> list[dict]:
+    """Reciprocal Rank Fusion across retrieval lists, deduped by content."""
+    scores: dict[str, float] = {}
+    first: dict[str, dict] = {}
+    for lst in result_lists:
+        for rank, c in enumerate(lst):
+            key = (c.get("content") or "")[:160]
+            if not key:
+                continue
+            scores[key] = scores.get(key, 0.0) + 1.0 / (k + rank + 1)
+            first.setdefault(key, c)
+    ordered = sorted(scores, key=lambda x: -scores[x])
+    return [first[x] for x in ordered[: top or FUSED_COUNT]]
+
+
 def _is_configured() -> bool:
     """Both Voyage AND Supabase must be set for RAG to function."""
     return bool(os.environ.get("VOYAGE_API_KEY")) and bool(os.environ.get("SUPABASE_URL")) \
@@ -373,14 +467,6 @@ async def retrieve_context(query: str) -> dict[str, Any]:
     # ── Manual chunks (deterministic, keyword-triggered) — always evaluated.
     manual = _match_manual_chunks(query)
 
-    if not _is_configured():
-        # No Voyage/Supabase configured — but we can still serve manual chunks.
-        if manual:
-            ctx_block = _format_chunks_for_prompt(manual)
-            logger.info("RAG: injected %d manual chunk(s) (Voyage/Supabase off)", len(manual))
-            return {"context_block": ctx_block, "chunks_count": len(manual), "rag_active": bool(ctx_block)}
-        return empty
-
     # Cache check
     cached = _cache_get(query)
     if cached is not None:
@@ -388,22 +474,36 @@ async def retrieve_context(query: str) -> dict[str, Any]:
         ctx_block = _format_chunks_for_prompt(combined)
         return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
 
-    embedding = await _embed_query(query)
-    if not embedding:
-        if manual:
-            ctx_block = _format_chunks_for_prompt(manual)
-            return {"context_block": ctx_block, "chunks_count": len(manual), "rag_active": bool(ctx_block)}
-        return empty
-    chunks = await _match_local(embedding)
-    if not chunks:
-        chunks = await _match_documents(embedding)
+    # ── Hybrid retrieval (Iter 111): vector + keyword in parallel, RRF-fused.
+    # Keyword path needs NO external keys — RAG keeps working even if Voyage
+    # is down or unconfigured (huge resilience win for prod).
+    has_voyage = bool(os.environ.get("VOYAGE_API_KEY"))
+    embedding, kw_chunks = await asyncio.gather(
+        _embed_query(query) if has_voyage else _noop_none(),
+        _match_keyword(query),
+    )
+    vec_chunks: list[dict] = []
+    if embedding:
+        vec_chunks = await _match_local(embedding)
+        if not vec_chunks and _is_configured():
+            vec_chunks = await _match_documents(embedding)
+
+    if vec_chunks and kw_chunks:
+        chunks = _fuse_rrf([vec_chunks, kw_chunks])
+    else:
+        chunks = (vec_chunks or kw_chunks)[:FUSED_COUNT]
+
     _cache_put(query, chunks)
     combined = manual + chunks
     ctx_block = _format_chunks_for_prompt(combined)
     if ctx_block:
-        logger.info("RAG: injected %d chunks (%d manual + %d retrieved) for query (len=%d)",
-                    len(combined), len(manual), len(chunks), len(query))
+        logger.info("RAG: injected %d chunks (%d manual + %d vector + %d keyword → %d fused) for query (len=%d)",
+                    len(combined), len(manual), len(vec_chunks), len(kw_chunks), len(chunks), len(query))
     return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
+
+
+async def _noop_none():
+    return None
 
 
 def rag_status() -> dict[str, Any]:

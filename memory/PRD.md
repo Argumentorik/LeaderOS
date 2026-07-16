@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 111 · 14.07.26] RAG GODMODE: Hybrid-Retrieval (Vektor + Keyword RRF) + Golden-Question-Selbsttest** — getestet: pytest 7/7 PASS + E2E-Chat-Verifikation der 3 roten User-Fragen
+  - **Problem (User-Report mit Screenshot)**: 3 von 5 Golden Questions auf Prod ROT (SEXIER-Beispiel, 10 Stufen des Zuhörens, Charisma-8-Elemente). Root Cause: reine Vektor-Suche verfehlt Eigenbegriffe (SEXIER-Chunks rankten bei 0.42, generische Chunks gewannen). Daten waren ALLE da (51× SEXIER, 453× Zuhör, 131× Charisma) — reines Ranking-Problem.
+  - **Fix in `services_rag.py`**: `_match_keyword` (Regex-Scan über rag_chunks.content mit Salient-Term-Extraktion: deutsche Stopwords + Domain-Noise-Filter, Suffix-Stripping für Plurale/Genitive) läuft PARALLEL zur Vektor-Suche, `_fuse_rrf` (Reciprocal Rank Fusion, k=60) fusioniert beide → top 8 (`RAG_FUSED_COUNT`). Bonus-Resilienz: Keyword-Pfad braucht KEINE externen Keys → RAG funktioniert selbst bei Voyage-Ausfall.
+  - **Golden-Check-Endpoint NEU**: `GET /api/admin/rag/golden-check` (Admin) — 7 kanonische Fragen durch die Live-Pipeline, liefert PASS/FAIL + chunks_in_store. Für Post-Deploy-Validierung auf Prod in 1 Call.
+  - **Pytest NEU**: `tests/test_golden_questions.py` — 7/7 PASS in 2s (Retrieval-Level, kein LLM-Kostenaufwand).
+  - **E2E verifiziert (Preview-Chat)**: SEXIER 6 Bausteine ✅ · 10 Stufen komplett ✅ · Charisma-Code alle 8 Elemente (Credo, Habitus, Außeralltäglichkeit…) ✅ — 3,5–6,7s.
+  - **⚠️ PROD: Redeploy nötig** (Code-Änderung; Daten liegen schon in Prod-DB). Danach als Admin: `GET https://leaderos.de/api/admin/rag/golden-check` → muss `status: PASS, 7/7` liefern.
+
 - [x] **[Iter 110 · 14.07.26] GO-LIVE-AUDIT (objektiv, gegen Checkliste)** — Ergebnis: Preview = GO-ready · **PROD = NO-GO bis Re-Deploy + Reingest**
   - ✅ Prod-Build: `yarn build` Compiled successfully, 0 Errors, 0 Warnings.
   - ✅ Backend-Tests: kritische Suiten standalone grün (mvp_final 16/16, iteration63_voice 21/21, iter98_security 18/18, iter100 3/3). Full-Suite-One-Shot (901 Tests) scheitert strukturell am Login-Rate-Limit (10/15min) — ALLE Fehler waren „Too many requests"-Kaskaden, kein App-Defekt. 3 Stale-Tests gefixt: 9 alte Dateien `from tests.conftest` → `from conftest`, register-Test ohne Pflichtfeld `phone`, „Expected 4 challenges" → `>= 4` (App hat 16).
