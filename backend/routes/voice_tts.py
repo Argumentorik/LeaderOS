@@ -380,7 +380,9 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"voicemode_{session_id}", system_message=system_msg)
     # gpt-4o-mini = ~10x schneller als gpt-5.2 für 2-3 Satz-Voice-Antworten.
     # RAG-Block grounded ihn auf Wlads Frameworks → Qualität bleibt hoch.
-    chat.with_model("openai", "gpt-4o-mini")
+    # Voice quality (Tester-Feedback Iter 115): gpt-4o statt gpt-4o-mini —
+    # deutlich bessere Antworten, immer noch schnell genug für Voice (~3-5s).
+    chat.with_model("openai", "gpt-4o")
 
     # Build short context — only last 6 turns to keep TTS latency low
     ctx_lines = []

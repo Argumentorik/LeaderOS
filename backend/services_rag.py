@@ -42,7 +42,7 @@ EMBEDDING_DIM = 1024
 # zero context. Iter 92.6 lowered to 0.25 to actually surface relevant chunks.
 MATCH_THRESHOLD = float(os.environ.get("RAG_MATCH_THRESHOLD", "0.25"))
 MATCH_COUNT = int(os.environ.get("RAG_MATCH_COUNT", "6"))              # top-K chunks
-MAX_CONTEXT_CHARS = 14000    # Iter 92.23.5: bumped 4k → 14k to fit the new long course transcripts (avg 4000 chars/chunk × 3-4 chunks fits comfortably in GPT-5.2 context).
+MAX_CONTEXT_CHARS = 20000    # Iter 115: bumped 14k → 20k (Tester: "RAG retrieves less than 1.0") — more fused chunks reach the model.
 CACHE_TTL_SECONDS = 1800     # in-memory cache, 30min — covers chatty sessions
 CACHE_MAX_ENTRIES = 1024
 
