@@ -24,7 +24,6 @@
  *   - icon       Lucide icon component for ordered items (default Sparkles)
  *   - className  passthrough
  */
-import { Sparkles } from 'lucide-react';
 
 const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;
 const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
@@ -113,7 +112,7 @@ function parseBlocks(text) {
   return blocks;
 }
 
-const OrderedCard = ({ item, accent, Icon }) => (
+const OrderedCard = ({ item, accent }) => (
   <div className="group relative flex items-start gap-3 p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-tint)] transition-all"
        style={{ '--accent': accent, '--accent-tint': `${accent}14` }}>
     <span
@@ -125,7 +124,6 @@ const OrderedCard = ({ item, accent, Icon }) => (
     <div className="flex-1 min-w-0">
       <p className="text-[13px] leading-relaxed text-foreground">{renderInline(item.text)}</p>
     </div>
-    <Icon size={12} className="text-muted-foreground/30 group-hover:text-[color:var(--accent)] shrink-0 mt-1 transition-colors" />
   </div>
 );
 
@@ -143,7 +141,6 @@ export const SmartText = ({
   text,
   variant = 'card',
   accent = '#BFFF00',
-  icon: Icon = Sparkles,
   className = '',
 }) => {
   if (!text) return null;
@@ -173,7 +170,7 @@ export const SmartText = ({
           return (
             <div key={`bl-${bIdx}`} className={listGap}>
               {b.items.map((it, i) => (
-                <OrderedCard key={`oi-${i}`} item={{ num: it.num ?? i + 1, text: it.text }} accent={accent} Icon={Icon} />
+                <OrderedCard key={`oi-${i}`} item={{ num: it.num ?? i + 1, text: it.text }} accent={accent} />
               ))}
             </div>
           );

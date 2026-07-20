@@ -12,6 +12,10 @@ router = APIRouter(prefix="/api", tags=["my-path"])
 # strategy: give value upfront, convert to Leadership OS / PLUS later).
 # Remaining 4: Accelerator-exclusive Masterclasses.
 LEARNING_VIDEOS = [
+    # Onboarding-Kurs — Plattform-Tutorial für neue User (Tester-Wunsch Iter 114)
+    {"id": "v0", "title": "Leader-OS Onboarding: Erste Schritte", "duration": "18 Min", "module": "Onboarding",
+     "description": "So holst du alles raus: KI-Coach richtig fragen, Video-Missionen, Daily Check-in, Leader-Diagnose & dein 30-Tage-Loop.",
+     "min_tier": "free", "episodes": 7, "thumbnail_color": "#BFFF00", "level": "Start"},
     # Free leadership starter pack (lead-magnet — 6 episodes, no tier required)
     {"id": "v1", "title": "Rhetorik-Grundlagen", "duration": "42 Min", "module": "Kommunikation",
      "description": "Die 3 Säulen wirkungsvoller Führungssprache. Körpersprache, Stimme & Wortwahl.",

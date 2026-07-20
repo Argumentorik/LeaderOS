@@ -190,15 +190,16 @@
 
 /* Iter 96: Claude-style thinking status — soft text shimmer sweep */
 .wlad-thinking-shimmer {
-  background: linear-gradient(90deg, currentColor 0%, currentColor 40%, rgba(191, 255, 0, 0.95) 50%, currentColor 60%, currentColor 100%);
-  background-size: 200% 100%;
+  background: linear-gradient(90deg, currentColor 0%, currentColor 45%, rgba(191, 255, 0, 0.95) 50%, currentColor 55%, currentColor 100%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: wladThinkingSweep 2.2s linear infinite;
 }
 @keyframes wladThinkingSweep {
-  0% { background-position: 200% 0; }
+  0% { background-position: 100% 0; }
   100% { background-position: -200% 0; }
 }
 

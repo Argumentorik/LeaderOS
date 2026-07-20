@@ -88,7 +88,7 @@ const PlainAssistantMessage = ({ content }) => (
   <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
     <WladBotAvatar size={28} className="mt-1" />
     <div className="max-w-[80%] bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-      <SmartText text={content} variant="inline" accent="#BFFF00" icon={Lightbulb} />
+      <SmartText text={content} variant="inline" accent="#BFFF00" />
     </div>
   </div>
 );
@@ -135,7 +135,7 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
               <Lightbulb size={14} className="text-amber-500" />
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{de ? 'Leadership-Erkenntnis' : 'Leadership Insight'}</span>
             </div>
-            <SmartText text={parsed.insight} variant="inline" accent="#F59E0B" icon={Lightbulb} />
+            <SmartText text={parsed.insight} variant="inline" accent="#F59E0B" />
           </div>
         )}
         {parsed.strategy && (

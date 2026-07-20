@@ -79,7 +79,7 @@ export default function ChallengersPage() {
   const [starting, setStarting] = useState(false);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
-  const [ttsEnabled, setTtsEnabled] = useState(true);
+  const [ttsEnabled, setTtsEnabled] = useState(false); // Tester-Feedback: kein Audio-Autoplay — User schaltet bewusst ein
   const scrollRef = useRef(null);
   const navigate = useNavigate();
 

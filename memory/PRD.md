@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 114 · 20.07.26] ADMIN-DESIGN-FIX + ONBOARDING-VIDEOKURS + TESTER-QUICK-WINS** — getestet: Screenshots (Admin light-mode, Lernvideos), Compile clean
+  - **Admin Wissens-Studio Design-Bug behoben**: RagDebugStudio hatte hardcoded white-on-dark Klassen → im Light-Mode unsichtbar. 56 Klassen theme-aware ersetzt (text-foreground, bg-black/x dark:bg-white/x, Lime→#6B8A00 dark:#BFFF00). Jetzt in beiden Modes perfekt lesbar.
+  - **Onboarding-Videokurs NEU**: `v0 „Leader-OS Onboarding: Erste Schritte"` (7 Folgen, Modul „Onboarding", free, Lime-Thumbnail) als ERSTER Kurs in der Leadership Library (my_path.py LEARNING_VIDEOS).
+  - **Tester-Feedback Quick-Wins (4/9)**: 1) Challenger-Audio-Autoplay AUS (ttsEnabled default false — User schaltet bewusst ein). 2) Grünes Sparkles-Icon an jedem Listen-Item entfernt (SmartText OrderedCard, Icon-Prop komplett entfernt). 3) „Wlad denkt nach"-Shimmer: letzter Buchstabe blieb grün → Gradient auf 300% + no-repeat + Keyframes gefixt. 4) Chat-Placeholder vertikal zentriert (py-[13px] leading-5).
+  - **Tester-Feedback OFFEN (braucht User-Entscheidung/größeren Scope)**: a) Challengers vorerst ausblenden (Feature Flag), b) leader-check.de-Ergebnisse mit leaderos-Account verknüpfen, c) Bot-Sprache soll User-Language-Setting folgen (aktuell immer Deutsch) + fehlende Übersetzungen, d) „Seite zu busy nach Login" (Dashboard-Vereinfachung).
+
 - [x] **[Iter 113 · 20.07.26] RAG CONTROL CENTER (Admin-UI) + Prod-GO-Verifikation** — getestet: UI-E2E (Golden-Check PASS 7/7 im Panel), Prod-Chat-Verifikation
   - **PROD VERIFIZIERT NACH DEPLOY**: Hybrid-RAG live auf leaderos.de — Charisma-8 ✅ (7s), SEXIER alle 6 Elemente ✅ (8,8s), rag.active=true.
   - **Neue Admin-UI `RagControlCenter`** (in AdminPage über dem Wissens-Studio): Live-Chunk-Status (Auto-Poll alle 5s während Ingest), „Wissen neu einlesen"-Button (POST reingest, optionales ZIP-URL-Feld, Default = Standard-Wissenspaket von persistenter Asset-URL), „Golden-Check (7 Fragen)"-Button mit Pass/Fail-Liste. data-testids: rag-control-center, rag-chunk-count, rag-reingest-btn, rag-golden-btn, rag-golden-results, rag-zip-input.
