@@ -15,6 +15,7 @@ import { AuthHealthWidget } from '../components/admin/AuthHealthWidget';
 import { SyncHealthWidget } from '../components/admin/SyncHealthWidget';
 import { UserManageCard } from '../components/admin/UserManageCard';
 import { RagDebugStudio } from '../components/admin/RagDebugStudio';
+import { RagControlCenter } from '../components/admin/RagControlCenter';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
 import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
 
@@ -270,6 +271,21 @@ export default function AdminPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* RAG Control Center — status, re-ingest, golden check (Iter 113) */}
+        <div className="mt-2">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? 'RAG Control Center' : 'RAG Control Center'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Wlads Wissensbasis verwalten: neu einlesen (ZIP), Chunk-Status live, Golden-Question-Selbsttest nach jedem Deploy.'
+                : "Manage Wlad's knowledge base: re-ingest (ZIP), live chunk status, golden-question self-test after every deploy."}
+            </p>
+          </div>
+          <RagControlCenter de={de} />
+        </div>
 
         {/* RAG Debug Studio — diagnose WladBot's knowledge retrieval */}
         <div className="mt-2">

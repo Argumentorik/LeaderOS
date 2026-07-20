@@ -15,6 +15,12 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 113 · 20.07.26] RAG CONTROL CENTER (Admin-UI) + Prod-GO-Verifikation** — getestet: UI-E2E (Golden-Check PASS 7/7 im Panel), Prod-Chat-Verifikation
+  - **PROD VERIFIZIERT NACH DEPLOY**: Hybrid-RAG live auf leaderos.de — Charisma-8 ✅ (7s), SEXIER alle 6 Elemente ✅ (8,8s), rag.active=true.
+  - **Neue Admin-UI `RagControlCenter`** (in AdminPage über dem Wissens-Studio): Live-Chunk-Status (Auto-Poll alle 5s während Ingest), „Wissen neu einlesen"-Button (POST reingest, optionales ZIP-URL-Feld, Default = Standard-Wissenspaket von persistenter Asset-URL), „Golden-Check (7 Fragen)"-Button mit Pass/Fail-Liste. data-testids: rag-control-center, rag-chunk-count, rag-reingest-btn, rag-golden-btn, rag-golden-results, rag-zip-input.
+  - **WICHTIG**: Admin-Panel-Route ist `/wlad-control-x7k9q2` (nicht /admin — non-guessable, SEC). Prod-Link: https://leaderos.de/wlad-control-x7k9q2
+  - **⚠️ REDEPLOY NÖTIG**, damit das Control Center auf Prod erscheint (Backend-Endpoints sind schon live).
+
 - [x] **[Iter 112 · 16.07.26] KOMPLETTER WISSENS-TEST + VOICE-RAG + MOBILE-UPGRADE** — getestet: 28/28 pytest PASS, Voice-E2E, Mobile-Screenshots + Overlap-Check
   - **Wissens-Abdeckung KOMPLETT**: neue `tests/test_knowledge_coverage.py` — 21 Fragen über ALLE 25 Kurse (bessere Chef, Weiße Rhetorik, 4 Farbtypen, Sales, 5 Rollen, Charisma-8, Anker, Bewerbung, Lernen, Ethos/Pathos/Logos, Homeoffice, Körpersprache, Präsentation, schwierige Gespräche, Motivation, 6P-Storytelling, digitale Rhetorik, 30 Schlagfertigkeitstechniken, 10 Stufen Zuhören, SEXIER) → **21/21 PASS in 5,3s**. Plus golden_questions 7/7.
   - **Voice + RAG verifiziert**: `_voice_llm_reply` nutzt Hybrid-Retrieval (10-Stufen-Antwort grounded ✅), TTS `POST /api/voice/tts` (persona: "wlad", ElevenLabs) liefert 40KB Audio in 1,7s ✅, STT via Whisper im /conversation-Flow.
