@@ -18,6 +18,17 @@ import { markChangelogSeen } from '../lib/changelogMeta';
 
 const ENTRIES = [
   {
+    date: '20. Juli 2026',
+    version: 'v116',
+    tag: 'SHIP',
+    title: 'RAG-Engine 2.0 — Embeddings jetzt 100% lokal',
+    bullets: [
+      'Voyage AI komplett entfernt: Embeddings laufen jetzt direkt auf dem Server (multilingual MiniLM, 384 dim).',
+      'Keine externen Keys, keine Rate-Limits mehr — Wissens-Suche in <50ms, beliebig viele Anfragen.',
+      'Alle Wissens-Chunks neu eingebettet, Hybrid-Retrieval (Vektor + Keyword + RRF) bleibt aktiv.',
+    ],
+  },
+  {
     date: '1. Juli 2026',
     version: 'v92.49',
     tag: 'SHIP',

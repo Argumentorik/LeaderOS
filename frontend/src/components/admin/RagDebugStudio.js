@@ -1,8 +1,8 @@
 /**
  * RAG Debug Studio — admin-only diagnostic tool for the WladBot knowledge base.
  *
- * Lets the operator (Mert) feed any user-style query through the same Voyage →
- * Supabase pipeline that powers WladBot chat, and see:
+ * Lets the operator (Mert) feed any user-style query through the same local
+ * embedding → Mongo vector pipeline that powers WladBot chat, and see:
  *   - top-N chunks + similarity scores
  *   - which courses / sections / themes / layers are hit
  *   - coverage warnings (zero hits, low relevance)

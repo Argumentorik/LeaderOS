@@ -185,7 +185,7 @@ async def rag_health() -> dict:
     """Diagnostic: is the WladBot RAG knowledge layer wired up correctly?
 
     Returns config flags + cache size. Does NOT expose secret values.
-    Use this after rotating Voyage/Supabase keys to verify activation.
+    Embeddings run fully local (no external keys) since Iter 116.
     """
     from services_rag import rag_status
     return rag_status()
@@ -226,6 +226,14 @@ app.add_middleware(RateLimitMiddleware)
 
 @app.on_event("startup")
 async def startup() -> None:
+    # Warm the local embedding model so the first RAG query is instant
+    try:
+        import asyncio as _aio
+        from services_embeddings import preload
+        _aio.get_event_loop().create_task(preload())
+    except Exception as e:
+        logger.warning(f"Embedding preload deferred: {e}")
+
     try:
         from routes.uploads import init_storage
         init_storage()

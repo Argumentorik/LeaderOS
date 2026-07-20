@@ -500,7 +500,7 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
     prompt_text = _build_analysis_prompt(challenge, transcript, prev_attempts, user_memory, rating_context)
 
     # Pull Wlad-specific RAG context. Best-effort — falls back to base prompt
-    # if Supabase/Voyage are unreachable.
+    # if retrieval fails.
     rag_block = ""
     try:
         from services_rag import retrieve_context

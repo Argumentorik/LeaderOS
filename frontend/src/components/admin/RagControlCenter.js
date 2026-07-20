@@ -112,7 +112,7 @@ export const RagControlCenter = ({ de = true }) => {
         </div>
         {ingesting && (
           <p className="text-[10px] text-muted-foreground" data-testid="rag-ingest-hint">
-            {de ? 'Läuft im Hintergrund (~15–20 Min, Voyage-Rate-Limit). Chunk-Zahl aktualisiert sich automatisch alle 5 Sek.' : 'Running in background (~15–20 min). Chunk count auto-refreshes every 5s.'}
+            {de ? 'Läuft im Hintergrund (~3–5 Min, lokales Embedding-Modell). Chunk-Zahl aktualisiert sich automatisch alle 5 Sek.' : 'Running in background (~3–5 min, local embedding model). Chunk count auto-refreshes every 5s.'}
           </p>
         )}
         {job?.status === 'failed' && (

@@ -1,7 +1,7 @@
 """Folder Knowledge service — second-layer "history" RAG.
 
 Mert (Iter 92.23.9):
-    "Folder Knowledge-RAG — neben dem Voyage-RAG auf Wlad-Corpus ein zweiter
+    "Folder Knowledge-RAG — neben dem Wissens-RAG auf Wlad-Corpus ein zweiter
     Mini-RAG nur ueber die Folder-Items, damit der Agent 'die Geschichte
     deines Themas' kennt"
 

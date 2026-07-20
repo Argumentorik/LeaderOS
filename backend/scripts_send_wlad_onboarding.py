@@ -33,7 +33,7 @@ LIZENZ = [
 
 HIGHLIGHTS = [
     ("\U0001F916 WladBot 3.0 \u2014 dein digitaler Zwilling",
-     "Ein KI-Coach, der deine komplette Methodik kennt: alle Kurse, Frameworks und Inhalte sind als durchsuchbares Wissen hinterlegt (RAG mit Voyage-Embeddings). Antwortet 24/7 im Stil von Wlad \u2014 mit Coaching-Modus, Chat-Verlauf und Ordnern wie bei ChatGPT."),
+     "Ein KI-Coach, der deine komplette Methodik kennt: alle Kurse, Frameworks und Inhalte sind als durchsuchbares Wissen hinterlegt (RAG mit semantischer Wissens-Suche). Antwortet 24/7 im Stil von Wlad \u2014 mit Coaching-Modus, Chat-Verlauf und Ordnern wie bei ChatGPT."),
     ("\U0001F3AF 30-Tage KI-Leadership Sprint",
      "300 Fragen, t\u00e4gliche Challenges und echtes Momentum: Jeden Tag eine Aufgabe, die den Teilnehmer als Leader sch\u00e4rft \u2014 gamifiziert mit XP, Levels und Fortschritts-Tracking."),
     ("\U0001F3A5 16 Video-Missionen mit KI-Analyse",

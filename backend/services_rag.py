@@ -1,21 +1,18 @@
-"""WladBot RAG — retrieval-augmented generation using Voyage embeddings + Supabase pgvector.
+"""WladBot RAG — retrieval-augmented generation with LOCAL embeddings (Iter 116).
 
 Architecture:
-  1. User query → Voyage `voyage-3-large` embedding (1024-dim)
-  2. Supabase RPC `match_documents` → top-k similar chunks from `wladbot_documents`
-  3. Inject top chunks as additional context into the WladBot system prompt
-  4. GPT-5.2 answers using Wlad's actual content, not just base knowledge
+  1. User query → local multilingual MiniLM embedding (384-dim, in-process, no API)
+  2. Cosine match against MongoDB `rag_chunks` (in-memory numpy matrix, <50ms)
+  3. Parallel keyword scan + Reciprocal Rank Fusion for proper-noun frameworks
+  4. Inject top chunks as additional context into the WladBot system prompt
 
 Graceful degradation:
-  - Voyage key missing      → no retrieval, chat still works with base prompt
-  - Supabase key invalid    → no retrieval, chat still works
-  - match_documents fails   → no retrieval, chat still works
-  - Empty/low-quality match → no retrieval, chat still works
+  - Embedding model fails to load → keyword retrieval still works
+  - Empty/low-quality match       → no retrieval, chat still works with base prompt
 
   Every failure path logs a warning. Chat NEVER breaks because of RAG.
 
-Cache: in-memory LRU keyed by query text (60s TTL) — saves Voyage tokens
-on repeat questions.
+Cache: in-memory LRU keyed by query text (30min TTL).
 """
 from __future__ import annotations
 
@@ -25,22 +22,13 @@ import os
 import time
 from typing import Any
 
-import httpx
-
 logger = logging.getLogger("leaderos.rag")
 
-VOYAGE_API_URL = "https://api.voyageai.com/v1/embeddings"
-# IMPORTANT: must match the model used to embed `wladbot_documents` (voyage-3, dim=1024).
-# Using voyage-3-large here would give ~0.07 similarity (model mismatch).
-VOYAGE_MODEL = "voyage-3"
-EMBEDDING_DIM = 1024
-
 # RAG tuning
-# Voyage-3 cosine similarities for in-domain queries cluster between 0.25 and
-# 0.45 (empirically measured against the 609-chunk Wlad corpus). The previous
-# 0.60 threshold filtered EVERYTHING out — RAG looked configured but returned
-# zero context. Iter 92.6 lowered to 0.25 to actually surface relevant chunks.
-MATCH_THRESHOLD = float(os.environ.get("RAG_MATCH_THRESHOLD", "0.25"))
+# Multilingual-MiniLM cosine similarities for in-domain German queries cluster
+# between 0.45 and 0.75 against the Wlad corpus; off-domain stays ≤0.47.
+# 0.40 = recall-first (Mert: "alle Chunks müssen greifen"), top-K caps precision.
+MATCH_THRESHOLD = float(os.environ.get("RAG_MATCH_THRESHOLD", "0.40"))
 MATCH_COUNT = int(os.environ.get("RAG_MATCH_COUNT", "6"))              # top-K chunks
 MAX_CONTEXT_CHARS = 20000    # Iter 115: bumped 14k → 20k (Tester: "RAG retrieves less than 1.0") — more fused chunks reach the model.
 CACHE_TTL_SECONDS = 1800     # in-memory cache, 30min — covers chatty sessions
@@ -52,7 +40,7 @@ _query_cache: dict[str, tuple[float, list[dict]]] = {}
 
 # ── Manual high-priority knowledge chunks (Iter 92.35, Mert P1) ──────────────
 # Deterministic keyword-triggered chunks that are injected ALONGSIDE the
-# Voyage/Supabase retrieval. Use this when a framework is too important to
+# vector retrieval. Use this when a framework is too important to
 # rely on semantic search alone (e.g. core Wlad models that must always be
 # grounded verbatim). Each entry: {keywords, content, metadata}.
 MANUAL_CHUNKS: list[dict] = [
@@ -202,143 +190,28 @@ def _fuse_rrf(result_lists: list[list[dict]], k: int = 60, top: int | None = Non
     return [first[x] for x in ordered[: top or FUSED_COUNT]]
 
 
-def _is_configured() -> bool:
-    """Both Voyage AND Supabase must be set for RAG to function."""
-    return bool(os.environ.get("VOYAGE_API_KEY")) and bool(os.environ.get("SUPABASE_URL")) \
-        and bool(os.environ.get("SUPABASE_SERVICE_KEY"))
-
-
 async def _embed_query(query: str) -> list[float] | None:
-    """Get the Voyage embedding for a user query. Returns None on any failure.
-
-    Iter 92.23.4 (Mert: "RAG must hit on every Wlad-query in production"):
-    Voyage's free-tier rate limit is 3 RPM — a chatty user triggers HTTP 429.
-    We now retry with exponential backoff (0.5s → 1.5s → 3s) and respect any
-    `Retry-After` header the API provides. This turns a hard fail into a
-    transparent latency bump.
-    """
-    api_key = os.environ.get("VOYAGE_API_KEY")
-    if not api_key:
-        return None
-    last_err: str | None = None
-    for attempt in range(4):
-        try:
-            async with httpx.AsyncClient(timeout=15) as client:
-                r = await client.post(
-                    VOYAGE_API_URL,
-                    headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                    json={
-                        "input": [query[:8000]],
-                        "model": VOYAGE_MODEL,
-                        "input_type": "query",
-                    },
-                )
-                if r.status_code == 200:
-                    if attempt > 0:
-                        logger.info("RAG: Voyage recovered after %d retries", attempt)
-                    return r.json()["data"][0]["embedding"]
-                if r.status_code == 429:
-                    # Honour server's Retry-After if provided, else exponential backoff
-                    retry_after = r.headers.get("Retry-After")
-                    if retry_after and retry_after.isdigit():
-                        wait = min(float(retry_after), 5.0)
-                    else:
-                        wait = 0.5 + (attempt * 1.0)  # 0.5, 1.5, 2.5, 3.5
-                    logger.warning("RAG: Voyage 429 (attempt %d/4) — sleeping %.1fs", attempt + 1, wait)
-                    await asyncio.sleep(wait)
-                    last_err = "rate_limit_429"
-                    continue
-                # 4xx other than 429 = unrecoverable
-                if 400 <= r.status_code < 500:
-                    logger.error("RAG: Voyage HTTP %d (not retryable): %s", r.status_code, r.text[:200])
-                    return None
-                # 5xx — retry
-                last_err = f"HTTP {r.status_code}"
-                await asyncio.sleep(0.5 * (attempt + 1))
-        except Exception as e:
-            last_err = str(e)
-            logger.warning("RAG: Voyage network error (attempt %d/4): %s", attempt + 1, e)
-            await asyncio.sleep(0.5 * (attempt + 1))
-    logger.warning("RAG: Voyage embedding failed after 4 attempts: %s", last_err)
-    return None
-
-
-async def _match_documents(embedding: list[float]) -> list[dict]:
-    """Call Supabase RPC `match_documents` to find similar chunks.
-
-    The RPC must accept: query_embedding (vector), match_threshold (float),
-    match_count (int). Returns list of {id, content, similarity, metadata?}.
-
-    Workaround: the deployed `match_wladbot_documents` RPC currently returns
-    metadata=NULL even though the underlying column is populated. When this
-    happens we backfill the metadata via a second batch read of the table.
-    """
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not (url and key):
-        logger.error("RAG: SUPABASE_URL or SUPABASE_SERVICE_KEY missing — skipping retrieval")
-        return []
-    # Iter 92.16: retry-with-backoff on PGRST002 (Supabase schema cache transient).
-    # Mert reported live "Could not query database for schema cache" → instead of
-    # silently returning [], retry twice with backoff so transient blips self-heal.
-    last_err: str | None = None
-    for attempt in range(3):
-        try:
-            async with httpx.AsyncClient(timeout=12) as client:
-                r = await client.post(
-                    f"{url}/rest/v1/rpc/match_wladbot_documents",
-                    headers={
-                        "apikey": key,
-                        "Authorization": f"Bearer {key}",
-                        "Content-Type": "application/json",
-                    },
-                    json={
-                        "query_embedding": embedding,
-                        "match_threshold": MATCH_THRESHOLD,
-                        "match_count": MATCH_COUNT,
-                    },
-                )
-                if r.status_code == 200:
-                    data = r.json()
-                    chunks = data if isinstance(data, list) else []
-                    if attempt > 0:
-                        logger.info("RAG: recovered after %d retries", attempt)
-                    # Backfill missing metadata (RPC bug → metadata is None on every row)
-                    missing_ids = [c["id"] for c in chunks if c.get("metadata") in (None, {})]
-                    if missing_ids:
-                        await _backfill_metadata(client, url, key, chunks, missing_ids)
-                    return chunks
-                last_err = f"HTTP {r.status_code}: {r.text[:200]}"
-                # PGRST002 = schema cache; retry. Anything else = unrecoverable.
-                if "PGRST002" not in (r.text or ""):
-                    logger.error("RAG: Supabase match_documents %s — not retryable", last_err)
-                    return []
-                logger.warning("RAG: PGRST002 schema-cache error (attempt %d/3) — retrying", attempt + 1)
-                await asyncio.sleep(0.8 * (attempt + 1))
-        except Exception as e:
-            last_err = str(e)
-            logger.warning("RAG: match_documents network error (attempt %d/3): %s", attempt + 1, e)
-            await asyncio.sleep(0.5 * (attempt + 1))
-    logger.error("RAG: match_documents FAILED after 3 attempts — last error: %s", last_err)
-    return []
+    """Embed a user query with the local model. Returns None on any failure."""
+    from services_embeddings import embed_query
+    return await embed_query(query)
 
 
 # ── Local vector store (MongoDB `rag_chunks` + in-memory numpy matrix) ──────
-# Primary retrieval path since Iter 105: Supabase's vector RPC proved flaky
-# (60-90s stalls after DB cold starts). The full corpus lives in Mongo and is
-# matched in-process in <50ms. Supabase remains a fallback only.
+# The ONLY retrieval path since Iter 116: the full corpus lives in Mongo and
+# is matched in-process in <50ms. No external vector DB, no external API.
 _LOCAL_CACHE: dict[str, Any] = {"matrix": None, "docs": None, "count": 0, "loaded_at": 0.0}
 
 
-async def _match_local(embedding: list[float]) -> list[dict]:
+async def _match_local(embedding: list[float], threshold: float | None = None,
+                       count: int | None = None) -> list[dict]:
     import numpy as np
     from config import db
     try:
-        count = await db.rag_chunks.estimated_document_count()
-        if count == 0:
+        doc_count = await db.rag_chunks.estimated_document_count()
+        if doc_count == 0:
             return []
         now = time.time()
-        if (_LOCAL_CACHE["matrix"] is None or _LOCAL_CACHE["count"] != count
+        if (_LOCAL_CACHE["matrix"] is None or _LOCAL_CACHE["count"] != doc_count
                 or now - _LOCAL_CACHE["loaded_at"] > 3600):
             docs = await db.rag_chunks.find(
                 {}, {"_id": 0, "content": 1, "metadata": 1, "embedding": 1}
@@ -350,44 +223,25 @@ async def _match_local(embedding: list[float]) -> list[dict]:
             _LOCAL_CACHE.update(
                 matrix=mat,
                 docs=[{"content": d["content"], "metadata": d.get("metadata") or {}} for d in docs],
-                count=count, loaded_at=now,
+                count=doc_count, loaded_at=now,
             )
             logger.info("RAG: local vector cache loaded (%d chunks)", len(docs))
         q = np.array(embedding, dtype=np.float32)
         q /= (np.linalg.norm(q) + 1e-9)
+        if _LOCAL_CACHE["matrix"].shape[1] != q.shape[0]:
+            logger.error("RAG: dim mismatch (store=%d, query=%d) — re-ingest required",
+                         _LOCAL_CACHE["matrix"].shape[1], q.shape[0])
+            return []
         sims = _LOCAL_CACHE["matrix"] @ q
-        top = np.argsort(-sims)[:MATCH_COUNT]
+        thr = MATCH_THRESHOLD if threshold is None else threshold
+        top = np.argsort(-sims)[:(count or MATCH_COUNT)]
         return [
             {**_LOCAL_CACHE["docs"][int(i)], "similarity": float(sims[int(i)])}
-            for i in top if float(sims[int(i)]) >= MATCH_THRESHOLD
+            for i in top if float(sims[int(i)]) >= thr
         ]
     except Exception as e:
         logger.warning("RAG: local match failed: %s", e)
         return []
-
-
-async def _backfill_metadata(client, url: str, key: str,
-                              chunks: list[dict], missing_ids: list[str]) -> None:
-    """Fetch metadata for chunk IDs the RPC didn't populate, merge in place."""
-    if not missing_ids:
-        return
-    # PostgREST `in.(a,b,c)` filter — UUIDs are safe
-    in_clause = ",".join(missing_ids)
-    try:
-        r = await client.get(
-            f"{url}/rest/v1/wladbot_documents?id=in.({in_clause})&select=id,metadata",
-            headers={"apikey": key, "Authorization": f"Bearer {key}"},
-        )
-        if r.status_code != 200:
-            return
-        meta_by_id = {row["id"]: row.get("metadata") for row in r.json() if row.get("id")}
-        for chunk in chunks:
-            if chunk.get("metadata") in (None, {}):
-                m = meta_by_id.get(chunk["id"])
-                if m:
-                    chunk["metadata"] = m
-    except Exception as e:
-        logger.debug("RAG: metadata backfill failed (non-fatal): %s", e)
 
 
 def _format_chunks_for_prompt(chunks: list[dict]) -> str:
@@ -475,18 +329,14 @@ async def retrieve_context(query: str) -> dict[str, Any]:
         return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
 
     # ── Hybrid retrieval (Iter 111): vector + keyword in parallel, RRF-fused.
-    # Keyword path needs NO external keys — RAG keeps working even if Voyage
-    # is down or unconfigured (huge resilience win for prod).
-    has_voyage = bool(os.environ.get("VOYAGE_API_KEY"))
+    # Both paths run fully local — no external keys, no rate limits.
     embedding, kw_chunks = await asyncio.gather(
-        _embed_query(query) if has_voyage else _noop_none(),
+        _embed_query(query),
         _match_keyword(query),
     )
     vec_chunks: list[dict] = []
     if embedding:
         vec_chunks = await _match_local(embedding)
-        if not vec_chunks and _is_configured():
-            vec_chunks = await _match_documents(embedding)
 
     if vec_chunks and kw_chunks:
         chunks = _fuse_rrf([vec_chunks, kw_chunks])
@@ -502,20 +352,16 @@ async def retrieve_context(query: str) -> dict[str, Any]:
     return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
 
 
-async def _noop_none():
-    return None
-
-
 def rag_status() -> dict[str, Any]:
-    """Health-check for /api/health or admin dashboards."""
+    """Health-check for /api/rag-status or admin dashboards."""
+    from services_embeddings import EMBED_MODEL_NAME, EMBEDDING_DIM, model_loaded
     return {
-        "configured": _is_configured(),
-        "voyage_key_set": bool(os.environ.get("VOYAGE_API_KEY")),
-        "supabase_key_set": bool(os.environ.get("SUPABASE_SERVICE_KEY")),
-        "supabase_url_set": bool(os.environ.get("SUPABASE_URL")),
-        "cache_size": len(_query_cache),
-        "model": VOYAGE_MODEL,
+        "configured": True,
+        "provider": "local",
+        "model": EMBED_MODEL_NAME,
         "dim": EMBEDDING_DIM,
+        "model_loaded": model_loaded(),
+        "cache_size": len(_query_cache),
         "match_threshold": MATCH_THRESHOLD,
         "match_count": MATCH_COUNT,
     }

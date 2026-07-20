@@ -56,14 +56,14 @@ class TestRagStaticInjection:
         assert "from services_rag import retrieve_context" in src
         assert "rag_block" in src
 
-    def test_rag_threshold_is_0_25(self):
+    def test_rag_threshold_is_0_40(self):
         with open("/app/backend/services_rag.py") as f:
             src = f.read()
         assert 'MATCH_THRESHOLD = float(os.environ.get("RAG_MATCH_THRESHOLD"' in src
-        assert '"0.25"' in src
+        assert '"0.40"' in src
 
 
-# --- Live chat (RAG retrieval) — Voyage 3 RPM limit: 1 request only ---
+# --- Live chat (RAG retrieval, local embeddings) ---
 class TestChatRag:
     def test_chat_feedbackformel(self, headers):
         r = requests.post(f"{BASE_URL}/api/chat",

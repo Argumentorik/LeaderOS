@@ -347,7 +347,7 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     to keep total voice latency under the Cloudflare 30s edge timeout.
 
     Pipeline (~6-12s total):
-      - parallel: history fetch | RAG retrieve (Voyage embed + Supabase top-K)
+      - parallel: history fetch | RAG retrieve (local embed + Mongo top-K)
       - gpt-4o-mini for the LLM step (2-3s vs gpt-5.2's 15-25s)
       - Wlad's frameworks still grounded via RAG context block
     """

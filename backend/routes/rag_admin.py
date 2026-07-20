@@ -38,6 +38,8 @@ async def _run_ingest(zip_url: str):
             r = await client.get(zip_url)
             r.raise_for_status()
         target = "/tmp/rag_ingest_src"
+        import shutil
+        shutil.rmtree(target, ignore_errors=True)
         os.makedirs(target, exist_ok=True)
         with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
             for name in zf.namelist():
@@ -65,10 +67,19 @@ async def reingest(body: ReingestBody, request: Request):
     admin = await require_admin(request)
     running = await db.rag_ingest_jobs.find_one({"status": "running"})
     if running:
-        raise HTTPException(status_code=409, detail="Ingestion läuft bereits — Status via GET /api/admin/rag/local-status.")
+        # Stale-job guard: a backend restart mid-ingest leaves the job "running"
+        # forever. Jobs older than 90 min are considered dead and get replaced.
+        started = running.get("started_at") or ""
+        try:
+            age_min = (datetime.now(timezone.utc) - datetime.fromisoformat(started)).total_seconds() / 60
+        except Exception:
+            age_min = 9999
+        if age_min < 90:
+            raise HTTPException(status_code=409, detail="Ingestion läuft bereits — Status via GET /api/admin/rag/local-status.")
+        logger.warning(f"RAG: stale running job ({age_min:.0f} min old) — replaced by new ingest")
     asyncio.create_task(_run_ingest(body.zip_url))
     logger.info(f"RAG re-ingest started by {admin.get('email')}")
-    return {"started": True, "note": "Läuft im Hintergrund (~15-20 Min wegen Voyage-Rate-Limit). Status: GET /api/admin/rag/local-status"}
+    return {"started": True, "note": "Läuft im Hintergrund (~10-30 Min, lokales Embedding-Modell). Status: GET /api/admin/rag/local-status"}
 
 
 # ── Golden-Question self-test (Iter 111 · Mert: "nie wieder ein Fehler") ─────

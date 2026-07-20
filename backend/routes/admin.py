@@ -266,7 +266,7 @@ def _auth_config_snapshot() -> tuple[dict, dict]:
         "stripe_api_key_set": bool(stripe),
         "stripe_mode": "live" if stripe.startswith("sk_live_") else ("test" if stripe.startswith("sk_test_") else "unknown"),
         "resend_api_key_set": bool(resend),
-        "voyage_api_key_set": bool(_os.environ.get("VOYAGE_API_KEY")),
+        "rag_embeddings": "local (multilingual MiniLM, 384-dim, keine externen Keys)",
         "supabase_url_set": bool(_os.environ.get("SUPABASE_URL")),
     }
     return enabled, config
@@ -396,44 +396,12 @@ async def community_leaderboard(request: Request, limit: int = 10):
 # ─────────────────────────────────────────────────────────────────────────
 
 async def _rag_fetch_chunks(embedding: list, match_threshold: float, match_count: int) -> list:
-    """Supabase vector RPC with PGRST002 retry + metadata backfill."""
-    import os
-    import asyncio
-    import httpx
-
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not (url and key):
-        raise HTTPException(status_code=503, detail="Supabase keys not configured")
-
-    async with httpx.AsyncClient(timeout=12) as client:
-        chunks_raw = []
-        last_err = None
-        for attempt in range(3):
-            r = await client.post(
-                f"{url}/rest/v1/rpc/match_wladbot_documents",
-                headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-                json={"query_embedding": embedding, "match_threshold": match_threshold, "match_count": match_count},
-            )
-            if r.status_code == 200:
-                chunks_raw = r.json() if isinstance(r.json(), list) else []
-                break
-            last_err = r.text[:200]
-            if "PGRST002" not in (r.text or ""):
-                raise HTTPException(status_code=502, detail=f"Supabase RPC failed: {last_err}")
-            await asyncio.sleep(0.8 * (attempt + 1))
-        if not chunks_raw and last_err:
-            raise HTTPException(
-                status_code=502,
-                detail=(f"Supabase RPC failed after 3 retries (PGRST002 schema-cache). "
-                        f"This is a transient Supabase platform issue — try again in ~30s. Last: {last_err}")
-            )
-
-        missing_ids = [c["id"] for c in chunks_raw if c.get("metadata") in (None, {})]
-        if missing_ids:
-            from services_rag import _backfill_metadata
-            await _backfill_metadata(client, url, key, chunks_raw, missing_ids)
-    return chunks_raw
+    """Local Mongo vector-store match — same path as live chat retrieval."""
+    from services_rag import _match_local
+    chunks = await _match_local(embedding, threshold=match_threshold, count=match_count)
+    for i, c in enumerate(chunks):
+        c.setdefault("id", f"local_{i}")
+    return chunks
 
 
 def _rag_build_coverage(chunks_raw: list) -> tuple[list, dict]:
@@ -505,18 +473,19 @@ async def rag_debug(request: Request):
     match_count = max(1, min(int(body.get("match_count", 10)), 30))
     match_threshold = max(0.0, min(float(body.get("match_threshold", 0.0)), 1.0))
 
-    from services_rag import _embed_query, VOYAGE_MODEL, EMBEDDING_DIM
+    from services_rag import _embed_query
+    from services_embeddings import EMBED_MODEL_NAME, EMBEDDING_DIM
 
     embedding = await _embed_query(query)
     if not embedding:
-        raise HTTPException(status_code=503, detail="Embedding service unavailable (Voyage)")
+        raise HTTPException(status_code=503, detail="Embedding service unavailable (local model)")
 
     chunks_raw = await _rag_fetch_chunks(embedding, match_threshold, match_count)
     chunks_out, coverage = _rag_build_coverage(chunks_raw)
 
     return {
         "query": query,
-        "model": VOYAGE_MODEL,
+        "model": EMBED_MODEL_NAME,
         "embedding_dim": EMBEDDING_DIM,
         "match_count": match_count,
         "match_threshold": match_threshold,
@@ -528,26 +497,9 @@ async def rag_debug(request: Request):
 
 @router.get("/rag-corpus-stats")
 async def rag_corpus_stats(request: Request):
-    """Overview of the entire 609-chunk corpus — which courses are best covered."""
+    """Overview of the local rag_chunks corpus — which courses are best covered."""
     await require_admin(request)
-    import os
-    import httpx
-
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not (url and key):
-        raise HTTPException(status_code=503, detail="Supabase not configured")
-
-    # Pull all metadata (lightweight — no embeddings, no content)
-    async with httpx.AsyncClient(timeout=20) as client:
-        r = await client.get(
-            f"{url}/rest/v1/wladbot_documents?select=id,metadata&limit=2000",
-            headers={"apikey": key, "Authorization": f"Bearer {key}"},
-        )
-    if r.status_code != 200:
-        raise HTTPException(status_code=502, detail=f"Supabase fetch failed: {r.text[:200]}")
-
-    rows = r.json() if isinstance(r.json(), list) else []
+    rows = await db.rag_chunks.find({}, {"_id": 0, "metadata": 1}).to_list(60000)
     courses: dict[str, int] = {}
     themes: dict[str, int] = {}
     layers: dict[str, int] = {}
