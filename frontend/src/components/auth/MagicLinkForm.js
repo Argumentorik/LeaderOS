@@ -23,10 +23,14 @@ export const MagicLinkForm = ({ de = true }) => {
           // Iter 92.42: align with backend's actual cooldown (1h rolling window).
           ? 'Zu viele Anfragen. Bitte warte 1 Stunde.'
           : 'Too many requests. Please wait 1 hour.');
-      } else if (status === 422 || detail) {
+      } else if (status === 422) {
         setError(de
           ? 'Bitte gib eine gültige E-Mail-Adresse ein.'
           : 'Please enter a valid email address.');
+      } else if (typeof detail === 'string' && detail) {
+        // Iter 117: show the real backend error instead of mislabeling
+        // every failure as "invalid email" (Mert prod report).
+        setError(detail);
       } else {
         setError(de
           ? 'Konnte den Link gerade nicht senden. Bitte versuche es erneut.'
@@ -83,7 +87,7 @@ export const MagicLinkForm = ({ de = true }) => {
           autoCorrect="off"
           spellCheck={false}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.replace(/\s+/g, ''))}
           placeholder={de ? 'name@deinefirma.de' : 'name@yourcompany.com'}
           className="w-full h-12 pl-11 pr-4 rounded-xl bg-white/[0.03] border border-white/[0.08] focus:border-[#BFFF00]/40 focus:bg-white/[0.05] focus:outline-none text-white placeholder:text-white/25 text-sm transition-all"
           data-testid="magic-link-email-input"
