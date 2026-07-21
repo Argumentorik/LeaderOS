@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 118 · 21.07.26] GODMODE DASHBOARD DE-CLUTTER (Design-Upgrade Phase 1)** — getestet: testing_agent frontend iteration_106.json ALLES PASS, 0 Issues
+  - **ActionInbox** (`components/dashboard/ActionInbox.js`): Die 3 Full-Width-Promos (Live-Event, Sync-Diagnose, Strategy-Call) sind in EIN kompaktes, aufklappbares Widget „Deine nächsten Schritte" konsolidiert (Collapse-State in sessionStorage). Fixt Tester-Feedback „Seite zu busy nach Login". Innere Banner-Logik (Tier-Awareness, Dismiss) unverändert.
+  - **WladMotivationCard** (Zitat des Tages) von Full-Width in die rechte Grid-Spalte demoted.
+  - Neue Reihenfolge: Greeting → ActionInbox → Stats → „Dein nächster Schritt"-CTA → Lern-Videos → Grid. Alles Wichtige above the fold.
+  - Sidebar: solides `bg-white dark:bg-[#101010]` statt Glas (backdrop-blur entfernt — Robustheit). ⚠️ WICHTIGE LEARNING: Im Headless-Screenshot erscheint die Sidebar im Dark Mode WEISS, obwohl computed styles korrekt dunkel sind — das ist ein Compositing-ARTEFAKT des Screenshot-Tools (sticky+h-screen Layer), KEIN echter Bug. Nicht erneut debuggen; via computed styles verifizieren.
+  - `/app/design_guidelines.json` erstellt (design_agent Blueprint: Bento Command Center, Token-Disziplin Lime/#0A0A0A, Motion-Regeln) — Referenz für weitere Design-Phasen.
+  - Preview-Erkenntnis: 502/Cloudflare-Fehler beim Aufwachen des Pods reproduziert → Merts Prod-Signup-Fehler war sehr wahrscheinlich Cold-Start.
+
 - [x] **[Iter 117 · 21.07.26] SIGNUP-DEBUG + CONTINUE-AS GODMODE + GOLDEN-CHECK 21 FRAGEN** — getestet: curl (Register 3×200 extern), Screenshot-E2E (Continue-As → Link gesendet), Golden-Check 21/21 PASS, deployment_agent PASS
   - **Cloudflare-Signup-Fehler (Prod-Report)**: Im Preview NICHT reproduzierbar — Register liefert extern stabil 200 (3×). Der Preview-502 beim ersten Versuch war Cold-Start (Pod schlief). Wahrscheinliche Prod-Ursache: Alt-Build/Cold-Start; nach Re-Deploy verifizieren. Falls weiterhin: Emergent Support (Prod-only Infra).
   - **Login-Fixes (Iter 117, aus vorherigem Report)**: MagicLinkForm zeigt echte Server-Fehler statt pauschal „ungültige E-Mail" (nur noch bei 422); E-Mail-Feld strippt Whitespace automatisch.
