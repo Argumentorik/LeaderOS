@@ -77,7 +77,7 @@ export const Sidebar = () => {
 
   return (
     <aside data-testid="sidebar"
-      className={`${collapsed ? 'w-[64px]' : 'w-[244px]'} h-screen flex flex-col bg-white/95 dark:bg-card/95 backdrop-blur-xl border-r border-black/[0.04] dark:border-white/[0.04] transition-[width] duration-300 relative`}>
+      className={`${collapsed ? 'w-[64px]' : 'w-[244px]'} h-screen flex flex-col bg-white dark:bg-[#101010] border-r border-black/[0.04] dark:border-white/[0.04] transition-[width] duration-300 relative`}>
 
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 h-[56px] border-b border-black/[0.03] dark:border-white/[0.03]">

@@ -12,12 +12,10 @@ import { StripeModeBanner } from '../components/admin/StripeModeBanner';
 import { AnimatedNumber } from '../components/dashboard/AnimatedNumber';
 import { StatCardsRow, QuickActionsGrid } from '../components/dashboard/StatCards';
 import { WladHubDiagnosisCard } from '../components/dashboard/WladHubCard';
-import { EventReminderBanner } from '../components/dashboard/EventReminder';
 import { WladMotivationCard } from '../components/dashboard/WladMotivationCard';
 import { DashboardLearningVideos } from '../components/dashboard/DashboardLearningVideos';
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
-import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
-import { SyncDiagnoseBanner } from '../components/dashboard/SyncDiagnoseBanner';
+import { ActionInbox } from '../components/dashboard/ActionInbox';
 import api from '../lib/api';
 import { useCredits } from '../contexts/CreditContext';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
@@ -145,23 +143,10 @@ export default function DashboardPage() {
         {/* ── Stripe Mode Banner (admin/owner only, auto-hides when live) ── */}
         <StripeModeBanner />
 
-        {/* ── Event Reminder ── */}
-        <EventReminderBanner de={de} />
-
-        {/* ── Sync-Diagnose Banner (P1, Iter 92.35) — bridges leader-check.de funnel ── */}
-        <SyncDiagnoseBanner de={de} />
-
-        {/* Iter 92.28 (Mert): tier-aware Beratungs-Banner — big-CTA for free,
-            softer "Strategy Call" for standard, slim bar for accelerator,
-            hidden for enterprise. Dismissible per session, auto-rearms after 7 days. */}
-        <div className="mb-5">
-          <SmartConsultationBanner placement="dashboard-top" />
-        </div>
-
-        {/* Wlad's Daily Motivation — click to hear Wlad speak via ElevenLabs */}
-        <div className="mb-5">
-          <WladMotivationCard de={de} />
-        </div>
+        {/* ── Action Inbox (Iter 118 Godmode): Live-Event + Sync-Diagnose +
+            Beratungs-Banner konsolidiert in EIN kompaktes, aufklappbares
+            Widget — fixes "Seite zu busy nach Login". ── */}
+        <ActionInbox de={de} />
 
         {/* ── Stat Cards Row ── */}
         <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />
@@ -292,6 +277,9 @@ export default function DashboardPage() {
 
           {/* RIGHT: Sidebar */}
           <div className="space-y-5">
+
+            {/* Wlad's Daily Motivation — demoted to sidebar (Iter 118 Godmode) */}
+            <WladMotivationCard de={de} />
 
             {/* Next 3 Events — Donnerstag-Cohort (Iter 92.9) */}
             <UpcomingEventsCard locale={de ? 'de' : 'en'} />
