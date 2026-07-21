@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 117 · 21.07.26] SIGNUP-DEBUG + CONTINUE-AS GODMODE + GOLDEN-CHECK 21 FRAGEN** — getestet: curl (Register 3×200 extern), Screenshot-E2E (Continue-As → Link gesendet), Golden-Check 21/21 PASS, deployment_agent PASS
+  - **Cloudflare-Signup-Fehler (Prod-Report)**: Im Preview NICHT reproduzierbar — Register liefert extern stabil 200 (3×). Der Preview-502 beim ersten Versuch war Cold-Start (Pod schlief). Wahrscheinliche Prod-Ursache: Alt-Build/Cold-Start; nach Re-Deploy verifizieren. Falls weiterhin: Emergent Support (Prod-only Infra).
+  - **Login-Fixes (Iter 117, aus vorherigem Report)**: MagicLinkForm zeigt echte Server-Fehler statt pauschal „ungültige E-Mail" (nur noch bei 422); E-Mail-Feld strippt Whitespace automatisch.
+  - **Continue-As GODMODE**: „Weiter als (Name)" loggt jetzt direkt ein — Google → sofortiger OAuth-Redirect (aktive Google-Session = 0 Klicks, kein PW), E-Mail/Passwort → 1-Klick-Magic-Link wird automatisch gesendet + Formular vorausgefüllt als Fallback. Sessions bleiben 30 Tage (sliding).
+  - **Golden-Check erweitert 7 → 21 Fragen** (alle 25 Kurse) in `rag_admin.py` — Admin-Button prüft jetzt das GESAMTE Wissen in einem Call. Preview: 21/21 PASS. pytest 28/28 PASS (coverage+golden) mit neuen lokalen Embeddings.
+  - **Safety-Status verifiziert**: SecurityHeaders (HSTS, X-Frame, nosniff, Referrer-Policy, Permissions-Policy) + RateLimitMiddleware aktiv; deployment_agent: PASS, 0 Blocker. ⚠️ Merken: Backend-Worker-RSS mit Embedding-Modell ≈ 830MB — nach Prod-Deploy Speicher beobachten.
+  - **OFFEN**: „Godmode Design-Upgrade" — Scope mit Mert klären (welche Bereiche?), ggf. design_agent.
+
 - [x] **[Iter 116 · 20.07.26] RAG-MIGRATION: Voyage AI → LOKALE EMBEDDINGS (komplett keyfrei)** — getestet: Testing-Agent 9/9 PASS (iteration_105.json), Golden-Check 7/7, Chat-E2E grounded, Reingest-Endpoint E2E (status done)
   - **Warum**: Mert wollte weg von Voyage (3-RPM-Rate-Limit, externer Key). Emergent LLM Key unterstützt KEINE Embeddings (mit Support bestätigt), Claude/Anthropic hat kein Embedding-Modell → Lösung: lokales Modell, 0 Keys, 0 Kosten, 0 Rate-Limits.
   - **Neues Modul `services_embeddings.py`**: fastembed/ONNX mit `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (384-dim, ~220MB, lädt in <5s, Query-Embedding <50ms). Lazy-Singleton + `preload()` beim Server-Start. Hinweis: `jinaai/jina-embeddings-v2-base-de` schlug fehl (ONNX-Runtime-1.27-Bug bei LayerNorm-Fusion).
