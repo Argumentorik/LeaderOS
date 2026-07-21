@@ -83,6 +83,7 @@ async def reingest(body: ReingestBody, request: Request):
 
 
 # ── Golden-Question self-test (Iter 111 · Mert: "nie wieder ein Fehler") ─────
+# Iter 117 GODMODE: extended from 7 → 21 questions covering ALL 25 courses.
 # Runs the canonical Wlad questions through the LIVE retrieval pipeline and
 # checks that the expected framework content is actually in the context block.
 GOLDEN_QUESTIONS = [
@@ -93,6 +94,20 @@ GOLDEN_QUESTIONS = [
     {"q": "Wlad hat ein Charisma-Modell aus acht Elementen. Was sind diese acht?", "expect_any": ["harisma"]},
     {"q": "Was ist die Weiße Rhetorik?", "expect_any": ["eiße Rhetorik", "eisse Rhetorik", "Rhetorik"]},
     {"q": "Wie setze ich einen Anker in der Gehaltsverhandlung?", "expect_any": ["nker", "erhandl"]},
+    {"q": "Was macht laut Wlad einen richtig guten Chef aus?", "expect_any": ["Chef", "Führung", "führ"]},
+    {"q": "Warum sollte ich durch Gründe führen statt durch Anweisungen?", "expect_any": ["Gründe", "Begründ", "führ"]},
+    {"q": "Was sind die vier Farbtypen in der Kommunikation?", "expect_any": ["Farb", "rot", "gelb"]},
+    {"q": "Wie überzeuge ich einen Kunden im Verkaufsgespräch?", "expect_any": ["Verkauf", "Kunde", "Sales"]},
+    {"q": "Was sind die 5 Rollen einer Führungskraft?", "expect_any": ["Rolle"]},
+    {"q": "Wie überzeuge ich im Vorstellungsgespräch bei einer Bewerbung?", "expect_any": ["ewerbung", "orstellungsgespräch"]},
+    {"q": "Wie kann ich schneller lernen und mir mehr merken?", "expect_any": ["lern", "merk"]},
+    {"q": "Was lehrt die klassische Rhetorik über Ethos, Pathos und Logos?", "expect_any": ["thos", "Rhetorik"]},
+    {"q": "Wie führe ich mein Team im Homeoffice richtig?", "expect_any": ["omeoffice", "emote", "irtuell"]},
+    {"q": "Wie wirkt meine Körpersprache souveräner auf der Bühne?", "expect_any": ["örpersprache", "örper", "estik"]},
+    {"q": "Wie baue ich eine überzeugende Präsentation auf?", "expect_any": ["räsentation", "räsentier"]},
+    {"q": "Wie führe ich ein schwieriges Gespräch mit einem Mitarbeiter?", "expect_any": ["espräch", "onflikt"]},
+    {"q": "Wie motiviere ich mein Team nachhaltig?", "expect_any": ["otivation", "otivier"]},
+    {"q": "Wie überzeuge ich in Online-Meetings und digitaler Rhetorik?", "expect_any": ["igital", "nline", "amera"]},
 ]
 
 

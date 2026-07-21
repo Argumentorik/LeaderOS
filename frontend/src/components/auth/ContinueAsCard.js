@@ -4,9 +4,10 @@
  * Shown above the standard auth form when a previous login is cached. Picks
  * up the avatar/name/provider from localStorage and offers a one-tap return.
  *
- * For OAuth providers we trigger the provider's native button (Google One-Tap
- * or MSAL/Apple popup); for email/password we prefill the email and focus the
- * password field; for magic_link we ping /api/auth/magic-link/request directly.
+ * For OAuth providers: Google → direct OAuth redirect (instant, no clicks);
+ * Apple/Microsoft → trigger the provider's native button. For email/password
+ * we send a 1-click magic link AND prefill the form as fallback; for
+ * magic_link we ping /api/auth/magic-link/request directly.
  */
 import { useState } from 'react';
 import { ArrowRight, X, KeyRound, Sparkles, Loader2 } from 'lucide-react';
@@ -124,8 +125,11 @@ export const ContinueAsCard = ({
 /**
  * Hook to handle "Continue as" click. Returns { trigger, loading, error }.
  * - For magic_link → sends a new link and shows success
- * - For email → returns 'prefill' so the parent can switch to login mode + prefill
- * - For google/apple/microsoft → returns 'oauth' so the parent triggers that provider's button
+ * - For email → sends a 1-click magic link directly (no password re-entry, Iter 117)
+ *   and prefills the login form as fallback
+ * - For google → redirects straight into the Google OAuth flow (active Google
+ *   session = instant login, no clicks, no password)
+ * - For apple/microsoft → returns 'oauth' so the parent triggers that provider's button
  */
 export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onError } = {}) => {
   const [loading, setLoading] = useState(false);
@@ -139,8 +143,17 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
         await api.post('/auth/magic-link/request', { email });
         onMagicSent?.(email);
       } else if (provider === 'email') {
+        // Godmode (Iter 117): one tap = instant 1-click link, no password typing.
+        // Form is still prefilled underneath as a fallback.
         onPrefill?.(email);
-      } else if (provider === 'google' || provider === 'apple' || provider === 'microsoft') {
+        await api.post('/auth/magic-link/request', { email });
+        onMagicSent?.(email);
+      } else if (provider === 'google') {
+        // Direct OAuth redirect — an active Google session logs in instantly.
+        const redirectUrl = window.location.origin + '/dashboard';
+        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+        return; // keep spinner until navigation
+      } else if (provider === 'apple' || provider === 'microsoft') {
         // The actual sign-in is triggered by the provider button itself —
         // we just signal the parent to focus/click it.
         onPrefill?.(email, provider);
