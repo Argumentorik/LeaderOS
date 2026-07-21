@@ -1,81 +1,133 @@
 {
-  "theme": "LIGHT",
-  "archetype": "4 (Swiss & High-Contrast) + E1 Glassmorphism Twist",
-  "mood": "Premium, structured, execution-driven, clear, focused",
-  "colors": {
-    "background_primary": "#FAFAFA",
-    "background_secondary": "#FFFFFF",
-    "text_primary": "#0A0A0A",
-    "text_secondary": "#52525B",
-    "border_subtle": "#E4E4E7",
-    "primary_action": "#000000",
-    "primary_action_text": "#FFFFFF",
-    "tier_free": {
-      "bg": "#F1F5F9",
-      "text": "#475569"
-    },
-    "tier_standard": {
-      "bg": "#EFF6FF",
-      "text": "#2563EB"
-    },
-    "tier_accelerator": {
-      "bg": "#FAF5FF",
-      "text": "#9333EA"
-    },
-    "event_live": "#FFF1F2",
-    "event_focus": "#F0FDF4"
+  "brand_identity": {
+    "name": "WladBot / Leader-OS",
+    "signature_color": "#BFFF00",
+    "theme_preference": "dark-first (with fully supported light mode)",
+    "vibe": "Elite, focused, 'Godmode' Command Center, premium coaching, high-performance"
   },
   "typography": {
-    "heading_font": "Cabinet Grotesk",
-    "body_font": "Satoshi",
-    "scale": {
-      "h1": "text-4xl sm:text-5xl tracking-tighter font-bold",
-      "h2": "text-2xl sm:text-3xl tracking-tight font-semibold",
-      "h3": "text-xl font-semibold",
-      "body": "text-base leading-relaxed",
-      "small_label": "text-xs tracking-[0.2em] uppercase font-bold text-gray-500"
+    "strategy": "The 'Tech Executive' Pairing",
+    "headings": {
+      "family": "Outfit, system-ui, sans-serif",
+      "weight": "font-semibold to font-bold",
+      "tracking": "tracking-tight",
+      "usage": "Use for Greeting, Widget titles, stat numbers, and primary CTA buttons. Do not exceed text-4xl on the dashboard."
+    },
+    "body": {
+      "family": "Inter, system-ui, sans-serif",
+      "weight": "font-normal to font-medium",
+      "leading": "leading-relaxed",
+      "usage": "Use for challenge descriptions, tasks, dates, and secondary labels."
     }
   },
-  "layout_spacing": {
-    "philosophy": "Generous spacing. Use p-8 and p-12 for section breathing room.",
-    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
-    "event_cards": "rounded-2xl p-6 bg-white border border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-gray-300",
-    "focus_grid": "grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch"
+  "colors": {
+    "dark_mode": {
+      "background": "bg-[#0A0A0A]",
+      "surface": "bg-[#141414] or bg-[#0A0A0A] with 1px border",
+      "surface_elevated": "bg-[#1E1E1E]",
+      "glass": "bg-[#141414]/70 backdrop-blur-xl",
+      "primary": "text-[#BFFF00] bg-[#BFFF00]",
+      "primary_hover": "bg-[#A5E600]",
+      "text_main": "text-white",
+      "text_muted": "text-neutral-400",
+      "border": "border-neutral-800",
+      "border_glow": "border-[#BFFF00]/30"
+    },
+    "light_mode": {
+      "background": "bg-[#F7F7F7]",
+      "surface": "bg-white",
+      "surface_elevated": "bg-[#FAFAFA]",
+      "glass": "bg-white/70 backdrop-blur-xl",
+      "primary": "text-[#0A0A0A] bg-[#BFFF00]",
+      "primary_hover": "bg-[#A5E600]",
+      "text_main": "text-[#0A0A0A]",
+      "text_muted": "text-neutral-500",
+      "border": "border-neutral-200",
+      "border_glow": "border-[#BFFF00]/50"
+    },
+    "rules": {
+      "primary_text_contrast": "CRITICAL: In Light Mode, text ON #BFFF00 buttons must be #0A0A0A. In Dark Mode, text ON #BFFF00 must also be #0A0A0A. Do not use white text on lime green.",
+      "accents": "Use #BFFF00 sparingly. It should highlight progress bars, active states, and primary CTAs. It should NOT be used as a large background or full gradient."
+    }
   },
-  "components": {
-    "header": "Crystal Glass: backdrop-blur-xl bg-white/70 border-b border-gray-200/50 sticky top-0 z-50 py-4",
-    "tabs": "Floating pill style. Override standard Shadcn tabs. Use rounded-full bg-gray-100 p-1, active tab gets bg-white shadow-sm rounded-full.",
-    "buttons": "rounded-xl font-medium px-6 py-3 transition-colors. Primary is black, Secondary is bg-gray-100 hover:bg-gray-200 text-black.",
-    "badges": "rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider"
-  },
-  "interactions": {
-    "hover": "Smooth transform translations and soft ambient shadow increases.",
-    "click": "Scale down slightly (scale-95) active state.",
-    "transitions": "transition-all duration-300 ease-out"
-  },
-  "media": {
-    "icons_library": "@phosphor-icons/react",
-    "images": [
-      {
-        "category": "hero_background",
-        "url": "https://images.unsplash.com/photo-1765370847579-70d5d83401d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG1pbmltYWxpc3QlMjB0ZXh0dXJlJTIwbGlnaHR8ZW58MHx8fHwxNzc2MzM2ODIyfDA&ixlib=rb-4.1.0&q=85",
-        "description": "Minimalist light square texture for subtle hero banner background to give premium feel."
+  "dashboard_reorganization_strategy": {
+    "goal": "De-clutter the post-login experience. Make 'Daily Work' the hero. Consolidate promos.",
+    "layout_structure": "High-Density Command Center (Bento Grid) with a Left Sidebar.",
+    "zones": {
+      "top_bar": {
+        "content": "Greeting ('Willkommen zurück, {Name}'), Tier Badge, Streak Days, and 'KI-Coach' button.",
+        "design": "Sticky glassmorphic header, flex row, horizontal alignment to save vertical space. Minimalist."
       },
-      {
-        "category": "focus_session_thumbnail",
-        "url": "https://images.unsplash.com/photo-1749545849681-37e7b302fdb6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjB3b3Jrc3BhY2UlMjBmb2N1c3xlbnwwfHx8fDE3NzYzMzY4MTR8MA&ixlib=rb-4.1.0&q=85",
-        "description": "Black notebooks and pen on white surface for Focus Time / Execution sessions."
+      "action_inbox_widget": {
+        "content": "Consolidated Promos: 1) LIVE KI Call, 2) Leader-Diagnose Sync, 3) Strategy-Call Upsell.",
+        "design": "Instead of 3 stacked full-width banners, create a single 'Aktionszentrum' (Action Center) card in the top-right of the dashboard grid, OR a sleek rotating horizontal ticker/carousel just below the header. The 'Bento Inbox' approach is preferred: A single card titled 'Deine nächsten Schritte' containing a compact, dismissible list (using Framer Motion AnimatePresence). Use neon-lime subtle accents for the 'Sync' task, minimal borders for the upsells."
+      },
+      "hero_bento_grid": {
+        "content": "Daily Challenge, Tasks (Aufgaben), and Stats (AI Readiness 81, Lernfortschritt 0%, Tag 30 Meilenstein).",
+        "design": "Grid layout (grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6). The 'Daily Challenge' and 'Lernfortschritt' take col-span-2 or 3 (dominant visual). Stats are col-span-1 summary blocks."
+      },
+      "quote_card": {
+        "content": "'Wlads Zitat des Tages' + 'Wlad hören' (TTS).",
+        "design": "Demote from a full-width block to a sleek, compact Bento square (col-span-1) with a soft gradient or dark card treatment and a subtle floating play button."
+      },
+      "sidebar": {
+        "content": "HEUTE, WACHSTUM, Was ist neu?, Language, Dark Mode, Upgrade, Profile, Logout.",
+        "design": "Clean, 240px fixed width (desktop). Group heavily. Use Phosphor Icons. Ensure the 'Auf OS PLUS upgraden' button is styled elegantly (e.g., ghost button with lime glowing border) rather than a massive block."
       }
-    ]
+    }
+  },
+  "component_guidelines": {
+    "cards": {
+      "style": "Neumorphic/Technical mix. Flat surface with a precise 1px border. NO heavy drop shadows in dark mode.",
+      "radius": "rounded-2xl",
+      "padding": "p-6 lg:p-8 (Generous spacing)",
+      "hover": "Hover state should subtly lift (-translate-y-0.5) and illuminate the border (border-neutral-700 dark mode / border-neutral-300 light mode).",
+      "godmode_feature": "For the 'Daily Challenge' card, implement the 'Tracing Beam' or subtle inner glow (inset shadow) to make it feel like the active command module."
+    },
+    "buttons": {
+      "primary": "Pill-shaped (rounded-full) or slightly rounded (rounded-lg). bg-[#BFFF00] text-[#0A0A0A] font-medium tracking-tight. Hover: bg-[#A5E600] scale-[1.02] transition-transform.",
+      "secondary": "Glass or Ghost style. bg-transparent border border-neutral-800 text-white (dark mode). Hover: bg-white/5."
+    },
+    "progress_bars": {
+      "style": "Ultra-thin (h-2), track: bg-neutral-800, indicator: bg-[#BFFF00] with a subtle drop-shadow-[0_0_8px_rgba(191,255,0,0.5)]."
+    },
+    "banners": {
+      "style": "If banners must be used, they are 48px height maximum, inline-flex, dismissible, with a subtle left-border accent of #BFFF00 rather than full background fills."
+    }
+  },
+  "motion_and_interactions": {
+    "page_load": "Staggered fade-up for Bento grid items (Framer Motion: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ staggerChildren: 0.1 }}).",
+    "hover_states": "All interactive elements MUST have a visible hover state (bg color shift or border glow). Transition duration: 200ms ease-out.",
+    "dismissing_promos": "Use AnimatePresence to smoothly collapse the height of a dismissed promo/upsell to 0 before removing it from the DOM."
+  },
+  "accessibility": {
+    "contrast": "Strict APCA/WCAG check. #BFFF00 on white is inaccessible for text. Always use it as a background with black text, or as a border/icon color.",
+    "focus": "focus-visible:ring-2 focus-visible:ring-[#BFFF00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+  },
+  "testing": {
+    "requirements": "All interactive elements MUST include a data-testid attribute (e.g., data-testid='promo-dismiss-button', data-testid='start-daily-challenge')."
   },
   "instructions_to_main_agent": [
-    "Implement the event platform using React, Tailwind CSS, and customized Shadcn components.",
-    "Use Cabinet Grotesk for headings and Satoshi for body fonts. Add them via Google Fonts or standard @font-face imports.",
-    "Do NOT use standard boring list views. Render events as premium cards (rounded-2xl) with clean typography, clear date/time blocks, and tiered badges (Free, Standard, Accelerator).",
-    "Build a custom Focus Time System widget mimicking a 'Control Room' dense grid, allowing users to define weekly focus times.",
-    "Add Phosphor icons (e.g., CalendarPlus, CalendarBlank, VideoCamera) for 1-click Google/Outlook calendar integration.",
-    "Include data-testid on all interactive elements.",
-    "Use a tabbed interface (Live Events, Replays, Focus Sessions) utilizing custom pill-shaped tabs rather than standard underlines.",
-    "Header must use Crystal Glass effect (backdrop-blur-xl bg-white/70)."
+    "Do NOT remove any existing features (Upsells, Sync, Quote, Stats). Reorganize them into the 'Action Inbox' and 'Bento Grid' to fix the 'too busy' layout.",
+    "Implement the 'Godmode' aesthetic: aggressive use of negative space (p-6/p-8 inside cards), 1px subtle borders, and #BFFF00 as the sole accent color on an otherwise monochrome (#0A0A0A) canvas.",
+    "Merge the 3 full-width banners (Event, Sync, Strategy Call) into a single compact 'Action Center' widget (a card with a stacked list) OR a minimalist top carousel.",
+    "Ensure the design works flawlessly in both dark and light modes using Tailwind dark: modifiers.",
+    "Use standard HTML+Tailwind for layout structure, and Shadcn for interactive components (dropdowns, dialogs).",
+    "Incorporate Framer Motion for smooth layout shifts when users dismiss the upsell/promos."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific interactive elements.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons. Use proper icon libraries (lucide-react, phosphor-icons).",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations separate good from extraordinary.",
+    "Use sonner for toasts, located in /app/src/components/ui/sonner.tsx (or equivalent)."
   ]
 }
