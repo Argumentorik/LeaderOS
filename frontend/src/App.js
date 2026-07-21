@@ -7,6 +7,10 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { Toaster } from "./components/ui/sonner";
 import { NetworkStatusBanner } from "./components/shared/NetworkStatusBanner";
 import { lazyWithRetry, clearChunkReloadGuard } from "./lib/lazyWithRetry";
+import { captureAttribution } from "./lib/attribution";
+
+// Iter 120: capture utm_*/gclid/referrer on every page load (first-touch safe)
+captureAttribution();
 
 // ── Eager routes ────────────────────────────────────────────────────────
 // Login + Dashboard ship in the main bundle because they are the most-hit

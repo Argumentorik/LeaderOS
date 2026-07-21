@@ -64,6 +64,31 @@ class UserRegister(BaseModel):
     # (Iter 92.24 phone-OR-email login). Required = friction trade-off accepted
     # for higher data quality + Cal.com pipeline reliability.
     phone: str
+    # Iter 120: ad/campaign attribution (utm_*, gclid, referrer …) captured
+    # client-side at first visit and attached at signup. Optional, sanitized.
+    attribution: dict | None = None
+
+
+# Iter 120: whitelist-sanitize attribution payloads (never trust the client)
+_ATTRIBUTION_KEYS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "gclid", "fbclid", "ttclid", "msclkid", "li_fat_id", "via", "ref",
+    "at", "landing", "referrer",
+}
+
+
+def clean_attribution(raw) -> dict | None:
+    if not isinstance(raw, dict):
+        return None
+    out: dict = {}
+    for touch in ("first_touch", "last_touch"):
+        t = raw.get(touch)
+        if isinstance(t, dict):
+            c = {k: str(v)[:300] for k, v in t.items()
+                 if k in _ATTRIBUTION_KEYS and isinstance(v, (str, int, float))}
+            if c:
+                out[touch] = c
+    return out or None
 
     @field_validator("email")
     @classmethod

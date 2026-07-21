@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../lib/api';
 import { parseAuthError } from '../lib/authErrors';
+import { getAttribution } from '../lib/attribution';
 import { Globe, WifiOff, KeyRound, Sparkles, Ticket } from 'lucide-react';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
@@ -72,7 +73,7 @@ export default function LoginPage({ initialMode = 'login' }) {
       // Iter 92.24 (Mert): login accepts EITHER email OR phone in the same field.
       // Send as `identifier`; backend coalesces `identifier|phone|email` to one value.
       const payload = mode === 'register'
-        ? { ...form, email: trimmedId }
+        ? { ...form, email: trimmedId, attribution: getAttribution() }
         : { identifier: trimmedId, password: form.password };
       const res = await api.post(endpoint, payload);
       login(res.data.user, 'email');

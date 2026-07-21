@@ -1,12 +1,12 @@
 # Leader-OS
 
-> Leader-OS ist das KI Leadership Trainingssystem für moderne Führungskräfte, Manager und Executives. Es kombiniert einen 24/7 KI-Coach (GPT-5.2), Video-Missionen mit KI-Bewertung (Whisper + SEXIER-Framework), Boardroom-Rhetorik und EQ-Training auf Basis der Leadership-Methodik von Wlad Jachtchenko.
+> Leader-OS ist das KI Leadership Trainingssystem für moderne Führungskräfte, Manager und Executives. Es kombiniert einen 24/7 KI-Coach (GPT-5.2), Video-Missionen mit KI-Bewertung (Whisper + SEXIER-Framework), Storytelling für Entscheider und EQ-Training auf Basis der Leadership-Methodik von Wlad Jachtchenko.
 
 Leader-OS (leaderos.de) ist eine SaaS-Plattform der Argumentorik-Akademie GmbH. Die Plattform trainiert die drei Kern-Dimensionen moderner Führung: **KI (Klar denken)**, **Rhetorik (Klar sprechen)** und **EQ (Klar führen)**. Sie richtet sich an Führungskräfte aus DAX-Konzernen, Foundern, C-Level-Executives und Team-Leads.
 
 ## Was Leader-OS ist
 
-- **24/7 KI-Coach (WladBot)**: Ein RAG-gestützter (Voyage-3 Embeddings) Coaching-Bot mit dem vollständigen Wissen von Wlad Jachtchenkos Leadership-Frameworks (Boardroom-Rhetorik, Verhandlung, Manipulation, SEXIER-Methodik, 10 Stufen des Zuhörens).
+- **24/7 KI-Coach (WladBot)**: Ein RAG-gestützter (lokale semantische Embeddings) Coaching-Bot mit dem vollständigen Wissen von Wlad Jachtchenkos Leadership-Frameworks (Storytelling für Entscheider, Verhandlung, Manipulation, SEXIER-Methodik, 10 Stufen des Zuhörens).
 - **Video-Missionen mit KI-Analyse**: Nutzer laden Speech- oder Präsentations-Videos hoch; OpenAI Whisper transkribiert; ein SEXIER-Framework-Analyzer gibt Feedback zu Struktur (Situation, Expectation, Xcept, Idea, Effect, Reinforce), Klarheit, Füllworten und Wirkung.
 - **3-Layer Leadership System**: KI-Modul (Denkstruktur), Rhetorik-Modul (Sprache), EQ-Modul (Wahrnehmung & Führung).
 - **30-Tage Leadership Sprint**: Strukturiertes Tagesprogramm mit täglichen Drip-Mails, Tasks und Coaching-Impulsen.
@@ -14,13 +14,13 @@ Leader-OS (leaderos.de) ist eine SaaS-Plattform der Argumentorik-Akademie GmbH. 
 
 ## Wer steht hinter Leader-OS
 
-**Wlad Jachtchenko** ist Bestseller-Autor (Argumentorik, Manipulation, Leadership), Top-Speaker und Coach für Boardroom-Rhetorik. Er trainiert seit über 15 Jahren Führungskräfte aus DAX-Konzernen und mittelständischen Hidden Champions. Leader-OS digitalisiert seine kompletten Coaching-Methoden als KI-Trainingssystem.
+**Wlad Jachtchenko** ist Bestseller-Autor (Argumentorik, Manipulation, Leadership), Top-Speaker und Coach für Storytelling für Entscheider. Er trainiert seit über 15 Jahren Führungskräfte aus DAX-Konzernen und mittelständischen Hidden Champions. Leader-OS digitalisiert seine kompletten Coaching-Methoden als KI-Trainingssystem.
 
 ## Methodische Kernbausteine
 
 - **SEXIER-Framework** (Wlad-Original): Situation → Expectation → Xcept → Idea → Effect → Reinforce. Das Standard-Sprechmuster für jede High-Stakes-Präsentation.
 - **10 Stufen des Zuhörens**: Vom Ignorieren über Aktives Zuhören bis zu Transformativem Zuhören. Pflicht-Framework für jede Führungskraft auf C-Level.
-- **Boardroom-Rhetorik**: Klarheit, Souveränität und Wirkung in Vorstandssitzungen.
+- **Storytelling für Entscheider**: Klarheit, Souveränität und Wirkung in Vorstandssitzungen.
 - **Argumentorik**: Wlads Marken-Methodik für strukturiertes Argumentieren und Verhandlungsführung.
 - **EQ-Training**: Emotionale Mustererkennung, Druck- und Konflikt-Navigation.
 

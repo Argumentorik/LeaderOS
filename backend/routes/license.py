@@ -55,6 +55,7 @@ class LicenseActivate(BaseModel):
     email: EmailStr
     password: str
     name: str = ""
+    attribution: dict | None = None
 
 
 async def _rate_limit_license(ip: str) -> None:
@@ -162,6 +163,12 @@ async def activate_license(data: LicenseActivate, request: Request, response: Re
     )
     await _log_license_attempt(ip, success=True)
     await record_user_action(user_id, "license_activated")
+
+    # Iter 120: persist ad/campaign attribution (utm_*, gclid …) if provided
+    from models import clean_attribution
+    cleaned_attr = clean_attribution(data.attribution)
+    if cleaned_attr:
+        await db.users.update_one({"user_id": user_id}, {"$set": {"attribution": cleaned_attr}})
 
     if account_created:
         import asyncio as _asyncio

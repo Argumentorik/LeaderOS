@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { getAttribution } from '../../lib/attribution';
 import { Loader2, Ticket, Sparkles } from 'lucide-react';
 import api from '../../lib/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -38,6 +39,7 @@ export const LicenseKeyForm = ({ de = true }) => {
         email: form.email.trim(),
         password: form.password,
         name: form.name.trim(),
+        attribution: getAttribution(),
       });
       login(res.data.user, 'license');
       const pkg = res.data.activated?.package_name || 'Leader-OS';

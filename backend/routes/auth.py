@@ -230,9 +230,12 @@ async def register(data: UserRegister, request: Request, response: Response):
             raise HTTPException(status_code=400, detail="Telefonnummer ist bereits registriert")
 
     source_platform = detect_source_platform(request)
+    from models import clean_attribution
     user_doc = {
         "user_id": user_id,
         "email": email,
+        # Iter 120: ad/campaign attribution (utm_*, gclid …) — first/last touch
+        "attribution": clean_attribution(data.attribution),
         "name": data.name.strip(),
         # Iter 92.23.12: optional phone (Cal.com coaching call confirmations only).
         # Iter 92.24: phone is now ALSO a login identifier — `phone_normalized`
