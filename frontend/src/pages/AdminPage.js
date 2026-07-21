@@ -126,6 +126,24 @@ export default function AdminPage() {
               <p className="text-sm text-muted-foreground">{de ? 'Enterprise, Empfehlungen, Coaching & Analytics' : 'Enterprise, Referrals, Coaching & Analytics'}</p>
             </div>
           </div>
+          {/* Quick links (Iter 119, Mert: "another link so we can always see it") */}
+          <div className="flex items-center gap-2 flex-wrap mt-3">
+            <button
+              onClick={() => document.querySelector('[data-testid="rag-control-center"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#BFFF00]/12 border border-[#BFFF00]/30 text-[11px] font-bold hover:bg-[#BFFF00]/25 transition-colors"
+              data-testid="admin-rag-quicklink"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#BFFF00] animate-pulse" />
+              RAG Control Center
+            </button>
+            <button
+              onClick={() => document.querySelector('[data-testid="license-keys-manager"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-[11px] font-bold hover:bg-black/[0.08] dark:hover:bg-white/[0.12] transition-colors"
+              data-testid="admin-license-quicklink"
+            >
+              {de ? 'Lizenz-Keys (400 Partner)' : 'License keys (400 partners)'}
+            </button>
+          </div>
         </div>
 
         {/* Revenue Row */}

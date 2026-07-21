@@ -133,3 +133,115 @@ async def golden_check(request: Request):
         "chunks_in_store": await db.rag_chunks.estimated_document_count(),
         "results": results,
     }
+
+
+# ── GODMODE Zero-Touch (Iter 119 · Mert: "ich will nichts machen") ───────────
+async def ensure_rag_ready():
+    """Self-healing knowledge base: on startup, if the vector store is empty
+    or holds legacy-dimension vectors (Voyage era), auto-ingest the default
+    knowledge pack. Zero manual steps after any deploy."""
+    try:
+        await asyncio.sleep(10)  # let the app settle + embedding model preload
+        from services_embeddings import EMBEDDING_DIM
+        count = await db.rag_chunks.estimated_document_count()
+        sample = await db.rag_chunks.find_one({}, {"embedding": 1})
+        dim_ok = bool(sample) and len(sample.get("embedding") or []) == EMBEDDING_DIM
+        if count > 0 and dim_ok:
+            logger.info(f"RAG ready: {count} chunks, dim OK — no auto-ingest needed")
+            return
+        running = await db.rag_ingest_jobs.find_one({"status": "running"})
+        if running:
+            try:
+                age_min = (datetime.now(timezone.utc)
+                           - datetime.fromisoformat(running.get("started_at") or "")).total_seconds() / 60
+            except Exception:
+                age_min = 9999
+            if age_min < 90:
+                return
+        logger.warning(f"RAG AUTO-INGEST: store not ready (chunks={count}, dim_ok={dim_ok}) — self-healing now")
+        await _run_ingest(DEFAULT_ZIP_URL)
+    except Exception as e:
+        logger.error(f"RAG auto-ingest check failed: {e}")
+
+
+# ── Knowledge editing (Iter 119 · Enterprise: "knowledge can be changed") ────
+@router.get("/sources")
+async def list_knowledge_sources(request: Request):
+    """All knowledge sources with chunk counts — the editable corpus view."""
+    from routes.admin import require_admin
+    await require_admin(request)
+    pipeline = [
+        {"$group": {
+            "_id": "$metadata.source_file",
+            "chunks": {"$sum": 1},
+            "course": {"$first": "$metadata.course"},
+            "type": {"$first": "$metadata.type"},
+        }},
+        {"$sort": {"_id": 1}},
+    ]
+    rows = await db.rag_chunks.aggregate(pipeline).to_list(1000)
+    return {"total_chunks": sum(r["chunks"] for r in rows), "sources": [
+        {"source_file": r["_id"], "chunks": r["chunks"], "course": r.get("course"), "type": r.get("type") or "course"}
+        for r in rows
+    ]}
+
+
+class KnowledgeUpload(BaseModel):
+    filename: str
+    content: str
+    course_title: str | None = None
+
+
+@router.post("/upload-knowledge")
+async def upload_knowledge(data: KnowledgeUpload, request: Request):
+    """Add or replace a knowledge source from raw text (.txt/.md content).
+
+    Chunks + embeds locally (no external keys) and inserts into rag_chunks.
+    Re-uploading the same filename replaces its chunks (idempotent).
+    """
+    from routes.admin import require_admin
+    admin = await require_admin(request)
+    text = (data.content or "").strip()
+    if len(text) < 50:
+        raise HTTPException(status_code=422, detail="Inhalt zu kurz (min. 50 Zeichen).")
+    if len(text) > 400_000:
+        raise HTTPException(status_code=422, detail="Datei zu groß (max. 400 KB Text). Bitte aufteilen.")
+    import re as _re
+    fname = _re.sub(r"[^a-zA-Z0-9._äöüÄÖÜß-]", "_", os.path.basename(data.filename or "wissen.txt"))
+    if not fname.endswith(".txt"):
+        fname = f"{fname.rsplit('.', 1)[0]}.txt"
+    title = (data.course_title or fname.rsplit(".txt", 1)[0].replace("_", " ").title()).strip()[:90]
+    from scripts_ingest_local_rag import chunk_text
+    from services_embeddings import embed_documents
+    import hashlib
+    import time as _time
+    chunks = chunk_text(text)
+    meta = {"course": title, "type": "custom", "source_file": fname}
+    docs = []
+    for i in range(0, len(chunks), 128):
+        batch = chunks[i:i + 128]
+        embs = await embed_documents(batch)
+        for c, e in zip(batch, embs):
+            docs.append({
+                "chunk_id": hashlib.sha1(f"{fname}:{c[:80]}:{len(c)}".encode()).hexdigest()[:16],
+                "content": c, "metadata": meta, "embedding": e,
+                "ingested_at": _time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            })
+    await db.rag_chunks.delete_many({"metadata.source_file": fname})
+    if docs:
+        await db.rag_chunks.insert_many(docs)
+    logger.info(f"RAG knowledge upload by {admin.get('email')}: {fname} → {len(docs)} chunks")
+    return {"source_file": fname, "course": title, "chunks_added": len(docs),
+            "total_chunks": await db.rag_chunks.estimated_document_count()}
+
+
+@router.delete("/source/{source_file}")
+async def delete_knowledge_source(source_file: str, request: Request):
+    from routes.admin import require_admin
+    admin = await require_admin(request)
+    res = await db.rag_chunks.delete_many({"metadata.source_file": source_file})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Quelle nicht gefunden.")
+    logger.info(f"RAG source deleted by {admin.get('email')}: {source_file} ({res.deleted_count} chunks)")
+    return {"deleted_chunks": res.deleted_count,
+            "total_chunks": await db.rag_chunks.estimated_document_count()}

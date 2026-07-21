@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 119 · 21.07.26] RAG ZERO-TOUCH GODMODE + EDITIERBARES WISSEN + 400-PARTNER-READINESS** — getestet: curl E2E (Upload/Sources/Delete/License-Redeem), Screenshot Admin-UI, Startup-Log verifiziert
+  - **Zero-Touch RAG** (`ensure_rag_ready()` in rag_admin.py, Hook in server.py startup): Nach jedem Deploy prüft das System automatisch Chunk-Zahl + Embedding-Dimension; bei leerem Store oder Alt-Voyage-Dimensionen startet der Ingest SELBST. Mert muss NICHTS mehr manuell machen. Log: "RAG ready: 7439 chunks, dim OK".
+  - **Editierbares Wissen (Enterprise-Grundstein)**: Neue Endpoints `GET /api/admin/rag/sources`, `POST /api/admin/rag/upload-knowledge` (.txt/.md → chunk → lokal embedden → sofort live, idempotent per filename, max 400KB), `DELETE /api/admin/rag/source/{file}`. Neue UI `KnowledgeSources.js` im RagControlCenter (Liste 53 Quellen, Upload-Button, Delete mit Confirm, CUSTOM-Badge). E2E: ZEBRA-Testwissen hochgeladen → sofort Top-Retrieval (sim 0.71) → gelöscht.
+  - **Admin-Quicklinks** (AdminPage-Header): „RAG Control Center" (Lime-Pill, pulsierender Dot) + „Lizenz-Keys (400 Partner)" — scrollen zu den Sektionen. Golden-Check-Label auf 21 Fragen aktualisiert.
+  - **400-Partner-Onboarding VERIFIZIERT**: Admin generiert Key → Kunde löst auf Login-Seite ein → Account mit tier=standard + Session + Welcome-Mail (license.py L168). ⚠️ E-Mail-Validierung lehnt Reserved-TLDs (.test) ab — für Tests gmail.com-Adressen nutzen.
+  - **Wlad-Onboarding**: `scripts_send_wlad_onboarding.py` (Word-Doku + HTML-Mail via Resend) — REVIEW-KOPIE an mertzafermutlu@gmail.com GESENDET (Resend-ID e896ec22). Versand an Wlad (wj@argumentorik.com) wartet auf Merts Freigabe: `python3 scripts_send_wlad_onboarding.py` (ohne Argument = an Wlad).
+  - Preview-Testdaten: partner-onboarding-119@gmail.com / Partner1234! (Standard-Tier via License-Key).
+
 - [x] **[Iter 118 · 21.07.26] GODMODE DASHBOARD DE-CLUTTER (Design-Upgrade Phase 1)** — getestet: testing_agent frontend iteration_106.json ALLES PASS, 0 Issues
   - **ActionInbox** (`components/dashboard/ActionInbox.js`): Die 3 Full-Width-Promos (Live-Event, Sync-Diagnose, Strategy-Call) sind in EIN kompaktes, aufklappbares Widget „Deine nächsten Schritte" konsolidiert (Collapse-State in sessionStorage). Fixt Tester-Feedback „Seite zu busy nach Login". Innere Banner-Logik (Tier-Awareness, Dismiss) unverändert.
   - **WladMotivationCard** (Zitat des Tages) von Full-Width in die rechte Grid-Spalte demoted.

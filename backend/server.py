@@ -231,6 +231,10 @@ async def startup() -> None:
         import asyncio as _aio
         from services_embeddings import preload
         _aio.get_event_loop().create_task(preload())
+        # GODMODE (Iter 119): self-healing knowledge base — auto-ingest if the
+        # vector store is empty or holds legacy-dimension vectors.
+        from routes.rag_admin import ensure_rag_ready
+        _aio.get_event_loop().create_task(ensure_rag_ready())
     except Exception as e:
         logger.warning(f"Embedding preload deferred: {e}")
 

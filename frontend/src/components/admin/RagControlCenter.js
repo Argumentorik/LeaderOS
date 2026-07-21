@@ -7,6 +7,7 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Database, RefreshCw, ShieldCheck, CheckCircle2, XCircle, Loader2, Zap } from 'lucide-react';
+import { KnowledgeSources } from './KnowledgeSources';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
@@ -91,7 +92,7 @@ export const RagControlCenter = ({ de = true }) => {
             </Button>
             <Button size="sm" onClick={runGolden} disabled={goldenRunning} className="h-9 text-xs gap-1.5 bg-[#0A0A0A] text-white hover:bg-[#222]" data-testid="rag-golden-btn">
               {goldenRunning ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} className="text-[#BFFF00]" />}
-              {de ? 'Golden-Check (7 Fragen)' : 'Golden check (7 questions)'}
+              {de ? 'Golden-Check (21 Fragen)' : 'Golden check (21 questions)'}
             </Button>
           </div>
         </div>
@@ -120,6 +121,17 @@ export const RagControlCenter = ({ de = true }) => {
             {de ? 'Letzter Ingest fehlgeschlagen' : 'Last ingest failed'}{job.error ? `: ${String(job.error).slice(0, 160)}` : ''}
           </p>
         )}
+
+        {/* Zero-Touch note (Iter 119) */}
+        <p className="text-[10px] text-muted-foreground flex items-center gap-1.5" data-testid="rag-autoingest-note">
+          <ShieldCheck size={11} className="text-[#6B8A00] dark:text-[#BFFF00] shrink-0" />
+          {de
+            ? 'Godmode aktiv: Nach jedem Deploy prüft das System die Wissensbasis automatisch und liest sie bei Bedarf selbst neu ein — kein manueller Schritt nötig.'
+            : 'Godmode active: after every deploy the system verifies the knowledge base and self-heals automatically — no manual steps.'}
+        </p>
+
+        {/* Editable knowledge corpus (Iter 119 · Enterprise) */}
+        <KnowledgeSources de={de} onChanged={loadStatus} />
 
         {/* Golden results */}
         {golden && (
