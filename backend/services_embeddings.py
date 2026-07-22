@@ -16,19 +16,39 @@ logger = logging.getLogger("leaderos.embeddings")
 EMBED_MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 EMBEDDING_DIM = 384
 
+# Rescue switch (Iter 121): if the production container is memory-tight, set
+# RAG_EMBEDDINGS_DISABLED=1 → no ONNX model is loaded, keyword-RAG still works.
+def _disabled() -> bool:
+    import os
+    return os.environ.get("RAG_EMBEDDINGS_DISABLED", "0") == "1"
+
+
+def _log_memory(stage: str) -> None:
+    try:
+        import resource
+        rss_mb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
+        logger.info("Embeddings[%s]: peak RSS %.0f MB", stage, rss_mb)
+    except Exception:
+        pass
+
+
 _model = None
 _model_lock = threading.Lock()
 
 
 def _get_model():
     global _model
+    if _disabled():
+        return None
     if _model is None:
         with _model_lock:
             if _model is None:
                 from fastembed import TextEmbedding
                 t = time.time()
+                _log_memory("before-load")
                 m = TextEmbedding(EMBED_MODEL_NAME)
                 logger.info("Embeddings: %s loaded in %.1fs", EMBED_MODEL_NAME, time.time() - t)
+                _log_memory("after-load")
                 _model = m
     return _model
 
@@ -58,6 +78,9 @@ async def embed_documents(texts: list[str]) -> list[list[float]]:
 
 async def preload() -> None:
     """Warm the ONNX model at startup so the first user query is instant."""
+    if _disabled():
+        logger.warning("Embeddings: DISABLED via RAG_EMBEDDINGS_DISABLED — keyword-RAG only")
+        return
     try:
         await asyncio.to_thread(_get_model)
     except Exception as e:

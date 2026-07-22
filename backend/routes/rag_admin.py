@@ -142,6 +142,10 @@ async def ensure_rag_ready():
     knowledge pack. Zero manual steps after any deploy."""
     try:
         await asyncio.sleep(10)  # let the app settle + embedding model preload
+        import os as _os
+        if _os.environ.get("RAG_AUTO_INGEST", "1") == "0" or _os.environ.get("RAG_EMBEDDINGS_DISABLED", "0") == "1":
+            logger.info("RAG auto-ingest skipped (disabled via env)")
+            return
         from services_embeddings import EMBEDDING_DIM
         count = await db.rag_chunks.estimated_document_count()
         sample = await db.rag_chunks.find_one({}, {"embedding": 1})
