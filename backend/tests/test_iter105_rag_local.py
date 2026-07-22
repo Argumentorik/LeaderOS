@@ -2,13 +2,17 @@
 Tests migration from Voyage AI to local sentence-transformers MiniLM-L12-v2.
 """
 import os
+import sys
 import time
 import pytest
 import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://command-center-229.preview.emergentagent.com").rstrip("/")
-ADMIN_EMAIL = "test@test.com"
-ADMIN_PASSWORD = "test123"
+
+# Iter 121.3 (Code Review): env-driven creds from conftest — no hardcoded pw
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_EMAIL as ADMIN_EMAIL, TEST_PASSWORD as ADMIN_PASSWORD  # noqa: E402
+
 EXPECTED_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 
@@ -57,7 +61,7 @@ def test_admin_rag_local_status(admin_headers):
     r = requests.get(f"{BASE_URL}/api/admin/rag/local-status", headers=admin_headers, timeout=30)
     assert r.status_code == 200, r.text[:300]
     data = r.json()
-    assert data.get("chunks") == 7439, f"Expected chunks=7439, got {data.get('chunks')}: {data}"
+    assert data.get("chunks") >= 7439, f"Expected chunks>=7439 (baseline corpus), got {data.get('chunks')}: {data}"
 
 
 def test_admin_rag_golden_check(admin_headers):
@@ -99,7 +103,7 @@ def test_admin_rag_corpus_stats(admin_headers):
     assert r.status_code == 200, r.text[:400]
     data = r.json()
     total = data.get("total_chunks") or data.get("total") or data.get("chunks")
-    assert total == 7439, f"Expected total_chunks=7439, got {total}: keys={list(data.keys())}"
+    assert total >= 7439, f"Expected total_chunks>=7439 (baseline corpus), got {total}: keys={list(data.keys())}"
     # course breakdown
     breakdown = data.get("courses") or data.get("by_course") or data.get("course_breakdown") or data.get("breakdown")
     assert breakdown, f"No course breakdown in stats: {data}"

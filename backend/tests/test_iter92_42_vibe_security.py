@@ -56,7 +56,6 @@ class TestMagicLinkE2E:
     def test_verify_endpoint_valid_token_full_flow(self, s):
         # Generate token via fresh event loop with own motor client (avoid loop reuse)
         async def get_tok():
-            from motor.motor_asyncio import AsyncIOMotorClient
             import hashlib, secrets
             from datetime import datetime, timezone, timedelta
             client = AsyncIOMotorClient(MONGO_URL)

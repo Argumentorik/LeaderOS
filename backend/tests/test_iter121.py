@@ -1,8 +1,8 @@
 """Iter 121 — Go-Live Lockdown backend regression."""
 import os
 import sys
-import requests
 import pytest
+import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
 if not BASE_URL:
@@ -13,8 +13,14 @@ if not BASE_URL:
                 BASE_URL = line.split("=", 1)[1].strip()
                 break
 
-TEST_EMAIL = "test@test.com"
-TEST_PASSWORD = "test123"
+# Iter 121.3 (Code Review): use env-driven creds from conftest instead of
+# hardcoding — avoids leaking test passwords into git if they ever change.
+sys.path.insert(0, os.path.dirname(__file__))
+from conftest import TEST_EMAIL, TEST_PASSWORD  # noqa: E402
+
+BASE_URL = BASE_URL or os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001")
+
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001")
 
 
 @pytest.fixture(scope="module")
