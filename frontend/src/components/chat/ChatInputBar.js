@@ -1,7 +1,8 @@
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { VoiceRecorder } from '../shared/VoiceRecorder';
-import { Send, Loader2, Paperclip, FileText, X, Zap, Headphones, Target } from 'lucide-react';
+import { Send, Loader2, Paperclip, FileText, X, Zap, Headphones, Target, HelpCircle } from 'lucide-react';
+import { FeatureBriefing } from './FeatureBriefing';
 
 const AttachedPreview = ({ attachedPdf, onRemove, de }) => (
   <div className="max-w-4xl mx-auto mb-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#BFFF00]/8 border border-[#BFFF00]/20" data-testid="pdf-attached">
@@ -29,6 +30,32 @@ export const ChatInputBar = ({
   coachMode, setCoachMode,
 }) => (
   <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-3 sm:p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
+    {/* Iter 121.2: Coach-Modus Briefing — nur beim ersten Aktivieren, dann per
+        localStorage gemerkt. „Fokus-Modus" damit die Cohort sofort versteht,
+        was hinter dem Target-Icon steckt. */}
+    {coachMode && (
+      <div className="max-w-4xl mx-auto mb-3">
+        <FeatureBriefing
+          storageKey="coach-mode-intro"
+          testId="coach-mode-briefing"
+          icon={Target}
+          eyebrow={de ? 'COACH-MODUS · FOKUS-MODUS' : 'COACH MODE · FOCUS MODE'}
+          title={de
+            ? 'Wlad wechselt in den Coach-Modus — Strategie statt Small-Talk.'
+            : 'Wlad switches to coach mode — strategy over small talk.'}
+          bullets={de ? [
+            'Strukturierte Antworten: Kontext → Strategie → 3 konkrete Schritte → nächster Move.',
+            'Perfekt für: Vorstands-Pitch, schwieriges Gespräch, Verhandlung, Karriere-Move.',
+            'Am Ende bekommst du direkt umsetzbare Tasks (nutze „Aufgaben aus dem Gespräch erstellen").',
+          ] : [
+            'Structured replies: context → strategy → 3 concrete steps → next move.',
+            'Perfect for: board pitch, tough conversation, negotiation, career move.',
+            'End of chat you can turn suggestions into actionable tasks.',
+          ]}
+        />
+      </div>
+    )}
+
     {attachedPdf && <AttachedPreview attachedPdf={attachedPdf} onRemove={() => setAttachedPdf(null)} de={de} />}
     <div className="flex items-end gap-1.5 sm:gap-3 max-w-4xl mx-auto">
       <VoiceRecorder onTranscription={onVoice} disabled={loading} />
@@ -58,20 +85,38 @@ export const ChatInputBar = ({
         />
       </label>
       {setCoachMode && (
-        <button
-          type="button"
-          onClick={() => setCoachMode(!coachMode)}
-          disabled={loading}
-          data-testid="coach-mode-toggle"
-          title={de
-            ? (coachMode ? 'Coach-Modus aktiv: strukturierte Antworten mit Strategie & Schritten' : 'Coach-Modus: strukturierte Antworten mit Strategie & Schritten')
-            : (coachMode ? 'Coach mode on: structured replies with strategy & steps' : 'Coach mode: structured replies with strategy & steps')}
-          className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition-all shrink-0 ${coachMode
-            ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-lg shadow-[#BFFF00]/30'
-            : 'bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border-[#BFFF00]/20 text-[#6B8A00] dark:text-[#BFFF00]'} ${loading ? 'opacity-50 pointer-events-none' : ''}`}
-        >
-          <Target size={15} strokeWidth={2.5} />
-        </button>
+        <div className="relative shrink-0">
+          <button
+            type="button"
+            onClick={() => setCoachMode(!coachMode)}
+            disabled={loading}
+            data-testid="coach-mode-toggle"
+            title={de
+              ? (coachMode ? 'Coach-Modus aktiv: strukturierte Antworten mit Strategie & Schritten' : 'Coach-Modus (Fokus): strukturierte Antworten mit Strategie & Schritten')
+              : (coachMode ? 'Coach mode on: structured replies with strategy & steps' : 'Coach mode (focus): structured replies with strategy & steps')}
+            className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border transition-all ${coachMode
+              ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-lg shadow-[#BFFF00]/30'
+              : 'bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border-[#BFFF00]/20 text-[#6B8A00] dark:text-[#BFFF00]'} ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+          >
+            <Target size={15} strokeWidth={2.5} />
+          </button>
+          {/* Iter 121.2: „?"-Info-Dot — schmales Trigger für Briefing-Reset */}
+          <button
+            type="button"
+            onClick={() => {
+              try { localStorage.removeItem('leaderos:briefing-dismissed:coach-mode-intro'); } catch { /* private mode */ }
+              // Trigger a page-level flash: toggling coachMode off→on is the
+              // cleanest way to re-display the FeatureBriefing above the bar.
+              if (!coachMode) setCoachMode(true);
+              else { setCoachMode(false); setTimeout(() => setCoachMode(true), 60); }
+            }}
+            aria-label={de ? 'Was ist der Coach-Modus?' : 'What is coach mode?'}
+            data-testid="coach-mode-help-btn"
+            className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white dark:bg-card border border-black/10 dark:border-white/15 text-muted-foreground/70 hover:text-[#6B8A00] dark:hover:text-[#BFFF00] flex items-center justify-center transition-colors shadow-sm"
+          >
+            <HelpCircle size={9} strokeWidth={2.4} />
+          </button>
+        </div>
       )}
       <Textarea data-testid="chat-input" value={input} onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); } }}

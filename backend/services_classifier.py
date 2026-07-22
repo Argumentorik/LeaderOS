@@ -38,11 +38,14 @@ CLASSIFY_PROMPT = """Du bist Leader-OS Intent-Classifier. Klassifiziere die User
 
 KATEGORIEN:
 - speech_coaching: User hat eine bevorstehende Rede/Pitch/Präsentation/Meeting und braucht Vorbereitung (z.B. "Ich habe morgen eine Präsentation")
-- speech_practice: User will eine konkrete Rede/Pitch JETZT üben/durchgehen (z.B. "Lass uns meinen Pitch durchgehen")
-- theory: User fragt ein theoretisches Wissens-Thema (z.B. "Was ist Framing?", "Erklär mir SEXIER")
+- speech_practice: User hat einen Redetext geschickt bzw. will eine konkrete Rede/Pitch JETZT üben oder Feedback dazu bekommen. Erkennungsmerkmale (angelehnt an Wlads Router-Regeln):
+    • Der Text hat Rede-Charakteristika: durchgehend narrativ, strukturierte Argumentation, Vision-Statement, Pitch-Struktur, persönliche Anekdote mit Purpose, historischer Bericht, Event-Kommentar, poetische Rezitation, Impromptu-Speech.
+    • ODER: User bezieht sich AUSDRÜCKLICH auf eine bereits im Chat vorhandene Rede/Transkription (z. B. „Gib mir Feedback zur Rede oben", „War ich zu schnell?", „Hatte ich zu viele Füllwörter?").
+    • NICHT speech_practice: reine Fragen ("Was ist SEXIER?"), hypothetische Diskussionen, direkte Befehle ("Erkläre XY"), Small-Talk, Listen, Datenabfragen, Grammatik-Fragen, Meta-Kommentare.
+- theory: User fragt ein theoretisches Wissens-Thema (z.B. "Was ist Framing?", "Erklär mir SEXIER", "Nenne die 10 Stufen des Zuhörens")
 - general_coaching: Generelle Coaching-Anfrage ohne konkretes Event (z.B. "Wie werde ich überzeugender?")
 - video_analysis: User will ein Video hochladen oder ein bereits hochgeladenes analysieren
-- feedback: User hat schon etwas formuliert/geschrieben und will Feedback dazu
+- feedback: User hat schon etwas kurzes formuliert/geschrieben (keine ganze Rede — z.B. Argument, E-Mail, Sales-One-Liner) und will Feedback dazu
 - playbook: User möchte einen strukturierten Plan/Playbook/Workflow erstellt haben (z.B. "Bau mir ein Playbook für Vorstandsmeeting")
 
 Antworte NUR mit JSON in diesem exakten Format:

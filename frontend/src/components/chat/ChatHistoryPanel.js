@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Plus, Trash2, Folder, History, PanelRightClose, PanelRightOpen, MessageSquare } from 'lucide-react';
+import { Plus, Trash2, Folder, History, PanelRightClose, PanelRightOpen, MessageSquare, HelpCircle } from 'lucide-react';
 import logger from '../../lib/logger';
 import api from '../../lib/api';
+import { FeatureBriefing } from './FeatureBriefing';
 
 const groupLabel = (iso, de) => {
   if (!iso) return de ? 'Älter' : 'Older';
@@ -24,6 +25,9 @@ export const ChatHistoryPanel = ({
 }) => {
   const [open, setOpen] = useState(() => localStorage.getItem('wlad_chat_panel') !== 'closed');
   const [deleting, setDeleting] = useState(null);
+  // Iter 121.2: „?"-Button re-opens the folder briefing on demand, even
+  // after the user has dismissed it once (localStorage entry cleared then).
+  const [showFoldersBriefing, setShowFoldersBriefing] = useState(true);
 
   const toggle = () => {
     setOpen((v) => {
@@ -101,7 +105,47 @@ export const ChatHistoryPanel = ({
       {/* Folders */}
       {folders.length > 0 && (
         <div className="px-4 pb-2">
-          <p className="text-[9.5px] font-black uppercase tracking-[0.14em] text-muted-foreground/60 mb-1.5">{de ? 'Ordner' : 'Folders'}</p>
+          <div className="flex items-center justify-between mb-1.5">
+            <p className="text-[9.5px] font-black uppercase tracking-[0.14em] text-muted-foreground/60">{de ? 'Kontext-Ordner' : 'Context folders'}</p>
+            <button
+              type="button"
+              onClick={() => {
+                try { localStorage.removeItem('leaderos:briefing-dismissed:folders-intro'); } catch { /* private mode */ }
+                setShowFoldersBriefing(true);
+              }}
+              className="p-1 -m-1 text-muted-foreground/40 hover:text-[#6B8A00] dark:hover:text-[#BFFF00] transition-colors"
+              aria-label={de ? 'Was sind Kontext-Ordner?' : 'What are context folders?'}
+              data-testid="chat-folders-help-btn"
+              title={de ? 'Was sind Kontext-Ordner?' : 'What are context folders?'}
+            >
+              <HelpCircle size={11.5} />
+            </button>
+          </div>
+
+          {/* Iter 121.2: Folders-Briefing — 3-Sekunden-Erklärung was das ist */}
+          {showFoldersBriefing && (
+            <div className="mb-2.5">
+              <FeatureBriefing
+                storageKey="folders-intro"
+                testId="folders-briefing"
+                icon={Folder}
+                eyebrow={de ? 'KONTEXT-ORDNER' : 'CONTEXT FOLDERS'}
+                title={de
+                  ? 'Bündle Chats zu einem Projekt — Wlad merkt sich alles.'
+                  : 'Bundle chats into projects — Wlad remembers everything.'}
+                bullets={de ? [
+                  'Ein Ordner = ein Projekt (z. B. „Q1-Board-Meeting", „Verhandlung mit XYZ").',
+                  'Alle Chats im Ordner teilen den Kontext — kein neu-Erklären.',
+                  'Wlad zieht bei jeder Antwort automatisch die Ordner-Notizen mit rein.',
+                ] : [
+                  'One folder = one project (e.g. "Q1 board meeting", "Negotiation with XYZ").',
+                  'All chats in the folder share context — no re-explaining.',
+                  'Wlad pulls in folder notes on every reply automatically.',
+                ]}
+              />
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-1.5" data-testid="chat-history-folders">
             <button
               onClick={() => onSelectFolder?.(null)}

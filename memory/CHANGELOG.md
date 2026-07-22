@@ -1,6 +1,15 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 121.2 · 22.07.26] Premium Feature-Briefings für Coach-Modus + Kontext-Ordner + Router-Refinement** — smoke-tested via Playwright
+  - **Neues Shared-Component** `frontend/src/components/chat/FeatureBriefing.js`: dismissible, localStorage-gemerkte Premium-Card mit Grain-Overlay, lime/gold Tone, Bullet-Liste, optionalem CTA. Reusable für alle künftigen „Was ist das & wie nutz ich das?"-Situationen.
+  - **Coach-Modus-Briefing** (`ChatInputBar.js`): erscheint beim ersten Aktivieren mit Titel „Wlad wechselt in den Coach-Modus — Strategie statt Small-Talk" + 3 Bullets (strukturiert · perfekt für Pitch/Verhandlung · direkt umsetzbare Tasks). Kleines „?"-Icon am Toggle re-öffnet das Briefing nach Dismiss.
+  - **Kontext-Ordner-Briefing** (`ChatHistoryPanel.js`): rechte Sidebar-Sektion umbenannt zu „Kontext-Ordner" mit HelpCircle-Icon; Briefing „Bündle Chats zu einem Projekt — Wlad merkt sich alles" + 3 Bullets (1 Ordner = 1 Projekt · alle Chats teilen Kontext · Wlad zieht Ordner-Notizen automatisch mit).
+  - **Router-Refinement** (`services_classifier.py`): CLASSIFY_PROMPT nutzt jetzt Wlads Original-Router-Regeln aus `router.txt` — bessere Trennung zwischen `speech_practice` (echte Rede-Transkripte, Vision-Statements, Pitches, Anekdoten mit Purpose) und `theory`/`general_coaching` (Fragen, Hypothetika, Kommandos, Small-Talk).
+  - **Global Debug-Helper**: `window.leaderos_reset_briefings()` resettet alle dismissed Briefings (für Support/Testing).
+  - **RAG-Status verifiziert**: 7 463 Chunks aktiv, alle 5 Wlad-Frameworks aus Iter 121.1 unverändert produktiv.
+
+
 - [x] **[Iter 121.1 · 22.07.26] Wlad-Framework-Sync: 5 Signature-Frameworks matchen jetzt 1:1 mit dem Original-WladBot (Telegram)** — E2E getestet gegen alle 5
   - **Root Cause**: Der alte `listening_10_stages` MANUAL_CHUNK enthielt komplett andere Stufen-Namen (Pseudo, Resonant, Generativ, Transformativ) als das Original-WladBot-Framework (Vortäuschendes, Kürzendes, Selektives, Übertrumpfendes, Egoistisches, Beratendes / Aufmerksames, Aktives, Empathisches, Helfendes). Dadurch antwortete der Bot mit erfundenen Stufen.
   - **Fix**: Alter Chunk entfernt, 5 neue `wladbot_reference`-MANUAL_CHUNKS (`services_rag.py`) mit exakt der Wortwahl aus Wlads Original: **10 Stufen des Zuhörens** (2-Kategorien-Struktur: Antwortsüchtig 1-6 / Verstehend 7-10), **6P-Modell** (Plot/Polarität/Protagonist/Peripetie/Pointe/Präsentation), **Charisma-Code** (8 Elemente: Credo/Habitus/Außeralltäglichkeit/Rhetorik/Inszenierung/Superskills/Motivation/Arbeit), **SEXIER-Modell** (S/E/X/I/E/R), **30 Schlagfertigkeitstechniken** (komplett nummerierte Liste).
