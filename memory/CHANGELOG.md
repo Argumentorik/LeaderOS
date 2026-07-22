@@ -1,5 +1,17 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
+## Latest — 22.07.2026
+
+- [x] **[Iter 121 · 22.07.26] Go-Live Lockdown: Videos, Community, Audio-Bus & leadercheck-Sync-Transparency** —
+  - **Alle Lernvideos gesperrt** (`PRELAUNCH_VIDEO_LOCK=1` in `routes/my_path.py`): `/api/my-path/videos` liefert `prelaunch_lock: true`, jedes Video kommt mit `unlocked=false` + `locked_reason='prelaunch'`. Frontend (`LearningVideosTab.js`, `DashboardLearningVideos.js`) zeigt lime „🔓 UPGRADE"-Badge + „Premium freischalten →"; Klick öffnet `PricingModal` (keine „Verfügbar / Gratis"-Verwirrung mehr).
+  - **Community gesperrt** (`CommunityPage.js` schlanker Rewrite + `LockedPageOverlay.js`): Ganzseitiges Premium-Gate mit „🔓 Upgrade auf Premium – Vollzugriff freischalten"-CTA und 3 Feature-Bullets (Peer-Feedback, Live-Leaderboard, Wlad-AMAs). Keine `/community/feed`- oder `/leaderboard`-Requests mehr (Netzwerk-Ruhe unter Overlay).
+  - **Globaler Audio-Bus** (`lib/audioBus.js` + Route-Effect in `App.js`): Alle Audio-Player (ElevenLabs-TTS via `VoicePlayButton`, Challenger-Voice, `useVoiceMode`-Playback) registrieren sich zentral. Route-Change dispatched `leaderos:audio-stop-all` → pausiert JEDES `<audio>` + `speechSynthesis.cancel()` → kein überlappender Ton mehr, wenn man z. B. von `/challengers` weg klickt.
+  - **Voice-Framework-Mapping** (`voice_framework_map.py` + `/api/voice/transcribe` + `voice_tts.py`): Whisper-Transkripte werden mit `enrich_transcript` angereichert → phonetische Varianten („sexier", „sechsier", „loguse") mappen auf Wlads Frameworks (SEXIER-Argumentation, 3 Säulen: Logos/Ethos/Pathos, Kommunikationsquadrant, Schwarze Rhetorik, Storytelling, SBI/WWW, BATNA). Kurze/unklare Aufnahmen setzen `low_confidence=true` + Hint „Bitte sprich einen vollständigen Satz deutlich in Richtung Mikrofon". `voice_tts.py` injiziert erkannte Frameworks als expliziten LLM-System-Prompt-Block.
+  - **VoiceRecorder-UX**: Toast-Warnungen für `low_confidence` (⚠️) und `matched_frameworks` („Framework erkannt: SEXIER-Argumentation"). Mic-Button-Tooltip klärt: „Stelle deine Frage — sprich deutlich in Richtung Mikrofon".
+  - **leadercheck.de Sync-Transparenz**: `GET /api/wladhub/sync/status` liefert `bridge_configured`, `leader_check_has_data`, `leader_check_row_count`, `has_local_diagnosis`, `last_local_sync`, `leadercheck_url`. `POST /api/wladhub/sync` liefert `records_imported`. Frontend-Toast (`LeaderDiagnosePage.handleSync`) zeigt „X neue Datensätze" bei Erfolg und einen Action-Toast mit „Diagnose starten"-Button (→ leader-check.de) wenn `status='no_data'` (statt stumm ins Leere zu leiten).
+  - **Founder-Purge-Script** (`scripts_delete_test_accounts.py`): Löscht `wj@argumentorik*` + `wlassassa*` User + alle 20+ verknüpften Collections. Preview-DB no-op (keine Matches); für Prod: `python /app/backend/scripts_delete_test_accounts.py` nach Deploy ausführen.
+  - **Test-Report `iteration_121.json`**: Backend 9/9 ✓, Frontend 5/5 ✓, keine Regressions.
+
 ## Deployed Features (Archiv)
 - [x] **[Iter 92.54 · 01.07.26] Challengers Meeting-Experience (11x.ai-Style)** —
   - **Meeting-Stage** in `ChallengersPage.js`: Video-Call-Bühne über dem Chat — großes Challenger-Portrait (Farb-Ring, Breathing, Ping-Ring beim Denken), „LIVE MEETING"-Badge (roter Pulse), Name-Plate mit Status („im Gespräch"/„denkt nach…"), Self-Tile mit User-Initialen („Du"). Screenshot-verifiziert mit Bezos.

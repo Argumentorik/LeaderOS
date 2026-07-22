@@ -123,7 +123,7 @@ def assess_transcript_quality(transcript: str) -> dict[str, Any]:
 
     is_question = (
         "?" in transcript
-        or bool(re.search(r"\b(wie|was|warum|weshalb|wann|wo|wer|welche|kannst du|kannst ihr|erkl(ä|ae)r|zeig|sag)\b",
+        or bool(re.search(r"\b(wie|was|warum|weshalb|wann|wo|wer|welche|kannst du|kannst ihr|erkl(ä|ae)r\w*|zeig\w*|sag\w*)\b",
                           transcript.lower()))
     )
 

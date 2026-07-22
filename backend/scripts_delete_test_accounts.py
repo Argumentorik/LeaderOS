@@ -13,10 +13,12 @@ import sys
 from datetime import datetime, timezone
 
 sys.path.insert(0, "/app/backend")
-from config import db  # noqa: E402
-from dotenv import load_dotenv  # noqa: E402
 
+# Iter 121: load .env BEFORE importing config.db so a bare shell run works too.
+from dotenv import load_dotenv  # noqa: E402
 load_dotenv("/app/backend/.env")
+
+from config import db  # noqa: E402
 
 
 # Collections that store per-user rows (keyed by user_id) — best-effort wipe.
