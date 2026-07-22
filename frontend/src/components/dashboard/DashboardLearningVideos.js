@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import VideoPlayer from '../shared/VideoPlayer';
+import { PricingModal } from '../shared/PricingModal';
 
 const VideoTile = ({ video, onPlay }) => {
   const { unlocked } = video;
@@ -23,18 +24,24 @@ const VideoTile = ({ video, onPlay }) => {
       className="group relative shrink-0 w-[220px] rounded-xl overflow-hidden text-left transition-all hover:scale-[1.02] hover:shadow-lg"
       data-testid={`dashboard-video-tile-${video.id}`}
       style={{
-        background: `linear-gradient(135deg, ${video.thumbnail_color}AA 0%, ${video.thumbnail_color}66 100%)`,
+        background: unlocked
+          ? `linear-gradient(135deg, ${video.thumbnail_color}AA 0%, ${video.thumbnail_color}66 100%)`
+          : `linear-gradient(135deg, ${video.thumbnail_color}44 0%, #0A0A0A 100%)`,
       }}
     >
       <div className="h-24 flex items-center justify-center relative">
         <div className={`relative z-10 w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${
-          unlocked ? 'bg-white/95' : 'bg-black/40 backdrop-blur'
+          unlocked ? 'bg-white/95' : 'bg-[#BFFF00]/95 shadow-lg shadow-[#BFFF00]/40 group-hover:scale-125'
         }`}>
-          {unlocked ? <Play size={18} className="text-black ml-0.5" fill="black" /> : <Lock size={16} className="text-white/90" />}
+          {unlocked ? <Play size={18} className="text-black ml-0.5" fill="black" /> : <Lock size={16} className="text-[#0A0A0A]" />}
         </div>
-        {unlocked && (
+        {unlocked ? (
           <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[8px] font-black uppercase tracking-wider">
             Verfügbar
+          </div>
+        ) : (
+          <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[8px] font-black uppercase tracking-wider shadow-lg shadow-[#BFFF00]/40" data-testid={`dashboard-video-lock-badge-${video.id}`}>
+            🔓 Upgrade
           </div>
         )}
       </div>
@@ -48,6 +55,11 @@ const VideoTile = ({ video, onPlay }) => {
           <span className="text-muted-foreground/40">·</span>
           <span className="flex items-center gap-0.5"><Layers size={9} /> {video.episodes}</span>
         </div>
+        {!unlocked && (
+          <p className="mt-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.06] text-[9.5px] font-black text-[#6B8A00] dark:text-[#BFFF00] flex items-center gap-1">
+            <Lock size={9} /> Premium freischalten →
+          </p>
+        )}
       </div>
     </button>
   );
@@ -57,6 +69,7 @@ export const DashboardLearningVideos = ({ de = true }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [playerOpen, setPlayerOpen] = useState(null);
+  const [showPaywall, setShowPaywall] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,6 +99,13 @@ export const DashboardLearningVideos = ({ de = true }) => {
   if (starters.length === 0) return null;
 
   const handlePlay = (video) => {
+    // Iter 121: locked videos → open premium paywall directly (no confusing
+    // chat detour). Prevents the "Verfügbar / Lock badge weirdness" the user
+    // reported when tapping locked tiles.
+    if (!video.unlocked) {
+      setShowPaywall(true);
+      return;
+    }
     if (video.vimeo_id || video.vimeo_url || video.video_url) {
       setPlayerOpen(video);
       return;
@@ -160,6 +180,7 @@ export const DashboardLearningVideos = ({ de = true }) => {
           </div>
         </div>
       )}
+      {showPaywall && <PricingModal onClose={() => setShowPaywall(false)} />}
     </Card>
   );
 };

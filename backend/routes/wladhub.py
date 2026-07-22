@@ -380,7 +380,42 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
         "message": f"WladHub-Daten erfolgreich importiert ({len(insights)} Einträge)",
         "has_diagnosis": True,
         "scores": scores,
+        "records_imported": len(insights),
         "last_sync": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@router.get("/sync/status")
+async def sync_status(request: Request):
+    """Iter 121: transparent health-check for the leader-check.de sync.
+
+    Returns whether the Supabase bridge is configured, whether the caller's
+    email exists on leader-check.de, and when the last sync happened. Used
+    by the diagnose page to show the user "sync bridge OK" instead of a
+    silent redirect.
+    """
+    user = await get_current_user(request)
+    email = user.get("email", "")
+    supabase_url, service_key = _get_supabase_config()
+    bridge_configured = bool(supabase_url and service_key)
+    has_remote = False
+    remote_row_count = 0
+    if bridge_configured and email:
+        try:
+            insights = await _fetch_supabase_insights(email)
+            has_remote = len(insights) > 0
+            remote_row_count = len(insights)
+        except Exception as e:
+            logger.warning(f"sync_status: remote lookup failed for {email}: {e}")
+    local = await db.wladhub_diagnoses.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return {
+        "bridge_configured": bridge_configured,
+        "email_used": email,
+        "leader_check_has_data": has_remote,
+        "leader_check_row_count": remote_row_count,
+        "has_local_diagnosis": bool(local),
+        "last_local_sync": user.get("wladhub_last_sync"),
+        "leadercheck_url": "https://leader-check.de",
     }
 
 

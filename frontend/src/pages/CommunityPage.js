@@ -1,172 +1,71 @@
-import { useState, useEffect, useCallback } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useAuth } from '../contexts/AuthContext';
-import api from '../lib/api';
-import logger from '../lib/logger';
-import { Users, Loader2, Heart, Flame, User as UserIcon } from 'lucide-react';
-import { CommunityCompose } from '../components/community/CommunityCompose';
-import { CommunityFilters } from '../components/community/CommunityFilters';
-import { CommunityPost } from '../components/community/CommunityPost';
-import { CommunityLeaderboard } from '../components/community/CommunityLeaderboard';
-import { CommunityMeStats } from '../components/community/CommunityMeStats';
-import { CommunityFeedTabs } from '../components/community/CommunityFeedTabs';
+import { Users } from 'lucide-react';
+import { LockedPageOverlay } from '../components/shared/LockedPageOverlay';
 
-const EMPTY_COPY = {
-  all:   { de: 'Noch keine Posts. Sei die Erste, die etwas teilt!',                 en: 'No posts yet. Be the first to share!' },
-  top:   { de: 'Noch keine Top-Posts. Klicke ein Herz und der erste landet hier.',  en: 'No top posts yet. Like a post and one will appear here.' },
-  mine:  { de: 'Du hast noch nichts gepostet. Teile deinen ersten Win!',            en: "You haven't posted yet. Share your first win!" },
-  liked: { de: 'Du hast noch nichts geliked.',                                       en: "You haven't liked anything yet." },
-};
-
-const EMPTY_ICON = { all: Users, top: Flame, mine: UserIcon, liked: Heart };
-
+/**
+ * CommunityPage — Prelaunch-locked (Iter 121, User: „Close Community as well").
+ *
+ * The full feed / composer / leaderboard code is temporarily disabled and
+ * replaced by the shared `LockedPageOverlay` which drives everyone to the
+ * PricingModal (same CTA as the video lock). Original page state is
+ * preserved in git history — flip the `PRELAUNCH_COMMUNITY_LOCK` guard back
+ * off + restore the imports below to re-enable after go-live.
+ */
 export default function CommunityPage() {
   const { lang } = useLanguage();
-  const { user: me } = useAuth();
   const de = lang === 'de';
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('all');
-  const [feed, setFeed] = useState('all');
-  const [draft, setDraft] = useState('');
-  const [draftCategory, setDraftCategory] = useState('general');
-  const [posting, setPosting] = useState(false);
-  const [expandedPost, setExpandedPost] = useState(null);
-  const [comments, setComments] = useState({});
-  const [commentDraft, setCommentDraft] = useState({});
-  const [leaderboard, setLeaderboard] = useState([]);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [feedRes, lbRes] = await Promise.all([
-        api.get('/community/feed', { params: { category, feed } }),
-        api.get('/admin/community/leaderboard', { params: { limit: 10 } }).catch(() => ({ data: [] })),
-      ]);
-      setPosts(feedRes.data || []);
-      setLeaderboard(lbRes.data || []);
-    } catch (err) { logger.error(err); }
-    finally { setLoading(false); }
-  }, [category, feed]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const createPost = async () => {
-    if (!draft.trim() || posting) return;
-    setPosting(true);
-    try {
-      const res = await api.post('/community/posts', { content: draft.trim(), category: draftCategory });
-      setPosts([res.data, ...posts]);
-      setDraft(''); setDraftCategory('general');
-    } catch (err) { logger.error(err); }
-    finally { setPosting(false); }
-  };
-
-  const toggleLike = async (postId) => {
-    try {
-      const res = await api.post(`/community/posts/${postId}/like`);
-      setPosts(prev => prev.map(p => p.post_id === postId ? { ...p, liked_by_me: res.data.liked, likes_count: res.data.likes_count } : p));
-    } catch (err) { logger.error(err); }
-  };
-
-  const loadComments = async (postId) => {
-    try {
-      const res = await api.get(`/community/posts/${postId}/comments`);
-      setComments(prev => ({ ...prev, [postId]: res.data }));
-    } catch (err) { logger.error(err); }
-  };
-
-  const toggleComments = (postId) => {
-    if (expandedPost === postId) setExpandedPost(null);
-    else { setExpandedPost(postId); if (!comments[postId]) loadComments(postId); }
-  };
-
-  const addComment = async (postId) => {
-    const text = (commentDraft[postId] || '').trim();
-    if (!text) return;
-    try {
-      const res = await api.post(`/community/posts/${postId}/comments`, { content: text });
-      setComments(prev => ({ ...prev, [postId]: [...(prev[postId] || []), res.data] }));
-      setCommentDraft(prev => ({ ...prev, [postId]: '' }));
-      setPosts(prev => prev.map(p => p.post_id === postId ? { ...p, comment_count: (p.comment_count || 0) + 1 } : p));
-    } catch (err) { logger.error(err); }
-  };
-
-  const deletePost = async (postId) => {
-    if (!window.confirm(de ? 'Post wirklich löschen?' : 'Delete this post?')) return;
-    try {
-      await api.delete(`/community/posts/${postId}`);
-      setPosts(prev => prev.filter(p => p.post_id !== postId));
-    } catch (err) { logger.error(err); }
-  };
-
-  const EmptyIcon = EMPTY_ICON[feed] || Users;
-  const emptyCopy = (EMPTY_COPY[feed] || EMPTY_COPY.all)[de ? 'de' : 'en'];
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-6xl mx-auto" data-testid="community-page">
-        <div className="mb-8 animate-fade-in">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20">
-              <Users size={20} className="text-[#0A0A0A]" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Community' : 'Community'}</h1>
-              <p className="text-sm text-muted-foreground">{de ? 'Teile Wins, frage nach Feedback, hilf anderen Leadern.' : 'Share wins, ask for feedback, help other leaders.'}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
-          <div className="space-y-5 min-w-0">
-            {/* Personalisierter Stats-Header (Mert Iter 92.23.6): zeigt dem User
-                seinen aktuellen Community-Rang prominent oberhalb des Feeds. */}
-            <CommunityMeStats de={de} />
-
-            <CommunityCompose
-              me={me} de={de}
-              draft={draft} setDraft={setDraft}
-              draftCategory={draftCategory} setDraftCategory={setDraftCategory}
-              posting={posting} onSubmit={createPost}
-            />
-
-            <CommunityFeedTabs feed={feed} setFeed={setFeed} de={de} />
-            <CommunityFilters category={category} setCategory={setCategory} de={de} />
-
-            {loading ? (
-              <div className="text-center py-16"><Loader2 size={24} className="mx-auto animate-spin text-[#BFFF00]" /></div>
-            ) : posts.length === 0 ? (
-              <Card data-testid="community-feed-empty"><CardContent className="p-10 text-center space-y-2">
-                <EmptyIcon size={32} className="mx-auto text-muted-foreground/40" />
-                <p className="text-sm text-muted-foreground">{emptyCopy}</p>
-              </CardContent></Card>
-            ) : (
-              <div className="space-y-3">
-                {posts.map(p => (
-                  <CommunityPost
-                    key={p.post_id}
-                    post={p}
-                    me={me}
-                    de={de}
-                    onLike={toggleLike}
-                    onToggleComments={toggleComments}
-                    onDelete={deletePost}
-                    expanded={expandedPost === p.post_id}
-                    comments={comments}
-                    commentDraft={commentDraft}
-                    setCommentDraft={setCommentDraft}
-                    onAddComment={addComment}
-                  />
-                ))}
+      <div className="relative min-h-[80vh]" data-testid="community-page-wrapper">
+        {/* Blurred backdrop so the overlay feels grounded on real UI */}
+        <div className="p-6 lg:p-10 max-w-6xl mx-auto pointer-events-none select-none" data-testid="community-page" aria-hidden>
+          <div className="mb-8 opacity-40">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20">
+                <Users size={20} className="text-[#0A0A0A]" />
               </div>
-            )}
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Community' : 'Community'}</h1>
+                <p className="text-sm text-muted-foreground">
+                  {de ? 'Teile Wins, frage nach Feedback, hilf anderen Leadern.' : 'Share wins, ask for feedback, help other leaders.'}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <CommunityLeaderboard leaderboard={leaderboard} postsCount={posts.length} de={de} me={me} />
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 opacity-30">
+            <div className="space-y-4">
+              {[0, 1, 2].map(i => (
+                <Card key={i} className="border-black/[0.04] dark:border-white/[0.06]"><CardContent className="p-6 h-24" /></Card>
+              ))}
+            </div>
+            <div className="space-y-3">
+              {[0, 1, 2].map(i => (
+                <Card key={`lb-${i}`} className="border-black/[0.04] dark:border-white/[0.06]"><CardContent className="p-4 h-14" /></Card>
+              ))}
+            </div>
+          </div>
         </div>
+
+        <LockedPageOverlay
+          testId="community-locked-overlay"
+          title={de ? 'Community — kommt zum Launch' : 'Community — coming at launch'}
+          subtitle={de
+            ? 'Die Community-Feeds, Leaderboards und Peer-Feedback-Threads schalten wir mit dem offiziellen Go-Live für alle Premium-Leader frei.'
+            : 'Community feeds, leaderboards and peer feedback threads unlock the moment we go live to Premium leaders.'}
+          features={de ? [
+            'Peer-Feedback zu deinen Video-Missionen',
+            'Live-Leaderboard aller Cohort-Leader',
+            'Monatliche AMAs mit Wlad + Community-Calls',
+          ] : [
+            'Peer feedback on your video missions',
+            'Live leaderboard across the cohort',
+            'Monthly AMAs with Wlad + community calls',
+          ]}
+        />
       </div>
     </DashboardLayout>
   );

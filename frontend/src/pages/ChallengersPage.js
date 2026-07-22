@@ -12,6 +12,7 @@ import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
+import { registerAudio, stopAllAudio } from '../lib/audioBus';
 import api from '../lib/api';
 import { openStrategyCall } from '../lib/calendly';
 import {
@@ -46,6 +47,9 @@ const speakPersona = async (text, persona, api, lang = 'de') => {
     const res = await api.post('/voice/tts', { text: clean, persona });
     const audio = new Audio(res.data.audio_url);
     _currentAudio = audio;
+    // Iter 121: hand off to the global audio bus so route-changes silence
+    // the challenger the instant the user navigates away.
+    registerAudio(audio);
     await audio.play();
   } catch {
     // Fallback to browser TTS so the feature still works
@@ -54,12 +58,10 @@ const speakPersona = async (text, persona, api, lang = 'de') => {
 };
 
 const stopSpeaking = () => {
-  window.speechSynthesis?.cancel();
-  if (_currentAudio) {
-    _currentAudio.pause();
-    _currentAudio.currentTime = 0;
-    _currentAudio = null;
-  }
+  // Delegates to the central bus so BOTH SpeechSynthesis AND every registered
+  // <audio> element (chat TTS, challenger, voice-mode) get killed at once.
+  stopAllAudio('challenger-page');
+  _currentAudio = null;
 };
 
 const DIFF = {

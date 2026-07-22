@@ -1010,11 +1010,18 @@ async def transcribe_voice(request: Request, file: UploadFile = File(...)):
 
     Reuses the same ffmpeg-normalised pipeline as the video missions flow so
     Safari / Chrome / Firefox containers all work the same way.
+
+    Iter 121 (User feedback): returns extra metadata so the client can:
+      - normalise mis-heard Wlad-Framework references (e.g. "sexier" →
+        SEXIER-Argumentation) as chip suggestions;
+      - warn the user "Bitte deutlicher sprechen" when the recording is
+        too short / mostly fillers.
     """
     await get_current_user(request)
     try:
         text = await _transcribe_audio(file)
-        return {"text": text}
+        from voice_framework_map import enrich_transcript
+        return enrich_transcript(text)
     except HTTPException:
         raise
     except Exception as e:

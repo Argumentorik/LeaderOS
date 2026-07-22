@@ -8,6 +8,7 @@ import { Toaster } from "./components/ui/sonner";
 import { NetworkStatusBanner } from "./components/shared/NetworkStatusBanner";
 import { lazyWithRetry, clearChunkReloadGuard } from "./lib/lazyWithRetry";
 import { captureAttribution } from "./lib/attribution";
+import { stopAllAudio } from "./lib/audioBus";
 
 // Iter 120: capture utm_*/gclid/referrer on every page load (first-touch safe)
 captureAttribution();
@@ -102,6 +103,9 @@ function AppRouter() {
   // the chunk-reload guard so future deploys can retry-then-reload again.
   useEffect(() => {
     clearChunkReloadGuard();
+    // Iter 121 (User feedback): kill ALL audio (TTS, ElevenLabs playback,
+    // Browser-SpeechSynthesis) so voices don't bleed across routes.
+    stopAllAudio('route-change');
   }, [location.pathname]);
 
   if (location.hash?.includes('session_id=')) {

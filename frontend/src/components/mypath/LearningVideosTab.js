@@ -81,13 +81,13 @@ const VideoCard = ({ video, onPlay, onUpgrade, newlyUnlocked }) => {
           </div>
         )}
         {!unlocked && (
-          <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white/90 text-[9px] font-black uppercase tracking-wider" data-testid={`video-locked-badge-${video.id}`}>
-            <Lock size={9} /> Gesperrt
+          <div className="absolute top-2 left-2 flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[10px] font-black uppercase tracking-wider shadow-lg shadow-[#BFFF00]/40" data-testid={`video-locked-badge-${video.id}`}>
+            <Lock size={10} /> Upgrade
           </div>
         )}
         {!exclusive && unlocked && (
           <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30">
-            Gratis
+            Verfügbar
           </div>
         )}
       </div>
@@ -111,7 +111,7 @@ const VideoCard = ({ video, onPlay, onUpgrade, newlyUnlocked }) => {
           {unlocked ? (
             <CheckCircle2 size={12} className="text-[#30D158]" />
           ) : (
-            <span className="text-[9px] font-bold text-[#BFFF00]">UPGRADE →</span>
+            <span className="text-[10px] font-black text-[#6B8A00] dark:text-[#BFFF00] inline-flex items-center gap-1"><Lock size={9} /> Premium freischalten →</span>
           )}
         </div>
       </div>
@@ -189,6 +189,7 @@ export default function LearningVideosTab() {
   const userRank = { free: 0, starter: 1, standard: 2, accelerator: 3 }[data.user_tier] || 0;
   const hasStarter = userRank >= 1;
   const hasAccelerator = userRank >= 3;
+  const prelaunchLock = data.prelaunch_lock === true;
 
   return (
     <div className="space-y-8" data-testid="learning-videos-tab">
@@ -199,9 +200,13 @@ export default function LearningVideosTab() {
             <Sparkles size={18} className="text-[#BFFF00]" />
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Deine Bibliothek</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+              {prelaunchLock ? 'Prelaunch — Vollzugriff mit Premium' : 'Deine Bibliothek'}
+            </p>
             <h3 className="text-base font-black">
-              {data.unlocked_count} / {data.total_count} Kurse freigeschaltet
+              {prelaunchLock
+                ? `${data.total_count} Kurse · Alle bald verfügbar`
+                : `${data.unlocked_count} / ${data.total_count} Kurse freigeschaltet`}
             </h3>
           </div>
         </div>
@@ -225,10 +230,12 @@ export default function LearningVideosTab() {
             <p className="text-xs text-muted-foreground mt-0.5">6 Kurse · {data.starter_videos.reduce((s, v) => s + v.episodes, 0)} Folgen · Vimeo HD · Ohne Anmeldepflicht</p>
           </div>
           <span
-            className="text-[10px] font-black px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+            className={`text-[10px] font-black px-3 py-1.5 rounded-full ${prelaunchLock
+              ? 'bg-[#BFFF00]/15 text-[#6B8A00] dark:text-[#BFFF00] border border-[#BFFF00]/30'
+              : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'}`}
             data-testid="free-videos-badge"
           >
-            INKLUSIVE
+            {prelaunchLock ? 'PREMIUM' : 'INKLUSIVE'}
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

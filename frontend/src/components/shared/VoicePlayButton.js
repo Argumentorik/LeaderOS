@@ -4,6 +4,7 @@ import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { getTtsSpeed } from '../../lib/ttsSpeed';
 import { VoiceWaveVisualizer } from './VoiceWaveVisualizer';
+import { registerAudio } from '../../lib/audioBus';
 
 /**
  * VoicePlayButton — triggers ElevenLabs TTS synthesis + inline <audio> playback.
@@ -83,6 +84,8 @@ export default function VoicePlayButton({
       // gracefully, and that's what Mert means by "standard AI sound".
       audio.preservesPitch = true;
       audioRef.current = audio;
+      // Iter 121: sign in with the global audio bus so route-changes stop us.
+      const unregister = registerAudio(audio);
       setAudioVersion(v => v + 1);  // Trigger re-render so visualizer picks up new audio
       // Live-update playbackRate if user changes the global speed mid-playback.
       const onSpeedChange = (e) => {
@@ -91,13 +94,24 @@ export default function VoicePlayButton({
           audioRef.current.preservesPitch = false;
         }
       };
+      const onGlobalStop = () => {
+        try { audio.pause(); } catch { /* already gone */ }
+        audioRef.current = null;
+        setPlaying(false);
+        setLoading(false);
+      };
       window.addEventListener('wladbot:tts-speed', onSpeedChange);
+      window.addEventListener('leaderos:audio-stop-all', onGlobalStop, { once: true });
       audio.onended = () => {
         window.removeEventListener('wladbot:tts-speed', onSpeedChange);
+        window.removeEventListener('leaderos:audio-stop-all', onGlobalStop);
+        unregister();
         setPlaying(false); if (onEnd) onEnd();
       };
       audio.onerror = () => {
         window.removeEventListener('wladbot:tts-speed', onSpeedChange);
+        window.removeEventListener('leaderos:audio-stop-all', onGlobalStop);
+        unregister();
         setPlaying(false); setLoading(false);
       };
       audio.onplay = () => { setLoading(false); setPlaying(true); };

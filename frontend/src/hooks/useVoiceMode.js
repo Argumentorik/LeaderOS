@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import api from '../lib/api';
 import logger from '../lib/logger';
+import { registerAudio } from '../lib/audioBus';
 
 /**
  * useVoiceMode — Hands-free voice conversation state machine.
@@ -298,7 +299,10 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     const audio = new Audio(audioUrl);
     audio.muted = muted;
     audioPlayerRef.current = audio;
+    // Iter 121: register with global audio-bus so navigating away kills it.
+    const unregister = registerAudio(audio);
     audio.onended = () => {
+      unregister();
       audioPlayerRef.current = null;
       setState(VOICE_STATES.IDLE);
       if (!cancelledRef.current && !pausedRef.current) {
@@ -306,7 +310,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       }
       resolve();
     };
-    audio.onerror = () => { logger.error('Audio playback error'); setState(VOICE_STATES.IDLE); resolve(); };
+    audio.onerror = () => { unregister(); logger.error('Audio playback error'); setState(VOICE_STATES.IDLE); resolve(); };
     audio.play().catch((e) => { logger.error('Audio play() rejected', e); setState(VOICE_STATES.IDLE); resolve(); });
   }), [muted, startRecording]);
 

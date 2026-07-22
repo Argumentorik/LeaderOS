@@ -375,7 +375,27 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
         rag_block = "\n\n" + rag_ctx["context_block"]
         logger.info("Voice RAG: %d chunks injected", rag_ctx.get("chunks_count", 0))
 
-    system_msg = VOICE_CONVO_SYSTEM_PROMPT + rag_block + memory_block
+    # Iter 121: framework-aware Boost. Wenn der Nutzer per Voice ein Wlad-
+    # Framework anspricht (auch phonetisch verballhornt — "sexier" → SEXIER),
+    # geben wir dem LLM einen expliziten Hinweis, welches Framework der
+    # Nutzer WAHRSCHEINLICH meint.
+    framework_block = ""
+    try:
+        from voice_framework_map import match_frameworks
+        matches = match_frameworks(transcript)
+        if matches:
+            names = ", ".join(f"{m['framework']} ({m['pillar']})" for m in matches)
+            framework_block = (
+                f"\n\n--- FRAMEWORK-KONTEXT (Voice-Match) ---\n"
+                f"Der User hat vermutlich diese Wlad-Frameworks erwähnt (auch bei "
+                f"unklarer Aussprache): {names}.\n"
+                f"Beziehe deine Antwort explizit auf dieses Framework und nenne "
+                f"es beim Namen.\n---"
+            )
+    except Exception as e:
+        logger.warning(f"Voice framework map skipped: {e}")
+
+    system_msg = VOICE_CONVO_SYSTEM_PROMPT + rag_block + framework_block + memory_block
 
     chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"voicemode_{session_id}", system_message=system_msg)
     # gpt-4o-mini = ~10x schneller als gpt-5.2 für 2-3 Satz-Voice-Antworten.

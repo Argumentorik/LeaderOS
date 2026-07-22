@@ -52,6 +52,15 @@ LEARNING_VIDEOS = [
 ]
 TIER_RANK = {"free": 0, "starter": 1, "standard": 2, "accelerator": 3}
 
+# ── Iter 121 (Wlad / Go-Live Lockdown) ────────────────────────────────────
+# Prelaunch: ALLE Lernvideos werden gesperrt bis wir die finalen Vimeo-Uploads
+# haben. Weder Free noch Accelerator sollen die Videos schon abspielen können —
+# stattdessen zeigt die UI den "🔓 Upgrade auf Premium – Vollzugriff freischalten"
+# CTA. Über die Environment-Variable `PRELAUNCH_VIDEO_LOCK=0` kann der Lock
+# nach dem Launch zentral wieder deaktiviert werden.
+import os as _os_prelaunch
+PRELAUNCH_VIDEO_LOCK = _os_prelaunch.environ.get("PRELAUNCH_VIDEO_LOCK", "1") == "1"
+
 LEVEL_META = {
     "Teamplayer": {
         "subtitle": "Du lernst im Team zu führen und Verantwortung zu übernehmen.",
@@ -187,7 +196,11 @@ async def get_learning_videos(request: Request):
     for v in LEARNING_VIDEOS:
         required_rank = TIER_RANK.get(v["min_tier"], 1)
         unlocked = user_rank >= required_rank
-        merged = {**v, "unlocked": unlocked}
+        # Iter 121: Global pre-launch lockdown — ALL videos show as locked
+        # regardless of tier. Cleared centrally when PRELAUNCH_VIDEO_LOCK=0.
+        if PRELAUNCH_VIDEO_LOCK:
+            unlocked = False
+        merged = {**v, "unlocked": unlocked, "locked_reason": "prelaunch" if PRELAUNCH_VIDEO_LOCK else None}
         ov = overrides.get(v["id"])
         if ov:
             for field in ("vimeo_id", "vimeo_url", "video_url", "release_date",
@@ -213,4 +226,5 @@ async def get_learning_videos(request: Request):
         "unlocked_count": sum(1 for item in videos if item["unlocked"]),
         "total_count": len(videos),
         "ready_count": ready_count,  # how many have a real Vimeo link
+        "prelaunch_lock": PRELAUNCH_VIDEO_LOCK,
     }

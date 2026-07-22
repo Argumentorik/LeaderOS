@@ -178,16 +178,37 @@ export default function LeaderDiagnosePage() {
     try {
       const res = await api.post('/wladhub/sync', {});
       if (res.data.status === 'synced') {
-        toast.success(de ? 'Neue Daten aus leader-check.de synchronisiert.' : 'Synced new data from leader-check.de.');
+        toast.success(de
+          ? `✓ ${res.data.records_imported || ''} neue Diagnose-Daten aus leader-check.de importiert.`.trim()
+          : `✓ Synced ${res.data.records_imported || ''} new records from leader-check.de.`.trim());
         await load();
       } else if (res.data.status === 'no_data') {
-        toast.info(de ? 'Noch keine Diagnose auf leader-check.de gefunden.' : 'No diagnosis found yet on leader-check.de.');
+        // Iter 121: don't just silently redirect — clarify why sync returned
+        // no data and offer the diagnosis link INSIDE the toast action.
+        toast.info(
+          de
+            ? 'Für deine E-Mail wurde noch keine Diagnose auf leader-check.de gefunden. Starte den kostenlosen Test dort — die Daten fließen automatisch zurück.'
+            : 'No diagnosis for your email on leader-check.de yet. Take the free assessment there — data flows back automatically.',
+          {
+            duration: 8000,
+            action: {
+              label: de ? 'Diagnose starten' : 'Take assessment',
+              onClick: () => window.open('https://leader-check.de', '_blank', 'noopener,noreferrer'),
+            },
+          },
+        );
+      } else if (res.data.status === 'local_data') {
+        toast.info(de
+          ? 'Deine lokale Diagnose ist aktuell — keine neuen Daten auf leader-check.de.'
+          : 'Your local diagnosis is up-to-date — no new data on leader-check.de.');
       } else {
         toast.info(de ? 'Daten sind aktuell.' : 'Data is up to date.');
       }
     } catch (err) {
       logger.error('Sync failed', err);
-      toast.error(de ? 'Synchronisation fehlgeschlagen.' : 'Sync failed.');
+      toast.error(de
+        ? 'Synchronisation fehlgeschlagen. Bitte prüfe deine Verbindung und versuche es nochmal.'
+        : 'Sync failed. Check your connection and retry.');
     } finally {
       setSyncing(false);
     }
