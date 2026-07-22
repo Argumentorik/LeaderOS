@@ -146,6 +146,19 @@ async def ensure_rag_ready():
         if _os.environ.get("RAG_AUTO_INGEST", "1") == "0" or _os.environ.get("RAG_EMBEDDINGS_DISABLED", "0") == "1":
             logger.info("RAG auto-ingest skipped (disabled via env)")
             return
+        # Crash-loop guard (Iter 121): if the process gets killed mid-ingest
+        # (e.g. prod OOM), do NOT immediately re-drop + re-ingest on every
+        # restart — that turns one failure into a permanent boot loop.
+        marker = await db.rag_auto_heal.find_one({"_id": "last_attempt"})
+        if marker:
+            try:
+                age_h = (datetime.now(timezone.utc)
+                         - datetime.fromisoformat(marker["at"])).total_seconds() / 3600
+            except Exception:
+                age_h = 999
+            if age_h < 6 and marker.get("status") != "done":
+                logger.warning("RAG auto-ingest: previous attempt %.1fh ago did not finish — backing off (manual trigger via Admin → RAG Control Center)", age_h)
+                return
         from services_embeddings import EMBEDDING_DIM
         count = await db.rag_chunks.estimated_document_count()
         sample = await db.rag_chunks.find_one({}, {"embedding": 1})
@@ -163,7 +176,13 @@ async def ensure_rag_ready():
             if age_min < 90:
                 return
         logger.warning(f"RAG AUTO-INGEST: store not ready (chunks={count}, dim_ok={dim_ok}) — self-healing now")
+        await db.rag_auto_heal.replace_one(
+            {"_id": "last_attempt"},
+            {"_id": "last_attempt", "at": datetime.now(timezone.utc).isoformat(), "status": "running"},
+            upsert=True,
+        )
         await _run_ingest(DEFAULT_ZIP_URL)
+        await db.rag_auto_heal.update_one({"_id": "last_attempt"}, {"$set": {"status": "done"}})
     except Exception as e:
         logger.error(f"RAG auto-ingest check failed: {e}")
 
