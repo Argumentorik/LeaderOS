@@ -38,6 +38,29 @@ FRAMEWORK_ALIASES: dict[str, dict[str, str]] = {
     "sechser": {"framework": "SEXIER-Argumentation", "pillar": "SEXIER"},
     "sexer": {"framework": "SEXIER-Argumentation", "pillar": "SEXIER"},
 
+    # 6P-Modell im Storytelling
+    "6p": {"framework": "6P-Modell (Storytelling)", "pillar": "Plot·Polarität·Protagonist·Peripetie·Pointe·Präsentation"},
+    "sechs p": {"framework": "6P-Modell (Storytelling)", "pillar": "Plot·Polarität·Protagonist·Peripetie·Pointe·Präsentation"},
+    "6-p": {"framework": "6P-Modell (Storytelling)", "pillar": "Plot·Polarität·Protagonist·Peripetie·Pointe·Präsentation"},
+    "peripetie": {"framework": "6P-Modell (Storytelling)", "pillar": "Peripetie (Wendepunkt)"},
+
+    # Charisma-Code mit 8 Elementen
+    "charisma": {"framework": "Charisma-Code (8 Elemente)", "pillar": "Credo·Habitus·Außeralltäglichkeit·Rhetorik·Inszenierung·Superskills·Motivation·Arbeit"},
+    "charisma-code": {"framework": "Charisma-Code (8 Elemente)", "pillar": "Credo·Habitus·Außeralltäglichkeit·Rhetorik·Inszenierung·Superskills·Motivation·Arbeit"},
+    "credo": {"framework": "Charisma-Code (8 Elemente)", "pillar": "Credo"},
+    "außeralltäglichkeit": {"framework": "Charisma-Code (8 Elemente)", "pillar": "Außeralltäglichkeit"},
+
+    # 10 Stufen des Zuhörens
+    "zuhören": {"framework": "10 Stufen des Zuhörens", "pillar": "antwortsüchtig vs. verstehend"},
+    "zuhoeren": {"framework": "10 Stufen des Zuhörens", "pillar": "antwortsüchtig vs. verstehend"},
+    "10 stufen": {"framework": "10 Stufen des Zuhörens", "pillar": "antwortsüchtig vs. verstehend"},
+    "zehn stufen": {"framework": "10 Stufen des Zuhörens", "pillar": "antwortsüchtig vs. verstehend"},
+
+    # 30 Schlagfertigkeitstechniken
+    "schlagfertigkeit": {"framework": "30 Schlagfertigkeitstechniken", "pillar": "Rückfrage · Retourkutsche · Meta …"},
+    "schlagfertig": {"framework": "30 Schlagfertigkeitstechniken", "pillar": "Rückfrage · Retourkutsche · Meta …"},
+    "retourkutsche": {"framework": "30 Schlagfertigkeitstechniken", "pillar": "Retourkutsche"},
+
     # Kommunikationsquadrant
     "kommunikationsquadrant": {"framework": "Kommunikationsquadrant", "pillar": "Quadrant"},
     "quadrant": {"framework": "Kommunikationsquadrant", "pillar": "Quadrant"},

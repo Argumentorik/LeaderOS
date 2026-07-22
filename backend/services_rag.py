@@ -44,31 +44,164 @@ _query_cache: dict[str, tuple[float, list[dict]]] = {}
 # rely on semantic search alone (e.g. core Wlad models that must always be
 # grounded verbatim). Each entry: {keywords, content, metadata}.
 MANUAL_CHUNKS: list[dict] = [
+    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WladBot (Telegram) ────
+    # Wörtlich aus den `theory.txt` / Screenshots von Wlad übernommen, damit
+    # unser Bot exakt dieselben Listen liefert wie der Referenz-Bot.
+    # ⚠️ Der ältere "listening_10_stages"-Eintrag wurde in Iter 121.1
+    # entfernt: er nutzte abweichende Stufen-Namen (Pseudo-/Resonant-/
+    # Generativ-/Transformativ-Zuhören) und WIDERSPRACH damit dem
+    # Original-Framework unten (antwortsüchtig vs. verstehend). Nie mehr
+    # zurückführen ohne Wlads explizite Freigabe.
+    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WladBot (Telegram) ────
+    # Wörtlich aus den `theory.txt` / Screenshots von Wlad übernommen, damit
+    # unser Bot exakt dieselben Listen liefert wie der Referenz-Bot.
     {
-        "keywords": ["zuhören", "zuhoeren", "zuhoren", "listening", "10 stufen", "zehn stufen", "stufen des zuhörens", "stages of listening", "aktives zuhören", "empathisches zuhören"],
+        "keywords": [
+            "zuhören", "zuhoeren", "zuhoren", "listening",
+            "10 stufen des zuhörens", "zehn stufen des zuhörens",
+            "stufen des zuhörens", "stages of listening",
+            "antwortsüchtig", "antwortsuechtig", "verstehendes zuhören",
+        ],
         "metadata": {
-            "course": "Wlad Leadership Frameworks",
+            "course": "Wlad Jachtchenko · Weiße Rhetorik",
             "topic": "10 Stufen des Zuhörens",
-            "framework": "listening_10_stages",
-            "source": "manual_chunk",
+            "framework": "listening_10_stages_wladbot",
+            "source": "wladbot_reference",
         },
         "content": (
-            "10 Stufen des Zuhörens (Wlad Jachtchenko) — vom oberflächlichen Hören zum tiefen, transformativen Zuhören:\n\n"
-            "Stufe 1 – Ignorieren: Der Sprecher wird wahrgenommen, aber die Botschaft nicht aufgenommen. Die Aufmerksamkeit ist woanders.\n"
-            "Stufe 2 – Pseudo-Zuhören: Man tut so, als würde man zuhören (Nicken, 'mhm'), die Botschaft erreicht aber nicht das Bewusstsein.\n"
-            "Stufe 3 – Selektives Zuhören: Man pickt nur Teile heraus, die zum eigenen Weltbild oder zur eigenen Agenda passen.\n"
-            "Stufe 4 – Aufmerksames Zuhören: Man hört die Worte, fokussiert auf die Sachebene, aber bewertet noch im Stillen.\n"
-            "Stufe 5 – Aktives Zuhören: Man stellt klärende Rückfragen, paraphrasiert und spiegelt — der Sprecher fühlt sich gehört.\n"
-            "Stufe 6 – Empathisches Zuhören: Man hört auch die Emotion hinter den Worten und benennt sie ('Das klingt frustrierend für dich.').\n"
-            "Stufe 7 – Bedürfnis-orientiertes Zuhören: Man erkennt das unausgesprochene Bedürfnis hinter der Aussage (Anerkennung, Sicherheit, Autonomie).\n"
-            "Stufe 8 – Resonantes Zuhören: Man schwingt emotional mit dem Sprecher — Vertrauen und Verbindung entstehen auf einer tieferen Ebene.\n"
-            "Stufe 9 – Generatives Zuhören: Man hört nicht nur, was gesagt wird, sondern was möglich werden könnte — der Sprecher entdeckt durch das Zuhören neue Gedanken.\n"
-            "Stufe 10 – Transformatives Zuhören: Das Zuhören wird zum Coaching-Akt. Der Sprecher denkt klarer, fühlt sich vollständig verstanden, und der Raum für echte Veränderung entsteht.\n\n"
-            "Leadership-Anwendung:\n"
-            "• Stufen 1–4 sind defensiv. Sie sichern das eigene Ego, aber kosten Vertrauen im Team.\n"
-            "• Stufen 5–7 sind die Pflicht für jede Führungskraft — ohne sie keine echte 1:1-Kommunikation.\n"
-            "• Stufen 8–10 sind die Kür — der C-Level-Edge. Hier entsteht der 'Coach-as-Leader'-Effekt: Mitarbeiter denken besser, weil du besser zuhörst.\n\n"
-            "Praxis: Vor jedem schwierigen Gespräch eine Stufe definieren — z.B. 'In diesem Gespräch will ich auf Stufe 7 (Bedürfnis) zuhören.' Dann bewusst auf das Bedürfnis hinter dem Gesagten achten."
+            "10 Stufen des Zuhörens (Wlad Jachtchenko) — geordnet in zwei Hauptkategorien:\n\n"
+            "**Antwortenorientiertes Zuhören (Stufen 1–6):**\n"
+            "1. **Vortäuschendes Zuhören** — Zuhören wird nur vorgetäuscht, entweder vorsätzlich oder fahrlässig.\n"
+            "2. **Kürzendes Zuhören** — Der Zuhörer unterbricht, weil er denkt, er habe genug verstanden.\n"
+            "3. **Selektives Zuhören** — Der Zuhörer achtet nur auf bestimmte Schlagworte und ignoriert den Rest.\n"
+            "4. **Übertrumpfendes Zuhören** — Der Zuhörer hört zu, um Argumente zu widerlegen oder eigene Geschichten zu erzählen.\n"
+            "5. **Egoistisches Zuhören** — Der Zuhörer sucht nach persönlichem Vorteil oder strategischem Nutzen.\n"
+            "6. **Beratendes Zuhören** — Der Zuhörer gibt ungefragt Ratschläge und spielt sich als Experte auf.\n\n"
+            "**Verstehendes Zuhören (Stufen 7–10):**\n"
+            "7. **Aufmerksames Zuhören** — Der Zuhörer hört mit ungeteilter Aufmerksamkeit zu.\n"
+            "8. **Aktives Zuhören** — Der Zuhörer stellt kluge Fragen, paraphrasiert und klärt Details.\n"
+            "9. **Empathisches Zuhören** — Der Zuhörer analysiert Körpersprache und Stimme und verbalisiert Emotionen.\n"
+            "10. **Helfendes Zuhören** — Der Zuhörer bietet psychologische oder praktische Hilfe an und investiert seine Zeit, um dem anderen zu helfen.\n\n"
+            "Diese Stufen helfen dabei, die Qualität des Zuhörens zu verbessern und die Kommunikation effektiver zu gestalten.\n\n"
+            "Weiterführend: Wlads Podcast-Folge „02 · Die 7 Stufen des Zuhörens (Weiße Rhetorik #1)"
+        ),
+    },
+    {
+        "keywords": [
+            "6p", "6-p", "sechs p", "6p-modell", "6p modell", "6 p modell",
+            "storytelling modell", "wlads storytelling",
+            "plot polarität protagonist", "peripetie pointe präsentation",
+        ],
+        "metadata": {
+            "course": "Wlad Jachtchenko · Storytelling",
+            "topic": "6P-Modell im Storytelling",
+            "framework": "storytelling_6p",
+            "source": "wladbot_reference",
+        },
+        "content": (
+            "**Das 6P-Modell** von Wlad Jachtchenko ist eine strukturierte Methode zur Erstellung von Geschichten im Storytelling. "
+            "Es besteht aus sechs wesentlichen Elementen, die eine gute Geschichte ausmachen:\n\n"
+            "1. **Plot (Handlung)** — Der thematische Rahmen der Geschichte. Es kann um Macht, Liebe, Identität, Verzweiflung oder andere Themen gehen. Der Plot ist das Herzstück der Geschichte.\n\n"
+            "2. **Polarität (Konflikt)** — Ein bestimmter Konflikt oder Gegensatz, der die Geschichte spannend macht. Beispiele sind Gewinner vs. Verlierer, Wahrheit vs. Lüge oder Liebe vs. Hass.\n\n"
+            "3. **Protagonist (Hauptfigur)** — Die zentrale Figur oder der Held der Geschichte, um den sich die Handlung dreht.\n\n"
+            "4. **Peripetie (Wendepunkt)** — Ein entscheidender Moment oder eine unerwartete Wendung in der Geschichte, die den Verlauf verändert.\n\n"
+            "5. **Pointe (Moral der Geschichte)** — Die Schlussfolgerung oder die Lektion, die aus der Geschichte gezogen werden kann.\n\n"
+            "6. **Präsentation** — Die Art und Weise, wie die Geschichte erzählt wird, einschließlich der Stimme, der Mimik und der allgemeinen Darbietung.\n\n"
+            "Dieses Modell hilft dabei, Geschichten klar und wirkungsvoll zu gestalten, indem es sowohl die Struktur als auch die Präsentation berücksichtigt."
+        ),
+    },
+    {
+        "keywords": [
+            "charisma", "charisma-code", "charisma code", "charisma-modell", "charisma modell",
+            "acht elemente", "8 elemente charisma", "charisma acht", "8-elemente-charisma",
+            "credo habitus", "außeralltäglichkeit", "ausseralltaeglichkeit",
+        ],
+        "metadata": {
+            "course": "Wlad Jachtchenko · Charisma-Code",
+            "topic": "Charisma-Modell mit 8 Elementen",
+            "framework": "charisma_8",
+            "source": "wladbot_reference",
+        },
+        "content": (
+            "Das **Charisma-Modell** von Wlad Jachtchenko besteht aus acht Elementen, die zusammen den **Charisma-Code** bilden:\n\n"
+            "1. **Credo** — Die festen Glaubensüberzeugungen eines Menschen, die von innen nach außen strahlen und eine klare Vision vermitteln.\n\n"
+            "2. **Habitus** — Eine optimistische Grundhaltung, die Vertrauen und Zuversicht ausstrahlt.\n\n"
+            "3. **Außeralltäglichkeit** — Die Fähigkeit, sich von der Masse abzuheben und etwas Einzigartiges zu bieten.\n\n"
+            "4. **Rhetorik** — Die Kunst des freien Sprechens, um Gedanken klar und überzeugend zu vermitteln.\n\n"
+            "5. **Inszenierung** — Die bewusste Darstellung der eigenen Person, um Aufmerksamkeit zu erregen und in Erinnerung zu bleiben.\n\n"
+            "6. **Superskills** — Besondere Fähigkeiten oder Talente, die einen von anderen abheben.\n\n"
+            "7. **Motivation** — Eine starke innere Antriebskraft und eine attraktive Vision, die andere inspiriert und mitreißt.\n\n"
+            "8. **Arbeit** — Die kontinuierliche Arbeit an den eigenen Fähigkeiten und Werten, um das Charisma zu stärken und zu pflegen.\n\n"
+            "Diese Elemente helfen dabei, eine charismatische Persönlichkeit zu entwickeln, die andere Menschen anzieht und inspiriert."
+        ),
+    },
+    {
+        "keywords": [
+            "sexier", "sexier-modell", "sexier modell", "sexier framework",
+            "statement explanation example impact rebuttal",
+            "argumentation modell", "wladsches argumentationsmodell",
+        ],
+        "metadata": {
+            "course": "Wlad Jachtchenko · Argumentation",
+            "topic": "SEXIER-Modell",
+            "framework": "sexier_argumentation",
+            "source": "wladbot_reference",
+        },
+        "content": (
+            "Das **SEXIER-Modell** von Wlad Jachtchenko ist das Kernframework für starke Argumente. Es besteht aus 6 Elementen:\n\n"
+            "**S – Statement**: Die These. Der Kernsatz, den du beweisen willst.\n"
+            "**E – Explanation**: Die Begründung. Warum ist die These wahr?\n"
+            "**X – eXample**: Das Beispiel. Ein konkreter Fall, der die These belegt.\n"
+            "**I – Impact**: Die Relevanz. Warum ist das für den Zuhörer wichtig?\n"
+            "**E – Explanation of Impact**: Die Begründung der Relevanz. Warum hat es genau diese Wirkung?\n"
+            "**R – Rebuttal**: Die Widerlegung des wichtigsten Einwands. Antizipiere den stärksten Gegen-Einwand und entkräfte ihn.\n\n"
+            "Nutzung: Wenn du eine Rede oder ein Argument analysierst, gehe alle 6 Elemente durch — fehlt eines, ist das Argument unvollständig."
+        ),
+    },
+    {
+        "keywords": [
+            "30 schlagfertigkeit", "schlagfertigkeitstechniken", "schlagfertigkeit techniken",
+            "30 schlagfertigkeits-techniken", "30 techniken schlagfertigkeit",
+            "rückfrage technik", "retourkutsche",
+        ],
+        "metadata": {
+            "course": "Wlad Jachtchenko · Schlagfertigkeit",
+            "topic": "30 Schlagfertigkeitstechniken",
+            "framework": "schlagfertigkeit_30",
+            "source": "wladbot_reference",
+        },
+        "content": (
+            "**Die 30 Schlagfertigkeitstechniken** von Wlad Jachtchenko:\n\n"
+            "1. Rückfrage-Technik\n"
+            "2. Überraschende Zustimmung\n"
+            "3. Notbremse-Technik\n"
+            "4. Retourkutsche\n"
+            "5. Verweigerungstechnik\n"
+            "6. Komplimente-Technik\n"
+            "7. Hinweis-Aufforderung-Technik\n"
+            "8. Übergehungstechnik\n"
+            "9. Definitionstechnik\n"
+            "10. Standard-Antworten-Technik\n"
+            "11. Ironie-Technik\n"
+            "12. Meta-Technik\n"
+            "13. Zwei-Silben-Technik\n"
+            "14. Gerade-Weil-Technik\n"
+            "15. Relativierungstechnik\n"
+            "16. Hilfe-Technik\n"
+            "17. Zurückweisungstechnik\n"
+            "18. Ihr-Problem-Technik\n"
+            "19. Spiegel-Technik\n"
+            "20. Vertagungstechnik\n"
+            "21. Schweige-Technik\n"
+            "22. Widerlegungstechnik\n"
+            "23. Abwägungstechnik\n"
+            "24. Zitate-Technik\n"
+            "25. Nonsense-Technik\n"
+            "26. Uminterpretier-Technik\n"
+            "27. Ich-Botschaften-Technik\n"
+            "28. Diplomaten-Technik\n"
+            "29. Lieber-als-Technik\n"
+            "30. Klartext-Technik"
         ),
     },
 ]

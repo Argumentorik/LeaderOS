@@ -1,5 +1,14 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
+
+- [x] **[Iter 121.1 · 22.07.26] Wlad-Framework-Sync: 5 Signature-Frameworks matchen jetzt 1:1 mit dem Original-WladBot (Telegram)** — E2E getestet gegen alle 5
+  - **Root Cause**: Der alte `listening_10_stages` MANUAL_CHUNK enthielt komplett andere Stufen-Namen (Pseudo, Resonant, Generativ, Transformativ) als das Original-WladBot-Framework (Vortäuschendes, Kürzendes, Selektives, Übertrumpfendes, Egoistisches, Beratendes / Aufmerksames, Aktives, Empathisches, Helfendes). Dadurch antwortete der Bot mit erfundenen Stufen.
+  - **Fix**: Alter Chunk entfernt, 5 neue `wladbot_reference`-MANUAL_CHUNKS (`services_rag.py`) mit exakt der Wortwahl aus Wlads Original: **10 Stufen des Zuhörens** (2-Kategorien-Struktur: Antwortsüchtig 1-6 / Verstehend 7-10), **6P-Modell** (Plot/Polarität/Protagonist/Peripetie/Pointe/Präsentation), **Charisma-Code** (8 Elemente: Credo/Habitus/Außeralltäglichkeit/Rhetorik/Inszenierung/Superskills/Motivation/Arbeit), **SEXIER-Modell** (S/E/X/I/E/R), **30 Schlagfertigkeitstechniken** (komplett nummerierte Liste).
+  - **RAG-Corpus erweitert**: `theory.txt` + `speech.txt` (Wlads originale WladBot-System-Prompts) via `scripts_ingest_local_rag.py` als 24 Chunks ingested → SEXIER-Kriterien, Kurs-Katalog, Feedback-Kriterien jetzt semantisch retrievable. Corpus jetzt 7 463 Chunks (7 439 + 24).
+  - **System-Prompt-Erweiterung** (`services.py` WLADBOT_SYSTEM_PROMPT): neuer Abschnitt „WLADS SIGNATURE-FRAMEWORKS" listet die 5 Frameworks als heilige Referenz + explizite Regel „Wenn User nach EINEM Framework fragt → vollständige Liste mit ALLEN Elementen und EXAKTER Reihenfolge, RAG-Kontext ist Wahrheit".
+  - **Voice-Framework-Map erweitert**: `6p`, `sechs p`, `charisma`, `credo`, `außeralltäglichkeit`, `zuhören`, `10 stufen`, `schlagfertigkeit`, `retourkutsche` → passendes Framework als LLM-Prompt-Boost.
+  - **E2E-Test bestanden**: alle 5 Framework-Queries live gegen `/api/chat` — Antworten matchen 1:1 die WladBot-Screenshots vom User (RAG=aktiv, 9 Chunks pro Query).
+
 ## Latest — 22.07.2026
 
 - [x] **[Iter 121 · 22.07.26] Go-Live Lockdown: Videos, Community, Audio-Bus & leadercheck-Sync-Transparency** —
