@@ -4,6 +4,12 @@ import * as Sentry from "@sentry/react";
 import "@/index.css";
 import App from "@/App";
 import { bootstrapConsent, readConsent } from "@/lib/consent";
+// Iter 121.7 (Godmode Observability): install console-buffer BEFORE any
+// other code runs so we capture the very first log lines too.
+import "@/lib/consoleBuffer";
+import { installGlobalHandlers } from "@/lib/telemetry";
+
+installGlobalHandlers();
 
 // Bootstrap GDPR/TTDSG consent BEFORE any tracking SDK initializes.
 // Normalizes legacy consent shapes and defaults PostHog to opt-out until

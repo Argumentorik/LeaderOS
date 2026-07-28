@@ -1,6 +1,19 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 121.7 · 28.07.26] GODMODE Production Hardening: Telemetry, ErrorBoundary, Support-Widget, Deep-Health** — E2E getestet (5 Backend-Endpoints + Frontend-Screenshot)
+  - **`routes/telemetry.py`**: neue Observability-Endpoints — `POST /api/telemetry/error` (jede Frontend-Exception landet mit `diagnostic_id` in `error_log` Collection), `POST /api/telemetry/feedback` (User-Feedback + Screenshot + Console-Tail → persistiert in `user_feedback` + fire-and-forget Resend-Mail an start@aiporate.com), `GET /api/health/deep` (Mongo · Resend · Emergent-LLM · Supabase-Bridge · RAG in einem Call). Admin-Views `GET /api/admin/telemetry/errors|feedback` mit Aggregation by_source/by_severity.
+  - **Rate-Limiting**: sliding-window per IP+email (60 errors/60s · 5 feedbacks/5min) → silent-drop bei Overrun, 429 mit Deutsch-Message.
+  - **`services_email.py`**: send_email() unterstützt jetzt `reply_to` → Feedback-Mails an start@aiporate.com haben den echten User als Reply-To (direktes Antworten aus Gmail heraus).
+  - **`lib/consoleBuffer.js`**: Rolling-Buffer der letzten 80 console.* Aufrufe (log/info/warn/error/debug), Zero-Dep, wraps das Console-Interface transparent. Debug-Helper `getConsoleTail()` liefert Snapshot für Feedback-Payload.
+  - **`lib/telemetry.js`**: Frontend-Client mit `reportError()` (dedup 5s-window, fetch statt axios um Interceptor-Loops zu vermeiden), `reportFeedback()`, `installGlobalHandlers()` (window.onerror + unhandledrejection → auto-report; ignoriert ResizeObserver-Noise).
+  - **`components/AppErrorBoundary.js` enhanced**: mirrors Sentry-Event zusätzlich in unser lokales `error_log`, zeigt echte Diagnostic-ID + prominent `start@aiporate.com`-Mailto-Link (mit vorausgefüllter ID + URL im Body). Feedback-Prompt öffnet unsere in-app Reporting statt Sentry-Dialog.
+  - **`components/support/FloatingSupportButton.js`**: Bottom-Left Floating-FAB (Bottom-Right ist WladBot-Drawer). Premium-Modal mit 4 Kategorien (Bug/Idee/Frage/Sonstiges), Textarea, optionalem `getDisplayMedia`-Screenshot (Fallback-tolerant), transparente Info über auto-attached Diagnostics, „Danke — wir sind dran"-Success-View.
+  - **Global-Handler-Boot in `index.js`**: consoleBuffer + `installGlobalHandlers()` laufen VOR jedem anderen Code, damit die ersten Log-Zeilen und First-Paint-Errors sofort erfasst werden.
+  - **Session-Recovery** (task e): verifiziert bereits implementiert in `lib/api.js` (silent `/auth/refresh` + ReAuthModal statt Hard-Redirect) — keine Regression.
+  - **E2E-Test**: `/api/health/deep` → status=pass für alle 5 Services (mongo 71ms · resend 233ms · llm 60ms · supabase 761ms · rag ok). `/telemetry/error` liefert `err_491975380f3c`. `/telemetry/feedback` liefert `fb_1dc71bd8b159` + Resend-Task fire-and-forget. Admin-View aggregiert korrekt.
+
+
 - [x] **[Iter 121.6 · 28.07.26] Simulations: Pause-Fix + neue „Argumentation vorbereiten" mit SEXIER-Framework** — E2E getestet (Backend Live-Call, Frontend Screenshot)
   - **Pause-Bug behoben** (`SimulationsPage.js`): Vorher gab es nur den roten „JETZT BEENDEN & BEWERTEN"-Button, der die Session terminierte. Jetzt zusätzlicher „Pause"-Button im Header (variant='outline') + „Weiter"-Resume-Button im gleichen Slot. Pause ruft nur `stopAllAudio('simulation-pause')` auf → `activeSim`, `messages`, Kontext bleiben komplett erhalten. Sichtbares Pause-Banner mit CTA in der Konversations-UI, Input-Bar wird versteckt solange pausiert.
   - **Scenario-Swap** (`data.py`): `remote-team-building` („Remote Team motivieren") komplett ersetzt durch `argumentation-prep` („Argumentation vorbereiten") mit `kind='preparation'` + `category='preparation'`.

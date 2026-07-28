@@ -49,6 +49,7 @@ async def send_email(
     subject: str,
     html: str,
     from_email: Optional[str] = None,
+    reply_to: Optional[str] = None,
     max_retries: int = 3,
 ) -> dict:
     """Send an email via Resend (async, non-blocking) with exponential-backoff retry.
@@ -72,6 +73,8 @@ async def send_email(
         "subject": subject,
         "html": html,
     }
+    if reply_to:
+        params["reply_to"] = [reply_to]
     # Permanent-fail markers — Resend will keep returning these forever; no point retrying.
     PERMANENT_ERROR_HINTS = (
         "domain is not verified",
