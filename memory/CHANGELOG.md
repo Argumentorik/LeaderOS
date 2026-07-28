@@ -1,6 +1,15 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 121.9 · 28.07.26] Product Focus Sprint — Mobile Hero-Experience + Snackable Chat + Slim Nav** — Lint 100% clean, mobile-first-CSS verified
+  - **Snackable ChatEmpty-State** (`components/chat/ChatEmpty.js`): kompletter Rewrite. Hero-Avatar + eine klare Frage („Worüber willst du sprechen?") + 6 großformatige Quick-Start-Cards (2-Spalten desktop, 1-Spalten mobile, min-height 68px) mit spezifischen Prompts (Pitch · Schwierige Gespräche · Delegation · Charisma · Verhandlung · Schlagfertigkeit). Wlads Frameworks-Grid ist jetzt hinter einem „Wlads Frameworks entdecken"-Toggle (progressive disclosure) statt gleich alles zu zeigen — Cohort weiß binnen 3 Sekunden „was kann ich hier tun?".
+  - **Mobile-optimized ChatInputBar** (`components/chat/ChatInputBar.js`): `position: sticky` mit `safe-area-inset-bottom`, `onFocus` scrollt Textarea auf iOS/Android beim Keyboard-Öffnen automatisch in die sichtbare Mitte, Send-Button jetzt 44×44px (mobile) für native Touch-Target-Compliance, `text-base` auf mobile (verhindert iOS-Auto-Zoom bei Focus), `aria-label` für Screen-Reader.
+  - **Neue MobileHeroNav** (`components/layout/MobileHeroNav.js`): iOS/Android-Style Bottom-Nav die nur unter md:768px sichtbar ist (Desktop behält vollständigen Sidebar). 4 Fixed-Items: WladBot · Video · Fortschritt · Mehr. „Mehr"-Item öffnet ein Bottom-Sheet mit den restlichen 8 Sektionen (Dashboard, Challenge, Challengers, Simulationen, Aufgaben, Lern-Videos, Community, Profil). Safe-area-inset-bottom respektiert, Active-State via Lime-Farbe + bolder Stroke, 44+px Touch-Targets.
+  - **DashboardLayout Mobile-Ready** (`components/layout/DashboardLayout.js`): main bekommt `pb-[64px] md:pb-0` damit Content nicht hinter der Bottom-Nav verschwindet. Sidebar bleibt `hidden md:block`. MobileHeroNav wird gemountet außer bei `hideSidebar`.
+  - **FloatingSupportButton auf Mobile** (`components/support/FloatingSupportButton.js`): `bottom-[76px] md:bottom-5` damit der FAB nicht die Bottom-Nav verdeckt.
+  - **Nicht angetastet** (bewusst): Desktop-Sidebar bleibt unverändert (Cohort-Members auf Desktop haben etablierten Workflow), Video-Analyse (unter `/coaching`) läuft bereits produktion-stabil.
+
+
 - [x] **[Iter 121.7 · 28.07.26] GODMODE Production Hardening: Telemetry, ErrorBoundary, Support-Widget, Deep-Health** — E2E getestet (5 Backend-Endpoints + Frontend-Screenshot)
   - **`routes/telemetry.py`**: neue Observability-Endpoints — `POST /api/telemetry/error` (jede Frontend-Exception landet mit `diagnostic_id` in `error_log` Collection), `POST /api/telemetry/feedback` (User-Feedback + Screenshot + Console-Tail → persistiert in `user_feedback` + fire-and-forget Resend-Mail an start@aiporate.com), `GET /api/health/deep` (Mongo · Resend · Emergent-LLM · Supabase-Bridge · RAG in einem Call). Admin-Views `GET /api/admin/telemetry/errors|feedback` mit Aggregation by_source/by_severity.
   - **Rate-Limiting**: sliding-window per IP+email (60 errors/60s · 5 feedbacks/5min) → silent-drop bei Overrun, 429 mit Deutsch-Message.

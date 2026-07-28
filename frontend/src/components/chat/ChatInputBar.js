@@ -29,7 +29,7 @@ export const ChatInputBar = ({
   isPremium, onOpenUpsell, onOpenAudioMode, de,
   coachMode, setCoachMode,
 }) => (
-  <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-3 sm:p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
+  <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-3 sm:p-4 bg-white/85 dark:bg-card/85 backdrop-blur-xl sticky bottom-0 z-30" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
     {/* Iter 121.2: Coach-Modus Briefing — nur beim ersten Aktivieren, dann per
         localStorage gemerkt. „Fokus-Modus" damit die Cohort sofort versteht,
         was hinter dem Target-Icon steckt. */}
@@ -120,14 +120,22 @@ export const ChatInputBar = ({
       )}
       <Textarea data-testid="chat-input" value={input} onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); } }}
+        onFocus={(e) => {
+          // Iter 121.9 (mobile): make sure the textarea slides ABOVE the on-screen
+          // keyboard on iOS/Android — scrollIntoView with block:'center' handles both.
+          setTimeout(() => {
+            try { e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch { /* older browsers */ }
+          }, 250);
+        }}
         placeholder={attachedPdf
           ? (de ? 'Was möchtest du zu dem PDF wissen?' : 'What do you want to know about the PDF?')
           : coachMode
             ? (de ? 'Coach-Modus: Wlad antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
             : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
-        className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 py-[13px] leading-5 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
+        className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 py-[13px] leading-5 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 text-base sm:text-sm focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}
-        className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
+        aria-label={de ? 'Nachricht senden' : 'Send message'}
+        className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] w-11 h-11 sm:w-auto sm:h-auto sm:px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
         {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
       </Button>
     </div>

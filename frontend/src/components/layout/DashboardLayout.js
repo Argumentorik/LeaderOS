@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
+import { MobileHeroNav } from './MobileHeroNav';
 import { SmartPopups } from '../shared/SmartPopups';
 import { PaywallModal } from '../shared/PaywallModal';
 import { useAuth } from '../../contexts/AuthContext';
@@ -43,7 +44,7 @@ export const DashboardLayout = ({ children, hideSidebar, rightPanel }) => {
           <Sidebar />
         </aside>
       )}
-      <main className={`flex-1 overflow-auto ${rightPanel ? 'min-w-0' : ''}`}>
+      <main className={`flex-1 overflow-auto pb-[64px] md:pb-0 ${rightPanel ? 'min-w-0' : ''}`}>
         {children}
       </main>
       {rightPanel && (
@@ -52,6 +53,7 @@ export const DashboardLayout = ({ children, hideSidebar, rightPanel }) => {
         </aside>
       )}
       <SmartPopups userData={user} />
+      {!hideSidebar && <MobileHeroNav />}
     </div>
   );
 };

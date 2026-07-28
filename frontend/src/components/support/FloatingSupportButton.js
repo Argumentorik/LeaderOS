@@ -94,7 +94,7 @@ export function FloatingSupportButton() {
         onClick={() => setOpen(true)}
         aria-label="Feedback senden"
         data-testid="support-fab"
-        className="fixed bottom-5 left-5 z-[9990] w-11 h-11 rounded-full bg-[#0A0A0A] text-[#BFFF00] shadow-xl shadow-black/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        className="fixed bottom-[76px] md:bottom-5 left-5 z-[9990] w-11 h-11 rounded-full bg-[#0A0A0A] text-[#BFFF00] shadow-xl shadow-black/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
         style={{ display: open ? 'none' : 'flex' }}
       >
         <MessageCircle size={18} strokeWidth={2.4} />
