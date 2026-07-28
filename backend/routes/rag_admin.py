@@ -188,9 +188,89 @@ async def ensure_rag_ready():
 
 
 # ── Knowledge editing (Iter 119 · Enterprise: "knowledge can be changed") ────
+# Iter 121.5 (Stefan feedback): sort books/courses first (by chunk count desc),
+# then live-calls (newest first), and derive a clean human-readable title from
+# the filename when `metadata.course` was stored as a text-fragment (older
+# ingest scripts sometimes captured the first sentence of the chunk).
+def _clean_display_title(source_file: str, raw_course: str | None) -> str:
+    """Human-friendly source title.
+
+    Uses the FILENAME as the authoritative title source. The stored `course`
+    metadata is only reused when it clearly looks like a curated title
+    (e.g. "Live-Call 2025.10.15") — never when it's an ALL-CAPS content
+    fragment like "WLAD JACHTCHENKO DUBISTER BESERECHEF" or a long
+    lowercase sentence copy-pasted from the first chunk.
+    """
+    base = (source_file or "").rsplit(".", 1)[0].replace("_", " ").strip()
+
+    def _looks_curated(s: str) -> bool:
+        if not s or len(s) > 60 or len(s) < 4:
+            return False
+        # Live-Call titles are ideal — accept them.
+        if s.startswith("Live-Call"):
+            return True
+        # Reject ALL-CAPS strings that are clearly OCR-garbage or content-echo.
+        letters = [c for c in s if c.isalpha()]
+        if letters and sum(1 for c in letters if c.isupper()) / len(letters) > 0.75:
+            return False
+        # Reject if any word is longer than 20 chars (fused content).
+        if any(len(w) > 20 for w in s.split()):
+            return False
+        return s[0].isupper()
+
+    if _looks_curated(raw_course or ""):
+        return raw_course.strip()
+
+    if not base:
+        return raw_course or source_file or "(unnamed)"
+
+    pretty = base.title()
+    # Normalize the German character mangling from earlier ingest runs.
+    # 1) ß encoded as "├Ƒ" or "├ƒ" (mojibake in Windows-1252 → UTF-8 roundtrip).
+    for bad in ("├Ƒ", "├ƒ", "├ƒe", "├Ƒe"):
+        pretty = pretty.replace(bad, "ß")
+    # 2) Snake-case umlaut placeholders → real umlauts (both title & lowercase).
+    replacements = [
+        ("Ae", "ä"), ("Oe", "ö"), ("Ue", "ü"),
+        ("ae", "ä"), ("oe", "ö"), ("ue", "ü"),
+    ]
+    for old, new in replacements:
+        pretty = pretty.replace(old, new)
+    # Restore capitalisation after the umlaut substitution ate leading caps.
+    words = pretty.split(" ")
+    pretty = " ".join(w[:1].upper() + w[1:] if w else w for w in words)
+    return pretty
+
+
+def _classify_source(source_file: str, raw_type: str | None) -> str:
+    """Best-effort category: 'live_call' | 'book' | 'course' | 'custom'."""
+    if raw_type in {"live_call", "book", "course", "custom"}:
+        return raw_type
+    fname = (source_file or "").lower()
+    # 2025.07.08.txt / 2026.02.11.txt → live_call
+    import re as _re
+    if _re.match(r"^\d{4}[._-]\d{2}[._-]\d{2}", fname):
+        return "live_call"
+    # everything else defaults to a course/book
+    return raw_type or "course"
+
+
 @router.get("/sources")
 async def list_knowledge_sources(request: Request):
-    """All knowledge sources with chunk counts — the editable corpus view."""
+    """All knowledge sources with chunk counts — the editable corpus view.
+
+    Response format (Iter 121.5, expanded from the original flat list):
+        {
+          "total_chunks": <int>,
+          "sources": [ {source_file, chunks, course, type, display_title}, ... ],
+          "by_type": {book/course: N, live_call: M, custom: K},
+          "categorised": {
+            "courses": [...books & courses first, sorted by chunks desc...],
+            "live_calls": [...transcripts, sorted by filename desc (=newest first)...],
+            "custom":   [...user-uploads via admin UI...]
+          }
+        }
+    """
     from routes.admin import require_admin
     await require_admin(request)
     pipeline = [
@@ -199,14 +279,55 @@ async def list_knowledge_sources(request: Request):
             "chunks": {"$sum": 1},
             "course": {"$first": "$metadata.course"},
             "type": {"$first": "$metadata.type"},
+            "last_ingested": {"$max": "$ingested_at"},
         }},
-        {"$sort": {"_id": 1}},
     ]
     rows = await db.rag_chunks.aggregate(pipeline).to_list(1000)
-    return {"total_chunks": sum(r["chunks"] for r in rows), "sources": [
-        {"source_file": r["_id"], "chunks": r["chunks"], "course": r.get("course"), "type": r.get("type") or "course"}
-        for r in rows
-    ]}
+
+    sources: list[dict] = []
+    by_type: dict[str, int] = {}
+    for r in rows:
+        src_file = r["_id"] or "(missing)"
+        raw_course = r.get("course")
+        cat = _classify_source(src_file, r.get("type"))
+        by_type[cat] = by_type.get(cat, 0) + 1
+        sources.append({
+            "source_file": src_file,
+            "chunks": r["chunks"],
+            "course": raw_course,
+            "display_title": _clean_display_title(src_file, raw_course),
+            "type": cat,
+            "last_ingested": r.get("last_ingested"),
+        })
+
+    # Categorised buckets — Stefan-Fix: books & courses appear FIRST so admins
+    # see Wlads main library without scrolling past 30 live-call transcripts.
+    courses = sorted(
+        [s for s in sources if s["type"] in {"book", "course"}],
+        key=lambda s: (-s["chunks"], s["source_file"]),
+    )
+    live_calls = sorted(
+        [s for s in sources if s["type"] == "live_call"],
+        key=lambda s: s["source_file"], reverse=True,  # newest date-file first
+    )
+    custom = sorted(
+        [s for s in sources if s["type"] == "custom"],
+        key=lambda s: s["source_file"],
+    )
+    # Flat list still supported (backward compat) — courses first, then calls,
+    # then custom — so the OLD UI ordering ALSO shows books first.
+    flat = courses + live_calls + custom
+
+    return {
+        "total_chunks": sum(r["chunks"] for r in rows),
+        "sources": flat,
+        "by_type": by_type,
+        "categorised": {
+            "courses": courses,
+            "live_calls": live_calls,
+            "custom": custom,
+        },
+    }
 
 
 class KnowledgeUpload(BaseModel):

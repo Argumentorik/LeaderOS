@@ -1,6 +1,18 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 121.5 · 22.07.26] Admin Knowledge-Sources Fix: Wlads Bücher waren immer da, nur unsichtbar** — API + Frontend verifiziert
+  - **Root Cause (Stefan-Feedback)**: `/api/admin/rag/sources` aggregierte alphabetisch nach `source_file` → Live-Call-Files (`2025.*.txt`, `2026.*.txt`) landeten oben, Wlads Bücher (`du_bist_der_bessere_chef.txt` etc.) rutschten unter die 27 Live-Call-Zeilen. Stefan sah die Bücher nicht, dachte sie fehlen — sie waren die ganze Zeit da (55 Sources, 7 463 Chunks).
+  - **Sekundär-Bug**: `metadata.course` wurde bei einigen Alt-Ingest-Batches als erster Content-Chunk-Text statt sauberer Titel gespeichert (z. B. „WLAD JACHTCHENKO DUBISTER BESERECHEF"). Zusätzlich waren Umlaute snake-case-ified („Fuehren", „Koerpersprache") und ß als Mojibake („Wei├Ƒe").
+  - **Backend-Fix** (`routes/rag_admin.py`):
+    · `_clean_display_title()` — leitet Titel primär aus dem Filename ab (`du_bist_der_bessere_chef.txt` → „Du Bist Der Bessere Chef") und übernimmt `metadata.course` nur wenn es sichtbar kuratiert ist (Länge, Kein-Alle-Caps, keine 20+ Zeichen Wörter).
+    · Umlaut-Restore: `ae/oe/ue` → ä/ö/ü, ß-Mojibake-Cleanup, Capitalization-Repair nach Umlaut-Substitution.
+    · `_classify_source()` — Live-Call-Detection via Datums-Regex.
+    · Response enthält jetzt `categorised: {courses[], live_calls[], custom[]}` + `by_type`-Counts. Flat `sources`-Feld weiterhin da (Bücher/Kurse zuerst → auch alte UI-Clients sehen sie automatisch prominent).
+  - **Frontend-Fix** (`components/admin/KnowledgeSources.js`): 3-Sektionen-Rendering mit Icons (`BookOpen` für Kurse, `Radio` für Live-Calls, `Sparkles` für Custom). Live-Calls per Default eingeklappt (spart Scroll-Space). Summary-Strip zeigt Total-Chunks + Source-Count. `display_title` bevorzugt statt raw `course`.
+  - **E2E-Verifikation** (Preview): 28 Kurse/Bücher zuerst (Du Bist Der Bessere Chef 918 · Weiße Rhetorik 571 · Führen Durch Gründe 297 · Kommunikation 290 · Sales 282 · Die 5 Rollen einer Führungskraft 267 · Die Charismatische Führungskraft 251 · Verhandlungstraining 185 … + 20 weitere), dann 27 Live-Calls sortiert nach Datum (neueste zuerst).
+
+
 - [x] **[Iter 121.2 · 22.07.26] Premium Feature-Briefings für Coach-Modus + Kontext-Ordner + Router-Refinement** — smoke-tested via Playwright
   - **Neues Shared-Component** `frontend/src/components/chat/FeatureBriefing.js`: dismissible, localStorage-gemerkte Premium-Card mit Grain-Overlay, lime/gold Tone, Bullet-Liste, optionalem CTA. Reusable für alle künftigen „Was ist das & wie nutz ich das?"-Situationen.
   - **Coach-Modus-Briefing** (`ChatInputBar.js`): erscheint beim ersten Aktivieren mit Titel „Wlad wechselt in den Coach-Modus — Strategie statt Small-Talk" + 3 Bullets (strukturiert · perfekt für Pitch/Verhandlung · direkt umsetzbare Tasks). Kleines „?"-Icon am Toggle re-öffnet das Briefing nach Dismiss.

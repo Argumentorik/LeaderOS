@@ -5,7 +5,7 @@
  */
 import { useState, useCallback, useRef } from 'react';
 import { Button } from '../ui/button';
-import { FileText, Upload, Trash2, Loader2, ChevronDown, Sparkles } from 'lucide-react';
+import { FileText, Upload, Trash2, Loader2, ChevronDown, Sparkles, BookOpen, Radio } from 'lucide-react';
 import api from '../../lib/api';
 import { toast } from 'sonner';
 
@@ -111,33 +111,117 @@ export const KnowledgeSources = ({ de = true, onChanged }) => {
 
           {loading && <Loader2 size={14} className="animate-spin text-muted-foreground" />}
           {sources && (
-            <div className="max-h-64 overflow-y-auto space-y-1 pr-1" data-testid="knowledge-sources-list">
-              {(sources.sources || []).map((s) => (
-                <div key={s.source_file} className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-black/[0.02] dark:hover:bg-white/[0.03] transition-colors text-[11px]" data-testid={`knowledge-source-${s.source_file}`}>
-                  <span className="flex-1 min-w-0 truncate font-semibold">{s.course || s.source_file}</span>
-                  {s.type === 'custom' && (
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] text-[9px] font-bold shrink-0">
-                      <Sparkles size={8} /> CUSTOM
-                    </span>
-                  )}
-                  <span className="text-muted-foreground shrink-0">{s.chunks} Chunks</span>
-                  <button
-                    onClick={() => remove(s)}
-                    className="p-1 rounded-md text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors shrink-0"
-                    title={de ? 'Quelle entfernen' : 'Remove source'}
-                    data-testid={`knowledge-delete-${s.source_file}`}
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-              ))}
-              {(sources.sources || []).length === 0 && (
-                <p className="text-[10px] text-muted-foreground px-2 py-1">{de ? 'Keine Quellen im Store.' : 'No sources in store.'}</p>
-              )}
-            </div>
+            <SourcesList sources={sources} de={de} onRemove={remove} />
           )}
         </div>
       )}
+    </div>
+  );
+};
+
+/**
+ * Iter 121.5 (Stefan-Feedback): categorised rendering so books + main courses
+ * appear FIRST and cannot be missed behind a wall of 30 Live-Call files.
+ */
+const SourcesList = ({ sources, de, onRemove }) => {
+  const cat = sources.categorised || { courses: sources.sources || [], live_calls: [], custom: [] };
+  const totalChunks = sources.total_chunks || 0;
+  const totalSources = (cat.courses?.length || 0) + (cat.live_calls?.length || 0) + (cat.custom?.length || 0);
+
+  return (
+    <div className="max-h-[420px] overflow-y-auto space-y-4 pr-1" data-testid="knowledge-sources-list">
+      {/* Summary strip */}
+      <div className="flex items-center justify-between px-2 py-1.5 rounded-lg bg-[#BFFF00]/10 border border-[#BFFF00]/20 text-[10.5px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00]" data-testid="knowledge-sources-summary">
+        <span>{totalSources} {de ? 'Quellen' : 'sources'}</span>
+        <span>{totalChunks.toLocaleString('de-DE')} {de ? 'Chunks' : 'chunks'}</span>
+      </div>
+
+      {/* Kurse & Bücher (Wlads Kern-Content) */}
+      {(cat.courses?.length ?? 0) > 0 && (
+        <SourceSection
+          testId="knowledge-section-courses"
+          icon={BookOpen}
+          label={de ? 'Kurse & Bücher' : 'Courses & books'}
+          sub={de ? 'Wlads Kern-Bibliothek' : "Wlad's core library"}
+          rows={cat.courses}
+          onRemove={onRemove}
+          de={de}
+        />
+      )}
+
+      {/* Live Calls */}
+      {(cat.live_calls?.length ?? 0) > 0 && (
+        <SourceSection
+          testId="knowledge-section-live-calls"
+          icon={Radio}
+          label={de ? 'Live-Calls' : 'Live calls'}
+          sub={de ? 'Neueste zuerst' : 'Newest first'}
+          rows={cat.live_calls}
+          onRemove={onRemove}
+          de={de}
+          collapsible
+          defaultCollapsed
+        />
+      )}
+
+      {/* Custom-Uploads via Admin */}
+      {(cat.custom?.length ?? 0) > 0 && (
+        <SourceSection
+          testId="knowledge-section-custom"
+          icon={Sparkles}
+          label={de ? 'Eigene Uploads' : 'Custom uploads'}
+          sub={de ? 'Über die Admin-UI hinzugefügt' : 'Added via admin UI'}
+          rows={cat.custom}
+          onRemove={onRemove}
+          de={de}
+        />
+      )}
+
+      {totalSources === 0 && (
+        <p className="text-[10px] text-muted-foreground px-2 py-1">{de ? 'Keine Quellen im Store.' : 'No sources in store.'}</p>
+      )}
+    </div>
+  );
+};
+
+const SourceSection = ({ testId, icon: Icon, label, sub, rows, onRemove, de, collapsible = false, defaultCollapsed = false }) => {
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  return (
+    <div className="space-y-1" data-testid={testId}>
+      <button
+        type="button"
+        onClick={() => collapsible && setCollapsed(!collapsed)}
+        className={`flex items-center gap-2 px-2 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-muted-foreground/80 w-full text-left ${collapsible ? 'hover:text-foreground cursor-pointer' : 'cursor-default'}`}
+        data-testid={`${testId}-header`}
+      >
+        <Icon size={11} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+        <span className="flex-1">{label} <span className="text-muted-foreground/50 font-semibold normal-case tracking-normal">· {rows.length} · {sub}</span></span>
+        {collapsible && <ChevronDown size={11} className={`transition-transform ${collapsed ? '-rotate-90' : ''}`} />}
+      </button>
+      {!collapsed && rows.map((s) => (
+        <div
+          key={s.source_file}
+          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-black/[0.02] dark:hover:bg-white/[0.03] transition-colors text-[11px]"
+          data-testid={`knowledge-source-${s.source_file}`}
+          title={s.source_file}
+        >
+          <span className="flex-1 min-w-0 truncate font-semibold">{s.display_title || s.course || s.source_file}</span>
+          {s.type === 'custom' && (
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] text-[9px] font-bold shrink-0">
+              <Sparkles size={8} /> CUSTOM
+            </span>
+          )}
+          <span className="text-muted-foreground shrink-0 tabular-nums">{s.chunks.toLocaleString('de-DE')} Chunks</span>
+          <button
+            onClick={() => onRemove(s)}
+            className="p-1 rounded-md text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors shrink-0"
+            title={de ? 'Quelle entfernen' : 'Remove source'}
+            data-testid={`knowledge-delete-${s.source_file}`}
+          >
+            <Trash2 size={12} />
+          </button>
+        </div>
+      ))}
     </div>
   );
 };
