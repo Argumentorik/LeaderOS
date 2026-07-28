@@ -1,6 +1,20 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 121.6 · 28.07.26] Simulations: Pause-Fix + neue „Argumentation vorbereiten" mit SEXIER-Framework** — E2E getestet (Backend Live-Call, Frontend Screenshot)
+  - **Pause-Bug behoben** (`SimulationsPage.js`): Vorher gab es nur den roten „JETZT BEENDEN & BEWERTEN"-Button, der die Session terminierte. Jetzt zusätzlicher „Pause"-Button im Header (variant='outline') + „Weiter"-Resume-Button im gleichen Slot. Pause ruft nur `stopAllAudio('simulation-pause')` auf → `activeSim`, `messages`, Kontext bleiben komplett erhalten. Sichtbares Pause-Banner mit CTA in der Konversations-UI, Input-Bar wird versteckt solange pausiert.
+  - **Scenario-Swap** (`data.py`): `remote-team-building` („Remote Team motivieren") komplett ersetzt durch `argumentation-prep` („Argumentation vorbereiten") mit `kind='preparation'` + `category='preparation'`.
+  - **Neues Modul „Argumentation vorbereiten"** (`components/simulations/ArgumentationPrepModal.js` + `POST /api/simulations/argumentation-prep`):
+    · 4-Step-Wizard (Kontext · Argumente · Gegenseite · Coaching) mit lime Step-Indicator, Wlad-spezifischen Placeholders, sanftem Progress-Design.
+    · Erfasst 10 strukturierte Felder: background/goal/relationship, main_points/evidence/prioritised, expected_objections/counterarguments/hidden_interests, coaching_focus.
+    · Backend-Endpoint schickt alles durch `ARGUMENTATION_PREP_PROMPT` (GPT-5.2 als Wlad-Coach mit 6-Sektionen-Ausgabestruktur: Situationsanalyse · 3 SEXIER-Blöcke · Erwartete Einwände & Rebuttals · Framing & Wording · Schwachstellen · Ready-to-Use-Strategie).
+    · Live-Call verifiziert: 8 551 Zeichen strukturierte Strategie in einem Request.
+    · Strategy-View mit Markdown-Rendering (Headings, Bold, Bullets), Copy-Button, „Jetzt in Simulation üben"-Bridge zum Salary-Negotiation-Szenario.
+    · +3 Leadership-XP + 2 Communication-XP pro erfolgreichem Prep (via `record_user_action`).
+    · Strategien werden in `argumentation_strategies` Collection persistiert.
+  - **Card-Visual**: SEXIER-Prep-Karten sind visuell distinct (Lime-Gradient, Sparkles-Icon, „SEXIER-PREP"-Badge statt Difficulty, „Prep starten"-CTA in dark-lime statt „Start"-lime), damit User sofort verstehen: das ist Coaching, keine Live-Simulation.
+
+
 - [x] **[Iter 121.5 · 22.07.26] Admin Knowledge-Sources Fix: Wlads Bücher waren immer da, nur unsichtbar** — API + Frontend verifiziert
   - **Root Cause (Stefan-Feedback)**: `/api/admin/rag/sources` aggregierte alphabetisch nach `source_file` → Live-Call-Files (`2025.*.txt`, `2026.*.txt`) landeten oben, Wlads Bücher (`du_bist_der_bessere_chef.txt` etc.) rutschten unter die 27 Live-Call-Zeilen. Stefan sah die Bücher nicht, dachte sie fehlen — sie waren die ganze Zeit da (55 Sources, 7 463 Chunks).
   - **Sekundär-Bug**: `metadata.course` wurde bei einigen Alt-Ingest-Batches als erster Content-Chunk-Text statt sauberer Titel gespeichert (z. B. „WLAD JACHTCHENKO DUBISTER BESERECHEF"). Zusätzlich waren Umlaute snake-case-ified („Fuehren", „Koerpersprache") und ß als Mojibake („Wei├Ƒe").

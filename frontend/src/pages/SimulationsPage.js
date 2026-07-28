@@ -15,10 +15,12 @@ import { downloadHTMLReport } from '../lib/reportGenerator';
 import {
   Swords, Play, Send, Square, Loader2, Trophy, Target,
   HeartHandshake, MessageSquareText, ArrowRight, Star,
-  Download, X, Mic
+  Download, X, Mic, Pause, Sparkles
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { SimulationBriefing } from '../components/shared/SimulationBriefing';
+import { ArgumentationPrepModal } from '../components/simulations/ArgumentationPrepModal';
+import { stopAllAudio } from '../lib/audioBus';
 
 const difficultyConfig = {
   easy: { gradient: 'from-green-500 to-emerald-500', text: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-500/10', border: 'border-green-200/40 dark:border-green-500/20', label: 'Leicht', labelEn: 'Easy', minutes: '~5 Min' },
@@ -27,26 +29,39 @@ const difficultyConfig = {
 };
 
 const ScenarioCard = ({ scenario, onStart, loading, de = true }) => {
+  const isPrep = scenario.kind === 'preparation';
   const diff = difficultyConfig[scenario.difficulty] || difficultyConfig.medium;
+  // Iter 121.6: preparation-cards get a distinct visual identity (Wlad-lime
+  // gradient + Sparkles icon + "SEXIER-PREP" badge) so users understand this
+  // isn't a live simulation but a coaching wizard.
+  const gradient = isPrep ? 'from-[#BFFF00] to-[#9ACC00]' : diff.gradient;
   return (
-    <Card className={`hover:shadow-xl hover:shadow-black/[0.06] hover:-translate-y-1 hover:border-[#BFFF00]/40 transition-all duration-300 group cursor-pointer border-black/[0.04] dark:border-white/[0.06] overflow-hidden`} onClick={() => onStart(scenario)} data-testid={`scenario-${scenario.scenario_id}`}>
+    <Card className={`hover:shadow-xl hover:shadow-black/[0.06] hover:-translate-y-1 hover:border-[#BFFF00]/40 transition-all duration-300 group cursor-pointer border-black/[0.04] dark:border-white/[0.06] overflow-hidden ${isPrep ? 'ring-1 ring-[#BFFF00]/30' : ''}`} onClick={() => onStart(scenario)} data-testid={`scenario-${scenario.scenario_id}`}>
       <CardContent className="p-5 relative">
-        <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${diff.gradient} opacity-70`} />
+        <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${gradient} opacity-70`} />
         <div className="flex items-start justify-between mb-3">
-          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${diff.gradient} flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
-            <Swords size={18} className="text-white" />
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+            {isPrep ? <Sparkles size={18} className="text-[#0A0A0A]" /> : <Swords size={18} className="text-white" />}
           </div>
           <div className="flex items-center gap-1.5">
-            <Badge className={`${diff.bg} ${diff.text} text-[10px] font-bold border-0`}>{de ? diff.label : diff.labelEn}</Badge>
-            <Badge className="bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground text-[10px] font-bold border-0">{diff.minutes}</Badge>
+            {isPrep ? (
+              <Badge className="bg-[#BFFF00] text-[#0A0A0A] text-[10px] font-black border-0">SEXIER-PREP</Badge>
+            ) : (
+              <>
+                <Badge className={`${diff.bg} ${diff.text} text-[10px] font-bold border-0`}>{de ? diff.label : diff.labelEn}</Badge>
+                <Badge className="bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground text-[10px] font-bold border-0">{diff.minutes}</Badge>
+              </>
+            )}
           </div>
         </div>
         <h3 className="text-[15px] font-bold mb-1 group-hover:text-[#6B8A00] dark:group-hover:text-[#BFFF00] transition-colors">{scenario.title}</h3>
         <p className="text-[12px] text-muted-foreground mb-3 line-clamp-2">{scenario.description}</p>
         <div className="flex items-center justify-between">
-          <p className="text-[11px] text-muted-foreground flex items-center gap-1"><Mic size={10} /> Voice + Text</p>
-          <Button size="sm" disabled={loading} className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-bold text-xs h-8 shadow-sm shadow-[#BFFF00]/20 transition-all group-hover:scale-[1.04]" data-testid={`start-sim-${scenario.scenario_id}`}>
-            <Play size={12} className="mr-1" fill="currentColor" /> Start
+          <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+            {isPrep ? <><Target size={10} /> Vor-Coaching · 4 Schritte</> : <><Mic size={10} /> Voice + Text</>}
+          </p>
+          <Button size="sm" disabled={loading} className={`font-bold text-xs h-8 shadow-sm transition-all group-hover:scale-[1.04] ${isPrep ? 'bg-[#0A0A0A] hover:bg-[#1A1A2E] text-[#BFFF00]' : 'bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] shadow-[#BFFF00]/20'}`} data-testid={`start-sim-${scenario.scenario_id}`}>
+            {isPrep ? <><Sparkles size={12} className="mr-1" /> Prep starten</> : <><Play size={12} className="mr-1" fill="currentColor" /> Start</>}
           </Button>
         </div>
       </CardContent>
@@ -192,6 +207,11 @@ export default function SimulationsPage() {
   const [loading, setLoading] = useState(false);
   const [scores, setScores] = useState(null);
   const [briefingScenario, setBriefingScenario] = useState(null);
+  // Iter 121.6: separate „Argumentation vorbereiten"-Wizard (nicht die klassische Simulation)
+  const [argPrepOpen, setArgPrepOpen] = useState(false);
+  // Iter 121.6: proper Pause (nicht mehr Beenden!) — hält Audio an, aber
+  // activeSim, messages und der Kontext bleiben komplett erhalten.
+  const [paused, setPaused] = useState(false);
   const scrollRef = useRef(null);
   const navigate = useNavigate();
 
@@ -253,14 +273,35 @@ export default function SimulationsPage() {
             </div>
           </div>
           {activeSim && (
-            <Button
-              size="lg"
-              onClick={endSimulation}
-              className="bg-rose-500 hover:bg-rose-600 text-white font-black shadow-lg shadow-rose-500/25 animate-pulse"
-              data-testid="end-simulation-btn"
-            >
-              <Square size={16} className="mr-2" fill="white" /> {lang === 'de' ? 'JETZT BEENDEN & BEWERTEN' : 'END NOW & SCORE'}
-            </Button>
+            <div className="flex items-center gap-2">
+              {/* Iter 121.6: Pause hält Audio an, State/Transcript bleibt.
+                  Nutzer kann jederzeit auf „Weiter" klicken und dort weitermachen. */}
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => {
+                  if (!paused) {
+                    stopAllAudio('simulation-pause');
+                    setPaused(true);
+                  } else {
+                    setPaused(false);
+                  }
+                }}
+                className={`font-black border-black/10 dark:border-white/10 ${paused ? 'text-[#6B8A00] dark:text-[#BFFF00] hover:bg-[#BFFF00]/10' : 'text-foreground/80'}`}
+                data-testid="pause-simulation-btn"
+                title={paused ? (lang === 'de' ? 'Simulation fortsetzen' : 'Resume simulation') : (lang === 'de' ? 'Audio pausieren — Konversation bleibt erhalten' : 'Pause audio — conversation is preserved')}
+              >
+                {paused ? <><Play size={16} className="mr-2" fill="currentColor" /> {lang === 'de' ? 'Weiter' : 'Resume'}</> : <><Pause size={16} className="mr-2" fill="currentColor" /> {lang === 'de' ? 'Pause' : 'Pause'}</>}
+              </Button>
+              <Button
+                size="lg"
+                onClick={endSimulation}
+                className="bg-rose-500 hover:bg-rose-600 text-white font-black shadow-lg shadow-rose-500/25"
+                data-testid="end-simulation-btn"
+              >
+                <Square size={16} className="mr-2" fill="white" /> {lang === 'de' ? 'JETZT BEENDEN & BEWERTEN' : 'END NOW & SCORE'}
+              </Button>
+            </div>
           )}
         </div>
 
@@ -287,12 +328,46 @@ export default function SimulationsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {scenariosLoading
                   ? [1, 2, 3, 4, 5, 6].map((i) => <ScenarioSkeleton key={i} />)
-                  : scenarios.map((s) => <ScenarioCard key={s.scenario_id} scenario={s} onStart={() => setBriefingScenario(s)} loading={loading} de={lang === 'de'} />)}
+                  : scenarios.map((s) => (
+                    <ScenarioCard
+                      key={s.scenario_id}
+                      scenario={s}
+                      onStart={(sc) => {
+                        // Iter 121.6: argumentation-prep goes through the SEXIER wizard,
+                        // everything else through the standard briefing.
+                        if (sc.kind === 'preparation' || sc.scenario_id === 'argumentation-prep') {
+                          setArgPrepOpen(true);
+                        } else {
+                          setBriefingScenario(sc);
+                        }
+                      }}
+                      loading={loading}
+                      de={lang === 'de'}
+                    />
+                  ))}
               </div>
             </div>
           )}
           {(activeSim || messages.length > 0) && !scores && (
             <div className="max-w-3xl mx-auto space-y-3">
+              {/* Iter 121.6: Pause-Banner — deutliches visuelles Signal, dass
+                  die Simulation aktiv ist, aber gerade wartet. */}
+              {paused && (
+                <div className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[#BFFF00]/10 border border-[#BFFF00]/30" data-testid="simulation-paused-banner">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#BFFF00] flex items-center justify-center">
+                      <Pause size={14} className="text-[#0A0A0A]" fill="#0A0A0A" />
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-black">{lang === 'de' ? 'Simulation pausiert' : 'Simulation paused'}</p>
+                      <p className="text-[11px] text-foreground/70">{lang === 'de' ? 'Konversation und Kontext bleiben erhalten. Klick "Weiter" um fortzufahren.' : 'Conversation and context are preserved. Click "Resume" to continue.'}</p>
+                    </div>
+                  </div>
+                  <Button size="sm" onClick={() => setPaused(false)} className="bg-[#0A0A0A] text-[#BFFF00] font-black shrink-0" data-testid="simulation-resume-btn">
+                    <Play size={12} className="mr-1" fill="currentColor" /> {lang === 'de' ? 'Weiter' : 'Resume'}
+                  </Button>
+                </div>
+              )}
               {/* Immersive simulation header */}
               <div className="text-center mb-6">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold">
@@ -362,7 +437,23 @@ export default function SimulationsPage() {
           />
         )}
 
-        {activeSim && (
+        {argPrepOpen && (
+          <ArgumentationPrepModal
+            onClose={() => setArgPrepOpen(false)}
+            onLaunchSimulation={() => {
+              // Bridge: after the SEXIER strategy is ready, drop the user into
+              // a live simulation with the negotiation-flavour scenario so
+              // they can practice with what they just prepared.
+              setArgPrepOpen(false);
+              const bridgeScenario = scenarios.find(s => s.scenario_id === 'salary-negotiation')
+                                  || scenarios.find(s => s.category === 'negotiation')
+                                  || scenarios[0];
+              if (bridgeScenario) setBriefingScenario(bridgeScenario);
+            }}
+          />
+        )}
+
+        {activeSim && !paused && (
           <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-4 bg-white/80 dark:bg-card/80 backdrop-blur-xl">
             <div className="flex gap-3 max-w-3xl mx-auto">
               <VoiceRecorder onTranscription={(text) => setInput(prev => prev + ' ' + text)} disabled={loading} />

@@ -214,6 +214,26 @@ class SimulationMessage(BaseModel):
     message: str
 
 
+# Iter 121.6 (Wlad-Feedback): guided argumentation-preparation replaces the
+# retired "Remote Team motivieren" scenario. Every field is optional so the
+# user can iterate — the AI coach fills gaps and produces a SEXIER strategy.
+class ArgumentationPrep(BaseModel):
+    # Context of the conversation
+    background: Optional[str] = None       # Was ist passiert / worum geht es?
+    goal: Optional[str] = None             # Was willst du erreichen?
+    relationship: Optional[str] = None     # Wer ist der Gegenüber, wie ist die Beziehung?
+    # My key arguments
+    main_points: Optional[str] = None      # Deine Kernargumente
+    evidence: Optional[str] = None         # Belege / Daten / Beispiele
+    prioritised: Optional[str] = None      # Reihenfolge / Prioritäten
+    # Likely arguments from the other side
+    expected_objections: Optional[str] = None
+    counterarguments: Optional[str] = None
+    hidden_interests: Optional[str] = None
+    # Coaching request
+    coaching_focus: Optional[str] = None   # e.g. "framing", "weaknesses", "rebuttals"
+
+
 class PlaybookStart(BaseModel):
     playbook_id: str
 
