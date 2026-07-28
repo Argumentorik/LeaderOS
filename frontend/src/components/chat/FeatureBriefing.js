@@ -116,7 +116,7 @@ export function FeatureBriefing({
           {bullets.length > 0 && (
             <ul className="mt-2.5 space-y-1.5" data-testid={`${testId}-bullets`}>
               {bullets.map((b, i) => (
-                <li key={i} className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground/72">
+                <li key={`${typeof b === 'string' ? b.slice(0, 40) : 'bullet'}-${i}`} className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground/72">
                   <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ background: toneStyles.dot }} />
                   <span>{b}</span>
                 </li>

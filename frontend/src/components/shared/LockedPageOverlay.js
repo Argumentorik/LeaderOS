@@ -54,7 +54,7 @@ export function LockedPageOverlay({
           {features.length > 0 && (
             <ul className="space-y-2 text-left bg-white/[0.03] border border-white/10 rounded-2xl p-4">
               {features.map((f, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-white/80">
+                <li key={`${typeof f === 'string' ? f.slice(0, 40) : 'feature'}-${i}`} className="flex items-start gap-2 text-sm text-white/80">
                   <span className="w-4 h-4 rounded-full bg-[#BFFF00]/20 border border-[#BFFF00]/40 flex items-center justify-center shrink-0 mt-0.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#BFFF00]" />
                   </span>
