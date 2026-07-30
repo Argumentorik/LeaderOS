@@ -14,6 +14,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle2, Star, Sparkles, Clock, Shield } from 'lucide-react';
 import { BookConsultationButton } from './BookConsultationButton';
+import { useConsultationGate } from '../../hooks/useConsultationGate';
 
 const OUTFIT = { fontFamily: 'Outfit, Inter, system-ui, sans-serif' };
 
@@ -60,6 +61,10 @@ export const BookingTeaserCard = ({
   className = '',
 }) => {
   const slotHint = useNextSlotHint();
+  const gate = useConsultationGate();
+
+  // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Angeboten.
+  if (!gate.ready) return null;
 
   return (
     <div

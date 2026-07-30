@@ -20,6 +20,7 @@ import { useMemo, useState, useCallback, useEffect } from 'react';
 import { Calendar, Sparkles, X, Clock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { BookConsultationButton } from './BookConsultationButton';
+import { useConsultationGate } from '../../hooks/useConsultationGate';
 
 const STORAGE_KEY = 'consult_banner_v1_dismissed_at';
 const REARM_AFTER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -79,6 +80,7 @@ export const SmartConsultationBanner = ({ placement = 'default', compact = false
   const { user } = useAuth();
   const [dismissed, dismiss] = useDismissState();
   const slot = useNextSlot();
+  const gate = useConsultationGate();
 
   const variant = useMemo(() => {
     const tier = (user?.tier || 'free').toLowerCase();
@@ -88,6 +90,9 @@ export const SmartConsultationBanner = ({ placement = 'default', compact = false
     return 'big';
   }, [user]);
 
+  // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Anrufen.
+  // Frische Free/Standard-User sollen erst die App erleben, dann verkaufen.
+  if (!gate.ready) return null;
   if (!variant || dismissed) return null;
 
   const copy = {
