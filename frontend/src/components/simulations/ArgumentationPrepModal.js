@@ -13,9 +13,9 @@
  * SEXIER-Strategie zurück, die der User dann direkt in die anschließende
  * Live-Simulation mitnehmen kann.
  */
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2 } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2, Clock, Save, Share2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import api from '../../lib/api';
@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 import { StrategySkeleton } from './StrategySkeleton';
 import { FieldVoiceButton } from './FieldVoiceButton';
 import { PREP_TEMPLATES } from './prepTemplates';
+import { PrepHistorySheet } from './PrepHistorySheet';
 
 const STEPS = [
   { id: 'context',    icon: Target,    title: 'Kontext',     hint: 'Worum geht es? Was willst du erreichen?' },
@@ -39,22 +40,85 @@ const initialData = {
   coaching_focus: '',
 };
 
-export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
+export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTemplate = null }) {
   const [step, setStep] = useState(0);
   const [data, setData] = useState(initialData);
   const [loading, setLoading] = useState(false);
   const [strategy, setStrategy] = useState(null);
   const [copied, setCopied] = useState(false);
   const [appliedTemplateId, setAppliedTemplateId] = useState(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [customTemplates, setCustomTemplates] = useState([]);
+  const [savingTemplate, setSavingTemplate] = useState(false);
 
   const update = (patch) => setData(d => ({ ...d, ...patch }));
 
+  const loadCustomTemplates = useCallback(async () => {
+    try {
+      const res = await api.get('/simulations/argumentation-templates');
+      setCustomTemplates(res.data || []);
+    } catch (err) {
+      logger.error('templates load', err);
+    }
+  }, []);
+
+  useEffect(() => { loadCustomTemplates(); }, [loadCustomTemplates]);
+
+  // Auto-apply a shared template that was deep-linked via ?tpl=<token>.
+  useEffect(() => {
+    if (initialTemplate) applyTemplate(initialTemplate);
+  }, [initialTemplate]);
+
   const applyTemplate = (tpl) => {
-    setData({ ...tpl.data });
-    setAppliedTemplateId(tpl.id);
-    // Jump straight to the final step — user just needs to tweak coaching focus.
+    setData({ ...initialData, ...tpl.data });
+    setAppliedTemplateId(tpl.id || tpl.template_id);
     setStep(STEPS.length - 1);
     toast.success(`Vorlage geladen: ${tpl.label}`, { duration: 2200 });
+  };
+
+  const hasEnoughForTemplate = () => {
+    return ((data.background || '') + (data.goal || '') + (data.main_points || '')).trim().length >= 20;
+  };
+
+  const saveAsTemplate = async () => {
+    if (!hasEnoughForTemplate()) {
+      toast.error('Fülle mind. Kontext + Ziel + Argumente aus, bevor du speicherst.');
+      return;
+    }
+    const label = window.prompt('Wie soll deine Vorlage heißen?', (data.goal || 'Meine Vorlage').slice(0, 50));
+    if (!label) return;
+    setSavingTemplate(true);
+    try {
+      const res = await api.post('/simulations/argumentation-templates', {
+        label: label.trim(),
+        hint: (data.background || '').slice(0, 80),
+        data,
+      });
+      setCustomTemplates((cur) => [res.data, ...cur]);
+      toast.success('Vorlage gespeichert · findest du oben in der Chip-Row', { duration: 2600 });
+    } catch (err) {
+      logger.error('save template', err);
+      toast.error('Vorlage konnte nicht gespeichert werden.');
+    } finally {
+      setSavingTemplate(false);
+    }
+  };
+
+  const shareTemplate = async (tpl) => {
+    const shareUrl = `${window.location.origin}/simulations?tpl=${tpl.share_token}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success('Share-Link kopiert · Sende ihn an dein Team', { duration: 2400 });
+    } catch (err) { logger.warn('clipboard failed', err); }
+  };
+
+  const openFromHistory = (doc) => {
+    if (doc?.input) setData({ ...initialData, ...doc.input });
+    if (doc?.strategy_markdown) {
+      setStrategy({ strategy_id: doc.strategy_id, strategy_markdown: doc.strategy_markdown });
+    }
+    setHistoryOpen(false);
+    toast.success('Alte Prep geladen');
   };
 
   const generate = async () => {
@@ -95,10 +159,15 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-3xl bg-white dark:bg-card rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col overflow-hidden"
+        className="relative w-full max-w-3xl bg-white dark:bg-card rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <Header step={step} strategyReady={!!strategy} onClose={onClose} />
+        <Header
+          step={step}
+          strategyReady={!!strategy}
+          onClose={onClose}
+          onOpenHistory={() => setHistoryOpen(true)}
+        />
 
         {/* Iter 121.10 (Wlad-Bug): Radix ScrollArea intercepted wheel/touch
             events inside the modal. Switched to native overflow — same look,
@@ -134,7 +203,17 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
                   transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <StepIndicator step={step} />
-                  {step === 0 && <TemplatesRow onApply={applyTemplate} appliedId={appliedTemplateId} />}
+                  {step === 0 && (
+                    <TemplatesRow
+                      onApply={applyTemplate}
+                      appliedId={appliedTemplateId}
+                      customTemplates={customTemplates}
+                      onSaveCurrent={saveAsTemplate}
+                      onShareCustom={shareTemplate}
+                      canSave={hasEnoughForTemplate()}
+                      savingTemplate={savingTemplate}
+                    />
+                  )}
                   {step === 0 && <ContextStep data={data} onChange={update} />}
                   {step === 1 && <ArgumentsStep data={data} onChange={update} />}
                   {step === 2 && <ObjectionsStep data={data} onChange={update} />}
@@ -154,12 +233,21 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
           onLaunchSim={onLaunchSimulation}
           onClose={onClose}
         />
+
+        <AnimatePresence>
+          {historyOpen && (
+            <PrepHistorySheet
+              onClose={() => setHistoryOpen(false)}
+              onOpen={openFromHistory}
+            />
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );
 }
 
-const Header = ({ step, strategyReady, onClose }) => (
+const Header = ({ step, strategyReady, onClose, onOpenHistory }) => (
   <div className="px-6 sm:px-8 py-4 flex items-center justify-between border-b border-black/[0.05] dark:border-white/[0.06]">
     <div className="flex items-center gap-3 min-w-0">
       <div className="w-9 h-9 rounded-xl bg-[#BFFF00] flex items-center justify-center shrink-0">
@@ -172,19 +260,49 @@ const Header = ({ step, strategyReady, onClose }) => (
         </h2>
       </div>
     </div>
-    <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors" data-testid="argumentation-prep-close" aria-label="Schließen">
-      <X size={18} />
-    </button>
+    <div className="flex items-center gap-1 shrink-0">
+      <button
+        onClick={onOpenHistory}
+        className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-[11px] font-black text-muted-foreground hover:text-foreground"
+        data-testid="argumentation-prep-history"
+        aria-label="Prep-History öffnen"
+        title="Deine letzten Preps"
+      >
+        <Clock size={13} strokeWidth={2.4} />
+        <span className="hidden sm:inline">History</span>
+      </button>
+      <button
+        onClick={onClose}
+        className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+        data-testid="argumentation-prep-close"
+        aria-label="Schließen"
+      >
+        <X size={18} />
+      </button>
+    </div>
   </div>
 );
 
-const TemplatesRow = ({ onApply, appliedId }) => (
+const TemplatesRow = ({ onApply, appliedId, customTemplates = [], onSaveCurrent, onShareCustom, canSave, savingTemplate }) => (
   <div className="mb-5 -mt-1" data-testid="argumentation-prep-templates">
-    <div className="flex items-center gap-2 mb-2.5">
-      <Wand2 size={12} className="text-[#6B8A00] dark:text-[#BFFF00]" strokeWidth={2.4} />
-      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-muted-foreground">
-        Vorlage laden · Wlad-kuratiert
-      </span>
+    <div className="flex items-center justify-between gap-2 mb-2.5">
+      <div className="flex items-center gap-2">
+        <Wand2 size={12} className="text-[#6B8A00] dark:text-[#BFFF00]" strokeWidth={2.4} />
+        <span className="text-[10px] font-black uppercase tracking-[0.16em] text-muted-foreground">
+          Vorlage laden · Wlad-kuratiert
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={onSaveCurrent}
+        disabled={!canSave || savingTemplate}
+        className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[9.5px] font-black uppercase tracking-wider bg-black/[0.04] dark:bg-white/[0.05] text-muted-foreground hover:bg-[#BFFF00]/15 hover:text-[#6B8A00] dark:hover:text-[#BFFF00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        data-testid="argprep-save-template"
+        title={canSave ? 'Aktuelle Eingaben als Vorlage speichern' : 'Fülle mind. Kontext + Ziel + Argumente aus'}
+      >
+        {savingTemplate ? <Loader2 size={10} className="animate-spin" /> : <Save size={10} strokeWidth={2.6} />}
+        Speichern
+      </button>
     </div>
     <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'thin' }}>
       {PREP_TEMPLATES.map((tpl) => {
@@ -218,6 +336,48 @@ const TemplatesRow = ({ onApply, appliedId }) => (
               </div>
             </div>
           </button>
+        );
+      })}
+      {customTemplates.map((tpl) => {
+        const active = appliedId === tpl.template_id;
+        return (
+          <div key={tpl.template_id} className="relative snap-start shrink-0">
+            <button
+              type="button"
+              onClick={() => onApply({ ...tpl, id: tpl.template_id, hint: tpl.hint || 'Deine gespeicherte Vorlage' })}
+              className={`group flex items-center gap-2 px-3 py-2 rounded-xl border text-left transition-all active:scale-[0.97] ${
+                active
+                  ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-md shadow-[#BFFF00]/25'
+                  : 'bg-white dark:bg-white/[0.02] border-[#BFFF00]/25 border-dashed text-foreground/85 hover:border-[#BFFF00]/60 hover:bg-[#BFFF00]/[0.04]'
+              }`}
+              data-testid={`argprep-custom-template-${tpl.template_id}`}
+              title={tpl.hint || 'Deine gespeicherte Vorlage'}
+            >
+              <span
+                className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                  active ? 'bg-[#0A0A0A]/10' : 'bg-[#BFFF00]/15 text-[#6B8A00] dark:text-[#BFFF00]'
+                }`}
+              >
+                <Save size={11} strokeWidth={2.5} />
+              </span>
+              <div className="min-w-0 max-w-[160px]">
+                <div className="text-[11.5px] font-black leading-tight truncate">{tpl.label}</div>
+                <div className={`text-[9.5px] leading-tight mt-0.5 truncate ${active ? 'text-[#0A0A0A]/60' : 'text-muted-foreground/80'}`}>
+                  {tpl.hint || 'Eigene Vorlage'}
+                </div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onShareCustom(tpl); }}
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0A0A0A] text-white hover:bg-[#BFFF00] hover:text-[#0A0A0A] flex items-center justify-center shadow-md transition-colors"
+              data-testid={`argprep-share-template-${tpl.template_id}`}
+              title="Share-Link kopieren"
+              aria-label="Teilen"
+            >
+              <Share2 size={9} strokeWidth={2.6} />
+            </button>
+          </div>
         );
       })}
     </div>

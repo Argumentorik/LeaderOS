@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
-from models import SimulationStart, SimulationMessage, ArgumentationPrep
+from models import SimulationStart, SimulationMessage, ArgumentationPrep, ArgumentationTemplateIn
 from services import get_current_user, clean_ai_text, update_user_scores, SIMULATION_SYSTEM_PROMPT
 from services_actions import record_user_action
 from data import SIMULATION_SCENARIOS
@@ -166,15 +166,6 @@ async def list_simulations(request: Request):
     return await db.simulations.find({"user_id": user["user_id"]}, {"_id": 0, "messages": 0}).sort("created_at", -1).to_list(50)
 
 
-@router.get("/simulations/{sim_id}")
-async def get_simulation(sim_id: str, request: Request):
-    user = await get_current_user(request)
-    sim = await db.simulations.find_one({"simulation_id": sim_id, "user_id": user["user_id"]}, {"_id": 0})
-    if not sim:
-        raise HTTPException(status_code=404, detail="Simulation not found")
-    return sim
-
-
 # ─── Iter 121.6: Argumentation-Preparation (SEXIER-Framework Coaching) ───
 ARGUMENTATION_PREP_PROMPT = """Du bist WLAD JACHTCHENKO als Argumentations-Coach.
 Der User bereitet eine wichtige, echte Argumentation/Gespräch vor. Deine Aufgabe:
@@ -308,3 +299,134 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
     except Exception as e:
         logger.error(f"Argumentation-prep error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Prep-History & Custom Templates (Iter 124 — Wlad Godmode) ────────────────
+
+def _prep_history_label(input_data: dict) -> str:
+    """Auto-generate a short label from the user's goal or background."""
+    for key in ("goal", "background", "main_points"):
+        v = (input_data or {}).get(key) or ""
+        v = v.strip()
+        if v:
+            return v[:70] + ("…" if len(v) > 70 else "")
+    return "Argumentations-Prep"
+
+
+@router.get("/simulations/argumentation-prep/history")
+async def argumentation_prep_history(request: Request):
+    """Return the last 5 SEXIER-strategies for the current user (newest first)."""
+    user = await get_current_user(request)
+    cursor = db.argumentation_strategies.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0, "strategy_id": 1, "input": 1, "strategy_markdown": 1, "created_at": 1},
+    ).sort("created_at", -1).limit(5)
+    docs = await cursor.to_list(length=5)
+    return [
+        {
+            "strategy_id": d.get("strategy_id"),
+            "label": _prep_history_label(d.get("input") or {}),
+            "created_at": d.get("created_at"),
+            "has_strategy": bool(d.get("strategy_markdown")),
+        }
+        for d in docs
+    ]
+
+
+@router.get("/simulations/argumentation-prep/history/{strategy_id}")
+async def argumentation_prep_get(strategy_id: str, request: Request):
+    """Re-open a previously generated strategy (own docs only)."""
+    user = await get_current_user(request)
+    doc = await db.argumentation_strategies.find_one(
+        {"strategy_id": strategy_id, "user_id": user["user_id"]},
+        {"_id": 0},
+    )
+    if not doc:
+        raise HTTPException(status_code=404, detail="Prep not found")
+    return {
+        "strategy_id": doc.get("strategy_id"),
+        "input": doc.get("input") or {},
+        "strategy_markdown": doc.get("strategy_markdown") or "",
+        "created_at": doc.get("created_at"),
+    }
+
+
+@router.delete("/simulations/argumentation-prep/history/{strategy_id}")
+async def argumentation_prep_delete(strategy_id: str, request: Request):
+    """Delete a previously generated strategy (own docs only)."""
+    user = await get_current_user(request)
+    res = await db.argumentation_strategies.delete_one(
+        {"strategy_id": strategy_id, "user_id": user["user_id"]},
+    )
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Prep not found")
+    return {"deleted": True}
+
+
+# ── Custom Templates ────────────────────────────────────────────────────────
+
+@router.get("/simulations/argumentation-templates")
+async def list_templates(request: Request):
+    """Return current user's private templates (newest first, max 20)."""
+    user = await get_current_user(request)
+    cursor = db.argumentation_templates.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0},
+    ).sort("created_at", -1).limit(20)
+    docs = await cursor.to_list(length=20)
+    return docs
+
+
+@router.post("/simulations/argumentation-templates")
+async def create_template(data: ArgumentationTemplateIn, request: Request):
+    """Save a custom Prep-Template (private + shareable via share_token)."""
+    user = await get_current_user(request)
+    tpl_id = f"argtpl_{uuid.uuid4().hex[:12]}"
+    share_token = uuid.uuid4().hex[:16]
+    doc = {
+        "template_id": tpl_id,
+        "user_id": user["user_id"],
+        "label": (data.label or "").strip() or "Meine Vorlage",
+        "hint": (data.hint or "").strip(),
+        "data": data.data.model_dump(),
+        "share_token": share_token,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.argumentation_templates.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@router.delete("/simulations/argumentation-templates/{template_id}")
+async def delete_template(template_id: str, request: Request):
+    user = await get_current_user(request)
+    res = await db.argumentation_templates.delete_one(
+        {"template_id": template_id, "user_id": user["user_id"]},
+    )
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Template not found")
+    return {"deleted": True}
+
+
+@router.get("/simulations/argumentation-templates/shared/{share_token}")
+async def get_shared_template(share_token: str, request: Request):
+    """Public-ish endpoint: anyone with the share_token can import a template.
+    Still requires an authenticated session so we can attribute imports."""
+    await get_current_user(request)  # auth-gate
+    doc = await db.argumentation_templates.find_one(
+        {"share_token": share_token},
+        {"_id": 0, "user_id": 0},
+    )
+    if not doc:
+        raise HTTPException(status_code=404, detail="Shared template not found")
+    return doc
+
+
+# ── Catch-all simulation GET route — MUST stay last so specific paths win ───
+@router.get("/simulations/{sim_id}")
+async def get_simulation(sim_id: str, request: Request):
+    user = await get_current_user(request)
+    sim = await db.simulations.find_one({"simulation_id": sim_id, "user_id": user["user_id"]}, {"_id": 0})
+    if not sim:
+        raise HTTPException(status_code=404, detail="Simulation not found")
+    return sim

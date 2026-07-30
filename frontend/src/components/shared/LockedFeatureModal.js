@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Check, ArrowRight, Lock } from 'lucide-react';
 import { usePricing } from '../../contexts/PricingContext';
@@ -76,9 +77,9 @@ export const LockedFeatureModal = ({ item, onClose }) => {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[120] flex items-center justify-center p-5 bg-[#0A0A0A]/70 backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-5 bg-[#0A0A0A]/70 backdrop-blur-md animate-fade-in"
       onClick={onClose}
       data-testid="locked-feature-modal"
     >
@@ -160,6 +161,7 @@ export const LockedFeatureModal = ({ item, onClose }) => {
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 };

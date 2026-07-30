@@ -234,6 +234,12 @@ class ArgumentationPrep(BaseModel):
     coaching_focus: Optional[str] = None   # e.g. "framing", "weaknesses", "rebuttals"
 
 
+class ArgumentationTemplateIn(BaseModel):
+    label: str
+    hint: Optional[str] = ""
+    data: ArgumentationPrep
+
+
 class PlaybookStart(BaseModel):
     playbook_id: str
 

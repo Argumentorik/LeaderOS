@@ -17,10 +17,11 @@ import {
   HeartHandshake, MessageSquareText, ArrowRight, Star,
   Download, X, Mic, Pause, Sparkles
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SimulationBriefing } from '../components/shared/SimulationBriefing';
 import { ArgumentationPrepModal } from '../components/simulations/ArgumentationPrepModal';
 import { stopAllAudio } from '../lib/audioBus';
+import { toast } from 'sonner';
 
 const difficultyConfig = {
   easy: { gradient: 'from-green-500 to-emerald-500', text: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-500/10', border: 'border-green-200/40 dark:border-green-500/20', label: 'Leicht', labelEn: 'Easy', minutes: '~5 Min' },
@@ -209,6 +210,8 @@ export default function SimulationsPage() {
   const [briefingScenario, setBriefingScenario] = useState(null);
   // Iter 121.6: separate „Argumentation vorbereiten"-Wizard (nicht die klassische Simulation)
   const [argPrepOpen, setArgPrepOpen] = useState(false);
+  const [sharedTemplate, setSharedTemplate] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   // Iter 121.6: proper Pause (nicht mehr Beenden!) — hält Audio an, aber
   // activeSim, messages und der Kontext bleiben komplett erhalten.
   const [paused, setPaused] = useState(false);
@@ -222,6 +225,32 @@ export default function SimulationsPage() {
   }, []);
   useEffect(() => { loadScenarios(); }, [loadScenarios]);
   useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+
+  // Iter 124 (Wlad Godmode): open ArgPrep w/ shared template when ?tpl= is present.
+  useEffect(() => {
+    const token = searchParams.get('tpl');
+    if (!token) return;
+    (async () => {
+      try {
+        const res = await api.get(`/simulations/argumentation-templates/shared/${token}`);
+        setSharedTemplate({
+          id: res.data.template_id,
+          template_id: res.data.template_id,
+          label: res.data.label,
+          hint: res.data.hint,
+          data: res.data.data,
+        });
+        setArgPrepOpen(true);
+        toast.success(`Geteilte Vorlage geladen: ${res.data.label}`, { duration: 2600 });
+      } catch (err) {
+        logger.error('shared tpl load', err);
+        toast.error('Diese Vorlage ist nicht mehr verfügbar.');
+      } finally {
+        searchParams.delete('tpl');
+        setSearchParams(searchParams, { replace: true });
+      }
+    })();
+  }, [searchParams, setSearchParams]);
 
   const startSimulation = async (scenarioId, setup = {}) => {
     setLoading(true);
@@ -439,12 +468,14 @@ export default function SimulationsPage() {
 
         {argPrepOpen && (
           <ArgumentationPrepModal
-            onClose={() => setArgPrepOpen(false)}
+            initialTemplate={sharedTemplate}
+            onClose={() => { setArgPrepOpen(false); setSharedTemplate(null); }}
             onLaunchSimulation={() => {
               // Bridge: after the SEXIER strategy is ready, drop the user into
               // a live simulation with the negotiation-flavour scenario so
               // they can practice with what they just prepared.
               setArgPrepOpen(false);
+              setSharedTemplate(null);
               const bridgeScenario = scenarios.find(s => s.scenario_id === 'salary-negotiation')
                                   || scenarios.find(s => s.category === 'negotiation')
                                   || scenarios[0];
