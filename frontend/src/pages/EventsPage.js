@@ -249,8 +249,8 @@ export default function EventsPage() {
           <div className="mt-10 animate-fade-in">
             <Card className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white border-0 overflow-hidden">
               <CardContent className="p-8 flex items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-[#7B3FE4]/20 flex items-center justify-center shrink-0">
-                  <Lock size={24} className="text-[#A78BFA]" />
+                <div className="w-14 h-14 rounded-2xl bg-[#BFFF00]/12 border border-[#BFFF00]/25 flex items-center justify-center shrink-0">
+                  <Lock size={22} strokeWidth={2.4} className="text-[#BFFF00]" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold mb-1">{de ? 'Accelerator Zugang freischalten' : 'Unlock Accelerator Access'}</h3>

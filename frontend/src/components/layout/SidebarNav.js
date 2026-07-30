@@ -27,7 +27,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
           {section.items.map((item) => {
             const baseCls = `flex items-center gap-2.5 px-3 py-[8px] rounded-[10px] text-[13px] font-medium transition-all duration-150 ${collapsed ? 'justify-center px-2' : ''}`;
 
-            // ── Locked item: render as a clickable div that routes to /coaching ──
+            // ── Locked item: premium subtle lock badge (brand aligned) ──
             if (item.locked) {
               return (
                 <button
@@ -35,18 +35,20 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
                   type="button"
                   onClick={() => setLockedItem(item)}
                   data-testid={`nav-locked-${item.path.replace('/', '')}`}
-                  className={`${baseCls} group w-full text-left text-gray-400/70 dark:text-muted-foreground/40 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50/40 dark:hover:bg-amber-500/[0.05] cursor-pointer`}
+                  className={`${baseCls} group relative w-full text-left text-gray-400/70 dark:text-muted-foreground/45 hover:text-gray-700 dark:hover:text-white/85 hover:bg-gray-50/60 dark:hover:bg-white/[0.03] cursor-pointer`}
                   title={`${item.label} — mit Leadership OS freischalten`}
                 >
-                  <item.icon size={16} className="shrink-0 opacity-70" />
+                  <item.icon size={16} className="shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
                   {!collapsed && (
                     <>
-                      <span className="opacity-80">{item.label}</span>
-                      <Lock
-                        size={11}
-                        className="ml-auto shrink-0 text-amber-500/80 transition-transform duration-200 group-hover:scale-125 group-hover:-rotate-12"
+                      <span className="opacity-80 group-hover:opacity-100 transition-opacity">{item.label}</span>
+                      <span
+                        className="ml-auto shrink-0 flex items-center justify-center w-[18px] h-[18px] rounded-md bg-black/[0.04] dark:bg-white/[0.05] text-gray-500/70 dark:text-white/40 group-hover:bg-[#BFFF00]/15 group-hover:text-[#6B8A00] dark:group-hover:text-[#BFFF00] transition-colors duration-200"
                         data-testid={`lock-${item.path.replace('/', '')}`}
-                      />
+                        aria-hidden="true"
+                      >
+                        <Lock size={9} strokeWidth={2.6} />
+                      </span>
                     </>
                   )}
                 </button>
