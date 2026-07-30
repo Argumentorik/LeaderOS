@@ -26,6 +26,7 @@ import { FieldVoiceButton } from './FieldVoiceButton';
 import { PREP_TEMPLATES } from './prepTemplates';
 import { PrepHistorySheet } from './PrepHistorySheet';
 import { VoiceSparringModal } from './VoiceSparringModal';
+import { StrategyResultView } from './StrategyResultView';
 
 const STEPS = [
   { id: 'context',    icon: Target,    title: 'Kontext',     hint: 'Worum geht es? Was willst du erreichen?' },
@@ -194,7 +195,25 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <StrategyView strategy={strategy} onCopy={copyStrategy} copied={copied} />
+                  <StrategyResultView
+                    strategy={strategy}
+                    onCopy={copyStrategy}
+                    copied={copied}
+                    onPrint={() => window.print()}
+                    onShare={async () => {
+                      const shareText = strategy.strategy_markdown || '';
+                      if (navigator.share) {
+                        try {
+                          await navigator.share({ title: 'Meine SEXIER-Strategie · Wlad Leader-OS', text: shareText });
+                          return;
+                        } catch { /* user cancelled */ }
+                      }
+                      try {
+                        await navigator.clipboard.writeText(shareText);
+                        toast.success('Strategie in Zwischenablage kopiert · füge sie beliebig ein', { duration: 2400 });
+                      } catch { toast.error('Teilen fehlgeschlagen.'); }
+                    }}
+                  />
                 </motion.div>
               ) : (
                 <motion.div
@@ -549,39 +568,6 @@ const Intro = ({ icon: Icon, title, text }) => (
     </div>
   </div>
 );
-
-const StrategyView = ({ strategy, onCopy, copied }) => (
-  <div className="space-y-4" data-testid="argumentation-strategy-view">
-    <div className="flex items-center justify-between p-3 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/30">
-      <div className="flex items-center gap-2">
-        <Sparkles size={14} className="text-[#6B8A00] dark:text-[#BFFF00]" />
-        <span className="text-[12px] font-black">SEXIER-Strategie · fertig zum Einsatz</span>
-      </div>
-      <Button size="sm" variant="outline" onClick={onCopy} className="text-[11px] font-black h-8" data-testid="argumentation-strategy-copy">
-        {copied ? <><Check size={12} className="mr-1" /> Kopiert</> : <><Copy size={12} className="mr-1" /> Kopieren</>}
-      </Button>
-    </div>
-    <div
-      className="prose prose-sm dark:prose-invert max-w-none text-[13.5px] leading-relaxed [&_h2]:text-[15px] [&_h2]:font-black [&_h2]:mt-4 [&_h2]:mb-2 [&_ul]:my-1.5 [&_strong]:text-foreground"
-      data-testid="argumentation-strategy-markdown"
-      dangerouslySetInnerHTML={{ __html: renderMarkdown(strategy.strategy_markdown) }}
-    />
-  </div>
-);
-
-/** Minimal markdown → HTML (headings, bold, bullets) — no external deps. */
-function renderMarkdown(md) {
-  if (!md) return '';
-  const esc = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  let html = esc(md);
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Bullets
-  html = html.replace(/(^|\n)- (.+)/g, (_, br, item) => `${br}<li>${item}</li>`);
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, (m) => `<ul>${m}</ul>`);
-  return html.replace(/\n{2,}/g, '<br /><br />').replace(/\n/g, ' ');
-}
 
 const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerate, onLaunchSim, onLaunchVoice, onClose }) => {
   const lastStep = step === STEPS.length - 1;
