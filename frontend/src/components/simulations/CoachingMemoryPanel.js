@@ -11,7 +11,7 @@
  */
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, TrendingUp, TrendingDown, ArrowRight, Sparkles } from 'lucide-react';
+import { Brain, TrendingUp, TrendingDown, ArrowRight, Sparkles, Shield } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 
@@ -32,7 +32,10 @@ export function CoachingMemoryPanel({ onTagClick }) {
 
   if (!data) return null;
 
-  // Empty-state: too few preps to derive real patterns yet.
+  const objections = data.recurring_objections || [];
+
+  // Empty-state: too few preps for full stats — but if we already spotted a
+  // recurring objection (2+ occurrences), surface it — that's actionable now.
   if (!data.has_signal) {
     return (
       <motion.div
@@ -46,7 +49,7 @@ export function CoachingMemoryPanel({ onTagClick }) {
           <div className="w-8 h-8 rounded-lg bg-[#BFFF00]/12 flex items-center justify-center shrink-0">
             <Sparkles size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-muted-foreground">Coaching Memory</p>
             <p className="text-[12.5px] font-black tracking-tight mt-0.5">
               Wlad lernt gerade dein Muster
@@ -58,6 +61,14 @@ export function CoachingMemoryPanel({ onTagClick }) {
             </p>
           </div>
         </div>
+
+        {objections.length > 0 && (
+          <RecurringObjectionsSection
+            objections={objections}
+            variant="light"
+            className="mt-3"
+          />
+        )}
       </motion.div>
     );
   }
@@ -166,7 +177,61 @@ export function CoachingMemoryPanel({ onTagClick }) {
           </p>
         </div>
       )}
+
+      {/* Recurring objections — surfaced only when 2+ preps share a formulation */}
+      {objections.length > 0 && (
+        <RecurringObjectionsSection objections={objections} variant="dark" className="relative mt-3.5" />
+      )}
     </motion.div>
+  );
+}
+
+// ── RecurringObjectionsSection ──────────────────────────────────────────────
+// Highlights objection-lines the user has anticipated 2+ times across preps —
+// these are the exact rebuttals Wlad recommends training in the next Voice-
+// Sparring session. Rendered under both empty-state and full panel.
+function RecurringObjectionsSection({ objections, variant = 'dark', className = '' }) {
+  const isDark = variant === 'dark';
+  return (
+    <div
+      className={`${className} pt-3 border-t ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06] dark:border-white/[0.06]'}`}
+      data-testid="coaching-memory-recurring-objections"
+    >
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-1.5">
+          <Shield size={11} className={isDark ? 'text-[#FF9500]' : 'text-[#FF9500]'} strokeWidth={2.6} />
+          <p className={`text-[9.5px] font-black uppercase tracking-[0.16em] ${isDark ? 'text-white/50' : 'text-muted-foreground'}`}>
+            Wiederkehrende Einwände
+          </p>
+        </div>
+        <span className={`text-[9px] font-black ${isDark ? 'text-white/40' : 'text-muted-foreground/70'}`}>
+          {objections.length} Muster
+        </span>
+      </div>
+      <ul className="space-y-1">
+        {objections.slice(0, 3).map((o, i) => (
+          <motion.li
+            key={o.text}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 + i * 0.06, duration: 0.28 }}
+            className={`flex items-start gap-2 text-[11.5px] leading-snug ${isDark ? 'text-white/85' : 'text-foreground/85'}`}
+          >
+            <span
+              className={`shrink-0 inline-flex items-center justify-center h-4 min-w-[22px] px-1 rounded text-[9px] font-black tabular-nums ${
+                isDark ? 'bg-[#FF9500]/20 text-[#FF9500]' : 'bg-[#FF9500]/15 text-[#B45309]'
+              }`}
+            >
+              {o.count}×
+            </span>
+            <span className="italic">&bdquo;{o.text}&ldquo;</span>
+          </motion.li>
+        ))}
+      </ul>
+      <p className={`text-[10px] mt-2 leading-relaxed ${isDark ? 'text-white/50' : 'text-muted-foreground/80'}`}>
+        Trainier diese Einwände gezielt im nächsten Voice-Sparring — sie tauchen bei dir wiederholt auf.
+      </p>
+    </div>
   );
 }
 

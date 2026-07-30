@@ -420,21 +420,27 @@ def _weak_sexier_dimensions(preps: list[dict]) -> list[dict]:
 
 def _recurring_objections(preps: list[dict]) -> list[dict]:
     """Extract the most common objection-lines the user has anticipated across
-    preps. Uses simple sentence-fragment count so we surface real patterns."""
+    preps. Splits on bullets/newlines/numbers AND sentence endings so we catch
+    real patterns even when users write in flowing text."""
     from collections import Counter
     counter: Counter = Counter()
+    displays: dict[str, str] = {}
     for p in preps:
         text = ((p.get("input") or {}).get("expected_objections") or "").strip()
         if not text:
             continue
-        # Split on common separators, drop very short/very long chunks.
-        for chunk in re.split(r"[·•\-\n\r;]+|\d+\.\s+", text):
-            c = chunk.strip().strip('.,"').lower()
-            if 12 <= len(c) <= 90:
-                counter[c] += 1
+        # Split on bullets, newlines, semi-colons, numbered lists, AND full stops
+        # followed by whitespace (so "A. B." → ["A", "B"]).
+        for chunk in re.split(r"[·•\-\n\r;]+|\d+\.\s+|(?<=[.!?])\s+(?=[A-ZÄÖÜ])", text):
+            display = chunk.strip().strip('.,"\'„"')
+            key = re.sub(r"\s+", " ", display).lower()
+            if 12 <= len(key) <= 90:
+                counter[key] += 1
+                # Keep the first prettified display form we see
+                displays.setdefault(key, display)
     top = [
-        {"text": t.capitalize(), "count": c}
-        for t, c in counter.most_common(4) if c >= 2
+        {"text": displays.get(k, k).capitalize(), "count": c}
+        for k, c in counter.most_common(4) if c >= 2
     ]
     return top
 
