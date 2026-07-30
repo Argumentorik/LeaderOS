@@ -15,13 +15,15 @@
  */
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
 import { StrategySkeleton } from './StrategySkeleton';
+import { FieldVoiceButton } from './FieldVoiceButton';
+import { PREP_TEMPLATES } from './prepTemplates';
 
 const STEPS = [
   { id: 'context',    icon: Target,    title: 'Kontext',     hint: 'Worum geht es? Was willst du erreichen?' },
@@ -43,8 +45,17 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
   const [loading, setLoading] = useState(false);
   const [strategy, setStrategy] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [appliedTemplateId, setAppliedTemplateId] = useState(null);
 
   const update = (patch) => setData(d => ({ ...d, ...patch }));
+
+  const applyTemplate = (tpl) => {
+    setData({ ...tpl.data });
+    setAppliedTemplateId(tpl.id);
+    // Jump straight to the final step — user just needs to tweak coaching focus.
+    setStep(STEPS.length - 1);
+    toast.success(`Vorlage geladen: ${tpl.label}`, { duration: 2200 });
+  };
 
   const generate = async () => {
     setLoading(true);
@@ -123,6 +134,7 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
                   transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <StepIndicator step={step} />
+                  {step === 0 && <TemplatesRow onApply={applyTemplate} appliedId={appliedTemplateId} />}
                   {step === 0 && <ContextStep data={data} onChange={update} />}
                   {step === 1 && <ArgumentsStep data={data} onChange={update} />}
                   {step === 2 && <ObjectionsStep data={data} onChange={update} />}
@@ -166,6 +178,52 @@ const Header = ({ step, strategyReady, onClose }) => (
   </div>
 );
 
+const TemplatesRow = ({ onApply, appliedId }) => (
+  <div className="mb-5 -mt-1" data-testid="argumentation-prep-templates">
+    <div className="flex items-center gap-2 mb-2.5">
+      <Wand2 size={12} className="text-[#6B8A00] dark:text-[#BFFF00]" strokeWidth={2.4} />
+      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-muted-foreground">
+        Vorlage laden · Wlad-kuratiert
+      </span>
+    </div>
+    <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'thin' }}>
+      {PREP_TEMPLATES.map((tpl) => {
+        const Icon = tpl.icon;
+        const active = appliedId === tpl.id;
+        return (
+          <button
+            key={tpl.id}
+            type="button"
+            onClick={() => onApply(tpl)}
+            className={`group snap-start shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl border text-left transition-all active:scale-[0.97] ${
+              active
+                ? 'bg-[#BFFF00] border-[#BFFF00] text-[#0A0A0A] shadow-md shadow-[#BFFF00]/25'
+                : 'bg-white dark:bg-white/[0.02] border-black/[0.08] dark:border-white/[0.08] text-foreground/85 hover:border-[#BFFF00]/50 hover:bg-[#BFFF00]/[0.04]'
+            }`}
+            data-testid={`argprep-template-${tpl.id}`}
+            title={tpl.hint}
+          >
+            <span
+              className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                active ? 'bg-[#0A0A0A]/10' : 'bg-black/[0.04] dark:bg-white/[0.05] group-hover:bg-[#BFFF00]/15'
+              }`}
+              style={active ? {} : { color: tpl.accent }}
+            >
+              <Icon size={12} strokeWidth={2.4} />
+            </span>
+            <div className="min-w-0">
+              <div className="text-[11.5px] font-black leading-tight">{tpl.label}</div>
+              <div className={`text-[9.5px] leading-tight mt-0.5 ${active ? 'text-[#0A0A0A]/60' : 'text-muted-foreground/80'}`}>
+                {tpl.hint}
+              </div>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+);
+
 const StepIndicator = ({ step }) => (
   <div className="flex items-center gap-2 mb-6" data-testid="argumentation-prep-steps">
     {STEPS.map((s, i) => {
@@ -191,20 +249,32 @@ const StepIndicator = ({ step }) => (
   </div>
 );
 
-const Field = ({ label, hint, value, onChange, placeholder, testId, rows = 3 }) => (
-  <div className="space-y-1.5">
-    <label className="text-[12px] font-black text-foreground/90 tracking-tight">{label}</label>
-    {hint && <p className="text-[11px] text-muted-foreground leading-relaxed">{hint}</p>}
-    <Textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      rows={rows}
-      className="resize-none text-[13px]"
-      data-testid={testId}
-    />
-  </div>
-);
+const Field = ({ label, hint, value, onChange, placeholder, testId, rows = 3 }) => {
+  const appendVoice = (text) => {
+    const trimmed = (text || '').trim();
+    if (!trimmed) return;
+    const next = value?.trim() ? `${value.trim()} ${trimmed}` : trimmed;
+    onChange(next);
+    toast.success('Aufnahme übernommen · +' + trimmed.split(/\s+/).length + ' Wörter', { duration: 1800 });
+  };
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-[12px] font-black text-foreground/90 tracking-tight">{label}</label>
+        <FieldVoiceButton onTranscribed={appendVoice} testId={testId ? `${testId}-mic` : undefined} />
+      </div>
+      {hint && <p className="text-[11px] text-muted-foreground leading-relaxed">{hint}</p>}
+      <Textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        className="resize-none text-[13px] focus-visible:ring-[#BFFF00]/40 focus-visible:ring-offset-0"
+        data-testid={testId}
+      />
+    </div>
+  );
+};
 
 const ContextStep = ({ data, onChange }) => (
   <div className="space-y-5">
