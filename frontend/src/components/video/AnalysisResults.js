@@ -75,7 +75,7 @@ export const AnalysisResults = ({
   // Iter 92.23: Public Share-Link only offered if entry_id exists and score >= 50
   const canShare = Boolean(analysis?.entry_id) && (analysis?.overall_score || 0) >= 50;
   // Iter 92.23.7: don't leak blob URLs on unmount
-  useEffect(() => () => { if (videoUrl?.startsWith('blob:')) try { URL.revokeObjectURL(videoUrl); } catch (_) {} }, [videoUrl]);
+  useEffect(() => () => { if (videoUrl?.startsWith('blob:')) try { URL.revokeObjectURL(videoUrl); } catch { /* ignore */ } }, [videoUrl]);
 
   const handleShare = async () => {
     if (shareUrl) {

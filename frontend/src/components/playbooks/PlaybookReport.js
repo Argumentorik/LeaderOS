@@ -1,6 +1,7 @@
 import { Button } from '../ui/button';
-import { Check, ArrowRight, Download, Star } from 'lucide-react';
+import { Check, ArrowRight, Download, Star, Calendar } from 'lucide-react';
 import SmartText from '../shared/SmartText';
+import { openHeadCoachCall } from '../../lib/calendly';
 
 export const PlaybookReport = ({ adviceReport, onDownloadPDF, generatingPDF, de }) => (
   <div className="space-y-3 mt-2">
