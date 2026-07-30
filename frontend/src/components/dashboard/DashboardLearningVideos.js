@@ -28,22 +28,27 @@ const VideoTile = ({ video, onPlay }) => {
       style={{
         background: unlocked
           ? `linear-gradient(135deg, ${video.thumbnail_color}AA 0%, ${video.thumbnail_color}66 100%)`
-          : `linear-gradient(135deg, ${video.thumbnail_color}44 0%, #0A0A0A 100%)`,
+          : `linear-gradient(135deg, #0A0A0A 0%, ${video.thumbnail_color}22 100%)`,
       }}
     >
       <div className="h-24 flex items-center justify-center relative">
+        {!unlocked && (
+          <div className="absolute inset-0 opacity-25 pointer-events-none" style={{
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(191,255,0,0.35) 0%, transparent 55%)',
+          }} />
+        )}
         <div className={`relative z-10 w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${
-          unlocked ? 'bg-white/95' : 'bg-[#BFFF00]/95 shadow-lg shadow-[#BFFF00]/40 group-hover:scale-125'
+          unlocked ? 'bg-white/95' : 'bg-black/40 backdrop-blur border border-white/10'
         }`}>
-          {unlocked ? <Play size={18} className="text-black ml-0.5" fill="black" /> : <Lock size={16} className="text-[#0A0A0A]" />}
+          {unlocked ? <Play size={18} className="text-black ml-0.5" fill="black" /> : <Lock size={15} strokeWidth={2.4} className="text-white/90" />}
         </div>
         {unlocked ? (
           <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[8px] font-black uppercase tracking-wider">
             Verfügbar
           </div>
         ) : (
-          <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[8px] font-black uppercase tracking-wider shadow-lg shadow-[#BFFF00]/40" data-testid={`dashboard-video-lock-badge-${video.id}`}>
-            🔓 Upgrade
+          <div className="absolute top-1.5 left-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[8px] font-black uppercase tracking-wider shadow-lg shadow-[#BFFF00]/30" data-testid={`dashboard-video-lock-badge-${video.id}`}>
+            <Lock size={8} strokeWidth={3} /> Upgrade
           </div>
         )}
       </div>

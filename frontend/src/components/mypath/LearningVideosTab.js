@@ -83,8 +83,8 @@ const VideoCard = ({ video, onPlay, onUpgrade, newlyUnlocked }) => {
           </div>
         )}
         {!unlocked && (
-          <div className="absolute top-2 left-2 flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[10px] font-black uppercase tracking-wider shadow-lg shadow-[#BFFF00]/40" data-testid={`video-locked-badge-${video.id}`}>
-            <Lock size={10} /> Upgrade
+          <div className="absolute top-2 left-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#BFFF00] text-[#0A0A0A] text-[10px] font-black uppercase tracking-wider shadow-md shadow-[#BFFF00]/25" data-testid={`video-locked-badge-${video.id}`}>
+            <Lock size={10} strokeWidth={2.6} /> Upgrade
           </div>
         )}
         {!exclusive && unlocked && (
