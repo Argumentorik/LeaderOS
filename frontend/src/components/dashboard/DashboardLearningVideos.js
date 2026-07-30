@@ -113,8 +113,8 @@ export const DashboardLearningVideos = ({ de = true }) => {
       if (isPrelaunchLock && isAccelerator) {
         toast.info(
           de
-            ? '🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — du bekommst sofort Zugriff als OS-PLUS-Member.'
-            : '🚀 This video unlocks at the official cohort launch — you get instant access as OS PLUS member.',
+            ? '🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — als OS-PLUS-Member bekommst du sofort Zugriff.'
+            : '🚀 This video unlocks at the official cohort launch — as an OS PLUS member you get instant access.',
           { duration: 6000 }
         );
         return;
