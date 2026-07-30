@@ -8,6 +8,10 @@ import httpx
 from datetime import datetime, timezone
 
 from config import db, logger
+
+# Public funnel URL — both spellings (leader-check.de / leadercheck.de) are ours.
+# Flip via env LEADERCHECK_URL once DNS for the non-hyphen domain is live.
+LEADERCHECK_URL = (os.environ.get("LEADERCHECK_URL") or "https://leader-check.de").rstrip("/")
 from services import get_current_user
 from services_actions import record_user_action
 
@@ -346,7 +350,7 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
         return {
             "status": "no_data",
             "message": "Noch keine Leader-Diagnose gefunden. Starte die kostenlose Diagnose auf leader-check.de",
-            "wladhub_url": "https://leader-check.de",
+            "wladhub_url": LEADERCHECK_URL,
             "has_diagnosis": False,
         }
 
@@ -415,7 +419,7 @@ async def sync_status(request: Request):
         "leader_check_row_count": remote_row_count,
         "has_local_diagnosis": bool(local),
         "last_local_sync": user.get("wladhub_last_sync"),
-        "leadercheck_url": "https://leader-check.de",
+        "leadercheck_url": LEADERCHECK_URL,
     }
 
 

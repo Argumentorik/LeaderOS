@@ -29,6 +29,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { usePricing } from '../contexts/PricingContext';
 import { toast } from 'sonner';
+import { LEADERCHECK_URL } from '../lib/domains';
 
 const WLAD_AVATAR = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
 
@@ -71,7 +72,7 @@ export default function DashboardPage() {
   };
 
   const copyReferral = () => {
-    navigator.clipboard.writeText(`https://leader-check.de?ref=${referralCode}`);
+    navigator.clipboard.writeText(`${LEADERCHECK_URL}?ref=${referralCode}`);
     toast.success(de ? 'Referral-Link kopiert!' : 'Referral link copied!');
   };
 

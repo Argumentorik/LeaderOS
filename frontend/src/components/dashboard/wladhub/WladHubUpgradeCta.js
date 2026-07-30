@@ -1,5 +1,6 @@
 import { Button } from '../../ui/button';
 import { ExternalLink, RefreshCw, Loader2, ArrowRight } from 'lucide-react';
+import { LEADERCHECK_URL } from '../../../lib/domains';
 
 export const WladHubUpgradeCta = ({ de, onSync, syncing }) => (
   <div className="p-3 rounded-xl bg-gradient-to-r from-[#0A0A0A] to-[#111] text-white">
@@ -8,7 +9,7 @@ export const WladHubUpgradeCta = ({ de, onSync, syncing }) => (
       {de ? 'Die WladHub-Diagnose gibt dir ein professionelles 3-Layer Leadership-Profil in 3 Minuten.' : 'The WladHub diagnosis gives you a professional 3-layer leadership profile in 3 minutes.'}
     </p>
     <div className="flex gap-2">
-      <Button size="sm" onClick={() => window.open('https://leader-check.de', '_blank', 'noopener,noreferrer')}
+      <Button size="sm" onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')}
         className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold text-[9px] h-6 flex-1" data-testid="wladhub-upgrade-btn">
         {de ? 'Kostenlose Diagnose' : 'Free Diagnosis'} <ExternalLink size={9} className="ml-1" />
       </Button>

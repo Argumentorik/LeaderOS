@@ -24,7 +24,7 @@ const analyticsConsented = Boolean(consent?.analytics);
 // errors land in the correct project. Falls back to leader-os for preview,
 // localhost, and anything else.
 const hostname = typeof window !== "undefined" ? window.location.hostname : "";
-const isLeaderCheck = /(^|\.)leader-check\.de$/i.test(hostname);
+const isLeaderCheck = /(^|\.)leader-?check\.de$/i.test(hostname);
 const sentryDsn = isLeaderCheck
   ? process.env.REACT_APP_SENTRY_DSN_LEADER_CHECK
   : process.env.REACT_APP_SENTRY_DSN_LEADER_OS;

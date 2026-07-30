@@ -10,6 +10,7 @@ import api from '../lib/api';
 import logger from '../lib/logger';
 import { generatePDF } from '../lib/pdfGenerator';
 import { toast } from 'sonner';
+import { LEADERCHECK_URL } from '../lib/domains';
 import {
   Share2, Copy, Users, Trophy, Star, ArrowRight, Gift,
   Linkedin, Award, TrendingUp, Crown, Zap, CheckCircle2,
@@ -50,7 +51,7 @@ export default function ReferralPage() {
   };
 
   const shareOn = async (platform) => {
-    const url = referralData?.share_url || 'https://leader-check.de';
+    const url = referralData?.share_url || LEADERCHECK_URL;
     const text = de
       ? `Ich nutze WladBot — das KI Leadership OS von Wlad Jachtchenko. Teste es kostenlos:`
       : `I use WladBot — the AI Leadership OS by Wlad Jachtchenko. Try it free:`;
@@ -68,7 +69,7 @@ export default function ReferralPage() {
     const text = de
       ? `Mein Leadership Score: ${certData?.leadership_score || 0}/100 — Level: ${certData?.level}. Teste deinen auf WladBot!`
       : `My Leadership Score: ${certData?.leadership_score || 0}/100 — Level: ${certData?.level}. Test yours on WladBot!`;
-    const url = referralData?.share_url || 'https://leader-check.de';
+    const url = referralData?.share_url || LEADERCHECK_URL;
 
     const links = {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`,

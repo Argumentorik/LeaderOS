@@ -1,6 +1,7 @@
 import { Card } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { Zap, ExternalLink, RefreshCw, Loader2 } from 'lucide-react';
+import { LEADERCHECK_URL } from '../../../lib/domains';
 
 export const WladHubEmptyState = ({ de, onSync, syncing }) => (
   <Card className="border-black/[0.04] dark:border-white/[0.06] overflow-hidden animate-fade-in" data-testid="wladhub-card-empty">
@@ -16,7 +17,7 @@ export const WladHubEmptyState = ({ de, onSync, syncing }) => (
         {de ? 'Starte die kostenlose 3-Minuten-Diagnose und erhalte deinen persönlichen Leadership-Score.' : 'Start the free 3-minute diagnosis and get your personal leadership score.'}
       </p>
       <div className="flex gap-2">
-        <Button size="sm" onClick={() => window.open('https://leader-check.de', '_blank', 'noopener,noreferrer')}
+        <Button size="sm" onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')}
           className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold text-[10px] h-7 flex-1" data-testid="wladhub-start-btn">
           {de ? 'Jetzt Diagnose starten' : 'Start Diagnosis Now'} <ExternalLink size={10} className="ml-1" />
         </Button>

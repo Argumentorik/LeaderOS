@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { RefreshCw, Loader2, Sparkles } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { LEADERCHECK_URL } from '../../lib/domains';
 import { toast } from 'sonner';
 
 /**
@@ -58,7 +59,7 @@ export const SyncDiagnoseBanner = ({ de = true }) => {
         toast.info(de
           ? 'Noch keine Diagnose auf leader-check.de gefunden. Starte sie dort kostenlos.'
           : 'No diagnosis on leader-check.de yet. Start the free assessment there.');
-        window.open('https://leader-check.de', '_blank', 'noopener,noreferrer');
+        window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer');
       } else {
         toast.success(de ? 'Diagnose ist bereits aktuell.' : 'Diagnosis already up to date.');
         setShow(false);

@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 123 · 30.07.26] LEADERCHECK-SYNC GODMODE + DOMAIN-RESILIENZ (beide Schreibweisen)** — getestet: curl E2E (sync/status + POST sync = 5 Einträge, Scores 81/67/74), UI-Sync-Klick auf /leader-diagnose ✅, CI-Build 0 Errors, Backend Health 200
+  - **Sync verifiziert**: `GET /api/wladhub/sync/status` (bridge_configured=true, 5 Rows) + `POST /api/wladhub/sync` importiert Supabase-Diagnose fehlerfrei — Backend war nie kaputt.
+  - **🔴 EXTERNER BEFUND `leadercheck.de` (ohne Bindestrich)**: Domain zeigt auf Cloudflare (162.159.x), liefert **SSL-Handshake-Failure + HTTP Error 1001** — auf Hosting/DNS-Ebene NICHT konfiguriert. Kann nur Mert in Cloudflare/Vercel fixen (Domain dem Vercel-Projekt hinzufügen oder CF-Proxy-Ziel korrigieren). `leader-check.de` (Vercel, 216.150.x) läuft einwandfrei (200).
+  - **Domain-Zentralisierung NEU**: `frontend/src/lib/domains.js` (`LEADERCHECK_URL`, env-Override `REACT_APP_LEADERCHECK_URL`) — 9 hardcodierte Links ersetzt (Sidebar, WladHub-CTAs, SyncDiagnoseBanner, Dashboard-Referral, LeaderDiagnosePage, ReferralPage 2×, Onboarding). Backend: `LEADERCHECK_URL` env in `wladhub.py` (wladhub_url + leadercheck_url Responses).
+  - **Hostname-Erkennung beide Schreibweisen**: `index.js` Sentry-DSN-Regex jetzt `/(^|\.)leader-?check\.de$/i` — sobald leadercheck.de auf die App zeigt, wird sie korrekt erkannt.
+  - **🐛 Referral-Bug gefixt**: `referral.py` Default-Funnel zeigte auf die TOTE `leadercheck.de` → Share-Links waren broken. Jetzt `leader-check.de` (env `REFERRAL_FUNNEL_URL` weiterhin überschreibbar). Verifiziert: share_url = leader-check.de?ref=WLAD-….
+  - **Domain-Flip nach DNS-Fix = 2 Env-Vars** (kein Code): `REACT_APP_LEADERCHECK_URL` + `LEADERCHECK_URL` auf https://leadercheck.de setzen.
+
 - [x] **[Iter 122 · 30.07.26] GODMODE FINAL PRE-DEPLOY HARDENING (Last Call)** — getestet: CI-Build 0 Errors/0 Warnings, curl E2E (Health/PDF/Coaching-Memory/RAG), Login→Dashboard→Simulations Screenshot-Smoke, deployment_agent PASS 0 Blocker
   - **Dead Code entfernt**: 17 verwaiste Frontend-Dateien gelöscht (6× community/, ChallengeMiniBar, PaywallBlur, VoiceSpeedToggle, PremiumProgram, EnterpriseQuoteModal, WeekCalendarCard, MiniDonut, KiBriefingCard, LeaderScoreRing, WladTopicChips, lib/wladQuotes.js) — alle per Import-Graph als 0-Referenzen verifiziert. `lib/utils.js` + `hooks/use-toast.js` bewusst behalten (shadcn ui/*.jsx nutzt sie).
   - **Backend-Imports bereinigt**: autoflake über 21 Dateien (routes/* + services.py + services_crm.py + server.py) — pyflakes jetzt 0 Findings. Server bootet sauber (Health 200, RAG provider=local).

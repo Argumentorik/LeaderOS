@@ -22,6 +22,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { shareToLinkedIn, shareToX, shareNative } from '../lib/share';
 import { toast } from 'sonner';
+import { LEADERCHECK_URL } from '../lib/domains';
 
 const LAYER_META = {
   ki_kompetenz: {
@@ -193,7 +194,7 @@ export default function LeaderDiagnosePage() {
             duration: 8000,
             action: {
               label: de ? 'Diagnose starten' : 'Take assessment',
-              onClick: () => window.open('https://leader-check.de', '_blank', 'noopener,noreferrer'),
+              onClick: () => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer'),
             },
           },
         );
