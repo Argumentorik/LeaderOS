@@ -359,14 +359,19 @@ def _prep_history_label(input_data: dict) -> str:
 
 
 @router.get("/simulations/argumentation-prep/history")
-async def argumentation_prep_history(request: Request):
-    """Return the last 5 SEXIER-strategies for the current user (newest first)."""
+async def argumentation_prep_history(request: Request, limit: int = 25):
+    """Return the recent SEXIER-strategies for the current user (newest first).
+
+    Iter 124.7: raised default limit to 25 so History-Sheet + tag-filters get
+    a useful working set. Frontend renders the first ~10 by default.
+    """
     user = await get_current_user(request)
+    limit = max(5, min(100, int(limit or 25)))
     cursor = db.argumentation_strategies.find(
         {"user_id": user["user_id"]},
         {"_id": 0, "strategy_id": 1, "input": 1, "strategy_markdown": 1, "tags": 1, "created_at": 1},
-    ).sort("created_at", -1).limit(5)
-    docs = await cursor.to_list(length=5)
+    ).sort("created_at", -1).limit(limit)
+    docs = await cursor.to_list(length=limit)
     out = []
     for d in docs:
         # Backfill tags on the fly for older docs that didn't get them at write time.
@@ -381,6 +386,143 @@ async def argumentation_prep_history(request: Request):
             "has_strategy": bool(d.get("strategy_markdown")),
         })
     return out
+
+
+# ── Coaching Memory (Iter 124.7 · flywheel foundation) ──────────────────────
+# Turns raw history into insight: „Du preparest zu 72% CFO-Themen · schwächster
+# SEXIER-Block: Emotion · zuletzt häufig auf 'zu emotional'-Coaching gefragt".
+# This is the moat: each session makes the next session smarter.
+
+_SEXIER_KEYWORDS = {
+    "Statement":   ["statement", "position", "these", "einstieg", "opening"],
+    "Evidence":    ["evidence", "belege", "zahlen", "daten", "beleg", "roi"],
+    "eXample":     ["example", "beispiel", "case", "fall"],
+    "Impact":      ["impact", "nutzen", "wert", "consequence", "auswirkung"],
+    "Emotion":     ["emotion", "gefühl", "framing", "story", "narrative"],
+    "Rebuttal":    ["rebuttal", "einwand", "gegen", "objection", "widerlegung"],
+}
+
+
+def _weak_sexier_dimensions(preps: list[dict]) -> list[dict]:
+    """Return SEXIER dimensions the user has explicitly asked coaching help on
+    (via `coaching_focus`), sorted by frequency."""
+    from collections import Counter
+    counter: Counter = Counter()
+    for p in preps:
+        focus = ((p.get("input") or {}).get("coaching_focus") or "").lower()
+        if not focus:
+            continue
+        for dim, keys in _SEXIER_KEYWORDS.items():
+            if any(k in focus for k in keys):
+                counter[dim] += 1
+    return [{"dimension": d, "count": c} for d, c in counter.most_common(3)]
+
+
+def _recurring_objections(preps: list[dict]) -> list[dict]:
+    """Extract the most common objection-lines the user has anticipated across
+    preps. Uses simple sentence-fragment count so we surface real patterns."""
+    from collections import Counter
+    counter: Counter = Counter()
+    for p in preps:
+        text = ((p.get("input") or {}).get("expected_objections") or "").strip()
+        if not text:
+            continue
+        # Split on common separators, drop very short/very long chunks.
+        for chunk in re.split(r"[·•\-\n\r;]+|\d+\.\s+", text):
+            c = chunk.strip().strip('.,"').lower()
+            if 12 <= len(c) <= 90:
+                counter[c] += 1
+    top = [
+        {"text": t.capitalize(), "count": c}
+        for t, c in counter.most_common(4) if c >= 2
+    ]
+    return top
+
+
+def _30d_trend(preps: list[dict]) -> dict:
+    """Return {last_30_days, prev_30_days, delta_pct}."""
+    now = datetime.now(timezone.utc)
+    last30 = 0
+    prev30 = 0
+    for p in preps:
+        iso = p.get("created_at") or ""
+        try:
+            dt = datetime.fromisoformat(iso)
+        except Exception:
+            continue
+        age_days = (now - dt).days
+        if age_days < 30:
+            last30 += 1
+        elif age_days < 60:
+            prev30 += 1
+    delta_pct = None
+    if prev30 > 0:
+        delta_pct = round(((last30 - prev30) / prev30) * 100)
+    return {"last_30_days": last30, "prev_30_days": prev30, "delta_pct": delta_pct}
+
+
+def _next_focus(tags_top: list[dict], weak_dims: list[dict]) -> str:
+    """Compose Wlad's one-line coaching recommendation for the next prep."""
+    if weak_dims and tags_top:
+        return (
+            f"Du preparest häufig {tags_top[0]['label']}-Situationen. "
+            f"Dein schwächster SEXIER-Block ist {weak_dims[0]['dimension']} — "
+            f"nutze deine nächste Session gezielt dafür."
+        )
+    if tags_top and tags_top[0]["count"] >= 3:
+        return (
+            f"Du hast {tags_top[0]['count']} Preps zum Thema {tags_top[0]['label']}. "
+            "Dedizierter Sparring-Track empfohlen."
+        )
+    if weak_dims:
+        return f"Trainier fokussiert dein {weak_dims[0]['dimension']}-Framing."
+    return "Noch nicht genug Daten für ein Muster — mach 3-4 weitere Preps."
+
+
+@router.get("/simulations/coaching-memory")
+async def coaching_memory(request: Request):
+    """Cross-session coaching insight: patterns, trends, next-focus.
+
+    This is the endpoint that turns Leader-OS from a text-generator into a
+    real coach: „your last 5 preps all had low Emotion focus — this is your
+    growth edge". Feeds the History-Sheet hero panel.
+    """
+    from collections import Counter
+    user = await get_current_user(request)
+    docs = await db.argumentation_strategies.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0, "input": 1, "strategy_markdown": 1, "tags": 1, "created_at": 1},
+    ).sort("created_at", -1).limit(200).to_list(200)
+
+    # Backfill tags in-memory for older docs so patterns include everything.
+    for d in docs:
+        if not d.get("tags"):
+            d["tags"] = _auto_tags(d.get("input") or {}, d.get("strategy_markdown") or "")
+
+    tag_counter: Counter = Counter()
+    for d in docs:
+        for t in (d.get("tags") or []):
+            tag_counter[t] += 1
+    total = len(docs)
+    tags_top = [
+        {"label": t, "count": c, "share_pct": round(c / total * 100) if total else 0}
+        for t, c in tag_counter.most_common(6)
+    ]
+
+    weak_dims = _weak_sexier_dimensions(docs)
+    objections = _recurring_objections(docs)
+    trend = _30d_trend(docs)
+    next_focus = _next_focus(tags_top, weak_dims)
+
+    return {
+        "total_preps": total,
+        "tags_top": tags_top,
+        "weak_sexier_dimensions": weak_dims,
+        "recurring_objections": objections,
+        "trend_30d": trend,
+        "next_focus": next_focus,
+        "has_signal": total >= 3,
+    }
 
 
 @router.get("/simulations/argumentation-prep/history/{strategy_id}")
