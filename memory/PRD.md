@@ -15,6 +15,15 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 122 · 30.07.26] GODMODE FINAL PRE-DEPLOY HARDENING (Last Call)** — getestet: CI-Build 0 Errors/0 Warnings, curl E2E (Health/PDF/Coaching-Memory/RAG), Login→Dashboard→Simulations Screenshot-Smoke, deployment_agent PASS 0 Blocker
+  - **Dead Code entfernt**: 17 verwaiste Frontend-Dateien gelöscht (6× community/, ChallengeMiniBar, PaywallBlur, VoiceSpeedToggle, PremiumProgram, EnterpriseQuoteModal, WeekCalendarCard, MiniDonut, KiBriefingCard, LeaderScoreRing, WladTopicChips, lib/wladQuotes.js) — alle per Import-Graph als 0-Referenzen verifiziert. `lib/utils.js` + `hooks/use-toast.js` bewusst behalten (shadcn ui/*.jsx nutzt sie).
+  - **Backend-Imports bereinigt**: autoflake über 21 Dateien (routes/* + services.py + services_crm.py + server.py) — pyflakes jetzt 0 Findings. Server bootet sauber (Health 200, RAG provider=local).
+  - **Letzter console.log** (FeatureBriefing.js) → logger.warn.
+  - **PDF-Download E2E verifiziert**: `GET /api/simulations/argumentation-prep/history/{id}/pdf` → 200, valides %PDF-1.4, 14KB. Coaching-Memory-Endpoint liefert alle 7 Keys inkl. recurring_objections.
+  - **Doku aktualisiert**: README.md (aktuelle Feature-/Repo-Übersicht) + DEPLOY.md komplett neu (Emergent-Deploy-Guide: Env-Matrix mit Pflicht/Optional/Notschalter, Post-Deploy-Checks, Rollback, Cron-Jobs, RAM-Hinweis ~1GB, Founder-Purge-Script).
+  - **Security-Sweep**: keine Secrets/hardcoded URLs im Source (grep sk_live/sk-emergent/JWT/preview-URL = 0 Treffer außer .env).
+  - **deployment_agent: PASS, 0 Blocker** → bereit für Prod-Deploy auf leaderos.de.
+
 - [x] **[Iter 121 · 22.07.26] Go-Live Lockdown: Videos + Community gesperrt, Audio-Bus, Voice-Framework-Mapping, leadercheck-Sync-Transparency** — getestet: Backend 9/9 ✓, Frontend 5/5 ✓ (iteration_121.json)
   - **PRELAUNCH_VIDEO_LOCK**: alle Lernvideos + Dashboard-Mini-Tiles + Community-Seite gesperrt mit einheitlichem „🔓 Upgrade auf Premium – Vollzugriff freischalten"-CTA (öffnet `PricingModal`). Klare Lock-Badges statt verwirrender „Verfügbar/Gratis"-States.
   - **Globaler AudioBus** (`lib/audioBus.js`): jede Audio-Instanz (ElevenLabs/Whisper-Playback, Challenger-Voice, VoiceMode) registriert sich zentral. Route-Change dispatched `leaderos:audio-stop-all` → keine überlappenden Stimmen mehr.
