@@ -13,6 +13,8 @@ const EN_TO_DE = {
   'Invalid or expired token':     'Der Link ist ungültig oder abgelaufen.',
   'Token expired':                'Der Link ist abgelaufen. Bitte neuen Link anfordern.',
   'Rate limit exceeded':          'Zu viele Versuche. Bitte in ein paar Minuten erneut probieren.',
+  'Too many requests. Bitte warte einen Moment.': 'Zu viele Anfragen. Bitte warte einen Moment.',
+  'Too many requests':            'Zu viele Anfragen. Bitte warte einen Moment.',
   'Too many attempts':            'Zu viele Fehlversuche. Bitte kurz warten.',
   'Account locked':               'Dein Konto wurde temporär gesperrt. Bitte in 15 Minuten erneut versuchen.',
   'Password too short':           'Passwort ist zu kurz (min. 8 Zeichen).',

@@ -62,7 +62,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             retry_after = int(window - (now - self._hits[key][0])) + 1
             return JSONResponse(
                 status_code=429,
-                content={"detail": "Too many requests. Bitte warte einen Moment."},
+                content={"detail": "Zu viele Anfragen. Bitte warte einen Moment."},
                 headers={"Retry-After": str(retry_after)},
             )
 
