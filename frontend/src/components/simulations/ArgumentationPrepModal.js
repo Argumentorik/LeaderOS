@@ -14,12 +14,14 @@
  * Live-Simulation mitnehmen kann.
  */
 import { useState } from 'react';
-import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Users, Lightbulb, Shield, Copy, Check, Swords } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
+import { StrategySkeleton } from './StrategySkeleton';
 
 const STEPS = [
   { id: 'context',    icon: Target,    title: 'Kontext',     hint: 'Worum geht es? Was willst du erreichen?' },
@@ -78,7 +80,10 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-md p-0 sm:p-6" data-testid="argumentation-prep-modal" onClick={onClose}>
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-3xl bg-white dark:bg-card rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
@@ -89,17 +94,42 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
             works reliably on mobile Safari + desktop trackpads. */}
         <div className="flex-1 overflow-y-auto overscroll-contain" data-testid="argumentation-prep-scroll" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="p-6 sm:p-8">
-            {!strategy ? (
-              <>
-                <StepIndicator step={step} />
-                {step === 0 && <ContextStep data={data} onChange={update} />}
-                {step === 1 && <ArgumentsStep data={data} onChange={update} />}
-                {step === 2 && <ObjectionsStep data={data} onChange={update} />}
-                {step === 3 && <CoachingStep data={data} onChange={update} />}
-              </>
-            ) : (
-              <StrategyView strategy={strategy} onCopy={copyStrategy} copied={copied} />
-            )}
+            <AnimatePresence mode="wait" initial={false}>
+              {loading && !strategy ? (
+                <motion.div
+                  key="skeleton"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <StrategySkeleton />
+                </motion.div>
+              ) : strategy ? (
+                <motion.div
+                  key="strategy"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <StrategyView strategy={strategy} onCopy={copyStrategy} copied={copied} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={`step-${step}`}
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <StepIndicator step={step} />
+                  {step === 0 && <ContextStep data={data} onChange={update} />}
+                  {step === 1 && <ArgumentsStep data={data} onChange={update} />}
+                  {step === 2 && <ObjectionsStep data={data} onChange={update} />}
+                  {step === 3 && <CoachingStep data={data} onChange={update} />}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -112,7 +142,7 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
           onLaunchSim={onLaunchSimulation}
           onClose={onClose}
         />
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -318,16 +348,23 @@ const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerat
     <div className="border-t border-black/[0.05] dark:border-white/[0.06] px-6 sm:px-8 py-4 flex items-center justify-between gap-3 bg-white/95 dark:bg-card/95">
       {!strategy ? (
         <>
-          <Button variant="ghost" onClick={onBack} disabled={step === 0} className="font-black text-[12px]" data-testid="argumentation-prep-back">
+          <Button variant="ghost" onClick={onBack} disabled={step === 0 || loading} className="font-black text-[12px]" data-testid="argumentation-prep-back">
             <ArrowLeft size={14} className="mr-1" /> Zurück
           </Button>
           {!lastStep ? (
-            <Button onClick={onNext} disabled={!canProceed} className="bg-[#0A0A0A] hover:bg-[#1A1A2E] text-white font-black text-[12px] px-5" data-testid="argumentation-prep-next">
+            <Button onClick={onNext} disabled={!canProceed} className="bg-[#0A0A0A] hover:bg-[#1A1A2E] text-white font-black text-[12px] px-5 transition-transform active:scale-[0.97]" data-testid="argumentation-prep-next">
               Weiter <ArrowRight size={14} className="ml-1" />
             </Button>
           ) : (
-            <Button onClick={onGenerate} disabled={loading} className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-black text-[12px] px-5 shadow-lg shadow-[#BFFF00]/30" data-testid="argumentation-prep-generate">
-              {loading ? <><Loader2 size={14} className="mr-1 animate-spin" /> Wlad schleift ...</> : <><Sparkles size={14} className="mr-1" /> SEXIER-Strategie erstellen</>}
+            <Button
+              onClick={onGenerate}
+              disabled={loading}
+              className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-black text-[12px] px-5 shadow-lg shadow-[#BFFF00]/30 transition-all active:scale-[0.97] disabled:opacity-90"
+              data-testid="argumentation-prep-generate"
+            >
+              {loading
+                ? <><Loader2 size={14} className="mr-1.5 animate-spin" /> Wlad schleift ...</>
+                : <><Sparkles size={14} className="mr-1.5" /> SEXIER-Strategie erstellen</>}
             </Button>
           )}
         </>
