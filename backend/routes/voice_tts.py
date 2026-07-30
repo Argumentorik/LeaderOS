@@ -757,7 +757,47 @@ async def argumentation_sparring(
     ]
     grounding = "\n".join(l for l in brief_lines if l)
 
-    # Compose system message: base sparring rules + role-specific attitude + prep grounding
+    # 5a. Fetch history + count user turns for escalation ladder (Iter 124.3)
+    history = await db.chat_messages.find(
+        {"session_id": session_id},
+        {"_id": 0, "role": 1, "content": 1},
+    ).sort("created_at", 1).to_list(20)
+    user_turns = [m for m in history if m.get("role") == "user"]
+    turn_no = len(user_turns) + 1  # this incoming turn included
+    # Extract compact "what user has already tried" summary — keeps escalation
+    # bounded even in long sessions. Just short-fragments, model reads them.
+    tried_snippets = []
+    for m in user_turns[-6:]:
+        c = (m.get("content") or "").strip()
+        if c:
+            tried_snippets.append(c[:110] + ("…" if len(c) > 110 else ""))
+    tried_block = ""
+    if tried_snippets:
+        tried_block = "\n".join(f"- {s}" for s in tried_snippets)
+
+    # Escalation ladder — Wlad wird bewusst schwerer je länger die Session läuft.
+    if turn_no <= 2:
+        escalation = "STUFE 1: normale Skepsis. Ein klarer Einwand pro Turn."
+    elif turn_no <= 4:
+        escalation = (
+            "STUFE 2: Werde härter. Bring einen zweiten Einwand direkt nach "
+            "dem ersten. Zeige, dass die ersten Antworten nicht überzeugt haben."
+        )
+    elif turn_no <= 6:
+        escalation = (
+            "STUFE 3: Ruthless. Attackiere Schwachstellen aus früheren "
+            "User-Antworten explizit ('vorhin sagtest du X — das widerspricht Y'). "
+            "Zeit-Druck aufbauen ('ich habe gleich das nächste Meeting')."
+        )
+    else:
+        escalation = (
+            "STUFE 4 (Boss-Mode): Wenn der User eine gute Antwort liefert, "
+            "gib EIN SATZ Coach-Feedback ('Der Turn war stark — du hast X endlich "
+            "sauber geframed'), dann ein neuer, härterer Angriff. Wenn schwach, "
+            "sag es direkt: 'Das reicht nicht — du wiederholst dich'."
+        )
+
+    # 5b. Compose system message: rules + role + prep + escalation + tried-list
     if sparring_cfg:
         system_msg = (
             SPARRING_SYSTEM_PROMPT
@@ -769,12 +809,13 @@ async def argumentation_sparring(
         system_msg = SPARRING_SYSTEM_PROMPT
     if grounding:
         system_msg += f"\n\n--- SPARRING-KONTEXT ---\n{grounding}\n---"
+    system_msg += (
+        f"\n\n--- DIALOG-STATUS ---\nTurn: #{turn_no}\n{escalation}\n"
+        + ("USER HAT BISHER PROBIERT (nicht wiederholen, greif konkret an):\n" + tried_block + "\n" if tried_block else "")
+        + "---"
+    )
 
-    # 5. Recent history for continuity (last 6 turns)
-    history = await db.chat_messages.find(
-        {"session_id": session_id},
-        {"_id": 0, "role": 1, "content": 1},
-    ).sort("created_at", 1).to_list(6)
+    # 5c. Recent conversation for continuity — keep last 6 turns tight
     ctx_lines = []
     for m in history[-6:]:
         role = "User" if m.get("role") == "user" else "Wlad"
@@ -828,4 +869,8 @@ async def argumentation_sparring(
         "response_text": reply_text,
         "audio_url": audio_url,
         "persona": persona_key,
+        "turn_no": turn_no,
+        "escalation_stage": (
+            1 if turn_no <= 2 else 2 if turn_no <= 4 else 3 if turn_no <= 6 else 4
+        ),
     }

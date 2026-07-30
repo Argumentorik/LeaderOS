@@ -49,8 +49,10 @@ export function VoiceSparringModal({ prepContext, prepGoal, onClose }) {
   const [sessionId, setSessionId] = useState(null);
   const [turns, setTurns] = useState([]);
   const [muted, setMuted] = useState(false);
-  const [revealText, setRevealText] = useState('');  // word-by-word reveal
+  const [revealText, setRevealText] = useState('');
   const [fullReply, setFullReply] = useState('');
+  const [turnNo, setTurnNo] = useState(0);
+  const [escalationStage, setEscalationStage] = useState(1);
 
   const mediaRecorderRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -143,8 +145,10 @@ export function VoiceSparringModal({ prepContext, prepGoal, onClose }) {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       if (cancelledRef.current) return;
-      const { session_id, transcript, response_text, audio_url } = res.data || {};
+      const { session_id, transcript, response_text, audio_url, turn_no, escalation_stage } = res.data || {};
       if (session_id) setSessionId(session_id);
+      if (turn_no) setTurnNo(turn_no);
+      if (escalation_stage) setEscalationStage(escalation_stage);
       setTurns((cur) => [
         ...cur,
         ...(transcript ? [{ role: 'user', text: transcript }] : []),
@@ -380,20 +384,26 @@ export function VoiceSparringModal({ prepContext, prepGoal, onClose }) {
           <div className="min-w-0">
             <p className="text-[9.5px] font-black uppercase tracking-[0.22em] text-white/45">
               Voice Sparring{activePersonaLabel ? ` · ${activePersonaLabel}` : ' · Wlad Live'}
+              {turnNo > 0 && <span className="text-[#BFFF00]/80"> · Turn #{turnNo}</span>}
             </p>
             <p className="text-[13px] font-black tracking-tight truncate max-w-[70vw]" style={{ fontFamily: 'Outfit, sans-serif' }}>
               {prepGoal || 'Live Argumentations-Sparring'}
             </p>
           </div>
         </div>
-        <button
-          onClick={onExit}
-          className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors shrink-0"
-          data-testid="voice-sparring-close"
-          aria-label="Sparring beenden"
-        >
-          <X size={16} />
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          {escalationStage > 1 && state !== 'picker' && (
+            <EscalationBadge stage={escalationStage} />
+          )}
+          <button
+            onClick={onExit}
+            className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors"
+            data-testid="voice-sparring-close"
+            aria-label="Sparring beenden"
+          >
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Body */}
@@ -589,3 +599,37 @@ function PersonaPicker({ personas, onPick }) {
 }
 
 export default VoiceSparringModal;
+
+// ── Escalation Badge (subtle indicator that Wlad is escalating) ─────────────
+const STAGE_META = {
+  2: { label: 'Härter',  from: 'rgba(255,215,90,0.16)',  to: 'rgba(255,215,90,0.35)',  dot: '#FFD75A' },
+  3: { label: 'Ruthless', from: 'rgba(255,138,90,0.16)', to: 'rgba(255,138,90,0.42)',  dot: '#FF8A5A' },
+  4: { label: 'Boss-Mode', from: 'rgba(255,89,89,0.20)', to: 'rgba(255,89,89,0.55)',   dot: '#FF5959' },
+};
+
+function EscalationBadge({ stage }) {
+  const meta = STAGE_META[stage] || STAGE_META[2];
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+      className="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full border text-[10px] font-black uppercase tracking-[0.14em]"
+      style={{
+        background: `linear-gradient(135deg, ${meta.from} 0%, ${meta.to} 100%)`,
+        borderColor: meta.dot + '55',
+        color: '#fff',
+      }}
+      data-testid={`escalation-badge-${stage}`}
+      title={`Escalation Stufe ${stage} — Wlad wird härter, je länger du sparrst`}
+    >
+      <motion.span
+        className="w-1.5 h-1.5 rounded-full shrink-0"
+        style={{ background: meta.dot, boxShadow: `0 0 6px ${meta.dot}` }}
+        animate={{ opacity: [1, 0.4, 1] }}
+        transition={{ duration: 1.4, repeat: Infinity }}
+      />
+      {meta.label}
+    </motion.div>
+  );
+}

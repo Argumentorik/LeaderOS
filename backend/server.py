@@ -308,7 +308,13 @@ async def startup() -> None:
         await db.users.create_index([("xp", -1)])
         await db.chat_messages.create_index([("session_id", 1), ("created_at", 1)])
         await db.activity_log.create_index([("user_id", 1), ("created_at", -1)])
-        logger.info("Production query indexes ensured (users.xp, chat_messages.session_id, activity_log.user_id+created_at)")
+        # Iter 124.3 (Wlad Godmode Scale): argumentation prep + templates
+        await db.argumentation_strategies.create_index([("user_id", 1), ("created_at", -1)])
+        await db.argumentation_strategies.create_index("strategy_id", unique=True, sparse=True)
+        await db.argumentation_templates.create_index([("user_id", 1), ("created_at", -1)])
+        await db.argumentation_templates.create_index("template_id", unique=True, sparse=True)
+        await db.argumentation_templates.create_index("share_token", unique=True, sparse=True)
+        logger.info("Production query indexes ensured (users.xp, chat_messages.session_id, activity_log.user_id+created_at, argumentation_*)")
 
         # Supabase sync events — idempotency (unique event_id) + audit trail
         await db.sync_events.create_index("event_id", unique=True, name="sync_event_id_unique")
