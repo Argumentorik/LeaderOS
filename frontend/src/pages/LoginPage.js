@@ -33,7 +33,7 @@ const getFeatures = (de) => (de ? [
 ]);
 
 export default function LoginPage({ initialMode = 'login' }) {
-  const { login } = useAuth();
+  const { login, user: authedUser } = useAuth();
   const { lang, toggleLang } = useLanguage();
   const navigate = useNavigate();
   // Iter 92.25: when the route is /signup or /register, mount directly in
@@ -47,11 +47,16 @@ export default function LoginPage({ initialMode = 'login' }) {
   const { data: providers } = useAuthProviders();
   const de = lang === 'de';
 
+  // Iter 124.4 (Godmode pre-launch): already-authed users must NOT see the
+  // login screen. Redirect them to the post-login route immediately.
+  useEffect(() => {
+    if (authedUser) navigate(postLoginRoute(authedUser), { replace: true });
+  }, [authedUser, navigate]);
+
   // If a previous login exists, default to "login" mode so the Continue-as card shows
   useEffect(() => {
     if (lastAccount && mode === 'register') setMode('login');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lastAccount, mode]);
 
   const handleOAuthSuccess = (user, method) => {
     login(user, method);
