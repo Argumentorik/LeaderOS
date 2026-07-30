@@ -17,7 +17,6 @@ import { useState } from 'react';
 import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Users, Lightbulb, Shield, Copy, Check, Swords } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { ScrollArea } from '../ui/scroll-area';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
@@ -85,7 +84,10 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
       >
         <Header step={step} strategyReady={!!strategy} onClose={onClose} />
 
-        <ScrollArea className="flex-1">
+        {/* Iter 121.10 (Wlad-Bug): Radix ScrollArea intercepted wheel/touch
+            events inside the modal. Switched to native overflow — same look,
+            works reliably on mobile Safari + desktop trackpads. */}
+        <div className="flex-1 overflow-y-auto overscroll-contain" data-testid="argumentation-prep-scroll" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="p-6 sm:p-8">
             {!strategy ? (
               <>
@@ -99,7 +101,7 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation }) {
               <StrategyView strategy={strategy} onCopy={copyStrategy} copied={copied} />
             )}
           </div>
-        </ScrollArea>
+        </div>
 
         <Footer
           step={step} strategy={strategy} loading={loading}

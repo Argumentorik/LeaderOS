@@ -1,0 +1,31 @@
+{
+  "summary": "Verified 2 bug fixes for Iter 121.10: (1) Accelerator-tier lock-click on Lern-Video tiles shows Sonner toast '🚀 ... Cohort-Launch ... OS-PLUS-Member' instead of dead-end PricingModal — confirmed on both /dashboard (data-testid=dashboard-learning-videos) and /lern-videos. (2) ArgumentationPrepModal (/simulations → scenario-argumentation-prep) uses native overflow-y-auto (data-testid=argumentation-prep-scroll), scrolls freely on mobile viewport (393×852: scrollHeight=671 > clientHeight=644, scrollTop advances). Step 1 → Weiter → Step 2 flow reachable, all textareas accessible. FREE-tier regression: free@wladbot.test still gets PricingModal on lock-click (no accelerator toast) — expected behaviour preserved.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "tests_executed": [
+    "GET /api/user/tier for test@test.com → tier=free (per test_credentials.md); switched to accelerator@wladbot.test → tier=accelerator for Bug1 verification",
+    "GET /api/my-path/videos as accelerator → 7 starter_videos, all with unlocked=false + locked_reason='prelaunch' (PRELAUNCH_VIDEO_LOCK=1 confirmed)",
+    "BUG1 Dashboard: /dashboard → dashboard-learning-videos loads → 6 lock badges → click first tile → Sonner toast shows '🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — du bekommst sofort Zugriff als OS-PLUS-Member.' → NO PricingModal (pricing-modal count = 0) → PASS",
+    "BUG1 /lern-videos: locked tile click → same accelerator toast '🚀 ... OS-PLUS-Member ... sofort Zugriff' → PASS",
+    "BUG2 Desktop 1920×1080: modal opens, argumentation-prep-scroll present, overflowY=auto, content fits (sh=ch=653, no scroll needed). Step1 fields filled → Next → Step2 loads with argprep-main-points/-evidence/-prioritised all visible.",
+    "BUG2 Mobile 393×852: sh=671, ch=644, scrollTop advances 0→27 on programmatic scrollTo — native scrolling works, no Radix interception.",
+    "REGRESSION free@wladbot.test on /dashboard lock-click → NO accelerator toast, PricingModal indicator detected (data-testid='pricing-modal') → PASS"
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Note in review-request said 'test@test.com is Accelerator tier'; actually per /app/memory/test_credentials.md and live /api/user/tier this account is tier=free (admin flag). Used accelerator@wladbot.test as the true Accelerator-tier test account — main agent should update the review-request notes/onboarding docs.",
+    "DashboardLearningVideos passes de=true by default; toast copy uses 'du bekommst sofort Zugriff' while LearningVideosTab uses 'als OS-PLUS-Member bekommst du sofort Zugriff' — wording slightly inconsistent between the two entry points. Not blocking, but could be unified for brand consistency."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "accelerator@wladbot.test / test123 (Accelerator tier — primary); free@wladbot.test / test123 (Free — regression). test@test.com is FREE not Accelerator, contrary to review-request.",
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Both fixes verified end-to-end via Playwright on desktop + mobile viewports. Backend /api/my-path/videos correctly returns locked_reason='prelaunch'. If PRELAUNCH_VIDEO_LOCK env var is ever toggled off, retest since tiles may become unlocked and toast branch won't fire."
+}

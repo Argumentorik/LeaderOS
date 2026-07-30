@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Play, Clock, Layers, Crown, CheckCircle2, Sparkles, X } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import VideoPlayer from '../shared/VideoPlayer';
 import { PricingModal } from '../shared/PricingModal';
+import { useTier } from '../../contexts/TierContext';
 
 const UNLOCK_MEMO_KEY = 'mypath:lastUnlockedIds';
 
@@ -139,6 +141,7 @@ export default function LearningVideosTab() {
 
   const [playerOpen, setPlayerOpen] = useState(null);  // video object currently playing
   const [showPaywall, setShowPaywall] = useState(false);
+  const { isAccelerator } = useTier();
 
   const handlePlay = (video) => {
     // If the video row has a Vimeo ID / URL → open in-app player.
@@ -149,7 +152,16 @@ export default function LearningVideosTab() {
     }
     navigate(`/chat?prefill=${encodeURIComponent('Erkläre mir die Kerninhalte von "' + video.title + '"')}`);
   };
-  const handleUpgrade = () => setShowPaywall(true);
+  const handleUpgrade = (video) => {
+    // Iter 121.10 (Wlad-Bug): OS-PLUS-members clicking a prelaunch-locked
+    // video previously landed in an empty PricingModal (dead-end). Now they
+    // get a warm launch-teaser instead.
+    if (isAccelerator && video?.locked_reason === 'prelaunch') {
+      toast.info('🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — als OS-PLUS-Member bekommst du sofort Zugriff.', { duration: 6000 });
+      return;
+    }
+    setShowPaywall(true);
+  };
 
   // ── Unlock-diff detection: which IDs are NEW since last visit? ──
   const newlyUnlockedIds = useMemo(() => {

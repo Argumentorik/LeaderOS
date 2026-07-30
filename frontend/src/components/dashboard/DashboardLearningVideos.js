@@ -12,8 +12,10 @@ import { Play, Lock, Layers, Clock, ArrowRight, Sparkles, X } from 'lucide-react
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { toast } from 'sonner';
 import VideoPlayer from '../shared/VideoPlayer';
 import { PricingModal } from '../shared/PricingModal';
+import { useTier } from '../../contexts/TierContext';
 
 const VideoTile = ({ video, onPlay }) => {
   const { unlocked } = video;
@@ -71,6 +73,7 @@ export const DashboardLearningVideos = ({ de = true }) => {
   const [playerOpen, setPlayerOpen] = useState(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const navigate = useNavigate();
+  const { isAccelerator } = useTier();
 
   useEffect(() => {
     (async () => {
@@ -99,10 +102,23 @@ export const DashboardLearningVideos = ({ de = true }) => {
   if (starters.length === 0) return null;
 
   const handlePlay = (video) => {
-    // Iter 121: locked videos → open premium paywall directly (no confusing
-    // chat detour). Prevents the "Verfügbar / Lock badge weirdness" the user
-    // reported when tapping locked tiles.
+    // Iter 121.10 (Bug-Fix, Wlad-Feedback): tier-aware routing.
+    //   · unlocked video          → open the player.
+    //   · locked because of tier  → open PricingModal (real upsell).
+    //   · locked because of PRELAUNCH but user already owns Accelerator/
+    //     Leadership-OS PLUS → NO paywall (dead-end). Show a warm
+    //     „bald verfügbar"-Toast + hint that they'll be first when it drops.
     if (!video.unlocked) {
+      const isPrelaunchLock = video.locked_reason === 'prelaunch';
+      if (isPrelaunchLock && isAccelerator) {
+        toast.info(
+          de
+            ? '🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — du bekommst sofort Zugriff als OS-PLUS-Member.'
+            : '🚀 This video unlocks at the official cohort launch — you get instant access as OS PLUS member.',
+          { duration: 6000 }
+        );
+        return;
+      }
       setShowPaywall(true);
       return;
     }
