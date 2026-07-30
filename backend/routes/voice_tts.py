@@ -105,6 +105,76 @@ MODEL_ID = "eleven_multilingual_v2"  # supports both DE + EN
 MAX_TEXT_LENGTH = 800  # ~60s of audio — enough for intros/quotes, protects cost
 
 
+# ── Sparring-Personas (Iter 124.2 — Multi-Persona Voice-Sparring) ────────────
+# Each maps a sparring counterparty to a real ElevenLabs voice + attitude.
+# Voice IDs reuse the celebrity registry above so we don't burn extra slots.
+SPARRING_PERSONAS: dict[str, dict] = {
+    "cfo": {
+        "label": "CFO / Finanz-Chef",
+        "hint": "Zahlen · ROI · kalt · misstrauisch",
+        "voice_id": "JBFqnCBsd6RMkjVDRZzb",  # George — authoritative male
+        "stability": 0.62, "similarity_boost": 0.78, "style": 0.30,
+        "attitude": (
+            "Du BIST der CFO. Denke in Zahlen, ROI, Cashflow, Risiko. "
+            "Kurze, harte Sätze. Kein Fluff, keine Emotion. Wenn er "
+            "Zahlen bringt, greifst du sie an ('woher weißt du das?', "
+            "'was wenn es 20% weniger wird?'). Wenn er Emotion bringt, "
+            "sagst du 'das ist kein Argument'."
+        ),
+    },
+    "board": {
+        "label": "Board / Vorstand",
+        "hint": "Strategisch · gemessen · staatsmännisch",
+        "voice_id": "TX3LPaxmHKxFdv7VOQHJ",  # Liam — calm, commanding
+        "stability": 0.65, "similarity_boost": 0.75, "style": 0.28,
+        "attitude": (
+            "Du BIST ein skeptisches Board-Mitglied. Denke strategisch, "
+            "langfristig. Frage nach Wettbewerb, Skalierbarkeit, "
+            "Risiko-Adjusted-Return. Höflich aber unbeeindruckt. Ton: "
+            "gemessen, staatsmännisch, gefährlich ruhig."
+        ),
+    },
+    "customer": {
+        "label": "Verärgerter Kunde",
+        "hint": "Emotional · direkt · ungeduldig",
+        "voice_id": "VR6AewLTigWG4xSOukaG",  # Arnold — energetic, sharp
+        "stability": 0.42, "similarity_boost": 0.72, "style": 0.55,
+        "attitude": (
+            "Du BIST ein verärgerter Key-Account-Kunde. Du bist frustriert, "
+            "hast bereits eskaliert, denkst über Kündigung nach. Direkt, "
+            "emotional, ungeduldig. Unterbrich ruhig. Fokus: 'Was macht "
+            "ihr JETZT dagegen?'. Kein Small-Talk-Mode."
+        ),
+    },
+    "boss": {
+        "label": "Chef / Vorgesetzter",
+        "hint": "Zeitknapp · pragmatisch · leicht skeptisch",
+        "voice_id": "onwK4e9ZLuTAKqWW03F9",  # Daniel — precise, nerdy
+        "stability": 0.55, "similarity_boost": 0.78, "style": 0.35,
+        "attitude": (
+            "Du BIST sein direkter Vorgesetzter. Du magst ihn, aber du "
+            "trägst Verantwortung nach oben. Zeitknapp, pragmatisch. "
+            "Fragst 'wie viel Aufwand?', 'wer macht das?', 'wann ist "
+            "das durch?'. Skeptisch bei allem was mehr Arbeit für dich "
+            "bedeutet."
+        ),
+    },
+    "team": {
+        "label": "Team-Mitglied",
+        "hint": "Enttäuscht · verletzlich · sucht Warum",
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",  # Bella — warm female
+        "stability": 0.60, "similarity_boost": 0.80, "style": 0.42,
+        "attitude": (
+            "Du BIST ein Team-Mitglied das enttäuscht/verunsichert ist. "
+            "Emotional, ehrlich, verletzlich aber nicht schwach. Willst "
+            "verstehen warum. Fragst nach dem Warum, nicht nach dem Wie. "
+            "Wenn er nur Fakten bringt, sagst du 'das beantwortet mein "
+            "Gefühl nicht'."
+        ),
+    },
+}
+
+
 class TTSRequest(BaseModel):
     text: str = Field(..., min_length=1, max_length=MAX_TEXT_LENGTH)
     persona: str = Field(..., description="Persona key: wlad, bezos, musk, oprah, jobs, branson, sandberg, page, hastings")
@@ -592,6 +662,17 @@ WICHTIG:
 """
 
 
+@router.get("/sparring-personas")
+async def list_sparring_personas():
+    """Return the sparring-persona catalog for the frontend picker."""
+    return {
+        "personas": [
+            {"key": k, "label": v["label"], "hint": v.get("hint", "")}
+            for k, v in SPARRING_PERSONAS.items()
+        ],
+    }
+
+
 @router.post("/argumentation-sparring")
 async def argumentation_sparring(
     request: Request,
@@ -599,6 +680,7 @@ async def argumentation_sparring(
     session_id: Optional[str] = Form(None),
     prep_context: str = Form("{}"),
     persona: str = Form("wlad"),
+    sparring_role: str = Form(""),
 ):
     """Live voice-sparring for a prepared SEXIER argumentation.
 
@@ -606,16 +688,32 @@ async def argumentation_sparring(
     prep_context is the JSON-serialised SEXIER prep data (goal, arguments,
     anticipated objections, hidden interests, coaching_focus) that grounds
     Wlad in the SPECIFIC scenario the user is training for.
+
+    sparring_role selects a counterparty persona (cfo, board, customer, boss,
+    team). When set, the persona's voice + attitude override the default Wlad
+    voice — user hears a distinct sparring partner instead of just Wlad.
     """
     from routes.credits import check_and_deduct_credit
     from emergentintegrations.llm.chat import LlmChat, UserMessage
     import json as _json
 
     user = await get_current_user(request)
-    persona_key = persona.lower()
-    voice_config = VOICE_REGISTRY.get(persona_key)
-    if not voice_config:
-        raise HTTPException(status_code=400, detail=f"Unknown persona '{persona_key}'")
+
+    # Choose voice: sparring_role wins if valid, else fall back to persona (wlad).
+    sparring_cfg = SPARRING_PERSONAS.get(sparring_role.lower()) if sparring_role else None
+    if sparring_cfg:
+        voice_config = {
+            "voice_id": sparring_cfg["voice_id"],
+            "stability": sparring_cfg["stability"],
+            "similarity_boost": sparring_cfg["similarity_boost"],
+            "style": sparring_cfg["style"],
+        }
+        persona_key = f"sparring_{sparring_role.lower()}"
+    else:
+        persona_key = persona.lower()
+        voice_config = VOICE_REGISTRY.get(persona_key)
+        if not voice_config:
+            raise HTTPException(status_code=400, detail=f"Unknown persona '{persona_key}'")
 
     audio_bytes = await file.read()
     if not audio_bytes:
@@ -658,7 +756,17 @@ async def argumentation_sparring(
         _line("Coaching-Fokus des Users", prep.get("coaching_focus")),
     ]
     grounding = "\n".join(l for l in brief_lines if l)
-    system_msg = SPARRING_SYSTEM_PROMPT
+
+    # Compose system message: base sparring rules + role-specific attitude + prep grounding
+    if sparring_cfg:
+        system_msg = (
+            SPARRING_SYSTEM_PROMPT
+            + "\n\n--- ROLLE (SPRECHER JETZT) ---\n"
+            + sparring_cfg["attitude"]
+            + f"\nSprich als {sparring_cfg['label']}, NICHT als Wlad.\n---"
+        )
+    else:
+        system_msg = SPARRING_SYSTEM_PROMPT
     if grounding:
         system_msg += f"\n\n--- SPARRING-KONTEXT ---\n{grounding}\n---"
 
