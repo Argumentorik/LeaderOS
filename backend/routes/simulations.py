@@ -1,7 +1,9 @@
 """Simulation routes."""
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import Response
 import uuid
 import json
+import re
 from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
@@ -10,8 +12,48 @@ from models import SimulationStart, SimulationMessage, ArgumentationPrep, Argume
 from services import get_current_user, clean_ai_text, update_user_scores, SIMULATION_SYSTEM_PROMPT
 from services_actions import record_user_action
 from data import SIMULATION_SCENARIOS
+from routes.argumentation_prep_pdf import render_strategy_pdf
 
 router = APIRouter(prefix="/api", tags=["simulations"])
+
+
+# ── Auto-Tags (Iter 124.6): heuristic keyword mapping — kein extra LLM-Call ─
+TAG_KEYWORDS: list[tuple[str, list[str]]] = [
+    ("Gehalt",         ["gehalt", "lohn", "salary", "vergütung", "bonus", "erhöhung", "raise"]),
+    ("CFO",            ["cfo", "finanzchef", "finanzchefin", "finanzvorstand"]),
+    ("Board",          ["board", "vorstand", "aufsichtsrat", "beirat"]),
+    ("Team",           ["team-mitglied", "mitarbeiter", "kollege", "kollegin", "einstellung", "onboarding"]),
+    ("Kündigung",      ["kündigung", "trennung", "entlassung", "layoff", "pip"]),
+    ("Kunde",          ["kunde", "kundin", "sla", "key-account", "customer", "eskalation"]),
+    ("Chef",           ["chef", "vorgesetzt", "manager", "boss"]),
+    ("Delegation",     ["delegation", "übergabe", "verantwortung abgeben"]),
+    ("Board-Präs",     ["präsentation", "pitch", "vorstellen", "vorlage"]),
+    ("Feedback",       ["feedback", "review", "kritik"]),
+    ("Priorisierung",  ["priorität", "backlog", "roadmap"]),
+    ("Retention",      ["retention", "verbleib", "bindung", "fluktuation"]),
+    ("Budget",         ["budget", "kosten", "invest", "roi", "risiko"]),
+    ("Konflikt",       ["konflikt", "streit", "reibung"]),
+]
+
+
+def _auto_tags(prep_input: dict, strategy_text: str = "") -> list[str]:
+    """Extract 3-5 short tags for later search / grouping in Prep-History."""
+    haystack = " ".join([
+        (prep_input or {}).get("background") or "",
+        (prep_input or {}).get("goal") or "",
+        (prep_input or {}).get("relationship") or "",
+        (prep_input or {}).get("main_points") or "",
+        strategy_text or "",
+    ]).lower()
+    if not haystack.strip():
+        return []
+    tags: list[str] = []
+    for tag, needles in TAG_KEYWORDS:
+        if any(n in haystack for n in needles):
+            tags.append(tag)
+        if len(tags) >= 5:
+            break
+    return tags
 
 
 @router.get("/simulations/scenarios")
@@ -270,12 +312,14 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
             "der oben definierten 6-Sektionen-Struktur.\n\n" + brief
         )))
         strategy_clean = clean_ai_text(strategy)
+        tags = _auto_tags(data.model_dump(), strategy_clean)
 
         await db.argumentation_strategies.insert_one({
             "strategy_id": strategy_id,
             "user_id": user["user_id"],
             "input": data.model_dump(),
             "strategy_markdown": strategy_clean,
+            "tags": tags,
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
 
@@ -294,6 +338,7 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
         return {
             "strategy_id": strategy_id,
             "strategy_markdown": strategy_clean,
+            "tags": tags,
             "sexier_ready": True,
         }
     except Exception as e:
@@ -319,18 +364,23 @@ async def argumentation_prep_history(request: Request):
     user = await get_current_user(request)
     cursor = db.argumentation_strategies.find(
         {"user_id": user["user_id"]},
-        {"_id": 0, "strategy_id": 1, "input": 1, "strategy_markdown": 1, "created_at": 1},
+        {"_id": 0, "strategy_id": 1, "input": 1, "strategy_markdown": 1, "tags": 1, "created_at": 1},
     ).sort("created_at", -1).limit(5)
     docs = await cursor.to_list(length=5)
-    return [
-        {
+    out = []
+    for d in docs:
+        # Backfill tags on the fly for older docs that didn't get them at write time.
+        tags = d.get("tags")
+        if not tags:
+            tags = _auto_tags(d.get("input") or {}, d.get("strategy_markdown") or "")
+        out.append({
             "strategy_id": d.get("strategy_id"),
             "label": _prep_history_label(d.get("input") or {}),
+            "tags": tags[:5],
             "created_at": d.get("created_at"),
             "has_strategy": bool(d.get("strategy_markdown")),
-        }
-        for d in docs
-    ]
+        })
+    return out
 
 
 @router.get("/simulations/argumentation-prep/history/{strategy_id}")
@@ -343,12 +393,44 @@ async def argumentation_prep_get(strategy_id: str, request: Request):
     )
     if not doc:
         raise HTTPException(status_code=404, detail="Prep not found")
+    tags = doc.get("tags") or _auto_tags(doc.get("input") or {}, doc.get("strategy_markdown") or "")
     return {
         "strategy_id": doc.get("strategy_id"),
         "input": doc.get("input") or {},
         "strategy_markdown": doc.get("strategy_markdown") or "",
+        "tags": tags[:5],
         "created_at": doc.get("created_at"),
     }
+
+
+@router.get("/simulations/argumentation-prep/history/{strategy_id}/pdf")
+async def argumentation_prep_pdf(strategy_id: str, request: Request):
+    """Download the strategy as a branded Wlad Leader-OS PDF (own docs only)."""
+    user = await get_current_user(request)
+    doc = await db.argumentation_strategies.find_one(
+        {"strategy_id": strategy_id, "user_id": user["user_id"]},
+        {"_id": 0},
+    )
+    if not doc:
+        raise HTTPException(status_code=404, detail="Prep not found")
+    tags = doc.get("tags") or _auto_tags(doc.get("input") or {}, doc.get("strategy_markdown") or "")
+    prep_input = doc.get("input") or {}
+    goal = (prep_input.get("goal") or "").strip() or "Meine Argumentations-Strategie"
+    user_name = (user.get("name") or user.get("email", "").split("@")[0] or "Leader").strip()
+    pdf_bytes = render_strategy_pdf(
+        strategy_markdown=doc.get("strategy_markdown") or "",
+        user_name=user_name,
+        prep_goal=goal,
+        tags=tags[:5],
+    )
+    # Filename-safe slug from goal
+    slug = re.sub(r"[^a-z0-9]+", "-", goal.lower()).strip("-")[:40] or "sexier-strategie"
+    filename = f"sexier-strategie-{slug}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.delete("/simulations/argumentation-prep/history/{strategy_id}")

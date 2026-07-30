@@ -118,7 +118,11 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
   const openFromHistory = (doc) => {
     if (doc?.input) setData({ ...initialData, ...doc.input });
     if (doc?.strategy_markdown) {
-      setStrategy({ strategy_id: doc.strategy_id, strategy_markdown: doc.strategy_markdown });
+      setStrategy({
+        strategy_id: doc.strategy_id,
+        strategy_markdown: doc.strategy_markdown,
+        tags: doc.tags || [],
+      });
     }
     setHistoryOpen(false);
     toast.success('Alte Prep geladen');
@@ -199,7 +203,31 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
                     strategy={strategy}
                     onCopy={copyStrategy}
                     copied={copied}
-                    onPrint={() => window.print()}
+                    onPrint={async () => {
+                      if (!strategy?.strategy_id) {
+                        window.print();
+                        return;
+                      }
+                      try {
+                        const res = await api.get(
+                          `/simulations/argumentation-prep/history/${strategy.strategy_id}/pdf`,
+                          { responseType: 'blob' },
+                        );
+                        const blob = new Blob([res.data], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `sexier-strategie-${(data.goal || 'wlad').slice(0, 40).replace(/[^a-z0-9]+/gi, '-')}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        setTimeout(() => URL.revokeObjectURL(url), 2000);
+                        toast.success('PDF heruntergeladen · fertig zum Ausdrucken', { duration: 2400 });
+                      } catch (err) {
+                        logger.error('pdf download', err);
+                        toast.error('PDF-Export fehlgeschlagen. Nutze stattdessen Browser-Drucken.');
+                      }
+                    }}
                     onShare={async () => {
                       const shareText = strategy.strategy_markdown || '';
                       if (navigator.share) {

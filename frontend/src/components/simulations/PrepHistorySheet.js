@@ -120,7 +120,17 @@ export function PrepHistorySheet({ onClose, onOpen }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12.5px] font-black leading-tight truncate">{item.label}</p>
-                    <p className="text-[10.5px] text-muted-foreground mt-0.5">{formatWhen(item.created_at)}</p>
+                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                      <p className="text-[10.5px] text-muted-foreground">{formatWhen(item.created_at)}</p>
+                      {(item.tags || []).slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center h-4 px-1.5 rounded-md text-[9px] font-black uppercase tracking-wide bg-[#BFFF00]/12 text-[#6B8A00] dark:text-[#BFFF00] border border-[#BFFF00]/25"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   {loadingId === item.strategy_id ? (
                     <Loader2 size={14} className="animate-spin text-muted-foreground shrink-0" />

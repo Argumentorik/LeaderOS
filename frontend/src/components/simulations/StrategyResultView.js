@@ -150,6 +150,18 @@ export function StrategyResultView({ strategy, onCopy, copied, onShare, onPrint 
               <p className="text-[11.5px] text-muted-foreground mt-1 leading-relaxed">
                 Wlad hat deine Vorbereitung strukturiert und geschärft. Springe direkt in eine Sektion oder kopiere alles für dein Gespräch.
               </p>
+              {(strategy?.tags || []).length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2.5" data-testid="argumentation-strategy-tags">
+                  {(strategy.tags || []).slice(0, 5).map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center h-5 px-2 rounded-md text-[9.5px] font-black uppercase tracking-wide bg-white/60 dark:bg-white/[0.06] text-[#6B8A00] dark:text-[#BFFF00] border border-[#BFFF00]/30"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
