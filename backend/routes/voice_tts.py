@@ -565,3 +565,159 @@ async def voice_conversation(
         audio_url=audio_url,
         persona=persona_key,
     )
+
+
+# ── Voice Sparring (Iter 124 — Argumentations-Live-Coach) ────────────────────
+
+SPARRING_SYSTEM_PROMPT = """Du bist WLAD JACHTCHENKO — der Argumentations-Sparring-Partner.
+
+Der User hat eine SEXIER-Strategie vorbereitet und übt jetzt LIVE. Deine Rolle:
+
+1. Du spielst den GEGENÜBER — realistisch, spezifisch auf das Prep-Kontext.
+2. Du bringst einen der antizipierten Einwände (oder einen ähnlichen) — kurz, direkt, glaubwürdig.
+3. Du unterbrichst NICHT freundlich — du bist der schwierige CFO/Chef/Kunde/Board-Mitglied.
+4. Nach 2-3 User-Antworten wechselst du KURZ in Coach-Modus: 1 Satz konkretes Feedback ("Der Einstieg war stark, aber das Framing zum ROI hat gefehlt"), dann zurück ins Sparring.
+
+STIL:
+- Antwortlänge: 1-2 Sätze MAX (max 20 Wörter). Diese sind Voice-Antworten — MUSS kurz sein.
+- Direktes Deutsch, kein Fluff, keine Höflichkeitsfloskeln.
+- Emotionaler Ton passend zur Rolle (skeptisch/bissig/testend).
+- Kein Meta-Talk ("ich spiele jetzt X") — du BIST X.
+
+WICHTIG:
+- Nutze IMMER das Prep-Kontext (Ziel, Argumente, Einwände, verborgene Interessen).
+- Wenn User etwas Starkes sagt, greif es auf und challenge weiter.
+- Wenn User schwach ist, zeig es — aber baue dann Coach-Feedback ein.
+- Sprich Deutsch. Erwähne dich selbst als "Wlad" nur beim Coach-Feedback.
+"""
+
+
+@router.post("/argumentation-sparring")
+async def argumentation_sparring(
+    request: Request,
+    file: UploadFile = File(...),
+    session_id: Optional[str] = Form(None),
+    prep_context: str = Form("{}"),
+    persona: str = Form("wlad"),
+):
+    """Live voice-sparring for a prepared SEXIER argumentation.
+
+    Pipeline: Whisper STT → GPT-4o coach/counterparty reply → ElevenLabs TTS.
+    prep_context is the JSON-serialised SEXIER prep data (goal, arguments,
+    anticipated objections, hidden interests, coaching_focus) that grounds
+    Wlad in the SPECIFIC scenario the user is training for.
+    """
+    from routes.credits import check_and_deduct_credit
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    import json as _json
+
+    user = await get_current_user(request)
+    persona_key = persona.lower()
+    voice_config = VOICE_REGISTRY.get(persona_key)
+    if not voice_config:
+        raise HTTPException(status_code=400, detail=f"Unknown persona '{persona_key}'")
+
+    audio_bytes = await file.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="Empty audio")
+
+    # 1. Transcribe FIRST — no credit burn on empty/bad audio
+    try:
+        transcript = await _transcribe_webm(audio_bytes)
+    except Exception as e:
+        logger.error(f"Sparring STT failed: {e}")
+        raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")
+    if not transcript:
+        raise HTTPException(status_code=400, detail="empty_transcript")
+
+    # 2. Deduct credit
+    credit_result = await check_and_deduct_credit(user, "chat")
+    if not credit_result["allowed"]:
+        raise HTTPException(status_code=402, detail="no_credits")
+
+    # 3. Session + user turn
+    session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
+    await _persist_voice_turn(session_id, user["user_id"], "user", transcript)
+
+    # 4. Parse prep context — build a compact grounding brief
+    try:
+        prep = _json.loads(prep_context) if prep_context else {}
+    except Exception:
+        prep = {}
+
+    def _line(label: str, val: str | None) -> str:
+        return f"- **{label}:** {val.strip()}" if val and val.strip() else ""
+
+    brief_lines = [
+        _line("Ziel des Users", prep.get("goal")),
+        _line("Kontext/Hintergrund", prep.get("background")),
+        _line("Gegenüber", prep.get("relationship")),
+        _line("User-Kernargumente", prep.get("main_points")),
+        _line("Antizipierte Einwände", prep.get("expected_objections")),
+        _line("Verborgene Interessen der Gegenseite", prep.get("hidden_interests")),
+        _line("Coaching-Fokus des Users", prep.get("coaching_focus")),
+    ]
+    grounding = "\n".join(l for l in brief_lines if l)
+    system_msg = SPARRING_SYSTEM_PROMPT
+    if grounding:
+        system_msg += f"\n\n--- SPARRING-KONTEXT ---\n{grounding}\n---"
+
+    # 5. Recent history for continuity (last 6 turns)
+    history = await db.chat_messages.find(
+        {"session_id": session_id},
+        {"_id": 0, "role": 1, "content": 1},
+    ).sort("created_at", 1).to_list(6)
+    ctx_lines = []
+    for m in history[-6:]:
+        role = "User" if m.get("role") == "user" else "Wlad"
+        ctx_lines.append(f"{role}: {m.get('content', '')}")
+    ctx = "\n".join(ctx_lines)
+    prompt = f"{ctx}\nUser: {transcript}\nWlad:" if ctx else transcript
+
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"sparring_{session_id}",
+            system_message=system_msg,
+        )
+        chat.with_model("openai", "gpt-4o")
+        reply_text = await chat.send_message(UserMessage(text=prompt))
+    except Exception as e:
+        logger.error(f"Sparring LLM failed: {e}")
+        if not credit_result.get("is_premium"):
+            try:
+                from routes.credits import refund_credit
+                await refund_credit(user["user_id"])
+            except Exception:
+                pass
+        raise HTTPException(status_code=502, detail=f"AI reply failed: {e}")
+
+    reply_text = _cap_reply_length(reply_text)
+    reply_text = _normalize_wlad_name(reply_text)
+    transcript = _normalize_wlad_name(transcript)
+
+    await _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text)
+    await db.chat_sessions.update_one(
+        {"session_id": session_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat(), "mode": "sparring"}},
+    )
+
+    try:
+        audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+        audio_url = f"data:audio/mpeg;base64,{audio_b64}"
+    except HTTPException as e:
+        logger.warning(f"Sparring TTS unavailable: {e.detail}")
+        audio_url = ""
+
+    try:
+        await record_user_action(user["user_id"], "argumentation_sparring_turn", metadata={"session_id": session_id})
+    except Exception:
+        pass
+
+    return {
+        "session_id": session_id,
+        "transcript": transcript,
+        "response_text": reply_text,
+        "audio_url": audio_url,
+        "persona": persona_key,
+    }
