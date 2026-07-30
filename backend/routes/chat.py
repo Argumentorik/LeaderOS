@@ -7,13 +7,13 @@ import base64
 import asyncio
 from datetime import datetime, timezone
 from typing import Optional
-from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 import pypdf
 import docx
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import ChatMessageIn, ChatSessionCreate
-from services import get_current_user, clean_ai_text, update_user_scores, get_user_memory, WLADBOT_SYSTEM_PROMPT, WLADBOT_CHAT_STYLE, WLADBOT_JSON_FORMAT
+from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT, WLADBOT_CHAT_STYLE, WLADBOT_JSON_FORMAT
 from services_actions import record_user_action
 from data import LEADERSHIP_QUOTES
 

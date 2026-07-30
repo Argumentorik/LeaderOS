@@ -13,6 +13,7 @@
  */
 import { useState, useEffect } from 'react';
 import { Sparkles, X, ChevronRight } from 'lucide-react';
+import logger from '../../lib/logger';
 
 const DISMISS_PREFIX = 'leaderos:briefing-dismissed:';
 
@@ -37,8 +38,8 @@ if (typeof window !== 'undefined') {
       Object.keys(localStorage)
         .filter(k => k.startsWith(DISMISS_PREFIX))
         .forEach(k => localStorage.removeItem(k));
-      console.log('[leaderos] all feature briefings reset');
-    } catch (e) { console.warn(e); }
+      logger.warn('[leaderos] all feature briefings reset');
+    } catch (e) { logger.warn(e); }
   };
 }
 

@@ -13,7 +13,7 @@ Both endpoints are guarded by `require_cron_auth` (X-Cron-Secret header).
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Request
 
-from config import db, logger
+from config import db
 from services import require_cron_auth
 from services_email import (
     send_email, trial_reminder_email,

@@ -1,7 +1,6 @@
 """Playbook routes."""
 from fastapi import APIRouter, HTTPException, Request
 import uuid
-import json
 from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 

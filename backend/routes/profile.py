@@ -1,5 +1,5 @@
 """User Profile — picture upload target, editable profile fields, activity feed."""
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 from typing import Optional

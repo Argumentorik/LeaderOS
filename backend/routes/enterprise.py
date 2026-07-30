@@ -1,11 +1,11 @@
 """Enterprise Funnel — 12-question diagnosis for team training leads."""
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 import uuid
 from datetime import datetime, timezone
 
-from config import db, logger
+from config import db
 from services import get_current_user
 from services_actions import record_user_action
 

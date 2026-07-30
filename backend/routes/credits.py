@@ -3,10 +3,10 @@
 Free users get 50 credits. After 10 uses, a soft pause prompts upgrade.
 Premium users (€997+ paid) have unlimited credits.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 from datetime import datetime, timezone
 
-from config import db, logger
+from config import db
 from services import get_current_user
 
 router = APIRouter(prefix="/api/credits", tags=["credits"])

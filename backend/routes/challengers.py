@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
-from services import get_current_user, clean_ai_text, update_user_scores
+from services import get_current_user, clean_ai_text
 from services_actions import record_user_action
 from data import LEADERSHIP_CHALLENGERS
 

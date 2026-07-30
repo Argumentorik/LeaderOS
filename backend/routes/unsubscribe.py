@@ -16,7 +16,7 @@ import base64
 import json
 import os
 from datetime import datetime, timezone
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from config import db, logger
 

@@ -255,8 +255,7 @@ async def startup() -> None:
 
     # MongoDB TTL index — auto-delete expired sessions
     try:
-        from pymongo import ASCENDING
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         # Convert existing string expires_at to datetime for TTL to work
         async for sess in db.user_sessions.find({"expires_at": {"$type": "string"}}, {"_id": 1, "expires_at": 1}):

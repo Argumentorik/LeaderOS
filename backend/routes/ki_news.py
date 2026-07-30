@@ -1,7 +1,6 @@
 """Daily KI-Business News & Insights for Leaders — curated content."""
 from fastapi import APIRouter, Request
 from datetime import datetime, timezone
-from config import db, logger
 from services import get_current_user
 
 router = APIRouter(prefix="/api", tags=["ki-news"])

@@ -2,14 +2,13 @@
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import Response
 import uuid
-import json
 import re
 from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import SimulationStart, SimulationMessage, ArgumentationPrep, ArgumentationTemplateIn
-from services import get_current_user, clean_ai_text, update_user_scores, SIMULATION_SYSTEM_PROMPT
+from services import get_current_user, clean_ai_text, SIMULATION_SYSTEM_PROMPT
 from services_actions import record_user_action
 from data import SIMULATION_SCENARIOS
 from routes.argumentation_prep_pdf import render_strategy_pdf

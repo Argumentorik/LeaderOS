@@ -1,11 +1,9 @@
 """30-Day Leader Challenge — Daily missions with quizzes and AI learning."""
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import Optional, List
-import uuid
 from datetime import datetime, timezone
 
-from config import db, logger, EMERGENT_LLM_KEY
+from config import db
 from services import get_current_user
 from services_actions import record_user_action
 from quiz_bank import QUIZ_BANK

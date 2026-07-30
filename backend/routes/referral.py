@@ -1,13 +1,12 @@
 """Referral System — Billion-dollar level viral growth engine."""
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import Optional
 import os
 import uuid
 import hashlib
 from datetime import datetime, timezone
 
-from config import db, logger
+from config import db
 from services import get_current_user
 from services_actions import record_user_action
 

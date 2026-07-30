@@ -2,7 +2,6 @@
 from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 from fastapi.responses import Response
 import uuid
-import os
 import requests
 from datetime import datetime, timezone
 

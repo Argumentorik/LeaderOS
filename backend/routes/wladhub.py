@@ -8,7 +8,7 @@ import httpx
 from datetime import datetime, timezone
 
 from config import db, logger
-from services import get_current_user, update_user_scores
+from services import get_current_user
 from services_actions import record_user_action
 
 router = APIRouter(prefix="/api/wladhub", tags=["wladhub"])
