@@ -15,6 +15,18 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 125 · 31.07.26] ZERO AI SLOP — FINAL TRUST-DIRECTIVE (getestet: testing_agent 100 % PASS, iteration_125.json)**
+  - **Fake-Metriken komplett entfernt**: /coaching (140.000+/82 %/94 %/4,9★-ProofNumbers, 2.500+/87 %/+42 %/4.9-Stats-Grid, Unsplash-Fake-Testimonials), /enterprise (312 % ROI-Strip), /login (4,9★ · 2.500+ Chip), LoginBrandPanel (2.500+ DAX-Claim → ehrliche Methodik-Zeile), BookingTeaserCard (4.9/5 · 312 Beratungen → "15 Min · unverbindlich").
+  - **Hype-Sections gelöscht**: CostSection, IdentityShift ("Das ist Transformation"), MondayMorning-Story, CoffeeLine (2,73 €/Tag), RoiCalculator (95 €/h-Mathe), ValueIntro, FinalClose. `ConversionSections.js` neu: nur noch ScoreTeaser (jetzt "BEISPIEL"-Badge + ehrliche Fußzeile, Lock-Icon statt 🔒), WhyCoursesFail, EngineLoop, ComparisonTable, RiskReversal, PersonalBlock. Hero neu: "Führung ist trainierbar." (Linear/Stripe-Ton).
+  - **UI-Emojis → Lucide-Icons**: CookieConsent (🍪→Cookie), PaymentSuccess (📄💬→FileText/MessageCircle), OnboardingVideoModal (🤖🎯👤→Bot/Target/UserRound), TierLockOverlay (👑 weg), LockedPageOverlay (🔓 weg), Toasts (🚀 weg), AGB/Widerruf (⚠️ weg).
+  - **"Sprint" global eliminiert** (Frontend + Backend: LoginPage, PricingModal, PaywallModal, Dashboard, PaymentSuccess, DownloadsPage, payments.py-Checkout-Description, og.py, support.py, events.py, services_email.py) → "Programm"/"Learning Path". Nie wieder "Sprint".
+  - **E-Mail EP 07 neu (evergreen)**: "Dein persönliches Operating System" — Weekly Review, Decision Loops, wiederverwendbare Systeme, kontinuierliche Verbesserung, Kurse + Wlad-Events in Leader-OS. Kein "Finale" mehr.
+  - **Support-FAB gelöscht** (`FloatingSupportButton.js` entfernt) → NEU `UsageFeedbackPrompt.js`: erscheint EINMALIG ab total_used ≥ 30 Credits (Premium: XP≥300-Proxy), unten mittig, dezent, dismissbar, localStorage `leaderos:usage-feedback-done`, nie wieder nach Dismiss (live verifiziert: appear→dismiss→reload→weg). Support weiter über FAQ & Support.
+  - **Dashboard-Asset NEU**: `ArgumentationPrepCard.js` ("Nächstes Meeting vorbereiten · 3 Minuten · Stimme oder Text · PDF") → `/simulations?prep=1` öffnet den Prep-Wizard automatisch. Mobile-first getestet (390px, kein Overflow).
+  - **Performance**: `ArgumentationPrepModal` jetzt lazy-loaded (eigener Chunk) — SimulationsPage lädt schneller.
+  - **Mobile-Fix**: "Dein nächster Schritt"-Card stackt jetzt vertikal auf Mobile (war gequetscht).
+  - ⚠️ **LEARNING BESTÄTIGT**: Parallele search_replace auf DIESELBE Datei überschreiben sich (CoachingPage brauchte sequentiellen Re-Fix).
+
 - [x] **[Iter 123 · 30.07.26] LEADERCHECK-SYNC GODMODE + DOMAIN-RESILIENZ (beide Schreibweisen)** — getestet: curl E2E (sync/status + POST sync = 5 Einträge, Scores 81/67/74), UI-Sync-Klick auf /leader-diagnose ✅, CI-Build 0 Errors, Backend Health 200
   - **Sync verifiziert**: `GET /api/wladhub/sync/status` (bridge_configured=true, 5 Rows) + `POST /api/wladhub/sync` importiert Supabase-Diagnose fehlerfrei — Backend war nie kaputt.
   - **🔴 EXTERNER BEFUND `leadercheck.de` (ohne Bindestrich)**: Domain zeigt auf Cloudflare (162.159.x), liefert **SSL-Handshake-Failure + HTTP Error 1001** — auf Hosting/DNS-Ebene NICHT konfiguriert. Kann nur Mert in Cloudflare/Vercel fixen (Domain dem Vercel-Projekt hinzufügen oder CF-Proxy-Ziel korrigieren). `leader-check.de` (Vercel, 216.150.x) läuft einwandfrei (200).
