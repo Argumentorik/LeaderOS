@@ -15,7 +15,7 @@
  * Video-Source: Vimeo 1197728183 (Mert lieferte den Link am 26.02.26).
  */
 import { useEffect, useRef, useState } from 'react';
-import { X, PlayCircle, Calendar, ArrowRight } from 'lucide-react';
+import { X, PlayCircle, Calendar, ArrowRight, Bot, Target, UserRound } from 'lucide-react';
 import gsap from 'gsap';
 import { useBookConsultation } from '../brand/BookConsultationButton';
 // Iter 92.32 (Mert): Vimeo embed entfernt — Privacy-Settings konnten den
@@ -178,16 +178,16 @@ export const OnboardingVideoModal = () => {
 
             <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { icon: '🤖', title: '24/7 KI-Coach', desc: 'Stell deine Frage, erhalte Antworten aus Wlads 1.605 Wissens-Chunks.' },
-                { icon: '🎯', title: '16 Video-Missionen', desc: '60 Sek Pitch aufnehmen → KI bewertet nach 3-Säulen-Framework.' },
-                { icon: '👤', title: '1:1 Coaching', desc: 'Mit Wlads Expertenteam — direkt einen Slot wählen.' },
+                { icon: Bot, title: '24/7 KI-Coach', desc: 'Stell deine Frage, erhalte Antworten aus Wlads Wissensbasis.' },
+                { icon: Target, title: '16 Video-Missionen', desc: '60 Sek Pitch aufnehmen → KI bewertet nach Wlads Framework.' },
+                { icon: UserRound, title: '1:1 Coaching', desc: 'Mit Wlads Expertenteam — direkt einen Slot wählen.' },
               ].map((b, i) => (
                 <div
                   key={b.title}
                   className="flex flex-col items-start gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#BFFF00]/30 transition-colors"
                   data-testid={`onboarding-benefit-${i}`}
                 >
-                  <span className="text-2xl leading-none" aria-hidden>{b.icon}</span>
+                  <b.icon size={22} className="text-[#BFFF00]" aria-hidden />
                   <p className="text-[13px] font-bold text-white leading-tight" style={{ fontFamily: 'Outfit, Inter, sans-serif' }}>
                     {b.title}
                   </p>

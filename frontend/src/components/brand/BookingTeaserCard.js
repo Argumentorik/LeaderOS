@@ -149,13 +149,8 @@ export const BookingTeaserCard = ({
             />
 
             <div className="flex items-center justify-center gap-1.5 mt-3.5">
-              <div className="flex items-center -space-x-0.5">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={`star-${i}`} size={11} className="text-amber-500 fill-amber-500" />
-                ))}
-              </div>
               <span className="text-[11px] text-muted-foreground font-semibold">
-                4.9/5 · 312 Beratungen
+                15 Min · unverbindlich · Cal.com
               </span>
             </div>
           </div>

@@ -21,12 +21,12 @@ import { getLastLogin, forgetLogin } from '../lib/recentLogins';
 import { postLoginRoute } from '../lib/postLoginRoute';
 
 const getFeatures = (de) => (de ? [
-  { t: '30-Tage KI-Leadership Sprint', s: 'Jeden Tag eine Challenge, die dich als Leader schärft — 300 Fragen, AI-Roleplays, echtes Momentum' },
+  { t: '30-Tage KI-Leadership Programm', s: 'Jeden Tag eine Challenge, die dich als Leader schärft — 300 Fragen, AI-Roleplays, echtes Momentum' },
   { t: '16 Video-Missionen mit KI-Analyse', s: 'Kamera an, 60 Sekunden Rede — Wlads Framework bewertet dich in 18 Sekunden' },
   { t: 'Persönlicher KI-Coach — 24/7', s: 'WladBot kennt Wlads Methodik in- und auswendig — und ab Tag 1 auch dich' },
   { t: 'Täglich KI-Business Briefing', s: 'Trends, Leader-Zitate und strategische Insights — bevor dein erstes Meeting startet' },
 ] : [
-  { t: '30-Day AI Leadership Sprint', s: '300 questions, daily challenges, AI roleplays' },
+  { t: '30-Day AI Leadership Program', s: '300 questions, daily challenges, AI roleplays' },
   { t: '16 Video Missions with AI Analysis', s: 'Camera on, give speech, instant AI scoring' },
   { t: 'Personal AI Coach — 24/7', s: 'Your WladBot knows Wlad\'s methodology inside out' },
   { t: 'Daily AI Business Briefing', s: 'Trends, leader quotes, strategic insights' },
@@ -144,7 +144,7 @@ export default function LoginPage({ initialMode = 'login' }) {
   const subheading = useMemo(() => {
     if (isMagic) return de ? 'Gib deine E-Mail ein — wir senden dir einen sicheren 1-Klick-Link. Kein Passwort, kein Aufwand.' : 'Enter your email — we\'ll send a secure 1-click link. No password, no friction.';
     if (isLicense) return de ? 'Du hast einen 16-stelligen Aktivierungscode gekauft? Löse ihn hier ein — dein Paket wird sofort freigeschaltet.' : 'Bought a 16-character activation code? Redeem it here — your package unlocks instantly.';
-    if (isRegister) return de ? 'Starte deinen KI-Leadership Sprint — 3 Sessions kostenlos, keine Kreditkarte, voller Zugriff auf WladBot.' : 'Start your AI leadership sprint — 3 sessions free, no credit card, full WladBot access.';
+    if (isRegister) return de ? 'Starte dein KI-Leadership Training — 3 Sessions kostenlos, keine Kreditkarte, voller Zugriff auf WladBot.' : 'Start your AI leadership training — 3 sessions free, no credit card, full WladBot access.';
     return de ? 'Schön, dich wiederzusehen. Dein Fortschritt wartet genau dort, wo du aufgehört hast.' : 'Good to see you again. Your progress is waiting right where you left off.';
   }, [isMagic, isLicense, isRegister, de]);
 
@@ -188,10 +188,6 @@ export default function LoginPage({ initialMode = 'login' }) {
               <p className="text-[10.5px] text-white/40 mt-0.5">
                 {de ? 'Online · zeigt dir jeden Tag die Richtung' : 'Online · shows you the direction every day'}
               </p>
-            </div>
-            <div className="ml-auto text-right leading-tight" data-testid="login-social-proof">
-              <p className="text-[11px] font-black text-[#BFFF00]">4,9 ★</p>
-              <p className="text-[9.5px] text-white/35">2.500+ Leader</p>
             </div>
           </div>
 

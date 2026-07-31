@@ -10,26 +10,18 @@ import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { FAQItem } from '../components/coaching/FAQItem';
 import { TierPricingGrid } from '../components/coaching/TierPricingGrid';
 import { CoachingRightPanel } from '../components/coaching/CoachingRightPanel';
-import { getLayers, getFaqs, getTestimonials } from '../components/coaching/coachingData';
+import { getLayers, getFaqs } from '../components/coaching/coachingData';
 import { useAuth } from '../contexts/AuthContext';
 import {
-  CostSection, IdentityShift, WhyCoursesFail, EngineLoop, MondayMorning,
-  ProofNumbers, ValueIntro, CoffeeLine, ComparisonTable, RoiCalculator,
-  RiskReversal, PersonalBlock, FinalClose, ScoreTeaser,
+  WhyCoursesFail, EngineLoop, ComparisonTable,
+  RiskReversal, PersonalBlock, ScoreTeaser,
 } from '../components/coaching/ConversionSections';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { openStrategyCall } from '../lib/calendly';
 import {
-  ArrowRight, Sparkles, PlayCircle, HelpCircle, Quote, TrendingUp, Users, Star
+  ArrowRight, PlayCircle, HelpCircle
 } from 'lucide-react';
-
-// Iter 92.46 · module-scope constant so React doesn't recreate on every render.
-const TESTIMONIAL_AVATARS = [
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&q=80',
-  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&crop=faces&q=80',
-  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&q=80',
-];
 
 /**
  * CoachingPage — high-converting landing-style hub (Iter 92.35, Mert).
@@ -39,7 +31,6 @@ const TESTIMONIAL_AVATARS = [
  *               Secondary CTA "Demo ansehen" (→ /chat)
  *   3-Layer   → KI · Rhetorik · EQ (glass-stack feel via LayerCard)
  *   Pricing   → €997 Stripe · €4.797 Cal.com · Enterprise Cal.com
- *   Social    → 3 testimonials + stats (2.500+ / 87% / +42%)
  *   FAQ       → 5 user-supplied questions
  */
 export default function CoachingPage() {
@@ -87,13 +78,6 @@ export default function CoachingPage() {
 
   const layers = getLayers(de);
   const faqs = getFaqs(de);
-  const testimonials = getTestimonials(de);
-  const stats = [
-    { icon: Users, value: '2.500+', label: de ? 'Leader gecoacht' : 'Leaders coached' },
-    { icon: TrendingUp, value: '87%', label: de ? 'verbessern Kommunikation in 14 Tagen' : 'improve communication in 14 days' },
-    { icon: Sparkles, value: '+42%', label: de ? 'bessere Präsentationsscores' : 'better presentation scores' },
-    { icon: Star, value: '4.9/5', label: de ? 'Bewertung' : 'Rating' },
-  ];
 
   return (
     <DashboardLayout rightPanel={<CoachingRightPanel de={de} onCheckout={handleStripeCheckout} />}>
@@ -128,24 +112,19 @@ export default function CoachingPage() {
             {/* Left: Copy */}
             <div className="space-y-6">
               <Badge className="bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] border-[#BFFF00]/25 font-bold text-[10px] tracking-[0.12em]">
-                {de ? 'DEIN LEADERSHIP COACHING SYSTEM' : 'YOUR LEADERSHIP COACHING SYSTEM'}
+                {de ? 'LEADERSHIP OPERATING SYSTEM' : 'LEADERSHIP OPERATING SYSTEM'}
               </Badge>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
                 {de ? (
-                  <>Du bist <span className="gradient-text">näher dran</span>, als du denkst.</>
+                  <>Führung ist <span className="gradient-text">trainierbar</span>.</>
                 ) : (
-                  <>You&rsquo;re <span className="gradient-text">closer</span> than you think.</>
+                  <>Leadership is <span className="gradient-text">trainable</span>.</>
                 )}
               </h1>
-              <div className="space-y-1.5 text-[15px] sm:text-[16px] font-semibold text-foreground/80 max-w-xl">
-                <p>{de ? 'Jedes Gespräch, das du vermeidest …' : 'Every conversation you avoid …'}</p>
-                <p>{de ? 'Jede Entscheidung, die du aufschiebst …' : 'Every decision you delay …'}</p>
-                <p>{de ? 'Jedes Meeting, nach dem du denkst: „Das hätte ich anders sagen sollen" …' : 'Every meeting you leave wishing you\'d said it differently …'}</p>
-              </div>
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
                 {de
-                  ? <>… kostet dich Einfluss. Leader-OS — auf Basis von Wlads Methodik — trainiert dich zu dem Leader, dem Menschen <em className="not-italic font-semibold text-foreground">von selbst folgen</em>.</>
-                  : <>… is costing you influence. Leader-OS — built on Wlad&rsquo;s methodology — trains you into the leader people <em className="not-italic font-semibold text-foreground">naturally follow</em>.</>}
+                  ? <>Leader-OS trainiert die Gespräche, die deinen Alltag entscheiden — Feedback, Konflikte, Verhandlungen, Auftritte. Mit KI-Simulationen, Video-Analyse und einem Coach auf Basis von Wlads dokumentierter Methodik.</>
+                  : <>Leader-OS trains the conversations that decide your day — feedback, conflict, negotiation, presence. With AI simulations, video analysis and a coach built on Wlad&rsquo;s documented methodology.</>}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Button
@@ -191,8 +170,8 @@ export default function CoachingPage() {
                   </p>
                   <p className="text-[12.5px] text-white/70 leading-relaxed">
                     {de
-                      ? '„Starte kostenlos — ich kalibriere mich in 60 Sekunden auf dich. Keine Kreditkarte, kein Risiko."'
-                      : '"Start free — I calibrate to you in 60 seconds. No credit card, no risk."'}
+                      ? 'Starte kostenlos — keine Kreditkarte. WladBot antwortet auf Basis von Wlads Kursen und Frameworks.'
+                      : 'Start free — no credit card. WladBot answers based on Wlad\'s courses and frameworks.'}
                   </p>
                 </div>
               </div>
@@ -200,10 +179,6 @@ export default function CoachingPage() {
             <ScoreTeaser de={de} onCta={scrollToPricing} />
           </div>
         </section>
-
-        {/* ── 2+3. AGITATE + IDENTITY (Iter 92.60 Conversion-Engine) ── */}
-        <CostSection de={de} />
-        <IdentityShift de={de} />
 
         {/* ── 3-LAYER SYSTEM ── full breakdown ── */}
         <section className="animate-fade-in stagger-2" data-testid="three-layer-section">
@@ -225,22 +200,17 @@ export default function CoachingPage() {
           </div>
         </section>
 
-        {/* ── 4-6. MECHANISM + VISION + PROOF ── */}
+        {/* ── PRODUCT MECHANISM ── */}
         <WhyCoursesFail de={de} />
         <EngineLoop de={de} />
-        <MondayMorning de={de} />
-        <ProofNumbers de={de} />
 
         {/* ── PRICING ── 3-Tier Funnel ── */}
         <section ref={pricingRef} className="animate-fade-in stagger-3 scroll-mt-8" data-testid="pricing-section">
-          <ValueIntro de={de} />
           <TierPricingGrid onCheckout={handleStripeCheckout} checkoutLoading={checkoutLoading} de={de} />
-          <CoffeeLine de={de} />
         </section>
 
-        {/* ── 11-13. COMPARISON + ROI + RISK REVERSAL ── */}
+        {/* ── COMPARISON + RISK REVERSAL ── */}
         <ComparisonTable de={de} />
-        <RoiCalculator de={de} />
         <RiskReversal de={de} onCta={scrollToPricing} />
 
         {/* ── 1:1 COACHING CTA ── strategy-call bridge ── */}
@@ -276,66 +246,6 @@ export default function CoachingPage() {
           </Card>
         </section>
 
-        {/* ── SOCIAL PROOF ── stats + testimonials ── */}
-        <section className="space-y-8 animate-fade-in stagger-5" data-testid="social-proof-section">
-          {/* Stats — Iter 92.46 GODMODE polish: bigger gradient tiles, better shadows */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat) => (
-              <Card key={stat.label} className="group bg-white dark:bg-card/60 border-black/[0.04] dark:border-white/[0.06] hover:border-[#BFFF00]/40 transition-all hover:-translate-y-1 hover:shadow-2xl">
-                <CardContent className="p-6 text-center">
-                  <div className="relative w-14 h-14 mx-auto mb-4">
-                    <div className="absolute inset-0 rounded-2xl bg-[#BFFF00] blur-lg opacity-40 group-hover:opacity-70 transition-opacity" />
-                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#BFFF00] via-[#B0E600] to-[#9ACC00] flex items-center justify-center shadow-[0_8px_24px_-6px_rgba(191,255,0,0.5)]">
-                      <stat.icon size={22} className="text-[#0A0A0A]" strokeWidth={2.6} />
-                    </div>
-                  </div>
-                  <p className="text-3xl font-black tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>{stat.value}</p>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-[0.12em] font-bold mt-1.5 leading-tight">
-                    {stat.label}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Testimonials — Iter 92.46 GODMODE: real Unsplash professional face images */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, idx) => (
-                <Card
-                  key={t.author + idx}
-                  className="group border-black/[0.04] dark:border-white/[0.06] hover:shadow-2xl hover:-translate-y-1 transition-all"
-                  data-testid={`testimonial-${idx}`}
-                >
-                  <CardContent className="p-6 space-y-4">
-                    {/* 5-star rating */}
-                    <div className="flex items-center gap-0.5">
-                      {[1,2,3,4,5].map((s) => (
-                        <Star key={s} size={13} className="fill-[#BFFF00] text-[#BFFF00]" />
-                      ))}
-                    </div>
-                    <Quote size={22} className="text-[#BFFF00]/70" />
-                    <p className="text-[14px] font-medium leading-relaxed text-foreground">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
-                    <div className="flex items-center gap-3 pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
-                      <img
-                        src={TESTIMONIAL_AVATARS[idx]}
-                        alt={t.author}
-                        className="w-11 h-11 rounded-full object-cover ring-2 ring-[#BFFF00]/30 group-hover:ring-[#BFFF00]/60 transition-all"
-                        loading="lazy"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                      <div>
-                        <p className="text-[13px] font-black">{t.author}</p>
-                        <p className="text-[11px] text-muted-foreground">{t.role}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
-        </section>
-
         {/* ── FAQ ── */}
         <section className="animate-fade-in stagger-6" data-testid="faq-section">
           <Card>
@@ -353,11 +263,10 @@ export default function CoachingPage() {
           </Card>
         </section>
 
-        {/* ── SECRET: Behavioral Personalization (nur Free-Tier) + Identity Close ── */}
+        {/* ── Personalization (Free-Tier only) ── */}
         {(user?.tier === 'free' || !user?.tier) && (
           <PersonalBlock de={de} user={user} onCta={scrollToPricing} />
         )}
-        <FinalClose de={de} onCta={scrollToPricing} />
 
         {/* ── Support Footer ── */}
         <div className="text-center py-4 animate-fade-in stagger-6">
@@ -376,3 +285,4 @@ export default function CoachingPage() {
     </DashboardLayout>
   );
 }
+

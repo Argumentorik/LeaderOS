@@ -140,7 +140,7 @@ def _render_leader_score_card(
 
     # Bottom-left tagline
     f_tagline = _font(18, weight="regular")
-    draw.text((60, HEIGHT - 60), "KI Leadership · 30-Tage Sprint", font=f_tagline, fill=TEXT_DIM)
+    draw.text((60, HEIGHT - 60), "KI Leadership · 30-Tage-Programm", font=f_tagline, fill=TEXT_DIM)
 
     buf = io.BytesIO()
     img.save(buf, format="PNG", optimize=True)

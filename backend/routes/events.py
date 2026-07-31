@@ -268,7 +268,7 @@ EVENTS_SEED_V2 = [
         "category": "execution",
     },
     {
-        "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: KI-Workflow Sprint",
+        "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: KI-Workflows",
         "description": "60 Minuten: Gemeinsam KI-Workflows durcharbeiten und in den Führungsalltag integrieren.",
         "outcomes": ["1 neuen KI-Workflow implementiert", "Praxis-Erfahrung gesammelt", "Peer-Austausch"],
         "event_type": "focus_session", "date": "2026-08-19T14:00:00Z", "duration": "60 min", "duration_minutes": 60,

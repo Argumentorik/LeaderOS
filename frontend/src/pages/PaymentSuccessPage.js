@@ -9,7 +9,7 @@ import { useCredits } from '../contexts/CreditContext';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import logger from '../lib/logger';
-import { CheckCircle2, Loader2, XCircle, ArrowRight, Zap, Crown, Flame, Brain, Video, Target, Users, Star } from 'lucide-react';
+import { CheckCircle2, Loader2, XCircle, ArrowRight, Zap, Crown, Flame, Brain, Video, Target, Users, Star, FileText, MessageCircle } from 'lucide-react';
 
 export default function PaymentSuccessPage() {
   const { lang } = useLanguage();
@@ -78,7 +78,7 @@ export default function PaymentSuccessPage() {
               {/* What's unlocked */}
               <div className="space-y-2">
                 {[
-                  { icon: Flame, label: de ? '30-Tage KI-Leadership Sprint' : '30-Day AI Leadership Sprint', unlocked: true },
+                  { icon: Flame, label: de ? '30-Tage KI-Leadership Programm' : '30-Day AI Leadership Program', unlocked: true },
                   { icon: Brain, label: de ? 'Unbegrenzter KI-Coach' : 'Unlimited AI Coach', unlocked: true },
                   { icon: Video, label: de ? '16 Video-Missionen' : '16 Video Missions', unlocked: true },
                   { icon: Target, label: de ? '10 Geführte Workflows' : '10 Guided Workflows', unlocked: true },
@@ -107,10 +107,10 @@ export default function PaymentSuccessPage() {
               {/* Quick PDF + Tools links */}
               <div className="grid grid-cols-2 gap-2 pt-2">
                 <Button onClick={() => navigate('/downloads')} variant="outline" className="text-xs h-10" data-testid="success-go-downloads">
-                  📄 {de ? 'PDF-Downloads' : 'PDF Downloads'}
+                  <FileText size={13} className="mr-1.5" /> {de ? 'PDF-Downloads' : 'PDF Downloads'}
                 </Button>
                 <Button onClick={() => navigate('/chat')} variant="outline" className="text-xs h-10" data-testid="success-go-chat">
-                  💬 {de ? 'KI-Coach starten' : 'Start AI Coach'}
+                  <MessageCircle size={13} className="mr-1.5" /> {de ? 'KI-Coach starten' : 'Start AI Coach'}
                 </Button>
               </div>
             </CardContent>

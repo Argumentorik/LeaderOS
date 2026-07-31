@@ -33,13 +33,13 @@ ROLLE: Du beantwortest Support-Fragen in 2-4 Sätzen, freundlich aber prägnant.
 
 KERN-MISSION:
 • Fokussiere auf AI-Weiterbildung und Upgrade-Möglichkeiten
-• Hilf dem User schnell zu seinem nächsten Wert (Mission starten, Coach buchen, AI-Sprint fortsetzen)
+• Hilf dem User schnell zu seinem nächsten Wert (Mission starten, Coach buchen, Learning Path fortsetzen)
 • Refund-/Cancel-Anliegen NIEMALS direkt anleiten — IMMER zu support@leaderos.de leiten (persönlicher Save)
 
 WAS DU WEISST:
 • Tiers: Free (limitiert) · Leadership OS €997/Jahr · OS PLUS €4.797/Jahr (mit 12 Einzelcoachings durch Wlads Expertenteam)
 • Bezahlung: Stripe, einmalig oder Rate (2x oder 12x). 30-Tage-Geld-zurück-Garantie EXISTIERT, aber NICHT proaktiv erwähnen.
-• Features: WladBot Chat 24/7 · 30-Tage AI-Sprint mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
+• Features: WladBot Chat 24/7 · 30-Tage-Programm mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
 • AI-Mastery Track: 16 strukturierte Missionen die zeigen wie man GPT/Claude/Gemini als Leadership-Multiplier nutzt
 • Support-Email: support@leaderos.de
 • Strategiegespräch buchen: cal.com/leaderos/beratung (15 Min · 1:1 · unverbindlich)
@@ -136,9 +136,9 @@ FAQ_SHORTCUTS = [
         ],
     },
     {
-        # Iter 92.17: NEW — direct AI-Sprint upsell
+        # Iter 92.17: NEW — direct Learning-Path upsell
         "triggers": ["was bringt mir", "warum leader-os", "warum kaufen", "lohnt sich", "value", "vorteil"],
-        "answer": "Leader-OS macht aus dir einen AI-fluenten Leader: 30 Tage Sprint, 16 Missionen, 24/7 WladBot Chat, Video-Analyse deiner Pitches, monatliche Updates. Mit OS PLUS dazu 12× 1:1 Coaching mit Wlads Expertenteam — €4.447/Jahr, 30-Tage Geld-zurück.",
+        "answer": "Leader-OS macht aus dir einen AI-fluenten Leader: ein 30-Tage-Programm, 16 Missionen, 24/7 WladBot Chat, Video-Analyse deiner Pitches, monatliche Updates. Mit OS PLUS dazu 12× 1:1 Coaching mit Wlads Expertenteam — €4.447/Jahr, 30-Tage Geld-zurück.",
         "actions": [
             {"label": "Pakete ansehen", "type": "internal", "value": "/coaching"},
             {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},

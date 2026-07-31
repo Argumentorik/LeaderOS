@@ -282,7 +282,7 @@ den ersten Meilenstein. Wir melden uns in 3 Tagen wieder.""",
         "headline": "Dein Lizenzschlüssel ist aktiv. 1 Jahr Vollzugang.",
         "body": """Ab sofort nutzt du:<br>
 • WladBot AI Coach 24/7<br>
-• Den kompletten 30-Tage Sprint<br>
+• Das komplette 30-Tage-Programm<br>
 • Alle Playbooks, Frameworks & Simulationen<br>
 • Die AI Leadership Community<br><br>
 <b>Dein heute-Ritual:</b> 5 Min Daily Check-in starten — dein XP-Konto wartet.""",
@@ -562,17 +562,17 @@ FRAMEWORK_EPISODES = [
     },
     {
         "ep": 7, "day": 14,
-        "framework": "Dein 30-Tage-System",
-        "subject": "EP 07/07 · Das Finale: Dein 30-Tage-System für messbaren Fortschritt",
-        "tagline": "Alle 7 Frameworks. Ein täglicher Loop.",
-        "what": "Frameworks kennen ist Stufe 1 — sie zur Gewohnheit machen ist Leadership. Wlads Loop: <b>Leader-Diagnose</b> (wo stehst du auf 0–100?), <b>Daily Check-in</b> (5 Minuten Reflexion pro Tag), <b>Challenges & Missionen</b> (bewusste Praxis mit Feedback). Wer den Loop 30 Tage fährt, führt messbar anders — nicht gefühlt, gemessen.",
+        "framework": "Dein persönliches Operating System",
+        "subject": "EP 07/07 · Dein persönliches Operating System als Leader",
+        "tagline": "Aus 7 Frameworks wird ein System für jede Arbeitswoche.",
+        "what": "Frameworks wirken erst, wenn sie Teil deiner Woche werden. Wlads Ansatz: ein persönliches Operating System aus drei Bausteinen — <b>Weekly Review</b> (15 Minuten pro Woche: Was lief gut? Was wiederholst du? Was änderst du?), <b>Decision Loops</b> (wiederkehrende Entscheidungen einmal sauber durchdenken und als feste Regel festhalten) und <b>wiederverwendbare Systeme</b> (Gesprächsleitfäden, Delegations-Checklisten, Meeting-Formate — einmal bauen, immer nutzen). So wird aus Lernen kontinuierliche Verbesserung.",
         "steps": [
-            "Mach deine Leader-Diagnose — sie ist dein Ausgangswert für die nächsten 30 Tage.",
-            "Blocke dir 5 Minuten täglich für den Check-in — gleiche Zeit, jeden Tag.",
-            "Wende pro Woche EIN Framework aus dieser Serie bewusst in einem echten Gespräch an.",
+            "Blocke 15 Minuten pro Woche für dein Weekly Review — gleicher Tag, gleiche Zeit.",
+            "Halte eine wiederkehrende Entscheidung als feste Regel fest — dein erster Decision Loop.",
+            "Baue ein wiederverwendbares System (z. B. deinen Feedback-Leitfaden) und nutze es im nächsten Gespräch.",
         ],
-        "practice": "Du hast jetzt alle 7 Frameworks. Dein Dashboard zeigt dir ab heute jeden Tag den nächsten Schritt — Wlad bleibt an deiner Seite.",
-        "cta_label": "Meinen 30-Tage-Loop starten",
+        "practice": "In Leader-OS findest du dafür alles an einem Ort: die Kurse, Live-Events mit Wlad, deinen täglichen Check-in und deinen Fortschritt. Mach Leader-OS zum Teil deiner Arbeitswoche — es wächst mit jeder Session mit.",
+        "cta_label": "Mein Operating System aufbauen",
         "cta_path": "/dashboard",
     },
 ]

@@ -103,21 +103,6 @@ export default function EnterprisePage() {
               ))}
             </div>
 
-            {/* ── ROI Stats Strip ── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { value: '312%', label: de ? 'ROI im 1. Jahr' : '1st-year ROI', color: '#BFFF00' },
-                { value: '10h', label: de ? '/Woche Zeitersparnis' : '/week saved', color: '#00AAFF' },
-                { value: '87%', label: de ? 'Retention nach Training' : 'Retention after training', color: '#FFB800' },
-                { value: '4.9', label: de ? 'Ø Teilnehmer-Bewertung' : 'Ø participant rating', color: '#D946EF' },
-              ].map(s => (
-                <div key={s.label} className="p-4 rounded-xl bg-white dark:bg-card border border-black/[0.04] dark:border-white/[0.06] text-center">
-                  <p className="text-3xl font-black tabular-nums" style={{ color: s.color }}>{s.value}</p>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-
             {/* ── ROI Calculator (interactive) ── */}
             <Card className="bg-gradient-to-br from-[#BFFF00]/[0.04] to-transparent border-[#BFFF00]/20">
               <CardContent className="p-6">

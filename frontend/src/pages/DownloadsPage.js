@@ -32,7 +32,7 @@ const buildLeadershipReport = (user) => ({
 });
 
 const build30TagePlan = (user) => ({
-  title: '30-Tage Leadership Sprint',
+  title: '30-Tage Leadership Programm',
   subtitle: 'Dein Aktionsplan',
   userName: user?.name,
   sections: [
@@ -92,7 +92,7 @@ const RESOURCES = [
   {
     id: '30_tage_plan',
     icon: Trophy,
-    title: '30-Tage Leadership Sprint',
+    title: '30-Tage Leadership Programm',
     description: 'Wochenweise Aktionsplan zum Ausdrucken & Abhaken.',
     badge: 'Aktionsplan',
     free: true,

@@ -72,7 +72,7 @@ export const LoginBrandPanel = ({ features, de }) => {
 
         <div className="mt-16">
           <p className="text-[11px] text-white/15 tracking-wide">
-            {de ? '2.500+ Führungskräfte trainieren bereits mit Leader-OS — von Startups bis DAX.' : '2,500+ leaders already train with Leader-OS — from startups to Fortune 500.'}
+            {de ? 'Auf Basis der Methodik von Wlad Jachtchenko — Rhetorik- und Leadership-Trainer.' : 'Built on the methodology of Wlad Jachtchenko — rhetoric and leadership trainer.'}
           </p>
         </div>
       </div>

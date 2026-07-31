@@ -161,7 +161,7 @@ export const FloatingWladBotDrawer = () => {
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: noCredits
-          ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad. 🚀' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad. 🚀')
+          ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad.' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad.')
           : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.'),
       }]);
     } finally {

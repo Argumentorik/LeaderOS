@@ -157,7 +157,7 @@ export default function LearningVideosTab() {
     // video previously landed in an empty PricingModal (dead-end). Now they
     // get a warm launch-teaser instead.
     if (isAccelerator && video?.locked_reason === 'prelaunch') {
-      toast.info('🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — als OS-PLUS-Member bekommst du sofort Zugriff.', { duration: 6000 });
+      toast.info('Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — als OS-PLUS-Member bekommst du sofort Zugriff.', { duration: 6000 });
       return;
     }
     setShowPaywall(true);

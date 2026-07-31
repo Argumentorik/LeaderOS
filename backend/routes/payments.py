@@ -81,7 +81,7 @@ PACKAGES = {
         "tier": "standard",
         "amount": 997.00,
         "currency": "eur",
-        "description": "1 Jahr Vollzugang · 12 Videokurse (1/Monat freigeschaltet, Wert 2.388€) · WladBot AI Coach 24/7 · 30-Tage Sprint · alle Frameworks · 30-Tage Geld-zurück",
+        "description": "1 Jahr Vollzugang · 12 Videokurse (1/Monat freigeschaltet, Wert 2.388€) · WladBot AI Coach 24/7 · 30-Tage-Programm · alle Frameworks · 30-Tage Geld-zurück",
         "billing": "one_time",
     },
     # Leadership OS — 2 Raten à 550€ (1.100€ gesamt, 103€ Aufschlag)

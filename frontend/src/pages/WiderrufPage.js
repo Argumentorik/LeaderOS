@@ -51,7 +51,7 @@ export default function WiderrufPage() {
           </div>
 
           <div className="bg-amber-500/[0.07] border border-amber-500/20 rounded-xl p-4">
-            <h2 className="text-amber-200 font-bold text-base mb-2">⚠️ {de ? 'Wichtiger Hinweis bei digitalen Inhalten' : 'Important notice for digital content'}</h2>
+            <h2 className="text-amber-200 font-bold text-base mb-2">{de ? 'Wichtiger Hinweis bei digitalen Inhalten' : 'Important notice for digital content'}</h2>
             <p className="text-amber-100/80">
               {de
                 ? 'Das Widerrufsrecht erlischt bei einem Vertrag zur Lieferung von digitalen Inhalten (z.B. KI-Coach-Zugang, Video-Trainings), wenn Sie ausdrücklich zugestimmt haben, dass mit der Ausführung des Vertrags vor Ende der Widerrufsfrist begonnen wird, UND Sie Ihre Kenntnis bestätigt haben, dass durch diese Zustimmung das Widerrufsrecht erlischt.'

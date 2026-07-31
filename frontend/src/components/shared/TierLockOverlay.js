@@ -87,7 +87,7 @@ export const TierLockOverlay = ({
               ? 'bg-[#BFFF00] text-[#0A0A0A]'
               : 'bg-[#BFFF00]/15 text-[#BFFF00] border border-[#BFFF00]/30'
           }`}>
-            {isAccelerator ? '👑 OS PLUS EXCLUSIVE' : 'LEADERSHIP OS'}
+            {isAccelerator ? 'OS PLUS EXCLUSIVE' : 'LEADERSHIP OS'}
           </div>
           <h2 className="text-2xl font-black text-white tracking-tight leading-tight">{cfg.title}</h2>
           <p className="text-[13px] text-white/60">{cfg.subtitle}</p>

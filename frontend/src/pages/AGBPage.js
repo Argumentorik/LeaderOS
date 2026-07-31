@@ -35,7 +35,7 @@ export default function AGBPage() {
       <div className="max-w-3xl mx-auto">
         <a href="/" className="inline-flex items-center gap-2 text-[#BFFF00] text-[12px] mb-6 hover:underline">← Zurück</a>
         <h1 className="text-3xl sm:text-4xl font-black mb-2">Allgemeine Geschäftsbedingungen</h1>
-        <p className="text-amber-300 text-[12px] mb-10">⚠️ Vorläufige Fassung — Anwalts-Review ausstehend</p>
+        <p className="text-amber-300 text-[12px] mb-10">Vorläufige Fassung — Anwalts-Review ausstehend</p>
 
         <Section num="1" title="Geltungsbereich">
           <p>

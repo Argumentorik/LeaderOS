@@ -44,8 +44,8 @@ export const LicenseKeyForm = ({ de = true }) => {
       login(res.data.user, 'license');
       const pkg = res.data.activated?.package_name || 'Leader-OS';
       toast.success(de
-        ? `${pkg} aktiviert! Willkommen an Bord 🚀`
-        : `${pkg} activated! Welcome aboard 🚀`);
+        ? `${pkg} aktiviert! Willkommen an Bord.`
+        : `${pkg} activated! Welcome aboard.`);
       navigate(postLoginRoute(res.data.user));
     } catch (err) {
       setError(parseAuthError(err, de ? 'Aktivierung fehlgeschlagen' : 'Activation failed'));

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
@@ -19,7 +19,11 @@ import {
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SimulationBriefing } from '../components/shared/SimulationBriefing';
-import { ArgumentationPrepModal } from '../components/simulations/ArgumentationPrepModal';
+// Perf: the prep wizard is heavy (framer-motion steps, voice input) and only
+// opens on demand — lazy chunk keeps the simulations page load fast.
+const ArgumentationPrepModal = lazy(() =>
+  import('../components/simulations/ArgumentationPrepModal').then(m => ({ default: m.ArgumentationPrepModal }))
+);
 import { stopAllAudio } from '../lib/audioBus';
 import { toast } from 'sonner';
 
@@ -227,6 +231,16 @@ export default function SimulationsPage() {
   useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   // Iter 124 (Wlad Godmode): open ArgPrep w/ shared template when ?tpl= is present.
+  // ?prep=1 (dashboard quick-access) opens the wizard directly.
+  useEffect(() => {
+    if (searchParams.get('prep') === '1') {
+      setArgPrepOpen(true);
+      searchParams.delete('prep');
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const token = searchParams.get('tpl');
     if (!token) return;
@@ -467,6 +481,7 @@ export default function SimulationsPage() {
         )}
 
         {argPrepOpen && (
+          <Suspense fallback={null}>
           <ArgumentationPrepModal
             initialTemplate={sharedTemplate}
             onClose={() => { setArgPrepOpen(false); setSharedTemplate(null); }}
@@ -482,6 +497,7 @@ export default function SimulationsPage() {
               if (bridgeScenario) setBriefingScenario(bridgeScenario);
             }}
           />
+          </Suspense>
         )}
 
         {activeSim && !paused && (

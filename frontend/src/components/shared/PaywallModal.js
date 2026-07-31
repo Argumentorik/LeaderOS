@@ -20,7 +20,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
   };
 
   const features = [
-    { icon: Flame, label: '30-Tage KI-Leadership Sprint' },
+    { icon: Flame, label: '30-Tage KI-Leadership Programm' },
     { icon: Brain, label: 'Unbegrenzter KI-Coach (24/7)' },
     { icon: Video, label: '16 Video-Missionen mit KI-Feedback' },
     { icon: Target, label: '10 Workflows + PDF-Reports' },

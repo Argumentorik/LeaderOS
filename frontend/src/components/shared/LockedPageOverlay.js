@@ -17,7 +17,7 @@ export function LockedPageOverlay({
   title = 'Community — bald verfügbar',
   subtitle = 'Diese Sektion schalten wir für alle Premium-Leader kurz nach dem offiziellen Launch frei.',
   features = [],
-  ctaText = '🔓 Upgrade auf Premium – Vollzugriff freischalten',
+  ctaText = 'Upgrade auf Premium – Vollzugriff freischalten',
   testId = 'locked-page-overlay',
 }) {
   const [showPaywall, setShowPaywall] = useState(false);
