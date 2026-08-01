@@ -15,6 +15,13 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 126 · 01.08.26] PDF-EXPORT GODMODE-REDESIGN (cavemode, selbst getestet: 4 Strategien + E2E-curl + visuelle Page-Renders)**
+  - **Kein rohes Markdown mehr**: `###`/`**` werden nie mehr roh gedruckt — ###-Headings in Sektionen 3–6 als farbige Sub-Headlines (Sektionsfarbe), `---` Trenner entfernt, XML-Escaping (& < >) vor Tag-Injection.
+  - **„Deine 3 stärksten Argumente" = Premium-Cards auf eigener/n Seite(n)**: eigene Hero-Seite (SEKTION 2 Eyebrow + große Headline), pro Argument eine Card mit dunklem Header (ARGUMENT 01 in Brand-Grün + Titel), farbiger SEXIER-Letter-Spalte (S=blau, E=grün, X=orange, I=violett, E²=cyan, R=rot) + Mini-Labels (STATEMENT/ERKLÄRUNG/…), Einwand/Antwort gefettet, abgerundete Ecken (reportlab 5 ROUNDEDCORNERS), Header wiederholt sich bei Seiten-Split (repeatRows). 3 Argumente = exakt 2 Seiten (kompakte Typo 8.9/12.2).
+  - **Robuster Parser für LLM-Varianten**: `### Argument 1:` / plain `Argument 1:` / `**Argument 1:**` + Letter-Formate `- S:` / `- S (Statement):` / `E2`→`E²` — Regression über alle 4 DB-Strategien: 3/3 Cards, 0 rohes Markdown.
+  - **BUGFIX gelernt**: reportlab SPAN nimmt Inhalt der Zelle oben-LINKS — Header muss in data[0][0].
+  - Datei: `/app/backend/routes/argumentation_prep_pdf.py` (komplett neu). Frontend unverändert.
+
 - [x] **[Iter 125 · 31.07.26] ZERO AI SLOP — FINAL TRUST-DIRECTIVE (getestet: testing_agent 100 % PASS, iteration_125.json)**
   - **Fake-Metriken komplett entfernt**: /coaching (140.000+/82 %/94 %/4,9★-ProofNumbers, 2.500+/87 %/+42 %/4.9-Stats-Grid, Unsplash-Fake-Testimonials), /enterprise (312 % ROI-Strip), /login (4,9★ · 2.500+ Chip), LoginBrandPanel (2.500+ DAX-Claim → ehrliche Methodik-Zeile), BookingTeaserCard (4.9/5 · 312 Beratungen → "15 Min · unverbindlich").
   - **Hype-Sections gelöscht**: CostSection, IdentityShift ("Das ist Transformation"), MondayMorning-Story, CoffeeLine (2,73 €/Tag), RoiCalculator (95 €/h-Mathe), ValueIntro, FinalClose. `ConversionSections.js` neu: nur noch ScoreTeaser (jetzt "BEISPIEL"-Badge + ehrliche Fußzeile, Lock-Icon statt 🔒), WhyCoursesFail, EngineLoop, ComparisonTable, RiskReversal, PersonalBlock. Hero neu: "Führung ist trainierbar." (Linear/Stripe-Ton).
