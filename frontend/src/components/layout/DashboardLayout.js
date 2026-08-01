@@ -44,7 +44,7 @@ export const DashboardLayout = ({ children, hideSidebar, rightPanel }) => {
           <Sidebar />
         </aside>
       )}
-      <main className={`flex-1 overflow-auto pb-[64px] md:pb-0 ${rightPanel ? 'min-w-0' : ''}`}>
+      <main className={`flex-1 overflow-auto pb-[92px] md:pb-0 ${rightPanel ? 'min-w-0' : ''}`}>
         {children}
       </main>
       {rightPanel && (

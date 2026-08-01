@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 127 · 01.08.26] MOBILE PREMIUM-UPDATE: Support weg + Floating-Dock-Navbar (selbst getestet: 390px-Screenshots Dashboard/Chat/More-Sheet, CI-Build 0 Errors)**
+  - **Support auf Mobile entfernt**: WladHelp-FAB (LifeBuoy) + FloatingWladBotDrawer-FAB jetzt `hidden md:flex` — auf Mobile keine schwebenden Buttons mehr, die Content verdecken (WladBot ist eh 1. Tab der Bottom-Nav). Desktop unverändert.
+  - **MobileHeroNav → Premium Floating Dock**: schwebende Glass-Pill-Bar (rounded-[22px], left-3/right-3, backdrop-blur-2xl, Godmode-Schatten, safe-area), aktiver Tab = Brand-Grün-Pill mit Glow, active:scale-Micro-Animationen. „Mehr"-Sheet: Grabber-Handle, Icons pro Bereich (lucide), staggered fade-in.
+  - **Layout-Anpassung**: DashboardLayout mobile pb 64→92px; UsageFeedbackPrompt: Zentrier-BUGFIX (animate-fade-in transform überschrieb -translate-x-1/2 → jetzt left-4/right-4/mx-auto) + z-Index 9990→45 (liegt nicht mehr über dem More-Sheet).
+
 - [x] **[Iter 126 · 01.08.26] PDF-EXPORT GODMODE-REDESIGN (cavemode, selbst getestet: 4 Strategien + E2E-curl + visuelle Page-Renders)**
   - **Kein rohes Markdown mehr**: `###`/`**` werden nie mehr roh gedruckt — ###-Headings in Sektionen 3–6 als farbige Sub-Headlines (Sektionsfarbe), `---` Trenner entfernt, XML-Escaping (& < >) vor Tag-Injection.
   - **„Deine 3 stärksten Argumente" = Premium-Cards auf eigener/n Seite(n)**: eigene Hero-Seite (SEKTION 2 Eyebrow + große Headline), pro Argument eine Card mit dunklem Header (ARGUMENT 01 in Brand-Grün + Titel), farbiger SEXIER-Letter-Spalte (S=blau, E=grün, X=orange, I=violett, E²=cyan, R=rot) + Mini-Labels (STATEMENT/ERKLÄRUNG/…), Einwand/Antwort gefettet, abgerundete Ecken (reportlab 5 ROUNDEDCORNERS), Header wiederholt sich bei Seiten-Split (repeatRows). 3 Argumente = exakt 2 Seiten (kompakte Typo 8.9/12.2).

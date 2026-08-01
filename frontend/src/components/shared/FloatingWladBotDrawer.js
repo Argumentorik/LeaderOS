@@ -186,7 +186,7 @@ export const FloatingWladBotDrawer = () => {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-6 z-[60] w-14 h-14 rounded-2xl bg-[#BFFF00] text-[#0A0A0A] shadow-2xl shadow-[#BFFF00]/30 ring-2 ring-white/10 hover:scale-105 active:scale-95 transition-transform flex items-center justify-center group"
+          className="fixed bottom-24 right-6 z-[60] w-14 h-14 rounded-2xl bg-[#BFFF00] text-[#0A0A0A] shadow-2xl shadow-[#BFFF00]/30 ring-2 ring-white/10 hover:scale-105 active:scale-95 transition-transform hidden md:flex items-center justify-center group"
           data-testid="wladbot-fab"
           title={de ? 'WladBot fragen' : 'Ask WladBot'}
         >

@@ -56,7 +56,7 @@ export function UsageFeedbackPrompt() {
 
   return (
     <div
-      className="fixed bottom-[76px] md:bottom-5 left-1/2 -translate-x-1/2 z-[9990] w-[calc(100%-2rem)] max-w-sm animate-fade-in"
+      className="fixed bottom-[100px] md:bottom-5 left-4 right-4 mx-auto z-[45] max-w-sm animate-fade-in"
       data-testid="usage-feedback-prompt"
     >
       <div className="rounded-2xl bg-[#0A0A0A] border border-white/[0.1] shadow-2xl shadow-black/40 overflow-hidden">

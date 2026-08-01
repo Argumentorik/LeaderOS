@@ -159,7 +159,7 @@ export const WladHelpButton = () => {
         <button
           ref={fabRef}
           onClick={() => setOpen(true)}
-          className={`group fixed ${liftOnMobile ? 'bottom-28 sm:bottom-6' : 'bottom-6'} right-6 z-[140] w-14 h-14 rounded-full bg-[#BFFF00] hover:bg-[#D4FF4D] active:scale-95 shadow-[0_12px_36px_-8px_rgba(191,255,0,0.55)] flex items-center justify-center transition-all`}
+          className={`group fixed ${liftOnMobile ? 'bottom-28 sm:bottom-6' : 'bottom-6'} right-6 z-[140] w-14 h-14 rounded-full bg-[#BFFF00] hover:bg-[#D4FF4D] active:scale-95 shadow-[0_12px_36px_-8px_rgba(191,255,0,0.55)] hidden md:flex items-center justify-center transition-all`}
           aria-label="WladHelp öffnen"
           title="WladHelp · Brauchst du Hilfe?"
           data-testid="wladhelp-fab"
