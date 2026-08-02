@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 128 · 02.08.26] VOICE SPARRING VORERST DEAKTIVIERT (User: „does not work") — selbst getestet (Build 0 Errors, Prep-Modal Screenshot, kein Voice-Button)**
+  - Voice-Sparring-Button aus `ArgumentationPrepModal` Footer entfernt (+ voiceOpen-State, Modal-Mount, Import). CoachingMemoryPanel-Hinweistext auf „Simulation" umformuliert.
+  - **Nicht gelöscht, nur entkoppelt**: `VoiceSparringModal.js` + Backend `/api/voice/argumentation-sparring` bleiben intakt — Reaktivierung = 1 Button + 1 State (siehe git log Iter 128). Falls Voice-Sparring später gefixt werden soll: Root-Cause auf Prod prüfen (vermutlich Mikrofonrechte/TTS-Latenz).
+  - ⚠️ Learning ERNEUT bestätigt: parallele search_replace auf dieselbe Datei → Trailing-Duplikat (2× passiert). IMMER sequentiell auf derselben Datei editieren.
+
 - [x] **[Iter 127 · 01.08.26] MOBILE PREMIUM-UPDATE: Support weg + Floating-Dock-Navbar (selbst getestet: 390px-Screenshots Dashboard/Chat/More-Sheet, CI-Build 0 Errors)**
   - **Support auf Mobile entfernt**: WladHelp-FAB (LifeBuoy) + FloatingWladBotDrawer-FAB jetzt `hidden md:flex` — auf Mobile keine schwebenden Buttons mehr, die Content verdecken (WladBot ist eh 1. Tab der Bottom-Nav). Desktop unverändert.
   - **MobileHeroNav → Premium Floating Dock**: schwebende Glass-Pill-Bar (rounded-[22px], left-3/right-3, backdrop-blur-2xl, Godmode-Schatten, safe-area), aktiver Tab = Brand-Grün-Pill mit Glow, active:scale-Micro-Animationen. „Mehr"-Sheet: Grabber-Handle, Icons pro Bereich (lucide), staggered fade-in.

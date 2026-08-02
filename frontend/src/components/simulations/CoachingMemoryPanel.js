@@ -229,7 +229,7 @@ function RecurringObjectionsSection({ objections, variant = 'dark', className = 
         ))}
       </ul>
       <p className={`text-[10px] mt-2 leading-relaxed ${isDark ? 'text-white/50' : 'text-muted-foreground/80'}`}>
-        Trainier diese Einwände gezielt im nächsten Voice-Sparring — sie tauchen bei dir wiederholt auf.
+        Trainier diese Einwände gezielt in deiner nächsten Simulation — sie tauchen bei dir wiederholt auf.
       </p>
     </div>
   );

@@ -15,7 +15,7 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2, Clock, Save, Share2, Radio } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2, Clock, Save, Share2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import api from '../../lib/api';
@@ -25,7 +25,6 @@ import { StrategySkeleton } from './StrategySkeleton';
 import { FieldVoiceButton } from './FieldVoiceButton';
 import { PREP_TEMPLATES } from './prepTemplates';
 import { PrepHistorySheet } from './PrepHistorySheet';
-import { VoiceSparringModal } from './VoiceSparringModal';
 import { StrategyResultView } from './StrategyResultView';
 
 const STEPS = [
@@ -52,7 +51,6 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
   const [historyOpen, setHistoryOpen] = useState(false);
   const [customTemplates, setCustomTemplates] = useState([]);
   const [savingTemplate, setSavingTemplate] = useState(false);
-  const [voiceOpen, setVoiceOpen] = useState(false);
 
   const update = (patch) => setData(d => ({ ...d, ...patch }));
 
@@ -280,7 +278,6 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
           onNext={() => setStep(s => Math.min(STEPS.length - 1, s + 1))}
           onGenerate={generate}
           onLaunchSim={onLaunchSimulation}
-          onLaunchVoice={() => setVoiceOpen(true)}
           onClose={onClose}
         />
 
@@ -293,14 +290,6 @@ export function ArgumentationPrepModal({ onClose, onLaunchSimulation, initialTem
           )}
         </AnimatePresence>
       </motion.div>
-
-      {voiceOpen && (
-        <VoiceSparringModal
-          prepContext={data}
-          prepGoal={data.goal || 'Live Argumentations-Sparring'}
-          onClose={() => setVoiceOpen(false)}
-        />
-      )}
     </div>
   );
 }
@@ -597,7 +586,7 @@ const Intro = ({ icon: Icon, title, text }) => (
   </div>
 );
 
-const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerate, onLaunchSim, onLaunchVoice, onClose }) => {
+const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerate, onLaunchSim, onClose }) => {
   const lastStep = step === STEPS.length - 1;
   return (
     <div className="border-t border-black/[0.05] dark:border-white/[0.06] px-6 sm:px-8 py-4 flex items-center justify-between gap-3 bg-white/95 dark:bg-card/95">
@@ -630,14 +619,6 @@ const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerat
           </Button>
           <div className="flex items-center gap-2">
             <Button
-              onClick={onLaunchVoice}
-              className="bg-white dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-[#0A0A0A] dark:text-white border border-black/[0.08] dark:border-white/15 font-black text-[12px] px-4 transition-all active:scale-[0.97]"
-              data-testid="argumentation-launch-voice"
-              title="Live Voice-Sparring mit Wlad starten"
-            >
-              <Radio size={14} className="mr-1.5 text-[#BFFF00]" /> Voice-Sparring
-            </Button>
-            <Button
               onClick={onLaunchSim}
               className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-black text-[12px] px-4 shadow-lg shadow-[#BFFF00]/30 transition-all active:scale-[0.97]"
               data-testid="argumentation-launch-sim"
@@ -652,3 +633,4 @@ const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerat
 };
 
 export default ArgumentationPrepModal;
+
