@@ -15,6 +15,15 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 130 · 03.08.26] GO-LIVE AUTH-SWEEP: Register-Bug + Admin-Delete + Mobile-Feedback + Phone-Login (testing_agent 100 % PASS, 17/17 pytest + Frontend, iteration_127.json)**
+  - **🐛 REGISTER-BUG (root cause)**: LoginPage-Effect setzte mode 'register' → 'login' zurück, sobald `lastAccount` in localStorage existierte → „Registrieren"-Klick tat NICHTS. Effect entfernt — expliziter Register-Intent (Route /signup oder Klick) gewinnt immer. E2E verifiziert (mit gesetztem lastAccount → Register → /onboarding Schritt 1/9).
+  - **Admin-Delete-Fix**: `cannot_delete_admin_account` entfernt — Admin darf FREMDE admin-geflaggte Accounts löschen (z. B. wlassassa@web.de auf Prod), nur Selbst-Löschung bleibt blockiert (`cannot_delete_own_account`). Nach Deploy: /wlad-control-x7k9q2 → User-Verwaltung → wlassassa@web.de löschen.
+  - **Mobile-Feedback-Popup weg**: UsageFeedbackPrompt jetzt `hidden md:block` — nur Desktop. Mobile 390px verifiziert: kein Prompt, keine Floating-FABs, Dock-Nav funktioniert.
+  - **Phone-Login-Normalisierung**: `phone_candidates()` in models.py — 0170…, +49170…, 0049170…, Formate mit Leerzeichen/Bindestrichen matchen alle denselben Account ($in-Query in Login + Register-Dedupe). 4 Formate getestet.
+  - **Register-Abuse-Guard NEU (Review-Hinweis)**: max. 15 Signups/IP/Stunde (429), via `signup_ip` + neuem `created_at_dt` (datetime) im User-Doc.
+  - **Hinweis**: `phone` bleibt Pflichtfeld bei Registrierung (bewusste Entscheidung Iter 92.34 §10, „also the number" ✓).
+  - Pytest-Suite: `/app/backend/tests/test_iter130_auth_sweep.py` (17 Cases). Offener Minor (aus Review): ContinueAsCard-Rendering für wiederkehrende User manuell prüfen.
+
 - [x] **[Iter 129 · 03.08.26] MASTERCLASS-ZUGANG (250 Credits gratis) + POST-PREP-FLOW GODMODE-VERIFIZIERT (testing_agent: 100 % PASS backend 9/9 + frontend, iteration_126.json)**
   - **Masterclass-Lizenz-Keys NEU**: Admin generiert Keys mit `package_id: "masterclass"` (LicenseKeysManager-Dropdown erweitert). Aktivierung (activate + redeem) setzt `user.masterclass=true`, Tier bleibt free, Credits = **250 statt 50** (`MASTERCLASS_CREDITS` in credits.py, limit dynamisch, Soft-Pause-Upsell für MC unterdrückt).
   - **MASTERCLASS-Badge**: TierBadge zeigt „MASTERCLASS" (GraduationCap, dark/brand) statt FREE — Header + Sidebar. BUGFIX: Zeile 75 `isFree ? 'Free'` überschrieb das Label.

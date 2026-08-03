@@ -204,6 +204,12 @@ def _safe_user_output(user: dict) -> dict:
 
 @router.post("/register")
 async def register(data: UserRegister, request: Request, response: Response):
+    # Abuse guard (pre-launch review): max 15 signups per IP per hour.
+    ip = _get_client_ip(request)
+    reg_cutoff = datetime.now(timezone.utc) - timedelta(hours=1)
+    reg_count = await db.users.count_documents({"signup_ip": ip, "created_at_dt": {"$gte": reg_cutoff}})
+    if reg_count >= 15:
+        raise HTTPException(status_code=429, detail="Zu viele Registrierungen von dieser IP. Bitte versuche es später erneut.")
     # Normalize email (case-insensitive uniqueness)
     email = data.email.strip().lower()
     # SEC (audit): enforce a minimum password strength so no more weak/guessable
@@ -264,6 +270,7 @@ async def register(data: UserRegister, request: Request, response: Response):
         "last_login_ua": ctx["ua"],
         "login_history": [history_entry],
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at_dt": datetime.now(timezone.utc),
     }
     # Sparse unique index on phone_normalized only ignores DOCS WITHOUT the field;
     # explicit nulls still conflict. Only attach the field when we have a real value.
