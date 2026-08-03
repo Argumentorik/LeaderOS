@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 129 · 03.08.26] MASTERCLASS-ZUGANG (250 Credits gratis) + POST-PREP-FLOW GODMODE-VERIFIZIERT (testing_agent: 100 % PASS backend 9/9 + frontend, iteration_126.json)**
+  - **Masterclass-Lizenz-Keys NEU**: Admin generiert Keys mit `package_id: "masterclass"` (LicenseKeysManager-Dropdown erweitert). Aktivierung (activate + redeem) setzt `user.masterclass=true`, Tier bleibt free, Credits = **250 statt 50** (`MASTERCLASS_CREDITS` in credits.py, limit dynamisch, Soft-Pause-Upsell für MC unterdrückt).
+  - **MASTERCLASS-Badge**: TierBadge zeigt „MASTERCLASS" (GraduationCap, dark/brand) statt FREE — Header + Sidebar. BUGFIX: Zeile 75 `isFree ? 'Free'` überschrieb das Label.
+  - **MasterclassAccessCard auf /coaching**: „Dein Zugang ist bereits aktiv — 0 €" + Free-Feature-Liste + Credit-Meter (X/250) + Klartext „Pakete unten sind optionale Upgrades". Rendert nur für masterclass && free.
+  - **Post-Prep-Flow komplett verifiziert**: ?prep=1 Auto-Open, Wizard, PDF (application/pdf), Text-Sim-Launch, PrepHistory, Coaching Memory — kein Voice-Button mehr (Iter 128).
+  - **wlassasa-Löschung (Prod)**: Kein solcher Account in Preview-DB. Auf Prod: Admin-Panel `/wlad-control-x7k9q2` → User-Verwaltung (UserManageCard) → E-Mail eingeben → löschen (`DELETE /api/admin/users/by-email/{email}` existiert seit Iter 102). Danach registriert Wlad sich neu.
+  - Test-Account: mc-test@wladbot-testing.de / McTest2026x. Regression-Suite: `/app/backend/tests/test_iter126_masterclass_and_prep.py`.
+
 - [x] **[Iter 128 · 02.08.26] VOICE SPARRING VORERST DEAKTIVIERT (User: „does not work") — selbst getestet (Build 0 Errors, Prep-Modal Screenshot, kein Voice-Button)**
   - Voice-Sparring-Button aus `ArgumentationPrepModal` Footer entfernt (+ voiceOpen-State, Modal-Mount, Import). CoachingMemoryPanel-Hinweistext auf „Simulation" umformuliert.
   - **Nicht gelöscht, nur entkoppelt**: `VoiceSparringModal.js` + Backend `/api/voice/argumentation-sparring` bleiben intakt — Reaktivierung = 1 Button + 1 State (siehe git log Iter 128). Falls Voice-Sparring später gefixt werden soll: Root-Cause auf Prod prüfen (vermutlich Mikrofonrechte/TTS-Latenz).
