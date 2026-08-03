@@ -104,10 +104,12 @@ async def admin_delete_user(email: str, request: Request) -> dict:
         raise HTTPException(status_code=400, detail="cannot_delete_own_account")
 
     user = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1, "is_admin": 1})
-    if user and user.get("is_admin"):
-        raise HTTPException(status_code=400, detail="cannot_delete_admin_account")
     if not user:
         raise HTTPException(status_code=404, detail="user_not_found")
+    if user.get("is_admin"):
+        # Iter 130: allow deleting OTHER admin-flagged accounts (e.g. Wlad's
+        # old private mail) — only self-deletion stays blocked above.
+        logger.warning(f"Admin {admin.get('email')} deletes admin-flagged account {email}")
     uid = user.get("user_id")
 
     related: dict = {}

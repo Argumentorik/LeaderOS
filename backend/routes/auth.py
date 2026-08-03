@@ -7,7 +7,7 @@ import httpx
 from datetime import datetime, timezone, timedelta
 
 from config import db, OAUTH_SESSION_URL, logger
-from models import UserRegister, UserLogin, normalize_phone, looks_like_phone
+from models import UserRegister, UserLogin, normalize_phone, looks_like_phone, phone_candidates
 from services import create_jwt_token, hash_password, verify_password, get_current_user
 from services_actions import record_user_action
 from services_login_security import (
@@ -223,7 +223,7 @@ async def register(data: UserRegister, request: Request, response: Response):
     phone_normalized = normalize_phone(phone_raw)
     if phone_normalized:
         existing_phone = await db.users.find_one(
-            {"phone_normalized": phone_normalized},
+            {"phone_normalized": {"$in": phone_candidates(phone_raw)}},
             {"_id": 0, "user_id": 1},
         )
         if existing_phone:
@@ -339,8 +339,9 @@ async def login(data: UserLogin, request: Request, response: Response):
     # Detect identifier type → build appropriate Mongo query
     if looks_like_phone(identifier_raw):
         phone_normalized = normalize_phone(identifier_raw)
+        candidates = phone_candidates(identifier_raw)
         rate_key = f"phone:{phone_normalized or identifier_raw.lower()}"
-        user_query = {"phone_normalized": phone_normalized} if phone_normalized else None
+        user_query = {"phone_normalized": {"$in": candidates}} if candidates else None
         method = "phone"
     else:
         email = identifier_raw.lower()

@@ -41,6 +41,23 @@ def normalize_phone(v: str | None) -> str | None:
     return ("+" + digits) if has_plus else digits
 
 
+def phone_candidates(v: str | None) -> list[str]:
+    """All equivalent lookup keys for a phone input, so '0170…', '+49170…'
+    and '0049170…' all find the same account (German-default assumption)."""
+    n = normalize_phone(v)
+    if not n:
+        return []
+    cands = {n}
+    if n.startswith("+49"):
+        cands.add("0" + n[3:])
+    elif n.startswith("0049"):
+        cands.add("+49" + n[4:])
+        cands.add("0" + n[4:])
+    elif n.startswith("0") and not n.startswith("00"):
+        cands.add("+49" + n[1:])
+    return list(cands)
+
+
 def looks_like_phone(v: str) -> bool:
     """True when the identifier looks like a phone number (starts with '+',
     or is mostly digits with no '@'). Used to route login lookup."""

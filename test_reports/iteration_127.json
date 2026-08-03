@@ -1,0 +1,31 @@
+{
+  "summary": "Iter 130 auth sweep — verified 3 critical pre-launch fixes: (a) register button no longer broken by cached lastLogin, (b) admin can delete OTHER admin-flagged accounts (only self-delete blocked), (c) UsageFeedbackPrompt hidden on mobile. Also verified phone-login normalization: 0170…, +49170…, 0049170…, dashed formats — ALL match the same account.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter130_auth_sweep.py",
+    "/app/test_reports/pytest/iter130.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "auth.py: register endpoint has no rate limit on repeated attempts from same IP — during a rapid test burst I hit ‘Zu viele Anfragen’ on /auth/register-like flow (message came via 429 during login rate-limit spillover). Verify register also has abuse protection ahead of launch traffic spikes.",
+    "LoginPage.js: getLastLogin() reads localStorage on every render via useState initializer — that's fine, but the ContinueAsCard did NOT appear even after seeding wladbot_recent_logins_v1 with a valid entry (savedAt within STALE_AFTER_DAYS). Likely because the entry is filtered by tier/provider matching logic — worth a quick manual verification that the ‘continue as’ card still renders for returning real users."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter130_auth_sweep.py"
+  ],
+  "success_rate": {"backend": "100% (17/17)", "frontend": "100% (all critical UI checks passed)"},
+  "test_credentials": "test@test.com/test123 (admin), free@wladbot.test/test123 — see /app/memory/test_credentials.md",
+  "seed_data_creation": "Created throwaway users via /auth/register with @wladbot-testing.de domain and TEST- prefix. Cleaned up in class teardown via admin-delete. One UI-created user (test-iter130-ui-<ts>@wladbot-testing.de) was NOT saved to DB — register submit hit 429 rate-limit, no cleanup needed.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "17 pytest cases in /app/backend/tests/test_iter130_auth_sweep.py cover: basic login, invalid creds, register with phone, phone-login across 4 formats (local/E.164/0049/dashed), duplicate phone + duplicate email rejection, weak-password rejection, admin self-delete guard, admin delete throwaway, admin delete nonexistent (404), non-admin forbidden (403). Frontend Playwright verified: /signup mounts register mode, register-tab click renders + persists form even with cached wladbot_recent_logins_v1, all 3 auth-mode tabs render without JS errors, mobile 390px hides usage-feedback-prompt (in DOM but display:none via ‘hidden md:block’), desktop shows prompt for free@wladbot.test and dismiss persists after reload. NOT tested via UI due to login rate-limit exhaustion mid-test: admin panel /wlad-control-x7k9q2 UserManageCard delete-by-email — but backend API path (DELETE /api/admin/users/by-email/{email}) is fully covered.",
+  "rca of the issue": "Register button did nothing BEFORE fix: LoginPage had a useEffect that force-reset mode → 'login' whenever getLastLogin() returned an entry. Removing that effect (per code comment at line 56-58) lets the explicit register intent (route or click) win. Verified: seeded wladbot_recent_logins_v1 with an account, opened /login, clicked data-testid=register-tab → register form (name/email/phone/password/submit) rendered AND stayed visible after 1.5s. Also /signup and /register routes correctly mount initialMode='register'."
+}

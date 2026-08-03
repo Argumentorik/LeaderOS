@@ -53,10 +53,9 @@ export default function LoginPage({ initialMode = 'login' }) {
     if (authedUser) navigate(postLoginRoute(authedUser), { replace: true });
   }, [authedUser, navigate]);
 
-  // If a previous login exists, default to "login" mode so the Continue-as card shows
-  useEffect(() => {
-    if (lastAccount && mode === 'register') setMode('login');
-  }, [lastAccount, mode]);
+  // Iter 130 BUGFIX: an earlier effect force-reset mode 'register' → 'login'
+  // whenever a lastAccount existed — clicking "Registrieren" then did NOTHING.
+  // Removed: explicit register intent (route or click) must always win.
 
   const handleOAuthSuccess = (user, method) => {
     login(user, method);
