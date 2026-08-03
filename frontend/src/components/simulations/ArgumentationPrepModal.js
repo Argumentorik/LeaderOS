@@ -15,7 +15,7 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Swords, Wand2, Clock, Save, Share2 } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Sparkles, Loader2, Target, Lightbulb, Shield, Copy, Check, Wand2, Clock, Save, Share2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import api from '../../lib/api';
@@ -623,7 +623,7 @@ const Footer = ({ step, strategy, loading, canProceed, onBack, onNext, onGenerat
               className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-black text-[12px] px-4 shadow-lg shadow-[#BFFF00]/30 transition-all active:scale-[0.97]"
               data-testid="argumentation-launch-sim"
             >
-              <Swords size={14} className="mr-1.5" /> Text-Sim
+              <Sparkles size={14} className="mr-1.5" /> Nächste Vorbereitung
             </Button>
           </div>
         </>

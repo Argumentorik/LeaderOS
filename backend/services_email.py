@@ -388,6 +388,65 @@ Bereit für den nächsten Schritt? <a href="{coaching_url}" style="color:{BRAND_
     return subject, _base_layout(body, preheader=f"Dein Leadership-OS Account ist live. Starte hier, {name}.")
 
 
+# ── Masterclass Welcome (from Wlad, on license activation) ────────────────
+# Iter 128 (Godmode · Wlad-Direktive): Warm, personal welcome from Wlad for
+# the ~400 Masterclass clients redeeming their 6/12/18-month license.
+# NOT generic — reads like a note from Wlad himself, funnels toward Plus.
+
+def masterclass_welcome_email(name: str, app_url: str = "https://leaderos.de") -> tuple[str, str]:
+    subject = f"Willkommen im Kreis, {name}."
+    dashboard_url = f"{app_url.rstrip('/')}/dashboard"
+    plus_url = "https://leader-check.de/plus"
+    body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.18),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.28);border-radius:14px;padding:20px 24px;margin-bottom:26px;">
+  <div style="font-size:10px;letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:8px;">Masterclass · Zugang aktiv</div>
+  <div style="font-size:26px;font-weight:900;line-height:1.15;letter-spacing:-0.02em;">Willkommen im Kreis, {name}.</div>
+</div>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.7;margin:0 0 18px;">
+Wenn du das hier liest, dann bist du bei uns nicht neu — du bist Teil der Masterclass. Ich freue mich sehr, dass du LeaderOS jetzt persönlich nutzen kannst.
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 18px;">
+Du hast <b>250 Credits</b> auf deinem Account. Das reicht für richtig viel: Argumentations-Vorbereitungen, WladBot-Coaching, Video-Feedback, PDF-Strategien. Nutze sie — jedes Gespräch, das du hier vorbereitest, macht dich in der echten Welt schärfer.
+</p>
+
+<h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:26px 0 12px;">Womit ich anfangen würde</h3>
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:22px;">
+  <p style="font-size:13.5px;color:rgba(255,255,255,0.88);line-height:1.7;margin:0 0 14px;">
+    <b>1.</b> Öffne die <b>SEXIER-Prep</b> und bereite dein nächstes wichtiges Gespräch vor.<br>
+    <b>2.</b> Frag den WladBot deine ehrlichste Führungsfrage. Er kennt meine Frameworks besser als ich sie zu 4 Uhr morgens erklären könnte.<br>
+    <b>3.</b> Mach den <b>Leader-Diagnose-Check</b> — 3 Minuten, Standortbestimmung.
+  </p>
+  <div style="text-align:center;padding-top:6px;">
+    <a href="{dashboard_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;">Jetzt einloggen</a>
+  </div>
+</div>
+
+<h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:26px 0 12px;">Ein Angebot nur für dich</h3>
+<div style="background:{BRAND_DARK};border:1px solid rgba(191,255,0,0.28);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
+  <p style="font-size:13.5px;color:rgba(255,255,255,0.88);line-height:1.65;margin:0 0 12px;">
+    Wenn LeaderOS für dich klickt, hol dir <b style="color:{BRAND_COLOR};">LeaderOS Plus</b> — Live-Calls mit mir, exklusive Kurse, Community, Events. Als Masterclass-Kunde bekommst du bevorzugten Zugang und Sonderkonditionen.
+  </p>
+  <a href="{plus_url}" style="color:{BRAND_COLOR};font-size:12.5px;font-weight:800;text-decoration:none;">
+    → LeaderOS Plus ansehen
+  </a>
+</div>
+
+<p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin:24px 0 6px;">
+Falls du direkt Fragen hast — antworte einfach auf diese E-Mail. Ich lese mit.
+</p>
+<p style="font-size:13.5px;color:#fff;font-weight:700;margin:0;">
+Wlad
+</p>
+<p style="font-size:11px;color:rgba(255,255,255,0.35);margin:4px 0 0;letter-spacing:0.06em;">
+WLAD JACHTCHENKO · GRÜNDER LEADEROS
+</p>
+"""
+    return subject, _base_layout(body, preheader=f"Dein Masterclass-Zugang ist live, {name}. 250 Credits warten.")
+
+
+
 # ── Stripe Receipt (after successful payment, in addition to tier_welcome) ───
 
 def stripe_receipt_email(name: str, package_name: str, amount: float, currency: str,

@@ -52,6 +52,7 @@ const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
 const EnterprisePage = lazyWithRetry(() => import("./pages/EnterprisePage"));
+const EnterpriseLandingPage = lazyWithRetry(() => import("./pages/EnterpriseLandingPage"));
 const Challenge30Page = lazyWithRetry(() => import("./pages/Challenge30Page"));
 const DownloadsPage = lazyWithRetry(() => import("./pages/DownloadsPage"));
 const ImpressumPage = lazyWithRetry(() => import("./pages/ImpressumPage"));
@@ -170,6 +171,11 @@ function AppRouter() {
             redirect to /dashboard. Keep this above the wildcard. */}
         <Route path="/settings" element={<Navigate to="/profile" replace />} />
         <Route path="/enterprise" element={<ProtectedRoute><EnterprisePage /></ProtectedRoute>} />
+        {/* Iter 128: public marketing surface for the Enterprise funnel.
+            No auth — captures CEO/team leads via /api/enterprise/public-lead. */}
+        <Route path="/for-teams" element={<EnterpriseLandingPage />} />
+        <Route path="/teams" element={<Navigate to="/for-teams" replace />} />
+        <Route path="/business" element={<Navigate to="/for-teams" replace />} />
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />

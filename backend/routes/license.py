@@ -46,6 +46,20 @@ async def _activate_masterclass(user_id: str) -> None:
     )
     logger.info(f"Masterclass access activated for {user_id} ({MASTERCLASS_CREDITS} credits)")
 
+    # Iter 128 (Wlad-Direktive): send a warm personal welcome from Wlad. The
+    # email is best-effort — never blocks activation. Skips silently if the
+    # user record has no email or Resend is not configured.
+    try:
+        user = await db.users.find_one({"user_id": user_id}, {"email": 1, "name": 1, "_id": 0})
+        if user and user.get("email"):
+            import asyncio as _asyncio
+            from services_email import send_email, masterclass_welcome_email
+            display_name = (user.get("name") or user["email"].split("@")[0]).strip() or "Leader"
+            subject, html = masterclass_welcome_email(display_name)
+            _asyncio.create_task(send_email(user["email"], subject, html))
+    except Exception as e:  # pragma: no cover — welcome email must not block activation
+        logger.warning(f"Masterclass welcome email failed for {user_id}: {e}")
+
 
 def _generate_key() -> str:
     raw = "".join(secrets.choice(KEY_ALPHABET) for _ in range(KEY_LENGTH))

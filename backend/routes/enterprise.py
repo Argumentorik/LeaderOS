@@ -60,6 +60,55 @@ QUESTIONS_EN = [
 ]
 
 
+# Public lead form — used by the marketing landing page (no auth required)
+class EnterprisePublicLeadForm(BaseModel):
+    company: str
+    name: Optional[str] = None
+    email: str
+    teamSize: Optional[str] = None
+    role: Optional[str] = None
+    goals: Optional[str] = None
+    wantsOwnRAG: Optional[bool] = False
+    lang: Optional[str] = "de"
+
+
+@router.post("/public-lead")
+async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request: Request):
+    """Submit an enterprise lead from the public marketing landing page.
+
+    This endpoint is intentionally public (no auth) so the /for-teams landing
+    page can capture leads before a CEO or team-lead has created an account.
+    """
+    lead_id = f"lead_{uuid.uuid4().hex[:12]}"
+    ip = (request.client.host if request.client else None) or "unknown"
+    lead_doc = {
+        "lead_id": lead_id,
+        "user_id": None,
+        "user_name": data.name or "",
+        "user_email": data.email,
+        "company_name": data.company,
+        "team_size": data.teamSize,
+        "role": data.role,
+        "goals": data.goals,
+        "wants_own_rag": bool(data.wantsOwnRAG),
+        "contact_email": data.email,
+        "lang": data.lang,
+        "source": "enterprise_landing_public",
+        "score": 60 if data.wantsOwnRAG else 50,
+        "priority": "hot" if data.wantsOwnRAG else "warm",
+        "status": "new",
+        "signup_ip": ip,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.enterprise_leads.insert_one(lead_doc)
+    return {
+        "lead_id": lead_id,
+        "message": "Danke! Das Team meldet sich innerhalb von 24 Stunden bei dir."
+                    if data.lang == "de"
+                    else "Thanks! The team will reach out within 24 hours.",
+    }
+
+
 @router.get("/questions")
 async def get_enterprise_questions(lang: str = "de"):
     return QUESTIONS_DE if lang == "de" else QUESTIONS_EN

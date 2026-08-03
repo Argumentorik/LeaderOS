@@ -15,10 +15,14 @@ so browsers download the file directly. No frontend PDF library needed.
 """
 from __future__ import annotations
 
+import hashlib
 import io
+import random
 import re
 from datetime import datetime, timezone
 
+from reportlab.graphics.barcode.qr import QrCodeWidget
+from reportlab.graphics.shapes import Drawing
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -27,7 +31,7 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, PageBreak, KeepTogether,
     Table, TableStyle,
 )
-from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.enums import TA_LEFT, TA_CENTER
 
 # ── Section color mapping — mirrors the frontend StrategyResultView ────────
 SECTION_META = {
@@ -115,21 +119,50 @@ def _render_line_html(line: str) -> str:
 
 
 # ═══════════════════════════════════ Page furniture ═══════════════════════
+def _draw_logo(canvas_obj, x: float, y: float, size: float = 1.4):
+    """Prominent Wlad Leader-OS logo: dark rounded square + lime W disc.
+
+    `size` is a multiplier (1.0 = compact header logo, 2.4 = cover hero).
+    """
+    r_outer = 0.55 * cm * size
+    canvas_obj.saveState()
+    # Outer dark rounded square
+    canvas_obj.setFillColor(BRAND_DARK)
+    canvas_obj.roundRect(
+        x - r_outer, y - r_outer, r_outer * 2, r_outer * 2,
+        0.16 * cm * size, fill=True, stroke=False,
+    )
+    # Inner lime circle
+    canvas_obj.setFillColor(BRAND_GREEN)
+    canvas_obj.circle(x, y, r_outer * 0.68, fill=True, stroke=False)
+    # W monogram
+    canvas_obj.setFillColor(BRAND_DARK)
+    canvas_obj.setFont("Helvetica-Bold", 14 * size)
+    canvas_obj.drawCentredString(x, y - (5 * size), "W")
+    canvas_obj.restoreState()
+
+
 def _cover(canvas_obj, doc):
-    """Draw the branded cover page background."""
+    """Draw the branded cover page background with prominent logo."""
     w, h = A4
+    # Full-width dark header bar
     canvas_obj.setFillColor(BRAND_DARK)
-    canvas_obj.rect(0, h - 1.8 * cm, w, 1.8 * cm, fill=True, stroke=False)
+    canvas_obj.rect(0, h - 2.4 * cm, w, 2.4 * cm, fill=True, stroke=False)
     canvas_obj.setFillColor(BRAND_GREEN)
-    canvas_obj.rect(0, h - 1.85 * cm, w, 0.05 * cm, fill=True, stroke=False)
+    canvas_obj.rect(0, h - 2.45 * cm, w, 0.06 * cm, fill=True, stroke=False)
+    # Prominent logo in header (larger, brand-forward)
+    _draw_logo(canvas_obj, 2.35 * cm, h - 1.2 * cm, size=1.15)
+    # Wordmark
     canvas_obj.setFillColor(colors.white)
-    canvas_obj.setFont("Helvetica-Bold", 12)
-    canvas_obj.drawString(2 * cm, h - 1.15 * cm, "WLAD LEADER-OS · SEXIER-PREP")
+    canvas_obj.setFont("Helvetica-Bold", 14)
+    canvas_obj.drawString(3.6 * cm, h - 1.05 * cm, "WLAD LEADER-OS")
     canvas_obj.setFillColor(BRAND_GREEN)
-    canvas_obj.circle(w - 2.2 * cm, h - 0.9 * cm, 0.35 * cm, fill=True, stroke=False)
-    canvas_obj.setFillColor(BRAND_DARK)
-    canvas_obj.setFont("Helvetica-Bold", 10)
-    canvas_obj.drawCentredString(w - 2.2 * cm, h - 1.05 * cm, "W")
+    canvas_obj.setFont("Helvetica-Bold", 9)
+    canvas_obj.drawString(3.6 * cm, h - 1.5 * cm, "SEXIER · ARGUMENTATION PREP")
+    # Right side: quiet URL
+    canvas_obj.setFillColor(colors.HexColor("#BFBFBF"))
+    canvas_obj.setFont("Helvetica", 8.5)
+    canvas_obj.drawRightString(w - 2 * cm, h - 1.35 * cm, "leader-check.de")
     _watermark(canvas_obj)
 
 
@@ -147,15 +180,17 @@ def _watermark(canvas_obj):
 
 
 def _content_page(canvas_obj, doc):
-    """Header/footer on all non-cover pages + watermark."""
+    """Header/footer on all non-cover pages + watermark + small logo."""
     w, h = A4
     _watermark(canvas_obj)
+    # Small logo in header
+    _draw_logo(canvas_obj, 2.35 * cm, h - 1.05 * cm, size=0.55)
     canvas_obj.setFillColor(BRAND_DARK)
     canvas_obj.setFont("Helvetica-Bold", 8)
-    canvas_obj.drawString(2 * cm, h - 1.1 * cm, "SEXIER-STRATEGIE · WLAD LEADER-OS")
+    canvas_obj.drawString(3.15 * cm, h - 1.1 * cm, "WLAD LEADER-OS · SEXIER-STRATEGIE")
     canvas_obj.setStrokeColor(BRAND_GREEN)
     canvas_obj.setLineWidth(1)
-    canvas_obj.line(2 * cm, h - 1.3 * cm, w - 2 * cm, h - 1.3 * cm)
+    canvas_obj.line(2 * cm, h - 1.4 * cm, w - 2 * cm, h - 1.4 * cm)
     canvas_obj.setFillColor(MUTED_GREY)
     canvas_obj.setFont("Helvetica", 8)
     canvas_obj.drawRightString(w - 2 * cm, 1.2 * cm, f"Seite {doc.page}")
@@ -333,7 +368,7 @@ def render_strategy_pdf(*, strategy_markdown: str, user_name: str, prep_goal: st
         buf,
         pagesize=A4,
         leftMargin=2 * cm, rightMargin=2 * cm,
-        topMargin=2.4 * cm, bottomMargin=2 * cm,
+        topMargin=2.7 * cm, bottomMargin=2 * cm,
         title=f"SEXIER-Strategie — {user_name or ''}".strip(" —"),
         author="Wlad Leader-OS",
     )
@@ -446,5 +481,149 @@ def render_strategy_pdf(*, strategy_markdown: str, user_name: str, prep_goal: st
             if raw.strip():
                 story.append(Paragraph(_render_line_html(raw), body))
 
+    # ── Final page: QR + rotating LeaderOS Plus invitation ──
+    seed = f"{user_name}|{prep_goal}|{(strategy_markdown or '')[:400]}"
+    _build_ending_page(story, styles, seed=seed)
+
     doc.build(story, onFirstPage=_on_first_page, onLaterPages=_content_page)
     return buf.getvalue()
+
+
+# ═══════════════════════ Ending page (QR + rotating message) ══════════════
+# Iter 128 (Wlad-Direktive): jedes PDF endet mit einer QR-basierten Einladung
+# zu LeaderOS Plus. Damit Masterclass-Kunden bei jedem neuen PDF eine frische
+# Nachricht bekommen, rotieren wir zwischen 12 Endings (deterministisch pro
+# Strategie-Hash, damit dasselbe PDF stabil reproduzierbar ist).
+ENDINGS = [
+    ("Bereit für den nächsten Level?",
+     "Diese Strategie ist erst der Anfang. LeaderOS Plus gibt dir Live-Calls, exklusive Kurse und die Community, die Wlad und sein Team persönlich begleiten."),
+    ("Du hast den Plan. Jetzt fehlt der Raum.",
+     "In LeaderOS Plus sparrst du mit Wlad und anderen Führungskräften an genau diesen Momenten — nicht mehr allein am Schreibtisch."),
+    ("Eine Strategie ist kein Playbook.",
+     "In LeaderOS Plus bauen wir mit dir zusammen dein persönliches Führungs-Playbook auf — Woche für Woche, bis es sitzt."),
+    ("Du bist nicht der erste, der das Gespräch führt.",
+     "Werde Teil des Kreises, der schon durch ist. LeaderOS Plus: echte Fälle, echte Antworten, echte Führung."),
+    ("Wlad kann dir gleich persönlich antworten.",
+     "In LeaderOS Plus sind monatliche Live-Sessions mit Wlad, plus Zugriff auf alle Frameworks, Kurse und Aufzeichnungen."),
+    ("Ein starkes Argument ist gut. Ein starkes Netzwerk ist besser.",
+     "LeaderOS Plus ist die Community, in der andere Leader deine schwierigsten Gespräche schon geführt haben — und dir zeigen, wie."),
+    ("Was du hier hältst, ist Wlads Framework.",
+     "Was du in LeaderOS Plus bekommst, ist Wlads Aufmerksamkeit — Live-Calls, Feedback, Coaching auf einem anderen Level."),
+    ("Perfekte Vorbereitung ist wiederholbar.",
+     "LeaderOS Plus macht sie zur Gewohnheit: jede Woche ein neuer Skill, jede Woche ein besserer Auftritt."),
+    ("Die besten Leader haben einen unfairen Vorteil.",
+     "LeaderOS Plus: laufender Zugriff auf Wlad, Rechtsanwälte, Vertriebler und Führungskräfte, die dir vorausgegangen sind."),
+    ("Du hast das PDF. Willst du auch den Rest?",
+     "Bücher, Kurse, Events, Community, Live-Calls — alles gebündelt in LeaderOS Plus. Ein Zugang. Kein Chaos."),
+    ("Kein Framework wirkt ohne Übung.",
+     "In LeaderOS Plus übst du mit echten Menschen — nicht mit einer KI, die immer nett bleibt."),
+    ("Führung ist eine tägliche Entscheidung.",
+     "LeaderOS Plus hält dich dran: kurze tägliche Impulse, klare Playbooks, ein Coach in der Tasche."),
+]
+
+QR_TARGET_URL = "https://leader-check.de/plus"
+
+
+def _pick_ending(seed: str) -> tuple[str, str]:
+    """Deterministically pick one of the endings from a stable seed."""
+    if not seed:
+        return random.choice(ENDINGS)
+    idx = int(hashlib.md5(seed.encode("utf-8")).hexdigest(), 16) % len(ENDINGS)
+    return ENDINGS[idx]
+
+
+def _qr_drawing(url: str, size_cm: float = 3.6) -> Drawing:
+    size_pt = size_cm * cm
+    qr = QrCodeWidget(url, barLevel="M")
+    b = qr.getBounds()
+    w = b[2] - b[0]
+    h = b[3] - b[1]
+    d = Drawing(size_pt, size_pt, transform=[size_pt / w, 0, 0, size_pt / h, 0, 0])
+    d.add(qr)
+    return d
+
+
+def _build_ending_page(story: list, styles: dict, seed: str) -> None:
+    """Final page — QR to LeaderOS Plus + rotating personalised message."""
+    story.append(PageBreak())
+
+    headline, subtext = _pick_ending(seed)
+
+    # Big dark hero card that occupies most of the page — very premium.
+    hero_headline_style = ParagraphStyle(
+        "end_head", fontName="Helvetica-Bold", fontSize=22, leading=26,
+        textColor=colors.white, alignment=TA_LEFT, spaceAfter=0.35 * cm,
+    )
+    hero_sub_style = ParagraphStyle(
+        "end_sub", fontName="Helvetica", fontSize=11, leading=15.5,
+        textColor=colors.HexColor("#D9D9D9"), alignment=TA_LEFT,
+    )
+    hero_kicker_style = ParagraphStyle(
+        "end_kicker", fontName="Helvetica-Bold", fontSize=8.5, leading=11,
+        textColor=BRAND_GREEN, alignment=TA_LEFT, spaceAfter=0.2 * cm,
+    )
+    qr_caption_style = ParagraphStyle(
+        "qr_cap", fontName="Helvetica-Bold", fontSize=9, leading=12,
+        textColor=colors.white, alignment=TA_CENTER, spaceBefore=0.2 * cm,
+    )
+    qr_url_style = ParagraphStyle(
+        "qr_url", fontName="Helvetica", fontSize=8, leading=10,
+        textColor=colors.HexColor("#BFBFBF"), alignment=TA_CENTER,
+    )
+
+    left_cell = [
+        Paragraph("LEADEROS PLUS · EINLADUNG", hero_kicker_style),
+        Paragraph(_esc(headline), hero_headline_style),
+        Paragraph(_esc(subtext), hero_sub_style),
+        Spacer(1, 0.5 * cm),
+        Paragraph(
+            '<font color="#BFFF00" size="9"><b>SCAN &nbsp;→&nbsp; JOIN &nbsp;→&nbsp; LEVEL UP</b></font>',
+            hero_sub_style,
+        ),
+    ]
+
+    # QR block on a lime tile (contrast + brand)
+    qr = _qr_drawing(QR_TARGET_URL, size_cm=3.4)
+    qr_tile = Table(
+        [[qr], [Paragraph("Scan me", qr_caption_style)], [Paragraph(QR_TARGET_URL, qr_url_style)]],
+        colWidths=[4.6 * cm],
+        rowHeights=[3.8 * cm, 0.55 * cm, 0.5 * cm],
+    )
+    qr_tile.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), BRAND_GREEN),
+        ("BACKGROUND", (0, 1), (0, 2), BRAND_DARK),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("BOX", (0, 0), (-1, -1), 0, colors.transparent),
+    ]))
+
+    hero = Table(
+        [[left_cell, qr_tile]],
+        colWidths=[10.2 * cm, 5.2 * cm],
+    )
+    hero.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), BRAND_DARK),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (0, 0), 22),
+        ("RIGHTPADDING", (0, 0), (0, 0), 10),
+        ("TOPPADDING", (0, 0), (-1, -1), 26),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 26),
+        ("LEFTPADDING", (1, 0), (1, 0), 4),
+        ("RIGHTPADDING", (1, 0), (1, 0), 18),
+        ("ROUNDEDCORNERS", [14, 14, 14, 14]),
+    ]))
+
+    story.append(Spacer(1, 0.4 * cm))
+    story.append(hero)
+
+    # Small print underneath
+    fine = ParagraphStyle(
+        "end_fine", fontName="Helvetica", fontSize=8.5, leading=12,
+        textColor=MUTED_GREY, alignment=TA_CENTER, spaceBefore=0.6 * cm,
+    )
+    story.append(Paragraph(
+        "Von Wlad Jachtchenko und dem Leader-OS Team. leader-check.de · Fragen? support@leader-check.de",
+        fine,
+    ))

@@ -260,6 +260,58 @@ Nutze Wlads klare, direkte Sprache. Nie generisch, immer spezifisch auf DIESEN F
 Antworte auf Deutsch."""
 
 
+# Iter 128 (Godmode Context-Layer): build a compact "who is this user" block
+# so every argumentation-prep strategy is personalised — profile info, latest
+# leader-diagnose scores, and recurring coaching patterns from prior preps.
+async def _build_user_context_block(user: dict) -> str:
+    lines: list[str] = []
+    name = (user.get("name") or "").strip()
+    role = (user.get("position") or "").strip()
+    company = (user.get("company") or "").strip()
+    industry = (user.get("industry") or "").strip()
+    if name or role or company:
+        header_bits = [b for b in [role, f"@ {company}" if company else ""] if b]
+        who = f"{name}" if name else "Der User"
+        role_line = " · ".join(header_bits)
+        lines.append(f"- **Wer:** {who}" + (f" — {role_line}" if role_line else ""))
+    if industry:
+        lines.append(f"- **Branche:** {industry}")
+
+    # Latest diagnose / self-assessed scores (0-100)
+    scores = []
+    for key, label in (("leadership_score", "Leadership"), ("communication_score", "Kommunikation"), ("eq_score", "EQ")):
+        v = user.get(key)
+        if isinstance(v, (int, float)) and v > 0:
+            scores.append(f"{label} {int(v)}")
+    if scores:
+        lines.append("- **Aktuelle Scores:** " + " · ".join(scores))
+
+    # Recurring coaching signals — reuse the coaching-memory helpers so a
+    # user's "growth edge" is baked into every new strategy.
+    try:
+        docs = await db.argumentation_strategies.find(
+            {"user_id": user["user_id"]},
+            {"_id": 0, "input": 1, "strategy_markdown": 1, "tags": 1, "created_at": 1},
+        ).sort("created_at", -1).limit(20).to_list(20)
+        if docs:
+            weak_dims = _weak_sexier_dimensions(docs)
+            objections = _recurring_objections(docs)
+            if weak_dims:
+                lines.append("- **Wachstumskante (SEXIER):** "
+                             + ", ".join(d.get("dimension", "") for d in weak_dims[:2] if d.get("dimension")))
+            if objections:
+                labels = [o.get("label", "") for o in objections[:3] if o.get("label")]
+                if labels:
+                    lines.append("- **Wiederkehrende Einwände in bisherigen Preps:** " + " · ".join(labels))
+            lines.append(f"- **Vorbereitungs-Erfahrung:** {len(docs)} SEXIER-Strategien bisher")
+    except Exception as e:  # pragma: no cover — context is enrichment, never blocks
+        logger.warning(f"user-context enrichment failed: {e}")
+
+    if not lines:
+        return ""
+    return "## Über den User (nutze das für Ton, Framing und Personalisierung)\n" + "\n".join(lines) + "\n"
+
+
 @router.post("/simulations/argumentation-prep")
 async def argumentation_prep(data: ArgumentationPrep, request: Request):
     """Guided argumentation preparation via SEXIER framework.
@@ -272,6 +324,12 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
     """
     user = await get_current_user(request)
     strategy_id = f"argprep_{uuid.uuid4().hex[:12]}"
+
+    # Iter 128 (Wlad-Direktive · Godmode Context-Layer): every strategy is
+    # personalised. We inject a compact "who is this user" block so gpt-5.2
+    # doesn't produce generic advice — it grounds tone, hooks, and framing in
+    # the leader's real profile, scores, and prior coaching patterns.
+    user_ctx = await _build_user_context_block(user)
 
     # Build a compact context brief for the LLM.
     def _row(label: str, value: str | None) -> str:
@@ -297,6 +355,8 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
     if data.coaching_focus:
         brief_lines.append(f"## Coaching-Fokus\n- {data.coaching_focus.strip()}\n")
     brief = "\n".join(line for line in brief_lines if line is not None)
+    if user_ctx:
+        brief = user_ctx + "\n" + brief
 
     try:
         chat = LlmChat(
