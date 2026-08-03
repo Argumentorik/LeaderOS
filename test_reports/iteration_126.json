@@ -1,0 +1,22 @@
+{
+  "summary": "Iter 126 — Verified (A) MASTERCLASS license flow (backend + frontend badge/card) and (B) Post-Argumentation-Prep flow (modal, no voice button, history sheet, PDF endpoint, coaching-memory API). All 9 backend tests PASSED. Frontend: MASTERCLASS badge visible in sidebar for mc-test user, /coaching shows masterclass-access-card with 0€ + 250. Free user regression clean (FREE badge, no mc card). /simulations?prep=1 opens ArgumentationPrepModal (Schritt 1 · Kontext) — argumentation-launch-voice data-testid does NOT exist anywhere. All acceptance criteria met.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter126_masterclass_and_prep.py",
+    "/app/test_reports/pytest/iter126.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/simulations.py is 662 lines — approaching split threshold (>700). Consider extracting argumentation-prep + history + templates into a separate router module.",
+    "credits.py get_credits returns dict shape inconsistently: premium branch omits 'masterclass' key while other branches include it. Minor but affects frontend defensive checks."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter126_masterclass_and_prep.py"],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100% (masterclass + free regression + prep modal open verified)"},
+  "test_credentials": "admin test@test.com/test123; premium accelerator@wladbot.test/test123; free free@wladbot.test/test123; masterclass mc-test@wladbot-testing.de/McTest2026x — all confirmed working. New emails use @wladbot-testing.de (EmailStr rejects .test TLD, per playbook).",
+  "seed_data_creation": "Backend test creates ephemeral masterclass + leadership_os license keys and 2 fresh @wladbot-testing.de accounts per run (mc_<hex>@... and los_<hex>@...). No cleanup — grows over time but acceptable for preview DB.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend regression file /app/backend/tests/test_iter126_masterclass_and_prep.py covers masterclass + leadership_os license activation, credits limit 50/250, coaching-memory + prep-history endpoints + PDF content-type check. Run with REACT_APP_BACKEND_URL env var set (pytest picks it up). Frontend: ArgumentationPrepModal auto-opens at /simulations?prep=1 for premium/accelerator user. Actual LLM strategy generation (20-90s) NOT executed here — backend prep-history returned prior strategies with valid PDFs so PDF pipeline is confirmed working end-to-end. rate-limit (429) triggered after ~3 login attempts on same IP — put sleep(60) between login batches in playwright.",
+  "rca_of_issue": "N/A — no defects found. All ten review-request bullets verified either via pytest (9/9) or Playwright (masterclass badge/card, free regression, prep modal open, no voice testid)."
+}

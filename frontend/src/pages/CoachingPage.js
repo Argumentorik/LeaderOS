@@ -19,6 +19,7 @@ import {
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { openStrategyCall } from '../lib/calendly';
+import { MasterclassAccessCard } from '../components/coaching/MasterclassAccessCard';
 import {
   ArrowRight, PlayCircle, HelpCircle
 } from 'lucide-react';
@@ -203,6 +204,11 @@ export default function CoachingPage() {
         {/* ── PRODUCT MECHANISM ── */}
         <WhyCoursesFail de={de} />
         <EngineLoop de={de} />
+
+        {/* ── MASTERCLASS: free access explainer (before pricing) ── */}
+        {user?.masterclass && (!user?.tier || user?.tier === 'free') && (
+          <MasterclassAccessCard de={de} />
+        )}
 
         {/* ── PRICING ── 3-Tier Funnel ── */}
         <section ref={pricingRef} className="animate-fade-in stagger-3 scroll-mt-8" data-testid="pricing-section">

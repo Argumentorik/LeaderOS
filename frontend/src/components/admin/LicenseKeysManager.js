@@ -9,6 +9,7 @@ import logger from '../../lib/logger';
 const PACKAGE_OPTIONS = [
   { id: 'leadership_os', label: 'Leadership OS (Standard · 997€)' },
   { id: 'leadership_os_plus', label: 'Leadership OS PLUS (4.797€)' },
+  { id: 'masterclass', label: 'Masterclass · Free-Zugang (250 Credits, 0€)' },
 ];
 
 const STATUS_STYLE = {

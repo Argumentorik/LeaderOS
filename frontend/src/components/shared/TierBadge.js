@@ -1,5 +1,6 @@
-import { Crown, Rocket, Sparkles, PlayCircle } from 'lucide-react';
+import { Crown, Rocket, Sparkles, PlayCircle, GraduationCap } from 'lucide-react';
 import { useTier } from '../../contexts/TierContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const CONFIG = {
   free: {
@@ -8,6 +9,13 @@ const CONFIG = {
     bg: 'bg-slate-100 dark:bg-slate-500/10',
     text: 'text-slate-600 dark:text-slate-300',
     border: 'border-slate-200 dark:border-slate-500/20',
+  },
+  masterclass: {
+    label: 'Masterclass',
+    icon: GraduationCap,
+    bg: 'bg-[#0A0A0A] dark:bg-[#BFFF00]/10',
+    text: 'text-[#BFFF00]',
+    border: 'border-[#BFFF00]/40',
   },
   starter: {
     label: 'Starter',
@@ -38,7 +46,9 @@ const CONFIG = {
  */
 export const TierBadge = ({ variant = 'pill', size = 'sm', showLabel = true }) => {
   const { tier, isFree, inGracePeriod } = useTier();
-  const cfg = CONFIG[tier] || CONFIG.free;
+  const { user } = useAuth();
+  const isMasterclass = Boolean(user?.masterclass) && (tier === 'free' || !tier);
+  const cfg = isMasterclass ? CONFIG.masterclass : (CONFIG[tier] || CONFIG.free);
   const Icon = cfg.icon;
 
   const sizeCls = size === 'xs'
@@ -62,7 +72,7 @@ export const TierBadge = ({ variant = 'pill', size = 'sm', showLabel = true }) =
     <div className={`inline-flex items-center rounded-full border font-bold uppercase tracking-wider ${cfg.bg} ${cfg.text} ${cfg.border} ${sizeCls}`}
       data-testid={`tier-badge-${tier}`}>
       <Icon size={iconSize} strokeWidth={2.5} />
-      {showLabel && <span>{isFree ? 'Free' : cfg.label}</span>}
+      {showLabel && <span>{isFree && !isMasterclass ? 'Free' : cfg.label}</span>}
       {inGracePeriod && <span className="text-rose-500 ml-0.5">•</span>}
     </div>
   );

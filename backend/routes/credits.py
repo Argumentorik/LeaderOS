@@ -12,6 +12,7 @@ from services import get_current_user
 router = APIRouter(prefix="/api/credits", tags=["credits"])
 
 FREE_CREDITS = 50
+MASTERCLASS_CREDITS = 250
 SOFT_PAUSE_AT = 10  # Show upsell after 10 uses
 CREDIT_COSTS = {
     "chat": 1,
@@ -37,9 +38,10 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
     # Get or initialize credit balance
     credit_doc = await db.credits.find_one({"user_id": user_id}, {"_id": 0})
     if not credit_doc:
+        initial = MASTERCLASS_CREDITS if user.get("masterclass") else FREE_CREDITS
         credit_doc = {
             "user_id": user_id,
-            "balance": FREE_CREDITS,
+            "balance": initial,
             "total_used": 0,
             "history": [],
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -82,17 +84,19 @@ async def get_credits(request: Request):
     if user.get("premium") or user.get("is_admin") or user.get("tier") in PAID_TIERS:
         return {"balance": -1, "is_premium": True, "total_used": 0, "limit": -1, "soft_pause": False}
 
+    limit = MASTERCLASS_CREDITS if user.get("masterclass") else FREE_CREDITS
     credit_doc = await db.credits.find_one({"user_id": user["user_id"]}, {"_id": 0})
     if not credit_doc:
-        return {"balance": FREE_CREDITS, "is_premium": False, "total_used": 0, "limit": FREE_CREDITS, "soft_pause": False}
+        return {"balance": limit, "is_premium": False, "total_used": 0, "limit": limit, "soft_pause": False, "masterclass": bool(user.get("masterclass"))}
 
     total_used = credit_doc.get("total_used", 0)
     return {
         "balance": credit_doc.get("balance", 0),
         "is_premium": False,
         "total_used": total_used,
-        "limit": FREE_CREDITS,
-        "soft_pause": total_used >= SOFT_PAUSE_AT and not credit_doc.get("soft_pause_dismissed", False),
+        "limit": limit,
+        "masterclass": bool(user.get("masterclass")),
+        "soft_pause": total_used >= SOFT_PAUSE_AT and not credit_doc.get("soft_pause_dismissed", False) and not user.get("masterclass"),
     }
 
 

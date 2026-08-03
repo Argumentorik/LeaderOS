@@ -26,7 +26,25 @@ KEY_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 KEY_LENGTH = 16
 
 # Only one-time packages are sellable via license key
-LICENSABLE_PACKAGE_IDS = ("leadership_os", "leadership_os_plus")
+LICENSABLE_PACKAGE_IDS = ("leadership_os", "leadership_os_plus", "masterclass")
+
+# Masterclass keys don't buy a tier — they unlock the free version with a
+# 5x credit budget (250 instead of 50) for Wlad's ~400 masterclass clients.
+MASTERCLASS_PACKAGE = {"name": "Masterclass · Free-Zugang (250 Credits)", "tier": "free"}
+
+
+async def _activate_masterclass(user_id: str) -> None:
+    from routes.credits import MASTERCLASS_CREDITS
+    await db.users.update_one({"user_id": user_id}, {"$set": {"masterclass": True}})
+    await db.credits.update_one(
+        {"user_id": user_id},
+        {
+            "$set": {"balance": MASTERCLASS_CREDITS},
+            "$setOnInsert": {"total_used": 0, "created_at": datetime.now(timezone.utc).isoformat()},
+        },
+        upsert=True,
+    )
+    logger.info(f"Masterclass access activated for {user_id} ({MASTERCLASS_CREDITS} credits)")
 
 
 def _generate_key() -> str:
@@ -154,9 +172,12 @@ async def activate_license(data: LicenseActivate, request: Request, response: Re
     if not redeemed:
         raise HTTPException(status_code=400, detail="Dieser Lizenz-Key wurde bereits eingelöst.")
 
-    # Activate the tier + welcome emails via the shared payments pipeline
-    from routes.payments import _activate_from_package
-    await _activate_from_package(user_id, key_doc["package_id"])
+    # Activate: masterclass = free version + 250 credits; else tier via payments pipeline
+    if key_doc["package_id"] == "masterclass":
+        await _activate_masterclass(user_id)
+    else:
+        from routes.payments import _activate_from_package
+        await _activate_from_package(user_id, key_doc["package_id"])
     await db.users.update_one(
         {"user_id": user_id},
         {"$set": {"license_key_id": key_doc["key_id"], "license_activated_at": datetime.now(timezone.utc).isoformat()}},
@@ -217,8 +238,11 @@ async def redeem_license(data: LicenseRedeem, request: Request):
     if not redeemed:
         raise HTTPException(status_code=400, detail="Dieser Lizenz-Key wurde bereits eingelöst.")
 
-    from routes.payments import _activate_from_package
-    await _activate_from_package(user["user_id"], key_doc["package_id"])
+    if key_doc["package_id"] == "masterclass":
+        await _activate_masterclass(user["user_id"])
+    else:
+        from routes.payments import _activate_from_package
+        await _activate_from_package(user["user_id"], key_doc["package_id"])
     await db.users.update_one(
         {"user_id": user["user_id"]},
         {"$set": {"license_key_id": key_doc["key_id"], "license_activated_at": datetime.now(timezone.utc).isoformat()}},
@@ -248,7 +272,7 @@ async def generate_license_keys(data: LicenseGenerate, request: Request):
     if not 1 <= data.count <= 100:
         raise HTTPException(status_code=400, detail="Anzahl muss zwischen 1 und 100 liegen.")
 
-    pkg = PACKAGES[data.package_id]
+    pkg = MASTERCLASS_PACKAGE if data.package_id == "masterclass" else PACKAGES[data.package_id]
     await db.license_keys.create_index("key_hash", unique=True)
     now_iso = datetime.now(timezone.utc).isoformat()
 
