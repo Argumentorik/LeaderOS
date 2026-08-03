@@ -1,9 +1,9 @@
 """Enterprise Funnel — 12-question diagnosis for team training leads."""
-from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from config import db
 from services import get_current_user
@@ -64,7 +64,7 @@ QUESTIONS_EN = [
 class EnterprisePublicLeadForm(BaseModel):
     company: str
     name: Optional[str] = None
-    email: str
+    email: EmailStr
     teamSize: Optional[str] = None
     role: Optional[str] = None
     goals: Optional[str] = None
@@ -78,20 +78,31 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
 
     This endpoint is intentionally public (no auth) so the /for-teams landing
     page can capture leads before a CEO or team-lead has created an account.
+    Rate-limited: max 5 submissions per IP per hour to prevent spam.
     """
-    lead_id = f"lead_{uuid.uuid4().hex[:12]}"
     ip = (request.client.host if request.client else None) or "unknown"
+
+    # Rate limit: 5 submissions/hour per IP
+    one_hour_ago = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+    recent = await db.enterprise_leads.count_documents({
+        "signup_ip": ip,
+        "created_at": {"$gte": one_hour_ago},
+    })
+    if recent >= 5:
+        raise HTTPException(status_code=429, detail="Zu viele Anfragen. Bitte in einer Stunde erneut versuchen.")
+
+    lead_id = f"lead_{uuid.uuid4().hex[:12]}"
     lead_doc = {
         "lead_id": lead_id,
         "user_id": None,
         "user_name": data.name or "",
-        "user_email": data.email,
+        "user_email": str(data.email),
         "company_name": data.company,
         "team_size": data.teamSize,
         "role": data.role,
         "goals": data.goals,
         "wants_own_rag": bool(data.wantsOwnRAG),
-        "contact_email": data.email,
+        "contact_email": str(data.email),
         "lang": data.lang,
         "source": "enterprise_landing_public",
         "score": 60 if data.wantsOwnRAG else 50,
@@ -101,6 +112,37 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.enterprise_leads.insert_one(lead_doc)
+
+    # Best-effort auto-acknowledgment email to the lead
+    try:
+        import asyncio as _asyncio
+        from services_email import send_email, _base_layout, BRAND_COLOR, BRAND_DARK
+        de = (data.lang or "de") == "de"
+        display = (data.name or "").strip() or (data.company or "there")
+        subject = "Danke für dein Interesse — LeaderOS Enterprise" if de else "Thanks for your interest — LeaderOS Enterprise"
+        body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.14),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.22);border-radius:14px;padding:18px 22px;margin-bottom:24px;">
+  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">
+    {"Anfrage eingegangen" if de else "Request received"}
+  </div>
+  <div style="font-size:22px;font-weight:900;line-height:1.2;">
+    {"Danke, "+display+"." if de else "Thanks, "+display+"."}
+  </div>
+</div>
+<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.65;margin:0 0 20px;">
+  {"Wir haben deine Anfrage für <b>"+ (data.company or "") +"</b> erhalten und melden uns innerhalb von 24 Stunden mit einem Terminvorschlag." if de
+   else "We received your request for <b>"+ (data.company or "") +"</b> and will get back to you within 24 hours with a time slot."}
+</p>
+<p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;margin:0;">
+  {"Falls du inzwischen etwas nachreichen möchtest — antworte einfach auf diese Mail." if de
+   else "If you want to add anything in the meantime — just reply to this email."}
+</p>
+"""
+        html = _base_layout(body, preheader="LeaderOS Enterprise — wir melden uns innerhalb von 24h.")
+        _asyncio.create_task(send_email(str(data.email), subject, html))
+    except Exception:  # pragma: no cover — never block lead capture on email failure
+        pass
+
     return {
         "lead_id": lead_id,
         "message": "Danke! Das Team meldet sich innerhalb von 24 Stunden bei dir."
