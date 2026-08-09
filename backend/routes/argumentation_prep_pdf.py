@@ -528,7 +528,7 @@ def _pick_ending(seed: str) -> tuple[str, str]:
     """Deterministically pick one of the endings from a stable seed."""
     if not seed:
         return random.choice(ENDINGS)
-    idx = int(hashlib.md5(seed.encode("utf-8")).hexdigest(), 16) % len(ENDINGS)
+    idx = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(ENDINGS)
     return ENDINGS[idx]
 
 

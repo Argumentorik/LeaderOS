@@ -165,7 +165,7 @@ const Hero = ({ de }) => (
       {/* Trust strip */}
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-white/50">
         {TRUST_LINE.map((t, i) => (
-          <div key={i} className="flex items-center gap-1.5">
+          <div key={t.en} className="flex items-center gap-1.5">
             <Check size={12} className="text-[#BFFF00]" />
             <span>{de ? t.de : t.en}</span>
           </div>
@@ -196,7 +196,7 @@ const BenefitsBlock = ({ de }) => (
           const Icon = b.icon;
           const t = de ? b.de : b.en;
           return (
-            <div key={i} className="relative rounded-3xl border border-white/[0.06] bg-[#141414] p-7 hover:border-[#BFFF00]/30 hover:bg-[#161616] transition-all" data-testid={`benefit-${i}`}>
+            <div key={b.en.title} className="relative rounded-3xl border border-white/[0.06] bg-[#141414] p-7 hover:border-[#BFFF00]/30 hover:bg-[#161616] transition-all" data-testid={`benefit-${i}`}>
               <div className="w-11 h-11 rounded-xl bg-[#BFFF00]/15 flex items-center justify-center mb-5">
                 <Icon size={19} className="text-[#BFFF00]" />
               </div>
@@ -232,7 +232,7 @@ const BringYourOwnRAG = ({ de }) => (
           {RAG_FEATURES.map((f, i) => {
             const Icon = f.icon;
             return (
-              <div key={i} className="flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4" data-testid={`rag-feature-${i}`}>
+              <div key={f.en} className="flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4" data-testid={`rag-feature-${i}`}>
                 <div className="w-9 h-9 rounded-xl bg-[#BFFF00]/12 flex items-center justify-center shrink-0">
                   <Icon size={16} className="text-[#BFFF00]" />
                 </div>
@@ -322,7 +322,7 @@ const HowItWorks = ({ de }) => {
           {steps.map((s, i) => {
             const Icon = s.icon;
             return (
-              <div key={i} className="rounded-3xl border border-white/[0.06] bg-[#141414] p-6 hover:border-[#BFFF00]/25 transition-all" data-testid={`step-${i}`}>
+              <div key={s.title} className="rounded-3xl border border-white/[0.06] bg-[#141414] p-6 hover:border-[#BFFF00]/25 transition-all" data-testid={`step-${i}`}>
                 <div className="w-10 h-10 rounded-xl bg-[#BFFF00]/15 flex items-center justify-center mb-4">
                   <Icon size={17} className="text-[#BFFF00]" />
                 </div>

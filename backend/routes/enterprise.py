@@ -119,7 +119,7 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
     # Best-effort auto-acknowledgment email to the lead
     try:
         import asyncio as _asyncio
-        from services_email import send_email, _base_layout, BRAND_COLOR, BRAND_DARK  # noqa: F401
+        from services_email import send_email, _base_layout, BRAND_COLOR
         de = (data.lang or "de") == "de"
         # Iter 131.1 (Security Audit SEC-002): escape ALL user-supplied strings
         # before templating them into HTML email bodies.

@@ -5,7 +5,6 @@
 - Masterclass license welcome trigger (best-effort, may be skipped)
 """
 import os
-import time
 import pytest
 import requests
 
@@ -22,7 +21,7 @@ if not BASE_URL:
         pass
 
 TEST_EMAIL = "free@wladbot.test"
-TEST_PASSWORD = "test123"
+TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "test123")  # env-driven (seed default)
 
 
 # ────────────────────── fixtures ──────────────────────

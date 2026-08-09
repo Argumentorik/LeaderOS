@@ -13,7 +13,6 @@ import logging
 import os
 from typing import Optional
 
-import httpx
 import jwt
 from jwt import PyJWKClient
 

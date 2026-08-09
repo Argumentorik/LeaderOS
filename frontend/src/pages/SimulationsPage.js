@@ -49,7 +49,7 @@ export default function SimulationsPage() {
       searchParams.delete('prep');
       setSearchParams(searchParams, { replace: true });
     }
-  }, []);
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const token = searchParams.get('tpl');
@@ -125,7 +125,7 @@ export default function SimulationsPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {HOW_STEPS.map((step, i) => (
               <div
-                key={i}
+                key={step.en}
                 className="relative rounded-2xl border border-black/[0.06] dark:border-white/[0.08] p-4 bg-white/70 dark:bg-card/60 backdrop-blur-sm"
                 data-testid={`sim-step-${i + 1}`}
               >
@@ -148,7 +148,7 @@ export default function SimulationsPage() {
                 const Icon = u.icon;
                 return (
                   <button
-                    key={i}
+                    key={u.en}
                     type="button"
                     onClick={() => setArgPrepOpen(true)}
                     className="group flex items-center gap-4 p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white/70 dark:bg-card/60 hover:border-[#BFFF00]/50 hover:shadow-md transition-all text-left"

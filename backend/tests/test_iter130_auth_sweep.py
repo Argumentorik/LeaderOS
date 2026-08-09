@@ -7,7 +7,6 @@ Covers:
 - Basic email login works.
 """
 import os
-import time
 import uuid
 import requests
 import pytest
@@ -30,7 +29,8 @@ API = f"{BASE_URL}/api"
 
 FREE_EMAIL = "free@wladbot.test"
 ADMIN_EMAIL = "test@test.com"
-PW = "test123"
+PW = os.environ.get("TEST_PASSWORD", "test123")  # env-driven (seed default)
+REG_PW = os.environ.get("TEST_REG_PASSWORD", "Testpass1")  # env-driven signup sentinel
 
 
 # ─── helpers ────────────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ def _login(session, identifier, password=PW):
     return r
 
 
-def _register(session, email, name, phone, password="Testpass1"):
+def _register(session, email, name, phone, password=REG_PW):
     r = session.post(f"{API}/auth/register", json={
         "email": email, "name": name, "phone": phone, "password": password,
     }, timeout=30)
@@ -76,7 +76,7 @@ class TestBasicLogin:
 
     def test_invalid_credentials(self):
         s = _client()
-        r = _login(s, FREE_EMAIL, password="wrong-password-xyz")
+        r = _login(s, FREE_EMAIL, password="wrong-password-xyz")  # noqa: S106 — deliberately wrong sentinel
         assert r.status_code == 401
 
 
@@ -96,7 +96,7 @@ class TestRegisterAndPhone:
         digits = uuid.uuid4().int % 100_000_000
         cls.phone_local = f"0170 {digits:08d}"
         cls.expected_normalized_e164 = f"+49170{digits:08d}"
-        cls.password = "Testpass1"
+        cls.password = REG_PW
         cls.user_id = None
         cls.token = None
 
@@ -149,7 +149,7 @@ class TestRegisterAndPhone:
         s = _client()
         rand = uuid.uuid4().hex[:8]
         r = _register(s, f"TEST-dupphone-{rand}@wladbot-testing.de",
-                      "Dup Phone", self.phone_local, "Testpass1")
+                      "Dup Phone", self.phone_local, REG_PW)
         assert r.status_code == 400, r.text
         assert "elefon" in r.text or "phone" in r.text.lower()
 
@@ -157,7 +157,7 @@ class TestRegisterAndPhone:
         """Same email → 400."""
         s = _client()
         digits = uuid.uuid4().int % 100_000_000
-        r = _register(s, self.email, "Dup Email", f"0170{digits:08d}", "Testpass1")
+        r = _register(s, self.email, "Dup Email", f"0170{digits:08d}", REG_PW)
         assert r.status_code == 400
 
     def test_9_weak_password_rejected(self):
@@ -198,7 +198,7 @@ class TestAdminDelete:
         digits = uuid.uuid4().int % 100_000_000
         s = _client()
         r = _register(s, throwaway, "Throwaway User",
-                      f"0170{digits:08d}", "Testpass1")
+                      f"0170{digits:08d}", REG_PW)
         assert r.status_code == 200, r.text
 
         # 2) admin deletes it
@@ -209,7 +209,7 @@ class TestAdminDelete:
 
         # 3) verify user is gone (login fails)
         s = _client()
-        r = _login(s, throwaway, "Testpass1")
+        r = _login(s, throwaway, REG_PW)
         assert r.status_code == 401
 
     def test_admin_delete_nonexistent_returns_404(self, admin_session):

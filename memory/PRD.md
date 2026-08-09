@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 132.1 · 04.08.26] CODE-REVIEW-FIXES (selbst getestet: pyflakes 0, Frontend 0 Warnings, PDF-E2E 200, /for-teams Screenshot)**
+  - Gefixt: MD5→SHA-256 (`argumentation_prep_pdf.py` `_pick_ending`), 7× Index-as-Key → stabile Keys (SimulationsPage, EnterpriseLandingPage, StrategySkeleton), Test-Passwörter env-driven (`TEST_PASSWORD`/`TEST_REG_PASSWORD` in test_iter128/130), 3 unused Imports entfernt (enterprise.py, services_login_security.py, services_oauth.py), einzige ECHTE Hook-Dep-Warning gefixt (SimulationsPage L52 searchParams).
+  - **FALSE POSITIVES verifiziert & dokumentiert**: „eval()" (Reviewer matchte `retrieval(` — 0 echte eval-Aufrufe, grep-verifiziert), „16 undefined variables" (pyflakes: 0 undefined), „211 Hook-Deps" (Live-Compiler zeigte genau 1 Warning — Rest sind stabile Modul-Imports, siehe Iter 109-Analyse), „localStorage-Secrets" (nur kosmetische UI-Prefs, Auth läuft über httpOnly-Cookies — Iter 109/66).
+  - **Bewusst DEFERRED (Iter-109-Entscheidung bestätigt)**: Complexity-Refactors (register, render_strategy_pdf …), File-Splits (OnboardingPage, AnalysisResults), Type-Hint-Kampagne — Backlog, Go-Live-Risiko > Nutzen.
+
 - [x] **[Iter 132 · 04.08.26] MASTERCLASS-KUNDENVERWALTUNG + SEO-GODMODE + LOGIN-PANEL-REDESIGN + CRON-SECRET (selbst getestet: curl E2E alle 6 Endpoints, UI-Flow-Screenshot, Cron-Auth 401/200)**
   - **Masterclass-Direktverwaltung NEU** (`routes/masterclass_admin.py` + `components/admin/MasterclassClientsManager.js` im Admin-Panel): Admin legt Kunden per E-Mail + Name + Laufzeit (6/12/18/24 Monate) + individuellem Startdatum an → Account SOFORT aktiv (masterclass=true, 250 Credits, KEIN Passwort — Login via Magic Link). Welcome-Mail (`masterclass_invite_email`) mit 3-Schritte-Login-Anleitung, optional abschaltbar.
   - **CSV-Bulk-Import** für die ~400 Bestandskunden: `POST /api/admin/masterclass/clients/import` (Spalten email;name;laufzeit;startdatum — , und ; Delimiter, TT.MM.JJJJ + ISO-Datum, utf-8-sig). Fehler-Report pro Zeile. Bereits abgelaufene Startdaten → Status "expired", kein Zugang.

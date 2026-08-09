@@ -97,7 +97,7 @@ export function StrategySkeleton() {
                 </div>
                 {Array.from({ length: s.lines }).map((_, li) => (
                   <div
-                    key={li}
+                    key={`${s.title}-line-${li}`}
                     className="h-2 rounded-full bg-black/[0.05] dark:bg-white/[0.06] shimmer-line"
                     style={{ width: `${75 - li * 12 + (i % 2) * 8}%` }}
                   />
