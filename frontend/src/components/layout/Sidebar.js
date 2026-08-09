@@ -114,6 +114,7 @@ export const Sidebar = () => {
       {!collapsed && (
         <div className="px-2 pb-1">
           <button onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')} data-testid="sidebar-wladhub-btn"
+            data-tour-id="nav-diagnose"
             className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-[#BFFF00]/[0.08] border border-[#BFFF00]/20 hover:border-[#BFFF00]/40 transition-all text-left group">
             <div className="w-5 h-5 rounded-md bg-[#BFFF00] flex items-center justify-center shrink-0">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="black"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>

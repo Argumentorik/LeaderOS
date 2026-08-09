@@ -17,7 +17,11 @@ import { Sparkles } from 'lucide-react';
  *   <WladBotAvatar size={64} pulse />    → typing pulse
  *   <WladBotAvatar size={56} live />     → "he's really here" presence
  */
-const AVATAR_SRC = '/wladbot-avatar.png';
+// Iter 131.3 (Wlad-Direktive · No AI-slop): the previous Pixar-styled
+// /wladbot-avatar.png was replaced by Wlad Jachtchenko's real photo so
+// the chat, emails, and every "WladBot spoke" surface shows a human
+// coach — not a cartoon.
+const AVATAR_SRC = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
 
 export const WladBotAvatar = ({
   size = 40,

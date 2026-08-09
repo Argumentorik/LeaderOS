@@ -12,6 +12,22 @@ import { LockedFeatureModal } from '../shared/LockedFeatureModal';
 export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
   const [lockedItem, setLockedItem] = useState(null);
 
+  // Iter 131.3 (Wlad-Direktive · Dashboard First-Tour): map paths to
+  // stable tour IDs so <DashboardFirstTour> can spotlight the correct
+  // sidebar row. New routes just add themselves here — no hard-coded
+  // querySelector strings scattered around.
+  const TOUR_ID_BY_PATH = {
+    '/dashboard': 'nav-dashboard',
+    '/challenge': 'nav-challenge',
+    '/daily-checkin': 'nav-checkin',
+    '/chat': 'nav-wladbot',
+    '/simulations': 'nav-simulations',
+    '/playbooks': 'nav-playbooks',
+    '/missions': 'nav-video',
+    '/my-path': 'nav-progress',
+    '/lern-videos': 'nav-videos',
+  };
+
   return (
     <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-hide" data-testid="sidebar-nav">
       {navSections.map((section) => (
@@ -35,6 +51,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
                   type="button"
                   onClick={() => setLockedItem(item)}
                   data-testid={`nav-locked-${item.path.replace('/', '')}`}
+                  data-tour-id={TOUR_ID_BY_PATH[item.path]}
                   className={`${baseCls} group relative w-full text-left text-gray-400/70 dark:text-muted-foreground/45 hover:text-gray-700 dark:hover:text-white/85 hover:bg-gray-50/60 dark:hover:bg-white/[0.03] cursor-pointer`}
                   title={`${item.label} — mit Leadership OS freischalten`}
                 >
@@ -57,6 +74,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
 
             return (
               <NavLink key={item.path} to={item.path} data-testid={`nav-${item.path.replace('/', '')}`}
+                data-tour-id={TOUR_ID_BY_PATH[item.path]}
                 className={({ isActive }) =>
                   `${baseCls} ${
                     isActive

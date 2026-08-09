@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
+import { WLAD_AVATAR } from '../lib/brand';
 import { WladGuide } from '../components/onboarding/WladGuide';
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
@@ -155,20 +156,34 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 0: Welcome — WladBot introduces himself */}
+        {/* Step 0: Welcome — Wlad greets the user personally.
+            Iter 131.3: replaced the AI-slop Pixar avatar with a premium
+            frame around Wlad Jachtchenko's real headshot — lime aura,
+            emerald "online" dot, no cartoon vibes. */}
         {step === 0 && (
           <div className="text-center space-y-6 motion-fade-in-up">
-            <div className="mx-auto inline-flex">
-              <WladBotAvatar size={104} live />
+            <div className="mx-auto inline-flex relative" data-testid="onboarding-wlad-portrait">
+              <div className="absolute inset-0 rounded-full bg-[#BFFF00] blur-xl opacity-30 scale-110" aria-hidden />
+              <div className="relative w-28 h-28 rounded-full p-[3px] bg-gradient-to-br from-[#BFFF00] via-[#9ACC00] to-[#6B8A00] shadow-[0_20px_60px_-15px_rgba(191,255,0,0.55)]">
+                <img
+                  src={WLAD_AVATAR}
+                  alt="Wlad Jachtchenko"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-background animate-pulse" />
             </div>
             <div>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase text-[#6B8A00] dark:text-[#BFFF00] mb-1">
+                Wlad Jachtchenko · dein persönlicher Coach
+              </p>
               <h1 className="text-3xl font-black tracking-tight">
-                {de ? `Hi ${firstName} — ich bin WladBot.` : `Hi ${firstName} — I'm WladBot.`}
+                {de ? `Hi ${firstName} — schön, dass du da bist.` : `Hi ${firstName} — glad you're here.`}
               </h1>
-              <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
+              <p className="text-base text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
                 {de
-                  ? 'Dein persönlicher Leadership-Coach, trainiert auf Wlad Jachtchenkos komplementäre Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
-                  : "Your personal leadership coach, trained on Wlad Jachtchenko's complementary methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
+                  ? 'Ich bin dein persönlicher Leadership-Coach, trainiert auf Wlad Jachtchenkos komplementäre Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
+                  : "I'm your personal leadership coach, trained on Wlad Jachtchenko's complementary methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
               </p>
               <div className="flex items-center justify-center gap-1.5 mt-3 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -504,11 +519,15 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 8: Done — WladBot confirms, personalized summary */}
+        {/* Step 8: Done — Wlad confirms, personalized summary.
+            Iter 131.3: real Wlad photo instead of the Pixar avatar. */}
         {step === 8 && (
           <div className="text-center space-y-6 animate-fade-in">
-            <div className="relative mx-auto inline-flex">
-              <WladBotAvatar size={88} live />
+            <div className="relative mx-auto inline-flex" data-testid="onboarding-finish-portrait">
+              <div className="absolute inset-0 rounded-full bg-[#BFFF00] blur-xl opacity-30 scale-110" aria-hidden />
+              <div className="relative w-24 h-24 rounded-full p-[3px] bg-gradient-to-br from-[#BFFF00] via-[#9ACC00] to-[#6B8A00] shadow-[0_18px_50px_-15px_rgba(191,255,0,0.55)]">
+                <img src={WLAD_AVATAR} alt="Wlad Jachtchenko" className="w-full h-full rounded-full object-cover" />
+              </div>
               <span className="absolute -top-1 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/40 border-2 border-white dark:border-[#0A0A0A]">
                 <CheckCircle2 size={16} className="text-white" />
               </span>

@@ -17,6 +17,7 @@ import { DashboardLearningVideos } from '../components/dashboard/DashboardLearni
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
 import { ActionInbox } from '../components/dashboard/ActionInbox';
 import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrepCard';
+import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import api from '../lib/api';
 import { useCredits } from '../contexts/CreditContext';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
@@ -32,7 +33,7 @@ import { usePricing } from '../contexts/PricingContext';
 import { toast } from 'sonner';
 import { LEADERCHECK_URL } from '../lib/domains';
 
-const WLAD_AVATAR = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+import { WLAD_AVATAR } from '../lib/brand';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -321,6 +322,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Iter 131.3: Guided first-run tour with speaking Wlad. Runs once
+          per user (localStorage flag) — user-triggerable via the profile
+          menu for a second walkthrough. */}
+      <DashboardFirstTour userTier={tierInfo?.tier || ud.tier || 'free'} />
     </DashboardLayout>
   );
 }

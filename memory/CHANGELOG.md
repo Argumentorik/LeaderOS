@@ -1,6 +1,23 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 131.3 · 09.02.26] Godmode Onboarding · Wlad-Avatar überall · sprechende Dashboard-Tour** — Verifikation via Screenshots (Login-Flow → Dashboard-Tour 12 Steps · Onboarding Step 0/8)
+  - **Zero AI-slop im Onboarding**: der Pixar-artige `/wladbot-avatar.png` war AI-Slop. Ersetzt durch das **echte Wlad-Jachtchenko-Foto** (`4knvn6cs_WladProfilbild.jpg`) in einem premium Lime-Aura-Frame mit Emerald-Online-Dot. Step 0 zeigt jetzt Kicker "WLAD JACHTCHENKO · DEIN PERSÖNLICHER COACH" + "Hi Felix — schön, dass du da bist.". Global centralisiert in `/app/frontend/src/lib/brand.js` (`WLAD_AVATAR`, `LEADEROS_PLUS_URL`, `LEADERCHECK_URL`).
+  - **WladBotAvatar global refactored**: `WladBotAvatar` (Chat-Bubble, E-Mails, Challengers) nutzt jetzt dasselbe echte Wlad-Foto → keine zwei unterschiedlichen "Wlad-Gesichter" mehr auf der Plattform.
+  - **Neue Dashboard First-Time-Tour** (`/app/frontend/src/components/onboarding/DashboardFirstTour.js` · 12 Steps):
+    - Startet automatisch beim ersten Dashboard-Besuch (localStorage-Flag `leaderos_tour_v1_done`)
+    - Spotlight-Ring mit `radial-gradient` Backdrop-Cutout auf jedem Sidebar-Item via `data-tour-id`
+    - Premium Coach-Card mit echtem Wlad-Foto, Kicker/Titel/Body, Progress-Bar 1/12, Zurück/Weiter/Fertig, X-Close
+    - **WladBot spricht auf Deutsch** via nativer `SpeechSynthesis` API (`u.lang="de-DE"`, bevorzugt DE-Voice) — kein Kosten, kein API-Key, funktioniert offline
+    - Mute-Toggle im Footer für lautlose User
+    - Locked-Items (Simulationen/Playbooks/Videos für Free-User) zeigen zusätzlich einen Amber-Hinweis "Für dich als Free-User noch gesperrt — mit Leader-OS Plus freigeschaltet"
+    - 12 beschriebene Steps: Welcome → Dashboard → Challenge → Check-in → WladBot → Argumentation-Prep → Video-Analyse → Playbooks → Fortschritt → Lern-Videos → Kostenlose Diagnose → Kalibriert
+  - **Sidebar Tour-Anchors**: `SidebarNav.js` und `Sidebar.js` (Diagnose-CTA) tragen `data-tour-id` (dashboard/challenge/checkin/wladbot/simulations/playbooks/video/progress/videos/diagnose). Neue Routen brauchen nur eine Zeile in `TOUR_ID_BY_PATH`.
+  - **RAG-Context nutzt jetzt echte Onboarding-Daten** (Iter 131.2 kontinuiert): `_build_user_context_block()` liest `role`, `team_size`, `primary_goal`, `experience_level`, `wladhub_scores` — jede SEXIER-Strategie ist auf den einzelnen User zugeschnitten statt generisch.
+  - **Ready to welcome first Masterclass clients**: alle Auto-Trigger-Emails (Masterclass-Welcome von Wlad), personalisierte Strategien, sprechende Dashboard-Tour + PDF mit QR-Code → LeaderOS Plus sind live.
+
+
+
 - [x] **[Iter 121.10 · 28.07.26] Bug-Fixes: Lock-Click-Dead-End + ArgumentationPrepModal-Scroll** — Testing-Agent Iter 123 · 100% pass · beide Bugs verifiziert
   - **Bug 1 (Wlad-Screenshot)**: Accelerator-tier User klickten auf ein prelaunch-gesperrtes Video-Kachel → `PricingModal` öffnete mit leerem `visiblePackages` (Nutzer besitzt bereits alle Pakete) → Dead-End. Root Cause: `PRELAUNCH_VIDEO_LOCK=1` sperrt ALLE Videos, auch für bezahlende OS-PLUS-Member. Fix: `DashboardLearningVideos.js` + `LearningVideosTab.js` nutzen jetzt `useTier()` aus `TierContext` — wenn `isAccelerator && video.locked_reason === 'prelaunch'` → warmer Sonner-Toast „🚀 Dieses Video wird ab dem offiziellen Cohort-Launch freigeschaltet — als OS-PLUS-Member bekommst du sofort Zugriff" statt Modal. Free-Tier-User sehen weiterhin `PricingModal` (verifizierte Regression bestanden).
   - **Bug 2 (Argumentation-Prep-Scroll)**: Radix `ScrollArea` im Modal-Container fing Wheel-/Touch-Events ab → kein Scroll auf Desktop UND Mobile. Fix: Ersetzt durch natives `<div className='flex-1 overflow-y-auto overscroll-contain' style={{ WebkitOverflowScrolling: 'touch' }}>` mit `data-testid='argumentation-prep-scroll'`. Testing-Agent verifiziert: Desktop 1920×1080 (sh=ch=653), Mobile 393×852 (sh=671 · ch=644 · scrollTop advances korrekt), Step-1→Step-2-Flow durchgängig scrollbar.
