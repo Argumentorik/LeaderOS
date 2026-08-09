@@ -853,16 +853,24 @@ async def post_enterprise_lead(data: EnterpriseLead, request: Request) -> dict:
         try:
             admin_to = os.environ.get("ENTERPRISE_LEAD_EMAIL") or os.environ.get("SENDER_EMAIL")
             if admin_to:
+                # Iter 131.1 (Security Audit SEC-002): escape ALL user-supplied
+                # strings before templating them into the admin email HTML.
+                import html as _html_mod
+                _c = _html_mod.escape(data.company)
+                _n = _html_mod.escape(data.contact_name)
+                _e = _html_mod.escape(data.contact_email)
+                _p = _html_mod.escape(data.phone or "-")
+                _m = _html_mod.escape(data.message or "-").replace("\n", "<br>")
                 subject = f"[Enterprise Lead] {data.company} - {data.seats} Seats - {quote['total_price']:.0f}EUR"
                 html = (
                     f"<h2>Neuer Enterprise Lead</h2>"
-                    f"<p><b>Firma:</b> {data.company}<br>"
-                    f"<b>Kontakt:</b> {data.contact_name} &lt;{data.contact_email}&gt;<br>"
-                    f"<b>Telefon:</b> {data.phone or '-'}<br>"
+                    f"<p><b>Firma:</b> {_c}<br>"
+                    f"<b>Kontakt:</b> {_n} &lt;{_e}&gt;<br>"
+                    f"<b>Telefon:</b> {_p}<br>"
                     f"<b>Mitarbeiter:</b> {data.seats}<br>"
                     f"<b>Quote:</b> {quote['total_price']:.2f}EUR ({quote['discount_pct']}%% Rabatt, {quote['price_per_seat']:.2f}EUR/Seat)<br>"
                     f"<b>Ersparnis:</b> {quote['total_savings']:.2f}EUR</p>"
-                    f"<p><b>Nachricht:</b><br>{(data.message or '-').replace(chr(10), '<br>')}</p>"
+                    f"<p><b>Nachricht:</b><br>{_m}</p>"
                 )
                 await send_email(admin_to, subject, html)
         except Exception as e:

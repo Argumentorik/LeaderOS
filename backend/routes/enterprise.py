@@ -2,12 +2,14 @@
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+import html as _html
 import uuid
 from datetime import datetime, timezone, timedelta
 
 from config import db
 from services import get_current_user
 from services_actions import record_user_action
+from routes.auth import _get_client_ip
 
 router = APIRouter(prefix="/api/enterprise", tags=["enterprise"])
 
@@ -80,9 +82,10 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
     page can capture leads before a CEO or team-lead has created an account.
     Rate-limited: max 5 submissions per IP per hour to prevent spam.
     """
-    ip = (request.client.host if request.client else None) or "unknown"
+    ip = _get_client_ip(request)
 
-    # Rate limit: 5 submissions/hour per IP
+    # Rate limit: 5 submissions/hour per IP (uses real client IP via
+    # cf-connecting-ip / x-forwarded-for → not the proxy's own address).
     one_hour_ago = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
     recent = await db.enterprise_leads.count_documents({
         "signup_ip": ip,
@@ -116,9 +119,13 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
     # Best-effort auto-acknowledgment email to the lead
     try:
         import asyncio as _asyncio
-        from services_email import send_email, _base_layout, BRAND_COLOR, BRAND_DARK
+        from services_email import send_email, _base_layout, BRAND_COLOR, BRAND_DARK  # noqa: F401
         de = (data.lang or "de") == "de"
-        display = (data.name or "").strip() or (data.company or "there")
+        # Iter 131.1 (Security Audit SEC-002): escape ALL user-supplied strings
+        # before templating them into HTML email bodies.
+        safe_name = _html.escape((data.name or "").strip())
+        safe_company = _html.escape((data.company or "").strip())
+        display = safe_name or safe_company or "there"
         subject = "Danke für dein Interesse — LeaderOS Enterprise" if de else "Thanks for your interest — LeaderOS Enterprise"
         body = f"""
 <div style="background:linear-gradient(135deg,rgba(191,255,0,0.14),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.22);border-radius:14px;padding:18px 22px;margin-bottom:24px;">
@@ -130,8 +137,8 @@ async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request:
   </div>
 </div>
 <p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.65;margin:0 0 20px;">
-  {"Wir haben deine Anfrage für <b>"+ (data.company or "") +"</b> erhalten und melden uns innerhalb von 24 Stunden mit einem Terminvorschlag." if de
-   else "We received your request for <b>"+ (data.company or "") +"</b> and will get back to you within 24 hours with a time slot."}
+  {"Wir haben deine Anfrage für <b>"+ safe_company +"</b> erhalten und melden uns innerhalb von 24 Stunden mit einem Terminvorschlag." if de
+   else "We received your request for <b>"+ safe_company +"</b> and will get back to you within 24 hours with a time slot."}
 </p>
 <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;margin:0;">
   {"Falls du inzwischen etwas nachreichen möchtest — antworte einfach auf diese Mail." if de
@@ -239,7 +246,13 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
 
 @router.get("/leads")
 async def get_enterprise_leads(request: Request):
-    """Get enterprise leads (admin)."""
-    await get_current_user(request)
+    """Get enterprise leads (admin-only).
+
+    Iter 131.1 (Security Audit SEC-001): previously exposed to any signed-in
+    user via `get_current_user`. Now gated by `require_admin` — enterprise
+    lead PII (company, contact, phone, message, quote) is confidential.
+    """
+    from routes.admin import require_admin
+    await require_admin(request)
     leads = await db.enterprise_leads.find({}, {"_id": 0}).sort("created_at", -1).to_list(50)
     return leads
