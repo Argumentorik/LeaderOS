@@ -104,7 +104,7 @@ class TestLeadercheckSync:
                   "leader_check_row_count", "has_local_diagnosis",
                   "last_local_sync", "leadercheck_url"):
             assert k in d, f"missing key {k}"
-        assert d["leadercheck_url"] == "https://leader-check.de"
+        assert d["leadercheck_url"] == "https://leadercheck.de"
         assert d["email_used"] == TEST_EMAIL
         assert d["bridge_configured"] is True
         # test@test.com is expected to have no supabase insight
@@ -118,7 +118,7 @@ class TestLeadercheckSync:
         if d["status"] == "synced":
             assert isinstance(d.get("records_imported"), int)
         elif d["status"] == "no_data":
-            assert "leader-check.de" in (d.get("message", "") + d.get("wladhub_url", ""))
+            assert "leadercheck.de" in (d.get("message", "") + d.get("wladhub_url", ""))
 
 
 # ── DELETE TEST ACCOUNTS SCRIPT ────────────────────────────────────────

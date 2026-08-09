@@ -13,7 +13,7 @@ export const WLAD_AVATAR =
   'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
 
 /** Where "LeaderOS Plus" points to (used in PDF, emails, upsell CTAs). */
-export const LEADEROS_PLUS_URL = 'https://leader-check.de/plus';
+export const LEADEROS_PLUS_URL = 'https://leadercheck.de/plus';
 
 /** Where the free diagnose lives. */
-export const LEADERCHECK_URL = 'https://leader-check.de';
+export const LEADERCHECK_URL = 'https://leadercheck.de';

@@ -162,7 +162,7 @@ def _cover(canvas_obj, doc):
     # Right side: quiet URL
     canvas_obj.setFillColor(colors.HexColor("#BFBFBF"))
     canvas_obj.setFont("Helvetica", 8.5)
-    canvas_obj.drawRightString(w - 2 * cm, h - 1.35 * cm, "leader-check.de")
+    canvas_obj.drawRightString(w - 2 * cm, h - 1.35 * cm, "leadercheck.de")
     _watermark(canvas_obj)
 
 
@@ -194,7 +194,7 @@ def _content_page(canvas_obj, doc):
     canvas_obj.setFillColor(MUTED_GREY)
     canvas_obj.setFont("Helvetica", 8)
     canvas_obj.drawRightString(w - 2 * cm, 1.2 * cm, f"Seite {doc.page}")
-    canvas_obj.drawString(2 * cm, 1.2 * cm, "leader-check.de · vertraulich · nur für den:die Adressat:in")
+    canvas_obj.drawString(2 * cm, 1.2 * cm, "leadercheck.de · vertraulich · nur für den:die Adressat:in")
 
 
 def _on_first_page(canvas_obj, doc):
@@ -521,7 +521,7 @@ ENDINGS = [
      "LeaderOS Plus hält dich dran: kurze tägliche Impulse, klare Playbooks, ein Coach in der Tasche."),
 ]
 
-QR_TARGET_URL = "https://leader-check.de/plus"
+QR_TARGET_URL = "https://leadercheck.de/plus"
 
 
 def _pick_ending(seed: str) -> tuple[str, str]:
@@ -624,6 +624,6 @@ def _build_ending_page(story: list, styles: dict, seed: str) -> None:
         textColor=MUTED_GREY, alignment=TA_CENTER, spaceBefore=0.6 * cm,
     )
     story.append(Paragraph(
-        "Von Wlad Jachtchenko und dem Leader-OS Team. leader-check.de · Fragen? support@leader-check.de",
+        "Von Wlad Jachtchenko und dem Leader-OS Team. leadercheck.de · Fragen? support@leadercheck.de",
         fine,
     ))

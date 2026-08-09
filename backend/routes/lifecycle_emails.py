@@ -312,7 +312,7 @@ async def cron_video_drip(request: Request):
 # Ten days after signup, gently remind the user about the free 30-minute
 # 1:1 call with Wlad's team. This is the highest-conversion moment: the
 # user has had time to feel the product but hasn't yet decided on a plan.
-CONSULTATION_BOOKING_URL = "https://leader-check.de/beratung"
+CONSULTATION_BOOKING_URL = "https://leadercheck.de/beratung"
 CONSULTATION_MIN_DAYS = 9.5
 CONSULTATION_MAX_DAYS = 30  # widow so we don't spam users who came back after a break
 

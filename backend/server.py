@@ -199,7 +199,7 @@ async def rag_health() -> dict:
 # Otherwise: split env list into explicit origins (production-safe).
 #
 # Iter 92.26 (Mert architecture brief, Jun 2026): production whitelist is locked to
-# 4 domains + www variants (leaderos.de, leadercheck.de, leader-os.de, leader-check.de).
+# 4 domains + www variants (leaderos.de, leadercheck.de, leader-os.de, leadercheck.de).
 # When ENV=production AND CORS_ORIGINS is `*`/empty, we REFUSE to start so a
 # misconfigured deploy fails loudly instead of silently exposing the API.
 _raw_cors = os.environ.get("CORS_ORIGINS", "").strip()

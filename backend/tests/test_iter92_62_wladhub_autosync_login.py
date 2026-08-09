@@ -126,7 +126,7 @@ def test_3_login_triggers_autosync_code_path(synctest_user):
     task must run (verified via backend log inspection).
 
     Since the test user does NOT exist in the Supabase auth.users table
-    the autosync will log 'no leader-check.de diagnosis' — that's the
+    the autosync will log 'no leadercheck.de diagnosis' — that's the
     expected regression path and proves the code fires."""
     uid = synctest_user["user_id"]
     mongo.users.update_one({"user_id": uid}, {"$unset": {
@@ -237,7 +237,7 @@ def test_6_regression_user_without_diagnosis():
                       json={"identifier": email, "password": password}, timeout=15)
     assert r.status_code == 200, r.text
 
-    # Autosync should log 'no leader-check.de diagnosis' (or nothing) — no crash
+    # Autosync should log 'no leadercheck.de diagnosis' (or nothing) — no crash
     time.sleep(6)
     u = mongo.users.find_one({"user_id": user_id})
     assert u is not None

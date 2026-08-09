@@ -9,9 +9,9 @@ from datetime import datetime, timezone
 
 from config import db, logger
 
-# Public funnel URL — both spellings (leader-check.de / leadercheck.de) are ours.
+# Public funnel URL — both spellings (leadercheck.de / leadercheck.de) are ours.
 # Flip via env LEADERCHECK_URL once DNS for the non-hyphen domain is live.
-LEADERCHECK_URL = (os.environ.get("LEADERCHECK_URL") or "https://leader-check.de").rstrip("/")
+LEADERCHECK_URL = (os.environ.get("LEADERCHECK_URL") or "https://leadercheck.de").rstrip("/")
 from services import get_current_user
 from services_actions import record_user_action
 
@@ -349,7 +349,7 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
             }
         return {
             "status": "no_data",
-            "message": "Noch keine Leader-Diagnose gefunden. Starte die kostenlose Diagnose auf leader-check.de",
+            "message": "Noch keine Leader-Diagnose gefunden. Starte die kostenlose Diagnose auf leadercheck.de",
             "wladhub_url": LEADERCHECK_URL,
             "has_diagnosis": False,
         }
@@ -391,10 +391,10 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
 
 @router.get("/sync/status")
 async def sync_status(request: Request):
-    """Iter 121: transparent health-check for the leader-check.de sync.
+    """Iter 121: transparent health-check for the leadercheck.de sync.
 
     Returns whether the Supabase bridge is configured, whether the caller's
-    email exists on leader-check.de, and when the last sync happened. Used
+    email exists on leadercheck.de, and when the last sync happened. Used
     by the diagnose page to show the user "sync bridge OK" instead of a
     silent redirect.
     """

@@ -271,6 +271,6 @@ def test_C_security_no_leak_for_user_without_supabase_account(noleak_user):
 
     # 3) Backend log should show the security-safe skip message
     log_ok = _log_contains(r"no account for", offset) or \
-             _log_contains(r"no leader-check.de diagnosis", offset) or \
+             _log_contains(r"no leadercheck.de diagnosis", offset) or \
              _log_contains(re.escape(email), offset)
     assert log_ok, "expected autosync-skip log message for noleak user"

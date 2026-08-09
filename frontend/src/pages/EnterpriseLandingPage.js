@@ -512,7 +512,7 @@ const Footer = ({ de }) => (
           <WladMark size={16} />
         </div>
         <div className="text-[12px] text-white/60">
-          © {new Date().getFullYear()} LeaderOS · leader-check.de
+          © {new Date().getFullYear()} LeaderOS · leadercheck.de
         </div>
       </div>
       <div className="flex items-center gap-5 text-[12px] text-white/50">

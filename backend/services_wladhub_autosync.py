@@ -1,4 +1,4 @@
-"""Auto-sync leader-check.de diagnosis on user signup.
+"""Auto-sync leadercheck.de diagnosis on user signup.
 
 When a user registers on leaderos.de, we attempt to find their existing
 Leader-Diagnose in the Supabase `leadership_insights` table by email match.
@@ -22,12 +22,12 @@ async def auto_sync_wladhub_on_signup(user_id: str, email: str) -> None:
     Pulls the latest leadership_insight row for `email` from Supabase. If
     found, persists to `wladhub_diagnoses` and updates the user's
     `wladhub_scores` so the dashboard widget shows the 3-Layer score on
-    first login — turning the leader-check.de quiz into a free funnel.
+    first login — turning the leadercheck.de quiz into a free funnel.
     """
     try:
         insights = await _fetch_supabase_insights(email)
         if not insights:
-            logger.info("autosync: no leader-check.de diagnosis for %s", email)
+            logger.info("autosync: no leadercheck.de diagnosis for %s", email)
             return
 
         latest = insights[0]
@@ -56,7 +56,7 @@ async def auto_sync_wladhub_on_signup(user_id: str, email: str) -> None:
             }},
         )
         logger.info(
-            "autosync: imported leader-check.de diagnosis for %s (overall=%s)",
+            "autosync: imported leadercheck.de diagnosis for %s (overall=%s)",
             email, scores["overall_score"],
         )
     except Exception as e:

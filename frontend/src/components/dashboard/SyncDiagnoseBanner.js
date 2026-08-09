@@ -8,14 +8,14 @@ import { LEADERCHECK_URL } from '../../lib/domains';
 import { toast } from 'sonner';
 
 /**
- * SyncDiagnoseBanner — prominent CTA for leader-check.de funnel users to
+ * SyncDiagnoseBanner — prominent CTA for leadercheck.de funnel users to
  * pull their existing Leader-Diagnose into the WladBot dashboard.
  *
  * Auto-hides if:
  *   - user already has a synced WladHub diagnosis (`last_sync` set)
  *   - user dismissed the banner this session (sessionStorage)
  *
- * Iter 92.35 (Mert P1): bridge between leader-check.de and leaderos.de.
+ * Iter 92.35 (Mert P1): bridge between leadercheck.de and leaderos.de.
  */
 const SS_DISMISS_KEY = 'sync_diagnose_banner_dismissed';
 
@@ -57,8 +57,8 @@ export const SyncDiagnoseBanner = ({ de = true }) => {
         setTimeout(() => window.location.reload(), 800);
       } else if (status === 'no_data') {
         toast.info(de
-          ? 'Noch keine Diagnose auf leader-check.de gefunden. Starte sie dort kostenlos.'
-          : 'No diagnosis on leader-check.de yet. Start the free assessment there.');
+          ? 'Noch keine Diagnose auf leadercheck.de gefunden. Starte sie dort kostenlos.'
+          : 'No diagnosis on leadercheck.de yet. Start the free assessment there.');
         window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer');
       } else {
         toast.success(de ? 'Diagnose ist bereits aktuell.' : 'Diagnosis already up to date.');
@@ -91,7 +91,7 @@ export const SyncDiagnoseBanner = ({ de = true }) => {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-black">
-              {de ? 'Hast du deine Leader-Diagnose auf leader-check.de gemacht?' : 'Did you complete your Leader Diagnosis on leader-check.de?'}
+              {de ? 'Hast du deine Leader-Diagnose auf leadercheck.de gemacht?' : 'Did you complete your Leader Diagnosis on leadercheck.de?'}
             </p>
             <p className="text-xs text-muted-foreground mt-0.5">
               {de

@@ -42,7 +42,7 @@ FEATURES = [
     ("🎧  Zero Audio-Overlap", "Globaler AudioBus stoppt JEDE aktive Stimme (TTS, Challenger, Voice-Mode) beim Seitenwechsel — kein Bleed mehr zwischen Routes."),
     ("🥊  Challengers", "8 CEO-Personas (Bezos, Musk, Oprah, Jobs, Branson, Sandberg, Page, Hastings) mit individuellen ElevenLabs-Stimmen, Meeting-Stage-UI."),
     ("🔒  Community (Prelaunch)", "Peer-Feedback, Live-Leaderboard, Wlad-AMAs — mit einheitlichem Premium-Gate zum Launch scharf schaltbar."),
-    ("🔗  leader-check.de Sync", "Transparenter Endpoint /api/wladhub/sync/status zeigt Bridge-Config, Row-Count, letzter Sync. Bei " + LOW + "no_data" + HIGH + " führt der Toast direkt zur Diagnose-Landing auf leader-check.de — kein stiller Redirect mehr."),
+    ("🔗  leadercheck.de Sync", "Transparenter Endpoint /api/wladhub/sync/status zeigt Bridge-Config, Row-Count, letzter Sync. Bei " + LOW + "no_data" + HIGH + " führt der Toast direkt zur Diagnose-Landing auf leadercheck.de — kein stiller Redirect mehr."),
     ("📈  UTM/Attribution", "First-Touch + Last-Touch (utm_*, gclid, fbclid, ttclid, msclkid, li_fat_id, via, ref + referrer + landing) persistieren auf jedem User. Ads-ready."),
     ("💳  Stripe + Tiers", "Free / Starter (€199) / Standard (€997/Jahr) / Accelerator (€6 970 oder 12× €580,83) mit Video-Analyse & 1:1-Calls. Fully integrated."),
     ("🔐  Auth", "Magic-Link + Emergent-Google-OAuth + " + LOW + "Continue-as" + HIGH + "-Quick-Login. Passwort-Reset, JWT, Rate-Limits, alles verifiziert."),
@@ -51,7 +51,7 @@ FEATURES = [
 
 CHECKLIST = [
     ("Auf leaderos.de mit deiner E-Mail einloggen", "Magic-Link oder " + LOW + "Continue as Wlad" + HIGH + "-Kachel — beide Wege getestet."),
-    ("Onboarding komplett durchlaufen", "5 Schritte inkl. Diagnose-Verknüpfung zu leader-check.de."),
+    ("Onboarding komplett durchlaufen", "5 Schritte inkl. Diagnose-Verknüpfung zu leadercheck.de."),
     ("Voice-Modus testen", "Frag " + LOW + "was ist sexier?" + HIGH + " — die Framework-Erkennung sollte greifen und der Bot deine SEXIER-Argumentation namentlich zitieren."),
     ("Challenger-Session testen", "Mit Bezos ein Meeting starten, dann Sidebar-Route wechseln → Audio muss SOFORT stoppen."),
     ("Godmode-Dashboard prüfen", "ActionInbox, Streak, Progress-Rings — alle Sektionen laden."),
@@ -181,7 +181,7 @@ def render_html() -> str:
               &nbsp;·&nbsp;
               <a href="{FRONTEND}/leader-diagnose" style="color:#94A3B8;text-decoration:underline;">Leader-Diagnose</a>
               &nbsp;·&nbsp;
-              <a href="https://leader-check.de" style="color:#94A3B8;text-decoration:underline;">leader-check.de</a>
+              <a href="https://leadercheck.de" style="color:#94A3B8;text-decoration:underline;">leadercheck.de</a>
             </div>
           </td>
         </tr>

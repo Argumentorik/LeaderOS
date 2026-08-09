@@ -60,7 +60,7 @@ export default function OnboardingPage() {
     { id: 'podcast',     icon: Mic,           label: 'Podcast' },
     { id: 'friend',      icon: MessageCircle, label: de ? 'Freund/Kollege' : 'Friend/Colleague' },
     { id: 'wlad_book',   icon: Newspaper,     label: de ? 'Wlads Buch' : 'Wlad\'s Book' },
-    { id: 'leadercheck', icon: CheckCircle2,  label: 'leader-check.de' },
+    { id: 'leadercheck', icon: CheckCircle2,  label: 'leadercheck.de' },
     { id: 'event',       icon: Calendar,      label: de ? 'Event/Konferenz' : 'Event/Conference' },
     { id: 'tiktok',      icon: Zap,           label: 'TikTok' },
     { id: 'chatgpt',     icon: Sparkles,      label: de ? 'ChatGPT / KI' : 'ChatGPT / AI' },

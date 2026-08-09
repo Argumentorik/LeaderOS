@@ -396,7 +396,7 @@ Bereit für den nächsten Schritt? <a href="{coaching_url}" style="color:{BRAND_
 def masterclass_welcome_email(name: str, app_url: str = "https://leaderos.de") -> tuple[str, str]:
     subject = f"Willkommen im Kreis, {name}."
     dashboard_url = f"{app_url.rstrip('/')}/dashboard"
-    plus_url = "https://leader-check.de/plus"
+    plus_url = "https://leadercheck.de/plus"
     body = f"""
 <div style="background:linear-gradient(135deg,rgba(191,255,0,0.18),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.28);border-radius:14px;padding:20px 24px;margin-bottom:26px;">
   <div style="font-size:10px;letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:8px;">Masterclass · Zugang aktiv</div>
@@ -453,7 +453,7 @@ WLAD JACHTCHENKO · GRÜNDER LEADEROS
 
 def consultation_reminder_email(
     name: str,
-    booking_url: str = "https://leader-check.de/beratung",
+    booking_url: str = "https://leadercheck.de/beratung",
     unsubscribe_link: str | None = None,
 ) -> tuple[str, str]:
     subject = f"{name}, 30 Minuten mit uns — auf uns."
@@ -495,7 +495,7 @@ Falls du gerade keine Zeit hast oder nicht magst — kein Stress. Ich melde mich
 Wlad &amp; Team
 </p>
 <p style="font-size:11px;color:rgba(255,255,255,0.35);margin:4px 0 0;letter-spacing:0.06em;">
-LEADEROS · leader-check.de
+LEADEROS · leadercheck.de
 </p>
 """
     # Iter 131.4: append unsubscribe link inline (below CTA) since

@@ -1,5 +1,5 @@
 """Iter 92.37 — PRE-RELEASE COMPREHENSIVE REGRESSION
-Before re-deploying to Vercel (leader-os.de + leader-check.de), verify all critical
+Before re-deploying to Vercel (leader-os.de + leadercheck.de), verify all critical
 user-facing flows still work after Iter 92.35 (Coaching Hub redesign + SyncDiagnoseBanner
 + RAG 10-Stufen MANUAL_CHUNK) and Iter 92.36 (Google OAuth diagnostic + origin fallback).
 
@@ -267,7 +267,7 @@ class TestAdmin:
 class TestCORSMultiDomain:
     @pytest.mark.parametrize("origin", [
         "https://leader-os.de",
-        "https://leader-check.de",
+        "https://leadercheck.de",
         "https://leaderos.de",
         "https://leadercheck.de",
         "https://www.leader-os.de",

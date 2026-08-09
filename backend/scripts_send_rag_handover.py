@@ -282,7 +282,7 @@ def render_html() -> str:
               &nbsp;·&nbsp;
               <a href="{FRONTEND}/admin" style="color:#94A3B8;text-decoration:underline;">Admin · Knowledge</a>
               &nbsp;·&nbsp;
-              <a href="https://leader-check.de" style="color:#94A3B8;text-decoration:underline;">leader-check.de</a>
+              <a href="https://leadercheck.de" style="color:#94A3B8;text-decoration:underline;">leadercheck.de</a>
             </div>
           </td>
         </tr>
