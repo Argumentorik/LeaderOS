@@ -220,8 +220,10 @@ export const ProductPreviewLoop = ({ de = true }) => {
         </div>
       </div>
 
-      {/* Body — single state visible at once */}
-      <div className="relative p-4 min-h-[180px]">
+      {/* Body — single state visible at once. Fixed height so switching to
+          the taller Video state doesn't push the panel down and cause the
+          entire login layout to shift (Iter 131.2 Wlad-Direktive). */}
+      <div className="relative p-4 h-[280px] overflow-hidden">
         {currentState === 'chat'  && <ChatPreview de={de} />}
         {currentState === 'score' && <ScorePreview de={de} />}
         {currentState === 'video' && <VideoPreview de={de} />}

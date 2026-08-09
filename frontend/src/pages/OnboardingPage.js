@@ -167,8 +167,8 @@ export default function OnboardingPage() {
               </h1>
               <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
                 {de
-                  ? 'Dein persönlicher Leadership-Coach, trainiert auf Wlads komplette Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
-                  : "Your personal leadership coach, trained on Wlad's complete methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
+                  ? 'Dein persönlicher Leadership-Coach, trainiert auf Wlad Jachtchenkos komplementäre Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
+                  : "Your personal leadership coach, trained on Wlad Jachtchenko's complementary methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
               </p>
               <div className="flex items-center justify-center gap-1.5 mt-3 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -198,8 +198,8 @@ export default function OnboardingPage() {
                 </h2>
                 <p className="text-[13px] text-white/55 mt-2 max-w-md animate-fade-in" style={{ animationDelay: '100ms' }}>
                   {de
-                    ? 'Zum Weiterbilden, Reflektieren und Wachsen — mit Wlads kompletter Methodik im Rücken.'
-                    : "To learn, reflect and grow — backed by Wlad's complete methodology."}
+                    ? 'Zum Weiterbilden, Reflektieren und Wachsen — mit Wlad Jachtchenkos komplementärer Methodik im Rücken.'
+                    : "To learn, reflect and grow — backed by Wlad Jachtchenko's complementary methodology."}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
@@ -207,12 +207,12 @@ export default function OnboardingPage() {
                     {
                       icon: BookOpen,
                       title: de ? 'Wlads gesamtes Wissen' : "Wlad's entire knowledge",
-                      desc: de ? 'Jede Antwort basiert auf Wlads Büchern, Vorträgen & Coaching-Praxis — in Sekunden bei dir.' : "Every answer draws on Wlad's books, talks & coaching practice — with you in seconds.",
+                      desc: de ? 'Jede Antwort basiert auf Wlad Jachtchenkos Büchern, Vorträgen & Coaching-Praxis — in Sekunden bei dir.' : "Every answer draws on Wlad Jachtchenko's books, talks & coaching practice — with you in seconds.",
                     },
                     {
                       icon: Video,
                       title: de ? 'Video-Feedback wie im 1:1' : 'Video feedback like a 1:1',
-                      desc: de ? 'Rede aufnehmen → präzises Feedback nach Wlads Methodik. Plus Lernvideos on demand.' : "Record a speech → precise feedback via Wlad's methodology. Plus learning videos on demand.",
+                      desc: de ? 'Rede aufnehmen → präzises Feedback nach Wlad Jachtchenkos Methodik. Plus Lernvideos on demand.' : "Record a speech → precise feedback via Wlad Jachtchenko's methodology. Plus learning videos on demand.",
                     },
                     {
                       icon: Flame,
@@ -243,10 +243,21 @@ export default function OnboardingPage() {
                 {/* Trust & community strip */}
                 <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5 mt-5 pt-4 border-t border-white/[0.07]" data-testid="onboarding-trust-strip">
                   {[
-                    { icon: Shield, label: de ? 'DSGVO-konform' : 'GDPR compliant' },
+                    { icon: Shield, label: de ? 'DSGVO-konform — was mit deinen Daten passiert' : 'GDPR compliant — what happens with your data', href: '/datenschutz' },
                     { icon: Lock, label: de ? 'Sichere Zahlung (Stripe)' : 'Secure payments (Stripe)' },
                     { icon: Users, label: de ? 'Teil der Leader-Community' : 'Part of the leader community' },
-                  ].map((t) => (
+                  ].map((t) => t.href ? (
+                    <a
+                      key={t.label}
+                      href={t.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-[10px] font-bold text-white/60 hover:text-[#BFFF00] underline decoration-white/15 hover:decoration-[#BFFF00]/60 underline-offset-2 transition-colors"
+                      data-testid="onboarding-dsgvo-link"
+                    >
+                      <t.icon size={11} className="text-[#BFFF00]/80" /> {t.label}
+                    </a>
+                  ) : (
                     <span key={t.label} className="flex items-center gap-1.5 text-[10px] font-bold text-white/45">
                       <t.icon size={11} className="text-[#BFFF00]/80" /> {t.label}
                     </span>
@@ -375,7 +386,7 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 6: WladHub */}
+        {/* Step 6: Kostenlose Leadership-Diagnose */}
         {step === 6 && (
           <div className="space-y-5 animate-fade-in">
             <Card className="border-amber-200/50 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-500/5 dark:to-orange-500/5">
@@ -385,13 +396,13 @@ export default function OnboardingPage() {
                     <Zap size={18} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold">WladHub Leadership-Diagnose</p>
-                    <p className="text-xs text-muted-foreground">{de ? '10 Minuten, sofortiger Report' : '10 minutes, instant report'}</p>
+                    <p className="text-sm font-bold">{de ? 'Kostenlose Leadership-Diagnose' : 'Free leadership diagnosis'}</p>
+                    <p className="text-xs text-muted-foreground">{de ? '10 Minuten · sofortiger Report · individuelles Feedback' : '10 minutes · instant report · personal feedback'}</p>
                   </div>
                 </div>
 
                 <div className="space-y-3 mb-4">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{de ? 'Deine Scores eingeben (optional)' : 'Enter your scores (optional)'}</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{de ? 'Schon gemacht? Deine Scores hier eintragen (optional)' : 'Already done it? Add your scores here (optional)'}</p>
                   {[
                     { key: 'ki_kompetenz', label: 'KI-Kompetenz', color: 'border-[#BFFF00]/30 focus:ring-[#BFFF00]' },
                     { key: 'boardroom_rhetorik', label: 'Boardroom-Rhetorik', color: 'border-rose-300 focus:ring-rose-500' },
@@ -409,10 +420,13 @@ export default function OnboardingPage() {
                   ))}
                 </div>
 
-                <Button variant="outline" className="w-full text-xs font-bold border-amber-300 hover:bg-amber-50 dark:border-amber-500/30 dark:hover:bg-amber-500/5"
+                <Button className="w-full text-xs font-black h-11 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:brightness-110 transition-all"
                   onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')} data-testid="wladhub-onboarding-link">
-                  <ExternalLink size={12} className="mr-1.5" /> {de ? 'Noch keine Diagnose? Jetzt auf WladHub machen' : "No diagnosis yet? Do it on WladHub"}
+                  <ExternalLink size={13} className="mr-1.5" /> {de ? 'Kostenlose Diagnose jetzt starten' : 'Start free diagnosis now'}
                 </Button>
+                <p className="text-[10px] text-muted-foreground text-center mt-2 font-medium">
+                  {de ? '10 Min · sofortiger Report · macht mein Coaching ab Tag 1 individueller' : '10 min · instant report · makes coaching more personal from day 1'}
+                </p>
               </CardContent>
             </Card>
 
@@ -500,11 +514,11 @@ export default function OnboardingPage() {
               </span>
             </div>
             <div>
-              <h2 className="text-2xl font-black">{de ? `Perfekt kalibriert, ${firstName}.` : `Perfectly calibrated, ${firstName}.`}</h2>
+              <h2 className="text-2xl font-black">{de ? `Ich bin jetzt für dich perfekt kalibriert, ${firstName}!` : `I'm now perfectly calibrated for you, ${firstName}!`}</h2>
               <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
                 {de
-                  ? 'Ab jetzt zeige ich dir jeden Tag die Richtung — mit Challenges, Feedback und Wlads Methodik im Rücken.'
-                  : "From now on I'll show you the direction every day — with challenges, feedback and Wlad's methodology behind you."}
+                  ? 'Ab jetzt zeige ich dir jeden Tag die Richtung — mit Challenges, Feedback und Wlad Jachtchenkos komplementärer Methodik im Rücken.'
+                  : "From now on I'll show you the direction every day — with challenges, feedback and Wlad Jachtchenko's complementary methodology behind you."}
               </p>
               {/* Personalized profile chips */}
               {(roleLabel || goalLabel) && (

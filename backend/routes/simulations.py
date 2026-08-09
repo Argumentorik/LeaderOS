@@ -266,21 +266,40 @@ Antworte auf Deutsch."""
 async def _build_user_context_block(user: dict) -> str:
     lines: list[str] = []
     name = (user.get("name") or "").strip()
-    role = (user.get("position") or "").strip()
+    role_pos = (user.get("position") or "").strip()
     company = (user.get("company") or "").strip()
     industry = (user.get("industry") or "").strip()
-    if name or role or company:
-        header_bits = [b for b in [role, f"@ {company}" if company else ""] if b]
+    if name or role_pos or company:
+        header_bits = [b for b in [role_pos, f"@ {company}" if company else ""] if b]
         who = f"{name}" if name else "Der User"
         role_line = " · ".join(header_bits)
         lines.append(f"- **Wer:** {who}" + (f" — {role_line}" if role_line else ""))
     if industry:
         lines.append(f"- **Branche:** {industry}")
 
-    # Latest diagnose / self-assessed scores (0-100)
+    # Iter 131.2 (Wlad-Direktive): use onboarding answers as real context —
+    # role/team_size/primary_goal/experience_level are set during Onboarding
+    # (routes.wladhub.save_onboarding_data) and must flow into every prep.
+    onboard_role = (user.get("role") or "").strip()
+    if onboard_role and onboard_role != role_pos:
+        lines.append(f"- **Selbsteinschätzung Rolle:** {onboard_role}")
+    if user.get("team_size"):
+        lines.append(f"- **Teamgröße:** {user['team_size']}")
+    if user.get("primary_goal"):
+        lines.append(f"- **Primäres Wachstumsziel:** {user['primary_goal']}")
+    if user.get("experience_level"):
+        lines.append(f"- **Erfahrungslevel:** {user['experience_level']}")
+
+    # Latest diagnose / self-assessed scores (0-100) — supports both the
+    # legacy top-level score fields and the new wladhub_scores dict.
     scores = []
     for key, label in (("leadership_score", "Leadership"), ("communication_score", "Kommunikation"), ("eq_score", "EQ")):
         v = user.get(key)
+        if isinstance(v, (int, float)) and v > 0:
+            scores.append(f"{label} {int(v)}")
+    wh = user.get("wladhub_scores") or {}
+    for key, label in (("ki_kompetenz", "KI-Kompetenz"), ("boardroom_rhetorik", "Boardroom-Rhetorik"), ("strategisches_eq", "Strategisches EQ")):
+        v = wh.get(key)
         if isinstance(v, (int, float)) and v > 0:
             scores.append(f"{label} {int(v)}")
     if scores:
