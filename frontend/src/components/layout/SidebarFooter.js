@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTier } from '../../contexts/TierContext';
 import { usePricing } from '../../contexts/PricingContext';
 import { TierBadge } from '../shared/TierBadge';
-import { Crown, Settings, Sparkles } from 'lucide-react';
+import { Crown, Settings, Sparkles, Compass } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { hasUnseenChangelog } from '../../lib/changelogMeta';
@@ -139,6 +139,17 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
           )}
         </div>
       )}
+      {/* Iter 131.4 (Wlad-Direktive): "Tour erneut ansehen" — user can
+          replay the guided dashboard walk-through any time. */}
+      <button
+        data-testid="restart-tour-btn"
+        onClick={() => restartDashboardTour(navigate)}
+        className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-[#4A6200] dark:text-muted-foreground/50 dark:hover:text-[#BFFF00] hover:bg-[#BFFF00]/[0.06] dark:hover:bg-[#BFFF00]/[0.04] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}
+        title={lang === 'de' ? 'Dashboard-Tour erneut ansehen' : 'Replay the dashboard tour'}
+      >
+        <Compass size={14} />
+        {!collapsed && <span className="font-medium">{lang === 'de' ? 'Tour erneut ansehen' : 'Replay tour'}</span>}
+      </button>
       <button data-testid="logout-btn" onClick={handleLogout}
         className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-rose-500 dark:text-muted-foreground/50 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-400/5 transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
         <IconLogout size={14} />
@@ -146,4 +157,16 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
       </button>
     </div>
   );
+};
+
+/**
+ * Restart the Dashboard First-Tour. Iter 131.4 (Wlad-Direktive):
+ * exposed in the sidebar so users who dismissed the tour can re-play it.
+ * Wraps the localStorage-flag clear + navigation to /dashboard + reload.
+ */
+export const restartDashboardTour = (navigate) => {
+  try { localStorage.removeItem('leaderos_tour_v1_done'); } catch { /* ignore */ }
+  if (navigate) navigate('/dashboard');
+  // A short delay before reload lets the router settle first.
+  setTimeout(() => { try { window.location.reload(); } catch { /* ignore */ } }, 60);
 };

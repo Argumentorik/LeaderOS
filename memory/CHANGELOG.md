@@ -1,6 +1,14 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 131.4 · 09.02.26] Voice-Tuning · Tour-Restart · 10-Tage-Beratungs-Erinnerung**
+  - **Voice-Tuning für die Dashboard-Tour** (`DashboardFirstTour.js`): aktive Voice-Selektion statt "first-match". Präferenz-Liste: `Google Deutsch` (Chrome) → `Anna/Petra/Markus/Yannick de-DE` (macOS/iOS Premium) → `Microsoft Katja/Stefan de-DE` (Windows) → beliebige `de-DE` → beliebige German. Zusätzlich rate `0.94` und pitch `0.95` — klingt spürbar wärmer und coach-artiger statt monoton. Fallback auf stumme Tour wenn keine Voice verfügbar.
+  - **Tour erneut ansehen** — neuer Button im Sidebar-Footer (`Compass`-Icon, Lime-Hover) direkt über "Abmelden". Klick → `restartDashboardTour(navigate)` löscht das `leaderos_tour_v1_done` localStorage-Flag, navigiert zu `/dashboard` und reloadet die Seite → Tour öffnet komplett neu. `data-testid="restart-tour-btn"`.
+  - **Day-10-Beratungs-Erinnerungs-Email** — nach ~10 Tagen (9.5 ≤ days ≤ 30) bekommt der User eine warme persönliche Einladung „30 Minuten mit einem Argumentorik-Berater — auf uns". Neuer Cron-Endpoint `POST /api/cron/day-10-consultation` (mit `require_cron_auth`), neues Email-Template `consultation_reminder_email()` in `services_email.py` (Lime-Kicker, klare Bullet-List was besprochen wird, CTA-Button zu `leader-check.de/beratung`, warmer Wlad-Abschluss). De-Dup via `email_log.type='day10_consultation'`. Skip-Kriterien: `consultation_booked=true`, `unsubscribed_all=true`, neue Kategorie `unsubscribed_consultation_reminder=true`. Unsubscribe-Link inline generiert via `unsubscribe_url()`. Neue Kategorie in `/app/backend/routes/unsubscribe.py` registriert.
+  - **Wichtig für Prod-Deploy**: `CRON_SHARED_SECRET` in Prod-.env setzen und in der externen Cron-Config (cron-job.org / GitHub Actions) den `X-Cron-Secret` Header mitgeben, sonst sind alle Cron-Endpoints (Trial-Reminder, Drip-Sequence, Day-10-Consultation) public triggerbar.
+
+
+
 - [x] **[Iter 131.3 · 09.02.26] Godmode Onboarding · Wlad-Avatar überall · sprechende Dashboard-Tour** — Verifikation via Screenshots (Login-Flow → Dashboard-Tour 12 Steps · Onboarding Step 0/8)
   - **Zero AI-slop im Onboarding**: der Pixar-artige `/wladbot-avatar.png` war AI-Slop. Ersetzt durch das **echte Wlad-Jachtchenko-Foto** (`4knvn6cs_WladProfilbild.jpg`) in einem premium Lime-Aura-Frame mit Emerald-Online-Dot. Step 0 zeigt jetzt Kicker "WLAD JACHTCHENKO · DEIN PERSÖNLICHER COACH" + "Hi Felix — schön, dass du da bist.". Global centralisiert in `/app/frontend/src/lib/brand.js` (`WLAD_AVATAR`, `LEADEROS_PLUS_URL`, `LEADERCHECK_URL`).
   - **WladBotAvatar global refactored**: `WladBotAvatar` (Chat-Bubble, E-Mails, Challengers) nutzt jetzt dasselbe echte Wlad-Foto → keine zwei unterschiedlichen "Wlad-Gesichter" mehr auf der Plattform.

@@ -306,3 +306,69 @@ async def cron_video_drip(request: Request):
         "skipped_no_video": skipped_no_video,
         "ready_video_ids": sorted(ready_ids),
     }
+
+
+# ── Day-10 Consultation Reminder (Iter 131.4 · Wlad-Direktive) ─────────────
+# Ten days after signup, gently remind the user about the free 30-minute
+# 1:1 call with Wlad's team. This is the highest-conversion moment: the
+# user has had time to feel the product but hasn't yet decided on a plan.
+CONSULTATION_BOOKING_URL = "https://leader-check.de/beratung"
+CONSULTATION_MIN_DAYS = 9.5
+CONSULTATION_MAX_DAYS = 30  # widow so we don't spam users who came back after a break
+
+
+@router.post("/cron/day-10-consultation")
+async def cron_day10_consultation(request: Request):
+    """Send a personal booking reminder ~10 days after signup.
+
+    De-duplicated via `email_log.type = 'day10_consultation'` so re-runs
+    are idempotent. Users who already booked a consultation (tracked via
+    `user.consultation_booked = true`) are skipped.
+    """
+    require_cron_auth(request)
+    if not email_enabled():
+        return {"sent": 0, "scanned": 0, "error": "RESEND_API_KEY not configured"}
+
+    from services_email import consultation_reminder_email  # local import → keeps startup lean
+
+    now = datetime.now(timezone.utc)
+    max_ago = (now - timedelta(days=CONSULTATION_MAX_DAYS)).isoformat()
+    candidates = await db.users.find(
+        {
+            "email": {"$exists": True, "$ne": ""},
+            "created_at": {"$gte": max_ago},
+            "consultation_booked": {"$ne": True},
+            "unsubscribed_all": {"$ne": True},
+            "unsubscribed_consultation_reminder": {"$ne": True},
+        },
+        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "created_at": 1},
+    ).to_list(5000)
+
+    sent = 0
+    scanned = 0
+    for u in candidates:
+        scanned += 1
+        days = _days_since(u.get("created_at"))
+        if days is None or days < CONSULTATION_MIN_DAYS or days > CONSULTATION_MAX_DAYS:
+            continue
+        already = await db.email_log.find_one(
+            {"user_id": u["user_id"], "type": "day10_consultation"}, {"_id": 0}
+        )
+        if already:
+            continue
+        name = (u.get("name") or (u["email"].split("@")[0])).strip() or "Leader"
+        subject, html = consultation_reminder_email(
+            name,
+            booking_url=CONSULTATION_BOOKING_URL,
+            unsubscribe_link=unsubscribe_url(u["user_id"], "consultation_reminder"),
+        )
+        result = await send_email(u["email"], subject, html)
+        await db.email_log.insert_one({
+            "user_id": u["user_id"], "type": "day10_consultation",
+            "sent": result["sent"], "email_id": result.get("email_id"),
+            "error": result.get("error"),
+            "sent_at": now.isoformat(),
+        })
+        if result["sent"]:
+            sent += 1
+    return {"sent": sent, "scanned": scanned}

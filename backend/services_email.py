@@ -446,6 +446,72 @@ WLAD JACHTCHENKO · GRÜNDER LEADEROS
     return subject, _base_layout(body, preheader=f"Dein Masterclass-Zugang ist live, {name}. 250 Credits warten.")
 
 
+# ── Day-10 Consultation Reminder (Iter 131.4 · Wlad-Direktive) ────────────
+# Warm personal invitation to book a free 30-min 1:1 call with Wlad's team.
+# Sent ~10 days after signup — after the user has had time to try the
+# platform but hasn't yet decided on a plan. Highest-conversion moment.
+
+def consultation_reminder_email(
+    name: str,
+    booking_url: str = "https://leader-check.de/beratung",
+    unsubscribe_link: str | None = None,
+) -> tuple[str, str]:
+    subject = f"{name}, 30 Minuten mit uns — auf uns."
+    body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.16),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.24);border-radius:14px;padding:20px 24px;margin-bottom:26px;">
+  <div style="font-size:10px;letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:8px;">Persönliche Beratung · kostenfrei</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.15;letter-spacing:-0.02em;">
+    {name}, kurzes Gespräch. Auf uns.
+  </div>
+</div>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.7;margin:0 0 18px;">
+Du bist jetzt ~10 Tage mit Leader-OS unterwegs. Das ist die Phase, in der die meisten merken: „Ich brauch jemanden, mit dem ich das kurz durchsprechen kann." Genau dafür sind wir da.
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 18px;">
+Ein:e Argumentorik-Leadership-Berater:in aus Wlad Jachtchenkos Team nimmt sich <b>30 Minuten</b> für dich — kostenfrei, 100% unverbindlich. Wir klären:
+</p>
+
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px 22px;margin-bottom:22px;">
+  <p style="font-size:13.5px;color:rgba(255,255,255,0.88);line-height:1.75;margin:0;">
+    &nbsp;•&nbsp; Wo stehst du gerade — und was fehlt noch, damit dein Team dir folgt?<br>
+    &nbsp;•&nbsp; Welches Format aus Leader-OS passt zu deiner nächsten Woche?<br>
+    &nbsp;•&nbsp; Wann macht LeaderOS Plus für dich Sinn — und wann nicht.
+  </p>
+</div>
+
+<div style="text-align:center;margin:26px 0 22px;">
+  <a href="{booking_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:15px 30px;border-radius:12px;text-decoration:none;font-weight:800;font-size:14px;letter-spacing:-0.01em;box-shadow:0 8px 26px -8px rgba(191,255,0,0.4);">
+    Slot wählen &nbsp;→
+  </a>
+  <p style="font-size:11px;color:rgba(255,255,255,0.5);margin:10px 0 0;">Verfügbare Slots: heute und diese Woche. Dauert 30 Minuten.</p>
+</div>
+
+<p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.65;margin:24px 0 6px;">
+Falls du gerade keine Zeit hast oder nicht magst — kein Stress. Ich melde mich nicht nochmal deswegen. Antworte einfach mit einem Satz, was gerade schiefläuft, ich lese mit.
+</p>
+<p style="font-size:13.5px;color:#fff;font-weight:700;margin:12px 0 0;">
+Wlad &amp; Team
+</p>
+<p style="font-size:11px;color:rgba(255,255,255,0.35);margin:4px 0 0;letter-spacing:0.06em;">
+LEADEROS · leader-check.de
+</p>
+"""
+    # Iter 131.4: append unsubscribe link inline (below CTA) since
+    # `_base_layout` doesn't natively template it.
+    if unsubscribe_link:
+        body += (
+            f'<p style="text-align:center;font-size:10px;color:rgba(255,255,255,0.28);'
+            f'margin-top:20px;">'
+            f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);'
+            f'text-decoration:underline;">Keine weiteren Beratungs-Einladungen</a>'
+            f'</p>'
+        )
+    return subject, _base_layout(body, preheader=f"{name}, 30 Minuten mit einem Argumentorik-Berater — auf uns.")
+
+
+
 
 # ── Stripe Receipt (after successful payment, in addition to tier_welcome) ───
 

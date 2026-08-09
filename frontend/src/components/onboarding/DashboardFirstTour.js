@@ -178,6 +178,35 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   }, [open, current]);
 
   // Speak current step. Cancels previous utterance to avoid overlap.
+  // Iter 131.4 (Wlad-Direktive · warmer voice): actively pick the best
+  // available German voice — many browsers ship multiple, and picking the
+  // wrong one gives that flat "GPS-voice" feel. We prefer known-good
+  // premium voices ("Google Deutsch", "Anna", "Petra", "Markus") and fall
+  // back gracefully. Rate 0.94 + pitch 0.95 makes it feel a touch slower
+  // and lower — more like a coach, less like an announcer.
+  const pickGermanVoice = () => {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+    const preferred = [
+      /^Google Deutsch$/i,          // Chrome desktop — warmest natural voice
+      /^Google.*German/i,
+      /Anna.*de[-_]DE/i,            // macOS / iOS premium DE female
+      /Petra.*de[-_]DE/i,           // macOS DE female
+      /Markus.*de[-_]DE/i,          // macOS DE male
+      /Yannick.*de[-_]DE/i,         // macOS DE male
+      /Microsoft.*Katja.*de[-_]DE/i,// Windows premium DE female
+      /Microsoft.*Stefan.*de[-_]DE/i,
+      /de[-_]DE/i,                  // any de-DE
+      /^de/i,                        // any German
+    ];
+    for (const rx of preferred) {
+      const hit = voices.find(v => rx.test(v.name) || rx.test(v.lang));
+      if (hit) return hit;
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (!open || muted || !current?.speak) return;
     if (!('speechSynthesis' in window)) return;
@@ -185,17 +214,16 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(current.speak);
       u.lang = 'de-DE';
-      u.rate = 1.0;
-      u.pitch = 1.0;
-      // Prefer a German voice if the browser has one.
-      const pickVoice = () => {
-        const voices = window.speechSynthesis.getVoices();
-        const de = voices.find(v => /de[-_]DE/i.test(v.lang)) || voices.find(v => /^de/i.test(v.lang));
-        if (de) u.voice = de;
+      u.rate = 0.94;   // slightly slower — coach-like, not announcer
+      u.pitch = 0.95;  // slightly lower — warmer, more grounded
+      u.volume = 1.0;
+      const speakWithVoice = () => {
+        const v = pickGermanVoice();
+        if (v) u.voice = v;
         window.speechSynthesis.speak(u);
       };
-      if (window.speechSynthesis.getVoices().length) pickVoice();
-      else window.speechSynthesis.addEventListener('voiceschanged', pickVoice, { once: true });
+      if ((window.speechSynthesis.getVoices() || []).length) speakWithVoice();
+      else window.speechSynthesis.addEventListener('voiceschanged', speakWithVoice, { once: true });
       utterRef.current = u;
     } catch { /* voice not available → silent tour still works */ }
     return () => {

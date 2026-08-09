@@ -29,6 +29,7 @@ CATEGORIES = {
     "video_drip": "unsubscribed_video_drip",
     "drip": "unsubscribed_drip",
     "reminders": "unsubscribed_reminders",
+    "consultation_reminder": "unsubscribed_consultation_reminder",
     "all": "unsubscribed_all",
 }
 
@@ -36,6 +37,7 @@ CATEGORY_LABELS = {
     "video_drip": "Lernvideo-Sequence (Woche 1-6)",
     "drip": "Wlads Framework-Serie (EP 01–07)",
     "reminders": "Trial- & Termin-Reminder",
+    "consultation_reminder": "Persönliche Beratungseinladung",
     "all": "ALLE Marketing-Emails",
 }
 
