@@ -18,6 +18,7 @@ import { RagDebugStudio } from '../components/admin/RagDebugStudio';
 import { RagControlCenter } from '../components/admin/RagControlCenter';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
 import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
+import { MasterclassClientsManager } from '../components/admin/MasterclassClientsManager';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -333,6 +334,21 @@ export default function AdminPage() {
             </p>
           </div>
           <LearningVideosManager />
+        </div>
+
+        {/* Masterclass clients — direct-create with 6/12/18-month terms (Iter 132) */}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? 'Masterclass-Kunden · Direktzugang' : 'Masterclass Clients · Direct Access'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Lege Masterclass-Kunden mit individueller Laufzeit (6/12/18 Monate) und Startdatum an — der Zugang ist sofort aktiv, der Kunde loggt sich per Magic Link ein. 7 Tage vor Ablauf geht automatisch eine Erinnerung raus, danach folgt der Auto-Downgrade.'
+                : 'Add masterclass clients with individual terms (6/12/18 months) and start dates — access is active instantly, clients log in via Magic Link. Expiry reminder 7 days before, then auto-downgrade.'}
+            </p>
+          </div>
+          <MasterclassClientsManager de={de} />
         </div>
 
         {/* License Keys — 16-digit activation codes for sales-sold packages */}

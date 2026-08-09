@@ -446,6 +446,85 @@ WLAD JACHTCHENKO · GRÜNDER LEADEROS
     return subject, _base_layout(body, preheader=f"Dein Masterclass-Zugang ist live, {name}. 250 Credits warten.")
 
 
+# ── Masterclass Invite (Iter 132 — admin creates the account directly) ──────
+# Sent when Wlad's team adds a masterclass client in the admin panel. The
+# account has NO password — the client logs in via Magic Link (1-click).
+
+def masterclass_invite_email(name: str, months: int, expires_label: str,
+                             app_url: str = "https://leaderos.de") -> tuple[str, str]:
+    import html as _html
+    safe = _html.escape(name)
+    login_url = f"{app_url.rstrip('/')}/login"
+    subject = f"{name}, dein Masterclass-Zugang zu Leader-OS ist freigeschaltet"
+    body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.18),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.28);border-radius:14px;padding:20px 24px;margin-bottom:26px;">
+  <div style="font-size:10px;letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:8px;">Masterclass · Zugang freigeschaltet</div>
+  <div style="font-size:26px;font-weight:900;line-height:1.15;letter-spacing:-0.02em;">Willkommen im Kreis, {safe}.</div>
+</div>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.7;margin:0 0 18px;">
+Als Teil der Masterclass hast du ab sofort persönlichen Zugang zu <b>Leader-OS</b> — meiner kompletten Methodik als KI, rund um die Uhr an deiner Seite. Dein Zugang läuft <b>{months} Monate</b> (bis {expires_label}) und beinhaltet <b>250 Credits</b> für Argumentations-Vorbereitungen, WladBot-Coaching, Video-Feedback und PDF-Strategien.
+</p>
+
+<h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:26px 0 12px;">So loggst du dich ein — ohne Passwort</h3>
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:22px;">
+  <p style="font-size:13.5px;color:rgba(255,255,255,0.88);line-height:1.8;margin:0;">
+    <b>1.</b> Öffne <a href="{login_url}" style="color:{BRAND_COLOR};text-decoration:none;font-weight:700;">leaderos.de/login</a><br>
+    <b>2.</b> Wähle den Tab <b>„Magic Link"</b> und gib diese E-Mail-Adresse ein<br>
+    <b>3.</b> Klicke auf den Link in deinem Postfach — fertig, du bist drin
+  </p>
+</div>
+
+<p style="margin:0 0 26px;text-align:center;">
+  <a href="{login_url}" style="display:inline-block;padding:14px 30px;background:{BRAND_COLOR};color:#0A0A0A;font-weight:800;text-decoration:none;border-radius:10px;font-size:15px;">Jetzt einloggen →</a>
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 18px;">
+Mein Tipp für den Start: Bereite dein nächstes wichtiges Gespräch mit der <b>SEXIER-Prep</b> vor — 3 Minuten Input, eine komplette Argumentationsstrategie als Ergebnis.
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.82);line-height:1.7;margin:24px 0 0;">
+Bis gleich im System,<br>
+Wlad
+</p>
+<p style="font-size:11px;color:rgba(255,255,255,0.35);margin:4px 0 0;letter-spacing:0.06em;">
+WLAD JACHTCHENKO · GRÜNDER LEADEROS
+</p>
+"""
+    return subject, _base_layout(body, preheader=f"Dein Zugang läuft {months} Monate — Login per 1-Klick, kein Passwort nötig.")
+
+
+def masterclass_expiry_reminder_email(name: str, days_left: int, expires_label: str) -> tuple[str, str]:
+    import html as _html
+    safe = _html.escape(name)
+    plus_url = "https://leadercheck.de/plus"
+    subject = f"{name}, dein Masterclass-Zugang endet in {days_left} Tagen"
+    body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.16),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.24);border-radius:14px;padding:20px 24px;margin-bottom:26px;">
+  <div style="font-size:10px;letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:8px;">Masterclass · Noch {days_left} Tage</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.15;letter-spacing:-0.02em;">{safe}, dein Zugang endet am {expires_label}.</div>
+</div>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.7;margin:0 0 18px;">
+Dein Masterclass-Zugang zu Leader-OS läuft in <b>{days_left} Tagen</b> aus. Danach wird dein Account automatisch auf die Free-Version umgestellt — deine Daten, Strategien und dein Fortschritt bleiben natürlich erhalten.
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 22px;">
+Wenn du weitermachen willst — mit vollem Zugang, allen Credits und allem, was noch kommt — sichere dir jetzt <b>LeaderOS Plus</b>:
+</p>
+
+<p style="margin:0 0 26px;text-align:center;">
+  <a href="{plus_url}" style="display:inline-block;padding:14px 30px;background:{BRAND_COLOR};color:#0A0A0A;font-weight:800;text-decoration:none;border-radius:10px;font-size:15px;">Zugang verlängern →</a>
+</p>
+
+<p style="font-size:14px;color:rgba(255,255,255,0.82);line-height:1.7;margin:24px 0 0;">
+Bis dahin: Nutze die verbleibenden Tage. Jedes vorbereitete Gespräch zählt.<br>
+Wlad
+</p>
+"""
+    return subject, _base_layout(body, preheader=f"Noch {days_left} Tage Masterclass-Zugang — verlängere jetzt, bevor er ausläuft.")
+
+
 # ── Day-10 Consultation Reminder (Iter 131.4 · Wlad-Direktive) ────────────
 # Warm personal invitation to book a free 30-min 1:1 call with Wlad's team.
 # Sent ~10 days after signup — after the user has had time to try the

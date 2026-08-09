@@ -27,6 +27,19 @@ CREDIT_COSTS = {
 PAID_TIERS = {"standard", "accelerator", "enterprise", "plus", "starter"}
 
 
+def masterclass_active(user: dict) -> bool:
+    """Masterclass flag + term check — memberships expire after 6/12/18 months."""
+    if not user.get("masterclass"):
+        return False
+    exp = user.get("masterclass_expires_at")
+    if not exp:
+        return True
+    try:
+        return datetime.fromisoformat(str(exp).replace("Z", "+00:00")) > datetime.now(timezone.utc)
+    except (ValueError, TypeError):
+        return True
+
+
 async def check_and_deduct_credit(user: dict, action: str) -> dict:
     """Check if user has credits. Deduct 1 if free user. Returns status dict."""
     user_id = user["user_id"]
@@ -38,7 +51,7 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
     # Get or initialize credit balance
     credit_doc = await db.credits.find_one({"user_id": user_id}, {"_id": 0})
     if not credit_doc:
-        initial = MASTERCLASS_CREDITS if user.get("masterclass") else FREE_CREDITS
+        initial = MASTERCLASS_CREDITS if masterclass_active(user) else FREE_CREDITS
         credit_doc = {
             "user_id": user_id,
             "balance": initial,
@@ -84,10 +97,11 @@ async def get_credits(request: Request):
     if user.get("premium") or user.get("is_admin") or user.get("tier") in PAID_TIERS:
         return {"balance": -1, "is_premium": True, "total_used": 0, "limit": -1, "soft_pause": False}
 
-    limit = MASTERCLASS_CREDITS if user.get("masterclass") else FREE_CREDITS
+    is_mc = masterclass_active(user)
+    limit = MASTERCLASS_CREDITS if is_mc else FREE_CREDITS
     credit_doc = await db.credits.find_one({"user_id": user["user_id"]}, {"_id": 0})
     if not credit_doc:
-        return {"balance": limit, "is_premium": False, "total_used": 0, "limit": limit, "soft_pause": False, "masterclass": bool(user.get("masterclass"))}
+        return {"balance": limit, "is_premium": False, "total_used": 0, "limit": limit, "soft_pause": False, "masterclass": is_mc}
 
     total_used = credit_doc.get("total_used", 0)
     return {
@@ -95,8 +109,8 @@ async def get_credits(request: Request):
         "is_premium": False,
         "total_used": total_used,
         "limit": limit,
-        "masterclass": bool(user.get("masterclass")),
-        "soft_pause": total_used >= SOFT_PAUSE_AT and not credit_doc.get("soft_pause_dismissed", False) and not user.get("masterclass"),
+        "masterclass": is_mc,
+        "soft_pause": total_used >= SOFT_PAUSE_AT and not credit_doc.get("soft_pause_dismissed", False) and not is_mc,
     }
 
 

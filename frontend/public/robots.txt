@@ -6,6 +6,10 @@
 User-agent: *
 Allow: /
 Allow: /login
+Allow: /signup
+Allow: /for-teams
+Allow: /sicherheit
+Allow: /changelog
 Allow: /impressum
 Allow: /datenschutz
 Allow: /agb

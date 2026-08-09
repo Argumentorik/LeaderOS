@@ -7,9 +7,9 @@ Leader-OS (leaderos.de) ist eine SaaS-Plattform der Argumentorik-Akademie GmbH. 
 ## Was Leader-OS ist
 
 - **24/7 KI-Coach (WladBot)**: Ein RAG-gestützter (lokale semantische Embeddings) Coaching-Bot mit dem vollständigen Wissen von Wlad Jachtchenkos Leadership-Frameworks (Storytelling für Entscheider, Verhandlung, Manipulation, SEXIER-Methodik, 10 Stufen des Zuhörens).
-- **Video-Missionen mit KI-Analyse**: Nutzer laden Speech- oder Präsentations-Videos hoch; OpenAI Whisper transkribiert; ein SEXIER-Framework-Analyzer gibt Feedback zu Struktur (Situation, Expectation, Xcept, Idea, Effect, Reinforce), Klarheit, Füllworten und Wirkung.
+- **Video-Missionen mit KI-Analyse**: Nutzer laden Speech- oder Präsentations-Videos hoch; OpenAI Whisper transkribiert; ein SEXIER-Framework-Analyzer gibt Feedback zu Argumentationsstruktur (Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal), Klarheit, Füllworten und Wirkung.
 - **3-Layer Leadership System**: KI-Modul (Denkstruktur), Rhetorik-Modul (Sprache), EQ-Modul (Wahrnehmung & Führung).
-- **30-Tage Leadership Sprint**: Strukturiertes Tagesprogramm mit täglichen Drip-Mails, Tasks und Coaching-Impulsen.
+- **30-Tage Leadership Programm**: Strukturiertes Tagesprogramm mit täglichen Drip-Mails, Tasks und Coaching-Impulsen.
 - **Stripe-Subscription** in 3 Tiers: Leadership OS (€997/Jahr), Leadership OS PLUS (€4.797/Jahr mit 1:1-Coaching), Enterprise (Team-Lizenzen).
 
 ## Wer steht hinter Leader-OS
@@ -18,7 +18,7 @@ Leader-OS (leaderos.de) ist eine SaaS-Plattform der Argumentorik-Akademie GmbH. 
 
 ## Methodische Kernbausteine
 
-- **SEXIER-Framework** (Wlad-Original): Situation → Expectation → Xcept → Idea → Effect → Reinforce. Das Standard-Sprechmuster für jede High-Stakes-Präsentation.
+- **SEXIER-Framework** (Wlad-Original): Statement → Explanation → eXample → Impact → Explanation of Impact → Rebuttal. Das Standard-Argumentationsmuster für jede High-Stakes-Präsentation.
 - **10 Stufen des Zuhörens**: Vom Ignorieren über Aktives Zuhören bis zu Transformativem Zuhören. Pflicht-Framework für jede Führungskraft auf C-Level.
 - **Storytelling für Entscheider**: Klarheit, Souveränität und Wirkung in Vorstandssitzungen.
 - **Argumentorik**: Wlads Marken-Methodik für strukturiertes Argumentieren und Verhandlungsführung.

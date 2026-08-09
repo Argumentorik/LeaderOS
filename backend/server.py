@@ -163,6 +163,10 @@ app.include_router(og_router)
 from routes.lifecycle_emails import router as lifecycle_emails_router  # noqa: E402
 app.include_router(lifecycle_emails_router)
 
+# Masterclass client management (admin direct-create + CSV import + expiry cron)
+from routes.masterclass_admin import router as masterclass_admin_router  # noqa: E402
+app.include_router(masterclass_admin_router)
+
 # A/B testing endpoints (variant assignment + event logging + admin results)
 from routes.ab_testing import router as ab_testing_router  # noqa: E402
 app.include_router(ab_testing_router)
