@@ -167,6 +167,10 @@ app.include_router(lifecycle_emails_router)
 from routes.masterclass_admin import router as masterclass_admin_router  # noqa: E402
 app.include_router(masterclass_admin_router)
 
+# Conversion Center — approval-gated 400-client email sequence (Iter 133)
+from routes.conversion_center import router as conversion_center_router  # noqa: E402
+app.include_router(conversion_center_router)
+
 # A/B testing endpoints (variant assignment + event logging + admin results)
 from routes.ab_testing import router as ab_testing_router  # noqa: E402
 app.include_router(ab_testing_router)

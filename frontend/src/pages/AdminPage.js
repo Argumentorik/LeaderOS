@@ -19,6 +19,7 @@ import { RagControlCenter } from '../components/admin/RagControlCenter';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
 import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
 import { MasterclassClientsManager } from '../components/admin/MasterclassClientsManager';
+import { ConversionCenter } from '../components/admin/ConversionCenter';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -349,6 +350,21 @@ export default function AdminPage() {
             </p>
           </div>
           <MasterclassClientsManager de={de} />
+        </div>
+
+        {/* Conversion Center — approval-gated 400-client email sequence (Iter 133) */}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? 'Conversion Center · Masterclass → Leader-OS' : 'Conversion Center · Masterclass → Leader-OS'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Die 8-teilige E-Mail-Serie für die ~400 Masterclass-Kunden. NICHTS geht raus, bevor du es hier freigibst — Vorschau, Test-Mail an dich, dann einzeln freigeben.'
+                : 'The 8-part email series for the ~400 masterclass clients. NOTHING is sent before you approve it here — preview, test-send, then approve one by one.'}
+            </p>
+          </div>
+          <ConversionCenter de={de} />
         </div>
 
         {/* License Keys — 16-digit activation codes for sales-sold packages */}

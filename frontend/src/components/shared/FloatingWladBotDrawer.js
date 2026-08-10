@@ -186,12 +186,12 @@ export const FloatingWladBotDrawer = () => {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-6 z-[60] w-14 h-14 rounded-2xl bg-[#BFFF00] text-[#0A0A0A] shadow-2xl shadow-[#BFFF00]/30 ring-2 ring-white/10 hover:scale-105 active:scale-95 transition-transform hidden md:flex items-center justify-center group"
+          className="fixed bottom-24 right-6 z-[60] rounded-full shadow-2xl shadow-black/40 ring-1 ring-white/10 hover:scale-105 hover:ring-[#BFFF00]/40 focus-visible:ring-2 focus-visible:ring-[#BFFF00] focus-visible:outline-none active:scale-95 transition-[transform,box-shadow] hidden md:flex items-center justify-center"
           data-testid="wladbot-fab"
           title={de ? 'WladBot fragen' : 'Ask WladBot'}
+          aria-label={de ? 'WladBot öffnen' : 'Open WladBot'}
         >
-          <Sparkles size={22} strokeWidth={2.5} className="group-hover:rotate-12 transition-transform" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-rose-500 ring-2 ring-[#0A0A0A] animate-pulse" aria-hidden />
+          <WladBotAvatar size={52} live />
         </button>
       )}
 

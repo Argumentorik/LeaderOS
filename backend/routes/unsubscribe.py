@@ -30,6 +30,7 @@ CATEGORIES = {
     "drip": "unsubscribed_drip",
     "reminders": "unsubscribed_reminders",
     "consultation_reminder": "unsubscribed_consultation_reminder",
+    "conversion": "unsubscribed_conversion",
     "all": "unsubscribed_all",
 }
 
@@ -38,6 +39,7 @@ CATEGORY_LABELS = {
     "drip": "Wlads Framework-Serie (EP 01–07)",
     "reminders": "Trial- & Termin-Reminder",
     "consultation_reminder": "Persönliche Beratungseinladung",
+    "conversion": "Masterclass → Leader-OS Serie (E-Mail 1–8)",
     "all": "ALLE Marketing-Emails",
 }
 
