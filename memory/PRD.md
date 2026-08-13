@@ -535,3 +535,36 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 - P1: Kunden-Learnings nach Launch systematisch in Produktverbesserungen überführen.
 - P2: Checkout-Reminder nach 24 h für Abbrecher (Segment G).
 - P3: Meeting-Mode (Swipe-Flashcards), P4: Voice-Sparring reaktivieren, ElevenLabs-Tour-Stimme.
+
+## Iter 135 · 2026-08-13 — GODMODE Final Audit (Produktionsreife)
+Auftrag: kein Feature-Bau, sondern Audit + Härtung von RAG, Admin-Bedienbarkeit, leadercheck.de-Sync, Premium-First, SEO, Security, Scale. Details im CHANGELOG.
+
+**Gefunden & behoben (P0/P1)**
+1. Chat-Isolation: fremde `session_id` wurde akzeptiert (Verlauf-Leak) → Ownership-Check + user-scoped History.
+2. RAG-Caches wurden nach Wissens-Updates nicht invalidiert → `invalidate_caches()` an allen drei Änderungspunkten.
+3. RAG konnte HTTP 500 auslösen → Retrieval vollständig gekapselt.
+4. leadercheck.de-Sync war one-shot und schrieb kein Log → Re-Sync bei Login (6-h-Fenster, `source_assessed_at`-Vergleich) + Logzeile pro Versuch.
+5. Zahlung ohne Sicherheitsnetz → `reconcile_pending_payments()` beim Login + Login-Redirect auf die Erfolgsseite.
+6. Fehlende Indizes auf Hot Paths (Checkout-Polling, Credits, Chat-Sessions).
+7. Ein einziges Canonical für alle Seiten → Per-Route-SEO; Sitemap auf 9 indexierbare URLs.
+
+**Neu (bewusst minimal)**
+- Premium-First-Rollout: `off → premium → all`, `routes/features.py` + Admin-Panel. Registry: `rag_source_labels` (premium), `meeting_mode` (off), `audio_briefing` (off).
+- Ops-Runbook im Admin + `/app/memory/DEV_HANDOVER.md`.
+
+**Offene manuelle Schritte (nur Wlad/Mert)**
+1. Stripe LIVE: Kunden-E-Mails/Rechnungsversand aktivieren (Code ist fertig).
+2. Google Search Console: neue `sitemap.xml` einreichen (9 URLs), `/` und `/signup` sind absichtlich raus.
+3. Echter 1-€-Kauf durch Mitarbeiter (Release-Gate).
+4. Deployment nötig, damit die neue Sitemap + Per-Route-SEO live sind.
+
+**Bekannte Grenzen (dokumentiert, kein Blocker)**
+- Vektor-Suche im RAM: sauber bis ~50–60k Chunks, danach echte Vektor-DB.
+- Metadaten-Qualität im Korpus: manche `course`-Werte sind Transkript-Zeilen; Anzeige/Zitate laufen über `_clean_display_title`. Saubere Lösung: Titel beim Ingest kuratieren.
+- Unbekannte URLs leiten auf `/dashboard` (Soft-404), keine echte 404-Seite.
+- Stripe-Webhook bleibt deaktiviert; Aktivierung über Statuspolling + Login-Reconcile.
+
+**Backlog (unverändert priorisiert)**
+- P1: E-Mail-Open/Click-Tracking im Conversion Center (Wlad: „c. ist clever").
+- P1: Kunden-Learnings nach Launch in Produktverbesserungen überführen.
+- P2: Checkout-Reminder nach 24 h. P3: Meeting-Mode. P4: Voice-Sparring, ElevenLabs-Tour.

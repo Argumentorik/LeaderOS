@@ -18,11 +18,26 @@ DEFAULT_ZIP_URL = "https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4
 
 @router.get("/local-status")
 async def local_rag_status(request: Request):
+    """RAG health for Ops: corpus size, model, cache state, last job, live probe."""
     from routes.admin import require_admin
     await require_admin(request)
-    count = await db.rag_chunks.estimated_document_count()
+    from services_rag import rag_status, retrieve_context, _LOCAL_CACHE
+    count = await db.rag_chunks.count_documents({})
     job = await db.rag_ingest_jobs.find_one({}, {"_id": 0}, sort=[("started_at", -1)])
-    return {"chunks": count, "last_job": job}
+    sources = len(await db.rag_chunks.distinct("metadata.source_file"))
+    # Live probe: does retrieval actually return grounded context right now?
+    probe = await retrieve_context("Was ist das SEXIER-Modell?")
+    status = rag_status()
+    return {
+        "chunks": count,
+        "sources": sources,
+        "last_job": job,
+        "engine": status,
+        "vector_cache_loaded": _LOCAL_CACHE.get("matrix") is not None,
+        "retrieval_ok": bool(probe["rag_active"]),
+        "retrieval_chunks": probe["chunks_count"],
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 class ReingestBody(BaseModel):
@@ -50,7 +65,9 @@ async def _run_ingest(zip_url: str):
                         open(os.path.join(target, fname), "wb").write(data)
         from scripts_ingest_local_rag import main as ingest_folder
         await ingest_folder(target)
-        count = await db.rag_chunks.estimated_document_count()
+        from services_rag import invalidate_caches
+        invalidate_caches("reingest")
+        count = await db.rag_chunks.count_documents({})
         await db.rag_ingest_jobs.update_many({}, {"$set": {
             "status": "done", "chunks": count,
             "finished_at": datetime.now(timezone.utc).isoformat(),
@@ -417,9 +434,11 @@ async def upload_knowledge(data: KnowledgeUpload, request: Request):
     await db.rag_chunks.delete_many({"metadata.source_file": fname})
     if docs:
         await db.rag_chunks.insert_many(docs)
+    from services_rag import invalidate_caches
+    invalidate_caches(f"upload:{fname}")
     logger.info(f"RAG knowledge upload by {admin.get('email')}: {fname} → {len(docs)} chunks")
     return {"source_file": fname, "course": title, "chunks_added": len(docs),
-            "total_chunks": await db.rag_chunks.estimated_document_count()}
+            "total_chunks": await db.rag_chunks.count_documents({})}
 
 
 @router.delete("/source/{source_file}")
@@ -429,6 +448,8 @@ async def delete_knowledge_source(source_file: str, request: Request):
     res = await db.rag_chunks.delete_many({"metadata.source_file": source_file})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Quelle nicht gefunden.")
+    from services_rag import invalidate_caches
+    invalidate_caches(f"delete:{source_file}")
     logger.info(f"RAG source deleted by {admin.get('email')}: {source_file} ({res.deleted_count} chunks)")
     return {"deleted_chunks": res.deleted_count,
-            "total_chunks": await db.rag_chunks.estimated_document_count()}
+            "total_chunks": await db.rag_chunks.count_documents({})}

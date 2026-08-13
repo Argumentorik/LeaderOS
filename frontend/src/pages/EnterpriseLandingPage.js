@@ -9,6 +9,7 @@
  *   Non-authenticated — captures leads via /api/enterprise/public-lead.
  */
 import { useState } from 'react';
+import { useSeo } from '../lib/seo';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -76,6 +77,12 @@ const TRUST_LINE = [
 ];
 
 export default function EnterpriseLandingPage() {
+  useSeo({
+    path: '/for-teams',
+    title: 'Leader-OS für Teams — KI-Leadership-Training für Unternehmen | Wlad Jachtchenko',
+    description: 'Leadership-Training für ganze Teams: KI-Coach, 30-Tage-Programm und Rhetorik-Training nach der Methodik von Wlad Jachtchenko. Seat-Preise, Rechnung auf Firma, DSGVO-konform.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
 

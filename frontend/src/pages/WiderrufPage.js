@@ -6,7 +6,14 @@
  */
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { useSeo } from '../lib/seo';
 export default function WiderrufPage() {
+  useSeo({
+    path: '/widerruf',
+    title: 'Widerrufsrecht — Leader-OS',
+    description: 'Widerrufsbelehrung und Muster-Widerrufsformular für Leader-OS.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
 

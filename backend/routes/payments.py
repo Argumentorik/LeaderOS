@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import stripe
 
@@ -634,6 +634,60 @@ async def _create_installment_checkout(user: dict, origin: str, base_url: str, p
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
     return {"url": session.url, "session_id": session.id, "installment_num": installment_num, "amount": amount}
+
+
+async def reconcile_pending_payments(user_id: str) -> int:
+    """Activate anything the buyer paid for but never saw confirmed.
+
+    Iter 135 (Audit): tier activation only happened while the buyer sat on
+    /payment-success and it polled the status. If their session expired during
+    checkout (or they closed the tab), they had paid and got nothing until they
+    reopened that exact URL. This runs on login, asks Stripe once per pending
+    transaction of the last 7 days, and activates what is actually paid.
+    Idempotent: a transaction is only activated while payment_status != "paid".
+    """
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    pending = await db.payment_transactions.find(
+        {"user_id": user_id, "payment_status": {"$ne": "paid"},
+         "status": {"$nin": ["expired", "unreadable"]},
+         "created_at": {"$gte": cutoff}},
+        {"_id": 0, "session_id": 1, "package_id": 1, "billing": 1, "installment_num": 1},
+    ).sort("created_at", -1).to_list(3)
+    if not pending:
+        return 0
+
+    _configure_stripe()
+    activated = 0
+    for tx in pending:
+        try:
+            session = stripe.checkout.Session.retrieve(tx["session_id"])
+        except Exception as e:
+            # Mark it so we never re-query this dead session on the next login.
+            await db.payment_transactions.update_one(
+                {"session_id": tx["session_id"]}, {"$set": {"status": "unreadable"}})
+            logger.warning("reconcile: cannot read session %s: %s", tx["session_id"], e)
+            continue
+        if session.payment_status != "paid":
+            if session.status == "expired":
+                await db.payment_transactions.update_one(
+                    {"session_id": tx["session_id"]}, {"$set": {"status": "expired"}})
+            continue
+        await db.payment_transactions.update_one(
+            {"session_id": tx["session_id"]},
+            {"$set": {"payment_status": "paid", "status": session.status,
+                      "paid_at": datetime.now(timezone.utc).isoformat(),
+                      "reconciled": True,
+                      "stripe_payment_intent_id": getattr(session, "payment_intent", None)}},
+        )
+        if tx.get("billing") == "installment_followup":
+            await _handle_installment_payment(user_id, tx.get("installment_num", 1))
+        else:
+            await _activate_from_package(user_id, tx.get("package_id"))
+        await _attach_invoice_links(tx["session_id"], session)
+        activated += 1
+        logger.warning("reconcile: activated paid-but-unconfirmed payment %s for %s",
+                       tx["session_id"], user_id)
+    return activated
 
 
 # ── 1€-Livetest freischalten (Admin) ─────────────────────────────────────────

@@ -1,4 +1,5 @@
 import { Shield, Lock, FileCheck, Globe, Brain, Server, KeyRound, Trash2, Eye, ArrowLeft } from 'lucide-react';
+import { useSeo } from '../lib/seo';
 import { Link } from 'react-router-dom';
 
 const FRAMEWORKS = [
@@ -42,6 +43,12 @@ const PRACTICES = [
 ];
 
 export default function TrustPage() {
+  useSeo({
+    path: '/sicherheit',
+    title: 'Sicherheit & Datenschutz — Leader-OS',
+    description: 'Wie Leader-OS deine Daten schützt: Server in der EU, Verschlüsselung, DSGVO-konforme Verarbeitung, Löschung auf Knopfdruck.',
+  });
+
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white" data-testid="trust-page">
       <div className="max-w-4xl mx-auto px-6 py-14">

@@ -12,11 +12,24 @@
  * raw commit messages are noisy and unconvincing to humans.
  */
 import { useEffect } from 'react';
+import { useSeo } from '../lib/seo';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Zap, Wrench, Rocket } from 'lucide-react';
 import { markChangelogSeen } from '../lib/changelogMeta';
 
 const ENTRIES = [
+  {
+    date: '13. August 2026',
+    version: 'v135',
+    tag: 'SHIP',
+    title: 'Verlässlichere Antworten, sichtbare Quellen, Premium zuerst',
+    bullets: [
+      'Bei Wissensfragen nennt der Coach jetzt, aus welchem Buch oder Kurs die Antwort stammt — Premium-Mitglieder sehen das zuerst.',
+      'Neues Wissen wirkt sofort: nach jedem Update der Wissensbasis greift der Coach direkt darauf zu, nicht erst später.',
+      'Deine leadercheck.de-Diagnose bleibt aktuell: machst du sie erneut, übernimmt Leader-OS die neuen Werte automatisch.',
+      'Kauf und Rechnung laufen jetzt komplett automatisch — die Rechnung kommt direkt von Stripe per E-Mail.',
+    ],
+  },
   {
     date: '20. Juli 2026',
     version: 'v116',
@@ -133,6 +146,12 @@ const TAG_STYLE = {
 };
 
 export default function ChangelogPage() {
+  useSeo({
+    path: '/changelog',
+    title: 'Changelog — was neu ist in Leader-OS',
+    description: 'Alle Verbesserungen an Leader-OS in verständlicher Sprache: neue Trainings, bessere KI-Antworten, neue Auswertungen.',
+  });
+
   useEffect(() => { markChangelogSeen(); }, []);
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">

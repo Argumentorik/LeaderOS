@@ -6,6 +6,7 @@
  */
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { useSeo } from '../lib/seo';
 const Section = ({ title, children }) => (
   <section className="mb-8">
     <h2 className="text-white font-bold text-base mb-2">{title}</h2>
@@ -26,6 +27,12 @@ const ProcessorRow = ({ name, country, purpose, basis, data }) => (
 );
 
 export default function DatenschutzPage() {
+  useSeo({
+    path: '/datenschutz',
+    title: 'Datenschutzerklärung — Leader-OS',
+    description: 'Datenschutzerklärung von Leader-OS: welche Daten wir verarbeiten, wozu, wie lange und welche Rechte du hast.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
 

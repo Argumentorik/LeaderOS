@@ -167,6 +167,7 @@ async def _save_diagnosis_to_mongo(user_id: str, scores: dict, source: str = "ma
         "action_plan": scores.get("action_plan", []),
         "roi_forecast": scores.get("roi_forecast"),
         "diagnosis_date": scores.get("diagnosis_date") or datetime.now(timezone.utc).date().isoformat(),
+        "source_assessed_at": scores.get("source_assessed_at"),
         "imported_at": datetime.now(timezone.utc).isoformat(),
         "source": source,
         "fuehrungsdimensionen": scores.get("fuehrungsdimensionen"),

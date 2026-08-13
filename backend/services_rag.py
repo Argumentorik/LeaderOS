@@ -377,6 +377,26 @@ async def _match_local(embedding: list[float], threshold: float | None = None,
         return []
 
 
+def _source_label(meta: dict) -> str:
+    """Readable citation label for a chunk.
+
+    Many chunks from early ingest runs carry the first transcript line as
+    `course` ("in diesem Abschnitt zeige ich dir …") or OCR garbage
+    ("WLAD JACHTCHENKO DUBISTER BESERECHEF"). `_clean_display_title` already
+    solves that for the admin source list — we reuse it so the model cites
+    "Du Bist Der Bessere Chef" instead of noise.
+    """
+    try:
+        from routes.rag_admin import _clean_display_title
+        label = _clean_display_title(meta.get("source_file") or "", meta.get("course"))
+    except Exception:
+        label = (meta.get("course") or meta.get("source_file") or "Wlad-Material")
+    topic = (meta.get("topic") or "").strip()
+    if topic and topic.lower() not in label.lower():
+        label = f"{label} · {topic}"
+    return label[:110]
+
+
 def _format_chunks_for_prompt(chunks: list[dict]) -> str:
     """Format retrieved chunks into a single context block for the system prompt.
 
@@ -385,6 +405,10 @@ def _format_chunks_for_prompt(chunks: list[dict]) -> str:
     transcripts are 4kB each, and dropping all of them silently is much worse
     than feeding a slightly-clipped first chunk. The budget itself was also
     bumped (4k → 14k) so the common case is 3-4 full chunks injected.
+
+    Iter 135 (Audit): the header now carries the SOURCE (course/topic/file).
+    Before, metadata was dropped, so the model had no way to attribute an
+    answer to the right book/course and could not be asked to cite it.
     """
     if not chunks:
         return ""
@@ -394,7 +418,9 @@ def _format_chunks_for_prompt(chunks: list[dict]) -> str:
         content = (c.get("content") or "").strip()
         if not content:
             continue
-        header = f"[Quelle {i} · Relevanz {c.get('similarity', 0):.2f}]\n"
+        meta = c.get("metadata") or {}
+        label = _source_label(meta)
+        header = f"[Quelle {i} · {label} · Relevanz {c.get('similarity', 0):.2f}]\n"
         budget_left = MAX_CONTEXT_CHARS - total - len(header)
         if budget_left <= 200:
             # No room for even a meaningful excerpt — stop appending
@@ -463,18 +489,32 @@ async def retrieve_context(query: str) -> dict[str, Any]:
 
     # ── Hybrid retrieval (Iter 111): vector + keyword in parallel, RRF-fused.
     # Both paths run fully local — no external keys, no rate limits.
-    embedding, kw_chunks = await asyncio.gather(
-        _embed_query(query),
-        _match_keyword(query),
-    )
-    vec_chunks: list[dict] = []
-    if embedding:
-        vec_chunks = await _match_local(embedding)
+    # Iter 135 (Audit): the whole block is guarded. The contract is "chat NEVER
+    # breaks because of RAG" — an OOM in the embedding model or a numpy error
+    # must degrade to an un-grounded answer, not a 500.
+    try:
+        embedding, kw_chunks = await asyncio.gather(
+            _embed_query(query),
+            _match_keyword(query),
+            return_exceptions=True,
+        )
+        if isinstance(embedding, BaseException):
+            logger.warning("RAG: embedding failed: %s", embedding)
+            embedding = None
+        if isinstance(kw_chunks, BaseException):
+            logger.warning("RAG: keyword match failed: %s", kw_chunks)
+            kw_chunks = []
+        vec_chunks: list[dict] = []
+        if embedding:
+            vec_chunks = await _match_local(embedding)
 
-    if vec_chunks and kw_chunks:
-        chunks = _fuse_rrf([vec_chunks, kw_chunks])
-    else:
-        chunks = (vec_chunks or kw_chunks)[:FUSED_COUNT]
+        if vec_chunks and kw_chunks:
+            chunks = _fuse_rrf([vec_chunks, kw_chunks])
+        else:
+            chunks = (vec_chunks or kw_chunks)[:FUSED_COUNT]
+    except Exception as e:
+        logger.error("RAG: retrieval failed entirely, answering without context: %s", e)
+        vec_chunks, kw_chunks, chunks = [], [], []
 
     _cache_put(query, chunks)
     combined = manual + chunks
@@ -483,6 +523,23 @@ async def retrieve_context(query: str) -> dict[str, Any]:
         logger.info("RAG: injected %d chunks (%d manual + %d vector + %d keyword → %d fused) for query (len=%d)",
                     len(combined), len(manual), len(vec_chunks), len(kw_chunks), len(chunks), len(query))
     return {"context_block": ctx_block, "chunks_count": len(combined), "rag_active": bool(ctx_block)}
+
+
+def invalidate_caches(reason: str = "") -> dict[str, int]:
+    """Drop query + vector caches. MUST be called after any corpus change.
+
+    Iter 135 (Audit finding): re-ingest/upload/delete changed `rag_chunks` but
+    left the 30-min query cache and the in-process vector matrix untouched, so
+    the bot kept answering from the OLD corpus for up to an hour after an admin
+    updated the knowledge base.
+    """
+    queries = len(_query_cache)
+    chunks = _LOCAL_CACHE.get("count") or 0
+    _query_cache.clear()
+    _LOCAL_CACHE.update(matrix=None, docs=None, count=0, loaded_at=0.0)
+    logger.info("RAG: caches invalidated (%s) — dropped %d cached queries, %d-chunk matrix",
+                reason or "manual", queries, chunks)
+    return {"queries_dropped": queries, "matrix_chunks_dropped": chunks}
 
 
 def rag_status() -> dict[str, Any]:

@@ -21,6 +21,8 @@ import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
 import { MasterclassClientsManager } from '../components/admin/MasterclassClientsManager';
 import { ConversionCenter } from '../components/admin/ConversionCenter';
 import { LiveTestPanel } from '../components/admin/LiveTestPanel';
+import { FeatureRolloutPanel } from '../components/admin/FeatureRolloutPanel';
+import { OpsHandoverPanel } from '../components/admin/OpsHandoverPanel';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -169,6 +171,8 @@ export default function AdminPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
           <AuthHealthWidget health={authHealth} de={de} />
           <SyncHealthWidget de={de} />
+          <FeatureRolloutPanel de={de} />
+          <OpsHandoverPanel />
           <UserManageCard de={de} />
           <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="community-stats">
             <CardContent className="p-5">

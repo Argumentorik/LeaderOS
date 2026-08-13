@@ -303,10 +303,18 @@ async def _resolve_folder_context(folder_id: Optional[str], user_id: str) -> tup
 
 
 async def _ensure_session(session_id: str, user_id: str, message: str, agent: str, folder_id: Optional[str] = None) -> str:
-    """Create chat session if needed, return session_id."""
+    """Create chat session if needed, return session_id.
+
+    Iter 135 (Security): a client-supplied session_id MUST belong to the caller.
+    Without this check another user's session_id would load their history into
+    the prompt and leak their conversation back in the answer.
+    """
     if session_id:
-        # If session exists but the folder context just changed, keep the
-        # session's original folder_id stable (no silent re-tagging).
+        owned = await db.chat_sessions.find_one(
+            {"session_id": session_id, "user_id": user_id}, {"_id": 1}
+        )
+        if not owned:
+            raise HTTPException(status_code=404, detail="Session nicht gefunden")
         return session_id
     new_id = f"chat_{uuid.uuid4().hex[:12]}"
     doc = {
@@ -372,7 +380,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     import asyncio as _asyncio
     from services_rag import retrieve_context
     history, user_memory, folder_res, rag_ctx = await _asyncio.gather(
-        db.chat_messages.find({"session_id": session_id}, {"_id": 0}).sort("created_at", 1).to_list(20),
+        db.chat_messages.find({"session_id": session_id, "user_id": user["user_id"]}, {"_id": 0}).sort("created_at", 1).to_list(20),
         get_user_memory(user["user_id"]),
         _resolve_folder_context(data.folder_id, user["user_id"]),
         retrieve_context(data.message),
@@ -392,6 +400,15 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     system_msg = _build_system_message(data.agent, user_memory, folder_context, structured)
     if rag_ctx["context_block"]:
         system_msg = system_msg + rag_ctx["context_block"]
+        # Premium-first (Iter 135): paid users get explicit source attribution.
+        from routes.features import is_feature_enabled
+        if await is_feature_enabled("rag_source_labels", user):
+            system_msg += (
+                "\nQUELLENANGABE (Pflicht bei Wissensfragen): Wenn deine Antwort auf "
+                "den obigen Quellen beruht, schließe mit einer eigenen letzten Zeile ab: "
+                "\"Quelle: <Titel>\" — der Titel steht im jeweiligen [Quelle …]-Header. "
+                "Mehrere Titel mit Komma trennen. Nie erfundene Titel, nie Seitenzahlen.\n"
+            )
 
     try:
         # Iter 92.48 (Mert · GODMODE): Hybrid model routing.

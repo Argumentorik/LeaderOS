@@ -51,23 +51,49 @@ _USER_DATA_COLLECTIONS = [
 
 @router.get("/sync-health")
 async def sync_health(request: Request) -> dict:
-    """leadercheck.de ↔ Leader-OS sync activity (last 24h) for the admin panel."""
+    """leadercheck.de ↔ Leader-OS sync activity for the admin panel.
+
+    Iter 135 (Audit): the automatic login/signup sync now writes a log row per
+    attempt, so these numbers reflect reality instead of only manual syncs.
+    Statuses: completed (data written) · unchanged (already current) ·
+    not_found (no diagnose on leadercheck.de) · error (needs attention).
+    """
     await require_admin(request)
     now = datetime.now(timezone.utc)
     cutoff = (now - timedelta(hours=24)).isoformat()
 
     logs = await db.wladhub_sync_log.find(
         {"created_at": {"$gte": cutoff}}, {"_id": 0}
-    ).sort("created_at", -1).to_list(200)
-    completed = sum(1 for entry in logs if entry.get("status") == "completed")
-    records = sum(int(entry.get("records_imported") or 0) for entry in logs)
+    ).sort("created_at", -1).to_list(500)
+
+    def _count(*statuses):
+        return sum(1 for e in logs if e.get("status") in statuses)
+
+    failed = [e for e in logs if e.get("status") == "error"]
+    last_success = await db.wladhub_sync_log.find_one(
+        {"status": "completed"}, {"_id": 0}, sort=[("created_at", -1)]
+    )
+    last_failure = await db.wladhub_sync_log.find_one(
+        {"status": "error"}, {"_id": 0}, sort=[("created_at", -1)]
+    )
 
     return {
         "window_hours": 24,
         "syncs_24h": len(logs),
-        "completed_24h": completed,
-        "incomplete_24h": len(logs) - completed,
-        "records_imported_24h": records,
+        "completed_24h": _count("completed"),
+        "unchanged_24h": _count("unchanged"),
+        "not_found_24h": _count("not_found"),
+        "failed_24h": len(failed),
+        "incomplete_24h": len(logs) - _count("completed"),
+        "records_imported_24h": sum(int(e.get("records_imported") or 0) for e in logs),
+        "last_success_at": (last_success or {}).get("created_at"),
+        "last_failure_at": (last_failure or {}).get("created_at"),
+        "last_failure_reason": (last_failure or {}).get("error"),
+        "failure_reasons": [
+            {"email": e.get("email"), "error": (e.get("error") or "")[:160],
+             "at": e.get("created_at")}
+            for e in failed[:5]
+        ],
         "total_diagnoses": await db.wladhub_diagnoses.count_documents({}),
         "connected_users": len(await db.wladhub_diagnoses.distinct("user_id")),
         "recent": logs[:10],

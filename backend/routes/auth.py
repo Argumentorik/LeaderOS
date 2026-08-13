@@ -326,13 +326,34 @@ async def register(data: UserRegister, request: Request, response: Response):
 # ========== LOGIN ==========
 
 def _maybe_autosync_wladhub(user: dict) -> None:
-    """Iter 92.62: pull leadercheck.de diagnosis on ANY login (not just
-    register) so users who took the quiz AFTER signup still get synced."""
-    if user.get("has_wladhub_diagnosis") or not user.get("email"):
+    """Pull the leadercheck.de diagnosis on login.
+
+    Iter 135 (Audit): re-checks at most every 6h per user instead of "only
+    until the first diagnosis exists" — otherwise a RE-taken diagnose on
+    leadercheck.de would never reach Leader-OS.
+    """
+    if not user.get("email"):
         return
+    last = user.get("wladhub_last_check")
+    if last:
+        try:
+            from datetime import datetime as _dt
+            age_h = (datetime.now(timezone.utc) - _dt.fromisoformat(last)).total_seconds() / 3600
+            if age_h < 6:
+                return
+        except Exception:
+            pass
     import asyncio as _asyncio
     from services_wladhub_autosync import auto_sync_wladhub_on_signup
     _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user["user_id"], email=user["email"]))
+
+
+def _maybe_reconcile_payments(user: dict) -> None:
+    """Iter 135: activate a payment the buyer never saw confirmed (expired
+    session during checkout). No-op when there is nothing pending."""
+    import asyncio as _asyncio
+    from routes.payments import reconcile_pending_payments
+    _asyncio.create_task(reconcile_pending_payments(user["user_id"]))
 
 
 @router.post("/login")
@@ -394,6 +415,7 @@ async def login(data: UserLogin, request: Request, response: Response):
     token = create_jwt_token(user["user_id"])
     await _create_session(user["user_id"], ip_address, response, method=method)
     _maybe_autosync_wladhub(user)
+    _maybe_reconcile_payments(user)
 
     return {"token": token, "user": _safe_user_output(user)}
 
@@ -442,6 +464,7 @@ async def google_session(request: Request, response: Response):
         })
         sync_event = "user.updated"
         _maybe_autosync_wladhub(existing)
+        _maybe_reconcile_payments(existing)
         # New-device email for existing Google user
         fire_and_forget_new_device_alert(
             user_email=email,
@@ -792,6 +815,7 @@ async def magic_link_verify(data: MagicLinkVerify, request: Request, response: R
     token = create_jwt_token(user["user_id"])
     await _create_session(user["user_id"], ctx["ip"], response, method="magic_link")
     _maybe_autosync_wladhub(user)
+    _maybe_reconcile_payments(user)
     return {"token": token, "user": _safe_user_output(user)}
 
 

@@ -7,6 +7,7 @@
  */
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { useSeo } from '../lib/seo';
 const Section = ({ num, title, children }) => (
   <section className="mb-8">
     <h2 className="text-white font-bold text-base mb-2">{num}. {title}</h2>
@@ -15,6 +16,12 @@ const Section = ({ num, title, children }) => (
 );
 
 export default function AGBPage() {
+  useSeo({
+    path: '/agb',
+    title: 'AGB — Leader-OS',
+    description: 'Allgemeine Geschäftsbedingungen für die Nutzung von Leader-OS.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
 

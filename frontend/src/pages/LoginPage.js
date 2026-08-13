@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../lib/api';
 import { parseAuthError } from '../lib/authErrors';
 import { getAttribution } from '../lib/attribution';
+import { useSeo } from '../lib/seo';
 import { Globe, WifiOff, KeyRound, Sparkles, Ticket } from 'lucide-react';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
@@ -33,9 +34,21 @@ const getFeatures = (de) => (de ? [
 ]);
 
 export default function LoginPage({ initialMode = 'login' }) {
+  // /login is the canonical app entry — /signup and /register point here so
+  // Google does not see three duplicates of the same shell (Iter 135).
+  useSeo({
+    path: '/login',
+    title: 'Leader-OS — KI Leadership System für Führungskräfte von Wlad Jachtchenko',
+    description: 'Anmelden bei Leader-OS: KI-Coach für Führungssituationen, 30-Tage-Programm, Rhetorik- und EQ-Training nach der Methodik von Wlad Jachtchenko.',
+  });
   const { login, user: authedUser } = useAuth();
   const { lang, toggleLang } = useLanguage();
   const navigate = useNavigate();
+  const routerLocation = useLocation();
+  // Where the user was bounced from (e.g. /payment-success after checkout).
+  const returnTo = routerLocation.state?.from?.pathname
+    ? `${routerLocation.state.from.pathname}${routerLocation.state.from.search || ''}`
+    : null;
   // Iter 92.25: when the route is /signup or /register, mount directly in
   // register mode. Default '/login' route keeps the existing behaviour.
   const [mode, setMode] = useState(initialMode);
@@ -50,8 +63,8 @@ export default function LoginPage({ initialMode = 'login' }) {
   // Iter 124.4 (Godmode pre-launch): already-authed users must NOT see the
   // login screen. Redirect them to the post-login route immediately.
   useEffect(() => {
-    if (authedUser) navigate(postLoginRoute(authedUser), { replace: true });
-  }, [authedUser, navigate]);
+    if (authedUser) navigate(postLoginRoute(authedUser, returnTo), { replace: true });
+  }, [authedUser, navigate, returnTo]);
 
   // Iter 130 BUGFIX: an earlier effect force-reset mode 'register' → 'login'
   // whenever a lastAccount existed — clicking "Registrieren" then did NOTHING.
@@ -60,7 +73,7 @@ export default function LoginPage({ initialMode = 'login' }) {
   const handleOAuthSuccess = (user, method) => {
     login(user, method);
     toast.success(de ? `Willkommen zurück, ${user.name || user.email}!` : `Welcome back, ${user.name || user.email}!`);
-    navigate(postLoginRoute(user));
+    navigate(postLoginRoute(user, returnTo));
   };
 
   const handleOAuthError = (msg) => {
@@ -81,7 +94,7 @@ export default function LoginPage({ initialMode = 'login' }) {
         : { identifier: trimmedId, password: form.password };
       const res = await api.post(endpoint, payload);
       login(res.data.user, 'email');
-      navigate(postLoginRoute(res.data.user));
+      navigate(postLoginRoute(res.data.user, returnTo));
     } catch (err) {
       if (!err.response) {
         setError(de

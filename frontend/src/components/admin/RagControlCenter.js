@@ -95,11 +95,25 @@ export const RagControlCenter = ({ de = true }) => {
             </div>
             <div>
               <p className="text-sm font-black" data-testid="rag-chunk-count">
-                {status ? `${(status.chunks || 0).toLocaleString('de-DE')} Chunks` : '…'}
+                {status ? `${(status.chunks || 0).toLocaleString('de-DE')} Chunks · ${status.sources ?? '–'} ${de ? 'Quellen' : 'sources'}` : '…'}
               </p>
               <p className="text-[10px] text-muted-foreground">
                 {job ? `${de ? 'Letzter Ingest' : 'Last ingest'}: ${job.status}${job.started_at ? ` · ${new Date(job.started_at).toLocaleString('de-DE')}` : ''}` : (de ? 'Wlads Wissensbasis (MongoDB Vector Store)' : "Wlad's knowledge base")}
               </p>
+              {status && (
+                <p className="text-[10px] mt-0.5" data-testid="rag-live-probe">
+                  <span className={status.retrieval_ok ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}>
+                    {status.retrieval_ok
+                      ? `${de ? 'Abruf live geprüft' : 'Retrieval verified live'} · ${status.retrieval_chunks} ${de ? 'Treffer' : 'hits'}`
+                      : (de ? 'Abruf liefert KEINE Treffer' : 'Retrieval returns NO hits')}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {' · '}{de ? 'Modell' : 'model'} {status.engine?.model_loaded ? 'OK' : (de ? 'NICHT geladen' : 'NOT loaded')}
+                    {status.engine?.dim ? ` (${status.engine.dim}d)` : ''}
+                    {' · '}{de ? 'Vektor-Cache' : 'vector cache'} {status.vector_cache_loaded ? (de ? 'warm' : 'warm') : (de ? 'kalt' : 'cold')}
+                  </span>
+                </p>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">

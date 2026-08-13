@@ -179,6 +179,10 @@ app.include_router(ab_testing_router)
 from routes.unsubscribe import router as unsubscribe_router  # noqa: E402
 app.include_router(unsubscribe_router)
 
+# Premium-first feature rollout (off → premium → all)
+from routes.features import router as features_router  # noqa: E402
+app.include_router(features_router)
+
 
 @app.get("/api/")
 async def root() -> dict[str, str]:
@@ -322,6 +326,21 @@ async def startup() -> None:
         await db.argumentation_templates.create_index("template_id", unique=True, sparse=True)
         await db.argumentation_templates.create_index("share_token", unique=True, sparse=True)
         logger.info("Production query indexes ensured (users.xp, chat_messages.session_id, activity_log.user_id+created_at, argumentation_*)")
+
+        # Iter 135 (Audit · launch scale): hot paths that were still doing full
+        # collection scans. Checkout status is polled every 3s per buyer and the
+        # credit balance is read on every chat message — both were unindexed.
+        await db.payment_transactions.create_index("session_id", name="tx_session_id")
+        await db.payment_transactions.create_index([("user_id", 1), ("created_at", -1)], name="tx_user_recent")
+        await db.credits.create_index("user_id", name="credits_user_id")
+        await db.chat_sessions.create_index("session_id", name="chat_session_id")
+        await db.tasks.create_index([("user_id", 1), ("created_at", -1)], name="tasks_user_recent")
+        await db.folder_items.create_index([("folder_id", 1), ("user_id", 1)], name="folder_items_folder_user")
+        await db.wladhub_diagnoses.create_index("user_id", name="diag_user_id")
+        await db.wladhub_sync_log.create_index([("created_at", -1)], name="sync_log_recent")
+        await db.wladhub_sync_log.create_index([("status", 1), ("created_at", -1)], name="sync_log_status_recent")
+        await db.feature_rollout.create_index("feature_key", unique=True, name="feature_key_unique")
+        logger.info("Iter135 hot-path indexes ensured (payments, credits, chat_sessions, tasks, folders, wladhub, features)")
 
         # Supabase sync events — idempotency (unique event_id) + audit trail
         await db.sync_events.create_index("event_id", unique=True, name="sync_event_id_unique")
