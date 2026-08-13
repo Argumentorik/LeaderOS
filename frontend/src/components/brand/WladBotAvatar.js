@@ -21,7 +21,7 @@ import { Sparkles } from 'lucide-react';
 // /wladbot-avatar.png was replaced by Wlad Jachtchenko's real photo so
 // the chat, emails, and every "WladBot spoke" surface shows a human
 // coach — not a cartoon.
-const AVATAR_SRC = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+const AVATAR_SRC = 'https://leadercheck.de/wladbot-3-nobg.png';
 
 export const WladBotAvatar = ({
   size = 40,

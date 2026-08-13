@@ -1,6 +1,6 @@
 import { Brain, Sparkles, HeartHandshake } from 'lucide-react';
 
-export const WLAD_AVATAR = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+export const WLAD_AVATAR = 'https://leadercheck.de/wladbot-3-nobg.png';
 
 // 3-Layer Leadership System (Iter 92.35 — Mert: high-converting landing copy)
 // KI · Rhetorik · EQ → user-supplied final headlines + bullets.

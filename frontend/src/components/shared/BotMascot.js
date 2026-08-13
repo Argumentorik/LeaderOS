@@ -6,7 +6,7 @@ import logger from '../../lib/logger';
 import { BotMascotRinging } from './BotMascotRinging';
 import { BotMascotPanel } from './BotMascotPanel';
 
-const WLAD_IMG = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+const WLAD_IMG = 'https://leadercheck.de/wladbot-3-nobg.png';
 
 export const BotMascot = () => {
   const [phase, setPhase] = useState('idle');

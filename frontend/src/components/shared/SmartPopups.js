@@ -4,7 +4,7 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { X, ArrowRight, Zap, Share2, Gift, Flame } from 'lucide-react';
 
-const WLAD = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+const WLAD = 'https://leadercheck.de/wladbot-3-nobg.png';
 
 // Pages where SmartPopups should NEVER fire (user already on a high-intent flow,
 // or active work that a popup would interrupt).

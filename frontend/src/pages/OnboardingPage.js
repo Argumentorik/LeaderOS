@@ -178,8 +178,7 @@ export default function OnboardingPage() {
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase text-[#6B8A00] dark:text-[#BFFF00] mb-1">
                 WladBot · trainiert auf Wlad Jachtchenkos Material
-              </p>
-              <h1 className="text-3xl font-black tracking-tight">
+              </p>              <h1 className="text-3xl font-black tracking-tight">
                 {de ? `Hi ${firstName}, schön, dass du da bist.` : `Hi ${firstName}, glad you're here.`}
               </h1>
               <p className="text-base text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">

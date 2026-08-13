@@ -4,7 +4,7 @@ import { X, CheckCircle2, Flame, Brain, Video, Target, Calendar, Sparkles } from
 import { PricingModal } from './PricingModal';
 import { useBookConsultation } from '../brand/BookConsultationButton';
 
-const WLAD = 'https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/4knvn6cs_WladProfilbild.jpg';
+const WLAD = 'https://leadercheck.de/wladbot-3-nobg.png';
 
 // Accessible lime color for text/icons on light surfaces
 const LIME_ACCENT = 'text-[#6B8A00] dark:text-[#BFFF00]';
