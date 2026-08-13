@@ -132,7 +132,7 @@ def _base_layout(body_html: str, preheader: str = "", badge: str = "") -> str:
     spacing to the logo, divider line, and mobile media-queries for small
     screens. `alt="WladBot"` keeps the tile branded if images are blocked.
     """
-    avatar_url = f"{_frontend_url()}/wladbot-avatar.png"
+    avatar_url = f"{_frontend_url()}/wladbot-avatar-clean.png"
     badge_html = (
         f'<span style="display:inline-block;border:1px solid rgba(191,255,0,0.4);background:rgba(191,255,0,0.08);color:{BRAND_COLOR};font-size:10px;font-weight:900;letter-spacing:0.16em;padding:7px 14px;border-radius:999px;white-space:nowrap;">{badge}</span>'
         if badge else

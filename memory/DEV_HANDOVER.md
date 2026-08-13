@@ -120,3 +120,15 @@ frontend/src/lib/seo.js                  Per-Route Head-Tags
 ```
 
 Tests: `cd /app/backend && REACT_APP_BACKEND_URL=<url> python3 -m pytest tests/test_iter135_godmode_audit.py tests/test_iter134_golive.py -q`
+
+---
+
+## 6. Nachtrag Iter 135.1 — Avatar & Sprachausgabe
+
+**Avatar**: Es gibt genau EINE Quelle: `public/wladbot-avatar-clean.png` (Gesichts-Ausschnitt des WladBot-Charakters von leadercheck.de, 512×512, ruhiger Hintergrund). Referenziert über `WLAD_AVATAR` in `src/lib/brand.js` und `AVATAR_SRC` in `components/brand/WladBotAvatar.js`; E-Mails/Magic-Link nutzen dieselbe Datei. Neuen Avatar einsetzen = diese Datei ersetzen, sonst nichts.
+Grund für den Crop: das transparente Ganzkörper-PNG wurde in 28–32-px-Kreisen (Chat, FAB) zu einem dunklen Punkt.
+
+**Sprachausgabe (ElevenLabs) ist AKTUELL TOT**: `ELEVENLABS_API_KEY` in `backend/.env` enthält eine Key-**ID**, keinen API-Key. ElevenLabs-Keys beginnen mit `sk_`. API antwortet `invalid_api_key`.
+- `POST /api/voice/tts` liefert seither `{"audio_url": "", "error": "elevenlabs_invalid_api_key"}` (200, bewusst degradiert) und die UI zeigt einen Hinweis-Toast statt stumm nichts zu tun.
+- Fix: echten `sk_...`-Key in `backend/.env` setzen → `sudo supervisorctl restart backend` → prüfen mit
+  `curl -s -X POST $URL/api/voice/tts -H "Authorization: Bearer <token>" -H 'Content-Type: application/json' -d '{"text":"Test","persona":"wlad"}'` → `audio_url` muss mit `data:audio/mpeg;base64,` beginnen.

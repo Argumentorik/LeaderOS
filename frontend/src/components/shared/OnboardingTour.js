@@ -8,7 +8,7 @@ import {
   Play
 } from 'lucide-react';
 
-const WLAD_AVATAR = 'https://leadercheck.de/wladbot-3-nobg.png';
+const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 const tourSteps = {
   de: [

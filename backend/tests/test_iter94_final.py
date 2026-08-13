@@ -7,7 +7,7 @@ Scope (quick regression only — iter 93 already deep-verified session persisten
 - Chat E2E: send message → get structured reply → multi-turn
 - Payments: POST /api/payments/checkout for leadership_os returns Stripe URL
 - Security headers: CSP, HSTS preload, COOP
-- Branding: /wladbot-avatar.png returns 200
+- Branding: /wladbot-avatar-clean.png returns 200
 """
 import os
 import re
@@ -163,7 +163,7 @@ class TestSecurityHeaders:
 class TestBranding:
     def test_avatar_asset_available(self):
         # served by frontend static — hit through preview URL
-        r = requests.get(f"{BASE_URL}/wladbot-avatar.png", timeout=10, allow_redirects=True)
+        r = requests.get(f"{BASE_URL}/wladbot-avatar-clean.png", timeout=10, allow_redirects=True)
         assert r.status_code == 200, f"avatar png missing: {r.status_code}"
         assert r.headers.get("content-type", "").startswith("image/"), f"not image: {r.headers.get('content-type')}"
         assert len(r.content) > 5000, f"avatar suspiciously small: {len(r.content)}"

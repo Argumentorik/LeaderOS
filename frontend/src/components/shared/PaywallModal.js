@@ -4,7 +4,7 @@ import { X, CheckCircle2, Flame, Brain, Video, Target, Calendar, Sparkles } from
 import { PricingModal } from './PricingModal';
 import { useBookConsultation } from '../brand/BookConsultationButton';
 
-const WLAD = 'https://leadercheck.de/wladbot-3-nobg.png';
+const WLAD = '/wladbot-avatar-clean.png';
 
 // Accessible lime color for text/icons on light surfaces
 const LIME_ACCENT = 'text-[#6B8A00] dark:text-[#BFFF00]';

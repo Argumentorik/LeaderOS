@@ -5,6 +5,7 @@ import logger from '../../lib/logger';
 import { getTtsSpeed } from '../../lib/ttsSpeed';
 import { VoiceWaveVisualizer } from './VoiceWaveVisualizer';
 import { registerAudio } from '../../lib/audioBus';
+import { toast } from 'sonner';
 
 /**
  * VoicePlayButton — triggers ElevenLabs TTS synthesis + inline <audio> playback.
@@ -70,6 +71,8 @@ export default function VoicePlayButton({
     try {
       const res = await api.post('/voice/tts', { text: text.slice(0, 800), persona });
       if (!res.data.audio_url) {
+        // Iter 135: never fail silently — the user pressed play and deserves a reason.
+        toast.error('Sprachausgabe ist gerade nicht verfügbar. Der Text steht dir weiterhin zur Verfügung.');
         setLoading(false);
         if (onEnd) onEnd();
         return;

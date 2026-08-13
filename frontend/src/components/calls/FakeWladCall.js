@@ -228,7 +228,7 @@ export const FakeWladCall = () => {
               className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#BFFF00]/45"
               data-testid="fake-call-avatar"
             >
-              <img src="/wladbot-avatar.png" alt="Wlad" className="w-full h-full object-cover" />
+              <img src="/wladbot-avatar-clean.png" alt="Wlad" className="w-full h-full object-cover" />
             </div>
           </div>
 

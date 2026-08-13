@@ -300,6 +300,17 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
         audio_bytes = await run_in_threadpool(_synthesize, text, voice_config)
     except Exception as e:
         err_msg = str(e)
+        low = err_msg.lower()
+        # Iter 135 (Audit): short, honest reason instead of a raw SDK header dump.
+        if "invalid_api_key" in low or "api key id used as api key" in low:
+            reason = "elevenlabs_invalid_api_key"
+        elif "quota" in low or "429" in low:
+            reason = "elevenlabs_quota_or_rate_limit"
+        elif "401" in low or "unauthorized" in low:
+            reason = "elevenlabs_unauthorized"
+        else:
+            reason = "elevenlabs_unavailable"
+
         # On 401 Unauthorized from ElevenLabs, drop cached client so next request
         # re-reads ELEVENLABS_API_KEY (handles rotation without pod restart).
         if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
@@ -312,6 +323,9 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
             "cached": False,
             "persona": persona_key,
             "voice_id": voice_config["voice_id"],
+            # Iter 135 (Audit): never a silent failure. The caller (and Ops)
+            # must be able to see WHY there is no audio.
+            "error": reason,
         }
 
     audio_b64 = base64.b64encode(audio_bytes).decode("ascii")

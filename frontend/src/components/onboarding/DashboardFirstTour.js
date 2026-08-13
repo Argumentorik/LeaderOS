@@ -36,7 +36,7 @@ const TOUR_STEPS = [
     target: null, // centered modal, no spotlight
     kicker: 'Willkommen',
     title: 'Schön, dass du da bist.',
-    body: 'Ich bin dein persönlicher Coach. In 60 Sekunden zeig ich dir jede Ecke von Leader-OS — damit du weißt, wo du dranbleibst, wenn dein Alltag ruft.',
+    body: 'Ich bin dein persönlicher Coach. In 60 Sekunden zeig ich dir jede Ecke von Leader-OS, damit du weißt, wo du dranbleibst, wenn dein Alltag ruft.',
     speak: 'Willkommen bei Leader OS. Ich bin dein persönlicher Coach und zeige dir jetzt jede Ecke der Plattform, damit du morgen früh sofort loslegen kannst.',
   },
   {
@@ -44,7 +44,7 @@ const TOUR_STEPS = [
     target: 'nav-dashboard',
     kicker: 'Dein Zuhause',
     title: 'Das Dashboard.',
-    body: 'Hier siehst du täglich, wo du stehst: dein nächster Schritt, dein Fortschritt, dein Streak. Kein Chaos — nur das Wichtigste heute.',
+    body: 'Hier siehst du täglich, wo du stehst: dein nächster Schritt, dein Fortschritt, dein Streak. Kein Chaos, nur das Wichtigste heute.',
     speak: 'Dein Dashboard. Hier siehst du täglich, wo du stehst und was heute dein nächster Schritt ist.',
   },
   {
@@ -60,16 +60,16 @@ const TOUR_STEPS = [
     target: 'nav-checkin',
     kicker: 'Täglicher Check-in',
     title: 'Kurz reflektieren, klar bleiben.',
-    body: 'Zwei Minuten pro Tag. Wie war dein Tag? Was hast du gelernt? So bleiben deine Fortschritte messbar — statt in Meetings zu versickern.',
+    body: 'Zwei Minuten pro Tag. Wie war dein Tag? Was hast du gelernt? So bleiben deine Fortschritte messbar, statt in Meetings zu versickern.',
     speak: 'Der tägliche Check-in. Zwei Minuten Reflexion, damit dein Wachstum sichtbar bleibt.',
   },
   {
     id: 'wladbot',
     target: 'nav-wladbot',
     kicker: 'Frag den Coach',
-    title: 'WladBot — 24/7 Sparring.',
+    title: 'WladBot: 24/7 Sparring.',
     body: 'Jede Antwort basiert auf Wlad Jachtchenkos Büchern, Vorträgen und Coaching-Praxis. Stell die Frage, die du sonst niemandem stellen würdest.',
-    speak: 'WladBot. Frag mich alles — jede Antwort basiert auf Wlad Jachtchenkos Büchern und Coaching-Praxis.',
+    speak: 'WladBot. Frag mich alles, jede Antwort basiert auf Wlad Jachtchenkos Büchern und Coaching-Praxis.',
   },
   {
     id: 'simulations',
@@ -102,7 +102,7 @@ const TOUR_STEPS = [
     target: 'nav-progress',
     kicker: 'Sichtbar besser werden',
     title: 'Mein Fortschritt.',
-    body: 'Was hast du gelernt? Wo bist du gewachsen? Deine Scores, dein Streak, deine Coaching-Memory an einem Ort. Kein Bauchgefühl — Zahlen.',
+    body: 'Was hast du gelernt? Wo bist du gewachsen? Deine Scores, dein Streak, deine Coaching-Memory an einem Ort. Kein Bauchgefühl, sondern Zahlen.',
     speak: 'Mein Fortschritt. Deine Scores, dein Streak, deine Coaching Memory an einem Ort.',
   },
   {
@@ -110,7 +110,7 @@ const TOUR_STEPS = [
     target: 'nav-videos',
     kicker: 'Kurze Lernvideos',
     title: 'Lern-Videos.',
-    body: 'Zwischen zehn und vierzig Minuten. Kein Fluff. Rhetorik, schwierige Gespräche, Leadership-Grundlagen — direkt von Wlad, direkt anwendbar.',
+    body: 'Zwischen zehn und vierzig Minuten. Kein Fluff. Rhetorik, schwierige Gespräche, Leadership-Grundlagen, direkt von Wlad, direkt anwendbar.',
     speak: 'Die Lernvideos. Kurze, direkt anwendbare Lektionen zu Rhetorik und Leadership.',
     locked: (tier) => tier === 'free',
   },
@@ -127,7 +127,7 @@ const TOUR_STEPS = [
     target: null,
     kicker: 'Kalibriert',
     title: 'Das war\'s. Jetzt fangen wir an.',
-    body: 'Wenn du eine Frage hast — ich bin oben rechts, immer da. Mein Vorschlag für die ersten sieben Tage: mach heute Tag eins der Challenge, morgen früh den Check-in, und wenn du Zeit hast: die kostenlose Diagnose. In dieser Reihenfolge. Los.',
+    body: 'Wenn du eine Frage hast: ich bin oben rechts, immer da. Mein Vorschlag für die ersten sieben Tage: mach heute Tag eins der Challenge, morgen früh den Check-in, und wenn du Zeit hast: die kostenlose Diagnose. In dieser Reihenfolge. Los.',
     speak: 'Das war die Kurzführung. Ich bin oben rechts, immer da. Mein Vorschlag: heute Tag eins der Challenge, morgen früh der Check-in, dann die Diagnose. Los.',
   },
 ];
@@ -345,7 +345,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
           {isLocked && (
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-amber-500/10 border border-amber-500/25 px-3 py-2 text-[11px] font-bold text-amber-300">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              Für dich als Free-User noch gesperrt — mit Leader-OS Plus freigeschaltet.
+              Für dich als Free-User noch gesperrt, mit Leader-OS Plus freigeschaltet.
             </div>
           )}
         </div>

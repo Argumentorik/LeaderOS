@@ -1,14 +1,16 @@
 /**
  * brand.js — Central Wlad / Leader-OS brand assets.
  *
- * Iter 134 (Wlad-Direktive · Go-Live):
- *   Es gilt EIN Avatar über alle Produkte hinweg — der WladBot-Charakter,
- *   identisch zu leadercheck.de (`/wladbot-3-nobg.png`). Kein Foto-Mix,
- *   kein zweites Portrait. Eine Quelle, ein Gesicht, überall gleich.
+ * Iter 135.1 (Wlad-Direktive):
+ *   EIN Avatar überall: der WladBot-Charakter von leadercheck.de, aber als
+ *   sauberer Kopf-Ausschnitt auf ruhigem Hintergrund. Das transparente
+ *   Ganzkörper-PNG wurde in kleinen runden Rahmen (Chat, 32 px) zu einem
+ *   dunklen Punkt — deshalb liegt hier der zugeschnittene Face-Crop.
+ *   Quelle: leadercheck.de/wladbot-3-nobg.png → public/wladbot-avatar-clean.png
  */
 
-/** WladBot-Avatar — identisch zu leadercheck.de. */
-export const WLAD_AVATAR = 'https://leadercheck.de/wladbot-3-nobg.png';
+/** WladBot-Avatar — sauberer Gesichts-Ausschnitt, gleiche Figur wie leadercheck.de. */
+export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 /** Wlad's personal welcome video, shown right before the onboarding starts. */
 export const WLAD_WELCOME_VIDEO =

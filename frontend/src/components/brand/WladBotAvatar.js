@@ -17,11 +17,10 @@ import { Sparkles } from 'lucide-react';
  *   <WladBotAvatar size={64} pulse />    → typing pulse
  *   <WladBotAvatar size={56} live />     → "he's really here" presence
  */
-// Iter 131.3 (Wlad-Direktive · No AI-slop): the previous Pixar-styled
-// /wladbot-avatar.png was replaced by Wlad Jachtchenko's real photo so
-// the chat, emails, and every "WladBot spoke" surface shows a human
-// coach — not a cartoon.
-const AVATAR_SRC = 'https://leadercheck.de/wladbot-3-nobg.png';
+// Iter 135.1 (Wlad-Direktive): sauberer Gesichts-Ausschnitt des WladBot-
+// Charakters von leadercheck.de. Das transparente Ganzkörper-PNG wurde in
+// kleinen Rahmen (Chat, 28-32 px) zu einem dunklen Punkt.
+const AVATAR_SRC = '/wladbot-avatar-clean.png';
 
 export const WladBotAvatar = ({
   size = 40,

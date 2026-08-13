@@ -80,8 +80,8 @@ export const LoginBrandPanel = ({ features, de }) => {
 
           <p className="text-[13.5px] text-white/40 leading-relaxed max-w-sm mb-2 brand-rise" style={{ animationDelay: '560ms' }}>
             {de
-              ? 'Klarheit ist kein Talent — sie ist ein System. Wlads Methodik als KI, rund um die Uhr an deiner Seite.'
-              : "Clarity isn't a talent — it's a system. Wlad's methodology as AI, by your side around the clock."}
+              ? 'Klarheit ist kein Talent, sondern ein System. Wlads Methodik als KI, rund um die Uhr an deiner Seite.'
+              : "Clarity isn't a talent, it's a system. Wlad's methodology as AI, by your side around the clock."}
           </p>
 
           <div className="space-y-2 mt-10">
@@ -110,7 +110,7 @@ export const LoginBrandPanel = ({ features, de }) => {
 
         <div className="mt-16 brand-rise" style={{ animationDelay: '1250ms' }}>
           <p className="text-[11px] text-white/15 tracking-wide">
-            {de ? 'Auf Basis der Methodik von Wlad Jachtchenko — Rhetorik- und Leadership-Trainer.' : 'Built on the methodology of Wlad Jachtchenko — rhetoric and leadership trainer.'}
+            {de ? 'Auf Basis der Methodik von Wlad Jachtchenko, Rhetorik- und Leadership-Trainer.' : 'Built on the methodology of Wlad Jachtchenko, rhetoric and leadership trainer.'}
           </p>
         </div>
       </div>

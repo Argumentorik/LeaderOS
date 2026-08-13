@@ -17,7 +17,7 @@ import {
   Target, Heart, Shield, ExternalLink
 } from 'lucide-react';
 
-const WLAD_AVATAR = 'https://leadercheck.de/wladbot-3-nobg.png';
+const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 export default function ReferralPage() {
   const { lang } = useLanguage();

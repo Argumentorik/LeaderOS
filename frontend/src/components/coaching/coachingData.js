@@ -1,6 +1,6 @@
 import { Brain, Sparkles, HeartHandshake } from 'lucide-react';
 
-export const WLAD_AVATAR = 'https://leadercheck.de/wladbot-3-nobg.png';
+export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 // 3-Layer Leadership System (Iter 92.35 — Mert: high-converting landing copy)
 // KI · Rhetorik · EQ → user-supplied final headlines + bullets.

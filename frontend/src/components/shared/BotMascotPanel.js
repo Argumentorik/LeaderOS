@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import { openStrategyCall } from '../../lib/calendly';
 
-const WLAD_IMG = 'https://leadercheck.de/wladbot-3-nobg.png';
+const WLAD_IMG = '/wladbot-avatar-clean.png';
 
 export const BotMascotPanel = ({ de, onClose, onNavigate, onCheckout, checkoutLoading }) => (
   <>
