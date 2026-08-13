@@ -330,6 +330,49 @@ async def list_knowledge_sources(request: Request):
     }
 
 
+# ── Corpus-Vollständigkeit (Iter 134 · Wlad: "sieht man nicht ob alles da ist") ──
+# Vergleicht die Quell-ZIP (Wlads komplette Bibliothek) mit dem, was wirklich
+# in rag_chunks liegt. Antwort auf "ist das gesamte Wissen wirklich drin?".
+
+
+@router.get("/coverage")
+async def corpus_coverage(request: Request, zip_url: str = DEFAULT_ZIP_URL):
+    from routes.admin import require_admin
+    await require_admin(request)
+
+    async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+        r = await client.get(zip_url)
+        r.raise_for_status()
+    with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
+        expected = sorted({
+            os.path.basename(n) for n in zf.namelist()
+            if n.endswith(".txt") and "__MACOSX" not in n and os.path.basename(n)
+        })
+
+    rows = await db.rag_chunks.aggregate([
+        {"$group": {"_id": "$metadata.source_file", "chunks": {"$sum": 1}}},
+    ]).to_list(2000)
+    ingested = {r["_id"]: r["chunks"] for r in rows if r["_id"]}
+
+    missing = [f for f in expected if f not in ingested]
+    extra = sorted([f for f in ingested if f not in expected])
+    thin = sorted(
+        [{"source_file": f, "chunks": ingested[f]} for f in expected
+         if f in ingested and ingested[f] < 5],
+        key=lambda x: x["chunks"],
+    )
+    return {
+        "zip_url": zip_url,
+        "expected_files": len(expected),
+        "ingested_files": len([f for f in expected if f in ingested]),
+        "total_chunks": sum(ingested.values()),
+        "complete": not missing,
+        "missing": [{"source_file": f, "display_title": _clean_display_title(f, None)} for f in missing],
+        "extra": [{"source_file": f, "chunks": ingested[f]} for f in extra],
+        "thin": thin,
+    }
+
+
 class KnowledgeUpload(BaseModel):
     filename: str
     content: str

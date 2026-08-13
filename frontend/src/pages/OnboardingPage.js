@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
-import { WLAD_AVATAR } from '../lib/brand';
+import { WLAD_AVATAR, WLAD_WELCOME_VIDEO } from '../lib/brand';
 import { WladGuide } from '../components/onboarding/WladGuide';
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
@@ -17,7 +17,7 @@ import {
   ExternalLink, CheckCircle2, Crown, Briefcase,
   GraduationCap, Building, TrendingUp, Calendar, Phone, Clock,
   Youtube, Instagram, Linkedin, Search, Mic, MessageCircle, Newspaper, HelpCircle,
-  Video, Smartphone, Lock, BookOpen, Flame
+  Video, Smartphone, Lock, BookOpen, Flame, Play
 } from 'lucide-react';
 
 const STEPS = ['welcome', 'features', 'profile', 'role', 'goal', 'heard', 'wladhub', 'call', 'done'];
@@ -31,6 +31,8 @@ export default function OnboardingPage() {
   const [profileData, setProfileData] = useState({ position: '', company: '', industry: '' });
   const [loading, setLoading] = useState(false);
   const [wladhubScores, setWladhubScores] = useState({ ki_kompetenz: '', boardroom_rhetorik: '', strategisches_eq: '' });
+  const [videoStarted, setVideoStarted] = useState(false);
+  const videoRef = useRef(null);
   const de = lang === 'de';
   const openBooking = useBookConsultation();
   const firstName = user?.name?.split(' ')[0] || (de ? 'Leader' : 'Leader');
@@ -44,11 +46,11 @@ export default function OnboardingPage() {
   ];
 
   const goals = [
-    { id: 'communication', icon: MessageSquareText, label: de ? 'Bessere Kommunikation' : 'Better Communication', desc: de ? 'Überzeugender praesentieren & argumentieren' : 'Present & argue more persuasively' },
-    { id: 'conflicts', icon: Shield, label: de ? 'Konflikte lösen' : 'Resolve Conflicts', desc: de ? 'Schwierige Gespräche souveraen führen' : 'Handle tough conversations confidently' },
+    { id: 'communication', icon: MessageSquareText, label: de ? 'Bessere Kommunikation' : 'Better Communication', desc: de ? 'Überzeugender präsentieren & argumentieren' : 'Present & argue more persuasively' },
+    { id: 'conflicts', icon: Shield, label: de ? 'Konflikte lösen' : 'Resolve Conflicts', desc: de ? 'Schwierige Gespräche souverän führen' : 'Handle tough conversations confidently' },
     { id: 'delegation', icon: Target, label: de ? 'Besser delegieren' : 'Better Delegation', desc: de ? 'Aufgaben abgeben & Team stärken' : 'Delegate tasks & empower team' },
     { id: 'strategy', icon: Brain, label: de ? 'Strategischer denken' : 'Think Strategically', desc: de ? 'Bessere Entscheidungen treffen' : 'Make better decisions' },
-    { id: 'career', icon: TrendingUp, label: de ? 'Karriere beschleunigen' : 'Accelerate Career', desc: de ? 'Nächste Befoerderung vorbereiten' : 'Prepare next promotion' },
+    { id: 'career', icon: TrendingUp, label: de ? 'Karriere beschleunigen' : 'Accelerate Career', desc: de ? 'Nächste Beförderung vorbereiten' : 'Prepare next promotion' },
     { id: 'eq', icon: Sparkles, label: de ? 'EQ entwickeln' : 'Develop EQ', desc: de ? 'Emotionale Intelligenz stärken' : 'Strengthen emotional intelligence' },
   ];
 
@@ -76,20 +78,20 @@ export default function OnboardingPage() {
     2: `${firstName}, damit ich dich richtig coache, brauche ich Kontext. Wer bist du im Business?`,
     3: 'Verstanden. Und welche Rolle beschreibt dich am besten? Danach kalibriere ich mein Coaching.',
     4: roleLabel
-      ? `${roleLabel} — ich kenne deine Baustellen. Woran arbeiten wir zuerst?`
+      ? `${roleLabel}. Ich kenne deine Baustellen. Woran arbeiten wir zuerst?`
       : 'Woran arbeiten wir zuerst? Ein Fokus schlägt zehn Vorsätze.',
-    5: 'Kurz aus Neugier — wie hast du von uns gehört? Das hilft uns, mehr Leader wie dich zu finden.',
+    5: 'Kurz aus Neugier: wie hast du von uns gehört? Das hilft uns, mehr Leader wie dich zu finden.',
     6: 'Hast du schon eine Leader-Diagnose gemacht? Deine Scores machen mein Coaching von Tag 1 an präziser.',
-    7: 'Mein Tipp: 15 Minuten mit einem echten Coach — danach kennst du deinen schnellsten Weg. Kein Muss.',
+    7: 'Mein Tipp: 15 Minuten mit einem echten Coach, danach kennst du deinen schnellsten Weg. Kein Muss.',
   } : {
     2: `${firstName}, to coach you properly I need context. Who are you in business?`,
     3: 'Got it. Which role describes you best? I calibrate my coaching to it.',
     4: roleLabel
-      ? `${roleLabel} — I know your pain points. What do we tackle first?`
+      ? `${roleLabel}. I know your pain points. What do we tackle first?`
       : 'What do we tackle first? One focus beats ten resolutions.',
-    5: 'Quick curiosity — how did you hear about us? It helps us find more leaders like you.',
+    5: 'Quick curiosity: how did you hear about us? It helps us find more leaders like you.',
     6: 'Done a leader diagnosis yet? Your scores make my coaching sharper from day one.',
-    7: 'My tip: 15 minutes with a real coach — then you know your fastest path. No pressure.',
+    7: 'My tip: 15 minutes with a real coach, then you know your fastest path. No pressure.',
   };
 
   const finish = async () => {
@@ -175,19 +177,47 @@ export default function OnboardingPage() {
             </div>
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase text-[#6B8A00] dark:text-[#BFFF00] mb-1">
-                Wlad Jachtchenko · dein persönlicher Coach
+                WladBot · trainiert auf Wlad Jachtchenkos Material
               </p>
               <h1 className="text-3xl font-black tracking-tight">
-                {de ? `Hi ${firstName} — schön, dass du da bist.` : `Hi ${firstName} — glad you're here.`}
+                {de ? `Hi ${firstName}, schön, dass du da bist.` : `Hi ${firstName}, glad you're here.`}
               </h1>
               <p className="text-base text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
                 {de
-                  ? 'Ich bin dein persönlicher Leadership-Coach, trainiert auf Wlad Jachtchenkos komplementäre Methodik. Gib mir 60 Sekunden — dann kalibriere ich mich exakt auf dich.'
-                  : "I'm your personal leadership coach, trained on Wlad Jachtchenko's complementary methodology. Give me 60 seconds — I'll calibrate myself exactly to you."}
+                  ? 'Ich arbeite mit Wlad Jachtchenkos Material: seine Bücher, Kurse und Coachings. Damit ich dir konkret helfen kann, brauche ich ein paar kurze Angaben von dir.'
+                  : "I work from Wlad Jachtchenko's material: his books, courses and coaching sessions. To help you concretely, I need a few short answers from you."}
               </p>
               <div className="flex items-center justify-center gap-1.5 mt-3 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 {de ? 'Online · antwortet in Sekunden' : 'Online · replies in seconds'}
+              </div>
+            </div>
+            <div className="max-w-xl mx-auto" data-testid="onboarding-welcome-video">
+              <div className="relative aspect-video rounded-2xl overflow-hidden bg-black border border-black/[0.08] dark:border-white/[0.1] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
+                <video
+                  ref={videoRef}
+                  src={WLAD_WELCOME_VIDEO}
+                  className="w-full h-full object-contain bg-black"
+                  controls={videoStarted}
+                  playsInline
+                  preload="metadata"
+                  onPlay={() => setVideoStarted(true)}
+                />
+                {!videoStarted && (
+                  <button
+                    type="button"
+                    onClick={() => { videoRef.current?.play(); setVideoStarted(true); }}
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 bg-black/55 group"
+                    data-testid="onboarding-video-play"
+                  >
+                    <span className="w-14 h-14 rounded-full bg-[#BFFF00] flex items-center justify-center shadow-lg transition-transform group-hover:scale-105">
+                      <Play size={20} className="text-[#0A0A0A] ml-0.5" fill="#0A0A0A" />
+                    </span>
+                    <span className="text-[11px] font-bold text-white/90 tracking-wide">
+                      {de ? 'Wlad erklärt dir Leader-OS in 2 Minuten' : 'Wlad explains Leader-OS in 2 minutes'}
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
             <Button onClick={next} className="glow-lime btn-shine bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold px-8 h-12 shadow-lg shadow-[#BFFF00]/15" data-testid="onboarding-start-btn">
@@ -209,12 +239,12 @@ export default function OnboardingPage() {
                   {de ? 'Das ist kein gewöhnlicher ChatBot' : 'This is not an ordinary chatbot'}
                 </p>
                 <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-[1.08] animate-fade-in" style={{ letterSpacing: '-0.03em' }}>
-                  {de ? 'Wlad — immer an deiner Seite.' : 'Wlad — always by your side.'}
+                  {de ? 'Wlad. Immer an deiner Seite.' : 'Wlad. Always by your side.'}
                 </h2>
                 <p className="text-[13px] text-white/55 mt-2 max-w-md animate-fade-in" style={{ animationDelay: '100ms' }}>
                   {de
-                    ? 'Zum Weiterbilden, Reflektieren und Wachsen — mit Wlad Jachtchenkos komplementärer Methodik im Rücken.'
-                    : "To learn, reflect and grow — backed by Wlad Jachtchenko's complementary methodology."}
+                    ? 'Zum Weiterbilden, Reflektieren und Wachsen, auf Basis von Wlad Jachtchenkos Büchern, Kursen und Coaching-Praxis.'
+                    : "To learn, reflect and grow, based on Wlad Jachtchenko's books, courses and coaching practice."}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
@@ -222,7 +252,7 @@ export default function OnboardingPage() {
                     {
                       icon: BookOpen,
                       title: de ? 'Wlads gesamtes Wissen' : "Wlad's entire knowledge",
-                      desc: de ? 'Jede Antwort basiert auf Wlad Jachtchenkos Büchern, Vorträgen & Coaching-Praxis — in Sekunden bei dir.' : "Every answer draws on Wlad Jachtchenko's books, talks & coaching practice — with you in seconds.",
+                      desc: de ? 'Jede Antwort basiert auf Wlad Jachtchenkos Büchern, Vorträgen & Coaching-Praxis. In Sekunden bei dir.' : "Every answer draws on Wlad Jachtchenko's books, talks & coaching practice. With you in seconds.",
                     },
                     {
                       icon: Video,
@@ -232,11 +262,11 @@ export default function OnboardingPage() {
                     {
                       icon: Flame,
                       title: de ? 'Jeden Tag besser werden' : 'Get better every day',
-                      desc: de ? 'Challenges, Reflexions-Check-ins & dein persönlicher Wachstumspfad — kein Stillstand.' : 'Challenges, reflection check-ins & your personal growth path — no standing still.',
+                      desc: de ? 'Challenges, Reflexions-Check-ins & dein persönlicher Wachstumspfad. Kein Stillstand.' : 'Challenges, reflection check-ins & your personal growth path. No standing still.',
                     },
                     {
                       icon: Smartphone,
-                      title: de ? 'Immer dabei — auch mobil' : 'Always with you — mobile too',
+                      title: de ? 'Immer dabei, auch mobil' : 'Always with you, mobile too',
                       desc: de ? 'Desktop, Tablet oder Smartphone: Wlad ist da, wann und wo du ihn brauchst.' : "Desktop, tablet or phone: Wlad is there whenever and wherever you need him.",
                     },
                   ].map((f, i) => (
@@ -258,7 +288,7 @@ export default function OnboardingPage() {
                 {/* Trust & community strip */}
                 <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5 mt-5 pt-4 border-t border-white/[0.07]" data-testid="onboarding-trust-strip">
                   {[
-                    { icon: Shield, label: de ? 'DSGVO-konform — was mit deinen Daten passiert' : 'GDPR compliant — what happens with your data', href: '/datenschutz' },
+                    { icon: Shield, label: de ? 'DSGVO-konform: was mit deinen Daten passiert' : 'GDPR compliant: what happens with your data', href: '/datenschutz' },
                     { icon: Lock, label: de ? 'Sichere Zahlung (Stripe)' : 'Secure payments (Stripe)' },
                     { icon: Users, label: de ? 'Teil der Leader-Community' : 'Part of the leader community' },
                   ].map((t) => t.href ? (
@@ -478,8 +508,8 @@ export default function OnboardingPage() {
                     <p className="text-xs text-muted-foreground">{de ? 'Mit Wlads Head Coach · 1:1' : "With Wlad's Head Coach · 1:1"}</p>
                   </div>
                   <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {de ? 'Slots offen' : 'slots open'}
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    {de ? 'online buchbar' : 'book online'}
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 mb-4">
@@ -513,7 +543,7 @@ export default function OnboardingPage() {
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
                 data-testid="onboarding-skip-call-btn"
               >
-                {de ? 'Überspringen — ich starte direkt' : 'Skip — I want to start now'} →
+                {de ? 'Überspringen, ich starte direkt' : 'Skip, I want to start now'} →
               </button>
             </div>
           </div>
@@ -533,11 +563,11 @@ export default function OnboardingPage() {
               </span>
             </div>
             <div>
-              <h2 className="text-2xl font-black">{de ? `Ich bin jetzt für dich perfekt kalibriert, ${firstName}!` : `I'm now perfectly calibrated for you, ${firstName}!`}</h2>
+              <h2 className="text-2xl font-black">{de ? `Alles gespeichert, ${firstName}.` : `All saved, ${firstName}.`}</h2>
               <p className="text-base text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
                 {de
-                  ? 'Ab jetzt zeige ich dir jeden Tag die Richtung — mit Challenges, Feedback und Wlad Jachtchenkos komplementärer Methodik im Rücken.'
-                  : "From now on I'll show you the direction every day — with challenges, feedback and Wlad Jachtchenko's complementary methodology behind you."}
+                  ? 'Dein Dashboard ist auf deine Rolle und dein Ziel eingestellt. Du kannst das jederzeit im Profil ändern.'
+                  : 'Your dashboard is set up for your role and your goal. You can change this anytime in your profile.'}
               </p>
               {/* Personalized profile chips */}
               {(roleLabel || goalLabel) && (

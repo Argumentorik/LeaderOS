@@ -723,3 +723,13 @@
   - `api.js` vereinfacht (70 Z): 401 → `/auth/refresh` once, dann Redirect zu /login wenn fehlgeschlagen
   - `AuthContext.login(userData)` ohne Token-Param; `checkAuth()` ruft nur `/auth/me`
   - Verifiziert: curl + Playwright E2E — 0 Authorization-Header auf 40+ API-Calls, session_token Cookie httpOnly=true (`iteration_66.json`)
+
+- [x] **[Iter 134 · 2026-06 · GO-LIVE GATE] Kaufstrecke, Rechnung, Onboarding** — Wlad-Direktive: keine neuen Features, nur alles fixen, was einen echten Kunden am Kauf hindert.
+  - **Echte Stripe-Rechnung (Blocker behoben)**: `routes/payments.py` erstellt Checkout Sessions jetzt mit dem rohen Stripe-SDK statt dem generischen Wrapper. Neu: `invoice_creation.enabled=true` (Stripe erzeugt + mailt die Rechnung), echter Produktname statt "Payment", `billing_address_collection=required` (Pflicht für DE-Rechnung), Kunden-Dedupe über `Customer.list(email)` → keine doppelten Stripe-Kunden. Gilt für Standard-Checkout UND Ratenzahlung.
+  - **Status-Endpoint** liefert `package_name`, `tier`, `invoice_url`, `invoice_number`; Rechnungslinks werden in `payment_transactions` persistiert (`_attach_invoice_links`).
+  - **1-€-Livetest Release-Gate**: neue Admin-Endpoints `GET/POST/DELETE /api/admin/livetest/buyers` + Panel `components/admin/LiveTestPanel.js` (Aktivierungscode, Link, fertiger Anleitungstext zum Rausschicken, Liste aller 1-€-Transaktionen inkl. Rechnungsnummer). Gate: `is_admin OR livetest_buyer` (DB-Flag, keine claimbare E-Mail-Allowlist) + Code `WLAD-1EURO-2026`.
+  - **RAG-Vollständigkeit** (Wlad: "man sieht nicht, ob alles drin ist"): `GET /api/admin/rag/coverage` vergleicht die Quell-ZIP mit `rag_chunks` → 53/53 Dateien, 7.463 Chunks, keine Lücken. Button "Ist alles drin? (Bücher-Check)" im RAG Control Center.
+  - **Onboarding**: Wlads Begrüßungsvideo (MP4, H.264, Click-to-Play) direkt vor dem Start; kein Voice/TTS; AI-Slop-Copy entfernt ("komplementäre Methodik", "perfekt kalibriert", Fake-Scarcity "Slots offen", ae-Tippfehler); alle Gedankenstriche (—) aus sichtbarer Onboarding-Copy entfernt (Wlad: "AI-Slop-Strich"); Standard-Wlad-Foto überall.
+  - **PaymentSuccessPage**: Polling 20×3 s (statt 5×2 s) mit eigenem "wird noch verarbeitet"-Zustand statt Fehlmeldung; 404 → sofort klare Fehlerkarte mit "Zurück zum Kauf"; echte Rechnungsnummer + Stripe-Rechnungslink; Feature-Liste spiegelt jetzt TIER_CONFIG (keine falschen Versprechen wie "16 Video-Missionen" für Standard).
+  - **DashboardFirstTour** startet stumm (Voice nur auf Wunsch). **UsageFeedbackPrompt** erscheint nicht mehr auf /onboarding, /coaching, /payment-success (verdeckte CTAs).
+  - Tests: `backend/tests/test_iter134_golive.py` 7/7 PASS; Frontend-Report `test_reports/iteration_129.json`.

@@ -8,9 +8,7 @@ from pydantic import BaseModel, field_validator
 import uuid
 from datetime import datetime, timezone
 
-from emergentintegrations.payments.stripe.checkout import (
-    StripeCheckout, CheckoutSessionRequest, CheckoutSessionResponse, CheckoutStatusResponse
-)
+import stripe
 
 from config import db, STRIPE_API_KEY, logger
 from services import get_current_user, require_cron_auth
@@ -149,6 +147,101 @@ TEST_PACKAGES = {
     },
 }
 TEST_ACTIVATION_CODE = "WLAD-1EURO-2026"
+
+
+# ── Stripe session creation (raw SDK) ────────────────────────────────────────
+# Iter 134 (Go-Live): checkout sessions are built with the raw Stripe SDK so we
+# can guarantee three things the generic wrapper could not:
+#   1. invoice_creation → Stripe generates and EMAILS a real invoice/receipt.
+#   2. the real product name on the checkout page + invoice (was "Payment").
+#   3. one Stripe customer per email — no duplicates on repeat purchases.
+INVOICE_FOOTER = (
+    "Leader-OS · Argumentorik GmbH · Rechnung wird von Stripe im Auftrag "
+    "ausgestellt. Fragen zur Rechnung: support@leaderos.de"
+)
+
+
+def _configure_stripe():
+    stripe.api_key = STRIPE_API_KEY
+    if "sk_test_emergent" in (STRIPE_API_KEY or ""):
+        stripe.api_base = "https://integrations.emergentagent.com/stripe"
+    return stripe
+
+
+def _find_or_create_customer(email: str, name: str = "") -> str | None:
+    """Reuse the existing Stripe customer for this email — never create a duplicate."""
+    if not email:
+        return None
+    try:
+        found = stripe.Customer.list(email=email, limit=1).data
+        if found:
+            return found[0].id
+        return stripe.Customer.create(email=email, name=name or None).id
+    except Exception as e:
+        logger.warning(f"Stripe customer lookup failed for {email}: {e}")
+        return None
+
+
+def _create_stripe_session(*, amount: float, currency: str, product_name: str,
+                           description: str, success_url: str, cancel_url: str,
+                           metadata: dict, email: str, name: str = ""):
+    """Create a Checkout Session that produces a real, emailed Stripe invoice."""
+    _configure_stripe()
+    params = {
+        "payment_method_types": ["card"],
+        "mode": "payment",
+        "line_items": [{
+            "price_data": {
+                "currency": currency,
+                "unit_amount": int(round(amount * 100)),
+                "product_data": {
+                    "name": product_name,
+                    "description": (description or product_name)[:250],
+                },
+            },
+            "quantity": 1,
+        }],
+        "success_url": success_url,
+        "cancel_url": cancel_url,
+        "metadata": metadata,
+        # A German invoice needs the full billing address of the buyer.
+        "billing_address_collection": "required",
+        "invoice_creation": {
+            "enabled": True,
+            "invoice_data": {
+                "description": product_name,
+                "metadata": metadata,
+                "footer": INVOICE_FOOTER,
+            },
+        },
+    }
+    customer_id = _find_or_create_customer(email, name)
+    if customer_id:
+        params["customer"] = customer_id
+        params["customer_update"] = {"address": "auto", "name": "auto"}
+    elif email:
+        params["customer_email"] = email
+    return stripe.checkout.Session.create(**params)
+
+
+async def _attach_invoice_links(session_id: str, session_obj) -> dict:
+    """Resolve the Stripe invoice for a paid session and persist its links."""
+    invoice_id = getattr(session_obj, "invoice", None)
+    if not invoice_id:
+        return {}
+    try:
+        inv = stripe.Invoice.retrieve(invoice_id)
+        links = {
+            "invoice_id": inv.id,
+            "invoice_number": getattr(inv, "number", None),
+            "invoice_url": getattr(inv, "hosted_invoice_url", None),
+            "invoice_pdf": getattr(inv, "invoice_pdf", None),
+        }
+        await db.payment_transactions.update_one({"session_id": session_id}, {"$set": links})
+        return links
+    except Exception as e:
+        logger.warning(f"Invoice lookup failed for session {session_id}: {e}")
+        return {}
 
 
 async def _activate_from_package(user_id: str, package_id: str):
@@ -310,7 +403,9 @@ async def create_checkout(data: CheckoutRequest, request: Request):
     if data.package_id in TEST_PACKAGES:
         if (data.discount_code or "").strip().upper() != TEST_ACTIVATION_CODE:
             raise HTTPException(status_code=403, detail="Ungültiger Aktivierungscode")
-        if not user.get("is_admin"):
+        # Admins always; employees only after an admin flagged them in the
+        # admin dashboard (trusted DB flag, never a claimable email allowlist).
+        if not (user.get("is_admin") or user.get("livetest_buyer")):
             raise HTTPException(status_code=403, detail="Nicht freigeschaltet für den Livetest")
 
     # Discount codes — currently single hardcoded "WLAD10" earned via the
@@ -330,14 +425,12 @@ async def create_checkout(data: CheckoutRequest, request: Request):
     success_url = f"{origin}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{origin}/coaching"
 
-    webhook_url = f"{str(request.base_url).rstrip('/')}/api/webhook/stripe"
-
     try:
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-
-        checkout_request = CheckoutSessionRequest(
+        session = _create_stripe_session(
             amount=final_amount,
             currency=package["currency"],
+            product_name=package["name"],
+            description=package.get("description", ""),
             success_url=success_url,
             cancel_url=cancel_url,
             metadata={
@@ -348,12 +441,12 @@ async def create_checkout(data: CheckoutRequest, request: Request):
                 "discount_code": data.discount_code or "",
                 "discount_pct": str(discount_pct),
                 "original_amount": str(package["amount"]),
-            }
+            },
+            email=user.get("email", ""),
+            name=user.get("name", ""),
         )
 
-        session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
-
-        await _record_pending_transaction(session.session_id, user, data.package_id, package)
+        await _record_pending_transaction(session.id, user, data.package_id, package)
         if discount_pct:
             # Mark this user as having redeemed the bribe — A/B analytics
             await db.ab_events.insert_one({
@@ -365,8 +458,8 @@ async def create_checkout(data: CheckoutRequest, request: Request):
                          "final_amount": final_amount},
                 "ts": datetime.now(timezone.utc).isoformat(),
             })
-        logger.info(f"Checkout session created: {session.session_id} for user {user['user_id']} ({package['name']}, discount={discount_pct*100:.0f}%)")
-        return {"url": session.url, "session_id": session.session_id, "discounted_amount": final_amount}
+        logger.info(f"Checkout session created: {session.id} for user {user['user_id']} ({package['name']}, discount={discount_pct*100:.0f}%)")
+        return {"url": session.url, "session_id": session.id, "discounted_amount": final_amount}
 
     except Exception as e:
         logger.error(f"Stripe checkout error: {e}")
@@ -392,22 +485,26 @@ async def get_checkout_status(session_id: str, request: Request):
             "amount": tx["amount"],
             "currency": tx["currency"],
             "package_id": tx.get("package_id"),
+            "package_name": tx.get("package_name"),
+            "tier": tx.get("tier"),
+            "invoice_url": tx.get("invoice_url"),
+            "invoice_number": tx.get("invoice_number"),
         }
 
     try:
-        webhook_url = f"{str(request.base_url).rstrip('/')}/api/webhook/stripe"
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+        _configure_stripe()
+        session = stripe.checkout.Session.retrieve(session_id)
 
         # Update transaction
         update = {
-            "payment_status": status.payment_status,
-            "status": status.status,
+            "payment_status": session.payment_status,
+            "status": session.status,
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }
 
-        if status.payment_status == "paid" and tx.get("payment_status") != "paid":
+        if session.payment_status == "paid" and tx.get("payment_status") != "paid":
             update["paid_at"] = datetime.now(timezone.utc).isoformat()
+            update["stripe_payment_intent_id"] = getattr(session, "payment_intent", None)
             if tx.get("billing") == "installment_followup":
                 await _handle_installment_payment(user["user_id"], tx.get("installment_num", 1))
             else:
@@ -418,12 +515,18 @@ async def get_checkout_status(session_id: str, request: Request):
             {"$set": update}
         )
 
+        invoice = await _attach_invoice_links(session_id, session) if session.payment_status == "paid" else {}
+
         return {
-            "status": status.status,
-            "payment_status": status.payment_status,
-            "amount": status.amount_total / 100,  # cents to euros
-            "currency": status.currency,
+            "status": session.status,
+            "payment_status": session.payment_status,
+            "amount": (session.amount_total or 0) / 100,  # cents to euros
+            "currency": session.currency,
             "package_id": tx.get("package_id"),
+            "package_name": tx.get("package_name"),
+            "tier": tx.get("tier"),
+            "invoice_url": invoice.get("invoice_url"),
+            "invoice_number": invoice.get("invoice_number"),
         }
 
     except Exception as e:
@@ -495,29 +598,32 @@ async def _create_installment_checkout(user: dict, origin: str, base_url: str, p
     installment_num = plan.get("installments_paid", 0) + 1
     success_url = f"{origin.rstrip('/')}/payment-success?session_id={{CHECKOUT_SESSION_ID}}&installment={installment_num}"
     cancel_url = f"{origin.rstrip('/')}/coaching"
-    webhook_url = f"{base_url.rstrip('/')}/api/webhook/stripe"
 
-    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     plan_id = plan.get("plan_id", "leadership_os_12x")
-    checkout_request = CheckoutSessionRequest(
+    total = plan.get("installments_total", 12)
+    product_name = f"Leadership OS · Rate {installment_num}/{total}"
+    session = _create_stripe_session(
         amount=amount, currency="eur",
+        product_name=product_name,
+        description=f"Ratenzahlung Leadership OS — Rate {installment_num} von {total}",
         success_url=success_url, cancel_url=cancel_url,
         metadata={
             "user_id": user["user_id"], "user_email": user.get("email", ""),
             "package_id": f"{plan_id}_followup",
             "installment_num": str(installment_num),
-            "installments_total": str(plan.get("installments_total", 12)),
+            "installments_total": str(total),
         },
+        email=user.get("email", ""),
+        name=user.get("name", ""),
     )
-    session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
 
     await db.payment_transactions.insert_one({
         "transaction_id": f"tx_{uuid.uuid4().hex[:12]}",
-        "session_id": session.session_id,
+        "session_id": session.id,
         "user_id": user["user_id"],
         "user_email": user.get("email", ""),
         "package_id": f"{plan_id}_followup",
-        "package_name": f"Leadership OS Rate {installment_num}/{plan.get('installments_total', 12)}",
+        "package_name": product_name,
         "tier": "standard",
         "billing": "installment_followup",
         "installment_num": installment_num,
@@ -527,7 +633,54 @@ async def _create_installment_checkout(user: dict, origin: str, base_url: str, p
         "status": "initiated",
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    return {"url": session.url, "session_id": session.session_id, "installment_num": installment_num, "amount": amount}
+    return {"url": session.url, "session_id": session.id, "installment_num": installment_num, "amount": amount}
+
+
+# ── 1€-Livetest freischalten (Admin) ─────────────────────────────────────────
+# Iter 134: Mitarbeiter sollen den echten Kauf-Flow live durchlaufen können,
+# ohne Admin-Rechte zu bekommen. Admin setzt hier ein Flag am User-Record.
+
+class LiveTestBuyer(BaseModel):
+    email: str
+
+
+@router.get("/admin/livetest/buyers")
+async def list_livetest_buyers(request: Request):
+    from routes.admin import require_admin
+    await require_admin(request)
+    users = await db.users.find(
+        {"livetest_buyer": True},
+        {"_id": 0, "email": 1, "name": 1, "user_id": 1, "tier": 1},
+    ).to_list(200)
+    txs = await db.payment_transactions.find(
+        {"package_id": {"$in": list(TEST_PACKAGES.keys())}}, {"_id": 0},
+    ).sort("created_at", -1).to_list(50)
+    return {
+        "buyers": users,
+        "activation_code": TEST_ACTIVATION_CODE,
+        "test_package_id": list(TEST_PACKAGES.keys())[0],
+        "transactions": txs,
+    }
+
+
+@router.post("/admin/livetest/buyers")
+async def add_livetest_buyer(data: LiveTestBuyer, request: Request):
+    from routes.admin import require_admin
+    await require_admin(request)
+    email = data.email.strip().lower()
+    res = await db.users.update_one({"email": email}, {"$set": {"livetest_buyer": True}})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail=f"Kein Account mit {email} — erst Account anlegen/registrieren.")
+    logger.info(f"Livetest buyer enabled: {email}")
+    return {"enabled": True, "email": email, "activation_code": TEST_ACTIVATION_CODE}
+
+
+@router.delete("/admin/livetest/buyers/{email}")
+async def remove_livetest_buyer(email: str, request: Request):
+    from routes.admin import require_admin
+    await require_admin(request)
+    await db.users.update_one({"email": email.strip().lower()}, {"$unset": {"livetest_buyer": ""}})
+    return {"removed": True, "email": email}
 
 
 @router.post("/payments/installment/next")

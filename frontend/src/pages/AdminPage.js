@@ -20,6 +20,7 @@ import { LearningVideosManager } from '../components/admin/LearningVideosManager
 import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
 import { MasterclassClientsManager } from '../components/admin/MasterclassClientsManager';
 import { ConversionCenter } from '../components/admin/ConversionCenter';
+import { LiveTestPanel } from '../components/admin/LiveTestPanel';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -380,6 +381,21 @@ export default function AdminPage() {
             </p>
           </div>
           <LicenseKeysManager de={de} />
+        </div>
+
+        {/* 1€ live test — the release gate before going live (Iter 134) */}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? '1-€-Livetest · Release-Gate' : '€1 Live Test · Release Gate'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Schalte Kolleg:innen für den 1-€-Kauf frei und schick ihnen den fertigen Ablauf. Sie starten bei null, zahlen 1 € über den echten Stripe-Checkout, bekommen die Stripe-Rechnung per Mail und den vollen Zugang — ohne dass wir irgendwas in der Datenbank anfassen.'
+                : 'Unlock colleagues for the €1 purchase and send them the ready-made steps. They start from zero, pay €1 through the real Stripe checkout, receive the Stripe invoice by email and full access — without us touching the database.'}
+            </p>
+          </div>
+          <LiveTestPanel de={de} />
         </div>
       </div>
     </DashboardLayout>

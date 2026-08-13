@@ -1,0 +1,46 @@
+{
+  "summary": "Iter 129 — Go-Live frontend verification of the €1 employee-test money path. All 9 onboarding steps (text-only, no TTS/mic/audio controls, real Wlad photo 500×500) work on 1920×1080 AND 390×844 — no overflow, all CTAs reachable, finish lands on /dashboard. LiveTestPanel (data-testid=livetest-panel) fully functional on /wlad-control-x7k9q2 — copy-code / copy-link / copy-instructions clicks OK, add existing test@test.com → success toast + buyers list, trash icon removes it, non-existent email → 'Kein Account mit …' error toast, 1-€-Transaktionen list renders. RAG coverage button returns 'Vollständig · 53/53 Dateien · 7.463 Chunks' within polling window. /coaching?code=WLAD-1EURO-2026 shows 'Für 1 € aktivieren' button; click redirects to checkout.stripe.com/c/pay/cs_live_… with product name 'Leadership OS · Live-Test (1€)' and amount €1,00 (Stripe also displays US$1.20 as base currency because the merchant account is USD — informational). Normal (non-code) /coaching CTAs also present. /payment-success without session_id shows clean error card with data-testid=payment-retry-btn → 'Zurück zum Kauf' navigates to /coaching. Session survives hard-refresh on /dashboard, logout→login works. No console errors on the money path (only ignorable 401 on /auth/refresh and 3rd-party posthog/px-cloud noise).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "DashboardFirstTour.js", "issue": "First-time dashboard walk-through uses browser SpeechSynthesis (TTS) and shows a 🔊 speaker icon / Volume2-VolumeX toggle at '1 / 12'. This tour fires immediately AFTER onboarding on the /dashboard and is effectively part of the first-run experience the owner asked to be text-only. Requirement: 'Onboarding must be TEXT ONLY — absolutely no voice/TTS'. Recommend either (a) removing the SpeechSynthesis code + the volume icon entirely, or (b) at minimum making the tour muted by default and hiding the audio UI. File explicitly documents the TTS behaviour in its docstring (lines 15-17) and imports Volume2/VolumeX.", "selector": "[data-testid='dashboard-first-tour']", "priority": "HIGH"},
+      {"component": "DashboardFirstTour.js", "issue": "Its full-viewport backdrop (<div class='fixed inset-0 z-[9999]'>) intercepts pointer events — blocks all sidebar / dashboard interactions until dismissed. First-time users literally cannot click 'Abmelden' or any nav link before completing/closing the tour. Confirmed by 30s Playwright timeout on the logout link.", "selector": "[data-testid='dashboard-first-tour']", "priority": "MEDIUM"},
+      {"component": "PaymentSuccessPage.js", "issue": "For /payment-success?session_id=<invalid> the frontend polls /api/payments/checkout/status/{id} which returns 404. After 20 failed attempts (60s) the code sets status='pending' (payment-pending-card + 'Neu laden'). It NEVER renders payment-retry-btn for invalid/non-existent sessions — only for the no-session-id path or a backend-declared status:'expired'. Task expected 'clean error card with payment-retry-btn' also for invalid session IDs. Suggested fix: treat repeated 404s as 'error' (not 'pending') after N attempts, so the retry button + 'Zurück zum Kauf' surfaces.", "selector": "[data-testid='payment-retry-btn']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "Stripe checkout base currency", "issue": "The Stripe Checkout page shows 'US$1.20' as the primary 'Payment currency' with '€1.00' underneath and 'includes 4% conversion fee' disclosure. The merchant Stripe account appears to be USD-based, so EUR line items are shown as converted USD. This is not a bug per se but customer-facing perception risk (buyer sees $1.20 charge, not €1). Owner should confirm this is intended for a German product.", "affected_selectors": ["checkout.stripe.com"]}
+    ],
+    "design_issues": [
+      {"screen": "OnboardingPage step 5 ('Wie hast du von uns gehört')", "issues": ["A svg.lucide-mic icon is used for the 'Podcast' source label — this is decorative only (not a voice control) and semantically correct for 'podcast', so leave as-is; documenting for the auditor because the automated audio-scan flagged it."]},
+      {"screen": "OnboardingPage step 1 ('Video-Feedback wie im 1:1')", "issues": ["Copy 'Rede aufnehmen → präzises Feedback' describes the paid Video-Analyse feature. It's a feature description, not a voice UI. No action needed."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/onb_step0.jpg",
+    "/app/test_reports/onb_step8.jpg",
+    "/app/test_reports/onb_m0.jpg",
+    "/app/test_reports/onb_m8.jpg",
+    "/app/test_reports/livetest_panel.jpg",
+    "/app/test_reports/ps_no_session.jpg",
+    "/app/test_reports/ps_invalid_session.jpg"
+  ],
+  "action_items": [
+    "Remove browser SpeechSynthesis + Volume2/VolumeX toggle from DashboardFirstTour.js (or default-mute and hide the audio UI) — owner explicitly banned voice/TTS in the first-run experience.",
+    "Make sure the DashboardFirstTour backdrop is dismissable / non-blocking BEFORE the user clicks 'Weiter' — currently intercepts all pointer events including logout.",
+    "In PaymentSuccessPage.js: treat sustained 404 from /api/payments/checkout/status/{id} as terminal error → surface payment-retry-btn, not the pending card. Right now invalid/expired-but-404 sessions leave the user on an infinite 'Zahlung wird noch verarbeitet' state.",
+    "Optional: confirm with the owner that Stripe Checkout displaying 'US$1.20' as primary currency (with €1.00 under it) is acceptable for German buyers, or reconfigure the Stripe account to EUR-native so buyers only see € on the hosted page."
+  ],
+  "critical_code_review_comments": [
+    "DashboardFirstTour.js (404 lines) directly calls window.speechSynthesis — hard to disable centrally. Consider hoisting into a hook or a feature flag so 'voice-off' can be one-line-toggled for launch.",
+    "PaymentSuccessPage.js conflates 'network error' with 'still processing' — after 20 attempts of ANY failure it says 'pending'. Distinguish HTTP 404 (session never existed) from network / 5xx errors.",
+    "PaymentSuccessPage.js emits noisy console.warn on every failed poll (visible as red errors in DevTools since the logger uses console.error/warn depending on level). Owner said 'no console-breaking errors'; these are warnings but they spam the console."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (per instructions)", "frontend": "≈90% — onboarding, admin livetest, RAG, 1€ Stripe redirect, session/logout, mobile all pass; DashboardFirstTour TTS+overlay and invalid-session payment-success flow are the two open issues"},
+  "test_credentials": "test@test.com / test123 (admin-flagged free tier). Activation code WLAD-1EURO-2026 works.",
+  "seed_data_creation": "Added TEST_ / test@test.com entry to livetest buyers list and removed it via trash. Also attempted 'notreal_TEST_9999@example.invalid' which was correctly rejected. No lingering seed data.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Real admin route is /wlad-control-x7k9q2 (NOT /admin — /admin redirects/404s). Set localStorage.setItem('leaderos_tour_v1_done','1') BEFORE navigating to any authed page or the DashboardFirstTour overlay will block all clicks (30s timeout on Abmelden without this). Onboarding step CTA data-testids: onboarding-start-btn (step0), onboarding-features-next (step1), onboarding-profile-next (step2), role-<id> / goal-<id> / heard-<id> (steps 3-5, auto-advance on click), skip-wladhub-btn or save-wladhub-btn (step6), onboarding-skip-call-btn or onboarding-book-call-btn (step7), finish-onboarding-btn (step8). Stripe is on a LIVE account with USD base currency — do not complete any checkout. Backend RAG coverage endpoint returns within ~5-15s in this env, not the full 60s.",
+  "rca of the issue": "DashboardFirstTour was intentionally added as a Godmode 'coach mark' walkthrough (Iter 131.3 per its docstring) with SpeechSynthesis 'because it's free and offline'. That predates the go-live directive that banned voice from the first-run flow, so it wasn't caught. PaymentSuccessPage's 'pending' fallback was designed for slow-settling real card payments, not for cs_test_invalid_XXX which the backend correctly 404s — the code path just doesn't discriminate 404 from network flake."
+}

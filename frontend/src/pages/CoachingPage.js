@@ -18,6 +18,7 @@ import {
 } from '../components/coaching/ConversionSections';
 import api from '../lib/api';
 import logger from '../lib/logger';
+import { toast } from 'sonner';
 import { openStrategyCall } from '../lib/calendly';
 import { MasterclassAccessCard } from '../components/coaching/MasterclassAccessCard';
 import {
@@ -55,7 +56,7 @@ export default function CoachingPage() {
       if (res.data.url) window.location.href = res.data.url;
     } catch (err) {
       logger.error('Checkout error:', err);
-      alert(de ? 'Checkout fehlgeschlagen. Bitte versuche es erneut.' : 'Checkout failed. Please try again.');
+      toast.error(err?.response?.data?.detail || (de ? 'Checkout fehlgeschlagen. Bitte versuche es erneut.' : 'Checkout failed. Please try again.'));
     } finally { setCheckoutLoading(false); }
   }, [de]);
 
@@ -133,7 +134,7 @@ export default function CoachingPage() {
                   className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-12 px-6 shadow-lg shadow-[#BFFF00]/20"
                   data-testid="hero-primary-cta"
                 >
-                  {de ? 'Starte deine Leadership-Journey' : 'Start My Leadership Journey'}
+                  {de ? 'Coaching starten' : 'Start coaching'}
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
                 <Button

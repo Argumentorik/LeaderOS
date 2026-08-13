@@ -135,7 +135,9 @@ const TOUR_STEPS = [
 export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone }) => {
   const [open, setOpen] = useState(false);
   const [stepIdx, setStepIdx] = useState(0);
-  const [muted, setMuted] = useState(false);
+  // Iter 134 (Go-Live · Wlad-Direktive "kein Voice im Onboarding"):
+  // the tour starts silent. Ton nur, wenn der User es selbst einschaltet.
+  const [muted, setMuted] = useState(true);
   const [rect, setRect] = useState(null);
   const utterRef = useRef(null);
 

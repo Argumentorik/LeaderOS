@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Database, RefreshCw, ShieldCheck, CheckCircle2, XCircle, Loader2, Zap } from 'lucide-react';
+import { Database, RefreshCw, ShieldCheck, CheckCircle2, XCircle, Loader2, Zap, Library } from 'lucide-react';
 import { KnowledgeSources } from './KnowledgeSources';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -18,6 +18,8 @@ export const RagControlCenter = ({ de = true }) => {
   const [ingesting, setIngesting] = useState(false);
   const [golden, setGolden] = useState(null);
   const [goldenRunning, setGoldenRunning] = useState(false);
+  const [coverage, setCoverage] = useState(null);
+  const [coverageRunning, setCoverageRunning] = useState(false);
   const pollRef = useRef(null);
 
   const loadStatus = useCallback(async () => {
@@ -66,6 +68,20 @@ export const RagControlCenter = ({ de = true }) => {
     }
   };
 
+  const runCoverage = async () => {
+    setCoverageRunning(true);
+    setCoverage(null);
+    try {
+      const body = zipUrl.trim() ? { params: { zip_url: zipUrl.trim() } } : {};
+      const res = await api.get('/admin/rag/coverage', body);
+      setCoverage(res.data);
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || (de ? 'Vollständigkeits-Check fehlgeschlagen' : 'Coverage check failed'));
+    } finally {
+      setCoverageRunning(false);
+    }
+  };
+
   const job = status?.last_job;
 
   return (
@@ -89,6 +105,10 @@ export const RagControlCenter = ({ de = true }) => {
           <div className="flex items-center gap-2 flex-wrap">
             <Button variant="outline" size="sm" onClick={loadStatus} className="h-9 text-xs gap-1.5" data-testid="rag-refresh-btn">
               <RefreshCw size={13} /> {de ? 'Aktualisieren' : 'Refresh'}
+            </Button>
+            <Button size="sm" onClick={runCoverage} disabled={coverageRunning} className="h-9 text-xs gap-1.5 bg-[#0A0A0A] text-white hover:bg-[#222]" data-testid="rag-coverage-btn">
+              {coverageRunning ? <Loader2 size={13} className="animate-spin" /> : <Library size={13} className="text-[#BFFF00]" />}
+              {de ? 'Ist alles drin? (Bücher-Check)' : 'Is everything in? (library check)'}
             </Button>
             <Button size="sm" onClick={runGolden} disabled={goldenRunning} className="h-9 text-xs gap-1.5 bg-[#0A0A0A] text-white hover:bg-[#222]" data-testid="rag-golden-btn">
               {goldenRunning ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} className="text-[#BFFF00]" />}
@@ -132,6 +152,42 @@ export const RagControlCenter = ({ de = true }) => {
 
         {/* Editable knowledge corpus (Iter 119 · Enterprise) */}
         <KnowledgeSources de={de} onChanged={loadStatus} />
+
+        {/* Corpus completeness — "is Wlad's whole library really in there?" */}
+        {coverage && (
+          <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] p-3 space-y-2" data-testid="rag-coverage-results">
+            <p className={`text-xs font-black ${coverage.complete ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`} data-testid="rag-coverage-headline">
+              {coverage.complete
+                ? (de ? 'Vollständig' : 'Complete')
+                : (de ? 'Lücken gefunden' : 'Gaps found')} · {coverage.ingested_files}/{coverage.expected_files} {de ? 'Dateien' : 'files'} · {(coverage.total_chunks || 0).toLocaleString('de-DE')} Chunks
+            </p>
+            {(coverage.missing || []).length > 0 && (
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-rose-500">{de ? 'Fehlt in der Wissensbasis' : 'Missing from knowledge base'}</p>
+                {coverage.missing.map((m) => (
+                  <div key={m.source_file} className="flex items-start gap-2 text-[11px] text-rose-500">
+                    <XCircle size={13} className="shrink-0 mt-0.5" /> <span>{m.display_title || m.source_file}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {(coverage.thin || []).length > 0 && (
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600">{de ? 'Auffällig wenig Inhalt' : 'Suspiciously little content'}</p>
+                {coverage.thin.map((t) => (
+                  <p key={t.source_file} className="text-[11px] text-amber-600">{t.source_file} <span className="opacity-70">({t.chunks} Chunks)</span></p>
+                ))}
+              </div>
+            )}
+            {coverage.complete && (
+              <p className="text-[10px] text-muted-foreground">
+                {de
+                  ? 'Jede Datei aus Wlads Quell-Bibliothek ist eingelesen und mit Chunks im Vector Store vertreten.'
+                  : "Every file from Wlad's source library is ingested and represented in the vector store."}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Golden results */}
         {golden && (

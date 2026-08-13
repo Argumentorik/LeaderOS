@@ -514,3 +514,24 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 - Iter 60: Frontend 8/8 · Backend 10/12 → 2 Bugs gefixt (community_post activity_log + LEVEL_META)
 - Iter 59: 14/14 backend pytest PASS · 100% frontend regression
 - Iter 58: Frontend 9/9 · Backend 8/11 (Spec-Naming-Mismatches)
+
+## Iter 134 · 2026-06 — GO-LIVE GATE (Status)
+**Direktive Wlad**: keine neuen Features, kein Redesign. Nur alles fixen, was einen echten Kunden am Kauf hindert. Das 1-€-Mitarbeiter-Geschäft ist das finale Release-Gate.
+
+**Erledigt & getestet** (Details im CHANGELOG):
+- Stripe-Rechnung per E-Mail (`invoice_creation`), echter Produktname, Pflicht-Rechnungsadresse, Kunden-Dedupe — Standard-Checkout + Ratenzahlung.
+- Status-Endpoint mit `package_name`/`tier`/`invoice_url`/`invoice_number`; PaymentSuccessPage robust (20×3 s, eigener "wird verarbeitet"-State, 404 → klare Fehlerkarte, echte Feature-Liste statt Falschversprechen).
+- Admin "1-€-Livetest · Release-Gate": Mitarbeiter freischalten (`livetest_buyer`-Flag), Code + Link + fertiger Anleitungstext, Transaktionsliste mit Rechnungsnummer.
+- RAG-Vollständigkeit sichtbar: 53/53 Dateien, 7.463 Chunks (`/api/admin/rag/coverage`).
+- Onboarding: Wlad-Video vor dem Start, kein Voice, AI-Slop-Copy + Gedankenstriche entfernt, Standard-Wlad-Foto, Mobile + Desktop geprüft.
+
+**Offene MANUELLE Schritte (nur Wlad/Mert können das)**
+1. Stripe-Dashboard (LIVE): Einstellungen → Kunden-E-Mails → "Erfolgreiche Zahlungen"/Rechnungen aktivieren, damit die Rechnung wirklich rausgeht.
+2. Optional: Stripe "Adaptive Pricing" prüfen (US-Besucher sahen im Test US$1,20 statt 1,00 € inkl. 4 % Umrechnungshinweis; Account selbst ist DE/EUR).
+3. Echten 1-€-Kauf durch Mitarbeiter durchführen (Preview-Backend nutzt bereits den sk_live-Key).
+
+**Backlog nach dem Go-Live** (Reihenfolge von Wlad bestätigt)
+- P1: E-Mail-Click-/Open-Tracking pro Sequenz-Mail im Conversion Center (wer trainiert wie) — Wlad: "c. ist clever".
+- P1: Kunden-Learnings nach Launch systematisch in Produktverbesserungen überführen.
+- P2: Checkout-Reminder nach 24 h für Abbrecher (Segment G).
+- P3: Meeting-Mode (Swipe-Flashcards), P4: Voice-Sparring reaktivieren, ElevenLabs-Tour-Stimme.

@@ -6,6 +6,7 @@
  * Support stays reachable via the FAQ & Support section.
  */
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { X, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { useCredits } from '../../contexts/CreditContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -13,10 +14,13 @@ import { reportFeedback } from '../../lib/telemetry';
 
 const DONE_KEY = 'leaderos:usage-feedback-done';
 const USAGE_THRESHOLD = 30;
+// Never cover a CTA on the onboarding / purchase path (Iter 134, Go-Live).
+const MUTED_PATHS = ['/onboarding', '/coaching', '/payment-success'];
 
 export function UsageFeedbackPrompt() {
   const { totalUsed, isPremium } = useCredits();
   const { user } = useAuth();
+  const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [message, setMessage] = useState('');
@@ -52,7 +56,7 @@ export function UsageFeedbackPrompt() {
     }
   };
 
-  if (!visible) return null;
+  if (!visible || MUTED_PATHS.some(p => pathname.startsWith(p))) return null;
 
   return (
     <div
@@ -70,7 +74,7 @@ export function UsageFeedbackPrompt() {
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#BFFF00]">Support · Direktkontakt</p>
-                <p className="text-[13px] font-bold text-white mt-0.5">Du nutzt Leader-OS aktiv — was sollen wir besser machen?</p>
+                <p className="text-[13px] font-bold text-white mt-0.5">Du nutzt Leader-OS aktiv. Was sollen wir besser machen?</p>
               </div>
               <button onClick={dismiss} className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 shrink-0" data-testid="usage-feedback-dismiss" aria-label="Schließen">
                 <X size={14} />
