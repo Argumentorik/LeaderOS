@@ -79,8 +79,8 @@ export const BillingSection = ({ de }) => {
                 </p>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   {de
-                    ? '24/7 KI-Coach · 16 Video-Missionen · 1:1 Coaching · 500 Credits/Monat'
-                    : '24/7 AI Coach · 16 Video Missions · 1:1 Coaching · 500 Credits/month'}
+                    ? '24/7 KI-Coach · 30-Tage-Challenge · 12 Videokurse · Playbooks & Simulationen'
+                    : '24/7 AI coach · 30-day challenge · 12 video courses · playbooks & simulations'}
                 </p>
               </div>
             </div>

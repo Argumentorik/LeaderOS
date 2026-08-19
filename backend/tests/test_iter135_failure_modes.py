@@ -3,7 +3,10 @@
 Covers: RAG unavailable · embedding failure · cache invalidation ·
 leadercheck.de unreachable · malformed payload · duplicate sync · re-take.
 
-Run: cd /app/backend && python3 -m pytest tests/test_iter135_failure_modes.py -q
+Run STANDALONE (own process): cd /app/backend && python3 -m pytest tests/test_iter135_failure_modes.py -q
+
+Note: these tests drive motor directly through one shared event loop, so they
+must not share a pytest process with other DB-touching sync-style modules.
 """
 import asyncio
 
@@ -11,11 +14,7 @@ import services_rag
 import services_wladhub_autosync as autosync
 from config import db
 
-# One shared event loop: motor's client binds to the loop it first runs on,
-# so asyncio.run() per test would break it.
-LOOP = asyncio.new_event_loop()
-asyncio.set_event_loop(LOOP)
-run = LOOP.run_until_complete
+from tests._loop import run  # shared loop (motor binds to the first one)
 
 
 def _cleanup(user_id):

@@ -435,6 +435,7 @@ async def get_user_memory(user_id: str) -> str:
         return ""
 
     parts = [_build_profile_section(user)]
+    parts.append(_build_about_me_section(user))
     parts.append(_build_company_context(user))
     parts.append(await _build_checkins_section(user_id))
     parts.append(await _build_sims_section(user_id))
@@ -448,6 +449,20 @@ async def get_user_memory(user_id: str) -> str:
         parts.append(f"\nPREMIUM USER: Ja ({user.get('premium_package', 'aktiv')})\n")
 
     return "".join(parts)
+
+
+def _build_about_me_section(user: dict) -> str:
+    """Iter 136 (Wlad): the user's own free-text context — the single most
+    valuable input for personalised feedback. Goes into EVERY AI workflow that
+    uses get_user_memory (chat, video analysis, voice)."""
+    about = (user.get("about_me") or "").strip()
+    if not about:
+        return ""
+    return (
+        "\nÜBER MICH (vom User selbst geschrieben — höchste Priorität für "
+        "Personalisierung; beziehe dich konkret darauf, statt allgemein zu "
+        f"antworten):\n{about[:6000]}\n"
+    )
 
 
 def _build_profile_section(user: dict) -> str:

@@ -182,6 +182,7 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
     name: profile.name || '', position: profile.position || '',
     company: profile.company || '', industry: profile.industry || '',
     bio: profile.bio || '', linkedin_url: profile.linkedin_url || '',
+    about_me: profile.about_me || '',
   });
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
   return (
@@ -194,6 +195,37 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
       </div>
       <Input placeholder="LinkedIn URL" value={form.linkedin_url} onChange={e => update('linkedin_url', e.target.value)} data-testid="profile-edit-linkedin" />
       <Textarea placeholder="Bio / Leadership-Motto" rows={3} value={form.bio} onChange={e => update('bio', e.target.value)} data-testid="profile-edit-bio" />
+
+      {/* Über mich — der wichtigste Input für persönliches Feedback (Iter 136) */}
+      <div className="rounded-2xl border border-[#BFFF00]/25 bg-[#BFFF00]/[0.04] p-4 space-y-2">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-black">Über mich</p>
+          <span className="text-[10px] font-bold text-muted-foreground">
+            {form.about_me.length}/6000
+          </span>
+        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Alles, was WladBot über dich wissen sollte, um dir konkret statt allgemein zu antworten:
+          Position und Verantwortung, Team und Umfeld, deine Stärken und Baustellen, aktuelle Projekte
+          und Herausforderungen, Ziele, Arbeits- und Kommunikationsstil, Erfahrungen, Vorlieben.
+          Schreib frei, so viel oder so wenig du willst. Du kannst das jederzeit ändern — WladBot nutzt
+          immer die aktuelle Version.
+        </p>
+        <Textarea
+          rows={10}
+          maxLength={6000}
+          value={form.about_me}
+          onChange={e => update('about_me', e.target.value)}
+          placeholder={'Beispiel: Ich leite seit 2 Jahren ein 12-köpfiges Vertriebsteam in einem Maschinenbau-Mittelständler. Stark bin ich in Analyse und Struktur, schwer fällt mir, unangenehme Dinge direkt anzusprechen — ich verpacke zu weich. Aktuell baue ich ein neues Vertriebsgebiet auf, zwei erfahrene Kollegen blockieren. Ziel: bis Q4 als Bereichsleiter wahrgenommen werden. Ich arbeite gern vorbereitet, mag klare Frameworks, keine Motivationssprüche.'}
+          className="text-sm leading-relaxed"
+          data-testid="profile-edit-about-me"
+        />
+        {profile.about_me_updated_at && (
+          <p className="text-[10px] text-muted-foreground">
+            Zuletzt aktualisiert: {new Date(profile.about_me_updated_at).toLocaleDateString('de-DE')}
+          </p>
+        )}
+      </div>
       <div className="flex gap-2 pt-2">
         <Button onClick={() => onSave(form)} disabled={saving} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-black" data-testid="profile-save-btn">
           {saving ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Save size={14} className="mr-1.5" />}
@@ -210,6 +242,8 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
 // ─────────────────────────────────────────────────────────────────────────
 // Main ProfilePage
 // ─────────────────────────────────────────────────────────────────────────
+
+const TIER_LABELS = { free: 'Free', standard: 'Leadership OS', accelerator: 'Leadership OS PLUS', enterprise: 'Enterprise' };
 
 export default function ProfilePage() {
   const { lang } = useLanguage();
@@ -291,7 +325,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#BFFF00]/12 border border-[#BFFF00]/25 text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">
                   <Crown size={9} strokeWidth={2.8} />
-                  {profile.tier} Member {joinedYears >= 1 ? `· ${joinedYears}+ ${de ? 'Jahre' : 'yrs'}` : ''}
+                  {TIER_LABELS[profile.tier] || TIER_LABELS.free} {joinedYears >= 1 ? `· ${joinedYears}+ ${de ? 'Jahre' : 'yrs'}` : ''}
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight truncate" data-testid="profile-name">{profile.name || 'Leader'}</h1>
@@ -333,6 +367,39 @@ export default function ProfilePage() {
           <Card className="animate-fade-in border-[#BFFF00]/30">
             <CardContent className="p-5">
               <EditProfileForm profile={profile} onSave={savePatch} onCancel={() => setEditing(false)} saving={saving} />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* ─── ÜBER MICH (read view) — Kontext für WladBot (Iter 136) ─── */}
+        {!editing && (
+          <Card className={profile.about_me ? '' : 'border-[#BFFF00]/30'} data-testid="about-me-card">
+            <CardContent className="p-5">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div>
+                  <p className="text-sm font-black">{de ? 'Über mich' : 'About me'}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {de
+                      ? 'Dieser Kontext fließt in jede WladBot-Antwort ein — Chat, Video-Feedback, Strategien.'
+                      : 'This context flows into every WladBot answer — chat, video feedback, strategies.'}
+                  </p>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => setEditing(true)} className="h-8 text-[11px] shrink-0" data-testid="about-me-edit-btn">
+                  <Edit3 size={12} className="mr-1" />
+                  {profile.about_me ? (de ? 'Bearbeiten' : 'Edit') : (de ? 'Jetzt ausfüllen' : 'Fill in now')}
+                </Button>
+              </div>
+              {profile.about_me ? (
+                <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-muted-foreground" data-testid="about-me-text">
+                  {profile.about_me}
+                </p>
+              ) : (
+                <p className="text-[12px] text-muted-foreground" data-testid="about-me-empty">
+                  {de
+                    ? 'Noch leer. Je konkreter du hier über deine Rolle, dein Team, deine Baustellen und Ziele schreibst, desto konkreter wird das Feedback — statt allgemeiner Ratschläge.'
+                    : 'Still empty. The more concrete you are about your role, team, blockers and goals, the more concrete the feedback gets.'}
+                </p>
+              )}
             </CardContent>
           </Card>
         )}

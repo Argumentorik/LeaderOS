@@ -17,6 +17,9 @@ class ProfileUpdate(BaseModel):
     industry: Optional[str] = Field(None, max_length=100)
     bio: Optional[str] = Field(None, max_length=500)
     linkedin_url: Optional[str] = Field(None, max_length=300)
+    # Iter 136 (Wlad): free-text personal + professional context. Flows into
+    # every AI interaction via services.get_user_memory().
+    about_me: Optional[str] = Field(None, max_length=6000)
 
 
 # ── Mapping action-key → human-readable label + icon (rendered by frontend) ──
@@ -108,6 +111,8 @@ async def get_my_profile(request: Request) -> dict:
         "industry": user.get("industry", ""),
         "bio": user.get("bio", ""),
         "linkedin_url": user.get("linkedin_url", ""),
+        "about_me": user.get("about_me", ""),
+        "about_me_updated_at": user.get("about_me_updated_at"),
         "tier": user.get("tier", "free"),
         "level": user.get("level", "Emerging Leader"),
         "xp": user.get("xp", 0),
@@ -135,6 +140,8 @@ async def update_my_profile(data: ProfileUpdate, request: Request) -> dict:
     if not update:
         return {"updated": 0, "fields": []}
     user_fields = list(update.keys())   # only user-provided fields
+    if "about_me" in update:
+        update["about_me_updated_at"] = datetime.now(timezone.utc).isoformat()
     update["updated_at"] = datetime.now(timezone.utc).isoformat()
     await db.users.update_one({"user_id": user["user_id"]}, {"$set": update})
     logger.info(f"Profile updated for {user['user_id']}: {user_fields}")

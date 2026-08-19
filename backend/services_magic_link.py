@@ -99,6 +99,17 @@ async def consume_token(raw_token: str) -> Optional[dict]:
         return None
 
     user = await db.users.find_one({"email": record["email"]}, {"_id": 0})
+    if user:
+        # Iter 136: clicking a magic link PROVES inbox ownership → the address
+        # counts as verified from here on (used by the email-sending guard).
+        await db.users.update_one(
+            {"email": record["email"]},
+            {"$set": {"email_verified": True,
+                      "email_verified_at": now.isoformat(),
+                      "email_verified_via": "magic_link"},
+             "$unset": {"email_status": ""}},
+        )
+        await db.email_suppression.delete_many({"email": record["email"]})
     return user
 
 

@@ -132,3 +132,25 @@ Grund für den Crop: das transparente Ganzkörper-PNG wurde in 28–32-px-Kreise
 - `POST /api/voice/tts` liefert seither `{"audio_url": "", "error": "elevenlabs_invalid_api_key"}` (200, bewusst degradiert) und die UI zeigt einen Hinweis-Toast statt stumm nichts zu tun.
 - Fix: echten `sk_...`-Key in `backend/.env` setzen → `sudo supervisorctl restart backend` → prüfen mit
   `curl -s -X POST $URL/api/voice/tts -H "Authorization: Bearer <token>" -H 'Content-Type: application/json' -d '{"text":"Test","persona":"wlad"}'` → `audio_url` muss mit `data:audio/mpeg;base64,` beginnen.
+
+---
+
+## 7. Nachtrag Iter 136 — E-Mail-Versand, Lizenz-Wiederanmeldung, „Über mich"
+
+**E-Mail (einziger Choke Point: `services_email.send_email`)**
+- Verifizierte Absender-Domains bei Resend: `leaderos.de`, `leadercheck.de`, `leader-os.de` (alle verified). Absender kommt aus `SENDER_EMAIL` (aktuell `wlad@leaderos.de`).
+- Vor JEDEM Versand läuft `_sendability()`: ungültige Syntax, Test-/Reserved-Domains (`.test`, `.local`, `.invalid`, `example.com`, `wladbot.test`) und Adressen auf der Sperrliste werden blockiert. Rückgabe: `{"sent": false, "error": "blocked:<grund>"}` + Warn-Log. Es gibt keinen Pfad daran vorbei.
+- Bei permanentem Resend-Fehler → `suppress_email()`: Eintrag in `email_suppression` + `users.email_status = "invalid"`. Diese Adresse wird nie wieder automatisch angeschrieben (Schutz der Absender-Reputation).
+- Sperrliste aufheben: Dokument aus `email_suppression` löschen (oder der User klickt einen Magic Link → wird automatisch entsperrt).
+- `email_verified: true` wird gesetzt bei OAuth-Login und bei Magic-Link-Klick (`email_verified_via`).
+- **Nicht in unserem Repo**: die Supabase-Edge-Function von leadercheck.de verschickt eigene Mails über Resend. Deren 403-Fehler in den Resend-Logs stammen von dort — dort muss der Absender ebenfalls auf eine verifizierte Domain gesetzt werden.
+
+**Lizenz-Wiederanmeldung** (`POST /api/auth/license/activate`)
+- Bereits eingelöster Key + gleiche E-Mail + korrektes Passwort → normaler Re-Login (`relogin: true`), es wird nichts doppelt aktiviert.
+- Andere E-Mail → 400. Falsches Passwort → 401. Google/Apple-Konto → 409 mit Hinweis.
+
+**„Über mich"** (`users.about_me`, max. 6000 Zeichen)
+- Bearbeitbar unter Profil → „Über mich"; `PATCH /api/profile/me`.
+- Fließt über `services.get_user_memory()` in JEDEN AI-Workflow (Chat, Video-Analyse, Voice) — dort steht der Block „ÜBER MICH". Kein zweiter Kontext-Pfad, nicht in Prompts duplizieren.
+
+**Stripe-Rechnung**: Verkäufer-Angaben stehen in `INVOICE_FOOTER` / `INVOICE_SELLER` (`routes/payments.py`): Argumentorik-Akademie GmbH, Tölzer Str. 1, 82031 Grünwald, info@argumentorik.com. Der **Kontoname und die Support-Telefonnummer auf Stripe-Belegen** kommen aus den Stripe-Dashboard-Einstellungen (Business/Public details) — nur dort änderbar.

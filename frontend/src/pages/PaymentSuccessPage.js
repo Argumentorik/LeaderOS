@@ -95,8 +95,8 @@ export default function PaymentSuccessPage() {
                   ]
                   : [
                     { icon: Flame, label: de ? '30-Tage Challenge komplett' : 'Full 30-day challenge' },
-                    { icon: Brain, label: de ? 'KI-Coach 24/7 · 500 Credits pro Monat' : 'AI coach 24/7 · 500 credits per month' },
-                    { icon: Video, label: de ? '12 Videokurse — monatlich einer freigeschaltet' : '12 video courses — one unlocked per month' },
+                    { icon: Brain, label: de ? 'KI-Coach 24/7' : 'AI coach 24/7' },
+                    { icon: Video, label: de ? '12 Videokurse & Playbooks' : '12 video courses & playbooks' },
                     { icon: Target, label: de ? 'Playbooks, Workflows & Simulationen' : 'Playbooks, workflows & simulations' },
                   ]
                 ).map(item => (

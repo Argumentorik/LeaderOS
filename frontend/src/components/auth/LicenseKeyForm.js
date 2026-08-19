@@ -43,9 +43,9 @@ export const LicenseKeyForm = ({ de = true }) => {
       });
       login(res.data.user, 'license');
       const pkg = res.data.activated?.package_name || 'Leader-OS';
-      toast.success(de
-        ? `${pkg} aktiviert! Willkommen an Bord.`
-        : `${pkg} activated! Welcome aboard.`);
+      toast.success(res.data.relogin
+        ? (de ? `Willkommen zurück! ${pkg} ist aktiv.` : `Welcome back! ${pkg} is active.`)
+        : (de ? `${pkg} aktiviert! Willkommen an Bord.` : `${pkg} activated! Welcome aboard.`));
       navigate(postLoginRoute(res.data.user));
     } catch (err) {
       setError(parseAuthError(err, de ? 'Aktivierung fehlgeschlagen' : 'Activation failed'));
@@ -77,7 +77,9 @@ export const LicenseKeyForm = ({ de = true }) => {
           )}
         </div>
         <p className="text-[10px] text-white/30 mt-1.5">
-          {de ? 'Du hast den Key von unserem Sales-Team oder per E-Mail erhalten.' : 'You received the key from our sales team or via email.'}
+          {de
+            ? 'Vom Sales-Team oder per E-Mail erhalten. Schon aktiviert? Mit Key, E-Mail und Passwort kommst du hier auch wieder rein.'
+            : 'From our sales team or via email. Already activated? Key, email and password log you back in here too.'}
         </p>
       </div>
 

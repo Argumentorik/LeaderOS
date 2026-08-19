@@ -568,3 +568,12 @@ Auftrag: kein Feature-Bau, sondern Audit + Härtung von RAG, Admin-Bedienbarkeit
 - P1: E-Mail-Open/Click-Tracking im Conversion Center (Wlad: „c. ist clever").
 - P1: Kunden-Learnings nach Launch in Produktverbesserungen überführen.
 - P2: Checkout-Reminder nach 24 h. P3: Meeting-Mode. P4: Voice-Sparring, ElevenLabs-Tour.
+
+## Iter 136 · 2026-08-19 — Wlad-Bugliste (nach Go-Live)
+Erledigt: E-Mail-Guard + Sperrliste, Magic-Link-Verifizierung, Lizenz-Wiederanmeldung, Argumentorik-Rechnungsdaten, Premium-Copy bereinigt, „Über mich" inkl. AI-Anbindung, toter BotMascot-Code entfernt, Cal-Embed-Textfarbe. Details im CHANGELOG.
+
+**Offene Entscheidungen (brauchen Wlads Ja/Nein)**
+1. Sollen die tatsächlichen Limits für zahlende Kunden fallen (heute: Standard = 500 Credits/Monat, 12 Videokurse monatlich freigeschaltet)? Bisher nur die Ansage entfernt, nicht das Entitlement — das ist eine Preis-/Kostenentscheidung.
+2. Stripe-Dashboard: Kontoname + Support-Telefonnummer auf Belegen (nur dort änderbar).
+3. Supabase-Edge-Function von leadercheck.de verschickt eigene Resend-Mails → dort Absender auf verifizierte Domain umstellen (nicht unser Repo).
+4. Cal.com-Buchungsbutton: Textfarbe gesetzt, aber nicht visuell verifiziert — Screenshot von Wlad nötig, falls weiter falsch.

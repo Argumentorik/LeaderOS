@@ -2,11 +2,14 @@
 import os
 import asyncio
 import logging
-from datetime import datetime
+import re
+from datetime import datetime, timezone
 from typing import Optional
 
 import resend
 from dotenv import load_dotenv
+
+from config import db
 
 load_dotenv()
 
@@ -44,6 +47,47 @@ def is_enabled() -> bool:
     return bool(RESEND_API_KEY)
 
 
+RESERVED_EMAIL_DOMAINS = (
+    ".test", ".local", ".localhost", ".invalid", ".example",
+    "example.com", "example.org", "example.net", "wladbot.test",
+)
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$")
+
+
+async def _sendability(to: str) -> tuple[bool, str]:
+    """Decide whether we are allowed to send to `to`. Returns (ok, reason)."""
+    addr = (to or "").strip().lower()
+    if not _EMAIL_RE.match(addr):
+        return False, "invalid_address"
+    if any(addr.endswith(d) or addr.split("@")[-1] == d for d in RESERVED_EMAIL_DOMAINS):
+        return False, "reserved_test_domain"
+    try:
+        hit = await db.email_suppression.find_one({"email": addr}, {"_id": 0, "reason": 1})
+    except Exception:
+        hit = None
+    if hit:
+        return False, f"suppressed:{hit.get('reason', 'unknown')}"
+    return True, ""
+
+
+async def suppress_email(addr: str, reason: str) -> None:
+    """Add an address to the suppression list after a permanent delivery failure."""
+    addr = (addr or "").strip().lower()
+    if not addr:
+        return
+    try:
+        await db.email_suppression.update_one(
+            {"email": addr},
+            {"$set": {"email": addr, "reason": reason[:200],
+                      "created_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        await db.users.update_one({"email": addr}, {"$set": {"email_status": "invalid"}})
+        logger.error("Email suppressed for %s — %s", addr, reason[:160])
+    except Exception as e:
+        logger.warning("Suppression write failed for %s: %s", addr, e)
+
+
 async def send_email(
     to: str,
     subject: str,
@@ -53,6 +97,14 @@ async def send_email(
     max_retries: int = 3,
 ) -> dict:
     """Send an email via Resend (async, non-blocking) with exponential-backoff retry.
+
+    Iter 136: THIS IS THE ONLY CHOKE POINT for outbound mail. Every flow
+    (onboarding, sequences, cron, magic link, receipts) goes through here, so
+    the sendability check below cannot be bypassed:
+      - syntactically invalid addresses
+      - reserved/test domains (.test, .local, .invalid, example.com …)
+      - addresses on the suppression list (previous hard failure)
+    Suppressed addresses are logged and counted, never silently swallowed.
 
     Returns {"sent": bool, "email_id": str|None, "error": str|None, "attempts": int}.
     Silent if API key missing — logs warning and returns sent=False.
@@ -66,6 +118,11 @@ async def send_email(
     if not _init_resend():
         logger.warning("RESEND_API_KEY not set — skipping email to %s", to)
         return {"sent": False, "email_id": None, "error": "RESEND_API_KEY not configured", "attempts": 0}
+
+    ok, reason = await _sendability(to)
+    if not ok:
+        logger.warning("Email BLOCKED to %s (%s) — subject=%r", to, reason, subject[:60])
+        return {"sent": False, "email_id": None, "error": f"blocked:{reason}", "attempts": 0}
 
     params = {
         "from": from_email or f"{BRAND_NAME} <{SENDER_EMAIL}>",
@@ -104,6 +161,8 @@ async def send_email(
                     "Resend PERMANENT failure to %s on attempt %d (no retry): %s",
                     to, attempt, err_text,
                 )
+                # Iter 136: never try this address again — protects sender reputation.
+                await suppress_email(to, err_text)
                 return {"sent": False, "email_id": None, "error": err_text, "attempts": attempt}
             if attempt < max_retries:
                 # Exponential backoff: 0.5s, 1s, 2s

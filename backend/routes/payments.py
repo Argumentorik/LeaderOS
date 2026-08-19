@@ -156,9 +156,10 @@ TEST_ACTIVATION_CODE = "WLAD-1EURO-2026"
 #   2. the real product name on the checkout page + invoice (was "Payment").
 #   3. one Stripe customer per email — no duplicates on repeat purchases.
 INVOICE_FOOTER = (
-    "Leader-OS · Argumentorik GmbH · Rechnung wird von Stripe im Auftrag "
-    "ausgestellt. Fragen zur Rechnung: support@leaderos.de"
+    "Argumentorik-Akademie GmbH · Tölzer Str. 1 · 82031 Grünwald · "
+    "info@argumentorik.com — Rechnung wird von Stripe im Auftrag ausgestellt."
 )
+INVOICE_SELLER = "Argumentorik-Akademie GmbH"
 
 
 def _configure_stripe():
@@ -212,6 +213,12 @@ def _create_stripe_session(*, amount: float, currency: str, product_name: str,
                 "description": product_name,
                 "metadata": metadata,
                 "footer": INVOICE_FOOTER,
+                # Iter 136 (Wlad): the customer must see the real seller on the
+                # invoice — Argumentorik-Akademie GmbH, not "Leadership OS".
+                "custom_fields": [
+                    {"name": "Anbieter", "value": INVOICE_SELLER},
+                    {"name": "Kontakt", "value": "info@argumentorik.com"},
+                ],
             },
         },
     }

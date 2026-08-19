@@ -287,7 +287,7 @@ export const FakeWladCall = () => {
             type="button"
             onClick={accept}
             data-testid="fake-call-accept"
-            className="flex-1 h-9 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white text-[11.5px] font-black inline-flex items-center justify-center gap-1.5 transition-colors shadow-[0_4px_14px_-4px_rgba(48,209,88,0.5)]"
+            className="flex-1 h-9 rounded-lg bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[11.5px] font-black inline-flex items-center justify-center gap-1.5 transition-colors shadow-[0_4px_14px_-4px_rgba(191,255,0,0.45)]"
           >
             <Phone size={11} />
             Termin buchen

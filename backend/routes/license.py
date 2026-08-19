@@ -13,7 +13,9 @@ import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Request, Response
-from pydantic import BaseModel, EmailStr
+import re
+
+from pydantic import BaseModel, field_validator
 
 from config import db, logger
 from services import create_jwt_token, hash_password, verify_password, get_current_user
@@ -84,10 +86,20 @@ def _mask(normalized: str) -> str:
 
 class LicenseActivate(BaseModel):
     license_key: str
-    email: EmailStr
+    email: str
     password: str
     name: str = ""
     attribution: dict | None = None
+
+    @field_validator("email")
+    @classmethod
+    def _valid_email(cls, v: str) -> str:
+        # Iter 136: own validator so the user sees a German sentence instead of
+        # the raw English pydantic/email-validator message.
+        v = (v or "").strip().lower()
+        if not re.match(r"^[^@\s]+@[^@\s.]+\.[a-z]{2,}$", v):
+            raise ValueError("Bitte gib eine gültige E-Mail-Adresse ein.")
+        return v
 
 
 async def _rate_limit_license(ip: str) -> None:
@@ -133,7 +145,34 @@ async def activate_license(data: LicenseActivate, request: Request, response: Re
         await _log_license_attempt(ip, success=False)
         raise HTTPException(status_code=404, detail="Lizenz-Key nicht gefunden. Bitte prüfe die Eingabe.")
     if key_doc["status"] == "redeemed":
-        raise HTTPException(status_code=400, detail="Dieser Lizenz-Key wurde bereits eingelöst.")
+        # Iter 136 (Wlad): a redeemed key is the customer's way back IN, not a
+        # dead end. Same email + correct password → normal re-login, nothing is
+        # activated twice. A different account → still blocked.
+        owner_id = key_doc.get("redeemed_by")
+        email = data.email.strip().lower()
+        owner = await db.users.find_one({"user_id": owner_id}, {"_id": 0}) if owner_id else None
+        if not owner or owner.get("email", "").lower() != email:
+            raise HTTPException(
+                status_code=400,
+                detail="Dieser Lizenz-Key wurde bereits mit einer anderen E-Mail-Adresse eingelöst.",
+            )
+        if not owner.get("password_hash"):
+            raise HTTPException(
+                status_code=409,
+                detail="Dieses Konto nutzt Google/Apple-Login. Bitte melde dich damit an.",
+            )
+        if not verify_password(data.password, owner["password_hash"]):
+            await _log_license_attempt(ip, success=False)
+            raise HTTPException(status_code=401, detail="Falsches Passwort für dieses Konto.")
+
+        await _create_session(owner["user_id"], ip, response, method="license")
+        await _log_license_attempt(ip, success=True)
+        return {
+            "user": _safe_user_output(owner),
+            "account_created": False,
+            "relogin": True,
+            "activated": {"package_name": key_doc.get("package_name") or "Leader-OS"},
+        }
     if key_doc["status"] == "revoked":
         raise HTTPException(status_code=400, detail="Dieser Lizenz-Key wurde deaktiviert. Bitte kontaktiere den Support.")
 
