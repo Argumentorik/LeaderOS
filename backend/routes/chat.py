@@ -365,7 +365,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     if not credit_result["allowed"]:
         raise HTTPException(status_code=402, detail="no_credits")
 
-    session_id = await _ensure_session(data.session_id, user["user_id"], data.message, data.agent, data.folder_id)
+    session_id = await _ensure_session(data.session_id, user["user_id"], data.display_text or data.message, data.agent, data.folder_id)
 
     # Iter 92.42 (Vibe-Security): normalize modality early so persistence + response agree.
     VALID_MODALITIES = ("text", "speech", "video")
@@ -390,6 +390,8 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     await db.chat_messages.insert_one({
         "message_id": f"msg_{uuid.uuid4().hex[:12]}", "session_id": session_id,
         "user_id": user["user_id"], "role": "user", "content": data.message,
+        "display_text": (data.display_text or "")[:4000] or None,
+        "attachment": data.attachment,
         "modality": msg_modality,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })

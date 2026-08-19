@@ -199,6 +199,11 @@ class ChatMessageIn(BaseModel):
     # 'text' (default), 'speech' (audio transcribed via Whisper), 'video'
     # (clip transcribed + SEXIER-analysed). Server still re-validates.
     modality: Optional[str] = "text"
+    # Iter 137: der LLM-Prompt (message) enthält Dokument-Dump + [Kontext:…].
+    # display_text/attachment sind die für den User sichtbaren Werte, damit die
+    # Historie nach einem Reload lesbar bleibt (statt des Roh-Prompts).
+    display_text: Optional[str] = None
+    attachment: Optional[dict] = None
 
 
 class ChatSessionCreate(BaseModel):

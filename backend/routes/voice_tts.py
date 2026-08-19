@@ -61,7 +61,7 @@ VOICE_REGISTRY: dict[str, dict] = {
     #   damit Wlad nicht überdramatisch klingt.
     #   Override via env `ELEVENLABS_WLAD_VOICE_ID=<id>` möglich.
     "wlad": {
-        "voice_id": os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "pNInz6obpgDQGcFmaJgB"),  # "Adam" — deep, neutral male (standard AI sound)
+        "voice_id": os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),  # Iter 137: Wlads eigene geklonte Stimme (Default), per ENV überschreibbar
         "name": "Wlad Jachtchenko",
         "stability": 0.72, "similarity_boost": 0.80, "style": 0.12,
         "language": "de",

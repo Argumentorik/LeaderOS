@@ -57,6 +57,30 @@ export default function ChatPage() {
   const [currentSession, setCurrentSession] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showContext, setShowContext] = useState(false);
+  const [aboutMe, setAboutMe] = useState('');
+
+  // Iter 137: Kontext wird GEFÜHRT — wer Rolle/Branche oder „Über mich" noch
+  // nicht ausgefüllt hat, bekommt das Panel beim ersten Chat-Besuch geöffnet.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await api.get('/profile/me');
+        if (cancelled) return;
+        setAboutMe(res.data.about_me || '');
+        setUserContext(prev => ({
+          role: prev.role || res.data.position || '',
+          company: prev.company || res.data.company || '',
+          industry: prev.industry || res.data.industry || '',
+        }));
+        const incomplete = !res.data.about_me || !res.data.position || !res.data.industry;
+        if (incomplete) setShowContext(true);
+      } catch (err) {
+        logger.warn('profile context load failed', err);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
   const [userContext, setUserContext] = useState({ role: '', company: '', industry: '' });
   const [showPaywall, setShowPaywall] = useState(false);
   const [attachedPdf, setAttachedPdf] = useState(null);
@@ -159,14 +183,16 @@ export default function ChatPage() {
     if (!text || loading) return;
     setInput('');
     const fullMsg = buildFullMessage({ text, messages, userContext, attachedPdf });
+    const attachmentMeta = attachedPdf ? { filename: attachedPdf.filename, pages: attachedPdf.pages || null } : null;
     setMessages(prev => [...prev, {
       role: 'user', content: text,
-      pdf: attachedPdf ? { filename: attachedPdf.filename, pages: attachedPdf.pages } : null,
+      pdf: attachmentMeta,
     }]);
     setAttachedPdf(null);
     setLoading(true);
     try {
-      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: overrideMode || (coachMode ? 'coach' : 'chat') };
+      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: overrideMode || (coachMode ? 'coach' : 'chat'), display_text: text };
+      if (attachmentMeta) body.attachment = attachmentMeta;
       if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
       const res = await api.post('/chat', body);
       if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
@@ -223,7 +249,7 @@ export default function ChatPage() {
         {showUpsell && <ChatUpsellModal onClose={() => setShowUpsell(false)} de={de} />}
 
         <ChatRolesHeader
-          showContext={showContext} setShowContext={setShowContext}
+          showContext={showContext} setShowContext={setShowContext} aboutMe={aboutMe}
           userContext={userContext} setUserContext={setUserContext}
           onNewSession={handleNewSession}
           lang={lang}

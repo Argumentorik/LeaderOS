@@ -4,6 +4,7 @@ import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownR
 import SmartText from '../shared/SmartText';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { FileText } from 'lucide-react';
 import { ModalityBadge } from './ModalityBadge';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
 
@@ -69,9 +70,22 @@ const FollowUpChips = ({ questions, onSuggest, de }) => (
   </div>
 );
 
-const UserMessage = ({ content, modality }) => (
+const UserMessage = ({ content, modality, pdf }) => (
   <div className="flex justify-end mb-4 animate-fade-in" data-testid="chat-user-message">
     <div className="flex flex-col items-end gap-1 max-w-[70%]">
+      {/* Iter 137: das Dokument haengt sichtbar an der Nachricht — der User
+          sieht, dass WladBot es wirklich gelesen hat. */}
+      {pdf && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/25" data-testid="chat-message-attachment">
+          <FileText size={13} className="text-[#6B8A00] dark:text-[#BFFF00] shrink-0" />
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold truncate max-w-[220px]">{pdf.filename}</p>
+            <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">
+              {pdf.pages ? `${pdf.pages} Seiten gelesen` : 'gelesen'} · von WladBot ausgewertet
+            </p>
+          </div>
+        </div>
+      )}
       <div className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">
         <p className="text-sm text-white whitespace-pre-wrap">{content}</p>
       </div>
@@ -93,8 +107,31 @@ const PlainAssistantMessage = ({ content }) => (
   </div>
 );
 
+// Iter 137: Alt-Nachrichten (vor display_text) enthalten den Roh-Prompt —
+// Dokument-Dump und [Kontext:…] werden fuer die Anzeige herausgefiltert.
+const legacyClean = (content) => {
+  if (typeof content !== 'string') return { text: content, pdf: null };
+  let text = content;
+  let pdf = null;
+  const doc = text.match(/^\[Dokument: ([^·\]]+)(?:· [^\]]*)?\]\n---\n[\s\S]*?\n---\n\n/);
+  if (doc) { pdf = { filename: doc[1].trim() }; text = text.slice(doc[0].length); }
+  const img = text.match(/^\[Bild angehängt: ([^\]]+)\]\n\n/);
+  if (img) { pdf = { filename: img[1].trim() }; text = text.slice(img[0].length); }
+  text = text.replace(/^\[Kontext: [^\]]*\]\n\n/, '');
+  return { text, pdf };
+};
+
 export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
-  if (msg.role === 'user') return <UserMessage content={msg.content} modality={msg.modality} />;
+  if (msg.role === 'user') {
+    const legacy = msg.display_text ? null : legacyClean(msg.content);
+    return (
+      <UserMessage
+        content={msg.display_text || legacy?.text || msg.content}
+        modality={msg.modality}
+        pdf={msg.pdf || msg.attachment || legacy?.pdf}
+      />
+    );
+  }
 
   let parsed = msg.parsed;
   if (!parsed && typeof msg.content === 'string') {

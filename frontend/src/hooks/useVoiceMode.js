@@ -20,7 +20,9 @@ export const VOICE_STATES = {
 };
 
 const SILENCE_THRESHOLD = 0.012;
-const SILENCE_DURATION_MS = 1400;
+// Iter 137 (Wlad): Walkie-Talkie-Gefühl — 5s Stille, damit man mitten im Satz
+// Luft holen darf, ohne dass Wlad losredet. Orb-Tap sendet sofort.
+export const SILENCE_DURATION_MS = 5000;
 const MIN_RECORDING_MS = 600;
 const MAX_RECORDING_MS = 30000;
 const MAX_EMPTY_RETRIES = 3;
@@ -58,6 +60,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(false);
   const [level, setLevel] = useState(0);
+  const [silenceLeft, setSilenceLeft] = useState(null);
 
   const sessionIdRef = useRef(initialSessionId);
   const mediaRecorderRef = useRef(null);
@@ -76,6 +79,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const pausedRef = useRef(false);
   const speechDetectedRef = useRef(false);
   const speechFramesRef = useRef(0);
+  const lastCountdownRef = useRef(null);
 
   useEffect(() => { sessionIdRef.current = initialSessionId; }, [initialSessionId]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
@@ -138,6 +142,14 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
         stopRecording();
         return;
       }
+      // Sichtbarer Countdown, sobald wirklich gesprochen wurde
+      if (speechDetectedRef.current && elapsed > MIN_RECORDING_MS) {
+        const left = Math.ceil((SILENCE_DURATION_MS - (now - silenceStartRef.current)) / 1000);
+        if (left !== lastCountdownRef.current) {
+          lastCountdownRef.current = left;
+          setSilenceLeft(left > 0 ? left : 0);
+        }
+      }
       // Nobody spoke yet → keep listening patiently; soft-restart after 15s
       // to keep the mic stream fresh (no API call, no "thinking" state).
       if (!speechDetectedRef.current && elapsed > NO_SPEECH_RESTART_MS) {
@@ -146,6 +158,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       }
     } else {
       silenceStartRef.current = null;
+      if (lastCountdownRef.current !== null) { lastCountdownRef.current = null; setSilenceLeft(null); }
     }
 
     if (elapsed > MAX_RECORDING_MS) { stopRecording(); return; }
@@ -163,6 +176,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     silenceStartRef.current = null;
     speechDetectedRef.current = false;
     speechFramesRef.current = 0;
+    lastCountdownRef.current = null;
+    setSilenceLeft(null);
     chunksRef.current = [];
 
     const mime = pickSupportedMime();
@@ -207,6 +222,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const stopRecording = useCallback(() => {
     if (stoppedRef.current) return;
     stoppedRef.current = true;
+    lastCountdownRef.current = null;
+    setSilenceLeft(null);
     if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     try {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
@@ -360,7 +377,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    state, transcript, reply, error, paused, muted, level,
+    state, transcript, reply, error, paused, muted, level, silenceLeft,
     handleOrbTap, togglePause, toggleMute, fullCleanup,
   };
 };

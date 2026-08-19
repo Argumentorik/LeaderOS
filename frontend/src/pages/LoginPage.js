@@ -118,6 +118,11 @@ export default function LoginPage({ initialMode = 'login' }) {
     onPrefill: (email, provider) => {
       // For OAuth providers, switch mode to 'login' so the buttons are visible
       // then ask user to click the provider button (one-tap auto-prompts if available)
+      if (provider === 'license') {
+        setMode('license');
+        setForm(f => ({ ...f, email }));
+        return;
+      }
       if (provider) {
         setMode('login');
         setForm(f => ({ ...f, email }));

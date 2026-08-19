@@ -70,9 +70,11 @@ export const ChatInputBar = ({
         <Headphones size={15} strokeWidth={2.5} />
       </button>
       <label
-        className={`cursor-pointer flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border border-[#BFFF00]/20 transition-colors shrink-0 ${(loading || uploadingPdf) ? 'opacity-50 pointer-events-none' : ''}`}
+        title={de
+          ? 'Erlaubt: PDF, Word (.docx), TXT, Markdown, CSV und Bilder (PNG/JPG/WEBP) — max. 20 MB, bis 40 Seiten werden gelesen. WladBot liest den Inhalt und nutzt ihn nur für diese Unterhaltung. Nicht möglich: Excel, PowerPoint, ZIP, Audio, Video, passwortgeschützte oder gescannte PDFs ohne Textebene.'
+          : 'Allowed: PDF, Word (.docx), TXT, Markdown, CSV and images (PNG/JPG/WEBP) — max 20 MB, up to 40 pages are read. WladBot reads the content and uses it for this conversation only. Not supported: Excel, PowerPoint, ZIP, audio, video, password-protected or scanned PDFs without a text layer.'}
+        className={`relative cursor-pointer flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border border-[#BFFF00]/20 transition-colors shrink-0 ${(loading || uploadingPdf) ? 'opacity-50 pointer-events-none' : ''}`}
         data-testid="pdf-upload-btn"
-        title={de ? 'Dokument anhängen (PDF, Word, TXT, Bild)' : 'Attach document (PDF, Word, TXT, image)'}
       >
         {uploadingPdf
           ? <Loader2 size={15} className="animate-spin text-[#6B8A00] dark:text-[#BFFF00]" />
@@ -83,6 +85,12 @@ export const ChatInputBar = ({
           className="hidden"
           onChange={onPdfUpload}
         />
+        <span
+          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white dark:bg-card border border-black/10 dark:border-white/15 text-muted-foreground/70 flex items-center justify-center shadow-sm pointer-events-none"
+          data-testid="upload-info-dot"
+        >
+          <HelpCircle size={9} strokeWidth={2.4} />
+        </span>
       </label>
       {setCoachMode && (
         <div className="relative shrink-0">
@@ -100,6 +108,10 @@ export const ChatInputBar = ({
           >
             <Target size={15} strokeWidth={2.5} />
           </button>
+          <span className={`hidden sm:block absolute -bottom-4 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-wide whitespace-nowrap ${
+            coachMode ? 'text-[#6B8A00] dark:text-[#BFFF00]' : 'text-muted-foreground/60'}`}>
+            {coachMode ? 'COACH' : (de ? 'NORMAL' : 'PLAIN')}
+          </span>
           {/* Iter 121.2: „?"-Info-Dot — schmales Trigger für Briefing-Reset */}
           <button
             type="button"
