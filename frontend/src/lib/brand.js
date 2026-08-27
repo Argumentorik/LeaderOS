@@ -16,6 +16,10 @@ export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 export const WLAD_WELCOME_VIDEO =
   'https://customer-assets-eiarnc6j.emergentagent.net/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/gwj6ejp2_YouTube%20Video%2005.mp4';
 
+/** Tatsächliche Länge des Welcome-Clips (mvhd-Atom: 34,84s) — Fallback, wenn
+ *  der Browser keine Video-Metadaten liefert. */
+export const WLAD_WELCOME_VIDEO_SECONDS = 35;
+
 /** Where "LeaderOS Plus" points to (used in PDF, emails, upsell CTAs). */export const LEADEROS_PLUS_URL = 'https://leadercheck.de/plus';
 
 /** Where the free diagnose lives. */

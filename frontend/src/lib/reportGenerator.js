@@ -375,10 +375,12 @@ export async function downloadHTMLReport({ title, subtitle, date, analysis, chal
 
   /* PILLAR */
   .pillar-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px; }
-  .pillar-card { padding: 22px 16px; border-radius: 14px; background: ${BRAND.panel}; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-  .pillar-name { font-family:'Outfit', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
-  .pillar-num { font-family:'Outfit', sans-serif; font-size: 46px; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin: 8px 0 2px; }
-  .pillar-cap { font-size: 10px; color: ${BRAND.textMuted}; margin-bottom: 10px; }
+  /* Iter 139: html2canvas rendert line-height:1 mit anderen Font-Metriken als der
+     Browser → Zahl und Untertitel überlappten. Feste Zeilenboxen + Flow-Layout. */
+  .pillar-card { padding: 20px 14px; border-radius: 14px; background: ${BRAND.panel}; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+  .pillar-name { font-family:'Outfit', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 0.05em; line-height: 1.35; margin: 0 0 10px; }
+  .pillar-num { font-family:'Outfit', sans-serif; font-size: 40px; font-weight: 900; line-height: 1.25; height: 50px; letter-spacing: -0.02em; margin: 0; }
+  .pillar-cap { font-size: 10px; line-height: 1.4; min-height: 28px; color: ${BRAND.textMuted}; margin: 6px 0 10px; }
   .pillar-bar { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
   .pillar-bar > div { height: 100%; border-radius: 2px; }
 

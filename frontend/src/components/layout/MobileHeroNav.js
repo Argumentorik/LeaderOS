@@ -60,12 +60,12 @@ export function MobileHeroNav() {
               >
                 <span className={`flex items-center justify-center h-[26px] px-4 rounded-full transition-all duration-200 ${active
                   ? 'bg-[#BFFF00] text-[#0A0A0A] shadow-[0_4px_14px_-2px_rgba(191,255,0,0.55)]'
-                  : 'text-muted-foreground/70 group-active:scale-90'}`}>
+                  : 'nav-row group-active:scale-90'}`}>
                   <Icon size={17} strokeWidth={active ? 2.6 : 2.1} />
                 </span>
                 <span className={`text-[9.5px] tracking-tight transition-colors ${active
                   ? 'font-black text-foreground'
-                  : 'font-semibold text-muted-foreground/70'}`}>
+                  : 'font-semibold nav-row'}`}>
                   {de ? item.label_de : item.label_en}
                 </span>
               </button>
@@ -77,10 +77,10 @@ export function MobileHeroNav() {
             aria-label={de ? 'Mehr' : 'More'}
             className="relative flex flex-col items-center justify-center gap-[3px] min-h-[44px] group"
           >
-            <span className="flex items-center justify-center h-[26px] px-4 rounded-full text-muted-foreground/70 group-active:scale-90 transition-transform">
+            <span className="flex items-center justify-center h-[26px] px-4 rounded-full nav-row group-active:scale-90 transition-transform">
               <Menu size={17} strokeWidth={2.1} />
             </span>
-            <span className="text-[9.5px] font-semibold tracking-tight text-muted-foreground/70">{de ? 'Mehr' : 'More'}</span>
+            <span className="text-[9.5px] font-semibold tracking-tight nav-row">{de ? 'Mehr' : 'More'}</span>
           </button>
         </div>
       </nav>

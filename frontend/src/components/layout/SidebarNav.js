@@ -37,7 +37,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
               <div className={`w-[16px] h-[16px] rounded-[4px] flex items-center justify-center bg-gradient-to-br ${section.badgeGrad}`}>
                 <section.badge />
               </div>
-              <span className={`text-[9px] font-extrabold uppercase tracking-[0.16em] transition-colors ${activeSection === section.id ? 'text-foreground/70' : 'text-muted-foreground/35'}`}>{section.label}</span>
+              <span className={`text-[9px] font-extrabold uppercase tracking-[0.16em] transition-colors ${activeSection === section.id ? 'nav-label-active' : 'nav-label'}`}>{section.label}</span>
             </div>
           )}
           {section.items.map((item) => {
@@ -52,7 +52,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
                   onClick={() => setLockedItem(item)}
                   data-testid={`nav-locked-${item.path.replace('/', '')}`}
                   data-tour-id={TOUR_ID_BY_PATH[item.path]}
-                  className={`${baseCls} group relative w-full text-left text-gray-400/70 dark:text-muted-foreground/45 hover:text-gray-700 dark:hover:text-white/85 hover:bg-gray-50/60 dark:hover:bg-white/[0.03] cursor-pointer`}
+                  className={`${baseCls} group relative w-full text-left nav-row-locked hover:bg-gray-50/60 dark:hover:bg-white/[0.03] cursor-pointer`}
                   title={`${item.label} — mit Leadership OS freischalten`}
                 >
                   <item.icon size={16} className="shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
@@ -79,7 +79,7 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
                   `${baseCls} ${
                     isActive
                       ? 'bg-[#BFFF00]/[0.07] dark:bg-[#BFFF00]/[0.06] text-[#4A6200] dark:text-[#BFFF00] font-semibold border-l-2 border-[#6B8A00] dark:border-[#BFFF00]'
-                      : 'text-gray-400 dark:text-muted-foreground/60 hover:text-gray-600 dark:hover:text-foreground/80 hover:bg-gray-50/50 dark:hover:bg-white/[0.02]'
+                      : 'nav-row hover:bg-gray-50/50 dark:hover:bg-white/[0.02]'
                   }`
                 }>
                 <item.icon size={16} className="shrink-0" />

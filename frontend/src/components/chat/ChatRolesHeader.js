@@ -1,8 +1,8 @@
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Building, Plus, Info } from 'lucide-react';
+import { Building, Plus, Info, X } from 'lucide-react';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
-const ContextPanel = ({ userContext, setUserContext, de, aboutMe }) => {
+const ContextPanel = ({ userContext, setUserContext, de, aboutMe, onClose }) => {
   const filled = ['role', 'company', 'industry'].filter(k => (userContext[k] || '').trim()).length;
   return (
     <div className="mt-4 mb-3 rounded-2xl border border-[#BFFF00]/25 bg-[#BFFF00]/[0.04] p-4 space-y-3 animate-fade-in" data-testid="context-panel">
@@ -15,11 +15,24 @@ const ContextPanel = ({ userContext, setUserContext, de, aboutMe }) => {
               : 'Without these three, WladBot answers generically. With them it reasons about your role, company and industry.'}
           </p>
         </div>
-        <span className={`text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${
-          filled === 3 ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                       : 'bg-amber-500/15 text-amber-600'}`} data-testid="context-progress">
-          {filled}/3
-        </span>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className={`text-[10px] font-black px-2 py-1 rounded-full ${
+            filled === 3 ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                         : 'bg-amber-500/15 text-amber-600'}`} data-testid="context-progress">
+            {filled}/3
+          </span>
+          {/* Iter 139: auf Mobile war das Panel nicht schließbar (Header-Button
+              lag außerhalb des Sichtbereichs) — eigener Close-Button im Panel. */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={de ? 'Kontext schließen' : 'Close context'}
+            data-testid="context-panel-close"
+            className="w-7 h-7 rounded-full flex items-center justify-center bg-black/[0.05] dark:bg-white/[0.08] text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <X size={13} />
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -118,7 +131,7 @@ export const ChatRolesHeader = ({
           </div>
         </div>
 
-        {showContext && <ContextPanel userContext={userContext} setUserContext={setUserContext} de={de} aboutMe={aboutMe} />}
+        {showContext && <ContextPanel userContext={userContext} setUserContext={setUserContext} de={de} aboutMe={aboutMe} onClose={() => setShowContext(false)} />}
       </div>
     </div>
   );

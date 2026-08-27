@@ -113,7 +113,7 @@ function parseBlocks(text) {
 }
 
 const OrderedCard = ({ item, accent }) => (
-  <div className="group relative flex items-start gap-3 p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-tint)] transition-all"
+  <div className="relative flex items-start gap-3 p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] cursor-text select-text"
        style={{ '--accent': accent, '--accent-tint': `${accent}14` }}>
     <span
       className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-black text-[12px] shadow-sm"

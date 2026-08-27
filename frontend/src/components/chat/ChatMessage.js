@@ -1,12 +1,38 @@
 import { useState } from 'react';
 import { Badge } from '../ui/badge';
-import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight } from 'lucide-react';
+import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight, Copy, Check } from 'lucide-react';
 import SmartText from '../shared/SmartText';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { FileText } from 'lucide-react';
 import { ModalityBadge } from './ModalityBadge';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
+
+/* Iter 139: Antworten sahen klickbar aus, waren es aber nicht. Jetzt gibt es
+   eine echte Aktion — Antwort kopieren, mit sichtbarer Bestätigung. */
+const CopyMessageButton = ({ text, de }) => {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text || '');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch (err) { logger.warn('copy failed', err); }
+  };
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      data-testid="chat-copy-btn"
+      aria-label={de ? 'Antwort kopieren' : 'Copy answer'}
+      className="inline-flex items-center gap-1 text-[10.5px] font-bold text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] transition-colors px-1 py-0.5 rounded-md"
+    >
+      {copied
+        ? <><Check size={11} className="text-emerald-500" /> {de ? 'Kopiert' : 'Copied'}</>
+        : <><Copy size={11} /> {de ? 'Kopieren' : 'Copy'}</>}
+    </button>
+  );
+};
 
 /* Iter 92.58: tasks are opt-in — WladBot suggests, the user clicks to accept. */
 const TasksSuggestion = ({ tasks, sessionId, de }) => {
@@ -98,11 +124,14 @@ const UserMessage = ({ content, modality, pdf }) => (
   </div>
 );
 
-const PlainAssistantMessage = ({ content }) => (
+const PlainAssistantMessage = ({ content, de }) => (
   <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
     <WladBotAvatar size={28} className="mt-1" />
-    <div className="max-w-[80%] bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-      <SmartText text={content} variant="inline" accent="#BFFF00" />
+    <div className="max-w-[80%] space-y-1">
+      <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm select-text">
+        <SmartText text={content} variant="inline" accent="#BFFF00" />
+      </div>
+      <CopyMessageButton text={content} de={de} />
     </div>
   </div>
 );
@@ -137,7 +166,7 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
   if (!parsed && typeof msg.content === 'string') {
     try { parsed = JSON.parse(msg.content); } catch { parsed = null; }
   }
-  if (!parsed) return <PlainAssistantMessage content={msg.content} />;
+  if (!parsed) return <PlainAssistantMessage content={msg.content} de={de} />;
 
   // Iter 96: normal conversational reply (ChatGPT/Grok style) — plain flowing text
   // + clickable follow-up chips that deepen the conversation step by step.
@@ -146,9 +175,10 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
       <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
         <WladBotAvatar size={28} className="mt-1" />
         <div className="max-w-[80%] space-y-2 min-w-0">
-          <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+          <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm select-text">
             <SmartText text={parsed.text} variant="inline" accent="#BFFF00" />
           </div>
+          <CopyMessageButton text={parsed.text} de={de} />
           {parsed.follow_up_questions?.length > 0 && onSuggest && (
             <FollowUpChips questions={parsed.follow_up_questions} onSuggest={onSuggest} de={de} />
           )}
@@ -211,6 +241,11 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
         {parsed.follow_up_questions?.length > 0 && onSuggest && (
           <FollowUpChips questions={parsed.follow_up_questions} onSuggest={onSuggest} de={de} />
         )}
+        <CopyMessageButton
+          text={[parsed.insight, parsed.strategy, ...(parsed.action_steps || []).map((s, i) => `${i + 1}. ${s}`), parsed.reflection]
+            .filter(Boolean).join('\n\n')}
+          de={de}
+        />
       </div>
     </div>
   );

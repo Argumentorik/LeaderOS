@@ -6,7 +6,14 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
-import { WLAD_AVATAR, WLAD_WELCOME_VIDEO } from '../lib/brand';
+import { WLAD_AVATAR, WLAD_WELCOME_VIDEO, WLAD_WELCOME_VIDEO_SECONDS } from '../lib/brand';
+
+const formatVideoLength = (seconds, de) => {
+  if (!seconds) return de ? 'in wenigen Sekunden' : 'in seconds';
+  if (seconds < 90) return de ? `in ${seconds} Sekunden` : `in ${seconds} seconds`;
+  const mins = Math.round(seconds / 60);
+  return de ? `in ${mins} Minuten` : `in ${mins} minutes`;
+};
 import { WladGuide } from '../components/onboarding/WladGuide';
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
@@ -32,6 +39,9 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [wladhubScores, setWladhubScores] = useState({ ki_kompetenz: '', boardroom_rhetorik: '', strategisches_eq: '' });
   const [videoStarted, setVideoStarted] = useState(false);
+  // Iter 139: Dauer kommt aus den Video-Metadaten; Startwert = tatsächliche
+  // Länge des Welcome-Clips, damit auch ohne Metadaten kein „2 Minuten" steht.
+  const [videoDuration, setVideoDuration] = useState(WLAD_WELCOME_VIDEO_SECONDS);
   const videoRef = useRef(null);
   const de = lang === 'de';
   const openBooking = useBookConsultation();
@@ -200,6 +210,10 @@ export default function OnboardingPage() {
                   controls={videoStarted}
                   playsInline
                   preload="metadata"
+                  onLoadedMetadata={(e) => {
+                    const d = e.currentTarget.duration;
+                    if (Number.isFinite(d) && d > 0) setVideoDuration(Math.round(d));
+                  }}
                   onPlay={() => setVideoStarted(true)}
                 />
                 {!videoStarted && (
@@ -212,8 +226,10 @@ export default function OnboardingPage() {
                     <span className="w-14 h-14 rounded-full bg-[#BFFF00] flex items-center justify-center shadow-lg transition-transform group-hover:scale-105">
                       <Play size={20} className="text-[#0A0A0A] ml-0.5" fill="#0A0A0A" />
                     </span>
-                    <span className="text-[11px] font-bold text-white/90 tracking-wide">
-                      {de ? 'Wlad erklärt dir Leader-OS in 2 Minuten' : 'Wlad explains Leader-OS in 2 minutes'}
+                    <span className="text-[11px] font-bold text-white/90 tracking-wide" data-testid="onboarding-video-duration">
+                      {de
+                        ? `Wlad erklärt dir Leader-OS ${formatVideoLength(videoDuration, true)}`
+                        : `Wlad explains Leader-OS ${formatVideoLength(videoDuration, false)}`}
                     </span>
                   </button>
                 )}

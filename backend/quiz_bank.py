@@ -409,3 +409,42 @@ QUIZ_BANK[30] = [
     {"q": "Teile deinen Abschluss und dein wichtigstes Learning auf LinkedIn oder mit deinem Team.", "type": "action", "path": "/referral", "explanation": "30 Tage geschafft! Teile deinen Fortschritt. Inspiriere andere. Öffentliches Commitment verstärkt die Transformation."},
     {"q": "Die letzte Frage: Was ist der EINE Satz der deine Leadership-Philosophie zusammenfasst?", "type": "mc", "options": ["Ergebnisse zählen", "Führung ist die Kunst, Menschen zu befähigen, gemeinsam Außergewöhnliches zu erreichen", "Kontrolle ist alles", "Der Markt entscheidet"], "correct": 1, "explanation": "Dein Leadership-Satz: Definiere ihn selbst. Aber denke daran — die besten Leader befähigen andere, nicht sich selbst. Das ist WladBot's Kernbotschaft."},
 ]
+
+# ── Iter 139: Distraktor-Overrides ────────────────────────────────────────────
+# scripts_improve_quiz_distractors.py schreibt geprüfte, gleich lange und
+# plausible Antwortoptionen nach quiz_overrides.json. Sie werden hier über den
+# Bestand gelegt, damit der kuratierte Fragen-Text unangetastet bleibt.
+QUIZ_BANK_RAW = {day: [dict(q) for q in questions] for day, questions in QUIZ_BANK.items()}
+
+
+def _apply_overrides() -> int:
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parent / "quiz_overrides.json"
+    if not path.exists():
+        return 0
+    try:
+        overrides = json.loads(path.read_text())
+    except (ValueError, OSError):
+        return 0
+    applied = 0
+    for ref, data in overrides.items():
+        day_str, _, idx_str = ref.partition(":")
+        try:
+            day, idx = int(day_str), int(idx_str)
+        except ValueError:
+            continue
+        questions = QUIZ_BANK.get(day)
+        if not questions or idx >= len(questions):
+            continue
+        options = data.get("options")
+        correct = data.get("correct")
+        if isinstance(options, list) and len(options) >= 3 and isinstance(correct, int):
+            questions[idx]["options"] = options
+            questions[idx]["correct"] = correct
+            applied += 1
+    return applied
+
+
+OVERRIDES_APPLIED = _apply_overrides()

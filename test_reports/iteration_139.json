@@ -1,0 +1,49 @@
+{
+  "summary": "Iter 139 Bugfix-Verifikation (7 Punkte + 2 Extras) auf der Preview-URL. Backend: neue pytest-Suite tests/test_iter139_fixes.py (8 Tests, 8 passed) fuer P4 Quiz-Shuffle/Leak/Laengen/Scoring und P2 Support-Adresse (3 echte WladBot-Antworten). Frontend: Playwright-Runs fuer P1 (Kontrast Sidebar + Mobile-Bottom-Nav in Dark/Light), P3 Onboarding-Dauer, P5 Aufgaben-Expand/Tastatur/Selektion, P6 Audio-Mode-Verlaufspersistenz (mit gemocktem /api/voice/conversation, da kein echtes Mikrofon), P7 Kopieren/Hover/Selektion, Extra A Mobile-Kontext-Panel, plus Regression (Login, Dashboard, Chat-Antwort, Anhang-Persistenz nach Reload, Walkie-Talkie-Countdown-Slot h-14=56px). Alle 9 Punkte verifiziert; keine Blocker.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Audio-Mode Overlay (/chat -> audio-mode-btn)",
+        "issues": [
+          "Der Status-Text (voice-mode-status, z.B. 'Ich hoere dir zu...') liegt optisch unter/hinter dem Orb-Glow und wird dadurch teilweise verdeckt bzw. schlecht lesbar (Screenshot voice_final.png). Vorschlag: mehr vertikaler Abstand oder Text ueber den Glow legen (z-index/Position)."
+        ]
+      },
+      {
+        "screen": "/onboarding Schritt 0",
+        "issues": [
+          "Fallback-Text 'in wenigen Sekunden' erscheint, solange video.duration nicht verfuegbar ist (in Test-Chromium ohne H.264 nie). Echte Videolaenge ist 34,84s (aus mvhd-Atom gelesen) -> im echten Browser wuerde 'in 35 Sekunden' stehen. Optional: bekannten Default (~35s) statt vager Formulierung nutzen. Kein Fehler, nur Hinweis."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter139_fixes.py",
+    "/app/test_reports/pytest/iter139_results.xml"
+  ],
+  "action_items": [
+    "Optional (LOW): Status-Text im Audio-Mode-Overlay vom Orb-Glow entkoppeln (Lesbarkeit).",
+    "Optional (LOW): Onboarding-Dauer-Fallback konkretisieren (z.B. '~35 Sekunden'), da manche Browser/Umgebungen keine Video-Metadaten liefern."
+  ],
+  "critical_code_review_comments": [
+    "P4: get_quiz und _score_quiz nutzen identische Seed-Parts (user_id, day, index) — Scoring stimmt mit der ausgelieferten Reihenfolge ueberein (per Test gegen lokal berechnetes shuffle_options bestaetigt). Kein 'correct'/'explanation'-Leak im GET-Payload.",
+    "P6: turns-State lebt in VoiceModeOverlay und wird nur beim Unmount verworfen — Verlauf ist damit strukturell gegen den Hook-Reset (transcript/reply=null) immun. Verifiziert ueber 24s und zwei Turns.",
+    "P7: OrderedCard hat cursor-text/select-text und keine Hover-Klassen — Border/Background/Cursor vor und nach Hover identisch gemessen.",
+    "Extra B (PDF) nur statisch geprueft: .pillar-num hat feste height:50px bei line-height 1.25, .pillar-cap min-height:28px, keine negativen Margins -> Zeilenboxen deterministisch, Overlap-Fix plausibel. Kein Analyse-Datensatz zum PDF-Erzeugen vorhanden."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter139_fixes.py"
+  ],
+  "success_rate": {"backend": "100% (8/8 pytest)", "frontend": "100% (P1, P3, P5, P6, P7, Extra A, Regression)"},
+  "seed_data_creation": "1 Chat-Anhang (iter139_regression.txt) + einige Chat-Sessions/Quiz-Submit fuer standard@wladbot.test; Quiz-POST verbraucht 1 Credit.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "standard@wladbot.test / test123, free@wladbot.test / test123 (aus /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Messwerte Iter 139: P1 Sidebar-Kontraste Dark 8.48-15.87:1 (18 Elemente, Bg #101010), Light 6.19-7.23:1; Mobile-Bottom-Nav Dark 17.45:1 / Light 19.17:1. Fuer standard@wladbot.test existieren keine nav-locked-* Eintraege (alles freigeschaltet) -> .nav-row-locked nur statisch geprueft (--nav-fg-muted 66% => ~7:1 dark). P4: 109 MC-Fragen geprueft, 10 (9%) ueber 25% Laengenabweichung (deckt sich mit den 23/235 unveraenderten Fragen). Orb-Testid ist 'voice-mode-orb' (nicht 'voice-orb'). P6 nur mit gemocktem /api/voice/conversation + WebAudio-Fake-Mic testbar; Auto-Send per 5s-Stille feuert mit Fake-Ton unzuverlaessig -> Orb tippen zum Senden. Clipboard-Test braucht context.grant_permissions(['clipboard-read','clipboard-write']).",
+  "rca_of_the_issue": "Keine offenen Defekte. Einzige Auffaelligkeit (P3 video.duration = NaN) ist eine Umgebungslimitierung: Playwright-Chromium ohne H.264-Codec laedt keine MP4-Metadaten (readyState 0), daher greift der Fallback-Text. Die echte Videolaenge (34,84s) wurde serverseitig aus dem mvhd-Atom bestaetigt."
+}

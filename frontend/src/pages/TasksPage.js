@@ -31,6 +31,8 @@ export default function TasksPage() {
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
   const [generating, setGenerating] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  // Iter 139: Aufgabentexte waren abgeschnitten und nicht öffenbar.
+  const [expandedTask, setExpandedTask] = useState(null);
 
   const loadTasks = useCallback(async () => {
     try { const res = await api.get('/tasks'); setTasks(res.data); } catch (err) { logger.error(err); }
@@ -220,8 +222,25 @@ export default function TasksPage() {
                       <span className="text-[18px] font-black text-[#BFFF00]/60" style={{ fontFamily: 'Outfit, sans-serif' }}>{i + 1}</span>
                       <Badge variant="outline" className={`text-[8px] px-1.5 py-0 h-4 ${priorityColor(task.priority)}`}>{priorityLabel(task.priority)}</Badge>
                     </div>
-                    <p className="text-[13px] font-bold leading-snug flex-1">{task.title}</p>
-                    {task.description && <p className="text-[10.5px] text-muted-foreground line-clamp-2">{task.description}</p>}
+                    <p className="text-[13px] font-bold leading-snug flex-1 select-text break-words">{task.title}</p>
+                    {task.description && (
+                      <button
+                        type="button"
+                        onClick={() => setExpandedTask(expandedTask === task.task_id ? null : task.task_id)}
+                        aria-expanded={expandedTask === task.task_id}
+                        className="text-left select-text"
+                        data-testid={`focus-expand-${i}`}
+                      >
+                        <span className={`block text-[10.5px] text-muted-foreground ${expandedTask === task.task_id ? 'whitespace-pre-wrap break-words leading-relaxed' : 'line-clamp-2'}`}>
+                          {task.description}
+                        </span>
+                        <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#4A6200] dark:text-[#BFFF00]">
+                          {expandedTask === task.task_id
+                            ? <><ChevronUp size={11} /> {lang === 'de' ? 'Weniger' : 'Less'}</>
+                            : <><ChevronDown size={11} /> {lang === 'de' ? 'Mehr anzeigen' : 'Show more'}</>}
+                        </span>
+                      </button>
+                    )}
                     <Button
                       size="sm"
                       onClick={() => toggleTask(task)}
@@ -260,15 +279,46 @@ export default function TasksPage() {
                 <Checkbox checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
                   className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
-                    {task.source === 'ai_coach' && (
-                      <span className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00] bg-[#BFFF00]/10 px-1.5 py-0.5 rounded-full border border-[#BFFF00]/20 shrink-0" data-testid="wladbot-task-badge">
-                        <Sparkles size={8} /> von WladBot
-                      </span>
-                    )}
-                  </div>
-                  {task.description && <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{task.description}</p>}
+                  {(() => {
+                    const isOpen = expandedTask === task.task_id;
+                    const hasMore = Boolean(task.description) || (task.title || '').length > 70;
+                    return (
+                      <div
+                        role={hasMore ? 'button' : undefined}
+                        tabIndex={hasMore ? 0 : undefined}
+                        aria-expanded={hasMore ? isOpen : undefined}
+                        aria-label={hasMore ? (lang === 'de' ? `Aufgabe ${isOpen ? 'zuklappen' : 'vollständig anzeigen'}` : `${isOpen ? 'Collapse' : 'Expand'} task`) : undefined}
+                        onClick={() => hasMore && setExpandedTask(isOpen ? null : task.task_id)}
+                        onKeyDown={(e) => {
+                          if (!hasMore) return;
+                          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedTask(isOpen ? null : task.task_id); }
+                        }}
+                        className={`select-text ${hasMore ? 'cursor-pointer' : ''} rounded-lg -mx-1 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#BFFF00]/50`}
+                        data-testid={`task-text-${task.task_id}`}
+                      >
+                        <div className="flex items-start gap-2">
+                          <p className={`text-sm font-semibold ${isOpen ? 'whitespace-pre-wrap break-words' : ''} ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
+                          {task.source === 'ai_coach' && (
+                            <span className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00] bg-[#BFFF00]/10 px-1.5 py-0.5 rounded-full border border-[#BFFF00]/20 shrink-0 mt-0.5" data-testid="wladbot-task-badge">
+                              <Sparkles size={8} /> von WladBot
+                            </span>
+                          )}
+                        </div>
+                        {task.description && (
+                          <p className={`text-[11px] text-muted-foreground mt-1 ${isOpen ? 'whitespace-pre-wrap break-words leading-relaxed' : 'truncate'}`} data-testid={`task-desc-${task.task_id}`}>
+                            {task.description}
+                          </p>
+                        )}
+                        {hasMore && (
+                          <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#4A6200] dark:text-[#BFFF00]" data-testid={`task-expand-${task.task_id}`}>
+                            {isOpen
+                              ? <><ChevronUp size={11} /> {lang === 'de' ? 'Weniger' : 'Less'}</>
+                              : <><ChevronDown size={11} /> {lang === 'de' ? 'Mehr anzeigen' : 'Show more'}</>}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center gap-3 mt-1.5">
                     <Badge variant="outline" className={`text-[9px] px-1.5 py-0 h-4 ${priorityColor(task.priority)}`}>{priorityLabel(task.priority)}</Badge>
                     {task.category && task.category !== 'general' && <span className="text-[9px] text-muted-foreground">{task.category}</span>}

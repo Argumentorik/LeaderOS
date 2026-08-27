@@ -1,0 +1,1910 @@
+{
+ "1:0": {
+  "options": [
+   "Erfahrung: Ein Leader mit mehr Erfahrung trifft fundiertere Entscheidungen",
+   "Ausbildung: Eine bessere Ausbildung verbessert das Führungsverhalten erheblich",
+   "Netzwerke: Mehr Kontakte helfen beim Zugang zu Informationen und Ressourcen",
+   "KI-Kompetenz: Strategische Nutzung von KI führt zu deutlich besseren Entscheidungen"
+  ],
+  "correct": 3
+ },
+ "1:2": {
+  "options": [
+   "Führungskräfte mit AI-Kompetenz werden besonders gefragt und gut bezahlt",
+   "Die Entwicklung ist ungewiss und erfordert eine abwartende Haltung",
+   "Nur die IT-Abteilung muss sich mit AI auseinandersetzen",
+   "Es gibt wenig Einfluss auf Karrierechancen durch AI-Entwicklungen"
+  ],
+  "correct": 0
+ },
+ "1:3": {
+  "options": [
+   "KI hilft, Verhaltensmuster aufzudecken, die dir verborgen bleiben, objektiv und klar",
+   "Der Ansatz eignet sich nur für Menschen mit introspektiven Neigungen oder Vorlieben",
+   "Solche Reflexionen sind nett, helfen aber in der Praxis nur bedingt weiter",
+   "Selbstanalyse durch KI bietet keine verlässlichen Erkenntnisse über dein Verhalten"
+  ],
+  "correct": 0
+ },
+ "1:6": {
+  "options": [
+   "Jeden Tag wie den ersten betrachten und die Neugier beibehalten",
+   "Am Beginn alles wissen müssen, um schnell zu handeln",
+   "Für neue Firmen besonders relevant, nicht für etablierte",
+   "Entscheidungen sollten zügig ohne lange Überlegungen getroffen werden"
+  ],
+  "correct": 0
+ },
+ "1:8": {
+  "options": [
+   "Sie verfügen über hohe emotionale Intelligenz und zahlenmäßig große Netzwerke",
+   "Sie setzen auf klare Kommunikation, technologische Kompetenz und emotionale Intelligenz",
+   "Sie zeigen mehr Arbeitsaufwand und haben ein breiteres Netzwerk als andere",
+   "Sie haben oft ein höheres Gehalt und mehr Berufserfahrung als ihre Kollegen"
+  ],
+  "correct": 1
+ },
+ "2:0": {
+  "options": [
+   "Führungskräfte haben keinen echten Bezug zu AI-Trends",
+   "AI ist nur für Unternehmen im Technologiebereich wichtig",
+   "Das Verständnis von AI ist nicht notwendig für gute Entscheidungen",
+   "Jede Entscheidung sollte den Einfluss von AI berücksichtigen"
+  ],
+  "correct": 3
+ },
+ "2:2": {
+  "options": [
+   "AI wird so essenziell wie Elektrizität und überall unbemerkt sein",
+   "AI benötigt enorme Mengen an Energie für ihre Berechnung",
+   "NVIDIA hat das Geschäft mit Stromverkäufen für sich entdeckt",
+   "AI wird als neue Energiequelle in Zukunft genutzt werden"
+  ],
+  "correct": 0
+ },
+ "2:5": {
+  "options": [
+   "Unternehmensstrategien sollten AI als Integrationsfaktor berücksichtigen",
+   "AI-Abteilungen sind erforderlich, um wettbewerbsfähig zu bleiben",
+   "Mehr Investitionen in Microsoft sind unvermeidlich",
+   "Es ist besser, auf die Reifung von AI-Technologien zu warten"
+  ],
+  "correct": 0
+ },
+ "2:6": {
+  "options": [
+   "Die Kunst, KI spezifische Fragen zu stellen für bessere Analysen und Strategien",
+   "Die Fähigkeit, E-Mails an das Management effektiv zu formulieren und zu verschicken",
+   "Ein Konzept, das einzig für Software-Entwickler von Bedeutung ist",
+   "Die Methode, KI bei der Aufgabenverteilung an Mitarbeiter zu unterstützen"
+  ],
+  "correct": 0
+ },
+ "2:7": {
+  "options": [
+   "AI automatisiert Prozesse in der Software-Entwicklung",
+   "Software wird auf einfache Anwendungen reduziert",
+   "AI hat kaum Einfluss auf die Software-Industrie",
+   "AI entwickelt unabhängig Software ohne menschliches Eingreifen"
+  ],
+  "correct": 0
+ },
+ "2:9": {
+  "options": [
+   "Sie riskieren, von AI-gestützten Firmen überholt zu werden",
+   "Es besteht keine ernsthafte Bedrohung durch KI",
+   "Nur Unternehmen der Tech-Branche müssen sich anpassen",
+   "AI wird nicht so schnell voranschreiten wie gedacht"
+  ],
+  "correct": 0
+ },
+ "3:0": {
+  "options": [
+   "KI analysiert die Logik deiner Argumente und kann deine Glaubwürdigkeit steigern",
+   "KI unterstützt bei der Verbesserung der Argumentation aber nicht bei der emotionalen Wirkung",
+   "KI bewertet emotionale Aspekte und hilft bei der Erarbeitung von logischen Argumenten",
+   "KI prüft Argumentationen, analysiert Glaubwürdigkeit und bewertet emotionale Ansprache"
+  ],
+  "correct": 3
+ },
+ "3:1": {
+  "options": [
+   "4 Aspekte: Klarheit, Empathie, Struktur und Mut — Relevant in der KI-Ära",
+   "4 Kommunikationskanäle für effektive Führung in der digitalen Welt",
+   "4 bedeutende Rubriken, die mit KI nichts zu tun haben",
+   "4 strategische Methoden, die von KI nicht ersetzt werden können"
+  ],
+  "correct": 0
+ },
+ "3:3": {
+  "options": [
+   "Sie ist in der Praxis oft nicht hilfreich und führt zu Missverständnissen",
+   "Es wird oft als unangemessen empfunden und wirkt aufdringlich",
+   "Mitarbeiter empfinden Feedback als nicht glaubwürdig und wenig unterstützend",
+   "Stattdessen sollte die SBI-Methode verwendet werden für mehr Klarheit"
+  ],
+  "correct": 3
+ },
+ "3:4": {
+  "options": [
+   "Psychologische Sicherheit ist entscheidend für eine Risikoübernahme im Team",
+   "Die besten Mitarbeiter sind notwendig für den Erfolg eines Teams",
+   "Ein hohes Budget sichert die optimale Teameffizienz",
+   "Lange Meetings führen zu einer intensiveren Teamkommunikation"
+  ],
+  "correct": 0
+ },
+ "3:5": {
+  "options": [
+   "Stimme wird wichtiger, Körpersprache zählt weniger in Video-Calls",
+   "Die Gewichtung bleibt gleich, es zählt alles gleich viel",
+   "Nur gesprochene Worte sind entscheidend in der Videokommunikation",
+   "Körperausdruck ist in Video-Calls irrelevant für die Führung"
+  ],
+  "correct": 0
+ },
+ "3:6": {
+  "options": [
+   "KI simuliert dein Gegenüber und bietet dir ein realistisches Übungsgespräch",
+   "KI erstellt ein Skript, das während des Gesprächs verwendet werden kann",
+   "KI kann nur für einfache Gespräche effektiv eingesetzt werden",
+   "KI ist kein hilfreiches Mittel, um schwierige Gespräche vorzubereiten"
+  ],
+  "correct": 0
+ },
+ "3:7": {
+  "options": [
+   "Persönliches Kümmern und ehrliche Kritik sind entscheidend",
+   "Vollständige Ehrlichkeit ist der Schlüssel zum Erfolg",
+   "Es geht darum, immer freundlich zu sein",
+   "Diese Methode ist nur für neue Unternehmen geeignet"
+  ],
+  "correct": 0
+ },
+ "3:9": {
+  "options": [
+   "Nervensystem stärken durch 6 Sekunden Atempause vor der Antwort gibt dir Kontrolle",
+   "Stress unbedingt vermeiden um effektive Kommunikation zu gewährleisten",
+   "Nur Athleten profitieren von Atempause in Stresssituationen während der Kommunikation",
+   "Meditation ist der einzige effektive Weg zur Stressbewältigung für Führungskräfte"
+  ],
+  "correct": 0
+ },
+ "4:0": {
+  "options": [
+   "Emotionale Intelligenz wird entscheidend für Führungskompetenz in der KI-Ära",
+   "Analytische Fähigkeiten sind für den Berufserfolg im KI-Zeitalter unerlässlich",
+   "Nur Menschen mit hoher EQ können in der Berufswelt langfristig bestehen",
+   "Emotionale Intelligenz ist nicht mehr relevant für den heutigen Arbeitsmarkt"
+  ],
+  "correct": 0
+ },
+ "4:1": {
+  "options": [
+   "Die 5 Zuhör-Ebenen sind Ignorieren bis Empathisch, meist bleiben Leader auf Ebene 3 stehen",
+   "Die meisten Leader arbeiten auf der höchsten Ebene, dem empathischen Zuhören, was sie effektiver macht",
+   "Eine der wichtigsten Ebenen des Zuhörens ist das Tun-als-ob, was viele Leader oft anwenden",
+   "Leader hören häufig aufmerksam zu, doch die wirklich wichtige Ebene bleibt ungenutzt"
+  ],
+  "correct": 0
+ },
+ "4:3": {
+  "options": [
+   "Verletzlichkeit offenbart Schwächen und senkt das Vertrauen in die Führungskraft",
+   "Das Teilen von Fehlern zeigt, dass man nicht für die Rolle geeignet ist",
+   "Verletzlichkeit hat keinen Platz in einer professionellen Umgebung",
+   "Ehrliche Fehler zuzugeben fördert stärkere Vertrauensbeziehungen im Team"
+  ],
+  "correct": 3
+ },
+ "4:4": {
+  "options": [
+   "Dein emotionaler Zustand beeinflusst das gesamte Team, egal ob positiv oder negativ",
+   "Emotionale Ansteckung ist nur bei Kindern von Bedeutung in der Gemeinschaft",
+   "Die Gefühlslage eines Leaders hat keinen Einfluss auf die Teamdynamik",
+   "Der Leader hat keinen Einfluss auf die Stimmung seiner Teammitglieder"
+  ],
+  "correct": 0
+ },
+ "4:6": {
+  "options": [
+   "Nach 6 Sekunden richtig atmen steigerst du deine Reaktionseffektivität",
+   "Die 6-Sekunden-Regel hilft beim Zählen von Gedanken",
+   "Sechs Sekunden verlängert deine Entscheidungsfähigkeit deutlich",
+   "Durch 6 Sekunden fokussiertes Atmen aktivierst du deine Entscheidungsfreiheit"
+  ],
+  "correct": 3
+ },
+ "4:9": {
+  "options": [
+   "KI analysiert deine Kommunikation, z. B. Tonfall in E-Mails oder die Stimmung in Meetings",
+   "Mitarbeiter sollten nur überwacht werden, um ihre Leistung zu steigern und Probleme zu identifizieren",
+   "KI kann nicht sinnvoll eingesetzt werden, da Emotionen subjektiv und schwer messbar sind",
+   "Die Nutzung von KI zur Analyse emotionaler Aspekte ist ausschließlich Aufgabe der Personalabteilung"
+  ],
+  "correct": 0
+ },
+ "5:0": {
+  "options": [
+   "Dein KI-Score sollte über 70 liegen, um konkurrenzfähig zu bleiben",
+   "AI Agents werden in der Softwareentwicklung irrelevant sein",
+   "Die Relevanz von AI Agents ist nur temporär, daher abwarten",
+   "Ein niedriger KI-Score ist für Führungskräfte unproblematisch"
+  ],
+  "correct": 0
+ },
+ "5:2": {
+  "options": [
+   "AI-Knowhow ist entscheidend für Führungspositionen geworden",
+   "Nur Unternehmen mit Technologie-Fokus suchen AI-experte CEOs",
+   "Die Zahlen zeigen nur einen Zusammenhang, keine Ursache dafür",
+   "Boards legen Wert auf spezielle Kompetenzen und Trends in der Branche"
+  ],
+  "correct": 0
+ },
+ "5:4": {
+  "options": [
+   "AI reduziert Kosten, steigert Geschwindigkeit und eröffnet neue Geschäftsmöglichkeiten",
+   "Nur Unternehmen in der Technikbranche profitieren von AI-Vorteilen und Gewinnmargen",
+   "Die Ergebnisse zeigen lediglich eine Korrelation, ohne kausalen Zusammenhang zu beweisen",
+   "AI verbessert Prozesse, hat aber keinen Effekt auf die Profitmargen der Firmen"
+  ],
+  "correct": 0
+ },
+ "5:7": {
+  "options": [
+   "Technologie hat keinen Einfluss auf die Bedeutung von EQ in der Führung",
+   "EQ wird zunehmend irrelevant in einer von AI geprägten Welt",
+   "AI kann menschliche Fähigkeiten wie Empathie und Vertrauen ersetzen",
+   "Mit der zunehmenden AI-Nutzung wird EQ als Führungskompetenz wertvoller"
+  ],
+  "correct": 3
+ },
+ "5:9": {
+  "options": [
+   "Führungskräfte sollten Teams aktiv für neue Aufgaben schulen und nicht untätig bleiben",
+   "Es besteht kein Grund zur Sorge, die Jobs werden sich weitgehend stabil halten",
+   "Diese Veränderung ist keine Führungsaufgabe, sondern muss von HR bewältigt werden",
+   "Teams einfach zu motivieren wird ausreichen, um die Veränderungen zu bewältigen"
+  ],
+  "correct": 0
+ },
+ "6:3": {
+  "options": [
+   "Unwichtig + Einfach — oft erledigen sie es selbst aus Bequemlichkeit",
+   "Wichtig + Komplex — kennen sie nur als ihre eigene Aufgabe",
+   "Wichtig + Einfach — Manager übernehmen es oft selbst",
+   "Unwichtig + Komplex — es gibt zu viele Herausforderungen darin"
+  ],
+  "correct": 0
+ },
+ "6:4": {
+  "options": [
+   "Gib deinem Team den Kontext, nicht Anweisungen oder Befehle",
+   "Mikromanagement ist nur bei Start-ups ein Problem",
+   "Eingehende Kontrolle ist für Effektivität notwendig",
+   "Kontext ist unwichtig, Anweisungen sind entscheidend"
+  ],
+  "correct": 0
+ },
+ "6:7": {
+  "options": [
+   "Kleine Einheiten fördern schnelle Entscheidungen und Verantwortung in Teams",
+   "Kleine Teams sparen Budget und reduzieren Kosten in der Zusammenarbeit",
+   "Die Regel gilt nur für Teams, die bei Amazon tätig sind oder dort arbeiten",
+   "Meetings sollten immer mit Essen kombiniert werden für bessere Ergebnisse"
+  ],
+  "correct": 0
+ },
+ "6:9": {
+  "options": [
+   "KI-Agenten führen automatisch alle Aufgaben durch",
+   "Es gibt keine wesentlichen Veränderungen im Delegationsprozess",
+   "KI ersetzt vollständig menschliche Delegation in Teams",
+   "Leader delegieren an KI-Agenten und kreative Mitarbeiter"
+  ],
+  "correct": 3
+ },
+ "7:0": {
+  "options": [
+   "Motivation allein führt nicht zum Erfolg bei Habit-Änderungen",
+   "Freizeit hilft, um neue Gewohnheiten zu etablieren",
+   "Genetik hat großen Einfluss auf das Verhalten und Gewohnheiten",
+   "Die besten verändern Gewohnheiten durch Systeme und Routinen"
+  ],
+  "correct": 3
+ },
+ "7:2": {
+  "options": [
+   "Der Coach erkennt deine Verhaltensmuster und kann gezielt darauf eingehen",
+   "Der Coach stellt dir vielseitige Fragen und fördert so deine Reflexion",
+   "Der Coach kann dir schneller Antworten geben und Informationen bereitstellen",
+   "Der Coach bietet dir mehr Feedback zu deinen Fortschritten auf dem Weg"
+  ],
+  "correct": 0
+ },
+ "7:6": {
+  "options": [
+   "Es kommt darauf an, wie viel Zeit man investiert",
+   "Talent ist der entscheidende Faktor für den Erfolg",
+   "Die Qualität des Trainings ist entscheidend für das Lernen",
+   "Nur gute Lehrer können optimalen Fortschritt bieten"
+  ],
+  "correct": 2
+ },
+ "7:8": {
+  "options": [
+   "Einem Teammitglied aktiv bei seinem Ziel helfen, etwa durch Coaching oder Ressourcen",
+   "Freundlich zu sein und gute Stimmung im Team zu verbreiten, ohne konkretes Ziel",
+   "Ein LinkedIn-Beitrag verfassen, um die Erfolge des Teams zu teilen und sichtbar zu machen",
+   "Zusätzliche Meetings einberufen, um mehr Zeit für den Austausch im Team zu schaffen"
+  ],
+  "correct": 0
+ },
+ "8:0": {
+  "options": [
+   "Ein Werkzeug zur Festlegung von Zielen für Projekte",
+   "Eine Methode zur Klassifikation von Aufgaben",
+   "Priorisierung von Aufgaben in 4 Kategorien",
+   "Ein Tool zur Verwaltung von Terminen und Fristen"
+  ],
+  "correct": 2
+ },
+ "8:1": {
+  "options": [
+   "Im Quadrant für wichtige und dringende Aufgaben",
+   "Im strategischen Aufgabenbereich für Planung",
+   "In regelmäßigen Pausen zur Erholung",
+   "Im Quadrant für dringende, jedoch unwichtige Aufgaben"
+  ],
+  "correct": 3
+ },
+ "8:4": {
+  "options": [
+   "Strukturierte Methode zur Aufgabenplanung und Zeitmanagement",
+   "Technik für effektive Team-Meetings im Alpenraum",
+   "Eignet sich nur für umfangreiche Projekte mit vielen Beteiligten",
+   "Verfahren zur Auflistung und Priorisierung von Tätigkeiten"
+  ],
+  "correct": 0
+ },
+ "8:5": {
+  "options": [
+   "Zu spezifisch formuliert — etwa 'deutlicher kommunizieren'",
+   "Zu ambitioniert — wie beispielweise ' jeden Tag besser werden'",
+   "Formulierung von zu vielen Zielen gleichzeitig",
+   "Nicht messbar — wie 'besser kommunizieren' ohne konkrete Zahl"
+  ],
+  "correct": 3
+ },
+ "8:6": {
+  "options": [
+   "KI analysiert Optionen, erkennt Verzerrungen und simuliert Möglichkeiten",
+   "KI trifft Entscheidungen an deiner Stelle und gibt Ergebnisse wieder",
+   "KI bietet nur zufällige Lösungen für Problemstellungen an",
+   "KI trägt nicht zur Entscheidungsfindung bei und bleibt unwichtig"
+  ],
+  "correct": 0
+ },
+ "8:7": {
+  "options": [
+   "Entscheidungsermüdung tritt nach vielen Entscheidungen auf",
+   "Entscheidungsermüdung ist ein allgemeines Gerücht",
+   "Koffein kann bei Entscheidungsermüdung helfen",
+   "Wichtige Entscheidungen am Morgen treffen und Routine einführen"
+  ],
+  "correct": 3
+ },
+ "9:0": {
+  "options": [
+   "Überzeugend an C-Level kommunizieren und präsentieren",
+   "Mit Lautstärke und Durchsetzungskraft argumentieren",
+   "Kreativ und beeindruckend mit Präsentationen umgehen",
+   "Ist nur für Spitzenmanager relevant und deren Präsentationen"
+  ],
+  "correct": 0
+ },
+ "9:3": {
+  "options": [
+   "Der erste Punkt eines Vortrags bleibt am stärksten im Gedächtnis",
+   "Der erste Eindruck ist für die meisten unwichtig",
+   "Ein Ereignis wird als prägend wahrgenommen, wenn es früh stattfindet",
+   "Die erste Information hat keinen Einfluss auf spätere Eindrücke"
+  ],
+  "correct": 0
+ },
+ "9:4": {
+  "options": [
+   "Pausen betonen die wichtigen Punkte und fördern die Aufmerksamkeit",
+   "Schweigen wird oft als Mangel an Stärke wahrgenommen",
+   "Pausen sollten nur in Krisengesprächen eingesetzt werden",
+   "Vollständiges Schweigen führt in Gesprächen zu Missverständnissen"
+  ],
+  "correct": 0
+ },
+ "9:5": {
+  "options": [
+   "Das zuletzt Gesagte wird gut erinnert",
+   "Das Neueste wird bevorzugt wahrgenommen",
+   "Informationen von sozialen Medien beeinflussen stark",
+   "Vorherige Informationen dominieren das Gedächtnis"
+  ],
+  "correct": 0
+ },
+ "9:6": {
+  "options": [
+   "Eins ist oft zu wenig für eine klare Präsentation",
+   "Maximal sieben Kernbotschaften können verwirren",
+   "Drei zentrale Botschaften sind ideal für eine Präsentation",
+   "So viele Kernpunkte wie nötig können effektiver sein"
+  ],
+  "correct": 2
+ },
+ "9:7": {
+  "options": [
+   "Es gibt keinen wesentlichen Unterschied zwischen beiden Begriffen",
+   "Überreden gilt als die effektivere Methode im Gespräch",
+   "Überzeugen erfordert mehr Zeit und Aufwand als Überreden",
+   "Überzeugen basiert auf Argumenten, Überreden auf Druck oder Tricks"
+  ],
+  "correct": 3
+ },
+ "9:9": {
+  "options": [
+   "Glaubwürdigkeit, klare Ziele, emotionale Intelligenz und Engagement",
+   "Bestimmtheit, starke Meinung und Durchsetzungsvermögen",
+   "Attraktives Auftreten, Stilbewusstsein und Selbstbewusstsein",
+   "Hohes Einkommen, Einfluss und privilegierter Hintergrund"
+  ],
+  "correct": 0
+ },
+ "10:0": {
+  "options": [
+   "Spezifisch, Messbar, Attraktiv, Realistisch, Terminiert",
+   "Schnell, Messbar, Attraktiv, Realistisch, Terminiert",
+   "Strategisch, Messbar, Attentiv, Realistisch, Terminiert",
+   "Spezifisch, Messbar, Ansprechend, Realistisch, Zeitgebunden"
+  ],
+  "correct": 0
+ },
+ "10:3": {
+  "options": [
+   "20% der Tätigkeiten führen zu 80% des Erfolgs",
+   "80% der Zeit in Meetings, 20% Arbeit",
+   "80% der Aufgaben sollten delegiert werden",
+   "Eine Regel zur Budgetverteilung"
+  ],
+  "correct": 0
+ },
+ "10:5": {
+  "options": [
+   "Aufgaben in feste Zeitblöcke einteilen statt sie endlos zu bearbeiten",
+   "Mit Uhren arbeiten, um die Zeit besser einzuschätzen",
+   "Zeit systematisch für jede Tätigkeit erfassen und analysieren",
+   "Aufgaben möglichst schnell abarbeiten, um Zeit zu sparen"
+  ],
+  "correct": 0
+ },
+ "10:6": {
+  "options": [
+   "Sie strukturiert die Tagesplanung durch eine systematische Vorgehensweise",
+   "Sie ist nur für Führungskräfte in großen Unternehmen geeignet",
+   "Die Methode ist zu komplex für die meisten Nutzer",
+   "Sie hilft nur bei langwierigen Projekten und nicht im Alltag"
+  ],
+  "correct": 0
+ },
+ "10:7": {
+  "options": [
+   "Mangelnde Transparenz in strategischen Zielen",
+   "Zu wenig Zeit für die Planung von Aufgaben",
+   "Ein Übermaß an eingehenden E-Mails",
+   "Unzureichende Software zur Aufgabenverwaltung"
+  ],
+  "correct": 0
+ },
+ "10:8": {
+  "options": [
+   "Effektivität bleibt unwichtig im Vergleich zur Effizienz",
+   "Effizienz bedeutet, die richtigen Dinge anzugehen",
+   "Effektivität ist entscheidend, bevor Effizienz zählt",
+   "Effizienz kann ohne Effektivität sinnvoll sein"
+  ],
+  "correct": 2
+ },
+ "11:1": {
+  "options": [
+   "Das Gehörte in eigenen Worten wiedergeben",
+   "Ratschläge zur Lösung des Problems geben",
+   "Fragen zur Klärung der Inhalte stellen",
+   "Augenkontakt zur Verbindung halten"
+  ],
+  "correct": 0
+ },
+ "11:2": {
+  "options": [
+   "Führungskräfte ignorieren die Sorgen ihrer Mitarbeiter",
+   "Die Umsetzungen sind oftmals zu kostspielig",
+   "Technische Anforderungen werden häufig nicht erfüllt",
+   "Das verfügbare Budget reicht häufig nicht aus"
+  ],
+  "correct": 0
+ },
+ "11:3": {
+  "options": [
+   "Man hört nur, was die eigene Sichtweise unterstützt",
+   "Man gibt jeder Meinung eine unkritische Bestätigung",
+   "Man bewertet Informationen zu positiv und zu mild",
+   "Man stimmt oft voreilig und ohne tiefere Reflexion zu"
+  ],
+  "correct": 0
+ },
+ "11:5": {
+  "options": [
+   "Es wird Oxytocin freigesetzt, was das Vertrauen fördert",
+   "Es steigt Cortisol, was Stress und Anspannung verursacht",
+   "Die Dopaminproduktion verringert sich und hemmt die Freude",
+   "Es passiert nichts Aufregendes, es bleibt unverändert"
+  ],
+  "correct": 0
+ },
+ "11:6": {
+  "options": [
+   "Was beschäftigt dich momentan am meisten?",
+   "Hast du alle Aufgaben gut abgeschlossen?",
+   "Stehen aktuelle Schwierigkeiten an?",
+   "Wie läuft es bei dir zurzeit?"
+  ],
+  "correct": 0
+ },
+ "11:7": {
+  "options": [
+   "Der Leader spricht überwiegend und hört wenig zu",
+   "Die Gespräche finden viel zu unregelmäßig statt",
+   "Die Themen sind oft nicht klar definiert",
+   "Die Dauer der Gespräche wird viel zu lang gewählt"
+  ],
+  "correct": 0
+ },
+ "12:1": {
+  "options": [
+   "Teamgröße auf das Limit von zwei Pizzen anpassen für Effizienz",
+   "Regel zur Vermeidung von langen Mittagspausen im Büro",
+   "Teams sollten regelmäßig zwei Meetings pro Woche planen",
+   "Meetings sollten auf die Dauer von zwei Pizzen begrenzt sein"
+  ],
+  "correct": 0
+ },
+ "12:2": {
+  "options": [
+   "Widerspruch ist erlaubt, aber die Entscheidung muss akzeptiert werden",
+   "Man muss stets zustimmen, um Teil des Teams zu bleiben",
+   "Entscheidungen sollten regelmäßig hinterfragt und verzögert werden",
+   "Gegensätzliche Meinungen sind unerwünscht und schädlich für den Fortschritt"
+  ],
+  "correct": 0
+ },
+ "12:3": {
+  "options": [
+   "Er hält Folien für überflüssig in der Kommunikation",
+   "Die Methode fördert eine Zeitersparnis in Besprechungen",
+   "Memos fördern ein tieferes Nachdenken über Inhalte",
+   "Er zielt auf Kostensenkung bei Präsentationen ab"
+  ],
+  "correct": 2
+ },
+ "12:5": {
+  "options": [
+   "Bei Entscheidungen prüfen, ob man sie später bereuen könnte",
+   "Nur auf bewährte und sichere Optionen setzen",
+   "Risiken bei Entscheidungen möglichst gering halten",
+   "Kosten und Ressourcen stets im Blick behalten"
+  ],
+  "correct": 0
+ },
+ "12:6": {
+  "options": [
+   "Entscheidungen basierend auf unvollständigen Informationen treffen",
+   "Schnelle Absprachen innerhalb kurzer Meetings finden",
+   "Antworten auf E-Mails zügig formulieren und versenden",
+   "Schnellere Kündigungen in der Personalplanung durchführen"
+  ],
+  "correct": 0
+ },
+ "12:7": {
+  "options": [
+   "Der Stuhl steht für den Kunden und dessen Meinung ist stets wichtig",
+   "Er wird für den Vorgesetzten reserviert, steht aber oft leer",
+   "Er bleibt für spätere Teilnehmer frei, um Platz zu schaffen",
+   "Es handelt sich um eine symbolische Geste ohne tiefere Bedeutung"
+  ],
+  "correct": 0
+ },
+ "12:8": {
+  "options": [
+   "KI kann für dich Entscheidungen treffen",
+   "KI hilft dir beim Schreiben von Berichten",
+   "Du nutzt KI, um Risiken und blinde Flecken zu erkennen",
+   "KI wird dazu eingesetzt, deine Meinung zu bestätigen"
+  ],
+  "correct": 2
+ },
+ "13:1": {
+  "options": [
+   "Es besteht kein bedeutender Unterschied zwischen den beiden Begriffen",
+   "Kritik ist stets direkter und unverblümter als Feedback",
+   "Feedback fokussiert sich auf Verbesserungen in der Zukunft",
+   "Feedback wird oft als freundlich wahrgenommen im Vergleich zur Kritik"
+  ],
+  "correct": 2
+ },
+ "13:2": {
+  "options": [
+   "Situation-Verhalten-Wirkung: Was war der Kontext, welches Verhalten, welche Auswirkung?",
+   "Schnell-Billig-Individuell: Ein Ansatz für effiziente Projektplanung und -umsetzung",
+   "Strategie-Budget-Innovation: Ein Modell zur finanziellen Planung in Unternehmen",
+   "Ein IT-Framework: Struktur zur Umsetzung digitaler Prozesse und Systeme"
+  ],
+  "correct": 0
+ },
+ "13:3": {
+  "options": [
+   "Das Losada-Ratio belegt, dass 3:1 positives Feedback für Teams erforderlich ist",
+   "Positives Feedback stärkt das Wohlbefinden der Mitarbeiter in jedem Team regelmäßig",
+   "Teams profitieren von positivem Feedback, ohne dass es hohe Kosten verursacht",
+   "Mitarbeiter empfangen positives Feedback als Teil ihrer Leistungserwartungen"
+  ],
+  "correct": 0
+ },
+ "13:5": {
+  "options": [
+   "Vergangenheit analysieren und um Feedback bitten",
+   "Vorschläge für künftige Handlungen geben",
+   "Zukünftige Leistungen im Voraus bewerten",
+   "Schnelles Feedback für sofortige Verbesserung geben"
+  ],
+  "correct": 1
+ },
+ "13:7": {
+  "options": [
+   "Wahrheitsgemäß und direkt kommunizieren",
+   "Brutal ehrlich während Gesprächen sein",
+   "Kritik immer direkt äußern und niemals abmildern",
+   "Sich um andere kümmern und dabei direkt herausfordern"
+  ],
+  "correct": 3
+ },
+ "13:8": {
+  "options": [
+   "Ruinöse Empathie - nett statt ehrlich, was Konflikte verhindert",
+   "Übermäßig viel Feedback kann die Entwicklung hemmen",
+   "Eine zu harte Feedbackweise schadet der Beziehung langfristig",
+   "Das Auslassen von Feedback führt oft zu Missverständnissen"
+  ],
+  "correct": 0
+ },
+ "14:2": {
+  "options": [
+   "Man schätzt die benötigte Zeit für Aufgaben oft zu hoch ein",
+   "Menschen überschätzen die eigene Effizienz bei Planungen",
+   "Man geht häufig von unrealistischen Vorgaben aus",
+   "Menschen unterschätzen systematisch den Zeitaufwand für Aufgaben"
+  ],
+  "correct": 3
+ },
+ "14:3": {
+  "options": [
+   "KI ist immer neutral und hat somit keine Biases",
+   "KI hat die Tendenz, bestehende Biases zu verstärken",
+   "KI kann Annahmen durch objektive Analyse in Frage stellen",
+   "KI hat keine Möglichkeit, Biases zu erkennen oder zu prüfen"
+  ],
+  "correct": 2
+ },
+ "14:5": {
+  "options": [
+   "An Projekten festhalten aufgrund bereits getätigter Investitionen, obwohl sie nicht sinnvoll sind",
+   "Vermeidung von Verlusten durch das Festhalten an abgeschlossenen Investitionen in einem Projekt",
+   "Strategien zur Reduzierung von Kosten durch intelligente Budgetplanung und Priorisierung",
+   "Sich in einem Projekt auf das eingesetzte Kapital berufen, selbst wenn Ziele unerreichbar sind"
+  ],
+  "correct": 0
+ },
+ "14:6": {
+  "options": [
+   "Probleme auf ihre grundlegenden Wahrheiten herunterbrechen und nicht vergleichen",
+   "Als Erster handeln, um Vorteile gegenüber anderen zu erlangen",
+   "Sich an bewährte Methoden und Prinzipien zu halten",
+   "Die erste Idee annehmen und darauf aufbauen ohne Alternativen zu prüfen"
+  ],
+  "correct": 0
+ },
+ "14:7": {
+  "options": [
+   "Wahrscheinlichkeiten statt absoluter Gewissheiten betrachten",
+   "Pro-Contra-Analysen zur Entscheidungsfindung nutzen",
+   "Intuitive Entscheidungen und Bauchgefühle folgen",
+   "Zusätzliche Informationen und Daten sammeln"
+  ],
+  "correct": 0
+ },
+ "14:9": {
+  "options": [
+   "Folgen und Einfluss eines Handelns genau abwägen",
+   "Die Ergebnisse von Entscheidungen hinterfragen",
+   "Wirksame Strategien für kritische Situationen entwickeln",
+   "Direkte Effekte und ihre weiterführenden Konsequenzen einschätzen"
+  ],
+  "correct": 3
+ },
+ "15:0": {
+  "options": [
+   "Führungskräfte sollten sich auf emotionale Ansprache und Inspiration konzentrieren",
+   "Die Kommunikation erfolgt primär durch schriftliche Mittel und weniger verbal",
+   "Es sind keine Änderungen erforderlich, die Kommunikation bleibt wie bisher",
+   "Leiter müssen die ausgehenden Informationen verstärken und weniger kreativ sein"
+  ],
+  "correct": 0
+ },
+ "15:7": {
+  "options": [
+   "AI entwickelt überzeugende Argumente für deine Rede",
+   "AI übernimmt die gesamte Kritik der Rede in deinem Namen",
+   "AI analysiert und verbessert deine Argumente auf Schwächen",
+   "AI ermittelt die besten Redestrukturen und deine Überzeugungsstärke"
+  ],
+  "correct": 2
+ },
+ "15:9": {
+  "options": [
+   "AI übernimmt die Kontrolle, du bist lediglich passiv",
+   "Ein Co-Pilot reicht für eine erfolgreiche Kommunikation",
+   "AI benötigt keine Vorgaben oder Anweisungen",
+   "Du steuerst die Kommunikation, AI unterstützt dabei"
+  ],
+  "correct": 3
+ },
+ "16:0": {
+  "options": [
+   "Objectives und Key Results — John Doerr für Google eingeführt",
+   "Online Key Results — Mark Zuckerberg als Konzept entwickelt",
+   "Optimized KPI Ratings — bei IBM populär gemacht",
+   "Organized Knowledge Reports — von McKinsey verbreitet"
+  ],
+  "correct": 0
+ },
+ "16:1": {
+  "options": [
+   "OKR beschreibt ein Ziel, KPI misst kontinuierlich den Fortschritt",
+   "KPI bezieht sich auf vergangene Leistungen, OKR auf zukünftige Ziele",
+   "KPI bewertet die Effizienz von Prozessen, OKR definiert den Strategieansatz",
+   "OKR setzt sich aus Zielen und Ergebnissen zusammen, KPI misst die Ergebnisse"
+  ],
+  "correct": 3
+ },
+ "16:2": {
+  "options": [
+   "Ziele festlegen, die 10-fach höher sind als realistisch — für neues Denken",
+   "Visionen verfolgen, die unrealistisch erscheinen, aber mutig sind",
+   "Innovationen anstreben, die radikal anders sind als bisherige Ansätze",
+   "Projekte entwickeln, die auf außergewöhnliche Leistungen abzielen"
+  ],
+  "correct": 0
+ },
+ "16:4": {
+  "options": [
+   "Key Results beziehen sich häufig auf Prozesse anstelle von konkreten Ergebnissen",
+   "Die gesetzten OKRs sind meist unrealistisch hoch und nicht erreichbar",
+   "Oftmals gibt es zu wenige OKRs zur Zielverwirklichung",
+   "Der Einsatz von spezialisierten OKR-Tools wird oft vernachlässigt"
+  ],
+  "correct": 0
+ },
+ "16:5": {
+  "options": [
+   "Führungskräfte sollten sich auf die eigene Arbeitszeit konzentrieren",
+   "Teamresultate zählen mehr als individuelle Leistungen",
+   "Die Beziehung zu Mitarbeitern hat keinen Einfluss auf Ergebnisse",
+   "Die eigene Produktivität ist für den Erfolg entscheidend"
+  ],
+  "correct": 1
+ },
+ "16:6": {
+  "options": [
+   "Wöchentlich und monatlich, Reset nur einmal jährlich",
+   "Wöchentliche kurze und monatliche tiefere Überprüfungen",
+   "Jährliche Überprüfung ist ausreichend für OKRs",
+   "Überprüfungen sollten nur am Quartalsende stattfinden"
+  ],
+  "correct": 1
+ },
+ "16:9": {
+  "options": [
+   "Setze dir Ziele, die so einzigartig sind, dass du keinen direkten Konkurrenten hast",
+   "Wettbewerb sollte vermieden werden, da dieser immer nachteilige Folgen hat",
+   "Monopole sind eine gefragte Unternehmensstrategie für langfristigen Erfolg",
+   "Es ist besser, sich nicht auf Konkurrenz zu konzentrieren, um effizienter zu arbeiten"
+  ],
+  "correct": 0
+ },
+ "17:0": {
+  "options": [
+   "Angst vor negativen Rückmeldungen und möglichen Konflikten",
+   "Unzureichende Fähigkeiten zur Gesprächsführung in solchen Situationen",
+   "Vorurteilsbehaftete Sichtweisen auf die Relevanz der Themen",
+   "Mangelndes Interesse an den Emotionen des Gesprächspartners"
+  ],
+  "correct": 0
+ },
+ "17:1": {
+  "options": [
+   "Sichere Umgebung schaffen, Fakten festhalten und gemeinsam Lösungen entwickeln",
+   "Wichtige Gespräche nur bei klaren Meinungsverschiedenheiten führen",
+   "Offene Diskussionen für jeden Gesprächspartner ermöglichen",
+   "Sensiblen Themen nur mit Experten erörtern, um Konflikte zu vermeiden"
+  ],
+  "correct": 0
+ },
+ "17:2": {
+  "options": [
+   "Describe-Express-Specify-Consequences: Situationen sachlich beschreiben und Gefühle äußern",
+   "Technik zur Deeskalation von Konflikten durch aktives Zuhören und Empathie",
+   "Methode, um personalbezogene Konflikte gezielt zu bearbeiten und zu lösen",
+   "Diese Methode hilft dabei, Bitte und Konsequenzen klar und deutlich zu benennen"
+  ],
+  "correct": 0
+ },
+ "17:4": {
+  "options": [
+   "Zu lange und kompliziert erklären, anstatt präzise zu kommunizieren",
+   "Emotionale Ausbrüche zeigen, was den Dialog belasten kann",
+   "Das Gespräch ohne Begleitung von HR führen ist ein Risiko",
+   "Zu schnell und unüberlegt handeln, ohne die Gründe darzulegen"
+  ],
+  "correct": 0
+ },
+ "17:5": {
+  "options": [
+   "Vorbereitung ist nicht nötig, besser ungeplant agieren",
+   "Ausschließlich Informationen sammeln und abwarten",
+   "Das Personalwesen sollte immer informiert sein",
+   "Ziele festlegen, Fakten zusammentragen und Gesprächsstart planen"
+  ],
+  "correct": 3
+ },
+ "17:6": {
+  "options": [
+   "Ich habe zur Kenntnis genommen, dass X passiert ist und möchte mehr darüber erfahren",
+   "Lass uns über ein Problem sprechen, das mich sehr beschäftigt hat in letzter Zeit",
+   "Es gibt Rückmeldungen von anderen, die wir unbedingt ansprechen sollten",
+   "Mir ist aufgefallen, dass X geschehen ist und ich möchte verstehen, was dazu führte"
+  ],
+  "correct": 0
+ },
+ "17:7": {
+  "options": [
+   "Eine kurze Pause anbieten und die Emotion respektieren",
+   "Das Gespräch abbrechen, um die Stimmung aufzulockern",
+   "Unbemerkt weitermachen und die Emotion ignorieren",
+   "Schnell nachgeben und dem anderen zustimmen"
+  ],
+  "correct": 0
+ },
+ "18:0": {
+  "options": [
+   "Mimik und Gestik sind irrelevant in Videokonferenzen",
+   "Die Worte sind der alleinige Entscheidungsfaktor",
+   "Audio lässt sich vollständig als Kommunikationsmittel nutzen",
+   "Über 50% der Wirkung kommen von nonverbalen Signalen"
+  ],
+  "correct": 3
+ },
+ "18:1": {
+  "options": [
+   "Häufiges Sprechen vor der Kamera steigert die Authentizität und Überzeugungskraft",
+   "Durch die Kamera wird das Erscheinungsbild automatisch verbessert",
+   "Das Gefühl von Nervosität vor der Kamera ist ein häufiges Problem",
+   "Dieser Effekt ist nur für Personen relevant, die Videos online teilen"
+  ],
+  "correct": 0
+ },
+ "18:5": {
+  "options": [
+   "KI analysiert Sprechweise, Tempowechsel und gibt Hinweise zur Verbesserung",
+   "KI erstellt realistische KI-gestützte visuelle Inhalte für Videos",
+   "KI kann bestehende Videos verändern oder neu aufnehmen",
+   "KI ist in der Kommunikationsanalyse nicht erforderlich"
+  ],
+  "correct": 0
+ },
+ "18:6": {
+  "options": [
+   "30 Sekunden sind ausreichend für eine effektive Botschaft",
+   "5 Minuten bieten genügend Zeit für umfassende Erklärungen",
+   "10 Minuten sind ideal, um komplexe Inhalte darzustellen",
+   "60-120 Sekunden sind optimal für klare und energische Botschaften"
+  ],
+  "correct": 3
+ },
+ "18:8": {
+  "options": [
+   "Änderung in Lautstärke, Tempo und Höhe — hält Interesse und zeigt Gefühle",
+   "Verwendung unterschiedlicher Sprachen, um Vielseitigkeit zu zeigen",
+   "Dauerhaftes Reden ohne Pausen für mehr Engagement",
+   "Lautes Sprechen zur besseren Verständlichkeit der Botschaft"
+  ],
+  "correct": 0
+ },
+ "19:0": {
+  "options": [
+   "Die cleversten Teammitglieder sind entscheidend für den Erfolg",
+   "Erfahrungsreichtum spielt eine entscheidende Rolle im Team",
+   "Die Dauer der Meetings beeinflusst die Teamleistung stark",
+   "Psychologische Sicherheit ist der wichtigste Erfolgsfaktor für Teams"
+  ],
+  "correct": 3
+ },
+ "19:2": {
+  "options": [
+   "Wöchentlicher Termin für kollegiales Feedback unter Teammitgliedern",
+   "Einfache wöchentliche Besprechung zu Teamzielen",
+   "Gelegenheit zur Selbstreflexion über persönliche Leistungen",
+   "Regelmäßiges Meeting für allgemeine Projektupdates"
+  ],
+  "correct": 0
+ },
+ "19:5": {
+  "options": [
+   "Offenes 360-Grad-Feedback und transparente Gehälter sind zentral",
+   "Die Interne Kommunikation erfolgt vollständig öffentlich",
+   "Mitarbeiter haben keinen Zugriff auf geheime Informationen",
+   "Netflix nutzt Social Media zur Transparenzsteigerung"
+  ],
+  "correct": 0
+ },
+ "19:9": {
+  "options": [
+   "Mitarbeiter-Befragung zur Sicherstellung der Gesprächskultur und Feedbackhäufigkeit",
+   "Überprüfung der Anzahl an eingegangenen Beschwerden im Team über einen bestimmten Zeitraum",
+   "Regelmäßige Performance-Reviews zur Einschätzung von Mitarbeitereffizienz und Zufriedenheit",
+   "Analyse der Mitarbeiterfluktuation als Indikator für Teamdynamik und Arbeitsklima"
+  ],
+  "correct": 0
+ },
+ "20:0": {
+  "options": [
+   "EQ ist für 58% des Erfolgs in verschiedenen Berufen entscheidend",
+   "IQ hat eine größere Bedeutung als der EQ für den Erfolg",
+   "EQ spielt keine Rolle für den beruflichen Fortschritt aller Beschäftigten",
+   "EQ ist nur für Führungskräfte von Bedeutung, nicht für andere Positionen"
+  ],
+  "correct": 0
+ },
+ "20:2": {
+  "options": [
+   "Emotionen klar benennen kann helfen, ihre Stärke deutlich zu verringern",
+   "Emotionen zu ignorieren hat keinen positiven Effekt auf ihre Intensität",
+   "Emotionen falsch zuzuordnen führt oft zu Missverständnissen und Konflikten",
+   "Emotionen wegzudrängen hilft kurzfristig, wirkt jedoch langfristig nachteilig"
+  ],
+  "correct": 0
+ },
+ "20:4": {
+  "options": [
+   "Es gibt keinen Unterschied zwischen Reaktion und Antwort",
+   "Reaktion ist immer die bessere Wahl als Antwort",
+   "Antwort benötigt mehr Zeit als spontane Reaktion",
+   "Reaktion geschieht unbewusst, Antwort erfolgt bewusst gewählt"
+  ],
+  "correct": 3
+ },
+ "20:5": {
+  "options": [
+   "In diesem Raum liegt deine Wahlfreiheit für die Reaktion und das prägt deinen Führungsstil",
+   "Die Zeit im Raum gilt es besser zu nutzen, um über die Reaktion nachzudenken und zu planen",
+   "Pausen im Raum helfen Leaders, emotionale Reaktionen zu vermeiden und überlegt zu handeln",
+   "Langsame Reaktionen im Raum führen oft zu überlegenen Entscheidungen und stärken die Führungskompetenz"
+  ],
+  "correct": 0
+ },
+ "20:7": {
+  "options": [
+   "Die Stimmung eines Leaders beeinflusst die Emotionen im Team",
+   "In Teams herrscht immer eine einheitliche Gefühlslage",
+   "Emotionale Unterstützung führt zu gemeinsamer Entspannung im Team",
+   "Teammitglieder teilen häufig ihre persönlichen Probleme"
+  ],
+  "correct": 0
+ },
+ "20:9": {
+  "options": [
+   "Verletzlichkeit ist nur in bestimmten Situationen von Vorteil",
+   "Verletzlichkeit ist Schwäche und sollte vermieden werden",
+   "Verletzlichkeit fördert das Vertrauen und die Offenheit im Team",
+   "Verletzlichkeit ist eine Eigenschaft, die nur bei Frauen geschätzt wird"
+  ],
+  "correct": 2
+ },
+ "21:0": {
+  "options": [
+   "Regelmäßige Verbesserung führt zu dauerhaften Fortschritten im Leadership",
+   "Einfaches Talent bestimmt häufig den Erfolg eines Leaders",
+   "Zusätzliches Wissen hat einen direkten Einfluss auf den Führungserfolg",
+   "Hochentwickelte Tools fördern die Fähigkeit zum erfolgreichen Führen"
+  ],
+  "correct": 0
+ },
+ "21:1": {
+  "options": [
+   "Eine Phase ohne Fortschritt, gefüllt mit Anstrengung und Frustration",
+   "Eine Zeit des Lernens, in der der Fokus auf Ergebnissen liegt",
+   "Ein Gebirgesystem, das die Entwicklung beeinflusst",
+   "Eine Phase mit hohem Stress und Leistungsdruck"
+  ],
+  "correct": 0
+ },
+ "21:4": {
+  "options": [
+   "Beobachtungen führen nicht zu Veränderungen im Verhalten von Menschen",
+   "Menschen verbessern sich, wenn sie bei ihrer Arbeit beobachtet werden",
+   "Es handelt sich um eine Technik zur Steigerung von Motivation",
+   "Ein Effekt, der sich nur in sozialen Studien manifestiert"
+  ],
+  "correct": 1
+ },
+ "21:7": {
+  "options": [
+   "Ein Mangel an Wissen führt zu Selbstüberschätzung bei Lernenden",
+   "Eine falsche Wahrnehmung der eigenen Fähigkeiten beeinflusst Führungspersonen",
+   "Die Fähigkeit zu lernen steigert das Vertrauen in die eigene Kompetenz",
+   "Nur weniger Erfahrung führt zu Selbstüberschätzung und Fehleinschätzungen"
+  ],
+  "correct": 1
+ },
+ "21:8": {
+  "options": [
+   "Strukturiertes Üben mit Fokus auf spezifische Schwächen und sofortiger Rückmeldung",
+   "Einmaliges Üben über einen langen Zeitraum, meistens 10.000 Stunden",
+   "Ersatz für bestehendes Talent, das durch Technik verbessert wird",
+   "Regelmäßiges Üben, um allgemeine Fähigkeiten zu festigen und zu vertiefen"
+  ],
+  "correct": 0
+ },
+ "22:0": {
+  "options": [
+   "Selbstständige KI, die Aufgaben eigenständig ausführt und Entscheidungen trifft",
+   "Intelligente Software, die ausschließlich Informationen bereitstellt und Fragen beantwortet",
+   "Spezielle Programme, die nur für technisches Personal zugänglich sind",
+   "Hilfssoftware, die alltägliche Aufgaben wie Terminkoordination erledigt"
+  ],
+  "correct": 0
+ },
+ "22:1": {
+  "options": [
+   "Der Fokus liegt auf den Ergebnissen statt auf Tools im Arbeitsprozess",
+   "Leiter müssen mehr Erfahrung mit Softwarelösungen sammeln",
+   "Die Anforderung an technologische Kenntnisse steigt stark",
+   "Diese Veränderung betrifft ausschließlich technologieorientierte Unternehmen"
+  ],
+  "correct": 0
+ },
+ "22:4": {
+  "options": [
+   "90% der Firmen nutzen AI, jedoch nur 10% setzen es umfassend um – das ist eine Führungsfrage",
+   "Viele AI-Startups scheitern am Mangel an qualifizierten Fachkräften für erfolgreiche Implementierung",
+   "Die Hauptursache für AI-Engpässe liegt in der hohen Investition in Hardware und Technik",
+   "80% der Unternehmen haben AI-Projekte, doch es mangelt an der strategischen Steuerung durch das Management"
+  ],
+  "correct": 0
+ },
+ "22:5": {
+  "options": [
+   "KI, die eigenständig Aufgaben plant und ausführt wie ein digitaler Partner",
+   "KI, die in Agenturen für Marketingzwecke eingesetzt wird und Projekte leitet",
+   "Künstliche Intelligenz, die aggressive Entscheidungen trifft und Probleme löst",
+   "Ein Begriff, der in der Marketingbranche häufig verwendet wird, jedoch wenig bedeutet"
+  ],
+  "correct": 0
+ },
+ "22:7": {
+  "options": [
+   "AI reduziert Kosten drastisch, was Wettbewerber zwingt, diese Technologie zu nutzen",
+   "Technologie ist nur für große Unternehmen relevant und für kleinere tabu",
+   "AI wird oft überbewertet und sorgt nicht für echte Vorteile",
+   "Die Nutzung von AI ist eine optionale Entscheidung für Firmenunternehmen"
+  ],
+  "correct": 0
+ },
+ "22:9": {
+  "options": [
+   "Organisationen schaffen, die mit AI-Disruption wachsen und sich weiterentwickeln",
+   "Sich durch Strategien und Technologien vor AI-Risiken zu schützen",
+   "Höhere Versicherungspolicen zur Absicherung gegen AI-Fehler einsetzen",
+   "Strategisch konservative Investitionen zur Stabilität in der AI-Welt wählen"
+  ],
+  "correct": 0
+ },
+ "23:0": {
+  "options": [
+   "Eine persönliche Unterschrift zur Führungshaltung",
+   "Eine spezielle Auszeichnung für Führungskompetenz",
+   "Eine Form von Kontaktinformation für Führungskräfte",
+   "Dein individueller Stil und Einfluss als Führungskraft"
+  ],
+  "correct": 3
+ },
+ "23:1": {
+  "options": [
+   "Zwingend, Visionär, Unterstützend, Teamorientiert, Leistungsgetrieben, Coaching",
+   "Autoritär, Visionär, Teamorientiert, Konsens, Leistungsorientiert, Coaching",
+   "Zwang, Visionär, Affiliativ, Demokratisch, Leistungstreiber, Coaching",
+   "Coercive, Authoritative, Affiliative, Democratic, Pacesetting, Coaching"
+  ],
+  "correct": 3
+ },
+ "23:2": {
+  "options": [
+   "Demokratisch — Teamentscheidungen ermöglichen unter gemeinsamer Führung",
+   "Laissez-faire — Freiheit und Selbstmanagement für die Teammitglieder",
+   "Coaching — individuelle Förderung zur Entwicklung des Teams",
+   "Authoritative — klare Anleitung und Vertrauen vermitteln in schwierigen Zeiten"
+  ],
+  "correct": 3
+ },
+ "23:4": {
+  "options": [
+   "Führungsstil an Mitarbeiterreife und Situation anpassen",
+   "Führung ist nur in speziellen Situationen erforderlich",
+   "Führung erfolgt durch Delegieren und nicht durch Anweisen",
+   "Führerschaft ist durchgehend im gleichen Stil zu gestalten"
+  ],
+  "correct": 0
+ },
+ "23:5": {
+  "options": [
+   "Führung durch Unterstützung des Teams für dessen Erfolg",
+   "Hilfe und Dienstleistung an den Kunden steht im Vordergrund",
+   "Führungsethik, die Unterwerfung des Leaders fordert",
+   "Wird ausschließlich in Non-Profit-Organisationen angewendet"
+  ],
+  "correct": 0
+ },
+ "23:9": {
+  "options": [
+   "Dein Warum motiviert Menschen mehr als dein Was oder Wie",
+   "Neugierde fördert kreatives Denken im Team und kommt hier ins Spiel",
+   "Es ist wichtig, alle Entscheidungen ständig zu hinterfragen",
+   "Ein starkes Warum hilft, eine klare Vision für das Unternehmen zu entwickeln"
+  ],
+  "correct": 0
+ },
+ "24:0": {
+  "options": [
+   "90 Tage bieten einen klaren Zeitraum für konzentriertes Handeln",
+   "Jahrespläne berücksichtigen weniger wichtige Aufgaben",
+   "Mit Jahresplänen ist Planung einfacher und schneller",
+   "Quartalsweise Planung bringt mehr Flexibilität und Anpassung"
+  ],
+  "correct": 0
+ },
+ "24:1": {
+  "options": [
+   "Strukturierter Plan für die ersten 90 Tage in einer neuen Position",
+   "Überstehen der Probezeit ohne klare Zielvorgaben",
+   "Einarbeitung nach festgelegten Kriterien und Zeitrahmen",
+   "Befasst sich ausschließlich mit neuen Mitarbeiterfragen"
+  ],
+  "correct": 0
+ },
+ "24:2": {
+  "options": [
+   "Frühe Erfolge, die Vertrauen fördern und Fortschritt erzeugen",
+   "Schnelle Erfolge sind nicht von Bedeutung für den Erfolg",
+   "Günstige Lösungen ohne langfristige Planung",
+   "Konzepte, die auf kurzfristige Vorteile ausgerichtet sind"
+  ],
+  "correct": 0
+ },
+ "24:5": {
+  "options": [
+   "Die wichtigste Aufgabe zuerst am Morgen angehen",
+   "Unangenehmes erst am Abend abschließen",
+   "Die Metapher beschreibt Zeitmanagement",
+   "Frösche stehen für unerledigte Aufgaben"
+  ],
+  "correct": 0
+ },
+ "24:6": {
+  "options": [
+   "1-2 Tage zur Zielsetzung, Klärung von Rollen und Teamentwicklung nutzen",
+   "Einen PowerPoint-Marathon zur Präsentation aller Ideen abhalten",
+   "Eine lockere Teambuilding-Veranstaltung zur Förderung des Miteinanders organisieren",
+   "Eine intensive Brainstorming-Session zur Ideensammlung planen"
+  ],
+  "correct": 0
+ },
+ "24:7": {
+  "options": [
+   "Ein langfristiges Ziel, das das Team motiviert und inspiriert",
+   "Zielsetzung, die unrealistisch und schwer zu erreichen ist",
+   "Ein prägnanter Slogan für die Firmenkommunikation",
+   "Ein Ziel, das klar umrissen, aber sehr herausfordernd ist"
+  ],
+  "correct": 0
+ },
+ "24:9": {
+  "options": [
+   "Umsatz und Gewinn, aber keine anderen Indikatoren",
+   "Mitarbeiterzufriedenheit ohne rechtliche Aspekte",
+   "Nur das Bauchgefühl, andere Messungen sind überflüssig",
+   "Zahlen, Kulturveränderungen sowie persönliches Wachstum"
+  ],
+  "correct": 3
+ },
+ "25:0": {
+  "options": [
+   "Schneller AI in Produkte integrieren ist entscheidend für den Wettbewerb",
+   "Kreative Features sind der Schlüssel zum Erfolg in der heutigen Wirtschaft",
+   "Kosteneffizienz wird maßgeblich für die Innovationskraft sein",
+   "Überzeugendes Design bleibt zentral für Produkte im digitalen Markt"
+  ],
+  "correct": 0
+ },
+ "25:1": {
+  "options": [
+   "Neues entwickeln anstelle von Verbesserungen",
+   "Innovative Ideen für Unternehmensgründungen nutzen",
+   "Ambitionierte Innovation in Technologieprojekten vorantreiben",
+   "Startups fördern und das Unternehmenswachstum unterstützen"
+  ],
+  "correct": 0
+ },
+ "25:4": {
+  "options": [
+   "Erfolgreiche Firmen verbessern Produkte für ihre Kunden und ignorieren AI-Entwicklungen",
+   "Zuvor etablierte Unternehmen entwickeln oft zu viele Ideen in kurzer Zeit",
+   "Unternehmen haben häufig nicht genügend Mittel für KI-Investitionen",
+   "Innovation im Bereich KI ist überwiegend für Startups relevant"
+  ],
+  "correct": 0
+ },
+ "25:6": {
+  "options": [
+   "Es erlaubt, schneller Lösungen zu entwickeln und diese zeitnah zu testen",
+   "Mit AI sind mehrere Prototypen in kürzerer Zeit möglich, was Prozesse beschleunigt",
+   "Die Nutzung von AI fördert den Austausch innerhalb von Entwicklerteams",
+   "Technologische Hilfsmittel wie AI sind nur für Softwareentwickler nützlich"
+  ],
+  "correct": 1
+ },
+ "25:9": {
+  "options": [
+   "AI plant die Zukunft basierend auf festgelegten Parametern",
+   "AI kann unverändert die Zukunft optimal gestalten",
+   "AI hilft bei der Planung von Visionen in der Vergangenheit",
+   "AI unterstützt dabei, den Weg zur idealen Zukunft rückwärts zu gestalten"
+  ],
+  "correct": 3
+ },
+ "26:1": {
+  "options": [
+   "Dein Ruf ist das, was andere über dich denken, wenn du nicht dabei bist",
+   "Deine Online-Präsenz ist maßgeblich für deine persönliche Marke",
+   "Dein visuelles Erscheinungsbild prägt die Wahrnehmung deiner Person",
+   "Dein Netzwerk bestimmt, wie Menschen dich wahrnehmen, wenn du abwesend bist"
+  ],
+  "correct": 0
+ },
+ "26:4": {
+  "options": [
+   "Experte werden durch wertvolle Inhalte und besondere Sichtweisen",
+   "Bücher veröffentlichen, um eigene Gedanken festzuhalten",
+   "Die eigene Meinung zählt nur für Berater und Coaches",
+   "Ununterbrochen über verschiedene Themen nachdenken"
+  ],
+  "correct": 0
+ },
+ "26:5": {
+  "options": [
+   "LinkedIn — dort sind Netzwerke und zukünftige Talente gut vertreten",
+   "TikTok — ideal für kreative Leadership-Inhalte mit hohem Engagement",
+   "Instagram — für visuelle Kommunikation von Führungsstilen geeignet",
+   "Twitter — schnellste Plattform für direkte Interaktion mit der Zielgruppe"
+  ],
+  "correct": 0
+ },
+ "26:7": {
+  "options": [
+   "Echte Einblicke in Entscheidungen, Learnings und Werte ohne PR-Jargon",
+   "Texte, die vor allem das Unternehmen in den Vordergrund stellen",
+   "Inhalte, die darauf abzielen, neue Mitarbeiter für das Unternehmen zu gewinnen",
+   "Beiträge, die sich ausschließlich um Produktwerbung und Verkaufsförderung drehen"
+  ],
+  "correct": 0
+ },
+ "26:9": {
+  "options": [
+   "KI liefert dir Unterstützung für Ideen, Textverbesserungen und deine Markenbotschaft",
+   "KI übernimmt vollständig die Erstellung deines Contents und wirkt als kreative Autorität",
+   "KI substituiert ganz das persönliche Element in deinem Branding und macht es überflüssig",
+   "KI wird in deinem Branding nicht benötigt und spielt keine Rolle für deinen Erfolg"
+  ],
+  "correct": 0
+ },
+ "27:0": {
+  "options": [
+   "Kultur und Prozesse nicht vor dem Wachstum festlegen sorgt für Unordnung",
+   "Frühzeitige Einstellungen von Personal sind meist nicht sinnvoll",
+   "Unzureichende finanzielle Mittel wirken sich negativ auf die Entwicklung",
+   "Zu viele Meetings behindern die Effizienz und den Fortschritt"
+  ],
+  "correct": 0
+ },
+ "27:1": {
+  "options": [
+   "150 — die Grenze für enge persönliche Beziehungen in Gruppen",
+   "Eine Messgröße für soziale Netzwerke und Interaktionen",
+   "Ein Konzept zur Bewertung von Gruppendynamik und Führung",
+   "Eine Zahl zur Definition von Budgetgrenzen in Organisationen"
+  ],
+  "correct": 0
+ },
+ "27:2": {
+  "options": [
+   "Maximale Anzahl an Mitarbeitern, die ein Vorgesetzter effektiv führen kann",
+   "Anzahl der Berichte in einem Unternehmen als Steuerungsgröße",
+   "Leistungsüberprüfung von Mitarbeitern zur Qualitätssteigerung",
+   "Anzahl direkter Mitarbeiter pro Führungskraft in verschiedenen Kontexten"
+  ],
+  "correct": 0
+ },
+ "27:5": {
+  "options": [
+   "Unterschiedslos Einstellungen vornehmen führt zu Schattenseiten",
+   "Einstellungen spiegeln kulturelle Vielfalt im Team perfekt wider",
+   "Ausschließlich aufgrund von Fähigkeiten Personalentscheidungen treffen",
+   "Es geht darum, neue Perspektiven und Fähigkeiten ins Unternehmen zu holen"
+  ],
+  "correct": 3
+ },
+ "27:7": {
+  "options": [
+   "Werte grafisch darstellen und im Unternehmen aushängen",
+   "Ein umfassendes Kultur-Handbuch erstellen und verteilen",
+   "Regelmäßige Team-Events zur Förderung der Unternehmenskultur planen",
+   "Werte in das Handeln umsetzen, durch Rituale festigen und vorleben"
+  ],
+  "correct": 3
+ },
+ "28:0": {
+  "options": [
+   "Dringlichkeit schaffen, Koalition aufbauen, Vision definieren, kommunizieren und stärken",
+   "8 Phasen der Kommunikation während eines Veränderungsprozesses definieren und planen",
+   "Dringlichkeit erzeugen, Veränderungen gemäß KPIs umsetzen, Kultur festigen und messen",
+   "Notwendigkeit erzeugen, Strategie ausarbeiten, Team informieren, Erfolge feiern und verankern"
+  ],
+  "correct": 0
+ },
+ "28:1": {
+  "options": [
+   "Widerstand wird nicht beachtet, es fehlt an starker Kommunikation und schnellen Erfolgen",
+   "Projekte werden oft finanziell überschätzt und haben zu wenig Budget für den Erfolg",
+   "Verpfuschte Planungen und unrealistische Erwartungen führen häufig zu Misserfolgen",
+   "Die Auswahl der Berater ist entscheidend, falsche Partner können den Prozess stören"
+  ],
+  "correct": 0
+ },
+ "28:2": {
+  "options": [
+   "Emotionale Phasen während eines Veränderungsprozesses",
+   "Eine spezifische Lernkurve für Mitarbeiterschulungen",
+   "Die Geschwindigkeit von Veränderungsprozessen verstehen",
+   "Entwicklung einer Leistungskurve über die Zeit"
+  ],
+  "correct": 0
+ },
+ "28:4": {
+  "options": [
+   "Es gibt keinen Unterschied zwischen Change Management und Change Leadership",
+   "Management fokussiert Prozesse, während Leadership Menschen motiviert",
+   "Leadership wird als zeitgemäßer angesehen als herkömmliches Management",
+   "Im Change Management geht es vorrangig um technische Aspekte und Systeme"
+  ],
+  "correct": 1
+ },
+ "28:6": {
+  "options": [
+   "Widerstand ignorieren und versuchen, die Skeptiker zu ersetzen",
+   "Den Widerstand überstimmen, um das Projekt voranzubringen",
+   "Zuhören und Widerständler als Teil des Lösungsteams einbeziehen",
+   "Widerstand tolerieren, aber die Kritiker nicht einbinden"
+  ],
+  "correct": 2
+ },
+ "28:7": {
+  "options": [
+   "Die Notwendigkeit zur Veränderung deutlich machen, damit Handeln wichtiger wird als Stillstand",
+   "Einfache Kommunikation während einer Krise, um die Mitarbeiter zu motivieren und zu informieren",
+   "Eine akute Notsituation schaffen, um schnelles Handeln zu erzwingen und Widerstände zu brechen",
+   "Ein Feueralarm führt dazu, dass Mitarbeiter aus ihren Positionen fliehen und die Situation neu bewerten"
+  ],
+  "correct": 0
+ },
+ "28:9": {
+  "options": [
+   "Umsatzverlauf wird als J-Form dargestellt",
+   "Eine Darstellungsmethode von Veränderungen",
+   "Es beschreibt den typischen Lernverlauf von Veränderungen",
+   "Leistung sinkt zunächst, bevor sie wächst – das ist normal"
+  ],
+  "correct": 3
+ },
+ "29:0": {
+  "options": [
+   "Dein Netzwerk hat großen Einfluss auf deinen Karriereerfolg",
+   "Fleiß allein führt oft zu beruflichem Aufstieg",
+   "In der heutigen Welt sind Social-Media-Kontakte entscheidend",
+   "Beruflicher Erfolg hängt nur von den eigenen Fähigkeiten ab"
+  ],
+  "correct": 0
+ },
+ "29:1": {
+  "options": [
+   "Entfernte Bekannte vermitteln oft neue Informationen und Chancen",
+   "Schwache Beziehungen bringen keine relevanten Informationen mit",
+   "Engere Freunde verfügen über die besten Informationen und Kontakte",
+   "Berufliche Netzwerke bieten keine neuen Möglichkeiten für persönliche Kontakte"
+  ],
+  "correct": 0
+ },
+ "29:2": {
+  "options": [
+   "Wertschätzung zeigen ohne sofortige Gegenleistung zu erwarten",
+   "Nehmer sind erfolgreicher als die, die ständig geben",
+   "Immer Geschenke an andere verteilen bevor man selbst etwas bekommt",
+   "Erlass von Schulden zugunsten der Mitmenschen"
+  ],
+  "correct": 0
+ },
+ "29:5": {
+  "options": [
+   "Strategisches Vernetzen von Personen in deinem Umfeld",
+   "Veranstaltungen zur Pflege von Kontakten planen",
+   "Aktives Sammeln von Kontakten und Visitenkarten",
+   "Effektive Nutzung sozialer Medien zur Kontaktpflege"
+  ],
+  "correct": 0
+ },
+ "29:9": {
+  "options": [
+   "Die Bedeutung von Verbindungen nimmt mit jedem neuen Kontakt zu",
+   "Jeder neue Kontakt hat keinen Einfluss auf das Netzwerk",
+   "Die Anzahl der Kontakte führt zu einem schwächeren Netzwerkwert",
+   "Steigende Mitgliederzahlen erhöhen nicht den Wert eines Netzwerks"
+  ],
+  "correct": 0
+ },
+ "30:1": {
+  "options": [
+   "KI verbessert die Führungsfähigkeit, doch Empathie und Vertrauen sind menschlich",
+   "KI ist ein nützliches Hilfsmittel für Führungskräfte in Organisationen",
+   "KI übernimmt die Rolle von Führungspersonen in Unternehmen meist",
+   "KI hat in der Führung heute nicht die Bedeutung, die ihr oft zugeschrieben wird"
+  ],
+  "correct": 0
+ },
+ "30:3": {
+  "options": [
+   "Kleine tägliche Fortschritte summieren sich im Lauf der Zeit",
+   "Zusammengesetzte Ziele führen zu besseren Ergebnissen",
+   "Gemeinsame Teamarbeit steigert die Effizienz erheblich",
+   "Finanzielle Zinsen tragen zur Wertsteigerung von Investitionen bei"
+  ],
+  "correct": 0
+ },
+ "30:4": {
+  "options": [
+   "Regelmäßige Selbstreflexion, konstruktives Feedback, KI gezielt einsetzen",
+   "Höhere Arbeitszeit, vielseitiges Lesen, zahlreiche Besprechungen",
+   "Frühere Weckzeiten, intensives Sporttreiben, reduzierte Mediennutzung",
+   "Keine Veränderungen vornehmen und alte Gewohnheiten beibehalten"
+  ],
+  "correct": 0
+ },
+ "30:9": {
+  "options": [
+   "Führung bedeutet, Menschen zu ermutigen, gemeinsam Großartiges zu schaffen",
+   "Führung heißt, die Kontrolle über alle Entscheidungen zu behalten",
+   "Führung basiert darauf, die Marktbedingungen richtig einzuschätzen",
+   "Führung fördert das individuelle Wachstum über das Teamziel hinaus"
+  ],
+  "correct": 0
+ },
+ "1:7": {
+  "options": [
+   "Zuerst KI-Anwendungen effektiv auswählen",
+   "Künftig nur auf IBM-Technologie setzen",
+   "Das Potenzial von KI ganz verstehen",
+   "Sofort KI-Tools ohne Konzept einsetzen"
+  ],
+  "correct": 2
+ },
+ "6:1": {
+  "options": [
+   "Delegation erfordert, dass die Ziele klar sind, das Vorgehen jedoch individuell bleibt",
+   "Es ist besser, selbst alle Aufgaben zu übernehmen, um Kontrolle zu behalten",
+   "Die Führungskraft muss allen Mitarbeitenden Aufgaben vorgeben",
+   "Kreativität kann verletzt werden, wenn man die Details vorschreibt"
+  ],
+  "correct": 0
+ },
+ "10:1": {
+  "options": [
+   "Vision ist der langfristige Traum, Ziel ist der konkret messbare Schritt",
+   "Es gibt keinen Unterschied zwischen Vision und Ziel",
+   "Ziele stellen die wichtigsten Meilensteine für den Erfolg dar",
+   "Visionen sind vor allem unrealistisch und schwer umsetzbar"
+  ],
+  "correct": 0
+ },
+ "24:4": {
+  "options": [
+   "Kontinuierliche Bemühungen führen zu wachsendem Schwung und Effizienz",
+   "Ein sich selbst antreibendes System, das nie stoppt",
+   "Es beschreibt schnelle und einfache Veränderungen im Prozess",
+   "Gilt ausschließlich für industrielle Produktionsstätten"
+  ],
+  "correct": 0
+ },
+ "26:0": {
+  "options": [
+   "Er verbessert deine Sichtbarkeit in sozialen Netzwerken",
+   "Es ist wichtig für Personen mit hohem Einfluss",
+   "Personal Branding wird oft von HR gefordert",
+   "Dein Ruf öffnet Türen und zieht Talente sowie Chancen an"
+  ],
+  "correct": 3
+ },
+ "28:5": {
+  "options": [
+   "Ein Modell zur Förderung individueller Veränderungen in 5 Schritten",
+   "Ein strategisches Werkzeug für Change-Management-Prozesse",
+   "Ein Konzept zur Analyse von Teamdynamiken im Wandel",
+   "Ein Prozess zur Evaluation von Veränderungserfolgen"
+  ],
+  "correct": 0
+ },
+ "30:6": {
+  "options": [
+   "Führung ist eine ständige Aufgabe in jedem Gespräch und nicht an einen Titel gebunden",
+   "Führungskräfte sind immer im Dienst, unabhängig von ihrer Position",
+   "Führung wird nur von den höchsten Managern ausgeübt und nicht von anderen",
+   "Work-Life-Balance spielt keine Rolle bei der Wahrnehmung von Führungsverantwortung"
+  ],
+  "correct": 0
+ },
+ "1:1": {
+  "options": [
+   "Drei Ebenen des Managements für verschiedene Führungsaufgaben",
+   "Drei Stufen der Karriereentwicklung für Führungskräfte",
+   "Drei Abteilungen mit spezifischen Rollen im Unternehmen",
+   "Drei wesentliche Kompetenzen für moderne Führungspersönlichkeiten"
+  ],
+  "correct": 3
+ },
+ "4:8": {
+  "options": [
+   "Ehrlichkeit ist wichtiger als Nettigkeit in einem professionellen Umfeld",
+   "Psychologische Sicherheit erfordert ehrliche Rückmeldungen ohne Strafe",
+   "Hohe Ansprüche sind entscheidend für einen produktiven Austausch",
+   "Nettigkeit allein fördert keine echte Verantwortung im Team"
+  ],
+  "correct": 1
+ },
+ "5:3": {
+  "options": [
+   "Score 30 bleibt auf theoretischem Niveau, Score 80 nutzt KI für strategische Analysen",
+   "Beide Scores sind willkürlich, liefern keine nützlichen Informationen im praktischen Sinne",
+   "Score 30 ist Funktionen, während Score 80 Möglichkeiten für strategische Planung bietet",
+   "Beide Scores sind einfach Werte ohne tiefere Bedeutung in der praktischen Anwendung"
+  ],
+  "correct": 0
+ },
+ "5:6": {
+  "options": [
+   "Layer 1: Verständnis, Layer 2: Anwendungen, Layer 3: strategische Ansätze, Layer 4: Kultur",
+   "Hardware erwerben, um AI-Technologien besser zu nutzen und die Effizienz zu steigern",
+   "Einen CTO einführen, um die technischen Aspekte der KI-Entwicklung zu überwachen",
+   "Externe Beratung in Anspruch nehmen, um KI-Prozesse zu optimieren"
+  ],
+  "correct": 0
+ },
+ "6:0": {
+  "options": [
+   "Sie erzeugen mehr Resultate durch die Arbeit ihres Teams als durch eigene Anstrengungen",
+   "Die Delegation ihrer Aufgaben führt zu einem signifikanten Anstieg ihrer Leistungen",
+   "Leader, die anderen vertrauen, haben höhere Einnahmen als jene im Alleingang",
+   "Ihre Notwendigkeit, keine Aufgaben mehr selbst zu erledigen, lässt ihre Gehälter steigen"
+  ],
+  "correct": 0
+ },
+ "7:3": {
+  "options": [
+   "Growth Mindset: Du nutzt die 30 Tage, um dich weiterzuentwickeln und dazuzulernen",
+   "Fixed Mindset: Du möchtest nur deine vorhandenen Fähigkeiten bestätigen und das begrenzt dich",
+   "Growth Mindset: Du siehst Anpassungen als Belastung, anstatt sie als Chancen für Wachstum zu erkennen",
+   "Fixed Mindset: Du meidest Herausforderungen, weil du Angst vor Misserfolg hast"
+  ],
+  "correct": 0
+ },
+ "8:9": {
+  "options": [
+   "Reversible schnell treffen, irreversible benötigen mehr Analyse",
+   "Unterscheidung ist nicht relevant für Entscheidungen",
+   "Irreversible Entscheidungen haben keinen Einfluss auf Ergebnisse",
+   "Kein echter Unterschied zwischen reversiblen und irreversiblen Entscheidungen"
+  ],
+  "correct": 0
+ },
+ "9:1": {
+  "options": [
+   "Vertrautheit erhöht oft die positive Bewertung von wiederholt gesehenen Dingen",
+   "Wiederholte Konfrontation kann Ängste oder Unsicherheiten verstärken",
+   "Häufige Auseinandersetzung mit einem Thema führt zu besserem Verständnis",
+   "Das ständige Wiederholen kann zu lähmendem Gruppenzwang führen"
+  ],
+  "correct": 0
+ },
+ "11:0": {
+  "options": [
+   "Aktives Zuhören bedeutet häufiges Nicken während des Gesprächs",
+   "Aktives Zuhören umfasst das Schreiben von Notizen während des Sprechens",
+   "Aktives Zuhören zeichnet sich durch das Verhindern von Unterbrechungen aus",
+   "Aktives Zuhören schließt aktives Verstehen und Rückmeldung des Gehörten ein"
+  ],
+  "correct": 3
+ },
+ "12:0": {
+  "options": [
+   "Entscheidungen richten sich nach den Bedürfnissen der Kunden",
+   "Kundenservice sollte stets effizient gestaltet werden",
+   "Kunden sind die oberste Priorität im Geschäftsprozess",
+   "Wettbewerb sollte weniger beachtet werden als der Kunde"
+  ],
+  "correct": 0
+ },
+ "13:0": {
+  "options": [
+   "Regelmäßiges Feedback steigert das Engagement der Mitarbeiter erheblich",
+   "Mitarbeiter ziehen weniger Feedback oft vor, um produktiver zu sein",
+   "Ein effektives Team benötigt ausschließlich jährliche Feedbackgespräche",
+   "Feedback hat nur geringe Relevanz für die Mitarbeiterbindung"
+  ],
+  "correct": 0
+ },
+ "13:6": {
+  "options": [
+   "Bei positiver Leistung und bei schwerwiegenden Fehlverhalten",
+   "Nur bei schwerwiegenden Fehlern oder in Konflikten",
+   "Sofortiger Austausch ist nicht optimal – besser Termin planen",
+   "Feedback sollte selten spontan gegeben werden"
+  ],
+  "correct": 0
+ },
+ "14:0": {
+  "options": [
+   "Sie fördern das analytische Denken von Führungskräften",
+   "Sie beinhalten alle historische Ansätze zum Zeitmanagement",
+   "Sie unterstützen kluge Entscheidungen durch Klarheit",
+   "Sie konzentrieren sich auf die Umsetzung strategischer Ziele"
+  ],
+  "correct": 2
+ },
+ "15:1": {
+  "options": [
+   "Die Fähigkeit, virtuell Raum zu schaffen durch Energie und Klarheit",
+   "Die Gewohnheit, die Kamera während des gesamten Meetings eingeschaltet zu haben",
+   "Eingehender Fokus auf einen professionellen Hintergrund bei Videoanrufen",
+   "Die Kunst, durch gezielte Präsenz und Interaktion zu überzeugen"
+  ],
+  "correct": 0
+ },
+ "15:2": {
+  "options": [
+   "Echte Präsenz wird entscheidend für Vertrauen und Anerkennung in der Kommunikation",
+   "Das Klonen von Stimmen kann auch positive Effekte auf die Kommunikation haben",
+   "Künstliche Stimmen stellen keinerlei Gefährdung für das Vertrauen dar",
+   "Die Nutzung von Voice-AI führt zu mehr Authentizität in der Führungskommunikation"
+  ],
+  "correct": 0
+ },
+ "15:4": {
+  "options": [
+   "Das Memo zwingt zum eigenen Denken, AI entlastet Führungskräfte davon",
+   "Memos von AI sind informativer und effizienter als menschliche Texte",
+   "Bezos' Methode ist überholt und passt nicht mehr in die heutige Arbeitswelt",
+   "Der Einsatz von AI gefährdet den kritischen Denkprozess des Leaders"
+  ],
+  "correct": 3
+ },
+ "16:7": {
+  "options": [
+   "Teams verfolgen die gleichen Ziele im Sinne einer einheitlichen Ausrichtung",
+   "Teams sind sich über ihre Ziele und Werte einig und arbeiten harmonisch zusammen",
+   "Die Ziele sind klar voneinander abgetrennt und unabhängig von hierarchischen Strukturen",
+   "Teamziele stehen direkt im Einklang mit den Unternehmenszielen – strategische Abstimmung"
+  ],
+  "correct": 3
+ },
+ "17:9": {
+  "options": [
+   "Emotionale Reaktion, die den Verstand ausschaltet — Lösung: Atme kurz durch",
+   "Sich rasch ändernde Stimmung, die Konzentration stört — Lösung: Nimm dir Zeit",
+   "Impulsives Verhalten, das klare Entscheidungen verhindert — Lösung: Pause einlegen",
+   "Übermäßige emotionale Reaktion, die rationales Handeln blockiert — Lösung: 6-Sekunden-Pause"
+  ],
+  "correct": 3
+ },
+ "18:2": {
+  "options": [
+   "Direkter Blick in die Kamera, klare Gliederung, lebhafte Stimme",
+   "Optimale Beleuchtung, hochwertige Technik, neutraler Hintergrund",
+   "Eingesetztes Studio, professionelle Ausstattung, kreative Schnitte",
+   "Schnelle Übergänge, festgelegte Inhalte, leise Stimme"
+  ],
+  "correct": 0
+ },
+ "18:4": {
+  "options": [
+   "Mitarbeiter fühlen sich bei Online-Meetings besser integriert",
+   "Remote-Zusammenarbeit führt häufig zu Ermüdung",
+   "Mitarbeiter erhalten Vorteile, wenn sie vor Ort sind",
+   "Teammitglieder tauschen sich lieber vor Ort aus"
+  ],
+  "correct": 2
+ },
+ "18:9": {
+  "options": [
+   "Echte Emotionen — der Zuschauer erkennt, dass du an deine Botschaft glaubst",
+   "Überlegene Technik sorgt für eine glaubwürdigere Präsentation an sich",
+   "Eine größere Anzahl an Folien transportiert mehr Informationen zu deinem Thema",
+   "Die Präsentationsdauer spielt eine Rolle bei der Aufnahme der Inhalte"
+  ],
+  "correct": 0
+ },
+ "19:6": {
+  "options": [
+   "Modell mit vier Bereichen: Offen, Blind, Versteckt, Unbekannt — Feedback verringert blinde Flecken",
+   "Ein Bildtyp, der Kommunikation zwischen Menschen erleichtert und Missverständnisse klärt",
+   "Das Konzept stammt von einer Person, die in der Psychologie wichtig ist und um Feedback ging",
+   "Ein Verfahren, um Kommunikationsblockaden zu erkennen und die Interaktion zu optimieren"
+  ],
+  "correct": 0
+ },
+ "19:7": {
+  "options": [
+   "Feedback fördert die Entwicklung, während Blame schwächt",
+   "Feedback ist oft angenehm, Blame hingegen unangenehm",
+   "Eine Blame-Kultur ist transparent, Feedback eher versteckt",
+   "Feedback zielt auf Lösungen, Blame auf Bestrafung"
+  ],
+  "correct": 3
+ },
+ "20:6": {
+  "options": [
+   "Achte auf Kommunikationsmuster und die Körpersprache der Teammitglieder",
+   "Diskussionen in der Gruppe anregen, um mehr Informationen zu sammeln",
+   "Mitarbeiterbefragungen nutzen, um Stimmungen im Team zu erfassen",
+   "Gerüchte und informelle Gespräche zur Stimmungslage in Betracht ziehen"
+  ],
+  "correct": 0
+ },
+ "21:5": {
+  "options": [
+   "Technische Fähigkeiten haben sich am stärksten entwickelt",
+   "Die persönlichen Stärken sind unverändert geblieben",
+   "Viele Fähigkeiten haben sich nur geringfügig verbessert",
+   "Mehrere Skills haben sich gleichermaßen verändert"
+  ],
+  "correct": 0
+ },
+ "22:2": {
+  "options": [
+   "AI-Ethische Verantwortung aktiv umsetzen und durch eigenes Verhalten zeigen",
+   "Die Verantwortung für AI-Entscheidungen an die IT-Abteilung abgeben",
+   "AI möglichst meiden, um Risiken nicht einzugehen",
+   "Die Gefahren von AI als übertrieben empfinden und ignorieren"
+  ],
+  "correct": 0
+ },
+ "22:6": {
+  "options": [
+   "Leader delegieren Aufgaben an AI-Agenten wie an Menschen mit klaren Vorgaben",
+   "AI wird menschliche Mitarbeiter vollständig ersetzen ohne eigene Entscheidungen",
+   "Leiter müssen AI als philosophische Herausforderung betrachten und ignorieren",
+   "Delegation an AI hat keine praktische Relevanz für Führungskräfte im Unternehmen"
+  ],
+  "correct": 0
+ },
+ "25:5": {
+  "options": [
+   "Kreativität und Umsetzung sind die entscheidenden Wettbewerbsvorteile",
+   "Alle Unternehmen werden schließlich gleich erfolgreich sein",
+   "Investitionen in mehr Künstliche Intelligenz sind notwendig",
+   "Der Bedarf an Mitarbeitern wird stark abnehmen"
+  ],
+  "correct": 0
+ },
+ "26:2": {
+  "options": [
+   "Kompetenz, Prinzipien, Bekanntheit",
+   "Rolle, Unternehmen, Einkommen",
+   "Persönlichkeit, Erscheinung, Verbindungen",
+   "Fähigkeiten, Grundsätze, Öffentlichkeitsarbeit"
+  ],
+  "correct": 0
+ },
+ "26:6": {
+  "options": [
+   "Ein positives Merkmal beeinflusst die gesamte Wahrnehmung, daher zählen erste Eindrücke stark",
+   "Ein einheitlicher Eindruck basiert auf einem besonderen Licht- oder Farbspektrum im Raum",
+   "Eine visuelle Illusion, die uns dazu bringt, Farben und Formen anders zu interpretieren",
+   "Ein charmantes Auftreten kann die Meinung über die Fachkompetenz einer Person verzerren"
+  ],
+  "correct": 0
+ },
+ "27:4": {
+  "options": [
+   "Vertrauen aufbauen und Konflikte konstruktiv lösen",
+   "Klar definierte KPIs zur Erfolgsmessung setzen",
+   "Teammitglieder mit besonderen Talenten auswählen",
+   "Gemeinsame Verantwortung und Fokus auf Ergebnisse"
+  ],
+  "correct": 0
+ },
+ "27:6": {
+  "options": [
+   "Fragen, was das Schlimmste ist, wenn Aufgaben delegiert werden",
+   "Sich darauf konzentrieren, nur wichtige Aufgaben selbst zu erledigen",
+   "Jede Aufgabe an andere abgeben, um Zeit zu sparen",
+   "Nur unwichtige Tätigkeiten auslagern, um effizienter zu arbeiten"
+  ],
+  "correct": 0
+ },
+ "29:4": {
+  "options": [
+   "Ein Gremium aus mehreren Führungskräften aus einem Unternehmen",
+   "Eine Gruppe von Mentoren, die dir privat helfen",
+   "3-5 Vertrauenspersonen, die dich unterstützen und fordern",
+   "Ein Club, in dem Menschen sich geschäftlich vernetzen"
+  ],
+  "correct": 2
+ },
+ "29:7": {
+  "options": [
+   "Transactional fragt nach dem eigenen Nutzen, Transformational nach beiderseitigem Wachstum",
+   "Transactional bezieht sich auf kurzfristige Vorzüge, Transformational auf langfristige Bindungen",
+   "Transactional betrifft Kosten und Zeit, Transformational fokussiert persönliche Beziehungen",
+   "Transactional ist kurzfristig orientiert, Transformational basiert auf dauerhaften Partnerschaften"
+  ],
+  "correct": 0
+ },
+ "30:0": {
+  "options": [
+   "Ich habe meine Stärken und blinden Flecken erkannt",
+   "Ich musste feststellen, dass ich nichts Neues gelernt habe",
+   "Ich erkenne, dass ich mehr Theorie benötige",
+   "Ich muss noch intensiver an meinen Fähigkeiten arbeiten"
+  ],
+  "correct": 0
+ },
+ "30:7": {
+  "options": [
+   "Nachhaltiger Umsatz über Jahre erzielt und vermarktet",
+   "Beendete Projekte, die maßgeblich zum Erfolg führten",
+   "Verschiedene Karrierefortschritte im Team angestoßen",
+   "Menschen, die durch deine Art zu führen, selbstständig wurden"
+  ],
+  "correct": 3
+ }
+}

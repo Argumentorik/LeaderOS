@@ -38,6 +38,13 @@
     --chart-5: 200 80% 50%;
     --radius: 0.75rem;
 
+    /* Navigation tokens (Iter 139) — WCAG-AA Kontrast in BEIDEN Modes.
+       Vorher: text-gray-400 (2.6:1) bzw. muted-foreground/60 (2.4:1). */
+    --nav-fg: 0 0% 34%;          /* inaktiver Menüpunkt */
+    --nav-fg-hover: 0 0% 8%;
+    --nav-fg-muted: 0 0% 42%;    /* gesperrter Menüpunkt */
+    --nav-label: 0 0% 38%;       /* Sektions-Label */
+
     /* Brand tokens — light mode uses darker lime for WCAG contrast on white */
     --brand: 72 100% 27%;        /* #6B8A00 — WCAG AA on light bg */
     --brand-hex: #6B8A00;
@@ -72,6 +79,11 @@
     --chart-3: 24 90% 55%;
     --chart-4: 340 75% 60%;
     --chart-5: 200 80% 55%;
+    /* Navigation tokens (Iter 139) — auf #101010 Sidebar-Grund gemessen */
+    --nav-fg: 0 0% 76%;
+    --nav-fg-hover: 0 0% 98%;
+    --nav-fg-muted: 0 0% 66%;
+    --nav-label: 0 0% 68%;
     /* Dark mode: full neon lime */
     --brand: 72 100% 50%;
     --brand-hex: #BFFF00;
@@ -93,6 +105,15 @@
   }
   code, pre { font-family: 'JetBrains Mono', monospace; }
 }
+
+/* ── Navigation (Iter 139): Kontrast über Theme-Tokens, keine Einzel-Overrides ── */
+.nav-row { color: hsl(var(--nav-fg)); }
+.nav-row:hover, .nav-row:focus-visible { color: hsl(var(--nav-fg-hover)); }
+.nav-row-locked { color: hsl(var(--nav-fg-muted)); }
+.nav-row-locked:hover, .nav-row-locked:focus-visible { color: hsl(var(--nav-fg-hover)); }
+.nav-label { color: hsl(var(--nav-label)); }
+.nav-label-active { color: hsl(var(--nav-fg-hover)); }
+
 
 @layer base {
   [data-debug-wrapper="true"] { display: contents !important; }

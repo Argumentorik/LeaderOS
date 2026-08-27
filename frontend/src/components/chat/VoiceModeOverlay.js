@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { X, Volume2 } from 'lucide-react';
 import { useVoiceMode, VOICE_STATES, SILENCE_DURATION_MS } from '../../hooks/useVoiceMode';
 import { VoiceOrb } from './VoiceOrb';
@@ -33,6 +34,21 @@ export const VoiceModeOverlay = ({ sessionId, onSessionUpdate, onClose, de = tru
     handleOrbTap, togglePause, toggleMute, fullCleanup,
   } = useVoiceMode({ initialSessionId: sessionId, onSessionUpdate, persona: 'wlad', de });
 
+  // Iter 139: Antworten verschwanden, sobald der Hook fürs nächste Zuhören
+  // transcript/reply zurücksetzte. Der Verlauf lebt jetzt hier — persistent,
+  // scrollbar, kein Auto-Dismiss.
+  const [turns, setTurns] = useState([]);
+  const lastReplyRef = useRef('');
+  const historyEndRef = useRef(null);
+
+  useEffect(() => {
+    if (!reply || reply === lastReplyRef.current) return;
+    lastReplyRef.current = reply;
+    setTurns(prev => [...prev, { id: `${Date.now()}`, question: transcript, answer: reply }]);
+  }, [reply, transcript]);
+
+  useEffect(() => { historyEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [turns]);
+
   const status = statusLabel(state, error, de);
 
   const handleClose = () => {
@@ -63,7 +79,7 @@ export const VoiceModeOverlay = ({ sessionId, onSessionUpdate, onClose, de = tru
       <div className="flex flex-col items-center gap-10">
         <VoiceOrb state={state} level={level} onTap={handleOrbTap} ariaLabel={status} />
 
-        <p className="text-white/80 text-sm font-medium tracking-wide" data-testid="voice-mode-status">
+        <p className="relative z-10 text-white/90 text-sm font-semibold tracking-wide mt-2" data-testid="voice-mode-status">
           {status}
         </p>
 
@@ -79,13 +95,29 @@ export const VoiceModeOverlay = ({ sessionId, onSessionUpdate, onClose, de = tru
           </div>
         )}
 
-        <div className="min-h-[80px] max-w-xl w-full text-center space-y-3">
-          {transcript && (
-            <p className="text-white/50 text-sm italic" data-testid="voice-mode-transcript">"{transcript}"</p>
+        <div className="max-w-xl w-full space-y-3 max-h-[34vh] overflow-y-auto px-1 scrollbar-hide" data-testid="voice-mode-history">
+          {turns.map((t, i) => (
+            <div key={t.id} className="text-left space-y-1.5" data-testid={`voice-turn-${i}`}>
+              {t.question && (
+                <p className="text-white/45 text-sm italic select-text" data-testid={i === turns.length - 1 ? 'voice-mode-transcript' : undefined}>
+                  "{t.question}"
+                </p>
+              )}
+              <p className="text-white text-base leading-relaxed select-text" data-testid={i === turns.length - 1 ? 'voice-mode-reply' : undefined}>
+                {t.answer}
+              </p>
+            </div>
+          ))}
+          {/* laufende Frage, solange noch keine Antwort da ist */}
+          {transcript && !turns.some(t => t.question === transcript) && (
+            <p className="text-white/45 text-sm italic text-left select-text" data-testid="voice-live-transcript">"{transcript}"</p>
           )}
-          {reply && (
-            <p className="text-white text-base leading-relaxed" data-testid="voice-mode-reply">{reply}</p>
+          {turns.length === 0 && !transcript && (
+            <p className="text-white/30 text-sm text-center">
+              {de ? 'Sprich einfach los — deine Antworten bleiben hier stehen.' : 'Just start talking — your answers stay here.'}
+            </p>
           )}
+          <div ref={historyEndRef} />
         </div>
       </div>
 

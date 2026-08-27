@@ -7,6 +7,7 @@ from config import db
 from services import get_current_user
 from services_actions import record_user_action
 from quiz_bank import QUIZ_BANK
+from quiz_quality import shuffle_options
 
 router = APIRouter(prefix="/api/challenge30", tags=["challenge30"])
 
@@ -105,7 +106,7 @@ async def get_challenge_status(request: Request):
 
 @router.get("/quiz/{day}")
 async def get_quiz(day: int, request: Request):
-    await get_current_user(request)
+    user = await get_current_user(request)
     if day < 1 or day > 30:
         raise HTTPException(status_code=400, detail="Tag muss zwischen 1 und 30 sein")
     challenge = next((c for c in CHALLENGES if c["day"] == day), None)
@@ -113,19 +114,26 @@ async def get_quiz(day: int, request: Request):
         raise HTTPException(status_code=404, detail="Challenge nicht gefunden")
     questions = get_quiz_for_day(day)
     safe_questions = []
-    for q in questions:
+    for i, q in enumerate(questions):
         item = {"q": q["q"], "type": q.get("type", "mc")}
         if q.get("type") == "coach":
             item["path"] = q.get("path", "/chat")
         elif q.get("type") == "action":
             item["path"] = q.get("path", "/tools")
         else:
-            item["options"] = q.get("options", [])
+            # Iter 139: Positions-Bias raus. Deterministisch pro (User, Tag, Frage)
+            # geshuffelt — Reload behält die Reihenfolge, der Index der richtigen
+            # Antwort verlässt den Server NICHT.
+            shuffled, _correct = shuffle_options(
+                q.get("options", []), q.get("correct", -1),
+                user["user_id"], str(day), str(i),
+            )
+            item["options"] = shuffled
         safe_questions.append(item)
     return {"day": day, "challenge": challenge, "questions": safe_questions, "total": len(safe_questions)}
 
 
-def _score_quiz(questions: list, answers: dict) -> tuple:
+def _score_quiz(questions: list, answers: dict, user_id: str = "", day: int = 0) -> tuple:
     """Score quiz answers against questions. Returns (correct, total, results)."""
     correct = 0
     total_mc = 0
@@ -141,10 +149,21 @@ def _score_quiz(questions: list, answers: dict) -> tuple:
             results.append({"question": q["q"], "type": qtype, "correct": is_correct, "explanation": q.get("explanation", ""), "path": q.get("path", "")})
         else:
             total_mc += 1
-            is_correct = user_answer == q.get("correct", -1) if q.get("correct", -1) != -1 else True
+            # Iter 139: gleiche Shuffle-Permutation wie im GET → der eingereichte
+            # Index bezieht sich auf die geshuffelte Reihenfolge.
+            shuffled, shuffled_correct = shuffle_options(
+                q.get("options", []), q.get("correct", -1),
+                user_id, str(day), str(i),
+            )
+            is_correct = user_answer == shuffled_correct if shuffled_correct != -1 else True
             if is_correct:
                 correct += 1
-            results.append({"question": q["q"], "type": "mc", "correct": is_correct, "correct_answer": q.get("correct"), "user_answer": user_answer, "explanation": q.get("explanation", "")})
+            results.append({
+                "question": q["q"], "type": "mc", "correct": is_correct,
+                "correct_answer": shuffled_correct, "user_answer": user_answer,
+                "correct_text": shuffled[shuffled_correct] if 0 <= shuffled_correct < len(shuffled) else "",
+                "explanation": q.get("explanation", ""),
+            })
     return correct, total_mc, results
 
 
@@ -171,7 +190,7 @@ async def submit_quiz(day: int, data: QuizSubmission, request: Request):
         raise HTTPException(status_code=404, detail="Keine Fragen für diesen Tag")
     challenge = next((c for c in CHALLENGES if c["day"] == day), None)
 
-    correct, total_mc, results = _score_quiz(questions, data.answers)
+    correct, total_mc, results = _score_quiz(questions, data.answers, user["user_id"], day)
     score = round((correct / max(total_mc, 1)) * 100)
     passed = score >= 60
     xp = challenge["xp"] if passed else challenge["xp"] // 2
