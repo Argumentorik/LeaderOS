@@ -8,6 +8,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user
 from services_actions import record_user_action
 from data import PLAYBOOKS
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["playbooks"])
 
@@ -97,7 +98,7 @@ async def playbook_step(playbook_id: str, data_in: dict, request: Request):
         return {"response": parsed, "completed": completed, "next_step": step_index + 1 if not completed else None}
     except Exception as e:
         logger.error(f"Playbook step error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "playbooks")
 
 
 @router.post("/playbooks/{playbook_id}/report")
@@ -135,4 +136,4 @@ Antworte als JSON:
         return report
     except Exception as e:
         logger.error(f"Report generation error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "playbooks")

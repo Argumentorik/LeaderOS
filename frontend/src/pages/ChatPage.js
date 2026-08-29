@@ -210,7 +210,14 @@ export default function ChatPage() {
         setMessages(prev => prev.slice(0, -1));
       } else {
         logger.error('Chat error:', err);
-        setMessages(prev => [...prev, { role: 'assistant', content: de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.' }]);
+        // Iter 141: Backend liefert bei KI-Ausfällen (Budget, Rate-Limit, Auth)
+        // eine fertige, ruhige Klartext-Meldung — die zeigen wir dem Nutzer.
+        const status = err.response?.status;
+        const backendMsg = typeof err.response?.data?.detail === 'string' ? err.response.data.detail : '';
+        const friendly = (status === 503 || status === 504 || status === 429) && backendMsg
+          ? backendMsg
+          : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.');
+        setMessages(prev => [...prev, { role: 'assistant', content: friendly, isNotice: true }]);
       }
     }
     finally { setLoading(false); }

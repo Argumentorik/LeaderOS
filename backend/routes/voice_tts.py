@@ -23,6 +23,7 @@ from config import db, logger, EMERGENT_LLM_KEY
 from services import get_current_user, get_user_memory
 from services_actions import record_user_action
 from routes.admin import require_admin
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api/voice", tags=["voice"])
 
@@ -304,6 +305,12 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
         # Iter 135 (Audit): short, honest reason instead of a raw SDK header dump.
         if "invalid_api_key" in low or "api key id used as api key" in low:
             reason = "elevenlabs_invalid_api_key"
+        elif "subscription_required" in low or "only_for_creator" in low or "creator tier" in low:
+            # Wlads Stimme ist ein Professional Voice Clone → ElevenLabs verlangt
+            # dafür mindestens den Creator-Tarif.
+            reason = "elevenlabs_plan_too_low_for_professional_voice"
+        elif "missing_permissions" in low or "user_read" in low:
+            reason = "elevenlabs_key_missing_permissions"
         elif "quota" in low or "429" in low:
             reason = "elevenlabs_quota_or_rate_limit"
         elif "401" in low or "unauthorized" in low:
@@ -330,8 +337,10 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
 
     audio_b64 = base64.b64encode(audio_bytes).decode("ascii")
 
-    # 3. Cache (only if under 250 KB — prevents collection bloat)
-    if len(audio_b64) < 250_000:
+    # 3. Cache (only if under 250 KB — prevents collection bloat).
+    #    Iter 141 (Code Review): leeres Audio NIE cachen, sonst bleibt diese
+    #    Text+Voice-Kombination dauerhaft stumm.
+    if audio_bytes and len(audio_b64) < 250_000:
         try:
             await _save_cached_audio(cache_key, persona_key, text, voice_config["voice_id"], audio_b64)
         except Exception as e:
@@ -551,9 +560,9 @@ async def _synthesize_or_cached(reply_text: str, persona_key: str, voice_config:
         if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             _reset_client()
         logger.error(f"Voice TTS failed: {e}")
-        raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {e}")
+        raise await ai_http_error(e, "voice_tts")
     audio_b64 = base64.b64encode(audio_bytes_out).decode("ascii")
-    if len(audio_b64) < 250_000:
+    if audio_bytes_out and len(audio_b64) < 250_000:
         try:
             await _save_cached_audio(cache_key, persona_key, reply_text, voice_config["voice_id"], audio_b64)
         except Exception as e:
@@ -590,7 +599,7 @@ async def voice_conversation(
         transcript = await _transcribe_webm(audio_bytes)
     except Exception as e:
         logger.error(f"Voice transcription failed: {e}")
-        raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")
+        raise await ai_http_error(e, "voice_transcribe")
     if not transcript:
         raise HTTPException(status_code=400, detail="empty_transcript")
 
@@ -616,7 +625,7 @@ async def voice_conversation(
                 await refund_credit(user["user_id"])
             except Exception as refund_err:
                 logger.warning(f"Credit refund failed: {refund_err}")
-        raise HTTPException(status_code=502, detail=f"AI reply failed: {e}")
+        raise await ai_http_error(e, "voice_reply")
     reply_text = _cap_reply_length(reply_text)
     reply_text = _normalize_wlad_name(reply_text)
     # Also normalise the transcript that goes back to the UI/Memory.
@@ -738,7 +747,7 @@ async def argumentation_sparring(
         transcript = await _transcribe_webm(audio_bytes)
     except Exception as e:
         logger.error(f"Sparring STT failed: {e}")
-        raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")
+        raise await ai_http_error(e, "voice_transcribe")
     if not transcript:
         raise HTTPException(status_code=400, detail="empty_transcript")
 
@@ -853,7 +862,7 @@ async def argumentation_sparring(
                 await refund_credit(user["user_id"])
             except Exception:
                 pass
-        raise HTTPException(status_code=502, detail=f"AI reply failed: {e}")
+        raise await ai_http_error(e, "voice_reply")
 
     reply_text = _cap_reply_length(reply_text)
     reply_text = _normalize_wlad_name(reply_text)

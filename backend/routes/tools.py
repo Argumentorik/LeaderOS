@@ -9,6 +9,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user
 from services_actions import record_user_action
 from data import TOOL_PROMPTS
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["tools"])
 
@@ -111,7 +112,7 @@ async def deep_assist(request: Request):
         return parsed
     except Exception as e:
         logger.error(f"Deep assist error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "tools")
 
 
 @router.post("/tools/{tool_id}")
@@ -163,5 +164,5 @@ async def use_tool(tool_id: str, request: Request):
         return {"result": parsed, "tool": tool["title"]}
     except Exception as e:
         logger.error(f"Tool error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "tools")
 

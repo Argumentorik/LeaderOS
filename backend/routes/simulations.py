@@ -12,6 +12,7 @@ from services import get_current_user, clean_ai_text, SIMULATION_SYSTEM_PROMPT
 from services_actions import record_user_action
 from data import SIMULATION_SCENARIOS
 from routes.argumentation_prep_pdf import render_strategy_pdf
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["simulations"])
 
@@ -100,7 +101,7 @@ async def start_simulation(data: SimulationStart, request: Request):
         return {"simulation_id": sim_id, "scenario": scenario, "initial_message": clean_ai_text(ai_response)}
     except Exception as e:
         logger.error(f"Simulation start error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "simulations")
 
 
 async def _process_simulation_completion(sim_id: str, user_id: str, scenario: dict, ai_response: str):
@@ -198,7 +199,7 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
         return {"response": clean_ai_text(ai_response), "scores": scores, "ended": scores is not None and scores.get("completed")}
     except Exception as e:
         logger.error(f"Simulation message error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "simulations")
 
 
 @router.get("/simulations")
@@ -421,7 +422,7 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
         }
     except Exception as e:
         logger.error(f"Argumentation-prep error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "simulations")
 
 
 # ── Prep-History & Custom Templates (Iter 124 — Wlad Godmode) ────────────────

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Badge } from '../ui/badge';
 import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight, Copy, Check } from 'lucide-react';
 import SmartText from '../shared/SmartText';
@@ -12,11 +12,27 @@ import { WladBotAvatar } from '../brand/WladBotAvatar';
    eine echte Aktion — Antwort kopieren, mit sichtbarer Bestätigung. */
 const CopyMessageButton = ({ text, de }) => {
   const [copied, setCopied] = useState(false);
+  const timerRef = useRef(null);
+  useEffect(() => () => clearTimeout(timerRef.current), []);
   const copy = async () => {
+    const value = text || '';
     try {
-      await navigator.clipboard.writeText(text || '');
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        // Fallback für Browser/Kontexte ohne Clipboard-API (z. B. http)
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
       setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopied(false), 1800);
     } catch (err) { logger.warn('copy failed', err); }
   };
   return (
@@ -151,6 +167,17 @@ const legacyClean = (content) => {
 };
 
 export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
+  // Iter 141: Systemhinweis (KI kurz nicht erreichbar) — klar als Hinweis
+  // erkennbar, nicht als Wlad-Antwort.
+  if (msg.isNotice) {
+    return (
+      <div className="flex mb-4 animate-fade-in" data-testid="chat-notice">
+        <div className="max-w-[80%] rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3">
+          <p className="text-[13px] leading-relaxed text-amber-900 dark:text-amber-200 select-text">{msg.content}</p>
+        </div>
+      </div>
+    );
+  }
   if (msg.role === 'user') {
     const legacy = msg.display_text ? null : legacyClean(msg.content);
     return (

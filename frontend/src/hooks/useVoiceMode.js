@@ -74,6 +74,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const audioPlayerRef = useRef(null);
   const stoppedRef = useRef(false);
   const cancelledRef = useRef(false);
+  const lastLevelRef = useRef(0);
   const emptyRetryCountRef = useRef(0);
   const recordedMimeRef = useRef('audio/webm');
   const pausedRef = useRef(false);
@@ -121,7 +122,12 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     let sum = 0;
     for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
     const rms = Math.sqrt(sum / buf.length);
-    setLevel(rms);
+    // Iter 141 (Code Review): nicht 60×/s neu rendern — nur bei sichtbarer
+    // Änderung des Pegels (2 %-Schritte reichen für den Orb).
+    if (Math.abs(rms - lastLevelRef.current) > 0.01) {
+      lastLevelRef.current = rms;
+      setLevel(rms);
+    }
 
     const now = Date.now();
     const elapsed = now - recordingStartRef.current;
@@ -194,6 +200,12 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true },
       });
+      // Iter 141 (Code Review): Wurde der Voice Mode während der Mikrofon-
+      // Freigabe geschlossen, blieb der Track sonst offen (Aufnahme-Icon an).
+      if (cancelledRef.current) {
+        stream.getTracks().forEach(t => t.stop());
+        return;
+      }
       streamRef.current = stream;
 
       const AudioCtx = window.AudioContext || window.webkitAudioContext;

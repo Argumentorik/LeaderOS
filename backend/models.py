@@ -19,7 +19,9 @@ def _normalize_email(v: str) -> str:
         )
     except EmailNotValidError as e:
         raise ValueError(str(e))
-    return result.normalized
+    # Iter 141: email_validator kleinschreibt nur die Domain. Die Routen (auth.py)
+    # arbeiten durchgängig mit .lower() — hier gleich konsistent normalisieren.
+    return result.normalized.lower()
 
 
 # Iter 92.24 (Mert): phone-OR-email login. Helpers to normalize/detect identifier.
@@ -85,28 +87,6 @@ class UserRegister(BaseModel):
     # client-side at first visit and attached at signup. Optional, sanitized.
     attribution: dict | None = None
 
-
-# Iter 120: whitelist-sanitize attribution payloads (never trust the client)
-_ATTRIBUTION_KEYS = {
-    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
-    "gclid", "fbclid", "ttclid", "msclkid", "li_fat_id", "via", "ref",
-    "at", "landing", "referrer",
-}
-
-
-def clean_attribution(raw) -> dict | None:
-    if not isinstance(raw, dict):
-        return None
-    out: dict = {}
-    for touch in ("first_touch", "last_touch"):
-        t = raw.get(touch)
-        if isinstance(t, dict):
-            c = {k: str(v)[:300] for k, v in t.items()
-                 if k in _ATTRIBUTION_KEYS and isinstance(v, (str, int, float))}
-            if c:
-                out[touch] = c
-    return out or None
-
     @field_validator("email")
     @classmethod
     def _v_email(cls, v: str) -> str:
@@ -146,6 +126,28 @@ def clean_attribution(raw) -> dict | None:
         if not re.match(r"^[+()\d\s\-./]+$", v):
             raise ValueError("Telefonnummer enthält ungültige Zeichen")
         return v
+
+
+# Iter 120: whitelist-sanitize attribution payloads (never trust the client)
+_ATTRIBUTION_KEYS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "gclid", "fbclid", "ttclid", "msclkid", "li_fat_id", "via", "ref",
+    "at", "landing", "referrer",
+}
+
+
+def clean_attribution(raw) -> dict | None:
+    if not isinstance(raw, dict):
+        return None
+    out: dict = {}
+    for touch in ("first_touch", "last_touch"):
+        t = raw.get(touch)
+        if isinstance(t, dict):
+            c = {k: str(v)[:300] for k, v in t.items()
+                 if k in _ATTRIBUTION_KEYS and isinstance(v, (str, int, float))}
+            if c:
+                out[touch] = c
+    return out or None
 
 
 class UserLogin(BaseModel):

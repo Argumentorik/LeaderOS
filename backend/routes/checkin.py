@@ -8,6 +8,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from models import DailyCheckinIn
 from services import get_current_user
 from services_actions import record_user_action
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["checkin"])
 
@@ -74,7 +75,7 @@ async def submit_daily_checkin(data: DailyCheckinIn, request: Request):
         return {"checkin_id": checkin_id, "feedback": parsed, "is_update": existing is not None}
     except Exception as e:
         logger.error(f"Daily checkin error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "checkin")
 
 
 @router.get("/daily-checkin")

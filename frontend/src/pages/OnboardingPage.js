@@ -344,7 +344,7 @@ export default function OnboardingPage() {
                   data-testid="onboarding-position-input"
                   placeholder={de ? 'z.B. Head of Sales, CTO, VP Marketing...' : 'e.g. Head of Sales, CTO, VP Marketing...'}
                   className="w-full px-4 py-3 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-card text-sm focus:ring-2 focus:ring-[#BFFF00]/20 focus:border-[#BFFF00] transition-all"
-                  data-testid="onboarding-position" />
+                  />
               </div>
               <div>
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">{de ? 'Unternehmen' : 'Company'}</label>
@@ -352,7 +352,7 @@ export default function OnboardingPage() {
                   data-testid="onboarding-company-input"
                   placeholder={de ? 'z.B. BMW, SAP, Startup...' : 'e.g. BMW, SAP, Startup...'}
                   className="w-full px-4 py-3 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-card text-sm focus:ring-2 focus:ring-[#BFFF00]/20 focus:border-[#BFFF00] transition-all"
-                  data-testid="onboarding-company" />
+                  />
               </div>
               <div>
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">{de ? 'Branche' : 'Industry'}</label>
@@ -360,7 +360,7 @@ export default function OnboardingPage() {
                   data-testid="onboarding-industry-input"
                   placeholder={de ? 'z.B. Tech, Finanzen, Gesundheit, Automobil...' : 'e.g. Tech, Finance, Health, Automotive...'}
                   className="w-full px-4 py-3 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-card text-sm focus:ring-2 focus:ring-[#BFFF00]/20 focus:border-[#BFFF00] transition-all"
-                  data-testid="onboarding-industry" />
+                  />
               </div>
             </div>
             <div className="flex justify-center pt-2">

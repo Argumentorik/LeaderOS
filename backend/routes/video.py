@@ -17,6 +17,7 @@ from services import get_current_user, get_user_memory, clean_ai_text
 from services_actions import record_user_action
 from services_tier import require_feature, resolve_user_tier
 from services_video_trial import get_video_trial_status, consume_video_trial
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["video"])
 
@@ -72,6 +73,24 @@ def _ffmpeg_extract_audio(input_path: str, output_path: str, bitrate: str = "64k
 # larger into 10-min segments and join the transcripts — gives us effectively
 # unlimited recording length (caps at ~500 MB raw upload below).
 WHISPER_MAX_BYTES = 24 * 1024 * 1024  # leave 1 MB headroom for HTTP overhead
+
+# Iter 141 (Code Review): Der asynchrone Pfad hält den Upload im RAM, solange die
+# Analyse läuft. Darum harte Grenzen: Größe pro Upload und Anzahl paralleler Jobs.
+ASYNC_MAX_UPLOAD_BYTES = 150 * 1024 * 1024
+MAX_CONCURRENT_VIDEO_JOBS = 3
+_ACTIVE_VIDEO_JOBS: set = set()
+
+
+async def _refund_video_credit(user_id: str, credit_result: dict) -> None:
+    """Iter 141 (Code Review): Wie im Chat — schlägt die Analyse fehl, bekommt
+    der Nutzer seinen Credit zurück (Premium zahlt ohnehin nicht pro Analyse)."""
+    if credit_result.get("is_premium"):
+        return
+    try:
+        from routes.credits import refund_credit
+        await refund_credit(user_id)
+    except Exception as e:
+        logger.warning("Video credit refund failed for %s: %s", user_id, e)
 CHUNK_SECONDS = 600  # 10 minutes — well under 25 MB at 64 kbit/s mono
 
 
@@ -829,8 +848,10 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
         return analysis
     except HTTPException:
         # Preserve 4xx codes coming from _transcribe_audio (400 empty / 413 too big / 422 silent)
+        await _refund_video_credit(user["user_id"], credit_result)
         raise
     except Exception as e:
+        await _refund_video_credit(user["user_id"], credit_result)
         logger.exception("Video challenge error for user=%s challenge=%s", user.get("user_id"), challenge_id)
         # Surface a friendlier message — most failures are Whisper container quirks.
         detail = str(e)
@@ -855,7 +876,7 @@ async def _video_analyze_background(
     job_id: str,
     user_id: str,
     challenge: dict,
-    file_path: str,
+    file_bytes: bytes,
     file_name: str,
     rating: dict,
     rating_context: str,
@@ -863,19 +884,20 @@ async def _video_analyze_background(
     prev_attempts: list,
     used_trial_slot: bool,
     tier: str,
+    credit_result: dict,
 ) -> None:
     """Background worker: transcribe → analyse → persist → mark job complete."""
     try:
         await db.video_jobs.update_one({"job_id": job_id}, {"$set": {"status": "transcribing"}})
 
-        # Build an UploadFile-like wrapper from disk so _transcribe_audio still works.
-        class _DiskUpload:
+        # Iter 140: Der Upload bleibt im Speicher — kein Pod-lokales File mehr
+        # (auf dem Deployment wäre es für andere Instanzen nicht erreichbar).
+        class _MemUpload:
             filename = file_name
             async def read(self) -> bytes:
-                with open(file_path, "rb") as f:
-                    return f.read()
+                return file_bytes
 
-        transcript = await _transcribe_audio(_DiskUpload())  # type: ignore[arg-type]
+        transcript = await _transcribe_audio(_MemUpload())  # type: ignore[arg-type]
         await db.video_jobs.update_one({"job_id": job_id}, {"$set": {"status": "analyzing", "transcript_preview": transcript[:120]}})
 
         analysis = await _run_video_ai_analysis(challenge, transcript, prev_attempts, user_memory, rating_context)
@@ -899,19 +921,15 @@ async def _video_analyze_background(
             {"job_id": job_id},
             {"$set": {"status": "error", "error_code": he.status_code, "error_detail": str(he.detail)}},
         )
+        await _refund_video_credit(user_id, credit_result)
         logger.warning("Video job %s failed (HTTP %s): %s", job_id, he.status_code, he.detail)
     except Exception as e:
         await db.video_jobs.update_one(
             {"job_id": job_id},
             {"$set": {"status": "error", "error_code": 500, "error_detail": str(e)[:300]}},
         )
+        await _refund_video_credit(user_id, credit_result)
         logger.exception("Video job %s crashed", job_id)
-    finally:
-        try:
-            if os.path.exists(file_path):
-                os.unlink(file_path)
-        except OSError:
-            pass
 
 
 @router.post("/video-challenges/{challenge_id}/analyze-async", status_code=202)
@@ -951,21 +969,30 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
         {"_id": 0, "analysis.overall_score": 1, "created_at": 1}
     ).sort("created_at", -1).to_list(5)
 
-    # Persist the upload to disk so the background task can read it after we return.
+    # Iter 141 (Code Review): Der Upload wird im Speicher an den Hintergrund-Task
+    # übergeben (kein Pod-lokales File, das nach dem Deploy unerreichbar wäre).
+    # Darum hier ein deutlich engeres Limit als beim synchronen Weg plus ein
+    # Deckel auf gleichzeitige Jobs — sonst würde N × Upload den Pod sprengen.
     contents = await file.read()
     if not contents:
         raise HTTPException(status_code=400, detail="Empty audio file received")
-    if len(contents) > 500 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="Datei ist zu groß (>500 MB). Bitte komprimiere die Aufnahme.")
+    if len(contents) > ASYNC_MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"Aufnahme ist zu groß (>{ASYNC_MAX_UPLOAD_BYTES // (1024 * 1024)} MB). "
+                   "Bitte kürzer aufnehmen oder komprimieren.",
+        )
+    if len(_ACTIVE_VIDEO_JOBS) >= MAX_CONCURRENT_VIDEO_JOBS:
+        raise HTTPException(
+            status_code=429,
+            detail="Gerade werden mehrere Analysen berechnet. Bitte in 1-2 Minuten erneut starten.",
+        )
     suffix = ".webm"
     if file.filename and "." in file.filename:
         ext = file.filename.rsplit(".", 1)[-1].lower()
         if ext in {"webm", "mp4", "m4a", "mp3", "wav", "ogg", "mpga", "mpeg", "flac", "mov", "mkv", "aac"}:
             suffix = f".{ext}"
     job_id = f"vidjob_{uuid.uuid4().hex[:14]}"
-    persist_path = os.path.join(tempfile.gettempdir(), f"{job_id}{suffix}")
-    with open(persist_path, "wb") as f:
-        f.write(contents)
 
     await db.video_jobs.insert_one({
         "job_id": job_id,
@@ -976,11 +1003,12 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    asyncio.create_task(_video_analyze_background(
+    # Referenz halten (RUF006): sonst kann der Task vom GC verworfen werden.
+    task = asyncio.create_task(_video_analyze_background(
         job_id=job_id,
         user_id=user["user_id"],
         challenge=challenge,
-        file_path=persist_path,
+        file_bytes=contents,
         file_name=file.filename or f"upload{suffix}",
         rating=rating,
         rating_context=rating_context,
@@ -988,7 +1016,10 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
         prev_attempts=prev_attempts,
         used_trial_slot=used_trial_slot,
         tier=tier_info["tier"],
+        credit_result=credit_result,
     ))
+    _ACTIVE_VIDEO_JOBS.add(task)
+    task.add_done_callback(_ACTIVE_VIDEO_JOBS.discard)
 
     return {"job_id": job_id, "status": "queued"}
 
@@ -1025,4 +1056,4 @@ async def transcribe_voice(request: Request, file: UploadFile = File(...)):
         raise
     except Exception as e:
         logger.error(f"Transcription error: {e}")
-        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
+        raise await ai_http_error(e, "video_transcribe")

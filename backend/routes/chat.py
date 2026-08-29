@@ -27,6 +27,7 @@ router = APIRouter(prefix="/api", tags=["chat"])
 from services_classifier import classify_intent
 
 from pydantic import BaseModel
+from services_ai_errors import ai_http_error
 
 
 class IntentClassifyIn(BaseModel):
@@ -387,11 +388,20 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     )
     folder_context, _folder_doc = folder_res
 
+    # Iter 141 (Code Review): attachment ist Client-Input — nur die zwei Felder
+    # übernehmen, die die UI braucht, damit kein beliebiges Dict in Mongo landet.
+    attachment = None
+    if isinstance(data.attachment, dict):
+        filename = str(data.attachment.get("filename") or "")[:200]
+        if filename:
+            pages = data.attachment.get("pages")
+            attachment = {"filename": filename, "pages": pages if isinstance(pages, int) else None}
+
     await db.chat_messages.insert_one({
         "message_id": f"msg_{uuid.uuid4().hex[:12]}", "session_id": session_id,
         "user_id": user["user_id"], "role": "user", "content": data.message,
         "display_text": (data.display_text or "")[:4000] or None,
-        "attachment": data.attachment,
+        "attachment": attachment,
         "modality": msg_modality,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
@@ -496,7 +506,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
                 await refund_credit(user["user_id"])
             except Exception as refund_err:
                 logger.warning(f"Credit refund failed: {refund_err}")
-        raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
+        raise await ai_http_error(e, "chat")
 
 
 @router.get("/chat/history/{session_id}")

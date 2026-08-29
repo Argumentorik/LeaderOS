@@ -10,6 +10,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user, clean_ai_text
 from services_actions import record_user_action
 from data import LEADERSHIP_CHALLENGERS
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["challengers"])
 
@@ -58,7 +59,7 @@ async def start_challenge(challenger_id: str, request: Request):
         return {"challenge_id": challenge_id, "challenger": challenger, "initial_message": clean_ai_text(ai_response)}
     except Exception as e:
         logger.error(f"Challenge start error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "challengers")
 
 
 @router.get("/challengers/intros")
@@ -190,7 +191,7 @@ async def challenge_message(challenger_id: str, request: Request):
         return {"response": clean_ai_text(ai_response) if not finish else "", "result": result}
     except Exception as e:
         logger.error(f"Challenge message error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "challengers")
 
 
 @router.get("/challengers/history")
