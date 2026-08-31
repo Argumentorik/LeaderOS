@@ -3,6 +3,24 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🧹 Code Quality Refactoring · Iter 41 (Jun 2026)
+- Backend (Verhalten identisch, verifiziert mit 31/31 Regression-Tests):
+  - `routes/auth.py`: OTP-/Login-Logik in Modul-Level-Funktionen (parse_login_email, request_otp_for_email, verify_otp_and_login, build_sync_token_response, send_otp_email, mask_email); Route-Handler jetzt dünn
+  - `routes/payments.py`: Webhook-Logik extrahiert (verify_webhook_event, record_webhook_event, apply_webhook_event, get_subscription_status)
+  - `routes/email.py`: deliver_report_email, deliver_plan_reminder extrahiert
+  - `routes/admin.py`: build_funnel_chart extrahiert
+  - `services/email_scheduler.py`: überflüssiges `global` entfernt (Pyflakes-Finding)
+- Frontend-Splits (visuell/funktional identisch, E2E verifiziert):
+  - MariaWay.jsx (520→60 Zeilen) → components/hero/maria/{MariaHero,MariaTimeline,MariaAIStack,MariaTransformation,LeaderOSIntro}
+  - Report.jsx (505→90 Zeilen) → components/report/{reportConfig,ReportHeader,ReportRoles,ReportCharts,ReportInsights,ReportPlan}
+  - Roadmap.jsx (441→140 Zeilen) → components/roadmap/{roadmapData,RoadmapAgents,RoadmapWeeklyPlan,RoadmapJournal,RoadmapCourses}
+  - Report.jsx: unnötige Setter aus useEffect-Deps entfernt
+- Umlaut-Fixes in Roadmap-/Report-Copy (Überzeuge, bewährte, Problemlösung, Produktivität etc. — pre-existing Defekt)
+- Hook-Dependency-Findings (28) geprüft: alle False Positives (lokale Variablen/Imports/Konstanten)
+- BEWUSST NICHT umgesetzt (mit Begründung): localStorage→httpOnly-Cookie-Migration (Tokens sind purpose-built, kein PII, Security-Audit bestanden — Architektur-Change nur bei Compliance-Zwang); Email-Template-Splits (kosmetisch); Login/HighTicketClose/UserForm-Splits (Backlog P2)
+- Testing: testing_agent Iter41 → Backend 31/31, Frontend 100% (Quiz-E2E mit 20 Fragen, Report, Roadmap, Landing) · Baseline: tests/test_iter41_refactor_regression.py
+- Bekannt: Stale Alt-Test-Suiten (test_admin_kurse.py, test_api.py) failen wegen veralteter Kontrakte (pre-auth, kein phone-Feld) — Aufräumen empfohlen
+
 ## ⚡ Quiz auf 20 Fragen verkürzt (Jun 2026)
 - `questions.js`: `EXCLUDED_IDS` [5,9,10,14,15,19,20,24,25,30] gefiltert → 20 Fragen (Rhetorik 4, Krit. Denken 3, Entscheidung 3, Führung 3, EQ 3, KI-Strategie 4)
 - Backend-Scoring unverändert (Kategorie-Durchschnitte, mengen-unabhängig)

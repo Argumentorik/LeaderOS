@@ -188,6 +188,5 @@ def start_scheduler(db) -> None:
 
 
 def stop_scheduler() -> None:
-    global _scheduler_task
     if _scheduler_task and not _scheduler_task.done():
         _scheduler_task.cancel()

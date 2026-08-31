@@ -1,0 +1,45 @@
+{
+  "summary": "Iter41 regression verification after mechanical refactoring of backend routes (auth/payments/email/admin) and frontend component splits (hero/maria/*, report/*, roadmap/*). NEW suite /app/backend/tests/test_iter41_refactor_regression.py: 31/31 PASS (health, OTP request/verify incl. 400/401 paths + no-PII shape, legacy quick-login without session_id, /auth/me 401, /auth/leader-os-sync 401, /privacy-policy German content, admin login+token, admin stats/users/transactions/emails 200 with token & 401 without, funnel-chart?days=7 with series/totals/rates/days structure and 7 series entries, payments status unknown, Stripe webhook fail-safe without signature, license validate FAKE-KEY valid:false, license create/list admin-gated, email send-report 404 'Report not found', send-plan-reminder 404 'User not found', drip-preview?slug=unknown 404, full quiz E2E with 20 answers -> report_token/sync_token/cat_scores/layer_scores/avg_total/6 leadership_roles/narrative, GET /report/{sid} 401 without Bearer + 200 with report_token, no _id leakage, user/create without phone -> 422). FRONTEND E2E via preview URL: Landing page renders all required blocks (20 Fragen, maria-way-section, maria-week-1..4, maria-cta-bot, phase-card-1..4, leaderos-cta-start, carousel, 8 images all loading, ZERO console errors). Quiz E2E: /diagnose role select -> form (name/email/phone) -> 'Frage 1 von 20' confirmed -> all 20 questions answered -> wladbot-q20 chat appeared -> Weiter -> /analyzing -> /report; report rendered fully (report-name, report-total-score 80%, leadership-roles with 6 role cards, report-layers, report-radar-chart, report-roi, wladbot-platform, report-credo, report-30day-plan, report-book-upsell, report-ctas) and report-download-pdf click produced NO JS errors. Roadmap E2E: roadmap-title, agent-ecosystem (6 agent-cards), 4 week-tabs all clickable with correct phase-0..3 switching, special-events, journal-section (6 textareas), journal-gate button disabled before fill, wladbot-motivation + roadmap-cta-sprint appear after 6 entries, courses-section (6 courses), roadmap-download-pdf clickable without error. No regressions found from the refactoring.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "POST /api/user/create, POST /api/quiz/generate-report (Resend side-effect)",
+        "issue": "Welcome/Auto-report emails to @example.com fail with Resend 'Invalid to field' (sandbox restriction). Errors are logged and swallowed correctly (no 500), but the frontend report page still shows the success banner 'Report wurde an <email> gesendet' although delivery failed. Consider surfacing the actual send status."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Roadmap courses / Report role cards (pre-existing, not caused by refactor)",
+        "issues": [
+          "German umlauts stripped in copy: components/roadmap/roadmapData.js -> 'Uberzeuge in Meetings', 'bewahrte Methoden', 'Problemlosung & Entscheidung', 'Datengestutzte Entscheidungen'; components/report/reportConfig.jsx -> 'Uberzeugungskraft', 'Produktivitat', 'Menschenverstandnis'. Should read Überzeuge/bewährte/Problemlösung/Datengestützte/Überzeugungskraft/Produktivität/Menschenverständnis."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter41_refactor_regression.py",
+    "/app/test_reports/pytest/iter41_results.xml"
+  ],
+  "action_items": [
+    "Restore missing German umlauts in /app/frontend/src/components/roadmap/roadmapData.js and /app/frontend/src/components/report/reportConfig.jsx (copy-only fix)",
+    "Optional: make the 'Report wurde an X gesendet' banner reflect the real email delivery result instead of always showing success"
+  ],
+  "critical_code_review_comments": [
+    "Refactored modules look clean: auth.py (315), payments.py (328), email.py (211), admin.py (419) all well below the 700-line limit and route handlers are thin wrappers over module-level functions - behaviour verified identical by 31 assertions.",
+    "Note: /app/backend/tests contains many stale suites (test_admin_kurse.py, test_api.py etc.) that assert pre-auth/pre-phone contracts. Recommend deleting or updating them; they add noise to every regression run.",
+    "tests/test_iter38_smoke.py now reports '1 skipped' instead of 6 passing - worth checking its skip condition (it no longer provides smoke coverage)."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter41_refactor_regression.py"],
+  "success_rate": {"backend": "100% (31/31)", "frontend": "100% of requested flows"},
+  "seed_data_creation": "Test users with TEST_ prefixed emails (TEST_iter41_*@example.com, TEST_e2e_*@example.com) plus one generated report; no seeded/production data modified.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Admin password wladhub2026 (POST /api/admin/login); OTP test email start@aiporate.com",
+  "context_for_next_testing_agent": "Use /app/backend/tests/test_iter41_refactor_regression.py as the current regression baseline (run with -p no:randomly to respect rate limits; quick-login/request is 5/min, user/create 10/min, generate-report 6/min). Full quiz E2E (20 questions) works end-to-end through the preview URL and takes ~60-90s including LLM narrative. Landing/Report/Roadmap testids verified as listed in the report. Ignore stale suites listed in critical_code_review_comments.",
+  "rca_of_the_issue": "No regressions attributable to the refactor. Umlaut loss exists in the extracted data files and also in the pre-split HEAD version (verified via git show), i.e. pre-existing copy defect, not a refactoring artifact."
+}
