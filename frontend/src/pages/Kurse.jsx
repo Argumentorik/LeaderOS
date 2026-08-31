@@ -206,7 +206,7 @@ export default function Kurse() {
                 <div className="flex-1">
                   <p className="font-manrope font-bold text-white mb-1">Bereit für deinen persönlichen Plan?</p>
                   <p className="font-inter text-sm text-slate-500">
-                    Diese 6 Module sind nur der Anfang. Starte mit der kostenlosen Diagnose · in 10 Minuten weißt du, welcher Pfad zu dir passt.
+                    Diese 6 Module sind nur der Anfang. Starte mit der kostenlosen Diagnose · in 7 Minuten weißt du, welcher Pfad zu dir passt.
                   </p>
                 </div>
                 <button

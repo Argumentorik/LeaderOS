@@ -104,7 +104,7 @@ export default function ThreeLayersSection() {
           </span>
           <p className="text-slate-400 leading-relaxed" style={{ fontSize: "15px", letterSpacing: "-0.011em" }}>
             Die Diagnose misst dich auf allen drei Ebenen einzeln.{" "}
-            <span className="text-white">10 Minuten · 30 Fragen · ein klares Profil.</span> So weißt du nach dem Test, wo du
+            <span className="text-white">7 Minuten · 20 Fragen · ein klares Profil.</span> So weißt du nach dem Test, wo du
             stärkst · und wo du nachschärfst.
           </p>
         </div>

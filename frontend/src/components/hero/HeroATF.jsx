@@ -73,7 +73,7 @@ export default function HeroATF({ onCtaClick }) {
         data-testid="hero-subheadline"
         style={{ fontSize: "19px", lineHeight: 1.5, letterSpacing: "-0.018em" }}
       >
-        <span className="text-white font-semibold">Zehn Minuten · 30 Fragen · ehrlich beantwortet.</span>{" "}
+        <span className="text-white font-semibold">Sieben Minuten · 20 Fragen · ehrlich beantwortet.</span>{" "}
         Du bekommst sofort deinen Score in drei Ebenen plus konkreten 30-Tage-Plan.{" "}
         Kein Login. Kein Spam. <span className="text-[#C8FF00] font-semibold">Sofort umsetzbar.</span>
       </p>
@@ -127,7 +127,7 @@ export default function HeroATF({ onCtaClick }) {
             onClick={onCtaClick}
             className="btn-primary inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold order-1 md:order-2"
           >
-            Jetzt Diagnose starten · 10 Min
+            Jetzt Diagnose starten · 7 Min
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>

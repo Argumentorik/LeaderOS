@@ -26,12 +26,12 @@ export const headlines = [
     lines: ["Beherrschst du die", "{6 Rollen des modernen}", "Leaders?"],
   },
   {
-    pre: "Dein Leadership-Profil in 10 Minuten.",
+    pre: "Dein Leadership-Profil in 7 Minuten.",
     lines: ["Entdecke, welche", "{Führungsrolle}", "dich definiert."],
   },
   {
     pre: "97% der Führungskräfte überschätzen sich in mindestens einer Rolle.",
-    lines: ["{10 Minuten.}", "6 Rollen. 1 Score.", "Keine Ausreden."],
+    lines: ["{7 Minuten.}", "6 Rollen. 1 Score.", "Keine Ausreden."],
   },
   {
     pre: "Es gibt ein Geheimnis, das die Top 1% der Leader kennen · und du noch nicht.",
@@ -76,7 +76,7 @@ export const problems = [
 ];
 
 export const diagnoseSteps = [
-  { num: "1", title: "30 Fragen · 6 Führungsdimensionen", desc: "" },
+  { num: "1", title: "20 Fragen · 6 Führungsdimensionen", desc: "" },
   { num: "2", title: "Dein Score in drei Ebenen", desc: "KI · Rhetorik · EQ" },
   {
     num: "3",

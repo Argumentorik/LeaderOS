@@ -3,6 +3,13 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## ⚡ Quiz auf 20 Fragen verkürzt (Jun 2026)
+- `questions.js`: `EXCLUDED_IDS` [5,9,10,14,15,19,20,24,25,30] gefiltert → 20 Fragen (Rhetorik 4, Krit. Denken 3, Entscheidung 3, Führung 3, EQ 3, KI-Strategie 4)
+- Backend-Scoring unverändert (Kategorie-Durchschnitte, mengen-unabhängig)
+- Copy überall angepasst: "30 Fragen" → "20 Fragen", "10 Min(uten)" → "7 Min(uten)" in App.js (SEO), UserForm, Quiz (WladBot-Text, testid wladbot-q20), HeroATF, heroData, ThreeLayers, DiagnoseSteps, ProblemSection, FinalCTA, SocialProof, Kurse, Report, email_templates.py
+- Resume-Guard: `quiz_current` wird auf questions.length-1 geclamped (alte 30er-Sessions crashen nicht)
+- Smoke-Test bestanden: "Frage 1 von 20" ✅
+
 ## 🛡️ Godmode Security Hardening · Fund-Ready (Feb 2026)
 Nach dem security_audit_agent-Report (Verdict: FAIL — DO NOT LAUNCH) wurden ALLE P0/P1/P2/P3 Findings gefixt. Verifiziert via testing_agent Iter40: **17/17 Unit-Tests + 16/16 Integration-Tests PASS**, 0 critical/minor Code-Bugs.
 

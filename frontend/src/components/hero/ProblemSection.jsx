@@ -67,7 +67,7 @@ export default function ProblemSection() {
                 </div>
                 <div className="mt-8 pt-6 border-t border-[#C8FF00]/[0.08]">
                   <p className="font-inter text-sm text-slate-500 leading-relaxed">
-                    Die Diagnose zeigt dir in <span className="text-white font-medium">10 Minuten</span>, welche Ebene du
+                    Die Diagnose zeigt dir in <span className="text-white font-medium">7 Minuten</span>, welche Ebene du
                     vernachlässigst · ohne Bullshit.
                   </p>
                 </div>

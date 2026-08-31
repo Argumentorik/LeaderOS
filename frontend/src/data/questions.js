@@ -515,13 +515,16 @@ const baseQuestions = [
   }
 ];
 
+// 20-question set: balanced cut (Rhetorik 4, Kritisches Denken 3, Entscheidung 3, Führung 3, EQ 3, KI-Strategie 4)
+const EXCLUDED_IDS = new Set([5, 9, 10, 14, 15, 19, 20, 24, 25, 30]);
+
 // Function to get questions for a specific role
 export function getQuestionsForRole(role) {
   const roleKey = role?.toLowerCase().replace(/[-\s]/g, '_') || 'selbststaendige';
   const validRoles = ['selbststaendige', 'angestellte', 'senior_manager', 'high_potential'];
   const selectedRole = validRoles.includes(roleKey) ? roleKey : 'selbststaendige';
   
-  return baseQuestions.map(q => ({
+  return baseQuestions.filter(q => !EXCLUDED_IDS.has(q.id)).map(q => ({
     ...q,
     scenario: q.scenarios[selectedRole] || q.scenarios.selbststaendige
   }));

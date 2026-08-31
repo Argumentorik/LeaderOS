@@ -33,7 +33,7 @@ export default function SocialProofSection() {
             <div className="font-inter text-xs text-slate-500">sagen: &laquo;Hat mir die Augen geöffnet&raquo;</div>
           </div>
           <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 text-center">
-            <div className="font-manrope font-extrabold text-3xl text-white mb-2">10 Min</div>
+            <div className="font-manrope font-extrabold text-3xl text-white mb-2">7 Min</div>
             <div className="font-inter text-xs text-slate-500">für Klarheit, die andere in Monaten nicht bekommen</div>
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function FinalCTASection({ onCtaClick }) {
           </span>
         </h2>
         <p className="font-inter text-lg text-slate-400 mb-3 max-w-2xl mx-auto">
-          Finde es heraus. <span className="text-white font-medium">Kostenlos. In 10 Minuten.</span>
+          Finde es heraus. <span className="text-white font-medium">Kostenlos. In 7 Minuten.</span>
         </p>
         <p className="font-inter text-sm text-[#C8FF00]/70 mb-10">
           + 50 Free Credits für deinen WladBot · Report als PDF · 30-Tage-Plan

@@ -124,7 +124,7 @@ export default function UserForm() {
           </h1>
           <p className="font-inter text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
             {step === 1
-              ? "Deine Rolle bestimmt den Kontext deiner Diagnose. 30 Fragen, individuell auf dein Profil zugeschnitten."
+              ? "Deine Rolle bestimmt den Kontext deiner Diagnose. 20 Fragen, individuell auf dein Profil zugeschnitten."
               : "Damit wir deinen personalisierten Report erstellen und dich auf Wunsch persönlich begleiten können."}
           </p>
         </div>
@@ -274,7 +274,7 @@ export default function UserForm() {
             </button>
 
             <p className="font-inter text-sm text-slate-600 text-center">
-              30 Fragen · ca. 10 Minuten · Szenario-basiert 
+              20 Fragen · ca. 7 Minuten · Szenario-basiert 
             </p>
 
             <div className="glass-card-subtle p-5 space-y-4" data-testid="trust-section">

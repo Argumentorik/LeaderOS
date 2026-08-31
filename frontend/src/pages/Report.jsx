@@ -513,7 +513,7 @@ export default function Report() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8FF00]" />
               </span>
               <span className="font-mono text-[11px] tracking-[0.2em] text-slate-400 font-medium uppercase">
-                Erkenne dein Potenzial · <span className="text-[#C8FF00]">3 Ebenen</span> in 10 Minuten
+                Erkenne dein Potenzial · <span className="text-[#C8FF00]">3 Ebenen</span> in 7 Minuten
               </span>
             </div>
             <h3 className="font-manrope font-extrabold text-2xl text-white mb-2">

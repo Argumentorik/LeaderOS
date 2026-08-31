@@ -24,7 +24,7 @@ function SkeletonQuiz() {
     <div className="relative h-full px-2 py-8">
       <div className="mx-auto h-full w-full rounded-xl bg-[#0d0d0d] border border-white/[0.06] p-5 shadow-2xl shadow-black/40">
         <div className="flex items-center gap-2 mb-5">
-          <span className="font-mono text-[10px] tracking-[0.22em] text-[#C8FF00] font-bold">FRAGE 14 / 30</span>
+          <span className="font-mono text-[10px] tracking-[0.22em] text-[#C8FF00] font-bold">FRAGE 14 / 20</span>
           <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
@@ -257,8 +257,8 @@ const FEATURES = [
   {
     key: "f1",
     icon: FileText,
-    title: "30 Fragen · 6 Führungsdimensionen.",
-    description: "10 Minuten · ehrlich beantwortet · ohne Login. Du gibst kein Bauchgefühl ab — du gibst Daten ab.",
+    title: "20 Fragen · 6 Führungsdimensionen.",
+    description: "7 Minuten · ehrlich beantwortet · ohne Login. Du gibst kein Bauchgefühl ab — du gibst Daten ab.",
     skeleton: <SkeletonQuiz />,
     className: "col-span-1 lg:col-span-4 border-b lg:border-r border-white/[0.06]",
   },
@@ -296,7 +296,7 @@ export default function DiagnoseStepsSection() {
     >
       <div className="text-center mb-12">
         <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
-          ▸ 10 Minuten · Sofort-Klarheit
+          ▸ 7 Minuten · Sofort-Klarheit
         </span>
         <h2
           className="font-manrope font-extrabold text-white mx-auto max-w-4xl"

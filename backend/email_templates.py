@@ -135,12 +135,12 @@ def _welcome_body(name: str, role: str) -> str:
 </td></tr>
 <tr><td style="background:{BRAND['card']};border-radius:12px;padding:28px 24px;border:1px solid {BRAND['border']};">
 <p style="font-size:15px;color:{BRAND['gray']};line-height:1.7;margin:0;">Die meisten Führungskräfte glauben, sie wüssten, wo sie stehen. Dann machen sie die Leader OS Diagnose – und merken, dass sie in einer von sechs Rollen massiv unterschätzt werden.</p>
-<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;font-weight:500;">Ob das bei dir auch so ist? Keine Ahnung. Aber in 10 Minuten weißt du es.</p>
+<p style="font-size:15px;color:{BRAND['white']};line-height:1.7;margin:16px 0 0 0;font-weight:500;">Ob das bei dir auch so ist? Keine Ahnung. Aber in 7 Minuten weißt du es.</p>
 </td></tr>
 <tr><td style="padding:28px 0;">
 {_section_label("Was dich erwartet")}
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-{_numbered_step("01", "30 Szenario-Fragen", f" — zugeschnitten auf deine Rolle als {role}")}
+{_numbered_step("01", "20 Szenario-Fragen", f" — zugeschnitten auf deine Rolle als {role}")}
 {_numbered_step("02", "KI-Report", " — dein Profil über 6 Führungsrollen")}
 {_numbered_step("03", "30-Tage-Plan", " — konkrete Schritte, kein Blabla")}
 </table>

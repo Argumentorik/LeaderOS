@@ -10,7 +10,7 @@ function WladBotChat({ onContinue }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 30 Fragen durchgezogen. Respekt. Bevor ich deinen Report erstelle, wollte ich kurz mit dir sprechen. Was ist gerade deine größte Leadership-Herausforderung?"
+      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Bevor ich deinen Report erstelle, wollte ich kurz mit dir sprechen. Was ist gerade deine größte Leadership-Herausforderung?"
     }
   ]);
   const [input, setInput] = useState("");
@@ -33,7 +33,7 @@ function WladBotChat({ onContinue }) {
     try {
       const res = await axios.post(`${API}/coach/chat`, {
         session_id: user.session_id || "demo",
-        message: `[Vor-Report Gespräch] Der Nutzer hat gerade 30 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich auf: ${text}`,
+        message: `[Vor-Report Gespräch] Der Nutzer hat gerade 20 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich auf: ${text}`,
       });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
       setExchangeCount(c => c + 1);
@@ -52,7 +52,7 @@ function WladBotChat({ onContinue }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]" data-testid="wladbot-q30">
+    <div className="min-h-screen bg-[#0a0a0a]" data-testid="wladbot-q20">
       <div className="max-w-2xl mx-auto px-5 pt-28 pb-12">
         {/* Header */}
         <div className="text-center mb-10">
@@ -167,7 +167,9 @@ export default function Quiz() {
     if (!stored) { navigate("/diagnose"); return; }
     const userData = JSON.parse(stored);
     const role = userData.role || 'selbststaendige';
-    setQuestions(getQuestionsForRole(role));
+    const qs = getQuestionsForRole(role);
+    setQuestions(qs);
+    setCurrent(c => Math.min(c, qs.length - 1));
   }, [navigate]);
 
   // Auto-save every answer immediately to localStorage (and to backend best-effort)

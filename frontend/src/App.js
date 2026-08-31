@@ -33,15 +33,15 @@ function ScrollToTop() {
 const ROUTE_META = {
   "/": {
     title: "Leader-Check · Kostenlose KI-Leadership-Diagnose in 5 Minuten | Leader OS",
-    description: "Kostenlose KI-Diagnose für Führungskräfte: 30 Fragen · 5 Min · personalisierter Report mit 30-Tage-Aktionsplan. Wlad Jachtchenkos Methodik live. DSGVO-konform.",
+    description: "Kostenlose KI-Diagnose für Führungskräfte: 20 Fragen · 5 Min · personalisierter Report mit 30-Tage-Aktionsplan. Wlad Jachtchenkos Methodik live. DSGVO-konform.",
   },
   "/diagnose": {
     title: "Diagnose starten · Leader-Check",
     description: "Starte deine kostenlose Leadership-Diagnose. Name + E-Mail eintragen, in 5 Minuten zum personalisierten KI-Report.",
   },
   "/quiz": {
-    title: "30 Fragen · Leadership-Diagnose | Leader-Check",
-    description: "Beantworte 30 Fragen zu KI, Rhetorik und EQ. Auto-Save aktiv — du kannst jederzeit pausieren und fortsetzen.",
+    title: "20 Fragen · Leadership-Diagnose | Leader-Check",
+    description: "Beantworte 20 Fragen zu KI, Rhetorik und EQ. Auto-Save aktiv — du kannst jederzeit pausieren und fortsetzen.",
   },
   "/report": {
     title: "Dein Leadership-Report · Leader-Check",
