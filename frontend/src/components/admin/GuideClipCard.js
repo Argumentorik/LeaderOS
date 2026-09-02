@@ -5,8 +5,12 @@ import { Textarea } from '../ui/textarea';
 import { Loader2, Sparkles, Mic, Image as ImageIcon, Clapperboard, Eye, EyeOff, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { GuideShotList } from './GuideShotList';
 
 const STATUS_LABEL = {
+  shots_planned: 'Shots geplant', shot_keyframes_running: 'Keyframes laufen…', shot_keyframes_ready: 'Keyframes fertig',
+  shots_keyframed: 'Keyframes fertig', shot_keyframes_failed: 'Keyframes fehlgeschlagen',
+  render_running: 'Film wird gerendert…', render_failed: 'Rendern fehlgeschlagen',
   interrupted: 'Unterbrochen (Neustart)',
   script_ready: 'Skript bereit', audio_running: 'Stimme läuft…', audio_ready: 'Stimme fertig', audio_failed: 'Stimme fehlgeschlagen',
   keyframe_running: 'Keyframe läuft…', keyframe_ready: 'Keyframe fertig', keyframe_failed: 'Keyframe fehlgeschlagen',
@@ -16,7 +20,7 @@ const STATUS_LABEL = {
 
 const base = process.env.REACT_APP_BACKEND_URL;
 
-export const GuideClipCard = ({ clip, costs, onChange }) => {
+export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
   const [script, setScript] = useState(clip.script);
   const [scene, setScene] = useState(clip.shot?.scene_prompt || '');
   const [motion, setMotion] = useState(clip.shot?.motion_prompt || '');
@@ -106,6 +110,7 @@ export const GuideClipCard = ({ clip, costs, onChange }) => {
                 {clip.published ? <><EyeOff size={12} className="mr-1" />Zurückziehen</> : <><Eye size={12} className="mr-1" />Freigeben</>}
               </Button>
             </div>
+            {clip.multi_shot && <GuideShotList clip={clip} costs={costs} screens={screens} onChange={onChange} />}
             {(err || clip.error) && <p className="text-[11px] text-rose-500" data-testid={`guide-clip-error-${clip.slug}`}>{err || clip.error}</p>}
             {clip.audio_url && <audio controls src={`${base}${clip.audio_url}`} className="w-full h-8" data-testid={`guide-clip-audio-${clip.slug}`} />}
             <p className="text-[10px] text-muted-foreground">Ausgegeben für diesen Clip: {(clip.spent_usd || 0).toFixed(2)} $ {clip.duration_seconds ? `· Sprechdauer ${clip.duration_seconds} s` : ''}</p>

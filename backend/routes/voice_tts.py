@@ -62,7 +62,10 @@ VOICE_REGISTRY: dict[str, dict] = {
     #   damit Wlad nicht überdramatisch klingt.
     #   Override via env `ELEVENLABS_WLAD_VOICE_ID=<id>` möglich.
     "wlad": {
-        "voice_id": os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),  # Iter 137: Wlads eigene geklonte Stimme (Default), per ENV überschreibbar
+        # Iter 144: Wlads Minimax-Klon (aus dem Guide Studio) hat Vorrang — ElevenLabs bleibt Fallback,
+        # wenn MINIMAX_WLAD_VOICE_ID nicht gesetzt ist (Professional-Clone dort braucht Creator-Tier).
+        "voice_id": os.environ.get("MINIMAX_WLAD_VOICE_ID") or os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),
+        "provider": "minimax" if os.environ.get("MINIMAX_WLAD_VOICE_ID") else "elevenlabs",
         "name": "Wlad Jachtchenko",
         "stability": 0.72, "similarity_boost": 0.80, "style": 0.12,
         "language": "de",
@@ -103,6 +106,7 @@ VOICE_REGISTRY: dict[str, dict] = {
 }
 
 MODEL_ID = "eleven_multilingual_v2"  # supports both DE + EN
+FALLBACK_VOICE_ID = os.environ.get("ELEVENLABS_FALLBACK_VOICE_ID", "pNInz6obpgDQGcFmaJgB")  # "Adam" — Standardstimme, immer verfügbar
 MAX_TEXT_LENGTH = 800  # ~60s of audio — enough for intros/quotes, protects cost
 
 
@@ -232,6 +236,16 @@ def _normalize_wlad_name(text: str) -> str:
 def _synthesize(text: str, voice_config: dict) -> bytes:
     """Blocking synthesis — returns raw MP3 bytes. Run inside run_in_threadpool."""
     text = _normalize_wlad_name(text)
+    if voice_config.get("provider") == "minimax":
+        from services_fal import FalError, synthesize_speech
+
+        try:
+            audio, _ = synthesize_speech(text, voice_config["voice_id"], fast=True)
+            return audio
+        except FalError as e:
+            # Fal-Queue überlastet/ausgefallen -> ElevenLabs-Standardstimme statt Fehler beim Nutzer
+            logger.warning("Minimax-Klon nicht verfügbar (%s) — Fallback auf ElevenLabs %s", e, FALLBACK_VOICE_ID)
+            voice_config = {**voice_config, "voice_id": FALLBACK_VOICE_ID}
     client = _get_client()
     try:
         from elevenlabs import VoiceSettings

@@ -115,7 +115,7 @@ export const GuideStudio = () => {
       </Card>
 
       <div className="space-y-3">
-        {data.clips.map((clip) => <GuideClipCard key={clip.slug} clip={clip} costs={data.costs} onChange={load} />)}
+        {data.clips.map((clip) => <GuideClipCard key={clip.slug} clip={clip} costs={data.costs} screens={data.broll_screens} onChange={load} />)}
       </div>
     </div>
   );

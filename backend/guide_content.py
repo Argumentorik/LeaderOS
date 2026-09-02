@@ -47,7 +47,124 @@ SHOT_PRESETS = {
         "speech_start": 4.0,
         "aspect_ratio": "9:16",
     },
+    "loft_walk_in": {
+        "label": "Loft-Büro · Walk-in",
+        "kind": "walk",
+        "scene_prompt": (
+            "Scene: a modern bright loft office with tall windows, soft daylight, concrete and warm wood, a few "
+            "green plants, a large screen on the wall glowing softly in lime green. He is walking toward the camera "
+            "through the office, full body visible, confident relaxed stride. Horizontal 16:9 composition, "
+            "Netflix-quality animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "The man walks calmly and confidently toward the camera through the bright loft office, natural arm "
+            "swing, stops and looks into the camera with a slight smile. Slow cinematic dolly-in, soft daylight "
+            "flares, consistent character and outfit, no camera cuts, smooth realistic motion."
+        ),
+        "duration": "5",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
+    "loft_talk_medium": {
+        "label": "Loft-Büro · Halbnah",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: medium shot from the waist up, he stands in a modern bright loft office with tall windows and "
+            "soft daylight, blurred background with warm wood, plants and a softly glowing lime-green screen. "
+            "He looks straight into the camera with a warm confident expression, hands relaxed and ready to gesture. "
+            "Horizontal 16:9 composition, face clearly lit and large in frame, Netflix-quality animation film still, "
+            "shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "The man stands still and talks directly to the camera like a coach, natural mouth movements, subtle "
+            "head movements, small open hand gestures, warm eye contact. Very slow cinematic push-in, no walking, "
+            "no camera cuts, consistent character and outfit, smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.6,
+        "aspect_ratio": "16:9",
+    },
+    "loft_talk_closeup": {
+        "label": "Loft-Büro · Close-up",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: close-up from the chest up, he stands in a modern bright loft office, soft daylight from the "
+            "side, strongly blurred background with warm wood and a softly glowing lime-green screen. He looks "
+            "straight into the camera with calm confidence and a slight smile. Horizontal 16:9 composition, face "
+            "large and sharp in frame, Netflix-quality animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "The man talks directly to the camera, natural mouth movements, calm confident expression, subtle "
+            "nods, minimal head movement, warm eye contact, ends with a slight confident smile. Very slow cinematic "
+            "push-in, no walking, no camera cuts, consistent character, smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.6,
+        "aspect_ratio": "16:9",
+    },
 }
+
+# B-Roll: echte App-Screens (Playwright-Screenshots in backend/assets/broll)
+BROLL_SCREENS = {
+    "dashboard": "Dashboard",
+    "chat": "WladBot-Chat",
+    "video": "Video-Analyse",
+    "challenge": "30-Tage-Challenge",
+    "simulations": "Simulationen",
+}
+
+# Wie ein Onboarding-Clip in Shots zerfällt (Stufe B, 16:9)
+MULTI_SHOT_PLAN = [
+    {"type": "walk", "preset": "loft_walk_in"},
+    {"type": "talk", "preset": "loft_talk_medium", "max_words": 22},
+    {"type": "broll", "screens": ["dashboard", "chat", "video", "challenge"]},
+    {"type": "talk", "preset": "loft_talk_closeup", "max_words": 22},
+]
+TALK_MAX_SECONDS = 9.2
+
+
+def _sentences(text: str) -> list[str]:
+    import re
+
+    return [p for p in re.split(r"(?<=[.!?])\s+", " ".join(text.split())) if p]
+
+
+def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
+    """Nimmt ganze Sätze von vorn, bis max_words erreicht wäre (mindestens einen)."""
+    taken, count = [], 0
+    for s in sentences:
+        n = len(s.split())
+        if taken and count + n > max_words:
+            break
+        taken.append(s)
+        count += n
+        if count >= max_words:
+            break
+    return " ".join(taken), sentences[len(taken):]
+
+
+def plan_shots(script: str) -> list[dict]:
+    """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
+    B-Roll bekommt den Rest in der Mitte."""
+    sentences = _sentences(script)
+    talks = [i for i, s in enumerate(MULTI_SHOT_PLAN) if s["type"] == "talk"]
+    texts = {}
+    if talks:
+        texts[talks[0]], sentences = _take_words(sentences, MULTI_SHOT_PLAN[talks[0]]["max_words"])
+        if len(talks) > 1:
+            tail, count, limit = [], 0, MULTI_SHOT_PLAN[talks[-1]]["max_words"]
+            while sentences and count + len(sentences[-1].split()) <= limit:
+                tail.insert(0, sentences.pop())
+                count += len(tail[0].split())
+            texts[talks[-1]] = " ".join(tail)
+    shots = []
+    for i, tpl in enumerate(MULTI_SHOT_PLAN):
+        shots.append({
+            "id": f"s{i + 1}", "type": tpl["type"], "preset": tpl.get("preset"),
+            "screens": tpl.get("screens", []),
+            "text": " ".join(sentences) if tpl["type"] == "broll" else texts.get(i, ""),
+        })
+    return shots
 
 # ── Teaser: Ein 10-s-Shot für Social (Stufe A) ──────────────────────────────
 TEASER_CLIPS = [

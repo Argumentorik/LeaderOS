@@ -17,7 +17,10 @@ from fastapi.responses import Response
 from pydantic import BaseModel
 
 from config import EMERGENT_LLM_KEY, db, logger
-from guide_content import SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, WLAD_STYLE_PROMPT, seed_clips, word_count, word_limits
+from guide_content import (
+    BROLL_SCREENS, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, TALK_MAX_SECONDS, WLAD_STYLE_PROMPT,
+    plan_shots, seed_clips, word_count, word_limits,
+)
 from routes.admin import require_admin
 from routes.uploads import get_object, put_object
 from services import get_current_user
@@ -26,7 +29,9 @@ from services_fal import (
     COST_I2V, COST_KEYFRAME, COST_LIPSYNC_PER_S, FalError, clone_voice, edit_image,
     image_to_video, lipsync_video, render_talking_video, synthesize_speech,
 )
-from services_video_compose import finish_video, pad_audio, subtitle_chunks
+from services_video_compose import (
+    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, subtitle_chunks,
+)
 
 router = APIRouter(prefix="/api/guide", tags=["guide"])
 
@@ -38,6 +43,10 @@ CLIP_MEDIA = {"video": "video_path", "audio": "audio_path", "padded": "audio_pad
               "raw": "raw_video_path", "keyframe": "keyframe_path"}
 MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", "padded": "audio/mpeg",
                "keyframe": "image/png"}
+SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "video/mp4"),
+              "audio": ("audio_path", "audio/mpeg"), "padded": ("padded_path", "audio/mpeg"),
+              "synced": ("synced_path", "video/mp4")}
+FRAME_16_9 = (1280, 720)
 
 
 # ── Datenzugriff ────────────────────────────────────────────────────────────
@@ -177,8 +186,21 @@ async def set_prefs(data: PrefsIn, request: Request):
     return {"ok": True, "mission_autoplay": data.mission_autoplay}
 
 
+@router.get("/public/teaser")
+async def public_teaser():
+    """Ohne Login (Login-Seite): der freigegebene Teaser — oder null."""
+    clip = await db.guide_clips.find_one(
+        {"kind": "teaser", "published": True, "video_path": {"$ne": None}}, {"_id": 0},
+    )
+    if not clip:
+        return {"clip": None}
+    return {"clip": {"slug": clip["slug"], "title": clip["title"], "script": clip["script"],
+                     "video_url": _media_url(clip["media_token"], "video"),
+                     "poster_url": _media_url(clip["media_token"], "keyframe") if clip.get("keyframe_path") else None}}
+
+
 @router.get("/media/{token}/{kind}")
-async def serve_media(token: str, kind: str):
+async def serve_media(token: str, kind: str, request: Request):
     """Öffentlich (ohne Login): Guide-Videos sind für alle Nutzer identisch und
     müssen zusätzlich vom Generator-Dienst abgerufen werden können. Der Token ist
     nicht erratbar und hängt am jeweiligen Clip."""
@@ -205,15 +227,66 @@ async def serve_media(token: str, kind: str):
     except Exception as e:
         logger.error("Guide media fetch failed for %s: %s", path, e)
         raise HTTPException(status_code=404, detail="Not found")
-    return Response(content=data, media_type=media_type or content_type,
-                    headers={"Cache-Control": "public, max-age=86400"})
+    return _ranged(request, data, media_type or content_type)
+
+
+def _ranged(request: Request, data: bytes, media_type: str) -> Response:
+    """Range-Requests für <video>/<audio> (Safari verlangt 206, Scrubbing braucht es überall)."""
+    headers = {"Cache-Control": "public, max-age=86400", "Accept-Ranges": "bytes"}
+    rng = request.headers.get("range")
+    if rng and rng.startswith("bytes="):
+        start_s, _, end_s = rng[6:].partition("-")
+        start = int(start_s or 0)
+        end = min(int(end_s) if end_s else len(data) - 1, len(data) - 1)
+        if start > end:
+            raise HTTPException(status_code=416, detail="Range not satisfiable")
+        headers["Content-Range"] = f"bytes {start}-{end}/{len(data)}"
+        return Response(content=data[start:end + 1], status_code=206, media_type=media_type, headers=headers)
+    return Response(content=data, media_type=media_type, headers=headers)
+
+
+@router.get("/media/{token}/shot/{shot_id}/{kind}")
+async def serve_shot_media(token: str, shot_id: str, kind: str, request: Request):
+    """Zwischenergebnisse einzelner Shots (Fal muss raw + padded abrufen können)."""
+    if kind not in SHOT_MEDIA:
+        raise HTTPException(status_code=404, detail="Not found")
+    clip = await db.guide_clips.find_one({"media_token": token}, {"_id": 0, "shots": 1})
+    shot = next((s for s in (clip or {}).get("shots", []) if s["id"] == shot_id), None)
+    field, media_type = SHOT_MEDIA[kind]
+    if not shot or not shot.get(field):
+        raise HTTPException(status_code=404, detail="Not found")
+    try:
+        data, _ = await asyncio.to_thread(get_object, shot[field])
+    except Exception as e:
+        logger.error("Guide shot media fetch failed for %s: %s", shot[field], e)
+        raise HTTPException(status_code=404, detail="Not found")
+    return _ranged(request, data, media_type)
+
+
+@router.get("/broll/{screen}")
+async def serve_broll(screen: str):
+    path = BROLL_DIR / f"{screen}.png"
+    if screen not in BROLL_SCREENS or not path.exists():
+        raise HTTPException(status_code=404, detail="Not found")
+    return Response(content=path.read_bytes(), media_type="image/png",
+                    headers={"Cache-Control": "public, max-age=3600"})
 
 
 # ── Admin: Einrichtung ──────────────────────────────────────────────────────
 
+def _shot_view(shot: dict, token: str | None) -> dict:
+    view = {k: v for k, v in shot.items() if not k.endswith("_path")}
+    for kind, (field, _) in SHOT_MEDIA.items():
+        view[f"{kind}_url"] = f"/api/guide/media/{token}/shot/{shot['id']}/{kind}" if shot.get(field) and token else None
+    preset = SHOT_PRESETS.get(shot.get("preset") or "")
+    view["preset_label"] = preset["label"] if preset else "App-Tour (B-Roll)"
+    view["duration"] = preset["duration"] if preset else None
+    return view
+
+
 def _admin_clip_view(c: dict) -> dict:
     token = c.get("media_token")
-    view = {k: v for k, v in c.items() if not k.endswith("_path")}
+    view = {k: v for k, v in c.items() if not k.endswith("_path") and k != "shots"}
     for kind, field in CLIP_MEDIA.items():
         view[f"{kind}_url"] = _media_url(token, kind) if c.get(field) and token else None
     view["words"] = word_count(c.get("script", ""))
@@ -221,6 +294,8 @@ def _admin_clip_view(c: dict) -> dict:
     preset = SHOT_PRESETS.get(c.get("shot_preset") or "")
     view["shot"] = preset and {**preset, "scene_prompt": c.get("scene_prompt") or preset["scene_prompt"],
                                "motion_prompt": c.get("motion_prompt") or preset["motion_prompt"]}
+    view["shots"] = [_shot_view(s, token) for s in c.get("shots", [])]
+    view["multi_shot"] = c.get("kind") in ("onboarding", "mission")
     return view
 
 
@@ -246,6 +321,7 @@ async def admin_overview(request: Request):
         },
         "limits": {"min_words": SCRIPT_MIN_WORDS, "max_words": SCRIPT_MAX_WORDS},
         "costs": {"keyframe": COST_KEYFRAME, "i2v": COST_I2V, "lipsync_per_s": COST_LIPSYNC_PER_S, "voice_clone": 1.5},
+        "broll_screens": BROLL_SCREENS,
     }
 
 
@@ -527,6 +603,148 @@ async def _job_cinematic(slug: str, clip: dict, settings: dict, token: str) -> N
 _STAGES = {"audio": _job_audio, "video": _job_video, "keyframe": _job_keyframe, "cinematic": _job_cinematic}
 
 
+# ── Multi-Shot (Iter 144): Walk-in + Talk-Shots + App-B-Roll ────────────────
+
+async def _patch_shot(slug: str, shot_id: str, patch: dict) -> None:
+    await db.guide_clips.update_one(
+        {"slug": slug, "shots.id": shot_id},
+        {"$set": {**{f"shots.$.{k}": v for k, v in patch.items()},
+                  "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+
+
+def _shot_url(token: str, shot_id: str, kind: str) -> str:
+    return _absolute(f"/api/guide/media/{token}/shot/{shot_id}/{kind}")
+
+
+async def _job_shot_keyframes(slug: str, clip: dict, settings: dict, token: str) -> None:
+    """Ein Keyframe pro Avatar-Shot; der vorige Keyframe dient als dritte Referenz (Konsistenz)."""
+    if not settings.get("portrait_path"):
+        raise FalError("Zuerst das Avatar-Bild (Gesicht) hochladen")
+    refs = [_absolute(_media_url(settings["media_token"], "portrait"))]
+    if settings.get("body_path"):
+        refs.append(_absolute(_media_url(settings["media_token"], "body")))
+    await _patch_clip(slug, {"media_token": token})
+    previous = None
+    for shot in clip.get("shots", []):
+        if shot["type"] == "broll":
+            continue
+        if shot.get("keyframe_path"):
+            previous = shot["id"]
+            continue
+        preset = SHOT_PRESETS[shot["preset"]]
+        await _patch_clip(slug, {"progress": f"Keyframe {shot['id']}"})
+        shot_refs = refs + ([_shot_url(token, previous, "keyframe")] if previous else [])
+        prompt = f"{WLAD_STYLE_PROMPT} {shot.get('scene_prompt') or preset['scene_prompt']}"
+        image = await asyncio.to_thread(edit_image, prompt, shot_refs, preset["aspect_ratio"])
+        path = await _store(f"kf_{shot['id']}", slug, image, "image/png", "png")
+        await _spend(slug, COST_KEYFRAME)
+        await _patch_shot(slug, shot["id"], {"keyframe_path": path, "raw_path": None, "synced_path": None, "error": None})
+        previous = shot["id"]
+    await _patch_clip(slug, {"status": "shots_keyframed", "progress": None, "error": None})
+
+
+async def _tts_fitting(text: str, voice_id: str, limit: float | None) -> tuple[bytes, float]:
+    audio, _ = await asyncio.to_thread(synthesize_speech, text, voice_id)
+    seconds = await asyncio.to_thread(_duration_of, audio)
+    if limit and seconds > limit:
+        speed = min(1.25, round(seconds / limit + 0.03, 2))
+        audio, _ = await asyncio.to_thread(synthesize_speech, text, voice_id, speed)
+        seconds = await asyncio.to_thread(_duration_of, audio)
+        if seconds > limit:
+            raise FalError(f"Sprechtext dauert {seconds:.1f} s — in einen Talk-Shot passen {limit:.0f} s. Text kürzen.")
+    return audio, seconds
+
+
+def _duration_of(data: bytes) -> float:
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(suffix=".bin", delete=True) as f:
+        f.write(data)
+        f.flush()
+        return probe(f.name)["duration"]
+
+
+async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None:
+    shots = clip.get("shots") or []
+    if not shots:
+        raise FalError("Zuerst die Shots planen")
+    if any(s["type"] != "broll" and not s.get("keyframe_path") for s in shots):
+        raise FalError("Zuerst alle Keyframes erzeugen und prüfen")
+    voice_id = settings.get("custom_voice_id") or DEFAULT_VOICE_ID
+    width, height = FRAME_16_9
+    await _patch_clip(slug, {"media_token": token})
+
+    for shot in shots:
+        sid, preset = shot["id"], SHOT_PRESETS.get(shot.get("preset") or "")
+        if shot.get("text") and not shot.get("audio_path"):
+            await _patch_clip(slug, {"progress": f"Stimme {sid}"})
+            limit = TALK_MAX_SECONDS if shot["type"] == "talk" else None
+            audio, seconds = await _tts_fitting(shot["text"], voice_id, limit)
+            shot["audio_path"] = await _store(f"a_{sid}", slug, audio, "audio/mpeg", "mp3")
+            shot["audio_seconds"] = round(seconds, 2)
+            await _patch_shot(slug, sid, {"audio_path": shot["audio_path"], "audio_seconds": shot["audio_seconds"]})
+        if shot["type"] in ("walk", "talk") and not shot.get("raw_path"):
+            await _patch_clip(slug, {"progress": f"Bewegung {sid} (Kling)"})
+            raw = await asyncio.to_thread(
+                image_to_video, _shot_url(token, sid, "keyframe"),
+                shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"], preset["aspect_ratio"],
+            )
+            shot["raw_path"] = await _store(f"raw_{sid}", slug, raw, "video/mp4", "mp4")
+            await _spend(slug, COST_I2V[preset["duration"]])
+            await _patch_shot(slug, sid, {"raw_path": shot["raw_path"], "synced_path": None})
+        if shot["type"] == "talk" and not shot.get("synced_path"):
+            await _patch_clip(slug, {"progress": f"Lipsync {sid}"})
+            audio_bytes, _ = await asyncio.to_thread(get_object, shot["audio_path"])
+            total = float(preset["duration"])
+            padded = await asyncio.to_thread(pad_audio, audio_bytes, preset["speech_start"], total)
+            shot["padded_path"] = await _store(f"pad_{sid}", slug, padded, "audio/mpeg", "mp3")
+            await _patch_shot(slug, sid, {"padded_path": shot["padded_path"]})
+            synced = await asyncio.to_thread(lipsync_video, _shot_url(token, sid, "raw"), _shot_url(token, sid, "padded"))
+            await _spend(slug, COST_LIPSYNC_PER_S * total)
+            shot["synced_path"] = await _store(f"sync_{sid}", slug, synced, "video/mp4", "mp4")
+            await _patch_shot(slug, sid, {"synced_path": shot["synced_path"]})
+
+    await _patch_clip(slug, {"progress": "Schnitt & Branding"})
+    segments, cues, offset, brand_windows = [], [], 0.0, []
+    for shot in shots:
+        preset = SHOT_PRESETS.get(shot.get("preset") or "")
+        if shot["type"] == "broll":
+            audio, _ = await asyncio.to_thread(get_object, shot["audio_path"])
+            screens = [(BROLL_DIR / f"{s}.png").read_bytes() for s in shot["screens"] if (BROLL_DIR / f"{s}.png").exists()]
+            seg = await asyncio.to_thread(render_broll, screens, audio, width, height)
+            cues += subtitle_chunks(shot["text"], offset, shot["audio_seconds"], 6)
+        elif shot["type"] == "talk":
+            synced, _ = await asyncio.to_thread(get_object, shot["synced_path"])
+            padded, _ = await asyncio.to_thread(get_object, shot["padded_path"])
+            seg = await asyncio.to_thread(normalize_segment, synced, padded, width, height)
+            cues += subtitle_chunks(shot["text"], offset + preset["speech_start"], shot["audio_seconds"], 6)
+        else:
+            raw, _ = await asyncio.to_thread(get_object, shot["raw_path"])
+            seg = await asyncio.to_thread(normalize_segment, raw, None, width, height)
+        segments.append(seg)
+        seg_len = await asyncio.to_thread(_duration_of, seg)
+        if shot["type"] != "broll":
+            brand_windows.append((offset + (1.0 if offset == 0 else 0.0), offset + seg_len))
+        offset += seg_len
+
+    joined = await asyncio.to_thread(concat_segments, segments)
+    from services_video_compose import extract_audio
+
+    audio_track = await asyncio.to_thread(extract_audio, joined)
+    final = await asyncio.to_thread(finish_video, joined, audio_track, cues, True, brand_windows)
+    path = await _store("video", slug, final, "video/mp4", "mp4")
+    await _patch_clip(slug, {
+        "video_path": path, "status": "video_ready", "error": None, "progress": None,
+        "video_bytes": len(final), "pipeline": "multishot", "subtitles": cues,
+        "duration_seconds_video": round(offset, 1),
+    })
+    logger.info("Guide multishot ready: %s (%.1fs, %s KB)", slug, offset, len(final) // 1024)
+
+
+_STAGES.update({"shot_keyframes": _job_shot_keyframes, "render": _job_render})
+
+
 async def _run_job(slug: str, stage: str) -> None:
     """Fehler landen am Clip, nicht im Nirwana."""
     try:
@@ -545,7 +763,8 @@ def _start_job(slug: str, stage: str) -> None:
     task.add_done_callback(_JOBS.discard)
 
 
-RUNNING = {"audio_running", "video_running", "keyframe_running", "cinematic_running"}
+RUNNING = {"audio_running", "video_running", "keyframe_running", "cinematic_running",
+           "shot_keyframes_running", "render_running"}
 
 
 async def _kick(slug: str, stage: str, *checks) -> dict:
@@ -600,6 +819,97 @@ async def generate_cinematic(slug: str, request: Request):
 
 class PublishIn(BaseModel):
     published: bool
+
+
+# ── Admin: Multi-Shot ───────────────────────────────────────────────────────
+
+@router.post("/admin/clips/{slug}/plan")
+async def plan_clip_shots(slug: str, request: Request):
+    """Verteilt das Skript auf Walk-in, Talk-Shots und App-B-Roll (kostenfrei, verwirft alte Shots)."""
+    await require_admin(request)
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if not clip:
+        raise HTTPException(status_code=404, detail="Clip nicht gefunden")
+    if clip.get("status") in RUNNING:
+        raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
+    shots = plan_shots(clip["script"])
+    await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
+    return {"ok": True, "shots": shots}
+
+
+class ShotIn(BaseModel):
+    id: str
+    text: str | None = None
+    screens: list[str] | None = None
+    scene_prompt: str | None = None
+    motion_prompt: str | None = None
+
+
+class ShotsSaveIn(BaseModel):
+    shots: list[ShotIn]
+
+
+@router.put("/admin/clips/{slug}/shots")
+async def save_shots(slug: str, data: ShotsSaveIn, request: Request):
+    """Text-/Szenen-Änderungen je Shot. Geänderter Text verwirft Stimme + Lipsync des Shots,
+    geänderte Szene verwirft den Keyframe — es wird nur neu gerendert, was sich geändert hat."""
+    await require_admin(request)
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if not clip:
+        raise HTTPException(status_code=404, detail="Clip nicht gefunden")
+    if clip.get("status") in RUNNING:
+        raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
+    by_id = {s["id"]: s for s in clip.get("shots", [])}
+    for item in data.shots:
+        shot = by_id.get(item.id)
+        if not shot:
+            raise HTTPException(status_code=404, detail=f"Shot {item.id} nicht gefunden")
+        if item.text is not None:
+            text = " ".join(item.text.split())
+            if shot["type"] == "walk" and text:
+                raise HTTPException(status_code=400, detail="Der Walk-in-Shot ist stumm")
+            if shot["type"] == "talk" and word_count(text) > 26:
+                raise HTTPException(status_code=400, detail=f"Shot {item.id}: höchstens 26 Wörter pro Talk-Shot")
+            if text != shot.get("text", ""):
+                shot.update({"text": text, "audio_path": None, "audio_seconds": None, "padded_path": None, "synced_path": None})
+        if item.screens is not None and shot["type"] == "broll":
+            screens = [s for s in item.screens if s in BROLL_SCREENS]
+            if not screens:
+                raise HTTPException(status_code=400, detail="Mindestens ein App-Screen für die B-Roll")
+            shot["screens"] = screens
+        for key in ("scene_prompt", "motion_prompt"):
+            value = getattr(item, key)
+            if value is not None and shot["type"] != "broll":
+                value = value.strip()[:1500] or None
+                if value != shot.get(key):
+                    shot[key] = value
+                    if key == "scene_prompt":
+                        shot.update({"keyframe_path": None, "raw_path": None, "synced_path": None})
+                    else:
+                        shot.update({"raw_path": None, "synced_path": None})
+    await _patch_clip(slug, {"shots": list(by_id.values()), "error": None})
+    return {"ok": True}
+
+
+@router.post("/admin/clips/{slug}/shot-keyframes")
+async def generate_shot_keyframes(slug: str, request: Request):
+    await require_admin(request)
+    return await _kick(
+        slug, "shot_keyframes",
+        (lambda c, s: c.get("shots"), "Zuerst die Shots planen"),
+        (lambda c, s: s.get("portrait_path"), "Zuerst das Avatar-Bild (Gesicht) hochladen"),
+    )
+
+
+@router.post("/admin/clips/{slug}/render")
+async def render_multishot(slug: str, request: Request):
+    await require_admin(request)
+    return await _kick(
+        slug, "render",
+        (lambda c, s: c.get("shots"), "Zuerst die Shots planen"),
+        (lambda c, s: all(sh.get("keyframe_path") for sh in c["shots"] if sh["type"] != "broll"),
+         "Zuerst alle Keyframes erzeugen und prüfen"),
+    )
 
 
 @router.post("/admin/clips/{slug}/publish")

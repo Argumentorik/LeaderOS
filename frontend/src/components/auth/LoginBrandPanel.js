@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { WladMark } from '../brand/WladMark';
 import { ProductPreviewLoop } from './ProductPreviewLoop';
+import { LoginTeaserVideo } from './LoginTeaserVideo';
 
 const BG_IMG = 'https://images.unsplash.com/photo-1633602114554-be8c2c5d6828?crop=entropy&cs=srgb&fm=webp&w=1400&q=60';
 
 export const LoginBrandPanel = ({ features, de }) => {
+  const [hasTeaser, setHasTeaser] = useState(false);
   return (
     <div data-testid="login-brand-panel" className="hidden lg:flex lg:w-[45%] relative overflow-hidden">
       {/* Cinematic background: photo → deep dark grade → fine grid → aurora */}
@@ -102,9 +105,10 @@ export const LoginBrandPanel = ({ features, de }) => {
             ))}
           </div>
 
-          {/* Animated product preview loop — Chat-Burst → KI-Score → Video-Frame */}
+          {/* Wlad-Teaser (freigegeben) — sonst der animierte Produkt-Loop */}
           <div className="brand-rise" style={{ animationDelay: '1100ms' }}>
-            <ProductPreviewLoop de={de} />
+            <LoginTeaserVideo de={de} onAvailable={setHasTeaser} />
+            {!hasTeaser && <ProductPreviewLoop de={de} />}
           </div>
         </div>
 

@@ -23,6 +23,7 @@ logger = logging.getLogger("wladbot")
 
 VOICE_CLONE_ENDPOINT = "fal-ai/minimax/voice-clone"
 TTS_ENDPOINT = "fal-ai/minimax/speech-02-hd"
+TTS_TURBO_ENDPOINT = "fal-ai/minimax/speech-02-turbo"
 TALKING_VIDEO_ENDPOINT = "fal-ai/sadtalker"
 
 QUEUE_ORIGIN = "https://queue.fal.run"
@@ -93,16 +94,23 @@ def _get_with_retry(url: str, *, timeout_seconds: int, deadline: float, max_atte
     raise AssertionError("unreachable")
 
 
-def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> dict[str, Any]:
+def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_interval: float = 3.0) -> dict[str, Any]:
     """Ein Submit, dann Polling bis zum Endzustand. Submit wird NIE automatisch
     wiederholt — Fal könnte den (kostenpflichtigen) Job schon angenommen haben."""
     control = _control_base()
-    submit = requests.post(
-        f"{control}/proxy",
-        headers=_headers({"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
-        json=payload,
-        timeout=60,
-    )
+    for attempt in range(4):
+        submit = requests.post(
+            f"{control}/proxy",
+            headers=_headers({"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
+            json=payload,
+            timeout=60,
+        )
+        if submit.status_code == 503 and attempt < 3 and "retryable\":true" in submit.text.replace(" ", ""):
+            wait = 3 if timeout_seconds <= 60 else 20 * (attempt + 1)
+            logger.warning("Fal capacity unavailable (503) — retry %s/3 in %ss", attempt + 1, wait)
+            time.sleep(wait)
+            continue
+        break
     if submit.status_code == 402:
         raise FalInsufficientCredits("Universal-Key-Guthaben reicht für diese Generierung nicht")
     if submit.status_code >= 400:
@@ -127,7 +135,7 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> dict
             return result.json()
         if status in {"FAILED", "CANCELLED", "CANCELED", "ERROR"}:
             raise FalError(f"Generierung fehlgeschlagen: {status}")
-        time.sleep(3)
+        time.sleep(poll_interval)
     raise FalError("Zeitüberschreitung bei der Generierung")
 
 
@@ -147,15 +155,16 @@ def clone_voice(audio_url: str) -> str:
     return voice_id
 
 
-def synthesize_speech(text: str, voice_id: str, speed: float = 1.0) -> tuple[bytes, int]:
-    """Deutsche Sprachausgabe. Liefert (mp3-Bytes, Dauer in Sekunden)."""
-    result = run_fal(TTS_ENDPOINT, {
+def synthesize_speech(text: str, voice_id: str, speed: float = 1.0, fast: bool = False) -> tuple[bytes, int]:
+    """Deutsche Sprachausgabe. Liefert (mp3-Bytes, Dauer in Sekunden).
+    fast=True nutzt speech-02-turbo mit engem Polling — für den Voice-Mode/Chat."""
+    result = run_fal(TTS_TURBO_ENDPOINT if fast else TTS_ENDPOINT, {
         "text": text,
         "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": 1, "pitch": 0},
         "audio_setting": {"format": "mp3", "sample_rate": 32000, "channel": 1, "bitrate": 128000},
         "output_format": "url",
         "language_boost": "German",
-    }, timeout_seconds=600)
+    }, timeout_seconds=45 if fast else 600, poll_interval=0.8 if fast else 3.0)
     url = (result.get("audio") or {}).get("url")
     if not url:
         raise FalError("TTS lieferte keine Audio-URL")
