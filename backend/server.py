@@ -100,6 +100,7 @@ from routes.referral import router as referral_router
 from routes.enterprise import router as enterprise_router
 from routes.credits import router as credits_router
 from routes.challenge30 import router as challenge30_router
+from routes.guide import router as guide_router
 from routes.ki_news import router as ki_news_router
 from routes.my_path import router as my_path_router
 from routes.community import router as community_router
@@ -139,6 +140,7 @@ app.include_router(referral_router)
 app.include_router(enterprise_router)
 app.include_router(credits_router)
 app.include_router(challenge30_router)
+app.include_router(guide_router)
 app.include_router(ki_news_router)
 app.include_router(my_path_router)
 app.include_router(community_router)

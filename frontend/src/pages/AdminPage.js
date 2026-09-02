@@ -23,6 +23,7 @@ import { ConversionCenter } from '../components/admin/ConversionCenter';
 import { LiveTestPanel } from '../components/admin/LiveTestPanel';
 import { FeatureRolloutPanel } from '../components/admin/FeatureRolloutPanel';
 import { OpsHandoverPanel } from '../components/admin/OpsHandoverPanel';
+import { GuideStudio } from '../components/admin/GuideStudio';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -325,6 +326,21 @@ export default function AdminPage() {
             </p>
           </div>
           <RagDebugStudio />
+        </div>
+
+        {/* Guide Studio — Wlad-Avatar-Clips: Skript → Stimme → Keyframe → Cinematic (Iter 143) */}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              {de ? 'Guide Studio · Wlad-Avatar-Videos' : 'Guide Studio · Wlad Avatar Videos'}
+            </h2>
+            <p className="text-[11px] text-muted-foreground">
+              {de
+                ? 'Onboarding-, Mission- und Social-Clips mit dem 3D-Wlad. Reihenfolge: Skript speichern → Stimme → Keyframe prüfen → Cinematic rendern → Freigeben. Nichts wird Nutzern gezeigt, bevor du freigibst.'
+                : 'Onboarding, mission and social clips with the 3D Wlad. Order: save script → voice → check keyframe → render cinematic → publish. Nothing is shown to users before you approve.'}
+            </p>
+          </div>
+          <GuideStudio />
         </div>
 
         {/* Learning Videos Manager — Vimeo metadata for the 10-course catalogue */}
