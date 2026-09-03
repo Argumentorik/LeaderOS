@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 146 · 03.09.26] PLAN-ABSCHLUSS: VIDEO-GUIDE-MENÜPUNKT + MISSION-INTRO-AUTOSHOW (Testing-Agent 13/13 Backend + Frontend grün, `iteration_146.json`)**
+  - `/video-guide` (`pages/VideoGuidePage.js`, im `DashboardLayout`, Sidebar-Eintrag „Video-Guide" unter HEUTE): Player oben, Erststart-Serie (5) + Mission-Briefings (7) als Kacheln mit Poster/Dauer/Seen-Haken, Fortschritt „n/12 gesehen", `?clip=<slug>` wählt vor.
+  - `MissionGuideClip` (Challenge-Seite, Tag 1-7): erster Aufruf (ungesehen + `mission_autoplay`) → Modal mit Clip (kein Ton-Autoplay, Ton per Klick), Checkbox „Briefings nicht mehr automatisch zeigen" → `POST /api/guide/prefs`; danach Play-Zeile im Kopf.
+  - Damit ist der ursprüngliche Onboarding-Video-Plan vollständig umgesetzt (Erststart-Serie, Mission-Intros, Video-Guide, Skript unter Player, Fallback-Text, Admin-Freigabe, Wlad-Klonstimme, Stufe B produziert). Abweichung zum Plan (vom User gewünscht): Untertitel eingebrannt, cinematic Multi-Shot statt Talking-Head-Standbild.
+  - Offen aus dem Plan: „Skript veraltet"-Markierung im Admin bei geänderten Missionstexten (nicht gebaut).
 - [x] **[Iter 145 · 03.09.26] ALLE 13 GUIDE-FILME PRODUZIERT + AUSGEROLLT (Testing-Agent 21/22 Backend grün, 1 Bug gefixt; Frontend grün; Deployment-Agent: pass)**
   - **Produziert (gesamt 23,63 $)**: `teaser-login` (9:16, 35 s, Conversion-Text, Login-Seite), `start-1..5` (16:9, 37-47 s), `mission-day-1..7` (16:9). Serienproduktion via `POST /api/guide/admin/clips/bulk-produce` (Stage `full` = planen → Keyframes → Film, Semaphore 3 parallel; überspringt fertige Multishot-Clips). Admin-Button „Alle offenen Clips produzieren" in `GuideStudio.js`.
   - **Ausspielung**: Login (`LoginTeaserVideo` direkt unter der Headline, Poster = s1-Keyframe, `public/teaser` bevorzugt niedrigste `order` → teaser-login=0, teaser-spotlight=1), Dashboard `GuideClipsRow` (5 Onboarding-Thumbnails + `GuideVideoPlayer`, seen-Tracking), Dashboard-Ersttour Welcome-Step bettet Intro-Video ein (Browser-TTS dann stumm; Card via inset/margin auto zentriert, max-w 620), Challenge-Seite `MissionGuideClip` für `current_day` 1-7. Alle 13 Clips **published**.
