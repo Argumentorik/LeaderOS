@@ -149,7 +149,14 @@ MULTI_SHOT_PLAN = [
     {"type": "broll"},
     {"type": "talk", "preset": "loft_talk_closeup", "max_words": 22},
 ]
+MULTI_SHOT_PLAN_PRO = [
+    {"type": "walk", "preset": "loft_walk_in"},
+    {"type": "talk", "preset": "loft_talk_medium", "max_words": 48},
+    {"type": "broll"},
+    {"type": "talk", "preset": "loft_talk_closeup", "max_words": 40},
+]
 TALK_MAX_SECONDS = 9.2
+TALK_MAX_SECONDS_PRO = 28.0
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
@@ -177,17 +184,22 @@ def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
     return " ".join(taken), sentences[len(taken):]
 
 
-def plan_shots(script: str, screens: list[str] | None = None) -> list[dict]:
+def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
-    B-Roll bekommt den Rest in der Mitte."""
+    B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit)."""
+    plan = MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN
     screens = screens or DEFAULT_SCREENS
     sentences = _sentences(script)
-    talks = [i for i, s in enumerate(MULTI_SHOT_PLAN) if s["type"] == "talk"]
+    talks = [i for i, s in enumerate(plan) if s["type"] == "talk"]
     texts = {}
+    total = word_count(script)
+    # pro: Anteile statt fester Grenzen (50 % Einstieg, ~25 % App-Tour, 25 % Abschluss), sentence-aligned
+    first_limit = min(plan[talks[0]]["max_words"], max(12, round(total * 0.5))) if pro and talks else (plan[talks[0]]["max_words"] if talks else 0)
+    last_limit = min(plan[talks[-1]]["max_words"], max(10, round(total * 0.25))) if pro and talks else (plan[talks[-1]]["max_words"] if talks else 0)
     if talks:
-        texts[talks[0]], sentences = _take_words(sentences, MULTI_SHOT_PLAN[talks[0]]["max_words"])
+        texts[talks[0]], sentences = _take_words(sentences, first_limit)
         if len(talks) > 1:
-            tail, count, limit = [], 0, MULTI_SHOT_PLAN[talks[-1]]["max_words"]
+            tail, count, limit = [], 0, last_limit
             while sentences and count + len(sentences[-1].split()) <= limit:
                 tail.insert(0, sentences.pop())
                 count += len(tail[0].split())
@@ -203,7 +215,7 @@ def plan_shots(script: str, screens: list[str] | None = None) -> list[dict]:
                     tail = [last]
             texts[talks[-1]] = " ".join(tail)
     shots = []
-    for i, tpl in enumerate(MULTI_SHOT_PLAN):
+    for i, tpl in enumerate(plan):
         shots.append({
             "id": f"s{i + 1}", "type": tpl["type"], "preset": tpl.get("preset"),
             "screens": screens if tpl["type"] == "broll" else [],
@@ -242,13 +254,12 @@ ONBOARDING_CLIPS = [
         "order": 1,
         "title": "Willkommen bei Leader-OS",
         "script": (
-            "Schön, dass du da bist. Leader-OS ist kein Kurs, den du abarbeitest — es ist dein "
-            "Sparringspartner für echte Führungssituationen. Das schwierige Gespräch morgen. "
-            "Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand. "
-            "In den nächsten zehn Minuten richtest du dein System ein: du sagst mir, wer du bist "
-            "und wo du führst. Danach arbeiten wir an deinen Fällen, nicht an Beispielen aus "
-            "einem Lehrbuch. Nimm dir die zehn Minuten wirklich. Sie entscheiden, wie gut alles "
-            "danach wird."
+            "Schön, dass du da bist. Hier bekommst du keinen Kurs, den du abarbeitest — sondern einen "
+            "Sparringspartner für echte Führungssituationen. Deine Chance: In den nächsten zehn Minuten richtest "
+            "du dein System ein und arbeitest ab morgen an deinen eigenen Fällen. Das schwierige Gespräch. "
+            "Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand. Du sagst mir, wer du bist und wo du "
+            "führst — ich passe alles darauf an. Nimm dir diese zehn Minuten wirklich. Sie entscheiden, wie gut "
+            "alles danach wird."
         ),
     },
     {

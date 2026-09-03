@@ -91,9 +91,46 @@ def _render_logo(width: int, height: int) -> Image.Image:
     x, y = int(width * 0.06), int(height * 0.05)
     canvas.alpha_composite(mark, (x, y))
     draw = ImageDraw.Draw(canvas)
-    font = _font(FONT_BOLD, int(size * 0.5))
-    draw.text((x + size + int(size * 0.3), y + int(size * 0.22)), "LEADER-OS", font=font, fill=(255, 255, 255, 235))
+    font = _font(FONT_BOLD, int(size * 0.46))
+    tx = x + size + int(size * 0.3)
+    draw.text((tx, y + int(size * 0.08)), "LEADER-OS", font=font, fill=(255, 255, 255, 235))
+    small = _font(FONT_BOLD, int(size * 0.2))
+    _spaced(draw, (tx, y + int(size * 0.62)), "POWERED BY WLADBOT", small, LIME, int(size * 0.045))
     return canvas
+
+
+def _spaced(draw, pos, text, font, fill, tracking):
+    x, y = pos
+    for ch in text:
+        draw.text((x, y), ch, font=font, fill=fill)
+        x += draw.textlength(ch, font=font) + tracking
+
+
+def render_end_card(width: int, height: int, seconds: float = 2.6) -> bytes:
+    """Abbinder: W-Mark, LEADER-OS, POWERED BY WLADBOT auf Schwarz — mit Stille-Tonspur."""
+    canvas = Image.new("RGB", (width, height), (10, 10, 10))
+    size = int(min(width, height) * 0.16)
+    mark = Image.open(LOGO_PATH).convert("RGBA").resize((size, size), Image.LANCZOS)
+    cy = int(height * 0.44)
+    canvas.paste(mark, ((width - size) // 2, cy - size), mark)
+    draw = ImageDraw.Draw(canvas)
+    font = _font(FONT_BOLD, int(size * 0.5))
+    w = draw.textlength("LEADER-OS", font=font)
+    draw.text(((width - w) / 2, cy + int(size * 0.18)), "LEADER-OS", font=font, fill=(255, 255, 255))
+    small = _font(FONT_BOLD, int(size * 0.17))
+    tracking = int(size * 0.05)
+    text = "POWERED BY WLADBOT"
+    tw = sum(draw.textlength(c, font=small) + tracking for c in text) - tracking
+    _spaced(draw, ((width - tw) / 2, cy + int(size * 0.78)), text, small, LIME[:3], tracking)
+    with tempfile.TemporaryDirectory() as tmp:
+        frame, out = os.path.join(tmp, "end.png"), os.path.join(tmp, "end.mp4")
+        canvas.save(frame)
+        _run([
+            "-loop", "1", "-framerate", str(FPS), "-i", frame, "-f", "lavfi", "-i", "anullsrc=r=32000:cl=mono",
+            "-t", f"{seconds:.2f}", "-vf", f"scale={width}:{height},format=yuv420p",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "18", "-c:a", "aac", "-b:a", "128k", "-shortest", out,
+        ])
+        return Path(out).read_bytes()
 
 
 def _wrap(draw, text: str, font, max_width: int) -> list[str]:
@@ -262,16 +299,31 @@ def normalize_segment(video: bytes, audio: bytes | None, width: int, height: int
         return Path(out).read_bytes()
 
 
-def concat_segments(segments: list[bytes]) -> bytes:
+def concat_segments(segments: list[bytes], crossfade: float = 0.0) -> bytes:
+    """Harter Schnitt (crossfade=0) oder weiche Überblendung (xfade + acrossfade) zwischen den Shots."""
     with tempfile.TemporaryDirectory() as tmp:
-        paths = []
+        paths, durs = [], []
         for i, seg in enumerate(segments):
             p = os.path.join(tmp, f"seg_{i}.mp4")
             Path(p).write_bytes(seg)
             paths.append(p)
+            durs.append(probe(p)["duration"])
         inputs = [a for p in paths for a in ("-i", p)]
-        streams = "".join(f"[{i}:v:0][{i}:a:0]" for i in range(len(paths)))
         out = os.path.join(tmp, "joined.mp4")
+        if crossfade > 0 and len(paths) > 1:
+            chain, lv, la, offset = [], "0:v:0", "0:a:0", 0.0
+            for i in range(1, len(paths)):
+                offset += durs[i - 1] - crossfade
+                nv, na = f"v{i}", f"a{i}"
+                chain.append(f"[{lv}][{i}:v:0]xfade=transition=fade:duration={crossfade}:offset={offset:.3f}[{nv}]")
+                chain.append(f"[{la}][{i}:a:0]acrossfade=d={crossfade}[{na}]")
+                lv, la = nv, na
+            _run([
+                *inputs, "-filter_complex", ";".join(chain), "-map", f"[{lv}]", "-map", f"[{la}]",
+                "-c:v", "libx264", "-preset", "fast", "-crf", "18", "-c:a", "aac", "-b:a", "128k", out,
+            ])
+            return Path(out).read_bytes()
+        streams = "".join(f"[{i}:v:0][{i}:a:0]" for i in range(len(paths)))
         _run([
             *inputs, "-filter_complex", f"{streams}concat=n={len(paths)}:v=1:a=1[v][a]",
             "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "fast", "-crf", "18",

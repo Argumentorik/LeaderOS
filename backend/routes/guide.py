@@ -21,18 +21,19 @@ from pydantic import BaseModel
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, TALK_MAX_SECONDS,
-    WLAD_STYLE_PROMPT, plan_shots, scene_for_aspect, seed_clips, word_count, word_limits,
+    TALK_MAX_SECONDS_PRO, WLAD_STYLE_PROMPT, plan_shots, scene_for_aspect, seed_clips, word_count, word_limits,
 )
 from routes.admin import require_admin
 from routes.uploads import get_object, put_object
 from services import get_current_user
 from services_ai_errors import ai_http_error
 from services_fal import (
-    COST_I2V, COST_KEYFRAME, COST_LIPSYNC_PER_S, FalError, clone_voice, edit_image,
-    image_to_video, lipsync_video, render_talking_video, synthesize_speech,
+    COST_I2V, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, clone_voice, edit_image,
+    image_to_video, lipsync_video, omnihuman_video, render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
-    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, subtitle_chunks,
+    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_end_card,
+    subtitle_chunks,
 )
 
 router = APIRouter(prefix="/api/guide", tags=["guide"])
@@ -69,13 +70,11 @@ async def _import_produced_seed() -> None:
     imported = 0
     for clip in data.get("clips", []):
         clip.pop("_id", None)
-        existing = await db.guide_clips.find_one({"slug": clip["slug"]}, {"_id": 0, "video_path": 1})
-        if existing is None:
-            await db.guide_clips.insert_one(clip)
-        elif not existing.get("video_path"):
-            await db.guide_clips.update_one({"slug": clip["slug"]}, {"$set": clip})
-        else:
+        # Nur in eine leere DB (Prod-Erststart) einspielen — nie bestehende Clips überschreiben,
+        # sonst macht der Import einen laufenden Re-Render (video_path=None) wieder rückgängig.
+        if await db.guide_clips.find_one({"slug": clip["slug"]}, {"_id": 1}) is not None:
             continue
+        await db.guide_clips.insert_one(clip)
         imported += 1
     settings = data.get("settings") or {}
     if settings.get("portrait_path"):
@@ -724,6 +723,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     if empty:
         raise FalError(f"Shot {', '.join(empty)} hat keinen Sprechtext — Text eintragen oder Shots neu planen")
     aspect = clip.get("aspect") or "16:9"
+    pro = clip.get("quality") == "pro"
     width, height = FRAMES[aspect]
     await _patch_clip(slug, {"media_token": token})
 
@@ -731,21 +731,37 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         sid, preset = shot["id"], SHOT_PRESETS.get(shot.get("preset") or "")
         if shot.get("text") and not shot.get("audio_path"):
             await _patch_clip(slug, {"progress": f"Stimme {sid}"})
-            limit = TALK_MAX_SECONDS if shot["type"] == "talk" else None
+            limit = (TALK_MAX_SECONDS_PRO if pro else TALK_MAX_SECONDS) if shot["type"] == "talk" else None
             audio, seconds = await _tts_fitting(shot["text"], voice_id, limit)
+            if shot["type"] == "talk" and seconds < 2.5:
+                # OmniHuman/Lipsync hängen bei < 2 s Ton -> hinten mit Stille auf 2,5 s auffüllen
+                audio = await asyncio.to_thread(pad_audio, audio, 0.0, 2.5)
+                seconds = 2.5
             shot["audio_path"] = await _store(f"a_{sid}", slug, audio, "audio/mpeg", "mp3")
             shot["audio_seconds"] = round(seconds, 2)
             await _patch_shot(slug, sid, {"audio_path": shot["audio_path"], "audio_seconds": shot["audio_seconds"]})
-        if shot["type"] in ("walk", "talk") and not shot.get("raw_path"):
-            await _patch_clip(slug, {"progress": f"Bewegung {sid} (Kling)"})
+        if pro and shot["type"] == "talk" and not shot.get("synced_path"):
+            await _patch_clip(slug, {"progress": f"OmniHuman {sid}"})
+            synced = await asyncio.to_thread(
+                omnihuman_video, _shot_url(token, sid, "keyframe"), _shot_url(token, sid, "audio"),
+                shot.get("motion_prompt") or preset["motion_prompt"],
+            )
+            await _spend(slug, round(COST_OMNIHUMAN_PER_S * float(shot["audio_seconds"]), 2))
+            shot["synced_path"] = await _store(f"sync_{sid}", slug, synced, "video/mp4", "mp4")
+            shot["engine"] = "omnihuman"
+            await _patch_shot(slug, sid, {"synced_path": shot["synced_path"], "engine": "omnihuman"})
+            continue
+        needs_motion = shot["type"] == "walk" or (shot["type"] == "talk" and not pro)
+        if needs_motion and not shot.get("raw_path"):
+            await _patch_clip(slug, {"progress": f"Bewegung {sid} (Kling{' 2.5 Pro' if pro else ''})"})
             raw = await asyncio.to_thread(
                 image_to_video, _shot_url(token, sid, "keyframe"),
-                shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"], aspect,
+                shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"], aspect, pro,
             )
             shot["raw_path"] = await _store(f"raw_{sid}", slug, raw, "video/mp4", "mp4")
-            await _spend(slug, COST_I2V[preset["duration"]])
-            await _patch_shot(slug, sid, {"raw_path": shot["raw_path"], "synced_path": None})
-        if shot["type"] == "talk" and not shot.get("synced_path"):
+            await _spend(slug, (COST_I2V_PRO if pro else COST_I2V)[preset["duration"]])
+            await _patch_shot(slug, sid, {"raw_path": shot["raw_path"], "synced_path": None, "engine": "kling-2.5-pro" if pro else "kling-2.1"})
+        if shot["type"] == "talk" and not pro and not shot.get("synced_path"):
             await _patch_clip(slug, {"progress": f"Lipsync {sid}"})
             audio_bytes, _ = await asyncio.to_thread(get_object, shot["audio_path"])
             total = float(preset["duration"])
@@ -766,6 +782,11 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             screens = [_screen_bytes(s, aspect) for s in shot["screens"] if (BROLL_DIR / f"{s}.png").exists()]
             seg = await asyncio.to_thread(render_broll, screens, audio, width, height)
             cues += subtitle_chunks(shot["text"], offset, shot["audio_seconds"], 6)
+        elif shot["type"] == "talk" and (shot.get("engine") == "omnihuman" or pro):
+            synced, _ = await asyncio.to_thread(get_object, shot["synced_path"])
+            audio, _ = await asyncio.to_thread(get_object, shot["audio_path"])
+            seg = await asyncio.to_thread(normalize_segment, synced, audio, width, height)
+            cues += subtitle_chunks(shot["text"], offset + 0.05, shot["audio_seconds"], 6)
         elif shot["type"] == "talk":
             synced, _ = await asyncio.to_thread(get_object, shot["synced_path"])
             padded, _ = await asyncio.to_thread(get_object, shot["padded_path"])
@@ -778,9 +799,11 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         seg_len = await asyncio.to_thread(_duration_of, seg)
         if shot["type"] != "broll":
             brand_windows.append((offset + (1.0 if offset == 0 else 0.0), offset + seg_len))
-        offset += seg_len
+        offset += seg_len - (XFADE if pro and segments[:-1] else 0.0)
 
-    joined = await asyncio.to_thread(concat_segments, segments)
+    if pro:
+        segments.append(await asyncio.to_thread(render_end_card, width, height))
+    joined = await asyncio.to_thread(concat_segments, segments, XFADE if pro else 0.0)
     from services_video_compose import extract_audio
 
     audio_track = await asyncio.to_thread(extract_audio, joined)
@@ -788,7 +811,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     path = await _store("video", slug, final, "video/mp4", "mp4")
     await _patch_clip(slug, {
         "video_path": path, "status": "video_ready", "error": None, "progress": None,
-        "video_bytes": len(final), "pipeline": "multishot", "subtitles": cues,
+        "video_bytes": len(final), "pipeline": "multishot", "subtitles": cues, "stale": False,
         "duration_seconds_video": round(offset, 1),
     })
     logger.info("Guide multishot ready: %s (%.1fs, %s KB)", slug, offset, len(final) // 1024)
@@ -801,6 +824,7 @@ def _screen_bytes(screen: str, aspect: str) -> bytes:
 
 
 _FULL_SLOTS = asyncio.Semaphore(3)
+XFADE = 0.45
 
 
 async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
@@ -808,7 +832,7 @@ async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
     Höchstens 3 Clips gleichzeitig, damit Fal nicht in 503 läuft."""
     async with _FULL_SLOTS:
         if not clip.get("shots"):
-            clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug))
+            clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro")
             await _patch_clip(slug, {"shots": clip["shots"]})
         await _job_shot_keyframes(slug, clip, settings, token)
         clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
@@ -906,7 +930,7 @@ async def plan_clip_shots(slug: str, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
-    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug))
+    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro")
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -977,6 +1001,8 @@ async def generate_shot_keyframes(slug: str, request: Request):
 
 class BulkIn(BaseModel):
     slugs: list[str]
+    quality: str = "pro"
+    reset: bool = False
 
 
 @router.post("/admin/clips/bulk-produce")
@@ -988,10 +1014,25 @@ async def bulk_produce(data: BulkIn, request: Request):
         raise HTTPException(status_code=400, detail="Zuerst das Avatar-Bild (Gesicht) hochladen")
     started, skipped = [], []
     for slug in data.slugs:
-        clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0, "status": 1, "video_path": 1, "pipeline": 1})
-        if not clip or clip.get("status") in RUNNING or (clip.get("video_path") and clip.get("pipeline") == "multishot"):
+        clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+        if not clip or clip.get("status") in RUNNING:
             skipped.append(slug)
             continue
+        if data.reset:
+            # Upgrade: neu planen, Keyframes gleicher Presets behalten, alles andere neu rendern
+            old = {(s_.get("preset"), s_["type"]): s_ for s_ in clip.get("shots", [])}
+            shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro")
+            for s_ in shots:
+                prev = old.get((s_.get("preset"), s_["type"]))
+                if prev and prev.get("keyframe_path"):
+                    s_["keyframe_path"] = prev["keyframe_path"]
+            # Altes Video bleibt für Nutzer online, bis der neue Film fertig ist (pipeline=None erlaubt Re-Render)
+            await _patch_clip(slug, {"shots": shots, "quality": data.quality, "pipeline": None, "stale": True})
+        elif clip.get("video_path") and clip.get("pipeline") == "multishot":
+            skipped.append(slug)
+            continue
+        else:
+            await _patch_clip(slug, {"quality": data.quality})
         await _patch_clip(slug, {"status": "full_running", "error": None, "progress": "wartet auf Slot"})
         _start_job(slug, "full")
         started.append(slug)

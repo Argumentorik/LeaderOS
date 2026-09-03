@@ -11,14 +11,14 @@
    "status": "video_ready",
    "published": true,
    "audio_path": "guide/audio_start-1-willkommen_c3602eb1.mp3",
-   "video_path": "guide/video_start-1-willkommen_b997cd4a.mp4",
+   "video_path": "guide/video_start-1-willkommen_53e85048.mp4",
    "media_token": "DekISj2JI1hs4aPtTrxPHso4hlc6u77_",
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-02T10:00:43.311719+00:00",
+   "updated_at": "2026-09-03T22:23:15.494252+00:00",
    "voice_id_used": "Deep_Voice_Man",
-   "video_bytes": 8782495,
+   "video_bytes": 7101200,
    "shots": [
     {
      "id": "s1",
@@ -26,9 +26,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_start-1-willkommen_46ac852d.png",
-     "raw_path": "guide/raw_s1_start-1-willkommen_4108573c.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_start-1-willkommen_50c84b02.mp4",
      "synced_path": null
     },
     {
@@ -36,14 +36,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Schön, dass du da bist. Leader-OS ist kein Kurs, den du abarbeitest — es ist dein Sparringspartner für echte Führungssituationen.",
-     "error": null,
+     "text": "Schön, dass du da bist. Leader-OS ist kein Kurs, den du abarbeitest — es ist dein Sparringspartner für echte Führungssituationen. Das schwierige Gespräch morgen. Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand.",
      "keyframe_path": "guide/kf_s2_start-1-willkommen_2ec40a2a.png",
-     "raw_path": "guide/raw_s2_start-1-willkommen_8035565f.mp4",
-     "synced_path": "guide/sync_s2_start-1-willkommen_6287b64e.mp4",
-     "audio_path": "guide/a_s2_start-1-willkommen_44b12bee.mp3",
-     "audio_seconds": 7.99,
-     "padded_path": "guide/pad_s2_start-1-willkommen_91cbf688.mp3"
+     "audio_path": "guide/a_s2_start-1-willkommen_116fc183.mp3",
+     "audio_seconds": 13.1,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_start-1-willkommen_827c5722.mp4"
     },
     {
      "id": "s3",
@@ -55,11 +53,9 @@
       "video",
       "challenge"
      ],
-     "text": "Das schwierige Gespräch morgen. Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand. In den nächsten zehn Minuten richtest du dein System ein: du sagst mir, wer du bist und wo du führst. Danach arbeiten wir an deinen Fällen, nicht an Beispielen aus einem Lehrbuch.",
-     "audio_path": "guide/a_s3_start-1-willkommen_a04d8b06.mp3",
-     "audio_seconds": 17.75,
-     "padded_path": null,
-     "synced_path": null
+     "text": "In den nächsten zehn Minuten richtest du dein System ein: du sagst mir, wer du bist und wo du führst. Danach arbeiten wir an deinen Fällen, nicht an Beispielen aus einem Lehrbuch.",
+     "audio_path": "guide/a_s3_start-1-willkommen_bb9a1422.mp3",
+     "audio_seconds": 10.3
     },
     {
      "id": "s4",
@@ -67,122 +63,121 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Nimm dir die zehn Minuten wirklich. Sie entscheiden, wie gut alles danach wird.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_start-1-willkommen_14811689.png",
-     "raw_path": "guide/raw_s4_start-1-willkommen_6b7fade7.mp4",
-     "synced_path": "guide/sync_s4_start-1-willkommen_210290b4.mp4",
-     "audio_path": "guide/a_s4_start-1-willkommen_bb3cf86d.mp3",
-     "audio_seconds": 3.38,
-     "padded_path": "guide/pad_s4_start-1-willkommen_d0b792a5.mp3"
+     "audio_path": "guide/a_s4_start-1-willkommen_579bc4bf.mp3",
+     "audio_seconds": 4.36,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_start-1-willkommen_3644a229.mp4"
     }
    ],
    "progress": null,
-   "spent_usd": 1.65,
-   "duration_seconds_video": 42.7,
+   "spent_usd": 4.8,
+   "duration_seconds_video": 31.5,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 6.03,
+     "start": 5.09,
+     "end": 5.45,
      "text": "Schön"
     },
     {
-     "start": 6.03,
-     "end": 7.06,
+     "start": 5.45,
+     "end": 6.42,
      "text": "dass du da bist."
     },
     {
-     "start": 7.06,
-     "end": 8.6,
+     "start": 6.42,
+     "end": 7.88,
      "text": "Leader-OS ist kein Kurs"
     },
     {
-     "start": 8.6,
-     "end": 9.89,
+     "start": 7.88,
+     "end": 9.09,
      "text": "den du abarbeitest —"
     },
     {
-     "start": 9.89,
-     "end": 12.34,
+     "start": 9.09,
+     "end": 11.4,
      "text": "es ist dein Sparringspartner für echte"
     },
     {
-     "start": 12.34,
-     "end": 13.63,
+     "start": 11.4,
+     "end": 12.61,
      "text": "Führungssituationen."
     },
     {
-     "start": 15.01,
-     "end": 17.09,
+     "start": 12.61,
+     "end": 14.49,
      "text": "Das schwierige Gespräch morgen."
     },
     {
-     "start": 17.09,
-     "end": 18.16,
+     "start": 14.49,
+     "end": 15.46,
      "text": "Der Mitarbeiter"
     },
     {
-     "start": 18.16,
-     "end": 18.89,
+     "start": 15.46,
+     "end": 16.13,
      "text": "der abbaut."
     },
     {
-     "start": 18.89,
-     "end": 21.17,
+     "start": 16.13,
+     "end": 18.19,
      "text": "Die Präsentation vor dem Vorstand."
     },
     {
-     "start": 21.17,
-     "end": 23.65,
+     "start": 17.76,
+     "end": 19.96,
      "text": "In den nächsten zehn Minuten richtest"
     },
     {
-     "start": 23.65,
-     "end": 24.92,
+     "start": 19.96,
+     "end": 21.09,
      "text": "du dein System ein"
     },
     {
-     "start": 24.92,
-     "end": 25.79,
+     "start": 21.09,
+     "end": 21.87,
      "text": "du sagst mir"
     },
     {
-     "start": 25.79,
-     "end": 27.2,
+     "start": 21.87,
+     "end": 23.12,
      "text": "wer du bist und wo du"
     },
     {
-     "start": 27.2,
-     "end": 27.67,
+     "start": 23.12,
+     "end": 23.54,
      "text": "führst."
     },
     {
-     "start": 27.67,
-     "end": 30.15,
+     "start": 23.54,
+     "end": 25.74,
      "text": "Danach arbeiten wir an deinen Fällen"
     },
     {
-     "start": 30.15,
-     "end": 32.76,
+     "start": 25.74,
+     "end": 28.06,
      "text": "nicht an Beispielen aus einem Lehrbuch."
     },
     {
-     "start": 33.36,
-     "end": 34.9,
+     "start": 27.6,
+     "end": 29.58,
      "text": "Nimm dir die zehn Minuten wirklich."
     },
     {
-     "start": 34.9,
-     "end": 35.6,
+     "start": 29.58,
+     "end": 30.49,
      "text": "Sie entscheiden"
     },
     {
-     "start": 35.6,
-     "end": 36.74,
+     "start": 30.49,
+     "end": 31.96,
      "text": "wie gut alles danach wird."
     }
    ],
-   "published_at": "2026-09-02T10:00:43.311708+00:00"
+   "published_at": "2026-09-02T10:00:43.311708+00:00",
+   "quality": "pro"
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -195,12 +190,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-2-so-sprichst-du_a2f4e6bb.mp4",
+   "video_path": "guide/video_start-2-so-sprichst-du_3eff6a4b.mp4",
    "media_token": "s8rrsoIoMXpbC8E_9aOuNYiTN5GIBvLD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-03T17:57:50.009296+00:00",
+   "updated_at": "2026-09-03T21:23:07.856032+00:00",
    "progress": null,
    "shots": [
     {
@@ -209,9 +204,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_start-2-so-sprichst-du_9b53c395.png",
-     "raw_path": "guide/raw_s1_start-2-so-sprichst-du_3290d73b.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_start-2-so-sprichst-du_e2724d54.mp4",
      "synced_path": null
     },
     {
@@ -220,13 +215,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Der häufigste Fehler: Stichworte. Wer „Mitarbeitergespräch\" eintippt, bekommt eine Wikipedia-Antwort. Schlecht ist: „Konflikt im Team\".",
-     "error": null,
      "keyframe_path": "guide/kf_s2_start-2-so-sprichst-du_2ec33c72.png",
-     "raw_path": "guide/raw_s2_start-2-so-sprichst-du_03d35e21.mp4",
-     "synced_path": "guide/sync_s2_start-2-so-sprichst-du_9867a6cf.mp4",
-     "audio_path": "guide/a_s2_start-2-so-sprichst-du_88f830ad.mp3",
-     "audio_seconds": 8.78,
-     "padded_path": "guide/pad_s2_start-2-so-sprichst-du_14b2ade3.mp3"
+     "audio_path": "guide/a_s2_start-2-so-sprichst-du_1582fc28.mp3",
+     "audio_seconds": 8.75,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_start-2-so-sprichst-du_99a7b5f3.mp4"
     },
     {
      "id": "s3",
@@ -238,147 +231,146 @@
       "coaching",
       "tasks"
      ],
-     "text": "Gut ist: „Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum — wie eröffne ich das Gespräch?\" Siehst du den Unterschied? Situation, Beteiligte, Zeitpunkt, Ziel.",
-     "audio_path": "guide/a_s3_start-2-so-sprichst-du_d0694280.mp3",
-     "audio_seconds": 13.25
+     "text": "Gut ist: „Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum — wie eröffne ich das Gespräch?\" Siehst du den Unterschied? Situation, Beteiligte, Zeitpunkt, Ziel. Je konkreter du fragst, desto brauchbarer die Antwort.",
+     "audio_path": "guide/a_s3_start-2-so-sprichst-du_c75eb178.mp3",
+     "audio_seconds": 16.92
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Je konkreter du fragst, desto brauchbarer die Antwort. Schreib wie zu einem Coach, der dich kennt — nicht wie in eine Suchmaschine.",
-     "error": null,
+     "text": "Schreib wie zu einem Coach, der dich kennt — nicht wie in eine Suchmaschine.",
      "keyframe_path": "guide/kf_s4_start-2-so-sprichst-du_055b20d0.png",
-     "raw_path": "guide/raw_s4_start-2-so-sprichst-du_c78cecdd.mp4",
-     "synced_path": "guide/sync_s4_start-2-so-sprichst-du_dcd1f486.mp4",
-     "audio_path": "guide/a_s4_start-2-so-sprichst-du_6223739e.mp3",
-     "audio_seconds": 6.88,
-     "padded_path": "guide/pad_s4_start-2-so-sprichst-du_4b07eabd.mp3"
+     "audio_path": "guide/a_s4_start-2-so-sprichst-du_434cb694.mp3",
+     "audio_seconds": 2.92,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_start-2-so-sprichst-du_e2786a19.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 38.2,
+   "spent_usd": 3.87,
+   "duration_seconds_video": 32.4,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.06,
+     "start": 5.09,
+     "end": 6.5,
      "text": "Der häufigste Fehler"
     },
     {
-     "start": 7.06,
-     "end": 7.8,
+     "start": 6.5,
+     "end": 7.24,
      "text": "Stichworte."
     },
     {
-     "start": 7.8,
-     "end": 10.17,
+     "start": 7.24,
+     "end": 9.6,
      "text": "Wer „Mitarbeitergespräch\" eintippt"
     },
     {
-     "start": 10.17,
-     "end": 12.26,
+     "start": 9.6,
+     "end": 11.69,
      "text": "bekommt eine Wikipedia-Antwort."
     },
     {
-     "start": 12.26,
-     "end": 13.14,
+     "start": 11.69,
+     "end": 12.56,
      "text": "Schlecht ist"
     },
     {
-     "start": 13.14,
-     "end": 14.42,
+     "start": 12.56,
+     "end": 13.84,
      "text": "„Konflikt im Team\"."
     },
     {
-     "start": 15.01,
-     "end": 15.48,
+     "start": 13.42,
+     "end": 13.91,
      "text": "Gut ist"
     },
     {
-     "start": 15.48,
-     "end": 17.78,
+     "start": 13.91,
+     "end": 16.28,
      "text": "„Zwei meiner Entwickler reden seit drei"
     },
     {
-     "start": 17.78,
-     "end": 19.54,
+     "start": 16.28,
+     "end": 18.11,
      "text": "Wochen nicht mehr miteinander"
     },
     {
-     "start": 19.54,
-     "end": 20.6,
+     "start": 18.11,
+     "end": 19.2,
      "text": "das Projekt steht"
     },
     {
-     "start": 20.6,
-     "end": 22.31,
+     "start": 19.2,
+     "end": 20.97,
      "text": "morgen um zehn habe ich beide"
     },
     {
-     "start": 22.31,
-     "end": 22.84,
+     "start": 20.97,
+     "end": 21.51,
      "text": "im Raum —"
     },
     {
-     "start": 22.84,
-     "end": 25.02,
+     "start": 21.51,
+     "end": 23.77,
      "text": "wie eröffne ich das Gespräch?\" Siehst"
     },
     {
-     "start": 25.02,
-     "end": 26.14,
+     "start": 23.77,
+     "end": 24.92,
      "text": "du den Unterschied?"
     },
     {
-     "start": 26.14,
-     "end": 26.73,
+     "start": 24.92,
+     "end": 25.53,
      "text": "Situation"
     },
     {
-     "start": 26.73,
-     "end": 27.38,
+     "start": 25.53,
+     "end": 26.2,
      "text": "Beteiligte"
     },
     {
-     "start": 27.38,
-     "end": 27.97,
+     "start": 26.2,
+     "end": 26.81,
      "text": "Zeitpunkt"
     },
     {
-     "start": 27.97,
-     "end": 28.26,
+     "start": 26.81,
+     "end": 27.11,
      "text": "Ziel."
     },
     {
-     "start": 28.79,
-     "end": 30.04,
+     "start": 27.11,
+     "end": 28.51,
      "text": "Je konkreter du fragst"
     },
     {
-     "start": 30.04,
-     "end": 31.66,
+     "start": 28.51,
+     "end": 30.34,
      "text": "desto brauchbarer die Antwort."
     },
     {
-     "start": 31.66,
-     "end": 33.12,
+     "start": 29.92,
+     "end": 30.99,
      "text": "Schreib wie zu einem Coach"
     },
     {
-     "start": 33.12,
-     "end": 33.99,
+     "start": 30.99,
+     "end": 31.62,
      "text": "der dich kennt —"
     },
     {
-     "start": 33.99,
-     "end": 35.67,
+     "start": 31.62,
+     "end": 32.84,
      "text": "nicht wie in eine Suchmaschine."
     }
    ],
-   "video_bytes": 9183847,
-   "published_at": "2026-09-03T17:57:50.009287+00:00"
+   "video_bytes": 7780421,
+   "published_at": "2026-09-03T17:57:50.009287+00:00",
+   "quality": "pro"
   },
   {
    "slug": "start-3-kontext",
@@ -391,12 +383,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-3-kontext_dd54f437.mp4",
+   "video_path": "guide/video_start-3-kontext_a53ece85.mp4",
    "media_token": "GB37Y8TmoBLfW-BRIsbTfQmpgfup0UXG",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-03T17:57:50.187354+00:00",
+   "updated_at": "2026-09-03T21:24:14.604927+00:00",
    "progress": null,
    "shots": [
     {
@@ -405,9 +397,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_start-3-kontext_745647b1.png",
-     "raw_path": "guide/raw_s1_start-3-kontext_b0c7c4c1.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_start-3-kontext_566577ec.mp4",
      "synced_path": null
     },
     {
@@ -415,14 +407,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Zwei Führungskräfte stellen dieselbe Frage und brauchen völlig verschiedene Antworten.",
-     "error": null,
+     "text": "Zwei Führungskräfte stellen dieselbe Frage und brauchen völlig verschiedene Antworten. Ein Teamleiter mit vier Leuten in der Pflege führt anders als ein Bereichsleiter mit achtzig Leuten im Vertrieb.",
      "keyframe_path": "guide/kf_s2_start-3-kontext_d9b71282.png",
-     "raw_path": "guide/raw_s2_start-3-kontext_7807cf32.mp4",
-     "synced_path": "guide/sync_s2_start-3-kontext_5d488aeb.mp4",
-     "audio_path": "guide/a_s2_start-3-kontext_4b7aa89a.mp3",
-     "audio_seconds": 4.64,
-     "padded_path": "guide/pad_s2_start-3-kontext_022c881d.mp3"
+     "audio_path": "guide/a_s2_start-3-kontext_b35e30bb.mp3",
+     "audio_seconds": 11.02,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_start-3-kontext_0cb54d5b.mp4"
     },
     {
      "id": "s3",
@@ -433,9 +423,9 @@
       "dashboard",
       "chat"
      ],
-     "text": "Ein Teamleiter mit vier Leuten in der Pflege führt anders als ein Bereichsleiter mit achtzig Leuten im Vertrieb. Deshalb hinterlegst du Rolle, Unternehmen und Branche — und im Bereich „Über mich\" alles, was zu dir gehört: Stärken, Schwächen, Verantwortung, Ziele. Das liest die KI bei jeder Antwort mit.",
-     "audio_path": "guide/a_s3_start-3-kontext_58410c2c.mp3",
-     "audio_seconds": 18.97
+     "text": "Deshalb hinterlegst du Rolle, Unternehmen und Branche — und im Bereich „Über mich\" alles, was zu dir gehört: Stärken, Schwächen, Verantwortung, Ziele. Das liest die KI bei jeder Antwort mit.",
+     "audio_path": "guide/a_s3_start-3-kontext_85f9d863.mp3",
+     "audio_seconds": 15.62
     },
     {
      "id": "s4",
@@ -443,117 +433,116 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Fünf Minuten Aufwand, und aus allgemeinen Ratschlägen wird Beratung, die auf deinen Alltag passt. Ohne diese Angaben bleibt alles Mittelmaß.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_start-3-kontext_bd96c8a4.png",
-     "raw_path": "guide/raw_s4_start-3-kontext_c881db07.mp4",
-     "synced_path": "guide/sync_s4_start-3-kontext_04f2f72a.mp4",
-     "audio_path": "guide/a_s4_start-3-kontext_301d9f7a.mp3",
-     "audio_seconds": 7.63,
-     "padded_path": "guide/pad_s4_start-3-kontext_d26a19c6.mp3"
+     "audio_path": "guide/a_s4_start-3-kontext_03087fb0.mp3",
+     "audio_seconds": 9.83,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_start-3-kontext_64b3a375.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 44.0,
+   "spent_usd": 5.33,
+   "duration_seconds_video": 40.3,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 8.15,
+     "start": 5.09,
+     "end": 7.69,
      "text": "Zwei Führungskräfte stellen dieselbe Frage und"
     },
     {
-     "start": 8.15,
-     "end": 10.28,
+     "start": 7.69,
+     "end": 9.89,
      "text": "brauchen völlig verschiedene Antworten."
     },
     {
-     "start": 15.01,
-     "end": 17.16,
+     "start": 9.89,
+     "end": 11.76,
      "text": "Ein Teamleiter mit vier Leuten in"
     },
     {
-     "start": 17.16,
-     "end": 19.18,
+     "start": 11.76,
+     "end": 13.51,
      "text": "der Pflege führt anders als ein"
     },
     {
-     "start": 19.18,
-     "end": 22.18,
+     "start": 13.51,
+     "end": 16.11,
      "text": "Bereichsleiter mit achtzig Leuten im Vertrieb."
     },
     {
-     "start": 22.18,
-     "end": 24.07,
+     "start": 15.66,
+     "end": 18.16,
      "text": "Deshalb hinterlegst du Rolle"
     },
     {
-     "start": 24.07,
-     "end": 25.7,
+     "start": 18.16,
+     "end": 20.32,
      "text": "Unternehmen und Branche —"
     },
     {
-     "start": 25.7,
-     "end": 27.85,
+     "start": 20.32,
+     "end": 23.17,
      "text": "und im Bereich „Über mich\" alles"
     },
     {
-     "start": 27.85,
-     "end": 29.03,
+     "start": 23.17,
+     "end": 24.72,
      "text": "was zu dir gehört"
     },
     {
-     "start": 29.03,
-     "end": 29.55,
+     "start": 24.72,
+     "end": 25.41,
      "text": "Stärken"
     },
     {
-     "start": 29.55,
-     "end": 30.2,
+     "start": 25.41,
+     "end": 26.27,
      "text": "Schwächen"
     },
     {
-     "start": 30.2,
-     "end": 31.11,
+     "start": 26.27,
+     "end": 27.48,
      "text": "Verantwortung"
     },
     {
-     "start": 31.11,
-     "end": 31.5,
+     "start": 27.48,
+     "end": 28.0,
      "text": "Ziele."
     },
     {
-     "start": 31.5,
-     "end": 33.2,
+     "start": 28.0,
+     "end": 30.24,
      "text": "Das liest die KI bei jeder"
     },
     {
-     "start": 33.2,
-     "end": 33.98,
+     "start": 30.24,
+     "end": 31.28,
      "text": "Antwort mit."
     },
     {
-     "start": 34.58,
-     "end": 35.75,
+     "start": 30.83,
+     "end": 32.34,
      "text": "Fünf Minuten Aufwand"
     },
     {
-     "start": 35.75,
-     "end": 38.31,
+     "start": 32.34,
+     "end": 35.64,
      "text": "und aus allgemeinen Ratschlägen wird Beratung"
     },
     {
-     "start": 38.31,
-     "end": 39.87,
+     "start": 35.64,
+     "end": 37.65,
      "text": "die auf deinen Alltag passt."
     },
     {
-     "start": 39.87,
-     "end": 42.21,
+     "start": 37.65,
+     "end": 40.66,
      "text": "Ohne diese Angaben bleibt alles Mittelmaß."
     }
    ],
-   "video_bytes": 8363323,
-   "published_at": "2026-09-03T17:57:50.187346+00:00"
+   "video_bytes": 8372836,
+   "published_at": "2026-09-03T17:57:50.187346+00:00",
+   "quality": "pro"
   },
   {
    "slug": "start-4-werkzeuge",
@@ -566,12 +555,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-4-werkzeuge_cbd4880a.mp4",
+   "video_path": "guide/video_start-4-werkzeuge_2419bd05.mp4",
    "media_token": "a1VU71OC6LPnX5JckWjFoPLIxAgmR-9Y",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.457634+00:00",
-   "updated_at": "2026-09-03T17:57:50.450973+00:00",
+   "updated_at": "2026-09-03T22:24:28.224121+00:00",
    "progress": null,
    "shots": [
     {
@@ -580,9 +569,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_start-4-werkzeuge_fd837362.png",
-     "raw_path": "guide/raw_s1_start-4-werkzeuge_a7572b30.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_start-4-werkzeuge_88c560a4.mp4",
      "synced_path": null
     },
     {
@@ -590,14 +579,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Vier Werkzeuge, vier Zwecke. Der Chat ist für Denken und Vorbereiten: Strategie für ein Gespräch, Argumente für eine Entscheidung.",
-     "error": null,
+     "text": "Vier Werkzeuge, vier Zwecke. Der Chat ist für Denken und Vorbereiten: Strategie für ein Gespräch, Argumente für eine Entscheidung. Die Simulation ist zum Üben — dein Gegenüber antwortet, und zwar unbequem.",
      "keyframe_path": "guide/kf_s2_start-4-werkzeuge_e1c94b75.png",
-     "raw_path": "guide/raw_s2_start-4-werkzeuge_9f97403d.mp4",
-     "synced_path": "guide/sync_s2_start-4-werkzeuge_b7a3f4ef.mp4",
-     "audio_path": "guide/a_s2_start-4-werkzeuge_a3e5fecb.mp3",
-     "audio_seconds": 7.34,
-     "padded_path": "guide/pad_s2_start-4-werkzeuge_cc8245b9.mp3"
+     "audio_path": "guide/a_s2_start-4-werkzeuge_0924fe43.mp3",
+     "audio_seconds": 13.28,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_start-4-werkzeuge_c8b405f4.mp4"
     },
     {
      "id": "s3",
@@ -609,9 +596,9 @@
       "video",
       "playbooks"
      ],
-     "text": "Die Simulation ist zum Üben — dein Gegenüber antwortet, und zwar unbequem. Die Video-Analyse zeigt dir, wie du wirkst: Stimme, Tempo, Struktur, Präsenz. Playbooks sind fertige Abläufe für wiederkehrende Situationen. Regel für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse.",
-     "audio_path": "guide/a_s3_start-4-werkzeuge_b772afff.mp3",
-     "audio_seconds": 21.96
+     "text": "Die Video-Analyse zeigt dir, wie du wirkst: Stimme, Tempo, Struktur, Präsenz. Playbooks sind fertige Abläufe für wiederkehrende Situationen. Regel für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse.",
+     "audio_path": "guide/a_s3_start-4-werkzeuge_e713dea6.mp3",
+     "audio_seconds": 16.2
     },
     {
      "id": "s4",
@@ -619,132 +606,131 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Genau diese Reihenfolge macht den Unterschied.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_start-4-werkzeuge_5c638109.png",
-     "raw_path": "guide/raw_s4_start-4-werkzeuge_bf562f71.mp4",
-     "synced_path": "guide/sync_s4_start-4-werkzeuge_7f336b9e.mp4",
-     "audio_path": "guide/a_s4_start-4-werkzeuge_a1052749.mp3",
-     "audio_seconds": 1.87,
-     "padded_path": "guide/pad_s4_start-4-werkzeuge_b3942a34.mp3"
+     "audio_path": "guide/a_s4_start-4-werkzeuge_f20b2fdd.mp3",
+     "audio_seconds": 2.05,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_start-4-werkzeuge_ca81c011.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 46.9,
+   "spent_usd": 4.45,
+   "duration_seconds_video": 35.3,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 6.52,
+     "start": 5.09,
+     "end": 6.1,
      "text": "Vier Werkzeuge"
     },
     {
-     "start": 6.52,
-     "end": 7.23,
+     "start": 6.1,
+     "end": 6.91,
      "text": "vier Zwecke."
     },
     {
-     "start": 7.23,
-     "end": 8.81,
+     "start": 6.91,
+     "end": 8.73,
      "text": "Der Chat ist für Denken und"
     },
     {
-     "start": 8.81,
-     "end": 9.52,
+     "start": 8.73,
+     "end": 9.54,
      "text": "Vorbereiten"
     },
     {
-     "start": 9.52,
-     "end": 11.1,
+     "start": 9.54,
+     "end": 11.36,
      "text": "Strategie für ein Gespräch"
     },
     {
-     "start": 11.1,
-     "end": 12.98,
+     "start": 11.36,
+     "end": 13.52,
      "text": "Argumente für eine Entscheidung."
     },
     {
-     "start": 15.01,
-     "end": 17.06,
+     "start": 13.52,
+     "end": 15.47,
      "text": "Die Simulation ist zum Üben —"
     },
     {
-     "start": 17.06,
-     "end": 18.84,
+     "start": 15.47,
+     "end": 17.16,
      "text": "dein Gegenüber antwortet"
     },
     {
-     "start": 18.84,
-     "end": 20.11,
+     "start": 17.16,
+     "end": 18.37,
      "text": "und zwar unbequem."
     },
     {
-     "start": 20.11,
-     "end": 22.09,
+     "start": 18.06,
+     "end": 19.97,
      "text": "Die Video-Analyse zeigt dir"
     },
     {
-     "start": 22.09,
-     "end": 23.09,
+     "start": 19.97,
+     "end": 20.92,
      "text": "wie du wirkst"
     },
     {
-     "start": 23.09,
-     "end": 23.58,
+     "start": 20.92,
+     "end": 21.4,
      "text": "Stimme"
     },
     {
-     "start": 23.58,
-     "end": 24.01,
+     "start": 21.4,
+     "end": 21.8,
      "text": "Tempo"
     },
     {
-     "start": 24.01,
-     "end": 24.64,
+     "start": 21.8,
+     "end": 22.42,
      "text": "Struktur"
     },
     {
-     "start": 24.64,
-     "end": 25.21,
+     "start": 22.42,
+     "end": 22.96,
      "text": "Präsenz."
     },
     {
-     "start": 25.21,
-     "end": 28.68,
+     "start": 22.96,
+     "end": 26.3,
      "text": "Playbooks sind fertige Abläufe für wiederkehrende"
     },
     {
-     "start": 28.68,
-     "end": 29.53,
+     "start": 26.3,
+     "end": 27.11,
      "text": "Situationen."
     },
     {
-     "start": 29.53,
-     "end": 31.02,
+     "start": 27.11,
+     "end": 28.54,
      "text": "Regel für den Anfang"
     },
     {
-     "start": 31.02,
-     "end": 32.44,
+     "start": 28.54,
+     "end": 29.9,
      "text": "erst denken im Chat"
     },
     {
-     "start": 32.44,
-     "end": 34.42,
+     "start": 29.9,
+     "end": 31.81,
      "text": "dann üben in der Simulation"
     },
     {
-     "start": 34.42,
-     "end": 36.97,
+     "start": 31.81,
+     "end": 34.26,
      "text": "dann aufnehmen in der Video-Analyse."
     },
     {
-     "start": 37.55,
-     "end": 39.42,
+     "start": 33.84,
+     "end": 35.89,
      "text": "Genau diese Reihenfolge macht den Unterschied."
     }
    ],
-   "video_bytes": 9702708,
-   "published_at": "2026-09-03T17:57:50.450964+00:00"
+   "video_bytes": 8097465,
+   "published_at": "2026-09-03T17:57:50.450964+00:00",
+   "quality": "pro"
   },
   {
    "slug": "start-5-erste-7-tage",
@@ -757,13 +743,13 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-5-erste-7-tage_9aa56087.mp4",
+   "video_path": "guide/video_start-5-erste-7-tage_441664df.mp4",
    "media_token": "C0ZApviUPueybB13FsQaxbZxcGePYvot",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.458459+00:00",
-   "updated_at": "2026-09-03T17:57:50.669426+00:00",
-   "progress": null,
+   "updated_at": "2026-09-03T23:32:18.562539+00:00",
+   "progress": "Schnitt & Branding",
    "shots": [
     {
      "id": "s1",
@@ -771,9 +757,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_start-5-erste-7-tage_a232df50.png",
-     "raw_path": "guide/raw_s1_start-5-erste-7-tage_27d181da.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_start-5-erste-7-tage_ffdf89d6.mp4",
      "synced_path": null
     },
     {
@@ -781,14 +767,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Konkret: Heute füllst du deinen Kontext aus und stellst der KI eine echte Frage aus deinem Alltag.",
-     "error": null,
+     "text": "Konkret: Heute füllst du deinen Kontext aus und stellst der KI eine echte Frage aus deinem Alltag. Morgen startest du Tag eins der Challenge — zehn Minuten, nicht mehr.",
      "keyframe_path": "guide/kf_s2_start-5-erste-7-tage_7ae51f7d.png",
-     "raw_path": "guide/raw_s2_start-5-erste-7-tage_3ec72225.mp4",
-     "synced_path": "guide/sync_s2_start-5-erste-7-tage_a3aab23e.mp4",
-     "audio_path": "guide/a_s2_start-5-erste-7-tage_53b366bb.mp3",
-     "audio_seconds": 5.47,
-     "padded_path": "guide/pad_s2_start-5-erste-7-tage_6f2a3a1b.mp3"
+     "audio_path": "guide/a_s2_start-5-erste-7-tage_3b2602bf.mp3",
+     "audio_seconds": 9.9,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_start-5-erste-7-tage_92139a7d.mp4"
     },
     {
      "id": "s3",
@@ -800,9 +784,11 @@
       "checkin",
       "mypath"
      ],
-     "text": "Morgen startest du Tag eins der Challenge — zehn Minuten, nicht mehr. In der ersten Woche nimmst du außerdem ein Video auf. Ja, das kostet Überwindung. Genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten.",
-     "audio_path": "guide/a_s3_start-5-erste-7-tage_c0dcff7f.mp3",
-     "audio_seconds": 11.56
+     "text": "In der ersten Woche nimmst du außerdem ein Video auf. Ja, das kostet Überwindung. Genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten.",
+     "audio_path": "guide/a_s3_start-5-erste-7-tage_a17d68a2.mp3",
+     "audio_seconds": 8.35,
+     "padded_path": null,
+     "synced_path": null
     },
     {
      "id": "s4",
@@ -810,127 +796,127 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Wer das durchhält, merkt den Unterschied nicht am Wissen, sondern daran, wie er im nächsten schwierigen Gespräch dasteht. Lass uns anfangen.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_start-5-erste-7-tage_cac33a6c.png",
-     "raw_path": "guide/raw_s4_start-5-erste-7-tage_ae74528d.mp4",
-     "synced_path": "guide/sync_s4_start-5-erste-7-tage_31b67f09.mp4",
-     "audio_path": "guide/a_s4_start-5-erste-7-tage_afbb253d.mp3",
-     "audio_seconds": 7.85,
-     "padded_path": "guide/pad_s4_start-5-erste-7-tage_ec999e12.mp3"
+     "audio_path": "guide/a_s4_start-5-erste-7-tage_aa327db2.mp3",
+     "audio_seconds": 6.73,
+     "padded_path": null,
+     "synced_path": "guide/sync_s4_start-5-erste-7-tage_d37dc2be.mp4",
+     "engine": "omnihuman"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 36.5,
+   "spent_usd": 5.74,
+   "duration_seconds_video": 28.7,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 6.1,
+     "start": 5.09,
+     "end": 5.58,
      "text": "Konkret"
     },
     {
-     "start": 6.1,
-     "end": 8.06,
+     "start": 5.58,
+     "end": 7.67,
      "text": "Heute füllst du deinen Kontext aus"
     },
     {
-     "start": 8.06,
-     "end": 9.73,
+     "start": 7.67,
+     "end": 9.46,
      "text": "und stellst der KI eine echte"
     },
     {
-     "start": 9.73,
-     "end": 11.11,
+     "start": 9.46,
+     "end": 10.93,
      "text": "Frage aus deinem Alltag."
     },
     {
-     "start": 15.01,
-     "end": 16.78,
+     "start": 10.93,
+     "end": 12.84,
      "text": "Morgen startest du Tag eins der"
     },
     {
-     "start": 16.78,
-     "end": 17.41,
+     "start": 12.84,
+     "end": 13.51,
      "text": "Challenge —"
     },
     {
-     "start": 17.41,
-     "end": 18.16,
+     "start": 13.51,
+     "end": 14.31,
      "text": "zehn Minuten"
     },
     {
-     "start": 18.16,
-     "end": 18.79,
+     "start": 14.31,
+     "end": 14.99,
      "text": "nicht mehr."
     },
     {
-     "start": 18.79,
-     "end": 20.45,
+     "start": 14.56,
+     "end": 16.34,
      "text": "In der ersten Woche nimmst du"
     },
     {
-     "start": 20.45,
-     "end": 21.76,
+     "start": 16.34,
+     "end": 17.75,
      "text": "außerdem ein Video auf."
     },
     {
-     "start": 21.76,
-     "end": 21.93,
+     "start": 17.75,
+     "end": 17.94,
      "text": "Ja"
     },
     {
-     "start": 21.93,
-     "end": 23.25,
+     "start": 17.94,
+     "end": 19.35,
      "text": "das kostet Überwindung."
     },
     {
-     "start": 23.25,
-     "end": 24.57,
+     "start": 19.35,
+     "end": 20.76,
      "text": "Genau deshalb wirkt es."
     },
     {
-     "start": 24.57,
-     "end": 25.25,
+     "start": 20.76,
+     "end": 21.5,
      "text": "Sieben Tage"
     },
     {
-     "start": 25.25,
-     "end": 26.57,
+     "start": 21.5,
+     "end": 22.91,
      "text": "jeden Tag zehn Minuten."
     },
     {
-     "start": 27.13,
-     "end": 28.18,
+     "start": 22.47,
+     "end": 23.37,
      "text": "Wer das durchhält"
     },
     {
-     "start": 28.18,
-     "end": 30.39,
+     "start": 23.37,
+     "end": 25.26,
      "text": "merkt den Unterschied nicht am Wissen"
     },
     {
-     "start": 30.39,
-     "end": 31.2,
+     "start": 25.26,
+     "end": 25.96,
      "text": "sondern daran"
     },
     {
-     "start": 31.2,
-     "end": 33.47,
+     "start": 25.96,
+     "end": 27.9,
      "text": "wie er im nächsten schwierigen Gespräch"
     },
     {
-     "start": 33.47,
-     "end": 33.93,
+     "start": 27.9,
+     "end": 28.3,
      "text": "dasteht."
     },
     {
-     "start": 33.93,
-     "end": 34.98,
+     "start": 28.3,
+     "end": 29.2,
      "text": "Lass uns anfangen."
     }
    ],
-   "video_bytes": 7624238,
-   "published_at": "2026-09-03T17:57:50.669418+00:00"
+   "video_bytes": 6448896,
+   "published_at": "2026-09-03T17:57:50.669418+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-1",
@@ -943,12 +929,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-1_b038c4b2.mp4",
+   "video_path": "guide/video_mission-day-1_dbb351bf.mp4",
    "media_token": "HPJrckA9IVchbJMUkGbjk4mULZQOSf62",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.459189+00:00",
-   "updated_at": "2026-09-03T17:57:50.815754+00:00",
+   "updated_at": "2026-09-03T22:28:01.038669+00:00",
    "progress": null,
    "shots": [
     {
@@ -957,9 +943,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-1_269ca7d5.png",
-     "raw_path": "guide/raw_s1_mission-day-1_bdbbf80a.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-1_d967719c.mp4",
      "synced_path": null
     },
     {
@@ -968,13 +954,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Tag eins ist kein Test, den man bestehen muss. Zehn Fragen zeigen dir, wo du in den sechs Führungsdimensionen heute stehst.",
-     "error": null,
      "keyframe_path": "guide/kf_s2_mission-day-1_7aeb4729.png",
-     "raw_path": "guide/raw_s2_mission-day-1_c6e6df71.mp4",
-     "synced_path": "guide/sync_s2_mission-day-1_8d1efd65.mp4",
-     "audio_path": "guide/a_s2_mission-day-1_14ea9b73.mp3",
-     "audio_seconds": 7.67,
-     "padded_path": "guide/pad_s2_mission-day-1_11c5d0a3.mp3"
+     "audio_path": "guide/a_s2_mission-day-1_cdb3a5af.mp3",
+     "audio_seconds": 7.63,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-1_0b5c75aa.mp4"
     },
     {
      "id": "s3",
@@ -986,8 +970,8 @@
       "mypath"
      ],
      "text": "Antworte ehrlich, nicht wie das Lehrbuch es gern hätte — geschönte Antworten bringen dir einen geschönten Plan. Ein gutes Ergebnis ist nicht die volle Punktzahl, sondern eine Dimension, bei der du sagst: genau, da bin ich schwach.",
-     "audio_path": "guide/a_s3_mission-day-1_9c1e119b.mp3",
-     "audio_seconds": 11.99
+     "audio_path": "guide/a_s3_mission-day-1_408de7b8.mp3",
+     "audio_seconds": 12.53
     },
     {
      "id": "s4",
@@ -995,107 +979,106 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Damit arbeiten wir die nächsten Wochen.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_mission-day-1_31f97e46.png",
-     "raw_path": "guide/raw_s4_mission-day-1_adb07f0a.mp4",
-     "synced_path": "guide/sync_s4_mission-day-1_247b67cf.mp4",
-     "audio_path": "guide/a_s4_mission-day-1_167c14b2.mp3",
-     "audio_seconds": 2.41,
-     "padded_path": "guide/pad_s4_mission-day-1_18d30de5.mp3"
+     "audio_path": "guide/a_s4_mission-day-1_afe93d5a.mp3",
+     "audio_seconds": 1.48,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-1_a3e1e627.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 36.9,
+   "spent_usd": 3.46,
+   "duration_seconds_video": 25.4,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.12,
+     "start": 5.09,
+     "end": 6.56,
      "text": "Tag eins ist kein Test"
     },
     {
-     "start": 7.12,
-     "end": 8.54,
+     "start": 6.56,
+     "end": 7.98,
      "text": "den man bestehen muss."
     },
     {
-     "start": 8.54,
-     "end": 10.02,
+     "start": 7.98,
+     "end": 9.45,
      "text": "Zehn Fragen zeigen dir"
     },
     {
-     "start": 10.02,
-     "end": 12.47,
+     "start": 9.45,
+     "end": 11.89,
      "text": "wo du in den sechs Führungsdimensionen"
     },
     {
-     "start": 12.47,
-     "end": 13.31,
+     "start": 11.89,
+     "end": 12.72,
      "text": "heute stehst."
     },
     {
-     "start": 15.01,
-     "end": 15.94,
+     "start": 12.32,
+     "end": 13.29,
      "text": "Antworte ehrlich"
     },
     {
-     "start": 15.94,
-     "end": 17.57,
+     "start": 13.29,
+     "end": 15.0,
      "text": "nicht wie das Lehrbuch es gern"
     },
     {
-     "start": 17.57,
-     "end": 17.95,
+     "start": 15.0,
+     "end": 15.4,
      "text": "hätte —"
     },
     {
-     "start": 17.95,
-     "end": 20.57,
+     "start": 15.4,
+     "end": 18.13,
      "text": "geschönte Antworten bringen dir einen geschönten"
     },
     {
-     "start": 20.57,
-     "end": 20.84,
+     "start": 18.13,
+     "end": 18.41,
      "text": "Plan."
     },
     {
-     "start": 20.84,
-     "end": 22.59,
+     "start": 18.41,
+     "end": 20.24,
      "text": "Ein gutes Ergebnis ist nicht die"
     },
     {
-     "start": 22.59,
-     "end": 23.46,
+     "start": 20.24,
+     "end": 21.15,
      "text": "volle Punktzahl"
     },
     {
-     "start": 23.46,
-     "end": 24.71,
+     "start": 21.15,
+     "end": 22.46,
      "text": "sondern eine Dimension"
     },
     {
-     "start": 24.71,
-     "end": 25.64,
+     "start": 22.46,
+     "end": 23.43,
      "text": "bei der du sagst"
     },
     {
-     "start": 25.64,
-     "end": 25.96,
+     "start": 23.43,
+     "end": 23.77,
      "text": "genau"
     },
     {
-     "start": 25.96,
-     "end": 27.0,
+     "start": 23.77,
+     "end": 24.85,
      "text": "da bin ich schwach."
     },
     {
-     "start": 27.56,
-     "end": 29.97,
+     "start": 24.38,
+     "end": 25.86,
      "text": "Damit arbeiten wir die nächsten Wochen."
     }
    ],
-   "video_bytes": 8832771,
-   "published_at": "2026-09-03T17:57:50.815747+00:00"
+   "video_bytes": 6216031,
+   "published_at": "2026-09-03T17:57:50.815747+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-2",
@@ -1108,12 +1091,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-2_de41f31f.mp4",
+   "video_path": "guide/video_mission-day-2_7c182838.mp4",
    "media_token": "qVvNUBpaeQg9EbdxCbvM6bINtZGi5AL2",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.459931+00:00",
-   "updated_at": "2026-09-03T17:57:51.000675+00:00",
+   "updated_at": "2026-09-03T22:29:37.333313+00:00",
    "progress": null,
    "shots": [
     {
@@ -1122,9 +1105,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-2_064f2f9e.png",
-     "raw_path": "guide/raw_s1_mission-day-2_83209477.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-2_673e862c.mp4",
      "synced_path": null
     },
     {
@@ -1132,14 +1115,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Heute geht es nicht um Technik, sondern um Haltung.",
-     "error": null,
+     "text": "Heute geht es nicht um Technik, sondern um Haltung. KI nimmt dir keine Entscheidung ab — sie zeigt dir die Optionen, die du übersehen hättest.",
      "keyframe_path": "guide/kf_s2_mission-day-2_44c54bdc.png",
-     "raw_path": "guide/raw_s2_mission-day-2_3923c5b6.mp4",
-     "synced_path": "guide/sync_s2_mission-day-2_e163de92.mp4",
-     "audio_path": "guide/a_s2_mission-day-2_0d71f3c6.mp3",
-     "audio_seconds": 2.81,
-     "padded_path": "guide/pad_s2_mission-day-2_4a109e36.mp3"
+     "audio_path": "guide/a_s2_mission-day-2_3e2da9c0.mp3",
+     "audio_seconds": 6.73,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-2_94949ddf.mp4"
     },
     {
      "id": "s3",
@@ -1150,102 +1131,101 @@
       "chat",
       "tools"
      ],
-     "text": "KI nimmt dir keine Entscheidung ab — sie zeigt dir die Optionen, die du übersehen hättest. Wer sie als Orakel nutzt, wird faul. Wer sie als Sparringspartner nutzt, wird schneller besser.",
-     "audio_path": "guide/a_s3_mission-day-2_4994fbcb.mp3",
-     "audio_seconds": 11.23
+     "text": "Wer sie als Orakel nutzt, wird faul. Wer sie als Sparringspartner nutzt, wird schneller besser. Zehn Fragen zum KI-Mindset. Nutze danach den Chat und frag mich nach einer Entscheidung.",
+     "audio_path": "guide/a_s3_mission-day-2_fb361ba7.mp3",
+     "audio_seconds": 9.94
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Zehn Fragen zum KI-Mindset. Nutze danach den Chat und frag mich nach einer Entscheidung, die diese Woche bei dir ansteht.",
-     "error": null,
+     "text": "Die diese Woche bei dir ansteht.",
      "keyframe_path": "guide/kf_s4_mission-day-2_8a4818e3.png",
-     "raw_path": "guide/raw_s4_mission-day-2_86dc4040.mp4",
-     "synced_path": "guide/sync_s4_mission-day-2_f1625184.mp4",
-     "audio_path": "guide/a_s4_mission-day-2_7a351d4e.mp3",
-     "audio_seconds": 7.42,
-     "padded_path": "guide/pad_s4_mission-day-2_ff82d9f2.mp3"
+     "audio_path": "guide/a_s4_mission-day-2_d5ca78b2.mp3",
+     "audio_seconds": 1.33,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-2_f8acdda6.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 36.1,
+   "spent_usd": 3.29,
+   "duration_seconds_video": 21.7,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.38,
+     "start": 5.09,
+     "end": 6.61,
      "text": "Heute geht es nicht um Technik"
     },
     {
-     "start": 7.38,
-     "end": 8.45,
+     "start": 6.61,
+     "end": 7.55,
      "text": "sondern um Haltung."
     },
     {
-     "start": 15.01,
-     "end": 17.14,
+     "start": 7.55,
+     "end": 9.22,
      "text": "KI nimmt dir keine Entscheidung ab"
     },
     {
-     "start": 17.14,
-     "end": 17.21,
+     "start": 9.22,
+     "end": 9.27,
      "text": "—"
     },
     {
-     "start": 17.21,
-     "end": 18.9,
+     "start": 9.27,
+     "end": 10.59,
      "text": "sie zeigt dir die Optionen"
     },
     {
-     "start": 18.9,
-     "end": 20.47,
+     "start": 10.59,
+     "end": 11.82,
      "text": "die du übersehen hättest."
     },
     {
-     "start": 20.47,
-     "end": 22.04,
+     "start": 11.36,
+     "end": 12.76,
      "text": "Wer sie als Orakel nutzt"
     },
     {
-     "start": 22.04,
-     "end": 22.66,
+     "start": 12.76,
+     "end": 13.31,
      "text": "wird faul."
     },
     {
-     "start": 22.66,
-     "end": 24.86,
+     "start": 13.31,
+     "end": 15.27,
      "text": "Wer sie als Sparringspartner nutzt"
     },
     {
-     "start": 24.86,
-     "end": 26.24,
+     "start": 15.27,
+     "end": 16.5,
      "text": "wird schneller besser."
     },
     {
-     "start": 26.78,
-     "end": 28.48,
+     "start": 16.5,
+     "end": 18.01,
      "text": "Zehn Fragen zum KI-Mindset."
     },
     {
-     "start": 28.48,
-     "end": 30.36,
+     "start": 18.01,
+     "end": 19.68,
      "text": "Nutze danach den Chat und frag"
     },
     {
-     "start": 30.36,
-     "end": 32.19,
-     "text": "mich nach einer Entscheidung"
+     "start": 19.68,
+     "end": 21.3,
+     "text": "mich nach einer Entscheidung."
     },
     {
-     "start": 32.19,
-     "end": 34.2,
-     "text": "die diese Woche bei dir ansteht."
+     "start": 20.85,
+     "end": 22.18,
+     "text": "Die diese Woche bei dir ansteht."
     }
    ],
-   "video_bytes": 8579888,
-   "published_at": "2026-09-03T17:57:51.000668+00:00"
+   "video_bytes": 5333854,
+   "published_at": "2026-09-03T17:57:51.000668+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-3",
@@ -1258,12 +1238,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-3_8fc3c4e3.mp4",
+   "video_path": "guide/video_mission-day-3_6d5e5ea7.mp4",
    "media_token": "o0BdTaj9blbgWEq0zvTEH2Lk9xNYEwTv",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.460638+00:00",
-   "updated_at": "2026-09-03T17:57:51.137855+00:00",
+   "updated_at": "2026-09-03T22:30:22.341620+00:00",
    "progress": null,
    "shots": [
     {
@@ -1272,9 +1252,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-3_9b02e7b4.png",
-     "raw_path": "guide/raw_s1_mission-day-3_36339692.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-3_c14d4231.mp4",
      "synced_path": null
     },
     {
@@ -1283,13 +1263,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Die meisten Führungskräfte reden klar — und werden trotzdem nicht verstanden. Der Grund liegt selten an den Worten, sondern an der Reihenfolge.",
-     "error": null,
      "keyframe_path": "guide/kf_s2_mission-day-3_37179348.png",
-     "raw_path": "guide/raw_s2_mission-day-3_90db6322.mp4",
-     "synced_path": "guide/sync_s2_mission-day-3_83c5aabf.mp4",
-     "audio_path": "guide/a_s2_mission-day-3_8550ade0.mp3",
-     "audio_seconds": 7.63,
-     "padded_path": "guide/pad_s2_mission-day-3_aab2f9fd.mp3"
+     "audio_path": "guide/a_s2_mission-day-3_6527e220.mp3",
+     "audio_seconds": 8.53,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-3_fae28b74.mp4"
     },
     {
      "id": "s3",
@@ -1301,103 +1279,100 @@
       "chat"
      ],
      "text": "Heute geht es darum, wie du eine Botschaft baust, die hängen bleibt. Ein gutes Ergebnis: du formulierst eine Nachricht, die du diese Woche wirklich senden musst.",
-     "audio_path": "guide/a_s3_mission-day-3_dc7e8857.mp3",
-     "audio_seconds": 8.89,
-     "padded_path": null,
-     "synced_path": null
+     "audio_path": "guide/a_s3_mission-day-3_a1d0cbf0.mp3",
+     "audio_seconds": 8.46
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Und beim zweiten Lesen merkst du, was du weglassen kannst.",
-     "error": null,
+     "text": "Und merkst beim zweiten Lesen, was du weglassen kannst.",
      "keyframe_path": "guide/kf_s4_mission-day-3_7cdb7488.png",
-     "raw_path": "guide/raw_s4_mission-day-3_8a68d9e4.mp4",
-     "synced_path": "guide/sync_s4_mission-day-3_912d3d30.mp4",
-     "audio_path": "guide/a_s4_mission-day-3_ebecdaca.mp3",
-     "audio_seconds": 3.02,
-     "padded_path": "guide/pad_s4_mission-day-3_cf037536.mp3"
+     "audio_path": "guide/a_s4_mission-day-3_3350161e.mp3",
+     "audio_seconds": 2.66,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-3_bdad5c57.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 33.8,
+   "spent_usd": 3.7900000000000005,
+   "duration_seconds_video": 23.2,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.78,
+     "start": 5.09,
+     "end": 7.48,
      "text": "Die meisten Führungskräfte reden klar —"
     },
     {
-     "start": 7.78,
-     "end": 9.81,
+     "start": 7.48,
+     "end": 9.75,
      "text": "und werden trotzdem nicht verstanden."
     },
     {
-     "start": 9.81,
-     "end": 11.4,
+     "start": 9.75,
+     "end": 11.53,
      "text": "Der Grund liegt selten an den"
     },
     {
-     "start": 11.4,
-     "end": 11.79,
+     "start": 11.53,
+     "end": 11.96,
      "text": "Worten"
     },
     {
-     "start": 11.79,
-     "end": 13.27,
+     "start": 11.96,
+     "end": 13.62,
      "text": "sondern an der Reihenfolge."
     },
     {
-     "start": 15.01,
-     "end": 16.16,
+     "start": 13.12,
+     "end": 14.21,
      "text": "Heute geht es darum"
     },
     {
-     "start": 16.16,
-     "end": 17.76,
+     "start": 14.21,
+     "end": 15.74,
      "text": "wie du eine Botschaft baust"
     },
     {
-     "start": 17.76,
-     "end": 18.8,
+     "start": 15.74,
+     "end": 16.72,
      "text": "die hängen bleibt."
     },
     {
-     "start": 18.8,
-     "end": 19.89,
+     "start": 16.72,
+     "end": 17.76,
      "text": "Ein gutes Ergebnis"
     },
     {
-     "start": 19.89,
-     "end": 21.61,
+     "start": 17.76,
+     "end": 19.4,
      "text": "du formulierst eine Nachricht"
     },
     {
-     "start": 21.61,
-     "end": 23.56,
+     "start": 19.4,
+     "end": 21.25,
      "text": "die du diese Woche wirklich senden"
     },
     {
-     "start": 23.56,
-     "end": 23.9,
+     "start": 21.25,
+     "end": 21.58,
      "text": "musst."
     },
     {
-     "start": 24.43,
-     "end": 26.18,
-     "text": "Und beim zweiten Lesen merkst du"
+     "start": 21.12,
+     "end": 22.6,
+     "text": "Und merkst beim zweiten Lesen"
     },
     {
-     "start": 26.18,
-     "end": 27.45,
+     "start": 22.6,
+     "end": 23.78,
      "text": "was du weglassen kannst."
     }
    ],
-   "video_bytes": 7683785,
-   "published_at": "2026-09-03T17:57:51.137845+00:00"
+   "video_bytes": 5562283,
+   "published_at": "2026-09-03T17:57:51.137845+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-4",
@@ -1410,12 +1385,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-4_e062da5b.mp4",
+   "video_path": "guide/video_mission-day-4_dc6ebfbf.mp4",
    "media_token": "CdlZm6M92ODN-1wqTR_RpIkyX7J22BWj",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.461314+00:00",
-   "updated_at": "2026-09-03T17:57:51.393110+00:00",
+   "updated_at": "2026-09-03T22:31:21.633794+00:00",
    "progress": null,
    "shots": [
     {
@@ -1424,9 +1399,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-4_638c8d43.png",
-     "raw_path": "guide/raw_s1_mission-day-4_ca85fc86.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-4_f93faeee.mp4",
      "synced_path": null
     },
     {
@@ -1435,13 +1410,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Feedback scheitert fast nie am Mut, sondern am Zeitpunkt und an der Beobachtung. Wer sagt „Sie sind unzuverlässig\", bekommt Widerstand.",
-     "error": null,
      "keyframe_path": "guide/kf_s2_mission-day-4_11019fb4.png",
-     "raw_path": "guide/raw_s2_mission-day-4_82112553.mp4",
-     "synced_path": "guide/sync_s2_mission-day-4_f0d61ef4.mp4",
-     "audio_path": "guide/a_s2_mission-day-4_b9e352bb.mp3",
-     "audio_seconds": 8.78,
-     "padded_path": "guide/pad_s2_mission-day-4_e86b21b0.mp3"
+     "audio_path": "guide/a_s2_mission-day-4_1f37cb86.mp3",
+     "audio_seconds": 7.74,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-4_c1914d9f.mp4"
     },
     {
      "id": "s3",
@@ -1452,92 +1425,91 @@
       "simulations",
       "playbooks"
      ],
-     "text": "Wer sagt „Der Bericht war am Dienstag zugesagt und kam am Freitag\", bekommt ein Gespräch.",
-     "audio_path": "guide/a_s3_mission-day-4_49e9de81.mp3",
-     "audio_seconds": 6.19
+     "text": "Wer sagt „Der Bericht war am Dienstag zugesagt und kam am Freitag\", bekommt ein Gespräch. Heute übst du diesen Unterschied. Ein gutes Ergebnis ist ein Satz.",
+     "audio_path": "guide/a_s3_mission-day-4_84aed520.mp3",
+     "audio_seconds": 9.61
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Heute übst du diesen Unterschied. Ein gutes Ergebnis ist ein Satz, den du morgen so aussprechen könntest, ohne dich zu verstellen.",
-     "error": null,
+     "text": "Den du morgen so aussprechen könntest, ohne dich zu verstellen.",
      "keyframe_path": "guide/kf_s4_mission-day-4_ea0f1336.png",
-     "raw_path": "guide/raw_s4_mission-day-4_83ad66bd.mp4",
-     "synced_path": "guide/sync_s4_mission-day-4_9a116fe4.mp4",
-     "audio_path": "guide/a_s4_mission-day-4_7d4a7edc.mp3",
-     "audio_seconds": 7.02,
-     "padded_path": "guide/pad_s4_mission-day-4_93b30470.mp3"
+     "audio_path": "guide/a_s4_mission-day-4_026f3d47.mp3",
+     "audio_seconds": 3.06,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-4_8b91eea5.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 31.1,
+   "spent_usd": 3.7300000000000004,
+   "duration_seconds_video": 24.1,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.99,
+     "start": 5.09,
+     "end": 7.16,
      "text": "Feedback scheitert fast nie am Mut"
     },
     {
-     "start": 7.99,
-     "end": 10.06,
+     "start": 7.16,
+     "end": 8.99,
      "text": "sondern am Zeitpunkt und an der"
     },
     {
-     "start": 10.06,
-     "end": 10.87,
+     "start": 8.99,
+     "end": 9.7,
      "text": "Beobachtung."
     },
     {
-     "start": 10.87,
-     "end": 13.15,
+     "start": 9.7,
+     "end": 11.71,
      "text": "Wer sagt „Sie sind unzuverlässig\""
     },
     {
-     "start": 13.15,
-     "end": 14.42,
+     "start": 11.71,
+     "end": 12.83,
      "text": "bekommt Widerstand."
     },
     {
-     "start": 15.01,
-     "end": 17.0,
+     "start": 12.32,
+     "end": 14.09,
      "text": "Wer sagt „Der Bericht war am"
     },
     {
-     "start": 17.0,
-     "end": 19.71,
+     "start": 14.09,
+     "end": 16.49,
      "text": "Dienstag zugesagt und kam am Freitag\""
     },
     {
-     "start": 19.71,
-     "end": 21.2,
+     "start": 16.49,
+     "end": 17.82,
      "text": "bekommt ein Gespräch."
     },
     {
-     "start": 21.75,
-     "end": 23.57,
+     "start": 17.82,
+     "end": 19.91,
      "text": "Heute übst du diesen Unterschied."
     },
     {
-     "start": 23.57,
-     "end": 25.34,
-     "text": "Ein gutes Ergebnis ist ein Satz"
+     "start": 19.91,
+     "end": 21.93,
+     "text": "Ein gutes Ergebnis ist ein Satz."
     },
     {
-     "start": 25.34,
-     "end": 27.44,
-     "text": "den du morgen so aussprechen könntest"
+     "start": 21.48,
+     "end": 23.36,
+     "text": "Den du morgen so aussprechen könntest"
     },
     {
-     "start": 27.44,
-     "end": 28.77,
+     "start": 23.36,
+     "end": 24.54,
      "text": "ohne dich zu verstellen."
     }
    ],
-   "video_bytes": 7581831,
-   "published_at": "2026-09-03T17:57:51.393101+00:00"
+   "video_bytes": 5947090,
+   "published_at": "2026-09-03T17:57:51.393101+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-5",
@@ -1550,12 +1522,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-5_0cb828cc.mp4",
+   "video_path": "guide/video_mission-day-5_30ae99ac.mp4",
    "media_token": "8OKna1dbHi6gX2FcCvzd1kI1kfgw9tGD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.461847+00:00",
-   "updated_at": "2026-09-03T17:57:51.555906+00:00",
+   "updated_at": "2026-09-03T22:32:18.331973+00:00",
    "progress": null,
    "shots": [
     {
@@ -1564,9 +1536,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-5_dafcbf53.png",
-     "raw_path": "guide/raw_s1_mission-day-5_405a99e1.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-5_fda93946.mp4",
      "synced_path": null
     },
     {
@@ -1574,14 +1546,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Führung heißt entscheiden, bevor alle Informationen da sind. Die häufigste Ausrede lautet: ich brauche noch Zahlen. Manchmal stimmt das.",
-     "error": null,
+     "text": "Führung heißt entscheiden, bevor alle Informationen da sind. Die häufigste Ausrede lautet: ich brauche noch Zahlen. Manchmal stimmt das. Meistens ist es Angst vor dem Fehler.",
      "keyframe_path": "guide/kf_s2_mission-day-5_5e49a07d.png",
-     "raw_path": "guide/raw_s2_mission-day-5_84c5543c.mp4",
-     "synced_path": "guide/sync_s2_mission-day-5_6e23bdd7.mp4",
-     "audio_path": "guide/a_s2_mission-day-5_a7eac4a8.mp3",
-     "audio_seconds": 7.81,
-     "padded_path": "guide/pad_s2_mission-day-5_f672fbec.mp3"
+     "audio_path": "guide/a_s2_mission-day-5_a989c9fd.mp3",
+     "audio_seconds": 11.34,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-5_669d52e7.mp4"
     },
     {
      "id": "s3",
@@ -1592,114 +1562,111 @@
       "chat",
       "tasks"
      ],
-     "text": "Meistens ist es Angst vor dem Fehler. Heute lernst du, wie du zwischen beidem unterscheidest. Ein gutes Ergebnis: du treffst eine Entscheidung, die du seit Wochen vor dir herschiebst.",
-     "audio_path": "guide/a_s3_mission-day-5_d43946c4.mp3",
-     "audio_seconds": 9.43,
-     "padded_path": null,
-     "synced_path": null
+     "text": "Heute lernst du, wie du zwischen beidem unterscheidest. Ein gutes Ergebnis: du treffst eine Entscheidung, die du seit Wochen vor dir herschiebst .",
+     "audio_path": "guide/a_s3_mission-day-5_ddc80849.mp3",
+     "audio_seconds": 8.89
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Und du schreibst auf, woran du merken würdest, dass sie falsch war.",
-     "error": null,
+     "text": "Und schreibst auf, woran du merkst, dass sie falsch war.",
      "keyframe_path": "guide/kf_s4_mission-day-5_813c3286.png",
-     "raw_path": "guide/raw_s4_mission-day-5_9700b2de.mp4",
-     "synced_path": "guide/sync_s4_mission-day-5_ed72ae5d.mp4",
-     "audio_path": "guide/a_s4_mission-day-5_cff8a75e.mp3",
-     "audio_seconds": 4.28,
-     "padded_path": "guide/pad_s4_mission-day-5_689c8dcf.mp3"
+     "audio_path": "guide/a_s4_mission-day-5_b1fc6e7f.mp3",
+     "audio_seconds": 2.7,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-5_132bb450.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 34.4,
+   "spent_usd": 4.24,
+   "duration_seconds_video": 26.5,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.18,
+     "start": 5.09,
+     "end": 6.84,
      "text": "Führung heißt entscheiden"
     },
     {
-     "start": 7.18,
-     "end": 9.13,
+     "start": 6.84,
+     "end": 9.07,
      "text": "bevor alle Informationen da sind."
     },
     {
-     "start": 9.13,
-     "end": 10.85,
+     "start": 9.07,
+     "end": 11.03,
      "text": "Die häufigste Ausrede lautet"
     },
     {
-     "start": 10.85,
-     "end": 12.27,
+     "start": 11.03,
+     "end": 12.65,
      "text": "ich brauche noch Zahlen."
     },
     {
-     "start": 12.27,
-     "end": 13.45,
+     "start": 12.65,
+     "end": 14.0,
      "text": "Manchmal stimmt das."
     },
     {
-     "start": 15.01,
-     "end": 16.56,
+     "start": 14.0,
+     "end": 15.96,
      "text": "Meistens ist es Angst vor dem"
     },
     {
-     "start": 16.56,
-     "end": 16.94,
+     "start": 15.96,
+     "end": 16.43,
      "text": "Fehler."
     },
     {
-     "start": 16.94,
-     "end": 17.8,
+     "start": 15.99,
+     "end": 17.0,
      "text": "Heute lernst du"
     },
     {
-     "start": 17.8,
-     "end": 19.83,
+     "start": 17.0,
+     "end": 19.39,
      "text": "wie du zwischen beidem unterscheidest."
     },
     {
-     "start": 19.83,
-     "end": 20.85,
+     "start": 19.39,
+     "end": 20.59,
      "text": "Ein gutes Ergebnis"
     },
     {
-     "start": 20.85,
-     "end": 22.4,
+     "start": 20.59,
+     "end": 22.42,
      "text": "du treffst eine Entscheidung"
     },
     {
-     "start": 22.4,
-     "end": 23.8,
+     "start": 22.42,
+     "end": 24.06,
      "text": "die du seit Wochen vor dir"
     },
     {
-     "start": 23.8,
-     "end": 24.44,
-     "text": "herschiebst."
+     "start": 24.06,
+     "end": 24.88,
+     "text": "herschiebst ."
     },
     {
-     "start": 24.99,
-     "end": 26.37,
-     "text": "Und du schreibst auf"
+     "start": 24.41,
+     "end": 25.31,
+     "text": "Und schreibst auf"
     },
     {
-     "start": 26.37,
-     "end": 27.95,
-     "text": "woran du merken würdest"
+     "start": 25.31,
+     "end": 26.11,
+     "text": "woran du merkst"
     },
     {
-     "start": 27.95,
-     "end": 29.27,
+     "start": 26.11,
+     "end": 27.11,
      "text": "dass sie falsch war."
     }
    ],
-   "video_bytes": 8352742,
-   "published_at": "2026-09-03T17:57:51.555899+00:00"
+   "video_bytes": 6702285,
+   "published_at": "2026-09-03T17:57:51.555899+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-6",
@@ -1712,12 +1679,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-6_00225846.mp4",
+   "video_path": "guide/video_mission-day-6_7840fd67.mp4",
    "media_token": "QDn-iMDKv6ivA0XuAUv5gE67BX83bOVj",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.462599+00:00",
-   "updated_at": "2026-09-03T17:57:51.735526+00:00",
+   "updated_at": "2026-09-03T22:33:03.314371+00:00",
    "progress": null,
    "shots": [
     {
@@ -1726,9 +1693,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-6_808fba5f.png",
-     "raw_path": "guide/raw_s1_mission-day-6_9dd2605b.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-6_280af97e.mp4",
      "synced_path": null
     },
     {
@@ -1737,13 +1704,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Kein Konflikt wird durch Warten kleiner. Er wird nur teurer.",
-     "error": null,
      "keyframe_path": "guide/kf_s2_mission-day-6_97aadf8b.png",
-     "raw_path": "guide/raw_s2_mission-day-6_65876901.mp4",
-     "synced_path": "guide/sync_s2_mission-day-6_9d44967d.mp4",
-     "audio_path": "guide/a_s2_mission-day-6_bfd08fad.mp3",
-     "audio_seconds": 3.02,
-     "padded_path": "guide/pad_s2_mission-day-6_0552b682.mp3"
+     "audio_path": "guide/a_s2_mission-day-6_ba1cbb59.mp3",
+     "audio_seconds": 4.5,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-6_b30136a5.mp4"
     },
     {
      "id": "s3",
@@ -1754,102 +1719,101 @@
       "simulations",
       "coaching"
      ],
-     "text": "Die Kunst ist, ihn anzusprechen, während er noch klein ist — da fühlt es sich unnötig an, und genau da funktioniert es. Heute geht es um den ersten Satz eines solchen Gesprächs.",
-     "audio_path": "guide/a_s3_mission-day-6_df75d550.mp3",
-     "audio_seconds": 10.62
+     "text": "Die Kunst ist, ihn anzusprechen, während er noch klein ist — da fühlt es sich unnötig an, und genau da funktioniert es. Heute geht es um den ersten Satz eines solchen Gesprächs. Ein gutes Ergebnis: du weißt.",
+     "audio_path": "guide/a_s3_mission-day-6_48047120.mp3",
+     "audio_seconds": 12.46
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Ein gutes Ergebnis: du weißt, mit welcher Person du diese Woche zehn Minuten sprechen solltest, und wie du beginnst.",
-     "error": null,
+     "text": "Mit welcher Person du diese Woche zehn Minuten sprechen solltest, und wie du beginnst.",
      "keyframe_path": "guide/kf_s4_mission-day-6_4daf8ca4.png",
-     "raw_path": "guide/raw_s4_mission-day-6_4509e25f.mp4",
-     "synced_path": "guide/sync_s4_mission-day-6_c17716a6.mp4",
-     "audio_path": "guide/a_s4_mission-day-6_54077669.mp3",
-     "audio_seconds": 7.63,
-     "padded_path": "guide/pad_s4_mission-day-6_7433abb1.mp3"
+     "audio_path": "guide/a_s4_mission-day-6_63c9a1b1.mp3",
+     "audio_seconds": 3.82,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-6_fa15ea9b.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 35.6,
+   "spent_usd": 3.3299999999999996,
+   "duration_seconds_video": 24.4,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 7.69,
+     "start": 5.09,
+     "end": 8.14,
      "text": "Kein Konflikt wird durch Warten kleiner."
     },
     {
-     "start": 7.69,
-     "end": 8.66,
+     "start": 8.14,
+     "end": 9.59,
      "text": "Er wird nur teurer."
     },
     {
-     "start": 15.01,
-     "end": 15.88,
+     "start": 9.12,
+     "end": 10.0,
      "text": "Die Kunst ist"
     },
     {
-     "start": 15.88,
-     "end": 16.94,
+     "start": 10.0,
+     "end": 11.06,
      "text": "ihn anzusprechen"
     },
     {
-     "start": 16.94,
-     "end": 18.61,
+     "start": 11.06,
+     "end": 12.75,
      "text": "während er noch klein ist —"
     },
     {
-     "start": 18.61,
-     "end": 20.35,
+     "start": 12.75,
+     "end": 14.5,
      "text": "da fühlt es sich unnötig an"
     },
     {
-     "start": 20.35,
-     "end": 22.15,
+     "start": 14.5,
+     "end": 16.32,
      "text": "und genau da funktioniert es."
     },
     {
-     "start": 22.15,
-     "end": 23.83,
+     "start": 16.32,
+     "end": 18.01,
      "text": "Heute geht es um den ersten"
     },
     {
-     "start": 23.83,
-     "end": 25.63,
+     "start": 18.01,
+     "end": 19.83,
      "text": "Satz eines solchen Gesprächs."
     },
     {
-     "start": 26.19,
-     "end": 27.48,
+     "start": 19.83,
+     "end": 21.02,
      "text": "Ein gutes Ergebnis"
     },
     {
-     "start": 27.48,
-     "end": 28.1,
-     "text": "du weißt"
+     "start": 21.02,
+     "end": 21.58,
+     "text": "du weißt."
     },
     {
-     "start": 28.1,
-     "end": 30.35,
-     "text": "mit welcher Person du diese Woche"
+     "start": 21.13,
+     "end": 22.63,
+     "text": "Mit welcher Person du diese Woche"
     },
     {
-     "start": 30.35,
-     "end": 32.46,
+     "start": 22.63,
+     "end": 24.04,
      "text": "zehn Minuten sprechen solltest"
     },
     {
-     "start": 32.46,
-     "end": 33.82,
+     "start": 24.04,
+     "end": 24.95,
      "text": "und wie du beginnst."
     }
    ],
-   "video_bytes": 7759827,
-   "published_at": "2026-09-03T17:57:51.735518+00:00"
+   "video_bytes": 5857759,
+   "published_at": "2026-09-03T17:57:51.735518+00:00",
+   "quality": "pro"
   },
   {
    "slug": "mission-day-7",
@@ -1862,12 +1826,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-7_05f8b318.mp4",
+   "video_path": "guide/video_mission-day-7_d0bab623.mp4",
    "media_token": "aAbC2dEosBZXcQ0owj0VsFfz2IZ51Ra3",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.463456+00:00",
-   "updated_at": "2026-09-03T17:57:52.089397+00:00",
+   "updated_at": "2026-09-03T22:33:43.715961+00:00",
    "progress": null,
    "shots": [
     {
@@ -1876,9 +1840,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_mission-day-7_2665e8e3.png",
-     "raw_path": "guide/raw_s1_mission-day-7_7b4c2af3.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_mission-day-7_77834109.mp4",
      "synced_path": null
     },
     {
@@ -1886,14 +1850,12 @@
      "type": "talk",
      "preset": "loft_talk_medium",
      "screens": [],
-     "text": "Sieben Tage sind geschafft — jetzt kommt der Teil, den die meisten überspringen: auswerten.",
-     "error": null,
+     "text": "Sieben Tage sind geschafft — jetzt kommt der Teil, den die meisten überspringen: auswerten. Nicht „war gut\", sondern konkret: Was hast du anders gemacht als vorher?",
      "keyframe_path": "guide/kf_s2_mission-day-7_635f4899.png",
-     "raw_path": "guide/raw_s2_mission-day-7_d1137e1d.mp4",
-     "synced_path": "guide/sync_s2_mission-day-7_47a492bb.mp4",
-     "audio_path": "guide/a_s2_mission-day-7_c1156b76.mp3",
-     "audio_seconds": 4.14,
-     "padded_path": "guide/pad_s2_mission-day-7_95c042b1.mp3"
+     "audio_path": "guide/a_s2_mission-day-7_41c07391.mp3",
+     "audio_seconds": 9.94,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_mission-day-7_f989a82d.mp4"
     },
     {
      "id": "s3",
@@ -1905,9 +1867,9 @@
       "coaching",
       "dashboard"
      ],
-     "text": "Nicht „war gut\", sondern konkret: Was hast du anders gemacht als vorher? Wo bist du in die alte Rolle zurückgefallen? Ein gutes Ergebnis heute ist eine einzige Sache, die du in Woche zwei bewusst wiederholst.",
-     "audio_path": "guide/a_s3_mission-day-7_32efc460.mp3",
-     "audio_seconds": 12.02
+     "text": "Wo bist du in die alte Rolle zurückgefallen? Ein gutes Ergebnis heute ist eine einzige Sache, die du in Woche zwei bewusst wiederholst.",
+     "audio_path": "guide/a_s3_mission-day-7_b6f21098.mp3",
+     "audio_seconds": 8.42
     },
     {
      "id": "s4",
@@ -1915,112 +1877,111 @@
      "preset": "loft_talk_closeup",
      "screens": [],
      "text": "Eine. Nicht fünf. Wer fünf Dinge ändern will, ändert nichts.",
-     "error": null,
      "keyframe_path": "guide/kf_s4_mission-day-7_16e545b7.png",
-     "raw_path": "guide/raw_s4_mission-day-7_1736cf9f.mp4",
-     "synced_path": "guide/sync_s4_mission-day-7_0efe62f4.mp4",
-     "audio_path": "guide/a_s4_mission-day-7_3450baa2.mp3",
-     "audio_seconds": 3.42,
-     "padded_path": "guide/pad_s4_mission-day-7_1bcd0730.mp3"
+     "audio_path": "guide/a_s4_mission-day-7_b229c7ab.mp3",
+     "audio_seconds": 4.68,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_mission-day-7_a69b0b5e.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 37.0,
+   "spent_usd": 4.34,
+   "duration_seconds_video": 26.7,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 6.96,
+     "start": 5.09,
+     "end": 6.86,
      "text": "Sieben Tage sind geschafft —"
     },
     {
-     "start": 6.96,
-     "end": 7.95,
+     "start": 6.86,
+     "end": 8.19,
      "text": "jetzt kommt der Teil"
     },
     {
-     "start": 7.95,
-     "end": 9.31,
+     "start": 8.19,
+     "end": 10.03,
      "text": "den die meisten überspringen"
     },
     {
-     "start": 9.31,
-     "end": 9.78,
+     "start": 10.03,
+     "end": 10.66,
      "text": "auswerten."
     },
     {
-     "start": 15.01,
-     "end": 15.98,
+     "start": 10.66,
+     "end": 11.67,
      "text": "Nicht „war gut\""
     },
     {
-     "start": 15.98,
-     "end": 16.94,
+     "start": 11.67,
+     "end": 12.69,
      "text": "sondern konkret"
     },
     {
-     "start": 16.94,
-     "end": 18.75,
+     "start": 12.69,
+     "end": 14.59,
      "text": "Was hast du anders gemacht als"
     },
     {
-     "start": 18.75,
-     "end": 19.18,
+     "start": 14.59,
+     "end": 15.03,
      "text": "vorher?"
     },
     {
-     "start": 19.18,
-     "end": 20.51,
+     "start": 14.56,
+     "end": 15.98,
      "text": "Wo bist du in die alte"
     },
     {
-     "start": 20.51,
-     "end": 21.78,
+     "start": 15.98,
+     "end": 17.35,
      "text": "Rolle zurückgefallen?"
     },
     {
-     "start": 21.78,
-     "end": 23.77,
+     "start": 17.35,
+     "end": 19.48,
      "text": "Ein gutes Ergebnis heute ist eine"
     },
     {
-     "start": 23.77,
-     "end": 24.61,
+     "start": 19.48,
+     "end": 20.39,
      "text": "einzige Sache"
     },
     {
-     "start": 24.61,
-     "end": 26.31,
+     "start": 20.39,
+     "end": 22.2,
      "text": "die du in Woche zwei bewusst"
     },
     {
-     "start": 26.31,
-     "end": 27.03,
+     "start": 22.2,
+     "end": 22.98,
      "text": "wiederholst."
     },
     {
-     "start": 27.59,
-     "end": 27.89,
+     "start": 22.52,
+     "end": 22.93,
      "text": "Eine."
     },
     {
-     "start": 27.89,
-     "end": 28.55,
+     "start": 22.93,
+     "end": 23.83,
      "text": "Nicht fünf."
     },
     {
-     "start": 28.55,
-     "end": 30.17,
+     "start": 23.83,
+     "end": 26.05,
      "text": "Wer fünf Dinge ändern will"
     },
     {
-     "start": 30.17,
-     "end": 31.01,
+     "start": 26.05,
+     "end": 27.2,
      "text": "ändert nichts."
     }
    ],
-   "video_bytes": 7743687,
-   "published_at": "2026-09-03T17:57:52.089389+00:00"
+   "video_bytes": 6167824,
+   "published_at": "2026-09-03T17:57:52.089389+00:00",
+   "quality": "pro"
   },
   {
    "slug": "teaser-spotlight",
@@ -2084,12 +2045,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_teaser-login_e9898a2b.mp4",
+   "video_path": "guide/video_teaser-login_18c2b018.mp4",
    "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-03T18:09:26.358354+00:00",
+   "updated_at": "2026-09-03T21:22:31.684432+00:00",
    "progress": null,
    "shots": [
     {
@@ -2098,9 +2059,9 @@
      "preset": "loft_walk_in",
      "screens": [],
      "text": "",
-     "error": null,
      "keyframe_path": "guide/kf_s1_teaser-login_15a3414d.png",
-     "raw_path": "guide/raw_s1_teaser-login_3c83e5c5.mp4",
+     "engine": "kling-2.5-pro",
+     "raw_path": "guide/raw_s1_teaser-login_dec5105c.mp4",
      "synced_path": null
     },
     {
@@ -2109,13 +2070,11 @@
      "preset": "loft_talk_medium",
      "screens": [],
      "text": "Du führst ein Team. Aber wer coacht eigentlich dich?",
-     "error": null,
      "keyframe_path": "guide/kf_s2_teaser-login_fb129090.png",
-     "raw_path": "guide/raw_s2_teaser-login_d257e052.mp4",
-     "synced_path": "guide/sync_s2_teaser-login_32353a6e.mp4",
-     "audio_path": "guide/a_s2_teaser-login_ce7a4f0d.mp3",
-     "audio_seconds": 3.42,
-     "padded_path": "guide/pad_s2_teaser-login_12088e37.mp3"
+     "audio_path": "guide/a_s2_teaser-login_d4ae7e3e.mp3",
+     "audio_seconds": 3.06,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s2_teaser-login_4cba4876.mp4"
     },
     {
      "id": "s3",
@@ -2126,92 +2085,91 @@
       "video",
       "missions"
      ],
-     "text": "Leader-OS ist dein persönlicher Coach: KI-Sparring für schwierige Gespräche, Video-Analyse deiner Wirkung und tägliche Missionen, die dich wirklich besser machen.",
-     "audio_path": "guide/a_s3_teaser-login_7ca54083.mp3",
-     "audio_seconds": 10.19
+     "text": "Leader-OS ist dein persönlicher Coach: KI-Sparring für schwierige Gespräche, Video-Analyse deiner Wirkung und tägliche Missionen, die dich wirklich besser machen. Kein Kurs, den du abarbeitest.",
+     "audio_path": "guide/a_s3_teaser-login_70f9b57e.mp3",
+     "audio_seconds": 12.28
     },
     {
      "id": "s4",
      "type": "talk",
      "preset": "loft_talk_closeup",
      "screens": [],
-     "text": "Kein Kurs, den du abarbeitest. Ein System, das mit dir arbeitet. Starte heute — kostenlos.",
-     "error": null,
+     "text": "Ein System, das mit dir arbeitet. Starte heute — kostenlos.",
      "keyframe_path": "guide/kf_s4_teaser-login_2424ec08.png",
-     "raw_path": "guide/raw_s4_teaser-login_185f7153.mp4",
-     "synced_path": "guide/sync_s4_teaser-login_00c00acb.mp4",
-     "audio_path": "guide/a_s4_teaser-login_c7c8a2d7.mp3",
-     "audio_seconds": 8.28,
-     "padded_path": "guide/pad_s4_teaser-login_f143e71e.mp3"
+     "audio_path": "guide/a_s4_teaser-login_1bb2264b.mp3",
+     "audio_seconds": 2.81,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s4_teaser-login_c6c518e2.mp4"
     }
    ],
-   "spent_usd": 1.65,
-   "duration_seconds_video": 35.1,
+   "spent_usd": 2.9400000000000004,
+   "duration_seconds_video": 21.8,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.64,
-     "end": 6.91,
+     "start": 5.09,
+     "end": 6.23,
      "text": "Du führst ein Team."
     },
     {
-     "start": 6.91,
-     "end": 9.06,
+     "start": 6.23,
+     "end": 8.15,
      "text": "Aber wer coacht eigentlich dich?"
     },
     {
-     "start": 15.01,
-     "end": 17.45,
+     "start": 7.66,
+     "end": 10.14,
      "text": "Leader-OS ist dein persönlicher Coach"
     },
     {
-     "start": 17.45,
-     "end": 19.82,
+     "start": 10.14,
+     "end": 12.56,
      "text": "KI-Sparring für schwierige Gespräche"
     },
     {
-     "start": 19.82,
-     "end": 23.15,
+     "start": 12.56,
+     "end": 15.96,
      "text": "Video-Analyse deiner Wirkung und tägliche Missionen"
     },
     {
-     "start": 23.15,
-     "end": 25.2,
+     "start": 15.96,
+     "end": 18.05,
      "text": "die dich wirklich besser machen."
     },
     {
-     "start": 25.76,
-     "end": 26.73,
+     "start": 18.05,
+     "end": 18.7,
      "text": "Kein Kurs"
     },
     {
-     "start": 26.73,
-     "end": 28.58,
+     "start": 18.7,
+     "end": 19.94,
      "text": "den du abarbeitest."
     },
     {
-     "start": 28.58,
-     "end": 29.66,
+     "start": 19.5,
+     "end": 20.05,
      "text": "Ein System"
     },
     {
-     "start": 29.66,
-     "end": 31.7,
+     "start": 20.05,
+     "end": 21.11,
      "text": "das mit dir arbeitet."
     },
     {
-     "start": 31.7,
-     "end": 33.07,
+     "start": 21.11,
+     "end": 21.81,
      "text": "Starte heute —"
     },
     {
-     "start": 33.07,
-     "end": 34.04,
+     "start": 21.81,
+     "end": 22.31,
      "text": "kostenlos."
     }
    ],
-   "video_bytes": 7376423,
-   "published_at": "2026-09-03T15:48:03.099791+00:00"
+   "video_bytes": 4279192,
+   "published_at": "2026-09-03T15:48:03.099791+00:00",
+   "quality": "pro"
   }
  ],
  "settings": {

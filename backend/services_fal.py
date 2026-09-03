@@ -105,7 +105,7 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_in
             json=payload,
             timeout=60,
         )
-        if submit.status_code == 503 and attempt < 3 and "retryable\":true" in submit.text.replace(" ", ""):
+        if submit.status_code in (502, 503, 504) and attempt < 3:
             wait = 3 if timeout_seconds <= 60 else 20 * (attempt + 1)
             logger.warning("Fal capacity unavailable (503) — retry %s/3 in %ss", attempt + 1, wait)
             time.sleep(wait)
@@ -122,6 +122,11 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_in
     deadline = time.monotonic() + timeout_seconds
     while time.monotonic() < deadline:
         status_res = _get_with_retry(status_url, timeout_seconds=30, deadline=deadline)
+        if status_res.status_code in (502, 503, 504, 429):
+            # Proxy/Fal kurz nicht erreichbar -> der Job läuft weiter, nur nochmal fragen
+            logger.warning("Fal status %s — retry in %ss", status_res.status_code, max(poll_interval, 5))
+            time.sleep(max(poll_interval, 5))
+            continue
         if status_res.status_code >= 400:
             raise FalError(f"Statusabfrage fehlgeschlagen ({status_res.status_code})")
         status_body = status_res.json()
@@ -194,6 +199,10 @@ def render_talking_video(image_url: str, audio_url: str, resolution: str = "512"
 IMAGE_EDIT_ENDPOINT = "fal-ai/nano-banana/edit"
 I2V_ENDPOINT = "fal-ai/kling-video/v2.1/standard/image-to-video"
 LIPSYNC_ENDPOINT = "fal-ai/kling-video/lipsync/audio-to-video"
+I2V_PRO_ENDPOINT = "fal-ai/kling-video/v2.5-turbo/pro/image-to-video"
+OMNIHUMAN_ENDPOINT = "fal-ai/bytedance/omnihuman/v1.5"
+COST_I2V_PRO = {"5": 0.35, "10": 0.70}
+COST_OMNIHUMAN_PER_S = 0.16
 
 COST_KEYFRAME = 0.04
 COST_I2V = {"5": 0.25, "10": 0.50}
@@ -216,19 +225,33 @@ def edit_image(prompt: str, image_urls: list[str], aspect_ratio: str = "9:16") -
     return download(url)
 
 
-def image_to_video(image_url: str, prompt: str, duration: str = "10", aspect_ratio: str = "9:16") -> bytes:
-    """Keyframe + Bewegungs-Prompt -> Kling-Shot (mp4-Bytes, ohne Ton)."""
-    result = run_fal(I2V_ENDPOINT, {
+def image_to_video(image_url: str, prompt: str, duration: str = "10", aspect_ratio: str = "9:16", pro: bool = False) -> bytes:
+    """Keyframe + Bewegungs-Prompt -> Kling-Shot (mp4-Bytes, ohne Ton). pro = Kling 2.5 Turbo Pro (1080p)."""
+    payload = {
         "prompt": prompt,
         "image_url": image_url,
         "duration": duration,
-        "aspect_ratio": aspect_ratio,
         "negative_prompt": "blur, distort, low quality, extra limbs, deformed hands, text, watermark, subtitles, camera cut",
         "cfg_scale": 0.5,
-    }, timeout_seconds=1800)
+    }
+    if not pro:
+        payload["aspect_ratio"] = aspect_ratio
+    result = run_fal(I2V_PRO_ENDPOINT if pro else I2V_ENDPOINT, payload, timeout_seconds=1800)
     url = (result.get("video") or {}).get("url")
     if not url:
         raise FalError("Kling lieferte keine Video-URL")
+    return download(url, timeout=300)
+
+
+def omnihuman_video(image_url: str, audio_url: str, prompt: str | None = None) -> bytes:
+    """Keyframe + Tonspur -> sprechendes Video mit nativer Lippen-/Körperbewegung (1080p)."""
+    payload = {"image_url": image_url, "audio_url": audio_url, "resolution": "1080p", "turbo_mode": False}
+    if prompt:
+        payload["prompt"] = prompt[:600]
+    result = run_fal(OMNIHUMAN_ENDPOINT, payload, timeout_seconds=2400)
+    url = (result.get("video") or {}).get("url")
+    if not url:
+        raise FalError("OmniHuman lieferte keine Video-URL")
     return download(url, timeout=300)
 
 
