@@ -7,8 +7,10 @@ Skript als Text, damit nie ein Loch in der Oberfläche entsteht.
 """
 
 import asyncio
+import json
 import secrets
 import uuid
+from pathlib import Path
 from datetime import datetime, timezone
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
@@ -18,8 +20,8 @@ from pydantic import BaseModel
 
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
-    BROLL_SCREENS, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, TALK_MAX_SECONDS, WLAD_STYLE_PROMPT,
-    plan_shots, seed_clips, word_count, word_limits,
+    BROLL_SCREENS, CLIP_SCREENS, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, TALK_MAX_SECONDS,
+    WLAD_STYLE_PROMPT, plan_shots, scene_for_aspect, seed_clips, word_count, word_limits,
 )
 from routes.admin import require_admin
 from routes.uploads import get_object, put_object
@@ -46,12 +48,42 @@ MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", 
 SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "video/mp4"),
               "audio": ("audio_path", "audio/mpeg"), "padded": ("padded_path", "audio/mpeg"),
               "synced": ("synced_path", "video/mp4")}
-FRAME_16_9 = (1280, 720)
 
 
 # ── Datenzugriff ────────────────────────────────────────────────────────────
 
 _BOOT_RESET_DONE = False
+_SEED_FILE = Path(__file__).resolve().parent.parent / "guide_seed_data.json"
+
+
+async def _import_produced_seed() -> None:
+    """Prod-DB startet leer: produzierte Clips (Pfade im gemeinsamen Object Storage) einspielen —
+    nur dort, wo noch kein eigenes Video existiert."""
+    if not _SEED_FILE.exists():
+        return
+    try:
+        data = json.loads(_SEED_FILE.read_text())
+    except Exception as e:
+        logger.error("Guide seed file unreadable: %s", e)
+        return
+    imported = 0
+    for clip in data.get("clips", []):
+        clip.pop("_id", None)
+        existing = await db.guide_clips.find_one({"slug": clip["slug"]}, {"_id": 0, "video_path": 1})
+        if existing is None:
+            await db.guide_clips.insert_one(clip)
+        elif not existing.get("video_path"):
+            await db.guide_clips.update_one({"slug": clip["slug"]}, {"$set": clip})
+        else:
+            continue
+        imported += 1
+    settings = data.get("settings") or {}
+    if settings.get("portrait_path"):
+        current = await db.guide_settings.find_one({"_id": SETTINGS_ID}, {"portrait_path": 1})
+        if not (current or {}).get("portrait_path"):
+            await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": settings}, upsert=True)
+    if imported:
+        logger.info("Guide seed imported: %s produced clips", imported)
 
 
 async def _ensure_seeded() -> None:
@@ -60,6 +92,7 @@ async def _ensure_seeded() -> None:
     global _BOOT_RESET_DONE
     if not _BOOT_RESET_DONE:
         _BOOT_RESET_DONE = True
+        await _import_produced_seed()
         await db.guide_clips.update_many(
             {"status": {"$regex": "_running$"}},
             {"$set": {"status": "interrupted", "progress": None,
@@ -101,10 +134,22 @@ def _media_url(token: str, kind: str) -> str:
     return f"/api/guide/media/{token}/{kind}"
 
 
+def _poster_url(clip: dict) -> str | None:
+    token = clip.get("media_token")
+    if not token:
+        return None
+    if clip.get("keyframe_path"):
+        return _media_url(token, "keyframe")
+    first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
+    return f"/api/guide/media/{token}/shot/{first['id']}/keyframe" if first else None
+
+
 def _public_clip(clip: dict, seen: list) -> dict:
     token = clip.get("media_token")
     has_video = bool(clip.get("video_path") and clip.get("published") and token)
     return {
+        "poster_url": _poster_url(clip) if has_video else None,
+        "duration_seconds_video": clip.get("duration_seconds_video"),
         "slug": clip["slug"],
         "kind": clip["kind"],
         "ref": clip.get("ref"),
@@ -190,13 +235,13 @@ async def set_prefs(data: PrefsIn, request: Request):
 async def public_teaser():
     """Ohne Login (Login-Seite): der freigegebene Teaser — oder null."""
     clip = await db.guide_clips.find_one(
-        {"kind": "teaser", "published": True, "video_path": {"$ne": None}}, {"_id": 0},
+        {"kind": "teaser", "published": True, "video_path": {"$ne": None}}, {"_id": 0}, sort=[("order", 1)],
     )
     if not clip:
         return {"clip": None}
     return {"clip": {"slug": clip["slug"], "title": clip["title"], "script": clip["script"],
                      "video_url": _media_url(clip["media_token"], "video"),
-                     "poster_url": _media_url(clip["media_token"], "keyframe") if clip.get("keyframe_path") else None}}
+                     "poster_url": _poster_url(clip)}}
 
 
 @router.get("/media/{token}/{kind}")
@@ -295,7 +340,8 @@ def _admin_clip_view(c: dict) -> dict:
     view["shot"] = preset and {**preset, "scene_prompt": c.get("scene_prompt") or preset["scene_prompt"],
                                "motion_prompt": c.get("motion_prompt") or preset["motion_prompt"]}
     view["shots"] = [_shot_view(s, token) for s in c.get("shots", [])]
-    view["multi_shot"] = c.get("kind") in ("onboarding", "mission")
+    view["multi_shot"] = c.get("kind") in ("onboarding", "mission") or bool(c.get("multi_shot"))
+    view["aspect"] = c.get("aspect") or "16:9"
     return view
 
 
@@ -454,12 +500,12 @@ class ScriptSaveIn(BaseModel):
 @router.put("/admin/clips/{slug}")
 async def save_script(slug: str, data: ScriptSaveIn, request: Request):
     await require_admin(request)
-    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0, "kind": 1})
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0, "kind": 1, "multi_shot": 1, "video_path": 1})
     if not clip:
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     script = " ".join((data.script or "").split())
     words = word_count(script)
-    lo, hi = word_limits(clip["kind"])
+    lo, hi = (30, 115) if clip.get("multi_shot") else word_limits(clip["kind"])
     if not lo <= words <= hi:
         raise HTTPException(
             status_code=400,
@@ -468,10 +514,11 @@ async def save_script(slug: str, data: ScriptSaveIn, request: Request):
     patch = {
         "script": script,
         "script_source": "wlad",
-        "status": "script_ready",
         "error": None,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
+    if not clip.get("video_path"):
+        patch["status"] = "script_ready"  # fertige Filme bleiben online; Shots neu planen = bewusste Aktion
     if data.title:
         patch["title"] = data.title.strip()[:120]
     if data.scene_prompt is not None:
@@ -633,10 +680,11 @@ async def _job_shot_keyframes(slug: str, clip: dict, settings: dict, token: str)
             previous = shot["id"]
             continue
         preset = SHOT_PRESETS[shot["preset"]]
+        aspect = clip.get("aspect") or preset["aspect_ratio"]
         await _patch_clip(slug, {"progress": f"Keyframe {shot['id']}"})
         shot_refs = refs + ([_shot_url(token, previous, "keyframe")] if previous else [])
-        prompt = f"{WLAD_STYLE_PROMPT} {shot.get('scene_prompt') or preset['scene_prompt']}"
-        image = await asyncio.to_thread(edit_image, prompt, shot_refs, preset["aspect_ratio"])
+        prompt = f"{WLAD_STYLE_PROMPT} {scene_for_aspect(shot.get('scene_prompt') or preset['scene_prompt'], aspect)}"
+        image = await asyncio.to_thread(edit_image, prompt, shot_refs, aspect)
         path = await _store(f"kf_{shot['id']}", slug, image, "image/png", "png")
         await _spend(slug, COST_KEYFRAME)
         await _patch_shot(slug, shot["id"], {"keyframe_path": path, "raw_path": None, "synced_path": None, "error": None})
@@ -672,7 +720,11 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     if any(s["type"] != "broll" and not s.get("keyframe_path") for s in shots):
         raise FalError("Zuerst alle Keyframes erzeugen und prüfen")
     voice_id = settings.get("custom_voice_id") or DEFAULT_VOICE_ID
-    width, height = FRAME_16_9
+    empty = [s_["id"] for s_ in shots if s_["type"] != "walk" and not (s_.get("text") or "").strip()]
+    if empty:
+        raise FalError(f"Shot {', '.join(empty)} hat keinen Sprechtext — Text eintragen oder Shots neu planen")
+    aspect = clip.get("aspect") or "16:9"
+    width, height = FRAMES[aspect]
     await _patch_clip(slug, {"media_token": token})
 
     for shot in shots:
@@ -688,7 +740,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             await _patch_clip(slug, {"progress": f"Bewegung {sid} (Kling)"})
             raw = await asyncio.to_thread(
                 image_to_video, _shot_url(token, sid, "keyframe"),
-                shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"], preset["aspect_ratio"],
+                shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"], aspect,
             )
             shot["raw_path"] = await _store(f"raw_{sid}", slug, raw, "video/mp4", "mp4")
             await _spend(slug, COST_I2V[preset["duration"]])
@@ -711,7 +763,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         preset = SHOT_PRESETS.get(shot.get("preset") or "")
         if shot["type"] == "broll":
             audio, _ = await asyncio.to_thread(get_object, shot["audio_path"])
-            screens = [(BROLL_DIR / f"{s}.png").read_bytes() for s in shot["screens"] if (BROLL_DIR / f"{s}.png").exists()]
+            screens = [_screen_bytes(s, aspect) for s in shot["screens"] if (BROLL_DIR / f"{s}.png").exists()]
             seg = await asyncio.to_thread(render_broll, screens, audio, width, height)
             cues += subtitle_chunks(shot["text"], offset, shot["audio_seconds"], 6)
         elif shot["type"] == "talk":
@@ -742,7 +794,29 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     logger.info("Guide multishot ready: %s (%.1fs, %s KB)", slug, offset, len(final) // 1024)
 
 
-_STAGES.update({"shot_keyframes": _job_shot_keyframes, "render": _job_render})
+def _screen_bytes(screen: str, aspect: str) -> bytes:
+    mobile = BROLL_DIR / f"{screen}_m.png"
+    path = mobile if aspect == "9:16" and mobile.exists() else BROLL_DIR / f"{screen}.png"
+    return path.read_bytes()
+
+
+_FULL_SLOTS = asyncio.Semaphore(3)
+
+
+async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
+    """Komplett-Pipeline für die Serienproduktion: planen (falls nötig) -> Keyframes -> Film.
+    Höchstens 3 Clips gleichzeitig, damit Fal nicht in 503 läuft."""
+    async with _FULL_SLOTS:
+        if not clip.get("shots"):
+            clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug))
+            await _patch_clip(slug, {"shots": clip["shots"]})
+        await _job_shot_keyframes(slug, clip, settings, token)
+        clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+        await _patch_clip(slug, {"status": "full_running"})
+        await _job_render(slug, clip, settings, token)
+
+
+_STAGES.update({"shot_keyframes": _job_shot_keyframes, "render": _job_render, "full": _job_full})
 
 
 async def _run_job(slug: str, stage: str) -> None:
@@ -764,7 +838,7 @@ def _start_job(slug: str, stage: str) -> None:
 
 
 RUNNING = {"audio_running", "video_running", "keyframe_running", "cinematic_running",
-           "shot_keyframes_running", "render_running"}
+           "shot_keyframes_running", "render_running", "full_running"}
 
 
 async def _kick(slug: str, stage: str, *checks) -> dict:
@@ -832,7 +906,7 @@ async def plan_clip_shots(slug: str, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
-    shots = plan_shots(clip["script"])
+    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug))
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -899,6 +973,29 @@ async def generate_shot_keyframes(slug: str, request: Request):
         (lambda c, s: c.get("shots"), "Zuerst die Shots planen"),
         (lambda c, s: s.get("portrait_path"), "Zuerst das Avatar-Bild (Gesicht) hochladen"),
     )
+
+
+class BulkIn(BaseModel):
+    slugs: list[str]
+
+
+@router.post("/admin/clips/bulk-produce")
+async def bulk_produce(data: BulkIn, request: Request):
+    """Serienproduktion: planen + Keyframes + Film je Clip (max. 3 parallel)."""
+    await require_admin(request)
+    settings = await _settings()
+    if not settings.get("portrait_path"):
+        raise HTTPException(status_code=400, detail="Zuerst das Avatar-Bild (Gesicht) hochladen")
+    started, skipped = [], []
+    for slug in data.slugs:
+        clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0, "status": 1, "video_path": 1, "pipeline": 1})
+        if not clip or clip.get("status") in RUNNING or (clip.get("video_path") and clip.get("pipeline") == "multishot"):
+            skipped.append(slug)
+            continue
+        await _patch_clip(slug, {"status": "full_running", "error": None, "progress": "wartet auf Slot"})
+        _start_job(slug, "full")
+        started.append(slug)
+    return {"ok": True, "started": started, "skipped": skipped}
 
 
 @router.post("/admin/clips/{slug}/render")

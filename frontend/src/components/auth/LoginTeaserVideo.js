@@ -33,7 +33,7 @@ export const LoginTeaserVideo = ({ de = true, onAvailable }) => {
 
   return (
     <div className="flex items-end gap-5" data-testid="login-teaser">
-      <div className="relative w-[168px] aspect-[9/16] rounded-2xl overflow-hidden border border-white/[0.1] shadow-[0_24px_60px_-20px_rgba(191,255,0,0.35)] bg-black shrink-0">
+      <div className="relative w-[196px] aspect-[9/16] rounded-2xl overflow-hidden border border-white/[0.1] shadow-[0_24px_60px_-20px_rgba(191,255,0,0.35)] bg-black shrink-0">
         <video
           ref={videoRef}
           src={`${process.env.REACT_APP_BACKEND_URL}${clip.video_url}`}

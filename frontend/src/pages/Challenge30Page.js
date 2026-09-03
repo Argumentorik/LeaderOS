@@ -12,6 +12,7 @@ import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { toast } from 'sonner';
+import { MissionGuideClip } from '../components/guide/MissionGuideClip';
 import {
   Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown
 } from 'lucide-react';
@@ -165,6 +166,8 @@ export default function Challenge30Page() {
             </div>
           </div>
         </div>
+
+        <MissionGuideClip day={currentDay} de={de} />
 
         {/* ── Week Selector (Pill Tabs) ── */}
         <div className="flex items-center gap-1.5 p-1 rounded-full bg-gray-100 dark:bg-white/[0.04] w-fit mb-6 animate-fade-in" data-testid="week-tabs">

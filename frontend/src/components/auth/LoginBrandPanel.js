@@ -87,7 +87,12 @@ export const LoginBrandPanel = ({ features, de }) => {
               : "Clarity isn't a talent, it's a system. Wlad's methodology as AI, by your side around the clock."}
           </p>
 
-          <div className="space-y-2 mt-10">
+          {/* Wlad-Teaser (freigegeben) direkt unter der Headline — Conversion first */}
+          <div className="mt-8 brand-rise" style={{ animationDelay: '640ms' }}>
+            <LoginTeaserVideo de={de} onAvailable={setHasTeaser} />
+          </div>
+
+          <div className={`space-y-2 ${hasTeaser ? 'mt-8' : 'mt-10'}`}>
             {features.slice(0, 3).map((item, i) => (
               <div
                 key={item.t}
@@ -105,11 +110,12 @@ export const LoginBrandPanel = ({ features, de }) => {
             ))}
           </div>
 
-          {/* Wlad-Teaser (freigegeben) — sonst der animierte Produkt-Loop */}
-          <div className="brand-rise" style={{ animationDelay: '1100ms' }}>
-            <LoginTeaserVideo de={de} onAvailable={setHasTeaser} />
-            {!hasTeaser && <ProductPreviewLoop de={de} />}
-          </div>
+          {/* Ohne freigegebenen Teaser: der animierte Produkt-Loop */}
+          {!hasTeaser && (
+            <div className="brand-rise" style={{ animationDelay: '1100ms' }}>
+              <ProductPreviewLoop de={de} />
+            </div>
+          )}
         </div>
 
         <div className="mt-16 brand-rise" style={{ animationDelay: '1250ms' }}>

@@ -18,6 +18,7 @@ import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCar
 import { ActionInbox } from '../components/dashboard/ActionInbox';
 import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrepCard';
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
+import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import api from '../lib/api';
 import { useCredits } from '../contexts/CreditContext';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
@@ -142,6 +143,9 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Iter 145: Wlads Guide — freigegebene Onboarding-Clips */}
+        <GuideClipsRow de={de} />
 
         {/* ── Stripe Mode Banner (admin/owner only, auto-hides when live) ── */}
         <StripeModeBanner />

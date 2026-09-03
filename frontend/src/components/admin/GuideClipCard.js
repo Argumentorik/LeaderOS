@@ -8,6 +8,7 @@ import logger from '../../lib/logger';
 import { GuideShotList } from './GuideShotList';
 
 const STATUS_LABEL = {
+  full_running: 'Produktion läuft…', full_failed: 'Produktion fehlgeschlagen',
   shots_planned: 'Shots geplant', shot_keyframes_running: 'Keyframes laufen…', shot_keyframes_ready: 'Keyframes fertig',
   shots_keyframed: 'Keyframes fertig', shot_keyframes_failed: 'Keyframes fehlgeschlagen',
   render_running: 'Film wird gerendert…', render_failed: 'Rendern fehlgeschlagen',

@@ -24,6 +24,7 @@ import { createPortal } from 'react-dom';
 import { X, ArrowRight, ArrowLeft, Volume2, VolumeX, Check } from 'lucide-react';
 import { WLAD_AVATAR } from '../../lib/brand';
 import { Button } from '../ui/button';
+import api from '../../lib/api';
 
 const STORAGE_KEY = 'leaderos_tour_v1_done';
 
@@ -140,6 +141,14 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   const [muted, setMuted] = useState(true);
   const [rect, setRect] = useState(null);
   const utterRef = useRef(null);
+  // Iter 145: freigegebenes Wlad-Intro-Video (Guide Studio) ersetzt im Welcome-Step die Browser-Stimme.
+  const [introClip, setIntroClip] = useState(null);
+  useEffect(() => {
+    if (!open) return;
+    api.get('/guide/clips', { params: { kind: 'onboarding' } })
+      .then((res) => setIntroClip((res.data?.clips || []).find((c) => c.video_url) || null))
+      .catch(() => setIntroClip(null));
+  }, [open]);
 
   // Show once per user (unless `force` triggers a rerun from the profile menu).
   useEffect(() => {
@@ -211,6 +220,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
 
   useEffect(() => {
     if (!open || muted || !current?.speak) return;
+    if (current.id === 'welcome' && introClip) return; // das Video spricht selbst
     if (!('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel();
@@ -231,7 +241,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
     return () => {
       try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
     };
-  }, [open, stepIdx, muted, current]);
+  }, [open, stepIdx, muted, current, introClip]);
 
   const close = (persist = true) => {
     setOpen(false);
@@ -252,7 +262,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
 
   // Compute card position — under spotlight if it fits, otherwise centered.
   const cardStyle = (() => {
-    if (!rect) return { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
+    if (!rect) return { inset: 0, margin: 'auto', height: 'fit-content', maxHeight: 'calc(100vh - 24px)', overflowY: 'auto' };
     const vh = window.innerHeight;
     const vw = window.innerWidth;
     const cardW = 380;
@@ -307,7 +317,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
         role="dialog"
         aria-modal="true"
         aria-labelledby="tour-title"
-        className="absolute w-[92vw] max-w-[380px] bg-[#0A0A0A] text-white rounded-2xl shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] border border-[#BFFF00]/25 overflow-hidden animate-fade-in"
+        className={`absolute w-[92vw] ${current.id === 'welcome' && introClip ? 'max-w-[620px]' : 'max-w-[380px]'} bg-[#0A0A0A] text-white rounded-2xl shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] border border-[#BFFF00]/25 overflow-hidden animate-fade-in`}
         style={cardStyle}
         data-testid={`tour-card-${current.id}`}
       >
@@ -339,6 +349,17 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
 
         {/* Body */}
         <div className="px-4 pb-3">
+          {current.id === 'welcome' && introClip && (
+            <div className="mb-3 rounded-xl overflow-hidden border border-white/[0.08] bg-black" data-testid="tour-intro-video-wrap">
+              <video
+                src={`${process.env.REACT_APP_BACKEND_URL}${introClip.video_url}`}
+                poster={introClip.poster_url ? `${process.env.REACT_APP_BACKEND_URL}${introClip.poster_url}` : undefined}
+                controls autoPlay playsInline preload="auto"
+                className="w-full aspect-video"
+                data-testid="tour-intro-video"
+              />
+            </div>
+          )}
           <p className="text-[13px] text-white/75 leading-relaxed">
             {current.body}
           </p>

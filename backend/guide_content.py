@@ -104,23 +104,57 @@ SHOT_PRESETS = {
     },
 }
 
-# B-Roll: echte App-Screens (Playwright-Screenshots in backend/assets/broll)
+# B-Roll: echte App-Screens (Playwright-Screenshots in backend/assets/broll; *_m.png = Mobile für 9:16)
 BROLL_SCREENS = {
     "dashboard": "Dashboard",
     "chat": "WladBot-Chat",
     "video": "Video-Analyse",
     "challenge": "30-Tage-Challenge",
     "simulations": "Simulationen",
+    "missions": "Missionen",
+    "tasks": "Aufgaben",
+    "checkin": "Daily Check-in",
+    "tools": "Werkzeuge",
+    "playbooks": "Playbooks",
+    "videos": "Lern-Videos",
+    "progress": "Community",
+    "diagnose": "Leader-Diagnose",
+    "mypath": "Mein Weg",
+    "coaching": "Coaching-Memory",
+    "profile": "Profil & Kontext",
 }
 
-# Wie ein Onboarding-Clip in Shots zerfällt (Stufe B, 16:9)
+# Passende App-Screens je Clip (B-Roll-Block)
+CLIP_SCREENS = {
+    "start-1-willkommen": ["dashboard", "chat", "video", "challenge"],
+    "start-2-so-sprichst-du": ["chat", "simulations", "coaching", "tasks"],
+    "start-3-kontext": ["profile", "dashboard", "chat"],
+    "start-4-werkzeuge": ["tools", "simulations", "video", "playbooks"],
+    "start-5-erste-7-tage": ["missions", "challenge", "checkin", "mypath"],
+    "mission-day-1": ["missions", "diagnose", "mypath"],
+    "mission-day-2": ["missions", "chat", "tools"],
+    "mission-day-3": ["missions", "simulations", "chat"],
+    "mission-day-4": ["missions", "simulations", "playbooks"],
+    "mission-day-5": ["missions", "chat", "tasks"],
+    "mission-day-6": ["missions", "simulations", "coaching"],
+    "mission-day-7": ["mypath", "checkin", "coaching", "dashboard"],
+    "teaser-login": ["chat", "video", "missions"],
+}
+DEFAULT_SCREENS = ["dashboard", "chat", "video", "challenge"]
+
+# Wie ein Onboarding-Clip in Shots zerfällt (Stufe B)
 MULTI_SHOT_PLAN = [
     {"type": "walk", "preset": "loft_walk_in"},
     {"type": "talk", "preset": "loft_talk_medium", "max_words": 22},
-    {"type": "broll", "screens": ["dashboard", "chat", "video", "challenge"]},
+    {"type": "broll"},
     {"type": "talk", "preset": "loft_talk_closeup", "max_words": 22},
 ]
 TALK_MAX_SECONDS = 9.2
+FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
+
+
+def scene_for_aspect(prompt: str, aspect: str) -> str:
+    return prompt.replace("Horizontal 16:9 composition", "Vertical 9:16 composition") if aspect == "9:16" else prompt
 
 
 def _sentences(text: str) -> list[str]:
@@ -143,9 +177,10 @@ def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
     return " ".join(taken), sentences[len(taken):]
 
 
-def plan_shots(script: str) -> list[dict]:
+def plan_shots(script: str, screens: list[str] | None = None) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte."""
+    screens = screens or DEFAULT_SCREENS
     sentences = _sentences(script)
     talks = [i for i, s in enumerate(MULTI_SHOT_PLAN) if s["type"] == "talk"]
     texts = {}
@@ -156,12 +191,22 @@ def plan_shots(script: str) -> list[dict]:
             while sentences and count + len(sentences[-1].split()) <= limit:
                 tail.insert(0, sentences.pop())
                 count += len(tail[0].split())
+            if not tail and sentences:
+                # Letzter Satz ist zu lang für einen Talk-Shot -> am letzten Komma/Gedankenstrich teilen
+                last = sentences.pop()
+                cut = max(last.rfind(", ", 0, len(last) // 2 + 20), last.rfind(" — ", 0, len(last) // 2 + 20))
+                if cut > 0:
+                    head, rest = last[:cut + 1].rstrip(","), last[cut + 1:].strip(" —")
+                    sentences.append(head + ("" if head.endswith((".", "!", "?")) else "."))
+                    tail = [rest[0].upper() + rest[1:] if rest else rest]
+                else:
+                    tail = [last]
             texts[talks[-1]] = " ".join(tail)
     shots = []
     for i, tpl in enumerate(MULTI_SHOT_PLAN):
         shots.append({
             "id": f"s{i + 1}", "type": tpl["type"], "preset": tpl.get("preset"),
-            "screens": tpl.get("screens", []),
+            "screens": screens if tpl["type"] == "broll" else [],
             "text": " ".join(sentences) if tpl["type"] == "broll" else texts.get(i, ""),
         })
     return shots
@@ -170,12 +215,25 @@ def plan_shots(script: str) -> list[dict]:
 TEASER_CLIPS = [
     {
         "slug": "teaser-spotlight",
-        "order": 0,
+        "order": 1,
         "title": "Teaser: Ins Licht",
         "script": "Führung ist kein Talent. Führung ist ein System. Willkommen bei Leader-OS.",
         "shot_preset": "spotlight_entrance",
     },
 ]
+
+# Login-Seite: Multi-Shot 9:16, Conversion-Text (Stufe B)
+LOGIN_TEASER = {
+    "slug": "teaser-login",
+    "order": 0,
+    "title": "Warum Leader-OS",
+    "script": (
+        "Du führst ein Team. Aber wer coacht eigentlich dich? Leader-OS ist dein persönlicher Coach: "
+        "KI-Sparring für schwierige Gespräche, Video-Analyse deiner Wirkung und tägliche Missionen, "
+        "die dich wirklich besser machen. Kein Kurs, den du abarbeitest. Ein System, das mit dir arbeitet. "
+        "Starte heute — kostenlos."
+    ),
+}
 
 # ── Erststart-Serie: 5 Clips, je 30-45 Sekunden ──────────────────────────────
 ONBOARDING_CLIPS = [
@@ -347,6 +405,11 @@ def seed_clips() -> list[dict]:
         }
         for c in TEASER_CLIPS
     ]
+    clips.append({
+        "slug": LOGIN_TEASER["slug"], "kind": "teaser", "ref": None, "order": LOGIN_TEASER["order"],
+        "title": LOGIN_TEASER["title"], "script": " ".join(LOGIN_TEASER["script"].split()),
+        "multi_shot": True, "aspect": "9:16",
+    })
     clips += [
         {
             "slug": c["slug"],
@@ -355,6 +418,7 @@ def seed_clips() -> list[dict]:
             "order": c["order"],
             "title": c["title"],
             "script": " ".join(c["script"].split()),
+            "aspect": "16:9",
         }
         for c in ONBOARDING_CLIPS
     ]
@@ -366,6 +430,7 @@ def seed_clips() -> list[dict]:
             "order": 100 + c["day"],
             "title": c["title"],
             "script": " ".join(c["script"].split()),
+            "aspect": "16:9",
         }
         for c in MISSION_CLIPS
     ]

@@ -41,7 +41,8 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
         <div className="relative bg-black aspect-video">
           <video
             ref={videoRef}
-            src={clip.video_url}
+            src={`${process.env.REACT_APP_BACKEND_URL}${clip.video_url}`}
+            poster={clip.poster_url ? `${process.env.REACT_APP_BACKEND_URL}${clip.poster_url}` : undefined}
             className="w-full h-full object-contain"
             playsInline
             controls={started}

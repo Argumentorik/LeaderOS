@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
-import { Loader2, Upload, Mic, Check, AlertCircle } from 'lucide-react';
+import { Loader2, Upload, Mic, Check, AlertCircle, Clapperboard } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideClipCard } from './GuideClipCard';
@@ -58,6 +58,8 @@ export const GuideStudio = () => {
   const [data, setData] = useState(null);
   const [cloning, setCloning] = useState(false);
   const [cloneErr, setCloneErr] = useState('');
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [bulkErr, setBulkErr] = useState('');
 
   const load = useCallback(async () => {
     try {
@@ -86,6 +88,13 @@ export const GuideStudio = () => {
 
   const s = data.settings;
   const cloneRunning = s.voice_clone_status === 'running';
+  const pending = data.clips.filter((c) => c.multi_shot && !(c.status || '').endsWith('_running') && !(c.video_url && c.pipeline === 'multishot'));
+  const bulkProduce = async () => {
+    setBulkBusy(true); setBulkErr('');
+    try { await api.post('/guide/admin/clips/bulk-produce', { slugs: pending.map((c) => c.slug) }); await load(); }
+    catch (e) { setBulkErr(e?.response?.data?.detail || 'Serienproduktion fehlgeschlagen'); }
+    finally { setBulkBusy(false); }
+  };
   return (
     <div className="space-y-4" data-testid="guide-studio">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -115,6 +124,14 @@ export const GuideStudio = () => {
       </Card>
 
       <div className="space-y-3">
+        <div className="flex items-center gap-2" data-testid="guide-bulk-row">
+          <Button size="sm" variant="outline" disabled={bulkBusy || !pending.length} onClick={bulkProduce} className="h-7 text-[11px]" data-testid="guide-bulk-produce-btn">
+            {bulkBusy ? <Loader2 size={12} className="animate-spin mr-1" /> : <Clapperboard size={12} className="mr-1" />}
+            Alle offenen Clips produzieren ({pending.length} · ≈ {(pending.length * 1.7).toFixed(2)} $)
+          </Button>
+          <span className="text-[10px] text-muted-foreground">Max. 3 parallel · Planen → Keyframes → Film je Clip</span>
+          {bulkErr && <span className="text-[10px] text-rose-500">{bulkErr}</span>}
+        </div>
         {data.clips.map((clip) => <GuideClipCard key={clip.slug} clip={clip} costs={data.costs} screens={data.broll_screens} onChange={load} />)}
       </div>
     </div>
