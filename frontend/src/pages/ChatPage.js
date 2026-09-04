@@ -8,6 +8,7 @@ import { PaywallModal } from '../components/shared/PaywallModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useCredits } from '../contexts/CreditContext';
 import api from '../lib/api';
+import { streamChat } from '../lib/chatStream';
 import { ChatMessage } from '../components/chat/ChatMessage';
 import { ChatRolesHeader } from '../components/chat/ChatRolesHeader';
 import { ChatEmpty } from '../components/chat/ChatEmpty';
@@ -54,6 +55,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showContext, setShowContext] = useState(false);
@@ -115,7 +117,10 @@ export default function ChatPage() {
     api.get('/folders').then((res) => setFolders(res.data || [])).catch(() => {});
   }, []);
   useEffect(() => { if (currentSession) loadHistory(currentSession); }, [currentSession, loadHistory]);
-  useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  useEffect(() => {
+    const live = messages[messages.length - 1]?.streaming;
+    scrollRef.current?.scrollIntoView({ behavior: live ? 'auto' : 'smooth' });
+  }, [messages]);
 
   // Iter 92.23.2 (Mert: "wenn man den Chat dann erweitern will sollte
   // direkt das Wissen aufgegriffen werden und im Chat die Unterhaltung
@@ -190,37 +195,61 @@ export default function ChatPage() {
     }]);
     setAttachedPdf(null);
     setLoading(true);
-    try {
-      const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode: overrideMode || (coachMode ? 'coach' : 'chat'), display_text: text };
-      if (attachmentMeta) body.attachment = attachmentMeta;
-      if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
-      const res = await api.post('/chat', body);
-      if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
-      else { loadSessions(); }
+    setStreaming(false);
+    const mode = overrideMode || (coachMode ? 'coach' : 'chat');
+    const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode, display_text: text };
+    if (attachmentMeta) body.attachment = attachmentMeta;
+    if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
+    const applyResult = (data) => {
+      if (!currentSession) { setCurrentSession(data.session_id); }
+      loadSessions();
       setMessages(prev => {
-        const base = prev.length
-          ? [...prev.slice(0, -1), { ...prev[prev.length - 1], modality: res.data.modality || 'text' }]
+        const withoutDraft = prev.filter((m) => !m.streaming);
+        const base = withoutDraft.length
+          ? [...withoutDraft.slice(0, -1), { ...withoutDraft[withoutDraft.length - 1], modality: data.modality || 'text' }]
           : [];
-        return [...base, { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response, modality: res.data.modality || 'text' }];
+        return [...base, { role: 'assistant', content: JSON.stringify(data.response), parsed: data.response, modality: data.modality || 'text' }];
       });
       reloadCredits();
+    };
+    try {
+      if (mode === 'chat') {
+        let draft = '';
+        await streamChat(body, {
+          onDelta: (chunk) => {
+            draft += chunk;
+            setStreaming(true);
+            setMessages(prev => {
+              const last = prev[prev.length - 1];
+              const msg = { role: 'assistant', streaming: true, parsed: { text: draft, follow_up_questions: [] }, content: draft };
+              return last?.streaming ? [...prev.slice(0, -1), msg] : [...prev, msg];
+            });
+          },
+          onDone: applyResult,
+        });
+      } else {
+        const res = await api.post('/chat', body);
+        applyResult(res.data);
+      }
     } catch (err) {
-      if (err.response?.status === 402) {
+      setMessages(prev => prev.filter((m) => !m.streaming));
+      const status = err.response?.status ?? err.status;
+      if (status === 402) {
         setShowPaywall(true);
         setMessages(prev => prev.slice(0, -1));
       } else {
         logger.error('Chat error:', err);
         // Iter 141: Backend liefert bei KI-Ausfällen (Budget, Rate-Limit, Auth)
         // eine fertige, ruhige Klartext-Meldung — die zeigen wir dem Nutzer.
-        const status = err.response?.status;
-        const backendMsg = typeof err.response?.data?.detail === 'string' ? err.response.data.detail : '';
+        const detail = err.response?.data?.detail ?? err.data?.detail;
+        const backendMsg = typeof detail === 'string' ? detail : '';
         const friendly = (status === 503 || status === 504 || status === 429) && backendMsg
           ? backendMsg
           : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.');
         setMessages(prev => [...prev, { role: 'assistant', content: friendly, isNotice: true }]);
       }
     }
-    finally { setLoading(false); }
+    finally { setLoading(false); setStreaming(false); }
   };
   // Keep ref synced so the prefill effect (above) can call handleSend without
   // referencing it in dependency arrays (would cause infinite loops).
@@ -299,7 +328,7 @@ export default function ChatPage() {
               )}
             </div>
           ))}
-          {loading && <WladThinking de={de} />}
+          {loading && !streaming && <WladThinking de={de} />}
           {!loading && messages.filter((m) => m.role === 'assistant').length >= 2 && (
             <div className="flex justify-center mb-4 animate-fade-in">
               <button

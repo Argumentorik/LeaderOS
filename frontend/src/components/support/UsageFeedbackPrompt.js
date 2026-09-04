@@ -60,7 +60,7 @@ export function UsageFeedbackPrompt() {
 
   return (
     <div
-      className="hidden md:block fixed bottom-5 left-4 right-4 mx-auto z-[45] max-w-sm animate-fade-in"
+      className="hidden md:block fixed bottom-5 right-24 z-[45] w-[24rem] max-w-[calc(100vw-8rem)] animate-fade-in"
       data-testid="usage-feedback-prompt"
     >
       <div className="rounded-2xl bg-[#0A0A0A] border border-white/[0.1] shadow-2xl shadow-black/40 overflow-hidden">

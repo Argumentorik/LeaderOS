@@ -199,13 +199,16 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
   // + clickable follow-up chips that deepen the conversation step by step.
   if (parsed.text) {
     return (
-      <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid="chat-ai-message">
+      <div className="flex mb-4 animate-fade-in items-start gap-2.5" data-testid={msg.streaming ? 'chat-ai-message-streaming' : 'chat-ai-message'}>
         <WladBotAvatar size={28} className="mt-1" />
         <div className="max-w-[80%] space-y-2 min-w-0">
           <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm select-text">
             <SmartText text={parsed.text} variant="inline" accent="#BFFF00" />
+            {msg.streaming && (
+              <span className="inline-block w-[7px] h-[15px] ml-0.5 align-text-bottom bg-[#BFFF00] rounded-[2px] animate-pulse" data-testid="chat-stream-caret" />
+            )}
           </div>
-          <CopyMessageButton text={parsed.text} de={de} />
+          {!msg.streaming && <CopyMessageButton text={parsed.text} de={de} />}
           {parsed.follow_up_questions?.length > 0 && onSuggest && (
             <FollowUpChips questions={parsed.follow_up_questions} onSuggest={onSuggest} de={de} />
           )}

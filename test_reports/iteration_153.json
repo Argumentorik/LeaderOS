@@ -1,0 +1,29 @@
+{
+  "summary": "Iter 153 chat-streaming (SSE) end-to-end verified. Backend: 7/7 pytest passed (existing test_iter153_chat_stream.py 3/3 + 4 new edge cases: 422 validation, 401 on history, no Mongo _id, cross-user session isolation). Frontend (accelerator@wladbot.test): short message streamed into [chat-ai-message-streaming] with caret after ~1.5s, 'Wlad denkt nach' vanished on first token, finalized as [chat-ai-message] with 'Kopieren' + 2 follow-up chips, no leftover draft/caret, 0 console errors, session appears in 'Deine Chats'. Long deep-model message (267 chars): first tokens 1.8s, monotonic growth 134->2671 chars, done at 50s, 2 chips. Follow-up chip click auto-sends a new user message and streams the reply (4.3s). Reload -> latest session auto-loads persisted streamed answer (2904 chars) + chips + copy button. Coach mode: uses classic POST /chat (network log shows /chat only), thinking indicator shown, NO streaming bubble, structured card (Strategie / numbered steps / reflection / task suggestion) renders. 'Aufgaben aus dem Gespraech erstellen' works and returns a task suggestion card. Usage-feedback popup measured at x=1440,y=927 — no geometric overlap with chat input (x694-1326) or send button. Free user (free@wladbot.test, balance 26) streamed one message successfully, no broken draft bubble. Total ~7 LLM calls used.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter153_chat_stream.py",
+    "/app/backend/tests/test_iter153_chat_stream_edge.py",
+    "/app/test_reports/pytest/iter153_stream.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Non-blocking: [data-testid=chat-input] is NOT disabled during loading/streaming (only the send button is). Double-send is prevented by the `if (!text || loading) return;` guard in handleSend, so this is safe — but the spec claim 'input remains disabled while loading' is not literally implemented; consider disabling or keep as-is intentionally (typing ahead is arguably better UX).",
+    "Non-blocking: streamChat() is called without an AbortSignal in ChatPage.handleSend — navigating away or unmounting mid-stream leaves the fetch/reader running and setMessages may fire on an unmounted tree. Passing an AbortController tied to a cleanup effect would be cleaner.",
+    "Observation (transient, not reproducible in the 2nd run): in one run the visible length of the streaming bubble momentarily shrank (337 -> 17 chars) before growing to the full 782-char answer. Most likely SmartText re-parsing an incomplete markdown list mid-stream; second run showed strictly monotonic growth (134/476/761/1164/1479/1854/2219/2671). Worth a quick look at SmartText's handling of partially-received markdown, low priority.",
+    "402 paywall path for /chat/stream is structurally correct (credit check happens in _prepare_chat BEFORE StreamingResponse, so the client gets a real HTTP 402 that ChatPage maps to the paywall modal) — could not be exercised live because free@wladbot.test still had 26 credits and burning them was out of scope."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter153_chat_stream_edge.py"],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "100% of tested flows (streaming short + deep, chip follow-up, persistence after reload, coach mode classic path, create-tasks, popup position, free-tier stream)"},
+  "seed_data_creation": "None. Used existing seeded accounts accelerator@wladbot.test and free@wladbot.test; new chat sessions/messages created as normal test data.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "accelerator@wladbot.test / test123, free@wladbot.test / test123 (from /app/memory/test_credentials.md) — both valid",
+  "context_for_next_testing_agent": "Streaming chat is stable. Untested/blocked: (1) real 402 paywall-on-stream (needs a user with 0 credits — free@wladbot.test had 26 left, now ~25), (2) agent-mode classic path, (3) mobile viewport for the feedback popup (component is hidden below md via `hidden md:block`). Pytest for this feature: tests/test_iter153_chat_stream.py + tests/test_iter153_chat_stream_edge.py (7 tests, ~1 LLM call total). Each chat UI message = real LLM cost; deep model (>180 chars) takes 40-50s.",
+  "rca_of_the_issue": "No defects to root-cause; feature works as specified."
+}

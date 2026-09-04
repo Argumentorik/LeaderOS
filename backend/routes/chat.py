@@ -357,8 +357,8 @@ async def accept_suggested_tasks(data: TasksAcceptIn, request: Request):
     return {"created": len(clean)}
 
 
-@router.post("/chat")
-async def send_chat_message(data: ChatMessageIn, request: Request):
+async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
+    """Gemeinsamer Vorlauf für /chat und /chat/stream: Credits, Session, Kontext, System-Prompt, Modellwahl."""
     from routes.credits import check_and_deduct_credit
     user = await get_current_user(request)
 
@@ -376,11 +376,8 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
 
     # Iter 92.53 (Speed): fetch history BEFORE inserting the new user message
     # and run history | memory | folder-context | RAG in PARALLEL (saves 1-3s).
-    # Side-effect fix: history no longer contains the just-sent message, so the
-    # prompt does not duplicate it anymore (was hurting output quality).
-    import asyncio as _asyncio
     from services_rag import retrieve_context
-    history, user_memory, folder_res, rag_ctx = await _asyncio.gather(
+    history, user_memory, folder_res, rag_ctx = await asyncio.gather(
         db.chat_messages.find({"session_id": session_id, "user_id": user["user_id"]}, {"_id": 0}).sort("created_at", 1).to_list(20),
         get_user_memory(user["user_id"]),
         _resolve_folder_context(data.folder_id, user["user_id"]),
@@ -422,91 +419,162 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
                 "Mehrere Titel mit Komma trennen. Nie erfundene Titel, nie Seitenzahlen.\n"
             )
 
-    try:
-        # Iter 92.48 (Mert · GODMODE): Hybrid model routing.
-        # - Short questions (<180 chars, no code blocks, no PDF attachment) →
-        #   gpt-4o-mini: ~3-5x faster (2-4s vs 12-18s), plenty smart when
-        #   grounded in Wlad's RAG context.
-        # - Long/deep coaching messages → gpt-5.2: full reasoning power for
-        #   nuanced advice, playbook building, strategic breakdowns.
-        # RAG is always on for both — so Wlad's frameworks stay grounded.
-        msg_len = len(data.message or "")
-        has_attachment = "[Dokument:" in (data.message or "") or "[Bild angehängt:" in (data.message or "")
-        use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"
-        model_name = "gpt-5.2" if use_deep_model else "gpt-4o-mini"
+    # Iter 92.48 (Mert · GODMODE): Hybrid model routing.
+    # - Short questions (<180 chars, no code blocks, no PDF attachment) →
+    #   gpt-4o-mini: ~3-5x faster (2-4s vs 12-18s), plenty smart when
+    #   grounded in Wlad's RAG context.
+    # - Long/deep coaching messages → gpt-5.2: full reasoning power for
+    #   nuanced advice, playbook building, strategic breakdowns.
+    msg_len = len(data.message or "")
+    has_attachment = "[Dokument:" in (data.message or "") or "[Bild angehängt:" in (data.message or "")
+    use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"
+    model_name = "gpt-5.2" if use_deep_model else "gpt-4o-mini"
+    context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
 
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"wladbot_{session_id}", system_message=system_msg)
-        chat.with_model("openai", model_name)
+    return {
+        "user": user, "credit_result": credit_result, "session_id": session_id, "modality": msg_modality,
+        "structured": structured, "system_msg": system_msg, "model_name": model_name,
+        "prompt": f"{context}\nUser: {data.message}", "rag_ctx": rag_ctx, "folder_context": folder_context,
+        "agent": data.agent,
+    }
 
-        context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
-        ai_response = await asyncio.wait_for(
-            chat.send_message(UserMessage(text=f"{context}\nUser: {data.message}")),
-            timeout=120,
-        )
 
-        if structured:
-            try:
-                from services_ai_parse import parse_ai_json
-                parsed = parse_ai_json(ai_response) or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
-            except Exception:
-                parsed = {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None, "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": data.agent or "General"}
-        else:
-            text_reply = (ai_response or "").strip()
-            # Extract follow-up questions marker → clickable chips in the UI.
+def _parse_chat_reply(ai_response: str, structured: bool, agent: Optional[str]) -> dict:
+    if structured:
+        try:
+            from services_ai_parse import parse_ai_json
+            parsed = parse_ai_json(ai_response)
+        except Exception:
+            parsed = None
+        return parsed or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None,
+                          "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": agent or "General"}
+    text_reply = (ai_response or "").strip()
+    # Extract follow-up questions marker → clickable chips in the UI.
+    followups = []
+    if FOLLOWUP_MARKER in text_reply:
+        text_reply, _, tail = text_reply.partition(FOLLOWUP_MARKER)
+        text_reply = text_reply.strip()
+        try:
+            followups = [q for q in json.loads(tail.strip()) if isinstance(q, str) and q.strip()][:2]
+        except Exception:
             followups = []
-            if "###WEITER###" in text_reply:
-                text_reply, _, tail = text_reply.partition("###WEITER###")
-                text_reply = text_reply.strip()
-                try:
-                    followups = [q for q in json.loads(tail.strip()) if isinstance(q, str) and q.strip()][:2]
-                except Exception:
-                    followups = []
-            # Defensive: if the model slipped into JSON anyway, unwrap it.
-            if text_reply.startswith("{"):
-                try:
-                    from services_ai_parse import parse_ai_json
-                    maybe = parse_ai_json(text_reply)
-                    if maybe and maybe.get("insight"):
-                        text_reply = "\n\n".join(p for p in [maybe.get("insight", ""), maybe.get("strategy", "")] if p)
-                        followups = followups or (maybe.get("follow_up_questions") or [])[:2]
-                except Exception:
-                    pass
-            parsed = {"text": text_reply, "follow_up_questions": followups}
+    # Defensive: if the model slipped into JSON anyway, unwrap it.
+    if text_reply.startswith("{"):
+        try:
+            from services_ai_parse import parse_ai_json
+            maybe = parse_ai_json(text_reply)
+            if maybe and maybe.get("insight"):
+                text_reply = "\n\n".join(p for p in [maybe.get("insight", ""), maybe.get("strategy", "")] if p)
+                followups = followups or (maybe.get("follow_up_questions") or [])[:2]
+        except Exception:
+            pass
+    return {"text": text_reply, "follow_up_questions": followups}
 
-        msg_id = f"msg_{uuid.uuid4().hex[:12]}"
-        await db.chat_messages.insert_one({
-            "message_id": msg_id, "session_id": session_id, "user_id": user["user_id"],
-            "role": "assistant", "content": json.dumps(parsed), "parsed": parsed,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
 
-        # Iter 92.58 (Mert): tasks are SUGGESTIONS now — persisted only after
-        # the user clicks "übernehmen" (POST /chat/tasks/accept). No auto-save.
+FOLLOWUP_MARKER = "###WEITER###"
 
-        await db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
-        await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "agent": data.agent})
 
-        # Iter 92.42: re-use the validated modality computed above so response
-        # always agrees with what we persisted on the user message.
-        return {
-            "session_id": session_id,
-            "message_id": msg_id,
-            "response": parsed,
-            "raw": ai_response,
-            "rag": {"active": rag_ctx["rag_active"], "chunks": rag_ctx["chunks_count"]},
-            "folder_context_used": bool(folder_context),
-            "modality": msg_modality,
-        }
+async def _finalize_chat(prep: dict, ai_response: str) -> dict:
+    """Antwort parsen, persistieren, Session/Action aktualisieren — identisch für Stream und Nicht-Stream."""
+    user, session_id = prep["user"], prep["session_id"]
+    parsed = _parse_chat_reply(ai_response, prep["structured"], prep["agent"])
+    msg_id = f"msg_{uuid.uuid4().hex[:12]}"
+    await db.chat_messages.insert_one({
+        "message_id": msg_id, "session_id": session_id, "user_id": user["user_id"],
+        "role": "assistant", "content": json.dumps(parsed), "parsed": parsed,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    # Iter 92.58 (Mert): tasks are SUGGESTIONS now — persisted only after
+    # the user clicks "übernehmen" (POST /chat/tasks/accept). No auto-save.
+    await db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
+    await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "agent": prep["agent"]})
+    return {
+        "session_id": session_id,
+        "message_id": msg_id,
+        "response": parsed,
+        "raw": ai_response,
+        "rag": {"active": prep["rag_ctx"]["rag_active"], "chunks": prep["rag_ctx"]["chunks_count"]},
+        "folder_context_used": bool(prep["folder_context"]),
+        "modality": prep["modality"],
+    }
+
+
+async def _refund_after_failure(prep: dict) -> None:
+    # Refund the credit — the user paid but got no answer.
+    if not prep["credit_result"].get("is_premium"):
+        try:
+            from routes.credits import refund_credit
+            await refund_credit(prep["user"]["user_id"])
+        except Exception as refund_err:
+            logger.warning(f"Credit refund failed: {refund_err}")
+
+
+@router.post("/chat")
+async def send_chat_message(data: ChatMessageIn, request: Request):
+    prep = await _prepare_chat(data, request)
+    try:
+        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"wladbot_{prep['session_id']}", system_message=prep["system_msg"])
+        chat.with_model("openai", prep["model_name"])
+        ai_response = await asyncio.wait_for(chat.send_message(UserMessage(text=prep["prompt"])), timeout=120)
+        return await _finalize_chat(prep, ai_response)
     except Exception as e:
         logger.error(f"Chat error: {e}")
-        # Refund the credit — the user paid but got no answer.
-        if not credit_result.get("is_premium"):
-            try:
-                from routes.credits import refund_credit
-                await refund_credit(user["user_id"])
-            except Exception as refund_err:
-                logger.warning(f"Credit refund failed: {refund_err}")
+        await _refund_after_failure(prep)
         raise await ai_http_error(e, "chat")
+
+
+def _sse(event: dict) -> str:
+    return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+
+def _safe_visible_len(text: str) -> int:
+    """Zeichen, die sicher gestreamt werden können: alles vor dem Follow-up-Marker,
+    ohne ein angefangenes Marker-Präfix am Ende preiszugeben."""
+    cut = text.find(FOLLOWUP_MARKER)
+    if cut >= 0:
+        return cut
+    for k in range(min(len(FOLLOWUP_MARKER) - 1, len(text)), 0, -1):
+        if text.endswith(FOLLOWUP_MARKER[:k]):
+            return len(text) - k
+    return len(text)
+
+
+@router.post("/chat/stream")
+async def send_chat_message_stream(data: ChatMessageIn, request: Request):
+    """Wie /chat, aber Wlads Antwort kommt als Server-Sent-Events Wort für Wort.
+    Events: start → delta* → done | error. Coach-/Agent-Modus (JSON) wird am Ende als ein Block geliefert."""
+    from fastapi.responses import StreamingResponse
+    from services_llm_async import stream_completion
+
+    prep = await _prepare_chat(data, request)
+
+    async def gen():
+        yield _sse({"type": "start", "session_id": prep["session_id"], "model": prep["model_name"], "structured": prep["structured"]})
+        full, sent = "", 0
+        try:
+            messages = [{"role": "system", "content": prep["system_msg"]}, {"role": "user", "content": prep["prompt"]}]
+            async for delta in stream_completion("openai", prep["model_name"], messages, timeout=120):
+                full += delta
+                if prep["structured"]:
+                    continue
+                visible = _safe_visible_len(full)
+                if visible > sent:
+                    yield _sse({"type": "delta", "text": full[sent:visible]})
+                    sent = visible
+            result = await _finalize_chat(prep, full)
+            yield _sse({"type": "done", **result})
+        except Exception as e:
+            logger.error(f"Chat stream error: {e}")
+            await _refund_after_failure(prep)
+            try:
+                http_err = await ai_http_error(e, "chat")
+                detail, status = http_err.detail, http_err.status_code
+            except Exception:
+                detail, status = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.", 500
+            yield _sse({"type": "error", "status": status, "detail": detail})
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no", "Connection": "keep-alive"})
 
 
 @router.get("/chat/history/{session_id}")
