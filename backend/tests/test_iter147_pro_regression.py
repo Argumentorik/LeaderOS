@@ -99,7 +99,7 @@ class TestPublicTeaser:
     def test_poster_bytes(self, anon, teaser):
         r = anon.get(BASE_URL + teaser["clip"]["poster_url"], timeout=120)
         assert r.status_code == 200
-        assert r.headers.get("content-type") == "image/png", r.headers.get("content-type")
+        assert r.headers.get("content-type") in ("image/png", "image/jpeg"), r.headers.get("content-type")
         assert len(r.content) > 1024
 
 
@@ -144,7 +144,7 @@ class TestUserClips:
         problems = []
         for c in user_clips:
             r = free_client.get(BASE_URL + c["poster_url"], timeout=120)
-            if r.status_code != 200 or r.headers.get("content-type") != "image/png":
+            if r.status_code != 200 or r.headers.get("content-type") not in ("image/png", "image/jpeg"):
                 problems.append(f"{c['slug']}: {r.status_code}/{r.headers.get('content-type')}")
         assert not problems, problems
 

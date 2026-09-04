@@ -81,6 +81,9 @@ if _sentry_dsn:
 
 from config import client, db, logger
 from middleware import RateLimitMiddleware, SecurityHeadersMiddleware
+import services_llm_async
+
+services_llm_async.install()
 
 from routes.auth import router as auth_router
 from routes.chat import router as chat_router

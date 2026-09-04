@@ -15,6 +15,14 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 152 · 04.09.26] GODMODE SPEED: LLM-AUFRUFE BLOCKIEREN DEN EVENT-LOOP NICHT MEHR (pytest 24/24 grün, Deployment-Check PASS/WARN)**
+  - **Root Cause**: `emergentintegrations.LlmChat._execute_completion` ruft das synchrone `litellm.completion` in einer async-Methode → ein einzelner Chat (gpt-5.2, 25–40 s) blockierte den GESAMTEN Backend-Prozess (gemessen: `/api/auth/me` 36,5 s während eines Chats). Fix: `services_llm_async.install()` in `server.py` ersetzt die Methode 1:1 durch `litellm.acompletion` (gleiche Parameter). Nachher: `/api/auth/me` 0,11–0,2 s während eines 31-s-Chats. Betrifft ALLE 27 `send_message`-Aufrufer (Chat, Coach, Guide-Skripte, Analysen …).
+  - Verifiziert: Chat-Antworten detailliert & kontextbezogen (RAG 8 Chunks, Wlad-Frameworks, Follow-up-Chips), Coach-Modus strukturiert (insight/strategy/action_steps), `about_me` fließt in Antworten ein. Kurzfragen 2,6 s (gpt-4o-mini), Tiefenfragen 25–40 s (gpt-5.2, „Wlad denkt nach“-Indikator).
+  - Backend-Endpunkte des Dashboards alle ~110–250 ms. Prod-Build: main 339 KB gz + 55 Lazy-Chunks (Dev-Server in der Preview zeigt 5 MB unminified — nicht repräsentativ).
+  - Deployment-Agent: PASS mit WARN (RAG-Auto-Ingest kann `rag_chunks` bei Dimensionswechsel neu aufbauen — beabsichtigt). Keine Hardcodes, CORS-Prod-Schutz vorhanden.
+  - Tests: `backend/tests/test_iter152_nonblocking_llm.py`; iter147-Test auf JPEG-Poster angepasst.
+  - Nächster Speed-Hebel: Streaming (SSE) für Tiefenantworten, damit Text ab Sekunde 1 erscheint.
+
 - [x] **[Iter 151 · 04.09.26] PROXY-IP-HÄRTUNG + SICHERHEITS-MAIL (pytest 5/5 + e2e-Spoof-Test grün)**
   - `services_login_security.get_client_ip`: einzige Quelle für Client-IPs (Login-Sperre, Rate-Limit-Middleware, Login-Historie, Enterprise-Lead-Limit, OAuth). Nimmt den `TRUSTED_PROXY_HOPS`-ten Eintrag von rechts aus `X-Forwarded-For` (Default 1); zu kurze Kette → Verbindungs-IP, niemals ein Client-Wert. `cf-connecting-ip` nur mit `TRUST_CF_CONNECTING_IP=true`. Preview/Emergent-Deploy: Kette ist Cloudflare → Google LB → Ingress ⇒ `TRUSTED_PROXY_HOPS=3` in `backend/.env` gesetzt (verifiziert: gespoofte XFF `6.6.6.6, 8.8.8.8` → aufgezeichnet wird die echte Egress-IP). Doku in `.env.example`.
   - „Das war ich nicht“ schickt jetzt eine Bestätigungs-Mail (`send_not_me_alert`, Fire-and-forget via Resend): gemeldete Logins (Browser/OS, Ort, IP, Zeit), Liste der beendeten Sitzungen, Button „Passwort jetzt ändern“ → `/profile?tab=account&focus=password`. HTML-escaped. Response enthält `email_sent_to`; Frontend-Toast nennt die Adresse. Für `*.wladbot.test`-Accounts wird die Mail von der bestehenden Sperrliste geblockt (erwartet).
