@@ -12,13 +12,34 @@ from config import db, JWT_SECRET, logger
 
 # ========== AUTH ==========
 
-def create_jwt_token(user_id: str) -> str:
+JWT_LIFETIME_DAYS = 7
+
+
+def create_jwt_token(user_id: str, token_version: int = 1) -> str:
+    """`tv` = token_version des Nutzers; Logout/Passwortwechsel erhöhen sie und machen alte Tokens ungültig."""
     payload = {
         "user_id": user_id,
-        "exp": datetime.now(timezone.utc) + timedelta(days=30),
+        "tv": int(token_version or 1),
+        "exp": datetime.now(timezone.utc) + timedelta(days=JWT_LIFETIME_DAYS),
         "iat": datetime.now(timezone.utc),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+
+def validate_password_strength(password: str) -> None:
+    pw = password or ""
+    if len(pw) < 8:
+        raise HTTPException(status_code=400, detail="Passwort muss mindestens 8 Zeichen lang sein.")
+    if pw.isdigit() or pw.isalpha():
+        raise HTTPException(status_code=400, detail="Passwort muss Buchstaben und Zahlen enthalten.")
+
+
+async def bump_token_version(user_id: str) -> None:
+    """Widerruft alle ausgegebenen JWTs des Nutzers (Cookie-Sessions bleiben davon unberührt)."""
+    await db.users.update_one(
+        {"user_id": user_id},
+        [{"$set": {"token_version": {"$add": [{"$ifNull": ["$token_version", 1]}, 1]}}}],
+    )
 
 
 def hash_password(password: str) -> str:
@@ -96,7 +117,11 @@ async def _authenticate_via_jwt(token: str) -> dict | None:
         # leeway=10 absorbs minor clock drift between client+server (max 10s).
         # Without this, a 1-second server-time skew kills a perfectly valid JWT.
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], leeway=10)
-        return await db.users.find_one({"user_id": payload["user_id"]}, {"_id": 0})
+        user = await db.users.find_one({"user_id": payload["user_id"]}, {"_id": 0})
+        # Tokens ohne `tv` (vor SEC-001) gelten als Version 1 -> bleiben gültig, bis der Nutzer widerruft.
+        if user and int(payload.get("tv", 1)) < int(user.get("token_version", 1)):
+            return None
+        return user
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
 

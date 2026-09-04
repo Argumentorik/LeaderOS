@@ -177,7 +177,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
 async def _issue_session(user: dict, request: Request, response: Response, method: str) -> dict:
     """Create JWT + session cookie and return the standard {token, user} payload."""
     from routes.auth import _create_session, _safe_user_output, _get_client_ip
-    token = create_jwt_token(user["user_id"])
+    token = create_jwt_token(user["user_id"], user.get("token_version", 1))
     await _create_session(user["user_id"], _get_client_ip(request), response, method=method)
     return {"token": token, "user": _safe_user_output(user)}
 

@@ -15,6 +15,16 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 150 · 04.09.26] SECURITY-AUDIT-FIXES + LOGIN-SCHUTZ (pytest 24/24 grün, Testing-Agent Backend 17/17 + Frontend ✓, `iteration_150.json`)**
+  - Security-Audit (read-only) ergab: kein Critical/High; 1× MEDIUM (SEC-001 unwiderrufbare 30-Tage-JWTs) + P3-Hardening.
+  - **SEC-001 Token-Widerruf**: JWT trägt `tv` (= `users.token_version`, Default 1). `_authenticate_via_jwt` lehnt `tv < token_version` ab (401). Logout, Passwortwechsel, „Alle anderen Geräte abmelden“ und „Das war ich nicht“ rufen `bump_token_version` (Pipeline-Update mit `$ifNull`, damit fehlendes Feld 1→2 wird). Legacy-Tokens ohne `tv` gelten als v1 → bestehende Sessions bleiben gültig, bis der Nutzer widerruft. Cookie-Sessions anderer Browser bleiben unberührt (Frontend nutzt nur httpOnly-Cookies, keine Bearer-Tokens). JWT-Laufzeit 30→7 Tage.
+  - **Credits atomar**: `check_and_deduct_credit` → `find_one_and_update({balance:{$gte:cost}})`; 25 parallele Abzüge bei Guthaben 5 → genau 5 erlaubt, Saldo 0.
+  - **Passwort-Regel** einheitlich (8 Zeichen + Buchstaben & Zahlen): `validate_password_strength` in `services.py`, Pydantic `UserRegister`, `/password/change`, Frontend-Form (minLength 8 + Toast).
+  - **Login-Schutz UI** (Profil › Sicherheit): `GET /auth/security/overview` liefert `new_devices` (Logins der letzten 14 Tage von zuvor unbekannten Fingerprints, ohne aktuelles Gerät, ohne quittierte). Banner `NewDeviceAlert.js` mit Browser/OS, Ort, Zeit, IP. „Das war ich“ → `POST /auth/security/acknowledge` (setzt `security_ack_at`). „Das war ich nicht“ → `POST /auth/security/not-me` (andere Sessions löschen, Tokens widerrufen, `security_incident_at`) → Navigation `/profile?tab=account&focus=password` (Tabs jetzt URL-gesteuert, Passwortfeld fokussiert).
+  - Feedback-Popup (`UsageFeedbackPrompt`) auf `/profile` und `/video-guide` stummgeschaltet (überlappte Inhalte, 2× vom Testing-Agent gemeldet).
+  - Noch offen aus dem Audit (P3, nicht beauftragt): Client-IP nur vom vertrauenswürdigen Proxy-Hop, CORS-Whitelist in Preview, Microsoft-OAuth `email_verified`-Claim prüfen.
+  - Tests: `backend/tests/test_iter150_security_fixes.py` (7), `test_iter150_verify.py` (17, Testing-Agent). Hinweis: `/api/auth/*` ist auf 20 Req/Min/IP limitiert → Tests mit Retry-After-Backoff (~70 s Laufzeit).
+
 - [x] **[Iter 148/149 · 04.09.26] CODE-REVIEW-FIXES GUIDE-MEDIEN + „GODMODE"-REGRESSION (pytest 39/39 grün, Testing-Agent Backend 100 % + Frontend 100 %, `iteration_149.json`)**
   - **Streaming statt RAM**: `_serve_object` in `routes/guide.py` — Objekt wird einmal gestreamt auf Platte geholt (`download_object` in `routes/uploads.py`, Disk-Cache `/tmp/guide_media`, sha1-Dateiname, Per-Pfad-Lock, atomarer `.part`→Rename, Eviction 1,5 GB nach atime) und in 1-MB-Chunks per `StreamingResponse` ausgeliefert. Range-Semantik: 206/Content-Range, Suffix-Range, offene Range, 416 mit `bytes */size`, Multi-/Garbage-Range → 200. `HEAD` unterstützt. Backend-RSS bleibt bei parallelen Vollabrufen flach (12 parallele Cold-Requests → 1 Download, byte-identisch).
   - **ETag + 304** (`If-None-Match`) auf allen Medien-Antworten (Browser/CDN revalidieren statt neu laden).

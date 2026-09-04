@@ -4,11 +4,14 @@ from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
 import uuid
 import httpx
+import jwt
 from datetime import datetime, timezone, timedelta
 
 from config import db, OAUTH_SESSION_URL, logger
 from models import UserRegister, UserLogin, normalize_phone, looks_like_phone, phone_candidates
-from services import create_jwt_token, hash_password, verify_password, get_current_user
+from services import (
+    JWT_SECRET, bump_token_version, create_jwt_token, hash_password, validate_password_strength, verify_password, get_current_user,
+)
 from services_actions import record_user_action
 from services_login_security import (
     parse_user_agent,
@@ -214,11 +217,7 @@ async def register(data: UserRegister, request: Request, response: Response):
     email = data.email.strip().lower()
     # SEC (audit): enforce a minimum password strength so no more weak/guessable
     # accounts (e.g. "test123") can be created. Existing accounts are unaffected.
-    pw = data.password or ""
-    if len(pw) < 8:
-        raise HTTPException(status_code=400, detail="Passwort muss mindestens 8 Zeichen lang sein.")
-    if pw.isdigit() or pw.isalpha():
-        raise HTTPException(status_code=400, detail="Passwort muss Buchstaben und Zahlen enthalten.")
+    validate_password_strength(data.password)
     ctx = await _capture_login_context(request)
     ip_address = ctx["ip"]
 
@@ -412,7 +411,7 @@ async def login(data: UserLogin, request: Request, response: Response):
         method=method,
     )
 
-    token = create_jwt_token(user["user_id"])
+    token = create_jwt_token(user["user_id"], user.get("token_version", 1))
     await _create_session(user["user_id"], ip_address, response, method=method)
     _maybe_autosync_wladhub(user)
     _maybe_reconcile_payments(user)
@@ -499,10 +498,10 @@ async def google_session(request: Request, response: Response):
         _asyncio.create_task(_send_signup_welcome(email, google_data.get("name") or email.split("@")[0]))
 
     # Generate a real JWT token (not the session_token)
-    token = create_jwt_token(user_id)
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    token = create_jwt_token(user_id, (user or {}).get("token_version", 1))
     await _create_session(user_id, ip_address, response, method="google")
 
-    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
 
     # Mirror to Supabase (fire-and-forget)
     from services_supabase_sync import mirror_user_event_fire_and_forget
@@ -531,7 +530,7 @@ async def refresh_token(request: Request, response: Response):
     """Refresh an expiring JWT token. Extends the current session instead of
     creating a new one (avoids evicting sessions on other devices)."""
     user = await get_current_user(request)
-    token = create_jwt_token(user["user_id"])
+    token = create_jwt_token(user["user_id"], user.get("token_version", 1))
 
     existing_token = request.cookies.get("session_token")
     session = None
@@ -646,7 +645,10 @@ async def logout(request: Request, response: Response):
     # Delete session from cookie
     session_token = request.cookies.get("session_token")
     if session_token:
+        session = await db.user_sessions.find_one({"session_token": session_token}, {"_id": 0, "user_id": 1})
         await db.user_sessions.delete_one({"session_token": session_token})
+        if session:
+            await bump_token_version(session["user_id"])
 
     # Also try to invalidate JWT-based session
     bearer = request.headers.get("Authorization", "")
@@ -656,6 +658,13 @@ async def logout(request: Request, response: Response):
         session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
         if session:
             await db.user_sessions.delete_one({"session_token": token})
+            await bump_token_version(session["user_id"])
+        else:
+            try:
+                payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], leeway=10)
+                await bump_token_version(payload["user_id"])
+            except jwt.InvalidTokenError:
+                pass
 
     response.delete_cookie("session_token", path="/")
     return {"message": "Logged out"}
@@ -678,8 +687,7 @@ async def change_password(data: PasswordChangeRequest, request: Request):
     """
     user = await get_current_user(request)
 
-    if len(data.new_password) < 6:
-        raise HTTPException(status_code=400, detail="Neues Passwort muss min. 6 Zeichen haben.")
+    validate_password_strength(data.new_password)
     if data.new_password == data.current_password:
         raise HTTPException(status_code=400, detail="Neues Passwort darf nicht identisch zum aktuellen sein.")
 
@@ -707,6 +715,7 @@ async def change_password(data: PasswordChangeRequest, request: Request):
         })
     else:
         await db.user_sessions.delete_many({"user_id": user["user_id"]})
+    await bump_token_version(user["user_id"])
 
     return {"message": "Passwort erfolgreich geändert."}
 
@@ -812,7 +821,7 @@ async def magic_link_verify(data: MagicLinkVerify, request: Request, response: R
         method="magic_link",
     )
 
-    token = create_jwt_token(user["user_id"])
+    token = create_jwt_token(user["user_id"], user.get("token_version", 1))
     await _create_session(user["user_id"], ctx["ip"], response, method="magic_link")
     _maybe_autosync_wladhub(user)
     _maybe_reconcile_payments(user)
@@ -829,11 +838,12 @@ async def security_overview(request: Request):
         {"user_id": user["user_id"]},
         {"_id": 0, "login_history": 1, "last_login_at": 1, "last_login_geo": 1,
          "last_login_ua": 1, "signup_ip": 1, "signup_geo": 1, "created_at": 1,
-         "password_changed_at": 1},
+         "password_changed_at": 1, "security_ack_at": 1},
     ) or {}
 
     # Last 20 entries (newest first) — backfill missing fields for old entries
-    raw = list(reversed((full.get("login_history") or [])[-20:]))
+    all_history = full.get("login_history") or []
+    raw = list(reversed(all_history[-20:]))
     history = [
         {
             "ip": h.get("ip") or "",
@@ -867,9 +877,11 @@ async def security_overview(request: Request):
             "is_current": is_current,
         })
 
+    current_fp = device_fingerprint(_get_client_ip(request), parse_user_agent(request.headers.get("user-agent", "")))
     return {
         "login_history": history,
         "sessions": sessions,
+        "new_devices": _new_device_logins(all_history, current_fp, full.get("security_ack_at") or ""),
         "signup": {
             "at": full.get("created_at"),
             "ip": full.get("signup_ip"),
@@ -892,4 +904,50 @@ async def revoke_other_sessions(request: Request):
     if current_cookie:
         query["session_token"] = {"$ne": current_cookie}
     result = await db.user_sessions.delete_many(query)
+    await bump_token_version(user["user_id"])
     return {"revoked": result.deleted_count}
+
+
+def _new_device_logins(history: list, current_fp: str, ack_at: str, days: int = 14) -> list:
+    """Logins der letzten `days` Tage von zuvor unbekannten Geräten — ohne das aktuelle Gerät
+    und ohne bereits bestätigte („Das war ich“) Einträge."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    seen: set[str] = set()
+    out = []
+    for h in history:
+        fp = h.get("fingerprint") or ""
+        first_time = fp not in seen
+        seen.add(fp)
+        if not first_time or not fp or fp == current_fp:
+            continue
+        if (h.get("at") or "") <= max(cutoff, ack_at or ""):
+            continue
+        out.append(h)
+    return list(reversed(out))[:3]
+
+
+@router.post("/security/acknowledge")
+async def security_acknowledge(request: Request):
+    """„Das war ich“ — blendet die Neues-Gerät-Warnung für alle bisherigen Logins aus."""
+    user = await get_current_user(request)
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"security_ack_at": now}})
+    return {"acknowledged_at": now}
+
+
+@router.post("/security/not-me")
+async def security_not_me(request: Request):
+    """„Das war ich nicht“ — alle anderen Geräte abmelden, alle Tokens widerrufen, Warnung quittieren."""
+    user = await get_current_user(request)
+    current_cookie = request.cookies.get("session_token") or ""
+    query = {"user_id": user["user_id"]}
+    if current_cookie:
+        query["session_token"] = {"$ne": current_cookie}
+    result = await db.user_sessions.delete_many(query)
+    await bump_token_version(user["user_id"])
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one({"user_id": user["user_id"]},
+                              {"$set": {"security_ack_at": now, "security_incident_at": now}})
+    logger.warning("SECURITY not-me reported by %s (%d sessions revoked)", user["user_id"], result.deleted_count)
+    return {"revoked": result.deleted_count, "has_password": bool(user.get("password_hash")),
+            "next": "change_password"}

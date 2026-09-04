@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -249,6 +249,15 @@ export default function ProfilePage() {
   const { lang } = useLanguage();
   const { checkAuth } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const TAB_VALUES = ['activity', 'stats', 'account', 'security'];
+  const activeTab = TAB_VALUES.includes(searchParams.get('tab')) ? searchParams.get('tab') : 'activity';
+  const setActiveTab = (value) => {
+    const next = new URLSearchParams(searchParams);
+    next.set('tab', value);
+    next.delete('focus');
+    setSearchParams(next, { replace: true });
+  };
   const de = lang === 'de';
 
   const [profile, setProfile] = useState(null);
@@ -442,7 +451,7 @@ export default function ProfilePage() {
         </div>
 
         {/* ─── TABS: Activity + Achievements ─── */}
-        <Tabs defaultValue="activity" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="bg-muted/40 p-1 h-auto" data-testid="profile-tabs">
             <TabsTrigger value="activity" className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold data-[state=active]:bg-white dark:data-[state=active]:bg-card data-[state=active]:shadow-sm" data-testid="profile-tab-activity">
               <ActivityIcon size={13} /> {de ? 'Letzte Aktivitäten' : 'Recent Activity'}

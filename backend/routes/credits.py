@@ -5,6 +5,7 @@ Premium users (€997+ paid) have unlimited credits.
 """
 from fastapi import APIRouter, Request
 from datetime import datetime, timezone
+from pymongo import ReturnDocument
 
 from config import db
 from services import get_current_user
@@ -61,15 +62,11 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
         }
         await db.credits.insert_one(credit_doc)
 
-    balance = credit_doc.get("balance", 0)
     cost = CREDIT_COSTS.get(action, 1)
 
-    if balance < cost:
-        return {"allowed": False, "remaining": balance, "is_premium": False}
-
-    # Deduct
-    await db.credits.update_one(
-        {"user_id": user_id},
+    # Atomar: Abzug nur, wenn das Guthaben im selben Schritt noch reicht (keine Race ins Minus).
+    updated = await db.credits.find_one_and_update(
+        {"user_id": user_id, "balance": {"$gte": cost}},
         {
             "$inc": {"balance": -cost, "total_used": cost},
             "$push": {"history": {
@@ -77,8 +74,13 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
                 "$slice": -100,
             }},
         },
+        projection={"_id": 0, "balance": 1},
+        return_document=ReturnDocument.AFTER,
     )
-    return {"allowed": True, "remaining": balance - cost, "is_premium": False}
+    if updated is None:
+        current = await db.credits.find_one({"user_id": user_id}, {"_id": 0, "balance": 1}) or {}
+        return {"allowed": False, "remaining": max(0, current.get("balance", 0)), "is_premium": False}
+    return {"allowed": True, "remaining": updated["balance"], "is_premium": False}
 
 
 async def refund_credit(user_id: str) -> None:

@@ -15,7 +15,7 @@ import { reportFeedback } from '../../lib/telemetry';
 const DONE_KEY = 'leaderos:usage-feedback-done';
 const USAGE_THRESHOLD = 30;
 // Never cover a CTA on the onboarding / purchase path (Iter 134, Go-Live).
-const MUTED_PATHS = ['/onboarding', '/coaching', '/payment-success'];
+const MUTED_PATHS = ['/onboarding', '/coaching', '/payment-success', '/profile', '/video-guide'];
 
 export function UsageFeedbackPrompt() {
   const { totalUsed, isPremium } = useCredits();
