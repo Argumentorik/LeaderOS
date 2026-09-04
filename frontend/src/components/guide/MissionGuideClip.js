@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Play, X } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -12,6 +13,7 @@ import { GuideVideoPlayer } from './GuideVideoPlayer';
  */
 export const MissionGuideClip = ({ day, de = true }) => {
   const [clip, setClip] = useState(null);
+  const [loaded, setLoaded] = useState(false);
   const [autoplay, setAutoplay] = useState(true);
   const [open, setOpen] = useState(false);
 
@@ -23,11 +25,19 @@ export const MissionGuideClip = ({ day, de = true }) => {
         const auto = res.data?.mission_autoplay !== false;
         setAutoplay(auto);
         if (c?.video_url) { setClip(c); if (auto && !c.seen) setOpen(true); } else setClip(null);
+        setLoaded(true);
       })
       .catch((err) => logger.warn('mission clip failed', err));
   }, [day]);
 
-  if (!clip) return null;
+  if (!clip) {
+    if (!loaded || day <= 7) return null;
+    return (
+      <Link to="/video-guide" className="mb-6 inline-flex items-center gap-2 text-[12px] font-semibold text-muted-foreground hover:text-foreground transition-colors" data-testid="mission-guide-fallback-link">
+        <Play size={12} /> {de ? 'Wlads Briefings noch einmal ansehen (Video-Guide)' : "Rewatch Wlad's briefings (Video Guide)"}
+      </Link>
+    );
+  }
 
   const setPref = async (value) => {
     setAutoplay(value);

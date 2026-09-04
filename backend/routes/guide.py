@@ -7,16 +7,20 @@ Skript als Text, damit nie ein Loch in der Oberfläche entsteht.
 """
 
 import asyncio
+import hashlib
 import json
 import secrets
+import tempfile
+import threading
 import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
-from fastapi.responses import Response
+from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
+from pymongo.errors import DuplicateKeyError
 
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
@@ -24,7 +28,7 @@ from guide_content import (
     TALK_MAX_SECONDS_PRO, WLAD_STYLE_PROMPT, plan_shots, scene_for_aspect, seed_clips, word_count, word_limits,
 )
 from routes.admin import require_admin
-from routes.uploads import get_object, put_object
+from routes.uploads import download_object, get_object, put_object
 from services import get_current_user
 from services_ai_errors import ai_http_error
 from services_fal import (
@@ -43,17 +47,18 @@ DEFAULT_VOICE_ID = "Deep_Voice_Man"  # Minimax-Standardstimme, bis Wlads Klon st
 _JOBS: set = set()
 SETTINGS_ASSETS = {"portrait": "portrait_path", "sample": "voice_sample_path", "body": "body_path"}
 CLIP_MEDIA = {"video": "video_path", "audio": "audio_path", "padded": "audio_padded_path",
-              "raw": "raw_video_path", "keyframe": "keyframe_path"}
+              "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "keyframe_path"}
 MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", "padded": "audio/mpeg",
-               "keyframe": "image/png"}
+               "keyframe": "image/png", "poster": "image/jpeg"}
 SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "video/mp4"),
               "audio": ("audio_path", "audio/mpeg"), "padded": ("padded_path", "audio/mpeg"),
-              "synced": ("synced_path", "video/mp4")}
+              "synced": ("synced_path", "video/mp4"), "poster": ("keyframe_path", "image/jpeg")}
 
 
 # ── Datenzugriff ────────────────────────────────────────────────────────────
 
 _BOOT_RESET_DONE = False
+_SEEDED_OK = False
 _SEED_FILE = Path(__file__).resolve().parent.parent / "guide_seed_data.json"
 
 
@@ -74,21 +79,30 @@ async def _import_produced_seed() -> None:
         # sonst macht der Import einen laufenden Re-Render (video_path=None) wieder rückgängig.
         if await db.guide_clips.find_one({"slug": clip["slug"]}, {"_id": 1}) is not None:
             continue
-        await db.guide_clips.insert_one(clip)
+        try:
+            await db.guide_clips.insert_one(clip)
+        except DuplicateKeyError:
+            continue
         imported += 1
     settings = data.get("settings") or {}
     if settings.get("portrait_path"):
         current = await db.guide_settings.find_one({"_id": SETTINGS_ID}, {"portrait_path": 1})
         if not (current or {}).get("portrait_path"):
-            await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": settings}, upsert=True)
+            existing_keys = set((await db.guide_settings.find_one({"_id": SETTINGS_ID}) or {}).keys())
+            missing = {k: v for k, v in settings.items() if k not in existing_keys}
+            if missing:
+                await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": missing}, upsert=True)
     if imported:
         logger.info("Guide seed imported: %s produced clips", imported)
 
 
 async def _ensure_seeded() -> None:
     """Legt fehlende Clips aus guide_content an (idempotent, überschreibt nichts).
-    Beim ersten Aufruf nach einem Neustart werden verwaiste Läufe als Fehler markiert."""
-    global _BOOT_RESET_DONE
+    Beim ersten Aufruf nach einem Neustart werden verwaiste Läufe als Fehler markiert.
+    Läuft pro Prozess nur einmal erfolgreich durch — danach kostet der Aufruf nichts."""
+    global _BOOT_RESET_DONE, _SEEDED_OK
+    if _SEEDED_OK:
+        return
     if not _BOOT_RESET_DONE:
         _BOOT_RESET_DONE = True
         await _import_produced_seed()
@@ -101,23 +115,28 @@ async def _ensure_seeded() -> None:
             {"_id": SETTINGS_ID, "voice_clone_status": "running"},
             {"$set": {"voice_clone_status": "failed", "voice_clone_error": "Server wurde neu gestartet"}},
         )
+    await db.guide_clips.create_index("slug", unique=True)
     for seed in seed_clips():
         existing = await db.guide_clips.find_one({"slug": seed["slug"]}, {"_id": 0, "script": 1})
         if existing:
             continue
-        await db.guide_clips.insert_one({
-            **seed,
-            "script_source": "seed",
-            "status": "script_ready",
-            "published": False,
-            "audio_path": None,
-            "video_path": None,
-            "media_token": None,
-            "duration_seconds": None,
-            "error": None,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-        })
+        try:
+            await db.guide_clips.insert_one({
+                **seed,
+                "script_source": "seed",
+                "status": "script_ready",
+                "published": False,
+                "audio_path": None,
+                "video_path": None,
+                "media_token": None,
+                "duration_seconds": None,
+                "error": None,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            })
+        except DuplicateKeyError:
+            pass
+    _SEEDED_OK = True
 
 
 async def _settings() -> dict:
@@ -138,9 +157,9 @@ def _poster_url(clip: dict) -> str | None:
     if not token:
         return None
     if clip.get("keyframe_path"):
-        return _media_url(token, "keyframe")
+        return _media_url(token, "poster")
     first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
-    return f"/api/guide/media/{token}/shot/{first['id']}/keyframe" if first else None
+    return f"/api/guide/media/{token}/shot/{first['id']}/poster" if first else None
 
 
 def _public_clip(clip: dict, seen: list) -> dict:
@@ -244,6 +263,7 @@ async def public_teaser():
 
 
 @router.get("/media/{token}/{kind}")
+@router.head("/media/{token}/{kind}")
 async def serve_media(token: str, kind: str, request: Request):
     """Öffentlich (ohne Login): Guide-Videos sind für alle Nutzer identisch und
     müssen zusätzlich vom Generator-Dienst abgerufen werden können. Der Token ist
@@ -266,30 +286,128 @@ async def serve_media(token: str, kind: str, request: Request):
 
     if not path:
         raise HTTPException(status_code=404, detail="Not found")
+    return await _serve_object(request, path, media_type, poster=kind == "poster")
+
+
+# ── Medien-Auslieferung: Disk-Cache + gestreamte Range-Antworten ────────────
+# Ein Video wird genau einmal aus dem Object Storage auf die Platte geholt und danach
+# in 1-MB-Stücken gestreamt. Der Prozess hält nie ein ganzes Video im RAM — egal, wie
+# viele Nutzer gleichzeitig schauen.
+
+_MEDIA_DIR = Path(tempfile.gettempdir()) / "guide_media"
+_MEDIA_DIR_MAX_BYTES = 1536 * 1024 * 1024
+_MEDIA_CHUNK = 1024 * 1024
+_MEDIA_LOCKS: dict[str, threading.Lock] = {}
+_MEDIA_LOCKS_GUARD = threading.Lock()
+
+
+def _local_media(path: str) -> Path:
+    """Pfad im Disk-Cache; lädt bei Bedarf gestreamt herunter (ein Download pro Objekt, auch parallel)."""
+    _MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+    target = _MEDIA_DIR / hashlib.sha1(path.encode()).hexdigest()
+    if target.exists():
+        return target
+    with _MEDIA_LOCKS_GUARD:
+        lock = _MEDIA_LOCKS.setdefault(path, threading.Lock())
+    with lock:
+        if target.exists():
+            return target
+        tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part")
+        try:
+            download_object(path, str(tmp))
+            tmp.replace(target)
+        finally:
+            tmp.unlink(missing_ok=True)
+    _evict_media_cache()
+    return target
+
+
+def _evict_media_cache() -> None:
+    files = [p for p in _MEDIA_DIR.iterdir() if p.is_file() and not p.name.endswith(".part")]
+    total = sum(p.stat().st_size for p in files)
+    for p in sorted(files, key=lambda f: f.stat().st_atime):
+        if total <= _MEDIA_DIR_MAX_BYTES:
+            break
+        total -= p.stat().st_size
+        p.unlink(missing_ok=True)
+
+
+def _parse_range(header: str | None, size: int) -> tuple[int, int] | None:
+    """Ein einzelner Bytes-Range → (start, end) inklusiv; None = volle Antwort; 416 bei unerfüllbar."""
+    if not header or not header.startswith("bytes=") or "," in header:
+        return None
+    start_s, _, end_s = header[6:].strip().partition("-")
     try:
-        data, content_type = await asyncio.to_thread(get_object, path)
+        if not start_s:  # Suffix-Range: die letzten N Bytes
+            start, end = max(0, size - int(end_s)), size - 1
+        else:
+            start = int(start_s)
+            end = min(int(end_s) if end_s else size - 1, size - 1)
+    except ValueError:
+        return None
+    if start > end or start >= size:
+        raise HTTPException(status_code=416, detail="Range not satisfiable",
+                            headers={"Content-Range": f"bytes */{size}"})
+    return start, end
+
+
+def _file_chunks(file_path: Path, start: int, end: int):
+    with file_path.open("rb") as f:
+        f.seek(start)
+        remaining = end - start + 1
+        while remaining > 0:
+            chunk = f.read(min(_MEDIA_CHUNK, remaining))
+            if not chunk:
+                break
+            remaining -= len(chunk)
+            yield chunk
+
+
+def _local_poster(path: str) -> Path:
+    """Keyframe (PNG, ~1,3 MB) -> Poster-JPEG max. 960 px breit (~80 KB), einmal erzeugt, dann aus dem Cache."""
+    source = _local_media(path)
+    target = source.with_name(source.name + "_poster.jpg")
+    if target.exists():
+        return target
+    from PIL import Image
+
+    with Image.open(source) as img:
+        img = img.convert("RGB")
+        if img.width > 960:
+            img = img.resize((960, round(img.height * 960 / img.width)), Image.LANCZOS)
+        tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part")
+        img.save(tmp, "JPEG", quality=82, optimize=True, progressive=True)
+        tmp.replace(target)
+    return target
+
+
+async def _serve_object(request: Request, path: str, media_type: str, poster: bool = False) -> Response:
+    """Range-Requests für <video>/<audio> (Safari verlangt 206, Scrubbing braucht es überall);
+    ETag/304, damit Browser und CDN nach Ablauf des Caches nur revalidieren statt neu laden."""
+    try:
+        file_path = await asyncio.to_thread(_local_poster if poster else _local_media, path)
     except Exception as e:
         logger.error("Guide media fetch failed for %s: %s", path, e)
         raise HTTPException(status_code=404, detail="Not found")
-    return _ranged(request, data, media_type or content_type)
-
-
-def _ranged(request: Request, data: bytes, media_type: str) -> Response:
-    """Range-Requests für <video>/<audio> (Safari verlangt 206, Scrubbing braucht es überall)."""
-    headers = {"Cache-Control": "public, max-age=86400", "Accept-Ranges": "bytes"}
-    rng = request.headers.get("range")
-    if rng and rng.startswith("bytes="):
-        start_s, _, end_s = rng[6:].partition("-")
-        start = int(start_s or 0)
-        end = min(int(end_s) if end_s else len(data) - 1, len(data) - 1)
-        if start > end:
-            raise HTTPException(status_code=416, detail="Range not satisfiable")
-        headers["Content-Range"] = f"bytes {start}-{end}/{len(data)}"
-        return Response(content=data[start:end + 1], status_code=206, media_type=media_type, headers=headers)
-    return Response(content=data, media_type=media_type, headers=headers)
+    size = file_path.stat().st_size
+    etag = f'"{file_path.name[:16]}-{size}"'
+    headers = {"Cache-Control": "public, max-age=86400", "Accept-Ranges": "bytes", "ETag": etag}
+    if request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers=headers)
+    rng = _parse_range(request.headers.get("range"), size)
+    start, end = rng if rng else (0, size - 1)
+    status = 206 if rng else 200
+    if rng:
+        headers["Content-Range"] = f"bytes {start}-{end}/{size}"
+    headers["Content-Length"] = str(end - start + 1)
+    if request.method == "HEAD":
+        return Response(status_code=status, media_type=media_type, headers=headers)
+    return StreamingResponse(_file_chunks(file_path, start, end), status_code=status,
+                             media_type=media_type, headers=headers)
 
 
 @router.get("/media/{token}/shot/{shot_id}/{kind}")
+@router.head("/media/{token}/shot/{shot_id}/{kind}")
 async def serve_shot_media(token: str, shot_id: str, kind: str, request: Request):
     """Zwischenergebnisse einzelner Shots (Fal muss raw + padded abrufen können)."""
     if kind not in SHOT_MEDIA:
@@ -299,12 +417,7 @@ async def serve_shot_media(token: str, shot_id: str, kind: str, request: Request
     field, media_type = SHOT_MEDIA[kind]
     if not shot or not shot.get(field):
         raise HTTPException(status_code=404, detail="Not found")
-    try:
-        data, _ = await asyncio.to_thread(get_object, shot[field])
-    except Exception as e:
-        logger.error("Guide shot media fetch failed for %s: %s", shot[field], e)
-        raise HTTPException(status_code=404, detail="Not found")
-    return _ranged(request, data, media_type)
+    return await _serve_object(request, shot[field], media_type, poster=kind == "poster")
 
 
 @router.get("/broll/{screen}")
@@ -875,9 +988,20 @@ async def _kick(slug: str, stage: str, *checks) -> dict:
     for ok, message in checks:
         if not ok(clip, settings):
             raise HTTPException(status_code=400, detail=message)
-    await _patch_clip(slug, {"status": f"{stage}_running", "error": None})
+    if not await _claim(slug, f"{stage}_running"):
+        raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
     _start_job(slug, stage)
     return {"ok": True, "status": f"{stage}_running"}
+
+
+async def _claim(slug: str, status: str, extra: dict | None = None) -> bool:
+    """Atomarer Statuswechsel (compare-and-set) — verhindert doppelte, bezahlte Jobs bei parallelen Requests."""
+    result = await db.guide_clips.update_one(
+        {"slug": slug, "status": {"$nin": list(RUNNING)}},
+        {"$set": {"status": status, "error": None, **(extra or {}),
+                  "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return result.modified_count == 1
 
 
 @router.post("/admin/clips/{slug}/voice")
@@ -1033,7 +1157,9 @@ async def bulk_produce(data: BulkIn, request: Request):
             continue
         else:
             await _patch_clip(slug, {"quality": data.quality})
-        await _patch_clip(slug, {"status": "full_running", "error": None, "progress": "wartet auf Slot"})
+        if not await _claim(slug, "full_running", {"progress": "wartet auf Slot"}):
+            skipped.append(slug)
+            continue
         _start_job(slug, "full")
         started.append(slug)
     return {"ok": True, "started": started, "skipped": skipped}

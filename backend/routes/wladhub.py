@@ -115,7 +115,7 @@ async def _fetch_supabase_insights(user_email: str) -> list:
             if resp.status_code == 200:
                 return resp.json()
     except Exception as e:
-        logger.error(f"Supabase fetch error: {e}")
+        logger.error(f"Supabase fetch error: {type(e).__name__}: {e!r}")
     return []
 
 

@@ -15,6 +15,16 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 148/149 · 04.09.26] CODE-REVIEW-FIXES GUIDE-MEDIEN + „GODMODE"-REGRESSION (pytest 39/39 grün, Testing-Agent Backend 100 % + Frontend 100 %, `iteration_149.json`)**
+  - **Streaming statt RAM**: `_serve_object` in `routes/guide.py` — Objekt wird einmal gestreamt auf Platte geholt (`download_object` in `routes/uploads.py`, Disk-Cache `/tmp/guide_media`, sha1-Dateiname, Per-Pfad-Lock, atomarer `.part`→Rename, Eviction 1,5 GB nach atime) und in 1-MB-Chunks per `StreamingResponse` ausgeliefert. Range-Semantik: 206/Content-Range, Suffix-Range, offene Range, 416 mit `bytes */size`, Multi-/Garbage-Range → 200. `HEAD` unterstützt. Backend-RSS bleibt bei parallelen Vollabrufen flach (12 parallele Cold-Requests → 1 Download, byte-identisch).
+  - **ETag + 304** (`If-None-Match`) auf allen Medien-Antworten (Browser/CDN revalidieren statt neu laden).
+  - **Poster als JPEG**: neuer Medien-Kind `poster` (Clip + Shot) = Keyframe auf max. 960 px, JPEG q82 (1,37 MB → ~100 KB, 12 Kacheln ≈ 1,2 MB statt 15 MB). `keyframe` bleibt roh (PNG) für Fal. `_poster_url` zeigt auf `poster`.
+  - **Atomarer Job-Lock** (`_claim`, Compare-and-Set `status $nin RUNNING`) war bereits gebaut → per Test bestätigt (10 parallele Claims → genau 1 gewinnt).
+  - `_ensure_seeded` läuft pro Prozess nur einmal erfolgreich durch (vorher ~15 DB-Queries pro `/clips`-Aufruf).
+  - `MissionGuideClip`: für Tage > 7 kleiner Link „Wlads Briefings noch einmal ansehen (Video-Guide)" statt nichts. Supabase-Fehlerlog nennt jetzt Exception-Typ (vorher leere Meldung).
+  - Tests: `backend/tests/test_iter148_media_streaming.py` (9), `test_iter149_guide_regression.py` (30, Testing-Agent). Keine Fal-Aufrufe.
+  - Offen (Testing-Agent-Hinweise, kein Blocker): Support-Popup überlappt untere Kacheln auf `/video-guide` bei 1920×1080; uvicorn-Baseline ~850 MB RSS (RAG-Imports) — Sizing für Deploy beachten; CDN vor `/api/guide/media` wäre die 1000-Kunden-Lösung; Cache in `/tmp` ist nach Pod-Neustart leer (erster Abruf zahlt Download-Latenz).
+
 - [x] **[Iter 147 · 03.09.26] QUALITÄTS-UPGRADE „PRO": OmniHuman-Lipsync + Kling 2.5 Turbo Pro + Branding/Übergänge (alle 13 Clips neu produziert, ≈ 32 $; Regression Testing-Agent 13/13 + Frontend grün, `iteration_147.json`)**
   - **Reset behält jetzt das alte Video online** (`stale: True`, `pipeline: None`), bis der neue Film fertig ist → Re-Render ohne Lücke für Nutzer. Seed neu exportiert (14 Clips).
   - **Talk-Shots → `fal-ai/bytedance/omnihuman/v1.5`** (Keyframe + Wlad-Tonspur → 1080p-Video mit nativem Lipsync + Körper-/Handbewegung, 0,16 $/s). Kein 10-s-Limit → `MULTI_SHOT_PLAN_PRO` (Talk bis 48/40 Wörter, Anteile 50 %/25 %/25 % sentence-aligned, `TALK_MAX_SECONDS_PRO=28`). Shot-Feld `engine: omnihuman`; Compose muxt die Original-TTS-Tonspur (`normalize_segment(synced, audio)`), Cues ab Offset 0.

@@ -47,6 +47,18 @@ def get_object(path: str):
     return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 
+def download_object(path: str, dest: str, chunk_size: int = 1024 * 1024) -> str:
+    """Objekt gestreamt auf die Platte schreiben (nie komplett im RAM)."""
+    key = init_storage()
+    with requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=120, stream=True) as resp:
+        resp.raise_for_status()
+        with open(dest, "wb") as f:
+            for chunk in resp.iter_content(chunk_size=chunk_size):
+                if chunk:
+                    f.write(chunk)
+        return resp.headers.get("Content-Type", "application/octet-stream")
+
+
 @router.post("/upload/profile-picture")
 async def upload_profile_picture(request: Request, file: UploadFile = File(...)):
     user = await get_current_user(request)
