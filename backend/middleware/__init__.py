@@ -6,6 +6,8 @@ from collections import defaultdict
 import time
 import asyncio
 
+from services_login_security import get_client_ip
+
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
@@ -24,15 +26,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self._cleanup_counter = 0
 
     def _get_ip(self, request: Request) -> str:
-        # SEC hardening: first XFF hop is client-spoofable. Prefer the
-        # Cloudflare-verified header, then the last (proxy-appended) XFF hop.
-        cf_ip = request.headers.get("cf-connecting-ip")
-        if cf_ip:
-            return cf_ip.strip()
-        forwarded = request.headers.get("x-forwarded-for", "")
-        if forwarded:
-            return forwarded.split(",")[-1].strip()
-        return request.client.host if request.client else "unknown"
+        # Nur der vertrauenswürdige Proxy-Hop zählt (kein client-gesetztes XFF/CF-Header).
+        return get_client_ip(request)
 
     def _get_limit(self, path: str) -> tuple[int, int]:
         """Returns (max_requests, window_seconds) for the given path."""

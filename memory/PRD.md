@@ -15,6 +15,11 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 | **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
 
 ## Deployed Features
+- [x] **[Iter 151 · 04.09.26] PROXY-IP-HÄRTUNG + SICHERHEITS-MAIL (pytest 5/5 + e2e-Spoof-Test grün)**
+  - `services_login_security.get_client_ip`: einzige Quelle für Client-IPs (Login-Sperre, Rate-Limit-Middleware, Login-Historie, Enterprise-Lead-Limit, OAuth). Nimmt den `TRUSTED_PROXY_HOPS`-ten Eintrag von rechts aus `X-Forwarded-For` (Default 1); zu kurze Kette → Verbindungs-IP, niemals ein Client-Wert. `cf-connecting-ip` nur mit `TRUST_CF_CONNECTING_IP=true`. Preview/Emergent-Deploy: Kette ist Cloudflare → Google LB → Ingress ⇒ `TRUSTED_PROXY_HOPS=3` in `backend/.env` gesetzt (verifiziert: gespoofte XFF `6.6.6.6, 8.8.8.8` → aufgezeichnet wird die echte Egress-IP). Doku in `.env.example`.
+  - „Das war ich nicht“ schickt jetzt eine Bestätigungs-Mail (`send_not_me_alert`, Fire-and-forget via Resend): gemeldete Logins (Browser/OS, Ort, IP, Zeit), Liste der beendeten Sitzungen, Button „Passwort jetzt ändern“ → `/profile?tab=account&focus=password`. HTML-escaped. Response enthält `email_sent_to`; Frontend-Toast nennt die Adresse. Für `*.wladbot.test`-Accounts wird die Mail von der bestehenden Sperrliste geblockt (erwartet).
+  - Tests: `backend/tests/test_iter151_proxy_ip_and_mail.py`.
+
 - [x] **[Iter 150 · 04.09.26] SECURITY-AUDIT-FIXES + LOGIN-SCHUTZ (pytest 24/24 grün, Testing-Agent Backend 17/17 + Frontend ✓, `iteration_150.json`)**
   - Security-Audit (read-only) ergab: kein Critical/High; 1× MEDIUM (SEC-001 unwiderrufbare 30-Tage-JWTs) + P3-Hardening.
   - **SEC-001 Token-Widerruf**: JWT trägt `tv` (= `users.token_version`, Default 1). `_authenticate_via_jwt` lehnt `tv < token_version` ab (401). Logout, Passwortwechsel, „Alle anderen Geräte abmelden“ und „Das war ich nicht“ rufen `bump_token_version` (Pipeline-Update mit `$ifNull`, damit fehlendes Feld 1→2 wird). Legacy-Tokens ohne `tv` gelten als v1 → bestehende Sessions bleiben gültig, bis der Nutzer widerruft. Cookie-Sessions anderer Browser bleiben unberührt (Frontend nutzt nur httpOnly-Cookies, keine Bearer-Tokens). JWT-Laufzeit 30→7 Tage.

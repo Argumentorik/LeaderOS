@@ -16,8 +16,10 @@ from services_actions import record_user_action
 from services_login_security import (
     parse_user_agent,
     device_fingerprint,
+    get_client_ip,
     lookup_geo,
     fire_and_forget_new_device_alert,
+    fire_and_forget_not_me_alert,
 )
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -151,11 +153,8 @@ async def _create_session(user_id: str, ip_address: str, response: Response, met
 
 
 def _get_client_ip(request: Request) -> str:
-    """Extract real client IP, handling proxies."""
-    forwarded = request.headers.get("x-forwarded-for", "")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
+    """Echte Client-IP vom vertrauenswürdigen Proxy-Hop (siehe services_login_security.get_client_ip)."""
+    return get_client_ip(request)
 
 
 async def _capture_login_context(request: Request) -> dict:
@@ -943,11 +942,20 @@ async def security_not_me(request: Request):
     query = {"user_id": user["user_id"]}
     if current_cookie:
         query["session_token"] = {"$ne": current_cookie}
+    revoked_sessions = await db.user_sessions.find(
+        query, {"_id": 0, "created_at": 1, "ip_address": 1, "method": 1}).sort("created_at", -1).to_list(50)
     result = await db.user_sessions.delete_many(query)
     await bump_token_version(user["user_id"])
     now = datetime.now(timezone.utc).isoformat()
     await db.users.update_one({"user_id": user["user_id"]},
                               {"$set": {"security_ack_at": now, "security_incident_at": now}})
     logger.warning("SECURITY not-me reported by %s (%d sessions revoked)", user["user_id"], result.deleted_count)
+    current_fp = device_fingerprint(_get_client_ip(request), parse_user_agent(request.headers.get("user-agent", "")))
+    fire_and_forget_not_me_alert(
+        user_email=user["email"],
+        user_name=user.get("name") or "",
+        sessions=[{"created_at": s.get("created_at"), "ip": s.get("ip_address"), "method": s.get("method")} for s in revoked_sessions],
+        suspicious=_new_device_logins(user.get("login_history") or [], current_fp, user.get("security_ack_at") or ""),
+    )
     return {"revoked": result.deleted_count, "has_password": bool(user.get("password_hash")),
-            "next": "change_password"}
+            "next": "change_password", "email_sent_to": user["email"]}

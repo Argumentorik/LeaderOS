@@ -27,8 +27,8 @@ export const NewDeviceAlert = ({ devices = [], de = true, onDone }) => {
       } else {
         const res = await api.post('/auth/security/not-me');
         toast.success(de
-          ? `${res.data.revoked} andere Sitzung${res.data.revoked === 1 ? '' : 'en'} beendet, alle Zugriffs-Tokens widerrufen.`
-          : `${res.data.revoked} other session(s) ended, all access tokens revoked.`);
+          ? `${res.data.revoked} andere Sitzung${res.data.revoked === 1 ? '' : 'en'} beendet, alle Zugriffs-Tokens widerrufen. Bestätigung geht an ${res.data.email_sent_to}.`
+          : `${res.data.revoked} other session(s) ended, all access tokens revoked. Confirmation sent to ${res.data.email_sent_to}.`);
         if (res.data.has_password) {
           toast(de ? 'Bitte jetzt dein Passwort ändern.' : 'Please change your password now.', { duration: 8000 });
           navigate('/profile?tab=account&focus=password');
