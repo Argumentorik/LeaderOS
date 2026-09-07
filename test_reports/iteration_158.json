@@ -1,0 +1,34 @@
+{
+  "summary": "Iter 158 (Interaktiver Wlad Beta offen für paid tiers + 3 Free-Test-Turns) e2e getestet. Backend pytest: 7/8 grün (1 Fail = Spec-Deviation: standard user bleibt bei paid_open=false NICHT locked, sondern fällt in Free-Trial zurück — Code-Review-Finding, kein Fix vorgenommen). 2 kostenpflichtige /turn-Aufrufe + 1 /speak wurden ausgeführt (~$0.02): Free trial_left 2→1→0, danach 403 interactive_locked und /speak returned 200 mit audio. Frontend: Standard sieht Badge 'BETA' (kein PREVIEW/TESTS), Overlay + 3 Chips + kein trial-Display. Free (trial=0) zeigt locked-Link 'TEST AUFGEBRAUCHT · UPGRADE' → /coaching. Admin-Card enthält 'Leader-OS/PLUS offen · Free: 3 Test-Gespräche', trial-input + paid-toggle + beta-toggle 'Für alle unbegrenzt öffnen' vorhanden. /playbooks, /missions, /missions/archive laden fehlerfrei ohne feature-video-section (korrekt, da noch kein Video). /chat Voice-Mode-Overlay öffnet (Smoke OK). Endzustand: enabled=false, paid_open=true, free_trial_turns=3 (manuell restauriert nach Test-Fail).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "PUT /api/guide/interactive/admin + GET /status", "issue": "Standard-User mit paid_open=false wird NICHT locked (bekommt trial_left=3 aus interactive_trial_used=0). Spec erwartet locked:true. Aktuell: locked:false, trial:true, trial_left:3. _access() vergibt Trial an JEDEN Nicht-Admin/Nicht-Enabled/Nicht-Paid, auch an paid-tier-user wenn paid_open=false → Standard/Accel bekommen ihr eigenes Trial-Kontingent statt sofortiger Sperre. Business-Entscheidung: entweder Trial nur an tier=free binden, oder Spec akzeptieren."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/tests/test_iter158_interactive_wlad.py",
+    "/app/test_reports/pytest/iter158.xml"
+  ],
+  "action_items": [
+    "Optional: In backend/routes/guide_interactive.py::_access() Trial nur für tier=='free' vergeben (trial = not is_admin and not beta.enabled and not paid and tier == 'free'), damit standard/accelerator mit paid_open=false wie in Spec verlangt locked:true zeigen."
+  ],
+  "critical_code_review_comments": [
+    "routes/guide_interactive.py::_access(): Trial-Fallback greift für ALLE Nicht-Paid-User (inkl. standard/accelerator wenn paid_open=false). Falls Spec-Verhalten (paid tiers gesperrt bei paid_open=false) gewünscht ist, Trial an tier=='free' koppeln.",
+    "InteractiveWladButton statusPromise Modul-Cache: Beim Tier-Wechsel via localStorage.clear() + neuer Login bleibt der Cache bestehen; resetInteractiveStatus() wird nur beim Overlay-Close aufgerufen. Für Multi-User-Preview-Sessions besser bei Login/Logout aufrufen.",
+    "guide_content.py CLIP_QUESTIONS: fest 3 Fragen pro Feature-Clip — sauber, aber Fallback DEFAULT_QUESTIONS sollte auch geprüft werden (falls neue kind='feature' Clips hinzukommen ohne Eintrag)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "87.5% (7/8, 1 Spec-Deviation)", "frontend": "100%"},
+  "test_credentials": "test@test.com / test123 (Admin), free@wladbot.test, standard@wladbot.test, accelerator@wladbot.test — alle test123",
+  "seed_data_creation": "Keine neuen Seeds. Free-User interactive_trial_used wurde durch 2 Test-Turns von 1 auf 3 erhöht (trial_left=0, jetzt gesperrt). Falls Rerun gewünscht: db.users.update_one({email:'free@wladbot.test'},{$set:{interactive_trial_used:0}}) oder Admin trial-input erhöhen.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "KRITISCH: Test-File liegt unter /app/tests/ (NICHT /app/backend/tests/) wegen Fal-Jobs Hot-Reload-Schutz. Endzustand Beta: enabled=false, paid_open=true, free_trial_turns=3 (verifiziert via curl). Free-User trial_left ist jetzt 0 — nächster Testing-Agent muss entweder interactive_trial_used resetten oder trial_total via Admin PUT erhöhen. Kostenpflichtige /turn+/speak-Smoke wurde ausgeführt, nicht wiederholen.",
+  "rca of the issue": "Spec vs Code Deviation (nicht bug): _access() logic 'trial = not (is_admin or enabled or paid)' vergibt Trial an ALLE nicht-paid User inkl. tier=standard/accelerator bei paid_open=false. Spec wollte für standard bei paid_open=false explizit locked:true. Reproduction: PUT admin {paid_open:false}, GET /status als standard@wladbot.test → locked:false, trial:true, trial_left:3. Mitigation: entweder Trial an tier=='free' koppeln, oder Spec updaten. Für /turn und /speak Flow: alle korrekt, Free-Trial-Countdown funktioniert, /speak-Ausnahme für letzte Antwort funktioniert."
+}

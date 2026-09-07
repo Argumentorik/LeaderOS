@@ -2,11 +2,14 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useLanguage } from '../contexts/LanguageContext';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { generatePDF } from '../lib/pdfGenerator';
 import api from '../lib/api';
 import { BookOpen } from 'lucide-react';
 import { PlaybookListCard } from '../components/playbooks/PlaybookListCard';
 import { PlaybookChatView } from '../components/playbooks/PlaybookChatView';
+
+const PLAYBOOK_CLIPS = ['bp-playbooks'];
 
 export default function PlaybooksPage() {
   const { lang } = useLanguage();
@@ -159,6 +162,8 @@ export default function PlaybooksPage() {
               <p className="text-sm text-muted-foreground font-medium">{de ? 'Interaktive Coaching-Sitzungen mit persönlichem Report' : 'Interactive coaching sessions with personal report'}</p>
             </div>
           </div>
+
+          <FeatureVideoSection slugs={PLAYBOOK_CLIPS} de={de} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in stagger-1">
             {playbooks.map((pb) => (

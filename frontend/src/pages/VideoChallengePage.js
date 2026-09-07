@@ -12,6 +12,7 @@ import { RecordingStudio } from '../components/video/RecordingStudio';
 import { VideoUpsellModal } from '../components/video/VideoUpsellModal';
 import { VideoStudioSidebar } from '../components/video/VideoStudioSidebar';
 import { VideoTrialBanner } from '../components/video/VideoTrialBanner';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import api from '../lib/api';
 import { useVideoRecorder } from '../hooks/useVideoRecorder';
@@ -20,6 +21,8 @@ import { downloadHTMLReport } from '../lib/reportGenerator';
 import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
 
 const DEFAULT_RATING = { mode: 'hard', level: 'fortgeschritten', focus: [], audience: 'allgemein' };
+
+const STUDIO_CLIPS = ['bp-missionen', 'bp-video-analyse'];
 
 export default function VideoChallengePage() {
   const { lang } = useLanguage();
@@ -252,6 +255,8 @@ export default function VideoChallengePage() {
           </div>
 
           {!isAccelerator && trial?.eligible && <VideoTrialBanner trial={trial} de={de} />}
+
+          {!activeChallenge && !analysis && <FeatureVideoSection slugs={STUDIO_CLIPS} de={de} />}
 
           {!activeChallenge && !analysis && (
             <ChallengeList

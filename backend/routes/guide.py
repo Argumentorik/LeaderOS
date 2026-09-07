@@ -26,7 +26,7 @@ from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
-    scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
+    clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
 from routes.uploads import download_object, get_object, put_object
@@ -176,6 +176,7 @@ def _public_clip(clip: dict, seen: list) -> dict:
         "order": clip.get("order", 0),
         "title": clip["title"],
         "script": clip["script"],
+        "questions": clip_questions(clip["slug"]),
         "video_url": _media_url(token, "video") if has_video else None,
         "duration_seconds": clip.get("duration_seconds"),
         "seen": clip["slug"] in seen,
@@ -193,8 +194,8 @@ async def _progress(user_id: str) -> dict:
 async def list_clips(request: Request, kind: str = "onboarding"):
     user = await get_current_user(request)
     await _ensure_seeded()
-    if kind not in ("onboarding", "mission", "teaser", "coaching", "all"):
-        raise HTTPException(status_code=400, detail="kind muss onboarding, mission, teaser, coaching oder all sein")
+    if kind not in ("onboarding", "mission", "teaser", "coaching", "feature", "all"):
+        raise HTTPException(status_code=400, detail="kind muss onboarding, mission, teaser, coaching, feature oder all sein")
     query = {} if kind == "all" else {"kind": kind}
     clips = await db.guide_clips.find(query, {"_id": 0}).sort("order", 1).to_list(200)
     progress = await _progress(user["user_id"])
@@ -460,7 +461,7 @@ def _admin_clip_view(c: dict) -> dict:
     view["shot"] = preset and {**preset, "scene_prompt": c.get("scene_prompt") or preset["scene_prompt"],
                                "motion_prompt": c.get("motion_prompt") or preset["motion_prompt"]}
     view["shots"] = [_shot_view(s, token) for s in c.get("shots", [])]
-    view["multi_shot"] = c.get("kind") in ("onboarding", "mission", "coaching") or bool(c.get("multi_shot"))
+    view["multi_shot"] = c.get("kind") in ("onboarding", "mission", "coaching", "feature") or bool(c.get("multi_shot"))
     view["aspect"] = c.get("aspect") or "16:9"
     return view
 

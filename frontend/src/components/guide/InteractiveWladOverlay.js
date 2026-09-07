@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { X, Mic, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { X, Mic, Sparkles, MessageSquare } from 'lucide-react';
 import { useVoiceMode, VOICE_STATES } from '../../hooks/useVoiceMode';
 import { VoiceControls } from '../chat/VoiceControls';
 
@@ -39,19 +40,27 @@ const WladAvatar = ({ state, level, speakLevel, onTap, label }) => {
   );
 };
 
-export const InteractiveWladOverlay = ({ clip, onClose, de = true }) => {
+export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null }) => {
   const extraFields = useMemo(() => ({ context_title: clip?.title || '', context_script: (clip?.script || '').slice(0, 1200) }), [clip]);
   const [turns, setTurns] = useState([]);
+  const [trialLeft, setTrialLeft] = useState(access?.trial ? access.trial_left : null);
   const endRef = useRef(null);
   const {
     state, transcript, error, paused, muted, level, speakLevel,
-    handleOrbTap, togglePause, toggleMute, fullCleanup,
+    handleOrbTap, togglePause, toggleMute, fullCleanup, sendText,
   } = useVoiceMode({
     de, persona: 'wlad', endpoint: '/guide/interactive/turn', speakEndpoint: '/guide/interactive/speak', extraFields,
-    onTurn: (t) => setTurns((prev) => [...prev, { id: `${Date.now()}`, question: t.transcript, answer: t.reply }]),
+    onTurn: (t) => {
+      setTurns((prev) => [...prev, { id: `${Date.now()}`, question: t.transcript, answer: t.reply }]);
+      if (t.data?.trial) setTrialLeft(t.data.trial_left);
+    },
   });
+  const trialExhausted = trialLeft === 0;
+  const questions = (clip?.questions || []).slice(0, 3);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [turns]);
+  // Letztes Test-Gespräch verbraucht: nach Wlads Antwort nicht weiter zuhören
+  useEffect(() => { if (trialExhausted && state === VOICE_STATES.LISTENING && !paused) togglePause(); }, [trialExhausted, state, paused, togglePause]);
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') { fullCleanup(); onClose?.(); } };
     window.addEventListener('keydown', onKey);
@@ -75,11 +84,30 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true }) => {
       </div>
 
       <div className="flex flex-col items-center gap-7 w-full">
-        <WladAvatar state={state} level={level} speakLevel={speakLevel} onTap={handleOrbTap} label={status} />
+        <WladAvatar state={state} level={level} speakLevel={speakLevel} onTap={trialExhausted ? undefined : handleOrbTap} label={status} />
         <div className="text-center space-y-1">
           <p className="text-sm font-bold tracking-wide" data-testid="interactive-wlad-status">{status}</p>
           {clip?.title && <p className="text-[11px] text-white/40">{de ? 'Zum Video' : 'About'} „{clip.title}“ · {de ? 'Wlads Stimme' : "Wlad's voice"}</p>}
+          {trialLeft != null && (
+            <p className={`text-[11px] font-bold ${trialExhausted ? 'text-amber-400' : 'text-[#BFFF00]/80'}`} data-testid="interactive-wlad-trial">
+              {trialExhausted
+                ? (de ? 'Deine Test-Gespräche sind aufgebraucht.' : 'Your trial conversations are used up.')
+                : (de ? `Noch ${trialLeft} Test-Gespräch${trialLeft === 1 ? '' : 'e'}` : `${trialLeft} trial conversation${trialLeft === 1 ? '' : 's'} left`)}
+              {trialExhausted && <Link to="/coaching" onClick={() => { fullCleanup(); onClose?.(); }} className="ml-2 underline text-white" data-testid="interactive-wlad-upgrade">{de ? 'Mit Leader-OS unbegrenzt →' : 'Unlimited with Leader-OS →'}</Link>}
+            </p>
+          )}
         </div>
+        {!turns.length && !trialExhausted && questions.length > 0 && (state === VOICE_STATES.IDLE || state === VOICE_STATES.LISTENING) && (
+          <div className="flex flex-wrap justify-center gap-2 max-w-xl" data-testid="interactive-wlad-suggestions">
+            {questions.map((q, i) => (
+              <button key={q} type="button" onClick={() => sendText(q)}
+                      className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-[#BFFF00] hover:text-black hover:border-[#BFFF00] transition-colors"
+                      data-testid={`interactive-wlad-suggestion-${i}`}>
+                <MessageSquare size={11} /> {q}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="max-w-xl w-full space-y-3 max-h-[32vh] overflow-y-auto px-1 scrollbar-hide" data-testid="interactive-wlad-history">
           {turns.map((t, i) => (
             <div key={t.id} className="space-y-1.5" data-testid={`interactive-wlad-turn-${i}`}>

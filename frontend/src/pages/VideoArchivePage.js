@@ -14,6 +14,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { ArrowLeft, Trophy, TrendingUp, Calendar, ChevronDown, ChevronUp, Sparkles, Loader2 } from 'lucide-react';
@@ -120,6 +121,8 @@ const AttemptRow = ({ attempt, expanded, onToggle, de }) => {
   );
 };
 
+const ARCHIVE_CLIPS = ['bp-video-analyse'];
+
 export default function VideoArchivePage() {
   const navigate = useNavigate();
   const { lang } = useLanguage();
@@ -223,6 +226,7 @@ export default function VideoArchivePage() {
         </div>
 
         <div className="px-6 lg:px-12 pb-16 max-w-6xl mx-auto">
+          <FeatureVideoSection slugs={ARCHIVE_CLIPS} de={de} dark />
           {attempts.length === 0 ? (
             <Card className="p-12 text-center bg-white/[0.02] border-white/[0.06] rounded-2xl">
               <div className="w-14 h-14 rounded-2xl bg-[#BFFF00]/10 flex items-center justify-center mx-auto mb-4">

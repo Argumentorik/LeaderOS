@@ -85,6 +85,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const speechDetectedRef = useRef(false);
   const speechFramesRef = useRef(0);
   const lastCountdownRef = useRef(null);
+  const discardNextStopRef = useRef(false);
+  const sendAndPlayRef = useRef(null);
 
   useEffect(() => { sessionIdRef.current = initialSessionId; }, [initialSessionId]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
@@ -247,12 +249,24 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   }, []);
 
   // ── Network: post audio, get reply, play ─────────────────────────────
-  const sendAndPlay = useCallback(async (blob) => {
+  // Getippte/vorgeschlagene Frage ohne Mikrofon: laufende Aufnahme verwerfen, Text senden
+  const sendText = useCallback((text) => {
+    if (!text?.trim() || cancelledRef.current) return;
+    if (mediaRecorderRef.current?.state === 'recording') {
+      discardNextStopRef.current = true;
+      try { mediaRecorderRef.current.stop(); } catch (e) { logger.warn('recorder stop', e); }
+    } else {
+      stopMicTracks();
+    }
+    sendAndPlayRef.current?.(null, text.trim());
+  }, [stopMicTracks]);
+
+  const sendAndPlay = useCallback(async (blob, typedText = null) => {
     setState(VOICE_STATES.THINKING);
     try {
-      const ext = mimeToExt(recordedMimeRef.current);
       const fd = new FormData();
-      fd.append('file', blob, `voice.${ext}`);
+      if (typedText) fd.append('text', typedText);
+      else fd.append('file', blob, `voice.${mimeToExt(recordedMimeRef.current)}`);
       if (sessionIdRef.current) fd.append('session_id', sessionIdRef.current);
       const { endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, persona } = optsRef.current;
       fd.append('persona', persona);
@@ -269,7 +283,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       let { audio_url } = res.data;
       setTranscript(t);
       setReply(response_text);
-      onTurn?.({ transcript: t, reply: response_text });
+      onTurn?.({ transcript: t, reply: response_text, data: res.data });
       if (session_id && session_id !== sessionIdRef.current) {
         sessionIdRef.current = session_id;
         onSessionUpdate?.(session_id);
@@ -308,6 +322,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
 
   const handleRecordingStopped = useCallback(async () => {
     stopMicTracks();
+    if (discardNextStopRef.current) { discardNextStopRef.current = false; chunksRef.current = []; return; }
     if (cancelledRef.current) return;
     const blob = new Blob(chunksRef.current, { type: recordedMimeRef.current });
     chunksRef.current = [];
@@ -328,6 +343,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     emptyRetryCountRef.current = 0;
     await sendAndPlay(blob);
   }, [de, stopMicTracks, sendAndPlay, startRecording]);
+  sendAndPlayRef.current = sendAndPlay;
 
   // ── Playback ─────────────────────────────────────────────────────────
   const playReply = useCallback((audioUrl) => new Promise((resolve) => {
@@ -433,6 +449,6 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
 
   return {
     state, transcript, reply, error, paused, muted, level, silenceLeft, speakLevel,
-    handleOrbTap, togglePause, toggleMute, fullCleanup,
+    handleOrbTap, togglePause, toggleMute, fullCleanup, sendText,
   };
 };

@@ -9,7 +9,7 @@ Wortgrenze ist keine Kosmetik: Fal rechnet pro Sekunde Video ab.
 
 SCRIPT_MIN_WORDS = 55
 SCRIPT_MAX_WORDS = 115
-WORD_LIMITS = {"teaser": (6, 70), "onboarding": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
+WORD_LIMITS = {"teaser": (6, 70), "onboarding": (70, 150), "feature": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
 
 
 def word_limits(kind: str) -> tuple[int, int]:
@@ -238,7 +238,31 @@ CLIP_SCREENS = {
     "mission-day-7": ["mypath", "checkin", "coaching", "dashboard"],
     "teaser-login": ["chat", "video", "missions"],
     "coaching-pakete": ["videos", "chat", "simulations", "coaching"],
+    "bp-playbooks": ["playbooks", "chat", "tools"],
+    "bp-missionen": ["missions", "video", "progress"],
+    "bp-video-analyse": ["video", "missions", "progress"],
 }
+
+# Best-Practice-Clips (Kind "feature"): Wlad erklärt, wie man ein Feature richtig nutzt — sitzt direkt auf der Feature-Seite
+FEATURE_CLIPS = [
+    {"slug": "bp-playbooks", "order": 300, "title": "Playbooks richtig nutzen"},
+    {"slug": "bp-missionen", "order": 301, "title": "Video-Missionen: so trainierst du"},
+    {"slug": "bp-video-analyse", "order": 302, "title": "Video-Analyse: so liest du dein Feedback"},
+]
+
+# Vorschlagsfragen für „Mit Wlad sprechen“ (Fallback: generisch)
+CLIP_QUESTIONS = {
+    "bp-playbooks": ["Welches Playbook passt zu meinem Gespräch nächste Woche?", "Wie formuliere ich das Ziel in einem Satz?", "Was mache ich mit dem Advice Report?"],
+    "bp-missionen": ["Welche Mission sollte ich zuerst machen?", "Wie fange ich die ersten zehn Sekunden an?", "Was ändere ich im zweiten Versuch?"],
+    "bp-video-analyse": ["Was bedeutet SEXIER genau?", "Welches Video eignet sich zum Hochladen?", "Wie lese ich meinen Score richtig?"],
+    "coaching-pakete": ["Welches Paket passt zu meiner Situation?", "Was passiert in den Live-Coachings?", "Wie schnell sehe ich Ergebnisse?"],
+    "teaser-login": ["Wie startest du mit mir?", "Was bringt mir der erste Tag?", "Was unterscheidet dich von einem Kurs?"],
+}
+DEFAULT_QUESTIONS = ["Wie wende ich das morgen konkret an?", "Was ist der häufigste Fehler dabei?", "Gib mir ein Beispiel aus deiner Praxis."]
+
+
+def clip_questions(slug: str) -> list[str]:
+    return CLIP_QUESTIONS.get(slug, DEFAULT_QUESTIONS)
 DEFAULT_SCREENS = ["dashboard", "chat", "video", "challenge"]
 
 # Wie ein Onboarding-Clip in Shots zerfällt (Stufe B)
@@ -264,7 +288,7 @@ WLAD_STATURE = "He is tall with long legs and elegant, athletic proportions (abo
 WLAD_STATURE_TALK = "He is tall with broad shoulders and an upright, relaxed posture; the camera is close to him. "
 # Studio-Look für Clips über Videos, Simulationen & Co.; sonst Gesprächs-Charakter im Loft.
 CLIP_SETTING = {"start-4-werkzeuge": "studio", "teaser-login": "studio", "teaser-spotlight": "studio",
-                "coaching-pakete": "studio"}
+                "coaching-pakete": "studio", "bp-playbooks": "studio", "bp-missionen": "studio", "bp-video-analyse": "studio"}
 
 
 def presence_plan(setting: str = "loft") -> list[dict]:
@@ -590,6 +614,8 @@ def seed_clips() -> list[dict]:
               for c in MISSION_CLIPS]
     clips.append(_clip("coaching-pakete", "coaching", 200, "Was du mit Leader-OS bekommst", GODMODE_SCRIPTS["coaching-pakete"],
                        multi_shot=True, aspect="16:9"))
+    clips += [_clip(c["slug"], "feature", c["order"], c["title"], GODMODE_SCRIPTS[c["slug"]], multi_shot=True, aspect="16:9")
+              for c in FEATURE_CLIPS]
     return clips
 
 

@@ -15,6 +15,7 @@ from pydantic import BaseModel
 
 from config import db, logger
 from services import get_current_user, get_user_memory
+from services_tier import resolve_user_tier
 from services_actions import record_user_action
 from services_ai_errors import ai_http_error
 from routes.admin import require_admin
@@ -28,18 +29,32 @@ router = APIRouter(prefix="/api/guide/interactive", tags=["guide-interactive"])
 
 BETA_KEY = "interactive_beta"
 MAX_CONTEXT_CHARS = 1200
+PAID_TIERS = ("standard", "accelerator")
+# Default: offen für Leader-OS/PLUS, Free darf 3 Gespräche testen, danach Upsell. `enabled` = für alle unbegrenzt.
+BETA_DEFAULTS = {"enabled": False, "paid_open": True, "free_trial_turns": 3}
 
 
 def _beta(settings: dict) -> dict:
-    return {"enabled": False, **(settings.get(BETA_KEY) or {})}
+    return {**BETA_DEFAULTS, **(settings.get(BETA_KEY) or {})}
 
 
 async def _access(user: dict) -> dict:
     beta = _beta(await _settings())
     is_admin = bool(user.get("is_admin"))
-    unlocked = beta["enabled"] or is_admin
-    return {"locked": not unlocked, "enabled": beta["enabled"], "admin_preview": is_admin and not beta["enabled"],
-            "updated_at": beta.get("updated_at")}
+    tier_info = await resolve_user_tier(user)
+    tier = tier_info.get("tier") if tier_info.get("active", True) else "free"
+    paid = tier in PAID_TIERS and beta["paid_open"]
+    trial_total = int(beta["free_trial_turns"] or 0)
+    trial_used = int(user.get("interactive_trial_used") or 0)
+    trial_left = max(0, trial_total - trial_used)
+    trial = not (is_admin or beta["enabled"] or paid)
+    unlocked = is_admin or beta["enabled"] or paid or trial_left > 0
+    return {
+        "locked": not unlocked, "enabled": beta["enabled"], "paid_open": beta["paid_open"], "tier": tier,
+        "admin_preview": is_admin and not beta["enabled"] and not paid,
+        "trial": trial, "trial_left": trial_left if trial else None, "trial_total": trial_total,
+        "updated_at": beta.get("updated_at"),
+    }
 
 
 async def _wlad_voice_config() -> dict:
@@ -59,27 +74,33 @@ async def interactive_status(request: Request):
 
 
 class BetaToggleIn(BaseModel):
-    enabled: bool
+    enabled: Optional[bool] = None
+    paid_open: Optional[bool] = None
+    free_trial_turns: Optional[int] = None
 
 
 @router.put("/admin")
 async def set_interactive_beta(data: BetaToggleIn, request: Request):
     admin = await require_admin(request)
-    patch = {"enabled": data.enabled, "updated_at": datetime.now(timezone.utc).isoformat(), "updated_by": admin.get("email")}
+    current = _beta(await _settings())
+    patch = {**current, **{k: v for k, v in data.model_dump().items() if v is not None},
+             "updated_at": datetime.now(timezone.utc).isoformat(), "updated_by": admin.get("email")}
+    patch["free_trial_turns"] = max(0, min(10, int(patch["free_trial_turns"])))
     await _set_settings({BETA_KEY: patch})
-    logger.info("Interactive Wlad beta %s by %s", "opened" if data.enabled else "locked", admin.get("email"))
+    logger.info("Interactive Wlad beta -> %s by %s", {k: patch[k] for k in BETA_DEFAULTS}, admin.get("email"))
     return {"ok": True, **_beta({BETA_KEY: patch, "_id": SETTINGS_ID})}
 
 
 @router.post("/turn")
 async def interactive_turn(
     request: Request,
-    file: UploadFile = File(...),
+    file: Optional[UploadFile] = File(None),
+    text: str = Form(""),
     session_id: Optional[str] = Form(None),
     context_title: str = Form(""),
     context_script: str = Form(""),
 ):
-    """Ein Sprach-Turn am Video: Audio rein, Wlads Antwort (Text + Klonstimme) raus."""
+    """Ein Turn am Video: Audio (oder getippte/vorgeschlagene Frage) rein, Wlads Antwort raus."""
     from routes.credits import check_and_deduct_credit, refund_credit
 
     user = await get_current_user(request)
@@ -87,13 +108,15 @@ async def interactive_turn(
     if access["locked"]:
         raise HTTPException(status_code=403, detail="interactive_locked")
 
-    audio_bytes = await file.read()
-    if not audio_bytes:
-        raise HTTPException(status_code=400, detail="Empty audio")
-    try:
-        transcript = await _transcribe_webm(audio_bytes)
-    except Exception as e:
-        raise await ai_http_error(e, "voice_transcribe")
+    transcript = text.strip()[:600]
+    if not transcript:
+        audio_bytes = await file.read() if file else b""
+        if not audio_bytes:
+            raise HTTPException(status_code=400, detail="Empty audio")
+        try:
+            transcript = await _transcribe_webm(audio_bytes)
+        except Exception as e:
+            raise await ai_http_error(e, "voice_transcribe")
     if not transcript:
         raise HTTPException(status_code=400, detail="empty_transcript")
 
@@ -133,9 +156,14 @@ async def interactive_turn(
     except Exception as e:
         logger.warning("record_user_action failed: %s", e)
 
+    trial_left = access["trial_left"]
+    if access["trial"]:
+        await db.users.update_one({"user_id": user["user_id"]}, {"$inc": {"interactive_trial_used": 1}})
+        trial_left = max(0, trial_left - 1)
+
     # Stimme kommt separat über /speak (eigenes Zeitfenster) — der Text erscheint sofort als Untertitel
     return {"session_id": session_id, "transcript": transcript, "response_text": reply, "audio_url": "",
-            "persona": "wlad", "voice": "wlad-clone"}
+            "persona": "wlad", "voice": "wlad-clone", "trial": access["trial"], "trial_left": trial_left}
 
 
 class SpeakIn(BaseModel):
@@ -147,7 +175,9 @@ class SpeakIn(BaseModel):
 async def interactive_speak(data: SpeakIn, request: Request):
     """Antworttext -> Wlads Klonstimme (Minimax, bis 40 s Queue-Budget; danach ElevenLabs-Fallback)."""
     user = await get_current_user(request)
-    if (await _access(user))["locked"]:
+    access = await _access(user)
+    if access["locked"] and not (access["trial"] and data.session_id
+                                 and await db.chat_sessions.find_one({"session_id": data.session_id, "user_id": user["user_id"]}, {"_id": 1})):
         raise HTTPException(status_code=403, detail="interactive_locked")
     text = _normalize_wlad_name(_cap_reply_length(data.text.strip()))
     if not text:

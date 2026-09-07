@@ -85,6 +85,35 @@ SCRIPTS["coaching-pakete"] = (
     "Situation passt. Und wenn du unsicher bist, frag mich einfach direkt."
 )
 
+SCRIPTS["bp-playbooks"] = (
+    "Die Playbooks sind kein Fragebogen. Sie sind die Vorbereitung, die ich mit meinen Klienten vor jedem "
+    "wichtigen Gespräch mache – in fünf Schritten. Best Practice: Nimm ein echtes Gespräch, das in den nächsten "
+    "sieben Tagen ansteht, nicht ein Beispiel. Schreib im ersten Schritt die Situation so auf, wie du sie einem "
+    "Freund erzählen würdest, mit Namen und Zitat. Beim Ziel formulierst du das Ergebnis in einem Satz, den dein "
+    "Gegenüber am Ende selbst sagen könnte. Und lies den Advice Report nicht nur – markiere den einen Satz, den "
+    "du morgen wörtlich benutzt. Zehn Minuten Vorbereitung, und das Gespräch läuft anders. Fang mit dem Gespräch an, "
+    "vor dem du dich am meisten drückst."
+)
+
+SCRIPTS["bp-missionen"] = (
+    "Video-Missionen sind dein Trainingsraum. Du bekommst eine Situation – Veränderung erklären, Vision pitchen, "
+    "kritisches Feedback geben – und sprichst zwei Minuten in die Kamera. Best Practice aus tausend Trainings: "
+    "Erster Versuch ohne Notizen, so wie es im Meeting auch wäre. Dann liest du das Feedback, änderst genau eine "
+    "Sache – den Einstieg, das Beispiel, den Schluss – und nimmst sofort ein zweites Mal auf. Nicht drei Sachen. "
+    "Eine. So entsteht der Fortschritt, den du nach einer Woche im echten Raum spürst. Und nimm die Mission, die "
+    "dir unangenehm ist. Die angenehme kannst du schon. Starte heute mit einem Versuch, zwei Minuten."
+)
+
+SCRIPTS["bp-video-analyse"] = (
+    "Die Video-Analyse bewertet, was dein Team hört, nicht was du gemeint hast. Ich schaue auf Klarheit, "
+    "Sicherheit, Empathie und Struktur – und auf SEXIER: Statement, Erklärung, Beispiel, Wirkung, Begründung, "
+    "Einwand. Best Practice: Lade echtes Material hoch, nicht die geschönte Version. Ein Meeting-Ausschnitt, eine "
+    "Präsentation vom Handy, drei Minuten reichen. Schau dir zuerst das schwächste Feld an, nicht die Gesamtnote, "
+    "und übe genau dort mit der Übung, die ich dir dazu gebe. Vergleiche nach zwei Wochen den zweiten Upload mit "
+    "dem ersten – das ist dein Fortschritt, sichtbar in Zahlen. Nimm dir heute ein Video aus der letzten Woche "
+    "und lade es hoch."
+)
+
 AI_SLOP = (
     "in der heutigen", "es ist wichtig zu", "tauchen wir ein", "lassen sie uns", "revolutionär", "nahtlos",
     "ganzheitlich", "unverzichtbar", "spielend leicht", "auf das nächste level", "game changer", "letztendlich",

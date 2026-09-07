@@ -11,12 +11,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_teaser-login_955e16ac.mp4",
+   "video_path": "guide/video_teaser-login_482fb89e.mp4",
    "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-07T00:39:54.280216+00:00",
+   "updated_at": "2026-09-07T09:12:59.704691+00:00",
    "progress": null,
    "shots": [
     {
@@ -26,12 +26,13 @@
      "screens": [],
      "text": "Du führst ein Team – aber wer coacht eigentlich dich? Ich bin Wlad. Leader-OS ist dein persönlicher Sparringspartner: Wir bereiten schwierige Gespräche gemeinsam vor, du übst sie in der Simulation.",
      "error": null,
-     "keyframe_path": "guide/kf_s1_teaser-login_3c58d149.png",
+     "keyframe_path": "guide/kf_s1_teaser-login_acdc1757.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s1_teaser-login_23332fbe.mp4",
-     "audio_path": "guide/a_s1_teaser-login_ef04e462.mp3",
-     "audio_seconds": 12.93,
+     "synced_path": "guide/sync_s1_teaser-login_42cb609e.mp4",
+     "audio_path": "guide/a_s1_teaser-login_e84a7944.mp3",
+     "audio_seconds": 13.0,
      "speech_lead": 0.4,
+     "speech_tail": 0.0,
      "engine": "omnihuman"
     },
     {
@@ -44,9 +45,10 @@
       "missions"
      ],
      "text": "Und in der Video-Analyse siehst du, wie du wirklich wirkst. Kein Kurs zum Abarbeiten, sondern ein System, das mit dir arbeitet – jeden Tag zehn Minuten.",
-     "audio_path": "guide/a_s2_teaser-login_366d90e6.mp3",
-     "audio_seconds": 7.27,
-     "speech_lead": 0.0
+     "audio_path": "guide/a_s2_teaser-login_607fc221.mp3",
+     "audio_seconds": 7.49,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0
     },
     {
      "id": "s3",
@@ -55,93 +57,93 @@
      "screens": [],
      "text": "Starte jetzt, kostenlos.",
      "error": null,
-     "keyframe_path": "guide/kf_s3_teaser-login_1ca7700a.png",
+     "keyframe_path": "guide/kf_s3_teaser-login_49b8e757.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s3_teaser-login_86ba0606.mp4",
-     "audio_path": "guide/a_s3_teaser-login_e89a2bc8.mp3",
+     "synced_path": "guide/sync_s3_teaser-login_359f34d1.mp4",
+     "audio_path": "guide/a_s3_teaser-login_17235367.mp3",
      "audio_seconds": 3.4,
      "speech_lead": 0.0,
-     "engine": "omnihuman",
-     "speech_tail": 0.9
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
     }
    ],
-   "spent_usd": 5.63,
-   "duration_seconds_video": 22.9,
+   "spent_usd": 8.33,
+   "duration_seconds_video": 23.1,
    "pipeline": "multishot",
    "subtitles": [
     {
      "start": 0.45,
-     "end": 2.08,
+     "end": 2.09,
      "text": "Du führst ein Team – aber"
     },
     {
-     "start": 2.08,
-     "end": 3.84,
+     "start": 2.09,
+     "end": 3.86,
      "text": "wer coacht eigentlich dich?"
     },
     {
-     "start": 3.84,
-     "end": 4.69,
+     "start": 3.86,
+     "end": 4.72,
      "text": "Ich bin Wlad."
     },
     {
-     "start": 4.69,
-     "end": 7.89,
+     "start": 4.72,
+     "end": 7.93,
      "text": "Leader-OS ist dein persönlicher Sparringspartner"
     },
     {
-     "start": 7.89,
-     "end": 11.02,
+     "start": 7.93,
+     "end": 11.08,
      "text": "Wir bereiten schwierige Gespräche gemeinsam vor"
     },
     {
-     "start": 11.02,
-     "end": 12.98,
+     "start": 11.08,
+     "end": 13.05,
      "text": "du übst sie in der Simulation."
     },
     {
      "start": 13.17,
-     "end": 14.9,
+     "end": 14.95,
      "text": "Und in der Video-Analyse siehst du"
     },
     {
-     "start": 14.9,
-     "end": 16.04,
+     "start": 14.95,
+     "end": 16.13,
      "text": "wie du wirklich wirkst."
     },
     {
-     "start": 16.04,
-     "end": 17.27,
+     "start": 16.13,
+     "end": 17.4,
      "text": "Kein Kurs zum Abarbeiten"
     },
     {
-     "start": 17.27,
-     "end": 18.21,
+     "start": 17.4,
+     "end": 18.37,
      "text": "sondern ein System"
     },
     {
-     "start": 18.21,
-     "end": 19.6,
+     "start": 18.37,
+     "end": 19.79,
      "text": "das mit dir arbeitet – jeden"
     },
     {
-     "start": 19.6,
-     "end": 20.44,
+     "start": 19.79,
+     "end": 20.66,
      "text": "Tag zehn Minuten."
     },
     {
-     "start": 19.98,
-     "end": 21.39,
+     "start": 20.19,
+     "end": 21.6,
      "text": "Starte jetzt"
     },
     {
-     "start": 21.39,
-     "end": 22.48,
+     "start": 21.6,
+     "end": 22.69,
      "text": "kostenlos."
     }
    ],
-   "video_bytes": 3686290,
-   "published_at": "2026-09-04T09:06:22.300527+00:00",
+   "video_bytes": 4526495,
+   "published_at": "2026-09-07T09:12:59.704681+00:00",
    "quality": "pro"
   },
   {
@@ -160,9 +162,8 @@
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-07T00:42:47.942881+00:00",
-   "voice_id_used": "Deep_Voice_Man",
-   "video_bytes": 9132716,
+   "updated_at": "2026-09-07T04:34:55.799597+00:00",
+   "progress": null,
    "shots": [
     {
      "id": "s1",
@@ -173,11 +174,12 @@
      "error": null,
      "keyframe_path": "guide/kf_s1_start-1-willkommen_0d0e405c.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s1_start-1-willkommen_5413dc73.mp4",
-     "audio_path": "guide/a_s1_start-1-willkommen_a8dc14bc.mp3",
-     "audio_seconds": 24.27,
+     "synced_path": null,
+     "audio_path": null,
+     "audio_seconds": null,
      "speech_lead": 0.4,
-     "engine": "omnihuman"
+     "engine": "omnihuman",
+     "padded_path": null
     },
     {
      "id": "s2",
@@ -190,9 +192,11 @@
       "challenge"
      ],
      "text": "Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität.",
-     "audio_path": "guide/a_s2_start-1-willkommen_d808a57b.mp3",
-     "audio_seconds": 14.18,
-     "speech_lead": 0.0
+     "audio_path": null,
+     "audio_seconds": null,
+     "speech_lead": 0.0,
+     "padded_path": null,
+     "synced_path": null
     },
     {
      "id": "s3",
@@ -211,7 +215,6 @@
      "speech_tail": 0.9
     }
    ],
-   "progress": null,
    "spent_usd": 10.48,
    "duration_seconds_video": 48.8,
    "pipeline": "multishot",
@@ -387,6 +390,7 @@
      "text": "Sie sind gut investiert."
     }
    ],
+   "video_bytes": 9132716,
    "published_at": "2026-09-02T10:00:43.311708+00:00",
    "quality": "pro"
   },
@@ -407,9 +411,8 @@
    "error": null,
    "created_at": "2026-09-02T01:01:52.733632+00:00",
    "updated_at": "2026-09-02T08:56:03.348965+00:00",
-   "spent_usd": 0.68,
-   "voice_id_used": "Voice6717536d1788310928",
    "progress": null,
+   "spent_usd": 0.68,
    "duration_seconds_video": 10.0,
    "pipeline": "cinematic",
    "subtitles": [
@@ -430,7 +433,8 @@
     }
    ],
    "video_bytes": 1437672,
-   "published_at": "2026-09-02T08:56:03.348948+00:00"
+   "published_at": "2026-09-02T08:56:03.348948+00:00",
+   "shots": []
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -443,12 +447,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-2-so-sprichst-du_6cbb6d2d.mp4",
+   "video_path": "guide/video_start-2-so-sprichst-du_53c23928.mp4",
    "media_token": "s8rrsoIoMXpbC8E_9aOuNYiTN5GIBvLD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-07T00:42:47.575495+00:00",
+   "updated_at": "2026-09-07T04:34:09.828660+00:00",
    "progress": null,
    "shots": [
     {
@@ -897,12 +901,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-4-werkzeuge_ac0f7928.mp4",
+   "video_path": "guide/video_start-4-werkzeuge_ec6c4af3.mp4",
    "media_token": "a1VU71OC6LPnX5JckWjFoPLIxAgmR-9Y",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.457634+00:00",
-   "updated_at": "2026-09-07T00:58:02.103746+00:00",
+   "updated_at": "2026-09-07T02:37:17.434762+00:00",
    "progress": null,
    "shots": [
     {
@@ -911,13 +915,15 @@
      "preset": "studio_medium",
      "screens": [],
      "text": "Leader-OS gibt dir vier Werkzeuge, und jedes hat seinen Platz. Der Chat ist zum Denken und Vorbereiten da: Wie baue ich das Gespräch auf, welche Argumente tragen, was ist mein Ziel? In der Simulation übst du dann – dein Gegenüber antwortet, und zwar nicht bequem, sondern so, wie es im echten Leben antworten würde. Die Video-Analyse zeigt dir anschließend, wie du wirkst.",
-     "keyframe_path": "guide/kf_s1_start-4-werkzeuge_1334149c.png",
-     "audio_path": "guide/a_s1_start-4-werkzeuge_ec87a378.mp3",
-     "audio_seconds": 24.2,
+     "error": null,
+     "keyframe_path": "guide/kf_s1_start-4-werkzeuge_089a2afb.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_start-4-werkzeuge_86bfad2e.mp4",
+     "audio_path": "guide/a_s1_start-4-werkzeuge_44e863c8.mp3",
+     "audio_seconds": 22.14,
      "speech_lead": 0.4,
      "speech_tail": 0.0,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s1_start-4-werkzeuge_40e42255.mp4"
+     "engine": "omnihuman"
     },
     {
      "id": "s2",
@@ -930,8 +936,8 @@
       "playbooks"
      ],
      "text": "Deine Stimme, dein Tempo, deine Struktur, deine Präsenz. Und die Playbooks sind fertige Abläufe für Situationen, die immer wiederkommen – Feedback geben, Kritik annehmen, eine Entscheidung verkünden. Meine Empfehlung für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse.",
-     "audio_path": "guide/a_s2_start-4-werkzeuge_25ce5f4c.mp3",
-     "audio_seconds": 18.83,
+     "audio_path": "guide/a_s2_start-4-werkzeuge_e03ec387.mp3",
+     "audio_seconds": 18.68,
      "speech_lead": 0.0,
      "speech_tail": 0.0
     },
@@ -941,186 +947,188 @@
      "preset": "studio_closeup",
      "screens": [],
      "text": "Genau diese Reihenfolge macht aus Wissen Können. Probier heute das erste Werkzeug aus – der Chat wartet schon auf dich.",
-     "keyframe_path": "guide/kf_s3_start-4-werkzeuge_0d18f300.png",
-     "audio_path": "guide/a_s3_start-4-werkzeuge_aef879d7.mp3",
-     "audio_seconds": 8.53,
+     "error": null,
+     "keyframe_path": "guide/kf_s3_start-4-werkzeuge_b8ee6ee0.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_start-4-werkzeuge_2a80e189.mp4",
+     "audio_path": "guide/a_s3_start-4-werkzeuge_c44bcf01.mp3",
+     "audio_seconds": 8.1,
      "speech_lead": 0.0,
      "speech_tail": 0.9,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s3_start-4-werkzeuge_248f15ca.mp4"
+     "engine": "omnihuman"
     }
    ],
-   "spent_usd": 9.76,
-   "duration_seconds_video": 51.1,
+   "spent_usd": 18.299999999999997,
+   "duration_seconds_video": 48.4,
    "pipeline": "multishot",
    "subtitles": [
     {
      "start": 0.45,
-     "end": 2.71,
+     "end": 2.51,
      "text": "Leader-OS gibt dir vier Werkzeuge"
     },
     {
-     "start": 2.71,
-     "end": 4.51,
+     "start": 2.51,
+     "end": 4.15,
      "text": "und jedes hat seinen Platz."
     },
     {
-     "start": 4.51,
-     "end": 6.3,
+     "start": 4.15,
+     "end": 5.79,
      "text": "Der Chat ist zum Denken und"
     },
     {
-     "start": 6.3,
-     "end": 7.3,
+     "start": 5.79,
+     "end": 6.7,
      "text": "Vorbereiten da"
     },
     {
-     "start": 7.3,
-     "end": 9.29,
+     "start": 6.7,
+     "end": 8.53,
      "text": "Wie baue ich das Gespräch auf"
     },
     {
-     "start": 9.29,
-     "end": 10.89,
+     "start": 8.53,
+     "end": 9.98,
      "text": "welche Argumente tragen"
     },
     {
-     "start": 10.89,
-     "end": 12.08,
+     "start": 9.98,
+     "end": 11.08,
      "text": "was ist mein Ziel?"
     },
     {
-     "start": 12.08,
-     "end": 14.08,
+     "start": 11.08,
+     "end": 12.9,
      "text": "In der Simulation übst du dann"
     },
     {
-     "start": 14.08,
-     "end": 15.87,
+     "start": 12.9,
+     "end": 14.54,
      "text": "– dein Gegenüber antwortet"
     },
     {
-     "start": 15.87,
-     "end": 17.34,
+     "start": 14.54,
+     "end": 15.87,
      "text": "und zwar nicht bequem"
     },
     {
-     "start": 17.34,
-     "end": 18.07,
+     "start": 15.87,
+     "end": 16.54,
      "text": "sondern so"
     },
     {
-     "start": 18.07,
-     "end": 20.19,
+     "start": 16.54,
+     "end": 18.49,
      "text": "wie es im echten Leben antworten"
     },
     {
-     "start": 20.19,
-     "end": 20.59,
+     "start": 18.49,
+     "end": 18.85,
      "text": "würde."
     },
     {
-     "start": 20.59,
-     "end": 23.32,
+     "start": 18.85,
+     "end": 21.34,
      "text": "Die Video-Analyse zeigt dir anschließend"
     },
     {
-     "start": 23.32,
-     "end": 24.25,
+     "start": 21.34,
+     "end": 22.19,
      "text": "wie du wirkst."
     },
     {
-     "start": 24.53,
-     "end": 25.33,
+     "start": 22.43,
+     "end": 23.22,
      "text": "Deine Stimme"
     },
     {
-     "start": 25.33,
-     "end": 26.0,
+     "start": 23.22,
+     "end": 23.89,
      "text": "dein Tempo"
     },
     {
-     "start": 26.0,
-     "end": 26.92,
+     "start": 23.89,
+     "end": 24.8,
      "text": "deine Struktur"
     },
     {
-     "start": 26.92,
-     "end": 27.78,
+     "start": 24.8,
+     "end": 25.65,
      "text": "deine Präsenz."
     },
     {
-     "start": 27.78,
-     "end": 30.11,
+     "start": 25.65,
+     "end": 27.97,
      "text": "Und die Playbooks sind fertige Abläufe"
     },
     {
-     "start": 30.11,
-     "end": 31.09,
+     "start": 27.97,
+     "end": 28.94,
      "text": "für Situationen"
     },
     {
-     "start": 31.09,
-     "end": 33.55,
+     "start": 28.94,
+     "end": 31.37,
      "text": "die immer wiederkommen – Feedback geben"
     },
     {
-     "start": 33.55,
-     "end": 34.53,
+     "start": 31.37,
+     "end": 32.35,
      "text": "Kritik annehmen"
     },
     {
-     "start": 34.53,
-     "end": 36.25,
+     "start": 32.35,
+     "end": 34.05,
      "text": "eine Entscheidung verkünden."
     },
     {
-     "start": 36.25,
-     "end": 38.21,
+     "start": 34.05,
+     "end": 36.0,
      "text": "Meine Empfehlung für den Anfang"
     },
     {
-     "start": 38.21,
-     "end": 39.43,
+     "start": 36.0,
+     "end": 37.22,
      "text": "erst denken im Chat"
     },
     {
-     "start": 39.43,
-     "end": 41.15,
+     "start": 37.22,
+     "end": 38.92,
      "text": "dann üben in der Simulation"
     },
     {
-     "start": 41.15,
-     "end": 43.36,
+     "start": 38.92,
+     "end": 41.11,
      "text": "dann aufnehmen in der Video-Analyse."
     },
     {
-     "start": 42.94,
-     "end": 45.59,
+     "start": 40.7,
+     "end": 43.2,
      "text": "Genau diese Reihenfolge macht aus Wissen"
     },
     {
-     "start": 45.59,
-     "end": 46.06,
+     "start": 43.2,
+     "end": 43.64,
      "text": "Können."
     },
     {
-     "start": 46.06,
-     "end": 48.45,
+     "start": 43.64,
+     "end": 45.9,
      "text": "Probier heute das erste Werkzeug aus"
     },
     {
-     "start": 48.45,
-     "end": 50.24,
+     "start": 45.9,
+     "end": 47.59,
      "text": "– der Chat wartet schon auf"
     },
     {
-     "start": 50.24,
-     "end": 50.57,
+     "start": 47.59,
+     "end": 47.9,
      "text": "dich."
     }
    ],
-   "video_bytes": 8752732,
+   "video_bytes": 8932180,
    "published_at": "2026-09-03T17:57:50.450964+00:00",
    "quality": "pro"
   },
@@ -2432,6 +2440,955 @@
    ],
    "video_bytes": 6167824,
    "published_at": "2026-09-03T17:57:52.089389+00:00",
+   "quality": "pro"
+  },
+  {
+   "slug": "coaching-pakete",
+   "kind": "coaching",
+   "ref": null,
+   "order": 200,
+   "title": "Was du mit Leader-OS bekommst",
+   "script": "Bevor du dir die Pakete ansiehst, eine ehrliche Einordnung. Die meisten Führungskräfte scheitern nicht am Wissen. Sie scheitern am Mittwoch um vierzehn Uhr, wenn das Gespräch wirklich ansteht. Genau dafür ist Leader-OS gebaut: zehn Kurse, zweiundsiebzig Folgen, jede unter zwölf Minuten, jede mit einem Werkzeug, das du am selben Tag einsetzt. Leader-OS für neunhundertsiebenundneunzig Euro im Jahr enthält die sechs Fundament-Kurse – Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meetings – und mich als Coach, jederzeit, mit deinem Kontext im Kopf. Leader-OS PLUS ergänzt die vier Kurse für die oberste Ebene – KI-First Leadership, Change, Executive Presence, Boardroom-Strategie – und zwölf Live-Coachings mit meinem Team, in denen wir deine echten Fälle durcharbeiten. Der Prozess ist bei beiden gleich: Situation beschreiben, Werkzeug anwenden, Feedback bekommen, besser ins nächste Gespräch gehen. Das Ergebnis siehst du nicht in einem Zertifikat, sondern in deinem Team. Schau dir unten an, welches Paket zu deiner Situation passt. Und wenn du unsicher bist, frag mich einfach direkt.",
+   "script_source": "wlad",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_coaching-pakete_b4f93246.mp4",
+   "media_token": "ThhmZtISezqYJg_LKtQEDAsqq5-8LC_k",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-07T01:19:58.575948+00:00",
+   "updated_at": "2026-09-07T12:09:11.366524+00:00",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Bevor du dir die Pakete ansiehst, eine ehrliche Einordnung. Die meisten Führungskräfte scheitern nicht am Wissen. Sie scheitern am Mittwoch um vierzehn Uhr, wenn das Gespräch wirklich ansteht. Genau dafür ist Leader-OS gebaut: zehn Kurse, zweiundsiebzig Folgen, jede unter zwölf Minuten, jede mit einem Werkzeug, das du am selben Tag einsetzt.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_coaching-pakete_835a4c1b.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_coaching-pakete_c851318f.mp4",
+     "audio_path": "guide/a_s1_coaching-pakete_434ff5bf.mp3",
+     "audio_seconds": 20.56,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman",
+     "padded_path": null
+    },
+    {
+     "id": "s2",
+     "type": "broll",
+     "preset": null,
+     "screens": [
+      "videos",
+      "chat",
+      "simulations",
+      "coaching"
+     ],
+     "text": "Leader-OS für neunhundertsiebenundneunzig Euro im Jahr enthält die sechs Fundament-Kurse – Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meetings – und mich als Coach, jederzeit, mit deinem Kontext im Kopf. Leader-OS PLUS ergänzt die vier Kurse für die oberste Ebene – KI-First Leadership, Change, Executive Presence, Boardroom-Strategie – und zwölf Live-Coachings mit meinem Team, in denen wir deine echten Fälle durcharbeiten.",
+     "audio_path": "guide/a_s2_coaching-pakete_dd512673.mp3",
+     "audio_seconds": 29.41,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0,
+     "padded_path": null,
+     "synced_path": null
+    },
+    {
+     "id": "s3",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Der Prozess ist bei beiden gleich: Situation beschreiben, Werkzeug anwenden, Feedback bekommen, besser ins nächste Gespräch gehen. Das Ergebnis siehst du nicht in einem Zertifikat, sondern in deinem Team. Schau dir unten an, welches Paket zu deiner Situation passt. Und wenn du unsicher bist, frag mich einfach direkt.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_coaching-pakete_6a36fb8d.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_coaching-pakete_8768fb7c.mp4",
+     "audio_path": "guide/a_s3_coaching-pakete_7ee43921.mp3",
+     "audio_seconds": 18.86,
+     "speech_lead": 0.0,
+     "speech_tail": 0.9,
+     "padded_path": null,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 10.92,
+   "duration_seconds_video": 68.4,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.46,
+     "text": "Bevor du dir die Pakete ansiehst"
+    },
+    {
+     "start": 2.46,
+     "end": 3.98,
+     "text": "eine ehrliche Einordnung."
+    },
+    {
+     "start": 3.98,
+     "end": 6.72,
+     "text": "Die meisten Führungskräfte scheitern nicht am"
+    },
+    {
+     "start": 6.72,
+     "end": 7.15,
+     "text": "Wissen."
+    },
+    {
+     "start": 7.15,
+     "end": 9.4,
+     "text": "Sie scheitern am Mittwoch um vierzehn"
+    },
+    {
+     "start": 9.4,
+     "end": 9.65,
+     "text": "Uhr"
+    },
+    {
+     "start": 9.65,
+     "end": 11.78,
+     "text": "wenn das Gespräch wirklich ansteht."
+    },
+    {
+     "start": 11.78,
+     "end": 13.79,
+     "text": "Genau dafür ist Leader-OS gebaut"
+    },
+    {
+     "start": 13.79,
+     "end": 14.46,
+     "text": "zehn Kurse"
+    },
+    {
+     "start": 14.46,
+     "end": 15.8,
+     "text": "zweiundsiebzig Folgen"
+    },
+    {
+     "start": 15.8,
+     "end": 17.32,
+     "text": "jede unter zwölf Minuten"
+    },
+    {
+     "start": 17.32,
+     "end": 18.78,
+     "text": "jede mit einem Werkzeug"
+    },
+    {
+     "start": 18.78,
+     "end": 20.61,
+     "text": "das du am selben Tag einsetzt."
+    },
+    {
+     "start": 20.83,
+     "end": 24.5,
+     "text": "Leader-OS für neunhundertsiebenundneunzig Euro im Jahr"
+    },
+    {
+     "start": 24.5,
+     "end": 27.55,
+     "text": "enthält die sechs Fundament-Kurse – Rhetorik"
+    },
+    {
+     "start": 27.55,
+     "end": 28.98,
+     "text": "schwierige Gespräche"
+    },
+    {
+     "start": 28.98,
+     "end": 29.73,
+     "text": "Delegation"
+    },
+    {
+     "start": 29.73,
+     "end": 30.34,
+     "text": "Feedback"
+    },
+    {
+     "start": 30.34,
+     "end": 31.22,
+     "text": "Storytelling"
+    },
+    {
+     "start": 31.22,
+     "end": 33.26,
+     "text": "Meetings – und mich als Coach"
+    },
+    {
+     "start": 33.26,
+     "end": 33.94,
+     "text": "jederzeit"
+    },
+    {
+     "start": 33.94,
+     "end": 35.77,
+     "text": "mit deinem Kontext im Kopf."
+    },
+    {
+     "start": 35.77,
+     "end": 38.29,
+     "text": "Leader-OS PLUS ergänzt die vier Kurse"
+    },
+    {
+     "start": 38.29,
+     "end": 40.46,
+     "text": "für die oberste Ebene – KI-First"
+    },
+    {
+     "start": 40.46,
+     "end": 41.21,
+     "text": "Leadership"
+    },
+    {
+     "start": 41.21,
+     "end": 41.68,
+     "text": "Change"
+    },
+    {
+     "start": 41.68,
+     "end": 42.97,
+     "text": "Executive Presence"
+    },
+    {
+     "start": 42.97,
+     "end": 46.37,
+     "text": "Boardroom-Strategie – und zwölf Live-Coachings mit"
+    },
+    {
+     "start": 46.37,
+     "end": 47.18,
+     "text": "meinem Team"
+    },
+    {
+     "start": 47.18,
+     "end": 49.29,
+     "text": "in denen wir deine echten Fälle"
+    },
+    {
+     "start": 49.29,
+     "end": 50.24,
+     "text": "durcharbeiten."
+    },
+    {
+     "start": 49.83,
+     "end": 51.82,
+     "text": "Der Prozess ist bei beiden gleich"
+    },
+    {
+     "start": 51.82,
+     "end": 53.11,
+     "text": "Situation beschreiben"
+    },
+    {
+     "start": 53.11,
+     "end": 54.16,
+     "text": "Werkzeug anwenden"
+    },
+    {
+     "start": 54.16,
+     "end": 55.21,
+     "text": "Feedback bekommen"
+    },
+    {
+     "start": 55.21,
+     "end": 57.2,
+     "text": "besser ins nächste Gespräch gehen."
+    },
+    {
+     "start": 57.2,
+     "end": 59.01,
+     "text": "Das Ergebnis siehst du nicht in"
+    },
+    {
+     "start": 59.01,
+     "end": 60.01,
+     "text": "einem Zertifikat"
+    },
+    {
+     "start": 60.01,
+     "end": 61.35,
+     "text": "sondern in deinem Team."
+    },
+    {
+     "start": 61.35,
+     "end": 62.47,
+     "text": "Schau dir unten an"
+    },
+    {
+     "start": 62.47,
+     "end": 64.81,
+     "text": "welches Paket zu deiner Situation passt."
+    },
+    {
+     "start": 64.81,
+     "end": 66.33,
+     "text": "Und wenn du unsicher bist"
+    },
+    {
+     "start": 66.33,
+     "end": 67.79,
+     "text": "frag mich einfach direkt."
+    }
+   ],
+   "video_bytes": 12948069,
+   "published_at": "2026-09-07T12:09:11.366515+00:00",
+   "quality": "pro"
+  },
+  {
+   "slug": "bp-playbooks",
+   "kind": "feature",
+   "ref": null,
+   "order": 300,
+   "title": "Playbooks richtig nutzen",
+   "script": "Die Playbooks sind kein Fragebogen. Sie sind die Vorbereitung, die ich mit meinen Klienten vor jedem wichtigen Gespräch mache – in fünf Schritten. Best Practice: Nimm ein echtes Gespräch, das in den nächsten sieben Tagen ansteht, nicht ein Beispiel. Schreib im ersten Schritt die Situation so auf, wie du sie einem Freund erzählen würdest, mit Namen und Zitat. Beim Ziel formulierst du das Ergebnis in einem Satz, den dein Gegenüber am Ende selbst sagen könnte. Und lies den Advice Report nicht nur – markiere den einen Satz, den du morgen wörtlich benutzt. Zehn Minuten Vorbereitung, und das Gespräch läuft anders. Fang mit dem Gespräch an, vor dem du dich am meisten drückst.",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-playbooks_6a754391.mp4",
+   "media_token": "BIj22an_necZ0iM0Z8p5wmQBdWWW9XPd",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-07T10:29:47.577544+00:00",
+   "updated_at": "2026-09-07T10:58:24.735413+00:00",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Die Playbooks sind kein Fragebogen. Sie sind die Vorbereitung, die ich mit meinen Klienten vor jedem wichtigen Gespräch mache – in fünf Schritten. Best Practice: Nimm ein echtes Gespräch, das in den nächsten sieben Tagen ansteht, nicht ein Beispiel. Schreib im ersten Schritt die Situation so auf, wie du sie einem Freund erzählen würdest, mit Namen und Zitat.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_bp-playbooks_9550a098.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-playbooks_aba80e47.mp4",
+     "audio_path": "guide/a_s1_bp-playbooks_843adcbd.mp3",
+     "audio_seconds": 19.77,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s2",
+     "type": "broll",
+     "preset": null,
+     "screens": [
+      "playbooks",
+      "chat",
+      "tools"
+     ],
+     "text": "Beim Ziel formulierst du das Ergebnis in einem Satz, den dein Gegenüber am Ende selbst sagen könnte. Und lies den Advice Report nicht nur – markiere den einen Satz, den du morgen wörtlich benutzt.",
+     "audio_path": "guide/a_s2_bp-playbooks_9ceceff8.mp3",
+     "audio_seconds": 11.02,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0
+    },
+    {
+     "id": "s3",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Zehn Minuten Vorbereitung, und das Gespräch läuft anders. Fang mit dem Gespräch an, vor dem du dich am meisten drückst.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_bp-playbooks_af2452fb.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_bp-playbooks_e506ca7e.mp4",
+     "audio_path": "guide/a_s3_bp-playbooks_4cb4f9d3.mp3",
+     "audio_seconds": 6.84,
+     "speech_lead": 0.0,
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 4.33,
+   "duration_seconds_video": 37.0,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.41,
+     "text": "Die Playbooks sind kein Fragebogen."
+    },
+    {
+     "start": 2.41,
+     "end": 3.86,
+     "text": "Sie sind die Vorbereitung"
+    },
+    {
+     "start": 3.86,
+     "end": 5.6,
+     "text": "die ich mit meinen Klienten vor"
+    },
+    {
+     "start": 5.6,
+     "end": 7.56,
+     "text": "jedem wichtigen Gespräch mache – in"
+    },
+    {
+     "start": 7.56,
+     "end": 8.4,
+     "text": "fünf Schritten."
+    },
+    {
+     "start": 8.4,
+     "end": 9.18,
+     "text": "Best Practice"
+    },
+    {
+     "start": 9.18,
+     "end": 10.58,
+     "text": "Nimm ein echtes Gespräch"
+    },
+    {
+     "start": 10.58,
+     "end": 12.37,
+     "text": "das in den nächsten sieben Tagen"
+    },
+    {
+     "start": 12.37,
+     "end": 12.82,
+     "text": "ansteht"
+    },
+    {
+     "start": 12.82,
+     "end": 13.89,
+     "text": "nicht ein Beispiel."
+    },
+    {
+     "start": 13.89,
+     "end": 16.07,
+     "text": "Schreib im ersten Schritt die Situation"
+    },
+    {
+     "start": 16.07,
+     "end": 16.46,
+     "text": "so auf"
+    },
+    {
+     "start": 16.46,
+     "end": 18.25,
+     "text": "wie du sie einem Freund erzählen"
+    },
+    {
+     "start": 18.25,
+     "end": 18.7,
+     "text": "würdest"
+    },
+    {
+     "start": 18.7,
+     "end": 19.82,
+     "text": "mit Namen und Zitat."
+    },
+    {
+     "start": 20.03,
+     "end": 22.18,
+     "text": "Beim Ziel formulierst du das Ergebnis"
+    },
+    {
+     "start": 22.18,
+     "end": 22.99,
+     "text": "in einem Satz"
+    },
+    {
+     "start": 22.99,
+     "end": 24.9,
+     "text": "den dein Gegenüber am Ende selbst"
+    },
+    {
+     "start": 24.9,
+     "end": 25.66,
+     "text": "sagen könnte."
+    },
+    {
+     "start": 25.66,
+     "end": 27.51,
+     "text": "Und lies den Advice Report nicht"
+    },
+    {
+     "start": 27.51,
+     "end": 29.25,
+     "text": "nur – markiere den einen Satz"
+    },
+    {
+     "start": 29.25,
+     "end": 31.05,
+     "text": "den du morgen wörtlich benutzt."
+    },
+    {
+     "start": 30.59,
+     "end": 31.93,
+     "text": "Zehn Minuten Vorbereitung"
+    },
+    {
+     "start": 31.93,
+     "end": 33.48,
+     "text": "und das Gespräch läuft anders."
+    },
+    {
+     "start": 33.48,
+     "end": 34.77,
+     "text": "Fang mit dem Gespräch an"
+    },
+    {
+     "start": 34.77,
+     "end": 36.12,
+     "text": "vor dem du dich am meisten"
+    },
+    {
+     "start": 36.12,
+     "end": 36.53,
+     "text": "drückst."
+    }
+   ],
+   "video_bytes": 6682719,
+   "published_at": "2026-09-07T10:58:24.735405+00:00",
+   "quality": "pro"
+  },
+  {
+   "slug": "bp-missionen",
+   "kind": "feature",
+   "ref": null,
+   "order": 301,
+   "title": "Video-Missionen: so trainierst du",
+   "script": "Video-Missionen sind dein Trainingsraum. Du bekommst eine Situation – Veränderung erklären, Vision pitchen, kritisches Feedback geben – und sprichst zwei Minuten in die Kamera. Best Practice aus tausend Trainings: Erster Versuch ohne Notizen, so wie es im Meeting auch wäre. Dann liest du das Feedback, änderst genau eine Sache – den Einstieg, das Beispiel, den Schluss – und nimmst sofort ein zweites Mal auf. Nicht drei Sachen. Eine. So entsteht der Fortschritt, den du nach einer Woche im echten Raum spürst. Und nimm die Mission, die dir unangenehm ist. Die angenehme kannst du schon. Starte heute mit einem Versuch, zwei Minuten.",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-missionen_e99540cc.mp4",
+   "media_token": "MfMPcHJole0TdkcMMqqrRpsNYuVoyM8o",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-07T10:29:47.580373+00:00",
+   "updated_at": "2026-09-07T10:58:24.930803+00:00",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Video-Missionen sind dein Trainingsraum. Du bekommst eine Situation – Veränderung erklären, Vision pitchen, kritisches Feedback geben – und sprichst zwei Minuten in die Kamera. Best Practice aus tausend Trainings: Erster Versuch ohne Notizen, so wie es im Meeting auch wäre. Dann liest du das Feedback, änderst genau eine Sache – den Einstieg, das Beispiel.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_bp-missionen_b16549c4.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-missionen_7586d76d.mp4",
+     "audio_path": "guide/a_s1_bp-missionen_6290b793.mp3",
+     "audio_seconds": 21.78,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s2",
+     "type": "broll",
+     "preset": null,
+     "screens": [
+      "missions",
+      "video",
+      "progress"
+     ],
+     "text": "Den Schluss – und nimmst sofort ein zweites Mal auf. Nicht drei Sachen. Eine. So entsteht der Fortschritt, den du nach einer Woche im echten Raum spürst.",
+     "audio_path": "guide/a_s2_bp-missionen_1883b6da.mp3",
+     "audio_seconds": 11.09,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0
+    },
+    {
+     "id": "s3",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Und nimm die Mission, die dir unangenehm ist. Die angenehme kannst du schon. Starte heute mit einem Versuch, zwei Minuten.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_bp-missionen_2b93a62c.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_bp-missionen_512baa90.mp4",
+     "audio_path": "guide/a_s3_bp-missionen_a63af281.mp3",
+     "audio_seconds": 8.1,
+     "speech_lead": 0.0,
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 4.86,
+   "duration_seconds_video": 40.5,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.94,
+     "text": "Video-Missionen sind dein Trainingsraum."
+    },
+    {
+     "start": 2.94,
+     "end": 5.42,
+     "text": "Du bekommst eine Situation – Veränderung"
+    },
+    {
+     "start": 5.42,
+     "end": 5.98,
+     "text": "erklären"
+    },
+    {
+     "start": 5.98,
+     "end": 6.91,
+     "text": "Vision pitchen"
+    },
+    {
+     "start": 6.91,
+     "end": 9.4,
+     "text": "kritisches Feedback geben – und sprichst"
+    },
+    {
+     "start": 9.4,
+     "end": 11.08,
+     "text": "zwei Minuten in die Kamera."
+    },
+    {
+     "start": 11.08,
+     "end": 13.32,
+     "text": "Best Practice aus tausend Trainings"
+    },
+    {
+     "start": 13.32,
+     "end": 15.06,
+     "text": "Erster Versuch ohne Notizen"
+    },
+    {
+     "start": 15.06,
+     "end": 16.61,
+     "text": "so wie es im Meeting auch"
+    },
+    {
+     "start": 16.61,
+     "end": 16.92,
+     "text": "wäre."
+    },
+    {
+     "start": 16.92,
+     "end": 18.6,
+     "text": "Dann liest du das Feedback"
+    },
+    {
+     "start": 18.6,
+     "end": 20.46,
+     "text": "änderst genau eine Sache – den"
+    },
+    {
+     "start": 20.46,
+     "end": 21.02,
+     "text": "Einstieg"
+    },
+    {
+     "start": 21.02,
+     "end": 21.83,
+     "text": "das Beispiel."
+    },
+    {
+     "start": 22.13,
+     "end": 24.47,
+     "text": "Den Schluss – und nimmst sofort"
+    },
+    {
+     "start": 24.47,
+     "end": 25.98,
+     "text": "ein zweites Mal auf."
+    },
+    {
+     "start": 25.98,
+     "end": 27.34,
+     "text": "Nicht drei Sachen."
+    },
+    {
+     "start": 27.34,
+     "end": 27.71,
+     "text": "Eine."
+    },
+    {
+     "start": 27.71,
+     "end": 29.83,
+     "text": "So entsteht der Fortschritt"
+    },
+    {
+     "start": 29.83,
+     "end": 31.79,
+     "text": "den du nach einer Woche im"
+    },
+    {
+     "start": 31.79,
+     "end": 33.22,
+     "text": "echten Raum spürst."
+    },
+    {
+     "start": 32.77,
+     "end": 34.05,
+     "text": "Und nimm die Mission"
+    },
+    {
+     "start": 34.05,
+     "end": 35.45,
+     "text": "die dir unangenehm ist."
+    },
+    {
+     "start": 35.45,
+     "end": 37.29,
+     "text": "Die angenehme kannst du schon."
+    },
+    {
+     "start": 37.29,
+     "end": 39.18,
+     "text": "Starte heute mit einem Versuch"
+    },
+    {
+     "start": 39.18,
+     "end": 39.97,
+     "text": "zwei Minuten."
+    }
+   ],
+   "video_bytes": 7746855,
+   "published_at": "2026-09-07T10:58:24.930795+00:00",
+   "quality": "pro"
+  },
+  {
+   "slug": "bp-video-analyse",
+   "kind": "feature",
+   "ref": null,
+   "order": 302,
+   "title": "Video-Analyse: so liest du dein Feedback",
+   "script": "Die Video-Analyse bewertet, was dein Team hört, nicht was du gemeint hast. Ich schaue auf Klarheit, Sicherheit, Empathie und Struktur – und auf SEXIER: Statement, Erklärung, Beispiel, Wirkung, Begründung, Einwand. Best Practice: Lade echtes Material hoch, nicht die geschönte Version. Ein Meeting-Ausschnitt, eine Präsentation vom Handy, drei Minuten reichen. Schau dir zuerst das schwächste Feld an, nicht die Gesamtnote, und übe genau dort mit der Übung, die ich dir dazu gebe. Vergleiche nach zwei Wochen den zweiten Upload mit dem ersten – das ist dein Fortschritt, sichtbar in Zahlen. Nimm dir heute ein Video aus der letzten Woche und lade es hoch.",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-video-analyse_ff32deab.mp4",
+   "media_token": "lA01P2teRyURwhsZN1HZIIVQDb8S60-S",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-07T10:29:47.581160+00:00",
+   "updated_at": "2026-09-07T11:12:05.516532+00:00",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Die Video-Analyse bewertet, was dein Team hört, nicht was du gemeint hast. Ich schaue auf Klarheit, Sicherheit, Empathie und Struktur – und auf SEXIER: Statement, Erklärung, Beispiel, Wirkung, Begründung, Einwand. Best Practice: Lade echtes Material hoch, nicht die geschönte Version. Ein Meeting-Ausschnitt, eine Präsentation vom Handy, drei Minuten reichen.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_bp-video-analyse_a5582717.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-video-analyse_d1fa05af.mp4",
+     "audio_path": "guide/a_s1_bp-video-analyse_cd3fb479.mp3",
+     "audio_seconds": 24.05,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s2",
+     "type": "broll",
+     "preset": null,
+     "screens": [
+      "video",
+      "missions",
+      "progress"
+     ],
+     "text": "Schau dir zuerst das schwächste Feld an, nicht die Gesamtnote, und übe genau dort mit der Übung, die ich dir dazu gebe.",
+     "audio_path": "guide/a_s2_bp-video-analyse_10fa336d.mp3",
+     "audio_seconds": 6.12,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0
+    },
+    {
+     "id": "s3",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Vergleiche nach zwei Wochen den zweiten Upload mit dem ersten – das ist dein Fortschritt, sichtbar in Zahlen. Nimm dir heute ein Video aus der letzten Woche und lade es hoch.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_bp-video-analyse_1bd39f9e.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_bp-video-analyse_46d44a50.mp4",
+     "audio_path": "guide/a_s3_bp-video-analyse_7237b62a.mp3",
+     "audio_seconds": 11.02,
+     "speech_lead": 0.0,
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 5.69,
+   "duration_seconds_video": 40.8,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.32,
+     "text": "Die Video-Analyse bewertet"
+    },
+    {
+     "start": 2.32,
+     "end": 3.64,
+     "text": "was dein Team hört"
+    },
+    {
+     "start": 3.64,
+     "end": 5.44,
+     "text": "nicht was du gemeint hast."
+    },
+    {
+     "start": 5.44,
+     "end": 7.11,
+     "text": "Ich schaue auf Klarheit"
+    },
+    {
+     "start": 7.11,
+     "end": 7.87,
+     "text": "Sicherheit"
+    },
+    {
+     "start": 7.87,
+     "end": 10.02,
+     "text": "Empathie und Struktur – und auf"
+    },
+    {
+     "start": 10.02,
+     "end": 10.51,
+     "text": "SEXIER"
+    },
+    {
+     "start": 10.51,
+     "end": 11.2,
+     "text": "Statement"
+    },
+    {
+     "start": 11.2,
+     "end": 11.89,
+     "text": "Erklärung"
+    },
+    {
+     "start": 11.89,
+     "end": 12.52,
+     "text": "Beispiel"
+    },
+    {
+     "start": 12.52,
+     "end": 13.07,
+     "text": "Wirkung"
+    },
+    {
+     "start": 13.07,
+     "end": 13.84,
+     "text": "Begründung"
+    },
+    {
+     "start": 13.84,
+     "end": 14.39,
+     "text": "Einwand."
+    },
+    {
+     "start": 14.39,
+     "end": 15.36,
+     "text": "Best Practice"
+    },
+    {
+     "start": 15.36,
+     "end": 17.16,
+     "text": "Lade echtes Material hoch"
+    },
+    {
+     "start": 17.16,
+     "end": 19.11,
+     "text": "nicht die geschönte Version."
+    },
+    {
+     "start": 19.11,
+     "end": 20.7,
+     "text": "Ein Meeting-Ausschnitt"
+    },
+    {
+     "start": 20.7,
+     "end": 22.64,
+     "text": "eine Präsentation vom Handy"
+    },
+    {
+     "start": 22.64,
+     "end": 24.1,
+     "text": "drei Minuten reichen."
+    },
+    {
+     "start": 24.37,
+     "end": 26.3,
+     "text": "Schau dir zuerst das schwächste Feld"
+    },
+    {
+     "start": 26.3,
+     "end": 26.46,
+     "text": "an"
+    },
+    {
+     "start": 26.46,
+     "end": 27.59,
+     "text": "nicht die Gesamtnote"
+    },
+    {
+     "start": 27.59,
+     "end": 28.99,
+     "text": "und übe genau dort mit der"
+    },
+    {
+     "start": 28.99,
+     "end": 29.31,
+     "text": "Übung"
+    },
+    {
+     "start": 29.31,
+     "end": 30.49,
+     "text": "die ich dir dazu gebe."
+    },
+    {
+     "start": 30.02,
+     "end": 32.37,
+     "text": "Vergleiche nach zwei Wochen den zweiten"
+    },
+    {
+     "start": 32.37,
+     "end": 34.0,
+     "text": "Upload mit dem ersten – das"
+    },
+    {
+     "start": 34.0,
+     "end": 35.26,
+     "text": "ist dein Fortschritt"
+    },
+    {
+     "start": 35.26,
+     "end": 36.41,
+     "text": "sichtbar in Zahlen."
+    },
+    {
+     "start": 36.41,
+     "end": 38.09,
+     "text": "Nimm dir heute ein Video aus"
+    },
+    {
+     "start": 38.09,
+     "end": 39.84,
+     "text": "der letzten Woche und lade es"
+    },
+    {
+     "start": 39.84,
+     "end": 40.14,
+     "text": "hoch."
+    }
+   ],
+   "video_bytes": 8274123,
+   "published_at": "2026-09-07T11:12:05.516524+00:00",
    "quality": "pro"
   }
  ],
