@@ -70,6 +70,21 @@ SCRIPTS = {
 }
 
 # Formulierungen, die nach Maschine klingen — der Qualitätscheck schlägt an, wenn sie vorkommen.
+SCRIPTS["coaching-pakete"] = (
+    "Bevor du dir die Pakete ansiehst, eine ehrliche Einordnung. Die meisten Führungskräfte scheitern "
+    "nicht am Wissen. Sie scheitern am Mittwoch um vierzehn Uhr, wenn das Gespräch wirklich ansteht. "
+    "Genau dafür ist Leader-OS gebaut: zehn Kurse, zweiundsiebzig Folgen, jede unter zwölf Minuten, jede "
+    "mit einem Werkzeug, das du am selben Tag einsetzt. Leader-OS für neunhundertsiebenundneunzig Euro im "
+    "Jahr enthält die sechs Fundament-Kurse – Rhetorik, schwierige Gespräche, Delegation, Feedback, "
+    "Storytelling, Meetings – und mich als Coach, jederzeit, mit deinem Kontext im Kopf. "
+    "Leader-OS PLUS ergänzt die vier Kurse für die oberste Ebene – KI-First Leadership, Change, "
+    "Executive Presence, Boardroom-Strategie – und zwölf Live-Coachings mit meinem Team, in denen wir "
+    "deine echten Fälle durcharbeiten. Der Prozess ist bei beiden gleich: Situation beschreiben, "
+    "Werkzeug anwenden, Feedback bekommen, besser ins nächste Gespräch gehen. Das Ergebnis siehst du "
+    "nicht in einem Zertifikat, sondern in deinem Team. Schau dir unten an, welches Paket zu deiner "
+    "Situation passt. Und wenn du unsicher bist, frag mich einfach direkt."
+)
+
 AI_SLOP = (
     "in der heutigen", "es ist wichtig zu", "tauchen wir ein", "lassen sie uns", "revolutionär", "nahtlos",
     "ganzheitlich", "unverzichtbar", "spielend leicht", "auf das nächste level", "game changer", "letztendlich",

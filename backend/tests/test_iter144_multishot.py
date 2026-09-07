@@ -9,6 +9,11 @@ import pytest
 import requests
 from dotenv import dotenv_values
 
+# Iter 155: Diese Tests setzen den alten 4-Shot-Plan (Walk-in) voraus und schreiben in den
+# Live-Clip start-1-willkommen (s1 → "Hallo", s2 → "Wort0 …"). Seit dem Präsenz-Plan (Iter 154)
+# zerstören sie echte Produktionsdaten — deshalb deaktiviert. Aktuelle Guide-Tests: test_iter149/154/155.
+pytestmark = pytest.mark.skip(reason="Legacy 4-Shot-Pipeline; destruktiv auf Live-Clips (siehe Iter 155)")
+
 frontend_env = dotenv_values("/app/frontend/.env")
 base_url = os.environ.get("REACT_APP_BACKEND_URL") or frontend_env.get("REACT_APP_BACKEND_URL")
 if not base_url:
@@ -220,11 +225,11 @@ class TestSaveShotsValidation:
         assert "stumm" in r.json()["detail"], r.json()
 
     def test_talk_word_limit(self, admin_headers):
-        long_text = " ".join(f"Wort{i}" for i in range(30))
+        long_text = " ".join(f"Wort{i}" for i in range(70))
         r = requests.put(_shots_url(), headers=admin_headers,
                          json={"shots": [{"id": "s2", "text": long_text}]}, timeout=60)
         assert r.status_code == 400, f"{r.status_code}: {r.text[:300]}"
-        assert "26 W" in r.json()["detail"], r.json()
+        assert "W\u00f6rter pro Talk-Shot" in r.json()["detail"], r.json()
 
     def test_broll_empty_screens(self, admin_headers):
         r = requests.put(_shots_url(), headers=admin_headers,

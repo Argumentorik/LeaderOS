@@ -85,5 +85,6 @@ def test_presence_plan_and_scripts():
         shots = plan_shots(script, None, True, CLIP_SETTING.get(slug, "loft"))
         assert [s["type"] for s in shots] == ["talk", "broll", "talk"]
         assert word_count(shots[0]["text"]) <= 64
-        q = godmode_check({"slug": slug, "kind": "teaser" if slug.startswith("teaser") else "onboarding", "script": script, "shots": shots})
+        kind = "teaser" if slug.startswith("teaser") else "coaching" if slug.startswith("coaching") else "onboarding"
+        q = godmode_check({"slug": slug, "kind": kind, "script": script, "shots": shots})
         assert all(i["ok"] for i in q["items"] if i["id"].startswith("script")), (slug, q)

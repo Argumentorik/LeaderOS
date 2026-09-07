@@ -21,6 +21,8 @@ import logger from '../lib/logger';
 import { toast } from 'sonner';
 import { openStrategyCall } from '../lib/calendly';
 import { MasterclassAccessCard } from '../components/coaching/MasterclassAccessCard';
+import { CourseCatalogSection } from '../components/coaching/CourseCatalogSection';
+import { CoachingVideoSection } from '../components/coaching/CoachingVideoSection';
 import {
   ArrowRight, PlayCircle, HelpCircle
 } from 'lucide-react';
@@ -182,6 +184,9 @@ export default function CoachingPage() {
           </div>
         </section>
 
+        {/* ── WLAD VIDEO: Pakete, Prozess, Ergebnis (value-first) ── */}
+        <CoachingVideoSection de={de} />
+
         {/* ── 3-LAYER SYSTEM ── full breakdown ── */}
         <section className="animate-fade-in stagger-2" data-testid="three-layer-section">
           <div className="text-center space-y-2 max-w-2xl mx-auto mb-8">
@@ -205,6 +210,9 @@ export default function CoachingPage() {
         {/* ── PRODUCT MECHANISM ── */}
         <WhyCoursesFail de={de} />
         <EngineLoop de={de} />
+
+        {/* ── KURS-BIBLIOTHEK als Paketinhalt (Upsell: jeder sieht die ganze Struktur) ── */}
+        <CourseCatalogSection de={de} onCta={scrollToPricing} />
 
         {/* ── MASTERCLASS: free access explainer (before pricing) ── */}
         {user?.masterclass && (!user?.tier || user?.tier === 'free') && (

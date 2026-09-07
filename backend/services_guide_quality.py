@@ -10,7 +10,7 @@ from guide_scripts_godmode import AI_SLOP
 
 _PRESENCE_PRESETS = {p for pair in PRESENCE_SETTINGS.values() for p in pair}
 _CTA = ("fang", "starte", "probier", "nimm dir", "füll", "schreib", "lass uns", "los geht", "leg los", "wir an",
-        "jetzt", "heute", "morgen", "als nächstes", "dein nächster schritt")
+        "jetzt", "heute", "morgen", "als nächstes", "dein nächster schritt", "schau dir", "frag mich")
 
 
 def _sentences(text: str) -> list[str]:

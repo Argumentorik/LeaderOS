@@ -34,6 +34,11 @@ def _control_base() -> str:
     return f"{base}/api/v1/fal"
 
 
+def _direct_key() -> str | None:
+    """Optional: eigener Fal-Key (FAL_KEY) -> direkt gegen queue.fal.run statt über den geteilten Emergent-Proxy."""
+    return os.environ.get("FAL_KEY") or None
+
+
 class FalError(Exception):
     pass
 
@@ -43,6 +48,8 @@ class FalInsufficientCredits(FalError):
 
 
 def _headers(extra: Optional[dict] = None) -> dict:
+    if _direct_key():
+        return {"Authorization": f"Key {_direct_key()}", "Content-Type": "application/json", **(extra or {})}
     headers = {
         "Authorization": f"Bearer {os.environ['EMERGENT_LLM_KEY']}",
         "Content-Type": "application/json",
@@ -60,7 +67,7 @@ def _headers(extra: Optional[dict] = None) -> dict:
 
 
 def _trusted_queue_url(value: str) -> str:
-    queue_base = urlparse(f"{_control_base()}/queue")
+    queue_base = urlparse(QUEUE_ORIGIN if _direct_key() else f"{_control_base()}/queue")
     candidate = urlparse(value)
     prefix = queue_base.path.rstrip("/") + "/"
     if (
@@ -94,14 +101,22 @@ def _get_with_retry(url: str, *, timeout_seconds: int, deadline: float, max_atte
     raise AssertionError("unreachable")
 
 
-def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_interval: float = 3.0) -> dict[str, Any]:
-    """Ein Submit, dann Polling bis zum Endzustand. Submit wird NIE automatisch
-    wiederholt — Fal könnte den (kostenpflichtigen) Job schon angenommen haben."""
-    control = _control_base()
+class FalTimeout(FalError):
+    """Fal hat den Job angenommen, aber nicht rechtzeitig geliefert — Request bleibt abholbar."""
+
+    def __init__(self, message: str, request: dict):
+        super().__init__(message)
+        self.request = request
+
+
+def submit_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> dict[str, Any]:
+    """Ein Submit (nie automatisch wiederholt — Fal könnte den Job schon angenommen haben).
+    Liefert den Queue-Body (request_id, status_url, response_url) zum späteren Abholen."""
+    direct = _direct_key()
     for attempt in range(4):
         submit = requests.post(
-            f"{control}/proxy",
-            headers=_headers({"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
+            f"{QUEUE_ORIGIN}/{endpoint_id}" if direct else f"{_control_base()}/proxy",
+            headers=_headers(None if direct else {"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
             json=payload,
             timeout=60,
         )
@@ -116,10 +131,19 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_in
     if submit.status_code >= 400:
         raise FalError(f"Fal-Submit fehlgeschlagen ({submit.status_code}): {submit.text[:300]}")
     body = submit.json()
-    status_url = _trusted_queue_url(body["status_url"])
-    response_url = _trusted_queue_url(body["response_url"])
+    logger.info("Fal %s submitted: request_id=%s", endpoint_id, body.get("request_id"))
+    return {"endpoint": endpoint_id, "request_id": body.get("request_id"),
+            "status_url": body["status_url"], "response_url": body["response_url"]}
+
+
+def wait_fal(request: dict, timeout_seconds: int = 900, poll_interval: float = 3.0) -> dict[str, Any]:
+    """Pollt einen bereits eingereichten Request bis zum Endzustand."""
+    endpoint_id = request.get("endpoint") or "?"
+    status_url = _trusted_queue_url(request["status_url"])
+    response_url = _trusted_queue_url(request["response_url"])
 
     deadline = time.monotonic() + timeout_seconds
+    last_log = time.monotonic()
     while time.monotonic() < deadline:
         status_res = _get_with_retry(status_url, timeout_seconds=30, deadline=deadline)
         if status_res.status_code in (502, 503, 504, 429):
@@ -131,6 +155,10 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_in
             raise FalError(f"Statusabfrage fehlgeschlagen ({status_res.status_code})")
         status_body = status_res.json()
         status = (status_body.get("status") or "").upper()
+        if time.monotonic() - last_log > 120:
+            last_log = time.monotonic()
+            logger.info("Fal %s [%s]: %s (%ss übrig)", endpoint_id, request.get("request_id"), status,
+                        int(deadline - time.monotonic()))
         if status in {"COMPLETED", "OK"}:
             if status_body.get("error"):
                 raise FalError(f"Generierung fehlgeschlagen: {status_body['error']}")
@@ -141,7 +169,12 @@ def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_in
         if status in {"FAILED", "CANCELLED", "CANCELED", "ERROR"}:
             raise FalError(f"Generierung fehlgeschlagen: {status}")
         time.sleep(poll_interval)
-    raise FalError("Zeitüberschreitung bei der Generierung")
+    raise FalTimeout("Zeitüberschreitung bei der Generierung — Request bleibt abholbar", request)
+
+
+def run_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900, poll_interval: float = 3.0) -> dict[str, Any]:
+    """Submit + Polling bis zum Endzustand."""
+    return wait_fal(submit_fal(endpoint_id, payload, timeout_seconds), timeout_seconds, poll_interval)
 
 
 # ── Fachliche Wrapper ───────────────────────────────────────────────────────
@@ -243,12 +276,21 @@ def image_to_video(image_url: str, prompt: str, duration: str = "10", aspect_rat
     return download(url, timeout=300)
 
 
-def omnihuman_video(image_url: str, audio_url: str, prompt: str | None = None) -> bytes:
-    """Keyframe + Tonspur -> sprechendes Video mit nativer Lippen-/Körperbewegung (1080p)."""
-    payload = {"image_url": image_url, "audio_url": audio_url, "resolution": "1080p", "turbo_mode": False}
-    if prompt:
-        payload["prompt"] = prompt[:600]
-    result = run_fal(OMNIHUMAN_ENDPOINT, payload, timeout_seconds=2400)
+def omnihuman_video(image_url: str, audio_url: str, prompt: str | None = None,
+                    pending: dict | None = None, on_submit=None) -> bytes:
+    """Keyframe + Tonspur -> sprechendes Video mit nativer Lippen-/Körperbewegung (1080p).
+    `pending`: früher eingereichter Request, der nur noch abgeholt wird (kein neuer Submit).
+    `on_submit(request)`: Callback direkt nach dem Submit, damit der Aufrufer den Request persistiert."""
+    if pending:
+        request = pending
+    else:
+        payload = {"image_url": image_url, "audio_url": audio_url, "resolution": "1080p", "turbo_mode": False}
+        if prompt:
+            payload["prompt"] = prompt[:600]
+        request = submit_fal(OMNIHUMAN_ENDPOINT, payload, timeout_seconds=3600)
+        if on_submit:
+            on_submit(request)
+    result = wait_fal(request, timeout_seconds=3600)
     url = (result.get("video") or {}).get("url")
     if not url:
         raise FalError("OmniHuman lieferte keine Video-URL")

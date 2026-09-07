@@ -7,10 +7,13 @@ import logger from '../../lib/logger';
 
 const base = process.env.REACT_APP_BACKEND_URL;
 const TYPE_LABEL = { walk: 'Walk-in', talk: 'Talk-Shot', broll: 'App-Tour' };
+// Präsenz-Shots (OmniHuman, bis 28 s) dürfen länger sprechen als die alten 10-s-Kling-Shots
+const wordCap = (shot) => (/closeup$/.test(shot.preset || '') ? 50 : /^(studio_|loft_seated_)/.test(shot.preset || '') ? 64 : 26);
 
 const ShotRow = ({ shot, slug, screens, draft, onDraft }) => {
   const words = (draft.text || '').trim().split(/\s+/).filter(Boolean).length;
-  const tooLong = shot.type === 'talk' && words > 26;
+  const cap = wordCap(shot);
+  const tooLong = shot.type === 'talk' && words > cap;
   const ready = shot.type === 'broll' ? Boolean(shot.audio_url) : Boolean(shot.synced_url || (shot.type === 'walk' && shot.raw_url));
   return (
     <div className="grid grid-cols-[72px_1fr] gap-3 p-3 rounded-xl border border-border bg-background/60" data-testid={`guide-shot-${slug}-${shot.id}`}>
@@ -30,8 +33,8 @@ const ShotRow = ({ shot, slug, screens, draft, onDraft }) => {
         <div className="flex items-center gap-2 text-[10px]">
           <span className="font-bold text-foreground">{TYPE_LABEL[shot.type]}</span>
           <span className="text-muted-foreground truncate">{shot.preset_label}</span>
-          <span className={`ml-auto font-semibold ${ready ? 'text-[#5a7a00] dark:text-[#BFFF00]' : 'text-muted-foreground'}`} data-testid={`guide-shot-state-${slug}-${shot.id}`}>
-            {ready ? 'gerendert' : shot.keyframe_url ? 'Keyframe ok' : shot.type === 'broll' ? 'bereit' : 'offen'}
+          <span className={`ml-auto font-semibold ${ready ? 'text-[#5a7a00] dark:text-[#BFFF00]' : shot.fal_pending ? 'text-amber-500' : 'text-muted-foreground'}`} data-testid={`guide-shot-state-${slug}-${shot.id}`}>
+            {ready ? 'gerendert' : shot.fal_pending ? 'in Fal-Queue · Rendern holt ab' : shot.keyframe_url ? 'Keyframe ok' : shot.type === 'broll' ? 'bereit' : 'offen'}
           </span>
         </div>
         {shot.type !== 'walk' && (
@@ -40,7 +43,7 @@ const ShotRow = ({ shot, slug, screens, draft, onDraft }) => {
                     className={`text-[11px] bg-background border-border ${tooLong ? 'border-rose-500' : ''}`}
                     data-testid={`guide-shot-text-${slug}-${shot.id}`} />
         )}
-        {shot.type === 'talk' && <p className={`text-[9px] ${tooLong ? 'text-rose-500' : 'text-muted-foreground'}`}>{words} Wörter · max 26 (≈ 9 s)</p>}
+        {shot.type === 'talk' && <p className={`text-[9px] ${tooLong ? 'text-rose-500' : 'text-muted-foreground'}`}>{words} Wörter · max {cap} ({cap > 26 ? '≈ 28 s' : '≈ 9 s'})</p>}
         {shot.type === 'broll' && (
           <div className="flex flex-wrap gap-1">
             {Object.entries(screens).map(([id, label]) => {

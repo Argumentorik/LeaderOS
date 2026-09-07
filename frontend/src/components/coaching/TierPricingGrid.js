@@ -35,6 +35,7 @@ const TIERS = [
     valueHint: '12 Monate Zugang · 30-Tage Geld-zurück · Raten möglich',
     features: [
       { label: 'Zugriff auf alle Coaching-Module', has: true, bold: true },
+      { label: 'Kurs-Bibliothek: Kurse 1–6 (31 Folgen, je < 12 Min)', has: true, highlight: true },
       { label: 'KI-gestützte Analyse & Feedback', has: true, highlight: true },
       { label: 'Video- & Speech-Coaching', has: true, highlight: true },
       { label: '30-Tage Leadership Plan', has: true },
@@ -43,6 +44,7 @@ const TIERS = [
       { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true },
       { label: 'Alle Frameworks & Playbooks', has: true },
       { label: 'License Key per E-Mail', has: true },
+      { label: 'Kurse 7–10 (41 Folgen): KI-First, Change, Executive Presence, Boardroom', has: false },
       { label: '12× Einzelcoaching mit Coaches', has: false },
       { label: 'Persönliche Strategie-Session', has: false },
     ],
@@ -65,6 +67,7 @@ const TIERS = [
     valueHint: 'Persönliches Sales-Gespräch · 1:1 mit Wlads Head-Coach',
     features: [
       { label: 'Alles aus Leadership OS', has: true, bold: true },
+      { label: 'Alle 10 Kurse (72 Folgen): + KI-First, Change, Executive Presence, Boardroom', has: true, highlight: true },
       { label: 'Persönliche Strategie-Session', has: true, highlight: true },
       { label: 'Individuelle Coaching-Pfade', has: true, highlight: true },
       { label: 'Priority AI Feedback System', has: true, highlight: true },

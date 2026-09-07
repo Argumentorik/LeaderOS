@@ -26,7 +26,7 @@ from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
-    scene_for_aspect, seed_clips, word_count, word_limits,
+    scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
 from routes.uploads import download_object, get_object, put_object
@@ -34,8 +34,8 @@ from services import get_current_user
 from services_guide_quality import godmode_check
 from services_ai_errors import ai_http_error
 from services_fal import (
-    COST_I2V, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, clone_voice, edit_image,
-    image_to_video, lipsync_video, omnihuman_video, render_talking_video, synthesize_speech,
+    COST_I2V, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, FalTimeout, clone_voice,
+    edit_image, image_to_video, lipsync_video, omnihuman_video, render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
     BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_end_card,
@@ -193,8 +193,8 @@ async def _progress(user_id: str) -> dict:
 async def list_clips(request: Request, kind: str = "onboarding"):
     user = await get_current_user(request)
     await _ensure_seeded()
-    if kind not in ("onboarding", "mission", "teaser", "all"):
-        raise HTTPException(status_code=400, detail="kind muss onboarding, mission, teaser oder all sein")
+    if kind not in ("onboarding", "mission", "teaser", "coaching", "all"):
+        raise HTTPException(status_code=400, detail="kind muss onboarding, mission, teaser, coaching oder all sein")
     query = {} if kind == "all" else {"kind": kind}
     clips = await db.guide_clips.find(query, {"_id": 0}).sort("order", 1).to_list(200)
     progress = await _progress(user["user_id"])
@@ -438,7 +438,8 @@ async def serve_broll(screen: str):
 # ── Admin: Einrichtung ──────────────────────────────────────────────────────
 
 def _shot_view(shot: dict, token: str | None) -> dict:
-    view = {k: v for k, v in shot.items() if not k.endswith("_path")}
+    view = {k: v for k, v in shot.items() if not k.endswith("_path") and k != "fal_request"}
+    view["fal_pending"] = bool(shot.get("fal_request")) and not shot.get("synced_path")
     for kind, (field, _) in SHOT_MEDIA.items():
         view[f"{kind}_url"] = f"/api/guide/media/{token}/shot/{shot['id']}/{kind}" if shot.get(field) and token else None
     preset = SHOT_PRESETS.get(shot.get("preset") or "")
@@ -459,7 +460,7 @@ def _admin_clip_view(c: dict) -> dict:
     view["shot"] = preset and {**preset, "scene_prompt": c.get("scene_prompt") or preset["scene_prompt"],
                                "motion_prompt": c.get("motion_prompt") or preset["motion_prompt"]}
     view["shots"] = [_shot_view(s, token) for s in c.get("shots", [])]
-    view["multi_shot"] = c.get("kind") in ("onboarding", "mission") or bool(c.get("multi_shot"))
+    view["multi_shot"] = c.get("kind") in ("onboarding", "mission", "coaching") or bool(c.get("multi_shot"))
     view["aspect"] = c.get("aspect") or "16:9"
     return view
 
@@ -624,7 +625,7 @@ async def save_script(slug: str, data: ScriptSaveIn, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     script = " ".join((data.script or "").split())
     words = word_count(script)
-    lo, hi = (30, 115) if clip.get("multi_shot") else word_limits(clip["kind"])
+    lo, hi = (30, 115) if clip.get("multi_shot") and clip["kind"] == "teaser" else word_limits(clip["kind"])
     if not lo <= words <= hi:
         raise HTTPException(
             status_code=400,
@@ -769,7 +770,7 @@ async def _job_cinematic(slug: str, clip: dict, settings: dict, token: str) -> N
 _STAGES = {"audio": _job_audio, "video": _job_video, "keyframe": _job_keyframe, "cinematic": _job_cinematic}
 
 
-# ── Multi-Shot (Iter 144): Walk-in + Talk-Shots + App-B-Roll ────────────────
+# ── Multi-Shot (Iter 144/154): Präsenz-Talk-Shots + App-B-Roll ─────────────
 
 async def _patch_shot(slug: str, shot_id: str, patch: dict) -> None:
     await db.guide_clips.update_one(
@@ -802,11 +803,11 @@ async def _job_shot_keyframes(slug: str, clip: dict, settings: dict, token: str)
         aspect = clip.get("aspect") or preset["aspect_ratio"]
         await _patch_clip(slug, {"progress": f"Keyframe {shot['id']}"})
         shot_refs = refs + ([_shot_url(token, previous, "keyframe")] if previous else [])
-        prompt = f"{WLAD_STYLE_PROMPT} {scene_for_aspect(shot.get('scene_prompt') or preset['scene_prompt'], aspect)}"
+        prompt = f"{style_prompt_for(preset)} {scene_for_aspect(shot.get('scene_prompt') or preset['scene_prompt'], aspect, talk=preset.get('kind') == 'talk')}"
         image = await asyncio.to_thread(edit_image, prompt, shot_refs, aspect)
         path = await _store(f"kf_{shot['id']}", slug, image, "image/png", "png")
         await _spend(slug, COST_KEYFRAME)
-        await _patch_shot(slug, shot["id"], {"keyframe_path": path, "raw_path": None, "synced_path": None, "error": None})
+        await _patch_shot(slug, shot["id"], {"keyframe_path": path, "raw_path": None, "synced_path": None, "fal_request": None, "error": None})
         previous = shot["id"]
     await _patch_clip(slug, {"status": "shots_keyframed", "progress": None, "error": None})
 
@@ -871,15 +872,29 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             await _patch_shot(slug, sid, {"audio_path": shot["audio_path"], "audio_seconds": shot["audio_seconds"],
                                           "speech_lead": lead, "speech_tail": tail})
         if pro and shot["type"] == "talk" and not shot.get("synced_path"):
-            await _patch_clip(slug, {"progress": f"OmniHuman {sid}"})
-            synced = await asyncio.to_thread(
-                omnihuman_video, _shot_url(token, sid, "keyframe"), _shot_url(token, sid, "audio"),
-                shot.get("motion_prompt") or preset["motion_prompt"],
-            )
+            pending = shot.get("fal_request")
+            await _patch_clip(slug, {"progress": f"OmniHuman {sid}" + (" (abholen)" if pending else "")})
+            loop = asyncio.get_running_loop()
+
+            def _remember(req, _sid=sid):
+                # läuft im Worker-Thread: Request-ID sofort persistieren, damit ein Timeout nichts verliert
+                asyncio.run_coroutine_threadsafe(_patch_shot(slug, _sid, {"fal_request": req}), loop).result(30)
+
+            try:
+                synced = await asyncio.to_thread(
+                    omnihuman_video, _shot_url(token, sid, "keyframe"), _shot_url(token, sid, "audio"),
+                    shot.get("motion_prompt") or preset["motion_prompt"], pending, _remember,
+                )
+            except FalTimeout:
+                raise FalError(f"OmniHuman {sid} steckt in der Fal-Queue — Request gemerkt, "
+                               "„Rendern“ später erneut starten holt das Ergebnis ab")
+            except FalError:
+                await _patch_shot(slug, sid, {"fal_request": None})
+                raise
             await _spend(slug, round(COST_OMNIHUMAN_PER_S * float(shot["audio_seconds"]), 2))
             shot["synced_path"] = await _store(f"sync_{sid}", slug, synced, "video/mp4", "mp4")
             shot["engine"] = "omnihuman"
-            await _patch_shot(slug, sid, {"synced_path": shot["synced_path"], "engine": "omnihuman"})
+            await _patch_shot(slug, sid, {"synced_path": shot["synced_path"], "engine": "omnihuman", "fal_request": None})
             continue
         needs_motion = shot["type"] == "walk" or (shot["type"] == "talk" and not pro)
         if needs_motion and not shot.get("raw_path"):
@@ -1004,6 +1019,19 @@ RUNNING = {"audio_running", "video_running", "keyframe_running", "cinematic_runn
            "shot_keyframes_running", "render_running", "full_running"}
 
 
+async def release_orphaned_jobs() -> int:
+    """Nach Prozess-Neustart: Clips mit In-Process-Jobstatus wieder freigeben (sonst dauerhaft 409)."""
+    n = 0
+    async for c in db.guide_clips.find({"status": {"$in": list(RUNNING)}}, {"_id": 0, "slug": 1, "status": 1}):
+        stage = c["status"].removesuffix("_running")
+        await _patch_clip(c["slug"], {"status": f"{stage}_failed", "progress": None,
+                                      "error": "Server wurde neu gestartet — Auftrag bitte erneut starten (Fal-Ergebnisse werden abgeholt)"})
+        n += 1
+    if n:
+        logger.warning("Guide: %s verwaiste Jobs freigegeben", n)
+    return n
+
+
 async def _kick(slug: str, stage: str, *checks) -> dict:
     clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
     if not clip:
@@ -1073,7 +1101,7 @@ class PublishIn(BaseModel):
 
 @router.post("/admin/clips/{slug}/plan")
 async def plan_clip_shots(slug: str, request: Request):
-    """Verteilt das Skript auf Walk-in, Talk-Shots und App-B-Roll (kostenfrei, verwirft alte Shots)."""
+    """Verteilt das Skript auf Präsenz-Talk-Shots und App-B-Roll (kostenfrei, verwirft alte Shots)."""
     await require_admin(request)
     clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
     if not clip:
@@ -1116,10 +1144,11 @@ async def save_shots(slug: str, data: ShotsSaveIn, request: Request):
             text = " ".join(item.text.split())
             if shot["type"] == "walk" and text:
                 raise HTTPException(status_code=400, detail="Der Walk-in-Shot ist stumm")
-            if shot["type"] == "talk" and word_count(text) > 26:
-                raise HTTPException(status_code=400, detail=f"Shot {item.id}: höchstens 26 Wörter pro Talk-Shot")
+            cap = talk_word_cap(shot.get("preset") or "")
+            if shot["type"] == "talk" and word_count(text) > cap:
+                raise HTTPException(status_code=400, detail=f"Shot {item.id}: höchstens {cap} Wörter pro Talk-Shot")
             if text != shot.get("text", ""):
-                shot.update({"text": text, "audio_path": None, "audio_seconds": None, "padded_path": None, "synced_path": None})
+                shot.update({"text": text, "audio_path": None, "audio_seconds": None, "padded_path": None, "synced_path": None, "fal_request": None})
         if item.screens is not None and shot["type"] == "broll":
             screens = [s for s in item.screens if s in BROLL_SCREENS]
             if not screens:
@@ -1132,9 +1161,9 @@ async def save_shots(slug: str, data: ShotsSaveIn, request: Request):
                 if value != shot.get(key):
                     shot[key] = value
                     if key == "scene_prompt":
-                        shot.update({"keyframe_path": None, "raw_path": None, "synced_path": None})
+                        shot.update({"keyframe_path": None, "raw_path": None, "synced_path": None, "fal_request": None})
                     else:
-                        shot.update({"raw_path": None, "synced_path": None})
+                        shot.update({"raw_path": None, "synced_path": None, "fal_request": None})
     await _patch_clip(slug, {"shots": list(by_id.values()), "error": None})
     return {"ok": True}
 

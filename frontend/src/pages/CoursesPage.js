@@ -105,6 +105,34 @@ const EpisodePanel = ({ ep, course, onClose, de }) => {
   );
 };
 
+const UpsellBanner = ({ data, de }) => {
+  const navigate = useNavigate();
+  const locked = data.courses.filter((c) => !c.unlocked);
+  if (!locked.length) return null;
+  const lockedEps = locked.reduce((n, c) => n + c.episode_count, 0);
+  const plusOnly = locked.every((c) => c.tier === 'accelerator');
+  return (
+    <div className="mt-6 rounded-2xl border border-[#BFFF00]/30 bg-gradient-to-r from-[#0A0A0A] to-[#16210A] text-white p-5 flex flex-wrap items-center gap-4" data-testid="courses-upsell-banner">
+      <div className="flex-1 min-w-[240px]">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">{de ? 'Du siehst die komplette Bibliothek' : 'You see the whole library'}</p>
+        <p className="text-[15px] font-bold mt-1">
+          {de
+            ? `${locked.length} Kurse mit ${lockedEps} Folgen warten noch auf dich.`
+            : `${locked.length} courses with ${lockedEps} episodes are still waiting for you.`}
+        </p>
+        <p className="text-[12px] text-white/55 mt-0.5">
+          {de
+            ? (plusOnly ? 'Leader-OS PLUS schaltet Kurse 7–10 frei: KI-First Leadership, Change, Executive Presence, Boardroom-Strategie — plus 12 Live-Coachings.' : 'Leader-OS schaltet Kurse 1–6 frei (Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meetings). PLUS ergänzt Kurse 7–10 und 12 Live-Coachings.')
+            : (plusOnly ? 'Leader-OS PLUS unlocks courses 7–10 plus 12 live coachings.' : 'Leader-OS unlocks courses 1–6. PLUS adds courses 7–10 and 12 live coachings.')}
+        </p>
+      </div>
+      <button type="button" onClick={() => navigate('/coaching')} className="inline-flex items-center gap-2 px-5 h-11 rounded-xl bg-[#BFFF00] text-black text-[13px] font-black hover:bg-[#D4FF4D] transition-colors" data-testid="courses-upsell-cta">
+        <Sparkles size={14} /> {de ? 'Pakete vergleichen' : 'Compare plans'}
+      </button>
+    </div>
+  );
+};
+
 export default function CoursesPage() {
   const { lang } = useLanguage();
   const de = lang !== 'en';
@@ -137,9 +165,12 @@ export default function CoursesPage() {
       {!data ? (
         <div className="mt-10 text-sm text-muted-foreground" data-testid="courses-loading">{de ? 'Lade Kurse…' : 'Loading…'}</div>
       ) : (
-        <div className="grid gap-5 md:grid-cols-2 mt-8">
-          {data.courses.map((c) => <CourseCard key={c.slug} course={c} de={de} onOpen={(ep) => openEpisode(c, ep)} />)}
-        </div>
+        <>
+          <UpsellBanner data={data} de={de} />
+          <div className="grid gap-5 md:grid-cols-2 mt-8">
+            {data.courses.map((c) => <CourseCard key={c.slug} course={c} de={de} onOpen={(ep) => openEpisode(c, ep)} />)}
+          </div>
+        </>
       )}
       <EpisodePanel ep={active?.ep} course={active?.course} onClose={() => setActive(null)} de={de} />
     </div>

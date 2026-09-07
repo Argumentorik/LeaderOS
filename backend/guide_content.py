@@ -25,6 +25,20 @@ WLAD_STYLE_PROMPT = (
     "trousers and brown leather shoes. Clean stylized 3D animation film look, subsurface skin, soft fabric "
     "detail, no text, no watermark."
 )
+# Präsenz-Talk-Shots: Portrait-Beschnitt statt Ganzkörper — sonst kopiert das Modell das Ganzkörper-Referenzfoto.
+WLAD_STYLE_PROMPT_TALK = (
+    "High-end Pixar-style 3D animated character of the man in the first reference image: keep his exact "
+    "face, dark side-parted hair, short stubble beard, warm brown eyes and friendly confident expression. "
+    "Same athletic build, outfit and confident posture as the man in the second reference image, but framed "
+    "like a portrait photo: crop at the waist or chest, NOT full body, no legs, no feet, no floor visible. "
+    "The person fills at least 70 percent of the image height and is centered. He wears a dark green velvet "
+    "blazer, a light blue shirt with open collar, no tie. Clean stylized 3D animation film look, subsurface "
+    "skin, soft fabric detail, no text, no watermark."
+)
+
+
+def style_prompt_for(preset: dict) -> str:
+    return WLAD_STYLE_PROMPT_TALK if preset.get("kind") == "talk" else WLAD_STYLE_PROMPT
 
 SHOT_PRESETS = {
     # ── GODMODE (Iter 154): Präsenz statt Herumlaufen ─────────────────────────
@@ -32,12 +46,13 @@ SHOT_PRESETS = {
         "label": "Loft · sitzend, halbnah",
         "kind": "talk",
         "scene_prompt": (
-            "Scene: medium shot, he sits relaxed at a warm wooden table in a modern bright loft office, tall windows "
-            "with soft daylight behind him, blurred background with concrete, warm wood, a few plants and a softly "
-            "glowing lime-green screen. Camera slightly above eye level, like sitting across the table from him. "
-            "He leans in a little, forearms resting on the table, looks straight into the camera with a warm, "
-            "attentive expression. Horizontal 16:9 composition, face sharp, Netflix-quality animation film still, "
-            "shallow depth of field, 8k render."
+            "Scene: TIGHT medium shot framed from the waist up — his head sits near the top edge of the frame and his "
+            "torso fills most of the image height, table edge at the bottom, no legs visible. He sits relaxed at a warm "
+            "wooden table in a modern bright loft office, tall windows with soft daylight behind him, blurred background "
+            "with concrete, warm wood, a few plants and a softly glowing lime-green screen. Camera close, slightly above "
+            "eye level, like sitting across the table from him. He leans in a little, forearms resting on the table, "
+            "looks straight into the camera with a warm, attentive expression. Horizontal 16:9 composition, he is large "
+            "and present in frame, face sharp, Netflix-quality animation film still, shallow depth of field, 8k render."
         ),
         "motion_prompt": (
             "He stays seated and present, talks directly to the camera like in a calm one-on-one conversation: "
@@ -53,9 +68,10 @@ SHOT_PRESETS = {
         "label": "Loft · sitzend, Close-up",
         "kind": "talk",
         "scene_prompt": (
-            "Scene: close-up from the chest up, he sits at a warm wooden table in a modern bright loft office, soft "
-            "daylight from the side, strongly blurred background with warm wood and a softly glowing lime-green "
-            "screen. Camera slightly above eye level. He looks straight into the camera with calm confidence and "
+            "Scene: TIGHT close-up framed from the chest up — his face fills the upper half of the frame, shoulders "
+            "touch the frame edges, no legs, no full body. He sits at a warm wooden table in a modern bright loft office, "
+            "soft daylight from the side, strongly blurred background with warm wood and a softly glowing lime-green "
+            "screen. Camera close, slightly above eye level. He looks straight into the camera with calm confidence and "
             "a slight smile, as if finishing an important thought. Horizontal 16:9 composition, face large and "
             "sharp in frame, Netflix-quality animation film still, shallow depth of field, 8k render."
         ),
@@ -221,6 +237,7 @@ CLIP_SCREENS = {
     "mission-day-6": ["missions", "simulations", "coaching"],
     "mission-day-7": ["mypath", "checkin", "coaching", "dashboard"],
     "teaser-login": ["chat", "video", "missions"],
+    "coaching-pakete": ["videos", "chat", "simulations", "coaching"],
 }
 DEFAULT_SCREENS = ["dashboard", "chat", "video", "challenge"]
 
@@ -244,8 +261,10 @@ PRESENCE_SETTINGS = {
 }
 # Wlad wirkt einige Zentimeter größer: längere Beine, elegante Proportionen (Nutzerwunsch Iter 154).
 WLAD_STATURE = "He is tall with long legs and elegant, athletic proportions (about 1.90 m), upright posture. "
+WLAD_STATURE_TALK = "He is tall with broad shoulders and an upright, relaxed posture; the camera is close to him. "
 # Studio-Look für Clips über Videos, Simulationen & Co.; sonst Gesprächs-Charakter im Loft.
-CLIP_SETTING = {"start-4-werkzeuge": "studio", "teaser-login": "studio", "teaser-spotlight": "studio"}
+CLIP_SETTING = {"start-4-werkzeuge": "studio", "teaser-login": "studio", "teaser-spotlight": "studio",
+                "coaching-pakete": "studio"}
 
 
 def presence_plan(setting: str = "loft") -> list[dict]:
@@ -264,9 +283,20 @@ TALK_MAX_SECONDS_PRO = 28.0
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
-def scene_for_aspect(prompt: str, aspect: str) -> str:
+def scene_for_aspect(prompt: str, aspect: str, talk: bool = False) -> str:
     prompt = prompt.replace("Horizontal 16:9 composition", "Vertical 9:16 composition") if aspect == "9:16" else prompt
-    return prompt if WLAD_STATURE in prompt else prompt.replace("Scene: ", "Scene: " + WLAD_STATURE, 1)
+    stature = WLAD_STATURE_TALK if talk else WLAD_STATURE
+    return prompt if stature in prompt else prompt.replace("Scene: ", "Scene: " + stature, 1)
+
+
+def talk_word_cap(preset_name: str) -> int:
+    """Wortbudget eines Talk-Shots: Präsenz-Shots (OmniHuman, bis 28 s) 64/50, alte 10-s-Kling-Shots 26."""
+    for medium, closeup in PRESENCE_SETTINGS.values():
+        if preset_name == medium:
+            return 64
+        if preset_name == closeup:
+            return 50
+    return 26
 
 
 def _sentences(text: str) -> list[str]:
@@ -574,6 +604,11 @@ def seed_clips() -> list[dict]:
         }
         for c in MISSION_CLIPS
     ]
+    clips.append({
+        "slug": "coaching-pakete", "kind": "coaching", "ref": None, "order": 200,
+        "title": "Was du mit Leader-OS bekommst", "script": GODMODE_SCRIPTS["coaching-pakete"],
+        "multi_shot": True, "aspect": "16:9",
+    })
     return clips
 
 

@@ -1,0 +1,44 @@
+{
+  "summary": "Iter 155 tested: course-catalog on /coaching, upsell-banner on /kurse, kind-whitelist + preset word-cap backend. All new features work as spec'd. 12/13 pytest cases in iter154+iter155 files pass; the single failure is a pre-existing state issue on start-1-willkommen (OmniHuman lipsync missing) unrelated to Iter 155.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/guide/admin/overview", "issue": "clip 'start-1-willkommen' godmode.passed=10/11 — item lipsync_omnihuman=false. Pre-existing environment state (Fal render not attached in preview); breaks legacy assertion in test_iter154_courses_godmode.py::test_guide_godmode_and_posters but NOT related to Iter 155."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter155_coaching_clip.py",
+    "/app/backend/tests/test_iter154_courses_godmode.py",
+    "/app/test_reports/pytest/iter155.xml"
+  ],
+  "acceptance_verifications": {
+    "free_user_coaching": "course-catalog-section visible; catalog-package-standard/-accelerator present; catalog-status-standard='997 € / Jahr', catalog-status-accelerator='4.797 € / Jahr'; toggle rhetorik-grundlagen expands catalog-episodes-rhetorik-grundlagen; 'gratis' badge on Folge 1 present; catalog-cta-standard scrolls (no crash, url stays /coaching); pricing bullets 'Kurse 1–6' and 'Alle 10 Kurse (72 Folgen)' present.",
+    "free_user_kurse": "courses-upsell-banner visible with text mentioning 'Kurse 1–6' + PLUS 7–10; courses-upsell-cta navigates to /coaching.",
+    "standard_user_kurse": "banner visible; text: 'Leader-OS PLUS schaltet Kurse 7–10 frei' (only PLUS section referenced). catalog-status-standard='freigeschaltet'; catalog-cta-standard='Zur Bibliothek' navigates to /kurse.",
+    "plus_user_kurse": "courses-upsell-banner NOT rendered (count=0) — correct.",
+    "mobile_390": "course-catalog-section scrollWidth=352 within 390 viewport — no horizontal overflow.",
+    "backend_kind_whitelist": "GET /api/guide/clips?kind=coaching → 200 (1 clip: coaching-pakete); kind=foo → 400.",
+    "backend_admin_word_cap": "PUT /api/guide/admin/clips/coaching-pakete/shots with 70-word text → 400 detail='Shot s1: höchstens 64 Wörter pro Talk-Shot'."
+  },
+  "action_items": [
+    "Investigate start-1-willkommen godmode.lipsync_omnihuman=false in preview DB — likely the OmniHuman step never ran for this clip. If this is expected in preview (external Fal poller), consider relaxing the legacy iter154 assertion or ensure the seed/data step attaches an OmniHuman marker. NOT a blocker for Iter 155 acceptance."
+  ],
+  "critical_code_review_comments": [
+    "CourseCatalogSection correctly hides/shows per-tier state and CTA text; consistent with backend GET /api/courses tiers.",
+    "CoachingVideoSection guard (renders nothing without ready video) is respected — 'coaching-video-section' correctly absent on /coaching for coaching-pakete which has no rendered clip yet.",
+    "Word-cap enforcement returns a clean 400 with the exact copy expected by the admin UI ('höchstens 64 Wörter pro Talk-Shot')."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% for Iter-155 scope (12/12 relevant cases + curl checks)", "frontend": "100% for Iter-155 scope"},
+  "test_credentials": "Used credentials from /app/memory/test_credentials.md: test@test.com/test123 (admin), free@wladbot.test/test123, standard@wladbot.test/test123, accelerator@wladbot.test/test123.",
+  "seed_data_creation": "None — no writes to live clip text; only cap-violation payload sent (rejected before persistence).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 155 acceptance verified end-to-end. The one iter154 pytest failure (test_guide_godmode_and_posters on start-1-willkommen lipsync_omnihuman) is an existing environment-state artifact — same failure would appear with or without Iter 155 changes.",
+  "rca of the issue": "start-1-willkommen godmode fail: godmode.items shows lipsync_omnihuman=false, meaning no OmniHuman lipsync render is attached to any of its talk shots in this preview DB. All other godmode checks pass (10/11). Mitigation: either (a) run the OmniHuman step for this clip via admin tooling, or (b) mark test_guide_godmode_and_posters as env-dependent for start-1-willkommen. No code change proposed by testing agent."
+}

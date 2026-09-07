@@ -265,6 +265,13 @@ async def startup() -> None:
     except Exception as e:
         logger.warning(f"Storage init deferred: {e}")
 
+    # Guide-Jobs leben im Prozess: nach einem Neustart hängende "*_running"-Clips freigeben (Fal-Requests bleiben abholbar)
+    try:
+        from routes.guide import release_orphaned_jobs
+        await release_orphaned_jobs()
+    except Exception as e:
+        logger.warning(f"Guide job reconcile deferred: {e}")
+
     # SEC-003: promote allowlisted EXISTING users to is_admin (runtime auth = DB flag only)
     try:
         from routes.admin import seed_admin_flags
