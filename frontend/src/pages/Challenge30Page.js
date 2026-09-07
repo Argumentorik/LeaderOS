@@ -14,7 +14,7 @@ import logger from '../lib/logger';
 import { toast } from 'sonner';
 import { MissionGuideClip } from '../components/guide/MissionGuideClip';
 import {
-  Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown
+  Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown, Mic
 } from 'lucide-react';
 
 const HERO_IMG = 'https://static.prod-images.emergentagent.com/jobs/dd3457c0-3be5-4c4c-bc34-5b0e823b9278/images/02d966222d58fb69dc61882571863588f7b507b00513e790a26d658a206acd36.png';
@@ -253,6 +253,14 @@ export default function Challenge30Page() {
                       data-testid={`start-quiz-${c.day}`}>
                       <Play size={12} className="mr-1" />
                       {getCtaLabel(isToday, de)}
+                    </Button>
+                  )}
+                  {canStart && !isQuiz && String(c.path || '').startsWith('/chat') && (
+                    <Button size="sm" variant="outline" onClick={() => startAction(c.day, `${c.path}${c.path.includes('?') ? '&' : '?'}voice=1`)}
+                      className="font-bold text-[11px] h-8 px-3 rounded-full" title={de ? 'Übung im Sprachmodus mit Wlad' : 'Practice by voice with Wlad'}
+                      data-testid={`start-action-voice-${c.day}`}>
+                      <Mic size={12} className="mr-1" />
+                      {de ? 'Per Stimme' : 'By voice'}
                     </Button>
                   )}
                   {canStart && !isQuiz && (

@@ -9,6 +9,8 @@ import { FileText, Upload, Trash2, Loader2, ChevronDown, Sparkles, BookOpen, Rad
 import api from '../../lib/api';
 import { toast } from 'sonner';
 
+const MAX_KNOWLEDGE_BYTES = 2 * 1024 * 1024;
+
 export const KnowledgeSources = ({ de = true, onChanged }) => {
   const [open, setOpen] = useState(false);
   const [sources, setSources] = useState(null);
@@ -36,18 +38,20 @@ export const KnowledgeSources = ({ de = true, onChanged }) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
-    if (!/\.(txt|md)$/i.test(file.name)) {
-      toast.error(de ? 'Nur .txt oder .md Dateien' : 'Only .txt or .md files');
+    if (!/\.(txt|md|pdf|docx)$/i.test(file.name)) {
+      toast.error(de ? 'Erlaubt: .txt, .md, .pdf, .docx' : 'Allowed: .txt, .md, .pdf, .docx');
       return;
     }
-    const content = await file.text();
+    if (file.size > MAX_KNOWLEDGE_BYTES) {
+      toast.error(de ? `Datei zu groß (${(file.size / 1024 / 1024).toFixed(1)} MB, max. 2 MB) — bitte aufteilen` : `File too large (max 2 MB)`);
+      return;
+    }
     setUploading(true);
     try {
-      const res = await api.post('/admin/rag/upload-knowledge', {
-        filename: file.name,
-        content,
-        course_title: file.name.replace(/\.(txt|md)$/i, '').replace(/_/g, ' '),
-      });
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('course_title', file.name.replace(/\.(txt|md|pdf|docx)$/i, '').replace(/_/g, ' '));
+      const res = await api.post('/admin/rag/upload-knowledge-file', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000 });
       toast.success(de
         ? `„${res.data.course}" hinzugefügt — ${res.data.chunks_added} Chunks, WladBot kennt es sofort.`
         : `"${res.data.course}" added — ${res.data.chunks_added} chunks, live immediately.`);
@@ -93,7 +97,7 @@ export const KnowledgeSources = ({ de = true, onChanged }) => {
       {open && (
         <div className="px-3.5 pb-3.5 space-y-2.5">
           <div className="flex items-center gap-2">
-            <input ref={fileRef} type="file" accept=".txt,.md" className="hidden" onChange={onFile} data-testid="knowledge-file-input" />
+            <input ref={fileRef} type="file" accept=".txt,.md,.pdf,.docx" className="hidden" onChange={onFile} data-testid="knowledge-file-input" />
             <Button
               size="sm"
               onClick={() => fileRef.current?.click()}
@@ -102,7 +106,7 @@ export const KnowledgeSources = ({ de = true, onChanged }) => {
               data-testid="knowledge-upload-btn"
             >
               {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
-              {uploading ? (de ? 'Wird eingebettet…' : 'Embedding…') : (de ? 'Wissen hochladen (.txt/.md)' : 'Upload knowledge (.txt/.md)')}
+              {uploading ? (de ? 'Wird eingebettet…' : 'Embedding…') : (de ? 'Wissen hochladen (.txt/.md/.pdf/.docx · max 2 MB)' : 'Upload knowledge (.txt/.md/.pdf/.docx · max 2 MB)')}
             </Button>
             <p className="text-[10px] text-muted-foreground">
               {de ? 'Neue Transkripte/Dokumente sind sofort im WladBot-Wissen.' : 'New transcripts/documents are instantly live in WladBot.'}

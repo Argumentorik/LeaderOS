@@ -106,12 +106,20 @@ async def get_credits(request: Request):
         return {"balance": limit, "is_premium": False, "total_used": 0, "limit": limit, "soft_pause": False, "masterclass": is_mc}
 
     total_used = credit_doc.get("total_used", 0)
+    history = credit_doc.get("history") or []
+    by_action: dict[str, int] = {}
+    for h in history:
+        by_action[h.get("action", "chat")] = by_action.get(h.get("action", "chat"), 0) + int(h.get("cost", 1))
     return {
         "balance": credit_doc.get("balance", 0),
         "is_premium": False,
         "total_used": total_used,
         "limit": limit,
         "masterclass": is_mc,
+        # Transparenz: was kostet was, wofür ging es bisher drauf, letzte Aktionen
+        "costs": CREDIT_COSTS,
+        "used_by_action": by_action,
+        "recent": list(reversed(history[-8:])),
         "soft_pause": total_used >= SOFT_PAUSE_AT and not credit_doc.get("soft_pause_dismissed", False) and not is_mc,
     }
 

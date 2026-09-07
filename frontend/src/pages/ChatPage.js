@@ -155,6 +155,14 @@ export default function ChatPage() {
   }, [activeFolder, de]);
 
   const prefillHandledRef = useRef(false);
+  // ?voice=1 (z. B. Tages-Challenge „Per Stimme üben“): Audio-Mode direkt öffnen
+  useEffect(() => {
+    if (searchParams.get('voice') === '1') {
+      setAudioMode(true);
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     if (prefillHandledRef.current) return;
     const prefill = searchParams.get('prefill');

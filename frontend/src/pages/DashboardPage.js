@@ -20,12 +20,12 @@ import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrep
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import api from '../lib/api';
-import { useCredits } from '../contexts/CreditContext';
+import { CreditBadge } from '../components/dashboard/CreditBadge';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { TierBadge } from '../components/shared/TierBadge';
 import { useTier } from '../contexts/TierContext';
 import {
-  Zap, ArrowRight, Flame, ChevronRight,
+  ArrowRight, Flame, ChevronRight,
   MessageSquareText, Sparkles, CheckCircle2, Star, Gift,
   Share2, Copy, Play, BarChart3
 } from 'lucide-react';
@@ -46,7 +46,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [referralCode, setReferralCode] = useState('');
-  const { balance, isPremium } = useCredits();
 
   const loadDashboard = useCallback(async () => {
     try {
@@ -129,13 +128,7 @@ export default function DashboardPage() {
             <Button variant="outline" size="sm" onClick={() => navigate('/chat')} className="font-semibold text-xs h-9 gap-1.5" data-testid="talk-coach-btn">
               <MessageSquareText size={14} /> {de ? 'KI-Coach' : 'AI Coach'}
             </Button>
-            {!isPremium && balance >= 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A0A0A] text-white" data-testid="credit-badge">
-                <Zap size={12} className="text-[#BFFF00]" />
-                <span className="text-[11px] font-bold">{balance}</span>
-                <span className="text-[10px] text-white/40">Credits</span>
-              </div>
-            )}
+            <CreditBadge de={de} />
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20" data-testid="streak-bar">
               <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
               <span className="text-[12px] font-bold"><AnimatedNumber value={streak?.days || 0} duration={500} /></span>

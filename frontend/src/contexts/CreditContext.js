@@ -20,6 +20,10 @@ export const CreditProvider = ({ children }) => {
         isPremium: res.data.is_premium,
         totalUsed: res.data.total_used,
         softPause: res.data.soft_pause || false,
+        limit: res.data.limit,
+        costs: res.data.costs || {},
+        usedByAction: res.data.used_by_action || {},
+        recent: res.data.recent || [],
       });
     } catch (err) {
       // 401 here just means session expired — UI will redirect via ReAuthModal anyway

@@ -6,7 +6,7 @@ import zipfile
 from datetime import datetime, timezone
 
 import httpx
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from pydantic import BaseModel
 
 from config import db, logger
@@ -343,48 +343,84 @@ class KnowledgeUpload(BaseModel):
     course_title: str | None = None
 
 
-@router.post("/upload-knowledge")
-async def upload_knowledge(data: KnowledgeUpload, request: Request):
-    """Add or replace a knowledge source from raw text (.txt/.md content).
+MAX_KNOWLEDGE_BYTES = 2 * 1024 * 1024  # 2 MB pro Datei (Bücher, Skripte, Notizen)
+KNOWLEDGE_EXTS = (".txt", ".md", ".pdf", ".docx")
 
-    Chunks + embeds locally (no external keys) and inserts into rag_chunks.
-    Re-uploading the same filename replaces its chunks (idempotent).
-    """
-    admin = await require_admin(request)
-    text = (data.content or "").strip()
+
+def _extract_text(fname: str, raw: bytes) -> str:
+    """Text aus .txt/.md/.pdf/.docx (lokal, ohne externe Dienste)."""
+    low = fname.lower()
+    if low.endswith(".pdf"):
+        from io import BytesIO
+        from pypdf import PdfReader
+        return "\n\n".join((page.extract_text() or "") for page in PdfReader(BytesIO(raw)).pages)
+    if low.endswith(".docx"):
+        from io import BytesIO
+        import docx
+        return "\n".join(p.text for p in docx.Document(BytesIO(raw)).paragraphs)
+    return raw.decode("utf-8", errors="replace")
+
+
+async def _ingest_knowledge(admin: dict, filename: str, text: str, course_title: str | None) -> dict:
+    """Chunken + lokal einbetten + in rag_chunks schreiben. Gleicher Dateiname ersetzt (idempotent)."""
+    text = (text or "").strip()
     if len(text) < 50:
-        raise HTTPException(status_code=422, detail="Inhalt zu kurz (min. 50 Zeichen).")
-    if len(text) > 400_000:
-        raise HTTPException(status_code=422, detail="Datei zu groß (max. 400 KB Text). Bitte aufteilen.")
+        raise HTTPException(status_code=422, detail="Inhalt zu kurz (min. 50 Zeichen) — bei PDFs: enthält die Datei echten Text (kein Scan)?")
+    if len(text) > MAX_KNOWLEDGE_BYTES:
+        raise HTTPException(status_code=422, detail="Datei zu groß (max. 2 MB Text). Bitte aufteilen.")
+    import hashlib
     import re as _re
-    fname = _re.sub(r"[^a-zA-Z0-9._äöüÄÖÜß-]", "_", os.path.basename(data.filename or "wissen.txt"))
-    if not fname.endswith(".txt"):
-        fname = f"{fname.rsplit('.', 1)[0]}.txt"
-    title = (data.course_title or fname.rsplit(".txt", 1)[0].replace("_", " ").title()).strip()[:90]
+    import time as _time
     from scripts_ingest_local_rag import chunk_text
     from services_embeddings import embed_documents
-    import hashlib
-    import time as _time
+
+    fname = _re.sub(r"[^a-zA-Z0-9._äöüÄÖÜß-]", "_", os.path.basename(filename or "wissen.txt"))
+    fname = f"{fname.rsplit('.', 1)[0]}.txt" if not fname.endswith(".txt") else fname
+    title = (course_title or fname.rsplit(".txt", 1)[0].replace("_", " ").title()).strip()[:90]
     chunks = chunk_text(text)
     meta = {"course": title, "type": "custom", "source_file": fname}
     docs = []
     for i in range(0, len(chunks), 128):
         batch = chunks[i:i + 128]
         embs = await embed_documents(batch)
-        for c, e in zip(batch, embs):
-            docs.append({
-                "chunk_id": hashlib.sha1(f"{fname}:{c[:80]}:{len(c)}".encode()).hexdigest()[:16],
-                "content": c, "metadata": meta, "embedding": e,
-                "ingested_at": _time.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            })
+        docs += [{
+            "chunk_id": hashlib.sha1(f"{fname}:{c[:80]}:{len(c)}".encode()).hexdigest()[:16],
+            "content": c, "metadata": meta, "embedding": e,
+            "ingested_at": _time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        } for c, e in zip(batch, embs)]
     await db.rag_chunks.delete_many({"metadata.source_file": fname})
     if docs:
         await db.rag_chunks.insert_many(docs)
     from services_rag import invalidate_caches
     invalidate_caches(f"upload:{fname}")
-    logger.info(f"RAG knowledge upload by {admin.get('email')}: {fname} → {len(docs)} chunks")
-    return {"source_file": fname, "course": title, "chunks_added": len(docs),
+    logger.info(f"RAG knowledge upload by {admin.get('email')}: {fname} → {len(docs)} chunks ({len(text)} chars)")
+    return {"source_file": fname, "course": title, "chunks_added": len(docs), "chars": len(text),
             "total_chunks": await db.rag_chunks.count_documents({})}
+
+
+@router.post("/upload-knowledge")
+async def upload_knowledge(data: KnowledgeUpload, request: Request):
+    """Wissen als Rohtext (.txt/.md-Inhalt) hinzufügen oder ersetzen."""
+    admin = await require_admin(request)
+    return await _ingest_knowledge(admin, data.filename, data.content, data.course_title)
+
+
+@router.post("/upload-knowledge-file")
+async def upload_knowledge_file(request: Request, file: UploadFile = File(...), course_title: str = Form("")):
+    """Wissen als Datei (.txt/.md/.pdf/.docx, max. 2 MB) — Bücher & Skripte direkt aus dem Admin."""
+    admin = await require_admin(request)
+    name = file.filename or "wissen.txt"
+    if not name.lower().endswith(KNOWLEDGE_EXTS):
+        raise HTTPException(status_code=422, detail="Erlaubt: .txt, .md, .pdf, .docx")
+    raw = await file.read()
+    if len(raw) > MAX_KNOWLEDGE_BYTES:
+        raise HTTPException(status_code=413, detail=f"Datei zu groß ({len(raw) / 1024 / 1024:.1f} MB, max. 2 MB). Bitte aufteilen.")
+    try:
+        text = _extract_text(name, raw)
+    except Exception as e:
+        logger.warning(f"knowledge extract failed for {name}: {e}")
+        raise HTTPException(status_code=422, detail="Datei konnte nicht gelesen werden (beschädigt oder passwortgeschützt?)")
+    return await _ingest_knowledge(admin, name, text, course_title or None)
 
 
 @router.delete("/source/{source_file}")

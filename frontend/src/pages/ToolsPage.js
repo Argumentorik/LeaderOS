@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Button } from '../components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import { generatePDF } from '../lib/pdfGenerator';
 import { toolsDe, toolsEn } from '../lib/toolsData';
@@ -36,7 +37,29 @@ export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState(null);
   const [currentStep, setCurrentStep] = useState(-1);
   const [answers, setAnswers] = useState({});
+  const { user } = useAuth();
+  // Iter 160 (Tester-Feedback „Daten immer neu eingeben“): Persona aus Profil vorbelegen + letzte Eingabe merken (nur Rollen-/Zieltexte, nichts Sensibles)
+  const personaKey = user?.user_id ? `wlad_workflow_persona_${user.user_id}` : null;
   const [persona, setPersona] = useState(EMPTY_PERSONA);
+  const hydratedKeyRef = useRef(null);
+  useEffect(() => {
+    if (!personaKey || hydratedKeyRef.current === personaKey) return; // erst wenn der User geladen ist, genau einmal
+    hydratedKeyRef.current = personaKey;
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(personaKey) || 'null'); } catch (e) { /* noop */ }
+    setPersona(saved ? { ...EMPTY_PERSONA, ...saved } : {
+      ...EMPTY_PERSONA,
+      role: user?.position || user?.role_title || '',
+      industry: user?.industry || user?.branche || '',
+      team: user?.team_size ? String(user.team_size) : '',
+      goals: user?.goals || '',
+    });
+  }, [personaKey, user]);
+  useEffect(() => {
+    if (personaKey && hydratedKeyRef.current === personaKey && Object.values(persona).some(Boolean)) {
+      try { localStorage.setItem(personaKey, JSON.stringify(persona)); } catch (e) { /* noop */ }
+    }
+  }, [persona, personaKey]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
@@ -88,14 +111,13 @@ export default function ToolsPage() {
     }, `WladBot-${activeTool.title.replace(/\s+/g, '-')}`);
   };
 
+  // Persona bleibt beim Wechsel/Neustart erhalten (Tester-Feedback: „Daten immer neu eingeben“)
   const resetTool = () => {
     setActiveTool(null); setCurrentStep(-1); setAnswers({}); setResult(null);
-    setPersona(EMPTY_PERSONA);
   };
 
   const selectTool = (t) => {
     setActiveTool(t); setCurrentStep(-1); setAnswers({}); setResult(null);
-    setPersona(EMPTY_PERSONA);
   };
 
   const totalSteps = activeTool ? activeTool.steps.length + 1 : 0;
