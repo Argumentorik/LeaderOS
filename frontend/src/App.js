@@ -56,6 +56,7 @@ const EnterpriseLandingPage = lazyWithRetry(() => import("./pages/EnterpriseLand
 const Challenge30Page = lazyWithRetry(() => import("./pages/Challenge30Page"));
 const VideoGuidePage = lazyWithRetry(() => import("./pages/VideoGuidePage"));
 const CoursesPage = lazyWithRetry(() => import("./pages/CoursesPage"));
+const CourseDetailPage = lazyWithRetry(() => import("./pages/CourseDetailPage"));
 const DownloadsPage = lazyWithRetry(() => import("./pages/DownloadsPage"));
 const ImpressumPage = lazyWithRetry(() => import("./pages/ImpressumPage"));
 const TrustPage = lazyWithRetry(() => import("./pages/TrustPage"));
@@ -181,6 +182,7 @@ function AppRouter() {
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
         <Route path="/video-guide" element={<ProtectedRoute><VideoGuidePage /></ProtectedRoute>} />
         <Route path="/kurse" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
+        <Route path="/kurse/:slug" element={<ProtectedRoute><CourseDetailPage /></ProtectedRoute>} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />
         <Route path="/sicherheit" element={<TrustPage />} />

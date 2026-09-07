@@ -1,12 +1,12 @@
 """Kurs-Bibliothek: 10 Kurse / 72 Folgen, Freischaltung nach Tier, Videos per Admin-Upload."""
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from pydantic import BaseModel
 
 from config import db
-from course_content import COURSES, course_view
+from course_content import CATEGORIES, COURSES, course_view
 from routes.admin import require_admin
 from routes.guide import _serve_object
 from routes.uploads import put_object
@@ -33,19 +33,42 @@ async def _tier(user: dict) -> str:
     return info.get("tier") if info.get("active", True) else "free"
 
 
+async def _thumbnails() -> dict[str, str]:
+    docs = await db.course_meta.find({"thumbnail_url": {"$exists": True}}, {"_id": 0, "slug": 1, "thumbnail_url": 1}).to_list(100)
+    return {d["slug"]: d["thumbnail_url"] for d in docs}
+
+
+def _decorate(v: dict, seen: set[str], thumbs: dict[str, str]) -> dict:
+    """Fortschritt, „Neu“-Flag, nächste Folge und Thumbnail-Override auf eine course_view legen."""
+    for e in v["episodes"]:
+        e["seen"] = e["id"] in seen
+    v["seen_count"] = sum(1 for e in v["episodes"] if e["seen"])
+    fresh = datetime.now(timezone.utc) - timedelta(days=14)
+    v["is_new"] = any(
+        e["video_updated_at"] and datetime.fromisoformat(e["video_updated_at"]) >= fresh for e in v["episodes"]
+    )
+    nxt = next((e for e in v["episodes"] if e["unlocked"] and not e["seen"]), None)
+    v["next_episode"] = nxt["number"] if nxt else None
+    if v["slug"] in thumbs:
+        v["thumbnail_url"] = thumbs[v["slug"]]
+    return v
+
+
 @router.get("")
 async def list_courses(request: Request):
     user = await get_current_user(request)
-    tier, videos, seen = await _tier(user), await _videos(), await _progress(user["user_id"])
+    tier, videos, seen, thumbs = await _tier(user), await _videos(), await _progress(user["user_id"]), await _thumbnails()
     out = []
     for c in COURSES:
-        v = course_view(c, tier, videos)
-        for e in v["episodes"]:
-            e["seen"] = e["id"] in seen
-        v["seen_count"] = sum(1 for e in v["episodes"] if e["seen"])
+        v = _decorate(course_view(c, tier, videos), seen, thumbs)
         v["episodes"] = [{k: e[k] for k in ("id", "number", "title", "minutes", "free_preview", "unlocked", "video_ready", "seen")} for e in v["episodes"]]
         out.append(v)
-    return {"tier": tier, "courses": out, "total_episodes": sum(c["episode_count"] for c in out)}
+    return {
+        "tier": tier, "courses": out,
+        "categories": CATEGORIES,
+        "total_episodes": sum(c["episode_count"] for c in out),
+        "seen_total": sum(c["seen_count"] for c in out),
+    }
 
 
 @router.get("/{slug}")
@@ -55,10 +78,22 @@ async def get_course(slug: str, request: Request):
     if not course:
         raise HTTPException(status_code=404, detail="Kurs nicht gefunden")
     v = course_view(course, await _tier(user), await _videos())
-    seen = await _progress(user["user_id"])
-    for e in v["episodes"]:
-        e["seen"] = e["id"] in seen
-    return v
+    return _decorate(v, await _progress(user["user_id"]), await _thumbnails())
+
+
+class ThumbnailIn(BaseModel):
+    thumbnail_url: str
+
+
+@router.put("/admin/{slug}/thumbnail")
+async def set_course_thumbnail(slug: str, data: ThumbnailIn, request: Request):
+    """Vorschaubild eines Kurses überschreiben (Standard: /courses/<slug>.jpg)."""
+    await require_admin(request)
+    if slug not in _BY_SLUG:
+        raise HTTPException(status_code=404, detail="Kurs nicht gefunden")
+    await db.course_meta.update_one({"slug": slug}, {"$set": {
+        "thumbnail_url": data.thumbnail_url.strip(), "updated_at": datetime.now(timezone.utc).isoformat()}}, upsert=True)
+    return {"ok": True, "slug": slug}
 
 
 @router.post("/episodes/{episode_id}/seen")

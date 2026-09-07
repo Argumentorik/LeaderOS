@@ -1,38 +1,53 @@
-# Plan: Voyage-Altlasten entfernen · Wissen/Docs aktualisieren · SEO/AEO für DACH & „Wlad Jachtchenko“
+# Plan: /kurse im Academy-Look (Vorbild higgsfield.ai/academy)
 
-## 1. Voyage vollständig aus Code, Konfiguration und Dokumentation entfernen
-Stefan hat recht: Der RAG-Pfad und die Doku referenzieren noch Voyage (Embedding-Anbieter), obwohl die Einbettung inzwischen lokal läuft.
+Hinweis: Der erwähnte Screenshot ist nicht als Anhang angekommen; die Struktur wurde direkt von higgsfield.ai/academy übernommen (Hero → Kategorien → Kurs-Karten mit Vorschau → „Was drin ist“ → „Mehr aus …“). Falls der Screenshot einen anderen Ausschnitt zeigt (z. B. die Kursliste `/academy/courses` mit Filterleiste), bitte kurz sagen.
 
-Ergebnis:
-- Ein einziger Embedding-Weg (der aktuell produktive, lokale) für Ingestion, Suche und Admin-Uploads. Kein Voyage-Fallback, kein Voyage-Key, keine Voyage-Konstanten mehr.
-- Alle Erwähnungen in Code-Kommentaren, `.env.example`, README/Handbuch, Admin-Hinweisen und Health-Endpunkten ersetzt durch den tatsächlichen Anbieter.
-- Ein Konsistenz-Check im RAG-Health (Admin) zeigt: Anbieter, Modell, Dimension, Anzahl Chunks — damit „was läuft wirklich“ sichtbar ist.
-- Bestehende Chunks bleiben nutzbar; sollten Alt-Chunks mit abweichender Dimension existieren, werden sie in einem Lauf neu eingebettet (kein Wissensverlust).
+## Ziel
 
-## 2. Gesamtes Wissen & Dokumentation auf den aktuellen Stand bringen (GitHub `aiporator/SHIPOS`)
-Annahme: Das Repo `aiporator/SHIPOS` ist die Referenz für Produkt-Wissen (Konzepte, Kurs-Skripte, Positionierung), das in Wlads Wissensbasis (RAG) und in die App-Doku einfließen soll.
+Die Kurs-Bibliothek `/kurse` wird von der heutigen Text-Kartenliste zu einer **visuellen Academy-Startseite** mit Vorschaubildern, Kategorien, klaren Meta-Angaben und zwei Aktionen pro Kurs („Kostenlos starten“ / „Details“). Jeder Kurs bekommt zusätzlich eine **eigene Detailseite** `/kurse/<kurs>` mit Player und Folgenliste (heute: Popup).
 
-Ergebnis:
-- Inhalte aus dem Repo werden als Wissensquellen importiert (Markdown/PDF/DOCX über den 2-MB-Upload), sauber betitelt und thematisch zugeordnet; veraltete Duplikate im RAG werden entfernt.
-- Projekt-Dokumentation (README, Betriebshandbuch, Admin-Hilfetexte) wird auf den heutigen Funktionsumfang gebracht: Leader-OS/PLUS-Pakete, Kurs-Bibliothek, Video-Guide, Interaktiver Wlad (Beta), Wissens-Upload, Fal/Stimme, Zugriffsmodell.
-- Alte Produktnamen und Preise, die nicht mehr gelten, werden überall vereinheitlicht (eine Quelle der Wahrheit für Namen, Preise, Paketinhalte).
+## Aufbau der Seite (von oben nach unten)
 
-**Offen (bitte bestätigen):** Ist das Repo öffentlich? Falls privat, wird ein Lesezugriff (Token oder „Save to GitHub“-Verknüpfung) benötigt. Ohne Zugriff wird Punkt 2 auf die App-eigene Doku beschränkt.
+1. **Hero** (dunkel, Wlad-Präsenz-Look, Limette als Akzent)
+   Eyebrow „Kurs-Bibliothek“ · Headline „Lernen. Üben. Führen. Alles an einem Ort.“ · Subline „Echte Führungssituationen statt Theorie — vom 30-Sekunden-Statement bis zur Boardroom-Strategie. 10 Kurse, 72 Folgen, Folge 1 immer kostenlos.“ · Primär-Button „Kostenlos starten“ (öffnet Folge 1 des ersten noch nicht gesehenen Kurses) · Sekundär „Alle Kurse“ (scrollt zur Liste). Rechts/oben: Fortschritt des Nutzers („12 von 72 Folgen gesehen“) statt Marketing-Bild — die Seite ist eingeloggt.
 
-## 3. SEO/AEO für den DACH-Raum und „Wlad Jachtchenko“
-Ziel: Die öffentlichen Seiten werden von Google und KI-Antwortmaschinen (ChatGPT, Perplexity, Gemini) als *die* Quelle für „Wlad Jachtchenko“, „Leader-OS“, „Führungskräfte-Coaching“, „Rhetorik-Training“, „KI-Coach für Führungskräfte“ erkannt.
+2. **Nach Kategorie stöbern** — drei große Kacheln mit Bild und Titel, Klick filtert die Liste:
+   - **Rhetorik & Kommunikation** (Rhetorik-Grundlagen, Storytelling im Boardroom, Meeting-Rhetorik)
+   - **Führung & Gespräche** (Schwierige Gespräche, Delegation, Feedback-Formate)
+   - **Strategie & Executive** (KI-First Leadership, Change Management, Executive Presence, Boardroom-Strategie)
 
-Ergebnis:
-- **Technische Basis:** Sitemap (alle öffentlichen Seiten inkl. Kursübersicht, Coaching, Impressum), robots.txt, kanonische URLs, `hreflang de-DE/de-AT/de-CH`, saubere Titel/Meta-Beschreibungen pro Seite (deutsch, Keyword-fokussiert), Open-Graph/Twitter-Karten mit Wlad-Bild.
-- **Strukturierte Daten (JSON-LD):** Person (Wlad Jachtchenko: Autor, Rhetorik-Trainer, Speaker, Bücher, Social-Profile), Organization (Leader-OS), Course für die Kurse, Product/Offer für die Pakete, FAQPage auf Coaching- und Startseite, VideoObject für öffentliche Wlad-Videos.
-- **AEO-Inhalte:** Öffentliche, ohne Login lesbare Seiten mit klaren Frage-Antwort-Blöcken („Wer ist Wlad Jachtchenko?“, „Was ist Leader-OS?“, „Was kostet …?“, „Für wen …?“), eine `llms.txt` mit Kurzbeschreibung der Plattform und der wichtigsten Seiten, sowie eine öffentliche Kursübersicht (Titel, Folgen, Dauer — Inhalte bleiben geschützt).
-- **Keyword-Set DACH** (in Titel, H1/H2, FAQ und Alt-Texten): Wlad Jachtchenko, Leader-OS, Führungskräfte-Coaching, Leadership-Training online, Rhetorik für Führungskräfte, schwierige Mitarbeitergespräche, Delegation, Feedback geben, KI-Coach Führung, Executive Presence, Boardroom-Strategie.
-- **Messbarkeit:** Search-Console-Verifizierung vorbereitet, CTA-Klicks aus Suchergebnissen als Ereignis erfasst.
+3. **Alle Kurse** — Kartenraster (3 Spalten Desktop, 2 Tablet, 1 Mobil). Über dem Raster eine Filterzeile: Kategorie-Chips + „Alle · Freigeschaltet · Gesperrt · Angefangen“. Jede Karte:
+   - **Vorschaubild 16:9** (neu erzeugt je Kurs: Wlad frontal im Präsenz-Look + Kurstitel als Typo-Overlay, dunkler Grund, Limetten-Akzent — konsistent mit den Video-Guide-Thumbnails). Beim Hover läuft — falls vorhanden — die Folge 1 stumm als Vorschau an (wie beim Vorbild).
+   - Badges oben links: „KOSTENLOS · FOLGE 1“ (immer) sowie „GESPERRT“ mit Schloss bei fehlendem Paket, „NEU“ für Kurse mit frisch hochgeladenen Videos, Fortschrittsring/-balken bei angefangenen Kursen.
+   - Titel, ein Satz Beschreibung (bestehende Tagline).
+   - Meta-Zeile als Chips: Kategorie · Level (Grundlagen / Aufbau / Executive) · „7 Folgen“ · „48 Min“.
+   - Zwei Aktionen: **„Kostenlos starten“** (spielt Folge 1 sofort; bei angefangenem Kurs: „Weiter mit Folge n“) und **„Details“** (Detailseite). Gesperrte Kurse zeigen statt „Weiter“ den Hinweis „Teil von Leadership OS / PLUS“ und führen über „Details“ zur Folgenliste mit Upgrade-Hinweis — die Vorschau (Folge 1) bleibt spielbar.
 
-Annahmen:
-- Öffentliche Domain für die Indexierung ist die Produktions-Domain; Vorschau-Umgebungen bleiben `noindex`.
-- Sprache der öffentlichen Seiten bleibt Deutsch (EN nur sekundär, ohne eigenes SEO-Ziel).
-- Keine bezahlten SEO-Tools; alles on-page/technisch innerhalb der App.
+4. **Was drin ist** — sechs kurze Nutzen-Kacheln, wie beim Vorbild: „Echte Situationen, keine Theorie“, „Frag Wlad direkt aus der Folge“, „Folge gesehen = Fortschritt gezählt“, „Sofort anwenden: Playbook zu jedem Kurs“, „Kurze Folgen, max. 12 Minuten“, „Neue Folgen erscheinen automatisch“. Daneben ein großes Standbild aus einem Wlad-Clip.
+
+5. **Mehr aus Leader-OS** — drei Karten: „Frag Wlad“ (Chat), „Video-Guide“ (Wlad erklärt die Plattform), „30-Tage-Challenge“ — jeweils mit Kurztext und Button.
+
+6. Der bestehende **Upsell-Block** (x Kurse / y Folgen warten) wandert ans Ende der Kursliste (nur für Nutzer mit gesperrten Kursen) und übernimmt den Look der Karten.
+
+## Detailseite `/kurse/<kurs>`
+
+- Kopf: Vorschaubild groß, Titel, Beschreibung, Meta-Chips, Fortschritt („3 von 7 gesehen“), Button „Weiter mit Folge n“ / „Folge 1 kostenlos ansehen“.
+- Player mit der gewählten Folge; darunter Folgenliste (Nummer, Titel, Dauer, gesehen/frei/gesperrt), Lernziele (bestehende Bullets), „Frag Wlad dazu“, „Mit Wlad sprechen (Beta)“.
+- Gesperrte Folgen: Schloss + „Teil von Leadership OS PLUS“ + Button „Pakete ansehen“ (wie heute im Popup).
+- Direktlinks aus Dashboard/Guide/E-Mails auf einzelne Folgen (`/kurse/<kurs>?folge=3`) funktionieren.
+
+## Was sich NICHT ändert
+
+- Zugriffslogik (Folge 1 frei, Rest nach Paket), „gesehen“-Zählung, Video-Verwaltung im Admin, Kursinhalte und Reihenfolge.
+- Die Seite bleibt nur eingeloggt erreichbar; die öffentliche Übersicht bleibt `/kurse-uebersicht/` (SEO).
+
+## Annahmen (bei Bedarf widersprechen)
+
+- Level-Zuordnung: Kurse 1–3 „Grundlagen“, 4–6 „Aufbau“, 7–10 „Executive“.
+- Vorschaubilder werden einmalig KI-generiert (10 Stück) und im Admin später austauschbar; Hover-Video nutzt die vorhandene Folge-1-Aufnahme, sonst bleibt das Standbild.
+- Dunkler Hero + helle/dunkle Karten je nach App-Theme (kein komplett dunkles Redesign der ganzen App).
+- Deutsch primär, Englisch wie bisher über den Sprachschalter.
 
 ## Nicht Teil dieses Plans
-- Neue Videos oder Kursinhalte; Änderungen am Preis- oder Zugriffsmodell; Blog/Content-Marketing außerhalb der App.
+
+Neue Kursinhalte oder Videos, Preis-/Zugriffsänderungen, Kommentar-/Bewertungsfunktion, Zertifikate.

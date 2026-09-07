@@ -181,6 +181,24 @@ COURSES = [
 ]
 
 
+CATEGORIES = {
+    "rhetorik": {"de": "Rhetorik & Kommunikation", "en": "Rhetoric & communication"},
+    "fuehrung": {"de": "Führung & Gespräche", "en": "Leadership & conversations"},
+    "executive": {"de": "Strategie & Executive", "en": "Strategy & executive"},
+}
+COURSE_CATEGORY = {
+    "rhetorik-grundlagen": "rhetorik", "storytelling-boardroom": "rhetorik", "meeting-rhetorik": "rhetorik",
+    "schwierige-gespraeche": "fuehrung", "delegation": "fuehrung", "feedback-formate": "fuehrung",
+    "ki-first-leadership": "executive", "change-management": "executive", "executive-presence": "executive", "boardroom-strategie": "executive",
+}
+LEVELS = ["grundlagen", "aufbau", "executive"]  # Kurse 1–3 / 4–6 / 7–10
+
+
+def course_level(course: dict) -> str:
+    idx = next((i for i, c in enumerate(COURSES) if c["slug"] == course["slug"]), 0)
+    return LEVELS[min(idx // 3, 2)]
+
+
 def course_view(course: dict, user_tier: str, videos: dict[str, dict]) -> dict:
     """Kurs mit Freischalt-Status: Folge 1 immer frei, Rest ab Kurs-Tier. `videos` = {episode_id: {...}} aus der DB."""
     unlocked_course = TIER_RANK.get(user_tier, 0) >= TIER_RANK[course["tier"]]
@@ -193,10 +211,16 @@ def course_view(course: dict, user_tier: str, videos: dict[str, dict]) -> dict:
             "unlocked": i == 1 or unlocked_course,
             "video_url": vid.get("video_url") if (i == 1 or unlocked_course) else None,
             "video_ready": bool(vid.get("video_url")),
+            "video_updated_at": vid.get("updated_at"),
         })
+    first_url = eps[0]["video_url"] or ""
     return {
         "slug": course["slug"], "title": course["title"], "tagline": course["tagline"], "emoji": course["emoji"],
-        "tier": course["tier"], "tier_label": "Leader-OS" if course["tier"] == STANDARD else "Leadership OS PLUS",
+        "tier": course["tier"], "tier_label": "Leadership OS" if course["tier"] == STANDARD else "Leadership OS PLUS",
+        "category": COURSE_CATEGORY.get(course["slug"], "rhetorik"), "level": course_level(course),
+        "thumbnail_url": f"/courses/{course['slug']}.jpg",
+        # Hover-Vorschau nur für direkt streambare MP4s (unsere Storage-Route), nicht für Vimeo/YouTube-Links
+        "preview_url": first_url if first_url.startswith("/api/") or first_url.endswith(".mp4") else None,
         "episode_count": len(eps), "minutes_total": sum(e["minutes"] for e in course["episodes"]),
         "unlocked": unlocked_course, "videos_ready": sum(1 for e in eps if e["video_ready"]),
         "episodes": eps,
