@@ -24,12 +24,14 @@ from pymongo.errors import DuplicateKeyError
 
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
-    BROLL_SCREENS, CLIP_SCREENS, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS, TALK_MAX_SECONDS,
-    TALK_MAX_SECONDS_PRO, WLAD_STYLE_PROMPT, plan_shots, scene_for_aspect, seed_clips, word_count, word_limits,
+    BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
+    TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
+    scene_for_aspect, seed_clips, word_count, word_limits,
 )
 from routes.admin import require_admin
 from routes.uploads import download_object, get_object, put_object
 from services import get_current_user
+from services_guide_quality import godmode_check
 from services_ai_errors import ai_http_error
 from services_fal import (
     COST_I2V, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, clone_voice, edit_image,
@@ -271,6 +273,7 @@ async def serve_media(token: str, kind: str, request: Request):
     if kind not in CLIP_MEDIA and kind not in SETTINGS_ASSETS:
         raise HTTPException(status_code=404, detail="Not found")
 
+    clip = {}
     if kind in SETTINGS_ASSETS:
         settings = await _settings()
         if settings.get("media_token") != token:
@@ -286,7 +289,8 @@ async def serve_media(token: str, kind: str, request: Request):
 
     if not path:
         raise HTTPException(status_code=404, detail="Not found")
-    return await _serve_object(request, path, media_type, poster=kind == "poster")
+    return await _serve_object(request, path, media_type, poster=kind == "poster",
+                               title=clip.get("title") or "", kicker=KICKERS.get(clip.get("kind") or "", ""))
 
 
 # ── Medien-Auslieferung: Disk-Cache + gestreamte Range-Antworten ────────────
@@ -363,29 +367,30 @@ def _file_chunks(file_path: Path, start: int, end: int):
             yield chunk
 
 
-def _local_poster(path: str) -> Path:
-    """Keyframe (PNG, ~1,3 MB) -> Poster-JPEG max. 960 px breit (~80 KB), einmal erzeugt, dann aus dem Cache."""
+KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "Wlad für dich", "coaching": "Coaching"}
+
+
+def _local_poster(path: str, title: str = "", kicker: str = "") -> Path:
+    """Keyframe -> branded Thumbnail-JPEG (Titel-Typo, W-Mark, Lime-Akzent), einmal erzeugt, dann aus dem Cache."""
     source = _local_media(path)
-    target = source.with_name(source.name + "_poster.jpg")
+    key = hashlib.sha1(f"{title}|{kicker}|v2".encode()).hexdigest()[:10]
+    target = source.with_name(f"{source.name}_poster_{key}.jpg")
     if target.exists():
         return target
-    from PIL import Image
+    from services_video_compose import render_thumbnail
 
-    with Image.open(source) as img:
-        img = img.convert("RGB")
-        if img.width > 960:
-            img = img.resize((960, round(img.height * 960 / img.width)), Image.LANCZOS)
-        tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part")
-        img.save(tmp, "JPEG", quality=82, optimize=True, progressive=True)
-        tmp.replace(target)
+    tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part")
+    render_thumbnail(str(source), str(tmp), title, kicker)
+    tmp.replace(target)
     return target
 
 
-async def _serve_object(request: Request, path: str, media_type: str, poster: bool = False) -> Response:
+async def _serve_object(request: Request, path: str, media_type: str, poster: bool = False,
+                        title: str = "", kicker: str = "") -> Response:
     """Range-Requests für <video>/<audio> (Safari verlangt 206, Scrubbing braucht es überall);
     ETag/304, damit Browser und CDN nach Ablauf des Caches nur revalidieren statt neu laden."""
     try:
-        file_path = await asyncio.to_thread(_local_poster if poster else _local_media, path)
+        file_path = await asyncio.to_thread(_local_poster, path, title, kicker) if poster else await asyncio.to_thread(_local_media, path)
     except Exception as e:
         logger.error("Guide media fetch failed for %s: %s", path, e)
         raise HTTPException(status_code=404, detail="Not found")
@@ -412,12 +417,13 @@ async def serve_shot_media(token: str, shot_id: str, kind: str, request: Request
     """Zwischenergebnisse einzelner Shots (Fal muss raw + padded abrufen können)."""
     if kind not in SHOT_MEDIA:
         raise HTTPException(status_code=404, detail="Not found")
-    clip = await db.guide_clips.find_one({"media_token": token}, {"_id": 0, "shots": 1})
+    clip = await db.guide_clips.find_one({"media_token": token}, {"_id": 0, "shots": 1, "title": 1, "kind": 1})
     shot = next((s for s in (clip or {}).get("shots", []) if s["id"] == shot_id), None)
     field, media_type = SHOT_MEDIA[kind]
     if not shot or not shot.get(field):
         raise HTTPException(status_code=404, detail="Not found")
-    return await _serve_object(request, shot[field], media_type, poster=kind == "poster")
+    return await _serve_object(request, shot[field], media_type, poster=kind == "poster",
+                               title=clip.get("title") or "", kicker=KICKERS.get(clip.get("kind") or "", ""))
 
 
 @router.get("/broll/{screen}")
@@ -448,6 +454,7 @@ def _admin_clip_view(c: dict) -> dict:
         view[f"{kind}_url"] = _media_url(token, kind) if c.get(field) and token else None
     view["words"] = word_count(c.get("script", ""))
     view["word_limits"] = word_limits(c.get("kind", ""))
+    view["godmode"] = godmode_check(c)
     preset = SHOT_PRESETS.get(c.get("shot_preset") or "")
     view["shot"] = preset and {**preset, "scene_prompt": c.get("scene_prompt") or preset["scene_prompt"],
                                "motion_prompt": c.get("motion_prompt") or preset["motion_prompt"]}
@@ -839,6 +846,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     pro = clip.get("quality") == "pro"
     width, height = FRAMES[aspect]
     await _patch_clip(slug, {"media_token": token})
+    talk_shots = [s_ for s_ in shots if s_["type"] == "talk"]
 
     for shot in shots:
         sid, preset = shot["id"], SHOT_PRESETS.get(shot.get("preset") or "")
@@ -850,9 +858,18 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
                 # OmniHuman/Lipsync hängen bei < 2 s Ton -> hinten mit Stille auf 2,5 s auffüllen
                 audio = await asyncio.to_thread(pad_audio, audio, 0.0, 2.5)
                 seconds = 2.5
+            # GODMODE: Präsenz-Shots bekommen einen stillen Auftakt (erster Talk) und einen Ausklang
+            # (letzter Talk), damit Wlad nicht auf Frame 1 losredet und nicht mitten im Blick abgeschnitten wird.
+            lead = TALK_LEAD_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[0]) else 0.0
+            tail = TALK_TAIL_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[-1]) else 0.0
+            if lead or tail:
+                audio = await asyncio.to_thread(pad_audio, audio, lead, seconds + lead + tail)
+                seconds = seconds + lead + tail
+            shot["speech_lead"], shot["speech_tail"] = lead, tail
             shot["audio_path"] = await _store(f"a_{sid}", slug, audio, "audio/mpeg", "mp3")
             shot["audio_seconds"] = round(seconds, 2)
-            await _patch_shot(slug, sid, {"audio_path": shot["audio_path"], "audio_seconds": shot["audio_seconds"]})
+            await _patch_shot(slug, sid, {"audio_path": shot["audio_path"], "audio_seconds": shot["audio_seconds"],
+                                          "speech_lead": lead, "speech_tail": tail})
         if pro and shot["type"] == "talk" and not shot.get("synced_path"):
             await _patch_clip(slug, {"progress": f"OmniHuman {sid}"})
             synced = await asyncio.to_thread(
@@ -899,7 +916,8 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             synced, _ = await asyncio.to_thread(get_object, shot["synced_path"])
             audio, _ = await asyncio.to_thread(get_object, shot["audio_path"])
             seg = await asyncio.to_thread(normalize_segment, synced, audio, width, height)
-            cues += subtitle_chunks(shot["text"], offset + 0.05, shot["audio_seconds"], 6)
+            lead, tail = float(shot.get("speech_lead") or 0.0), float(shot.get("speech_tail") or 0.0)
+            cues += subtitle_chunks(shot["text"], offset + 0.05 + lead, shot["audio_seconds"] - lead - tail, 6)
         elif shot["type"] == "talk":
             synced, _ = await asyncio.to_thread(get_object, shot["synced_path"])
             padded, _ = await asyncio.to_thread(get_object, shot["padded_path"])
@@ -940,12 +958,20 @@ _FULL_SLOTS = asyncio.Semaphore(3)
 XFADE = 0.45
 
 
+def _setting_for(slug: str, clip: dict) -> str | None:
+    """Präsenz-Setting des Clips: explizit am Clip, sonst nach Inhalt (Studio für Werkzeuge/Teaser), sonst Loft."""
+    if clip.get("quality") != "pro":
+        return None
+    return clip.get("setting") or CLIP_SETTING.get(slug, "loft")
+
+
 async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
     """Komplett-Pipeline für die Serienproduktion: planen (falls nötig) -> Keyframes -> Film.
     Höchstens 3 Clips gleichzeitig, damit Fal nicht in 503 läuft."""
     async with _FULL_SLOTS:
         if not clip.get("shots"):
-            clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro")
+            clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro",
+                                       _setting_for(slug, clip))
             await _patch_clip(slug, {"shots": clip["shots"]})
         await _job_shot_keyframes(slug, clip, settings, token)
         clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
@@ -1054,7 +1080,7 @@ async def plan_clip_shots(slug: str, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
-    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro")
+    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro", _setting_for(slug, clip))
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -1145,7 +1171,8 @@ async def bulk_produce(data: BulkIn, request: Request):
         if data.reset:
             # Upgrade: neu planen, Keyframes gleicher Presets behalten, alles andere neu rendern
             old = {(s_.get("preset"), s_["type"]): s_ for s_ in clip.get("shots", [])}
-            shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro")
+            shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro",
+                               _setting_for(slug, {**clip, "quality": data.quality}))
             for s_ in shots:
                 prev = old.get((s_.get("preset"), s_["type"]))
                 if prev and prev.get("keyframe_path"):

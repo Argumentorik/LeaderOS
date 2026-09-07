@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Play, FileText, ChevronDown, ChevronUp, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Play, FileText, ChevronDown, ChevronUp, Check, MessageCircle } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 
@@ -92,16 +93,27 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
 
         {hasVideo && (
           <>
-            <button
-              type="button"
-              onClick={() => setScriptOpen(v => !v)}
-              aria-expanded={scriptOpen}
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00]"
-              data-testid={`guide-script-toggle-${clip.slug}`}
-            >
-              {scriptOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              {de ? 'Text mitlesen (20 Sekunden)' : 'Read the text instead'}
-            </button>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <button
+                type="button"
+                onClick={() => setScriptOpen(v => !v)}
+                aria-expanded={scriptOpen}
+                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00]"
+                data-testid={`guide-script-toggle-${clip.slug}`}
+              >
+                {scriptOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                {de ? 'Text mitlesen (20 Sekunden)' : 'Read the text instead'}
+              </button>
+              <Link
+                to={`/chat?prefill=${encodeURIComponent(de
+                  ? `Ich habe gerade dein Video „${clip.title}“ gesehen. Erklär mir bitte kurz, wie ich das konkret in meinem Alltag umsetze — und stell mir eine Rückfrage zu meiner Situation.`
+                  : `I just watched your video "${clip.title}". Explain briefly how I apply this in my day-to-day and ask me one question about my situation.`)}`}
+                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors"
+                data-testid={`guide-ask-wlad-${clip.slug}`}
+              >
+                <MessageCircle size={12} /> {de ? 'Frag Wlad dazu' : 'Ask Wlad about this'}
+              </Link>
+            </div>
             {scriptOpen && (
               <p className="text-[12.5px] leading-relaxed text-muted-foreground whitespace-pre-wrap select-text pt-1"
                  data-testid={`guide-script-${clip.slug}`}>

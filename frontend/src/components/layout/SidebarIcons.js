@@ -137,3 +137,9 @@ export const IconCamera = (p) => <I {...p}>
 export const SBolt = () => <svg width="9" height="9" viewBox="0 0 24 24" fill="white"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>;
 export const STarget = () => <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>;
 export const SBrain = () => <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 4 6v3h6v-3c2-1 4-3 4-6 0-4-3-7-7-7z"/><path d="M9 22h6"/></svg>;
+
+export const IconCourse = (p) => <I {...p}>
+  <path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z" stroke="currentColor" strokeWidth="1.6" fill="currentColor" opacity="0.1"/>
+  <path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z" stroke="currentColor" strokeWidth="1.6"/>
+  <path d="M15.5 9.5l3 1.75-3 1.75z" fill="currentColor"/>
+</I>;

@@ -8,7 +8,7 @@ import { WladMark } from '../brand/WladMark';
 import {
   IconCommand, IconPulse, IconClipboard, IconBubble, IconBolt,
   IconCrown, IconLayers, IconLens, IconFlow, IconGraph,
-  IconEvent, IconDiamond, IconFlame, IconCamera, IconChev, SBolt, STarget, SBrain,
+  IconEvent, IconDiamond, IconFlame, IconCamera, IconCourse, IconChev, SBolt, STarget, SBrain,
 } from './SidebarIcons';
 import { useAuth } from '../../contexts/AuthContext';
 import { LEADERCHECK_URL } from '../../lib/domains';
@@ -41,6 +41,7 @@ export const Sidebar = () => {
         { path: '/tasks', label: t('nav.tasks'), icon: IconClipboard },
         { path: '/chat', label: t('nav.aiCoach'), icon: IconBubble },
         { path: '/video-guide', label: lang === 'de' ? 'Video-Guide' : 'Video Guide', icon: IconCamera },
+        { path: '/kurse', label: lang === 'de' ? 'Kurse' : 'Courses', icon: IconCourse },
       ]
     },
     {

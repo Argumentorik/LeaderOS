@@ -106,6 +106,43 @@ def _spaced(draw, pos, text, font, fill, tracking):
         x += draw.textlength(ch, font=font) + tracking
 
 
+def render_thumbnail(source: str, dest: str, title: str, kicker: str = "", max_width: int = 1280) -> None:
+    """Branded Thumbnail: Keyframe + dunkler Verlauf unten + Titel-Typo + W-Mark + Lime-Akzent (JPEG)."""
+    with Image.open(source) as src:
+        img = src.convert("RGB")
+    if img.width > max_width:
+        img = img.resize((max_width, round(img.height * max_width / img.width)), Image.LANCZOS)
+    w, h = img.size
+    portrait = h > w
+    grad = Image.new("L", (1, h))
+    for y in range(h):
+        t = max(0.0, (y - h * 0.42) / (h * 0.58))
+        grad.putpixel((0, y), int(min(1.0, t ** 1.1) * 235))
+    shade = Image.new("RGB", (w, h), (8, 8, 8))
+    img = Image.composite(shade, img, grad.resize((w, h)))
+    draw = ImageDraw.Draw(img)
+    pad = int(w * 0.055)
+    title_size = int(w * (0.075 if portrait else 0.052))
+    font = _font(FONT_BOLD, title_size)
+    lines = _wrap(draw, title, font, w - 2 * pad)[:3]
+    line_h = int(title_size * 1.12)
+    y = h - pad - len(lines) * line_h - int(h * 0.02)
+    if kicker:
+        kf = _font(FONT_BOLD, int(title_size * 0.34))
+        _spaced(draw, (pad, y - int(title_size * 0.75)), kicker.upper(), kf, LIME[:3], int(title_size * 0.05))
+    draw.rectangle([pad, y - int(title_size * 0.15), pad + int(w * 0.035), y - int(title_size * 0.15) + int(title_size * 0.08)], fill=LIME[:3])
+    for i, line in enumerate(lines):
+        draw.text((pad, y + int(title_size * 0.12) + i * line_h), line, font=font, fill=(255, 255, 255))
+    mark = int(w * 0.055)
+    logo = Image.open(LOGO_PATH).convert("RGBA").resize((mark, mark), Image.LANCZOS)
+    img.paste(logo, (w - pad - mark, pad), logo)
+    small = _font(FONT_BOLD, int(mark * 0.32))
+    label = "LEADER-OS"
+    lw = draw.textlength(label, font=small)
+    draw.text((w - pad - mark - int(mark * 0.25) - lw, pad + int(mark * 0.32)), label, font=small, fill=(255, 255, 255))
+    img.save(dest, "JPEG", quality=86, optimize=True, progressive=True)
+
+
 def render_end_card(width: int, height: int, seconds: float = 2.6) -> bytes:
     """Abbinder: W-Mark, LEADER-OS, POWERED BY WLADBOT auf Schwarz — mit Stille-Tonspur."""
     canvas = Image.new("RGB", (width, height), (10, 10, 10))

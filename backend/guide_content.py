@@ -9,7 +9,7 @@ Wortgrenze ist keine Kosmetik: Fal rechnet pro Sekunde Video ab.
 
 SCRIPT_MIN_WORDS = 55
 SCRIPT_MAX_WORDS = 115
-WORD_LIMITS = {"teaser": (6, 30), "onboarding": (55, 115), "mission": (55, 115)}
+WORD_LIMITS = {"teaser": (6, 70), "onboarding": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
 
 
 def word_limits(kind: str) -> tuple[int, int]:
@@ -27,6 +27,88 @@ WLAD_STYLE_PROMPT = (
 )
 
 SHOT_PRESETS = {
+    # ── GODMODE (Iter 154): Präsenz statt Herumlaufen ─────────────────────────
+    "loft_seated_medium": {
+        "label": "Loft · sitzend, halbnah",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: medium shot, he sits relaxed at a warm wooden table in a modern bright loft office, tall windows "
+            "with soft daylight behind him, blurred background with concrete, warm wood, a few plants and a softly "
+            "glowing lime-green screen. Camera slightly above eye level, like sitting across the table from him. "
+            "He leans in a little, forearms resting on the table, looks straight into the camera with a warm, "
+            "attentive expression. Horizontal 16:9 composition, face sharp, Netflix-quality animation film still, "
+            "shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "He stays seated and present, talks directly to the camera like in a calm one-on-one conversation: "
+            "natural lip movement in sync with the voice, subtle nods, small purposeful hand gestures resting on "
+            "the table, warm eye contact, relaxed breathing. No walking, no camera cuts, steady framing, consistent "
+            "character and outfit, smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
+    "loft_seated_closeup": {
+        "label": "Loft · sitzend, Close-up",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: close-up from the chest up, he sits at a warm wooden table in a modern bright loft office, soft "
+            "daylight from the side, strongly blurred background with warm wood and a softly glowing lime-green "
+            "screen. Camera slightly above eye level. He looks straight into the camera with calm confidence and "
+            "a slight smile, as if finishing an important thought. Horizontal 16:9 composition, face large and "
+            "sharp in frame, Netflix-quality animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "He stays seated and present, speaks directly to the camera with natural lip movement in sync with the "
+            "voice, calm micro-expressions, a slight nod to underline key words, steady eye contact, ends with a "
+            "warm confident smile and holds the gaze. No walking, no camera cuts, steady framing, consistent "
+            "character and outfit, smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
+    "studio_medium": {
+        "label": "Dunkles Studio · halbnah",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: TIGHT medium shot framed from the waist up — his head sits near the top edge of the frame and his "
+            "torso fills most of the image height, legs NOT visible. He stands in a dark cinematic studio with a pitch-black "
+            "background. A single soft spotlight from above lights him, subtle haze, a thin lime-green rim light "
+            "on his shoulder. He stands still and grounded, looks straight into the camera with focused, warm "
+            "confidence. Horizontal 16:9 composition, face sharp, premium Apple-keynote look, Netflix-quality "
+            "animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "He stands grounded in the spotlight and speaks directly to the camera: natural lip movement in sync "
+            "with the voice, deliberate small hand gestures, subtle head movement, steady eye contact. No walking, "
+            "no camera cuts, steady framing, volumetric haze, consistent character and outfit, smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
+    "studio_closeup": {
+        "label": "Dunkles Studio · Close-up",
+        "kind": "talk",
+        "scene_prompt": (
+            "Scene: TIGHT close-up framed from the chest up — his face fills the upper half of the frame, no legs, no "
+            "full body. He stands in a dark cinematic studio with a pitch-black background, "
+            "soft key light from above, a thin lime-green rim light, subtle haze. He looks straight into the camera "
+            "with calm confidence and a slight smile. Horizontal 16:9 composition, face large and sharp in frame, "
+            "premium keynote look, Netflix-quality animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "He speaks directly to the camera with natural lip movement in sync with the voice, calm "
+            "micro-expressions, a slight nod on key words, steady eye contact, ends with a confident smile and "
+            "holds the gaze. No walking, no camera cuts, steady framing, consistent character and outfit, "
+            "smooth realistic motion."
+        ),
+        "duration": "10",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
     "spotlight_entrance": {
         "label": "Dunkles Studio · Lichtkegel",
         "scene_prompt": (
@@ -155,13 +237,36 @@ MULTI_SHOT_PLAN_PRO = [
     {"type": "broll"},
     {"type": "talk", "preset": "loft_talk_closeup", "max_words": 40},
 ]
+# GODMODE (Iter 154): Präsenz-Plan — Wlad ist ab Sekunde 1 im Bild und spricht direkt, kein Walk-in.
+PRESENCE_SETTINGS = {
+    "loft": ("loft_seated_medium", "loft_seated_closeup"),
+    "studio": ("studio_medium", "studio_closeup"),
+}
+# Wlad wirkt einige Zentimeter größer: längere Beine, elegante Proportionen (Nutzerwunsch Iter 154).
+WLAD_STATURE = "He is tall with long legs and elegant, athletic proportions (about 1.90 m), upright posture. "
+# Studio-Look für Clips über Videos, Simulationen & Co.; sonst Gesprächs-Charakter im Loft.
+CLIP_SETTING = {"start-4-werkzeuge": "studio", "teaser-login": "studio", "teaser-spotlight": "studio"}
+
+
+def presence_plan(setting: str = "loft") -> list[dict]:
+    medium, closeup = PRESENCE_SETTINGS.get(setting, PRESENCE_SETTINGS["loft"])
+    return [
+        {"type": "talk", "preset": medium, "max_words": 64},
+        {"type": "broll"},
+        {"type": "talk", "preset": closeup, "max_words": 50},
+    ]
+
+
+TALK_LEAD_SECONDS = 0.4   # Wlad ist kurz still im Bild, bevor er spricht
+TALK_TAIL_SECONDS = 0.9   # Sprech-Ausklang: Blick hält, kein abrupter Schnitt
 TALK_MAX_SECONDS = 9.2
 TALK_MAX_SECONDS_PRO = 28.0
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
 def scene_for_aspect(prompt: str, aspect: str) -> str:
-    return prompt.replace("Horizontal 16:9 composition", "Vertical 9:16 composition") if aspect == "9:16" else prompt
+    prompt = prompt.replace("Horizontal 16:9 composition", "Vertical 9:16 composition") if aspect == "9:16" else prompt
+    return prompt if WLAD_STATURE in prompt else prompt.replace("Scene: ", "Scene: " + WLAD_STATURE, 1)
 
 
 def _sentences(text: str) -> list[str]:
@@ -171,7 +276,9 @@ def _sentences(text: str) -> list[str]:
 
 
 def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
-    """Nimmt ganze Sätze von vorn, bis max_words erreicht wäre (mindestens einen)."""
+    """Nimmt ganze Sätze von vorn, bis max_words erreicht wäre (mindestens einen).
+    Passt der nächste Satz nicht mehr ganz, wird er am letzten Komma/Gedankenstrich innerhalb
+    des Budgets geteilt — so landet der Einstieg bei Wlad statt in der App-Tour."""
     taken, count = [], 0
     for s in sentences:
         n = len(s.split())
@@ -181,21 +288,38 @@ def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
         count += n
         if count >= max_words:
             break
-    return " ".join(taken), sentences[len(taken):]
+    rest = sentences[len(taken):]
+    budget = max_words - count
+    if rest and budget >= 10:
+        nxt = rest[0]
+        words = nxt.split()
+        head_words = " ".join(words[:budget])
+        cut = max(head_words.rfind(", "), head_words.rfind(" – "), head_words.rfind(" — "), head_words.rfind(": "))
+        if cut >= len(" ".join(words[:6])):
+            head, tail = nxt[:cut + 1].rstrip(",:"), nxt[cut + 1:].strip(" –—")
+            if len(tail.split()) >= 4:
+                taken.append(head + ("" if head.endswith((".", "!", "?")) else "."))
+                rest = [tail[0].upper() + tail[1:]] + rest[1:]
+    return " ".join(taken), rest
 
 
-def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False) -> list[dict]:
+def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
-    B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit)."""
-    plan = MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN
+    B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
+    setting = Präsenz-Plan ohne Walk-in ("loft" | "studio")."""
+    if setting:
+        plan = presence_plan(setting)
+    else:
+        plan = MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN
     screens = screens or DEFAULT_SCREENS
     sentences = _sentences(script)
     talks = [i for i, s in enumerate(plan) if s["type"] == "talk"]
     texts = {}
     total = word_count(script)
-    # pro: Anteile statt fester Grenzen (50 % Einstieg, ~25 % App-Tour, 25 % Abschluss), sentence-aligned
-    first_limit = min(plan[talks[0]]["max_words"], max(12, round(total * 0.5))) if pro and talks else (plan[talks[0]]["max_words"] if talks else 0)
-    last_limit = min(plan[talks[-1]]["max_words"], max(10, round(total * 0.25))) if pro and talks else (plan[talks[-1]]["max_words"] if talks else 0)
+    # pro: Anteile statt fester Grenzen (~55 % Einstieg, ~15-20 % App-Tour, ~30 % Abschluss), sentence-aligned
+    share_first, share_last = (0.55, 0.3) if setting else (0.5, 0.25)
+    first_limit = min(plan[talks[0]]["max_words"], max(12, round(total * share_first))) if pro and talks else (plan[talks[0]]["max_words"] if talks else 0)
+    last_limit = min(plan[talks[-1]]["max_words"], max(10, round(total * share_last))) if pro and talks else (plan[talks[-1]]["max_words"] if talks else 0)
     if talks:
         texts[talks[0]], sentences = _take_words(sentences, first_limit)
         if len(talks) > 1:
@@ -404,6 +528,11 @@ MISSION_CLIPS = [
 
 def seed_clips() -> list[dict]:
     """Alle Clips der aktuellen Stufe als flache Liste (Reihenfolge = Anzeige)."""
+    from guide_scripts_godmode import SCRIPTS as GODMODE_SCRIPTS
+
+    for c in ONBOARDING_CLIPS:
+        c["script"] = GODMODE_SCRIPTS.get(c["slug"], c["script"])
+    LOGIN_TEASER["script"] = GODMODE_SCRIPTS.get("teaser-login", LOGIN_TEASER["script"])
     clips = [
         {
             "slug": c["slug"],

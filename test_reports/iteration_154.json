@@ -1,0 +1,28 @@
+{
+  "summary": "Iter 154 (Course Library + GODMODE Guide) fully verified. Backend: 7/7 pytest passed (test_iter154_courses_godmode.py — catalog shape 10 courses / 72 episodes, free user sees only ep-1 previews, PLUS user unlocks everything and seen-progress increments, admin PUT video URL + stream guard 403 for locked, unauth /api/courses -> 401, guide GODMODE badges + branded JPEG poster < 400 KB, presence plan talk/broll/talk with word_count <= 64). Frontend: (1) FREE user (free@wladbot.test) /kurse -> sidebar 'Kurse' link present, 10 course cards, 10 locked, 4 'Leadership OS PLUS' + 6 'Leader-OS' tier badges (7 text hits total incl. header — 6 unique cards), 10 'Kostenlose Vorschau' markers, 10 'Alle N Folgen' expand toggles. Ep1 rhetorik-grundlagen: panel+bullets+pending notice render, NO <video>, 'Schließen' closes, 'Frag Wlad dazu' navigates to /chat (URL has ?prefill=… in navigate call, ChatPage consumes then strips). Locked ep2: course-episode-locked box shown, NO <video>, 'Pakete ansehen' -> /coaching. (2) PLUS user (accelerator@wladbot.test) /kurse: 10 cards, 0 locked. Rhetorik-grundlagen ep2 renders <video data-testid='course-episode-video' src='https://vimeo.com/123'>; after reload course card shows '1/6 gesehen' with check icon on ep2 (seen persisted). (3) /video-guide (free): 12 img tags with 12 poster URLs (all /api/guide/media/*/shot/*/poster), body contains 'Erststart' section and start-1..start-5 refs. Login page (logged out): teaser card 'Warum Leader-OS' with Wlad avatar visible, no console errors from teaser. (4) Admin (test@test.com) /wlad-control-x7k9q2 Guide Studio: 14 clip cards; expanding each of start-1-willkommen, start-2-so-sprichst-du, start-3-kontext, start-4-werkzeuge, start-5-erste-7-tage, teaser-login shows badge 'GODMODE-CHECK 11/11' with correct settings (start-4 STUDIO, teaser-login STUDIO, rest LOFT) plus green check items ('spricht den Nutzer direkt an', 'Präsenz-Shots (kein Walk-in)', 'branded Thumbnail vorhanden', etc.). No cost-triggering buttons were clicked.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter154_courses_godmode.py",
+    "/app/test_reports/pytest/iter154.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "review_request lists the badge testid as 'guide-godmode-command-center-229' — that looks like an accidental copy of the preview hostname. Actual implementation (correct) uses 'guide-godmode-${clip.slug}' per GuideClipCard.js:119. Not a bug, just a spec-note mismatch.",
+    "Admin route is intentionally obfuscated at /wlad-control-x7k9q2 (App.js:163). Fine, but there is no sidebar entry for admins — testing/QA had to grep the route. Consider a hidden admin-only link once is_admin is loaded.",
+    "CoursesPage 'Frag Wlad dazu' correctly builds /chat?prefill=<encoded>, but the destination URL was reported as '/chat' with no query — ChatPage consumes and strips the search param immediately; if a user reloads /chat after landing, the prefill is gone. Consider keeping the query until the message is actually sent, or persist in state.",
+    "Non-blocking: /video-guide shows 12 poster tiles even though only 6 clips are branded/godmode-passing in the spec (start-1..5 + teaser-login). The extra 6 posters are the older produced clips — content OK, worth confirming the tile count target is 12 (matches implementation) and not 6."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "100% of tested flows (kurse free-tier, kurse PLUS-tier, ep panel + ask-wlad + locked upgrade path, seen persistence, /video-guide posters, login teaser render, admin Guide Studio GODMODE badges)"},
+  "test_credentials": "free@wladbot.test / test123, accelerator@wladbot.test / test123, test@test.com / test123 (all from /app/memory/test_credentials.md, all valid)",
+  "seed_data_creation": "None. Reused seeded course catalog; test_admin_video_url_and_stream_guard persists https://vimeo.com/123 on rhetorik-grundlagen-2 (documented in spec). Marked delegation-2 and rhetorik-grundlagen-2 as seen for accelerator@ (~2 clicks, no cost).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All Iter 154 acceptance criteria met. Cost-sensitive endpoints (/api/guide/admin/produce|render|voice|keyframe|bulk) were NOT triggered. Admin route is /wlad-control-x7k9q2 (not /admin). Chat regression not re-executed here — Iter 153 already covers streaming; skipped to save LLM budget. Rate limit (429) hit on repeated logins — allow ~45-60 s between admin+non-admin login sessions from the same IP.",
+  "rca_of_the_issue": "No defects to root-cause; feature works as specified."
+}

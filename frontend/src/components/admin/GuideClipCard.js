@@ -115,6 +115,20 @@ export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
             {(err || clip.error) && <p className="text-[11px] text-rose-500" data-testid={`guide-clip-error-${clip.slug}`}>{err || clip.error}</p>}
             {clip.audio_url && <audio controls src={`${base}${clip.audio_url}`} className="w-full h-8" data-testid={`guide-clip-audio-${clip.slug}`} />}
             <p className="text-[10px] text-muted-foreground">Ausgegeben für diesen Clip: {(clip.spent_usd || 0).toFixed(2)} $ {clip.duration_seconds ? `· Sprechdauer ${clip.duration_seconds} s` : ''}</p>
+            {clip.godmode && (
+              <div className="rounded-lg border border-black/[0.06] dark:border-white/[0.08] p-2" data-testid={`guide-godmode-${clip.slug}`}>
+                <p className={`text-[10px] font-black uppercase tracking-wider ${clip.godmode.godmode ? 'text-emerald-500' : 'text-amber-500'}`}>
+                  GODMODE-Check {clip.godmode.passed}/{clip.godmode.total} · Setting: {clip.godmode.setting}
+                </p>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {clip.godmode.items.map((it) => (
+                    <span key={it.id} title={it.label} className={`text-[10px] px-1.5 py-0.5 rounded ${it.ok ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'}`} data-testid={`guide-godmode-item-${clip.slug}-${it.id}`}>
+                      {it.ok ? '✓' : '○'} {it.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">

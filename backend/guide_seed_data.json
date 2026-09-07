@@ -1,50 +1,186 @@
 {
  "clips": [
   {
+   "slug": "teaser-login",
+   "kind": "teaser",
+   "ref": null,
+   "order": 0,
+   "title": "Warum Leader-OS",
+   "script": "Du führst ein Team – aber wer coacht eigentlich dich? Ich bin Wlad. Leader-OS ist dein persönlicher Sparringspartner: Wir bereiten schwierige Gespräche gemeinsam vor, du übst sie in der Simulation, und in der Video-Analyse siehst du, wie du wirklich wirkst. Kein Kurs zum Abarbeiten, sondern ein System, das mit dir arbeitet – jeden Tag zehn Minuten. Starte jetzt, kostenlos.",
+   "script_source": "godmode_v1",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_teaser-login_955e16ac.mp4",
+   "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-02T10:00:43.113322+00:00",
+   "updated_at": "2026-09-07T00:39:54.280216+00:00",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Du führst ein Team – aber wer coacht eigentlich dich? Ich bin Wlad. Leader-OS ist dein persönlicher Sparringspartner: Wir bereiten schwierige Gespräche gemeinsam vor, du übst sie in der Simulation.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_teaser-login_3c58d149.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_teaser-login_23332fbe.mp4",
+     "audio_path": "guide/a_s1_teaser-login_ef04e462.mp3",
+     "audio_seconds": 12.93,
+     "speech_lead": 0.4,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s2",
+     "type": "broll",
+     "preset": null,
+     "screens": [
+      "chat",
+      "video",
+      "missions"
+     ],
+     "text": "Und in der Video-Analyse siehst du, wie du wirklich wirkst. Kein Kurs zum Abarbeiten, sondern ein System, das mit dir arbeitet – jeden Tag zehn Minuten.",
+     "audio_path": "guide/a_s2_teaser-login_366d90e6.mp3",
+     "audio_seconds": 7.27,
+     "speech_lead": 0.0
+    },
+    {
+     "id": "s3",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Starte jetzt, kostenlos.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_teaser-login_1ca7700a.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_teaser-login_86ba0606.mp4",
+     "audio_path": "guide/a_s3_teaser-login_e89a2bc8.mp3",
+     "audio_seconds": 3.4,
+     "speech_lead": 0.0,
+     "engine": "omnihuman",
+     "speech_tail": 0.9
+    }
+   ],
+   "spent_usd": 5.63,
+   "duration_seconds_video": 22.9,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.08,
+     "text": "Du führst ein Team – aber"
+    },
+    {
+     "start": 2.08,
+     "end": 3.84,
+     "text": "wer coacht eigentlich dich?"
+    },
+    {
+     "start": 3.84,
+     "end": 4.69,
+     "text": "Ich bin Wlad."
+    },
+    {
+     "start": 4.69,
+     "end": 7.89,
+     "text": "Leader-OS ist dein persönlicher Sparringspartner"
+    },
+    {
+     "start": 7.89,
+     "end": 11.02,
+     "text": "Wir bereiten schwierige Gespräche gemeinsam vor"
+    },
+    {
+     "start": 11.02,
+     "end": 12.98,
+     "text": "du übst sie in der Simulation."
+    },
+    {
+     "start": 13.17,
+     "end": 14.9,
+     "text": "Und in der Video-Analyse siehst du"
+    },
+    {
+     "start": 14.9,
+     "end": 16.04,
+     "text": "wie du wirklich wirkst."
+    },
+    {
+     "start": 16.04,
+     "end": 17.27,
+     "text": "Kein Kurs zum Abarbeiten"
+    },
+    {
+     "start": 17.27,
+     "end": 18.21,
+     "text": "sondern ein System"
+    },
+    {
+     "start": 18.21,
+     "end": 19.6,
+     "text": "das mit dir arbeitet – jeden"
+    },
+    {
+     "start": 19.6,
+     "end": 20.44,
+     "text": "Tag zehn Minuten."
+    },
+    {
+     "start": 19.98,
+     "end": 21.39,
+     "text": "Starte jetzt"
+    },
+    {
+     "start": 21.39,
+     "end": 22.48,
+     "text": "kostenlos."
+    }
+   ],
+   "video_bytes": 3686290,
+   "published_at": "2026-09-04T09:06:22.300527+00:00",
+   "quality": "pro"
+  },
+  {
    "slug": "start-1-willkommen",
    "kind": "onboarding",
    "ref": null,
    "order": 1,
    "title": "Willkommen bei Leader-OS",
-   "script": "Schön, dass du da bist. Leader-OS ist kein Kurs, den du abarbeitest — es ist dein Sparringspartner für echte Führungssituationen. Das schwierige Gespräch morgen. Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand. In den nächsten zehn Minuten richtest du dein System ein: du sagst mir, wer du bist und wo du führst. Danach arbeiten wir an deinen Fällen, nicht an Beispielen aus einem Lehrbuch. Nimm dir die zehn Minuten wirklich. Sie entscheiden, wie gut alles danach wird.",
-   "script_source": "seed",
+   "script": "Schön, dass du da bist. Ich bin Wlad, und ich sage dir gleich zu Beginn, was Leader-OS nicht ist: kein Kurs mit dreißig Videos, die du brav abarbeitest und danach vergisst. Leader-OS ist dein Sparringspartner für den Führungsalltag – für das Gespräch, das dir seit Tagen im Kopf herumgeht, für den Mitarbeiter, der nachlässt, für die Präsentation, bei der es wirklich um etwas geht. Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität. In den nächsten Videos zeige ich dir, wie du mit mir sprichst, wie du dein System einrichtest und womit du in der ersten Woche anfängst. Nimm dir dafür zehn Minuten. Sie sind gut investiert.",
+   "script_source": "godmode_v1",
    "status": "video_ready",
    "published": true,
    "audio_path": "guide/audio_start-1-willkommen_c3602eb1.mp3",
-   "video_path": "guide/video_start-1-willkommen_53e85048.mp4",
+   "video_path": "guide/video_start-1-willkommen_ae8e423d.mp4",
    "media_token": "DekISj2JI1hs4aPtTrxPHso4hlc6u77_",
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-03T22:23:15.494252+00:00",
+   "updated_at": "2026-09-07T00:42:47.942881+00:00",
    "voice_id_used": "Deep_Voice_Man",
-   "video_bytes": 7101200,
+   "video_bytes": 9132716,
    "shots": [
     {
      "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
+     "type": "talk",
+     "preset": "loft_seated_medium",
      "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_start-1-willkommen_46ac852d.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_start-1-willkommen_50c84b02.mp4",
-     "synced_path": null
+     "text": "Schön, dass du da bist. Ich bin Wlad, und ich sage dir gleich zu Beginn, was Leader-OS nicht ist: kein Kurs mit dreißig Videos, die du brav abarbeitest und danach vergisst. Leader-OS ist dein Sparringspartner für den Führungsalltag – für das Gespräch, das dir seit Tagen im Kopf herumgeht, für den Mitarbeiter, der nachlässt, für die Präsentation, bei der es wirklich um etwas geht.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_start-1-willkommen_0d0e405c.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_start-1-willkommen_5413dc73.mp4",
+     "audio_path": "guide/a_s1_start-1-willkommen_a8dc14bc.mp3",
+     "audio_seconds": 24.27,
+     "speech_lead": 0.4,
+     "engine": "omnihuman"
     },
     {
      "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Schön, dass du da bist. Leader-OS ist kein Kurs, den du abarbeitest — es ist dein Sparringspartner für echte Führungssituationen. Das schwierige Gespräch morgen. Der Mitarbeiter, der abbaut. Die Präsentation vor dem Vorstand.",
-     "keyframe_path": "guide/kf_s2_start-1-willkommen_2ec40a2a.png",
-     "audio_path": "guide/a_s2_start-1-willkommen_116fc183.mp3",
-     "audio_seconds": 13.1,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_start-1-willkommen_827c5722.mp4"
-    },
-    {
-     "id": "s3",
      "type": "broll",
      "preset": null,
      "screens": [
@@ -53,131 +189,248 @@
       "video",
       "challenge"
      ],
-     "text": "In den nächsten zehn Minuten richtest du dein System ein: du sagst mir, wer du bist und wo du führst. Danach arbeiten wir an deinen Fällen, nicht an Beispielen aus einem Lehrbuch.",
-     "audio_path": "guide/a_s3_start-1-willkommen_bb9a1422.mp3",
-     "audio_seconds": 10.3
+     "text": "Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität.",
+     "audio_path": "guide/a_s2_start-1-willkommen_d808a57b.mp3",
+     "audio_seconds": 14.18,
+     "speech_lead": 0.0
     },
     {
-     "id": "s4",
+     "id": "s3",
      "type": "talk",
-     "preset": "loft_talk_closeup",
+     "preset": "loft_seated_closeup",
      "screens": [],
-     "text": "Nimm dir die zehn Minuten wirklich. Sie entscheiden, wie gut alles danach wird.",
-     "keyframe_path": "guide/kf_s4_start-1-willkommen_14811689.png",
-     "audio_path": "guide/a_s4_start-1-willkommen_579bc4bf.mp3",
-     "audio_seconds": 4.36,
+     "text": "In den nächsten Videos zeige ich dir, wie du mit mir sprichst, wie du dein System einrichtest und womit du in der ersten Woche anfängst. Nimm dir dafür zehn Minuten. Sie sind gut investiert.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_start-1-willkommen_3af5b482.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_start-1-willkommen_400a29a2.mp4",
+     "audio_path": "guide/a_s3_start-1-willkommen_44ccd42a.mp3",
+     "audio_seconds": 10.73,
+     "speech_lead": 0.0,
      "engine": "omnihuman",
-     "synced_path": "guide/sync_s4_start-1-willkommen_3644a229.mp4"
+     "speech_tail": 0.9
     }
    ],
    "progress": null,
-   "spent_usd": 4.8,
-   "duration_seconds_video": 31.5,
+   "spent_usd": 10.48,
+   "duration_seconds_video": 48.8,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.09,
-     "end": 5.45,
+     "start": 0.45,
+     "end": 0.84,
      "text": "Schön"
     },
     {
-     "start": 5.45,
-     "end": 6.42,
+     "start": 0.84,
+     "end": 1.89,
      "text": "dass du da bist."
     },
     {
-     "start": 6.42,
-     "end": 7.88,
-     "text": "Leader-OS ist kein Kurs"
+     "start": 1.89,
+     "end": 2.74,
+     "text": "Ich bin Wlad"
     },
     {
-     "start": 7.88,
-     "end": 9.09,
-     "text": "den du abarbeitest —"
+     "start": 2.74,
+     "end": 4.44,
+     "text": "und ich sage dir gleich zu"
     },
     {
-     "start": 9.09,
-     "end": 11.4,
-     "text": "es ist dein Sparringspartner für echte"
+     "start": 4.44,
+     "end": 4.9,
+     "text": "Beginn"
     },
     {
-     "start": 11.4,
-     "end": 12.61,
-     "text": "Führungssituationen."
+     "start": 4.9,
+     "end": 6.47,
+     "text": "was Leader-OS nicht ist"
     },
     {
-     "start": 12.61,
-     "end": 14.49,
-     "text": "Das schwierige Gespräch morgen."
+     "start": 6.47,
+     "end": 8.36,
+     "text": "kein Kurs mit dreißig Videos"
     },
     {
-     "start": 14.49,
-     "end": 15.46,
-     "text": "Der Mitarbeiter"
+     "start": 8.36,
+     "end": 10.59,
+     "text": "die du brav abarbeitest und danach"
     },
     {
-     "start": 15.46,
-     "end": 16.13,
-     "text": "der abbaut."
+     "start": 10.59,
+     "end": 11.18,
+     "text": "vergisst."
     },
     {
-     "start": 16.13,
-     "end": 18.19,
-     "text": "Die Präsentation vor dem Vorstand."
+     "start": 11.18,
+     "end": 13.99,
+     "text": "Leader-OS ist dein Sparringspartner für den"
     },
     {
-     "start": 17.76,
-     "end": 19.96,
-     "text": "In den nächsten zehn Minuten richtest"
+     "start": 13.99,
+     "end": 16.21,
+     "text": "Führungsalltag – für das Gespräch"
     },
     {
-     "start": 19.96,
-     "end": 21.09,
-     "text": "du dein System ein"
+     "start": 16.21,
+     "end": 17.91,
+     "text": "das dir seit Tagen im Kopf"
     },
     {
-     "start": 21.09,
-     "end": 21.87,
-     "text": "du sagst mir"
+     "start": 17.91,
+     "end": 18.57,
+     "text": "herumgeht"
     },
     {
-     "start": 21.87,
-     "end": 23.12,
-     "text": "wer du bist und wo du"
+     "start": 18.57,
+     "end": 19.87,
+     "text": "für den Mitarbeiter"
     },
     {
-     "start": 23.12,
-     "end": 23.54,
-     "text": "führst."
+     "start": 19.87,
+     "end": 20.79,
+     "text": "der nachlässt"
     },
     {
-     "start": 23.54,
-     "end": 25.74,
-     "text": "Danach arbeiten wir an deinen Fällen"
+     "start": 20.79,
+     "end": 22.16,
+     "text": "für die Präsentation"
     },
     {
-     "start": 25.74,
-     "end": 28.06,
-     "text": "nicht an Beispielen aus einem Lehrbuch."
+     "start": 22.16,
+     "end": 23.99,
+     "text": "bei der es wirklich um etwas"
     },
     {
-     "start": 27.6,
-     "end": 29.58,
-     "text": "Nimm dir die zehn Minuten wirklich."
+     "start": 23.99,
+     "end": 24.32,
+     "text": "geht."
     },
     {
-     "start": 29.58,
-     "end": 30.49,
-     "text": "Sie entscheiden"
+     "start": 24.67,
+     "end": 26.7,
+     "text": "Du beschreibst mir deine Situation"
     },
     {
-     "start": 30.49,
-     "end": 31.96,
-     "text": "wie gut alles danach wird."
+     "start": 26.7,
+     "end": 28.85,
+     "text": "und wir arbeiten sie gemeinsam durch"
+    },
+    {
+     "start": 28.85,
+     "end": 31.18,
+     "text": "mit den Frameworks aus meinen Trainings"
+    },
+    {
+     "start": 31.18,
+     "end": 33.39,
+     "text": "mit klaren Schritten und mit ehrlichem"
+    },
+    {
+     "start": 33.39,
+     "end": 33.91,
+     "text": "Feedback."
+    },
+    {
+     "start": 33.91,
+     "end": 35.13,
+     "text": "Warum das anders ist?"
+    },
+    {
+     "start": 35.13,
+     "end": 37.51,
+     "text": "Weil hier nicht das Lehrbuch entscheidet"
+    },
+    {
+     "start": 37.51,
+     "end": 38.85,
+     "text": "sondern deine Realität."
+    },
+    {
+     "start": 38.39,
+     "end": 40.11,
+     "text": "In den nächsten Videos zeige ich"
+    },
+    {
+     "start": 40.11,
+     "end": 40.32,
+     "text": "dir"
+    },
+    {
+     "start": 40.32,
+     "end": 41.61,
+     "text": "wie du mit mir sprichst"
+    },
+    {
+     "start": 41.61,
+     "end": 43.44,
+     "text": "wie du dein System einrichtest und"
+    },
+    {
+     "start": 43.44,
+     "end": 44.94,
+     "text": "womit du in der ersten Woche"
+    },
+    {
+     "start": 44.94,
+     "end": 45.43,
+     "text": "anfängst."
+    },
+    {
+     "start": 45.43,
+     "end": 46.93,
+     "text": "Nimm dir dafür zehn Minuten."
+    },
+    {
+     "start": 46.93,
+     "end": 48.22,
+     "text": "Sie sind gut investiert."
     }
    ],
    "published_at": "2026-09-02T10:00:43.311708+00:00",
    "quality": "pro"
+  },
+  {
+   "slug": "teaser-spotlight",
+   "kind": "teaser",
+   "ref": null,
+   "order": 1,
+   "title": "Teaser: Ins Licht",
+   "script": "Führung ist kein Talent. Führung ist ein System. Willkommen bei Leader-OS.",
+   "script_source": "wlad",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": "guide/audio_teaser-spotlight_1b46654b.mp3",
+   "video_path": "guide/video_teaser-spotlight_baf67625.mp4",
+   "media_token": "m1p2NRyuenwFf_SOONZZxYMfyW_L3bHr",
+   "duration_seconds": 5,
+   "error": null,
+   "created_at": "2026-09-02T01:01:52.733632+00:00",
+   "updated_at": "2026-09-02T08:56:03.348965+00:00",
+   "spent_usd": 0.68,
+   "voice_id_used": "Voice6717536d1788310928",
+   "progress": null,
+   "duration_seconds_video": 10.0,
+   "pipeline": "cinematic",
+   "subtitles": [
+    {
+     "start": 4.0,
+     "end": 5.67,
+     "text": "Führung ist kein Talent."
+    },
+    {
+     "start": 5.67,
+     "end": 7.26,
+     "text": "Führung ist ein System."
+    },
+    {
+     "start": 7.26,
+     "end": 9.0,
+     "text": "Willkommen bei Leader-OS."
+    }
+   ],
+   "video_bytes": 1437672,
+   "published_at": "2026-09-02T08:56:03.348948+00:00"
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -185,44 +438,36 @@
    "ref": null,
    "order": 2,
    "title": "So sprichst du mit der KI",
-   "script": "Der häufigste Fehler: Stichworte. Wer „Mitarbeitergespräch\" eintippt, bekommt eine Wikipedia-Antwort. Schlecht ist: „Konflikt im Team\". Gut ist: „Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum — wie eröffne ich das Gespräch?\" Siehst du den Unterschied? Situation, Beteiligte, Zeitpunkt, Ziel. Je konkreter du fragst, desto brauchbarer die Antwort. Schreib wie zu einem Coach, der dich kennt — nicht wie in eine Suchmaschine.",
-   "script_source": "seed",
+   "script": "Wie gut ich dir helfen kann, hängt an einer einzigen Sache: an deiner Frage. Die meisten tippen Stichworte ein – „Mitarbeitergespräch“, „Konflikt im Team“ – und bekommen Antworten, die auf jeden passen und deshalb niemandem wirklich helfen. Mach es anders. Erzähl mir die Situation so, wie du sie einer guten Freundin erzählen würdest: Wer ist beteiligt, was ist passiert, wann steht das Gespräch an, und was willst du am Ende erreichen? Zum Beispiel: „Zwei aus meinem Team reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch?“ Merkst du den Unterschied? Jetzt kann ich mit dir vorbereiten, statt zu dozieren. Schreib mir wie einem Coach, der dich kennt – nicht wie einer Suchmaschine. Dann wird jede Antwort deine Antwort.",
+   "script_source": "godmode_v1",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-2-so-sprichst-du_3eff6a4b.mp4",
+   "video_path": "guide/video_start-2-so-sprichst-du_6cbb6d2d.mp4",
    "media_token": "s8rrsoIoMXpbC8E_9aOuNYiTN5GIBvLD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-03T21:23:07.856032+00:00",
+   "updated_at": "2026-09-07T00:42:47.575495+00:00",
    "progress": null,
    "shots": [
     {
      "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
+     "type": "talk",
+     "preset": "loft_seated_medium",
      "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_start-2-so-sprichst-du_9b53c395.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_start-2-so-sprichst-du_e2724d54.mp4",
-     "synced_path": null
+     "text": "Wie gut ich dir helfen kann, hängt an einer einzigen Sache: an deiner Frage. Die meisten tippen Stichworte ein – „Mitarbeitergespräch“, „Konflikt im Team“ – und bekommen Antworten, die auf jeden passen und deshalb niemandem wirklich helfen. Mach es anders. Erzähl mir die Situation so, wie du sie einer guten Freundin erzählen würdest: Wer ist beteiligt, was ist passiert, wann steht das Gespräch an, und was willst du am Ende erreichen?",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_start-2-so-sprichst-du_6a2ae528.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_start-2-so-sprichst-du_aee728d9.mp4",
+     "audio_path": "guide/a_s1_start-2-so-sprichst-du_cc9b38c7.mp3",
+     "audio_seconds": 26.79,
+     "speech_lead": 0.4,
+     "engine": "omnihuman"
     },
     {
      "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Der häufigste Fehler: Stichworte. Wer „Mitarbeitergespräch\" eintippt, bekommt eine Wikipedia-Antwort. Schlecht ist: „Konflikt im Team\".",
-     "keyframe_path": "guide/kf_s2_start-2-so-sprichst-du_2ec33c72.png",
-     "audio_path": "guide/a_s2_start-2-so-sprichst-du_1582fc28.mp3",
-     "audio_seconds": 8.75,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_start-2-so-sprichst-du_99a7b5f3.mp4"
-    },
-    {
-     "id": "s3",
      "type": "broll",
      "preset": null,
      "screens": [
@@ -231,144 +476,194 @@
       "coaching",
       "tasks"
      ],
-     "text": "Gut ist: „Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum — wie eröffne ich das Gespräch?\" Siehst du den Unterschied? Situation, Beteiligte, Zeitpunkt, Ziel. Je konkreter du fragst, desto brauchbarer die Antwort.",
-     "audio_path": "guide/a_s3_start-2-so-sprichst-du_c75eb178.mp3",
-     "audio_seconds": 16.92
+     "text": "Zum Beispiel: „Zwei aus meinem Team reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum.",
+     "audio_path": "guide/a_s2_start-2-so-sprichst-du_87ade8c0.mp3",
+     "audio_seconds": 7.6,
+     "speech_lead": 0.0
     },
     {
-     "id": "s4",
+     "id": "s3",
      "type": "talk",
-     "preset": "loft_talk_closeup",
+     "preset": "loft_seated_closeup",
      "screens": [],
-     "text": "Schreib wie zu einem Coach, der dich kennt — nicht wie in eine Suchmaschine.",
-     "keyframe_path": "guide/kf_s4_start-2-so-sprichst-du_055b20d0.png",
-     "audio_path": "guide/a_s4_start-2-so-sprichst-du_434cb694.mp3",
-     "audio_seconds": 2.92,
+     "text": "Wie eröffne ich das Gespräch?“ Merkst du den Unterschied? Jetzt kann ich mit dir vorbereiten, statt zu dozieren. Schreib mir wie einem Coach, der dich kennt – nicht wie einer Suchmaschine. Dann wird jede Antwort deine Antwort.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_start-2-so-sprichst-du_96a9a961.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_start-2-so-sprichst-du_98c5ba8b.mp4",
+     "audio_path": "guide/a_s3_start-2-so-sprichst-du_f1415d08.mp3",
+     "audio_seconds": 13.43,
+     "speech_lead": 0.0,
      "engine": "omnihuman",
-     "synced_path": "guide/sync_s4_start-2-so-sprichst-du_e2786a19.mp4"
+     "speech_tail": 0.9
     }
    ],
-   "spent_usd": 3.87,
-   "duration_seconds_video": 32.4,
+   "spent_usd": 10.39,
+   "duration_seconds_video": 47.5,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.09,
-     "end": 6.5,
-     "text": "Der häufigste Fehler"
+     "start": 0.45,
+     "end": 2.21,
+     "text": "Wie gut ich dir helfen kann"
     },
     {
-     "start": 6.5,
-     "end": 7.24,
-     "text": "Stichworte."
+     "start": 2.21,
+     "end": 4.09,
+     "text": "hängt an einer einzigen Sache"
     },
     {
-     "start": 7.24,
-     "end": 9.6,
-     "text": "Wer „Mitarbeitergespräch\" eintippt"
+     "start": 4.09,
+     "end": 5.1,
+     "text": "an deiner Frage."
     },
     {
-     "start": 9.6,
-     "end": 11.69,
-     "text": "bekommt eine Wikipedia-Antwort."
+     "start": 5.1,
+     "end": 7.3,
+     "text": "Die meisten tippen Stichworte ein –"
     },
     {
-     "start": 11.69,
-     "end": 12.56,
-     "text": "Schlecht ist"
+     "start": 7.3,
+     "end": 8.68,
+     "text": "„Mitarbeitergespräch“"
     },
     {
-     "start": 12.56,
-     "end": 13.84,
-     "text": "„Konflikt im Team\"."
+     "start": 8.68,
+     "end": 10.75,
+     "text": "„Konflikt im Team“ – und bekommen"
     },
     {
-     "start": 13.42,
-     "end": 13.91,
-     "text": "Gut ist"
+     "start": 10.75,
+     "end": 11.38,
+     "text": "Antworten"
     },
     {
-     "start": 13.91,
-     "end": 16.28,
-     "text": "„Zwei meiner Entwickler reden seit drei"
+     "start": 11.38,
+     "end": 13.39,
+     "text": "die auf jeden passen und deshalb"
     },
     {
-     "start": 16.28,
-     "end": 18.11,
-     "text": "Wochen nicht mehr miteinander"
+     "start": 13.39,
+     "end": 15.03,
+     "text": "niemandem wirklich helfen."
     },
     {
-     "start": 18.11,
-     "end": 19.2,
+     "start": 15.03,
+     "end": 15.97,
+     "text": "Mach es anders."
+    },
+    {
+     "start": 15.97,
+     "end": 17.73,
+     "text": "Erzähl mir die Situation so"
+    },
+    {
+     "start": 17.73,
+     "end": 19.68,
+     "text": "wie du sie einer guten Freundin"
+    },
+    {
+     "start": 19.68,
+     "end": 20.75,
+     "text": "erzählen würdest"
+    },
+    {
+     "start": 20.75,
+     "end": 21.88,
+     "text": "Wer ist beteiligt"
+    },
+    {
+     "start": 21.88,
+     "end": 22.94,
+     "text": "was ist passiert"
+    },
+    {
+     "start": 22.94,
+     "end": 24.64,
+     "text": "wann steht das Gespräch an"
+    },
+    {
+     "start": 24.64,
+     "end": 26.21,
+     "text": "und was willst du am Ende"
+    },
+    {
+     "start": 26.21,
+     "end": 26.84,
+     "text": "erreichen?"
+    },
+    {
+     "start": 27.23,
+     "end": 27.96,
+     "text": "Zum Beispiel"
+    },
+    {
+     "start": 27.96,
+     "end": 29.76,
+     "text": "„Zwei aus meinem Team reden seit"
+    },
+    {
+     "start": 29.76,
+     "end": 31.73,
+     "text": "drei Wochen nicht mehr miteinander"
+    },
+    {
+     "start": 31.73,
+     "end": 32.75,
      "text": "das Projekt steht"
     },
     {
-     "start": 19.2,
-     "end": 20.97,
+     "start": 32.75,
+     "end": 34.38,
      "text": "morgen um zehn habe ich beide"
     },
     {
-     "start": 20.97,
-     "end": 21.51,
-     "text": "im Raum —"
+     "start": 34.38,
+     "end": 34.83,
+     "text": "im Raum."
     },
     {
-     "start": 21.51,
-     "end": 23.77,
-     "text": "wie eröffne ich das Gespräch?\" Siehst"
+     "start": 34.38,
+     "end": 36.5,
+     "text": "Wie eröffne ich das Gespräch?“ Merkst"
     },
     {
-     "start": 23.77,
-     "end": 24.92,
+     "start": 36.5,
+     "end": 37.58,
      "text": "du den Unterschied?"
     },
     {
-     "start": 24.92,
-     "end": 25.53,
-     "text": "Situation"
+     "start": 37.58,
+     "end": 39.59,
+     "text": "Jetzt kann ich mit dir vorbereiten"
     },
     {
-     "start": 25.53,
-     "end": 26.2,
-     "text": "Beteiligte"
+     "start": 39.59,
+     "end": 40.62,
+     "text": "statt zu dozieren."
     },
     {
-     "start": 26.2,
-     "end": 26.81,
-     "text": "Zeitpunkt"
+     "start": 40.62,
+     "end": 42.22,
+     "text": "Schreib mir wie einem Coach"
     },
     {
-     "start": 26.81,
-     "end": 27.11,
-     "text": "Ziel."
+     "start": 42.22,
+     "end": 43.71,
+     "text": "der dich kennt – nicht wie"
     },
     {
-     "start": 27.11,
-     "end": 28.51,
-     "text": "Je konkreter du fragst"
+     "start": 43.71,
+     "end": 44.79,
+     "text": "einer Suchmaschine."
     },
     {
-     "start": 28.51,
-     "end": 30.34,
-     "text": "desto brauchbarer die Antwort."
-    },
-    {
-     "start": 29.92,
-     "end": 30.99,
-     "text": "Schreib wie zu einem Coach"
-    },
-    {
-     "start": 30.99,
-     "end": 31.62,
-     "text": "der dich kennt —"
-    },
-    {
-     "start": 31.62,
-     "end": 32.84,
-     "text": "nicht wie in eine Suchmaschine."
+     "start": 44.79,
+     "end": 46.91,
+     "text": "Dann wird jede Antwort deine Antwort."
     }
    ],
-   "video_bytes": 7780421,
+   "video_bytes": 9258913,
    "published_at": "2026-09-03T17:57:50.009287+00:00",
    "quality": "pro"
   },
@@ -378,44 +673,36 @@
    "ref": null,
    "order": 3,
    "title": "Kontext ist alles",
-   "script": "Zwei Führungskräfte stellen dieselbe Frage und brauchen völlig verschiedene Antworten. Ein Teamleiter mit vier Leuten in der Pflege führt anders als ein Bereichsleiter mit achtzig Leuten im Vertrieb. Deshalb hinterlegst du Rolle, Unternehmen und Branche — und im Bereich „Über mich\" alles, was zu dir gehört: Stärken, Schwächen, Verantwortung, Ziele. Das liest die KI bei jeder Antwort mit. Fünf Minuten Aufwand, und aus allgemeinen Ratschlägen wird Beratung, die auf deinen Alltag passt. Ohne diese Angaben bleibt alles Mittelmaß.",
-   "script_source": "seed",
+   "script": "Stell dir vor, zwei Führungskräfte stellen mir dieselbe Frage. Die eine leitet vier Pflegekräfte auf einer Station, der andere achtzig Leute im Vertrieb. Dieselbe Frage – und trotzdem brauchen beide völlig verschiedene Antworten. Genau deshalb gibt es deinen Kontext. Du hinterlegst einmal deine Rolle, dein Unternehmen und deine Branche, und unter „Über mich“ schreibst du auf, was dich ausmacht: deine Stärken, deine Baustellen, wofür du Verantwortung trägst und was du erreichen willst. Das lese ich bei jeder einzelnen Antwort mit, ohne dass du es wiederholen musst. Fünf Minuten Aufwand – und aus allgemeinen Ratschlägen wird Beratung, die in deinen Alltag passt. Also: Bevor du mir die erste Frage stellst, füll deinen Kontext aus. Je ehrlicher du dort bist, desto besser werde ich für dich.",
+   "script_source": "godmode_v1",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-3-kontext_a53ece85.mp4",
+   "video_path": "guide/video_start-3-kontext_7db0c851.mp4",
    "media_token": "GB37Y8TmoBLfW-BRIsbTfQmpgfup0UXG",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-03T21:24:14.604927+00:00",
+   "updated_at": "2026-09-07T00:42:39.880303+00:00",
    "progress": null,
    "shots": [
     {
      "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
+     "type": "talk",
+     "preset": "loft_seated_medium",
      "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_start-3-kontext_745647b1.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_start-3-kontext_566577ec.mp4",
-     "synced_path": null
+     "text": "Stell dir vor, zwei Führungskräfte stellen mir dieselbe Frage. Die eine leitet vier Pflegekräfte auf einer Station, der andere achtzig Leute im Vertrieb. Dieselbe Frage – und trotzdem brauchen beide völlig verschiedene Antworten. Genau deshalb gibt es deinen Kontext. Du hinterlegst einmal deine Rolle, dein Unternehmen und deine Branche, und unter „Über mich“ schreibst du auf, was dich ausmacht: deine Stärken, deine Baustellen.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_start-3-kontext_613f2d91.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_start-3-kontext_956db6ec.mp4",
+     "audio_path": "guide/a_s1_start-3-kontext_6e2b5717.mp3",
+     "audio_seconds": 26.68,
+     "speech_lead": 0.4,
+     "engine": "omnihuman"
     },
     {
      "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Zwei Führungskräfte stellen dieselbe Frage und brauchen völlig verschiedene Antworten. Ein Teamleiter mit vier Leuten in der Pflege führt anders als ein Bereichsleiter mit achtzig Leuten im Vertrieb.",
-     "keyframe_path": "guide/kf_s2_start-3-kontext_d9b71282.png",
-     "audio_path": "guide/a_s2_start-3-kontext_b35e30bb.mp3",
-     "audio_seconds": 11.02,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_start-3-kontext_0cb54d5b.mp4"
-    },
-    {
-     "id": "s3",
      "type": "broll",
      "preset": null,
      "screens": [
@@ -423,124 +710,179 @@
       "dashboard",
       "chat"
      ],
-     "text": "Deshalb hinterlegst du Rolle, Unternehmen und Branche — und im Bereich „Über mich\" alles, was zu dir gehört: Stärken, Schwächen, Verantwortung, Ziele. Das liest die KI bei jeder Antwort mit.",
-     "audio_path": "guide/a_s3_start-3-kontext_85f9d863.mp3",
-     "audio_seconds": 15.62
+     "text": "Wofür du Verantwortung trägst und was du erreichen willst. Das lese ich bei jeder einzelnen Antwort mit, ohne dass du es wiederholen musst. Fünf Minuten Aufwand – und aus allgemeinen Ratschlägen wird Beratung, die in deinen Alltag passt.",
+     "audio_path": "guide/a_s2_start-3-kontext_bb02596e.mp3",
+     "audio_seconds": 13.36,
+     "speech_lead": 0.0
     },
     {
-     "id": "s4",
+     "id": "s3",
      "type": "talk",
-     "preset": "loft_talk_closeup",
+     "preset": "loft_seated_closeup",
      "screens": [],
-     "text": "Fünf Minuten Aufwand, und aus allgemeinen Ratschlägen wird Beratung, die auf deinen Alltag passt. Ohne diese Angaben bleibt alles Mittelmaß.",
-     "keyframe_path": "guide/kf_s4_start-3-kontext_bd96c8a4.png",
-     "audio_path": "guide/a_s4_start-3-kontext_03087fb0.mp3",
-     "audio_seconds": 9.83,
+     "text": "Also: Bevor du mir die erste Frage stellst, füll deinen Kontext aus. Je ehrlicher du dort bist, desto besser werde ich für dich.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_start-3-kontext_834c704c.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_start-3-kontext_98846a3d.mp4",
+     "audio_path": "guide/a_s3_start-3-kontext_3860298a.mp3",
+     "audio_seconds": 8.75,
+     "speech_lead": 0.0,
      "engine": "omnihuman",
-     "synced_path": "guide/sync_s4_start-3-kontext_64b3a375.mp4"
+     "speech_tail": 0.9
     }
    ],
-   "spent_usd": 5.33,
-   "duration_seconds_video": 40.3,
+   "spent_usd": 11.08,
+   "duration_seconds_video": 48.3,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.09,
-     "end": 7.69,
-     "text": "Zwei Führungskräfte stellen dieselbe Frage und"
+     "start": 0.45,
+     "end": 1.33,
+     "text": "Stell dir vor"
     },
     {
-     "start": 7.69,
-     "end": 9.89,
-     "text": "brauchen völlig verschiedene Antworten."
+     "start": 1.33,
+     "end": 4.3,
+     "text": "zwei Führungskräfte stellen mir dieselbe Frage."
     },
     {
-     "start": 9.89,
-     "end": 11.76,
-     "text": "Ein Teamleiter mit vier Leuten in"
+     "start": 4.3,
+     "end": 6.64,
+     "text": "Die eine leitet vier Pflegekräfte auf"
     },
     {
-     "start": 11.76,
-     "end": 13.51,
-     "text": "der Pflege führt anders als ein"
+     "start": 6.64,
+     "end": 7.53,
+     "text": "einer Station"
     },
     {
-     "start": 13.51,
-     "end": 16.11,
-     "text": "Bereichsleiter mit achtzig Leuten im Vertrieb."
+     "start": 7.53,
+     "end": 9.86,
+     "text": "der andere achtzig Leute im Vertrieb."
     },
     {
-     "start": 15.66,
-     "end": 18.16,
-     "text": "Deshalb hinterlegst du Rolle"
+     "start": 9.86,
+     "end": 12.26,
+     "text": "Dieselbe Frage – und trotzdem brauchen"
     },
     {
-     "start": 18.16,
-     "end": 20.32,
-     "text": "Unternehmen und Branche —"
+     "start": 12.26,
+     "end": 14.54,
+     "text": "beide völlig verschiedene Antworten."
     },
     {
-     "start": 20.32,
-     "end": 23.17,
-     "text": "und im Bereich „Über mich\" alles"
+     "start": 14.54,
+     "end": 16.88,
+     "text": "Genau deshalb gibt es deinen Kontext."
     },
     {
-     "start": 23.17,
-     "end": 24.72,
-     "text": "was zu dir gehört"
+     "start": 16.88,
+     "end": 19.02,
+     "text": "Du hinterlegst einmal deine Rolle"
     },
     {
-     "start": 24.72,
-     "end": 25.41,
-     "text": "Stärken"
+     "start": 19.02,
+     "end": 21.23,
+     "text": "dein Unternehmen und deine Branche"
     },
     {
-     "start": 25.41,
-     "end": 26.27,
-     "text": "Schwächen"
+     "start": 21.23,
+     "end": 23.38,
+     "text": "und unter „Über mich“ schreibst du"
     },
     {
-     "start": 26.27,
-     "end": 27.48,
-     "text": "Verantwortung"
+     "start": 23.38,
+     "end": 23.63,
+     "text": "auf"
     },
     {
-     "start": 27.48,
-     "end": 28.0,
-     "text": "Ziele."
+     "start": 23.63,
+     "end": 24.77,
+     "text": "was dich ausmacht"
     },
     {
-     "start": 28.0,
-     "end": 30.24,
-     "text": "Das liest die KI bei jeder"
+     "start": 24.77,
+     "end": 25.66,
+     "text": "deine Stärken"
     },
     {
-     "start": 30.24,
-     "end": 31.28,
-     "text": "Antwort mit."
+     "start": 25.66,
+     "end": 26.73,
+     "text": "deine Baustellen."
     },
     {
-     "start": 30.83,
-     "end": 32.34,
-     "text": "Fünf Minuten Aufwand"
+     "start": 27.07,
+     "end": 29.22,
+     "text": "Wofür du Verantwortung trägst und was"
     },
     {
-     "start": 32.34,
-     "end": 35.64,
-     "text": "und aus allgemeinen Ratschlägen wird Beratung"
+     "start": 29.22,
+     "end": 30.38,
+     "text": "du erreichen willst."
     },
     {
-     "start": 35.64,
-     "end": 37.65,
-     "text": "die auf deinen Alltag passt."
+     "start": 30.38,
+     "end": 32.24,
+     "text": "Das lese ich bei jeder einzelnen"
     },
     {
-     "start": 37.65,
-     "end": 40.66,
-     "text": "Ohne diese Angaben bleibt alles Mittelmaß."
+     "start": 32.24,
+     "end": 32.94,
+     "text": "Antwort mit"
+    },
+    {
+     "start": 32.94,
+     "end": 34.91,
+     "text": "ohne dass du es wiederholen musst."
+    },
+    {
+     "start": 34.91,
+     "end": 36.65,
+     "text": "Fünf Minuten Aufwand – und aus"
+    },
+    {
+     "start": 36.65,
+     "end": 38.86,
+     "text": "allgemeinen Ratschlägen wird Beratung"
+    },
+    {
+     "start": 38.86,
+     "end": 40.43,
+     "text": "die in deinen Alltag passt."
+    },
+    {
+     "start": 39.98,
+     "end": 40.3,
+     "text": "Also"
+    },
+    {
+     "start": 40.3,
+     "end": 42.09,
+     "text": "Bevor du mir die erste Frage"
+    },
+    {
+     "start": 42.09,
+     "end": 42.6,
+     "text": "stellst"
+    },
+    {
+     "start": 42.6,
+     "end": 44.13,
+     "text": "füll deinen Kontext aus."
+    },
+    {
+     "start": 44.13,
+     "end": 45.79,
+     "text": "Je ehrlicher du dort bist"
+    },
+    {
+     "start": 45.79,
+     "end": 47.83,
+     "text": "desto besser werde ich für dich."
     }
    ],
-   "video_bytes": 8372836,
+   "video_bytes": 8562101,
    "published_at": "2026-09-03T17:57:50.187346+00:00",
    "quality": "pro"
   },
@@ -550,44 +892,35 @@
    "ref": null,
    "order": 4,
    "title": "Deine Werkzeuge",
-   "script": "Vier Werkzeuge, vier Zwecke. Der Chat ist für Denken und Vorbereiten: Strategie für ein Gespräch, Argumente für eine Entscheidung. Die Simulation ist zum Üben — dein Gegenüber antwortet, und zwar unbequem. Die Video-Analyse zeigt dir, wie du wirkst: Stimme, Tempo, Struktur, Präsenz. Playbooks sind fertige Abläufe für wiederkehrende Situationen. Regel für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse. Genau diese Reihenfolge macht den Unterschied.",
-   "script_source": "seed",
+   "script": "Leader-OS gibt dir vier Werkzeuge, und jedes hat seinen Platz. Der Chat ist zum Denken und Vorbereiten da: Wie baue ich das Gespräch auf, welche Argumente tragen, was ist mein Ziel? In der Simulation übst du dann – dein Gegenüber antwortet, und zwar nicht bequem, sondern so, wie es im echten Leben antworten würde. Die Video-Analyse zeigt dir anschließend, wie du wirkst: deine Stimme, dein Tempo, deine Struktur, deine Präsenz. Und die Playbooks sind fertige Abläufe für Situationen, die immer wiederkommen – Feedback geben, Kritik annehmen, eine Entscheidung verkünden. Meine Empfehlung für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse. Genau diese Reihenfolge macht aus Wissen Können. Probier heute das erste Werkzeug aus – der Chat wartet schon auf dich.",
+   "script_source": "godmode_v1",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-4-werkzeuge_2419bd05.mp4",
+   "video_path": "guide/video_start-4-werkzeuge_ac0f7928.mp4",
    "media_token": "a1VU71OC6LPnX5JckWjFoPLIxAgmR-9Y",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.457634+00:00",
-   "updated_at": "2026-09-03T22:24:28.224121+00:00",
+   "updated_at": "2026-09-07T00:58:02.103746+00:00",
    "progress": null,
    "shots": [
     {
      "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
+     "type": "talk",
+     "preset": "studio_medium",
      "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_start-4-werkzeuge_fd837362.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_start-4-werkzeuge_88c560a4.mp4",
-     "synced_path": null
+     "text": "Leader-OS gibt dir vier Werkzeuge, und jedes hat seinen Platz. Der Chat ist zum Denken und Vorbereiten da: Wie baue ich das Gespräch auf, welche Argumente tragen, was ist mein Ziel? In der Simulation übst du dann – dein Gegenüber antwortet, und zwar nicht bequem, sondern so, wie es im echten Leben antworten würde. Die Video-Analyse zeigt dir anschließend, wie du wirkst.",
+     "keyframe_path": "guide/kf_s1_start-4-werkzeuge_1334149c.png",
+     "audio_path": "guide/a_s1_start-4-werkzeuge_ec87a378.mp3",
+     "audio_seconds": 24.2,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman",
+     "synced_path": "guide/sync_s1_start-4-werkzeuge_40e42255.mp4"
     },
     {
      "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Vier Werkzeuge, vier Zwecke. Der Chat ist für Denken und Vorbereiten: Strategie für ein Gespräch, Argumente für eine Entscheidung. Die Simulation ist zum Üben — dein Gegenüber antwortet, und zwar unbequem.",
-     "keyframe_path": "guide/kf_s2_start-4-werkzeuge_e1c94b75.png",
-     "audio_path": "guide/a_s2_start-4-werkzeuge_0924fe43.mp3",
-     "audio_seconds": 13.28,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_start-4-werkzeuge_c8b405f4.mp4"
-    },
-    {
-     "id": "s3",
      "type": "broll",
      "preset": null,
      "screens": [
@@ -596,139 +929,198 @@
       "video",
       "playbooks"
      ],
-     "text": "Die Video-Analyse zeigt dir, wie du wirkst: Stimme, Tempo, Struktur, Präsenz. Playbooks sind fertige Abläufe für wiederkehrende Situationen. Regel für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse.",
-     "audio_path": "guide/a_s3_start-4-werkzeuge_e713dea6.mp3",
-     "audio_seconds": 16.2
+     "text": "Deine Stimme, dein Tempo, deine Struktur, deine Präsenz. Und die Playbooks sind fertige Abläufe für Situationen, die immer wiederkommen – Feedback geben, Kritik annehmen, eine Entscheidung verkünden. Meine Empfehlung für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der Video-Analyse.",
+     "audio_path": "guide/a_s2_start-4-werkzeuge_25ce5f4c.mp3",
+     "audio_seconds": 18.83,
+     "speech_lead": 0.0,
+     "speech_tail": 0.0
     },
     {
-     "id": "s4",
+     "id": "s3",
      "type": "talk",
-     "preset": "loft_talk_closeup",
+     "preset": "studio_closeup",
      "screens": [],
-     "text": "Genau diese Reihenfolge macht den Unterschied.",
-     "keyframe_path": "guide/kf_s4_start-4-werkzeuge_5c638109.png",
-     "audio_path": "guide/a_s4_start-4-werkzeuge_f20b2fdd.mp3",
-     "audio_seconds": 2.05,
+     "text": "Genau diese Reihenfolge macht aus Wissen Können. Probier heute das erste Werkzeug aus – der Chat wartet schon auf dich.",
+     "keyframe_path": "guide/kf_s3_start-4-werkzeuge_0d18f300.png",
+     "audio_path": "guide/a_s3_start-4-werkzeuge_aef879d7.mp3",
+     "audio_seconds": 8.53,
+     "speech_lead": 0.0,
+     "speech_tail": 0.9,
      "engine": "omnihuman",
-     "synced_path": "guide/sync_s4_start-4-werkzeuge_ca81c011.mp4"
+     "synced_path": "guide/sync_s3_start-4-werkzeuge_248f15ca.mp4"
     }
    ],
-   "spent_usd": 4.45,
-   "duration_seconds_video": 35.3,
+   "spent_usd": 9.76,
+   "duration_seconds_video": 51.1,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.09,
-     "end": 6.1,
-     "text": "Vier Werkzeuge"
+     "start": 0.45,
+     "end": 2.71,
+     "text": "Leader-OS gibt dir vier Werkzeuge"
     },
     {
-     "start": 6.1,
-     "end": 6.91,
-     "text": "vier Zwecke."
+     "start": 2.71,
+     "end": 4.51,
+     "text": "und jedes hat seinen Platz."
     },
     {
-     "start": 6.91,
-     "end": 8.73,
-     "text": "Der Chat ist für Denken und"
+     "start": 4.51,
+     "end": 6.3,
+     "text": "Der Chat ist zum Denken und"
     },
     {
-     "start": 8.73,
-     "end": 9.54,
-     "text": "Vorbereiten"
+     "start": 6.3,
+     "end": 7.3,
+     "text": "Vorbereiten da"
     },
     {
-     "start": 9.54,
-     "end": 11.36,
-     "text": "Strategie für ein Gespräch"
+     "start": 7.3,
+     "end": 9.29,
+     "text": "Wie baue ich das Gespräch auf"
     },
     {
-     "start": 11.36,
-     "end": 13.52,
-     "text": "Argumente für eine Entscheidung."
+     "start": 9.29,
+     "end": 10.89,
+     "text": "welche Argumente tragen"
     },
     {
-     "start": 13.52,
-     "end": 15.47,
-     "text": "Die Simulation ist zum Üben —"
+     "start": 10.89,
+     "end": 12.08,
+     "text": "was ist mein Ziel?"
     },
     {
-     "start": 15.47,
-     "end": 17.16,
-     "text": "dein Gegenüber antwortet"
+     "start": 12.08,
+     "end": 14.08,
+     "text": "In der Simulation übst du dann"
     },
     {
-     "start": 17.16,
-     "end": 18.37,
-     "text": "und zwar unbequem."
+     "start": 14.08,
+     "end": 15.87,
+     "text": "– dein Gegenüber antwortet"
     },
     {
-     "start": 18.06,
-     "end": 19.97,
-     "text": "Die Video-Analyse zeigt dir"
+     "start": 15.87,
+     "end": 17.34,
+     "text": "und zwar nicht bequem"
     },
     {
-     "start": 19.97,
-     "end": 20.92,
-     "text": "wie du wirkst"
+     "start": 17.34,
+     "end": 18.07,
+     "text": "sondern so"
     },
     {
-     "start": 20.92,
-     "end": 21.4,
-     "text": "Stimme"
+     "start": 18.07,
+     "end": 20.19,
+     "text": "wie es im echten Leben antworten"
     },
     {
-     "start": 21.4,
-     "end": 21.8,
-     "text": "Tempo"
+     "start": 20.19,
+     "end": 20.59,
+     "text": "würde."
     },
     {
-     "start": 21.8,
-     "end": 22.42,
-     "text": "Struktur"
+     "start": 20.59,
+     "end": 23.32,
+     "text": "Die Video-Analyse zeigt dir anschließend"
     },
     {
-     "start": 22.42,
-     "end": 22.96,
-     "text": "Präsenz."
+     "start": 23.32,
+     "end": 24.25,
+     "text": "wie du wirkst."
     },
     {
-     "start": 22.96,
-     "end": 26.3,
-     "text": "Playbooks sind fertige Abläufe für wiederkehrende"
+     "start": 24.53,
+     "end": 25.33,
+     "text": "Deine Stimme"
     },
     {
-     "start": 26.3,
-     "end": 27.11,
-     "text": "Situationen."
+     "start": 25.33,
+     "end": 26.0,
+     "text": "dein Tempo"
     },
     {
-     "start": 27.11,
-     "end": 28.54,
-     "text": "Regel für den Anfang"
+     "start": 26.0,
+     "end": 26.92,
+     "text": "deine Struktur"
     },
     {
-     "start": 28.54,
-     "end": 29.9,
+     "start": 26.92,
+     "end": 27.78,
+     "text": "deine Präsenz."
+    },
+    {
+     "start": 27.78,
+     "end": 30.11,
+     "text": "Und die Playbooks sind fertige Abläufe"
+    },
+    {
+     "start": 30.11,
+     "end": 31.09,
+     "text": "für Situationen"
+    },
+    {
+     "start": 31.09,
+     "end": 33.55,
+     "text": "die immer wiederkommen – Feedback geben"
+    },
+    {
+     "start": 33.55,
+     "end": 34.53,
+     "text": "Kritik annehmen"
+    },
+    {
+     "start": 34.53,
+     "end": 36.25,
+     "text": "eine Entscheidung verkünden."
+    },
+    {
+     "start": 36.25,
+     "end": 38.21,
+     "text": "Meine Empfehlung für den Anfang"
+    },
+    {
+     "start": 38.21,
+     "end": 39.43,
      "text": "erst denken im Chat"
     },
     {
-     "start": 29.9,
-     "end": 31.81,
+     "start": 39.43,
+     "end": 41.15,
      "text": "dann üben in der Simulation"
     },
     {
-     "start": 31.81,
-     "end": 34.26,
+     "start": 41.15,
+     "end": 43.36,
      "text": "dann aufnehmen in der Video-Analyse."
     },
     {
-     "start": 33.84,
-     "end": 35.89,
-     "text": "Genau diese Reihenfolge macht den Unterschied."
+     "start": 42.94,
+     "end": 45.59,
+     "text": "Genau diese Reihenfolge macht aus Wissen"
+    },
+    {
+     "start": 45.59,
+     "end": 46.06,
+     "text": "Können."
+    },
+    {
+     "start": 46.06,
+     "end": 48.45,
+     "text": "Probier heute das erste Werkzeug aus"
+    },
+    {
+     "start": 48.45,
+     "end": 50.24,
+     "text": "– der Chat wartet schon auf"
+    },
+    {
+     "start": 50.24,
+     "end": 50.57,
+     "text": "dich."
     }
    ],
-   "video_bytes": 8097465,
+   "video_bytes": 8752732,
    "published_at": "2026-09-03T17:57:50.450964+00:00",
    "quality": "pro"
   },
@@ -738,44 +1130,36 @@
    "ref": null,
    "order": 5,
    "title": "Deine ersten sieben Tage",
-   "script": "Konkret: Heute füllst du deinen Kontext aus und stellst der KI eine echte Frage aus deinem Alltag. Morgen startest du Tag eins der Challenge — zehn Minuten, nicht mehr. In der ersten Woche nimmst du außerdem ein Video auf. Ja, das kostet Überwindung. Genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten. Wer das durchhält, merkt den Unterschied nicht am Wissen, sondern daran, wie er im nächsten schwierigen Gespräch dasteht. Lass uns anfangen.",
-   "script_source": "seed",
+   "script": "Lass uns konkret werden, denn Vorsätze führen nicht – Gewohnheiten schon. Heute füllst du deinen Kontext aus und stellst mir eine echte Frage aus deinem Alltag, die dich gerade beschäftigt. Morgen beginnt Tag eins deiner Challenge: zehn Minuten, mehr nicht. Dabei lernst du Werkzeuge kennen, die du sofort einsetzen kannst – zum Beispiel die Feedbackformel: erst sagen, was du beobachtet hast, dann, was es auslöst, und schließlich, was du dir wünschst. Drei Sätze, die schwierige Gespräche entschärfen. In dieser ersten Woche nimmst du außerdem ein kurzes Video auf. Ja, das kostet Überwindung – und genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten. Den Unterschied merkst du nicht am Wissen, sondern daran, wie ruhig du im nächsten schwierigen Gespräch dastehst. Fangen wir an.",
+   "script_source": "godmode_v1",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-5-erste-7-tage_441664df.mp4",
+   "video_path": "guide/video_start-5-erste-7-tage_7c98604c.mp4",
    "media_token": "C0ZApviUPueybB13FsQaxbZxcGePYvot",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.458459+00:00",
-   "updated_at": "2026-09-03T23:32:18.562539+00:00",
-   "progress": "Schnitt & Branding",
+   "updated_at": "2026-09-07T00:42:41.079453+00:00",
+   "progress": null,
    "shots": [
     {
      "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
+     "type": "talk",
+     "preset": "loft_seated_medium",
      "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_start-5-erste-7-tage_a232df50.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_start-5-erste-7-tage_ffdf89d6.mp4",
-     "synced_path": null
+     "text": "Lass uns konkret werden, denn Vorsätze führen nicht – Gewohnheiten schon. Heute füllst du deinen Kontext aus und stellst mir eine echte Frage aus deinem Alltag, die dich gerade beschäftigt. Morgen beginnt Tag eins deiner Challenge: zehn Minuten, mehr nicht. Dabei lernst du Werkzeuge kennen, die du sofort einsetzen kannst – zum Beispiel die Feedbackformel: erst sagen, was du beobachtet hast, dann, was es auslöst, und schließlich.",
+     "error": null,
+     "keyframe_path": "guide/kf_s1_start-5-erste-7-tage_5811c257.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_start-5-erste-7-tage_877dd9a0.mp4",
+     "audio_path": "guide/a_s1_start-5-erste-7-tage_8170e985.mp3",
+     "audio_seconds": 23.87,
+     "speech_lead": 0.4,
+     "engine": "omnihuman"
     },
     {
      "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Konkret: Heute füllst du deinen Kontext aus und stellst der KI eine echte Frage aus deinem Alltag. Morgen startest du Tag eins der Challenge — zehn Minuten, nicht mehr.",
-     "keyframe_path": "guide/kf_s2_start-5-erste-7-tage_7ae51f7d.png",
-     "audio_path": "guide/a_s2_start-5-erste-7-tage_3b2602bf.mp3",
-     "audio_seconds": 9.9,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_start-5-erste-7-tage_92139a7d.mp4"
-    },
-    {
-     "id": "s3",
      "type": "broll",
      "preset": null,
      "screens": [
@@ -784,137 +1168,204 @@
       "checkin",
       "mypath"
      ],
-     "text": "In der ersten Woche nimmst du außerdem ein Video auf. Ja, das kostet Überwindung. Genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten.",
-     "audio_path": "guide/a_s3_start-5-erste-7-tage_a17d68a2.mp3",
-     "audio_seconds": 8.35,
-     "padded_path": null,
-     "synced_path": null
+     "text": "Was du dir wünschst. Drei Sätze, die schwierige Gespräche entschärfen. In dieser ersten Woche nimmst du außerdem ein kurzes Video auf.",
+     "audio_path": "guide/a_s2_start-5-erste-7-tage_f71f6969.mp3",
+     "audio_seconds": 8.96,
+     "speech_lead": 0.0
     },
     {
-     "id": "s4",
+     "id": "s3",
      "type": "talk",
-     "preset": "loft_talk_closeup",
+     "preset": "loft_seated_closeup",
      "screens": [],
-     "text": "Wer das durchhält, merkt den Unterschied nicht am Wissen, sondern daran, wie er im nächsten schwierigen Gespräch dasteht. Lass uns anfangen.",
-     "keyframe_path": "guide/kf_s4_start-5-erste-7-tage_cac33a6c.png",
-     "audio_path": "guide/a_s4_start-5-erste-7-tage_aa327db2.mp3",
-     "audio_seconds": 6.73,
-     "padded_path": null,
-     "synced_path": "guide/sync_s4_start-5-erste-7-tage_d37dc2be.mp4",
-     "engine": "omnihuman"
+     "text": "Ja, das kostet Überwindung – und genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten. Den Unterschied merkst du nicht am Wissen, sondern daran, wie ruhig du im nächsten schwierigen Gespräch dastehst. Fangen wir an.",
+     "error": null,
+     "keyframe_path": "guide/kf_s3_start-5-erste-7-tage_ff5ceeb5.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s3_start-5-erste-7-tage_5c409523.mp4",
+     "audio_path": "guide/a_s3_start-5-erste-7-tage_a6dacc9c.mp3",
+     "audio_seconds": 13.97,
+     "speech_lead": 0.0,
+     "engine": "omnihuman",
+     "speech_tail": 0.9
     }
    ],
-   "spent_usd": 5.74,
-   "duration_seconds_video": 28.7,
+   "spent_usd": 11.88,
+   "duration_seconds_video": 46.4,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 5.09,
-     "end": 5.58,
-     "text": "Konkret"
+     "start": 0.45,
+     "end": 1.81,
+     "text": "Lass uns konkret werden"
     },
     {
-     "start": 5.58,
-     "end": 7.67,
+     "start": 1.81,
+     "end": 4.13,
+     "text": "denn Vorsätze führen nicht – Gewohnheiten"
+    },
+    {
+     "start": 4.13,
+     "end": 4.47,
+     "text": "schon."
+    },
+    {
+     "start": 4.47,
+     "end": 6.39,
      "text": "Heute füllst du deinen Kontext aus"
     },
     {
-     "start": 7.67,
-     "end": 9.46,
-     "text": "und stellst der KI eine echte"
+     "start": 6.39,
+     "end": 8.2,
+     "text": "und stellst mir eine echte Frage"
     },
     {
-     "start": 9.46,
-     "end": 10.93,
-     "text": "Frage aus deinem Alltag."
+     "start": 8.2,
+     "end": 9.22,
+     "text": "aus deinem Alltag"
     },
     {
-     "start": 10.93,
-     "end": 12.84,
-     "text": "Morgen startest du Tag eins der"
+     "start": 9.22,
+     "end": 10.8,
+     "text": "die dich gerade beschäftigt."
     },
     {
-     "start": 12.84,
-     "end": 13.51,
-     "text": "Challenge —"
+     "start": 10.8,
+     "end": 13.12,
+     "text": "Morgen beginnt Tag eins deiner Challenge"
     },
     {
-     "start": 13.51,
-     "end": 14.31,
+     "start": 13.12,
+     "end": 13.85,
      "text": "zehn Minuten"
     },
     {
-     "start": 14.31,
-     "end": 14.99,
-     "text": "nicht mehr."
+     "start": 13.85,
+     "end": 14.48,
+     "text": "mehr nicht."
     },
     {
-     "start": 14.56,
+     "start": 14.48,
      "end": 16.34,
-     "text": "In der ersten Woche nimmst du"
+     "text": "Dabei lernst du Werkzeuge kennen"
     },
     {
      "start": 16.34,
-     "end": 17.75,
-     "text": "außerdem ein Video auf."
+     "end": 18.15,
+     "text": "die du sofort einsetzen kannst –"
     },
     {
-     "start": 17.75,
-     "end": 17.94,
+     "start": 18.15,
+     "end": 19.96,
+     "text": "zum Beispiel die Feedbackformel"
+    },
+    {
+     "start": 19.96,
+     "end": 20.58,
+     "text": "erst sagen"
+    },
+    {
+     "start": 20.58,
+     "end": 21.88,
+     "text": "was du beobachtet hast"
+    },
+    {
+     "start": 21.88,
+     "end": 22.17,
+     "text": "dann"
+    },
+    {
+     "start": 22.17,
+     "end": 23.02,
+     "text": "was es auslöst"
+    },
+    {
+     "start": 23.02,
+     "end": 23.92,
+     "text": "und schließlich."
+    },
+    {
+     "start": 24.2,
+     "end": 25.58,
+     "text": "Was du dir wünschst."
+    },
+    {
+     "start": 25.58,
+     "end": 26.34,
+     "text": "Drei Sätze"
+    },
+    {
+     "start": 26.34,
+     "end": 28.89,
+     "text": "die schwierige Gespräche entschärfen."
+    },
+    {
+     "start": 28.89,
+     "end": 31.09,
+     "text": "In dieser ersten Woche nimmst du"
+    },
+    {
+     "start": 31.09,
+     "end": 33.16,
+     "text": "außerdem ein kurzes Video auf."
+    },
+    {
+     "start": 32.72,
+     "end": 32.9,
      "text": "Ja"
     },
     {
-     "start": 17.94,
-     "end": 19.35,
-     "text": "das kostet Überwindung."
+     "start": 32.9,
+     "end": 35.0,
+     "text": "das kostet Überwindung – und genau"
     },
     {
-     "start": 19.35,
-     "end": 20.76,
-     "text": "Genau deshalb wirkt es."
+     "start": 35.0,
+     "end": 36.05,
+     "text": "deshalb wirkt es."
     },
     {
-     "start": 20.76,
-     "end": 21.5,
+     "start": 36.05,
+     "end": 36.79,
      "text": "Sieben Tage"
     },
     {
-     "start": 21.5,
-     "end": 22.91,
+     "start": 36.79,
+     "end": 38.21,
      "text": "jeden Tag zehn Minuten."
     },
     {
-     "start": 22.47,
-     "end": 23.37,
-     "text": "Wer das durchhält"
+     "start": 38.21,
+     "end": 40.3,
+     "text": "Den Unterschied merkst du nicht am"
     },
     {
-     "start": 23.37,
-     "end": 25.26,
-     "text": "merkt den Unterschied nicht am Wissen"
+     "start": 40.3,
+     "end": 40.73,
+     "text": "Wissen"
     },
     {
-     "start": 25.26,
-     "end": 25.96,
+     "start": 40.73,
+     "end": 41.6,
      "text": "sondern daran"
     },
     {
-     "start": 25.96,
-     "end": 27.9,
-     "text": "wie er im nächsten schwierigen Gespräch"
+     "start": 41.6,
+     "end": 43.82,
+     "text": "wie ruhig du im nächsten schwierigen"
     },
     {
-     "start": 27.9,
-     "end": 28.3,
-     "text": "dasteht."
+     "start": 43.82,
+     "end": 44.93,
+     "text": "Gespräch dastehst."
     },
     {
-     "start": 28.3,
-     "end": 29.2,
-     "text": "Lass uns anfangen."
+     "start": 44.93,
+     "end": 45.79,
+     "text": "Fangen wir an."
     }
    ],
-   "video_bytes": 6448896,
+   "video_bytes": 8574060,
    "published_at": "2026-09-03T17:57:50.669418+00:00",
    "quality": "pro"
   },
@@ -1981,194 +2432,6 @@
    ],
    "video_bytes": 6167824,
    "published_at": "2026-09-03T17:57:52.089389+00:00",
-   "quality": "pro"
-  },
-  {
-   "slug": "teaser-spotlight",
-   "kind": "teaser",
-   "ref": null,
-   "order": 1,
-   "title": "Teaser: Ins Licht",
-   "script": "Führung ist kein Talent. Führung ist ein System. Willkommen bei Leader-OS.",
-   "shot_preset": "spotlight_entrance",
-   "script_source": "wlad",
-   "status": "video_ready",
-   "published": true,
-   "audio_path": "guide/audio_teaser-spotlight_1b46654b.mp3",
-   "video_path": "guide/video_teaser-spotlight_baf67625.mp4",
-   "media_token": "m1p2NRyuenwFf_SOONZZxYMfyW_L3bHr",
-   "duration_seconds": 5,
-   "error": null,
-   "created_at": "2026-09-02T01:01:52.733632+00:00",
-   "updated_at": "2026-09-02T08:56:03.348965+00:00",
-   "spent_usd": 0.68,
-   "keyframe_path": "guide/keyframe_teaser-spotlight_50a70e1a.png",
-   "keyframe_prompt": "High-end Pixar-style 3D animated character of the man in the first reference image: keep his exact face, dark side-parted hair, short stubble beard, warm brown eyes and friendly confident expression. Full body, same athletic proportions and confident open stage posture as the man in the second reference image. He wears a dark green velvet blazer, a light blue shirt with open collar, no tie, dark tailored trousers and brown leather shoes. Clean stylized 3D animation film look, subsurface skin, soft fabric detail, no text, no watermark. Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
-   "raw_video_path": "guide/raw_teaser-spotlight_266386df.mp4",
-   "voice_id_used": "Voice6717536d1788310928",
-   "progress": null,
-   "audio_padded_path": "guide/padded_teaser-spotlight_88bc4baa.mp3",
-   "duration_seconds_video": 10.0,
-   "pipeline": "cinematic",
-   "subtitles": [
-    {
-     "start": 4.0,
-     "end": 5.67,
-     "text": "Führung ist kein Talent."
-    },
-    {
-     "start": 5.67,
-     "end": 7.26,
-     "text": "Führung ist ein System."
-    },
-    {
-     "start": 7.26,
-     "end": 9.0,
-     "text": "Willkommen bei Leader-OS."
-    }
-   ],
-   "video_bytes": 1437672,
-   "motion_prompt": "The man walks calmly and confidently forward out of the darkness into the hard spotlight, stops in the center of the light cone, looks straight into the camera, gives a slight confident smile and then talks to the camera with natural subtle head movements and small hand gestures. Slow cinematic dolly-in, volumetric haze in the light beam, consistent character and outfit, no camera cuts, smooth realistic motion.",
-   "scene_prompt": "Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
-   "published_at": "2026-09-02T08:56:03.348948+00:00"
-  },
-  {
-   "slug": "teaser-login",
-   "kind": "teaser",
-   "ref": null,
-   "order": 0,
-   "title": "Warum Leader-OS",
-   "script": "Du führst ein Team. Aber wer coacht eigentlich dich? Leader-OS ist dein persönlicher Coach: KI-Sparring für schwierige Gespräche, Video-Analyse deiner Wirkung und tägliche Missionen, die dich wirklich besser machen. Kein Kurs, den du abarbeitest. Ein System, das mit dir arbeitet. Starte heute — kostenlos.",
-   "multi_shot": true,
-   "aspect": "9:16",
-   "script_source": "wlad",
-   "status": "video_ready",
-   "published": true,
-   "audio_path": null,
-   "video_path": "guide/video_teaser-login_18c2b018.mp4",
-   "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
-   "duration_seconds": null,
-   "error": null,
-   "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-03T21:22:31.684432+00:00",
-   "progress": null,
-   "shots": [
-    {
-     "id": "s1",
-     "type": "walk",
-     "preset": "loft_walk_in",
-     "screens": [],
-     "text": "",
-     "keyframe_path": "guide/kf_s1_teaser-login_15a3414d.png",
-     "engine": "kling-2.5-pro",
-     "raw_path": "guide/raw_s1_teaser-login_dec5105c.mp4",
-     "synced_path": null
-    },
-    {
-     "id": "s2",
-     "type": "talk",
-     "preset": "loft_talk_medium",
-     "screens": [],
-     "text": "Du führst ein Team. Aber wer coacht eigentlich dich?",
-     "keyframe_path": "guide/kf_s2_teaser-login_fb129090.png",
-     "audio_path": "guide/a_s2_teaser-login_d4ae7e3e.mp3",
-     "audio_seconds": 3.06,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s2_teaser-login_4cba4876.mp4"
-    },
-    {
-     "id": "s3",
-     "type": "broll",
-     "preset": null,
-     "screens": [
-      "chat",
-      "video",
-      "missions"
-     ],
-     "text": "Leader-OS ist dein persönlicher Coach: KI-Sparring für schwierige Gespräche, Video-Analyse deiner Wirkung und tägliche Missionen, die dich wirklich besser machen. Kein Kurs, den du abarbeitest.",
-     "audio_path": "guide/a_s3_teaser-login_70f9b57e.mp3",
-     "audio_seconds": 12.28
-    },
-    {
-     "id": "s4",
-     "type": "talk",
-     "preset": "loft_talk_closeup",
-     "screens": [],
-     "text": "Ein System, das mit dir arbeitet. Starte heute — kostenlos.",
-     "keyframe_path": "guide/kf_s4_teaser-login_2424ec08.png",
-     "audio_path": "guide/a_s4_teaser-login_1bb2264b.mp3",
-     "audio_seconds": 2.81,
-     "engine": "omnihuman",
-     "synced_path": "guide/sync_s4_teaser-login_c6c518e2.mp4"
-    }
-   ],
-   "spent_usd": 2.9400000000000004,
-   "duration_seconds_video": 21.8,
-   "pipeline": "multishot",
-   "subtitles": [
-    {
-     "start": 5.09,
-     "end": 6.23,
-     "text": "Du führst ein Team."
-    },
-    {
-     "start": 6.23,
-     "end": 8.15,
-     "text": "Aber wer coacht eigentlich dich?"
-    },
-    {
-     "start": 7.66,
-     "end": 10.14,
-     "text": "Leader-OS ist dein persönlicher Coach"
-    },
-    {
-     "start": 10.14,
-     "end": 12.56,
-     "text": "KI-Sparring für schwierige Gespräche"
-    },
-    {
-     "start": 12.56,
-     "end": 15.96,
-     "text": "Video-Analyse deiner Wirkung und tägliche Missionen"
-    },
-    {
-     "start": 15.96,
-     "end": 18.05,
-     "text": "die dich wirklich besser machen."
-    },
-    {
-     "start": 18.05,
-     "end": 18.7,
-     "text": "Kein Kurs"
-    },
-    {
-     "start": 18.7,
-     "end": 19.94,
-     "text": "den du abarbeitest."
-    },
-    {
-     "start": 19.5,
-     "end": 20.05,
-     "text": "Ein System"
-    },
-    {
-     "start": 20.05,
-     "end": 21.11,
-     "text": "das mit dir arbeitet."
-    },
-    {
-     "start": 21.11,
-     "end": 21.81,
-     "text": "Starte heute —"
-    },
-    {
-     "start": 21.81,
-     "end": 22.31,
-     "text": "kostenlos."
-    }
-   ],
-   "video_bytes": 4279192,
-   "published_at": "2026-09-03T15:48:03.099791+00:00",
    "quality": "pro"
   }
  ],
