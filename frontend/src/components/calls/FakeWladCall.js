@@ -30,6 +30,7 @@ const SESSION_KEY = 'wlad_fake_call_count';
 // Optional: komplett kill-switch via `?nocall=1` URL-param oder localStorage flag.
 const MAX_CALLS_PER_SESSION = 1;
 const TRIGGER_INTERVAL_MS = 5 * 60 * 1000;  // 5 minutes (was 3)
+// localStorage below holds only UI flags/timestamps and a public promo code — nothing sensitive.
 const KILL_SWITCH_KEY = 'wlad_fake_call_disabled';
 // Routes where we must NOT pop the call (already in a call-equivalent flow)
 const SUPPRESSED_PATHS = ['/chat', '/onboarding', '/payment-success', '/login', '/auth/magic', '/email/unsubscribe'];

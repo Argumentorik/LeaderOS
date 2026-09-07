@@ -10,6 +10,8 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
 from config import db, logger
+from rag_titles import clean_display_title as _clean_display_title
+from routes.admin import require_admin
 
 router = APIRouter(prefix="/api/admin/rag", tags=["rag-admin"])
 
@@ -19,7 +21,6 @@ DEFAULT_ZIP_URL = "https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4
 @router.get("/local-status")
 async def local_rag_status(request: Request):
     """RAG health for Ops: corpus size, model, cache state, last job, live probe."""
-    from routes.admin import require_admin
     await require_admin(request)
     from services_rag import rag_status, retrieve_context, _LOCAL_CACHE
     count = await db.rag_chunks.count_documents({})
@@ -80,7 +81,6 @@ async def _run_ingest(zip_url: str):
 
 @router.post("/reingest")
 async def reingest(body: ReingestBody, request: Request):
-    from routes.admin import require_admin
     admin = await require_admin(request)
     running = await db.rag_ingest_jobs.find_one({"status": "running"})
     if running:
@@ -130,7 +130,6 @@ GOLDEN_QUESTIONS = [
 
 @router.get("/golden-check")
 async def golden_check(request: Request):
-    from routes.admin import require_admin
     await require_admin(request)
     from services_rag import retrieve_context
     results = []
@@ -209,56 +208,6 @@ async def ensure_rag_ready():
 # then live-calls (newest first), and derive a clean human-readable title from
 # the filename when `metadata.course` was stored as a text-fragment (older
 # ingest scripts sometimes captured the first sentence of the chunk).
-def _clean_display_title(source_file: str, raw_course: str | None) -> str:
-    """Human-friendly source title.
-
-    Uses the FILENAME as the authoritative title source. The stored `course`
-    metadata is only reused when it clearly looks like a curated title
-    (e.g. "Live-Call 2025.10.15") — never when it's an ALL-CAPS content
-    fragment like "WLAD JACHTCHENKO DUBISTER BESERECHEF" or a long
-    lowercase sentence copy-pasted from the first chunk.
-    """
-    base = (source_file or "").rsplit(".", 1)[0].replace("_", " ").strip()
-
-    def _looks_curated(s: str) -> bool:
-        if not s or len(s) > 60 or len(s) < 4:
-            return False
-        # Live-Call titles are ideal — accept them.
-        if s.startswith("Live-Call"):
-            return True
-        # Reject ALL-CAPS strings that are clearly OCR-garbage or content-echo.
-        letters = [c for c in s if c.isalpha()]
-        if letters and sum(1 for c in letters if c.isupper()) / len(letters) > 0.75:
-            return False
-        # Reject if any word is longer than 20 chars (fused content).
-        if any(len(w) > 20 for w in s.split()):
-            return False
-        return s[0].isupper()
-
-    if _looks_curated(raw_course or ""):
-        return raw_course.strip()
-
-    if not base:
-        return raw_course or source_file or "(unnamed)"
-
-    pretty = base.title()
-    # Normalize the German character mangling from earlier ingest runs.
-    # 1) ß encoded as "├Ƒ" or "├ƒ" (mojibake in Windows-1252 → UTF-8 roundtrip).
-    for bad in ("├Ƒ", "├ƒ", "├ƒe", "├Ƒe"):
-        pretty = pretty.replace(bad, "ß")
-    # 2) Snake-case umlaut placeholders → real umlauts (both title & lowercase).
-    replacements = [
-        ("Ae", "ä"), ("Oe", "ö"), ("Ue", "ü"),
-        ("ae", "ä"), ("oe", "ö"), ("ue", "ü"),
-    ]
-    for old, new in replacements:
-        pretty = pretty.replace(old, new)
-    # Restore capitalisation after the umlaut substitution ate leading caps.
-    words = pretty.split(" ")
-    pretty = " ".join(w[:1].upper() + w[1:] if w else w for w in words)
-    return pretty
-
-
 def _classify_source(source_file: str, raw_type: str | None) -> str:
     """Best-effort category: 'live_call' | 'book' | 'course' | 'custom'."""
     if raw_type in {"live_call", "book", "course", "custom"}:
@@ -288,7 +237,6 @@ async def list_knowledge_sources(request: Request):
           }
         }
     """
-    from routes.admin import require_admin
     await require_admin(request)
     pipeline = [
         {"$group": {
@@ -354,7 +302,6 @@ async def list_knowledge_sources(request: Request):
 
 @router.get("/coverage")
 async def corpus_coverage(request: Request, zip_url: str = DEFAULT_ZIP_URL):
-    from routes.admin import require_admin
     await require_admin(request)
 
     async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
@@ -403,7 +350,6 @@ async def upload_knowledge(data: KnowledgeUpload, request: Request):
     Chunks + embeds locally (no external keys) and inserts into rag_chunks.
     Re-uploading the same filename replaces its chunks (idempotent).
     """
-    from routes.admin import require_admin
     admin = await require_admin(request)
     text = (data.content or "").strip()
     if len(text) < 50:
@@ -443,7 +389,6 @@ async def upload_knowledge(data: KnowledgeUpload, request: Request):
 
 @router.delete("/source/{source_file}")
 async def delete_knowledge_source(source_file: str, request: Request):
-    from routes.admin import require_admin
     admin = await require_admin(request)
     res = await db.rag_chunks.delete_many({"metadata.source_file": source_file})
     if res.deleted_count == 0:

@@ -387,8 +387,8 @@ def _source_label(meta: dict) -> str:
     "Du Bist Der Bessere Chef" instead of noise.
     """
     try:
-        from routes.rag_admin import _clean_display_title
-        label = _clean_display_title(meta.get("source_file") or "", meta.get("course"))
+        from rag_titles import clean_display_title
+        label = clean_display_title(meta.get("source_file") or "", meta.get("course"))
     except Exception:
         label = (meta.get("course") or meta.get("source_file") or "Wlad-Material")
     topic = (meta.get("topic") or "").strip()

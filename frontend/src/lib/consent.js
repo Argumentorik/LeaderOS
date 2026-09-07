@@ -1,4 +1,6 @@
 /**
+ * Security note: localStorage holds NO auth material (sessions are httpOnly cookies) — only non-sensitive
+ * consent flags (which cookie categories the visitor allowed); an XSS reader gains nothing exploitable beyond what the page already shows.
  * GDPR/TTDSG consent bootstrap and reader.
  *
  * Single source of truth for the `lo_consent_v1` localStorage payload.

@@ -333,6 +333,41 @@ def _take_words(sentences: list[str], max_words: int) -> tuple[str, list[str]]:
     return " ".join(taken), rest
 
 
+def _talk_limits(plan: list[dict], talks: list[int], total: int, pro: bool, setting: str | None) -> tuple[int, int]:
+    """Wortbudget für ersten/letzten Talk-Shot. pro: Anteile (~55 % Einstieg, ~30 % Abschluss), sonst Preset-Maximum."""
+    if not talks:
+        return 0, 0
+    first_max, last_max = plan[talks[0]]["max_words"], plan[talks[-1]]["max_words"]
+    if not pro:
+        return first_max, last_max
+    share_first, share_last = (0.55, 0.3) if setting else (0.5, 0.25)
+    return min(first_max, max(12, round(total * share_first))), min(last_max, max(10, round(total * share_last)))
+
+
+def _split_long_sentence(last: str) -> tuple[str, str]:
+    """Satz am letzten Komma/Gedankenstrich (vor der Mitte + 20 Zeichen) in Kopf und Rest teilen."""
+    cut = max(last.rfind(", ", 0, len(last) // 2 + 20), last.rfind(" — ", 0, len(last) // 2 + 20))
+    if cut <= 0:
+        return "", last
+    head, rest = last[:cut + 1].rstrip(","), last[cut + 1:].strip(" —")
+    head += "" if head.endswith((".", "!", "?")) else "."
+    return head, (rest[0].upper() + rest[1:] if rest else rest)
+
+
+def _take_tail(sentences: list[str], limit: int) -> str:
+    """Nimmt ganze Sätze vom Ende bis `limit` Wörter; passt kein ganzer Satz, wird der letzte geteilt."""
+    tail, count = [], 0
+    while sentences and count + len(sentences[-1].split()) <= limit:
+        tail.insert(0, sentences.pop())
+        count += len(tail[0].split())
+    if not tail and sentences:
+        head, rest = _split_long_sentence(sentences.pop())
+        if head:
+            sentences.append(head)
+        tail = [rest]
+    return " ".join(tail)
+
+
 def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
@@ -344,38 +379,17 @@ def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False,
     screens = screens or DEFAULT_SCREENS
     sentences = _sentences(script)
     talks = [i for i, s in enumerate(plan) if s["type"] == "talk"]
-    texts = {}
-    total = word_count(script)
-    # pro: Anteile statt fester Grenzen (~55 % Einstieg, ~15-20 % App-Tour, ~30 % Abschluss), sentence-aligned
-    share_first, share_last = (0.55, 0.3) if setting else (0.5, 0.25)
-    first_limit = min(plan[talks[0]]["max_words"], max(12, round(total * share_first))) if pro and talks else (plan[talks[0]]["max_words"] if talks else 0)
-    last_limit = min(plan[talks[-1]]["max_words"], max(10, round(total * share_last))) if pro and talks else (plan[talks[-1]]["max_words"] if talks else 0)
+    first_limit, last_limit = _talk_limits(plan, talks, word_count(script), pro, setting)
+    texts: dict[int, str] = {}
     if talks:
         texts[talks[0]], sentences = _take_words(sentences, first_limit)
         if len(talks) > 1:
-            tail, count, limit = [], 0, last_limit
-            while sentences and count + len(sentences[-1].split()) <= limit:
-                tail.insert(0, sentences.pop())
-                count += len(tail[0].split())
-            if not tail and sentences:
-                # Letzter Satz ist zu lang für einen Talk-Shot -> am letzten Komma/Gedankenstrich teilen
-                last = sentences.pop()
-                cut = max(last.rfind(", ", 0, len(last) // 2 + 20), last.rfind(" — ", 0, len(last) // 2 + 20))
-                if cut > 0:
-                    head, rest = last[:cut + 1].rstrip(","), last[cut + 1:].strip(" —")
-                    sentences.append(head + ("" if head.endswith((".", "!", "?")) else "."))
-                    tail = [rest[0].upper() + rest[1:] if rest else rest]
-                else:
-                    tail = [last]
-            texts[talks[-1]] = " ".join(tail)
-    shots = []
-    for i, tpl in enumerate(plan):
-        shots.append({
-            "id": f"s{i + 1}", "type": tpl["type"], "preset": tpl.get("preset"),
-            "screens": screens if tpl["type"] == "broll" else [],
-            "text": " ".join(sentences) if tpl["type"] == "broll" else texts.get(i, ""),
-        })
-    return shots
+            texts[talks[-1]] = _take_tail(sentences, last_limit)
+    return [{
+        "id": f"s{i + 1}", "type": tpl["type"], "preset": tpl.get("preset"),
+        "screens": screens if tpl["type"] == "broll" else [],
+        "text": " ".join(sentences) if tpl["type"] == "broll" else texts.get(i, ""),
+    } for i, tpl in enumerate(plan)]
 
 # ── Teaser: Ein 10-s-Shot für Social (Stufe A) ──────────────────────────────
 TEASER_CLIPS = [
@@ -556,6 +570,11 @@ MISSION_CLIPS = [
 ]
 
 
+def _clip(slug: str, kind: str, order: int, title: str, script: str, **extra) -> dict:
+    return {"slug": slug, "kind": kind, "ref": extra.pop("ref", None), "order": order, "title": title,
+            "script": " ".join(script.split()), **extra}
+
+
 def seed_clips() -> list[dict]:
     """Alle Clips der aktuellen Stufe als flache Liste (Reihenfolge = Anzeige)."""
     from guide_scripts_godmode import SCRIPTS as GODMODE_SCRIPTS
@@ -563,52 +582,14 @@ def seed_clips() -> list[dict]:
     for c in ONBOARDING_CLIPS:
         c["script"] = GODMODE_SCRIPTS.get(c["slug"], c["script"])
     LOGIN_TEASER["script"] = GODMODE_SCRIPTS.get("teaser-login", LOGIN_TEASER["script"])
-    clips = [
-        {
-            "slug": c["slug"],
-            "kind": "teaser",
-            "ref": None,
-            "order": c["order"],
-            "title": c["title"],
-            "script": c["script"],
-            "shot_preset": c["shot_preset"],
-        }
-        for c in TEASER_CLIPS
-    ]
-    clips.append({
-        "slug": LOGIN_TEASER["slug"], "kind": "teaser", "ref": None, "order": LOGIN_TEASER["order"],
-        "title": LOGIN_TEASER["title"], "script": " ".join(LOGIN_TEASER["script"].split()),
-        "multi_shot": True, "aspect": "9:16",
-    })
-    clips += [
-        {
-            "slug": c["slug"],
-            "kind": "onboarding",
-            "ref": None,
-            "order": c["order"],
-            "title": c["title"],
-            "script": " ".join(c["script"].split()),
-            "aspect": "16:9",
-        }
-        for c in ONBOARDING_CLIPS
-    ]
-    clips += [
-        {
-            "slug": f"mission-day-{c['day']}",
-            "kind": "mission",
-            "ref": str(c["day"]),
-            "order": 100 + c["day"],
-            "title": c["title"],
-            "script": " ".join(c["script"].split()),
-            "aspect": "16:9",
-        }
-        for c in MISSION_CLIPS
-    ]
-    clips.append({
-        "slug": "coaching-pakete", "kind": "coaching", "ref": None, "order": 200,
-        "title": "Was du mit Leader-OS bekommst", "script": GODMODE_SCRIPTS["coaching-pakete"],
-        "multi_shot": True, "aspect": "16:9",
-    })
+    clips = [_clip(c["slug"], "teaser", c["order"], c["title"], c["script"], shot_preset=c["shot_preset"]) for c in TEASER_CLIPS]
+    clips.append(_clip(LOGIN_TEASER["slug"], "teaser", LOGIN_TEASER["order"], LOGIN_TEASER["title"], LOGIN_TEASER["script"],
+                       multi_shot=True, aspect="9:16"))
+    clips += [_clip(c["slug"], "onboarding", c["order"], c["title"], c["script"], aspect="16:9") for c in ONBOARDING_CLIPS]
+    clips += [_clip(f"mission-day-{c['day']}", "mission", 100 + c["day"], c["title"], c["script"], ref=str(c["day"]), aspect="16:9")
+              for c in MISSION_CLIPS]
+    clips.append(_clip("coaching-pakete", "coaching", 200, "Was du mit Leader-OS bekommst", GODMODE_SCRIPTS["coaching-pakete"],
+                       multi_shot=True, aspect="16:9"))
     return clips
 
 

@@ -130,10 +130,11 @@ def test_poster_returns_image(teaser):
 # ── Parallel identical + memory footprint ───────────────────────────────────
 def _worker_rss_kb() -> int:
     """RSS of the uvicorn worker process (reload spawns a child of the supervisor process)."""
-    cmd = ("pid=$(pgrep -f 'uvicorn server:app' | head -1); "
-           "ps -o rss= --ppid $pid --sort=-rss | head -1")
-    out = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout.strip()
-    return int(out or 0)
+    pids = subprocess.run(["pgrep", "-f", "uvicorn server:app"], capture_output=True, text=True).stdout.split()
+    if not pids:
+        return 0
+    out = subprocess.run(["ps", "-o", "rss=", "--ppid", pids[0], "--sort=-rss"], capture_output=True, text=True).stdout.split()
+    return int(out[0]) if out else 0
 
 
 def test_parallel_downloads_identical_and_streaming_does_not_buffer(video_url, full_bytes):

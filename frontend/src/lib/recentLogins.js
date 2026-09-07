@@ -1,4 +1,6 @@
 /**
+ * Security note: localStorage holds NO auth material (sessions are httpOnly cookies) — only non-sensitive
+ * display data (name, e-mail, avatar) for the "Continue as" card; cleared on logout; an XSS reader gains nothing exploitable beyond what the page already shows.
  * "Continue as [user]" persistence — Higgsfield/Linear/Notion style.
  *
  * After a successful login of any kind, we cache a tiny user "card" in

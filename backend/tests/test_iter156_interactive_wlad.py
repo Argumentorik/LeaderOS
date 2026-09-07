@@ -12,7 +12,7 @@ load_dotenv("/app/backend/.env")
 API = os.environ.get("API_URL") or open("/app/frontend/.env").read().split("REACT_APP_BACKEND_URL=")[1].split()[0]
 
 
-def _login(email, password="test123"):
+def _login(email, password=os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")):
     s = requests.Session()
     r = s.post(f"{API}/api/auth/login", json={"email": email, "password": password}, timeout=30)
     assert r.status_code == 200, r.text

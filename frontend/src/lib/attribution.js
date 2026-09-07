@@ -1,4 +1,6 @@
 /**
+ * Security note: localStorage holds NO auth material (sessions are httpOnly cookies) — only non-sensitive
+ * campaign parameters (utm_*, click IDs, referrer, landing path); an XSS reader gains nothing exploitable beyond what the page already shows.
  * Ad/campaign attribution capture (Iter 120 · Ads-Launch readiness).
  *
  * On every page load we capture utm_* params, click IDs (gclid/fbclid/…),

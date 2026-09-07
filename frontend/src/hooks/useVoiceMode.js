@@ -62,6 +62,9 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const [level, setLevel] = useState(0);
   const [silenceLeft, setSilenceLeft] = useState(null);
   const [speakLevel, setSpeakLevel] = useState(0);
+  // Iter 157: Optionen in einem Ref -> sendAndPlay bleibt stabil, nutzt aber immer die aktuellen Werte (keine Stale Closures)
+  const optsRef = useRef({ endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, persona });
+  optsRef.current = { endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, persona };
 
   const sessionIdRef = useRef(initialSessionId);
   const mediaRecorderRef = useRef(null);
@@ -251,6 +254,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       const fd = new FormData();
       fd.append('file', blob, `voice.${ext}`);
       if (sessionIdRef.current) fd.append('session_id', sessionIdRef.current);
+      const { endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, persona } = optsRef.current;
       fd.append('persona', persona);
       Object.entries(extraFields || {}).forEach(([k, v]) => { if (v != null) fd.append(k, String(v)); });
       // Hard-timeout 28s — Voice-Pipeline (Whisper + GPT-4o-mini + ElevenLabs)
@@ -300,7 +304,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
         setState(VOICE_STATES.ERROR);
       }
     }
-  }, [de, persona, endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, startRecording]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [de, startRecording]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRecordingStopped = useCallback(async () => {
     stopMicTracks();
