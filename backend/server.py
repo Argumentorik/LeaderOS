@@ -104,6 +104,7 @@ from routes.enterprise import router as enterprise_router
 from routes.credits import router as credits_router
 from routes.challenge30 import router as challenge30_router
 from routes.guide import router as guide_router
+from routes.guide_interactive import router as guide_interactive_router
 from routes.courses import router as courses_router
 from routes.ki_news import router as ki_news_router
 from routes.my_path import router as my_path_router
@@ -145,6 +146,7 @@ app.include_router(enterprise_router)
 app.include_router(credits_router)
 app.include_router(challenge30_router)
 app.include_router(guide_router)
+app.include_router(guide_interactive_router)
 app.include_router(courses_router)
 app.include_router(ki_news_router)
 app.include_router(my_path_router)

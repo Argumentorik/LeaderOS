@@ -52,7 +52,7 @@ const mimeToExt = (mime) => {
   return 'webm';
 };
 
-export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wlad', de = true }) => {
+export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wlad', de = true, endpoint = '/voice/conversation', extraFields = null, onTurn = null, speakEndpoint = null }) => {
   const [state, setState] = useState(VOICE_STATES.IDLE);
   const [transcript, setTranscript] = useState('');
   const [reply, setReply] = useState('');
@@ -61,6 +61,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   const [muted, setMuted] = useState(false);
   const [level, setLevel] = useState(0);
   const [silenceLeft, setSilenceLeft] = useState(null);
+  const [speakLevel, setSpeakLevel] = useState(0);
 
   const sessionIdRef = useRef(initialSessionId);
   const mediaRecorderRef = useRef(null);
@@ -251,20 +252,31 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       fd.append('file', blob, `voice.${ext}`);
       if (sessionIdRef.current) fd.append('session_id', sessionIdRef.current);
       fd.append('persona', persona);
+      Object.entries(extraFields || {}).forEach(([k, v]) => { if (v != null) fd.append(k, String(v)); });
       // Hard-timeout 28s — Voice-Pipeline (Whisper + GPT-4o-mini + ElevenLabs)
       // sollte typisch in 6-12s durchlaufen. Wenn länger → Cloudflare würde
       // gleich killen → wir geben dem User stattdessen eine klare Fehlermeldung.
-      const res = await api.post('/voice/conversation', fd, {
+      const res = await api.post(endpoint, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 28000,
       });
       if (cancelledRef.current) return;
-      const { transcript: t, response_text, audio_url, session_id } = res.data;
+      const { transcript: t, response_text, session_id } = res.data;
+      let { audio_url } = res.data;
       setTranscript(t);
       setReply(response_text);
+      onTurn?.({ transcript: t, reply: response_text });
       if (session_id && session_id !== sessionIdRef.current) {
         sessionIdRef.current = session_id;
         onSessionUpdate?.(session_id);
+      }
+      if (!audio_url && speakEndpoint && response_text) {
+        // Iter 156: Stimme in eigenem Zeitfenster (Wlads Klon kann in der Fal-Queue 20-40 s brauchen)
+        try {
+          const sp = await api.post(speakEndpoint, { text: response_text, session_id: sessionIdRef.current }, { timeout: 70000 });
+          if (cancelledRef.current) return;
+          audio_url = sp.data?.audio_url || '';
+        } catch (e) { logger.warn('speak failed — text only', e); }
       }
       await playReply(audio_url);
     } catch (err) {
@@ -288,7 +300,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
         setState(VOICE_STATES.ERROR);
       }
     }
-  }, [de, persona, onSessionUpdate, startRecording]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [de, persona, endpoint, extraFields, onTurn, speakEndpoint, onSessionUpdate, startRecording]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRecordingStopped = useCallback(async () => {
     stopMicTracks();
@@ -330,7 +342,34 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
     audioPlayerRef.current = audio;
     // Iter 121: register with global audio-bus so navigating away kills it.
     const unregister = registerAudio(audio);
+    // Iter 156: Ausgabepegel für die Avatar-Mundbewegung (Data-URL -> kein CORS-Problem)
+    let outCtx = null; let outRaf = null;
+    const startOutMeter = () => {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        outCtx = new Ctx();
+        const src = outCtx.createMediaElementSource(audio);
+        const an = outCtx.createAnalyser(); an.fftSize = 512;
+        src.connect(an); an.connect(outCtx.destination);
+        const buf = new Uint8Array(an.frequencyBinCount);
+        const tick = () => {
+          an.getByteTimeDomainData(buf);
+          let sum = 0; for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v; }
+          setSpeakLevel(Math.min(1, Math.sqrt(sum / buf.length) * 4));
+          outRaf = requestAnimationFrame(tick);
+        };
+        tick();
+      } catch (e) { logger.warn('out meter unavailable', e); }
+    };
+    const stopOutMeter = () => {
+      if (outRaf) cancelAnimationFrame(outRaf);
+      if (outCtx && outCtx.state !== 'closed') outCtx.close().catch(() => {});
+      setSpeakLevel(0);
+    };
+    audio.onplay = startOutMeter;
+    audio.onpause = stopOutMeter;
     audio.onended = () => {
+      stopOutMeter();
       unregister();
       audioPlayerRef.current = null;
       setState(VOICE_STATES.IDLE);
@@ -339,7 +378,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       }
       resolve();
     };
-    audio.onerror = () => { unregister(); logger.error('Audio playback error'); setState(VOICE_STATES.IDLE); resolve(); };
+    audio.onerror = () => { stopOutMeter(); unregister(); logger.error('Audio playback error'); setState(VOICE_STATES.IDLE); resolve(); };
     audio.play().catch((e) => { logger.error('Audio play() rejected', e); setState(VOICE_STATES.IDLE); resolve(); });
   }), [muted, startRecording]);
 
@@ -389,7 +428,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    state, transcript, reply, error, paused, muted, level, silenceLeft,
+    state, transcript, reply, error, paused, muted, level, silenceLeft, speakLevel,
     handleOrbTap, togglePause, toggleMute, fullCleanup,
   };
 };

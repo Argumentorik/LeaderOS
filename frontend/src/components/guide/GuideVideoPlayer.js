@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { InteractiveWladButton } from './InteractiveWladButton';
 import { Play, FileText, ChevronDown, ChevronUp, Check, MessageCircle } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -91,10 +92,8 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
           )}
         </div>
 
-        {hasVideo && (
-          <>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <button
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {hasVideo && <button
                 type="button"
                 onClick={() => setScriptOpen(v => !v)}
                 aria-expanded={scriptOpen}
@@ -103,7 +102,7 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
               >
                 {scriptOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                 {de ? 'Text mitlesen (20 Sekunden)' : 'Read the text instead'}
-              </button>
+              </button>}
               <Link
                 to={`/chat?prefill=${encodeURIComponent(de
                   ? `Ich habe gerade dein Video „${clip.title}“ gesehen. Erklär mir bitte kurz, wie ich das konkret in meinem Alltag umsetze — und stell mir eine Rückfrage zu meiner Situation.`
@@ -113,14 +112,13 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
               >
                 <MessageCircle size={12} /> {de ? 'Frag Wlad dazu' : 'Ask Wlad about this'}
               </Link>
-            </div>
-            {scriptOpen && (
+              <InteractiveWladButton clip={clip} de={de} />
+        </div>
+        {hasVideo && scriptOpen && (
               <p className="text-[12.5px] leading-relaxed text-muted-foreground whitespace-pre-wrap select-text pt-1"
                  data-testid={`guide-script-${clip.slug}`}>
                 {clip.script}
               </p>
-            )}
-          </>
         )}
       </div>
     </div>

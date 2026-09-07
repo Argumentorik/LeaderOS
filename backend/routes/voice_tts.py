@@ -240,7 +240,8 @@ def _synthesize(text: str, voice_config: dict) -> bytes:
         from services_fal import FalError, synthesize_speech
 
         try:
-            audio, _ = synthesize_speech(text, voice_config["voice_id"], fast=True)
+            audio, _ = synthesize_speech(text, voice_config["voice_id"], fast=True,
+                                         timeout_seconds=voice_config.get("tts_timeout"))
             return audio
         except FalError as e:
             # Fal-Queue überlastet/ausgefallen -> ElevenLabs-Standardstimme statt Fehler beim Nutzer

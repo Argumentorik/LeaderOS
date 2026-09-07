@@ -193,7 +193,8 @@ def clone_voice(audio_url: str) -> str:
     return voice_id
 
 
-def synthesize_speech(text: str, voice_id: str, speed: float = 1.0, fast: bool = False) -> tuple[bytes, int]:
+def synthesize_speech(text: str, voice_id: str, speed: float = 1.0, fast: bool = False,
+                      timeout_seconds: int | None = None) -> tuple[bytes, int]:
     """Deutsche Sprachausgabe. Liefert (mp3-Bytes, Dauer in Sekunden).
     fast=True nutzt speech-02-turbo mit engem Polling — für den Voice-Mode/Chat."""
     result = run_fal(TTS_TURBO_ENDPOINT if fast else TTS_ENDPOINT, {
@@ -202,7 +203,7 @@ def synthesize_speech(text: str, voice_id: str, speed: float = 1.0, fast: bool =
         "audio_setting": {"format": "mp3", "sample_rate": 32000, "channel": 1, "bitrate": 128000},
         "output_format": "url",
         "language_boost": "German",
-    }, timeout_seconds=45 if fast else 600, poll_interval=0.8 if fast else 3.0)
+    }, timeout_seconds=timeout_seconds or (45 if fast else 600), poll_interval=0.8 if fast else 3.0)
     url = (result.get("audio") or {}).get("url")
     if not url:
         raise FalError("TTS lieferte keine Audio-URL")

@@ -10,6 +10,7 @@ import { Loader2, Upload, Mic, Check, AlertCircle, Clapperboard } from 'lucide-r
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideClipCard } from './GuideClipCard';
+import { InteractiveBetaCard } from './InteractiveBetaCard';
 
 const AssetTile = ({ label, hint, url, kind, accept, endpoint, onDone, isAudio }) => {
   const inputRef = useRef(null);
@@ -122,6 +123,8 @@ export const GuideStudio = () => {
         <span className="ml-auto text-[10px] text-muted-foreground" data-testid="guide-spent">Bisher ausgegeben: {s.spent_usd.toFixed(2)} $</span>
         {(cloneErr || s.voice_clone_error) && <p className="w-full text-[10px] text-rose-500">{cloneErr || s.voice_clone_error}</p>}
       </Card>
+
+      <InteractiveBetaCard voiceCloned={!!s.custom_voice_id} />
 
       <div className="space-y-3">
         <div className="flex items-center gap-2" data-testid="guide-bulk-row">

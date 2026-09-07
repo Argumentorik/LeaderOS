@@ -4,6 +4,7 @@ import { Lock, Play, Check, Clock, Sparkles, ChevronRight, MessageCircle } from 
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
+import { InteractiveWladButton } from '../components/guide/InteractiveWladButton';
 
 const TIER_STYLE = {
   standard: 'bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] border-[#BFFF00]/40',
@@ -98,6 +99,7 @@ const EpisodePanel = ({ ep, course, onClose, de }) => {
           <button type="button" onClick={() => navigate(`/chat?prefill=${encodeURIComponent(de ? `Ich arbeite gerade an „${ep.title}“ aus deinem Kurs „${course.title}“. Wie setze ich das konkret in meiner Situation um?` : `I'm working on "${ep.title}" from your course "${course.title}". How do I apply it in my situation?`)}`)} className="inline-flex items-center gap-1.5 text-[12px] font-bold text-foreground/70 hover:text-foreground" data-testid="course-ask-wlad-btn">
             <MessageCircle size={13} /> {de ? 'Frag Wlad dazu' : 'Ask Wlad'}
           </button>
+          {!locked && <InteractiveWladButton clip={{ slug: ep.id, title: `${course.title} · ${ep.title}`, script: [ep.purpose, ...(ep.bullets || [])].filter(Boolean).join(' ') }} de={de} />}
           <button type="button" onClick={onClose} className="ml-auto text-[12px] font-bold text-muted-foreground" data-testid="course-episode-close">{de ? 'Schließen' : 'Close'}</button>
         </div>
       </div>
