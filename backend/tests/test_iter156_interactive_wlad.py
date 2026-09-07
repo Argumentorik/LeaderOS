@@ -19,38 +19,52 @@ def _login(email, password=os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")):
     return s
 
 
-def _set(admin, enabled):
-    r = admin.put(f"{API}/api/guide/interactive/admin", json={"enabled": enabled}, timeout=30)
-    assert r.status_code == 200 and r.json()["enabled"] is enabled
+def _set(admin, **patch):
+    r = admin.put(f"{API}/api/guide/interactive/admin", json=patch, timeout=30)
+    assert r.status_code == 200, r.text
+    return r.json()
 
 
-def test_beta_locked_by_default_for_users_admin_preview():
+DEFAULTS = {"enabled": False, "paid_open": True, "free_trial_turns": 3}
+
+
+def test_access_model_paid_open_free_trial_admin_always():
     admin = _login("test@test.com")
-    _set(admin, False)
-    free = _login("free@wladbot.test")
-    st = free.get(f"{API}/api/guide/interactive/status", timeout=30).json()
-    assert st["locked"] is True and st["enabled"] is False and st["beta"] is True and st["voice"] == "wlad-clone"
-    st_admin = admin.get(f"{API}/api/guide/interactive/status", timeout=30).json()
-    assert st_admin["locked"] is False and st_admin["admin_preview"] is True
+    _set(admin, **DEFAULTS)
+    free = _login("free@wladbot.test").get(f"{API}/api/guide/interactive/status", timeout=30).json()
+    assert free["beta"] is True and free["voice"] == "wlad-clone" and free["tier"] == "free"
+    assert free["trial"] is True and free["trial_total"] == 3 and free["locked"] is (free["trial_left"] == 0)
+    std = _login("standard@wladbot.test").get(f"{API}/api/guide/interactive/status", timeout=30).json()
+    assert std["locked"] is False and std["trial"] is False and std["tier"] == "standard"
+    adm = admin.get(f"{API}/api/guide/interactive/status", timeout=30).json()
+    assert adm["locked"] is False
 
 
-def test_locked_turn_returns_403_and_no_credit_burn():
+def test_locked_turn_and_speak_return_403_without_credit_burn():
     admin = _login("test@test.com")
-    _set(admin, False)
-    free = _login("free@wladbot.test")
-    r = free.post(f"{API}/api/guide/interactive/turn", files={"file": ("v.webm", io.BytesIO(b"x" * 3000), "audio/webm")},
-                  data={"context_title": "Test"}, timeout=30)
-    assert r.status_code == 403 and r.json()["detail"] == "interactive_locked"
+    _set(admin, free_trial_turns=0)  # Free ohne Test-Gespräche -> gesperrt
+    try:
+        free = _login("free@wladbot.test")
+        assert free.get(f"{API}/api/guide/interactive/status", timeout=30).json()["locked"] is True
+        r = free.post(f"{API}/api/guide/interactive/turn", files={"file": ("v.webm", io.BytesIO(b"x" * 3000), "audio/webm")},
+                      data={"context_title": "Test"}, timeout=30)
+        assert r.status_code == 403 and r.json()["detail"] == "interactive_locked"
+        assert free.post(f"{API}/api/guide/interactive/speak", json={"text": "Hallo"}, timeout=30).status_code == 403
+    finally:
+        _set(admin, **DEFAULTS)
 
 
-def test_admin_can_open_and_relock_beta():
+def test_admin_toggles_and_non_admin_forbidden():
     admin = _login("test@test.com")
-    _set(admin, True)
+    try:
+        assert _set(admin, enabled=True)["enabled"] is True
+        assert _login("free@wladbot.test").get(f"{API}/api/guide/interactive/status", timeout=30).json()["trial"] is False
+        assert _set(admin, paid_open=False, enabled=False)["paid_open"] is False
+        assert _login("standard@wladbot.test").get(f"{API}/api/guide/interactive/status", timeout=30).json()["trial"] is True
+        assert _set(admin, free_trial_turns=25)["free_trial_turns"] == 10  # gekappt auf 0-10
+    finally:
+        _set(admin, **DEFAULTS)
     free = _login("free@wladbot.test")
-    assert free.get(f"{API}/api/guide/interactive/status", timeout=30).json()["locked"] is False
-    _set(admin, False)
-    assert free.get(f"{API}/api/guide/interactive/status", timeout=30).json()["locked"] is True
-    # Nicht-Admin darf nicht schalten
     assert free.put(f"{API}/api/guide/interactive/admin", json={"enabled": True}, timeout=30).status_code == 403
 
 

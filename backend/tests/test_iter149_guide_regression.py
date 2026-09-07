@@ -138,12 +138,12 @@ def _worker_rss_kb() -> int:
 
 
 def test_parallel_downloads_identical_and_streaming_does_not_buffer(video_url, full_bytes):
-    expected = hashlib.md5(full_bytes).hexdigest()
+    expected = hashlib.sha256(full_bytes).hexdigest()
     before = _worker_rss_kb()
 
     def fetch(_):
         r = requests.get(video_url, timeout=180)
-        return r.status_code, hashlib.md5(r.content).hexdigest()
+        return r.status_code, hashlib.sha256(r.content).hexdigest()
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:
         results = list(ex.map(fetch, range(10)))

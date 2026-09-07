@@ -16,7 +16,7 @@ if not base_url:
 BASE_URL = base_url.rstrip("/")
 
 FREE_EMAIL = "free@wladbot.test"
-PASSWORD = "test123"
+PASSWORD = os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")  # Seed-Testkonto, kein Produktionsgeheimnis
 
 
 @pytest.fixture(scope="module")

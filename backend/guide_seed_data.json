@@ -157,12 +157,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": "guide/audio_start-1-willkommen_c3602eb1.mp3",
-   "video_path": "guide/video_start-1-willkommen_ae8e423d.mp4",
+   "video_path": "guide/video_start-1-willkommen_5de5ed68.mp4",
    "media_token": "DekISj2JI1hs4aPtTrxPHso4hlc6u77_",
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-07T04:34:55.799597+00:00",
+   "updated_at": "2026-09-07T12:42:14.579609+00:00",
    "progress": null,
    "shots": [
     {
@@ -174,12 +174,13 @@
      "error": null,
      "keyframe_path": "guide/kf_s1_start-1-willkommen_0d0e405c.png",
      "raw_path": null,
-     "synced_path": null,
-     "audio_path": null,
-     "audio_seconds": null,
+     "synced_path": "guide/sync_s1_start-1-willkommen_b9198e80.mp4",
+     "audio_path": "guide/a_s1_start-1-willkommen_15efeedc.mp3",
+     "audio_seconds": 24.66,
      "speech_lead": 0.4,
      "engine": "omnihuman",
-     "padded_path": null
+     "padded_path": null,
+     "speech_tail": 0.0
     },
     {
      "id": "s2",
@@ -192,11 +193,12 @@
       "challenge"
      ],
      "text": "Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität.",
-     "audio_path": null,
-     "audio_seconds": null,
+     "audio_path": "guide/a_s2_start-1-willkommen_d93a6f94.mp3",
+     "audio_seconds": 14.51,
      "speech_lead": 0.0,
      "padded_path": null,
-     "synced_path": null
+     "synced_path": null,
+     "speech_tail": 0.0
     },
     {
      "id": "s3",
@@ -215,182 +217,182 @@
      "speech_tail": 0.9
     }
    ],
-   "spent_usd": 10.48,
-   "duration_seconds_video": 48.8,
+   "spent_usd": 18.38,
+   "duration_seconds_video": 49.5,
    "pipeline": "multishot",
    "subtitles": [
     {
      "start": 0.45,
-     "end": 0.84,
+     "end": 0.85,
      "text": "Schön"
     },
     {
-     "start": 0.84,
-     "end": 1.89,
+     "start": 0.85,
+     "end": 1.91,
      "text": "dass du da bist."
     },
     {
-     "start": 1.89,
-     "end": 2.74,
+     "start": 1.91,
+     "end": 2.78,
      "text": "Ich bin Wlad"
     },
     {
-     "start": 2.74,
-     "end": 4.44,
+     "start": 2.78,
+     "end": 4.5,
      "text": "und ich sage dir gleich zu"
     },
     {
-     "start": 4.44,
-     "end": 4.9,
+     "start": 4.5,
+     "end": 4.97,
      "text": "Beginn"
     },
     {
-     "start": 4.9,
-     "end": 6.47,
+     "start": 4.97,
+     "end": 6.56,
      "text": "was Leader-OS nicht ist"
     },
     {
-     "start": 6.47,
-     "end": 8.36,
+     "start": 6.56,
+     "end": 8.49,
      "text": "kein Kurs mit dreißig Videos"
     },
     {
-     "start": 8.36,
-     "end": 10.59,
+     "start": 8.49,
+     "end": 10.75,
      "text": "die du brav abarbeitest und danach"
     },
     {
-     "start": 10.59,
-     "end": 11.18,
+     "start": 10.75,
+     "end": 11.35,
      "text": "vergisst."
     },
     {
-     "start": 11.18,
-     "end": 13.99,
+     "start": 11.35,
+     "end": 14.21,
      "text": "Leader-OS ist dein Sparringspartner für den"
     },
     {
-     "start": 13.99,
-     "end": 16.21,
+     "start": 14.21,
+     "end": 16.47,
      "text": "Führungsalltag – für das Gespräch"
     },
     {
-     "start": 16.21,
-     "end": 17.91,
+     "start": 16.47,
+     "end": 18.2,
      "text": "das dir seit Tagen im Kopf"
     },
     {
-     "start": 17.91,
-     "end": 18.57,
+     "start": 18.2,
+     "end": 18.86,
      "text": "herumgeht"
     },
     {
-     "start": 18.57,
-     "end": 19.87,
+     "start": 18.86,
+     "end": 20.19,
      "text": "für den Mitarbeiter"
     },
     {
-     "start": 19.87,
-     "end": 20.79,
+     "start": 20.19,
+     "end": 21.12,
      "text": "der nachlässt"
     },
     {
-     "start": 20.79,
-     "end": 22.16,
+     "start": 21.12,
+     "end": 22.52,
      "text": "für die Präsentation"
     },
     {
-     "start": 22.16,
-     "end": 23.99,
+     "start": 22.52,
+     "end": 24.38,
      "text": "bei der es wirklich um etwas"
     },
     {
-     "start": 23.99,
-     "end": 24.32,
+     "start": 24.38,
+     "end": 24.71,
      "text": "geht."
     },
     {
-     "start": 24.67,
-     "end": 26.7,
+     "start": 25.0,
+     "end": 27.08,
      "text": "Du beschreibst mir deine Situation"
     },
     {
-     "start": 26.7,
-     "end": 28.85,
+     "start": 27.08,
+     "end": 29.28,
      "text": "und wir arbeiten sie gemeinsam durch"
     },
     {
-     "start": 28.85,
-     "end": 31.18,
+     "start": 29.28,
+     "end": 31.66,
      "text": "mit den Frameworks aus meinen Trainings"
     },
     {
-     "start": 31.18,
-     "end": 33.39,
+     "start": 31.66,
+     "end": 33.92,
      "text": "mit klaren Schritten und mit ehrlichem"
     },
     {
-     "start": 33.39,
-     "end": 33.91,
+     "start": 33.92,
+     "end": 34.46,
      "text": "Feedback."
     },
     {
-     "start": 33.91,
-     "end": 35.13,
+     "start": 34.46,
+     "end": 35.7,
      "text": "Warum das anders ist?"
     },
     {
-     "start": 35.13,
-     "end": 37.51,
+     "start": 35.7,
+     "end": 38.14,
      "text": "Weil hier nicht das Lehrbuch entscheidet"
     },
     {
-     "start": 37.51,
-     "end": 38.85,
+     "start": 38.14,
+     "end": 39.51,
      "text": "sondern deine Realität."
     },
     {
-     "start": 38.39,
-     "end": 40.11,
+     "start": 39.06,
+     "end": 40.78,
      "text": "In den nächsten Videos zeige ich"
     },
     {
-     "start": 40.11,
-     "end": 40.32,
+     "start": 40.78,
+     "end": 40.99,
      "text": "dir"
     },
     {
-     "start": 40.32,
-     "end": 41.61,
+     "start": 40.99,
+     "end": 42.28,
      "text": "wie du mit mir sprichst"
     },
     {
-     "start": 41.61,
-     "end": 43.44,
+     "start": 42.28,
+     "end": 44.11,
      "text": "wie du dein System einrichtest und"
     },
     {
-     "start": 43.44,
-     "end": 44.94,
+     "start": 44.11,
+     "end": 45.61,
      "text": "womit du in der ersten Woche"
     },
     {
-     "start": 44.94,
-     "end": 45.43,
+     "start": 45.61,
+     "end": 46.1,
      "text": "anfängst."
     },
     {
-     "start": 45.43,
-     "end": 46.93,
+     "start": 46.1,
+     "end": 47.6,
      "text": "Nimm dir dafür zehn Minuten."
     },
     {
-     "start": 46.93,
-     "end": 48.22,
+     "start": 47.6,
+     "end": 48.89,
      "text": "Sie sind gut investiert."
     }
    ],
-   "video_bytes": 9132716,
+   "video_bytes": 9085808,
    "published_at": "2026-09-02T10:00:43.311708+00:00",
    "quality": "pro"
   },

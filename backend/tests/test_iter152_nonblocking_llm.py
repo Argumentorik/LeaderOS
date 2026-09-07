@@ -32,7 +32,7 @@ def test_patched_completion_awaits_acompletion(monkeypatch):
         return "ok"
 
     monkeypatch.setattr(litellm, "acompletion", fake_acompletion)
-    chat = LlmChat(api_key="sk-emergent-test", session_id="s", system_message="sys").with_model("openai", "gpt-4o-mini")
+    chat = LlmChat(api_key=os.environ.get("EMERGENT_LLM_KEY", "sk-test-placeholder"), session_id="s", system_message="sys").with_model("openai", "gpt-4o-mini")
     chat.with_params(max_tokens=5)
     out = asyncio.run(services_llm_async._execute_completion_async(chat, [{"role": "user", "content": "hi"}]))
     assert out == "ok"

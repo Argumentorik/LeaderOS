@@ -1,6 +1,7 @@
 /**
  * Global TTS playback speed — used by VoicePlayButton + voice overlays.
  * Persisted in localStorage so the user's pace preference survives reloads.
+ * Security note: only a numeric playback-speed preference — nothing sensitive, no auth material.
  */
 import logger from './logger';
 const KEY = 'wladbot_tts_speed_v1';

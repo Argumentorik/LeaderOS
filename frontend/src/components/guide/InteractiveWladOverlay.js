@@ -30,8 +30,8 @@ const WladAvatar = ({ state, level, speakLevel, onTap, label }) => {
       </span>
       {speaking && (
         <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-end gap-[3px] h-6" aria-hidden>
-          {[0.6, 1, 0.8, 1, 0.6].map((f, i) => (
-            <span key={i} className="w-[4px] rounded-full bg-[#BFFF00]" style={{ height: `${6 + speakLevel * 18 * f}px`, transition: 'height 70ms linear' }} />
+          {[['l2', 0.6], ['l1', 1], ['c', 0.8], ['r1', 1], ['r2', 0.6]].map(([k, f]) => (
+            <span key={k} className="w-[4px] rounded-full bg-[#BFFF00]" style={{ height: `${6 + speakLevel * 18 * f}px`, transition: 'height 70ms linear' }} />
           ))}
         </span>
       )}

@@ -1,5 +1,6 @@
 """Iter 141 — Regressionstests zu den Code-Review-Findings.
 
+
 Abgedeckt:
   HIGH   Registrierungs-Validatoren waren toter Code (models.py)
   MEDIUM Leeres TTS-Audio darf nicht gecacht werden
@@ -14,6 +15,8 @@ import sys
 import pytest
 from pydantic import ValidationError
 
+DUMMY_PW = "geheim123"  # noqa: S105 — Dummy für Schema-Tests, kein echtes Konto
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -22,7 +25,7 @@ def test_register_rejects_invalid_input():
     from models import UserRegister
 
     with pytest.raises(ValidationError) as exc:
-        UserRegister(email="NOTvalid", password="123", name="x" * 200, phone="!!")
+        UserRegister(email="NOTvalid", password="123", name="x" * 200, phone="!!")  # noqa: S106 — absichtlich ungültig
     fields = {e["loc"][0] for e in exc.value.errors()}
     assert {"email", "password", "name", "phone"} <= fields
 
@@ -30,7 +33,7 @@ def test_register_rejects_invalid_input():
 def test_register_accepts_valid_input():
     from models import UserRegister
 
-    u = UserRegister(email="  Max.Muster@Example.de ", password="geheim123", name=" Max ", phone="+49 170 1234567")
+    u = UserRegister(email="  Max.Muster@Example.de ", password=DUMMY_PW, name=" Max ", phone="+49 170 1234567")
     assert u.email == "max.muster@example.de"
     assert u.name == "Max"
 
@@ -40,7 +43,7 @@ def test_register_rejects_broken_emails(bad_email):
     from models import UserRegister
 
     with pytest.raises(ValidationError):
-        UserRegister(email=bad_email, password="geheim123", name="Max", phone="+4917012345")
+        UserRegister(email=bad_email, password=DUMMY_PW, name="Max", phone="+4917012345")
 
 
 # ── MEDIUM: KI-Fehler werden klassifiziert, nicht durchgereicht ──────────────

@@ -22,7 +22,7 @@ BASE_URL = base_url.rstrip("/")
 
 FREE_EMAIL = "free@wladbot.test"
 ADMIN_EMAIL = "test@test.com"
-PASSWORD = "test123"
+PASSWORD = os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")  # Seed-Testkonto, kein Produktionsgeheimnis
 
 
 def _login(email: str) -> str:
@@ -122,7 +122,7 @@ class TestUserClips:
             if not c.get("poster_url"):
                 problems.append(f"{c['slug']}: no poster_url")
             d = c.get("duration_seconds_video")
-            if not isinstance(d, (int, float)) or not (20 <= d <= 45):
+            if not isinstance(d, (int, float)) or not (20 <= d <= 75):  # Präsenz-Shots seit Iter 154 bis ~70 s
                 problems.append(f"{c['slug']}: duration_seconds_video={d}")
         assert not problems, problems
 
@@ -153,7 +153,7 @@ class TestUserClips:
 class TestAdminOverview:
     def test_thirteen_multishot_pro(self, overview):
         clips = [c for c in overview["clips"] if c.get("multi_shot")]
-        assert len(clips) == 13, [c["slug"] for c in clips]
+        assert len(clips) >= 13, [c["slug"] for c in clips]  # Iter 155/158: + coaching-pakete, bp-*
         problems = []
         for c in clips:
             if c.get("status") != "video_ready":
@@ -189,7 +189,7 @@ class TestAdminOverview:
     def test_spent_usd(self, overview):
         spent = overview["settings"]["spent_usd"]
         assert isinstance(spent, (int, float))
-        assert 50 <= spent <= 60, spent
+        assert spent >= 50, spent  # kumulierte Fal-Kosten wachsen mit jeder Produktion (Iter 147: 50-60 $)
 
     def test_no_id_leak(self, overview):
         assert all("_id" not in c for c in overview["clips"])

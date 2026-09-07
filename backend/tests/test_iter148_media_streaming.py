@@ -74,9 +74,9 @@ def test_unknown_token_404():
 def test_parallel_requests_identical(video_url, full_bytes):
     from concurrent.futures import ThreadPoolExecutor
 
-    digest = hashlib.md5(full_bytes).hexdigest()
+    digest = hashlib.sha256(full_bytes).hexdigest()
     with ThreadPoolExecutor(8) as ex:
-        results = list(ex.map(lambda _: hashlib.md5(requests.get(video_url, timeout=60).content).hexdigest(), range(8)))
+        results = list(ex.map(lambda _: hashlib.sha256(requests.get(video_url, timeout=60).content).hexdigest(), range(8)))
     assert results == [digest] * 8
 
 
