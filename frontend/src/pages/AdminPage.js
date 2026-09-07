@@ -1,50 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Card, CardContent } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import logger from '../lib/logger';
-import {
-  TrendingUp, Users, CreditCard, Building2, Share2,
-  Loader2, ShieldAlert, Euro, Activity, MessageCircle,
-} from 'lucide-react';
+import { Loader2, ShieldAlert, Activity } from 'lucide-react';
 import { AuthHealthWidget } from '../components/admin/AuthHealthWidget';
 import { SyncHealthWidget } from '../components/admin/SyncHealthWidget';
 import { UserManageCard } from '../components/admin/UserManageCard';
-import { RagDebugStudio } from '../components/admin/RagDebugStudio';
-import { RagControlCenter } from '../components/admin/RagControlCenter';
-import { LearningVideosManager } from '../components/admin/LearningVideosManager';
-import { LicenseKeysManager } from '../components/admin/LicenseKeysManager';
-import { MasterclassClientsManager } from '../components/admin/MasterclassClientsManager';
-import { ConversionCenter } from '../components/admin/ConversionCenter';
-import { LiveTestPanel } from '../components/admin/LiveTestPanel';
 import { FeatureRolloutPanel } from '../components/admin/FeatureRolloutPanel';
 import { OpsHandoverPanel } from '../components/admin/OpsHandoverPanel';
-import { GuideStudio } from '../components/admin/GuideStudio';
-
-const TIER_COLORS = {
-  free: 'bg-slate-400',
-  starter: 'bg-[#6B8A00]',
-  standard: 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00]',
-  accelerator: 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A]',
-  legacy_premium: 'bg-violet-500',
-};
-
-const Stat = ({ icon: Icon, label, value, sub, color = 'text-[#6B8A00] dark:text-[#BFFF00]', testid }) => (
-  <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid={testid}>
-    <CardContent className="p-5">
-      <div className="flex items-center justify-between mb-3">
-        <Icon size={18} className={color} />
-        {sub && <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{sub}</span>}
-      </div>
-      <p className="text-2xl font-black leading-none">{value}</p>
-      <p className="text-[11px] text-muted-foreground mt-1">{label}</p>
-    </CardContent>
-  </Card>
-);
+import { AdminStatRows, CommunityStatsCard, TierDistributionCard, LeadsAndReferrals, RecentTransactions } from '../components/admin/AdminOverviewCards';
+import { AdminToolSections } from '../components/admin/AdminToolSections';
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -115,9 +83,6 @@ export default function AdminPage() {
     return <DashboardLayout><div className="p-20 text-center"><Loader2 size={24} className="mx-auto animate-spin text-[#BFFF00]" /></div></DashboardLayout>;
   }
 
-  const rev = data.revenue;
-  const users = data.users;
-
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-10 max-w-7xl mx-auto" data-testid="admin-page">
@@ -152,21 +117,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Revenue Row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          <Stat icon={Euro} testid="stat-total-rev" label={de ? 'Gesamt-Umsatz' : 'Total Revenue'} value={`€${rev.total_eur.toLocaleString('de-DE')}`} sub="ALL TIME" />
-          <Stat icon={TrendingUp} testid="stat-mrr" label={de ? 'MRR (30 Tage)' : 'MRR (30d)'} value={`€${rev.mrr_estimate_eur.toLocaleString('de-DE')}`} sub="LIVE" color="text-emerald-500" />
-          <Stat icon={Activity} testid="stat-arr" label={de ? 'ARR Projektion' : 'ARR Projection'} value={`€${rev.arr_estimate_eur.toLocaleString('de-DE')}`} sub="x12" color="text-[#7B3FE4]" />
-          <Stat icon={CreditCard} testid="stat-installments" label={de ? 'Aktive Ratenpläne' : 'Active Installments'} value={data.installments.active_plans} sub={`${data.installments.completed_plans} FERTIG`} />
-        </div>
-
-        {/* Users Row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          <Stat icon={Users} testid="stat-total-users" label={de ? 'Gesamt-User' : 'Total Users'} value={users.total} />
-          <Stat icon={Users} testid="stat-new-30d" label={de ? 'Neu (30 Tage)' : 'New (30d)'} value={users.new_30d} color="text-emerald-500" />
-          <Stat icon={Building2} testid="stat-enterprise" label={de ? 'Enterprise Leads' : 'Enterprise Leads'} value={data.enterprise_leads} color="text-amber-500" />
-          <Stat icon={Share2} testid="stat-referrals" label={de ? 'Empfehlungen' : 'Referrals'} value={data.referrals} color="text-sky-500" />
-        </div>
+        <AdminStatRows data={data} de={de} />
 
         {/* Auth-Health Monitoring (launch priority) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
@@ -175,248 +126,14 @@ export default function AdminPage() {
           <FeatureRolloutPanel de={de} />
           <OpsHandoverPanel />
           <UserManageCard de={de} />
-          <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="community-stats">
-            <CardContent className="p-5">
-              <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-1.5"><MessageCircle size={11} /> Community</h3>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-2xl font-black">{data.community.total_posts}</p>
-                  <p className="text-[10px] text-muted-foreground">{de ? 'Posts insgesamt' : 'Posts total'}</p>
-                </div>
-                <div>
-                  <p className="text-lg font-black text-emerald-500">+{data.community.posts_7d}</p>
-                  <p className="text-[10px] text-muted-foreground">{de ? 'letzte 7 Tage' : 'last 7 days'}</p>
-                </div>
-                <div>
-                  <p className="text-lg font-black text-sky-500">{data.community.total_comments}</p>
-                  <p className="text-[10px] text-muted-foreground">{de ? 'Kommentare' : 'comments'}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CommunityStatsCard community={data.community} de={de} />
         </div>
 
-        {/* Tier Distribution */}
-        <Card className="border-black/[0.06] dark:border-white/[0.06] mb-6" data-testid="tier-dist-card">
-          <CardContent className="p-5">
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4">{de ? 'Tier-Verteilung' : 'Tier Distribution'}</h3>
-            <div className="space-y-3">
-              {Object.entries(data.tier_distribution).map(([tier, count]) => {
-                const pct = users.total > 0 ? (count / users.total) * 100 : 0;
-                return (
-                  <div key={tier} className="flex items-center gap-3">
-                    <span className="text-[11px] font-bold uppercase tracking-wider w-24 shrink-0">{tier}</span>
-                    <div className="flex-1 h-5 rounded-full bg-gray-100 dark:bg-muted overflow-hidden">
-                      <div className={`h-full ${TIER_COLORS[tier] || 'bg-slate-400'} transition-all duration-700`} style={{ width: `${pct}%` }} />
-                    </div>
-                    <span className="text-[11px] font-bold w-16 text-right shrink-0">{count} <span className="text-muted-foreground font-normal">({pct.toFixed(0)}%)</span></span>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-5 pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
-              <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">{de ? 'Umsatz pro Tier' : 'Revenue per Tier'}</h4>
-              <div className="flex gap-2 flex-wrap">
-                {Object.entries(rev.per_tier).map(([tier, amount]) => (
-                  <div key={tier} className="px-3 py-1.5 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20">
-                    <span className="text-[10px] font-bold uppercase tracking-wider">{tier}: </span>
-                    <span className="text-[11px] font-black text-[#4A6200] dark:text-[#BFFF00]">€{amount.toLocaleString('de-DE')}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <TierDistributionCard data={data} de={de} />
+        <LeadsAndReferrals enterprise={enterprise} referrals={referrals} de={de} />
+        <RecentTransactions txs={txs} de={de} />
 
-        {/* Enterprise Leads + Referrals */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-          <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="enterprise-leads-card">
-            <CardContent className="p-5">
-              <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-1.5"><Building2 size={12} /> Enterprise</h3>
-              {enterprise.length === 0 ? (
-                <p className="text-[11px] text-muted-foreground/60">{de ? 'Noch keine Enterprise-Leads.' : 'No enterprise leads yet.'}</p>
-              ) : (
-                <div className="space-y-2">
-                  {enterprise.slice(0, 8).map((e) => (
-                    <div key={e.lead_id || e.user_email || `${e.created_at}-${e.user_email}`} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-muted/30">
-                      <div className="min-w-0">
-                        <p className="text-[11px] font-bold truncate">{e.user_email || 'unknown'}</p>
-                        <p className="text-[9px] text-muted-foreground">{(e.created_at || '').split('T')[0]}</p>
-                      </div>
-                      <Badge className={`text-[9px] font-bold ${e.payment_status === 'paid' ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-0' : 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border-0'}`}>
-                        {e.payment_status || 'pending'}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="referrals-card">
-            <CardContent className="p-5">
-              <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-1.5"><Share2 size={12} /> {de ? 'Top Empfehlungs-Codes' : 'Top Referral Codes'}</h3>
-              {referrals.length === 0 ? (
-                <p className="text-[11px] text-muted-foreground/60">{de ? 'Noch keine Empfehlungen getracked.' : 'No referrals tracked yet.'}</p>
-              ) : (
-                <div className="space-y-2">
-                  {referrals.slice(0, 8).map((r) => (
-                    <div key={r.code} className="flex items-center justify-between">
-                      <code className="text-[11px] font-mono font-bold">{r.code}</code>
-                      <span className="text-[11px] font-black">{r.count}×</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Transactions */}
-        <Card className="border-black/[0.06] dark:border-white/[0.06]" data-testid="recent-txs-card">
-          <CardContent className="p-5">
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-1.5"><CreditCard size={12} /> {de ? 'Letzte Transaktionen' : 'Recent Transactions'}</h3>
-            {txs.length === 0 ? (
-              <p className="text-[11px] text-muted-foreground/60">{de ? 'Noch keine Transaktionen.' : 'No transactions yet.'}</p>
-            ) : (
-              <div className="space-y-1.5">
-                {txs.map((t) => (
-                  <div key={t.tx_id || t.session_id || `${t.user_email}-${t.created_at}`} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors text-[11px]">
-                    <div className="min-w-0 flex-1">
-                      <p className="font-bold truncate">{t.user_email || 'unknown'}</p>
-                      <p className="text-muted-foreground">{t.package_name} · {(t.created_at || '').split('T')[0]}</p>
-                    </div>
-                    <div className="text-right shrink-0 ml-3">
-                      <p className="font-black">€{(t.amount || 0).toFixed(0)}</p>
-                      <Badge className={`text-[8px] font-bold ${t.payment_status === 'paid' ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-0' : 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border-0'}`}>
-                        {t.payment_status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* RAG Control Center — status, re-ingest, golden check (Iter 113) */}
-        <div className="mt-2">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'RAG Control Center' : 'RAG Control Center'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Wlads Wissensbasis verwalten: neu einlesen (ZIP), Chunk-Status live, Golden-Question-Selbsttest nach jedem Deploy.'
-                : "Manage Wlad's knowledge base: re-ingest (ZIP), live chunk status, golden-question self-test after every deploy."}
-            </p>
-          </div>
-          <RagControlCenter de={de} />
-        </div>
-
-        {/* RAG Debug Studio — diagnose WladBot's knowledge retrieval */}
-        <div className="mt-2">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'WladBot Wissens-Studio' : 'WladBot Knowledge Studio'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Sieh genau welche Wlad-Chunks WladBot für jede Frage findet — Coverage-Lücken vor den Usern entdecken.'
-                : 'See exactly which Wlad chunks WladBot retrieves for any question — spot coverage gaps before users do.'}
-            </p>
-          </div>
-          <RagDebugStudio />
-        </div>
-
-        {/* Guide Studio — Wlad-Avatar-Clips: Skript → Stimme → Keyframe → Cinematic (Iter 143) */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'Guide Studio · Wlad-Avatar-Videos' : 'Guide Studio · Wlad Avatar Videos'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Onboarding-, Mission- und Social-Clips mit dem 3D-Wlad. Reihenfolge: Skript speichern → Stimme → Keyframe prüfen → Cinematic rendern → Freigeben. Nichts wird Nutzern gezeigt, bevor du freigibst.'
-                : 'Onboarding, mission and social clips with the 3D Wlad. Order: save script → voice → check keyframe → render cinematic → publish. Nothing is shown to users before you approve.'}
-            </p>
-          </div>
-          <GuideStudio />
-        </div>
-
-        {/* Learning Videos Manager — Vimeo metadata for the 10-course catalogue */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'Lernvideos · Vimeo-Verwaltung' : 'Learning Videos · Vimeo Manager'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Hinterlege Vimeo-IDs / URLs für die 10 Kurse. Sobald gespeichert spielt der In-App-Player ohne Code-Deploy.'
-                : 'Drop Vimeo IDs / URLs into the 10-course catalogue. The in-app player picks them up live, no deploy needed.'}
-            </p>
-          </div>
-          <LearningVideosManager />
-        </div>
-
-        {/* Masterclass clients — direct-create with 6/12/18-month terms (Iter 132) */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'Masterclass-Kunden · Direktzugang' : 'Masterclass Clients · Direct Access'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Lege Masterclass-Kunden mit individueller Laufzeit (6/12/18 Monate) und Startdatum an — der Zugang ist sofort aktiv, der Kunde loggt sich per Magic Link ein. 7 Tage vor Ablauf geht automatisch eine Erinnerung raus, danach folgt der Auto-Downgrade.'
-                : 'Add masterclass clients with individual terms (6/12/18 months) and start dates — access is active instantly, clients log in via Magic Link. Expiry reminder 7 days before, then auto-downgrade.'}
-            </p>
-          </div>
-          <MasterclassClientsManager de={de} />
-        </div>
-
-        {/* Conversion Center — approval-gated 400-client email sequence (Iter 133) */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'Conversion Center · Masterclass → Leader-OS' : 'Conversion Center · Masterclass → Leader-OS'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Die 8-teilige E-Mail-Serie für die ~400 Masterclass-Kunden. NICHTS geht raus, bevor du es hier freigibst — Vorschau, Test-Mail an dich, dann einzeln freigeben.'
-                : 'The 8-part email series for the ~400 masterclass clients. NOTHING is sent before you approve it here — preview, test-send, then approve one by one.'}
-            </p>
-          </div>
-          <ConversionCenter de={de} />
-        </div>
-
-        {/* License Keys — 16-digit activation codes for sales-sold packages */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? 'Lizenz-Keys · Sales-Aktivierung' : 'License Keys · Sales Activation'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Generiere 16-stellige Aktivierungscodes für telefonisch verkaufte Pakete. Kunde löst den Key auf der Login-Seite ein — Paket wird sofort freigeschaltet.'
-                : 'Generate 16-character activation codes for phone-sold packages. The customer redeems the key on the login page — package unlocks instantly.'}
-            </p>
-          </div>
-          <LicenseKeysManager de={de} />
-        </div>
-
-        {/* 1€ live test — the release gate before going live (Iter 134) */}
-        <div className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              {de ? '1-€-Livetest · Release-Gate' : '€1 Live Test · Release Gate'}
-            </h2>
-            <p className="text-[11px] text-muted-foreground">
-              {de
-                ? 'Schalte Kolleg:innen für den 1-€-Kauf frei und schick ihnen den fertigen Ablauf. Sie starten bei null, zahlen 1 € über den echten Stripe-Checkout, bekommen die Stripe-Rechnung per Mail und den vollen Zugang — ohne dass wir irgendwas in der Datenbank anfassen.'
-                : 'Unlock colleagues for the €1 purchase and send them the ready-made steps. They start from zero, pay €1 through the real Stripe checkout, receive the Stripe invoice by email and full access — without us touching the database.'}
-            </p>
-          </div>
-          <LiveTestPanel de={de} />
-        </div>
+        <AdminToolSections de={de} />
       </div>
     </DashboardLayout>
   );

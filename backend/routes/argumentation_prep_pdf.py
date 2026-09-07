@@ -361,59 +361,45 @@ def _build_arguments_section(sec: dict, story: list, styles: dict) -> None:
 
 
 # ═══════════════════════════════════ Main render ══════════════════════════
-def render_strategy_pdf(*, strategy_markdown: str, user_name: str, prep_goal: str, tags: list[str] | None = None) -> bytes:
-    """Return PDF bytes for the given SEXIER strategy."""
-    buf = io.BytesIO()
-    doc = SimpleDocTemplate(
-        buf,
-        pagesize=A4,
-        leftMargin=2 * cm, rightMargin=2 * cm,
-        topMargin=2.7 * cm, bottomMargin=2 * cm,
-        title=f"SEXIER-Strategie — {user_name or ''}".strip(" —"),
-        author="Wlad Leader-OS",
-    )
-
+def _make_styles() -> dict:
     ss = getSampleStyleSheet()
-    h_cover = ParagraphStyle(
-        "h_cover", parent=ss["Heading1"],
-        fontName="Helvetica-Bold", fontSize=32, leading=38,
-        textColor=BRAND_DARK, alignment=TA_LEFT, spaceAfter=0.6 * cm,
-    )
-    h_meta = ParagraphStyle(
-        "h_meta", parent=ss["Normal"],
-        fontName="Helvetica", fontSize=10, leading=14,
-        textColor=MUTED_GREY, spaceAfter=0.15 * cm,
-    )
-    h_section = ParagraphStyle(
-        "h_section", parent=ss["Heading2"],
-        fontName="Helvetica-Bold", fontSize=15, leading=19,
-        textColor=BRAND_DARK, spaceBefore=0.45 * cm, spaceAfter=0.15 * cm,
-    )
-    h_sub = ParagraphStyle(
-        "h_sub", parent=ss["Normal"],
-        fontName="Helvetica-Oblique", fontSize=9, leading=12,
-        textColor=MUTED_GREY, spaceAfter=0.35 * cm,
-    )
     body = ParagraphStyle(
         "body", parent=ss["Normal"],
         fontName="Helvetica", fontSize=10, leading=15,
         textColor=colors.HexColor("#111111"), spaceAfter=0.14 * cm,
     )
-    styles = {"h_meta": h_meta, "body": body}
+    return {
+        "h_cover": ParagraphStyle(
+            "h_cover", parent=ss["Heading1"],
+            fontName="Helvetica-Bold", fontSize=32, leading=38,
+            textColor=BRAND_DARK, alignment=TA_LEFT, spaceAfter=0.6 * cm,
+        ),
+        "h_meta": ParagraphStyle(
+            "h_meta", parent=ss["Normal"],
+            fontName="Helvetica", fontSize=10, leading=14,
+            textColor=MUTED_GREY, spaceAfter=0.15 * cm,
+        ),
+        "h_section": ParagraphStyle(
+            "h_section", parent=ss["Heading2"],
+            fontName="Helvetica-Bold", fontSize=15, leading=19,
+            textColor=BRAND_DARK, spaceBefore=0.45 * cm, spaceAfter=0.15 * cm,
+        ),
+        "h_sub": ParagraphStyle(
+            "h_sub", parent=ss["Normal"],
+            fontName="Helvetica-Oblique", fontSize=9, leading=12,
+            textColor=MUTED_GREY, spaceAfter=0.35 * cm,
+        ),
+        "body": body,
+    }
 
-    # ── Cover ────────────────────────────────────────────────
-    story: list = []
+
+def _build_cover(story: list, styles: dict, *, user_name: str, prep_goal: str, tags: list[str] | None) -> None:
+    body, h_meta = styles["body"], styles["h_meta"]
     story.append(Spacer(1, 4 * cm))
-    story.append(Paragraph(
-        '<font color="#6B8A00" size="11"><b>SEXIER-STRATEGIE</b></font>',
-        h_meta,
-    ))
-    story.append(Paragraph(_esc(prep_goal or "Deine Argumentations-Strategie"), h_cover))
+    story.append(Paragraph('<font color="#6B8A00" size="11"><b>SEXIER-STRATEGIE</b></font>', h_meta))
+    story.append(Paragraph(_esc(prep_goal or "Deine Argumentations-Strategie"), styles["h_cover"]))
     story.append(Paragraph(f"Für: <b>{_esc(user_name or 'Leader')}</b>", body))
-    story.append(Paragraph(
-        f"Erstellt am {datetime.now(timezone.utc).strftime('%d. %B %Y')} · Wlad Coaching",
-        h_meta,
-    ))
+    story.append(Paragraph(f"Erstellt am {datetime.now(timezone.utc).strftime('%d. %B %Y')} · Wlad Coaching", h_meta))
     if tags:
         story.append(Spacer(1, 0.4 * cm))
         chip_row = " ".join(
@@ -428,60 +414,81 @@ def render_strategy_pdf(*, strategy_markdown: str, user_name: str, prep_goal: st
     ))
     story.append(PageBreak())
 
-    # ── Sections ────────────────────────────────────────────
+
+def _section_title(sec: dict, styles: dict) -> Table:
+    color = sec["color"]
+    tbl = Table(
+        [[
+            "",
+            Paragraph(f'<font color="#{color.hexval()[2:]}"><b>Sektion {sec["key"]}</b></font>  '
+                      f'<b>{sec["title"]}</b>', styles["h_section"]),
+        ]],
+        colWidths=[0.15 * cm, None],
+    )
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), color),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return tbl
+
+
+def _build_generic_section(sec: dict, story: list, styles: dict) -> None:
+    body = styles["body"]
+    story.append(KeepTogether([_section_title(sec, styles)]))
+    if sec.get("subtitle"):
+        story.append(Paragraph(sec["subtitle"], styles["h_sub"]))
+    h3 = ParagraphStyle(
+        f"h3_{sec['key']}", parent=body,
+        fontName="Helvetica-Bold", fontSize=11.5, leading=15,
+        textColor=sec["color"], spaceBefore=0.3 * cm, spaceAfter=0.12 * cm,
+    )
+    for raw in sec["body_lines"]:
+        line = raw.rstrip()
+        stripped = line.strip()
+        if not stripped:
+            story.append(Spacer(1, 0.15 * cm))
+            continue
+        if stripped in ("---", "***", "___"):
+            continue
+        hm = re.match(r"^#{3,4}\s+(.*)$", stripped)
+        if hm:
+            story.append(Paragraph(_inline(hm.group(1)), h3))
+            continue
+        story.append(Paragraph(_render_line_html(line), body))
+    story.append(Spacer(1, 0.5 * cm))
+
+
+def render_strategy_pdf(*, strategy_markdown: str, user_name: str, prep_goal: str, tags: list[str] | None = None) -> bytes:
+    """Return PDF bytes for the given SEXIER strategy."""
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buf,
+        pagesize=A4,
+        leftMargin=2 * cm, rightMargin=2 * cm,
+        topMargin=2.7 * cm, bottomMargin=2 * cm,
+        title=f"SEXIER-Strategie — {user_name or ''}".strip(" —"),
+        author="Wlad Leader-OS",
+    )
+    styles = _make_styles()
+    story: list = []
+    _build_cover(story, styles, user_name=user_name, prep_goal=prep_goal, tags=tags)
+
     sections = _parse_sections(strategy_markdown)
     for sec in sections:
         if sec["key"] == "2":
             _build_arguments_section(sec, story, styles)
-            continue
-
-        color = sec["color"]
-        title_tbl = Table(
-            [[
-                "",
-                Paragraph(f'<font color="#{color.hexval()[2:]}"><b>Sektion {sec["key"]}</b></font>  '
-                          f'<b>{sec["title"]}</b>', h_section),
-            ]],
-            colWidths=[0.15 * cm, None],
-        )
-        title_tbl.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (0, 0), color),
-            ("LEFTPADDING", (0, 0), (-1, -1), 6),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("TOPPADDING", (0, 0), (-1, -1), 6),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-        ]))
-        story.append(KeepTogether([title_tbl]))
-        if sec.get("subtitle"):
-            story.append(Paragraph(sec["subtitle"], h_sub))
-
-        h3 = ParagraphStyle(
-            f"h3_{sec['key']}", parent=body,
-            fontName="Helvetica-Bold", fontSize=11.5, leading=15,
-            textColor=color, spaceBefore=0.3 * cm, spaceAfter=0.12 * cm,
-        )
-        for raw in sec["body_lines"]:
-            line = raw.rstrip()
-            stripped = line.strip()
-            if not stripped:
-                story.append(Spacer(1, 0.15 * cm))
-                continue
-            if stripped in ("---", "***", "___"):
-                continue
-            hm = re.match(r"^#{3,4}\s+(.*)$", stripped)
-            if hm:
-                story.append(Paragraph(_inline(hm.group(1)), h3))
-                continue
-            story.append(Paragraph(_render_line_html(line), body))
-        story.append(Spacer(1, 0.5 * cm))
+        else:
+            _build_generic_section(sec, story, styles)
 
     if not sections:
-        story.append(Paragraph("Keine strukturierten Sektionen gefunden.", body))
+        story.append(Paragraph("Keine strukturierten Sektionen gefunden.", styles["body"]))
         for raw in (strategy_markdown or "").split("\n"):
             if raw.strip():
-                story.append(Paragraph(_render_line_html(raw), body))
+                story.append(Paragraph(_render_line_html(raw), styles["body"]))
 
-    # ── Final page: QR + rotating LeaderOS Plus invitation ──
     seed = f"{user_name}|{prep_goal}|{(strategy_markdown or '')[:400]}"
     _build_ending_page(story, styles, seed=seed)
 

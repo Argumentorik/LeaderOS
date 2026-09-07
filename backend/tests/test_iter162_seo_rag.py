@@ -86,8 +86,12 @@ def test_index_shell_has_no_page_specific_schema():
     assert "google-site-verification" in html
 
 
+ADMIN_EMAIL = os.environ.get("TEST_ADMIN_EMAIL", "test@test.com")
+PASSWORD = os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")  # Seed-Testkonto, kein Produktionsgeheimnis
+
+
 def _admin_token():
-    r = requests.post(f"{BASE}/api/auth/login", json={"identifier": "test@test.com", "password": "test123"}, timeout=30)
+    r = requests.post(f"{BASE}/api/auth/login", json={"identifier": ADMIN_EMAIL, "password": PASSWORD}, timeout=30)
     assert r.status_code == 200, r.text
     return r.json().get("token") or r.json().get("access_token")
 

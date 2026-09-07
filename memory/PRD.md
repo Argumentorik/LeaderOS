@@ -28,6 +28,13 @@ Hinweis: Während Fal-Produktion KEINE Backend-Dateien ändern (Hot-Reload killt
 6. **Code-Review-Reste**: große Komponenten splitten (`OnboardingPage`, `AnalysisResults`, `VoiceSparringModal`, `ChallengersPage`, `AdminPage`).
 
 ## Deployed Features
+- [x] **[Iter 164 · 07.09.26] CODE-REVIEW-FIXES (Testing-Agent Frontend `iteration_164.json` + Selbsttest Onboarding/PDF)**
+  - **Geprüft & falsch-positiv**: kein `eval()` im Backend (Treffer = „retri**eval**“), 0 `react-hooks/exhaustive-deps`-Warnungen im gesamten `src/` (ESLint-Lauf), 0 undefinierte Variablen (pyflakes/ESLint `no-undef`), localStorage enthält KEIN Auth-Material (httpOnly-Cookies) — nur UI-Präferenzen/Flags.
+  - **Behoben**: Test-Credentials in `test_iter162_*` über `TEST_ADMIN_EMAIL`/`TEST_ACCOUNT_PASSWORD`; `render_strategy_pdf` in `_make_styles/_build_cover/_section_title/_build_generic_section` zerlegt; Preis-Tippfehler „4.977 EUR“ → „4.797 EUR“ (Mission-Upsell).
+  - **Komponenten gesplittet**: `ChallengersPage` 497→152 (`components/challengers/{ChallengerCards,ChallengerChat,ChallengerResult}` + `lib/challengerSpeech`), `AdminPage` 424→~150 (`AdminOverviewCards`, `AdminToolSections`), `AnalysisResults` 599→206 (`AnalysisAtoms`, `TheoryAnswerView`, `AnalysisPrimaryCards`, `AnalysisMagicBoxes`), `OnboardingPage` 622→~460 (`OnboardingIntroSteps`: WelcomeStep, FeaturesStep), `VoiceSparringModal` 635→534 (`VoiceSparringParts`), `KnowledgeSources` → `KnowledgeSourcesList` + `STRINGS`-Tabelle (Komplexität 42 → klein).
+  - **Nicht angefasst (bewusst)**: `routes/auth.py` (register/login/google_session/update_profile) — Auth-Code wird nur in einem eigenen, abgesicherten Durchgang refaktoriert. `VoiceSparringModal` hat aktuell KEINEN Einstiegspunkt in der App (verwaist, seit vor Iter 162) — Entscheidung offen: einbinden (Tools/Argumentations-Prep) oder entfernen.
+  - Challenger „Beenden & Feedback“ zeigt jetzt Spinner „Wird ausgewertet…“ (LLM-Scoring ~25 s).
+
 - [x] **[Iter 163 · 07.09.26] DASHBOARD ENTSCHLACKT „weniger ist mehr“ (Testing-Agent Frontend 7/7 `iteration_163.json`)**
   - Reihenfolge: Header (Gruß, Tier, KI-Coach, Credits, Streak) → `ActionInbox` (**startet zugeklappt**, sessionStorage `leaderos_action_inbox_open`) → **eine Aktion** „Heute · Dein nächster Schritt“ → **Fortschritt** (3 Stat-Karten + Level) → **„Mehr“-Trenner** (`DashboardMore`, testid `dashboard-more-toggle`, Zähler, localStorage `wladbot_dashboard_more_open`). Dahinter: Wlads Guide, Argumentations-Prep, Lern-Videos, Quick Actions, Workspaces, Upsell, Motivation, Events, Referral, WladHub-Diagnose. Seitenhöhe zugeklappt ~830 px statt ~2.300 px.
   - `SmartConsultationBanner`: „Accelerator“ → „Leadership OS PLUS“ (Wording kanonisch).

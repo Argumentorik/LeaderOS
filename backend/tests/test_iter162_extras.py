@@ -20,7 +20,11 @@ BASE = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001").rstrip("
 _UA = {"User-Agent": "iter162-tests/1.0"}
 
 
-def _login(identifier="test@test.com", password="test123"):
+ADMIN_EMAIL = os.environ.get("TEST_ADMIN_EMAIL", "test@test.com")
+PASSWORD = os.environ.get("TEST_ACCOUNT_PASSWORD", "test123")  # Seed-Testkonto, kein Produktionsgeheimnis
+
+
+def _login(identifier=ADMIN_EMAIL, password=PASSWORD):
     r = requests.post(f"{BASE}/api/auth/login", json={"identifier": identifier, "password": password}, timeout=30)
     assert r.status_code == 200, r.text
     return r.json()["token"]

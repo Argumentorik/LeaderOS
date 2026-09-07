@@ -1,0 +1,62 @@
+{
+  "summary": "Iter 164 REFACTOR regression testing. 4 of 6 scenarios PASS; 1 CRITICAL regression on Onboarding; 1 NOT TESTABLE (Voice Sparring — modal has no active entry point in codebase; import of VoiceSparringModal is orphaned).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "OnboardingPage",
+        "issue": "CRITICAL REFACTOR REGRESSION: OnboardingPage.js references <WelcomeStep .../> (line 169) and <FeaturesStep .../> (line 172) but never imports them. Console throws 'ReferenceError: WelcomeStep is not defined at OnboardingPage'. The refactor extracted these components to /components/onboarding/OnboardingIntroSteps.js but the import statement is missing. Result: /onboarding renders blank/errors for step 0 and step 1. All onboarding-* testids (onboarding-wlad-portrait, onboarding-welcome-video, onboarding-video-play, onboarding-video-duration, onboarding-start-btn, onboarding-progress, onboarding-features-step, feature-card-*, onboarding-trust-strip, onboarding-dsgvo-link, onboarding-features-next) are MISSING as a consequence.",
+        "selector": "/onboarding",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "VoiceSparringModal entry point",
+        "issue": "VoiceSparringModal (default export in components/simulations/VoiceSparringModal.js) is NOT imported anywhere else in the frontend (grepped 'import.*VoiceSparring' across src/ — only its own VoiceSparringParts import shows). No page/component wires it up. There is no button labeled 'Sparring'/'Voice Sparring' reachable from /tools, /simulations, /argumentation-prep (last redirects to /dashboard for logged in). Modal itself is presumably fine per code but cannot be reached — marking NOT TESTABLE per task instructions. Main agent should confirm this is expected or wire an entry point.",
+        "affected_selectors": ["voice-sparring-picker","sparring-persona-cfo","sparring-persona-board","sparring-persona-customer","sparring-persona-boss","sparring-persona-team"]
+      },
+      {
+        "flow": "Challenger endChallenge → result",
+        "issue": "Clicking end-challenge-btn on Jeff Bezos challenger with a substantive answer did not produce challenge-result within 60s in two attempts. POST /challengers/{id}/message with finish:true is expected to return {result:{...}}. This may be LLM latency or a backend issue on finish=true; not conclusively a refactor regression (wiring in ChallengersPage.js and ChallengerResult component looks correct). Recommend main agent check backend logs for /challengers/*/message?finish=true and consider extending client timeout / adding a loading state on end-challenge-btn."
+      },
+      {
+        "flow": "Video analysis results",
+        "issue": "NOT TESTABLE without recording a fresh video. standard@wladbot.test /missions has no pre-existing openable analysis surfacing data-testid=video-results in the UI. Refactor components (AnalysisAtoms, TheoryAnswerView, AnalysisPrimaryCards, AnalysisMagicBoxes) exist on disk and imports look correct via grep, but end-to-end render cannot be verified in this environment. Recommend seeding a mock analysis result."
+      }
+    ],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Challengers page renders: challengers-page + 8 challenger-<id> cards (bezos, musk, oprah, jobs, branson, sandberg, page, hastings) each with name, 'Schwer/Mittel' difficulty badge, 'Challenge starten'.",
+    "Click challenger-bezos → LoadingOverlay → challenger-chat with all sub-testids present: back-challengers-btn, tts-toggle, challenger-meeting-stage, meeting-self-tile, challenger-input, challenger-send-btn.",
+    "First assistant message renders. User bubble appears after send. end-challenge-btn appears after first user message. Assistant reply arrives within ~1-3s.",
+    "Admin (test@test.com) → /wlad-control-x7k9q2: admin-page renders. All expected testids present: stat-total-rev, stat-mrr, stat-arr, stat-installments, stat-total-users, stat-new-30d, stat-enterprise, stat-referrals, community-stats, tier-dist-card, enterprise-leads-card, referrals-card, recent-txs-card, rag-control-center, license-keys-manager, admin-rag-quicklink, knowledge-sources-toggle.",
+    "admin-rag-quicklink scrolls rag-control-center to top (rect.top ≈ 1px).",
+    "knowledge-sources-toggle expands, knowledge-dropzone + knowledge-file-input present, upload of 2 .md files → knowledge-upload-queue-summary shows '2/2 fertig', rows show '<n> Chunks' each, delete via knowledge-delete-<file>.txt (confirmed accepted).",
+    "Non-admin free@wladbot.test visiting /wlad-control-x7k9q2 is redirected to /dashboard.",
+    "Free user dashboard smoke: next-step-cta + dashboard-more-toggle still render (Iter 163 unchanged).",
+    "No new React key warnings observed. The single console error captured is the OnboardingPage ReferenceError above."
+  ],
+  "test_report_links": [],
+  "action_items": [
+    "URGENT: In /app/frontend/src/pages/OnboardingPage.js, add: `import { WelcomeStep, FeaturesStep } from '../components/onboarding/OnboardingIntroSteps';` (or whichever named exports OnboardingIntroSteps.js provides). Without this the entire /onboarding route is broken.",
+    "Confirm VoiceSparringModal wiring — either add an entry point (button in /tools or ArgumentationPrepModal StrategyResultView) or acknowledge as unused so tests can be marked NOT TESTABLE.",
+    "Investigate slow / missing challenge-result on end-challenge-btn (finish:true endpoint) — 60s timeout observed twice; add explicit loading state on the button or lengthen server-side scoring reliability.",
+    "Consider adding a seeded mock analysis result so the AnalysisResults refactor can be regression-tested without live recording."
+  ],
+  "critical_code_review_comments": [
+    "OnboardingIntroSteps refactor is a broken import — should have been caught by a smoke render of /onboarding before commit. Recommend eslint rule 'no-undef' + a CI smoke test for each protected route.",
+    "VoiceSparringParts export split looks fine (PersonaPicker + EscalationBadge + STATE_COPY + DEFAULT_PERSONAS all present) but the parent modal appears orphaned in the app graph.",
+    "ChallengersPage.js is now compact (153 lines) and readable after the split — good refactor.",
+    "AdminPage sections are correctly re-composed via AdminOverviewCards + AdminToolSections; testid contract preserved."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "67% (4/6 scenarios fully green; 1 CRITICAL bug; 1 NOT TESTABLE)"},
+  "test_credentials": "standard@wladbot.test / test123, test@test.com / test123 (admin), free@wladbot.test / test123",
+  "seed_data_creation": "Uploaded 2 test knowledge files (test_kb_alpha.md, test_kb_beta.md) and deleted both via UI — DB state clean.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes the OnboardingPage import, retest /onboarding steps 0→1→2 for testid contract (see task list). Backend has aggressive login rate limiting — sleep 3-5s between logins. Auth via POST /api/auth/login {identifier,password}. Set localStorage.wladbot_token + wladbot_onboarding_done=1 + cookie_consent=necessary + wladbot_first_tour_done=1 to bypass overlays. Cookie banner and support popup (Nein danke) still show. For /wlad-control-x7k9q2 use test@test.com. Challenger finish endpoint may be slow — allow ≥60s for challenge-result.",
+  "rca of the issue": "OnboardingPage.js was refactored to extract WelcomeStep and FeaturesStep sub-components into /components/onboarding/OnboardingIntroSteps.js, but the corresponding `import { WelcomeStep, FeaturesStep } from '../components/onboarding/OnboardingIntroSteps'` line was never added. JSX `<WelcomeStep .../>` at line 169 and `<FeaturesStep .../>` at line 172 therefore reference undefined identifiers. Reproduction: (1) login any user, (2) visit /onboarding, (3) console shows 'ReferenceError: WelcomeStep is not defined at OnboardingPage'; the page renders no step 0/1 content and all onboarding-* testids are absent. Fix: add the missing named import statement matching whatever OnboardingIntroSteps.js actually exports (verify export names)."
+}
