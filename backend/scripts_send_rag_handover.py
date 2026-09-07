@@ -37,7 +37,7 @@ PIPELINE = [
     ("🎤", "Voice-Framework-Map",
      "Phonetische Fehler-Aussprachen werden gemappt: " + LOW + "sexier" + HIGH + " → SEXIER-Argumentation, " + LOW + "loguse" + HIGH + " → Logos, " + LOW + "sechs P" + HIGH + " → 6P-Modell. Wlad kann jetzt fragen wie er will — der Bot versteht."),
     ("⚡", "Lokales Embedding (384-dim)",
-     "Jede Query wird binnen ~10 ms in einen 384-dimensionalen Vektor umgewandelt — komplett auf unserem Server, ohne OpenAI oder Voyage. Kein Datentransfer USA, kein API-Cost. DSGVO-safe."),
+     "Jede Query wird binnen ~10 ms in einen 384-dimensionalen Vektor umgewandelt — komplett auf unserem Server, ohne externen Embedding-Anbieter. Kein Datentransfer USA, kein API-Cost. DSGVO-safe."),
     ("🔍", "Hybrid-Search",
      "Zwei Suchen parallel: (1) Semantische Ähnlichkeit über Cosine-Distance, (2) Keyword-Scan für Eigennamen wie " + LOW + "SEXIER" + HIGH + ". Reciprocal Rank Fusion kombiniert beide → robuster als jeder Einzelweg."),
     ("📌", "High-Priority-Chunks",

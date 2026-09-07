@@ -544,10 +544,10 @@ def invalidate_caches(reason: str = "") -> dict[str, int]:
 
 def rag_status() -> dict[str, Any]:
     """Health-check for /api/rag-status or admin dashboards."""
-    from services_embeddings import EMBED_MODEL_NAME, EMBEDDING_DIM, model_loaded
+    from services_embeddings import EMBED_MODEL_NAME, EMBED_PROVIDER, EMBEDDING_DIM, model_loaded
     return {
         "configured": True,
-        "provider": "local",
+        "provider": EMBED_PROVIDER,
         "model": EMBED_MODEL_NAME,
         "dim": EMBEDDING_DIM,
         "model_loaded": model_loaded(),

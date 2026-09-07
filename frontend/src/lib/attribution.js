@@ -8,6 +8,8 @@
  * LAST touch updates whenever new campaign params arrive. Sent to the backend
  * at signup / license activation and stored on the user record.
  */
+import { capture } from './analytics';
+
 const KEY = 'wladbot_attribution_v1';
 const FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
   'gclid', 'fbclid', 'ttclid', 'msclkid', 'li_fat_id', 'via', 'ref'];
@@ -26,6 +28,7 @@ export const captureAttribution = () => {
       landing: (window.location.pathname + window.location.search).slice(0, 300),
       referrer: (document.referrer || '').slice(0, 300),
     };
+    if (found.utm_source === 'seo') capture('seo_cta_click', { ...found, landing: stamp.landing, referrer: stamp.referrer });
     let record = null;
     try { record = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { record = null; }
     if (record?.first_touch) {

@@ -1,5 +1,5 @@
 """Iter 105 — Local RAG (fastembed) regression tests.
-Tests migration from Voyage AI to local sentence-transformers MiniLM-L12-v2.
+Tests the local sentence-transformers MiniLM-L12-v2 embedding path (384-dim).
 """
 import os
 import sys

@@ -37,7 +37,7 @@ HIGH = "\u201C"  # "
 FEATURES = [
     ("🎬  Lern-Videos", "11 Kurse (Rhetorik, Führung, Coaching, Storytelling …). Prelaunch-gesperrt mit " + LOW + "🔓 Upgrade auf Premium" + HIGH + "-CTA. Zentral entsperrbar via env PRELAUNCH_VIDEO_LOCK=0 sobald deine Vimeo-Uploads live sind."),
     ("🎯  Godmode Dashboard", "Aufgeräumtes Cockpit mit ActionInbox, Fortschritts-Rings, Streak-Tracker, Dark-Mode. Alle Sidebar-Bugs gefixt."),
-    ("🧠  Wlad-Knowledge (RAG)", "7 400+ Chunks aus deinem Content lokal via paraphrase-multilingual-MiniLM-L12-v2 embedded (384 dim, Voyage-frei, DSGVO-friendly). Admin-UI unter /admin → Knowledge lässt dich neue Quellen live nachreichen."),
+    ("🧠  Wlad-Knowledge (RAG)", "7 400+ Chunks aus deinem Content lokal via paraphrase-multilingual-MiniLM-L12-v2 embedded (384 dim, kein externer Embedding-Anbieter, DSGVO-friendly). Admin-UI unter /admin → Knowledge lässt dich neue Quellen live nachreichen."),
     ("🎙️  Voice-Modus", "Whisper-STT + ElevenLabs-TTS + Framework-Mapping: Phonetische Varianten (" + LOW + "sexier" + HIGH + ", " + LOW + "loguse" + HIGH + ", " + LOW + "pathus" + HIGH + ") werden automatisch auf deine Frameworks gemappt. Kurze/unklare Aufnahmen bekommen den " + LOW + "Bitte deutlicher sprechen" + HIGH + "-Hint."),
     ("🎧  Zero Audio-Overlap", "Globaler AudioBus stoppt JEDE aktive Stimme (TTS, Challenger, Voice-Mode) beim Seitenwechsel — kein Bleed mehr zwischen Routes."),
     ("🥊  Challengers", "8 CEO-Personas (Bezos, Musk, Oprah, Jobs, Branson, Sandberg, Page, Hastings) mit individuellen ElevenLabs-Stimmen, Meeting-Stage-UI."),

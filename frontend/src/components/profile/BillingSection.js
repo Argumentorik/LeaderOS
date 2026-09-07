@@ -18,8 +18,8 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const TIER_LABEL = {
   free: 'Free',
-  standard: 'Standard · 997€/Jahr',
-  accelerator: 'Accelerator · 4.797€/Jahr',
+  standard: 'Leadership OS · 997€/Jahr',
+  accelerator: 'Leadership OS PLUS · 4.797€/Jahr',
   enterprise: 'Enterprise',
 };
 

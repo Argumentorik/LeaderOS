@@ -1,3 +1,6 @@
+> **⚠️ HISTORISCH.** Die RAG-Checks unten (externer Embedding-Key in `.env`, `match_wladbot` in `chat.py`) gelten nicht mehr: Embeddings laufen lokal (`services_embeddings.py`, 384 dim), Konsistenz-Check via `GET /api/rag-status`. Aktuelle Referenz: `memory/RAG_SYSTEM.md`.
+
+
 # 🎯 EMERGENT POD ↔ CLAUDE CODE ALIGNMENT (Iter 82 Final)
 
 **Date**: 2026-02 · **Source**: Emergent Pod (`main` branch, no `origin` remote)  

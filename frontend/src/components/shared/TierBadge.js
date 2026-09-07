@@ -25,14 +25,14 @@ const CONFIG = {
     border: 'border-[#6B8A00]/20 dark:border-[#BFFF00]/20',
   },
   standard: {
-    label: 'Leadership System',
+    label: 'Leadership OS',
     icon: Rocket,
     bg: 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00]',
     text: 'text-[#0A0A0A]',
     border: 'border-transparent',
   },
   accelerator: {
-    label: 'Accelerator',
+    label: 'Leadership OS PLUS',
     icon: Crown,
     bg: 'bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E]',
     text: 'text-[#BFFF00]',

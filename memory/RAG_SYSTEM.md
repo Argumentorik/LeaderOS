@@ -1,5 +1,8 @@
 # Leader-OS · RAG System — Vollständige Dokumentation
-_Stand: Iter 121 · 22.07.2026_
+_Stand: Iter 162 · 07.09.2026 — ein einziger Embedding-Weg (lokal), kein externer Anbieter, kein Embedding-Key_
+
+> **Konsistenz-Check live:** `GET /api/rag-status` → `provider`, `model`, `dim`, `chunks`, `store_dim`, `consistent`.
+> Admin-Sicht: `GET /api/admin/rag/local-status` (zusätzlich `dim_ok`, Quellen, letzter Ingest, Live-Probe).
 
 > **TL;DR** — Leader-OS nutzt ein **komplett lokales, DSGVO-freundliches
 > Retrieval-Augmented-Generation-System**. Wlads gesamter Content (Kurse,
@@ -16,10 +19,11 @@ _Stand: Iter 121 · 22.07.2026_
 
 ## 1 · Warum lokales RAG?
 
-Wir haben in Iter 116 bewusst **Voyage AI + OpenAI-Embeddings entfernt** und
-zu lokalen Embeddings gewechselt. Gründe:
+Wir haben in Iter 116 bewusst **alle externen Embedding-APIs entfernt** und
+zu lokalen Embeddings gewechselt. Seit Iter 162 gibt es im Code, in der
+Konfiguration und in der Doku keinen externen Embedding-Anbieter mehr. Gründe:
 
-| Kriterium | Voyage/OpenAI (vorher) | Lokal (heute) |
+| Kriterium | Externe Embedding-API (vorher) | Lokal (heute) |
 |---|---|---|
 | Kosten pro Ingest | ~€120 für 7 400 Chunks | **€0** |
 | Kosten pro Query | ~€0,00015 pro Frage | **€0** |
@@ -28,7 +32,7 @@ zu lokalen Embeddings gewechselt. Gründe:
 | Vendor-Lock-in | ❌ | ✅ |
 | Offline-fähig | ❌ | ✅ |
 
-**Trade-off:** Das lokale Modell ist ~5 % schwächer als `voyage-2` auf
+**Trade-off:** Das lokale Modell ist ~5 % schwächer als große API-Modelle auf
 englischen Fach-Benchmarks. Auf deutschem Wirtschaftsdeutsch (Wlads
 Kernsprache) ist es **gleichwertig** und deutlich schneller.
 
@@ -105,7 +109,7 @@ Kernsprache) ist es **gleichwertig** und deutlich schneller.
 
 **Modell:** `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
 **Library:** `fastembed` (0.5.x) mit ONNX-Runtime — CPU-only, keine GPU nötig.
-**Dimensionen:** **384** (vorher 1024 Voyage / 1536 OpenAI-ada)
+**Dimensionen:** **384** (Alt-Chunks mit anderer Dimension werden beim Ingest automatisch verworfen und neu eingebettet)
 **Loading:** Lazy beim ersten API-Call, `_load_model()` in
 `services_embeddings.py`, RSS-Impact ~600 MB nach Load.
 **Sprachen:** 50+ (verifiziert für Deutsch, Englisch, Spanisch, Französisch)

@@ -1,10 +1,12 @@
-# Leader-OS robots policy
-# Allow all friendly crawlers (search engines + LLMs), block API + auth-only routes from indexing.
-# Iter 92.40 — AEO/GEO optimization: explicitly ALLOW LLM crawlers so ChatGPT,
-# Perplexity, Claude, Gemini etc. can cite leaderos.de in answers.
+# Leader-OS robots policy (leaderos.de)
+# Öffentliche Seiten für Suchmaschinen UND Antwort-Maschinen (ChatGPT, Perplexity, Claude, Gemini, Copilot) freigeben.
+# App-Routen (nur mit Login) und API werden nicht indexiert.
 
 User-agent: *
 Allow: /
+Allow: /fragen/
+Allow: /wlad-jachtchenko/
+Allow: /kurse-uebersicht/
 Allow: /login
 Allow: /signup
 Allow: /for-teams
@@ -15,8 +17,9 @@ Allow: /datenschutz
 Allow: /agb
 Allow: /widerruf
 Allow: /llms.txt
+Allow: /seo/
 
-# Authenticated areas — never index, never follow
+# Authentifizierte Bereiche
 Disallow: /dashboard
 Disallow: /chat
 Disallow: /tools
@@ -30,6 +33,9 @@ Disallow: /my-path
 Disallow: /progress
 Disallow: /community
 Disallow: /coaching
+Disallow: /kurse
+Disallow: /lern-videos
+Disallow: /video-guide
 Disallow: /downloads
 Disallow: /referral
 Disallow: /enterprise
@@ -37,42 +43,37 @@ Disallow: /challenge
 Disallow: /profile
 Disallow: /payment-success
 Disallow: /onboarding
+Disallow: /daily-checkin
+Disallow: /leader-diagnose
 Disallow: /auth/
+Disallow: /m/
+Disallow: /f/
 
-# API routes — never index
+# API
 Disallow: /api/
 
-# Admin — never index (path is also non-guessable but defense in depth)
+# Admin
 Disallow: /wlad-control-x7k9q2
 
-# ── Search-engine specific tuning ─────────────────────────────────────────
+# ── Suchmaschinen ─────────────────────────────────────────────────────────
+# Kein Crawl-delay für Bing: ChatGPT-Search, Copilot und DuckDuckGo sitzen auf dem Bing-Index.
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
 
 User-agent: Googlebot-Image
 Allow: /
 
 User-agent: bingbot
-Crawl-delay: 5
+Allow: /
 
 User-agent: DuckDuckBot
 Allow: /
 
-User-agent: YandexBot
-Crawl-delay: 10
-
-# ── LLM / AI crawlers — EXPLICITLY ALLOWED for AEO/GEO ────────────────────
-# These bots feed LLM answer engines (ChatGPT, Perplexity, Claude, Gemini).
-# Allowing them means leaderos.de can be cited as a source in AI answers.
-
-# OpenAI / ChatGPT
+# ── KI-/Antwort-Crawler — explizit erlaubt (AEO/GEO) ─────────────────────
 User-agent: GPTBot
 Allow: /
 Disallow: /api/
 Disallow: /dashboard
-Disallow: /chat
-Disallow: /profile
 
 User-agent: ChatGPT-User
 Allow: /
@@ -80,13 +81,6 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-# Common Crawl (feeds many LLMs incl. Anthropic, Mistral)
-User-agent: CCBot
-Allow: /
-Disallow: /api/
-Disallow: /dashboard
-
-# Anthropic Claude
 User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
@@ -98,36 +92,50 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
-# Google Bard / Gemini (separate from search Googlebot)
 User-agent: Google-Extended
 Allow: /
 Disallow: /api/
 Disallow: /dashboard
 
-# Perplexity
+User-agent: Google-CloudVertexBot
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
-# Apple AI (training data)
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
 User-agent: Applebot-Extended
 Allow: /
 
-# Meta / Llama
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: MistralBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+
 User-agent: FacebookBot
 Allow: /
 
 User-agent: meta-externalagent
 Allow: /
 
-# DuckDuckGo AI
-User-agent: DuckAssistBot
-Allow: /
-
-# Microsoft Copilot
 User-agent: cohere-ai
 Allow: /
 
-# ── Blocked: aggressive SEO scrapers (no value-add) ───────────────────────
+# ── SEO-Scraper ohne Nutzen ──────────────────────────────────────────────
 User-agent: AhrefsBot
 Disallow: /
 
@@ -143,5 +151,4 @@ Disallow: /
 User-agent: PetalBot
 Disallow: /
 
-# Sitemap reference
 Sitemap: https://leaderos.de/sitemap.xml

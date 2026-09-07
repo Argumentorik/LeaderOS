@@ -47,14 +47,14 @@
 ### Einheitliche Patterns ✅
 - **Single LLM Key**: alle Routen `EMERGENT_LLM_KEY` (kein Vendor-Lockin, Key-Budget global)
 - **Single Model**: alle nutzen `openai/gpt-5.2` (keine Mixed-Quality)
-- **RAG Pipeline**: 4 wichtigsten content-Surfaces (chat/playbooks/video/simulations) nutzen einheitlich Voyage-3 + Supabase chunks (matching threshold 0.60)
+- **RAG Pipeline**: alle Content-Surfaces (chat/playbooks/video/simulations/voice) nutzen einheitlich das lokale Hybrid-RAG (MiniLM 384 dim + Keyword-RRF, `rag_chunks` in MongoDB, Threshold 0.40)
 - **Session Memory**: jeder Agent hat eindeutige session_id für conversation continuity
 - **Error Handling**: alle wrappen `await chat.send_message(...)` in try/except → fallback zu generic Wlad-Quote
 - **JSON Parse**: alle Agents die JSON erwarten nutzen `services_ai_parse.parse_ai_json()` (defensive)
 
 ### Backlog (Polish, kein Blocker)
 - **Cross-Agent Memory**: aktuell sieht der Playbook-Agent nicht was der Chat-Agent gesagt hat. Future Iter könnte einen "User Context Vector" via Supabase aufbauen.
-- **RAG Cache**: bei 10k user mit ~3 chat-msgs/day = 30k Voyage-Embed-Calls/Tag. Empfehlung: Redis-cache embeds für identische queries (60s TTL).
+- **RAG Cache**: Embeddings sind lokal (0 € pro Query); Query-Cache (30 min TTL, 1024 Einträge) ist In-Process. Bei mehreren Workern wäre ein geteilter Redis-Cache sinnvoll.
 
 ---
 

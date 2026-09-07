@@ -179,7 +179,7 @@ Direkt nach den Meta-Tags im `<head>` einfügen — **das ist der AEO-Power-Boos
           "name": "Wie funktioniert die KI-Analyse?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Die Diagnose basiert auf GPT-4o + 1.605 spezifischen Wissens-Chunks aus Wlads Büchern, Live-Kursen und Frameworks (RAG-System mit Voyage-3 Embeddings). Keine generische KI — sondern Wlad-spezifische Bewertung."
+            "text": "Die Diagnose basiert auf GPT + über 7.400 spezifischen Wissens-Chunks aus Wlads Büchern, Live-Kursen und Frameworks (lokales RAG-System, Embeddings auf eigenen Servern). Keine generische KI — sondern Wlad-spezifische Bewertung."
           }
         }
       ]

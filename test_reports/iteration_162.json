@@ -1,0 +1,32 @@
+{
+  "summary": "Iter 162 verified — RAG local-only (Voyage removed), bulk knowledge upload backend, SEO/AEO static pages, tier label rename to Leadership OS / Leadership OS PLUS. Ran existing 9 backend pytest (all pass) + wrote 8 new extras backend tests (all pass) covering health, admin/local-status, .exe reject (422), >2MB reject (413), md/txt upload+delete round-trip, golden-check PASS, public seo pages served static, robots/sitemap/llms.txt content. Frontend UI: SEO pages /fragen/, /wlad-jachtchenko/, /kurse-uebersicht/ verified (title, canonical=https://leaderos.de/<slug>/, hreflang de-DE/de-AT/de-CH/x-default, JSON-LD @graph, preview host JS-guard injects noindex,nofollow meta, no horizontal overflow at 390/1920, /fragen 301→/fragen/, 10 Kurse + 72 Folgen listed). CTA seo-cta-header click → /login preserves utm_source=seo&utm_medium=organic&utm_campaign=fragen&utm_content=header and login form renders. Tier labels verified via /profile: standard@wladbot.test sidebar+header badge shows 'LEADERSHIP OS' (no 'Leadership System'/'STANDARD' tier tokens); accelerator@wladbot.test shows 'LEADERSHIP OS PLUS' with billing line exactly 'Aktueller Plan: Leadership OS PLUS · 4.797€/Jahr' in Konto tab. Admin Knowledge section on /wlad-control-x7k9q2: knowledge-sources-toggle expands, knowledge-dropzone present, knowledge-file-input has 'multiple' attribute — CONFIRMED. Bulk-upload UI end-to-end (queue+per-file status) could NOT be fully driven via Playwright set_input_files (queue element never rendered, indicating React onChange may not fire for the hidden input under Playwright); backend flow is fully covered by pytest (multi-file, reject invalid, reject oversize, list, delete round-trip). Recommend main agent self-test bulk-upload manually or check onFile handler firing.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Admin Knowledge bulk upload UI", "issue": "Playwright set_input_files on data-testid='knowledge-file-input' (hidden input, className 'hidden') did not trigger React onChange — knowledge-upload-queue never rendered and no upload API call was made. Backend endpoint works via curl/pytest, and the file-chooser approach hit environment timeout. Needs manual verification.", "affected_selectors": ["[data-testid=knowledge-file-input]", "[data-testid=knowledge-upload-queue]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter162_seo_rag.py",
+    "/app/backend/tests/test_iter162_extras.py",
+    "/app/test_reports/pytest/iter162_extras.xml"
+  ],
+  "action_items": [
+    "Manually verify admin bulk-upload UI (queue progress, per-file status, success toast, sources list refresh) once — backend already fully covered."
+  ],
+  "critical_code_review_comments": [
+    "KnowledgeSources.js line 91: onFile sets e.target.value='' BEFORE calling addFiles(files); this is fine because addFiles receives a reference to the FileList captured before reset, but under some browsers/automations the change event may be swallowed if the reset happens synchronously. Consider calling addFiles(files) first, then clearing the input.",
+    "Cosmetic: /kurse-uebersicht/ page uses 'Folgen' internally but tests looked for 'Episoden' — align terminology across marketing copy if 'Episoden' is the canonical CTA wording."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter162_extras.py (new)"
+  ],
+  "success_rate": {"backend": "100% (17/17: 9 iter162 + 8 extras)", "frontend": "~90% (SEO pages + tier labels + admin section presence verified; only bulk-upload E2E queue interaction unverified via automation)"},
+  "test_credentials": "test@test.com / test123 (admin), standard@wladbot.test / test123, accelerator@wladbot.test / test123",
+  "seed_data_creation": "Backend pytest created & deleted TEST_iter162_a.txt, TEST_iter162_b.txt in custom sources (cleaned up). Any UI-attempted TEST_iter162_ui_* did NOT get created (queue never fired).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend RAG-local (dim=384, chunks>7480), Voyage fully removed. SEO pages served statically by CRA dev server from frontend/public with JS-guard for noindex on non-leaderos.de hosts (creates a SECOND meta name=robots — use querySelectorAll). Tier labels are pure display renames — accounts still use 'standard'/'accelerator' internally. Bulk-upload API path: POST /api/admin/rag/upload-knowledge-file (multipart: file+course_title), max 2MB → 413, wrong ext → 422, .md filenames normalised to .txt on server. Auth via localStorage 'wladbot_token' Bearer JWT; login endpoint accepts {identifier,password}. Frontend .env REACT_APP_BACKEND_URL is the SAME host for both API and static assets (behind ingress)."
+}

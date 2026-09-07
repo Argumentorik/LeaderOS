@@ -29,11 +29,15 @@ async def local_rag_status(request: Request):
     # Live probe: does retrieval actually return grounded context right now?
     probe = await retrieve_context("Was ist das SEXIER-Modell?")
     status = rag_status()
+    sample = await db.rag_chunks.find_one({}, {"embedding": 1})
+    store_dim = len((sample or {}).get("embedding") or []) if sample else None
     return {
         "chunks": count,
         "sources": sources,
         "last_job": job,
         "engine": status,
+        "store_dim": store_dim,
+        "dim_ok": store_dim is None or store_dim == status["dim"],
         "vector_cache_loaded": _LOCAL_CACHE.get("matrix") is not None,
         "retrieval_ok": bool(probe["rag_active"]),
         "retrieval_chunks": probe["chunks_count"],
@@ -154,7 +158,7 @@ async def golden_check(request: Request):
 # ── GODMODE Zero-Touch (Iter 119 · Mert: "ich will nichts machen") ───────────
 async def ensure_rag_ready():
     """Self-healing knowledge base: on startup, if the vector store is empty
-    or holds legacy-dimension vectors (Voyage era), auto-ingest the default
+    or holds vectors of a different dimension (older model), auto-ingest the default
     knowledge pack. Zero manual steps after any deploy."""
     try:
         await asyncio.sleep(10)  # let the app settle + embedding model preload

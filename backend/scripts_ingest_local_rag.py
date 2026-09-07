@@ -1,11 +1,11 @@
 """Ingest Wlad's unchunked course material into the local Mongo vector store.
 
 Embeddings: LOCAL multilingual MiniLM (384-dim) via fastembed — no API keys,
-no rate limits (Iter 116: Voyage AI fully removed).
+no rate limits, no external embedding provider.
 
 Usage: python3 scripts_ingest_local_rag.py /tmp/unchunked/unchunked
 Idempotent: re-running replaces chunks per source_file. If the store still
-holds vectors with a different dimension (old Voyage era), it is wiped first.
+holds vectors with a different dimension (older model), it is wiped first.
 """
 import asyncio
 import hashlib
@@ -65,7 +65,7 @@ async def main(folder: str):
     t0 = time.time()
     db = AsyncIOMotorClient(os.environ["MONGO_URL"])[os.environ["DB_NAME"]]
 
-    # Dimension guard: wipe legacy vectors (Voyage 1024-dim) before re-ingest
+    # Dimension guard: wipe vectors of a different dimension before re-ingest
     sample = await db.rag_chunks.find_one({}, {"embedding": 1})
     if sample and len(sample.get("embedding") or []) != EMBEDDING_DIM:
         old = await db.rag_chunks.estimated_document_count()

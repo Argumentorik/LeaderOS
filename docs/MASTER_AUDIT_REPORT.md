@@ -1,3 +1,6 @@
+> **⚠️ HISTORISCHER AUDIT.** Abschnitte zu RAG/Embeddings (externer Anbieter, 1.605 Chunks, 1024 dim, Supabase) beschreiben den Stand vor Iter 116. Heute: lokales Hybrid-RAG (MiniLM 384 dim + Keyword-RRF), 7.400+ Chunks in MongoDB, kein Embedding-Key. Siehe `memory/RAG_SYSTEM.md`.
+
+
 # 🎯 LEADER-OS · MASTER AUDIT REPORT
 *Iter 92.33 · Juni 2026 · "As if first paying enterprise client tomorrow"*
 

@@ -1,4 +1,4 @@
-"""Local embedding service — replaces Voyage AI (Iter 116, Mert: "RAG ohne Voyage").
+"""Local embedding service — the ONLY embedding path (ingestion, search, admin uploads).
 
 Model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (384-dim)
 served in-process via fastembed/ONNX. No API keys, no rate limits, no external
@@ -13,6 +13,7 @@ import time
 
 logger = logging.getLogger("leaderos.embeddings")
 
+EMBED_PROVIDER = "local"
 EMBED_MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 EMBEDDING_DIM = 384
 

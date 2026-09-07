@@ -1,3 +1,6 @@
+> **⚠️ HISTORISCH (Stand Juni 2026).** RAG-Angaben in diesem Dokument (externer Embedding-Anbieter, Supabase-Chunks, 1024/3072-dim) sind überholt: Seit Iter 116 laufen Embeddings **lokal** (MiniLM, 384 dim, `rag_chunks` in MongoDB, kein Embedding-Key). Aktuelle Referenz: `README.md`, `memory/RAG_SYSTEM.md`, `docs/PRODUKT_UND_PREISE.md`.
+
+
 # 🎯 Leader-OS · Claude Code Handoff (Master Context)
 
 > **Quellen:** Iter 92.13 abgeschlossen 26.02.26 · PR #37 auf `mvpcode` gemerged · Stripe Live aktiv · Production: https://leader-os.de
@@ -43,7 +46,7 @@
 | Service | Key | Status |
 |---------|-----|--------|
 | Stripe (Payments) | `sk_live_…` | ✅ Live (Pod + Production) — Key rotiert 02.06.26 |
-| Voyage AI (Embeddings) | `pa-MVjuR…` | ✅ Live |
+| Voyage AI (Embeddings) | — | ❌ Entfernt (Iter 116) — Embeddings laufen lokal im Backend, kein Key |
 | Emergent LLM (GPT-5.2) | `sk-emergent-…` | ✅ Live |
 | Resend (Email) | `re_F2Du…` | ✅ Live (`reminders@leader-os.de` verifiziert) |
 | ElevenLabs (Voice) | `sk_aae1…` | ✅ Live |

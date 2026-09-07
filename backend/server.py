@@ -207,11 +207,18 @@ async def health_check() -> dict[str, str]:
 async def rag_health() -> dict:
     """Diagnostic: is the WladBot RAG knowledge layer wired up correctly?
 
-    Returns config flags + cache size. Does NOT expose secret values.
-    Embeddings run fully local (no external keys) since Iter 116.
+    Embeddings run fully local (no external provider, no keys). Reports the
+    active provider/model/dimension AND what is actually stored, so a drift
+    between engine and vector store is visible at a glance.
     """
     from services_rag import rag_status
-    return rag_status()
+    status = rag_status()
+    sample = await db.rag_chunks.find_one({}, {"embedding": 1})
+    store_dim = len((sample or {}).get("embedding") or []) if sample else None
+    status["chunks"] = await db.rag_chunks.estimated_document_count()
+    status["store_dim"] = store_dim
+    status["consistent"] = store_dim is None or store_dim == status["dim"]
+    return status
 
 
 # CORS: `allow_credentials=True` (needed for httpOnly session cookie) is INCOMPATIBLE

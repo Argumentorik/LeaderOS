@@ -16,9 +16,14 @@
         <meta name="keywords" content="KI Leadership, AI Leadership, Führungskräfte Training, KI für Manager, Leadership Kommunikation, Storytelling für Entscheider, EQ Training Führungskräfte, Leadership Management, Strategisches Denken, KI Coach, Führungstraining online, Leadership Skills, KI-native Führungskraft, Manager Coaching, Wlad Jachtchenko, Leadership Programm, Leadership OS, AI Coach Deutsch" />
         <meta name="author" content="Wlad Jachtchenko" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+        <meta name="google-site-verification" content="%REACT_APP_GSC_VERIFICATION%" />
+        <!-- Preview-/Staging-Hosts bleiben noindex (Google wertet per JS gesetzte robots-Metas aus). -->
+        <script>(function(){if(!/(^|\.)leaderos\.de$/.test(location.hostname)){var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m);}})();</script>
         <meta name="googlebot" content="index, follow" />
         <link rel="canonical" href="https://leaderos.de/" />
-        <link rel="alternate" hreflang="de" href="https://leaderos.de/" />
+        <link rel="alternate" hreflang="de-DE" href="https://leaderos.de/" />
+        <link rel="alternate" hreflang="de-AT" href="https://leaderos.de/" />
+        <link rel="alternate" hreflang="de-CH" href="https://leaderos.de/" />
         <link rel="alternate" hreflang="x-default" href="https://leaderos.de/" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
@@ -50,8 +55,11 @@
         <meta name="twitter:image:alt" content="Leader-OS — KI Leadership System" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <!-- STRUCTURED DATA — JSON-LD (Organization + Course + Person)       -->
-        <!-- Helps Google show rich snippets / knowledge panel                -->
+        <!-- STRUCTURED DATA — Entity-Graph (Organization + Person + WebSite + App) -->
+        <!-- Seiten-spezifisches Schema (FAQPage, Course) liegt NICHT hier:     -->
+        <!-- die Shell wird auf JEDER Route ausgeliefert. FAQ/Kurse/Person →    -->
+        <!-- statische Seiten /fragen/, /kurse-uebersicht/, /wlad-jachtchenko/  -->
+        <!-- (generiert von backend/scripts_seo_pages.py).                      -->
         <!-- ════════════════════════════════════════════════════════════════ -->
         <script type="application/ld+json">
         {
@@ -61,7 +69,13 @@
               "@type": "Organization",
               "@id": "https://leaderos.de/#organization",
               "name": "Leader-OS",
-              "alternateName": ["LeaderOS", "Leader OS", "WladBot"],
+              "legalName": "Argumentorik-Akademie GmbH",
+              "alternateName": [
+                "LeaderOS",
+                "Leader OS",
+                "WladBot",
+                "Argumentorik-Akademie"
+              ],
               "url": "https://leaderos.de",
               "logo": {
                 "@type": "ImageObject",
@@ -72,64 +86,65 @@
               "founder": {
                 "@id": "https://leaderos.de/#wlad"
               },
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Tölzer Str. 1",
+                "postalCode": "82031",
+                "addressLocality": "Grünwald",
+                "addressCountry": "DE"
+              },
+              "areaServed": [
+                "DE",
+                "AT",
+                "CH"
+              ],
+              "email": "support@leaderos.de",
               "sameAs": [
                 "https://www.linkedin.com/in/wladjachtchenko/",
-                "https://www.youtube.com/@WladTraining"
+                "https://www.youtube.com/@WladTraining",
+                "https://argumentorik.com/"
               ],
-              "description": "KI Leadership Trainingssystem für Führungskräfte — AI Coach, Video-Missionen, Storytelling für Entscheider und EQ-Training basierend auf der Leadership-Methodik von Wlad Jachtchenko."
+              "description": "KI-Leadership-Trainingssystem für Führungskräfte im DACH-Raum — KI-Coach, Video-Missionen mit KI-Analyse, Kurs-Bibliothek, Interaktiver Wlad — auf Basis der Methodik von Wlad Jachtchenko."
             },
             {
               "@type": "Person",
               "@id": "https://leaderos.de/#wlad",
               "name": "Wlad Jachtchenko",
-              "givenName": "Wlad",
+              "alternateName": [
+                "Wladislaw Jachtchenko"
+              ],
+              "givenName": "Wladislaw",
               "familyName": "Jachtchenko",
-              "jobTitle": "Leadership-Coach & Bestseller-Autor",
-              "description": "Top-Speaker und Coach für Storytelling für Entscheider, Verhandlung und Manipulation. Trainiert seit über 15 Jahren Führungskräfte aus DAX-Konzernen.",
-              "url": "https://leaderos.de",
-              "sameAs": [
-                "https://www.linkedin.com/in/wladjachtchenko/"
-              ]
-            },
-            {
-              "@type": "Course",
-              "name": "Leader-OS — KI Leadership Programm",
-              "description": "Persönlicher KI-Coach, 16 Video-Missionen mit KI-Bewertung, Rhetorik-Training für Entscheider und EQ-Entwicklung. Transformierendes 30-Tage Leadership-Programm.",
-              "provider": {
+              "jobTitle": [
+                "Rhetorik-Trainer",
+                "Leadership-Coach",
+                "Keynote-Speaker",
+                "Bestseller-Autor"
+              ],
+              "description": "Rhetorik-Trainer, Leadership-Coach, Keynote-Speaker und dreifacher SPIEGEL-Bestseller-Autor (Weiße Rhetorik, Dunkle Rhetorik, Die 5 Rollen einer Führungskraft). Gründer der Argumentorik-Akademie; trainiert seit 2007 Führungskräfte aus DAX-Konzernen und Mittelstand.",
+              "url": "https://leaderos.de/wlad-jachtchenko/",
+              "image": "https://leaderos.de/og-default.jpg",
+              "worksFor": {
                 "@id": "https://leaderos.de/#organization"
               },
-              "instructor": {
-                "@id": "https://leaderos.de/#wlad"
-              },
-              "inLanguage": "de",
-              "educationalLevel": "Professional",
-              "audience": {
-                "@type": "EducationalAudience",
-                "audienceType": "Führungskräfte, Manager, CEOs, Teamleads"
-              },
-              "offers": [
-                {
-                  "@type": "Offer",
-                  "name": "Leadership OS",
-                  "price": "997",
-                  "priceCurrency": "EUR",
-                  "availability": "https://schema.org/InStock",
-                  "category": "Leadership Training"
-                },
-                {
-                  "@type": "Offer",
-                  "name": "Leadership OS PLUS",
-                  "price": "4797",
-                  "priceCurrency": "EUR",
-                  "availability": "https://schema.org/InStock",
-                  "category": "Leadership Training + Coaching"
-                }
+              "knowsAbout": [
+                "Rhetorik",
+                "Führungskräfte-Coaching",
+                "Leadership-Training",
+                "Argumentation",
+                "Verhandlungsführung",
+                "Storytelling für Entscheider",
+                "Executive Presence",
+                "KI-Coaching für Führungskräfte"
               ],
-              "hasCourseInstance": {
-                "@type": "CourseInstance",
-                "courseMode": "online",
-                "courseWorkload": "PT30D"
-              }
+              "sameAs": [
+                "https://www.linkedin.com/in/wladjachtchenko/",
+                "https://www.youtube.com/@WladTraining",
+                "https://www.wladislaw-jachtchenko.com/",
+                "https://argumentorik.com/",
+                "https://www.penguin.de/autoren/wladislaw-jachtchenko/624791",
+                "https://argumentorik.podbean.com/"
+              ]
             },
             {
               "@type": "WebSite",
@@ -139,111 +154,42 @@
               "publisher": {
                 "@id": "https://leaderos.de/#organization"
               },
-              "inLanguage": "de-DE",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://leaderos.de/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
+              "inLanguage": "de-DE"
             },
             {
               "@type": "SoftwareApplication",
+              "@id": "https://leaderos.de/#app",
               "name": "Leader-OS",
               "applicationCategory": "EducationalApplication",
               "operatingSystem": "Web",
-              "offers": {
-                "@type": "Offer",
-                "price": "997",
-                "priceCurrency": "EUR"
-              }
-            },
-            {
-              "@type": "FAQPage",
-              "@id": "https://leaderos.de/#faq",
-              "mainEntity": [
+              "inLanguage": "de",
+              "author": {
+                "@id": "https://leaderos.de/#organization"
+              },
+              "offers": [
                 {
-                  "@type": "Question",
-                  "name": "Für wen ist Leader-OS geeignet?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Für alle, die klarer führen, sprechen und entscheiden wollen — von Foundern bis Executives. Manager, CEOs, Teamleads, Consultants und alle Führungskräfte aus DAX-Konzernen, Mittelstand und Tech-Scale-Ups profitieren von der KI-gestützten Coaching-Methodik."
-                  }
+                  "@type": "Offer",
+                  "name": "Kostenlos",
+                  "price": "0",
+                  "priceCurrency": "EUR",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://leaderos.de/login"
                 },
                 {
-                  "@type": "Question",
-                  "name": "Brauche ich Vorkenntnisse für Leader-OS?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Nein. Das System passt sich deinem Level automatisch an. Ein adaptiver Lernpfad führt dich vom Einstieg bis zum C-Level-Niveau."
-                  }
+                  "@type": "Offer",
+                  "name": "Leadership OS",
+                  "price": "997",
+                  "priceCurrency": "EUR",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://leaderos.de/coaching"
                 },
                 {
-                  "@type": "Question",
-                  "name": "Wie schnell sehe ich Ergebnisse mit Leader-OS?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Erste Veränderungen sind meist innerhalb der ersten 7 Tage spürbar — durch tägliches Training mit sofortigem, strukturiertem KI-Feedback zu echten Gesprächen, Präsentationen und Entscheidungen."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Ist Leader-OS nur Coaching oder Software?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Es ist ein hybrides System aus KI-Software, persönlichem Coaching (in PLUS- und Enterprise-Tiers) und Wlad Jachtchenkos erprobten Leadership-Frameworks wie SEXIER, Storytelling für Entscheider und den 10 Stufen des Zuhörens."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Was unterscheidet Leader-OS von klassischen Leadership-Coachings?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Leader-OS arbeitet mit deinem echten Verhalten — Speech-Recordings, Video-Analyse, Entscheidungs-Mustern. Nicht mit Theorie. Die KI gibt sofortiges, strukturiertes Feedback nach den Frameworks von Wlad Jachtchenko, 24/7 verfügbar."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Was kostet Leader-OS?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Leadership OS startet bei €997/Jahr (Stripe Checkout, sofort verfügbar). Leadership OS PLUS mit 1:1-Coaching kostet €4.797/Jahr (per persönlichem Sales-Call). Enterprise-Team-Lizenzen auf Anfrage. 30-Tage Geld-zurück-Garantie, Ratenzahlung möglich."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Welche Frameworks lehrt Leader-OS?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "SEXIER (Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal) als Standard-Argumentationsmuster für High-Stakes-Gespräche und Präsentationen. 10 Stufen des Zuhörens für C-Level-Kommunikation. Storytelling für Entscheider, Argumentorik, EQ-Training und Verhandlungsführung — alles aus der Methodik von Wlad Jachtchenko."
-                  }
-                }
-              ]
-            },
-            {
-              "@type": "HowTo",
-              "name": "Wie werde ich in 30 Tagen eine KI-native Führungskraft?",
-              "description": "Das Leader-OS 30-Tage Leadership-Programm trainiert systematisch deine drei Führungs-Schichten: KI (Denken), Rhetorik (Sprechen), EQ (Führen).",
-              "totalTime": "P30D",
-              "step": [
-                {
-                  "@type": "HowToStep",
-                  "name": "Diagnose deiner aktuellen Leadership-Skills",
-                  "text": "Starte mit der kostenlosen Leadership-Diagnose auf leadercheck.de — der 3-Layer-Test misst deinen Status in KI-Denken, Rhetorik und EQ."
-                },
-                {
-                  "@type": "HowToStep",
-                  "name": "Layer 1 (Tag 1-10): KI — Klare Strukturen",
-                  "text": "Trainiere strukturierte Analyse mit dem WladBot KI-Coach. Erkenne deine Denk- und Sprachmuster mit RAG-gestützten Feedback-Loops."
-                },
-                {
-                  "@type": "HowToStep",
-                  "name": "Layer 2 (Tag 11-20): Rhetorik — Klare Sprache",
-                  "text": "Übe Storytelling für Entscheider mit dem SEXIER-Framework. Reduziere Füllworte, schärfe Argumentationslogik, optimiere Storytelling per Live-Speech-Feedback."
-                },
-                {
-                  "@type": "HowToStep",
-                  "name": "Layer 3 (Tag 21-30): EQ — Klare Führung",
-                  "text": "Erlerne die 10 Stufen des Zuhörens. Trainiere emotionale Muster-Erkennung, Druck-Navigation und Vertrauens-Aufbau auf C-Level-Niveau."
+                  "@type": "Offer",
+                  "name": "Leadership OS PLUS",
+                  "price": "4797",
+                  "priceCurrency": "EUR",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://leaderos.de/coaching"
                 }
               ]
             }

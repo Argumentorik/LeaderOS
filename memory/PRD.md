@@ -6,15 +6,16 @@
 ## Stack
 React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + Resend (Emergent)
 
-## Tier System (Iter 57)
-| Tier | Price | Duration | Video-Analyse | 1:1 Calls | AI Coach |
-|------|------|----------|---------------|-----------|----------|
-| Free | €0 | Lifetime | ❌ | 0 | ❌ |
-| **Starter** (Video Lessons) | €199 einmalig | Lifetime | ❌ | 0 | ❌ |
-| **Standard** (Leadership System) | €997/Jahr | 365 Tage | ❌ | 0 | ✅ |
-| **Accelerator** 👑 | **€6.970** oder **12× €580,83** | 730 Tage | ✅ EXCLUSIVE | 6× | ✅ |
+## Tier System (kanonisch seit Iter 162 — Quelle: `docs/PRODUKT_UND_PREISE.md`, Code: `services_tier.TIER_CONFIG`)
+| Öffentlicher Name | Key | Preis | Inhalt |
+|------|------|------|------|
+| Kostenlos | `free` | €0 | KI-Coach mit Credits, Folge 1 je Kurs, 3 Runden Interaktiver Wlad |
+| **Leadership OS** | `standard` | €997/Jahr (2×/12× Raten) | komplette Plattform, Kurs-Bibliothek Standard, Interaktiver Wlad unbegrenzt |
+| **Leadership OS PLUS** | `accelerator` | €4.797/Jahr (Cal.com) | + PLUS-Kurse, 12 Einzelcoachings, Strategie-Session, Quartals-Reviews |
+| Enterprise | `enterprise` | auf Anfrage | Team-Lizenzen ab 5 Plätzen |
+Veraltet und nirgends mehr zu verwenden: „Starter €199“, „Accelerator €6.970“, „Leadership System“.
 
-## OFFEN nach Iter 155
+## OFFEN nach Iter 162
 0. ~~Coaching-Video s3~~ ERLEDIGT in Iter 158. (Historie:) s1 (Studio halbnah, eng) + s3-Audio/-Keyframe fertig; OmniHuman für s3 ist 5× in der **geteilten Emergent-Fal-Queue** verhungert (>40–120 min IN_QUEUE, während s1-Shots in 16 min liefen; Support: Account-weite Concurrency, keine Kosten für nicht gestartete Requests). Der Request `01a07a1a-…` ist als `shots[s3].fal_request` hinterlegt → **„Rendern“ im Admin holt das Ergebnis ab, sobald Fal liefert** (kein neuer Submit, keine Doppelkosten). Externer Watcher: `memory/tmp/fal_poll.py` (Log `fal_poll.log`). Alternativ: eigener Fal-Key in `FAL_KEY` (backend/.env) → direkte Queue ohne Fremdlast; danach `fal_request` per `shot-keyframes`/Text-Edit oder DB auf None setzen und neu rendern.
 1. **Interaktiver Wlad**: Beta gebaut & gesperrt (Iter 156). Nächste Schritte: Beta im Guide Studio für alle öffnen, wenn gewünscht; Latenz der Klonstimme hängt an der geteilten Fal-Queue (eigener `FAL_KEY` oder ElevenLabs-Klon mit Creator-Tier für <1 s).
 2. **Missionen (7 × ≈6 $) im Präsenz-Look neu produzieren** (Phase 2), **Challenge-Videos** (Phase 4, Umfang offen), **Admin-Upload-Maske für Kursfolgen** (API vorhanden).
@@ -22,7 +23,18 @@ React + Tailwind + Shadcn/UI | FastAPI + MongoDB | GPT-5.2 + Whisper + Stripe + 
 4. Alle Bullets aller 72 Folgen aus dem Drehbuch V01 ergänzen (aktuell nur Folge 1 je Kurs) — Drehbuch liegt dem Agenten nicht vor.
 Hinweis: Während Fal-Produktion KEINE Backend-Dateien ändern (Hot-Reload killt Jobs). Fal-OmniHuman-Queue kann 25–60+ min dauern (Timeout jetzt 60 min, Queue-Log alle 2 min).
 
+
+5. **SEO/AEO Folgearbeit**: GSC-Token in `REACT_APP_GSC_VERIFICATION` eintragen + Sitemap einreichen (Produktion); optional öffentliche Kurs-Route `/kurse` für Gäste; Wlad-Videos als `VideoObject` sobald öffentliche URLs stehen.
+6. **Code-Review-Reste**: große Komponenten splitten (`OnboardingPage`, `AnalysisResults`, `VoiceSparringModal`, `ChallengersPage`, `AdminPage`).
+
 ## Deployed Features
+- [x] **[Iter 162 · 07.09.26] VOYAGE-CLEANUP · WISSEN/DOKU-UPDATE (SHIPOS) · BULK-IMPORT · SEO/AEO DACH (Testing-Agent Backend 17/17 + Frontend ✓ `iteration_162.json`, Bulk-UI selbst verifiziert)**
+  - **Voyage vollständig raus**: `services_embeddings.EMBED_PROVIDER="local"`; Kommentare/Docstrings in `services_embeddings`, `rag_admin`, `scripts_ingest_local_rag`, Tests, Handover-Skripte, `RUNBOOK`, `PRODUCTION_READINESS`, `SENTRY_ALERTS`, `LEADERCHECK_COPY_PASTE_KIT`, `RAG_SYSTEM.md` bereinigt; historische Audits (`HANDOFF_TO_CLAUDE_CODE`, `EMERGENT_CLAUDE_ALIGNMENT`, `MASTER_AUDIT_REPORT`) mit „HISTORISCH“-Banner. **Konsistenz-Check**: `GET /api/rag-status` → `provider, model, dim, chunks, store_dim, consistent`; Admin `local-status` → `store_dim`, `dim_ok`. Store: 7.481 Chunks, alle 384-dim, keine Duplikate.
+  - **Wissen aus `aiporator/SHIPOS` (Branch `mvpcode`, öffentlich)**: importiert `WLAD_CANON.md` (12 Chunks, kanonische Frameworks/Bücher/Falschzitate) + `01-rhetorik-grundlagen.md` (6 Chunks). `wlad_corpus_v3.jsonl.gz` (607 Chunks) NICHT importiert — ~88 % Überlappung mit bestehendem Store. SHIPOS ist eine parallele Produktlinie (leader-os.de, Claude-Code); `docs/gtm/SEO_AEO_PLAYBOOK.md`, `SEO_KEYWORDS.md` als Vorlage genutzt.
+  - **Doku**: `README.md` (Funktionsumfang, RAG, SEO), neu `docs/PRODUKT_UND_PREISE.md` (eine Quelle der Wahrheit für Namen/Preise/Pakete), Tier-Labels im UI kanonisch (`TierBadge`: „Leadership OS“/„Leadership OS PLUS“; `BillingSection`).
+  - **Bulk-Import Wissen** (`KnowledgeSources.js`): `multiple`-Input + Drag&Drop-Zone, sequentielle Uploads, Fortschritt je Datei (Wartet → Lädt hoch → Extrahiert & bettet ein → Fertig/Fehler), Client-Validierung (Typ/2 MB) je Datei, Zusammenfassung „N/M fertig · Fehler“, Titel aus Dateiname, Liste leeren. testids `knowledge-dropzone`, `knowledge-upload-queue`, `knowledge-upload-item-<name>`, `knowledge-upload-status-<name>`.
+  - **SEO/AEO**: Generator `backend/scripts_seo_pages.py` → statisches HTML (ohne JS lesbar) `/fragen/` (FAQPage, 12 Q&A), `/wlad-jachtchenko/` (Person/ProfilePage, Bücher, Frameworks), `/kurse-uebersicht/` (ItemList + 10 Course mit Syllabus aus `course_content.COURSES`), `sitemap.xml` (hreflang de-DE/de-AT/de-CH/x-default). Sichtbarer Text == JSON-LD (gleiche Daten). `index.html`: Entity-Graph (Organization, Person, WebSite, SoftwareApplication+Offers), SearchAction/FAQPage/HowTo aus der Shell entfernt, hreflang DACH, `google-site-verification` via `REACT_APP_GSC_VERIFICATION`, Inline-Guard → `noindex` auf Nicht-`leaderos.de`-Hosts. `robots.txt` (KI-Crawler explizit erlaubt, kein Bing-Crawl-delay, SEO-Scraper geblockt), `llms.txt` (kanonische Definitionen, Falschzitate, Preise, Seiten). CTA-Tracking: Links `utm_source=seo…` → `attribution.js` feuert PostHog `seo_cta_click`. Shared CSS `public/seo/site.css`. **Nach Kurs-/Preisänderung Generator erneut ausführen.**
+  - Tests: `backend/tests/test_iter162_seo_rag.py` (9), `test_iter162_extras.py` (8, Testing-Agent).
 - [x] **[Iter 160/161 · 07.09.26] ADMIN-WISSEN 2 MB + TESTER-FEEDBACK-SCREENSHOT ABGEARBEITET (Testing-Agent Backend 9/9 + Frontend ✓, Retest ✓ `iteration_160/161.json`)**
   - **Wissens-Upload GODMODE**: `POST /api/admin/rag/upload-knowledge-file` (multipart, .txt/.md/.pdf/.docx, **max 2 MB**, lokale Extraktion via pypdf/python-docx, 413/422/403 sauber), gemeinsame Ingestion `_ingest_knowledge` (auch für den Text-Endpunkt; Limit 400 KB → 2 MB). Admin-UI `KnowledgeSources`: Datei-Input akzeptiert PDF/DOCX, Größen-Check + Label „max 2 MB“.
   - **Screenshot-Feedback (Tester)** — Status: Dark-Mode-Menü ✓ (Iter 139), Quiz immer B/kurze Distraktoren ✓ (139), Audio-Antworten verschwinden ✓ (139), Events Schloss für Free ✓ (92.34), Termin buchen → cal.com/leaderos/beratung ✓, Diagnose-Ergebnisse (leadercheck-Import/Sync) ✓ (123). **Jetzt neu**: **Credit-Transparenz** (`GET /api/credits` + `costs`/`used_by_action`/`recent`; Dashboard-Badge → Portal-Popover „X von Y Credits übrig · Wofür bisher · Zuletzt · Kosten“), **Tages-Challenge Sprachmodus** (Button „Per Stimme“ bei Chat-Aktionen → `/chat?…&voice=1` öffnet Audio-Mode automatisch), **Workflows ohne Neu-Eingabe** (Persona aus Profil vorbelegt + pro User in localStorage gemerkt; `selectTool`/`resetTool` löschen sie nicht mehr).
