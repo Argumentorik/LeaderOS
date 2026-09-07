@@ -16,8 +16,9 @@ import { SmartConsultationBanner } from '../brand/SmartConsultationBanner';
 const OPEN_KEY = 'leaderos_action_inbox_open';
 
 export const ActionInbox = ({ de = true }) => {
+  // Iter 163 „weniger ist mehr“: Inbox startet zugeklappt; Nutzerwahl gilt für die Sitzung.
   const [open, setOpen] = useState(() => {
-    try { return sessionStorage.getItem(OPEN_KEY) !== '0'; } catch { return true; }
+    try { return sessionStorage.getItem(OPEN_KEY) === '1'; } catch { return false; }
   });
 
   const toggle = () => {

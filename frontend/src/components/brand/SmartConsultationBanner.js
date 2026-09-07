@@ -103,13 +103,13 @@ export const SmartConsultationBanner = ({ placement = 'default', compact = false
       cta: 'Slot wählen',
     },
     soft: {
-      eyebrow: 'STRATEGY-CALL · STANDARD',
+      eyebrow: 'STRATEGY-CALL · LEADERSHIP OS',
       title: 'Bereit für das volle 1:1-Coaching?',
-      sub: 'Lass uns klären, ob Accelerator (4.797€) der richtige nächste Schritt für dich ist.',
+      sub: 'Lass uns klären, ob Leadership OS PLUS (4.797 €) der richtige nächste Schritt für dich ist.',
       cta: 'Beratung anfragen',
     },
     minimal: {
-      eyebrow: 'ACCELERATOR · 1:1',
+      eyebrow: 'LEADERSHIP OS PLUS · 1:1',
       title: 'Brauchst du dein nächstes 1:1?',
       sub: null,
       cta: 'Slot wählen',

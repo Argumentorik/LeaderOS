@@ -22,6 +22,7 @@ import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import api from '../lib/api';
 import { CreditBadge } from '../components/dashboard/CreditBadge';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
+import { DashboardMore } from '../components/dashboard/DashboardMore';
 import { TierBadge } from '../components/shared/TierBadge';
 import { useTier } from '../contexts/TierContext';
 import {
@@ -137,27 +138,18 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Iter 145: Wlads Guide — freigegebene Onboarding-Clips */}
-        <GuideClipsRow de={de} />
-
-        {/* ── Stripe Mode Banner (admin/owner only, auto-hides when live) ── */}
+        {/* Iter 163 „weniger ist mehr“: Fokus = Inbox → EINE Aktion → Fortschritt. Alles andere hinter „Mehr“. */}
         <StripeModeBanner />
-
-        {/* ── Action Inbox (Iter 118 Godmode): Live-Event + Sync-Diagnose +
-            Beratungs-Banner konsolidiert in EIN kompaktes, aufklappbares
-            Widget — fixes "Seite zu busy nach Login". ── */}
         <ActionInbox de={de} />
 
-        {/* ── Stat Cards Row ── */}
-        <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />
-
-        {/* ── YOUR NEXT STEP (DOMINANT) ── */}
+        {/* ── HEUTE: die eine Aktion ── */}
         <Card className="bg-[#0A0A0A] text-white border-0 mb-6 overflow-hidden" data-testid="next-step-cta" data-anim="dash-cta">
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <img src={WLAD_AVATAR} alt="Wlad" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-white/10 shrink-0" />
                 <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#BFFF00]/80">{de ? 'Heute' : 'Today'}</p>
                   <h3 className="text-lg font-black">{de ? 'Dein nächster Schritt' : 'Your Next Step'}</h3>
                   <p className="text-sm text-white/50 mt-0.5">
                     {!c30.started
@@ -174,30 +166,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* ── Argumentation-Prep Schnellzugriff ── */}
-        <div className="mb-6">
-          <ArgumentationPrepCard de={de} />
-        </div>
-
-        {/* ── Lern-Videos Vorschau (direkter Zugriff aus dem Dashboard) ── */}
-        <div className="mb-6">
-          <DashboardLearningVideos de={de} />
-        </div>
-
-        {/* ── Main Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* LEFT: Actions + Quick Access */}
-          <div className="lg:col-span-2 space-y-5">
-
-            {/* Quick Actions */}
-            <QuickActionsGrid de={de} navigate={navigate} />
-
-            {/* Workspaces — Iter 92.23.11 (Mert): Folder cards with briefing + open */}
-            <FolderWorkspaceCards de={de} />
-
-            {/* XP + Level Progress */}
-            <Card className="border-black/[0.04] dark:border-white/[0.06] overflow-hidden relative" data-testid="level-progress" data-anim="dash-widget">
+        {/* ── FORTSCHRITT ── */}
+        <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />
+        <Card className="border-black/[0.04] dark:border-white/[0.06] overflow-hidden relative" data-testid="level-progress" data-anim="dash-widget">
               <div className="absolute top-0 right-0 w-40 h-40 bg-[#BFFF00]/[0.06] rounded-full blur-3xl pointer-events-none" />
               <CardContent className="p-5 relative">
                 <div className="flex items-center justify-between mb-4">
@@ -243,6 +214,16 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
+
+        {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
+        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 8 : 9}>
+        <GuideClipsRow de={de} />
+        <div className="mb-6"><ArgumentationPrepCard de={de} /></div>
+        <div className="mb-6"><DashboardLearningVideos de={de} /></div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-5">
+            <QuickActionsGrid de={de} navigate={navigate} />
+            <FolderWorkspaceCards de={de} />
 
             {/* Upsell Banner — tier-aware: hidden for OS PLUS, shows PLUS upgrade for Standard, shows OS for Free */}
             {!tierInfo?.isAccelerator && (
@@ -318,6 +299,7 @@ export default function DashboardPage() {
             <WladHubDiagnosisCard wladhubScores={ud.wladhub_scores} de={de} onNavigate={navigate} />
           </div>
         </div>
+        </DashboardMore>
       </div>
 
       {/* Iter 131.3: Guided first-run tour with speaking Wlad. Runs once
