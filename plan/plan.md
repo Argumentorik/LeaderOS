@@ -1,55 +1,34 @@
-# Plan: Video-Guide auf Gesprächsniveau (GODMODE) · Tempo der gesamten App · Event-Hinweis aus
+# Plan: Voyage-Frage von Stefan klären · Stand auf GitHub bringen · 2-MB-Wissens-Upload bestätigen
 
-## 1. Video-Guide-Produktion: Skripte, Bildführung, Schnitt
+## Ausgangslage
+Stefan sieht in seinem Code-Stand eine Funktion `_embed_query`, die bei jeder Nutzer-Nachricht die Anfrage über **Voyage** einbettet (mit Retry bei 429).
+Dieser Stand ist **veraltet**. Seit Iteration 162 läuft die gesamte RAG-Einbettung **lokal** (sentence-transformers, 384 Dimensionen, kein externer Dienst, keine Rate-Limits, kein API-Key). Voyage wurde aus Code, Tests und Doku entfernt; `GET /api/rag-status` zeigt `provider: local`.
+Stefans Kopie stammt also aus einem GitHub-Stand, der **vor** dieser Umstellung liegt – das Repo wurde seither nicht aktualisiert.
 
-Heute stören drei Dinge: Wlad geht in mehreren Clips sichtbar „auf den Zuschauer zu“ statt einfach mit ihm zu reden; die Clips sind aus mehreren Einzelaufnahmen zusammengesetzt und man hört und sieht die Schnitte; die Skripte klingen stellenweise nach Aufzählung statt nach Wlad.
+## Was gemacht wird
 
-**Bild & Schnitt**
-- Wlad bleibt in einer ruhigen Präsenz-Einstellung (frontal, direkter Blick, leichte natürliche Bewegung) — kein Heranlaufen, kein Zugehen auf die Kamera, kein Positionswechsel mitten im Satz.
-- Ein durchgehender Take pro Clip. Ein Schnitt nur für einen App-Einblender, und dann als weicher Übergang über die durchlaufende Stimme, nicht als harter Sprung.
-- Die Stimme wird pro Clip als **eine** zusammenhängende Tonspur erzeugt (nicht satzweise zusammengeklebt), damit Atem, Tempo und Betonung durchgehend natürlich sind.
+### 1. Godmode-Check „kein Voyage mehr“ (Code, Tests, Doku)
+- Kompletter Durchlauf über Backend, Skripte, Tests und Doku: keine `VOYAGE_*`-Variablen, keine Voyage-URL, keine Voyage-Kommentare/Docstrings, kein `_embed_query` mit HTTP-Aufruf.
+- Falls Reste gefunden werden: entfernen bzw. auf die lokale Einbettung umstellen. Falls nichts gefunden wird: als geprüft dokumentiert.
+- `.env.example`: keine Voyage-Variable mehr; ein kurzer Hinweis, dass Einbettungen lokal laufen.
+- Ergebnis für Stefan: eine kurze Notiz in `docs/RAG_SYSTEM.md` („Wie eine Nutzer-Nachricht heute eingebettet wird“ – lokal, synchron, ohne Retry-Logik, welche Funktion dafür zuständig ist), damit die Frage nicht wieder aufkommt.
 
-**Skripte (alle Guide-Clips, zuerst die Erststart-Serie)**
-- Gesprochene Sprache statt Aufzählung: Hauptsatz-Nebensatz-Erklärungen („Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten sinnvollen Schritt vorschlage.“), ein Gedanke pro Satz, ein konkretes Beispiel pro Clip, ein klarer Auftrag am Ende.
-- Kein KI-Ton: keine Floskeln („In diesem Video zeige ich dir …“), keine Dreierlisten, kein „Lass uns …“, kein Bindestrich-Stakkato. Wlads Wortschatz aus Büchern und Live-Calls, wo er passt.
-- Prioritäten: **1. „Willkommen bei Leader-OS“** (erster Eindruck, muss sitzen), **2. „So sprichst du mit der KI“** (komplett neu: was man Wlad sagt, wie man fragt, ein echter Beispiel-Dialog in Wlads Worten, was man danach tut), dann die restlichen Erststart-Clips, danach die Mission-Briefings.
-- Jedes Skript wird vor dem Rendern als Text freigegeben (Vorschau im Guide Studio, direkt umformulierbar). Ohne Freigabe kein Render.
+### 2. Sichtbarkeit im Admin-Dashboard (Wissen-Bereich)
+- Kleine Statuszeile im Wissens-Upload: **„Einbettung: lokal (384-dim) · Store konsistent“** aus dem bestehenden Status-Endpunkt – so sieht jeder Admin/Dev sofort, dass kein Voyage im Spiel ist.
 
-**Ablauf**
-- Erststart-Serie wird mit neuen Skripten und ruhiger Einstellung neu produziert; die alten Clips bleiben online, bis der neue Clip freigegeben ist (kein Loch im Guide).
-- Mission-Briefings folgen in einem zweiten Durchgang nach Freigabe der ersten Serie.
+### 3. 2-MB-Wissens-Upload bestätigen
+- Der Upload bis **2 MB** (PDF, DOCX, TXT, MD, einzeln und als Mehrfach-Upload mit Drag & Drop) ist seit Iteration 160/161 im Admin-Dashboard live.
+- Wird noch einmal Ende-zu-Ende geprüft (Datei nahe 2 MB → angenommen; über 2 MB → klare Fehlermeldung; Beschriftung „max 2 MB“ sichtbar). Nur wenn dabei etwas fehlt, wird nachgebessert.
 
-## 2. Video-Guide-Seite: schnell, mit Vorschaubildern
+### 4. GitHub aktualisieren
+- Der Agent kann **nicht selbst** nach GitHub pushen. Nach Abschluss der Punkte 1–3 wird der Stand fertig gemeldet; dann bitte im Chat unten **„Save to GitHub“** klicken. Damit landet alles auf dem Repo – Voyage-Cleanup, 2-MB-Upload, Login-Teaser, Kurs-Bibliothek, Events-Fix usw.
+- Empfehlung an Stefan: nach dem Push seinen lokalen Stand komplett neu vom Repo ziehen (nicht mergen), da sein Stand mehrere Iterationen zurückliegt.
 
-Heute erscheinen die Kacheln als schwarze Flächen (kein Vorschaubild vorhanden), die Seite lädt zuerst die komplette Clip-Datenbank samt Untertiteln und Produktionsdaten, und das aktive Video wird sofort vollständig geladen.
+## Annahmen
+- Keine Voyage-Rückkehr gewünscht; lokal bleibt der einzige Einbettungs-Weg (auch in Produktion).
+- Kein weiterer Umbau am RAG (Suche, Chunking, Modell) – nur Nachweis, Aufräumen und Sichtbarkeit.
+- Die 2-MB-Grenze bleibt (kein Anheben auf z. B. 10 MB).
 
-- Für jeden freigegebenen Clip wird automatisch ein Standbild aus dem Video gezogen (Kachel- und Player-Poster, im Guide Studio austauschbar); neue Clips bekommen ihr Bild beim Freigeben.
-- Die Seite lädt nur, was sie zeigt (Titel, Dauer, Bild, gesehen) — Liste in unter einer Sekunde, bis dahin Platzhalter-Kacheln.
-- Video lädt erst auf Klick (nur die ersten Sekunden vorab); Bilder und Videos werden vom Browser gecacht.
-- Kachel-Look wie in der Kurs-Bibliothek (16:9, Dauer-Badge, gesehen-Haken, Hover).
-
-## 3. Tempo der gesamten App
-
-Ziel: Jede Seite zeigt in unter 1,5 Sekunden Inhalt, Seitenwechsel fühlen sich sofort an, keine leeren Flächen beim Laden. Messlatte je Seite (Dashboard, Chat, Kurse, Video-Guide, Missionen, Playbooks, Admin): Inhalt sichtbar < 1,5 s, vollständig < 3 s bei normaler Verbindung; im Admin eine Tempo-Übersicht mit diesen Werten.
-
-- **Nur laden, was gezeigt wird**: Listen-Antworten werden auf die Felder reduziert, die die Seite braucht (heute kommen z. B. bei Clips, Kursen und Dashboard-Daten ganze Datensätze mit). Große Bereiche hinter „Mehr“ laden erst beim Aufklappen.
-- **Erste Anzeige sofort**: Jede Seite zeigt Platzhalter statt Weißfläche; Daten, die sich selten ändern (Kurse, Clips, Profil), kommen beim Wiederbesuch aus dem Zwischenspeicher und werden im Hintergrund aktualisiert.
-- **Dashboard in einem Zug**: Die vielen Einzelabfragen beim Start werden zu einer gebündelten Antwort, Aggregate werden serverseitig kurz zwischengespeichert.
-- **Bilder & Videos**: alle Bilder komprimiert und in passender Größe (Thumbnails ≤ 150 KB), Videos mit Poster und erst-auf-Klick-Laden, alle Medien mit langem Browser-Cache.
-- **Weniger Startgepäck**: Seiten und schwere Bausteine (Player, Aufnahme, Admin-Studio, Diagramme) werden erst geladen, wenn sie gebraucht werden; wichtigste Schrift und Logo werden vorgeladen.
-- **Wlad-Antworten**: Chat-Antworten erscheinen weiterhin gestreamt; Wissenssuche und Nutzer-Gedächtnis werden beim Öffnen einer Seite vorgeladen statt bei jeder Frage neu geholt.
-
-## 4. Event-Hinweis „Monats-Update-Call · Beraterteam · Leader·OS“
-
-Erscheint heute direkt nach dem Login. Wird komplett abgeschaltet: kein Event-Hinweis beim Start, im Dashboard, in der Inbox oder als Einblendung. Events bleiben über die Seite „Events“ erreichbar. Admin-Schalter „Event-Hinweise auf dem Dashboard“, standardmäßig aus.
-
-## 5. Nicht Teil dieses Plans
-
-Interaktiver Wlad / Sprach-Gespräch (bewusst zurückgestellt), neue Kursinhalte, Preis-/Zugriffsänderungen.
-
-## 6. Annahmen (bei Bedarf widersprechen)
-
-- Neuproduktion der Erststart-Serie (ca. 5 Clips) kostet Render-Budget (bisher ~15–20 US-$ je Clip); Mission-Briefings erst nach Freigabe der ersten Serie.
-- Skripte werden vor dem Rendern als Text freigegeben — das bremst einen Tag, sichert aber „kein AI-Slop“.
-- Vorschaubilder werden automatisch aus den Videos gezogen; Austausch im Guide Studio möglich.
-- Der Event-Hinweis wird für alle Nutzer abgeschaltet.
+## Nicht enthalten
+- Größere Refactorings am RAG oder am Chat-Flow.
+- Änderungen an Stefans lokalem Setup.

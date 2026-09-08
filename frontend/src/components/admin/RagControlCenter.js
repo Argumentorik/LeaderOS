@@ -112,6 +112,10 @@ export const RagControlCenter = ({ de = true }) => {
                     {status.engine?.dim ? ` (${status.engine.dim}d)` : ''}
                     {' · '}{de ? 'Vektor-Cache' : 'vector cache'} {status.vector_cache_loaded ? (de ? 'warm' : 'warm') : (de ? 'kalt' : 'cold')}
                   </span>
+                  <span className={status.dim_ok ? 'text-muted-foreground' : 'text-rose-500 font-semibold'} data-testid="rag-embedding-line">
+                    {' · '}{de ? 'Embeddings' : 'embeddings'} {status.engine?.provider === 'local' ? (de ? 'lokal' : 'local') : (status.engine?.provider || '?')}
+                    {' · Store '}{status.store_dim ?? '–'}d {status.dim_ok ? '✓' : (de ? '≠ Modell — Re-Ingest nötig' : '≠ model — re-ingest needed')}
+                  </span>
                 </p>
               )}
             </div>

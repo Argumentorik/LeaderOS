@@ -27,7 +27,7 @@ memory/      PRD, Changelog, Test-Credentials (Agent-Arbeitsdateien)
 - **SEXIER Argumentations-Prep** — Wizard mit Voice-Input, Templates, PDF-Export (reportlab), Coaching Memory
 - **Tier-System** — Kostenlos / Leadership OS (997 €/Jahr) / Leadership OS PLUS (4.797 €/Jahr) / Enterprise — Stripe Live + Lizenz-Keys für Sales. Quelle der Wahrheit: [docs/PRODUKT_UND_PREISE.md](docs/PRODUKT_UND_PREISE.md)
 - **Kurs-Bibliothek** — 10 Kurse / 72 Folgen (Folge 1 frei), Video-Guide mit KI-generierten Wlad-Clips (Fal.ai), **Interaktiver Wlad (Beta)** Sprach-Coaching (ElevenLabs)
-- **Wissens-Upload (Admin)** — .txt/.md/.pdf/.docx bis 2 MB je Datei, Bulk-Import per Drag & Drop mit Fortschritt je Datei, sofort live im RAG
+- **Wissens-Upload (Admin)** — .txt/.md/.pdf/.docx bis 2 MB je Datei, Bulk-Import per Drag & Drop mit Fortschritt je Datei, sofort live im RAG. Einstieg für Entwickler: [docs/DEV_HANDBUCH_RAG.md](docs/DEV_HANDBUCH_RAG.md) (RAG-Ablauf + Wissenspflege in 5 Minuten)
 - **Öffentliche SEO/AEO-Seiten** — `/fragen/`, `/wlad-jachtchenko/`, `/kurse-uebersicht/` (statisches HTML, ohne JS lesbar), `llms.txt`, Sitemap mit hreflang de-DE/de-AT/de-CH; Generator: `python3 backend/scripts_seo_pages.py`
 - **Events, Playbooks, 30-Tage-Challenge, Tasks, Community**
 

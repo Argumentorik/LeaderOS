@@ -17,7 +17,7 @@
 - **Folder-System** (Wingman-/OpenClaw-Style): Strukturierte Workspaces pro Thema ("Boardroom Q2", "Diversity-Pitch", "Schwieriges Mitarbeitergespräch"). Der Agent kennt den Kontext **bevor du fragst**.
 
 ### 2. **16 Video-Missionen mit KI-Analyse**
-- Kamera an, Rede halten, 60 Sek bis 15 Min sprechen → **GPT-5.2 + Whisper** + **Voyage RAG** liefern in 18 Sekunden:
+- Kamera an, Rede halten, 60 Sek bis 15 Min sprechen → **GPT-5.2 + Whisper** + **lokales RAG (Wlads Wissensbasis)** liefern in 18 Sekunden:
   - **3 Stärken + 3 Verbesserungen** (numeriert, konkret, mit Wlad-Übungen)
   - **Komplette 3-Säulen-Bewertung** (Logos/Ethos/Pathos Score)
   - **Speech-Analytics** (Tempo, Füllwörter, Phrasenstärke)
