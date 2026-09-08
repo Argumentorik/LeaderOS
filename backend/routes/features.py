@@ -43,6 +43,11 @@ FEATURE_REGISTRY: dict[str, dict] = {
         "description": "Kurzes Audio-Briefing zur Strategie.",
         "default_stage": "off",
     },
+    "event_hints": {
+        "label": "Event-Hinweise auf dem Dashboard",
+        "description": "Monats-Update-Call-Einblendung nach dem Login und Event-Erinnerungen in der Inbox. Events bleiben über die Seite „Events“ erreichbar.",
+        "default_stage": "off",
+    },
 }
 
 Stage = Literal["off", "premium", "all"]

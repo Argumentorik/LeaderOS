@@ -8,46 +8,75 @@ import { GuideVideoPlayer } from '../components/guide/GuideVideoPlayer';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 
 const base = process.env.REACT_APP_BACKEND_URL;
+const CACHE_KEY = 'wladbot_guide_clips_v1';
+
+const fmt = (sec) => { const n = Math.round(sec || 0); return n >= 60 ? `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}` : `${n} s`; };
 
 const ClipTile = ({ clip, index, active, onSelect }) => (
   <button
     type="button"
     onClick={() => onSelect(clip)}
-    className={`group text-left rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-0.5 ${active ? 'border-[#BFFF00] shadow-[0_0_0_3px_rgba(191,255,0,0.25)]' : 'border-black/[0.07] dark:border-white/[0.08]'} bg-white dark:bg-card`}
+    className={`group text-left rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${active ? 'border-[#BFFF00] shadow-[0_0_0_3px_rgba(191,255,0,0.25)]' : 'border-black/[0.07] dark:border-white/[0.08]'} bg-white dark:bg-card`}
     data-testid={`video-guide-tile-${clip.slug}`}
   >
-    <div className="relative aspect-video bg-black">
-      {clip.poster_url && <img src={`${base}${clip.poster_url}`} alt="" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />}
+    <div className="relative aspect-video bg-[#0A0A0A] overflow-hidden">
+      {clip.poster_url
+        ? <img src={`${base}${clip.poster_url}`} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" loading="lazy" decoding="async" />
+        : <div className="w-full h-full bg-gradient-to-br from-[#161616] to-[#0A0A0A]" />}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="h-10 w-10 rounded-full bg-[#BFFF00] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><Play size={15} fill="currentColor" /></span>
+        <span className="h-10 w-10 rounded-full bg-[#BFFF00] text-black flex items-center justify-center shadow-lg opacity-90 group-hover:scale-110 transition-transform"><Play size={15} fill="currentColor" /></span>
       </span>
       {clip.seen && <span className="absolute top-2 right-2 h-6 w-6 rounded-full bg-black/70 text-[#BFFF00] flex items-center justify-center" data-testid={`video-guide-seen-${clip.slug}`}><Check size={12} /></span>}
-      {clip.duration_seconds_video && <span className="absolute bottom-2 right-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/70 text-white">{Math.round(clip.duration_seconds_video)} s</span>}
+      <span className="absolute top-2 left-2 text-[9.5px] font-black uppercase tracking-[0.12em] px-1.5 py-0.5 rounded bg-black/60 text-white">{index}</span>
+      {clip.duration_seconds_video && <span className="absolute bottom-2 right-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/70 text-white" data-testid={`video-guide-duration-${clip.slug}`}>{fmt(clip.duration_seconds_video)}</span>}
     </div>
     <div className="p-3">
-      <p className="text-[10px] text-muted-foreground">{index}</p>
       <p className="text-[13px] font-semibold text-foreground leading-tight">{clip.title}</p>
     </div>
   </button>
+);
+
+const TileSkeleton = () => (
+  <div className="rounded-2xl overflow-hidden border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-card animate-pulse" data-testid="video-guide-skeleton">
+    <div className="aspect-video bg-black/[0.06] dark:bg-white/[0.06]" />
+    <div className="p-3 space-y-2"><div className="h-3 w-3/4 rounded bg-black/[0.08] dark:bg-white/[0.08]" /><div className="h-3 w-1/2 rounded bg-black/[0.06] dark:bg-white/[0.06]" /></div>
+  </div>
 );
 
 export default function VideoGuidePage() {
   const { lang } = useLanguage();
   const de = lang === 'de';
   const [params, setParams] = useSearchParams();
-  const [clips, setClips] = useState([]);
+  const [clips, setClips] = useState(() => { try { return JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null') || []; } catch { return []; } });
+  const [loaded, setLoaded] = useState(clips.length > 0);
   const [active, setActive] = useState(null);
+  const [detail, setDetail] = useState(null);
 
+  // Iter 166 Tempo: schlanke Liste (Titel, Dauer, Bild, gesehen), Wiederbesuch aus dem Zwischenspeicher, Skript erst für den aktiven Clip.
   useEffect(() => {
-    api.get('/guide/clips', { params: { kind: 'all' } })
+    api.get('/guide/clips', { params: { kind: 'all', lean: 1 } })
       .then((res) => {
         const list = (res.data?.clips || []).filter((c) => c.video_url && c.kind !== 'teaser');
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(list)); } catch { /* noop */ }
         setClips(list);
-        const wanted = params.get('clip');
-        setActive(list.find((c) => c.slug === wanted) || list.find((c) => !c.seen) || list[0] || null);
+        setLoaded(true);
       })
-      .catch((err) => logger.warn('video guide failed', err));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      .catch((err) => { logger.warn('video guide failed', err); setLoaded(true); });
+  }, []);
+
+  useEffect(() => {
+    if (!clips.length || active) return;
+    const wanted = params.get('clip');
+    setActive(clips.find((c) => c.slug === wanted) || clips.find((c) => !c.seen) || clips[0] || null);
+  }, [clips, active, params]);
+
+  useEffect(() => {
+    if (!active) return undefined;
+    let cancelled = false;
+    api.get(`/guide/clips/${active.slug}`).then((r) => { if (!cancelled) setDetail(r.data); }).catch(() => { if (!cancelled) setDetail(null); });
+    return () => { cancelled = true; };
+  }, [active]);
 
   const onboarding = useMemo(() => clips.filter((c) => c.kind === 'onboarding'), [clips]);
   const missions = useMemo(() => clips.filter((c) => c.kind === 'mission'), [clips]);
@@ -77,11 +106,14 @@ export default function VideoGuidePage() {
 
       {active && (
         <div className="mb-10 max-w-4xl" data-testid="video-guide-player">
-          <GuideVideoPlayer clip={active} de={de} onSeen={markSeen} />
+          <GuideVideoPlayer clip={detail?.slug === active.slug ? { ...active, ...detail } : { ...active, script: '' }} de={de} onSeen={markSeen} />
         </div>
       )}
 
-      {!clips.length && <p className="text-sm text-muted-foreground" data-testid="video-guide-empty">{de ? 'Noch keine Clips freigegeben.' : 'No clips published yet.'}</p>}
+      {!loaded && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3" data-testid="video-guide-loading">{[0, 1, 2, 3, 4].map((i) => <TileSkeleton key={i} />)}</div>
+      )}
+      {loaded && !clips.length && <p className="text-sm text-muted-foreground" data-testid="video-guide-empty">{de ? 'Noch keine Clips freigegeben.' : 'No clips published yet.'}</p>}
 
       {onboarding.length > 0 && (
         <section className="mb-10" data-testid="video-guide-onboarding">

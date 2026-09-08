@@ -22,6 +22,7 @@ import { Phone, MessageCircle, Gift } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBookConsultation } from '../brand/BookConsultationButton';
 import { useConsultationGate } from '../../hooks/useConsultationGate';
+import { useFeature } from '../../hooks/useFeature';
 import api from '../../lib/api';
 
 const SESSION_KEY = 'wlad_fake_call_count';
@@ -66,6 +67,8 @@ export const FakeWladCall = () => {
   const gate = useConsultationGate();
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
+  // Iter 166: Event-Hinweis nur, wenn der Admin-Schalter „Event-Hinweise auf dem Dashboard“ an ist (Standard: aus).
+  const eventHints = useFeature('event_hints');
 
   const isSuppressed = SUPPRESSED_PATHS.some((p) => location.pathname.startsWith(p));
 
@@ -118,6 +121,7 @@ export const FakeWladCall = () => {
 
   useEffect(() => {
     if (!user) return undefined;
+    if (!eventHints.ready || !eventHints.enabled) return undefined;
     // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Anrufen.
     // Frische Free/Standard-User bekommen keinen Fake-Call bis Tag 10.
     if (!gate.ready) return undefined;
@@ -148,7 +152,7 @@ export const FakeWladCall = () => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [user, scheduleNext, isPro, gate.ready]);
+  }, [user, scheduleNext, isPro, gate.ready, eventHints.ready, eventHints.enabled]);
 
   // Accept = book a real consultation via Cal.com.
   // The Wlad team takes the actual call there. Highest-value path.

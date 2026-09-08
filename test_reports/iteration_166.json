@@ -1,0 +1,44 @@
+{
+  "summary": "Iter 166 frontend-only regression — Video-Guide speed + Guide Studio drafts + event_hints gating. ALL 5 scenarios PASS. Video-Guide loads 12 tiles in ~1.58s with 12/12 posters (naturalWidth=1280) and 12/12 duration badges; sessionStorage cache 'wladbot_guide_clips_v1' populated (5.1KB); reload renders tiles in 0.60s with no skeleton visible. Clip switching updates player script (verified clip start-3-kontext script text updates). Fake call overlay 'Monats-Update-Call' did NOT appear on /dashboard within 95s for standard@wladbot.test nor within 30s for free@wladbot.test. /api/features returns event_hints=false for free, standard, and admin. Admin panel Feature-Rollout row 'Event-Hinweise auf dem Dashboard' shows 'Aus' active (feature-event_hints-off has bg-[#BFFF00] highlight). Guide Studio: script-draft panels exist for start-1-willkommen (119 words, no bullets) and start-2-so-sprichst-du (142 words, no bullets); textarea+approve+save+discard testids present; edit+'Entwurf speichern' persists across reload with no error; clicking 'Film rendern' surfaces 'Skript-Entwurf wartet auf Freigabe — erst freigeben, dann rendern' and does not start a render. Regression: /kurse renders 10 course cards; /dashboard shows next-step-cta and dashboard-more-toggle. No guide-related console errors. Draft was cleaned up (removed appended ' test.') after test — start-1 draft persisted back to original 712-char / 119-word content.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Login free@wladbot.test via /api/auth/login (200) → /video-guide: 12 tiles data-testid video-guide-tile-<slug> appear in 1.58s; poster <img> with naturalWidth=1280 & complete=true for all 12 tiles; video-guide-duration-<slug> badge for all 12; sessionStorage 'wladbot_guide_clips_v1' populated (5147 bytes)",
+    "Clicking video-guide-tile-start-3-kontext switches active clip → player 'Zum Lesen' script text changes to 'Stell dir vor, zwei Führungskräfte…' (matches start-3-kontext script)",
+    "Reload /video-guide: 12 tiles render in 0.60s from cache; no video-guide-loading skeleton observed during reload; no console errors related to guide/clips",
+    "standard@wladbot.test /dashboard: waited 95s → NO 'Monats-Update-Call' / 'Eingehender Anruf' overlay; no fake-call testid; no event-reminder testid; next-step-cta and dashboard-more-toggle present",
+    "free@wladbot.test /dashboard 30s window: NO call overlay",
+    "/api/features event_hints=false for free (premium:false), standard (premium:true), and admin",
+    "Admin /wlad-control-x7k9q2 Feature-Rollout panel: feature-row-event_hints present with description 'Monats-Update-Call-Einblendung nach dem Login und Event-Erinnerungen in der Inbox…'; feature-event_hints-off is the active stage (bg-[#BFFF00] text-[#0A0A0A]); feature-event_hints-premium and feature-event_hints-all inactive (border only). Not toggled on during test.",
+    "Guide Studio start-1-willkommen: guide-clip-toggle-start-1-willkommen expands guide-script-draft-start-1-willkommen with guide-script-draft-text-start-1-willkommen (119 words, no bullet lists, spoken German 'Schön, dass du hier bist…'); guide-script-draft-approve/save/discard-start-1-willkommen all present",
+    "Edit textarea + click guide-script-draft-save-start-1-willkommen: no error, panel still pending after reload with edited text ('test.' suffix persisted; cleaned up post-test)",
+    "start-2-so-sprichst-du panel: guide-script-draft-start-2-so-sprichst-du + textarea (142 words, no bullets) present",
+    "Rendern button for start-1-willkommen: error 'Skript-Entwurf wartet auf Freigabe — erst freigeben, dann rendern' shown; render did not start",
+    "Regression /kurse: 10 course-card-<slug> cards render",
+    "Regression /dashboard: next-step-cta and dashboard-more-toggle present"
+  ],
+  "test_report_links": [
+    "/app/test_reports/iter166_video_guide.jpg",
+    "/app/test_reports/iter166_dashboard_standard.jpg",
+    "/app/test_reports/iter166_admin.jpg",
+    "/app/test_reports/iter166_guide_studio.jpg"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "The stage buttons feature-event_hints-{off,premium,all} indicate active state only via className (bg-[#BFFF00]); no aria-pressed attribute. Adding aria-pressed=true/false would improve accessibility and automated verification of the active stage.",
+    "video-guide-player is the container testid; there is no distinct video-guide-active-title / video-guide-script testid, so switching verification relied on scraping 'Zum Lesen' inner text. Adding video-guide-active-title / video-guide-active-script data-testid would make automated diffing more reliable.",
+    "On admin dashboard the dashboard-first-tour overlay (z-[9999]) intercepts pointer events for other testids (e.g., action-inbox-toggle) even after localStorage wladbot_onboarding_done=1; the tour still mounts for the standard user. Consider gating the tour render on that flag (not just the CTA)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only)", "frontend": "100% (5/5 scenarios)"},
+  "test_credentials": "free@wladbot.test, standard@wladbot.test, test@test.com (admin) — all /test123",
+  "seed_data_creation": "Temporarily appended ' test.' to start-1-willkommen script draft to verify save persistence, then restored to original 119-word text via a second save (verified length back to 712 chars, no 'test.' suffix). No approve/discard performed. event_hints flag was NOT toggled.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Login via POST /api/auth/login {identifier,password} → token → localStorage.wladbot_token (also set wladbot_onboarding_done=1). Direct filling of the /login form was flaky under rate limits; API-token injection worked reliably. Video-Guide sessionStorage cache key is 'wladbot_guide_clips_v1'. Guide Studio testids follow pattern guide-clip-{toggle,card,status,words,script,save,voice,video,publish,render,download}-<slug> and guide-script-draft-{,-text,-approve,-save,-discard}-<slug>. event_hints stage buttons: feature-event_hints-{off,premium,all}; active detected via bg-[#BFFF00] className (no aria-pressed).",
+  "rca of the issue": "N/A — no defects found."
+}

@@ -304,6 +304,13 @@ TALK_LEAD_SECONDS = 0.4   # Wlad ist kurz still im Bild, bevor er spricht
 TALK_TAIL_SECONDS = 0.9   # Sprech-Ausklang: Blick hält, kein abrupter Schnitt
 TALK_MAX_SECONDS = 9.2
 TALK_MAX_SECONDS_PRO = 28.0
+TALK_MAX_SECONDS_SINGLE = 58.0  # Single-Take (OmniHuman 720p, ein durchgehender Take, eine Tonspur)
+
+
+def single_take_plan(setting: str = "loft") -> list[dict]:
+    """GODMODE-Gesprächsniveau: ein ruhiger Präsenz-Shot, der ganze Text als eine Tonspur, kein Schnitt."""
+    medium, _ = PRESENCE_SETTINGS.get(setting, PRESENCE_SETTINGS["loft"])
+    return [{"type": "talk", "preset": medium, "max_words": 160}]
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
@@ -392,10 +399,14 @@ def _take_tail(sentences: list[str], limit: int) -> str:
     return " ".join(tail)
 
 
-def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None) -> list[dict]:
+def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None,
+               single_take: bool = False) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
     setting = Präsenz-Plan ohne Walk-in ("loft" | "studio")."""
+    if single_take:
+        medium = single_take_plan(setting or "loft")[0]
+        return [{"id": "s1", "type": "talk", "preset": medium["preset"], "screens": [], "text": " ".join(script.split())}]
     if setting:
         plan = presence_plan(setting)
     else:

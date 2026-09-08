@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { Loader2, Sparkles, Mic, Image as ImageIcon, Clapperboard, Eye, EyeOff, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../../lib/api';
+import { ScriptDraftPanel } from './ScriptDraftPanel';
 import logger from '../../lib/logger';
 import { GuideShotList } from './GuideShotList';
 
@@ -65,6 +66,7 @@ export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
       {open && (
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-4">
           <div className="space-y-3">
+            <ScriptDraftPanel clip={clip} onChanged={onChange} />
             <div>
               <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                 <span>Sprechtext</span>

@@ -278,14 +278,15 @@ def image_to_video(image_url: str, prompt: str, duration: str = "10", aspect_rat
 
 
 def omnihuman_video(image_url: str, audio_url: str, prompt: str | None = None,
-                    pending: dict | None = None, on_submit=None) -> bytes:
+                    pending: dict | None = None, on_submit=None, resolution: str = "1080p") -> bytes:
     """Keyframe + Tonspur -> sprechendes Video mit nativer Lippen-/Körperbewegung (1080p).
     `pending`: früher eingereichter Request, der nur noch abgeholt wird (kein neuer Submit).
     `on_submit(request)`: Callback direkt nach dem Submit, damit der Aufrufer den Request persistiert."""
     if pending:
         request = pending
     else:
-        payload = {"image_url": image_url, "audio_url": audio_url, "resolution": "1080p", "turbo_mode": False}
+        # 1080p erlaubt max. 30 s Ton, 720p bis 60 s (Single-Take-Clips)
+        payload = {"image_url": image_url, "audio_url": audio_url, "resolution": resolution, "turbo_mode": False}
         if prompt:
             payload["prompt"] = prompt[:600]
         request = submit_fal(OMNIHUMAN_ENDPOINT, payload, timeout_seconds=3600)

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
+import { useFeature } from '../../hooks/useFeature';
 import logger from '../../lib/logger';
 import { ChevronRight } from 'lucide-react';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
@@ -26,6 +27,7 @@ export const EventReminderBanner = ({ de }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const { dismissed, dismiss } = useDismissedReminders();
+  const eventHints = useFeature('event_hints');
 
   const loadReminders = useCallback(async () => {
     try {
@@ -34,9 +36,9 @@ export const EventReminderBanner = ({ de }) => {
     } catch (err) { logger.error(err); }
   }, []);
 
-  useEffect(() => { loadReminders(); }, [loadReminders]);
+  useEffect(() => { if (eventHints.enabled) loadReminders(); }, [loadReminders, eventHints.enabled]);
 
-  if (!data) return null;
+  if (!eventHints.enabled || !data) return null;
 
   const activeReminders = (data.reminders || []).filter(r => !dismissed[r.event_id]);
   const nextEvent = data.next_event && !dismissed[data.next_event?.event_id] ? data.next_event : null;

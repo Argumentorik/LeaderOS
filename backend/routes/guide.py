@@ -7,6 +7,7 @@ Skript als Text, damit nie ein Loch in der Oberfläche entsteht.
 """
 
 import asyncio
+import subprocess
 import hashlib
 import json
 import secrets
@@ -25,7 +26,7 @@ from pymongo.errors import DuplicateKeyError
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
-    TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
+    TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
@@ -161,7 +162,10 @@ def _poster_url(clip: dict) -> str | None:
     if clip.get("keyframe_path"):
         return _media_url(token, "poster")
     first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
-    return f"/api/guide/media/{token}/shot/{first['id']}/poster" if first else None
+    if first:
+        return f"/api/guide/media/{token}/shot/{first['id']}/poster"
+    # Kein Keyframe (Multishot-Pipeline): Standbild wird beim ersten Abruf aus dem Video gezogen
+    return _media_url(token, "poster") if clip.get("video_path") else None
 
 
 def _public_clip(clip: dict, seen: list) -> dict:
@@ -190,16 +194,23 @@ async def _progress(user_id: str) -> dict:
 
 # ── Nutzer-Endpunkte ────────────────────────────────────────────────────────
 
+LEAN_FIELDS = ("slug", "kind", "ref", "order", "title", "poster_url", "video_url", "duration_seconds", "duration_seconds_video", "seen")
+
+
 @router.get("/clips")
-async def list_clips(request: Request, kind: str = "onboarding"):
+async def list_clips(request: Request, kind: str = "onboarding", lean: bool = False):
+    """`lean=1` liefert nur, was eine Kachel zeigt (Titel, Dauer, Bild, gesehen) — ohne Skript/Fragen."""
     user = await get_current_user(request)
     await _ensure_seeded()
     if kind not in ("onboarding", "mission", "teaser", "coaching", "feature", "all"):
         raise HTTPException(status_code=400, detail="kind muss onboarding, mission, teaser, coaching, feature oder all sein")
     query = {} if kind == "all" else {"kind": kind}
-    clips = await db.guide_clips.find(query, {"_id": 0}).sort("order", 1).to_list(200)
+    projection = {"_id": 0, "subtitles": 0, "shots.subtitles": 0, "error": 0, "progress": 0} if lean else {"_id": 0}
+    clips = await db.guide_clips.find(query, projection).sort("order", 1).to_list(200)
     progress = await _progress(user["user_id"])
     items = [_public_clip(c, progress.get("seen", [])) for c in clips]
+    if lean:
+        items = [{k: i[k] for k in LEAN_FIELDS} for i in items]
     return {
         "clips": items,
         "seen_count": sum(1 for i in items if i["seen"]),
@@ -220,6 +231,20 @@ async def mission_clip(day: int, request: Request):
         "clip": _public_clip(clip, progress.get("seen", [])),
         "mission_autoplay": progress.get("mission_autoplay", True),
     }
+
+
+@router.get("/clips/{slug}")
+async def clip_detail(slug: str, request: Request):
+    """Ein Clip komplett (Skript, Fragen, Untertitel) — wird erst geladen, wenn er abgespielt wird."""
+    user = await get_current_user(request)
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if not clip:
+        raise HTTPException(status_code=404, detail="Clip nicht gefunden")
+    progress = await _progress(user["user_id"])
+    out = _public_clip(clip, progress.get("seen", []))
+    out["subtitles"] = clip.get("subtitles") or []
+    return out
+
 
 
 class SeenIn(BaseModel):
@@ -287,6 +312,8 @@ async def serve_media(token: str, kind: str, request: Request):
             raise HTTPException(status_code=404, detail="Not found")
         path = clip.get(CLIP_MEDIA[kind])
         media_type = MEDIA_TYPES[kind]
+        if kind == "poster" and not path and clip.get("video_path"):
+            path = clip["video_path"]
 
     if not path:
         raise HTTPException(status_code=404, detail="Not found")
@@ -371,9 +398,25 @@ def _file_chunks(file_path: Path, start: int, end: int):
 KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "Wlad für dich", "coaching": "Coaching"}
 
 
+def _frame_from_video(video: Path) -> Path:
+    """Standbild (t≈1.5 s) aus einem MP4 ziehen — einmalig, danach aus dem lokalen Cache."""
+    target = video.with_name(f"{video.name}_frame.jpg")
+    if target.exists():
+        return target
+    import imageio_ffmpeg
+    tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part.jpg")
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-y", "-ss", "1.5", "-i", str(video),
+                    "-frames:v", "1", "-vf", "scale='min(1280,iw)':-2", "-q:v", "3", str(tmp)],
+                   check=True, capture_output=True, timeout=120)
+    tmp.replace(target)
+    return target
+
+
 def _local_poster(path: str, title: str = "", kicker: str = "") -> Path:
-    """Keyframe -> branded Thumbnail-JPEG (Titel-Typo, W-Mark, Lime-Akzent), einmal erzeugt, dann aus dem Cache."""
+    """Keyframe (oder Video-Standbild) -> branded Thumbnail-JPEG (Titel-Typo, W-Mark, Lime-Akzent), einmal erzeugt, dann aus dem Cache."""
     source = _local_media(path)
+    if source.suffix.lower() == ".mp4":
+        source = _frame_from_video(source)
     key = hashlib.sha1(f"{title}|{kicker}|v2".encode()).hexdigest()[:10]
     target = source.with_name(f"{source.name}_poster_{key}.jpg")
     if target.exists():
@@ -397,7 +440,7 @@ async def _serve_object(request: Request, path: str, media_type: str, poster: bo
         raise HTTPException(status_code=404, detail="Not found")
     size = file_path.stat().st_size
     etag = f'"{file_path.name[:16]}-{size}"'
-    headers = {"Cache-Control": "public, max-age=86400", "Accept-Ranges": "bytes", "ETag": etag}
+    headers = {"Cache-Control": "public, max-age=604800, stale-while-revalidate=86400", "Accept-Ranges": "bytes", "ETag": etag}
     if request.headers.get("if-none-match") == etag:
         return Response(status_code=304, headers=headers)
     rng = _parse_range(request.headers.get("range"), size)
@@ -854,7 +897,8 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         sid, preset = shot["id"], SHOT_PRESETS.get(shot.get("preset") or "")
         if shot.get("text") and not shot.get("audio_path"):
             await _patch_clip(slug, {"progress": f"Stimme {sid}"})
-            limit = (TALK_MAX_SECONDS_PRO if pro else TALK_MAX_SECONDS) if shot["type"] == "talk" else None
+            single = bool(clip.get("single_take"))
+            limit = ((TALK_MAX_SECONDS_SINGLE if single else TALK_MAX_SECONDS_PRO) if pro else TALK_MAX_SECONDS) if shot["type"] == "talk" else None
             audio, seconds = await _tts_fitting(shot["text"], voice_id, limit)
             if shot["type"] == "talk" and seconds < 2.5:
                 # OmniHuman/Lipsync hängen bei < 2 s Ton -> hinten mit Stille auf 2,5 s auffüllen
@@ -885,6 +929,7 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
                 synced = await asyncio.to_thread(
                     omnihuman_video, _shot_url(token, sid, "keyframe"), _shot_url(token, sid, "audio"),
                     shot.get("motion_prompt") or preset["motion_prompt"], pending, _remember,
+                    "720p" if clip.get("single_take") else "1080p",
                 )
             except FalTimeout:
                 raise FalError(f"OmniHuman {sid} steckt in der Fal-Queue — Request gemerkt, "
@@ -987,7 +1032,8 @@ async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
     async with _FULL_SLOTS:
         if not clip.get("shots"):
             clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro",
-                                       _setting_for(slug, clip))
+                                       _setting_for(slug, clip),
+                               single_take=bool(clip.get("single_take")))
             await _patch_clip(slug, {"shots": clip["shots"]})
         await _job_shot_keyframes(slug, clip, settings, token)
         clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
@@ -1109,7 +1155,8 @@ async def plan_clip_shots(slug: str, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
-    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro", _setting_for(slug, clip))
+    shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro", _setting_for(slug, clip),
+                               single_take=bool(clip.get("single_take")))
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -1202,7 +1249,7 @@ async def bulk_produce(data: BulkIn, request: Request):
             # Upgrade: neu planen, Keyframes gleicher Presets behalten, alles andere neu rendern
             old = {(s_.get("preset"), s_["type"]): s_ for s_ in clip.get("shots", [])}
             shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro",
-                               _setting_for(slug, {**clip, "quality": data.quality}))
+                               _setting_for(slug, {**clip, "quality": data.quality}), single_take=bool(clip.get("single_take")))
             for s_ in shots:
                 prev = old.get((s_.get("preset"), s_["type"]))
                 if prev and prev.get("keyframe_path"):
@@ -1227,6 +1274,7 @@ async def render_multishot(slug: str, request: Request):
     await require_admin(request)
     return await _kick(
         slug, "render",
+        (lambda c, s: c.get("script_draft_status") != "pending", "Skript-Entwurf wartet auf Freigabe — erst freigeben, dann rendern"),
         (lambda c, s: c.get("shots"), "Zuerst die Shots planen"),
         (lambda c, s: all(sh.get("keyframe_path") for sh in c["shots"] if sh["type"] != "broll"),
          "Zuerst alle Keyframes erzeugen und prüfen"),
@@ -1247,6 +1295,49 @@ async def publish_clip(slug: str, data: PublishIn, request: Request):
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }})
     return {"ok": True, "published": data.published}
+
+
+class ScriptDraftIn(BaseModel):
+    script: str
+
+
+CALM_PRESET = "loft_talk_medium"  # ruhige Präsenz-Einstellung: frontal, direkter Blick, kein Heranlaufen
+
+
+@router.put("/admin/clips/{slug}/script-draft")
+async def save_script_draft(slug: str, data: ScriptDraftIn, request: Request):
+    """Neues Skript als Entwurf ablegen — ohne Freigabe kein Render, alter Clip bleibt online."""
+    await require_admin(request)
+    if not await db.guide_clips.find_one({"slug": slug}, {"_id": 1}):
+        raise HTTPException(status_code=404, detail="Clip nicht gefunden")
+    script = " ".join((data.script or "").split())
+    if word_count(script) < 20:
+        raise HTTPException(status_code=400, detail="Skript-Entwurf zu kurz (mind. 20 Wörter)")
+    await db.guide_clips.update_one({"slug": slug}, {"$set": {
+        "script_draft": script, "script_draft_status": "pending", "updated_at": datetime.now(timezone.utc).isoformat()}})
+    return {"ok": True, "words": word_count(script)}
+
+
+@router.post("/admin/clips/{slug}/script-draft/approve")
+async def approve_script_draft(slug: str, request: Request):
+    """Entwurf freigeben: wird zum Skript, ruhige Einstellung gesetzt, Render danach freigeschaltet."""
+    await require_admin(request)
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if not clip or not clip.get("script_draft"):
+        raise HTTPException(status_code=404, detail="Kein Skript-Entwurf vorhanden")
+    await db.guide_clips.update_one({"slug": slug}, {"$set": {
+        "script": clip["script_draft"], "script_source": "wlad_v2", "script_approved_at": datetime.now(timezone.utc).isoformat(),
+        "script_draft_status": "approved", "shot_preset": CALM_PRESET, "single_take": True, "quality": "pro",
+        "status": "script_ready", "updated_at": datetime.now(timezone.utc).isoformat(),
+    }, "$unset": {"script_draft": "", "shots": ""}})
+    return {"ok": True, "preset": CALM_PRESET}
+
+
+@router.delete("/admin/clips/{slug}/script-draft")
+async def discard_script_draft(slug: str, request: Request):
+    await require_admin(request)
+    await db.guide_clips.update_one({"slug": slug}, {"$unset": {"script_draft": "", "script_draft_status": ""}})
+    return {"ok": True}
 
 
 @router.get("/admin/clips/{slug}")
