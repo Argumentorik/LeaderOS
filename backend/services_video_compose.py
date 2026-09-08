@@ -313,31 +313,41 @@ def render_broll(screens: list[bytes], audio: bytes, width: int, height: int) ->
         return Path(out).read_bytes()
 
 
-def normalize_segment(video: bytes, audio: bytes | None, width: int, height: int) -> bytes:
-    """Einheitliches Format für den Schnitt: WxH, 30 fps, aac mono. Ohne Audio -> Stille."""
+def normalize_segment(video: bytes, audio: bytes | None, width: int, height: int, keep_audio: bool = False) -> bytes:
+    """Einheitliches Format für den Schnitt: WxH, 30 fps, aac mono. Ohne Audio -> Stille;
+    keep_audio = native Tonspur des Shots (z. B. Kling 2.6 Schritte/Raumklang) behalten."""
     with tempfile.TemporaryDirectory() as tmp:
         vid, out = os.path.join(tmp, "in.mp4"), os.path.join(tmp, "out.mp4")
         Path(vid).write_bytes(video)
         dur = probe(vid)["duration"]
         args = ["-i", vid]
+        amap = "1:a:0"
         if audio:
             aud = os.path.join(tmp, "in.mp3")
             Path(aud).write_bytes(audio)
             args += ["-i", aud]
+        elif keep_audio and _has_audio(vid):
+            amap = "0:a:0"
         else:
             args += ["-f", "lavfi", "-t", f"{dur:.3f}", "-i", "anullsrc=r=32000:cl=mono"]
         vf = (f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
               f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=0x0b0b0b,fps={FPS},format=yuv420p")
         _run([
-            *args, "-vf", vf, "-map", "0:v:0", "-map", "1:a:0", "-t", f"{dur:.3f}",
+            *args, "-vf", vf, "-map", "0:v:0", "-map", amap, "-t", f"{dur:.3f}",
             "-c:v", "libx264", "-preset", "fast", "-crf", "18",
             "-c:a", "aac", "-b:a", "128k", "-ar", "32000", "-ac", "1", out,
         ])
         return Path(out).read_bytes()
 
 
-def concat_segments(segments: list[bytes], crossfade: float = 0.0) -> bytes:
-    """Harter Schnitt (crossfade=0) oder weiche Überblendung (xfade + acrossfade) zwischen den Shots."""
+def _has_audio(path: str) -> bool:
+    proc = subprocess.run([_ffmpeg(), "-hide_banner", "-i", path], capture_output=True, text=True, timeout=60)
+    return "Audio:" in (proc.stderr or "")
+
+
+def concat_segments(segments: list[bytes], crossfade: float | list[float] = 0.0) -> bytes:
+    """Harter Schnitt (crossfade=0) oder weiche Überblendung (xfade + acrossfade) zwischen den Shots.
+    crossfade darf eine Liste je Schnitt sein (len = Segmente - 1), z. B. länger nach einem Walk-in."""
     with tempfile.TemporaryDirectory() as tmp:
         paths, durs = [], []
         for i, seg in enumerate(segments):
@@ -347,13 +357,15 @@ def concat_segments(segments: list[bytes], crossfade: float = 0.0) -> bytes:
             durs.append(probe(p)["duration"])
         inputs = [a for p in paths for a in ("-i", p)]
         out = os.path.join(tmp, "joined.mp4")
-        if crossfade > 0 and len(paths) > 1:
+        fades = list(crossfade) if isinstance(crossfade, (list, tuple)) else [crossfade] * (len(paths) - 1)
+        if any(f > 0 for f in fades) and len(paths) > 1:
             chain, lv, la, offset = [], "0:v:0", "0:a:0", 0.0
             for i in range(1, len(paths)):
-                offset += durs[i - 1] - crossfade
+                xf = max(0.05, fades[i - 1])
+                offset += durs[i - 1] - xf
                 nv, na = f"v{i}", f"a{i}"
-                chain.append(f"[{lv}][{i}:v:0]xfade=transition=fade:duration={crossfade}:offset={offset:.3f}[{nv}]")
-                chain.append(f"[{la}][{i}:a:0]acrossfade=d={crossfade}[{na}]")
+                chain.append(f"[{lv}][{i}:v:0]xfade=transition=fade:duration={xf}:offset={offset:.3f}[{nv}]")
+                chain.append(f"[{la}][{i}:a:0]acrossfade=d={xf}[{na}]")
                 lv, la = nv, na
             _run([
                 *inputs, "-filter_complex", ";".join(chain), "-map", f"[{lv}]", "-map", f"[{la}]",

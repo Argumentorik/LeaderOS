@@ -129,7 +129,7 @@ EVENTS_SEED_V2 = [
             ],
             "event_type": "live", "duration": "60 min", "duration_minutes": 60,
             "max_participants": 500, "registered": 0, "host": "Wlad Jachtchenko",
-            "tags": ["LIVE", "KI", "Q&A", "jeden Donnerstag"], "access_level": "free", "featured": i == 0,
+            "tags": ["LIVE", "KI", "Q&A", "alle 2 Wochen"], "access_level": "free", "featured": i == 0,
             "category": "leadership", "status": "upcoming",
             "recurring": "weekly_thursday",
             # Date set dynamically below — Thursday 18:00 UTC, every week from first Thursday in July 2026
@@ -279,122 +279,68 @@ EVENTS_SEED_V2 = [
 ]
 
 
-def _compute_weekly_thursday_dates(count: int = 8, hour_utc: int = 18) -> list:
-    """Return ISO date strings for `count` consecutive Thursdays at hour_utc,
-    starting mid-August 2026 (Mert: season/cohort launch "ab Mitte August").
-    Rolls forward past Thursdays so the list always starts in the future."""
-    cohort_start = datetime(2026, 8, 13, hour_utc, 0, 0, tzinfo=timezone.utc)
-    # advance to first Thursday on/after cohort_start (weekday(): Mon=0, Thu=3)
-    days_until_thu = (3 - cohort_start.weekday()) % 7
-    first_thu = cohort_start + timedelta(days=days_until_thu)
-
+def _biweekly_thursdays(count: int, start: Optional[datetime] = None) -> list:
+    """Return `count` datetimes on consecutive biweekly Thursdays (every 2 weeks),
+    starting on the first Thursday on/after October 1, 2026 (Wlad cohort season).
+    Rolls forward in 2-week steps so the sequence never starts in the past."""
+    start = start or datetime(2026, 10, 1, tzinfo=timezone.utc)
+    days_until_thu = (3 - start.weekday()) % 7  # weekday(): Mon=0, Thu=3
+    first_thu = start + timedelta(days=days_until_thu)
     now = datetime.now(timezone.utc)
-    # Roll forward past Thursdays so the list always starts in the future.
-    while first_thu < now:
-        first_thu += timedelta(weeks=1)
-
-    return [(first_thu + timedelta(weeks=i)).isoformat().replace("+00:00", "Z") for i in range(count)]
+    while first_thu.date() < now.date():
+        first_thu += timedelta(weeks=2)
+    return [first_thu + timedelta(weeks=2 * i) for i in range(count)]
 
 
-# Backward-compat alias (old code paths may still reference biweekly helper).
-_compute_biweekly_thursday_dates = _compute_weekly_thursday_dates
+def _preferred_hour_utc(event: dict) -> int:
+    """Time-of-day (UTC) per event type. LIVE calls 18:00 UTC (= 20:00 DE)."""
+    et = event.get("event_type")
+    if et in ("workshop", "coaching", "mastermind"):
+        return 14
+    if et == "focus_session":
+        return 10
+    return 18
+
+
+def _event_sort_key(event: dict):
+    """Stable ordering: recurring LIVE KI Calls first (by index), then others by id."""
+    if event.get("recurring") in ("weekly_thursday", "biweekly_thursday"):
+        try:
+            idx = int(str(event.get("event_id", "")).split("_")[-1])
+        except Exception:
+            idx = 0
+        return (0, idx, str(event.get("event_id", "")))
+    return (1, 0, str(event.get("event_id", "")))
+
+
+async def _normalize_event_schedule():
+    """Assign every non-replay event to a unique biweekly Thursday from Oct 2026.
+    Guarantees: (a) only dates >= October 2026, (b) 2-week spacing between events,
+    (c) no two events on the same calendar day. Deterministic & idempotent."""
+    events = await db.events.find(
+        {"event_type": {"$ne": "replay"}},
+        {"_id": 0, "event_id": 1, "event_type": 1, "recurring": 1},
+    ).to_list(500)
+    if not events:
+        return
+    events.sort(key=_event_sort_key)
+    thursdays = _biweekly_thursdays(len(events))
+    for evt, thu in zip(events, thursdays):
+        dt = thu.replace(hour=_preferred_hour_utc(evt), minute=0, second=0, microsecond=0)
+        await db.events.update_one(
+            {"event_id": evt["event_id"]},
+            {"$set": {"date": dt.isoformat().replace("+00:00", "Z"), "status": "upcoming"}},
+        )
 
 
 async def _seed_events_v2():
-    """Seed the database with V2 events if empty.
-    Re-seeds weekly LIVE KI Calls if they already exist (so dates roll forward over time).
-    """
+    """Seed events if the DB is empty, then normalize the schedule so all upcoming
+    events fall on unique biweekly Thursdays starting October 2026."""
     count = await db.events.count_documents({})
     if count == 0:
-        # Compute dates for the 8 recurring weekly LIVE KI Calls
-        thursday_dates = _compute_weekly_thursday_dates(8)
         for event in EVENTS_SEED_V2:
-            doc = {**event}
-            if doc.get("recurring") in ("weekly_thursday", "biweekly_thursday"):
-                # Index of this LIVE KI Call (uses the event_id suffix)
-                try:
-                    idx = int(doc["event_id"].split("_")[-1])
-                except Exception:
-                    idx = 0
-                doc["date"] = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-            await db.events.insert_one(doc)
-        return
-
-    # Roll-forward: keep weekly LIVE KI Calls fresh — re-stamp their dates if past
-    thursday_dates = _compute_weekly_thursday_dates(8)
-    weekly_count = await db.events.count_documents(
-        {"recurring": {"$in": ["weekly_thursday", "biweekly_thursday"]}}
-    )
-    if weekly_count == 0:
-        # First time these recurring events are introduced — insert all 8
-        for event in EVENTS_SEED_V2:
-            if event.get("recurring") not in ("weekly_thursday", "biweekly_thursday"):
-                continue
-            doc = {**event}
-            try:
-                idx = int(doc["event_id"].split("_")[-1])
-            except Exception:
-                idx = 0
-            doc["date"] = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-            await db.events.insert_one(doc)
-        return
-
-    # Migration: ensure all recurring events use the new weekly_thursday flag
-    await db.events.update_many(
-        {"recurring": "biweekly_thursday"},
-        {"$set": {"recurring": "weekly_thursday"}},
-    )
-
-    # Migration: bump pre-July-2026 upcoming events forward onto July+ Thursdays
-    # so the cohort schedule kicks in regardless of when DB was first seeded.
-    cohort_floor = datetime(2026, 7, 1, tzinfo=timezone.utc)
-    bump_dates_18 = _compute_weekly_thursday_dates(12, hour_utc=18)
-    bump_dates_14 = _compute_weekly_thursday_dates(12, hour_utc=14)
-    bump_dates_10 = _compute_weekly_thursday_dates(12, hour_utc=10)
-    bump_idx = 0
-    async for evt in db.events.find(
-        {"event_type": {"$nin": ["replay"]}, "recurring": {"$ne": "weekly_thursday"}},
-        {"_id": 0, "event_id": 1, "date": 1, "event_type": 1},
-    ):
-        try:
-            existing = datetime.fromisoformat(str(evt.get("date", "")).replace("Z", "+00:00"))
-        except Exception:
-            continue
-        if existing >= cohort_floor:
-            continue
-        # Pick a Thursday slot — workshops/coaching morning, live evening
-        if evt.get("event_type") in ("workshop", "coaching", "mastermind"):
-            new_date = bump_dates_14[bump_idx % len(bump_dates_14)]
-        elif evt.get("event_type") == "focus_session":
-            new_date = bump_dates_10[bump_idx % len(bump_dates_10)]
-        else:
-            new_date = bump_dates_18[bump_idx % len(bump_dates_18)]
-        bump_idx += 1
-        await db.events.update_one(
-            {"event_id": evt["event_id"]},
-            {"$set": {"date": new_date, "status": "upcoming"}},
-        )
-
-    async for evt in db.events.find(
-        {"recurring": "weekly_thursday"}, {"_id": 0, "event_id": 1, "date": 1}
-    ):
-        try:
-            existing = datetime.fromisoformat(str(evt.get("date", "")).replace("Z", "+00:00"))
-            # Cohort-floor migration: even if the existing date is in the future,
-            # bump it to the July 2026 cohort schedule.
-            if existing > datetime.now(timezone.utc) and existing >= cohort_floor:
-                continue
-        except Exception:
-            pass
-        try:
-            idx = int(evt["event_id"].split("_")[-1])
-        except Exception:
-            idx = 0
-        new_date = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-        await db.events.update_one(
-            {"event_id": evt["event_id"]},
-            {"$set": {"date": new_date, "registered": 0, "status": "upcoming"}},
-        )
+            await db.events.insert_one({**event})
+    await _normalize_event_schedule()
 
 
 async def _attach_registration_status(events: list, request: Request) -> list:

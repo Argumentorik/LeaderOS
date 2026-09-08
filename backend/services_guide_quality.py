@@ -36,7 +36,7 @@ def godmode_check(clip: dict) -> dict:
         ("script_direct", bool(re.search(r"\b(du|dir|dich|dein\w*)\b", low)), "spricht den Nutzer direkt an"),
         ("script_next_step", any(c in " ".join(sents[-2:]).lower() for c in _CTA), "endet mit konkretem Next Step"),
         ("presence_shots", bool(talks) and all(t.get("preset") in _PRESENCE_PRESETS for t in talks),
-         "Präsenz-Shots (kein Walk-in)" if talks else "keine Shots geplant"),
+         "Sprech-Shots sind Präsenz-Shots (kein Herumlaufen beim Sprechen)" if talks else "keine Shots geplant"),
         ("lipsync_omnihuman", bool(talks) and all(t.get("engine") == "omnihuman" and t.get("synced_path") for t in talks),
          "OmniHuman-Lipsync auf allen Sprech-Shots"),
         ("soft_ending", bool(talks) and talks[-1].get("audio_seconds", 0) > 0 and "speech_lead" in talks[0],

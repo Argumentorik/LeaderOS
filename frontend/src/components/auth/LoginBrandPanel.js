@@ -54,37 +54,35 @@ export const LoginBrandPanel = ({ features, de }) => {
           <h1 className="text-4xl sm:text-5xl tracking-tighter leading-[1.08] text-white mb-5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 500, letterSpacing: '-0.035em' }}>
             {de ? (
               <>
-                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '120ms' }}>Die Zukunft gehört</span></span>
+                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '120ms' }}>Führe besser.</span></span>
                 <span className="block overflow-hidden">
                   <span className="block line-reveal" style={{ animationDelay: '260ms' }}>
                     <span className="relative inline-block">
-                      <span className="lime-shimmer">KI-nativen</span>
+                      <span className="lime-shimmer">Jeden Tag.</span>
                       <span aria-hidden className="absolute left-0 -bottom-1 h-[3px] w-full origin-left rounded-full bg-gradient-to-r from-[#BFFF00] to-[#BFFF00]/20 underline-draw" style={{ animationDelay: '900ms' }} />
                     </span>
                   </span>
                 </span>
-                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '400ms' }}>Führungskräften.</span></span>
               </>
             ) : (
               <>
-                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '120ms' }}>The future belongs to</span></span>
+                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '120ms' }}>Lead better.</span></span>
                 <span className="block overflow-hidden">
                   <span className="block line-reveal" style={{ animationDelay: '260ms' }}>
                     <span className="relative inline-block">
-                      <span className="lime-shimmer">AI-native</span>
+                      <span className="lime-shimmer">Every day.</span>
                       <span aria-hidden className="absolute left-0 -bottom-1 h-[3px] w-full origin-left rounded-full bg-gradient-to-r from-[#BFFF00] to-[#BFFF00]/20 underline-draw" style={{ animationDelay: '900ms' }} />
                     </span>
                   </span>
                 </span>
-                <span className="block overflow-hidden"><span className="block line-reveal" style={{ animationDelay: '400ms' }}>leaders.</span></span>
               </>
             )}
           </h1>
 
-          <p className="text-[13.5px] text-white/40 leading-relaxed max-w-sm mb-2 brand-rise" style={{ animationDelay: '560ms' }}>
+          <p className="text-[13.5px] text-white/45 leading-relaxed max-w-sm mb-2 brand-rise" style={{ animationDelay: '560ms' }} data-testid="login-brand-subline">
             {de
-              ? 'Klarheit ist kein Talent, sondern ein System. Wlads Methodik als KI, rund um die Uhr an deiner Seite.'
-              : "Clarity isn't a talent, it's a system. Wlad's methodology as AI, by your side around the clock."}
+              ? 'Kein Onlinekurs, den du abarbeitest. Kein Chatbot, der dir Allgemeinplätze liefert. Leader-OS ist das, was dir im Alltag fehlt: jemand, der dich vor dem schwierigen Gespräch vorbereitet – zehn Minuten, jeden Tag.'
+              : 'Not an online course you grind through. Not a chatbot handing you platitudes. Leader-OS is what your workday is missing: someone who prepares you before the hard conversation – ten minutes, every day.'}
           </p>
 
           {/* Wlad-Teaser (freigegeben) direkt unter der Headline — Conversion first */}

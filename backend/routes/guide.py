@@ -26,7 +26,8 @@ from pymongo.errors import DuplicateKeyError
 from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
-    TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE, TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
+    TALK_LEAD_AFTER_WALK_SECONDS, TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE,
+    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
@@ -35,8 +36,9 @@ from services import get_current_user
 from services_guide_quality import godmode_check
 from services_ai_errors import ai_http_error
 from services_fal import (
-    COST_I2V, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, FalTimeout, clone_voice,
-    edit_image, image_to_video, lipsync_video, omnihuman_video, render_talking_video, synthesize_speech,
+    COST_I2V, COST_I2V_AUDIO, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, FalTimeout,
+    clone_voice, edit_image, image_to_video, image_to_video_v26, add_ambience, lipsync_video, omnihuman_video,
+    render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
     BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_end_card,
@@ -669,7 +671,7 @@ async def save_script(slug: str, data: ScriptSaveIn, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     script = " ".join((data.script or "").split())
     words = word_count(script)
-    lo, hi = (30, 115) if clip.get("multi_shot") and clip["kind"] == "teaser" else word_limits(clip["kind"])
+    lo, hi = (30, word_limits("teaser")[1]) if clip.get("multi_shot") and clip["kind"] == "teaser" else word_limits(clip["kind"])
     if not lo <= words <= hi:
         raise HTTPException(
             status_code=400,
@@ -907,6 +909,8 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             # GODMODE: Präsenz-Shots bekommen einen stillen Auftakt (erster Talk) und einen Ausklang
             # (letzter Talk), damit Wlad nicht auf Frame 1 losredet und nicht mitten im Blick abgeschnitten wird.
             lead = TALK_LEAD_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[0]) else 0.0
+            if lead and shots[0]["type"] == "walk":
+                lead = TALK_LEAD_AFTER_WALK_SECONDS
             tail = TALK_TAIL_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[-1]) else 0.0
             if lead or tail:
                 audio = await asyncio.to_thread(pad_audio, audio, lead, seconds + lead + tail)
@@ -944,6 +948,27 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             continue
         needs_motion = shot["type"] == "walk" or (shot["type"] == "talk" and not pro)
         if needs_motion and not shot.get("raw_path"):
+            if shot["type"] == "walk" and preset.get("audio"):
+                # Walk-in (Kling 2.6): endet auf dem Keyframe des folgenden Talk-Shots -> nahtloser Übergang;
+                # Ton (Schritte, Raumklang) danach bildsynchron aus MMAudio, weil Kling End-Frame + Audio ausschließt.
+                nxt = next((s_ for s_ in shots[shots.index(shot) + 1:] if s_["type"] == "talk" and s_.get("keyframe_path")), None)
+                await _patch_clip(slug, {"progress": f"Walk-in {sid} (Kling 2.6)"})
+                raw = await asyncio.to_thread(
+                    image_to_video_v26, _shot_url(token, sid, "keyframe"),
+                    shot.get("motion_prompt") or preset["motion_prompt"], preset["duration"],
+                    _shot_url(token, nxt["id"], "keyframe") if nxt else None,
+                )
+                shot["raw_path"] = await _store(f"raw_{sid}", slug, raw, "video/mp4", "mp4")
+                await _patch_shot(slug, sid, {"raw_path": shot["raw_path"], "synced_path": None, "engine": "kling-2.6"})
+                await _patch_clip(slug, {"progress": f"Walk-in {sid} Ton (MMAudio)"})
+                sounded = await asyncio.to_thread(
+                    add_ambience, _shot_url(token, sid, "raw"), preset["ambience_prompt"], float(preset["duration"]),
+                )
+                shot["raw_path"] = await _store(f"raw_{sid}", slug, sounded, "video/mp4", "mp4")
+                shot["engine"] = "kling-2.6-audio"
+                await _spend(slug, COST_I2V_AUDIO[preset["duration"]])
+                await _patch_shot(slug, sid, {"raw_path": shot["raw_path"], "synced_path": None, "engine": "kling-2.6-audio"})
+                continue
             await _patch_clip(slug, {"progress": f"Bewegung {sid} (Kling{' 2.5 Pro' if pro else ''})"})
             raw = await asyncio.to_thread(
                 image_to_video, _shot_url(token, sid, "keyframe"),
@@ -965,9 +990,13 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             await _patch_shot(slug, sid, {"synced_path": shot["synced_path"]})
 
     await _patch_clip(slug, {"progress": "Schnitt & Branding"})
-    segments, cues, offset, brand_windows = [], [], 0.0, []
+    segments, cues, offset, brand_windows, fades = [], [], 0.0, [], []
     for shot in shots:
         preset = SHOT_PRESETS.get(shot.get("preset") or "")
+        if segments and pro:
+            # Überblendung zum vorigen Shot: nach einem Walk-in länger (Ton + Bild laufen weich ineinander)
+            fades.append(XFADE_WALK if shots[len(segments) - 1]["type"] == "walk" else XFADE)
+            offset -= fades[-1]
         if shot["type"] == "broll":
             audio, _ = await asyncio.to_thread(get_object, shot["audio_path"])
             screens = [_screen_bytes(s, aspect) for s in shot["screens"] if (BROLL_DIR / f"{s}.png").exists()]
@@ -986,16 +1015,17 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
             cues += subtitle_chunks(shot["text"], offset + preset["speech_start"], shot["audio_seconds"], 6)
         else:
             raw, _ = await asyncio.to_thread(get_object, shot["raw_path"])
-            seg = await asyncio.to_thread(normalize_segment, raw, None, width, height)
+            seg = await asyncio.to_thread(normalize_segment, raw, None, width, height, shot.get("engine") == "kling-2.6-audio")
         segments.append(seg)
         seg_len = await asyncio.to_thread(_duration_of, seg)
         if shot["type"] != "broll":
             brand_windows.append((offset + (1.0 if offset == 0 else 0.0), offset + seg_len))
-        offset += seg_len - (XFADE if pro and segments[:-1] else 0.0)
+        offset += seg_len
 
     if pro:
         segments.append(await asyncio.to_thread(render_end_card, width, height))
-    joined = await asyncio.to_thread(concat_segments, segments, XFADE if pro else 0.0)
+        fades.append(XFADE)
+    joined = await asyncio.to_thread(concat_segments, segments, fades if pro else 0.0)
     from services_video_compose import extract_audio
 
     audio_track = await asyncio.to_thread(extract_audio, joined)
@@ -1017,6 +1047,7 @@ def _screen_bytes(screen: str, aspect: str) -> bytes:
 
 _FULL_SLOTS = asyncio.Semaphore(3)
 XFADE = 0.45
+XFADE_WALK = 0.8  # Übergang Walk-in -> Talk: Bild endet ohnehin auf dem Talk-Keyframe, Ton läuft weich hinüber
 
 
 def _setting_for(slug: str, clip: dict) -> str | None:
@@ -1033,7 +1064,7 @@ async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
         if not clip.get("shots"):
             clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro",
                                        _setting_for(slug, clip),
-                               single_take=bool(clip.get("single_take")))
+                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
             await _patch_clip(slug, {"shots": clip["shots"]})
         await _job_shot_keyframes(slug, clip, settings, token)
         clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
@@ -1156,7 +1187,7 @@ async def plan_clip_shots(slug: str, request: Request):
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
     shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro", _setting_for(slug, clip),
-                               single_take=bool(clip.get("single_take")))
+                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -1249,7 +1280,7 @@ async def bulk_produce(data: BulkIn, request: Request):
             # Upgrade: neu planen, Keyframes gleicher Presets behalten, alles andere neu rendern
             old = {(s_.get("preset"), s_["type"]): s_ for s_ in clip.get("shots", [])}
             shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro",
-                               _setting_for(slug, {**clip, "quality": data.quality}), single_take=bool(clip.get("single_take")))
+                               _setting_for(slug, {**clip, "quality": data.quality}), single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
             for s_ in shots:
                 prev = old.get((s_.get("preset"), s_["type"]))
                 if prev and prev.get("keyframe_path"):

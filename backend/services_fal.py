@@ -235,7 +235,10 @@ I2V_ENDPOINT = "fal-ai/kling-video/v2.1/standard/image-to-video"
 LIPSYNC_ENDPOINT = "fal-ai/kling-video/lipsync/audio-to-video"
 I2V_PRO_ENDPOINT = "fal-ai/kling-video/v2.5-turbo/pro/image-to-video"
 OMNIHUMAN_ENDPOINT = "fal-ai/bytedance/omnihuman/v1.5"
+I2V_AUDIO_ENDPOINT = "fal-ai/kling-video/v2.6/pro/image-to-video"
+AMBIENCE_ENDPOINT = "fal-ai/mmaudio-v2"
 COST_I2V_PRO = {"5": 0.35, "10": 0.70}
+COST_I2V_AUDIO = {"5": 0.36, "10": 0.71}  # Kling 2.6 ohne Ton (0,07 $/s) + MMAudio (0,001 $/s)
 COST_OMNIHUMAN_PER_S = 0.16
 
 COST_KEYFRAME = 0.04
@@ -274,6 +277,42 @@ def image_to_video(image_url: str, prompt: str, duration: str = "10", aspect_rat
     url = (result.get("video") or {}).get("url")
     if not url:
         raise FalError("Kling lieferte keine Video-URL")
+    return download(url, timeout=300)
+
+
+def image_to_video_v26(image_url: str, prompt: str, duration: str = "5", end_image_url: str | None = None) -> bytes:
+    """Kling 2.6 Pro ohne nativen Ton: Start-Keyframe (+ optional End-Keyframe, damit der Shot exakt auf dem Bild
+    endet, mit dem der nächste Talk-Shot beginnt) -> mp4. End-Frame und native Audio schließen sich bei Kling aus,
+    deshalb kommt der Ton anschließend aus MMAudio (`add_ambience`)."""
+    payload = {
+        "prompt": prompt,
+        "start_image_url": image_url,
+        "duration": duration,
+        "generate_audio": False,
+        "negative_prompt": "blur, distort, low quality, extra limbs, deformed hands, text, watermark, subtitles, camera cut",
+    }
+    if end_image_url:
+        payload["end_image_url"] = end_image_url
+    result = run_fal(I2V_AUDIO_ENDPOINT, payload, timeout_seconds=1800)
+    url = (result.get("video") or {}).get("url")
+    if not url:
+        raise FalError("Kling 2.6 lieferte keine Video-URL")
+    return download(url, timeout=300)
+
+
+def add_ambience(video_url: str, prompt: str, duration: float) -> bytes:
+    """MMAudio v2: erzeugt zum Bild synchronen Ton (Schritte, Raumklang) und liefert das Video mit Tonspur."""
+    result = run_fal(AMBIENCE_ENDPOINT, {
+        "video_url": video_url,
+        "prompt": prompt,
+        "negative_prompt": "speech, talking, voice, singing, music, melody, lyrics",
+        "duration": max(1.0, min(30.0, float(duration))),
+        "num_steps": 25,
+        "cfg_strength": 4.5,
+    }, timeout_seconds=900)
+    url = (result.get("video") or {}).get("url")
+    if not url:
+        raise FalError("MMAudio lieferte keine Video-URL")
     return download(url, timeout=300)
 
 

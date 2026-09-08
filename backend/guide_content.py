@@ -9,7 +9,7 @@ Wortgrenze ist keine Kosmetik: Fal rechnet pro Sekunde Video ab.
 
 SCRIPT_MIN_WORDS = 55
 SCRIPT_MAX_WORDS = 115
-WORD_LIMITS = {"teaser": (6, 70), "onboarding": (70, 150), "feature": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
+WORD_LIMITS = {"teaser": (6, 150), "onboarding": (70, 150), "feature": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
 
 
 def word_limits(kind: str) -> tuple[int, int]:
@@ -143,6 +143,35 @@ SHOT_PRESETS = {
         ),
         "duration": "10",
         "speech_start": 4.0,
+        "aspect_ratio": "9:16",
+    },
+    # GODMODE Walk-in (Iter 167): Wlad kommt aus dem Dunkel ins Licht — Kling 2.6 mit nativem Ton (Schritte, Raumklang).
+    # Der Shot endet auf dem Keyframe des folgenden Talk-Shots (end_image) -> nahtloser Übergang ins Sprechen.
+    "studio_walk_in": {
+        "label": "Dunkles Studio · Walk-in mit Ton",
+        "kind": "walk",
+        "audio": True,
+        "scene_prompt": (
+            "Scene: a dark cinematic studio with a pitch-black background and a polished dark floor. A single hard "
+            "spotlight from above forms a bright cone of light in the center with subtle haze and volumetric light, "
+            "a thin lime-green rim light at the edge of the beam. He stands a few steps behind the light cone, still "
+            "half in shadow, mid-stride, about to walk forward into the light toward the camera, calm and confident. "
+            "Vertical 9:16 composition, full body visible with feet on the floor, premium Apple-keynote look, "
+            "Netflix-quality animation film still, shallow depth of field, 8k render."
+        ),
+        "motion_prompt": (
+            "The man walks calmly and confidently forward out of the darkness into the spotlight, straight toward the "
+            "camera, with a relaxed natural stride and a slight arm swing. Slow cinematic dolly-in that follows him, so "
+            "that by the end he stands grounded in the center of the light, framed from the waist up, looking straight "
+            "into the camera with a warm, focused expression and a slight confident smile. Volumetric haze in the "
+            "light beam, consistent character and outfit, no camera cuts, smooth realistic motion."
+        ),
+        "ambience_prompt": (
+            "soft steady footsteps of leather shoes on a polished studio floor, quiet studio room tone, "
+            "a very subtle deep cinematic ambience swelling gently as he steps into the light, no speech, no music"
+        ),
+        "duration": "5",
+        "speech_start": 0.0,
         "aspect_ratio": "9:16",
     },
     "loft_walk_in": {
@@ -311,6 +340,15 @@ def single_take_plan(setting: str = "loft") -> list[dict]:
     """GODMODE-Gesprächsniveau: ein ruhiger Präsenz-Shot, der ganze Text als eine Tonspur, kein Schnitt."""
     medium, _ = PRESENCE_SETTINGS.get(setting, PRESENCE_SETTINGS["loft"])
     return [{"type": "talk", "preset": medium, "max_words": 160}]
+
+
+# Walk-in vor dem Single-Take (Login-Teaser): Wlad kommt mit Ton herein, dann ein durchgehender Talk.
+WALK_IN_PRESETS = {"studio": "studio_walk_in", "loft": "loft_walk_in"}
+TALK_LEAD_AFTER_WALK_SECONDS = 0.7  # nach dem Ankommen kurz stehen und schauen, dann sprechen
+
+
+def walk_in_plan(setting: str = "studio") -> list[dict]:
+    return [{"type": "walk", "preset": WALK_IN_PRESETS.get(setting, WALK_IN_PRESETS["studio"])}, *single_take_plan(setting)]
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
@@ -400,13 +438,18 @@ def _take_tail(sentences: list[str], limit: int) -> str:
 
 
 def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None,
-               single_take: bool = False) -> list[dict]:
+               single_take: bool = False, walk_in: bool = False) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
-    setting = Präsenz-Plan ohne Walk-in ("loft" | "studio")."""
+    setting = Präsenz-Plan ohne Walk-in ("loft" | "studio"). walk_in = Single-Take mit Walk-in davor."""
     if single_take:
+        text = " ".join(script.split())
+        if walk_in:
+            walk, medium = walk_in_plan(setting or "studio")
+            return [{"id": "s1", "type": "walk", "preset": walk["preset"], "screens": [], "text": ""},
+                    {"id": "s2", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
         medium = single_take_plan(setting or "loft")[0]
-        return [{"id": "s1", "type": "talk", "preset": medium["preset"], "screens": [], "text": " ".join(script.split())}]
+        return [{"id": "s1", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
     if setting:
         plan = presence_plan(setting)
     else:
@@ -619,7 +662,7 @@ def seed_clips() -> list[dict]:
     LOGIN_TEASER["script"] = GODMODE_SCRIPTS.get("teaser-login", LOGIN_TEASER["script"])
     clips = [_clip(c["slug"], "teaser", c["order"], c["title"], c["script"], shot_preset=c["shot_preset"]) for c in TEASER_CLIPS]
     clips.append(_clip(LOGIN_TEASER["slug"], "teaser", LOGIN_TEASER["order"], LOGIN_TEASER["title"], LOGIN_TEASER["script"],
-                       multi_shot=True, aspect="9:16"))
+                       multi_shot=True, aspect="9:16", single_take=True, walk_in=True, setting="studio"))
     clips += [_clip(c["slug"], "onboarding", c["order"], c["title"], c["script"], aspect="16:9") for c in ONBOARDING_CLIPS]
     clips += [_clip(f"mission-day-{c['day']}", "mission", 100 + c["day"], c["title"], c["script"], ref=str(c["day"]), aspect="16:9")
               for c in MISSION_CLIPS]

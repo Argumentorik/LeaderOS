@@ -1,152 +1,6 @@
 {
  "clips": [
   {
-   "slug": "teaser-login",
-   "kind": "teaser",
-   "ref": null,
-   "order": 0,
-   "title": "Warum Leader-OS",
-   "script": "Du führst ein Team – aber wer coacht eigentlich dich? Ich bin Wlad. Leader-OS ist dein persönlicher Sparringspartner: Wir bereiten schwierige Gespräche gemeinsam vor, du übst sie in der Simulation, und in der Video-Analyse siehst du, wie du wirklich wirkst. Kein Kurs zum Abarbeiten, sondern ein System, das mit dir arbeitet – jeden Tag zehn Minuten. Starte jetzt, kostenlos.",
-   "script_source": "godmode_v1",
-   "status": "video_ready",
-   "published": true,
-   "audio_path": null,
-   "video_path": "guide/video_teaser-login_482fb89e.mp4",
-   "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
-   "duration_seconds": null,
-   "error": null,
-   "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-07T09:12:59.704691+00:00",
-   "progress": null,
-   "shots": [
-    {
-     "id": "s1",
-     "type": "talk",
-     "preset": "studio_medium",
-     "screens": [],
-     "text": "Du führst ein Team – aber wer coacht eigentlich dich? Ich bin Wlad. Leader-OS ist dein persönlicher Sparringspartner: Wir bereiten schwierige Gespräche gemeinsam vor, du übst sie in der Simulation.",
-     "error": null,
-     "keyframe_path": "guide/kf_s1_teaser-login_acdc1757.png",
-     "raw_path": null,
-     "synced_path": "guide/sync_s1_teaser-login_42cb609e.mp4",
-     "audio_path": "guide/a_s1_teaser-login_e84a7944.mp3",
-     "audio_seconds": 13.0,
-     "speech_lead": 0.4,
-     "speech_tail": 0.0,
-     "engine": "omnihuman"
-    },
-    {
-     "id": "s2",
-     "type": "broll",
-     "preset": null,
-     "screens": [
-      "chat",
-      "video",
-      "missions"
-     ],
-     "text": "Und in der Video-Analyse siehst du, wie du wirklich wirkst. Kein Kurs zum Abarbeiten, sondern ein System, das mit dir arbeitet – jeden Tag zehn Minuten.",
-     "audio_path": "guide/a_s2_teaser-login_607fc221.mp3",
-     "audio_seconds": 7.49,
-     "speech_lead": 0.0,
-     "speech_tail": 0.0
-    },
-    {
-     "id": "s3",
-     "type": "talk",
-     "preset": "studio_closeup",
-     "screens": [],
-     "text": "Starte jetzt, kostenlos.",
-     "error": null,
-     "keyframe_path": "guide/kf_s3_teaser-login_49b8e757.png",
-     "raw_path": null,
-     "synced_path": "guide/sync_s3_teaser-login_359f34d1.mp4",
-     "audio_path": "guide/a_s3_teaser-login_17235367.mp3",
-     "audio_seconds": 3.4,
-     "speech_lead": 0.0,
-     "speech_tail": 0.9,
-     "engine": "omnihuman"
-    }
-   ],
-   "spent_usd": 8.33,
-   "duration_seconds_video": 23.1,
-   "pipeline": "multishot",
-   "subtitles": [
-    {
-     "start": 0.45,
-     "end": 2.09,
-     "text": "Du führst ein Team – aber"
-    },
-    {
-     "start": 2.09,
-     "end": 3.86,
-     "text": "wer coacht eigentlich dich?"
-    },
-    {
-     "start": 3.86,
-     "end": 4.72,
-     "text": "Ich bin Wlad."
-    },
-    {
-     "start": 4.72,
-     "end": 7.93,
-     "text": "Leader-OS ist dein persönlicher Sparringspartner"
-    },
-    {
-     "start": 7.93,
-     "end": 11.08,
-     "text": "Wir bereiten schwierige Gespräche gemeinsam vor"
-    },
-    {
-     "start": 11.08,
-     "end": 13.05,
-     "text": "du übst sie in der Simulation."
-    },
-    {
-     "start": 13.17,
-     "end": 14.95,
-     "text": "Und in der Video-Analyse siehst du"
-    },
-    {
-     "start": 14.95,
-     "end": 16.13,
-     "text": "wie du wirklich wirkst."
-    },
-    {
-     "start": 16.13,
-     "end": 17.4,
-     "text": "Kein Kurs zum Abarbeiten"
-    },
-    {
-     "start": 17.4,
-     "end": 18.37,
-     "text": "sondern ein System"
-    },
-    {
-     "start": 18.37,
-     "end": 19.79,
-     "text": "das mit dir arbeitet – jeden"
-    },
-    {
-     "start": 19.79,
-     "end": 20.66,
-     "text": "Tag zehn Minuten."
-    },
-    {
-     "start": 20.19,
-     "end": 21.6,
-     "text": "Starte jetzt"
-    },
-    {
-     "start": 21.6,
-     "end": 22.69,
-     "text": "kostenlos."
-    }
-   ],
-   "video_bytes": 4526495,
-   "published_at": "2026-09-07T09:12:59.704681+00:00",
-   "quality": "pro"
-  },
-  {
    "slug": "start-1-willkommen",
    "kind": "onboarding",
    "ref": null,
@@ -162,8 +16,9 @@
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-07T12:42:14.579609+00:00",
-   "progress": null,
+   "updated_at": "2026-09-08T00:51:34.273066+00:00",
+   "voice_id_used": "Deep_Voice_Man",
+   "video_bytes": 9085808,
    "shots": [
     {
      "id": "s1",
@@ -180,7 +35,8 @@
      "speech_lead": 0.4,
      "engine": "omnihuman",
      "padded_path": null,
-     "speech_tail": 0.0
+     "speech_tail": 0.0,
+     "fal_request": null
     },
     {
      "id": "s2",
@@ -217,6 +73,7 @@
      "speech_tail": 0.9
     }
    ],
+   "progress": null,
    "spent_usd": 18.38,
    "duration_seconds_video": 49.5,
    "pipeline": "multishot",
@@ -392,51 +249,11 @@
      "text": "Sie sind gut investiert."
     }
    ],
-   "video_bytes": 9085808,
    "published_at": "2026-09-02T10:00:43.311708+00:00",
-   "quality": "pro"
-  },
-  {
-   "slug": "teaser-spotlight",
-   "kind": "teaser",
-   "ref": null,
-   "order": 1,
-   "title": "Teaser: Ins Licht",
-   "script": "Führung ist kein Talent. Führung ist ein System. Willkommen bei Leader-OS.",
-   "script_source": "wlad",
-   "status": "video_ready",
-   "published": true,
-   "audio_path": "guide/audio_teaser-spotlight_1b46654b.mp3",
-   "video_path": "guide/video_teaser-spotlight_baf67625.mp4",
-   "media_token": "m1p2NRyuenwFf_SOONZZxYMfyW_L3bHr",
-   "duration_seconds": 5,
-   "error": null,
-   "created_at": "2026-09-02T01:01:52.733632+00:00",
-   "updated_at": "2026-09-02T08:56:03.348965+00:00",
-   "progress": null,
-   "spent_usd": 0.68,
-   "duration_seconds_video": 10.0,
-   "pipeline": "cinematic",
-   "subtitles": [
-    {
-     "start": 4.0,
-     "end": 5.67,
-     "text": "Führung ist kein Talent."
-    },
-    {
-     "start": 5.67,
-     "end": 7.26,
-     "text": "Führung ist ein System."
-    },
-    {
-     "start": 7.26,
-     "end": 9.0,
-     "text": "Willkommen bei Leader-OS."
-    }
-   ],
-   "video_bytes": 1437672,
-   "published_at": "2026-09-02T08:56:03.348948+00:00",
-   "shots": []
+   "quality": "pro",
+   "stale": false,
+   "script_draft": "Schön, dass du hier bist. Ich bin Wlad, und das hier ist kein Kurs, den du abarbeitest, sondern ein Ort, an dem du an deinen eigenen Führungssituationen arbeitest. Stell dir vor, morgen um zehn sitzt dir ein Mitarbeiter gegenüber, der seit Wochen abbaut, und du weißt noch nicht, wie du das Gespräch eröffnest. Genau dafür bin ich da. Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten sinnvollen Schritt vorschlage. Damit das funktioniert, brauche ich zehn Minuten von dir: Wer bist du, wo führst du, was macht dir gerade am meisten zu schaffen. Je ehrlicher du das beantwortest, desto besser wird alles, was danach kommt. Also nimm dir diese zehn Minuten jetzt, nicht später.",
+   "script_draft_status": "pending"
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -454,7 +271,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-07T04:34:09.828660+00:00",
+   "updated_at": "2026-09-08T00:36:55.900722+00:00",
    "progress": null,
    "shots": [
     {
@@ -671,7 +488,10 @@
    ],
    "video_bytes": 9258913,
    "published_at": "2026-09-03T17:57:50.009287+00:00",
-   "quality": "pro"
+   "quality": "pro",
+   "stale": false,
+   "script_draft": "Der Unterschied zwischen einer brauchbaren und einer beliebigen Antwort liegt fast immer in deiner Frage. Wenn du mir nur Mitarbeitergespräch schreibst, bekommst du das, was in jedem Ratgeber steht, weil ich nichts über deine Lage weiß. Schreib mir stattdessen so, wie du es einem Coach erzählen würdest, der dich kennt. Zum Beispiel: Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, und morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch, ohne dass einer gleich dichtmacht? Jetzt weiß ich, worum es geht, wer beteiligt ist, wann es passiert und was du erreichen willst, und genau darauf antworte ich dir. Und wenn dir meine Antwort zu allgemein vorkommt, sag es mir, dann frage ich nach, bis es passt. Probier es gleich aus: Beschreib mir die Situation, die dir diese Woche am meisten im Kopf herumgeht.",
+   "script_draft_status": "pending"
   },
   {
    "slug": "start-3-kontext",
@@ -689,7 +509,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-07T00:42:39.880303+00:00",
+   "updated_at": "2026-09-08T00:42:02.592605+00:00",
    "progress": null,
    "shots": [
     {
@@ -890,7 +710,8 @@
    ],
    "video_bytes": 8562101,
    "published_at": "2026-09-03T17:57:50.187346+00:00",
-   "quality": "pro"
+   "quality": "pro",
+   "stale": false
   },
   {
    "slug": "start-4-werkzeuge",
@@ -1132,7 +953,8 @@
    ],
    "video_bytes": 8932180,
    "published_at": "2026-09-03T17:57:50.450964+00:00",
-   "quality": "pro"
+   "quality": "pro",
+   "stale": false
   },
   {
    "slug": "start-5-erste-7-tage",
@@ -1377,7 +1199,8 @@
    ],
    "video_bytes": 8574060,
    "published_at": "2026-09-03T17:57:50.669418+00:00",
-   "quality": "pro"
+   "quality": "pro",
+   "stale": false
   },
   {
    "slug": "mission-day-1",
@@ -2445,12 +2268,280 @@
    "quality": "pro"
   },
   {
+   "slug": "teaser-spotlight",
+   "kind": "teaser",
+   "ref": null,
+   "order": 1,
+   "title": "Teaser: Ins Licht",
+   "script": "Führung ist kein Talent. Führung ist ein System. Willkommen bei Leader-OS.",
+   "shot_preset": "spotlight_entrance",
+   "script_source": "wlad",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": "guide/audio_teaser-spotlight_1b46654b.mp3",
+   "video_path": "guide/video_teaser-spotlight_baf67625.mp4",
+   "media_token": "m1p2NRyuenwFf_SOONZZxYMfyW_L3bHr",
+   "duration_seconds": 5,
+   "error": null,
+   "created_at": "2026-09-02T01:01:52.733632+00:00",
+   "updated_at": "2026-09-02T08:56:03.348965+00:00",
+   "spent_usd": 0.68,
+   "keyframe_path": "guide/keyframe_teaser-spotlight_50a70e1a.png",
+   "keyframe_prompt": "High-end Pixar-style 3D animated character of the man in the first reference image: keep his exact face, dark side-parted hair, short stubble beard, warm brown eyes and friendly confident expression. Full body, same athletic proportions and confident open stage posture as the man in the second reference image. He wears a dark green velvet blazer, a light blue shirt with open collar, no tie, dark tailored trousers and brown leather shoes. Clean stylized 3D animation film look, subsurface skin, soft fabric detail, no text, no watermark. Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
+   "raw_video_path": "guide/raw_teaser-spotlight_266386df.mp4",
+   "voice_id_used": "Voice6717536d1788310928",
+   "progress": null,
+   "audio_padded_path": "guide/padded_teaser-spotlight_88bc4baa.mp3",
+   "duration_seconds_video": 10.0,
+   "pipeline": "cinematic",
+   "subtitles": [
+    {
+     "start": 4.0,
+     "end": 5.67,
+     "text": "Führung ist kein Talent."
+    },
+    {
+     "start": 5.67,
+     "end": 7.26,
+     "text": "Führung ist ein System."
+    },
+    {
+     "start": 7.26,
+     "end": 9.0,
+     "text": "Willkommen bei Leader-OS."
+    }
+   ],
+   "video_bytes": 1437672,
+   "motion_prompt": "The man walks calmly and confidently forward out of the darkness into the hard spotlight, stops in the center of the light cone, looks straight into the camera, gives a slight confident smile and then talks to the camera with natural subtle head movements and small hand gestures. Slow cinematic dolly-in, volumetric haze in the light beam, consistent character and outfit, no camera cuts, smooth realistic motion.",
+   "scene_prompt": "Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
+   "published_at": "2026-09-02T08:56:03.348948+00:00"
+  },
+  {
+   "slug": "teaser-login",
+   "kind": "teaser",
+   "ref": null,
+   "order": 0,
+   "title": "Warum Leader-OS",
+   "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos.",
+   "multi_shot": true,
+   "aspect": "9:16",
+   "script_source": "wlad_v3",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_teaser-login_3ba149c9.mp4",
+   "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-02T10:00:43.113322+00:00",
+   "updated_at": "2026-09-08T11:38:55.794968+00:00",
+   "progress": null,
+   "spent_usd": 16.909999999999997,
+   "duration_seconds_video": 55.9,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 4.97,
+     "end": 6.17,
+     "text": "Du führst ein Team."
+    },
+    {
+     "start": 6.17,
+     "end": 8.44,
+     "text": "Du triffst jeden Tag Entscheidungen"
+    },
+    {
+     "start": 8.44,
+     "end": 10.33,
+     "text": "die andere Menschen betreffen."
+    },
+    {
+     "start": 10.33,
+     "end": 12.73,
+     "text": "Aber wer bereitet eigentlich dich vor?"
+    },
+    {
+     "start": 12.73,
+     "end": 13.55,
+     "text": "Ich bin Wlad."
+    },
+    {
+     "start": 13.55,
+     "end": 15.82,
+     "text": "Und nach über tausend Trainings weiß"
+    },
+    {
+     "start": 15.82,
+     "end": 16.08,
+     "text": "ich"
+    },
+    {
+     "start": 16.08,
+     "end": 18.28,
+     "text": "Führung scheitert selten am Wissen."
+    },
+    {
+     "start": 18.28,
+     "end": 20.62,
+     "text": "Sie scheitert am Mittwoch um vierzehn"
+    },
+    {
+     "start": 20.62,
+     "end": 20.87,
+     "text": "Uhr"
+    },
+    {
+     "start": 20.87,
+     "end": 23.77,
+     "text": "wenn das schwierige Gespräch wirklich ansteht."
+    },
+    {
+     "start": 23.77,
+     "end": 26.17,
+     "text": "Genau dafür habe ich Leader-OS gebaut."
+    },
+    {
+     "start": 26.17,
+     "end": 27.18,
+     "text": "Kein Onlinekurs"
+    },
+    {
+     "start": 27.18,
+     "end": 29.64,
+     "text": "den du abarbeitest und wieder vergisst."
+    },
+    {
+     "start": 29.64,
+     "end": 30.46,
+     "text": "Kein Chatbot"
+    },
+    {
+     "start": 30.46,
+     "end": 32.48,
+     "text": "der dir Allgemeinplätze liefert."
+    },
+    {
+     "start": 32.48,
+     "end": 35.64,
+     "text": "Sondern dein tägliches Betriebssystem für Führung"
+    },
+    {
+     "start": 35.64,
+     "end": 37.84,
+     "text": "Du beschreibst mir deine Situation"
+    },
+    {
+     "start": 37.84,
+     "end": 40.37,
+     "text": "wir bereiten das Gespräch gemeinsam vor"
+    },
+    {
+     "start": 40.37,
+     "end": 42.14,
+     "text": "du übst es in der Simulation"
+    },
+    {
+     "start": 42.14,
+     "end": 44.22,
+     "text": "– und in der Video-Analyse siehst"
+    },
+    {
+     "start": 44.22,
+     "end": 44.41,
+     "text": "du"
+    },
+    {
+     "start": 44.41,
+     "end": 45.86,
+     "text": "wie du wirklich wirkst."
+    },
+    {
+     "start": 45.86,
+     "end": 47.12,
+     "text": "Zehn Minuten am Tag."
+    },
+    {
+     "start": 47.12,
+     "end": 48.51,
+     "text": "Mit meinen Frameworks"
+    },
+    {
+     "start": 48.51,
+     "end": 49.71,
+     "text": "mit deinem Kontext"
+    },
+    {
+     "start": 49.71,
+     "end": 51.16,
+     "text": "mit ehrlichem Feedback."
+    },
+    {
+     "start": 51.16,
+     "end": 51.98,
+     "text": "Führe besser."
+    },
+    {
+     "start": 51.98,
+     "end": 52.61,
+     "text": "Jeden Tag."
+    },
+    {
+     "start": 52.61,
+     "end": 54.25,
+     "text": "Fang heute an – kostenlos."
+    }
+   ],
+   "video_bytes": 13616134,
+   "published_at": "2026-09-07T12:23:07.437668+00:00",
+   "quality": "pro",
+   "stale": false,
+   "script_approved_at": "2026-09-08T11:03:56.578272+00:00",
+   "script_draft_status": "approved",
+   "setting": "studio",
+   "single_take": true,
+   "walk_in": true,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "walk",
+     "preset": "studio_walk_in",
+     "screens": [],
+     "text": "",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_teaser-login_643b6a40.png",
+     "raw_path": "guide/raw_s1_teaser-login_361213f7.mp4",
+     "synced_path": null,
+     "engine": "kling-2.6-audio"
+    },
+    {
+     "id": "s2",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s2_teaser-login_6a8a134e.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s2_teaser-login_ffa1f1f1.mp4",
+     "audio_path": "guide/a_s2_teaser-login_1a6e38fd.mp3",
+     "audio_seconds": 50.88,
+     "speech_lead": 0.7,
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
+    }
+   ]
+  },
+  {
    "slug": "coaching-pakete",
    "kind": "coaching",
    "ref": null,
    "order": 200,
    "title": "Was du mit Leader-OS bekommst",
    "script": "Bevor du dir die Pakete ansiehst, eine ehrliche Einordnung. Die meisten Führungskräfte scheitern nicht am Wissen. Sie scheitern am Mittwoch um vierzehn Uhr, wenn das Gespräch wirklich ansteht. Genau dafür ist Leader-OS gebaut: zehn Kurse, zweiundsiebzig Folgen, jede unter zwölf Minuten, jede mit einem Werkzeug, das du am selben Tag einsetzt. Leader-OS für neunhundertsiebenundneunzig Euro im Jahr enthält die sechs Fundament-Kurse – Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meetings – und mich als Coach, jederzeit, mit deinem Kontext im Kopf. Leader-OS PLUS ergänzt die vier Kurse für die oberste Ebene – KI-First Leadership, Change, Executive Presence, Boardroom-Strategie – und zwölf Live-Coachings mit meinem Team, in denen wir deine echten Fälle durcharbeiten. Der Prozess ist bei beiden gleich: Situation beschreiben, Werkzeug anwenden, Feedback bekommen, besser ins nächste Gespräch gehen. Das Ergebnis siehst du nicht in einem Zertifikat, sondern in deinem Team. Schau dir unten an, welches Paket zu deiner Situation passt. Und wenn du unsicher bist, frag mich einfach direkt.",
+   "multi_shot": true,
+   "aspect": "16:9",
    "script_source": "wlad",
    "status": "video_ready",
    "published": true,
@@ -2461,7 +2552,8 @@
    "error": null,
    "created_at": "2026-09-07T01:19:58.575948+00:00",
    "updated_at": "2026-09-07T12:09:11.366524+00:00",
-   "progress": null,
+   "pipeline": "multishot",
+   "quality": "pro",
    "shots": [
     {
      "id": "s1",
@@ -2512,13 +2604,15 @@
      "audio_seconds": 18.86,
      "speech_lead": 0.0,
      "speech_tail": 0.9,
+     "fal_request": null,
      "padded_path": null,
      "engine": "omnihuman"
     }
    ],
+   "stale": false,
+   "progress": null,
    "spent_usd": 10.92,
    "duration_seconds_video": 68.4,
-   "pipeline": "multishot",
    "subtitles": [
     {
      "start": 0.45,
@@ -2737,8 +2831,7 @@
     }
    ],
    "video_bytes": 12948069,
-   "published_at": "2026-09-07T12:09:11.366515+00:00",
-   "quality": "pro"
+   "published_at": "2026-09-07T12:09:11.366515+00:00"
   },
   {
    "slug": "bp-playbooks",
@@ -2747,6 +2840,8 @@
    "order": 300,
    "title": "Playbooks richtig nutzen",
    "script": "Die Playbooks sind kein Fragebogen. Sie sind die Vorbereitung, die ich mit meinen Klienten vor jedem wichtigen Gespräch mache – in fünf Schritten. Best Practice: Nimm ein echtes Gespräch, das in den nächsten sieben Tagen ansteht, nicht ein Beispiel. Schreib im ersten Schritt die Situation so auf, wie du sie einem Freund erzählen würdest, mit Namen und Zitat. Beim Ziel formulierst du das Ergebnis in einem Satz, den dein Gegenüber am Ende selbst sagen könnte. Und lies den Advice Report nicht nur – markiere den einen Satz, den du morgen wörtlich benutzt. Zehn Minuten Vorbereitung, und das Gespräch läuft anders. Fang mit dem Gespräch an, vor dem du dich am meisten drückst.",
+   "multi_shot": true,
+   "aspect": "16:9",
    "script_source": "seed",
    "status": "video_ready",
    "published": true,
@@ -2757,6 +2852,7 @@
    "error": null,
    "created_at": "2026-09-07T10:29:47.577544+00:00",
    "updated_at": "2026-09-07T10:58:24.735413+00:00",
+   "quality": "pro",
    "progress": null,
    "shots": [
     {
@@ -2766,6 +2862,7 @@
      "screens": [],
      "text": "Die Playbooks sind kein Fragebogen. Sie sind die Vorbereitung, die ich mit meinen Klienten vor jedem wichtigen Gespräch mache – in fünf Schritten. Best Practice: Nimm ein echtes Gespräch, das in den nächsten sieben Tagen ansteht, nicht ein Beispiel. Schreib im ersten Schritt die Situation so auf, wie du sie einem Freund erzählen würdest, mit Namen und Zitat.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s1_bp-playbooks_9550a098.png",
      "raw_path": null,
      "synced_path": "guide/sync_s1_bp-playbooks_aba80e47.mp4",
@@ -2797,6 +2894,7 @@
      "screens": [],
      "text": "Zehn Minuten Vorbereitung, und das Gespräch läuft anders. Fang mit dem Gespräch an, vor dem du dich am meisten drückst.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s3_bp-playbooks_af2452fb.png",
      "raw_path": null,
      "synced_path": "guide/sync_s3_bp-playbooks_e506ca7e.mp4",
@@ -2810,6 +2908,7 @@
    "spent_usd": 4.33,
    "duration_seconds_video": 37.0,
    "pipeline": "multishot",
+   "stale": false,
    "subtitles": [
     {
      "start": 0.45,
@@ -2948,8 +3047,7 @@
     }
    ],
    "video_bytes": 6682719,
-   "published_at": "2026-09-07T10:58:24.735405+00:00",
-   "quality": "pro"
+   "published_at": "2026-09-07T10:58:24.735405+00:00"
   },
   {
    "slug": "bp-missionen",
@@ -2958,6 +3056,8 @@
    "order": 301,
    "title": "Video-Missionen: so trainierst du",
    "script": "Video-Missionen sind dein Trainingsraum. Du bekommst eine Situation – Veränderung erklären, Vision pitchen, kritisches Feedback geben – und sprichst zwei Minuten in die Kamera. Best Practice aus tausend Trainings: Erster Versuch ohne Notizen, so wie es im Meeting auch wäre. Dann liest du das Feedback, änderst genau eine Sache – den Einstieg, das Beispiel, den Schluss – und nimmst sofort ein zweites Mal auf. Nicht drei Sachen. Eine. So entsteht der Fortschritt, den du nach einer Woche im echten Raum spürst. Und nimm die Mission, die dir unangenehm ist. Die angenehme kannst du schon. Starte heute mit einem Versuch, zwei Minuten.",
+   "multi_shot": true,
+   "aspect": "16:9",
    "script_source": "seed",
    "status": "video_ready",
    "published": true,
@@ -2968,6 +3068,7 @@
    "error": null,
    "created_at": "2026-09-07T10:29:47.580373+00:00",
    "updated_at": "2026-09-07T10:58:24.930803+00:00",
+   "quality": "pro",
    "progress": null,
    "shots": [
     {
@@ -2977,6 +3078,7 @@
      "screens": [],
      "text": "Video-Missionen sind dein Trainingsraum. Du bekommst eine Situation – Veränderung erklären, Vision pitchen, kritisches Feedback geben – und sprichst zwei Minuten in die Kamera. Best Practice aus tausend Trainings: Erster Versuch ohne Notizen, so wie es im Meeting auch wäre. Dann liest du das Feedback, änderst genau eine Sache – den Einstieg, das Beispiel.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s1_bp-missionen_b16549c4.png",
      "raw_path": null,
      "synced_path": "guide/sync_s1_bp-missionen_7586d76d.mp4",
@@ -3008,6 +3110,7 @@
      "screens": [],
      "text": "Und nimm die Mission, die dir unangenehm ist. Die angenehme kannst du schon. Starte heute mit einem Versuch, zwei Minuten.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s3_bp-missionen_2b93a62c.png",
      "raw_path": null,
      "synced_path": "guide/sync_s3_bp-missionen_512baa90.mp4",
@@ -3021,6 +3124,7 @@
    "spent_usd": 4.86,
    "duration_seconds_video": 40.5,
    "pipeline": "multishot",
+   "stale": false,
    "subtitles": [
     {
      "start": 0.45,
@@ -3154,8 +3258,7 @@
     }
    ],
    "video_bytes": 7746855,
-   "published_at": "2026-09-07T10:58:24.930795+00:00",
-   "quality": "pro"
+   "published_at": "2026-09-07T10:58:24.930795+00:00"
   },
   {
    "slug": "bp-video-analyse",
@@ -3164,6 +3267,8 @@
    "order": 302,
    "title": "Video-Analyse: so liest du dein Feedback",
    "script": "Die Video-Analyse bewertet, was dein Team hört, nicht was du gemeint hast. Ich schaue auf Klarheit, Sicherheit, Empathie und Struktur – und auf SEXIER: Statement, Erklärung, Beispiel, Wirkung, Begründung, Einwand. Best Practice: Lade echtes Material hoch, nicht die geschönte Version. Ein Meeting-Ausschnitt, eine Präsentation vom Handy, drei Minuten reichen. Schau dir zuerst das schwächste Feld an, nicht die Gesamtnote, und übe genau dort mit der Übung, die ich dir dazu gebe. Vergleiche nach zwei Wochen den zweiten Upload mit dem ersten – das ist dein Fortschritt, sichtbar in Zahlen. Nimm dir heute ein Video aus der letzten Woche und lade es hoch.",
+   "multi_shot": true,
+   "aspect": "16:9",
    "script_source": "seed",
    "status": "video_ready",
    "published": true,
@@ -3174,6 +3279,7 @@
    "error": null,
    "created_at": "2026-09-07T10:29:47.581160+00:00",
    "updated_at": "2026-09-07T11:12:05.516532+00:00",
+   "quality": "pro",
    "progress": null,
    "shots": [
     {
@@ -3183,6 +3289,7 @@
      "screens": [],
      "text": "Die Video-Analyse bewertet, was dein Team hört, nicht was du gemeint hast. Ich schaue auf Klarheit, Sicherheit, Empathie und Struktur – und auf SEXIER: Statement, Erklärung, Beispiel, Wirkung, Begründung, Einwand. Best Practice: Lade echtes Material hoch, nicht die geschönte Version. Ein Meeting-Ausschnitt, eine Präsentation vom Handy, drei Minuten reichen.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s1_bp-video-analyse_a5582717.png",
      "raw_path": null,
      "synced_path": "guide/sync_s1_bp-video-analyse_d1fa05af.mp4",
@@ -3214,6 +3321,7 @@
      "screens": [],
      "text": "Vergleiche nach zwei Wochen den zweiten Upload mit dem ersten – das ist dein Fortschritt, sichtbar in Zahlen. Nimm dir heute ein Video aus der letzten Woche und lade es hoch.",
      "error": null,
+     "fal_request": null,
      "keyframe_path": "guide/kf_s3_bp-video-analyse_1bd39f9e.png",
      "raw_path": null,
      "synced_path": "guide/sync_s3_bp-video-analyse_46d44a50.mp4",
@@ -3227,6 +3335,7 @@
    "spent_usd": 5.69,
    "duration_seconds_video": 40.8,
    "pipeline": "multishot",
+   "stale": false,
    "subtitles": [
     {
      "start": 0.45,
@@ -3390,8 +3499,7 @@
     }
    ],
    "video_bytes": 8274123,
-   "published_at": "2026-09-07T11:12:05.516524+00:00",
-   "quality": "pro"
+   "published_at": "2026-09-07T11:12:05.516524+00:00"
   }
  ],
  "settings": {
@@ -3403,6 +3511,13 @@
   "body_path": "guide/body_196a7b4aa2",
   "sample_content_type": "audio/mpeg",
   "voice_sample_path": "guide/sample_7d58a5d5ce",
-  "custom_voice_id": "Voice6717536d1788310928"
+  "custom_voice_id": "Voice6717536d1788310928",
+  "interactive_beta": {
+   "enabled": false,
+   "paid_open": true,
+   "free_trial_turns": 3,
+   "updated_at": "2026-09-07T12:29:43.875384+00:00",
+   "updated_by": "test@test.com"
+  }
  }
 }
