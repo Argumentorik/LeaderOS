@@ -56,7 +56,8 @@ class TestMagicLinkE2E:
     def test_verify_endpoint_valid_token_full_flow(self, s):
         # Generate token via fresh event loop with own motor client (avoid loop reuse)
         async def get_tok():
-            import hashlib, secrets
+            import hashlib
+            import secrets
             from datetime import datetime, timezone, timedelta
             client = AsyncIOMotorClient(MONGO_URL)
             mydb = client[DB_NAME]
@@ -168,7 +169,8 @@ class TestEmailTemplatesLinks:
 
     @pytest.mark.parametrize("ep_idx", range(7))
     def test_drip_links(self, ep_idx):
-        import sys, importlib
+        import sys
+        import importlib
         sys.path.insert(0, "/app/backend")
         m = importlib.import_module("services_email")
         _, html = m.framework_episode_email("Mert", m.FRAMEWORK_EPISODES[ep_idx])
@@ -218,7 +220,7 @@ class TestEmailTemplatesLinks:
 # ─── send_email retry signature ────────────────────────────────────────────
 class TestSendEmailRetry:
     def test_send_email_has_max_retries_kwarg(self):
-        import sys, inspect; sys.path.insert(0, "/app/backend")
+        import sys; import inspect; sys.path.insert(0, "/app/backend")
         from services_email import send_email
         sig = inspect.signature(send_email)
         assert "max_retries" in sig.parameters

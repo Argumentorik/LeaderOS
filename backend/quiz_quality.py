@@ -23,7 +23,7 @@ MIN_OPTION_CHARS = 25
 
 def _seeded_rng(*parts: str) -> random.Random:
     digest = hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()
-    return random.Random(int(digest[:16], 16))
+    return random.Random(int(digest[:16], 16))  # noqa: S311 — bewusst deterministisch (Seed aus Inhalt), keine Security-Zufälligkeit
 
 
 def shuffle_options(options: list, correct_index: int, *seed_parts: str) -> tuple[list, int]:

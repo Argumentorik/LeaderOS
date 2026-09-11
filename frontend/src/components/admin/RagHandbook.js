@@ -33,8 +33,8 @@ const renderMarkdown = (md) => {
       const [head, , ...body] = rows;
       out.push(
         <table key={`t${i}`} className="my-2 w-full text-[12px] border-collapse">
-          <thead><tr>{cells(head).map((c, k) => <th key={k} className="text-left py-1 pr-3 border-b border-black/10 dark:border-white/10 text-[10px] uppercase tracking-wide text-muted-foreground">{c}</th>)}</tr></thead>
-          <tbody>{body.map((r, ri) => <tr key={ri}>{cells(r).map((c, k) => <td key={k} className="py-1 pr-3 align-top border-b border-black/[0.04] dark:border-white/[0.05]">{inline(c)}</td>)}</tr>)}</tbody>
+          <thead><tr>{cells(head).map((c, k) => <th key={`${k}-${c}`} className="text-left py-1 pr-3 border-b border-black/10 dark:border-white/10 text-[10px] uppercase tracking-wide text-muted-foreground">{c}</th>)}</tr></thead>
+          <tbody>{body.map((r, ri) => <tr key={`${ri}-${r.slice(0, 40)}`}>{cells(r).map((c, k) => <td key={`${k}-${c.slice(0, 40)}`} className="py-1 pr-3 align-top border-b border-black/[0.04] dark:border-white/[0.05]">{inline(c)}</td>)}</tr>)}</tbody>
         </table>,
       );
       continue;
@@ -44,7 +44,7 @@ const renderMarkdown = (md) => {
       const ordered = /^\s*\d+\./.test(line);
       while (i < lines.length && /^\s*(-|\d+\.)\s/.test(lines[i])) { items.push(lines[i].replace(/^\s*(-|\d+\.)\s/, '')); i += 1; }
       const Tag = ordered ? 'ol' : 'ul';
-      out.push(<Tag key={`l${i}`} className={`my-1.5 pl-5 space-y-1 text-[12.5px] ${ordered ? 'list-decimal' : 'list-disc'}`}>{items.map((it, k) => <li key={k}>{inline(it)}</li>)}</Tag>);
+      out.push(<Tag key={`l${i}`} className={`my-1.5 pl-5 space-y-1 text-[12.5px] ${ordered ? 'list-decimal' : 'list-disc'}`}>{items.map((it, k) => <li key={`${k}-${it.slice(0, 40)}`}>{inline(it)}</li>)}</Tag>);
       continue;
     }
     const h = line.match(/^(#{1,3})\s+(.*)/);

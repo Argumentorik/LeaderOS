@@ -1,5 +1,5 @@
 """Daily check-in routes."""
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 import uuid
 from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage

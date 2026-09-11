@@ -2,7 +2,6 @@
 
 Run: cd /app/backend && REACT_APP_BACKEND_URL=<url> pytest tests/test_iter136_fixes.py -q
 """
-import asyncio
 import os
 import uuid
 

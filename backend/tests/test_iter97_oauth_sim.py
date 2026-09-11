@@ -1,6 +1,5 @@
 """Iteration 97: Google OAuth sanitizer + providers + sim/chat regression."""
 import os
-import time
 import pytest
 import requests
 

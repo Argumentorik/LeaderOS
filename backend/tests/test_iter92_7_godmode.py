@@ -10,7 +10,6 @@ Iter 92.6 + 92.7 GODMODE backend regression tests.
 - Public assets HEAD: favicon.svg, icon-192.png, apple-touch-icon.png, manifest.json
 """
 import os
-import re
 from datetime import datetime
 import pytest
 import requests

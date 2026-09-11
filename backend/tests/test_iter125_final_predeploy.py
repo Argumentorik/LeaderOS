@@ -50,7 +50,7 @@ class TestFreeUserCreditsUsed:
         assert r.status_code == 200, r.text[:200]
         data = r.json()
         # Try common field names
-        used = data.get('total_used') or data.get('used') or data.get('totalUsed')
+        assert any(k in data for k in ('total_used', 'used', 'totalUsed'))
         print(f"credits status: {data}")
         # Not asserting hard — informational for the prompt test.
 

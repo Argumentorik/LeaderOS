@@ -10,7 +10,6 @@ Scope (quick regression only — iter 93 already deep-verified session persisten
 - Branding: /wladbot-avatar-clean.png returns 200
 """
 import os
-import re
 import base64
 import pytest
 import requests

@@ -82,7 +82,7 @@ class TestQuizQuality:
                 checked += 1
                 lengths = [len(o) for o in opts]
                 median = statistics.median(lengths)
-                dev = max(abs(l - median) / median for l in lengths)
+                dev = max(abs(n - median) / median for n in lengths)
                 if dev > 0.25:
                     outliers.append((day, q["q"][:40], round(dev, 2)))
         assert checked >= 20, f"only {checked} MC questions checked"

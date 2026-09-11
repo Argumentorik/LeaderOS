@@ -15,7 +15,7 @@ Each test creates fresh users with timestamped emails to avoid collisions.
 """
 import os
 import time
-import random
+import secrets
 import sys
 import requests
 
@@ -33,7 +33,7 @@ SHORT_INVALID_PASSWORD = "x"  # noqa: S105 — minimal-length sentinel
 
 def _uniq() -> str:
     """Unique numeric+lowercase suffix for emails (digits-only for phone tests)."""
-    return f"{int(time.time())}{random.randint(1000, 9999)}"
+    return f"{int(time.time())}{secrets.randbelow(9000) + 1000}"
 
 
 def _register(email, password, name, phone=None, origin=None):

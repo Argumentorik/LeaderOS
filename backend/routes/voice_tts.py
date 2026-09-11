@@ -793,7 +793,7 @@ async def argumentation_sparring(
         _line("Verborgene Interessen der Gegenseite", prep.get("hidden_interests")),
         _line("Coaching-Fokus des Users", prep.get("coaching_focus")),
     ]
-    grounding = "\n".join(l for l in brief_lines if l)
+    grounding = "\n".join(ln for ln in brief_lines if ln)
 
     # 5a. Fetch history + count user turns for escalation ladder (Iter 124.3)
     history = await db.chat_messages.find(

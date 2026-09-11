@@ -8,11 +8,11 @@ import logger from '../../lib/logger';
 const base = process.env.REACT_APP_BACKEND_URL;
 const TYPE_LABEL = { walk: 'Walk-in', talk: 'Talk-Shot', broll: 'App-Tour' };
 // Präsenz-Shots (OmniHuman, bis 28 s) dürfen länger sprechen als die alten 10-s-Kling-Shots
-const wordCap = (shot) => (/closeup$/.test(shot.preset || '') ? 50 : /^(studio_|loft_seated_)/.test(shot.preset || '') ? 64 : 26);
+const wordCap = (shot, singleTake) => (singleTake ? 160 : /closeup$/.test(shot.preset || '') ? 50 : /^(studio_|loft_seated_)/.test(shot.preset || '') ? 64 : 26);
 
-const ShotRow = ({ shot, slug, screens, draft, onDraft }) => {
+const ShotRow = ({ shot, slug, screens, draft, onDraft, singleTake }) => {
   const words = (draft.text || '').trim().split(/\s+/).filter(Boolean).length;
-  const cap = wordCap(shot);
+  const cap = wordCap(shot, singleTake);
   const tooLong = shot.type === 'talk' && words > cap;
   const ready = shot.type === 'broll' ? Boolean(shot.audio_url) : Boolean(shot.synced_url || (shot.type === 'walk' && shot.raw_url));
   return (
@@ -43,7 +43,7 @@ const ShotRow = ({ shot, slug, screens, draft, onDraft }) => {
                     className={`text-[11px] bg-background border-border ${tooLong ? 'border-rose-500' : ''}`}
                     data-testid={`guide-shot-text-${slug}-${shot.id}`} />
         )}
-        {shot.type === 'talk' && <p className={`text-[9px] ${tooLong ? 'text-rose-500' : 'text-muted-foreground'}`}>{words} Wörter · max {cap} ({cap > 26 ? '≈ 28 s' : '≈ 9 s'})</p>}
+        {shot.type === 'talk' && <p className={`text-[9px] ${tooLong ? 'text-rose-500' : 'text-muted-foreground'}`}>{words} Wörter · max {cap} ({cap > 64 ? '≈ 58 s' : cap > 26 ? '≈ 28 s' : '≈ 9 s'})</p>}
         {shot.type === 'broll' && (
           <div className="flex flex-wrap gap-1">
             {Object.entries(screens).map(([id, label]) => {
@@ -113,7 +113,7 @@ export const GuideShotList = ({ clip, costs, screens, onChange }) => {
       </div>
       {err && <p className="text-[11px] text-rose-500" data-testid={`guide-shots-error-${clip.slug}`}>{err}</p>}
       {shots.map((s) => (
-        <ShotRow key={s.id} shot={s} slug={clip.slug} screens={screens} draft={draftOf(s)}
+        <ShotRow key={s.id} shot={s} slug={clip.slug} screens={screens} draft={draftOf(s)} singleTake={!!clip.single_take}
                  onDraft={(patch) => setDrafts((d) => ({ ...d, [s.id]: { ...draftOf(s), ...(d[s.id] || {}), ...patch } }))} />
       ))}
     </div>

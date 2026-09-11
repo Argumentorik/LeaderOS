@@ -8,7 +8,6 @@ Covers:
   admin/overview, payments/checkout, cron/monthly-scorecard
 """
 import os
-import io
 import pytest
 import requests
 

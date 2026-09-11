@@ -1,6 +1,5 @@
 """Quick smoke test for license-key backend endpoints (iter 99)."""
 import os
-import time
 import uuid
 import requests
 import pytest

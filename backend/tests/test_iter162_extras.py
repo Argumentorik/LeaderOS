@@ -1,7 +1,6 @@
 """Iter 162 extras — file upload edge cases + regression endpoints."""
 import io
 import os
-import re
 import requests
 
 # Load frontend URL from env file if not set

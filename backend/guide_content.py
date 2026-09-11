@@ -384,8 +384,14 @@ def scene_for_aspect(prompt: str, aspect: str, talk: bool = False) -> str:
     return prompt if stature in prompt else prompt.replace("Scene: ", "Scene: " + stature, 1)
 
 
-def talk_word_cap(preset_name: str) -> int:
-    """Wortbudget eines Talk-Shots: Präsenz-Shots (OmniHuman, bis 28 s) 64/50, alte 10-s-Kling-Shots 26."""
+SINGLE_TAKE_WORD_CAP = 160  # ein durchgehender Take bis ~58 s
+
+
+def talk_word_cap(preset_name: str, single_take: bool = False) -> int:
+    """Wortbudget eines Talk-Shots: Single-Take 160 (bis 58 s), Präsenz-Shots (OmniHuman, bis 28 s) 64/50,
+    alte 10-s-Kling-Shots 26."""
+    if single_take:
+        return SINGLE_TAKE_WORD_CAP
     for medium, closeup in PRESENCE_SETTINGS.values():
         if preset_name == medium:
             return 64
@@ -463,23 +469,24 @@ def _take_tail(sentences: list[str], limit: int) -> str:
     return " ".join(tail)
 
 
+def _single_take_shots(script: str, setting: str | None, walk_in: bool) -> list[dict]:
+    text = " ".join(script.split())
+    if walk_in:
+        walk, medium = walk_in_plan(setting or "studio")
+        return [{"id": "s1", "type": "walk", "preset": walk["preset"], "screens": [], "text": ""},
+                {"id": "s2", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
+    medium = single_take_plan(setting or "loft")[0]
+    return [{"id": "s1", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
+
+
 def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None,
                single_take: bool = False, walk_in: bool = False) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
     setting = Präsenz-Plan ohne Walk-in ("loft" | "studio"). walk_in = Single-Take mit Walk-in davor."""
     if single_take:
-        text = " ".join(script.split())
-        if walk_in:
-            walk, medium = walk_in_plan(setting or "studio")
-            return [{"id": "s1", "type": "walk", "preset": walk["preset"], "screens": [], "text": ""},
-                    {"id": "s2", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
-        medium = single_take_plan(setting or "loft")[0]
-        return [{"id": "s1", "type": "talk", "preset": medium["preset"], "screens": [], "text": text}]
-    if setting:
-        plan = presence_plan(setting)
-    else:
-        plan = MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN
+        return _single_take_shots(script, setting, walk_in)
+    plan = presence_plan(setting) if setting else (MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN)
     screens = screens or DEFAULT_SCREENS
     sentences = _sentences(script)
     talks = [i for i, s in enumerate(plan) if s["type"] == "talk"]

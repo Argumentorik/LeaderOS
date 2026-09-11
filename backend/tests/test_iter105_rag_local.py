@@ -3,7 +3,6 @@ Tests the local sentence-transformers MiniLM-L12-v2 embedding path (384-dim).
 """
 import os
 import sys
-import time
 import pytest
 import requests
 

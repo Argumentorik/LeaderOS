@@ -2,7 +2,6 @@
 import os
 import sys
 import requests
-import pytest
 
 sys.path.insert(0, os.path.dirname(__file__))
 from conftest import TEST_PASSWORD  # noqa: E402 — env-driven, no hardcoded secrets
@@ -35,7 +34,7 @@ def test_mypath_videos_lock_badges():
         v = data.get(key) if isinstance(data, dict) else None
         if isinstance(v, list):
             vids.extend(v)
-    assert len(vids) > 0, f"no videos for free user"
+    assert len(vids) > 0, "no videos for free user"
     has_unlocked_field = any("unlocked" in v for v in vids if isinstance(v, dict))
     assert has_unlocked_field, f"unlocked flag missing: sample={vids[0] if vids else None}"
     # free tier should have at least one locked

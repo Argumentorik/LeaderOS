@@ -220,7 +220,7 @@ ORG_LD = {
 
 
 def page_fragen() -> str:
-    body = f'<div class="toc"><strong>Inhalt:</strong> ' + " · ".join(f'<a href="#f{i}">{esc(q)}</a>' for i, (q, _) in enumerate(FAQ, 1)) + "</div>\n" + faq_html(FAQ)
+    body = '<div class="toc"><strong>Inhalt:</strong> ' + " · ".join(f'<a href="#f{i}">{esc(q)}</a>' for i, (q, _) in enumerate(FAQ, 1)) + "</div>\n" + faq_html(FAQ)
     return layout(
         path="/fragen/",
         title="Leader-OS: Fragen & Antworten — Wlad Jachtchenko, Preise, SEXIER, Kurse",
@@ -325,7 +325,7 @@ def sitemap() -> str:
     rows = []
     for path, freq, prio in STATIC_URLS:
         u = ORIGIN + path
-        alt = "".join(f'\n    <xhtml:link rel="alternate" hreflang="{l}" href="{u}"/>' for l in ("de-DE", "de-AT", "de-CH", "x-default"))
+        alt = "".join(f'\n    <xhtml:link rel="alternate" hreflang="{lang}" href="{u}"/>' for lang in ("de-DE", "de-AT", "de-CH", "x-default"))
         rows.append(f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>{alt}\n  </url>")
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<!-- Leader-OS sitemap — generiert von backend/scripts_seo_pages.py. Nur öffentlich lesbare Seiten; App-Routen (/dashboard, /chat, …) sind auth-only und nicht gelistet. -->\n'

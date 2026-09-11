@@ -64,10 +64,8 @@ class TestDomainSweep:
 # ── Sender + share.js + sitemap/robots ────────────────────────────────────────
 class TestSenderAndShare:
     def test_sender_email_no_dash(self):
-        from backend import services_email  # type: ignore
         # import via path
         import importlib.util
-        import sys
         spec = importlib.util.spec_from_file_location("services_email", "/app/backend/services_email.py")
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)

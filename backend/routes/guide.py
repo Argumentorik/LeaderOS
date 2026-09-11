@@ -1241,7 +1241,7 @@ async def save_shots(slug: str, data: ShotsSaveIn, request: Request):
             text = " ".join(item.text.split())
             if shot["type"] == "walk" and text:
                 raise HTTPException(status_code=400, detail="Der Walk-in-Shot ist stumm")
-            cap = talk_word_cap(shot.get("preset") or "")
+            cap = talk_word_cap(shot.get("preset") or "", bool(clip.get("single_take")))
             if shot["type"] == "talk" and word_count(text) > cap:
                 raise HTTPException(status_code=400, detail=f"Shot {item.id}: höchstens {cap} Wörter pro Talk-Shot")
             if text != shot.get("text", ""):

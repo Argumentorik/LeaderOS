@@ -13,7 +13,7 @@ Covers:
   - POST /api/admin/rag-debug           (no 'unknown' in coverage.courses)
 """
 import os
-import random
+import secrets
 import string
 import time
 import pytest
@@ -57,7 +57,7 @@ def admin_headers(admin_token):
 
 
 def _rand(n=8):
-    return "".join(random.choices(string.ascii_lowercase + string.digits, k=n))
+    return "".join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(n))
 
 
 # --------- Lifecycle status ---------

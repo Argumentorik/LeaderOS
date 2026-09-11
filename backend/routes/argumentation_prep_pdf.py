@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import hashlib
 import io
-import random
+import secrets
 import re
 from datetime import datetime, timezone
 
@@ -534,7 +534,7 @@ QR_TARGET_URL = "https://leadercheck.de/plus"
 def _pick_ending(seed: str) -> tuple[str, str]:
     """Deterministically pick one of the endings from a stable seed."""
     if not seed:
-        return random.choice(ENDINGS)
+        return secrets.choice(ENDINGS)
     idx = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(ENDINGS)
     return ENDINGS[idx]
 

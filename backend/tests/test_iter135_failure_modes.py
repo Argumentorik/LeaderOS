@@ -8,7 +8,6 @@ Run STANDALONE (own process): cd /app/backend && python3 -m pytest tests/test_it
 Note: these tests drive motor directly through one shared event loop, so they
 must not share a pytest process with other DB-touching sync-style modules.
 """
-import asyncio
 
 import services_rag
 import services_wladhub_autosync as autosync

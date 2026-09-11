@@ -232,7 +232,7 @@ def test_6_regression_user_without_diagnosis():
     assert r.status_code == 200
     user_id = r.json()["user"]["user_id"]
 
-    offset = _log_offset()
+    _log_offset()
     r = requests.post(f"{API}/auth/login",
                       json={"identifier": email, "password": password}, timeout=15)
     assert r.status_code == 200, r.text

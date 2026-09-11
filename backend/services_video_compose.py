@@ -264,16 +264,16 @@ def _render_subtitle(width: int, height: int, text: str) -> Image.Image:
     lines = _wrap(draw, text, font, int(width * 0.82))
     line_h = int(font.size * 1.25)
     pad_x, pad_y = int(font.size * 0.7), int(font.size * 0.45)
-    block_w = max(int(draw.textlength(l, font=font)) for l in lines) + pad_x * 2
+    block_w = max(int(draw.textlength(ln, font=font)) for ln in lines) + pad_x * 2
     block_h = line_h * len(lines) + pad_y * 2
     x0 = (width - block_w) // 2
     anchor = 0.80 if height > width else 0.87
     y0 = int(height * anchor) - block_h // 2
     draw.rounded_rectangle([x0, y0, x0 + block_w, y0 + block_h], radius=int(font.size * 0.55), fill=(0, 0, 0, 150))
     y = y0 + pad_y
-    for l in lines:
-        w = draw.textlength(l, font=font)
-        draw.text(((width - w) / 2, y), l, font=font, fill=(255, 255, 255, 255))
+    for ln in lines:
+        w = draw.textlength(ln, font=font)
+        draw.text(((width - w) / 2, y), ln, font=font, fill=(255, 255, 255, 255))
         y += line_h
     return canvas
 
