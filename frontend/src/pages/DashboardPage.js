@@ -20,6 +20,7 @@ import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrep
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import api from '../lib/api';
+import { loadDashboardBootstrap } from '../lib/dashboardBootstrap';
 import { CreditBadge } from '../components/dashboard/CreditBadge';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { DashboardMore } from '../components/dashboard/DashboardMore';
@@ -50,13 +51,21 @@ export default function DashboardPage() {
 
   const loadDashboard = useCallback(async () => {
     try {
-      const [dashRes, refRes] = await Promise.all([
-        api.get('/dashboard-v4').catch(() => api.get('/dashboard')),
-        api.get('/referral/code').catch(() => ({ data: {} })),
-      ]);
-      setData(dashRes.data);
-      setReferralCode(refRes.data?.code || '');
-    } catch (err) { logger.error('Dashboard load error:', err); } finally { setLoading(false); }
+      // Iter 168: ein Request für alles (Dashboard, Referral, Events, Videos, Clips, Ordner) — Widgets lesen ihre Scheibe aus dem Bündel
+      const b = await loadDashboardBootstrap();
+      setData(b.dashboard);
+      setReferralCode(b.referral?.code || '');
+    } catch (err) {
+      logger.warn('Dashboard bootstrap failed, falling back to single requests:', err?.message);
+      try {
+        const [dashRes, refRes] = await Promise.all([
+          api.get('/dashboard-v4').catch(() => api.get('/dashboard')),
+          api.get('/referral/code').catch(() => ({ data: {} })),
+        ]);
+        setData(dashRes.data);
+        setReferralCode(refRes.data?.code || '');
+      } catch (err2) { logger.error('Dashboard load error:', err2); }
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => {

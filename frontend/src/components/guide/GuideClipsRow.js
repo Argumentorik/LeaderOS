@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Play, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 import logger from '../../lib/logger';
 import { GuideVideoPlayer } from './GuideVideoPlayer';
 
@@ -17,7 +18,8 @@ export const GuideClipsRow = ({ de = true }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    api.get('/guide/clips', { params: { kind: 'onboarding' } })
+    const pre = takeSlice('guide_clips');
+    (pre ? Promise.resolve({ data: pre }) : api.get('/guide/clips', { params: { kind: 'onboarding' } }))
       .then((res) => {
         const withVideo = (res.data?.clips || []).filter((c) => c.video_url);
         setClips(withVideo);

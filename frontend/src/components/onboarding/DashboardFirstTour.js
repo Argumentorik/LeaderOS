@@ -25,6 +25,7 @@ import { X, ArrowRight, ArrowLeft, Volume2, VolumeX, Check } from 'lucide-react'
 import { WLAD_AVATAR } from '../../lib/brand';
 import { Button } from '../ui/button';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 
 const STORAGE_KEY = 'leaderos_tour_v1_done';
 
@@ -145,7 +146,8 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   const [introClip, setIntroClip] = useState(null);
   useEffect(() => {
     if (!open) return;
-    api.get('/guide/clips', { params: { kind: 'onboarding' } })
+    const pre = takeSlice('guide_clips');
+    (pre ? Promise.resolve({ data: pre }) : api.get('/guide/clips', { params: { kind: 'onboarding' } }))
       .then((res) => setIntroClip((res.data?.clips || []).find((c) => c.video_url) || null))
       .catch(() => setIntroClip(null));
   }, [open]);

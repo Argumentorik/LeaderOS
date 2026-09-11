@@ -15,6 +15,20 @@ from routes.admin import require_admin
 
 router = APIRouter(prefix="/api/admin/rag", tags=["rag-admin"])
 
+_HANDBOOK = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", "docs", "DEV_HANDBUCH_RAG.md")
+
+
+@router.get("/handbuch")
+async def rag_handbook(request: Request):
+    """Dev-Handbuch (docs/DEV_HANDBUCH_RAG.md) als Markdown für die Admin-Hilfe (Iter 168)."""
+    await require_admin(request)
+    path = os.path.normpath(_HANDBOOK)
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="Handbuch nicht gefunden")
+    with open(path, encoding="utf-8") as fh:
+        text = fh.read()
+    return {"markdown": text, "updated_at": datetime.fromtimestamp(os.path.getmtime(path), tz=timezone.utc).isoformat()}
+
 DEFAULT_ZIP_URL = "https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/8k335gkq_unchunked.zip"
 
 

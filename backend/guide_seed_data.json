@@ -6,254 +6,206 @@
    "ref": null,
    "order": 1,
    "title": "Willkommen bei Leader-OS",
-   "script": "Schön, dass du da bist. Ich bin Wlad, und ich sage dir gleich zu Beginn, was Leader-OS nicht ist: kein Kurs mit dreißig Videos, die du brav abarbeitest und danach vergisst. Leader-OS ist dein Sparringspartner für den Führungsalltag – für das Gespräch, das dir seit Tagen im Kopf herumgeht, für den Mitarbeiter, der nachlässt, für die Präsentation, bei der es wirklich um etwas geht. Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität. In den nächsten Videos zeige ich dir, wie du mit mir sprichst, wie du dein System einrichtest und womit du in der ersten Woche anfängst. Nimm dir dafür zehn Minuten. Sie sind gut investiert.",
-   "script_source": "godmode_v1",
+   "script": "Schön, dass du hier bist. Ich bin Wlad, und das hier ist kein Kurs, den du abarbeitest, sondern ein Ort, an dem du an deinen eigenen Führungssituationen arbeitest. Stell dir vor, morgen um zehn sitzt dir ein Mitarbeiter gegenüber, der seit Wochen abbaut, und du weißt noch nicht, wie du das Gespräch eröffnest. Genau dafür bin ich da. Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten sinnvollen Schritt vorschlage. Damit das funktioniert, brauche ich zehn Minuten von dir: Wer bist du, wo führst du, was macht dir gerade am meisten zu schaffen. Je ehrlicher du das beantwortest, desto besser wird alles, was danach kommt. Also nimm dir diese zehn Minuten jetzt, nicht später.",
+   "script_source": "wlad_v2",
    "status": "video_ready",
    "published": true,
    "audio_path": "guide/audio_start-1-willkommen_c3602eb1.mp3",
-   "video_path": "guide/video_start-1-willkommen_5de5ed68.mp4",
+   "video_path": "guide/video_start-1-willkommen_d9f392fe.mp4",
    "media_token": "DekISj2JI1hs4aPtTrxPHso4hlc6u77_",
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-08T00:51:34.273066+00:00",
+   "updated_at": "2026-09-11T00:24:38.534035+00:00",
    "voice_id_used": "Deep_Voice_Man",
-   "video_bytes": 9085808,
+   "video_bytes": 7205342,
+   "progress": null,
+   "spent_usd": 24.49,
+   "duration_seconds_video": 38.6,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 0.77,
+     "text": "Schön"
+    },
+    {
+     "start": 0.77,
+     "end": 1.74,
+     "text": "dass du hier bist."
+    },
+    {
+     "start": 1.74,
+     "end": 2.44,
+     "text": "Ich bin Wlad"
+    },
+    {
+     "start": 2.44,
+     "end": 3.89,
+     "text": "und das hier ist kein Kurs"
+    },
+    {
+     "start": 3.89,
+     "end": 4.91,
+     "text": "den du abarbeitest"
+    },
+    {
+     "start": 4.91,
+     "end": 5.77,
+     "text": "sondern ein Ort"
+    },
+    {
+     "start": 5.77,
+     "end": 7.22,
+     "text": "an dem du an deinen eigenen"
+    },
+    {
+     "start": 7.22,
+     "end": 8.83,
+     "text": "Führungssituationen arbeitest."
+    },
+    {
+     "start": 8.83,
+     "end": 9.59,
+     "text": "Stell dir vor"
+    },
+    {
+     "start": 9.59,
+     "end": 11.09,
+     "text": "morgen um zehn sitzt dir ein"
+    },
+    {
+     "start": 11.09,
+     "end": 12.27,
+     "text": "Mitarbeiter gegenüber"
+    },
+    {
+     "start": 12.27,
+     "end": 13.51,
+     "text": "der seit Wochen abbaut"
+    },
+    {
+     "start": 13.51,
+     "end": 14.8,
+     "text": "und du weißt noch nicht"
+    },
+    {
+     "start": 14.8,
+     "end": 16.41,
+     "text": "wie du das Gespräch eröffnest."
+    },
+    {
+     "start": 16.41,
+     "end": 17.65,
+     "text": "Genau dafür bin ich da."
+    },
+    {
+     "start": 17.65,
+     "end": 18.35,
+     "text": "Du sagst mir"
+    },
+    {
+     "start": 18.35,
+     "end": 19.37,
+     "text": "was gerade anliegt"
+    },
+    {
+     "start": 19.37,
+     "end": 20.98,
+     "text": "damit ich dir nicht irgendwas"
+    },
+    {
+     "start": 20.98,
+     "end": 23.72,
+     "text": "sondern den nächsten sinnvollen Schritt vorschlage."
+    },
+    {
+     "start": 23.72,
+     "end": 24.95,
+     "text": "Damit das funktioniert"
+    },
+    {
+     "start": 24.95,
+     "end": 26.73,
+     "text": "brauche ich zehn Minuten von dir"
+    },
+    {
+     "start": 26.73,
+     "end": 27.37,
+     "text": "Wer bist du"
+    },
+    {
+     "start": 27.37,
+     "end": 28.07,
+     "text": "wo führst du"
+    },
+    {
+     "start": 28.07,
+     "end": 29.74,
+     "text": "was macht dir gerade am meisten"
+    },
+    {
+     "start": 29.74,
+     "end": 30.38,
+     "text": "zu schaffen."
+    },
+    {
+     "start": 30.38,
+     "end": 32.16,
+     "text": "Je ehrlicher du das beantwortest"
+    },
+    {
+     "start": 32.16,
+     "end": 33.45,
+     "text": "desto besser wird alles"
+    },
+    {
+     "start": 33.45,
+     "end": 34.36,
+     "text": "was danach kommt."
+    },
+    {
+     "start": 34.36,
+     "end": 36.08,
+     "text": "Also nimm dir diese zehn Minuten"
+    },
+    {
+     "start": 36.08,
+     "end": 36.4,
+     "text": "jetzt"
+    },
+    {
+     "start": 36.4,
+     "end": 37.1,
+     "text": "nicht später."
+    }
+   ],
+   "published_at": "2026-09-02T10:00:43.311708+00:00",
+   "quality": "pro",
+   "stale": false,
+   "script_draft_status": "approved",
+   "script_approved_at": "2026-09-10T23:58:05.768276+00:00",
+   "shot_preset": "loft_talk_medium",
+   "single_take": true,
    "shots": [
     {
      "id": "s1",
      "type": "talk",
      "preset": "loft_seated_medium",
      "screens": [],
-     "text": "Schön, dass du da bist. Ich bin Wlad, und ich sage dir gleich zu Beginn, was Leader-OS nicht ist: kein Kurs mit dreißig Videos, die du brav abarbeitest und danach vergisst. Leader-OS ist dein Sparringspartner für den Führungsalltag – für das Gespräch, das dir seit Tagen im Kopf herumgeht, für den Mitarbeiter, der nachlässt, für die Präsentation, bei der es wirklich um etwas geht.",
+     "text": "Schön, dass du hier bist. Ich bin Wlad, und das hier ist kein Kurs, den du abarbeitest, sondern ein Ort, an dem du an deinen eigenen Führungssituationen arbeitest. Stell dir vor, morgen um zehn sitzt dir ein Mitarbeiter gegenüber, der seit Wochen abbaut, und du weißt noch nicht, wie du das Gespräch eröffnest. Genau dafür bin ich da. Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten sinnvollen Schritt vorschlage. Damit das funktioniert, brauche ich zehn Minuten von dir: Wer bist du, wo führst du, was macht dir gerade am meisten zu schaffen. Je ehrlicher du das beantwortest, desto besser wird alles, was danach kommt. Also nimm dir diese zehn Minuten jetzt, nicht später.",
      "error": null,
-     "keyframe_path": "guide/kf_s1_start-1-willkommen_0d0e405c.png",
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_start-1-willkommen_7f5efd36.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s1_start-1-willkommen_b9198e80.mp4",
-     "audio_path": "guide/a_s1_start-1-willkommen_15efeedc.mp3",
-     "audio_seconds": 24.66,
+     "synced_path": "guide/sync_s1_start-1-willkommen_891e569d.mp4",
+     "audio_path": "guide/a_s1_start-1-willkommen_263f1db7.mp3",
+     "audio_seconds": 37.95,
      "speech_lead": 0.4,
-     "engine": "omnihuman",
-     "padded_path": null,
-     "speech_tail": 0.0,
-     "fal_request": null
-    },
-    {
-     "id": "s2",
-     "type": "broll",
-     "preset": null,
-     "screens": [
-      "dashboard",
-      "chat",
-      "video",
-      "challenge"
-     ],
-     "text": "Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier nicht das Lehrbuch entscheidet, sondern deine Realität.",
-     "audio_path": "guide/a_s2_start-1-willkommen_d93a6f94.mp3",
-     "audio_seconds": 14.51,
-     "speech_lead": 0.0,
-     "padded_path": null,
-     "synced_path": null,
-     "speech_tail": 0.0
-    },
-    {
-     "id": "s3",
-     "type": "talk",
-     "preset": "loft_seated_closeup",
-     "screens": [],
-     "text": "In den nächsten Videos zeige ich dir, wie du mit mir sprichst, wie du dein System einrichtest und womit du in der ersten Woche anfängst. Nimm dir dafür zehn Minuten. Sie sind gut investiert.",
-     "error": null,
-     "keyframe_path": "guide/kf_s3_start-1-willkommen_3af5b482.png",
-     "raw_path": null,
-     "synced_path": "guide/sync_s3_start-1-willkommen_400a29a2.mp4",
-     "audio_path": "guide/a_s3_start-1-willkommen_44ccd42a.mp3",
-     "audio_seconds": 10.73,
-     "speech_lead": 0.0,
-     "engine": "omnihuman",
-     "speech_tail": 0.9
+     "speech_tail": 0.9,
+     "engine": "omnihuman"
     }
-   ],
-   "progress": null,
-   "spent_usd": 18.38,
-   "duration_seconds_video": 49.5,
-   "pipeline": "multishot",
-   "subtitles": [
-    {
-     "start": 0.45,
-     "end": 0.85,
-     "text": "Schön"
-    },
-    {
-     "start": 0.85,
-     "end": 1.91,
-     "text": "dass du da bist."
-    },
-    {
-     "start": 1.91,
-     "end": 2.78,
-     "text": "Ich bin Wlad"
-    },
-    {
-     "start": 2.78,
-     "end": 4.5,
-     "text": "und ich sage dir gleich zu"
-    },
-    {
-     "start": 4.5,
-     "end": 4.97,
-     "text": "Beginn"
-    },
-    {
-     "start": 4.97,
-     "end": 6.56,
-     "text": "was Leader-OS nicht ist"
-    },
-    {
-     "start": 6.56,
-     "end": 8.49,
-     "text": "kein Kurs mit dreißig Videos"
-    },
-    {
-     "start": 8.49,
-     "end": 10.75,
-     "text": "die du brav abarbeitest und danach"
-    },
-    {
-     "start": 10.75,
-     "end": 11.35,
-     "text": "vergisst."
-    },
-    {
-     "start": 11.35,
-     "end": 14.21,
-     "text": "Leader-OS ist dein Sparringspartner für den"
-    },
-    {
-     "start": 14.21,
-     "end": 16.47,
-     "text": "Führungsalltag – für das Gespräch"
-    },
-    {
-     "start": 16.47,
-     "end": 18.2,
-     "text": "das dir seit Tagen im Kopf"
-    },
-    {
-     "start": 18.2,
-     "end": 18.86,
-     "text": "herumgeht"
-    },
-    {
-     "start": 18.86,
-     "end": 20.19,
-     "text": "für den Mitarbeiter"
-    },
-    {
-     "start": 20.19,
-     "end": 21.12,
-     "text": "der nachlässt"
-    },
-    {
-     "start": 21.12,
-     "end": 22.52,
-     "text": "für die Präsentation"
-    },
-    {
-     "start": 22.52,
-     "end": 24.38,
-     "text": "bei der es wirklich um etwas"
-    },
-    {
-     "start": 24.38,
-     "end": 24.71,
-     "text": "geht."
-    },
-    {
-     "start": 25.0,
-     "end": 27.08,
-     "text": "Du beschreibst mir deine Situation"
-    },
-    {
-     "start": 27.08,
-     "end": 29.28,
-     "text": "und wir arbeiten sie gemeinsam durch"
-    },
-    {
-     "start": 29.28,
-     "end": 31.66,
-     "text": "mit den Frameworks aus meinen Trainings"
-    },
-    {
-     "start": 31.66,
-     "end": 33.92,
-     "text": "mit klaren Schritten und mit ehrlichem"
-    },
-    {
-     "start": 33.92,
-     "end": 34.46,
-     "text": "Feedback."
-    },
-    {
-     "start": 34.46,
-     "end": 35.7,
-     "text": "Warum das anders ist?"
-    },
-    {
-     "start": 35.7,
-     "end": 38.14,
-     "text": "Weil hier nicht das Lehrbuch entscheidet"
-    },
-    {
-     "start": 38.14,
-     "end": 39.51,
-     "text": "sondern deine Realität."
-    },
-    {
-     "start": 39.06,
-     "end": 40.78,
-     "text": "In den nächsten Videos zeige ich"
-    },
-    {
-     "start": 40.78,
-     "end": 40.99,
-     "text": "dir"
-    },
-    {
-     "start": 40.99,
-     "end": 42.28,
-     "text": "wie du mit mir sprichst"
-    },
-    {
-     "start": 42.28,
-     "end": 44.11,
-     "text": "wie du dein System einrichtest und"
-    },
-    {
-     "start": 44.11,
-     "end": 45.61,
-     "text": "womit du in der ersten Woche"
-    },
-    {
-     "start": 45.61,
-     "end": 46.1,
-     "text": "anfängst."
-    },
-    {
-     "start": 46.1,
-     "end": 47.6,
-     "text": "Nimm dir dafür zehn Minuten."
-    },
-    {
-     "start": 47.6,
-     "end": 48.89,
-     "text": "Sie sind gut investiert."
-    }
-   ],
-   "published_at": "2026-09-02T10:00:43.311708+00:00",
-   "quality": "pro",
-   "stale": false,
-   "script_draft": "Schön, dass du hier bist. Ich bin Wlad, und das hier ist kein Kurs, den du abarbeitest, sondern ein Ort, an dem du an deinen eigenen Führungssituationen arbeitest. Stell dir vor, morgen um zehn sitzt dir ein Mitarbeiter gegenüber, der seit Wochen abbaut, und du weißt noch nicht, wie du das Gespräch eröffnest. Genau dafür bin ich da. Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten sinnvollen Schritt vorschlage. Damit das funktioniert, brauche ich zehn Minuten von dir: Wer bist du, wo führst du, was macht dir gerade am meisten zu schaffen. Je ehrlicher du das beantwortest, desto besser wird alles, was danach kommt. Also nimm dir diese zehn Minuten jetzt, nicht später.",
-   "script_draft_status": "pending"
+   ]
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -261,237 +213,225 @@
    "ref": null,
    "order": 2,
    "title": "So sprichst du mit der KI",
-   "script": "Wie gut ich dir helfen kann, hängt an einer einzigen Sache: an deiner Frage. Die meisten tippen Stichworte ein – „Mitarbeitergespräch“, „Konflikt im Team“ – und bekommen Antworten, die auf jeden passen und deshalb niemandem wirklich helfen. Mach es anders. Erzähl mir die Situation so, wie du sie einer guten Freundin erzählen würdest: Wer ist beteiligt, was ist passiert, wann steht das Gespräch an, und was willst du am Ende erreichen? Zum Beispiel: „Zwei aus meinem Team reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch?“ Merkst du den Unterschied? Jetzt kann ich mit dir vorbereiten, statt zu dozieren. Schreib mir wie einem Coach, der dich kennt – nicht wie einer Suchmaschine. Dann wird jede Antwort deine Antwort.",
-   "script_source": "godmode_v1",
+   "script": "Der Unterschied zwischen einer brauchbaren und einer beliebigen Antwort liegt fast immer in deiner Frage. Wenn du mir nur Mitarbeitergespräch schreibst, bekommst du das, was in jedem Ratgeber steht, weil ich nichts über deine Lage weiß. Schreib mir stattdessen so, wie du es einem Coach erzählen würdest, der dich kennt. Zum Beispiel: Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, und morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch, ohne dass einer gleich dichtmacht? Jetzt weiß ich, worum es geht, wer beteiligt ist, wann es passiert und was du erreichen willst, und genau darauf antworte ich dir. Und wenn dir meine Antwort zu allgemein vorkommt, sag es mir, dann frage ich nach, bis es passt. Probier es gleich aus: Beschreib mir die Situation, die dir diese Woche am meisten im Kopf herumgeht.",
+   "script_source": "wlad_v2",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-2-so-sprichst-du_53c23928.mp4",
+   "video_path": "guide/video_start-2-so-sprichst-du_41e15044.mp4",
    "media_token": "s8rrsoIoMXpbC8E_9aOuNYiTN5GIBvLD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-08T00:36:55.900722+00:00",
+   "updated_at": "2026-09-11T00:24:58.347164+00:00",
    "progress": null,
+   "spent_usd": 18.13,
+   "duration_seconds_video": 49.0,
+   "pipeline": "multishot",
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 3.06,
+     "text": "Der Unterschied zwischen einer brauchbaren und"
+    },
+    {
+     "start": 3.06,
+     "end": 5.38,
+     "text": "einer beliebigen Antwort liegt fast immer"
+    },
+    {
+     "start": 5.38,
+     "end": 6.28,
+     "text": "in deiner Frage."
+    },
+    {
+     "start": 6.28,
+     "end": 8.89,
+     "text": "Wenn du mir nur Mitarbeitergespräch schreibst"
+    },
+    {
+     "start": 8.89,
+     "end": 9.8,
+     "text": "bekommst du das"
+    },
+    {
+     "start": 9.8,
+     "end": 11.38,
+     "text": "was in jedem Ratgeber steht"
+    },
+    {
+     "start": 11.38,
+     "end": 13.14,
+     "text": "weil ich nichts über deine Lage"
+    },
+    {
+     "start": 13.14,
+     "end": 13.42,
+     "text": "weiß."
+    },
+    {
+     "start": 13.42,
+     "end": 14.95,
+     "text": "Schreib mir stattdessen so"
+    },
+    {
+     "start": 14.95,
+     "end": 16.65,
+     "text": "wie du es einem Coach erzählen"
+    },
+    {
+     "start": 16.65,
+     "end": 17.1,
+     "text": "würdest"
+    },
+    {
+     "start": 17.1,
+     "end": 17.95,
+     "text": "der dich kennt."
+    },
+    {
+     "start": 17.95,
+     "end": 18.69,
+     "text": "Zum Beispiel"
+    },
+    {
+     "start": 18.69,
+     "end": 20.84,
+     "text": "Zwei meiner Entwickler reden seit drei"
+    },
+    {
+     "start": 20.84,
+     "end": 22.54,
+     "text": "Wochen nicht mehr miteinander"
+    },
+    {
+     "start": 22.54,
+     "end": 23.56,
+     "text": "das Projekt steht"
+    },
+    {
+     "start": 23.56,
+     "end": 25.09,
+     "text": "und morgen um zehn habe ich"
+    },
+    {
+     "start": 25.09,
+     "end": 25.88,
+     "text": "beide im Raum."
+    },
+    {
+     "start": 25.88,
+     "end": 27.52,
+     "text": "Wie eröffne ich das Gespräch"
+    },
+    {
+     "start": 27.52,
+     "end": 29.45,
+     "text": "ohne dass einer gleich dichtmacht?"
+    },
+    {
+     "start": 29.45,
+     "end": 30.3,
+     "text": "Jetzt weiß ich"
+    },
+    {
+     "start": 30.3,
+     "end": 31.09,
+     "text": "worum es geht"
+    },
+    {
+     "start": 31.09,
+     "end": 32.11,
+     "text": "wer beteiligt ist"
+    },
+    {
+     "start": 32.11,
+     "end": 33.64,
+     "text": "wann es passiert und was du"
+    },
+    {
+     "start": 33.64,
+     "end": 34.6,
+     "text": "erreichen willst"
+    },
+    {
+     "start": 34.6,
+     "end": 36.53,
+     "text": "und genau darauf antworte ich dir."
+    },
+    {
+     "start": 36.53,
+     "end": 38.17,
+     "text": "Und wenn dir meine Antwort zu"
+    },
+    {
+     "start": 38.17,
+     "end": 39.25,
+     "text": "allgemein vorkommt"
+    },
+    {
+     "start": 39.25,
+     "end": 39.87,
+     "text": "sag es mir"
+    },
+    {
+     "start": 39.87,
+     "end": 41.0,
+     "text": "dann frage ich nach"
+    },
+    {
+     "start": 41.0,
+     "end": 41.74,
+     "text": "bis es passt."
+    },
+    {
+     "start": 41.74,
+     "end": 42.99,
+     "text": "Probier es gleich aus"
+    },
+    {
+     "start": 42.99,
+     "end": 44.57,
+     "text": "Beschreib mir die Situation"
+    },
+    {
+     "start": 44.57,
+     "end": 46.27,
+     "text": "die dir diese Woche am meisten"
+    },
+    {
+     "start": 46.27,
+     "end": 47.29,
+     "text": "im Kopf herumgeht."
+    }
+   ],
+   "video_bytes": 9104834,
+   "published_at": "2026-09-03T17:57:50.009287+00:00",
+   "quality": "pro",
+   "stale": false,
+   "script_draft_status": "approved",
+   "script_approved_at": "2026-09-10T23:58:05.946849+00:00",
+   "shot_preset": "loft_talk_medium",
+   "single_take": true,
    "shots": [
     {
      "id": "s1",
      "type": "talk",
      "preset": "loft_seated_medium",
      "screens": [],
-     "text": "Wie gut ich dir helfen kann, hängt an einer einzigen Sache: an deiner Frage. Die meisten tippen Stichworte ein – „Mitarbeitergespräch“, „Konflikt im Team“ – und bekommen Antworten, die auf jeden passen und deshalb niemandem wirklich helfen. Mach es anders. Erzähl mir die Situation so, wie du sie einer guten Freundin erzählen würdest: Wer ist beteiligt, was ist passiert, wann steht das Gespräch an, und was willst du am Ende erreichen?",
+     "text": "Der Unterschied zwischen einer brauchbaren und einer beliebigen Antwort liegt fast immer in deiner Frage. Wenn du mir nur Mitarbeitergespräch schreibst, bekommst du das, was in jedem Ratgeber steht, weil ich nichts über deine Lage weiß. Schreib mir stattdessen so, wie du es einem Coach erzählen würdest, der dich kennt. Zum Beispiel: Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, und morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch, ohne dass einer gleich dichtmacht? Jetzt weiß ich, worum es geht, wer beteiligt ist, wann es passiert und was du erreichen willst, und genau darauf antworte ich dir. Und wenn dir meine Antwort zu allgemein vorkommt, sag es mir, dann frage ich nach, bis es passt. Probier es gleich aus: Beschreib mir die Situation, die dir diese Woche am meisten im Kopf herumgeht.",
      "error": null,
-     "keyframe_path": "guide/kf_s1_start-2-so-sprichst-du_6a2ae528.png",
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_start-2-so-sprichst-du_06aec2e0.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s1_start-2-so-sprichst-du_aee728d9.mp4",
-     "audio_path": "guide/a_s1_start-2-so-sprichst-du_cc9b38c7.mp3",
-     "audio_seconds": 26.79,
+     "synced_path": "guide/sync_s1_start-2-so-sprichst-du_992c0938.mp4",
+     "audio_path": "guide/a_s1_start-2-so-sprichst-du_65e857c1.mp3",
+     "audio_seconds": 48.14,
      "speech_lead": 0.4,
+     "speech_tail": 0.9,
      "engine": "omnihuman"
-    },
-    {
-     "id": "s2",
-     "type": "broll",
-     "preset": null,
-     "screens": [
-      "chat",
-      "simulations",
-      "coaching",
-      "tasks"
-     ],
-     "text": "Zum Beispiel: „Zwei aus meinem Team reden seit drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum.",
-     "audio_path": "guide/a_s2_start-2-so-sprichst-du_87ade8c0.mp3",
-     "audio_seconds": 7.6,
-     "speech_lead": 0.0
-    },
-    {
-     "id": "s3",
-     "type": "talk",
-     "preset": "loft_seated_closeup",
-     "screens": [],
-     "text": "Wie eröffne ich das Gespräch?“ Merkst du den Unterschied? Jetzt kann ich mit dir vorbereiten, statt zu dozieren. Schreib mir wie einem Coach, der dich kennt – nicht wie einer Suchmaschine. Dann wird jede Antwort deine Antwort.",
-     "error": null,
-     "keyframe_path": "guide/kf_s3_start-2-so-sprichst-du_96a9a961.png",
-     "raw_path": null,
-     "synced_path": "guide/sync_s3_start-2-so-sprichst-du_98c5ba8b.mp4",
-     "audio_path": "guide/a_s3_start-2-so-sprichst-du_f1415d08.mp3",
-     "audio_seconds": 13.43,
-     "speech_lead": 0.0,
-     "engine": "omnihuman",
-     "speech_tail": 0.9
     }
-   ],
-   "spent_usd": 10.39,
-   "duration_seconds_video": 47.5,
-   "pipeline": "multishot",
-   "subtitles": [
-    {
-     "start": 0.45,
-     "end": 2.21,
-     "text": "Wie gut ich dir helfen kann"
-    },
-    {
-     "start": 2.21,
-     "end": 4.09,
-     "text": "hängt an einer einzigen Sache"
-    },
-    {
-     "start": 4.09,
-     "end": 5.1,
-     "text": "an deiner Frage."
-    },
-    {
-     "start": 5.1,
-     "end": 7.3,
-     "text": "Die meisten tippen Stichworte ein –"
-    },
-    {
-     "start": 7.3,
-     "end": 8.68,
-     "text": "„Mitarbeitergespräch“"
-    },
-    {
-     "start": 8.68,
-     "end": 10.75,
-     "text": "„Konflikt im Team“ – und bekommen"
-    },
-    {
-     "start": 10.75,
-     "end": 11.38,
-     "text": "Antworten"
-    },
-    {
-     "start": 11.38,
-     "end": 13.39,
-     "text": "die auf jeden passen und deshalb"
-    },
-    {
-     "start": 13.39,
-     "end": 15.03,
-     "text": "niemandem wirklich helfen."
-    },
-    {
-     "start": 15.03,
-     "end": 15.97,
-     "text": "Mach es anders."
-    },
-    {
-     "start": 15.97,
-     "end": 17.73,
-     "text": "Erzähl mir die Situation so"
-    },
-    {
-     "start": 17.73,
-     "end": 19.68,
-     "text": "wie du sie einer guten Freundin"
-    },
-    {
-     "start": 19.68,
-     "end": 20.75,
-     "text": "erzählen würdest"
-    },
-    {
-     "start": 20.75,
-     "end": 21.88,
-     "text": "Wer ist beteiligt"
-    },
-    {
-     "start": 21.88,
-     "end": 22.94,
-     "text": "was ist passiert"
-    },
-    {
-     "start": 22.94,
-     "end": 24.64,
-     "text": "wann steht das Gespräch an"
-    },
-    {
-     "start": 24.64,
-     "end": 26.21,
-     "text": "und was willst du am Ende"
-    },
-    {
-     "start": 26.21,
-     "end": 26.84,
-     "text": "erreichen?"
-    },
-    {
-     "start": 27.23,
-     "end": 27.96,
-     "text": "Zum Beispiel"
-    },
-    {
-     "start": 27.96,
-     "end": 29.76,
-     "text": "„Zwei aus meinem Team reden seit"
-    },
-    {
-     "start": 29.76,
-     "end": 31.73,
-     "text": "drei Wochen nicht mehr miteinander"
-    },
-    {
-     "start": 31.73,
-     "end": 32.75,
-     "text": "das Projekt steht"
-    },
-    {
-     "start": 32.75,
-     "end": 34.38,
-     "text": "morgen um zehn habe ich beide"
-    },
-    {
-     "start": 34.38,
-     "end": 34.83,
-     "text": "im Raum."
-    },
-    {
-     "start": 34.38,
-     "end": 36.5,
-     "text": "Wie eröffne ich das Gespräch?“ Merkst"
-    },
-    {
-     "start": 36.5,
-     "end": 37.58,
-     "text": "du den Unterschied?"
-    },
-    {
-     "start": 37.58,
-     "end": 39.59,
-     "text": "Jetzt kann ich mit dir vorbereiten"
-    },
-    {
-     "start": 39.59,
-     "end": 40.62,
-     "text": "statt zu dozieren."
-    },
-    {
-     "start": 40.62,
-     "end": 42.22,
-     "text": "Schreib mir wie einem Coach"
-    },
-    {
-     "start": 42.22,
-     "end": 43.71,
-     "text": "der dich kennt – nicht wie"
-    },
-    {
-     "start": 43.71,
-     "end": 44.79,
-     "text": "einer Suchmaschine."
-    },
-    {
-     "start": 44.79,
-     "end": 46.91,
-     "text": "Dann wird jede Antwort deine Antwort."
-    }
-   ],
-   "video_bytes": 9258913,
-   "published_at": "2026-09-03T17:57:50.009287+00:00",
-   "quality": "pro",
-   "stale": false,
-   "script_draft": "Der Unterschied zwischen einer brauchbaren und einer beliebigen Antwort liegt fast immer in deiner Frage. Wenn du mir nur Mitarbeitergespräch schreibst, bekommst du das, was in jedem Ratgeber steht, weil ich nichts über deine Lage weiß. Schreib mir stattdessen so, wie du es einem Coach erzählen würdest, der dich kennt. Zum Beispiel: Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, und morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch, ohne dass einer gleich dichtmacht? Jetzt weiß ich, worum es geht, wer beteiligt ist, wann es passiert und was du erreichen willst, und genau darauf antworte ich dir. Und wenn dir meine Antwort zu allgemein vorkommt, sag es mir, dann frage ich nach, bis es passt. Probier es gleich aus: Beschreib mir die Situation, die dir diese Woche am meisten im Kopf herumgeht.",
-   "script_draft_status": "pending"
+   ]
   },
   {
    "slug": "start-3-kontext",
@@ -509,7 +449,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-08T00:42:02.592605+00:00",
+   "updated_at": "2026-09-08T11:41:42.049685+00:00",
    "progress": null,
    "shots": [
     {
@@ -2325,7 +2265,7 @@
    "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos.",
    "multi_shot": true,
    "aspect": "9:16",
-   "script_source": "wlad_v3",
+   "script_source": "wlad",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
@@ -2334,7 +2274,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-08T11:38:55.794968+00:00",
+   "updated_at": "2026-09-08T11:45:57.646489+00:00",
    "progress": null,
    "spent_usd": 16.909999999999997,
    "duration_seconds_video": 55.9,
@@ -2492,7 +2432,7 @@
     }
    ],
    "video_bytes": 13616134,
-   "published_at": "2026-09-07T12:23:07.437668+00:00",
+   "published_at": "2026-09-08T11:42:02.886814+00:00",
    "quality": "pro",
    "stale": false,
    "script_approved_at": "2026-09-08T11:03:56.578272+00:00",

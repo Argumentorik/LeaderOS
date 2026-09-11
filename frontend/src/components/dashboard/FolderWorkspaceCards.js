@@ -20,6 +20,7 @@ import { Folder, Sparkles, ArrowRight, Loader2, Layers, Plus, Video, MessageSqua
 import { Card, CardContent } from '../ui/card';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 import logger from '../../lib/logger';
 import { openWladBotDrawer } from '../../lib/wladbotBus';
 
@@ -108,6 +109,8 @@ export const FolderWorkspaceCards = ({ de = true }) => {
 
   useEffect(() => {
     let alive = true;
+    const pre = takeSlice('folders');
+    if (pre) { setFolders(Array.isArray(pre) ? pre : []); return () => { alive = false; }; }
     api.get('/folders').then((res) => {
       if (alive) setFolders(Array.isArray(res.data) ? res.data : []);
     }).catch((err) => {

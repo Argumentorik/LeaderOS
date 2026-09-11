@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import { Play, Lock, Layers, Clock, ArrowRight, Sparkles, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
 import VideoPlayer from '../shared/VideoPlayer';
@@ -81,6 +82,8 @@ export const DashboardLearningVideos = ({ de = true }) => {
   const { isAccelerator } = useTier();
 
   useEffect(() => {
+    const pre = takeSlice('my_path_videos');
+    if (pre) { setData(pre); setLoading(false); return; }
     (async () => {
       try {
         const res = await api.get('/my-path/videos');

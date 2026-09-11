@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Database, RefreshCw, ShieldCheck, CheckCircle2, XCircle, Loader2, Zap, Library } from 'lucide-react';
 import { KnowledgeSources } from './KnowledgeSources';
+import { RagHandbook } from './RagHandbook';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
@@ -170,6 +171,7 @@ export const RagControlCenter = ({ de = true }) => {
 
         {/* Editable knowledge corpus (Iter 119 · Enterprise) */}
         <KnowledgeSources de={de} onChanged={loadStatus} />
+        <RagHandbook de={de} />
 
         {/* Corpus completeness — "is Wlad's whole library really in there?" */}
         {coverage && (

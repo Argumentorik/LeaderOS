@@ -307,6 +307,9 @@ async def startup() -> None:
         await db.user_sessions.create_index("session_token", unique=True)
         await db.chat_messages.create_index([("session_id", 1), ("created_at", 1)])
         await db.chat_sessions.create_index([("user_id", 1), ("updated_at", -1)])
+        # Ladezeit-Telemetrie (Iter 168): 14 Tage aufheben, dann automatisch weg
+        await db.page_loads.create_index("expires_at", expireAfterSeconds=14 * 24 * 3600)
+        await db.page_loads.create_index([("created_at", -1)])
 
         # Enterprise-grade: case-insensitive unique email index (prevents duplicate accounts)
         # First, normalize existing emails to lowercase so the index can be built cleanly

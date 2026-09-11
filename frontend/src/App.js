@@ -9,6 +9,7 @@ import { NetworkStatusBanner } from "./components/shared/NetworkStatusBanner";
 import { lazyWithRetry, clearChunkReloadGuard } from "./lib/lazyWithRetry";
 import { captureAttribution } from "./lib/attribution";
 import { stopAllAudio } from "./lib/audioBus";
+import { startPageLoad } from "./lib/pageLoadTelemetry";
 
 // Iter 120: capture utm_*/gclid/referrer on every page load (first-touch safe)
 captureAttribution();
@@ -111,6 +112,8 @@ function AppRouter() {
     // Iter 121 (User feedback): kill ALL audio (TTS, ElevenLabs playback,
     // Browser-SpeechSynthesis) so voices don't bleed across routes.
     stopAllAudio('route-change');
+    // Iter 168: Ladezeit je Seite messen (Admin → Ladezeiten)
+    startPageLoad(location.pathname);
   }, [location.pathname]);
 
   if (location.hash?.includes('session_id=')) {

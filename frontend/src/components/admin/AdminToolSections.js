@@ -6,6 +6,7 @@ import { MasterclassClientsManager } from './MasterclassClientsManager';
 import { ConversionCenter } from './ConversionCenter';
 import { LiveTestPanel } from './LiveTestPanel';
 import { GuideStudio } from './GuideStudio';
+import { PageLoadOverview } from './PageLoadOverview';
 
 /* Titled admin tool sections, rendered in this order below the overview cards. */
 const SECTIONS = [
@@ -14,6 +15,12 @@ const SECTIONS = [
     de: 'Wlads Wissensbasis verwalten: neu einlesen (ZIP), Chunk-Status live, Golden-Question-Selbsttest nach jedem Deploy.',
     en: "Manage Wlad's knowledge base: re-ingest (ZIP), live chunk status, golden-question self-test after every deploy.",
     render: (de) => <RagControlCenter de={de} />,
+  },
+  {
+    key: 'page-loads', mt: 'mt-2', title: (de) => (de ? 'Ladezeiten · Seiten im Blick' : 'Load Times · Pages at a Glance'),
+    de: 'Wie schnell steht jede Seite wirklich beim Nutzer? Gemessen im Browser, Ausreißer werden rot markiert.',
+    en: 'How fast does each page really appear for users? Measured in the browser, outliers are flagged red.',
+    render: (de) => <PageLoadOverview de={de} />,
   },
   {
     key: 'rag-debug', mt: 'mt-2', title: (de) => (de ? 'WladBot Wissens-Studio' : 'WladBot Knowledge Studio'),

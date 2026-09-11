@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 import { useFeature } from '../../hooks/useFeature';
 import logger from '../../lib/logger';
 import { ChevronRight } from 'lucide-react';
@@ -30,6 +31,8 @@ export const EventReminderBanner = ({ de }) => {
   const eventHints = useFeature('event_hints');
 
   const loadReminders = useCallback(async () => {
+    const pre = takeSlice('events_reminders');
+    if (pre) { setData(pre); return; }
     try {
       const res = await api.get('/events-reminders');
       setData(res.data);

@@ -32,7 +32,7 @@ import os
 import time
 import uuid
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from fastapi import APIRouter, Request, HTTPException
@@ -49,6 +49,7 @@ _RATE_BUCKET: dict[str, list[float]] = {}
 _RATE_LIMITS = {
     "error": (60, 60),      # 60 errors / 60s / bucket
     "feedback": (5, 300),   # 5 feedbacks / 5min / bucket
+    "page_load": (120, 60), # 120 Ladezeit-Batches / 60s / IP
 }
 
 
@@ -316,6 +317,82 @@ async def health_deep():
             "supabase_bridge": supabase_r,
             "rag": rag_r,
         },
+    }
+
+
+# ── Ladezeiten (Iter 168): Frontend meldet je Seitenaufbau, Admin sieht p50/p95 je Route ──
+class PageLoadSample(BaseModel):
+    path: str = Field(..., max_length=120)
+    ms: float = Field(..., ge=0, le=120000)
+    nav: str = Field("spa", max_length=12)          # initial | spa
+    ttfb: Optional[float] = Field(None, ge=0, le=60000)
+    requests: int = Field(0, ge=0, le=200)
+
+
+class PageLoadBatch(BaseModel):
+    samples: list[PageLoadSample] = Field(..., max_length=50)
+
+
+def _route_key(path: str) -> str:
+    """/courses/abc-123 → /courses/:id — Ausreißer je Seite, nicht je Datensatz."""
+    parts = [p for p in path.split("?")[0].split("/") if p]
+    out = []
+    for i, p in enumerate(parts):
+        out.append(":id" if (i > 0 and (len(p) > 16 or p.isdigit() or "-" in p and len(p) > 10)) else p)
+    return "/" + "/".join(out) if out else "/"
+
+
+@router.post("/telemetry/page-load")
+async def report_page_load(payload: PageLoadBatch, request: Request):
+    ip = (request.headers.get("x-forwarded-for") or request.client.host or "?").split(",")[0].strip()
+    if not _rate_ok(ip, "page_load"):
+        return {"ok": True, "stored": 0}
+    user = await _maybe_user(request)
+    now = datetime.now(timezone.utc)
+    docs = [{
+        "route": _route_key(s.path), "path": s.path[:120], "ms": round(s.ms), "nav": s.nav[:12],
+        "ttfb": round(s.ttfb) if s.ttfb is not None else None, "requests": s.requests,
+        "user_id": user.get("user_id") if user else None, "created_at": now.isoformat(), "expires_at": now,
+    } for s in payload.samples]
+    if docs:
+        await db.page_loads.insert_many(docs)
+    return {"ok": True, "stored": len(docs)}
+
+
+def _pct(sorted_vals: list[float], q: float) -> int:
+    if not sorted_vals:
+        return 0
+    idx = min(len(sorted_vals) - 1, max(0, int(round(q * (len(sorted_vals) - 1)))))
+    return int(sorted_vals[idx])
+
+
+@router.get("/admin/telemetry/page-loads")
+async def page_load_overview(request: Request, since_hours: int = 24):
+    from routes.admin import require_admin
+    await require_admin(request)
+    since = (datetime.now(timezone.utc) - timedelta(hours=max(1, min(24 * 14, since_hours)))).isoformat()
+    rows = await db.page_loads.find({"created_at": {"$gte": since}}, {"_id": 0, "route": 1, "ms": 1, "nav": 1, "created_at": 1}) \
+        .sort("created_at", -1).limit(20000).to_list(20000)
+    by_route: dict[str, list[dict]] = {}
+    for r in rows:
+        by_route.setdefault(r["route"], []).append(r)
+    routes = []
+    for route, items in by_route.items():
+        vals = sorted(i["ms"] for i in items)
+        initial = sorted(i["ms"] for i in items if i.get("nav") == "initial")
+        p95 = _pct(vals, 0.95)
+        routes.append({
+            "route": route, "count": len(vals), "p50": _pct(vals, 0.5), "p95": p95, "max": int(vals[-1]),
+            "p50_initial": _pct(initial, 0.5) if initial else None, "last_at": items[0]["created_at"],
+            "grade": "slow" if p95 > 2500 else ("warn" if p95 > 1200 else "ok"),
+        })
+    routes.sort(key=lambda r: -r["p95"])
+    all_vals = sorted(r["ms"] for r in rows)
+    return {
+        "since_hours": since_hours, "samples": len(rows),
+        "overall": {"p50": _pct(all_vals, 0.5), "p95": _pct(all_vals, 0.95)},
+        "outliers": [r for r in routes if r["grade"] != "ok"],
+        "routes": routes,
     }
 
 
