@@ -5,6 +5,7 @@ werden Logo und Untertitel mit Pillow als PNG gerendert und per overlay-Filter
 zeitgesteuert eingeblendet. Alle Funktionen sind blockierend -> asyncio.to_thread.
 """
 
+import io
 import os
 import re
 import subprocess
@@ -12,7 +13,7 @@ import tempfile
 from pathlib import Path
 
 import imageio_ffmpeg
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 FONT_REGULAR = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
@@ -141,6 +142,78 @@ def render_thumbnail(source: str, dest: str, title: str, kicker: str = "", max_w
     lw = draw.textlength(label, font=small)
     draw.text((w - pad - mark - int(mark * 0.25) - lw, pad + int(mark * 0.32)), label, font=small, fill=(255, 255, 255))
     img.save(dest, "JPEG", quality=86, optimize=True, progressive=True)
+
+
+FONT_HAND = str(Path(__file__).resolve().parent / "assets" / "fonts" / "Caveat-Bold.ttf")
+
+
+def _still_to_video(canvas: "Image.Image", width: int, height: int, seconds: float) -> bytes:
+    with tempfile.TemporaryDirectory() as tmp:
+        frame, out = os.path.join(tmp, "card.png"), os.path.join(tmp, "card.mp4")
+        canvas.save(frame)
+        _run([
+            "-loop", "1", "-framerate", str(FPS), "-i", frame, "-f", "lavfi", "-i", "anullsrc=r=32000:cl=mono",
+            "-t", f"{seconds:.2f}", "-vf", f"scale={width}:{height},format=yuv420p",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "18", "-c:a", "aac", "-b:a", "128k", "-shortest", out,
+        ])
+        return Path(out).read_bytes()
+
+
+def render_farewell_card(width: int, height: int, farewell: str, next_step: str | None,
+                         signature_png: bytes | None = None, seconds: float = 3.5) -> bytes:
+    """Verabschiedungs-Karte (Iter 169): kleines Logo oben, Abschiedssatz, Wlads Unterschrift, nächster Schritt.
+    Ruhiger dunkler Leader-OS-Look, keine Tonspur (Stille). Unterschrift: echtes PNG, sonst Handschrift-Font."""
+    canvas = Image.new("RGB", (width, height), (10, 10, 10))
+    draw = ImageDraw.Draw(canvas)
+    base = min(width, height)
+    portrait = height > width
+    # dezenter Lime-Schimmer unten links wie im App-Look
+    glow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    r = int(base * 0.55)
+    gd.ellipse((-r // 2, height - r // 2, r, height + r), fill=(191, 255, 0, 34))
+    glow = glow.filter(ImageFilter.GaussianBlur(int(base * 0.12)))
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), glow).convert("RGB"))
+    draw = ImageDraw.Draw(canvas)
+
+    logo = int(base * 0.085)
+    mark = Image.open(LOGO_PATH).convert("RGBA").resize((logo, logo), Image.LANCZOS)
+    canvas.paste(mark, ((width - logo) // 2, int(height * (0.10 if portrait else 0.09))), mark)
+
+    f_head = _font(FONT_BOLD, int(base * (0.095 if portrait else 0.09)))
+    lines = _wrap(draw, farewell, f_head, int(width * 0.82))
+    y = int(height * (0.36 if portrait else 0.30))
+    for ln in lines:
+        w = draw.textlength(ln, font=f_head)
+        draw.text(((width - w) / 2, y), ln, font=f_head, fill=(255, 255, 255))
+        y += int(f_head.size * 1.18)
+
+    y += int(base * 0.05)
+    if signature_png:
+        sig = Image.open(io.BytesIO(signature_png)).convert("RGBA")
+        sw = int(width * (0.42 if portrait else 0.26))
+        sig = sig.resize((sw, int(sig.height * sw / sig.width)), Image.LANCZOS)
+        canvas.paste(sig, ((width - sw) // 2, y), sig)
+        y += sig.height
+    else:
+        f_sig = _font(FONT_HAND, int(base * (0.21 if portrait else 0.16)))
+        try:
+            f_sig.set_variation_by_name("Bold")
+        except Exception:
+            pass
+        w = draw.textlength("Wlad", font=f_sig)
+        draw.text(((width - w) / 2, y), "Wlad", font=f_sig, fill=LIME[:3])
+        y += int(f_sig.size * 1.05)
+
+    if next_step:
+        f_next = _font(FONT_REGULAR, int(base * (0.042 if portrait else 0.036)))
+        y += int(base * 0.06)
+        w = draw.textlength(next_step, font=f_next)
+        pad_x, pad_y = int(base * 0.03), int(base * 0.016)
+        box = (int((width - w) / 2 - pad_x), y - pad_y, int((width + w) / 2 + pad_x), y + f_next.size + pad_y)
+        draw.rounded_rectangle(box, radius=int(base * 0.03), outline=(255, 255, 255, 40), width=1, fill=(22, 22, 22))
+        draw.text(((width - w) / 2, y), next_step, font=f_next, fill=(220, 220, 220))
+    return _still_to_video(canvas, width, height, seconds)
 
 
 def render_end_card(width: int, height: int, seconds: float = 2.6) -> bytes:

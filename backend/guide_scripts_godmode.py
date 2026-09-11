@@ -7,59 +7,58 @@ Tech-Hintergrund sofort versteht. Wlad-Frameworks statt Allgemeinplätze.
 
 SCRIPTS = {
     "start-1-willkommen": (
-        "Schön, dass du da bist. Ich bin Wlad, und ich sage dir gleich zu Beginn, was Leader-OS nicht ist: "
-        "kein Kurs mit dreißig Videos, die du brav abarbeitest und danach vergisst. Leader-OS ist dein "
-        "Sparringspartner für den Führungsalltag – für das Gespräch, das dir seit Tagen im Kopf herumgeht, "
-        "für den Mitarbeiter, der nachlässt, für die Präsentation, bei der es wirklich um etwas geht. "
-        "Du beschreibst mir deine Situation, und wir arbeiten sie gemeinsam durch: mit den Frameworks aus "
-        "meinen Trainings, mit klaren Schritten und mit ehrlichem Feedback. Warum das anders ist? Weil hier "
-        "nicht das Lehrbuch entscheidet, sondern deine Realität. In den nächsten Videos zeige ich dir, wie du "
-        "mit mir sprichst, wie du dein System einrichtest und womit du in der ersten Woche anfängst. "
-        "Nimm dir dafür zehn Minuten. Sie sind gut investiert."
+        "Schön, dass du hier bist. Ich bin Wlad, und das hier ist kein Kurs, den du abarbeitest, sondern ein Ort, an "
+        "dem du an deinen eigenen Führungssituationen arbeitest. Stell dir vor, morgen um zehn sitzt dir ein "
+        "Mitarbeiter gegenüber, der seit Wochen abbaut, und du weißt noch nicht, wie du das Gespräch eröffnest. Genau "
+        "dafür bin ich da. Du sagst mir, was gerade anliegt, damit ich dir nicht irgendwas, sondern den nächsten "
+        "sinnvollen Schritt vorschlage. Damit das funktioniert, brauche ich zehn Minuten von dir: Wer bist du, wo "
+        "führst du, was macht dir gerade am meisten zu schaffen. Je ehrlicher du das beantwortest, desto besser wird "
+        "alles, was danach kommt. Also nimm dir diese zehn Minuten jetzt, nicht später. Wir sehen uns gleich im "
+        "nächsten Video – da zeige ich dir, wie du mit mir sprichst."
     ),
     "start-2-so-sprichst-du": (
-        "Wie gut ich dir helfen kann, hängt an einer einzigen Sache: an deiner Frage. Die meisten tippen "
-        "Stichworte ein – „Mitarbeitergespräch“, „Konflikt im Team“ – und bekommen Antworten, die auf jeden "
-        "passen und deshalb niemandem wirklich helfen. Mach es anders. Erzähl mir die Situation so, wie du "
-        "sie einer guten Freundin erzählen würdest: Wer ist beteiligt, was ist passiert, wann steht das "
-        "Gespräch an, und was willst du am Ende erreichen? Zum Beispiel: „Zwei aus meinem Team reden seit "
-        "drei Wochen nicht mehr miteinander, das Projekt steht, morgen um zehn habe ich beide im Raum. Wie "
-        "eröffne ich das Gespräch?“ Merkst du den Unterschied? Jetzt kann ich mit dir vorbereiten, statt zu "
-        "dozieren. Schreib mir wie einem Coach, der dich kennt – nicht wie einer Suchmaschine. Dann wird "
-        "jede Antwort deine Antwort."
+        "Der Unterschied zwischen einer brauchbaren und einer beliebigen Antwort liegt fast immer in deiner Frage. "
+        "Wenn du mir nur Mitarbeitergespräch schreibst, bekommst du das, was in jedem Ratgeber steht, weil ich nichts "
+        "über deine Lage weiß. Schreib mir stattdessen so, wie du es einem Coach erzählen würdest, der dich kennt. "
+        "Zum Beispiel: Zwei meiner Entwickler reden seit drei Wochen nicht mehr miteinander, das Projekt steht, und "
+        "morgen um zehn habe ich beide im Raum. Wie eröffne ich das Gespräch, ohne dass einer gleich dichtmacht? "
+        "Jetzt weiß ich, worum es geht, wer beteiligt ist, wann es passiert und was du erreichen willst, und genau "
+        "darauf antworte ich dir. Und wenn dir meine Antwort zu allgemein vorkommt, sag es mir, dann frage ich nach, "
+        "bis es passt. Deine Aufgabe für heute: Schreib mir die eine Situation, die dir diese Woche am meisten im "
+        "Kopf herumgeht. Ich lese mit."
     ),
     "start-3-kontext": (
-        "Stell dir vor, zwei Führungskräfte stellen mir dieselbe Frage. Die eine leitet vier Pflegekräfte auf "
-        "einer Station, der andere achtzig Leute im Vertrieb. Dieselbe Frage – und trotzdem brauchen beide "
-        "völlig verschiedene Antworten. Genau deshalb gibt es deinen Kontext. Du hinterlegst einmal deine "
-        "Rolle, dein Unternehmen und deine Branche, und unter „Über mich“ schreibst du auf, was dich "
-        "ausmacht: deine Stärken, deine Baustellen, wofür du Verantwortung trägst und was du erreichen "
-        "willst. Das lese ich bei jeder einzelnen Antwort mit, ohne dass du es wiederholen musst. Fünf "
-        "Minuten Aufwand – und aus allgemeinen Ratschlägen wird Beratung, die in deinen Alltag passt. Also: "
-        "Bevor du mir die erste Frage stellst, füll deinen Kontext aus. Je ehrlicher du dort bist, desto "
-        "besser werde ich für dich."
+        "Stell dir vor, zwei Führungskräfte stellen mir dieselbe Frage. Die eine leitet vier Pflegekräfte auf einer "
+        "Station, der andere achtzig Leute im Vertrieb. Dieselbe Frage – und trotzdem brauchen beide völlig "
+        "verschiedene Antworten. Genau deshalb gibt es deinen Kontext. Du hinterlegst einmal deine Rolle, dein "
+        "Unternehmen und deine Branche, und unter „Über mich“ schreibst du auf, was dich ausmacht: deine Stärken, "
+        "deine Baustellen, wofür du Verantwortung trägst und was du erreichen willst. Das lese ich bei jeder "
+        "einzelnen Antwort mit, ohne dass du es wiederholen musst. Fünf Minuten Aufwand – und aus allgemeinen "
+        "Ratschlägen wird Beratung, die in deinen Alltag passt. Also: Bevor du mir die erste Frage stellst, füll "
+        "deinen Kontext aus. Je ehrlicher du dort bist, desto besser werde ich für dich. Nimm dir die fünf Minuten "
+        "jetzt. Ich warte hier auf dich."
     ),
     "start-4-werkzeuge": (
-        "Leader-OS gibt dir vier Werkzeuge, und jedes hat seinen Platz. Der Chat ist zum Denken und "
-        "Vorbereiten da: Wie baue ich das Gespräch auf, welche Argumente tragen, was ist mein Ziel? In der "
-        "Simulation übst du dann – dein Gegenüber antwortet, und zwar nicht bequem, sondern so, wie es im "
-        "echten Leben antworten würde. Die Video-Analyse zeigt dir anschließend, wie du wirkst: deine Stimme, "
-        "dein Tempo, deine Struktur, deine Präsenz. Und die Playbooks sind fertige Abläufe für Situationen, "
-        "die immer wiederkommen – Feedback geben, Kritik annehmen, eine Entscheidung verkünden. Meine "
-        "Empfehlung für den Anfang: erst denken im Chat, dann üben in der Simulation, dann aufnehmen in der "
-        "Video-Analyse. Genau diese Reihenfolge macht aus Wissen Können. Probier heute das erste Werkzeug "
-        "aus – der Chat wartet schon auf dich."
+        "Leader-OS gibt dir vier Werkzeuge, und jedes hat seinen Platz. Der Chat ist zum Denken und Vorbereiten da: "
+        "Wie baue ich das Gespräch auf, welche Argumente tragen, was ist mein Ziel? In der Simulation übst du dann – "
+        "dein Gegenüber antwortet, und zwar nicht bequem, sondern so, wie es im echten Leben antworten würde. Die "
+        "Video-Analyse zeigt dir anschließend, wie du wirkst: deine Stimme, dein Tempo, deine Struktur, deine "
+        "Präsenz. Und die Playbooks sind fertige Abläufe für Situationen, die immer wiederkommen – Feedback geben, "
+        "Kritik annehmen, eine Entscheidung verkünden. Meine Empfehlung für den Anfang: erst denken im Chat, dann "
+        "üben in der Simulation, dann aufnehmen in der Video-Analyse. Genau diese Reihenfolge macht aus Wissen "
+        "Können. Probier heute das erste Werkzeug aus – der Chat wartet schon auf dich. Fünf Minuten reichen für den "
+        "Anfang. Und im nächsten Video zeige ich dir, wie deine erste Woche aussieht."
     ),
     "start-5-erste-7-tage": (
-        "Lass uns konkret werden, denn Vorsätze führen nicht – Gewohnheiten schon. Heute füllst du deinen "
-        "Kontext aus und stellst mir eine echte Frage aus deinem Alltag, die dich gerade beschäftigt. Morgen "
-        "beginnt Tag eins deiner Challenge: zehn Minuten, mehr nicht. Dabei lernst du Werkzeuge kennen, die "
-        "du sofort einsetzen kannst – zum Beispiel die Feedbackformel: erst sagen, was du beobachtet hast, "
-        "dann, was es auslöst, und schließlich, was du dir wünschst. Drei Sätze, die schwierige Gespräche "
-        "entschärfen. In dieser ersten Woche nimmst du außerdem ein kurzes Video auf. Ja, das kostet "
-        "Überwindung – und genau deshalb wirkt es. Sieben Tage, jeden Tag zehn Minuten. Den Unterschied "
-        "merkst du nicht am Wissen, sondern daran, wie ruhig du im nächsten schwierigen Gespräch dastehst. "
-        "Fangen wir an."
+        "Lass uns konkret werden, denn Vorsätze führen nicht – Gewohnheiten schon. Heute füllst du deinen Kontext aus "
+        "und stellst mir eine echte Frage aus deinem Alltag, die dich gerade beschäftigt. Morgen beginnt Tag eins "
+        "deiner Challenge: zehn Minuten, mehr nicht. Dabei lernst du Werkzeuge kennen, die du sofort einsetzen kannst "
+        "– zum Beispiel die Feedbackformel: erst sagen, was du beobachtet hast, dann, was es auslöst, und "
+        "schließlich, was du dir wünschst. Drei Sätze, die schwierige Gespräche entschärfen. In dieser ersten Woche "
+        "nimmst du außerdem ein kurzes Video auf. Ja, das kostet Überwindung – und genau deshalb wirkt es. Sieben "
+        "Tage, jeden Tag zehn Minuten. Den Unterschied merkst du nicht am Wissen, sondern daran, wie ruhig du im "
+        "nächsten schwierigen Gespräch dastehst. Fangen wir an. Leg dir deine zehn Minuten jetzt in den Kalender. "
+        "Morgen sehen wir uns zur ersten Challenge – ich freue mich auf dich."
     ),
     # Iter 167: Login-Teaser GODMODE — Walk-in mit Ton, dann ein durchgehender Take (~47 s). Ton der Landing-Copy
     # („Führe besser. Jeden Tag.“ / „Kein Onlinekurs. Kein Chatbot. Dein tägliches Betriebssystem.“).
@@ -125,3 +124,53 @@ AI_SLOP = (
     "ganzheitlich", "unverzichtbar", "spielend leicht", "auf das nächste level", "game changer", "letztendlich",
     "zusammenfassend", "in diesem video", "herzlich willkommen zu", "ohne weiteres", "bahnbrechend",
 )
+
+# Iter 169: Mission-Briefings Tag 1–7 — ein Take, nur Wlad, klare Aufgabe, natürlicher Schluss.
+SCRIPTS["mission-day-1"] = (
+    "Tag eins. Bevor wir irgendetwas verändern, wollen wir wissen, wo du stehst. Heute beantwortest du zehn "
+    "Fragen zu deinem Führungsalltag – ehrlich, nicht so, wie du gern wärst. Es gibt kein Falsch. Diese Baseline "
+    "ist dein Ausgangspunkt, und in einer Woche schauen wir gemeinsam, was sich bewegt hat. Nimm dir zehn ruhige "
+    "Minuten, kein Handy nebenbei. Los geht's – ich bin gespannt, wo du startest."
+    )
+SCRIPTS["mission-day-2"] = (
+    "Tag zwei. Jeder redet über KI, und die meisten Führungskräfte schwanken zwischen Hype und Abwehr. Beides "
+    "hilft deinem Team nicht. Heute schauen wir nüchtern hin: Wo nimmt KI dir Arbeit ab, wo braucht dein Team "
+    "weiter dein Urteil – und wie sprichst du darüber, ohne Angst zu machen oder Versprechen zu geben, die du "
+    "nicht halten kannst? Deine Aufgabe: Nenne mir im Chat eine Aufgabe in deinem Team, bei der du dir heute "
+    "unsicher bist, ob KI helfen sollte. Damit arbeiten wir."
+    )
+SCRIPTS["mission-day-3"] = (
+    "Tag drei. Du sagst etwas, dein Team hört etwas anderes – und du merkst es erst, wenn das Ergebnis nicht "
+    "stimmt. Heute geht es darum, wie deine Botschaft wirklich ankommt: ein klarer Kern, ein Satz, den man sich "
+    "merken kann, und die Frage danach, was verstanden wurde. In der Challenge übst du das an einer echten "
+    "Nachricht, die du diese Woche loswerden musst. Formuliere sie heute einmal so, wie du sie normalerweise "
+    "sagen würdest – und dann so, dass sie hängen bleibt. Wir vergleichen."
+    )
+SCRIPTS["mission-day-4"] = (
+    "Tag vier. Feedback scheitert selten an der Absicht, fast immer an der Form. Zu weich, und nichts ändert "
+    "sich. Zu hart, und dein Gegenüber macht dicht. Heute lernst du eine Struktur, mit der du klar bleibst und "
+    "trotzdem in Verbindung: Beobachtung, Wirkung, Wunsch. Deine Aufgabe: Denk an eine Person, der du seit Wochen "
+    "etwas sagen willst. Formuliere ihr Feedback heute in drei Sätzen – und übe es in der Simulation, bevor du es "
+    "wirklich sagst. Ich höre zu."
+    )
+SCRIPTS["mission-day-5"] = (
+    "Tag fünf. Die wichtigen Entscheidungen triffst du nie mit allen Informationen. Wer wartet, bis alles klar "
+    "ist, entscheidet am Ende gar nicht – und das Team wartet mit. Heute schauen wir, wie du gute Entscheidungen "
+    "triffst, wenn vieles offen ist: Was weißt du sicher, was nimmst du an, was kannst du in einer Woche wieder "
+    "korrigieren? Deine Aufgabe: Nenne mir im Chat eine Entscheidung, die du gerade vor dir herschiebst. Wir "
+    "nehmen sie heute auseinander – und du triffst sie bis Freitag."
+    )
+SCRIPTS["mission-day-6"] = (
+    "Tag sechs. Die meisten Konflikte im Team werden nicht zu groß, weil sie groß angefangen haben – sondern weil "
+    "niemand sie angesprochen hat, als sie klein waren. Heute geht es um den frühen Satz: ruhig, konkret, ohne "
+    "Vorwurf. „Mir ist aufgefallen, dass … Wie siehst du das?“ Das ist alles. Deine Aufgabe: Wo in deinem Team "
+    "knirscht es gerade leise? Formuliere den ersten Satz, mit dem du das morgen ansprichst, und übe ihn heute in "
+    "der Simulation. Je früher, desto leichter."
+    )
+SCRIPTS["mission-day-7"] = (
+    "Tag sieben. Eine Woche liegt hinter dir – Zeit, ehrlich hinzuschauen. Nicht, ob du alles geschafft hast, "
+    "sondern was sich verändert hat: Welches Gespräch ist anders gelaufen? Wo hast du gezögert? Was nimmst du in "
+    "die zweite Woche mit? Heute beantwortest du dieselben Fragen wie am ersten Tag, und wir legen die Antworten "
+    "nebeneinander. Nimm dir dafür Zeit – das ist der wichtigste Blick der Woche. Ich bin stolz, dass du "
+    "drangeblieben bist. Wir sehen uns morgen, in Woche zwei."
+    )

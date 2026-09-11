@@ -27,7 +27,7 @@ from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_AFTER_WALK_SECONDS, TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE,
-    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, plan_shots,
+    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, farewell_for, plan_shots,
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
@@ -41,7 +41,7 @@ from services_fal import (
     render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
-    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_end_card,
+    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_farewell_card,
     subtitle_chunks,
 )
 
@@ -50,7 +50,7 @@ router = APIRouter(prefix="/api/guide", tags=["guide"])
 SETTINGS_ID = "guide_settings"
 DEFAULT_VOICE_ID = "Deep_Voice_Man"  # Minimax-Standardstimme, bis Wlads Klon steht
 _JOBS: set = set()
-SETTINGS_ASSETS = {"portrait": "portrait_path", "sample": "voice_sample_path", "body": "body_path"}
+SETTINGS_ASSETS = {"portrait": "portrait_path", "sample": "voice_sample_path", "body": "body_path", "signature": "signature_path"}
 CLIP_MEDIA = {"video": "video_path", "audio": "audio_path", "padded": "audio_padded_path",
               "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "keyframe_path"}
 MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", "padded": "audio/mpeg",
@@ -64,6 +64,7 @@ SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "v
 
 _BOOT_RESET_DONE = False
 _SEEDED_OK = False
+_PROCESS_STARTED_AT = datetime.now(timezone.utc).isoformat()  # Iter 169: Boot-Reset trifft nur Läufe von VOR dem Neustart
 _SEED_FILE = Path(__file__).resolve().parent.parent / "guide_seed_data.json"
 
 
@@ -112,7 +113,7 @@ async def _ensure_seeded() -> None:
         _BOOT_RESET_DONE = True
         await _import_produced_seed()
         await db.guide_clips.update_many(
-            {"status": {"$regex": "_running$"}},
+            {"status": {"$regex": "_running$"}, "updated_at": {"$lt": _PROCESS_STARTED_AT}},
             {"$set": {"status": "interrupted", "progress": None,
                       "error": "Server wurde neu gestartet — Schritt bitte erneut starten"}},
         )
@@ -552,6 +553,17 @@ async def _store_settings_asset(file: UploadFile, kind: str, max_mb: int) -> str
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
     return token
+
+
+@router.post("/admin/signature")
+async def upload_signature(request: Request, file: UploadFile = File(...)):
+    """Wlads echte Unterschrift (PNG, transparent) für die Verabschiedungs-Karte — ersetzt die Handschrift-Schrift
+    bei jedem weiteren Schnitt, ohne Neuaufnahme."""
+    await require_admin(request)
+    if (file.content_type or "") not in ("image/png", "image/webp"):
+        raise HTTPException(status_code=422, detail="Bitte ein PNG mit transparentem Hintergrund hochladen")
+    token = await _store_settings_asset(file, "signature", 2)
+    return {"ok": True, "signature_url": _media_url(token, "signature")}
 
 
 @router.post("/admin/portrait")
@@ -1023,8 +1035,13 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         offset += seg_len
 
     if pro:
-        segments.append(await asyncio.to_thread(render_end_card, width, height))
-        fades.append(XFADE)
+        # Iter 169: Verabschiedungs-Karte (Abschiedssatz, Unterschrift, nächster Schritt) statt nacktem Logo-Abbinder
+        farewell, next_step = farewell_for(slug)
+        signature = None
+        if settings.get("signature_path"):
+            signature, _ = await asyncio.to_thread(get_object, settings["signature_path"])
+        segments.append(await asyncio.to_thread(render_farewell_card, width, height, farewell, next_step, signature))
+        fades.append(XFADE_CARD)
     joined = await asyncio.to_thread(concat_segments, segments, fades if pro else 0.0)
     from services_video_compose import extract_audio
 
@@ -1048,6 +1065,7 @@ def _screen_bytes(screen: str, aspect: str) -> bytes:
 _FULL_SLOTS = asyncio.Semaphore(3)
 XFADE = 0.45
 XFADE_WALK = 0.8  # Übergang Walk-in -> Talk: Bild endet ohnehin auf dem Talk-Keyframe, Ton läuft weich hinüber
+XFADE_CARD = 0.8  # aus Wlads letztem Blick weich in die Verabschiedungs-Karte
 
 
 def _setting_for(slug: str, clip: dict) -> str | None:

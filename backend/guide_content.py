@@ -330,7 +330,33 @@ def presence_plan(setting: str = "loft") -> list[dict]:
 
 
 TALK_LEAD_SECONDS = 0.4   # Wlad ist kurz still im Bild, bevor er spricht
-TALK_TAIL_SECONDS = 0.9   # Sprech-Ausklang: Blick hält, kein abrupter Schnitt
+TALK_TAIL_SECONDS = 1.8   # Sprech-Ausklang (Iter 169): Wlad hält den Blick, dann weich in die Verabschiedungs-Karte
+
+# Verabschiedungs-Karte je Clip (Iter 169): Abschiedssatz + nächster Schritt. Fallback für alle anderen Clips.
+FAREWELLS = {
+    "teaser-login": ("Fang heute an.", "Kostenlos starten → leader-os.de"),
+    "start-1-willkommen": ("Wir sehen uns gleich.", "Weiter → So sprichst du mit mir"),
+    "start-2-so-sprichst-du": ("Ich lese mit.", "Jetzt → Schreib mir deine Situation im Chat"),
+    "start-3-kontext": ("Ich warte hier auf dich.", "Jetzt → Deinen Kontext ausfüllen"),
+    "start-4-werkzeuge": ("Bis gleich.", "Weiter → Deine ersten 7 Tage"),
+    "start-5-erste-7-tage": ("Bis morgen.", "Morgen → Tag 1: Deine Baseline"),
+    "mission-day-1": ("Ich bin gespannt.", "Jetzt → Challenge Tag 1 starten"),
+    "mission-day-2": ("Damit arbeiten wir.", "Jetzt → Challenge Tag 2 starten"),
+    "mission-day-3": ("Wir vergleichen.", "Jetzt → Challenge Tag 3 starten"),
+    "mission-day-4": ("Ich höre zu.", "Jetzt → In der Simulation üben"),
+    "mission-day-5": ("Bis Freitag.", "Jetzt → Challenge Tag 5 starten"),
+    "mission-day-6": ("Je früher, desto leichter.", "Jetzt → In der Simulation üben"),
+    "mission-day-7": ("Bis morgen, in Woche zwei.", "Morgen → Woche zwei"),
+    "coaching-pakete": ("Wir sehen uns drinnen.", "Weiter → Dein Paket wählen"),
+    "bp-playbooks": ("Bis gleich.", "Jetzt → Ein Playbook öffnen"),
+    "bp-missionen": ("Bis gleich.", "Jetzt → Deine erste Mission"),
+    "bp-video-analyse": ("Kamera an.", "Jetzt → Video-Analyse starten"),
+}
+FAREWELL_DEFAULT = ("Bis bald.", None)
+
+
+def farewell_for(slug: str) -> tuple[str, str | None]:
+    return FAREWELLS.get(slug, FAREWELL_DEFAULT)
 TALK_MAX_SECONDS = 9.2
 TALK_MAX_SECONDS_PRO = 28.0
 TALK_MAX_SECONDS_SINGLE = 58.0  # Single-Take (OmniHuman 720p, ein durchgehender Take, eine Tonspur)
@@ -663,8 +689,11 @@ def seed_clips() -> list[dict]:
     clips = [_clip(c["slug"], "teaser", c["order"], c["title"], c["script"], shot_preset=c["shot_preset"]) for c in TEASER_CLIPS]
     clips.append(_clip(LOGIN_TEASER["slug"], "teaser", LOGIN_TEASER["order"], LOGIN_TEASER["title"], LOGIN_TEASER["script"],
                        multi_shot=True, aspect="9:16", single_take=True, walk_in=True, setting="studio"))
-    clips += [_clip(c["slug"], "onboarding", c["order"], c["title"], c["script"], aspect="16:9") for c in ONBOARDING_CLIPS]
-    clips += [_clip(f"mission-day-{c['day']}", "mission", 100 + c["day"], c["title"], c["script"], ref=str(c["day"]), aspect="16:9")
+    clips += [_clip(c["slug"], "onboarding", c["order"], c["title"], c["script"], aspect="16:9", single_take=True) for c in ONBOARDING_CLIPS]
+    # Iter 169: Missionen = ein Take, nur Wlad, dunkles Studio, keine B-Roll
+    clips += [_clip(f"mission-day-{c['day']}", "mission", 100 + c["day"], c["title"],
+                    GODMODE_SCRIPTS.get(f"mission-day-{c['day']}", c["script"]), ref=str(c["day"]), aspect="16:9",
+                    single_take=True, setting="studio")
               for c in MISSION_CLIPS]
     clips.append(_clip("coaching-pakete", "coaching", 200, "Was du mit Leader-OS bekommst", GODMODE_SCRIPTS["coaching-pakete"],
                        multi_shot=True, aspect="16:9"))
