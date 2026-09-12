@@ -85,7 +85,7 @@ class TestPublicTeaser:
         clip = teaser["clip"]
         assert clip is not None, "teaser clip is null"
         assert clip["slug"] == "teaser-login", clip["slug"]
-        assert clip["video_url"].endswith("/video"), clip["video_url"]
+        assert "/video?v=" in clip["video_url"], clip["video_url"]  # Iter 176: Cache-Buster Pflicht
         assert clip["poster_url"], "poster_url missing"
         assert "_id" not in clip
 

@@ -84,7 +84,7 @@ class TestPublicTeaser:
         assert isinstance(clip["title"], str) and clip["title"]
         assert isinstance(clip["script"], str) and clip["script"]
         assert clip["video_url"].startswith("/api/guide/media/")
-        assert clip["video_url"].endswith("/video")
+        assert "/video" in clip["video_url"]  # Iter 176: ?v=<render> Cache-Buster
         assert clip["poster_url"], "poster_url fehlt"
 
     def test_teaser_video_full(self):

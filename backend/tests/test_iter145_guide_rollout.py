@@ -60,7 +60,7 @@ class TestPublicTeaser:
         clip = r.json().get("clip")
         assert clip is not None, "kein Teaser freigegeben"
         assert clip["slug"] == "teaser-login", f"erwartet teaser-login, bekam {clip['slug']}"
-        assert clip["video_url"] and clip["video_url"].endswith("/video")
+        assert clip["video_url"] and "/video" in clip["video_url"]  # Iter 176: ?v=<render> Cache-Buster
         assert clip["poster_url"]
         assert isinstance(clip["script"], str) and len(clip["script"]) > 50
 
@@ -68,7 +68,7 @@ class TestPublicTeaser:
         # Iter 149: Poster ist ein JPEG (Kind `poster`), davor rohes Keyframe-PNG — beides zulässig
         clip = requests.get(f"{BASE_URL}/api/guide/public/teaser", timeout=60).json()["clip"]
         poster = clip["poster_url"]
-        assert poster.endswith(("/poster", "/keyframe")), f"unerwartete Poster-Form: {poster}"
+        assert poster.split("?")[0].endswith(("/poster", "/keyframe")), f"unerwartete Poster-Form: {poster}"
         r = requests.get(f"{BASE_URL}{poster}", timeout=120)
         assert r.status_code == 200, r.status_code
         assert r.headers.get("content-type") in ("image/png", "image/jpeg"), r.headers.get("content-type")

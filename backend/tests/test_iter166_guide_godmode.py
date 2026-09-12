@@ -63,9 +63,15 @@ def test_script_draft_flow_blocks_render_until_approved():
     assert requests.put(f"{BASE}/api/guide/admin/clips/{slug}/script-draft", json={"script": draft}, headers=_h("free@wladbot.test"), timeout=30).status_code in (401, 403)
 
 
-def test_pending_godmode_drafts_exist_for_first_two_clips():
+def test_godmode_drafts_for_first_two_clips_are_pending_or_approved():
+    """Iter 166 legte die Entwürfe an; seit Iter 171 sind sie freigegeben und gerendert (GODMODE-Single-Take)."""
     h = _h(ADMIN_EMAIL)
     for slug in ("start-1-willkommen", "start-2-so-sprichst-du"):
         c = requests.get(f"{BASE}/api/guide/admin/clips/{slug}", headers=h, timeout=30).json()
-        assert c.get("script_draft_status") == "pending" and 70 <= len(c["script_draft"].split()) <= 150
-        assert c["published"] is True, "alter Clip bleibt online"
+        status = c.get("script_draft_status")
+        assert status in ("pending", "approved"), status
+        if status == "pending":
+            assert 70 <= len(c["script_draft"].split()) <= 150
+        else:
+            assert c.get("single_take") is True and c.get("video_url")
+        assert c["published"] is True, "Clip bleibt online"

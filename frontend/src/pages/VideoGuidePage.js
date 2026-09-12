@@ -8,7 +8,7 @@ import { GuideVideoPlayer } from '../components/guide/GuideVideoPlayer';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 
 const base = process.env.REACT_APP_BACKEND_URL;
-const CACHE_KEY = 'wladbot_guide_clips_v1';
+const CACHE_KEY = 'wladbot_guide_clips_v2';
 
 const fmt = (sec) => { const n = Math.round(sec || 0); return n >= 60 ? `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}` : `${n} s`; };
 

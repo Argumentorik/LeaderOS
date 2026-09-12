@@ -172,8 +172,18 @@ async def _set_settings(patch: dict) -> None:
     await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": patch}, upsert=True)
 
 
-def _media_url(token: str, kind: str) -> str:
-    return f"/api/guide/media/{token}/{kind}"
+def _media_url(token: str, kind: str, version: str | None = None) -> str:
+    # `?v=` = Render-Kennung aus dem Dateinamen: Token bleibt pro Clip gleich, Browser/CDN cachen die URL
+    # 7 Tage — ohne Versions-Suffix spielte der Browser nach einem Re-Render das alte Video weiter.
+    base = f"/api/guide/media/{token}/{kind}"
+    return f"{base}?v={version}" if version else base
+
+
+def _render_version(path: str | None) -> str | None:
+    if not path:
+        return None
+    stem = path.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+    return stem.rsplit("_", 1)[-1] if "_" in stem else stem
 
 
 def _poster_url(clip: dict) -> str | None:
@@ -181,12 +191,12 @@ def _poster_url(clip: dict) -> str | None:
     if not token:
         return None
     if clip.get("keyframe_path"):
-        return _media_url(token, "poster")
+        return _media_url(token, "poster", _render_version(clip["keyframe_path"]))
     first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
     if first:
-        return f"/api/guide/media/{token}/shot/{first['id']}/poster"
+        return f"/api/guide/media/{token}/shot/{first['id']}/poster?v={_render_version(first['keyframe_path'])}"
     # Kein Keyframe (Multishot-Pipeline): Standbild wird beim ersten Abruf aus dem Video gezogen
-    return _media_url(token, "poster") if clip.get("video_path") else None
+    return _media_url(token, "poster", _render_version(clip["video_path"])) if clip.get("video_path") else None
 
 
 def _public_clip(clip: dict, seen: list) -> dict:
@@ -202,7 +212,7 @@ def _public_clip(clip: dict, seen: list) -> dict:
         "title": clip["title"],
         "script": clip["script"],
         "questions": clip_questions(clip["slug"]),
-        "video_url": _media_url(token, "video") if has_video else None,
+        "video_url": _media_url(token, "video", _render_version(clip["video_path"])) if has_video else None,
         "duration_seconds": clip.get("duration_seconds"),
         "seen": clip["slug"] in seen,
     }
@@ -307,7 +317,7 @@ async def public_teaser():
     if not clip:
         return {"clip": None}
     return {"clip": {"slug": clip["slug"], "title": clip["title"], "script": clip["script"],
-                     "video_url": _media_url(clip["media_token"], "video"),
+                     "video_url": _media_url(clip["media_token"], "video", _render_version(clip["video_path"])),
                      "poster_url": _poster_url(clip)}}
 
 
@@ -517,7 +527,7 @@ def _admin_clip_view(c: dict) -> dict:
     token = c.get("media_token")
     view = {k: v for k, v in c.items() if not k.endswith("_path") and k != "shots"}
     for kind, field in CLIP_MEDIA.items():
-        view[f"{kind}_url"] = _media_url(token, kind) if c.get(field) and token else None
+        view[f"{kind}_url"] = _media_url(token, kind, _render_version(c.get(field))) if c.get(field) and token else None
     view["words"] = word_count(c.get("script", ""))
     view["word_limits"] = word_limits(c.get("kind", ""))
     view["godmode"] = godmode_check(c)
