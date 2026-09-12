@@ -70,7 +70,7 @@ SCRIPTS = {
         "Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein "
         "Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du "
         "beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – "
-        "so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\n"
+        "so unbequem wie das echte Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\n"
         "Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. "
         "Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf "
         "leadercheck.de. Danach sehen wir uns hier."

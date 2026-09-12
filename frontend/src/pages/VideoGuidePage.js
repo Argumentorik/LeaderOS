@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Play, Check, Clapperboard } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Play, Check, Clapperboard, ArrowRight } from 'lucide-react';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GuideVideoPlayer } from '../components/guide/GuideVideoPlayer';
+import { GuideNextStep } from '../components/guide/GuideNextStep';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 
 const base = process.env.REACT_APP_BACKEND_URL;
@@ -107,6 +108,7 @@ export default function VideoGuidePage() {
       {active && (
         <div className="mb-10 max-w-4xl" data-testid="video-guide-player">
           <GuideVideoPlayer clip={detail?.slug === active.slug ? { ...active, ...detail } : { ...active, script: '' }} de={de} onSeen={markSeen} />
+          <GuideNextStep clip={active} de={de} />
         </div>
       )}
 
@@ -126,7 +128,10 @@ export default function VideoGuidePage() {
 
       {missions.length > 0 && (
         <section data-testid="video-guide-missions">
-          <h2 className="text-base md:text-lg font-bold mb-3">{de ? 'Mission-Briefings · 30-Tage Challenge' : 'Mission briefings · 30-day challenge'}</h2>
+          <Link to="/challenge" className="group inline-flex items-center gap-2 mb-3 text-base md:text-lg font-bold hover:text-[#5a7a00] dark:hover:text-[#BFFF00] transition-colors" data-testid="video-guide-missions-title">
+            {de ? '30-Tage-Challenge · Briefings Tag 1–7' : '30-day challenge · Briefings day 1–7'}
+            <ArrowRight size={16} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+          </Link>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {missions.map((c) => <ClipTile key={c.slug} clip={c} index={`${de ? 'Tag' : 'Day'} ${c.ref}`} active={active?.slug === c.slug} onSelect={select} />)}
           </div>

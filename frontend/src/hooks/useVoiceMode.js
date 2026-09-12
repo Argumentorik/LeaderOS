@@ -22,7 +22,7 @@ export const VOICE_STATES = {
 const SILENCE_THRESHOLD = 0.012;
 // Iter 137 (Wlad): Walkie-Talkie-Gefühl — 5s Stille, damit man mitten im Satz
 // Luft holen darf, ohne dass Wlad losredet. Orb-Tap sendet sofort.
-export const SILENCE_DURATION_MS = 5000;
+export const SILENCE_DURATION_MS = 2000; // Iter 177: Anruf-Gefühl — 2 s Stille senden (Tipp auf den Orb sendet sofort)
 const MIN_RECORDING_MS = 600;
 const MAX_RECORDING_MS = 30000;
 const MAX_EMPTY_RETRIES = 3;

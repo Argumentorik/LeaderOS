@@ -11,17 +11,17 @@
    "status": "video_ready",
    "published": true,
    "audio_path": "guide/audio_start-1-willkommen_c3602eb1.mp3",
-   "video_path": "guide/video_start-1-willkommen_6454ba78.mp4",
+   "video_path": "guide/video_start-1-willkommen_15722f8a.mp4",
    "media_token": "DekISj2JI1hs4aPtTrxPHso4hlc6u77_",
    "duration_seconds": 35,
    "error": null,
    "created_at": "2026-09-02T00:33:14.443536+00:00",
-   "updated_at": "2026-09-11T11:10:32.659870+00:00",
+   "updated_at": "2026-09-12T15:26:39.373997+00:00",
    "voice_id_used": "Deep_Voice_Man",
-   "video_bytes": 9714969,
+   "video_bytes": 9648141,
    "progress": null,
    "spent_usd": 31.279999999999998,
-   "duration_seconds_video": 43.1,
+   "duration_seconds_video": 42.6,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -218,7 +218,12 @@
      "engine": "omnihuman",
      "synced_path": "guide/sync_s1_start-1-willkommen_36a99d1b.mp4"
     }
-   ]
+   ],
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "start-2-so-sprichst-du",
@@ -231,15 +236,15 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-2-so-sprichst-du_99f23b71.mp4",
+   "video_path": "guide/video_start-2-so-sprichst-du_4c74475b.mp4",
    "media_token": "s8rrsoIoMXpbC8E_9aOuNYiTN5GIBvLD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.455725+00:00",
-   "updated_at": "2026-09-11T11:11:50.457569+00:00",
+   "updated_at": "2026-09-12T15:28:33.036962+00:00",
    "progress": null,
    "spent_usd": 26.419999999999998,
-   "duration_seconds_video": 52.7,
+   "duration_seconds_video": 52.2,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -423,7 +428,7 @@
      "text": "Ich lese mit."
     }
    ],
-   "video_bytes": 10044598,
+   "video_bytes": 9947211,
    "published_at": "2026-09-03T17:57:50.009287+00:00",
    "quality": "pro",
    "stale": false,
@@ -447,7 +452,12 @@
      "engine": "omnihuman",
      "synced_path": "guide/sync_s1_start-2-so-sprichst-du_92c274fa.mp4"
     }
-   ]
+   ],
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "start-3-kontext",
@@ -460,12 +470,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-3-kontext_c147fd99.mp4",
+   "video_path": "guide/video_start-3-kontext_696cdce8.mp4",
    "media_token": "GB37Y8TmoBLfW-BRIsbTfQmpgfup0UXG",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-11T11:14:13.958076+00:00",
+   "updated_at": "2026-09-12T15:30:22.254522+00:00",
    "progress": null,
    "shots": [
     {
@@ -485,7 +495,7 @@
     }
    ],
    "spent_usd": 19.7,
-   "duration_seconds_video": 54.8,
+   "duration_seconds_video": 54.3,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -644,12 +654,16 @@
      "text": "Ich warte hier auf dich."
     }
    ],
-   "video_bytes": 9186387,
+   "video_bytes": 9146275,
    "published_at": "2026-09-03T17:57:50.187346+00:00",
    "quality": "pro",
    "stale": false,
-   "script_draft_status": "approved",
-   "single_take": true
+   "single_take": true,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "start-4-werkzeuge",
@@ -662,12 +676,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-4-werkzeuge_bcf288ae.mp4",
+   "video_path": "guide/video_start-4-werkzeuge_cda6754a.mp4",
    "media_token": "a1VU71OC6LPnX5JckWjFoPLIxAgmR-9Y",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.457634+00:00",
-   "updated_at": "2026-09-11T11:28:47.020680+00:00",
+   "updated_at": "2026-09-12T15:33:29.241250+00:00",
    "progress": null,
    "shots": [
     {
@@ -687,7 +701,7 @@
     }
    ],
    "spent_usd": 27.889999999999997,
-   "duration_seconds_video": 60.8,
+   "duration_seconds_video": 60.3,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -876,12 +890,17 @@
      "text": "wie deine erste Woche aussieht."
     }
    ],
-   "video_bytes": 18442330,
+   "video_bytes": 18009741,
    "published_at": "2026-09-03T17:57:50.450964+00:00",
    "quality": "pro",
    "stale": false,
    "script_draft_status": "approved",
-   "single_take": true
+   "single_take": true,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "start-5-erste-7-tage",
@@ -894,12 +913,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_start-5-erste-7-tage_1c1c4d16.mp4",
+   "video_path": "guide/video_start-5-erste-7-tage_f3d835b5.mp4",
    "media_token": "C0ZApviUPueybB13FsQaxbZxcGePYvot",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.458459+00:00",
-   "updated_at": "2026-09-11T11:26:24.868875+00:00",
+   "updated_at": "2026-09-12T15:35:34.693596+00:00",
    "progress": null,
    "shots": [
     {
@@ -919,7 +938,7 @@
     }
    ],
    "spent_usd": 19.93,
-   "duration_seconds_video": 51.1,
+   "duration_seconds_video": 50.6,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1118,12 +1137,17 @@
      "text": "dich."
     }
    ],
-   "video_bytes": 8849405,
+   "video_bytes": 8783338,
    "published_at": "2026-09-03T17:57:50.669418+00:00",
    "quality": "pro",
    "stale": false,
    "script_draft_status": "approved",
-   "single_take": true
+   "single_take": true,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-1",
@@ -1136,12 +1160,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-1_24acdc9a.mp4",
+   "video_path": "guide/video_mission-day-1_e0916f0f.mp4",
    "media_token": "HPJrckA9IVchbJMUkGbjk4mULZQOSf62",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.459189+00:00",
-   "updated_at": "2026-09-11T13:47:37.681579+00:00",
+   "updated_at": "2026-09-12T15:36:42.038315+00:00",
    "progress": null,
    "shots": [
     {
@@ -1163,7 +1187,7 @@
     }
    ],
    "spent_usd": 7.56,
-   "duration_seconds_video": 25.8,
+   "duration_seconds_video": 25.3,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1252,13 +1276,18 @@
      "text": "wo du startest."
     }
    ],
-   "video_bytes": 5115313,
+   "video_bytes": 4968712,
    "published_at": "2026-09-03T17:57:50.815747+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-2",
@@ -1271,12 +1300,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-2_f8547e80.mp4",
+   "video_path": "guide/video_mission-day-2_0e943153.mp4",
    "media_token": "qVvNUBpaeQg9EbdxCbvM6bINtZGi5AL2",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.459931+00:00",
-   "updated_at": "2026-09-11T11:39:12.652935+00:00",
+   "updated_at": "2026-09-12T15:38:20.851488+00:00",
    "progress": null,
    "shots": [
     {
@@ -1298,7 +1327,7 @@
     }
    ],
    "spent_usd": 7.99,
-   "duration_seconds_video": 29.6,
+   "duration_seconds_video": 29.1,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1402,13 +1431,18 @@
      "text": "Damit arbeiten wir."
     }
    ],
-   "video_bytes": 8626568,
+   "video_bytes": 8426705,
    "published_at": "2026-09-03T17:57:51.000668+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-3",
@@ -1421,12 +1455,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-3_d2c9c1e1.mp4",
+   "video_path": "guide/video_mission-day-3_e5469b62.mp4",
    "media_token": "o0BdTaj9blbgWEq0zvTEH2Lk9xNYEwTv",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.460638+00:00",
-   "updated_at": "2026-09-11T11:40:47.022481+00:00",
+   "updated_at": "2026-09-12T15:39:55.179413+00:00",
    "progress": null,
    "shots": [
     {
@@ -1448,7 +1482,7 @@
     }
    ],
    "spent_usd": 8.610000000000001,
-   "duration_seconds_video": 30.3,
+   "duration_seconds_video": 29.8,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1552,13 +1586,18 @@
      "text": "Wir vergleichen."
     }
    ],
-   "video_bytes": 7451266,
+   "video_bytes": 7308352,
    "published_at": "2026-09-03T17:57:51.137845+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-4",
@@ -1571,12 +1610,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-4_98413922.mp4",
+   "video_path": "guide/video_mission-day-4_7f7a5a61.mp4",
    "media_token": "CdlZm6M92ODN-1wqTR_RpIkyX7J22BWj",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.461314+00:00",
-   "updated_at": "2026-09-11T11:53:25.662237+00:00",
+   "updated_at": "2026-09-12T15:41:28.838914+00:00",
    "progress": null,
    "shots": [
     {
@@ -1598,7 +1637,7 @@
     }
    ],
    "spent_usd": 8.8,
-   "duration_seconds_video": 31.9,
+   "duration_seconds_video": 31.4,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1712,13 +1751,18 @@
      "text": "Ich höre zu."
     }
    ],
-   "video_bytes": 10043757,
+   "video_bytes": 9720428,
    "published_at": "2026-09-03T17:57:51.393101+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-5",
@@ -1731,12 +1775,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-5_1744a77f.mp4",
+   "video_path": "guide/video_mission-day-5_6e739d6c.mp4",
    "media_token": "8OKna1dbHi6gX2FcCvzd1kI1kfgw9tGD",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.461847+00:00",
-   "updated_at": "2026-09-11T11:53:19.481547+00:00",
+   "updated_at": "2026-09-12T15:43:02.405371+00:00",
    "progress": null,
    "shots": [
     {
@@ -1758,7 +1802,7 @@
     }
    ],
    "spent_usd": 9.42,
-   "duration_seconds_video": 32.7,
+   "duration_seconds_video": 32.2,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -1857,13 +1901,18 @@
      "text": "und du triffst sie bis Freitag."
     }
    ],
-   "video_bytes": 7473874,
+   "video_bytes": 7358854,
    "published_at": "2026-09-03T17:57:51.555899+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-6",
@@ -1876,12 +1925,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-6_722a76d0.mp4",
+   "video_path": "guide/video_mission-day-6_af62de1c.mp4",
    "media_token": "QDn-iMDKv6ivA0XuAUv5gE67BX83bOVj",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.462599+00:00",
-   "updated_at": "2026-09-11T12:14:40.467452+00:00",
+   "updated_at": "2026-09-12T15:44:20.272729+00:00",
    "progress": null,
    "shots": [
     {
@@ -1903,7 +1952,7 @@
     }
    ],
    "spent_usd": 8.389999999999999,
-   "duration_seconds_video": 31.9,
+   "duration_seconds_video": 31.4,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -2022,13 +2071,18 @@
      "text": "desto leichter."
     }
    ],
-   "video_bytes": 6417890,
+   "video_bytes": 6287891,
    "published_at": "2026-09-03T17:57:51.735518+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "mission-day-7",
@@ -2041,12 +2095,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_mission-day-7_781b04f1.mp4",
+   "video_path": "guide/video_mission-day-7_1c30db19.mp4",
    "media_token": "aAbC2dEosBZXcQ0owj0VsFfz2IZ51Ra3",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.463456+00:00",
-   "updated_at": "2026-09-11T12:09:24.377989+00:00",
+   "updated_at": "2026-09-12T15:45:43.552739+00:00",
    "progress": null,
    "shots": [
     {
@@ -2068,7 +2122,7 @@
     }
    ],
    "spent_usd": 9.469999999999999,
-   "duration_seconds_video": 32.4,
+   "duration_seconds_video": 31.9,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -2172,13 +2226,18 @@
      "text": "in Woche zwei."
     }
    ],
-   "video_bytes": 7216340,
+   "video_bytes": 7016307,
    "published_at": "2026-09-03T17:57:52.089389+00:00",
    "quality": "pro",
    "script_draft_status": "approved",
    "setting": "studio",
    "single_take": true,
-   "stale": false
+   "stale": false,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "teaser-spotlight",
@@ -2190,14 +2249,14 @@
    "shot_preset": "spotlight_entrance",
    "script_source": "wlad",
    "status": "video_ready",
-   "published": true,
+   "published": false,
    "audio_path": "guide/audio_teaser-spotlight_1b46654b.mp3",
    "video_path": "guide/video_teaser-spotlight_baf67625.mp4",
    "media_token": "m1p2NRyuenwFf_SOONZZxYMfyW_L3bHr",
    "duration_seconds": 5,
    "error": null,
    "created_at": "2026-09-02T01:01:52.733632+00:00",
-   "updated_at": "2026-09-02T08:56:03.348965+00:00",
+   "updated_at": "2026-09-12T12:05:09.200739+00:00",
    "spent_usd": 0.68,
    "keyframe_path": "guide/keyframe_teaser-spotlight_50a70e1a.png",
    "keyframe_prompt": "High-end Pixar-style 3D animated character of the man in the first reference image: keep his exact face, dark side-parted hair, short stubble beard, warm brown eyes and friendly confident expression. Full body, same athletic proportions and confident open stage posture as the man in the second reference image. He wears a dark green velvet blazer, a light blue shirt with open collar, no tie, dark tailored trousers and brown leather shoes. Clean stylized 3D animation film look, subsurface skin, soft fabric detail, no text, no watermark. Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
@@ -2225,9 +2284,9 @@
     }
    ],
    "video_bytes": 1437672,
-   "motion_prompt": "The man walks calmly and confidently forward out of the darkness into the hard spotlight, stops in the center of the light cone, looks straight into the camera, gives a slight confident smile and then talks to the camera with natural subtle head movements and small hand gestures. Slow cinematic dolly-in, volumetric haze in the light beam, consistent character and outfit, no camera cuts, smooth realistic motion.",
-   "scene_prompt": "Scene: a dark cinematic studio with a pitch-black background. A single hard spotlight from above forms a bright cone of light on a polished dark floor, with subtle haze and volumetric light. He stands at the edge of the light beam, half in shadow, about to step forward into the light. Vertical 9:16 composition, full body visible with feet on the floor, dramatic rim light, Netflix-quality animation film still, shallow depth of field, 8k render.",
-   "published_at": "2026-09-02T08:56:03.348948+00:00"
+   "motion_prompt": null,
+   "scene_prompt": null,
+   "published_at": null
   },
   {
    "slug": "teaser-login",
@@ -2235,22 +2294,22 @@
    "ref": null,
    "order": 0,
    "title": "Warum Leader-OS",
-   "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht.\n\nGenau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\nZehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.",
+   "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht.\n\nGenau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie das echte Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\nZehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.",
    "multi_shot": true,
    "aspect": "16:9",
-   "script_source": "wlad_v5_film",
+   "script_source": "wlad",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_teaser-login_6ddf76eb.mp4",
+   "video_path": "guide/video_teaser-login_133aa10b.mp4",
    "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-12T03:09:59.792110+00:00",
+   "updated_at": "2026-09-12T15:24:40.813274+00:00",
    "progress": null,
-   "spent_usd": 28.509999999999994,
-   "duration_seconds_video": 76.0,
+   "spent_usd": 34.74999999999999,
+   "duration_seconds_video": 70.4,
    "pipeline": "multishot",
    "subtitles": [
     {
@@ -2310,122 +2369,122 @@
     },
     {
      "start": 27.78,
-     "end": 30.37,
+     "end": 30.1,
      "text": "Genau dafür habe ich Leader-OS gebaut."
     },
     {
-     "start": 30.37,
-     "end": 31.46,
+     "start": 30.1,
+     "end": 31.08,
      "text": "Kein Onlinekurs"
     },
     {
-     "start": 31.46,
-     "end": 34.12,
+     "start": 31.08,
+     "end": 33.46,
      "text": "den du abarbeitest und wieder vergisst."
     },
     {
-     "start": 34.12,
-     "end": 35.0,
+     "start": 33.46,
+     "end": 34.25,
      "text": "Kein Chatbot"
     },
     {
-     "start": 35.0,
-     "end": 37.18,
+     "start": 34.25,
+     "end": 36.21,
      "text": "der dir Allgemeinplätze liefert."
     },
     {
-     "start": 37.18,
-     "end": 40.59,
+     "start": 36.21,
+     "end": 39.26,
      "text": "Sondern dein tägliches Betriebssystem für Führung"
     },
     {
-     "start": 40.59,
-     "end": 42.98,
+     "start": 39.26,
+     "end": 41.4,
      "text": "Du beschreibst mir deine Situation."
     },
     {
-     "start": 42.98,
-     "end": 45.7,
+     "start": 41.4,
+     "end": 43.84,
      "text": "Wir bereiten das Gespräch gemeinsam vor."
     },
     {
-     "start": 45.7,
-     "end": 47.61,
+     "start": 43.84,
+     "end": 45.55,
      "text": "Du übst es in der Simulation"
     },
     {
-     "start": 47.61,
-     "end": 49.45,
-     "text": "– so unbequem wie im echten"
+     "start": 45.55,
+     "end": 47.2,
+     "text": "– so unbequem wie das echte"
     },
     {
-     "start": 49.45,
-     "end": 49.86,
+     "start": 47.2,
+     "end": 47.57,
      "text": "Leben."
     },
     {
-     "start": 49.86,
-     "end": 52.24,
+     "start": 47.57,
+     "end": 49.71,
      "text": "Und in der Video-Analyse siehst du"
     },
     {
-     "start": 52.24,
-     "end": 53.81,
+     "start": 49.71,
+     "end": 51.11,
      "text": "wie du wirklich wirkst."
     },
     {
-     "start": 58.62,
-     "end": 59.92,
+     "start": 55.92,
+     "end": 57.09,
      "text": "Zehn Minuten am Tag."
     },
     {
-     "start": 59.92,
-     "end": 61.34,
+     "start": 57.09,
+     "end": 58.37,
      "text": "Mit meinen Frameworks"
     },
     {
-     "start": 61.34,
-     "end": 62.57,
+     "start": 58.37,
+     "end": 59.48,
      "text": "mit deinem Kontext"
     },
     {
-     "start": 62.57,
-     "end": 64.07,
+     "start": 59.48,
+     "end": 60.83,
      "text": "mit ehrlichem Feedback."
     },
     {
-     "start": 64.07,
-     "end": 64.91,
+     "start": 60.83,
+     "end": 61.59,
      "text": "Führe besser."
     },
     {
-     "start": 64.91,
-     "end": 65.56,
+     "start": 61.59,
+     "end": 62.17,
      "text": "Jeden Tag."
     },
     {
-     "start": 65.56,
-     "end": 67.57,
+     "start": 62.17,
+     "end": 63.98,
      "text": "Und wenn du erst wissen willst"
     },
     {
-     "start": 67.57,
-     "end": 68.8,
+     "start": 63.98,
+     "end": 65.09,
      "text": "wo du heute stehst"
     },
     {
-     "start": 68.8,
-     "end": 72.23,
+     "start": 65.09,
+     "end": 68.19,
      "text": "Mach den kostenlosen Leader-Check auf leadercheck.de."
     },
     {
-     "start": 72.23,
-     "end": 73.92,
+     "start": 68.19,
+     "end": 69.71,
      "text": "Danach sehen wir uns hier."
     }
    ],
-   "video_bytes": 15895763,
-   "published_at": "2026-09-08T11:42:02.886814+00:00",
+   "video_bytes": 12962464,
+   "published_at": "2026-09-12T12:03:05.969015+00:00",
    "quality": "pro",
    "stale": false,
    "script_approved_at": "2026-09-08T11:03:56.578272+00:00",
@@ -2468,17 +2527,17 @@
      "type": "talk",
      "preset": "studio_medium",
      "screens": [],
-     "text": "Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.",
+     "text": "Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie das echte Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.",
      "error": null,
-     "fal_request": null,
      "keyframe_path": "guide/kf_s3_teaser-login_32a06a37.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s3_teaser-login_304ddf77.mp4",
-     "audio_path": "guide/a_s3_teaser-login_583fb75e.mp3",
-     "audio_seconds": 26.73,
+     "engine": "omnihuman",
+     "audio_path": "guide/a_s3_teaser-login_ffe6d804.mp3",
+     "audio_seconds": 24.03,
      "speech_lead": 0.7,
      "speech_tail": 0.0,
-     "engine": "omnihuman"
+     "fal_request": null,
+     "synced_path": "guide/sync_s3_teaser-login_d69be5a3.mp4"
     },
     {
      "id": "s4",
@@ -2500,17 +2559,23 @@
      "screens": [],
      "text": "Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.",
      "error": null,
-     "fal_request": null,
      "keyframe_path": "guide/kf_s5_teaser-login_fc5ac1b9.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s5_teaser-login_68d97060.mp4",
-     "audio_path": "guide/a_s5_teaser-login_a8d1a44d.mp3",
-     "audio_seconds": 17.8,
+     "engine": "omnihuman",
+     "audio_path": "guide/a_s5_teaser-login_a1f47a12.mp3",
+     "audio_seconds": 14.99,
      "speech_lead": 0.7,
-     "speech_tail": 1.8,
-     "engine": "omnihuman"
+     "speech_tail": 0.5,
+     "fal_request": null,
+     "synced_path": "guide/sync_s5_teaser-login_cb7c179a.mp4"
     }
-   ]
+   ],
+   "spent_before_repair_usd": 28.51,
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "coaching-pakete",
@@ -2525,12 +2590,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_coaching-pakete_b0367b13.mp4",
+   "video_path": "guide/video_coaching-pakete_926d8aa7.mp4",
    "media_token": "ThhmZtISezqYJg_LKtQEDAsqq5-8LC_k",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-07T01:19:58.575948+00:00",
-   "updated_at": "2026-09-11T10:54:20.692192+00:00",
+   "updated_at": "2026-09-12T15:47:58.147207+00:00",
    "pipeline": "multishot",
    "quality": "pro",
    "shots": [
@@ -2809,8 +2874,13 @@
      "text": "frag mich einfach direkt."
     }
    ],
-   "video_bytes": 13021424,
-   "published_at": "2026-09-07T12:09:11.366515+00:00"
+   "video_bytes": 12996337,
+   "published_at": "2026-09-07T12:09:11.366515+00:00",
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "bp-playbooks",
@@ -2825,12 +2895,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_bp-playbooks_3258b5b7.mp4",
+   "video_path": "guide/video_bp-playbooks_e65770e1.mp4",
    "media_token": "BIj22an_necZ0iM0Z8p5wmQBdWWW9XPd",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-07T10:29:47.577544+00:00",
-   "updated_at": "2026-09-11T10:48:51.773741+00:00",
+   "updated_at": "2026-09-12T15:49:10.837416+00:00",
    "quality": "pro",
    "progress": null,
    "shots": [
@@ -3025,8 +3095,13 @@
      "text": "drückst."
     }
    ],
-   "video_bytes": 6764283,
-   "published_at": "2026-09-07T10:58:24.735405+00:00"
+   "video_bytes": 6714113,
+   "published_at": "2026-09-07T10:58:24.735405+00:00",
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "bp-missionen",
@@ -3041,12 +3116,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_bp-missionen_b9df03b4.mp4",
+   "video_path": "guide/video_bp-missionen_b481cdc4.mp4",
    "media_token": "MfMPcHJole0TdkcMMqqrRpsNYuVoyM8o",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-07T10:29:47.580373+00:00",
-   "updated_at": "2026-09-11T10:59:17.159898+00:00",
+   "updated_at": "2026-09-12T15:50:39.030762+00:00",
    "quality": "pro",
    "progress": null,
    "shots": [
@@ -3236,8 +3311,13 @@
      "text": "zwei Minuten."
     }
    ],
-   "video_bytes": 7794242,
-   "published_at": "2026-09-07T10:58:24.930795+00:00"
+   "video_bytes": 7782766,
+   "published_at": "2026-09-07T10:58:24.930795+00:00",
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   },
   {
    "slug": "bp-video-analyse",
@@ -3252,12 +3332,12 @@
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_bp-video-analyse_fe5f4390.mp4",
+   "video_path": "guide/video_bp-video-analyse_65e79c0c.mp4",
    "media_token": "lA01P2teRyURwhsZN1HZIIVQDb8S60-S",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-07T10:29:47.581160+00:00",
-   "updated_at": "2026-09-11T10:59:23.811878+00:00",
+   "updated_at": "2026-09-12T15:52:12.138069+00:00",
    "quality": "pro",
    "progress": null,
    "shots": [
@@ -3477,8 +3557,13 @@
      "text": "hoch."
     }
    ],
-   "video_bytes": 8349036,
-   "published_at": "2026-09-07T11:12:05.516524+00:00"
+   "video_bytes": 8325659,
+   "published_at": "2026-09-07T11:12:05.516524+00:00",
+   "preview_at": null,
+   "preview_bytes": null,
+   "preview_duration_seconds_video": null,
+   "preview_subtitles": null,
+   "video_preview_path": null
   }
  ],
  "settings": {
@@ -3495,7 +3580,7 @@
    "enabled": false,
    "paid_open": true,
    "free_trial_turns": 3,
-   "updated_at": "2026-09-07T12:29:43.875384+00:00",
+   "updated_at": "2026-09-12T11:17:39.445005+00:00",
    "updated_by": "test@test.com"
   },
   "music_bed_path": "guide/music_bed_settings_41a351f9.wav"

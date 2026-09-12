@@ -27,7 +27,7 @@ from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_AFTER_WALK_SECONDS, TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE,
-    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, FILM_CARD_SECONDS, farewell_for, normalize_script, plan_shots,
+    TALK_TAIL_SECONDS, OUTRO_FADE_SECONDS, WLAD_STYLE_PROMPT, FILM_CARD_SECONDS, farewell_for, normalize_script, plan_shots,
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
@@ -41,6 +41,7 @@ from services_fal import (
     render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
+    outro,
     BROLL_DIR, concat_segments, finish_video, mix_music_bed, normalize_segment, pad_audio, probe, render_broll,
     render_farewell_card, subtitle_chunks,
 )
@@ -52,9 +53,9 @@ DEFAULT_VOICE_ID = "Deep_Voice_Man"  # Minimax-Standardstimme, bis Wlads Klon st
 _JOBS: set = set()
 SETTINGS_ASSETS = {"portrait": "portrait_path", "sample": "voice_sample_path", "body": "body_path", "signature": "signature_path"}
 CLIP_MEDIA = {"video": "video_path", "audio": "audio_path", "padded": "audio_padded_path",
-              "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "keyframe_path"}
+              "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "video_path", "preview": "video_preview_path"}
 MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", "padded": "audio/mpeg",
-               "keyframe": "image/png", "poster": "image/jpeg"}
+               "keyframe": "image/png", "poster": "image/jpeg", "preview": "video/mp4"}
 SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "video/mp4"),
               "audio": ("audio_path", "audio/mpeg"), "padded": ("padded_path", "audio/mpeg"),
               "synced": ("synced_path", "video/mp4"), "poster": ("keyframe_path", "image/jpeg")}
@@ -187,16 +188,29 @@ def _render_version(path: str | None) -> str | None:
 
 
 def _poster_url(clip: dict) -> str | None:
+    """Vorschaubild = Standbild aus dem fertigen Video (Wlads Gesicht, nicht die Blende), versioniert wie das Video."""
     token = clip.get("media_token")
     if not token:
         return None
+    if clip.get("video_path"):
+        return _media_url(token, "poster", _render_version(clip["video_path"]))
     if clip.get("keyframe_path"):
-        return _media_url(token, "poster", _render_version(clip["keyframe_path"]))
+        return _media_url(token, "keyframe", _render_version(clip["keyframe_path"]))
     first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
     if first:
         return f"/api/guide/media/{token}/shot/{first['id']}/poster?v={_render_version(first['keyframe_path'])}"
-    # Kein Keyframe (Multishot-Pipeline): Standbild wird beim ersten Abruf aus dem Video gezogen
-    return _media_url(token, "poster", _render_version(clip["video_path"])) if clip.get("video_path") else None
+    return None
+
+
+def poster_source(clip: dict) -> tuple[str | None, float]:
+    """Quelle + Zeitpunkt fürs Vorschaubild: der erste Sprech-Take (ohne eingebrannte Untertitel/Blende),
+    kurz nach dem stillen Auftakt — Wlads Gesicht, ruhiger Blick. Fallback: fertiges Video bei 1,5 s."""
+    for shot in clip.get("shots") or []:
+        if shot.get("type") == "talk" and shot.get("synced_path"):
+            return shot["synced_path"], round(float(shot.get("speech_lead") or 0.0) + 0.9, 2)
+    if clip.get("video_path"):
+        return clip["video_path"], 1.5
+    return clip.get("keyframe_path"), 0.0
 
 
 def _public_clip(clip: dict, seen: list) -> dict:
@@ -343,13 +357,15 @@ async def serve_media(token: str, kind: str, request: Request):
             raise HTTPException(status_code=404, detail="Not found")
         path = clip.get(CLIP_MEDIA[kind])
         media_type = MEDIA_TYPES[kind]
-        if kind == "poster" and not path and clip.get("video_path"):
-            path = clip["video_path"]
+        poster_at = 1.5
+        if kind == "poster":
+            path, poster_at = poster_source(clip)
 
     if not path:
         raise HTTPException(status_code=404, detail="Not found")
     return await _serve_object(request, path, media_type, poster=kind == "poster",
-                               title=clip.get("title") or "", kicker=KICKERS.get(clip.get("kind") or "", ""))
+                               title=clip.get("title") or "", kicker=KICKERS.get(clip.get("kind") or "", ""),
+                               at=poster_at if clip else 1.5)
 
 
 # ── Medien-Auslieferung: Disk-Cache + gestreamte Range-Antworten ────────────
@@ -429,25 +445,25 @@ def _file_chunks(file_path: Path, start: int, end: int):
 KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "Wlad für dich", "coaching": "Coaching"}
 
 
-def _frame_from_video(video: Path) -> Path:
-    """Standbild (t≈1.5 s) aus einem MP4 ziehen — einmalig, danach aus dem lokalen Cache."""
-    target = video.with_name(f"{video.name}_frame.jpg")
+def _frame_from_video(video: Path, at: float = 1.5) -> Path:
+    """Standbild (t=at) aus einem MP4 ziehen — einmalig, danach aus dem lokalen Cache."""
+    target = video.with_name(f"{video.name}_frame_{at:.2f}.jpg")
     if target.exists():
         return target
     import imageio_ffmpeg
     tmp = target.with_suffix(f".{uuid.uuid4().hex[:8]}.part.jpg")
-    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-y", "-ss", "1.5", "-i", str(video),
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-y", "-ss", f"{at:.2f}", "-i", str(video),
                     "-frames:v", "1", "-vf", "scale='min(1280,iw)':-2", "-q:v", "3", str(tmp)],
                    check=True, capture_output=True, timeout=120)
     tmp.replace(target)
     return target
 
 
-def _local_poster(path: str, title: str = "", kicker: str = "") -> Path:
+def _local_poster(path: str, title: str = "", kicker: str = "", at: float = 1.5) -> Path:
     """Keyframe (oder Video-Standbild) -> branded Thumbnail-JPEG (Titel-Typo, W-Mark, Lime-Akzent), einmal erzeugt, dann aus dem Cache."""
     source = _local_media(path)
-    if source.suffix.lower() == ".mp4":
-        source = _frame_from_video(source)
+    if path.lower().endswith(".mp4"):
+        source = _frame_from_video(source, at)
     key = hashlib.sha1(f"{title}|{kicker}|v2".encode()).hexdigest()[:10]
     target = source.with_name(f"{source.name}_poster_{key}.jpg")
     if target.exists():
@@ -461,11 +477,11 @@ def _local_poster(path: str, title: str = "", kicker: str = "") -> Path:
 
 
 async def _serve_object(request: Request, path: str, media_type: str, poster: bool = False,
-                        title: str = "", kicker: str = "") -> Response:
+                        title: str = "", kicker: str = "", at: float = 1.5) -> Response:
     """Range-Requests für <video>/<audio> (Safari verlangt 206, Scrubbing braucht es überall);
     ETag/304, damit Browser und CDN nach Ablauf des Caches nur revalidieren statt neu laden."""
     try:
-        file_path = await asyncio.to_thread(_local_poster, path, title, kicker) if poster else await asyncio.to_thread(_local_media, path)
+        file_path = await asyncio.to_thread(_local_poster, path, title, kicker, at) if poster else await asyncio.to_thread(_local_media, path)
     except Exception as e:
         logger.error("Guide media fetch failed for %s: %s", path, e)
         raise HTTPException(status_code=404, detail="Not found")
@@ -926,7 +942,9 @@ def _duration_of(data: bytes) -> float:
         return probe(f.name)["duration"]
 
 
-async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None:
+async def _job_render(slug: str, clip: dict, settings: dict, token: str, preview: bool = False) -> None:
+    """preview=True: fertigen Film nur als Vorschau ablegen (video_preview_path) — das freigegebene Video bleibt online,
+    bis die Vorschau per /approve-preview übernommen wird."""
     shots = clip.get("shots") or []
     if not shots:
         raise FalError("Zuerst die Shots planen")
@@ -1065,6 +1083,12 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         else:
             raw, _ = await asyncio.to_thread(get_object, shot["raw_path"])
             seg = await asyncio.to_thread(normalize_segment, raw, None, width, height, shot.get("engine") == "kling-2.6-audio")
+        if pro and shot is shots[-1] and shot["type"] == "talk":
+            # Iter 177: sauberes Ende — 0,5 s Ruhe nach dem letzten Wort, dann 0,8 s Bild+Ton-Blende (kein Standbild/Loop);
+            # ältere Takes mit 1,8 s Stille werden entsprechend gekürzt.
+            baked_tail = float(shot.get("speech_tail") or 0.0)
+            trim = max(0.0, baked_tail - (TALK_TAIL_SECONDS + OUTRO_FADE_SECONDS))
+            seg = await asyncio.to_thread(outro, seg, OUTRO_FADE_SECONDS, trim)
         segments.append(seg)
         seg_len = await asyncio.to_thread(_duration_of, seg)
         if shot["type"] != "broll":
@@ -1093,12 +1117,24 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
     audio_track = await asyncio.to_thread(extract_audio, joined)
     final = await asyncio.to_thread(finish_video, joined, audio_track, cues, True, brand_windows)
     path = await _store("video", slug, final, "video/mp4", "mp4")
+    if preview:
+        await _patch_clip(slug, {
+            "status": "video_ready" if clip.get("video_path") else "preview_ready", "error": None, "progress": None,
+            "video_preview_path": path, "preview_subtitles": cues, "preview_duration_seconds_video": round(offset, 1),
+            "preview_bytes": len(final), "preview_at": datetime.now(timezone.utc).isoformat(),
+        })
+        logger.info("Guide preview ready: %s (%.1fs, %s KB) — altes Video bleibt online", slug, offset, len(final) // 1024)
+        return
     await _patch_clip(slug, {
         "video_path": path, "status": "video_ready", "error": None, "progress": None,
         "video_bytes": len(final), "pipeline": "multishot", "subtitles": cues, "stale": False,
-        "duration_seconds_video": round(offset, 1),
+        "duration_seconds_video": round(offset, 1), "video_preview_path": None, "preview_subtitles": None,
     })
     logger.info("Guide multishot ready: %s (%.1fs, %s KB)", slug, offset, len(final) // 1024)
+
+
+async def _job_render_preview(slug: str, clip: dict, settings: dict, token: str) -> None:
+    await _job_render(slug, clip, settings, token, preview=True)
 
 
 def _screen_bytes(screen: str, aspect: str) -> bytes:
@@ -1110,7 +1146,7 @@ def _screen_bytes(screen: str, aspect: str) -> bytes:
 _FULL_SLOTS = asyncio.Semaphore(3)
 XFADE = 0.45
 XFADE_WALK = 0.8  # Übergang Walk-in -> Talk: Bild endet ohnehin auf dem Talk-Keyframe, Ton läuft weich hinüber
-XFADE_CARD = 0.8  # aus Wlads letztem Blick weich in die Verabschiedungs-Karte
+XFADE_CARD = 0.3  # Iter 177: der Take blendet selbst aus (outro), die Karte kommt danach kurz weich aus Schwarz
 LEADERCHECK_URL = "https://leadercheck.de"
 MUSIC_BED_DB = -27.0  # Musikteppich unter der Stimme kaum hörbar
 MUSIC_BED_PROMPT = ("very quiet, warm cinematic ambient underscore, soft sustained pads and a gentle low piano motif, "
@@ -1150,7 +1186,7 @@ async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
         await _job_render(slug, clip, settings, token)
 
 
-_STAGES.update({"shot_keyframes": _job_shot_keyframes, "render": _job_render, "full": _job_full})
+_STAGES.update({"shot_keyframes": _job_shot_keyframes, "render": _job_render, "render_preview": _job_render_preview, "full": _job_full})
 
 
 async def _run_job(slug: str, stage: str) -> None:
@@ -1172,7 +1208,7 @@ def _start_job(slug: str, stage: str) -> None:
 
 
 RUNNING = {"audio_running", "video_running", "keyframe_running", "cinematic_running",
-           "shot_keyframes_running", "render_running", "full_running"}
+           "shot_keyframes_running", "render_running", "render_preview_running", "full_running"}
 
 
 async def release_orphaned_jobs() -> int:
@@ -1388,6 +1424,37 @@ async def render_multishot(slug: str, request: Request):
         (lambda c, s: all(sh.get("keyframe_path") for sh in c["shots"] if sh["type"] != "broll"),
          "Zuerst alle Keyframes erzeugen und prüfen"),
     )
+
+
+@router.post("/admin/clips/{slug}/render-preview")
+async def render_preview(slug: str, request: Request):
+    """Film neu zusammensetzen/rendern, aber nur als Vorschau ablegen — das freigegebene Video bleibt online."""
+    await require_admin(request)
+    return await _kick(slug, "render_preview", (lambda c, s: bool(c.get("shots")), "Zuerst die Shots planen"))
+
+
+@router.post("/admin/clips/{slug}/approve-preview")
+async def approve_preview(slug: str, request: Request):
+    """Vorschau übernehmen: wird das freigegebene Video (Version im Link ändert sich → kein Browser-Cache)."""
+    await require_admin(request)
+    clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if not clip or not clip.get("video_preview_path"):
+        raise HTTPException(status_code=400, detail="Keine Vorschau vorhanden")
+    await _patch_clip(slug, {
+        "video_path": clip["video_preview_path"], "subtitles": clip.get("preview_subtitles") or [],
+        "duration_seconds_video": clip.get("preview_duration_seconds_video"), "video_bytes": clip.get("preview_bytes"),
+        "status": "video_ready", "stale": False, "video_preview_path": None, "preview_subtitles": None,
+        "preview_duration_seconds_video": None, "preview_bytes": None, "preview_at": None,
+    })
+    return {"ok": True, "video_path": clip["video_preview_path"]}
+
+
+@router.delete("/admin/clips/{slug}/preview")
+async def discard_preview(slug: str, request: Request):
+    await require_admin(request)
+    await _patch_clip(slug, {"video_preview_path": None, "preview_subtitles": None, "preview_duration_seconds_video": None,
+                             "preview_bytes": None, "preview_at": None})
+    return {"ok": True}
 
 
 @router.post("/admin/clips/{slug}/publish")

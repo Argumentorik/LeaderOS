@@ -375,7 +375,8 @@ def presence_plan(setting: str = "loft") -> list[dict]:
 
 
 TALK_LEAD_SECONDS = 0.4   # Wlad ist kurz still im Bild, bevor er spricht
-TALK_TAIL_SECONDS = 1.8   # Sprech-Ausklang (Iter 169): Wlad hält den Blick, dann weich in die Verabschiedungs-Karte
+TALK_TAIL_SECONDS = 0.5   # Iter 177: 0,5 s Ruhe nach dem letzten Wort — der Rest ist Blende (OUTRO_FADE_SECONDS), kein Standbild
+OUTRO_FADE_SECONDS = 0.8  # Bild + Ton blenden gemeinsam aus, dann Verabschiedungs-Karte
 
 # Verabschiedungs-Karte je Clip (Iter 169): Abschiedssatz + nächster Schritt. Fallback für alle anderen Clips.
 FAREWELLS = {

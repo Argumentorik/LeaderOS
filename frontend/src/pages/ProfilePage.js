@@ -197,7 +197,7 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
       <Textarea placeholder="Bio / Leadership-Motto" rows={3} value={form.bio} onChange={e => update('bio', e.target.value)} data-testid="profile-edit-bio" />
 
       {/* Über mich — der wichtigste Input für persönliches Feedback (Iter 136) */}
-      <div className="rounded-2xl border border-[#BFFF00]/25 bg-[#BFFF00]/[0.04] p-4 space-y-2">
+      <div id="profile-context" className="rounded-2xl border border-[#BFFF00]/25 bg-[#BFFF00]/[0.04] p-4 space-y-2 scroll-mt-24" data-testid="profile-context-section">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-black">Über mich</p>
           <span className="text-[10px] font-bold text-muted-foreground">
@@ -263,7 +263,13 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [activity, setActivity] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(() => searchParams.get('edit') === 'context');
+
+  useEffect(() => {
+    if (searchParams.get('edit') !== 'context') return undefined;
+    const t = setTimeout(() => document.getElementById('profile-context')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+    return () => clearTimeout(t);
+  }, [searchParams]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 

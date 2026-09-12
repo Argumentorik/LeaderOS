@@ -1,43 +1,59 @@
-# Plan: Das Login-Video – unser aufwendigstes Video
+# Plan (neu): Login-Video sparsam reparieren, saubere Enden, Thumbnails überall, Links & Navigation
 
-## Ziel
-Ein einziges, durchgehendes Video (ca. 65–70 s), das auf der Login-Seite entscheidet, ob sich jemand anmeldet. Wlad spricht in einem Zug, aber der Ort wechselt fließend – keine B-Roll, keine harten Schnitte. Mit Ton (Stimme, Schritte/Raumklang, leiser Musikteppich), groß abspielbar, mit einem perfekten Ende inklusive Verweis und Link auf leadercheck.de.
+Leitlinie: **Keine komplette Neuaufnahme.** Nur die Stellen neu rendern, die wirklich fehlerhaft sind; alles andere aus vorhandenem Material verbessern (kostenlos).
 
-## So sieht das Video aus (3 Kapitel, 2 fließende Übergänge)
+---
 
-| Kapitel | Ort & Bild | Inhalt | Dauer |
+## 1. Login-Video (76 s, 3 Kapitel) – gezielte Reparatur
+
+Befund: Kapitel 1 (Loft, Walk-in) ist gut und bleibt **unangetastet**. Zwei Fehler liegen in Kapitel 2 und 3:
+
+| Fehler | Wo | Maßnahme | Kosten |
 |---|---|---|---|
-| 1 · Das Problem | Loft, warmes Tageslicht, Wlad sitzt halbnah am Tisch | „Du führst ein Team … wer bereitet eigentlich dich vor? … Führung scheitert am Mittwoch um vierzehn Uhr.“ | ~20 s |
-| Übergang 1 | Wlad steht auf, geht aus dem Loft in die Dunkelheit – das Bild verdunkelt sich, ein Lichtkegel geht an | Keine Sprache, dafür Schritte, Raumklang, Musik schwillt leicht an | ~5 s |
-| 2 · Die Antwort | Dunkles Studio, Wlad tritt in den Spotlight, stehend halbnah | „Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs … Kein Chatbot … dein tägliches Betriebssystem: Situation beschreiben, Gespräch vorbereiten, in der Simulation üben, in der Video-Analyse sehen, wie du wirkst.“ | ~25 s |
-| Übergang 2 | Langsame Kamerafahrt näher an Wlad heran (gleicher Ort, Bild wird intimer) | Kurze Sprechpause, Musik wird ruhiger | ~4 s |
-| 3 · Der Ruf | Studio, nah, ruhig, direkter Blick | „Zehn Minuten am Tag. Mit meinen Frameworks, deinem Kontext, ehrlichem Feedback. Führe besser. Jeden Tag. – Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.“ Blick hält 2 s. | ~15 s |
-| Abschluss | Verabschiedungs-Karte, weich eingeblendet | „Fang heute an.“ · Unterschrift Wlad · **leadercheck.de** groß mit QR-Code · „Kostenlos starten“ | 4,5 s |
+| „im echten Leben“ wird als „I-M“ buchstabiert | Kapitel 2 (Studio) – Satz „so unbequem wie im echten Leben“ | Satz umformulieren zu „so unbequem wie das echte Leben“ (kein „im“ mehr, das die Stimme als Abkürzung liest). Ton für Kapitel 2 neu erzeugen, Kapitel-2-Take neu rendern (~22 s) | ca. 6–8 $ |
+| Lip-Sync wird zum Schluss schlechter | Kapitel 3 (Studio nah, ~15 s) | Kapitel-3-Take neu rendern, kurz gehalten (unter 20 s), ohne Verlängerung durch Standbild/Loop | ca. 5–7 $ |
+| Ende abgehackt/abrupt | Übergang Kapitel 3 → Abschiedskarte | Ausklang beim Zusammensetzen: 0,5 s Ruhe nach dem letzten Wort, 0,8 s Bild- und Ton-Abblende, dann Karte | 0 $ |
 
-- Die Stimme ist eine einzige, durchgehende Aufnahme; die Sprechpausen liegen genau auf den Übergängen, so klingt es wie ein Take.
-- Der Übergang ins Studio nutzt die Technik des aktuellen Walk-ins: Der Übergangs-Shot endet exakt auf dem Bild, mit dem das nächste Kapitel beginnt – kein sichtbarer Schnitt.
-- Durchgehend ein sehr leiser, cineastischer Musikteppich (unter der Stimme kaum hörbar, in den Übergängen und am Ende etwas präsenter). Schritte und Raumklang wie bisher bildsynchron.
-- Format **16:9** (Kino-Look, groß abspielbar). Untertitel eingebrannt, damit das Video auch stumm wirkt.
+- Zusatzregel gegen Lip-Sync-Drift: Kein Take wird durch Wiederholen oder Einfrieren von Bildern verlängert, um Ton zu füllen. Ton bestimmt die Länge; Video endet mit dem Ton.
+- Musikbett, Abschiedskarte mit QR-Code, Untertitel und Kapitel 1 bleiben exakt wie freigegeben.
+- Ablauf: Erst Kapitel 2 + 3 als Vorschau rendern, Sichtprüfung der letzten 10 Sekunden, dann zusammensetzen und freigeben. Das alte Video bleibt online, bis das neue freigegeben ist.
+- **Gesamtkosten: ca. 12–15 $.** Günstigere Variante (nur Kapitel 3, ca. 5–7 $) ließe „I-M“ bestehen – daher nicht empfohlen.
 
-## Skript-Richtung
-Ton wie die Landing-Page („Führe besser. Jeden Tag.“ / „Kein Onlinekurs. Kein Chatbot.“), Du-Ansprache, konkrete Szene (Mittwoch, 14 Uhr, das schwierige Gespräch), Leader-OS-Werkzeuge beim Namen, am Ende der Leader-Check als niedrigschwelliger erster Schritt. Ca. 170 Wörter. Muss den 11/11-Qualitätscheck bestehen. Das Skript wird ohne extra Freigaberunde produziert; einzelne Kapitel lassen sich danach einzeln neu aufnehmen (ca. 3–4 $ pro Kapitel).
+## 2. Saubere Enden bei allen anderen Clips – ohne Neuaufnahme
+- „So sprichst du mit der KI“ (Clip 2) und alle weiteren Erststart-, Missions- und Feature-Clips bekommen denselben Ausklang (0,5 s Ruhe, 0,8 s Blende) – zusammengesetzt aus den vorhandenen Takes, **0 $**.
+- „Willkommen bei Leader-OS“ wird **nicht** neu aufgenommen (der Lip-Sync-Befund betraf das Login-Video).
+- Wo ein Roh-Take nicht mehr vorliegt, bleibt der Clip unverändert (kein Render „aus Prinzip“); diese Fälle werden gelistet.
 
-## Was sich auf der Login-Seite ändert
-- **Großer Player**: Das Video wird als breite Kino-Karte (16:9) in der linken Spalte gezeigt statt als kleines Hochformat. Ein Klick öffnet es **bildschirmfüllend** (Lightbox, dunkler Hintergrund, Ton an, große Untertitel, Schließen per X oder Escape).
-- **Auftritt**: Die Karte gleitet beim Laden ein, das Vorschaubild zeigt Wlad im Spotlight mit Lime-Schimmer, ein klarer Knopf „▶ Warum Leader-OS – 1 Minute, mit Ton“. Stumme Auto-Vorschau läuft im Hintergrund weiter, wie heute.
-- **Ende klickbar**: Sobald die Abschluss-Karte läuft, erscheinen im Player zwei Knöpfe direkt über der Karte: „Leader-Check auf leadercheck.de“ (öffnet die Seite in neuem Tab) und „Kostenlos starten“ (springt ins Registrier-Formular).
-- **Mobil**: Auch auf dem Handy sichtbar – als kompakte Vorschau über dem Formular, die den Vollbild-Player öffnet (heute gibt es das Video auf dem Handy gar nicht).
-- Wird auch im Video-Guide und im Admin-Studio normal geführt (Vorschau, Download als MP4 für Social).
+## 3. Thumbnails überall
+- Jeder Clip bekommt ein echtes Vorschaubild aus dem fertigen Video (Standbild mit Wlads Gesicht, nicht die erste schwarze/Blenden-Sekunde). Erzeugung aus der vorhandenen Datei, **0 $**, einmalig gespeichert.
+- Sichtbar an allen Stellen: Video-Guide-Kacheln, **Missions-Briefings in der 30-Tage-Challenge**, Dashboard-Video-Reihe, Login-Video (Vorschaubild vor dem Abspielen), Kurse-Bereich, Admin-Guide-Studio.
+- Fehlt ein Bild, wird es beim ersten Aufruf automatisch aus dem Video gezogen – nie mehr eine leere/graue Kachel oder ein Platzhalter.
+- Vorschaubilder werden wie die Videos mit einer Versionskennung ausgeliefert, damit nach einem Neu-Render nie ein altes Bild aus dem Browser-Cache erscheint.
 
-## Kosten und Ablauf
-- Geschätzt **ca. 11 $** für einen Durchlauf (3 Bilder, 2 Übergänge mit Ton, ~60 s Sprechvideo, Musikteppich). Für Feinschliff einzelner Kapitel bitte **bis 25 $** einplanen.
-- Produktion im Hintergrund (ca. 45–90 min, abhängig von der Warteschlange des Video-Dienstes). Das aktuelle Login-Video bleibt online, bis das neue fertig ist.
-- Danach: Prüfung von Übergängen, Ton, Untertiteln, Ende und Karte; dauerhaft gespeichert, damit es beim nächsten Deploy mitkommt.
+## 4. Navigation
+- „Video-Guide“ rückt in der linken Navigation direkt unter „Dashboard“ (Position 2), Desktop und mobil.
 
-## Annahmen (bitte widersprechen, falls anders gewünscht)
-1. Format 16:9 statt bisher Hochformat – für die große Wiedergabe und den Kino-Look.
-2. Orte: Loft (sitzend) → dunkles Studio (stehend) → Studio nah. Andere Orte (z. B. Bühne, Büro-Flur) sind möglich, kosten aber Bild-Iterationen.
-3. Zwei kurze Sprechpausen (je 4–5 s) an den Übergängen sind gewollt – sie sind das „fließende“ Element mit Schritten, Raumklang und Musik.
-4. leadercheck.de wird im gesprochenen Text erwähnt **und** auf der Abschluss-Karte groß mit QR-Code gezeigt; im Player ist der Link klickbar.
-5. Musikteppich wird KI-generiert (lizenzfrei), sehr leise; wenn ein eigener Track gewünscht ist, kann er hochgeladen und stattdessen verwendet werden.
-6. Unterschrift weiterhin als Handschrift-Schrift, bis ein echtes PNG vorliegt.
+## 5. Links direkt unter den Videos (Video-Guide)
+Unter dem Player eine sichtbare Zeile „Nächster Schritt“ mit einem Button – auch während das Video läuft:
+
+| Clip | Button | Ziel |
+|---|---|---|
+| Willkommen bei Leader-OS | „Leader-Diagnose starten“ | Leader-Diagnose |
+| Kontext ist alles | „Kontext zu dir & deiner Rolle eintragen“ | Profil, Abschnitt Kontext/Über mich (Rolle, Team, Baustellen) – scrollt direkt dorthin |
+| Missions-Briefings Tag 1–7 | „Zur 30-Tage-Challenge“ | 30-Tage-Challenge-Werkzeug |
+
+## 6. 30-Tage-Challenge ↔ Video-Guide
+- Video-Guide: Sektion heißt „30-Tage-Challenge · Briefings Tag 1–7“; die Überschrift ist klickbar und führt zum Werkzeug.
+- Werkzeug 30-Tage-Challenge: Das Tages-Briefing (mit Thumbnail) steht direkt unter der Tages-Aufgabe, mit Link „Alle Briefings im Video-Guide“.
+
+## 7. Audio-Mode
+- Der Kernfehler (Antwort bis 50 s → Abbruch) ist bereits behoben; wirkt auf leaderos.de nach dem nächsten Deploy (Stimme < 1 s, Gesprächsschritt 3–5 s).
+- Zusätzlich: Sprechpause 5 s → 2 s (Tipp auf den Orb sendet sofort); Zustände „Ich höre zu“ → „WladBot denkt nach“ → „WladBot spricht“ sichtbar; Fehlerbild „ausgeloggt/eingeloggt“ wird auf leaderos.de mit Mikrofon nachgestellt und – falls noch vorhanden – behoben.
+
+---
+
+## Annahmen
+- Login-Video: Kapitel 1 bleibt; Kapitel 2 + 3 werden neu gerendert (ca. 12–15 $). Sollen es nur ca. 5–7 $ sein, bitte „nur Kapitel 3“ sagen – dann bleibt „I-M“.
+- Skripte bleiben unverändert bis auf den einen umformulierten Satz in Kapitel 2.
+- Alle Renderkosten werden vor dem Start im Guide Studio angezeigt; nichts rendert ohne Klick auf „Rendern“.
+- Änderungen gelten für Deutsch und Englisch gleich.

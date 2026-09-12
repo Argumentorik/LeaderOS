@@ -490,6 +490,23 @@ def concat_segments(segments: list[bytes], crossfade: float | list[float] = 0.0)
         return Path(out).read_bytes()
 
 
+def outro(video: bytes, fade: float = 0.8, trim_tail: float = 0.0) -> bytes:
+    """Sauberes Ende eines Takes: optional hinten kürzen (überlange Stille), dann Bild und Ton über `fade` s ausblenden.
+    Kein Loop, kein Standbild — der Take endet mit dem Ton."""
+    with tempfile.TemporaryDirectory() as tmp:
+        vid, out = os.path.join(tmp, "in.mp4"), os.path.join(tmp, "out.mp4")
+        Path(vid).write_bytes(video)
+        dur = probe(vid)["duration"]
+        end = max(1.0, dur - max(0.0, trim_tail))
+        start = max(0.0, end - fade)
+        _run([
+            "-i", vid, "-t", f"{end:.3f}",
+            "-vf", f"fade=t=out:st={start:.3f}:d={fade:.3f}", "-af", f"afade=t=out:st={start:.3f}:d={fade:.3f}",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "18", "-c:a", "aac", "-b:a", "128k", out,
+        ])
+        return Path(out).read_bytes()
+
+
 def extract_audio(video: bytes) -> bytes:
     with tempfile.TemporaryDirectory() as tmp:
         vid, out = os.path.join(tmp, "in.mp4"), os.path.join(tmp, "a.mp3")

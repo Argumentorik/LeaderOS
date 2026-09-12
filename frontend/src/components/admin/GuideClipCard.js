@@ -6,6 +6,7 @@ import api from '../../lib/api';
 import { ScriptDraftPanel } from './ScriptDraftPanel';
 import logger from '../../lib/logger';
 import { GuideShotList } from './GuideShotList';
+import { GuidePreviewPanel } from './GuidePreviewPanel';
 import { GuideClipActions, GuideGodmodeBadges, GuideClipPreview } from './GuideClipParts';
 
 const STATUS_LABEL = {
@@ -13,6 +14,7 @@ const STATUS_LABEL = {
   shots_planned: 'Shots geplant', shot_keyframes_running: 'Keyframes laufen…', shot_keyframes_ready: 'Keyframes fertig',
   shots_keyframed: 'Keyframes fertig', shot_keyframes_failed: 'Keyframes fehlgeschlagen',
   render_running: 'Film wird gerendert…', render_failed: 'Rendern fehlgeschlagen',
+  render_preview_running: 'Vorschau wird gerendert…', render_preview_failed: 'Vorschau fehlgeschlagen', preview_ready: 'Vorschau bereit',
   interrupted: 'Unterbrochen (Neustart)',
   script_ready: 'Skript bereit', audio_running: 'Stimme läuft…', audio_ready: 'Stimme fertig', audio_failed: 'Stimme fehlgeschlagen',
   keyframe_running: 'Keyframe läuft…', keyframe_ready: 'Keyframe fertig', keyframe_failed: 'Keyframe fehlgeschlagen',
@@ -47,6 +49,8 @@ export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
   }));
   const stage = (name) => call(name, () => api.post(`/guide/admin/clips/${clip.slug}/${name}`));
   const publish = () => call('publish', () => api.post(`/guide/admin/clips/${clip.slug}/publish`, { published: !clip.published }));
+  const approvePreview = () => call('approve-preview', () => api.post(`/guide/admin/clips/${clip.slug}/approve-preview`));
+  const discardPreview = () => call('discard-preview', () => api.delete(`/guide/admin/clips/${clip.slug}/preview`));
 
     return (
     <Card className="p-4 bg-card border-border" data-testid={`guide-clip-card-${clip.slug}`}>
@@ -87,6 +91,7 @@ export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
             )}
             <GuideClipActions clip={clip} costs={costs} busy={busy} running={running} wordsOk={wordsOk} onSave={save} onStage={stage} onPublish={publish} />
             {clip.multi_shot && <GuideShotList clip={clip} costs={costs} screens={screens} onChange={onChange} />}
+            {clip.multi_shot && <GuidePreviewPanel clip={clip} base={base} busy={busy} onStage={stage} onApprove={approvePreview} onDiscard={discardPreview} />}
             {(err || clip.error) && <p className="text-[11px] text-rose-500" data-testid={`guide-clip-error-${clip.slug}`}>{err || clip.error}</p>}
             {clip.audio_url && <audio controls src={`${base}${clip.audio_url}`} className="w-full h-8" data-testid={`guide-clip-audio-${clip.slug}`} />}
             <p className="text-[10px] text-muted-foreground">Ausgegeben für diesen Clip: {(clip.spent_usd || 0).toFixed(2)} $ {clip.duration_seconds ? `· Sprechdauer ${clip.duration_seconds} s` : ''}</p>

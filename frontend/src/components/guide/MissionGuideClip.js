@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, X } from 'lucide-react';
+import { Play, X, Clapperboard } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideVideoPlayer } from './GuideVideoPlayer';
@@ -50,16 +50,22 @@ export const MissionGuideClip = ({ day, de = true }) => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group mb-6 w-full flex items-center gap-3 rounded-2xl border border-black/[0.07] dark:border-white/[0.08] bg-white dark:bg-card px-3 py-2.5 text-left hover:border-[#BFFF00]/60 transition-colors animate-fade-in"
+        className="group mb-1.5 w-full flex items-center gap-3 rounded-2xl border border-black/[0.07] dark:border-white/[0.08] bg-white dark:bg-card px-3 py-2.5 text-left hover:border-[#BFFF00]/60 transition-colors animate-fade-in"
         data-testid="mission-guide-clip"
       >
-        <span className="h-9 w-9 rounded-full bg-[#BFFF00] text-black flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"><Play size={14} fill="currentColor" /></span>
+        <span className="relative h-12 w-[84px] rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0" data-testid="mission-guide-thumb">
+          {clip.poster_url && <img src={`${process.env.REACT_APP_BACKEND_URL}${clip.poster_url}`} alt="" className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />}
+          <span className="absolute inset-0 flex items-center justify-center"><span className="h-7 w-7 rounded-full bg-[#BFFF00] text-black flex items-center justify-center group-hover:scale-105 transition-transform"><Play size={12} fill="currentColor" /></span></span>
+        </span>
         <span className="min-w-0 flex-1">
           <span className="block text-[10px] uppercase tracking-[0.18em] font-bold text-[#5a7a00] dark:text-[#BFFF00]">{de ? `Wlads Briefing · Tag ${day}` : `Wlad's briefing · Day ${day}`}</span>
           <span className="block text-[13px] font-semibold text-foreground truncate">{clip.title}{clip.duration_seconds_video ? ` · ${Math.round(clip.duration_seconds_video)} s` : ''}</span>
         </span>
         {clip.seen && <span className="text-[10px] font-semibold text-muted-foreground">{de ? 'gesehen' : 'watched'}</span>}
       </button>
+      <Link to="/video-guide" className="mb-6 inline-flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground hover:text-[#5a7a00] dark:hover:text-[#BFFF00] transition-colors" data-testid="mission-guide-all-link">
+        <Clapperboard size={11} /> {de ? 'Alle Briefings im Video-Guide' : 'All briefings in the Video Guide'}
+      </Link>
 
       {open && (
         <div className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setOpen(false)} data-testid="mission-guide-modal">

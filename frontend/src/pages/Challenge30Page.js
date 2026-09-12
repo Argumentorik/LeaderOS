@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { Fragment, useState, useEffect, useCallback } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -169,7 +169,6 @@ export default function Challenge30Page() {
           </div>
         </div>
 
-        <MissionGuideClip day={currentDay} de={de} />
 
         {/* ── Week Selector (Pill Tabs) ── */}
         <div className="flex items-center gap-1.5 p-1 rounded-full bg-gray-100 dark:bg-white/[0.04] w-fit mb-6 animate-fade-in" data-testid="week-tabs">
@@ -224,7 +223,8 @@ export default function Challenge30Page() {
             const canStart = unlocked && !done;
 
             return (
-              <div key={c.day} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${getDayCardClass({ done, isToday, unlocked })}`} data-testid={`challenge-day-${c.day}`}>
+              <Fragment key={c.day}>
+              <div className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${getDayCardClass({ done, isToday, unlocked })}`} data-testid={`challenge-day-${c.day}`}>
 
                 {/* Day Number */}
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-xs font-black ${getDayBadgeClass({ done, isToday, unlocked })}`} style={isToday && !done ? { background: weekAccent } : {}}>
@@ -282,6 +282,8 @@ export default function Challenge30Page() {
                   )}
                 </div>
               </div>
+              {c.day === currentDay && <div className="pt-2" data-testid="challenge-day-briefing"><MissionGuideClip day={currentDay} de={de} /></div>}
+              </Fragment>
             );
           })}
         </div>

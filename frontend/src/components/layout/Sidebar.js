@@ -36,11 +36,11 @@ export const Sidebar = () => {
       id: 'today', label: t('nav.today'), badge: SBolt, badgeGrad: 'from-[#BFFF00] to-[#9ACC00]',
       items: [
         { path: '/dashboard', label: t('nav.commandCenter'), icon: IconCommand },
+        { path: '/video-guide', label: lang === 'de' ? 'Video-Guide' : 'Video Guide', icon: IconCamera },
         { path: '/challenge', label: lang === 'de' ? '30-Tage Challenge' : '30-Day Challenge', icon: IconFlame },
         { path: '/daily-checkin', label: t('nav.dailyCheckin'), icon: IconPulse },
         { path: '/tasks', label: t('nav.tasks'), icon: IconClipboard },
         { path: '/chat', label: t('nav.aiCoach'), icon: IconBubble },
-        { path: '/video-guide', label: lang === 'de' ? 'Video-Guide' : 'Video Guide', icon: IconCamera },
         { path: '/kurse', label: lang === 'de' ? 'Kurse' : 'Courses', icon: IconCourse, newTab: true },  // Kurse öffnen im neuen Tab (Wunsch Stefan)
       ]
     },
