@@ -68,9 +68,13 @@ _PROCESS_STARTED_AT = datetime.now(timezone.utc).isoformat()  # Iter 169: Boot-R
 _SEED_FILE = Path(__file__).resolve().parent.parent / "guide_seed_data.json"
 
 
+_IN_PROGRESS_STATUSES = {"full_running", "audio_ready", "shots_planned", "shots_keyframed", "keyframe_ready"}
+
+
 async def _import_produced_seed() -> None:
-    """Prod-DB startet leer: produzierte Clips (Pfade im gemeinsamen Object Storage) einspielen —
-    nur dort, wo noch kein eigenes Video existiert."""
+    """Prod-DB startet leer: produzierte Clips (Pfade im gemeinsamen Object Storage) einspielen.
+    Iter 176: Bestehende Clips werden auf den neueren Seed-Stand gehoben (neue GODMODE-Videos kommen so
+    ohne Re-Render in Prod an) — nie während eines laufenden Renders und nie bei gleichem Video."""
     if not _SEED_FILE.exists():
         return
     try:
@@ -79,17 +83,31 @@ async def _import_produced_seed() -> None:
         logger.error("Guide seed file unreadable: %s", e)
         return
     imported = 0
+    upgraded = 0
     for clip in data.get("clips", []):
         clip.pop("_id", None)
-        # Nur in eine leere DB (Prod-Erststart) einspielen — nie bestehende Clips überschreiben,
-        # sonst macht der Import einen laufenden Re-Render (video_path=None) wieder rückgängig.
-        if await db.guide_clips.find_one({"slug": clip["slug"]}, {"_id": 1}) is not None:
+        existing = await db.guide_clips.find_one(
+            {"slug": clip["slug"]}, {"_id": 1, "status": 1, "updated_at": 1, "video_path": 1, "published": 1}
+        )
+        if existing is None:
+            try:
+                await db.guide_clips.insert_one(clip)
+            except DuplicateKeyError:
+                continue
+            imported += 1
             continue
-        try:
-            await db.guide_clips.insert_one(clip)
-        except DuplicateKeyError:
+        seed_video = clip.get("video_path")
+        newer = (clip.get("updated_at") or "") > (existing.get("updated_at") or "")
+        if not seed_video or not newer or existing.get("video_path") == seed_video:
             continue
-        imported += 1
+        if existing.get("status") in _IN_PROGRESS_STATUSES:
+            continue
+        # Sichtbarkeit bleibt Prod-Entscheidung: `published` nur übernehmen, wenn dort noch nichts gesetzt ist.
+        payload = {k: v for k, v in clip.items() if k != "published"}
+        if existing.get("published") is None and "published" in clip:
+            payload["published"] = clip["published"]
+        await db.guide_clips.update_one({"_id": existing["_id"]}, {"$set": payload})
+        upgraded += 1
     settings = data.get("settings") or {}
     if settings.get("portrait_path"):
         current = await db.guide_settings.find_one({"_id": SETTINGS_ID}, {"portrait_path": 1})
@@ -98,8 +116,8 @@ async def _import_produced_seed() -> None:
             missing = {k: v for k, v in settings.items() if k not in existing_keys}
             if missing:
                 await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": missing}, upsert=True)
-    if imported:
-        logger.info("Guide seed imported: %s produced clips", imported)
+    if imported or upgraded:
+        logger.info("Guide seed: %s clips importiert, %s auf neuere Videos gehoben", imported, upgraded)
 
 
 async def _ensure_seeded() -> None:
