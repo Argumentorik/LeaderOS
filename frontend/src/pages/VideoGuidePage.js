@@ -58,7 +58,7 @@ export default function VideoGuidePage() {
     api.get('/guide/clips', { params: { kind: 'all', lean: 1 } })
       .then((res) => {
         const list = (res.data?.clips || []).filter((c) => c.video_url && c.kind !== 'teaser');
-        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(list)); } catch { /* noop */ }
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(list)); } catch (e) { logger.warn('guide cache write skipped', e); }
         setClips(list);
         setLoaded(true);
       })

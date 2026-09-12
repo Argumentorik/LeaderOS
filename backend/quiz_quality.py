@@ -37,22 +37,18 @@ def shuffle_options(options: list, correct_index: int, *seed_parts: str) -> tupl
     return shuffled, new_correct
 
 
-def validate_question(question: dict) -> list:
-    """Liefert eine Liste verletzter Regeln (leer = Frage ist zulässig)."""
-    issues = []
-    options = question.get("options") or []
-    correct = question.get("correct", -1)
+def _structural_issue(options: list, correct: int) -> Optional[list]:
+    """Blockierende Formfehler; None = Struktur ok, [] = Selbstauskunft (nicht bewertbar)."""
     if len(options) < 3:
-        issues.append("zu_wenige_optionen")
-        return issues
+        return ["zu_wenige_optionen"]
     if not 0 <= correct < len(options):
-        # correct == -1 ist eine Selbstauskunft-Frage (jede Antwort zählt) —
-        # dort gibt es keinen Distraktor, der bewertet werden könnte.
-        if correct == -1:
-            return []
-        issues.append("kein_gueltiger_correct_index")
-        return issues
+        # correct == -1 ist eine Selbstauskunft-Frage (jede Antwort zählt) — kein bewertbarer Distraktor.
+        return [] if correct == -1 else ["kein_gueltiger_correct_index"]
+    return None
 
+
+def _length_issues(options: list, correct: int) -> list:
+    issues = []
     lengths = [len(o) for o in options]
     median = statistics.median(lengths)
     for i, length in enumerate(lengths):
@@ -60,20 +56,31 @@ def validate_question(question: dict) -> list:
             issues.append(f"option_{i}_zu_kurz")
         if median and abs(length - median) / median > LENGTH_TOLERANCE:
             issues.append(f"option_{i}_laengenabweichung")
-
     if lengths[correct] == max(lengths) and lengths[correct] > median * (1 + LENGTH_TOLERANCE):
         issues.append("richtige_antwort_ist_deutlich_laengste")
+    return issues
 
-    lowered = [o.lower() for o in options]
+
+def _signal_issues(options: list, correct: int) -> list:
+    issues = []
     if len({o.strip().lower() for o in options}) != len(options):
         issues.append("doppelte_optionen")
-
+    lowered = [o.lower() for o in options]
     for word in ABSOLUTE_WORDS:
         carriers = [i for i, o in enumerate(lowered) if word in o]
         if carriers == [correct]:
             issues.append(f"signalwort_nur_in_richtiger_antwort:{word}")
-
     return issues
+
+
+def validate_question(question: dict) -> list:
+    """Liefert eine Liste verletzter Regeln (leer = Frage ist zulässig)."""
+    options = question.get("options") or []
+    correct = question.get("correct", -1)
+    structural = _structural_issue(options, correct)
+    if structural is not None:
+        return structural
+    return _length_issues(options, correct) + _signal_issues(options, correct)
 
 
 def position_distribution(bank: dict) -> dict:

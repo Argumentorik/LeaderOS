@@ -7,7 +7,7 @@ import api from '../lib/api';
 import { parseAuthError } from '../lib/authErrors';
 import { getAttribution } from '../lib/attribution';
 import { useSeo } from '../lib/seo';
-import { Globe, WifiOff, KeyRound, Sparkles, Ticket } from 'lucide-react';
+import { Globe, WifiOff } from 'lucide-react';
 import { LoginTeaserVideo } from '../components/auth/LoginTeaserVideo';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
@@ -15,6 +15,7 @@ import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { AuthForm } from '../components/auth/AuthForm';
 import { TrustBadges, ModeSwitch } from '../components/auth/LoginExtras';
 import { MagicLinkForm } from '../components/auth/MagicLinkForm';
+import { AuthModeTabs, LegalFooter } from '../components/auth/AuthModeTabs';
 import { LicenseKeyForm } from '../components/auth/LicenseKeyForm';
 import { OAuthProviderStack } from '../components/auth/OAuthButtons';
 import { ContinueAsCard, useContinueAs } from '../components/auth/ContinueAsCard';
@@ -240,51 +241,7 @@ export default function LoginPage({ initialMode = 'login' }) {
             </div>
           )}
 
-          {/* Auth method tabs (only in non-register mode) */}
-          {!isRegister && (
-            <div
-              className="mb-4 inline-flex p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]"
-              role="tablist"
-              data-testid="auth-mode-tabs"
-            >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={mode === 'login'}
-                onClick={() => switchMode('login')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
-                  mode === 'login' ? 'bg-white/10 text-white shadow-sm' : 'text-white/45 hover:text-white/70'
-                }`}
-                data-testid="tab-password"
-              >
-                <KeyRound size={12} /> {de ? 'Passwort' : 'Password'}
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={isMagic}
-                onClick={() => switchMode('magic')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
-                  isMagic ? 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' : 'text-white/45 hover:text-white/70'
-                }`}
-                data-testid="tab-magic-link"
-              >
-                <Sparkles size={12} /> Magic Link
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={isLicense}
-                onClick={() => switchMode('license')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
-                  isLicense ? 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' : 'text-white/45 hover:text-white/70'
-                }`}
-                data-testid="tab-license-key"
-              >
-                <Ticket size={12} /> {de ? 'Lizenz-Key' : 'License Key'}
-              </button>
-            </div>
-          )}
+          {!isRegister && <AuthModeTabs mode={mode} onSwitch={switchMode} de={de} />}
 
           {/* OAuth providers (only show if any configured AND we're not in magic/license mode) */}
           {!isMagic && !isLicense && providers && (
@@ -350,17 +307,7 @@ export default function LoginPage({ initialMode = 'login' }) {
           </div>
 
           <TrustBadges />
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] text-muted-foreground" data-testid="legal-footer">
-            <a href="/impressum" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-impressum">Impressum</a>
-            <span className="opacity-30">·</span>
-            <a href="/datenschutz" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-datenschutz">{de ? 'Datenschutz' : 'Privacy'}</a>
-            <span className="opacity-30">·</span>
-            <a href="/agb" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-agb">AGB</a>
-            <span className="opacity-30">·</span>
-            <a href="/widerruf" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-widerruf">{de ? 'Widerruf' : 'Withdrawal'}</a>
-            <span className="opacity-30">·</span>
-            <a href="/changelog" className="hover:text-[#BFFF00] hover:underline" data-testid="footer-changelog">Changelog</a>
-          </div>
+          <LegalFooter de={de} />
         </div>
       </div>
     </div>

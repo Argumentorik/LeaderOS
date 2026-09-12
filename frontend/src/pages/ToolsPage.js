@@ -46,7 +46,7 @@ export default function ToolsPage() {
     if (!personaKey || hydratedKeyRef.current === personaKey) return; // erst wenn der User geladen ist, genau einmal
     hydratedKeyRef.current = personaKey;
     let saved = null;
-    try { saved = JSON.parse(localStorage.getItem(personaKey) || 'null'); } catch (e) { /* noop */ }
+    try { saved = JSON.parse(localStorage.getItem(personaKey) || 'null'); } catch (e) { logger.warn('persona restore skipped', e); }
     setPersona(saved ? { ...EMPTY_PERSONA, ...saved } : {
       ...EMPTY_PERSONA,
       role: user?.position || user?.role_title || '',
@@ -57,7 +57,7 @@ export default function ToolsPage() {
   }, [personaKey, user]);
   useEffect(() => {
     if (personaKey && hydratedKeyRef.current === personaKey && Object.values(persona).some(Boolean)) {
-      try { localStorage.setItem(personaKey, JSON.stringify(persona)); } catch (e) { /* noop */ }
+      try { localStorage.setItem(personaKey, JSON.stringify(persona)); } catch (e) { logger.warn('persona save skipped', e); }
     }
   }, [persona, personaKey]);
   const [loading, setLoading] = useState(false);
