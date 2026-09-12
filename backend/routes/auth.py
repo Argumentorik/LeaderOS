@@ -211,11 +211,14 @@ def _safe_user_output(user: dict) -> dict:
 
 @router.post("/register")
 async def register(data: UserRegister, request: Request, response: Response):
-    # Abuse guard (pre-launch review): max 15 signups per IP per hour.
+    # Abuse guard (pre-launch review): max 40 signups per IP per hour.
+    # Iter 178: von 15 → 40 erhöht. Firmen-NAT und Mobilfunk-Carrier teilen eine
+    # IP; beim Launch hätten echte Anmeldungen sonst 429 bekommen. Duplicate-
+    # Checks auf E-Mail/Telefon bleiben die eigentliche Missbrauchsbremse.
     ip = _get_client_ip(request)
     reg_cutoff = datetime.now(timezone.utc) - timedelta(hours=1)
     reg_count = await db.users.count_documents({"signup_ip": ip, "created_at_dt": {"$gte": reg_cutoff}})
-    if reg_count >= 15:
+    if reg_count >= 40:
         raise HTTPException(status_code=429, detail="Zu viele Registrierungen von dieser IP. Bitte versuche es später erneut.")
     # Normalize email (case-insensitive uniqueness)
     email = data.email.strip().lower()
@@ -770,12 +773,13 @@ async def magic_link_request(data: MagicLinkRequest, request: Request):
         raise HTTPException(status_code=429, detail="Zu viele Magic-Link-Anfragen. Bitte warte 1 Stunde.")
 
     # Rule 2: same ip across all magic-link emails (anti-spray / bot)
+    # Iter 178: 10 → 30 pro IP/Stunde (Firmen-NAT / Mobilfunk teilen IPs).
     any_email_same_ip = await db.login_attempts.count_documents({
         "email": {"$regex": "^magic:"},
         "ip": ip,
         "created_at": {"$gte": one_hour_ago},
     })
-    if any_email_same_ip >= 10:
+    if any_email_same_ip >= 30:
         raise HTTPException(status_code=429, detail="Zu viele Magic-Link-Anfragen. Bitte warte 1 Stunde.")
 
     await db.login_attempts.insert_one({

@@ -29,15 +29,42 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         # Nur der vertrauenswürdige Proxy-Hop zählt (kein client-gesetztes XFF/CF-Header).
         return get_client_ip(request)
 
+    # Iter 178 (Go-Live-Check): nur Credential-Endpoints werden hart begrenzt.
+    # Session-Endpoints (/auth/me, /auth/refresh, /auth/providers, /auth/logout)
+    # laufen bei jedem Seitenaufruf und dürfen NICHT im Login-Budget liegen —
+    # sonst löst ein 429 bei mehreren Nutzern hinter derselben IP (Firmen-NAT,
+    # Mobilfunk) ein scheinbares Ausloggen aus.
+    _CREDENTIAL_PATHS = (
+        "/api/auth/login",
+        "/api/auth/register",
+        "/api/auth/magic-link",
+        "/api/auth/license",
+        "/api/auth/google-session",
+        "/api/auth/google/callback",
+        "/api/auth/apple/callback",
+        "/api/auth/microsoft/callback",
+        "/api/auth/password/change",
+    )
+
     def _get_limit(self, path: str) -> tuple[int, int]:
         """Returns (max_requests, window_seconds) for the given path."""
-        if "/api/auth/login" in path or "/api/auth/register" in path:
-            return 20, 60
+        if any(path.startswith(p) for p in self._CREDENTIAL_PATHS):
+            # 40/min je Endpoint und IP — Brute-Force pro Konto wird zusätzlich
+            # in routes/auth.py (10 Fehlversuche / 15 min je E-Mail+IP) gebremst.
+            return 40, 60
         if "/api/chat/send" in path or "/analyze" in path:
             return 20, 60
         if path.startswith("/api/"):
             return 120, 60
         return 0, 0  # no limit for non-API
+
+    def _bucket(self, path: str) -> str:
+        """Eigener Zähler je Credential-Endpoint, sonst je API-Bereich."""
+        for p in self._CREDENTIAL_PATHS:
+            if path.startswith(p):
+                return p
+        parts = path.split("/")
+        return parts[2] if len(parts) > 2 else "api"
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path
@@ -47,7 +74,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         ip = self._get_ip(request)
-        key = f"{ip}:{path.split('/')[2] if len(path.split('/')) > 2 else 'api'}"
+        key = f"{ip}:{self._bucket(path)}"
         now = time.monotonic()
 
         # Prune old entries
