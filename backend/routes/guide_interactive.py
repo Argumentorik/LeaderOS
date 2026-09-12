@@ -7,6 +7,7 @@ Die Beta ist standardmäßig GESPERRT: nur Admins sehen sie im Preview, bis `int
 """
 from __future__ import annotations
 
+import os
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -21,7 +22,7 @@ from services_ai_errors import ai_http_error
 from routes.admin import require_admin
 from routes.guide import SETTINGS_ID, _set_settings, _settings
 from routes.voice_tts import (
-    VOICE_REGISTRY, _cap_reply_length, _ensure_voice_session, _normalize_wlad_name, _persist_voice_turn,
+    FALLBACK_VOICE_ID, VOICE_REGISTRY, _cap_reply_length, _ensure_voice_session, _normalize_wlad_name, _persist_voice_turn,
     _synthesize_or_cached, _transcribe_webm, _voice_llm_reply,
 )
 
@@ -58,9 +59,11 @@ async def _access(user: dict) -> dict:
 
 
 async def _wlad_voice_config() -> dict:
-    """Wlads Klonstimme aus dem Guide Studio (identisch zu den Videos); ElevenLabs-Fallback bleibt in _synthesize."""
-    settings = await _settings()
+    """Echtzeit: ElevenLabs-Klon (Flash, < 1 s). Minimax-Klon aus dem Guide Studio nur mit WLAD_REALTIME_VOICE=minimax."""
     base = VOICE_REGISTRY["wlad"]
+    if os.environ.get("WLAD_REALTIME_VOICE") != "minimax":
+        return dict(base)
+    settings = await _settings()
     voice_id = settings.get("custom_voice_id") or base["voice_id"]
     provider = "minimax" if settings.get("custom_voice_id") else base["provider"]
     return {**base, "voice_id": voice_id, "provider": provider}
@@ -184,4 +187,4 @@ async def interactive_speak(data: SpeakIn, request: Request):
         raise HTTPException(status_code=400, detail="Empty text")
     voice = {**(await _wlad_voice_config()), "tts_timeout": 40}
     audio_b64 = await _synthesize_or_cached(text, "wlad", voice)
-    return {"audio_url": f"data:audio/mpeg;base64,{audio_b64}", "voice": "wlad-clone" if voice["provider"] == "minimax" else "fallback"}
+    return {"audio_url": f"data:audio/mpeg;base64,{audio_b64}", "voice": "wlad-clone" if voice["voice_id"] != FALLBACK_VOICE_ID else "fallback"}

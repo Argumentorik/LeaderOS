@@ -9,6 +9,8 @@ Strategy:
 """
 from __future__ import annotations
 import os
+import asyncio as _asyncio
+import time
 import base64
 import hashlib
 import tempfile
@@ -62,10 +64,12 @@ VOICE_REGISTRY: dict[str, dict] = {
     #   damit Wlad nicht überdramatisch klingt.
     #   Override via env `ELEVENLABS_WLAD_VOICE_ID=<id>` möglich.
     "wlad": {
-        # Iter 144: Wlads Minimax-Klon (aus dem Guide Studio) hat Vorrang — ElevenLabs bleibt Fallback,
-        # wenn MINIMAX_WLAD_VOICE_ID nicht gesetzt ist (Professional-Clone dort braucht Creator-Tier).
-        "voice_id": os.environ.get("MINIMAX_WLAD_VOICE_ID") or os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),
-        "provider": "minimax" if os.environ.get("MINIMAX_WLAD_VOICE_ID") else "elevenlabs",
+        # Iter 174: Echtzeit = ElevenLabs-Klon (Flash, ~0,6 s). Minimax (Fal-Queue 20–50 s) nur noch,
+        # wenn WLAD_REALTIME_VOICE=minimax gesetzt ist (Videos im Guide Studio nutzen Minimax weiterhin direkt).
+        "voice_id": (os.environ.get("MINIMAX_WLAD_VOICE_ID") if os.environ.get("WLAD_REALTIME_VOICE") == "minimax" else None)
+                    or os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),
+        "provider": "minimax" if os.environ.get("WLAD_REALTIME_VOICE") == "minimax" and os.environ.get("MINIMAX_WLAD_VOICE_ID") else "elevenlabs",
+        "realtime": True,
         "name": "Wlad Jachtchenko",
         "stability": 0.72, "similarity_boost": 0.80, "style": 0.12,
         "language": "de",
@@ -106,6 +110,8 @@ VOICE_REGISTRY: dict[str, dict] = {
 }
 
 MODEL_ID = "eleven_multilingual_v2"  # supports both DE + EN
+# Echtzeit-Modell für den Audio-Mode: Flash v2.5 liefert Deutsch in ~0,5 s (multilingual_v2: ~3 s).
+REALTIME_MODEL_ID = os.environ.get("ELEVENLABS_REALTIME_MODEL", "eleven_flash_v2_5")
 FALLBACK_VOICE_ID = os.environ.get("ELEVENLABS_FALLBACK_VOICE_ID", "pNInz6obpgDQGcFmaJgB")  # "Adam" — Standardstimme, immer verfügbar
 MAX_TEXT_LENGTH = 800  # ~60s of audio — enough for intros/quotes, protects cost
 
@@ -263,14 +269,26 @@ def _synthesize(text: str, voice_config: dict) -> bytes:
         style=voice_config.get("style", 0.0),
         use_speaker_boost=True,
     )
-    stream = client.text_to_speech.convert(
-        text=text,
-        voice_id=voice_config["voice_id"],
-        model_id=MODEL_ID,
-        voice_settings=settings,
-        output_format="mp3_44100_128",
-    )
-    return b"".join(chunk for chunk in stream)
+    realtime = bool(voice_config.get("realtime"))
+
+    def _convert(voice_id: str) -> bytes:
+        stream = client.text_to_speech.convert(
+            text=text,
+            voice_id=voice_id,
+            model_id=REALTIME_MODEL_ID if realtime else MODEL_ID,
+            voice_settings=settings,
+            output_format="mp3_44100_64" if realtime else "mp3_44100_128",
+        )
+        return b"".join(chunk for chunk in stream)
+
+    try:
+        return _convert(voice_config["voice_id"])
+    except Exception as e:
+        if voice_config["voice_id"] == FALLBACK_VOICE_ID:
+            raise
+        # Klon nicht verfügbar (z. B. Plan abgelaufen → 403) → Standardstimme statt Fehler
+        logger.warning("ElevenLabs-Stimme %s nicht verfügbar (%s) — Fallback auf %s", voice_config["voice_id"], str(e)[:160], FALLBACK_VOICE_ID)
+        return _convert(FALLBACK_VOICE_ID)
 
 
 # ── Endpoints ───────────────────────────────────────────────────────────────
@@ -433,6 +451,7 @@ class VoiceConvoResponse(BaseModel):
     response_text: str
     audio_url: str
     persona: str
+    timings: dict[str, int] = {}
 
 
 async def _transcribe_webm(audio_bytes: bytes) -> str:
@@ -465,7 +484,6 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
       - Wlad's frameworks still grounded via RAG context block
     """
     from emergentintegrations.llm.chat import LlmChat, UserMessage
-    import asyncio as _asyncio
 
     async def _fetch_history():
         return await db.chat_messages.find(
@@ -614,18 +632,32 @@ async def voice_conversation(
     if not audio_bytes:
         raise HTTPException(status_code=400, detail="Empty audio")
 
-    # 1. Transcribe BEFORE deducting credit (no credit burn on bad audio)
+    timings: dict[str, int] = {}
+    t0 = time.monotonic()
+
+    def _mark(key: str) -> None:
+        nonlocal t0
+        now = time.monotonic()
+        timings[key] = int((now - t0) * 1000)
+        t0 = now
+
+    # 1. Transcribe BEFORE deducting credit (no credit burn on bad audio) — Gedächtnis parallel laden
+    memory_task = _asyncio.create_task(get_user_memory(user["user_id"]))
     try:
         transcript = await _transcribe_webm(audio_bytes)
     except Exception as e:
+        memory_task.cancel()
         logger.error(f"Voice transcription failed: {e}")
         raise await ai_http_error(e, "voice_transcribe")
+    _mark("stt_ms")
     if not transcript:
+        memory_task.cancel()
         raise HTTPException(status_code=400, detail="empty_transcript")
 
     # 2. Charge credit
     credit_result = await check_and_deduct_credit(user, "chat")
     if not credit_result["allowed"]:
+        memory_task.cancel()
         raise HTTPException(status_code=402, detail="no_credits")
 
     # 3. Session + user turn
@@ -633,7 +665,11 @@ async def voice_conversation(
     await _persist_voice_turn(session_id, user["user_id"], "user", transcript)
 
     # 4. LLM reply
-    user_memory = await get_user_memory(user["user_id"])
+    try:
+        user_memory = await memory_task
+    except Exception as e:
+        logger.warning(f"Voice memory failed (proceeding without): {e}")
+        user_memory = ""
     try:
         reply_text = await _voice_llm_reply(session_id, user["user_id"], transcript, user_memory)
     except Exception as e:
@@ -646,25 +682,28 @@ async def voice_conversation(
             except Exception as refund_err:
                 logger.warning(f"Credit refund failed: {refund_err}")
         raise await ai_http_error(e, "voice_reply")
+    _mark("llm_ms")
     reply_text = _cap_reply_length(reply_text)
     reply_text = _normalize_wlad_name(reply_text)
     # Also normalise the transcript that goes back to the UI/Memory.
     transcript = _normalize_wlad_name(transcript)
 
-    # 5. Persist assistant turn + bump session timestamp
-    await _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text)
-    await db.chat_sessions.update_one(
-        {"session_id": session_id},
-        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+    # 5. TTS zuerst (kritischer Pfad), Persistenz parallel dazu
+    persist_task = _asyncio.gather(
+        _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text),
+        db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}),
+        return_exceptions=True,
     )
-
-    # 6. TTS (cached) — graceful: if TTS fails (e.g. quota), still return the text reply
     try:
         audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
         audio_url = f"data:audio/mpeg;base64,{audio_b64}"
     except HTTPException as e:
         logger.warning(f"TTS unavailable — returning text-only voice reply: {e.detail}")
         audio_url = ""
+    _mark("tts_ms")
+    await persist_task
+    timings["total_ms"] = sum(timings.values())
+    logger.info("Voice turn %s: stt %sms · llm %sms · tts %sms", persona_key, timings.get("stt_ms"), timings.get("llm_ms"), timings.get("tts_ms"))
 
     try:
         await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "mode": "voice"})
@@ -677,6 +716,7 @@ async def voice_conversation(
         response_text=reply_text,
         audio_url=audio_url,
         persona=persona_key,
+        timings=timings,
     )
 
 

@@ -68,15 +68,21 @@ def test_admin_toggles_and_non_admin_forbidden():
     assert free.put(f"{API}/api/guide/interactive/admin", json={"enabled": True}, timeout=30).status_code == 403
 
 
-def test_voice_config_uses_guide_clone_voice():
+def test_voice_config_uses_guide_clone_voice(monkeypatch):
+    """Iter 174: Echtzeit = ElevenLabs-Klon; der Minimax-Klon aus dem Guide Studio nur mit WLAD_REALTIME_VOICE=minimax."""
     import asyncio
     from routes.guide_interactive import _wlad_voice_config
     from routes.guide import _settings
 
     async def _both():
-        return await _wlad_voice_config(), await _settings()
+        cfg = await _wlad_voice_config()
+        settings = await _settings()
+        monkeypatch.setenv("WLAD_REALTIME_VOICE", "minimax")
+        cfg2 = await _wlad_voice_config()
+        return cfg, settings, cfg2
 
-    cfg, settings = asyncio.run(_both())
-    if settings.get("custom_voice_id"):
-        assert cfg["voice_id"] == settings["custom_voice_id"] and cfg["provider"] == "minimax"
+    cfg, settings, cfg2 = asyncio.run(_both())
+    assert cfg["provider"] == "elevenlabs" and cfg.get("realtime") is True
     assert cfg["language"] == "de"
+    if settings.get("custom_voice_id"):
+        assert cfg2["voice_id"] == settings["custom_voice_id"] and cfg2["provider"] == "minimax"
