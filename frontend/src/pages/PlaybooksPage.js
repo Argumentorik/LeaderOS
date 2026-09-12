@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { generatePDF } from '../lib/pdfGenerator';
 import api from '../lib/api';
+import { swrGet } from '../lib/swrCache';
 import { BookOpen } from 'lucide-react';
 import { PlaybookListCard } from '../components/playbooks/PlaybookListCard';
 import { PlaybookChatView } from '../components/playbooks/PlaybookChatView';
@@ -27,7 +28,7 @@ export default function PlaybooksPage() {
   const scrollRef = useRef(null);
 
   const loadPlaybooks = useCallback(async () => {
-    try { const res = await api.get('/playbooks'); setPlaybooks(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/playbooks', setPlaybooks, { onError: (err) => logger.error(err) });
   }, []);
 
   useEffect(() => { loadPlaybooks(); }, [loadPlaybooks]);

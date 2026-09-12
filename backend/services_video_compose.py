@@ -159,8 +159,28 @@ def _still_to_video(canvas: "Image.Image", width: int, height: int, seconds: flo
         return Path(out).read_bytes()
 
 
+def mix_music_bed(video: bytes, bed: bytes, gain_db: float = -27.0) -> bytes:
+    """Leisen Musikteppich unter die Tonspur legen: geloopt auf Videolänge, 2 s Fade-in, 3 s Fade-out,
+    beim Sprechen per Sidechain leicht abgesenkt, in Pausen/Übergängen dadurch etwas präsenter."""
+    with tempfile.TemporaryDirectory() as tmp:
+        vid, mus, out = os.path.join(tmp, "in.mp4"), os.path.join(tmp, "bed.wav"), os.path.join(tmp, "out.mp4")
+        Path(vid).write_bytes(video)
+        Path(mus).write_bytes(bed)
+        dur = probe(vid)["duration"]
+        fade_out_at = max(0.0, dur - 3.0)
+        flt = (
+            f"[1:a]aloop=loop=-1:size=2e9,atrim=0:{dur:.3f},asetpts=N/SR/TB,"
+            f"afade=t=in:st=0:d=2,afade=t=out:st={fade_out_at:.3f}:d=3,volume={gain_db}dB,aformat=channel_layouts=mono[bed];"
+            f"[bed][0:a]sidechaincompress=threshold=0.02:ratio=4:attack=40:release=600[ducked];"
+            f"[ducked][0:a]amix=inputs=2:duration=first:normalize=0[a]"
+        )
+        _run(["-i", vid, "-i", mus, "-filter_complex", flt, "-map", "0:v:0", "-map", "[a]",
+              "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-ar", "32000", "-ac", "1", out])
+        return Path(out).read_bytes()
+
+
 def render_farewell_card(width: int, height: int, farewell: str, next_step: str | None,
-                         signature_png: bytes | None = None, seconds: float = 3.5) -> bytes:
+                         signature_png: bytes | None = None, seconds: float = 3.5, qr_url: str | None = None) -> bytes:
     """Verabschiedungs-Karte (Iter 169): kleines Logo oben, Abschiedssatz, Wlads Unterschrift, nächster Schritt.
     Ruhiger dunkler Leader-OS-Look, keine Tonspur (Stille). Unterschrift: echtes PNG, sonst Handschrift-Font."""
     canvas = Image.new("RGB", (width, height), (10, 10, 10))
@@ -205,6 +225,22 @@ def render_farewell_card(width: int, height: int, farewell: str, next_step: str 
         draw.text(((width - w) / 2, y), "Wlad", font=f_sig, fill=LIME[:3])
         y += int(f_sig.size * 1.05)
 
+    if qr_url:
+        import qrcode
+
+        qr = qrcode.QRCode(box_size=10, border=1, error_correction=qrcode.constants.ERROR_CORRECT_M)
+        qr.add_data(qr_url)
+        qr.make(fit=True)
+        size = int(base * 0.20)
+        qimg = qr.make_image(fill_color=(10, 10, 10), back_color=(255, 255, 255)).convert("RGB").resize((size, size), Image.NEAREST)
+        pad = int(base * 0.012)
+        qx, qy = width - size - int(width * 0.06), height - size - int(height * 0.10)
+        draw.rounded_rectangle((qx - pad, qy - pad, qx + size + pad, qy + size + pad), radius=int(base * 0.015), fill=(255, 255, 255))
+        canvas.paste(qimg, (qx, qy))
+        f_url = _font(FONT_BOLD, int(base * 0.05))
+        label = qr_url.replace("https://", "").replace("http://", "").rstrip("/")
+        lw = draw.textlength(label, font=f_url)
+        draw.text((qx + size / 2 - lw / 2, qy - f_url.size - int(base * 0.03)), label, font=f_url, fill=LIME[:3])
     if next_step:
         f_next = _font(FONT_REGULAR, int(base * (0.042 if portrait else 0.036)))
         y += int(base * 0.06)

@@ -310,8 +310,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
         if (!pausedRef.current && !cancelledRef.current) setTimeout(startRecording, 400);
       } else if (isTimeout) {
         setError(de
-          ? 'Wlad braucht heute etwas länger. Tippe den Orb, um es erneut zu probieren.'
-          : 'Wlad is taking longer than usual. Tap the orb to try again.');
+          ? 'WladBot braucht heute etwas länger. Tippe den Orb, um es erneut zu probieren.'
+          : 'WladBot is taking longer than usual. Tap the orb to try again.');
         setState(VOICE_STATES.ERROR);
       } else {
         setError(de ? 'Fehler beim Verarbeiten — versuche es erneut.' : 'Processing failed — try again.');

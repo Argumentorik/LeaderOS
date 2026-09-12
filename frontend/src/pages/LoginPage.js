@@ -8,6 +8,7 @@ import { parseAuthError } from '../lib/authErrors';
 import { getAttribution } from '../lib/attribution';
 import { useSeo } from '../lib/seo';
 import { Globe, WifiOff, KeyRound, Sparkles, Ticket } from 'lucide-react';
+import { LoginTeaserVideo } from '../components/auth/LoginTeaserVideo';
 import { LoginBrandPanel } from '../components/auth/LoginBrandPanel';
 import { WladMark } from '../components/brand/WladMark';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
@@ -51,7 +52,7 @@ export default function LoginPage({ initialMode = 'login' }) {
     : null;
   // Iter 92.25: when the route is /signup or /register, mount directly in
   // register mode. Default '/login' route keeps the existing behaviour.
-  const [mode, setMode] = useState(initialMode);
+  const [mode, setMode] = useState(routerLocation.state?.mode || initialMode);
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
@@ -181,7 +182,7 @@ export default function LoginPage({ initialMode = 'login' }) {
         <Globe size={11} /> {de ? 'DE' : 'EN'}
       </button>
 
-      <LoginBrandPanel features={getFeatures(de)} de={de} />
+      <LoginBrandPanel features={getFeatures(de)} de={de} onStartRegister={() => switchMode('register')} />
 
       <div className="flex-1 flex items-start lg:items-center justify-center px-5 pt-16 pb-8 sm:px-8 lg:p-12 relative z-10">
         <div data-testid="login-mobile-header" className="absolute top-4 left-4 flex items-center gap-2 lg:hidden">
@@ -194,7 +195,11 @@ export default function LoginPage({ initialMode = 'login' }) {
           </div>
         </div>
 
-        <div className="w-full max-w-md lg:max-w-[400px]">
+        <div className="w-full max-w-md lg:max-w-[400px]" id="login-form-card">
+          {/* Mobil: kompakte Kino-Vorschau über dem Formular (öffnet den Vollbild-Player) */}
+          <div className="lg:hidden mb-5" data-testid="login-teaser-mobile">
+            <LoginTeaserVideo de={de} compact onStartRegister={() => switchMode('register')} />
+          </div>
           {/* WladBot 3.0 trust anchor — he's here, live (Iter 92.50) */}
           <div className="flex items-center gap-3 mb-5" data-testid="login-wladbot-trust">
             <WladBotAvatar size={42} live />
@@ -302,15 +307,18 @@ export default function LoginPage({ initialMode = 'login' }) {
             </div>
           )}
 
-          {error && (
-            <div data-testid="auth-error" className="mb-5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px] font-medium flex items-start gap-2">
-              <WifiOff size={14} className="mt-0.5 shrink-0 opacity-60" />
-              <span>{error}</span>
-            </div>
-          )}
+          <div role="alert" aria-live="assertive" aria-atomic="true">
+            {error && (
+              <div data-testid="auth-error" className="mb-5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px] font-medium flex items-start gap-2">
+                <WifiOff size={14} className="mt-0.5 shrink-0 opacity-60" />
+                <span>{error}</span>
+              </div>
+            )}
+          </div>
 
           {isMagic ? (
-            <MagicLinkForm de={de} />
+            <MagicLinkForm de={de} initialEmail={/@/.test(form.email || '') ? form.email.trim() : ''} />
+
           ) : isLicense ? (
             <LicenseKeyForm de={de} />
           ) : (

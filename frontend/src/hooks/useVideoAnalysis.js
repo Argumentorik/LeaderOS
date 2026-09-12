@@ -8,12 +8,14 @@ const MAX_POLLS = 120;
 // Async analyze-job submission + polling (extracted from VideoChallengePage).
 export function useVideoAnalysis({ blobRef, ratingConfig, de, onComplete }) {
   const [analyzing, setAnalyzing] = useState(false);
+  const [phase, setPhase] = useState({ stage: 'idle', pct: 0 });
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
   const submitVideo = useCallback(async (activeChallenge) => {
     if (!blobRef.current || !activeChallenge) return;
     setAnalyzing(true);
+    setPhase({ stage: 'upload', pct: 0 });
     try {
       const formData = new FormData();
       formData.append('file', blobRef.current, 'challenge.webm');
@@ -27,10 +29,14 @@ export function useVideoAnalysis({ blobRef, ratingConfig, de, onComplete }) {
       try {
         const startRes = await api.post(
           `/video-challenges/${activeChallenge.challenge_id}/analyze-async?${params.toString()}`,
-          formData, { headers: { 'Content-Type': 'multipart/form-data' } }
+          formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            onUploadProgress: (e) => { if (e.total) setPhase({ stage: 'upload', pct: Math.round((e.loaded / e.total) * 100) }); },
+          }
         );
         const jobId = startRes.data?.job_id;
         if (!jobId) throw new Error('no_job_id');
+        setPhase({ stage: 'queued', pct: 100 });
         let consecutivePollErrors = 0;
         for (let i = 0; i < MAX_POLLS; i += 1) {
           await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
@@ -46,6 +52,7 @@ export function useVideoAnalysis({ blobRef, ratingConfig, de, onComplete }) {
             continue;
           }
           if (!job || !job.status) continue;
+          if (job.status !== 'complete' && job.status !== 'error') setPhase({ stage: job.status, pct: 100 });
           if (job.status === 'complete') { analysisResult = job.analysis; break; }
           if (job.status === 'error') {
             const err = new Error(job.error_detail || 'Analyse fehlgeschlagen');
@@ -79,8 +86,9 @@ export function useVideoAnalysis({ blobRef, ratingConfig, de, onComplete }) {
       } catch (toastErr) { logger.warn('toast unavailable:', toastErr?.message); }
     } finally {
       setAnalyzing(false);
+      setPhase({ stage: 'idle', pct: 0 });
     }
   }, [blobRef, ratingConfig, de]);
 
-  return { analyzing, submitVideo };
+  return { analyzing, submitVideo, phase };
 }

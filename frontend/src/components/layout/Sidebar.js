@@ -41,7 +41,7 @@ export const Sidebar = () => {
         { path: '/tasks', label: t('nav.tasks'), icon: IconClipboard },
         { path: '/chat', label: t('nav.aiCoach'), icon: IconBubble },
         { path: '/video-guide', label: lang === 'de' ? 'Video-Guide' : 'Video Guide', icon: IconCamera },
-        { path: '/kurse', label: lang === 'de' ? 'Kurse' : 'Courses', icon: IconCourse },
+        { path: '/kurse', label: lang === 'de' ? 'Kurse' : 'Courses', icon: IconCourse, newTab: true },  // Kurse öffnen im neuen Tab (Wunsch Stefan)
       ]
     },
     {

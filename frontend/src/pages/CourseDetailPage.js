@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Check, Clock, Lock, MessageCircle, Play } from 'lucide-react';
 import api from '../lib/api';
+import { swrGet } from '../lib/swrCache';
 import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
 import { InteractiveWladButton } from '../components/guide/InteractiveWladButton';
@@ -68,7 +69,7 @@ export default function CourseDetailPage() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    api.get(`/courses/${slug}`).then((r) => setCourse(r.data)).catch((e) => { logger.error('course load failed', e); setError(true); });
+    swrGet(`/courses/${slug}`, setCourse, { onError: (e) => { logger.error('course load failed', e); setError(true); } });
   }, [slug]);
 
   const requested = Number(params.get('folge')) || null;

@@ -75,7 +75,6 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
         <div className="flex items-center gap-2 text-[#BFFF00]">
           <Sparkles size={15} />
           <span className="text-[11px] font-black tracking-[0.18em] uppercase">{de ? 'Mit Wlad sprechen' : 'Talk to Wlad'}</span>
-          <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-[#BFFF00] text-black tracking-wider">BETA</span>
         </div>
         <button type="button" onClick={() => { fullCleanup(); onClose?.(); }} data-testid="interactive-wlad-close"
                 className="text-white/60 hover:text-white p-2 rounded-full bg-white/[0.04] hover:bg-white/[0.10] transition-colors" aria-label={de ? 'Schließen' : 'Close'}>

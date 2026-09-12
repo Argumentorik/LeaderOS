@@ -47,7 +47,12 @@ def detect_source_platform(request: Request) -> str:
     return "leader-os"
 
 
-async def _send_signup_welcome(email: str, name: str) -> None:
+def _frontend_url_for(request: Request) -> str:
+    from services_email import _frontend_url
+    return _frontend_url(request)
+
+
+async def _send_signup_welcome(email: str, name: str, app_url: str = "") -> None:
     """Send the post-signup welcome email. Silently no-ops if Resend isn't configured."""
     try:
         from services_email import send_email, signup_welcome_email, is_enabled, _frontend_url
@@ -61,7 +66,7 @@ async def _send_signup_welcome(email: str, name: str) -> None:
             return
         # Iter 92.27: respect per-deploy FRONTEND_BASE_URL env so emails from the
         # leadercheck.de Vercel project link to leadercheck.de, leaderos.de project → leaderos.de.
-        subject, html = signup_welcome_email(name or email.split("@")[0], app_url=_frontend_url())
+        subject, html = signup_welcome_email(name or email.split("@")[0], app_url=app_url or _frontend_url())
         r = await send_email(email, subject, html)
         await db.email_log.insert_one({
             "user_email": email, "type": "signup_welcome",
@@ -308,7 +313,7 @@ async def register(data: UserRegister, request: Request, response: Response):
     _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user_id, email=email))
 
     # Welcome email (fire-and-forget — non-blocking)
-    _asyncio.create_task(_send_signup_welcome(email, data.name.strip()))
+    _asyncio.create_task(_send_signup_welcome(email, data.name.strip(), _frontend_url_for(request)))
 
     # Iter 92.18: CRM webhook — fire to Wingman (or whatever CRM is wired up)
     try:
@@ -494,7 +499,7 @@ async def google_session(request: Request, response: Response):
         from services_wladhub_autosync import auto_sync_wladhub_on_signup
         _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user_id, email=email))
         # Fire welcome email for new Google user (fire-and-forget)
-        _asyncio.create_task(_send_signup_welcome(email, google_data.get("name") or email.split("@")[0]))
+        _asyncio.create_task(_send_signup_welcome(email, google_data.get("name") or email.split("@")[0], _frontend_url_for(request)))
 
     # Generate a real JWT token (not the session_token)
     user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
@@ -783,7 +788,8 @@ async def magic_link_request(data: MagicLinkRequest, request: Request):
 
     token = await create_token(email, ip)
     if token:
-        await send_magic_link_email(email, token)
+        from services_email import _frontend_url
+        await send_magic_link_email(email, token, base_url=_frontend_url(request))
 
     return {"message": "Falls die E-Mail in unserem System existiert, haben wir dir einen Login-Link geschickt. Bitte prüfe dein Postfach."}
 

@@ -28,7 +28,7 @@ def test_tail_holds_gaze():
 def test_farewells_cover_all_produced_clips():
     for slug in ONBOARDING + MISSIONS + ["teaser-login", "coaching-pakete", "bp-playbooks", "bp-missionen", "bp-video-analyse"]:
         farewell, next_step = farewell_for(slug)
-        assert farewell.endswith(".") and next_step and "→" in next_step, slug
+        assert farewell.endswith(".") and next_step and ("→" in next_step or "leadercheck.de" in next_step), slug
     assert farewell_for("unbekannt") == ("Bis bald.", None)
     assert FAREWELLS["start-5-erste-7-tage"][1].startswith("Morgen")
 

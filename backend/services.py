@@ -475,6 +475,8 @@ async def get_user_memory(user_id: str) -> str:
     parts.append(_build_score_analysis(user))
     parts.append(_build_wladhub_section(user))
     parts.append(await _build_wladhub_diagnosis_section(user_id))
+    from services_journey import journey_prompt_section
+    parts.append(journey_prompt_section(user))
 
     if user.get("premium"):
         parts.append(f"\nPREMIUM USER: Ja ({user.get('premium_package', 'aktiv')})\n")

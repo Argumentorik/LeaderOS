@@ -12,6 +12,7 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { useLanguage } from '../contexts/LanguageContext';
 import api from '../lib/api';
+import { swrGet } from '../lib/swrCache';
 import { ListChecks, Plus, Trash2, Sparkles, Target, CheckCircle2, Clock, Quote, CalendarDays, ArrowRight, Flame, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -35,7 +36,7 @@ export default function TasksPage() {
   const [expandedTask, setExpandedTask] = useState(null);
 
   const loadTasks = useCallback(async () => {
-    try { const res = await api.get('/tasks'); setTasks(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/tasks', setTasks, { onError: (err) => logger.error(err) });
   }, []);
 
   useEffect(() => { loadTasks(); }, [loadTasks]);

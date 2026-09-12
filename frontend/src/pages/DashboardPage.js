@@ -16,6 +16,7 @@ import { WladMotivationCard } from '../components/dashboard/WladMotivationCard';
 import { DashboardLearningVideos } from '../components/dashboard/DashboardLearningVideos';
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
 import { ActionInbox } from '../components/dashboard/ActionInbox';
+import { JourneyCard } from '../components/dashboard/JourneyCard';
 import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrepCard';
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
@@ -151,29 +152,31 @@ export default function DashboardPage() {
         <StripeModeBanner />
         <ActionInbox de={de} />
 
-        {/* ── HEUTE: die eine Aktion ── */}
-        <Card className="bg-[#0A0A0A] text-white border-0 mb-6 overflow-hidden" data-testid="next-step-cta" data-anim="dash-cta">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
-              <div className="flex items-center gap-4 flex-1 min-w-0">
-                <img src={WLAD_AVATAR} alt="Wlad" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-white/10 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#BFFF00]/80">{de ? 'Heute' : 'Today'}</p>
-                  <h3 className="text-lg font-black">{de ? 'Dein nächster Schritt' : 'Your Next Step'}</h3>
-                  <p className="text-sm text-white/50 mt-0.5">
-                    {!c30.started
-                      ? (de ? 'Starte dein 30-Tage KI-Leadership Programm und lerne die Grundlagen.' : 'Start your 30-day AI Leadership program and learn the fundamentals.')
-                      : (de ? `Mache weiter mit Tag ${c30.current_day} deiner Challenge — 10 interaktive Fragen warten.` : `Continue with Day ${c30.current_day} of your challenge — 10 interactive questions await.`)
-                    }
-                  </p>
+        {/* ── HEUTE: die eine Aktion — personalisiert (erste 7 Schritte), danach 30-Tage-Programm ── */}
+        <JourneyCard de={de} fallback={(
+          <Card className="bg-[#0A0A0A] text-white border-0 mb-6 overflow-hidden" data-testid="next-step-cta" data-anim="dash-cta">
+            <CardContent className="p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <img src={WLAD_AVATAR} alt="Wlad" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-white/10 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#BFFF00]/80">{de ? 'Heute' : 'Today'}</p>
+                    <h3 className="text-lg font-black">{de ? 'Dein nächster Schritt' : 'Your Next Step'}</h3>
+                    <p className="text-sm text-white/50 mt-0.5">
+                      {!c30.started
+                        ? (de ? 'Starte dein 30-Tage KI-Leadership Programm und lerne die Grundlagen.' : 'Start your 30-day AI Leadership program and learn the fundamentals.')
+                        : (de ? `Mache weiter mit Tag ${c30.current_day} deiner Challenge — 10 interaktive Fragen warten.` : `Continue with Day ${c30.current_day} of your challenge — 10 interactive questions await.`)
+                      }
+                    </p>
+                  </div>
                 </div>
+                <Button onClick={() => navigate('/challenge')} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11 px-5 w-full sm:w-auto shrink-0 shadow-lg shadow-[#BFFF00]/20" data-testid="next-step-btn">
+                  <Play size={14} className="mr-1.5" /> {!c30.started ? (de ? 'Challenge starten' : 'Start Challenge') : (de ? 'Weitermachen' : 'Continue')}
+                </Button>
               </div>
-              <Button onClick={() => navigate('/challenge')} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11 px-5 w-full sm:w-auto shrink-0 shadow-lg shadow-[#BFFF00]/20" data-testid="next-step-btn">
-                <Play size={14} className="mr-1.5" /> {!c30.started ? (de ? 'Challenge starten' : 'Start Challenge') : (de ? 'Weitermachen' : 'Continue')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )} />
 
         {/* ── FORTSCHRITT ── */}
         <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />

@@ -7,40 +7,41 @@ const inputClass = "h-12 w-full rounded-xl bg-white/[0.03] border border-white/[
  * Iter 92.43 (Mert · 100M-App): friction-reduction UX from the brief.
  * 4-step indicator (length, mixed-case, digit, symbol).
  */
+// Pflicht-Regeln = Backend `validate_password_strength` (8 Zeichen, Buchstaben + Zahlen); Rest ist Bonus.
+export const PASSWORD_RULES = [
+  { id: 'length', required: true, test: (v) => v.length >= 8, de: 'Mindestens 8 Zeichen', en: 'At least 8 characters' },
+  { id: 'letter', required: true, test: (v) => /[a-zA-ZäöüÄÖÜß]/.test(v), de: 'Mindestens ein Buchstabe', en: 'At least one letter' },
+  { id: 'digit', required: true, test: (v) => /\d/.test(v), de: 'Mindestens eine Zahl', en: 'At least one number' },
+  { id: 'case', required: false, test: (v) => /[A-Z]/.test(v) && /[a-z]/.test(v), de: 'Groß- und Kleinbuchstaben', en: 'Upper and lower case' },
+  { id: 'symbol', required: false, test: (v) => /[^A-Za-z0-9äöüÄÖÜß]/.test(v), de: 'Ein Sonderzeichen', en: 'A special character' },
+];
+export const passwordMeetsRules = (v) => PASSWORD_RULES.filter((r) => r.required).every((r) => r.test(v || ''));
+
 const PasswordStrength = ({ value, de }) => {
-  const checks = [
-    { test: (v) => v.length >= 8, label: de ? '8+ Zeichen' : '8+ chars' },
-    { test: (v) => /[A-Z]/.test(v) && /[a-z]/.test(v), label: de ? 'Groß+Klein' : 'Aa' },
-    { test: (v) => /\d/.test(v), label: de ? 'Zahl' : 'Number' },
-    { test: (v) => /[!@#$%^&*(),.?":{}|<>_\-+=]/.test(v), label: de ? 'Sonderzeichen' : 'Symbol' },
-  ];
-  const passed = checks.filter((c) => c.test(value)).length;
-  const color = passed >= 3 ? '#BFFF00' : passed >= 2 ? '#FBBF24' : '#9CA3AF';
+  const v = value || '';
+  const passed = PASSWORD_RULES.filter((c) => c.test(v)).length;
+  const requiredOk = passwordMeetsRules(v);
+  const color = passed >= 4 ? '#BFFF00' : requiredOk ? '#A3E635' : passed >= 2 ? '#FBBF24' : '#9CA3AF';
   return (
-    <div className="mt-2 flex flex-col gap-1.5" data-testid="password-strength">
-      <div className="flex gap-1">
-        {[0, 1, 2, 3].map((i) => (
-          <span
-            key={i}
-            className="h-1 flex-1 rounded-full transition-colors"
-            style={{ background: i < passed ? color : 'rgba(255,255,255,0.06)' }}
-          />
+    <div className="mt-2 flex flex-col gap-1.5" data-testid="password-strength" role="status" aria-live="polite">
+      <div className="flex gap-1" aria-hidden>
+        {PASSWORD_RULES.map((r, i) => (
+          <span key={r.id} className="h-1 flex-1 rounded-full transition-colors" style={{ background: i < passed ? color : 'rgba(255,255,255,0.06)' }} />
         ))}
       </div>
-      <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-        {checks.map((c) => {
-          const ok = c.test(value);
+      <ul id="password-checklist" className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-0.5" data-testid="password-checklist">
+        {PASSWORD_RULES.map((c) => {
+          const ok = c.test(v);
           return (
-            <span
-              key={c.label}
-              className={`flex items-center gap-1 text-[10px] font-semibold ${ok ? 'text-[#BFFF00]' : 'text-white/30'}`}
-            >
-              {ok ? <CheckCircle2 size={9} /> : <span className="w-2 h-2 rounded-full bg-white/15" />}
-              {c.label}
-            </span>
+            <li key={c.id} data-testid={`password-rule-${c.id}`} data-ok={ok ? '1' : '0'}
+                className={`flex items-center gap-1.5 text-[10.5px] font-semibold ${ok ? 'text-[#BFFF00]' : c.required ? 'text-white/45' : 'text-white/25'}`}>
+              {ok ? <CheckCircle2 size={10} /> : <span className="w-2 h-2 rounded-full border border-white/25" />}
+              {de ? c.de : c.en}{!c.required && <span className="font-normal opacity-60">{de ? ' · Bonus' : ' · bonus'}</span>}
+            </li>
           );
         })}
-      </div>
+      </ul>
+      <p className="sr-only">{requiredOk ? (de ? 'Passwort erfüllt alle Regeln.' : 'Password meets all rules.') : (de ? 'Passwort erfüllt die Regeln noch nicht.' : 'Password does not meet the rules yet.')}</p>
     </div>
   );
 };
@@ -165,8 +166,9 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
-            minLength={6}
-            placeholder={de ? 'Min. 6 Zeichen' : 'Min. 6 characters'}
+            minLength={isRegister ? 8 : undefined}
+            aria-describedby={isRegister ? 'password-checklist' : undefined}
+            placeholder={isRegister ? (de ? 'Min. 8 Zeichen, Buchstaben + Zahl' : 'Min. 8 chars, letters + number') : (de ? 'Dein Passwort' : 'Your password')}
             value={form.password}
             onChange={e => setForm({ ...form, password: e.target.value })}
             required
@@ -183,7 +185,7 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
           </button>
         </div>
         {/* Iter 92.43: password-strength indicator only on register */}
-        {isRegister && form.password && <PasswordStrength value={form.password} de={de} />}
+        {isRegister && <PasswordStrength value={form.password} de={de} />}
       </div>
 
       {/* Iter 92.43 (Mert · 100M-App): premium primary CTA — taller (h-14),
@@ -191,7 +193,7 @@ export const AuthForm = ({ mode, form, setForm, showPw, setShowPw, loading, onSu
       <button
         data-testid={isRegister ? 'register-submit-btn' : 'login-submit-btn'}
         type="submit"
-        disabled={loading}
+        disabled={loading || (isRegister && !passwordMeetsRules(form.password))}
         aria-busy={loading}
         className="group h-14 w-full rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-black text-[15px] tracking-tight shadow-[0_8px_30px_-8px_rgba(191,255,0,0.5)] hover:shadow-[0_12px_40px_-8px_rgba(191,255,0,0.7)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >

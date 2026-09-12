@@ -27,7 +27,7 @@ from config import EMERGENT_LLM_KEY, db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_AFTER_WALK_SECONDS, TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE,
-    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, farewell_for, plan_shots,
+    TALK_TAIL_SECONDS, WLAD_STYLE_PROMPT, FILM_CARD_SECONDS, farewell_for, normalize_script, plan_shots,
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
@@ -37,12 +37,12 @@ from services_guide_quality import godmode_check
 from services_ai_errors import ai_http_error
 from services_fal import (
     COST_I2V, COST_I2V_AUDIO, COST_I2V_PRO, COST_KEYFRAME, COST_LIPSYNC_PER_S, COST_OMNIHUMAN_PER_S, FalError, FalTimeout,
-    clone_voice, edit_image, image_to_video, image_to_video_v26, add_ambience, lipsync_video, omnihuman_video,
+    clone_voice, edit_image, image_to_video, image_to_video_v26, add_ambience, generate_music, lipsync_video, omnihuman_video,
     render_talking_video, synthesize_speech,
 )
 from services_video_compose import (
-    BROLL_DIR, concat_segments, finish_video, normalize_segment, pad_audio, probe, render_broll, render_farewell_card,
-    subtitle_chunks,
+    BROLL_DIR, concat_segments, finish_video, mix_music_bed, normalize_segment, pad_audio, probe, render_broll,
+    render_farewell_card, subtitle_chunks,
 )
 
 router = APIRouter(prefix="/api/guide", tags=["guide"])
@@ -681,7 +681,7 @@ async def save_script(slug: str, data: ScriptSaveIn, request: Request):
     clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0, "kind": 1, "multi_shot": 1, "video_path": 1})
     if not clip:
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
-    script = " ".join((data.script or "").split())
+    script = normalize_script(data.script or "")
     words = word_count(script)
     lo, hi = (30, word_limits("teaser")[1]) if clip.get("multi_shot") and clip["kind"] == "teaser" else word_limits(clip["kind"])
     if not lo <= words <= hi:
@@ -857,6 +857,12 @@ async def _job_shot_keyframes(slug: str, clip: dict, settings: dict, token: str)
         if shot.get("keyframe_path"):
             previous = shot["id"]
             continue
+        if SHOT_PRESETS.get(shot.get("preset") or "", {}).get("keyframe_from") == "prev" and previous:
+            prev_shot = next(s_ for s_ in clip["shots"] if s_["id"] == previous)
+            shot["keyframe_path"] = prev_shot["keyframe_path"]
+            await _patch_shot(slug, shot["id"], {"keyframe_path": prev_shot["keyframe_path"], "raw_path": None, "synced_path": None, "fal_request": None})
+            previous = shot["id"]
+            continue
         preset = SHOT_PRESETS[shot["preset"]]
         aspect = clip.get("aspect") or preset["aspect_ratio"]
         await _patch_clip(slug, {"progress": f"Keyframe {shot['id']}"})
@@ -865,6 +871,7 @@ async def _job_shot_keyframes(slug: str, clip: dict, settings: dict, token: str)
         image = await asyncio.to_thread(edit_image, prompt, shot_refs, aspect)
         path = await _store(f"kf_{shot['id']}", slug, image, "image/png", "png")
         await _spend(slug, COST_KEYFRAME)
+        shot["keyframe_path"] = path
         await _patch_shot(slug, shot["id"], {"keyframe_path": path, "raw_path": None, "synced_path": None, "fal_request": None, "error": None})
         previous = shot["id"]
     await _patch_clip(slug, {"status": "shots_keyframed", "progress": None, "error": None})
@@ -920,9 +927,11 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
                 seconds = 2.5
             # GODMODE: Präsenz-Shots bekommen einen stillen Auftakt (erster Talk) und einen Ausklang
             # (letzter Talk), damit Wlad nicht auf Frame 1 losredet und nicht mitten im Blick abgeschnitten wird.
-            lead = TALK_LEAD_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[0]) else 0.0
-            if lead and shots[0]["type"] == "walk":
-                lead = TALK_LEAD_AFTER_WALK_SECONDS
+            idx = shots.index(shot)
+            after_walk = idx > 0 and shots[idx - 1]["type"] == "walk"
+            lead = 0.0
+            if pro and shot["type"] == "talk":
+                lead = TALK_LEAD_AFTER_WALK_SECONDS if after_walk else (TALK_LEAD_SECONDS if shot is talk_shots[0] else 0.0)
             tail = TALK_TAIL_SECONDS if (pro and shot["type"] == "talk" and shot is talk_shots[-1]) else 0.0
             if lead or tail:
                 audio = await asyncio.to_thread(pad_audio, audio, lead, seconds + lead + tail)
@@ -1040,9 +1049,17 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str) -> None
         signature = None
         if settings.get("signature_path"):
             signature, _ = await asyncio.to_thread(get_object, settings["signature_path"])
-        segments.append(await asyncio.to_thread(render_farewell_card, width, height, farewell, next_step, signature))
+        film = clip.get("film")
+        segments.append(await asyncio.to_thread(
+            render_farewell_card, width, height, farewell, next_step, signature,
+            FILM_CARD_SECONDS.get(film, 3.5), LEADERCHECK_URL if film == "login_film" else None,
+        ))
         fades.append(XFADE_CARD)
     joined = await asyncio.to_thread(concat_segments, segments, fades if pro else 0.0)
+    if clip.get("music_bed"):
+        await _patch_clip(slug, {"progress": "Musikteppich"})
+        bed = await _music_bed(settings)
+        joined = await asyncio.to_thread(mix_music_bed, joined, bed, MUSIC_BED_DB)
     from services_video_compose import extract_audio
 
     audio_track = await asyncio.to_thread(extract_audio, joined)
@@ -1066,6 +1083,21 @@ _FULL_SLOTS = asyncio.Semaphore(3)
 XFADE = 0.45
 XFADE_WALK = 0.8  # Übergang Walk-in -> Talk: Bild endet ohnehin auf dem Talk-Keyframe, Ton läuft weich hinüber
 XFADE_CARD = 0.8  # aus Wlads letztem Blick weich in die Verabschiedungs-Karte
+LEADERCHECK_URL = "https://leadercheck.de"
+MUSIC_BED_DB = -27.0  # Musikteppich unter der Stimme kaum hörbar
+MUSIC_BED_PROMPT = ("very quiet, warm cinematic ambient underscore, soft sustained pads and a gentle low piano motif, "
+                    "slow, hopeful, minimal, no drums, no vocals, seamless loop")
+
+
+async def _music_bed(settings: dict) -> bytes:
+    """Musikteppich einmal KI-generieren (Stable Audio), in guide_settings ablegen, danach kostenlos wiederverwenden."""
+    if settings.get("music_bed_path"):
+        data, _ = await asyncio.to_thread(get_object, settings["music_bed_path"])
+        return data
+    data = await asyncio.to_thread(generate_music, MUSIC_BED_PROMPT, 47)
+    path = await _store("music_bed", "settings", data, "audio/wav", "wav")
+    await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": {"music_bed_path": path}}, upsert=True)
+    return data
 
 
 def _setting_for(slug: str, clip: dict) -> str | None:
@@ -1082,7 +1114,7 @@ async def _job_full(slug: str, clip: dict, settings: dict, token: str) -> None:
         if not clip.get("shots"):
             clip["shots"] = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro",
                                        _setting_for(slug, clip),
-                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
+                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")), film=clip.get("film"))
             await _patch_clip(slug, {"shots": clip["shots"]})
         await _job_shot_keyframes(slug, clip, settings, token)
         clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
@@ -1205,7 +1237,7 @@ async def plan_clip_shots(slug: str, request: Request):
     if clip.get("status") in RUNNING:
         raise HTTPException(status_code=409, detail="Für diesen Clip läuft schon ein Auftrag")
     shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), clip.get("quality") == "pro", _setting_for(slug, clip),
-                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
+                               single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")), film=clip.get("film"))
     await _patch_clip(slug, {"shots": shots, "status": "shots_planned", "error": None})
     return {"ok": True, "shots": shots}
 
@@ -1298,7 +1330,7 @@ async def bulk_produce(data: BulkIn, request: Request):
             # Upgrade: neu planen, Keyframes gleicher Presets behalten, alles andere neu rendern
             old = {(s_.get("preset"), s_["type"]): s_ for s_ in clip.get("shots", [])}
             shots = plan_shots(clip["script"], CLIP_SCREENS.get(slug), data.quality == "pro",
-                               _setting_for(slug, {**clip, "quality": data.quality}), single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")))
+                               _setting_for(slug, {**clip, "quality": data.quality}), single_take=bool(clip.get("single_take")), walk_in=bool(clip.get("walk_in")), film=clip.get("film"))
             for s_ in shots:
                 prev = old.get((s_.get("preset"), s_["type"]))
                 if prev and prev.get("keyframe_path"):

@@ -1,0 +1,43 @@
+{
+  "summary": "Iter 173 review. Backend (pytest + REST E2E) fully green: 7/7 unit tests in test_iter173_journey_login.py + 5/5 new API E2E tests in test_iter173_api_e2e.py (unauth 401, journey shape, bootstrap.journey key, complete/{day} flow with day=9→400, throwaway register). Frontend: register password-checklist (5 rules with data-ok updates), submit disabled with 'abc' and enabled with 'Test1234x'; magic-link sent panel with 60s countdown 'Erneut senden in NN s' + magic-link-change-email; wrong-password auth-error inside role=alert with email preserved; journey-card on /dashboard shows focus (KI-Kompetenz), title, reason (personalized), 7 progress bars, btn, and journey-step-done marks the step and shows next ('Deine Baseline' → 'KI richtig einordnen'); journey-focus-line rendered on /challenge; WladBot FAB opens drawer. ONE CRITICAL BUG: /auth/magic?token=invalidtoken redirects to /login and never shows magic-verify-error state.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "MagicLinkVerifyPage / api.js interceptor",
+        "issue": "Visiting /auth/magic?token=invalidtoken redirects to /login within ~200ms; MagicLinkVerifyPage briefly renders then disappears. RCA (verified via network trace): on mount the app calls GET /api/features which returns 401 for unauthenticated visitors; the axios interceptor in /app/frontend/src/lib/api.js is NOT in isAuthEndpoint allowlist for /features, so it retries via /auth/refresh (also 401), then executes 'window.location.href = /login' because window.location.pathname is /auth/magic (not /login). Result: user with invalid/expired magic link is bounced to /login instead of seeing magic-verify-error with 'Neuen Link anfordern' / 'Zurück zum Login'. Same regression will affect /signup, /register and any other public route that mounts a component calling /api/features while logged out.",
+        "selector": "[data-testid=\"magic-verify-error\"]",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter173_journey_login.py",
+    "/app/backend/tests/test_iter173_api_e2e.py"
+  ],
+  "action_items": [
+    "Fix /auth/magic redirect bug: in /app/frontend/src/lib/api.js around line 80, extend onAuthPage check to also treat public routes as auth pages, e.g.: const p = window.location.pathname; const onAuthPage = p.startsWith('/login') || p.startsWith('/auth/magic') || p.startsWith('/signup') || p.startsWith('/register') || window.location.hash.includes('session_id'); OR make GET /api/features return 200 with defaults for unauthenticated users so the 401 cascade never triggers on public routes."
+  ],
+  "critical_code_review_comments": [
+    "api.js 401-interceptor 'onAuthPage' check is /login-substring only — misses /auth/magic, /signup, /register. Any non-auth-endpoint 401 on these routes causes an unintended hard redirect to /login and breaks the intended error UX (visible via /api/features 401 on magic verify).",
+    "MagicLinkVerifyPage.js error-effect (if state==='error' && authedUser => navigate) is fine, but the current bug bypasses even reaching setState('error') because a sibling request kills the SPA state before verify() returns."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter173_api_e2e.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12: 7 unit + 5 E2E)",
+    "frontend": "~90% — all iter173 features render correctly except magic-verify error state (blocked by unrelated api.js interceptor bug)"
+  },
+  "test_credentials": "standard@wladbot.test / test123 (used for journey card), free@wladbot.test (used once for magic-link-request — rate-limit consumed). Throwaway account created via /api/auth/register for journey/complete testing (email pattern iter173_<uuid>@wladbot-testing.de).",
+  "seed_data_creation": "One throwaway user via POST /api/auth/register (email iter173_<uuid8>@wladbot-testing.de, phone +4915xxxxxxxx). Standard@wladbot.test journey progress unchanged permanently (day-1 marked done during UI test — acceptable per instructions).",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "test_iter173_api_e2e.py includes register with required phone field; keep the phone key when adding new register-based tests. Magic-link and login endpoints are rate-limited (3/h magic, 20/min /auth/*). If backend tests skip due to 429, wait ≥45s. The /api/features 401→hard-redirect issue affects any unauthenticated public route mounted alongside FeatureFlag fetches (/auth/magic, /signup, /register — verify after fix).",
+  "rca of the issue": "STEP 1: page.goto /auth/magic?token=invalidtoken renders SPA which mounts MagicLinkVerifyPage. STEP 2: An unrelated global fetch (probably FeatureFlagProvider or a similar bootstrap) hits GET /api/features. Unauthenticated → 401. STEP 3: /api/features URL is NOT in isAuthEndpoint regex in /app/frontend/src/lib/api.js line 39. STEP 4: Interceptor calls /auth/refresh → 401 (excluded, no recurse). STEP 5: onAuthPage check evaluates window.location.pathname.includes('/login') === false; hasCachedUser === false. STEP 6: window.location.href = '/login' — hard redirect executes before MagicLinkVerifyPage's own verify catch-block can setState('error'). Reproduction: fresh browser context, visit /auth/magic?token=anything → observe URL becomes /login. Mitigation: extend onAuthPage list OR relax /api/features to return anonymous defaults with 200."
+}

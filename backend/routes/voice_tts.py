@@ -233,6 +233,9 @@ def _normalize_wlad_name(text: str) -> str:
     return text
 
 
+REALTIME_CLONE_BUDGET_S = int(os.environ.get("VOICE_CLONE_BUDGET_S", "6"))
+
+
 def _synthesize(text: str, voice_config: dict) -> bytes:
     """Blocking synthesis — returns raw MP3 bytes. Run inside run_in_threadpool."""
     text = _normalize_wlad_name(text)
@@ -240,8 +243,10 @@ def _synthesize(text: str, voice_config: dict) -> bytes:
         from services_fal import FalError, synthesize_speech
 
         try:
+            # Echtzeit-Budget: Fal-Queue braucht oft 20–50 s → nach kurzem Warten sofort ElevenLabs,
+            # damit die Antwort im Audio-Mode unter dem Frontend-Timeout bleibt.
             audio, _ = synthesize_speech(text, voice_config["voice_id"], fast=True,
-                                         timeout_seconds=voice_config.get("tts_timeout"))
+                                         timeout_seconds=voice_config.get("tts_timeout") or REALTIME_CLONE_BUDGET_S)
             return audio
         except FalError as e:
             # Fal-Queue überlastet/ausgefallen -> ElevenLabs-Standardstimme statt Fehler beim Nutzer

@@ -62,15 +62,18 @@ SCRIPTS = {
     ),
     # Iter 167: Login-Teaser GODMODE — Walk-in mit Ton, dann ein durchgehender Take (~47 s). Ton der Landing-Copy
     # („Führe besser. Jeden Tag.“ / „Kein Onlinekurs. Kein Chatbot. Dein tägliches Betriebssystem.“).
-    "teaser-login": (
-        "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet "
-        "eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am "
-        "Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau "
-        "dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, "
-        "der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir "
-        "deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der "
-        "Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem "
-        "Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos."
+    "teaser-login": (  # 3 Kapitel = 3 Absätze (Loft -> Studio -> Studio nah), Leerzeile trennt
+        "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer "
+        "bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert "
+        "selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich "
+        "ansteht.\n\n"
+        "Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein "
+        "Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du "
+        "beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – "
+        "so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\n"
+        "Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. "
+        "Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf "
+        "leadercheck.de. Danach sehen wir uns hier."
     ),
 }
 

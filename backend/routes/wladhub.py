@@ -532,6 +532,7 @@ async def save_onboarding_data(data: OnboardingData, request: Request):
     user = await get_current_user(request)
     update_fields = {
         "onboarding_completed": True,
+        "onboarding_completed_at": datetime.now(timezone.utc).isoformat(),
         "role": data.role,
         "team_size": data.team_size,
         "primary_goal": data.primary_goal,

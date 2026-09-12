@@ -25,6 +25,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Sparkles, X, Send, Loader2, Folder, ChevronDown, Lightbulb, Target } from 'lucide-react';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
 import api from '../../lib/api';
+import { streamChat } from '../../lib/chatStream';
 import logger from '../../lib/logger';
 import SmartText from './SmartText';
 import { useAuth } from '../../contexts/AuthContext';
@@ -152,17 +153,39 @@ export const FloatingWladBotDrawer = () => {
     try {
       const body = { message: text, session_id: sessionId, modality };
       if (activeFolderId) body.folder_id = activeFolderId;
-      const res = await api.post('/chat', body);
-      if (!sessionId) setSessionId(res.data.session_id);
-      setMessages(prev => [...prev, { role: 'assistant', content: '', parsed: res.data.response, modality: res.data.modality || modality }]);
+      let draft = '';
+      let hadDelta = false;
+      await streamChat(body, {
+        onStart: (evt) => { if (!sessionId && evt.session_id) setSessionId(evt.session_id); },
+        onDelta: (chunk) => {
+          draft += chunk;
+          hadDelta = true;
+          setMessages(prev => {
+            const last = prev[prev.length - 1];
+            const msg = { role: 'assistant', streaming: true, content: draft, parsed: { text: draft }, modality };
+            return last?.streaming ? [...prev.slice(0, -1), msg] : [...prev, msg];
+          });
+        },
+        onDone: (data) => {
+          if (!sessionId) setSessionId(data.session_id);
+          setMessages(prev => [...prev.filter(m => !m.streaming), { role: 'assistant', content: '', parsed: data.response, modality: data.modality || modality }]);
+        },
+      });
+      if (!hadDelta) setMessages(prev => prev.filter(m => !m.streaming));
     } catch (err) {
       logger.error('drawer chat failed:', err);
-      const noCredits = err?.response?.status === 402;
+      setMessages(prev => prev.filter(m => !m.streaming));
+      const status = err?.response?.status ?? err?.status;
+      const noCredits = status === 402;
+      const detail = err?.response?.data?.detail ?? err?.data?.detail;
+      const backendMsg = typeof detail === 'string' ? detail : '';
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: noCredits
           ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad.' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad.')
-          : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.'),
+          : ((status === 503 || status === 504 || status === 429) && backendMsg
+            ? backendMsg
+            : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.')),
       }]);
     } finally {
       setSending(false);
@@ -343,7 +366,7 @@ export const FloatingWladBotDrawer = () => {
                   </div>
                 ))
               )}
-              {sending && (
+              {sending && !messages[messages.length - 1]?.streaming && (
                 <div className="flex">
                   <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl px-3 py-2 flex gap-1">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#BFFF00] typing-dot" />

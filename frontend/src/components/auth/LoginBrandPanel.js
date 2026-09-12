@@ -6,7 +6,7 @@ import { LoginTeaserVideo } from './LoginTeaserVideo';
 
 const BG_IMG = 'https://images.unsplash.com/photo-1633602114554-be8c2c5d6828?crop=entropy&cs=srgb&fm=webp&w=1400&q=60';
 
-export const LoginBrandPanel = ({ features, de }) => {
+export const LoginBrandPanel = ({ features, de, onStartRegister }) => {
   const [hasTeaser, setHasTeaser] = useState(false);
   return (
     <div data-testid="login-brand-panel" className="hidden lg:flex lg:w-[45%] relative overflow-hidden">
@@ -87,7 +87,7 @@ export const LoginBrandPanel = ({ features, de }) => {
 
           {/* Wlad-Teaser (freigegeben) direkt unter der Headline — Conversion first */}
           <div className="mt-8 brand-rise" style={{ animationDelay: '640ms' }}>
-            <LoginTeaserVideo de={de} onAvailable={setHasTeaser} />
+            <LoginTeaserVideo de={de} onAvailable={setHasTeaser} onStartRegister={onStartRegister} />
           </div>
 
           <div className={`space-y-2 ${hasTeaser ? 'mt-8' : 'mt-10'}`}>

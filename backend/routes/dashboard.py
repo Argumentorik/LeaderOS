@@ -152,6 +152,7 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
     from routes.events import get_event_reminders, get_events
     from routes.folders import list_folders
     from routes.guide import list_clips
+    from routes.journey import get_journey
     from routes.my_path import get_learning_videos
     from routes.referral import get_referral_code
 
@@ -163,7 +164,7 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
         response.headers["X-Bootstrap-Cache"] = "hit"
         return hit[1]
 
-    dashboard, referral, reminders, events_live, videos, clips, folders = await asyncio.gather(
+    dashboard, referral, reminders, events_live, videos, clips, folders, journey = await asyncio.gather(
         get_dashboard_v4(request),
         _safe(get_referral_code(request), {}),
         _safe(get_event_reminders(request), {"reminders": [], "next_event": None}),
@@ -171,10 +172,11 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
         _safe(get_learning_videos(request), None),
         _safe(list_clips(request, "onboarding", False), {"clips": []}),
         _safe(list_folders(request), []),
+        _safe(get_journey(request), None),
     )
     payload = {
         "dashboard": dashboard, "referral": referral, "events_reminders": reminders, "events_live": events_live,
-        "my_path_videos": videos, "guide_clips": clips, "folders": folders,
+        "my_path_videos": videos, "guide_clips": clips, "folders": folders, "journey": journey,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
     if len(_bootstrap_cache) > 2000:

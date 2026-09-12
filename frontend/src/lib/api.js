@@ -77,7 +77,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch {
         processQueue(false);
-        const onAuthPage = window.location.pathname.includes('/login') || window.location.hash.includes('session_id');
+        const p = window.location.pathname;
+        const onAuthPage = ['/login', '/signup', '/register', '/auth/magic', '/auth-callback'].some((r) => p.startsWith(r)) || window.location.hash.includes('session_id');
         if (!onAuthPage) {
           // Soft re-auth flow: keep the user on the current page, show modal.
           // If a user object exists in cache → show ReAuthModal (preserves scroll/state).

@@ -177,6 +177,8 @@ export function LoadingOverlay({
   de = true,
   agents: customAgents,
   stepDuration,
+  progressLabel,
+  minAgent = 0,
 }) {
   const preset = (de ? FLOWS_DE : FLOWS_EN)[flow] || (de ? FLOWS_DE : FLOWS_EN).generic;
   const agents = customAgents || preset.agents;
@@ -200,7 +202,8 @@ export function LoadingOverlay({
 
   if (!isOpen) return null;
 
-  const completedCount = activeAgent;
+  const shownAgent = Math.max(activeAgent, Math.min(minAgent, agents.length - 1));
+  const completedCount = shownAgent;
   const progressPct = Math.min(100, Math.round(((completedCount + 0.5) / agents.length) * 100));
 
   return (
@@ -233,6 +236,9 @@ export function LoadingOverlay({
           <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/30">
             {de ? 'Läuft seit' : 'Running for'} · {elapsed}s
           </p>
+          {progressLabel && (
+            <p className="text-[12px] font-semibold text-[#BFFF00]" data-testid="loading-overlay-progress">{progressLabel}</p>
+          )}
         </div>
 
         {/* Thin progress line */}
@@ -248,8 +254,8 @@ export function LoadingOverlay({
         {/* Agent status feed */}
         <div className="space-y-1.5">
           {agents.map((agent, i) => {
-            const done = i < activeAgent;
-            const active = i === activeAgent;
+            const done = i < shownAgent;
+            const active = i === shownAgent;
             return (
               <div
                 key={agent.name}

@@ -67,6 +67,17 @@ const AGBPage = lazyWithRetry(() => import("./pages/AGBPage"));
 const EmailUnsubscribePage = lazyWithRetry(() => import("./pages/EmailUnsubscribePage"));
 
 import { WladMark } from "./components/brand/WladMark";
+import { registerRoutePreloads, prefetchIdleRoutes } from "./lib/routePrefetch";
+
+registerRoutePreloads({
+  '/chat': ChatPage, '/tools': ToolsPage, '/simulations': SimulationsPage, '/missions': VideoChallengePage,
+  '/missions/archive': VideoArchivePage, '/challengers': ChallengersPage, '/tasks': TasksPage, '/playbooks': PlaybooksPage,
+  '/events': EventsPage, '/my-path': MyPathPage, '/lern-videos': LearningVideosPage, '/community': CommunityPage,
+  '/coaching': CoachingPage, '/downloads': DownloadsPage, '/referral': ReferralPage, '/profile': ProfilePage,
+  '/challenge': Challenge30Page, '/video-guide': VideoGuidePage, '/kurse': CoursesPage, '/kurse/:slug': CourseDetailPage,
+  '/daily-checkin': DailyCheckinPage, '/leader-diagnose': LeaderDiagnosePage, '/enterprise': EnterprisePage,
+  '/wlad-control-x7k9q2': AdminPage,
+});
 import { CookieConsent } from "./components/legal/CookieConsent";
 import { ReAuthModal } from "./components/auth/ReAuthModal";
 import { FakeWladCall } from "./components/calls/FakeWladCall";
@@ -104,6 +115,9 @@ const ProtectedRoute = ({ children }) => {
 
 function AppRouter() {
   const location = useLocation();
+  const { user } = useAuth();
+
+  useEffect(() => { if (user) prefetchIdleRoutes(); }, [user]);
 
   // Iter 92.11: once we successfully reach any route after a reload, clear
   // the chunk-reload guard so future deploys can retry-then-reload again.

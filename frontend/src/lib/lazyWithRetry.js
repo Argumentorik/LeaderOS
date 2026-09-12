@@ -33,10 +33,15 @@ const isChunkLoadError = (err) => {
   );
 };
 
-export const lazyWithRetry = (factory) =>
-  lazy(async () => {
+export const lazyWithRetry = (factory) => {
+  let pending = null;
+  const load = () => {
+    if (!pending) pending = factory().catch((e) => { pending = null; throw e; });
+    return pending;
+  };
+  const Component = lazy(async () => {
     try {
-      return await factory();
+      return await load();
     } catch (err) {
       // small backoff retry
       await new Promise((r) => setTimeout(r, 600));
@@ -59,6 +64,9 @@ export const lazyWithRetry = (factory) =>
       }
     }
   });
+  Component.preload = () => load().catch(() => {});
+  return Component;
+};
 
 // Clear the reload guard once the user has successfully navigated past
 // the failure. Call this after the next successful render.

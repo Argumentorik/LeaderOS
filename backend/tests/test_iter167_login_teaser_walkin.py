@@ -53,8 +53,10 @@ def test_teaser_script_godmode():
 
 
 def test_seed_marks_login_teaser_walk_in():
+    # Iter 171: Login-Teaser ist jetzt der 16:9-Film (Loft -> Studio); Walk-in-Plan bleibt als Option erhalten
     clip = next(c for c in seed_clips() if c["slug"] == "teaser-login")
-    assert clip["single_take"] and clip["walk_in"] and clip["setting"] == "studio" and clip["aspect"] == "9:16"
+    assert clip["film"] == "login_film" and clip["aspect"] == "16:9"
+    assert [s["type"] for s in plan_shots("Ein Satz.", None, True, "studio", single_take=True, walk_in=True)] == ["walk", "talk"]
 
 
 def _synthetic(path: str, seconds: float, with_audio: bool) -> bytes:

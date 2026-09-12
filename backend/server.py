@@ -114,6 +114,7 @@ from routes.profile import router as profile_router
 from routes.voice_tts import router as voice_tts_router
 from routes.monitoring import router as monitoring_router
 from routes.telemetry import router as telemetry_router
+from routes.journey import router as journey_router
 from routes.gdpr import router as gdpr_router
 from routes.oauth import router as oauth_router
 from routes.license import router as license_router
@@ -156,6 +157,7 @@ app.include_router(profile_router)
 app.include_router(voice_tts_router)
 app.include_router(monitoring_router)
 app.include_router(telemetry_router)
+app.include_router(journey_router)
 app.include_router(gdpr_router)
 app.include_router(support_router)
 app.include_router(folders_router)

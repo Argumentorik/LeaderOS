@@ -73,7 +73,7 @@ export default function VideoChallengePage() {
     loadArchive();
   }, [releaseStream, loadArchive]);
 
-  const { analyzing, submitVideo } = useVideoAnalysis({
+  const { analyzing, submitVideo, phase } = useVideoAnalysis({
     blobRef, ratingConfig, de,
     onComplete: handleAnalysisComplete,
   });
@@ -232,7 +232,9 @@ export default function VideoChallengePage() {
   return (
     <DashboardLayout>
       {!canAccess && !tierCtx.loading && <TierLockOverlay feature="video_analysis" requiredTier="accelerator" de={de} />}
-      <LoadingOverlay isOpen={analyzing} flow="video" de={de} />
+      <LoadingOverlay isOpen={analyzing} flow="video" de={de}
+        progressLabel={phase.stage === 'upload' ? (de ? `Upload ${phase.pct} %` : `Upload ${phase.pct}%`) : phase.stage === 'queued' ? (de ? 'Upload fertig · Analyse startet' : 'Upload done · analysis starting') : phase.stage === 'transcribing' ? (de ? 'Transkription läuft' : 'Transcribing') : phase.stage === 'analyzing' ? (de ? 'Wlad analysiert deine Rede' : 'Wlad is analyzing your speech') : undefined}
+        minAgent={phase.stage === 'analyzing' ? 2 : 0} />
       <div className="flex flex-col lg:flex-row-reverse min-h-screen" data-testid="video-studio-shell">
         <VideoStudioSidebar
           entries={archive}

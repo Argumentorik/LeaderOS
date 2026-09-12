@@ -22,17 +22,42 @@ BRAND_COLOR = "#BFFF00"
 BRAND_DARK = "#0A0A0A"
 
 
-def _frontend_url() -> str:
-    """Iter 92.27 (Mert deploy): single source of truth for the app URL used in
-    transactional emails. Read at call-time (not import-time) so each Vercel
-    deployment (`leaderos` project → leaderos.de, `leadercheck` project →
-    leadercheck.de) sends emails that link back to its OWN domain — even though
-    both projects share this same backend service code.
+_TRUSTED_ORIGIN_SUFFIXES = (".emergentagent.com", "leaderos.de", "leadercheck.de", "leader-os.de", "leader-check.de")
 
-    Fallback `https://leaderos.de` matches Mert's primary production domain
-    (Jun 2026 launch). Old hardcoded `leaderos.de` (with dash) is deprecated.
+
+def _trusted_origin(origin: str) -> bool:
+    origin = (origin or "").strip().lower()
+    if not origin.startswith("https://") and not origin.startswith("http://localhost"):
+        return False
+    host = origin.split("://", 1)[1].split("/", 1)[0].split(":", 1)[0]
+    whitelist = [o.strip().lower() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip() and o.strip() != "*"]
+    if origin in whitelist:
+        return True
+    return host == "localhost" or any(host == s.lstrip(".") or host.endswith(s) for s in _TRUSTED_ORIGIN_SUFFIXES)
+
+
+def _frontend_url(request=None) -> str:
+    """App URL for links in transactional emails (magic link, welcome, reset).
+
+    Order: `FRONTEND_BASE_URL` (explicit per deploy) → trusted `Origin` of the
+    request (preview vs. prod get their own link) → `PUBLIC_BASE_URL` → leaderos.de.
     """
-    return (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    explicit = (os.environ.get("FRONTEND_BASE_URL") or "").strip()
+    if explicit:
+        return explicit.rstrip("/")
+    if request is not None:
+        origin = request.headers.get("origin") or ""
+        if not origin:
+            ref = request.headers.get("referer") or ""
+            if "://" in ref:
+                scheme, rest = ref.split("://", 1)
+                origin = f"{scheme}://{rest.split('/', 1)[0]}"
+        if _trusted_origin(origin):
+            return origin.rstrip("/")
+    public = (os.environ.get("PUBLIC_BASE_URL") or "").strip()
+    if public:
+        return public.rstrip("/")
+    return "https://leaderos.de"
 
 
 def _init_resend():

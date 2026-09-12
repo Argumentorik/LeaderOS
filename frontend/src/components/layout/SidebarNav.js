@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { LockedFeatureModal } from '../shared/LockedFeatureModal';
+import { prefetchRoute } from '../../lib/routePrefetch';
 
 /**
  * Iter 92.49 (Mert Godmode): locked items (Free tier on premium sections) open
@@ -75,6 +76,8 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
             return (
               <NavLink key={item.path} to={item.path} data-testid={`nav-${item.path.replace('/', '')}`}
                 data-tour-id={TOUR_ID_BY_PATH[item.path]}
+                onMouseEnter={() => prefetchRoute(item.path)} onFocus={() => prefetchRoute(item.path)} onTouchStart={() => prefetchRoute(item.path)}
+                target={item.newTab ? '_blank' : undefined} rel={item.newTab ? 'noopener noreferrer' : undefined}
                 className={({ isActive }) =>
                   `${baseCls} ${
                     isActive

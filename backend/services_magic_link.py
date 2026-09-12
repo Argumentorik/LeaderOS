@@ -39,8 +39,9 @@ def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
-def _frontend_base() -> str:
-    return (os.environ.get("FRONTEND_BASE_URL") or _BASE_URL_DEFAULT).rstrip("/")
+def _frontend_base(request=None) -> str:
+    from services_email import _frontend_url
+    return _frontend_url(request) or _BASE_URL_DEFAULT
 
 
 async def ensure_indexes() -> None:
@@ -113,7 +114,8 @@ async def consume_token(raw_token: str) -> Optional[dict]:
     return user
 
 
-def _format_email_html(user_name: str, link: str, next_event: dict | None = None) -> str:
+def _format_email_html(user_name: str, link: str, next_event: dict | None = None, base: str = "") -> str:
+    base = base or _frontend_base()
     event_block = ""
     if next_event:
         try:
@@ -126,7 +128,7 @@ def _format_email_html(user_name: str, link: str, next_event: dict | None = None
       <div style="font-size:9px;font-weight:800;letter-spacing:0.14em;color:#BFFF00;margin-bottom:6px;">🔴 NICHT VERPASSEN · NÄCHSTES LIVE-EVENT</div>
       <div style="font-size:14px;font-weight:700;color:#fafafa;">{next_event.get('title', '')}</div>
       <div style="font-size:12px;color:#94a3b8;margin-top:4px;">{date_label} · {next_event.get('duration', '')} · mit {next_event.get('host', 'Wlad Jachtchenko')}</div>
-      <a href="{_frontend_base()}/events" style="display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#BFFF00;text-decoration:none;">Platz sichern →</a>
+      <a href="{base}/events" style="display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#BFFF00;text-decoration:none;">Platz sichern →</a>
     </div>"""
 
     return f"""
@@ -138,7 +140,7 @@ def _format_email_html(user_name: str, link: str, next_event: dict | None = None
       <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
         <tr>
           <td style="padding-right:14px;vertical-align:middle;">
-            <img src="{_frontend_base()}/wladbot-avatar-clean.png" alt="WladBot" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
+            <img src="{base}/wladbot-avatar-clean.png" alt="WladBot" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
           </td>
           <td style="vertical-align:middle;">
             <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WladBot <span style="font-size:9px;font-weight:800;color:#BFFF00;background:#1c2a08;padding:2px 6px;border-radius:6px;vertical-align:middle;">3.0</span></div>
@@ -174,7 +176,7 @@ def _format_email_html(user_name: str, link: str, next_event: dict | None = None
 """.strip()
 
 
-async def send_magic_link_email(email: str, raw_token: str) -> bool:
+async def send_magic_link_email(email: str, raw_token: str, base_url: str = "") -> bool:
     """Build the verify URL and send via Resend. Returns True on send success."""
     from services_email import send_email, is_enabled
 
@@ -199,8 +201,9 @@ async def send_magic_link_email(email: str, raw_token: str) -> bool:
     except Exception:
         next_event = None
 
-    link = f"{_frontend_base()}/auth/magic?token={raw_token}"
-    html = _format_email_html(user_name, link, next_event)
+    base = (base_url or _frontend_base()).rstrip("/")
+    link = f"{base}/auth/magic?token={raw_token}"
+    html = _format_email_html(user_name, link, next_event, base)
     result = await send_email(
         to=email,
         subject="Dein 1-Klick-Login für WladBot",

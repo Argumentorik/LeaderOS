@@ -118,7 +118,7 @@ def submit_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> d
             f"{QUEUE_ORIGIN}/{endpoint_id}" if direct else f"{_control_base()}/proxy",
             headers=_headers(None if direct else {"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
             json=payload,
-            timeout=60,
+            timeout=min(60, max(10, timeout_seconds)),
         )
         if submit.status_code in (502, 503, 504) and attempt < 3:
             wait = 3 if timeout_seconds <= 60 else 20 * (attempt + 1)
@@ -297,6 +297,18 @@ def image_to_video_v26(image_url: str, prompt: str, duration: str = "5", end_ima
     url = (result.get("video") or {}).get("url")
     if not url:
         raise FalError("Kling 2.6 lieferte keine Video-URL")
+    return download(url, timeout=300)
+
+
+MUSIC_ENDPOINT = "fal-ai/stable-audio-25/text-to-audio"
+
+
+def generate_music(prompt: str, seconds: int = 47) -> bytes:
+    """Stable Audio 2.5: lizenzfreier Musikteppich (Text -> Audio). Einmalig, danach aus dem Storage."""
+    result = run_fal(MUSIC_ENDPOINT, {"prompt": prompt, "seconds_total": int(seconds)}, timeout_seconds=600)
+    url = ((result.get("audio") or result.get("audio_file") or {}).get("url"))
+    if not url:
+        raise FalError("Stable Audio lieferte keine Audio-URL")
     return download(url, timeout=300)
 
 

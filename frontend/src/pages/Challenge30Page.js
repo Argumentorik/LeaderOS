@@ -12,6 +12,7 @@ import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { toast } from 'sonner';
+import { JourneyFocusLine } from '../components/dashboard/JourneyFocusLine';
 import { MissionGuideClip } from '../components/guide/MissionGuideClip';
 import {
   Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown, Mic
@@ -146,6 +147,7 @@ export default function Challenge30Page() {
             <p className="text-sm text-white/50 max-w-md">
               {de ? 'Jeden Tag 10 Fragen. 4 Wochen. Von Awareness zur strategischen Dominanz.' : '10 questions per day. 4 weeks. From awareness to strategic dominance.'}
             </p>
+            <JourneyFocusLine de={de} className="mt-3 max-w-xl" />
 
             {/* Progress Bar inside hero */}
             <div className="mt-6 flex items-center gap-4">

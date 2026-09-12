@@ -2235,213 +2235,279 @@
    "ref": null,
    "order": 0,
    "title": "Warum Leader-OS",
-   "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos.",
+   "script": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht.\n\nGenau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.\n\nZehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.",
    "multi_shot": true,
-   "aspect": "9:16",
-   "script_source": "wlad",
+   "aspect": "16:9",
+   "script_source": "wlad_v5_film",
    "status": "video_ready",
    "published": true,
    "audio_path": null,
-   "video_path": "guide/video_teaser-login_c5399a3f.mp4",
+   "video_path": "guide/video_teaser-login_6ddf76eb.mp4",
    "media_token": "gMgZdwQUU6Z9Ybt4LQFBm09_A5GNhMas",
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-11T10:54:21.220090+00:00",
+   "updated_at": "2026-09-12T03:09:59.792110+00:00",
    "progress": null,
-   "spent_usd": 16.909999999999997,
-   "duration_seconds_video": 55.9,
+   "spent_usd": 28.509999999999994,
+   "duration_seconds_video": 76.0,
    "pipeline": "multishot",
    "subtitles": [
     {
-     "start": 4.97,
-     "end": 6.17,
+     "start": 0.45,
+     "end": 1.57,
      "text": "Du führst ein Team."
     },
     {
-     "start": 6.17,
-     "end": 8.44,
+     "start": 1.57,
+     "end": 3.69,
      "text": "Du triffst jeden Tag Entscheidungen"
     },
     {
-     "start": 8.44,
-     "end": 10.33,
+     "start": 3.69,
+     "end": 5.46,
      "text": "die andere Menschen betreffen."
     },
     {
-     "start": 10.33,
-     "end": 12.73,
+     "start": 5.46,
+     "end": 7.7,
      "text": "Aber wer bereitet eigentlich dich vor?"
     },
     {
-     "start": 12.73,
-     "end": 13.55,
+     "start": 7.7,
+     "end": 8.47,
      "text": "Ich bin Wlad."
     },
     {
-     "start": 13.55,
-     "end": 15.82,
+     "start": 8.47,
+     "end": 10.59,
      "text": "Und nach über tausend Trainings weiß"
     },
     {
-     "start": 15.82,
-     "end": 16.08,
+     "start": 10.59,
+     "end": 10.83,
      "text": "ich"
     },
     {
-     "start": 16.08,
-     "end": 18.28,
+     "start": 10.83,
+     "end": 12.89,
      "text": "Führung scheitert selten am Wissen."
     },
     {
-     "start": 18.28,
-     "end": 20.62,
+     "start": 12.89,
+     "end": 15.07,
      "text": "Sie scheitert am Mittwoch um vierzehn"
     },
     {
-     "start": 20.62,
-     "end": 20.87,
+     "start": 15.07,
+     "end": 15.31,
      "text": "Uhr"
     },
     {
-     "start": 20.87,
-     "end": 23.77,
+     "start": 15.31,
+     "end": 18.02,
      "text": "wenn das schwierige Gespräch wirklich ansteht."
     },
     {
-     "start": 23.77,
-     "end": 26.17,
+     "start": 27.78,
+     "end": 30.37,
      "text": "Genau dafür habe ich Leader-OS gebaut."
     },
     {
-     "start": 26.17,
-     "end": 27.18,
+     "start": 30.37,
+     "end": 31.46,
      "text": "Kein Onlinekurs"
     },
     {
-     "start": 27.18,
-     "end": 29.64,
+     "start": 31.46,
+     "end": 34.12,
      "text": "den du abarbeitest und wieder vergisst."
     },
     {
-     "start": 29.64,
-     "end": 30.46,
+     "start": 34.12,
+     "end": 35.0,
      "text": "Kein Chatbot"
     },
     {
-     "start": 30.46,
-     "end": 32.48,
+     "start": 35.0,
+     "end": 37.18,
      "text": "der dir Allgemeinplätze liefert."
     },
     {
-     "start": 32.48,
-     "end": 35.64,
+     "start": 37.18,
+     "end": 40.59,
      "text": "Sondern dein tägliches Betriebssystem für Führung"
     },
     {
-     "start": 35.64,
-     "end": 37.84,
-     "text": "Du beschreibst mir deine Situation"
+     "start": 40.59,
+     "end": 42.98,
+     "text": "Du beschreibst mir deine Situation."
     },
     {
-     "start": 37.84,
-     "end": 40.37,
-     "text": "wir bereiten das Gespräch gemeinsam vor"
+     "start": 42.98,
+     "end": 45.7,
+     "text": "Wir bereiten das Gespräch gemeinsam vor."
     },
     {
-     "start": 40.37,
-     "end": 42.14,
-     "text": "du übst es in der Simulation"
+     "start": 45.7,
+     "end": 47.61,
+     "text": "Du übst es in der Simulation"
     },
     {
-     "start": 42.14,
-     "end": 44.22,
-     "text": "– und in der Video-Analyse siehst"
+     "start": 47.61,
+     "end": 49.45,
+     "text": "– so unbequem wie im echten"
     },
     {
-     "start": 44.22,
-     "end": 44.41,
-     "text": "du"
+     "start": 49.45,
+     "end": 49.86,
+     "text": "Leben."
     },
     {
-     "start": 44.41,
-     "end": 45.86,
+     "start": 49.86,
+     "end": 52.24,
+     "text": "Und in der Video-Analyse siehst du"
+    },
+    {
+     "start": 52.24,
+     "end": 53.81,
      "text": "wie du wirklich wirkst."
     },
     {
-     "start": 45.86,
-     "end": 47.12,
+     "start": 58.62,
+     "end": 59.92,
      "text": "Zehn Minuten am Tag."
     },
     {
-     "start": 47.12,
-     "end": 48.51,
+     "start": 59.92,
+     "end": 61.34,
      "text": "Mit meinen Frameworks"
     },
     {
-     "start": 48.51,
-     "end": 49.71,
+     "start": 61.34,
+     "end": 62.57,
      "text": "mit deinem Kontext"
     },
     {
-     "start": 49.71,
-     "end": 51.16,
+     "start": 62.57,
+     "end": 64.07,
      "text": "mit ehrlichem Feedback."
     },
     {
-     "start": 51.16,
-     "end": 51.98,
+     "start": 64.07,
+     "end": 64.91,
      "text": "Führe besser."
     },
     {
-     "start": 51.98,
-     "end": 52.61,
+     "start": 64.91,
+     "end": 65.56,
      "text": "Jeden Tag."
     },
     {
-     "start": 52.61,
-     "end": 54.25,
-     "text": "Fang heute an – kostenlos."
+     "start": 65.56,
+     "end": 67.57,
+     "text": "Und wenn du erst wissen willst"
+    },
+    {
+     "start": 67.57,
+     "end": 68.8,
+     "text": "wo du heute stehst"
+    },
+    {
+     "start": 68.8,
+     "end": 72.23,
+     "text": "Mach den kostenlosen Leader-Check auf leadercheck.de."
+    },
+    {
+     "start": 72.23,
+     "end": 73.92,
+     "text": "Danach sehen wir uns hier."
     }
    ],
-   "video_bytes": 13655740,
+   "video_bytes": 15895763,
    "published_at": "2026-09-08T11:42:02.886814+00:00",
    "quality": "pro",
    "stale": false,
    "script_approved_at": "2026-09-08T11:03:56.578272+00:00",
    "script_draft_status": "approved",
-   "setting": "studio",
-   "single_take": true,
-   "walk_in": true,
+   "film": "login_film",
+   "music_bed": true,
    "shots": [
     {
      "id": "s1",
+     "type": "talk",
+     "preset": "loft_seated_medium",
+     "screens": [],
+     "text": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_teaser-login_51f306a4.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_teaser-login_23078d88.mp4",
+     "audio_path": "guide/a_s1_teaser-login_dcf0f49b.mp3",
+     "audio_seconds": 17.97,
+     "speech_lead": 0.4,
+     "speech_tail": 0.0,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s2",
      "type": "walk",
-     "preset": "studio_walk_in",
+     "preset": "loft_walk_out",
      "screens": [],
      "text": "",
      "error": null,
      "fal_request": null,
-     "keyframe_path": "guide/kf_s1_teaser-login_643b6a40.png",
-     "raw_path": "guide/raw_s1_teaser-login_361213f7.mp4",
+     "keyframe_path": "guide/kf_s2_teaser-login_1eda28f5.png",
+     "raw_path": "guide/raw_s2_teaser-login_1216550f.mp4",
      "synced_path": null,
      "engine": "kling-2.6-audio"
     },
     {
-     "id": "s2",
+     "id": "s3",
      "type": "talk",
      "preset": "studio_medium",
      "screens": [],
-     "text": "Du führst ein Team. Du triffst jeden Tag Entscheidungen, die andere Menschen betreffen. Aber wer bereitet eigentlich dich vor? Ich bin Wlad. Und nach über tausend Trainings weiß ich: Führung scheitert selten am Wissen. Sie scheitert am Mittwoch um vierzehn Uhr, wenn das schwierige Gespräch wirklich ansteht. Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation, wir bereiten das Gespräch gemeinsam vor, du übst es in der Simulation – und in der Video-Analyse siehst du, wie du wirklich wirkst. Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Fang heute an – kostenlos.",
+     "text": "Genau dafür habe ich Leader-OS gebaut. Kein Onlinekurs, den du abarbeitest und wieder vergisst. Kein Chatbot, der dir Allgemeinplätze liefert. Sondern dein tägliches Betriebssystem für Führung: Du beschreibst mir deine Situation. Wir bereiten das Gespräch gemeinsam vor. Du übst es in der Simulation – so unbequem wie im echten Leben. Und in der Video-Analyse siehst du, wie du wirklich wirkst.",
      "error": null,
      "fal_request": null,
-     "keyframe_path": "guide/kf_s2_teaser-login_6a8a134e.png",
+     "keyframe_path": "guide/kf_s3_teaser-login_32a06a37.png",
      "raw_path": null,
-     "synced_path": "guide/sync_s2_teaser-login_ffa1f1f1.mp4",
-     "audio_path": "guide/a_s2_teaser-login_1a6e38fd.mp3",
-     "audio_seconds": 50.88,
+     "synced_path": "guide/sync_s3_teaser-login_304ddf77.mp4",
+     "audio_path": "guide/a_s3_teaser-login_583fb75e.mp3",
+     "audio_seconds": 26.73,
      "speech_lead": 0.7,
-     "speech_tail": 0.9,
+     "speech_tail": 0.0,
+     "engine": "omnihuman"
+    },
+    {
+     "id": "s4",
+     "type": "walk",
+     "preset": "studio_push_in",
+     "screens": [],
+     "text": "",
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s3_teaser-login_32a06a37.png",
+     "raw_path": "guide/raw_s4_teaser-login_2a13d668.mp4",
+     "synced_path": null,
+     "engine": "kling-2.6-audio",
+     "motion_prompt": null
+    },
+    {
+     "id": "s5",
+     "type": "talk",
+     "preset": "studio_closeup",
+     "screens": [],
+     "text": "Zehn Minuten am Tag. Mit meinen Frameworks, mit deinem Kontext, mit ehrlichem Feedback. Führe besser. Jeden Tag. Und wenn du erst wissen willst, wo du heute stehst: Mach den kostenlosen Leader-Check auf leadercheck.de. Danach sehen wir uns hier.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s5_teaser-login_fc5ac1b9.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s5_teaser-login_68d97060.mp4",
+     "audio_path": "guide/a_s5_teaser-login_a8d1a44d.mp3",
+     "audio_seconds": 17.8,
+     "speech_lead": 0.7,
+     "speech_tail": 1.8,
      "engine": "omnihuman"
     }
    ]
@@ -3431,6 +3497,7 @@
    "free_trial_turns": 3,
    "updated_at": "2026-09-07T12:29:43.875384+00:00",
    "updated_by": "test@test.com"
-  }
+  },
+  "music_bed_path": "guide/music_bed_settings_41a351f9.wav"
  }
 }

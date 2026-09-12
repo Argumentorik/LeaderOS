@@ -9,6 +9,7 @@ import { ChallengerChat } from '../components/challengers/ChallengerChat';
 import { ChallengerResult } from '../components/challengers/ChallengerResult';
 import { cleanText, speakPersona, stopSpeaking } from '../lib/challengerSpeech';
 import api from '../lib/api';
+import { swrGet } from '../lib/swrCache';
 
 export default function ChallengersPage() {
   const { lang } = useLanguage();
@@ -26,10 +27,10 @@ export default function ChallengersPage() {
   const scrollRef = useRef(null);
 
   const loadChallengers = useCallback(async () => {
-    try { const res = await api.get('/challengers'); setChallengers(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/challengers', setChallengers, { onError: (err) => logger.error(err) });
   }, []);
   const loadHistory = useCallback(async () => {
-    try { const res = await api.get('/challengers/history'); setHistory(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/challengers/history', setHistory, { onError: (err) => logger.error(err) });
   }, []);
 
   // Iter 92.48 (Mert · GODMODE): Warm-cache everything the moment the user

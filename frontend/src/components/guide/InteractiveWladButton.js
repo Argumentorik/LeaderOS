@@ -32,16 +32,16 @@ export const InteractiveWladButton = ({ clip, de = true }) => {
     const exhausted = status.trial && status.trial_total > 0;
     return (
       <Link to="/coaching" className="inline-flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground/80 hover:text-foreground transition-colors"
-            title={exhausted ? (de ? 'Deine Test-Gespräche sind aufgebraucht — mit Leader-OS unbegrenzt' : 'Trial used up — unlimited with Leader-OS') : (de ? 'Beta — wird schrittweise freigeschaltet' : 'Beta — rolling out gradually')}
+            title={exhausted ? (de ? 'Deine Test-Gespräche sind aufgebraucht — mit Leader-OS unbegrenzt' : 'Trial used up — unlimited with Leader-OS') : (de ? 'Wird schrittweise freigeschaltet' : 'Rolling out gradually')}
             data-testid={`interactive-wlad-locked-${clip.slug}`}>
         <Lock size={11} /> {de ? 'Mit Wlad sprechen' : 'Talk to Wlad'}
-        <Badge>{exhausted ? (de ? 'TEST AUFGEBRAUCHT · UPGRADE' : 'TRIAL USED · UPGRADE') : 'BETA'}</Badge>
+        <Badge>{exhausted ? (de ? 'TEST AUFGEBRAUCHT · UPGRADE' : 'TRIAL USED · UPGRADE') : (de ? 'BALD' : 'SOON')}</Badge>
       </Link>
     );
   }
-  const label = status.admin_preview ? 'BETA · PREVIEW'
-    : status.trial ? (de ? `BETA · ${status.trial_left} TEST${status.trial_left === 1 ? '' : 'S'}` : `BETA · ${status.trial_left} TRIAL${status.trial_left === 1 ? '' : 'S'}`)
-      : 'BETA';
+  const label = status.admin_preview ? 'PREVIEW'
+    : status.trial ? (de ? `${status.trial_left} TEST${status.trial_left === 1 ? '' : 'S'}` : `${status.trial_left} TRIAL${status.trial_left === 1 ? '' : 'S'}`)
+      : (de ? 'NEU' : 'NEW');
   return (
     <>
       <button type="button" onClick={() => setOpen(true)}

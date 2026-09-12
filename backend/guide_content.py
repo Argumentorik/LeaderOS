@@ -9,7 +9,7 @@ Wortgrenze ist keine Kosmetik: Fal rechnet pro Sekunde Video ab.
 
 SCRIPT_MIN_WORDS = 55
 SCRIPT_MAX_WORDS = 115
-WORD_LIMITS = {"teaser": (6, 150), "onboarding": (70, 150), "feature": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
+WORD_LIMITS = {"teaser": (6, 190), "onboarding": (70, 150), "feature": (70, 150), "mission": (55, 130), "coaching": (70, 170)}
 
 
 def word_limits(kind: str) -> tuple[int, int]:
@@ -174,6 +174,51 @@ SHOT_PRESETS = {
         "speech_start": 0.0,
         "aspect_ratio": "9:16",
     },
+    # Login-Film (Iter 171): Loft -> Dunkelheit -> Spotlight. Start = eigener Keyframe (Wlad steht am Tisch),
+    # Ende = Keyframe des folgenden Studio-Shots (end_image) -> fließender Ortswechsel ohne Schnitt.
+    "loft_walk_out": {
+        "label": "Loft · steht auf und geht ins Dunkel",
+        "kind": "walk",
+        "audio": True,
+        "scene_prompt": (
+            "Scene: a bright modern loft office with warm daylight from tall windows, a wooden table with a laptop, "
+            "green plants. He has just stood up from the chair beside the table and stands upright, turned slightly "
+            "toward a dark open doorway at the back of the room, calm and decisive. Full body visible, feet on the "
+            "floor, wide 16:9 composition, premium Apple-keynote look, Netflix-quality animation film still, 8k render."
+        ),
+        "motion_prompt": (
+            "The man turns and walks calmly away from the table toward the dark doorway at the back. As he walks, the "
+            "warm daylight of the loft fades away and the room falls into darkness; then a single hard spotlight "
+            "switches on ahead of him and he steps into the cone of light and turns to face the camera, ending framed "
+            "from the waist up in a dark studio with volumetric haze. One continuous smooth camera move following him, "
+            "no cuts, consistent character and outfit, cinematic, realistic motion."
+        ),
+        "ambience_prompt": (
+            "calm footsteps of leather shoes on a wooden floor becoming footsteps on a polished studio floor, "
+            "quiet room tone, a soft click of a stage spotlight switching on, subtle deep cinematic ambience, no speech, no music"
+        ),
+        "duration": "10",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
+    "studio_push_in": {
+        "label": "Studio · langsame Fahrt nah heran",
+        "kind": "walk",
+        "audio": True,
+        "keyframe_from": "prev",  # Start = Keyframe des vorigen Studio-Shots, Ende = Close-up des nächsten
+        "scene_prompt": "",
+        "motion_prompt": (
+            "Very slow, steady cinematic dolly-in toward the man standing in the single spotlight; he stays still, "
+            "breathes calmly, holds eye contact with the camera with a focused, warm expression. The framing tightens "
+            "from waist-up to a close-up of his face and shoulders. The lighting stays exactly the same the whole time: "
+            "one soft spotlight from above, pitch-black background, no new lights, no light rays, no sparkles, no "
+            "flashes, no fog change. No cuts, no speech, consistent character and outfit."
+        ),
+        "ambience_prompt": "very quiet studio room tone, subtle low cinematic hum, no speech, no music",
+        "duration": "5",
+        "speech_start": 0.0,
+        "aspect_ratio": "16:9",
+    },
     "loft_walk_in": {
         "label": "Loft-Büro · Walk-in",
         "kind": "walk",
@@ -334,7 +379,7 @@ TALK_TAIL_SECONDS = 1.8   # Sprech-Ausklang (Iter 169): Wlad hält den Blick, da
 
 # Verabschiedungs-Karte je Clip (Iter 169): Abschiedssatz + nächster Schritt. Fallback für alle anderen Clips.
 FAREWELLS = {
-    "teaser-login": ("Fang heute an.", "Kostenlos starten → leader-os.de"),
+    "teaser-login": ("Fang heute an.", "Kostenlos starten · leadercheck.de"),
     "start-1-willkommen": ("Wir sehen uns gleich.", "Weiter → So sprichst du mit mir"),
     "start-2-so-sprichst-du": ("Ich lese mit.", "Jetzt → Schreib mir deine Situation im Chat"),
     "start-3-kontext": ("Ich warte hier auf dich.", "Jetzt → Deinen Kontext ausfüllen"),
@@ -375,6 +420,30 @@ TALK_LEAD_AFTER_WALK_SECONDS = 0.7  # nach dem Ankommen kurz stehen und schauen,
 
 def walk_in_plan(setting: str = "studio") -> list[dict]:
     return [{"type": "walk", "preset": WALK_IN_PRESETS.get(setting, WALK_IN_PRESETS["studio"])}, *single_take_plan(setting)]
+
+
+# Film-Pläne (Iter 171): Absätze des Skripts (Leerzeile) werden der Reihe nach auf die Talk-Shots verteilt.
+FILM_PLANS = {
+    "login_film": [
+        {"type": "talk", "preset": "loft_seated_medium"},
+        {"type": "walk", "preset": "loft_walk_out"},
+        {"type": "talk", "preset": "studio_medium"},
+        {"type": "walk", "preset": "studio_push_in"},
+        {"type": "talk", "preset": "studio_closeup"},
+    ],
+}
+FILM_CARD_SECONDS = {"login_film": 4.5}
+
+
+def film_shots(script: str, plan_name: str) -> list[dict]:
+    plan = FILM_PLANS[plan_name]
+    paragraphs = [" ".join(p.split()) for p in script.split("\n\n") if p.strip()]
+    talks = [i for i, s in enumerate(plan) if s["type"] == "talk"]
+    if len(paragraphs) != len(talks):
+        raise ValueError(f"Film {plan_name}: {len(talks)} Sprech-Kapitel erwartet, {len(paragraphs)} Absätze im Skript")
+    texts = dict(zip(talks, paragraphs))
+    return [{"id": f"s{i + 1}", "type": s["type"], "preset": s["preset"], "screens": [], "text": texts.get(i, "")}
+            for i, s in enumerate(plan)]
 FRAMES = {"16:9": (1280, 720), "9:16": (720, 1280)}
 
 
@@ -480,10 +549,13 @@ def _single_take_shots(script: str, setting: str | None, walk_in: bool) -> list[
 
 
 def plan_shots(script: str, screens: list[str] | None = None, pro: bool = False, setting: str | None = None,
-               single_take: bool = False, walk_in: bool = False) -> list[dict]:
+               single_take: bool = False, walk_in: bool = False, film: str | None = None) -> list[dict]:
     """Verteilt den Sprechtext: erster Talk-Shot = Anfang, letzter Talk-Shot = Ende,
     B-Roll bekommt den Rest in der Mitte. pro = längere Talk-Passagen (OmniHuman, kein 10-s-Limit).
-    setting = Präsenz-Plan ohne Walk-in ("loft" | "studio"). walk_in = Single-Take mit Walk-in davor."""
+    setting = Präsenz-Plan ohne Walk-in ("loft" | "studio"). walk_in = Single-Take mit Walk-in davor.
+    film = benannter Film-Plan (Kapitel = Absätze des Skripts)."""
+    if film:
+        return film_shots(script, film)
     if single_take:
         return _single_take_shots(script, setting, walk_in)
     plan = presence_plan(setting) if setting else (MULTI_SHOT_PLAN_PRO if pro else MULTI_SHOT_PLAN)
@@ -683,7 +755,12 @@ MISSION_CLIPS = [
 
 def _clip(slug: str, kind: str, order: int, title: str, script: str, **extra) -> dict:
     return {"slug": slug, "kind": kind, "ref": extra.pop("ref", None), "order": order, "title": title,
-            "script": " ".join(script.split()), **extra}
+            "script": normalize_script(script), **extra}
+
+
+def normalize_script(text: str) -> str:
+    """Whitespace glätten, Absätze (Leerzeile = Film-Kapitel) erhalten."""
+    return "\n\n".join(" ".join(p.split()) for p in text.split("\n\n") if p.strip())
 
 
 def seed_clips() -> list[dict]:
@@ -695,7 +772,7 @@ def seed_clips() -> list[dict]:
     LOGIN_TEASER["script"] = GODMODE_SCRIPTS.get("teaser-login", LOGIN_TEASER["script"])
     clips = [_clip(c["slug"], "teaser", c["order"], c["title"], c["script"], shot_preset=c["shot_preset"]) for c in TEASER_CLIPS]
     clips.append(_clip(LOGIN_TEASER["slug"], "teaser", LOGIN_TEASER["order"], LOGIN_TEASER["title"], LOGIN_TEASER["script"],
-                       multi_shot=True, aspect="9:16", single_take=True, walk_in=True, setting="studio"))
+                       multi_shot=True, aspect="16:9", film="login_film", music_bed=True))
     clips += [_clip(c["slug"], "onboarding", c["order"], c["title"], c["script"], aspect="16:9", single_take=True) for c in ONBOARDING_CLIPS]
     # Iter 169: Missionen = ein Take, nur Wlad, dunkles Studio, keine B-Roll
     clips += [_clip(f"mission-day-{c['day']}", "mission", 100 + c["day"], c["title"],
