@@ -1,0 +1,27 @@
+{
+  "summary": "Iter 179 Frontend-only Smoke: Alle vier Themen sichtbar & funktional. LeaderCheckStart (Einstieg ohne Diagnose) rendert korrekt, Popup öffnet leadercheck.de/?email=... exakt. Wlad-Overlay öffnet, Vorschlag → KI-Antwort → [interactive-wlad-turn-0] mit Zitat, Kopieren-Button, ESC schließt. Admin-Kurs-Folgen-Video-Feld: ungültiger Vimeo-Link liefert deutsche Fehlermeldung und wird NICHT gespeichert; gültiger Link 347119375 wird sofort LIVE; Poster-Sekunde speichert ohne Fehler. Admin-Guide-Clip zeigt drei Quellen (Generiert LIVE / Vimeo / Eigenes Video), Poster-Sekunde-Feld, Download-Link liefert HTTP 200 mit Content-Disposition attachment. Thumbnails: keine gebrochenen Bilder auf /video-guide, /kurse, /kurse/rhetorik-grundlagen (16:9-Kacheln laden). Login-Teaser (login-teaser-video/login-teaser-vimeo) vorhanden. Kein horizontaler Overflow auf 1920x1080 und 390x844.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "LeaderCheckStart Fetch (iter179-ui@wladbot-testing.de)", "issue": "Nach Klick auf [leadercheck-fetch-btn] erscheint KEIN Text in [leadercheck-note] (Element wird nicht gerendert). Kein roter Toast, kein sichtbarer Zustandshinweis für den Nutzer, dass noch nichts gefunden wurde. Backend-Response führt vermutlich weder zu 'synced'/'local_data' noch zum Note-Setzen (evtl. andere Status-Werte wie 'pending'/'no_email_match'). Priorität MEDIUM — im Spec explizit gefordert.", "affected_selectors": ["[data-testid=leadercheck-note]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_iter179_video_field.py"],
+  "action_items": [
+    "LeaderCheckStart: sicherstellen, dass NACH einem Klick auf [leadercheck-fetch-btn] immer entweder (a) Ansicht wechselt (Diagnose gefunden) ODER (b) [leadercheck-note] mit verständlichem Text erscheint. Aktuell bleibt der Nutzer ohne Rückmeldung. Wahrscheinlich behandelt der Check-Handler bestimmte Response-Status nicht.",
+    "OPTIONAL: /dashboard zeigt für standard@wladbot.test weder [guide-clips-row] noch [mission-guide-thumb]. Falls die neuen Thumbnails hier sichtbar sein SOLLEN, bitte prüfen (evtl. an Bedingung 'has_diagnosis' geknüpft)."
+  ],
+  "critical_code_review_comments": [
+    "InteractiveWladOverlay: onScroll setzt atBottom=true nur binnen 80px; auf sehr kurzem Client-Höhe (scrollH==clientH) trotzdem OK.",
+    "LeaderCheckStart: 'silent'-Nachcheck bei window focus feuert nur einmal (autoCheckedRef) — bei mehrfachem Rückkehren ins Tab wird kein Retry ausgelöst. Bei realistischem Nutzerflow (Nutzer schließt Check-Tab, kommt zurück, öffnet erneut) kein automatischer Refresh."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped)", "frontend": "95%"},
+  "test_credentials": "test@test.com/test123 (admin+free), iter179-ui@wladbot-testing.de/GoLive2026x! (no diagnosis), standard@wladbot.test/test123 (no diagnosis in preview)",
+  "seed_data_creation": "Admin-Änderung: Kurs-Folge rhetorik-grundlagen-5 (Schwarze Rhetorik erkennen) hat jetzt Vimeo-Link 347119375 mit poster-at=2 gesetzt. Bitte zurücksetzen, falls unerwünscht.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend-Status: Alle Iter179-pytest bestätigt grün laut Vorgabe. UI-Änderungen von Iter179 sind in der Preview live. Login-Flow: Cookie 'Nur notwendige' klicken, dann Tab 'Passwort', dann Anmelden. Admin-URL /wlad-control-x7k9q2, teuere Guide-Sektion ganz unten. Kurs-Folgen-Sektion ist die 'Kurs-Folgen · Video'-Sub-Sektion."
+}

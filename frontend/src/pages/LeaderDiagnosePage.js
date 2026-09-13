@@ -23,6 +23,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { shareToLinkedIn, shareToX, shareNative } from '../lib/share';
 import { toast } from 'sonner';
 import { LEADERCHECK_URL } from '../lib/domains';
+import { LeaderCheckStart } from '../components/diagnose/LeaderCheckStart';
 
 const LAYER_META = {
   ki_kompetenz: {
@@ -240,6 +241,25 @@ export default function LeaderDiagnosePage() {
   }
 
   const overall = data?.overall_score || 0;
+  if (!data?.has_diagnosis) {
+    return (
+      <DashboardLayout>
+        <div className="min-h-screen bg-[#0A0A0A]" data-testid="leader-diagnose-page">
+          <div className="mx-auto max-w-4xl px-6 pt-8 pb-16 lg:px-12">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="mb-8 flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-white/80"
+              data-testid="back-to-dashboard-btn"
+            >
+              <ArrowLeft size={16} /> Dashboard
+            </button>
+            <LeaderCheckStart de={de} email={user?.email || ''} onFound={load} />
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const ki = data?.ki_kompetenz || 0;
   const rhet = data?.boardroom_rhetorik || 0;
   const eq = data?.strategisches_eq || 0;

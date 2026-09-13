@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Play, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../../lib/api';
 import { takeSlice } from '../../lib/dashboardBootstrap';
 import logger from '../../lib/logger';
 import { GuideVideoPlayer } from './GuideVideoPlayer';
+import { VideoThumb } from '../shared/VideoThumb';
 
-const base = process.env.REACT_APP_BACKEND_URL;
 
 /**
  * Iter 145: Wlads Guide auf dem Dashboard — die freigegebenen Onboarding-Clips
@@ -53,13 +53,10 @@ export const GuideClipsRow = ({ de = true }) => {
                 className={`group relative rounded-xl overflow-hidden border text-left transition-all duration-300 hover:-translate-y-0.5 ${active?.slug === c.slug ? 'border-[#BFFF00] shadow-[0_0_0_3px_rgba(191,255,0,0.25)]' : 'border-black/[0.07] dark:border-white/[0.08]'}`}
                 data-testid={`guide-clip-thumb-${c.slug}`}
               >
-                <div className="aspect-video bg-black relative">
-                  {c.poster_url && <img src={`${base}${c.poster_url}`} alt="" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />}
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="h-9 w-9 rounded-full bg-[#BFFF00] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><Play size={14} fill="currentColor" /></span>
-                  </span>
-                  {c.seen && <span className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-black/70 text-[#BFFF00] flex items-center justify-center"><Check size={11} /></span>}
-                </div>
+                <VideoThumb
+                  src={c.poster_url} title={c.title} kicker={de ? 'Wlads Guide' : "Wlad's guide"}
+                  duration={c.duration_seconds_video} seen={c.seen}
+                />
                 <div className="px-2 py-1.5">
                   <p className="text-[10px] text-muted-foreground">{i + 1} · {c.duration_seconds_video ? `${Math.round(c.duration_seconds_video)} s` : ''}</p>
                   <p className="text-[11.5px] font-semibold text-foreground leading-tight line-clamp-2">{c.title}</p>

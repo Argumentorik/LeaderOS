@@ -6,6 +6,7 @@ import { MasterclassClientsManager } from './MasterclassClientsManager';
 import { ConversionCenter } from './ConversionCenter';
 import { LiveTestPanel } from './LiveTestPanel';
 import { GuideStudio } from './GuideStudio';
+import { CourseEpisodesManager } from './CourseEpisodesManager';
 import { PageLoadOverview } from './PageLoadOverview';
 
 /* Titled admin tool sections, rendered in this order below the overview cards. */
@@ -33,6 +34,12 @@ const SECTIONS = [
     de: 'Onboarding-, Mission- und Social-Clips mit dem 3D-Wlad. Reihenfolge: Skript speichern → Stimme → Keyframe prüfen → Cinematic rendern → Freigeben. Nichts wird Nutzern gezeigt, bevor du freigibst.',
     en: 'Onboarding, mission and social clips with the 3D Wlad. Order: save script → voice → check keyframe → render cinematic → publish. Nothing is shown to users before you approve.',
     render: () => <GuideStudio />,
+  },
+  {
+    key: 'course-videos', title: (de) => (de ? 'Kurs-Folgen · Video (Vimeo oder Upload)' : 'Course Episodes · Video (Vimeo or Upload)'),
+    de: 'Pro Folge Vimeo-Link einfügen oder eigenes Video hochladen (MP4/MOV bis 2 GB, Fortschritt sichtbar). Sofort live. Vorschaubild per Sekunde wählbar, Download für Detailarbeit außerhalb.',
+    en: 'Per episode: paste a Vimeo link or upload your own video (MP4/MOV up to 2 GB with progress). Live instantly. Pick the thumbnail second, download for external editing.',
+    render: () => <CourseEpisodesManager />,
   },
   {
     key: 'videos', title: (de) => (de ? 'Lernvideos · Vimeo-Verwaltung' : 'Learning Videos · Vimeo Manager'),

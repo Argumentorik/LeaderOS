@@ -21,7 +21,8 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
 
   if (!clip) return null;
 
-  const hasVideo = Boolean(clip.video_url) && !videoBroken;
+  const hasVideo = (Boolean(clip.video_url) || Boolean(clip.vimeo_id)) && !videoBroken;
+  const isVimeo = clip.video_kind === 'vimeo' && Boolean(clip.vimeo_id);
 
   const markSeen = async () => {
     if (seenSentRef.current) return;
@@ -40,6 +41,20 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
     <div className={`rounded-2xl border border-black/[0.07] dark:border-white/[0.08] bg-white dark:bg-card overflow-hidden ${compact ? '' : 'shadow-sm'}`}
          data-testid={`guide-clip-${clip.slug}`}>
       {hasVideo ? (
+        isVimeo ? (
+          <div className="bg-black aspect-video" data-testid={`guide-vimeo-${clip.slug}`}>
+            <iframe
+              src={`https://player.vimeo.com/video/${clip.vimeo_id}?badge=0&autopause=0&dnt=1&title=0&byline=0&portrait=0`}
+              title={clip.title}
+              loading="lazy"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="w-full h-full"
+              onLoad={markSeen}
+            />
+          </div>
+        ) : (
         <div className="relative bg-black aspect-video">
           <video
             ref={videoRef}
@@ -72,6 +87,7 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
             </button>
           )}
         </div>
+        )
       ) : (
         <div className="px-5 pt-5" data-testid={`guide-text-fallback-${clip.slug}`}>
           <p className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-muted-foreground mb-2">

@@ -7,6 +7,8 @@ import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
 import { InteractiveWladButton } from '../components/guide/InteractiveWladButton';
 import { CATEGORY_META, LEVEL_LABEL, askWladPrefill, t } from '../components/courses/courseMeta';
+import { VideoThumb } from '../components/shared/VideoThumb';
+import { VideoPlayer } from '../components/shared/VideoPlayer';
 
 const Chip = ({ children }) => (
   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 text-[11px] font-semibold">{children}</span>
@@ -34,7 +36,7 @@ const Player = ({ ep, course, de, navigate }) => {
   if (!ep.unlocked) {
     return (
       <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-locked">
-        <img src={course.thumbnail_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+        <div className="absolute inset-0 opacity-40"><VideoThumb src={ep.poster_url || course.thumbnail_url} title={course.title} showPlay={false} /></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
           <span className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"><Lock size={20} className="text-[#BFFF00]" /></span>
           <p className="font-black mt-3">{de ? `Teil von ${course.tier_label}` : `Part of ${course.tier_label}`}</p>
@@ -47,11 +49,18 @@ const Player = ({ ep, course, de, navigate }) => {
     );
   }
   if (ep.video_url) {
-    return <video key={ep.id} src={ep.video_url} controls autoPlay playsInline poster={course.thumbnail_url} className="w-full rounded-2xl bg-black aspect-video" data-testid="course-episode-video" />;
+    const poster = ep.poster_url
+      ? (/^https?:/.test(ep.poster_url) ? ep.poster_url : `${process.env.REACT_APP_BACKEND_URL}${ep.poster_url}`)
+      : course.thumbnail_url;
+    return (
+      <div data-testid="course-episode-video">
+        <VideoPlayer key={ep.id} src={ep.video_url} vimeoId={ep.vimeo_id || undefined} poster={poster} title={ep.title} autoplay />
+      </div>
+    );
   }
   return (
     <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-pending">
-      <img src={course.thumbnail_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+      <div className="absolute inset-0 opacity-60"><VideoThumb src={ep.poster_url || course.thumbnail_url} title={course.title} showPlay={false} /></div>
       <p className="absolute bottom-5 left-5 right-5 text-white text-[13px] font-semibold">
         {de ? 'Wlad nimmt diese Folge gerade auf. Du bekommst sie automatisch, sobald sie da ist.' : 'Wlad is recording this episode. It unlocks here automatically.'}
       </p>
@@ -101,7 +110,7 @@ export default function CourseDetailPage() {
 
       <header className="mt-4 rounded-3xl bg-[#0A0A0A] text-white overflow-hidden grid lg:grid-cols-[1.1fr_1fr]" data-testid="course-header">
         <div className="relative aspect-video lg:aspect-auto lg:min-h-[280px]">
-          <img src={course.thumbnail_url} alt={course.title} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0"><VideoThumb src={course.thumbnail_url} title={course.title} kicker={de ? 'Kurs' : 'Course'} showPlay={false} className="!h-full !aspect-auto" /></div>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0A0A0A]/40 hidden lg:block" />
         </div>
         <div className="p-6 sm:p-8 flex flex-col min-w-0">

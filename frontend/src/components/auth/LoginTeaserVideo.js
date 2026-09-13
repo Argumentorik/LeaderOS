@@ -67,6 +67,22 @@ export const LoginTeaserVideo = ({ de = true, onAvailable, onStartRegister, comp
   }, [onStartRegister]);
 
   if (!clip) return null;
+  // Iter 179: Teaser als Vimeo-Link hinterlegt → Vimeo-Player statt <video> (Autoplay/Blende entfallen).
+  if (clip.video_kind === 'vimeo' && clip.vimeo_id) {
+    return (
+      <div className={compact ? 'w-full' : 'w-full max-w-[560px]'} data-testid={compact ? 'login-teaser-compact' : 'login-teaser'}>
+        <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/[0.1] bg-black" data-testid="login-teaser-frame">
+          <iframe
+            src={`https://player.vimeo.com/video/${clip.vimeo_id}?badge=0&autopause=0&dnt=1&title=0&byline=0&portrait=0`}
+            title={clip.title} loading="lazy" allowFullScreen className="h-full w-full"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            data-testid="login-teaser-vimeo"
+          />
+        </div>
+      </div>
+    );
+  }
 
   const openLightbox = () => { videoRef.current?.pause(); setOpen(true); };
   const closeLightbox = () => { setOpen(false); const v = videoRef.current; if (v) { v.muted = true; setMuted(true); v.play().catch(() => {}); } };

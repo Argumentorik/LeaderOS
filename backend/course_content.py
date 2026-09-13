@@ -210,8 +210,13 @@ def course_view(course: dict, user_tier: str, videos: dict[str, dict]) -> dict:
             "id": ep_id, "number": i, **e, "free_preview": i == 1,
             "unlocked": i == 1 or unlocked_course,
             "video_url": vid.get("video_url") if (i == 1 or unlocked_course) else None,
+            "vimeo_id": vid.get("vimeo_id") if (i == 1 or unlocked_course) else None,
             "video_ready": bool(vid.get("video_url")),
             "video_updated_at": vid.get("updated_at"),
+            "poster_url": (
+                f"/api/courses/episodes/{ep_id}/poster?v={vid.get('poster_at') or 0}" if vid.get("storage_path")
+                else vid.get("vimeo_thumbnail")
+            ),
         })
     first_url = eps[0]["video_url"] or ""
     return {

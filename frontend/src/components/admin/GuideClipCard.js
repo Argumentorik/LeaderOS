@@ -8,6 +8,7 @@ import logger from '../../lib/logger';
 import { GuideShotList } from './GuideShotList';
 import { GuidePreviewPanel } from './GuidePreviewPanel';
 import { GuideClipActions, GuideGodmodeBadges, GuideClipPreview } from './GuideClipParts';
+import { VideoSourcePanel } from './VideoSourcePanel';
 
 const STATUS_LABEL = {
   full_running: 'Produktion läuft…', full_failed: 'Produktion fehlgeschlagen',
@@ -90,6 +91,7 @@ export const GuideClipCard = ({ clip, costs, screens = {}, onChange }) => {
               </div>
             )}
             <GuideClipActions clip={clip} costs={costs} busy={busy} running={running} wordsOk={wordsOk} onSave={save} onStage={stage} onPublish={publish} />
+            <VideoSourcePanel kind="guide" id={clip.slug} data={clip} onChanged={onChange} />
             {clip.multi_shot && <GuideShotList clip={clip} costs={costs} screens={screens} onChange={onChange} />}
             {clip.multi_shot && <GuidePreviewPanel clip={clip} base={base} busy={busy} onStage={stage} onApprove={approvePreview} onDiscard={discardPreview} />}
             {(err || clip.error) && <p className="text-[11px] text-rose-500" data-testid={`guide-clip-error-${clip.slug}`}>{err || clip.error}</p>}

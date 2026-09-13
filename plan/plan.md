@@ -1,59 +1,97 @@
-# Plan (neu): Login-Video sparsam reparieren, saubere Enden, Thumbnails überall, Links & Navigation
+# Plan: Leader-Diagnose-Einstieg, „Mit Wlad sprechen“, Video-Verwaltung im Admin, Thumbnails
 
-Leitlinie: **Keine komplette Neuaufnahme.** Nur die Stellen neu rendern, die wirklich fehlerhaft sind; alles andere aus vorhandenem Material verbessern (kostenlos).
+Vier Themen aus der Nachricht, in dieser Reihenfolge umgesetzt.
 
 ---
 
-## 1. Login-Video (76 s, 3 Kapitel) – gezielte Reparatur
+## 1. Leader-Diagnose: Einstieg für Nutzer ohne Leader-Check
 
-Befund: Kapitel 1 (Loft, Walk-in) ist gut und bleibt **unangetastet**. Zwei Fehler liegen in Kapitel 2 und 3:
+**Heute**: `/leader-diagnose` zeigt auch ohne vorhandene Diagnose die volle Seite — Ring-Score, 3 Layer, Dimensionen. Ohne Daten stehen dort abgeleitete oder Null-Werte. Der Weg zu leadercheck.de existiert nur versteckt: als Aktion in einer Hinweis-Meldung, die erst nach einem Klick auf „Mit leadercheck.de syncen“ erscheint.
 
-| Fehler | Wo | Maßnahme | Kosten |
-|---|---|---|---|
-| „im echten Leben“ wird als „I-M“ buchstabiert | Kapitel 2 (Studio) – Satz „so unbequem wie im echten Leben“ | Satz umformulieren zu „so unbequem wie das echte Leben“ (kein „im“ mehr, das die Stimme als Abkürzung liest). Ton für Kapitel 2 neu erzeugen, Kapitel-2-Take neu rendern (~22 s) | ca. 6–8 $ |
-| Lip-Sync wird zum Schluss schlechter | Kapitel 3 (Studio nah, ~15 s) | Kapitel-3-Take neu rendern, kurz gehalten (unter 20 s), ohne Verlängerung durch Standbild/Loop | ca. 5–7 $ |
-| Ende abgehackt/abrupt | Übergang Kapitel 3 → Abschiedskarte | Ausklang beim Zusammensetzen: 0,5 s Ruhe nach dem letzten Wort, 0,8 s Bild- und Ton-Abblende, dann Karte | 0 $ |
+**Neu**: Wer noch keine Diagnose hat, sieht statt der Zahlen eine eigene Startansicht:
 
-- Zusatzregel gegen Lip-Sync-Drift: Kein Take wird durch Wiederholen oder Einfrieren von Bildern verlängert, um Ton zu füllen. Ton bestimmt die Länge; Video endet mit dem Ton.
-- Musikbett, Abschiedskarte mit QR-Code, Untertitel und Kapitel 1 bleiben exakt wie freigegeben.
-- Ablauf: Erst Kapitel 2 + 3 als Vorschau rendern, Sichtprüfung der letzten 10 Sekunden, dann zusammensetzen und freigeben. Das alte Video bleibt online, bis das neue freigegeben ist.
-- **Gesamtkosten: ca. 12–15 $.** Günstigere Variante (nur Kapitel 3, ca. 5–7 $) ließe „I-M“ bestehen – daher nicht empfohlen.
+- Kurze Erklärung, was der Leader-Check ist und was er in Leader-OS auslöst (personalisierte Reise, Fokus in der Challenge, Wlads Kontextwissen) — also warum sich die 5 Minuten lohnen.
+- Großer Hauptbutton **„Leader-Check auf leadercheck.de starten“** (öffnet in neuem Tab).
+- Darunter ein zweiter Schritt **„Ergebnis jetzt holen“**: holt die Diagnose per Sync. Findet sich nichts, bleibt eine verständliche Erklärung stehen statt einer Fehlermeldung (z. B. „Noch nichts unter deiner E-Mail gefunden — schließe den Check ab und tippe hier erneut.“).
+- Erkennbar, mit welcher E-Mail gesucht wird, damit ein Nutzer merkt, wenn er den Check mit einer anderen Adresse gemacht hat.
+- Die E-Mail wird beim Sprung auf leadercheck.de mitgegeben, damit das Ergebnis zuverlässig zurückfindet. Sollte leadercheck.de diesen Parameter nicht auswerten, entfällt nur diese Bequemlichkeit; der Rest funktioniert unverändert.
+- Rückkehr aus dem anderen Tab: beim erneuten Fokussieren des Fensters wird einmal still nachgesehen, ob inzwischen ein Ergebnis vorliegt — liegt es vor, wechselt die Seite ohne Klick in die volle Diagnose-Ansicht.
 
-## 2. Saubere Enden bei allen anderen Clips – ohne Neuaufnahme
-- „So sprichst du mit der KI“ (Clip 2) und alle weiteren Erststart-, Missions- und Feature-Clips bekommen denselben Ausklang (0,5 s Ruhe, 0,8 s Blende) – zusammengesetzt aus den vorhandenen Takes, **0 $**.
-- „Willkommen bei Leader-OS“ wird **nicht** neu aufgenommen (der Lip-Sync-Befund betraf das Login-Video).
-- Wo ein Roh-Take nicht mehr vorliegt, bleibt der Clip unverändert (kein Render „aus Prinzip“); diese Fälle werden gelistet.
+Wer eine Diagnose hat, sieht die Seite unverändert wie heute.
 
-## 3. Thumbnails überall
-- Jeder Clip bekommt ein echtes Vorschaubild aus dem fertigen Video (Standbild mit Wlads Gesicht, nicht die erste schwarze/Blenden-Sekunde). Erzeugung aus der vorhandenen Datei, **0 $**, einmalig gespeichert.
-- Sichtbar an allen Stellen: Video-Guide-Kacheln, **Missions-Briefings in der 30-Tage-Challenge**, Dashboard-Video-Reihe, Login-Video (Vorschaubild vor dem Abspielen), Kurse-Bereich, Admin-Guide-Studio.
-- Fehlt ein Bild, wird es beim ersten Aufruf automatisch aus dem Video gezogen – nie mehr eine leere/graue Kachel oder ein Platzhalter.
-- Vorschaubilder werden wie die Videos mit einer Versionskennung ausgeliefert, damit nach einem Neu-Render nie ein altes Bild aus dem Browser-Cache erscheint.
+Derselbe Einstieg wird überall dort angeboten, wo heute ins Leere verlinkt wird (Dashboard-Hinweis „Diagnose“, „Nächster Schritt“ unter den Guide-Videos), damit es nur einen Weg gibt.
 
-## 4. Navigation
-- „Video-Guide“ rückt in der linken Navigation direkt unter „Dashboard“ (Position 2), Desktop und mobil.
+---
 
-## 5. Links direkt unter den Videos (Video-Guide)
-Unter dem Player eine sichtbare Zeile „Nächster Schritt“ mit einem Button – auch während das Video läuft:
+## 2. „Mit Wlad sprechen“ (u. a. bei den Leadership Playbooks) — lesbar und ruhiger
 
-| Clip | Button | Ziel |
-|---|---|---|
-| Willkommen bei Leader-OS | „Leader-Diagnose starten“ | Leader-Diagnose |
-| Kontext ist alles | „Kontext zu dir & deiner Rolle eintragen“ | Profil, Abschnitt Kontext/Über mich (Rolle, Team, Baustellen) – scrollt direkt dorthin |
-| Missions-Briefings Tag 1–7 | „Zur 30-Tage-Challenge“ | 30-Tage-Challenge-Werkzeug |
+**Heute**: Vollbild-Overlay. Oben Titelzeile, in der Mitte ein sehr großer Avatar (bis 224 px), darunter Status, Vorschlagsfragen und erst dann die Antwort in einem Bereich, der auf ein Drittel der Fensterhöhe begrenzt ist — ohne Abstand nach unten, direkt an den Sprachsteuerungs-Buttons. Auf Laptops und Handys bleibt für die eigentliche Antwort sehr wenig Platz; das Ende des Textes klebt am Rand und ist schwer zu lesen.
 
-## 6. 30-Tage-Challenge ↔ Video-Guide
-- Video-Guide: Sektion heißt „30-Tage-Challenge · Briefings Tag 1–7“; die Überschrift ist klickbar und führt zum Werkzeug.
-- Werkzeug 30-Tage-Challenge: Das Tages-Briefing (mit Thumbnail) steht direkt unter der Tages-Aufgabe, mit Link „Alle Briefings im Video-Guide“.
+**Neu** — dasselbe Gespräch, andere Gewichtung:
 
-## 7. Audio-Mode
-- Der Kernfehler (Antwort bis 50 s → Abbruch) ist bereits behoben; wirkt auf leaderos.de nach dem nächsten Deploy (Stimme < 1 s, Gesprächsschritt 3–5 s).
-- Zusätzlich: Sprechpause 5 s → 2 s (Tipp auf den Orb sendet sofort); Zustände „Ich höre zu“ → „WladBot denkt nach“ → „WladBot spricht“ sichtbar; Fehlerbild „ausgeloggt/eingeloggt“ wird auf leaderos.de mit Mikrofon nachgestellt und – falls noch vorhanden – behoben.
+- **Antwort ist der Hauptdarsteller**: Der Textbereich bekommt den größten Teil der Fläche und echten Abstand nach unten (kein Text mehr direkt an den Buttons), damit der letzte Satz immer vollständig lesbar ist.
+- **Avatar wird kompakter, sobald gesprochen wird**: Beim Start groß und einladend; sobald die erste Antwort kommt, rückt er als kleinerer Kopf nach oben. Sprech-Ring und Pegel bleiben, nur kleiner.
+- **Frage und Antwort klar getrennt**: Frage als Zitat, Antwort in größerer, ruhig gesetzter Schrift mit mehr Zeilenabstand; mehrere Absätze werden als Absätze dargestellt statt als Textblock.
+- **Neue Antwort wird nicht verpasst**: sanftes Einblenden, automatisches Nachscrollen nur, wenn man unten ist; sonst erscheint „Neue Antwort ↓“.
+- **Lesehilfen**: Antwort kopieren; Verlauf des Gesprächs nach oben scrollbar; Vorschlagsfragen rutschen nach dem ersten Wortwechsel in eine schmale Zeile, statt Platz zu belegen.
+- **Handy**: eigene Aufteilung (Avatar klein oben, Text scrollt darunter, Steuerung unten mit Sicherheitsabstand zur Home-Leiste). Text bleibt auch bei langer Antwort vollständig erreichbar.
+- **Status bleibt sichtbar** („Ich höre dir zu…“, „Wlad denkt nach…“, „Wlad spricht“) — nur dezenter, direkt am Avatar.
+- Hinweis „Noch X Test-Gespräche“ und der Upgrade-Weg bleiben unverändert, nur besser platziert.
+
+Funktion, Kosten und Sprachlogik bleiben identisch — es ändert sich nur die Darstellung. Da dieses Overlay überall gleich verwendet wird (Playbooks, Video-Guide, Missionen, Features), wirkt die Verbesserung an allen Stellen.
+
+---
+
+## 3. Videos im Admin: Vimeo-Link oder eigenes Video hochladen — und herunterladen
+
+Ein **einheitliches Video-Feld** für beide Welten: Wlad-Guide-Clips (Video-Guide, Missions-Briefings, Login-Teaser, Feature-Clips) und Kurs-Folgen.
+
+Pro Video drei Quellen, sichtbar als Auswahl mit Kennzeichnung, welche gerade live ist:
+
+1. **Generiert** (wie heute, nur bei Guide-Clips)
+2. **Vimeo-Link** (Link oder ID einfügen)
+3. **Eigenes Video hochgeladen**
+
+Verhalten:
+
+- **Sofort live**: Sobald ein Link gesetzt oder ein Upload fertig ist, sehen Nutzer dieses Video. Das generierte Video bleibt gespeichert und ist per Klick wieder aktivierbar („Zurück zum generierten Video“) — nichts wird überschrieben oder gelöscht.
+- **Upload großer Dateien**: Videos werden in Stücken hochgeladen, mit Fortschritt in Prozent und Phase („Lädt 43 %“ → „Wird geprüft“ → „Fertig“). Abbrechen und Fortsetzen möglich. Erlaubt: MP4 und MOV bis 2 GB je Datei.
+- **Nach dem Upload** wird Dauer erkannt, ein Vorschaubild erzeugt und die Adresse frisch versioniert, damit alle Nutzer sofort das neue Video sehen (kein Browser-Cache-Problem wie zuletzt).
+- **Fehlerfälle in Klartext**: falsches Format, zu groß, Verbindung abgebrochen, Vimeo-Link privat/nicht abspielbar — jeweils mit dem konkreten nächsten Schritt.
+- **Vimeo-Link wird vor dem Speichern geprüft** (existiert, ist einbettbar). Nicht einbettbare Links werden abgelehnt, statt später beim Kunden schwarz zu bleiben.
+
+**Download für Detailarbeit** (nur Admin):
+
+- Pro Video ein **Herunterladen**-Button mit sprechendem Dateinamen (z. B. `mission-tag-1_v7.mp4`), direkt neben dem Video im Admin.
+- Ein kurzer Hinweistext macht den Arbeitsweg explizit: **herunterladen → außerhalb schneiden → als eigenes Video wieder hochladen** (das generierte bleibt als Rückfall erhalten).
+- Bei Guide-Clips ist zusätzlich der letzte Vorschau-Schnitt herunterladbar, nicht nur die Live-Fassung.
+- Kunden bekommen keinen Download (bewusst), weder im Player noch über eine Adresse, die man weitergeben kann.
+
+---
+
+## 4. Thumbnails: überall korrekt
+
+**Ziel**: Es gibt keine Kachel mehr ohne Vorschaubild und kein verzerrtes oder falsch beschnittenes Bild.
+
+- **Bestandsaufnahme über alle Stellen**, an denen Videos als Kachel erscheinen: Video-Guide, Missions-Briefing in der Challenge, Tages-Briefing auf dem Dashboard, Playbooks/Feature-Abschnitte, Kurs-Übersicht `/kurse`, Kurs-Detailseite mit Folgenliste, Login-Teaser-Poster, Admin-Listen. Jede Stelle wird auf Desktop und Handy geprüft.
+- **Einheitliches Verhalten**: festes 16:9-Format, Bild füllt die Kachel ohne Verzerrung, Dauer- und „gesehen“-Marker an derselben Position, ruhiges Nachladen (kein Springen des Layouts, kein weißes Aufblitzen).
+- **Immer ein Bild**: Fehlt ein Vorschaubild, wird automatisch eines aus dem Video gezogen. Ist auch das nicht möglich (z. B. reiner Vimeo-Link ohne Zugriff), erscheint eine gestaltete Ersatzkachel im Leader-OS-Look mit Titel — nie ein leerer Kasten oder ein gebrochenes Bild-Symbol.
+- **Bild aus dem Video wählen** (deine Entscheidung): Im Admin pro Video ein Sekundenfeld mit Sofort-Vorschau — „Sekunde 4,5 als Vorschaubild übernehmen“. Gilt für generierte Clips, eigene Uploads und Kurs-Folgen gleichermaßen. Das gewählte Bild wird versioniert, damit es bei allen Nutzern sofort wechselt.
+- Für Vimeo-Links wird das Vimeo-Standbild verwendet; wer ein anderes Bild will, wählt es aus einem hochgeladenen Video oder behält das Vimeo-Bild.
 
 ---
 
 ## Annahmen
-- Login-Video: Kapitel 1 bleibt; Kapitel 2 + 3 werden neu gerendert (ca. 12–15 $). Sollen es nur ca. 5–7 $ sein, bitte „nur Kapitel 3“ sagen – dann bleibt „I-M“.
-- Skripte bleiben unverändert bis auf den einen umformulierten Satz in Kapitel 2.
-- Alle Renderkosten werden vor dem Start im Guide Studio angezeigt; nichts rendert ohne Klick auf „Rendern“.
-- Änderungen gelten für Deutsch und Englisch gleich.
+
+- Die Videos im Video-Guide, in den Missionen und auf der Login-Seite sind dieselben Guide-Clips wie bisher; es werden keine neuen Videos generiert und es entstehen keine Render-Kosten.
+- Es werden keine Inhalte (Skripte, Sprecher-Stimme, Kursstruktur) verändert.
+- Uploads liegen im bestehenden Objektspeicher; Videos werden weiterhin über die App ausgeliefert, nicht über eine öffentliche Adresse.
+- Zugriffsrechte bleiben wie heute: gesperrte Kurs-Folgen bleiben gesperrt, auch wenn ein Vimeo-Link gesetzt ist.
+- Der Download im Admin ist an den Admin-Zugang gebunden; Adressen sind nicht ohne Anmeldung aufrufbar und nicht teilbar.
+- Reihenfolge der Auslieferung: Diagnose-Einstieg → „Mit Wlad sprechen“ → Video-Feld mit Upload/Link/Download → Thumbnails. Jeder Punkt ist einzeln nutzbar, falls du zwischendurch etwas vorziehen willst.
+
+## Nicht Teil dieses Plans
+
+- Schneiden/Trimmen direkt in der App (bewusst außerhalb: Download → externes Programm → Upload).
+- Neue Videos generieren, neue Kurse oder neue Challenge-Erklärvideos.
+- Vimeo-Konto-Einstellungen (Sichtbarkeit, Domain-Sperre) — das passiert in deinem Vimeo-Konto; die App prüft nur, ob ein Link abspielbar ist.

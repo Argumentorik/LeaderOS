@@ -7,8 +7,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { GuideVideoPlayer } from '../components/guide/GuideVideoPlayer';
 import { GuideNextStep } from '../components/guide/GuideNextStep';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { VideoThumb } from '../components/shared/VideoThumb';
 
-const base = process.env.REACT_APP_BACKEND_URL;
 const CACHE_KEY = 'wladbot_guide_clips_v2';
 
 const fmt = (sec) => { const n = Math.round(sec || 0); return n >= 60 ? `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}` : `${n} s`; };
@@ -21,9 +21,7 @@ const ClipTile = ({ clip, index, active, onSelect }) => (
     data-testid={`video-guide-tile-${clip.slug}`}
   >
     <div className="relative aspect-video bg-[#0A0A0A] overflow-hidden">
-      {clip.poster_url
-        ? <img src={`${base}${clip.poster_url}`} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" loading="lazy" decoding="async" />
-        : <div className="w-full h-full bg-gradient-to-br from-[#161616] to-[#0A0A0A]" />}
+      <VideoThumb src={clip.poster_url} title={clip.title} kicker={clip.kind === 'mission' ? 'Mission' : 'Leader-OS'} showPlay={false} />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
       <span className="absolute inset-0 flex items-center justify-center">
         <span className="h-10 w-10 rounded-full bg-[#BFFF00] text-black flex items-center justify-center shadow-lg opacity-90 group-hover:scale-110 transition-transform"><Play size={15} fill="currentColor" /></span>

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Target, MessageCircle, CheckCircle2, BookOpen, Timer, RefreshCw, Video, Flame, Lock, ArrowRight } from 'lucide-react';
+import { VideoThumb } from '../shared/VideoThumb';
 
 const BENEFITS = [
   { icon: Target, de: ['Echte Situationen, keine Theorie', 'Jede Folge startet mit einem Moment aus deinem Führungsalltag.'], en: ['Real situations, no theory', 'Every episode starts with a moment from your leadership day.'] },
@@ -78,7 +79,7 @@ export const CoursesUpsell = ({ data, de }) => {
   return (
     <div className="mt-8 rounded-2xl border border-[#BFFF00]/30 bg-[#0A0A0A] text-white overflow-hidden grid md:grid-cols-[auto_1fr_auto] items-center gap-5 p-5" data-testid="courses-upsell-banner">
       <div className="hidden md:block w-40 aspect-video rounded-xl overflow-hidden relative">
-        <img src={locked[0].thumbnail_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-70" />
+        <div className="absolute inset-0 opacity-70"><VideoThumb src={locked[0].thumbnail_url} title={locked[0].title} showPlay={false} /></div>
         <span className="absolute inset-0 flex items-center justify-center"><Lock size={18} className="text-[#BFFF00]" /></span>
       </div>
       <div>

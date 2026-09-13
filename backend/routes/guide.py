@@ -53,9 +53,10 @@ DEFAULT_VOICE_ID = "Deep_Voice_Man"  # Minimax-Standardstimme, bis Wlads Klon st
 _JOBS: set = set()
 SETTINGS_ASSETS = {"portrait": "portrait_path", "sample": "voice_sample_path", "body": "body_path", "signature": "signature_path"}
 CLIP_MEDIA = {"video": "video_path", "audio": "audio_path", "padded": "audio_padded_path",
-              "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "video_path", "preview": "video_preview_path"}
+              "raw": "raw_video_path", "keyframe": "keyframe_path", "poster": "video_path", "preview": "video_preview_path",
+              "custom": "custom_video_path"}
 MEDIA_TYPES = {"video": "video/mp4", "raw": "video/mp4", "audio": "audio/mpeg", "padded": "audio/mpeg",
-               "keyframe": "image/png", "poster": "image/jpeg", "preview": "video/mp4"}
+               "keyframe": "image/png", "poster": "image/jpeg", "preview": "video/mp4", "custom": "video/mp4"}
 SHOT_MEDIA = {"keyframe": ("keyframe_path", "image/png"), "raw": ("raw_path", "video/mp4"),
               "audio": ("audio_path", "audio/mpeg"), "padded": ("padded_path", "audio/mpeg"),
               "synced": ("synced_path", "video/mp4"), "poster": ("keyframe_path", "image/jpeg")}
@@ -187,13 +188,36 @@ def _render_version(path: str | None) -> str | None:
     return stem.rsplit("_", 1)[-1] if "_" in stem else stem
 
 
+def _active_video(clip: dict) -> tuple[str, str | None]:
+    """Welches Video sehen Nutzer? ('generated'|'upload'|'vimeo', Storage-Pfad bzw. None bei Vimeo).
+    Iter 179: Ein Video-Feld für drei Quellen — das generierte Video bleibt immer erhalten."""
+    source = clip.get("video_source") or "generated"
+    if source == "upload" and clip.get("custom_video_path"):
+        return "upload", clip["custom_video_path"]
+    if source == "vimeo" and clip.get("vimeo_id"):
+        return "vimeo", None
+    return "generated", clip.get("video_path")
+
+
+def _poster_version(clip: dict, path: str | None) -> str | None:
+    """Versions-Kennung fürs Vorschaubild — ändert sich auch, wenn nur die Sekunde neu gewählt wurde."""
+    if not path:
+        return None
+    version = _render_version(path)
+    at = clip.get("poster_at")
+    return f"{version}-{at}" if at else version
+
+
 def _poster_url(clip: dict) -> str | None:
-    """Vorschaubild = Standbild aus dem fertigen Video (Wlads Gesicht, nicht die Blende), versioniert wie das Video."""
+    """Vorschaubild = Standbild aus dem aktiven Video (Wlads Gesicht, nicht die Blende), versioniert wie das Video."""
     token = clip.get("media_token")
+    source, path = _active_video(clip)
+    if source == "vimeo":
+        return clip.get("vimeo_thumbnail") or None
     if not token:
         return None
-    if clip.get("video_path"):
-        return _media_url(token, "poster", _render_version(clip["video_path"]))
+    if path:
+        return _media_url(token, "poster", _poster_version(clip, path))
     if clip.get("keyframe_path"):
         return _media_url(token, "keyframe", _render_version(clip["keyframe_path"]))
     first = next((s for s in clip.get("shots", []) if s.get("keyframe_path")), None)
@@ -203,8 +227,14 @@ def _poster_url(clip: dict) -> str | None:
 
 
 def poster_source(clip: dict) -> tuple[str | None, float]:
-    """Quelle + Zeitpunkt fürs Vorschaubild: der erste Sprech-Take (ohne eingebrannte Untertitel/Blende),
-    kurz nach dem stillen Auftakt — Wlads Gesicht, ruhiger Blick. Fallback: fertiges Video bei 1,5 s."""
+    """Quelle + Zeitpunkt fürs Vorschaubild. Eigene Sekunde (`poster_at`) gewinnt immer; sonst der erste
+    Sprech-Take (ohne eingebrannte Untertitel/Blende), kurz nach dem stillen Auftakt. Fallback: Video bei 1,5 s."""
+    source, active = _active_video(clip)
+    at_override = clip.get("poster_at")
+    if at_override is not None and active:
+        return active, float(at_override)
+    if source == "upload" and active:
+        return active, 1.5
     for shot in clip.get("shots") or []:
         if shot.get("type") == "talk" and shot.get("synced_path"):
             return shot["synced_path"], round(float(shot.get("speech_lead") or 0.0) + 0.9, 2)
@@ -215,10 +245,18 @@ def poster_source(clip: dict) -> tuple[str | None, float]:
 
 def _public_clip(clip: dict, seen: list) -> dict:
     token = clip.get("media_token")
-    has_video = bool(clip.get("video_path") and clip.get("published") and token)
+    source, active = _active_video(clip)
+    published = bool(clip.get("published"))
+    if source == "vimeo":
+        has_video = published and bool(clip.get("vimeo_id"))
+        video_url = None
+    else:
+        has_video = published and bool(active and token)
+        video_url = _media_url(token, "custom" if source == "upload" else "video", _render_version(active)) if has_video else None
+    duration = clip.get("custom_duration_seconds") if source == "upload" else clip.get("duration_seconds_video")
     return {
         "poster_url": _poster_url(clip) if has_video else None,
-        "duration_seconds_video": clip.get("duration_seconds_video"),
+        "duration_seconds_video": duration,
         "slug": clip["slug"],
         "kind": clip["kind"],
         "ref": clip.get("ref"),
@@ -226,7 +264,9 @@ def _public_clip(clip: dict, seen: list) -> dict:
         "title": clip["title"],
         "script": clip["script"],
         "questions": clip_questions(clip["slug"]),
-        "video_url": _media_url(token, "video", _render_version(clip["video_path"])) if has_video else None,
+        "video_url": video_url,
+        "video_kind": "vimeo" if (has_video and source == "vimeo") else "file",
+        "vimeo_id": clip.get("vimeo_id") if (has_video and source == "vimeo") else None,
         "duration_seconds": clip.get("duration_seconds"),
         "seen": clip["slug"] in seen,
     }
@@ -239,7 +279,8 @@ async def _progress(user_id: str) -> dict:
 
 # ── Nutzer-Endpunkte ────────────────────────────────────────────────────────
 
-LEAN_FIELDS = ("slug", "kind", "ref", "order", "title", "poster_url", "video_url", "duration_seconds", "duration_seconds_video", "seen")
+LEAN_FIELDS = ("slug", "kind", "ref", "order", "title", "poster_url", "video_url", "video_kind", "vimeo_id",
+               "duration_seconds", "duration_seconds_video", "seen")
 
 
 @router.get("/clips")
@@ -326,13 +367,16 @@ async def set_prefs(data: PrefsIn, request: Request):
 async def public_teaser():
     """Ohne Login (Login-Seite): der freigegebene Teaser — oder null."""
     clip = await db.guide_clips.find_one(
-        {"kind": "teaser", "published": True, "video_path": {"$ne": None}}, {"_id": 0}, sort=[("order", 1)],
+        {"kind": "teaser", "published": True}, {"_id": 0}, sort=[("order", 1)],
     )
     if not clip:
         return {"clip": None}
+    public = _public_clip(clip, [])
+    if not public["video_url"] and not public["vimeo_id"]:
+        return {"clip": None}
     return {"clip": {"slug": clip["slug"], "title": clip["title"], "script": clip["script"],
-                     "video_url": _media_url(clip["media_token"], "video", _render_version(clip["video_path"])),
-                     "poster_url": _poster_url(clip)}}
+                     "video_url": public["video_url"], "video_kind": public["video_kind"],
+                     "vimeo_id": public["vimeo_id"], "poster_url": public["poster_url"]}}
 
 
 @router.get("/media/{token}/{kind}")
@@ -462,7 +506,7 @@ def _frame_from_video(video: Path, at: float = 1.5) -> Path:
 def _local_poster(path: str, title: str = "", kicker: str = "", at: float = 1.5) -> Path:
     """Keyframe (oder Video-Standbild) -> branded Thumbnail-JPEG (Titel-Typo, W-Mark, Lime-Akzent), einmal erzeugt, dann aus dem Cache."""
     source = _local_media(path)
-    if path.lower().endswith(".mp4"):
+    if path.lower().endswith((".mp4", ".mov")):
         source = _frame_from_video(source, at)
     key = hashlib.sha1(f"{title}|{kicker}|v2".encode()).hexdigest()[:10]
     target = source.with_name(f"{source.name}_poster_{key}.jpg")
@@ -553,6 +597,17 @@ def _admin_clip_view(c: dict) -> dict:
     view["shots"] = [_shot_view(s, token) for s in c.get("shots", [])]
     view["multi_shot"] = c.get("kind") in ("onboarding", "mission", "coaching", "feature") or bool(c.get("multi_shot"))
     view["aspect"] = c.get("aspect") or "16:9"
+    # Iter 179: Video-Feld mit drei Quellen — was ist gerade live, was liegt bereit?
+    source, active = _active_video(c)
+    view["video_source"] = c.get("video_source") or "generated"
+    view["active_source"] = source
+    view["has_generated"] = bool(c.get("video_path"))
+    view["has_upload"] = bool(c.get("custom_video_path"))
+    view["poster_url"] = _poster_url(c)
+    view["active_video_url"] = (
+        None if source == "vimeo"
+        else _media_url(token, "custom" if source == "upload" else "video", _render_version(active)) if (active and token) else None
+    )
     return view
 
 
@@ -1463,7 +1518,7 @@ async def publish_clip(slug: str, data: PublishIn, request: Request):
     clip = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
     if not clip:
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
-    if data.published and not clip.get("video_path"):
+    if data.published and not _active_video(clip)[1] and not clip.get("vimeo_id"):
         raise HTTPException(status_code=400, detail="Ohne fertiges Video kann nicht freigegeben werden")
     await db.guide_clips.update_one({"slug": slug}, {"$set": {
         "published": data.published,

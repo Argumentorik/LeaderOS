@@ -4,6 +4,7 @@ import { Play, X, Clapperboard } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideVideoPlayer } from './GuideVideoPlayer';
+import { VideoThumb } from '../shared/VideoThumb';
 
 /**
  * Iter 146: Wlads Mission-Briefing für den aktiven Challenge-Tag (Tag 1-7).
@@ -54,7 +55,7 @@ export const MissionGuideClip = ({ day, de = true }) => {
         data-testid="mission-guide-clip"
       >
         <span className="relative h-12 w-[84px] rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0" data-testid="mission-guide-thumb">
-          {clip.poster_url && <img src={`${process.env.REACT_APP_BACKEND_URL}${clip.poster_url}`} alt="" className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />}
+          <VideoThumb src={clip.poster_url} title={clip.title} showPlay={false} className="!aspect-auto h-full" />
           <span className="absolute inset-0 flex items-center justify-center"><span className="h-7 w-7 rounded-full bg-[#BFFF00] text-black flex items-center justify-center group-hover:scale-105 transition-transform"><Play size={12} fill="currentColor" /></span></span>
         </span>
         <span className="min-w-0 flex-1">

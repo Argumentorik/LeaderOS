@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from config import db
@@ -120,6 +121,30 @@ async def stream_episode_video(episode_id: str, request: Request):
     if not ep or not ep["unlocked"]:
         raise HTTPException(status_code=403, detail="Diese Folge ist in deinem Paket nicht enthalten.")
     return await _serve_object(request, vid["storage_path"], "video/mp4")
+
+
+@router.get("/episodes/{episode_id}/poster")
+async def episode_poster(episode_id: str, request: Request):
+    """Vorschaubild einer Folge: Standbild aus dem hochgeladenen Video (eigene Sekunde möglich)
+    oder Vimeo-Standbild. Ohne Video: 404 — die App zeigt dann die gestaltete Ersatzkachel."""
+    await get_current_user(request)
+    vid = await db.course_videos.find_one({"episode_id": episode_id}, {"_id": 0})
+    if not vid:
+        raise HTTPException(status_code=404, detail="Kein Vorschaubild")
+    slug, _, num = episode_id.rpartition("-")
+    course = _BY_SLUG.get(slug) or {}
+    title = ""
+    try:
+        title = course["episodes"][int(num) - 1]["title"]
+    except (KeyError, IndexError, ValueError):
+        title = course.get("title", "")
+    if vid.get("storage_path"):
+        at = float(vid.get("poster_at") or 1.5)
+        return await _serve_object(request, vid["storage_path"], "image/jpeg", poster=True,
+                                   title=title, kicker="Kurs", at=at)
+    if vid.get("vimeo_thumbnail"):
+        return RedirectResponse(vid["vimeo_thumbnail"], status_code=302)
+    raise HTTPException(status_code=404, detail="Kein Vorschaubild")
 
 
 class VideoIn(BaseModel):

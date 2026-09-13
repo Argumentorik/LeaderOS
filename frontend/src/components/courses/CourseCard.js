@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Lock, Play, Clock, Sparkles } from 'lucide-react';
 import { CATEGORY_META, LEVEL_LABEL, t } from './courseMeta';
+import { VideoThumb } from '../shared/VideoThumb';
 
 const Badge = ({ children, tone = 'lime', testid }) => (
   <span data-testid={testid} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9.5px] font-black uppercase tracking-[0.12em] backdrop-blur ${
@@ -30,8 +31,8 @@ export const CourseCard = ({ course: c, de }) => {
       data-testid={`course-card-${c.slug}`}
       onMouseEnter={play} onMouseLeave={stop}
     >
-      <Link to={`/kurse/${c.slug}`} className="relative block aspect-video bg-[#0A0A0A] overflow-hidden" data-testid={`course-thumb-${c.slug}`}>
-        <img src={c.thumbnail_url} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+      <Link to={`/kurse/${c.slug}`} className="group relative block aspect-video overflow-hidden bg-[#0A0A0A]" data-testid={`course-thumb-${c.slug}`}>
+        <VideoThumb src={c.thumbnail_url} title={c.title} kicker={de ? 'Kurs' : 'Course'} showPlay={false} />
         {c.preview_url && (
           <video ref={vidRef} src={c.preview_url} muted playsInline preload="none" className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-testid={`course-preview-${c.slug}`} />
         )}
