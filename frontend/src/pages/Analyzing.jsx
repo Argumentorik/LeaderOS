@@ -35,6 +35,7 @@ export default function Analyzing() {
   const [activePhase, setActivePhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
   const [quote] = useState(() => leaderQuotes[Math.floor(Math.random() * leaderQuotes.length)]);
 
   useEffect(() => {
@@ -53,18 +54,33 @@ export default function Analyzing() {
   }, [activePhase]);
 
   useEffect(() => {
-    const { answers, session_id, chat_context } = location.state || {};
-    if (!answers) { navigate("/quiz"); return; }
+    // Answers come from navigation state — or, after a reload/crash of this
+    // page, from the auto-saved quiz progress in localStorage.
+    let { answers, session_id, chat_context } = location.state || {};
+    if (!answers) {
+      try {
+        const saved = Object.values(JSON.parse(localStorage.getItem("quiz_answers") || "{}"));
+        const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+        if (saved.length > 0 && (user.session_id || user.user_id)) {
+          answers = saved;
+          session_id = user.session_id || user.user_id;
+        }
+      } catch { /* fall through */ }
+    }
+    if (!answers) {
+      // Nothing to generate from — if a report already exists, go there.
+      navigate(localStorage.getItem("emergent_report") ? "/report" : "/quiz");
+      return;
+    }
 
     const generateReport = async () => {
       try {
         const res = await axios.post(
           `${API}/quiz/generate-report`,
           { session_id, answers, chat_context: chat_context || null },
-          { timeout: 60000 }
+          { timeout: 90000 }
         );
-        // Persist report + tokens. report_token gates future /report + /coach
-        // requests, sync_token is used for Leader-OS product handoff.
+        // Persist report + tokens FIRST, only then clear the quiz auto-save.
         localStorage.setItem("emergent_report", JSON.stringify(res.data));
         if (res.data?.report_token) {
           localStorage.setItem("leaderos_report_token", res.data.report_token);
@@ -72,17 +88,19 @@ export default function Analyzing() {
         if (res.data?.sync_token) {
           localStorage.setItem("leaderos_sync_token", res.data.sync_token);
         }
+        localStorage.removeItem("quiz_answers");
+        localStorage.removeItem("quiz_current");
         navigate("/report");
       } catch (err) {
         console.error("Report generation failed:", err);
-        setError("Report-Generierung fehlgeschlagen. Bitte versuche es erneut.");
+        setError("Report-Generierung fehlgeschlagen. Deine Antworten sind gespeichert — du kannst es direkt erneut versuchen.");
       }
     };
 
     // Start API call after 3s animation delay (report generation runs while phases animate)
-    const timer = setTimeout(generateReport, 3000);
+    const timer = setTimeout(generateReport, retryCount > 0 ? 300 : 3000);
     return () => clearTimeout(timer);
-  }, [location.state, navigate]);
+  }, [location.state, navigate, retryCount]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4" data-testid="analyzing-page">
@@ -156,11 +174,24 @@ export default function Analyzing() {
         </div>
 
         {error && (
-          <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 mb-6">
-            <p className="font-inter text-sm text-red-400">{error}</p>
-            <button onClick={() => navigate("/quiz")} className="mt-3 font-inter text-sm text-[#C8FF00] underline">
-              Zurück zum Quiz
-            </button>
+          <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 mb-6" data-testid="analyzing-error">
+            <p className="font-inter text-sm text-red-400 mb-3">{error}</p>
+            <div className="flex items-center justify-center gap-4">
+              <button
+                data-testid="analyzing-retry"
+                onClick={() => { setError(null); setRetryCount(c => c + 1); }}
+                className="px-5 py-2.5 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-sm hover:shadow-lg hover:shadow-[#C8FF00]/20 transition-all"
+              >
+                Erneut versuchen
+              </button>
+              <button
+                data-testid="analyzing-back-to-quiz"
+                onClick={() => navigate("/quiz")}
+                className="font-inter text-sm text-slate-400 hover:text-white underline transition-colors"
+              >
+                Zurück zum Quiz
+              </button>
+            </div>
           </div>
         )}
 

@@ -206,9 +206,10 @@ export default function Quiz() {
   const handleSubmit = (chatContext) => {
     const answersArray = Object.values(answers);
     const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
-    // Clear auto-save once we submit successfully (user is moving forward)
-    localStorage.removeItem("quiz_answers");
-    localStorage.removeItem("quiz_current");
+    // NOTE: quiz_answers/quiz_current are intentionally NOT cleared here.
+    // They are cleared in Analyzing.jsx only AFTER the report was successfully
+    // generated and persisted — so a failed/interrupted generation never
+    // sends the user back to question 1.
     navigate("/analyzing", {
       state: {
         answers: answersArray,

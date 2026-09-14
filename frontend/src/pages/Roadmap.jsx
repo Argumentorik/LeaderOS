@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sparkles, Download } from "lucide-react";
 import { generateRoadmapPDF } from "../utils/generatePDF";
+import { recoverReportFromServer } from "../utils/reportRecovery";
 import { roleLabels } from "../components/roadmap/roadmapData";
 import { RoadmapAgents, RoadmapSpecialEvents } from "../components/roadmap/RoadmapAgents";
 import { RoadmapWeeklyPlan } from "../components/roadmap/RoadmapWeeklyPlan";
@@ -20,19 +21,25 @@ export default function Roadmap() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
+    const applyReport = (report) => {
+      if (report.avg_total) setUserScore(report.avg_total);
+      if (report.weakest_role?.key) setWeakestRole(report.weakest_role.key);
+      if (!report.weakest_role?.key && report.leadership_roles) {
+        const sorted = Object.entries(report.leadership_roles).sort((a, b) => a[1] - b[1]);
+        if (sorted.length > 0) setWeakestRole(sorted[0][0]);
+      }
+    };
     try {
       const report = JSON.parse(localStorage.getItem("emergent_report") || "{}");
       const usr = JSON.parse(localStorage.getItem("emergent_user") || "{}");
       if (usr.name) setUserName(usr.name);
-      if (report.avg_total) setUserScore(report.avg_total);
-
-      // Use pre-computed strongest/weakest from backend
-      if (report.weakest_role?.key) setWeakestRole(report.weakest_role.key);
-
-      // Fallback: compute from leadership_roles
-      if (!report.weakest_role?.key && report.leadership_roles) {
-        const sorted = Object.entries(report.leadership_roles).sort((a, b) => a[1] - b[1]);
-        if (sorted.length > 0) setWeakestRole(sorted[0][0]);
+      if (report.session_id) {
+        applyReport(report);
+      } else {
+        // Storage wiped (crash/reload) — recover from server for personalization
+        recoverReportFromServer().then((recovered) => {
+          if (recovered) applyReport(recovered);
+        });
       }
     } catch (err) {
       // Non-critical: report data enhances UX but page works without it

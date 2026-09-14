@@ -3,6 +3,18 @@
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
+## 🛟 Crash-Resilienz: Quiz-Fortschritt & Report-Recovery (Jun 2026)
+- **Root Cause**: Quiz.jsx löschte `quiz_answers`/`quiz_current` schon beim Absenden (vor Report-Erstellung) → jeder Fehler/Reload/Timeout danach = zurück zu Frage 1
+- Fixes:
+  - Quiz.jsx: Antworten werden NICHT mehr beim Submit gelöscht
+  - Analyzing.jsx: Cleanup erst NACH erfolgreicher Report-Persistierung; Antworten-Recovery aus localStorage bei Reload (kein nav-state); Fehler-UI mit "Erneut versuchen"-Button (data-testid=analyzing-retry); LLM-Timeout 60s→90s; bei fehlenden Antworten + vorhandenem Report → direkt /report
+  - Neu: `utils/reportRecovery.js` → `recoverReportFromServer()` (GET /api/report/{sid} mit report_token Bearer, re-persistiert in localStorage)
+  - Report.jsx: lädt Report bei leerem localStorage automatisch vom Server statt Redirect auf /
+  - Roadmap.jsx: gleiche Server-Recovery für Personalisierung
+- Verifiziert per Browser-E2E: (1) Report-Recovery nach Storage-Wipe ✅ (2) Klick "30-Tage-Plan ansehen" → Roadmap rendert mit Personalisierung, keine Console-Errors ✅ (3) Quiz resumed bei Frage 20 mit 20/20 ✅ (4) /analyzing-Reload generiert aus localStorage → /report, Cleanup erst nach Erfolg ✅ (5) Fehlerfall → Retry-UI, alle 20 Antworten erhalten ✅
+- Freeze in Preview NICHT reproduzierbar (vermutlich Production/Device-spezifisch bzw. LLM-Timeout) — Resilienz-Netz fängt jetzt jeden Fall ab
+- ⚠️ Redeploy nötig, damit der Fix auf Production (exec-eval.emergent.host) live geht
+
 ## 🧹 Code Quality Refactoring · Iter 41 (Jun 2026)
 - Backend (Verhalten identisch, verifiziert mit 31/31 Regression-Tests):
   - `routes/auth.py`: OTP-/Login-Logik in Modul-Level-Funktionen (parse_login_email, request_otp_for_email, verify_otp_and_login, build_sync_token_response, send_otp_email, mask_email); Route-Handler jetzt dünn

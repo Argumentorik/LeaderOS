@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ExitIntentPopup from "../components/ExitIntentPopup";
+import { recoverReportFromServer } from "../utils/reportRecovery";
 import { catLabels, roleConfig } from "../components/report/reportConfig";
 import { ReportHeader } from "../components/report/ReportHeader";
 import { ReportRoles } from "../components/report/ReportRoles";
@@ -15,14 +16,25 @@ export default function Report() {
   const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
-    const raw = localStorage.getItem("emergent_report");
-    const rawUser = localStorage.getItem("emergent_user");
-    if (!raw) { navigate("/"); return; }
-    const data = JSON.parse(raw);
-    setReport(data);
-    if (rawUser) setUser(JSON.parse(rawUser));
-    if (data.user) setUser(prev => ({ ...prev, ...data.user }));
-    setTimeout(() => setEmailSent(true), 3000);
+    let cancelled = false;
+    const load = async () => {
+      const rawUser = localStorage.getItem("emergent_user");
+      let data = null;
+      try { data = JSON.parse(localStorage.getItem("emergent_report")); } catch { /* corrupted */ }
+      if (!data) {
+        // Browser storage wiped (crash/reload/new tab) — the report still
+        // lives on the server, recover it instead of bouncing to the start.
+        data = await recoverReportFromServer();
+      }
+      if (cancelled) return;
+      if (!data) { navigate("/"); return; }
+      setReport(data);
+      if (rawUser) setUser(JSON.parse(rawUser));
+      if (data.user) setUser(prev => ({ ...prev, ...data.user }));
+      setTimeout(() => { if (!cancelled) setEmailSent(true); }, 3000);
+    };
+    load();
+    return () => { cancelled = true; };
   }, [navigate]);
 
   const leadership_roles = useMemo(() => report?.leadership_roles || {}, [report]);
