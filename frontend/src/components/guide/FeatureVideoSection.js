@@ -17,7 +17,7 @@ const loadFeatureClips = () => {
 /** Wlads Best-Practice-Video für ein Feature (Playbooks, Missionen, Video-Analyse). Ohne fertiges Video: nichts. */
 export const FeatureVideoSection = ({ slugs, de = true, dark = false, compact = false }) => {
   const [clips, setClips] = useState([]);
-  useEffect(() => { loadFeatureClips().then((all) => setClips(all.filter((c) => slugs.includes(c.slug) && c.video_url))); }, [slugs]);
+  useEffect(() => { loadFeatureClips().then((all) => setClips(all.filter((c) => slugs.includes(c.slug) && (c.video_url || c.vimeo_id)))); }, [slugs]);
   if (!clips.length) return null;
   return (
     <section className={`animate-fade-in ${compact ? '' : 'mb-6'}`} data-testid={`feature-video-section-${slugs[0]}`}>

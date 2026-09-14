@@ -505,7 +505,7 @@ export function VoiceSparringModal({ prepContext, prepGoal, onClose }) {
               }`}
               data-testid="voice-sparring-mute"
               aria-label={muted ? 'Wlad-Stimme aktivieren' : 'Stimme stumm schalten'}
-              title={muted ? 'Nur Text — kein TTS' : 'Wlad spricht'}
+              title={muted ? 'Nur Text — kein TTS' : 'WladBot spricht'}
             >
               {muted ? <MicOff size={16} /> : <Volume2 size={16} />}
             </button>

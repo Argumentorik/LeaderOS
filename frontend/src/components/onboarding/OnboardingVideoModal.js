@@ -171,7 +171,7 @@ export const OnboardingVideoModal = () => {
         {/* ── Hero Benefits (Iter 92.32 launch-safe — replaces fragile Vimeo embed) ──
             Vimeo "Privacy settings" konnten Embed blockieren → catastrophic UX.
             Stattdessen: 3 Benefit-Cards die in 5 Sekunden zeigen WAS Leader-OS kann.
-            Wlad-Video bleibt zugänglich über die "Wlad hören" Card auf dem Dashboard. */}
+            Wlad-Video bleibt zugänglich über die "WladBot hören" Card auf dem Dashboard. */}
         <div ref={videoRef} className="relative px-6 sm:px-8 pb-2" style={{ opacity: 0 }}>
           <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#BFFF00]/[0.08] via-white/[0.02] to-transparent border border-[#BFFF00]/20 p-6 sm:p-7">
             <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full bg-[#BFFF00]/15 blur-[60px] pointer-events-none" aria-hidden />

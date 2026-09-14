@@ -18,7 +18,7 @@ const Badge = ({ children, lime }) => (
   <span className={`text-[8px] font-black px-1 py-[1px] rounded tracking-wider ${lime ? 'bg-[#BFFF00] text-black' : 'bg-muted text-muted-foreground'}`}>{children}</span>
 );
 
-/** „Mit Wlad sprechen · Beta“: offen für Leader-OS/PLUS, Free darf 3 Gespräche testen, danach Upsell. */
+/** „Mit WladBot sprechen · Beta“: offen für Leader-OS/PLUS, Free darf 3 Gespräche testen, danach Upsell. */
 export const InteractiveWladButton = ({ clip, de = true }) => {
   const [status, setStatus] = useState(null);
   const [open, setOpen] = useState(false);
@@ -34,7 +34,7 @@ export const InteractiveWladButton = ({ clip, de = true }) => {
       <Link to="/coaching" className="inline-flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground/80 hover:text-foreground transition-colors"
             title={exhausted ? (de ? 'Deine Test-Gespräche sind aufgebraucht — mit Leader-OS unbegrenzt' : 'Trial used up — unlimited with Leader-OS') : (de ? 'Wird schrittweise freigeschaltet' : 'Rolling out gradually')}
             data-testid={`interactive-wlad-locked-${clip.slug}`}>
-        <Lock size={11} /> {de ? 'Mit Wlad sprechen' : 'Talk to Wlad'}
+        <Lock size={11} /> {de ? 'Mit WladBot sprechen' : 'Talk to WladBot'}
         <Badge>{exhausted ? (de ? 'TEST AUFGEBRAUCHT · UPGRADE' : 'TRIAL USED · UPGRADE') : (de ? 'BALD' : 'SOON')}</Badge>
       </Link>
     );
@@ -47,7 +47,7 @@ export const InteractiveWladButton = ({ clip, de = true }) => {
       <button type="button" onClick={() => setOpen(true)}
               className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:opacity-80 transition-opacity"
               data-testid={`interactive-wlad-open-${clip.slug}`}>
-        {status.trial ? <Sparkles size={12} /> : <Mic size={12} />} {de ? 'Mit Wlad sprechen' : 'Talk to Wlad'}
+        {status.trial ? <Sparkles size={12} /> : <Mic size={12} />} {de ? 'Mit WladBot sprechen' : 'Talk to WladBot'}
         <Badge lime>{label}</Badge>
       </button>
       {open && <InteractiveWladOverlay clip={clip} de={de} access={status} onClose={close} />}

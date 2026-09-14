@@ -41,12 +41,12 @@ const FEATURES = {
       'Auf Wlads Methodik trainiert — nicht generisch',
     ],
   },
-  '/lern-videos': {
-    label: 'Lern-Videos',
-    tagline: 'Wlads komplette Video-Bibliothek — kuratiert, durchsuchbar und auf den Punkt. Lernen, wann es in deinen Kalender passt.',
+  '/kurse': {
+    label: 'Kurse',
+    tagline: '10 Kurse, 72 Folgen, jede unter 12 Minuten — Wlads komplette Bibliothek für den Mittwoch, an dem das Gespräch ansteht.',
     benefits: [
-      '28 Wochen Live-Kurs-Material',
-      'Kapitel-genau durchsuchbar',
+      '72 Folgen · 10 Kurse',
+      'Folge 1 jedes Kurses gratis',
       'Mit WladBot-Chat & Missionen verknüpft',
     ],
   },

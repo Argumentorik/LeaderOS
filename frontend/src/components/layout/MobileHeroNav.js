@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   MessagesSquare, Video, TrendingUp, Menu, X,
-  LayoutDashboard, Flame, Swords, Target, CheckSquare, PlayCircle, Users, UserRound,
+  LayoutDashboard, Flame, Swords, Target, CheckSquare, Users, UserRound,
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -25,7 +25,6 @@ const MORE_ITEMS = [
   { path: '/challengers',  icon: Swords,          label_de: 'Challengers',       label_en: 'Challengers' },
   { path: '/simulations',  icon: Target,          label_de: 'Simulationen',      label_en: 'Simulations' },
   { path: '/tasks',        icon: CheckSquare,     label_de: 'Aufgaben',          label_en: 'Tasks' },
-  { path: '/lern-videos',  icon: PlayCircle,      label_de: 'Lern-Videos',       label_en: 'Learning Videos' },
   { path: '/community',    icon: Users,           label_de: 'Community',         label_en: 'Community' },
   { path: '/profile',      icon: UserRound,       label_de: 'Profil',            label_en: 'Profile' },
 ];

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import logger from '../lib/logger';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -10,6 +11,8 @@ import { ChallengerResult } from '../components/challengers/ChallengerResult';
 import { cleanText, speakPersona, stopSpeaking } from '../lib/challengerSpeech';
 import api from '../lib/api';
 import { swrGet } from '../lib/swrCache';
+
+const CHALLENGER_CLIPS = ['bp-challengers'];
 
 export default function ChallengersPage() {
   const { lang } = useLanguage();
@@ -136,6 +139,9 @@ export default function ChallengersPage() {
       {!activeChallenge && !result && (
         <>
           <LoadingOverlay isOpen={starting} flow="challenger" de={de} />
+          <div className="px-6 pt-6 lg:px-10 max-w-4xl mx-auto w-full">
+            <FeatureVideoSection slugs={CHALLENGER_CLIPS} de={de} />
+          </div>
           <ChallengerCards challengers={challengers} passedIds={passedChallengers} de={de} starting={starting} onStart={startChallenge} />
         </>
       )}

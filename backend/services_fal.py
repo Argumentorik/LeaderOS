@@ -197,8 +197,10 @@ def synthesize_speech(text: str, voice_id: str, speed: float = 1.0, fast: bool =
                       timeout_seconds: int | None = None) -> tuple[bytes, int]:
     """Deutsche Sprachausgabe. Liefert (mp3-Bytes, Dauer in Sekunden).
     fast=True nutzt speech-02-turbo mit engem Polling — für den Voice-Mode/Chat."""
+    from services_speech_text import to_speakable
+
     result = run_fal(TTS_TURBO_ENDPOINT if fast else TTS_ENDPOINT, {
-        "text": text,
+        "text": to_speakable(text),
         "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": 1, "pitch": 0},
         "audio_setting": {"format": "mp3", "sample_rate": 32000, "channel": 1, "bitrate": 128000},
         "output_format": "url",

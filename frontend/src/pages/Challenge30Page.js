@@ -14,6 +14,7 @@ import logger from '../lib/logger';
 import { toast } from 'sonner';
 import { JourneyFocusLine } from '../components/dashboard/JourneyFocusLine';
 import { MissionGuideClip } from '../components/guide/MissionGuideClip';
+import { ChallengeBriefings } from '../components/challenge/ChallengeBriefings';
 import {
   Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown, Mic
 } from 'lucide-react';
@@ -286,6 +287,11 @@ export default function Challenge30Page() {
               </Fragment>
             );
           })}
+        </div>
+
+        {/* Iter 180: Tages-Briefings Tag 1–7 leben jetzt hier (vorher im Video-Guide). */}
+        <div className="mt-8">
+          <ChallengeBriefings de={de} currentDay={currentDay} />
         </div>
 
         {/* ── Week Milestone ── */}

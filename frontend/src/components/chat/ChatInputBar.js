@@ -142,7 +142,7 @@ export const ChatInputBar = ({
         placeholder={attachedPdf
           ? (de ? 'Was möchtest du zu dem PDF wissen?' : 'What do you want to know about the PDF?')
           : coachMode
-            ? (de ? 'Coach-Modus: Wlad antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
+            ? (de ? 'Coach-Modus: WladBot antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
             : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
         className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 py-[13px] leading-5 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 text-base sm:text-sm focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}

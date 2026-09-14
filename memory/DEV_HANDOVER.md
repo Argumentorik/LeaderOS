@@ -154,3 +154,12 @@ Grund für den Crop: das transparente Ganzkörper-PNG wurde in 28–32-px-Kreise
 - Fließt über `services.get_user_memory()` in JEDEN AI-Workflow (Chat, Video-Analyse, Voice) — dort steht der Block „ÜBER MICH". Kein zweiter Kontext-Pfad, nicht in Prompts duplizieren.
 
 **Stripe-Rechnung**: Verkäufer-Angaben stehen in `INVOICE_FOOTER` / `INVOICE_SELLER` (`routes/payments.py`): Argumentorik-Akademie GmbH, Tölzer Str. 1, 82031 Grünwald, info@argumentorik.com. Der **Kontoname und die Support-Telefonnummer auf Stripe-Belegen** kommen aus den Stripe-Dashboard-Einstellungen (Business/Public details) — nur dort änderbar.
+
+## Iter 180 — Wichtig für Test-Agenten: Headless-Chromium kann kein H.264
+Der Playwright-Chromium im Screenshot-/Testing-Tool ist ohne proprietäre Codecs gebaut.
+Guide-Videos (h264/aac, via `/api/guide/media/<token>/video`) lösen dort `MEDIA_ERR_SRC_NOT_SUPPORTED`
+(error code 4) aus → `GuideVideoPlayer` schaltet korrekt auf den Text-Fallback um. Ein Testbericht
+„kein Video, nur Text-Fallback, kein [guide-play-*]" ist deshalb KEIN Produktfehler.
+Gegenprobe (Iter 180 durchgeführt): HTTP 200/206, `content-type: video/mp4`, `accept-ranges: bytes`,
+ffmpeg zeigt h264 High / yuv420p / aac — im echten Browser läuft es. Prüfe im Zweifel nur, ob das
+POSTER lädt ([video-thumb] mit Bild) und die API `video_url` liefert.

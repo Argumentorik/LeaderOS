@@ -315,6 +315,9 @@ CLIP_SCREENS = {
     "bp-playbooks": ["playbooks", "chat", "tools"],
     "bp-missionen": ["missions", "video", "progress"],
     "bp-video-analyse": ["video", "missions", "progress"],
+    "bp-workflows": ["tools", "chat", "playbooks"],
+    "bp-challengers": ["challenge", "video", "progress"],
+    "bp-simulationen": ["simulations", "chat", "progress"],
 }
 
 # Best-Practice-Clips (Kind "feature"): Wlad erklärt, wie man ein Feature richtig nutzt — sitzt direkt auf der Feature-Seite
@@ -322,13 +325,20 @@ FEATURE_CLIPS = [
     {"slug": "bp-playbooks", "order": 300, "title": "Playbooks richtig nutzen"},
     {"slug": "bp-missionen", "order": 301, "title": "Video-Missionen: so trainierst du"},
     {"slug": "bp-video-analyse", "order": 302, "title": "Video-Analyse: so liest du dein Feedback"},
+    # Iter 180: ein Take, nur Wlad im Studio — Skript + Lippensynchron neu, kein neues Filmmaterial
+    {"slug": "bp-workflows", "order": 303, "title": "Workflows: die Abkürzung für deine Vorbereitung", "single_take": True},
+    {"slug": "bp-challengers", "order": 304, "title": "Challengers: so nutzt du die Bühne", "single_take": True},
+    {"slug": "bp-simulationen", "order": 305, "title": "Simulationen: so sparrst du richtig", "single_take": True},
 ]
 
-# Vorschlagsfragen für „Mit Wlad sprechen“ (Fallback: generisch)
+# Vorschlagsfragen für „Mit WladBot sprechen“ (Fallback: generisch)
 CLIP_QUESTIONS = {
     "bp-playbooks": ["Welches Playbook passt zu meinem Gespräch nächste Woche?", "Wie formuliere ich das Ziel in einem Satz?", "Was mache ich mit dem Advice Report?"],
     "bp-missionen": ["Welche Mission sollte ich zuerst machen?", "Wie fange ich die ersten zehn Sekunden an?", "Was ändere ich im zweiten Versuch?"],
     "bp-video-analyse": ["Was bedeutet SEXIER genau?", "Welches Video eignet sich zum Hochladen?", "Wie lese ich meinen Score richtig?"],
+    "bp-workflows": ["Welcher Workflow passt zu meinem nächsten Termin?", "Wie formuliere ich eine Absage, die nicht verbrennt?", "Wie strukturiere ich ein Meeting in fünf Minuten?"],
+    "bp-challengers": ["Mit welcher Challenge fange ich an?", "Wie bekomme ich eine bessere Bewertung?", "Was schaue ich mir bei anderen an?"],
+    "bp-simulationen": ["Welche Simulation passt zu meinem Gespräch morgen?", "Wie mache ich mein Gegenüber schwieriger?", "Woran merke ich, dass ich besser werde?"],
     "coaching-pakete": ["Welches Paket passt zu meiner Situation?", "Was passiert in den Live-Coachings?", "Wie schnell sehe ich Ergebnisse?"],
     "teaser-login": ["Wie startest du mit mir?", "Was bringt mir der erste Tag?", "Was unterscheidet dich von einem Kurs?"],
 }
@@ -362,7 +372,8 @@ WLAD_STATURE = "He is tall with long legs and elegant, athletic proportions (abo
 WLAD_STATURE_TALK = "He is tall with broad shoulders and an upright, relaxed posture; the camera is close to him. "
 # Studio-Look für Clips über Videos, Simulationen & Co.; sonst Gesprächs-Charakter im Loft.
 CLIP_SETTING = {"start-4-werkzeuge": "studio", "teaser-login": "studio", "teaser-spotlight": "studio",
-                "coaching-pakete": "studio", "bp-playbooks": "studio", "bp-missionen": "studio", "bp-video-analyse": "studio"}
+                "coaching-pakete": "studio", "bp-playbooks": "studio", "bp-missionen": "studio", "bp-video-analyse": "studio",
+                "bp-workflows": "studio", "bp-challengers": "studio", "bp-simulationen": "studio"}
 
 
 def presence_plan(setting: str = "loft") -> list[dict]:
@@ -782,7 +793,9 @@ def seed_clips() -> list[dict]:
               for c in MISSION_CLIPS]
     clips.append(_clip("coaching-pakete", "coaching", 200, "Was du mit Leader-OS bekommst", GODMODE_SCRIPTS["coaching-pakete"],
                        multi_shot=True, aspect="16:9"))
-    clips += [_clip(c["slug"], "feature", c["order"], c["title"], GODMODE_SCRIPTS[c["slug"]], multi_shot=True, aspect="16:9")
+    clips += [_clip(c["slug"], "feature", c["order"], c["title"], GODMODE_SCRIPTS[c["slug"]],
+                    multi_shot=not c.get("single_take"), single_take=bool(c.get("single_take")),
+                    setting="studio" if c.get("single_take") else None, aspect="16:9")
               for c in FEATURE_CLIPS]
     return clips
 

@@ -69,23 +69,24 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
             onError={() => setVideoBroken(true)}
             data-testid={`guide-video-${clip.slug}`}
           />
-          {!started && (
-            <button
-              type="button"
-              onClick={start}
-              autoFocus={autoFocus}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/45 hover:bg-black/35 transition-colors group"
-              data-testid={`guide-play-${clip.slug}`}
-            >
-              <span className="w-16 h-16 rounded-full bg-[#BFFF00] flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Play size={26} className="text-black ml-1" fill="currentColor" />
-              </span>
-              <span className="text-[11px] font-bold text-white/90 tracking-wide">
-                {de ? 'Mit Ton starten' : 'Play with sound'}
-                {clip.duration_seconds ? ` · ${clip.duration_seconds}s` : ''}
-              </span>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={start}
+            autoFocus={autoFocus}
+            aria-hidden={started}
+            tabIndex={started ? -1 : 0}
+            className={`absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/45 transition-[opacity,background-color] duration-500 group ${
+              started ? 'pointer-events-none opacity-0' : 'opacity-100 hover:bg-black/35'}`}
+            data-testid={`guide-play-${clip.slug}`}
+          >
+            <span className="w-16 h-16 rounded-full bg-[#BFFF00] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <Play size={26} className="text-black ml-1" fill="currentColor" />
+            </span>
+            <span className="text-[11px] font-bold text-white/90 tracking-wide">
+              {de ? 'Mit Ton starten' : 'Play with sound'}
+              {clip.duration_seconds ? ` · ${clip.duration_seconds}s` : ''}
+            </span>
+          </button>
         </div>
         )
       ) : (
@@ -126,7 +127,7 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
                 className="inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors"
                 data-testid={`guide-ask-wlad-${clip.slug}`}
               >
-                <MessageCircle size={12} /> {de ? 'Frag Wlad dazu' : 'Ask Wlad about this'}
+                <MessageCircle size={12} /> {de ? 'Frag WladBot dazu' : 'Ask WladBot about this'}
               </Link>
               <InteractiveWladButton clip={clip} de={de} />
         </div>

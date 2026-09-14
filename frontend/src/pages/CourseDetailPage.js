@@ -147,7 +147,7 @@ export default function CourseDetailPage() {
             )}
             <div className="flex flex-wrap items-center gap-3 mt-5">
               <button type="button" onClick={() => navigate(askWladPrefill(course, current, de))} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl border border-black/[0.1] dark:border-white/[0.15] text-[12.5px] font-bold hover:bg-black/[0.03] dark:hover:bg-white/[0.05]" data-testid="course-ask-wlad-btn">
-                <MessageCircle size={13} /> {de ? 'Frag Wlad dazu' : 'Ask Wlad'}
+                <MessageCircle size={13} /> {de ? 'Frag WladBot dazu' : 'Ask WladBot'}
               </button>
               {current.unlocked && <InteractiveWladButton clip={{ slug: current.id, title: `${course.title} · ${current.title}`, script: [current.purpose, ...(current.bullets || [])].filter(Boolean).join(' ') }} de={de} />}
             </div>

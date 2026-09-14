@@ -73,19 +73,23 @@ _SEED_FILE = Path(__file__).resolve().parent.parent / "guide_seed_data.json"
 _IN_PROGRESS_STATUSES = {"full_running", "audio_ready", "shots_planned", "shots_keyframed", "keyframe_ready"}
 
 
-async def _import_produced_seed() -> None:
+async def _import_produced_seed(force: bool = False) -> dict:
     """Prod-DB startet leer: produzierte Clips (Pfade im gemeinsamen Object Storage) einspielen.
     Iter 176: Bestehende Clips werden auf den neueren Seed-Stand gehoben (neue GODMODE-Videos kommen so
-    ohne Re-Render in Prod an) — nie während eines laufenden Renders und nie bei gleichem Video."""
+    ohne Re-Render in Prod an) — nie während eines laufenden Renders und nie bei gleichem Video.
+    Iter 180: `force=True` (Admin-Knopf „Videos aus Seed einspielen") übernimmt den Seed-Stand auch ohne
+    neueres Datum und setzt die Freigabe aus dem Seed — damit fehlende Videos/Vorschaubilder in Prod
+    mit einem Klick zurückkommen."""
     if not _SEED_FILE.exists():
-        return
+        return {"imported": 0, "upgraded": 0, "skipped": [], "seed_file": False}
     try:
         data = json.loads(_SEED_FILE.read_text())
     except Exception as e:
         logger.error("Guide seed file unreadable: %s", e)
-        return
+        return {"imported": 0, "upgraded": 0, "skipped": [], "seed_file": False}
     imported = 0
     upgraded = 0
+    skipped: list[str] = []
     for clip in data.get("clips", []):
         clip.pop("_id", None)
         existing = await db.guide_clips.find_one(
@@ -100,14 +104,18 @@ async def _import_produced_seed() -> None:
             continue
         seed_video = clip.get("video_path")
         newer = (clip.get("updated_at") or "") > (existing.get("updated_at") or "")
-        if not seed_video or not newer or existing.get("video_path") == seed_video:
+        if not seed_video or (not force and (not newer or existing.get("video_path") == seed_video)):
+            skipped.append(clip["slug"])
             continue
         if existing.get("status") in _IN_PROGRESS_STATUSES:
+            skipped.append(clip["slug"])
             continue
-        # Sichtbarkeit bleibt Prod-Entscheidung: `published` nur übernehmen, wenn dort noch nichts gesetzt ist.
+        # Sichtbarkeit bleibt Prod-Entscheidung: `published` nur übernehmen, wenn dort noch nichts gesetzt ist
+        # (oder der Admin den Seed bewusst erzwingt).
         payload = {k: v for k, v in clip.items() if k != "published"}
-        if existing.get("published") is None and "published" in clip:
-            payload["published"] = clip["published"]
+        if force or existing.get("published") is None:
+            if "published" in clip:
+                payload["published"] = clip["published"]
         await db.guide_clips.update_one({"_id": existing["_id"]}, {"$set": payload})
         upgraded += 1
     settings = data.get("settings") or {}
@@ -120,6 +128,7 @@ async def _import_produced_seed() -> None:
                 await db.guide_settings.update_one({"_id": SETTINGS_ID}, {"$set": missing}, upsert=True)
     if imported or upgraded:
         logger.info("Guide seed: %s clips importiert, %s auf neuere Videos gehoben", imported, upgraded)
+    return {"imported": imported, "upgraded": upgraded, "skipped": skipped, "seed_file": True}
 
 
 async def _ensure_seeded() -> None:
@@ -652,6 +661,19 @@ async def _store_settings_asset(file: UploadFile, kind: str, max_mb: int) -> str
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
     return token
+
+
+@router.post("/admin/seed/reimport")
+async def reimport_seed(request: Request):
+    """Videos + Freigaben aus `guide_seed_data.json` einspielen — der Knopf für Prod,
+    wenn dort ein Video oder Vorschaubild fehlt. Laufende Renders bleiben unberührt."""
+    await require_admin(request)
+    result = await _import_produced_seed(force=True)
+    if not result["seed_file"]:
+        raise HTTPException(status_code=400, detail="Keine Seed-Datei gefunden (guide_seed_data.json)")
+    total = await db.guide_clips.count_documents({})
+    published = await db.guide_clips.count_documents({"published": True, "video_path": {"$ne": None}})
+    return {"ok": True, **result, "clips_total": total, "clips_published": published}
 
 
 @router.post("/admin/signature")

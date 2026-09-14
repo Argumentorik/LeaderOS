@@ -15,6 +15,7 @@ export const VideoThumb = ({
   showPlay = true, rounded = '', className = '', children,
 }) => {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const url = failed ? null : absolute(src);
   const seconds = duration ? Math.round(duration) : null;
 
@@ -24,7 +25,9 @@ export const VideoThumb = ({
         <img
           src={url} alt={title} loading="lazy" decoding="async"
           onError={() => setFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          onLoad={() => setLoaded(true)}
+          style={{ opacity: loaded ? 1 : 0 }}
+          className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-500 group-hover:scale-[1.04]"
         />
       ) : (
         <div className="absolute inset-0 flex flex-col justify-end p-3" data-testid="video-thumb-fallback"

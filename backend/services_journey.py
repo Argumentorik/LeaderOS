@@ -32,7 +32,7 @@ ROLE_META = {
 # 7 Tage je Fokus: {title, task, path, cta, minutes}
 WEEK_PLANS = {
     "boardroom_rhetorik": [
-        {"title": "Deine Baseline", "task": "Frag Wlad: „Wie wirke ich, wenn ich unter Druck spreche?“ und beschreibe eine echte Situation aus {team_ctx}.", "path": "/chat", "cta": "Mit Wlad sprechen", "minutes": 10},
+        {"title": "Deine Baseline", "task": "Frag WladBot: „Wie wirke ich, wenn ich unter Druck spreche?“ und beschreibe eine echte Situation aus {team_ctx}.", "path": "/chat", "cta": "Mit WladBot sprechen", "minutes": 10},
         {"title": "Ein Satz, eine Botschaft", "task": "Formuliere die Kernbotschaft deines nächsten Meetings in einem Satz. Wlad schärft ihn mit dir.", "path": "/tools", "cta": "Werkzeug öffnen", "minutes": 10},
         {"title": "Die drei Säulen", "task": "Tag 3 der Challenge: Struktur, Klarheit, Wirkung – die Grundlage für jede Rede.", "path": "/challenge", "cta": "Challenge öffnen", "minutes": 10},
         {"title": "Vor der Kamera", "task": "Nimm deine Botschaft in 60 Sekunden auf. Wlad analysiert Füllwörter, Tempo und Wirkung.", "path": "/missions", "cta": "Video-Mission starten", "minutes": 10},
@@ -41,8 +41,8 @@ WEEK_PLANS = {
         {"title": "Wochen-Review", "task": "Erzähl Wlad, was sich in deinen Gesprächen verändert hat – er baut daraus deinen Plan für Woche 2.", "path": "/chat", "cta": "Review mit Wlad", "minutes": 10},
     ],
     "strategisches_eq": [
-        {"title": "Deine Baseline", "task": "Frag Wlad: „Welches Gespräch schiebe ich gerade vor mir her – und warum?“ Beschreibe die Person aus {team_ctx}.", "path": "/chat", "cta": "Mit Wlad sprechen", "minutes": 10},
-        {"title": "Perspektivwechsel", "task": "Lass Wlad die Sicht deines Gegenübers einnehmen. Was braucht diese Person wirklich von dir?", "path": "/chat", "cta": "Mit Wlad sprechen", "minutes": 10},
+        {"title": "Deine Baseline", "task": "Frag WladBot: „Welches Gespräch schiebe ich gerade vor mir her – und warum?“ Beschreibe die Person aus {team_ctx}.", "path": "/chat", "cta": "Mit WladBot sprechen", "minutes": 10},
+        {"title": "Perspektivwechsel", "task": "Lass WladBot die Sicht deines Gegenübers einnehmen. Was braucht diese Person wirklich von dir?", "path": "/chat", "cta": "Mit WladBot sprechen", "minutes": 10},
         {"title": "Stärken & Trigger", "task": "Tag 4 der Challenge: Was bringt dich aus der Ruhe – und was machst du dann?", "path": "/challenge", "cta": "Challenge öffnen", "minutes": 10},
         {"title": "Das schwierige Gespräch", "task": "Simuliere das Gespräch, das du aufschiebst. Ziel: ruhig bleiben, klar bleiben.", "path": "/simulations", "cta": "Simulation starten", "minutes": 15},
         {"title": "Feedback, das ankommt", "task": "Baue mit Wlad ein konkretes Feedback für ein Teammitglied – wertschätzend und deutlich.", "path": "/tools", "cta": "Werkzeug öffnen", "minutes": 10},
@@ -50,10 +50,10 @@ WEEK_PLANS = {
         {"title": "Wochen-Review", "task": "Welches Gespräch hast du geführt? Wlad wertet mit dir aus und plant Woche 2.", "path": "/chat", "cta": "Review mit Wlad", "minutes": 10},
     ],
     "ki_kompetenz": [
-        {"title": "Deine Baseline", "task": "Frag Wlad: „Welche Entscheidung steht bei {team_ctx} als Nächstes an?“ und lass dir drei Szenarien bauen.", "path": "/chat", "cta": "Mit Wlad sprechen", "minutes": 10},
+        {"title": "Deine Baseline", "task": "Frag WladBot: „Welche Entscheidung steht bei {team_ctx} als Nächstes an?“ und lass dir drei Szenarien bauen.", "path": "/chat", "cta": "Mit WladBot sprechen", "minutes": 10},
         {"title": "KI richtig einordnen", "task": "Tag 2 der Challenge: Was KI für Führungskräfte kann – und was nicht.", "path": "/challenge", "cta": "Challenge öffnen", "minutes": 10},
-        {"title": "Der Sparringspartner", "task": "Gib Wlad eine echte Entscheidung und lass ihn die stärksten Gegenargumente finden.", "path": "/chat", "cta": "Mit Wlad sprechen", "minutes": 10},
-        {"title": "Vom Plan zur Aufgabe", "task": "Lass Wlad aus deinem Ziel einen Wochenplan mit klaren Aufgaben ableiten.", "path": "/tasks", "cta": "Aufgaben öffnen", "minutes": 10},
+        {"title": "Der Sparringspartner", "task": "Gib Wlad eine echte Entscheidung und lass ihn die stärksten Gegenargumente finden.", "path": "/chat", "cta": "Mit WladBot sprechen", "minutes": 10},
+        {"title": "Vom Plan zur Aufgabe", "task": "Lass WladBot aus deinem Ziel einen Wochenplan mit klaren Aufgaben ableiten.", "path": "/tasks", "cta": "Aufgaben öffnen", "minutes": 10},
         {"title": "Entscheidung erklären", "task": "Nimm in 60 Sekunden auf, wie du eine Entscheidung deinem Team erklärst. Wlad prüft Klarheit und Struktur.", "path": "/missions", "cta": "Video-Mission starten", "minutes": 10},
         {"title": "Kurs: Grundlagen", "task": "Folge 1 ist frei: Wlads Denkwerkzeuge für bessere Entscheidungen.", "path": "/kurse", "cta": "Zum Kurs", "minutes": 12},
         {"title": "Wochen-Review", "task": "Welche Entscheidung hast du mit Wlad vorbereitet? Auswertung und Plan für Woche 2.", "path": "/chat", "cta": "Review mit Wlad", "minutes": 10},

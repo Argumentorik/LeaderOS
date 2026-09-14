@@ -4,7 +4,7 @@ import { VideoThumb } from '../shared/VideoThumb';
 
 const BENEFITS = [
   { icon: Target, de: ['Echte Situationen, keine Theorie', 'Jede Folge startet mit einem Moment aus deinem Führungsalltag.'], en: ['Real situations, no theory', 'Every episode starts with a moment from your leadership day.'] },
-  { icon: MessageCircle, de: ['Frag Wlad direkt aus der Folge', 'Ein Klick — und du besprichst die Folge auf deine Situation gemünzt.'], en: ['Ask Wlad right from the episode', 'One click — discuss the episode applied to your situation.'] },
+  { icon: MessageCircle, de: ['Frag WladBot direkt aus der Folge', 'Ein Klick — und du besprichst die Folge auf deine Situation gemünzt.'], en: ['Ask WladBot right from the episode', 'One click — discuss the episode applied to your situation.'] },
   { icon: CheckCircle2, de: ['Folge gesehen = Fortschritt gezählt', 'Dein Level wächst mit jeder Folge automatisch mit.'], en: ['Watched = progress counted', 'Your level grows automatically with every episode.'] },
   { icon: BookOpen, de: ['Sofort anwenden: Playbook zu jedem Kurs', 'Skripte und Checklisten für das nächste Gespräch.'], en: ['Apply instantly: a playbook per course', 'Scripts and checklists for your next conversation.'] },
   { icon: Timer, de: ['Kurze Folgen, max. 12 Minuten', 'Passt zwischen zwei Meetings — ohne Qualitätsverlust.'], en: ['Short episodes, max. 12 minutes', 'Fits between two meetings — no loss of depth.'] },
@@ -43,7 +43,7 @@ export const WhatsInside = ({ de }) => (
 export const MoreFromLeaderOS = ({ de }) => {
   const navigate = useNavigate();
   const items = [
-    { icon: MessageCircle, to: '/chat', testid: 'courses-more-chat', de: ['Frag Wlad', 'Dein KI-Coach kennt Bücher, Kurse und Live-Calls — stell die Frage, die dich gerade beschäftigt.', 'Zum Chat'], en: ['Ask Wlad', 'Your AI coach knows the books, courses and live calls — ask what is on your mind.', 'Open chat'] },
+    { icon: MessageCircle, to: '/chat', testid: 'courses-more-chat', de: ['Frag WladBot', 'Dein KI-Coach kennt Bücher, Kurse und Live-Calls — stell die Frage, die dich gerade beschäftigt.', 'Zum Chat'], en: ['Ask WladBot', 'Your AI coach knows the books, courses and live calls — ask what is on your mind.', 'Open chat'] },
     { icon: Video, to: '/video-guide', testid: 'courses-more-guide', de: ['Video-Guide', 'Wlad erklärt dir die Plattform in kurzen Clips — vom Check-in bis zur Video-Analyse.', 'Guide ansehen'], en: ['Video guide', 'Wlad walks you through the platform in short clips.', 'Watch guide'] },
     { icon: Flame, to: '/challenge', testid: 'courses-more-challenge', de: ['30-Tage-Challenge', 'Jeden Tag eine Aufgabe, 10 Fragen, ein Fortschritt — das Programm, das Gewohnheiten baut.', 'Challenge öffnen'], en: ['30-day challenge', 'One task a day, 10 questions, visible progress.', 'Open challenge'] },
   ];

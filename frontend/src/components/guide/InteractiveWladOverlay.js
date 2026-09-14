@@ -9,8 +9,8 @@ const WLAD = '/wladbot-avatar-clean.png';
 const statusLabel = (state, error, de) => ({
   [VOICE_STATES.IDLE]: de ? 'Tippe auf Wlad, um zu sprechen' : 'Tap Wlad to speak',
   [VOICE_STATES.LISTENING]: de ? 'Ich höre dir zu…' : 'Listening…',
-  [VOICE_STATES.THINKING]: de ? 'Wlad denkt nach…' : 'Wlad is thinking…',
-  [VOICE_STATES.SPEAKING]: de ? 'Wlad spricht' : 'Wlad is speaking',
+  [VOICE_STATES.THINKING]: de ? 'WladBot denkt nach…' : 'Wlad is thinking…',
+  [VOICE_STATES.SPEAKING]: de ? 'WladBot spricht' : 'Wlad is speaking',
   [VOICE_STATES.ERROR]: error || (de ? 'Fehler aufgetreten' : 'Error occurred'),
 }[state]);
 
@@ -129,7 +129,7 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 text-[#BFFF00]">
               <Sparkles size={13} />
-              <span className="text-[10.5px] font-black uppercase tracking-[0.18em]">{de ? 'Mit Wlad sprechen' : 'Talk to Wlad'}</span>
+              <span className="text-[10.5px] font-black uppercase tracking-[0.18em]">{de ? 'Mit WladBot sprechen' : 'Talk to WladBot'}</span>
             </div>
             <p className="mt-0.5 truncate text-[13px] font-bold" data-testid="interactive-wlad-status">{status}</p>
             {clip?.title && (
@@ -166,7 +166,7 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
               <WladAvatar state={state} level={level} speakLevel={speakLevel}
                           onTap={trialExhausted ? undefined : handleOrbTap} label={status} />
               <p className="max-w-md text-[14px] leading-relaxed text-white/45">
-                {de ? 'Frag Wlad direkt zum Video — er antwortet mit seiner Stimme.' : 'Ask Wlad about the video — he answers in his own voice.'}
+                {de ? 'Frag WladBot direkt zum Video — er antwortet mit seiner Stimme.' : 'Ask WladBot about the video — he answers in his own voice.'}
               </p>
               {!trialExhausted && questions.length > 0 && (
                 <div className="flex max-w-xl flex-wrap justify-center gap-2" data-testid="interactive-wlad-suggestions">

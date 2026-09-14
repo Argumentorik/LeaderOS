@@ -1,6 +1,5 @@
 import { RagDebugStudio } from './RagDebugStudio';
 import { RagControlCenter } from './RagControlCenter';
-import { LearningVideosManager } from './LearningVideosManager';
 import { LicenseKeysManager } from './LicenseKeysManager';
 import { MasterclassClientsManager } from './MasterclassClientsManager';
 import { ConversionCenter } from './ConversionCenter';
@@ -40,12 +39,6 @@ const SECTIONS = [
     de: 'Pro Folge Vimeo-Link einfügen oder eigenes Video hochladen (MP4/MOV bis 2 GB, Fortschritt sichtbar). Sofort live. Vorschaubild per Sekunde wählbar, Download für Detailarbeit außerhalb.',
     en: 'Per episode: paste a Vimeo link or upload your own video (MP4/MOV up to 2 GB with progress). Live instantly. Pick the thumbnail second, download for external editing.',
     render: () => <CourseEpisodesManager />,
-  },
-  {
-    key: 'videos', title: (de) => (de ? 'Lernvideos · Vimeo-Verwaltung' : 'Learning Videos · Vimeo Manager'),
-    de: 'Hinterlege Vimeo-IDs / URLs für die 10 Kurse. Sobald gespeichert spielt der In-App-Player ohne Code-Deploy.',
-    en: 'Drop Vimeo IDs / URLs into the 10-course catalogue. The in-app player picks them up live, no deploy needed.',
-    render: () => <LearningVideosManager />,
   },
   {
     key: 'masterclass', title: (de) => (de ? 'Masterclass-Kunden · Direktzugang' : 'Masterclass Clients · Direct Access'),

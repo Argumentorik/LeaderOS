@@ -10,6 +10,9 @@ import {
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
+
+const SIMULATION_CLIPS = ['bp-simulationen'];
 
 // Iter 128 (Godmode · Wlad-Direktive): Der klassische Text-Sim-Flow wurde entfernt.
 // Die Seite bleibt als /simulations erreichbar (Sidebar/MobileNav ändert sich
@@ -114,6 +117,10 @@ export default function SimulationsPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 pt-10">
+          <FeatureVideoSection slugs={SIMULATION_CLIPS} de={de} />
         </div>
 
         {/* How it works */}

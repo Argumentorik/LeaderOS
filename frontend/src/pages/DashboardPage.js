@@ -13,7 +13,6 @@ import { AnimatedNumber } from '../components/dashboard/AnimatedNumber';
 import { StatCardsRow, QuickActionsGrid } from '../components/dashboard/StatCards';
 import { WladHubDiagnosisCard } from '../components/dashboard/WladHubCard';
 import { WladMotivationCard } from '../components/dashboard/WladMotivationCard';
-import { DashboardLearningVideos } from '../components/dashboard/DashboardLearningVideos';
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
 import { ActionInbox } from '../components/dashboard/ActionInbox';
 import { JourneyCard } from '../components/dashboard/JourneyCard';
@@ -228,10 +227,9 @@ export default function DashboardPage() {
             </Card>
 
         {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
-        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 8 : 9}>
+        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 7 : 8}>
         <GuideClipsRow de={de} />
         <div className="mb-6"><ArgumentationPrepCard de={de} /></div>
-        <div className="mb-6"><DashboardLearningVideos de={de} /></div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
             <QuickActionsGrid de={de} navigate={navigate} />

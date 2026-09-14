@@ -78,7 +78,6 @@ export default function VideoGuidePage() {
   }, [active]);
 
   const onboarding = useMemo(() => clips.filter((c) => c.kind === 'onboarding'), [clips]);
-  const missions = useMemo(() => clips.filter((c) => c.kind === 'mission'), [clips]);
   const seen = clips.filter((c) => c.seen).length;
 
   const select = (clip) => {
@@ -124,17 +123,21 @@ export default function VideoGuidePage() {
         </section>
       )}
 
-      {missions.length > 0 && (
-        <section data-testid="video-guide-missions">
-          <Link to="/challenge" className="group inline-flex items-center gap-2 mb-3 text-base md:text-lg font-bold hover:text-[#5a7a00] dark:hover:text-[#BFFF00] transition-colors" data-testid="video-guide-missions-title">
-            {de ? '30-Tage-Challenge · Briefings Tag 1–7' : '30-day challenge · Briefings day 1–7'}
-            <ArrowRight size={16} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
-          </Link>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {missions.map((c) => <ClipTile key={c.slug} clip={c} index={`${de ? 'Tag' : 'Day'} ${c.ref}`} active={active?.slug === c.slug} onSelect={select} />)}
-          </div>
-        </section>
-      )}
+      {/* Iter 180: Die Tages-Briefings leben in der 30-Tage-Challenge — hier nur der Weg dorthin. */}
+      <Link to="/challenge"
+            className="group flex items-center gap-3 rounded-2xl border border-black/[0.07] bg-white p-4 transition-colors hover:border-[#BFFF00] dark:border-white/[0.08] dark:bg-card"
+            data-testid="video-guide-challenge-link">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00]">
+          <Clapperboard size={16} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[13.5px] font-bold">{de ? 'Tages-Briefings Tag 1–7' : 'Daily briefings day 1–7'}</span>
+          <span className="block text-[12px] text-muted-foreground">
+            {de ? 'Findest du direkt in der 30-Tage-Challenge — bei dem Tag, an dem du gerade stehst.' : 'Right inside the 30-day challenge — at the day you are on.'}
+          </span>
+        </span>
+        <ArrowRight size={16} className="opacity-50 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
+      </Link>
     </div>
     </DashboardLayout>
   );

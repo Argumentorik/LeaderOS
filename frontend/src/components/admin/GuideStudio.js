@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
-import { Loader2, Upload, Mic, Check, AlertCircle, Clapperboard } from 'lucide-react';
+import { Loader2, Upload, Mic, Check, AlertCircle, Clapperboard, RefreshCw } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideClipCard } from './GuideClipCard';
@@ -61,6 +61,8 @@ export const GuideStudio = () => {
   const [cloneErr, setCloneErr] = useState('');
   const [bulkBusy, setBulkBusy] = useState(false);
   const [bulkErr, setBulkErr] = useState('');
+  const [seedBusy, setSeedBusy] = useState(false);
+  const [seedNote, setSeedNote] = useState('');
 
   const load = useCallback(async () => {
     try {
@@ -83,6 +85,19 @@ export const GuideStudio = () => {
     try { await api.post('/guide/admin/voice-clone', {}); await load(); }
     catch (e) { setCloneErr(e?.response?.data?.detail || 'Stimm-Klon fehlgeschlagen'); }
     finally { setCloning(false); }
+  };
+
+  const reimportSeed = async () => {
+    setSeedBusy(true); setSeedNote('');
+    try {
+      const res = await api.post('/guide/admin/seed/reimport', {});
+      const d = res.data;
+      setSeedNote(`${d.imported} neu, ${d.upgraded} aktualisiert · ${d.clips_published}/${d.clips_total} Clips mit Video freigegeben`);
+      await load();
+    } catch (e) {
+      logger.error('seed reimport failed', e);
+      setSeedNote(e?.response?.data?.detail || 'Einspielen fehlgeschlagen');
+    } finally { setSeedBusy(false); }
   };
 
   if (!data) return <div className="text-xs text-muted-foreground py-6" data-testid="guide-studio-loading"><Loader2 size={14} className="animate-spin inline mr-2" />Guide Studio lädt…</div>;
@@ -125,6 +140,21 @@ export const GuideStudio = () => {
       </Card>
 
       <InteractiveBetaCard voiceCloned={!!s.custom_voice_id} />
+
+      <Card className="flex flex-wrap items-center gap-3 border-border bg-card p-3" data-testid="guide-seed-row">
+        <RefreshCw size={14} className="text-[#BFFF00]" />
+        <div className="flex-1 min-w-[220px] text-[11px] text-muted-foreground">
+          <span className="font-bold text-foreground">Videos aus Seed einspielen</span> — holt fertige Videos,
+          Vorschaubilder und Freigaben aus <span className="font-mono">guide_seed_data.json</span> in diese Umgebung.
+          Nutze das nach einem Deployment, wenn live ein Video oder Thumbnail fehlt. Laufende Renders bleiben unberührt.
+          {seedNote && <span className="ml-2 text-[#5a7a00] dark:text-[#BFFF00]">{seedNote}</span>}
+        </div>
+        <Button size="sm" variant="outline" disabled={seedBusy} onClick={reimportSeed}
+                className="h-7 text-[11px]" data-testid="guide-seed-reimport-btn">
+          {seedBusy ? <Loader2 size={12} className="animate-spin mr-1" /> : <RefreshCw size={12} className="mr-1" />}
+          Einspielen
+        </Button>
+      </Card>
 
       <div className="space-y-3">
         <div className="flex items-center gap-2" data-testid="guide-bulk-row">

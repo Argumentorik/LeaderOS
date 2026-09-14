@@ -22,7 +22,7 @@ from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
 from pydantic import BaseModel, Field
 
 from config import db, logger, EMERGENT_LLM_KEY
-from services import get_current_user, get_user_memory
+from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT
 from services_actions import record_user_action
 from routes.admin import require_admin
 from services_ai_errors import ai_http_error
@@ -244,7 +244,10 @@ REALTIME_CLONE_BUDGET_S = int(os.environ.get("VOICE_CLONE_BUDGET_S", "6"))
 
 def _synthesize(text: str, voice_config: dict) -> bytes:
     """Blocking synthesis — returns raw MP3 bytes. Run inside run_in_threadpool."""
-    text = _normalize_wlad_name(text)
+    from services_speech_text import to_speakable
+
+    # Iter 180: Aussprache-Schicht („im" → „imm", „Lade" deutsch, Abkürzungen buchstabiert).
+    text = to_speakable(_normalize_wlad_name(text))
     if voice_config.get("provider") == "minimax":
         from services_fal import FalError, synthesize_speech
 
@@ -421,28 +424,25 @@ async def clear_voice_cache(request: Request, persona: Optional[str] = None) -> 
 # ── Audio-Mode: Conversational Voice Endpoint ───────────────────────────────
 # ChatGPT/Claude-style voice mode: audio-in → transcript → LLM → audio-out.
 
-VOICE_CONVO_SYSTEM_PROMPT = """Du bist WladBot — ein deutschsprachiger Leadership-Coach im LIVE-VOICE-MODUS.
+VOICE_STYLE_BLOCK = """
 
-WICHTIG für Voice:
-- Antworte natürlich gesprochen, wie in einem echten Gespräch.
-- Maximal 2-3 kurze Sätze (60-90 Wörter), niemals länger.
-- Kein JSON, keine Listen, keine Aufzählungspunkte, keine Überschriften.
-- Keine Markdown-Formatierung, keine Sterne, keine Klammern.
-- Stelle gerne Rückfragen, halte den Dialog am Leben.
-- Sprich Deutsch, sei direkt, warm, charismatisch — wie Wlad Jachtchenko persönlich.
-- Wenn der User unklar spricht, frage präzise nach.
+--- LIVE-VOICE-MODUS: NUR DIE FORM ÄNDERT SICH, NICHT DIE QUALITÄT ---
+Dein Wissen, deine Frameworks und deine Genauigkeit sind im Sprechen IDENTISCH zum Schreiben.
+Du kürzt nur die Form — du vereinfachst NICHT den Inhalt.
+- Antworte natürlich gesprochen, 2–4 Sätze (60–110 Wörter), niemals länger.
+- Kein JSON, keine Listen, keine Aufzählungspunkte, keine Überschriften, keine Markdown-Zeichen.
+- Wenn du ein Framework anwendest, nenne es beim Namen (z. B. Feedbackformel, 3 Säulen der Überzeugung)
+  und gib EINEN konkreten Satz, den der Nutzer morgen wörtlich sagen kann.
+- Stelle am Ende höchstens eine kurze Rückfrage, wenn es das Gespräch weiterbringt.
+- Keine erfundenen Zahlen, Buchtitel, Studien oder Zitate. Wenn du etwas nicht weißt: sag es in einem Satz.
+- Wenn der Nutzer unklar spricht (Spracherkennung), frage präzise nach, statt zu raten.
 
-NAMENSREGEL — STRIKT:
-- Sein Name wird IMMER „Wlad" geschrieben (mit W), niemals „Vlad".
-- Auch nicht „Vladimir", nicht „Wladimir" — nur „Wlad".
-
-WLADS FRAMEWORKS (nutze, wenn der RAG-Kontext unten welche liefert):
-- 3 Säulen der Überzeugung (Logos · Ethos · Pathos)
-- Kommunikationsquadrant (Klarheit · Empathie · Struktur · Mut)
-- Schwarze Rhetorik / Manipulationsabwehr
-- Verhandeln nach Wlad-Methodik
-Wenn du ein Framework anwendest, nenne es kurz beim Namen — auch im Voice-Modus.
+NAMENSREGEL — STRIKT: Sein Name wird IMMER „Wlad" geschrieben (mit W), niemals „Vlad",
+niemals „Vladimir", niemals „Wladimir". Das Produkt heißt „Wladbot".
 """
+
+# Alt-Name bleibt als Alias erhalten (wird an mehreren Stellen importiert).
+VOICE_CONVO_SYSTEM_PROMPT = WLADBOT_SYSTEM_PROMPT + VOICE_STYLE_BLOCK
 
 
 class VoiceConvoResponse(BaseModel):

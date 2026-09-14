@@ -177,3 +177,28 @@ SCRIPTS["mission-day-7"] = (
     "nebeneinander. Nimm dir dafür Zeit – das ist der wichtigste Blick der Woche. Ich bin stolz, dass du "
     "drangeblieben bist. Wir sehen uns morgen, in Woche zwei."
     )
+
+# Iter 180: drei neue Ein-Take-Clips (Workflows · Challengers · Simulationen)
+SCRIPTS["bp-workflows"] = (
+    "Workflows sind die Abkürzung für die Arbeit, die du sowieso machst. Ein Gespräch vorbereiten, eine Absage "
+    "formulieren, ein Meeting strukturieren – jeder Workflow ist ein fertiger Ablauf, in den du nur deine Situation "
+    "einsetzt. Best Practice: Nimm nicht den, der spannend klingt, sondern den, der zu deinem nächsten Termin passt. "
+    "Beantworte die Fragen so, wie du sie einem Kollegen erzählen würdest, mit Namen und Zitat. Am Ende markierst du "
+    "den einen Satz, den du wörtlich benutzt. Fünf Minuten Vorbereitung, und du gehst anders in den Raum."
+)
+
+SCRIPTS["bp-challengers"] = (
+    "Challengers ist die Bühne, auf der du dich vergleichst – nicht mit einem Ranking, sondern mit Menschen, die an "
+    "denselben Gesprächen arbeiten wie du. Du wählst eine Herausforderung, sprichst deine Version, und siehst, wie "
+    "andere dieselbe Situation gelöst haben. Best Practice: Reiche ein, bevor du dich bereit fühlst. Die erste "
+    "Version ist nie die beste, aber sie ist die, aus der du lernst. Schau dir danach genau zwei fremde Beiträge an "
+    "und notiere einen Satz, den du übernimmst. So wächst dein Repertoire jede Woche."
+)
+
+SCRIPTS["bp-simulationen"] = (
+    "Simulationen sind dein Sparringspartner für die Gespräche, vor denen du dich drückst. Du beschreibst die "
+    "Situation, ich spiele dein Gegenüber – widerständig, emotional, oder ruhig kalkulierend, so wie im echten Raum. "
+    "Best Practice: Nimm ein Gespräch, das wirklich ansteht, und geh mitten hinein, ohne Vorrede. Wenn du merkst, "
+    "dass du in die Defensive gerätst, brich ab und starte die Szene neu. Drei Durchläufe, jeweils eine Sache "
+    "anders. Danach führst du das Gespräch zum ersten Mal nicht zum ersten Mal."
+)

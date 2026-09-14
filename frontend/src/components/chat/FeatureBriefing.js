@@ -47,7 +47,7 @@ export function FeatureBriefing({
   storageKey,        // localStorage-Key — leer = kein Dismiss-Memory (dev)
   icon: Icon = Sparkles,
   eyebrow,           // z.B. "COACH-MODUS"
-  title,             // z.B. "Wlad denkt in Strategie & Schritten"
+  title,             // z.B. "WladBot denkt in Strategie & Schritten"
   bullets = [],      // ["…", "…"]
   cta,               // { label: 'Ordner anlegen', onClick }
   tone = 'lime',     // 'lime' (default) | 'gold' (premium accent)

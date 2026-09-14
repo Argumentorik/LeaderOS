@@ -26,7 +26,6 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
     '/playbooks': 'nav-playbooks',
     '/missions': 'nav-video',
     '/my-path': 'nav-progress',
-    '/lern-videos': 'nav-videos',
   };
 
   return (

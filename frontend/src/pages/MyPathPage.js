@@ -3,7 +3,6 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Progress } from '../components/ui/progress';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
-import LearningVideosTab from '../components/mypath/LearningVideosTab';
 import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { useNavigate, useSearchParams } from 'react-router-dom';

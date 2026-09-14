@@ -475,7 +475,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T00:33:14.456659+00:00",
-   "updated_at": "2026-09-12T15:30:22.254522+00:00",
+   "updated_at": "2026-09-12T15:52:52.961426+00:00",
    "progress": null,
    "shots": [
     {
@@ -2306,7 +2306,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-12T15:24:40.813274+00:00",
+   "updated_at": "2026-09-13T11:22:17.618911+00:00",
    "progress": null,
    "spent_usd": 34.74999999999999,
    "duration_seconds_video": 70.4,
@@ -2575,7 +2575,9 @@
    "preview_bytes": null,
    "preview_duration_seconds_video": null,
    "preview_subtitles": null,
-   "video_preview_path": null
+   "video_preview_path": null,
+   "duration": 62,
+   "video_source": "generated"
   },
   {
    "slug": "coaching-pakete",
@@ -3564,6 +3566,495 @@
    "preview_duration_seconds_video": null,
    "preview_subtitles": null,
    "video_preview_path": null
+  },
+  {
+   "slug": "bp-workflows",
+   "kind": "feature",
+   "ref": null,
+   "order": 303,
+   "title": "Workflows: die Abkürzung für deine Vorbereitung",
+   "script": "Workflows sind die Abkürzung für die Arbeit, die du sowieso machst. Ein Gespräch vorbereiten, eine Absage formulieren, ein Meeting strukturieren – jeder Workflow ist ein fertiger Ablauf, in den du nur deine Situation einsetzt. Best Practice: Nimm nicht den, der spannend klingt, sondern den, der zu deinem nächsten Termin passt. Beantworte die Fragen so, wie du sie einem Kollegen erzählen würdest, mit Namen und Zitat. Am Ende markierst du den einen Satz, den du wörtlich benutzt. Fünf Minuten Vorbereitung, und du gehst anders in den Raum.",
+   "multi_shot": false,
+   "single_take": true,
+   "setting": "studio",
+   "aspect": "16:9",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-workflows_8d87db32.mp4",
+   "media_token": "Aj_ShYt6o5FiM9UALVSOkV0c75J4-ieS",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-14T00:15:07.197923+00:00",
+   "updated_at": "2026-09-14T00:38:55.856588+00:00",
+   "quality": "pro",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Workflows sind die Abkürzung für die Arbeit, die du sowieso machst. Ein Gespräch vorbereiten, eine Absage formulieren, ein Meeting strukturieren – jeder Workflow ist ein fertiger Ablauf, in den du nur deine Situation einsetzt. Best Practice: Nimm nicht den, der spannend klingt, sondern den, der zu deinem nächsten Termin passt. Beantworte die Fragen so, wie du sie einem Kollegen erzählen würdest, mit Namen und Zitat. Am Ende markierst du den einen Satz, den du wörtlich benutzt. Fünf Minuten Vorbereitung, und du gehst anders in den Raum.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_bp-workflows_b95078d8.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-workflows_00aee756.mp4",
+     "audio_path": "guide/a_s1_bp-workflows_9c91a235.mp3",
+     "audio_seconds": 32.29,
+     "speech_lead": 0.4,
+     "speech_tail": 0.5,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 5.25,
+   "pipeline": "multishot",
+   "stale": false,
+   "duration_seconds_video": 32.8,
+   "preview_subtitles": null,
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.63,
+     "text": "Workflows sind die Abkürzung für die"
+    },
+    {
+     "start": 2.63,
+     "end": 3.06,
+     "text": "Arbeit"
+    },
+    {
+     "start": 3.06,
+     "end": 4.39,
+     "text": "die du sowieso machst."
+    },
+    {
+     "start": 4.39,
+     "end": 5.9,
+     "text": "Ein Gespräch vorbereiten"
+    },
+    {
+     "start": 5.9,
+     "end": 7.36,
+     "text": "eine Absage formulieren"
+    },
+    {
+     "start": 7.36,
+     "end": 9.9,
+     "text": "ein Meeting strukturieren – jeder Workflow"
+    },
+    {
+     "start": 9.9,
+     "end": 11.36,
+     "text": "ist ein fertiger Ablauf"
+    },
+    {
+     "start": 11.36,
+     "end": 13.12,
+     "text": "in den du nur deine Situation"
+    },
+    {
+     "start": 13.12,
+     "end": 13.66,
+     "text": "einsetzt."
+    },
+    {
+     "start": 13.66,
+     "end": 14.51,
+     "text": "Best Practice"
+    },
+    {
+     "start": 14.51,
+     "end": 15.42,
+     "text": "Nimm nicht den"
+    },
+    {
+     "start": 15.42,
+     "end": 16.63,
+     "text": "der spannend klingt"
+    },
+    {
+     "start": 16.63,
+     "end": 17.36,
+     "text": "sondern den"
+    },
+    {
+     "start": 17.36,
+     "end": 19.54,
+     "text": "der zu deinem nächsten Termin passt."
+    },
+    {
+     "start": 19.54,
+     "end": 21.05,
+     "text": "Beantworte die Fragen so"
+    },
+    {
+     "start": 21.05,
+     "end": 23.11,
+     "text": "wie du sie einem Kollegen erzählen"
+    },
+    {
+     "start": 23.11,
+     "end": 23.6,
+     "text": "würdest"
+    },
+    {
+     "start": 23.6,
+     "end": 24.81,
+     "text": "mit Namen und Zitat."
+    },
+    {
+     "start": 24.81,
+     "end": 26.63,
+     "text": "Am Ende markierst du den einen"
+    },
+    {
+     "start": 26.63,
+     "end": 26.93,
+     "text": "Satz"
+    },
+    {
+     "start": 26.93,
+     "end": 28.39,
+     "text": "den du wörtlich benutzt."
+    },
+    {
+     "start": 28.39,
+     "end": 29.96,
+     "text": "Fünf Minuten Vorbereitung"
+    },
+    {
+     "start": 29.96,
+     "end": 31.54,
+     "text": "und du gehst anders in den"
+    },
+    {
+     "start": 31.54,
+     "end": 31.84,
+     "text": "Raum."
+    }
+   ],
+   "video_bytes": 7687080,
+   "video_preview_path": null,
+   "published_at": "2026-09-14T00:38:55.856580+00:00"
+  },
+  {
+   "slug": "bp-challengers",
+   "kind": "feature",
+   "ref": null,
+   "order": 304,
+   "title": "Challengers: so nutzt du die Bühne",
+   "script": "Challengers ist die Bühne, auf der du dich vergleichst – nicht mit einem Ranking, sondern mit Menschen, die an denselben Gesprächen arbeiten wie du. Du wählst eine Herausforderung, sprichst deine Version, und siehst, wie andere dieselbe Situation gelöst haben. Best Practice: Reiche ein, bevor du dich bereit fühlst. Die erste Version ist nie die beste, aber sie ist die, aus der du lernst. Schau dir danach genau zwei fremde Beiträge an und notiere einen Satz, den du übernimmst. So wächst dein Repertoire jede Woche.",
+   "multi_shot": false,
+   "single_take": true,
+   "setting": "studio",
+   "aspect": "16:9",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-challengers_9070f72b.mp4",
+   "media_token": "3kCJjgsAnQ7_MWer5YfKo2SonE9z6AK1",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-14T00:15:07.202021+00:00",
+   "updated_at": "2026-09-14T00:38:56.065556+00:00",
+   "quality": "pro",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Challengers ist die Bühne, auf der du dich vergleichst – nicht mit einem Ranking, sondern mit Menschen, die an denselben Gesprächen arbeiten wie du. Du wählst eine Herausforderung, sprichst deine Version, und siehst, wie andere dieselbe Situation gelöst haben. Best Practice: Reiche ein, bevor du dich bereit fühlst. Die erste Version ist nie die beste, aber sie ist die, aus der du lernst. Schau dir danach genau zwei fremde Beiträge an und notiere einen Satz, den du übernimmst. So wächst dein Repertoire jede Woche.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_bp-challengers_90553edf.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-challengers_c9959878.mp4",
+     "audio_path": "guide/a_s1_bp-challengers_617c1dc3.mp3",
+     "audio_seconds": 31.32,
+     "speech_lead": 0.4,
+     "speech_tail": 0.5,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 5.09,
+   "pipeline": "multishot",
+   "stale": false,
+   "duration_seconds_video": 31.9,
+   "preview_subtitles": null,
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 2.04,
+     "text": "Challengers ist die Bühne"
+    },
+    {
+     "start": 2.04,
+     "end": 3.81,
+     "text": "auf der du dich vergleichst –"
+    },
+    {
+     "start": 3.81,
+     "end": 5.28,
+     "text": "nicht mit einem Ranking"
+    },
+    {
+     "start": 5.28,
+     "end": 6.56,
+     "text": "sondern mit Menschen"
+    },
+    {
+     "start": 6.56,
+     "end": 9.0,
+     "text": "die an denselben Gesprächen arbeiten wie"
+    },
+    {
+     "start": 9.0,
+     "end": 9.19,
+     "text": "du."
+    },
+    {
+     "start": 9.19,
+     "end": 11.08,
+     "text": "Du wählst eine Herausforderung"
+    },
+    {
+     "start": 11.08,
+     "end": 12.48,
+     "text": "sprichst deine Version"
+    },
+    {
+     "start": 12.48,
+     "end": 13.16,
+     "text": "und siehst"
+    },
+    {
+     "start": 13.16,
+     "end": 15.78,
+     "text": "wie andere dieselbe Situation gelöst haben."
+    },
+    {
+     "start": 15.78,
+     "end": 16.64,
+     "text": "Best Practice"
+    },
+    {
+     "start": 16.64,
+     "end": 17.31,
+     "text": "Reiche ein"
+    },
+    {
+     "start": 17.31,
+     "end": 19.02,
+     "text": "bevor du dich bereit fühlst."
+    },
+    {
+     "start": 19.02,
+     "end": 20.79,
+     "text": "Die erste Version ist nie die"
+    },
+    {
+     "start": 20.79,
+     "end": 21.16,
+     "text": "beste"
+    },
+    {
+     "start": 21.16,
+     "end": 22.2,
+     "text": "aber sie ist die"
+    },
+    {
+     "start": 22.2,
+     "end": 23.3,
+     "text": "aus der du lernst."
+    },
+    {
+     "start": 23.3,
+     "end": 25.37,
+     "text": "Schau dir danach genau zwei fremde"
+    },
+    {
+     "start": 25.37,
+     "end": 27.51,
+     "text": "Beiträge an und notiere einen Satz"
+    },
+    {
+     "start": 27.51,
+     "end": 28.61,
+     "text": "den du übernimmst."
+    },
+    {
+     "start": 28.61,
+     "end": 30.87,
+     "text": "So wächst dein Repertoire jede Woche."
+    }
+   ],
+   "video_bytes": 9895832,
+   "video_preview_path": null,
+   "published_at": "2026-09-14T00:38:56.065548+00:00"
+  },
+  {
+   "slug": "bp-simulationen",
+   "kind": "feature",
+   "ref": null,
+   "order": 305,
+   "title": "Simulationen: so sparrst du richtig",
+   "script": "Simulationen sind dein Sparringspartner für die Gespräche, vor denen du dich drückst. Du beschreibst die Situation, ich spiele dein Gegenüber – widerständig, emotional, oder ruhig kalkulierend, so wie im echten Raum. Best Practice: Nimm ein Gespräch, das wirklich ansteht, und geh mitten hinein, ohne Vorrede. Wenn du merkst, dass du in die Defensive gerätst, brich ab und starte die Szene neu. Drei Durchläufe, jeweils eine Sache anders. Danach führst du das Gespräch zum ersten Mal nicht zum ersten Mal.",
+   "multi_shot": false,
+   "single_take": true,
+   "setting": "studio",
+   "aspect": "16:9",
+   "script_source": "seed",
+   "status": "video_ready",
+   "published": true,
+   "audio_path": null,
+   "video_path": "guide/video_bp-simulationen_ff0373cb.mp4",
+   "media_token": "11m1t50W9mnbSiva0VEQwz9YWcI5ge84",
+   "duration_seconds": null,
+   "error": null,
+   "created_at": "2026-09-14T00:15:07.202671+00:00",
+   "updated_at": "2026-09-14T00:38:56.274268+00:00",
+   "quality": "pro",
+   "progress": null,
+   "shots": [
+    {
+     "id": "s1",
+     "type": "talk",
+     "preset": "studio_medium",
+     "screens": [],
+     "text": "Simulationen sind dein Sparringspartner für die Gespräche, vor denen du dich drückst. Du beschreibst die Situation, ich spiele dein Gegenüber – widerständig, emotional, oder ruhig kalkulierend, so wie im echten Raum. Best Practice: Nimm ein Gespräch, das wirklich ansteht, und geh mitten hinein, ohne Vorrede. Wenn du merkst, dass du in die Defensive gerätst, brich ab und starte die Szene neu. Drei Durchläufe, jeweils eine Sache anders. Danach führst du das Gespräch zum ersten Mal nicht zum ersten Mal.",
+     "error": null,
+     "fal_request": null,
+     "keyframe_path": "guide/kf_s1_bp-simulationen_3f443b49.png",
+     "raw_path": null,
+     "synced_path": "guide/sync_s1_bp-simulationen_cc8166c5.mp4",
+     "audio_path": "guide/a_s1_bp-simulationen_a84c542f.mp3",
+     "audio_seconds": 33.7,
+     "speech_lead": 0.4,
+     "speech_tail": 0.5,
+     "engine": "omnihuman"
+    }
+   ],
+   "spent_usd": 5.47,
+   "pipeline": "multishot",
+   "stale": false,
+   "duration_seconds_video": 34.3,
+   "preview_subtitles": null,
+   "subtitles": [
+    {
+     "start": 0.45,
+     "end": 3.63,
+     "text": "Simulationen sind dein Sparringspartner für die"
+    },
+    {
+     "start": 3.63,
+     "end": 4.3,
+     "text": "Gespräche"
+    },
+    {
+     "start": 4.3,
+     "end": 6.06,
+     "text": "vor denen du dich drückst."
+    },
+    {
+     "start": 6.06,
+     "end": 8.02,
+     "text": "Du beschreibst die Situation"
+    },
+    {
+     "start": 8.02,
+     "end": 10.8,
+     "text": "ich spiele dein Gegenüber – widerständig"
+    },
+    {
+     "start": 10.8,
+     "end": 11.47,
+     "text": "emotional"
+    },
+    {
+     "start": 11.47,
+     "end": 13.1,
+     "text": "oder ruhig kalkulierend"
+    },
+    {
+     "start": 13.1,
+     "end": 14.58,
+     "text": "so wie im echten Raum."
+    },
+    {
+     "start": 14.58,
+     "end": 15.53,
+     "text": "Best Practice"
+    },
+    {
+     "start": 15.53,
+     "end": 16.75,
+     "text": "Nimm ein Gespräch"
+    },
+    {
+     "start": 16.75,
+     "end": 18.17,
+     "text": "das wirklich ansteht"
+    },
+    {
+     "start": 18.17,
+     "end": 19.66,
+     "text": "und geh mitten hinein"
+    },
+    {
+     "start": 19.66,
+     "end": 20.54,
+     "text": "ohne Vorrede."
+    },
+    {
+     "start": 20.54,
+     "end": 21.55,
+     "text": "Wenn du merkst"
+    },
+    {
+     "start": 21.55,
+     "end": 23.78,
+     "text": "dass du in die Defensive gerätst"
+    },
+    {
+     "start": 23.78,
+     "end": 25.74,
+     "text": "brich ab und starte die Szene"
+    },
+    {
+     "start": 25.74,
+     "end": 26.01,
+     "text": "neu."
+    },
+    {
+     "start": 26.01,
+     "end": 27.1,
+     "text": "Drei Durchläufe"
+    },
+    {
+     "start": 27.1,
+     "end": 28.85,
+     "text": "jeweils eine Sache anders."
+    },
+    {
+     "start": 28.85,
+     "end": 31.09,
+     "text": "Danach führst du das Gespräch zum"
+    },
+    {
+     "start": 31.09,
+     "end": 33.25,
+     "text": "ersten Mal nicht zum ersten Mal."
+    }
+   ],
+   "video_bytes": 6772272,
+   "video_preview_path": null,
+   "published_at": "2026-09-14T00:38:56.274261+00:00"
   }
  ],
  "settings": {

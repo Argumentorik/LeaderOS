@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import logger from '../lib/logger';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Button } from '../components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -17,6 +18,8 @@ import { ToolsUpsellModal } from '../components/tools/ToolsUpsellModal';
 import { ToolsGrid } from '../components/tools/ToolsGrid';
 import { StepIndicator } from '../components/tools/StepIndicator';
 import { WorkflowResultPanel } from '../components/tools/WorkflowResultPanel';
+
+const WORKFLOW_CLIPS = ['bp-workflows'];
 
 const buildPersonaText = (persona) => {
   const parts = [];
@@ -133,12 +136,15 @@ export default function ToolsPage() {
         {showUpsell && <ToolsUpsellModal onClose={() => setShowUpsell(false)} de={de} />}
 
         {!activeTool && (
-          <ToolsGrid
-            tools={tools}
-            onSelectTool={selectTool}
-            onOpenDeepAssist={() => setShowDeepAssist(true)}
-            de={de}
-          />
+          <>
+            <FeatureVideoSection slugs={WORKFLOW_CLIPS} de={de} />
+            <ToolsGrid
+              tools={tools}
+              onSelectTool={selectTool}
+              onOpenDeepAssist={() => setShowDeepAssist(true)}
+              de={de}
+            />
+          </>
         )}
 
         {activeTool && (

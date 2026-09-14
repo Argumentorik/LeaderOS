@@ -37,7 +37,6 @@ const CommunityPage = lazyWithRetry(() => import("./pages/CommunityPage"));
 const AdminPage = lazyWithRetry(() => import("./pages/AdminPage"));
 const ProfilePage = lazyWithRetry(() => import("./pages/ProfilePage"));
 const MyPathPage = lazyWithRetry(() => import("./pages/MyPathPage"));
-const LearningVideosPage = lazyWithRetry(() => import("./pages/LearningVideosPage"));
 const SharedMissionPage = lazyWithRetry(() => import("./pages/SharedMissionPage"));
 const SharedFolderPage = lazyWithRetry(() => import("./pages/SharedFolderPage"));
 const ChallengersPage = lazyWithRetry(() => import("./pages/ChallengersPage"));
@@ -72,7 +71,7 @@ import { registerRoutePreloads, prefetchIdleRoutes } from "./lib/routePrefetch";
 registerRoutePreloads({
   '/chat': ChatPage, '/tools': ToolsPage, '/simulations': SimulationsPage, '/missions': VideoChallengePage,
   '/missions/archive': VideoArchivePage, '/challengers': ChallengersPage, '/tasks': TasksPage, '/playbooks': PlaybooksPage,
-  '/events': EventsPage, '/my-path': MyPathPage, '/lern-videos': LearningVideosPage, '/community': CommunityPage,
+  '/events': EventsPage, '/my-path': MyPathPage, '/community': CommunityPage,
   '/coaching': CoachingPage, '/downloads': DownloadsPage, '/referral': ReferralPage, '/profile': ProfilePage,
   '/challenge': Challenge30Page, '/video-guide': VideoGuidePage, '/kurse': CoursesPage, '/kurse/:slug': CourseDetailPage,
   '/daily-checkin': DailyCheckinPage, '/leader-diagnose': LeaderDiagnosePage, '/enterprise': EnterprisePage,
@@ -170,8 +169,8 @@ function AppRouter() {
         <Route path="/playbooks" element={<ProtectedRoute><PlaybooksPage /></ProtectedRoute>} />
         <Route path="/events" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
         <Route path="/my-path" element={<ProtectedRoute><MyPathPage /></ProtectedRoute>} />
-        <Route path="/lern-videos" element={<ProtectedRoute><LearningVideosPage /></ProtectedRoute>} />
-        <Route path="/learning-videos" element={<Navigate to="/lern-videos" replace />} />
+        <Route path="/lern-videos" element={<Navigate to="/kurse" replace />} />
+        <Route path="/learning-videos" element={<Navigate to="/kurse" replace />} />
         {/* PUBLIC route — Mission Replay Showcase (no auth required) */}
         <Route path="/m/:slug" element={<SharedMissionPage />} />
         <Route path="/f/:slug" element={<SharedFolderPage />} />
