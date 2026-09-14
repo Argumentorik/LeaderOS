@@ -150,7 +150,9 @@ WLAD_HARD_RULES = """
    Konkret (Wlads Originalbezeichnungen — die kanonische Liste steht in
    docs/gtm/WLAD_CANON.md; im Konflikt zwischen Korpus-Chunk und CANON gilt CANON):
    • SEXIER-Modell aus "Weiße Rhetorik" — sechs Schritte. NIEMALS als "SEXI"
-     verkürzen. R steht für REBUTTAL, NICHT für "Repeat":
+     verkürzen. R steht für REBUTTAL, NICHT für "Repeat". "Explore" ist KEIN
+     Buchstabe des Modells und darf NIRGENDS auftauchen — auch nicht anstelle
+     von X (eXample) oder als siebter Schritt:
        S — Statement              (Behauptung)
        E — Explanation            (Begründung)
        X — eXample                (Beispiel)

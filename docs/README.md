@@ -19,6 +19,7 @@ The single most important file is the **canon**: every public claim
 | --- | --- |
 | [`gtm/WLAD_CANON.md`](./gtm/WLAD_CANON.md) | **Verified facts canon.** 400.000+ Klienten, 13 Bücher, 3× SPIEGEL, framework definitions. In Konflikten gewinnt immer der Canon. |
 | [`gtm/KNOWLEDGE_ONE_PAGER.md`](./gtm/KNOWLEDGE_ONE_PAGER.md) | How the knowledge system (RAG + canon + prompts) fits together — stakeholder-readable |
+| [`gtm/EXPERT_OS_THESIS.md`](./gtm/EXPERT_OS_THESIS.md) | **Platform thesis** — why the canon-lock + hybrid-RAG architecture is a reusable "Expert-OS" engine, not a Wlad-only feature; for pitching other personal brands / enterprise L&D |
 | [`gtm/ONE_PAGER.md`](./gtm/ONE_PAGER.md) | Product one-pager |
 | [`gtm/CONTENT_STRATEGY.md`](./gtm/CONTENT_STRATEGY.md) | Content pillars, journal strategy, AEO/GEO position |
 | [`gtm/CONTENT_90D.md`](./gtm/CONTENT_90D.md) | 90-day content plan |
