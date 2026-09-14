@@ -151,6 +151,22 @@ export default function VideoChallengePage() {
     }
   };
 
+  // Iter 182: Eigenes Material (Meeting-Ausschnitt, Handy-Video) statt Live-Aufnahme.
+  const MAX_UPLOAD_BYTES = 150 * 1024 * 1024;
+  const handlePickFile = async (file) => {
+    if (file.size > MAX_UPLOAD_BYTES) {
+      const msg = de
+        ? 'Die Datei ist größer als 150 MB. Bitte einen kürzeren Ausschnitt hochladen (3 Minuten reichen).'
+        : 'File is larger than 150 MB. Please upload a shorter excerpt (3 minutes is plenty).';
+      try { (await import('sonner')).toast.error(msg, { duration: 6000 }); }
+      catch (toastErr) { logger.warn('toast unavailable:', toastErr?.message); }
+      return;
+    }
+    blobRef.current = file;
+    releaseStream();
+    submitVideo(activeChallenge);
+  };
+
   const resetChallenge = () => {
     setActiveChallenge(null);
     setAnalysis(null);
@@ -250,7 +266,9 @@ export default function VideoChallengePage() {
           de={de}
         />
 
-        <div className="flex-1 min-w-0 p-6 lg:p-10 max-w-4xl mx-auto bg-gradient-mesh" data-testid="video-challenge-page">
+        {/* w-full: mx-auto schaltet in der Spalte (Handy) das Strecken ab — ohne w-full wird
+            die Spalte max-content breit (489 px) und der Inhalt läuft aus dem Bild. */}
+        <div className="flex-1 min-w-0 w-full p-6 lg:p-10 max-w-4xl mx-auto bg-gradient-mesh" data-testid="video-challenge-page">
           {showUpsell && <VideoUpsellModal onClose={() => setShowUpsell(false)} lang={lang} />}
           <div className="mb-5">
             <SmartConsultationBanner placement="missions-top" compact />
@@ -280,6 +298,7 @@ export default function VideoChallengePage() {
               onStartRecording={startRecording} onStopRecording={stopRecording}
               onReset={() => { setRecorded(false); setTimer(0); }}
               onSubmit={() => submitVideo(activeChallenge)}
+              onPickFile={handlePickFile}
               lang={lang}
             />
           )}

@@ -7,6 +7,7 @@ Skript als Text, damit nie ein Loch in der Oberfläche entsteht.
 """
 
 import asyncio
+import base64
 import subprocess
 import hashlib
 import json
@@ -674,6 +675,37 @@ async def reimport_seed(request: Request):
     total = await db.guide_clips.count_documents({})
     published = await db.guide_clips.count_documents({"published": True, "video_path": {"$ne": None}})
     return {"ok": True, **result, "clips_total": total, "clips_published": published}
+
+
+class VoicePreviewIn(BaseModel):
+    text: str
+
+
+@router.post("/admin/voice-preview")
+async def voice_preview(data: VoicePreviewIn, request: Request):
+    """Aussprache-Probe (Iter 180): denselben Satz mit Wlads Klon-Stimme und der aktuellen
+    Aussprache-Liste synthetisieren — zum Anhören, BEVOR Videos neu gerendert werden.
+    Kostet nur TTS (Cent-Bereich), kein Filmmaterial."""
+    await require_admin(request)
+    from services_speech_text import to_speakable
+
+    text = (data.text or "").strip()
+    if not 3 <= len(text) <= 300:
+        raise HTTPException(status_code=400, detail="Bitte 3–300 Zeichen eingeben")
+    settings = await _settings()
+    voice_id = settings.get("custom_voice_id") or DEFAULT_VOICE_ID
+    try:
+        audio, _ = await asyncio.to_thread(synthesize_speech, text, voice_id, 1.0, True)
+    except FalError as e:
+        raise await ai_http_error(e, "Sprachprobe fehlgeschlagen")
+    seconds = await asyncio.to_thread(_duration_of, audio)
+    return {
+        "written_text": text,
+        "spoken_text": to_speakable(text),
+        "duration_seconds": round(seconds, 2),
+        "voice": "clone" if settings.get("custom_voice_id") else "fallback",
+        "audio_data_url": "data:audio/mpeg;base64," + base64.b64encode(audio).decode(),
+    }
 
 
 @router.post("/admin/signature")

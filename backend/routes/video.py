@@ -79,6 +79,7 @@ WHISPER_MAX_BYTES = 24 * 1024 * 1024  # leave 1 MB headroom for HTTP overhead
 ASYNC_MAX_UPLOAD_BYTES = 150 * 1024 * 1024
 MAX_CONCURRENT_VIDEO_JOBS = 3
 _ACTIVE_VIDEO_JOBS: set = set()
+_PROCESS_STARTED_AT = datetime.now(timezone.utc).isoformat()
 
 
 async def _refund_video_credit(user_id: str, credit_result: dict) -> None:
@@ -91,6 +92,31 @@ async def _refund_video_credit(user_id: str, credit_result: dict) -> None:
         await refund_credit(user_id)
     except Exception as e:
         logger.warning("Video credit refund failed for %s: %s", user_id, e)
+
+
+async def release_orphaned_video_jobs() -> int:
+    """Iter 182: Analyse-Jobs leben im Prozess. Nach einem Neustart (Deploy, Hot-Reload)
+    sind sie weg — der Datensatz stünde aber für immer auf 'queued', das Frontend pollt
+    ins Leere und der Credit wäre verbrannt. Darum beim Start: als Fehler markieren
+    und Credit zurückgeben."""
+    stale = await db.video_jobs.find(
+        {"status": {"$in": ["queued", "transcribing", "analyzing"]},
+         "created_at": {"$lt": _PROCESS_STARTED_AT}},
+        {"_id": 0, "job_id": 1, "user_id": 1, "is_premium": 1},
+    ).to_list(500)
+    for job in stale:
+        await db.video_jobs.update_one({"job_id": job["job_id"]}, {"$set": {
+            "status": "error",
+            "error_code": 503,
+            "error_detail": "Der Server wurde zwischendurch neu gestartet. Bitte die Analyse "
+                            "erneut starten — dein Credit ist zurück auf dem Konto.",
+        }})
+        await _refund_video_credit(job["user_id"], {"is_premium": bool(job.get("is_premium"))})
+    if stale:
+        logger.warning("Video-Analysen nach Neustart freigegeben: %s", len(stale))
+    return len(stale)
+
+
 CHUNK_SECONDS = 600  # 10 minutes — well under 25 MB at 64 kbit/s mono
 
 
@@ -946,33 +972,15 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
 
     tier_info = await resolve_user_tier(user)
     trial = await get_video_trial_status(user, tier_info["tier"])
-    used_trial_slot = False
-    if trial["active"]:
-        await consume_video_trial(user["user_id"])
-        used_trial_slot = True
-    else:
+    if not trial["active"]:
         await require_feature(user, "video_analysis")
-
-    credit_result = await check_and_deduct_credit(user, "video_mission")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
 
     challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
     if not challenge:
         raise HTTPException(status_code=404, detail="Challenge not found")
 
-    rating = _get_rating_params(request, user)
-    rating_context = _build_rating_context(rating["mode"], rating["level"], rating["focus"], rating["audience"])
-    user_memory = await get_user_memory(user["user_id"])
-    prev_attempts = await db.video_challenges.find(
-        {"user_id": user["user_id"], "challenge_id": challenge_id},
-        {"_id": 0, "analysis.overall_score": 1, "created_at": 1}
-    ).sort("created_at", -1).to_list(5)
-
-    # Iter 141 (Code Review): Der Upload wird im Speicher an den Hintergrund-Task
-    # übergeben (kein Pod-lokales File, das nach dem Deploy unerreichbar wäre).
-    # Darum hier ein deutlich engeres Limit als beim synchronen Weg plus ein
-    # Deckel auf gleichzeitige Jobs — sonst würde N × Upload den Pod sprengen.
+    # Iter 181 (Code Review, HIGH): ZUERST prüfen, DANN abbuchen. Vorher verlor ein Kunde
+    # Credit und Trial-Slot, wenn die Datei zu groß war oder gerade zu viele Analysen liefen.
     contents = await file.read()
     if not contents:
         raise HTTPException(status_code=400, detail="Empty audio file received")
@@ -987,6 +995,24 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
             status_code=429,
             detail="Gerade werden mehrere Analysen berechnet. Bitte in 1-2 Minuten erneut starten.",
         )
+
+    used_trial_slot = False
+    if trial["active"]:
+        await consume_video_trial(user["user_id"])
+        used_trial_slot = True
+
+    credit_result = await check_and_deduct_credit(user, "video_mission")
+    if not credit_result["allowed"]:
+        raise HTTPException(status_code=402, detail="no_credits")
+
+    rating = _get_rating_params(request, user)
+    rating_context = _build_rating_context(rating["mode"], rating["level"], rating["focus"], rating["audience"])
+    user_memory = await get_user_memory(user["user_id"])
+    prev_attempts = await db.video_challenges.find(
+        {"user_id": user["user_id"], "challenge_id": challenge_id},
+        {"_id": 0, "analysis.overall_score": 1, "created_at": 1}
+    ).sort("created_at", -1).to_list(5)
+
     suffix = ".webm"
     if file.filename and "." in file.filename:
         ext = file.filename.rsplit(".", 1)[-1].lower()
@@ -1000,6 +1026,8 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
         "challenge_id": challenge_id,
         "status": "queued",
         "file_size": len(contents),
+        "is_premium": bool(credit_result.get("is_premium")),
+        "used_trial_slot": used_trial_slot,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 

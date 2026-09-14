@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 import tempfile
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -32,6 +32,7 @@ ALLOWED_EXT = {".mp4", ".mov"}
 ALLOWED_TYPES = {"video/mp4", "video/quicktime", "application/octet-stream"}
 UPLOAD_DIR = Path(tempfile.gettempdir()) / "media_uploads"
 TARGETS = ("guide_clip", "course_episode")
+STALE_UPLOAD_HOURS = 12
 VIMEO_RE = re.compile(r"(?:vimeo\.com/|player\.vimeo\.com/video/)(\d+)")
 
 
@@ -230,12 +231,33 @@ async def upload_chunk(upload_id: str, request: Request):
     path = _session_path(upload_id)
     if not path.exists():
         raise HTTPException(status_code=404, detail="Upload-Datei nicht mehr vorhanden — bitte neu starten.")
-    received = session["received"] + len(chunk)
-    if received > MAX_UPLOAD_BYTES:
+
+    # Iter 182: Jedes Stück nennt seine Position. Ein wiederholt gesendetes Stück
+    # (Netz-Wackler, Retry) landet dadurch an derselben Stelle statt doppelt am
+    # Dateiende — vorher wurde die Datei dabei unbrauchbar.
+    on_disk = path.stat().st_size
+    raw_offset = request.headers.get("X-Chunk-Offset")
+    if raw_offset is None:
+        offset = on_disk
+    else:
+        try:
+            offset = int(raw_offset)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Ungültige Chunk-Position") from None
+    if offset < 0 or offset > on_disk:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Upload steht bei {on_disk} Bytes. Bitte ab dieser Stelle weitersenden.",
+        )
+    if offset + len(chunk) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="Datei zu groß (max. 2 GB je Video).")
-    with path.open("ab") as f:
+
+    with path.open("r+b") as f:
+        f.seek(offset)
         f.write(chunk)
-    await db.media_uploads.update_one({"upload_id": upload_id}, {"$set": {"received": received}})
+    received = path.stat().st_size
+    await db.media_uploads.update_one({"upload_id": upload_id}, {"$set": {
+        "received": received, "updated_at": datetime.now(timezone.utc).isoformat()}})
     return {"received": received, "size": session["size"],
             "percent": round(min(100.0, received / max(1, session["size"]) * 100), 1)}
 
@@ -294,6 +316,30 @@ async def upload_complete(upload_id: str, request: Request):
     return {"ok": True, "duration_seconds": duration, "video_source": "upload",
             "video_url": f"/api/courses/episodes/{target_id}/video?v={version}",
             "poster_url": f"/api/courses/episodes/{target_id}/poster?v={version}"}
+
+
+async def cleanup_stale_uploads(max_age_hours: int = STALE_UPLOAD_HOURS) -> int:
+    """Iter 182: Abgebrochene Uploads (Tab zu, Netz weg, Neustart) räumen sich selbst auf —
+    sonst liegen 2-GB-Stücke dauerhaft im /tmp des Pods und der Datensatz bleibt stehen."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=max_age_hours)).isoformat()
+    stale = await db.media_uploads.find({"created_at": {"$lt": cutoff}}, {"_id": 0, "upload_id": 1}).to_list(1000)
+    for doc in stale:
+        _session_path(doc["upload_id"]).unlink(missing_ok=True)
+    if stale:
+        await db.media_uploads.delete_many({"upload_id": {"$in": [d["upload_id"] for d in stale]}})
+
+    # Dateien ohne Datensatz (z. B. nach DB-Wechsel) ebenfalls entfernen.
+    orphan_files = 0
+    if UPLOAD_DIR.exists():
+        known = {d["upload_id"] for d in await db.media_uploads.find({}, {"_id": 0, "upload_id": 1}).to_list(1000)}
+        for part in UPLOAD_DIR.glob("*.part"):
+            if part.stem not in known:
+                part.unlink(missing_ok=True)
+                orphan_files += 1
+    total = len(stale) + orphan_files
+    if total:
+        logger.info("Verwaiste Video-Uploads aufgeräumt: %s Sitzungen, %s Dateien", len(stale), orphan_files)
+    return total
 
 
 @router.delete("/upload/{upload_id}")

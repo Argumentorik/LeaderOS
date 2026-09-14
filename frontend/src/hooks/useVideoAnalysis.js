@@ -18,7 +18,8 @@ export function useVideoAnalysis({ blobRef, ratingConfig, de, onComplete }) {
     setPhase({ stage: 'upload', pct: 0 });
     try {
       const formData = new FormData();
-      formData.append('file', blobRef.current, 'challenge.webm');
+      // Eigene Uploads behalten ihren Dateinamen (Endung entscheidet im Backend über die Tonspur-Extraktion).
+      formData.append('file', blobRef.current, blobRef.current.name || 'challenge.webm');
       const params = new URLSearchParams();
       params.set('rating_mode', ratingConfig.mode);
       params.set('rating_level', ratingConfig.level);

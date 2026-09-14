@@ -164,6 +164,9 @@ function AppRouter() {
         <Route path="/changelog" element={<ChangelogPage />} />
         <Route path="/whats-new" element={<Navigate to="/changelog" replace />} />
         <Route path="/video-challenge" element={<Navigate to="/missions" replace />} />
+        {/* Iter 182: Video-Analyse wohnt im Video-Studio — Direktlinks landen dort statt im Nirgendwo. */}
+        <Route path="/video-analyse" element={<Navigate to="/missions" replace />} />
+        <Route path="/video-analysis" element={<Navigate to="/missions" replace />} />
         <Route path="/challengers" element={<ProtectedRoute><ChallengersPage /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
         <Route path="/playbooks" element={<ProtectedRoute><PlaybooksPage /></ProtectedRoute>} />

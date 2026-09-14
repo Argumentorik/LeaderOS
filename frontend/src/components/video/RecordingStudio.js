@@ -18,7 +18,7 @@
 import { useState, useCallback } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
-import { ArrowLeft, ArrowRight, Square, Loader2, Mic, Radio } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Square, Loader2, Mic, Radio, Upload } from 'lucide-react';
 import { RatingConfig } from './RatingConfig';
 import { RecordingCountdown } from './RecordingCountdown';
 
@@ -144,10 +144,35 @@ const PromptPill = ({ challenge, de }) => (
 // ────────────────────────────────────────────────────────────────────────────
 // Main component
 // ────────────────────────────────────────────────────────────────────────────
+// Eigenes Material hochladen (Meeting-Ausschnitt, Handy-Video) — gleicher Analyse-Weg wie die Aufnahme.
+const UploadOwnVideo = ({ onPickFile, de }) => (
+  <label
+    className="group flex cursor-pointer flex-col items-center gap-3 focus-within:outline-none"
+    data-testid="upload-video-label"
+  >
+    <span className="relative inline-flex h-[88px] w-[88px] items-center justify-center rounded-full">
+      <span aria-hidden className="absolute inset-2 rounded-full border-2 border-white/20 transition-colors group-hover:border-[#BFFF00]/60" />
+      <span className="relative inline-flex h-[58px] w-[58px] items-center justify-center rounded-full bg-white/10 transition-transform group-hover:scale-105 group-active:scale-95">
+        <Upload size={22} className="text-white/80" strokeWidth={2.2} />
+      </span>
+    </span>
+    <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition-colors group-hover:text-[#BFFF00]">
+      {de ? 'Video hochladen' : 'Upload video'}
+    </span>
+    <input
+      type="file"
+      accept="video/*,audio/*"
+      className="sr-only"
+      data-testid="upload-video-input"
+      onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onPickFile(f); }}
+    />
+  </label>
+);
+
 export const RecordingStudio = ({
   activeChallenge, recording, recorded, analyzing, timer,
   videoRef, ratingConfig, onSaveRatingConfig,
-  onCancel, onStartRecording, onStopRecording, onReset, onSubmit, lang,
+  onCancel, onStartRecording, onStopRecording, onReset, onSubmit, onPickFile, lang,
 }) => {
   const de = lang === 'de';
   const [counting, setCounting] = useState(false);
@@ -271,9 +296,19 @@ export const RecordingStudio = ({
 
       {/* ── Bottom action area ── */}
       {!analyzing && (
-        <div className="flex items-center justify-center gap-6 pt-2 pb-1">
+        <div className="flex flex-wrap items-center justify-center gap-6 pt-2 pb-1">
           {!recording && !recorded && !counting && (
-            <BigRecordButton onClick={handleStartClick} de={de} />
+            <>
+              <BigRecordButton onClick={handleStartClick} de={de} />
+              {onPickFile && (
+                <>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/25">
+                    {de ? 'oder' : 'or'}
+                  </span>
+                  <UploadOwnVideo onPickFile={onPickFile} de={de} />
+                </>
+              )}
+            </>
           )}
 
           {recording && (

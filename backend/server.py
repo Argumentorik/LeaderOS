@@ -285,6 +285,20 @@ async def startup() -> None:
     except Exception as e:
         logger.warning(f"Guide job reconcile deferred: {e}")
 
+    # Iter 182: Video-Analysen und Chunk-Uploads leben im Prozess bzw. auf der Platte —
+    # nach einem Neustart aufräumen (Credit zurück, verwaiste Upload-Stücke löschen).
+    try:
+        from routes.video import release_orphaned_video_jobs
+        await release_orphaned_video_jobs()
+    except Exception as e:
+        logger.warning(f"Video job reconcile deferred: {e}")
+
+    try:
+        from routes.media_admin import cleanup_stale_uploads
+        await cleanup_stale_uploads()
+    except Exception as e:
+        logger.warning(f"Media upload cleanup deferred: {e}")
+
     # SEC-003: promote allowlisted EXISTING users to is_admin (runtime auth = DB flag only)
     try:
         from routes.admin import seed_admin_flags

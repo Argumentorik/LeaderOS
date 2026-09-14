@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 import { Loader2, Upload, Mic, Check, AlertCircle, Clapperboard, RefreshCw } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -63,6 +64,10 @@ export const GuideStudio = () => {
   const [bulkErr, setBulkErr] = useState('');
   const [seedBusy, setSeedBusy] = useState(false);
   const [seedNote, setSeedNote] = useState('');
+  const [sampleText, setSampleText] = useState('Im Meeting am Mittwoch lade ich das Playbook und prüfe den ROI.');
+  const [sample, setSample] = useState(null);
+  const [sampleBusy, setSampleBusy] = useState(false);
+  const [sampleErr, setSampleErr] = useState('');
 
   const load = useCallback(async () => {
     try {
@@ -85,6 +90,17 @@ export const GuideStudio = () => {
     try { await api.post('/guide/admin/voice-clone', {}); await load(); }
     catch (e) { setCloneErr(e?.response?.data?.detail || 'Stimm-Klon fehlgeschlagen'); }
     finally { setCloning(false); }
+  };
+
+  const playSample = async () => {
+    setSampleBusy(true); setSampleErr(''); setSample(null);
+    try {
+      const res = await api.post('/guide/admin/voice-preview', { text: sampleText.trim() });
+      setSample(res.data);
+    } catch (e) {
+      logger.error('voice preview failed', e);
+      setSampleErr(e?.response?.data?.detail || 'Sprachprobe fehlgeschlagen');
+    } finally { setSampleBusy(false); }
   };
 
   const reimportSeed = async () => {
@@ -140,6 +156,35 @@ export const GuideStudio = () => {
       </Card>
 
       <InteractiveBetaCard voiceCloned={!!s.custom_voice_id} />
+
+      <Card className="flex flex-wrap items-center gap-3 border-border bg-card p-3" data-testid="guide-voice-preview-row">
+        <Mic size={14} className="text-[#BFFF00]" />
+        <div className="min-w-[200px] flex-1">
+          <p className="text-[11px] font-bold text-foreground">Aussprache-Probe</p>
+          <p className="text-[10px] text-muted-foreground">
+            Satz eintippen und anhören — so hörst du die Aussprache (z. B. „im“, „lade“, „KI“), bevor Videos neu gerendert werden. Kostet nur Cent.
+          </p>
+          {sample?.spoken_text && (
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              Gesprochen wird: <span className="font-mono text-foreground">{sample.spoken_text}</span>
+            </p>
+          )}
+          {sample?.audio_data_url && (
+            <audio controls src={sample.audio_data_url} className="mt-2 h-8 w-full max-w-[420px]" data-testid="guide-voice-sample-audio">
+              <track kind="captions" />
+            </audio>
+          )}
+          {sampleErr && <p className="mt-1 text-[10px] text-rose-500" data-testid="guide-voice-sample-error">{sampleErr}</p>}
+        </div>
+        <Input value={sampleText} onChange={(e) => setSampleText(e.target.value)} disabled={sampleBusy}
+               placeholder="Im Meeting am Mittwoch lade ich das Playbook."
+               className="h-8 w-full max-w-[320px] border-border bg-background text-[11px]" data-testid="guide-voice-sample-input" />
+        <Button size="sm" variant="outline" disabled={sampleBusy || !sampleText.trim()} onClick={playSample}
+                className="h-7 text-[11px]" data-testid="guide-voice-sample-btn">
+          {sampleBusy ? <Loader2 size={12} className="mr-1 animate-spin" /> : <Mic size={12} className="mr-1" />}
+          Anhören
+        </Button>
+      </Card>
 
       <Card className="flex flex-wrap items-center gap-3 border-border bg-card p-3" data-testid="guide-seed-row">
         <RefreshCw size={14} className="text-[#BFFF00]" />

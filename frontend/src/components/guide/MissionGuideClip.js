@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import { Play, X, Clapperboard } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -33,10 +33,15 @@ export const MissionGuideClip = ({ day, de = true }) => {
 
   if (!clip) {
     if (!loaded || day <= 7) return null;
+    // Ab Tag 8 gibt es kein eigenes Briefing mehr — Iter 180: Verweis auf die Briefing-Kacheln
+    // weiter unten auf DIESER Seite (vorher zeigte er in den Video-Guide).
     return (
-      <Link to="/video-guide" className="mb-6 inline-flex items-center gap-2 text-[12px] font-semibold text-muted-foreground hover:text-foreground transition-colors" data-testid="mission-guide-fallback-link">
-        <Play size={12} /> {de ? 'Wlads Briefings noch einmal ansehen (Video-Guide)' : "Rewatch Wlad's briefings (Video Guide)"}
-      </Link>
+      <button type="button"
+              onClick={() => document.querySelector('[data-testid="challenge-briefings"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="inline-flex items-center gap-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              data-testid="mission-guide-fallback-link">
+        <Play size={12} /> {de ? 'Briefings Tag 1–7 noch einmal ansehen' : "Rewatch briefings day 1–7"}
+      </button>
     );
   }
 
@@ -64,9 +69,12 @@ export const MissionGuideClip = ({ day, de = true }) => {
         </span>
         {clip.seen && <span className="text-[10px] font-semibold text-muted-foreground">{de ? 'gesehen' : 'watched'}</span>}
       </button>
-      <Link to="/video-guide" className="mb-6 inline-flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground hover:text-[#5a7a00] dark:hover:text-[#BFFF00] transition-colors" data-testid="mission-guide-all-link">
-        <Clapperboard size={11} /> {de ? 'Alle Briefings im Video-Guide' : 'All briefings in the Video Guide'}
-      </Link>
+      <button type="button"
+              onClick={() => document.querySelector('[data-testid="challenge-briefings"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="mb-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground transition-colors hover:text-[#5a7a00] dark:hover:text-[#BFFF00]"
+              data-testid="mission-guide-all-link">
+        <Clapperboard size={11} /> {de ? 'Alle Briefings Tag 1–7' : 'All briefings day 1–7'}
+      </button>
 
       {open && (
         <div className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setOpen(false)} data-testid="mission-guide-modal">

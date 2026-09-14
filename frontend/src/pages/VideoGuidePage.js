@@ -78,6 +78,9 @@ export default function VideoGuidePage() {
   }, [active]);
 
   const onboarding = useMemo(() => clips.filter((c) => c.kind === 'onboarding'), [clips]);
+  // Iter 182: Die Feature-Clips (Workflows, Challengers, Simulationen, Playbooks, Video-Analyse,
+  // Coaching) waren nur auf ihren Zielseiten sichtbar — hier fehlten sie in der Übersicht.
+  const features = useMemo(() => clips.filter((c) => c.kind === 'feature' || c.kind === 'coaching'), [clips]);
   const seen = clips.filter((c) => c.seen).length;
 
   const select = (clip) => {
@@ -119,6 +122,19 @@ export default function VideoGuidePage() {
           <h2 className="text-base md:text-lg font-bold mb-3">{de ? 'Erststart-Serie' : 'Getting started'}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {onboarding.map((c, i) => <ClipTile key={c.slug} clip={c} index={`${de ? 'Clip' : 'Clip'} ${i + 1}`} active={active?.slug === c.slug} onSelect={select} />)}
+          </div>
+        </section>
+      )}
+
+      {features.length > 0 && (
+        <section className="mb-10" data-testid="video-guide-features">
+          <h2 className="text-base md:text-lg font-bold mb-1">{de ? 'So nutzt du die Werkzeuge' : 'How to use the tools'}</h2>
+          <p className="text-[13px] text-muted-foreground mb-3">
+            {de ? 'Kurz erklärt: Workflows, Challengers, Simulationen, Playbooks, Video-Analyse und die Pakete.'
+                : 'Short and clear: workflows, challengers, simulations, playbooks, video analysis and the packages.'}
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {features.map((c) => <ClipTile key={c.slug} clip={c} index={de ? 'Funktion' : 'Feature'} active={active?.slug === c.slug} onSelect={select} />)}
           </div>
         </section>
       )}

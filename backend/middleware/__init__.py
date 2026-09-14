@@ -46,8 +46,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         "/api/auth/password/change",
     )
 
+    _MEDIA_PATHS = ("/api/guide/media", "/api/guide/broll", "/api/courses/episodes")
+
     def _get_limit(self, path: str) -> tuple[int, int]:
         """Returns (max_requests, window_seconds) for the given path."""
+        # Iter 181 (Code Review): Medien-Auslieferung (Poster-Flut beim Erststart, Range-Requests
+        # eines Videos) darf nicht im Kunden-Bucket landen — sonst 429 hinter Firmen-NAT.
+        if any(path.startswith(p) for p in self._MEDIA_PATHS):
+            return 0, 0
         if any(path.startswith(p) for p in self._CREDENTIAL_PATHS):
             # 40/min je Endpoint und IP — Brute-Force pro Konto wird zusätzlich
             # in routes/auth.py (10 Fehlversuche / 15 min je E-Mail+IP) gebremst.

@@ -2306,7 +2306,7 @@
    "duration_seconds": null,
    "error": null,
    "created_at": "2026-09-02T10:00:43.113322+00:00",
-   "updated_at": "2026-09-13T11:22:17.618911+00:00",
+   "updated_at": "2026-09-14T00:53:57.303645+00:00",
    "progress": null,
    "spent_usd": 34.74999999999999,
    "duration_seconds_video": 70.4,
@@ -2577,7 +2577,12 @@
    "preview_subtitles": null,
    "video_preview_path": null,
    "duration": 62,
-   "video_source": "generated"
+   "video_source": "generated",
+   "custom_duration_seconds": 3.0,
+   "custom_filename": "iter179_sample.mp4",
+   "custom_uploaded_at": "2026-09-14T00:53:52.661879+00:00",
+   "custom_video_path": "uploads/guide_clip/teaser-login/f6b3d6f7.mp4",
+   "poster_at": 1.5
   },
   {
    "slug": "coaching-pakete",
