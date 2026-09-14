@@ -369,13 +369,19 @@ async def _transcribe_audio(file: UploadFile) -> str:
 
 
 async def _whisper_transcribe_single(stt: OpenAISpeechToText, path: str, allow_empty: bool = False) -> str:
-    """Send a single (<=24 MB) audio file to Whisper and return the transcript."""
+    """Send a single (<=24 MB) audio file to Whisper and return the transcript.
+
+    Iter 183: Eigennamen werden vorab genannt und danach korrigiert, damit im
+    Transkript nie „Vlad" steht.
+    """
+    from services_speech_text import SPEECH_NAME_HINT, fix_brand_names
     with open(path, "rb") as audio_file:
         response = await stt.transcribe(
             file=audio_file, model="whisper-1",
             response_format="json", language="de",
+            prompt=SPEECH_NAME_HINT,
         )
-    text = (getattr(response, "text", "") or "").strip()
+    text = fix_brand_names((getattr(response, "text", "") or "").strip())
     if not text and not allow_empty:
         raise HTTPException(status_code=422,
                             detail="Audio konnte nicht transkribiert werden — kein Sprachsignal erkannt.")
@@ -523,6 +529,16 @@ async def _answer_theory_question(transcript: str) -> dict:
 
 
 
+def _canon_for_analysis() -> str:
+    """Verbindliche SEXIER-Definition für die Video-Analyse (Iter 183)."""
+    try:
+        from wlad_canon import canon_block
+        return canon_block("", always=("sexier",))
+    except Exception as e:
+        logger.warning("Canon block skipped: %s", e)
+        return ""
+
+
 async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts: list, user_memory, rating_context: str) -> dict:
     """Call GPT-5.2 to analyse transcript and return structured feedback.
 
@@ -559,7 +575,10 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
     chat = LlmChat(
         api_key=EMERGENT_LLM_KEY,
         session_id=f"vid_{uuid.uuid4().hex[:8]}",
-        system_message=VIDEO_ANALYSIS_PROMPT + rating_context + rag_block + (f"\n\nUSER PROFIL:\n{user_memory}" if user_memory else ""),
+        system_message=VIDEO_ANALYSIS_PROMPT + rating_context + rag_block
+        # Iter 183: SEXIER steht wörtlich im Prompt — die Panels der Analyse und
+        # die gesprochene Erklärung können sich damit nicht widersprechen.
+        + _canon_for_analysis() + (f"\n\nUSER PROFIL:\n{user_memory}" if user_memory else ""),
     )
     chat.with_model("openai", "gpt-5.2")
 

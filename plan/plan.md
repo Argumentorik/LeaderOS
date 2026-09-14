@@ -1,97 +1,104 @@
-# Plan: Leader-Diagnose-Einstieg, „Mit Wlad sprechen“, Video-Verwaltung im Admin, Thumbnails
+# Plan: Thumbnails · Name „Wlad" · Sprach-Modus genauso schlau wie Text · Magic Link
 
-Vier Themen aus der Nachricht, in dieser Reihenfolge umgesetzt.
+## Der Befund aus den zwei Fotos
 
----
+Dieselbe Frage, zwei Antworten:
 
-## 1. Leader-Diagnose: Einstieg für Nutzer ohne Leader-Check
+| | Text-Modus (Foto 1) | Sprach-Modus (Foto 2) |
+|---|---|---|
+| S | Statement (Behauptung) ✓ | „State" ✓ (Wortlaut abweichend) |
+| E | Explanation (Begründung) ✓ | **„Example" ✗** |
+| X | eXample (Beispiel) ✓ | **„Explanation" ✗** |
+| I | Impact (Relevanz) ✓ | Impact ✓ |
+| E | Explanation of Impact ✓ | **„Explore – verschiedene Blickwinkel" ✗ (frei erfunden)** |
+| R | Rebuttal (Widerlegung) ✓ | Rebuttal ✓ |
 
-**Heute**: `/leader-diagnose` zeigt auch ohne vorhandene Diagnose die volle Seite — Ring-Score, 3 Layer, Dimensionen. Ohne Daten stehen dort abgeleitete oder Null-Werte. Der Weg zu leadercheck.de existiert nur versteckt: als Aktion in einer Hinweis-Meldung, die erst nach einem Klick auf „Mit leadercheck.de syncen“ erscheint.
+Der Text-Modus antwortet korrekt (deckt sich mit „Weiße Rhetorik"). Der Sprach-Modus vertauscht
+E und X und erfindet beim zweiten E ein „Explore", das es im Modell nicht gibt. Ursache: der
+Sprach-Modus antwortet aus einem eigenen, schnelleren Weg ohne Anbindung an die Buch-/
+Wissensbasis — er rät aus dem Gedächtnis des Modells statt aus Wlads Inhalten.
+Im Foto ist außerdem „Bei **VLAD** gibt es ja das SEXIer Modell" zu sehen — der Namensfehler
+der Spracherkennung (Punkt 2).
 
-**Neu**: Wer noch keine Diagnose hat, sieht statt der Zahlen eine eigene Startansicht:
+## 1. Sprach-Modus wird inhaltlich gleichwertig zum Text-Modus
 
-- Kurze Erklärung, was der Leader-Check ist und was er in Leader-OS auslöst (personalisierte Reise, Fokus in der Challenge, Wlads Kontextwissen) — also warum sich die 5 Minuten lohnen.
-- Großer Hauptbutton **„Leader-Check auf leadercheck.de starten“** (öffnet in neuem Tab).
-- Darunter ein zweiter Schritt **„Ergebnis jetzt holen“**: holt die Diagnose per Sync. Findet sich nichts, bleibt eine verständliche Erklärung stehen statt einer Fehlermeldung (z. B. „Noch nichts unter deiner E-Mail gefunden — schließe den Check ab und tippe hier erneut.“).
-- Erkennbar, mit welcher E-Mail gesucht wird, damit ein Nutzer merkt, wenn er den Check mit einer anderen Adresse gemacht hat.
-- Die E-Mail wird beim Sprung auf leadercheck.de mitgegeben, damit das Ergebnis zuverlässig zurückfindet. Sollte leadercheck.de diesen Parameter nicht auswerten, entfällt nur diese Bequemlichkeit; der Rest funktioniert unverändert.
-- Rückkehr aus dem anderen Tab: beim erneuten Fokussieren des Fensters wird einmal still nachgesehen, ob inzwischen ein Ergebnis vorliegt — liegt es vor, wechselt die Seite ohne Klick in die volle Diagnose-Ansicht.
+- Der Sprach-Modus bekommt **dieselbe Wissensanbindung und dieselben Coach-Regeln** wie der
+  Chat: gleiche Buch-/Kursinhalte, gleiches Gedächtnis für den Nutzer, gleiches Antwort-Niveau.
+  Kein zweiter, dümmerer Weg mehr.
+- Unterschied bleibt nur die **Form**: gesprochene Antworten bleiben kurz, ohne Sternchen,
+  Listen oder Überschriften, in ganzen Sätzen — aber inhaltlich identisch zur Textantwort.
+- Gesichertes Kernwissen wird zusätzlich fest verankert, damit es in **jedem** Modus wörtlich
+  stimmt. Für SEXIER gilt verbindlich:
+  **S** = Statement (Behauptung) · **E** = Explanation (Begründung) · **X** = eXample (Beispiel) ·
+  **I** = Impact (Relevanz für den Zuhörer) · **E** = Explanation of Impact (Begründung der
+  Relevanz) · **R** = Rebuttal (Widerlegung des stärksten Einwands).
+  Ebenso behandelt werden die anderen tragenden Modelle (z. B. 3-B-Schema, SEXI als Kurzform,
+  Schwarze/Weiße Rhetorik, die Fragetypen), damit in beiden Modi kein Buchstabe wandert.
+- Die Video-Analyse nutzt dieselbe verbindliche Definition — die SEXIER-Panels in der Analyse
+  und die gesprochene Erklärung können sich damit nicht mehr widersprechen.
 
-Wer eine Diagnose hat, sieht die Seite unverändert wie heute.
+**Prüfung, die den Fall aus den Fotos abdeckt:** Ein fester Satz Wissensfragen wird in **beiden**
+Modi gestellt (SEXIER, SEXI, 3-B-Schema, Einwandbehandlung, die 4 Persönlichkeitstypen,
+„Was ist Weiße Rhetorik?") und Wort für Wort gegen die verbindliche Definition geprüft.
+Freigabe nur, wenn Sprache und Text dieselbe Substanz liefern — und kein erfundenes Element
+wie „Explore" mehr auftaucht.
 
-Derselbe Einstieg wird überall dort angeboten, wo heute ins Leere verlinkt wird (Dashboard-Hinweis „Diagnose“, „Nächster Schritt“ unter den Guide-Videos), damit es nur einen Weg gibt.
+## 2. Der Name ist überall „Wlad"
 
----
+- Die Spracherkennung bekommt den Namen vorab mitgeteilt (Wlad, WladBot, Jachtchenko,
+  Leader-OS, LeaderCheck), damit er von Anfang an richtig geschrieben wird.
+- Zusätzlich eine feste Korrektur über jeden erkannten Text, bevor er irgendwo erscheint:
+  Vlad, Vladimir, Wladimir, Flat & Co. werden zu „Wlad" bzw. „WladBot". Wirksam an einer
+  Stelle für alle Wege — Sprach-Modus (auch der live mitlaufende Text beim Zuhören), Chat,
+  Interaktiver Wlad am Video, Analyse-Transkripte, automatische Gesprächstitel.
+- Auch die Antworten des Coaches werden geprüft: schreibt das Modell „Vlad", wird es korrigiert,
+  bevor es im Bild steht oder gesprochen wird.
+- Bestehende Gesprächstitel und Transkripte mit „Vlad" werden einmalig mitkorrigiert.
+- Grenze: selbst getippter Nutzertext wird nicht umgeschrieben.
 
-## 2. „Mit Wlad sprechen“ (u. a. bei den Leadership Playbooks) — lesbar und ruhiger
+## 3. Thumbnails — nie wieder leere Kacheln
 
-**Heute**: Vollbild-Overlay. Oben Titelzeile, in der Mitte ein sehr großer Avatar (bis 224 px), darunter Status, Vorschlagsfragen und erst dann die Antwort in einem Bereich, der auf ein Drittel der Fensterhöhe begrenzt ist — ohne Abstand nach unten, direkt an den Sprachsteuerungs-Buttons. Auf Laptops und Handys bleibt für die eigentliche Antwort sehr wenig Platz; das Ende des Textes klebt am Rand und ist schwer zu lesen.
+**Heute:** Das Vorschaubild wird bei jedem Aufruf frisch aus dem Video gezogen. Nach Neustart
+oder Deploy ist der Zwischenspeicher leer, der erste Abruf scheitert oder dauert zu lange —
+das Bild „verschwindet". Besonders bei neu hochgeladenen und neu gerenderten Videos.
 
-**Neu** — dasselbe Gespräch, andere Gewichtung:
+**Künftig:**
+- Jedes Video bekommt sein Vorschaubild **einmal fest erzeugt und dauerhaft gespeichert** —
+  unabhängig von Neustart, Deploy oder Zwischenspeicher. Gilt für generierte Videos, eigene
+  Uploads und Vimeo-Links (dort wird das Vimeo-Bild übernommen).
+- Neues Bild automatisch bei Re-Render, neuem Upload oder geänderter Vorschau-Sekunde.
+- Fehlt ein Bild doch, erscheint die gestaltete Ersatzkachel im Marken-Look mit Titel —
+  nie ein leerer Rahmen oder ein kaputtes Bild-Symbol.
+- Im Admin: Liste „Videos ohne Vorschaubild" plus ein Knopf, der alle fehlenden in einem
+  Durchgang nachzieht — auch direkt nach einem Deploy auf Live prüfbar.
+- Keine Render-Kosten: es werden nur Standbilder aus vorhandenem Material gezogen.
 
-- **Antwort ist der Hauptdarsteller**: Der Textbereich bekommt den größten Teil der Fläche und echten Abstand nach unten (kein Text mehr direkt an den Buttons), damit der letzte Satz immer vollständig lesbar ist.
-- **Avatar wird kompakter, sobald gesprochen wird**: Beim Start groß und einladend; sobald die erste Antwort kommt, rückt er als kleinerer Kopf nach oben. Sprech-Ring und Pegel bleiben, nur kleiner.
-- **Frage und Antwort klar getrennt**: Frage als Zitat, Antwort in größerer, ruhig gesetzter Schrift mit mehr Zeilenabstand; mehrere Absätze werden als Absätze dargestellt statt als Textblock.
-- **Neue Antwort wird nicht verpasst**: sanftes Einblenden, automatisches Nachscrollen nur, wenn man unten ist; sonst erscheint „Neue Antwort ↓“.
-- **Lesehilfen**: Antwort kopieren; Verlauf des Gesprächs nach oben scrollbar; Vorschlagsfragen rutschen nach dem ersten Wortwechsel in eine schmale Zeile, statt Platz zu belegen.
-- **Handy**: eigene Aufteilung (Avatar klein oben, Text scrollt darunter, Steuerung unten mit Sicherheitsabstand zur Home-Leiste). Text bleibt auch bei langer Antwort vollständig erreichbar.
-- **Status bleibt sichtbar** („Ich höre dir zu…“, „Wlad denkt nach…“, „Wlad spricht“) — nur dezenter, direkt am Avatar.
-- Hinweis „Noch X Test-Gespräche“ und der Upgrade-Weg bleiben unverändert, nur besser platziert.
+## 4. Magic Link muss sitzen
 
-Funktion, Kosten und Sprachlogik bleiben identisch — es ändert sich nur die Darstellung. Da dieses Overlay überall gleich verwendet wird (Playbooks, Video-Guide, Missionen, Features), wirkt die Verbesserung an allen Stellen.
+Der passwortlose Login wird vollständig durchgespielt und in Ordnung gebracht: Link anfordern →
+E-Mail kommt an (Absender, Betreff, Darstellung auf dem Handy) → Klick führt direkt in die
+angemeldete Ansicht. Dazu die unangenehmen Fälle: abgelaufener Link, zweiter Klick auf einen
+schon benutzten Link, Link in einem anderen Browser geöffnet, unbekannte E-Mail-Adresse,
+mehrfaches Anfordern hintereinander. Jeder Fall endet mit einer klaren deutschen Meldung und
+einem Weg zurück — nie in einer weißen Seite oder einem Endlos-Ladebalken.
 
----
+## Entscheidungen und Annahmen (können widersprochen werden)
 
-## 3. Videos im Admin: Vimeo-Link oder eigenes Video hochladen — und herunterladen
-
-Ein **einheitliches Video-Feld** für beide Welten: Wlad-Guide-Clips (Video-Guide, Missions-Briefings, Login-Teaser, Feature-Clips) und Kurs-Folgen.
-
-Pro Video drei Quellen, sichtbar als Auswahl mit Kennzeichnung, welche gerade live ist:
-
-1. **Generiert** (wie heute, nur bei Guide-Clips)
-2. **Vimeo-Link** (Link oder ID einfügen)
-3. **Eigenes Video hochgeladen**
-
-Verhalten:
-
-- **Sofort live**: Sobald ein Link gesetzt oder ein Upload fertig ist, sehen Nutzer dieses Video. Das generierte Video bleibt gespeichert und ist per Klick wieder aktivierbar („Zurück zum generierten Video“) — nichts wird überschrieben oder gelöscht.
-- **Upload großer Dateien**: Videos werden in Stücken hochgeladen, mit Fortschritt in Prozent und Phase („Lädt 43 %“ → „Wird geprüft“ → „Fertig“). Abbrechen und Fortsetzen möglich. Erlaubt: MP4 und MOV bis 2 GB je Datei.
-- **Nach dem Upload** wird Dauer erkannt, ein Vorschaubild erzeugt und die Adresse frisch versioniert, damit alle Nutzer sofort das neue Video sehen (kein Browser-Cache-Problem wie zuletzt).
-- **Fehlerfälle in Klartext**: falsches Format, zu groß, Verbindung abgebrochen, Vimeo-Link privat/nicht abspielbar — jeweils mit dem konkreten nächsten Schritt.
-- **Vimeo-Link wird vor dem Speichern geprüft** (existiert, ist einbettbar). Nicht einbettbare Links werden abgelehnt, statt später beim Kunden schwarz zu bleiben.
-
-**Download für Detailarbeit** (nur Admin):
-
-- Pro Video ein **Herunterladen**-Button mit sprechendem Dateinamen (z. B. `mission-tag-1_v7.mp4`), direkt neben dem Video im Admin.
-- Ein kurzer Hinweistext macht den Arbeitsweg explizit: **herunterladen → außerhalb schneiden → als eigenes Video wieder hochladen** (das generierte bleibt als Rückfall erhalten).
-- Bei Guide-Clips ist zusätzlich der letzte Vorschau-Schnitt herunterladbar, nicht nur die Live-Fassung.
-- Kunden bekommen keinen Download (bewusst), weder im Player noch über eine Adresse, die man weitergeben kann.
-
----
-
-## 4. Thumbnails: überall korrekt
-
-**Ziel**: Es gibt keine Kachel mehr ohne Vorschaubild und kein verzerrtes oder falsch beschnittenes Bild.
-
-- **Bestandsaufnahme über alle Stellen**, an denen Videos als Kachel erscheinen: Video-Guide, Missions-Briefing in der Challenge, Tages-Briefing auf dem Dashboard, Playbooks/Feature-Abschnitte, Kurs-Übersicht `/kurse`, Kurs-Detailseite mit Folgenliste, Login-Teaser-Poster, Admin-Listen. Jede Stelle wird auf Desktop und Handy geprüft.
-- **Einheitliches Verhalten**: festes 16:9-Format, Bild füllt die Kachel ohne Verzerrung, Dauer- und „gesehen“-Marker an derselben Position, ruhiges Nachladen (kein Springen des Layouts, kein weißes Aufblitzen).
-- **Immer ein Bild**: Fehlt ein Vorschaubild, wird automatisch eines aus dem Video gezogen. Ist auch das nicht möglich (z. B. reiner Vimeo-Link ohne Zugriff), erscheint eine gestaltete Ersatzkachel im Leader-OS-Look mit Titel — nie ein leerer Kasten oder ein gebrochenes Bild-Symbol.
-- **Bild aus dem Video wählen** (deine Entscheidung): Im Admin pro Video ein Sekundenfeld mit Sofort-Vorschau — „Sekunde 4,5 als Vorschaubild übernehmen“. Gilt für generierte Clips, eigene Uploads und Kurs-Folgen gleichermaßen. Das gewählte Bild wird versioniert, damit es bei allen Nutzern sofort wechselt.
-- Für Vimeo-Links wird das Vimeo-Standbild verwendet; wer ein anderes Bild will, wählt es aus einem hochgeladenen Video oder behält das Vimeo-Bild.
-
----
-
-## Annahmen
-
-- Die Videos im Video-Guide, in den Missionen und auf der Login-Seite sind dieselben Guide-Clips wie bisher; es werden keine neuen Videos generiert und es entstehen keine Render-Kosten.
-- Es werden keine Inhalte (Skripte, Sprecher-Stimme, Kursstruktur) verändert.
-- Uploads liegen im bestehenden Objektspeicher; Videos werden weiterhin über die App ausgeliefert, nicht über eine öffentliche Adresse.
-- Zugriffsrechte bleiben wie heute: gesperrte Kurs-Folgen bleiben gesperrt, auch wenn ein Vimeo-Link gesetzt ist.
-- Der Download im Admin ist an den Admin-Zugang gebunden; Adressen sind nicht ohne Anmeldung aufrufbar und nicht teilbar.
-- Reihenfolge der Auslieferung: Diagnose-Einstieg → „Mit Wlad sprechen“ → Video-Feld mit Upload/Link/Download → Thumbnails. Jeder Punkt ist einzeln nutzbar, falls du zwischendurch etwas vorziehen willst.
+1. **Sprache wird etwas später, aber richtig.** Die volle Wissensanbindung kostet beim
+   Sprach-Modus rund eine halbe bis eine Sekunde mehr, bis Wlad zu sprechen beginnt.
+   Angenommen wird: Richtigkeit geht vor Tempo. Alternative wäre, die Anbindung nur bei
+   Wissensfragen zuzuschalten und bei Motivations-/Sparring-Sätzen weiter sofort zu antworten —
+   sag Bescheid, wenn das gewünscht ist.
+2. Verbindlich festgeschriebenes Kernwissen umfasst die Rhetorik-Modelle und Kernbegriffe,
+   nicht ganze Buchkapitel.
+3. Eigene Thumbnails hochzuladen ist nicht Teil des Plans — nur die Sekunden-Wahl, die es im
+   Admin schon gibt.
+4. Es werden keine Videos und keine Audios neu gerendert. Für die Prüfung des Sprach-Modus
+   entstehen nur die üblichen Cent-Beträge für ein paar Testantworten.
+5. Der Text-Modus bleibt inhaltlich wie er ist — er ist laut Foto 1 korrekt.
 
 ## Nicht Teil dieses Plans
 
-- Schneiden/Trimmen direkt in der App (bewusst außerhalb: Download → externes Programm → Upload).
-- Neue Videos generieren, neue Kurse oder neue Challenge-Erklärvideos.
-- Vimeo-Konto-Einstellungen (Sichtbarkeit, Domain-Sperre) — das passiert in deinem Vimeo-Konto; die App prüft nur, ob ein Link abspielbar ist.
+- Neue Videos, neue Stimmen, neue Skripte, Re-Renderings.
+- Weitere Ausspracheschliffe der gesprochenen Antwort („im" / „imm") — bleibt pausiert.
+- Änderungen am Aussehen der Video-Kacheln über die Ersatzkachel hinaus.

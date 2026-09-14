@@ -39,6 +39,33 @@ PRONUNCIATION: dict[str, str] = {
 
 _WORD_RE = re.compile(r"[A-Za-zÄÖÜäöüß]+")
 
+# Iter 183: Der Name kommt aus der Spracherkennung häufig falsch zurück („Bei Vlad gibt es …").
+# Eine Stelle für alle Wege: Transkripte, Antworten, Gesprächstitel, Analyse-Texte.
+_BRAND_FIXES: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\b[vwfb]lad[\s-]?bot\b", re.IGNORECASE), "WladBot"),
+    (re.compile(r"\b(?:vladimir|wladimir|vladimier)\b", re.IGNORECASE), "Wlad"),
+    (re.compile(r"\b(?:vlad|vlat|blad|flad)\b", re.IGNORECASE), "Wlad"),
+    (re.compile(r"\b(?:Flat|Wlat)\b"), "Wlad"),
+    (re.compile(r"\b(?:Jatschenko|Jachenko|Jaschenko|Jachtschenko)\b"), "Jachtchenko"),
+    (re.compile(r"\bLeader[\s-]?OS\b", re.IGNORECASE), "Leader-OS"),
+    (re.compile(r"\bLeader[\s-]?Check\b", re.IGNORECASE), "LeaderCheck"),
+)
+
+# Whisper-Hinweis: Eigennamen vorab nennen, damit sie richtig geschrieben ankommen.
+SPEECH_NAME_HINT = (
+    "Wlad Jachtchenko, WladBot, Leader-OS, LeaderCheck, Argumentorik, "
+    "SEXIER-Modell, Weiße Rhetorik, Dunkle Rhetorik, Charisma-Code, Peripetie."
+)
+
+
+def fix_brand_names(text: str) -> str:
+    """Marken- und Eigennamen korrigieren („Vlad" → „Wlad"). Lässt alles andere unberührt."""
+    if not text:
+        return text
+    for pattern, replacement in _BRAND_FIXES:
+        text = pattern.sub(replacement, text)
+    return text
+
 
 def _match_case(original: str, replacement: str) -> str:
     if original.isupper() and len(original) > 1:
@@ -46,6 +73,21 @@ def _match_case(original: str, replacement: str) -> str:
     if original[:1].isupper():
         return replacement[:1].upper() + replacement[1:]
     return replacement
+
+
+def to_plain_speech(text: str) -> str:
+    """Gesprochene Antworten sind Prosa: keine Sternchen, Raute-Überschriften oder Listenpunkte.
+
+    Iter 183: Die verbindlichen Definitionen sind als Liste formuliert — im Sprach-Modus
+    darf davon nichts als Markdown im Bild oder in der Stimme landen.
+    """
+    if not text:
+        return text
+    out = re.sub(r"[*_`#]+", "", text)
+    out = re.sub(r"(?m)^\s*(?:[-•–]|\d+\.)\s+", "", out)
+    out = re.sub(r"\n{2,}", "\n", out)
+    out = re.sub(r"\n", " ", out)
+    return re.sub(r"[ \t]{2,}", " ", out).strip()
 
 
 def to_speakable(text: str) -> str:

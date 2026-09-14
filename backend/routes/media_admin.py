@@ -21,7 +21,7 @@ from pydantic import BaseModel
 
 from config import db, logger
 from routes.admin import require_admin
-from routes.guide import _active_video, _media_url, _render_version
+from routes.guide import _active_video, _media_url, _render_version, ensure_poster, posters_backfill, posters_status
 from routes.uploads import download_object, put_object
 
 router = APIRouter(prefix="/api/media", tags=["media-admin"])
@@ -165,8 +165,30 @@ async def set_guide_poster_at(slug: str, data: PosterAtIn, request: Request):
     _, path = _active_video(clip)
     token = clip.get("media_token")
     version = f"{_render_version(path)}-{at}" if path else None
+    # Iter 183: Bild sofort mit der neuen Sekunde dauerhaft erzeugen.
+    if path:
+        try:
+            await ensure_poster({**clip, "poster_at": at}, force=True)
+        except Exception as e:
+            logger.warning("Vorschaubild (neue Sekunde) fehlgeschlagen: %s", e)
     return {"ok": True, "poster_at": at,
             "poster_url": _media_url(token, "poster", version) if token and path else None}
+
+
+# ── Vorschaubilder: Übersicht + Nachziehen (Iter 183) ───────────────────────
+
+@router.get("/posters")
+async def posters_overview(request: Request):
+    """Welche Videos haben noch kein dauerhaft gespeichertes Vorschaubild?"""
+    await require_admin(request)
+    return await posters_status()
+
+
+@router.post("/posters/backfill")
+async def posters_backfill_endpoint(request: Request, force: bool = False):
+    """Alle fehlenden Vorschaubilder in einem Durchgang nachziehen (keine Render-Kosten)."""
+    await require_admin(request)
+    return await posters_backfill(force=force)
 
 
 @router.post("/poster-at/course/{episode_id}")
@@ -303,6 +325,12 @@ async def upload_complete(upload_id: str, request: Request):
             "custom_filename": session["filename"], "custom_uploaded_at": datetime.now(timezone.utc).isoformat(),
             "video_source": "upload", "poster_at": None,
         })
+        # Iter 183: Vorschaubild direkt aus dem neuen Video erzeugen und speichern.
+        try:
+            await ensure_poster({**clip, "custom_video_path": storage_path,
+                                 "video_source": "upload", "poster_at": None}, force=True)
+        except Exception as e:
+            logger.warning("Vorschaubild nach Upload fehlgeschlagen: %s", e)
         token = clip.get("media_token")
         return {"ok": True, "duration_seconds": duration, "video_source": "upload",
                 "video_url": _media_url(token, "custom", version) if token else None,

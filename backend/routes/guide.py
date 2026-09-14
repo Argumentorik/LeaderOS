@@ -253,6 +253,76 @@ def poster_source(clip: dict) -> tuple[str | None, float]:
     return clip.get("keyframe_path"), 0.0
 
 
+async def ensure_poster(clip: dict, force: bool = False) -> str | None:
+    """Iter 183: Vorschaubild EINMAL erzeugen und dauerhaft im Objekt-Speicher ablegen.
+
+    Vorher wurde das Bild bei jedem Abruf frisch aus dem Video gezogen — nach Neustart
+    oder Deploy war der Zwischenspeicher leer, der erste Abruf musste das komplette
+    Video laden und die Kachel blieb leer. Jetzt liegt ein kleines JPEG im Speicher;
+    ein Abruf lädt nur noch ~100 KB.
+
+    Rückgabe: Speicherpfad des Bildes (oder None: Vimeo liefert sein eigenes Bild bzw.
+    es gibt noch kein Material).
+    """
+    source, _active = _active_video(clip)
+    if source == "vimeo":
+        return None
+    path, at = poster_source(clip)
+    if not path:
+        return None
+    want = _poster_version(clip, path) or "0"
+    if not force and clip.get("poster_path") and clip.get("poster_built_version") == want:
+        return clip["poster_path"]
+    local = await asyncio.to_thread(
+        _local_poster, path, clip.get("title") or "", KICKERS.get(clip.get("kind") or "", ""), at,
+    )
+    storage_path = f"posters/guide/{clip['slug']}/{want}.jpg"
+    await asyncio.to_thread(put_object, storage_path, local.read_bytes(), "image/jpeg")
+    await db.guide_clips.update_one({"slug": clip["slug"]}, {"$set": {
+        "poster_path": storage_path, "poster_built_version": want,
+    }})
+    logger.info("Vorschaubild gespeichert: %s (%s)", clip["slug"], storage_path)
+    return storage_path
+
+
+async def posters_backfill(slugs: list[str] | None = None, force: bool = False) -> dict:
+    """Fehlende Vorschaubilder in einem Durchgang nachziehen (Admin-Knopf, auch nach Deploy)."""
+    query: dict = {"slug": {"$in": slugs}} if slugs else {}
+    clips = await db.guide_clips.find(query, {"_id": 0}).to_list(500)
+    built, skipped, failed = [], [], []
+    for clip in clips:
+        try:
+            result = await ensure_poster(clip, force=force)
+            if result and (force or clip.get("poster_path") != result):
+                built.append(clip["slug"])
+            else:
+                skipped.append(clip["slug"])
+        except Exception as e:
+            logger.warning("Vorschaubild fehlgeschlagen (%s): %s", clip.get("slug"), e)
+            failed.append({"slug": clip.get("slug"), "error": str(e)[:160]})
+    return {"built": built, "skipped": skipped, "failed": failed, "total": len(clips)}
+
+
+async def posters_status() -> dict:
+    """Welche Clips haben (noch) kein dauerhaft gespeichertes Vorschaubild?"""
+    clips = await db.guide_clips.find({}, {"_id": 0}).to_list(500)
+    missing, ready, vimeo = [], [], []
+    for clip in clips:
+        source, _ = _active_video(clip)
+        path, _at = poster_source(clip)
+        entry = {"slug": clip["slug"], "title": clip.get("title") or "", "kind": clip.get("kind")}
+        if source == "vimeo":
+            vimeo.append(entry)
+        elif not path:
+            continue
+        elif clip.get("poster_path") and clip.get("poster_built_version") == (_poster_version(clip, path) or "0"):
+            ready.append(entry)
+        else:
+            missing.append(entry)
+    return {"missing": missing, "ready": ready, "vimeo": vimeo,
+            "missing_count": len(missing), "ready_count": len(ready)}
+
+
 def _public_clip(clip: dict, seen: list) -> dict:
     token = clip.get("media_token")
     source, active = _active_video(clip)
@@ -389,6 +459,16 @@ async def public_teaser():
                      "vimeo_id": public["vimeo_id"], "poster_url": public["poster_url"]}}
 
 
+_POSTER_TASKS: set = set()
+
+
+async def _build_poster_bg(clip: dict) -> None:
+    try:
+        await ensure_poster(clip)
+    except Exception as e:
+        logger.warning("Vorschaubild im Hintergrund fehlgeschlagen (%s): %s", clip.get("slug"), e)
+
+
 @router.get("/media/{token}/{kind}")
 @router.head("/media/{token}/{kind}")
 async def serve_media(token: str, kind: str, request: Request):
@@ -414,6 +494,16 @@ async def serve_media(token: str, kind: str, request: Request):
         poster_at = 1.5
         if kind == "poster":
             path, poster_at = poster_source(clip)
+            # Iter 183: Liegt das Bild dauerhaft im Speicher, wird es direkt ausgeliefert
+            # (~100 KB statt komplettes Video laden + Standbild ziehen).
+            want = _poster_version(clip, path) or "0"
+            if clip.get("poster_path") and clip.get("poster_built_version") == want:
+                return await _serve_object(request, clip["poster_path"], "image/jpeg")
+            if path:
+                # Erst einmal live ausliefern, im Hintergrund dauerhaft speichern.
+                _task = asyncio.create_task(_build_poster_bg(clip))
+                _POSTER_TASKS.add(_task)
+                _task.add_done_callback(_POSTER_TASKS.discard)
 
     if not path:
         raise HTTPException(status_code=404, detail="Not found")
@@ -1240,6 +1330,13 @@ async def _job_render(slug: str, clip: dict, settings: dict, token: str, preview
         "duration_seconds_video": round(offset, 1), "video_preview_path": None, "preview_subtitles": None,
     })
     logger.info("Guide multishot ready: %s (%.1fs, %s KB)", slug, offset, len(final) // 1024)
+    # Iter 183: Vorschaubild sofort aus dem neuen Film erzeugen und dauerhaft speichern.
+    fresh = await db.guide_clips.find_one({"slug": slug}, {"_id": 0})
+    if fresh:
+        try:
+            await ensure_poster(fresh, force=True)
+        except Exception as e:
+            logger.warning("Vorschaubild nach Render fehlgeschlagen (%s): %s", slug, e)
 
 
 async def _job_render_preview(slug: str, clip: dict, settings: dict, token: str) -> None:

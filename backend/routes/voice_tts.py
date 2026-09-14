@@ -219,24 +219,14 @@ async def _save_cached_audio(cache_key: str, persona: str, text: str, voice_id: 
     )
 
 
-import re as _re_name
-
-
 def _normalize_wlad_name(text: str) -> str:
-    """Defensive: ersetze alle Vorkommen von 'Vlad' / 'Vladimir' / 'Wladimir' durch 'Wlad'.
+    """Marken-Namen korrigieren (eine Quelle: `services_speech_text.fix_brand_names`).
 
-    Mert: 'Vlad darf nicht genannt werden, nur Wlad'. Wenn das LLM trotz
-    System-Prompt-Anweisung 'Vlad' ausgibt (oder ein RAG-Quelltext es enthält),
-    fängt das hier den Slip ab — sowohl im TTS-Eingabetext als auch in
-    Antworten, die wir an den Frontend zurückgeben.
+    Wirkt auf TTS-Eingaben, Transkripte und alles, was zurück ans Frontend geht:
+    „Vlad", „Vladimir", „Wladimir", „Flat" → „Wlad"; „Vlad Bot" → „WladBot".
     """
-    if not text:
-        return text
-    # Standalone occurrences only — keep 'Wlad' intact, fix 'Vlad' / 'Vladi'
-    text = _re_name.sub(r"\bVladimir\b", "Wlad", text)
-    text = _re_name.sub(r"\bWladimir\b", "Wlad", text)
-    text = _re_name.sub(r"\bVlad\b", "Wlad", text)
-    return text
+    from services_speech_text import fix_brand_names
+    return fix_brand_names(text)
 
 
 REALTIME_CLONE_BUDGET_S = int(os.environ.get("VOICE_CLONE_BUDGET_S", "6"))
@@ -455,16 +445,22 @@ class VoiceConvoResponse(BaseModel):
 
 
 async def _transcribe_webm(audio_bytes: bytes) -> str:
-    """Whisper transcription. Auto-detects language but biases to DE."""
+    """Whisper transcription. Auto-detects language but biases to DE.
+
+    Iter 183: Eigennamen werden Whisper vorab genannt (`prompt`) und danach zur
+    Sicherheit korrigiert — „Bei Vlad gibt es …" darf nirgends erscheinen.
+    """
     from emergentintegrations.llm.openai import OpenAISpeechToText
+    from services_speech_text import SPEECH_NAME_HINT, fix_brand_names
     stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
     with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
         tmp.write(audio_bytes)
         tmp_path = tmp.name
     try:
         with open(tmp_path, "rb") as f:
-            response = await stt.transcribe(file=f, model="whisper-1", response_format="json", language="de")
-        return (response.text or "").strip()
+            response = await stt.transcribe(file=f, model="whisper-1", response_format="json",
+                                            language="de", prompt=SPEECH_NAME_HINT)
+        return fix_brand_names((response.text or "").strip())
     finally:
         try:
             os.unlink(tmp_path)
@@ -528,6 +524,14 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
 
     system_msg = VOICE_CONVO_SYSTEM_PROMPT + rag_block + framework_block + memory_block
 
+    # Iter 183: Verbindliche Definitionen (SEXIER & Co.) — identisch zum Text-Modus.
+    # Vorher hat das Modell im Sprechen E und X vertauscht und ein „Explore" erfunden.
+    try:
+        from wlad_canon import canon_block
+        system_msg += canon_block(transcript)
+    except Exception as e:
+        logger.warning(f"Canon block skipped: {e}")
+
     chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"voicemode_{session_id}", system_message=system_msg)
     # gpt-4o-mini = ~10x schneller als gpt-5.2 für 2-3 Satz-Voice-Antworten.
     # RAG-Block grounded ihn auf Wlads Frameworks → Qualität bleibt hoch.
@@ -548,7 +552,8 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     prompt = f"{ctx}\nUser: {transcript}\nCoach:" if ctx else transcript
 
     reply = await chat.send_message(UserMessage(text=prompt))
-    return (reply or "").strip()
+    from services_speech_text import fix_brand_names, to_plain_speech
+    return to_plain_speech(fix_brand_names((reply or "").strip()))
 
 
 async def _ensure_voice_session(session_id: Optional[str], user_id: str, transcript: str) -> str:

@@ -12,6 +12,7 @@ import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { GuideClipCard } from './GuideClipCard';
 import { InteractiveBetaCard } from './InteractiveBetaCard';
+import { PosterHealthCard } from './PosterHealthCard';
 
 const AssetTile = ({ label, hint, url, kind, accept, endpoint, onDone, isAudio }) => {
   const inputRef = useRef(null);
@@ -156,6 +157,8 @@ export const GuideStudio = () => {
       </Card>
 
       <InteractiveBetaCard voiceCloned={!!s.custom_voice_id} />
+
+      <PosterHealthCard />
 
       <Card className="flex flex-wrap items-center gap-3 border-border bg-card p-3" data-testid="guide-voice-preview-row">
         <Mic size={14} className="text-[#BFFF00]" />

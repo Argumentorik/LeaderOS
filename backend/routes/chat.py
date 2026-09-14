@@ -318,9 +318,10 @@ async def _ensure_session(session_id: str, user_id: str, message: str, agent: st
             raise HTTPException(status_code=404, detail="Session nicht gefunden")
         return session_id
     new_id = f"chat_{uuid.uuid4().hex[:12]}"
+    from services_speech_text import fix_brand_names
     doc = {
         "session_id": new_id, "user_id": user_id,
-        "title": message[:50], "agent": agent,
+        "title": fix_brand_names(message[:50]), "agent": agent,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -407,6 +408,12 @@ async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
     # coach output only when the user picked an agent or Coach-Modus.
     structured = (data.mode == "coach") or bool(data.agent and data.agent != "auto")
     system_msg = _build_system_message(data.agent, user_memory, folder_context, structured)
+    # Iter 183: Verbindliche Definitionen (SEXIER & Co.) — dieselbe Quelle wie im Sprach-Modus.
+    try:
+        from wlad_canon import canon_block
+        system_msg += canon_block(data.message)
+    except Exception as e:
+        logger.warning("Canon block skipped: %s", e)
     if rag_ctx["context_block"]:
         system_msg = system_msg + rag_ctx["context_block"]
         # Premium-first (Iter 135): paid users get explicit source attribution.
@@ -476,6 +483,8 @@ FOLLOWUP_MARKER = "###WEITER###"
 
 async def _finalize_chat(prep: dict, ai_response: str) -> dict:
     """Antwort parsen, persistieren, Session/Action aktualisieren — identisch für Stream und Nicht-Stream."""
+    from services_speech_text import fix_brand_names
+    ai_response = fix_brand_names(ai_response)
     user, session_id = prep["user"], prep["session_id"]
     parsed = _parse_chat_reply(ai_response, prep["structured"], prep["agent"])
     msg_id = f"msg_{uuid.uuid4().hex[:12]}"

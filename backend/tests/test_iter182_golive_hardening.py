@@ -28,15 +28,6 @@ def admin() -> httpx.Client:
 
 
 @pytest.fixture(scope="module")
-def loop():
-    """Motor bindet sich an genau EINE Event-Loop — alle Direkt-DB-Tests teilen sie."""
-    lo = asyncio.new_event_loop()
-    asyncio.set_event_loop(lo)
-    yield lo
-    lo.close()
-
-
-@pytest.fixture(scope="module")
 def sample_video(admin: httpx.Client) -> Path:
     """Ein echtes kleines MP4: das bereits produzierte Guide-Video (kein Render nötig)."""
     if SAMPLE.exists() and SAMPLE.stat().st_size > 100_000:
