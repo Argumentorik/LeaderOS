@@ -36,6 +36,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/GROWTH_LOOP.md`](./gtm/GROWTH_LOOP.md) | The growth loop: check → content → funnel → referral |
 | [`gtm/WEBINAR_FUNNEL.md`](./gtm/WEBINAR_FUNNEL.md) | **Ascension funnel map** (Ad → Webinar → 4 Videos → Trial → 30-Tage-Challenge → Leadership Plus) + honesty rules + missing video assets |
 | [`gtm/NEWSLETTER.md`](./gtm/NEWSLETTER.md) | Newsletter system |
+| [`gtm/EMAIL_BROADCASTS.md`](./gtm/EMAIL_BROADCASTS.md) | Evergreen broadcast emails (checklist/trust/CTA/teaser pattern) outside the linear lead-nurture cron chain |
 | [`gtm/INSTAGRAM_30_DAY_PLAN.md`](./gtm/INSTAGRAM_30_DAY_PLAN.md) | 30-day Instagram plan (design-ready) |
 | [`gtm/MARKETING_GREATOR_2026.md`](./gtm/MARKETING_GREATOR_2026.md) | Greator 2026 campaign |
 | [`gtm/VIMEO_WORKFLOW.md`](./gtm/VIMEO_WORKFLOW.md) | Video hosting workflow |

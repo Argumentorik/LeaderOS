@@ -4,13 +4,15 @@
 > erfinden. Ergänzt `CONTENT_ADS.md` (Design-DNA, Formate, Wording-Regeln)
 > und `ADS_90D.md` (Funnel-Storys). Hier steht die **Mengenplanung**.
 >
-> Stand 06.09.2026 · Bestand im Ad-Studio `/ads`: 143 Bild-Creatives —
-> 15 Evergreen, **W1 komplett mit Varianten a/b/c (72)**, LinkedIn-
-> Querformate, W2 Frameworks/Schmerz (36), Google-Bildassets (12); Filter
-> nach Plattform, Kampagne, Variante. Dazu 12 Social-Karten unter
-> `/social` und die Google-Text-Assets (RSA, Demand Gen, Erweiterungen)
-> im Studio-Tab „Google Text-Assets". Kampagnenstruktur:
-> `META_ADS_WEBINAR.md`, `LINKEDIN_ADS_WEBINAR.md`, `GOOGLE_ADS_SETUP.md` §6.
+> Stand 15.09.2026 · Bestand im Ad-Studio `/ads`: 145 Bild-Creatives —
+> 17 Evergreen (inkl. Cluster I „Proof-Checklist"), **W1 komplett mit
+> Varianten a/b/c (72)**, LinkedIn-Querformate, W2 Frameworks/Schmerz
+> (36), Google-Bildassets (12); Filter nach Plattform, Kampagne,
+> Variante. Dazu 12 Social-Karten unter `/social` und die Google-Text-
+> Assets (RSA, Demand Gen, Erweiterungen) im Studio-Tab „Google
+> Text-Assets". Kampagnenstruktur: `META_ADS_WEBINAR.md`,
+> `LINKEDIN_ADS_WEBINAR.md`, `GOOGLE_ADS_SETUP.md` §6. E-Mail-seitiges
+> Pendant zum Proof-Checklist-Cluster: `EMAIL_BROADCASTS.md`.
 
 ---
 
