@@ -301,6 +301,42 @@ export const AD_SERIES = [
       'deiner BIB 0001, Goldfolie-Siegel und Wlads handschriftlicher ' +
       'Unterschrift. Trägst du, oder lässt du.',
   },
+
+  // ─── I · Proof-Checklist (Vertrauens-Fakten vor der Buchung) ────
+  {
+    id: 'AD-I-01',
+    slug: 'gespraech-oder-nicht',
+    format: '1x1',
+    platform: 'meta',
+    palette: 'paper',
+    topText: 'FÜNF GRÜNDE\nFÜR EIN GESPRÄCH.',
+    titleText: 'ODER KEINS.\nDEINE WAHL.',
+    bottomText: '30 MIN · KEIN VERKAUFSDRUCK',
+    cta: 'TERMIN BUCHEN',
+    photo: '/wlad/wlad-portrait.jpg',
+    photoFit: 'cover',
+    caption:
+      'Wo du stehst. Welches der 11 Frameworks greift. Ob Challenge ' +
+      'oder Leadership Plus passt. 30 Minuten, kein Skript — und wenn ' +
+      'die Antwort „noch nicht“ ist, sagen wir das auch.',
+  },
+  {
+    id: 'AD-I-02',
+    slug: 'proof-vor-buchung',
+    format: '9x16',
+    platform: 'stories',
+    palette: 'midnight',
+    topText: 'BEVOR DU\nBUCHST.',
+    titleText: '400.000+ KLIENTEN.\nKEIN CALLCENTER.',
+    bottomText: 'TEAM · NICHT VERTRIEB',
+    cta: 'LEADER-OS.DE',
+    photo: '/wlad/wlad-portrait.jpg',
+    photoFit: 'cover',
+    caption:
+      'Seit 2007 im Training, 13 Bücher, 3× SPIEGEL-Bestseller — und ' +
+      'am Telefon sitzt das Team, das das System baut, nicht ein ' +
+      'Call-Center-Skript.',
+  },
 ];
 
 // ─── Welle 1 · Webinar 17.09.2026 · 8 Angles × 3 Formate ────────────

@@ -1160,3 +1160,109 @@ def lead_nurture_email(step: int, name: str, unsubscribe_link: str | None = None
         raise ValueError(f"lead_nurture_email: unknown step {step}")
 
     return subject, _base_layout(body, preheader=preheader, bib_code=f"N-{step:02d}")
+
+
+def beratung_checklist_email(name: str, unsubscribe_link: str | None = None) -> tuple[str, str]:
+    """Return (subject, html) for the standalone "Beratungsgespräch"
+    broadcast — a win-back/evergreen send, not a cron step.
+
+    Structure (checklist → trust-block → CTA → content-teaser) is a
+    deliberate departure from the prose-paragraph nurture mails: it's
+    modeled on the classic B2C-coaching broadcast pattern (benefit
+    checklist you can scan in 5 seconds, proof block, one low-friction
+    CTA, one piece of free value as a soft second CTA). Every claim is
+    canon-verified (docs/gtm/WLAD_CANON.md) — no invented testimonials,
+    no fake urgency, same honesty rules as docs/gtm/WEBINAR_FUNNEL.md.
+
+    Not wired to a cron — call this from an admin/broadcast route when
+    you actually want to send it, same as launch_announcement_email.
+    """
+    beratung_url = "https://www.leader-os.de/#beratung"
+    article_url = "https://leader-os.de/journal/warum-inhouse-trainings-nach-sechs-wochen-verpuffen"
+
+    subject = f"{name}, ein 30-Minuten-Gespräch kann mehr klären als drei Wochen Grübeln"
+    preheader = "5 Dinge, die ein Beratungsgespräch klärt — und wieso am Telefon niemand aus dem Callcenter sitzt."
+
+    unsub = (
+        f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:24px 0 0;text-align:center;">'
+        f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);text-decoration:underline;">Keine weiteren Mails dieser Art</a>'
+        f'</p>' if unsubscribe_link else ''
+    )
+
+    def _cta(url: str, label: str) -> str:
+        return f"""
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 8px;"><tr>
+  <td style="background:{BRAND_COLOR};padding:0;">
+    <a href="{url}" style="display:inline-block;padding:16px 28px;color:{BRAND_DARK};text-decoration:none;font-weight:900;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">+&nbsp;&nbsp;{label}</a>
+  </td>
+</tr></table>"""
+
+    def _kicker(text: str) -> str:
+        return (
+            f'<div style="font-family:\'SF Mono\',Menlo,Consolas,monospace;font-size:10px;'
+            f'letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;'
+            f'margin:12px 0 14px;">▸ {text}</div>'
+        )
+
+    def _headline(text: str) -> str:
+        return (
+            f'<div style="font-weight:900;font-style:italic;font-size:30px;line-height:1.05;'
+            f'letter-spacing:-0.03em;color:#ffffff;margin:0 0 22px;">{text}'
+            f'<span style="color:{BRAND_COLOR};">.</span></div>'
+        )
+
+    p = 'style="font-size:14.5px;color:rgba(255,255,255,0.80);line-height:1.65;margin:0 0 18px;"'
+    mono_label = (
+        f'style="font-family:\'SF Mono\',Menlo,Consolas,monospace;font-size:9px;'
+        f'letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:12px;"'
+    )
+
+    def _checklist(label: str, items: list[str]) -> str:
+        rows = "".join(
+            f'<tr><td style="padding:6px 10px 6px 0;vertical-align:top;width:22px;">'
+            f'<span style="color:{BRAND_COLOR};font-weight:900;font-size:14px;">✓</span></td>'
+            f'<td style="padding:6px 0;font-size:13.5px;color:#ffffff;line-height:1.55;">{item}</td></tr>'
+            for item in items
+        )
+        return (
+            '<div style="border-top:2px solid rgba(255,255,255,0.15);'
+            'border-bottom:2px solid rgba(255,255,255,0.15);padding:18px 0;margin:0 0 24px;">'
+            f'<div {mono_label}>▸ {label}</div>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
+            '</div>'
+        )
+
+    checklist = _checklist("EIN GESPRÄCH HILFT DIR DABEI …", [
+        "deine aktuelle Führungssituation von außen einzuordnen",
+        "herauszufinden, welches der 11 Frameworks für deinen Fall greift",
+        "zu klären, ob 30-Tage-Challenge oder Leadership Plus besser passt",
+        "offene Fragen zu WladBot &amp; KI im Führungsalltag zu klären",
+        "einen konkreten nächsten Schritt mitzunehmen — ohne Kaufzwang",
+    ])
+
+    trust = _checklist("DAS UNTERSCHEIDET DAS GESPRÄCH", [
+        "<b style=\"color:#fff;\">400.000+ trainierte Klienten seit 2007</b>, 13 Bücher, 3× SPIEGEL-Bestseller — nicht neu im Geschäft",
+        "<b style=\"color:#fff;\">Dieselbe Methodik läuft 24/7 in WladBot</b> — Chat, Sprache, Video-Analyse, ein Kanon, keine Version verwässert",
+        "<b style=\"color:#fff;\">Am Telefon sitzt das Team, das das System baut</b> — kein Callcenter-Skript, keine Verkaufsvorgabe",
+    ])
+
+    body = f"""
+{_kicker("BERATUNGSGESPRÄCH")}
+{_headline(f"Hallo {name}")}
+<p {p}>drei Wochen allein nachdenken bringt selten mehr Klarheit als ein einziges gutes Gespräch. Deshalb gibt es die Option, mit Wlads Team direkt zu sprechen — bevor du irgendetwas entscheidest.</p>
+{checklist}
+{trust}
+<p {p}>Kein Pitch, keine Deadline, kein „nur noch heute“. Du beschreibst deine Situation, wir sagen dir ehrlich, was Sinn ergibt — auch wenn die Antwort „noch nichts kaufen“ lautet.</p>
+{_cta(beratung_url, "Beratungsgespräch buchen · 30 Min")}
+<p {p} style="margin-top:28px;">Noch nicht bereit für ein Gespräch? Dieser Artikel zeigt, warum die meisten Inhouse-Trainings nach sechs Wochen wirkungslos verpuffen — und was stattdessen trägt.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid rgba(255,255,255,0.15);margin:0 0 8px;"><tr>
+  <td style="padding:18px 20px;">
+    <div {mono_label}>▸ AUS DEM JOURNAL</div>
+    <div style="font-size:15px;font-weight:800;color:#ffffff;line-height:1.35;margin-bottom:6px;">Warum Inhouse-Trainings nach sechs Wochen verpuffen<span style="color:{BRAND_COLOR};">.</span></div>
+    <a href="{article_url}" style="font-size:12.5px;color:{BRAND_COLOR};text-decoration:underline;">Artikel lesen →</a>
+  </td>
+</tr></table>
+{unsub}
+"""
+
+    return subject, _base_layout(body, preheader=preheader, bib_code="B-01")
