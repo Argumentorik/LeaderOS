@@ -222,8 +222,8 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
             )
             from services.email_scheduler import cancel_quiz_reminders
             await cancel_quiz_reminders(db, data.session_id)
-        except Exception:  # noqa: BLE001
-            pass
+        except Exception as e:  # noqa: BLE001
+            logger.warning("Quiz completion/reminder-cancel failed for %s: %s", data.session_id, e)
 
         from routes.email import send_auto_report_email
         await send_auto_report_email(db, config, user, report, data.session_id)
@@ -315,7 +315,7 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
             raise HTTPException(status_code=404, detail="No progress")
         return {
             "session_id": session_id, "name": user.get("name"),
-            "email": user.get("email"), "role": user.get("role"),
+            "email": (user.get("email") or "").lower().strip(), "role": user.get("role"),
             "answers": {}, "current": 0, "total": 20, "completed": False,
         }
 

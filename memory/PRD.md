@@ -1,5 +1,39 @@
 # Leader OS / Leader-Check — Product Requirements
 
+## 🚀 Iter 42 · Report-Flow-Klarheit + Godmode-PDF + Quiz-Resume (Jun 2026)
+Fünf Teile umgesetzt & E2E-verifiziert (testing_agent Iter42: Backend 6/6, Frontend 16/16 · 0 kritische Findings):
+
+**Teil 1 · Ablauf nach Frage 20 (Quiz.jsx)**
+- WladBot-Chat bleibt, klar als **Optional** markiert (Badge „Optional · du kannst direkt weiter")
+- Haupt-Button umbenannt: „Deinen 30-Tage-Plan aktivieren" → **„Meinen Report jetzt erstellen"** (data-testid `wladbot-continue`, größer/prominenter)
+- Intro-Text + Backend-Prompt so angepasst, dass WladBot NIE behauptet, den Report im Hintergrund zu erstellen / E-Mail zu schicken → weist immer auf den Button hin
+
+**Teil 2 · Analyzing-Screen (Analyzing.jsx)**
+- Ehrliche Status-Zeile: „kann bis zu ~60 Sekunden dauern · bitte auf der Seite bleiben, geht automatisch weiter"
+- „Fast geschafft · Report wird finalisiert"-Indikator wenn Phasen durch, aber Request läuft noch
+- Retry-Button bei Fehler bleibt (`analyzing-retry`)
+
+**Teil 3 · Paket-Sektion NUR im Report (`components/report/ReportPackages.jsx`)**
+- Nachgebaut nach leaderos.de/coaching „DAS STECKT IN DEN PAKETEN": 4-Stat-Bar (10 Kurse/72 Folgen/12 h/10 Folgen gratis), 2 Paket-Karten (Leader-OS 6 Kurse/31 Folgen/288 Min · Leader-OS Plus 4 Kurse/41 Folgen/456 Min + „Live dabei"), aufklappbare Kurs-Teaser, „1 gratis"-Badges
+- Free-vs-Paid-Banner: „Dein Report & 30-Tage-Plan sind kostenlos" — Kurse = das bezahlte Upgrade
+- CTAs `report-packages-cta-sprint` (997 €) + `report-packages-cta-library` → beide zu `/close`
+- Platziert zwischen `Report30DayPlan` und `ReportBookUpsell`. **Nur** im Report (bewusste User-Entscheidung: Ziel = Kurse freischalten)
+
+**Teil 4 · Godmode Diagnose-PDF (`services/pdf_report.py`)**
+- Root Cause: Helvetica (WinAnsi) hat keine Glyphen für 🔒 ✨ ✓ → ▸ → wurden als leere Lücken gerendert
+- Fix: **Vektor-Icon-Helfer** (`_icon_tri/_icon_check/_icon_arrow/_icon_lock/_icon_sparkle` + `_icon_text_centered`) ersetzen ALLE kaputten Glyphen — verifiziert via PDF-Analyse (alle Icons rendern als echte Formen)
+- Überlauf-Fix: Pattern-01-Titel via `_ellipsize` (statt `[:70]`-Truncation ohne Breiten-Check), Desc via `_ellipsize_words`
+- E-Mail-Text: Betreff/Preheader der Diagnose-Mail auf Premium gehoben (`email_templates.py report_email`)
+
+**Teil 5 · Quiz später fortsetzen + Abbruch-Erinnerungen**
+- Neue Collection `db.quiz_progress` (unique index session_id) — jede Antwort serverseitig gespeichert
+- Endpoints: `POST /api/quiz/progress` (upsert + enqueued reminders once), `GET /api/quiz/progress/{sid}` (Rehydration)
+- Quiz.jsx: speichert nach jeder Antwort an Server; Resume landet an **erster offener Frage** (fixt „letzte Frage neu beantworten"); `?resume=<sid>`-Link rehydriert User geräteübergreifend
+- Abbruch-Mails: 2 neue Episoden `quiz_reminder_1` (2 h) + `quiz_reminder_2` (24 h) in `email_episodes.py` (Dark/Lime, additiv — bestehende 7 Episoden unangetastet); `enqueue_quiz_reminders`/`cancel_quiz_reminders` in `email_scheduler.py`; Skip-Logik in `_process_one` (kein Nag wenn completed/Report existiert/gekauft/unsubscribed)
+- `generate_report` markiert `quiz_progress.completed=true` + cancelt Reminders
+- Reminder-Resume-Link: `https://leadercheck.de/quiz?resume=<sid>`
+- ⚠️ Redeploy nötig für Production
+
 ## Vision
 Leader-Check ist eine High-End-Leadership-Diagnose-Webapp (Funnel: Landing → 30-Fragen-Quiz → KI-Report → 30-Tage-Aktionsplan → Sales-Page) im Branding von Wladislaw Jachtchenko (3× SPIEGEL-Bestseller). Sprache: durchgehend Deutsch, Premium / direkt / kein Bullshit-Bingo.
 
