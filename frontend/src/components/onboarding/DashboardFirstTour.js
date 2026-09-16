@@ -111,7 +111,7 @@ const TOUR_STEPS = [
     id: 'videos',
     target: 'nav-videos',
     kicker: 'Kurze Lernvideos',
-    title: 'Lern-Videos.',
+    title: 'Kurse & Lern-Videos.',
     body: 'Zwischen zehn und vierzig Minuten. Kein Fluff. Rhetorik, schwierige Gespräche, Leadership-Grundlagen, direkt von Wlad, direkt anwendbar.',
     speak: 'Die Lernvideos. Kurze, direkt anwendbare Lektionen zu Rhetorik und Leadership.',
     locked: (tier) => tier === 'free',
@@ -141,6 +141,8 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   // the tour starts silent. Ton nur, wenn der User es selbst einschaltet.
   const [muted, setMuted] = useState(true);
   const [rect, setRect] = useState(null);
+  const closedRef = useRef(false);
+  const stepRef = useRef(0);
   const utterRef = useRef(null);
   // Iter 145: freigegebenes Wlad-Intro-Video (Guide Studio) ersetzt im Welcome-Step die Browser-Stimme.
   const [introClip, setIntroClip] = useState(null);
@@ -155,6 +157,8 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   // Show once per user (unless `force` triggers a rerun from the profile menu).
   useEffect(() => {
     if (force) {
+      closedRef.current = false;
+      stepRef.current = 0;
       setOpen(true);
       setStepIdx(0);
       return;
@@ -173,22 +177,82 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   const steps = useMemo(() => TOUR_STEPS, []);
 
   const current = steps[stepIdx];
+  const target = current?.target || null;
 
-  // Compute spotlight rect
+  // Iter 184 (Kundenmeldung · Lichtkegel auf falschem Element):
+  // Vorher wurde der Rahmen EINMAL pro Schritt gemessen — und zwar VOR dem
+  // weichen Scrollen. Scrollt die Nav-Liste danach, sitzt die Markierung
+  // dauerhaft auf der falschen Zeile (Text sagt "Video-Analyse", Kegel liegt
+  // auf "Mein Fortschritt"). Jetzt wird das Ziel während des ganzen Schritts
+  // nachgemessen: vor, zurück, Fenster verkleinert, Seite gescrollt.
   useEffect(() => {
-    if (!open || !current?.target) { setRect(null); return; }
-    const el = document.querySelector(`[data-tour-id="${current.target}"]`);
-    if (!el) { setRect(null); return; }
-    const r = el.getBoundingClientRect();
-    setRect({
-      top: r.top - 8,
-      left: r.left - 8,
-      width: r.width + 16,
-      height: r.height + 16,
-    });
-    // Scroll target into view (softly)
-    el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-  }, [open, current]);
+    if (!open || !target) { setRect(null); return; }
+
+    let cancelled = false;
+    let scrolled = false;
+
+    const findEl = () => {
+      const el = document.querySelector(`[data-tour-id="${target}"]`);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      // Element existiert, ist aber unsichtbar (zugeklappte Sidebar / display:none)
+      if (r.width < 2 || r.height < 2) return null;
+      return el;
+    };
+
+    // Ziel nicht sichtbar? Sidebar einmal aufklappen, dann erneut versuchen.
+    const reveal = () => {
+      const sidebar = document.querySelector('[data-testid="sidebar"]');
+      const toggle = document.querySelector('[data-testid="sidebar-collapse-btn"]');
+      if (sidebar && toggle && sidebar.offsetWidth < 120) {
+        toggle.click();
+        return true;
+      }
+      return false;
+    };
+
+    const measure = () => {
+      if (cancelled) return;
+      let el = findEl();
+      if (!el) {
+        if (reveal()) el = findEl();
+      }
+      if (!el) {
+        // Kein sichtbares Ziel → Schritt mittig ohne Lichtkegel, statt
+        // eine falsche Stelle zu markieren.
+        setRect(null);
+        return;
+      }
+      const r = el.getBoundingClientRect();
+      const next = { top: r.top - 8, left: r.left - 8, width: r.width + 16, height: r.height + 16 };
+      setRect((prev) => (
+        prev
+        && Math.abs(prev.top - next.top) < 0.5
+        && Math.abs(prev.left - next.left) < 0.5
+        && Math.abs(prev.width - next.width) < 0.5
+        && Math.abs(prev.height - next.height) < 0.5
+          ? prev
+          : next
+      ));
+      if (!scrolled) {
+        scrolled = true;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+      }
+    };
+
+    measure();
+    // Während des Schritts nachmessen (deckt weiches Scrollen, Sidebar-
+    // Animation und Layout-Wechsel ab) + auf Resize/Scroll reagieren.
+    const timer = setInterval(measure, 120);
+    window.addEventListener('resize', measure);
+    window.addEventListener('scroll', measure, true);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', measure, true);
+    };
+  }, [open, target, stepIdx]);
 
   // Speak current step. Cancels previous utterance to avoid overlap.
   // Iter 131.4 (Wlad-Direktive · warmer voice): actively pick the best
@@ -246,6 +310,8 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   }, [open, stepIdx, muted, current, introClip]);
 
   const close = (persist = true) => {
+    if (closedRef.current) return;
+    closedRef.current = true;
     setOpen(false);
     try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
     if (persist) {
@@ -254,11 +320,19 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
     if (onDone) onDone();
   };
 
+  // Schnelles Mehrfach-Klicken darf Schritte nicht doppelt zählen und die
+  // Zählung ("7 / 12") nie von der Anzeige trennen — der Ref wird synchron
+  // gesetzt, React-State folgt.
+  const goTo = (i) => {
+    const clamped = Math.min(Math.max(0, i), steps.length - 1);
+    stepRef.current = clamped;
+    setStepIdx(clamped);
+  };
   const next = () => {
-    if (stepIdx < steps.length - 1) setStepIdx(stepIdx + 1);
+    if (stepRef.current < steps.length - 1) goTo(stepRef.current + 1);
     else close(true);
   };
-  const prev = () => setStepIdx(Math.max(0, stepIdx - 1));
+  const prev = () => goTo(stepRef.current - 1);
 
   if (!open) return null;
 
@@ -304,6 +378,8 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
       {rect && (
         <div
           className="absolute pointer-events-none rounded-2xl transition-all duration-300"
+          data-testid="tour-spotlight"
+          data-tour-current={target || ''}
           style={{
             top: rect.top,
             left: rect.left,

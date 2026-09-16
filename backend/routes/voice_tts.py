@@ -564,7 +564,7 @@ async def _ensure_voice_session(session_id: Optional[str], user_id: str, transcr
     now = datetime.now(timezone.utc).isoformat()
     await db.chat_sessions.insert_one({
         "session_id": new_id, "user_id": user_id,
-        "title": transcript[:50], "agent": None, "mode": "voice",
+        "title": transcript[:50].strip() or "Sprach-Gespräch", "agent": None, "mode": "voice",
         "created_at": now, "updated_at": now,
     })
     return new_id
@@ -584,6 +584,9 @@ def _cap_reply_length(text: str) -> str:
     """Trim reply to TTS-safe length on a word boundary."""
     if not text:
         return "Sag das nochmal — habe ich nicht ganz verstanden."
+    # Iter 184: Rohzeichen (\n, \u201e) würden sonst vorgelesen werden.
+    from services_text_clean import unescape_text, unwrap_json_string
+    text = unescape_text(unwrap_json_string(text)).strip()
     if len(text) > MAX_TEXT_LENGTH:
         return text[:MAX_TEXT_LENGTH].rsplit(" ", 1)[0] + "."
     return text

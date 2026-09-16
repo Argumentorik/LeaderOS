@@ -15,6 +15,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from models import ChatMessageIn, ChatSessionCreate
 from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT, WLADBOT_CHAT_STYLE, WLADBOT_JSON_FORMAT
 from services_actions import record_user_action
+from services_text_clean import deep_unescape, unescape_text, unwrap_json_string
 from data import LEADERSHIP_QUOTES
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -321,7 +322,7 @@ async def _ensure_session(session_id: str, user_id: str, message: str, agent: st
     from services_speech_text import fix_brand_names
     doc = {
         "session_id": new_id, "user_id": user_id,
-        "title": fix_brand_names(message[:50]), "agent": agent,
+        "title": fix_brand_names(unescape_text(message)[:50]), "agent": agent,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -351,7 +352,7 @@ class TasksAcceptIn(BaseModel):
 async def accept_suggested_tasks(data: TasksAcceptIn, request: Request):
     """Iter 92.58: tasks suggested by WladBot are created only on user click."""
     user = await get_current_user(request)
-    clean = [t for t in (data.tasks or []) if isinstance(t, dict) and t.get("title")][:5]
+    clean = [deep_unescape(t) for t in (data.tasks or []) if isinstance(t, dict) and t.get("title")][:5]
     if not clean:
         raise HTTPException(status_code=400, detail="no_tasks")
     await _save_ai_tasks(clean, user["user_id"], data.session_id or "")
@@ -455,7 +456,9 @@ def _parse_chat_reply(ai_response: str, structured: bool, agent: Optional[str]) 
             parsed = None
         return parsed or {"insight": ai_response, "strategy": "", "action_steps": [], "simulation_prompt": None,
                           "reflection": "", "tasks": [], "follow_up_questions": [], "agent_used": agent or "General"}
-    text_reply = (ai_response or "").strip()
+    # Iter 184: doppelt verpackte Antwort zuerst auspacken, sonst sieht der
+    # Kunde `\n` / `\u201e` als Rohzeichen im Text.
+    text_reply = unwrap_json_string((ai_response or "").strip()).strip()
     # Extract follow-up questions marker → clickable chips in the UI.
     followups = []
     if FOLLOWUP_MARKER in text_reply:
@@ -475,7 +478,7 @@ def _parse_chat_reply(ai_response: str, structured: bool, agent: Optional[str]) 
                 followups = followups or (maybe.get("follow_up_questions") or [])[:2]
         except Exception:
             pass
-    return {"text": text_reply, "follow_up_questions": followups}
+    return {"text": unescape_text(text_reply), "follow_up_questions": followups}
 
 
 FOLLOWUP_MARKER = "###WEITER###"
@@ -486,7 +489,9 @@ async def _finalize_chat(prep: dict, ai_response: str) -> dict:
     from services_speech_text import fix_brand_names
     ai_response = fix_brand_names(ai_response)
     user, session_id = prep["user"], prep["session_id"]
-    parsed = _parse_chat_reply(ai_response, prep["structured"], prep["agent"])
+    # Iter 184: an EINER Stelle entpacken — Chat, Verlauf, Aufgaben und
+    # PDF-Export lesen danach denselben, bereinigten Text.
+    parsed = deep_unescape(_parse_chat_reply(ai_response, prep["structured"], prep["agent"]))
     msg_id = f"msg_{uuid.uuid4().hex[:12]}"
     await db.chat_messages.insert_one({
         "message_id": msg_id, "session_id": session_id, "user_id": user["user_id"],
@@ -501,7 +506,7 @@ async def _finalize_chat(prep: dict, ai_response: str) -> dict:
         "session_id": session_id,
         "message_id": msg_id,
         "response": parsed,
-        "raw": ai_response,
+        "raw": unescape_text(ai_response),
         "rag": {"active": prep["rag_ctx"]["rag_active"], "chunks": prep["rag_ctx"]["chunks_count"]},
         "folder_context_used": bool(prep["folder_context"]),
         "modality": prep["modality"],

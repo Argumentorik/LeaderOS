@@ -7,6 +7,7 @@ import logger from '../../lib/logger';
 import { FileText } from 'lucide-react';
 import { ModalityBadge } from './ModalityBadge';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
+import { unescapeText, deepUnescape } from '../../lib/textClean';
 
 /* Iter 139: Antworten sahen klickbar aus, waren es aber nicht. Jetzt gibt es
    eine echte Aktion — Antwort kopieren, mit sichtbarer Bestätigung. */
@@ -173,7 +174,7 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
     return (
       <div className="flex mb-4 animate-fade-in" data-testid="chat-notice">
         <div className="max-w-[80%] rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3">
-          <p className="text-[13px] leading-relaxed text-amber-900 dark:text-amber-200 select-text">{msg.content}</p>
+          <p className="text-[13px] leading-relaxed text-amber-900 dark:text-amber-200 select-text">{unescapeText(msg.content)}</p>
         </div>
       </div>
     );
@@ -182,7 +183,7 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
     const legacy = msg.display_text ? null : legacyClean(msg.content);
     return (
       <UserMessage
-        content={msg.display_text || legacy?.text || msg.content}
+        content={unescapeText(msg.display_text || legacy?.text || msg.content)}
         modality={msg.modality}
         pdf={msg.pdf || msg.attachment || legacy?.pdf}
       />
@@ -191,9 +192,15 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
 
   let parsed = msg.parsed;
   if (!parsed && typeof msg.content === 'string') {
-    try { parsed = JSON.parse(msg.content); } catch { parsed = null; }
+    try {
+      let raw = JSON.parse(msg.content);
+      // Iter 184: doppelt verpackte Antwort (JSON-String im JSON-String).
+      if (typeof raw === 'string') raw = JSON.parse(raw);
+      parsed = raw && typeof raw === 'object' ? raw : null;
+    } catch { parsed = null; }
   }
-  if (!parsed) return <PlainAssistantMessage content={msg.content} de={de} />;
+  parsed = parsed ? deepUnescape(parsed) : null;
+  if (!parsed) return <PlainAssistantMessage content={unescapeText(msg.content)} de={de} />;
 
   // Iter 96: normal conversational reply (ChatGPT/Grok style) — plain flowing text
   // + clickable follow-up chips that deepen the conversation step by step.

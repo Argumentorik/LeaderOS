@@ -25,8 +25,9 @@
  *   - className  passthrough
  */
 
-const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;
-const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
+import { unescapeText } from '../../lib/textClean';
+
+const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
 
 // Inline "1. … 2. … 3. …" — split a single line that hides a list.
 // We look for at least 2 occurrences before treating it as a list.
@@ -55,7 +56,9 @@ function renderInline(text) {
 
 function parseBlocks(text) {
   if (!text || typeof text !== 'string') return [];
-  const lines = text.split(/\r?\n/);
+  // Schutznetz (Iter 184): Rohzeichen (\n, \u201e) werden beim Darstellen
+  // bereinigt, statt sie dem Kunden zu zeigen.
+  const lines = unescapeText(text).split(/\r?\n/);
   const blocks = [];
   let buffer = null; // { type: 'list-ordered' | 'list-unordered' | 'paragraph', items: [] }
 

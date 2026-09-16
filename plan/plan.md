@@ -1,104 +1,96 @@
-# Plan: Thumbnails · Name „Wlad" · Sprach-Modus genauso schlau wie Text · Magic Link
+# Kundenfeedback abarbeiten · Qualität auf Produktionsniveau
 
-## Der Befund aus den zwei Fotos
+## 1. Tour-Fehler: Spotlight springt auf das falsche Element
 
-Dieselbe Frage, zwei Antworten:
+**Gemeldet:** Kundin loggt sich ein, sieht das Video, klickt „Weiter", dann „Zurück", dann wieder
+„Weiter" — danach liegt der Lichtkegel auf „Mein Fortschritt", während der Text und der Pfeil
+„Video-Analyse" erklären (Schritt 7/12).
 
-| | Text-Modus (Foto 1) | Sprach-Modus (Foto 2) |
-|---|---|---|
-| S | Statement (Behauptung) ✓ | „State" ✓ (Wortlaut abweichend) |
-| E | Explanation (Begründung) ✓ | **„Example" ✗** |
-| X | eXample (Beispiel) ✓ | **„Explanation" ✗** |
-| I | Impact (Relevanz) ✓ | Impact ✓ |
-| E | Explanation of Impact ✓ | **„Explore – verschiedene Blickwinkel" ✗ (frei erfunden)** |
-| R | Rebuttal (Widerlegung) ✓ | Rebuttal ✓ |
-
-Der Text-Modus antwortet korrekt (deckt sich mit „Weiße Rhetorik"). Der Sprach-Modus vertauscht
-E und X und erfindet beim zweiten E ein „Explore", das es im Modell nicht gibt. Ursache: der
-Sprach-Modus antwortet aus einem eigenen, schnelleren Weg ohne Anbindung an die Buch-/
-Wissensbasis — er rät aus dem Gedächtnis des Modells statt aus Wlads Inhalten.
-Im Foto ist außerdem „Bei **VLAD** gibt es ja das SEXIer Modell" zu sehen — der Namensfehler
-der Spracherkennung (Punkt 2).
-
-## 1. Sprach-Modus wird inhaltlich gleichwertig zum Text-Modus
-
-- Der Sprach-Modus bekommt **dieselbe Wissensanbindung und dieselben Coach-Regeln** wie der
-  Chat: gleiche Buch-/Kursinhalte, gleiches Gedächtnis für den Nutzer, gleiches Antwort-Niveau.
-  Kein zweiter, dümmerer Weg mehr.
-- Unterschied bleibt nur die **Form**: gesprochene Antworten bleiben kurz, ohne Sternchen,
-  Listen oder Überschriften, in ganzen Sätzen — aber inhaltlich identisch zur Textantwort.
-- Gesichertes Kernwissen wird zusätzlich fest verankert, damit es in **jedem** Modus wörtlich
-  stimmt. Für SEXIER gilt verbindlich:
-  **S** = Statement (Behauptung) · **E** = Explanation (Begründung) · **X** = eXample (Beispiel) ·
-  **I** = Impact (Relevanz für den Zuhörer) · **E** = Explanation of Impact (Begründung der
-  Relevanz) · **R** = Rebuttal (Widerlegung des stärksten Einwands).
-  Ebenso behandelt werden die anderen tragenden Modelle (z. B. 3-B-Schema, SEXI als Kurzform,
-  Schwarze/Weiße Rhetorik, die Fragetypen), damit in beiden Modi kein Buchstabe wandert.
-- Die Video-Analyse nutzt dieselbe verbindliche Definition — die SEXIER-Panels in der Analyse
-  und die gesprochene Erklärung können sich damit nicht mehr widersprechen.
-
-**Prüfung, die den Fall aus den Fotos abdeckt:** Ein fester Satz Wissensfragen wird in **beiden**
-Modi gestellt (SEXIER, SEXI, 3-B-Schema, Einwandbehandlung, die 4 Persönlichkeitstypen,
-„Was ist Weiße Rhetorik?") und Wort für Wort gegen die verbindliche Definition geprüft.
-Freigabe nur, wenn Sprache und Text dieselbe Substanz liefern — und kein erfundenes Element
-wie „Explore" mehr auftaucht.
-
-## 2. Der Name ist überall „Wlad"
-
-- Die Spracherkennung bekommt den Namen vorab mitgeteilt (Wlad, WladBot, Jachtchenko,
-  Leader-OS, LeaderCheck), damit er von Anfang an richtig geschrieben wird.
-- Zusätzlich eine feste Korrektur über jeden erkannten Text, bevor er irgendwo erscheint:
-  Vlad, Vladimir, Wladimir, Flat & Co. werden zu „Wlad" bzw. „WladBot". Wirksam an einer
-  Stelle für alle Wege — Sprach-Modus (auch der live mitlaufende Text beim Zuhören), Chat,
-  Interaktiver Wlad am Video, Analyse-Transkripte, automatische Gesprächstitel.
-- Auch die Antworten des Coaches werden geprüft: schreibt das Modell „Vlad", wird es korrigiert,
-  bevor es im Bild steht oder gesprochen wird.
-- Bestehende Gesprächstitel und Transkripte mit „Vlad" werden einmalig mitkorrigiert.
-- Grenze: selbst getippter Nutzertext wird nicht umgeschrieben.
-
-## 3. Thumbnails — nie wieder leere Kacheln
-
-**Heute:** Das Vorschaubild wird bei jedem Aufruf frisch aus dem Video gezogen. Nach Neustart
-oder Deploy ist der Zwischenspeicher leer, der erste Abruf scheitert oder dauert zu lange —
-das Bild „verschwindet". Besonders bei neu hochgeladenen und neu gerenderten Videos.
+**Was passiert:** Beim Zurückgehen wird der Text-Schritt gewechselt, der markierte Bereich aber
+nicht neu berechnet. Ab da laufen Erklärung und Markierung dauerhaft auseinander — jeder weitere
+Klick verschiebt die Lücke.
 
 **Künftig:**
-- Jedes Video bekommt sein Vorschaubild **einmal fest erzeugt und dauerhaft gespeichert** —
-  unabhängig von Neustart, Deploy oder Zwischenspeicher. Gilt für generierte Videos, eigene
-  Uploads und Vimeo-Links (dort wird das Vimeo-Bild übernommen).
-- Neues Bild automatisch bei Re-Render, neuem Upload oder geänderter Vorschau-Sekunde.
-- Fehlt ein Bild doch, erscheint die gestaltete Ersatzkachel im Marken-Look mit Titel —
-  nie ein leerer Rahmen oder ein kaputtes Bild-Symbol.
-- Im Admin: Liste „Videos ohne Vorschaubild" plus ein Knopf, der alle fehlenden in einem
-  Durchgang nachzieht — auch direkt nach einem Deploy auf Live prüfbar.
-- Keine Render-Kosten: es werden nur Standbilder aus vorhandenem Material gezogen.
+- Markierung, Text und Pfeil kommen aus einer Quelle: Der Lichtkegel wird bei JEDEM Schrittwechsel
+  neu am Ziel gemessen — vor, zurück, übersprungen, Fenster verkleinert, Seite gescrollt.
+- Ist das Ziel eines Schritts gerade nicht sichtbar (zugeklappte Sidebar, Handy-Ansicht, Feature für
+  diesen Kunden gesperrt), wird es vorher sichtbar gemacht; geht das nicht, erscheint der Schritt
+  ohne Lichtkegel mittig statt mit falscher Markierung.
+- „Zurück" und „Weiter" lassen sich schnell mehrfach klicken, ohne dass Schritte doppelt zählen oder
+  die Zählung („7 / 12") von der Anzeige abweicht.
+- Wer die Tour abbricht oder durchläuft, bekommt sie nicht erneut; „Tour erneut ansehen" startet
+  sauber bei Schritt 1.
 
-## 4. Magic Link muss sitzen
+## 2. WladBot-Antwort mit „komischen Abkürzungen"
 
-Der passwortlose Login wird vollständig durchgespielt und in Ordnung gebracht: Link anfordern →
-E-Mail kommt an (Absender, Betreff, Darstellung auf dem Handy) → Klick führt direkt in die
-angemeldete Ansicht. Dazu die unangenehmen Fälle: abgelaufener Link, zweiter Klick auf einen
-schon benutzten Link, Link in einem anderen Browser geöffnet, unbekannte E-Mail-Adresse,
-mehrfaches Anfordern hintereinander. Jeder Fall endet mit einer klaren deutschen Meldung und
-einem Weg zurück — nie in einer weißen Seite oder einem Endlos-Ladebalken.
+**Gemeldet:** In der Antwort stehen Zeichenfolgen wie `\n`, `\u201e`, `\u201c` mitten im Text —
+besonders in den nummerierten Schritten, nachdem die Kundin im Gespräch nachgefragt und Details
+ergänzt hat.
 
-## Entscheidungen und Annahmen (können widersprochen werden)
+**Was passiert:** Es sind keine Abkürzungen, sondern unaufgelöste Steuerzeichen für Zeilenumbruch
+und Anführungszeichen. Die Antwort wird an einer Stelle doppelt verpackt und dann als Rohtext
+angezeigt, statt als Absätze und „Anführungszeichen".
 
-1. **Sprache wird etwas später, aber richtig.** Die volle Wissensanbindung kostet beim
-   Sprach-Modus rund eine halbe bis eine Sekunde mehr, bis Wlad zu sprechen beginnt.
-   Angenommen wird: Richtigkeit geht vor Tempo. Alternative wäre, die Anbindung nur bei
-   Wissensfragen zuzuschalten und bei Motivations-/Sparring-Sätzen weiter sofort zu antworten —
-   sag Bescheid, wenn das gewünscht ist.
-2. Verbindlich festgeschriebenes Kernwissen umfasst die Rhetorik-Modelle und Kernbegriffe,
-   nicht ganze Buchkapitel.
-3. Eigene Thumbnails hochzuladen ist nicht Teil des Plans — nur die Sekunden-Wahl, die es im
-   Admin schon gibt.
-4. Es werden keine Videos und keine Audios neu gerendert. Für die Prüfung des Sprach-Modus
-   entstehen nur die üblichen Cent-Beträge für ein paar Testantworten.
-5. Der Text-Modus bleibt inhaltlich wie er ist — er ist laut Foto 1 korrekt.
+**Künftig:**
+- Antworten werden an einer Stelle entpackt, bevor sie irgendwo erscheinen. Zeilenumbrüche werden zu
+  echten Absätzen, `\u201e`/`\u201c` zu deutschen Anführungszeichen. Gilt für Chat, Sprach-Modus,
+  Aufgaben-/Schritt-Listen, Verlauf, PDF-Export und Gesprächstitel.
+- Ein Schutznetz zusätzlich in der Anzeige: Falls doch einmal Rohzeichen durchkommen, werden sie beim
+  Darstellen bereinigt, statt sie dem Kunden zu zeigen.
+- Bereits gespeicherte Antworten mit solchen Zeichen werden einmalig mitkorrigiert, damit auch alte
+  Gespräche und übernommene Aufgaben sauber aussehen.
+- Dieser Fall wird dauerhaft mitgeprüft: eine Nachfrage im laufenden Gespräch („vertiefe das",
+  Details nachschieben) muss ohne Rohzeichen ankommen — genau der Weg, den die Kundin gegangen ist.
+
+## 3. Qualität: „keine Vibe-Coded App mehr"
+
+Der Anspruch ist berechtigt, aber „alles auf 100 %" ist kein prüfbares Ziel. Vorgeschlagen wird ein
+Durchgang mit harten, nachprüfbaren Grenzen — statt einer offenen Umbau-Runde:
+
+- **Nichts bleibt still kaputt:** Jede Stelle, an der heute ein Fehler unsichtbar verschluckt wird,
+  bekommt entweder eine Klartext-Meldung für den Kunden oder einen Eintrag im Fehler-Monitor. Ziel:
+  ein Kunde sieht nie einen leeren Bereich ohne Erklärung.
+- **Kein Rohtext, keine Platzhalter im Bild:** Systematischer Durchgang über alle Bildschirme auf
+  Rohzeichen, „undefined", „NaN", leere Kacheln, abgeschnittene Texte — Handy und Desktop.
+- **Große Bausteine entflechten:** Die fünf größten Bildschirme (Dashboard, Challenge, Video-Studio,
+  Chat, Admin) werden in kleinere Teile zerlegt, ohne das Verhalten zu ändern. Das ist die Grundlage
+  dafür, dass künftige Änderungen nicht an anderer Stelle etwas umwerfen.
+- **Kunden-Wege abgesichert:** Registrieren, Login (Passwort, Magic Link, Google), Onboarding samt
+  Tour, Chat, Sprach-Modus, Video-Analyse, Kurse, Challenge, Zahlung — jeder Weg wird als
+  wiederholbarer Test hinterlegt, der bei jeder späteren Änderung mitläuft.
+
+## 4. 1000 Kunden gleichzeitig
+
+Aktuell ist nichts auf diese Last gemessen — es wäre unseriös, das ohne Zahlen zu behaupten.
+Vorgeschlagen:
+
+- **Messen statt hoffen:** Lasttest mit 1000 gleichzeitigen Kunden auf den typischen Wegen
+  (Dashboard öffnen, Video starten, Chat-Frage, Kurs-Folge). Ergebnis als Zahlen: Antwortzeiten,
+  Fehlerquote, wo es zuerst eng wird.
+- **Erwartbare Engstellen vorab entschärfen:** Videos und Vorschaubilder über einen Auslieferungs-
+  Dienst (CDN) statt über die App; gleichzeitige Video-Analysen in eine Warteschlange mit ehrlicher
+  Wartezeit-Anzeige statt Absage; teure Abfragen einmal berechnen und kurz zwischenspeichern.
+- **Ehrliche Obergrenzen:** Für Sprach-Modus und Video-Analyse wird festgehalten, wie viele Kunden
+  gleichzeitig bedient werden können, und was passiert, wenn es mehr sind — inklusive dem, was der
+  Kunde dann sieht.
+- **Grenze:** Mehr Last braucht am Ende mehr Serverleistung. Was mit Code erreichbar ist, wird
+  erreicht; wenn danach mehr Leistung nötig ist, kommt eine Kostenangabe statt einer Codeänderung.
+
+## Reihenfolge und Annahmen
+
+1. Die zwei Kundenmeldungen zuerst (Tour, Rohzeichen) — sie treffen jeden neuen Kunden sofort.
+2. Danach der Qualitäts-Durchgang aus Punkt 3.
+3. Zum Schluss Messung und Engstellen aus Punkt 4.
+
+Annahmen, die widersprochen werden können:
+- Punkt 3 und 4 verändern das Aussehen nicht. Es geht um Stabilität, nicht um Design.
+- Es werden keine Videos, Stimmen oder Skripte neu produziert.
+- Der Lasttest läuft gegen die Testumgebung, nicht gegen die Live-Seite mit echten Kunden.
+- Für den Lasttest entstehen geringe Kosten für Rechenzeit; Sprach- und Analyse-Wege werden dabei nur
+  stichprobenartig mitgetestet, damit keine unnötigen KI-Kosten anfallen.
 
 ## Nicht Teil dieses Plans
 
-- Neue Videos, neue Stimmen, neue Skripte, Re-Renderings.
-- Weitere Ausspracheschliffe der gesprochenen Antwort („im" / „imm") — bleibt pausiert.
-- Änderungen am Aussehen der Video-Kacheln über die Ersatzkachel hinaus.
+- Neue Funktionen.
+- Wechsel von Anbietern (Stimme, KI-Modelle, Zahlung).
+- Umstellung der Infrastruktur auf einen anderen Hoster.

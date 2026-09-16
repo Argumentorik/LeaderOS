@@ -879,3 +879,21 @@ Erledigt: E-Mail-Guard + Sperrliste, Magic-Link-Verifizierung, Lizenz-Wiederanme
 2. Stripe-Dashboard: Kontoname + Support-Telefonnummer auf Belegen (nur dort änderbar).
 3. Supabase-Edge-Function von leadercheck.de verschickt eigene Resend-Mails → dort Absender auf verifizierte Domain umstellen (nicht unser Repo).
 4. Cal.com-Buchungsbutton: Textfarbe gesetzt, aber nicht visuell verifiziert — Screenshot von Wlad nötig, falls weiter falsch.
+
+## Iter 184 · 2026-06-16 — Kundenfeedback: Tour-Lichtkegel + Rohzeichen
+**Punkt 1 (erledigt, verifiziert): Tour-Spotlight auf falschem Element**
+- Ursache: Der Rahmen wurde EINMAL pro Schritt gemessen — und zwar VOR dem weichen Scrollen der Nav-Liste. Nach „Zurück"→„Weiter" lag der Kegel dauerhaft auf einer anderen Zeile (Text „Video-Analyse", Kegel auf „Mein Fortschritt").
+- Fix (`components/onboarding/DashboardFirstTour.js`): Ziel wird während des ganzen Schritts nachgemessen (Intervall 120 ms + resize/scroll-Listener), Markierung/Text/Zähler kommen aus einer Quelle (`target` aus dem Schritt); zugeklappte Sidebar wird vorher aufgeklappt; kein sichtbares Ziel → Karte mittig OHNE Lichtkegel statt falscher Markierung; `next/prev` über Ref → kein Doppelzählen bei schnellen Klicks.
+- Zusätzlich: `data-tour-id` für Kurse (`nav-videos`), Schritt-Titel an Nav-Label angeglichen, `data-testid="tour-spotlight"` + `data-tour-current` für messbare Tests.
+- Verifiziert im Browser: Schritt 7 nach „Weiter/Zurück/Weiter" → Abweichung Kegel↔Ziel 0 px, Zähler 7/12 passend; mobil (390 px) zentriert ohne Kegel.
+
+**Punkt 2 (erledigt, verifiziert): Rohzeichen `\n`, `\u201e`, `\u201c` in Antworten**
+- Ursache: Das Modell liefert die Antwort gelegentlich als doppelt verpackten JSON-String. `json.loads` ergab einen String statt eines Dicts, der Parser scheiterte, und der Rohtext mit allen Escape-Sequenzen ging unverändert an die UI.
+- Fix (eine Quelle): neu `backend/services_text_clean.py` (`unescape_text`, `deep_unescape`, `unwrap_json_string`), eingebunden in `services_ai_parse.parse_ai_json`, `routes/chat.py` (`_parse_chat_reply`, `_finalize_chat`, Session-Titel, Aufgaben-Übernahme), `routes/voice_tts.py` (`_cap_reply_length` → gilt für Sprach-Modus und interaktiven Guide), `routes/challengers.py`.
+- Schutznetz in der Anzeige: `frontend/src/lib/textClean.js`, genutzt in `SmartText`, `ChatMessage`, `ChatHistoryPanel` (Titel) und `lib/pdfGenerator.js` (PDF-Export).
+- Einmal-Korrektur für Altdaten: `backend/scripts_fix_escaped_text.py` (Vorschau/`--apply`); Lauf am 2026-06-16: 0 betroffene Datensätze.
+- Tests: `backend/tests/test_iter184_text_clean.py` (6 Tests, alle grün) — inkl. echtem Kundenweg über die API: Frage → Nachfrage „vertiefe das" mit Details → nummerierte Schritte → Verlauf, alles ohne Rohzeichen.
+
+**Offen aus dem freigegebenen Plan (noch nicht begonnen)**
+- P1 · Punkt 3 Qualitäts-Durchgang: (a) kein still verschluckter Fehler (Klartext-Meldung oder Fehler-Monitor-Eintrag), (b) systematischer Screen-Durchgang auf Rohtext/`undefined`/`NaN`/leere Kacheln/abgeschnittene Texte (Handy + Desktop), (c) die fünf größten Bildschirme (Dashboard, Challenge, Video-Studio, Chat, Admin) verhaltensneutral zerlegen, (d) Kunden-Wege als wiederholbare Tests hinterlegen.
+- P1 · Punkt 4 Last: Lasttest mit 1000 gleichzeitigen Kunden gegen die Testumgebung, Zahlen statt Behauptungen; danach CDN für Videos/Poster, Warteschlange für Video-Analysen, Caching teurer Abfragen, ehrliche Obergrenzen für Sprach-Modus/Analyse.

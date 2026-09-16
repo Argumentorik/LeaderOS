@@ -3,6 +3,7 @@ import { Plus, Trash2, Folder, History, PanelRightClose, PanelRightOpen, Message
 import logger from '../../lib/logger';
 import api from '../../lib/api';
 import { FeatureBriefing } from './FeatureBriefing';
+import { unescapeText } from '../../lib/textClean';
 
 const groupLabel = (iso, de) => {
   if (!iso) return de ? 'Älter' : 'Older';
@@ -205,7 +206,7 @@ export const ChatHistoryPanel = ({
                 >
                   {folder && <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: folder.color || '#BFFF00' }} />}
                   <span className={`flex-1 min-w-0 truncate text-[12px] ${active ? 'font-bold' : 'font-medium text-foreground/75'}`}>
-                    {s.title || (de ? 'Neues Gespräch' : 'New conversation')}
+                    {unescapeText(s.title) || (de ? 'Neues Gespräch' : 'New conversation')}
                   </span>
                   <button
                     type="button"

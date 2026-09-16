@@ -96,7 +96,8 @@ def _parse_challenge_result(ai_response: str) -> dict | None:
         # Legacy fallback: regex extract single-line JSON containing "hired"
         json_match = re.search(r'\{[^{}]*"hired"[^{}]*\}', ai_response)
         if json_match:
-            return json.loads(json_match.group())
+            from services_text_clean import deep_unescape
+            return deep_unescape(json.loads(json_match.group()))
     except (json.JSONDecodeError, Exception):
         pass
     return None
