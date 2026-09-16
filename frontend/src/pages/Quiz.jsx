@@ -10,7 +10,7 @@ function WladBotChat({ onContinue }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Bevor ich deinen Report erstelle, wollte ich kurz mit dir sprechen. Was ist gerade deine größte Leadership-Herausforderung?"
+      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Dieses kurze Gespräch ist komplett optional. Wenn du magst, erzähl mir: Was ist gerade deine größte Leadership-Herausforderung? Sobald du bereit bist, tippst du unten auf den grünen Button · dann wird dein Report erstellt."
     }
   ]);
   const [input, setInput] = useState("");
@@ -33,12 +33,12 @@ function WladBotChat({ onContinue }) {
     try {
       const res = await axios.post(`${API}/coach/chat`, {
         session_id: user.session_id || "demo",
-        message: `[Vor-Report Gespräch] Der Nutzer hat gerade 20 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich auf: ${text}`,
+        message: `[Vor-Report Gespräch] Der Nutzer hat gerade 20 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich. WICHTIG: Behaupte NIEMALS, dass du den Report gerade im Hintergrund erstellst oder von selbst eine E-Mail verschickst · das passiert erst, wenn der Nutzer unten auf den Button tippt. Weise am Ende deiner Antwort freundlich darauf hin, dass er unten auf den grünen Button tippt, um seinen Report jetzt zu erstellen. Nutzer-Nachricht: ${text}`,
       });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
       setExchangeCount(c => c + 1);
     } catch {
-      setMessages(prev => [...prev, { role: "assistant", text: "Danke fürs Teilen. Lass uns jetzt deinen Report anschauen · ich bin gespannt!" }]);
+      setMessages(prev => [...prev, { role: "assistant", text: "Danke fürs Teilen! Tipp jetzt unten auf den grünen Button · dann erstelle ich deinen Report." }]);
       setExchangeCount(c => c + 1);
     } finally {
       setLoading(false);
@@ -62,12 +62,12 @@ function WladBotChat({ onContinue }) {
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-2">
             WladBot möchte dich kennenlernen
           </h2>
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#C8FF00] animate-pulse" />
-            <span className="font-inter text-sm text-slate-400">Wlad ist online</span>
+          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.06]">
+            <span className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
+            <span className="font-inter text-xs text-[#C8FF00] font-semibold tracking-wide uppercase">Optional · du kannst direkt weiter</span>
           </div>
           <p className="font-inter text-sm text-slate-500 max-w-md mx-auto">
-            Ein kurzes Gespräch, bevor dein personalisierter Report erstellt wird. Optional, aber wertvoll.
+            Ein kurzes Gespräch, wenn du magst. Deinen Report bekommst du direkt danach · sobald du unten auf den Button tippst.
           </p>
         </div>
 
@@ -128,19 +128,19 @@ function WladBotChat({ onContinue }) {
           </button>
         </div>
 
-        {/* Continue */}
+        {/* Continue — the ONE clear next action */}
         <button
           data-testid="wladbot-continue"
           onClick={handleContinue}
-          className="w-full py-4 rounded-xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-bold text-base flex items-center justify-center gap-3 hover:bg-[#d4ff33] transition-all shadow-lg shadow-[#C8FF00]/15"
+          className="w-full py-5 rounded-2xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-extrabold text-lg md:text-xl flex items-center justify-center gap-3 hover:bg-[#d4ff33] transition-all shadow-xl shadow-[#C8FF00]/25 hover:scale-[1.01]"
         >
-          <Sparkles className="w-5 h-5" />
-          Deinen 30-Tage-Plan aktivieren
-          <ArrowRight className="w-5 h-5" />
+          <Sparkles className="w-6 h-6" />
+          Meinen Report jetzt erstellen
+          <ArrowRight className="w-6 h-6" />
         </button>
 
         <p className="font-inter text-xs text-slate-600 text-center mt-4">
-          Du kannst auch direkt fortfahren · das Gespräch ist optional
+          Kostenlos · dein persönlicher Leadership-Report erscheint direkt danach
         </p>
       </div>
     </div>
@@ -163,21 +163,61 @@ export default function Quiz() {
   const [showWladBot, setShowWladBot] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("emergent_user");
-    if (!stored) { navigate("/diagnose"); return; }
-    const userData = JSON.parse(stored);
-    const role = userData.role || 'selbststaendige';
-    const qs = getQuestionsForRole(role);
-    setQuestions(qs);
-    setCurrent(c => Math.min(c, qs.length - 1));
+    const init = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const resumeSid = params.get("resume");
+      let stored = localStorage.getItem("emergent_user");
+      let serverAnswers = null;
+
+      // Cross-device / cross-browser resume via the personal link in the reminder mail.
+      if (resumeSid) {
+        try {
+          const { data: p } = await axios.get(`${API}/quiz/progress/${resumeSid}`);
+          if (p && p.session_id) {
+            if (!stored) {
+              const u = { session_id: p.session_id, user_id: p.session_id, name: p.name, email: p.email, role: p.role };
+              localStorage.setItem("emergent_user", JSON.stringify(u));
+              stored = JSON.stringify(u);
+            }
+            if (p.answers && Object.keys(p.answers).length) serverAnswers = p.answers;
+          }
+        } catch { /* fall back to local */ }
+      }
+
+      if (!stored) { navigate("/diagnose"); return; }
+      const userData = JSON.parse(stored);
+      const role = userData.role || 'selbststaendige';
+      const qs = getQuestionsForRole(role);
+
+      // Prefer whichever source has more answers (server wins on new device).
+      let localAnswers = {};
+      try { localAnswers = JSON.parse(localStorage.getItem("quiz_answers") || "{}"); } catch { /* */ }
+      const merged = (serverAnswers && Object.keys(serverAnswers).length >= Object.keys(localAnswers).length)
+        ? serverAnswers : localAnswers;
+      if (Object.keys(merged).length) {
+        localStorage.setItem("quiz_answers", JSON.stringify(merged));
+        setAnswers(merged);
+      }
+
+      // Resume exactly at the first UNANSWERED question — no re-answering.
+      const firstUnanswered = qs.findIndex(q => merged[q.id] === undefined);
+      setQuestions(qs);
+      setCurrent(firstUnanswered === -1 ? qs.length - 1 : firstUnanswered);
+    };
+    init();
   }, [navigate]);
 
-  // Auto-save every answer immediately to localStorage (and to backend best-effort)
+  // Auto-save every answer immediately — localStorage AND server (best-effort).
   useEffect(() => {
-    if (Object.keys(answers).length > 0) {
-      localStorage.setItem("quiz_answers", JSON.stringify(answers));
-    }
-  }, [answers]);
+    if (Object.keys(answers).length === 0 || questions.length === 0) return;
+    localStorage.setItem("quiz_answers", JSON.stringify(answers));
+    const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+    const sid = user.session_id || user.user_id;
+    if (!sid) return;
+    axios.post(`${API}/quiz/progress`, {
+      session_id: sid, answers, current, total: questions.length,
+    }).catch(() => {});
+  }, [answers, current, questions.length]);
 
   useEffect(() => {
     localStorage.setItem("quiz_current", String(current));

@@ -6,7 +6,7 @@ import uuid
 import logging
 from typing import Optional
 
-from models import QuizSubmit, CoachMessage
+from models import QuizSubmit, CoachMessage, QuizProgressUpdate
 from services.security import issue_report_token, verify_report_token, issue_sync_token
 
 logger = logging.getLogger(__name__)
@@ -214,6 +214,17 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
         }
         await db.reports.insert_one({**report, "report_id": str(uuid.uuid4())})
 
+        # Mark quiz progress complete + stop any pending abandonment reminders.
+        try:
+            await db.quiz_progress.update_one(
+                {"session_id": data.session_id},
+                {"$set": {"completed": True, "completed_at": datetime.now(timezone.utc).isoformat()}},
+            )
+            from services.email_scheduler import cancel_quiz_reminders
+            await cancel_quiz_reminders(db, data.session_id)
+        except Exception:  # noqa: BLE001
+            pass
+
         from routes.email import send_auto_report_email
         await send_auto_report_email(db, config, user, report, data.session_id)
 
@@ -235,6 +246,78 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
         report_token = issue_report_token(data.session_id, user.get("email", ""))
         sync_token = issue_sync_token(data.session_id, user.get("email", ""))
         return {**report, "report_token": report_token, "sync_token": sync_token}
+
+    @router.post("/quiz/progress")
+    @_rl("60/minute")
+    async def save_quiz_progress(request: Request, data: QuizProgressUpdate) -> dict:
+        user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
+        if not user:
+            user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        now = datetime.now(timezone.utc)
+        answers = data.answers or {}
+        existing = await db.quiz_progress.find_one(
+            {"session_id": data.session_id}, {"_id": 1, "reminders_enqueued": 1}
+        )
+        await db.quiz_progress.update_one(
+            {"session_id": data.session_id},
+            {
+                "$set": {
+                    "session_id": data.session_id,
+                    "email": (user.get("email") or "").lower().strip(),
+                    "name": user.get("name"),
+                    "role": user.get("role"),
+                    "answers": answers,
+                    "current": data.current,
+                    "total": data.total,
+                    "answered_count": len(answers),
+                    "updated_at": now.isoformat(),
+                },
+                "$setOnInsert": {
+                    "created_at": now.isoformat(),
+                    "started_at": now.isoformat(),
+                    "completed": False,
+                },
+            },
+            upsert=True,
+        )
+        # Enqueue the two abandonment reminders once (2h + 24h).
+        if (not existing or not existing.get("reminders_enqueued")) and user.get("email"):
+            try:
+                from services.email_scheduler import enqueue_quiz_reminders
+                await enqueue_quiz_reminders(
+                    db, email=user["email"], name=user.get("name", "Hey"),
+                    session_id=data.session_id, total=data.total,
+                )
+                await db.quiz_progress.update_one(
+                    {"session_id": data.session_id}, {"$set": {"reminders_enqueued": True}}
+                )
+            except Exception:  # noqa: BLE001
+                pass
+        return {"status": "saved"}
+
+    @router.get("/quiz/progress/{session_id}")
+    @_rl("30/minute")
+    async def get_quiz_progress(request: Request, session_id: str) -> dict:
+        prog = await db.quiz_progress.find_one({"session_id": session_id}, {"_id": 0})
+        if prog:
+            return {
+                "session_id": session_id, "name": prog.get("name"),
+                "email": prog.get("email"), "role": prog.get("role"),
+                "answers": prog.get("answers", {}), "current": prog.get("current", 0),
+                "total": prog.get("total", 20), "completed": prog.get("completed", False),
+            }
+        # No saved progress yet — return the user shell so a resume-link can rehydrate.
+        user = await db.users.find_one({"session_id": session_id}, {"_id": 0}) or \
+            await db.users.find_one({"user_id": session_id}, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=404, detail="No progress")
+        return {
+            "session_id": session_id, "name": user.get("name"),
+            "email": user.get("email"), "role": user.get("role"),
+            "answers": {}, "current": 0, "total": 20, "completed": False,
+        }
 
     @router.get("/report/{session_id}")
     @_rl("30/minute")

@@ -8,6 +8,7 @@ import { ReportRoles } from "../components/report/ReportRoles";
 import { ReportLayers, ReportRadarROI } from "../components/report/ReportCharts";
 import { ReportRecommendations, ReportAgentEcosystem, ReportCredo } from "../components/report/ReportInsights";
 import { Report30DayPlan, ReportBookUpsell, ReportCTAs } from "../components/report/ReportPlan";
+import { ReportPackages } from "../components/report/ReportPackages";
 
 export default function Report() {
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ export default function Report() {
         <ReportAgentEcosystem />
         <ReportCredo narrative={narrative} />
         <Report30DayPlan weakestRoles={weakestRoles} />
+        <ReportPackages />
         <ReportBookUpsell />
         <ReportCTAs />
       </div>

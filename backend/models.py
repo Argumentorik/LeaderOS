@@ -31,6 +31,13 @@ class QuizSubmit(BaseModel):
     journal_entries: Optional[List[str]] = None
 
 
+class QuizProgressUpdate(BaseModel):
+    session_id: str
+    answers: dict = {}
+    current: int = 0
+    total: int = 20
+
+
 class CoachMessage(BaseModel):
     session_id: str
     message: str

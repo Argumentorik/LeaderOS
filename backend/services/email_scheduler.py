@@ -84,6 +84,51 @@ async def cancel_drip(db, email: str, reason: str = "purchased") -> int:
     return res.modified_count
 
 
+# ─── Quiz Abandonment Reminders (separate from the 7-episode drip) ──
+
+QUIZ_REMINDER_SLUGS = ("quiz_reminder_1", "quiz_reminder_2")
+QUIZ_REMINDER_OFFSETS = [
+    ("quiz_reminder_1", timedelta(hours=2)),
+    ("quiz_reminder_2", timedelta(hours=24)),
+]
+
+
+async def enqueue_quiz_reminders(db, *, email: str, name: str, session_id: str, total: int = 20) -> int:
+    """Schedule the 2h + 24h 'finish your quiz' reminders for an abandoned quiz."""
+    if not email:
+        return 0
+    email_norm = email.lower().strip()
+    existing = await db.email_queue.find_one(
+        {"session_id": session_id, "slug": {"$in": list(QUIZ_REMINDER_SLUGS)}}
+    )
+    if existing:
+        return 0
+    now = datetime.now(timezone.utc)
+    resume_url = f"https://leadercheck.de/quiz?resume={session_id}"
+    docs = []
+    for slug, delta in QUIZ_REMINDER_OFFSETS:
+        docs.append({
+            "email": email_norm, "name": name, "slug": slug, "session_id": session_id,
+            "context": {"name": name, "email": email_norm, "session_id": session_id,
+                        "resume_url": resume_url, "total": total},
+            "due_at": now + delta, "status": "pending",
+            "source": "quiz_abandonment", "created_at": now,
+        })
+    await db.email_queue.insert_many(docs)
+    logger.info("Enqueued %d quiz reminders for %s", len(docs), email_norm)
+    return len(docs)
+
+
+async def cancel_quiz_reminders(db, session_id: str, reason: str = "completed") -> int:
+    """Cancel pending quiz reminders once the quiz was finished."""
+    res = await db.email_queue.update_many(
+        {"session_id": session_id, "slug": {"$in": list(QUIZ_REMINDER_SLUGS)}, "status": "pending"},
+        {"$set": {"status": "cancelled", "cancelled_reason": reason,
+                  "cancelled_at": datetime.now(timezone.utc)}},
+    )
+    return res.modified_count
+
+
 # ─── Worker Loop ─────────────────────────────────────────
 
 async def _user_already_bought(db, email: str) -> bool:
@@ -120,15 +165,35 @@ def _send_via_resend(to: str, subject: str, html: str) -> str:
 
 async def _process_one(db, doc: dict) -> str:
     email = doc["email"]
+    now = datetime.now(timezone.utc)
+    slug = doc.get("slug", "")
+
+    # Quiz abandonment reminders: never nag someone who already finished.
+    if slug in QUIZ_REMINDER_SLUGS:
+        sid = doc.get("session_id")
+        prog = await db.quiz_progress.find_one(
+            {"session_id": sid}, {"completed": 1, "current": 1, "answered_count": 1, "total": 1}
+        ) if sid else None
+        report_exists = await db.reports.find_one({"session_id": sid}, {"_id": 1}) if sid else None
+        if (prog and prog.get("completed")) or report_exists:
+            await db.email_queue.update_one({"_id": doc["_id"]},
+                {"$set": {"status": "skipped", "skip_reason": "quiz_completed", "processed_at": now}})
+            return "skipped_completed"
+        # Inject live progress so "Frage X von Y" is accurate at send time.
+        if prog:
+            ctx = doc.setdefault("context", {})
+            ctx["answered"] = prog.get("answered_count", prog.get("current", 0))
+            ctx["total"] = prog.get("total", ctx.get("total", 20))
+
     if await _user_already_bought(db, email):
         await db.email_queue.update_one({"_id": doc["_id"]},
             {"$set": {"status": "skipped", "skip_reason": "purchased",
-                      "processed_at": datetime.now(timezone.utc)}})
+                      "processed_at": now}})
         return "skipped_purchased"
     if await _user_unsubscribed(db, email):
         await db.email_queue.update_one({"_id": doc["_id"]},
             {"$set": {"status": "skipped", "skip_reason": "unsubscribed",
-                      "processed_at": datetime.now(timezone.utc)}})
+                      "processed_at": now}})
         return "skipped_unsubscribed"
 
     rendered = render_email(doc["slug"], doc.get("context", {}))

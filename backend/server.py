@@ -204,6 +204,13 @@ async def startup():
     except Exception:
         pass
 
+    # Quiz progress (server-side resume + abandonment reminders)
+    try:
+        await db.quiz_progress.create_index("session_id", unique=True, name="quiz_progress_sid_unique")
+        await db.quiz_progress.create_index([("completed", 1), ("updated_at", 1)])
+    except Exception:
+        pass
+
     start_scheduler(db)
 
     # Stripe self-healing background loop — expires stale pending checkouts

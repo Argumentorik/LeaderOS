@@ -246,10 +246,11 @@ def _draw_p(c: canvas.Canvas, text: str, x: float, y: float, max_w: float, **kw)
 
 
 def _eyebrow(c: canvas.Canvas, text: str, x: float, y: float):
-    """Lime mono uppercase eyebrow label."""
+    """Lime triangle bullet + mono uppercase eyebrow label."""
+    adv = _icon_tri(c, x, y, 8, LIME)
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(x, y, f"▸  {text.upper()}")
+    c.drawString(x + adv, y, text.upper())
 
 
 def _section_number(c: canvas.Canvas, num: str, x: float, y: float):
@@ -275,7 +276,7 @@ def _locked_overlay(c: canvas.Canvas, x: float, y: float, w_box: float, h_box: f
     c.roundRect(pill_x, pill_y, pill_w, 8 * mm, 4 * mm, fill=1, stroke=0)
     c.setFillColor(BG)
     c.setFont("Helvetica-Bold", 8.5)
-    c.drawCentredString(x + w_box / 2, pill_y + 2.7 * mm, "🔒  " + label.upper())
+    _icon_text_centered(c, x + w_box / 2, pill_y + 2.7 * mm, "lock", label.upper(), 8.5, BG, BG)
 
 
 def _card(c: canvas.Canvas, x: float, y: float, w_box: float, h_box: float, lime_border: bool = False, radius: float = 4 * mm):
@@ -300,6 +301,138 @@ def _progress(c: canvas.Canvas, x: float, y: float, w_full: float, value: int, m
         c.setStrokeColor(WHITE)
         c.setLineWidth(0.7)
         c.line(bx, y - 1 * mm, bx, y + h_bar + 1 * mm)
+
+
+# ════════════════════════════════════════════════════════════════════
+# VECTOR ICONS
+# Helvetica (WinAnsi) has no glyphs for lock/sparkle/check/arrow/triangle,
+# so those code points render as empty gaps. We draw crisp vector icons
+# instead — consistent everywhere, no missing-glyph boxes.
+# ════════════════════════════════════════════════════════════════════
+def _ellipsize(c: canvas.Canvas, text: str, font: str, size: float, max_w: float) -> str:
+    """Trim a single line to fit max_w, adding an ellipsis if needed."""
+    text = text or ""
+    if c.stringWidth(text, font, size) <= max_w:
+        return text
+    while text and c.stringWidth(text + "…", font, size) > max_w:
+        text = text[:-1]
+    return text.rstrip() + "…"
+
+
+def _ellipsize_words(text: str, max_chars: int) -> str:
+    """Word-safe character cap so wrapped paragraphs never overflow a card."""
+    text = (text or "").strip()
+    if len(text) <= max_chars:
+        return text
+    cut = text[:max_chars].rsplit(" ", 1)[0]
+    return cut.rstrip(" .,;:") + "…"
+
+
+def _icon_tri(c: canvas.Canvas, x: float, y: float, size: float, color) -> float:
+    """Right-pointing triangle bullet (replaces ▸). Returns x-advance to text."""
+    c.saveState()
+    c.setFillColor(color)
+    s = size * 0.7
+    yb = y - size * 0.02
+    p = c.beginPath()
+    p.moveTo(x, yb)
+    p.lineTo(x, yb + s)
+    p.lineTo(x + s * 0.85, yb + s / 2)
+    p.close()
+    c.drawPath(p, fill=1, stroke=0)
+    c.restoreState()
+    return s * 0.85 + size * 0.5
+
+
+def _icon_check(c: canvas.Canvas, x: float, y: float, size: float, color) -> float:
+    """Checkmark stroke (replaces ✓). Returns x-advance."""
+    c.saveState()
+    c.setStrokeColor(color)
+    c.setLineWidth(max(0.9, size * 0.13))
+    c.setLineCap(1)
+    c.setLineJoin(1)
+    s = size * 0.85
+    p = c.beginPath()
+    p.moveTo(x, y + s * 0.42)
+    p.lineTo(x + s * 0.36, y + s * 0.06)
+    p.lineTo(x + s * 0.95, y + s * 0.9)
+    c.drawPath(p, fill=0, stroke=1)
+    c.restoreState()
+    return s * 0.95 + size * 0.35
+
+
+def _icon_arrow(c: canvas.Canvas, x: float, y: float, size: float, color) -> float:
+    """Right arrow (replaces →). Returns x-advance."""
+    c.saveState()
+    c.setStrokeColor(color)
+    c.setLineWidth(max(0.9, size * 0.11))
+    c.setLineCap(1)
+    c.setLineJoin(1)
+    s = size * 0.95
+    ym = y + size * 0.33
+    hs = size * 0.27
+    p = c.beginPath()
+    p.moveTo(x, ym)
+    p.lineTo(x + s, ym)
+    p.moveTo(x + s - hs, ym + hs)
+    p.lineTo(x + s, ym)
+    p.lineTo(x + s - hs, ym - hs)
+    c.drawPath(p, fill=0, stroke=1)
+    c.restoreState()
+    return s + size * 0.35
+
+
+def _icon_lock(c: canvas.Canvas, x: float, y: float, size: float, color) -> float:
+    """Padlock (replaces 🔒). Returns x-advance."""
+    c.saveState()
+    body_w = size * 0.8
+    body_h = size * 0.6
+    c.setFillColor(color)
+    c.roundRect(x, y, body_w, body_h, size * 0.12, fill=1, stroke=0)
+    c.setStrokeColor(color)
+    c.setLineWidth(max(0.8, size * 0.13))
+    r = body_w * 0.3
+    cxp = x + body_w / 2
+    top = y + body_h
+    sp = c.beginPath()
+    sp.arc(cxp - r, top - r, cxp + r, top + r, startAng=0, extent=180)
+    c.drawPath(sp, fill=0, stroke=1)
+    c.restoreState()
+    return body_w + size * 0.35
+
+
+def _icon_sparkle(c: canvas.Canvas, x: float, y: float, size: float, color) -> float:
+    """Four-point sparkle (replaces ✨). Returns x-advance."""
+    c.saveState()
+    c.setFillColor(color)
+    cx = x + size * 0.4
+    cy = y + size * 0.35
+    r = size * 0.48
+    k = r * 0.16
+    p = c.beginPath()
+    p.moveTo(cx, cy + r)
+    p.curveTo(cx + k, cy + k, cx + k, cy + k, cx + r, cy)
+    p.curveTo(cx + k, cy - k, cx + k, cy - k, cx, cy - r)
+    p.curveTo(cx - k, cy - k, cx - k, cy - k, cx - r, cy)
+    p.curveTo(cx - k, cy + k, cx - k, cy + k, cx, cy + r)
+    p.close()
+    c.drawPath(p, fill=1, stroke=0)
+    c.restoreState()
+    return size * 0.9 + size * 0.35
+
+
+def _icon_text_centered(c: canvas.Canvas, cx: float, y: float, kind: str, text: str,
+                        size: float, icon_color, text_color, font: str = "Helvetica-Bold"):
+    """Draw a leading vector icon + text, centred as one block around cx."""
+    gap = size * 0.45
+    icon_w = {"arrow": size * 0.95, "lock": size * 0.8, "sparkle": size * 0.9, "check": size * 0.9}[kind]
+    tw = c.stringWidth(text, font, size)
+    start = cx - (icon_w + gap + tw) / 2
+    fn = {"arrow": _icon_arrow, "lock": _icon_lock, "sparkle": _icon_sparkle, "check": _icon_check}[kind]
+    fn(c, start, y, size, icon_color)
+    c.setFillColor(text_color)
+    c.setFont(font, size)
+    c.drawString(start + icon_w + gap, y, text)
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -359,7 +492,8 @@ def _page1_leadership_dna(c: canvas.Canvas, ctx: dict, total: int):
     c.roundRect(chip1_x, chip_y, chip1_w, 16 * mm, 3 * mm, fill=0, stroke=1)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 7.5)
-    c.drawString(chip1_x + 5 * mm, chip_y + 10 * mm, "▸  ARCHETYP")
+    _adv = _icon_tri(c, chip1_x + 5 * mm, chip_y + 10 * mm, 7.5, SLATE_MUTED)
+    c.drawString(chip1_x + 5 * mm + _adv, chip_y + 10 * mm, "ARCHETYP")
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 12)
     c.drawString(chip1_x + 5 * mm, chip_y + 4 * mm, archetype)
@@ -372,7 +506,8 @@ def _page1_leadership_dna(c: canvas.Canvas, ctx: dict, total: int):
     c.roundRect(chip2_x, chip_y, chip1_w, 16 * mm, 3 * mm, fill=0, stroke=1)
     c.setFillColor(LIME)
     c.setFont("Helvetica", 7.5)
-    c.drawString(chip2_x + 5 * mm, chip_y + 10 * mm, "▸  PERZENTIL")
+    _adv = _icon_tri(c, chip2_x + 5 * mm, chip_y + 10 * mm, 7.5, LIME)
+    c.drawString(chip2_x + 5 * mm + _adv, chip_y + 10 * mm, "PERZENTIL")
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 12)
     c.drawString(chip2_x + 5 * mm, chip_y + 4 * mm, percentile)
@@ -389,7 +524,7 @@ def _page1_leadership_dna(c: canvas.Canvas, ctx: dict, total: int):
     hook_y = 32 * mm
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9.5)
-    c.drawCentredString(w / 2, hook_y, "✨   Deine vollständige Leadership-DNA wartet in LeaderOS.")
+    _icon_text_centered(c, w / 2, hook_y, "sparkle", "Deine vollständige Leadership-DNA wartet in LeaderOS.", 9.5, LIME, LIME)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
     c.drawCentredString(w / 2, hook_y - 6 * mm, "Diese Diagnose ist nur das erste Kapitel.")
@@ -446,7 +581,14 @@ def _page2_executive_snapshot(c: canvas.Canvas, ctx: dict, total: int):
         c.drawString(26 * mm, y - 19 * mm, interpretation)
         c.setFillColor(LIME)
         c.setFont("Helvetica-Bold", 7.5)
-        c.drawRightString(w - 26 * mm, y - 19 * mm, "🔒  DETAILANALYSE IN LEADEROS")
+        _lbl = "DETAILANALYSE IN LEADEROS"
+        _adv = 7.5 * 1.15
+        c.setFont("Helvetica-Bold", 7.5)
+        _tw = c.stringWidth(_lbl, "Helvetica-Bold", 7.5)
+        _sx = (w - 26 * mm) - (_adv + _tw)
+        _icon_lock(c, _sx, y - 19 * mm, 7.5, LIME)
+        c.setFillColor(LIME)
+        c.drawString(_sx + _adv, y - 19 * mm, _lbl)
 
         y -= (card_h + spacing)
 
@@ -501,16 +643,17 @@ def _page3_pattern(c: canvas.Canvas, ctx: dict, total: int):
     _card(c, 20 * mm, y - card_h, w - 40 * mm, card_h, lime_border=True)
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(26 * mm, y - 7 * mm, "▸  PATTERN 01 · ENTHÜLLT")
+    _adv = _icon_tri(c, 26 * mm, y - 7 * mm, 8, LIME)
+    c.drawString(26 * mm + _adv, y - 7 * mm, "PATTERN 01 · ENTHÜLLT")
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 13)
     title1 = (first.get("title") if first else None) or "Du löst Probleme schneller als du delegierst."
-    c.drawString(26 * mm, y - 14 * mm, title1[:70])
+    c.drawString(26 * mm, y - 14 * mm, _ellipsize(c, title1, "Helvetica-Bold", 13, w - 52 * mm))
     desc1 = (first.get("description") if first else None) or (
         "Deine Stärke wird zur Falle: Du übernimmst Aufgaben, die andere wachsen lassen würden. "
         "Das macht dich kurzfristig stark · und langfristig zum Bottleneck."
     )
-    _draw_p(c, desc1, 26 * mm, y - 19 * mm, w - 52 * mm, size=9.5, color=SLATE, leading=1.5)
+    _draw_p(c, _ellipsize_words(desc1, 210), 26 * mm, y - 19 * mm, w - 52 * mm, size=9.5, color=SLATE, leading=1.5)
 
     y -= (card_h + 6 * mm)
 
@@ -520,7 +663,8 @@ def _page3_pattern(c: canvas.Canvas, ctx: dict, total: int):
     _locked_overlay(c, 20 * mm, y - locked_h, w - 40 * mm, locked_h, "Pattern 02 · in LeaderOS")
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(26 * mm, y - 7 * mm, "▸  PATTERN 02")
+    _adv = _icon_tri(c, 26 * mm, y - 7 * mm, 8, SLATE_MUTED)
+    c.drawString(26 * mm + _adv, y - 7 * mm, "PATTERN 02")
 
     y -= (locked_h + 4 * mm)
 
@@ -529,13 +673,14 @@ def _page3_pattern(c: canvas.Canvas, ctx: dict, total: int):
     _locked_overlay(c, 20 * mm, y - locked_h, w - 40 * mm, locked_h, "Pattern 03 · in LeaderOS")
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(26 * mm, y - 7 * mm, "▸  PATTERN 03")
+    _adv = _icon_tri(c, 26 * mm, y - 7 * mm, 8, SLATE_MUTED)
+    c.drawString(26 * mm + _adv, y - 7 * mm, "PATTERN 03")
 
     # CTA
     cta_y = 30 * mm
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 10)
-    c.drawCentredString(w / 2, cta_y, "→   ALLE 3 PATTERNS IN LEADEROS FREISCHALTEN")
+    _icon_text_centered(c, w / 2, cta_y, "arrow", "ALLE 3 PATTERNS IN LEADEROS FREISCHALTEN", 10, LIME, LIME)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
     c.drawCentredString(w / 2, cta_y - 6 * mm, "leadercheck.de/diagnose · dein License-Key liegt im Welcome-Mail")
@@ -587,7 +732,7 @@ def _page4_biggest_opportunity(c: canvas.Canvas, ctx: dict, total: int):
     cx_arrow = w / 2 - 5 * mm
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 22)
-    c.drawString(cx_arrow, gauge_y + gauge_h - 26 * mm, "→")
+    _icon_arrow(c, cx_arrow, gauge_y + gauge_h - 26 * mm, 22, LIME)
 
     # Potential
     cx2 = w - 65 * mm
@@ -624,7 +769,7 @@ def _page4_biggest_opportunity(c: canvas.Canvas, ctx: dict, total: int):
     for tag, line in impacts:
         c.setFillColor(LIME)
         c.setFont("Helvetica-Bold", 12)
-        c.drawString(22 * mm, y, "✓")
+        _icon_check(c, 22 * mm, y, 12, LIME)
         c.setFillColor(WHITE)
         c.setFont("Helvetica-Bold", 10.5)
         c.drawString(30 * mm, y, tag)
@@ -636,7 +781,7 @@ def _page4_biggest_opportunity(c: canvas.Canvas, ctx: dict, total: int):
     # Bottom hook
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9.5)
-    c.drawCentredString(w / 2, 30 * mm, "→   DETAILLIERTE SIMULATION DEINER ENTWICKLUNG IN LEADEROS")
+    _icon_text_centered(c, w / 2, 30 * mm, "arrow", "DETAILLIERTE SIMULATION DEINER ENTWICKLUNG IN LEADEROS", 9.5, LIME, LIME)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
     c.drawCentredString(w / 2, 24 * mm, "Pro Woche · pro Skill · pro Entscheidung modelliert.")
@@ -670,7 +815,8 @@ def _page5_30day_challenge(c: canvas.Canvas, ctx: dict, total: int):
     _card(c, 20 * mm, y - card_h, w - 40 * mm, card_h, lime_border=True)
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(26 * mm, y - 8 * mm, "▸  WEEK 01 · BASELINE")
+    _adv = _icon_tri(c, 26 * mm, y - 8 * mm, 8, LIME)
+    c.drawString(26 * mm + _adv, y - 8 * mm, "WEEK 01 · BASELINE")
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 14)
     c.drawString(26 * mm, y - 16 * mm, "Sehen, wo du wirklich stehst.")
@@ -706,7 +852,8 @@ def _page5_30day_challenge(c: canvas.Canvas, ctx: dict, total: int):
         # Visible label + teaser
         c.setFillColor(SLATE_MUTED)
         c.setFont("Helvetica-Bold", 8)
-        c.drawString(26 * mm, y - 6.5 * mm, f"▸  {label}")
+        _adv = _icon_tri(c, 26 * mm, y - 6.5 * mm, 8, SLATE_MUTED)
+        c.drawString(26 * mm + _adv, y - 6.5 * mm, label)
         c.setFillColor(WHITE)
         c.setFont("Helvetica-Bold", 10.5)
         c.drawString(26 * mm, y - 13 * mm, teaser)
@@ -718,13 +865,13 @@ def _page5_30day_challenge(c: canvas.Canvas, ctx: dict, total: int):
         c.roundRect(pill_x, pill_y, pill_w, 7 * mm, 3.5 * mm, fill=1, stroke=0)
         c.setFillColor(BG)
         c.setFont("Helvetica-Bold", 7.5)
-        c.drawCentredString(pill_x + pill_w / 2, pill_y + 2.2 * mm, "🔒  IN LEADEROS FREISCHALTEN")
+        _icon_text_centered(c, pill_x + pill_w / 2, pill_y + 2.2 * mm, "lock", "IN LEADEROS FREISCHALTEN", 7.5, BG, BG)
         y -= (locked_h + 3 * mm)
 
     # Bottom CTA
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9.5)
-    c.drawCentredString(w / 2, 30 * mm, "→   IN LEADEROS WEITERMACHEN")
+    _icon_text_centered(c, w / 2, 30 * mm, "arrow", "IN LEADEROS WEITERMACHEN", 9.5, LIME, LIME)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
     c.drawCentredString(w / 2, 24 * mm, "Wochen 2–4 mit täglichen Missionen · personalisierten Übungen · WladBot-Sparring.")
@@ -778,7 +925,7 @@ def _page6_ai_coach(c: canvas.Canvas, ctx: dict, total: int):
     c.drawCentredString(w / 2, 32 * mm, "Dies sind nur Beispiele. WladBot lernt deinen Kontext · in LeaderOS.")
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9.5)
-    c.drawCentredString(w / 2, 25 * mm, "→   50 GRATIS-CREDITS WARTEN AUF DICH")
+    _icon_text_centered(c, w / 2, 25 * mm, "arrow", "50 GRATIS-CREDITS WARTEN AUF DICH", 9.5, LIME, LIME)
 
     c.showPage()
 
@@ -811,7 +958,8 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     # Content
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9)
-    c.drawString(30 * mm, hero_y + hero_h - 11 * mm, "▸  DEIN BONUS · AKTIV")
+    _adv = _icon_tri(c, 30 * mm, hero_y + hero_h - 11 * mm, 9, LIME)
+    c.drawString(30 * mm + _adv, hero_y + hero_h - 11 * mm, "DEIN BONUS · AKTIV")
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 24)
     c.drawString(30 * mm, hero_y + hero_h - 25 * mm, "50 Free Credits.")
@@ -828,7 +976,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.roundRect(cta_x, cta_y_btn, cta_w, 11 * mm, 5.5 * mm, fill=1, stroke=0)
     c.setFillColor(BG)
     c.setFont("Helvetica-Bold", 10.5)
-    c.drawCentredString(cta_x + cta_w / 2, cta_y_btn + 3.8 * mm, "→  LEADEROS.DE LOGIN")
+    _icon_text_centered(c, cta_x + cta_w / 2, cta_y_btn + 3.8 * mm, "arrow", "LEADEROS.DE LOGIN", 10.5, BG, BG)
     # Clickable link region
     c.linkURL("https://leaderos.de/login",
               (cta_x, cta_y_btn, cta_x + cta_w, cta_y_btn + 11 * mm),
@@ -869,7 +1017,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
         if done:
             c.setFillColor(BG)
             c.setFont("Helvetica-Bold", 9)
-            c.drawCentredString(x + 5 * mm, sy + 3.5 * mm, "✓")
+            _icon_check(c, x + 5 * mm - 1.7 * mm, sy + 3.2 * mm, 7, BG)
         else:
             c.setFillColor(SLATE_MUTED)
             c.setFont("Helvetica-Bold", 8)
@@ -885,7 +1033,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
         if i < len(steps) - 1:
             c.setFillColor(BORDER)
             c.setFont("Helvetica-Bold", 9)
-            c.drawString(x + step_w - 4 * mm, sy + 3.5 * mm, "→")
+            _icon_arrow(c, x + step_w - 4 * mm, sy + 3.5 * mm, 9, BORDER)
 
     # ─── EMAIL SERIES PROMISE ────────────────────────────────────
     promise_y = sy - 14 * mm
@@ -893,7 +1041,8 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     _card(c, 20 * mm, promise_y - promise_h, w - 40 * mm, promise_h, lime_border=True)
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(26 * mm, promise_y - 7 * mm, "▸  WAS DICH JETZT ERWARTET")
+    _adv = _icon_tri(c, 26 * mm, promise_y - 7 * mm, 8, LIME)
+    c.drawString(26 * mm + _adv, promise_y - 7 * mm, "WAS DICH JETZT ERWARTET")
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 11)
     c.drawString(26 * mm, promise_y - 13 * mm, "10 Wochen Wlad · 1× pro Woche · direkt in deinen Posteingang.")

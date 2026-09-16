@@ -227,8 +227,8 @@ def report_email(name: str, report: dict) -> dict:
 {_ps_block('Diese E-Mail ist nur der Anfang. In den nächsten 30 Tagen schicken wir dir 1× pro Woche einen <strong style="color:' + BRAND['lime'] + '">Wlad-Framework Quick-Win</strong> · um deine 50 Credits maximal zu nutzen.')}"""
 
     return {
-        "subject": f"{name}: {profile_title} — dein Leader OS Report",
-        "html": _base_wrapper(content, f"Dein Score: {total}% — {profile_title}."),
+        "subject": f"{name}, hier ist deine Leadership-DNA · {profile_title}",
+        "html": _base_wrapper(content, f"7-Seiten-Diagnose im Anhang · dein Score: {total}% · {profile_title}. Jetzt öffnen."),
     }
 
 

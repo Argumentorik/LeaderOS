@@ -121,8 +121,11 @@ export default function Analyzing() {
         <h1 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-3" data-testid="analyzing-title">
           Dein Leadership-Profil wird erstellt
         </h1>
-        <p className="font-inter text-sm text-slate-500 mb-8">
+        <p className="font-inter text-sm text-slate-500 mb-2">
           10 Analyse-Dimensionen · 6 KI-Agenten arbeiten für dich
+        </p>
+        <p className="font-inter text-xs text-slate-600 mb-8">
+          Das kann bis zu ~60 Sekunden dauern · bitte bleib auf dieser Seite. Es geht automatisch weiter, sobald dein Report fertig ist.
         </p>
 
         {/* Leadership Quote */}
@@ -172,6 +175,15 @@ export default function Analyzing() {
             );
           })}
         </div>
+
+        {activePhase >= phases.length - 1 && !error && (
+          <div className="flex items-center justify-center gap-2 mb-6" data-testid="analyzing-finalizing">
+            {[0, 1, 2].map(i => (
+              <span key={i} className="w-2 h-2 rounded-full bg-[#C8FF00] analyzing-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+            ))}
+            <span className="font-inter text-sm text-slate-400 ml-1">Fast geschafft · dein Report wird finalisiert</span>
+          </div>
+        )}
 
         {error && (
           <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 mb-6" data-testid="analyzing-error">

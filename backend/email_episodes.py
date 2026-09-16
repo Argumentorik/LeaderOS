@@ -940,6 +940,62 @@ def episode_07_executive_mode(name: str, email: str = "") -> dict:
 
 
 # ════════════════════════════════════════════════════════════
+#  QUIZ ABANDONMENT REMINDERS (additive · not part of the 7-drip)
+# ════════════════════════════════════════════════════════════
+
+def _quiz_reminder_body(name, resume_url, answered, total, headline, opener,
+                        mission_line, cta_label, hint, email):
+    top = f"""<tr><td style="background:{BRAND['bg_dark']};padding:64px 40px 40px 40px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+<tr><td style="padding:0 0 30px 0;"><img src="{LOGO_URL}" alt="Leader OS" height="22" style="height:22px;width:auto;display:block;border:0;outline:none;" /></td></tr>
+<tr><td style="padding:0 0 20px 0;">{_eyebrow("Deine Diagnose wartet")}</td></tr>
+<tr><td style="padding:0 0 22px 0;">{_hero_headline(headline)}</td></tr>
+<tr><td style="padding:0 0 32px 0;max-width:480px;">{_punch_opener(opener)}</td></tr>
+<tr><td>{_stat_row([(f"{answered}/{total}", "Fragen beantwortet"), ("~3", "Min bis fertig"), ("0 €", "kostenlos")])}</td></tr>
+</table></td></tr>"""
+    cta = f"""<tr><td style="background:{BRAND['bg_dark']};padding:8px 40px 56px 40px;border-top:1px solid {BRAND['border_dark']};">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+<tr><td style="padding:32px 0 22px 0;"><h2 style="font-size:26px;line-height:1.2;letter-spacing:-0.02em;font-weight:800;color:{BRAND['white']};margin:0;">{mission_line}</h2></td></tr>
+<tr><td>{_cta(cta_label, resume_url, hint)}</td></tr>
+</table></td></tr>"""
+    return top + cta + _footer(email)
+
+
+def episode_quiz_reminder_1(name: str, resume_url: str = "https://leadercheck.de/quiz",
+                            answered: int = 0, total: int = 20, email: str = "") -> dict:
+    body = _quiz_reminder_body(
+        name, resume_url, answered, total,
+        headline=f"{name}, du warst<br>fast durch.",
+        opener=f"Du hast {answered} von {total} Fragen beantwortet · dann kam das Leben dazwischen. Kein Problem: dein Fortschritt ist gespeichert · du machst genau da weiter, wo du warst. In unter 3 Minuten hast du deinen persönlichen Leadership-Report.",
+        mission_line="Mach deine Diagnose in 3 Minuten fertig.",
+        cta_label="→ Diagnose fortsetzen",
+        hint="Kostenlos · dein Fortschritt ist gespeichert · kein Neuanfang",
+        email=email,
+    )
+    return {
+        "subject": f"{name}, deine Leadership-Diagnose wartet ({answered}/{total})",
+        "html": _wrap(f"Du warst bei Frage {answered} von {total}. Mach in 3 Minuten fertig · dein Fortschritt ist gespeichert.", body),
+    }
+
+
+def episode_quiz_reminder_2(name: str, resume_url: str = "https://leadercheck.de/quiz",
+                            answered: int = 0, total: int = 20, email: str = "") -> dict:
+    body = _quiz_reminder_body(
+        name, resume_url, answered, total,
+        headline=f"{name}, letzte<br>Erinnerung.",
+        opener=f"Deine Diagnose steht seit gestern bei {answered} von {total}. Die meisten, die hier abbrechen, erfahren nie, wo ihr größter Führungs-Hebel liegt. Schade drum · die letzten Fragen dauern keine 3 Minuten · und danach liegt dein 7-Seiten-Report in deinem Postfach.",
+        mission_line="Die letzten Fragen · dann ist dein Report da.",
+        cta_label="→ Jetzt abschließen",
+        hint="Kostenlos · danach bekommst du deinen 7-Seiten-Report als PDF",
+        email=email,
+    )
+    return {
+        "subject": f"{name}, letzte Erinnerung: deine Diagnose ({answered}/{total})",
+        "html": _wrap(f"Letzte Erinnerung · deine Leadership-Diagnose steht bei {answered}/{total}. 3 Minuten bis zum Report.", body),
+    }
+
+
+# ════════════════════════════════════════════════════════════
 #  Episode Registry
 # ════════════════════════════════════════════════════════════
 
@@ -951,6 +1007,8 @@ EPISODES = {
     "ep05_cfo_test":         episode_05_cfo_test,
     "ep06_three_min":        episode_06_three_min,
     "ep07_executive_mode":   episode_07_executive_mode,
+    "quiz_reminder_1":       episode_quiz_reminder_1,
+    "quiz_reminder_2":       episode_quiz_reminder_2,
 }
 
 
@@ -963,4 +1021,12 @@ def render_episode(slug: str, ctx: dict) -> dict | None:
     email = ctx.get("email", "")
     if slug == "ep01_first_win":
         return fn(name=name, weakest_label=weakest, email=email)
+    if slug in ("quiz_reminder_1", "quiz_reminder_2"):
+        return fn(
+            name=name,
+            resume_url=ctx.get("resume_url", "https://leadercheck.de/quiz"),
+            answered=ctx.get("answered", ctx.get("current", 0)),
+            total=ctx.get("total", 20),
+            email=email,
+        )
     return fn(name=name, email=email)
