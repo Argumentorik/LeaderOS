@@ -64,6 +64,7 @@ const WladJachtchenkoPage = lazyWithRetry(() => import("./pages/WladJachtchenkoP
 const EventPage = lazyWithRetry(() => import("./pages/EventPage"));
 const WebinarPage = lazyWithRetry(() => import("./pages/WebinarPage"));
 const TrainingLandingPage = lazyWithRetry(() => import("./pages/TrainingLandingPage"));
+const KommunikationPage = lazyWithRetry(() => import("./pages/KommunikationPage"));
 const FrameworksPage = lazyWithRetry(() => import("./pages/FrameworksPage"));
 const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
 const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
@@ -245,6 +246,8 @@ function AppRouter() {
         <Route path="/webinar/live" element={<WebinarLivePage />} />
         {/* Ad-only · short-scroll, single-viewport variant, same 17.09. offer + register endpoint as /webinar and /event */}
         <Route path="/training" element={<TrainingLandingPage />} />
+        {/* Ad-only · Kommunikation-first, Steadyflow-Mechanik mit Kanon-Inhalt (zehn Frameworks als Marquee) */}
+        <Route path="/kommunikation" element={<KommunikationPage />} />
         {/* Public · free 4-video lead-magnet funnel · "Führung beginnt hier" */}
         <Route path="/fuehrung-beginnt-hier" element={<FreeVideosPage />} />
         <Route path="/gratis" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
