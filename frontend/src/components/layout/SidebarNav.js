@@ -90,25 +90,30 @@ export const SidebarNav = ({ mainItems, moreGroups, collapsed, moreLabel, moreHi
   });
 
   const holds = (items) => (items || []).some((i) => i.path === location.pathname);
-  const isOpen = (id, items) => (holds(items) ? true : Boolean(openMap[id]));
-  const toggle = (id, items) => {
+  // Iter 188: Die Hauptgruppen stehen beim ersten Besuch offen, „Mehr" bleibt
+  // zu. JEDE Gruppe lässt sich zuklappen — auch die, in der man gerade steht.
+  const isOpen = (id, defaultOpen = false) => (
+    Object.prototype.hasOwnProperty.call(openMap, id) ? Boolean(openMap[id]) : defaultOpen
+  );
+  const toggle = (id, defaultOpen = false) => {
     setOpenMap((prev) => {
-      const next = { ...prev, [id]: !isOpen(id, items) };
+      const current = Object.prototype.hasOwnProperty.call(prev, id) ? Boolean(prev[id]) : defaultOpen;
+      const next = { ...prev, [id]: !current };
       try { localStorage.setItem(NAV_OPEN_KEY, JSON.stringify(next)); } catch { /* noop */ }
       return next;
     });
   };
 
   const moreItems = (moreGroups || []).flatMap((g) => g.items);
-  const moreOpen = isOpen('more', moreItems);
+  const moreOpen = isOpen('more');
 
-  const GroupHead = ({ id, label, icon: Icon, items, tid }) => (
-    <button type="button" onClick={() => toggle(id, items)} aria-expanded={isOpen(id, items)}
+  const GroupHead = ({ id, label, icon: Icon, items, tid, defaultOpen }) => (
+    <button type="button" onClick={() => toggle(id, defaultOpen)} aria-expanded={isOpen(id, defaultOpen)}
       className={`flex items-center gap-2.5 w-full px-3 py-[8px] rounded-[10px] text-[13px] font-medium transition-colors ${holds(items) ? 'text-[#4A6200] dark:text-[#BFFF00] font-semibold' : 'nav-row'} hover:bg-gray-50/50 dark:hover:bg-white/[0.02]`}
       data-testid={tid}>
       <Icon size={16} className="shrink-0" />
       <span className="truncate">{label}</span>
-      <ChevronDown size={12} className={`ml-auto shrink-0 opacity-45 transition-transform ${isOpen(id, items) ? 'rotate-180' : ''}`} />
+      <ChevronDown size={12} className={`ml-auto shrink-0 opacity-45 transition-transform ${isOpen(id, defaultOpen) ? 'rotate-180' : ''}`} />
     </button>
   );
 
@@ -121,8 +126,13 @@ export const SidebarNav = ({ mainItems, moreGroups, collapsed, moreLabel, moreHi
         }
         return (
           <div key={item.id} className="mb-0.5">
-            <GroupHead id={item.id} label={item.label} icon={item.icon} items={item.children} tid={`nav-group-${item.id}`} />
-            {isOpen(item.id, item.children) && (
+            <GroupHead id={item.id} label={item.label} icon={item.icon} items={item.children}
+                       tid={`nav-group-${item.id}`} defaultOpen={item.defaultOpen} />
+            {item.hint && !collapsed && (
+              <p className="px-3 pb-1 -mt-0.5 text-[10.5px] leading-tight text-muted-foreground/75"
+                 data-testid={`nav-hint-${item.id}`}>{item.hint}</p>
+            )}
+            {isOpen(item.id, item.defaultOpen) && (
               <div className="mt-0.5 space-y-0.5" data-testid={`nav-group-items-${item.id}`}>
                 {item.children.map((c) => <NavRow key={c.path} item={c} collapsed={false} indent onLocked={setLockedItem} />)}
               </div>
@@ -136,7 +146,7 @@ export const SidebarNav = ({ mainItems, moreGroups, collapsed, moreLabel, moreHi
         moreItems.map((i) => <NavRow key={i.path} item={i} collapsed onLocked={setLockedItem} />)
       ) : (
         <div className="pt-2 mt-2 border-t border-black/[0.04] dark:border-white/[0.05]">
-          <button type="button" onClick={() => toggle('more', moreItems)} aria-expanded={moreOpen}
+          <button type="button" onClick={() => toggle('more')} aria-expanded={moreOpen}
             className="flex items-center gap-2.5 w-full px-3 py-[8px] rounded-[10px] nav-row hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors"
             data-testid="nav-more-toggle">
             <span className="flex items-center gap-[3px] shrink-0 w-4 justify-center">

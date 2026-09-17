@@ -20,7 +20,7 @@ import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrep
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import {
-  Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard,
+  Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard, MyTasksCard,
   QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine, LabCard,
 } from '../components/dashboard/home/HomeSections';
 import api from '../lib/api';
@@ -85,10 +85,6 @@ export default function DashboardPage() {
     loadDashboard();
   }, [loadDashboard]);
 
-  // Plan Iter 187: Wlads Gesicht kommt aus einem bereits produzierten Video —
-  // ein Standbild, kein erzeugtes Bild.
-  const wladPortrait = (bundle?.guide_clips?.clips || []).find((c) => c.poster_url)?.poster_url || null;
-
   const getGreeting = () => {
     const h = new Date().getHours();
     if (h < 12) return de ? 'Guten Morgen' : 'Good Morning';
@@ -148,7 +144,7 @@ export default function DashboardPage() {
 
         {/* ── 1 · Datum und Stand (Iter 185) ── */}
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} portrait={wladPortrait} />
+          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} />
           <div className="flex items-center gap-2 flex-wrap pt-1">
             <TierBadge size="sm" />
             <CreditBadge de={de} />
@@ -180,7 +176,7 @@ export default function DashboardPage() {
         {/* ── 4 · Frag deinen Coach ── */}
         <Section id="coach" title={de ? 'Frag deinen Coach' : 'Ask your coach'}
                  hint={de ? 'WladBot antwortet auf deine Führungsfragen — mit Wlads Material und deinem Kontext.' : 'WladBot answers your leadership questions — from Wlad’s material and your context.'}>
-          <AskCoachCard de={de} navigate={navigate} portrait={wladPortrait} />
+          <AskCoachCard de={de} navigate={navigate} />
         </Section>
 
         {/* ── 4b · Leadership LAB: erst nach den 30 Tagen der „nächste Schritt" (Iter 186) ── */}
@@ -197,7 +193,13 @@ export default function DashboardPage() {
           <CoursesCard status={coursesStatus} de={de} navigate={navigate} onUnlock={() => openPricing('leadership_os')} />
         </Section>
 
-        {/* ── 6 · Eigene Aufgabe anlegen ── */}
+        {/* ── 6 · Meine Aufgaben (Iter 188: Menüpunkt bleibt draußen, hier ist der Ort) ── */}
+        <Section id="my-tasks" title={de ? 'Meine Aufgaben' : 'My tasks'}
+                 hint={de ? 'Was bei dir offen ist — direkt abhaken.' : 'What is open for you — tick it off right here.'}>
+          <MyTasksCard de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 7 · Eigene Aufgabe anlegen ── */}
         <Section id="own-task" title={de ? 'Eigene Aufgabe anlegen' : 'Create your own task'}
                  hint={de ? 'Alles, was du dir vornimmst, landet in deiner Aufgabenliste.' : 'Anything you take on lands in your task list.'}>
           <QuickTaskCard de={de} />

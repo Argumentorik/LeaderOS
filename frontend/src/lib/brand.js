@@ -11,6 +11,9 @@
 
 /** WladBot-Avatar — sauberer Gesichts-Ausschnitt, gleiche Figur wie leadercheck.de. */
 export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
+// Iter 188: festes Standbild aus dem vorhandenen Videomaterial (Ausschnitt
+// Gesicht + Schultern). Liegt in der App, ist damit für jedes Konto sofort da.
+export const WLAD_PORTRAIT = '/wlad-portrait.jpg';
 
 /** Wlad's personal welcome video, shown right before the onboarding starts. */
 export const WLAD_WELCOME_VIDEO =

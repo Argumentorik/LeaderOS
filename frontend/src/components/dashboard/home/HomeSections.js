@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
@@ -10,6 +10,7 @@ import api from '../../../lib/api';
 import logger from '../../../lib/logger';
 import { toast } from 'sonner';
 import { CreditCostHint, useCreditCost } from '../../shared/CreditCostHint';
+import { WLAD_PORTRAIT } from '../../../lib/brand';
 
 /**
  * Startseite (Iter 185): eine Sache pro Abschnitt, ein Satz Erklärung dazu.
@@ -29,18 +30,27 @@ export const Section = ({ id, title, hint, action, children }) => (
   </section>
 );
 
-export const TodayHeader = ({ name, greeting, day, total, de, portrait }) => {
+/** Standbild von Wlad. Fällt es aus, bleibt kein Loch im Layout zurück. */
+export const WladPortrait = ({ size = 86, rounded = 'rounded-2xl', className = '', testid = 'home-wlad-portrait' }) => {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <img src={WLAD_PORTRAIT} alt="Wlad" loading="lazy" width={size} height={size}
+         onError={() => setFailed(true)}
+         style={{ width: size, height: size }}
+         className={`${rounded} object-cover shrink-0 ring-1 ring-black/[0.06] dark:ring-white/[0.08] ${className}`}
+         data-testid={testid} />
+  );
+};
+
+export const TodayHeader = ({ name, greeting, day, total, de }) => {
   const today = new Date().toLocaleDateString(de ? 'de-DE' : 'en-US', {
     weekday: 'long', day: 'numeric', month: 'long',
   });
   return (
     <div className="mb-8 flex items-start gap-4 sm:gap-5" data-testid="home-today-header">
-      {/* Plan Iter 187: ein echtes Standbild aus Wlads Videos — kein erzeugtes Bild. */}
-      {portrait && (
-        <img src={portrait} alt="Wlad" loading="lazy"
-             className="hidden sm:block w-[86px] h-[86px] rounded-2xl object-cover object-[50%_18%] shrink-0 ring-1 ring-black/[0.06] dark:ring-white/[0.08]"
-             data-testid="home-wlad-portrait" />
-      )}
+      {/* Iter 188: festes Standbild aus dem Videomaterial — immer da. */}
+      <WladPortrait className="hidden sm:block" />
       <div className="min-w-0">
         <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{today}</p>
         <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">
@@ -155,7 +165,7 @@ const EXAMPLE_QUESTIONS_EN = [
   'My team is not pulling together — where do I start?',
 ];
 
-export const AskCoachCard = ({ de, navigate, portrait }) => {
+export const AskCoachCard = ({ de, navigate }) => {
   const [text, setText] = useState('');
   const { blocked, hint } = useCreditCost('chat');
   const go = (question) => {
@@ -166,16 +176,12 @@ export const AskCoachCard = ({ de, navigate, portrait }) => {
   const examples = de ? EXAMPLE_QUESTIONS_DE : EXAMPLE_QUESTIONS_EN;
   return (
     <Card data-testid="home-ask-coach"><CardContent className="p-5 space-y-3">
-      {portrait && (
-        <div className="flex items-center gap-3">
-          <img src={portrait} alt="Wlad" loading="lazy"
-               className="w-11 h-11 rounded-full object-cover object-top ring-1 ring-black/[0.06] dark:ring-white/[0.08]"
-               data-testid="home-coach-portrait" />
-          <p className="text-[12.5px] text-muted-foreground leading-snug">
-            {de ? 'Wlad antwortet dir — in seinen Worten, mit seinen Methoden.' : 'Wlad answers you — in his words, with his methods.'}
-          </p>
-        </div>
-      )}
+      <div className="flex items-center gap-3">
+        <WladPortrait size={44} rounded="rounded-full" testid="home-coach-portrait" />
+        <p className="text-[12.5px] text-muted-foreground leading-snug">
+          {de ? 'Wlad antwortet dir — in seinen Worten, mit seinen Methoden.' : 'Wlad answers you — in his words, with his methods.'}
+        </p>
+      </div>
       <div className="flex gap-2">
         <Input
           value={text}
@@ -241,6 +247,83 @@ export const CoursesCard = ({ status, de, navigate, onUnlock }) => {
             <Lock size={12} className="mr-1.5" /> {de ? 'Restliche Folgen freischalten' : 'Unlock remaining episodes'}
           </Button>
         )}
+      </div>
+    </CardContent></Card>
+  );
+};
+
+/**
+ * Iter 188: „Meine Aufgaben" steht wieder sichtbar auf dem Dashboard — der
+ * Menüpunkt bleibt draußen. Drei offene Aufgaben, jede direkt abhakbar.
+ */
+export const MyTasksCard = ({ de, navigate }) => {
+  const [tasks, setTasks] = useState(null);
+  const [busy, setBusy] = useState('');
+
+  useEffect(() => {
+    api.get('/tasks')
+      .then((r) => setTasks((r.data || []).filter((t) => t.status !== 'completed')))
+      .catch((err) => { logger.error('tasks load failed', err); setTasks([]); });
+  }, []);
+
+  const complete = async (task) => {
+    setBusy(task.task_id);
+    try {
+      await api.put(`/tasks/${task.task_id}`, { status: 'completed' });
+      setTasks((prev) => (prev || []).filter((t) => t.task_id !== task.task_id));
+      toast.success(de ? 'Erledigt.' : 'Done.');
+    } catch (err) {
+      logger.error('task complete failed', err);
+      toast.error(de ? 'Das hat nicht geklappt.' : 'That did not work.');
+    } finally { setBusy(''); }
+  };
+
+  if (tasks === null) {
+    return (
+      <Card data-testid="home-my-tasks-loading"><CardContent className="p-5">
+        <p className="text-[13px] text-muted-foreground">{de ? 'Lade deine Aufgaben…' : 'Loading your tasks…'}</p>
+      </CardContent></Card>
+    );
+  }
+
+  if (!tasks.length) {
+    return (
+      <Card data-testid="home-my-tasks-empty"><CardContent className="p-5">
+        <p className="text-sm font-bold">{de ? 'Nichts offen' : 'Nothing open'}</p>
+        <p className="text-[13px] text-muted-foreground mt-1">
+          {de ? 'Du hast gerade keine offene Aufgabe. Lege unten eine an, wenn dir etwas einfällt.'
+              : 'You have no open task right now. Create one below whenever something comes up.'}
+        </p>
+        <Button variant="ghost" onClick={() => navigate('/tasks')} className="mt-2 h-9 px-2 font-bold text-[12.5px]" data-testid="home-my-tasks-all-empty-btn">
+          {de ? 'Alle Aufgaben ansehen' : 'See all tasks'} <ArrowRight size={13} className="ml-1.5" />
+        </Button>
+      </CardContent></Card>
+    );
+  }
+
+  return (
+    <Card data-testid="home-my-tasks"><CardContent className="p-2.5">
+      <ul className="divide-y divide-black/[0.04] dark:divide-white/[0.05]">
+        {tasks.slice(0, 3).map((task) => (
+          <li key={task.task_id} className="flex items-start gap-3 px-2.5 py-3" data-testid={`home-task-row-${task.task_id}`}>
+            <button type="button" onClick={() => complete(task)} disabled={busy === task.task_id}
+              aria-label={de ? 'Als erledigt markieren' : 'Mark as done'}
+              className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded-[6px] border-2 border-black/15 dark:border-white/20 hover:border-[#6B8A00] dark:hover:border-[#BFFF00] hover:bg-[#BFFF00]/15 transition-colors disabled:opacity-40"
+              data-testid={`home-task-done-${task.task_id}`} />
+            <div className="min-w-0 flex-1">
+              <p className="text-[13.5px] font-semibold leading-snug">{task.title}</p>
+              {task.description && <p className="text-[12px] text-muted-foreground mt-0.5 line-clamp-2">{task.description}</p>}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div className="flex items-center justify-between gap-2 px-2.5 pt-1 pb-1.5">
+        <p className="text-[11.5px] text-muted-foreground">
+          {de ? `${tasks.length} offen` : `${tasks.length} open`}
+        </p>
+        <Button variant="ghost" onClick={() => navigate('/tasks')} className="h-9 px-2 font-bold text-[12.5px]" data-testid="home-my-tasks-all-btn">
+          {de ? 'Alle Aufgaben ansehen' : 'See all tasks'} <ArrowRight size={13} className="ml-1.5" />
+        </Button>
       </div>
     </CardContent></Card>
   );

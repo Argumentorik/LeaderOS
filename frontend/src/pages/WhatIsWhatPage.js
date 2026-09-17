@@ -20,7 +20,7 @@ const AREAS_DE = [
   { path: '/challengers', name: 'Challengers', text: 'Bekannte Persönlichkeiten stellen dir unangenehme Fragen. Gutes Training für Druck.' },
   { path: '/playbooks', name: 'Leitfäden', text: 'Schritt-für-Schritt-Anleitungen für konkrete Situationen: Feedback, Konflikt, Verhandlung.' },
   { path: '/missions', name: 'Video-Analyse', text: 'Du nimmst dich auf, die KI wertet Sprache, Körper und Wirkung aus.' },
-  { path: '/tools', name: 'Werkzeuge', text: 'Fertige Vorlagen, die Denkarbeit abnehmen: E-Mails, Meeting-Vorbereitung, Entscheidungen.' },
+  { path: '/tools', name: 'GODMODE', text: 'Dein Werkzeugkasten für den Arbeitsalltag: fertige Vorlagen für E-Mails, Meeting-Vorbereitung und Entscheidungen.' },
   { path: '/tasks', name: 'Aufgaben', text: 'Deine eigene Liste. Was du dir vornimmst, steht hier — ohne KI-Guthaben.' },
   { path: '/my-path', name: 'Mein Fortschritt', text: 'Was du bisher gemacht hast: Level, Tage dabei, gesehene Folgen. Kein Ranking.' },
   { path: '/events', name: 'Live-Events', text: 'Termine mit Wlad und der Community: Fragen stellen, Sparring bekommen.' },

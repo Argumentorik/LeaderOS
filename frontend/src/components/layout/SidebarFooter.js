@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTier } from '../../contexts/TierContext';
 import { usePricing } from '../../contexts/PricingContext';
 import { TierBadge } from '../shared/TierBadge';
-import { Crown, Settings, Sparkles, Compass, HelpCircle } from 'lucide-react';
+import { Crown, Settings, Sparkles, Compass } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { hasUnseenChangelog } from '../../lib/changelogMeta';
@@ -41,12 +41,6 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
 
   return (
     <div className="border-t border-black/[0.03] dark:border-white/[0.03] p-2 space-y-0.5">
-      {/* Iter 185: „Was ist was?" — ein Satz pro Bereich, dauerhaft erreichbar. */}
-      <button data-testid="sidebar-what-is-what-btn" onClick={() => navigate('/was-ist-was')}
-        className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-gray-600 dark:text-muted-foreground/50 dark:hover:text-[#BFFF00] hover:bg-gray-50/50 dark:hover:bg-[#BFFF00]/[0.04] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
-        <HelpCircle size={14} className="shrink-0" />
-        {!collapsed && <span className="font-medium">{lang === 'de' ? 'Was ist was?' : 'What is what?'}</span>}
-      </button>
 
       {/* Iter 92.49: "Was ist neu?" → /changelog. Lime pulse-dot until the
           latest version was seen (localStorage, see lib/changelogMeta). */}

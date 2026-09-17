@@ -23,8 +23,8 @@ const DETAIL_DIMS = (de) => [
 ];
 
 export const ChallengerResult = ({ result, p, de, onReset }) => (
-  <div className="p-6 lg:p-10 max-w-2xl mx-auto" data-testid="challenge-result">
-    <div className="animate-fade-in space-y-6">
+  <div className="p-6 lg:p-10 xl:px-14 w-full" data-testid="challenge-result">
+    <div className="animate-fade-in space-y-6 max-w-3xl">
       <div className="text-center">
         {p && (
           <div className="relative inline-block mb-4">

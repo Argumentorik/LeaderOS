@@ -47,7 +47,7 @@ const ChallengerCard = ({ c, passed, de, disabled, onStart }) => {
 };
 
 export const ChallengerCards = ({ challengers, passedIds, de, starting, onStart }) => (
-  <div className="p-6 lg:p-10 max-w-5xl mx-auto" data-testid="challengers-page">
+  <div className="p-6 lg:p-10 xl:px-14 w-full" data-testid="challengers-page">
     <div className="flex items-center gap-4 mb-8">
       <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20"><Trophy size={22} className="text-white" /></div>
       <div>
@@ -55,7 +55,7 @@ export const ChallengerCards = ({ challengers, passedIds, de, starting, onStart 
         <p className="text-sm text-muted-foreground font-medium">{de ? 'Stelle dich den Interviews mit legendären Leadern.' : 'Face legendary leaders in simulated interviews.'}</p>
       </div>
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
       {challengers.map((c) => (
         <ChallengerCard key={c.challenger_id} c={c} passed={passedIds.includes(c.challenger_id)} de={de} disabled={starting} onStart={onStart} />
       ))}

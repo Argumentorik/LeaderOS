@@ -1,110 +1,76 @@
-# Plan: Volle Breite · Menü neu (aufklappbar) · Kurse als Universität mit Start 01.11.2026
+# Plan: Wlad-Bild sichtbar, Menü offen, Werkzeuge heißen GODMODE, Dashboard aufräumen
 
-**Sparmodus: Diese Arbeit soll in ca. 40 Credits fertig werden.** Wie das den Plan verändert, steht unten in „Arbeitsweise im Sparmodus“.
-
-## Worum es geht
-Vier Dinge, die zusammen das Gefühl der App verändern:
-1. Alle Seiten nutzen die ganze Bildschirmbreite — kein schmaler Streifen in der Mitte mehr.
-2. Das Dashboard wird freundlicher: echte, warme Bilder von Wlad statt reiner Kacheln.
-3. Das Menü wird neu geordnet, kürzer und **aufklappbar**.
-4. Die Kurse werden als **eine Universität** gezeigt — das Leadership LAB ist ein Teil davon, kein eigener Menüpunkt. Start: **01.11.2026**. Vorher kann man kaufen (Platz sichern) oder sich als Interessent eintragen und Videos ansehen.
+Acht Punkte aus der Rückmeldung. Alles sind Korrekturen an dem, was gerade gebaut wurde — keine neuen Bereiche.
 
 ---
 
-## 1. Volle Breite (alle Seiten)
+## 1. Das Bild von Wlad ist nicht zu sehen (Begrüßung und „Frag deinen Coach")
 
-Heute sitzt der Inhalt in einem mittigen Band mit fester Höchstbreite. Auf einem großen Monitor bleiben links und rechts große leere Flächen.
+An beiden Stellen sollte ein echtes Standbild von Wlad stehen. Es erscheint nicht.
+
+Grund: Das Bild wird aus den vorhandenen Video-Vorschaubildern geholt. Liegt für ein Konto (noch) kein Vorschaubild vor, bleibt die Stelle leer — und genau das passiert.
 
 Neu:
-- Der Inhalt läuft über die ganze Fläche neben dem Menü, mit ruhigem Rand (mehr Rand auf großen Bildschirmen, weniger auf dem Handy).
-- Lesetexte (Kurs-Beschreibungen, Skripte, Chat-Antworten) behalten eine begrenzte Zeilenlänge, damit sie lesbar bleiben — die *Karten und Raster* werden breit, nicht der Fließtext.
-- Raster nutzen die neue Breite: wo heute 2–3 Karten pro Reihe stehen, stehen auf breiten Bildschirmen 4 (z. B. Kurse, Leitfäden, Werkzeuge, Gesprächs-Training).
-- Betroffen sind alle Hauptseiten, ausdrücklich genannt: Dashboard, Challengers, Kurse, Kurs-Detail, 30-Tage-Programm, Chat, Leitfäden, Werkzeuge, Video-Guide, Mein Fortschritt, Community, Live-Calls, Video-Analyse, Aufgaben, Check-in und die öffentlichen Seiten (Leadership-Programm, Leadership LAB).
-- Das Handy-Layout bleibt wie es ist (eine Spalte, kein seitliches Überlaufen).
+- Ein festes, ausgewähltes Standbild von Wlad wird zum Bestandteil der App. Es liegt immer vor, für jedes Konto, und lädt sofort.
+- Es steht an beiden Stellen: neben der Begrüßung („Guten Tag, … · Tag 8 / 30") und bei „Frag deinen Coach".
+- Der Ausschnitt zeigt Gesicht und Schultern — keine eingebrannte Video-Unterschrift, kein angeschnittener Kopf.
+- Fällt das Bild aus, bleibt keine leere Fläche zurück: dann steht dort nur Text, ohne Loch im Layout.
 
-## 2. Freundlicheres Dashboard mit Wlad
+Das Bild wird aus dem vorhandenen Videomaterial gezogen — es wird kein neues Bild erzeugt.
 
-- Oben ein Begrüßungsbereich mit einem echten, warmen Bild von Wlad (zugewandt, offen) neben der Anrede und dem Stand „Tag 7 / 30“.
-- Weitere Wlad-Bilder an den Stellen, wo heute nur Text steht: leere Zustände („noch keine Aufgabe offen“), Hinweis auf den WladBot.
-- Quelle der Bilder: **ausschließlich Standbilder aus den bereits produzierten Wlad-Videos** (kostenlos, sofort verfügbar). Keine neu erzeugten Bilder — das spart Credits und hält den Look echt.
+## 2. Challengers über die ganze Breite
 
-## 3. Menü: neu geordnet und aufklappbar
+Die Seite „Challengers" sitzt weiter in einem schmalen Band. Sie nutzt künftig die ganze Fläche neben dem Menü — auch die Ansichten innerhalb der Seite (laufender Challenger, Ergebnis, Auswertung), nicht nur die Startseite. Lesetexte behalten ihre Zeilenlänge, die Karten und Listen werden breit.
 
-Heute: 16 Einträge, alle Gruppen immer offen, teils alte Namen (Simulationen, Playbooks, Missionen) und eine Gruppe „Admin“, in der nur die Verkaufsseite liegt.
+## 3. Menü: Gruppen stehen zu Beginn offen — und lassen sich alle schließen
 
-**Aufklappbar**
-- Jede Gruppe ist ein Kopf mit Pfeil: klicken öffnet oder schließt sie.
-- Beim Öffnen der App ist nur die Gruppe offen, in der man gerade steht — der Rest ist zu. Damit sieht man auf einen Blick 3–5 Einträge statt 16.
-- Der Zustand wird gemerkt: wer eine Gruppe offen lässt, findet sie beim nächsten Besuch offen.
-- Beim schmalen (eingeklappten) Menü und auf dem Handy bleibt es wie heute: Symbole bzw. die volle Liste.
+Heute ist nur die Gruppe offen, in der man gerade steht; genau die lässt sich nicht zuklappen.
 
-**Neue Ordnung (Namen nach dem Glossar, 13 Einträge):**
+Neu:
+- Beim ersten Besuch sind **beide** Hauptgruppen offen: „GODMODE & Leitfäden" und „Training" mit Gesprächs-Training, Challengers, Video-Analyse. Man sieht sofort, was es gibt.
+- **Jede** Gruppe lässt sich zuklappen — auch die, in der man gerade steht.
+- Der Zustand wird gemerkt: wer zuklappt, findet es beim nächsten Besuch zu.
+- Der Bereich „Mehr" bleibt weiterhin zu Beginn geschlossen. Er ist die Ablage für alles Seltene; offen wäre die Liste wieder so lang wie vorher.
 
-**Heute**
-- Command Center (Dashboard)
-- 30-Tage-Programm · zeigt „Tag 7 / 30“
-- WladBot (KI-Coach)
+## 4. „Werkzeuge" heißt künftig „GODMODE"
 
-**Lernen**
-- Kurse (enthält das Leadership LAB)
-- Video-Guide
+Der Begriff „Werkzeuge" wird durch **GODMODE** ersetzt — überall, wo dieser Bereich benannt wird: Menüeintrag, Seitenüberschrift, untere Leiste am Handy.
 
-**Training**
-- Gesprächs-Training (früher „Simulationen“)
-- Challengers
-- Video-Analyse (früher „Missionen“)
-- Leitfäden (früher „Playbooks“)
-- Werkzeuge (früher „Tools“)
+- Die Hauptgruppe im Menü heißt **„GODMODE & Leitfäden"**, darin **GODMODE** und **Leitfäden**.
+- Weil ein erfundenes Wort erklärt werden muss, steht eine kurze Zeile darunter: „Dein Werkzeugkasten für den Arbeitsalltag."
 
-**Fortschritt**
-- Mein Fortschritt
-- Community
-- Live-Calls (früher „Events“)
+**Diese Entscheidung ist bewusst zu prüfen:** In einem früheren Durchgang wurde „GODMODE" aus der App entfernt, weil der Begriff nichts erklärt. Er kommt jetzt gezielt zurück — aber nur an dieser einen Stelle, nicht als Abzeichen oder Stufenname irgendwo sonst. Wer es anders will: Alternativen wären „Werkzeugkasten", „Sofort-Hilfen" oder „Praxis-Werkzeuge".
 
-Unten im Menü (nicht als eigene Gruppe): Leadership-Programm (Pakete) und Leader-Diagnose.
+## 5. „Video-Guide" heißt künftig „Onboarding-Videos"
 
-**Was aus dem Menü verschwindet:**
-- **Leadership LAB** — kein eigener Bereich mehr, sondern der Kern der Kurs-Seite (siehe Punkt 4). Die öffentliche LAB-Seite bleibt unter ihrer Adresse erreichbar (für Anzeigen, Mails, Links) und wird von der Kurs-Seite aus verlinkt.
-- „Check-in“ und „Meine Aufgaben“ — gehören zum Tagesablauf und werden direkt im 30-Tage-Programm und auf dem Dashboard geöffnet. Die Seiten bleiben erreichbar, nur der Menüpunkt geht.
-- Die Gruppe „Admin“ (enthielt nur die Verkaufsseite).
-- „Kurse“ öffnet nicht mehr in einem neuen Tab, sondern normal in der App.
+Der Bereich zeigt Einführungsvideos, nicht einen Videoratgeber. Er wird überall in „Onboarding-Videos" umbenannt: im Bereich „Mehr", in der Handy-Liste und als Seitenüberschrift.
 
-## 4. Kurse = die Universität (LAB inbegriffen), Start 01.11.2026
+## 6. „Was ist was?" verschwindet aus dem Dashboard
 
-Der Kauf entscheidet sich an dieser Seite. Sie muss in den ersten fünf Sekunden zeigen: *hier steckt sehr viel drin*.
+Der Block wird vom Dashboard entfernt. Die Seite selbst bleibt über ihre Adresse erreichbar (für Verweise aus Mails oder der Tour), sie wird nur nicht mehr auf dem Dashboard angeboten.
 
-**Kurs-Übersicht (/kurse)**
-- Kopf mit dem ganzen Umfang in Zahlen: **10 Kurse · 72 Folgen · Live-Calls · Start 01.11.2026** (plus Gesamt-Stunden), dazu die Tage bis zum Start.
-- Darunter der Aufbau wie ein Studienplan: die 10 Kurse nach Stufe geordnet (Grundlagen → Aufbau → Executive), jeder Kurs mit Folgen-Anzahl, Dauer und Zweck — alle 72 Folgen aufklappbar sichtbar, auch vor dem Kauf. Das Volumen ist das Verkaufsargument.
-- Das **Leadership LAB** steht als Teil dieses Pakets drin: Live-Calls und Startgruppe als eigener Block auf derselben Seite („so wird aus den Kursen ein Semester“), mit Link auf die ausführliche öffentliche LAB-Seite.
-- Ein Knopf: **Platz sichern** (Kauf jetzt). Nach dem Kauf steht dort „Zugang gesichert · schaltet am 01.11.2026 frei“ statt eines Schlosses.
-- Am 01.11.2026 schalten für alle Käufer **alle 10 Kurse** frei — keine Staffelung nach Paketstufe mehr.
-- Käufer bekommen eine Bestätigung per Mail und eine Erinnerung kurz vor dem 01.11.2026.
+## 7. Die Aufgaben fehlen auf dem Dashboard
 
-**Folgen-Seiten (einzelne Folge)**
-- Die **erste Folge jedes Kurses** ist für jeden frei ansehbar, auch ohne Konto.
-- Jede weitere Folge zeigt statt des Players ein kurzes Formular: Vorname + E-Mail → „Video ansehen“. Danach läuft das Video.
-- Wer die E-Mail einmal eingetragen hat, muss sie auf den nächsten Folgen nicht erneut eintragen.
-- Diese Einträge landen als Interessenten mit Angabe, welcher Kurs/welche Folge sie ausgelöst hat, und sind im Admin-Bereich als Liste einsehbar (mit Export).
-- Wo noch keine Aufnahme existiert, steht ehrlich „Aufnahme folgt · ab 01.11.2026“ — plus dasselbe Formular als Vormerkung.
-- Wer gekauft hat (oder nach dem 01.11. eingeloggt ist), sieht nie ein Formular.
+Beim Aufräumen ist der Menüpunkt „Meine Aufgaben" weggefallen — mit der Begründung, Aufgaben würden direkt auf dem Dashboard geöffnet. Dort sind sie aber nicht sichtbar.
+
+Neu: Das Dashboard bekommt einen klaren Abschnitt **„Meine Aufgaben"**:
+- die offenen Aufgaben als kurze Liste (die drei nächsten), jede direkt abhakbar
+- darunter ein Verweis auf die vollständige Aufgaben-Seite
+- sind keine Aufgaben offen, steht dort ein Satz, der das sagt — keine leere Kachel
+
+Der Menüpunkt bleibt draußen; das Dashboard ist der Ort dafür.
+
+## 8. Der Check-in — zur Entscheidung
+
+Beim gleichen Aufräumen ist auch „Check-in" aus dem Menü gefallen, mit derselben Begründung. Auf dem Dashboard gibt es dafür bereits eine Zeile. Diese Zeile bleibt, wie sie ist. Falls der Check-in ebenfalls untergeht, bitte melden — dann wird er wie die Aufgaben zu einem eigenen Abschnitt.
 
 ---
-
-## Arbeitsweise im Sparmodus (Ziel ≈ 40 Credits)
-
-- **Keine neuen Bilder, keine neuen Videos, kein Rendern.** Nur vorhandenes Material.
-- **Keine zusätzlichen Runden am Text.** Die Seiten bekommen die Wörter aus dem Glossar, fertig — keine Feinschliff-Schleifen.
-- **Eine Prüfrunde am Ende** (Desktop + Handy, Kurs-Seite, Folgen-Seite mit E-Mail-Tor, Menü, Dashboard) statt einer Prüfung nach jedem Schritt.
-- **Ausdrücklich nicht dabei** (kostet sonst separat, kommt später): der große Qualitäts-Durchgang über alle Bildschirme und der Lasttest mit 1000 Nutzern.
-- Reicht das Budget nicht für alles, ist die Reihenfolge: **(1) Kurse + Folgen-Tor → (2) Menü aufklappbar + neu geordnet → (3) volle Breite → (4) Wlad-Bilder.** Punkt 4 fällt zuerst weg.
 
 ## Entscheidungen, die getroffen wurden (bitte widersprechen, wenn falsch)
 
-1. **Ein Kauf für alles.** „Platz sichern“ auf der Kurs-Seite ist derselbe Kauf wie die LAB-Anmeldung — ein Produkt, ein Preis, ein Zugang (72 Folgen + Live-Calls ab 01.11.2026).
-2. **Das E-Mail-Tor gilt einmal, nicht pro Folge.** Nach einer Eintragung sind alle vorhandenen Folgen-Videos für diesen Besucher ansehbar.
-3. **Das Datum 01.11.2026 wird an einer Stelle gepflegt** und wirkt überall (Übersicht, Folgen, Mails). Verschiebt sich der Start, ist es eine Zahl.
-4. **Die bisherige Kurs-Staffelung nach Paket entfällt** (heute: Kurse 1–6 für Leadership OS, 7–10 nur PLUS).
-5. **Alle 72 Folgen sind schon vor dem Kauf mit Titel und Dauer sichtbar.** Der Umfang soll beeindrucken.
-6. **Check-in und Aufgaben verlieren nur den Menüplatz**, nicht die Seite. Die öffentliche LAB-Seite bleibt bestehen.
-7. Keine Änderung am 30-Tage-Programm und an den Tagesmails.
+1. **GODMODE ersetzt das Wort „Werkzeuge"** — nur für diesen Bereich, nicht als Abzeichen oder Stufenname an anderen Stellen. Mit einer erklärenden Zeile darunter.
+2. **Das Wlad-Bild wird fest in die App gelegt**, statt es bei jedem Aufruf aus den Video-Vorschaubildern zu holen. Damit ist es zuverlässig da — der Preis ist, dass es überall dasselbe Bild ist.
+3. **„Mehr" bleibt zu Beginn geschlossen**, die beiden Hauptgruppen sind offen.
+4. **„Meine Aufgaben" und „Check-in" kommen nicht ins Menü zurück** — sie bleiben Abschnitte auf dem Dashboard.
+5. **„Was ist was?" bleibt als Seite bestehen**, verschwindet aber vom Dashboard.
+6. An den Kursen, dem 30-Tage-Programm und den Tagesmails wird nichts geändert.

@@ -44,7 +44,7 @@ export const MoreFromLeaderOS = ({ de }) => {
   const navigate = useNavigate();
   const items = [
     { icon: MessageCircle, to: '/chat', testid: 'courses-more-chat', de: ['Frag WladBot', 'Dein KI-Coach kennt Bücher, Kurse und Live-Calls — stell die Frage, die dich gerade beschäftigt.', 'Zum Chat'], en: ['Ask WladBot', 'Your AI coach knows the books, courses and live calls — ask what is on your mind.', 'Open chat'] },
-    { icon: Video, to: '/video-guide', testid: 'courses-more-guide', de: ['Video-Guide', 'Wlad erklärt dir die Plattform in kurzen Clips — vom Check-in bis zur Video-Analyse.', 'Guide ansehen'], en: ['Video guide', 'Wlad walks you through the platform in short clips.', 'Watch guide'] },
+    { icon: Video, to: '/video-guide', testid: 'courses-more-guide', de: ['Onboarding-Videos', 'Wlad erklärt dir die Plattform in kurzen Clips — vom Check-in bis zur Video-Analyse.', 'Videos ansehen'], en: ['Onboarding videos', 'Wlad walks you through the platform in short clips.', 'Watch videos'] },
     { icon: Flame, to: '/challenge', testid: 'courses-more-challenge', de: ['30-Tage-Challenge', 'Jeden Tag eine Aufgabe, 10 Fragen, ein Fortschritt — das Programm, das Gewohnheiten baut.', 'Challenge öffnen'], en: ['30-day challenge', 'One task a day, 10 questions, visible progress.', 'Open challenge'] },
   ];
   return (

@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  MessagesSquare, Video, TrendingUp, Menu, X, Wrench, BookOpen, GraduationCap, CalendarDays,
+  MessagesSquare, Video, TrendingUp, Menu, X, Wrench, BookOpen, GraduationCap, CalendarDays, Clapperboard,
   LayoutDashboard, Flame, Swords, Target, Users, UserRound,
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -17,7 +17,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 const HERO_ITEMS = [
   { path: '/dashboard', icon: LayoutDashboard, label_de: 'Dashboard', label_en: 'Dashboard', testId: 'mobile-nav-dashboard' },
   { path: '/chat',      icon: MessagesSquare,  label_de: 'WladBot',   label_en: 'WladBot',   testId: 'mobile-nav-chat' },
-  { path: '/tools',     icon: Wrench,          label_de: 'Werkzeuge', label_en: 'Tools',     testId: 'mobile-nav-tools' },
+  { path: '/tools',     icon: Wrench,          label_de: 'GODMODE',   label_en: 'GODMODE',     testId: 'mobile-nav-tools' },
 ];
 
 const MORE_ITEMS = [
@@ -26,6 +26,7 @@ const MORE_ITEMS = [
   { path: '/missions',     icon: Video,           label_de: 'Video-Analyse',      label_en: 'Video analysis' },
   { path: '/playbooks',    icon: BookOpen,        label_de: 'Leitfäden',          label_en: 'Playbooks' },
   { path: '/kurse',        icon: GraduationCap,   label_de: 'Kurse (72 Folgen)',  label_en: 'Courses (72 episodes)' },
+  { path: '/video-guide',  icon: Clapperboard,    label_de: 'Onboarding-Videos',  label_en: 'Onboarding videos' },
   { path: '/challenge',    icon: Flame,           label_de: '30-Tage-Programm',   label_en: '30-day program' },
   { path: '/events',       icon: CalendarDays,    label_de: 'Live-Events',        label_en: 'Live events' },
   { path: '/my-path',      icon: TrendingUp,      label_de: 'Mein Fortschritt',   label_en: 'My progress' },
