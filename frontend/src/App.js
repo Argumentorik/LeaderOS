@@ -48,6 +48,7 @@ const VideoArchivePage = lazyWithRetry(() => import("./pages/VideoArchivePage"))
 const LeaderDiagnosePage = lazyWithRetry(() => import("./pages/LeaderDiagnosePage"));
 // Iter 92.29 (Mert): public Changelog drives curiosity & SEO ("build-in-public" surface).
 const ChangelogPage = lazyWithRetry(() => import("./pages/ChangelogPage"));
+const WhatIsWhatPage = lazyWithRetry(() => import("./pages/WhatIsWhatPage"));
 const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
@@ -182,7 +183,11 @@ function AppRouter() {
         {/* Admin route is intentionally hidden behind a non-guessable path. Backend require_admin() still gates all /api/admin/* */}
         <Route path="/wlad-control-x7k9q2" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         <Route path="/progress-old" element={<ProtectedRoute><ProgressPage /></ProtectedRoute>} />
-        <Route path="/coaching" element={<ProtectedRoute><CoachingPage /></ProtectedRoute>} />
+        {/* Iter 185: Verkaufsseite ohne Login erreichbar (Suche + KI-Empfehlungen).
+            Alte Adresse bleibt gültig und leitet weiter. */}
+        <Route path="/leadership-programm" element={<CoachingPage />} />
+        <Route path="/coaching" element={<Navigate to="/leadership-programm" replace />} />
+        <Route path="/was-ist-was" element={<ProtectedRoute><WhatIsWhatPage /></ProtectedRoute>} />
         <Route path="/downloads" element={<ProtectedRoute><DownloadsPage /></ProtectedRoute>} />
         <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
         <Route path="/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />

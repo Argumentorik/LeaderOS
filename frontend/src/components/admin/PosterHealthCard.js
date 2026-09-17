@@ -40,13 +40,14 @@ export const PosterHealthCard = () => {
           <p className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#4A6200] dark:text-[#BFFF00]">
             <Image size={11} /> Vorschaubilder
           </p>
-          <p className="text-[13.5px] font-bold mt-1">
+          <p className="text-[13.5px] font-bold mt-1" data-testid="poster-health-summary">
             {status
-              ? `${status.ready_count} dauerhaft gespeichert · ${status.missing_count} offen`
+              ? `${status.ready_count} abrufbar · ${status.missing_count} offen${status.broken_count ? ` · ${status.broken_count} defekt` : ''}`
               : 'Wird geprüft…'}
           </p>
           <p className="text-[12px] text-muted-foreground mt-0.5">
-            Bilder liegen fest im Speicher — auch nach Neustart oder Deploy. Nachziehen kostet nichts.
+            Geprüft wird nicht nur der Eintrag, sondern ob sich das Bild wirklich abrufen lässt.
+            Defekte werden hier gemeldet und beim Nachziehen neu erzeugt. Kostet nichts.
           </p>
         </div>
         <button
@@ -65,7 +66,7 @@ export const PosterHealthCard = () => {
         <ul className="mt-3 space-y-1" data-testid="poster-missing-list">
           {missing.map((c) => (
             <li key={c.slug} className="text-[12px] text-muted-foreground" data-testid={`poster-missing-${c.slug}`}>
-              {c.title || c.slug} <span className="opacity-50">· {c.slug}</span>
+              {c.title || c.slug} <span className="opacity-50">· {c.slug}{c.reason ? ` · ${c.reason}` : ''}</span>
             </li>
           ))}
         </ul>
@@ -74,7 +75,7 @@ export const PosterHealthCard = () => {
       {status && missing.length === 0 && (
         <p className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-emerald-600 dark:text-emerald-400"
            data-testid="poster-all-ready">
-          <Check size={13} /> Jedes Video hat sein Vorschaubild.
+          <Check size={13} /> Jedes Video hat ein abrufbares Vorschaubild.
         </p>
       )}
 

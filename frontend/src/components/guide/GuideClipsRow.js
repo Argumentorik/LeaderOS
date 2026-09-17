@@ -35,7 +35,7 @@ export const GuideClipsRow = ({ de = true }) => {
     <section className="mb-8 rounded-2xl border border-black/[0.07] dark:border-white/[0.08] bg-white dark:bg-card p-4" data-testid="guide-clips-row">
       <button type="button" onClick={() => setCollapsed(!collapsed)} className="w-full flex items-center gap-3 text-left" data-testid="guide-clips-toggle">
         <div className="flex-1">
-          <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-[#5a7a00] dark:text-[#BFFF00]">{de ? 'Wlads Guide' : "Wlad's guide"}</p>
+          <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-[#5a7a00] dark:text-[#BFFF00]">{de ? 'WladBot Guide' : "WladBot guide"}</p>
           <p className="text-sm font-bold text-foreground">{de ? 'So holst du in 5 Clips alles aus Leader-OS' : 'Get everything out of Leader-OS in 5 clips'}</p>
         </div>
         <span className="text-[11px] text-muted-foreground" data-testid="guide-clips-seen">{seenCount}/{clips.length}</span>
@@ -54,7 +54,7 @@ export const GuideClipsRow = ({ de = true }) => {
                 data-testid={`guide-clip-thumb-${c.slug}`}
               >
                 <VideoThumb
-                  src={c.poster_url} title={c.title} kicker={de ? 'Wlads Guide' : "Wlad's guide"}
+                  src={c.poster_url} title={c.title} kicker={de ? 'WladBot Guide' : "WladBot guide"}
                   duration={c.duration_seconds_video} seen={c.seen}
                 />
                 <div className="px-2 py-1.5">

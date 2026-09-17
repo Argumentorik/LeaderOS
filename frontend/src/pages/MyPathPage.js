@@ -7,6 +7,7 @@ import { SmartConsultationBanner } from '../components/brand/SmartConsultationBa
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
+import { useReadableColor } from '../lib/levelColors';
 import logger from '../lib/logger';
 import {
   Sparkles, Lock, CheckCircle2, ArrowRight, Zap, Crown,
@@ -103,6 +104,7 @@ const LevelNode = ({ level, isLast, navigate }) => {
 };
 
 export default function MyPathPage() {
+  const { ink } = useReadableColor();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -157,12 +159,12 @@ export default function MyPathPage() {
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Zertifikate</h3>
           {data.certificates?.map(cert => (
             <div key={cert.level} className={`flex items-center gap-2.5 p-3 rounded-xl ${cert.earned ? 'bg-[#BFFF00]/5 border border-[#BFFF00]/15' : 'bg-muted/20 border border-border'}`} data-testid={`cert-${cert.earned ? 'earned' : 'pending'}`}>
-              <Award size={14} className={cert.earned ? 'text-[#BFFF00]' : 'text-muted-foreground/30'} />
+              <Award size={14} className={cert.earned ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/30'} />
               <div className="flex-1 min-w-0">
                 <p className={`text-[10px] font-bold ${cert.earned ? '' : 'text-muted-foreground/50'}`}>{cert.title}</p>
                 <p className="text-[8px] text-muted-foreground/50">{cert.level}</p>
               </div>
-              {cert.earned ? <CheckCircle2 size={12} className="text-[#BFFF00]" /> : <Lock size={10} className="text-muted-foreground/20" />}
+              {cert.earned ? <CheckCircle2 size={12} className="text-[#5A7A00] dark:text-[#BFFF00]" /> : <Lock size={10} className="text-muted-foreground/20" />}
             </div>
           ))}
         </div>
@@ -238,12 +240,12 @@ export default function MyPathPage() {
                       {(() => { const I = LEVEL_ICONS[data.current_index]; return <I size={22} className="text-white" />; })()}
                     </div>
                     <div className="flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: currentMeta.color }}>Aktuelles Level</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: ink(currentMeta.color) }}>Aktuelles Level</p>
                       <h2 className="text-xl font-black">{data.current_level}</h2>
                       <p className="text-xs text-muted-foreground">{currentMeta.subtitle}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-2xl font-black" style={{ color: currentMeta.color }}>{data.xp}</p>
+                      <p className="text-2xl font-black" style={{ color: ink(currentMeta.color) }} data-testid="mypath-xp-value">{data.xp}</p>
                       <p className="text-[9px] text-muted-foreground">XP</p>
                     </div>
                   </div>
@@ -270,8 +272,8 @@ export default function MyPathPage() {
 
             <div className="flex items-center justify-center py-8 max-w-3xl" data-anim="mypath-trophy">
               <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl ${data.current_index === 4 ? 'bg-[#BFFF00]/10 border border-[#BFFF00]/20' : 'bg-muted/20 border border-border'}`}>
-                <Trophy size={18} className={data.current_index === 4 ? 'text-[#BFFF00]' : 'text-muted-foreground/30'} />
-                <span className={`text-sm font-bold ${data.current_index === 4 ? 'text-[#BFFF00]' : 'text-muted-foreground/40'}`}>
+                <Trophy size={18} className={data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/30'} />
+                <span className={`text-sm font-bold ${data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/40'}`}>
                   {data.current_index === 4 ? 'Visionär erreicht! Du gestaltest die Zukunft der Führung.' : 'Werde Visionär — entwickle deine Zukunftsperspektive'}
                 </span>
               </div>

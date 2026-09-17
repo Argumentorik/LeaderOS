@@ -128,12 +128,12 @@ async def _process_simulation_completion(sim_id: str, user_id: str, scenario: di
 
 @router.post("/simulations/{sim_id}/message")
 async def simulation_message(sim_id: str, data: SimulationMessage, request: Request):
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "simulation")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("simulation", credit_result))
 
     sim = await db.simulations.find_one({"simulation_id": sim_id, "user_id": user["user_id"]}, {"_id": 0})
     if not sim:

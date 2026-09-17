@@ -32,7 +32,7 @@ from guide_content import (
     clip_questions, scene_for_aspect, seed_clips, style_prompt_for, talk_word_cap, word_count, word_limits,
 )
 from routes.admin import require_admin
-from routes.uploads import download_object, get_object, put_object
+from routes.uploads import download_object, get_object, object_exists, put_object
 from services import get_current_user
 from services_guide_quality import godmode_check
 from services_ai_errors import ai_http_error
@@ -286,14 +286,32 @@ async def ensure_poster(clip: dict, force: bool = False) -> str | None:
 
 
 async def posters_backfill(slugs: list[str] | None = None, force: bool = False) -> dict:
-    """Fehlende Vorschaubilder in einem Durchgang nachziehen (Admin-Knopf, auch nach Deploy)."""
+    """Fehlende Vorschaubilder in einem Durchgang nachziehen (Admin-Knopf, auch nach Deploy).
+
+    Iter 185: Ist ein Bild eingetragen, aber nicht abrufbar, wird es neu erzeugt.
+    Für Vimeo-Clips wird das fehlende Vimeo-Vorschaubild nachgeholt.
+    """
     query: dict = {"slug": {"$in": slugs}} if slugs else {}
     clips = await db.guide_clips.find(query, {"_id": 0}).to_list(500)
     built, skipped, failed = [], [], []
     for clip in clips:
         try:
-            result = await ensure_poster(clip, force=force)
-            if result and (force or clip.get("poster_path") != result):
+            if _active_video(clip)[0] == "vimeo":
+                if clip.get("vimeo_thumbnail"):
+                    skipped.append(clip["slug"])
+                    continue
+                from routes.media_admin import _check_vimeo
+                info = await _check_vimeo(clip.get("vimeo_url") or clip.get("vimeo_id") or "")
+                await db.guide_clips.update_one({"slug": clip["slug"]}, {"$set": {
+                    "vimeo_thumbnail": info.get("vimeo_thumbnail"),
+                }})
+                built.append(clip["slug"])
+                continue
+            rebuild = force
+            if not rebuild and clip.get("poster_path"):
+                rebuild = not await asyncio.to_thread(object_exists, clip["poster_path"])
+            result = await ensure_poster(clip, force=rebuild)
+            if result and (rebuild or clip.get("poster_path") != result):
                 built.append(clip["slug"])
             else:
                 skipped.append(clip["slug"])
@@ -304,23 +322,33 @@ async def posters_backfill(slugs: list[str] | None = None, force: bool = False) 
 
 
 async def posters_status() -> dict:
-    """Welche Clips haben (noch) kein dauerhaft gespeichertes Vorschaubild?"""
+    """Iter 185: Nicht nur prüfen, ob ein Bild *eingetragen* ist, sondern ob es
+    sich auch tatsächlich *abrufen* lässt. Defekte gelten als fehlend."""
     clips = await db.guide_clips.find({}, {"_id": 0}).to_list(500)
-    missing, ready, vimeo = [], [], []
+    missing, ready, vimeo, broken = [], [], [], []
     for clip in clips:
         source, _ = _active_video(clip)
         path, _at = poster_source(clip)
         entry = {"slug": clip["slug"], "title": clip.get("title") or "", "kind": clip.get("kind")}
         if source == "vimeo":
-            vimeo.append(entry)
-        elif not path:
+            if clip.get("vimeo_thumbnail"):
+                vimeo.append(entry)
+            else:
+                missing.append({**entry, "reason": "Vimeo-Vorschaubild fehlt"})
             continue
-        elif clip.get("poster_path") and clip.get("poster_built_version") == (_poster_version(clip, path) or "0"):
-            ready.append(entry)
+        if not path:
+            continue
+        want = _poster_version(clip, path) or "0"
+        stored = clip.get("poster_path")
+        if not stored or clip.get("poster_built_version") != want:
+            missing.append({**entry, "reason": "kein gespeichertes Bild"})
+        elif not await asyncio.to_thread(object_exists, stored):
+            broken.append({**entry, "reason": "Bild nicht abrufbar"})
+            missing.append({**entry, "reason": "Bild nicht abrufbar"})
         else:
-            missing.append(entry)
-    return {"missing": missing, "ready": ready, "vimeo": vimeo,
-            "missing_count": len(missing), "ready_count": len(ready)}
+            ready.append(entry)
+    return {"missing": missing, "ready": ready, "vimeo": vimeo, "broken": broken,
+            "missing_count": len(missing), "ready_count": len(ready), "broken_count": len(broken)}
 
 
 def _public_clip(clip: dict, seen: list) -> dict:
@@ -586,7 +614,7 @@ def _file_chunks(file_path: Path, start: int, end: int):
             yield chunk
 
 
-KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "Wlad für dich", "coaching": "Coaching"}
+KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "WladBot für dich", "coaching": "Coaching"}
 
 
 def _frame_from_video(video: Path, at: float = 1.5) -> Path:
@@ -1671,6 +1699,19 @@ async def publish_clip(slug: str, data: PublishIn, request: Request):
         raise HTTPException(status_code=404, detail="Clip nicht gefunden")
     if data.published and not _active_video(clip)[1] and not clip.get("vimeo_id"):
         raise HTTPException(status_code=400, detail="Ohne fertiges Video kann nicht freigegeben werden")
+    if data.published:
+        # Iter 185 (Kundenmeldung „Thumbnails sind nicht immer da"): Kein Video
+        # geht live, ohne dass ein Vorschaubild dauerhaft gespeichert vorliegt.
+        try:
+            poster = await ensure_poster(clip)
+        except Exception as e:
+            logger.warning("Vorschaubild vor Freigabe fehlgeschlagen (%s): %s", slug, e)
+            poster = None
+        if _active_video(clip)[0] == "vimeo":
+            if not clip.get("vimeo_thumbnail"):
+                raise HTTPException(status_code=400, detail="Vimeo-Vorschaubild fehlt — bitte zuerst Video prüfen (Vimeo-Check)")
+        elif not poster:
+            raise HTTPException(status_code=400, detail="Vorschaubild konnte nicht erzeugt werden — bitte im Poster-Check nachziehen")
     await db.guide_clips.update_one({"slug": slug}, {"$set": {
         "published": data.published,
         "published_at": datetime.now(timezone.utc).isoformat() if data.published else None,

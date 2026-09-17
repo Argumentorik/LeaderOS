@@ -64,7 +64,7 @@ export const MissionGuideClip = ({ day, de = true }) => {
           <span className="absolute inset-0 flex items-center justify-center"><span className="h-7 w-7 rounded-full bg-[#BFFF00] text-black flex items-center justify-center group-hover:scale-105 transition-transform"><Play size={12} fill="currentColor" /></span></span>
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-[10px] uppercase tracking-[0.18em] font-bold text-[#5a7a00] dark:text-[#BFFF00]">{de ? `Wlads Briefing · Tag ${day}` : `Wlad's briefing · Day ${day}`}</span>
+          <span className="block text-[10px] uppercase tracking-[0.18em] font-bold text-[#5a7a00] dark:text-[#BFFF00]">{de ? `WladBot Briefing · Tag ${day}` : `WladBot briefing · Day ${day}`}</span>
           <span className="block text-[13px] font-semibold text-foreground truncate">{clip.title}{clip.duration_seconds_video ? ` · ${Math.round(clip.duration_seconds_video)} s` : ''}</span>
         </span>
         {clip.seen && <span className="text-[10px] font-semibold text-muted-foreground">{de ? 'gesehen' : 'watched'}</span>}

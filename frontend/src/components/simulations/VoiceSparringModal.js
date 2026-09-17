@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mic, Loader2, Volume2, MicOff, Sparkles } from 'lucide-react';
 import { STATE_COPY, DEFAULT_PERSONAS, PersonaPicker, EscalationBadge } from './VoiceSparringParts';
 import { toast } from 'sonner';
+import { registerAudio, stopMedia } from '../../lib/audioBus';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 
@@ -52,6 +53,14 @@ export function VoiceSparringModal({ prepContext, prepGoal, onClose }) {
   const startListeningRef = useRef(() => {});
   const interruptStartedRef = useRef(0);
   const revealTimerRef = useRef(null);
+
+  // Iter 185: Sparring-Stimme am zentralen Ton-Aus-Schalter; beim Öffnen
+  // werden laufende Videos pausiert (ein Ton zur Zeit).
+  useEffect(() => {
+    stopMedia('voice-sparring-open');
+    const unregister = audioElRef.current ? registerAudio(audioElRef.current) : () => {};
+    return () => unregister();
+  }, []);
 
   // ── Fetch remote persona list (with sensible defaults on failure) ──────
   useEffect(() => {

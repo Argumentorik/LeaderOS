@@ -14,6 +14,7 @@ import { GdprSection } from '../components/profile/GdprSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
+import { useReadableColor } from '../lib/levelColors';
 import logger from '../lib/logger';
 import { toast } from 'sonner';
 import {
@@ -82,20 +83,26 @@ const ProfileAvatar = ({ picture, name, onUpload, uploading }) => {
   );
 };
 
-const StatTile = ({ icon: Icon, label, value, color = '#BFFF00', testid }) => (
+const StatTile = ({ icon: Icon, label, value, color = '#BFFF00', testid }) => {
+  const { ink } = useReadableColor();
+  return (
   <div className="group p-3 rounded-xl bg-white/70 dark:bg-card/60 backdrop-blur border border-black/[0.04] dark:border-white/[0.06] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-black/[0.08] dark:hover:border-white/[0.12]" data-testid={testid}>
     <div className="flex items-center gap-2 mb-1.5">
       <span className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ background: `${color}1F` }}>
-        <Icon size={12} style={{ color }} strokeWidth={2.5} />
+        <Icon size={12} style={{ color: ink(color) }} strokeWidth={2.5} />
       </span>
       <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{label}</span>
     </div>
     <p className="text-xl font-black tabular-nums">{value}</p>
   </div>
-);
+  );
+};
 
 const LevelProgress = ({ xp, level, de }) => {
+  const { ink } = useReadableColor();
   const meta = LEVEL_META[level] || LEVEL_META['Teamplayer'];
+  // Lesbar in beiden Modi: Neongrün wird im hellen Modus dunkelgrün.
+  const textColor = ink(meta.color);
   const nextMeta = meta.next ? LEVEL_META[meta.next] : null;
   const prevThreshold = meta.min || 0;
   const curr = nextMeta ? meta.threshold : 99999;
@@ -105,13 +112,13 @@ const LevelProgress = ({ xp, level, de }) => {
     <div className="p-4 rounded-2xl" style={{ background: `linear-gradient(135deg, ${meta.color}15, ${meta.color}04)`, border: `1px solid ${meta.color}30` }}>
       <div className="flex items-center justify-between mb-2">
         <div>
-          <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: meta.color }}>
+          <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: textColor }}>
             {de ? 'Aktuelles Level' : 'Current Level'}
           </p>
           <p className="text-base font-black">{level}</p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-black tabular-nums" style={{ color: meta.color }}>{xp.toLocaleString('de-DE')}</p>
+          <p className="text-2xl font-black tabular-nums" style={{ color: textColor }} data-testid="level-xp-value">{xp.toLocaleString('de-DE')}</p>
           <p className="text-[9px] text-muted-foreground">XP</p>
         </div>
       </div>
@@ -122,7 +129,7 @@ const LevelProgress = ({ xp, level, de }) => {
           </div>
           <div className="flex justify-between mt-1.5 text-[9px]">
             <span className="text-muted-foreground font-semibold">{prevThreshold} XP</span>
-            <span className="font-bold" style={{ color: meta.color }}>
+            <span className="font-bold" style={{ color: textColor }}>
               {de ? 'Nächstes Level' : 'Next'}: {meta.next}
             </span>
             <span className="text-muted-foreground font-semibold">{curr} XP</span>
@@ -130,7 +137,7 @@ const LevelProgress = ({ xp, level, de }) => {
         </>
       ) : (
         <div className="text-center pt-2">
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: `${meta.color}18`, color: meta.color }}>
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: `${meta.color}18`, color: textColor }} data-testid="level-max-badge">
             <Crown size={10} /> {de ? 'Höchstes Level erreicht' : 'Max level reached'}
           </span>
         </div>
@@ -140,6 +147,7 @@ const LevelProgress = ({ xp, level, de }) => {
 };
 
 const ActivityFeed = ({ activities, de }) => {
+  const { ink } = useReadableColor();
   if (!activities || activities.length === 0) {
     return (
       <div className="text-center py-12">
@@ -159,14 +167,14 @@ const ActivityFeed = ({ activities, de }) => {
         return (
           <div key={a.activity_id} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-card/70 border border-black/[0.04] dark:border-white/[0.06] hover:shadow-sm transition-shadow" data-testid={`activity-${a.action}`}>
             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${a.xp_color}18` }}>
-              <Icon size={15} style={{ color: a.xp_color }} />
+              <Icon size={15} style={{ color: ink(a.xp_color) }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-semibold leading-tight">{a.label}</p>
               <p className="text-[10px] text-muted-foreground">{timeStr}</p>
             </div>
             {a.xp_delta > 0 && (
-              <Badge className="text-[10px] font-black border-0 tabular-nums px-2" style={{ background: `${a.xp_color}18`, color: a.xp_color }}>
+              <Badge className="text-[10px] font-black border-0 tabular-nums px-2" style={{ background: `${a.xp_color}18`, color: ink(a.xp_color) }}>
                 +{a.xp_delta} XP
               </Badge>
             )}
@@ -247,6 +255,7 @@ const TIER_LABELS = { free: 'Free', standard: 'Leadership OS', accelerator: 'Lea
 
 export default function ProfilePage() {
   const { lang } = useLanguage();
+  const { ink } = useReadableColor();
   const { checkAuth } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -443,7 +452,7 @@ export default function ProfilePage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="w-7 h-7 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover:scale-110" style={{ background: `${d.color}1F` }}>
-                    <d.icon size={14} style={{ color: d.color }} strokeWidth={2.5} />
+                    <d.icon size={14} style={{ color: ink(d.color) }} strokeWidth={2.5} />
                   </span>
                   <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{d.label}</span>
                 </div>
@@ -494,12 +503,12 @@ export default function ProfilePage() {
             <Card className="border-black/[0.04] dark:border-white/[0.06]">
               <CardContent className="p-5 space-y-4">
                 <div className="text-center py-4">
-                  <p className="text-6xl font-black tabular-nums text-[#BFFF00]">+{activity?.xp_last_30d || 0}</p>
+                  <p className="text-6xl font-black tabular-nums text-[#5A7A00] dark:text-[#BFFF00]">+{activity?.xp_last_30d || 0}</p>
                   <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-2">{de ? 'XP in 30 Tagen' : 'XP in 30 days'}</p>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="text-center p-3 rounded-xl bg-muted/30">
-                    <Calendar size={14} className="mx-auto text-[#BFFF00] mb-1" />
+                    <Calendar size={14} className="mx-auto text-[#5A7A00] dark:text-[#BFFF00] mb-1" />
                     <p className="text-lg font-black">{activity?.total || 0}</p>
                     <p className="text-[9px] text-muted-foreground font-bold uppercase">{de ? 'Aktionen' : 'Actions'}</p>
                   </div>

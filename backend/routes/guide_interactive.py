@@ -104,7 +104,7 @@ async def interactive_turn(
     context_script: str = Form(""),
 ):
     """Ein Turn am Video: Audio (oder getippte/vorgeschlagene Frage) rein, Wlads Antwort raus."""
-    from routes.credits import check_and_deduct_credit, refund_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail, refund_credit
 
     user = await get_current_user(request)
     access = await _access(user)
@@ -125,7 +125,7 @@ async def interactive_turn(
 
     credit = await check_and_deduct_credit(user, "chat")
     if not credit["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
 
     session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
     await _persist_voice_turn(session_id, user["user_id"], "user", transcript)

@@ -125,7 +125,7 @@ FINISH_INSTRUCTION = (
 
 @router.post("/challengers/{challenger_id}/message")
 async def challenge_message(challenger_id: str, request: Request):
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     body = await request.json()
     message = body.get("message", "")
     challenge_id = body.get("challenge_id", "")
@@ -134,7 +134,7 @@ async def challenge_message(challenger_id: str, request: Request):
 
     credit_result = await check_and_deduct_credit(user, "roleplay")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("roleplay", credit_result))
 
     challenger = next((c for c in LEADERSHIP_CHALLENGERS if c["challenger_id"] == challenger_id), None)
     if not challenger:

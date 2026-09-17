@@ -42,7 +42,7 @@ export const ChallengeBriefings = ({ de = true, currentDay = 1 }) => {
           {de ? 'Briefings' : 'Briefings'}
         </p>
         <h2 className="mt-0.5 text-base font-bold md:text-lg">
-          {de ? 'Wlads Tages-Briefings · Tag 1–7' : "Wlad's daily briefings · day 1–7"}
+          {de ? 'WladBot Tages-Briefings · Tag 1–7' : "WladBot daily briefings · day 1–7"}
         </h2>
         <p className="mt-1 text-[12.5px] text-muted-foreground">
           {de ? 'Ein Clip pro Tag: was heute dran ist und warum es wirkt.' : 'One clip per day: what is due today and why it works.'}

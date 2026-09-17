@@ -8,6 +8,7 @@ import { Badge } from '../components/ui/badge';
 import { WladBotAvatar } from '../components/brand/WladBotAvatar';
 import { WLAD_AVATAR, WLAD_WELCOME_VIDEO_SECONDS } from '../lib/brand';
 import { WladGuide } from '../components/onboarding/WladGuide';
+import { useManagedMedia } from '../hooks/useManagedMedia';
 import { WelcomeStep, FeaturesStep } from '../components/onboarding/OnboardingIntroSteps';
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
@@ -37,6 +38,7 @@ export default function OnboardingPage() {
   // Länge des Welcome-Clips, damit auch ohne Metadaten kein „2 Minuten" steht.
   const [videoDuration, setVideoDuration] = useState(WLAD_WELCOME_VIDEO_SECONDS);
   const videoRef = useRef(null);
+  useManagedMedia(videoRef);
   const de = lang === 'de';
   const openBooking = useBookConsultation();
   const firstName = user?.name?.split(' ')[0] || (de ? 'Leader' : 'Leader');

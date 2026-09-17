@@ -22,7 +22,7 @@ export const FeatureVideoSection = ({ slugs, de = true, dark = false, compact = 
   return (
     <section className={`animate-fade-in ${compact ? '' : 'mb-6'}`} data-testid={`feature-video-section-${slugs[0]}`}>
       <p className={`inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] mb-2 ${dark ? 'text-[#BFFF00]' : 'text-[#4A6200] dark:text-[#BFFF00]'}`}>
-        <Sparkles size={11} /> {de ? 'Best Practice von Wlad' : 'Best practice from Wlad'}
+        <Sparkles size={11} /> {de ? 'Best Practice von WladBot' : 'Best practice from WladBot'}
       </p>
       <div className={`grid gap-4 ${clips.length > 1 ? 'md:grid-cols-2' : 'max-w-2xl'}`}>
         {clips.map((c) => <GuideVideoPlayer key={c.slug} clip={c} de={de} />)}

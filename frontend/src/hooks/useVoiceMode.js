@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import api from '../lib/api';
 import logger from '../lib/logger';
-import { registerAudio } from '../lib/audioBus';
+import { registerAudio, stopMedia } from '../lib/audioBus';
 
 /**
  * useVoiceMode — Hands-free voice conversation state machine.
@@ -180,6 +180,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
   // ── Recording ────────────────────────────────────────────────────────
   const startRecording = useCallback(async () => {
     if (cancelledRef.current) return;
+    // Iter 185: Sprach-Modus hat Vorrang — laufende Videos werden pausiert.
+    stopMedia('voice-mode-start');
     setState(VOICE_STATES.LISTENING);
     setError('');
     setTranscript('');

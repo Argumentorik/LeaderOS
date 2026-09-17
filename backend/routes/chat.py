@@ -361,12 +361,12 @@ async def accept_suggested_tasks(data: TasksAcceptIn, request: Request):
 
 async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
     """Gemeinsamer Vorlauf für /chat und /chat/stream: Credits, Session, Kontext, System-Prompt, Modellwahl."""
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "chat")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
 
     session_id = await _ensure_session(data.session_id, user["user_id"], data.display_text or data.message, data.agent, data.folder_id)
 

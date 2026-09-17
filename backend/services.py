@@ -489,9 +489,18 @@ def _build_about_me_section(user: dict) -> str:
     valuable input for personalised feedback. Goes into EVERY AI workflow that
     uses get_user_memory (chat, video analysis, voice)."""
     about = (user.get("about_me") or "").strip()
+    # Iter 185: die drei kurzen Angaben von der Startseite zählen mit.
+    quick = []
+    if user.get("position"):
+        quick.append(f"Rolle: {user['position']}")
+    if user.get("team_size"):
+        quick.append(f"Teamgröße: {user['team_size']}")
+    if user.get("current_goal"):
+        quick.append(f"Aktuelles Ziel: {user['current_goal']}")
+    quick_line = ("\nKURZANGABEN: " + " · ".join(quick) + "\n") if quick else ""
     if not about:
-        return ""
-    return (
+        return quick_line
+    return quick_line + (
         "\nÜBER MICH (vom User selbst geschrieben — höchste Priorität für "
         "Personalisierung; beziehe dich konkret darauf, statt allgemein zu "
         f"antworten):\n{about[:6000]}\n"

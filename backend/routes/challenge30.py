@@ -178,12 +178,12 @@ async def _get_or_create_progress(user_id: str) -> dict:
 
 @router.post("/quiz/{day}")
 async def submit_quiz(day: int, data: QuizSubmission, request: Request):
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "quiz")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("quiz", credit_result))
 
     questions = get_quiz_for_day(day)
     if not questions:

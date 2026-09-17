@@ -53,9 +53,15 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 402 = paywall trigger
+    // 402 = Guthaben leer ODER Bereich gesperrt — Iter 185: zwei getrennte
+    // Meldungen, nie beide gleichzeitig, und kein ungefragtes Kauffenster.
     if (error.response?.status === 402) {
-      window.dispatchEvent(new CustomEvent('wladbot:paywall', { detail: { path: window.location.pathname } }));
+      const detail = error.response?.data?.detail;
+      const kind = typeof detail === 'object' && detail ? detail.error : detail;
+      const name = kind === 'tier_required' ? 'wladbot:feature-locked' : 'wladbot:credits-empty';
+      window.dispatchEvent(new CustomEvent(name, {
+        detail: { path: window.location.pathname, info: typeof detail === 'object' ? detail : null },
+      }));
       return Promise.reject(error);
     }
 

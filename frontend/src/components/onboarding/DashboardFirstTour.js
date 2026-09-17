@@ -25,6 +25,7 @@ import { X, ArrowRight, ArrowLeft, Volume2, VolumeX, Check } from 'lucide-react'
 import { WLAD_AVATAR } from '../../lib/brand';
 import { Button } from '../ui/button';
 import api from '../../lib/api';
+import { useManagedMedia } from '../../hooks/useManagedMedia';
 import { takeSlice } from '../../lib/dashboardBootstrap';
 
 const STORAGE_KEY = 'leaderos_tour_v1_done';
@@ -146,6 +147,9 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
   const utterRef = useRef(null);
   // Iter 145: freigegebenes Wlad-Intro-Video (Guide Studio) ersetzt im Welcome-Step die Browser-Stimme.
   const [introClip, setIntroClip] = useState(null);
+  const introVideoRef = useRef(null);
+  // Iter 185: Tour-Video meldet sich am zentralen Ton-Aus-Schalter an.
+  useManagedMedia(introVideoRef, introClip?.slug || null);
   useEffect(() => {
     if (!open) return;
     const pre = takeSlice('guide_clips');
@@ -430,6 +434,7 @@ export const DashboardFirstTour = ({ userTier = 'free', force = false, onDone })
           {current.id === 'welcome' && introClip && (
             <div className="mb-3 rounded-xl overflow-hidden border border-white/[0.08] bg-black" data-testid="tour-intro-video-wrap">
               <video
+                ref={introVideoRef}
                 src={`${process.env.REACT_APP_BACKEND_URL}${introClip.video_url}`}
                 poster={introClip.poster_url ? `${process.env.REACT_APP_BACKEND_URL}${introClip.poster_url}` : undefined}
                 controls autoPlay playsInline preload="auto"

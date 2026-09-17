@@ -4,7 +4,6 @@ import logger from '../lib/logger';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { ScrollArea } from '../components/ui/scroll-area';
-import { PaywallModal } from '../components/shared/PaywallModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useCredits } from '../contexts/CreditContext';
 import api from '../lib/api';
@@ -84,7 +83,6 @@ export default function ChatPage() {
     return () => { cancelled = true; };
   }, []);
   const [userContext, setUserContext] = useState({ role: '', company: '', industry: '' });
-  const [showPaywall, setShowPaywall] = useState(false);
   const [attachedPdf, setAttachedPdf] = useState(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [audioMode, setAudioMode] = useState(false);
@@ -93,7 +91,7 @@ export default function ChatPage() {
   const [folders, setFolders] = useState([]);
   // Iter 92.23.8 (Mert): folder context — chat injected with folder.context_summary
   const [activeFolder, setActiveFolder] = useState(null);
-  const { isPremium, totalUsed, reload: reloadCredits } = useCredits();
+  const { isPremium, reload: reloadCredits } = useCredits();
   const scrollRef = useRef(null);
   const navigate = useNavigate();
   // searchParams used for ?prefill=... (deep-link from /missions Deep-Chat-CTA)
@@ -243,7 +241,8 @@ export default function ChatPage() {
       setMessages(prev => prev.filter((m) => !m.streaming));
       const status = err.response?.status ?? err.status;
       if (status === 402) {
-        setShowPaywall(true);
+        // Iter 185: Die Meldung kommt zentral (DashboardLayout) — hier kein
+        // zweites Fenster mehr aufmachen.
         setMessages(prev => prev.slice(0, -1));
       } else {
         logger.error('Chat error:', err);
@@ -287,7 +286,6 @@ export default function ChatPage() {
 
   return (
     <DashboardLayout>
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} creditsUsed={totalUsed} />}
       <div className="flex h-screen" data-testid="chat-page">
         <div className="flex flex-col flex-1 min-w-0">
         {showUpsell && <ChatUpsellModal onClose={() => setShowUpsell(false)} de={de} />}

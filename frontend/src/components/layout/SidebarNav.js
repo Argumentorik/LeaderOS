@@ -86,7 +86,13 @@ export const SidebarNav = ({ navSections, activeSection, collapsed }) => {
                   }`
                 }>
                 <item.icon size={16} className="shrink-0" />
-                {!collapsed && <span>{item.label}</span>}
+                {!collapsed && <span className="truncate">{item.label}</span>}
+                {!collapsed && item.badgeText && (
+                  <span className="ml-auto shrink-0 text-[9px] font-black uppercase tracking-[0.1em] px-1.5 py-0.5 rounded-md bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00]"
+                        data-testid={`nav-badge-${item.path.replace('/', '')}`}>
+                    {item.badgeText}
+                  </span>
+                )}
               </NavLink>
             );
           })}

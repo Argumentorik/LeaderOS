@@ -47,6 +47,29 @@ def get_object(path: str):
     return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 
+def object_exists(path: str) -> bool:
+    """Iter 185: Liegt das Objekt wirklich abrufbar im Speicher?
+
+    Die Poster-Prüfung im Admin-Bereich verließ sich bisher darauf, dass ein
+    Pfad in der Datenbank *eingetragen* ist. Kundenmeldung: „die Thumbnails
+    sind nicht immer da" — ein eingetragener Pfad kann ins Leere zeigen.
+    """
+    if not path:
+        return False
+    key = init_storage()
+    try:
+        resp = requests.get(
+            f"{STORAGE_URL}/objects/{path}",
+            headers={"X-Storage-Key": key, "Range": "bytes=0-64"},
+            timeout=20, stream=True,
+        )
+        ok = resp.status_code < 400
+        resp.close()
+        return ok
+    except requests.RequestException:
+        return False
+
+
 def download_object(path: str, dest: str, chunk_size: int = 1024 * 1024) -> str:
     """Objekt gestreamt auf die Platte schreiben (nie komplett im RAM)."""
     key = init_storage()

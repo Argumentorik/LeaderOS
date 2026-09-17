@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { PublicPageShell } from '../components/layout/PublicPageShell';
+import { useSeo } from '../lib/seo';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -46,7 +48,23 @@ export default function CoachingPage() {
   const [testCode, setTestCode] = useState(null);
   const pricingRef = useRef(null);
 
+  // Iter 185: Diese Seite ist öffentlich — auffindbar für Suche und KI.
+  useSeo({
+    path: '/leadership-programm',
+    title: de
+      ? 'Leadership-Programm mit Wlad Jachtchenko · Preise, Inhalte, häufige Fragen'
+      : 'Leadership programme with Wlad Jachtchenko · pricing, content, FAQ',
+    description: de
+      ? 'Führung lernen mit KI-Coach, Kursen und Gesprächs-Training — plus persönliches Coaching mit Wlad Jachtchenko. Preise, Leistungen und häufige Fragen auf einer Seite.'
+      : 'Learn leadership with an AI coach, courses and conversation training — plus personal coaching with Wlad Jachtchenko. Pricing, content and FAQ on one page.',
+  });
+
   const handleStripeCheckout = useCallback(async (packageId, discountCode = null) => {
+    // Iter 185: Ohne Login zuerst Konto anlegen — danach direkt zurück hierher.
+    if (!user) {
+      navigate(`/signup?next=${encodeURIComponent('/leadership-programm')}`);
+      return;
+    }
     setCheckoutLoading(packageId);
     try {
       const endpoint = packageId === 'accelerator_installment_followup'
@@ -60,7 +78,7 @@ export default function CoachingPage() {
       logger.error('Checkout error:', err);
       toast.error(err?.response?.data?.detail || (de ? 'Checkout fehlgeschlagen. Bitte versuche es erneut.' : 'Checkout failed. Please try again.'));
     } finally { setCheckoutLoading(false); }
-  }, [de]);
+  }, [de, user, navigate]);
 
   // Auto-start installment checkout if ?installment=next query param present.
   // Iter 92.59: ?code=WLAD-… shows the 1€ live-test activation banner.
@@ -83,9 +101,8 @@ export default function CoachingPage() {
   const layers = getLayers(de);
   const faqs = getFaqs(de);
 
-  return (
-    <DashboardLayout rightPanel={<CoachingRightPanel de={de} onCheckout={handleStripeCheckout} />}>
-      <div className="p-6 lg:p-8 max-w-5xl space-y-16" data-testid="coaching-page">
+  const body = (
+    <div className={`p-6 lg:p-8 space-y-16 ${user ? 'max-w-5xl' : 'max-w-5xl mx-auto'}`} data-testid="coaching-page">
 
         {/* ── 1€ LIVE-TEST ACTIVATION (Iter 92.59, code-gated) ── */}
         {testCode && (
@@ -296,7 +313,13 @@ export default function CoachingPage() {
             </a>
           </p>
         </div>
-      </div>
+    </div>
+  );
+
+  if (!user) return <PublicPageShell>{body}</PublicPageShell>;
+  return (
+    <DashboardLayout rightPanel={<CoachingRightPanel de={de} onCheckout={handleStripeCheckout} />}>
+      {body}
     </DashboardLayout>
   );
 }

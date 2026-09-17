@@ -149,6 +149,9 @@ async def _safe(coro, fallback):
 async def dashboard_bootstrap(request: Request, response: Response, fresh: int = 0):
     """Dashboard in einem Zug: alle Startdaten parallel in EINER Antwort (Iter 168).
     Ersetzt 7 Einzelrequests beim Seitenaufbau; kurzer Cache je Nutzer (8 s), `?fresh=1` umgeht ihn."""
+    from routes.challenge30 import CHALLENGES, get_challenge_status
+    from routes.checkin import get_today_checkin
+    from routes.courses import list_courses
     from routes.events import get_event_reminders, get_events
     from routes.folders import list_folders
     from routes.guide import list_clips
@@ -164,7 +167,7 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
         response.headers["X-Bootstrap-Cache"] = "hit"
         return hit[1]
 
-    dashboard, referral, reminders, events_live, videos, clips, folders, journey = await asyncio.gather(
+    dashboard, referral, reminders, events_live, videos, clips, folders, journey, c30_status, checkin_today, courses = await asyncio.gather(
         get_dashboard_v4(request),
         _safe(get_referral_code(request), {}),
         _safe(get_event_reminders(request), {"reminders": [], "next_event": None}),
@@ -173,10 +176,42 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
         _safe(list_clips(request, "onboarding", False), {"clips": []}),
         _safe(list_folders(request), []),
         _safe(get_journey(request), None),
+        _safe(get_challenge_status(request), None),
+        _safe(get_today_checkin(request), None),
+        _safe(list_courses(request), None),
     )
+    # Iter 185: Startseite beantwortet „was soll ich hier tun?" — Tagesaufgabe,
+    # Check-in und Kurs-Stand kommen im selben Zug mit.
+    today_task = None
+    if c30_status:
+        day = int(c30_status.get("current_day") or 1)
+        entry = next((c for c in CHALLENGES if c.get("day") == day), None)
+        if entry:
+            today_task = {
+                "day": day, "total": 30,
+                "title_de": entry.get("title_de"), "title_en": entry.get("title_en"),
+                "desc_de": entry.get("desc_de"), "desc_en": entry.get("desc_en"),
+                "duration": entry.get("duration"), "path": entry.get("path"),
+                "type": entry.get("type"), "xp": entry.get("xp"),
+                "done": day in (c30_status.get("completed_days") or []),
+                "started": bool(c30_status.get("completed_days")),
+                "completed_count": len(c30_status.get("completed_days") or []),
+            }
     payload = {
         "dashboard": dashboard, "referral": referral, "events_reminders": reminders, "events_live": events_live,
         "my_path_videos": videos, "guide_clips": clips, "folders": folders, "journey": journey,
+        "challenge_today": today_task,
+        "checkin_today": checkin_today,
+        "courses_status": ({
+            "tier": courses.get("tier"),
+            "total_episodes": courses.get("total_episodes"),
+            "seen_total": courses.get("seen_total"),
+            "unlocked_episodes": sum(1 for c in courses.get("courses", []) for e in c.get("episodes", []) if e.get("unlocked")),
+            "next_episode": next(({"course": c.get("title"), "slug": c.get("slug"), "id": e.get("id"),
+                                   "number": e.get("number"), "title": e.get("title"), "minutes": e.get("minutes")}
+                                  for c in courses.get("courses", []) for e in c.get("episodes", [])
+                                  if e.get("unlocked") and not e.get("seen")), None),
+        } if courses else None),
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
     if len(_bootstrap_cache) > 2000:

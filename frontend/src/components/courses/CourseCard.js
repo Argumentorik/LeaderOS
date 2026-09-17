@@ -62,6 +62,15 @@ export const CourseCard = ({ course: c, de }) => {
           <Chip><Clock size={9} /> {c.minutes_total} Min</Chip>
         </div>
         {started && <p className="text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00]" data-testid={`course-seen-${c.slug}`}>{c.seen_count}/{c.episode_count} {de ? 'gesehen' : 'seen'}</p>}
+        {/* Iter 185: Freischaltung steht auf der Kachel — keine Kachel, die erst beim Klick sperrt. */}
+        <p className={`text-[11.5px] font-semibold ${c.unlocked ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}
+           data-testid={`course-access-${c.slug}`}>
+          {c.unlocked
+            ? (de ? 'Alle Folgen für dich freigeschaltet' : 'All episodes unlocked for you')
+            : (de
+                ? `Folge 1 ist frei · Folgen 2–${c.episode_count} kommen mit ${c.tier_label} dazu`
+                : `Episode 1 is free · episodes 2–${c.episode_count} come with ${c.tier_label}`)}
+        </p>
         <div className="mt-auto flex items-center gap-2 pt-1">
           {c.unlocked || !started ? (
             <button type="button" onClick={() => navigate(`/kurse/${c.slug}?folge=${startEp}`)} className="flex-1 h-10 rounded-xl bg-[#0A0A0A] dark:bg-[#BFFF00] text-white dark:text-black text-[12.5px] font-black hover:bg-[#1f1f1f] dark:hover:bg-[#D4FF4D] transition-colors" data-testid={`course-start-${c.slug}`}>

@@ -628,7 +628,7 @@ async def voice_conversation(
     Pipeline: Whisper STT → GPT-5.2 short reply → ElevenLabs TTS → persist turns.
     Credit is deducted only after a valid transcript exists.
     """
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     persona_key = persona.lower()
@@ -666,7 +666,7 @@ async def voice_conversation(
     credit_result = await check_and_deduct_credit(user, "chat")
     if not credit_result["allowed"]:
         memory_task.cancel()
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
 
     # 3. Session + user turn
     session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
@@ -784,7 +784,7 @@ async def argumentation_sparring(
     team). When set, the persona's voice + attitude override the default Wlad
     voice — user hears a distinct sparring partner instead of just Wlad.
     """
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     from emergentintegrations.llm.chat import LlmChat, UserMessage
     import json as _json
 
@@ -822,7 +822,7 @@ async def argumentation_sparring(
     # 2. Deduct credit
     credit_result = await check_and_deduct_credit(user, "chat")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
 
     # 3. Session + user turn
     session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)

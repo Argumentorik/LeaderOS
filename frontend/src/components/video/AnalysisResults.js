@@ -3,6 +3,7 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ArrowLeft, ArrowRight, Star, Download, MessageSquareText, RotateCcw, Share2, Copy, Check, Play } from 'lucide-react';
+import { useManagedMedia } from '../../hooks/useManagedMedia';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -23,6 +24,7 @@ export const AnalysisResults = ({
   const [copied, setCopied] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef(null);
+  useManagedMedia(videoRef);
 
   // Iter 92.23: Public Share-Link only offered if entry_id exists and score >= 50
   const canShare = Boolean(analysis?.entry_id) && (analysis?.overall_score || 0) >= 50;

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { InteractiveWladButton } from './InteractiveWladButton';
 import { Play, FileText, ChevronDown, ChevronUp, Check, MessageCircle } from 'lucide-react';
 import api from '../../lib/api';
+import { useManagedMedia } from '../../hooks/useManagedMedia';
 import logger from '../../lib/logger';
 
 /**
@@ -16,6 +17,8 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
   const [videoBroken, setVideoBroken] = useState(false);
   const videoRef = useRef(null);
   const seenSentRef = useRef(false);
+  // Iter 185: Ton stoppt beim Wegklicken, Sprach-Modus oder Seitenwechsel.
+  useManagedMedia(videoRef, clip?.slug);
 
   useEffect(() => { setStarted(false); setVideoBroken(false); seenSentRef.current = false; }, [clip?.slug]);
 

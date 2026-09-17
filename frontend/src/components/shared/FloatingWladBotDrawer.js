@@ -25,6 +25,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Sparkles, X, Send, Loader2, Folder, ChevronDown, Lightbulb, Target } from 'lucide-react';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
 import api from '../../lib/api';
+import { stopMedia } from '../../lib/audioBus';
 import { streamChat } from '../../lib/chatStream';
 import logger from '../../lib/logger';
 import SmartText from './SmartText';
@@ -65,6 +66,9 @@ export const FloatingWladBotDrawer = () => {
   const [sessionId, setSessionId] = useState(null);
   const scrollRef = useRef(null);
   const folderPickRef = useRef(null);
+
+  // Iter 185: Coach-Dialog hat Vorrang — laufende Videos werden pausiert.
+  useEffect(() => { if (open) stopMedia('coach-drawer-open'); }, [open]);
 
   // Iter 92.23.9: external open events (e.g. "Briefing"-Button in FolderRail).
   // Subscribers can pass {folderId, briefingMessage} → drawer opens, sets

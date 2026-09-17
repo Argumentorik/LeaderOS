@@ -19,6 +19,10 @@ import { JourneyCard } from '../components/dashboard/JourneyCard';
 import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrepCard';
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
+import {
+  Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard,
+  QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine,
+} from '../components/dashboard/home/HomeSections';
 import api from '../lib/api';
 import { loadDashboardBootstrap } from '../lib/dashboardBootstrap';
 import { CreditBadge } from '../components/dashboard/CreditBadge';
@@ -45,6 +49,10 @@ export default function DashboardPage() {
   const { open: openPricing } = usePricing();
   const de = lang === 'de';
   const [data, setData] = useState(null);
+  const [bundle, setBundle] = useState(null);
+  const [aboutDone, setAboutDone] = useState(() => {
+    try { return localStorage.getItem('leaderos_about_you_skipped') === '1'; } catch { return false; }
+  });
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [referralCode, setReferralCode] = useState('');
@@ -53,6 +61,7 @@ export default function DashboardPage() {
     try {
       // Iter 168: ein Request für alles (Dashboard, Referral, Events, Videos, Clips, Ordner) — Widgets lesen ihre Scheibe aus dem Bündel
       const b = await loadDashboardBootstrap();
+      setBundle(b);
       setData(b.dashboard);
       setReferralCode(b.referral?.code || '');
     } catch (err) {
@@ -103,6 +112,16 @@ export default function DashboardPage() {
   const xpToNext = xpInfo.xp_to_next || 0;
   const aiReadiness = ls.composite || 0;
   const learningPct = c30.progress_pct || 0;
+  // Iter 185: Startseiten-Daten aus dem Bootstrap-Bündel
+  const todayTask = bundle?.challenge_today || null;
+  const checkinDone = Boolean(bundle?.checkin_today && bundle.checkin_today.checked_in !== false);
+  const coursesStatus = bundle?.courses_status || null;
+  const nextEvent = (bundle?.events_live || [])[0] || bundle?.events_reminders?.next_event || null;
+  const videosSeen = coursesStatus?.seen_total ?? 0;
+  const eventsAttended = data?.stats?.events_attended ?? 0;
+  const memberSince = ud.member_since || ud.created_at;
+  const daysIn = memberSince ? Math.max(1, Math.round((Date.now() - new Date(memberSince).getTime()) / 86400000)) : 1;
+  const aboutComplete = aboutDone || Boolean(ud.position && ud.team_size && ud.current_goal);
 
   if (loading) {
     return (
@@ -120,36 +139,85 @@ export default function DashboardPage() {
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
         <OnboardingVideoModal />
 
-        {/* ── Greeting ── */}
-        <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-8" data-anim="dash-header">
-          <div>
-            <p className="text-sm text-muted-foreground">{de ? 'Willkommen zurück,' : 'Welcome back,'}</p>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{ud.name || 'Leader'}</h1>
-              <TierBadge size="sm" />
-              {tierInfo?.inGracePeriod && (
-                <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
-                  {de ? 'Jetzt verlängern' : 'Renew now'}
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Button variant="outline" size="sm" onClick={() => navigate('/chat')} className="font-semibold text-xs h-9 gap-1.5" data-testid="talk-coach-btn">
-              <MessageSquareText size={14} /> {de ? 'KI-Coach' : 'AI Coach'}
-            </Button>
+        {/* ── 1 · Datum und Stand (Iter 185) ── */}
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} />
+          <div className="flex items-center gap-2 flex-wrap pt-1">
+            <TierBadge size="sm" />
             <CreditBadge de={de} />
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20" data-testid="streak-bar">
-              <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
-              <span className="text-[12px] font-bold"><AnimatedNumber value={streak?.days || 0} duration={500} /></span>
-              <span className="text-[10px] text-muted-foreground font-medium">{de ? 'Tage' : 'days'}</span>
-            </div>
+            {tierInfo?.inGracePeriod && (
+              <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
+                {de ? 'Jetzt verlängern' : 'Renew now'}
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Iter 163 „weniger ist mehr“: Fokus = Inbox → EINE Aktion → Fortschritt. Alles andere hinter „Mehr“. */}
         <StripeModeBanner />
         <ActionInbox de={de} />
+
+        {/* ── 2 · Die Aufgabe für heute ── */}
+        <Section id="task" title={de ? 'Die Aufgabe für heute' : "Today's task"}
+                 hint={de ? 'Eine Übung aus dem 30-Tage-Programm — kurz, konkret, für heute.' : 'One exercise from the 30-day program — short and concrete.'}>
+          <TodayTaskCard task={todayTask} de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 3 · Check-in ── */}
+        <Section id="checkin" title={de ? 'Check-in (2 Minuten)' : 'Check-in (2 minutes)'}
+                 hint={de ? 'Kurz festhalten, was heute lief — daraus lernt dein Coach, was du brauchst.' : 'Note how today went — your coach learns from it.'}>
+          <CheckinRow done={checkinDone} de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 4 · Frag deinen Coach ── */}
+        <Section id="coach" title={de ? 'Frag deinen Coach' : 'Ask your coach'}
+                 hint={de ? 'WladBot antwortet auf deine Führungsfragen — mit Wlads Material und deinem Kontext.' : 'WladBot answers your leadership questions — from Wlad’s material and your context.'}>
+          <AskCoachCard de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 5 · Kurse ── */}
+        <Section id="courses" title={de ? 'Kurse' : 'Courses'}
+                 hint={de ? 'Kurze Videofolgen von Wlad, jede unter 12 Minuten. Folge 1 jedes Kurses ist frei.' : 'Short video episodes from Wlad, each under 12 minutes. Episode 1 of each course is free.'}>
+          <CoursesCard status={coursesStatus} de={de} navigate={navigate} onUnlock={() => openPricing('leadership_os')} />
+        </Section>
+
+        {/* ── 6 · Eigene Aufgabe anlegen ── */}
+        <Section id="own-task" title={de ? 'Eigene Aufgabe anlegen' : 'Create your own task'}
+                 hint={de ? 'Alles, was du dir vornimmst, landet in deiner Aufgabenliste.' : 'Anything you take on lands in your task list.'}>
+          <QuickTaskCard de={de} />
+        </Section>
+
+        {/* ── 7 · Über dich ── */}
+        {!aboutComplete && (
+          <Section id="about-you" title={de ? 'Über dich' : 'About you'}
+                   hint={de ? 'Drei kurze Angaben, damit die Antworten zu deiner Lage passen. Jederzeit überspringbar.' : 'Three short answers so the advice fits your situation. Skippable anytime.'}>
+            <AboutYouCard user={ud} de={de}
+                          onSaved={() => setAboutDone(true)}
+                          onSkip={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }} />
+          </Section>
+        )}
+
+        {/* ── 8 · Nächstes Live-Event ── */}
+        {nextEvent && (
+          <Section id="event" title={de ? 'Nächstes Live-Event' : 'Next live event'}
+                   hint={de ? 'Live mit Wlad: Fragen stellen, Sparring bekommen.' : 'Live with Wlad: ask questions, get sparring.'}>
+            <NextEventRow event={nextEvent} de={de} navigate={navigate} />
+          </Section>
+        )}
+
+        {/* ── 9 · Dein Weiterkommen ── */}
+        <Section id="progress" title={de ? 'Dein Weiterkommen' : 'Your progress'}
+                 hint={de ? 'Kein Ranking — nur, was du bisher gemacht hast.' : 'No ranking — just what you have done so far.'}>
+          <ProgressLine levelName={levelName} daysIn={daysIn} videosSeen={videosSeen} eventsAttended={eventsAttended} de={de} />
+        </Section>
+
+        {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
+        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 9 : 10}>
+        {/* ── Verschoben nach „Mehr" (Iter 185): Journey, Kennzahlen, XP-Zahl ── */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 mb-4 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 w-fit" data-testid="streak-bar">
+          <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+          <span className="text-[12px] font-bold"><AnimatedNumber value={streak?.days || 0} duration={500} /></span>
+          <span className="text-[10px] text-muted-foreground font-medium">{de ? 'Tage Streak' : 'day streak'}</span>
+        </div>
 
         {/* ── HEUTE: die eine Aktion — personalisiert (erste 7 Schritte), danach 30-Tage-Programm ── */}
         <JourneyCard de={de} fallback={(
@@ -226,8 +294,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-        {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
-        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 7 : 8}>
+
         <GuideClipsRow de={de} />
         <div className="mb-6"><ArgumentationPrepCard de={de} /></div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

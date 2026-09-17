@@ -1,4 +1,5 @@
 import { Button } from '../ui/button';
+import { CreditCostHint, useCreditCost } from '../shared/CreditCostHint';
 import { Textarea } from '../ui/textarea';
 import { VoiceRecorder } from '../shared/VoiceRecorder';
 import { Send, Loader2, Paperclip, FileText, X, Zap, Headphones, Target, HelpCircle } from 'lucide-react';
@@ -28,7 +29,11 @@ export const ChatInputBar = ({
   attachedPdf, setAttachedPdf, uploadingPdf, onPdfUpload,
   isPremium, onOpenUpsell, onOpenAudioMode, de,
   coachMode, setCoachMode,
-}) => (
+}) => {
+  // Iter 185: „kostet 1 von noch 3" VOR dem Senden; bei 0 ist der Knopf
+  // ruhiggestellt — mit Begründung statt Absage nach der Arbeit.
+  const { blocked, hint } = useCreditCost('chat');
+  return (
   <div className="border-t border-black/[0.06] dark:border-white/[0.06] p-3 sm:p-4 bg-white/85 dark:bg-card/85 backdrop-blur-xl sticky bottom-0 z-30" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
     {/* Iter 121.2: Coach-Modus Briefing — nur beim ersten Aktivieren, dann per
         localStorage gemerkt. „Fokus-Modus" damit die Cohort sofort versteht,
@@ -145,13 +150,19 @@ export const ChatInputBar = ({
             ? (de ? 'Coach-Modus: WladBot antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
             : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
         className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 py-[13px] leading-5 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 text-base sm:text-sm focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
-      <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading}
+      <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading || blocked}
+        title={hint}
         aria-label={de ? 'Nachricht senden' : 'Send message'}
         className="bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] w-11 h-11 sm:w-auto sm:h-auto sm:px-4 shrink-0 rounded-2xl shadow-lg shadow-[#BFFF00]/25 transition-all hover:scale-[1.03] active:scale-[0.96]">
         {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
       </Button>
     </div>
 
+    {!isPremium && (
+      <div className="flex items-center justify-center gap-3 mt-2">
+        <CreditCostHint action="chat" />
+      </div>
+    )}
     {!isPremium && (
       <div className="flex items-center justify-center mt-2">
         <button onClick={onOpenUpsell} className="text-[10px] text-muted-foreground hover:text-[#BFFF00] transition-colors font-medium" data-testid="upsell-mini-btn">
@@ -160,4 +171,5 @@ export const ChatInputBar = ({
       </div>
     )}
   </div>
-);
+  );
+};

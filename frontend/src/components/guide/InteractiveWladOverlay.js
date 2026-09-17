@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, Check, Copy, MessageSquare, Mic, Sparkles, X } from 'lucide-react';
+import { stopMedia } from '../../lib/audioBus';
 import { useVoiceMode, VOICE_STATES } from '../../hooks/useVoiceMode';
 import { VoiceControls } from '../chat/VoiceControls';
 
 const WLAD = '/wladbot-avatar-clean.png';
 
 const statusLabel = (state, error, de) => ({
-  [VOICE_STATES.IDLE]: de ? 'Tippe auf Wlad, um zu sprechen' : 'Tap Wlad to speak',
+  [VOICE_STATES.IDLE]: de ? 'Tippe auf WladBot, um zu sprechen' : 'Tap WladBot to speak',
   [VOICE_STATES.LISTENING]: de ? 'Ich höre dir zu…' : 'Listening…',
   [VOICE_STATES.THINKING]: de ? 'WladBot denkt nach…' : 'Wlad is thinking…',
   [VOICE_STATES.SPEAKING]: de ? 'WladBot spricht' : 'Wlad is speaking',
@@ -76,6 +77,8 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
   const [atBottom, setAtBottom] = useState(true);
   const [newAnswer, setNewAnswer] = useState(false);
   const scrollRef = useRef(null);
+  // Iter 185: Coach-Dialog hat Vorrang — laufende Videos werden pausiert.
+  useEffect(() => { stopMedia('coach-dialog-open'); }, []);
   const endRef = useRef(null);
   const {
     state, transcript, error, paused, muted, level, speakLevel,
@@ -114,7 +117,7 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
   }, [fullCleanup, onClose]);
 
   const voiceLoading = state === VOICE_STATES.THINKING && !!transcript && turns.some((t) => t.question === transcript);
-  const status = voiceLoading ? (de ? 'Wlads Stimme kommt…' : "Wlad's voice is coming…") : statusLabel(state, error, de);
+  const status = voiceLoading ? (de ? 'WladBots Stimme kommt…' : "WladBot's voice is coming…") : statusLabel(state, error, de);
   const jumpDown = () => { setNewAnswer(false); endRef.current?.scrollIntoView({ behavior: 'smooth' }); };
 
   return (
@@ -133,7 +136,7 @@ export const InteractiveWladOverlay = ({ clip, onClose, de = true, access = null
             </div>
             <p className="mt-0.5 truncate text-[13px] font-bold" data-testid="interactive-wlad-status">{status}</p>
             {clip?.title && (
-              <p className="truncate text-[11px] text-white/40">{de ? 'Zum Video' : 'About'} „{clip.title}“ · {de ? 'Wlads Stimme' : "Wlad's voice"}</p>
+              <p className="truncate text-[11px] text-white/40">{de ? 'Zum Video' : 'About'} „{clip.title}“ · {de ? 'WladBots Stimme' : "WladBot's voice"}</p>
             )}
           </div>
           <button type="button" onClick={() => { fullCleanup(); onClose?.(); }} data-testid="interactive-wlad-close"

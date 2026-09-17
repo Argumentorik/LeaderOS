@@ -20,6 +20,9 @@ class ProfileUpdate(BaseModel):
     # Iter 136 (Wlad): free-text personal + professional context. Flows into
     # every AI interaction via services.get_user_memory().
     about_me: Optional[str] = Field(None, max_length=6000)
+    # Iter 185: drei kurze Angaben von der Startseite („Über dich")
+    team_size: Optional[str] = Field(None, max_length=40)
+    current_goal: Optional[str] = Field(None, max_length=300)
 
 
 # ── Mapping action-key → human-readable label + icon (rendered by frontend) ──
@@ -112,6 +115,8 @@ async def get_my_profile(request: Request) -> dict:
         "bio": user.get("bio", ""),
         "linkedin_url": user.get("linkedin_url", ""),
         "about_me": user.get("about_me", ""),
+        "team_size": user.get("team_size", ""),
+        "current_goal": user.get("current_goal", ""),
         "about_me_updated_at": user.get("about_me_updated_at"),
         "tier": user.get("tier", "free"),
         "level": user.get("level", "Emerging Leader"),

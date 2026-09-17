@@ -87,6 +87,9 @@ async def _refund_video_credit(user_id: str, credit_result: dict) -> None:
     der Nutzer seinen Credit zurück (Premium zahlt ohnehin nicht pro Analyse)."""
     if credit_result.get("is_premium"):
         return
+    # Iter 185: Bei der garantierten ersten Auswertung wurde nichts abgebucht.
+    if credit_result.get("remaining") == -1:
+        return
     try:
         from routes.credits import refund_credit
         await refund_credit(user_id)
@@ -675,6 +678,48 @@ async def _persist_video_analysis(user_id: str, challenge_id: str, analysis: dic
     return entry_id
 
 
+async def _is_first_analysis(user_id: str) -> bool:
+    """Hat dieser Kunde noch keine einzige Video-Auswertung bekommen?"""
+    return await db.video_challenges.count_documents({"user_id": user_id}, limit=1) == 0
+
+
+@router.get("/video-challenges/access")
+async def video_analysis_access(request: Request):
+    """Iter 185: VOR dem Aufnehmen prüfen — wer aufnehmen darf, bekommt die
+    Auswertung garantiert. Keine Absage nach der Arbeit mehr."""
+    from routes.credits import CREDIT_COSTS, check_credit_balance
+    user = await get_current_user(request)
+    tier_info = await resolve_user_tier(user)
+    trial = await get_video_trial_status(user, tier_info["tier"])
+    first_free = await _is_first_analysis(user["user_id"])
+    balance = await check_credit_balance(user)
+    cost = CREDIT_COSTS.get("video_mission", 1)
+    unlimited = balance.get("unlimited", False)
+    has_feature = bool(tier_info.get("features", {}).get("video_analysis"))
+    enough_credits = unlimited or int(balance.get("balance", 0)) >= cost
+
+    if first_free:
+        return {"allowed": True, "reason": "first_free", "cost": 0, "first_free": True,
+                "balance": balance.get("balance"), "unlimited": unlimited,
+                "trial_left": trial.get("remaining"),
+                "message": "Deine erste Video-Auswertung ist für dich kostenlos — ohne Guthaben, ohne Freischaltung."}
+    if not (trial.get("active") or has_feature):
+        return {"allowed": False, "reason": "tier_required", "cost": cost, "first_free": False,
+                "balance": balance.get("balance"), "unlimited": unlimited, "trial_left": 0,
+                "message": "Die Video-Auswertung gehört zu Leadership OS PLUS. Dein Testzeitraum ist aufgebraucht."}
+    if not enough_credits:
+        from routes.credits import no_credits_detail
+        detail = no_credits_detail("video_mission", {"remaining": balance.get("balance", 0)})
+        return {"allowed": False, "reason": "no_credits", "cost": cost, "first_free": False,
+                "balance": balance.get("balance"), "unlimited": unlimited,
+                "trial_left": trial.get("remaining"), "message": detail["message"],
+                "next_refill": detail["next_refill"]}
+    return {"allowed": True, "reason": "ok", "cost": cost, "first_free": False,
+            "balance": balance.get("balance"), "unlimited": unlimited,
+            "trial_left": trial.get("remaining"),
+            "message": f"Diese Auswertung kostet {cost} Credit."}
+
+
 @router.get("/user/video-trial-status")
 async def get_user_video_trial_status(request: Request):
     user = await get_current_user(request)
@@ -848,7 +893,7 @@ async def delete_mission_share(slug: str, request: Request):
 @router.post("/video-challenges/{challenge_id}/analyze")
 async def analyze_video_challenge(challenge_id: str, request: Request, file: UploadFile = File(...)):
     from data import VIDEO_CHALLENGES
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     # Trial-first: Free + Starter + Standard get 3 free analyses in their first 14 days.
@@ -856,17 +901,22 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
     tier_info = await resolve_user_tier(user)
     trial = await get_video_trial_status(user, tier_info["tier"])
     used_trial_slot = False
-    if trial["active"]:
-        # Inside trial window with quota remaining → bypass require_feature, consume slot.
-        await consume_video_trial(user["user_id"])
-        used_trial_slot = True
-    else:
-        # Either Accelerator (passes) or trial-ineligible/expired (raises 402 with upgrade detail).
-        await require_feature(user, "video_analysis")
+    # Entscheidung Iter 185 (4a): Die ERSTE Video-Auswertung ist für jeden
+    # garantiert — kein Zugang, kein Guthaben nötig.
+    first_free = await _is_first_analysis(user["user_id"])
+    credit_result = {"allowed": True, "remaining": -1, "is_premium": False}
+    if not first_free:
+        if trial["active"]:
+            # Inside trial window with quota remaining → bypass require_feature, consume slot.
+            await consume_video_trial(user["user_id"])
+            used_trial_slot = True
+        else:
+            # Either Accelerator (passes) or trial-ineligible/expired (raises 402 with upgrade detail).
+            await require_feature(user, "video_analysis")
 
-    credit_result = await check_and_deduct_credit(user, "video_mission")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        credit_result = await check_and_deduct_credit(user, "video_mission")
+        if not credit_result["allowed"]:
+            raise HTTPException(status_code=402, detail=no_credits_detail("video_mission", credit_result))
 
     challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
     if not challenge:
@@ -986,12 +1036,14 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
     audio length and gives us room to show real progress states in the UI.
     """
     from data import VIDEO_CHALLENGES
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     tier_info = await resolve_user_tier(user)
     trial = await get_video_trial_status(user, tier_info["tier"])
-    if not trial["active"]:
+    # Entscheidung Iter 185 (4a): erste Auswertung für jeden garantiert.
+    first_free = await _is_first_analysis(user["user_id"])
+    if not first_free and not trial["active"]:
         await require_feature(user, "video_analysis")
 
     challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
@@ -1016,13 +1068,15 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
         )
 
     used_trial_slot = False
-    if trial["active"]:
-        await consume_video_trial(user["user_id"])
-        used_trial_slot = True
+    credit_result = {"allowed": True, "remaining": -1, "is_premium": False}
+    if not first_free:
+        if trial["active"]:
+            await consume_video_trial(user["user_id"])
+            used_trial_slot = True
 
-    credit_result = await check_and_deduct_credit(user, "video_mission")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        credit_result = await check_and_deduct_credit(user, "video_mission")
+        if not credit_result["allowed"]:
+            raise HTTPException(status_code=402, detail=no_credits_detail("video_mission", credit_result))
 
     rating = _get_rating_params(request, user)
     rating_context = _build_rating_context(rating["mode"], rating["level"], rating["focus"], rating["audience"])

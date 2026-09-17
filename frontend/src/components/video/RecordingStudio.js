@@ -15,12 +15,13 @@
  *   - Huge tabular-nums timer (visible from 3m away)
  *   - Description hidden during recording so the user faces the camera
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight, Square, Loader2, Mic, Radio, Upload } from 'lucide-react';
 import { RatingConfig } from './RatingConfig';
 import { RecordingCountdown } from './RecordingCountdown';
+import api from '../../lib/api';
 
 const formatTime = (s) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
@@ -176,6 +177,16 @@ export const RecordingStudio = ({
 }) => {
   const de = lang === 'de';
   const [counting, setCounting] = useState(false);
+  // Iter 185: VOR dem Aufnehmen prüfen — wer aufnehmen darf, bekommt die
+  // Auswertung garantiert. Keine Absage nach der Arbeit mehr.
+  const [access, setAccess] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    api.get('/video-challenges/access')
+      .then((r) => { if (alive) setAccess(r.data); })
+      .catch(() => { if (alive) setAccess({ allowed: true, reason: 'unknown', message: '' }); });
+    return () => { alive = false; };
+  }, []);
 
   // Click on RECORD → start countdown; countdown end → actual recording starts.
   const handleStartClick = useCallback(() => {
@@ -225,6 +236,18 @@ export const RecordingStudio = ({
           <p className="text-sm text-muted-foreground mt-2 max-w-lg mx-auto leading-relaxed">
             {activeChallenge.description}
           </p>
+        </div>
+      )}
+
+      {/* ── Zugang & Kosten VOR der Aufnahme (Iter 185) ── */}
+      {!recording && !recorded && !analyzing && !counting && access && (
+        <div className={`rounded-2xl border px-4 py-3 text-[12.5px] font-semibold ${access.allowed
+          ? 'border-[#BFFF00]/25 bg-[#BFFF00]/[0.06] text-foreground'
+          : 'border-amber-500/30 bg-amber-500/[0.08] text-amber-700 dark:text-amber-300'}`}
+             data-testid="video-access-hint">
+          {access.message || (access.first_free
+            ? (de ? 'Deine erste Auswertung ist kostenlos.' : 'Your first analysis is free.')
+            : (de ? `Diese Auswertung kostet ${access.cost} Credit.` : `This analysis costs ${access.cost} credit.`))}
         </div>
       )}
 

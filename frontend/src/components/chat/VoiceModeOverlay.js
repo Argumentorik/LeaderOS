@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Volume2 } from 'lucide-react';
+import { stopMedia } from '../../lib/audioBus';
 import { useVoiceMode, VOICE_STATES, SILENCE_DURATION_MS } from '../../hooks/useVoiceMode';
 import { VoiceOrb } from './VoiceOrb';
 import { VoiceControls } from './VoiceControls';
@@ -29,6 +30,8 @@ const SilenceCountdown = ({ left, de }) => (
 );
 
 export const VoiceModeOverlay = ({ sessionId, onSessionUpdate, onClose, de = true }) => {
+  // Iter 185: Ein Ton zur Zeit — beim Öffnen laufen keine Videos weiter.
+  useEffect(() => { stopMedia('voice-mode-open'); }, []);
   const {
     state, transcript, reply, error, paused, muted, level, silenceLeft,
     handleOrbTap, togglePause, toggleMute, fullCleanup,

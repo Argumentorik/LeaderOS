@@ -11,12 +11,15 @@ import {
   IconEvent, IconDiamond, IconFlame, IconCamera, IconCourse, IconChev, SBolt, STarget, SBrain,
 } from './SidebarIcons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useChallengeDay } from '../../lib/challengeDay';
 import { LEADERCHECK_URL } from '../../lib/domains';
 
 // Iter 92.34 (Mert Go-Live §C): items locked for Free tier — render with 🔒
 // icon and redirect to /coaching (upgrade page) when clicked.
+// Entscheidung Iter 185 (3a): /tasks ist offen — es zeigt nur eigene Aufgaben
+// und kostet keine KI-Leistung.
 const FREE_TIER_LOCKED = new Set([
-  '/simulations', '/playbooks', '/tasks', '/tools',
+  '/simulations', '/playbooks', '/tools',
   '/events',
 ]);
 
@@ -27,6 +30,8 @@ export const Sidebar = () => {
   const { user } = useAuth();
   const userTier = (user?.tier || 'free').toLowerCase();
   const isLockedPath = (path) => userTier === 'free' && FREE_TIER_LOCKED.has(path);
+  // Iter 185: Die 30-Tage-Herausforderung zeigt ihren Stand direkt im Menü.
+  const challengeDay = useChallengeDay();
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
@@ -37,7 +42,8 @@ export const Sidebar = () => {
       items: [
         { path: '/dashboard', label: t('nav.commandCenter'), icon: IconCommand },
         { path: '/video-guide', label: lang === 'de' ? 'Video-Guide' : 'Video Guide', icon: IconCamera },
-        { path: '/challenge', label: lang === 'de' ? '30-Tage Challenge' : '30-Day Challenge', icon: IconFlame },
+        { path: '/challenge', label: lang === 'de' ? '30-Tage Challenge' : '30-Day Challenge', icon: IconFlame,
+          badgeText: challengeDay ? `${lang === 'de' ? 'Tag' : 'Day'} ${challengeDay} / 30` : null },
         { path: '/daily-checkin', label: t('nav.dailyCheckin'), icon: IconPulse },
         { path: '/tasks', label: t('nav.tasks'), icon: IconClipboard },
         { path: '/chat', label: t('nav.aiCoach'), icon: IconBubble },
