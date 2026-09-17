@@ -54,11 +54,11 @@ export const Sidebar = () => {
       subLine: lang === 'de' ? 'Dein Coach — fragen, wann du willst' : 'Your coach — ask any time',
     },
     {
-      id: 'toolbox', label: lang === 'de' ? 'GODMODE & Leitfäden' : 'GODMODE & playbooks', icon: IconFlow,
-      hint: lang === 'de' ? 'Dein Werkzeugkasten für den Arbeitsalltag.' : 'Your toolbox for everyday work.',
+      id: 'toolbox', label: lang === 'de' ? 'Werkzeuge & Leitfäden' : 'Tools & playbooks', icon: IconFlow,
+      hint: lang === 'de' ? 'Fertige Vorlagen für deinen Arbeitsalltag.' : 'Ready-made templates for your working day.',
       defaultOpen: true,
       children: [
-        { path: '/tools', label: 'GODMODE', icon: IconFlow },
+        { path: '/tools', label: lang === 'de' ? 'Werkzeuge' : 'Tools', icon: IconFlow },
         { path: '/playbooks', label: lang === 'de' ? 'Leitfäden' : 'Playbooks', icon: IconLayers },
       ].map(withLock),
     },

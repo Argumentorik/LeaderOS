@@ -10,7 +10,7 @@ export const ToolsGrid = ({ tools, onSelectTool, onOpenDeepAssist, de }) => (
         <Wrench size={22} className="text-white" />
       </div>
       <div className="flex-1 min-w-[200px]">
-        <h1 className="text-2xl sm:text-3xl font-black tracking-tight">GODMODE</h1>
+        <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Werkzeuge' : 'Tools'}</h1>
         <p className="text-sm text-muted-foreground font-medium">{de ? 'Dein Werkzeugkasten für den Arbeitsalltag — Schritt für Schritt zum fertigen Ergebnis.' : 'Your toolbox for everyday work — step by step to a finished result.'}</p>
       </div>
       <Button

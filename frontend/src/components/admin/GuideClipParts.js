@@ -43,7 +43,7 @@ export const GuideGodmodeBadges = ({ clip }) => {
   return (
     <div className="rounded-lg border border-black/[0.06] dark:border-white/[0.08] p-2" data-testid={`guide-godmode-${clip.slug}`}>
       <p className={`text-[10px] font-black uppercase tracking-wider ${g.godmode ? 'text-emerald-500' : 'text-amber-500'}`}>
-        GODMODE-Check {g.passed}/{g.total} · Setting: {g.setting}
+        Qualitätsprüfung {g.passed}/{g.total} · Setting: {g.setting}
       </p>
       <div className="flex flex-wrap gap-1 mt-1">
         {g.items.map((it) => (

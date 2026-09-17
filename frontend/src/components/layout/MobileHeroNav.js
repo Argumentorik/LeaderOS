@@ -17,7 +17,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 const HERO_ITEMS = [
   { path: '/dashboard', icon: LayoutDashboard, label_de: 'Dashboard', label_en: 'Dashboard', testId: 'mobile-nav-dashboard' },
   { path: '/chat',      icon: MessagesSquare,  label_de: 'WladBot',   label_en: 'WladBot',   testId: 'mobile-nav-chat' },
-  { path: '/tools',     icon: Wrench,          label_de: 'GODMODE',   label_en: 'GODMODE',     testId: 'mobile-nav-tools' },
+  { path: '/tools',     icon: Wrench,          label_de: 'Werkzeuge', label_en: 'Tools',         testId: 'mobile-nav-tools' },
 ];
 
 const MORE_ITEMS = [

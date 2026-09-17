@@ -128,7 +128,7 @@ export default function VideoGuidePage() {
 
       {features.length > 0 && (
         <section className="mb-10" data-testid="video-guide-features">
-          <h2 className="text-base md:text-lg font-bold mb-1">{de ? 'So nutzt du GODMODE' : 'How to use GODMODE'}</h2>
+          <h2 className="text-base md:text-lg font-bold mb-1">{de ? 'So nutzt du die Werkzeuge' : 'How to use the tools'}</h2>
           <p className="text-[13px] text-muted-foreground mb-3">
             {de ? 'Kurz erklärt: Workflows, Challengers, Simulationen, Playbooks, Video-Analyse und die Pakete.'
                 : 'Short and clear: workflows, challengers, simulations, playbooks, video analysis and the packages.'}

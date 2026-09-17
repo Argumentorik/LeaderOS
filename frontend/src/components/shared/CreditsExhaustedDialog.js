@@ -22,7 +22,7 @@ const ACTION_LABELS = {
   simulation: { label: 'Gesprächs-Training', icon: Target },
   roleplay: { label: 'Challenger-Rollenspiele', icon: Mic },
   quiz: { label: 'Challenge-Aufgaben', icon: Target },
-  workflow: { label: 'GODMODE', icon: Wrench },
+  workflow: { label: 'Werkzeuge', icon: Wrench },
 };
 
 export const CreditsExhaustedDialog = ({ onClose, detail = null }) => {
