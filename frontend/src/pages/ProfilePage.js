@@ -32,16 +32,16 @@ const ACTION_ICONS = {
 };
 
 const LEVEL_META = {
-  'Teamplayer':           { color: '#64748B', next: 'Mentor',              threshold: 200,   min: 0 },
-  'Mentor':               { color: '#00AAFF', next: 'Kommunikator',        threshold: 500,   min: 200 },
-  'Kommunikator':         { color: '#FFB800', next: 'Strategischer Denker', threshold: 1000, min: 500 },
-  'Strategischer Denker': { color: '#FF4444', next: 'Visionär',            threshold: 2000,  min: 1000 },
+  'Teamplayer':           { color: '#BFFF00', next: 'Mentor',              threshold: 200,   min: 0 },
+  'Mentor':               { color: '#BFFF00', next: 'Kommunikator',        threshold: 500,   min: 200 },
+  'Kommunikator':         { color: '#BFFF00', next: 'Strategischer Denker', threshold: 1000, min: 500 },
+  'Strategischer Denker': { color: '#BFFF00', next: 'Visionär',            threshold: 2000,  min: 1000 },
   'Visionär':             { color: '#BFFF00', next: null,                  threshold: 99999, min: 2000 },
   // Legacy fallbacks (pre-migration users)
-  'Emerging Leader':      { color: '#64748B', next: 'Mentor',              threshold: 200,   min: 0 },
-  'Capable Leader':       { color: '#00AAFF', next: 'Kommunikator',        threshold: 500,   min: 200 },
-  'Confident Leader':     { color: '#FFB800', next: 'Strategischer Denker', threshold: 1000, min: 500 },
-  'Strategic Leader':     { color: '#FF4444', next: 'Visionär',            threshold: 2000,  min: 1000 },
+  'Emerging Leader':      { color: '#BFFF00', next: 'Mentor',              threshold: 200,   min: 0 },
+  'Capable Leader':       { color: '#BFFF00', next: 'Kommunikator',        threshold: 500,   min: 200 },
+  'Confident Leader':     { color: '#BFFF00', next: 'Strategischer Denker', threshold: 1000, min: 500 },
+  'Strategic Leader':     { color: '#BFFF00', next: 'Visionär',            threshold: 2000,  min: 1000 },
   'Visionary Leader':     { color: '#BFFF00', next: null,                  threshold: 99999, min: 2000 },
 };
 
@@ -251,7 +251,7 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
 // Main ProfilePage
 // ─────────────────────────────────────────────────────────────────────────
 
-const TIER_LABELS = { free: 'Free', standard: 'Leadership OS', accelerator: 'Leadership OS PLUS', enterprise: 'Enterprise' };
+const TIER_LABELS = { free: 'Kostenloser Zugang', standard: 'Leadership OS', accelerator: 'Leadership OS PLUS', enterprise: 'Enterprise' };
 
 export default function ProfilePage() {
   const { lang } = useLanguage();
@@ -346,18 +346,29 @@ export default function ProfilePage() {
           <div className="relative p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
             <ProfileAvatar picture={profile.picture} name={profile.name} onUpload={uploadPicture} uploading={uploading} />
             <div className="flex-1 min-w-0 text-white">
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#BFFF00]/12 border border-[#BFFF00]/25 text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">
-                  <Crown size={9} strokeWidth={2.8} />
-                  {TIER_LABELS[profile.tier] || TIER_LABELS.free} {joinedYears >= 1 ? `· ${joinedYears}+ ${de ? 'Jahre' : 'yrs'}` : ''}
-                </span>
-              </div>
+              {profile.tier && profile.tier !== 'free' && (
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#BFFF00]/12 border border-[#BFFF00]/25 text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]">
+                    <Crown size={9} strokeWidth={2.8} />
+                    {TIER_LABELS[profile.tier]} {joinedYears >= 1 ? `· ${joinedYears}+ ${de ? 'Jahre' : 'yrs'}` : ''}
+                  </span>
+                </div>
+              )}
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight truncate" data-testid="profile-name">{profile.name || 'Leader'}</h1>
               <p className="text-sm text-white/60 truncate">
                 {profile.position && `${profile.position}${profile.company ? ` · ${profile.company}` : ''}`}
                 {!profile.position && !profile.company && (de ? 'Position nicht gesetzt' : 'Position not set')}
               </p>
               {profile.bio && <p className="text-xs text-white/50 mt-2 italic">&ldquo;{profile.bio}&rdquo;</p>}
+              {/* Iter 186: Der Zugang steht im Konto, in normaler Sprache — nicht als Etikett am Namen. */}
+              <p className="text-[12px] text-white/50 mt-2" data-testid="profile-access-line">
+                {de ? 'Dein Zugang: ' : 'Your access: '}
+                <span className="font-semibold text-white/80">
+                  {profile.tier && profile.tier !== 'free'
+                    ? (profile.tier === 'accelerator' ? 'Leadership OS PLUS' : 'Leadership OS')
+                    : (de ? 'Kostenloser Zugang' : 'Free access')}
+                </span>
+              </p>
 
               <div className="flex items-center gap-2 mt-3 flex-wrap">
                 <Button size="sm" onClick={() => setEditing(!editing)} className="bg-white/10 hover:bg-white/15 text-white backdrop-blur border border-white/10 h-8 text-[11px]" data-testid="profile-edit-btn">
@@ -445,8 +456,8 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" data-testid="dimension-scores">
           {[
             { label: de ? 'Leadership' : 'Leadership', value: profile.leadership_score, color: '#BFFF00', icon: Crown },
-            { label: de ? 'Kommunikation' : 'Communication', value: profile.communication_score, color: '#00AAFF', icon: MessageCircle },
-            { label: 'EQ', value: profile.eq_score, color: '#FFB800', icon: Sparkles },
+            { label: de ? 'Kommunikation' : 'Communication', value: profile.communication_score, color: '#BFFF00', icon: MessageCircle },
+            { label: 'EQ', value: profile.eq_score, color: '#BFFF00', icon: Sparkles },
           ].map(d => (
             <Card key={d.label} className="group border-black/[0.04] dark:border-white/[0.06] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <CardContent className="p-4">

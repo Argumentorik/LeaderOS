@@ -126,7 +126,7 @@ export default function CoachingPage() {
   const faqs = getFaqs(de);
 
   const body = (
-    <div className={`p-6 lg:p-8 space-y-16 ${user ? 'max-w-5xl' : 'max-w-5xl mx-auto'}`} data-testid="coaching-page">
+    <div className={`p-6 lg:p-8 space-y-16 ${user ? 'xl:px-14 w-full' : 'max-w-[1400px] mx-auto'}`} data-testid="coaching-page">
 
         {/* ── 1€ LIVE-TEST ACTIVATION (Iter 92.59, code-gated) ── */}
         {testCode && (

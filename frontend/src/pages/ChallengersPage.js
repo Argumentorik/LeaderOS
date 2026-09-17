@@ -139,7 +139,7 @@ export default function ChallengersPage() {
       {!activeChallenge && !result && (
         <>
           <LoadingOverlay isOpen={starting} flow="challenger" de={de} />
-          <div className="px-6 pt-6 lg:px-10 max-w-4xl mx-auto w-full">
+          <div className="px-6 pt-6 lg:px-10 xl:px-14 w-full">
             <FeatureVideoSection slugs={CHALLENGER_CLIPS} de={de} />
           </div>
           <ChallengerCards challengers={challengers} passedIds={passedChallengers} de={de} starting={starting} onStart={startChallenge} />

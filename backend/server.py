@@ -196,6 +196,10 @@ app.include_router(unsubscribe_router)
 from routes.features import router as features_router  # noqa: E402
 app.include_router(features_router)
 
+# Leadership LAB: eigene Anmeldung in zwei Stufen (Iter 186)
+from routes.lab import router as lab_router  # noqa: E402
+app.include_router(lab_router)
+
 
 @app.get("/api/")
 async def root() -> dict[str, str]:
@@ -271,6 +275,16 @@ async def startup() -> None:
         _aio.get_event_loop().create_task(ensure_rag_ready())
     except Exception as e:
         logger.warning(f"Embedding preload deferred: {e}")
+
+    # Iter 186: Tages-Mails des 30-Tage-Programms laufen in der App selbst
+    # (7:00 deutsche Zeit, pro Tag einmal, gegen Doppelversand abgesichert).
+    try:
+        import asyncio as _aio2
+
+        from services_challenge_mailer import challenge_mail_loop
+        _aio2.create_task(challenge_mail_loop())
+    except Exception as e:
+        logger.warning(f"Tages-Mail-Schleife nicht gestartet: {e}")
 
     try:
         from routes.uploads import init_storage

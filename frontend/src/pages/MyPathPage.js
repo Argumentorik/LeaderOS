@@ -201,7 +201,7 @@ export default function MyPathPage() {
         </div>
       </div>
     }>
-      <div className="p-6 lg:p-8 max-w-5xl" data-testid="my-path-page">
+      <div className="p-6 lg:p-8 xl:px-14 w-full" data-testid="my-path-page">
         {/* Iter 92.28: Beratungs-Banner — tier-aware, fits naturally with the "Path" framing */}
         <div className="mb-6">
           <SmartConsultationBanner placement="mypath-top" />

@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from config import db
 from services import get_current_user
 from services_actions import record_user_action
+from challenge30_criteria import done_criteria, next_open_day, open_days, with_criteria
 from quiz_bank import QUIZ_BANK
 from quiz_quality import shuffle_options
 
@@ -93,15 +94,42 @@ async def get_challenge_status(request: Request):
         await db.challenge30_progress.insert_one(progress)
     start = datetime.fromisoformat(progress["started_at"].replace("Z", "+00:00")) if isinstance(progress["started_at"], str) else progress["started_at"]
     current_day = min((datetime.now(timezone.utc) - start).days + 1, 30)
+    completed = progress.get("completed_days", [])
+    # Iter 186: „Erledigt ist, wenn …", angefangene Tage und offene (verpasste)
+    # Tage gehören zum Stand — verpasst heißt nachholbar, nicht verloren.
     return {
-        "challenges": CHALLENGES,
-        "completed_days": progress.get("completed_days", []),
+        "challenges": with_criteria(CHALLENGES),
+        "completed_days": completed,
+        "started_days": sorted(progress.get("started_days", [])),
         "current_day": current_day,
+        "open_days": open_days(CHALLENGES, completed, current_day),
+        "next_open_day": next_open_day(CHALLENGES, completed, current_day),
         "total_xp_earned": progress.get("total_xp_earned", 0),
         "quiz_scores": progress.get("quiz_scores", {}),
         "started_at": progress.get("started_at"),
-        "is_complete": len(progress.get("completed_days", [])) >= 30,
+        "is_complete": len(completed) >= 30,
     }
+
+
+@router.post("/start/{day}")
+async def start_challenge_day(day: int, request: Request):
+    """Angefangen-aber-nicht-fertig ist ein eigener Zustand (Iter 186).
+
+    Tage, die in einen anderen Bereich führen, gelten NICHT beim Antippen als
+    erledigt — sie gelten als begonnen, bis die Arbeit dort getan ist.
+    """
+    user = await get_current_user(request)
+    entry = next((c for c in CHALLENGES if c["day"] == day), None)
+    if not entry:
+        raise HTTPException(status_code=404, detail="Challenge nicht gefunden")
+    await db.challenge30_progress.update_one(
+        {"user_id": user["user_id"]},
+        {"$addToSet": {"started_days": day},
+         "$setOnInsert": {"started_at": datetime.now(timezone.utc).isoformat(),
+                          "completed_days": [], "total_xp_earned": 0, "quiz_scores": {}}},
+        upsert=True,
+    )
+    return {"day": day, "started": True, "path": entry.get("path"), **done_criteria(entry)}
 
 
 @router.get("/quiz/{day}")
@@ -113,6 +141,7 @@ async def get_quiz(day: int, request: Request):
     if not challenge:
         raise HTTPException(status_code=404, detail="Challenge nicht gefunden")
     questions = get_quiz_for_day(day)
+    challenge = {**challenge, **done_criteria(challenge)}
     safe_questions = []
     for i, q in enumerate(questions):
         item = {"q": q["q"], "type": q.get("type", "mc")}

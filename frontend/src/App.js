@@ -49,6 +49,7 @@ const LeaderDiagnosePage = lazyWithRetry(() => import("./pages/LeaderDiagnosePag
 // Iter 92.29 (Mert): public Changelog drives curiosity & SEO ("build-in-public" surface).
 const ChangelogPage = lazyWithRetry(() => import("./pages/ChangelogPage"));
 const WhatIsWhatPage = lazyWithRetry(() => import("./pages/WhatIsWhatPage"));
+const LabPage = lazyWithRetry(() => import("./pages/LabPage"));
 const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
@@ -186,6 +187,8 @@ function AppRouter() {
         {/* Iter 185: Verkaufsseite ohne Login erreichbar (Suche + KI-Empfehlungen).
             Alte Adresse bleibt gültig und leitet weiter. */}
         <Route path="/leadership-programm" element={<CoachingPage />} />
+        {/* Leadership LAB: öffentlich erreichbar wie das Leadership-Programm (Iter 186) */}
+        <Route path="/leadership-lab" element={<LabPage />} />
         <Route path="/coaching" element={<Navigate to="/leadership-programm" replace />} />
         <Route path="/was-ist-was" element={<ProtectedRoute><WhatIsWhatPage /></ProtectedRoute>} />
         <Route path="/downloads" element={<ProtectedRoute><DownloadsPage /></ProtectedRoute>} />
@@ -205,8 +208,9 @@ function AppRouter() {
         <Route path="/business" element={<Navigate to="/for-teams" replace />} />
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
         <Route path="/video-guide" element={<ProtectedRoute><VideoGuidePage /></ProtectedRoute>} />
-        <Route path="/kurse" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
-        <Route path="/kurse/:slug" element={<ProtectedRoute><CourseDetailPage /></ProtectedRoute>} />
+        {/* Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto. */}
+        <Route path="/kurse" element={<CoursesPage />} />
+        <Route path="/kurse/:slug" element={<CourseDetailPage />} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />
         <Route path="/sicherheit" element={<TrustPage />} />

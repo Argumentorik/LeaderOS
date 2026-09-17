@@ -1,82 +1,43 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
-import { CourseCard } from '../components/courses/CourseCard';
-import { CourseHero, CategoryTiles, CourseFilters } from '../components/courses/CourseDiscovery';
-import { WhatsInside, MoreFromLeaderOS, CoursesUpsell } from '../components/courses/CourseSections';
-import { matchesStatus } from '../components/courses/courseMeta';
+import { useAuth } from '../contexts/AuthContext';
+import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { PublicPageShell } from '../components/layout/PublicPageShell';
+import { UniversityHero, LabBlock, Curriculum } from '../components/courses/Curriculum';
+import { WhatsInside, MoreFromLeaderOS } from '../components/courses/CourseSections';
 
 export default function CoursesPage() {
   const { lang } = useLanguage();
   const de = lang !== 'en';
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [data, setData] = useState(null);
-  const [category, setCategory] = useState('all');
-  const [status, setStatus] = useState('all');
-  const listRef = useRef(null);
 
   useEffect(() => {
     api.get('/courses').then((r) => setData(r.data)).catch((e) => logger.error('courses load failed', e));
   }, []);
 
   const courses = useMemo(() => data?.courses || [], [data]);
-  const counts = useMemo(() => courses.reduce((acc, c) => ({ ...acc, [c.category]: (acc[c.category] || 0) + 1 }), {}), [courses]);
-  const visible = courses.filter((c) => (category === 'all' || c.category === category) && matchesStatus(c, status));
 
-  const startFree = () => {
-    const c = courses.find((x) => x.seen_count === 0) || courses[0];
-    if (c) navigate(`/kurse/${c.slug}?folge=1`);
-  };
-  const pickCategory = (key) => { setCategory(key); listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-
-  return (
-    <div className="p-4 sm:p-8 xl:px-12 w-full max-w-[1600px] mx-auto" data-testid="courses-page">
-      {/* Iter 185: erklärt statt vorausgesetzt — zwei Sätze und ein klarer Startpunkt. */}
-      <div className="mb-6 rounded-2xl border border-black/[0.07] dark:border-white/[0.08] bg-white dark:bg-card p-5" data-testid="courses-intro">
-        <h1 className="text-xl md:text-2xl font-black tracking-tight">{de ? 'Kurse' : 'Courses'}</h1>
-        <p className="text-[13.5px] text-muted-foreground mt-1.5 leading-relaxed max-w-3xl">
-          {de
-            ? 'Das sind Videokurse von Wlad zu Führung, Rhetorik und Verhandlung. Eine Folge dauert unter 12 Minuten — du siehst sie, wann es passt, und kannst jederzeit aufhören.'
-            : 'These are Wlad’s video courses on leadership, rhetoric and negotiation. One episode takes under 12 minutes — watch whenever it fits.'}
-        </p>
-        <p className="text-[13.5px] text-muted-foreground mt-1.5 leading-relaxed max-w-3xl">
-          {de
-            ? 'Folge 1 jedes Kurses ist frei. Wenn du nicht weißt, wo du anfangen sollst: nimm den Vorschlag.'
-            : 'Episode 1 of each course is free. If you do not know where to start, take the suggestion.'}
-        </p>
-        <button type="button" onClick={startFree}
-                className="mt-3.5 inline-flex items-center gap-1.5 rounded-xl bg-[#BFFF00] px-4 py-2.5 text-[13px] font-black text-black transition-transform hover:-translate-y-0.5"
-                data-testid="courses-start-here-btn">
-          {de ? 'Hier starten' : 'Start here'}
-        </button>
-      </div>
-      <CourseHero de={de} total={data?.total_episodes || 72} seen={data?.seen_total || 0} onStart={startFree} onBrowse={() => listRef.current?.scrollIntoView({ behavior: 'smooth' })} />
+  const body = (
+    <div className="p-4 sm:p-8 xl:px-12 w-full" data-testid="courses-page">
+      <UniversityHero data={data} de={de} onSecure={() => navigate('/leadership-programm')} />
+      <LabBlock de={de} launch={data?.launch} />
       {!data ? (
-        <div className="mt-10 text-sm text-muted-foreground" data-testid="courses-loading">{de ? 'Lade Kurse…' : 'Loading…'}</div>
+        <div className="mt-10 text-sm text-muted-foreground" data-testid="courses-loading">{de ? 'Lade Studienplan…' : 'Loading…'}</div>
       ) : (
         <>
-          <CategoryTiles de={de} active={category} onPick={pickCategory} counts={counts} />
-          <section ref={listRef} className="mt-12 scroll-mt-6" data-testid="courses-list">
-            <div className="flex items-end justify-between gap-4 flex-wrap">
-              <h2 className="text-lg md:text-xl font-black">{de ? 'Alle Kurse' : 'All courses'}</h2>
-              <p className="text-[12px] text-muted-foreground" data-testid="courses-count">{visible.length} {de ? 'von' : 'of'} {courses.length}</p>
-            </div>
-            <CourseFilters de={de} category={category} status={status} onCategory={setCategory} onStatus={setStatus} />
-            {visible.length === 0 ? (
-              <p className="mt-8 text-sm text-muted-foreground" data-testid="courses-empty">{de ? 'Kein Kurs passt zu diesem Filter.' : 'No course matches this filter.'}</p>
-            ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
-                {visible.map((c) => <CourseCard key={c.slug} course={c} de={de} />)}
-              </div>
-            )}
-            <CoursesUpsell data={data} de={de} />
-          </section>
+          <Curriculum courses={courses} de={de} launch={data.launch} />
           <WhatsInside de={de} />
           <MoreFromLeaderOS de={de} />
         </>
       )}
     </div>
   );
+
+  if (!user) return <PublicPageShell>{body}</PublicPageShell>;
+  return <DashboardLayout>{body}</DashboardLayout>;
 }

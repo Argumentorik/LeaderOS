@@ -1,7 +1,9 @@
 """Leader-OS Kurs-Bibliothek (Drehbuch V01, Aufnahme durch Wlad).
 
-10 Kurse · 72 Folgen. Folge 1 jedes Kurses = FREE Preview. Kurse 1–6 = Tier standard (Leader-OS €997),
-Kurse 7–10 = Tier accelerator (Leadership OS PLUS). Videos werden nach der Aufnahme im Admin hochgeladen.
+10 Kurse · 72 Folgen — eine Universität, ein Kauf. Folge 1 jedes Kurses ist für
+jeden frei. Alle weiteren Folgen schalten für Käufer am Startdatum frei
+(`course_launch.py`). Ohne Kauf öffnet ein E-Mail-Tor die vorhandenen Folgen.
+Die Felder `tier` bleiben als Historie stehen, steuern aber keinen Zugang mehr.
 """
 
 STANDARD, PLUS = "standard", "accelerator"
@@ -199,18 +201,38 @@ def course_level(course: dict) -> str:
     return LEVELS[min(idx // 3, 2)]
 
 
-def course_view(course: dict, user_tier: str, videos: dict[str, dict]) -> dict:
-    """Kurs mit Freischalt-Status: Folge 1 immer frei, Rest ab Kurs-Tier. `videos` = {episode_id: {...}} aus der DB."""
-    unlocked_course = TIER_RANK.get(user_tier, 0) >= TIER_RANK[course["tier"]]
+def course_view(course: dict, user_tier: str, videos: dict[str, dict],
+                launched: bool | None = None, lead_ok: bool = False) -> dict:
+    """Kurs mit Freischalt-Status (Plan Iter 187).
+
+    Eine Universität, ein Kauf: Wer gekauft hat, bekommt ab dem Startdatum ALLE
+    10 Kurse — keine Staffelung nach Paketstufe mehr.
+
+    Pro Folge sagt `gate`, welche Barriere davor steht:
+      "none"   — läuft sofort (Folge 1 ist für jeden frei, Käufer ab Start alles)
+      "starts" — gekauft, aber der Start ist noch nicht da
+      "email"  — Vorname + E-Mail eintragen, dann läuft das Video
+    """
+    if launched is None:
+        from course_launch import is_launched
+        launched = is_launched()
+    has_access = TIER_RANK.get(user_tier, 0) >= TIER_RANK[STANDARD]
+    open_now = has_access and launched
     eps = []
     for i, e in enumerate(course["episodes"], start=1):
         ep_id = f"{course['slug']}-{i}"
         vid = videos.get(ep_id) or {}
+        if i == 1 or open_now:
+            gate, unlocked = "none", True
+        elif has_access:
+            gate, unlocked = "starts", False
+        else:
+            gate, unlocked = "email", lead_ok
         eps.append({
             "id": ep_id, "number": i, **e, "free_preview": i == 1,
-            "unlocked": i == 1 or unlocked_course,
-            "video_url": vid.get("video_url") if (i == 1 or unlocked_course) else None,
-            "vimeo_id": vid.get("vimeo_id") if (i == 1 or unlocked_course) else None,
+            "unlocked": unlocked, "gate": gate,
+            "video_url": vid.get("video_url") if unlocked else None,
+            "vimeo_id": vid.get("vimeo_id") if unlocked else None,
             "video_ready": bool(vid.get("video_url")),
             "video_updated_at": vid.get("updated_at"),
             "poster_url": (
@@ -221,12 +243,13 @@ def course_view(course: dict, user_tier: str, videos: dict[str, dict]) -> dict:
     first_url = eps[0]["video_url"] or ""
     return {
         "slug": course["slug"], "title": course["title"], "tagline": course["tagline"], "emoji": course["emoji"],
-        "tier": course["tier"], "tier_label": "Leadership OS" if course["tier"] == STANDARD else "Leadership OS PLUS",
+        "tier": course["tier"], "tier_label": "Leadership LAB",
         "category": COURSE_CATEGORY.get(course["slug"], "rhetorik"), "level": course_level(course),
         "thumbnail_url": f"/courses/{course['slug']}.jpg",
         # Hover-Vorschau nur für direkt streambare MP4s (unsere Storage-Route), nicht für Vimeo/YouTube-Links
         "preview_url": first_url if first_url.startswith("/api/") or first_url.endswith(".mp4") else None,
         "episode_count": len(eps), "minutes_total": sum(e["minutes"] for e in course["episodes"]),
-        "unlocked": unlocked_course, "videos_ready": sum(1 for e in eps if e["video_ready"]),
+        "unlocked": open_now, "has_access": has_access,
+        "videos_ready": sum(1 for e in eps if e["video_ready"]),
         "episodes": eps,
     }

@@ -86,7 +86,7 @@ export default function SimulationsPage() {
         {/* Hero */}
         <div className="relative overflow-hidden border-b border-black/[0.05] dark:border-white/[0.06]">
           <div className="absolute inset-0 bg-gradient-to-br from-[#BFFF00]/[0.06] via-transparent to-transparent pointer-events-none" />
-          <div className="relative max-w-4xl mx-auto px-6 py-14 sm:py-20">
+          <div className="relative w-full px-6 lg:px-12 py-14 sm:py-20">
             <Badge className="bg-[#BFFF00] text-[#0A0A0A] font-black text-[10px] tracking-wide mb-5 border-0" data-testid="sim-hero-badge">
               SEXIER · ARGUMENTATION PREP
             </Badge>
@@ -122,12 +122,12 @@ export default function SimulationsPage() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-6 pt-10">
+        <div className="w-full px-6 lg:px-12 pt-10">
           <FeatureVideoSection slugs={SIMULATION_CLIPS} de={de} />
         </div>
 
         {/* How it works */}
-        <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16">
+        <div className="w-full px-6 lg:px-12 py-12 sm:py-16">
           <div className="mb-8">
             <h2 className="text-lg sm:text-xl font-black mb-1">{de ? 'So läuft es ab' : 'How it works'}</h2>
             <p className="text-[13px] text-muted-foreground">{de ? 'Vier Schritte, keine Fragebögen-Hölle.' : 'Four steps, no survey hell.'}</p>
@@ -153,7 +153,7 @@ export default function SimulationsPage() {
           <div className="mt-14">
             <h2 className="text-lg sm:text-xl font-black mb-1">{de ? 'Wofür Führungskräfte es nutzen' : 'What leaders use it for'}</h2>
             <p className="text-[13px] text-muted-foreground mb-6">{de ? 'Alles, was mehr ist als „mal eben ein Meeting".' : 'Anything more than "just another meeting".'}</p>
-            <div className="grid sm:grid-cols-2 gap-3">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
               {USE_CASES.map((u, i) => {
                 const Icon = u.icon;
                 return (

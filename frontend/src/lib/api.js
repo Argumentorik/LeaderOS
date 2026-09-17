@@ -23,8 +23,10 @@ export const API_BASE = (IS_LOCAL_DEV && RAW_BACKEND_URL && RAW_BACKEND_URL !== 
  * diesen Seiten darf niemals hart zum Anmeldeformular umleiten.
  */
 export const PUBLIC_PATHS = [
-  '/', '/leadership-programm', '/coaching', '/for-teams', '/teams', '/business',
+  '/', '/leadership-programm', '/leadership-lab', '/coaching', '/for-teams', '/teams', '/business',
   '/impressum', '/datenschutz', '/agb', '/widerruf', '/changelog', '/kurse-uebersicht',
+  // Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto.
+  '/kurse',
 ];
 
 /**

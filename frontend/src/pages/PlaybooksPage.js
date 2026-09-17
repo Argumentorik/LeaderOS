@@ -153,7 +153,7 @@ export default function PlaybooksPage() {
   if (!activePlaybook) {
     return (
       <DashboardLayout>
-        <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-6 bg-gradient-mesh min-h-screen" data-testid="playbooks-page">
+        <div className="p-6 lg:p-10 xl:px-14 w-full space-y-6 bg-gradient-mesh min-h-screen" data-testid="playbooks-page">
           <div className="flex items-center gap-4 animate-fade-in">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/15">
               <BookOpen size={22} className="text-white" />
@@ -166,7 +166,7 @@ export default function PlaybooksPage() {
 
           <FeatureVideoSection slugs={PLAYBOOK_CLIPS} de={de} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in stagger-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 animate-fade-in stagger-1">
             {playbooks.map((pb) => (
               <PlaybookListCard key={pb.playbook_id} pb={pb} onStart={startPlaybook} loading={loading} de={de} />
             ))}

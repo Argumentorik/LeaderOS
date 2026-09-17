@@ -21,7 +21,7 @@ export default function CommunityPage() {
     <DashboardLayout>
       <div className="relative min-h-[80vh]" data-testid="community-page-wrapper">
         {/* Blurred backdrop so the overlay feels grounded on real UI */}
-        <div className="p-6 lg:p-10 max-w-6xl mx-auto pointer-events-none select-none" data-testid="community-page" aria-hidden>
+        <div className="p-6 lg:p-10 xl:px-14 w-full pointer-events-none select-none" data-testid="community-page" aria-hidden>
           <div className="mb-8 opacity-40">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20">

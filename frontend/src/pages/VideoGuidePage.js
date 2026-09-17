@@ -92,7 +92,7 @@ export default function VideoGuidePage() {
 
   return (
     <DashboardLayout>
-    <div className="p-6 lg:p-10 max-w-6xl mx-auto min-h-screen" data-testid="video-guide-page">
+    <div className="p-6 lg:p-10 xl:px-14 w-full min-h-screen" data-testid="video-guide-page">
       <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#5a7a00] dark:text-[#BFFF00] flex items-center gap-1.5"><Clapperboard size={12} />{de ? 'Video-Guide' : 'Video guide'}</p>
@@ -113,14 +113,14 @@ export default function VideoGuidePage() {
       )}
 
       {!loaded && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3" data-testid="video-guide-loading">{[0, 1, 2, 3, 4].map((i) => <TileSkeleton key={i} />)}</div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 gap-3" data-testid="video-guide-loading">{[0, 1, 2, 3, 4].map((i) => <TileSkeleton key={i} />)}</div>
       )}
       {loaded && !clips.length && <p className="text-sm text-muted-foreground" data-testid="video-guide-empty">{de ? 'Noch keine Clips freigegeben.' : 'No clips published yet.'}</p>}
 
       {onboarding.length > 0 && (
         <section className="mb-10" data-testid="video-guide-onboarding">
           <h2 className="text-base md:text-lg font-bold mb-3">{de ? 'Erststart-Serie' : 'Getting started'}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 gap-3">
             {onboarding.map((c, i) => <ClipTile key={c.slug} clip={c} index={`${de ? 'Clip' : 'Clip'} ${i + 1}`} active={active?.slug === c.slug} onSelect={select} />)}
           </div>
         </section>
@@ -133,7 +133,7 @@ export default function VideoGuidePage() {
             {de ? 'Kurz erklärt: Workflows, Challengers, Simulationen, Playbooks, Video-Analyse und die Pakete.'
                 : 'Short and clear: workflows, challengers, simulations, playbooks, video analysis and the packages.'}
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 gap-3">
             {features.map((c) => <ClipTile key={c.slug} clip={c} index={de ? 'Funktion' : 'Feature'} active={active?.slug === c.slug} onSelect={select} />)}
           </div>
         </section>

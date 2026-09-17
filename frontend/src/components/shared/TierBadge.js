@@ -44,9 +44,12 @@ const CONFIG = {
  * TierBadge — shows user's current tier.
  * Variants: 'full' (icon+label), 'compact' (icon only), 'pill' (default)
  */
-export const TierBadge = ({ variant = 'pill', size = 'sm', showLabel = true }) => {
+export const TierBadge = ({ variant = 'pill', size = 'sm', showLabel = true, showFree = false }) => {
   const { tier, isFree, inGracePeriod } = useTier();
   const { user } = useAuth();
+  // Iter 186: Niemand trägt ein Etikett vor sich her. „Kostenloser Zugang"
+  // steht im Konto (Einstellungen), nicht am Namen.
+  if (isFree && !user?.masterclass && !showFree) return null;
   const isMasterclass = Boolean(user?.masterclass) && (tier === 'free' || !tier);
   const cfg = isMasterclass ? CONFIG.masterclass : (CONFIG[tier] || CONFIG.free);
   const Icon = cfg.icon;

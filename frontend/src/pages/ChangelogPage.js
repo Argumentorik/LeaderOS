@@ -45,7 +45,7 @@ const ENTRIES = [
     date: '1. Juli 2026',
     version: 'v92.49',
     tag: 'SHIP',
-    title: 'Godmode Design-Pass: WladBot überall, Speed-Hybrid & Premium Lock-Popups',
+    title: 'Design-Durchgang: WladBot überall, schnellere Antworten und klarere Hinweise',
     bullets: [
       'WladBot-Avatar jetzt im Chat, in jeder E-Mail und bei den Challengers — ein Gesicht, eine Stimme, überall.',
       'Hybrid AI-Routing: kurze Fragen in unter 2 Sekunden beantwortet, tiefe Fragen mit vollem RAG-Kontext.',

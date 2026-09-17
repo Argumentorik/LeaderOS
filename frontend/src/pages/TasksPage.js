@@ -141,7 +141,7 @@ export default function TasksPage() {
 
   return (
     <DashboardLayout rightPanel={<RightPanel />}>
-      <div className="p-6 lg:p-8 space-y-6 max-w-4xl" data-testid="tasks-page">
+      <div className="p-6 lg:p-8 xl:px-14 space-y-6 w-full" data-testid="tasks-page">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">

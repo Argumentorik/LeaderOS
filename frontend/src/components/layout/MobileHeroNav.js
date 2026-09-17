@@ -8,25 +8,29 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  MessagesSquare, Video, TrendingUp, Menu, X,
-  LayoutDashboard, Flame, Swords, Target, CheckSquare, Users, UserRound,
+  MessagesSquare, Video, TrendingUp, Menu, X, Wrench, BookOpen, GraduationCap, CalendarDays,
+  LayoutDashboard, Flame, Swords, Target, Users, UserRound,
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
+// Plan Iter 187: dieselben vier Anker wie am Rechner — Rest liegt unter „Mehr".
 const HERO_ITEMS = [
-  { path: '/chat',      icon: MessagesSquare, label_de: 'WladBot',     label_en: 'WladBot',  testId: 'mobile-nav-chat' },
-  { path: '/coaching',  icon: Video,          label_de: 'Video',       label_en: 'Video',    testId: 'mobile-nav-video' },
-  { path: '/my-path',   icon: TrendingUp,     label_de: 'Fortschritt', label_en: 'Progress', testId: 'mobile-nav-progress' },
+  { path: '/dashboard', icon: LayoutDashboard, label_de: 'Dashboard', label_en: 'Dashboard', testId: 'mobile-nav-dashboard' },
+  { path: '/chat',      icon: MessagesSquare,  label_de: 'WladBot',   label_en: 'WladBot',   testId: 'mobile-nav-chat' },
+  { path: '/tools',     icon: Wrench,          label_de: 'Werkzeuge', label_en: 'Tools',     testId: 'mobile-nav-tools' },
 ];
 
 const MORE_ITEMS = [
-  { path: '/dashboard',    icon: LayoutDashboard, label_de: 'Dashboard',         label_en: 'Dashboard' },
-  { path: '/challenge',    icon: Flame,           label_de: '30-Tage Challenge', label_en: '30-Day Challenge' },
-  { path: '/challengers',  icon: Swords,          label_de: 'Challengers',       label_en: 'Challengers' },
-  { path: '/simulations',  icon: Target,          label_de: 'Simulationen',      label_en: 'Simulations' },
-  { path: '/tasks',        icon: CheckSquare,     label_de: 'Aufgaben',          label_en: 'Tasks' },
-  { path: '/community',    icon: Users,           label_de: 'Community',         label_en: 'Community' },
-  { path: '/profile',      icon: UserRound,       label_de: 'Profil',            label_en: 'Profile' },
+  { path: '/simulations',  icon: Target,          label_de: 'Gesprächs-Training', label_en: 'Conversation training' },
+  { path: '/challengers',  icon: Swords,          label_de: 'Challengers',        label_en: 'Challengers' },
+  { path: '/missions',     icon: Video,           label_de: 'Video-Analyse',      label_en: 'Video analysis' },
+  { path: '/playbooks',    icon: BookOpen,        label_de: 'Leitfäden',          label_en: 'Playbooks' },
+  { path: '/kurse',        icon: GraduationCap,   label_de: 'Kurse (72 Folgen)',  label_en: 'Courses (72 episodes)' },
+  { path: '/challenge',    icon: Flame,           label_de: '30-Tage-Programm',   label_en: '30-day program' },
+  { path: '/events',       icon: CalendarDays,    label_de: 'Live-Events',        label_en: 'Live events' },
+  { path: '/my-path',      icon: TrendingUp,      label_de: 'Mein Fortschritt',   label_en: 'My progress' },
+  { path: '/community',    icon: Users,           label_de: 'Community',          label_en: 'Community' },
+  { path: '/profile',      icon: UserRound,       label_de: 'Einstellungen',      label_en: 'Settings' },
 ];
 
 export function MobileHeroNav() {

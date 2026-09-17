@@ -4,7 +4,7 @@ import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import {
   ArrowRight, Calendar, CheckCircle2, Clock, Flame, MessageSquareText,
-  Play, Plus, BookOpen, User, Sparkles, Video, Lock,
+  Play, Plus, BookOpen, User, Sparkles, Video, Lock, GraduationCap,
 } from 'lucide-react';
 import api from '../../../lib/api';
 import logger from '../../../lib/logger';
@@ -29,27 +29,35 @@ export const Section = ({ id, title, hint, action, children }) => (
   </section>
 );
 
-export const TodayHeader = ({ name, greeting, day, total, de }) => {
+export const TodayHeader = ({ name, greeting, day, total, de, portrait }) => {
   const today = new Date().toLocaleDateString(de ? 'de-DE' : 'en-US', {
     weekday: 'long', day: 'numeric', month: 'long',
   });
   return (
-    <div className="mb-8" data-testid="home-today-header">
-      <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{today}</p>
-      <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">
-        {greeting}, {name || 'Leader'}
-      </h1>
-      {day ? (
-        <p className="text-[13px] text-muted-foreground mt-1.5 inline-flex items-center gap-1.5" data-testid="home-day-counter">
-          <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
-          {de ? `Tag ${day} von ${total}` : `Day ${day} of ${total}`} · {de ? '30-Tage-Programm' : '30-day program'}
-        </p>
-      ) : null}
+    <div className="mb-8 flex items-start gap-4 sm:gap-5" data-testid="home-today-header">
+      {/* Plan Iter 187: ein echtes Standbild aus Wlads Videos — kein erzeugtes Bild. */}
+      {portrait && (
+        <img src={portrait} alt="Wlad" loading="lazy"
+             className="hidden sm:block w-[86px] h-[86px] rounded-2xl object-cover object-[50%_18%] shrink-0 ring-1 ring-black/[0.06] dark:ring-white/[0.08]"
+             data-testid="home-wlad-portrait" />
+      )}
+      <div className="min-w-0">
+        <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{today}</p>
+        <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">
+          {greeting}, {name || 'Leader'}
+        </h1>
+        {day ? (
+          <p className="text-[13px] text-muted-foreground mt-1.5 inline-flex items-center gap-1.5" data-testid="home-day-counter">
+            <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+            {de ? `Tag ${day} von ${total}` : `Day ${day} of ${total}`} · {de ? '30-Tage-Programm' : '30-day program'}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 };
 
-export const TodayTaskCard = ({ task, de, navigate }) => {
+export const TodayTaskCard = ({ task, de, navigate, onStart, openCount = 0 }) => {
   if (!task) {
     return (
       <Card data-testid="home-task-empty"><CardContent className="p-5">
@@ -65,6 +73,12 @@ export const TodayTaskCard = ({ task, de, navigate }) => {
   }
   const title = de ? task.title_de : (task.title_en || task.title_de);
   const desc = de ? task.desc_de : (task.desc_en || task.desc_de);
+  const doneText = de ? task.done_de : (task.done_en || task.done_de);
+  const started = Boolean(task.started) && !task.done;
+  const go = () => {
+    onStart?.(task.day);
+    navigate(task.path || '/challenge');
+  };
   return (
     <Card className="bg-[#0A0A0A] text-white border-0 overflow-hidden" data-testid="home-task-card">
       <CardContent className="p-6">
@@ -76,8 +90,23 @@ export const TodayTaskCard = ({ task, de, navigate }) => {
             <h3 className="text-lg font-black mt-1 leading-snug">{title}</h3>
             <p className="text-[13.5px] text-white/60 mt-1.5 leading-relaxed">{desc}</p>
             <p className="text-[11.5px] text-white/40 mt-2 inline-flex items-center gap-1.5">
-              <Clock size={11} /> {task.duration || '10 Min'} · {task.xp ? `+${task.xp} XP` : ''}
+              <Clock size={11} /> {task.duration || '10 Min'}{started ? (de ? ' · begonnen' : ' · started') : ''}
             </p>
+            {doneText && (
+              <div className="mt-3 rounded-xl bg-white/[0.06] border border-white/[0.08] px-3.5 py-2.5" data-testid="home-task-done-criteria">
+                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]/70">
+                  {de ? 'Erledigt ist, wenn' : 'Done when'}
+                </p>
+                <p className="text-[13px] text-white/80 mt-1 leading-relaxed">{doneText}</p>
+              </div>
+            )}
+            {openCount > 1 && (
+              <p className="text-[12px] text-white/45 mt-2.5" data-testid="home-task-open-hint">
+                {de
+                  ? `${openCount} Aufgaben liegen noch offen — nichts ist verloren, du holst sie in Ruhe nach.`
+                  : `${openCount} tasks are still open — nothing is lost, catch up at your pace.`}
+              </p>
+            )}
           </div>
           <div className="shrink-0">
             {task.done ? (
@@ -85,8 +114,9 @@ export const TodayTaskCard = ({ task, de, navigate }) => {
                 <CheckCircle2 size={14} className="mr-1.5 text-[#BFFF00]" /> {de ? 'Nächste Aufgabe ansehen' : 'See next task'}
               </Button>
             ) : (
-              <Button onClick={() => navigate(task.path || '/challenge')} className="bg-[#BFFF00] text-black hover:bg-[#D4FF4D] font-black h-11 px-5 w-full sm:w-auto" data-testid="home-task-open-btn">
-                <Play size={14} className="mr-1.5" /> {de ? 'Jetzt machen' : 'Do it now'}
+              <Button onClick={go} className="bg-[#BFFF00] text-black hover:bg-[#D4FF4D] font-black h-11 px-5 w-full sm:w-auto" data-testid="home-task-open-btn">
+                <Play size={14} className="mr-1.5" />
+                {started ? (de ? 'Weitermachen' : 'Continue') : (de ? 'Jetzt machen' : 'Do it now')}
               </Button>
             )}
           </div>
@@ -125,7 +155,7 @@ const EXAMPLE_QUESTIONS_EN = [
   'My team is not pulling together — where do I start?',
 ];
 
-export const AskCoachCard = ({ de, navigate }) => {
+export const AskCoachCard = ({ de, navigate, portrait }) => {
   const [text, setText] = useState('');
   const { blocked, hint } = useCreditCost('chat');
   const go = (question) => {
@@ -136,6 +166,16 @@ export const AskCoachCard = ({ de, navigate }) => {
   const examples = de ? EXAMPLE_QUESTIONS_DE : EXAMPLE_QUESTIONS_EN;
   return (
     <Card data-testid="home-ask-coach"><CardContent className="p-5 space-y-3">
+      {portrait && (
+        <div className="flex items-center gap-3">
+          <img src={portrait} alt="Wlad" loading="lazy"
+               className="w-11 h-11 rounded-full object-cover object-top ring-1 ring-black/[0.06] dark:ring-white/[0.08]"
+               data-testid="home-coach-portrait" />
+          <p className="text-[12.5px] text-muted-foreground leading-snug">
+            {de ? 'Wlad antwortet dir — in seinen Worten, mit seinen Methoden.' : 'Wlad answers you — in his words, with his methods.'}
+          </p>
+        </div>
+      )}
       <div className="flex gap-2">
         <Input
           value={text}
@@ -311,5 +351,21 @@ export const ProgressLine = ({ levelName, daysIn, videosSeen, eventsAttended, de
         </span>
       )}
     </div>
+  </CardContent></Card>
+);
+
+export const LabCard = ({ enrolled, de, navigate }) => (
+  <Card data-testid="home-lab-card"><CardContent className="p-5 space-y-2.5">
+    <p className="text-[13.5px] font-bold inline-flex items-center gap-2">
+      <GraduationCap size={15} className="text-[#4A6200] dark:text-[#BFFF00]" /> Leadership LAB
+    </p>
+    <p className="text-[13px] text-muted-foreground leading-relaxed">
+      {enrolled
+        ? (de ? 'Du bist angemeldet. Deine Gruppe und die Live-Termine stehen im LAB.' : 'You are enrolled. Your group and live calls are in the LAB.')
+        : (de ? '72 Folgen, Live-Calls mit Begleitung und ein Coach, der deine Lage kennt — der Schritt nach den 30 Tagen.' : '72 episodes, guided live calls and a coach who knows your situation — the step after the 30 days.')}
+    </p>
+    <Button size="sm" onClick={() => navigate('/leadership-lab')} className="h-9 text-[12px] bg-[#0A0A0A] dark:bg-white dark:text-black text-white font-bold" data-testid="home-lab-btn">
+      {enrolled ? (de ? 'Zum LAB' : 'To the LAB') : (de ? 'LAB ansehen' : 'See the LAB')} <ArrowRight size={12} className="ml-1" />
+    </Button>
   </CardContent></Card>
 );

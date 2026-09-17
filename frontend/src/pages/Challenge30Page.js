@@ -107,7 +107,7 @@ export default function Challenge30Page() {
     navigate(path);
   };
 
-  if (loading) return <DashboardLayout><div className="px-5 py-6 sm:px-8 lg:px-12 lg:py-10"><div className="mx-auto w-full max-w-[1700px] space-y-3">{[1,2,3,4].map(i => <div key={`sk-${i}`} className="h-20 rounded-xl skeleton-pulse" />)}</div></div></DashboardLayout>;
+  if (loading) return <DashboardLayout><div className="px-5 py-6 sm:px-8 lg:px-12 lg:py-10"><div className="w-full space-y-3">{[1,2,3,4].map(i => <div key={`sk-${i}`} className="h-20 rounded-xl skeleton-pulse" />)}</div></div></DashboardLayout>;
 
   const challenges = data?.challenges || [];
   const completed = new Set(data?.completed_days || []);
@@ -138,7 +138,7 @@ export default function Challenge30Page() {
   return (
     <DashboardLayout>
       <div className="min-h-screen w-full px-5 py-6 sm:px-8 lg:px-12 lg:py-10" data-testid="challenge30-page">
-        <div className="mx-auto w-full max-w-[1700px]">
+        <div className="w-full">
 
           {/* ── Hero: volle Breite, Zahlen rechts ── */}
           <div className="relative mb-8 overflow-hidden rounded-3xl animate-fade-in" style={{ background: '#0A0A0A' }}>

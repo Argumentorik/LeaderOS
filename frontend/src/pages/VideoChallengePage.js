@@ -268,7 +268,7 @@ export default function VideoChallengePage() {
 
         {/* w-full: mx-auto schaltet in der Spalte (Handy) das Strecken ab — ohne w-full wird
             die Spalte max-content breit (489 px) und der Inhalt läuft aus dem Bild. */}
-        <div className="flex-1 min-w-0 w-full p-6 lg:p-10 max-w-4xl mx-auto bg-gradient-mesh" data-testid="video-challenge-page">
+        <div className="flex-1 min-w-0 w-full p-6 lg:p-10 xl:px-14 bg-gradient-mesh" data-testid="video-challenge-page">
           {showUpsell && <VideoUpsellModal onClose={() => setShowUpsell(false)} lang={lang} />}
           <div className="mb-5">
             <SmartConsultationBanner placement="missions-top" compact />

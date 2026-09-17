@@ -64,7 +64,7 @@ export default function DailyCheckinPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-3xl mx-auto space-y-6 bg-gradient-mesh min-h-screen" data-testid="daily-checkin-page">
+      <div className="p-6 lg:p-10 xl:px-14 w-full space-y-6 bg-gradient-mesh min-h-screen" data-testid="daily-checkin-page">
         {/* Header */}
         <div className="animate-fade-in">
           <div className="flex items-center gap-4 mb-2">

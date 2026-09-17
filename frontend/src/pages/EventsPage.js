@@ -95,7 +95,7 @@ export default function EventsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-6xl mx-auto min-h-screen" data-testid="events-page">
+      <div className="p-6 lg:p-10 xl:px-14 w-full min-h-screen" data-testid="events-page">
         {/* Event Detail Modal */}
         {selectedEvent && (
           <EventDetailModal
@@ -184,7 +184,7 @@ export default function EventsPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
             {[1,2,3,4,5,6].map(i => (
               <div key={`sk-${i}`} className="h-52 rounded-2xl skeleton-pulse" />
             ))}
@@ -225,7 +225,7 @@ export default function EventsPage() {
                     ))}
                   </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
                   {(activeTab === 'live' ? regular : events.filter(e => !e.featured)).map(event => (
                     <EventCard key={event.event_id} event={event} de={de} onClick={() => setSelectedEvent(event)} />
                   ))}

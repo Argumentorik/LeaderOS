@@ -21,7 +21,7 @@ import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour'
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import {
   Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard,
-  QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine,
+  QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine, LabCard,
 } from '../components/dashboard/home/HomeSections';
 import api from '../lib/api';
 import { loadDashboardBootstrap } from '../lib/dashboardBootstrap';
@@ -85,6 +85,10 @@ export default function DashboardPage() {
     loadDashboard();
   }, [loadDashboard]);
 
+  // Plan Iter 187: Wlads Gesicht kommt aus einem bereits produzierten Video —
+  // ein Standbild, kein erzeugtes Bild.
+  const wladPortrait = (bundle?.guide_clips?.clips || []).find((c) => c.poster_url)?.poster_url || null;
+
   const getGreeting = () => {
     const h = new Date().getHours();
     if (h < 12) return de ? 'Guten Morgen' : 'Good Morning';
@@ -122,11 +126,13 @@ export default function DashboardPage() {
   const memberSince = ud.member_since || ud.created_at;
   const daysIn = memberSince ? Math.max(1, Math.round((Date.now() - new Date(memberSince).getTime()) / 86400000)) : 1;
   const aboutComplete = aboutDone || Boolean(ud.position && ud.team_size && ud.current_goal);
+  const challengeComplete = (todayTask?.completed_count || 0) >= 30;
+  const labEnrolled = Boolean(bundle?.lab_enrolled);
 
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="p-6 lg:p-10 max-w-6xl mx-auto" data-testid="dashboard-loading">
+        <div className="p-6 lg:p-10 xl:px-14 w-full" data-testid="dashboard-loading">
           <div className="space-y-4">{[1,2,3,4].map(i => <div key={`sk-${i}`} className="h-28 rounded-2xl skeleton-pulse" />)}</div>
         </div>
       </DashboardLayout>
@@ -136,13 +142,13 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       {/* pb-28: Platz für Support-Widget/Feedback-Hinweis unten rechts (Iter 185) */}
-      <div className="p-6 lg:p-10 pb-28 max-w-5xl mx-auto min-h-screen cascade" data-testid="dashboard-page">
+      <div className="p-6 lg:p-10 xl:px-14 pb-28 w-full min-h-screen cascade" data-testid="dashboard-page">
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
         <OnboardingVideoModal />
 
         {/* ── 1 · Datum und Stand (Iter 185) ── */}
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} />
+          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} portrait={wladPortrait} />
           <div className="flex items-center gap-2 flex-wrap pt-1">
             <TierBadge size="sm" />
             <CreditBadge de={de} />
@@ -160,7 +166,9 @@ export default function DashboardPage() {
         {/* ── 2 · Die Aufgabe für heute ── */}
         <Section id="task" title={de ? 'Die Aufgabe für heute' : "Today's task"}
                  hint={de ? 'Eine Übung aus dem 30-Tage-Programm — kurz, konkret, für heute.' : 'One exercise from the 30-day program — short and concrete.'}>
-          <TodayTaskCard task={todayTask} de={de} navigate={navigate} />
+          <TodayTaskCard task={todayTask} de={de} navigate={navigate}
+                         openCount={todayTask?.open_count || 0}
+                         onStart={(day) => api.post(`/challenge30/start/${day}`).catch(() => {})} />
         </Section>
 
         {/* ── 3 · Check-in ── */}
@@ -172,8 +180,16 @@ export default function DashboardPage() {
         {/* ── 4 · Frag deinen Coach ── */}
         <Section id="coach" title={de ? 'Frag deinen Coach' : 'Ask your coach'}
                  hint={de ? 'WladBot antwortet auf deine Führungsfragen — mit Wlads Material und deinem Kontext.' : 'WladBot answers your leadership questions — from Wlad’s material and your context.'}>
-          <AskCoachCard de={de} navigate={navigate} />
+          <AskCoachCard de={de} navigate={navigate} portrait={wladPortrait} />
         </Section>
+
+        {/* ── 4b · Leadership LAB: erst nach den 30 Tagen der „nächste Schritt" (Iter 186) ── */}
+        {(challengeComplete || labEnrolled) && (
+          <Section id="lab" title="Leadership LAB"
+                   hint={de ? 'Die Weiterbildung nach dem Einstieg: Kurse, Live-Calls, eigene Anmeldung.' : 'The programme after the intro: courses, live calls, own enrolment.'}>
+            <LabCard enrolled={labEnrolled} de={de} navigate={navigate} />
+          </Section>
+        )}
 
         {/* ── 5 · Kurse ── */}
         <Section id="courses" title={de ? 'Kurse' : 'Courses'}

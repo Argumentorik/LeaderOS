@@ -133,7 +133,7 @@ export default function ToolsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-4xl mx-auto bg-gradient-mesh min-h-screen" data-testid="tools-page">
+      <div className="p-6 lg:p-10 xl:px-14 w-full bg-gradient-mesh min-h-screen" data-testid="tools-page">
         {showUpsell && <ToolsUpsellModal onClose={() => setShowUpsell(false)} de={de} />}
 
         {!activeTool && (

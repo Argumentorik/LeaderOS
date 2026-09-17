@@ -184,8 +184,12 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
     # Check-in und Kurs-Stand kommen im selben Zug mit.
     today_task = None
     if c30_status:
-        day = int(c30_status.get("current_day") or 1)
-        entry = next((c for c in CHALLENGES if c.get("day") == day), None)
+        # Iter 186 (Entscheidung 8a): die nächste OFFENE Aufgabe in der Reihenfolge.
+        day = int(c30_status.get("next_open_day") or c30_status.get("current_day") or 1)
+        from challenge30_criteria import done_criteria
+    entry = next((c for c in CHALLENGES if c.get("day") == day), None)
+    if entry:
+        entry = {**entry, **done_criteria(entry)}
         if entry:
             today_task = {
                 "day": day, "total": 30,
@@ -193,14 +197,17 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
                 "desc_de": entry.get("desc_de"), "desc_en": entry.get("desc_en"),
                 "duration": entry.get("duration"), "path": entry.get("path"),
                 "type": entry.get("type"), "xp": entry.get("xp"),
+                "done_de": entry.get("done_de"), "done_en": entry.get("done_en"),
+                "started": day in (c30_status.get("started_days") or []),
+                "open_count": len(c30_status.get("open_days") or []),
                 "done": day in (c30_status.get("completed_days") or []),
-                "started": bool(c30_status.get("completed_days")),
                 "completed_count": len(c30_status.get("completed_days") or []),
             }
     payload = {
         "dashboard": dashboard, "referral": referral, "events_reminders": reminders, "events_live": events_live,
         "my_path_videos": videos, "guide_clips": clips, "folders": folders, "journey": journey,
         "challenge_today": today_task,
+        "lab_enrolled": bool(await db.lab_enrollments.find_one({"user_id": user["user_id"]}, {"_id": 1})),
         "checkin_today": checkin_today,
         "courses_status": ({
             "tier": courses.get("tier"),

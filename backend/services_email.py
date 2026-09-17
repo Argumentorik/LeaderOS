@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
 BRAND_NAME = "WladBot"
+# Absender-Name im Postfach (Wunsch Stefan): "Wlad von Leader OS"
+SENDER_NAME = os.environ.get("SENDER_NAME", "Wlad von Leader OS")
 BRAND_COLOR = "#BFFF00"
 BRAND_DARK = "#0A0A0A"
 
@@ -150,7 +152,7 @@ async def send_email(
         return {"sent": False, "email_id": None, "error": f"blocked:{reason}", "attempts": 0}
 
     params = {
-        "from": from_email or f"{BRAND_NAME} <{SENDER_EMAIL}>",
+        "from": from_email or f"{SENDER_NAME} <{SENDER_EMAIL}>",
         "to": [to],
         "subject": subject,
         "html": html,
@@ -393,17 +395,53 @@ def tier_welcome_email(tier: str, name: str, app_url: str = "https://leaderos.de
     cfg = TIER_WELCOME.get(tier, TIER_WELCOME["standard"])
     subject = cfg["subject"].format(name=name)
     cta_url = f"{app_url.rstrip('/')}{cfg['cta_path']}"
+    # Plan Iter 187: Der Kauf ist ein Platz in der Universität — das Startdatum
+    # steht in der Bestätigung, damit niemand auf ein Schloss starrt.
+    from course_launch import launch_info
+    li = launch_info()
+    start_note = "" if li["launched"] else f"""
+<div style="border:1px solid rgba(191,255,0,0.2);border-radius:12px;padding:14px 18px;margin:0 0 22px;">
+  <div style="font-size:13px;font-weight:800;color:{BRAND_COLOR};margin-bottom:4px;">Dein Platz ist gesichert</div>
+  <div style="font-size:13.5px;color:rgba(255,255,255,0.75);line-height:1.6;">
+    Alle 10 Kurse (72 Folgen) und die Live-Calls schalten am <b>{li['label']}</b> frei.
+    Bis dahin kannst du die erste Folge jedes Kurses schon ansehen.
+  </div>
+</div>"""
     body = f"""
 <div style="background:linear-gradient(135deg,rgba(191,255,0,0.12),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.2);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
   <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Tier: {tier.upper()}</div>
   <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">{cfg['headline']}</div>
 </div>
 <p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.65;margin:0 0 24px;">{cfg['body']}</p>
+{start_note}
 <div style="text-align:center;padding:8px 0 4px;">
   <a href="{cta_url}" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">{cfg['cta_label']}</a>
 </div>
 """
     return subject, _base_layout(body, preheader=cfg["headline"])
+
+
+def course_launch_reminder_email(name: str, days_left: int, app_url: str = "https://leaderos.de") -> tuple[str, str]:
+    """Erinnerung kurz vor dem Start der Kurs-Universität (Plan Iter 187)."""
+    from course_launch import launch_info
+    li = launch_info()
+    when = "morgen" if days_left <= 1 else f"in {days_left} Tagen"
+    subject = f"{name}, {when} geht es los — 10 Kurse, 72 Folgen"
+    body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.12),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.2);border-radius:14px;padding:16px 20px;margin-bottom:24px;">
+  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">Start {li['label']}</div>
+  <div style="font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-0.02em;">Es geht {when} los</div>
+</div>
+<p style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.65;margin:0 0 24px;">
+  Hallo {name}, am <b>{li['label']}</b> schalten alle 10 Kurse mit 72 Folgen und die Live-Calls
+  für dich frei. Nimm dir für die erste Woche zwei feste Termine im Kalender — eine Folge dauert
+  unter 12 Minuten.
+</p>
+<div style="text-align:center;padding:8px 0 4px;">
+  <a href="{app_url.rstrip('/')}/kurse" style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;">Studienplan ansehen</a>
+</div>
+"""
+    return subject, _base_layout(body, preheader=f"Start am {li['label']}")
 
 
 def installment_due_email(name: str, installment_num: int, total: int, amount: float,
@@ -1080,3 +1118,61 @@ Hallo {name},
 """
     return subject, _base_layout(body, preheader=f"Woche {week}: {subtitle} · {duration}", badge=f"WOCHE&nbsp;{week}&nbsp;/&nbsp;6")
 
+
+
+# ── 30-Tage-Programm: eine Mail pro Programmtag (Iter 186) ──────────────────
+
+def challenge_day_email(
+    name: str,
+    day: int,
+    title: str,
+    desc: str,
+    duration: str,
+    done_text: str,
+    why: str,
+    cta_path: str = "/challenge",
+    app_url: str = "https://leaderos.de",
+    unsubscribe_link: str | None = None,
+    last_call: bool = False,
+) -> tuple[str, str]:
+    """Die Aufgabe des Tages — konkret, mit „Erledigt ist, wenn …", ohne Werbeblock.
+
+    Kundenmeldung: Tag 1 hatte eine Mail, Tag 2 keine. Jetzt kommt genau eine
+    Mail pro Programmtag, nur wenn die Aufgabe noch offen ist.
+    """
+    cta_url = f"{app_url.rstrip('/')}{cta_path}"
+    unsub = (
+        f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:22px 0 0;text-align:center;">'
+        f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);text-decoration:underline;">Tages-Mails abbestellen</a>'
+        f'</p>' if unsubscribe_link else ''
+    )
+    nudge = (
+        '<p style="font-size:13px;color:rgba(255,255,255,0.55);margin:0 0 18px;">'
+        'Das ist meine letzte Erinnerung — danach ist hier Ruhe. Deine Aufgabe bleibt in der App offen '
+        'und du kannst sie jederzeit nachholen.</p>' if last_call else ''
+    )
+    body = f"""
+<div style="font-size:9px;color:{BRAND_COLOR};letter-spacing:0.18em;font-weight:900;text-transform:uppercase;margin-bottom:10px;">30-Tage-Programm · Tag {day} von 30</div>
+<h1 style="font-size:26px;line-height:1.15;font-weight:900;margin:0 0 6px;letter-spacing:-0.025em;color:#fff;">{title}</h1>
+<p style="font-size:13px;color:rgba(255,255,255,0.55);margin:0 0 22px;">{duration} · heute dran</p>
+
+<p style="font-size:14.5px;color:rgba(255,255,255,0.9);line-height:1.6;margin:0 0 18px;">Hallo {name},</p>
+{nudge}
+<p style="font-size:14.5px;color:rgba(255,255,255,0.88);line-height:1.65;margin:0 0 18px;">{desc}</p>
+
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px 22px;margin-bottom:18px;">
+  <div style="font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.45);font-weight:900;text-transform:uppercase;margin-bottom:8px;">Warum das heute dran ist</div>
+  <p style="font-size:14px;color:rgba(255,255,255,0.88);margin:0 0 14px;line-height:1.65;">{why}</p>
+  <div style="font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.45);font-weight:900;text-transform:uppercase;margin-bottom:8px;">Erledigt ist, wenn</div>
+  <p style="font-size:14px;color:rgba(255,255,255,0.88);margin:0;line-height:1.65;">{done_text}</p>
+</div>
+
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 6px;"><tr>
+  <td style="background:{BRAND_COLOR};border-radius:12px;">
+    <a href="{cta_url}" style="display:inline-block;padding:14px 26px;font-size:14px;font-weight:900;color:#0A0A0A;text-decoration:none;">Aufgabe öffnen &rarr;</a>
+  </td>
+</tr></table>
+{unsub}
+"""
+    subject = f"Tag {day}: {title}"
+    return subject, _base_layout(body, preheader=f"{duration} · {done_text}", badge=f"TAG&nbsp;{day}&nbsp;/&nbsp;30")

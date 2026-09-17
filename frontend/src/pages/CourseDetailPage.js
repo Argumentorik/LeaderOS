@@ -5,6 +5,9 @@ import api from '../lib/api';
 import { swrGet } from '../lib/swrCache';
 import logger from '../lib/logger';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { PublicPageShell } from '../components/layout/PublicPageShell';
 import { InteractiveWladButton } from '../components/guide/InteractiveWladButton';
 import { CATEGORY_META, LEVEL_LABEL, askWladPrefill, t } from '../components/courses/courseMeta';
 import { VideoThumb } from '../components/shared/VideoThumb';
@@ -14,7 +17,7 @@ const Chip = ({ children }) => (
   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 text-[11px] font-semibold">{children}</span>
 );
 
-const EpisodeRow = ({ ep, active, onPick, de }) => (
+const EpisodeRow = ({ ep, active, onPick, de, launch }) => (
   <button type="button" onClick={() => onPick(ep.number)}
     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${active ? 'bg-[#BFFF00]/15 ring-1 ring-[#BFFF00]/50' : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'} ${ep.unlocked ? '' : 'opacity-70'}`}
     data-testid={`course-episode-${ep.id}`} aria-current={active ? 'true' : undefined}>
@@ -25,27 +28,85 @@ const EpisodeRow = ({ ep, active, onPick, de }) => (
       <span className="block text-[13px] font-semibold truncate">{ep.number}. {ep.title}</span>
       <span className="block text-[11px] text-muted-foreground">
         {ep.minutes} Min{ep.free_preview && <> · <b className="text-[#4A6200] dark:text-[#BFFF00]">{de ? 'Kostenlos' : 'Free'}</b></>}
-        {!ep.unlocked && <> · {de ? 'Gesperrt' : 'Locked'}</>}
+        {ep.gate === 'email' && <> · {de ? 'mit E-Mail ansehen' : 'watch with email'}</>}
+        {ep.gate === 'starts' && <> · {de ? `ab ${launch?.label}` : `from ${launch?.label}`}</>}
         {ep.unlocked && !ep.video_ready && <> · {de ? 'Aufnahme folgt' : 'Recording soon'}</>}
       </span>
     </span>
   </button>
 );
 
-const Player = ({ ep, course, de, navigate }) => {
-  if (!ep.unlocked) {
+/** Plan Iter 187: Vorname + E-Mail → Video läuft. Gilt einmal, nicht pro Folge. */
+const EmailGate = ({ ep, course, de, onDone, title, note }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setBusy(true); setErr('');
+    try {
+      await api.post('/courses/lead', { name: name.trim(), email: email.trim(), episode_id: ep.id });
+      onDone();
+    } catch (e2) {
+      setErr(de ? 'Das hat nicht geklappt. Bitte Namen und E-Mail prüfen.' : 'That did not work. Please check name and email.');
+      logger.error('course lead failed', e2);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-gate">
+      <div className="absolute inset-0 opacity-30"><VideoThumb src={ep.poster_url || course.thumbnail_url} title={course.title} showPlay={false} /></div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
+        <p className="font-black text-[15px] sm:text-base max-w-md leading-snug" data-testid="course-gate-title">{title}</p>
+        <p className="text-[12px] text-white/60 mt-1.5 max-w-sm">{note}</p>
+        <form onSubmit={submit} className="mt-4 w-full max-w-md flex flex-col sm:flex-row gap-2">
+          <input value={name} onChange={(e) => setName(e.target.value)} required minLength={2}
+                 placeholder={de ? 'Vorname' : 'First name'} data-testid="course-gate-name"
+                 className="flex-1 h-11 px-3.5 rounded-xl bg-white/10 border border-white/15 text-[13px] placeholder:text-white/40 focus:outline-none focus:border-[#BFFF00]" />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} required type="email"
+                 placeholder={de ? 'E-Mail' : 'Email'} data-testid="course-gate-email"
+                 className="flex-1 h-11 px-3.5 rounded-xl bg-white/10 border border-white/15 text-[13px] placeholder:text-white/40 focus:outline-none focus:border-[#BFFF00]" />
+          <button type="submit" disabled={busy} data-testid="course-gate-submit"
+                  className="h-11 px-5 rounded-xl bg-[#BFFF00] text-black text-[12.5px] font-black hover:bg-[#D4FF4D] disabled:opacity-60">
+            {busy ? (de ? 'Moment…' : 'One moment…') : (de ? 'Video ansehen' : 'Watch video')}
+          </button>
+        </form>
+        {err && <p className="text-[12px] text-rose-300 mt-2" role="alert" data-testid="course-gate-error">{err}</p>}
+        <p className="text-[10.5px] text-white/40 mt-3 max-w-sm">
+          {de ? 'Einmal eintragen — danach sind alle vorhandenen Folgen für dich offen.' : 'Enter once — all available episodes are then open for you.'}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const Player = ({ ep, course, de, navigate, onGateDone }) => {
+  const launchLabel = course.launch?.label || '';
+  // Gekauft, aber der Start ist noch nicht da.
+  if (ep.gate === 'starts') {
     return (
-      <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-locked">
+      <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-starts">
         <div className="absolute inset-0 opacity-40"><VideoThumb src={ep.poster_url || course.thumbnail_url} title={course.title} showPlay={false} /></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
-          <span className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"><Lock size={20} className="text-[#BFFF00]" /></span>
-          <p className="font-black mt-3">{de ? `Teil von ${course.tier_label}` : `Part of ${course.tier_label}`}</p>
-          <p className="text-[12px] text-white/60 mt-1 max-w-sm">{de ? 'Folge 1 ist kostenlos. Alle weiteren Folgen schalten sich mit deinem Paket frei.' : 'Episode 1 is free. All further episodes unlock with your plan.'}</p>
-          <button type="button" onClick={() => navigate('/coaching')} className="mt-4 inline-flex items-center gap-2 px-5 h-10 rounded-full bg-[#BFFF00] text-black text-[12.5px] font-black hover:bg-[#D4FF4D]" data-testid="course-upgrade-btn">
-            {de ? 'Pakete ansehen' : 'See plans'}
-          </button>
+          <span className="w-12 h-12 rounded-full bg-emerald-500/15 flex items-center justify-center"><Check size={20} className="text-emerald-400" /></span>
+          <p className="font-black mt-3">{de ? 'Zugang gesichert' : 'Access secured'}</p>
+          <p className="text-[12.5px] text-white/60 mt-1 max-w-sm">
+            {de ? `Diese Folge schaltet am ${launchLabel} frei — zusammen mit allen 72 Folgen.` : `This episode unlocks on ${launchLabel} — together with all 72 episodes.`}
+          </p>
         </div>
       </div>
+    );
+  }
+  // Ohne Kauf: E-Mail-Tor.
+  if (!ep.unlocked) {
+    return (
+      <EmailGate ep={ep} course={course} de={de} onDone={onGateDone}
+                 title={de ? 'Diese Folge ansehen' : 'Watch this episode'}
+                 note={de ? 'Trag Vorname und E-Mail ein — dann läuft das Video.' : 'Enter your first name and email — then the video plays.'} />
     );
   }
   if (ep.video_url) {
@@ -58,11 +119,19 @@ const Player = ({ ep, course, de, navigate }) => {
       </div>
     );
   }
+  // Aufnahme fehlt noch: ehrlich sagen — und als Vormerkung dasselbe Formular.
+  if (!course.has_access && !course.lead_registered) {
+    return (
+      <EmailGate ep={ep} course={course} de={de} onDone={onGateDone}
+                 title={de ? `Aufnahme folgt · ab ${launchLabel}` : `Recording soon · from ${launchLabel}`}
+                 note={de ? 'Trag dich vor — du bekommst Bescheid, sobald diese Folge da ist.' : 'Sign up — we let you know as soon as this episode is ready.'} />
+    );
+  }
   return (
     <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#0A0A0A]" data-testid="course-episode-pending">
       <div className="absolute inset-0 opacity-60"><VideoThumb src={ep.poster_url || course.thumbnail_url} title={course.title} showPlay={false} /></div>
       <p className="absolute bottom-5 left-5 right-5 text-white text-[13px] font-semibold">
-        {de ? 'Wlad nimmt diese Folge gerade auf. Du bekommst sie automatisch, sobald sie da ist.' : 'Wlad is recording this episode. It unlocks here automatically.'}
+        {de ? `Aufnahme folgt · ab ${launchLabel}. Du bekommst sie automatisch, sobald sie da ist.` : `Recording soon · from ${launchLabel}. It unlocks here automatically.`}
       </p>
     </div>
   );
@@ -74,6 +143,7 @@ export default function CourseDetailPage() {
   const navigate = useNavigate();
   const { lang } = useLanguage();
   const de = lang !== 'en';
+  const { user } = useAuth();
   const [course, setCourse] = useState(null);
   const [error, setError] = useState(false);
 
@@ -89,24 +159,29 @@ export default function CourseDetailPage() {
   }, [course, requested]);
 
   useEffect(() => {
-    if (current?.unlocked && current?.video_ready && !current.seen) {
+    if (course?.authenticated && current?.unlocked && current?.video_ready && !current.seen) {
       api.post(`/courses/episodes/${current.id}/seen`).then(() => {
         setCourse((c) => c && { ...c, seen_count: c.seen_count + 1, episodes: c.episodes.map((e) => (e.id === current.id ? { ...e, seen: true } : e)) });
       }).catch(() => {});
     }
-  }, [current]);
+  }, [current, course?.authenticated]);
+
+  const reload = () => { api.get(`/courses/${slug}`).then((r) => setCourse(r.data)).catch((e) => logger.error('course reload failed', e)); };
 
   const pick = (n) => setParams({ folge: String(n) });
 
-  if (error) return <div className="p-8 text-sm text-muted-foreground" data-testid="course-not-found">{de ? 'Kurs nicht gefunden.' : 'Course not found.'} <Link to="/kurse" className="font-bold underline">{de ? 'Zur Bibliothek' : 'Back to library'}</Link></div>;
-  if (!course || !current) return <div className="p-8 text-sm text-muted-foreground" data-testid="course-loading">{de ? 'Lade Kurs…' : 'Loading…'}</div>;
+  const Shell = ({ children }) => (user ? <DashboardLayout>{children}</DashboardLayout> : <PublicPageShell>{children}</PublicPageShell>);
+
+  if (error) return <Shell><div className="p-8 text-sm text-muted-foreground" data-testid="course-not-found">{de ? 'Kurs nicht gefunden.' : 'Course not found.'} <Link to="/kurse" className="font-bold underline">{de ? 'Zum Studienplan' : 'Back to curriculum'}</Link></div></Shell>;
+  if (!course || !current) return <Shell><div className="p-8 text-sm text-muted-foreground" data-testid="course-loading">{de ? 'Lade Kurs…' : 'Loading…'}</div></Shell>;
 
   const pct = Math.round((course.seen_count / course.episode_count) * 100);
   const ctaEp = course.next_episode || 1;
 
   return (
-    <div className="p-4 sm:p-8 max-w-6xl mx-auto" data-testid="course-detail-page">
-      <Link to="/kurse" className="inline-flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground hover:text-foreground" data-testid="course-back"><ArrowLeft size={13} /> {de ? 'Kurs-Bibliothek' : 'Course library'}</Link>
+    <Shell>
+    <div className="p-4 sm:p-8 xl:px-12 w-full" data-testid="course-detail-page">
+      <Link to="/kurse" className="inline-flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground hover:text-foreground" data-testid="course-back"><ArrowLeft size={13} /> {de ? 'Studienplan' : 'Curriculum'}</Link>
 
       <header className="mt-4 rounded-3xl bg-[#0A0A0A] text-white overflow-hidden grid lg:grid-cols-[1.1fr_1fr]" data-testid="course-header">
         <div className="relative aspect-video lg:aspect-auto lg:min-h-[280px]">
@@ -135,7 +210,7 @@ export default function CourseDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-6 mt-6">
         <div className="min-w-0">
-          <Player ep={current} course={course} de={de} navigate={navigate} />
+          <Player ep={current} course={course} de={de} navigate={navigate} onGateDone={reload} />
           <div className="mt-4">
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">{de ? 'Folge' : 'Episode'} {current.number} · {current.minutes} Min</p>
             <h2 className="text-lg md:text-xl font-black mt-1 break-words" data-testid="course-episode-title">{current.title}</h2>
@@ -149,15 +224,16 @@ export default function CourseDetailPage() {
               <button type="button" onClick={() => navigate(askWladPrefill(course, current, de))} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl border border-black/[0.1] dark:border-white/[0.15] text-[12.5px] font-bold hover:bg-black/[0.03] dark:hover:bg-white/[0.05]" data-testid="course-ask-wlad-btn">
                 <MessageCircle size={13} /> {de ? 'Frag WladBot dazu' : 'Ask WladBot'}
               </button>
-              {current.unlocked && <InteractiveWladButton clip={{ slug: current.id, title: `${course.title} · ${current.title}`, script: [current.purpose, ...(current.bullets || [])].filter(Boolean).join(' ') }} de={de} />}
+              {current.unlocked && course.authenticated && <InteractiveWladButton clip={{ slug: current.id, title: `${course.title} · ${current.title}`, script: [current.purpose, ...(current.bullets || [])].filter(Boolean).join(' ') }} de={de} />}
             </div>
           </div>
         </div>
         <aside className="min-w-0 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-card p-2 self-start" data-testid="course-episode-list">
           <p className="px-3 pt-2 pb-1 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">{de ? 'Alle Folgen' : 'All episodes'}</p>
-          {course.episodes.map((ep) => <EpisodeRow key={ep.id} ep={ep} active={ep.id === current.id} onPick={pick} de={de} />)}
+          {course.episodes.map((ep) => <EpisodeRow key={ep.id} ep={ep} active={ep.id === current.id} onPick={pick} de={de} launch={course.launch} />)}
         </aside>
       </div>
     </div>
+    </Shell>
   );
 }

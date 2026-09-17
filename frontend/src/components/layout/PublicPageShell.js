@@ -12,7 +12,7 @@ export const PublicPageShell = ({ children }) => {
   return (
     <div className="min-h-screen bg-background" data-testid="public-page-shell">
       <header className="sticky top-0 z-40 border-b border-black/[0.06] dark:border-white/[0.06] bg-background/90 backdrop-blur">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2" data-testid="public-shell-home">
             <WladMark size={22} />
             <span className="font-black text-[14px] tracking-tight" style={{ fontFamily: 'Outfit, Inter, sans-serif' }}>
@@ -37,7 +37,7 @@ export const PublicPageShell = ({ children }) => {
       <main>{children}</main>
 
       <footer className="border-t border-black/[0.06] dark:border-white/[0.06] mt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-muted-foreground">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-8 flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-muted-foreground">
           <Link to="/impressum" className="hover:text-foreground">Impressum</Link>
           <Link to="/datenschutz" className="hover:text-foreground">Datenschutz</Link>
           <Link to="/agb" className="hover:text-foreground">AGB</Link>

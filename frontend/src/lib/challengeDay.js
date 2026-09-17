@@ -26,7 +26,7 @@ export function useChallengeDay() {
     let alive = true;
     api.get('/challenge30/status')
       .then((res) => {
-        const d = res.data?.current_day;
+        const d = res.data?.next_open_day || res.data?.current_day;
         if (!alive || !d) return;
         cache = { day: d, at: Date.now() };
         setDay(d);
@@ -36,6 +36,45 @@ export function useChallengeDay() {
   }, []);
 
   return day;
+}
+
+/**
+ * useChallengeToday — Tag + Titel der heutigen (nächsten offenen) Aufgabe für
+ * die Standzeile im Menü (Iter 186).
+ */
+let todayCache = { value: null, at: 0 };
+
+export function useChallengeToday() {
+  const [today, setToday] = useState(todayCache.value);
+
+  useEffect(() => {
+    const slice = takeSlice('challenge_today');
+    if (slice?.day) {
+      const value = { day: slice.day, title: slice.title_de || slice.title_en || '' };
+      todayCache = { value, at: Date.now() };
+      setToday(value);
+      return undefined;
+    }
+    if (todayCache.value && Date.now() - todayCache.at < TTL) {
+      setToday(todayCache.value);
+      return undefined;
+    }
+    let alive = true;
+    api.get('/challenge30/status')
+      .then((res) => {
+        const d = res.data;
+        const day = d?.next_open_day || d?.current_day;
+        if (!alive || !day) return;
+        const entry = (d.challenges || []).find((c) => c.day === day);
+        const value = { day, title: entry?.title_de || '' };
+        todayCache = { value, at: Date.now() };
+        setToday(value);
+      })
+      .catch(() => { /* Menü bleibt ohne Standzeile */ });
+    return () => { alive = false; };
+  }, []);
+
+  return today;
 }
 
 export default useChallengeDay;
