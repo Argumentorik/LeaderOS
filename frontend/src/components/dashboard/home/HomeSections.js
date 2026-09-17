@@ -103,7 +103,7 @@ export const TodayTaskCard = ({ task, de, navigate, onStart, openCount = 0 }) =>
               <Clock size={11} /> {task.duration || '10 Min'}{started ? (de ? ' · begonnen' : ' · started') : ''}
             </p>
             {doneText && (
-              <div className="mt-3 rounded-xl bg-white/[0.06] border border-white/[0.08] px-3.5 py-2.5" data-testid="home-task-done-criteria">
+              <div className="mt-3 rounded-xl bg-white/[0.06] border border-white/[0.08] px-3.5 py-2.5" data-testid="home-today-done-criteria">
                 <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00]/70">
                   {de ? 'Erledigt ist, wenn' : 'Done when'}
                 </p>

@@ -95,8 +95,8 @@ export default function VideoGuidePage() {
     <div className="p-6 lg:p-10 xl:px-14 w-full min-h-screen" data-testid="video-guide-page">
       <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#5a7a00] dark:text-[#BFFF00] flex items-center gap-1.5"><Clapperboard size={12} />{de ? 'Onboarding-Videos' : 'Onboarding videos'}</p>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">{de ? 'Wlad erklärt dir Leader-OS' : 'Wlad explains Leader-OS'}</h1>
+          <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#5a7a00] dark:text-[#BFFF00] flex items-center gap-1.5"><Clapperboard size={12} />{de ? 'Einführung' : 'Introduction'}</p>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">{de ? 'Onboarding-Videos' : 'Onboarding videos'}</h1>
           <p className="text-sm text-muted-foreground mt-1">{de ? 'Kurze Clips: wie du mit der KI arbeitest und was jede Mission von dir will.' : 'Short clips: how to work with the AI and what each mission asks of you.'}</p>
         </div>
         <div className="text-right" data-testid="video-guide-progress">

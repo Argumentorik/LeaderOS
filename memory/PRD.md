@@ -968,3 +968,18 @@ Als Fehlalarm belegt (nichts geändert, damit es nicht erneut aufgerollt wird):
 - „Unsicherer Zufall in quiz_quality.py" — bewusst gesetzter Startwert aus dem Inhalt, damit die Antwortreihenfolge reproduzierbar ist (Vermerk steht in der Zeile).
 - „localStorage-Sicherheit" — Sitzungen liegen in httpOnly-Cookies; im Speicher des Browsers liegt kein Anmeldematerial (steht so in `consent.js`, `attribution.js`, `recentLogins.js`).
 Bewusst NICHT angefasst (großer Umbau ohne Nutzen für den Kunden, gehört in den geplanten Qualitäts-Durchgang): 271 Hinweise auf fehlende Hook-Abhängigkeiten, Entflechtung von `routes/auth.py`, Aufteilen großer Komponenten, `useMemo`-Feinschliff.
+
+---
+
+## Iter 188 · Korrekturen aus der Rückmeldung (17.06.2026)
+
+1. **Wlad-Bild ist jetzt zuverlässig da**: Es wurde nicht mehr aus den Video-Vorschaubildern geholt (die für manche Konten fehlen), sondern liegt als festes Standbild in der App: `frontend/public/wlad-portrait.jpg` (440×440, aus dem vorhandenen Video „Warum Leader-OS" geschnitten — Gesicht und Schultern, ohne Logo und ohne eingebrannte Unterschrift; kein erzeugtes Bild). Neue Komponente `WladPortrait` in `HomeSections.js` mit `onError`-Absicherung: fällt das Bild aus, bleibt kein Loch im Layout. Steht neben der Begrüßung und bei „Frag deinen Coach".
+2. **Challengers volle Breite**: `ChallengerCards.js` und `ChallengerResult.js` auf `w-full` + `xl:px-14`; Kacheln bis 3 Spalten auf breiten Schirmen, Lesetext im Ergebnis bleibt auf `max-w-3xl`.
+3. **Menü**: Beide Hauptgruppen stehen beim ersten Besuch offen (`defaultOpen`), „Mehr" bleibt zu. `isOpen(id, defaultOpen)` prüft mit `hasOwnProperty`, damit sich die Wahl des Nutzers vom Vorgabewert trennt — dadurch lässt sich JEDE Gruppe zuklappen, auch die der aktuellen Seite. Zustand in `localStorage['leaderos_nav_open']`.
+4. **„Werkzeuge" heißt „GODMODE"** (bewusste Rücknahme der Iter-186-Entscheidung, nur für diesen Bereich — nicht als Abzeichen oder Stufenname): Menügruppe „GODMODE & Leitfäden" mit erklärender Zeile „Dein Werkzeugkasten für den Arbeitsalltag.", Unterpunkt „GODMODE", Seitenüberschrift in `ToolsGrid.js`, Handy-Leiste, `nav.workflows` (DE + EN), `CreditsExhaustedDialog`, `WhatIsWhatPage`. Videotitel der Aufnahmen bleiben unverändert.
+5. **„Video-Guide" heißt „Onboarding-Videos"**: Menü, Handy-Liste (neuer Eintrag), Seitenüberschrift `VideoGuidePage.js`, Verweis auf der Kursseite.
+6. **„Was ist was?"** aus `SidebarFooter.js` entfernt; die Seite `/was-ist-was` bleibt über die Adresse erreichbar.
+7. **„Meine Aufgaben" auf dem Dashboard**: neue `MyTasksCard` (drei nächste offene Aufgaben, jede über ein Kästchen abhakbar → `PUT /api/tasks/{id}` `status=completed`, Verweis „Alle Aufgaben ansehen", eigener Satz statt leerer Kachel). Der Menüpunkt bleibt draußen.
+8. Check-in bleibt als Zeile auf dem Dashboard, unverändert.
+
+**Geprüft**: `/app/test_reports/iteration_188.json` — 10/10 Punkte grün (Bild wirklich geladen, Abhaken bleibt nach Neuladen weg, Menü-Erstzustand und Zuklappen inkl. Merken, Begriffe, Challengers 1676 px breit ohne Überlauf, Handy 390 px ohne Seitwärts-Scrollen, Kurse/Chat unverändert). Zwei Nachbesserungen aus dem Bericht direkt erledigt: Überschrift auf `/video-guide` heißt jetzt „Onboarding-Videos", und der doppeldeutige Testanker `home-task-done-criteria` heißt jetzt `home-today-done-criteria`.
