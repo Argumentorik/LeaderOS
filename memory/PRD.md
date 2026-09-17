@@ -928,3 +928,32 @@ Erledigt: E-Mail-Guard + Sperrliste, Magic-Link-Verifizierung, Lizenz-Wiederanme
 - P1: Qualitäts-Durchgang (still verschluckte Fehler, Screen-Durchgang, große Bausteine entflechten, Kunden-Wege als Tests) — aus Iter 184 verschoben.
 - P1: Lasttest 1000 gleichzeitige Kunden + Engstellen (CDN, Warteschlange, Caching, ehrliche Obergrenzen).
 - Tests: `backend/tests/test_iter185_credits_video.py` (11), `test_iter184_text_clean.py` (6) — alle grün; Frontend-Bericht `/app/test_reports/iteration_186.json`.
+
+---
+
+## Iter 187 · Kurs-Universität, Menü „3 + 1", volle Breite, Mailversand (17.06.2026)
+
+**Auftrag des Kunden (genehmigter Plan + Nachtrag im Gespräch)**
+Vier Dinge: volle Bildschirmbreite auf allen Seiten, freundlicheres Dashboard mit echten Wlad-Bildern, ein neues aufklappbares Menü, und die Kurse als EINE Universität mit Start 01.11.2026. Nachtrag des Kunden zum Menü („Das ultimative Steve-Jobs-Menü, 3 + 1"): oben nur vier Einträge, alles Seltene hinter „Mehr", sauber gruppiert.
+
+**Was umgesetzt ist**
+- **Startdatum an einer Stelle**: `backend/course_launch.py` (`COURSES_LAUNCH_DATE`, Vorgabe 2026-11-01) → `launch_info()` liefert Datum, Beschriftung „01.11.2026", `launched`, `days_until`. Übersicht, Folgen-Seiten und Mails lesen denselben Wert.
+- **Ein Kauf für alles**: Die Staffelung nach Paket (früher Kurse 1–6 / 7–10) ist weg. `course_view()` gibt pro Folge `gate`: `none` (Folge 1 immer frei; Käufer ab Start alles), `starts` (gekauft, Start noch nicht da), `email` (ohne Kauf). `tier_label` überall „Leadership LAB".
+- **Studienplan öffentlich**: `GET /api/courses` und `/api/courses/{slug}` brauchen keinen Login mehr (`_maybe_user`), `PUBLIC_PATHS` in `lib/api.js` um `/kurse` ergänzt. Route `/kurse` ist nicht mehr geschützt und öffnet in derselben Registerkarte.
+- **E-Mail-Tor, einmal statt pro Folge**: `POST /api/courses/lead` legt den Interessenten in `course_leads` an und setzt das Cookie `los_course_lead` (httpOnly, 180 Tage). Danach sind alle vorhandenen Folgen für diesen Besucher offen. Vertriebssicht: `GET /api/courses/admin/leads` und `…/leads.csv` (Export mit Kurs + auslösender Folge).
+- **Kurs-Seite als Universität**: `components/courses/Curriculum.js` mit `UniversityHero` (10 Kurse · 72 Folgen · Stunden · Start + Countdown; „Platz sichern" bzw. „Zugang gesichert · schaltet am 01.11.2026 frei"), `LabBlock` (Live-Calls + Startgruppe, Link auf `/leadership-lab`) und `Curriculum` (drei Stufen, jeder Kurs aufklappbar mit ALLEN Folgen samt Dauer und Status — vor dem Kauf).
+- **Folgen-Seite**: `EmailGate` (Vorname + E-Mail → „Video ansehen"), Hinweis „Zugang gesichert" für Käufer vor dem Start, „Aufnahme folgt · ab 01.11.2026" plus Vormerkung, wo noch kein Video liegt. Käufer sehen nie ein Formular.
+- **Menü „3 + 1"**: Oben nur `Dashboard` (mit „Tag X / 30"), `WladBot`, `Werkzeuge & Leitfäden`, `Training`; die letzten zwei klappen ihre Unterpunkte auf. Unten „Mehr" → Gruppen `Wissen & Community` (Kurse (72 Folgen), 30-Tage-Programm, Video-Guide, Live-Events, Mein Fortschritt, Community) und `Admin & Einstellungen` (Leadership-Programm, Einstellungen). Zustand in `localStorage['leaderos_nav_open']`, die Gruppe der aktuellen Seite ist immer offen. Weg: Check-in und Meine Aufgaben (Seiten bleiben erreichbar), Gruppe „Admin". Handy-Leiste spiegelt die vier Anker.
+- **Volle Breite**: 13 Seiten von fester Mittelbreite auf `w-full` mit ruhigem Rand (`xl:px-14`) umgestellt; Raster nutzen auf breiten Schirmen mehr Spalten (Leitfäden, Gesprächs-Training, Video-Guide, Live-Events). Lesetexte behalten ihre Zeilenlänge. `PublicPageShell` auf 1400 px.
+- **Wlad im Dashboard**: Standbild aus einem bereits produzierten Video (`bundle.guide_clips.clips[].poster_url`) neben der Anrede und in „Frag deinen Coach". Keine erzeugten Bilder.
+- **Mails wieder funktionsfähig (Fehlerursache)**: Der Resend-Schlüssel war bei Resend ungültig („API key is invalid", 400) — deshalb gingen Magic-Links und alle anderen Mails nicht raus. Der Kunde hat einen neuen Schlüssel eingetragen; Versand geprüft (Magic-Link an `delivered@resend.dev` angenommen), Domains `leaderos.de`, `leader-os.de`, `leadercheck.de` sind bestätigt. Absender-Name jetzt „Wlad von Leader OS" (`SENDER_NAME`).
+- **Mails zum Start**: Kaufbestätigung nennt das Startdatum; neue Erinnerung `POST /api/cron/course-launch` (7 Tage und 1 Tag vorher, einmal pro Empfänger über `email_log`).
+- **Nebenbefund behoben**: In `routes/dashboard.py` überschrieb ein doppelter Schlüssel `started` den Tages-Status der Aufgabe.
+
+**Geprüft**: `/app/test_reports/iteration_187.json` — Backend 5/5 (`backend/tests/test_iter187_courses_university.py`), Frontend alle Punkte grün (öffentliche Kursseite, E-Mail-Tor kursübergreifend, Käufer-Ansicht, Menü inkl. Merken über Neuladen, 13 Seiten ohne waagerechtes Überlaufen, Handy 390 px, Wlad-Bilder geladen).
+
+**Offen / nächste Schritte**
+- P1: Qualitäts-Durchgang über alle Bildschirme (Handy + Rechner): verschluckte Fehler, leere Kacheln, „undefined"/„NaN", abgeschnittene Texte, Ersatz-Anzeigen bei fehlenden Daten. Bewusst NICHT Teil von Iter 187.
+- P1: Lasttest 1000 gleichzeitige Kunden (Dashboard, Videostart, Chat, Kurse) + Engstellen.
+- P2: Kursvideos aufnehmen und hochladen — bis dahin steht überall ehrlich „Aufnahme folgt · ab 01.11.2026".
+- P2: Erst-Tour: der Schritt zum Check-in zeigt auf einen Menüpunkt, den es nicht mehr gibt (fällt still auf ein mittiges Fenster zurück, kein Fehler) — Text bei Gelegenheit nachziehen.

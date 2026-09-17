@@ -1,0 +1,29 @@
+{
+  "summary": "Iter 187 review: 10-Kurse-Universität + neues 3+1-Menü + volle Bildschirmbreite + Wlad-Portrait. Backend (5/5 pytest) und Frontend (öffentliche /kurse, E-Mail-Tor mit Cookie-Persistenz kursübergreifend, angemeldete Ansicht mit 'Zugang gesichert', Sidebar 4 Top-Einträge + Mehr-Panel mit localStorage-Persistenz, Wlad-Portraits, Full-Width auf 13 Seiten, keine horizontale Überlaufung, Mobile OK) sind grün.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter187_courses_university.py",
+    "/app/test_reports/pytest/iter187_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "course_launch.py und course_content.py sauber getrennt und dokumentiert — gutes Design.",
+    "routes/courses.py: LEAD_COOKIE korrekt httpOnly+secure+samesite=lax mit 180-Tage-Laufzeit. Kein _id-Leak in Responses (überall {_id:0}). ✓",
+    "course_view() gate-Logik korrekt (none/starts/email) und deckt alle drei Zustände ab.",
+    "list_courses gibt in Übersicht kein 'unlocked'-Feld für Nicht-Ersten-Folgen (Projektionsfilter Zeile 94 blendet 'unlocked' aus — wird aus 'gate' im Frontend abgeleitet). Konsistent."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter187_courses_university.py"
+  ],
+  "success_rate": { "backend": "100%", "frontend": "100%" },
+  "test_credentials": "standard@wladbot.test / test123 (Kaufkonto), free@wladbot.test / test123",
+  "seed_data_creation": "Ein Kurs-Lead wurde via POST /api/courses/lead angelegt (E-Mail kurs-tor-*@wladbot-testing.de) — bewusst als Testkontakt.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Alle Iter-187-Punkte geprüft: (1) GET /api/courses öffentlich → launch={2026-11-01,label:01.11.2026,launched:false,days_until>0}, total_courses=10, total_episodes=72, Folge 1 gate=none, alle anderen gate=email. (2) POST /api/courses/lead setzt Cookie los_course_lead und schaltet Folgen kursübergreifend frei (getestet mit Sitzung + Delegation-Folge 3 → keine Formularanzeige mehr). (3) standard@wladbot.test: has_access=true, gate=starts, 'Zugang gesichert' im Hero und auf Folge-Seite ([data-testid=course-episode-starts] vorhanden). (4) Sidebar 4 Top-Einträge (Dashboard/WladBot/Werkzeuge & Leitfäden/Training), nav-more-toggle + nav-more-panel + localStorage-Schlüssel 'leaderos_nav_open' persistent über Reload. (5) 13 Seiten bei 1920 ohne horizontales Überlaufen. (6) Mobile 390 kein Seiten-Scroll. (7) Dashboard-Portraits [data-testid=home-wlad-portrait] (naturalWidth=1248) und [home-coach-portrait] geladen. Console-401er auf /kurse ohne Login sind erwartet (Statusabfragen, die auth benötigen). Keine Blocker."
+}
