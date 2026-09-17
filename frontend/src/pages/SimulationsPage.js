@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Button } from '../components/ui/button';
+import { CreditCostHint } from '../components/shared/CreditCostHint';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../contexts/LanguageContext';
 import api from '../lib/api';
@@ -115,6 +116,8 @@ export default function SimulationsPage() {
                 <Clock size={12} />
                 {de ? '~4 Minuten · 4 Schritte' : '~4 minutes · 4 steps'}
               </div>
+              {/* Iter 185: Kosten VOR der Aktion */}
+              <CreditCostHint action="simulation" />
             </div>
           </div>
         </div>

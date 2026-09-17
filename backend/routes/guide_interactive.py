@@ -125,7 +125,7 @@ async def interactive_turn(
 
     credit = await check_and_deduct_credit(user, "chat")
     if not credit["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit))
 
     session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
     await _persist_voice_turn(session_id, user["user_id"], "user", transcript)

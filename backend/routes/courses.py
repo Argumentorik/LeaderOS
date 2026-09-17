@@ -1,4 +1,5 @@
 """Kurs-Bibliothek: 10 Kurse / 72 Folgen, Freischaltung nach Tier, Videos per Admin-Upload."""
+import logging
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -13,6 +14,8 @@ from routes.guide import _serve_object
 from routes.uploads import put_object
 from services import get_current_user
 from services_tier import resolve_user_tier
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/courses", tags=["courses"])
 
@@ -123,6 +126,37 @@ async def stream_episode_video(episode_id: str, request: Request):
     return await _serve_object(request, vid["storage_path"], "video/mp4")
 
 
+async def ensure_episode_poster(vid: dict, title: str, force: bool = False) -> str | None:
+    """Iter 185: Vorschaubild einer Kursfolge EINMAL erzeugen und dauerhaft ablegen.
+
+    Kundenmeldung „die Thumbnails sind nicht immer da": Bisher wurde das Bild
+    bei jedem Abruf frisch aus dem Video gezogen — schlägt das fehl, bleibt die
+    Kachel leer. Jetzt liegt ein kleines JPEG im Speicher.
+    """
+    import asyncio
+
+    from routes.guide import _local_poster, _render_version
+    from routes.uploads import object_exists, put_object
+
+    path = vid.get("storage_path")
+    if not path:
+        return None
+    want = f"{_render_version(path) or '0'}-{vid.get('poster_at') or 1.5}"
+    stored = vid.get("poster_path")
+    if not force and stored and vid.get("poster_built_version") == want:
+        if await asyncio.to_thread(object_exists, stored):
+            return stored
+    local = await asyncio.to_thread(
+        _local_poster, path, title, "Kurs", float(vid.get("poster_at") or 1.5),
+    )
+    storage_path = f"posters/courses/{vid['episode_id']}/{want}.jpg"
+    await asyncio.to_thread(put_object, storage_path, local.read_bytes(), "image/jpeg")
+    await db.course_videos.update_one({"episode_id": vid["episode_id"]}, {"$set": {
+        "poster_path": storage_path, "poster_built_version": want,
+    }})
+    return storage_path
+
+
 @router.get("/episodes/{episode_id}/poster")
 async def episode_poster(episode_id: str, request: Request):
     """Vorschaubild einer Folge: Standbild aus dem hochgeladenen Video (eigene Sekunde möglich)
@@ -139,6 +173,14 @@ async def episode_poster(episode_id: str, request: Request):
     except (KeyError, IndexError, ValueError):
         title = course.get("title", "")
     if vid.get("storage_path"):
+        # Iter 185: zuerst das dauerhaft gespeicherte Bild, sonst einmalig erzeugen.
+        try:
+            stored = await ensure_episode_poster(vid, title)
+        except Exception as e:
+            logger.warning("Kurs-Vorschaubild fehlgeschlagen (%s): %s", episode_id, e)
+            stored = None
+        if stored:
+            return await _serve_object(request, stored, "image/jpeg")
         at = float(vid.get("poster_at") or 1.5)
         return await _serve_object(request, vid["storage_path"], "image/jpeg", poster=True,
                                    title=title, kicker="Kurs", at=at)

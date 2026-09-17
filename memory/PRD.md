@@ -897,3 +897,34 @@ Erledigt: E-Mail-Guard + Sperrliste, Magic-Link-Verifizierung, Lizenz-Wiederanme
 **Offen aus dem freigegebenen Plan (noch nicht begonnen)**
 - P1 · Punkt 3 Qualitäts-Durchgang: (a) kein still verschluckter Fehler (Klartext-Meldung oder Fehler-Monitor-Eintrag), (b) systematischer Screen-Durchgang auf Rohtext/`undefined`/`NaN`/leere Kacheln/abgeschnittene Texte (Handy + Desktop), (c) die fünf größten Bildschirme (Dashboard, Challenge, Video-Studio, Chat, Admin) verhaltensneutral zerlegen, (d) Kunden-Wege als wiederholbare Tests hinterlegen.
 - P1 · Punkt 4 Last: Lasttest mit 1000 gleichzeitigen Kunden gegen die Testumgebung, Zahlen statt Behauptungen; danach CDN für Videos/Poster, Warteschlange für Video-Analysen, Caching teurer Abfragen, ehrliche Obergrenzen für Sprach-Modus/Analyse.
+
+## Iter 185 · 2026-06-17 — Gemeldete Fehler, Credits, Startseite, Kurse, öffentliche Programmseite
+**Teil 0 · Gemeldete Fehler**
+- 0.1 Tour-Lichtkegel: Fix aus Iter 184 aktiv (Nachmessen während des Schritts, Karte mittig ohne Kegel wenn Ziel unsichtbar, kein Doppelzählen). ⚠️ Die gemeldete Sichtung („Playbooks erklärt, Challengers markiert") stammt von der LIVE-Seite — Fix ist in der Testumgebung verifiziert (0 px Abweichung), muss nach dem Veröffentlichen live nachgelaufen werden.
+- 0.2 Level/XP im hellen Modus: neu `frontend/src/lib/levelColors.js` (dunklere Variante je Levelfarbe, Neongrün → #5A7A00). Angewendet in ProfilePage (Level-Label, Levelname, XP-Zahl `level-xp-value`, Badge `level-max-badge`, Aktivitätsliste, Kennzahlen-Kacheln, +XP-30-Tage) und MyPathPage (`mypath-xp-value`, Zertifikate). Verifiziert: hell rgb(90,122,0), dunkel rgb(191,255,0).
+- 0.3 Ton läuft weiter: `audioBus.registerMedia/stopMedia` + neuer Hook `hooks/useManagedMedia.js`. Angemeldet: GuideVideoPlayer, Onboarding-Video, Tour-Video, AnalysisResults, Sparring-Audio. Stop-Auslöser: Seitenwechsel (`route-change`), Coach-Dialog (`coach-drawer-open`), Sprach-Modus (`voice-mode-open`/`voice-mode-start`), Start eines anderen Videos (`other-media-started`), Unmount. Vimeo/YouTube-iframes werden per postMessage pausiert. Abspielposition bleibt erhalten. Verifiziert über `leaderos:media-stop`-Ereignisse; echte Tonwiedergabe ist im Testbrowser nicht prüfbar (kein H.264/AAC).
+- 0.4 Vorschaubilder: `posters_status` prüft jetzt die ABRUFBARKEIT (`object_exists`), defekte gelten als fehlend und werden beim Nachziehen neu erzeugt; Kursfolgen zählen mit (`_course_posters_status`, `ensure_episode_poster` speichert Kurs-Poster dauerhaft unter `posters/courses/…`). Freigabe ohne Vorschaubild ist blockiert (Guide-Clips + Vimeo-Check). Stand 17.06.: 21 abrufbar, 0 fehlend, 0 defekt.
+- 0.5 KI-Clips heißen „WladBot" (Guide, Best Practice, Tages-Briefings, Sprach-Hinweise); Kursvideos mit Wlad selbst bleiben „Wlad".
+
+**Teil 1 · Credits (Entscheidungen 2b, 3a, 4a)**
+- Freier Zugang: monatlich 20 Credits (`MONTHLY_FREE_REFILL`, `_apply_monthly_refill`), `GET /api/credits` liefert `monthly_refill` + `next_refill`.
+- Leeres Guthaben: EINE Meldung (`CreditsExhaustedDialog`) mit Verbrauch, Aufschlüsselung, Möglichkeiten und Kauf-Klick darin. Kein ungefragtes Kauffenster mehr. 402 wird zentral getrennt: `wladbot:credits-empty` vs `wladbot:feature-locked` (api.js + `notifyPaymentRequired`, auch für den SSE-Streaming-Weg). Verifiziert: je genau ein Dialog, nie beide.
+- Kostenhinweis vor der Aktion (`CreditCostHint`/`useCreditCost`): Chat, Startseiten-Coach, Gesprächs-Training, Werkzeuge; Knopf bei 0 ruhiggestellt mit Begründung.
+- Video-Auswertung: `GET /api/video-challenges/access` prüft VOR der Aufnahme (Hinweis `video-access-hint` im Studio verifiziert); erste Auswertung für jeden garantiert (`_is_first_analysis`, ohne Guthaben/Freischaltung).
+- Aufgaben-Bereich für freien Zugang aufgeschlossen (`FREE_TIER_LOCKED` ohne `/tasks`).
+- Support-Werkzeug: `GET /api/credits/admin/lookup`, `POST /api/credits/admin/topup/{user_id}`, `GET /api/credits/admin/stuck` + Admin-Karte `CreditSupportCard`.
+
+**Teil 2 · Startseite** — neue Reihenfolge (Datum/Stand → Aufgabe für heute → Check-in → Frag deinen Coach → Kurse → Eigene Aufgabe → Über dich → Nächstes Live-Event → Dein Weiterkommen → „Mehr"), je ein Erklärsatz; alte Kacheln/XP-Zahl unter „Mehr". Neue Bootstrap-Scheiben `challenge_today`, `checkin_today`, `courses_status`. Menü: Gesprächs-Training / Leitfäden / Werkzeuge, Challenge-Badge „Tag X / 30", neue Seite `/was-ist-was`. Profil-Felder `team_size`, `current_goal` fließen in den KI-Kontext.
+
+**Teil 3 · Kurse** — volle Breite (1600 px), Erklärblock mit zwei Sätzen + „Hier starten", Freischalt-Status auf jeder Kachel (`course-access-<slug>`).
+
+**Teil 4 · /coaching** — jetzt öffentlich unter `/leadership-programm` (Entscheidung 7b), `/coaching` leitet weiter; `PublicPageShell` für Besucher ohne Login, Kauf führt zuerst durch die Anmeldung; SEO-Titel/Beschreibung + FAQ/Course-JSON-LD, Sitemap-Eintrag. Wichtig: 401-Interceptor leitet auf öffentlichen Seiten nicht mehr zum Login um (`PUBLIC_PATHS` in `lib/api.js`).
+
+**Teil 5 „Was ist neu"** — auf Wunsch des Kunden gestrichen (unnötig).
+
+**Offen / nächste Schritte**
+- P0: Konto der betroffenen Kundin auffüllen — E-Mail-Adresse fehlt noch (Support-Werkzeug ist bereit).
+- P0: Veröffentlichen und danach den Tour-Weg live nachlaufen (Desktop + Handy).
+- P1: Qualitäts-Durchgang (still verschluckte Fehler, Screen-Durchgang, große Bausteine entflechten, Kunden-Wege als Tests) — aus Iter 184 verschoben.
+- P1: Lasttest 1000 gleichzeitige Kunden + Engstellen (CDN, Warteschlange, Caching, ehrliche Obergrenzen).
+- Tests: `backend/tests/test_iter185_credits_video.py` (11), `test_iter184_text_clean.py` (6) — alle grün; Frontend-Bericht `/app/test_reports/iteration_186.json`.

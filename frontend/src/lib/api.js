@@ -27,6 +27,18 @@ export const PUBLIC_PATHS = [
   '/impressum', '/datenschutz', '/agb', '/widerruf', '/changelog', '/kurse-uebersicht',
 ];
 
+/**
+ * Iter 185: EINE Stelle, die „Guthaben leer" bzw. „Bereich gesperrt" meldet —
+ * auch für Wege, die nicht über axios laufen (SSE-Streaming via fetch).
+ */
+export function notifyPaymentRequired(detail) {
+  const kind = typeof detail === 'object' && detail ? detail.error : detail;
+  const name = kind === 'tier_required' ? 'wladbot:feature-locked' : 'wladbot:credits-empty';
+  window.dispatchEvent(new CustomEvent(name, {
+    detail: { path: window.location.pathname, info: typeof detail === 'object' ? detail : null },
+  }));
+}
+
 const api = axios.create({  baseURL: API_BASE,
   withCredentials: true,
   // 120s: LLM endpoints (workflows, challenger finish, video jobs) regularly
@@ -64,12 +76,7 @@ api.interceptors.response.use(
     // 402 = Guthaben leer ODER Bereich gesperrt — Iter 185: zwei getrennte
     // Meldungen, nie beide gleichzeitig, und kein ungefragtes Kauffenster.
     if (error.response?.status === 402) {
-      const detail = error.response?.data?.detail;
-      const kind = typeof detail === 'object' && detail ? detail.error : detail;
-      const name = kind === 'tier_required' ? 'wladbot:feature-locked' : 'wladbot:credits-empty';
-      window.dispatchEvent(new CustomEvent(name, {
-        detail: { path: window.location.pathname, info: typeof detail === 'object' ? detail : null },
-      }));
+      notifyPaymentRequired(error.response?.data?.detail);
       return Promise.reject(error);
     }
 

@@ -1,4 +1,4 @@
-import { API_BASE } from './api';
+import { API_BASE, notifyPaymentRequired } from './api';
 
 // Liest Server-Sent-Events von POST /chat/stream und ruft pro Event den Handler auf.
 export async function streamChat(body, { onStart, onDelta, onDone, signal } = {}) {
@@ -13,6 +13,9 @@ export async function streamChat(body, { onStart, onDelta, onDone, signal } = {}
     const err = new Error(`chat stream failed (${res.status})`);
     err.status = res.status;
     try { err.data = await res.json(); } catch { err.data = null; }
+    // Iter 185: Der Streaming-Weg läuft nicht über axios — die Meldung zu
+    // leerem Guthaben bzw. gesperrtem Bereich muss trotzdem erscheinen.
+    if (res.status === 402) notifyPaymentRequired(err.data?.detail);
     throw err;
   }
   const reader = res.body.getReader();

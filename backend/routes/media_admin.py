@@ -8,6 +8,7 @@ jederzeit möglich. Download ist admin-only (Kunden bekommen keinen).
 """
 from __future__ import annotations
 
+import asyncio
 import re
 import tempfile
 import uuid
@@ -177,18 +178,73 @@ async def set_guide_poster_at(slug: str, data: PosterAtIn, request: Request):
 
 # ── Vorschaubilder: Übersicht + Nachziehen (Iter 183) ───────────────────────
 
+async def _course_episode_title(episode_id: str) -> str:
+    from course_content import COURSES
+
+    slug, _, num = episode_id.rpartition("-")
+    course = next((c for c in COURSES if c["slug"] == slug), None)
+    if not course:
+        return episode_id
+    try:
+        return course["episodes"][int(num) - 1]["title"]
+    except (KeyError, IndexError, ValueError):
+        return course.get("title", episode_id)
+
+
+async def _course_posters_status() -> dict:
+    """Iter 185: Kursfolgen zählen mit — geprüft wird die Abrufbarkeit."""
+    from routes.uploads import object_exists
+
+    missing, ready = [], []
+    async for vid in db.course_videos.find({}, {"_id": 0}):
+        if not vid.get("storage_path"):
+            if vid.get("vimeo_thumbnail"):
+                ready.append({"episode_id": vid["episode_id"], "source": "vimeo"})
+            continue
+        stored = vid.get("poster_path")
+        if stored and await asyncio.to_thread(object_exists, stored):
+            ready.append({"episode_id": vid["episode_id"], "source": "upload"})
+        else:
+            missing.append({"episode_id": vid["episode_id"],
+                            "reason": "kein gespeichertes Bild" if not stored else "Bild nicht abrufbar"})
+    return {"missing": missing, "ready": ready,
+            "missing_count": len(missing), "ready_count": len(ready)}
+
+
 @router.get("/posters")
 async def posters_overview(request: Request):
-    """Welche Videos haben noch kein dauerhaft gespeichertes Vorschaubild?"""
+    """Welche Videos haben noch kein dauerhaft abrufbares Vorschaubild?"""
     await require_admin(request)
-    return await posters_status()
+    data = await posters_status()
+    data["courses"] = await _course_posters_status()
+    data["missing_count"] += data["courses"]["missing_count"]
+    data["ready_count"] += data["courses"]["ready_count"]
+    data["missing"] = data["missing"] + [
+        {"slug": m["episode_id"], "title": m["episode_id"], "kind": "course", "reason": m["reason"]}
+        for m in data["courses"]["missing"]
+    ]
+    return data
 
 
 @router.post("/posters/backfill")
 async def posters_backfill_endpoint(request: Request, force: bool = False):
     """Alle fehlenden Vorschaubilder in einem Durchgang nachziehen (keine Render-Kosten)."""
     await require_admin(request)
-    return await posters_backfill(force=force)
+    result = await posters_backfill(force=force)
+    from routes.courses import ensure_episode_poster
+
+    built, failed = [], []
+    async for vid in db.course_videos.find({"storage_path": {"$nin": [None, ""]}}, {"_id": 0}):
+        try:
+            title = await _course_episode_title(vid["episode_id"])
+            if await ensure_episode_poster(vid, title, force=force):
+                built.append(vid["episode_id"])
+        except Exception as e:
+            logger.warning("Kurs-Vorschaubild fehlgeschlagen (%s): %s", vid.get("episode_id"), e)
+            failed.append({"slug": vid.get("episode_id"), "error": str(e)[:160]})
+    result["courses_built"] = built
+    result["failed"] = (result.get("failed") or []) + failed
+    return result
 
 
 @router.post("/poster-at/course/{episode_id}")

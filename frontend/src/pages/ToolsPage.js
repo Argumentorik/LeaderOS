@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import logger from '../lib/logger';
 import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
+import { CreditCostHint } from '../components/shared/CreditCostHint';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Button } from '../components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -161,6 +162,8 @@ export default function ToolsPage() {
               </div>
               <h2 className="text-xl font-black">{activeTool.title}</h2>
               <StepIndicator currentStep={currentStep + 1} totalSteps={totalSteps} toolGradient={activeTool.gradient} />
+              {/* Iter 185: Kosten VOR der Aktion */}
+              <CreditCostHint action="workflow" className="block mt-2" />
             </div>
 
             {isPersonaStep && !isComplete && (

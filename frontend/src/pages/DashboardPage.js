@@ -135,7 +135,8 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-6xl mx-auto min-h-screen cascade" data-testid="dashboard-page">
+      {/* pb-28: Platz für Support-Widget/Feedback-Hinweis unten rechts (Iter 185) */}
+      <div className="p-6 lg:p-10 pb-28 max-w-5xl mx-auto min-h-screen cascade" data-testid="dashboard-page">
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
         <OnboardingVideoModal />
 
@@ -191,7 +192,7 @@ export default function DashboardPage() {
           <Section id="about-you" title={de ? 'Über dich' : 'About you'}
                    hint={de ? 'Drei kurze Angaben, damit die Antworten zu deiner Lage passen. Jederzeit überspringbar.' : 'Three short answers so the advice fits your situation. Skippable anytime.'}>
             <AboutYouCard user={ud} de={de}
-                          onSaved={() => setAboutDone(true)}
+                          onSaved={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }}
                           onSkip={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }} />
           </Section>
         )}

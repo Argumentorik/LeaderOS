@@ -1,0 +1,55 @@
+{
+  "summary": "Iter 186 frontend testing (test@test.com, premium=true / FREE tier). Verified dashboard section order+content, sidebar labels + badge, was-ist-was page, /tasks not locked, level color light/dark on /profile, /kurse intro + course-access, admin credit-support-card + poster-health, and public /leadership-programm + /coaching redirect. Coach example + input navigate to /chat with ?prefill=. Own-task create + toast + appears on /tasks. About-you save shows toast; skip hides section. Blockers encountered during automation (cookie banner + usage-feedback prompt overlapping form buttons) were dismissed via localStorage keys. video-access-hint on /missions could not be verified for FREE user (paywall modal blocks entry), chat credit-cost-hint hidden for premium=true account, credits-exhausted-dialog + fresh-signup 402 flows and video/audio pause behavior not executed (out of budget / require additional accounts).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "DashboardPage AboutYou", "issue": "After successful save, on hard page reload the 'Über dich' section briefly re-appears even though /api/profile/me AND /api/dashboard/bootstrap both return position/team_size/current_goal populated. Reproduction: clear profile → dashboard shows about-you → save (toast success) → reload → section still queryable. Root cause probably stale bundle cache or aboutComplete evaluated before ud hydration. Path: /app/frontend/src/pages/DashboardPage.js:124 (aboutComplete uses `data?.user` but the initial render before loadDashboard resolves shows section=visible; likely fine because loading spinner covers it, but tester observed section rendered after loading finished on 1 run of 2). Consider persisting `leaderos_about_you_skipped='1'` on save too as belt+braces.", "selector": "[data-testid=\"home-section-about-you\"]", "priority": "MEDIUM"},
+      {"component": "Automation UX overlays (not a product bug, but affects testability)", "issue": "Cookie consent banner (lo_consent_v1) AND UsageFeedbackPrompt (leaderos:usage-feedback-done) cover the bottom-right corner where 'home-coach-send-btn' at (x=1487,y=752) and 'home-task-create-btn' at (x=1482,y=1340) sit. Automated tests must set both localStorage keys or dismiss the overlays. The support widget also overlaps the input row for Frag deinen Coach. Consider stacking-context / z-index adjustments so support widget does not cover primary CTA row on the dashboard.", "selector": "[data-testid=\"usage-feedback-prompt\"]", "priority": "LOW"},
+      {"component": "MyPath page", "issue": "Navigating directly to /my-path landed in dark mode automatically (document.documentElement.dark=true), while /profile landed in light mode. Behaviour inconsistency between the two pages of the same account — not a critical color bug (dark mode neon rgb(191,255,0) is correct there) but worth aligning both to the user's chosen theme.", "selector": "[data-testid=\"mypath-xp-value\"]", "priority": "LOW"}
+    ],
+    "integration_issues": [
+      {"flow": "Video-Analyse (/missions) for FREE tier user", "issue": "test@test.com (FREE tier) sees the 'Video-Analyse ist exklusiv in Leadership OS PLUS' paywall modal directly on entry, so the RecordingStudio and its 'video-access-hint' never render. Cannot verify the requested hint without an Accelerator/PLUS account. Use accelerator@wladbot.test to complete this check.", "affected_selectors": ["[data-testid=\"video-access-hint\"]"]},
+      {"flow": "Chat cost hint for non-premium", "issue": "credit-cost-hint-chat is intentionally hidden for premium=true users; test@test.com has premium=true, so hint not observable. Requires a freshly signed-up FREE user (agent-to-agent note confirms).", "affected_selectors": ["[data-testid=\"credit-cost-hint-chat\"]"]},
+      {"flow": "Credits-exhausted 402 dialog", "issue": "Not executed — requires fresh signup + credit exhaustion + intercepting {error:'no_credits'} 402. Deferred; needs targeted E2E fixture.", "affected_selectors": ["[data-testid=\"credits-exhausted-dialog\"]"]},
+      {"flow": "Video/audio pause on nav + WladBot drawer/voice-mode", "issue": "Not executed within this iteration (video codec + drawer interaction chain too flaky in headless without dedicated harness). Recommended: unit-test audioBus.registerMedia/stopMedia via jsdom.", "affected_selectors": ["video", "[data-testid=\"floating-wladbot-drawer\"]"]}
+    ],
+    "design_issues": []
+  },
+  "verified_items": [
+    "Dashboard section order (task→checkin→coach→courses→own-task→about-you→event→progress→Mehr) with 1-sentence hints, no undefined/NaN/\\n",
+    "No horizontal overflow at 1920x900 and 390x844",
+    "home-coach-example → /chat?prefill=... (auto-sends)",
+    "home-coach-input + home-coach-send-btn → /chat (auto-sends via prefill)",
+    "home-task-input + home-task-create-btn → 'Aufgabe angelegt' toast; task visible on /tasks",
+    "home-about-save-btn → save toast + persists to /api/profile/me + /api/dashboard/bootstrap.user reflects fields; home-about-skip-btn hides section + sets leaderos_about_you_skipped=1",
+    "Sidebar labels: Gesprächs-Training, Leitfäden, Werkzeuge present",
+    "nav-badge-challenge text: 'TAG 30 / 30'",
+    "sidebar-what-is-what-btn → /was-ist-was with what-is-what-page shell + 13 Öffnen buttons",
+    "/tasks NOT locked for FREE tier (no locked-feature modal)",
+    "Profile /profile level-xp-value: LIGHT rgb(90,122,0) (readable, NOT neon); DARK rgb(191,255,0) (neon)",
+    "/kurse: courses-intro renders 2 explanatory sentences; courses-start-here-btn present; 10 course-access-* lines visible before click",
+    "/wlad-control-x7k9q2: credit-support-card + credit-support-query + credit-support-search-btn work; search returns tier info; poster-health-summary present; 'steckt fest' list rendered",
+    "Public regression: LOGGED OUT /leadership-programm renders public-page-shell + public-shell-login + public-shell-signup; /coaching redirects to /leadership-programm both logged-out and logged-in"
+  ],
+  "test_report_links": ["/app/test_reports/iteration_186.json", "/app/test_reports/iter186_dashboard.jpg", "/app/test_reports/iter186_dashboard_final.jpg", "/app/test_reports/iter186_after_reload.jpg", "/app/test_reports/iter186_admin.jpg", "/app/test_reports/iter186_missions.jpg"],
+  "action_items": [
+    "Confirm About-you section stays hidden after save+reload — may need to persist skip flag on save too (path: /app/frontend/src/pages/DashboardPage.js:124/194).",
+    "Verify video-access-hint copy using accelerator@wladbot.test on /missions RecordingStudio.",
+    "Run credit-cost-hint-chat + credits-exhausted-dialog + tier_required flow with a fresh FREE-signup or by stubbing 402 responses (network intercept in Playwright).",
+    "Add pause-on-nav + pause-on-drawer/voice-mode assertions for GuideVideoPlayer via a dedicated harness that uses video.play() programmatically (headless has no H.264).",
+    "Consider z-index tweak so UsageFeedbackPrompt does not overlap the 'Frag deinen Coach' input row on dashboard (impacts UX for logged-in users after 30 AI interactions, not just testability)."
+  ],
+  "critical_code_review_comments": [
+    "DashboardPage.js:194 — onSaved only sets local aboutDone=true; on hard reload the initial render before dashboard-v4 fetches will briefly display about-you unless ud already has the fields at first paint. Persisting leaderos_about_you_skipped='1' on save avoids the flash and is cheap belt-and-braces.",
+    "UsageFeedbackPrompt overlaps primary CTAs on dashboard at 1920x900 (right column intrudes ~300px, causing button clicks to miss when not force=True). Move prompt to bottom-left or hide during first N seconds of dashboard.",
+    "dashboardBootstrap.js has an in-module bundle cache with 15s TTL — after a PATCH /profile the reload can still hit the fresh backend but if a user quickly opens two dashboard tabs the second reads stale bundle for ≤15s. Consider clearing the bundle in api interceptor on profile PATCH success."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested this iteration", "frontend": "~85% of requested flows verified"},
+  "test_credentials": "test@test.com / test123 (used for all logged-in tests). Admin flag on same account. accelerator@wladbot.test / test123 required for /missions video hint. Fresh signup required for credits-exhausted dialog.",
+  "seed_data_creation": "TEST_ prefixed tasks + profile fields (position=Teamleiter, team_size=8, current_goal=Bessere Meetings) were created on user_f111693f1b00. Cleaned tasks via API but profile fields remain populated after final run — main agent may want to reset for next iteration.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Before any Playwright automation, set these localStorage keys after page load and before clicking form buttons: leaderos_tour_v1_done=1, leaderos_welcome_seen=1, leaderos:usage-feedback-done=1, lo_consent_v1={v:1,ts:ISO,essential:true,analytics:true,replays:true}. Otherwise cookie banner + usage-feedback + dashboard-first-tour will block/overlap dashboard CTA buttons. Use accelerator@wladbot.test for RecordingStudio + video-access-hint verification and a freshly-created FREE account for credit-cost-hint + credits-exhausted-dialog flows.",
+  "rca of the issue": "Coach-send / task-create / about-save all worked once overlays were dismissed via localStorage. About-you re-appearance after reload correlated with the initial render happening before /api/dashboard/bootstrap resolved — mitigation: persist skip flag on save."
+}
