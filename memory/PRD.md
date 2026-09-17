@@ -957,3 +957,14 @@ Vier Dinge: volle Bildschirmbreite auf allen Seiten, freundlicheres Dashboard mi
 - P1: Lasttest 1000 gleichzeitige Kunden (Dashboard, Videostart, Chat, Kurse) + Engstellen.
 - P2: Kursvideos aufnehmen und hochladen — bis dahin steht überall ehrlich „Aufnahme folgt · ab 01.11.2026".
 - P2: Erst-Tour: der Schritt zum Check-in zeigt auf einen Menüpunkt, den es nicht mehr gibt (fällt still auf ein mittiges Fenster zurück, kein Fehler) — Text bei Gelegenheit nachziehen.
+
+### Nachtrag Iter 187 · Code-Prüfbericht nachgegangen (17.06.2026)
+Behoben: `lib/audioBus.js` schickt die Stopp-Nachricht an eingebettete Vimeo/YouTube-Rahmen jetzt gezielt an deren Herkunft statt an `*`.
+Als Fehlalarm belegt (nichts geändert, damit es nicht erneut aufgerollt wird):
+- „eval() in services_rag.py / scripts_seo_pages.py" — es gibt kein `eval` im Projekt; der Treffer war die Textstelle `test_golden_retrieval(`.
+- „30 undefinierte Variablen", „336-mal `is` statt `==`" — `ruff check --select F821,F811,F841,F632` über `backend/` ist sauber.
+- „Ringschluss courses → guide → media_admin → courses" — die Rückwege sind bereits absichtlich träge Importe innerhalb der Funktionen (`guide.py:303`, `media_admin.py:234`); auf oberster Ebene gibt es keinen Ring.
+- „Fest eingebaute Geheimnisse in Tests" — Platzhalter mit `noqa`-Vermerk bzw. die dokumentierten Testkonten aus `test_credentials.md`.
+- „Unsicherer Zufall in quiz_quality.py" — bewusst gesetzter Startwert aus dem Inhalt, damit die Antwortreihenfolge reproduzierbar ist (Vermerk steht in der Zeile).
+- „localStorage-Sicherheit" — Sitzungen liegen in httpOnly-Cookies; im Speicher des Browsers liegt kein Anmeldematerial (steht so in `consent.js`, `attribution.js`, `recentLogins.js`).
+Bewusst NICHT angefasst (großer Umbau ohne Nutzen für den Kunden, gehört in den geplanten Qualitäts-Durchgang): 271 Hinweise auf fehlende Hook-Abhängigkeiten, Entflechtung von `routes/auth.py`, Aufteilen großer Komponenten, `useMemo`-Feinschliff.

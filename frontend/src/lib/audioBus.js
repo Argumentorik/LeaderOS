@@ -37,12 +37,19 @@ export function stopMedia(reason = 'media-stop', except = null) {
     try { if (typeof el.pause === 'function') el.pause(); } catch { /* ignore */ }
   });
   if (typeof document === 'undefined') return;
-  // Eingebettete Player lassen sich nur per Nachricht anhalten.
+  // Eingebettete Player lassen sich nur per Nachricht anhalten. Die Nachricht
+  // geht gezielt an die Herkunft des jeweiligen Rahmens, nicht an „alle".
+  const pauseFrame = (f, message) => {
+    try {
+      const origin = new URL(f.src, window.location.href).origin;
+      f.contentWindow?.postMessage(message, origin);
+    } catch { /* cross-origin oder unlesbare Adresse */ }
+  };
   document.querySelectorAll('iframe[src*="player.vimeo.com"]').forEach((f) => {
-    try { f.contentWindow?.postMessage('{"method":"pause"}', '*'); } catch { /* cross-origin */ }
+    pauseFrame(f, '{"method":"pause"}');
   });
   document.querySelectorAll('iframe[src*="youtube.com/embed"]').forEach((f) => {
-    try { f.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":[]}', '*'); } catch { /* cross-origin */ }
+    pauseFrame(f, '{"event":"command","func":"pauseVideo","args":[]}');
   });
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('leaderos:media-stop', { detail: { reason } }));
