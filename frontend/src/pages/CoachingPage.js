@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { PublicPageShell } from '../components/layout/PublicPageShell';
 import { useSeo } from '../lib/seo';
@@ -49,8 +49,32 @@ export default function CoachingPage() {
   const pricingRef = useRef(null);
 
   // Iter 185: Diese Seite ist öffentlich — auffindbar für Suche und KI.
+  const faqJsonLd = useMemo(() => ({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        mainEntity: getFaqs(de).map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      },
+      {
+        '@type': 'Course',
+        name: de ? 'Leadership-Programm mit Wlad Jachtchenko' : 'Leadership programme with Wlad Jachtchenko',
+        description: de
+          ? 'KI-Coach, Videokurse, Gesprächs-Training und Video-Analyse für Führungskräfte — plus persönliches Coaching.'
+          : 'AI coach, video courses, conversation training and video analysis for leaders — plus personal coaching.',
+        inLanguage: de ? 'de' : 'en',
+        provider: { '@type': 'Organization', name: 'Leader-OS', url: 'https://leaderos.de' },
+      },
+    ],
+  }), [de]);
+
   useSeo({
     path: '/leadership-programm',
+    jsonLd: faqJsonLd,
     title: de
       ? 'Leadership-Programm mit Wlad Jachtchenko · Preise, Inhalte, häufige Fragen'
       : 'Leadership programme with Wlad Jachtchenko · pricing, content, FAQ',

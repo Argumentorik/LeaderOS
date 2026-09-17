@@ -18,8 +18,16 @@ export const API_BASE = (IS_LOCAL_DEV && RAW_BACKEND_URL && RAW_BACKEND_URL !== 
   ? `${RAW_BACKEND_URL}/api`
   : '/api';
 
-const api = axios.create({
-  baseURL: API_BASE,
+/**
+ * Seiten, die ohne Login erreichbar sein MÜSSEN (Iter 185). Ein 401 auf
+ * diesen Seiten darf niemals hart zum Anmeldeformular umleiten.
+ */
+export const PUBLIC_PATHS = [
+  '/', '/leadership-programm', '/coaching', '/for-teams', '/teams', '/business',
+  '/impressum', '/datenschutz', '/agb', '/widerruf', '/changelog', '/kurse-uebersicht',
+];
+
+const api = axios.create({  baseURL: API_BASE,
   withCredentials: true,
   // 120s: LLM endpoints (workflows, challenger finish, video jobs) regularly
   // take 30-90s — a 30s timeout made them fail while the backend kept working.
@@ -84,8 +92,12 @@ api.interceptors.response.use(
       } catch {
         processQueue(false);
         const p = window.location.pathname;
+        // Iter 185: Öffentliche Seiten dürfen NIE zum Anmeldeformular
+        // umgeleitet werden — wer über Suche oder KI-Empfehlung kommt, wäre
+        // sonst weg (Befund aus dem Plan zur Verkaufsseite).
         const onAuthPage = ['/login', '/signup', '/register', '/auth/magic', '/auth-callback'].some((r) => p.startsWith(r)) || window.location.hash.includes('session_id');
-        if (!onAuthPage) {
+        const onPublicPage = PUBLIC_PATHS.some((r) => p === r || p.startsWith(`${r}/`));
+        if (!onAuthPage && !onPublicPage) {
           // Soft re-auth flow: keep the user on the current page, show modal.
           // If a user object exists in cache → show ReAuthModal (preserves scroll/state).
           // Otherwise (cold session) → hard redirect to /login.
