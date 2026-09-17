@@ -23,7 +23,7 @@ Opt-in                 (E-Mail · routes/webinar.py → Bestätigung + Kalender)
         ↓
 4 kostenlose Videos    (/fuehrung-beginnt-hier · 1 Video/Tag per Mail)
         ↓
-Live-Webinar 17.09.    (Live-Demo + Q&A + Leader-Check-Empfehlung)
+Live-Webinar 15.10.    (Live-Demo + Q&A + Leader-Check-Empfehlung)
         ↓
 Follow-up-Mail         (Tag danach · services_email.webinar_followup_email)
         ↓

@@ -1,10 +1,10 @@
-# Meta Ads · Webinar 17.09.2026 · Launch-Paket
+# Meta Ads · Webinar 15.10.2026 · Launch-Paket
 
 > Die Matrix „educate ↔ convert × more budget ↔ no budget" auf LeaderOS
 > übersetzt, plus alles, was am Montag im Ads-Manager eingetragen wird:
 > Struktur, Zielgruppen, 24 Creatives mit fertiger Copy, Tracking, Regeln.
 >
-> Stand 06.09.2026 · Ads-Start nächste Woche · Webinar Do 17.09., 10:00 Uhr.
+> Stand 06.09.2026 · Ads-Start nächste Woche · Webinar Do 15.10., 10:00 Uhr.
 > Budgetannahme aus `GOOGLE_ADS_SETUP.md` §5: **30 €/Tag**.
 
 ---
@@ -140,7 +140,7 @@ Vollständig in `contentAds.js`; hier die Kurzfassung zum Gegenlesen.
 
 **D03 · Webinar**
 Headline: *Live-Webinar mit Wlad Jachtchenko* · Beschreibung: *17. Sept · 10 Uhr · 90 Min*
-Primärtext: „Du weißt, wie gute Führung geht. Du kommst nur nicht dazu, sie zu leben. Am 17. September zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller, seit 2007 Coach für über 400.000 Klienten) live, wie Führung täglich trainierbar wird … 90 Minuten. Kostenlos. Keine Aufzeichnung."
+Primärtext: „Du weißt, wie gute Führung geht. Du kommst nur nicht dazu, sie zu leben. Am 15. Oktober zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller, seit 2007 Coach für über 400.000 Klienten) live, wie Führung täglich trainierbar wird … 90 Minuten. Kostenlos. Keine Aufzeichnung."
 
 **B01 · Seminar-Schmerz**
 Headline: *Seminare ändern Wissen. Nicht Verhalten.* · Beschreibung: *17. Sept · live · kostenlos*
@@ -155,7 +155,7 @@ Headline: *SEXIER: sechs Schritte, ein Argument* · Beschreibung: *SEXIER · liv
 Primärtext: „Statement. Explanation. eXample. Impact. Explanation of Impact. Rebuttal …" (Definition wörtlich aus dem Kanon)
 
 **C02 · 400.000+**
-Headline: *Wlad Jachtchenko · live am 17. September* · Beschreibung: *90 Min · Q&A · live*
+Headline: *Wlad Jachtchenko · live am 15. Oktober* · Beschreibung: *90 Min · Q&A · live*
 
 **C01 · SPIEGEL**
 Headline: *Der Autor von „Weiße Rhetorik" — live* · Beschreibung: *17. Sept · 10 Uhr · kostenlos*
@@ -253,7 +253,7 @@ im Ads-Manager.
 
 ## 5. Zahlen, die man erwarten darf
 
-Ads-Start Di 09.09., Webinar Do 17.09. → **8 Tage Laufzeit.**
+Ads-Start Di 09.09., Webinar Do 15.10. → **8 Tage Laufzeit.**
 
 | | konservativ | gut |
 | --- | --- | --- |
@@ -287,7 +287,7 @@ Zahl, die zählt: `webinar_leads` gefiltert nach `utm.content` = Ad-ID.
 
 ---
 
-## 7. Nach dem Webinar · Welle 2 (18.09.–15.10.)
+## 7. Nach dem Webinar · Welle 2 (16.10.–15.11.)
 
 - **Registrierte, nicht erschienen** → Retargeting mit D02 (Trial). Kein
   „Replay" — es gibt bewusst keine Aufzeichnung, das bleibt so.

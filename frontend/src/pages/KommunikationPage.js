@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
+import { trackMeta, metaEventId } from '../lib/metaPixel';
+import { trackLinkedInLead } from '../lib/linkedinInsight';
 
 /**
  * KommunikationPage · /kommunikation · ad-only landing, Kommunikation-first.
@@ -373,11 +375,11 @@ function Hero({ onPlay }) {
 
           <motion.div {...fadeUp} transition={spring(0.4)} className="flex flex-wrap items-center justify-center" style={{ gap: 20 }}>
             <motion.a
-              href={TRIAL_URL} {...hoverShrink}
+              href="#check" {...hoverShrink}
               onClick={() => track('kommunikation_cta_click', { where: 'hero' })}
               className="rounded-full bg-white" style={{ ...BODY, fontSize: 16, color: INK, padding: '16px 34px' }}
             >
-              14 Tage kostenlos starten
+              Kommunikations-Check starten
             </motion.a>
             <motion.button
               type="button" {...hoverShrink} onClick={onPlay}
@@ -398,13 +400,13 @@ function Hero({ onPlay }) {
 
 const ANSAETZE = [
   { code: 'SEXIER', job: 'Argumentation', stat: '6', desc: 'Sechs Schritte, ein Argument, das jeder Gegenrede standhält.', bg: '#0A0A0A', hi: '#BFFF00', img: '/wlad/books/weisse-rhetorik.jpg' },
-  { code: 'B-W-W', job: 'Feedback', stat: '3 Sätze', desc: 'Beobachtung, Wirkung, Wunsch — kein Drama, kein „Du bist …".', bg: '#16632B', hi: '#BFFF00' },
+  { code: 'B-W-W', job: 'Feedback', stat: '3 Sätze', desc: 'Beobachtung, Wirkung, Wunsch — kein Drama, kein „Du bist …".', bg: '#16632B', hi: '#BFFF00', img: '/wlad/books/die-5-rollen-einer-fuehrungskraft.jpg' },
   { code: 'Zuhören', job: '10 Stufen', stat: '80 %', desc: 'der Führungskräfte bleiben auf Stufe 2: warten, bis sie dran sind.', bg: '#1E40FF', hi: '#BFFF00', img: '/wlad/wlad-portrait.jpg' },
   { code: 'Dunkle Rhetorik', job: 'Defense', desc: 'Strohmann, Ad Hominem, Whataboutism erkennen — und ruhig kontern.', bg: '#0A0A0A', hi: '#FFFFFF', img: '/wlad/books/dunkle-rhetorik.jpg' },
-  { code: '4 Farben', job: 'Typen lesen', stat: '4', desc: 'Rot, Gelb, Grün, Blau — den Typ erkennen, den Ton treffen.', bg: '#E11D74', hi: '#FFE600' },
+  { code: '4 Farben', job: 'Typen lesen', stat: '4', desc: 'Rot, Gelb, Grün, Blau — den Typ erkennen, den Ton treffen.', bg: '#E11D74', hi: '#FFE600', img: '/wlad/books/das-geheimnis-der-erfolgreichen-alltagskommunikation.jpg' },
   { code: 'Schlagfertigkeit', job: '30 Techniken', stat: '30', desc: 'Rückfrage, Notbremse, überraschende Zustimmung.', bg: '#FF6A2D', hi: '#0A0A0A', img: '/wlad/books/redest-du-noch-oder-ueberzeugst-du-schon.jpg' },
   { code: 'Quadrant', job: 'Schulz von Thun', stat: '4', desc: 'Sache, Selbstoffenbarung, Beziehung, Appell — in jeder Nachricht.', bg: '#0A0A0A', hi: '#BFFF00', img: '/wlad/wlad-portrait.jpg' },
-  { code: 'Gesprächstypen', job: 'Vorbereitung', stat: '4', desc: 'Informieren, Überzeugen, Verhandeln, Konfrontieren — erst der Typ, dann das Framework.', bg: '#16632B', hi: '#FFFFFF' },
+  { code: 'Gesprächstypen', job: 'Vorbereitung', stat: '4', desc: 'Informieren, Überzeugen, Verhandeln, Konfrontieren — erst der Typ, dann das Framework.', bg: '#16632B', hi: '#FFFFFF', img: '/wlad/books/die-rhetorik-der-top-performer.jpg' },
   { code: 'Charisma-Code', job: 'Wirkung', stat: '3', desc: 'Präsenz, Wärme, Kompetenz — in Sekunden entschieden.', bg: '#1E40FF', hi: '#FFFFFF', img: '/wlad/books/die-charismatische-fuehrungskraft.jpg' },
   { code: 'Verhandlung', job: 'Harvard + Wlad', desc: 'Hart in der Sache, weich zur Person.', bg: '#0A0A0A', hi: '#BFFF00', img: '/wlad/books/satanische-verhandlungskunst.jpg' },
 ];
@@ -415,9 +417,7 @@ function AnsatzCard({ a }) {
       className="relative shrink-0 overflow-hidden text-white w-[320px] h-[450px] md:w-[380px] md:h-[480px]"
       style={{ borderRadius: 20, background: a.bg }}
     >
-      {a.img && (
-        <img src={a.img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55, mixBlendMode: 'luminosity' }} />
-      )}
+      <img src={a.img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55, mixBlendMode: 'luminosity' }} />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgb(19,21,21) 0%, rgba(255,255,255,0) 50%, rgb(19,21,21) 100%)' }} />
       <div className="absolute inset-0 flex flex-col justify-between" style={{ padding: 'clamp(20px, 5vw, 40px)' }}>
         <div style={{ ...BODY, fontSize: 14 }}>
@@ -547,6 +547,206 @@ function Zahlen() {
   );
 }
 
+// ─── Kommunikations-Check (Typeform-Stepper) ──────────────────────────
+//
+// Eine Frage pro Screen, große Antwort-Karten, Tastatur 1–4 + Enter,
+// Fortschrittsbalken. Letzter Schritt: Vorname + E-Mail → echte Webinar-
+// Registrierung (POST /api/webinar/register, source kommunikation-check),
+// Antworten landen als `quiz` am Lead. Das Ergebnis-Framework wandert als
+// ?focus= auf /webinar/danke.
+
+const QUESTIONS = [
+  {
+    key: 'pain', q: 'Wo verlierst du in Gesprächen am meisten?',
+    options: [
+      ['Meine Argumente kommen nicht an', 'SEXIER'],
+      ['Feedback eskaliert oder verpufft', 'B-W-W'],
+      ['Ich werde überhört oder unterbrochen', 'Charisma-Code'],
+      ['Verhandlungen kippen gegen mich', 'Verhandlung'],
+    ],
+  },
+  {
+    key: 'prep', q: 'Wie bereitest du ein schwieriges Gespräch vor?',
+    options: [['Gar nicht — ich improvisiere'], ['Ein paar Stichpunkte'], ['Ein Skript, Satz für Satz'], ['Ich spiele es vorher durch']],
+  },
+  {
+    key: 'frequency', q: 'Wie oft führst du solche Gespräche?',
+    options: [['Täglich'], ['Mehrmals pro Woche'], ['Ein paar Mal im Monat'], ['Selten — aber dann zählt es']],
+  },
+  {
+    key: 'role', q: 'Deine Rolle heute?',
+    options: [['Teamlead'], ['Abteilungs- oder Bereichsleitung'], ['Geschäftsführung / C-Level'], ['Selbstständig / Beratung']],
+  },
+  {
+    key: 'lever', q: 'Was wäre dein größter Hebel?',
+    options: [['Struktur — wissen, was ich sage'], ['Souveränität — ruhig bleiben'], ['Klarheit — verstanden werden'], ['Durchsetzung — Ergebnisse holen']],
+  },
+];
+
+const UTM_KEYS = ['source', 'medium', 'campaign', 'term', 'content'];
+const readUtm = () => {
+  try {
+    const q = new URLSearchParams(window.location.search);
+    const fresh = Object.fromEntries(UTM_KEYS.map((k) => [k, (q.get(`utm_${k}`) || '').slice(0, 120)]));
+    if (Object.values(fresh).some(Boolean)) { sessionStorage.setItem('lo_km_utm', JSON.stringify(fresh)); return fresh; }
+    return JSON.parse(sessionStorage.getItem('lo_km_utm') || 'null');
+  } catch { return null; }
+};
+
+const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((v || '').trim());
+
+function KommunikationsCheck() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-100px' });
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState('idle');
+  const total = QUESTIONS.length + 1;
+  const done = step >= QUESTIONS.length;
+  const focus = answers.pain_focus || 'SEXIER';
+
+  const choose = (qKey, label, tag) => {
+    setAnswers((a) => ({ ...a, [qKey]: label, ...(tag ? { [`${qKey}_focus`]: tag } : {}) }));
+    track('kommunikation_check_answer', { step: step + 1, key: qKey, value: label });
+    setStep((s) => s + 1);
+  };
+
+  useEffect(() => {
+    if (done) return undefined;
+    const onKey = (e) => {
+      const n = Number(e.key);
+      const q = QUESTIONS[step];
+      if (n >= 1 && n <= q.options.length && document.activeElement?.tagName !== 'INPUT') {
+        const [label, tag] = q.options[n - 1];
+        choose(q.key, label, tag);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, done]);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (state === 'loading') return;
+    if (!isEmail(email)) { setState('invalid'); return; }
+    setState('loading');
+    track('kommunikation_check_submit', { focus });
+    const eventId = metaEventId();
+    try {
+      const res = await fetch('/api/webinar/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(), name: name.trim(), source: 'kommunikation-check',
+          utm: readUtm(), meta_event_id: eventId,
+          answers: { ...answers, focus },
+          referrer: document.referrer || null, landing_path: window.location.pathname,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        trackMeta('Lead', { content_name: 'webinar-2026-10-15', content_category: 'webinar' }, eventId);
+        trackLinkedInLead();
+        window.location.assign(`/webinar/danke?email=${encodeURIComponent(email.trim())}&focus=${encodeURIComponent(focus)}`);
+        return;
+      }
+      setState('error');
+    } catch { setState('error'); }
+  };
+
+  const card = { background: '#fff', borderRadius: 24, boxShadow: PILL_SHADOW, padding: 'clamp(24px, 4vw, 48px)' };
+  const q = QUESTIONS[Math.min(step, QUESTIONS.length - 1)];
+
+  return (
+    <section id="check" ref={ref} className="pt-[130px] lg:pt-[200px] scroll-mt-24">
+      <div className="mx-auto" style={{ maxWidth: 760, padding: '0 30px' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, ease: scrollEase }} className="text-center">
+          <div className="inline-block rounded-full bg-white" style={{ ...BODY, fontSize: 14, color: INK, padding: '8px 16px', border: '1px solid rgba(19,21,21,0.1)' }}>
+            Kommunikations-Check · 60 Sekunden
+          </div>
+          <h2 className="mt-5 text-[34px] md:text-[42px] lg:text-[48px]" style={{ ...HEADLINE, color: INK, lineHeight: 1.15 }}>
+            Welcher Ansatz ist für dich der erste?
+          </h2>
+          <p className="mt-3" style={{ ...BODY, fontSize: 17, color: MUTED }}>
+            Fünf Fragen, kein Login. Am Ende: dein Fokus-Framework — und dein Platz im Live-Webinar am 15. Oktober.
+          </p>
+        </motion.div>
+
+        <div className="mt-10" style={card} data-testid="kommunikation-check">
+          <div className="flex items-center justify-between" style={{ ...BODY, fontSize: 12, color: MUTED }}>
+            <span>{done ? 'Fast fertig' : `Frage ${step + 1} von ${QUESTIONS.length}`}</span>
+            <span>{Math.round((Math.min(step, total - 1) / (total - 1)) * 100)} %</span>
+          </div>
+          <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(19,21,21,0.08)' }}>
+            <motion.div className="h-full rounded-full" style={{ background: BLUE }} animate={{ width: `${(Math.min(step, total - 1) / (total - 1)) * 100}%` }} transition={{ duration: 0.4, ease: scrollEase }} />
+          </div>
+
+          <AnimatePresence mode="wait">
+            {!done ? (
+              <motion.div key={q.key} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.3 }}>
+                <h3 className="mt-7 text-[24px] md:text-[30px]" style={{ ...HEADLINE, color: INK, lineHeight: 1.2 }}>{q.q}</h3>
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {q.options.map(([label, tag], i) => (
+                    <motion.button
+                      key={label} type="button" whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.96 }}
+                      onClick={() => choose(q.key, label, tag)}
+                      className="text-left flex items-center gap-3 min-h-[64px] rounded-2xl border-2 transition-colors hover:border-[#4382BC]"
+                      style={{ ...BODY, fontSize: 15, color: INK, padding: '14px 16px', borderColor: 'rgba(19,21,21,0.1)', background: PAGE_BG }}
+                    >
+                      <span className="shrink-0 flex items-center justify-center rounded-md font-mono" style={{ width: 26, height: 26, fontSize: 12, background: '#fff', border: '1px solid rgba(19,21,21,0.15)' }}>{i + 1}</span>
+                      {label}
+                    </motion.button>
+                  ))}
+                </div>
+                <div className="mt-5 flex items-center justify-between" style={{ ...BODY, fontSize: 12, color: MUTED }}>
+                  <button type="button" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="disabled:opacity-30 hover:text-black">← Zurück</button>
+                  <span className="hidden sm:inline">Tipp: Taste 1–4 drücken</span>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.form key="form" onSubmit={submit} noValidate initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+                <div className="mt-7 inline-flex items-center gap-2 rounded-full" style={{ ...BODY, fontSize: 13, color: INK, background: 'rgba(67,130,188,0.1)', padding: '6px 14px' }}>
+                  <Check size={14} style={{ color: BLUE }} /> Dein Fokus-Framework: <b>{focus}</b>
+                </div>
+                <h3 className="mt-4 text-[24px] md:text-[30px]" style={{ ...HEADLINE, color: INK, lineHeight: 1.2 }}>
+                  Wohin soll dein Ergebnis — und dein Platz im Webinar?
+                </h3>
+                <p className="mt-2" style={{ ...BODY, fontSize: 14, color: MUTED }}>
+                  Live am Do, 15. Oktober, 10:00 Uhr · 90 Minuten · kostenlos · Bestätigung + Kalender-Link kommen sofort.
+                </p>
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <input type="text" placeholder="Vorname" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name"
+                    className="h-14 flex-1 rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
+                  <input type="email" inputMode="email" autoComplete="email" placeholder="E-Mail-Adresse" value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (state === 'invalid') setState('idle'); }}
+                    className="h-14 flex-[1.4] rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
+                </div>
+                <motion.button type="submit" whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.96 }} disabled={state === 'loading'}
+                  className="mt-3 w-full h-14 rounded-xl text-white disabled:opacity-70" style={{ ...BODY, fontSize: 15, background: INK }}>
+                  {state === 'loading' ? 'Wird gesichert …' : 'Ergebnis + Webinar-Platz sichern'}
+                </motion.button>
+                {state === 'invalid' && <p role="alert" className="mt-2 text-sm text-red-600">Bitte eine gültige E-Mail-Adresse eingeben.</p>}
+                {state === 'error' && <p role="alert" className="mt-2 text-sm text-red-600">Das hat leider nicht geklappt — bitte nochmal versuchen.</p>}
+                <p className="mt-3" style={{ ...BODY, fontSize: 11, color: MUTED }}>
+                  Kein Spam. Abmeldung jederzeit mit einem Klick. <a href="/datenschutz" className="underline">Datenschutz</a>
+                </p>
+                <button type="button" onClick={() => setStep(QUESTIONS.length - 1)} className="mt-4 hover:text-black" style={{ ...BODY, fontSize: 12, color: MUTED }}>← Zurück</button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <p className="mt-6 text-center" style={{ ...BODY, fontSize: 13, color: MUTED }}>
+          Ohne Check direkt anmelden? <a href="/webinar" className="underline hover:text-black">Zur Webinar-Seite</a> · Oder gleich loslegen: <a href={TRIAL_URL} className="underline hover:text-black">14 Tage kostenlos testen</a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────
 
 export default function KommunikationPage() {
@@ -594,6 +794,7 @@ export default function KommunikationPage() {
       <Navbar />
       <Hero onPlay={() => { setVideoOpen(true); track('kommunikation_video_open'); }} />
       <Ansaetze />
+      <KommunikationsCheck />
       <Zahlen />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
         <a href="/impressum" className="hover:underline">Impressum</a> · <a href="/datenschutz" className="hover:underline">Datenschutz</a>

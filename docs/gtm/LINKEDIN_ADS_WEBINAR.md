@@ -1,4 +1,4 @@
-# LinkedIn Ads · Webinar 17.09.2026 · Launch-Paket
+# LinkedIn Ads · Webinar 15.10.2026 · Launch-Paket
 
 > Schwester-Dokument zu `META_ADS_WEBINAR.md`. Gleiche 8 Angles, gleiche
 > Ehrlichkeitsregeln, andere Plattform-Logik: LinkedIn ist 5–8× teurer pro
@@ -37,7 +37,7 @@ wenn das Webinar-Angebot als Lead-Magnet bewiesen ist.
 ```
 Kampagnengruppe  LEADEROS-WEBINAR-2026-09
 │
-└─ Kampagne  WEBINAR-DACH-LEADERS                    50 €/Tag · Laufzeit 09.09.–17.09.
+└─ Kampagne  WEBINAR-DACH-LEADERS                    50 €/Tag · Laufzeit 09.09.–15.10.
      Ziel: Website-Conversions (Conversion „Webinar-Lead", Insight Tag)
      Format: Single Image Ad (Sponsored Content)
      Sprache: Deutsch · Standort: DE, AT, CH
@@ -70,11 +70,11 @@ Im Ad-Studio `/ads` → Filter **Plattform → linkedin**. Daten in
 
 | Ad-ID | Angle | LinkedIn-Headline (≤ 70) | Intro (≤ 150) |
 | --- | --- | --- | --- |
-| `AD-D03-1.91x1-a` | Webinar | Live-Webinar mit Wlad Jachtchenko · 17. September · kostenlos | ✅ |
-| `AD-B01-1.91x1-a` | Seminar-Schmerz | Seminare ändern Wissen, nicht Verhalten. Live-Webinar am 17.09. | ✅ |
+| `AD-D03-1.91x1-a` | Webinar | Live-Webinar mit Wlad Jachtchenko · 15. Oktober · kostenlos | ✅ |
+| `AD-B01-1.91x1-a` | Seminar-Schmerz | Seminare ändern Wissen, nicht Verhalten. Live-Webinar am 15.10. | ✅ |
 | `AD-A02-1.91x1-a` | Feedbackformel | Drei Sätze für jedes schwierige Gespräch · Live-Webinar | ✅ |
 | `AD-A01-1.91x1-a` | SEXIER | SEXIER: sechs Schritte, ein vollständiges Argument · live | Reserve |
-| `AD-C02-1.91x1-a` | 400.000+ | Wlad Jachtchenko live · 17. September · 90 Minuten · kostenlos | ✅ |
+| `AD-C02-1.91x1-a` | 400.000+ | Wlad Jachtchenko live · 15. Oktober · 90 Minuten · kostenlos | ✅ |
 | `AD-C01-1.91x1-a` | SPIEGEL | Der Autor von „Weiße Rhetorik" live · kostenloses Webinar | Reserve |
 | `AD-D01-1.91x1-a` | Leader-Check | Leader-Check: dein Führungsprofil in 10 Minuten · kostenlos | nicht in dieser Kampagne |
 | `AD-D02-1.91x1-a` | Challenge | Führung trainieren wie Fitness · 14 Tage kostenlos testen | W2 |

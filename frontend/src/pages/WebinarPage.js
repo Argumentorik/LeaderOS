@@ -7,7 +7,6 @@ import {
   ArrowUpRight, ArrowDown, Check, Star, PlayCircle, CalendarCheck,
   MessageCircleQuestion, BellRing, ClipboardCheck, Video, BookOpen, X, Plus,
 } from 'lucide-react';
-import { LandingFooter } from '../components/landing/LandingFooter';
 import { applyPageMeta } from '../lib/pageMeta';
 import { isValidEmail } from '../features/newsletter/lib/newsletterClient';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
@@ -44,10 +43,10 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * no invented testimonials, no fake scarcity, no fake exclusivity.
  */
 
-const WEBINAR_TS = new Date('2026-09-17T10:00:00+02:00').getTime();
-const DATE_LINE = 'DO 17. SEPTEMBER 2026 · 10:00 UHR · LIVE · ONLINE';
+const WEBINAR_TS = new Date('2026-10-15T10:00:00+02:00').getTime();
+const DATE_LINE = 'DO 15. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 // Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
-const DATE_LINE_SHORT = 'DO 17. SEPT 2026 · 10:00 UHR · LIVE';
+const DATE_LINE_SHORT = 'DO 15. OKT 2026 · 10:00 UHR · LIVE';
 
 const STATS = [
   ['400.000+', 'trainierte Klienten'],
@@ -371,7 +370,7 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
       const ok = res.ok && data?.ok;
       track('webinar_register_result', { ok });
       if (ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-09-17', content_category: 'webinar' }, eventId);
+        trackMeta('Lead', { content_name: 'webinar-2026-10-15', content_category: 'webinar' }, eventId);
         trackLinkedInLead();
         navigate(`/webinar/danke?email=${encodeURIComponent(email)}`);
         return;
@@ -451,6 +450,61 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
 
 /** Sticky CTA bar · slides in from ~20 % scroll depth on every breakpoint.
  * Compact email capture on sm+, button-only on phones. */
+const TransparentHeader = ({ onCta }) => {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const ink = scrolled;
+  return (
+    <motion.header
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      data-testid="webinar-header"
+      className={`hidden min-[900px]:block fixed inset-x-0 top-0 z-30 transition-[background-color,border-color,backdrop-filter] duration-300 ${
+        ink ? 'bg-white/85 backdrop-blur-md border-b border-[#111111]/8' : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-[1280px] mx-auto px-10 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-3" aria-label="LeaderOS Startseite">
+          <WladMark size={30} variant={ink ? 'solid' : 'outline'} />
+          <span
+            className={`font-black tracking-tight text-[19px] transition-colors ${ink ? 'text-[#111111]' : 'text-white'}`}
+            style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}
+          >
+            Leader<span className={ink ? 'text-[#5A7700]' : 'text-[#BFFF00]'}>·</span>OS
+          </span>
+        </Link>
+        <div className="flex items-center gap-3">
+          <motion.span
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] ${
+              ink ? 'bg-[#BFFF00]/25 text-[#111111]' : 'bg-white/10 text-white border border-white/20'
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full inline-block ${ink ? 'bg-[#111111]' : 'bg-[#BFFF00]'}`} />
+            {DATE_LINE_SHORT}
+          </motion.span>
+          <button
+            type="button"
+            onClick={onCta}
+            className={`inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-[11.5px] font-bold uppercase tracking-[0.14em] transition-colors ${
+              ink ? 'bg-[#111111] text-white hover:bg-[#333]' : 'bg-white text-[#111111] hover:bg-[#BFFF00]'
+            }`}
+          >
+            Platz sichern <ArrowUpRight size={14} />
+          </button>
+        </div>
+      </div>
+    </motion.header>
+  );
+};
+
 const StickyCtaBar = ({ onCtaClick }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(false);
@@ -474,7 +528,7 @@ const StickyCtaBar = ({ onCtaClick }) => {
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
             <div className="hidden md:block shrink-0">
               <p className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#5A7700]">▸ Kostenloses Live-Webinar</p>
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">17. September · 10 Uhr · Live</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">15. Oktober · 10 Uhr · Live</p>
             </div>
             <div className="hidden sm:block flex-1">
               <RegisterForm idSuffix="-sticky" compact />
@@ -626,12 +680,12 @@ export default function WebinarPage() {
     root.classList.remove('dark');
     captureUtm();
     track('webinar_view');
-    trackMeta('ViewContent', { content_name: 'webinar-2026-09-17', content_category: 'webinar' });
+    trackMeta('ViewContent', { content_name: 'webinar-2026-10-15', content_category: 'webinar' });
 
     const restoreMeta = applyPageMeta({
       title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
       description:
-        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 17.09.2026 mit ' +
+        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 15.10.2026 mit ' +
         'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
         'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
       url: 'https://leader-os.de/webinar',
@@ -644,8 +698,8 @@ export default function WebinarPage() {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: 'Führe besser. Jeden Tag. · Das kostenlose LeaderOS Live-Webinar',
-      startDate: '2026-09-17T10:00:00+02:00',
-      endDate: '2026-09-17T11:30:00+02:00',
+      startDate: '2026-10-15T10:00:00+02:00',
+      endDate: '2026-10-15T11:30:00+02:00',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: { '@type': 'VirtualLocation', url: 'https://leader-os.de/webinar' },
@@ -679,30 +733,10 @@ export default function WebinarPage() {
     <div className="bg-white text-[#111111] min-h-[100dvh] antialiased" data-testid="webinar-page">
       <MouseGlow />
 
-      {/* Squeeze chrome · logo only, no nav exits */}
-      <motion.header
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-[1100px] mx-auto px-5 md:px-10 pt-5 pb-4 md:pt-6 md:pb-0 flex items-center justify-between"
-      >
-        <Link to="/" className="flex items-center gap-3" aria-label="LeaderOS Startseite">
-          <WladMark size={34} />
-          <span className="font-black tracking-tight text-[#111111] text-[19px]" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
-            Leader<span className="text-[#5A7700] mx-0.5">·</span>OS
-          </span>
-        </Link>
-        <motion.span
-          animate={{ opacity: [0.65, 1, 0.65] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-          className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[#BFFF00]/25 px-3.5 py-1.5 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] text-[#111111]"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#111111] inline-block" />
-          {/* Mobil passt neben das Logo nur die Kurzform, sonst bricht die Pille. */}
-          <span className="sm:hidden">Live · kostenlos</span>
-          <span className="hidden sm:inline">Live-Webinar · kostenlos</span>
-        </motion.span>
-      </motion.header>
+      {/* Squeeze chrome · transparent over the hero video, frosted white once
+          the hero is scrolled away. No nav exits. Mobile has its own header
+          row inside CinematicHero, so this one only renders from 900 px up. */}
+      <TransparentHeader onCta={scrollToForm} />
 
       <main id="main-content">
         {/* ── HOOK · headline → sub → CTA → trust → product ────────────── */}
@@ -824,7 +858,7 @@ export default function WebinarPage() {
                 ))}
               </ol>
             </div>
-            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 17. September · 10 Uhr · kostenlos" />
+            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 15. Oktober · 10 Uhr · kostenlos" />
           </div>
         </section>
 
@@ -1206,7 +1240,26 @@ export default function WebinarPage() {
 
       <StickyCtaBar onCtaClick={scrollToForm} />
 
-      <LandingFooter />
+      {/* Squeeze footer · legal only. The full site footer (40 links, pricing,
+          newsletter) is a nav exit on a page whose single job is the form. */}
+      <footer className="bg-[#111111] text-white" data-testid="webinar-footer">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="LeaderOS Startseite">
+            <WladMark size={26} variant="outline" />
+            <span className="font-black tracking-tight text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
+              Leader<span className="text-[#BFFF00]">·</span>OS
+            </span>
+          </Link>
+          <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/45 text-center">
+            © 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20 Länder
+          </p>
+          <nav className="flex items-center gap-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/60">
+            <Link to="/impressum" className="hover:text-white">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-white">Datenschutz</Link>
+            <Link to="/agb" className="hover:text-white">AGB</Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }

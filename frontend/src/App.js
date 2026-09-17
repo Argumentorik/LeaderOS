@@ -244,7 +244,7 @@ function AppRouter() {
         <Route path="/webinar/danke" element={<WebinarThankYouPage />} />
         {/* Waiting room · reminder emails (WEBINAR_JOIN_URL) point here */}
         <Route path="/webinar/live" element={<WebinarLivePage />} />
-        {/* Ad-only · short-scroll, single-viewport variant, same 17.09. offer + register endpoint as /webinar and /event */}
+        {/* Ad-only · short-scroll, single-viewport variant, same 15.10. offer + register endpoint as /webinar and /event */}
         <Route path="/training" element={<TrainingLandingPage />} />
         {/* Ad-only · Kommunikation-first, Steadyflow-Mechanik mit Kanon-Inhalt (zehn Frameworks als Marquee) */}
         <Route path="/kommunikation" element={<KommunikationPage />} />

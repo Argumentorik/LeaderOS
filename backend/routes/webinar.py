@@ -43,8 +43,8 @@ from services_email import (
 
 router = APIRouter(prefix="/api", tags=["webinar"])
 
-WEBINAR_CAMPAIGN = "webinar-2026-09-17"
-WEBINAR_DATE_ISO = "2026-09-17T08:00:00Z"  # 10:00 CEST
+WEBINAR_CAMPAIGN = "webinar-2026-10-15"
+WEBINAR_DATE_ISO = "2026-10-15T08:00:00Z"  # 10:00 CEST
 WEBINAR_DURATION_MIN = 90
 WEBINAR_MAX_CAPACITY = 500
 WEBINAR_JOIN_URL = os.environ.get("WEBINAR_JOIN_URL", "https://leader-os.de/webinar")
@@ -149,6 +149,10 @@ class RegisterPayload(BaseModel):
     # Browser-Pixel-Event-ID (lib/metaPixel.js) → dieselbe ID über die
     # Conversions API, damit Meta Browser- und Server-Event dedupliziert.
     meta_event_id: str | None = Field(default="", max_length=64)
+    # Qualifizierungs-Antworten aus dem Typeform-Stepper auf /kommunikation.
+    # Kurze, feste Schlüssel → Werte; landet als `quiz` am Lead, damit die
+    # Nachfass-Mails und der Sales-Room wissen, wo jemand steht.
+    answers: dict[str, str] | None = None
 
 
 # ── Meta Conversions API ────────────────────────────────────────────────
@@ -251,6 +255,10 @@ async def register(payload: RegisterPayload, request: Request):
         set_fields["landing_path"] = payload.landing_path
     if ip:
         set_fields["last_ip"] = ip
+    if payload.answers:
+        clean = {str(k)[:40]: str(v)[:120] for k, v in list(payload.answers.items())[:12]}
+        set_fields["quiz"] = clean
+        set_fields["quiz_at"] = now
 
     await db.webinar_leads.update_one(
         {"email_lower": email},
