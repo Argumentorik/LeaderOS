@@ -87,7 +87,7 @@ function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <a href="https://app.leader-os.de/login" className="text-sm text-gray-500 hover:text-black transition-colors">
+          <a href="https://leaderos.de/login" className="text-sm text-gray-500 hover:text-black transition-colors">
             Login
           </a>
           <a
@@ -119,7 +119,7 @@ function Navbar() {
           </div>
           <hr className="my-5 border-black/10" />
           <div className="flex flex-col gap-3">
-            <a href="https://app.leader-os.de/login" className="text-base text-gray-600">Login</a>
+            <a href="https://leaderos.de/login" className="text-base text-gray-600">Login</a>
             <a
               href="#anmelden"
               onClick={() => setOpen(false)}

@@ -9,7 +9,9 @@ import {
 } from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { isValidEmail } from '../features/newsletter/lib/newsletterClient';
-import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
+import {
+  WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback,
+} from '../lib/brandAssets';
 import { WladMark } from '../components/brand/WladMark';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
@@ -83,13 +85,48 @@ const WEEK = [
 const SEMINAR_FLOW = ['Seminar', 'Notizen', 'Alltag', 'Vergessen'];
 const OS_FLOW = ['Täglich 15 Min', 'KI-Coach', 'Simulation', 'Feedback', 'Fortschritt'];
 
+// Jede Karte mit Bild — eigene Assets (Wlad, WladBot-Avatar, Buchcover),
+// kein Stock. `fit` steuert, ob das Bild die Fläche füllt (Foto) oder
+// als Cover auf Ink-Fläche steht (Buch, Avatar).
 const LEARN_CARDS = [
-  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.'],
-  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.'],
-  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.'],
-  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.'],
-  ['Die Frameworks', 'Die Methoden hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.'],
+  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.', '/wlad/wlad-portrait.jpg', 'cover'],
+  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.', '/wlad/wladbot3.0.webp', 'avatar'],
+  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/wlad/books/redest-du-noch-oder-ueberzeugst-du-schon.jpg', 'book'],
+  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/wlad/books/die-5-rollen-einer-fuehrungskraft.jpg', 'book'],
+  ['Die Frameworks', 'Die Methoden hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.', '/wlad/books/weisse-rhetorik.jpg', 'book'],
+  ['Live-Q&A mit Wlad', 'Deine härteste Führungsfrage — ab 11:15 Uhr direkt von Wlad beantwortet, kein Skript.', '/wlad/wlad-portrait-640.jpg', 'cover'],
 ];
+
+// Presse- und Kunden-Logos: nur echte Logo-Dateien werden gezeigt, kein
+// Wordmark-Ersatz. Datei unter public/logos/press/<key>.svg ablegen — der
+// Eintrag erscheint dann automatisch; ohne Datei bleibt der Block leer.
+const MEDIA_LOGOS = {
+  'DER SPIEGEL': '/logos/press/der-spiegel.svg',
+  'BUSINESS INSIDER': '/logos/press/business-insider.svg',
+  'SÜDDEUTSCHE ZEITUNG': '/logos/press/sueddeutsche-zeitung.svg',
+  'RTL': '/logos/press/rtl.svg',
+  'ARD · DAS ERSTE': '/logos/press/ard-das-erste.svg',
+  'PROSIEBEN · GALILEO': '/logos/press/prosieben-galileo.svg',
+  'TEDX': '/logos/press/tedx.svg',
+  'GREATOR': '/logos/press/greator.svg',
+};
+const CLIENT_LOGOS = Object.fromEntries(
+  CLIENTS.map((c) => [c, `/logos/clients/${c.toLowerCase().replace(/[^a-z0-9]/g, '-')}.svg`]),
+);
+
+/** Prüft per HEAD-Request, welche Logo-Dateien wirklich existieren —
+ *  ein fehlendes SVG rendert sonst als kaputtes Bild. */
+const useExistingAssets = (paths) => {
+  const [existing, setExisting] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    Promise.all(paths.map((p) => fetch(p, { method: 'HEAD' }).then((r) => (r.ok && /svg|image/.test(r.headers.get('content-type') || '') ? p : null)).catch(() => null)))
+      .then((res) => { if (alive) setExisting(res.filter(Boolean)); });
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paths.join('|')]);
+  return existing;
+};
 
 const VALUE_STACK = [
   [Video, 'Live-Demonstration', 'Das komplette Leadership Operating System, live gezeigt — kein Foliensatz.'],
@@ -450,6 +487,44 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
 
 /** Sticky CTA bar · slides in from ~20 % scroll depth on every breakpoint.
  * Compact email capture on sm+, button-only on phones. */
+/** Presse- und Kunden-Logos · rendert ausschließlich vorhandene Logo-
+ *  Dateien (HEAD-Check), nie Text-Wordmarks. Fehlen alle Dateien einer
+ *  Gruppe, fällt der Block komplett weg statt leer zu stehen. */
+const LogoBand = ({ eyebrow, names, logos, muted = false }) => {
+  const paths = names.map((n) => logos[n]).filter(Boolean);
+  const existing = useExistingAssets(paths);
+  const items = names.filter((n) => existing.includes(logos[n]));
+  if (!items.length) return null;
+  return (
+    <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center first:mt-0">
+      <motion.p
+        initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
+        className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-5"
+      >
+        {eyebrow}
+      </motion.p>
+      <ul className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
+        {items.map((n, i) => (
+          <motion.li
+            key={n}
+            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
+            className={muted ? 'opacity-55 hover:opacity-100 transition-opacity' : 'opacity-80 hover:opacity-100 transition-opacity'}
+          >
+            <img src={logos[n]} alt={n} loading="lazy" className="h-6 md:h-7 w-auto max-w-[140px] object-contain grayscale" />
+          </motion.li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const LogoBands = () => (
+  <>
+    <LogoBand eyebrow="▸ Bekannt aus" names={MEDIA} logos={MEDIA_LOGOS} />
+    <LogoBand eyebrow="▸ Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" names={CLIENTS} logos={CLIENT_LOGOS} muted />
+  </>
+);
+
 const TransparentHeader = ({ onCta }) => {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -658,15 +733,37 @@ const ParallaxPortrait = () => {
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.02, 1, 1.02]);
 
   return (
-    <div ref={ref} className="rounded-3xl overflow-hidden border border-[#111111]/10 shadow-[0_30px_60px_-35px_rgba(17,17,17,0.35)]">
-      <motion.img
-        style={reduced ? {} : { y, rotate, scale }}
-        src={WLAD_AVATAR}
-        onError={withFallback(WLAD_AVATAR_FALLBACKS)}
-        alt="Wlad Jachtchenko · Host des Webinars"
-        loading="lazy"
-        className="w-full aspect-[4/5] object-cover object-top"
-      />
+    <div ref={ref} className="relative">
+      <div className="rounded-3xl overflow-hidden border border-[#111111]/10 shadow-[0_30px_60px_-35px_rgba(17,17,17,0.35)]">
+        <motion.img
+          style={reduced ? {} : { y, rotate, scale }}
+          src={WLAD_AVATAR}
+          onError={withFallback(WLAD_AVATAR_FALLBACKS)}
+          alt="Wlad Jachtchenko · Host des Webinars"
+          loading="lazy"
+          className="w-full aspect-[4/5] object-cover object-top"
+        />
+      </div>
+      {/* WladBot · der KI-Coach, der Wlads Methodik trägt — als zweites
+          Gesicht neben dem Host, nicht als Icon. */}
+      <motion.figure
+        initial={{ opacity: 0, y: 16, rotate: -4 }}
+        whileInView={{ opacity: 1, y: 0, rotate: -3 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -bottom-6 -right-3 sm:-right-6 w-[38%] max-w-[180px] rounded-2xl bg-[#111111] border-4 border-white shadow-[0_24px_50px_-20px_rgba(17,17,17,0.5)] overflow-hidden"
+        data-testid="webinar-host-wladbot"
+      >
+        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 40%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
+        <img
+          src={WLADBOT_AVATAR}
+          onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
+          alt="WladBot · der KI-Coach mit Wlads Methodik"
+          loading="lazy"
+          className="relative w-full aspect-square object-contain p-2"
+        />
+        <figcaption className="relative px-3 pb-2.5 font-mono text-[8.5px] font-bold uppercase tracking-[0.18em] text-[#BFFF00]">▸ WladBot · KI-Coach</figcaption>
+      </motion.figure>
     </div>
   );
 };
@@ -775,44 +872,9 @@ export default function WebinarPage() {
                 </motion.div>
               ))}
             </div>
-            <div className="border-t border-[#111111]/8 pt-7 text-center">
-              <motion.p
-                initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-                className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-4"
-              >
-                ▸ Bekannt aus
-              </motion.p>
-              <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5">
-                {MEDIA.map((m, i) => (
-                  <motion.li
-                    key={m}
-                    initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-                    className="font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-[0.14em] text-[#4b4b4d]"
-                  >
-                    {m}
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
+            <LogoBands />
             <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center">
-              <motion.p
-                initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-                className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-4"
-              >
-                ▸ Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen
-              </motion.p>
-              <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5">
-                {CLIENTS.map((c, i) => (
-                  <motion.li
-                    key={c}
-                    initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i * 0.6} variants={FADE_UP}
-                    className="font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-[0.14em] text-[#707072]"
-                  >
-                    {c}
-                  </motion.li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-2">
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2">
                 {REVIEW_PLATFORMS.map(([name, rating, count, href]) => (
                   <a
                     key={name}
@@ -944,18 +1006,35 @@ export default function WebinarPage() {
               headline={<>Das lernst du in 90 Minuten<span className="text-[#5A7700] not-italic">.</span></>}
             />
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {LEARN_CARDS.map(([title, desc], i) => (
+              {LEARN_CARDS.map(([title, desc, img, fit], i) => (
                 <motion.div
                   key={title}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={i} variants={FADE_UP}
+                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} custom={i} variants={FADE_UP}
                   whileHover={{ y: -5, scale: 1.015 }}
-                  className="rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] p-6 transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
+                  className="group rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] overflow-hidden transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
                 >
-                  <motion.span whileHover={{ rotate: 10, scale: 1.12 }} className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] mb-4">
-                    <Check size={15} strokeWidth={3} />
-                  </motion.span>
-                  <h3 className="text-[17px] text-[#111111] mb-1.5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
-                  <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
+                  <div className={`relative aspect-[16/10] overflow-hidden ${fit === 'cover' ? 'bg-[#111111]' : 'bg-[#111111]'}`}>
+                    {fit === 'cover' ? (
+                      <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
+                    ) : fit === 'avatar' ? (
+                      <>
+                        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 45%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
+                        <img src={img} alt="WladBot · dein KI-Coach" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.05]" />
+                      </>
+                    ) : (
+                      <>
+                        <img src={img} alt="" aria-hidden loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-[1.3] blur-xl opacity-40" />
+                        <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-5 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] transition-transform duration-700 group-hover:scale-[1.04]" />
+                      </>
+                    )}
+                    <span className="absolute left-4 top-4 inline-flex w-8 h-8 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111]">
+                      <Check size={15} strokeWidth={3} />
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-[17px] text-[#111111] mb-1.5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
+                    <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>

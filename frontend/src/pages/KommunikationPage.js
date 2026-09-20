@@ -27,6 +27,10 @@ const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwI
 const COUNTER_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260625_213350_6343fcfb-2892-4dcc-8573-1161447cacf5.mp4';
 const INTRO_VIMEO_ID = '1197728183';
 const TRIAL_URL = 'https://leaderos.de/signup?trial=14';
+// Reihenfolge im Funnel: erst der kostenlose Leader-Check (leadercheck.de,
+// 10 Min), dann der Trial auf leaderos.de. Alle "loslegen"-Wege zeigen
+// deshalb zuerst auf den Check.
+const CHECK_URL = 'https://leadercheck.de?utm_source=leader-os&utm_medium=landing&utm_campaign=kommunikation';
 
 const INK = 'rgb(19, 21, 21)';
 const PAGE_BG = 'rgb(247, 247, 247)';
@@ -120,7 +124,7 @@ function Navbar() {
           </nav>
           <div className="bg-white flex items-center" style={{ borderRadius: 20, padding: 6, gap: 6, boxShadow: PILL_SHADOW }}>
             <motion.a
-              href="https://app.leader-os.de/login"
+              href="https://leaderos.de/login"
               {...hoverShrink}
               className="flex items-center justify-center"
               style={{ ...BODY, height: 52, padding: '0 18px', borderRadius: 14, fontSize: 14, color: INK }}
@@ -128,13 +132,13 @@ function Navbar() {
               Login
             </motion.a>
             <motion.a
-              href={TRIAL_URL}
+              href={CHECK_URL}
               {...hoverShrink}
               onClick={() => track('kommunikation_cta_click', { where: 'nav' })}
               className="flex items-center justify-center text-white"
               style={{ ...BODY, height: 52, padding: '0 20px', borderRadius: 14, fontSize: 14, background: INK }}
             >
-              14 Tage kostenlos
+              Leader-Check · 10 Min
             </motion.a>
           </div>
         </motion.div>
@@ -148,7 +152,7 @@ function Navbar() {
         >
           <Brand small />
           <div className="flex items-center" style={{ gap: 6 }}>
-            <DarkSquare href={TRIAL_URL} label="14 Tage kostenlos testen" size={40} radius={12}>
+            <DarkSquare href={CHECK_URL} label="Leader-Check starten · 10 Minuten" size={40} radius={12}>
               <Flame size={18} />
             </DarkSquare>
             <button
@@ -183,7 +187,7 @@ function Navbar() {
                 {NAV_LINKS.map((l) => (
                   <a key={l.href} href={l.href} onClick={() => setOpen(false)} style={{ ...BODY, fontSize: 16, color: INK }}>{l.label}</a>
                 ))}
-                <a href="https://app.leader-os.de/login" style={{ ...BODY, fontSize: 16, color: MUTED }}>Login</a>
+                <a href="https://leaderos.de/login" style={{ ...BODY, fontSize: 16, color: MUTED }}>Login</a>
               </div>
             </motion.div>
           </>
@@ -739,9 +743,14 @@ function KommunikationsCheck() {
           </AnimatePresence>
         </div>
 
-        <p className="mt-6 text-center" style={{ ...BODY, fontSize: 13, color: MUTED }}>
-          Ohne Check direkt anmelden? <a href="/webinar" className="underline hover:text-black">Zur Webinar-Seite</a> · Oder gleich loslegen: <a href={TRIAL_URL} className="underline hover:text-black">14 Tage kostenlos testen</a>
-        </p>
+        <div className="mt-8 mx-auto rounded-2xl bg-white" style={{ maxWidth: 640, padding: '18px 20px', border: '1px solid rgba(19,21,21,0.1)' }}>
+          <div style={{ ...BODY, fontSize: 12, color: MUTED, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Dein Weg in drei Schritten</div>
+          <ol className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ ...BODY, fontSize: 13.5, color: INK }}>
+            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>1</span><span><a href={CHECK_URL} className="underline hover:text-black">Leader-Check</a> auf leadercheck.de — 10 Minuten, dein Führungsprofil</span></li>
+            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>2</span><span><a href="/webinar" className="underline hover:text-black">Live-Webinar</a> am 29. Oktober — das System, live gezeigt</span></li>
+            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>3</span><span><a href={TRIAL_URL} className="underline hover:text-black">14 Tage kostenlos</a> auf leaderos.de — erst nach dem Check</span></li>
+          </ol>
+        </div>
       </div>
     </section>
   );
