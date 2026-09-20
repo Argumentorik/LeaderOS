@@ -25,7 +25,7 @@ let shownThisSession = false;
  *
  * All claims verified against docs/gtm/WLAD_CANON.md + WebinarPage.js:
  * 400.000+ Klienten · 3× SPIEGEL-Bestseller · 4,9/5 Trustpilot (388) ·
- * webinar date DO 15. OKTOBER 2026 · 10:00 UHR.
+ * webinar date DO 29. OKTOBER 2026 · 10:00 UHR.
  */
 export const WebinarFollowPopup = ({ armedAt = 0 }) => {
   const [open, setOpen] = useState(false);
@@ -144,7 +144,7 @@ export const WebinarFollowPopup = ({ armedAt = 0 }) => {
             {/* Body */}
             <div className="px-5 sm:px-7 py-6">
               <p className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-brand-strong">
-                ▸ DO 15. OKTOBER 2026 · 10:00 UHR · LIVE
+                ▸ DO 29. OKTOBER 2026 · 10:00 UHR · LIVE
               </p>
 
               <h2

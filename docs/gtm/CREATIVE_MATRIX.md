@@ -134,14 +134,14 @@ Angles sind ein A/B-Test, nicht drei Aussagen.
 
 ## 3. Produktionswellen
 
-Heute ist der **05.09.**, das Webinar am **15.10.** — 200 Assets sind bis
+Heute ist der **05.09.**, das Webinar am **29.10.** — 200 Assets sind bis
 dahin nicht zu schaffen und wären auch nicht nutzbar. Deshalb gestaffelt:
 
 | Welle | Zeitraum | Menge | Inhalt | Kumuliert |
 | --- | --- | --- | --- | --- |
 | **W1 · Launch** | bis 16.09. | **24** | 8 Angles × 3 Formate: D01–D03, A01, A02, B01, C01, C02 | 24 |
-| **W2 · Nach dem Webinar** | 16.10.–15.11. | **48** | Frameworks A03–A08, Schmerz B02–B04 | 72 |
-| **W3 · Skalierung** | 16.10.–15.11. | **64** | Restliche Angles + zweite Varianten der Gewinner | 136 |
+| **W2 · Nach dem Webinar** | 30.10.–29.11. | **48** | Frameworks A03–A08, Schmerz B02–B04 | 72 |
+| **W3 · Skalierung** | 30.10.–29.11. | **64** | Restliche Angles + zweite Varianten der Gewinner | 136 |
 | **W4 · Auffüllung** | 16.11.–15.12. | **64** | Dritte Varianten, saisonale Hooks, Reste | 200 |
 
 **W1 ist das Einzige, was jetzt zählt.** 24 Assets, davon gehen 8–10 in

@@ -29,8 +29,8 @@ The single most important file is the **canon**: every public claim
 | [`gtm/RUNBOOK_ADS_CHANNELS.md`](./gtm/RUNBOOK_ADS_CHANNELS.md) | Channel-by-channel ads runbook |
 | [`gtm/CREATIVE_MATRIX.md`](./gtm/CREATIVE_MATRIX.md) | **Mengenplanung Creatives** — 24 Angles × 3 Formate × 3 Varianten = 200, Produktionswellen, Namensschema, wie viele überhaupt testbar sind |
 | [`gtm/GOOGLE_ADS_SETUP.md`](./gtm/GOOGLE_ADS_SETUP.md) | Google Ads technical setup (account, gtag, Consent Mode v2, conversion actions, UTM) |
-| [`gtm/META_ADS_WEBINAR.md`](./gtm/META_ADS_WEBINAR.md) | **Meta Ads Launch-Paket Webinar 15.10.** — Matrix educate/convert übersetzt, Kampagnenstruktur bei 30 €/Tag, 24 Creatives mit Copy, Pixel + Conversions API, Erwartungswerte |
-| [`gtm/LINKEDIN_ADS_WEBINAR.md`](./gtm/LINKEDIN_ADS_WEBINAR.md) | **LinkedIn Ads Launch-Paket Webinar 15.10.** — eine Kampagne bei 50 €/Tag, Job-Titel-Zielgruppe, 8 Creatives 1200×627, Insight Tag + Conversion, warum Website-Conversions statt Lead Gen Forms |
+| [`gtm/META_ADS_WEBINAR.md`](./gtm/META_ADS_WEBINAR.md) | **Meta Ads Launch-Paket Webinar 29.10.** — Matrix educate/convert übersetzt, Kampagnenstruktur bei 30 €/Tag, 24 Creatives mit Copy, Pixel + Conversions API, Erwartungswerte |
+| [`gtm/LINKEDIN_ADS_WEBINAR.md`](./gtm/LINKEDIN_ADS_WEBINAR.md) | **LinkedIn Ads Launch-Paket Webinar 29.10.** — eine Kampagne bei 50 €/Tag, Job-Titel-Zielgruppe, 8 Creatives 1200×627, Insight Tag + Conversion, warum Website-Conversions statt Lead Gen Forms |
 | [`gtm/SEO_KEYWORDS.md`](./gtm/SEO_KEYWORDS.md) | Keyword universe (DACH leadership/AI/communication) |
 | [`gtm/SEO_AEO_PLAYBOOK.md`](./gtm/SEO_AEO_PLAYBOOK.md) | **Technical visibility** — why CRA breaks AI crawlers, prerendering vs static pages, robots/IndexNow/Bing, rules for new pages |
 | [`gtm/GROWTH_LOOP.md`](./gtm/GROWTH_LOOP.md) | The growth loop: check → content → funnel → referral |
@@ -92,7 +92,7 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 
 | Doc | Why it stays at `docs/` root |
 | --- | --- |
-| [`LAUNCH_PLAN.md`](./LAUNCH_PLAN.md) | **Master-Plan bis zum Webinar 15.10.2026** — drei Arbeitsströme, Woche für Woche, Gate-Logik, Risiken. Verweist quer über gtm/, app/ und ops/ |
+| [`LAUNCH_PLAN.md`](./LAUNCH_PLAN.md) | **Master-Plan bis zum Webinar 29.10.2026** — drei Arbeitsströme, Woche für Woche, Gate-Logik, Risiken. Verweist quer über gtm/, app/ und ops/ |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Schema migration history — the PR template requires recording migrations here; path is load-bearing |
 
 `sql/` holds loose SQL helpers for reference. Real migrations go through

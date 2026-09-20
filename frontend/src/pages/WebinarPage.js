@@ -43,10 +43,10 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * no invented testimonials, no fake scarcity, no fake exclusivity.
  */
 
-const WEBINAR_TS = new Date('2026-10-15T10:00:00+02:00').getTime();
-const DATE_LINE = 'DO 15. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
+const WEBINAR_TS = new Date('2026-10-29T10:00:00+01:00').getTime();
+const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 // Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
-const DATE_LINE_SHORT = 'DO 15. OKT 2026 · 10:00 UHR · LIVE';
+const DATE_LINE_SHORT = 'DO 29. OKT 2026 · 10:00 UHR · LIVE';
 
 const STATS = [
   ['400.000+', 'trainierte Klienten'],
@@ -370,7 +370,7 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
       const ok = res.ok && data?.ok;
       track('webinar_register_result', { ok });
       if (ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-10-15', content_category: 'webinar' }, eventId);
+        trackMeta('Lead', { content_name: 'webinar-2026-10-29', content_category: 'webinar' }, eventId);
         trackLinkedInLead();
         navigate(`/webinar/danke?email=${encodeURIComponent(email)}`);
         return;
@@ -528,7 +528,7 @@ const StickyCtaBar = ({ onCtaClick }) => {
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
             <div className="hidden md:block shrink-0">
               <p className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#5A7700]">▸ Kostenloses Live-Webinar</p>
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">15. Oktober · 10 Uhr · Live</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">29. Oktober · 10 Uhr · Live</p>
             </div>
             <div className="hidden sm:block flex-1">
               <RegisterForm idSuffix="-sticky" compact />
@@ -680,12 +680,12 @@ export default function WebinarPage() {
     root.classList.remove('dark');
     captureUtm();
     track('webinar_view');
-    trackMeta('ViewContent', { content_name: 'webinar-2026-10-15', content_category: 'webinar' });
+    trackMeta('ViewContent', { content_name: 'webinar-2026-10-29', content_category: 'webinar' });
 
     const restoreMeta = applyPageMeta({
       title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
       description:
-        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 15.10.2026 mit ' +
+        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 29.10.2026 mit ' +
         'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
         'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
       url: 'https://leader-os.de/webinar',
@@ -698,8 +698,8 @@ export default function WebinarPage() {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: 'Führe besser. Jeden Tag. · Das kostenlose LeaderOS Live-Webinar',
-      startDate: '2026-10-15T10:00:00+02:00',
-      endDate: '2026-10-15T11:30:00+02:00',
+      startDate: '2026-10-29T10:00:00+01:00',
+      endDate: '2026-10-29T11:30:00+01:00',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: { '@type': 'VirtualLocation', url: 'https://leader-os.de/webinar' },
@@ -858,7 +858,7 @@ export default function WebinarPage() {
                 ))}
               </ol>
             </div>
-            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 15. Oktober · 10 Uhr · kostenlos" />
+            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 29. Oktober · 10 Uhr · kostenlos" />
           </div>
         </section>
 

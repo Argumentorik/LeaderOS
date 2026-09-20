@@ -17,7 +17,7 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * Distinct from /webinar (long-form Hormozi funnel) and /event (dark
  * dotted-glow alt framing) — this is the short-scroll, motion-rich,
  * single-viewport variant: everything the ad promises sits in one card,
- * nothing to scroll past before the offer. Same underlying event (15.10.,
+ * nothing to scroll past before the offer. Same underlying event (29.10.,
  * see routes/webinar.py WEBINAR_DATE_ISO) and the same real registration
  * endpoint — a third creative angle on one honest offer, not a new product.
  *
@@ -25,7 +25,7 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * organic search (see docs/gtm/SEO_AEO_PLAYBOOK.md).
  */
 
-const WEBINAR_DATE_ISO = '2026-10-15T08:00:00Z'; // 10:00 CEST
+const WEBINAR_DATE_ISO = '2026-10-29T09:00:00Z'; // 10:00 CET (nach der Zeitumstellung)
 
 const track = (event, props = {}) => {
   if (typeof window !== 'undefined' && window.posthog?.capture) {
@@ -259,7 +259,7 @@ function LiveTerminFolder() {
           <div className="text-[11px] text-gray-400 mb-3">Mit Wlad Jachtchenko, live &amp; interaktiv</div>
           <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#E1F5FE] px-2.5 py-1.5">
             <Clock size={12} className="text-[#03A9F4]" />
-            <span className="text-[11px] font-semibold text-[#03A9F4]">15.10. · 10:00 Uhr</span>
+            <span className="text-[11px] font-semibold text-[#03A9F4]">29.10. · 10:00 Uhr</span>
           </div>
         </div>
 
@@ -311,7 +311,7 @@ function RegisterBlock() {
       const ok = res.ok && data?.ok;
       track('training_lp_register_result', { ok });
       if (ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-10-15', content_category: 'webinar' }, eventId);
+        trackMeta('Lead', { content_name: 'webinar-2026-10-29', content_category: 'webinar' }, eventId);
         trackLinkedInLead();
         navigate(`/webinar/danke?email=${encodeURIComponent(email)}`);
         return;
@@ -419,7 +419,7 @@ function Hero() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className={`mt-5 ${monoLabel}`}
           >
-            15.10.2026 · 10:00 UHR · LIVE, 90 MIN · 0 €
+            29.10.2026 · 10:00 UHR · LIVE, 90 MIN · 0 €
           </motion.div>
 
           <div className="mt-8">
@@ -452,7 +452,7 @@ export default function TrainingLandingPage() {
     const restoreMeta = applyPageMeta({
       title: 'Kostenloses Live-Training · Führung wird trainiert, nicht gelernt · LeaderOS',
       description:
-        'Live-Training am 15.10.2026 mit Wlad Jachtchenko (3× SPIEGEL-Bestseller): 90 Minuten, ' +
+        'Live-Training am 29.10.2026 mit Wlad Jachtchenko (3× SPIEGEL-Bestseller): 90 Minuten, ' +
         'ein echtes System statt Theorie. Kostenlos, live, keine Aufzeichnung.',
       url: 'https://leader-os.de/training',
       image: 'https://leader-os.de/og-wlad.jpg',

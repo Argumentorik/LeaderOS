@@ -42,7 +42,7 @@ const POSTER = '/wlad/wlad-portrait.jpg';
 
 const HEADLINE = [['Führe'], ['besser.'], ['Jeden Tag', '.']];
 const SUB = 'Mit Wlad Jachtchenko: der Charisma-Code, das Leadership-Betriebssystem und ein echter Live-Case — mit deinen Fragen im Q&A.';
-const FACTS = [['Termin', '15. OKT'], ['Dauer', '90 MIN'], ['Teilnahme', '0 €']];
+const FACTS = [['Termin', '29. OKT'], ['Dauer', '90 MIN'], ['Teilnahme', '0 €']];
 const PROOF = '400.000+ Klienten · 3× SPIEGEL-Bestseller';
 
 /** Inline-Kurzschreibweise für die Keyframes aus index.css (Name, Dauer, Delay). */
@@ -157,7 +157,7 @@ const DesktopHero = ({ formSlot }) => (
       <div style={{ maxWidth: 620 }}>
         <p className="ze" style={{ margin: '0 0 18px', display: 'flex', alignItems: 'center', gap: 10, ...ze('zeFadeUp', 0.8, 0.12) }}>
           <span aria-hidden style={{ width: 7, height: 7, borderRadius: 999, background: LIME, boxShadow: '0 0 0 3px rgba(191,255,0,0.25)' }} />
-          <Bib style={{ color: LIME, fontSize: 10.5 }}>Kostenloses Live-Webinar · Do 15. Oktober 2026 · 10:00 Uhr</Bib>
+          <Bib style={{ color: LIME, fontSize: 10.5 }}>Kostenloses Live-Webinar · Do 29. Oktober 2026 · 10:00 Uhr</Bib>
         </p>
 
         <Headline style={{ fontSize: 'clamp(72px, 8.4vw, 132px)', lineHeight: 0.88 }} />

@@ -18,8 +18,8 @@ import { applyPageMeta } from '../lib/pageMeta';
  * instead of waiting for the webinar date.
  */
 
-const WEBINAR_START = new Date('2026-10-15T10:00:00+02:00');
-const WEBINAR_END = new Date('2026-10-15T11:30:00+02:00');
+const WEBINAR_START = new Date('2026-10-29T10:00:00+01:00');
+const WEBINAR_END = new Date('2026-10-29T11:30:00+01:00');
 
 const googleCalendarUrl = () => {
   const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -175,7 +175,7 @@ export default function WebinarThankYouPage() {
 
           <div className="mt-7 flex justify-center">
             <PlusCircleCTA
-              href="/fuehrung-beginnt-hier?utm_source=webinar&utm_medium=thankyou&utm_campaign=webinar-2026-10-15"
+              href="/fuehrung-beginnt-hier?utm_source=webinar&utm_medium=thankyou&utm_campaign=webinar-2026-10-29"
               testId="webinar-thankyou-cta-videos"
             >
               Videoserie freischalten · kostenlos
@@ -197,9 +197,9 @@ export default function WebinarThankYouPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             {[
-              ['WhatsApp', `https://wa.me/?text=${encodeURIComponent('Kostenloses Live-Webinar mit Wlad Jachtchenko (3× SPIEGEL-Bestseller) am 15.10. — Führung täglich trainieren statt einmal im Jahr Seminar: https://leader-os.de/webinar?utm_source=share-whatsapp&utm_medium=referral&utm_campaign=webinar-2026-10-15')}`],
-              ['LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://leader-os.de/webinar?utm_source=share-linkedin&utm_medium=referral&utm_campaign=webinar-2026-10-15')}`],
-              ['E-Mail', `mailto:?subject=${encodeURIComponent('Kostenloses Live-Webinar: Führung wird trainiert')}&body=${encodeURIComponent('Hi,\n\nam 15.10. um 10 Uhr zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller) live, wie Führung täglich trainierbar wird — kostenlos, mit Q&A.\n\nHier anmelden: https://leader-os.de/webinar?utm_source=share-email&utm_medium=referral&utm_campaign=webinar-2026-10-15')}`],
+              ['WhatsApp', `https://wa.me/?text=${encodeURIComponent('Kostenloses Live-Webinar mit Wlad Jachtchenko (3× SPIEGEL-Bestseller) am 29.10. — Führung täglich trainieren statt einmal im Jahr Seminar: https://leader-os.de/webinar?utm_source=share-whatsapp&utm_medium=referral&utm_campaign=webinar-2026-10-29')}`],
+              ['LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://leader-os.de/webinar?utm_source=share-linkedin&utm_medium=referral&utm_campaign=webinar-2026-10-29')}`],
+              ['E-Mail', `mailto:?subject=${encodeURIComponent('Kostenloses Live-Webinar: Führung wird trainiert')}&body=${encodeURIComponent('Hi,\n\nam 29.10. um 10 Uhr zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller) live, wie Führung täglich trainierbar wird — kostenlos, mit Q&A.\n\nHier anmelden: https://leader-os.de/webinar?utm_source=share-email&utm_medium=referral&utm_campaign=webinar-2026-10-29')}`],
             ].map(([label, href]) => (
               <a
                 key={label}
@@ -227,7 +227,7 @@ export default function WebinarThankYouPage() {
           </p>
           <div className="mt-6">
             <a
-              href="https://leaderos.de/signup?trial=14&utm_source=webinar&utm_medium=thankyou&utm_campaign=webinar-2026-10-15"
+              href="https://leaderos.de/signup?trial=14&utm_source=webinar&utm_medium=thankyou&utm_campaign=webinar-2026-10-29"
               data-testid="webinar-thankyou-cta-trial"
               className="text-[12px] font-bold uppercase tracking-[0.2em] text-foreground/55 hover:text-foreground transition-colors"
             >

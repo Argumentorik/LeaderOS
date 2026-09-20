@@ -10,7 +10,7 @@
 > Konto, Tag, Consent, Conversion-Actions, UTM-Konventionen.
 
 **Stand:** August 2026 · Webinar-Termin überall im Repo:
-**Do 15.10.2026, 10:00 CEST** (`2026-10-15T08:00:00Z`).
+**Do 29.10.2026, 10:00 CEST** (`2026-10-29T09:00:00Z`).
 
 ---
 
@@ -193,7 +193,7 @@ Ein Schema für alle Kanäle — `campaign` landet 1:1 in
 | --- | --- | --- |
 | `utm_source` | `google` · `meta` · `linkedin` · `newsletter` | Plattform, klein |
 | `utm_medium` | `cpc` · `paid-social` · `email` | Kanaltyp |
-| `utm_campaign` | `g-search-wladbot` · `g-search-webinar` · `webinar-2026-10-15` | kebab-case, ≤ 64 Zeichen, Prefix `g-` für Google |
+| `utm_campaign` | `g-search-wladbot` · `g-search-webinar` · `webinar-2026-10-29` | kebab-case, ≤ 64 Zeichen, Prefix `g-` für Google |
 
 Beispiel Final-URL Kampagne S-01:
 `https://leader-os.de/wladbot?utm_source=google&utm_medium=cpc&utm_campaign=g-search-wladbot`
