@@ -197,16 +197,18 @@ The target is the repo variable `BACKEND_URL` (default
 `https://leader-os.de`). When a run fails, a GitHub issue opens
 automatically.
 
-**Not in `cron.yml`** — and nowhere else in the repo:
+**Webinar jobs** (`.github/workflows/webinar-cron.yml`, added 24.09.):
 
-- `POST /api/cron/webinar-reminders`: sends the 24h and 1h reminders. The
-  send window is only **±30 minutes** around each mark, so it must run at
-  least every 15–30 min. The docstring says "every ~15 min".
-- `POST /api/cron/webinar-followup`: once a day. Fires from 20h after the
-  webinar.
+- `POST /api/cron/webinar-reminders`: 24h reminder (sent 12–24.5 h before)
+  and 1h reminder (0–2 h before). Each lead gets each one once (flags on
+  `webinar_leads`), so extra calls are harmless.
+- `POST /api/cron/webinar-followup`: from 20h after the webinar, once per lead.
 
-If no external scheduler (cron-job.org, a Supabase `net.http_post` job, or
-Emergent) calls these, **nobody gets a reminder for 29.10.** See §8.1.
+The workflow only fires in the windows around 29.10. It is the **backup**:
+scheduled GitHub runs start up to 5 h late here (`cron-jobs` is scheduled
+for 07:00 UTC and runs around 12:30). **Primary scheduler: cron-job.org**,
+every 15 min on `webinar-reminders` with header `X-Cron-Secret` (value =
+`CRON_SHARED_SECRET` in Emergent, same as the GitHub secret). See §8.1.
 
 **B · Supabase pg_cron** (about 15 jobs in the database). These include
 `email_dispatcher`, `advance_email_journeys`, `drain_emergent_sync`,
@@ -242,12 +244,14 @@ In priority order. Found in live data or in the code, dated.
      "2026-10-29T09:00:00Z"`, campaign `webinar-2026-10-29`). Confirmation,
      reminder, and follow-up emails and the calendar link come from
      Emergent. **Until Emergent runs this code, emails show the old date.**
-   - **No scheduler in the repo calls `/api/cron/webinar-reminders` or
-     `/api/cron/webinar-followup`** (checked 24.09.). Find out whether
-     something outside the repo calls them (Supabase pg_cron, cron-job.org,
-     Emergent). If not: add a job every 15 min for the reminders and a
-     daily job for the follow-up. Test before 28.10., 10:00 CET, when the
-     24h window opens.
+   - The reminder windows were widened on 24.09. (±30 min → 12–24.5 h and
+     0–2 h, `_REMINDER_WINDOWS` in `backend/routes/webinar.py`). **Emergent
+     needs this code**, otherwise late cron runs miss the window.
+   - Backup scheduler: `webinar-cron.yml` (§6). **Primary:** create a
+     cron-job.org job every 15 min on `/api/cron/webinar-reminders`.
+   - Test before 28.10.: Actions → `webinar-cron` → Run workflow. The
+     response must be HTTP 200 with `"enabled": true` (Resend key set) and
+     `"reason": "outside window"` until 28.10.
 2. **Supabase performance incident (16.09.).** Postgres logs showed
    `canceling statement due to statement timeout`, queries of 34–38 s,
    `could not accept SSL connection: EOF`, and pg_cron jobs 8, 10, 12, 14,
@@ -314,7 +318,8 @@ named key in the tool.
 - [ ] Smoke checks from §4 green (or failures written down)
 - [ ] Export Emergent code, diff against `mvpcode`, record the result below
 - [ ] Get Emergent to the 29.10. webinar code, test signup + confirmation email (§8.1)
-- [ ] Make sure webinar reminders are scheduled every 15 min (§6, §8.1)
+- [ ] Create the cron-job.org job for webinar reminders, run `webinar-cron` once manually (§6, §8.1)
+- [ ] Set `META_PIXEL_ID` + `META_CAPI_TOKEN` in Emergent for the Meta Conversions API ([`MARKETING_KICKOFF.md`](../gtm/MARKETING_KICKOFF.md))
 - [ ] Check `SENDER_EMAIL` and the Resend domain (§8.3)
 - [ ] Check the Supabase incident status (§8.2)
 - [ ] Every Emergent change → PR against `mvpcode`

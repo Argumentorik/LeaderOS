@@ -34,6 +34,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/SEO_KEYWORDS.md`](./gtm/SEO_KEYWORDS.md) | Keyword universe (DACH leadership/AI/communication) |
 | [`gtm/SEO_AEO_PLAYBOOK.md`](./gtm/SEO_AEO_PLAYBOOK.md) | **Technical visibility** — why CRA breaks AI crawlers, prerendering vs static pages, robots/IndexNow/Bing, rules for new pages |
 | [`gtm/GROWTH_LOOP.md`](./gtm/GROWTH_LOOP.md) | The growth loop: check → content → funnel → referral |
+| [`gtm/MARKETING_KICKOFF.md`](./gtm/MARKETING_KICKOFF.md) | **Go/No-Go Marketing-Start ab 28.09.** — Gate (Zahlungsmittel, Pixel, CAPI, Reminder, Resend), Kampagnenstart, tägliche Checks in Woche 1, wer macht was |
 | [`gtm/WEBINAR_FUNNEL.md`](./gtm/WEBINAR_FUNNEL.md) | **Ascension funnel map** (Ad → Webinar → 4 Videos → Trial → 30-Tage-Challenge → Leadership Plus) + honesty rules + missing video assets |
 | [`gtm/NEWSLETTER.md`](./gtm/NEWSLETTER.md) | Newsletter system |
 | [`gtm/EMAIL_BROADCASTS.md`](./gtm/EMAIL_BROADCASTS.md) | Evergreen broadcast emails (checklist/trust/CTA/teaser pattern) outside the linear lead-nurture cron chain |

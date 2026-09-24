@@ -358,7 +358,15 @@ async def unsubscribe(token: str):
     ))
 
 
-async def _send_reminder_window(window_hours: float, label: str) -> dict:
+# Reminder windows (hours before the event). Deliberately wide: scheduled
+# GitHub Actions runs start hours late under load, so a ±30 min window gets
+# missed. The per-lead flags below make repeated runs inside a window safe.
+# 24h: lower bound 12h keeps the "Morgen" wording true (sent the day before).
+# 1h: up to 2h matches event_reminder_email's "Startet gleich" threshold.
+_REMINDER_WINDOWS = {"24h": (12.0, 24.5), "1h": (0.0, 2.0)}
+
+
+async def _send_reminder_window(label: str) -> dict:
     """Send 24h/1h reminders to all non-unsubscribed leads, deduped per flag."""
     if not email_enabled():
         return {"sent": 0, "skipped": 0, "error": "RESEND_API_KEY not configured"}
@@ -366,7 +374,8 @@ async def _send_reminder_window(window_hours: float, label: str) -> dict:
     event_dt = datetime.fromisoformat(WEBINAR_DATE_ISO.replace("Z", "+00:00"))
     now = datetime.now(timezone.utc)
     hours_until = (event_dt - now).total_seconds() / 3600
-    if not (window_hours - 0.5 <= hours_until <= window_hours + 0.5):
+    low, high = _REMINDER_WINDOWS[label]
+    if not (low < hours_until <= high):
         return {"sent": 0, "skipped": 0, "reason": "outside window", "hours_until": round(hours_until, 2)}
 
     flag_field = "reminder_24h_sent" if label == "24h" else "reminder_1h_sent"
@@ -399,8 +408,8 @@ async def _send_reminder_window(window_hours: float, label: str) -> dict:
 async def cron_reminders(request: Request):
     """Call every ~15 min from an external scheduler. Sends 24h + 1h reminders."""
     require_cron_auth(request)
-    r24 = await _send_reminder_window(24.0, "24h")
-    r1 = await _send_reminder_window(1.0, "1h")
+    r24 = await _send_reminder_window("24h")
+    r1 = await _send_reminder_window("1h")
     return {"24h": r24, "1h": r1, "enabled": email_enabled()}
 
 

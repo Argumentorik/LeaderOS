@@ -13,6 +13,14 @@
 | `POST /api/cron/trial-reminders` | `0 9 * * *` (täglich 09:00) | Sendet Trial-Ablauf-Reminder 3 Tage vor Ende | Free-Trial Reaktivierung |
 | `POST /api/cron/drip-sequence` | `0 10 * * *` (täglich 10:00) | Day 1 / 3 / 7 Drip-Emails an neue User | Onboarding-Aktivierung |
 | `POST /api/cron/video-drip` | `0 11 * * 1` (montags 11:00) | Wöchentliche Video-Drip (Woche 1-6) | Lead-Magnet Lernvideo-Serie |
+| `POST /api/cron/webinar-reminders` | `*/15 * * * *` (alle 15 min, mindestens 27.–29.10.) | 24h-Reminder (12–24,5 h vorher) + 1h-Reminder (0–2 h vorher) an alle Webinar-Leads, je Lead einmal | Show-up-Rate Webinar 29.10. |
+| `POST /api/cron/webinar-followup` | `0 8 * * *` (täglich) | „Starte deinen Trial"-Mail ab 20 h nach dem Webinar, je Lead einmal | Webinar → Trial |
+
+> **Webinar-Crons:** GitHub-Action `webinar-cron.yml` ruft beide nur in den
+> Fenstern um den Termin auf — **als Backup**. Geplante GitHub-Läufe starten
+> hier bis zu 5 h verspätet (siehe `cron-jobs`, 07:00 → ~12:30 UTC). Primär
+> deshalb bei cron-job.org einen 15-min-Job für `webinar-reminders` anlegen
+> (Setup unten). Doppelte Aufrufe sind unkritisch.
 
 ---
 
