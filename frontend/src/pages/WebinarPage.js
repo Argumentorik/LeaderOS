@@ -7,10 +7,11 @@ import {
   ArrowUpRight, ArrowDown, Check, Star, PlayCircle, CalendarCheck,
   MessageCircleQuestion, BellRing, ClipboardCheck, Video, BookOpen, X, Plus,
 } from 'lucide-react';
-import { LandingFooter } from '../components/landing/LandingFooter';
 import { applyPageMeta } from '../lib/pageMeta';
 import { isValidEmail } from '../features/newsletter/lib/newsletterClient';
-import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
+import {
+  WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback,
+} from '../lib/brandAssets';
 import { WladMark } from '../components/brand/WladMark';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
@@ -44,10 +45,10 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * no invented testimonials, no fake scarcity, no fake exclusivity.
  */
 
-const WEBINAR_TS = new Date('2026-09-17T10:00:00+02:00').getTime();
-const DATE_LINE = 'DO 17. SEPTEMBER 2026 · 10:00 UHR · LIVE · ONLINE';
+const WEBINAR_TS = new Date('2026-10-29T10:00:00+01:00').getTime();
+const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 // Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
-const DATE_LINE_SHORT = 'DO 17. SEPT 2026 · 10:00 UHR · LIVE';
+const DATE_LINE_SHORT = 'DO 29. OKT 2026 · 10:00 UHR · LIVE';
 
 const STATS = [
   ['400.000+', 'trainierte Klienten'],
@@ -84,13 +85,48 @@ const WEEK = [
 const SEMINAR_FLOW = ['Seminar', 'Notizen', 'Alltag', 'Vergessen'];
 const OS_FLOW = ['Täglich 15 Min', 'KI-Coach', 'Simulation', 'Feedback', 'Fortschritt'];
 
+// Jede Karte mit Bild — eigene Assets (Wlad, WladBot-Avatar, Buchcover),
+// kein Stock. `fit` steuert, ob das Bild die Fläche füllt (Foto) oder
+// als Cover auf Ink-Fläche steht (Buch, Avatar).
 const LEARN_CARDS = [
-  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.'],
-  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.'],
-  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.'],
-  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.'],
-  ['Die Frameworks', 'Die Methoden hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.'],
+  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.', '/wlad/wlad-portrait.jpg', 'cover'],
+  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.', '/wlad/wladbot3.0.webp', 'avatar'],
+  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/wlad/books/redest-du-noch-oder-ueberzeugst-du-schon.jpg', 'book'],
+  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/wlad/books/die-5-rollen-einer-fuehrungskraft.jpg', 'book'],
+  ['Die Frameworks', 'Die Methoden hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.', '/wlad/books/weisse-rhetorik.jpg', 'book'],
+  ['Live-Q&A mit Wlad', 'Deine härteste Führungsfrage — ab 11:15 Uhr direkt von Wlad beantwortet, kein Skript.', '/wlad/wlad-portrait-640.jpg', 'cover'],
 ];
+
+// Presse- und Kunden-Logos: nur echte Logo-Dateien werden gezeigt, kein
+// Wordmark-Ersatz. Datei unter public/logos/press/<key>.svg ablegen — der
+// Eintrag erscheint dann automatisch; ohne Datei bleibt der Block leer.
+const MEDIA_LOGOS = {
+  'DER SPIEGEL': '/logos/press/der-spiegel.svg',
+  'BUSINESS INSIDER': '/logos/press/business-insider.svg',
+  'SÜDDEUTSCHE ZEITUNG': '/logos/press/sueddeutsche-zeitung.svg',
+  'RTL': '/logos/press/rtl.svg',
+  'ARD · DAS ERSTE': '/logos/press/ard-das-erste.svg',
+  'PROSIEBEN · GALILEO': '/logos/press/prosieben-galileo.svg',
+  'TEDX': '/logos/press/tedx.svg',
+  'GREATOR': '/logos/press/greator.svg',
+};
+const CLIENT_LOGOS = Object.fromEntries(
+  CLIENTS.map((c) => [c, `/logos/clients/${c.toLowerCase().replace(/[^a-z0-9]/g, '-')}.svg`]),
+);
+
+/** Prüft per HEAD-Request, welche Logo-Dateien wirklich existieren —
+ *  ein fehlendes SVG rendert sonst als kaputtes Bild. */
+const useExistingAssets = (paths) => {
+  const [existing, setExisting] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    Promise.all(paths.map((p) => fetch(p, { method: 'HEAD' }).then((r) => (r.ok && /svg|image/.test(r.headers.get('content-type') || '') ? p : null)).catch(() => null)))
+      .then((res) => { if (alive) setExisting(res.filter(Boolean)); });
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paths.join('|')]);
+  return existing;
+};
 
 const VALUE_STACK = [
   [Video, 'Live-Demonstration', 'Das komplette Leadership Operating System, live gezeigt — kein Foliensatz.'],
@@ -371,7 +407,7 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
       const ok = res.ok && data?.ok;
       track('webinar_register_result', { ok });
       if (ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-09-17', content_category: 'webinar' }, eventId);
+        trackMeta('Lead', { content_name: 'webinar-2026-10-29', content_category: 'webinar' }, eventId);
         trackLinkedInLead();
         navigate(`/webinar/danke?email=${encodeURIComponent(email)}`);
         return;
@@ -451,6 +487,99 @@ const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
 
 /** Sticky CTA bar · slides in from ~20 % scroll depth on every breakpoint.
  * Compact email capture on sm+, button-only on phones. */
+/** Presse- und Kunden-Logos · rendert ausschließlich vorhandene Logo-
+ *  Dateien (HEAD-Check), nie Text-Wordmarks. Fehlen alle Dateien einer
+ *  Gruppe, fällt der Block komplett weg statt leer zu stehen. */
+const LogoBand = ({ eyebrow, names, logos, muted = false }) => {
+  const paths = names.map((n) => logos[n]).filter(Boolean);
+  const existing = useExistingAssets(paths);
+  const items = names.filter((n) => existing.includes(logos[n]));
+  if (!items.length) return null;
+  return (
+    <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center first:mt-0">
+      <motion.p
+        initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
+        className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-5"
+      >
+        {eyebrow}
+      </motion.p>
+      <ul className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
+        {items.map((n, i) => (
+          <motion.li
+            key={n}
+            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
+            className={muted ? 'opacity-55 hover:opacity-100 transition-opacity' : 'opacity-80 hover:opacity-100 transition-opacity'}
+          >
+            <img src={logos[n]} alt={n} loading="lazy" className="h-6 md:h-7 w-auto max-w-[140px] object-contain grayscale" />
+          </motion.li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const LogoBands = () => (
+  <>
+    <LogoBand eyebrow="▸ Bekannt aus" names={MEDIA} logos={MEDIA_LOGOS} />
+    <LogoBand eyebrow="▸ Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" names={CLIENTS} logos={CLIENT_LOGOS} muted />
+  </>
+);
+
+const TransparentHeader = ({ onCta }) => {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const ink = scrolled;
+  return (
+    <motion.header
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      data-testid="webinar-header"
+      className={`hidden min-[900px]:block fixed inset-x-0 top-0 z-30 transition-[background-color,border-color,backdrop-filter] duration-300 ${
+        ink ? 'bg-white/85 backdrop-blur-md border-b border-[#111111]/8' : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-[1280px] mx-auto px-10 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-3" aria-label="LeaderOS Startseite">
+          <WladMark size={30} variant={ink ? 'solid' : 'outline'} />
+          <span
+            className={`font-black tracking-tight text-[19px] transition-colors ${ink ? 'text-[#111111]' : 'text-white'}`}
+            style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}
+          >
+            Leader<span className={ink ? 'text-[#5A7700]' : 'text-[#BFFF00]'}>·</span>OS
+          </span>
+        </Link>
+        <div className="flex items-center gap-3">
+          <motion.span
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] ${
+              ink ? 'bg-[#BFFF00]/25 text-[#111111]' : 'bg-white/10 text-white border border-white/20'
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full inline-block ${ink ? 'bg-[#111111]' : 'bg-[#BFFF00]'}`} />
+            {DATE_LINE_SHORT}
+          </motion.span>
+          <button
+            type="button"
+            onClick={onCta}
+            className={`inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-[11.5px] font-bold uppercase tracking-[0.14em] transition-colors ${
+              ink ? 'bg-[#111111] text-white hover:bg-[#333]' : 'bg-white text-[#111111] hover:bg-[#BFFF00]'
+            }`}
+          >
+            Platz sichern <ArrowUpRight size={14} />
+          </button>
+        </div>
+      </div>
+    </motion.header>
+  );
+};
+
 const StickyCtaBar = ({ onCtaClick }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(false);
@@ -474,7 +603,7 @@ const StickyCtaBar = ({ onCtaClick }) => {
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
             <div className="hidden md:block shrink-0">
               <p className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#5A7700]">▸ Kostenloses Live-Webinar</p>
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">17. September · 10 Uhr · Live</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">29. Oktober · 10 Uhr · Live</p>
             </div>
             <div className="hidden sm:block flex-1">
               <RegisterForm idSuffix="-sticky" compact />
@@ -604,15 +733,37 @@ const ParallaxPortrait = () => {
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.02, 1, 1.02]);
 
   return (
-    <div ref={ref} className="rounded-3xl overflow-hidden border border-[#111111]/10 shadow-[0_30px_60px_-35px_rgba(17,17,17,0.35)]">
-      <motion.img
-        style={reduced ? {} : { y, rotate, scale }}
-        src={WLAD_AVATAR}
-        onError={withFallback(WLAD_AVATAR_FALLBACKS)}
-        alt="Wlad Jachtchenko · Host des Webinars"
-        loading="lazy"
-        className="w-full aspect-[4/5] object-cover object-top"
-      />
+    <div ref={ref} className="relative">
+      <div className="rounded-3xl overflow-hidden border border-[#111111]/10 shadow-[0_30px_60px_-35px_rgba(17,17,17,0.35)]">
+        <motion.img
+          style={reduced ? {} : { y, rotate, scale }}
+          src={WLAD_AVATAR}
+          onError={withFallback(WLAD_AVATAR_FALLBACKS)}
+          alt="Wlad Jachtchenko · Host des Webinars"
+          loading="lazy"
+          className="w-full aspect-[4/5] object-cover object-top"
+        />
+      </div>
+      {/* WladBot · der KI-Coach, der Wlads Methodik trägt — als zweites
+          Gesicht neben dem Host, nicht als Icon. */}
+      <motion.figure
+        initial={{ opacity: 0, y: 16, rotate: -4 }}
+        whileInView={{ opacity: 1, y: 0, rotate: -3 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -bottom-6 -right-3 sm:-right-6 w-[38%] max-w-[180px] rounded-2xl bg-[#111111] border-4 border-white shadow-[0_24px_50px_-20px_rgba(17,17,17,0.5)] overflow-hidden"
+        data-testid="webinar-host-wladbot"
+      >
+        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 40%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
+        <img
+          src={WLADBOT_AVATAR}
+          onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
+          alt="WladBot · der KI-Coach mit Wlads Methodik"
+          loading="lazy"
+          className="relative w-full aspect-square object-contain p-2"
+        />
+        <figcaption className="relative px-3 pb-2.5 font-mono text-[8.5px] font-bold uppercase tracking-[0.18em] text-[#BFFF00]">▸ WladBot · KI-Coach</figcaption>
+      </motion.figure>
     </div>
   );
 };
@@ -626,12 +777,12 @@ export default function WebinarPage() {
     root.classList.remove('dark');
     captureUtm();
     track('webinar_view');
-    trackMeta('ViewContent', { content_name: 'webinar-2026-09-17', content_category: 'webinar' });
+    trackMeta('ViewContent', { content_name: 'webinar-2026-10-29', content_category: 'webinar' });
 
     const restoreMeta = applyPageMeta({
       title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
       description:
-        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 17.09.2026 mit ' +
+        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 29.10.2026 mit ' +
         'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
         'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
       url: 'https://leader-os.de/webinar',
@@ -644,8 +795,8 @@ export default function WebinarPage() {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: 'Führe besser. Jeden Tag. · Das kostenlose LeaderOS Live-Webinar',
-      startDate: '2026-09-17T10:00:00+02:00',
-      endDate: '2026-09-17T11:30:00+02:00',
+      startDate: '2026-10-29T10:00:00+01:00',
+      endDate: '2026-10-29T11:30:00+01:00',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: { '@type': 'VirtualLocation', url: 'https://leader-os.de/webinar' },
@@ -679,30 +830,10 @@ export default function WebinarPage() {
     <div className="bg-white text-[#111111] min-h-[100dvh] antialiased" data-testid="webinar-page">
       <MouseGlow />
 
-      {/* Squeeze chrome · logo only, no nav exits */}
-      <motion.header
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-[1100px] mx-auto px-5 md:px-10 pt-5 pb-4 md:pt-6 md:pb-0 flex items-center justify-between"
-      >
-        <Link to="/" className="flex items-center gap-3" aria-label="LeaderOS Startseite">
-          <WladMark size={34} />
-          <span className="font-black tracking-tight text-[#111111] text-[19px]" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
-            Leader<span className="text-[#5A7700] mx-0.5">·</span>OS
-          </span>
-        </Link>
-        <motion.span
-          animate={{ opacity: [0.65, 1, 0.65] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-          className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[#BFFF00]/25 px-3.5 py-1.5 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] text-[#111111]"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#111111] inline-block" />
-          {/* Mobil passt neben das Logo nur die Kurzform, sonst bricht die Pille. */}
-          <span className="sm:hidden">Live · kostenlos</span>
-          <span className="hidden sm:inline">Live-Webinar · kostenlos</span>
-        </motion.span>
-      </motion.header>
+      {/* Squeeze chrome · transparent over the hero video, frosted white once
+          the hero is scrolled away. No nav exits. Mobile has its own header
+          row inside CinematicHero, so this one only renders from 900 px up. */}
+      <TransparentHeader onCta={scrollToForm} />
 
       <main id="main-content">
         {/* ── HOOK · headline → sub → CTA → trust → product ────────────── */}
@@ -741,44 +872,9 @@ export default function WebinarPage() {
                 </motion.div>
               ))}
             </div>
-            <div className="border-t border-[#111111]/8 pt-7 text-center">
-              <motion.p
-                initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-                className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-4"
-              >
-                ▸ Bekannt aus
-              </motion.p>
-              <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5">
-                {MEDIA.map((m, i) => (
-                  <motion.li
-                    key={m}
-                    initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-                    className="font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-[0.14em] text-[#4b4b4d]"
-                  >
-                    {m}
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
+            <LogoBands />
             <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center">
-              <motion.p
-                initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-                className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-4"
-              >
-                ▸ Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen
-              </motion.p>
-              <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5">
-                {CLIENTS.map((c, i) => (
-                  <motion.li
-                    key={c}
-                    initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i * 0.6} variants={FADE_UP}
-                    className="font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-[0.14em] text-[#707072]"
-                  >
-                    {c}
-                  </motion.li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-2">
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2">
                 {REVIEW_PLATFORMS.map(([name, rating, count, href]) => (
                   <a
                     key={name}
@@ -824,7 +920,7 @@ export default function WebinarPage() {
                 ))}
               </ol>
             </div>
-            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 17. September · 10 Uhr · kostenlos" />
+            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 29. Oktober · 10 Uhr · kostenlos" />
           </div>
         </section>
 
@@ -910,18 +1006,35 @@ export default function WebinarPage() {
               headline={<>Das lernst du in 90 Minuten<span className="text-[#5A7700] not-italic">.</span></>}
             />
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {LEARN_CARDS.map(([title, desc], i) => (
+              {LEARN_CARDS.map(([title, desc, img, fit], i) => (
                 <motion.div
                   key={title}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={i} variants={FADE_UP}
+                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} custom={i} variants={FADE_UP}
                   whileHover={{ y: -5, scale: 1.015 }}
-                  className="rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] p-6 transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
+                  className="group rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] overflow-hidden transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
                 >
-                  <motion.span whileHover={{ rotate: 10, scale: 1.12 }} className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] mb-4">
-                    <Check size={15} strokeWidth={3} />
-                  </motion.span>
-                  <h3 className="text-[17px] text-[#111111] mb-1.5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
-                  <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
+                  <div className={`relative aspect-[16/10] overflow-hidden ${fit === 'cover' ? 'bg-[#111111]' : 'bg-[#111111]'}`}>
+                    {fit === 'cover' ? (
+                      <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
+                    ) : fit === 'avatar' ? (
+                      <>
+                        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 45%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
+                        <img src={img} alt="WladBot · dein KI-Coach" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.05]" />
+                      </>
+                    ) : (
+                      <>
+                        <img src={img} alt="" aria-hidden loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-[1.3] blur-xl opacity-40" />
+                        <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-5 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] transition-transform duration-700 group-hover:scale-[1.04]" />
+                      </>
+                    )}
+                    <span className="absolute left-4 top-4 inline-flex w-8 h-8 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111]">
+                      <Check size={15} strokeWidth={3} />
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-[17px] text-[#111111] mb-1.5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
+                    <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -1206,7 +1319,26 @@ export default function WebinarPage() {
 
       <StickyCtaBar onCtaClick={scrollToForm} />
 
-      <LandingFooter />
+      {/* Squeeze footer · legal only. The full site footer (40 links, pricing,
+          newsletter) is a nav exit on a page whose single job is the form. */}
+      <footer className="bg-[#111111] text-white" data-testid="webinar-footer">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="LeaderOS Startseite">
+            <WladMark size={26} variant="outline" />
+            <span className="font-black tracking-tight text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
+              Leader<span className="text-[#BFFF00]">·</span>OS
+            </span>
+          </Link>
+          <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/45 text-center">
+            © 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20 Länder
+          </p>
+          <nav className="flex items-center gap-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/60">
+            <Link to="/impressum" className="hover:text-white">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-white">Datenschutz</Link>
+            <Link to="/agb" className="hover:text-white">AGB</Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }

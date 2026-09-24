@@ -42,7 +42,7 @@ const POSTER = '/wlad/wlad-portrait.jpg';
 
 const HEADLINE = [['Führe'], ['besser.'], ['Jeden Tag', '.']];
 const SUB = 'Mit Wlad Jachtchenko: der Charisma-Code, das Leadership-Betriebssystem und ein echter Live-Case — mit deinen Fragen im Q&A.';
-const FACTS = [['Termin', '17. SEPT'], ['Dauer', '90 MIN'], ['Teilnahme', '0 €']];
+const FACTS = [['Termin', '29. OKT'], ['Dauer', '90 MIN'], ['Teilnahme', '0 €']];
 const PROOF = '400.000+ Klienten · 3× SPIEGEL-Bestseller';
 
 /** Inline-Kurzschreibweise für die Keyframes aus index.css (Name, Dauer, Delay). */
@@ -147,15 +147,17 @@ const DesktopHero = ({ formSlot }) => (
 
     <div
       style={{
-        position: 'relative', maxWidth: 1280, margin: '0 auto', padding: '48px 40px 64px',
-        minHeight: 'min(calc(100svh - 64px), 880px)',
+        // 96 px oben: der transparente Header der Seite liegt fixiert über
+        // dem Hero (64 px) — die Kopie darf nicht darunter laufen.
+        position: 'relative', maxWidth: 1280, margin: '0 auto', padding: '96px 40px 64px',
+        minHeight: 'min(100svh, 920px)',
         display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 440px', columnGap: 'clamp(48px, 9vw, 160px)', alignItems: 'center',
       }}
     >
       <div style={{ maxWidth: 620 }}>
         <p className="ze" style={{ margin: '0 0 18px', display: 'flex', alignItems: 'center', gap: 10, ...ze('zeFadeUp', 0.8, 0.12) }}>
           <span aria-hidden style={{ width: 7, height: 7, borderRadius: 999, background: LIME, boxShadow: '0 0 0 3px rgba(191,255,0,0.25)' }} />
-          <Bib style={{ color: LIME, fontSize: 10.5 }}>Kostenloses Live-Webinar · Do 17. September 2026 · 10:00 Uhr</Bib>
+          <Bib style={{ color: LIME, fontSize: 10.5 }}>Kostenloses Live-Webinar · Do 29. Oktober 2026 · 10:00 Uhr</Bib>
         </p>
 
         <Headline style={{ fontSize: 'clamp(72px, 8.4vw, 132px)', lineHeight: 0.88 }} />

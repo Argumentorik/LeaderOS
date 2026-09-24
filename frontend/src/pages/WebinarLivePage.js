@@ -22,11 +22,11 @@ import { WladMark } from '../components/brand/WladMark';
  * Light theme, same center axis as /webinar.
  */
 
-const WEBINAR_TS = new Date('2026-09-17T10:00:00+02:00').getTime();
-const DATE_LINE = 'DO 17. SEPTEMBER 2026 · 10:00 UHR · LIVE · ONLINE';
+const WEBINAR_TS = new Date('2026-10-29T10:00:00+01:00').getTime();
+const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 
-const WEBINAR_START = new Date('2026-09-17T10:00:00+02:00');
-const WEBINAR_END = new Date('2026-09-17T11:30:00+02:00');
+const WEBINAR_START = new Date('2026-10-29T10:00:00+01:00');
+const WEBINAR_END = new Date('2026-10-29T11:30:00+01:00');
 
 const AGENDA = [
   ['10:00', 'Check-in & Warm-up'],
@@ -165,7 +165,7 @@ export default function WebinarLivePage() {
 
     const restoreMeta = applyPageMeta({
       title: 'Warteraum · Live-Webinar · LeaderOS',
-      description: 'Der Warteraum zum kostenlosen LeaderOS Live-Webinar am 17.09.2026 — Countdown, Ablauf und dein Teilnahme-Link.',
+      description: 'Der Warteraum zum kostenlosen LeaderOS Live-Webinar am 29.10.2026 — Countdown, Ablauf und dein Teilnahme-Link.',
       url: 'https://leader-os.de/webinar/live',
       image: 'https://leader-os.de/og-wlad.jpg',
     });

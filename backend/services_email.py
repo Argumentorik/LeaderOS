@@ -783,7 +783,7 @@ def webinar_followup_email(
     unsubscribe_link: str | None = None,
 ) -> tuple[str, str]:
     """Day-after nudge: turn a webinar registrant into a trial signup."""
-    signup_url = f"{app_url.rstrip('/')}/signup?trial=14&utm_source=webinar&utm_medium=email&utm_campaign=webinar-2026-09-17"
+    signup_url = f"{app_url.rstrip('/')}/signup?trial=14&utm_source=webinar&utm_medium=email&utm_campaign=webinar-2026-10-29"
     unsub = (
         f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:20px 0 0;text-align:center;">'
         f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);text-decoration:underline;">Keine weiteren Mails zu diesem Webinar</a>'

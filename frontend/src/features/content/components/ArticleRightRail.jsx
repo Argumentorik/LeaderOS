@@ -29,7 +29,7 @@ const WebinarCard = () => {
         <dl className="space-y-2 mb-4">
           <div className="flex gap-3">
             <dt className="w-14 shrink-0 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-foreground/45 pt-0.5">Termin</dt>
-            <dd className="text-[12.5px] font-bold text-foreground leading-[1.35]">Do, 17.09.2026 · 10 Uhr</dd>
+            <dd className="text-[12.5px] font-bold text-foreground leading-[1.35]">Do, 29.10.2026 · 10 Uhr</dd>
           </div>
           <div className="flex gap-3">
             <dt className="w-14 shrink-0 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-foreground/45 pt-0.5">Format</dt>

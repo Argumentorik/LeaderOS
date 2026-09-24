@@ -1,6 +1,6 @@
 # LeaderOS · Launch-Plan bis zum Webinar
 
-> **Fixpunkt: Donnerstag, 17.09.2026, 10:00 Uhr — Live-Webinar.**
+> **Fixpunkt: Donnerstag, 29.10.2026, 10:00 Uhr — Live-Webinar.**
 > Stand 24.08.2026 (Montag). **24 Tage, davon 17 Werktage.**
 >
 > Der Termin ist öffentlich, in Mails, JSON-LD und auf vier Seiten
@@ -43,7 +43,7 @@ Kalendereintrag.**
 Ehrlich getrennt nach „verifiziert live" und „gebaut, aber ungeprüft":
 
 **✅ Live und verifiziert**
-- Webinar-Termin 17.09. konsistent über 12 Dateien (inkl. Wochentag-Fix)
+- Webinar-Termin 29.10. konsistent über 12 Dateien (inkl. Wochentag-Fix)
 - `/fragen` — 9 Antworten als statisches HTML, von AI-Crawlern lesbar
 - `/wladbot`, `/os`, `/app` — Kampagnenseiten, Lead-Formular verdrahtet
 - 153 Journal-Artikel per Build-Prerendering crawlbar
@@ -84,7 +84,7 @@ B-AW-ID ──► gtag scharf ──► Ads live ◄────┘   (braucht C
                         Traffic auf /wladbot
                               │
                               ▼
-A-P0-Bugs gefixt ──────► Webinar 17.09. ──► Masterclass-Rollout
+A-P0-Bugs gefixt ──────► Webinar 29.10. ──► Masterclass-Rollout
                               ▲
 C-Videos ─────────────────────┘
 ```
@@ -145,7 +145,7 @@ Ziel: alle Fremdabhängigkeiten aufgelöst, echte Bug-Ursachen bekannt.
    Selbstregistrierung oder auf Terminbuchung optimieren.
 3. **AI-Skills als Kursstrang + Zertifikat?** Bennets Argument: Firmen
    finanzieren eher, wenn Führung **und** KI kombiniert sind. Wenn ja,
-   gehört es in die Webinar-Story — also **vor** den 17.09.
+   gehört es in die Webinar-Story — also **vor** den 29.10.
 
 ---
 
@@ -200,9 +200,9 @@ Funktion, die niemand vermisst hat.
       E-Mail → `/wladbot/danke` → Leader-Check → Webinar-Anmeldung
 - [ ] Mi 16.09.: Ads-Budget für die Webinar-Kampagne hochziehen,
       Reminder-Mail T-24h kontrollieren
-- [ ] **Do 17.09., 10:00: Webinar.** Danach: Aufzeichnungsverzicht ist
+- [ ] **Do 29.10., 10:00: Webinar.** Danach: Aufzeichnungsverzicht ist
       Teil des Versprechens — keine Aufzeichnung veröffentlichen
-- [ ] Fr 18.09.: Nachfass-Mails, Leads auswerten, Masterclass-Rollout
+- [ ] Fr 30.10.: Nachfass-Mails, Leads auswerten, Masterclass-Rollout
       entscheiden
 
 ---
