@@ -32,7 +32,7 @@ steht das Projekt. Das ist der eigentliche Grund für diese Liste.
 
 | Tool | Wofür | Bekannter Login | Wo Mitglieder verwalten | `stefan@argumentorik.com` |
 | --- | --- | --- | --- | --- |
-| **Emergent** (`command-center-229`) | App-Backend (FastAPI), MongoDB, leaderos.de-App-Tier, Object-Store | start@aiporate.com | Emergent → Project → Settings → Team | ❓ |
+| **Emergent** (`command-center-229`) | App-Backend (FastAPI), MongoDB, leaderos.de-App-Tier, Object-Store | start@aiporate.com | Emergent → Project → Settings → Team | ✅ Admin seit 24.09. — Onboarding: [`EMERGENT_ADMIN_ONBOARDING.md`](./EMERGENT_ADMIN_ONBOARDING.md) |
 | **MongoDB** — läuft **in Emergent** (kein eigenes Atlas-Konto) | Nutzer, Sessions, Leads, Zahlungen, `login_attempts`, `webinar_leads` | über Emergent | Zugang = Emergent-Team-Mitgliedschaft | → Emergent |
 | **Resend** | Alle Transaktions- und Nurture-Mails | start@aiporate.com | Resend → Settings → Team | ❓ |
 | **Stripe** | Zahlungen, Webhooks, Raten | start@aiporate.com | Stripe → Settings → Team and security | ❓ |
@@ -64,7 +64,7 @@ In dieser Reihenfolge freischalten — jede Zeile ist ein Invite an
 
 | # | Tool | Klickpfad | Rolle für Stefan | Warum |
 | --- | --- | --- | --- | --- |
-| 1 | **Emergent** (inkl. MongoDB) | Emergent → Projekt `command-center-229` → Settings → Team → Invite | Admin/Developer | App-Backend deployen, Env-Vars, **Mongo**; ohne das kann er Login-/Mail-Incidents nicht beheben |
+| 1 | **Emergent** (inkl. MongoDB) — ✅ **erledigt 24.09., Admin** | Emergent → Projekt `command-center-229` → Settings → Team → Invite | Admin | App-Backend deployen, Env-Vars, **Mongo**; ohne das kann er Login-/Mail-Incidents nicht beheben |
 | 2 | **Supabase** | supabase.com/dashboard → Org `skawjzvddehhmkwiltui` → Team → Invite member | **Developer** (Owner nur, wenn er auch Billing sehen soll) | Postgres, pg_cron (die Jobs mit Timeouts am 16.09.), Auth, Storage |
 | 3 | **GitHub** | github.com/aiporator/shipos → Settings → Collaborators → `sbcodes` → Role | write → **maintain** | PRs mergen, Labels/Branches verwalten, ohne Repo löschen zu dürfen |
 | 4 | **Sentry** | sentry.io → Org `aiporate` → Settings → Members → Invite | Member (Team `leader-os` + `leader-check`) | Fehler aus Frontend/Backend sehen |
