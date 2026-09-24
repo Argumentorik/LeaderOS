@@ -402,19 +402,14 @@ recipe.
 
 ## 12. Who to ask / where state lives outside the repo
 
-| Thing | Where it's configured | Who has access |
-|---|---|---|
-| Marketing hosting | Vercel · team `aiporators-projects`, project `leaderos` | start@aiporate.com |
-| App hosting + Mongo | Emergent | start@aiporate.com |
-| Identity mirror + billing DB | Supabase project `srujvjjncrszhaaxepxf` | start@aiporate.com |
-| Analytics | PostHog `eu.posthog.com` project 181271 | start@aiporate.com |
-| Email | Resend (domain `leaderos.de`) | start@aiporate.com |
-| Payments | Stripe | start@aiporate.com |
-| DNS | GoDaddy (A → Vercel) | start@aiporate.com |
-| Error monitoring | Sentry | start@aiporate.com |
-| Team wiki (human-readable summaries) | Google Drive folder "LeaderOS Wiki" — Start Here, Dev Onboarding, Product Overview, GTM Playbook, Ops Quick Reference | start@aiporate.com |
+The full, verified access matrix (every tool, who is admin, what is still
+missing for `mert@argumentorik.com`) lives in
+[`docs/ops/TOOL_ACCESS.md`](./docs/ops/TOOL_ACCESS.md) — maintain it there,
+not here. Short version: Vercel, GitHub, Supabase, Emergent, Resend, Stripe,
+PostHog, Sentry and the domain registrar are all owned by
+**start@aiporate.com**; a second owner is being added everywhere.
 
-Contact: **start@aiporate.com**.
+Contact: **start@aiporate.com** / **mert@argumentorik.com**.
 
 > Note on the wiki: the Drive docs summarize and link — **the repo is
 > always the source of truth**. If wiki and repo disagree, the repo wins.
