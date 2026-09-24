@@ -1,8 +1,9 @@
-# Tool-Zugänge — wer hat wo Zugriff, und was fehlt für `mert@argumentorik.com`
+# Tool-Zugänge — wer hat wo Zugriff, und was fehlt für `stefan@argumentorik.com`
 
-> Stand 24.09.2026. Ziel: jedes Werkzeug, das LeaderOS/Leader-Check am
-> Laufen hält, hat **mindestens zwei** Admins, und die neue Team-Adresse
-> `mert@argumentorik.com` ist überall eingetragen. Was hier mit ✅ steht,
+> Stand 24.09.2026. Ziel: **Stefan (`stefan@argumentorik.com`) bekommt
+> Zugang zu jedem Werkzeug, das er als Entwickler braucht**, und jedes Tool
+> hat mindestens zwei Admins. `mert@argumentorik.com` folgt, sobald Eduard
+> das Postfach freigeschaltet hat. Was hier mit ✅ steht,
 > wurde direkt gegen die Plattform geprüft (API); alles mit ❓ konnte von
 > hier aus nicht gelesen werden und muss im jeweiligen Dashboard nachgesehen
 > werden. Dieses Dokument ersetzt die Tabelle in `ONBOARDING.md` §12.
@@ -16,10 +17,10 @@
 
 ## 1. Ist-Stand (geprüft)
 
-| Tool | Wofür | Owner / Admin | Weitere Mitglieder | `mert@argumentorik.com` | Geprüft |
+| Tool | Wofür | Owner / Admin | Weitere Mitglieder | `stefan@argumentorik.com` | Geprüft |
 | --- | --- | --- | --- | --- | --- |
-| **GitHub** `aiporator/shipos` | Code, CI, Deploy-Trigger | `aiporator` (start@aiporate.com) · admin | `sbcodes` (Stefan) · write | ❌ fehlt | ✅ API |
-| **Vercel** Team `aiporators-projects` (INHALE), Projekt `leaderos` | Hosting leader-os.de, Env-Vars, Domains | start@aiporate.com · OWNER | stefan@argumentorik.com · MEMBER · mighani@skillbyte.de · DEVELOPER | ❌ fehlt | ✅ API |
+| **GitHub** `aiporator/shipos` | Code, CI, Deploy-Trigger | `aiporator` (start@aiporate.com) · admin | `sbcodes` (Stefan) · write | ✅ write (GitHub-Login `sbcodes`) — für Merges/Settings auf **maintain** anheben | ✅ API |
+| **Vercel** Team `aiporators-projects` (INHALE), Projekt `leaderos` | Hosting leader-os.de, Env-Vars, Domains | start@aiporate.com · OWNER | stefan@argumentorik.com · MEMBER · mighani@skillbyte.de · DEVELOPER | ✅ MEMBER — reicht für Deploys, Logs, Env-Vars | ✅ API |
 | ↳ Einladung `wj@argumentorik.com` | — | — | **Einladung vom 19.05. ist abgelaufen, nie angenommen** | — | ✅ API |
 | **Supabase** Projekt `srujvjjncrszhaaxepxf` (Org `skawjzvddehhmkwiltui`) | Postgres, Auth, Storage, RAG, pg_cron, Edge Functions | start@aiporate.com | ❓ | ❓ | ❌ nur Projekt lesbar, Mitglieder nicht |
 
@@ -29,10 +30,10 @@ steht das Projekt. Das ist der eigentliche Grund für diese Liste.
 
 ## 2. Nicht von hier prüfbar — im Dashboard nachsehen
 
-| Tool | Wofür | Bekannter Login | Wo Mitglieder verwalten | `mert@argumentorik.com` |
+| Tool | Wofür | Bekannter Login | Wo Mitglieder verwalten | `stefan@argumentorik.com` |
 | --- | --- | --- | --- | --- |
 | **Emergent** (`command-center-229`) | App-Backend (FastAPI), MongoDB, leaderos.de-App-Tier, Object-Store | start@aiporate.com | Emergent → Project → Settings → Team | ❓ |
-| **MongoDB Atlas** (hinter Emergent) | Nutzer, Sessions, Leads, Zahlungen | ❓ — evtl. nur über Emergent | Atlas → Organization → Access Manager | ❓ |
+| **MongoDB** — läuft **in Emergent** (kein eigenes Atlas-Konto) | Nutzer, Sessions, Leads, Zahlungen, `login_attempts`, `webinar_leads` | über Emergent | Zugang = Emergent-Team-Mitgliedschaft | → Emergent |
 | **Resend** | Alle Transaktions- und Nurture-Mails | start@aiporate.com | Resend → Settings → Team | ❓ |
 | **Stripe** | Zahlungen, Webhooks, Raten | start@aiporate.com | Stripe → Settings → Team and security | ❓ |
 | **PostHog EU** Projekt `181271` | Produkt-Analytics, Session Replays, Identity-Stitching | start@aiporate.com | PostHog → Organization settings → Members | ❓ |
@@ -54,38 +55,36 @@ steht das Projekt. Das ist der eigentliche Grund für diese Liste.
 | **Trustpilot** (`argumentorik.com`) · **Greator** (Coach-Profil) | Bewertungsplattformen | vermutlich Argumentorik | Plattform-Profil | ❓ |
 | **Zoom / Webinar-Tool** | Live-Webinar 29.10. | ❓ — nicht im Repo hinterlegt | — | ❓ |
 
-## 3. Reihenfolge, in der Zugänge erteilt werden sollten
+## 3. Stefans Zugänge — Klickliste für den Owner (`start@aiporate.com`)
 
-Nach Ausfallrisiko sortiert — die ersten drei blockieren im Ernstfall
-Deploys, Datenbank und Mails, alles andere ist Komfort.
+Stefan ist der Entwickler, der Emergent, Supabase und das Backend
+diagnostiziert (siehe Incident 16.09.). Er hat heute nur GitHub + Vercel.
+In dieser Reihenfolge freischalten — jede Zeile ist ein Invite an
+`stefan@argumentorik.com`:
 
-1. **GitHub** — `mert@argumentorik.com` als zweiten Account anlegen (oder
-   bestehendes GitHub-Konto von Mert mit der Adresse verknüpfen) und als
-   **admin** auf `aiporator/shipos` eintragen: Repo → Settings →
-   Collaborators → Add people. Danach `wj@argumentorik.com` mindestens
-   **read**, damit Wlad PRs und Historie sehen kann.
-2. **Vercel** — Team `aiporators-projects` → Settings → Members → Invite:
-   `mert@argumentorik.com` als **Owner** (zweiter Owner!), `wj@argumentorik.com`
-   neu einladen (alte Einladung ist abgelaufen) als Member. Prüfen, wer
-   `mighani@skillbyte.de` ist — DEVELOPER-Rolle seit 06.08. über GitHub-
-   Auto-Approve; wenn unbekannt, entfernen.
-3. **Supabase** — Org `skawjzvddehhmkwiltui` → Team → Invite:
-   `mert@argumentorik.com` als **Owner**, Stefan als Developer (er
-   diagnostiziert dort ohnehin, siehe Incident vom 16.09.).
-4. **Emergent** — zweiten Admin eintragen; ohne Emergent-Zugang ist das
-   App-Backend nicht deploybar.
-5. **Resend, Stripe** — je einen zweiten Admin; Stripe zusätzlich
-   Wlad/Argumentorik als Buchhaltungs-Zugang (Rolle „Analyst" reicht).
-6. **PostHog, Sentry** — Members; Stefan dazu.
-7. **Domain-Registrar** — Delegierten-Zugang statt Passwort-Teilen.
-8. Rest (Cal.com, ElevenLabs, Voyage, Higgsfield, Vimeo, GSC, Ads-Konten,
-   Clarity, Drive) — nach Bedarf, aber jeweils eintragen, sobald das
-   Passwort bekannt ist.
+| # | Tool | Klickpfad | Rolle für Stefan | Warum |
+| --- | --- | --- | --- | --- |
+| 1 | **Emergent** (inkl. MongoDB) | Emergent → Projekt `command-center-229` → Settings → Team → Invite | Admin/Developer | App-Backend deployen, Env-Vars, **Mongo**; ohne das kann er Login-/Mail-Incidents nicht beheben |
+| 2 | **Supabase** | supabase.com/dashboard → Org `skawjzvddehhmkwiltui` → Team → Invite member | **Developer** (Owner nur, wenn er auch Billing sehen soll) | Postgres, pg_cron (die Jobs mit Timeouts am 16.09.), Auth, Storage |
+| 3 | **GitHub** | github.com/aiporator/shipos → Settings → Collaborators → `sbcodes` → Role | write → **maintain** | PRs mergen, Labels/Branches verwalten, ohne Repo löschen zu dürfen |
+| 4 | **Sentry** | sentry.io → Org `aiporate` → Settings → Members → Invite | Member (Team `leader-os` + `leader-check`) | Fehler aus Frontend/Backend sehen |
+| 5 | **PostHog EU** | eu.posthog.com → Organization settings → Members → Invite | Member | Funnels, Session Replays für Bug-Reports |
+| 6 | **Resend** | resend.com → Settings → Team → Invite | Member | Mail-Logs — Magic-Link-/Reminder-Zustellung prüfen |
+| 7 | **Stripe** | dashboard.stripe.com → Settings → Team and security → Invite | **Developer** (sieht API-Logs + Webhooks, keine Auszahlungen) | Webhook-Fehler debuggen |
+| 8 | **ElevenLabs**, **Voyage AI** | jeweils Workspace → Members | Member | Sprach-Modus und RAG-Embeddings |
+| 9 | **Vercel** | — | bleibt MEMBER | reicht bereits |
+
+Nicht nötig für Stefan: Ads-Konten (Meta, LinkedIn, Google), Search Console,
+Cal.com, Drive-Wiki, Registrar — das ist Marketing bzw. Owner-Hoheit.
+
+**Zweiter Owner überall:** parallel `mert@argumentorik.com` als Owner in
+denselben Tools eintragen, sobald das Postfach steht — heute ist
+`start@aiporate.com` auf allem der einzige Owner.
 
 ## 4. Was nach dem Eintragen zu tun ist
 
-- In jedem Tool nach dem Invite **einmal mit `mert@argumentorik.com`
-  einloggen** und den Zugang in Spalte 5 dieser Tabelle auf ✅ setzen.
+- Stefan loggt sich nach jedem Invite einmal ein und bestätigt — dann
+  Spalte 5 der Tabellen auf ✅ setzen.
 - 2FA für die neue Adresse überall aktivieren — ein zweiter Owner ohne 2FA
   ist ein zweites Risiko, kein Backup.
 - Secrets **nicht** per Mail schicken. Wenn jemand einen API-Key braucht,
@@ -96,8 +95,7 @@ Deploys, Datenbank und Mails, alles andere ist Komfort.
 
 ## 5. Offene Fragen (bitte beantworten, dann Tabelle ergänzen)
 
-- Wer ist `mighani@skillbyte.de` (Vercel DEVELOPER)?
+- `mighani@skillbyte.de` (Vercel DEVELOPER seit 06.08.) — Skillbyte-Kollege? Wenn er nicht mehr mitarbeitet: entfernen.
 - Welcher Registrar hält die vier Domains wirklich — GoDaddy oder inwx/hetzner?
-- Läuft MongoDB in Emergent oder in einem eigenen Atlas-Konto?
 - Gibt es für das Webinar am 29.10. ein Zoom-/Streaming-Konto, und wer ist Host?
 - Ist `stefan@argumentorik.com` auf Supabase, Sentry und PostHog bereits drin?
