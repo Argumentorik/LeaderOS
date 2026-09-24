@@ -81,6 +81,46 @@ Cal.com, Drive-Wiki, Registrar — das ist Marketing bzw. Owner-Hoheit.
 denselben Tools eintragen, sobald das Postfach steht — heute ist
 `start@aiporate.com` auf allem der einzige Owner.
 
+## 3a. Zahlungsmittel und Rechnungsadresse umstellen
+
+Heute laufen die kostenpflichtigen Tools auf Merts private Zahlungsmittel
+bzw. auf `start@aiporate.com`. Zugänge umzustellen reicht nicht, auch die
+**Kreditkarte, die Rechnungsadresse und die USt-ID** müssen auf die
+Argumentorik Akademie GmbH umgestellt werden, sonst:
+
+- laufen die Kosten weiter über Mert, und Argumentorik kann die Vorsteuer nicht ziehen
+  (Rechnungen sind auf die falsche Firma ausgestellt),
+- fällt bei einer abgelaufenen/gesperrten Karte die Produktion aus
+  (Vercel, Supabase, Emergent und Resend pausieren bei Zahlungsausfall).
+
+**Wichtig:** Karten- und Kontodaten trägt der Karteninhaber (Argumentorik)
+**selbst** im jeweiligen Billing-Dashboard ein. Niemals per Mail, Chat,
+Screenshot oder in dieses Repo.
+
+| # | Tool | Wo | Was umstellen | Priorität |
+| --- | --- | --- | --- | --- |
+| 1 | **Stripe** | Settings → Business → **Bank accounts and currencies** · Business details | **Auszahlungskonto** (hier landen die Kundenzahlungen!), Firmendaten, USt-ID, Support-Adresse | 🔴 zuerst — Geld, nicht Kosten |
+| 2 | **Meta Business** · **LinkedIn Campaign Manager** · **Google Ads** | Billing & payments bzw. Abrechnung | Zahlungsmethode + Rechnungsadresse **vor** Start der Webinar-Kampagnen (Ad-Spend) | 🔴 vor Kampagnenstart |
+| 3 | **Emergent** | Account → Billing / Credits | Karte für Credits, Rechnungsempfänger | 🔴 hostet das App-Backend + MongoDB |
+| 4 | **Vercel** Team `aiporators-projects` | Team Settings → Billing | Zahlungsmethode, Billing-E-Mail, Rechnungsadresse, USt-ID | 🔴 hostet leader-os.de |
+| 5 | **Supabase** Org `skawjzvddehhmkwiltui` | Org → Billing | Zahlungsmethode, Rechnungsadresse, USt-ID | 🔴 Postgres/Auth |
+| 6 | **Domain-Registrar** (4 Domains) | Account → Zahlungsmethoden · Auto-Renew | Karte + Auto-Renew prüfen, Halter (Owner-C) auf Argumentorik | 🔴 Domain-Ablauf = Totalausfall |
+| 7 | **Resend** | Settings → Billing | Zahlungsmethode, Rechnungsadresse | 🟠 |
+| 8 | **ElevenLabs** · **Voyage AI** · **OpenAI/Anthropic** | Billing | Zahlungsmethode, Prepaid/Auto-Recharge-Limit | 🟠 |
+| 9 | **PostHog** · **Sentry** | Billing | Nur falls bezahlter Plan, sonst Billing-E-Mail setzen | 🟡 |
+| 10 | **Cal.com** · **Vimeo** · **Higgsfield** · **Zoom** · **Google Workspace** | Billing | Zahlungsmethode, Rechnungsadresse | 🟡 |
+
+Bei jedem Tool:
+
+1. **Billing-/Rechnungs-E-Mail** auf eine Argumentorik-Buchhaltungsadresse
+   setzen (z. B. `rechnung@argumentorik.com`, falls es die gibt), nicht auf eine Person.
+2. **Rechnungsadresse + USt-ID** der Argumentorik Akademie GmbH eintragen,
+   damit ab dann jede Rechnung auf die GmbH läuft.
+3. **Alte Karte entfernen**, sobald die neue als Standard hinterlegt und
+   einmal erfolgreich belastet wurde.
+4. **Bisherige Kosten** (alles, was bis zur Umstellung über Merts Karte lief)
+   als Auslagen dokumentieren: Rechnungen exportieren und gesammelt abrechnen.
+
 ## 4. Was nach dem Eintragen zu tun ist
 
 - Stefan loggt sich nach jedem Invite einmal ein und bestätigt — dann
@@ -99,3 +139,5 @@ denselben Tools eintragen, sobald das Postfach steht — heute ist
 - Welcher Registrar hält die vier Domains wirklich — GoDaddy oder inwx/hetzner?
 - Gibt es für das Webinar am 29.10. ein Zoom-/Streaming-Konto, und wer ist Host?
 - Ist `stefan@argumentorik.com` auf Supabase, Sentry und PostHog bereits drin?
+- Welche Firmenkarte und welche Rechnungs-E-Mail nutzt Argumentorik für
+  SaaS-Kosten, und wer trägt sie ein (Wlad, Eduard oder die Buchhaltung)? → §3a
