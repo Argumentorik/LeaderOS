@@ -80,7 +80,9 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`ops/CRON_SCHEDULE.md`](./ops/CRON_SCHEDULE.md) | All cron jobs (installments, drips, webinar reminders, lead-nurture) |
 | [`ops/SENTRY_ALERTS.md`](./ops/SENTRY_ALERTS.md) | Sentry alert rules |
 | [`ops/INTEGRATIONS.md`](./ops/INTEGRATIONS.md) | PostHog EU + Sentry + Supabase frontend wiring |
-| [`ops/PLATFORM_ACCESS.md`](./ops/PLATFORM_ACCESS.md) | Who has access to what |
+| [`ops/EMERGENT_ADMIN_ONBOARDING.md`](./ops/EMERGENT_ADMIN_ONBOARDING.md) | **Emergent-Admin-Onboarding (Stefan)** — Topologie, GitHub↔Emergent-Drift, Env-Vars, Deploy + Smoke-Checks, Cron-Jobs, offene Incidents, First-Week-Checkliste |
+| [`ops/TOOL_ACCESS.md`](./ops/TOOL_ACCESS.md) | **Wer hat wo Zugriff** — alle Tools, geprüfter Ist-Stand, Invite-Reihenfolge, offene Punkte für `mert@argumentorik.com` |
+| [`ops/PLATFORM_ACCESS.md`](./ops/PLATFORM_ACCESS.md) | Cross-domain wiring checklist (Vercel ↔ Emergent ↔ Supabase) |
 | [`ops/PRODUCTION_READINESS.md`](./ops/PRODUCTION_READINESS.md) | Production-readiness audit |
 | [`ops/VERCEL_QUICK_SETUP.md`](./ops/VERCEL_QUICK_SETUP.md) | Vercel dual-project setup from scratch |
 | [`ops/SUPABASE_MIGRATION.md`](./ops/SUPABASE_MIGRATION.md) | How schema migrations work here |
