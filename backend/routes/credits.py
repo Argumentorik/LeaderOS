@@ -63,6 +63,16 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
     return {"allowed": True, "remaining": balance - cost, "is_premium": False}
 
 
+async def has_credit(user: dict, action: str) -> bool:
+    """Nur prüfen, nichts abziehen — für Aktionen, die erst bei Erfolg kosten
+    (Video-Analyse: erst Whisper + KI, dann check_and_deduct_credit)."""
+    if user.get("premium"):
+        return True
+    credit_doc = await db.credits.find_one({"user_id": user["user_id"]}, {"_id": 0, "balance": 1})
+    balance = credit_doc.get("balance", 0) if credit_doc else FREE_CREDITS
+    return balance >= CREDIT_COSTS.get(action, 1)
+
+
 @router.get("")
 async def get_credits(request: Request):
     """Get user's credit balance and usage info."""

@@ -239,6 +239,34 @@ granted with `select grant_admin('email')` in Supabase, see `RUNBOOK.md`).
 
 In priority order. Found in live data or in the code, dated.
 
+0. **⚠️ No deploy of `mvpcode` to Emergent before Monday 28.09.** (Greator
+   event on 26./27.09., Wlad demos Video-Analyse and Challengers live, see
+   [`GREATOR_TAG2_LEADEROS.md`](../gtm/GREATOR_TAG2_LEADEROS.md)).
+   - Until 25.09. the speech-to-text shim `backend/lib/llm_provider.py`
+     only accepted `transcribe(file_path, language)`, while `routes/video.py`
+     and `routes/voice_tts.py` call `transcribe(file=…, model=…,
+     response_format=…)` and read `.text`. **Deploying `mvpcode` would have
+     broken video missions, `/api/voice/transcribe` and voice mode.** Fixed
+     (both call styles, returns a `str` with `.text`), but deploy only after
+     the event and after the diff against the live code (§2).
+   - Video analysis praised its own prompt: silent audio → Whisper phantom
+     „Untertitel der Amara.org-Community" → instructions and transcript in one
+     block → the model quoted the prompt as „Stärken". Fixed in
+     `routes/video.py` on `mvpcode` with five changes:
+     1. `_speech_problem()`: Whisper phantoms and < 15 words → 422.
+     2. Prompt: task, context and speech separated, speech inside
+        `<transkript>` tags, new JSON field `insufficient_speech`.
+     3. `insufficient_speech: true` → 422 instead of a score.
+     4. `_drop_prompt_echo()` removes strengths/key phrases quoting the mission
+        text or score history; the response always carries the real Whisper
+        transcript.
+     5. Charge only for a finished analysis: `has_credit()` (new in
+        `routes/credits.py`) checks up front, credit and trial slot are
+        deducted after the analysis. Silence, too little speech and AI errors
+        cost nothing.
+
+     **The live Emergent version is newer** (`_ensure_three`, „GENAU 3",
+     async jobs): port these five changes there.
 1. **The webinar on 29.10.2026: backend deploy + reminder scheduler.**
    - On `mvpcode` the date moved to 29.10., 10:00 CET (`WEBINAR_DATE_ISO =
      "2026-10-29T09:00:00Z"`, campaign `webinar-2026-10-29`). Confirmation,
