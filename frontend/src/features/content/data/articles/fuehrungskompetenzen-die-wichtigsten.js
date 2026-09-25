@@ -16,7 +16,7 @@ export default {
     'trainierbare Verhaltensweisen · mit konkreten Frameworks statt Theorie.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Führungskompetenzen', 'Führungskräfteentwicklung', 'Methoden'],
   seo: {
     title: 'Führungskompetenzen: die 8 wichtigsten als Liste',

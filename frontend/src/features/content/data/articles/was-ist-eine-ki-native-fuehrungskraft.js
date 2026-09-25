@@ -13,7 +13,7 @@ export default {
     'eine bist · jenseits von ChatGPT-Tab-Aufhaben.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-26',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['KI Leadership', 'Definition', 'Führung', 'Selbsttest'],
   seo: {
     title: 'KI-native Führungskraft: Definition + 5 Merkmale',

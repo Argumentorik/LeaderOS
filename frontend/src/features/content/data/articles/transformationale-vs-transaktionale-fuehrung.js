@@ -11,7 +11,7 @@ export default {
     'Der Unterschied zwischen transaktionaler und transformationaler Führung — und warum du beide brauchst. Klar erklärt, mit Praxis-Logik.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Transformationale Führung', 'Transaktionale Führung', 'Leadership'],
   seo: {
     title: 'Transformationale vs. transaktionale Führung: Unterschied',

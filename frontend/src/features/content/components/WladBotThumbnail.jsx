@@ -45,7 +45,8 @@ export const WladBotThumbnail = ({
   showText = true,
 }) => {
   const idx = String(coverFor(title)).padStart(2, '0');
-  const line = truncate(description) || 'Neue Feldnotiz im Journal.';
+  // Sprechblase nur mit echtem Text, nie mit Platzhalter.
+  const line = truncate(description);
 
   return (
     <div className="absolute inset-0 h-full w-full overflow-hidden bg-[#0A0A0A]">
@@ -72,6 +73,7 @@ export const WladBotThumbnail = ({
           visual anchor every card needs regardless of texture. Anchored
           to the top independently of the headline block below so the
           layout never depends on card height/aspect ratio. */}
+      {line && (
       <div className="absolute top-0 inset-x-0 z-10 flex items-start gap-2.5 p-4 md:p-5">
         <img
           src={WLADBOT_AVATAR}
@@ -91,6 +93,7 @@ export const WladBotThumbnail = ({
           </p>
         </div>
       </div>
+      )}
 
       {showText && (
         <div className="absolute bottom-0 inset-x-0 z-10 p-5 md:p-6">

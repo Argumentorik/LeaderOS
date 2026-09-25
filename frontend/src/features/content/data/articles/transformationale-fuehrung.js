@@ -15,7 +15,7 @@ export default {
     'funktioniert · mit konkreten Drills statt Theorie.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-29',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Transformationale Führung', 'Leadership', 'Methoden'],
   seo: {
     title: 'Transformationale Führung: Definition + 4 Dimensionen',

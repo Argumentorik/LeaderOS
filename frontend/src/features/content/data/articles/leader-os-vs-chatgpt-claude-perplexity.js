@@ -13,7 +13,7 @@ export default {
     'wie LeaderOS sich rechnet. Matrix mit konkreten Use-Cases.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-26',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Vergleich', 'ChatGPT', 'Claude', 'Perplexity', 'Tools'],
   seo: {
     title: 'LeaderOS vs ChatGPT, Claude, Perplexity: 2026',

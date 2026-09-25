@@ -6,7 +6,7 @@ export default {
   description: 'Was Führungsverantwortung wirklich bedeutet · die Ebenen, die Führungsspanne und der Unterschied zwischen Titel und echter Verantwortung. Klar erklärt von Wlad Jachtchenko.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Führungsverantwortung', 'Grundlagen', 'Methoden'],
   seo: {
     title: 'Führungsverantwortung: Definition, Ebenen & Beispiele',
