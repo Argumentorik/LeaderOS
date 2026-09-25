@@ -42,6 +42,7 @@ import { WladMark } from '../brand/WladMark';
 const COL_SYSTEM = [
   { label: '14 Tage kostenlos testen',     href: 'https://leaderos.de/signup?trial=14', external: true, focal: true },
   { label: 'Führung beginnt hier · 4 Videos', to: '/fuehrung-beginnt-hier', focal: true },
+  { label: 'KI-Führungskraft werden',     to: '/ki-fuehrungskraft', focal: true },
   { label: 'Diagnose · 10 Min',            href: 'https://leadercheck.de', external: true },
   { label: 'WladBot · 24/7 Sparring',      to: '/#platform' },
   { label: '11 Frameworks',                to: '/#platform' },

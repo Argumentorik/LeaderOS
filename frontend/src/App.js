@@ -65,6 +65,7 @@ const EventPage = lazyWithRetry(() => import("./pages/EventPage"));
 const WebinarPage = lazyWithRetry(() => import("./pages/WebinarPage"));
 const TrainingLandingPage = lazyWithRetry(() => import("./pages/TrainingLandingPage"));
 const KommunikationPage = lazyWithRetry(() => import("./pages/KommunikationPage"));
+const KiFuehrungskraftPage = lazyWithRetry(() => import("./pages/KiFuehrungskraftPage"));
 const FrameworksPage = lazyWithRetry(() => import("./pages/FrameworksPage"));
 const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
 const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
@@ -248,6 +249,8 @@ function AppRouter() {
         <Route path="/training" element={<TrainingLandingPage />} />
         {/* Ad-only · Kommunikation-first, Steadyflow-Mechanik mit Kanon-Inhalt (zehn Frameworks als Marquee) */}
         <Route path="/kommunikation" element={<KommunikationPage />} />
+        {/* Kampagnen-Landing + SEO-Pillar „KI-Führungskraft" · 6 Kampagnen via ?k= · prerendert (scripts/prerender-landings.mjs) */}
+        <Route path="/ki-fuehrungskraft" element={<KiFuehrungskraftPage />} />
         {/* Public · free 4-video lead-magnet funnel · "Führung beginnt hier" */}
         <Route path="/fuehrung-beginnt-hier" element={<FreeVideosPage />} />
         <Route path="/gratis" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
