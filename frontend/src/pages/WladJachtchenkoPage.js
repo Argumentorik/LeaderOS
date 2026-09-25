@@ -9,6 +9,7 @@ import { applyPageMeta } from '../lib/pageMeta';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
 import { DottedGlowBackground } from '../components/shared/DottedGlowBackground';
 import { WladMagicBox } from '../components/landing/WladMagicBox';
+import { BookShelf } from '../components/brand/BookShelf';
 import { useTheme } from '../contexts/ThemeContext';
 
 /**
@@ -67,16 +68,14 @@ const BOOKS = [
     year: 2018,
     publisher: 'Goldmann',
     isbn: '978-3-442-22229-2',
-    badge: '315 SEITEN',
   },
   {
     slug: 'die-5-rollen-einer-fuehrungskraft',
     title: 'Die 5 Rollen einer Führungskraft',
-    sub: 'Visionär · Vorbild · Coach · Konfliktlöser · Manager',
+    sub: 'Kommunikator · Manager · Team-Leader · Psychologe · Problemlöser',
     year: 2020,
     publisher: 'Remote',
     isbn: '3-948642-09-5',
-    badge: 'SPIEGEL-Bestseller',
   },
   {
     slug: 'weisse-rhetorik',
@@ -85,7 +84,6 @@ const BOOKS = [
     year: 2021,
     publisher: 'Goldmann',
     isbn: '3-442-17872-X',
-    badge: 'SPIEGEL-Bestseller',
   },
   {
     slug: 'die-rhetorik-der-top-performer',
@@ -94,34 +92,30 @@ const BOOKS = [
     year: 2021,
     publisher: 'Wirtschafts Verlag',
     isbn: '978-3-936652-41-3',
-    badge: '190 SEITEN',
   },
   {
     slug: 'satanische-verhandlungskunst',
     title: 'Satanische Verhandlungskunst',
-    sub: 'Verhandeln auf höchstem Niveau',
+    sub: 'Die gemeinsten Tricks aus zwei Jahrhunderten – und wie man sich dagegen wehrt',
     year: 2021,
     publisher: 'Langen Müller',
     isbn: '3-7844-3596-3',
-    badge: '253 SEITEN',
   },
   {
     slug: 'das-geheimnis-der-erfolgreichen-alltagskommunikation',
     title: 'Das Geheimnis der erfolgreichen Alltagskommunikation',
-    sub: 'Sechs Werkzeuge für klare Kommunikation',
+    sub: 'Werde zum Kommunikations-Genie',
     year: 2022,
     publisher: 'Remote',
     isbn: '978-1-955655-46-0',
-    badge: '192 SEITEN',
   },
   {
     slug: 'die-koerpersprache-als-spiegelbild-deiner-seele',
     title: 'Die Körpersprache als Spiegelbild deiner Seele',
-    sub: 'Nonverbale Signale lesen und gezielt einsetzen',
+    sub: 'Werde zum Meister der nonverbalen Kommunikation',
     year: 2022,
     publisher: 'Remote',
     isbn: '978-1-955655-48-4',
-    badge: '180 SEITEN',
   },
   {
     slug: 'manipuliere-dich-gluecklich',
@@ -130,7 +124,6 @@ const BOOKS = [
     year: 2022,
     publisher: 'Goldmann',
     isbn: '978-3-442-17936-7',
-    badge: 'SPIEGEL-Bestseller',
   },
   {
     slug: 'redest-du-noch-oder-ueberzeugst-du-schon',
@@ -139,16 +132,14 @@ const BOOKS = [
     year: 2022,
     publisher: 'Remote',
     isbn: '978-1-955655-44-6',
-    badge: 'SPIEGEL-Bestseller',
   },
   {
     slug: 'die-kraft-der-positiven-psychologie',
     title: 'Die Kraft der Positiven Psychologie',
-    sub: 'Resilienz, Optimismus, Selbstwirksamkeit',
+    sub: 'Mit dem richtigen Mindset zu mehr Selbstbewusstsein und Gelassenheit',
     year: 2023,
     publisher: 'Remote',
     isbn: '978-1-960004-07-9',
-    badge: '240 SEITEN',
   },
   {
     slug: '55-rhetorik-tipps-fuer-fuehrungskraefte',
@@ -157,7 +148,6 @@ const BOOKS = [
     year: 2023,
     publisher: 'liberaudio',
     isbn: null,
-    badge: 'HÖRBUCH',
   },
   {
     slug: '55-fuehrungstipps-fuer-mitarbeitergespraeche',
@@ -166,7 +156,6 @@ const BOOKS = [
     year: 2024,
     publisher: 'liberaudio',
     isbn: null,
-    badge: 'HÖRBUCH',
   },
   {
     slug: 'die-charismatische-fuehrungskraft',
@@ -175,7 +164,6 @@ const BOOKS = [
     year: 2024,
     publisher: 'Remote',
     isbn: null,
-    badge: 'NEU',
   },
 ];
 
@@ -629,7 +617,7 @@ export default function WladJachtchenkoPage() {
   }, []);
 
   return (
-    <div className="bg-background text-foreground min-h-screen antialiased" data-testid="wlad-page">
+    <div className="bg-background text-foreground min-h-screen antialiased overflow-x-clip" data-testid="wlad-page">
       <LandingNav />
 
       <main id="main-content" className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 md:pt-24 pb-16 md:pb-24">
@@ -777,104 +765,21 @@ export default function WladJachtchenkoPage() {
           </div>
         </section>
 
-        {/* Books · SPIEGEL-Bestseller trio */}
-        <section className="mt-20 md:mt-28">
-          <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-end mb-10 md:mb-12">
-            <div className="md:col-span-7 text-center md:text-left">
-              <p className="text-[10.5px] font-bold uppercase tracking-[0.28em] text-brand-strong mb-4 font-mono">
-                ▸ BÜCHER · 13 PUBLIZIERT · ALLE AN EINEM ORT
-              </p>
-              <h2
-                className="text-[28px] sm:text-[36px] md:text-[52px] leading-[1.02] tracking-[-0.03em] text-foreground"
-                style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
-              >
-                Drei davon<br />SPIEGEL-Bestseller<span className="text-brand not-italic">.</span>
-              </h2>
-            </div>
-            <div className="md:col-span-5 md:pb-3 text-center md:text-left">
-              <p className="text-[14.5px] md:text-[15.5px] leading-[1.6] text-foreground/70">
-                Verkauft sich in zwei Welten zugleich: mittelständische Vorstandsetagen
-                im Schwarzwald und Strategie-Berater in Berlin lesen dieselben Seiten.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-            {BOOKS.map((b, i) => {
-              const isSpiegel = b.badge === 'SPIEGEL-Bestseller';
-              return (
-                <motion.article
-                  key={b.title}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.3 }}
-                  custom={i}
-                  variants={CARD_REVEAL}
-                  className={`group border-2 ${isSpiegel ? 'border-foreground bg-brand/[0.04]' : 'border-foreground/40'} overflow-hidden hover:bg-foreground/[0.04] hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(191,255,0,0.3)] transition-all duration-300 flex flex-col`}
-                >
-                  {/* Cover frame · real cover at /wlad/books/<slug>.jpg wins;
-                      until that file lands the designed typographic spine
-                      below shows through (img simply hides itself on 404). */}
-                  <div className="relative aspect-[2/3] max-h-[290px] overflow-hidden bg-[#0A0A0A]">
-                    <div className="absolute inset-0 flex flex-col justify-between p-4" aria-hidden>
-                      <span className="font-mono text-[8px] font-bold uppercase tracking-[0.24em] text-white/45">
-                        Wladislaw Jachtchenko
-                      </span>
-                      <span
-                        className="text-white text-[20px] leading-[1.05] tracking-[-0.02em]"
-                        style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
-                      >
-                        {b.title.replace(/\.$/, '')}<span className="text-brand not-italic">.</span>
-                      </span>
-                      <span className="font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-brand">
-                        ▸ {b.publisher} · {b.year}
-                      </span>
-                    </div>
-                    <img
-                      src={bookCoverUrl(b)}
-                      alt={`Buchcover: ${b.title} · Wladislaw Jachtchenko (${b.year})`}
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <span aria-hidden className="absolute inset-x-0 bottom-0 h-[3px] bg-brand/80" />
-                  </div>
-                  <div className="p-5 md:p-6 flex flex-col flex-1">
-                    <div className="flex items-center justify-between gap-2 mb-4">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 ${isSpiegel ? 'bg-foreground text-background' : 'border border-foreground/30 text-foreground/55'} font-mono text-[9px] font-bold uppercase tracking-[0.18em]`}>
-                        {isSpiegel ? '★ SPIEGEL' : b.badge}
-                      </span>
-                      <span className="font-mono text-[10px] font-bold text-foreground/55">{b.year}</span>
-                    </div>
-                    <h3
-                      className="text-[18px] md:text-[20px] leading-[1.1] tracking-[-0.02em] text-foreground"
-                      style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
-                    >
-                      {b.title.replace(/\.$/, '')}<span className="text-brand-strong not-italic">.</span>
-                    </h3>
-                    <p className="mt-2 text-[12.5px] leading-[1.5] text-foreground/65 flex-1">
-                      {b.sub}
-                    </p>
-                    <div className="mt-4 pt-3 border-t border-foreground/10 font-mono text-[9.5px] uppercase tracking-[0.16em] text-foreground/45">
-                      ▸ {b.publisher}
-                      {b.isbn && <span className="block mt-0.5 normal-case tracking-normal text-[9px]">ISBN {b.isbn}</span>}
-                    </div>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </div>
-
-          <a
-            href="https://wlad-jachtchenko.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-1.5 text-[12.5px] font-bold uppercase tracking-[0.14em] text-foreground hover:text-brand-strong transition-colors"
-          >
-            Alle 13 Bücher · Details & Kauf <ArrowUpRight size={14} />
-          </a>
-        </section>
+        {/* Books · Bücherregal mit allen Bänden. Volle Breite (bricht aus
+            dem 1280er-Container aus), dunkles Band wie auf /webinar und
+            /ki-fuehrungskraft. Bestseller-Siegel nur, wo der Titel selbst
+            belegt ist (src/data/wladBookshelf.js). */}
+        <div className="mt-20 md:mt-28 relative w-screen left-1/2 -translate-x-1/2">
+          <BookShelf
+            eyebrow="Bücher"
+            title="Drei davon SPIEGEL-Bestseller"
+            intro="Rhetorik, Führung, Psychologie, Verhandlung: gelesen in mittelständischen Vorstandsetagen und von Strategie-Beratern gleichermaßen. Die Frameworks daraus trainiert LeaderOS jeden Tag."
+            moreHref="https://wlad-jachtchenko.com"
+            moreEyebrow="Alle Bücher & Hörbücher"
+            moreTitle="Details und Kauf auf wlad-jachtchenko.com"
+            moreExternal
+          />
+        </div>
 
         {/* Clients · the brand-strong namedrop strip. These names are
             consistently cited on Wlad's own platforms (Argumentorik,

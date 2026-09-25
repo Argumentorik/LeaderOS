@@ -93,6 +93,9 @@ export function BookShelf({
   title = 'Bücher, aus denen die Methode kommt',
   intro = 'Die Frameworks in LeaderOS stehen zuerst in diesen Büchern: SEXIER, die 10 Stufen des Zuhörens, Körpersprache, Verhandlung. Der KI-Coach wendet sie so an, wie Wlad sie geschrieben hat.',
   moreHref = '/wlad-jachtchenko',
+  moreEyebrow = 'Alle Bücher',
+  moreTitle = 'Wlads komplette Bibliothek mit ISBN',
+  moreExternal = false,
   onTrack,
 }) {
   const sectionRef = useRef(null);
@@ -243,12 +246,13 @@ export function BookShelf({
           <li className="shrink-0 snap-start flex items-center" style={{ width: 'clamp(200px, 20vw, 260px)', height: 'clamp(315px, 36vw, 435px)' }}>
             <a
               href={moreHref}
+              {...(moreExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               onClick={() => onTrack?.('bookshelf_more')}
               className="group/more flex flex-col justify-between w-full h-[70%] rounded-[6px] transition-colors hover:bg-white/[0.06]"
               style={{ border: '1px dashed rgba(255,255,255,0.25)', padding: 22 }}
             >
-              <span className="text-[11px]" style={{ ...MONO, color: LIME, fontWeight: 700 }}>Alle Bücher</span>
-              <span className="text-[22px] leading-[1.15] text-white" style={HEAD}>Wlads komplette Bibliothek mit ISBN</span>
+              <span className="text-[11px]" style={{ ...MONO, color: LIME, fontWeight: 700 }}>{moreEyebrow}</span>
+              <span className="text-[22px] leading-[1.15] text-white" style={HEAD}>{moreTitle}</span>
               <ArrowUpRight size={26} className="text-white transition-transform group-hover/more:translate-x-1 group-hover/more:-translate-y-1" />
             </a>
           </li>
