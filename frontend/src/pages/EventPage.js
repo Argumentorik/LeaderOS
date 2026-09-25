@@ -197,7 +197,7 @@ const SignupForm = ({ idSuffix = '' }) => {
           onChange={(e) => { setEmail(e.target.value); if (state === 'error') setState('idle'); }}
           placeholder="Deine E-Mail-Adresse"
           aria-label="E-Mail-Adresse"
-          className="flex-1 h-14 px-5 bg-white/[0.04] border-2 border-white/20 focus:border-brand outline-none text-white text-[15px] placeholder:text-white/35 transition-colors"
+          className="w-full sm:flex-1 h-14 px-5 bg-white/[0.04] border-2 border-white/20 focus:border-brand outline-none text-white text-[15px] placeholder:text-white/35 transition-colors"
         />
         <button
           type="submit"

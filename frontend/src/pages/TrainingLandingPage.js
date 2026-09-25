@@ -330,7 +330,7 @@ function RegisterBlock() {
           placeholder="Vorname"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="h-14 flex-1 rounded-xl border border-black/10 px-4 text-[15px] focus:outline-none focus:border-brand"
+          className="h-14 w-full sm:w-auto sm:flex-1 rounded-xl border border-black/10 px-4 text-[15px] focus:outline-none focus:border-brand"
         />
         <input
           type="email"
@@ -338,7 +338,7 @@ function RegisterBlock() {
           placeholder="E-Mail-Adresse"
           value={email}
           onChange={(e) => { setEmail(e.target.value); if (state === 'invalid') setState('idle'); }}
-          className="h-14 flex-[1.4] rounded-xl border border-black/10 px-4 text-[15px] focus:outline-none focus:border-brand"
+          className="h-14 w-full sm:w-auto sm:flex-[1.4] rounded-xl border border-black/10 px-4 text-[15px] focus:outline-none focus:border-brand"
         />
       </div>
       <motion.button

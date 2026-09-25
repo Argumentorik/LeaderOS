@@ -16,6 +16,7 @@ import { WladMark } from '../components/brand/WladMark';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
+import { AGENDA, WEBINAR_TS } from '../data/webinarEvent';
 
 /**
  * WebinarPage · /webinar · Hormozi ascension funnel, motion-first build.
@@ -45,7 +46,6 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * no invented testimonials, no fake scarcity, no fake exclusivity.
  */
 
-const WEBINAR_TS = new Date('2026-10-29T10:00:00+01:00').getTime();
 const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 // Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
 const DATE_LINE_SHORT = 'DO 29. OKT 2026 · 10:00 UHR · LIVE';
@@ -135,14 +135,6 @@ const VALUE_STACK = [
   [ClipboardCheck, 'Der kostenlose Leader-Check', 'Dein Führungsprofil in 10 Minuten — KI-Readiness, Rhetorik, EQ.'],
   [PlayCircle, 'Die 4-teilige Videoserie', '„Führung beginnt hier" — schaltest du direkt nach der Anmeldung frei.'],
   [BellRing, 'Kalender + Erinnerungen', 'Google-Calendar-Einladung sofort, Erinnerung 24h und 1h vor dem Start.'],
-];
-
-const AGENDA = [
-  ['10:00', 'Check-in & Warm-up', 'Kurz ankommen — worum es in den nächsten 90 Minuten geht.'],
-  ['10:05', 'Der Charisma-Code live', 'Präsenz · Wärme · Kompetenz — die drei Signale, in Echtzeit demonstriert.'],
-  ['10:25', 'Das Leadership Operating System', 'Wie WladBot, tägliche Drills und die 11 Frameworks zusammenspielen.'],
-  ['10:55', 'Live-Case aus der Community', 'Eine echte Führungssituation, gemeinsam durchgearbeitet.'],
-  ['11:15', 'Q&A mit Wlad', 'Deine Fragen, direkt beantwortet.'],
 ];
 
 const FREE_VIDEOS = [

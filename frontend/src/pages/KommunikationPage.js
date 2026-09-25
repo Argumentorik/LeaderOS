@@ -723,10 +723,10 @@ function KommunikationsCheck() {
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <input type="text" placeholder="Vorname" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name"
-                    className="h-14 flex-1 rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
+                    className="h-14 w-full sm:w-auto sm:flex-1 rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
                   <input type="email" inputMode="email" autoComplete="email" placeholder="E-Mail-Adresse" value={email}
                     onChange={(e) => { setEmail(e.target.value); if (state === 'invalid') setState('idle'); }}
-                    className="h-14 flex-[1.4] rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
+                    className="h-14 w-full sm:w-auto sm:flex-[1.4] rounded-xl px-4 text-[15px] focus:outline-none focus:border-[#4382BC]" style={{ border: '2px solid rgba(19,21,21,0.1)', background: PAGE_BG }} />
                 </div>
                 <motion.button type="submit" whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.96 }} disabled={state === 'loading'}
                   className="mt-3 w-full h-14 rounded-xl text-white disabled:opacity-70" style={{ ...BODY, fontSize: 15, background: INK }}>
