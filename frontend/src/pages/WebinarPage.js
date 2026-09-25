@@ -13,6 +13,8 @@ import {
   WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback,
 } from '../lib/brandAssets';
 import { WladMark } from '../components/brand/WladMark';
+import { BookShelf } from '../components/brand/BookShelf';
+import { LogoWall } from '../components/brand/LogoWall';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
@@ -64,11 +66,6 @@ const MEDIA = [
   'ARD · DAS ERSTE', 'PROSIEBEN · GALILEO', 'TEDX', 'GREATOR',
 ];
 
-const CLIENTS = [
-  'Allianz', 'BMW', 'Siemens', 'Telekom', 'Lufthansa', 'Bosch',
-  'Vodafone', 'Daimler', 'Sky', 'Pro7', '3M', 'Generali',
-];
-
 const REVIEW_PLATFORMS = [
   ['Trustpilot', '4,9', '388 Bewertungen', 'https://uk.trustpilot.com/review/argumentorik.com'],
   ['Greator', '4,7', '995 Bewertungen', 'https://greator.com/coach/wlad-jachtchenko'],
@@ -110,10 +107,6 @@ const MEDIA_LOGOS = {
   'TEDX': '/logos/press/tedx.svg',
   'GREATOR': '/logos/press/greator.svg',
 };
-const CLIENT_LOGOS = Object.fromEntries(
-  CLIENTS.map((c) => [c, `/logos/clients/${c.toLowerCase().replace(/[^a-z0-9]/g, '-')}.svg`]),
-);
-
 /** Prüft per HEAD-Request, welche Logo-Dateien wirklich existieren —
  *  ein fehlendes SVG rendert sonst als kaputtes Bild. */
 const useExistingAssets = (paths) => {
@@ -513,7 +506,9 @@ const LogoBand = ({ eyebrow, names, logos, muted = false }) => {
 const LogoBands = () => (
   <>
     <LogoBand eyebrow="▸ Bekannt aus" names={MEDIA} logos={MEDIA_LOGOS} />
-    <LogoBand eyebrow="▸ Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" names={CLIENTS} logos={CLIENT_LOGOS} muted />
+    <div className="border-t border-[#111111]/8 mt-7 first:mt-0 -mx-5 md:-mx-10">
+      <LogoWall tone="light" compact eyebrow="Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" />
+    </div>
   </>
 );
 
@@ -1197,6 +1192,9 @@ export default function WebinarPage() {
           „Führung ist Fähigkeit. Fähigkeit ist trainierbar<span className="text-[#BFFF00] not-italic">.</span>"
           <span className="block mt-5 font-mono not-italic text-[10px] font-bold uppercase tracking-[0.26em] text-white/50">— Wlad Jachtchenko</span>
         </StatementBand>
+
+        {/* ── BÜCHERREGAL · alle Bände als Beweis, ziehbar ────────────── */}
+        <BookShelf onTrack={(e, p) => track(`webinar_${e}`, p)} />
 
         {/* ── BEWEIS II · framework cards ──────────────────────────────── */}
         <section className="bg-white">

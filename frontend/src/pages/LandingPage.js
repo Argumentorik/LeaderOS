@@ -36,6 +36,7 @@ import { ScrollProgressRail } from '../components/landing/ScrollProgressRail';
 import { LeadCaptureModal } from '../components/landing/LeadCaptureModal';
 import { LandingChatPod } from '../components/landing/LandingChatPod';
 import { WladSignGuy } from '../components/landing/WladSignGuy';
+import { LogoWall } from '../components/brand/LogoWall';
 import LeaderCheckLanding from './LeaderCheckLanding';
 import { LANDING_BENEFITS, LANDING_META } from '../data/landingAssets';
 
@@ -136,6 +137,8 @@ export default function LandingPage() {
             derselben Person auf derselben Seite war redundant, seit das
             Intro-Video direkt nach dem Hero-Block steht. */}
         <HeroSection />
+        {/* Direkt unter dem ersten Screen: Referenz-Logos, Chrome-Hover */}
+        <LogoWall />
         <WhatIsLeaderOsSection />
         <WladIntroVideo />
         <SprintSpecimenStrip />

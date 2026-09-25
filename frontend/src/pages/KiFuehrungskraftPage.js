@@ -4,6 +4,7 @@ import { Play, Check, X, Star, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
 import { BookShelf } from '../components/brand/BookShelf';
+import { LogoWall } from '../components/brand/LogoWall';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 import { WEBINAR_TS, WEBINAR_CAMPAIGN } from '../data/webinarEvent';
@@ -1096,6 +1097,7 @@ export default function KiFuehrungskraftPage() {
       <Navbar />
       <main>
         <Hero k={k} onPlay={() => { setVideoOpen(true); track('ki_video_open'); }} />
+        <LogoWall tone="light" compact eyebrow="Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" />
         <WhyNow />
         <Split />
         <Outcomes k={k} />
