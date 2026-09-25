@@ -1,0 +1,61 @@
+name: brand-probe
+
+# Temporär: Screenshots + CSS-Farben externer Seiten für Design-Abgleich.
+on:
+  push:
+    branches-ignore: [mvpcode]
+    paths: ['.github/probe/urls.txt']
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - run: npm i --no-save playwright@1 && npx playwright install --with-deps chromium
+      - name: Screenshots und Farben
+        run: |
+          mkdir -p .github/probe/out
+          cat > probe.mjs <<'JS'
+          import { chromium } from 'playwright';
+          import fs from 'fs';
+          const urls = fs.readFileSync('.github/probe/urls.txt', 'utf8').split('\n').filter(Boolean);
+          const b = await chromium.launch();
+          let i = 0;
+          for (const u of urls) {
+            i += 1;
+            const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+            try {
+              await p.goto(u, { waitUntil: 'networkidle', timeout: 45000 });
+              await p.waitForTimeout(2500);
+              await p.screenshot({ path: `.github/probe/out/site-${i}.png` });
+              await p.screenshot({ path: `.github/probe/out/site-${i}-full.png`, fullPage: true });
+              const colors = await p.evaluate(() => {
+                const c = {};
+                for (const el of document.querySelectorAll('*')) {
+                  const s = getComputedStyle(el);
+                  for (const k of ['color', 'backgroundColor', 'borderTopColor']) {
+                    const v = s[k]; if (!v || v.includes('0, 0, 0, 0')) continue;
+                    c[v] = (c[v] || 0) + 1;
+                  }
+                }
+                const fonts = [...new Set([...document.querySelectorAll('h1,h2,h3,p,a,button')].map((e) => getComputedStyle(e).fontFamily))].slice(0, 8);
+                return { colors: Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 25), fonts };
+              });
+              console.log('URL', u, JSON.stringify(colors));
+            } catch (e) { console.log('FAIL', u, e.message); }
+          }
+          await b.close();
+          JS
+          node probe.mjs | tee .github/probe/out/colors.txt
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add .github/probe/out
+          git diff --cached --quiet || (git commit -m "brand-probe Ergebnisse" && git push)
