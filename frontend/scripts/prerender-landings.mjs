@@ -58,6 +58,7 @@ function renderPage(template, { title, description, url, image, jsonLd, rootHtml
 // ------------------------------------------------------ /ki-fuehrungskraft
 const kf = await import(pathToFileURL(join(DATA, 'kiFuehrungskraft.js')).href);
 const ev = await import(pathToFileURL(join(DATA, 'webinarEvent.js')).href);
+const shelf = await import(pathToFileURL(join(DATA, 'wladBookshelf.js')).href);
 const c = kf.CAMPAIGNS[kf.DEFAULT_CAMPAIGN];
 
 const INK = '#0A0A0A';
@@ -94,6 +95,9 @@ const rootHtml = [
   section('', `<p style="${bib}">▸ Dein Gastgeber</p><h2 style="${h2}">${esc(kf.HOST.name)}</h2><p style="${p}"><b>${esc(kf.HOST.role)}.</b> ${esc(kf.HOST.bio)}</p>` +
     `<p style="${p}">${kf.STATS.map(([v, l]) => `${esc(v)} ${esc(l)}`).join(' · ')}</p>` +
     `<p style="${p}">Führungskräfte von ${esc(kf.HOST.clients.join(', '))} und vielen weiteren haben Wlads Trainings durchlaufen.</p>`),
+  section('', `<p style="${bib}">▸ Die Bibliothek</p><h2 style="${h2}">Bücher, aus denen die Methode kommt.</h2><ol style="${p}padding-left:1.2em;">` +
+    shelf.BOOKSHELF.map((b) => `<li style="margin:0 0 10px;"><b>${esc(b.title)}</b> – ${esc(b.sub)}${b.coAuthor ? ` (mit ${esc(b.coAuthor)})` : ''}. ${esc(b.publisher)}, ${b.year}${b.isbn ? `, ISBN ${esc(b.isbn)}` : ''}${b.bestseller ? ' · SPIEGEL-Bestseller' : ''}.</li>`).join('') +
+    `</ol><p style="${p}"><a href="/wlad-jachtchenko" style="color:${INK};">Alle Bücher von Wlad Jachtchenko</a></p>`),
   section('', `<p style="${bib}">▸ Stimmen aus Wlads Trainings</p><h2 style="${h2}">4,9 von 5 auf Trustpilot.</h2>` +
     kf.REVIEWS.map(([q, n, ctx, d]) => `<blockquote style="${p}margin:0 0 14px;">„${esc(q)}" – ${esc(n)}, ${esc(ctx)}, ${esc(d)} auf Trustpilot</blockquote>`).join('') +
     `<p style="${p}"><a href="${esc(kf.TRUSTPILOT_URL)}" rel="noopener">Alle 388 Bewertungen auf Trustpilot</a></p>`),
