@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 import uuid
 import json
 import os
+import re
 import tempfile
 import subprocess
 from datetime import datetime, timezone
@@ -161,6 +162,40 @@ Referenziere IMMER ein spezifisches Wlad-Framework in deinem Feedback.
 Antworte NUR mit validem JSON. Kein extra Text.""" + WLAD_HARD_RULES
 
 
+# Whisper erfindet bei stillem oder fast stillem Audio Abspann-Texte aus
+# seinen Trainingsdaten („Untertitel der Amara.org-Community", „Untertitel im
+# Auftrag des ZDF", „Vielen Dank fürs Zuschauen"). Das ist nicht leer, rutschte
+# also durch `if not text` — und die Analyse bewertete dann den Prompt statt
+# einer Rede. Diese Phrasen sind nie echte Nutzersprache.
+_WHISPER_PHANTOMS = (
+    "amara.org",
+    "untertitel im auftrag",
+    "untertitelung aufgrund",
+    "untertitel von",
+    "untertitel der",
+    "vielen dank fürs zuschauen",
+    "danke fürs zuschauen",
+    "copyright wdr",
+)
+
+
+def _speech_problem(text: str, min_words: int = 0) -> str | None:
+    """Grund, warum `text` keine verwertbare Rede ist — oder None.
+
+    min_words=0 für Sprachbefehle im Chat (auch „Ja" ist legitim), > 0 für
+    Video-Missionen, deren kürzeste Mission 30 Sekunden dauert.
+    """
+    norm = " ".join((text or "").lower().split())
+    words = [w for w in norm.replace(".", " ").replace(",", " ").split() if any(c.isalnum() for c in w)]
+    if any(p in norm for p in _WHISPER_PHANTOMS) and len(words) < 20:
+        return ("In deiner Aufnahme war keine Sprache zu hören — nur Stille. Prüfe, ob das richtige "
+                "Mikrofon ausgewählt und freigegeben ist, und nimm noch einmal auf.")
+    if min_words and len(words) < min_words:
+        return (f"Die Aufnahme enthält zu wenig Sprache für eine Analyse ({len(words)} Wörter). "
+                "Sprich mindestens 30 Sekunden am Stück und nimm noch einmal auf. Dieser Versuch kostet nichts.")
+    return None
+
+
 async def _transcribe_audio(file: UploadFile) -> str:
     """Transcribe uploaded media (audio or video) using OpenAI Whisper.
 
@@ -240,6 +275,9 @@ async def _transcribe_audio(file: UploadFile) -> str:
         if not text:
             raise HTTPException(status_code=422,
                                 detail="Audio konnte nicht transkribiert werden — kein Sprachsignal erkannt.")
+        problem = _speech_problem(text)
+        if problem:
+            raise HTTPException(status_code=422, detail=problem)
         return text
     finally:
         for p in (raw_path, mp3_path):
@@ -251,23 +289,41 @@ async def _transcribe_audio(file: UploadFile) -> str:
 
 
 def _build_analysis_prompt(challenge: dict, transcript: str, prev_attempts: list, user_memory: str, rating_context: str) -> str:
-    """Build the full analysis prompt for the AI model."""
-    prev_context = ""
+    """Build the full analysis prompt for the AI model.
+
+    Anweisungen, Kontext und Rede sind strikt getrennt: früher standen
+    Missionstext („Sei klar, empathisch …"), letzte Scores und Transkript
+    ungetrennt in einem Block — bei dünnem Transkript zitierte das Modell den
+    Prompt als „Stärke". Das User-Profil steht bereits in der System-Message
+    (_run_video_ai_analysis) und wird hier nicht noch einmal eingefügt.
+    """
+    prev_line = "- Bisherige Versuche: keine"
     if prev_attempts:
         prev_scores = [a.get("analysis", {}).get("overall_score", 0) for a in prev_attempts if a.get("analysis")]
         if prev_scores:
-            prev_context = f"\nDer User hat diese Challenge bereits {len(prev_scores)}x gemacht. Letzte Scores: {prev_scores}. Gib Feedback ob sich der User verbessert hat."
+            prev_line = (f"- Bisherige Versuche: {len(prev_scores)}, letzte Scores (neueste zuerst): {prev_scores} "
+                         "— nur für \"improvement_vs_previous\" verwenden")
+    safe_transcript = re.sub(r"<\s*/?\s*transkript\s*>", "", transcript or "", flags=re.IGNORECASE)
 
-    memory_context = f"\n\nUSER PROFIL:\n{user_memory}" if user_memory else ""
+    return f"""AUFGABE: Bewerte AUSSCHLIESSLICH die Rede zwischen <transkript> und </transkript> nach Wlads Methodik.
+Alles unter KONTEXT ist Hintergrundwissen für dich: nicht zitieren, nicht als Teil der Rede bewerten.
 
-    return f"""Analysiere diese Leadership-Rede für die Mission: "{challenge['title']}" - {challenge['description']}
-{prev_context}{memory_context}
+KONTEXT
+- Mission: "{challenge['title']}" – Aufgabenstellung an den User: {challenge['description']}
+{prev_line}
 
-TRANSKRIPT:
-\"{transcript}\"
+<transkript>
+{safe_transcript}
+</transkript>
 
-Bewerte DETAILLIERT anhand von Wlads Methodik. Antworte als JSON:
+REGELN
+- Zitate in "strengths" und "key_phrases" müssen wörtlich aus dem Transkript stammen.
+- Enthält das Transkript keine echte Rede (nur Untertitel-/Abspann-Hinweise, Stille, weniger als drei Sätze),
+  setze "insufficient_speech": true, "overall_score": 0 und lass "strengths" leer — erfinde nichts.
+
+Antworte als JSON:
 {{
+  "insufficient_speech": false,
   "overall_score": 0-100,
   "clarity_score": 0-100,
   "confidence_score": 0-100,
@@ -313,6 +369,40 @@ def _get_rating_params(request, user):
 async def get_video_challenges():
     from data import VIDEO_CHALLENGES
     return VIDEO_CHALLENGES
+
+
+_QUOTE_RE = re.compile(r"[„“”\"»«]([^„“”\"»«]+?)[“”\"«»]")
+_HISTORY_MARKERS = ("letzte scores", "bisherige versuche", "analysiere diese leadership-rede")
+# Kürzere Mission-Stücke („Ein Satz.", „Wer bist du als Leader?") darf echtes
+# Lob zitieren — sonst stünde der Elevator Pitch ohne Stärken da.
+_ECHO_MIN_CHARS = 25
+
+
+def _norm_words(text) -> str:
+    return " ".join(re.sub(r"[^\w\s-]", " ", str(text or "").lower()).split())
+
+
+def _drop_prompt_echo(items: list, mission: str, transcript: str) -> list:
+    """Entfernt Einträge, die den Prompt statt der Rede zitieren.
+
+    Echo = Score-Historie („Letzte Scores …") oder ein Satz bzw. Zitat aus der
+    Mission („Sei klar, empathisch und motivierend"), das in der Rede nie fiel.
+    Lob mit Bezug zur Aufgabe („erfüllt die Aufgabenstellung") bleibt stehen.
+    """
+    mission_n, spoken_n = _norm_words(mission), _norm_words(transcript)
+    sentences = [s for s in (_norm_words(x) for x in re.split(r"[.!?]+", mission)) if len(s) >= _ECHO_MIN_CHARS]
+
+    def is_echo(item) -> bool:
+        text = str(item)
+        item_n = _norm_words(text)
+        if any(m in item_n for m in _HISTORY_MARKERS):
+            return True
+        if any(s in item_n and s not in spoken_n for s in sentences):
+            return True
+        pieces = (_norm_words(p) for p in [text, *_QUOTE_RE.findall(text)])
+        return any(len(p) >= _ECHO_MIN_CHARS and p in mission_n and p not in spoken_n for p in pieces)
+
+    return [x for x in items if not is_echo(x)]
 
 
 async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts: list, user_memory, rating_context: str) -> dict:
@@ -368,8 +458,22 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
         # Raise a clear error so the user gets retried-prompt UI instead of bad data.
         raise ValueError("AI analysis failed to return structured feedback. Please retry.")
 
-    # Ensure transcript is preserved even if AI omitted it
-    analysis["transcript"] = analysis.get("transcript") or transcript
+    if analysis.get("insufficient_speech"):
+        raise HTTPException(
+            status_code=422,
+            detail=("In deiner Aufnahme war keine verwertbare Rede zu erkennen. Prüfe dein Mikrofon "
+                    "und nimm noch einmal auf. Dieser Versuch zählt nicht und kostet nichts."),
+        )
+
+    mission = challenge.get("description") or ""
+    if isinstance(analysis.get("strengths"), list):
+        analysis["strengths"] = _drop_prompt_echo(analysis["strengths"], mission, transcript)
+    speech = analysis.get("speech_analysis")
+    if isinstance(speech, dict) and isinstance(speech.get("key_phrases"), list):
+        speech["key_phrases"] = _drop_prompt_echo(speech["key_phrases"], mission, transcript)
+
+    # Immer das echte Whisper-Transkript zeigen, nie die Fassung des Modells.
+    analysis["transcript"] = transcript
     return analysis
 
 
@@ -425,7 +529,7 @@ async def get_video_archive(request: Request):
 @router.post("/video-challenges/{challenge_id}/analyze")
 async def analyze_video_challenge(challenge_id: str, request: Request, file: UploadFile = File(...)):
     from data import VIDEO_CHALLENGES
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, has_credit
     user = await get_current_user(request)
 
     # Trial-first: Free + Starter + Standard get 3 free analyses in their first 14 days.
@@ -433,16 +537,12 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
     tier_info = await resolve_user_tier(user)
     trial = await get_video_trial_status(user, tier_info["tier"])
     used_trial_slot = False
-    if trial["active"]:
-        # Inside trial window with quota remaining → bypass require_feature, consume slot.
-        await consume_video_trial(user["user_id"])
-        used_trial_slot = True
-    else:
+    if not trial["active"]:
         # Either Accelerator (passes) or trial-ineligible/expired (raises 402 with upgrade detail).
         await require_feature(user, "video_analysis")
 
-    credit_result = await check_and_deduct_credit(user, "video_mission")
-    if not credit_result["allowed"]:
+    # Nur prüfen — abgebucht wird erst, wenn die Analyse steht (siehe unten).
+    if not await has_credit(user, "video_mission"):
         raise HTTPException(status_code=402, detail="no_credits")
 
     challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
@@ -459,7 +559,22 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
 
     try:
         transcript = await _transcribe_audio(file)
+        problem = _speech_problem(transcript, min_words=15)
+        if problem:
+            raise HTTPException(status_code=422, detail=problem)
+
         analysis = await _run_video_ai_analysis(challenge, transcript, prev_attempts, user_memory, rating_context)
+
+        # Erst ein fertiges Ergebnis kostet etwas: Stille, zu wenig Sprache und
+        # KI-Fehler verbrauchen weder Credit noch Test-Slot (vorher wurde
+        # beides schon vor Whisper abgebucht).
+        credit_result = await check_and_deduct_credit(user, "video_mission")
+        if not credit_result["allowed"]:
+            raise HTTPException(status_code=402, detail="no_credits")
+        if trial["active"]:
+            await consume_video_trial(user["user_id"])
+            used_trial_slot = True
+
         await _persist_video_analysis(user["user_id"], challenge_id, analysis, rating, len(prev_attempts) + 1)
         # Attach trial metadata for the UI banner (X / 3 remaining etc.)
         if used_trial_slot:

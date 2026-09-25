@@ -254,6 +254,20 @@ class LlmChat:
 # Wenn OPENAI_API_KEY in der ENV ist, geht das direkt zu OpenAI. Sonst
 # fällt es auf emergentintegrations zurück (übergangsweise).
 
+class _Transcript(str):
+    """Transkript als `str` **mit** `.text`.
+
+    Die Aufrufer im Code nutzen zwei Stile: `text = await stt.transcribe(path)`
+    und `resp = await stt.transcribe(file=f, …); resp.text` (Emergent-/OpenAI-
+    Stil, u. a. routes/video.py, routes/voice_tts.py). Ein str mit `.text`
+    bedient beide, ohne die Aufrufer anzufassen.
+    """
+
+    @property
+    def text(self) -> str:
+        return str(self)
+
+
 class OpenAISpeechToText:
     """Drop-in für `emergentintegrations.llm.openai.OpenAISpeechToText`."""
 
@@ -263,42 +277,61 @@ class OpenAISpeechToText:
         # ENV gewinnt — eigener OpenAI-Key überschreibt den Emergent-Key.
         self._openai_key = os.environ.get("OPENAI_API_KEY")
 
-    async def transcribe(self, file_path: str, language: Optional[str] = None) -> str:
-        """STT aus einem File-Pfad. Kompatibel mit der Emergent-Signatur."""
+    async def transcribe(self, file_path: Optional[str] = None, language: Optional[str] = None, *,
+                         file=None, model: Optional[str] = None,
+                         response_format: Optional[str] = None, **_ignored) -> "_Transcript":
+        """STT aus Pfad **oder** offenem File-Objekt.
+
+        Beide Signaturen sind gültig:
+          await stt.transcribe("a.mp3", language="de")                     → str
+          await stt.transcribe(file=f, model="whisper-1",
+                               response_format="json", language="de")     → .text
+        Vorher akzeptierte der Shim nur (file_path, language) — die Aufrufe mit
+        file=… endeten in einem TypeError, d. h. Video-Analyse und Voice-Mode
+        wären nach einem Deploy dieses Codes ausgefallen.
+        """
+        if file is None and not file_path:
+            raise TypeError("transcribe() braucht file_path oder file=")
+        use_model = model or self._model
         if self._openai_key:
-            return await self._native(open(file_path, "rb"), language)
-        return await self._legacy(file_path, language)
+            if file is not None:
+                return _Transcript(await self._native(file, language, use_model))
+            with open(file_path, "rb") as fh:
+                return _Transcript(await self._native(fh, language, use_model))
+        return _Transcript(await self._legacy(file if file is not None else file_path,
+                                              language, use_model, response_format))
 
     async def transcribe_bytes(self, data: bytes, filename: str = "audio.webm",
-                               language: Optional[str] = None) -> str:
+                               language: Optional[str] = None) -> "_Transcript":
         """STT aus rohen Bytes (Voice-Mode-Recording)."""
         import io
         if self._openai_key:
             f = io.BytesIO(data); f.name = filename
-            return await self._native(f, language)
+            return _Transcript(await self._native(f, language, self._model))
         # Legacy-Pfad braucht ein File — temporär schreiben.
         import tempfile, os as _os
         with tempfile.NamedTemporaryFile(delete=False, suffix=_os.path.splitext(filename)[1] or ".webm") as tf:
             tf.write(data); path = tf.name
         try:
-            return await self._legacy(path, language)
+            return _Transcript(await self._legacy(path, language, self._model, None))
         finally:
             try: _os.unlink(path)
             except OSError: pass
 
-    async def _native(self, file_obj, language: Optional[str]) -> str:
+    async def _native(self, file_obj, language: Optional[str], model: Optional[str] = None) -> str:
         try:
             from openai import AsyncOpenAI
         except ImportError as e:  # pragma: no cover
             raise RuntimeError("openai SDK not installed.") from e
         client = AsyncOpenAI(api_key=self._openai_key)
-        kwargs = {"model": self._model, "file": file_obj}
+        kwargs = {"model": model or self._model, "file": file_obj}
         if language:
             kwargs["language"] = language
         resp = await client.audio.transcriptions.create(**kwargs)
         return getattr(resp, "text", "") or ""
 
-    async def _legacy(self, file_path: str, language: Optional[str]) -> str:
+    async def _legacy(self, file_or_path, language: Optional[str], model: Optional[str] = None,
+                      response_format: Optional[str] = None) -> str:
         # Explizite Fehlermeldung wenn weder OpenAI noch Emergent
         # verfügbar — sonst kracht's später irgendwo in der Emergent-
         # Library mit unverständlichem Stack-Trace.
@@ -313,6 +346,17 @@ class OpenAISpeechToText:
             OpenAISpeechToText as _EmSTT,
         )
         em = _EmSTT(api_key=em_key)
-        # Emergent-Signatur war .transcribe(path) ohne language-Flag — wir
-        # ignorieren `language` hier, falls die Lib es nicht akzeptiert.
-        return await em.transcribe(file_path)
+        # Die Emergent-Lib erwartet den OpenAI-Stil (file=…, model=…,
+        # response_format=…) und liefert ein Objekt mit .text — so ruft es
+        # auch der Live-Code auf Emergent auf.
+        is_path = isinstance(file_or_path, (str, bytes, os.PathLike))
+        fh = open(file_or_path, "rb") if is_path else file_or_path
+        try:
+            kwargs = {"file": fh, "model": model or self._model, "response_format": response_format or "json"}
+            if language:
+                kwargs["language"] = language
+            resp = await em.transcribe(**kwargs)
+        finally:
+            if is_path:
+                fh.close()
+        return (getattr(resp, "text", None) if not isinstance(resp, str) else resp) or ""
