@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Play, Check, X, Star, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
+import { BookShelf } from '../components/brand/BookShelf';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 import { WEBINAR_TS, WEBINAR_CAMPAIGN } from '../data/webinarEvent';
@@ -1103,6 +1104,7 @@ export default function KiFuehrungskraftPage() {
         <Audiences />
         <Agenda />
         <Host />
+        <div className="mt-[90px] lg:mt-[140px]"><BookShelf onTrack={(e, p) => track(`ki_${e}`, p)} /></div>
         <Reviews />
         <Faq />
         <Register k={k} />
