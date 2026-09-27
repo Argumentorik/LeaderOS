@@ -37,6 +37,8 @@ import { LeadCaptureModal } from '../components/landing/LeadCaptureModal';
 import { LandingChatPod } from '../components/landing/LandingChatPod';
 import { WladSignGuy } from '../components/landing/WladSignGuy';
 import { LogoWall } from '../components/brand/LogoWall';
+import { ThreeStepPath } from '../components/brand/ThreeStepPath';
+import { capture } from '../lib/analytics';
 import LeaderCheckLanding from './LeaderCheckLanding';
 import { LANDING_BENEFITS, LANDING_META } from '../data/landingAssets';
 
@@ -139,6 +141,12 @@ export default function LandingPage() {
         <HeroSection />
         {/* Direkt unter dem ersten Screen: Referenz-Logos, Chrome-Hover */}
         <LogoWall />
+        {/* Glasklare Abfolge: Check → Webinar → 14 Tage (WEBINAR_FUNNEL.md) */}
+        <ThreeStepPath
+          tone="dark"
+          checkUrl="https://leadercheck.de?utm_source=leader-os&utm_medium=landing&utm_campaign=home-3-steps"
+          onTrack={(e, p) => capture(`home_${e}`, p)}
+        />
         <WhatIsLeaderOsSection />
         <WladIntroVideo />
         <SprintSpecimenStrip />

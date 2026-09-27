@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
+import { ThreeStepPath } from '../components/brand/ThreeStepPath';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 
@@ -742,15 +743,6 @@ function KommunikationsCheck() {
             )}
           </AnimatePresence>
         </div>
-
-        <div className="mt-8 mx-auto rounded-2xl bg-white" style={{ maxWidth: 640, padding: '18px 20px', border: '1px solid rgba(19,21,21,0.1)' }}>
-          <div style={{ ...BODY, fontSize: 12, color: MUTED, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Dein Weg in drei Schritten</div>
-          <ol className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ ...BODY, fontSize: 13.5, color: INK }}>
-            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>1</span><span><a href={CHECK_URL} className="underline hover:text-black">Leader-Check</a> auf leadercheck.de — 10 Minuten, dein Führungsprofil</span></li>
-            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>2</span><span><a href="/webinar" className="underline hover:text-black">Live-Webinar</a> am 29. Oktober — das System, live gezeigt</span></li>
-            <li className="flex items-start gap-2.5"><span className="shrink-0 flex items-center justify-center rounded-full text-white" style={{ width: 22, height: 22, fontSize: 11, background: INK }}>3</span><span><a href={TRIAL_URL} className="underline hover:text-black">14 Tage kostenlos</a> auf leaderos.de — erst nach dem Check</span></li>
-          </ol>
-        </div>
       </div>
     </section>
   );
@@ -804,6 +796,7 @@ export default function KommunikationPage() {
       <Hero onPlay={() => { setVideoOpen(true); track('kommunikation_video_open'); }} />
       <Ansaetze />
       <KommunikationsCheck />
+      <ThreeStepPath tone="light" checkUrl={CHECK_URL} trialUrl={TRIAL_URL} onTrack={(e, p) => track(`kommunikation_${e}`, p)} />
       <Zahlen />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
         <a href="/impressum" className="hover:underline">Impressum</a> · <a href="/datenschutz" className="hover:underline">Datenschutz</a>
