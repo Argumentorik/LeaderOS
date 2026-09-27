@@ -25,7 +25,6 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  */
 
 const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260728_015819_1b3ec855-d586-4018-96c8-8bf90cada037.mp4';
-const COUNTER_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260625_213350_6343fcfb-2892-4dcc-8573-1161447cacf5.mp4';
 const INTRO_VIMEO_ID = '1197728183';
 const TRIAL_URL = 'https://leaderos.de/signup?trial=14';
 // Reihenfolge im Funnel: erst der kostenlose Leader-Check (leadercheck.de,
@@ -58,7 +57,7 @@ const track = (event, props = {}) => {
 const NAV_LINKS = [
   { label: 'Ansätze', href: '#ansaetze' },
   { label: 'Frameworks', href: '/frameworks' },
-  { label: 'Zahlen', href: '#zahlen' },
+  { label: 'Die App', href: '#app' },
   { label: 'Journal', href: '/journal' },
 ];
 
@@ -471,81 +470,197 @@ function Ansaetze() {
   );
 }
 
-// ─── Zahlen (Counter) ─────────────────────────────────────────────────
+// ─── Die App (Apple-Style Feature-Cards) ──────────────────────────────
+//
+// Drei Karten, je eine Stärke der App, mit Produkt-Beispielansicht. Der
+// „+"-Knopf klappt Details auf (wie apple.com). Darunter Test + Preise.
+// Ersetzt den früheren Zahlen-Block; belegte Proof-Zahlen stehen in Hero
+// und Ansätzen (Trustpilot), keine Verknappung.
 
-function useCountUp(target, active, duration = 1000) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!active) return undefined;
-    let raf; const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / duration);
-      setValue(Math.round(target * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, active, duration]);
-  return value;
-}
-
-const STATS = [
-  { value: 13, suffix: '', desc: 'Bücher — drei davon SPIEGEL-Bestseller' },
-  { value: 20, suffix: '+', desc: 'Länder, in denen Wlad Führungskräfte trainiert hat' },
-  { value: 388, suffix: '', desc: 'Bewertungen auf Trustpilot · 4,9 von 5' },
+const APP_CARDS = [
+  {
+    key: 'coach',
+    eyebrow: 'KI-Coach WladBot',
+    title: 'Dein Coach kennt die Methode.',
+    dark: true,
+    points: [
+      'Antwortet mit Wlads Frameworks: SEXIER, Feedbackformel, 10 Stufen des Zuhörens.',
+      'An deinen echten Fällen, rund um die Uhr, auch um 23 Uhr vor dem schwierigen Termin.',
+      'Kein Urteil, beliebig oft: dieselbe Frage so lange, bis sie sitzt.',
+    ],
+  },
+  {
+    key: 'sim',
+    eyebrow: 'Simulationen',
+    title: 'Proben, bevor es ernst wird.',
+    points: [
+      'Die KI spielt dein Gegenüber: den Mitarbeiter, der abwehrt, den Kunden, der blockt.',
+      'Du führst das Gespräch, am Ende kommt Feedback nach Wlads Methodik.',
+      'Kritikgespräch, Verhandlung, Konflikt: so oft, bis du sicher bist.',
+    ],
+  },
+  {
+    key: 'video',
+    eyebrow: 'Video-Analyse',
+    title: 'Wirkung, schwarz auf weiß.',
+    points: [
+      'Rede im Browser aufnehmen, 30 Sekunden bis 3 Minuten, keine App nötig.',
+      'Score, 3 Stärken mit Zitat aus deiner Rede, 3 Hebel mit Übung.',
+      'Im Testzeitraum sind 3 Video-Analysen inklusive.',
+    ],
+  },
 ];
 
-function Stat({ s, active }) {
-  const v = useCountUp(s.value, active);
+function CoachVisual() {
   return (
-    <div className="flex flex-col items-center text-center" style={{ gap: 12 }}>
-      <div className="text-[40px] md:text-[68px]" style={{ ...HEADLINE, color: INK, lineHeight: 0.9 }}>
-        {v}<span style={{ color: BLUE }}>{s.suffix}</span>
+    <div className="flex flex-col" style={{ gap: 10 }}>
+      <div className="self-end rounded-2xl rounded-br-md" style={{ ...BODY, fontSize: 14, lineHeight: 1.4, background: '#BFFF00', color: INK, padding: '10px 14px', maxWidth: '82%' }}>
+        Morgen Kritikgespräch mit Alex. Wie fange ich an?
       </div>
-      <p className="text-[16px] md:text-[18px]" style={{ ...BODY, color: MUTED, maxWidth: 240 }}>{s.desc}</p>
+      <div className="self-start rounded-2xl rounded-bl-md" style={{ ...BODY, fontSize: 14, lineHeight: 1.45, background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '10px 14px', maxWidth: '88%' }}>
+        Mit einer Beobachtung, nicht mit einer Bewertung: „Mir ist aufgefallen, dass …“. Dann die Wirkung, dann dein Wunsch.
+        <span className="block mt-2 font-mono text-[10px] uppercase tracking-[0.16em]" style={{ color: '#BFFF00' }}>Feedbackformel B·W·W</span>
+      </div>
     </div>
   );
 }
 
-function Zahlen() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
-  const reveal = (delay) => ({
-    initial: { opacity: 0, y: 20 },
-    animate: inView ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 0.6, ease: scrollEase, delay },
-  });
-
+function SimVisual() {
   return (
-    <section id="zahlen" ref={ref} className="pt-[130px] lg:pt-[200px] pb-[120px] overflow-hidden">
-      <div className="mx-auto flex flex-col items-center text-center" style={{ maxWidth: 1260, padding: '0 30px', gap: 60 }}>
-        <div className="flex flex-col items-center" style={{ maxWidth: 500, gap: 20 }}>
-          <motion.div {...reveal(0)} className="rounded-full bg-white" style={{ ...BODY, fontSize: 14, color: INK, padding: '8px 16px', border: '1px solid rgba(19,21,21,0.1)' }}>
-            Zahlen aus 19 Jahren Praxis
+    <div className="relative w-full h-full rounded-2xl overflow-hidden" style={{ minHeight: 210 }}>
+      <img src="/journal/topics/feedback.webp" alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale" />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.75), rgba(10,10,10,0) 60%)' }} />
+      <div className="absolute left-3 right-3 bottom-3 flex flex-col" style={{ gap: 8 }}>
+        <div className="self-start rounded-2xl rounded-bl-md bg-white/95" style={{ ...BODY, fontSize: 13, color: INK, padding: '8px 12px' }}>
+          <b>Alex:</b> Ich arbeite doch genug.
+        </div>
+        <div className="self-end rounded-2xl rounded-br-md" style={{ ...BODY, fontSize: 13, background: '#BFFF00', color: INK, padding: '8px 12px' }}>
+          Coach: Stark, jetzt die Wirkung benennen.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VideoVisual() {
+  const bars = [['Klarheit', 82], ['Struktur', 74], ['Empathie', 69]];
+  const r = 34; const c = 2 * Math.PI * r;
+  return (
+    <div className="flex items-center" style={{ gap: 20 }}>
+      <svg width="96" height="96" viewBox="0 0 84 84" className="shrink-0" aria-hidden>
+        <circle cx="42" cy="42" r={r} fill="none" stroke="rgba(19,21,21,0.08)" strokeWidth="8" />
+        <circle cx="42" cy="42" r={r} fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" strokeDasharray={`${c * 0.78} ${c}`} transform="rotate(-90 42 42)" />
+        <text x="42" y="49" textAnchor="middle" style={{ ...HEADLINE, fontSize: 22, fill: INK }}>78</text>
+      </svg>
+      <div className="flex-1 flex flex-col" style={{ gap: 10 }}>
+        {bars.map(([k, v]) => (
+          <div key={k}>
+            <div className="flex justify-between" style={{ ...BODY, fontSize: 12.5, color: MUTED }}><span>{k}</span><span>{v}</span></div>
+            <div className="mt-1 h-2 rounded-full" style={{ background: 'rgba(19,21,21,0.08)' }}>
+              <div className="h-2 rounded-full" style={{ width: `${v}%`, background: 'linear-gradient(90deg, #4382BC, #BFFF00)' }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const VISUALS = { coach: CoachVisual, sim: SimVisual, video: VideoVisual };
+
+function AppCard({ card, index }) {
+  const [open, setOpen] = useState(false);
+  const Visual = VISUALS[card.key];
+  const fg = card.dark ? '#fff' : INK;
+  const sub = card.dark ? 'rgba(255,255,255,0.62)' : MUTED;
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.7, ease: scrollEase, delay: index * 0.12 }}
+      whileHover={{ y: -6 }}
+      className="relative flex flex-col overflow-hidden"
+      style={{ borderRadius: 30, background: card.dark ? '#0A0A0A' : '#FFFFFF', minHeight: 520, padding: 30, boxShadow: '0 30px 60px -40px rgba(19,21,21,0.35)' }}
+      data-testid={`app-card-${card.key}`}
+    >
+      <p style={{ ...BODY, fontSize: 14, color: card.dark ? '#BFFF00' : BLUE }}>{card.eyebrow}</p>
+      <h3 className="mt-2 text-[28px] md:text-[32px]" style={{ ...HEADLINE, fontWeight: 600, color: fg, lineHeight: 1.1, letterSpacing: '-0.02em' }}>{card.title}</h3>
+      <div className="mt-8 flex-1 flex flex-col justify-end"><Visual /></div>
+      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em]" style={{ color: sub }}>Beispielansicht</p>
+
+      <button
+        type="button"
+        onClick={() => { setOpen((o) => !o); track('kommunikation_app_card_toggle', { card: card.key, open: !open }); }}
+        aria-expanded={open}
+        aria-label={open ? `${card.eyebrow}: Details schließen` : `${card.eyebrow}: Details anzeigen`}
+        className="absolute z-20 flex items-center justify-center rounded-full transition-transform hover:scale-105"
+        style={{ right: 22, bottom: 22, width: 40, height: 40, background: card.dark ? '#fff' : INK, color: card.dark ? INK : '#fff' }}
+      >
+        <motion.span animate={{ rotate: open ? 45 : 0 }} transition={{ type: 'spring', duration: 0.4, bounce: 0.2 }} style={{ fontSize: 24, lineHeight: 1, marginTop: -2 }}>+</motion.span>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.35, ease: scrollEase }}
+            className="absolute inset-0 z-10 flex flex-col"
+            style={{ background: card.dark ? 'rgba(10,10,10,0.96)' : 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)', padding: 30 }}
+          >
+            <p style={{ ...BODY, fontSize: 14, color: card.dark ? '#BFFF00' : BLUE }}>{card.eyebrow}</p>
+            <h3 className="mt-2 text-[24px]" style={{ ...HEADLINE, fontWeight: 600, color: fg, lineHeight: 1.15 }}>{card.title}</h3>
+            <ul className="mt-6 flex flex-col" style={{ gap: 14 }}>
+              {card.points.map((pt) => (
+                <li key={pt} className="flex items-start" style={{ ...BODY, fontSize: 16, lineHeight: 1.45, color: fg, gap: 10 }}>
+                  <Check size={18} className="shrink-0 mt-0.5" style={{ color: card.dark ? '#BFFF00' : BLUE }} /> {pt}
+                </li>
+              ))}
+            </ul>
+            <a href={TRIAL_URL} onClick={() => track('kommunikation_cta_click', { where: `app-card-${card.key}` })}
+              className="mt-auto self-start rounded-full" style={{ ...BODY, fontSize: 15, padding: '12px 22px', background: card.dark ? '#BFFF00' : INK, color: card.dark ? INK : '#fff' }}>
+              14 Tage kostenlos testen
+            </a>
           </motion.div>
-          <motion.h2 {...reveal(0.1)} className="text-[38px] md:text-[42px] lg:text-[48px]" style={{ ...HEADLINE, color: INK, lineHeight: 1.2 }}>
-            Warum diese Methodik trägt
-          </motion.h2>
-          <motion.div {...reveal(0.2)} className="text-[60px] md:text-[100px] lg:text-[120px]" style={{ ...HEADLINE, color: BLUE, lineHeight: 1 }}>
-            400.000+
-          </motion.div>
-          <motion.p {...reveal(0.3)} style={{ ...BODY, fontSize: 18, color: MUTED }}>Trainierte Klienten seit 2007</motion.p>
+        )}
+      </AnimatePresence>
+    </motion.article>
+  );
+}
+
+function AppShowcase() {
+  return (
+    <section id="app" className="pt-[130px] lg:pt-[180px]">
+      <div className="mx-auto flex flex-col" style={{ maxWidth: 1260, padding: '0 30px' }}>
+        <div className="flex flex-col items-center text-center mx-auto" style={{ maxWidth: 760, gap: 18 }}>
+          <div className="rounded-full bg-white" style={{ ...BODY, fontSize: 14, color: INK, padding: '8px 16px', border: '1px solid rgba(19,21,21,0.1)' }}>
+            Die LeaderOS-App
+          </div>
+          <h2 className="text-[38px] md:text-[48px] lg:text-[60px]" style={{ ...HEADLINE, color: INK, lineHeight: 1.05, letterSpacing: '-0.025em', textWrap: 'balance' }}>
+            Wlads Methodik. In deiner Tasche.
+          </h2>
+          <p className="text-[18px] md:text-[20px]" style={{ ...BODY, color: MUTED, lineHeight: 1.45 }}>
+            15 Minuten am Tag statt drei Tage im Jahr. Drei Werkzeuge, mit denen aus Wissen Wirkung wird.
+          </p>
         </div>
 
-        <motion.div {...reveal(0.3)} className="relative w-full mx-auto overflow-hidden" style={{ maxWidth: 1080, aspectRatio: '2.45' }}>
-          <div className="relative w-full h-[280px] md:h-[440px] overflow-hidden">
-            <video className="w-full h-[500px] md:h-[800px] object-cover" style={{ mixBlendMode: 'darken' }} src={COUNTER_VIDEO} autoPlay muted loop playsInline />
-            <div className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, #F6F6F6)' }} />
-          </div>
-          <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none bg-white" style={{ width: 1600, height: 300, bottom: -240, filter: 'blur(10px)' }} />
-        </motion.div>
+        <div className="mt-14 grid grid-cols-1 lg:grid-cols-3" style={{ gap: 24 }}>
+          {APP_CARDS.map((c, i) => <AppCard key={c.key} card={c} index={i} />)}
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-8 md:gap-[50px]" style={{ maxWidth: 840 }}>
-          {STATS.map((s, i) => (
-            <motion.div key={s.desc} {...reveal(0.1 * i)}>
-              <Stat s={s} active={inView} />
-            </motion.div>
-          ))}
+        <p className="mt-8 text-center" style={{ ...BODY, fontSize: 15, color: MUTED }}>
+          Außerdem in der App: Videokurse mit Wlad · Leadership Challengers · 30-Tage-Challenge
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center" style={{ gap: 14 }}>
+          <motion.a href={TRIAL_URL} {...hoverShrink} onClick={() => track('kommunikation_cta_click', { where: 'app-showcase' })}
+            className="rounded-full text-white" style={{ ...BODY, fontSize: 16, padding: '16px 32px', background: INK }}>
+            14 Tage kostenlos testen
+          </motion.a>
+          <motion.a href="/#pricing" {...hoverShrink} onClick={() => track('kommunikation_pricing_click', { where: 'app-showcase' })}
+            className="rounded-full" style={{ ...BODY, fontSize: 16, padding: '15px 30px', color: INK, border: '1px solid rgba(19,21,21,0.2)' }}>
+            Preise ansehen
+          </motion.a>
         </div>
       </div>
     </section>
@@ -796,8 +911,8 @@ export default function KommunikationPage() {
       <Hero onPlay={() => { setVideoOpen(true); track('kommunikation_video_open'); }} />
       <Ansaetze />
       <KommunikationsCheck />
+      <AppShowcase />
       <ThreeStepPath tone="light" checkUrl={CHECK_URL} trialUrl={TRIAL_URL} onTrack={(e, p) => track(`kommunikation_${e}`, p)} />
-      <Zahlen />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
         <a href="/impressum" className="hover:underline">Impressum</a> · <a href="/datenschutz" className="hover:underline">Datenschutz</a>
       </div>

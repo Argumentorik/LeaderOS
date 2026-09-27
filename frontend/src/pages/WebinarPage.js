@@ -48,6 +48,10 @@ import { AGENDA, WEBINAR_TS } from '../data/webinarEvent';
  * no invented testimonials, no fake scarcity, no fake exclusivity.
  */
 
+// Marken-Typo wie /ki-fuehrungskraft und CinematicHero: Anton für Display, Geist für Titel.
+const DISPLAY = { fontFamily: "'Anton', 'Arial Narrow', Impact, sans-serif", fontWeight: 400, textTransform: 'uppercase', letterSpacing: '-0.005em' };
+const TITLE = { fontFamily: 'Geist, Inter, system-ui, sans-serif', fontWeight: 600, letterSpacing: '-0.015em' };
+
 const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
 // Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
 const DATE_LINE_SHORT = 'DO 29. OKT 2026 · 10:00 UHR · LIVE';
@@ -86,11 +90,11 @@ const OS_FLOW = ['Täglich 15 Min', 'KI-Coach', 'Simulation', 'Feedback', 'Forts
 // kein Stock. `fit` steuert, ob das Bild die Fläche füllt (Foto) oder
 // als Cover auf Ink-Fläche steht (Buch, Avatar).
 const LEARN_CARDS = [
-  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.', '/wlad/wlad-portrait.jpg', 'cover'],
+  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.', '/journal/topics/feedback.webp', 'photo'],
   ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.', '/wlad/wladbot3.0.webp', 'avatar'],
-  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/wlad/books/redest-du-noch-oder-ueberzeugst-du-schon.jpg', 'book'],
-  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/wlad/books/die-5-rollen-einer-fuehrungskraft.jpg', 'book'],
-  ['Die Frameworks', 'Die Methoden hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.', '/wlad/books/weisse-rhetorik.jpg', 'book'],
+  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/journal/topics/app-b.webp', 'photo'],
+  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/journal/topics/sprint.webp', 'photo'],
+  ['Die Frameworks', 'Die Methoden aus der Arbeit mit 400.000+ Klienten — von SEXIER bis zur Feedbackformel.', '/wlad/books/weisse-rhetorik.jpg', 'book'],
   ['Live-Q&A mit Wlad', 'Deine härteste Führungsfrage — ab 11:15 Uhr direkt von Wlad beantwortet, kein Skript.', '/wlad/wlad-portrait-640.jpg', 'cover'],
 ];
 
@@ -283,7 +287,7 @@ const FlipUnit = ({ value, label }) => {
   return (
     <div className="flex flex-col items-center justify-center w-[64px] h-[64px] sm:w-[76px] sm:h-[76px] rounded-2xl bg-white border border-[#111111]/10 shadow-[0_10px_30px_-18px_rgba(17,17,17,0.25)] overflow-hidden" style={{ perspective: 300 }}>
       {reduced ? (
-        <span className="tabular-nums leading-none text-[#111111] text-[24px] sm:text-[30px]" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}>{display}</span>
+        <span className="tabular-nums leading-none text-[#111111] text-[24px] sm:text-[30px]" style={DISPLAY}>{display}</span>
       ) : (
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
@@ -293,7 +297,7 @@ const FlipUnit = ({ value, label }) => {
             exit={{ rotateX: -90, opacity: 0, filter: 'blur(3px)' }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
             className="tabular-nums leading-none text-[#111111] text-[24px] sm:text-[30px]"
-            style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic', transformStyle: 'preserve-3d' }}
+            style={{ ...DISPLAY, transformStyle: 'preserve-3d' }}
           >
             {display}
           </motion.span>
@@ -621,8 +625,8 @@ const SectionHeader = ({ eyebrow, headline, intro }) => (
     </motion.p>
     <motion.h2
       initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-      className="text-balance mx-auto max-w-3xl text-[32px] sm:text-[44px] md:text-[52px] leading-[1.04] tracking-[-0.035em] text-[#111111]"
-      style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
+      className="text-balance mx-auto max-w-4xl text-[38px] sm:text-[54px] md:text-[68px] leading-[0.95] text-[#111111]"
+      style={DISPLAY}
     >
       {headline}
     </motion.h2>
@@ -651,8 +655,8 @@ const StatementBand = ({ eyebrow, children }) => (
       )}
       <motion.p
         initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-        className="text-balance text-[26px] sm:text-[38px] md:text-[46px] leading-[1.08] tracking-[-0.03em] text-white"
-        style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
+        className="text-balance text-[32px] sm:text-[48px] md:text-[60px] leading-[0.96] text-white"
+        style={DISPLAY}
       >
         {children}
       </motion.p>
@@ -680,7 +684,7 @@ const FaqAccordion = () => {
                 aria-expanded={isOpen}
                 className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="text-[16px] leading-[1.3] text-[#111111]" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{q}</span>
+                <span className="text-[16px] leading-[1.3] text-[#111111]" style={TITLE}>{q}</span>
                 <motion.span
                   animate={{ rotate: isOpen ? 45 : 0 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -852,7 +856,7 @@ export default function WebinarPage() {
                   initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
                   className="text-center"
                 >
-                  <div className="text-[24px] sm:text-[28px] text-[#111111]" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}>
+                  <div className="text-[24px] sm:text-[28px] text-[#111111]" style={DISPLAY}>
                     <CountUpValue value={value} /><span className="text-[#5A7700] not-italic">.</span>
                   </div>
                   <div className="mt-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[#707072]">{label}</div>
@@ -942,7 +946,7 @@ export default function WebinarPage() {
                       transition={{ duration: 0.6, delay: 0.35 + 0.28 * i }}
                       className="flex flex-col items-start"
                     >
-                      <span className={`text-[15.5px] font-bold ${i === SEMINAR_FLOW.length - 1 ? 'text-red-600' : 'text-[#4b4b4d]'}`} style={{ fontFamily: 'Outfit, sans-serif' }}>{step}</span>
+                      <span className={`text-[15.5px] font-bold ${i === SEMINAR_FLOW.length - 1 ? 'text-red-600' : 'text-[#4b4b4d]'}`} style={TITLE}>{step}</span>
                       {i < SEMINAR_FLOW.length - 1 && <ArrowDown size={13} className="text-[#9e9ea0] my-1 ml-1" />}
                     </motion.li>
                   ))}
@@ -971,7 +975,7 @@ export default function WebinarPage() {
                         viewport={{ once: true, amount: 0.8 }}
                         transition={{ duration: 1.1, delay: 0.35 + 0.24 * i }}
                         className={`text-[15.5px] font-bold ${i === OS_FLOW.length - 1 ? 'text-[#5A7700]' : 'text-[#111111]'}`}
-                        style={{ fontFamily: 'Outfit, sans-serif' }}
+                        style={TITLE}
                       >
                         {step}
                       </motion.span>
@@ -1001,7 +1005,9 @@ export default function WebinarPage() {
                   className="group rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] overflow-hidden transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
                 >
                   <div className={`relative aspect-[16/10] overflow-hidden ${fit === 'cover' ? 'bg-[#111111]' : 'bg-[#111111]'}`}>
-                    {fit === 'cover' ? (
+                    {fit === 'photo' ? (
+                      <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-[1.04]" />
+                    ) : fit === 'cover' ? (
                       <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
                     ) : fit === 'avatar' ? (
                       <>
@@ -1019,7 +1025,7 @@ export default function WebinarPage() {
                     </span>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-[17px] text-[#111111] mb-1.5" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
+                    <h3 className="text-[17px] text-[#111111] mb-1.5" style={TITLE}>{title}</h3>
                     <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
                   </div>
                 </motion.div>
@@ -1056,7 +1062,7 @@ export default function WebinarPage() {
                     className="absolute -left-[9px] top-1 w-4 h-4 rounded-full ring-4 ring-white"
                   />
                   <span className="font-mono text-[12px] font-bold text-[#5A7700] tabular-nums">{time}</span>
-                  <p className="mt-0.5 text-[16.5px] font-bold text-[#111111]" style={{ fontFamily: 'Outfit, sans-serif' }}>{title}</p>
+                  <p className="mt-0.5 text-[16.5px] text-[#111111]" style={TITLE}>{title}</p>
                   <p className="mt-0.5 text-[14px] leading-[1.55] text-[#707072]">{desc}</p>
                 </motion.li>
               ))}
@@ -1088,7 +1094,7 @@ export default function WebinarPage() {
                     <Icon size={20} />
                   </motion.span>
                   <div>
-                    <h3 className="text-[15.5px] text-[#111111] mb-1" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
+                    <h3 className="text-[15.5px] text-[#111111] mb-1" style={TITLE}>{title}</h3>
                     <p className="text-[13px] leading-[1.55] text-[#707072]">{desc}</p>
                   </div>
                 </motion.div>
@@ -1115,10 +1121,10 @@ export default function WebinarPage() {
                   className="rounded-3xl bg-[#fafafa] border border-[#111111]/8 hover:border-[#BFFF00] p-6 transition-colors hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <span className="inline-flex w-9 h-9 items-center justify-center rounded-full bg-[#111111] text-[#BFFF00] text-[14px] font-black" style={{ fontFamily: 'Outfit, sans-serif' }}>{i + 1}</span>
+                    <span className="inline-flex w-9 h-9 items-center justify-center rounded-full bg-[#111111] text-[#BFFF00] text-[13px] font-bold font-mono">{String(i + 1).padStart(2, '0')}</span>
                     <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#9e9ea0]">{duration}</span>
                   </div>
-                  <h3 className="text-[15px] leading-[1.3] text-[#111111]" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{title}</h3>
+                  <h3 className="text-[15px] leading-[1.3] text-[#111111]" style={TITLE}>{title}</h3>
                 </motion.div>
               ))}
             </div>
@@ -1146,8 +1152,8 @@ export default function WebinarPage() {
               </motion.p>
               <motion.h2
                 initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-                className="text-balance text-[32px] sm:text-[44px] leading-[1.05] tracking-[-0.035em] text-[#111111] mb-5"
-                style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
+                className="text-balance text-[38px] sm:text-[56px] leading-[0.95] text-[#111111] mb-5"
+                style={DISPLAY}
               >
                 Warum es LeaderOS gibt<span className="text-[#5A7700] not-italic">.</span>
               </motion.h2>
@@ -1215,7 +1221,7 @@ export default function WebinarPage() {
                   <motion.span whileHover={{ rotate: 8, scale: 1.1 }} className="inline-flex w-9 h-9 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] mb-4">
                     <BookOpen size={16} />
                   </motion.span>
-                  <h3 className="text-[17.5px] text-[#111111] mb-2" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}>{name}</h3>
+                  <h3 className="text-[17.5px] text-[#111111] mb-2" style={TITLE}>{name}</h3>
                   <p className="text-[14px] leading-[1.6] text-[#4b4b4d] mb-4">{def}</p>
                   <Link
                     to={href}
@@ -1244,7 +1250,7 @@ export default function WebinarPage() {
                   initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.5 }} custom={i} variants={FADE_UP}
                   className="flex items-start gap-4 rounded-2xl bg-white border border-[#111111]/8 px-5 py-4"
                 >
-                  <span className="shrink-0 inline-flex w-7 h-7 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] text-[13px] font-black" style={{ fontFamily: 'Outfit, sans-serif' }}>{i + 1}</span>
+                  <span className="shrink-0 inline-flex w-7 h-7 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] text-[12px] font-bold font-mono">{String(i + 1).padStart(2, '0')}</span>
                   <span className="text-[15px] leading-[1.5] text-[#39393b] pt-0.5">{reason}</span>
                 </motion.li>
               ))}
@@ -1288,7 +1294,7 @@ export default function WebinarPage() {
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h2 className="text-balance text-[30px] sm:text-[44px] md:text-[52px] leading-[1.05] tracking-[-0.035em] text-[#111111]" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}>
+              <h2 className="text-balance text-[36px] sm:text-[54px] md:text-[66px] leading-[0.95] text-[#111111]" style={DISPLAY}>
                 In einem Jahr wirst du sowieso geführt haben.
                 Die einzige Frage: mit System — oder mit Bauchgefühl<span className="text-[#5A7700] not-italic">?</span>
               </h2>
