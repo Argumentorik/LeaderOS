@@ -21,6 +21,7 @@ from services_email import (
     video_drip_email, VIDEO_DRIP_VIDEOS,
     free_video_drip_email,
     lead_nurture_email,
+    license_activation_email,
     is_enabled as email_enabled,
 )
 from services_free_videos import (
@@ -56,6 +57,17 @@ LEAD_NURTURE_STEPS = [
     (5, 8),
     (6, 10),
     (7, 12),
+]
+
+# License-activation journey (/frameworks-Leads, db.license_leads):
+# step → day offset since capture. Step 1 is normally sent instantly at
+# capture time (routes/license_activation.py) — offset 0 here is the catch-up.
+LICENSE_NURTURE_STEPS = [
+    (1, 0),
+    (2, 1),
+    (3, 3),
+    (4, 5),
+    (5, 7),
 ]
 
 
@@ -460,6 +472,113 @@ async def cron_lead_nurture(request: Request):
         "scanned": scanned,
         "by_step": sent_by_step,
         "converted_skipped": converted,
+    }
+
+
+@router.post("/cron/license-nurture")
+async def cron_license_nurture(request: Request):
+    """Daily license-activation drip — 5 mails over 7 days for /frameworks leads.
+
+    Scans `db.license_leads` (see routes/license_activation.py) and sends the
+    next due step per lead based on capture age (offsets 0/1/3/5/7).
+    Idempotent via `license_steps_sent` on the lead doc (plus email_log
+    entries). At most ONE step per lead per run, same backlog-catch-up
+    behaviour as /api/cron/lead-nurture. Skips (and marks) leads who have
+    since converted to registered users — the user drips own them from then
+    on. `webinar_upcoming` is computed once per run so a lead captured
+    months after 29.10. never gets a dead-event reference.
+    """
+    require_cron_auth(request)
+    if not email_enabled():
+        return {"sent": 0, "scanned": 0, "error": "RESEND_API_KEY not configured"}
+
+    from routes.license_activation import license_unsub_url, _webinar_upcoming  # local import avoids cycle
+
+    now = datetime.now(timezone.utc)
+    webinar_upcoming = _webinar_upcoming()
+    max_offset = LICENSE_NURTURE_STEPS[-1][1]
+
+    sent_total = 0
+    sent_by_step = {}
+    scanned = 0
+    converted = 0
+
+    # 7 days of journey + 7 days of buffer for late cron catches.
+    cutoff = (now - timedelta(days=max_offset + 7)).isoformat()
+    candidates = await db.license_leads.find(
+        {
+            "email": {"$exists": True, "$ne": ""},
+            "created_at": {"$gte": cutoff},
+            "unsubscribed": {"$ne": True},
+            "converted": {"$ne": True},
+        },
+        {"_id": 0, "email": 1, "email_lower": 1, "name": 1, "created_at": 1,
+         "reserved_code": 1, "webinar_registered": 1, "license_steps_sent": 1},
+    ).to_list(5000)
+
+    for lead in candidates:
+        scanned += 1
+        email = lead["email"]
+        # Converted to a registered user since capture? Mark + skip — the
+        # registered-user drips (signup_welcome, drip-sequence, …) own them.
+        existing_user = await db.users.find_one(
+            {"email_lower": email}, {"_id": 0, "user_id": 1}
+        )
+        if existing_user:
+            await db.license_leads.update_one(
+                {"email_lower": email},
+                {"$set": {"converted": True,
+                          "converted_user_id": existing_user["user_id"],
+                          "converted_at": now.isoformat()}},
+            )
+            converted += 1
+            continue
+
+        days = _days_since(lead.get("created_at"))
+        if days is None:
+            continue
+        already = set(lead.get("license_steps_sent") or [])
+        name = lead.get("name") or email.split("@")[0]
+        reserved_code = lead.get("reserved_code") or ""
+        if not reserved_code:
+            continue  # shouldn't happen — activate() always sets it
+
+        for step, offset in LICENSE_NURTURE_STEPS:
+            if step in already:
+                continue
+            if days < offset - 0.25:
+                continue
+
+            subject, html = license_activation_email(
+                step, name, reserved_code,
+                unsubscribe_link=license_unsub_url(email),
+                webinar_registered=bool(lead.get("webinar_registered")),
+                webinar_upcoming=webinar_upcoming,
+            )
+            result = await send_email(email, subject, html)
+            log_type = f"license_nurture_s{step}"
+            await db.email_log.insert_one({
+                "email": email, "type": log_type, "step": step,
+                "sent": result["sent"], "email_id": result.get("email_id"),
+                "error": result.get("error"), "sent_at": now.isoformat(),
+            })
+            if result["sent"]:
+                await db.license_leads.update_one(
+                    {"email_lower": email},
+                    {"$addToSet": {"license_steps_sent": step},
+                     "$set": {"last_license_nurture_sent_at": now.isoformat()}},
+                )
+                sent_total += 1
+                sent_by_step[log_type] = sent_by_step.get(log_type, 0) + 1
+            # At most one step per lead per run — never burst-send the backlog.
+            break
+
+    return {
+        "sent": sent_total,
+        "scanned": scanned,
+        "by_step": sent_by_step,
+        "converted_skipped": converted,
+        "webinar_upcoming": webinar_upcoming,
     }
 
 
