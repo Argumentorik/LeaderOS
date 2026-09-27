@@ -15,7 +15,7 @@ export default {
     'Weisungsbefugnis trotzdem führen.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Fachliche Führung', 'Laterale Führung', 'Methoden'],
   seo: {
     title: 'Fachliche Führung ohne Weisungsbefugnis: so geht es',

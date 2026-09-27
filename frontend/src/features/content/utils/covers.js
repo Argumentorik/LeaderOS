@@ -13,6 +13,7 @@
  * on the article record and `resolveCover()` will return that path verbatim.
  */
 import { categoryForArticle } from '../data/taxonomy';
+import { topicCover } from './topicCovers';
 
 // Curated editorial photo pool. Each entry is the Unsplash photo ID · we
 // render the full CDN URL at request time. Keep ~6 per bucket so the same
@@ -102,20 +103,16 @@ export function resolveCover(article, shape = 'wide') {
 }
 
 /**
- * Local branded cover · deterministic pick from the bundled texture set
- * (/journal/covers/cover-01..10.webp, black canvas + lime accents).
- *
- * This is the PRIMARY fallback for article heroes and og:images: it ships
- * with the app (no CDN dependency, no CSP entry needed) and keeps the
- * journal reading as one branded set. Same slug always maps to the same
- * texture. resolveCover (Unsplash) stays available for surfaces that
- * explicitly want photography.
+ * Lokales Cover · themenpassendes Editorial-Foto (utils/topicCovers.js,
+ * public/journal/topics/). Primärer Fallback für Artikel-Hero und og:image:
+ * liegt im Bundle, braucht keinen CSP-Eintrag, und derselbe Slug zeigt immer
+ * dasselbe Bild. Die abstrakten Texturen unter /journal/covers/ bleiben für
+ * Flächen ohne Artikelbezug.
  */
 export const LOCAL_COVER_COUNT = 10;
 
 export function localCoverPath(article) {
-  const idx = String((hash(article?.slug || '') % LOCAL_COVER_COUNT) + 1).padStart(2, '0');
-  return `/journal/covers/cover-${idx}.webp`;
+  return topicCover(article);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { readingTime } from '../utils/readingTime';
-import { WladBotThumbnail } from './WladBotThumbnail';
+import { topicAlt, topicCover } from '../utils/topicCovers';
 
 const TYPE_LABEL = {
   article: 'ARTICLE',
@@ -12,20 +12,23 @@ const TYPE_LABEL = {
 /**
  * ArticleCard · entry in the JournalIndex grid.
  *
- * Editorial specimen card with full-width cover image up top (Unsplash-
- * resolved by taxonomy), hairline border on the body, lime accent on
- * the type label. Hover lifts the whole card · the cover gently zooms
- * to suggest enterable depth.
+ * Editorial specimen card with full-width cover image up top (eigenes
+ * `cover` oder das themenpassende Foto aus utils/topicCovers.js), hairline
+ * border on the body, lime accent on the type label. Hover lifts the whole
+ * card · the cover gently zooms to suggest enterable depth.
+ *
+ * `coverVariant` ('a' | 'b') erzwingt eine Bildvariante, z. B. damit zwei
+ * Karten desselben Themas nebeneinander nicht dasselbe Foto zeigen.
  */
-export const ArticleCard = ({ article }) => {
+export const ArticleCard = ({ article, coverVariant }) => {
   const minutes = article.readingMinutes ?? readingTime(article.body);
   const date = new Date(article.publishedAt).toLocaleDateString('de-DE', {
     day: '2-digit', month: 'short', year: 'numeric',
   });
-  // Real photographic cover wins; everything else gets the consistent
-  // branded WladBot thumbnail (thumbnail-with-text) so the journal reads
-  // as one set instead of random stock photography.
-  const hasCover = Boolean(article.cover);
+  const src = article.cover || topicCover(article, coverVariant);
+  const alt = article.cover
+    ? `${article.title.replace(/\.$/, '')} · LeaderOS Journal · Wlad Jachtchenko`
+    : `${topicAlt(article)} · ${article.title.replace(/\.$/, '')}`;
   return (
     <article
       data-testid={`article-card-${article.slug}`}
@@ -33,19 +36,13 @@ export const ArticleCard = ({ article }) => {
     >
       {/* Cover · 16:10 editorial frame · subtle zoom on hover */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-foreground/5">
-        {hasCover ? (
-          <img
-            src={article.cover}
-            alt={`${article.title.replace(/\.$/, '')} · LeaderOS Journal · Wlad Jachtchenko`}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-          />
-        ) : (
-          <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]">
-            <WladBotThumbnail title={article.title} description={article.description} eyebrow={TYPE_LABEL[article.type] || 'LEADER·OS'} />
-          </div>
-        )}
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-[1.04]"
+        />
         {/* Subtle bottom darkening so the type pill stays legible on any photo */}
         <div
           aria-hidden

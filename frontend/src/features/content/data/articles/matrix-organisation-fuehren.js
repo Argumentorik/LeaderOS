@@ -6,7 +6,7 @@ export default {
   description: 'Zwei Vorgesetzte, ein Mitarbeiter, ständige Prioritätskonflikte. Wie du in der Matrix-Organisation führst, ohne dass deine Leute zwischen den Berichtslinien zerrieben werden.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Laterale Führung', 'Matrix-Organisation', 'Methoden'],
   seo: {
     title: 'Matrix-Organisation führen · Doppelte Berichtslinien meistern',

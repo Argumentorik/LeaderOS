@@ -14,7 +14,7 @@ export default {
     'disziplinarische Macht trotzdem führst.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-29',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Fachliche Führung', 'Disziplinarische Führung', 'Methoden'],
   seo: {
     title: 'Fachliche vs. disziplinarische Führung: Unterschied',

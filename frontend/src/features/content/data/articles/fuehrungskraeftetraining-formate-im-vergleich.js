@@ -16,7 +16,7 @@ export default {
     'gegenübergestellt mit allen Stärken und Schwächen.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Führungskräftetraining', 'Führungskräfteentwicklung', 'Methoden'],
   seo: {
     title: 'Führungskräftetraining: Seminar, Coaching oder KI?',

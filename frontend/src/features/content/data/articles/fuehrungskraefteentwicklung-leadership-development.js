@@ -16,7 +16,7 @@ export default {
     'Transfer-Gap zwischen Seminar und Alltag schließt.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-29',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Führungskräfteentwicklung', 'Leadership Development', 'Training and Development'],
   seo: {
     title: 'Führungskräfteentwicklung: Formate die wirklich wirken',

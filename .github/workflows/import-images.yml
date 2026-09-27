@@ -1,0 +1,65 @@
+name: import-images
+
+# Holt Bilder von externen URLs (z. B. Higgsfield-CDN), konvertiert sie nach
+# WebP und committet sie auf denselben Branch. Grund: Die Claude-Code-Umgebung
+# darf diese CDNs nicht erreichen, GitHub-Runner schon.
+#
+# Nutzung: eine JSON-Datei unter .github/image-imports/ pushen:
+#   [{ "url": "https://…/bild.png", "dest": "frontend/public/…/name.webp", "width": 1800 }]
+# Läuft nicht auf mvpcode. Der Commit des Workflows (GITHUB_TOKEN) löst keine
+# weiteren Workflows aus, es gibt also keine Schleife.
+
+on:
+  push:
+    branches-ignore: [mvpcode]
+    paths: ['.github/image-imports/**.json']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pillow==11.3.0
+      - name: Download und konvertieren
+        run: |
+          python - <<'PY'
+          import glob, io, json, os, urllib.request
+          from PIL import Image
+          done = 0
+          for manifest in sorted(glob.glob('.github/image-imports/*.json')):
+              for item in json.load(open(manifest)):
+                  dest = item['dest']
+                  if not dest.startswith('frontend/public/') or '..' in dest:
+                      raise SystemExit(f'Ungültiges Ziel: {dest}')
+                  if os.path.exists(dest) and not item.get('overwrite'):
+                      continue
+                  req = urllib.request.Request(item['url'], headers={'User-Agent': 'shipos-import-images'})
+                  data = urllib.request.urlopen(req, timeout=60).read()
+                  im = Image.open(io.BytesIO(data)).convert('RGB')
+                  w = int(item.get('width', 1800))
+                  if im.width > w:
+                      im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+                  os.makedirs(os.path.dirname(dest), exist_ok=True)
+                  im.save(dest, 'WEBP', quality=int(item.get('quality', 80)), method=6)
+                  print(f'{dest}: {im.width}x{im.height}, {os.path.getsize(dest) // 1024} KB')
+                  done += 1
+          print(f'{done} Bilder importiert')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public
+          if git diff --cached --quiet; then echo "Nichts Neues"; exit 0; fi
+          git commit -m "Bilder importiert (import-images)"
+          git push

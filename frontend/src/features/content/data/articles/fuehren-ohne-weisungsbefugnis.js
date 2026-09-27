@@ -14,7 +14,7 @@ export default {
     'Vorgesetztenfunktion führst · und warum das härter ist als gedacht.',
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-06-30',
-  cover: '/wlad/wlad-portrait.webp',
+  cover: null,
   tags: ['Führung', 'Laterale Führung', 'Projektleitung', 'Methoden'],
   seo: {
     title: 'Führen ohne Weisungsbefugnis · 7 Techniken, die wirklich wirken',

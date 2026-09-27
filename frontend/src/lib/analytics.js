@@ -15,7 +15,12 @@
 
 function getPosthog() {
   if (typeof window === 'undefined') return null;
-  return window.posthog && window.posthog.__SV ? window.posthog : null;
+  const ph = window.posthog;
+  // Das Snippet setzt __SV sofort, die Methoden (capture, identify, alias …)
+  // entstehen aber erst mit posthog.init(). Ohne Consent („Nur notwendige")
+  // läuft init nie: dann war ph.capture undefined und warf — die Seite fiel
+  // in die Error-Boundary. Nur ein initialisiertes PostHog zählt.
+  return ph && ph.__SV && typeof ph.capture === 'function' && typeof ph.identify === 'function' ? ph : null;
 }
 
 /**
