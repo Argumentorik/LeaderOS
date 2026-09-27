@@ -1162,6 +1162,201 @@ def lead_nurture_email(step: int, name: str, unsubscribe_link: str | None = None
     return subject, _base_layout(body, preheader=preheader, bib_code=f"N-{step:02d}")
 
 
+# ── License-Activation Journey: 5 Mails über 7 Tage (/frameworks-Leads) ─────
+# For leads who "reserved" a personal access code on /frameworks (Google-Ads
+# landing for framework-searches, see data/googleAdsAssets.js). Distinct from
+# LEAD_NURTURE above: this track opens with the reserved code, not a quiz
+# result, and — if the lead also opted into the webinar — reinforces that
+# bonus (instant 4-video unlock) instead of pushing a generic Beratung call.
+#
+# Day offsets 0/1/3/5/7, driven by /api/cron/license-nurture
+# (routes/lifecycle_emails.py). Step 1 also fires instantly at capture time
+# (routes/license_activation.py). Stops the moment the email shows up in
+# db.users — see cron_license_nurture — same "converted" gate as the lead
+# nurture journey.
+#
+# Facts policy (docs/gtm/WLAD_CANON.md): 400.000+ Klienten seit 2007,
+# 3× SPIEGEL-Bestseller, Trustpilot 4,9/5 (388) — nothing else. No fake
+# scarcity: the code has no invented expiry, only the webinar date (if still
+# upcoming) is a real deadline.
+
+LICENSE_NURTURE_TOTAL_STEPS = 5
+
+# Framework-Zitate aus FrameworksPage.js (SLIDES) — wortgleich, damit die Mail
+# hält, was die Landingpage über sich selbst behauptet.
+_LICENSE_FRAMEWORKS = {
+    2: ("SEXIER-Modell", "Aus „Weiße Rhetorik“",
+        "Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal. Sechs Schritte, jeder Pflicht für ein vollständiges Argument — inklusive der Widerlegung der Gegenargumente, bevor jemand sie ausspricht."),
+    3: ("Feedbackformel", "Wlads Kern-Framework",
+        "Beobachtung + Wirkung + Wunsch. Nie „Du bist…“, immer „Ich habe beobachtet, dass…“. Das Skript für jedes schwierige Gespräch — drei Sätze, mehr braucht es nicht."),
+    4: ("10 Stufen des Zuhörens", "Aus „Weiße Rhetorik“",
+        "Von Stufe 1, nicht zuhören, bis Stufe 10, Stille als Zuhören. 80 % aller Führungskräfte bleiben auf Stufe 2 stehen: auf die eigene Antwort warten."),
+}
+
+
+def license_activation_email(
+    step: int,
+    name: str,
+    reserved_code: str,
+    unsubscribe_link: str | None = None,
+    webinar_registered: bool = False,
+    webinar_upcoming: bool = True,
+    app_url: str = "https://leaderos.de",
+) -> tuple[str, str]:
+    """Return (subject, html) for license-activation step 1..5.
+
+    `webinar_upcoming` lets the cron turn off webinar-specific paragraphs
+    once the 29.10. date has passed, so a months-later send never references
+    a dead event — the account-activation CTA carries the mail on its own.
+    """
+    activate_url = f"{app_url.rstrip('/')}/signup?trial=14&utm_source=frameworks&utm_medium=email&utm_campaign=license-activation&code={reserved_code}"
+    webinar_url = "https://leader-os.de/webinar"
+
+    unsub = (
+        f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:24px 0 0;text-align:center;">'
+        f'<a href="{unsubscribe_link}" style="color:rgba(255,255,255,0.4);text-decoration:underline;">Keine weiteren Mails dieser Serie</a>'
+        f'</p>' if unsubscribe_link else ''
+    )
+
+    def _cta(url: str, label: str) -> str:
+        return f"""
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 8px;"><tr>
+  <td style="background:{BRAND_COLOR};padding:0;">
+    <a href="{url}" style="display:inline-block;padding:16px 28px;color:{BRAND_DARK};text-decoration:none;font-weight:900;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">+&nbsp;&nbsp;{label}</a>
+  </td>
+</tr></table>"""
+
+    def _kicker(text: str) -> str:
+        return (
+            f'<div style="font-family:\'SF Mono\',Menlo,Consolas,monospace;font-size:10px;'
+            f'letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;'
+            f'margin:12px 0 14px;">▸ {text} · {step:02d} / {LICENSE_NURTURE_TOTAL_STEPS:02d}</div>'
+        )
+
+    def _headline(text: str) -> str:
+        return (
+            f'<div style="font-weight:900;font-style:italic;font-size:32px;line-height:1.02;'
+            f'letter-spacing:-0.03em;color:#ffffff;margin:0 0 24px;">{text}'
+            f'<span style="color:{BRAND_COLOR};">.</span></div>'
+        )
+
+    def _code_plate() -> str:
+        # Dieselbe Chrome-Plate-Sprache wie components/landing/LicenseKeySection.js
+        # auf der Website — die Mail zeigt denselben Code, nicht einen anderen.
+        return f"""
+<table role="presentation" width="100%" style="margin:0 0 24px;"><tr><td align="center">
+<table role="presentation" style="border:2px solid rgba(255,255,255,0.14);background:#0C0C0C;padding:20px 28px;"><tr><td align="center">
+  <div style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:0.26em;color:rgba(255,255,255,0.45);font-weight:800;text-transform:uppercase;margin-bottom:10px;">▸ LEADEROS · DEIN ZUGANGSCODE</div>
+  <div style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:28px;font-weight:900;letter-spacing:0.08em;color:{BRAND_COLOR};">{reserved_code}</div>
+</td></tr></table>
+</td></tr></table>"""
+
+    p = 'style="font-size:14.5px;color:rgba(255,255,255,0.80);line-height:1.65;margin:0 0 18px;"'
+    box_open = (
+        '<div style="border-top:2px solid rgba(255,255,255,0.15);'
+        'border-bottom:2px solid rgba(255,255,255,0.15);padding:18px 0;margin:0 0 24px;">'
+    )
+    mono_label = (
+        f'style="font-family:\'SF Mono\',Menlo,Consolas,monospace;font-size:9px;'
+        f'letter-spacing:0.22em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:12px;"'
+    )
+    webinar_line = (
+        f'<p {p}>Dein Platz im Live-Webinar am <b style="color:#fff;">Do, 29. Oktober, 10 Uhr</b> steht — die '
+        f'4-teilige Videoserie „Führung beginnt hier" ist ab sofort für dich freigeschaltet.</p>'
+        if webinar_registered and webinar_upcoming else
+        '<p ' + p + '>Willst du dazu auch live dabei sein? Das nächste Webinar mit Wlad zeigt das System in Aktion.</p>'
+        if webinar_upcoming else ''
+    )
+
+    if step == 1:
+        subject = f"Dein Zugangscode ist reserviert, {name}"
+        preheader = f"{reserved_code} — so aktivierst du ihn."
+        body = f"""
+{_kicker("RESERVIERT")}
+{_headline(f"Willkommen, {name}")}
+<p {p}>dein persönlicher LeaderOS-Zugangscode ist reserviert:</p>
+{_code_plate()}
+<p {p}>Aktiviert wird er in unter zwei Minuten: Account anlegen, direkt loslegen. <b style="color:#fff;">14 Tage kostenlos, keine Kreditkarte</b> — mit WladBot, Simulationen und den acht Frameworks, die du gerade gesehen hast.</p>
+{webinar_line}
+{_cta(activate_url, "Code jetzt aktivieren")}
+{unsub}
+"""
+
+    elif step == 2:
+        fw_name, fw_role, fw_text = _LICENSE_FRAMEWORKS[2]
+        subject = "Ein Framework, das du sofort nutzen kannst"
+        preheader = f"{fw_name} — {fw_role}."
+        body = f"""
+{_kicker("FRAMEWORK")}
+{_headline(fw_name)}
+<p {p}>Hallo {name},</p>
+<p {p}>dein Code <b style="color:{BRAND_COLOR};">{reserved_code}</b> wartet noch auf dich. Bis du aktivierst, hier eines der acht Frameworks aus LeaderOS — heute schon einsetzbar:</p>
+{box_open}
+  <div {mono_label}>▸ {fw_role}</div>
+  <p style="font-size:14px;color:#ffffff;line-height:1.6;margin:0;">{fw_text}</p>
+</div>
+<p {p}>In LeaderOS trainierst du genau das jeden Tag mit WladBot — an deinen echten Fällen, nicht an Theorie.</p>
+{_cta(activate_url, "Code aktivieren · 14 Tage kostenlos")}
+{unsub}
+"""
+
+    elif step == 3:
+        fw_name, fw_role, fw_text = _LICENSE_FRAMEWORKS[3]
+        subject = f"{name}, drei Sätze für jedes schwierige Gespräch"
+        preheader = f"{fw_name} — und dein Code wartet noch."
+        body = f"""
+{_kicker("FRAMEWORK")}
+{_headline(fw_name)}
+<p {p}>{fw_text}</p>
+{box_open}
+  <div {mono_label}>▸ DEIN CODE</div>
+  <p style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:20px;font-weight:900;color:{BRAND_COLOR};margin:0;">{reserved_code}</p>
+</div>
+{webinar_line}
+<p {p}>Kein künstlicher Countdown auf den Code — aber je früher du startest, desto mehr Tage deiner 14 kostenlosen nutzt du auch wirklich.</p>
+{_cta(activate_url, "Jetzt aktivieren")}
+{unsub}
+"""
+
+    elif step == 4:
+        fw_name, fw_role, fw_text = _LICENSE_FRAMEWORKS[4]
+        subject = "Warum 400.000+ Klienten mit dieser Methodik arbeiten"
+        preheader = f"{fw_name} + Zahlen, die für sich stehen."
+        body = f"""
+{_kicker("BEWEIS")}
+{_headline("Substanz statt Buzzwords")}
+<p {p}>Hallo {name},</p>
+<p {p}>seit 2007 hat Wlad Jachtchenko <b style="color:#fff;">400.000+ Klienten</b> trainiert, 3× SPIEGEL-Bestseller geschrieben und steht bei <b style="color:#fff;">4,9 von 5</b> auf Trustpilot (388 Bewertungen). LeaderOS ist diese Methodik als tägliches System — nicht als Wochenend-Seminar.</p>
+{box_open}
+  <div {mono_label}>▸ {fw_role}</div>
+  <p style="font-size:13.5px;color:#ffffff;line-height:1.6;margin:0;">{fw_text}</p>
+</div>
+<p {p}>Dein Code <b style="color:{BRAND_COLOR};">{reserved_code}</b> gibt dir vollen Zugriff auf alle acht Frameworks, WladBot und die 30-Tage-Challenge.</p>
+{_cta(activate_url, "Zugang aktivieren")}
+{unsub}
+"""
+
+    elif step == 5:
+        subject = f"Letzte Mail dieser Serie, {name} — dein Code wartet"
+        preheader = "Danach hörst du nur noch von uns, wenn du aktivierst."
+        body = f"""
+{_kicker("LETZTE MAIL")}
+{_headline("Das war's von dieser Serie")}
+<p {p}>Hallo {name},</p>
+<p {p}>das ist die letzte Mail dieser Reihe. Dein Zugangscode bleibt reserviert, es läuft nichts ab — aber wir schreiben dich zu diesem Thema nicht wieder an.</p>
+{_code_plate()}
+{webinar_line}
+<p {p}>Falls du magst: zwei Minuten, ein Account, 14 Tage kostenlos.</p>
+{_cta(activate_url, "Code jetzt aktivieren")}
+{unsub}
+"""
+
+    else:
+        raise ValueError(f"license_activation_email: unknown step {step}")
+
+    return subject, _base_layout(body, preheader=preheader, bib_code=f"LIC-{step:02d}")
+
+
 def beratung_checklist_email(name: str, unsubscribe_link: str | None = None) -> tuple[str, str]:
     """Return (subject, html) for the standalone "Beratungsgespräch"
     broadcast — a win-back/evergreen send, not a cron step.

@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { applyPageMeta } from '../lib/pageMeta';
+import { FrameworksActivation } from '../components/landing/FrameworksActivation';
 
 /**
- * FrameworksPage · /frameworks · ein Viewport, acht Frameworks.
+ * FrameworksPage · /frameworks · Vollbild-Hero mit acht Frameworks, darunter
+ * die Zugangscode-Aktivierung.
  *
- * Mechanik 1:1 nach dem „Kollektiva"-Brief: gestapelte Vollbild-Hintergründe
- * mit 700-ms-Crossfade, statische H1 links, wechselnde Beschreibung rechts
- * (Remount + 500-ms-fadeIn), Avatar-Reihe mit Punkt-Indikator, Meta-Footer
- * mit Name · Rolle · statischer Zeile · Link. Geist 300/400/500, weiß auf
- * Bild, weiche Vignette, keine Karten, keine Pills, kein Glow.
+ * Hero-Mechanik 1:1 nach dem „Kollektiva"-Brief: gestapelte Vollbild-
+ * Hintergründe mit 700-ms-Crossfade, statische H1 links, wechselnde
+ * Beschreibung rechts (Remount + 500-ms-fadeIn), Avatar-Reihe mit
+ * Punkt-Indikator, Meta-Footer mit Name · Rolle · statischer Zeile · Link.
+ * Geist 300/400/500, weiß auf Bild, weiche Vignette, keine Karten, keine
+ * Pills, kein Glow.
  *
- * Zwei bewusste Abweichungen, beide aus der Ehrlichkeitsregel
+ * Zwei bewusste Abweichungen im Hero, beide aus der Ehrlichkeitsregel
  * (docs/gtm/WEBINAR_FUNNEL.md):
  *
  *   1. Die acht „Personen" sind Wlads acht Kern-Frameworks — Name,
@@ -27,6 +30,11 @@ import { applyPageMeta } from '../lib/pageMeta';
  *
  * Nur der aktive Clip spielt; die anderen sieben stehen pausiert mit
  * Poster, damit acht Videos kein Handy heißlaufen lassen.
+ *
+ * Darunter, außerhalb des Hero-Viewports: FrameworksActivation — vorher
+ * endete die Seite im Hero, ohne eigenes Conversion-Ziel (nur ein Textlink
+ * zum Webinar). Jetzt reserviert der Besuch einen persönlichen Zugangscode
+ * und kann optional das Webinar dazu buchen.
  */
 
 const CF = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/';
@@ -104,6 +112,7 @@ export default function FrameworksPage() {
   }, [active]);
 
   return (
+    <>
     <section className="relative h-screen w-full overflow-hidden font-geist text-white bg-[#0A0A0A]" data-testid="frameworks-hero">
       {/* Gestapelte Hintergründe · nur der aktive Index sichtbar */}
       {SLIDES.map((s, i) => (
@@ -170,5 +179,7 @@ export default function FrameworksPage() {
         </div>
       </div>
     </section>
+    <FrameworksActivation />
+    </>
   );
 }

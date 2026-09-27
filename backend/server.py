@@ -175,6 +175,10 @@ app.include_router(free_videos_router)
 from routes.webinar import router as webinar_router  # noqa: E402
 app.include_router(webinar_router)
 
+# License-activation funnel · /frameworks lead capture + 5-mail nurture (+ optional webinar registration)
+from routes.license_activation import router as license_activation_router  # noqa: E402
+app.include_router(license_activation_router)
+
 
 @app.get("/api/")
 async def root() -> dict[str, str]:

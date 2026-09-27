@@ -15,6 +15,7 @@
 | `POST /api/cron/video-drip` | `0 11 * * 1` (montags 11:00) | Wöchentliche Video-Drip (Woche 1-6) | Lead-Magnet Lernvideo-Serie |
 | `POST /api/cron/webinar-reminders` | `*/15 * * * *` (alle 15 min, mindestens 27.–29.10.) | 24h-Reminder (12–24,5 h vorher) + 1h-Reminder (0–2 h vorher) an alle Webinar-Leads, je Lead einmal | Show-up-Rate Webinar 29.10. |
 | `POST /api/cron/webinar-followup` | `0 8 * * *` (täglich) | „Starte deinen Trial"-Mail ab 20 h nach dem Webinar, je Lead einmal | Webinar → Trial |
+| `POST /api/cron/license-nurture` | `0 7 * * *` (täglich, via GitHub Actions `cron-jobs`) | 5-Mail-Serie über 7 Tage an `/frameworks`-Leads (`db.license_leads`) — Zugangscode-Aktivierung + optionaler Webinar-Bonus | `/frameworks`-Funnel → Account-Erstellung |
 
 > **Webinar-Crons:** GitHub-Action `webinar-cron.yml` ruft beide nur in den
 > Fenstern um den Termin auf — **als Backup**. Geplante GitHub-Läufe starten
@@ -33,6 +34,34 @@
    - **Headers:** `X-Cron-Secret: <CRON_SHARED_SECRET aus Emergent .env>`
    - **Notifications:** Email on failure
 3. Status testen: erstes Trigger sollte JSON `{"sent": 0, ...}` zurückgeben
+
+---
+
+## License-Activation Workflow (/frameworks)
+
+```
+Lead füllt /frameworks-Formular aus (Tag 0)
+        │
+        ├─ Sofort: Mail 1 (routes/license_activation.py, beim Submit)
+        │  + optional echte Webinar-Anmeldung (db.webinar_leads)
+        ▼
+Tag 1:   Mail 2 — SEXIER-Modell
+Tag 3:   Mail 3 — Feedbackformel
+Tag 5:   Mail 4 — 10 Stufen des Zuhörens
+Tag 7:   Mail 5 — letzte Erinnerung
+        │
+        ▼
+Sequenz endet automatisch, sobald die E-Mail in db.users auftaucht
+(echter Account) — dann wird der Lead `converted: true` markiert und
+für immer aus dem Cron-Query ausgeschlossen (backend/routes/lifecycle_emails.py).
+```
+
+**Idempotenz:** Jeder Lead bekommt jede Stufe exakt einmal (`license_steps_sent`
+Array + `db.email_log`). Der Cron holt beim ersten Lauf nach einer Pause nur
+**eine** fällige Stufe pro Lead nach (kein Mail-Burst bei Backlog).
+
+**Unsubscribe:** `GET /api/license/unsubscribe?token=...` (HMAC-Token, 365
+Tage gültig, gleicher Mechanismus wie die anderen Lead-Funnels).
 
 ---
 
