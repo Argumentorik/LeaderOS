@@ -67,7 +67,6 @@ const TrainingLandingPage = lazyWithRetry(() => import("./pages/TrainingLandingP
 const KommunikationPage = lazyWithRetry(() => import("./pages/KommunikationPage"));
 const KiFuehrungskraftPage = lazyWithRetry(() => import("./pages/KiFuehrungskraftPage"));
 const LeaderOsTourPage = lazyWithRetry(() => import("./pages/LeaderOsTourPage"));
-const FrameworksPage = lazyWithRetry(() => import("./pages/FrameworksPage"));
 const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
 const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
 const ArticlePage = lazyWithRetry(() => import("./features/content/pages/ArticlePage"));
@@ -238,9 +237,9 @@ function AppRouter() {
         {/* Public · dated free launch event · high-conversion signup */}
         <Route path="/event" element={<EventPage />} />
         <Route path="/live" element={<Navigate to="/event" replace />} />
-        {/* Public · ein Viewport, acht Frameworks (Kollektiva-Mechanik, Kanon-Inhalt) */}
-        <Route path="/frameworks" element={<FrameworksPage />} />
-        <Route path="/methodik" element={<Navigate to="/frameworks" replace />} />
+        {/* Seite entfernt · bestehende Ad-Links landen auf der Haupt-Ad-Landing */}
+        <Route path="/frameworks" element={<Navigate to="/kommunikation" replace />} />
+        <Route path="/methodik" element={<Navigate to="/kommunikation" replace />} />
         {/* Squeeze funnel for the free live webinar */}
         <Route path="/webinar" element={<WebinarPage />} />
         <Route path="/webinar/danke" element={<WebinarThankYouPage />} />

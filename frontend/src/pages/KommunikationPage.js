@@ -21,7 +21,7 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * Buttons für eine App, die es nicht gibt.
  *
  * Videos: eigener CloudFront-Bucket (bereits in der CSP media-src).
- * noindex: Ad-Landing, konkurriert nicht mit /frameworks um Suche.
+ * noindex: Ad-Landing.
  */
 
 const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260728_015819_1b3ec855-d586-4018-96c8-8bf90cada037.mp4';
@@ -56,7 +56,6 @@ const track = (event, props = {}) => {
 
 const NAV_LINKS = [
   { label: 'Ansätze', href: '#ansaetze' },
-  { label: 'Frameworks', href: '/frameworks' },
   { label: 'Die App', href: '#app' },
   { label: 'Journal', href: '/journal' },
 ];
