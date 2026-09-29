@@ -88,13 +88,11 @@ Intro-Texte bleiben unter 150 Zeichen, damit LinkedIn sie im Feed nicht
 hinter „…mehr anzeigen" kürzt. Zeichenzahlen stehen unter jedem Tile im
 Studio.
 
-### 2.1 Document Ad · später
+### 2.1 Document Ad · jetzt der Standard
 
-Das Format, das auf LinkedIn organisch am besten trägt, ist das
-5-Seiten-PDF (`ADS_90D.md` Funnel 2). Inhalt liegt fertig auf
-`/frameworks`: SEXIER, Feedbackformel, 5 Rollen, 10 Stufen, 3 Säulen,
-4 Farben, Dunkle Rhetorik, Charisma-Code. Seite 5 = Webinar-CTA. Braucht
-einen PDF-Export der Frameworks-Seite — W2.
+Stand 29.09.: LinkedIn läuft nur noch mit Document Ads. Das 6-Seiten-PDF,
+die Anlage und die Intro-Varianten stehen in `ADS_BING_LINKEDIN_WEBINAR.md`
+§1. Die Seite `/frameworks` gibt es nicht mehr.
 
 ---
 
@@ -180,7 +178,7 @@ in `webinar_leads`, gefiltert nach `utm.source = linkedin`.
 ## 6. Nach dem Webinar · W2
 
 - Retargeting-Kampagne auf Website-Besucher (sobald ≥ 300) mit D02.
-- Document Ad aus `/frameworks` (§2.1).
+- Document-Ad-Varianten testen (§2.1).
 - Kundenliste (E-Mails der Registrierten mit Marketing-Einwilligung) als
   Matched Audience — Lookalike-Ersatz auf LinkedIn.
 - Thought-Leader-Ads: Wlads eigene Posts sponsern statt Unternehmens-Ads

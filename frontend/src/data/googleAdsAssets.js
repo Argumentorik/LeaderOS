@@ -139,7 +139,7 @@ export const GOOGLE_CAMPAIGNS = [
     headlines: [
       'Webinar mit Wlad Jachtchenko',
       'Führung täglich trainierbar',
-      'Kostenlos · 17. Sept · 10 Uhr',
+      'Kostenlos · 29. Okt · 10 Uhr',
       'Keine Aufzeichnung, nur live',
       '3× SPIEGEL-Bestseller-Autor',
     ],
@@ -147,7 +147,7 @@ export const GOOGLE_CAMPAIGNS = [
     descriptions: [
       'Charisma-Code, Leadership-Betriebssystem, ein echter Live-Case. 90 Minuten, mit Q&A.',
       'Seminare ändern Wissen, nicht Verhalten. Im Webinar: Führung in 15 Minuten am Tag üben.',
-      'Seit 2007 im Coaching, über 400.000 Klienten, 13 Bücher. Zum ersten Mal live als System.',
+      'Seit 2007 im Coaching, 400.000+ Klienten, 3× SPIEGEL-Bestseller. Erstmals live als System.',
       'Kostenlos, live, ohne Aufzeichnung. Platz sichern, Kalender-Einladung kommt sofort.',
       'Wlad Jachtchenko beantwortet deine Fragen persönlich. 29. Oktober, 10 Uhr.',
     ],
@@ -158,7 +158,7 @@ export const GOOGLE_CAMPAIGNS = [
     goal: 'Framework-Suchen → /frameworks → Webinar/Trial',
     finalUrl: FRAMEWORKS_URL,
     paths: ['frameworks', 'wlad'],
-    note: 'Evergreen nach dem Webinar. Keywords aus SEO_KEYWORDS.md Cluster 3 + 4, Phrase-Match.',
+    note: 'PAUSIERT: Die Seite /frameworks ist entfernt und leitet auf /kommunikation um. Nicht in Google/Bing anlegen, bis es eine neue Framework-Landing gibt. Keywords aus SEO_KEYWORDS.md Cluster 3 + 4, Phrase-Match.',
     keywords: [
       '"5 rollen einer führungskraft"', '"sexier modell"', '"dunkle rhetorik"', '"logos ethos pathos"',
       '"4 farben modell"', '"schulz von thun 4 ohren"', '"aktives zuhören stufen"', '"charisma lernen"',
@@ -191,7 +191,7 @@ export const GOOGLE_EXTENSIONS = {
   sitelinks: [
     { text: 'Live-Webinar 29.10.', desc1: 'Kostenlos, 90 Minuten, Q&A', desc2: 'Keine Aufzeichnung', url: 'https://leader-os.de/webinar' },
     { text: 'Leader-Check', desc1: 'Dein Führungsprofil in 10 Min', desc2: 'Kostenlos, ohne Login', url: 'https://leader-check.de/' },
-    { text: 'Die Frameworks', desc1: 'SEXIER, 5 Rollen, 10 Stufen', desc2: 'Auf einer Seite', url: 'https://leader-os.de/frameworks' },
+    { text: 'Feedbackformel lesen', desc1: 'Beobachtung, Wirkung, Wunsch', desc2: 'Kostenlos, ohne Login', url: 'https://leader-os.de/journal/feedback-geben-vorlage-bww-framework' },
     { text: 'Über Wlad Jachtchenko', desc1: '3× SPIEGEL-Bestseller', desc2: 'Seit 2007 im Coaching', url: 'https://leader-os.de/wlad-jachtchenko' },
     { text: 'Journal', desc1: '150+ Artikel zu Führung', desc2: 'Kostenlos lesen', url: 'https://leader-os.de/journal' },
     { text: '14 Tage kostenlos testen', desc1: 'LeaderOS ohne Karte', desc2: 'Jederzeit kündbar', url: 'https://leader-os.de/' },
