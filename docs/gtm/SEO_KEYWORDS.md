@@ -89,6 +89,31 @@ Datei ist die Arbeits- und Tracking-Grundlage, keine Garantie.
 | 49 | erste 100 tage führungskraft | /journal/erste-100-tage-als-cto-oder-vp-engineering |
 | 50 | imposter syndrom führungskraft | /journal/imposter-syndrom-bei-c-level |
 
+## Cluster 7 · Neue Artikel 2026-09-30 (+20)
+
+| # | Keyword | Ziel-URL |
+|---|---|---|
+| 51 | delegieren lernen | /journal/delegieren-lernen-die-fuenf-stufen-der-delegation |
+| 52 | einwände entkräften | /journal/einwaende-im-gespraech-entkraeften-fuer-fuehrungskraefte |
+| 53 | 1:1 gespräch mitarbeiter | /journal/einzelgespraeche-mit-mitarbeitern-struktur-fragen-rhythmus |
+| 54 | entscheidungen treffen führungskraft | /journal/entscheidungen-treffen-unter-unsicherheit |
+| 55 | fragetechniken führungskraft | /journal/fragen-stellen-wie-fuehrungskraefte-mit-fragen-fuehren |
+| 56 | grow modell | /journal/grow-modell-coaching-gespraech-fuer-fuehrungskraefte |
+| 57 | jahresgespräch führen | /journal/jahresgespraech-fuehren-ablauf-fragen-und-fehler |
+| 58 | johari fenster | /journal/johari-fenster-blinde-flecken-als-fuehrungskraft |
+| 59 | ki richtlinien unternehmen | /journal/ki-richtlinien-fuers-team-praktischer-leitfaden |
+| 60 | konflikte im team | /journal/konflikte-im-team-frueh-erkennen-und-ansprechen |
+| 61 | mitarbeiter loben | /journal/lob-aussprechen-anerkennung-die-wirkt |
+| 62 | meeting leiten | /journal/meetings-leiten-agenda-entscheidung-naechste-schritte |
+| 63 | onboarding neue mitarbeiter führungskraft | /journal/neue-mitarbeiter-onboarden-die-ersten-30-tage |
+| 64 | verantwortung im team | /journal/ownership-im-team-staerken-verantwortung-uebergeben |
+| 65 | präsentation halten | /journal/praesentation-halten-aufbau-fuer-fuehrungskraefte |
+| 66 | psychologische sicherheit | /journal/psychologische-sicherheit-im-team-aufbauen |
+| 67 | schwierige fragen beantworten | /journal/q-and-a-souveraen-fuehren-schwierige-fragen-beantworten |
+| 68 | remote team führen | /journal/remote-team-fuehren-routinen-regeln-vertrauen |
+| 69 | situatives führen | /journal/situatives-fuehren-nach-hersey-und-blanchard |
+| 70 | mitarbeiter underperformer | /journal/underperformer-fuehren-das-gespraech-und-der-plan |
+
 ## Technischer Stand (Go-Live-Audit 2026-07-02)
 
 - ✅ Alle 112 Artikel in `sitemap-articles.xml` (Generator: `frontend/scripts/generate-sitemap-articles.mjs` — **nach jedem neuen Artikel ausführen**)

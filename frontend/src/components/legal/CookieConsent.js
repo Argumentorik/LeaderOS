@@ -50,16 +50,16 @@ export const CookieConsent = () => {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[9999] p-4 sm:p-6 pointer-events-none" data-testid="cookie-consent-banner">
+    <div className="fixed inset-x-0 bottom-0 z-[9999] p-2.5 sm:p-6 pointer-events-none" data-testid="cookie-consent-banner">
       <div className="mx-auto max-w-3xl pointer-events-auto rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-2xl shadow-black/40 overflow-hidden">
-        <div className="p-5 sm:p-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-[#BFFF00] flex items-center justify-center shrink-0 text-[#0A0A0A] font-black text-lg">🍪</div>
+        <div className="p-3.5 sm:p-6">
+          <div className="flex items-start gap-3 mb-3 sm:mb-4">
+            <div className="hidden sm:flex w-10 h-10 rounded-xl bg-[#BFFF00] items-center justify-center shrink-0 text-[#0A0A0A] font-black text-lg">🍪</div>
             <div>
-              <h3 className="text-white font-black text-base mb-1">
+              <h3 className="text-white font-black text-[15px] sm:text-base mb-0.5 sm:mb-1">
                 {de ? 'Datenschutz & Cookies' : 'Privacy & Cookies'}
               </h3>
-              <p className="text-white/70 text-[12px] leading-relaxed">
+              <p className="text-white/70 text-[12px] leading-snug sm:leading-relaxed">
                 {de
                   ? 'Wir nutzen technisch notwendige Cookies für deinen Login. Optional helfen uns Analyse-Tools, die App besser zu machen, und Marketing-Pixel zeigen uns, welche Anzeige dich hergebracht hat. Du entscheidest.'
                   : 'We use strictly necessary cookies for your login. Optional analytics tools help us improve, and marketing pixels tell us which ad brought you here. Your choice.'}
@@ -95,16 +95,16 @@ export const CookieConsent = () => {
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
             {!customizing ? (
               <>
-                <button onClick={acceptAll} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-[#BFFF00] text-[#0A0A0A] text-[12px] font-black hover:brightness-110 transition" data-testid="consent-accept-all">
+                <button onClick={acceptAll} className="sm:flex-1 sm:min-w-[120px] px-1 sm:px-0 py-3 sm:py-2.5 whitespace-nowrap rounded-xl bg-[#BFFF00] text-[#0A0A0A] text-[11.5px] sm:text-[12px] font-black hover:brightness-110 transition" data-testid="consent-accept-all">
                   {de ? 'Alle akzeptieren' : 'Accept all'}
                 </button>
-                <button onClick={essentialOnly} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-white/10 text-white text-[12px] font-bold hover:bg-white/20 transition" data-testid="consent-essential-only">
+                <button onClick={essentialOnly} className="sm:flex-1 sm:min-w-[120px] px-1 sm:px-0 py-3 sm:py-2.5 whitespace-nowrap rounded-xl bg-white/10 text-white text-[11.5px] sm:text-[12px] font-bold hover:bg-white/20 transition" data-testid="consent-essential-only">
                   {de ? 'Nur notwendige' : 'Essential only'}
                 </button>
-                <button onClick={() => setCustomizing(true)} className="flex-1 min-w-[100px] py-2.5 rounded-xl border border-white/20 text-white text-[12px] font-bold hover:bg-white/5 transition" data-testid="consent-customize">
+                <button onClick={() => setCustomizing(true)} className="sm:flex-1 sm:min-w-[100px] px-1 sm:px-0 py-3 sm:py-2.5 whitespace-nowrap rounded-xl border border-white/20 text-white text-[11.5px] sm:text-[12px] font-bold hover:bg-white/5 transition" data-testid="consent-customize">
                   {de ? 'Anpassen' : 'Customize'}
                 </button>
               </>

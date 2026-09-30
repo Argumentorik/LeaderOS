@@ -913,7 +913,7 @@ export default function KommunikationPage() {
       <AppShowcase />
       <ThreeStepPath tone="light" checkUrl={CHECK_URL} trialUrl={TRIAL_URL} onTrack={(e, p) => track(`kommunikation_${e}`, p)} />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
-        <a href="/impressum" className="hover:underline">Impressum</a> · <a href="/datenschutz" className="hover:underline">Datenschutz</a>
+        <a href="/impressum" className="hover:underline inline-block py-3 -my-3">Impressum</a> · <a href="/datenschutz" className="hover:underline inline-block py-3 -my-3">Datenschutz</a>
       </div>
       <VideoOverlay open={videoOpen} onClose={() => setVideoOpen(false)} />
     </div>

@@ -6,7 +6,7 @@
  * Hero-Links die auf entweder zeigen treffen jetzt beide diese Section.
  *
  * Layout:
- *   1. Live-Scarcity-Strip ganz oben (pulsing dot, "X / 8 Slots frei")
+ *   1. Info-Strip ganz oben (Start der Beratungsgespräche, keine Zähler)
  *   2. Headline + Subline ("Sprich mit uns. 30 Minuten, ehrlich.")
  *   3. 2-Spalten-Grid:
  *        Left (7/12)  · "Was passiert in 30 Minuten" 3-step + 5 bullets
@@ -16,11 +16,11 @@
  *   4. Demo-Fallback als kleiner Link unten ("Oder lieber erst Demo?")
  *
  * Slot-Daten:
- *   Wir berechnen 5 kommende Werktage relativ zu "heute" beim Render
- *   (clientseitig), und nutzen eine deterministische Pseudo-Verfügbarkeit
- *   pro Datum (Hash über DD.MM) damit das Pattern stabil aber unique pro
- *   Woche ist. Slots die "frei" markiert sind kriegen die volle Lime-
- *   Behandlung und linken auf Cal.com (Slot-Pre-Select via Query-Params).
+ *   Wir zeigen die ersten 5 Werktage ab BOOKING_START als Zeitfenster.
+ *   Die echte Verfügbarkeit steht ausschließlich in Cal.com: hier wird
+ *   nichts als "frei" oder "ausgebucht" behauptet (Ehrlichkeitsregel,
+ *   docs/gtm/WEBINAR_FUNNEL.md: keine Fake-Scarcity). Ein Klick öffnet
+ *   Cal.com mit vorgewähltem Datum.
  */
 
 import { motion } from 'framer-motion';
@@ -32,20 +32,16 @@ import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/bran
 // ─────────────────────────────────────────────────────────────────────────
 const TIME_SLOTS = ['10:00', '11:30', '14:00', '15:30', '17:00'];
 
-const dayHash = (d) => {
-  // Stable hash from DD-MM so the pattern is reproducible per day.
-  const s = `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`;
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-};
+// Beratungsgespräche starten mit dem offiziellen App-Launch am 1. November 2026
+// (Sonntag), der erste Werktag ist Montag, der 2. November.
+const BOOKING_START = new Date(2026, 10, 2);
 
 const nextWeekdays = (count = 5) => {
   const out = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  let cursor = new Date(today);
-  cursor.setDate(cursor.getDate() + 1); // start tomorrow
+  const tomorrow = new Date();
+  tomorrow.setHours(0, 0, 0, 0);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  let cursor = new Date(Math.max(tomorrow.getTime(), BOOKING_START.getTime()));
   while (out.length < count) {
     const dow = cursor.getDay(); // 0 = Sun, 6 = Sat
     if (dow !== 0 && dow !== 6) out.push(new Date(cursor));
@@ -57,14 +53,8 @@ const nextWeekdays = (count = 5) => {
 const buildAvailability = () => {
   const days = nextWeekdays(5);
   const DOW = ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'];
-  return days.map((d, idx) => {
-    const h = dayHash(d);
-    const slots = TIME_SLOTS.map((time, i) => {
-      // Deterministic: each day has 2-3 available slots, 2-3 booked
-      const seed = (h >> (i * 3)) & 0b111;
-      const free = idx === 0 ? seed > 4 : seed > 2; // day-1 mostly booked
-      return { time, free };
-    });
+  return days.map((d) => {
+    const slots = TIME_SLOTS.map((time) => ({ time }));
     return {
       date: d,
       label: DOW[d.getDay()],
@@ -86,26 +76,19 @@ const FADE_UP = {
   }),
 };
 
-const ScarcityStrip = ({ freeThisWeek, nextSlot }) => (
+const BookingInfoStrip = () => (
   <div
     data-testid="beratung-scarcity-strip"
     className="inline-flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 py-2.5 border-2 border-brand bg-brand/[0.12] mb-7"
   >
-    <span className="relative inline-flex w-2 h-2 shrink-0">
-      <span className="absolute inset-0 rounded-full bg-brand-strong animate-ping opacity-75" />
-      <span className="relative w-2 h-2 rounded-full bg-brand-strong" />
-    </span>
+    <span aria-hidden className="w-2 h-2 shrink-0 rounded-full bg-brand-strong" />
     <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-foreground">
-      DIESE WOCHE · {freeThisWeek} / 8 SLOTS FREI
+      BERATUNGSGESPRÄCHE AB 2. NOVEMBER
     </span>
-    {nextSlot && (
-      <>
-        <span aria-hidden className="w-px h-3 bg-foreground/25 hidden sm:inline-block" />
-        <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-foreground/70">
-          Nächster Slot · {nextSlot.label} {nextSlot.ddmm} · {nextSlot.time}
-        </span>
-      </>
-    )}
+    <span aria-hidden className="w-px h-3 bg-foreground/25 hidden sm:inline-block" />
+    <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-foreground/70">
+      Termin direkt im Kalender wählen
+    </span>
   </div>
 );
 
@@ -116,10 +99,10 @@ const SlotPreview = ({ availability, onPickSlot }) => (
   >
     <div className="flex items-baseline justify-between mb-5 pb-4 border-b border-foreground/15">
       <div className="font-mono text-[10px] font-bold uppercase tracking-[0.26em] text-foreground/55">
-        ▸ KOMMENDE WERKTAGE
+        ▸ ERSTE WERKTAGE
       </div>
       <div className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-brand-strong">
-        ● LIVE
+        AB 02.11.
       </div>
     </div>
 
@@ -139,15 +122,10 @@ const SlotPreview = ({ availability, onPickSlot }) => (
               <button
                 key={s.time}
                 type="button"
-                disabled={!s.free}
-                onClick={() => s.free && onPickSlot(day, s)}
-                className={`font-mono text-[11px] font-bold tabular-nums tracking-tight px-2 h-7 border transition-colors ${
-                  s.free
-                    ? 'border-foreground bg-white hover:bg-foreground hover:text-white text-foreground cursor-pointer'
-                    : 'border-foreground/15 bg-foreground/[0.04] text-foreground/30 line-through cursor-not-allowed'
-                }`}
+                onClick={() => onPickSlot(day, s)}
+                className="font-mono text-[11px] font-bold tabular-nums tracking-tight px-3 h-10 sm:h-8 border border-foreground bg-white hover:bg-foreground hover:text-white text-foreground cursor-pointer transition-colors"
                 data-testid={`slot-${day.ddmm}-${s.time}`}
-                aria-label={s.free ? `Termin am ${day.ddmm} um ${s.time}` : `${s.time} ausgebucht`}
+                aria-label={`Zeitfenster am ${day.ddmm} um ${s.time}, Verfügbarkeit im Kalender`}
               >
                 {s.time}
               </button>
@@ -236,12 +214,6 @@ const TrustStrip = () => (
 // ─────────────────────────────────────────────────────────────────────────
 export const AppointmentBookingSection = () => {
   const availability = buildAvailability();
-  const flatSlots = availability.flatMap((d) => d.slots.map((s) => ({ ...s, day: d })));
-  const freeThisWeek = flatSlots.filter((s) => s.free).length;
-  const nextFreeRaw = flatSlots.find((s) => s.free);
-  const nextSlot = nextFreeRaw
-    ? { label: nextFreeRaw.day.label, ddmm: nextFreeRaw.day.ddmm, time: nextFreeRaw.time }
-    : null;
 
   const handlePickSlot = (day, slot) => {
     if (typeof window !== 'undefined' && window.posthog) {
@@ -312,7 +284,7 @@ export const AppointmentBookingSection = () => {
           </p>
 
           <div className="mt-7">
-            <ScarcityStrip freeThisWeek={freeThisWeek} nextSlot={nextSlot} />
+            <BookingInfoStrip />
           </div>
         </motion.div>
 

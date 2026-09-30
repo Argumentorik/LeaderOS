@@ -872,7 +872,7 @@ export default function WebinarPage() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[12.5px] text-[#4b4b4d] hover:text-[#111111] transition-colors"
+                    className="inline-flex items-center gap-2 text-[12.5px] text-[#4b4b4d] hover:text-[#111111] transition-colors py-2.5 -my-2.5"
                   >
                     <Star size={13} className="text-[#111111] fill-[#BFFF00]" />
                     <span className="font-bold text-[#111111]">{rating}/5</span> {name} · {count} <ArrowUpRight size={11} />
@@ -1225,7 +1225,7 @@ export default function WebinarPage() {
                   <p className="text-[14px] leading-[1.6] text-[#4b4b4d] mb-4">{def}</p>
                   <Link
                     to={href}
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5A7700] hover:text-[#111111] transition-colors"
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5A7700] hover:text-[#111111] transition-colors py-3 -my-3"
                   >
                     Zum Deep-Dive im Journal
                     <span className="transition-transform group-hover:translate-x-1"><ArrowUpRight size={11} /></span>
@@ -1329,9 +1329,9 @@ export default function WebinarPage() {
             © 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20 Länder
           </p>
           <nav className="flex items-center gap-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/60">
-            <Link to="/impressum" className="hover:text-white">Impressum</Link>
-            <Link to="/datenschutz" className="hover:text-white">Datenschutz</Link>
-            <Link to="/agb" className="hover:text-white">AGB</Link>
+            <Link to="/impressum" className="hover:text-white py-3 -my-3">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-white py-3 -my-3">Datenschutz</Link>
+            <Link to="/agb" className="hover:text-white py-3 -my-3 px-1">AGB</Link>
           </nav>
         </div>
       </footer>

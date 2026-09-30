@@ -29,7 +29,7 @@ Dafür gibt es genau zwei Mechanismen:
 
 | Mechanismus | Wofür | Wo |
 | --- | --- | --- |
-| **Build-Prerendering** | die 153 Journal-Artikel + `/journal` | `frontend/scripts/prerender-articles.mjs`, läuft in `yarn build` |
+| **Build-Prerendering** | die 173 Journal-Artikel + `/journal` | `frontend/scripts/prerender-articles.mjs`, läuft in `yarn build` |
 | **Statische Seiten in `public/`** | Kampagnen- und Antwort-Seiten (`/fragen`, `/os`, `/app`, `/wladbot`) | `frontend/public/<name>/index.html`, von Vercel vor dem SPA-Rewrite ausgeliefert |
 
 Eine React-Route ohne einen dieser beiden Mechanismen ist für
