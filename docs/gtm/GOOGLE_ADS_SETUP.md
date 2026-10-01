@@ -69,6 +69,13 @@ Bidding), die anderen als sekundär.
 
 ## 3. Google-Tag scharfschalten (eine Zeile)
 
+> **Seit 01.10.2026:** Für die React-Routen (`/webinar`, `/webinar/danke`,
+> `/kommunikation`, `/ki-fuehrungskraft`, `/`) läuft der Tag über die
+> Vercel-Variable `REACT_APP_GOOGLE_ADS_ID` (+ optional
+> `REACT_APP_GOOGLE_ADS_WEBINAR_LABEL`), siehe
+> `docs/ops/ADS_TRACKING_GO_LIVE.md`. Der Abschnitt hier gilt nur noch für
+> die statischen Seiten `/wladbot`, `/app`, `/os`.
+
 Der komplette Tag- und Consent-Code liegt fertig in
 `frontend/public/js/consent-gtag.js` und ist auf `/wladbot`,
 `/wladbot/danke`, `/app` und `/os` eingebunden. Zum Aktivieren:

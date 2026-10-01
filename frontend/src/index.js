@@ -6,6 +6,8 @@ import App from "@/App";
 import { bootstrapConsent, readConsent } from "@/lib/consent";
 import { maybeInitMetaPixel } from "@/lib/metaPixel";
 import { maybeInitLinkedIn } from "@/lib/linkedinInsight";
+import { maybeInitGoogleAds } from "@/lib/googleAds";
+import { maybeInitBingUet } from "@/lib/bingUet";
 import { redirectAppRoutesToAppTier } from "@/lib/tierRedirect";
 
 // Leader-Check → LeaderOS handoff · runs SYNCHRONOUSLY before anything else.
@@ -132,6 +134,8 @@ if (analyticsConsented) {
 // prüfen den Consent selbst, daher hier ohne Guard.
 maybeInitMetaPixel();
 maybeInitLinkedIn();
+maybeInitGoogleAds();   // Consent Mode v2: lädt mit „denied", bis Marketing zugestimmt wird
+maybeInitBingUet();
 
 if (typeof window !== "undefined") {
   window.addEventListener("lo:consent", (e) => {
@@ -140,7 +144,8 @@ if (typeof window !== "undefined") {
       maybeInitPostHog();
       maybeInitClarity();
     }
-    if (c.marketing) { maybeInitMetaPixel(); maybeInitLinkedIn(); }
+    if (c.marketing) { maybeInitMetaPixel(); maybeInitLinkedIn(); maybeInitBingUet(); }
+    maybeInitGoogleAds();   // auch bei Rücknahme: consent update = denied
   });
 }
 

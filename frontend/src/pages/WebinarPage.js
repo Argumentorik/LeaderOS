@@ -334,7 +334,9 @@ const ScarcityBar = () => {
     return () => { cancelled = true; };
   }, []);
 
-  if (!stats || !stats.max_capacity) return null;
+  // Erst ab 25 echten Anmeldungen zeigen: „0 bereits angemeldet" ist ehrlich,
+  // aber schadet der Anmeldung. Die Zahl selbst bleibt immer echt.
+  if (!stats || !stats.max_capacity || (stats.registered || 0) < 25) return null;
   const pct = Math.min(100, Math.round((stats.registered / stats.max_capacity) * 100));
 
   return (

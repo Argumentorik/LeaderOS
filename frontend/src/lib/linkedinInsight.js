@@ -2,10 +2,10 @@
  * LinkedIn Insight Tag · consent-gated, inert bis Partner-ID.
  *
  * ───────────────────────────────────────────────────────────────────
- * SCHARFSCHALTEN: LINKEDIN_PARTNER_ID (Campaign Manager → Analysieren →
- * Insight Tag, 6–8 Ziffern) und LINKEDIN_LEAD_CONVERSION_ID (Conversion
- * „Webinar-Lead" anlegen → ID) eintragen. Solange die Platzhalter stehen,
- * wird kein Skript geladen. Siehe docs/gtm/LINKEDIN_ADS_WEBINAR.md §4.
+ * SCHARFSCHALTEN: Vercel-Env REACT_APP_LINKEDIN_PARTNER_ID (Campaign
+ * Manager → Analysieren → Insight Tag) und REACT_APP_LINKEDIN_LEAD_CONVERSION_ID
+ * (Conversion „Webinar-Lead") setzen, neu deployen. Ohne Variablen wird
+ * kein Skript geladen. Siehe docs/ops/ADS_TRACKING_GO_LIVE.md.
  * ───────────────────────────────────────────────────────────────────
  *
  * Gleiche Regeln wie lib/metaPixel.js: lädt nur bei
@@ -14,11 +14,9 @@
  * die Lead-Conversion kommt nur aus dem Browser und nur mit Consent.
  */
 import { readConsent } from './consent';
+import { LINKEDIN_PARTNER_ID, LINKEDIN_LEAD_CONVERSION_ID, LINKEDIN_CONFIGURED as CONFIGURED } from './adConfig';
 
-export const LINKEDIN_PARTNER_ID = 'XXXXXXX';          // ← Partner-ID
-export const LINKEDIN_LEAD_CONVERSION_ID = 'XXXXXXX';  // ← Conversion-ID „Webinar-Lead"
-
-const CONFIGURED = /^\d{6,10}$/.test(LINKEDIN_PARTNER_ID);
+export { LINKEDIN_PARTNER_ID, LINKEDIN_LEAD_CONVERSION_ID };
 let loaded = false;
 
 export const isLinkedInActive = () => CONFIGURED && loaded;

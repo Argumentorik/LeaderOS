@@ -80,6 +80,8 @@ const SharedFolderPage = lazyWithRetry(() => import("./pages/SharedFolderPage"))
 import { WladMark } from "./components/brand/WladMark";
 import { FloatingWladBotDrawer } from "./components/shared/FloatingWladBotDrawer";
 import { CookieConsent } from "./components/legal/CookieConsent";
+import { trackGoogleAdsPageView } from "./lib/googleAds";
+import { trackBingPageView } from "./lib/bingUet";
 import { ReAuthModal } from "./components/auth/ReAuthModal";
 import { FakeWladCall } from "./components/calls/FakeWladCall";
 import { AppErrorBoundary } from "./components/AppErrorBoundary";
@@ -119,6 +121,15 @@ function AppRouter() {
   useEffect(() => {
     clearChunkReloadGuard();
   }, [location.pathname]);
+
+  // Ad-Tags: SPA-Routenwechsel als Pageview melden (Google Ads zählt die
+  // Conversion „webinar_signup" über den Pageview /webinar/danke). Beide
+  // Funktionen sind no-ops, solange die IDs nicht gesetzt sind.
+  useEffect(() => {
+    const path = location.pathname + location.search;
+    trackGoogleAdsPageView(path);
+    trackBingPageView(path);
+  }, [location.pathname, location.search]);
 
   // Cross-tier guard · belt-and-suspenders for in-SPA navigation.
   // The synchronous pass in index.js handles initial page loads (typed URL,

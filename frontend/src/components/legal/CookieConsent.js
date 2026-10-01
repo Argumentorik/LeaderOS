@@ -10,7 +10,8 @@
  *     Art. 6(1)(f) · no PII, no replay, no PostHog, no ad pixels)
  *   - Customize    → granular toggles
  *
- * `marketing` (added 2026-09) gates the Meta Pixel (lib/metaPixel.js). It
+ * `marketing` (added 2026-09) gates the ad tags: Meta Pixel, LinkedIn Insight,
+ * Google Ads (Consent Mode v2) and Microsoft UET (lib/adConfig.js). It
  * is listed even while the pixel ID is still a placeholder, so consent
  * collected today already covers the pixel once it goes live.
  */
@@ -75,7 +76,7 @@ export const CookieConsent = () => {
                 { k: 'essential', t_de: 'Technisch notwendig', t_en: 'Strictly necessary', desc_de: 'Login, Session · kann nicht deaktiviert werden', desc_en: 'Login, session · cannot be disabled', locked: true },
                 { k: 'analytics', t_de: 'Analyse (PostHog)', t_en: 'Analytics (PostHog)', desc_de: 'Anonyme Nutzungs-Statistiken', desc_en: 'Anonymous usage stats' },
                 { k: 'replays', t_de: 'Session-Replay (Sentry)', t_en: 'Session replay (Sentry)', desc_de: 'Für gezielte Fehler-Reproduktion', desc_en: 'For targeted bug repro' },
-                { k: 'marketing', t_de: 'Marketing (Meta-Pixel)', t_en: 'Marketing (Meta Pixel)', desc_de: 'Misst, welche Anzeige dich hergebracht hat', desc_en: 'Measures which ad brought you here' },
+                { k: 'marketing', t_de: 'Marketing (Meta, Google Ads, LinkedIn, Microsoft)', t_en: 'Marketing (Meta, Google Ads, LinkedIn, Microsoft)', desc_de: 'Misst, welche Anzeige dich hergebracht hat', desc_en: 'Measures which ad brought you here' },
               ].map(({ k, t_de, t_en, desc_de, desc_en, locked }) => (
                 <label key={k} className="flex items-start gap-3 cursor-pointer">
                   <input

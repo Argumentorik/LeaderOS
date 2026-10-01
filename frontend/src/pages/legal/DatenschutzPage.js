@@ -129,7 +129,29 @@ export default function DatenschutzPage() {
           Cookie-Einstellungen widerrufen.
         </p>
 
-        <h3>5.3 Fehler-Monitoring (Sentry)</h3>
+        <h3>5.3 Marketing-Messung (Meta, Google Ads, LinkedIn, Microsoft)</h3>
+        <p>
+          Nur wenn Sie im Cookie-Hinweis der Kategorie „Marketing" zustimmen,
+          setzen wir Werkzeuge ein, die messen, ob eine Anzeige zu einer
+          Anmeldung geführt hat, und die Besucher unserer Seite auf der jeweiligen
+          Plattform erneut ansprechen können: das Meta-Pixel (Meta Platforms
+          Ireland Ltd.), das Google-Ads-Conversion-Tracking (Google Ireland
+          Ltd., Consent Mode v2, Standard: Ablehnung), das LinkedIn Insight Tag
+          (LinkedIn Ireland Unlimited Company) und das Microsoft Advertising
+          UET-Tag (Microsoft Ireland Operations Ltd.). Ohne Ihre Zustimmung
+          werden diese Skripte nicht geladen bzw. es werden keine Cookies gesetzt
+          und keine personenbezogenen Kennungen übertragen. Beim Meta-Pixel
+          übermitteln wir Anmeldungen zusätzlich serverseitig an Meta; die
+          E-Mail-Adresse wird dabei ausschließlich gehasht übertragen.
+        </p>
+        <p>
+          Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO,
+          § 25 Abs. 1 TDDDG), jederzeit widerrufbar über die Cookie-Einstellungen.
+          Die Anbieter verarbeiten Daten auch in den USA; Grundlage ist das EU-US
+          Data Privacy Framework.
+        </p>
+
+        <h3>5.4 Fehler-Monitoring (Sentry)</h3>
         <p>
           Wir verwenden Sentry zur Erkennung und Behebung technischer Fehler.
           Erfasst werden: Stack-Traces, Browser-Daten, fehlerhafte URLs.

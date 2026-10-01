@@ -2,10 +2,10 @@
  * Meta-Pixel (Facebook / Instagram Ads) · consent-gated, inert bis Pixel-ID.
  *
  * ───────────────────────────────────────────────────────────────────
- * SCHARFSCHALTEN: META_PIXEL_ID unten auf die echte Pixel-ID setzen
- * (15–16 Ziffern, Events Manager → Datenquellen → Pixel). Solange der
- * Platzhalter steht, wird KEIN Skript geladen und kein Event gesendet.
- * Siehe docs/gtm/META_ADS_WEBINAR.md §4.
+ * SCHARFSCHALTEN: Vercel-Env REACT_APP_META_PIXEL_ID setzen (15–16 Ziffern,
+ * Events Manager → Datenquellen → Pixel) und neu deployen. Ohne Variable
+ * wird KEIN Skript geladen und kein Event gesendet.
+ * Siehe docs/ops/ADS_TRACKING_GO_LIVE.md.
  * ───────────────────────────────────────────────────────────────────
  *
  * Regeln:
@@ -20,9 +20,9 @@
  *     die Conversions API, nie über den Browser-Pixel.
  */
 import { readConsent } from './consent';
+import { META_PIXEL_ID, META_CONFIGURED as CONFIGURED } from './adConfig';
 
-export const META_PIXEL_ID = 'XXXXXXXXXXXXXXX';   // ← hier die echte ID eintragen
-const CONFIGURED = /^\d{15,16}$/.test(META_PIXEL_ID);
+export { META_PIXEL_ID };
 
 let loaded = false;
 
