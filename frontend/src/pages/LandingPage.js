@@ -27,6 +27,7 @@ import { PricingLadder } from '../components/landing/PricingLadder';
 import { OfferProofSection } from '../components/landing/OfferProofSection';
 import { LicenseKeySection } from '../components/landing/LicenseKeySection';
 import { AppointmentBookingSection } from '../components/landing/AppointmentBookingSection';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { BenefitSection } from '../components/landing/BenefitSection';
 import { AppPreviewSection } from '../components/landing/AppPreviewSection';
 import { FAQSection } from '../components/landing/FAQSection';
@@ -160,6 +161,8 @@ export default function LandingPage() {
         <ArchetypeQuizSection />
         <FreeToolsSection />
         <PlatformValueSection />
+        {/* Kurs-Bibliothek · wichtigster Verkaufspunkt im System (App-Katalog, 6 + 4 Kurse) */}
+        <CoursesLibrarySection placement="landing" />
         <ClassesRoadmapSection />
         <TrackFieldSection />
         <HowItWorksSection />

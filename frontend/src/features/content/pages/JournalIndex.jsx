@@ -11,6 +11,7 @@ import { WladBotThumbnail } from '../components/WladBotThumbnail';
 import { DottedGlowBackground } from '../../../components/shared/DottedGlowBackground';
 import { NEWS_BUCKETS, NEWS_ITEMS } from '../data/newsfeed';
 import { WebinarTicketAd } from '../../../components/landing/WebinarTicketAd';
+import { CoursesLibrarySection } from '../../../components/landing/CoursesLibrarySection';
 
 /**
  * JournalIndex · /journal · Newsroom-frontpage layout (godmode).
@@ -930,6 +931,8 @@ export default function JournalIndex() {
             </div>
           );
         })}
+
+        <CoursesLibrarySection placement="journal-index" />
 
         {filtered.length === 0 && (
           <section className="max-w-[1480px] mx-auto px-6 md:px-12 py-20">

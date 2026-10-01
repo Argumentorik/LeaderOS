@@ -15,6 +15,7 @@ import {
 import { WladMark } from '../components/brand/WladMark';
 import { BookShelf } from '../components/brand/BookShelf';
 import { LogoWall } from '../components/brand/LogoWall';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
@@ -1037,6 +1038,8 @@ export default function WebinarPage() {
         <StatementBand eyebrow="▸ Warum jetzt">
           Wer täglich trainiert, überholt jeden, der einmal im Jahr ins Seminar geht<span className="text-[#BFFF00] not-italic">.</span>
         </StatementBand>
+
+        <CoursesLibrarySection placement="webinar" />
 
         {/* ── DETAILS · agenda, scroll-activated ───────────────────────── */}
         <section className="bg-white">

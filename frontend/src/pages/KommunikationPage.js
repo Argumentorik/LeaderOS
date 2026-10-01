@@ -6,6 +6,7 @@ import {
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
 import { ThreeStepPath } from '../components/brand/ThreeStepPath';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 
@@ -911,6 +912,7 @@ export default function KommunikationPage() {
       <Ansaetze />
       <KommunikationsCheck />
       <AppShowcase />
+      <CoursesLibrarySection placement="kommunikation" />
       <ThreeStepPath tone="light" checkUrl={CHECK_URL} trialUrl={TRIAL_URL} onTrack={(e, p) => track(`kommunikation_${e}`, p)} />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
         <a href="/impressum" className="hover:underline inline-block py-3 -my-3">Impressum</a> · <a href="/datenschutz" className="hover:underline inline-block py-3 -my-3">Datenschutz</a>

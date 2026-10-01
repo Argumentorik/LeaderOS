@@ -7,6 +7,7 @@ import { BlocksRenderer } from '../components/BlockRenderer';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { RelatedArticles } from '../components/RelatedArticles';
 import { NewsletterDrop } from '../components/NewsletterDrop';
+import { ArticleCourseCta } from '../components/ArticleCourseCta';
 import { ShareBar } from '../components/ShareBar';
 import { ArticleLeftRail, extractHeadings } from '../components/ArticleLeftRail';
 import { ArticleRightRail, ArticleMobileMiniApps } from '../components/ArticleRightRail';
@@ -191,6 +192,8 @@ export default function ArticlePage() {
                 articleTitle={article.title}
               />
             </article>
+
+            <ArticleCourseCta article={article} placement="article-end" />
 
             <WebinarTicketAd placement="article-body" className="mt-14 md:mt-16" />
 
