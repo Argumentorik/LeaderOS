@@ -1,0 +1,744 @@
+{
+ "singles": [
+  {
+   "file": "leaderos-creative-01.png",
+   "k": "Paradigmenwechsel 01",
+   "h": "Führung wird nicht gelernt. Sie wird trainiert.",
+   "s": "Niemand wird fit, weil er ein Buch über Fitness gelesen hat. Bei Führung tun wir genau das. Seit 20 Jahren.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-02.png",
+   "k": "Paradigmenwechsel 02",
+   "h": "~~Wissen~~ → Reps.",
+   "s": "Jede Führungskraft weiß, dass man Feedback geben sollte. Fast keine tut es gut. Der Unterschied ist nicht Wissen. Es sind Wiederholungen.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "training-b",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-03.png",
+   "k": "Paradigmenwechsel 03",
+   "h": "Ein Seminar im Jahr. 365 Gespräche.",
+   "s": "Das ist das Verhältnis, mit dem die meisten Führungskräfte arbeiten. Und dann wundern sie sich, dass nichts hängen bleibt.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-04.png",
+   "k": "Paradigmenwechsel 04",
+   "h": "Du brauchst keinen neuen Kurs. Du brauchst ein Training.",
+   "s": "Kurs: einmal durchschauen, abhaken, vergessen. Training: jeden Tag 15 Minuten, bis das Verhalten sitzt. LeaderOS ist das Zweite.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "ph": "sprint",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-05.png",
+   "k": "Paradigmenwechsel 05",
+   "h": "Das alte Modell.",
+   "s": "",
+   "list": [
+    "Seminar buchen",
+    "Zwei Tage Notizen",
+    "Montag: alles wie vorher",
+    "In 12 Monaten wieder"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "training",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-06.png",
+   "k": "Paradigmenwechsel 06",
+   "h": "Das neue Modell.",
+   "s": "",
+   "list": [
+    "Jeden Tag ein Drill, 15 Minuten",
+    "Das echte Gespräch vorher üben",
+    "KI-Coach, der Wlads Methodik kennt",
+    "Nach 30 Tagen: neues Verhalten"
+   ],
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "ph": null,
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-07.png",
+   "k": "Realität 01",
+   "h": "Welches Gespräch schiebst du gerade auf?",
+   "s": "Das Feedback. Die Gehaltsfrage. Der Konflikt, den alle sehen. Aufschieben kostet jede Woche mehr als das Gespräch selbst.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "conflict",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-08.png",
+   "k": "Realität 02",
+   "h": "Dein letztes Führungs&shy;seminar. Was ist davon übrig?",
+   "s": "Ehrlich. Nicht die Erinnerung an den Kaffee. Welches Verhalten hat sich geändert?",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-09.png",
+   "k": "Realität 03",
+   "h": "80 % hören auf Stufe 2 zu.",
+   "s": "Stufe 2 heißt: auf die eigene Antwort warten. Die Pyramide des Zuhörens hat zehn Stufen. Die meisten Führungskräfte kennen nicht einmal die dritte.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "listening",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-10.png",
+   "k": "Realität 04",
+   "h": "Du hast recht. Und überzeugst trotzdem niemanden.",
+   "s": "Logos ist die Logik. Ethos die Glaubwürdigkeit. Pathos die Emotion. Wer nur Logos bringt, gewinnt die Diskussion und verliert den Raum.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-11.png",
+   "k": "Realität 05",
+   "h": "„Meine Tür steht immer offen.“",
+   "s": "Heißt übersetzt: Ich warte, bis ihr kommt. Niemand kommt. Führung, die wartet, ist keine Führung.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "solitude",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-12.png",
+   "k": "Realität 06",
+   "h": "Niemand sagt dir, wenn du schlecht führst.",
+   "s": "Deine Mitarbeiter nicht. Dein Chef nicht. Dein Kalender schon: Er zeigt, welche Gespräche du seit Wochen verschiebst.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-13.png",
+   "k": "Framework · Feedbackformel",
+   "h": "Drei Sätze. Jedes schwierige Gespräch.",
+   "s": "",
+   "list": [
+    "Beobachtung: „Ich habe beobachtet, dass …“",
+    "Wirkung: „Dadurch …“",
+    "Wunsch: „Ich wünsche mir …“"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "feedback",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-14.png",
+   "k": "Framework · SEXIER",
+   "h": "Dein Argument hat fünf Schritte. Es braucht sechs.",
+   "s": "Statement, Explanation, eXample, Impact, Explanation of Impact. Und das R: Rebuttal. Die Gegenargumente widerlegen, bevor jemand sie ausspricht.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-15.png",
+   "k": "Framework · 5 Rollen",
+   "h": "Du antwortest in der falschen Rolle.",
+   "s": "Kommunikator, Manager, Team-Leader, Psychologe, Problemlöser. Die meisten Führungsprobleme entstehen, weil jemand als Problemlöser auf eine Psychologen-Frage antwortet.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "team",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-16.png",
+   "k": "Framework · 4 Farben",
+   "h": "Ein Argument. Ein Viertel des Raums.",
+   "s": "Rot will das Ergebnis. Gelb die Beziehung. Grün die Sicherheit. Blau die Daten. Wer immer gleich argumentiert, erreicht immer dieselben.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-17.png",
+   "k": "Framework · Dunkle Rhetorik",
+   "h": "Strohmann. Ad hominem. Whataboutism.",
+   "s": "Du erlebst sie jede Woche im Meeting. Die Frage ist nur, ob du sie erkennst, bevor sie wirken. Die Antwort ist immer dieselbe: hart in der Sache, weich zur Person.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "negotiation",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-18.png",
+   "k": "Framework · Charisma-Code",
+   "h": "Präsenz. Wärme. Kompetenz.",
+   "s": "Drei Signale, die in Sekunden entscheiden, ob ein Raum dir folgt. Jedes davon ist trainierbar. Keines davon ist Talent.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-19.png",
+   "k": "LeaderOS 01",
+   "h": "Ein Coach, der Wlads Bücher kennt. 24/7.",
+   "s": "WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "ph": "boardroom-b",
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-20.png",
+   "k": "LeaderOS 02",
+   "h": "Üb das Gespräch, bevor es zählt.",
+   "s": "Simulation: Du führst das Kündigungsgespräch, das Feedback, die Verhandlung. Mit einem Gegenüber, das zurückredet. Dann erst im echten Raum.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "ph": "time",
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-21.png",
+   "k": "LeaderOS 03",
+   "h": "15 Minuten am Tag.",
+   "s": "Mehr braucht ein Drill nicht. Weniger bringt ein Seminar. Dreißig Tage davon verschieben Verhalten von „weiß ich“ zu „mache ich“.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "ph": null,
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-22.png",
+   "k": "LeaderOS 04",
+   "h": "6 Grundlagen-Kurse. 4 Master-Programme.",
+   "s": "",
+   "list": [
+    "Rhetorik-Grundlagen",
+    "Schwierige Gespräche meistern",
+    "Delegation wie ein Profi",
+    "Feedback-Formate",
+    "Storytelling im Boardroom",
+    "Meeting-Rhetorik"
+   ],
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "ph": "app",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-23.png",
+   "k": "LeaderOS 05",
+   "h": "Nicht noch ein Tool. Ein System.",
+   "s": "Kurse, KI-Coach, Simulationen, tägliche Drills. Nicht nebeneinander, sondern ineinander. Deshalb heißt es Operating System.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "ph": "solitude",
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-24.png",
+   "k": "LeaderOS 06",
+   "h": "14 Tage. Keine Karte. Kein Risiko.",
+   "s": "Teste das System mit deinem echten nächsten Gespräch. Wenn es nichts verändert, hast du 14 Tage verloren. Wenn doch, ein Jahr gewonnen.",
+   "list": null,
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "ph": null,
+   "avatar": true
+  },
+  {
+   "file": "leaderos-creative-25.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Live mit Wlad.",
+   "s": "Do, 29. Oktober, 10:00 bis 11:30 Uhr. Kostenlos. Keine Aufzeichnung, denn Live-Case und Q&A funktionieren nur live.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-26.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Was in 90 Minuten passiert.",
+   "s": "",
+   "list": [
+    "Der Charisma-Code, live demonstriert",
+    "Das Leadership Operating System",
+    "Ein echter Live-Case aus der Community",
+    "Q&A: deine Fragen, direkt beantwortet"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "stage",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-27.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Keine Auf&shy;zeichnung.",
+   "s": "Bewusst. Wer live dabei ist, bringt seinen Fall mit und bekommt seine Antwort. Eine Aufzeichnung kann beides nicht.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-28.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "3× SPIEGEL-Bestseller. Seit 2007 im Coaching. 400.000+ Klienten.",
+   "s": "Zum ersten Mal zeigt Wlad Jachtchenko seine komplette Methodik als tägliches Trainingssystem. Live, kostenlos.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "presence",
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-29.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Bring dein Gespräch mit.",
+   "s": "Das Feedback, die Verhandlung, der Konflikt. Im Q&A werden echte Fälle besprochen. Deiner kann dabei sein.",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "ph": null,
+   "avatar": false
+  },
+  {
+   "file": "leaderos-creative-30.png",
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Entweder du trainierst Führung. Oder du hoffst.",
+   "s": "Do, 29.10., 10 Uhr. 90 Minuten, die den Unterschied zwischen beidem zeigen. Kostenloser Platz: leader-os.de/webinar",
+   "list": null,
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "boardroom-b",
+   "avatar": false
+  }
+ ],
+ "carousels": [
+  {
+   "id": "C1",
+   "name": "Was WladBot wirklich kann",
+   "slides": [
+    {
+     "file": "C1-01.png",
+     "t": "cover",
+     "k": "Carousel 01 · WladBot",
+     "h": "Ein Coach, der Wlads Bücher kennt.",
+     "s": "Acht Dinge, die WladBot im LeaderOS für dich tut. Wischen →",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-02.png",
+     "t": "chat",
+     "k": "01 · Fragen, bevor es zählt",
+     "h": "Frag ihn vor dem Gespräch.",
+     "s": "",
+     "chat": [
+      "Du: Mein Mitarbeiter liefert zum dritten Mal zu spät. Wie spreche ich das an, ohne dass es eskaliert?",
+      "WladBot: Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?"
+     ],
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-03.png",
+     "t": "cap",
+     "k": "02 · Text und Stimme",
+     "h": "Sprich mit ihm.",
+     "s": "",
+     "chat": null,
+     "cap": [
+      "Voice: Im Auto, vor dem Meeting, auf dem Flur. Du sprichst, er antwortet. Mit Wlads Frameworks, nicht mit Allgemeinplätzen.",
+      "Kontext: Er kennt deine Challenge-Historie. Die Antwort passt zu deinem Fall, nicht zu irgendeinem."
+     ],
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-04.png",
+     "t": "cap",
+     "k": "03 · Simulation",
+     "h": "Üb das Gespräch mit einem Gegenüber, das zurückredet.",
+     "s": "",
+     "chat": null,
+     "cap": [
+      "Simulation: Kündigungsgespräch, Gehaltsverhandlung, Feedback: Du führst es, bevor es zählt. Das Gegenüber reagiert, weicht aus, widerspricht."
+     ],
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-05.png",
+     "t": "cap",
+     "k": "04 · Auswertung",
+     "h": "Danach: Was saß, was fehlte.",
+     "s": "",
+     "chat": null,
+     "cap": [
+      "Score: Nach jeder Simulation eine Auswertung: Struktur, Klarheit, Wirkung. Und der nächste Drill dazu.",
+      "Drills: 15 Minuten am Tag, 30 Tage lang. An deinen echten Fällen, nicht an Fallstudien."
+     ],
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-06.png",
+     "t": "cap",
+     "k": "05 · Bibliothek",
+     "h": "6 Grundlagen-Kurse. 4 Master-Programme.",
+     "s": "",
+     "chat": null,
+     "cap": [
+      "Kurse: Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik. Dazu KI-First Leadership, Change, Executive Presence, Boardroom-Strategie.",
+      "Playbooks: Skripte für die Gespräche, die jede Führungskraft führen muss."
+     ],
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-07.png",
+     "t": "cap",
+     "k": "06 · Video-Analyse",
+     "h": "Nimm dich auf. Bekomm Feedback.",
+     "s": "",
+     "chat": null,
+     "cap": [
+      "Video-Analyse: Eine Minute Pitch oder Townhall-Opening aufnehmen. Du bekommst Feedback zu Struktur, Wirkung und Wortwahl, ohne dass ein Kollege zuschauen muss."
+     ],
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-08.png",
+     "t": "text",
+     "k": "07 · Das Prinzip",
+     "h": "Nicht noch ein Tool. Ein System.",
+     "s": "Kurse, KI-Coach, Simulationen, Drills und Auswertung greifen ineinander. Deshalb heißt es Operating System, nicht App.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C1-09.png",
+     "t": "cta",
+     "k": "08 · Start",
+     "h": "14 Tage. Keine Karte.",
+     "s": "Teste WladBot mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 29.10., kostenlos.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": "14 Tage kostenlos",
+     "avatar": true
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "name": "Das Gespräch, das du aufschiebst",
+   "slides": [
+    {
+     "file": "C2-01.png",
+     "t": "cover",
+     "k": "Carousel 02 · Das Gespräch",
+     "h": "Das Gespräch, das du seit drei Wochen aufschiebst.",
+     "s": "Du weißt genau, welches. Wischen →",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C2-02.png",
+     "t": "text",
+     "k": "01",
+     "h": "Du weißt, was du sagen müsstest.",
+     "s": "Das Problem war nie Wissen. Du hast das Buch gelesen. Du warst im Seminar. Du kennst die Formel.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C2-03.png",
+     "t": "text",
+     "k": "02",
+     "h": "Warum du es trotzdem nicht tust:",
+     "s": "Du hast es nie geübt. Kein Mensch macht etwas zum ersten Mal gut, wenn es zählt. Deshalb schiebst du.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C2-04.png",
+     "t": "three",
+     "k": "03 · Die Formel",
+     "h": "Drei Sätze.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": [
+      "Beobachtung: „Ich habe beobachtet, dass …“",
+      "Wirkung: „Dadurch …“",
+      "Wunsch: „Ich wünsche mir …“"
+     ],
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C2-05.png",
+     "t": "chat",
+     "k": "04 · Der Unterschied",
+     "h": "Sag es zuerst zu jemandem, der zurückredet.",
+     "s": "",
+     "chat": [
+      "Du: Ich habe beobachtet, dass der Bericht zum dritten Mal erst Freitagabend kam.",
+      "Gegenüber (Simulation): Ich hatte diese Woche drei andere Prioritäten von dir. Welche soll ich dafür fallen lassen?",
+      "WladBot: Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal."
+     ],
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C2-06.png",
+     "t": "text",
+     "k": "05 · Reps",
+     "h": "Fünf Durchläufe. Dann der echte Raum.",
+     "s": "Beim fünften Mal stolperst du nicht mehr über den ersten Satz. Das Gespräch dauert 90 Sekunden. Es war nie das Gespräch. Es war der erste Satz.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C2-07.png",
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Führung wird nicht gelernt. Sie wird trainiert.",
+     "s": "Jede Führungskraft weiß, was sie tun sollte. Die wenigsten haben es je geübt.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": true
+    },
+    {
+     "file": "C2-08.png",
+     "t": "cta",
+     "k": "07 · Start",
+     "h": "Üb es heute. Führ es morgen.",
+     "s": "14 Tage kostenlos, ohne Karte. Oder live am 29.10.: Wlad zeigt die Feedbackformel an einem echten Fall.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": "14 Tage kostenlos",
+     "avatar": true
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "name": "Seminar vs. System",
+   "slides": [
+    {
+     "file": "C3-01.png",
+     "t": "cover",
+     "k": "Carousel 03 · Seminar vs. System",
+     "h": "Seminar vs. System.",
+     "s": "Sechs Unterschiede, die erklären, warum nach dem Seminar nichts bleibt. Wischen →",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-02.png",
+     "t": "vs",
+     "k": "01 · Zeit",
+     "h": "Zeit.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": [
+      "Seminar · 2 Tage im Jahr: Dann 363 Tage ohne Training. Nichts, was du einmal im Jahr tust, wird zur Gewohnheit.",
+      "System · 15 Minuten am Tag: Jeden Werktag ein Drill. Nach 30 Tagen ist der neue Reflex da, nicht nur die Erinnerung."
+     ],
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-03.png",
+     "t": "vs",
+     "k": "02 · Inhalt",
+     "h": "Inhalt.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": [
+      "Seminar · Folien und Fallstudien: Beispiele von anderen. Interessant, aber nicht dein Montag.",
+      "System · Dein echter Fall: Dein Mitarbeiter, dein Konflikt, deine Verhandlung. Du bringst den Fall mit, das System den Drill."
+     ],
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-04.png",
+     "t": "vs",
+     "k": "03 · Übung",
+     "h": "Übung.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": [
+      "Seminar · Rollenspiel mit Kollegen: Einmal, vor Publikum, mit jemandem, der nett sein will.",
+      "System · Simulation mit Gegenüber: So oft du willst, mit einem Gegenüber, das widerspricht und ausweicht. Mit Auswertung danach."
+     ],
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-05.png",
+     "t": "vs",
+     "k": "04 · Danach",
+     "h": "Danach.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": [
+      "Seminar · Ein Ordner im Regal: Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch.",
+      "System · Ein Coach in der Tasche: WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
+     ],
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-06.png",
+     "t": "vs",
+     "k": "05 · Ergebnis",
+     "h": "Ergebnis.",
+     "s": "",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": [
+      "Seminar · Wissen: Du weißt mehr. Dein Team merkt nichts.",
+      "System · Verhalten: Du führst anders. Dein Team merkt es in der ersten Woche."
+     ],
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-07.png",
+     "t": "text",
+     "k": "06 · Live sehen",
+     "h": "Sieh das System live.",
+     "s": "Do, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A, keine Aufzeichnung.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": null,
+     "avatar": false
+    },
+    {
+     "file": "C3-08.png",
+     "t": "cta",
+     "k": "07 · Start",
+     "h": "Entweder du trainierst. Oder du hoffst.",
+     "s": "Platz im Webinar sichern oder direkt 14 Tage kostenlos testen. Beides ohne Karte.",
+     "chat": null,
+     "cap": null,
+     "three": null,
+     "vs": null,
+     "cta": "Kostenloser Platz · 29.10.",
+     "avatar": true
+    }
+   ]
+  }
+ ]
+}
