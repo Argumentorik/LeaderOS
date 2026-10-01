@@ -19,6 +19,9 @@ ADMIN_SEED_EMAILS = {
     "stefan@argumentorik.com",
     "stefan.bachmann123@gmail.com",
     "wj@argumentorik.com",
+    "ek@argumentorik.com",
+    "anja@argumentorik.com",
+    "carolin@argumentorik.com"
 }
 
 
