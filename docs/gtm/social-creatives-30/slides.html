@@ -1,0 +1,100 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Anton';src:url('anton.woff2') format('woff2')}/* anton.woff2: npm pack @fontsource/anton → files/anton-latin-400-normal.woff2; wlad-portrait.jpg aus frontend/public/wlad */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#222;font-family:'Liberation Sans',Arial,Helvetica,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:#0A0A0A;padding:84px 84px 96px;display:flex;flex-direction:column;justify-content:space-between}
+.mono{font-family:'DejaVu Sans Mono','Liberation Mono',monospace;text-transform:uppercase;letter-spacing:.22em;font-size:19px;font-weight:700}
+.d{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;line-height:.92;letter-spacing:.004em;font-weight:400}
+.lime{color:#BFFF00}
+.top{display:flex;justify-content:space-between;position:relative;z-index:3}
+.mid{position:relative;z-index:3}
+.h{font-size:138px}
+.h.s{font-size:112px}
+.h.xs{font-size:92px}
+.sub{margin-top:36px;font-size:36px;line-height:1.32;max-width:880px;color:rgba(255,255,255,.84)}
+.bot{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:3}
+.cta{display:inline-flex;align-items:center;gap:14px;background:#BFFF00;color:#0A0A0A;border-radius:999px;padding:24px 40px;font-weight:700;font-size:28px}
+.aura{position:absolute;inset:0;background:radial-gradient(70% 45% at 85% 8%,rgba(191,255,0,.16),transparent 70%);z-index:1}
+/* lime */
+.slide.lime-bg{background:#BFFF00;color:#0A0A0A}
+.slide.lime-bg .sub{color:rgba(10,10,10,.78)}
+.slide.lime-bg .cta{background:#0A0A0A;color:#BFFF00}
+.slide.lime-bg .mono{color:#0A0A0A}
+.slide.lime-bg .lime{color:#0A0A0A}
+.slide.lime-bg .aura{display:none}
+/* photo */
+.slide.photo .ph{position:absolute;inset:0;background:url('wlad-portrait.jpg') 42% 30%/auto 1350px no-repeat;z-index:0}
+.slide.photo .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,.05) 32%,rgba(10,10,10,.55) 55%,rgba(10,10,10,.97) 82%);z-index:1}
+.slide.photo .mid{margin-top:auto;margin-bottom:40px}
+/* list */
+.list{margin-top:44px;border-top:2px solid rgba(255,255,255,.2)}
+.list div{display:flex;gap:28px;align-items:baseline;padding:22px 0;border-bottom:2px solid rgba(255,255,255,.2);font-size:34px;line-height:1.25}
+.list div b{font-family:'Anton',Impact,sans-serif;font-size:50px;color:#BFFF00;width:70px;flex:none;font-weight:400}
+.slide.lime-bg .list{border-color:rgba(10,10,10,.25)} .slide.lime-bg .list div{border-color:rgba(10,10,10,.25)} .slide.lime-bg .list div b{color:#0A0A0A}
+.strike{text-decoration:line-through;text-decoration-thickness:10px;text-decoration-color:#BFFF00;color:rgba(255,255,255,.55)}
+.slide.lime-bg .strike{text-decoration-color:#0A0A0A;color:rgba(10,10,10,.5)}
+.num{font-family:'Anton',Impact,sans-serif;font-size:420px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(191,255,0,.35);position:absolute;right:60px;top:120px;z-index:2}
+.slide.lime-bg .num{-webkit-text-stroke:2px rgba(10,10,10,.25)}
+.wlad{display:flex;align-items:center;gap:16px;font-size:22px;color:rgba(255,255,255,.7)}
+.wlad img{width:64px;height:64px;border-radius:999px;object-fit:cover;object-position:50% 18%;border:3px solid #BFFF00}
+.slide.lime-bg .wlad{color:rgba(10,10,10,.7)} .slide.lime-bg .wlad img{border-color:#0A0A0A}
+.slide[data-i="22"] .list div{padding:13px 0;font-size:30px}.slide[data-i="22"] .list div b{font-size:42px}.slide[data-i="22"] .h{font-size:84px}
+</style></head><body>
+<script>
+const CTA_WEB='Kostenloser Platz · 29.10.';
+const CTA_TRIAL='14 Tage kostenlos';
+const S=[
+// ── Paradigmenwechsel
+{k:'Paradigmenwechsel 01',h:'Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>',s:'Niemand wird fit, weil er ein Buch über Fitness gelesen hat. Bei Führung tun wir genau das. Seit 20 Jahren.',cta:CTA_WEB,v:'photo'},
+{k:'Paradigmenwechsel 02',h:'<span class=strike>Wissen</span><br>Reps<span class=lime>.</span>',s:'Jede Führungskraft weiß, dass man Feedback geben sollte. Fast keine tut es gut. Der Unterschied ist nicht Wissen. Es sind Wiederholungen.',cta:CTA_WEB,v:'dark',size:'h'},
+{k:'Paradigmenwechsel 03',h:'Ein Seminar im Jahr.<br>365 Gespräche<span class=lime>.</span>',s:'Das ist das Verhältnis, mit dem die meisten Führungskräfte arbeiten. Und dann wundern sie sich, dass nichts hängen bleibt.',cta:CTA_WEB,v:'lime',size:'s'},
+{k:'Paradigmenwechsel 04',h:'Du brauchst keinen neuen Kurs.<br><span class=lime>Du brauchst ein Training.</span>',s:'Kurs: einmal durchschauen, abhaken, vergessen. Training: jeden Tag 15 Minuten, bis das Verhalten sitzt. LeaderOS ist das Zweite.',cta:CTA_TRIAL,v:'dark',size:'xs'},
+{k:'Paradigmenwechsel 05',h:'Das alte Modell<span class=lime>.</span>',s:'',list:['Seminar buchen','Zwei Tage Notizen','Montag: alles wie vorher','In 12 Monaten wieder'],cta:CTA_WEB,v:'dark',size:'s'},
+{k:'Paradigmenwechsel 06',h:'Das neue Modell<span class=lime>.</span>',s:'',list:['Jeden Tag ein Drill, 15 Minuten','Das echte Gespräch vorher üben','KI-Coach, der Wlads Methodik kennt','Nach 30 Tagen: neues Verhalten'],cta:CTA_TRIAL,v:'lime',size:'s'},
+// ── Schmerz
+{k:'Realität 01',h:'Welches Gespräch schiebst du gerade auf<span class=lime>?</span>',s:'Das Feedback. Die Gehaltsfrage. Der Konflikt, den alle sehen. Aufschieben kostet jede Woche mehr als das Gespräch selbst.',cta:CTA_WEB,v:'dark',size:'xs'},
+{k:'Realität 02',h:'Dein letztes Führungs&shy;seminar<span class=lime>.</span><br>Was ist davon übrig?',s:'Ehrlich. Nicht die Erinnerung an den Kaffee. Welches Verhalten hat sich geändert?',cta:CTA_WEB,v:'photo',size:'xs'},
+{k:'Realität 03',h:'80 % hören auf Stufe 2 zu<span class=lime>.</span>',s:'Stufe 2 heißt: auf die eigene Antwort warten. Die Pyramide des Zuhörens hat zehn Stufen. Die meisten Führungskräfte kennen nicht einmal die dritte.',cta:CTA_WEB,v:'dark',size:'s',num:'2'},
+{k:'Realität 04',h:'Du hast recht.<br>Und überzeugst trotzdem niemanden<span class=lime>.</span>',s:'Logos ist die Logik. Ethos die Glaubwürdigkeit. Pathos die Emotion. Wer nur Logos bringt, gewinnt die Diskussion und verliert den Raum.',cta:CTA_WEB,v:'lime',size:'xs'},
+{k:'Realität 05',h:'„Meine Tür steht immer offen.“',s:'Heißt übersetzt: Ich warte, bis ihr kommt. Niemand kommt. Führung, die wartet, ist keine Führung.',cta:CTA_WEB,v:'dark',size:'s'},
+{k:'Realität 06',h:'Niemand sagt dir, wenn du schlecht führst<span class=lime>.</span>',s:'Deine Mitarbeiter nicht. Dein Chef nicht. Dein Kalender schon: Er zeigt, welche Gespräche du seit Wochen verschiebst.',cta:CTA_WEB,v:'photo',size:'xs'},
+// ── Frameworks
+{k:'Framework · Feedbackformel',h:'Drei Sätze.<br>Jedes schwierige Gespräch<span class=lime>.</span>',s:'',list:['Beobachtung: „Ich habe beobachtet, dass …“','Wirkung: „Dadurch …“','Wunsch: „Ich wünsche mir …“'],cta:CTA_WEB,v:'dark',size:'s'},
+{k:'Framework · SEXIER',h:'Dein Argument hat fünf Schritte.<br><span class=lime>Es braucht sechs.</span>',s:'Statement, Explanation, eXample, Impact, Explanation of Impact. Und das R: Rebuttal. Die Gegenargumente widerlegen, bevor jemand sie ausspricht.',cta:CTA_WEB,v:'lime',size:'xs'},
+{k:'Framework · 5 Rollen',h:'Du antwortest in der falschen Rolle<span class=lime>.</span>',s:'Kommunikator, Manager, Team-Leader, Psychologe, Problemlöser. Die meisten Führungsprobleme entstehen, weil jemand als Problemlöser auf eine Psychologen-Frage antwortet.',cta:CTA_WEB,v:'dark',size:'s'},
+{k:'Framework · 4 Farben',h:'Ein Argument.<br>Ein Viertel des Raums<span class=lime>.</span>',s:'Rot will das Ergebnis. Gelb die Beziehung. Grün die Sicherheit. Blau die Daten. Wer immer gleich argumentiert, erreicht immer dieselben.',cta:CTA_WEB,v:'photo',size:'xs'},
+{k:'Framework · Dunkle Rhetorik',h:'Strohmann. Ad hominem. Whataboutism<span class=lime>.</span>',s:'Du erlebst sie jede Woche im Meeting. Die Frage ist nur, ob du sie erkennst, bevor sie wirken. Die Antwort ist immer dieselbe: hart in der Sache, weich zur Person.',cta:CTA_WEB,v:'dark',size:'xs'},
+{k:'Framework · Charisma-Code',h:'Präsenz. Wärme. Kompetenz<span class=lime>.</span>',s:'Drei Signale, die in Sekunden entscheiden, ob ein Raum dir folgt. Jedes davon ist trainierbar. Keines davon ist Talent.',cta:CTA_WEB,v:'lime',size:'s'},
+// ── Das Neue
+{k:'LeaderOS 01',h:'Ein Coach, der Wlads Bücher kennt.<br><span class=lime>24/7.</span>',s:'WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.',cta:CTA_TRIAL,v:'dark',size:'xs'},
+{k:'LeaderOS 02',h:'Üb das Gespräch,<br>bevor es zählt<span class=lime>.</span>',s:'Simulation: Du führst das Kündigungsgespräch, das Feedback, die Verhandlung. Mit einem Gegenüber, das zurückredet. Dann erst im echten Raum.',cta:CTA_TRIAL,v:'photo',size:'s'},
+{k:'LeaderOS 03',h:'15 Minuten am Tag<span class=lime>.</span>',s:'Mehr braucht ein Drill nicht. Weniger bringt ein Seminar. Dreißig Tage davon verschieben Verhalten von „weiß ich“ zu „mache ich“.',cta:CTA_TRIAL,v:'lime',size:'h'},
+{k:'LeaderOS 04',h:'6 Grundlagen-Kurse.<br>4 Master-Programme<span class=lime>.</span>',s:'',list:['Rhetorik-Grundlagen','Schwierige Gespräche meistern','Delegation wie ein Profi','Feedback-Formate','Storytelling im Boardroom','Meeting-Rhetorik'],cta:CTA_TRIAL,v:'dark',size:'xs'},
+{k:'LeaderOS 05',h:'Nicht noch ein Tool.<br><span class=lime>Ein System.</span>',s:'Kurse, KI-Coach, Simulationen, tägliche Drills. Nicht nebeneinander, sondern ineinander. Deshalb heißt es Operating System.',cta:CTA_TRIAL,v:'dark',size:'s'},
+{k:'LeaderOS 06',h:'14 Tage.<br>Keine Karte.<br>Kein Risiko<span class=lime>.</span>',s:'Teste das System mit deinem echten nächsten Gespräch. Wenn es nichts verändert, hast du 14 Tage verloren. Wenn doch, ein Jahr gewonnen.',cta:CTA_TRIAL,v:'lime',size:'s'},
+// ── Webinar
+{k:'Live-Webinar · 29. Oktober',h:'Live mit Wlad<span class=lime>.</span>',s:'Do, 29. Oktober, 10:00 bis 11:30 Uhr. Kostenlos. Keine Aufzeichnung, denn Live-Case und Q&A funktionieren nur live.',cta:CTA_WEB,v:'photo',size:'h'},
+{k:'Live-Webinar · 29. Oktober',h:'Was in 90 Minuten passiert<span class=lime>.</span>',s:'',list:['Der Charisma-Code, live demonstriert','Das Leadership Operating System','Ein echter Live-Case aus der Community','Q&A: deine Fragen, direkt beantwortet'],cta:CTA_WEB,v:'dark',size:'s'},
+{k:'Live-Webinar · 29. Oktober',h:'Keine Auf&shy;zeichnung<span class=lime>.</span>',s:'Bewusst. Wer live dabei ist, bringt seinen Fall mit und bekommt seine Antwort. Eine Aufzeichnung kann beides nicht.',cta:CTA_WEB,v:'lime',size:'h'},
+{k:'Live-Webinar · 29. Oktober',h:'3× SPIEGEL-Bestseller.<br>Seit 2007 im Coaching.<br>400.000+ Klienten<span class=lime>.</span>',s:'Zum ersten Mal zeigt Wlad Jachtchenko seine komplette Methodik als tägliches Trainingssystem. Live, kostenlos.',cta:CTA_WEB,v:'dark',size:'xs'},
+{k:'Live-Webinar · 29. Oktober',h:'Bring dein Gespräch mit<span class=lime>.</span>',s:'Das Feedback, die Verhandlung, der Konflikt. Im Q&A werden echte Fälle besprochen. Deiner kann dabei sein.',cta:CTA_WEB,v:'photo',size:'s'},
+{k:'Live-Webinar · 29. Oktober',h:'Entweder du trainierst Führung.<br><span class=lime>Oder du hoffst.</span>',s:'Do, 29.10., 10 Uhr. 90 Minuten, die den Unterschied zwischen beidem zeigen. Kostenloser Platz: leader-os.de/webinar',cta:CTA_WEB,v:'dark',size:'xs'},
+];
+document.body.innerHTML=S.map((x,i)=>`<section class="slide ${x.v==='lime'?'lime-bg':x.v}" data-i="${i+1}">
+ ${x.v==='photo'?'<div class=ph></div><div class=shade></div>':'<div class=aura></div>'}
+ ${x.num?`<div class=num>${x.num}</div>`:''}
+ <div class=top><span class="mono lime">▸ ${x.k}</span><span class=mono style="opacity:.6">${String(i+1).padStart(2,'0')}/30</span></div>
+ <div class=mid>
+  <h1 class="d h ${x.size||''}">${x.h}</h1>
+  ${x.s?`<p class=sub>${x.s}</p>`:''}
+  ${x.list?`<div class=list>${x.list.map((l,j)=>`<div><b>${String(j+1).padStart(2,'0')}</b><span>${l}</span></div>`).join('')}</div>`:''}
+ </div>
+ <div class=bot>
+  <div class=wlad><img src="wlad-portrait.jpg" alt=""><span>Wlad Jachtchenko<br><span class=mono style="font-size:14px;letter-spacing:.16em">LeaderOS · leader-os.de</span></span></div>
+  <span class=cta>${x.cta} →</span>
+ </div>
+</section>`).join('');
+window.__COPY=S;
+</script>
+</body></html>
