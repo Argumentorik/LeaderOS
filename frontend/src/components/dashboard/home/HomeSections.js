@@ -389,7 +389,7 @@ export const AboutYouCard = ({ user, de, onSaved, onSkip }) => {
         <Button onClick={save} disabled={saving} className="h-9 text-[12px] font-bold" data-testid="home-about-save-btn">
           <User size={13} className="mr-1.5" /> {de ? 'Speichern' : 'Save'}
         </Button>
-        <button type="button" onClick={onSkip} className="text-[12px] font-semibold text-muted-foreground hover:text-foreground" data-testid="home-about-skip-btn">
+        <button type="button" onClick={onSkip} className="min-h-[44px] px-2 text-[12px] font-semibold text-muted-foreground hover:text-foreground" data-testid="home-about-skip-btn">
           {de ? 'Später' : 'Later'}
         </button>
       </div>

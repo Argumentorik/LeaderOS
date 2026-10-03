@@ -143,17 +143,17 @@ export default function TasksPage() {
     <DashboardLayout rightPanel={<RightPanel />}>
       <div className="p-6 lg:p-8 xl:px-14 space-y-6 w-full" data-testid="tasks-page">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center shadow-lg shadow-black/10">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center shadow-lg shadow-black/10">
               <ListChecks size={22} className="text-white" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-2xl font-black tracking-tight">{lang === 'de' ? 'Aufgaben' : 'Tasks'}</h1>
               <p className="text-sm text-muted-foreground">{lang === 'de' ? 'Deine KI-generierten & manuellen Leadership-Aufgaben' : 'AI-generated & manual leadership tasks'}</p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               onClick={generateAiTasks}
               disabled={generating}
@@ -277,8 +277,8 @@ export default function TasksPage() {
           {(showAll ? filtered : filtered.slice(0, 5)).map((task) => (
             <Card key={task.task_id} className={`transition-all duration-200 card-glow ${task.status === 'completed' ? 'opacity-60' : ''}`} data-testid={`task-${task.task_id}`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <Checkbox className="w-6 h-6 shrink-0" checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
-                  className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
+                <Checkbox checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
+                  className="h-8 w-8 shrink-0 rounded-md data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
                 <div className="flex-1 min-w-0">
                   {(() => {
                     const isOpen = expandedTask === task.task_id;
@@ -329,7 +329,7 @@ export default function TasksPage() {
                     {task.created_at && <span className="text-[9px] text-muted-foreground">{lang === 'de' ? 'Erstellt' : 'Created'}: {new Date(task.created_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'short' })}</span>}
                   </div>
                 </div>
-                <button onClick={() => deleteTask(task.task_id)} className="shrink-0 text-muted-foreground hover:text-red-400 transition-colors p-3 -m-1" data-testid={`delete-task-${task.task_id}`}>
+                <button onClick={() => deleteTask(task.task_id)} className="shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted-foreground hover:text-red-400 transition-colors -mr-2" data-testid={`delete-task-${task.task_id}`}>
                   <Trash2 size={14} />
                 </button>
               </CardContent>

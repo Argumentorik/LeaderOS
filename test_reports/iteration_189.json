@@ -1,0 +1,53 @@
+{
+  "summary": "Iter 189 Frontend-only Mobile-Optimization-Regression (390x844) + Desktop-Regression (1920x800). 11 von 12 Pruefpunkten GRUEN. Ein kritischer Befund: /tasks-Abhak-Checkbox nur 16x16 px statt der geforderten 44 px (verursacht durch doppeltes className-Attribut in TasksPage.js:280/281).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "TasksPage.js (/tasks) — Abhak-Checkbox",
+        "issue": "Mobile: data-testid='task-checkbox-<id>' ist nur 16x16 px, nicht 44 px. ROOT CAUSE: In /app/frontend/src/pages/TasksPage.js Zeile 280-281 steht das JSX-Element <Checkbox ...> MIT ZWEI className-Attributen (erste className='w-6 h-6 shrink-0', zweite className='data-[state=checked]:bg-green-500 ...'). React behaelt nur das letzte className — damit wird 'w-6 h-6' NIE angewendet und der shadcn-Default h-4 w-4 (16 px) bleibt bestehen. Zusaetzlich: selbst w-6 h-6 (24 px) traefe die geforderten 44 px nicht; die Checkbox-Klasse muss auf h-11 w-11 (oder 10) erhoeht werden ODER ein Wrapper-Button mit 44 px um die Checkbox gelegt werden. Auch das Haken war nach Reload nicht gesetzt (aria-checked='false') — vermutliche Folge der nicht treffbaren 16-px-Flaeche auf dem Phone.",
+        "selector": "[data-testid^='task-checkbox-']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "TasksPage.js — Loeschen-Knopf (delete-task)",
+        "issue": "Mobile: delete-task-<id> ist 38x38 px (knapp unter dem 40-px-Minimum, deutlich unter 44 px laut Auftrag).",
+        "selector": "[data-testid^='delete-task-']",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "CoachingPage.js — Inline-Links im Preis-Block",
+        "issue": "Mobile /leadership-programm: data-testid='installment-link' hoehe 19.5 px, data-testid='support-email' hoehe 17 px. Beide sind Inline-Textlinks im Absatz; wenn die Vorgabe strikt 'Verweise mindestens 40 px' gilt, sind sie darunter. Bitte als bewusste Ausnahme bestaetigen ODER vertikales Padding geben.",
+        "selector": "[data-testid=installment-link], [data-testid=support-email]",
+        "priority": "LOW"
+      },
+      {
+        "component": "HomeSections.js — Spaeter-Knopf im Dashboard-Onboarding",
+        "issue": "Mobile /dashboard: data-testid='home-about-skip-btn' nur 21.7 px hoch. Minor — ist ein Dismiss/Ignore-Link.",
+        "selector": "[data-testid='home-about-skip-btn']",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "KRITISCH: TasksPage.js Zeile 280-281 — die beiden className-Attribute zusammenfuehren und die Groesse auf h-11 w-11 (44 px) heben, z. B. className='h-11 w-11 shrink-0 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500'. Dadurch wird das Abhaken auf dem Handy ueberhaupt erst zuverlaessig moeglich; aktuell schlug der Tipp-Test fehl (nach Reload immer noch unchecked).",
+    "Delete-Task-Knopf (Trash2-Icon) in /tasks auf mindestens 40 px (empfohlen 44 px) heben; aktuell 38x38.",
+    "Pruefen, ob installment-link und support-email auf /leadership-programm (mobile) als Textlinks eine Ausnahme sein duerfen oder py-2 bekommen muessen."
+  ],
+  "critical_code_review_comments": [
+    "TasksPage.js:280-281 enthaelt DOPPELTES className-Attribut am Checkbox-Element — React warnt darueber nur im Dev-Mode, das erste className wird stillschweigend verworfen. Das ist ein latenter Code-Smell, der genau den jetzigen Mobile-Bug ausloest. Empfehlung: ESLint-Regel 'react/jsx-no-duplicate-props' aktivieren (koennte dieses Problem fruehzeitig fangen).",
+    "components/ui/checkbox.jsx laesst nur h-4 w-4 als Default — fuer alle 44-px-Mobile-Checkbox-Cases waere ein 'size'-Prop oder ein 'TapCheckbox'-Wrapper (role=checkbox mit h-11 w-11) sauberer als jedes Mal className override.",
+    "index.css @media (max-width:640px) Regel fuer button.h-8/h-9/h-10 greift NICHT fuer Radix Checkbox (nicht als <button class='h-8'> gerendert) — daher muss die /tasks-Checkbox-Groesse explizit gesetzt werden."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "92%"},
+  "test_credentials": "standard@wladbot.test / test123",
+  "seed_data_creation": "keine",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Alle anderen Mobile-Punkte sind GRUEN: Kein horizontales Scrollen auf 16 getesteten Routen; keine sichtbaren Schriften unter 10.5 px (>10 Zeichen); Wlad-Portrait auf Dashboard sichtbar 64x64 (naturalWidth 440), Coach-Portrait 48x48 rund; /kurse-Vorschaubild ist 112 px breit (28 % der Viewport) — side-by-side ok; /kurse/rhetorik-grundlagen hat keine nowrap-ellipsis-Elemente mehr; Public-Header (Logo/Anmelden/Starten) jeweils 44 px, 'Starten' passt in eine Zeile; coaching-sticky-cta auf /leadership-programm (ausgeloggt mobile) sichtbar und scrollt per Klick zu pricing-section — NICHT sichtbar auf Desktop oder bei eingeloggtem Mobile-User; Katalog-Content zeigt alle 10 Kurse / 72 Folgen / 01.11.2026 — keine der verbotenen Phrasen 'Kurse 1-6', 'Kurse 7-10', '31 Folgen', '41 Folgen' gefunden. Desktop 1920: alle 12 Routen ohne Overflow, Sidebar-Startzustand toolbox+training offen, more geschlossen, Wlad-Portrait 86x86. Dashboard-Abhak-Knopf (home-task-done-<id>) ist 40x40 und funktioniert mit einem Tipp. Hauptbefund: /tasks-Checkbox-Groesse (siehe action_items).",
+  "rca of the issue": "ROOT CAUSE /tasks-Checkbox-Groesse (16 px statt 44 px): Doppel-className-Attribut in TasksPage.js:280-281. React akzeptiert nur das letzte Attribut mit gleichem Namen — die erste className='w-6 h-6 shrink-0' wird verworfen, nur className='data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500' bleibt bestehen; damit greift der shadcn-Default (peer h-4 w-4 ...). REPRO: Mobile 390x844, als standard@wladbot.test einloggen, /tasks oeffnen, erste Checkbox messen -> height=16 width=16. FIX: Beide Attribute zu EINEM mergen und zusaetzlich auf mindestens h-11 w-11 (44 px) setzen."
+}
