@@ -115,8 +115,8 @@ const EnrollForm = ({ startGroups, onDone }) => {
       </select>
       <Textarea value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })}
                 placeholder="Was willst du am Ende können?" rows={3} data-testid="lab-enroll-goal" />
-      <label className="flex items-start gap-2 text-[13px]">
-        <input type="checkbox" checked={form.consent_live_calls} className="mt-1"
+      <label className="flex items-start gap-3 py-2 text-[13px] cursor-pointer">
+        <input type="checkbox" checked={form.consent_live_calls} className="mt-0.5 w-6 h-6 shrink-0 accent-[#BFFF00]"
                onChange={(e) => setForm({ ...form, consent_live_calls: e.target.checked })}
                data-testid="lab-enroll-consent" />
         <span>Ich nehme an den Live-Terminen meiner Gruppe teil (Aufzeichnung liegt danach im Konto).</span>

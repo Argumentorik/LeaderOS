@@ -986,3 +986,31 @@ Bewusst NICHT angefasst (großer Umbau ohne Nutzen für den Kunden, gehört in d
 
 ### Nachtrag Iter 188 · „GODMODE" wieder raus (Kundenwunsch, 17.06.2026)
 Der Kunde: „im dashboard doch niemals godmode oder so als wort unsere kunden sind alle mitte 50!" — Punkt 4 aus Iter 188 ist damit zurückgenommen. Der Bereich heißt wieder **Werkzeuge** (Menügruppe „Werkzeuge & Leitfäden", Unterpunkt „Werkzeuge", Seitenüberschrift, Handy-Leiste, `nav.workflows` DE/EN, `CreditsExhaustedDialog`, `WhatIsWhatPage`, Hinweis auf der Onboarding-Video-Seite). Die erklärende Zeile im Menü bleibt, ohne Kunstwort: „Fertige Vorlagen für deinen Arbeitsalltag." Auch das Admin-Etikett „GODMODE-Check" heißt jetzt „Qualitätsprüfung". Geprüft: auf `/tools` und `/dashboard` kommt das Wort weder am Rechner noch am Handy vor. **Regel für später: „GODMODE" ist ein internes Wort und darf in keiner Kundenansicht auftauchen** — die Zielgruppe ist Mitte 50.
+
+---
+
+## Iter 189/190 · Handy-Optimierung (03.10.2026)
+
+**Auftrag**: „A large share of my visitors are on mobile. Review my app and optimize the experience for mobile devices." Maßstab: Zielgruppe Mitte 50 — Lesbarkeit und Treffsicherheit vor Feinheiten.
+
+**Vorgehen**: Nicht geraten, sondern gemessen. Über 20 Seiten bei 390×844 automatisch geprüft auf seitlichen Überlauf, berechnete Schriftgrößen, Höhe/Breite aller Knöpfe und Verweise sowie abgeschnittene Texte (`scrollWidth > clientWidth`). Danach dieselbe Messung bei 1920×800 als Gegenprobe.
+
+**Behoben**
+1. **Schrift-Untergrenze am Handy** (`index.css`, `@media (max-width: 640px)`): Die feinen Abstufungen `text-[7.5px]` bis `text-[14px]`, `text-xs` und `text-sm` werden auf lesbare Größen gehoben (kleinste Etiketten 11,5 px, Hilfstexte 13 px, Fließtext 14–14,5 px mit größerem Zeilenabstand). Am Rechner bleibt alles unverändert. Eine Regel statt 40 einzelne Seiten.
+2. **Tippflächen mindestens 44 px**: Regel für `button.h-8/h-9/h-10` und `[role=tab]` am Handy, dazu Hilfsklasse `.tap-target`. Einzeln nachgezogen: Abhaken auf dem Dashboard und in `/tasks` (letzteres war durch ein **doppeltes `className`-Attribut** auf 16 px festgenagelt — React behielt nur das zweite; echter Fehler, gefunden vom Prüfagenten), Löschen-Knopf, Reiter in `/events` und `/my-path`, „KI Deep-Assist", „Frag WladBot dazu", „Mit WladBot sprechen", „Antwort kopieren", Kopf- und Fußzeile der öffentlichen Seiten, Rechtsverweise unter dem Login, „Später", „Weiter trainieren", Rückweg „Studienplan", Einwilligungs-Kästchen im LAB-Formular.
+3. **Nichts mehr abgeschnitten**: Aufgaben-Beschreibungen, Event-Titel, Folgentitel in Kursliste und Studienplan, Kurstitel auf der Verkaufsseite und die Zeile „Deine nächsten Schritte" brechen am Handy um (`line-clamp`) statt mit Auslassungspunkten zu enden.
+4. **Kursübersicht am Handy kürzer**: schmales Vorschaubild (112 px) neben dem Text statt bildschirmbreit darüber, Folgenzeilen zweizeilig → Seitenlänge von 8145 px auf ~6900 px.
+5. **Wlad-Bild war am Handy unsichtbar** (`hidden sm:block`) — genau dort, wo die meisten Besucher sind. Jetzt 64 px am Handy, 86 px am Rechner.
+6. **Öffentliche Kopfzeile**: 64 px hoch, „Starten" am Handy (statt des umbrechenden „Kostenlos starten"), alle drei Elemente 44 px.
+7. **Feste Leiste auf der Verkaufsseite**: `/leadership-programm` ist am Handy über 10.000 px lang — unten steht jetzt dauerhaft „Pakete und Preise ansehen" (`coaching-sticky-cta`, nur ausgeloggt, nur unter `lg`), springt zum Preis-Abschnitt.
+8. **Anmelde-Reiter**: „Passwort / Magic Link / Lizenz" liegen am Handy als drei gleich breite Flächen (113×44) auf einer Zeile statt umzubrechen.
+9. **Inhaltliche Korrektur mitgenommen**: Die Verkaufsseite zeigte noch die alte Paket-Staffelung „Kurse 1–6 / Kurse 7–10 (31/41 Folgen)" — das widersprach dem Ein-Kauf-Modell aus Iter 187. Jetzt ein Block mit allen 10 Kursen, 72 Folgen, Start 01.11.2026 (`catalog-package-all`); auch die Merkmalliste in der Preis-Tabelle ist angepasst.
+
+**Geprüft**: `/app/test_reports/iteration_189.json` (11/12, ein echter Fehler gefunden) und `/app/test_reports/iteration_190.json` (Nachtest 100 %). 13 Handy-Routen ohne seitliches Scrollen, kein sichtbarer Text unter 10,5 px, Abhaken am Handy mit einem Tipp und dauerhaft nach dem Neuladen, Rechner-Ansicht unverändert.
+
+**Bewusste Ausnahme**: Verweise INNERHALB eines Satzes (`installment-link`, `support-email`) bleiben inline — eine 44-px-Fläche würde dort den Textfluss zerreißen.
+
+**Offen / nächste Schritte**
+- P1: Lasttest 1000 gleichzeitige Kunden (Dashboard, Videostart, Chat, Kurse).
+- P2: Wörter-Durchgang — alle Bezeichnungen auf Verständlichkeit für Mitte 50 prüfen („Video-Analyse", „Challengers", „Gesprächs-Training").
+- P2: Kursvideos aufnehmen; bis dahin steht „Aufnahme folgt · ab 01.11.2026".

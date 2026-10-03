@@ -93,7 +93,7 @@ const LevelNode = ({ level, isLast, navigate }) => {
             </div>
           )}
           {level.is_current && (
-            <button onClick={() => navigate('/challenge')} className="mt-3 flex items-center gap-1.5 text-[11px] font-bold transition-colors hover:opacity-80" style={{ color: level.color }}>
+            <button onClick={() => navigate('/challenge')} className="tap-target mt-2 flex items-center gap-1.5 py-2 text-[11px] font-bold transition-colors hover:opacity-80" style={{ color: level.color }}>
               Weiter trainieren <ArrowRight size={12} />
             </button>
           )}

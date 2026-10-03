@@ -3,12 +3,12 @@ import { KeyRound, Sparkles, Ticket } from 'lucide-react';
 const TABS = [
   { mode: 'login', icon: KeyRound, label: (de) => (de ? 'Passwort' : 'Password'), testId: 'tab-password', activeCls: 'bg-white/10 text-white shadow-sm' },
   { mode: 'magic', icon: Sparkles, label: () => 'Magic Link', testId: 'tab-magic-link', activeCls: 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' },
-  { mode: 'license', icon: Ticket, label: (de) => (de ? 'Lizenz-Key' : 'License Key'), testId: 'tab-license-key', activeCls: 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' },
+  { mode: 'license', icon: Ticket, label: (de) => (de ? 'Lizenz' : 'License'), testId: 'tab-license-key', activeCls: 'bg-[#BFFF00]/12 text-[#BFFF00] shadow-sm' },
 ];
 
 /** Passwort · Magic Link · Lizenz-Key */
 export const AuthModeTabs = ({ mode, onSwitch, de }) => (
-  <div className="mb-4 inline-flex p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" role="tablist" data-testid="auth-mode-tabs">
+  <div className="mb-4 flex w-full sm:inline-flex sm:w-auto p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" role="tablist" data-testid="auth-mode-tabs">
     {TABS.map((t) => (
       <button
         key={t.mode}
@@ -16,7 +16,7 @@ export const AuthModeTabs = ({ mode, onSwitch, de }) => (
         role="tab"
         aria-selected={mode === t.mode}
         onClick={() => onSwitch(t.mode)}
-        className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${mode === t.mode ? t.activeCls : 'text-white/45 hover:text-white/70'}`}
+        className={`flex flex-1 sm:flex-none items-center justify-center gap-1.5 whitespace-nowrap px-2 sm:px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${mode === t.mode ? t.activeCls : 'text-white/45 hover:text-white/70'}`}
         data-testid={t.testId}
       >
         <t.icon size={12} /> {t.label(de)}

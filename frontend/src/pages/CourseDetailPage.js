@@ -181,7 +181,7 @@ export default function CourseDetailPage() {
   return (
     <Shell>
     <div className="p-4 sm:p-8 xl:px-12 w-full" data-testid="course-detail-page">
-      <Link to="/kurse" className="inline-flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground hover:text-foreground" data-testid="course-back"><ArrowLeft size={13} /> {de ? 'Studienplan' : 'Curriculum'}</Link>
+      <Link to="/kurse" className="tap-target inline-flex items-center gap-1.5 py-2 text-[12px] font-bold text-muted-foreground hover:text-foreground" data-testid="course-back"><ArrowLeft size={13} /> {de ? 'Studienplan' : 'Curriculum'}</Link>
 
       <header className="mt-4 rounded-3xl bg-[#0A0A0A] text-white overflow-hidden grid lg:grid-cols-[1.1fr_1fr]" data-testid="course-header">
         <div className="relative aspect-video lg:aspect-auto lg:min-h-[280px]">
