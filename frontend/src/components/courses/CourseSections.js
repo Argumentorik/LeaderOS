@@ -59,7 +59,7 @@ export const MoreFromLeaderOS = ({ de }) => {
               <span className="w-9 h-9 rounded-xl bg-[#0A0A0A] dark:bg-[#BFFF00] text-[#BFFF00] dark:text-black flex items-center justify-center"><Icon size={16} /></span>
               <p className="text-[15px] font-black mt-3">{title}</p>
               <p className="text-[12px] text-muted-foreground mt-1 flex-1">{sub}</p>
-              <button type="button" onClick={() => navigate(it.to)} className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-black text-[#4A6200] dark:text-[#BFFF00] hover:gap-2.5 transition-all" data-testid={it.testid}>
+              <button type="button" onClick={() => navigate(it.to)} className="tap-target mt-3 inline-flex items-center gap-1.5 py-2 text-[12.5px] font-black text-[#4A6200] dark:text-[#BFFF00] hover:gap-2.5 transition-all" data-testid={it.testid}>
                 {cta} <ArrowRight size={13} />
               </button>
             </div>

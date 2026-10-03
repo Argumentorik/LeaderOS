@@ -45,7 +45,7 @@ export const InteractiveWladButton = ({ clip, de = true }) => {
   return (
     <>
       <button type="button" onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:opacity-80 transition-opacity"
+              className="tap-target inline-flex items-center gap-1.5 py-2 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:opacity-80 transition-opacity"
               data-testid={`interactive-wlad-open-${clip.slug}`}>
         {status.trial ? <Sparkles size={12} /> : <Mic size={12} />} {de ? 'Mit WladBot sprechen' : 'Talk to WladBot'}
         <Badge lime>{label}</Badge>

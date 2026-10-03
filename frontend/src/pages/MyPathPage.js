@@ -224,7 +224,7 @@ export default function MyPathPage() {
           <TabsList className="mb-8 bg-muted/40 p-1 h-auto w-full sm:w-auto" data-testid="mypath-tabs" data-anim="mypath-tabs">
             <TabsTrigger
               value="progress"
-              className="flex items-center gap-2 px-4 py-2 text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-card"
+              className="flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-card"
               data-testid="tab-progress"
             >
               <TrendingUp size={14} /> Mein Fortschritt

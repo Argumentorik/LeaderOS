@@ -289,7 +289,7 @@ export default function LoginPage({ initialMode = 'login' }) {
                 <button
                   type="button"
                   onClick={() => switchMode('magic')}
-                  className="mt-3 w-full text-center text-[11px] font-semibold uppercase tracking-wider text-white/35 hover:text-[#BFFF00] transition-colors"
+                  className="mt-2 w-full min-h-[44px] text-center text-[11px] font-semibold uppercase tracking-wider text-white/35 hover:text-[#BFFF00] transition-colors"
                   data-testid="switch-to-magic-link"
                 >
                   {de ? 'Passwort vergessen? · Magic Link nutzen' : 'Forgot password? · Use a Magic Link'}

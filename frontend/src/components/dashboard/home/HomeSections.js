@@ -31,14 +31,13 @@ export const Section = ({ id, title, hint, action, children }) => (
 );
 
 /** Standbild von Wlad. Fällt es aus, bleibt kein Loch im Layout zurück. */
-export const WladPortrait = ({ size = 86, rounded = 'rounded-2xl', className = '', testid = 'home-wlad-portrait' }) => {
+export const WladPortrait = ({ sizeClass = 'w-16 h-16 sm:w-[86px] sm:h-[86px]', rounded = 'rounded-2xl', className = '', testid = 'home-wlad-portrait' }) => {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    <img src={WLAD_PORTRAIT} alt="Wlad" loading="lazy" width={size} height={size}
+    <img src={WLAD_PORTRAIT} alt="Wlad" loading="lazy"
          onError={() => setFailed(true)}
-         style={{ width: size, height: size }}
-         className={`${rounded} object-cover shrink-0 ring-1 ring-black/[0.06] dark:ring-white/[0.08] ${className}`}
+         className={`${sizeClass} ${rounded} object-cover shrink-0 ring-1 ring-black/[0.06] dark:ring-white/[0.08] ${className}`}
          data-testid={testid} />
   );
 };
@@ -50,7 +49,7 @@ export const TodayHeader = ({ name, greeting, day, total, de }) => {
   return (
     <div className="mb-8 flex items-start gap-4 sm:gap-5" data-testid="home-today-header">
       {/* Iter 188: festes Standbild aus dem Videomaterial — immer da. */}
-      <WladPortrait className="hidden sm:block" />
+      <WladPortrait />
       <div className="min-w-0">
         <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{today}</p>
         <h1 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">
@@ -177,7 +176,7 @@ export const AskCoachCard = ({ de, navigate }) => {
   return (
     <Card data-testid="home-ask-coach"><CardContent className="p-5 space-y-3">
       <div className="flex items-center gap-3">
-        <WladPortrait size={44} rounded="rounded-full" testid="home-coach-portrait" />
+        <WladPortrait sizeClass="w-12 h-12" rounded="rounded-full" testid="home-coach-portrait" />
         <p className="text-[12.5px] text-muted-foreground leading-snug">
           {de ? 'Wlad antwortet dir — in seinen Worten, mit seinen Methoden.' : 'Wlad answers you — in his words, with his methods.'}
         </p>
@@ -308,8 +307,10 @@ export const MyTasksCard = ({ de, navigate }) => {
           <li key={task.task_id} className="flex items-start gap-3 px-2.5 py-3" data-testid={`home-task-row-${task.task_id}`}>
             <button type="button" onClick={() => complete(task)} disabled={busy === task.task_id}
               aria-label={de ? 'Als erledigt markieren' : 'Mark as done'}
-              className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded-[6px] border-2 border-black/15 dark:border-white/20 hover:border-[#6B8A00] dark:hover:border-[#BFFF00] hover:bg-[#BFFF00]/15 transition-colors disabled:opacity-40"
-              data-testid={`home-task-done-${task.task_id}`} />
+              className="-m-2.5 p-2.5 shrink-0 flex items-start disabled:opacity-40"
+              data-testid={`home-task-done-${task.task_id}`}>
+              <span className="w-[20px] h-[20px] rounded-[6px] border-2 border-black/20 dark:border-white/25 hover:border-[#6B8A00] dark:hover:border-[#BFFF00] hover:bg-[#BFFF00]/15 transition-colors" />
+            </button>
             <div className="min-w-0 flex-1">
               <p className="text-[13.5px] font-semibold leading-snug">{task.title}</p>
               {task.description && <p className="text-[12px] text-muted-foreground mt-0.5 line-clamp-2">{task.description}</p>}
@@ -408,7 +409,7 @@ export const NextEventRow = ({ event, de, navigate }) => {
         <Calendar size={16} className="text-[#4A6200] dark:text-[#BFFF00]" />
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-[13.5px] font-bold truncate">{event.title}</p>
+        <p className="text-[13.5px] font-bold line-clamp-2 sm:truncate">{event.title}</p>
         {label && <p className="text-[12px] text-muted-foreground">{label}{de ? ' Uhr' : ''}</p>}
       </div>
       <Button variant="outline" size="sm" onClick={() => navigate('/events')} className="h-9 text-[12px]" data-testid="home-event-btn">

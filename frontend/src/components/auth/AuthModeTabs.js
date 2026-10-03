@@ -38,7 +38,7 @@ export const LegalFooter = ({ de }) => (
     {LEGAL.map((l, i) => (
       <span key={l.href} className="contents">
         {i > 0 && <span className="opacity-30">·</span>}
-        <a href={l.href} className="hover:text-[#BFFF00] hover:underline" data-testid={l.testId}>{l.label(de)}</a>
+        <a href={l.href} className="tap-target py-1.5 px-0.5 hover:text-[#BFFF00] hover:underline" data-testid={l.testId}>{l.label(de)}</a>
       </span>
     ))}
   </div>

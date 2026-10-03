@@ -169,7 +169,7 @@ export const SmartConsultationBanner = ({ placement = 'default', compact = false
         onClick={dismiss}
         aria-label="Banner schließen"
         data-testid={`consult-banner-${placement}-dismiss`}
-        className="absolute top-3 right-3 z-10 p-1.5 text-white/40 hover:text-white/80 transition-colors rounded-md hover:bg-white/[0.06]"
+        className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 z-10 p-3 sm:p-1.5 text-white/40 hover:text-white/80 transition-colors rounded-md hover:bg-white/[0.06]"
       >
         <X size={16} />
       </button>

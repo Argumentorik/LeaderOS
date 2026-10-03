@@ -48,7 +48,7 @@ export const ActionInbox = ({ de = true }) => {
           <span className="block text-[12.5px] font-bold tracking-tight">
             {de ? 'Deine nächsten Schritte' : 'Your next steps'}
           </span>
-          <span className="block text-[10.5px] text-muted-foreground truncate">
+          <span className="block text-[10.5px] text-muted-foreground sm:truncate">
             {de ? 'Live-Events · Leader-Diagnose · 1:1-Coaching' : 'Live events · Leader diagnosis · 1:1 coaching'}
           </span>
         </span>

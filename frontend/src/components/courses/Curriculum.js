@@ -96,7 +96,7 @@ export const LabBlock = ({ de, launch }) => (
         );
       })}
     </div>
-    <Link to="/leadership-lab" className="mt-6 inline-flex items-center gap-1.5 text-[12.5px] font-black text-[#4A6200] dark:text-[#BFFF00] hover:gap-2.5 transition-all" data-testid="courses-lab-link">
+    <Link to="/leadership-lab" className="tap-target mt-5 inline-flex items-center gap-1.5 py-2 text-[12.5px] font-black text-[#4A6200] dark:text-[#BFFF00] hover:gap-2.5 transition-all" data-testid="courses-lab-link">
       {de ? 'Alles zum Leadership LAB' : 'Everything about the Leadership LAB'} <ArrowRight size={13} />
     </Link>
   </section>
@@ -112,11 +112,11 @@ const EpisodeState = ({ ep, de, launch }) => {
 
 const CourseRow = ({ course: c, de, launch, open, onToggle }) => (
   <article className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-card overflow-hidden" data-testid={`curriculum-course-${c.slug}`}>
-    <div className="flex flex-col sm:flex-row sm:items-stretch gap-0">
-      <Link to={`/kurse/${c.slug}`} className="relative block sm:w-52 xl:w-64 shrink-0 aspect-video sm:aspect-auto bg-[#0A0A0A]" data-testid={`curriculum-thumb-${c.slug}`}>
+    <div className="flex items-stretch gap-0">
+      <Link to={`/kurse/${c.slug}`} className="relative block w-28 sm:w-52 xl:w-64 shrink-0 bg-[#0A0A0A]" data-testid={`curriculum-thumb-${c.slug}`}>
         <div className="absolute inset-0"><VideoThumb src={c.thumbnail_url} title={c.title} showPlay={false} className="!h-full !aspect-auto" /></div>
       </Link>
-      <div className="flex-1 min-w-0 p-5">
+      <div className="flex-1 min-w-0 p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#4A6200] dark:text-[#BFFF00]">{t(LEVEL_LABEL[c.level], de)}</span>
           <span className="text-[11px] text-muted-foreground">· {c.episode_count} {de ? 'Folgen' : 'episodes'} · {c.minutes_total} Min</span>
@@ -142,13 +142,17 @@ const CourseRow = ({ course: c, de, launch, open, onToggle }) => (
         {c.episodes.map((ep) => (
           <li key={ep.id}>
             <Link to={`/kurse/${c.slug}?folge=${ep.number}`}
-                  className="flex items-center gap-3 px-5 py-2.5 hover:bg-black/[0.02] dark:hover:bg-white/[0.03]"
+                  className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 px-4 sm:px-5 py-3 min-h-[44px] hover:bg-black/[0.02] dark:hover:bg-white/[0.03]"
                   data-testid={`curriculum-episode-${ep.id}`}>
-              <span className="w-7 shrink-0 text-[11px] font-black text-muted-foreground tabular-nums">{ep.number}</span>
-              <span className="flex-1 min-w-0 text-[13px] font-semibold truncate">{ep.title}</span>
-              <span className="shrink-0 text-[11px] text-muted-foreground tabular-nums">{ep.minutes} Min</span>
-              <span className="shrink-0 w-[132px] text-right text-[11px] font-semibold">
-                <EpisodeState ep={ep} de={de} launch={launch} />
+              <span className="hidden sm:block w-7 shrink-0 text-[11px] font-black text-muted-foreground tabular-nums">{ep.number}</span>
+              <span className="flex-1 min-w-0 text-[13px] font-semibold sm:truncate">
+                <span className="sm:hidden text-muted-foreground tabular-nums">{ep.number}. </span>{ep.title}
+              </span>
+              <span className="flex items-center gap-3 sm:shrink-0">
+                <span className="text-[11px] text-muted-foreground tabular-nums">{ep.minutes} Min</span>
+                <span className="text-[11px] font-semibold sm:w-[132px] sm:text-right">
+                  <EpisodeState ep={ep} de={de} launch={launch} />
+                </span>
               </span>
             </Link>
           </li>

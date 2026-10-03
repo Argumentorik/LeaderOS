@@ -68,7 +68,7 @@ const ContextPanel = ({ userContext, setUserContext, de, aboutMe, onClose }) => 
             : (de ? 'Hier trägst du frei ein, was zu dir gehört: Persönlichkeit, Stärken, Schwächen, Erfahrungen, Kompetenzen, Vorlieben, Umfeld, Beruf, Verantwortung, Ziele. Der Text darf sich jederzeit ändern — WladBot nutzt immer die aktuelle Version.'
                   : 'Write freely about yourself: personality, strengths, weaknesses, experience, skills, preferences, environment, job, responsibility, goals. Edit it anytime — WladBot always uses the latest version.')}
         </p>
-        <a href="/profile" className="inline-flex items-center gap-1 mt-2 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:underline" data-testid="about-me-link">
+        <a href="/profile" className="tap-target inline-flex items-center gap-1 mt-1 py-2 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:underline" data-testid="about-me-link">
           {aboutMe ? (de ? 'Über mich bearbeiten' : 'Edit about me') : (de ? 'Jetzt „Über mich" ausfüllen' : 'Fill in "About me" now')} →
         </a>
       </div>

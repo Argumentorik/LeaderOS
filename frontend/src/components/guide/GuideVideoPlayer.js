@@ -127,7 +127,7 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
                 to={`/chat?prefill=${encodeURIComponent(de
                   ? `Ich habe gerade dein Video „${clip.title}“ gesehen. Erklär mir bitte kurz, wie ich das konkret in meinem Alltag umsetze — und stell mir eine Rückfrage zu meiner Situation.`
                   : `I just watched your video "${clip.title}". Explain briefly how I apply this in my day-to-day and ask me one question about my situation.`)}`}
-                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors"
+                className="tap-target inline-flex items-center gap-1.5 py-2 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors"
                 data-testid={`guide-ask-wlad-${clip.slug}`}
               >
                 <MessageCircle size={12} /> {de ? 'Frag WladBot dazu' : 'Ask WladBot about this'}

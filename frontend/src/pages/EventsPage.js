@@ -164,7 +164,7 @@ export default function EventsPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-full text-sm font-semibold transition-all ${
                 activeTab === tab.id
                   ? 'bg-white dark:bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -349,7 +349,7 @@ function EventCard({ event, de, onClick }) {
               {event.outcomes.slice(0, 2).map((o, i) => (
                 <div key={`out-${i}`} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <CheckCircle2 size={10} className="text-emerald-500 shrink-0" />
-                  <span className="truncate">{o}</span>
+                  <span className="line-clamp-2 sm:truncate">{o}</span>
                 </div>
               ))}
             </div>

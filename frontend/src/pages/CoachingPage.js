@@ -126,7 +126,7 @@ export default function CoachingPage() {
   const faqs = getFaqs(de);
 
   const body = (
-    <div className={`p-6 lg:p-8 space-y-16 ${user ? 'xl:px-14 w-full' : 'max-w-[1400px] mx-auto'}`} data-testid="coaching-page">
+    <div className={`p-6 lg:p-8 space-y-16 ${user ? 'xl:px-14 w-full' : 'max-w-[1400px] mx-auto pb-24 lg:pb-8'}`} data-testid="coaching-page">
 
         {/* ── 1€ LIVE-TEST ACTIVATION (Iter 92.59, code-gated) ── */}
         {testCode && (
@@ -337,6 +337,19 @@ export default function CoachingPage() {
             </a>
           </p>
         </div>
+
+        {/* Iter 189: Die Verkaufsseite ist am Handy sehr lang — der Knopf
+            bleibt deshalb unten stehen, damit niemand zurückscrollen muss. */}
+        {!user && (
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-3 bg-background/95 backdrop-blur border-t border-black/[0.08] dark:border-white/[0.08]"
+               data-testid="coaching-sticky-cta">
+            <button type="button" onClick={scrollToPricing}
+                    className="w-full min-h-[52px] inline-flex items-center justify-center gap-2 rounded-xl bg-[#BFFF00] text-black font-black text-[15px]"
+                    data-testid="coaching-sticky-cta-btn">
+              {de ? 'Pakete und Preise ansehen' : 'See plans and pricing'}
+            </button>
+          </div>
+        )}
     </div>
   );
 

@@ -25,7 +25,7 @@ const EpisodeRow = ({ ep, active, onPick, de, launch }) => (
       {ep.seen ? <Check size={12} /> : ep.unlocked ? <Play size={11} className="ml-0.5" /> : <Lock size={11} />}
     </span>
     <span className="flex-1 min-w-0">
-      <span className="block text-[13px] font-semibold truncate">{ep.number}. {ep.title}</span>
+      <span className="block text-[13px] font-semibold line-clamp-2 lg:truncate">{ep.number}. {ep.title}</span>
       <span className="block text-[11px] text-muted-foreground">
         {ep.minutes} Min{ep.free_preview && <> · <b className="text-[#4A6200] dark:text-[#BFFF00]">{de ? 'Kostenlos' : 'Free'}</b></>}
         {ep.gate === 'email' && <> · {de ? 'mit E-Mail ansehen' : 'watch with email'}</>}

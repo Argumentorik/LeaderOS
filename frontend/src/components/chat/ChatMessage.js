@@ -42,7 +42,7 @@ const CopyMessageButton = ({ text, de }) => {
       onClick={copy}
       data-testid="chat-copy-btn"
       aria-label={de ? 'Antwort kopieren' : 'Copy answer'}
-      className="inline-flex items-center gap-1 text-[10.5px] font-bold text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] transition-colors px-1 py-0.5 rounded-md"
+      className="tap-target inline-flex items-center gap-1 text-[10.5px] font-bold text-muted-foreground hover:text-[#4A6200] dark:hover:text-[#BFFF00] transition-colors px-2 py-2 rounded-md"
     >
       {copied
         ? <><Check size={11} className="text-emerald-500" /> {de ? 'Kopiert' : 'Copied'}</>

@@ -277,7 +277,7 @@ export default function TasksPage() {
           {(showAll ? filtered : filtered.slice(0, 5)).map((task) => (
             <Card key={task.task_id} className={`transition-all duration-200 card-glow ${task.status === 'completed' ? 'opacity-60' : ''}`} data-testid={`task-${task.task_id}`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <Checkbox checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
+                <Checkbox className="w-6 h-6 shrink-0" checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
                   className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
                 <div className="flex-1 min-w-0">
                   {(() => {
@@ -306,7 +306,7 @@ export default function TasksPage() {
                           )}
                         </div>
                         {task.description && (
-                          <p className={`text-[11px] text-muted-foreground mt-1 ${isOpen ? 'whitespace-pre-wrap break-words leading-relaxed' : 'truncate'}`} data-testid={`task-desc-${task.task_id}`}>
+                          <p className={`text-[11px] text-muted-foreground mt-1 ${isOpen ? 'whitespace-pre-wrap break-words leading-relaxed' : 'line-clamp-2 sm:truncate'}`} data-testid={`task-desc-${task.task_id}`}>
                             {task.description}
                           </p>
                         )}
@@ -329,7 +329,7 @@ export default function TasksPage() {
                     {task.created_at && <span className="text-[9px] text-muted-foreground">{lang === 'de' ? 'Erstellt' : 'Created'}: {new Date(task.created_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'short' })}</span>}
                   </div>
                 </div>
-                <button onClick={() => deleteTask(task.task_id)} className="text-muted-foreground hover:text-red-400 transition-colors p-1" data-testid={`delete-task-${task.task_id}`}>
+                <button onClick={() => deleteTask(task.task_id)} className="shrink-0 text-muted-foreground hover:text-red-400 transition-colors p-3 -m-1" data-testid={`delete-task-${task.task_id}`}>
                   <Trash2 size={14} />
                 </button>
               </CardContent>

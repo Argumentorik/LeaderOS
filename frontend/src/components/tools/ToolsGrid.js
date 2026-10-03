@@ -15,7 +15,7 @@ export const ToolsGrid = ({ tools, onSelectTool, onOpenDeepAssist, de }) => (
       </div>
       <Button
         onClick={onOpenDeepAssist}
-        className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20 font-bold"
+        className="min-h-[44px] w-full sm:w-auto bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20 font-bold"
         data-testid="open-deep-assist-btn"
       >
         <Sparkles size={14} className="mr-1.5" /> {de ? 'KI Deep-Assist' : 'AI Deep Assist'}
