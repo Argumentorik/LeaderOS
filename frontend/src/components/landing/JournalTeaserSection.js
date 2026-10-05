@@ -115,10 +115,7 @@ const Cover = ({ src, alt, aspectClassName, fallback }) => (
       }}
       className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.05] transition-[filter,transform] duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.02]"
     />
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 bg-brand mix-blend-multiply opacity-0 transition-opacity duration-500 group-hover:opacity-30"
-    />
+    {/* No colour wash on hover: the photo reveals its own colour, like a print. */}
   </div>
 );
 

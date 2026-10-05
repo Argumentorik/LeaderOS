@@ -374,13 +374,13 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
         </span>
         <div>
           <div className="flex items-center gap-1.5">
-            <MessageCircle size={13} className="text-brand" />
-            <span className="font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-brand">WladBot · live</span>
+            <MessageCircle size={14} className="text-brand" />
+            <span className="font-mono text-[11px] font-black uppercase tracking-[0.22em] text-brand">WladBot · live</span>
           </div>
-          <div className="text-[13px] font-bold text-background leading-tight mt-0.5">Frag Wlads KI-Coach</div>
+          <div className="text-[15px] font-bold text-background leading-tight mt-1">Frag Wlads KI-Coach</div>
         </div>
       </div>
-      <p className="text-[13px] leading-[1.5] text-background/80 mb-3">
+      <p className="text-[13.5px] leading-[1.5] text-background/90 mb-3">
         Was ist gerade deine größte Führungs-Herausforderung? Tipp sie
         ein · WladBot gibt dir den nächsten Schritt nach Wlads Methodik.
       </p>
@@ -393,7 +393,7 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
         }}
         rows={2}
         placeholder="z.B. Ein Senior zieht zum dritten Mal nicht mit…"
-        className="w-full bg-background/10 border border-background/20 focus:border-brand focus:outline-none text-background placeholder:text-background/40 text-[13px] leading-[1.4] p-2.5 mb-2.5 resize-none"
+        className="w-full bg-background/10 border border-background/30 focus:border-brand focus:outline-none text-background placeholder:text-background/60 text-[13.5px] leading-[1.4] p-2.5 mb-2.5 resize-none"
         data-testid="wladbot-problem-input"
       />
 

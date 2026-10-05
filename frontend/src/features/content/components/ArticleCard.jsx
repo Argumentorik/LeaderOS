@@ -49,10 +49,12 @@ export const ArticleCard = ({ article, coverVariant }) => {
           className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
           style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.45), rgba(10,10,10,0))' }}
         />
-        <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2 py-1 bg-white/95 backdrop-blur-sm font-mono text-[8.5px] font-bold uppercase tracking-[0.22em] text-foreground">
+        {/* Type pill · solid ink-on-white, 10.5 px: readable on every photo
+            (WCAG AAA black on white), never relies on the picture behind it. */}
+        <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white font-mono text-[10.5px] font-black uppercase tracking-[0.2em] text-[#0A0A0A] shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
           ▸ {TYPE_LABEL[article.type] || 'ARTICLE'}
         </div>
-        <div className="absolute bottom-3 right-3 font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-white/90">
+        <div className="absolute bottom-3 right-3 px-2 py-1 bg-[#0A0A0A]/80 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white">
           {minutes} MIN
         </div>
       </div>
