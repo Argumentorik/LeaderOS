@@ -85,6 +85,7 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`ops/SENTRY_ALERTS.md`](./ops/SENTRY_ALERTS.md) | Sentry alert rules |
 | [`ops/INTEGRATIONS.md`](./ops/INTEGRATIONS.md) | PostHog EU + Sentry + Supabase frontend wiring |
 | [`ops/EMERGENT_ADMIN_ONBOARDING.md`](./ops/EMERGENT_ADMIN_ONBOARDING.md) | **Emergent-Admin-Onboarding (Stefan)** — Topologie, GitHub↔Emergent-Drift, Env-Vars, Deploy + Smoke-Checks, Cron-Jobs, offene Incidents, First-Week-Checkliste |
+| [`ops/APP_TAKEOVER_STEFAN.md`](./ops/APP_TAKEOVER_STEFAN.md) | **App hand-over to Stefan** — how leaderos.de runs on Emergent, PostHog/Sentry/Stripe setup and the whys, admin-panel access for the support team, task list |
 | [`ops/TOOL_ACCESS.md`](./ops/TOOL_ACCESS.md) | **Wer hat wo Zugriff** — alle Tools, geprüfter Ist-Stand, Invite-Reihenfolge, offene Punkte für `mert@argumentorik.com` |
 | [`ops/PLATFORM_ACCESS.md`](./ops/PLATFORM_ACCESS.md) | Cross-domain wiring checklist (Vercel ↔ Emergent ↔ Supabase) |
 | [`ops/PRODUCTION_READINESS.md`](./ops/PRODUCTION_READINESS.md) | Production-readiness audit |

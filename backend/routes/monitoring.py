@@ -15,16 +15,14 @@ from services import get_current_user
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
 
-ADMIN_EMAILS = {
-    "test@test.com",
-    "start@aiporate.com",
-    "mert@aiporate.com",
-}
+# One admin definition for the whole backend (allowlist + is_admin flag):
+# routes/admin.py. Keeping a second list here is how accounts ended up admin
+# on one route and 403 on the next.
+from routes.admin import is_admin_user
 
 
 async def _require_admin(user: dict) -> None:
-    email = (user.get("email") or "").lower()
-    if not (user.get("is_admin") or email in ADMIN_EMAILS):
+    if not is_admin_user(user):
         raise HTTPException(status_code=403, detail="admin_only")
 
 
