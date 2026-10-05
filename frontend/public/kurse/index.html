@@ -23,10 +23,13 @@
   /kurse · statische Antwort-Seite (AEO) für die Kurs-Bibliothek, im
   Liquid-Glass-Layout (visionOS-Fensteroptik über unscharfem Raumfoto).
 
-  Oben: das Glas-Fenster als App-Vorschau (Kurslisten, Hero, Karten) —
-  reine Darstellung, keine Browser-Funktion. Darunter: die zitierbaren
-  Antworten („Welche Kurse gibt es?“, „Wie läuft ein Kurs ab?“), die FAQ
-  und das Schema. Beides ohne JavaScript lesbar; JS nur fürs Mobil-Menü.
+  Oben: das Glas-Fenster als App-Vorschau (Kurslisten, Hero, Karten) in
+  voller Breite. Darunter der Freischalt-Funnel als Stack: vier Ebenen
+  (kostenloser Account, 30-Tage-Challenge, OS-Jahr, Live), die beim
+  Scrollen übereinander einrasten (position: sticky, kein JS), dann Ablauf,
+  FAQ und Schluss-CTA. Die zitierbaren Antworten und die FAQ bleiben
+  wortgleich zum Schema. Alle Seitenlinks öffnen in neuen Tabs; nur
+  Sprungmarken (#…) bleiben im Tab.
 
   Glas-Regeln: das Fenster selbst hat KEIN backdrop-filter (sonst sehen
   die Panels nur die flache Tönung), Panels frosten das Seitenfoto durch
@@ -45,7 +48,8 @@
   --r-win:clamp(18px,1.9vw,40px);--r-lg:clamp(14px,1.5vw,30px);--r-md:clamp(11px,1.15vw,22px);--r-pill:999px;
   --t-2xs:clamp(9px,.70vw,13px);--t-xs:clamp(10px,.80vw,15px);--t-sm:clamp(11px,.92vw,17px);--t-md:clamp(12px,1.05vw,20px);
   --t-lg:clamp(15px,1.30vw,26px);--t-xl:clamp(18px,1.65vw,33px);--t-2xl:clamp(21px,2.05vw,42px);--t-hero:clamp(25px,2.95vw,60px);
-  --gutter:clamp(44px,calc((100vw - 1000px) / 2),140px);
+  --railw:clamp(76px,7vw,112px);--gr:clamp(12px,1.6vw,28px);
+  --lime:#BFFF00;--indigo:#6366F1;--violet:#8B5CF6;--pink:#EC4899;--amber:#F59E0B;--emerald:#10B981;--teal:#14B8A6;--hot:#ed1aa0;--blue:#3d6bff;
   --wincols:minmax(200px,25%) 1fr;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -62,23 +66,16 @@ svg{display:block}
 .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(120,110,104,.22),rgba(60,54,50,.38))}
 
 /* ── App grid ────────────────────────────────────────────────── */
-#app{position:relative;z-index:1;height:100vh;height:100dvh;display:grid;grid-template-columns:var(--gutter) 1fr var(--gutter);grid-template-rows:auto 1fr;padding:clamp(10px,1.35vw,26px) 0;row-gap:clamp(9px,1.05vw,20px)}
-.toolbar{grid-column:2;justify-self:center;width:min(100%,1040px);min-width:min(100%,520px);display:flex;align-items:center;gap:var(--gap-sm);padding:7px 10px;border-radius:var(--r-pill);background:rgba(132,126,125,.44);backdrop-filter:blur(34px) saturate(1.05);-webkit-backdrop-filter:blur(34px) saturate(1.05);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.18),0 24px 54px rgba(0,0,0,.16)}
-.tb-circ{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.30);display:grid;place-items:center;flex:none}
-.tb-circ.dim{opacity:.5}
-.url{flex:1;height:34px;border-radius:var(--r-pill);background:rgba(30,30,30,.32);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:var(--t-sm);font-weight:400}
-.url .aa{font-size:var(--t-xs);letter-spacing:.05em;color:var(--txt-dim)}
-.url .host{display:flex;align-items:center;gap:6px;color:#fff}
-.tb-icons{display:flex;gap:6px}
+#app{position:relative;z-index:1;height:100vh;height:100dvh;display:grid;grid-template-columns:var(--railw) 1fr var(--gr);grid-template-rows:1fr;padding:var(--gr) 0}
 
-.rail{grid-column:1;grid-row:2;align-self:center;justify-self:center;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:var(--r-pill);background:rgba(100,95,90,.34);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),0 26px 56px rgba(0,0,0,.16)}
+.rail{grid-column:1;grid-row:1;align-self:center;justify-self:center;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:var(--r-pill);background:rgba(100,95,90,.34);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),0 26px 56px rgba(0,0,0,.16)}
 .rail a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;transition:background .18s,transform .16s}
 .rail a:hover{background:rgba(255,255,255,.16)}
 .rail a:active{transform:scale(.94)}
 .rail a.on{background:rgba(255,255,255,.32)}
 
 /* ── Window (no backdrop-filter!) ───────────────────────────── */
-.window{grid-column:2;grid-row:2;min-height:0;display:grid;grid-template-rows:auto 1fr;border-radius:var(--r-win);background:var(--glass-win);box-shadow:inset 0 0 0 1px rgba(255,255,255,.36),0 18px 48px rgba(0,0,0,.10);padding:var(--pad);gap:var(--gap)}
+.window{grid-column:2;grid-row:1;min-height:0;display:grid;grid-template-rows:auto 1fr;border-radius:var(--r-win);background:var(--glass-win);box-shadow:inset 0 0 0 1px rgba(255,255,255,.36),0 18px 48px rgba(0,0,0,.10);padding:var(--pad);gap:var(--gap)}
 .whead{display:grid;grid-template-columns:var(--wincols);gap:var(--gap);align-items:center}
 .search{height:40px;border-radius:var(--r-pill);background:var(--glass-pill-dark);display:flex;align-items:center;gap:8px;padding:0 14px;font-size:var(--t-sm);color:var(--txt-dim)}
 .search input{flex:1;background:none;border:0;color:#fff;font:inherit;outline:0;min-width:0}
@@ -161,35 +158,124 @@ svg{display:block}
 .dock{display:none}
 .menu{display:none}
 
-/* ── Below the window: zitierbare Antworten ─────────────────── */
-.below{position:relative;z-index:1;padding:clamp(24px,4vw,64px) var(--gutter) clamp(40px,6vw,96px)}
-.below>*{max-width:1040px;margin:0 auto}
-.gsec{background:rgba(240,250,255,.10);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:var(--r-win);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);padding:clamp(22px,3vw,48px);margin-bottom:var(--gap)}
-.gsec .k{font-size:var(--t-2xs);letter-spacing:.14em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:10px}
-.gsec h1{font-size:var(--t-2xl);font-weight:500;line-height:1.05;letter-spacing:-.01em;max-width:30ch}
-.gsec h2{font-size:var(--t-xl);font-weight:500;line-height:1.1;letter-spacing:-.005em;max-width:30ch}
-.gsec h3{font-size:var(--t-md);font-weight:500;margin-top:18px;max-width:40ch}
-.gsec p{font-size:var(--t-sm);line-height:1.6;max-width:68ch;color:rgba(255,255,255,.88);margin-top:10px}
-.gsec p.first{font-size:var(--t-md);color:#fff}
-.gsec a{color:#fff;text-decoration:underline;text-underline-offset:3px}
-.gsec .access{display:inline-block;margin-top:14px;font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.16);box-shadow:inset 0 .5px 0 rgba(255,255,255,.35)}
-.gsec ol,.gsec ul{margin-top:14px;list-style:none;display:grid;gap:4px;max-width:68ch}
-.gsec li{padding:10px 0;border-top:1px solid rgba(255,255,255,.14);font-size:var(--t-sm);line-height:1.5}
-.gsec li .m{display:block;font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--dot);margin-bottom:3px}
-.gsec li b{font-weight:500}
-.gsec .steps li b{display:block}
-.cta{background:rgba(10,10,10,.55)}
-.cta .row2{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.cta .btn{height:44px}
-.foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:var(--t-xs);color:var(--txt-dim);padding:0 8px}
+
+/* ── Below the window: Freischalt-Funnel als Stack ──────────────── */
+.below{position:relative;z-index:1;padding:clamp(28px,4vw,72px) clamp(14px,3vw,48px) clamp(40px,6vw,96px)}
+.below>*{max-width:1400px;margin:0 auto}
+.k{font-size:var(--t-2xs);letter-spacing:.16em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:12px}
+.k b{color:var(--lime);font-weight:500}
+.below a.u{color:#fff;text-decoration:underline;text-underline-offset:3px}
+
+/* funnel hero */
+.fh{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,56px);align-items:end;padding:0 clamp(4px,1vw,16px) clamp(28px,4vw,64px)}
+.fh h1{font-size:clamp(30px,4.4vw,64px);font-weight:500;line-height:.98;letter-spacing:-.015em;max-width:14ch}
+.fh h1 em{font-style:normal;color:var(--lime)}
+.fh h2{font-size:var(--t-md);font-weight:500;margin-top:26px;color:var(--txt-dim)}
+.fh p.first{font-size:var(--t-lg);line-height:1.45;margin-top:10px;max-width:60ch;color:#fff}
+.fh p.by{font-size:var(--t-sm);line-height:1.6;margin-top:12px;color:var(--txt-dim);max-width:60ch}
+.ladder{display:grid;gap:8px}
+.ladder a{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 16px;border-radius:var(--r-md);background:rgba(16,15,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 3px 0 0 var(--c);transition:transform .18s,background .18s}
+.ladder a:hover{transform:translateX(4px);background:rgba(16,15,14,.86)}
+.ladder .n{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:var(--t-xs);letter-spacing:.08em;color:var(--c)}
+.ladder b{display:block;font-size:var(--t-sm);font-weight:500}
+.ladder small{display:block;font-size:var(--t-2xs);color:var(--txt-dim);margin-top:2px}
+.ladder .pr{font-size:var(--t-2xs);letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);white-space:nowrap}
+.ladder .pr.free{background:var(--lime);color:#0a0a0a}
+
+/* stack */
+.stack{display:flex;flex-direction:column;gap:clamp(14px,2vw,28px)}
+.layer{--c:var(--lime);position:sticky;top:calc(10px + var(--i)*12px);overflow:hidden;border-radius:var(--r-win);background:radial-gradient(52% 70% at 88% 0%,color-mix(in srgb,var(--c) 30%,#151312),#151312 100%);box-shadow:inset 0 2px 0 var(--c),inset 0 0 0 1px rgba(255,255,255,.12),0 -8px 40px rgba(0,0,0,.25),0 30px 70px rgba(0,0,0,.35);padding:clamp(22px,3vw,48px)}
+.lhead{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2vw,32px);align-items:start;margin-bottom:clamp(18px,2.4vw,34px)}
+.lnum{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:clamp(34px,4.6vw,72px);line-height:.9;color:var(--c);letter-spacing:-.03em}
+.lnum i{display:block;font-style:normal;font-size:var(--t-2xs);letter-spacing:.14em;text-transform:uppercase;color:var(--txt-dim);margin-top:10px}
+.ltag{display:inline-flex;align-items:center;gap:8px;font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:var(--r-pill);background:var(--c);color:#0a0a0a;font-weight:500;margin-bottom:12px}
+.ltag.ghost{background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent)}
+.layer h2{font-size:clamp(24px,3vw,44px);font-weight:500;line-height:1.02;letter-spacing:-.012em;max-width:22ch}
+.layer p.first{font-size:var(--t-md);line-height:1.5;max-width:64ch;color:rgba(255,255,255,.9);margin-top:12px}
+.layer p{font-size:var(--t-sm);line-height:1.6;max-width:68ch;color:rgba(255,255,255,.82)}
+
+/* course cards */
+.cgrid{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.2vw,16px)}
+.cc{--t:var(--c);position:relative;display:grid;grid-template-rows:auto 1fr;border-radius:var(--r-lg);overflow:hidden;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:transform .2s,box-shadow .2s}
+.cc:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t) 60%,transparent),0 18px 40px rgba(0,0,0,.35)}
+.cc .ph{position:relative;aspect-ratio:16/9;background:#1a1a1f center/cover no-repeat;margin:0;display:block}
+.cc .ph::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(14,13,12,.9) 100%),linear-gradient(90deg,color-mix(in srgb,var(--t) 38%,transparent),transparent 60%);mix-blend-mode:normal}
+.cc .code{position:absolute;left:10px;bottom:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:var(--t-xs);letter-spacing:.1em;color:#fff;padding:4px 9px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--t) 55%,rgba(10,10,12,.7));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t) 70%,transparent)}
+.cc .st{position:absolute;right:10px;top:10px;font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill);background:var(--lime);color:#0a0a0a;font-weight:500}
+.cc .st.lock{background:rgba(10,10,12,.7);color:#fff;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t) 70%,transparent);display:inline-flex;align-items:center;gap:6px}
+.cc .tx{padding:14px 14px 16px;border-top:3px solid var(--t)}
+.cc .tx small{display:block;font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--t);margin-bottom:6px}
+.cc .tx b{display:block;font-size:var(--t-md);font-weight:500;line-height:1.15}
+.cc .tx p{margin-top:6px;font-size:var(--t-xs);line-height:1.5;color:rgba(255,255,255,.78)}
+
+/* chips (drills) */
+.chips2{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.chips2 li{--t:var(--violet);font-size:var(--t-sm);padding:9px 14px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--t) 16%,rgba(255,255,255,.04));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t) 55%,transparent);color:#fff}
+.chips2 li::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--t);margin-right:9px;vertical-align:1px}
+
+/* "mehr drin" rows */
+.more{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:20px}
+.more div{padding:14px 16px;border-radius:var(--r-md);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);font-size:var(--t-sm);line-height:1.4}
+.more div b{display:block;color:var(--c);font-size:var(--t-2xs);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:5px}
+
+/* layer cta */
+.lcta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:clamp(20px,2.6vw,34px);padding-top:clamp(16px,2vw,24px);border-top:1px solid rgba(255,255,255,.12)}
+.btn.c{background:var(--c);color:#0a0a0a;height:48px;padding:0 22px;font-size:var(--t-sm);font-weight:500;box-shadow:0 10px 30px color-mix(in srgb,var(--c) 30%,transparent)}
+.btn.c:hover{filter:brightness(1.06)}
+.btn.o{height:48px;padding:0 20px;font-size:var(--t-sm)}
+.fine{font-size:var(--t-xs);color:var(--txt-dim);letter-spacing:.02em}
+.fine b{color:#fff;font-weight:500}
+
+/* live layer */
+.live2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:center}
+.live2 .poster{position:relative;aspect-ratio:16/10;border-radius:var(--r-lg);overflow:hidden;background:url('/journal/topics/stage.webp') center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.live2 .poster::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,10,12,.85)),linear-gradient(90deg,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%)}
+.live2 .poster .cap{position:absolute;left:16px;bottom:14px;right:16px;font-size:var(--t-sm);line-height:1.4}
+.live2 .poster .cap b{display:block;font-size:var(--t-xl);font-weight:500;line-height:1.05;margin-bottom:6px}
+.live2 .poster .dot{position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;font-size:var(--t-2xs);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;border-radius:var(--r-pill);background:rgba(10,10,12,.7);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 70%,transparent)}
+.live2 .poster .dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin-top:16px;font-size:var(--t-sm)}
+.kv dt{color:var(--c);letter-spacing:.08em;text-transform:uppercase;font-size:var(--t-2xs);padding-top:3px}
+.kv dd{color:#fff}
+
+/* ablauf */
+.gsec{position:relative;margin-top:clamp(28px,4vw,64px);border-radius:var(--r-win);background:rgba(20,18,17,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);padding:clamp(22px,3vw,48px)}
+.gsec h2{font-size:clamp(24px,3vw,44px);font-weight:500;line-height:1.02;letter-spacing:-.012em;max-width:22ch}
+.gsec p.first{font-size:var(--t-md);line-height:1.5;max-width:64ch;color:rgba(255,255,255,.9);margin-top:12px}
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}
+.steps li{--c:var(--lime);padding:18px 18px 20px;border-radius:var(--r-lg);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),inset 0 3px 0 var(--c);font-size:var(--t-sm);line-height:1.5;color:rgba(255,255,255,.82)}
+.steps .m{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:clamp(26px,3vw,40px);color:var(--c);line-height:1;margin-bottom:10px}
+.steps b{display:block;color:#fff;font-weight:500;font-size:var(--t-md);margin-bottom:6px}
+
+/* faq */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px;margin-top:24px}
+.faq div{padding:18px 0 20px;border-top:1px solid rgba(255,255,255,.14)}
+.faq h3{font-size:var(--t-md);font-weight:500;line-height:1.25;margin-bottom:8px}
+.faq h3::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime);margin-right:10px;vertical-align:2px}
+.faq p{font-size:var(--t-sm);line-height:1.6;color:rgba(255,255,255,.82);max-width:62ch}
+
+/* final cta */
+.final{margin-top:clamp(28px,4vw,64px);border-radius:var(--r-win);background:var(--lime);color:#0a0a0a;padding:clamp(26px,4vw,64px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(18px,3vw,48px);align-items:center;box-shadow:0 30px 80px rgba(191,255,0,.18)}
+.final .k{color:rgba(10,10,10,.6)}
+.final h2{font-size:clamp(30px,4.4vw,64px);font-weight:500;line-height:.98;letter-spacing:-.015em;max-width:12ch}
+.final p{font-size:var(--t-md);line-height:1.5;margin-top:14px;max-width:48ch;color:rgba(10,10,10,.82)}
+.final .row2{display:flex;flex-wrap:wrap;gap:10px;justify-self:end}
+.final .btn.ink{background:#0a0a0a;color:#fff;height:52px;padding:0 24px;font-size:var(--t-sm)}
+.final .btn.ok{box-shadow:inset 0 0 0 1.5px #0a0a0a;color:#0a0a0a;height:52px;padding:0 22px;font-size:var(--t-sm)}
+.final .btn.ok:hover{background:rgba(0,0,0,.08)}
+.foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:var(--t-xs);color:var(--txt-dim);padding:28px 8px 0}
 .foot nav{display:flex;flex-wrap:wrap;gap:16px}
 .foot a:hover{color:#fff}
+
+@media (max-width:1000px){.cgrid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:860px){.fh,.live2,.final{grid-template-columns:1fr}.final .row2{justify-self:start}.faq{grid-template-columns:1fr}.lhead{grid-template-columns:1fr;gap:10px}.lnum{font-size:clamp(28px,8vw,48px)}.layer{top:10px}}
+@media (max-width:560px){.cgrid{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.btn.c,.btn.o,.final .btn{width:100%;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.layer{position:relative;top:auto}}
 
 /* ── Breakpoints ─────────────────────────────────────────────── */
 @media (max-width:1180px){:root{--wincols:minmax(200px,26%) 1fr}.profile small{display:none}}
 @media (max-width:1130px){
-  :root{--gutter:clamp(12px,2vw,24px)}
-  #app{grid-template-columns:var(--gutter) 1fr var(--gutter)}
+  #app{grid-template-columns:var(--gr) 1fr var(--gr)}
   .rail{display:none}
   .dock{display:flex;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;gap:4px;padding:8px;border-radius:var(--r-pill);
     background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.075) 48%,rgba(255,255,255,.12)),rgba(58,53,51,.30);
@@ -200,7 +286,7 @@ svg{display:block}
   .dock a{position:relative;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;transition:background .18s,transform .16s}
   .dock a:hover{background:rgba(255,255,255,.16)}.dock a:active{transform:scale(.94)}
   .dock a.on{background:linear-gradient(145deg,rgba(255,255,255,.46),rgba(255,255,255,.22));box-shadow:inset 0 .5px 0 rgba(255,255,255,.6)}
-  .below{padding-bottom:110px}
+  .below{padding-bottom:120px}
 }
 @media (max-width:900px){
   #app{height:auto}
@@ -218,7 +304,6 @@ svg{display:block}
 @media (max-width:680px){
   .arrows{top:calc(var(--u)*4);bottom:auto}
   .tabs a:not(.on){display:none}
-  .tb-icons .x1{display:none}
 }
 @media (max-width:520px){
   .tabs,.bell,.profile{display:none}
@@ -243,7 +328,6 @@ svg{display:block}
   .card{flex:0 0 46%;scroll-snap-align:start}
   .hero{height:clamp(300px,80vw,420px)}
   .hero .in{max-width:94%}
-  .toolbar{min-width:0}
 }
 </style>
 </head>
@@ -251,25 +335,13 @@ svg{display:block}
 <div class="bg" aria-hidden="true"></div>
 
 <div id="app">
-  <!-- Safari-style pill toolbar · reine Darstellung -->
-  <div class="toolbar" role="group" aria-label="Browser-Leiste (Darstellung)">
-    <span class="tb-circ"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span>
-    <span class="tb-circ dim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
-    <div class="url"><span class="aa">AA</span><span class="host"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>leader-os.de/kurse</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></div>
-    <div class="tb-icons">
-      <span class="tb-circ x1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></span>
-      <span class="tb-circ x1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></span>
-      <span class="tb-circ"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><rect x="3" y="6" width="13" height="13" rx="2"/><rect x="8" y="3" width="13" height="13" rx="2"/></svg></span>
-    </div>
-  </div>
-
   <!-- Vertical rail (desktop) -->
   <nav class="rail" aria-label="Bereiche">
-    <a href="/" aria-label="Start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
-    <a href="/kurse" class="on" aria-label="Kurse" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></a>
-    <a href="/wladbot" aria-label="WladBot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></a>
-    <a href="/kommunikation" aria-label="Simulation"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></a>
-    <a href="/wlad-jachtchenko" aria-label="Über Wlad"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+    <a href="/" aria-label="Start" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="/kurse" class="on" aria-label="Kurse" aria-current="page" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></a>
+    <a href="/wladbot" aria-label="WladBot" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></a>
+    <a href="/kommunikation" aria-label="Simulation" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></a>
+    <a href="/wlad-jachtchenko" aria-label="Über Wlad" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
   </nav>
 
   <!-- The glass window -->
@@ -282,17 +354,17 @@ svg{display:block}
           <a href="#grundlagen" data-tab>Grundlagen</a>
           <a href="#master" data-tab>Master</a>
           <a href="#drills" data-tab>Frameworks</a>
-          <a href="/fragen" data-tab>Mehr</a>
+          <a href="/fragen" data-tab target="_blank" rel="noopener">Mehr</a>
         </nav>
-        <a class="bell" href="/webinar" aria-label="Live-Webinar am 29. Oktober"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><i></i></a>
-        <a class="profile" href="/wlad-jachtchenko"><img src="/wlad/wlad-portrait.webp" alt="Wlad Jachtchenko" width="32" height="32"/><span><b>Wlad Jachtchenko</b><small>@WladTraining</small></span></a>
+        <a class="bell" href="/webinar" aria-label="Live-Webinar am 29. Oktober" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><i></i></a>
+        <a class="profile" href="/wlad-jachtchenko" target="_blank" rel="noopener"><img src="/wlad/wlad-portrait.webp" alt="Wlad Jachtchenko" width="32" height="32"/><span><b>Wlad Jachtchenko</b><small>@WladTraining</small></span></a>
         <button class="burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
       </div>
       <div class="menu" id="menu">
         <h4>Stöbern</h4>
-        <div class="g"><a href="#grundlagen">Grundlagen</a><a href="#master">Master</a><a href="#drills">Frameworks</a><a href="/webinar">Webinar</a></div>
+        <div class="g"><a href="#grundlagen">Grundlagen</a><a href="#master">Master</a><a href="#drills">Frameworks</a><a href="/webinar" target="_blank" rel="noopener">Webinar</a></div>
         <h4>Deine Bibliothek</h4>
-        <div class="g"><a href="/fragen">Fragen &amp; Frameworks</a><a href="/journal">Journal</a><a href="/wlad-jachtchenko">Über Wlad</a><a href="https://leaderos.de/signup?trial=14">14 Tage testen</a></div>
+        <div class="g"><a href="/fragen" target="_blank" rel="noopener">Fragen &amp; Frameworks</a><a href="/journal" target="_blank" rel="noopener">Journal</a><a href="/wlad-jachtchenko" target="_blank" rel="noopener">Über Wlad</a><a href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener">14 Tage testen</a></div>
       </div>
     </div>
 
@@ -333,9 +405,9 @@ svg{display:block}
             <p class="by">K·02 · Wlad Jachtchenko</p>
             <p class="desc">Konflikt, Kritik und Kündigung so führen, dass das Gespräch nicht kippt. Danach übst du es in der Simulation mit einem Gegenüber, das zurückredet, bevor du es im Büro führst.</p>
             <div class="ctas">
-              <a class="btn w" href="https://leaderos.de/signup?trial=14"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8"/></svg>14 Tage kostenlos</a>
-              <a class="btn o" href="/webinar">Webinar 29.10.</a>
-              <a class="circ" href="/fragen" aria-label="Mehr"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></a>
+              <a class="btn w" href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8"/></svg>14 Tage kostenlos</a>
+              <a class="btn o" href="/webinar" target="_blank" rel="noopener">Webinar 29.10.</a>
+              <a class="circ" href="/fragen" aria-label="Mehr" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></a>
             </div>
           </div>
           <div class="arrows" aria-hidden="true"><button type="button" tabindex="-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" tabindex="-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
@@ -348,7 +420,7 @@ svg{display:block}
             <a class="card" href="#master" style="background-image:url('/journal/topics/team-b.webp')"><span class="chip">Master</span><span class="dots" aria-hidden="true"><svg width="40%" height="40%" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></span><b>Change Management Master</b><small>M·02 · Strategie</small><span class="lvl">OS-Jahr</span><span class="bm" aria-hidden="true"><svg width="45%" height="45%" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span></a>
             <a class="card" href="#master" style="background-image:url('/journal/topics/presence.webp')"><span class="chip">Master</span><span class="dots" aria-hidden="true"><svg width="40%" height="40%" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></span><b>Executive Presence</b><small>M·03 · Führung</small><span class="lvl">OS-Jahr</span><span class="bm" aria-hidden="true"><svg width="45%" height="45%" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span></a>
             <a class="card" href="#master" style="background-image:url('/journal/topics/boardroom-b.webp')"><span class="chip">Master</span><span class="dots" aria-hidden="true"><svg width="40%" height="40%" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></span><b>Boardroom-Strategie</b><small>M·04 · Strategie</small><span class="lvl">OS-Jahr</span><span class="bm" aria-hidden="true"><svg width="45%" height="45%" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span></a>
-            <a class="card live" href="/webinar"><span class="chip">Live</span><span class="dots" aria-hidden="true"><svg width="40%" height="40%" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></span><b>Webinar mit Wlad</b><small>Do, 29.10. · 10:00 Uhr</small><span class="lvl">kostenlos</span><span class="bm" aria-hidden="true"><svg width="45%" height="45%" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span></a>
+            <a class="card live" href="/webinar" target="_blank" rel="noopener"><span class="chip">Live</span><span class="dots" aria-hidden="true"><svg width="40%" height="40%" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></span><b>Webinar mit Wlad</b><small>Do, 29.10. · 10:00 Uhr</small><span class="lvl">kostenlos</span><span class="bm" aria-hidden="true"><svg width="45%" height="45%" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -358,69 +430,150 @@ svg{display:block}
 
 <!-- Floating liquid dock (≤1130px) -->
 <nav class="dock" aria-label="Bereiche">
-  <a href="/" aria-label="Start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
-  <a href="/kurse" class="on" aria-label="Kurse" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></a>
-  <a href="/wladbot" aria-label="WladBot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></a>
-  <a href="/kommunikation" aria-label="Simulation"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></a>
-  <a href="/wlad-jachtchenko" aria-label="Über Wlad"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+  <a href="/" aria-label="Start" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+  <a href="/kurse" class="on" aria-label="Kurse" aria-current="page" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></a>
+  <a href="/wladbot" aria-label="WladBot" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></a>
+  <a href="/kommunikation" aria-label="Simulation" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></a>
+  <a href="/wlad-jachtchenko" aria-label="Über Wlad" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
 </nav>
 
-<!-- ── Zitierbare Antworten (ohne JS lesbar) ───────────────────── -->
+<!-- ── Freischalt-Funnel · Stack (ohne JS lesbar) ──────────────── -->
 <main class="below">
-  <section class="gsec" id="katalog">
-    <p class="k">Kurs-Bibliothek · LeaderOS</p>
-    <h1>Kurse in LeaderOS: Katalog, Zugang und Ablauf</h1>
-    <h2 style="margin-top:22px">Welche Kurse gibt es in LeaderOS?</h2>
-    <p class="first">LeaderOS enthält sechs Grundlagen-Kurse, die in jedem Account freigeschaltet sind: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu kommen vier Master-Programme im OS-Jahr: KI-First Leadership, Change Management Master, Executive Presence und Boardroom-Strategie. Jeder Kurs endet nicht mit einem Haken, sondern mit einem Drill an deinem eigenen Fall.</p>
-    <p>Entwickelt aus der Methodik von Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor und seit 2007 Leadership-Coach. <a href="/wlad-jachtchenko">Über Wlad</a> · <a href="/fragen">Fragen &amp; Frameworks</a></p>
-  </section>
+  <header class="fh" id="katalog">
+    <div>
+      <p class="k">Kurs-Bibliothek · LeaderOS · <b>Freischalten statt anschauen</b></p>
+      <h1>Kurse in LeaderOS: Katalog, Zugang und Ablauf<em>.</em></h1>
+      <h2>Welche Kurse gibt es in LeaderOS?</h2>
+      <p class="first">LeaderOS enthält sechs Grundlagen-Kurse, die in jedem Account freigeschaltet sind: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu kommen vier Master-Programme im OS-Jahr: KI-First Leadership, Change Management Master, Executive Presence und Boardroom-Strategie. Jeder Kurs endet nicht mit einem Haken, sondern mit einem Drill an deinem eigenen Fall.</p>
+      <p class="by">Entwickelt aus der Methodik von Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor und seit 2007 Leadership-Coach. <a class="u" href="/wlad-jachtchenko" target="_blank" rel="noopener">Über Wlad</a> · <a class="u" href="/fragen" target="_blank" rel="noopener">Fragen &amp; Frameworks</a></p>
+    </div>
+    <nav class="ladder" aria-label="Der Stack">
+      <a href="#grundlagen" style="--c:var(--lime)"><span class="n">01</span><span><b>Kostenloser Account</b><small>Sechs Grundlagen-Kurse, WladBot, Drills · ab Tag 1</small></span><span class="pr free">Frei</span></a>
+      <a href="#drills" style="--c:var(--violet)"><span class="n">02</span><span><b>30-Tage-Challenge</b><small>Elf Framework-Drills, Zertifikat, 12 Monate Mitgliedschaft</small></span><span class="pr">997 €</span></a>
+      <a href="#master" style="--c:var(--hot)"><span class="n">03</span><span><b>OS-Jahr · Leadership Plus Pro</b><small>Vier Master-Programme, Live-Sessions mit Wlad</small></span><span class="pr">4 797 €</span></a>
+      <a href="#live" style="--c:var(--blue)"><span class="n">04</span><span><b>Live-Webinar</b><small>Donnerstag, 29. Oktober · 10:00 Uhr</small></span><span class="pr">Kostenlos</span></a>
+    </nav>
+  </header>
 
-  <section class="gsec" id="grundlagen">
-    <p class="k">Grundlagen · sechs Kurse</p>
-    <h2>Ab Tag 1 freigeschaltet.</h2>
-    <p class="first">Die sechs Grundlagen-Kurse sind in jedem Account enthalten, auch im 14-Tage-Test. Sie decken die Gespräche ab, die jede Führungskraft führen muss.</p>
-    <span class="access">Zugang · im 14-Tage-Test enthalten</span>
-    <ol>
-      <li><span class="m">K·01 · Kommunikation · Einstieg</span><b>Rhetorik-Grundlagen</b> – Die drei Säulen wirkungsvoller Führungssprache: Körpersprache, Stimme und Wortwahl.</li>
-      <li><span class="m">K·02 · Kommunikation · Einstieg</span><b>Schwierige Gespräche meistern</b> – Konflikt, Kritik und Kündigung führen, ohne dass das Gespräch kippt.</li>
-      <li><span class="m">K·03 · Führung · Einstieg</span><b>Delegation wie ein Profi</b> – Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement vermeiden.</li>
-      <li><span class="m">K·04 · Coaching · Einstieg</span><b>Feedback-Formate</b> – Strukturiert Feedback geben: regelmäßig, an Fakten gebunden, wirksam.</li>
-      <li><span class="m">K·05 · Kommunikation · Fortgeschritten</span><b>Storytelling im Boardroom</b> – Komplexe Ideen so erzählen, dass sie in zwei Minuten hängen bleiben.</li>
-      <li><span class="m">K·06 · Führung · Einstieg</span><b>Meeting-Rhetorik</b> – Agenda, Eröffnung und Wortmeldungen: Meetings führen, die zu Entscheidungen kommen.</li>
-    </ol>
-  </section>
+  <section class="stack" aria-label="Freischalten in vier Ebenen">
 
-  <section class="gsec" id="master">
-    <p class="k">Master · vier Programme</p>
-    <h2>Für das OS-Jahr.</h2>
-    <p class="first">Die vier Master-Programme sind Teil des OS-Jahres (Leadership Plus Pro). Sie richten sich an Führungskräfte, die Strategie, Veränderung und Präsenz auf C-Level trainieren wollen.</p>
-    <span class="access">Zugang · im OS-Jahr · Leadership Plus Pro</span>
-    <ol>
-      <li><span class="m">M·01 · AI-Strategie · Master</span><b>KI-First Leadership</b> – KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben.</li>
-      <li><span class="m">M·02 · Strategie · Master</span><b>Change Management Master</b> – Veränderung so führen, dass das Team mitgeht. Mit Kotters 8-Schritte-Modell, KI-aktualisiert.</li>
-      <li><span class="m">M·03 · Führung · Master</span><b>Executive Presence</b> – Raum einnehmen, bevor du sprichst: Präsenz und Gravitas trainieren.</li>
-      <li><span class="m">M·04 · Strategie · Master</span><b>Boardroom-Strategie</b> – C-Level-Entscheidungen vorbereiten, präsentieren und durchsetzen.</li>
-    </ol>
-  </section>
+    <!-- 01 · kostenloser Account -->
+    <article class="layer" id="grundlagen" style="--i:0;--c:var(--lime)">
+      <div class="lhead">
+        <div class="lnum">01<i>Ebene</i></div>
+        <div>
+          <span class="ltag">Kostenlos · ab Tag 1</span>
+          <h2>Ab Tag 1 freigeschaltet.</h2>
+          <p class="first">Die sechs Grundlagen-Kurse sind in jedem Account enthalten, auch im 14-Tage-Test. Sie decken die Gespräche ab, die jede Führungskraft führen muss.</p>
+        </div>
+      </div>
+      <ol class="cgrid">
+        <li class="cc" style="--t:var(--indigo)"><span class="ph" style="background-image:url('/journal/topics/stage.webp')"><span class="code">K·01</span><span class="st">Frei</span></span><div class="tx"><small>Kommunikation · Einstieg</small><b>Rhetorik-Grundlagen</b><p>Die drei Säulen wirkungsvoller Führungssprache: Körpersprache, Stimme und Wortwahl.</p></div></li>
+        <li class="cc" style="--t:var(--violet)"><span class="ph" style="background-image:url('/journal/topics/conflict.webp')"><span class="code">K·02</span><span class="st">Frei</span></span><div class="tx"><small>Kommunikation · Einstieg</small><b>Schwierige Gespräche meistern</b><p>Konflikt, Kritik und Kündigung führen, ohne dass das Gespräch kippt.</p></div></li>
+        <li class="cc" style="--t:var(--pink)"><span class="ph" style="background-image:url('/journal/topics/team.webp')"><span class="code">K·03</span><span class="st">Frei</span></span><div class="tx"><small>Führung · Einstieg</small><b>Delegation wie ein Profi</b><p>Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement vermeiden.</p></div></li>
+        <li class="cc" style="--t:var(--amber)"><span class="ph" style="background-image:url('/journal/topics/feedback.webp')"><span class="code">K·04</span><span class="st">Frei</span></span><div class="tx"><small>Coaching · Einstieg</small><b>Feedback-Formate</b><p>Strukturiert Feedback geben: regelmäßig, an Fakten gebunden, wirksam.</p></div></li>
+        <li class="cc" style="--t:var(--emerald)"><span class="ph" style="background-image:url('/journal/topics/writing.webp')"><span class="code">K·05</span><span class="st">Frei</span></span><div class="tx"><small>Kommunikation · Fortgeschritten</small><b>Storytelling im Boardroom</b><p>Komplexe Ideen so erzählen, dass sie in zwei Minuten hängen bleiben.</p></div></li>
+        <li class="cc" style="--t:var(--teal)"><span class="ph" style="background-image:url('/journal/topics/boardroom.webp')"><span class="code">K·06</span><span class="st">Frei</span></span><div class="tx"><small>Führung · Einstieg</small><b>Meeting-Rhetorik</b><p>Agenda, Eröffnung und Wortmeldungen: Meetings führen, die zu Entscheidungen kommen.</p></div></li>
+      </ol>
+      <div class="more">
+        <div><b>WladBot</b>Der KI-Coach antwortet auf 2 212 authentischen Wlad-Inhalten aus Büchern, Podcasts und Trainings.</div>
+        <div><b>Simulationen</b>Du übst das Gespräch mit einem Gegenüber, das zurückredet, bevor es im Büro zählt.</div>
+        <div><b>Tägliche Drills</b>15 Minuten am Tag, an deinem echten Fall statt an einer Fallstudie.</div>
+      </div>
+      <div class="lcta">
+        <a class="btn c" href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener">Jetzt kostenlos freischalten</a>
+        <span class="fine"><b>14 Tage</b> · ohne Karte · jederzeit kündbar · Anmeldung auf leaderos.de</span>
+      </div>
+    </article>
 
-  <section class="gsec" id="drills">
-    <p class="k">Framework-Drills · elf Frameworks</p>
-    <h2>Nicht als Poster. Als Drill.</h2>
-    <p class="first">Neben den Kursen trainiert LeaderOS elf Frameworks aus Wlads Büchern und Trainings als eigene Drills: jeweils kurz erklärt, dann an deinem Fall geübt und ausgewertet.</p>
-    <ul>
-      <li>Feedbackformel B·W·W (Beobachtung, Wirkung, Wunsch)</li>
-      <li>Harvard-Verhandlungsmethode</li>
-      <li>Kommunikationsquadrat nach Schulz von Thun</li>
-      <li>ALPEN-Methode</li>
-      <li>Die 5 Rollen einer Führungskraft</li>
-      <li>Vier-Farben-Modell</li>
-      <li>Dunkle Rhetorik erkennen und kontern</li>
-      <li>Drei Säulen der Überzeugung (Logos, Ethos, Pathos)</li>
-      <li>Die 10 Stufen des Zuhörens</li>
-      <li>OKR vs. KPI</li>
-      <li>Pareto-Prinzip in der Führung</li>
-    </ul>
-    <p>Die kanonischen Definitionen stehen unter <a href="/fragen">Fragen &amp; Frameworks</a>.</p>
+    <!-- 02 · Challenge -->
+    <article class="layer" id="drills" style="--i:1;--c:var(--violet)">
+      <div class="lhead">
+        <div class="lnum">02<i>Ebene</i></div>
+        <div>
+          <span class="ltag">30-Tage-Challenge · 12 Monate Mitgliedschaft</span>
+          <h2>Nicht als Poster. Als Drill.</h2>
+          <p class="first">Neben den Kursen trainiert LeaderOS elf Frameworks aus Wlads Büchern und Trainings als eigene Drills: jeweils kurz erklärt, dann an deinem Fall geübt und ausgewertet.</p>
+        </div>
+      </div>
+      <ul class="chips2">
+        <li style="--t:var(--violet)">Feedbackformel B·W·W (Beobachtung, Wirkung, Wunsch)</li>
+        <li style="--t:var(--indigo)">Harvard-Verhandlungsmethode</li>
+        <li style="--t:var(--pink)">Kommunikationsquadrat nach Schulz von Thun</li>
+        <li style="--t:var(--amber)">ALPEN-Methode</li>
+        <li style="--t:var(--lime)">Die 5 Rollen einer Führungskraft</li>
+        <li style="--t:var(--emerald)">Vier-Farben-Modell</li>
+        <li style="--t:var(--hot)">Dunkle Rhetorik erkennen und kontern</li>
+        <li style="--t:var(--teal)">Drei Säulen der Überzeugung (Logos, Ethos, Pathos)</li>
+        <li style="--t:var(--blue)">Die 10 Stufen des Zuhörens</li>
+        <li style="--t:var(--amber)">OKR vs. KPI</li>
+        <li style="--t:var(--indigo)">Pareto-Prinzip in der Führung</li>
+      </ul>
+      <p>Die kanonischen Definitionen stehen unter <a class="u" href="/fragen" target="_blank" rel="noopener">Fragen &amp; Frameworks</a>.</p>
+      <div class="more">
+        <div><b>Challenge</b>30 Tage, ein Drill pro Tag, am Ende ein persönliches Zertifikat mit deiner Startnummer.</div>
+        <div><b>12 Monate</b>Alle Frameworks, WladBot rund um die Uhr und die Kurs-Bibliothek bleiben ein Jahr offen.</div>
+        <div><b>Kein Abo</b>997 € einmalig. Keine automatische Verlängerung.</div>
+      </div>
+      <div class="lcta">
+        <a class="btn c" href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener">Challenge freischalten</a>
+        <a class="btn o" href="/fragen" target="_blank" rel="noopener">Frameworks ansehen</a>
+        <span class="fine"><b>997 € einmalig</b> · erst Account anlegen, dann im OS freischalten</span>
+      </div>
+    </article>
+
+    <!-- 03 · OS-Jahr -->
+    <article class="layer" id="master" style="--i:2;--c:var(--hot)">
+      <div class="lhead">
+        <div class="lnum">03<i>Ebene</i></div>
+        <div>
+          <span class="ltag">OS-Jahr · Leadership Plus Pro</span>
+          <h2>Für das OS-Jahr.</h2>
+          <p class="first">Die vier Master-Programme sind Teil des OS-Jahres (Leadership Plus Pro). Sie richten sich an Führungskräfte, die Strategie, Veränderung und Präsenz auf C-Level trainieren wollen.</p>
+        </div>
+      </div>
+      <ol class="cgrid">
+        <li class="cc" style="--t:var(--hot)"><span class="ph" style="background-image:url('/journal/topics/ai.webp')"><span class="code">M·01</span><span class="st lock">OS-Jahr</span></span><div class="tx"><small>AI-Strategie · Master</small><b>KI-First Leadership</b><p>KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben.</p></div></li>
+        <li class="cc" style="--t:var(--pink)"><span class="ph" style="background-image:url('/journal/topics/team-b.webp')"><span class="code">M·02</span><span class="st lock">OS-Jahr</span></span><div class="tx"><small>Strategie · Master</small><b>Change Management Master</b><p>Veränderung so führen, dass das Team mitgeht. Mit Kotters 8-Schritte-Modell, KI-aktualisiert.</p></div></li>
+        <li class="cc" style="--t:var(--amber)"><span class="ph" style="background-image:url('/journal/topics/presence.webp')"><span class="code">M·03</span><span class="st lock">OS-Jahr</span></span><div class="tx"><small>Führung · Master</small><b>Executive Presence</b><p>Raum einnehmen, bevor du sprichst: Präsenz und Gravitas trainieren.</p></div></li>
+        <li class="cc" style="--t:var(--lime)"><span class="ph" style="background-image:url('/journal/topics/boardroom-b.webp')"><span class="code">M·04</span><span class="st lock">OS-Jahr</span></span><div class="tx"><small>Strategie · Master</small><b>Boardroom-Strategie</b><p>C-Level-Entscheidungen vorbereiten, präsentieren und durchsetzen.</p></div></li>
+      </ol>
+      <div class="more">
+        <div><b>Live mit Wlad</b>Monatliche Live-Sessions und ein Strategie-Call, statt ausgebuchter 1:1-Slots.</div>
+        <div><b>Video-Analyse</b>Deine Aufnahmen werden nach Struktur, Klarheit und Wirkung ausgewertet.</div>
+        <div><b>Onboarding</b>Persönliches Onboarding und alle Simulationen, 12 Monate lang.</div>
+      </div>
+      <div class="lcta">
+        <a class="btn c" href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener">OS-Jahr freischalten</a>
+        <span class="fine"><b>4 797 € einmalig</b> oder drei Raten · 12 Monate · kein Abo</span>
+      </div>
+    </article>
+
+    <!-- 04 · Live -->
+    <article class="layer" id="live" style="--i:3;--c:var(--blue)">
+      <div class="live2">
+        <div>
+          <div class="lhead">
+            <div class="lnum">04<i>Ebene</i></div>
+            <div>
+              <span class="ltag ghost">Live · kostenlos</span>
+              <h2>Erst live sehen, dann freischalten.</h2>
+              <p class="first">90 Minuten live mit Wlad Jachtchenko: der Charisma-Code, das Leadership Operating System, ein echter Führungsfall und Live-Q&amp;A.</p>
+            </div>
+          </div>
+          <dl class="kv">
+            <dt>Wann</dt><dd>Donnerstag, 29. Oktober 2026 · 10:00 bis 11:30 Uhr</dd>
+            <dt>Wo</dt><dd>Online, live · 90 Minuten</dd>
+            <dt>Für wen</dt><dd>Führungskräfte, die Gespräche trainieren wollen statt Theorie zu sammeln</dd>
+          </dl>
+          <div class="lcta">
+            <a class="btn c" href="/webinar" target="_blank" rel="noopener">Platz im Webinar sichern</a>
+            <span class="fine"><b>Kostenlos</b> · live, ohne Aufzeichnung · Fragen im Q&amp;A</span>
+          </div>
+        </div>
+        <a class="poster" href="/webinar" aria-label="Zum Live-Webinar" target="_blank" rel="noopener"><span class="dot">Live · 29.10.</span><span class="cap"><b>Webinar mit Wlad</b>Charisma-Code · Leadership Operating System · dein Fall</span></a>
+      </div>
+    </article>
   </section>
 
   <section class="gsec" id="ablauf">
@@ -428,34 +581,38 @@ svg{display:block}
     <h2>Wie läuft ein Kurs in LeaderOS ab?</h2>
     <p class="first">Ein Kurs in LeaderOS besteht aus vier Schritten: einer kurzen Lektion mit einem Framework, einem Drill, der dasselbe Framework an deinem echten Fall anwendet, einer Simulation oder Frage an den KI-Coach WladBot vor dem anstehenden Gespräch und einer Auswertung nach Struktur, Klarheit und Wirkung. Dafür sind 15 Minuten am Tag eingeplant.</p>
     <ol class="steps">
-      <li><span class="m">01</span><b>Lektion</b>Kurz, mit dem Framework, das du heute brauchst.</li>
-      <li><span class="m">02</span><b>Drill</b>Dasselbe Framework an deinem echten Fall, nicht an einer Fallstudie.</li>
-      <li><span class="m">03</span><b>Simulation oder Frage</b>Du übst das Gespräch mit einem Gegenüber, das zurückredet, oder fragst WladBot, bevor es zählt.</li>
-      <li><span class="m">04</span><b>Auswertung</b>Was saß, was fehlte, und der nächste Drill dazu.</li>
+      <li style="--c:var(--lime)"><span class="m">01</span><b>Lektion</b>Kurz, mit dem Framework, das du heute brauchst.</li>
+      <li style="--c:var(--violet)"><span class="m">02</span><b>Drill</b>Dasselbe Framework an deinem echten Fall, nicht an einer Fallstudie.</li>
+      <li style="--c:var(--hot)"><span class="m">03</span><b>Simulation oder Frage</b>Du übst das Gespräch mit einem Gegenüber, das zurückredet, oder fragst WladBot, bevor es zählt.</li>
+      <li style="--c:var(--blue)"><span class="m">04</span><b>Auswertung</b>Was saß, was fehlte, und der nächste Drill dazu.</li>
     </ol>
   </section>
 
   <section class="gsec" id="fragen">
     <p class="k">Häufige Fragen · Kurse</p>
     <h2>Kurz beantwortet.</h2>
-    <h3>Welche Kurse sind im 14-Tage-Test enthalten?</h3><p>Alle sechs Grundlagen-Kurse: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu WladBot, Simulationen und die täglichen Drills. Der Test braucht keine Kreditkarte und ist jederzeit kündbar.</p>
-    <h3>Was ist der Unterschied zwischen Grundlagen- und Master-Kursen?</h3><p>Grundlagen-Kurse trainieren die Gespräche, die jede Führungskraft führt: Feedback, Delegation, Meetings, schwierige Gespräche. Master-Programme trainieren Strategie, Veränderung und Präsenz auf C-Level und sind Teil des OS-Jahres (Leadership Plus Pro).</p>
-    <h3>Brauche ich Vorkenntnisse?</h3><p>Nein. Die Grundlagen-Kurse beginnen bei den drei Säulen der Führungssprache. Du brauchst keine KI-Vorkenntnisse: Wenn du eine E-Mail schreiben kannst, kannst du WladBot nutzen.</p>
-    <h3>Was unterscheidet die Kurse von einem Videokurs?</h3><p>Ein Videokurs endet mit einem Haken. In LeaderOS endet jeder Kurs mit einem Drill an deinem Fall, einer Simulation mit einem Gegenüber, das zurückredet, und einer Auswertung. Trainiert wird Verhalten, nicht Wissen.</p>
-    <h3>Wer hat die Kurse entwickelt?</h3><p>Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor, Gründer der Argumentorik-Akademie und seit 2007 Leadership-Coach. Die Kurse bauen auf seinen Büchern auf, darunter „Weiße Rhetorik“, „Dunkle Rhetorik“ und „Die 5 Rollen einer Führungskraft“.</p>
-    <h3>Gibt es ein Zertifikat?</h3><p>Ja. Die 30-Tage-Challenge endet mit einem persönlichen Zertifikat und deiner Startnummer, zum Beispiel für LinkedIn oder den nächsten Arbeitgeber.</p>
+    <div class="faq">
+      <div><h3>Welche Kurse sind im 14-Tage-Test enthalten?</h3><p>Alle sechs Grundlagen-Kurse: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu WladBot, Simulationen und die täglichen Drills. Der Test braucht keine Kreditkarte und ist jederzeit kündbar.</p></div>
+      <div><h3>Was ist der Unterschied zwischen Grundlagen- und Master-Kursen?</h3><p>Grundlagen-Kurse trainieren die Gespräche, die jede Führungskraft führt: Feedback, Delegation, Meetings, schwierige Gespräche. Master-Programme trainieren Strategie, Veränderung und Präsenz auf C-Level und sind Teil des OS-Jahres (Leadership Plus Pro).</p></div>
+      <div><h3>Brauche ich Vorkenntnisse?</h3><p>Nein. Die Grundlagen-Kurse beginnen bei den drei Säulen der Führungssprache. Du brauchst keine KI-Vorkenntnisse: Wenn du eine E-Mail schreiben kannst, kannst du WladBot nutzen.</p></div>
+      <div><h3>Was unterscheidet die Kurse von einem Videokurs?</h3><p>Ein Videokurs endet mit einem Haken. In LeaderOS endet jeder Kurs mit einem Drill an deinem Fall, einer Simulation mit einem Gegenüber, das zurückredet, und einer Auswertung. Trainiert wird Verhalten, nicht Wissen.</p></div>
+      <div><h3>Wer hat die Kurse entwickelt?</h3><p>Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor, Gründer der Argumentorik-Akademie und seit 2007 Leadership-Coach. Die Kurse bauen auf seinen Büchern auf, darunter „Weiße Rhetorik“, „Dunkle Rhetorik“ und „Die 5 Rollen einer Führungskraft“.</p></div>
+      <div><h3>Gibt es ein Zertifikat?</h3><p>Ja. Die 30-Tage-Challenge endet mit einem persönlichen Zertifikat und deiner Startnummer, zum Beispiel für LinkedIn oder den nächsten Arbeitgeber.</p></div>
+    </div>
   </section>
 
-  <section class="gsec cta">
-    <p class="k">Nächster Schritt</p>
-    <h2>Kurs ansehen ist nicht Kurs können.</h2>
-    <p>Alle sechs Grundlagen-Kurse, WladBot und die Drills: 14 Tage kostenlos, ohne Karte. Oder sieh das System live im Webinar mit Wlad am 29. Oktober.</p>
-    <div class="row2"><a class="btn w" href="https://leaderos.de/signup?trial=14">14 Tage kostenlos testen</a><a class="btn o" href="/webinar">Live-Webinar am 29.10.</a></div>
+  <section class="final" aria-label="Nächster Schritt">
+    <div>
+      <p class="k">Nächster Schritt</p>
+      <h2>Kurs ansehen ist nicht Kurs können.</h2>
+      <p>Alle sechs Grundlagen-Kurse, WladBot und die Drills: 14 Tage kostenlos, ohne Karte. Oder sieh das System live im Webinar mit Wlad am 29. Oktober.</p>
+    </div>
+    <div class="row2"><a class="btn ink" href="https://leaderos.de/signup?trial=14" target="_blank" rel="noopener">14 Tage kostenlos testen</a><a class="btn ok" href="/webinar" target="_blank" rel="noopener">Live-Webinar am 29.10.</a></div>
   </section>
 
   <footer class="foot">
     <span>LeaderOS · Argumentorik-Akademie</span>
-    <nav><a href="/">Start</a><a href="/fragen">Fragen &amp; Frameworks</a><a href="/journal">Journal</a><a href="/wlad-jachtchenko">Über Wlad</a><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></nav>
+    <nav><a href="/" target="_blank" rel="noopener">Start</a><a href="/fragen" target="_blank" rel="noopener">Fragen &amp; Frameworks</a><a href="/journal" target="_blank" rel="noopener">Journal</a><a href="/wlad-jachtchenko" target="_blank" rel="noopener">Über Wlad</a><a href="/impressum" target="_blank" rel="noopener">Impressum</a><a href="/datenschutz" target="_blank" rel="noopener">Datenschutz</a></nav>
   </footer>
 </main>
 
