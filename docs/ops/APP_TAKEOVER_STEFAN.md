@@ -298,6 +298,73 @@ Emergent and whether the account still exists.
 
 ---
 
+## 9a. Cal.com — the booking link today, the sales automation next
+
+**Why it matters.** Every "Beratungsgespräch" and "Demo" CTA opens
+Cal.com, on the marketing site **and inside the app on leaderos.de**:
+onboarding (`OnboardingPage.js`), the coaching panel
+(`coaching/CoachingRightPanel.js`), the paywall and tier-lock dialogs
+(`shared/PaywallModal.js`, `shared/TierLockOverlay.js`,
+`shared/PricingModal.js`), Wlad-Universe (`WladUniversePage.js`) and the
+pricing ladder. The same account serves both hosts. From 2 November the
+consultation slots open (`AppointmentBookingSection.js`, `BOOKING_START`).
+A booking is the first sales touch; today it only lands in Cal.com's own
+list and in a calendar. Later it becomes the start of the sales
+automation, so the account must be ours and connected to the backend.
+
+**How it is wired today (frontend only, no backend code).**
+
+- Account `cal.com/leaderos`, event types **`/beratung`** (15-minute
+  strategy call) and **`/demo`**. All CTAs resolve through
+  `frontend/src/lib/calendly.js` (the name is historical; Calendly was
+  dropped) and `components/brand/BookConsultationButton.js`.
+- The embed script is loaded in `frontend/public/index.html`
+  (`Cal("init","beratung")`, dark theme, brand colour). Inside the app the
+  modal opens with name/email prefilled from `AuthContext`; outside the
+  app a new tab opens `https://cal.com/leaderos/beratung?utm_source=…`.
+- Deep links with date are supported: `?date=YYYY-MM-DD&month=YYYY-MM`
+  (the booking section on the landing uses that).
+- CSP in `backend/middleware/__init__.py` and `vercel.json` already allow
+  `app.cal.com`.
+
+**Account (task for you, asked on 01.10.).** Create the Cal.com
+account/team under `stefan@argumentorik.com` or a shared Argumentorik
+login, invite `mert@argumentorik.com` and `wj@argumentorik.com`, and make
+sure the two event types keep the exact slugs `leaderos/beratung` and
+`leaderos/demo`; every CTA in the code points at them. Connect Wlad's (or
+the sales team's) calendar and a Zoom/Meet location. Billing card on the
+GmbH, cap per Handbook §10.
+
+**Sales automation (next step, not yet in code).** Build in this order,
+each step small:
+
+1. **Cal.com webhook → backend.** In Cal.com: Settings → Developer →
+   Webhooks → subscriber URL `https://leaderos.de/api/cal/webhook`, events
+   `BOOKING_CREATED`, `BOOKING_RESCHEDULED`, `BOOKING_CANCELLED`,
+   `MEETING_ENDED`; set a secret and store it as `CAL_WEBHOOK_SECRET` on
+   Emergent. Backend: new router `backend/routes/cal.py` that verifies the
+   HMAC signature, upserts the booking into Mongo `bookings`
+   (`email_lower`, event type, start, status, UTM from the booking
+   metadata) and links it to `users` / `webinar_leads` by `email_lower`.
+2. **CRM hand-off.** Push the booking to the CRM as a deal stage
+   ("Beratung gebucht" → "Beratung stattgefunden" → "Angebot" → "Gewonnen").
+   The pipeline design is a product decision with Wlad; the code is one
+   outbound call per webhook event.
+3. **Emails via Resend, not Cal.com's.** Confirmation with the Leader-Check
+   link (so the call starts with a diagnosis), reminder 24 h, no-show
+   follow-up 2 h after `MEETING_ENDED` without attendance, post-call
+   offer with the 14-day trial or OS-year link. Templates in
+   `services_email.py`, sends logged in `email_log` like the webinar flow.
+4. **Admin visibility.** Bookings card in the admin panel next to the
+   webinar leads: count per week, source, show/no-show rate.
+5. **Analytics.** PostHog event `booking_created` with `email_lower` so
+   the funnel webinar → booking → purchase is one chart.
+
+Rules while building: `email_lower` is the join key everywhere; no
+booking data in the frontend bundle; the webhook endpoint must fail
+closed on a bad signature; nothing sends an email twice (idempotent on
+Cal.com's booking `uid`).
+
 ## 10. Your tasks after the hand-over
 
 ### 10.1 Before the webinar (29.10.)
@@ -356,6 +423,7 @@ days; weekly Mongo export.
 | PostHog EU | **new org by you** | §4 |
 | Resend | member invite + **card/billing email** | §2 task 7 |
 | ElevenLabs, Voyage | keys in Emergent env | decide Voyage (§9) |
+| Cal.com `cal.com/leaderos` | **account by you**, invite Mert + Wlad | keep slugs `/beratung`, `/demo`; webhook later (§9a) |
 
 Full matrix and the billing hand-over: [`TOOL_ACCESS.md`](./TOOL_ACCESS.md).
 
@@ -394,6 +462,8 @@ read the section again before the hand-over call.
    corpus? Which retriever runs? (§9)
 9. Which five smoke checks run after every deploy? (§3.4)
 10. Stripe webhooks all return 400. Most likely cause? (§6)
+11. Which two Cal.com slugs must never change, and what is the first step
+    of the sales automation? (§9a)
 
 **Answer key.** 1 No; you deploy Emergent manually. 2 Redeploy; env vars
 do not hot-reload. 3 `ELEVENLABS_API_KEY` in Emergent env. 4 `email_lower`;
@@ -404,4 +474,6 @@ pg_cron jobs. 7 Grant from the admin panel (no deploy) or `ADMIN_EMAILS`
 env (redeploy). 8 Yes; lexical-only. 9 `/api/health`,
 `/api/monitoring/system`, `/api/webinar/stats`, `/api/payments/stripe-mode`,
 cron endpoint without secret → 401/403, plus one real webinar signup.
-10 Wrong `STRIPE_WEBHOOK_SECRET`.
+10 Wrong `STRIPE_WEBHOOK_SECRET`. 11 `leaderos/beratung` and
+`leaderos/demo`; a signed Cal.com webhook into the backend that upserts
+bookings by `email_lower`.
