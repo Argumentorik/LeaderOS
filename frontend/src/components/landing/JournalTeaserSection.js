@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { listArticles, listTags } from '../../features/content/data/registry';
+import { topicCover, topicThemeFor } from '../../features/content/utils/topicCovers';
 
 /**
  * JournalTeaserSection · "FELDNOTIZEN" — the journal front page.
@@ -29,6 +30,24 @@ const COVERS = Array.from(
   (_, i) => `/journal/covers/cover-${String(i + 1).padStart(2, '0')}.webp`
 );
 const coverFor = (position) => COVERS[position % COVERS.length];
+
+/**
+ * Every story gets a picture, always: the article's own `cover` wins, then
+ * the topic-matched editorial photo (utils/topicCovers.js, same as the
+ * article page and the journal cards), then the generic position cover.
+ * Two stories sharing a topic get the other photo variant so the row never
+ * shows the same image twice. `coverFor(position)` stays the <img> onError
+ * fallback, so a missing file never leaves an empty box.
+ */
+const resolveCovers = (articles) => {
+  const seen = {};
+  return articles.map((a, i) => {
+    if (a.cover) return a.cover;
+    const theme = topicThemeFor(a);
+    seen[theme] = (seen[theme] || 0) + 1;
+    return topicCover(a, seen[theme] > 1 ? 'b' : 'a') || coverFor(i);
+  });
+};
 
 const TYPE_LABELS = {
   'field-note': 'Feldnotiz',
@@ -81,19 +100,22 @@ const Reveal = ({ children, delay = 0, className }) => {
 };
 
 /** Cover in an explicit aspect box · grayscale until hover, lime multiply wash. */
-const Cover = ({ src, alt, aspectClassName }) => (
+const Cover = ({ src, alt, aspectClassName, fallback }) => (
   <div className={`relative overflow-hidden bg-foreground/[0.05] ${aspectClassName}`}>
     <img
       src={src}
       alt={alt}
       loading="lazy"
       decoding="async"
+      onError={(e) => {
+        if (fallback && e.currentTarget.src !== fallback && !e.currentTarget.dataset.fellBack) {
+          e.currentTarget.dataset.fellBack = '1';
+          e.currentTarget.src = fallback;
+        }
+      }}
       className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.05] transition-[filter,transform] duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.02]"
     />
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 bg-brand mix-blend-multiply opacity-0 transition-opacity duration-500 group-hover:opacity-30"
-    />
+    {/* No colour wash on hover: the photo reveals its own colour, like a print. */}
   </div>
 );
 
@@ -125,13 +147,13 @@ const LimeDotTitle = ({ title }) => (
 );
 
 /** The dominant lead story · cover-01, oversized display headline, standfirst. */
-const LeadStory = ({ article }) => (
+const LeadStory = ({ article, cover }) => (
   <Link
     to={`/journal/${article.slug}`}
     data-testid={`journal-lead-${article.slug}`}
     className="group block"
   >
-    <Cover src={coverFor(0)} alt={article.title} aspectClassName="aspect-[16/10]" />
+    <Cover src={cover || coverFor(0)} fallback={coverFor(0)} alt={article.title} aspectClassName="aspect-[16/10]" />
     <div className="pt-7 md:pt-9">
       <MetaLine article={article} number={1} withAuthor className="mb-5" />
       <h3
@@ -154,13 +176,13 @@ const LeadStory = ({ article }) => (
 );
 
 /** Secondary tier story · covers 02–04, portrait crop, compact standfirst. */
-const SecondStory = ({ article, position }) => (
+const SecondStory = ({ article, position, cover }) => (
   <Link
     to={`/journal/${article.slug}`}
     data-testid={`journal-mini-${article.slug}`}
     className="group block"
   >
-    <Cover src={coverFor(position)} alt={article.title} aspectClassName="aspect-[4/3]" />
+    <Cover src={cover || coverFor(position)} fallback={coverFor(position)} alt={article.title} aspectClassName="aspect-[4/3]" />
     <div className="pt-5">
       <MetaLine article={article} number={position + 1} className="mb-3" />
       <h4
@@ -217,6 +239,9 @@ export const JournalTeaserSection = () => {
   const [lead, ...rest] = articles;
   const secondary = rest.slice(0, 3);
   const index = rest.slice(3, 9);
+  // Lead + the three secondary stories resolve their covers together so the
+  // variant de-duplication sees all four pictures that sit on screen at once.
+  const covers = resolveCovers([lead, ...secondary]);
   const total = listArticles().length;
   const tags = listTags().slice(0, 8);
 
@@ -270,7 +295,7 @@ export const JournalTeaserSection = () => {
               <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.16em] text-foreground/55">
                 <span>▸ Von Wlad Jachtchenko</span>
                 <span className="hidden opacity-30 sm:inline">·</span>
-                <span>13 Bücher · 3× SPIEGEL-Bestseller</span>
+                <span>3× SPIEGEL-Bestseller · seit 2007</span>
                 <span className="hidden opacity-30 sm:inline">·</span>
                 <span>400.000+ trainierte Klienten</span>
               </div>
@@ -291,7 +316,7 @@ export const JournalTeaserSection = () => {
         {/* ── Front page · lead story (8 cols) + text index rail (4 cols) ── */}
         <div className="mt-16 grid grid-cols-1 gap-14 border-t border-foreground/15 pt-12 md:mt-24 md:pt-16 lg:grid-cols-12 lg:gap-0">
           <Reveal className="lg:col-span-8 lg:pr-14">
-            <LeadStory article={lead} />
+            <LeadStory article={lead} cover={covers[0]} />
           </Reveal>
 
           {index.length > 0 && (
@@ -327,7 +352,7 @@ export const JournalTeaserSection = () => {
             <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
               {secondary.map((article, i) => (
                 <Reveal key={article.slug} delay={0.08 * i}>
-                  <SecondStory article={article} position={i + 1} />
+                  <SecondStory article={article} position={i + 1} cover={covers[i + 1]} />
                 </Reveal>
               ))}
             </div>

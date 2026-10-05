@@ -834,15 +834,17 @@ html {
   position: relative;
   overflow: hidden;
 }
+/* Art-print treatment (Oct 2026): monochrome photo, no colour tint. The
+   green multiply wash made every cover look like a filter instead of a
+   picture and killed label contrast; the halftone dots stay, but faint. */
 .newsroom-halftone img {
-  filter: grayscale(1) contrast(1.18) brightness(0.92);
+  filter: grayscale(1) contrast(1.12) brightness(0.98);
 }
 .newsroom-halftone::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: #2EBC75; /* deep lime-green for newsroom */
-  mix-blend-mode: multiply;
+  background: linear-gradient(to top, rgba(10,10,10,0.28), rgba(10,10,10,0) 45%);
   pointer-events: none;
 }
 .newsroom-halftone::before {
@@ -850,10 +852,10 @@ html {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(rgba(0,0,0,0.55) 1px, transparent 1.4px);
+    radial-gradient(rgba(0,0,0,0.5) 1px, transparent 1.4px);
   background-size: 3.5px 3.5px;
   mix-blend-mode: screen;
-  opacity: 0.32;
+  opacity: 0.14;
   pointer-events: none;
   z-index: 1;
 }

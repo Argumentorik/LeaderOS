@@ -186,7 +186,50 @@ import derKiKompetenzGapZwischenJuniorUndSeniorFuehrungskraeften from './article
 import wieDuNeinSagstOhneUnbeliebtZuWerden from './articles/wie-du-nein-sagst-ohne-unbeliebt-zu-werden';
 import die5ArgumentationsLevelsVonBehauptungBisSexier from './articles/die-5-argumentations-levels-von-behauptung-bis-sexier';
 
+// +20 Journal-Artikel 2026-09-30: Gespräche, Führungsalltag, Team, Modelle, KI-Richtlinien
+import delegierenLernenDieFuenfStufenDerDelegation from './articles/delegieren-lernen-die-fuenf-stufen-der-delegation';
+import einwaendeImGespraechEntkraeftenFuerFuehrungskraefte from './articles/einwaende-im-gespraech-entkraeften-fuer-fuehrungskraefte';
+import einzelgespraecheMitMitarbeiternStrukturFragenRhythmus from './articles/einzelgespraeche-mit-mitarbeitern-struktur-fragen-rhythmus';
+import entscheidungenTreffenUnterUnsicherheit from './articles/entscheidungen-treffen-unter-unsicherheit';
+import fragenStellenWieFuehrungskraefteMitFragenFuehren from './articles/fragen-stellen-wie-fuehrungskraefte-mit-fragen-fuehren';
+import growModellCoachingGespraechFuerFuehrungskraefte from './articles/grow-modell-coaching-gespraech-fuer-fuehrungskraefte';
+import jahresgespraechFuehrenAblaufFragenUndFehler from './articles/jahresgespraech-fuehren-ablauf-fragen-und-fehler';
+import johariFensterBlindeFleckenAlsFuehrungskraft from './articles/johari-fenster-blinde-flecken-als-fuehrungskraft';
+import kiRichtlinienFuersTeamPraktischerLeitfaden from './articles/ki-richtlinien-fuers-team-praktischer-leitfaden';
+import konflikteImTeamFruehErkennenUndAnsprechen from './articles/konflikte-im-team-frueh-erkennen-und-ansprechen';
+import lobAussprechenAnerkennungDieWirkt from './articles/lob-aussprechen-anerkennung-die-wirkt';
+import meetingsLeitenAgendaEntscheidungNaechsteSchritte from './articles/meetings-leiten-agenda-entscheidung-naechste-schritte';
+import neueMitarbeiterOnboardenDieErsten30Tage from './articles/neue-mitarbeiter-onboarden-die-ersten-30-tage';
+import ownershipImTeamStaerkenVerantwortungUebergeben from './articles/ownership-im-team-staerken-verantwortung-uebergeben';
+import praesentationHaltenAufbauFuerFuehrungskraefte from './articles/praesentation-halten-aufbau-fuer-fuehrungskraefte';
+import psychologischeSicherheitImTeamAufbauen from './articles/psychologische-sicherheit-im-team-aufbauen';
+import qAndASouveraenFuehrenSchwierigeFragenBeantworten from './articles/q-and-a-souveraen-fuehren-schwierige-fragen-beantworten';
+import remoteTeamFuehrenRoutinenRegelnVertrauen from './articles/remote-team-fuehren-routinen-regeln-vertrauen';
+import situativesFuehrenNachHerseyUndBlanchard from './articles/situatives-fuehren-nach-hersey-und-blanchard';
+import underperformerFuehrenDasGespraechUndDerPlan from './articles/underperformer-fuehren-das-gespraech-und-der-plan';
+
 const ARTICLES = [
+  // 2026-09-30 · +20 Artikel (Gespräche, Führungsalltag, Team, Modelle, KI-Richtlinien)
+  delegierenLernenDieFuenfStufenDerDelegation,
+  einwaendeImGespraechEntkraeftenFuerFuehrungskraefte,
+  einzelgespraecheMitMitarbeiternStrukturFragenRhythmus,
+  entscheidungenTreffenUnterUnsicherheit,
+  fragenStellenWieFuehrungskraefteMitFragenFuehren,
+  growModellCoachingGespraechFuerFuehrungskraefte,
+  jahresgespraechFuehrenAblaufFragenUndFehler,
+  johariFensterBlindeFleckenAlsFuehrungskraft,
+  kiRichtlinienFuersTeamPraktischerLeitfaden,
+  konflikteImTeamFruehErkennenUndAnsprechen,
+  lobAussprechenAnerkennungDieWirkt,
+  meetingsLeitenAgendaEntscheidungNaechsteSchritte,
+  neueMitarbeiterOnboardenDieErsten30Tage,
+  ownershipImTeamStaerkenVerantwortungUebergeben,
+  praesentationHaltenAufbauFuerFuehrungskraefte,
+  psychologischeSicherheitImTeamAufbauen,
+  qAndASouveraenFuehrenSchwierigeFragenBeantworten,
+  remoteTeamFuehrenRoutinenRegelnVertrauen,
+  situativesFuehrenNachHerseyUndBlanchard,
+  underperformerFuehrenDasGespraechUndDerPlan,
   // 2026-07-21 · canon-gap framework pillar (5 Argumentations-Levels — the
   // architecture SEXIER lives in as Level 4; source: WLAD_CANON.md)
   die5ArgumentationsLevelsVonBehauptungBisSexier,

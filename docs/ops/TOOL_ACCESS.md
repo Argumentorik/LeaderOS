@@ -38,7 +38,7 @@ steht das Projekt. Das ist der eigentliche Grund für diese Liste.
 | **Stripe** | Zahlungen, Webhooks, Raten | start@aiporate.com | Stripe → Settings → Team and security | ❓ |
 | **PostHog EU** Projekt `181271` | Produkt-Analytics, Session Replays, Identity-Stitching | start@aiporate.com | PostHog → Organization settings → Members | ❓ |
 | **Sentry** Org `aiporate` (EU) | Error-Monitoring, Projekte `leader-os` + `leader-check` | start@aiporate.com | Sentry → Settings → Members | ❓ |
-| **Cal.com** (`cal.com/leaderos/beratung`, `/demo`) | Beratungs-/Demo-Buchung | ❓ | Cal.com → Settings → Teams | ❓ |
+| **Cal.com** (`cal.com/leaderos/beratung`, `/demo`) | Beratungs-/Demo-Buchung · später Startpunkt der Sales-Automation (Webhook → Backend → CRM, siehe `APP_TAKEOVER_STEFAN.md` §9a) | Stefan legt das Konto an (Bitte vom 01.10.), lädt `mert@argumentorik.com` + `wj@argumentorik.com` ein | Cal.com → Settings → Teams | Owner |
 | **ElevenLabs** | Sprachausgabe WladBot, Audio-Modus | ❓ (API-Key in Emergent) | ElevenLabs → Workspace → Members | ❓ |
 | **Voyage AI** | Embeddings fürs RAG | ❓ (API-Key in Emergent) | Voyage Dashboard | ❓ |
 | **OpenAI / Anthropic** | LLM-Keys (nur nötig, wenn `llm_provider` vom Emergent-Wrapper weg soll) | ❓ | Platform → Members | ❓ |

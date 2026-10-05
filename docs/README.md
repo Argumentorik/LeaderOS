@@ -33,6 +33,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/LINKEDIN_ADS_WEBINAR.md`](./gtm/LINKEDIN_ADS_WEBINAR.md) | **LinkedIn Ads Launch-Paket Webinar 29.10.** — eine Kampagne bei 50 €/Tag, Job-Titel-Zielgruppe, 8 Creatives 1200×627, Insight Tag + Conversion, warum Website-Conversions statt Lead Gen Forms |
 | [`gtm/SEO_KEYWORDS.md`](./gtm/SEO_KEYWORDS.md) | Keyword universe (DACH leadership/AI/communication) |
 | [`gtm/SEO_AEO_PLAYBOOK.md`](./gtm/SEO_AEO_PLAYBOOK.md) | **Technical visibility** — why CRA breaks AI crawlers, prerendering vs static pages, robots/IndexNow/Bing, rules for new pages |
+| [`gtm/SEO_AEO_GEO_AUDIT.md`](./gtm/SEO_AEO_GEO_AUDIT.md) | **Audit Oct 2026** — keyword gaps, Q&A framework (`faq` block, `/kurse`, `/fragen`), citation readiness, schema mapping, owner actions |
 | [`gtm/GROWTH_LOOP.md`](./gtm/GROWTH_LOOP.md) | The growth loop: check → content → funnel → referral |
 | [`gtm/GREATOR_TAG2_LEADEROS.md`](./gtm/GREATOR_TAG2_LEADEROS.md) | **Greator-Event Tag 2 (27.09.)** — wo LeaderOS in Wlads Deck gehört (3 Live-Momente + Brücke), Demo-Regie mit Klickpfaden, Vorbereitung, Deck-Fixes, No-Gos |
 | [`gtm/KI_FUEHRUNG_KAMPAGNEN.md`](./gtm/KI_FUEHRUNG_KAMPAGNEN.md) | **6 Kampagnen, 1 Angebot** — Kohärenz-Matrix (Hook = H1 = Agenda = Produkt), Anzeigentexte Meta/LinkedIn/Google, URL-/UTM-Schema für `/ki-fuehrungskraft?k=`, SEO/AEO der Pillar-Seite |
@@ -84,6 +85,8 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`ops/SENTRY_ALERTS.md`](./ops/SENTRY_ALERTS.md) | Sentry alert rules |
 | [`ops/INTEGRATIONS.md`](./ops/INTEGRATIONS.md) | PostHog EU + Sentry + Supabase frontend wiring |
 | [`ops/EMERGENT_ADMIN_ONBOARDING.md`](./ops/EMERGENT_ADMIN_ONBOARDING.md) | **Emergent-Admin-Onboarding (Stefan)** — Topologie, GitHub↔Emergent-Drift, Env-Vars, Deploy + Smoke-Checks, Cron-Jobs, offene Incidents, First-Week-Checkliste |
+| [`ops/APP_TAKEOVER_STEFAN.md`](./ops/APP_TAKEOVER_STEFAN.md) | **App hand-over to Stefan** — what changed, first tasks done together, how Emergent works, PostHog/Sentry new setup, Supabase Disk IO, RAG without Voyage, admin-panel access for the support team |
+| [`ops/TECH_HANDBOOK.md`](./ops/TECH_HANDBOOK.md) | **How we treat the tech** — the system in one picture, principles, work flow, operating it, keeping the AI parts honest |
 | [`ops/TOOL_ACCESS.md`](./ops/TOOL_ACCESS.md) | **Wer hat wo Zugriff** — alle Tools, geprüfter Ist-Stand, Invite-Reihenfolge, offene Punkte für `mert@argumentorik.com` |
 | [`ops/PLATFORM_ACCESS.md`](./ops/PLATFORM_ACCESS.md) | Cross-domain wiring checklist (Vercel ↔ Emergent ↔ Supabase) |
 | [`ops/PRODUCTION_READINESS.md`](./ops/PRODUCTION_READINESS.md) | Production-readiness audit |

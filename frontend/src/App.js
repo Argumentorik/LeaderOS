@@ -67,7 +67,6 @@ const TrainingLandingPage = lazyWithRetry(() => import("./pages/TrainingLandingP
 const KommunikationPage = lazyWithRetry(() => import("./pages/KommunikationPage"));
 const KiFuehrungskraftPage = lazyWithRetry(() => import("./pages/KiFuehrungskraftPage"));
 const LeaderOsTourPage = lazyWithRetry(() => import("./pages/LeaderOsTourPage"));
-const FrameworksPage = lazyWithRetry(() => import("./pages/FrameworksPage"));
 const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
 const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
 const ArticlePage = lazyWithRetry(() => import("./features/content/pages/ArticlePage"));
@@ -81,6 +80,8 @@ const SharedFolderPage = lazyWithRetry(() => import("./pages/SharedFolderPage"))
 import { WladMark } from "./components/brand/WladMark";
 import { FloatingWladBotDrawer } from "./components/shared/FloatingWladBotDrawer";
 import { CookieConsent } from "./components/legal/CookieConsent";
+import { trackGoogleAdsPageView } from "./lib/googleAds";
+import { trackBingPageView } from "./lib/bingUet";
 import { ReAuthModal } from "./components/auth/ReAuthModal";
 import { FakeWladCall } from "./components/calls/FakeWladCall";
 import { AppErrorBoundary } from "./components/AppErrorBoundary";
@@ -120,6 +121,15 @@ function AppRouter() {
   useEffect(() => {
     clearChunkReloadGuard();
   }, [location.pathname]);
+
+  // Ad-Tags: SPA-Routenwechsel als Pageview melden (Google Ads zählt die
+  // Conversion „webinar_signup" über den Pageview /webinar/danke). Beide
+  // Funktionen sind no-ops, solange die IDs nicht gesetzt sind.
+  useEffect(() => {
+    const path = location.pathname + location.search;
+    trackGoogleAdsPageView(path);
+    trackBingPageView(path);
+  }, [location.pathname, location.search]);
 
   // Cross-tier guard · belt-and-suspenders for in-SPA navigation.
   // The synchronous pass in index.js handles initial page loads (typed URL,
@@ -238,9 +248,9 @@ function AppRouter() {
         {/* Public · dated free launch event · high-conversion signup */}
         <Route path="/event" element={<EventPage />} />
         <Route path="/live" element={<Navigate to="/event" replace />} />
-        {/* Public · ein Viewport, acht Frameworks (Kollektiva-Mechanik, Kanon-Inhalt) */}
-        <Route path="/frameworks" element={<FrameworksPage />} />
-        <Route path="/methodik" element={<Navigate to="/frameworks" replace />} />
+        {/* Seite entfernt · bestehende Ad-Links landen auf der Haupt-Ad-Landing */}
+        <Route path="/frameworks" element={<Navigate to="/kommunikation" replace />} />
+        <Route path="/methodik" element={<Navigate to="/kommunikation" replace />} />
         {/* Squeeze funnel for the free live webinar */}
         <Route path="/webinar" element={<WebinarPage />} />
         <Route path="/webinar/danke" element={<WebinarThankYouPage />} />

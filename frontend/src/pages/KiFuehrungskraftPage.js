@@ -5,6 +5,7 @@ import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
 import { BookShelf } from '../components/brand/BookShelf';
 import { LogoWall } from '../components/brand/LogoWall';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 import { WEBINAR_TS, WEBINAR_CAMPAIGN } from '../data/webinarEvent';
@@ -1102,6 +1103,7 @@ export default function KiFuehrungskraftPage() {
         <Split />
         <Outcomes k={k} />
         <Showcase />
+        <CoursesLibrarySection placement="ki-fuehrungskraft" />
         <Statement />
         <Audiences />
         <Agenda />

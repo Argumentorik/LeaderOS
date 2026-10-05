@@ -90,7 +90,7 @@ export const ManifestoSection = () => (
         </PlusCircleCTA>
         <a
           href="#benefit-01"
-          className="text-[12px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors"
+          className="text-[12px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors inline-block py-3 -my-3"
         >
           Wie das geht ↓
         </a>

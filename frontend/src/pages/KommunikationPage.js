@@ -6,6 +6,7 @@ import {
 import { applyPageMeta } from '../lib/pageMeta';
 import { WladMark } from '../components/brand/WladMark';
 import { ThreeStepPath } from '../components/brand/ThreeStepPath';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 
@@ -21,7 +22,7 @@ import { trackLinkedInLead } from '../lib/linkedinInsight';
  * Buttons für eine App, die es nicht gibt.
  *
  * Videos: eigener CloudFront-Bucket (bereits in der CSP media-src).
- * noindex: Ad-Landing, konkurriert nicht mit /frameworks um Suche.
+ * noindex: Ad-Landing.
  */
 
 const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260728_015819_1b3ec855-d586-4018-96c8-8bf90cada037.mp4';
@@ -56,7 +57,6 @@ const track = (event, props = {}) => {
 
 const NAV_LINKS = [
   { label: 'Ansätze', href: '#ansaetze' },
-  { label: 'Frameworks', href: '/frameworks' },
   { label: 'Die App', href: '#app' },
   { label: 'Journal', href: '/journal' },
 ];
@@ -912,9 +912,10 @@ export default function KommunikationPage() {
       <Ansaetze />
       <KommunikationsCheck />
       <AppShowcase />
+      <CoursesLibrarySection placement="kommunikation" />
       <ThreeStepPath tone="light" checkUrl={CHECK_URL} trialUrl={TRIAL_URL} onTrack={(e, p) => track(`kommunikation_${e}`, p)} />
       <div className="text-center pb-8" style={{ ...BODY, fontSize: 12, color: MUTED }}>
-        <a href="/impressum" className="hover:underline">Impressum</a> · <a href="/datenschutz" className="hover:underline">Datenschutz</a>
+        <a href="/impressum" className="hover:underline inline-block py-3 -my-3">Impressum</a> · <a href="/datenschutz" className="hover:underline inline-block py-3 -my-3">Datenschutz</a>
       </div>
       <VideoOverlay open={videoOpen} onClose={() => setVideoOpen(false)} />
     </div>

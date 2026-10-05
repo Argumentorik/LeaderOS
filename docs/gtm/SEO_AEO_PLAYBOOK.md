@@ -29,8 +29,13 @@ Dafür gibt es genau zwei Mechanismen:
 
 | Mechanismus | Wofür | Wo |
 | --- | --- | --- |
-| **Build-Prerendering** | die 153 Journal-Artikel + `/journal` | `frontend/scripts/prerender-articles.mjs`, läuft in `yarn build` |
-| **Statische Seiten in `public/`** | Kampagnen- und Antwort-Seiten (`/fragen`, `/os`, `/app`, `/wladbot`) | `frontend/public/<name>/index.html`, von Vercel vor dem SPA-Rewrite ausgeliefert |
+| **Build-Prerendering** | die 173 Journal-Artikel + `/journal`; die Landings `/ki-fuehrungskraft` und `/webinar` | `frontend/scripts/prerender-articles.mjs`, `prerender-landings.mjs`, beide in `yarn build` |
+| **Statische Seiten in `public/`** | Kampagnen- und Antwort-Seiten (`/fragen`, `/kurse`, `/os`, `/app`, `/wladbot`) | `frontend/public/<name>/index.html`, von Vercel vor dem SPA-Rewrite ausgeliefert |
+
+Artikel können einen `faq`-Block tragen (`{ type: 'faq', items: [[Frage,
+Antwort], …] }`): die App rendert ihn als Q&A-Abschnitt, das Prerendering
+hängt ein `FAQPage`-Schema an. Befund und Umsetzung vom Oktober 2026 stehen
+in `SEO_AEO_GEO_AUDIT.md`.
 
 Eine React-Route ohne einen dieser beiden Mechanismen ist für
 Antwort-Maschinen **unsichtbar**. Beim Anlegen neuer Marketing-Seiten

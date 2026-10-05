@@ -15,10 +15,11 @@ import {
 import { WladMark } from '../components/brand/WladMark';
 import { BookShelf } from '../components/brand/BookShelf';
 import { LogoWall } from '../components/brand/LogoWall';
+import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
-import { AGENDA, WEBINAR_TS } from '../data/webinarEvent';
+import { AGENDA, WEBINAR_TS, FAQ, WEBINAR_SEO } from '../data/webinarEvent';
 
 /**
  * WebinarPage · /webinar · Hormozi ascension funnel, motion-first build.
@@ -155,13 +156,8 @@ const LIVE_REASONS = [
   'Die Videoserie schaltest du als Teilnehmer direkt frei.',
 ];
 
-const FAQ = [
-  ['Kostet das etwas?', 'Nein. Das Webinar ist komplett kostenlos — keine Karte, kein Haken. Du brauchst nur deine E-Mail.'],
-  ['Wie lange dauert es?', '90 Minuten — von 10:00 bis etwa 11:30 Uhr, inklusive Live-Q&A.'],
-  ['Gibt es eine Aufzeichnung?', 'Nein, das Webinar ist live. Genau deshalb lohnt es sich: du kannst deine Fragen direkt im Q&A stellen.'],
-  ['Brauche ich Vorkenntnisse?', 'Nein. Für Führungskräfte und alle, die es werden wollen — Teamleads, Projektmanager, Senior-Experten. Keine KI-Vorkenntnisse nötig.'],
-  ['Kann ich Fragen stellen?', 'Ja — das Q&A ist fester Teil der Agenda (ab 11:15 Uhr). Wlad beantwortet live.'],
-];
+// FAQ lebt in data/webinarEvent.js: dieselbe Liste rendert das Build-
+// Prerendering (scripts/prerender-landings.mjs) als statisches HTML + FAQPage.
 
 const track = (event, props = {}) => {
   if (typeof window !== 'undefined' && window.posthog?.capture) {
@@ -333,7 +329,9 @@ const ScarcityBar = () => {
     return () => { cancelled = true; };
   }, []);
 
-  if (!stats || !stats.max_capacity) return null;
+  // Erst ab 25 echten Anmeldungen zeigen: „0 bereits angemeldet" ist ehrlich,
+  // aber schadet der Anmeldung. Die Zahl selbst bleibt immer echt.
+  if (!stats || !stats.max_capacity || (stats.registered || 0) < 25) return null;
   const pct = Math.min(100, Math.round((stats.registered / stats.max_capacity) * 100));
 
   return (
@@ -770,15 +768,17 @@ export default function WebinarPage() {
     track('webinar_view');
     trackMeta('ViewContent', { content_name: 'webinar-2026-10-29', content_category: 'webinar' });
 
-    const restoreMeta = applyPageMeta({
-      title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
-      description:
-        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 29.10.2026 mit ' +
-        'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
-        'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
-      url: 'https://leader-os.de/webinar',
-      image: 'https://leader-os.de/og-wlad.jpg',
-    });
+    const restoreMeta = applyPageMeta(WEBINAR_SEO);
+
+    // Das Build-Prerendering (scripts/prerender-landings.mjs) liefert Event +
+    // FAQPage bereits statisch im <head>. Nur bei reiner SPA-Navigation
+    // (kein prerendertes Markup im Dokument) nachträglich injizieren, sonst
+    // stünde jedes Schema doppelt.
+    const prerendered = !!document.head.querySelector('script[type="application/ld+json"]')
+      && document.head.innerHTML.includes('leader-os.de/webinar#event');
+    if (prerendered) {
+      return () => { restoreMeta(); if (wasDark) root.classList.add('dark'); };
+    }
 
     const ld = document.createElement('script');
     ld.type = 'application/ld+json';
@@ -872,7 +872,7 @@ export default function WebinarPage() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[12.5px] text-[#4b4b4d] hover:text-[#111111] transition-colors"
+                    className="inline-flex items-center gap-2 text-[12.5px] text-[#4b4b4d] hover:text-[#111111] transition-colors py-2.5 -my-2.5"
                   >
                     <Star size={13} className="text-[#111111] fill-[#BFFF00]" />
                     <span className="font-bold text-[#111111]">{rating}/5</span> {name} · {count} <ArrowUpRight size={11} />
@@ -1037,6 +1037,8 @@ export default function WebinarPage() {
         <StatementBand eyebrow="▸ Warum jetzt">
           Wer täglich trainiert, überholt jeden, der einmal im Jahr ins Seminar geht<span className="text-[#BFFF00] not-italic">.</span>
         </StatementBand>
+
+        <CoursesLibrarySection placement="webinar" />
 
         {/* ── DETAILS · agenda, scroll-activated ───────────────────────── */}
         <section className="bg-white">
@@ -1225,7 +1227,7 @@ export default function WebinarPage() {
                   <p className="text-[14px] leading-[1.6] text-[#4b4b4d] mb-4">{def}</p>
                   <Link
                     to={href}
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5A7700] hover:text-[#111111] transition-colors"
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5A7700] hover:text-[#111111] transition-colors py-3 -my-3"
                   >
                     Zum Deep-Dive im Journal
                     <span className="transition-transform group-hover:translate-x-1"><ArrowUpRight size={11} /></span>
@@ -1329,9 +1331,9 @@ export default function WebinarPage() {
             © 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20 Länder
           </p>
           <nav className="flex items-center gap-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/60">
-            <Link to="/impressum" className="hover:text-white">Impressum</Link>
-            <Link to="/datenschutz" className="hover:text-white">Datenschutz</Link>
-            <Link to="/agb" className="hover:text-white">AGB</Link>
+            <Link to="/impressum" className="hover:text-white py-3 -my-3">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-white py-3 -my-3">Datenschutz</Link>
+            <Link to="/agb" className="hover:text-white py-3 -my-3 px-1">AGB</Link>
           </nav>
         </div>
       </footer>

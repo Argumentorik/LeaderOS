@@ -15,6 +15,7 @@ import { AuthHealthWidget } from '../components/admin/AuthHealthWidget';
 import { RagDebugStudio } from '../components/admin/RagDebugStudio';
 import { LearningVideosManager } from '../components/admin/LearningVideosManager';
 import FreeVideoLeadsPanel from '../components/admin/FreeVideoLeadsPanel';
+import AdminAccessPanel from '../components/admin/AdminAccessPanel';
 
 const TIER_COLORS = {
   free: 'bg-slate-400',
@@ -266,6 +267,11 @@ export default function AdminPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Admin access for the support team + webinar attendee CSV import */}
+        <div className="mt-6 mb-6">
+          <AdminAccessPanel de={de} currentEmail={(user?.email || '').toLowerCase()} />
+        </div>
 
         {/* Free-Video Funnel · leads coming in from /gratis-videos */}
         <div className="mt-6 mb-6">

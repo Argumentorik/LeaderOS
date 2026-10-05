@@ -7,54 +7,467 @@
   Kept separate from sitemap.xml (static pages) so the two update
   independently and never list the same URL twice within the index.
 
-  153 published articles · generated for 2026-07-15.
+  173 published articles · generated for 2026-09-30.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://leader-os.de/journal/1-zu-1s-im-ki-zeitalter-was-bots-nicht-koennen</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://leader-os.de/journal/delegieren-lernen-die-fuenf-stufen-der-delegation</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/blended-learning-fuer-fuehrungskraefte</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://leader-os.de/journal/einwaende-im-gespraech-entkraeften-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/brief-an-meinen-28-jaehrigen-selbst-bevor-ich-team-lead-wurde</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://leader-os.de/journal/einzelgespraeche-mit-mitarbeitern-struktur-fragen-rhythmus</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/entscheidungen-treffen-unter-unsicherheit</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/fragen-stellen-wie-fuehrungskraefte-mit-fragen-fuehren</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/grow-modell-coaching-gespraech-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/jahresgespraech-fuehren-ablauf-fragen-und-fehler</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/johari-fenster-blinde-flecken-als-fuehrungskraft</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/ki-richtlinien-fuers-team-praktischer-leitfaden</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/konflikte-im-team-frueh-erkennen-und-ansprechen</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/lob-aussprechen-anerkennung-die-wirkt</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/meetings-leiten-agenda-entscheidung-naechste-schritte</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/neue-mitarbeiter-onboarden-die-ersten-30-tage</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/ownership-im-team-staerken-verantwortung-uebergeben</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/praesentation-halten-aufbau-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/psychologische-sicherheit-im-team-aufbauen</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/q-and-a-souveraen-fuehren-schwierige-fragen-beantworten</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/remote-team-fuehren-routinen-regeln-vertrauen</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/situatives-fuehren-nach-hersey-und-blanchard</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/underperformer-fuehren-das-gespraech-und-der-plan</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/sprint-vs-plus-plus-welcher-pfad</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/die-ersten-7-tage-mit-leader-os</loc>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/journal/burnout-bei-top-performern-die-warnsignale</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/chatgpt-als-co-pilot-7-prompts-fuer-fuehrungskraefte</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://leader-os.de/journal/vom-manager-zum-director-was-wirklich-anders-wird</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/gehaltsverhandlung-als-fuehrungskraft-drehbuch</loc>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/imposter-syndrom-bei-c-level</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/storytelling-fuer-fuehrungskraefte-pixar-formel</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/schlagfertigkeit-gegen-manipulation-drei-verteidigungen</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/townhall-speeches-die-7-minuten-regel</loc>
+    <lastmod>2026-08-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/verhandlungstaktiken-5-phrasen-die-deine-position-staerken</loc>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/konstruktive-konfrontation-das-bww-skript</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/pareto-prinzip-in-der-fuehrung</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/eisenhower-matrix-im-ki-zeitalter</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/okr-vs-kpi-wann-welche-methode</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/scrum-fuer-nicht-tech-manager</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/mit-ki-12-stunden-pro-woche-zurueckgewinnen</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/ki-halluzinationen-erkennen-als-manager</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/journal/claude-vs-chatgpt-vs-gemini-welche-ki-fuer-welchen-job</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/chatgpt-als-co-pilot-7-prompts-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/brief-an-meinen-28-jaehrigen-selbst-bevor-ich-team-lead-wurde</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/der-tag-an-dem-ich-aufhoerte-zu-pushen</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/drei-burnouts-eine-lektion</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/liebe-mitarbeiter-das-hier-wollte-ich-euch-immer-sagen</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/wie-viele-trainingstage-braucht-eine-fuehrungskraft-pro-jahr</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/new-work-fuehrungstraining-was-sich-seit-homeoffice-geaendert-hat</loc>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/journal/coaching-zertifizierung-fuer-fuehrungskraefte-icf-dbvc-erklaert</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/teamentwicklung-nach-tuckman-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/fuehrungskraeftetraining-mit-ki-skalieren-train-the-trainer</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/die-5-argumentations-levels-von-behauptung-bis-sexier</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/micro-learning-vs-klassisches-seminar-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/1-zu-1s-im-ki-zeitalter-was-bots-nicht-koennen</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/ebbinghaus-vergessenskurve-im-fuehrungskraeftetraining</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/wie-du-nein-sagst-ohne-unbeliebt-zu-werden</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/der-ki-kompetenz-gap-zwischen-junior-und-senior-fuehrungskraeften</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/peer-coaching-in-fuehrungsteams</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/stille-kuendigung-erkennen-bevor-sie-passiert</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/fuehrungskraefte-curriculum-fuer-den-mittelstand-aufbauen</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/warum-die-besten-chefs-die-schlechtesten-mentoren-sind</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/wie-du-ein-team-uebernimmst-das-dich-nicht-wollte</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/group-coaching-vs-einzelcoaching-fuer-fuehrungskraefte</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/micromanagement-erkennen-bei-dir-selbst</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/schwierige-nachrichten-async-ueberbringen-slack-teams</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/e-mails-die-autoritaet-zeigen-drei-regeln</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/leadership-coaching-fuer-frauen-in-fuehrungspositionen</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/warum-ki-dich-zu-einem-schlechteren-zuhoerer-macht</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/blended-learning-fuer-fuehrungskraefte</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -68,13 +481,6 @@
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/der-ki-kompetenz-gap-zwischen-junior-und-senior-fuehrungskraeften</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
     <loc>https://leader-os.de/journal/der-ki-sprint-was-dreissig-tage-strukturierte-anwendung-veraendern</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -82,70 +488,7 @@
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/der-tag-an-dem-ich-aufhoerte-zu-pushen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/die-5-argumentations-levels-von-behauptung-bis-sexier</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
     <loc>https://leader-os.de/journal/die-drei-saetze-die-gute-von-schlechten-chefs-unterscheiden</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/die-ersten-7-tage-mit-leader-os</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/drei-burnouts-eine-lektion</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/e-mails-die-autoritaet-zeigen-drei-regeln</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/ebbinghaus-vergessenskurve-im-fuehrungskraeftetraining</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/eisenhower-matrix-im-ki-zeitalter</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/fuehrungskraefte-curriculum-fuer-den-mittelstand-aufbauen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/fuehrungskraeftetraining-mit-ki-skalieren-train-the-trainer</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -159,210 +502,7 @@
   </url>
 
   <url>
-    <loc>https://leader-os.de/journal/gehaltsverhandlung-als-fuehrungskraft-drehbuch</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/group-coaching-vs-einzelcoaching-fuer-fuehrungskraefte</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/imposter-syndrom-bei-c-level</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/ki-halluzinationen-erkennen-als-manager</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/konstruktive-konfrontation-das-bww-skript</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/leadership-coaching-fuer-frauen-in-fuehrungspositionen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/liebe-mitarbeiter-das-hier-wollte-ich-euch-immer-sagen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/micro-learning-vs-klassisches-seminar-fuer-fuehrungskraefte</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/micromanagement-erkennen-bei-dir-selbst</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/mit-ki-12-stunden-pro-woche-zurueckgewinnen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/new-work-fuehrungstraining-was-sich-seit-homeoffice-geaendert-hat</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/okr-vs-kpi-wann-welche-methode</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/pareto-prinzip-in-der-fuehrung</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/peer-coaching-in-fuehrungsteams</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/schlagfertigkeit-gegen-manipulation-drei-verteidigungen</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/schwierige-nachrichten-async-ueberbringen-slack-teams</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/scrum-fuer-nicht-tech-manager</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/sprint-vs-plus-plus-welcher-pfad</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/stille-kuendigung-erkennen-bevor-sie-passiert</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/storytelling-fuer-fuehrungskraefte-pixar-formel</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/teamentwicklung-nach-tuckman-fuer-fuehrungskraefte</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/townhall-speeches-die-7-minuten-regel</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/verhandlungstaktiken-5-phrasen-die-deine-position-staerken</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/vom-manager-zum-director-was-wirklich-anders-wird</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/warum-die-besten-chefs-die-schlechtesten-mentoren-sind</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
     <loc>https://leader-os.de/journal/warum-ehrliche-ki-dir-mehr-hilft-als-ein-hoeflicher-chef</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/warum-ki-dich-zu-einem-schlechteren-zuhoerer-macht</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/wie-du-ein-team-uebernimmst-das-dich-nicht-wollte</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/wie-du-nein-sagst-ohne-unbeliebt-zu-werden</loc>
-    <lastmod>2026-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://leader-os.de/journal/wie-viele-trainingstage-braucht-eine-fuehrungskraft-pro-jahr</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

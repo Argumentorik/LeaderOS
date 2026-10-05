@@ -130,7 +130,7 @@ export const OfferProofSection = () => (
           href="https://leaderos.de/signup?trial=14"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-white/60 hover:text-brand transition-colors"
+          className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-white/60 hover:text-brand transition-colors py-3 -my-3"
         >
           Oder erst 14 Tage kostenlos testen <ArrowUpRight size={13} />
         </a>

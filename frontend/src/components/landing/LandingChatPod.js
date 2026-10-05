@@ -205,7 +205,7 @@ const TypingDots = () => (
 );
 
 const PodHeader = ({ bib, onClose }) => (
-  <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.08] text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/70 font-mono shrink-0">
+  <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.08] text-[10.5px] font-black uppercase tracking-[0.22em] text-white font-mono shrink-0">
     <div className="flex items-center gap-3">
       <span className="relative inline-flex w-2 h-2">
         <span className="absolute inset-0 rounded-full bg-brand animate-ping opacity-75" />
@@ -380,9 +380,9 @@ export const LandingChatPod = ({ mode = 'lead' }) => {
               <span className="absolute inset-0 rounded-full bg-brand animate-ping opacity-70" />
               <span className="relative w-2.5 h-2.5 rounded-full bg-brand" />
             </span>
-            <span className="text-[10.5px] font-bold uppercase tracking-[0.24em] font-mono text-left leading-tight">
+            <span className="text-[11px] font-black uppercase tracking-[0.24em] font-mono text-left leading-tight">
               ▸ FRAG WLADBOT<br />
-              <span className="text-white/55 tracking-[0.2em]">
+              <span className="text-white/80 tracking-[0.2em] font-bold">
                 {mode === 'readiness' ? 'Readiness in 60 Sek.' : 'Was passt zu dir?'}
               </span>
             </span>

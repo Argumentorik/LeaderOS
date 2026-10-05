@@ -200,7 +200,7 @@ export const FreeToolsSection = () => (
         <span>▸ ALLE TOOLS · 0 € · KEIN ABO</span>
         <span>▸ KEINE EMAIL ERFORDERLICH</span>
         <span>▸ DSGVO-KONFORM · EU-HOSTING</span>
-        <Link to="/journal" className="hover:text-brand-strong transition-colors ml-auto">
+        <Link to="/journal" className="hover:text-brand-strong transition-colors ml-auto py-3 -my-3">
           ▸ MEHR IM JOURNAL
         </Link>
       </div>

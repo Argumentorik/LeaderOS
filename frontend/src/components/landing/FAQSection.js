@@ -1,115 +1,110 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
-const FAQS = [
-  {
-    q: 'Was bekomme ich am Ende von 30 Tagen, konkret?',
-    a:
-      'Ein klareres Bild davon, wie du führst, geprüft an dreißig realen Drills aus deinem Alltag. Eine Bibliothek von elf Frameworks, die du in jeder Verhandlung, jedem 1:1 und jeder Firmenrede sofort abrufen kannst. Ein WladBot, der deine Challenge-Historie kennt und in deiner Sprache antwortet. Und ein Zertifikat mit deiner Startnummer 0001, das du auf LinkedIn teilen kannst, weil es zeigt, was du wirklich gelernt hast, nicht nur was du abgehakt hast.',
-  },
-  {
-    q: 'Wie hilft mir der WladBot in einer realen Situation?',
-    a:
-      'Beispiel Dienstag 22:47 Uhr: morgen früh musst du einem Senior-Mitarbeiter zum dritten Mal das gleiche Feedback geben. Du tippst die Situation in den Bot. Er gibt dir nicht "10 Tipps", sondern den nächsten Satz aus der Feedback-Formel (Beobachtung · Wirkung · Wunsch), abgestimmt auf das, was er über deinen Stil aus deiner Challenge weiß. Du gehst mit einem Skript ins Gespräch, nicht mit Bauchschmerzen.',
-  },
-  {
-    q: 'Was passiert nach den 30 Tagen, bleibt das System?',
-    a:
-      'Ja. Du behältst lebenslangen Zugriff auf alle elf Frameworks, WladBot 24/7 in deiner Tasche und die Lernvideo-Bibliothek. Wer die volle 12-Monats-Enablement-Begleitung mit monatlichen Live-Sessions und dem Drill-Channel will, upgradet auf Leadership Plus Pro. Die Challenge ist das Onboarding. Das OS bleibt dein Werkzeug für die nächsten Jahre. Kein Abo-Lock-in: einmal gezahlt, dauerhaft drin.',
-  },
-  {
-    q: 'Was kostet das genau?',
-    a:
-      'Der Einstieg ist 14 Tage kostenlos, ohne Karte, jederzeit kündbar. In dieser Zeit hast du vollen Zugang zur Plattform · alle Frameworks, WladBot 24/7, alle Lernvideos. Wenn es für dich passt, wandelst du danach in die 30-Tage-Challenge mit 12 Monaten Mitgliedschaft (997 € einmalig) oder die volle 12-Monats-Begleitung Leadership Plus Pro (4 797 € einmalig oder in drei Raten). Die Diagnose auf leadercheck.de bleibt unabhängig davon kostenlos. Kein Abo, keine automatische Verlängerung.',
-  },
-  {
-    q: 'Warum sollte ich für die Diagnose dieselbe Email nutzen?',
-    a:
-      'Weil die Diagnose-App (leadercheck.de) und die Coaching-App (leaderos.de) dieselbe Identität sehen, sobald du die gleiche Email-Adresse benutzt. Deine Diagnose-Scores aus dem Check fließen in deinen Challenge-Plan ein. Der WladBot weiß ab Tag 1, wo deine Schwächen liegen. Du musst nichts nochmal angeben. Andere Email = zwei getrennte Profile = keine Personalisierung.',
-  },
-  {
-    q: 'Wie unterscheidet sich das von ChatGPT oder einem normalen Coaching?',
-    a:
-      'ChatGPT kennt das halbe Internet, aber nicht dich und nicht die Methodik. Ein 1-zu-1-Coach kennt dich, ist aber nicht um 22:47 Uhr verfügbar und kostet pro Stunde, was bei LeaderOS eine ganze Challenge kostet. WladBot ist beides zusammen: trainiert auf 2 212 authentische Wlad-Chunks und einer Context-Schicht, die deine Challenge, deine Frameworks-Historie und deine letzten Drills kennt.',
-  },
-  {
-    q: 'Wie sicher sind meine Daten?',
-    a:
-      'DSGVO-konform, Server in der EU (Frankfurt). Deine Chats sind verschlüsselt und gehören dir. Kein Training auf deinen Daten, kein Verkauf an Dritte. Du kannst dein Konto und alle Daten jederzeit mit einem Klick löschen.',
-  },
-  {
-    q: 'Was, wenn ich merke, das ist nichts für mich?',
-    a:
-      'Während der 14-tägigen Test-Phase kündigst du mit einem Klick, ohne Karte, ohne Begründung · es entsteht kein Risiko. Falls du danach in die Challenge wandelst und es doch nicht passt, gilt zusätzlich 14 Tage Geld-zurück-Garantie auf die Challenge, ohne Begründungspflicht. Bisher hat noch niemand zurückgefordert. Die Garantie steht trotzdem, damit du angstfrei starten kannst.',
-  },
-];
-
-const Item = ({ faq, isOpen, onToggle, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.5, delay: 0.04 * index, ease: [0.16, 1, 0.3, 1] }}
-    className="border-b border-foreground/15"
-  >
-    <button
-      type="button"
-      onClick={onToggle}
-      className="w-full flex items-start gap-5 py-6 md:py-7 text-left group"
-      aria-expanded={isOpen}
-      data-testid={`faq-q-${index + 1}`}
-    >
-      <span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/45 font-mono pt-1 shrink-0 w-10">
-        {String(index + 1).padStart(2, '0')}
-      </span>
-      <span
-        className="flex-1 text-[18px] md:text-[22px] leading-[1.25] tracking-[-0.015em] text-foreground"
-        style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 700 }}
-      >
-        {faq.q}
-      </span>
-      <span
-        className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-full border transition-all ${
-          isOpen
-            ? 'bg-brand border-brand text-[#0A0A0A] rotate-45'
-            : 'border-foreground/25 text-foreground group-hover:border-foreground/50'
-        }`}
-        aria-hidden
-      >
-        <span className="text-xl leading-none font-black">+</span>
-      </span>
-    </button>
-
-    {isOpen && (
-      <motion.p
-        initial={{ opacity: 0, height: 0 }}
-        animate={{ opacity: 1, height: 'auto' }}
-        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="pl-15 ml-10 pr-12 md:pr-14 pb-6 md:pb-7 text-[14.5px] md:text-[15.5px] leading-[1.6] text-foreground/70"
-      >
-        {faq.a}
-      </motion.p>
-    )}
-  </motion.div>
-);
+import { Link } from 'react-router-dom';
+import { FAQS, LANDING_FAQ_KICKER, LANDING_FAQ_TITLE } from '../../data/landingFaq';
 
 /**
- * FAQSection · objection-handling block. Six common questions answered
- * crisply in Wlad's direct German voice (du-form, concrete examples,
- * no corporate fluff). Accordion behaviour, first item open by default
- * to invite scrolling, others click-to-expand.
+ * FAQSection · full-width answer block on the landing page.
+ *
+ * SEO/AEO rules baked in (docs/gtm/SEO_AEO_PLAYBOOK.md §3):
+ *  - every answer is ALWAYS in the DOM (collapsed, not unmounted) so
+ *    Google's renderer and answer engines read all of them, not just the
+ *    open one;
+ *  - questions are real <h3> headings under one <h2>, answer-first text;
+ *  - FAQPage JSON-LD mirrors the visible text word for word;
+ *  - internal links under the answers lead to the static answer pages
+ *    (/kurse, /fragen) and the webinar, which crawlers can read without JS.
+ *
+ * Layout: full-bleed section, a 12-column grid on desktop with the title
+ * pinned left and the questions filling the remaining width. Mobile stacks.
  */
+const isStatic = (href) => href.startsWith('/fragen') || href.startsWith('/kurse');
+
+const AnswerLink = ({ href, label }) =>
+  isStatic(href) ? (
+    // Static answer pages live outside the React router (public/<path>/index.html).
+    <a href={href} className="text-brand font-bold hover:underline underline-offset-4">{label} →</a>
+  ) : (
+    <Link to={href} className="text-brand font-bold hover:underline underline-offset-4">{label} →</Link>
+  );
+
+const Item = ({ faq, isOpen, onToggle, index }) => {
+  const panelId = `faq-a-${index + 1}`;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.45, delay: 0.03 * index, ease: [0.16, 1, 0.3, 1] }}
+      className="border-b border-foreground/15"
+      role="listitem"
+    >
+      <h3 className="m-0">
+        <button
+          type="button"
+          onClick={onToggle}
+          className="w-full flex items-start gap-4 md:gap-6 py-5 md:py-7 text-left group"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          data-testid={`faq-q-${index + 1}`}
+        >
+          <span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/45 font-mono pt-1.5 shrink-0 w-9 md:w-12">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span
+            className="flex-1 text-[18px] md:text-[24px] lg:text-[26px] leading-[1.2] tracking-[-0.015em] text-foreground"
+            style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 700 }}
+          >
+            {faq.q}
+          </span>
+          <span
+            className={`shrink-0 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full border transition-all ${
+              isOpen
+                ? 'bg-brand border-brand text-[#0A0A0A] rotate-45'
+                : 'border-foreground/25 text-foreground group-hover:border-foreground/50'
+            }`}
+            aria-hidden
+          >
+            <span className="text-xl leading-none font-black">+</span>
+          </span>
+        </button>
+      </h3>
+
+      {/* Always rendered: crawlers read every answer; only the height animates. */}
+      <motion.div
+        id={panelId}
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="overflow-hidden"
+        aria-hidden={!isOpen}
+      >
+        <div className="pl-9 md:pl-12 pr-2 md:pr-16 pb-6 md:pb-8 max-w-[72ch]">
+          <p className="text-[15px] md:text-[17px] leading-[1.65] text-foreground/75">{faq.a}</p>
+          {faq.links?.length ? (
+            <p className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-[13px] md:text-[14px]">
+              {faq.links.map(([href, label]) => (
+                <AnswerLink key={href} href={href} label={label} />
+              ))}
+            </p>
+          ) : null}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 export const FAQSection = () => {
   const [openIdx, setOpenIdx] = useState(0);
 
-  // FAQPage JSON-LD for AEO + SEO. Injected at mount so the structured
-  // data stays in lockstep with the visible FAQs above. Removed on
-  // unmount so it never lingers on routes that don't show FAQs.
+  // FAQPage JSON-LD, word for word the visible text. Injected at mount,
+  // removed on unmount so it never lingers on routes without FAQs.
   useEffect(() => {
     if (typeof document === 'undefined') return undefined;
     const data = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
+      '@id': 'https://leader-os.de/#faq',
       mainEntity: FAQS.map((f) => ({
         '@type': 'Question',
         name: f.q,
@@ -127,43 +122,51 @@ export const FAQSection = () => {
   return (
     <section
       id="faq"
-      className="relative w-full bg-background overflow-hidden border-t border-foreground/10"
-      aria-label="Häufige Fragen"
+      className="relative w-full bg-background border-t border-foreground/10"
+      aria-labelledby="faq-heading"
       data-testid="faq-section"
     >
-      <div className="max-w-[1080px] mx-auto px-5 md:px-10 py-24 md:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl mb-12 md:mb-16"
-        >
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.28em] text-foreground/55 mb-5 font-mono">
-            ▸ HÄUFIGE FRAGEN · WAS DU WISSEN MUSST
-          </p>
-          <h2
-            className="text-[40px] sm:text-[56px] md:text-[72px] leading-[0.92] tracking-[-0.04em] text-foreground"
-            style={{
-              fontFamily: 'Outfit, Inter, sans-serif',
-              fontWeight: 900,
-              fontStyle: 'italic',
-            }}
+      <div className="w-full px-5 md:px-10 xl:px-16 2xl:px-24 py-20 md:py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          {/* Title column · pinned on desktop so the heading stays in view
+              while the long list scrolls. */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-4 lg:sticky lg:top-28 self-start"
           >
-            Antworten<span className="text-brand not-italic">.</span>
-          </h2>
-        </motion.div>
+            <p className="text-[10.5px] font-bold uppercase tracking-[0.28em] text-foreground/55 mb-5 font-mono">
+              ▸ {LANDING_FAQ_KICKER}
+            </p>
+            <h2
+              id="faq-heading"
+              className="text-[40px] sm:text-[56px] md:text-[64px] xl:text-[72px] leading-[0.92] tracking-[-0.04em] text-foreground"
+              style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
+            >
+              {LANDING_FAQ_TITLE.replace(/\.$/, '')}<span className="text-brand not-italic">.</span>
+            </h2>
+            <p className="mt-6 max-w-sm text-[15px] md:text-[16px] leading-[1.6] text-foreground/65">
+              {FAQS.length} Antworten, antwort-zuerst geschrieben. Für die Frameworks selbst (SEXIER, Feedbackformel, 5 Rollen) gibt es eine eigene Seite.
+            </p>
+            <p className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-[13px] md:text-[14px]">
+              <AnswerLink href="/fragen" label="Fragen & Frameworks" />
+              <AnswerLink href="/kurse" label="Kurse & Zugang" />
+            </p>
+          </motion.div>
 
-        <div role="list">
-          {FAQS.map((faq, i) => (
-            <Item
-              key={faq.q}
-              faq={faq}
-              index={i}
-              isOpen={openIdx === i}
-              onToggle={() => setOpenIdx(openIdx === i ? -1 : i)}
-            />
-          ))}
+          <div className="lg:col-span-8" role="list">
+            {FAQS.map((faq, i) => (
+              <Item
+                key={faq.q}
+                faq={faq}
+                index={i}
+                isOpen={openIdx === i}
+                onToggle={() => setOpenIdx(openIdx === i ? -1 : i)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

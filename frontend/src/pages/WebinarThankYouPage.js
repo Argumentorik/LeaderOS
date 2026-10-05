@@ -6,6 +6,8 @@ import { LandingFooter } from '../components/landing/LandingFooter';
 import { PlusCircleCTA } from '../components/landing/PlusCircleCTA';
 import { WladMark } from '../components/brand/WladMark';
 import { applyPageMeta } from '../lib/pageMeta';
+import { trackGoogleAdsWebinarConversion } from '../lib/googleAds';
+import { trackBingWebinarLead } from '../lib/bingUet';
 
 /**
  * WebinarThankYouPage · /webinar/danke · dedicated confirmation surface for
@@ -63,7 +65,23 @@ export default function WebinarThankYouPage() {
       image: 'https://leader-os.de/og-wlad.jpg',
     });
 
+    // Conversion an Google Ads (Label) und Microsoft (UET) genau einmal pro
+    // Anmeldung: Reload der Danke-Seite zählt nicht doppelt. Meta und
+    // LinkedIn feuern bereits im Formular (WebinarPage.js).
+    try {
+      const key = 'lo_webinar_conv_' + (params.get('email') || 'anon');
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1');
+        trackGoogleAdsWebinarConversion(key);
+        trackBingWebinarLead();
+      }
+    } catch { /* storage blockiert → Conversion trotzdem einmal senden */
+      trackGoogleAdsWebinarConversion();
+      trackBingWebinarLead();
+    }
+
     return () => { restoreMeta(); if (wasDark) root.classList.add('dark'); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

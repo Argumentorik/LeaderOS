@@ -15,6 +15,11 @@ Allow: /start
 Allow: /os
 Allow: /app
 Allow: /wladbot
+Allow: /kurse
+Allow: /kommunikation
+Allow: /training
+Allow: /ki-fuehrungskraft
+Allow: /leaderos
 Allow: /wlad-jachtchenko
 Allow: /wlad
 Allow: /about

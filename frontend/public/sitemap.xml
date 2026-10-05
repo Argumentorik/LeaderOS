@@ -63,12 +63,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>https://leader-os.de/frameworks</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
 
   <!-- "Führung beginnt hier" · free 4-video lead-magnet funnel · top-of-funnel opt-in. -->
   <url>
@@ -164,4 +158,24 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- 2026-10-05 · Kommunikations-Training, Live-Training und die statische
+       Kurs-Antwortseite (/kurse · public/kurse/index.html). -->
+  <url>
+    <loc>https://leader-os.de/kommunikation</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://leader-os.de/training</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leader-os.de/kurse</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

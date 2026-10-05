@@ -1,22 +1,153 @@
-"""Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics."""
-from fastapi import APIRouter, HTTPException, Request
-from datetime import datetime, timezone, timedelta
+"""Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics.
 
-from config import db
+Admin access works in two layers (see docs/ops/APP_TAKEOVER_STEFAN.md §5):
+
+1. **Allowlist** — `ADMIN_EMAILS` below plus the comma-separated env var
+   `ADMIN_EMAILS` on Emergent. Good for founders; needs a redeploy to change.
+2. **`is_admin` flag on the user document** — set from the admin panel
+   (`POST /api/admin/admins`) by any existing admin. No deploy, takes effect
+   on the user's next request. This is how the support team gets in.
+
+`routes/auth.py::_safe_user_output` computes `is_admin` for the frontend from
+the same two sources, and `/wlad-control-x7k9q2` redirects everyone else to
+the dashboard.
+"""
+import os
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel, EmailStr
+
+from config import db, logger
 from services import get_current_user
 from services_tier import TIER_CONFIG
+from services_lead_import import parse_lead_csv
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
-# Admin emails (expand as needed)
-ADMIN_EMAILS = {"test@test.com", "start@aiporate.com", "mert@wladbot.com", "mertzafermutlu@gmail.com"}
+# Founder allowlist (code) + ops allowlist (env `ADMIN_EMAILS=a@x.de,b@y.de`).
+_CODE_ADMIN_EMAILS = {"test@test.com", "start@aiporate.com", "mert@wladbot.com", "mertzafermutlu@gmail.com"}
+_ENV_ADMIN_EMAILS = {e.strip().lower() for e in os.environ.get("ADMIN_EMAILS", "").split(",") if e.strip()}
+ADMIN_EMAILS = {e.lower() for e in _CODE_ADMIN_EMAILS} | _ENV_ADMIN_EMAILS
+
+
+def is_admin_user(user: dict) -> bool:
+    """Single source of truth for 'is this account an admin'."""
+    email = (user.get("email") or "").lower()
+    return bool(user.get("is_admin")) or email in ADMIN_EMAILS
 
 
 async def require_admin(request: Request) -> dict:
     user = await get_current_user(request)
-    if user.get("email", "").lower() not in {e.lower() for e in ADMIN_EMAILS} and not user.get("is_admin"):
+    if not is_admin_user(user):
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
+
+
+# ---------------------------------------------------------------- admin grants
+class AdminGrant(BaseModel):
+    email: EmailStr
+    grant: bool = True
+
+
+@router.get("/admins")
+async def admin_list(request: Request) -> dict:
+    """Who can open the admin panel: allowlist (code/env) + flagged accounts."""
+    await require_admin(request)
+    flagged = await db.users.find(
+        {"is_admin": True}, {"_id": 0, "email": 1, "name": 1, "admin_granted_by": 1, "admin_granted_at": 1}
+    ).sort("admin_granted_at", -1).to_list(200)
+    return {"allowlist": sorted(ADMIN_EMAILS), "flagged": flagged}
+
+
+@router.post("/admins")
+async def admin_grant(payload: AdminGrant, request: Request) -> dict:
+    """Grant or revoke admin access for an existing account.
+
+    The target must already have a leaderos.de account (sign up first), because
+    the flag lives on the user document. Allowlisted emails cannot be revoked
+    here and nobody can revoke themselves — that keeps at least one admin alive.
+    """
+    actor = await require_admin(request)
+    email = payload.email.strip().lower()
+    actor_email = (actor.get("email") or "").lower()
+    if not payload.grant and email == actor_email:
+        raise HTTPException(status_code=400, detail="cannot_revoke_self")
+    if not payload.grant and email in ADMIN_EMAILS:
+        raise HTTPException(status_code=400, detail="allowlisted_email_cannot_be_revoked")
+    target = await db.users.find_one({"email": email}, {"_id": 0, "email": 1, "name": 1})
+    if not target:
+        raise HTTPException(status_code=404, detail="no_account_for_email")
+    now = datetime.now(timezone.utc).isoformat()
+    update = (
+        {"$set": {"is_admin": True, "admin_granted_by": actor_email, "admin_granted_at": now}}
+        if payload.grant
+        else {"$set": {"is_admin": False, "admin_revoked_by": actor_email, "admin_revoked_at": now}}
+    )
+    await db.users.update_one({"email": email}, update)
+    await db.system_events.insert_one({
+        "type": "admin_grant" if payload.grant else "admin_revoke",
+        "email": email, "actor": actor_email, "created_at": now,
+    })
+    logger.info("admin %s: %s by %s", "grant" if payload.grant else "revoke", email, actor_email)
+    return {"ok": True, "email": email, "is_admin": payload.grant, "name": target.get("name")}
+
+
+# ----------------------------------------------------------- webinar CSV import
+@router.post("/webinar-leads/import")
+async def import_webinar_leads(request: Request, file: UploadFile = File(...), dry_run: bool = False) -> dict:
+    """Upsert webinar leads from a CSV prepared by the support team.
+
+    Columns: email (required), name, company — any order, any case, comma /
+    semicolon / tab separated. Existing leads keep their data; new ones get
+    `sources: ['csv-import']`. **No emails are sent** by this endpoint; the
+    reminder/follow-up crons pick the leads up like any other registration.
+    `?dry_run=true` only validates and reports counts.
+    """
+    actor = await require_admin(request)
+    raw = await file.read()
+    if len(raw) > 2_000_000:
+        raise HTTPException(status_code=413, detail="csv_too_large")
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        text = raw.decode("latin-1")
+    valid, invalid = parse_lead_csv(text)
+    if not valid:
+        raise HTTPException(status_code=422, detail="no_valid_rows")
+    inserted = updated = 0
+    if not dry_run:
+        now = datetime.now(timezone.utc).isoformat()
+        for lead in valid:
+            set_fields = {"email": lead["email"], "email_lower": lead["email"], "last_seen_at": now, "imported_by": actor.get("email")}
+            if lead.get("name"):
+                set_fields["name"] = lead["name"]
+            if lead.get("company"):
+                set_fields["company"] = lead["company"]
+            res = await db.webinar_leads.update_one(
+                {"email_lower": lead["email"]},
+                {
+                    "$set": set_fields,
+                    "$setOnInsert": {
+                        "created_at": now, "unsubscribed": False, "confirmation_sent": False,
+                        "reminder_24h_sent": False, "reminder_1h_sent": False, "followup_sent": False,
+                        "optin_count": 0,
+                    },
+                    "$addToSet": {"sources": "csv-import"},
+                },
+                upsert=True,
+            )
+            if res.upserted_id is not None:
+                inserted += 1
+            else:
+                updated += 1
+        await db.system_events.insert_one({
+            "type": "webinar_leads_import", "actor": actor.get("email"), "rows": len(valid),
+            "inserted": inserted, "updated": updated, "invalid": len(invalid), "created_at": now,
+        })
+    return {
+        "ok": True, "dry_run": dry_run, "rows": len(valid), "inserted": inserted, "updated": updated,
+        "invalid": len(invalid), "invalid_samples": invalid[:10],
+    }
 
 
 async def _compute_user_stats(last_30: str, last_7: str) -> dict:

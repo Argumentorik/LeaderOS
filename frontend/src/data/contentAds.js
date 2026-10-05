@@ -139,7 +139,7 @@ export const AD_SERIES = [
     // Nur Kanon-Zahlen (docs/gtm/WLAD_CANON.md). „14 Mio. Views" stand
     // hier ohne Beleg und ist raus.
     caption:
-      '400.000+ Klienten. 13 Bücher, drei davon SPIEGEL-Bestseller. ' +
+      '400.000+ Klienten. 3× SPIEGEL-Bestseller. ' +
       'Diese Methodik landet jetzt in deiner Tasche.',
   },
 
@@ -333,7 +333,7 @@ export const AD_SERIES = [
     photo: '/wlad/wlad-portrait.jpg',
     photoFit: 'cover',
     caption:
-      'Seit 2007 im Training, 13 Bücher, 3× SPIEGEL-Bestseller — und ' +
+      'Seit 2007 im Training, 3× SPIEGEL-Bestseller — und ' +
       'am Telefon sitzt das Team, das das System baut, nicht ein ' +
       'Call-Center-Skript.',
   },
@@ -373,7 +373,7 @@ const WEBINAR_ANGLES = [
     cta: 'PLATZ SICHERN',
     landing: 'https://leader-os.de/webinar',
     headline: 'Live-Webinar mit Wlad Jachtchenko',
-    description: '17. Sept · 10 Uhr · 90 Min',
+    description: '29. Okt · 10 Uhr · 90 Min',
     caption:
       'Du weißt, wie gute Führung geht. Du kommst nur nicht dazu, sie zu leben.\n\n' +
       'Am 29. Oktober zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller, seit 2007 Coach ' +
@@ -391,7 +391,7 @@ const WEBINAR_ANGLES = [
     cta: 'LIVE DABEI',
     landing: 'https://leader-os.de/webinar',
     headline: 'Seminare ändern Wissen. Nicht Verhalten.',
-    description: '17. Sept · live · kostenlos',
+    description: '29. Okt · live · kostenlos',
     caption:
       'Kennst du das? Das Führungsseminar war wirklich gut. Drei Wochen später ist ' +
       'vom Feedback-Vorsatz nichts übrig außer den Folien.\n\n' +
@@ -446,7 +446,7 @@ const WEBINAR_ANGLES = [
     description: '90 Min · Q&A · live',
     caption:
       'Seit 2007 trainiert Wlad Jachtchenko Führungskräfte — über 400.000 Klienten, ' +
-      '13 Bücher, drei davon SPIEGEL-Bestseller.\n\n' +
+      'dreifacher SPIEGEL-Bestseller-Autor.\n\n' +
       'Am 29. Oktober zeigt er zum ersten Mal live, wie seine komplette Methodik ' +
       'als tägliches Trainingssystem funktioniert. Und beantwortet deine Fragen ' +
       'persönlich.\n\n' +
@@ -461,7 +461,7 @@ const WEBINAR_ANGLES = [
     cta: 'PLATZ SICHERN',
     landing: 'https://leader-os.de/webinar',
     headline: 'Der Autor von „Weiße Rhetorik" — live',
-    description: '17. Sept · 10 Uhr · kostenlos',
+    description: '29. Okt · 10 Uhr · kostenlos',
     caption:
       '„Weiße Rhetorik", „Dunkle Rhetorik", „Die 5 Rollen einer Führungskraft" — ' +
       'die Methodik aus Wlads Büchern, live an einem echten Führungsfall ' +
@@ -760,7 +760,7 @@ const LI_COPY = {
     liHeadline: 'SEXIER: sechs Schritte, ein vollständiges Argument · live',
   },
   C02: {
-    liIntro: 'Seit 2007, über 400.000 Klienten, 13 Bücher. Am 29.10. zeigt Wlad Jachtchenko live, wie seine Methodik als tägliches Training funktioniert.',
+    liIntro: 'Seit 2007, 400.000+ Klienten, 3× SPIEGEL-Bestseller. Am 29.10. zeigt Wlad Jachtchenko live, wie seine Methodik als tägliches Training funktioniert.',
     liHeadline: 'Wlad Jachtchenko live · 29. Oktober · 90 Minuten · kostenlos',
   },
   C01: {
