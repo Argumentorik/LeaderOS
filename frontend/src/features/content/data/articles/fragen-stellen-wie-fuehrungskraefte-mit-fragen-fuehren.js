@@ -177,6 +177,24 @@ export default {
         'und du übst, nur Fragen zu stellen, statt Ratschläge zu geben. In den täglichen 15-Minuten-Drills reicht eine Situation pro Tag. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Warum sollten Führungskräfte mehr fragen als sagen?',
+          'Weil eine Frage den Mitarbeiter denken lässt, eine Anweisung nicht. Wer fragt, bekommt Informationen, die er sonst nie hört, und überträgt Verantwortung, statt sie zu behalten. Antworten kommen vom Team, Entscheidungen bleiben bei dir.',
+        ],
+        [
+          'Welche Fragen sind in der Führung am wirksamsten?',
+          'Offene Fragen, die mit „Was“ oder „Wie“ beginnen: „Was schlägst du vor?“, „Wie würdest du entscheiden?“, „Was hindert dich?“. „Warum“-Fragen wirken schnell wie ein Vorwurf und lösen Rechtfertigung statt Nachdenken aus.',
+        ],
+        [
+          'Was ist eine Suggestivfrage und warum ist sie ein Problem?',
+          'Eine Frage, die die gewünschte Antwort schon enthält: „Du siehst doch auch, dass wir das so machen sollten?“. Sie wirkt wie eine Anweisung mit Fragezeichen, liefert keine neue Information und beschädigt das Vertrauen, dass du wirklich hören willst.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Fragetechniken für Führungskräfte: Mit Fragen führen',

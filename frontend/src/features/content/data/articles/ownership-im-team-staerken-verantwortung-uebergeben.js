@@ -160,6 +160,24 @@ export default {
       text:
         'Den Wechsel von „ich gebe Aufgaben“ zu „ich übergebe Ergebnisse“ merkst du erst, wenn du das Zurücknehmen bewusst unterlässt. Im LeaderOS kannst du solche Übergabegespräche üben: WladBot spielt das Gegenüber, das nachfragt, zögert oder dir die Entscheidung zurückschiebt, und du trainierst in täglichen Drills von etwa 15 Minuten, ruhig beim Ergebnis zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was bedeutet Ownership im Team?',
+          'Dass ein Mitarbeiter ein Ergebnis verantwortet, nicht nur eine Aufgabe erledigt. Er entscheidet innerhalb eines klaren Rahmens, holt sich, was er braucht, und meldet Probleme, bevor sie eskalieren. Ownership ist delegierte Entscheidung plus sichtbare Konsequenz.',
+        ],
+        [
+          'Wie überträgt man Verantwortung wirklich?',
+          'Mit Ergebnis, Rahmen und Kontrollpunkt: Welches Ergebnis, bis wann, welche Entscheidungen darf die Person allein treffen, und wann schaut ihr gemeinsam drauf. Danach nicht hineinregieren. Jede Korrektur ohne Not nimmt die Verantwortung zurück.',
+        ],
+        [
+          'Warum übernehmen Mitarbeiter keine Verantwortung?',
+          'Meist, weil Verantwortung ohne Entscheidungsrecht übergeben wurde oder weil Fehler bestraft statt besprochen werden. Wer entscheiden darf und bei Fehlern Rückendeckung bekommt, übernimmt. Wer nur ausführen darf, wartet.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Ownership im Team stärken: Verantwortung übergeben',

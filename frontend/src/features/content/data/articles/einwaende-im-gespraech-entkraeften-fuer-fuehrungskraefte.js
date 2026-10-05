@@ -181,6 +181,24 @@ export default {
         'entgegen, und du übst, nachzufragen statt zu kontern. Die täglichen 15-Minuten-Drills sind dafür gedacht, dass die Rückfrage zum Reflex wird. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie geht man als Führungskraft mit Einwänden um?',
+          'In drei Schritten: Einwand wiederholen, damit das Gegenüber sich verstanden fühlt, den dahinterliegenden Punkt klären („Geht es um die Zeit oder um die Priorität?“) und erst dann mit einem Argument nach dem SEXIER-Modell antworten.',
+        ],
+        [
+          'Soll man einen Einwand sofort widerlegen?',
+          'Nein. Wer sofort kontert, signalisiert, dass er nicht zugehört hat, und der Einwand kommt in anderer Form zurück. Zuerst verstehen, dann einordnen, dann antworten. Das dauert zwei Sätze länger und spart die Wiederholung.',
+        ],
+        [
+          'Was tun, wenn der Einwand berechtigt ist?',
+          'Ihn anerkennen und die eigene Position anpassen. Ein berechtigter Einwand, den du übergehst, kostet mehr Glaubwürdigkeit als jedes Zugeständnis. „Du hast recht, das hatte ich nicht bedacht. Dann machen wir es so.“',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Einwände entkräften: Leitfaden für Führungskräfte',

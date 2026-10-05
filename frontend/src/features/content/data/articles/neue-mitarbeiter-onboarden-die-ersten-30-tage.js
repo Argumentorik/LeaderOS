@@ -145,6 +145,24 @@ export default {
       text:
         'Das Onboarding ist im Kern eine Serie von Gesprächen: die Erwartungsklärung, das Feedback, das Bilanzgespräch. Im LeaderOS kannst du diese Gespräche vorher üben. WladBot spielt die neue Kollegin oder den neuen Kollegen, reagiert verunsichert oder fragt nach, und du trainierst in täglichen 15-Minuten-Drills, klar und freundlich zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie sieht ein gutes Onboarding in den ersten 30 Tagen aus?',
+          'Woche 1: Menschen, Werkzeuge, ein erstes kleines Ergebnis. Woche 2 bis 3: eine echte Aufgabe mit klarem Ziel und einem festen Ansprechpartner. Woche 4: erstes Feedbackgespräch mit Beobachtungen aus vier Wochen und Zielen für die nächsten 60 Tage.',
+        ],
+        [
+          'Was ist der häufigste Onboarding-Fehler?',
+          'Den neuen Mitarbeiter mit Dokumenten und Videos allein zu lassen. Onboarding ist Beziehung, nicht Information: Wer in der ersten Woche kein echtes Gespräch mit seiner Führungskraft hatte, entscheidet innerlich früh, ob er bleibt.',
+        ],
+        [
+          'Wann sollte das erste Feedbackgespräch stattfinden?',
+          'Nach spätestens 30 Tagen, besser mit einem kurzen Zwischengespräch nach Woche 1. Je früher Erwartungen und Beobachtungen ausgesprochen werden, desto weniger muss in der Probezeit korrigiert werden.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Neue Mitarbeiter onboarden: die ersten 30 Tage',

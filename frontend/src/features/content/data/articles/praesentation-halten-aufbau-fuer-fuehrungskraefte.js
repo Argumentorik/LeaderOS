@@ -173,6 +173,24 @@ export default {
         'unterbricht, und du übst, ruhig zu bleiben und zum Punkt zurückzukehren. In täglichen 15-Minuten-Drills wiederholst du Einstieg, Kernaussage und Schluss. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie baut man eine Präsentation als Führungskraft auf?',
+          'Mit der Kernbotschaft zuerst: In den ersten 30 Sekunden sagst du, was du willst und warum. Dann maximal drei Argumente nach dem SEXIER-Modell, jeweils mit Beispiel, und zum Schluss die konkrete Entscheidung oder der nächste Schritt, den du vom Publikum erwartest.',
+        ],
+        [
+          'Wie lang sollte eine Präsentation vor dem Management sein?',
+          'So kurz, wie es die Entscheidung erlaubt: zehn Minuten Inhalt, der Rest Fragen. Entscheider wollen die Empfehlung, die Begründung und das Risiko, nicht den Weg dorthin. Details gehören in den Anhang.',
+        ],
+        [
+          'Was ist der häufigste Fehler bei Präsentationen?',
+          'Der Aufbau als Chronologie („Zuerst haben wir analysiert, dann …“) statt als Argument. Das Publikum wartet zehn Folien auf die Aussage. Kernbotschaft zuerst, dann Begründung, dann Beleg.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Präsentation halten: Aufbau für Führungskräfte',

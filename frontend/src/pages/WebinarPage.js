@@ -19,7 +19,7 @@ import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySecti
 import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
-import { AGENDA, WEBINAR_TS } from '../data/webinarEvent';
+import { AGENDA, WEBINAR_TS, FAQ, WEBINAR_SEO } from '../data/webinarEvent';
 
 /**
  * WebinarPage · /webinar · Hormozi ascension funnel, motion-first build.
@@ -156,13 +156,8 @@ const LIVE_REASONS = [
   'Die Videoserie schaltest du als Teilnehmer direkt frei.',
 ];
 
-const FAQ = [
-  ['Kostet das etwas?', 'Nein. Das Webinar ist komplett kostenlos — keine Karte, kein Haken. Du brauchst nur deine E-Mail.'],
-  ['Wie lange dauert es?', '90 Minuten — von 10:00 bis etwa 11:30 Uhr, inklusive Live-Q&A.'],
-  ['Gibt es eine Aufzeichnung?', 'Nein, das Webinar ist live. Genau deshalb lohnt es sich: du kannst deine Fragen direkt im Q&A stellen.'],
-  ['Brauche ich Vorkenntnisse?', 'Nein. Für Führungskräfte und alle, die es werden wollen — Teamleads, Projektmanager, Senior-Experten. Keine KI-Vorkenntnisse nötig.'],
-  ['Kann ich Fragen stellen?', 'Ja — das Q&A ist fester Teil der Agenda (ab 11:15 Uhr). Wlad beantwortet live.'],
-];
+// FAQ lebt in data/webinarEvent.js: dieselbe Liste rendert das Build-
+// Prerendering (scripts/prerender-landings.mjs) als statisches HTML + FAQPage.
 
 const track = (event, props = {}) => {
   if (typeof window !== 'undefined' && window.posthog?.capture) {
@@ -773,15 +768,17 @@ export default function WebinarPage() {
     track('webinar_view');
     trackMeta('ViewContent', { content_name: 'webinar-2026-10-29', content_category: 'webinar' });
 
-    const restoreMeta = applyPageMeta({
-      title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
-      description:
-        'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 29.10.2026 mit ' +
-        'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
-        'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
-      url: 'https://leader-os.de/webinar',
-      image: 'https://leader-os.de/og-wlad.jpg',
-    });
+    const restoreMeta = applyPageMeta(WEBINAR_SEO);
+
+    // Das Build-Prerendering (scripts/prerender-landings.mjs) liefert Event +
+    // FAQPage bereits statisch im <head>. Nur bei reiner SPA-Navigation
+    // (kein prerendertes Markup im Dokument) nachträglich injizieren, sonst
+    // stünde jedes Schema doppelt.
+    const prerendered = !!document.head.querySelector('script[type="application/ld+json"]')
+      && document.head.innerHTML.includes('leader-os.de/webinar#event');
+    if (prerendered) {
+      return () => { restoreMeta(); if (wasDark) root.classList.add('dark'); };
+    }
 
     const ld = document.createElement('script');
     ld.type = 'application/ld+json';

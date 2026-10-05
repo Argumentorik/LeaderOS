@@ -182,3 +182,99 @@ const dir = join(BUILD_DIR, kf.PATH.replace(/^\//, ''));
 await mkdir(dir, { recursive: true });
 await writeFile(join(dir, 'index.html'), html);
 console.log(`prerender-landings: ${kf.PATH} written to build${kf.PATH}/index.html`);
+
+// ------------------------------------------------------------------ /webinar
+// Die Conversion-Seite der Ads. Ohne Prerender sahen Antwort-Crawler hier
+// nur die SPA-Shell; Event-, FAQ- und Agenda-Daten kommen aus
+// src/data/webinarEvent.js — derselben Quelle, die WebinarPage.js rendert.
+{
+  const url = ev.WEBINAR_SEO.url;
+  const webinarRoot = [
+    `<div style="background:#fff;color:${INK};">`,
+    `<header style="background:${INK};color:#fff;padding:110px 0 80px;"><div style="${wrap}">`,
+    `<p style="font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:${LIME};margin:0 0 20px;">▸ Kostenloses Live-Webinar · ${esc(ev.WEBINAR_DATE_LABEL)} · ${esc(ev.WEBINAR_TIME_LABEL)}</p>`,
+    `<h1 style="font-family:Anton,Impact,sans-serif;text-transform:uppercase;font-weight:400;font-size:clamp(44px,9vw,108px);line-height:.92;margin:0;">${esc(ev.WEBINAR_HERO.h1)} <span style="display:block;color:${LIME};">${esc(ev.WEBINAR_HERO.h1Accent)}</span></h1>`,
+    `<p style="font-family:Inter,system-ui,sans-serif;font-size:19px;line-height:1.5;color:rgba(255,255,255,.78);max-width:640px;margin:24px 0 0;">${esc(ev.WEBINAR_HERO.sub)}</p>`,
+    `<p style="margin:32px 0 0;"><a href="#anmelden" style="display:inline-block;background:${LIME};color:${INK};font-family:Inter,system-ui,sans-serif;font-weight:700;padding:17px 30px;border-radius:999px;text-decoration:none;">Kostenlosen Platz sichern →</a></p>`,
+    `<p style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin:18px 0 0;">Kostenlos · ohne Karte · keine Aufzeichnung · mit Q&amp;A</p>`,
+    `</div></header>`,
+    `<main>`,
+    section('agenda', `<p style="${bib}">▸ Ablauf · ${esc(ev.WEBINAR_DATE_LABEL)}</p><h2 style="${h2}">90 Minuten. Live.</h2><ol style="${p}padding-left:1.2em;">` +
+      ev.AGENDA.map(([t, title, d]) => `<li style="margin:0 0 10px;"><b>${esc(t)} · ${esc(title)}</b> – ${esc(d)}</li>`).join('') + '</ol>'),
+    section('system', `<p style="${bib}">▸ Was du siehst</p><h2 style="${h2}">Das Leadership Operating System.</h2>` +
+      `<p style="${p}">Ein Trainingssystem statt eines Seminars: Kurse mit den Frameworks von Wlad Jachtchenko, der KI-Coach WladBot, Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem echten Fall. Im Webinar zeigt Wlad das System zum ersten Mal komplett.</p>` +
+      `<p style="${p}"><a href="/kurse" style="color:${INK};">Alle Kurse und der Zugang im Überblick</a> · <a href="/fragen" style="color:${INK};">Fragen &amp; Frameworks</a></p>`),
+    section('', `<p style="${bib}">▸ Dein Gastgeber</p><h2 style="${h2}">${esc(kf.HOST.name)}</h2><p style="${p}"><b>${esc(kf.HOST.role)}.</b> ${esc(kf.HOST.bio)}</p>` +
+      `<p style="${p}">${kf.STATS.map(([v, l]) => `${esc(v)} ${esc(l)}`).join(' · ')} · <a href="/wlad-jachtchenko" style="color:${INK};">Über Wlad Jachtchenko</a></p>`),
+    section('fragen', `<p style="${bib}">▸ Häufige Fragen</p><h2 style="${h2}">Kurz beantwortet.</h2>` +
+      ev.FAQ.map(([q, a]) => `<h3 style="${h3}margin-top:22px;">${esc(q)}</h3><p style="${p}">${esc(a)}</p>`).join('')),
+    section('anmelden', `<p style="${bib}color:${LIME};">▸ Anmeldung · ${esc(ev.WEBINAR_DATE_LABEL)}</p><h2 style="${h2}color:#fff;">Sichere dir deinen Platz.</h2>` +
+      `<p style="${p}color:rgba(255,255,255,.75);">${esc(ev.WEBINAR_TIME_LABEL)} · online · kostenlos. Das Anmeldeformular erscheint, sobald die Seite geladen ist.</p>`, `background:${INK};`),
+    `</main>`,
+    `<footer style="${wrap}padding-top:24px;padding-bottom:40px;font-family:Inter,system-ui,sans-serif;font-size:13px;color:#5F6166;">`,
+    `<a href="/" style="color:#5F6166;">LeaderOS</a> · <a href="/kurse" style="color:#5F6166;">Kurse</a> · <a href="/fragen" style="color:#5F6166;">Fragen &amp; Antworten</a> · <a href="/journal" style="color:#5F6166;">Journal</a> · <a href="/impressum" style="color:#5F6166;">Impressum</a> · <a href="/datenschutz" style="color:#5F6166;">Datenschutz</a>`,
+    `</footer></div>`,
+  ].join('');
+
+  const webinarLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
+        name: ev.WEBINAR_SEO.title,
+        description: ev.WEBINAR_SEO.description,
+        inLanguage: 'de-DE',
+        isPartOf: { '@id': `${BASE}/#website` },
+        publisher: { '@id': `${BASE}/#organization` },
+        primaryImageOfPage: { '@type': 'ImageObject', url: ev.WEBINAR_SEO.image, width: 1200, height: 630 },
+        breadcrumb: { '@id': `${url}#breadcrumb` },
+        mainEntity: { '@id': `${url}#event` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'LeaderOS', item: `${BASE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Live-Webinar', item: url },
+        ],
+      },
+      {
+        '@type': 'Event',
+        '@id': `${url}#event`,
+        name: 'Führe besser. Jeden Tag. · Das kostenlose LeaderOS Live-Webinar',
+        description: 'Kostenloses Live-Webinar mit Wlad Jachtchenko: Charisma-Code live, das Leadership Operating System mit KI-Coach, ein echter Führungsfall und Q&A.',
+        startDate: ev.WEBINAR_START,
+        endDate: ev.WEBINAR_END,
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: { '@type': 'VirtualLocation', url },
+        image: [ev.WEBINAR_SEO.image],
+        inLanguage: 'de-DE',
+        isAccessibleForFree: true,
+        organizer: { '@id': `${BASE}/#organization` },
+        performer: { '@id': `${BASE}/#wlad` },
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url, validFrom: '2026-07-04T00:00:00+02:00' },
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${url}#faq`,
+        mainEntity: ev.FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      },
+    ],
+  };
+
+  const webinarHtml = renderPage(template, {
+    title: ev.WEBINAR_SEO.title,
+    description: ev.WEBINAR_SEO.description,
+    url,
+    image: ev.WEBINAR_SEO.image,
+    jsonLd: webinarLd,
+    rootHtml: webinarRoot,
+  });
+  const webinarDir = join(BUILD_DIR, 'webinar');
+  await mkdir(webinarDir, { recursive: true });
+  await writeFile(join(webinarDir, 'index.html'), webinarHtml);
+  console.log('prerender-landings: /webinar written to build/webinar/index.html');
+}

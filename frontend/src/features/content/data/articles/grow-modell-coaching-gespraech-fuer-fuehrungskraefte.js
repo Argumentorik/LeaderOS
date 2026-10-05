@@ -209,6 +209,24 @@ export default {
         'mit WladBot, der das Gegenüber spielt, etwa die Mitarbeiterin, die nur „Ich weiß nicht“ sagt. In täglichen 15-Minuten-Drills kannst du jede Phase einzeln wiederholen. ' +
         'Dabei hilft auch Wlads Modell der Stufen des Zuhörens, denn gute Fragen entstehen aus gutem Zuhören. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was ist das GROW-Modell?',
+          'Eine Struktur für Coaching-Gespräche in vier Schritten: Goal (Was willst du erreichen?), Reality (Wo stehst du jetzt?), Options (Welche Wege gibt es?) und Will (Was tust du bis wann?). Die Führungskraft fragt, der Mitarbeiter findet die Antwort.',
+        ],
+        [
+          'Wie lange dauert ein GROW-Gespräch?',
+          'Zwanzig bis dreißig Minuten reichen, wenn die Führungskraft bei Fragen bleibt und nicht in Ratschläge wechselt. Die meiste Zeit gehört in Reality und Options; Will ist am Ende ein konkreter Satz mit Termin.',
+        ],
+        [
+          'Wann passt GROW nicht?',
+          'Wenn der Mitarbeiter eine Entscheidung oder eine Anweisung braucht, nicht eine Reflexion. GROW ist für Situationen, in denen die Person die Lösung selbst finden kann und soll. Bei Compliance-Themen oder im Notfall führt man, man coacht nicht.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'GROW-Modell: Coaching-Gespräch für Führungskräfte',

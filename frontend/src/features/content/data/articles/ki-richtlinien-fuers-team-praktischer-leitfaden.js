@@ -178,6 +178,24 @@ export default {
         'und du trainierst, ruhig, klar und ohne Vorwurf zu reagieren. In täglichen 15-Minuten-Drills wiederholst du solche Gespräche, bis sie dir leichter fallen. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was gehört in eine KI-Richtlinie fürs Team?',
+          'Vier Punkte: welche Tools erlaubt sind, welche Daten nie eingegeben werden dürfen (Kundendaten, Personaldaten, Vertrauliches), wer Ergebnisse vor der Weitergabe prüft und wie KI-Nutzung gekennzeichnet wird. Eine Seite reicht, wenn sie konkret ist.',
+        ],
+        [
+          'Warum braucht ein Team überhaupt KI-Regeln?',
+          'Weil das Team KI ohnehin nutzt, oft heimlich. Ohne Regeln landen vertrauliche Daten in fremden Tools, und niemand weiß, welche Texte geprüft wurden. Regeln machen die Nutzung sichtbar und sicher, statt sie zu verbieten.',
+        ],
+        [
+          'Wie führt man KI-Richtlinien ein, ohne das Team zu bremsen?',
+          'Gemeinsam formulieren, mit erlaubten Anwendungsfällen beginnen statt mit Verboten, und die Regel nach vier Wochen gemeinsam überprüfen. Eine Richtlinie, die das Team mitgeschrieben hat, wird eingehalten; eine aus der Rechtsabteilung wird umgangen.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'KI-Richtlinien fürs Team: praktischer Leitfaden',

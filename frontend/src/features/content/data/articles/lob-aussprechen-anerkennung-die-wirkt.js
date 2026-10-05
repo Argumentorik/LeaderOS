@@ -163,6 +163,24 @@ export default {
         'nach Floskel. Die täglichen 15-Minuten-Drills sind dafür gedacht, dass aus dem Vorsatz eine Gewohnheit wird. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie spricht man Lob richtig aus?',
+          'Konkret, zeitnah und mit Wirkung: Nenne die Beobachtung („Du hast im Meeting den Einwand des Kunden aufgegriffen“), die Wirkung („Dadurch war die Entscheidung in zehn Minuten durch“) und lass das Lob dann stehen, ohne ein „aber“.',
+        ],
+        [
+          'Warum wirkt „Gut gemacht“ nicht?',
+          'Weil es keine Information enthält. Der Mitarbeiter weiß nicht, was genau gut war und was er wiederholen soll. Anerkennung wirkt, wenn sie ein beobachtbares Verhalten benennt und zeigt, welche Wirkung es hatte.',
+        ],
+        [
+          'Wie oft sollte eine Führungskraft loben?',
+          'Öfter, als sich die meisten trauen, aber nur, wenn es eine echte Beobachtung gibt. Als Faustregel: pro kritischem Feedback mehrere konkrete Anerkennungen über die Woche verteilt, nie als Ritual am Freitag.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Mitarbeiter loben: Anerkennung, die wirkt',

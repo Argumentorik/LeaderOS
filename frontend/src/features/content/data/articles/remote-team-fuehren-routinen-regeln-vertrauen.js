@@ -183,6 +183,24 @@ export default {
       text:
         'Viele dieser Gespräche sind ungewohnt, etwa die Frage nach Einsamkeit oder die Ansage, was du erwartest. Im LeaderOS kannst du sie vorher üben: WladBot spielt das Gegenüber, und du trainierst in täglichen Drills von 15 Minuten, deine Sätze klar und ruhig zu formulieren. Die ersten 14 Tage sind kostenlos.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie führt man ein Remote-Team erfolgreich?',
+          'Mit drei festen Routinen: ein kurzer täglicher Check-in im Team, ein wöchentliches 1:1 pro Person und ein klarer Erreichbarkeitsrahmen. Dazu schriftliche Entscheidungen an einem Ort, damit niemand auf Flurfunk angewiesen ist.',
+        ],
+        [
+          'Welche Regeln braucht ein Remote-Team?',
+          'Wenige, aber explizite: Kernzeiten, Antwortzeiten pro Kanal, wo Entscheidungen dokumentiert werden und wann Kamera an ist. Regeln, die das Team selbst formuliert, werden eingehalten; Regeln, die von oben kommen, werden umgangen.',
+        ],
+        [
+          'Wie entsteht Vertrauen ohne Büro?',
+          'Durch verlässliche Routinen und Ergebnisse statt Anwesenheit. Vertrauen wächst, wenn Zusagen eingehalten werden, Probleme früh gemeldet werden dürfen und die Führungskraft erreichbar ist, ohne zu kontrollieren.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Remote-Team führen: Routinen, Regeln, Vertrauen',

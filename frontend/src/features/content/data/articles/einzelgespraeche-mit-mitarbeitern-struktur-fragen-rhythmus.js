@@ -178,6 +178,24 @@ export default {
         'mit Stille und Nachfragen umzugehen, statt die Lücke mit eigenen Themen zu füllen. Die täglichen 15-Minuten-Drills eignen sich für einzelne Bausteine, etwa die erste Frage ' +
         'oder das Abschlussritual. Das echte Gespräch bleibt deines. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie oft sollte ein 1:1-Gespräch stattfinden?',
+          'Als Regel wöchentlich oder alle zwei Wochen, 30 Minuten, fester Termin, der nicht für operative Themen verschoben wird. Seltener als monatlich verliert das Gespräch seine Funktion als Frühwarnsystem.',
+        ],
+        [
+          'Wie ist ein gutes 1:1-Gespräch aufgebaut?',
+          'Drei Teile: Zuerst spricht der Mitarbeiter über das, was ihn beschäftigt. Dann deine Themen: Feedback, Beobachtungen, Prioritäten. Zum Schluss Entwicklung und nächste Schritte. Der Mitarbeiter führt die Agenda, du hältst die Struktur.',
+        ],
+        [
+          'Welche Fragen gehören in jedes 1:1?',
+          'Drei feste Fragen genügen: „Was läuft gerade gut?“, „Wo hängst du und was brauchst du von mir?“ und „Was sollten wir ändern?“. Dazu einmal im Monat: „Wo willst du in einem Jahr stehen?“.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: '1:1 Gespräch mit Mitarbeitern: Struktur und Fragen',

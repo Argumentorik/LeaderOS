@@ -199,6 +199,24 @@ export default {
         'täglichen 15-Minuten-Drills helfen dir, die ersten Sätze sicher zu haben, wenn es darauf ankommt. Du ' +
         'kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie führt man das Gespräch mit einem Underperformer?',
+          'Mit Beobachtung, Wirkung und Erwartung: „Ich habe beobachtet, dass drei Berichte verspätet kamen. Dadurch stand das Team zweimal ohne Zahlen im Meeting. Ich erwarte, dass die Berichte ab jetzt donnerstags da sind.“ Dann die Frage: „Was brauchst du dafür?“.',
+        ],
+        [
+          'Was gehört in einen Plan für Underperformer?',
+          'Zwei bis drei messbare Erwartungen, ein Zeitraum von vier bis acht Wochen, feste Check-ins und die Unterstützung, die du zusagst. Und die Konsequenz, wenn es nicht klappt, offen benannt. Ein Plan ohne Konsequenz ist ein Wunsch.',
+        ],
+        [
+          'Wann ist Leistungsschwäche ein Führungsproblem?',
+          'Wenn Erwartungen nie klar ausgesprochen wurden, Feedback zum ersten Mal im Krisengespräch kommt oder die Aufgabe nicht zur Person passt. Prüfe erst deinen Anteil, dann den des Mitarbeiters.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Underperformer führen: Gespräch und Plan für Führungskräfte',

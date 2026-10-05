@@ -188,6 +188,24 @@ export default {
         'der du wirklich sprichst. In den täglichen 15-Minuten-Drills wiederholst du die schwierigsten Fragen, ' +
         'bis die ersten Sätze ohne Nachdenken kommen. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie beantwortet man schwierige Fragen im Q&A?',
+          'Kurz pausieren, die Frage in einem Satz wiederholen oder einordnen, dann in drei Teilen antworten: Kernaussage, Begründung, Beispiel. Danach stoppen. Wer weiterredet, schwächt die Antwort und lädt zur nächsten Nachfrage ein.',
+        ],
+        [
+          'Was tun, wenn man die Antwort nicht weiß?',
+          'Es sagen, und einen Termin nennen: „Das weiß ich heute nicht. Ich kläre es und melde mich bis Freitag.“ Das wirkt souveräner als jede improvisierte Antwort, die am nächsten Tag korrigiert werden muss.',
+        ],
+        [
+          'Wie geht man mit aggressiven Fragen um?',
+          'Hart in der Sache, weich zur Person: Den Angriff nicht spiegeln, den sachlichen Kern herauslösen („Wenn ich dich richtig verstehe, geht es dir um die Kosten“) und nur diesen beantworten. Der Ton des Fragestellers ist nicht dein Thema.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Schwierige Fragen beantworten: Q&A souverän führen',

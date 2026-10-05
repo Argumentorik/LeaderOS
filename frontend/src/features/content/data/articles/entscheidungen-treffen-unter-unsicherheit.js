@@ -205,6 +205,24 @@ export default {
         'Die täglichen 15-Minuten-Drills sind dafür gedacht, dass du die Formulierungen im Ernstfall abrufen ' +
         'kannst. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie trifft man Entscheidungen unter Unsicherheit?',
+          'Indem du die Entscheidung in umkehrbar und unumkehrbar trennst. Umkehrbare Entscheidungen triffst du schnell mit 70 Prozent Information und korrigierst. Unumkehrbare bekommen Zeit, eine zweite Meinung und ein klares Kriterium, wann du entscheidest.',
+        ],
+        [
+          'Wann ist Warten die falsche Entscheidung?',
+          'Wenn mehr Information nichts mehr ändert. Die Frage lautet: „Welche Information würde meine Entscheidung kippen, und bekomme ich sie in der Zeit?“ Lautet die Antwort nein, ist Warten keine Vorsicht, sondern Verzögerung mit Kosten.',
+        ],
+        [
+          'Wie kommuniziert man eine unsichere Entscheidung?',
+          'Mit Entscheidung, Begründung und Annahme: „Wir machen A, weil B. Das gilt, solange C stimmt. Wenn sich C ändert, entscheiden wir neu.“ So bleibt die Entscheidung klar, ohne falsche Sicherheit vorzutäuschen.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Entscheidungen treffen unter Unsicherheit: 5 Schritte',

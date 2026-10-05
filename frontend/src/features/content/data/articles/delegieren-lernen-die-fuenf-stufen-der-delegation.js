@@ -186,6 +186,24 @@ export default {
         'Stufe zu bleiben. In den täglichen 15-Minuten-Drills wiederholst du die Formulierungen, bis sie im ' +
         'echten Gespräch ohne Nachdenken kommen. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was sind die 5 Stufen der Delegation?',
+          'Stufe 1: Mach genau das. Stufe 2: Recherchiere und berichte. Stufe 3: Schlage vor, ich entscheide. Stufe 4: Entscheide, informiere mich vorher. Stufe 5: Entscheide selbst und informiere mich danach. Pro Aufgabe wählst du die Stufe bewusst.',
+        ],
+        [
+          'Warum scheitert Delegation so oft?',
+          'Weil Stufe und Kontrollpunkt nicht benannt werden. Der Mitarbeiter weiß nicht, ob er entscheiden darf oder nur vorschlagen soll, und die Aufgabe landet als Rückfrage wieder bei dir. Unklare Delegation ist keine Delegation.',
+        ],
+        [
+          'Was ist Rückdelegation und wie verhindert man sie?',
+          'Rückdelegation ist, wenn eine abgegebene Aufgabe über eine Frage wieder auf deinem Tisch landet („Wie soll ich das machen?“). Verhindern: mit einer Gegenfrage („Was schlägst du vor?“) und einem festen Termin für das Ergebnis.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Delegieren lernen: 5 Stufen der Delegation',

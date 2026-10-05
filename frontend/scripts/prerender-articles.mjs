@@ -102,6 +102,18 @@ function blockToHtml(b, slug) {
         `<ul style="margin:0;padding-left:1.4em;color:#1a1a1a;">${opts}</ul></aside>`
       );
     }
+    case 'faq': {
+      // Antwort-Block (AEO): Frage als h3, Antwort als erster Absatz darunter.
+      // Spiegelt sich 1:1 im FAQPage-Schema (articleJsonLd) — Googles Regel.
+      const items = (b.items || [])
+        .map(
+          ([q, a]) =>
+            `<h3 style="margin:1.2em 0 .4em;line-height:1.3;font-weight:800;color:#000;">${esc(q)}</h3>` +
+            `<p style="${P}">${esc(a)}</p>`
+        )
+        .join('');
+      return `<section style="margin:1.6em 0 1.3em;border-top:2px solid #000;padding-top:.6em;"><h2 style="margin:.4em 0 .2em;line-height:1.25;font-weight:800;color:#000;">${esc(b.title || 'Häufige Fragen')}</h2>${items}</section>`;
+    }
     case 'image':
       return b.src
         ? `<figure style="margin:0 0 1.3em;"><img src="${esc(b.src)}" alt="${esc(b.alt || '')}" loading="lazy" style="max-width:100%;height:auto;"/>` +
@@ -142,32 +154,45 @@ function articleBodyHtml(a) {
 // -------------------------------------------------------------- JSON-LD
 function articleJsonLd(a) {
   const url = `${BASE}/journal/${a.slug}`;
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BlogPosting',
-        '@id': `${url}#article`,
-        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-        headline: a.title,
-        description: a.seo?.description || a.description || '',
-        inLanguage: 'de-DE',
-        datePublished: a.publishedAt || undefined,
-        dateModified: a.publishedAt || undefined,
-        keywords: (a.seo?.keywords || a.tags || []).join(', '),
-        author: { '@id': `${BASE}/wlad-jachtchenko#person` },
-        publisher: { '@id': `${BASE}/#organization` },
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'LeaderOS', item: `${BASE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Journal', item: `${BASE}/journal` },
-          { '@type': 'ListItem', position: 3, name: a.title, item: url },
-        ],
-      },
-    ],
-  };
+  const faqItems = (a.body || []).filter((b) => b.type === 'faq').flatMap((b) => b.items || []);
+  const graph = [
+    {
+      '@type': 'BlogPosting',
+      '@id': `${url}#article`,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+      headline: a.title,
+      description: a.seo?.description || a.description || '',
+      inLanguage: 'de-DE',
+      datePublished: a.publishedAt || undefined,
+      dateModified: a.updatedAt || a.publishedAt || undefined,
+      keywords: (a.seo?.keywords || a.tags || []).join(', '),
+      // Gleiche @id wie der Person-Knoten in public/index.html und in
+      // features/content/utils/seo.js — ein Autor, ein Entity-Knoten.
+      author: { '@id': `${BASE}/#wlad` },
+      publisher: { '@id': `${BASE}/#organization` },
+      speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'article p:first-of-type', 'article h2'] },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'LeaderOS', item: `${BASE}/` },
+        { '@type': 'ListItem', position: 2, name: 'Journal', item: `${BASE}/journal` },
+        { '@type': 'ListItem', position: 3, name: a.title, item: url },
+      ],
+    },
+  ];
+  if (faqItems.length) {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      mainEntity: faqItems.map(([q, ans]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: ans },
+      })),
+    });
+  }
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 // -------------------------------------------- template surgery per page

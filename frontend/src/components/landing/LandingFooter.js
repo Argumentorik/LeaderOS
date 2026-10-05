@@ -93,6 +93,11 @@ const COL_EXPLORE = [
   // Vercel direkt ausgeliefert. Ein <Link> würde clientseitig routen
   // und im SPA-404 landen.
   { label: 'Fragen & Frameworks',           href: '/fragen' },
+  // Ebenfalls statisch (public/kurse/index.html) · deshalb `href`.
+  { label: 'Kurse · Katalog & Zugang',      href: '/kurse' },
+  { label: 'Kommunikations-Training',       to: '/kommunikation' },
+  { label: 'KI-Führungskraft',              to: '/ki-fuehrungskraft' },
+  { label: 'Live-Webinar · 29.10.',         to: '/webinar' },
 ];
 
 const COL_COMPANY = [

@@ -123,6 +123,32 @@ const Image = ({ block }) => (
   </figure>
 );
 
+/**
+ * faq { title?, items: [question, answer][] } · Antwort-Block am Artikelende.
+ * Das Prerendering (scripts/prerender-articles.mjs) rendert denselben Block
+ * statisch und hängt ein FAQPage-Schema an — Frage und Antwort müssen deshalb
+ * wortgleich bleiben, keine Kürzung im UI.
+ */
+const Faq = ({ block }) => (
+  <section className="my-12 border-t-2 border-foreground pt-6" aria-label={block.title || 'Häufige Fragen'}>
+    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-foreground/55 font-mono">▸ FAQ</p>
+    <h2
+      className="mt-2 text-[28px] md:text-[36px] leading-[1.1] tracking-[-0.025em] text-foreground"
+      style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
+    >
+      {(block.title || 'Häufige Fragen').replace(/\.$/, '')}<span className="text-brand not-italic">.</span>
+    </h2>
+    <dl className="mt-4 divide-y divide-foreground/10">
+      {(block.items ?? []).map(([q, a], i) => (
+        <div key={i} className="py-5">
+          <dt className="text-[18px] md:text-[20px] leading-[1.3] font-extrabold text-foreground">{q}</dt>
+          <dd className="mt-2 text-[15.5px] md:text-[17px] leading-[1.65] text-foreground/85">{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+);
+
 const REGISTRY = {
   paragraph: Paragraph,
   heading: Heading,
@@ -131,6 +157,7 @@ const REGISTRY = {
   callout: Callout,
   framework: Framework,
   image: Image,
+  faq: Faq,
 };
 
 // Re-export the registry shape so BlocksRenderer's parent can compose

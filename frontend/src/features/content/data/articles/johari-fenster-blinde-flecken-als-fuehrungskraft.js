@@ -166,6 +166,24 @@ export default {
         'das zögert oder nur Andeutungen macht, und du trainierst, nachzufragen, ohne dich zu rechtfertigen. ' +
         'In täglichen 15-Minuten-Drills wiederholst du die Fragen und die Antworten, bis sie sich natürlich anfühlen. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was ist das Johari-Fenster?',
+          'Ein Modell mit vier Feldern: Was ich und andere über mich wissen (öffentlich), was nur ich weiß (verborgen), was nur andere sehen (blinder Fleck) und was niemand kennt (unbekannt). Für Führungskräfte zählt der blinde Fleck: Wirkung, die das Team sieht und du nicht.',
+        ],
+        [
+          'Wie verkleinert eine Führungskraft ihren blinden Fleck?',
+          'Durch aktives Einholen von Feedback mit konkreten Fragen („Was mache ich in Meetings, das dich bremst?“), durch eine Vertrauensperson, die dir die Wahrheit sagt, und durch Aufzeichnungen der eigenen Auftritte. Allgemeines „Gib mir Feedback“ liefert nichts.',
+        ],
+        [
+          'Warum haben Führungskräfte besonders große blinde Flecken?',
+          'Weil die Hierarchie ehrliches Feedback filtert. Je höher die Position, desto weniger Menschen sagen, was sie sehen, und desto länger bleibt ein Verhaltensmuster unkorrigiert. Wer nicht aktiv nachfragt, hört irgendwann nur noch Zustimmung.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Johari-Fenster: blinde Flecken als Führungskraft',

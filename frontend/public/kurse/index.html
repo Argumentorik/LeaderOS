@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Kurse in LeaderOS · Katalog, Zugang und Ablauf | LeaderOS</title>
+<meta name="description" content="Alle zehn Kurse in LeaderOS auf einer Seite: sechs Grundlagen-Kurse (im 14-Tage-Test enthalten), vier Master-Programme im OS-Jahr, elf Framework-Drills. Wie ein Kurs abläuft und was im Test drin ist."/>
+<link rel="canonical" href="https://leader-os.de/kurse"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Kurse in LeaderOS · Katalog, Zugang und Ablauf"/>
+<meta property="og:description" content="Sechs Grundlagen-Kurse ab Tag 1, vier Master-Programme im OS-Jahr, elf Framework-Drills. Jeder Kurs endet mit einem Drill an deinem Fall, nicht mit einem Haken."/>
+<meta property="og:url" content="https://leader-os.de/kurse"/>
+<meta property="og:image" content="https://leader-os.de/og-default.png"/>
+<meta property="og:locale" content="de_DE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<!--
+  /kurse · statische Antwort-Seite (AEO) für die Kurs-Bibliothek.
+
+  Zweck: „Welche Kurse hat LeaderOS?“, „Was ist im 14-Tage-Test enthalten?“
+  und „Wie läuft ein Kurs ab?“ vollständig IM HTML beantworten — ohne
+  JavaScript, für GPTBot, ClaudeBot, PerplexityBot, Applebot und Googles
+  Erst-Crawl. Liegt in public/, Vercel liefert sie vor dem SPA-Rewrite aus.
+
+  Quelle der Kursdaten: frontend/src/data/leaderOsCourses.js (Titel, Modul,
+  Level, Beschreibung, Zugang). Bewusst KEINE Laufzeiten oder Folgenzahlen —
+  die stehen nirgends verifiziert. Bei Änderungen am Katalog beide Dateien
+  anfassen. Das Schema unten spiegelt EXAKT den sichtbaren Text.
+-->
+<style>
+:root{--ink:#0A0A0A;--canvas:#FFFFFF;--cloud:#F5F5F5;--line:#E4E4E4;--muted:#6B6B6B;--brand:#6B8A00;--lime:#BFFF00}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{height:26px;width:26px;display:block}
+.brand .wm{font-family:Outfit,Inter,sans-serif;font-weight:900;font-size:19px;letter-spacing:-.03em}
+.brand .wm em{font-style:normal;color:var(--brand)}
+.nav .links{display:none;gap:26px;font-size:13.5px;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:11px 20px}
+.hero{padding:64px 0 44px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:Anton,Inter,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:-.01em;line-height:.88;font-size:clamp(44px,10.5vw,112px)}
+.hero h1 .dot{color:var(--brand)}
+.hero .lede{margin-top:22px;max-width:44rem;font-size:17.5px;line-height:1.55;color:#222}
+.hero .kicker{margin-bottom:20px}
+.sec{padding:48px 0;border-bottom:1px solid var(--line)}
+.sec h2{font-size:clamp(24px,3.6vw,36px);line-height:1.15;font-weight:700;letter-spacing:-.02em;max-width:36rem}
+.sec .first{margin-top:16px;max-width:40rem;font-size:17.5px;line-height:1.6}
+.sec p{max-width:40rem}
+.sec p+p{margin-top:12px}
+.access{display:inline-block;margin:14px 0 0;font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);border-radius:999px;padding:5px 11px}
+.courses{list-style:none;margin-top:22px;border-top:1px solid var(--line)}
+.courses li{display:grid;grid-template-columns:1fr;gap:4px;padding:18px 0;border-bottom:1px solid var(--line)}
+.courses h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.courses .meta{font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);font-weight:700}
+.courses p{font-size:15.5px;color:#2a2a2a;max-width:40rem}
+.steps{list-style:none;counter-reset:s;margin-top:18px;max-width:40rem}
+.steps li{counter-increment:s;position:relative;padding:12px 0 12px 46px;border-top:1px solid var(--line);font-size:15.5px}
+.steps li::before{content:"0" counter(s);position:absolute;left:0;top:12px;font-family:ui-monospace,monospace;font-size:12px;font-weight:700;color:var(--brand)}
+.steps li b{display:block;font-weight:700;color:var(--ink)}
+.fw{list-style:none;margin-top:18px;display:grid;grid-template-columns:1fr;gap:0;max-width:40rem}
+.fw li{padding:9px 0;border-top:1px solid var(--line);font-size:15.5px}
+.q{padding:30px 0;border-bottom:1px solid var(--line)}
+.q h3{font-size:clamp(19px,2.6vw,24px);line-height:1.25;font-weight:700;letter-spacing:-.015em;max-width:36rem}
+.q p{margin-top:10px;max-width:40rem;font-size:16px;line-height:1.65;color:#2a2a2a}
+.q a,.sec a{color:var(--brand);text-decoration:underline;text-underline-offset:3px;font-weight:500}
+.cta{background:var(--ink);color:#fff;padding:72px 0}
+.cta h2{font-family:Anton,Inter,sans-serif;font-weight:400;text-transform:uppercase;line-height:.9;font-size:clamp(34px,7vw,72px);letter-spacing:-.01em}
+.cta h2 .dot{color:var(--lime)}
+.cta p{margin-top:18px;max-width:34rem;font-size:16px;font-weight:300;color:rgba(255,255,255,.72)}
+.cta .row{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px}
+.cta .pill{background:var(--lime);color:#0c0f04}
+.cta .ghost{background:transparent;border:1px solid rgba(255,255,255,.32);color:#fff}
+.cta .mono{color:rgba(255,255,255,.5)}
+.foot{padding:34px 0;border-top:1px solid var(--line)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+.foot a{font-size:13px;color:var(--muted)}
+.foot nav{display:flex;flex-wrap:wrap;gap:18px}
+@media (min-width:860px){.nav .links{display:flex}.courses li{grid-template-columns:150px 1fr}.courses li .meta{padding-top:4px}.courses li h3,.courses li p{grid-column:2}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="LeaderOS Startseite">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <defs><linearGradient id="ks-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/></linearGradient></defs>
+        <rect width="32" height="32" rx="9.6" fill="url(#ks-bg)"/>
+        <g transform="translate(4.2 4.2) scale(0.7375)">
+          <path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke="#0A0A0A" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke="#0A0A0A" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+          <circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A"/>
+        </g>
+      </svg>
+      <span class="wm">Leader<em>·</em>OS</span>
+    </a>
+    <nav class="links" aria-label="Hauptnavigation">
+      <a href="/fragen">Fragen &amp; Frameworks</a>
+      <a href="/journal">Journal</a>
+      <a href="/wlad-jachtchenko">Über Wlad</a>
+      <a href="/webinar">Webinar</a>
+    </nav>
+    <a class="pill" href="https://leaderos.de/signup?trial=14">14 Tage kostenlos testen</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="mono kicker">Kurs-Bibliothek · LeaderOS</p>
+      <h1>Zehn Kurse.<br/>Elf Drills.<br/>Ein System<span class="dot">.</span></h1>
+      <p class="lede">Alle Kurse in LeaderOS auf einer Seite: was drin ist, wer welchen Zugang hat
+        und wie ein Kurs abläuft. Entwickelt aus der Methodik von Wlad Jachtchenko, dreifacher
+        SPIEGEL-Bestseller-Autor und seit 2007 Leadership-Coach.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="katalog">
+    <div class="wrap">
+      <p class="mono">Antwort · Katalog</p>
+      <h2>Welche Kurse gibt es in LeaderOS?</h2>
+      <p class="first">LeaderOS enthält sechs Grundlagen-Kurse, die in jedem Account freigeschaltet
+        sind: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi,
+        Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu kommen vier
+        Master-Programme im OS-Jahr: KI-First Leadership, Change Management Master, Executive
+        Presence und Boardroom-Strategie. Jeder Kurs endet nicht mit einem Haken, sondern mit
+        einem Drill an deinem eigenen Fall.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="grundlagen">
+    <div class="wrap">
+      <p class="mono">Grundlagen · sechs Kurse</p>
+      <h2>Ab Tag 1 freigeschaltet.</h2>
+      <p class="first">Die sechs Grundlagen-Kurse sind in jedem Account enthalten, auch im
+        14-Tage-Test. Sie decken die Gespräche ab, die jede Führungskraft führen muss.</p>
+      <span class="access">Zugang · im 14-Tage-Test enthalten</span>
+      <ol class="courses">
+        <li><span class="meta">K·01 · Kommunikation · Einstieg</span><h3>Rhetorik-Grundlagen</h3><p>Die drei Säulen wirkungsvoller Führungssprache: Körpersprache, Stimme und Wortwahl.</p></li>
+        <li><span class="meta">K·02 · Kommunikation · Einstieg</span><h3>Schwierige Gespräche meistern</h3><p>Konflikt, Kritik und Kündigung führen, ohne dass das Gespräch kippt.</p></li>
+        <li><span class="meta">K·03 · Führung · Einstieg</span><h3>Delegation wie ein Profi</h3><p>Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement vermeiden.</p></li>
+        <li><span class="meta">K·04 · Coaching · Einstieg</span><h3>Feedback-Formate</h3><p>Strukturiert Feedback geben: regelmäßig, an Fakten gebunden, wirksam.</p></li>
+        <li><span class="meta">K·05 · Kommunikation · Fortgeschritten</span><h3>Storytelling im Boardroom</h3><p>Komplexe Ideen so erzählen, dass sie in zwei Minuten hängen bleiben.</p></li>
+        <li><span class="meta">K·06 · Führung · Einstieg</span><h3>Meeting-Rhetorik</h3><p>Agenda, Eröffnung und Wortmeldungen: Meetings führen, die zu Entscheidungen kommen.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="master">
+    <div class="wrap">
+      <p class="mono">Master · vier Programme</p>
+      <h2>Für das OS-Jahr.</h2>
+      <p class="first">Die vier Master-Programme sind Teil des OS-Jahres (Leadership Plus Pro). Sie
+        richten sich an Führungskräfte, die Strategie, Veränderung und Präsenz auf C-Level
+        trainieren wollen.</p>
+      <span class="access">Zugang · im OS-Jahr · Leadership Plus Pro</span>
+      <ol class="courses">
+        <li><span class="meta">M·01 · AI-Strategie · Master</span><h3>KI-First Leadership</h3><p>KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben.</p></li>
+        <li><span class="meta">M·02 · Strategie · Master</span><h3>Change Management Master</h3><p>Veränderung so führen, dass das Team mitgeht. Mit Kotters 8-Schritte-Modell, KI-aktualisiert.</p></li>
+        <li><span class="meta">M·03 · Führung · Master</span><h3>Executive Presence</h3><p>Raum einnehmen, bevor du sprichst: Präsenz und Gravitas trainieren.</p></li>
+        <li><span class="meta">M·04 · Strategie · Master</span><h3>Boardroom-Strategie</h3><p>C-Level-Entscheidungen vorbereiten, präsentieren und durchsetzen.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="drills">
+    <div class="wrap">
+      <p class="mono">Framework-Drills · elf Frameworks</p>
+      <h2>Nicht als Poster. Als Drill.</h2>
+      <p class="first">Neben den Kursen trainiert LeaderOS elf Frameworks aus Wlads Büchern und
+        Trainings als eigene Drills: jeweils kurz erklärt, dann an deinem Fall geübt und
+        ausgewertet.</p>
+      <ul class="fw">
+        <li>Feedbackformel B·W·W (Beobachtung, Wirkung, Wunsch)</li>
+        <li>Harvard-Verhandlungsmethode</li>
+        <li>Kommunikationsquadrat nach Schulz von Thun</li>
+        <li>ALPEN-Methode</li>
+        <li>Die 5 Rollen einer Führungskraft</li>
+        <li>Vier-Farben-Modell</li>
+        <li>Dunkle Rhetorik erkennen und kontern</li>
+        <li>Drei Säulen der Überzeugung (Logos, Ethos, Pathos)</li>
+        <li>Die 10 Stufen des Zuhörens</li>
+        <li>OKR vs. KPI</li>
+        <li>Pareto-Prinzip in der Führung</li>
+      </ul>
+      <p style="margin-top:16px">Die kanonischen Definitionen stehen unter <a href="/fragen">Fragen &amp; Frameworks</a>.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="ablauf">
+    <div class="wrap">
+      <p class="mono">Antwort · Ablauf</p>
+      <h2>Wie läuft ein Kurs in LeaderOS ab?</h2>
+      <p class="first">Ein Kurs in LeaderOS besteht aus vier Schritten: einer kurzen Lektion mit
+        einem Framework, einem Drill, der dasselbe Framework an deinem echten Fall anwendet,
+        einer Simulation oder Frage an den KI-Coach WladBot vor dem anstehenden Gespräch und
+        einer Auswertung nach Struktur, Klarheit und Wirkung. Dafür sind 15 Minuten am Tag
+        eingeplant.</p>
+      <ol class="steps">
+        <li><b>Lektion</b>Kurz, mit dem Framework, das du heute brauchst.</li>
+        <li><b>Drill</b>Dasselbe Framework an deinem echten Fall, nicht an einer Fallstudie.</li>
+        <li><b>Simulation oder Frage</b>Du übst das Gespräch mit einem Gegenüber, das zurückredet, oder fragst WladBot, bevor es zählt.</li>
+        <li><b>Auswertung</b>Was saß, was fehlte, und der nächste Drill dazu.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="fragen">
+    <div class="wrap">
+      <p class="mono">Häufige Fragen · Kurse</p>
+      <h2>Kurz beantwortet.</h2>
+      <div class="q"><h3>Welche Kurse sind im 14-Tage-Test enthalten?</h3><p>Alle sechs Grundlagen-Kurse: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu WladBot, Simulationen und die täglichen Drills. Der Test braucht keine Kreditkarte und ist jederzeit kündbar.</p></div>
+      <div class="q"><h3>Was ist der Unterschied zwischen Grundlagen- und Master-Kursen?</h3><p>Grundlagen-Kurse trainieren die Gespräche, die jede Führungskraft führt: Feedback, Delegation, Meetings, schwierige Gespräche. Master-Programme trainieren Strategie, Veränderung und Präsenz auf C-Level und sind Teil des OS-Jahres (Leadership Plus Pro).</p></div>
+      <div class="q"><h3>Brauche ich Vorkenntnisse?</h3><p>Nein. Die Grundlagen-Kurse beginnen bei den drei Säulen der Führungssprache. Du brauchst keine KI-Vorkenntnisse: Wenn du eine E-Mail schreiben kannst, kannst du WladBot nutzen.</p></div>
+      <div class="q"><h3>Was unterscheidet die Kurse von einem Videokurs?</h3><p>Ein Videokurs endet mit einem Haken. In LeaderOS endet jeder Kurs mit einem Drill an deinem Fall, einer Simulation mit einem Gegenüber, das zurückredet, und einer Auswertung. Trainiert wird Verhalten, nicht Wissen.</p></div>
+      <div class="q"><h3>Wer hat die Kurse entwickelt?</h3><p>Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor, Gründer der Argumentorik-Akademie und seit 2007 Leadership-Coach. Die Kurse bauen auf seinen Büchern auf, darunter „Weiße Rhetorik“, „Dunkle Rhetorik“ und „Die 5 Rollen einer Führungskraft“.</p></div>
+      <div class="q"><h3>Gibt es ein Zertifikat?</h3><p>Ja. Die 30-Tage-Challenge endet mit einem persönlichen Zertifikat und deiner Startnummer, zum Beispiel für LinkedIn oder den nächsten Arbeitgeber.</p></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <p class="mono">Nächster Schritt</p>
+      <h2>Kurs ansehen ist nicht<br/>Kurs können<span class="dot">.</span></h2>
+      <p>Alle sechs Grundlagen-Kurse, WladBot und die Drills: 14 Tage kostenlos, ohne Karte.
+        Oder sieh das System live im Webinar mit Wlad am 29. Oktober.</p>
+      <div class="row">
+        <a class="pill" href="https://leaderos.de/signup?trial=14">14 Tage kostenlos testen</a>
+        <a class="pill ghost" href="/webinar">Live-Webinar am 29.10.</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="mono">LeaderOS · Argumentorik-Akademie</span>
+    <nav>
+      <a href="/fragen">Fragen &amp; Frameworks</a>
+      <a href="/journal">Journal</a>
+      <a href="/wlad-jachtchenko">Über Wlad</a>
+      <a href="/impressum">Impressum</a>
+      <a href="/datenschutz">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://leader-os.de/kurse#webpage",
+      "url": "https://leader-os.de/kurse",
+      "name": "Kurse in LeaderOS · Katalog, Zugang und Ablauf",
+      "description": "Alle zehn Kurse in LeaderOS auf einer Seite: sechs Grundlagen-Kurse (im 14-Tage-Test enthalten), vier Master-Programme im OS-Jahr, elf Framework-Drills.",
+      "inLanguage": "de-DE",
+      "isPartOf": { "@id": "https://leader-os.de/#website" },
+      "publisher": { "@id": "https://leader-os.de/#organization" },
+      "breadcrumb": { "@id": "https://leader-os.de/kurse#breadcrumb" },
+      "mainEntity": { "@id": "https://leader-os.de/kurse#list" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://leader-os.de/kurse#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Start", "item": "https://leader-os.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Kurse", "item": "https://leader-os.de/kurse" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://leader-os.de/kurse#list",
+      "name": "Kurse in LeaderOS",
+      "numberOfItems": 10,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k01", "name": "Rhetorik-Grundlagen", "description": "Die drei Säulen wirkungsvoller Führungssprache: Körpersprache, Stimme und Wortwahl.", "courseCode": "K·01", "educationalLevel": "Einstieg", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 2, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k02", "name": "Schwierige Gespräche meistern", "description": "Konflikt, Kritik und Kündigung führen, ohne dass das Gespräch kippt.", "courseCode": "K·02", "educationalLevel": "Einstieg", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 3, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k03", "name": "Delegation wie ein Profi", "description": "Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement vermeiden.", "courseCode": "K·03", "educationalLevel": "Einstieg", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 4, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k04", "name": "Feedback-Formate", "description": "Strukturiert Feedback geben: regelmäßig, an Fakten gebunden, wirksam.", "courseCode": "K·04", "educationalLevel": "Einstieg", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 5, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k05", "name": "Storytelling im Boardroom", "description": "Komplexe Ideen so erzählen, dass sie in zwei Minuten hängen bleiben.", "courseCode": "K·05", "educationalLevel": "Fortgeschritten", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 6, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#k06", "name": "Meeting-Rhetorik", "description": "Agenda, Eröffnung und Wortmeldungen: Meetings führen, die zu Entscheidungen kommen.", "courseCode": "K·06", "educationalLevel": "Einstieg", "inLanguage": "de", "isAccessibleForFree": true, "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Im 14-Tage-Test enthalten", "url": "https://leaderos.de/signup?trial=14" } } },
+        { "@type": "ListItem", "position": 7, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#m01", "name": "KI-First Leadership", "description": "KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben.", "courseCode": "M·01", "educationalLevel": "Master", "inLanguage": "de", "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "4797", "priceCurrency": "EUR", "description": "Im OS-Jahr · Leadership Plus Pro", "url": "https://leaderos.de/checkout?tier=plusplus" } } },
+        { "@type": "ListItem", "position": 8, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#m02", "name": "Change Management Master", "description": "Veränderung so führen, dass das Team mitgeht. Mit Kotters 8-Schritte-Modell, KI-aktualisiert.", "courseCode": "M·02", "educationalLevel": "Master", "inLanguage": "de", "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "4797", "priceCurrency": "EUR", "description": "Im OS-Jahr · Leadership Plus Pro", "url": "https://leaderos.de/checkout?tier=plusplus" } } },
+        { "@type": "ListItem", "position": 9, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#m03", "name": "Executive Presence", "description": "Raum einnehmen, bevor du sprichst: Präsenz und Gravitas trainieren.", "courseCode": "M·03", "educationalLevel": "Master", "inLanguage": "de", "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "4797", "priceCurrency": "EUR", "description": "Im OS-Jahr · Leadership Plus Pro", "url": "https://leaderos.de/checkout?tier=plusplus" } } },
+        { "@type": "ListItem", "position": 10, "item": { "@type": "Course", "@id": "https://leader-os.de/kurse#m04", "name": "Boardroom-Strategie", "description": "C-Level-Entscheidungen vorbereiten, präsentieren und durchsetzen.", "courseCode": "M·04", "educationalLevel": "Master", "inLanguage": "de", "provider": { "@id": "https://leader-os.de/#organization" }, "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Online", "instructor": { "@id": "https://leader-os.de/#wlad" } }, "offers": { "@type": "Offer", "price": "4797", "priceCurrency": "EUR", "description": "Im OS-Jahr · Leadership Plus Pro", "url": "https://leaderos.de/checkout?tier=plusplus" } } }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://leader-os.de/kurse#faq",
+      "mainEntity": [
+        { "@type": "Question", "name": "Welche Kurse gibt es in LeaderOS?", "acceptedAnswer": { "@type": "Answer", "text": "LeaderOS enthält sechs Grundlagen-Kurse, die in jedem Account freigeschaltet sind: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu kommen vier Master-Programme im OS-Jahr: KI-First Leadership, Change Management Master, Executive Presence und Boardroom-Strategie. Jeder Kurs endet nicht mit einem Haken, sondern mit einem Drill an deinem eigenen Fall." } },
+        { "@type": "Question", "name": "Wie läuft ein Kurs in LeaderOS ab?", "acceptedAnswer": { "@type": "Answer", "text": "Ein Kurs in LeaderOS besteht aus vier Schritten: einer kurzen Lektion mit einem Framework, einem Drill, der dasselbe Framework an deinem echten Fall anwendet, einer Simulation oder Frage an den KI-Coach WladBot vor dem anstehenden Gespräch und einer Auswertung nach Struktur, Klarheit und Wirkung. Dafür sind 15 Minuten am Tag eingeplant." } },
+        { "@type": "Question", "name": "Welche Kurse sind im 14-Tage-Test enthalten?", "acceptedAnswer": { "@type": "Answer", "text": "Alle sechs Grundlagen-Kurse: Rhetorik-Grundlagen, Schwierige Gespräche meistern, Delegation wie ein Profi, Feedback-Formate, Storytelling im Boardroom und Meeting-Rhetorik. Dazu WladBot, Simulationen und die täglichen Drills. Der Test braucht keine Kreditkarte und ist jederzeit kündbar." } },
+        { "@type": "Question", "name": "Was ist der Unterschied zwischen Grundlagen- und Master-Kursen?", "acceptedAnswer": { "@type": "Answer", "text": "Grundlagen-Kurse trainieren die Gespräche, die jede Führungskraft führt: Feedback, Delegation, Meetings, schwierige Gespräche. Master-Programme trainieren Strategie, Veränderung und Präsenz auf C-Level und sind Teil des OS-Jahres (Leadership Plus Pro)." } },
+        { "@type": "Question", "name": "Brauche ich Vorkenntnisse?", "acceptedAnswer": { "@type": "Answer", "text": "Nein. Die Grundlagen-Kurse beginnen bei den drei Säulen der Führungssprache. Du brauchst keine KI-Vorkenntnisse: Wenn du eine E-Mail schreiben kannst, kannst du WladBot nutzen." } },
+        { "@type": "Question", "name": "Was unterscheidet die Kurse von einem Videokurs?", "acceptedAnswer": { "@type": "Answer", "text": "Ein Videokurs endet mit einem Haken. In LeaderOS endet jeder Kurs mit einem Drill an deinem Fall, einer Simulation mit einem Gegenüber, das zurückredet, und einer Auswertung. Trainiert wird Verhalten, nicht Wissen." } },
+        { "@type": "Question", "name": "Wer hat die Kurse entwickelt?", "acceptedAnswer": { "@type": "Answer", "text": "Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor, Gründer der Argumentorik-Akademie und seit 2007 Leadership-Coach. Die Kurse bauen auf seinen Büchern auf, darunter „Weiße Rhetorik“, „Dunkle Rhetorik“ und „Die 5 Rollen einer Führungskraft“." } },
+        { "@type": "Question", "name": "Gibt es ein Zertifikat?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Die 30-Tage-Challenge endet mit einem persönlichen Zertifikat und deiner Startnummer, zum Beispiel für LinkedIn oder den nächsten Arbeitgeber." } }
+      ]
+    }
+  ]
+}
+</script>
+</body>
+</html>

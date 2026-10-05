@@ -145,6 +145,24 @@ export default {
         'die eine Aufgabe „schon kann“, und du übst, enger zu führen, ohne Misstrauen zu signalisieren, oder loszulassen, ohne dich zu verabschieden. ' +
         'In täglichen 15-Minuten-Drills wiederholst du die Formulierungen, bis sie im echten Gespräch verfügbar sind. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was ist situatives Führen nach Hersey und Blanchard?',
+          'Ein Modell, das den Führungsstil an den Reifegrad des Mitarbeiters für eine konkrete Aufgabe anpasst: Anweisen bei geringer Kompetenz und hohem Engagement, Coachen, Unterstützen und Delegieren bei hoher Kompetenz und hohem Engagement. Ein Stil für alle gibt es nicht.',
+        ],
+        [
+          'Welche vier Führungsstile unterscheidet das Modell?',
+          'Anweisen (viel Anleitung, wenig Unterstützung), Coachen (viel Anleitung, viel Unterstützung), Unterstützen (wenig Anleitung, viel Unterstützung) und Delegieren (wenig Anleitung, wenig Unterstützung). Der Stil folgt der Aufgabe, nicht der Person generell.',
+        ],
+        [
+          'Was ist die Grenze des Modells?',
+          'Es setzt voraus, dass du den Reifegrad richtig einschätzt, und genau da irren Führungskräfte am häufigsten: Sie führen erfahrene Mitarbeiter zu eng und neue zu locker. Frag, statt zu raten: „Wie viel Anleitung willst du bei dieser Aufgabe?“.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Situatives Führen nach Hersey und Blanchard erklärt',

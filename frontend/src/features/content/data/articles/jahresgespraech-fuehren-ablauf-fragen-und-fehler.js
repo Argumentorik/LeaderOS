@@ -159,6 +159,24 @@ export default {
         '15-Minuten-Drills übst du einzelne Bausteine wie die Brücke zwischen Rückblick und Zielbild. Das Gespräch ' +
         'selbst führst du trotzdem selbst. Wenn du das ausprobieren willst, kannst du LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie läuft ein Jahresgespräch ab?',
+          'In vier Teilen: Rückblick auf Ziele und Leistung, Selbsteinschätzung des Mitarbeiters, deine Einschätzung mit konkreten Beobachtungen und ein Ausblick mit zwei bis drei Zielen für das nächste Jahr. Plane 60 bis 90 Minuten ohne Unterbrechung.',
+        ],
+        [
+          'Welche Fragen gehören in ein Jahresgespräch?',
+          'Fragen, die Beobachtung und Zukunft verbinden: „Worauf bist du in diesem Jahr stolz?“, „Was hat dich am meisten gebremst?“, „Welche Aufgabe willst du nächstes Jahr mehr, welche weniger?“ und „Was brauchst du von mir?“.',
+        ],
+        [
+          'Was ist der häufigste Fehler im Jahresgespräch?',
+          'Kritik, die im Jahresgespräch zum ersten Mal fällt. Feedback gehört ins laufende Jahr; das Jahresgespräch fasst zusammen, überrascht aber nicht. Zweiter Fehler: Gehalt und Entwicklung im selben Termin vermischen.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Jahresgespräch führen: Ablauf, Fragen, Fehler',

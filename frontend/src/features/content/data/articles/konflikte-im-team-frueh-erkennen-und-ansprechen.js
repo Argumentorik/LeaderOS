@@ -156,6 +156,24 @@ export default {
       text:
         'Das Schwierigste an Teamkonflikten ist oft nicht die Methode, sondern der erste Satz. Im LeaderOS kannst du ihn üben: WladBot spielt Teammitglieder, die abblocken, widersprechen oder schweigen, und du trainierst in täglichen Drills von 15 Minuten, bei deiner Beobachtung zu bleiben. Die ersten 14 Tage sind kostenlos.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Woran erkennt man Konflikte im Team früh?',
+          'An Verhalten, nicht an Worten: Zwei Personen stimmen in Meetings nur noch über dich ab, Absprachen laufen schriftlich statt direkt, Humor wird spitz, jemand zieht sich zurück. Diese Signale kommen Wochen vor dem offenen Streit.',
+        ],
+        [
+          'Wie spricht man einen Konflikt im Team an?',
+          'Einzeln zuerst, dann gemeinsam. Mit Beobachtung statt Deutung: „Mir ist aufgefallen, dass ihr seit zwei Wochen nur noch über mich abstimmt.“ Dann die Frage, was passiert ist, und erst danach das gemeinsame Gespräch mit klarer Regel: hart in der Sache, weich zur Person.',
+        ],
+        [
+          'Soll die Führungskraft Konflikte lösen oder moderieren?',
+          'Moderieren, solange beide Seiten sprechen können; entscheiden, wenn der Konflikt die Arbeit blockiert. Wer zu früh entscheidet, erzeugt einen Verlierer. Wer zu lange moderiert, verliert das Team.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Konflikte im Team früh erkennen und ansprechen',

@@ -148,6 +148,24 @@ export default {
       text:
         'Das alles ist weniger Wissen als Gewohnheit, und Gewohnheiten ändern sich durch Wiederholung. Im LeaderOS kannst du die Momente üben, in denen es darauf ankommt: WladBot spielt das Teammitglied, das widerspricht oder einen Fehler meldet, und du trainierst in täglichen Drills von 15 Minuten, nicht sofort zu verteidigen, sondern nachzufragen. Die ersten 14 Tage sind kostenlos.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Was ist psychologische Sicherheit?',
+          'Die geteilte Überzeugung im Team, dass man Fragen stellen, Fehler zugeben und widersprechen kann, ohne dafür bestraft oder bloßgestellt zu werden. Sie ist kein Wohlfühlfaktor, sondern die Voraussetzung dafür, dass Probleme früh auf den Tisch kommen.',
+        ],
+        [
+          'Wie baut eine Führungskraft psychologische Sicherheit auf?',
+          'Durch eigenes Verhalten: Fehler zuerst selbst benennen, auf Widerspruch mit Interesse statt Verteidigung reagieren, Fragen sichtbar belohnen und bei Fehlern nach der Ursache statt nach dem Schuldigen fragen. Das Team kopiert, was die Führungskraft tut.',
+        ],
+        [
+          'Woran erkennt man fehlende psychologische Sicherheit?',
+          'An Stille. Niemand fragt nach, niemand widerspricht, Probleme tauchen erst auf, wenn sie nicht mehr zu verbergen sind. Ein Meeting ohne eine einzige kritische Frage ist ein Warnsignal, kein Erfolg.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Psychologische Sicherheit im Team aufbauen',

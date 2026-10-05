@@ -203,6 +203,24 @@ export default {
         'stellt. Du übst deine drei Einstiegssätze und die Abschlussrunde, bis sie sitzen. Die Drills dauern ' +
         'täglich rund 15 Minuten, und du kannst LeaderOS 14 Tage kostenlos testen.',
     },
+    {
+      type: 'faq',
+      title: 'Häufige Fragen',
+      items: [
+        [
+          'Wie leitet man ein Meeting richtig?',
+          'Mit einem Ziel pro Punkt, nicht mit einem Thema: „Entscheidung über X“ statt „Thema X“. Eröffne mit dem Ergebnis, das am Ende stehen soll, halte die Zeit, fasse jede Entscheidung laut zusammen und schließe mit Verantwortlichen und Terminen.',
+        ],
+        [
+          'Was gehört auf eine gute Meeting-Agenda?',
+          'Pro Punkt: das Ziel (Information, Diskussion oder Entscheidung), die Zeit und wer vorbereitet. Punkte ohne Entscheidungsbedarf gehören in eine E-Mail. Eine Agenda mit fünf „Themen“ und ohne Ziele ist der häufigste Grund für Meetings ohne Ergebnis.',
+        ],
+        [
+          'Wie beendet man ein Meeting mit Ergebnis?',
+          'Mit drei Sätzen pro Entscheidung: Was wurde entschieden, wer macht was bis wann, und wer muss informiert werden. Das dauert zwei Minuten und ersetzt das Protokoll, das niemand liest.',
+        ],
+      ],
+    },
   ],
   seo: {
     title: 'Meeting leiten: Agenda, Entscheidung, nächste Schritte',
