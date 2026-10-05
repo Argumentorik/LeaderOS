@@ -146,7 +146,111 @@ consent-gated (`lo_consent_v1`); analytics and the database stay in the
 EU. GDPR export and delete exist (`routes/gdpr.py`). Evidence with
 file and line: `docs/ops/PRODUCTION_READINESS.md` §0.
 
-## 7. Documents worth knowing
+## 7. Mindset for solving things
+
+1. **Reproduce before you fix.** A bug you cannot trigger yourself is a
+   rumour. Get the account, the time, the request. Logs and a Sentry event
+   beat a screenshot.
+2. **Env var before code.** Most "broken" reports are a missing, stale or
+   wrong variable on Emergent or Vercel. Check the env table first; it
+   takes two minutes and saves a day.
+3. **Read, don't guess.** `supervisorctl tail`, Supabase Postgres logs,
+   Resend logs, Stripe event log. The answer is usually written down
+   already.
+4. **Smallest safe change, then verify.** One PR per cause, smoke checks
+   after deploy, Sentry quiet for a day. A fix nobody verified is a second
+   bug.
+5. **Time-box and escalate.** The incident runbook gives each path a time
+   budget. Exceeded twice: stop, write what you tried, call the other
+   developer. Heroics at 2 a.m. create the next incident.
+6. **Never hot-fix on Emergent without a PR.** If it is not in GitHub it
+   will be deleted by the next deploy and nobody will know why the bug came
+   back.
+7. **Decide with data when you can, with the user when you must.** Usage
+   numbers for feature cuts, Sentry counts for priorities. Wording and
+   promises to users: Wlad decides.
+8. **Do not ship a workaround that lies.** A spinner that hides a 402, a
+   counter that invents registrations, a "coming soon" that never comes.
+   Say what is true in the UI.
+9. **Leave the campsite cleaner.** When you touch a file, fix the comment,
+   delete the dead branch, update the doc the next person will read.
+10. **Ask early.** History: Mert. Product: Wlad. Access and mailboxes:
+    Eduard. Thirty minutes of asking beats three days of archaeology.
+
+## 8. Weekly routine — Monday, 45 minutes
+
+Done in this order, results noted in a short message to Wlad (three lines:
+green, yellow, red).
+
+| # | Where | Check | Red means |
+| --- | --- | --- | --- |
+| 1 | Sentry | New issues since last week, P0 alerts fired, unresolved issues > 7 days | A P0 without a ticket |
+| 2 | Emergent | Pod CPU/memory trend, credits balance, last deploy = last merge on `mvpcode`? | Credits under one month of use; drift |
+| 3 | **Supabase** | Settings → Usage: Disk IO budget, DB size, egress · Database → Query Performance top 10 · Integrations → Cron: failed runs · Auth → logs for spikes · Reports → API errors · Advisors (security + performance) — any new ERROR | Disk IO draining daily, cron failures, a new advisor ERROR |
+| 4 | Supabase backups | Database → Backups: last daily backup exists; once a month restore-test to a branch | No backup in 48 h |
+| 5 | MongoDB | Weekly export of `users`, `payment_transactions`, `webinar_leads` to the Argumentorik Drive | Export missing |
+| 6 | Resend | Bounce + complaint rate (< 2 % / < 0.1 %), domain still verified, daily volume vs plan | Bounces rising; domain unverified |
+| 7 | Stripe | Failed webhooks (Developers → Webhooks), disputes, payouts arriving on the GmbH account | Any failed webhook |
+| 8 | PostHog | Activation funnel, weekly active users, top 10 routes, any route with 0 users for two weeks | WAU falling two weeks in a row |
+| 9 | GitHub | Open PRs older than 5 days, Dependabot security alerts, failed `cron-jobs` / `webinar-cron` runs (auto-opened issues) | A failed cron run nobody saw |
+| 10 | Billing | Spend vs cap per tool (§10), card expiry dates, invoices on the GmbH | Any tool above 70 % of its cap |
+
+Monthly, first Monday: review the access matrix (`TOOL_ACCESS.md`): remove
+leavers, confirm two admins + 2FA per tool; AEO check (ask ChatGPT,
+Perplexity, Claude "Welche Kurse hat LeaderOS?", "Was ist das
+SEXIER-Modell?"); cost review per tool against the budget line.
+
+## 9. What to keep in mind
+
+- **The webinar on 29.10. is the next deadline.** Nothing risky on Emergent
+  in the 48 hours before it; freeze on 27.10. evening.
+- **Two hosts, two deploys.** Vercel is automatic, Emergent is you.
+- **`email_lower`** everywhere, always.
+- **Canon before corpus.** `WLAD_CANON.md` wins; wrong chunks get fixed.
+- **Consent gates analytics.** If PostHog or Sentry "show nothing", the
+  visitor may simply not have accepted; test with consent granted.
+- **Crons need the same secret in three places** (GitHub, cron-job.org,
+  Emergent).
+- **Rate limits are per IP.** A demo from one office network can hit them;
+  raise temporarily, never remove.
+- **Every number on a page comes from the canon or from the database.**
+- **Billing emails go to a shared mailbox, not a person's inbox** (§10).
+
+## 10. Billing guardrails — a card limit is never reached
+
+The rule: **every paid tool has a cap below the card limit, an alert well
+before the cap, and a billing mailbox two people read.** Caps are set by the
+cardholder (Wlad or Eduard) with Stefan on the call; Stefan verifies the
+alerts arrive.
+
+| Tool | Where the cap lives | Set it to | Alert |
+| --- | --- | --- | --- |
+| **Supabase** (org `skawjzvddehhmkwiltui`) | Org → Billing → **Spend cap** (Pro plan) | Spend cap **on**; compute add-on chosen deliberately, not by auto-scale | Usage emails (like the Disk IO mail) to the billing mailbox |
+| **Emergent** | Account → Billing / Credits | Auto-recharge **off** or capped at one month's use; manual top-up on the Monday routine | Low-credit email |
+| **Vercel** (team `aiporators-projects`) | Team → Settings → Billing → **Spend Management** | Monthly amount + **pause projects** when reached (marketing site only, backend is unaffected) | Email at 50 / 75 / 100 % |
+| **OpenAI / Anthropic** (if native keys are used) | Platform → Limits / Usage limits | Monthly budget with hard limit; per-key limits for test keys | Email at 75 % |
+| **ElevenLabs** | Subscription → usage | Plan quota only, **no auto-upgrade / no overage** | Quota email |
+| **Voyage** (if kept) | Dashboard → billing | Monthly budget | Email |
+| **Resend** | Settings → Billing | Fixed plan; volume reviewed weekly (§8) | Plan-limit email |
+| **Google Ads · Meta · LinkedIn** | Campaign daily budgets + **account spending limit** (Google) / spending limit (Meta, LinkedIn) | Account limit = monthly ad budget; daily budgets sum below it | Platform alerts to the billing mailbox |
+| **Domains** (4) | Registrar → auto-renew | Auto-renew **on**, card valid for 12+ months | Renewal reminders |
+| **Stripe** | Not a cost; **payouts** | Payout schedule daily/weekly to the GmbH account | Failed payout email |
+
+And the card itself:
+
+1. One company card for SaaS, limit above the **sum of all caps** plus
+   20 %; a second card on file at Supabase, Vercel and Emergent as backup.
+2. Billing contact on every tool = a shared mailbox (e.g.
+   `rechnung@argumentorik.com`), forwarded to Stefan and Wlad. Never a
+   personal inbox: a person on holiday is how a limit gets reached.
+3. Card expiry dates in the shared calendar, 30 days before.
+4. The Monday routine (§8 row 10) compares spend to cap; anything above
+   70 % gets a decision the same day: raise the cap on purpose, or reduce
+   usage.
+5. Nothing that costs money auto-scales without a cap. If a vendor offers
+   "unlimited overage", the answer is no.
+
+## 11. Documents worth knowing
 
 - `CLAUDE.md` — the repo briefing and working rules.
 - `docs/app/SYSTEM_OVERVIEW.md`, `docs/app/APP_ARCHITECTURE.md` — the map.
@@ -154,3 +258,29 @@ file and line: `docs/ops/PRODUCTION_READINESS.md` §0.
 - `docs/app/FEEDBACK_BACKLOG.md` — tester feedback, triaged with code refs.
 - `docs/ops/APP_TAKEOVER_STEFAN.md` — the hand-over itself.
 - `docs/gtm/WLAD_CANON.md` — the only source for claims about Wlad.
+
+## 12. Check yourself — eight short questions
+
+1. Where is the source of truth for the code, and what does that mean for
+   a fix made directly on Emergent? (§1, §7.6)
+2. Name the five steps of the core training loop. (§2.2)
+3. A visitor says "PostHog shows nothing for me". First thing to check? (§9)
+4. Which Supabase screens are in the Monday routine, and what is red? (§8)
+5. What are the three parts of every billing guardrail? (§10)
+6. A `402 no_credits` shows as an endless spinner. Is that a limit or a bug?
+   (§5)
+7. Who decides a WladBot wording change? Who decides a feature cut, and on
+   what basis? (§5, §2.2)
+8. The incident runbook time budget is exceeded twice. What do you do?
+   (§7.5)
+
+**Answer key.** 1 GitHub `mvpcode`; a hot-fix not in GitHub is deleted by
+the next deploy. 2 Lesson → drill on the real case → WladBot before the
+conversation → simulation with pushback → evaluation. 3 Consent: analytics
+only runs after the banner was accepted. 4 Usage (Disk IO, size, egress),
+Query Performance, Cron failures, Auth logs, API errors, Advisors, Backups;
+red = Disk IO draining daily, cron failures, new advisor ERROR, no backup
+in 48 h. 5 A cap below the card limit, an alert before the cap, a shared
+billing mailbox. 6 A bug: limits must fail with a clear message. 7 Wlad;
+the developer with Wlad, based on PostHog usage (under 5 % of WAU → hide,
+then remove). 8 Stop, write down what was tried, call the other developer.

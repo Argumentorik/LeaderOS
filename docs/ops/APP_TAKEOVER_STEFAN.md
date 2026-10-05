@@ -368,3 +368,40 @@ Full matrix and the billing hand-over: [`TOOL_ACCESS.md`](./TOOL_ACCESS.md).
 - Mert `start@aiporate.com` → `mert@argumentorik.com` — previous owner of
   all tools; records the walkthrough video; available during the hand-over.
 - Support team — admin access through §8, not through shared logins.
+
+---
+
+## 13. Check yourself — ten short questions
+
+Answer from memory, then check the section in brackets. If two are wrong,
+read the section again before the hand-over call.
+
+1. A PR is merged to `mvpcode`. Is the change live on leaderos.de? What is
+   missing? (§3.1)
+2. You change `RESEND_API_KEY` in Emergent. What must happen before emails
+   work? (§3.2)
+3. Four testers say "voice does not work". What do you check before opening
+   the code? (§2 task 4, §10.2)
+4. Which key is used to identify a person in Mongo, Supabase, PostHog and
+   Sentry? Why does it matter? (§4)
+5. Where do Sentry alerts go, and what are the three P0 rules? (§5)
+6. The Supabase mail says "running out of Disk IO Budget". Is that a money
+   problem? What are the first two things you look at? (§7)
+7. A support colleague opens `leaderos.de/wlad-control-x7k9q2` and lands on
+   the dashboard. What are the two ways to fix that, and which one needs
+   no deploy? (§8)
+8. `VOYAGE_API_KEY` is missing on Emergent. Does WladBot still use Wlad's
+   corpus? Which retriever runs? (§9)
+9. Which five smoke checks run after every deploy? (§3.4)
+10. Stripe webhooks all return 400. Most likely cause? (§6)
+
+**Answer key.** 1 No; you deploy Emergent manually. 2 Redeploy; env vars
+do not hot-reload. 3 `ELEVENLABS_API_KEY` in Emergent env. 4 `email_lower`;
+otherwise one person becomes two accounts/profiles. 5 To you (new Sentry
+org); 5xx spike, Stripe webhook error, auth endpoint 5xx. 6 No, it is a
+compute burst budget; Disk IO usage graph, then Query Performance /
+pg_cron jobs. 7 Grant from the admin panel (no deploy) or `ADMIN_EMAILS`
+env (redeploy). 8 Yes; lexical-only. 9 `/api/health`,
+`/api/monitoring/system`, `/api/webinar/stats`, `/api/payments/stripe-mode`,
+cron endpoint without secret → 401/403, plus one real webinar signup.
+10 Wrong `STRIPE_WEBHOOK_SECRET`.
