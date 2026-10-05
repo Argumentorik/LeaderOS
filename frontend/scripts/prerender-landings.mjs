@@ -278,3 +278,124 @@ console.log(`prerender-landings: ${kf.PATH} written to build${kf.PATH}/index.htm
   await writeFile(join(webinarDir, 'index.html'), webinarHtml);
   console.log('prerender-landings: /webinar written to build/webinar/index.html');
 }
+
+// -------------------------------------------------------- /wlad-jachtchenko
+// The canonical answer page for the name. Searches for "Wlad Jachtchenko"
+// must land on leader-os.de, and answer engines must be able to read bio,
+// books, frameworks and FAQ without JavaScript. Data: src/data/wladProfile.js
+// (verified claims only) + src/data/wladBookshelf.js.
+{
+  const wp = await import(pathToFileURL(join(DATA, 'wladProfile.js')).href);
+  const url = wp.PAGE_URL;
+  const dl = (rows) =>
+    `<dl style="${p}display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;">` +
+    rows.map(([k, v]) => `<dt style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:${OLIVE};font-weight:700;padding-top:4px;">${esc(k)}</dt><dd style="margin:0;">${esc(v)}</dd>`).join('') +
+    `</dl>`;
+  const wladRoot = [
+    `<div style="background:#F4F4F1;color:${INK};">`,
+    `<header style="background:${INK};color:#fff;padding:110px 0 80px;"><div style="${wrap}">`,
+    `<p style="font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:${LIME};margin:0 0 20px;">▸ Person · Rhetorik-Trainer · Leadership-Coach · Gründer LeaderOS</p>`,
+    `<h1 style="font-family:Anton,Impact,sans-serif;text-transform:uppercase;font-weight:400;font-size:clamp(48px,10vw,120px);line-height:.9;margin:0;">Wlad <span style="color:${LIME};">Jachtchenko</span></h1>`,
+    `<p style="font-family:Inter,system-ui,sans-serif;font-size:19px;line-height:1.5;color:rgba(255,255,255,.82);max-width:720px;margin:24px 0 0;">${esc(wp.LEDE)}</p>`,
+    `<p style="margin:28px 0 0;"><img src="${esc(wp.PORTRAIT)}" alt="Wlad Jachtchenko" width="160" height="160" style="border-radius:999px;object-fit:cover;object-position:50% 18%;border:3px solid ${LIME};" /></p>`,
+    `</div></header>`,
+    `<main>`,
+    section('bio', `<p style="${bib}">▸ Biografie</p><h2 style="${h2}">Werdegang.</h2>` + wp.BIO.map((t) => `<p style="${p}">${esc(t)}</p>`).join('') + dl(wp.FACTS)),
+    section('buecher', `<p style="${bib}">▸ Bücher</p><h2 style="${h2}">Die Bücher, aus denen die Methode kommt.</h2><ol style="${p}padding-left:1.2em;">` +
+      wp.BOOKS.map((b) => `<li style="margin:0 0 10px;"><b>${esc(b.title)}</b> – ${esc(b.sub)}${b.coAuthor ? ` (mit ${esc(b.coAuthor)})` : ''}. ${esc(b.publisher)}, ${b.year}${b.isbn ? `, ISBN ${esc(b.isbn)}` : ''}${b.bestseller ? ' · SPIEGEL-Bestseller' : ''}.</li>`).join('') + `</ol>`),
+    section('methodik', `<p style="${bib}">▸ Methodik</p><h2 style="${h2}">Führung wird nicht gelernt. Sie wird trainiert.</h2>` +
+      wp.FRAMEWORKS.map(([t, d, href]) => `<h3 style="${h3}margin-top:18px;">${esc(t)}</h3><p style="${p}">${esc(d)} <a href="${esc(href)}" style="color:${INK};">Mehr dazu</a></p>`).join('')),
+    section('erleben', `<p style="${bib}">▸ Wo du Wlad erlebst</p><h2 style="${h2}">Live, im System, im Journal.</h2>` +
+      wp.WHERE.map(([href, t, d]) => `<h3 style="${h3}margin-top:18px;"><a href="${esc(href)}" style="color:${INK};">${esc(t)}</a></h3><p style="${p}">${esc(d)}</p>`).join('')),
+    section('fragen', `<p style="${bib}">▸ Häufige Fragen</p><h2 style="${h2}">Kurz beantwortet.</h2>` +
+      wp.FAQ.map(([q, a]) => `<h3 style="${h3}margin-top:22px;">${esc(q)}</h3><p style="${p}">${esc(a)}</p>`).join('')),
+    section('start', `<p style="${bib}color:${LIME};">▸ Nächster Schritt</p><h2 style="${h2}color:#fff;">Trainiere mit Wlads Methodik.</h2>` +
+      `<p style="${p}color:rgba(255,255,255,.75);"><a href="https://leaderos.de/signup?trial=14" style="color:${LIME};">14 Tage kostenlos testen</a> · <a href="/webinar" style="color:${LIME};">Platz im Live-Webinar am 29.10. sichern</a></p>`, `background:${INK};`),
+    `</main>`,
+    `<footer style="${wrap}padding-top:24px;padding-bottom:40px;font-family:Inter,system-ui,sans-serif;font-size:13px;color:#5F6166;">`,
+    `<a href="/" style="color:#5F6166;">LeaderOS</a> · <a href="/kurse" style="color:#5F6166;">Kurse</a> · <a href="/fragen" style="color:#5F6166;">Fragen &amp; Antworten</a> · <a href="/journal" style="color:#5F6166;">Journal</a> · <a href="/impressum" style="color:#5F6166;">Impressum</a> · <a href="/datenschutz" style="color:#5F6166;">Datenschutz</a>`,
+    `</footer></div>`,
+  ].join('');
+
+  const wladLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ProfilePage',
+        '@id': `${url}#webpage`,
+        url,
+        name: wp.SEO.title,
+        description: wp.SEO.description,
+        inLanguage: 'de-DE',
+        isPartOf: { '@id': `${BASE}/#website` },
+        publisher: { '@id': `${BASE}/#organization` },
+        primaryImageOfPage: { '@type': 'ImageObject', url: wp.OG_IMAGE, width: 1200, height: 630 },
+        breadcrumb: { '@id': `${url}#breadcrumb` },
+        mainEntity: { '@id': `${BASE}/#wlad` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'LeaderOS', item: `${BASE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Wlad Jachtchenko', item: url },
+        ],
+      },
+      {
+        // Same @id as the Person node in public/index.html — one entity,
+        // enriched here with the full profile.
+        '@type': 'Person',
+        '@id': `${BASE}/#wlad`,
+        name: 'Wlad Jachtchenko',
+        givenName: 'Wlad',
+        familyName: 'Jachtchenko',
+        alternateName: wp.ALSO_CALLED,
+        description: wp.LEDE,
+        url,
+        mainEntityOfPage: url,
+        image: wp.PORTRAIT,
+        birthDate: '1985-01-11',
+        birthPlace: { '@type': 'Place', name: 'Dnipro' },
+        jobTitle: 'Rhetorik-Trainer · Leadership-Coach · Autor · Gründer LeaderOS',
+        alumniOf: [
+          { '@type': 'CollegeOrUniversity', name: 'Ludwig-Maximilians-Universität München', url: 'https://www.lmu.de' },
+          { '@type': 'CollegeOrUniversity', name: 'Columbia University', url: 'https://www.columbia.edu' },
+        ],
+        worksFor: [
+          { '@type': 'Organization', '@id': `${BASE}/#organization`, name: 'LeaderOS', url: BASE },
+          { '@type': 'EducationalOrganization', name: 'Argumentorik-Akademie', url: 'https://wlad-jachtchenko.com' },
+        ],
+        knowsAbout: wp.KNOWS_ABOUT,
+        sameAs: wp.SAME_AS,
+        author: wp.BOOKS.map((b) => ({
+          '@type': 'Book',
+          name: b.title,
+          alternativeHeadline: b.sub,
+          inLanguage: 'de',
+          datePublished: String(b.year),
+          publisher: { '@type': 'Organization', name: b.publisher },
+          ...(b.isbn ? { isbn: b.isbn } : {}),
+          author: { '@id': `${BASE}/#wlad` },
+        })),
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${url}#faq`,
+        mainEntity: wp.FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      },
+    ],
+  };
+
+  const wladHtml = renderPage(template, {
+    title: wp.SEO.title,
+    description: wp.SEO.description,
+    url,
+    image: wp.OG_IMAGE,
+    jsonLd: wladLd,
+    rootHtml: wladRoot,
+  });
+  const wladDir = join(BUILD_DIR, wp.PATH.replace(/^\//, ''));
+  await mkdir(wladDir, { recursive: true });
+  await writeFile(join(wladDir, 'index.html'), wladHtml);
+  console.log(`prerender-landings: ${wp.PATH} written to build${wp.PATH}/index.html`);
+}

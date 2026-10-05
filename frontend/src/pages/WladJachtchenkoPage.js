@@ -553,6 +553,14 @@ export default function WladJachtchenkoPage() {
       type: 'profile',
     });
 
+    // Build-time prerender (scripts/prerender-landings.mjs) already ships
+    // ProfilePage + Person(#wlad) + FAQPage in <head>. Only inject on pure
+    // SPA navigation, otherwise every node would exist twice.
+    const prerendered = document.head.innerHTML.includes('leader-os.de/wlad-jachtchenko#webpage');
+    if (prerendered) {
+      return () => restoreMeta();
+    }
+
     const ldPerson = document.createElement('script');
     ldPerson.type = 'application/ld+json';
     ldPerson.textContent = JSON.stringify(PERSON_JSON_LD);
