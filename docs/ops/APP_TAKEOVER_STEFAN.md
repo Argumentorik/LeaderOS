@@ -1,363 +1,370 @@
-# LeaderOS app takeover — Stefan
+# LeaderOS app takeover — Stefan (v2, 05.10.2026)
 
-> For **Stefan (`stefan@argumentorik.com`, GitHub `sbcodes`)**. Date: 05.10.2026.
-> This is the one file to read before anything else. It explains how the
-> app on **leaderos.de** runs, why each piece exists, how Emergent, PostHog,
-> Sentry and Stripe are set up, how the support team gets into the admin
-> panel, and which tasks are now yours. Everything is checked against the
-> code on `mvpcode` unless marked otherwise. Deeper references are linked;
-> you don't need to read them today.
+> For **Stefan (`stefan@argumentorik.com`, GitHub `sbcodes`)**. One file,
+> read top to bottom. It says what changed, what we do **together first**,
+> how Emergent works, and how **you** set up PostHog and Sentry from scratch.
+> Stripe you already have. A walkthrough video from Mert follows; this file
+> is the written version. The repo copy is the one that gets updated:
+> `docs/ops/APP_TAKEOVER_STEFAN.md`. How we treat the tech in general:
+> [`TECH_HANDBOOK.md`](./TECH_HANDBOOK.md).
 >
-> Scope: the **app** (`leaderos.de`, Emergent). The marketing site
-> (`leader-os.de`, Vercel) only matters where it talks to your backend.
+> Scope: the **app on leaderos.de** (Emergent). The marketing site
+> leader-os.de (Vercel) only matters where it calls your backend.
 
 ---
 
-## 0. Your message, answered
+## 1. What changed in the last two weeks (Mert's side)
 
-You wrote that the test feedback points at two areas: server issues early in
-the test, and the app feeling like too much. Both are right, and both are
-yours to own now. §7 turns them into a plan: a reliability checklist for the
-first one, and a data-driven feature cut for the second one. Nothing has to
-be fixed today; reading this file is today's work.
+Everything below is on branch `claude/leader-os-video-funnel-3am9ju`
+(92 files), waiting for a PR to `mvpcode` and then **your** Emergent deploy.
+Nothing of it is live on leaderos.de yet.
 
----
-
-## 1. What you are taking over
-
-```
-leaderos.de (app)                      Emergent project `command-center-229`
-  ├── React SPA (same bundle as leader-os.de, served by Emergent)
-  ├── FastAPI backend  backend/server.py  · 36 routers in backend/routes/
-  ├── MongoDB          inside the Emergent pod (users, sessions, leads, payments)
-  ├── Supabase Postgres `srujvjjncrszhaaxepxf` (identity mirror, RAG vectors, cron)
-  └── Resend (email) · Stripe (payments) · ElevenLabs (voice) · Voyage (embeddings)
-
-leader-os.de (marketing, Vercel, branch mvpcode)
-  └── /api/*  →  rewritten to the same Emergent backend
-```
-
-**Why two hosts.** The marketing site needs fast static hosting, SEO
-prerendering and Vercel previews. The app needs long-running Python, a
-database and background jobs. Splitting them means a backend outage never
-takes the landing pages down, and a marketing deploy never touches user data.
-The cost: `/api/*` on leader-os.de is proxied to Emergent, so the webinar
-signup form depends on your backend being up.
-
-**Source of truth is GitHub `aiporator/shipos`, branch `mvpcode`.** Emergent
-has drifted from it (details in
-[`EMERGENT_ADMIN_ONBOARDING.md` §2](./EMERGENT_ADMIN_ONBOARDING.md)). Your
-first technical task is the reconciliation in §7.1.
-
----
-
-## 2. How Emergent functions, and why we use it
-
-**What it is.** A managed container that runs the FastAPI backend, the
-MongoDB instance and an object store, with a UI for env vars, deploys and
-logs. It was chosen because it got the prototype into production in days,
-with the LLM calls wrapped in Emergent's own key (`EMERGENT_LLM_KEY`).
-
-**What you need to know to operate it.**
-
-| Topic | How it works | Why it matters |
+| Area | Change | Why |
 | --- | --- | --- |
-| Deploy | Manual from the Emergent UI, from branch `mvpcode`. Vercel deploys the marketing site on its own; Emergent does not. | A merged PR is not live on leaderos.de until you deploy. |
-| Env vars | Emergent → project → environment. **No hot reload: every change needs a redeploy.** Full table in `EMERGENT_ADMIN_ONBOARDING.md` §3. | Half of all "it's broken" reports are a missing env var. Check `ELEVENLABS_API_KEY` first (voice), `RESEND_API_KEY` (all email), `STRIPE_API_KEY` (checkout). |
-| Logs | Pod shell: `sudo supervisorctl status backend` · `sudo supervisorctl tail -100 backend` | Startup failures (missing `JWT_SECRET`, import errors) only show here. |
-| Health | `GET https://leaderos.de/api/health` → `{"status":"ok"}` · `GET /api/monitoring/system` → `overall: "go"` | Run after every deploy. Smoke list in `EMERGENT_ADMIN_ONBOARDING.md` §4. |
-| MongoDB | Lives in the pod. Indexes are created at startup by `server.py`; no migrations to run. | Backups are Emergent's. Export important collections (`users`, `payment_transactions`, `webinar_leads`) once a week until a proper backup job exists. |
-| Rollback | Emergent → redeploy previous version. | Minutes, not hours. |
-| Lock-in | Two shims switch provider by env var only: `backend/lib/llm_provider.py` (`ANTHROPIC_API_KEY` or `OPENAI_API_KEY` → native SDK, else Emergent key) and `backend/lib/object_storage.py` (Supabase Storage when `SUPABASE_URL` + `SUPABASE_SERVICE_KEY` are set). | You can leave Emergent in steps without touching routes. Order: reconcile → flip LLM key → flip storage → move hosting. |
+| **Admin access** | Any admin can grant/revoke the `is_admin` flag from the admin panel; env allowlist `ADMIN_EMAILS`; one admin check for all routes | Support team gets in with their own login, no redeploy, no shared founder account (§8) |
+| **Webinar CSV import** | Admin panel uploads attendee lists into `webinar_leads` (dry run first, no emails sent) | The team prepares the list, we don't hand-edit Mongo |
+| **RAG without Voyage** | `services_rag.py`: Supabase alone enables retrieval; without `VOYAGE_API_KEY` it runs lexical-only instead of switching off | Voyage was a hard dependency by accident (§9) |
+| **Webinar page** | Prerendered HTML with Event + FAQ schema; date/agenda/FAQ in one data module `src/data/webinarEvent.js` | Crawlers and the SPA show the same thing |
+| **Ads tracking** | Google Ads, Microsoft UET, Meta Pixel + CAPI, LinkedIn Insight, all consent-gated, activated by Vercel env vars only | Ads start without a code change |
+| **Courses section + `/kurse`** | Course library on landing pages, CTA under journal articles, static `/kurse` answer page with Course schema | Courses are the main selling point and were invisible to search |
+| **Journal** | 20 new guides (173 total), FAQ blocks with FAQPage schema, SEO/AEO audit | Organic reach |
+| **Removed** | `/frameworks` page (redirects to `/kommunikation`), fake appointment slots, webinar counter below 25 registrations | Honesty rules |
+| **Mobile** | Tap targets, cookie banner, booking strip "from 2 November" | Lead conversion on phones |
 
-**Scheduled jobs** run from GitHub Actions (`.github/workflows/cron.yml`,
-`webinar-cron.yml`) and call your backend with `X-Cron-Secret`. The secret
-must be identical in GitHub and Emergent. Details:
-[`CRON_SCHEDULE.md`](./CRON_SCHEDULE.md).
+Full list: `git log origin/mvpcode..claude/leader-os-video-funnel-3am9ju`.
 
 ---
 
-## 3. PostHog — product analytics (new account needed)
+## 2. First tasks — we do these together (one call, in this order)
 
-**Why.** PostHog answers the question you raised: which features do people
-actually use? Without it the "cut something" decision is opinion. It also
-gives session replays for bug reports and Core Web Vitals from real users.
+Mert drives, you have the keyboard. After this list you own the app.
 
-**How it is wired today.**
+| # | Task | Who | Done when |
+| --- | --- | --- | --- |
+| 1 | **Reconcile Emergent with GitHub.** Export the live Emergent code, diff against `mvpcode`, port Emergent-only changes into a PR. | both | Reconciliation log entry in `EMERGENT_ADMIN_ONBOARDING.md` |
+| 2 | **Merge the branch, deploy Emergent, run smoke checks** (§3.4). | you | `/api/health` ok, `/api/webinar/stats` ok, one test signup delivers a confirmation email |
+| 3 | **Supabase Disk IO alert (03.10.)** — see §7. Check usage graph, find the hot query/job, decide compute upgrade. | both | Alert gone for 7 days |
+| 4 | **Env audit on Emergent**: `ELEVENLABS_API_KEY`, `RESEND_API_KEY` + `SENDER_EMAIL` (verified domain), `STRIPE_API_KEY` + `STRIPE_WEBHOOK_SECRET`, `CRON_SHARED_SECRET` = GitHub secret, `VOYAGE_API_KEY` (§9). | you | Each one confirmed in the UI, not assumed |
+| 5 | **Sentry — new org by you** (§5). DSNs into Emergent + Vercel, test event visible. | you | Test event arrives |
+| 6 | **PostHog — new org by you** (§4). Key into `index.html` + Emergent, identify fires after login. | you | `identify` call in the network tab |
+| 7 | **Billing**: Resend card + billing email on Argumentorik; Supabase org card; Emergent credits. Cards are entered by the cardholder in the dashboard, never sent around. | Stefan / Wlad / Eduard | Invoices run on the GmbH |
+| 8 | **Admin panel rollout** for the support team (§8). | you | One support login opens the panel, one dry-run CSV passes |
+| 9 | **Feedback P0** (§10.2): quiz answer bias, voice/TTS, check-in, 402 handling, duplicate events. | you | Each closed with a PR |
+| 10 | **Reliability** (§10.4): Sentry P0 rules, health check every 5 min, workers for webinar day. | you | Rules exist, first alert received |
 
-- Frontend: inline snippet in `frontend/public/index.html`, EU host
-  `eu.i.posthog.com`, project key hardcoded (`phc_xmMQne…`). It only
-  initialises after the visitor accepted analytics in the consent banner
-  (`lo_consent_v1.analytics === true`), and `frontend/src/index.js`
-  re-attempts init when consent changes.
-- Identity: `identifyByEmail(email_lower)` on login and session rehydrate,
-  `resetIdentity()` on logout (`frontend/src/lib/analytics.js`,
-  `contexts/AuthContext.js`). The key is **`email_lower`**, the same key as
-  Mongo, Supabase and Sentry. Never identify with anything else, or one
-  person becomes two profiles.
-- Backend: `POSTHOG_KEY` / `POSTHOG_API_KEY` + `POSTHOG_HOST` on Emergent for
-  server-side events.
-- Extra events already firing: `web_vital` (LCP, CLS, INP, TTFB), funnel
-  events with `surface` and `funnel` properties (e.g. `webinar_view`).
+---
 
-**Set up the new account (you are the owner).**
+## 3. Emergent — how it works
 
-1. `eu.posthog.com` → create organisation "Argumentorik" (EU region, keep
-   data in the EU like Supabase `eu-north-1`), project "LeaderOS".
+**What it is.** Emergent is an AI-agent development platform that hosts the
+app it built: the FastAPI backend, MongoDB and an object store run inside
+one managed pod (project `command-center-229`). The agent iterated the app
+through ~180 "iterations"; the repo `aiporator/shipos` is the exported
+state plus everything built since. That is why GitHub and Emergent have
+drifted: the agent sometimes committed to `mvpcode`, sometimes only to its
+own copy (§2 of `EMERGENT_ADMIN_ONBOARDING.md` lists the evidence).
+
+**Why we use it.** It got a prototype into production in days, with LLM
+calls wrapped behind Emergent's own key (`EMERGENT_LLM_KEY`). The price is
+lock-in and drift; both are being reduced (3.5).
+
+### 3.1 Deploying
+
+- Deploys are **manual** in the Emergent UI from branch `mvpcode`. Vercel
+  deploys the marketing site automatically; Emergent never does.
+- A merged PR is therefore **not live** on leaderos.de until you deploy.
+- Before every deploy until the reconciliation is done: diff live code
+  against `mvpcode` (task 2.1), or a deploy can delete Emergent-only fixes.
+- Rollback = redeploy the previous version in Emergent.
+
+### 3.2 Env vars
+
+Emergent → project → environment. **No hot reload; every change needs a
+redeploy.** Table of all 60+ variables and what breaks without each:
+`EMERGENT_ADMIN_ONBOARDING.md` §3. Half of all bug reports are a missing
+or stale env var.
+
+### 3.3 Logs and the database
+
+- Pod shell: `sudo supervisorctl status backend` ·
+  `sudo supervisorctl tail -100 backend`. Startup failures only show here.
+- MongoDB lives in the pod. Indexes are built at startup by `server.py`,
+  no migrations. Collections that matter: `users`, `user_sessions`,
+  `login_attempts`, `webinar_leads`, `payment_transactions`, `credits`,
+  `chat_messages`, `system_events`. Export the money and lead collections
+  weekly until a backup job exists.
+
+### 3.4 Smoke checks after every deploy
+
+```
+GET https://leaderos.de/api/health              → {"status":"ok"}
+GET https://leaderos.de/api/monitoring/system   → overall: "go"
+GET https://leaderos.de/api/webinar/stats       → registered count
+GET https://leaderos.de/api/payments/stripe-mode → live: true
+POST /api/cron/lead-nurture without X-Cron-Secret → 401/403
+```
+Then one real signup on leader-os.de/webinar with a test address: the
+confirmation must appear in Resend → Logs and in Mongo `webinar_leads`.
+
+### 3.5 Leaving Emergent step by step (already prepared)
+
+Two shims switch provider by env var alone: `backend/lib/llm_provider.py`
+(`ANTHROPIC_API_KEY` or `OPENAI_API_KEY` → native SDK, else Emergent key)
+and `backend/lib/object_storage.py` (Supabase Storage when
+`SUPABASE_URL` + `SUPABASE_SERVICE_KEY` are set). Order: reconcile → flip
+LLM key → flip storage → run the pytest suites in CI → move hosting.
+
+### 3.6 Scheduled jobs
+
+GitHub Actions (`cron.yml`, `webinar-cron.yml`) call your backend with
+`X-Cron-Secret`; the primary webinar scheduler is cron-job.org every
+15 min. The secret must be identical in GitHub, cron-job.org and Emergent.
+Supabase pg_cron runs ~15 jobs whose code is **not in the repo** (drift).
+Details: `CRON_SCHEDULE.md`, `EMERGENT_ADMIN_ONBOARDING.md` §6.
+
+---
+
+## 4. PostHog — new setup, by you
+
+**Why.** It answers your own question: which features do people use? Without
+it the "cut something" decision is opinion. Plus session replays for bug
+reports and real-user Core Web Vitals. The old project under
+`start@aiporate.com` is being retired; **you create the new one and own it.**
+
+**Set up (30 minutes).**
+
+1. `eu.posthog.com` → new organisation "Argumentorik" (**EU** region, same
+   as Supabase `eu-north-1`) → project "LeaderOS".
 2. Project settings → copy the project API key (`phc_…`).
-3. Replace the key in `frontend/public/index.html` (search for
-   `posthog.init(`), open a PR to `mvpcode`. Vercel redeploys the marketing
-   site; you deploy Emergent for the app.
+3. Frontend: in `frontend/public/index.html` search `posthog.init(` and
+   replace the old key. PR to `mvpcode`. Vercel redeploys the marketing
+   site; you deploy Emergent so the app gets it too.
 4. Emergent env: `POSTHOG_KEY=<new key>`, `POSTHOG_HOST=https://eu.i.posthog.com`, redeploy.
-5. Verify: DevTools → Network → filter `posthog` → requests go to
-   `eu.i.posthog.com/e/`; after login an `identify` call carries the
+5. Verify in DevTools → Network, filter `posthog`: requests to
+   `eu.i.posthog.com/e/`; after login an `identify` call with the
    lowercased email.
-6. Invite `wj@argumentorik.com` and `mert@argumentorik.com` as members; set
-   2FA.
+6. Invite `wj@argumentorik.com`, `mert@argumentorik.com`; 2FA on.
 
-**First three dashboards to build** (they feed §7.3):
+**How the code is wired.** Inline snippet in `index.html`, only initialised
+after the visitor accepted analytics in the consent banner
+(`lo_consent_v1.analytics`); `frontend/src/index.js` re-tries on consent
+change. Identity = `identifyByEmail(email_lower)` on login/rehydrate,
+`resetIdentity()` on logout (`frontend/src/lib/analytics.js`). The key is
+**`email_lower`**, the same as in Mongo, Supabase and Sentry. Events that
+already fire: `web_vital`, funnel events with `surface`/`funnel`.
 
-- Pageviews per `$pathname` for the app routes, last 30 days, unique users.
-- Activation funnel: signup → first WladBot message → first drill → day-7 return.
-- Session replays filtered on `console error` or rage clicks, for bug triage.
+**First dashboards** (feed §10.3): unique users per app route (30 days);
+activation funnel signup → first WladBot message → first drill → day-7
+return; replays filtered on console errors.
 
 ---
 
-## 4. Sentry — error monitoring (new account needed)
+## 5. Sentry — new setup, by you
 
-**Why.** The "server issues early in the test" were invisible until users
+**Why.** The server issues in the test were invisible until users
 complained. Sentry turns a 5xx spike, a failing Stripe webhook or a broken
-login into an alert within a minute, with the stack trace.
+login into an alert within a minute, with the stack trace. The old org
+`aiporate` is being retired; **you create the new one and own it.**
 
-**How it is wired today.**
-
-- Backend: Sentry SDK in `backend/server.py`, env `SENTRY_DSN`, `SENTRY_ENV`,
-  `SENTRY_RELEASE`, `SENTRY_TRACES_SAMPLE_RATE` (0.10),
-  `SENTRY_PROFILES_SAMPLE_RATE` (0.10). A `before_send` filter drops
-  expected noise: 401/403/404/422/429, client disconnects, health checks.
-- Frontend: `@sentry/react` in `frontend/src/index.js`, env-gated and
-  host-based: `REACT_APP_SENTRY_DSN_LEADER_OS` for leaderos.de /
-  leader-os.de, `REACT_APP_SENTRY_DSN_LEADER_CHECK` for the diagnosis site.
-  With no DSN the SDK stays dormant. User context is set with `email_lower`.
-- Alert rules are documented, not yet created in a UI you own:
-  [`SENTRY_ALERTS.md`](./SENTRY_ALERTS.md).
-
-**Set up the new account (you are the owner).**
+**Set up (45 minutes).**
 
 1. `sentry.io` → new organisation "argumentorik", **data region EU**.
-2. Three projects: `leaderos-backend` (Python / FastAPI), `leader-os`
-   (React), `leader-check` (React).
-3. DSNs → Emergent env (`SENTRY_DSN`, `SENTRY_ENV=production`) and Vercel env
-   (`REACT_APP_SENTRY_DSN_LEADER_OS`, `REACT_APP_SENTRY_DSN_LEADER_CHECK`,
-   scope Production). Redeploy both.
-4. Create the alert rules from `SENTRY_ALERTS.md` with **you** as recipient
-   (replace the placeholder addresses there): P0 = 5xx spike, Stripe webhook
-   failure, auth endpoint errors. Add Slack later if you use it.
-5. Verify: `POST /api/monitoring/test` (admin only) raises a test event; it
-   must appear in `leaderos-backend` within a minute.
-6. Invite `wj@argumentorik.com` and `mert@argumentorik.com`.
+2. Projects: `leaderos-backend` (Python/FastAPI), `leader-os` (React),
+   `leader-check` (React).
+3. DSNs → Emergent env `SENTRY_DSN`, `SENTRY_ENV=production`
+   (`SENTRY_TRACES_SAMPLE_RATE` and `SENTRY_PROFILES_SAMPLE_RATE` stay at
+   0.10) and Vercel env `REACT_APP_SENTRY_DSN_LEADER_OS`,
+   `REACT_APP_SENTRY_DSN_LEADER_CHECK` (scope Production). Redeploy both.
+4. Alert rules from [`SENTRY_ALERTS.md`](./SENTRY_ALERTS.md) with **you** as
+   recipient: P0 = 5xx spike (>5/min), Stripe webhook error, auth endpoint
+   5xx; P1 = first-seen issue, p95 latency >3 s, RAG errors.
+5. Verify: `POST /api/monitoring/test` as admin → event in
+   `leaderos-backend` within a minute.
+6. Invite `wj@argumentorik.com`, `mert@argumentorik.com`.
+
+**How the code is wired.** Backend SDK in `backend/server.py` with a
+`before_send` filter that drops 401/403/404/422/429, client disconnects
+and health checks. Frontend `@sentry/react` in `frontend/src/index.js`,
+dormant without a DSN, project chosen by hostname. User context uses
+`email_lower`.
 
 ---
 
-## 5. Stripe — payments
+## 6. Stripe — you are already on it
 
-**Why crucial.** Checkout for the tiers (30-day challenge 997 €, OS year
-4 797 €, instalments) and the webhook that activates the tier on the user
-document. If the webhook fails, people pay and get nothing.
+What remains, none of it code:
 
-**How it is wired.**
-
-- `backend/routes/payments.py`: `STRIPE_API_KEY` on Emergent. `sk_live_…` or
-  your own `sk_test_…` → native Stripe SDK; the value `sk_test_emergent`
-  selects Emergent's sandbox wrapper. `GET /api/payments/stripe-mode`
-  tells you which mode is active and warns if the key is missing.
-- Webhook endpoint: `/api/webhook/stripe` (reachable as
-  `https://leaderos.de/api/webhook/stripe`; the old
-  `leader-os.de/api/webhook/stripe` also lands on the same backend through
-  the Vercel rewrite). Needs `STRIPE_WEBHOOK_SECRET` on Emergent. Events:
-  `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
-  `checkout.session.async_payment_failed`, `payment_intent.payment_failed`.
-- Idempotency and retries: Stripe retries for three days; handler is
-  idempotent per event id.
-- Step-by-step go-live and the 1 € smoke test: [`DEPLOY.md`](./DEPLOY.md).
-  Incident paths (400 on every webhook = wrong secret, paid but no tier =
+- **Payouts, business details, VAT ID** on the Argumentorik Akademie GmbH
+  (Stripe → Settings → Business). Money, not cost: do this first.
+- Live key on Emergent (`STRIPE_API_KEY=sk_live_…`), webhook endpoint
+  `https://leaderos.de/api/webhook/stripe` with the four events
+  (`checkout.session.completed`, `…async_payment_succeeded`,
+  `…async_payment_failed`, `payment_intent.payment_failed`) and
+  `STRIPE_WEBHOOK_SECRET` set. `GET /api/payments/stripe-mode` confirms
+  live mode. The 1 € smoke test is in [`DEPLOY.md`](./DEPLOY.md).
+- Incident paths (400 on every webhook = wrong secret; paid but no tier =
   webhook not delivered): [`INCIDENT_RUNBOOK.md`](./INCIDENT_RUNBOOK.md).
 
-**What must change on the business side** (owner action, not code): the
-**payout bank account, business details and VAT ID** must be the
-Argumentorik Akademie GmbH, and you should be invited as *Developer* (sees
-API logs and webhooks, not payouts). Checklist in
-[`TOOL_ACCESS.md` §3a](./TOOL_ACCESS.md).
+---
+
+## 7. Supabase — the Disk IO alert and billing
+
+**The mail from 03.10.** ("Your project is running out of Disk IO Budget",
+project `srujvjjncrszhaaxepxf`) is **not a money alert**. Supabase gives
+small compute instances a burst budget for disk reads/writes; we are using
+it up, so queries slow down and the instance can become unresponsive. The
+16.09. incident (34–38 s queries, pg_cron job startup timeouts) is the same
+symptom.
+
+**Fix path, in order.**
+
+1. Dashboard → Settings → Billing → Usage → *Disk IO*: see when the budget
+   drains (steady vs. spikes at cron times).
+2. Database → Query Performance: the top queries by total time. Likely
+   suspects: the ~15 pg_cron jobs (`email_dispatcher`,
+   `advance_email_journeys`, `drain_emergent_sync`, `slo_breach_check`,
+   `emergent_circuit_check`, health probes) and the
+   `wladbot-chat-emergent` component that calls a deprecated endpoint ~437×
+   per day. Disable jobs that no longer have a consumer (`email_sends` has
+   been idle since 03.08.; the backend sends through Resend directly).
+3. Missing indexes: `pg_stat_statements` top 20 by `mean_exec_time`; add
+   via migration (`apply_migration`), then `get_advisors`.
+4. If the load is legitimate: upgrade the compute add-on one size
+   (Settings → Compute and Disk). This costs money → needs the org billing
+   card on Argumentorik first.
+
+**Access.** Your Developer invite to org `skawjzvddehhmkwiltui` is sent;
+accept it and turn on 2FA. Billing is Owner-only; Wlad or Eduard enters
+the card.
 
 ---
 
-## 6. Admin panel access for the support team (fixed in code, deploy pending)
+## 8. Admin panel for the support team (fixed in code, needs your deploy)
 
-**The problem.** Admin access is decided per account: an allowlist of
-emails in `backend/routes/admin.py` plus an `is_admin` flag on the user
-document. Anyone else who opens `leaderos.de/wlad-control-x7k9q2` is sent to
-the dashboard. Adding the support team meant editing the allowlist and
-redeploying, or handing out a founder login.
+Admin access is per account: an allowlist in `backend/routes/admin.py`
+plus an `is_admin` flag on the user document. Everyone else who opens
+`leaderos.de/wlad-control-x7k9q2` lands on the dashboard.
 
-**The fix (PR on `claude/leader-os-video-funnel-3am9ju`, needs merge + Emergent deploy).**
+After the deploy:
 
-1. **Grant from the panel.** Admin panel → card *Admin access & webinar
-   import* → enter the person's email → *Grant*. Requirement: the person has
-   already signed up on leaderos.de (the flag lives on their user document).
-   From the next request their own login opens the admin panel. Revoke is
-   one click; nobody can revoke themselves and allowlisted emails cannot be
-   removed there, so there is always at least one admin.
-   API: `GET /api/admin/admins`, `POST /api/admin/admins {email, grant}`.
-   Every grant is logged in `system_events`.
-2. **Env allowlist as a second route.** `ADMIN_EMAILS=a@argumentorik.com,b@argumentorik.com`
-   on Emergent (comma-separated) is merged with the code allowlist. Useful
-   for founders; needs a redeploy.
-3. **CSV import of webinar attendees.** Same card → choose the CSV the team
-   prepared → *Check (dry run)* → *Import*. Columns `email` (required),
-   `name`, `company`; comma, semicolon or tab; German or English headers;
-   Zoom attendee exports work as-is. Leads are upserted into
-   `webinar_leads` with source `csv-import`. **No email is sent by the
-   import**; the reminder and follow-up crons treat them like any
-   registration. API: `POST /api/admin/webinar-leads/import?dry_run=true`.
-4. One admin definition for the whole backend: `routes/monitoring.py` had
-   its own, smaller allowlist (so an account could be admin on one route and
-   403 on another). It now uses `is_admin_user()` from `routes/admin.py`.
-
-**Rollout for the webinar on 29.10.:** merge → deploy Emergent → each support
-person signs up on leaderos.de → you grant them from the panel → they test
-the CSV dry run with a five-line file.
+1. Admin panel → card **Admin access & webinar import** → email → *Grant*.
+   The person must already have signed up on leaderos.de. From the next
+   request their own login opens the panel. Revoke is one click; nobody can
+   revoke themselves; allowlisted emails cannot be removed there.
+   API: `GET/POST /api/admin/admins`. Every grant lands in `system_events`.
+2. Or env: `ADMIN_EMAILS=a@argumentorik.com,b@argumentorik.com` on Emergent
+   (merged with the code allowlist; needs a redeploy).
+3. CSV import: same card → file → *Check (dry run)* → *Import*. Columns
+   `email` (required), `name`, `company`; comma/semicolon/tab; German or
+   English headers; Zoom exports work. Upserts into `webinar_leads` with
+   source `csv-import`. **No email is sent by the import.**
+   API: `POST /api/admin/webinar-leads/import?dry_run=true`.
+4. `routes/monitoring.py` used to have its own, smaller allowlist (admin
+   on one route, 403 on the next). It now uses `is_admin_user()` from
+   `routes/admin.py`.
 
 ---
 
-## 7. The tasks that are now yours
+## 9. RAG and Voyage — the facts
 
-### 7.1 This week
+**Our RAG is ours.** The corpus is 2 212 chunks of Wlad's books, podcasts
+and trainings in Supabase (`wladbot_documents`, pgvector + German
+full-text index). Retrieval is hybrid (`backend/services_rag.py`): a
+semantic retriever (vector similarity) and a lexical retriever (Postgres
+full-text, catches exact names like SEXIER, ALPEN) fused by Reciprocal
+Rank Fusion. The lexical path needs **no external API**.
 
-| # | Task | Where | Why first |
-| --- | --- | --- | --- |
-| 1 | **Reconcile Emergent with `mvpcode`**: export the live code, diff, port the Emergent-only changes into GitHub as a PR, then deploy `mvpcode`. Record the result in `EMERGENT_ADMIN_ONBOARDING.md` → "Reconciliation log". | §2 there | Every other deploy is unsafe until this is done. The webinar date, reminder windows and the admin panel fix all sit on `mvpcode` and are **not live** on Emergent. |
-| 2 | Deploy and run the smoke checks (`/api/health`, `/api/monitoring/system`, `/api/webinar/stats`, one test signup on leader-os.de/webinar → confirmation email in Resend). | `EMERGENT_ADMIN_ONBOARDING.md` §4 | Proves the webinar backend before ads run. |
-| 3 | Create the new **Sentry** and **PostHog** accounts (§3, §4), put the keys in Vercel and Emergent, redeploy. | this file | Observability must exist before 29.10. |
-| 4 | Check `ELEVENLABS_API_KEY` on Emergent. | Emergent env | Four testers reported "voice does not work". If the key is missing or invalid, that is the whole bug. |
+**Where Voyage sits.** Only the semantic path uses Voyage AI's embedding
+API (`voyage-3`, 1 024 dims) to embed the user's question; the corpus
+vectors were produced with the same model. Voyage is not "the RAG", it is
+one of two retrievers.
 
-### 7.2 Before the webinar (29.10.)
+**What was wrong.** `_is_configured()` required a Voyage key, so a missing
+key switched retrieval off entirely, lexical included. Fixed on this
+branch: Supabase alone enables RAG; without `VOYAGE_API_KEY` it runs
+lexical-only and `rag_status()` reports `embedding_provider: "none"`.
 
-- Webinar reminder scheduler: the primary should be an Emergent-side
-  scheduler or external cron; `webinar-cron.yml` in GitHub is the backup
-  (§6 of the Emergent doc).
-- Resend: domain verified (DKIM/SPF), sender `reminders@leader-os.de`,
-  check bounce rate.
-- Stripe payouts on Argumentorik (§5), webhook secret set, 1 € smoke test.
-- Support team in the admin panel (§6) and one dry-run CSV import.
-- Feedback backlog P0, in this order (full analysis with code references in
-  [`FEEDBACK_BACKLOG.md`](../app/FEEDBACK_BACKLOG.md)):
-  1. Quiz: correct answer is B in 229 of 232 questions and also the longest
-     option. Randomise positions server-side and equalise distractor length.
-  2. Voice/TTS (see 7.1 #4) and the audio-mode answer that disappears after
-     two seconds.
-  3. Daily check-in that never starts the analysis.
-  4. `402 no_credits` is rendered as "broken" on most pages: eight endpoints
-     return it, three places handle it. One global paywall handler.
-  5. Duplicate event rows: unique index on `event_id`, upsert instead of
-     insert (`routes/events.py`).
+**Your decision (task 2.4).** Check whether `VOYAGE_API_KEY` is set on
+Emergent and whether the account still exists.
 
-### 7.3 Making the app simpler (your second point)
+- Keep Voyage: cheapest path, nothing to migrate; put the key on a paid
+  tier (free tier is 3 requests/min, which caused 429s).
+- Drop Voyage entirely: re-embed the corpus with another model
+  (`supabase/functions/backfill-embeddings` exists for that), change
+  `EMBEDDING_DIM` and the `match_wladbot_documents` RPC to the new size,
+  swap `_embed_query`. About two days, needs a Supabase migration.
+- Until decided: lexical-only works, quality is slightly lower on
+  paraphrased questions.
 
-You are right that too much is going on. Do it with data, not taste:
+---
 
-1. Four weeks after the PostHog reset, pull unique users per app route for
-   30 days.
+## 10. Your tasks after the hand-over
+
+### 10.1 Before the webinar (29.10.)
+
+Reminder scheduler verified (cron-job.org primary, GitHub backup); Resend
+domain verified and bounce rate checked; Stripe payouts moved; support team
+in the admin panel with one dry-run import; the P0 list below.
+
+### 10.2 Feedback P0 (details with code references in [`FEEDBACK_BACKLOG.md`](../app/FEEDBACK_BACKLOG.md))
+
+1. Quiz: correct answer is B in 229 of 232 questions and also the longest
+   option. Randomise server-side and equalise distractor length.
+2. Voice/TTS: check `ELEVENLABS_API_KEY` first; then keep the audio-mode
+   answer on screen instead of dismissing after two seconds.
+3. Daily check-in that never starts the analysis.
+4. `402 no_credits` rendered as "broken": eight endpoints return it, three
+   places handle it. One global paywall handler.
+5. Duplicate event rows: unique index on `event_id`, upsert
+   (`routes/events.py`).
+
+### 10.3 Making it simpler (your second point)
+
+1. Four weeks after the PostHog reset: unique users per app route, 30 days.
 2. Candidates from the feedback: three entry points into the same thing
    (WladBot chat, Coaching, Simulation), Challengers, Workflows/Tools,
    Wlad-Universe, Community/Progress, Events, Referral.
-3. Rule: a feature used by fewer than 5 % of weekly active users gets hidden
-   behind a sidebar toggle first (Danny's suggestion) and removed a month
-   later if nobody asks for it.
-4. Protect the core loop, it is what we sell: **course lesson → drill on the
+3. Rule: under 5 % of weekly active users → hide behind a sidebar toggle
+   first, remove a month later if nobody asks.
+4. Protect the core loop, it is what we sell: course lesson → drill on the
    user's real case → ask WladBot before the conversation → simulation with
-   pushback → evaluation**. Everything else is optional.
-5. Shorter WladBot answers: two testers called them an overload. Response
-   length and reading level are prompt settings in `services.py`
-   (`WLAD_HARD_RULES`), not a redesign.
+   pushback → evaluation.
+5. Shorter WladBot answers: length and reading level are prompt settings
+   in `services.py` (`WLAD_HARD_RULES`), not a redesign. Wording changes
+   get Wlad's OK.
 
-### 7.4 Making it reliable (your first point)
+### 10.4 Making it reliable (your first point)
 
-- Sentry P0 alerts live (§4) and a synthetic check on `/api/health` every
-  five minutes (any uptime service; GitHub Actions `cron.yml` can do it).
-- uvicorn workers: default is one. For a webinar-day spike set 2–4 on the
-  pod (`INCIDENT_RUNBOOK.md`, "slow under load"), and watch pod CPU in
-  Emergent.
-- LLM timeouts and credit checks: every LLM route must fail with a message,
-  never hang (see the `has_credit()` pattern in `routes/credits.py`).
-- Rate limits are in `backend/middleware/__init__.py` (20 req/min on auth and
-  chat per IP, 120 on `/api/*`). Shared office IPs during a live demo can
-  hit these; raise temporarily on demo days, not permanently.
-- Weekly Mongo export of the money and lead collections until a backup job
-  exists.
+Sentry P0 rules live; synthetic `/api/health` check every five minutes;
+uvicorn workers 2–4 on webinar day (default is one); every LLM route fails
+with a message, never hangs (`has_credit()` pattern in `routes/credits.py`);
+rate limits in `backend/middleware/__init__.py` raised temporarily on demo
+days; weekly Mongo export.
 
 ---
 
-## 8. How to develop it further
+## 11. Access checklist
 
-**The loop.** Branch from `mvpcode` → PR → CI (`ci`, `gitleaks`,
-`lockfile-guard`, `constants-drift`, `codeql`) → merge → Vercel deploys the
-marketing site → **you deploy Emergent** → smoke checks. Rules in
-[`BRANCHING.md`](./BRANCHING.md).
-
-**Where things are.** `backend/routes/*.py` one router per feature;
-`backend/services*.py` shared logic and all email templates;
-`backend/lib/` provider shims; `frontend/src/pages` and
-`frontend/src/components` per surface; `frontend/src/features/content` the
-journal; `docs/app/APP_ARCHITECTURE.md` and `docs/app/SYSTEM_OVERVIEW.md` for
-the map; `docs/app/SCHEMA.md` for Supabase.
-
-**Rules that protect the product** (from `CLAUDE.md`, the file every
-contributor reads):
-
-- `email_lower` is the identity key everywhere (Mongo, Supabase, PostHog,
-  Sentry). Never create or link a user without it.
-- Every claim about Wlad comes from `docs/gtm/WLAD_CANON.md`. WladBot's
-  hard rules live in `services.py`; changing them is a product decision.
-- No fake scarcity, no invented numbers, no faked reviews. The webinar
-  counter hides itself below 25 registrations on purpose.
-- Supabase schema changes only through migrations; views
-  `security_invoker = true`; trigger functions granted to `service_role`
-  only.
-- No new frontend dependency without updating `yarn.lock` (Vercel builds
-  with `--frozen-lockfile`).
-
-**Testing.** `backend/tests/` has real suites, but CI only runs
-`compileall`. Turning the pure-function tests on in CI (they need no DB:
-`test_free_video_funnel.py`, `test_lead_import.py`) is a one-line win.
-Integration suites need a running backend and `TEST_*` credentials.
-
-**Definition of done for a feature:** PR merged, deployed to Emergent,
-smoke checks green, Sentry quiet for a day, and a PostHog event that shows
-whether anyone uses it.
-
----
-
-## 9. Access checklist
-
-| Tool | You | Action |
+| Tool | Status | Action |
 | --- | --- | --- |
 | Emergent `command-center-229` (incl. MongoDB) | ✅ admin since 24.09. | — |
-| GitHub `aiporator/shipos` | ✅ write (`sbcodes`) | ask for **maintain** so you can merge |
-| Vercel team `aiporators-projects`, project `leaderos` | ✅ member | — |
-| Supabase `srujvjjncrszhaaxepxf` | invite sent (Developer) | accept, enable 2FA |
-| Sentry | **you create the new org** (§4) | owner |
-| PostHog EU | **you create the new org** (§3) | owner |
-| Stripe | invite as Developer pending | see §5 |
-| Resend | invite pending | needed for email logs |
-| ElevenLabs, Voyage | keys live in Emergent env | ask for member access when you rotate keys |
+| GitHub `aiporator/shipos` | ✅ write | ask for **maintain** to merge |
+| Vercel project `leaderos` | ✅ member | — |
+| Stripe | ✅ you are on it | payouts to Argumentorik (§6) |
+| Supabase org `skawjzvddehhmkwiltui` | invite sent (Developer) | accept, 2FA; Disk IO fix (§7) |
+| Sentry | **new org by you** | §5 |
+| PostHog EU | **new org by you** | §4 |
+| Resend | member invite + **card/billing email** | §2 task 7 |
+| ElevenLabs, Voyage | keys in Emergent env | decide Voyage (§9) |
 
 Full matrix and the billing hand-over: [`TOOL_ACCESS.md`](./TOOL_ACCESS.md).
 
-## 10. People
+## 12. People
 
 - Wlad Jachtchenko `wj@argumentorik.com` — product and content owner; every
-  WladBot wording change gets his OK.
-- Eduard `ek@argumentorik.com` — Google Workspace / mailboxes.
+  WladBot wording change gets his OK. Enters billing cards or delegates to
+  Eduard.
+- Eduard `ek@argumentorik.com` — Google Workspace, mailboxes, billing.
 - Mert `start@aiporate.com` → `mert@argumentorik.com` — previous owner of
-  all tools; available for questions during the hand-over.
-- Support team — gets admin access through §6, not through shared logins.
+  all tools; records the walkthrough video; available during the hand-over.
+- Support team — admin access through §8, not through shared logins.

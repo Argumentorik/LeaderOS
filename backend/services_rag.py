@@ -68,9 +68,18 @@ _query_cache: dict[str, tuple[float, list[dict]]] = {}
 
 
 def _is_configured() -> bool:
-    """Both Voyage AND Supabase must be set for RAG to function."""
-    return bool(os.environ.get("VOYAGE_API_KEY")) and bool(os.environ.get("SUPABASE_URL")) \
-        and bool(os.environ.get("SUPABASE_SERVICE_KEY"))
+    """RAG needs Supabase only. The corpus (`wladbot_documents`, 2 212 chunks)
+    and the German full-text index live there; the lexical retriever needs no
+    external API. `VOYAGE_API_KEY` only adds the semantic (vector) retriever —
+    without it `_embed_query` returns None and retrieval runs lexical-only,
+    exactly as the degradation path in the module docstring promises. Before
+    this change a missing Voyage key switched RAG off entirely."""
+    return bool(os.environ.get("SUPABASE_URL")) and bool(os.environ.get("SUPABASE_SERVICE_KEY"))
+
+
+def embedding_provider() -> str:
+    """'voyage' when the semantic retriever is active, else 'none' (lexical-only)."""
+    return "voyage" if os.environ.get("VOYAGE_API_KEY") else "none"
 
 
 async def _embed_query(query: str) -> list[float] | None:
@@ -389,6 +398,7 @@ def rag_status() -> dict[str, Any]:
     """Health-check for /api/health or admin dashboards."""
     return {
         "configured": _is_configured(),
+        "embedding_provider": embedding_provider(),
         "voyage_key_set": bool(os.environ.get("VOYAGE_API_KEY")),
         "supabase_key_set": bool(os.environ.get("SUPABASE_SERVICE_KEY")),
         "supabase_url_set": bool(os.environ.get("SUPABASE_URL")),
