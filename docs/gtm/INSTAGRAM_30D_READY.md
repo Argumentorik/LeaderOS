@@ -5,7 +5,18 @@ Freitag, 10. Oktober, 08:00 Uhr, letzter geplanter Feed-Post Samstag,
 8. November. Danach läuft der Wochenrhythmus aus `INSTAGRAM_30_DAY_PLAN.md`
 weiter, gefüttert aus Wlads YouTube-Folgen.
 
-## Der Look (ein Stil für alles)
+## Der Look (ein Stil, sechs Cover-Typen)
+
+Der Feed wechselt als Schachbrett zwischen hell und dunkel, damit das
+Profil strahlt statt zu versinken: ungerade Posts auf warmem Papier
+(Creme), gerade Posts auf dunklem Foto oder Studio. Sechs Cover-Typen
+rotieren: Paper mit Fotofenster und großer Serif-Nummer (01, 09), Typo-
+Specimen mit Riesenwort („363“, „SEXIER“: 07, 11), Diagnose-HUD mit
+Mono-Readout und Suchrahmen (03 hell, 10 dunkel), Pass Card mit
+Framework-Spezifikation und Barcode (05), warmes Foto (02, 06), Avatar
+im Studio (04, 08, 12). Innen bleibt jedes Carousel dunkel, bis auf die
+Prinzip-Slide, die hell ist. Die Reihenfolge steht in `premium.html`
+(`COVER`-Array) und ist je Post austauschbar.
 
 Dunkel, warm, teuer. Editorial-Fotos mit Film-Grading (Sepia-Anteil,
 reduzierte Sättigung, angehobener Kontrast), weiches Jalousien-Licht von
