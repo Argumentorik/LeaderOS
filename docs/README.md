@@ -43,6 +43,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/EMAIL_BROADCASTS.md`](./gtm/EMAIL_BROADCASTS.md) | Evergreen broadcast emails (checklist/trust/CTA/teaser pattern) outside the linear lead-nurture cron chain |
 | [`gtm/INSTAGRAM_30_DAY_PLAN.md`](./gtm/INSTAGRAM_30_DAY_PLAN.md) | 30-day Instagram plan (design-ready) |
 | [`gtm/INSTAGRAM_LAUNCH_12.md`](./gtm/INSTAGRAM_LAUNCH_12.md) | Instagram-Start: die ersten 12 Carousel-Posts (Feed-Lock), Captions, Hashtags, Tages-Routine |
+| [`gtm/INSTAGRAM_30D_READY.md`](./gtm/INSTAGRAM_30D_READY.md) | 30 Tage Instagram ab 10.10.: 188 gerenderte Assets, Postproxy-Zeitplan, Look, Freigabe |
 | [`gtm/MARKETING_GREATOR_2026.md`](./gtm/MARKETING_GREATOR_2026.md) | Greator 2026 campaign |
 | [`gtm/VIMEO_WORKFLOW.md`](./gtm/VIMEO_WORKFLOW.md) | Video hosting workflow |
 | [`gtm/REMOTION_VIDEO.md`](./gtm/REMOTION_VIDEO.md) | Programmatic video rendering |

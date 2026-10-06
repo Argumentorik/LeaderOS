@@ -1,0 +1,57 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="premium.css">
+<script src="data-ig.js"></script><script src="data-a.js"></script><script src="data-b.js"></script>
+</head><body>
+<script>
+const q=new URLSearchParams(location.search); const SET=q.get('set')||'ig';
+const HANDLE='@wlad.jachtchenko';
+const esc=(s)=>s||'';
+function photo(x){
+  if(x.v==='photo') return `<div class="ph warm" style="background-image:url('wlad-portrait.jpg');background-position:42% 25%"></div>`;
+  let ph=x.ph; if(!ph&&x.hf) ph=(window.FALLBACK||{})[x.hf];
+  if(ph) return `<div class="ph ${x.av!==undefined?'av':''}" style="background-image:url('ph/${ph}.webp')"></div>`;
+  return `<div class="studio"></div>`;
+}
+function body(x){
+  if(x.t==='chat') return `<div class=chat>${x.chat.map(([w,m])=>`<div class="card ${w==='Du'?'user':(w==='WladBot'||w==='Verteidigung')?'ai':''}"><span class=who>${w}</span><p>${m}</p></div>`).join('')}</div>${x.note?`<p class=note>${x.note}</p>`:''}`;
+  if(x.t==='cap') return `<div class=cap>${x.cap.map(([c,t,d])=>d===undefined?`<div class=card><b>${c}</b><span>${t}</span></div>`:`<div class=card><b><small>${c}</small>${t}</b><span>${d}</span></div>`).join('')}</div>`;
+  if(x.t==='three') return `<div class=three>${x.three.map((t,j)=>`<div class=card><b>${j+1}</b><p>${t}</p></div>`).join('')}</div>`;
+  if(x.t==='vs') return `<div class=vs>${x.vs.map(([tag,t,d],j)=>`<div class="card ${j?'new':'old'}"><span class=tag2>${tag}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;
+  if(x.list) return `${x.s?`<p class=sub>${x.s}</p>`:''}<div class=list>${x.list.map((t,j)=>`<div><b>${j+1}</b><span>${t}</span></div>`).join('')}</div>`;
+  return x.s?`<p class=sub>${x.s}</p>`:'';
+}
+function slide(x,opts){
+  const {cid,i,n,kind,tags,story}=opts;
+  const isCta=x.t==='cta'||(!x.t&&x.cta&&kind==='single');
+  const hasAv=x.av!==undefined; const paper=false;
+  const SHRINK={'P03-5':'xxs','P05-6':'xxs','P08-8':'xxs'}; const size=SHRINK[`${cid}-${i}`]||x.size||(x.t==='vs'||x.t==='cap'?'s':'')
+  const pager=n>1?`${String(i).padStart(2,'0')}/${String(n).padStart(2,'0')}`:'';
+  const right= isCta?`<span class=ctl>${x.cta==='Kostenloser Platz · 29.10.'||x.cta==='Kostenloser Platz · 29.10.'?'Platz sichern · 29.10. ↗':x.cta==='Gespräch ab 2.11. buchen'?'Gespräch buchen ↗':'Kostenlos starten ↗'}</span>`:(n>1?`<span class=swipe>${i<n?'Wischen →':'Link in Bio'}</span>`:`<span class=swipe>Link in Bio</span>`);
+  const frameLbl=kind==='single'?`${cid} · ${HANDLE}`:`${cid} · ${pager}`;
+  return `<section class="slide ${story?'story':''} ${paper?'paper':''} ${hasAv?'has-avatar':''} ${x.num?'has-num':''}" data-c="${cid}" data-i="${i}">
+  ${photo(x)}<div class=grade></div><div class=slats></div><div class=vign></div><div class=grain></div>
+  ${x.num?`<div class=num>${x.num}</div>`:''}
+  ${hasAv?`<img class="avatar ${x.av||''}" src="avatar.png" alt="">`:''}
+  ${x.hf&&window.SCENE?'':''}
+  <div class=frame><span class=lbl>${frameLbl}</span><i class="tick tl"></i><i class="tick br"></i></div>
+  ${tags.map((t,j)=>`<span class="tag t${j+1}">${t}</span>`).join('')}
+  <div class=top><span class=wm>LEADER<i>·</i>OS</span><span class=ser>Führung wird trainiert.</span><span>${HANDLE}</span></div>
+  <div class=mid>${kind==='single'?`<p class=k>${x.k}</p>`:`<p class=k>${x.k}</p>`}<h1 class="h ${size}">${x.h}</h1>${body(x)}</div>
+  <div class=bot><div class=who2><img src="wlad-portrait.jpg" alt=""><span><b>Wlad Jachtchenko</b><small>LeaderOS · leader-os.de</small></span></div>${right}</div>
+</section>`;
+}
+let html='';
+if(SET==='ig'){
+  window.C.forEach((c,ci)=>{const n=c.slides.length;c.slides.forEach((x,i)=>{
+    const tags=i===0?[`Post ${String(ci+1).padStart(2,'0')}`,'Carousel']:(x.v==='lime'&&x.t==='text'?['Prinzip']:(x.t==='cta'?['Start']:[]));
+    html+=slide(x,{cid:c.id,i:i+1,n,kind:'carousel',tags});
+  });});
+} else if(SET==='a'||SET==='b'){
+  const S=SET==='a'?window.SA:window.SB;
+  S.forEach((x,i)=>{const tags=[x.k.split('·')[0].trim().replace(/\s0\d$/,'')]; html+=slide(x,{cid:(SET==='a'?'A':'B')+String(i+1).padStart(2,'0'),i:i+1,n:1,kind:'single',tags});});
+} else if(SET==='story'){
+  // principle slides (lime text slides) of the 12 carousels + 18 statements from set A as 9:16 stories
+  window.C.forEach((c,ci)=>{const x=c.slides.find(s=>s.v==='lime'&&s.t==='text'); if(x) html+=slide({...x,k:`Post ${String(ci+1).padStart(2,'0')} · Prinzip`,ph:c.slides[0].ph||'solitude',v:undefined,av:undefined,size:'s'},{cid:'ST'+String(ci+1).padStart(2,'0'),i:1,n:1,kind:'single',tags:['Prinzip'],story:true});});
+  window.SA.filter(x=>!x.list&&x.s).slice(0,18).forEach((x,i)=>{html+=slide({...x,v:undefined,av:undefined,size:'s',ph:x.ph||'boardroom'},{cid:'ST'+String(13+i).padStart(2,'0'),i:1,n:1,kind:'single',tags:[x.k.split('·')[0].trim().replace(/\s0\d$/,'')],story:true});});
+}
+document.body.innerHTML=html; window.__ALL={C:window.C,SA:window.SA,SB:window.SB,SCENE:window.SCENE};
+</script></body></html>

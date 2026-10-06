@@ -3,6 +3,7 @@
 # rewrite in vercel.json. See docs/DOMAIN_TOPOLOGY.md.
 
 User-agent: *
+Disallow: /preview/
 Allow: /
 Allow: /login
 Allow: /event

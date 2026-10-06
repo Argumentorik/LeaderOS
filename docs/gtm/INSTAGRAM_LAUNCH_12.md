@@ -1,10 +1,15 @@
 # Instagram-Start · Die ersten 12 Posts (Feed-Lock)
 
-Start: **Dienstag, 7. Oktober 2026**, dann täglich bis Samstag, 18. Oktober,
+Start: **Freitag, 10. Oktober 2026**, dann täglich bis Dienstag, 21. Oktober,
 jeweils **08:00 Uhr**. Zwölf Posts, zwölf Carousels, acht Slides pro Post,
 4:5 (1080 × 1350). Danach übernimmt der Wochenrhythmus aus
 `INSTAGRAM_30_DAY_PLAN.md` (Carousel Mo/Mi/Fr, dazwischen Reels aus den
 YouTube-Rollenspielen, Stories aus den Slides).
+
+Freigabe vor dem Start: Wlad bekommt am 6. Oktober alle zwölf Carousels
+und Captions (Google Doc plus Kontaktbogen per Mail) und gibt bis
+Donnerstag, 9. Oktober, frei oder streicht. Ab dann läuft die Montagsrunde
+(13. und 20. Oktober, 12:00) für die jeweils folgende Woche.
 
 Warum zwölf am Stück: Der Feed ist beim ersten Besuch das Profil. Zwölf
 Carousels in zwei Wochen füllen vier Reihen, zeigen das System (Frameworks,
@@ -58,7 +63,7 @@ Hashtag-Basis (in jedem Post, 12 Stück):
 `#führungskräfte #leadership #führung #führungskraft #mitarbeiterführung #teamführung #rhetorik #kommunikation #führungskräftetraining #leadershipdevelopment #wladjachtchenko #leaderos`
 Dazu pro Post fünf bis acht Themen-Tags (unten).
 
-### Post 01 · Di 07.10. · Führung wird nicht gelernt. Sie wird trainiert.
+### Post 01 · Fr 10.10. · Führung wird nicht gelernt. Sie wird trainiert.
 Pillar: Paradigmenwechsel. Cover: Lime, Avatar.
 Slides: Problem (du weißt es, dein Team merkt nichts) → Ebbinghaus-Kurve
 (20 Min 40 %, 1 Tag 65 %, 1 Monat 80 %) → Lernen vs. Trainieren → drei
@@ -80,7 +85,7 @@ Caption:
 
 Themen-Tags: `#lernen #gewohnheiten #ebbinghaus #training #mindset #neuesführen #persönlichkeitsentwicklung`
 
-### Post 02 · Mi 08.10. · Feedback in drei Sätzen
+### Post 02 · Sa 11.10. · Feedback in drei Sätzen
 Pillar: Framework (Feedbackformel B·W·W). Cover: S/W-Foto Feedback.
 Slides: „Du bist unzuverlässig“ → B·W·W → Beispiel-Dialog mit WladBot →
 drei Fehler (Urteil, Immer, Rückzieher) → Prinzip → üben → CTA.
@@ -101,7 +106,7 @@ Caption:
 
 Themen-Tags: `#feedback #feedbackgeben #feedbackkultur #mitarbeitergespräch #kritikgespräch #gesprächsführung`
 
-### Post 03 · Do 09.10. · Das Gespräch, das du seit drei Wochen aufschiebst
+### Post 03 · So 12.10. · Das Gespräch, das du seit drei Wochen aufschiebst
 Pillar: Schwierige Gespräche. Cover: S/W Konflikt.
 Slides: scheitert vor der Tür → vier Gesprächstypen (Informieren,
 Überzeugen, Verhandeln, Konfrontieren) → der Fehler (verhandeln statt
@@ -123,7 +128,7 @@ Caption:
 
 Themen-Tags: `#schwierigegespräche #konfliktmanagement #konfliktgespräch #kündigungsgespräch #verhandeln #grenzensetzen`
 
-### Post 04 · Fr 10.10. · Du hast nicht eine Rolle. Du hast fünf.
+### Post 04 · Mo 13.10. · Du hast nicht eine Rolle. Du hast fünf.
 Pillar: Framework (5 Rollen). Cover: S/W Presence, Avatar klein.
 Slides: Titel ist keine Rolle → Kommunikator, Manager, Team-Leader →
 Psychologe, Problemlöser → drei Diagnose-Fragen → der Hebel → Prinzip →
@@ -144,7 +149,7 @@ Caption:
 
 Themen-Tags: `#führungsrollen #führungsstil #führungskompetenz #selbstreflexion #teamleader #chef`
 
-### Post 05 · Sa 11.10. · Delegieren ist kein Ja oder Nein
+### Post 05 · Di 14.10. · Delegieren ist kein Ja oder Nein
 Pillar: Framework (5 Stufen der Delegation). Cover: Lime, Avatar.
 Slides: Rückdelegation → Stufe 1 und 2 → Stufe 3 bis 5 → drei Fragen vor der
 Wahl → Beispiel-Dialog → Prinzip („Sprich die Stufe aus. Und den Termin.“)
@@ -165,7 +170,7 @@ Caption:
 
 Themen-Tags: `#delegieren #delegation #mikromanagement #zeitmanagement #verantwortung #teamentwicklung`
 
-### Post 06 · So 12.10. · 80 Prozent hören auf Stufe 2 zu
+### Post 06 · Mi 15.10. · 80 Prozent hören auf Stufe 2 zu
 Pillar: Framework (10 Stufen des Zuhörens). Cover: S/W Listening.
 Slides: Stufe 1 bis 3 → der Test → Stufe 4 bis 6 → Stufe 7 bis 10 → die
 Schwelle → Prinzip → CTA 1:1.
@@ -185,7 +190,7 @@ Caption:
 
 Themen-Tags: `#zuhören #aktiveszuhören #empathie #einzelgespräch #mitarbeitergespräche #kommunikationstraining`
 
-### Post 07 · Mo 13.10. · Warum dein Vorstand nicht überzeugt ist
+### Post 07 · Do 16.10. · Warum dein Vorstand nicht überzeugt ist
 Pillar: Rhetorik (SEXIER). Cover: S/W Bühne.
 Slides: du argumentierst immer gleich → S·E·X → I·E·R → Level-Regel → der
 Rebuttal → Prinzip → CTA Pitch.
@@ -203,7 +208,7 @@ Caption:
 
 Themen-Tags: `#argumentieren #überzeugen #präsentation #weißerhetorik #sexier #pitch #vorstand`
 
-### Post 08 · Di 14.10. · Niemand hat je für einen Obstkorb eine Extrameile gemacht
+### Post 08 · Fr 17.10. · Niemand hat je für einen Obstkorb eine Extrameile gemacht
 Pillar: Mitarbeiter motivieren. Cover: S/W Team.
 Slides: Motivation ist keine Zahlung → Autonomie, Fortschritt,
 Zugehörigkeit → woran du erkennst, was fehlt → Wochen-Ritual → nach vier
@@ -224,7 +229,7 @@ Caption:
 
 Themen-Tags: `#mitarbeitermotivation #motivation #teamkultur #mitarbeiterbindung #newwork #führungskultur`
 
-### Post 09 · Mi 15.10. · KI ohne Methodik ist Slop
+### Post 09 · Sa 18.10. · KI ohne Methodik ist Slop
 Pillar: KI für Führungskräfte. Cover: Lime, Avatar.
 Slides: „alles“ oder „zu früh“ → Use-Case 1 (Gespräch von morgen) →
 Use-Case 2 (Rede in SEXIER) → Use-Case 3 (Freitag-Coaching) → KI vs. Du →
@@ -244,7 +249,7 @@ Caption:
 
 Themen-Tags: `#kiführung #künstlicheintelligenz #chatgpt #kiimunternehmen #digitalleadership #aileadership #wladbot`
 
-### Post 10 · Do 16.10. · Nie wieder sprachlos im Meeting
+### Post 10 · So 19.10. · Nie wieder sprachlos im Meeting
 Pillar: Schlagfertigkeit (Dunkle Rhetorik). Cover: S/W Boardroom.
 Slides: Trick 1 Schuldumkehr → Trick 2 falsche Dichotomie → Trick 3
 Personalisierung → drei Verteidigungen → nicht schnell kontern, den Boden
@@ -266,7 +271,7 @@ Caption:
 
 Themen-Tags: `#schlagfertigkeit #dunklerhetorik #manipulation #meeting #souveränität #rhetoriktraining`
 
-### Post 11 · Fr 17.10. · Warum nach dem Seminar nichts bleibt
+### Post 11 · Mo 20.10. · Warum nach dem Seminar nichts bleibt
 Pillar: Paradigmenwechsel (Seminar vs. System). Cover: S/W Training.
 Slides: Zeit → Inhalt → Übung → Danach → Ergebnis (Lime) → Prinzip
 („Entweder du trainierst. Oder du hoffst.“) → CTA Webinar 29.10.
@@ -287,7 +292,7 @@ Caption:
 
 Themen-Tags: `#führungskräfteentwicklung #seminar #weiterbildung #webinar #personalentwicklung #lernenneudenken`
 
-### Post 12 · Sa 18.10. · Werden statt wissen
+### Post 12 · Di 21.10. · Werden statt wissen
 Pillar: Das System (LeaderOS). Cover: S/W Sprint, Avatar.
 Slides: nicht noch ein Tool → ab Tag 1 (sechs Kurse, WladBot, Simulationen)
 → wenn du tiefer willst (Challenge, OS-Jahr) → wer dahintersteht
@@ -338,3 +343,80 @@ kommenden Woche in einem Dokument, Kontaktbogen als Bild. Was Wlad
 streicht, fällt weg; was er umformuliert, wird in die HTML-Quelle
 übernommen und neu gerendert (`carousels-ig.html`, Renderer in der
 Session). Nichts geht raus, was nicht aus seinen Frameworks stammt.
+
+---
+
+## 6. YouTube-Kanal · Befund (Stand 6. Oktober 2026)
+
+Kanal: `youtube.com/@wlad.jachtchenko` („Wlad Jachtchenko · DER
+FÜHRUNGSKRÄFTE PODCAST“). YouTube, Podbean und Apple Podcasts sind aus der
+Build-Umgebung gesperrt, der Befund stammt aus Suchergebnissen und
+Verzeichnissen, nicht aus dem Kanal selbst. Für echte Zahlen (Abonnenten,
+Views pro Video, Watchtime) entweder YouTube in Windsor verbinden oder
+einen Studio-Export schicken.
+
+Was sich belegen lässt:
+
+- Wöchentlicher Rhythmus, über 500 Folgen; jede Folge als Video auf
+  YouTube und als Audio im Podcast (Apple-Ranking Business/Karriere #1 in
+  Deutschland laut Verzeichnis).
+- Drei Formate: Solo-Folgen 10 bis 15 Minuten (z. B. „494: 5 Rhetorikregeln,
+  die dich sofort überzeugender machen als 80 % der Führungskräfte“),
+  Interviews und Gastvorträge (z. B. „500: Plötzlich Führungskraft im
+  KI-Zeitalter“ mit Greator-CEO Alexander Müller; „493: Warum deine
+  Mitarbeiter innerlich kündigen“, Vortrag Georg von Stein), und seit
+  September **Live-Rollenspiele** („499: Die Wahrheit kommt beim 3. Mal“,
+  „501: Mitarbeiter streitet Fehler ab“, „502: Wenn Mitarbeiter keine
+  Kritik annehmen“).
+- Titelmuster: Nummer plus Ergebnisversprechen in der Du-Form, oft mit
+  Zahl („5 Rhetorikregeln“, „über 6 Stunden pro Woche“). Das passt eins zu
+  eins zu den Carousel-Covern.
+- Shorts existieren („Folge @wlad.jachtchenko für tägliche Tipps“), bisher
+  als Follow-Aufruf, nicht als Wissensformat.
+- Die Kanalbeschreibung nennt „seit 2012“, „115.000 Führungskräfte“ und
+  „dreifacher TEDx-Speaker“. Diese Zahlen weichen vom Kanon ab (seit 2007,
+  400.000+ Klienten). Vor dem Start abstimmen, welche Fassung gilt, damit
+  Instagram und YouTube dieselben Zahlen zeigen.
+
+Was das für uns heißt:
+
+- Die Live-Rollenspiele sind das stärkste Material für Reels: 30 bis 60
+  Sekunden Ausschnitt, Untertitel, am Ende die Lime-Prinzip-Slide des
+  passenden Carousels. Post 02 (Feedback), 03 (schwierige Gespräche) und
+  10 (Schlagfertigkeit) haben direkte Entsprechungen in Folge 499, 501, 502.
+- Jedes Carousel bekommt eine Quell-Folge (Transkript), damit Wlads
+  Formulierungen und nicht unsere in den Slides stehen. Das ist die
+  Grundlage für die Montagsrunde: Wlad prüft gegen seine eigene Folge.
+
+## 7. WladBot-Avatar-Videos auf YouTube
+
+Auf dem Kanal sollen zusätzlich Videos mit dem WladBot-Avatar erscheinen.
+Vorschlag für den Start, damit es neben Wlads Talking-Head-Folgen
+funktioniert und nicht konkurriert:
+
+- Format: „WladBot erklärt“ · 45 bis 90 Sekunden, 9:16 für Shorts und
+  Reels, 16:9-Schnitt für den Kanal. Der Avatar spricht das Lime-Prinzip
+  und die drei Kernpunkte eines Carousels, Wlads Porträt und Name bleiben
+  im Abspann als Quelle („aus Wlads Folge 501“).
+- Stimme: Nur mit Wlads ausdrücklicher Freigabe als Stimm-Klon, sonst eine
+  neutrale deutsche Stimme. Der Avatar ist eine Cartoon-Figur, kein
+  KI-Gesicht von Wlad (Regel aus `WLAD_CANON.md`).
+- Kennzeichnung: in Titel oder erstem Satz „WladBot, der KI-Coach aus
+  LeaderOS“. Keine Verwechslung mit Wlad selbst.
+- Rhythmus: eins pro Woche, jeweils zum Carousel der Woche, Veröffentlichung
+  Donnerstag, damit es Wlads Montagsfolge nicht überlagert.
+- Erste drei: Feedbackformel (Post 02), Delegieren in fünf Stufen (Post 05),
+  KI ohne Methodik ist Slop (Post 09). Skripte sind die Slides 3 bis 7 der
+  jeweiligen Carousels, in Ich-Form des Avatars umgeschrieben.
+
+## 8. Fragen an Wlad (per Mail am 6. Oktober gestellt)
+
+1. Welche der zwölf Posts streichst oder änderst du? Freigabe bis 9. Oktober.
+2. Welche drei Themen aus deinen Folgen 490 bis 502 sollen im Oktober auf
+   Instagram zuerst laufen?
+3. Welche Zahlen gelten: Kanalbeschreibung (seit 2012, 115.000) oder Kanon
+   (seit 2007, 400.000+)?
+4. Darf WladBot mit deiner geklonten Stimme sprechen, oder neutrale Stimme?
+5. Welche Rollenspiel-Folgen dürfen wir als Reels schneiden, und wer liefert
+   die Rohdateien: Max oder YouTube-Download?
+6. Montagsrunde 12:00: Teams, Zoom oder Kommentare im Google Doc?

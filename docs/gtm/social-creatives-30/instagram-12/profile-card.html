@@ -1,0 +1,47 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="premium.css">
+<style>
+.slide.pc{padding:0}
+.pc .studio{background:radial-gradient(70% 60% at 80% 10%,#5a4330 0%,#2b2119 45%,#120f0d 85%),#120f0d}
+.pc .av2{position:absolute;z-index:2;left:50%;transform:translateX(-50%);bottom:-40px;width:1180px;height:1180px;object-fit:contain;filter:sepia(.15) saturate(.95) contrast(1.06) brightness(.9) blur(2.5px) drop-shadow(0 60px 80px rgba(0,0,0,.6))}
+.pc .glow{position:absolute;z-index:3;left:50%;top:62%;transform:translate(-50%,-50%);width:760px;height:420px;border-radius:50%;background:radial-gradient(closest-side,rgba(207,255,58,.28),transparent 70%);filter:blur(30px)}
+.card3{position:absolute;z-index:5;left:50%;top:52%;width:860px;transform:translate(-50%,-50%) perspective(1600px) rotateX(10deg) rotateY(-6deg);background:linear-gradient(160deg,#1b1917,#0e0d0c);border-radius:28px;padding:44px 48px 40px;box-shadow:0 60px 120px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.14),inset 0 1px 0 rgba(255,255,255,.18),0 0 90px rgba(207,255,58,.12);color:#f3eadb;font-family:'Inter',sans-serif}
+.card3 .row{display:flex;align-items:center;gap:40px}
+.card3 .pp{width:160px;height:160px;border-radius:50%;padding:5px;background:conic-gradient(from 200deg,#f9ce34,#ee2a7b,#6228d7,#f9ce34);flex:none}
+.card3 .pp img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 15%;border:5px solid #0e0d0c}
+.card3 .stats{display:flex;gap:46px}
+.card3 .stats div{text-align:center}
+.card3 .stats b{display:block;font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.card3 .stats span{font-size:19px;color:rgba(243,234,219,.6)}
+.card3 .name{font-size:40px;font-weight:700;letter-spacing:-.02em;margin-top:32px}
+.card3 .name i{font-style:normal;color:rgba(243,234,219,.5);font-weight:400;font-size:28px;margin-left:12px}
+.card3 .bio{font-size:24px;line-height:1.4;margin-top:10px;color:rgba(243,234,219,.85)}
+.card3 .bio b{color:#CFFF3A;font-weight:600}
+.card3 .link{font-size:21px;color:#8fb5ff;margin-top:14px}
+.card3 .btns{display:flex;gap:12px;margin-top:28px}
+.card3 .btns span{flex:1;text-align:center;font-weight:600;font-size:22px;padding:18px;border-radius:12px;background:#f3eadb;color:#0f0d0b}
+.card3 .btns span.g{background:rgba(255,255,255,.1);color:#f3eadb}
+.card3 .bubble{position:absolute;left:30px;top:-54px;background:#1f1d1a;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:12px 20px;font-size:19px;display:flex;align-items:center;gap:10px;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.card3 .bubble i{font-style:normal;color:#CFFF3A}
+.pc .top{position:absolute;left:76px;right:76px;top:72px}
+.pc .cap{position:absolute;z-index:6;left:76px;right:76px;bottom:76px;margin:0}
+.pc .cap h1{font-family:'Inter',sans-serif;font-weight:600;font-size:58px;letter-spacing:-.035em;line-height:1.04;color:#f3eadb;max-width:760px}
+.pc .cap h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.12em}
+.pc .cap p{margin-top:16px;font-size:23px;color:rgba(243,234,219,.62);max-width:720px;line-height:1.4}
+.pc.story .card3{top:46%}.pc.story .av2{width:1400px;height:1400px;bottom:-60px}.pc.story .cap{bottom:120px}.pc.story .cap h1{font-size:72px}
+</style></head><body>
+<script>
+const V=[{story:false},{story:true}];
+document.body.innerHTML=V.map(v=>`<section class="slide pc ${v.story?'story':''}">
+<div class=studio></div><div class=vign></div><div class=grain></div>
+<img class=av2 src="avatar.png" alt=""><div class=glow></div>
+<div class=top><span class=wm>LEADER<i>·</i>OS</span><span class=ser>Führung wird trainiert.</span><span>@wlad.jachtchenko</span></div>
+<div class=card3><span class=bubble><i>▸</i> Ab 10.10. jeden Tag ein Framework</span>
+ <div class=row><div class=pp><img src="wlad-portrait.jpg" alt=""></div><div class=stats><div><b>1.643</b><span>Beiträge</span></div><div><b>77,8K</b><span>Follower</span></div><div><b>16</b><span>Gefolgt</span></div></div></div>
+ <div class=name>wlad.jachtchenko <i>Wlad Jachtchenko</i></div>
+ <div class=bio>Tägliche Führungstipps für charismatisches Leadership. <b>Führung wird nicht gelernt. Sie wird trainiert.</b></div>
+ <div class=link>leader-os.de/kurse</div>
+ <div class=btns><span>Folgen</span><span class=g>Nachricht</span></div>
+</div>
+<div class=cap><h1>Dein Coach stellt vor: <em>der neue Feed.</em></h1><p>WladBot, der KI-Coach aus LeaderOS, zeigt dir ab dem 10. Oktober jeden Tag ein Framework aus Wlads Methodik. Folgen, speichern, trainieren.</p></div>
+</section>`).join('');
+</script></body></html>
