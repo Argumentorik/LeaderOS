@@ -1014,3 +1014,12 @@ Der Kunde: „im dashboard doch niemals godmode oder so als wort unsere kunden s
 - P1: Lasttest 1000 gleichzeitige Kunden (Dashboard, Videostart, Chat, Kurse).
 - P2: Wörter-Durchgang — alle Bezeichnungen auf Verständlichkeit für Mitte 50 prüfen („Video-Analyse", „Challengers", „Gesprächs-Training").
 - P2: Kursvideos aufnehmen; bis dahin steht „Aufnahme folgt · ab 01.11.2026".
+
+### Nachtrag · Admin-Rechte für ek@ / anja@ / carolin@argumentorik.com (03.10.2026)
+Kundenwunsch: `is_admin` für diese drei Adressen setzen. Geprüft — es war nichts zu bauen:
+- Alle drei stehen bereits in `ADMIN_SEED_EMAILS` (`backend/routes/admin.py`).
+- `seed_admin_flags()` läuft bei jedem Start des Servers und hebt vorhandene Konten der Liste auf `is_admin: true`.
+- `_create_session()` (`routes/auth.py:128`) hebt das Flag zusätzlich bei JEDER Anmeldung — Passwort, Google, Magic-Link und Registrierung laufen alle darüber. Damit bekommen auch Konten, die NACH dem Serverstart angelegt werden, die Rechte.
+- In dieser Datenbank existiert zu keiner der drei Adressen ein Konto (nachgesehen; Admins hier: `start@aiporate.com`, `mertzafermutlu@gmail.com` + 1).
+- Nachweis: Registrierung mit `ek@argumentorik.com` ergab sofort `is_admin: true`; das Probe-Konto wurde danach wieder entfernt.
+Merkregel: Wer in der Liste steht, braucht nur eine einzige Anmeldung. Eine bestehende, noch offene Sitzung zieht das Flag nicht nach — einmal abmelden und wieder anmelden.
