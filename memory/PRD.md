@@ -1023,3 +1023,16 @@ Kundenwunsch: `is_admin` für diese drei Adressen setzen. Geprüft — es war ni
 - In dieser Datenbank existiert zu keiner der drei Adressen ein Konto (nachgesehen; Admins hier: `start@aiporate.com`, `mertzafermutlu@gmail.com` + 1).
 - Nachweis: Registrierung mit `ek@argumentorik.com` ergab sofort `is_admin: true`; das Probe-Konto wurde danach wieder entfernt.
 Merkregel: Wer in der Liste steht, braucht nur eine einzige Anmeldung. Eine bestehende, noch offene Sitzung zieht das Flag nicht nach — einmal abmelden und wieder anmelden.
+
+### Iter 191 · Schalter für Admin-Rechte im Admin-Bereich (07.10.2026)
+Wunsch: „Soll ich dir einen kleinen Schalter bauen, mit dem du selbst jemanden zum Admin machen oder das Recht entziehen kannst?" → ja.
+
+**Backend** (`routes/admin.py`)
+- `GET /api/admin/admins` — Liste aller Personen mit Recht (Name, E-Mail, ob auf der festen Liste, ob man selbst), dazu `allowlist_pending` (Adressen der Code-Liste ohne Konto — bekommen das Recht mit der ersten Anmeldung) und `revoked`.
+- `PUT /api/admin/users/by-email/{email}/admin` mit `{ "is_admin": true|false }`.
+- Schutz: nur mit Admin-Recht (401/403 ohne), **das eigene Recht lässt sich nicht ändern** (`cannot_change_own_admin`), unbekannte Adresse → 404, E-Mail wird kleingeschrieben verglichen, Vorgang ist wiederholbar, jede Änderung landet als Warnung im Protokoll.
+- **Wichtig**: Entzug setzt zusätzlich `admin_revoked: true`. Sowohl `seed_admin_flags()` (Serverstart) als auch die Beförderung in `_create_session()` (jede Anmeldung) prüfen dieses Merkmal — sonst käme ein entzogenes Recht bei der nächsten Anmeldung zurück. „Wieder geben" entfernt das Merkmal.
+
+**Frontend**: `components/admin/AdminRightsCard.js`, eingehängt in `AdminPage.js` neben „Nutzer verwalten". Eingabefeld + „Zum Admin machen", Liste mit „Entziehen" (mit Rückfrage), Block „Vorgemerkt" und Block „Entzogen" mit „Wieder geben".
+
+**Geprüft** (selbst, ohne Prüfagent): per curl alle Schutzregeln (eigenes Recht 400, unbekannt 404, ohne Anmeldung 401, geben/entziehen 200); per Datenbank, dass ein Entzug den Startabgleich UND die Beförderung bei der Anmeldung übersteht; in der Oberfläche der ganze Weg Entziehen (3→2, Block „Entzogen" erscheint) → Wieder geben (→3) → unbekannte Adresse zeigt „Zu dieser Adresse gibt es kein Konto."

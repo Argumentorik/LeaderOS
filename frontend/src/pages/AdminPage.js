@@ -9,6 +9,7 @@ import { Loader2, ShieldAlert, Activity } from 'lucide-react';
 import { AuthHealthWidget } from '../components/admin/AuthHealthWidget';
 import { SyncHealthWidget } from '../components/admin/SyncHealthWidget';
 import { UserManageCard } from '../components/admin/UserManageCard';
+import { AdminRightsCard } from '../components/admin/AdminRightsCard';
 import { CreditSupportCard } from '../components/admin/CreditSupportCard';
 import { FeatureRolloutPanel } from '../components/admin/FeatureRolloutPanel';
 import { OpsHandoverPanel } from '../components/admin/OpsHandoverPanel';
@@ -127,6 +128,7 @@ export default function AdminPage() {
           <FeatureRolloutPanel de={de} />
           <OpsHandoverPanel />
           <UserManageCard de={de} />
+          <AdminRightsCard de={de} />
           <CreditSupportCard />
           <CommunityStatsCard community={data.community} de={de} />
         </div>

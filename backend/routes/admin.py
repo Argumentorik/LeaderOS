@@ -1,5 +1,6 @@
 """Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics."""
 from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel
 from datetime import datetime, timezone, timedelta
 
 from config import db, logger
@@ -26,10 +27,15 @@ ADMIN_SEED_EMAILS = {
 
 
 async def seed_admin_flags() -> None:
-    """Idempotent startup seed: promote existing allowlisted users to is_admin."""
+    """Idempotent startup seed: promote existing allowlisted users to is_admin.
+
+    Iter 191: `admin_revoked` beats the allowlist. Ohne diesen Vorbehalt würde
+    ein im Panel entzogenes Recht beim nächsten Start wieder auftauchen.
+    """
     emails = [e.lower() for e in ADMIN_SEED_EMAILS]
     res = await db.users.update_many(
-        {"$or": [{"email_lower": {"$in": emails}}, {"email": {"$in": emails}}], "is_admin": {"$ne": True}},
+        {"$or": [{"email_lower": {"$in": emails}}, {"email": {"$in": emails}}],
+         "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True}},
         {"$set": {"is_admin": True}},
     )
     if res.modified_count:
@@ -119,6 +125,61 @@ async def admin_set_tier(email: str, request: Request, tier: str = "accelerator"
     from services_tier import activate_tier
     await activate_tier(user["user_id"], tier)
     return {"email": email, "tier": tier, "activated": True}
+
+
+@router.get("/admins")
+async def admin_list_admins(request: Request):
+    """Wer hat Admin-Recht? (Iter 191 — Schalter im Admin-Bereich)"""
+    me = await require_admin(request)
+    rows = await db.users.find(
+        {"is_admin": True},
+        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "created_at": 1, "last_login_at": 1},
+    ).to_list(200)
+    seed = sorted(e.lower() for e in ADMIN_SEED_EMAILS)
+    for r in rows:
+        mail = (r.get("email") or "").lower()
+        r["on_allowlist"] = mail in seed
+        r["is_you"] = mail == (me.get("email") or "").lower()
+    rows.sort(key=lambda r: (not r["is_you"], r.get("email") or ""))
+    # Adressen der Liste, zu denen es (noch) kein Konto gibt: bekommen das Recht
+    # automatisch mit der ersten Anmeldung.
+    have = {(r.get("email") or "").lower() for r in rows}
+    revoked = await db.users.find(
+        {"admin_revoked": True}, {"_id": 0, "email": 1, "name": 1}
+    ).to_list(200)
+    return {
+        "admins": rows,
+        "count": len(rows),
+        "allowlist_pending": [e for e in seed if e not in have],
+        "revoked": revoked,
+    }
+
+
+class AdminFlagIn(BaseModel):
+    is_admin: bool
+
+
+@router.put("/users/by-email/{email}/admin")
+async def admin_set_admin_flag(email: str, data: AdminFlagIn, request: Request):
+    """Admin-Recht geben oder entziehen. Das eigene Recht bleibt unberührt."""
+    me = await require_admin(request)
+    email = email.strip().lower()
+    if email == (me.get("email") or "").lower():
+        raise HTTPException(status_code=400, detail="cannot_change_own_admin")
+    user = await db.users.find_one(
+        {"$or": [{"email_lower": email}, {"email": email}]}, {"_id": 0, "user_id": 1, "email": 1}
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    update = (
+        {"$set": {"is_admin": True}, "$unset": {"admin_revoked": "", "admin_revoked_at": ""}}
+        if data.is_admin else
+        {"$set": {"is_admin": False, "admin_revoked": True,
+                  "admin_revoked_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    await db.users.update_one({"user_id": user["user_id"]}, update)
+    logger.warning("Admin %s setzt is_admin=%s für %s", me.get("email"), data.is_admin, email)
+    return {"email": user.get("email"), "is_admin": data.is_admin}
 
 
 @router.delete("/users/by-email/{email}")

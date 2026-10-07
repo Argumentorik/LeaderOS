@@ -131,7 +131,7 @@ async def _create_session(user_id: str, ip_address: str, response: Response, met
     from routes.admin import ADMIN_SEED_EMAILS
     seed_emails = [e.lower() for e in ADMIN_SEED_EMAILS]
     await db.users.update_one(
-        {"user_id": user_id, "is_admin": {"$ne": True},
+        {"user_id": user_id, "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True},
          "$or": [{"email_lower": {"$in": seed_emails}}, {"email": {"$in": seed_emails}}]},
         {"$set": {"is_admin": True}},
     )
