@@ -15,9 +15,10 @@ router = APIRouter(prefix="/api/credits", tags=["credits"])
 
 FREE_CREDITS = 50
 MASTERCLASS_CREDITS = 250
-# Entscheidung Iter 185 (2b): Freier Zugang bekommt monatlich 20 Credits
+# Entscheidung Iter 185 (2b): Freier Zugang bekommt monatlich Credits
 # nachgefüllt, statt einmalig 50 und dann nie wieder.
-MONTHLY_FREE_REFILL = 20
+# Iter 192 (Wunsch Stefan): von 20 auf 50 pro Monat erhöht.
+MONTHLY_FREE_REFILL = 50
 SOFT_PAUSE_AT = 10  # Show upsell after 10 uses
 CREDIT_COSTS = {
     "chat": 1,
@@ -59,19 +60,39 @@ def next_refill_label() -> str:
     return f"1. {names[month - 1]} {year}"
 
 
+# Wert vor Iter 192 — nur für die einmalige Nachzahlung an Konten, die in
+# diesem Monat schon mit der alten Menge aufgefüllt wurden.
+PREVIOUS_MONTHLY_REFILL = 20
+
+
 async def _apply_monthly_refill(user: dict, credit_doc: dict) -> dict:
-    """Monatliches Nachfüllen für den freien Zugang (nie nach unten korrigieren)."""
+    """Monatliches Nachfüllen für den freien Zugang (nie nach unten korrigieren).
+
+    Iter 192: Wird die monatliche Menge erhöht, bekommen Konten, die in diesem
+    Monat schon aufgefüllt wurden, die Differenz sofort nachgezahlt — sonst
+    müssten sie bis zum Ersten warten. Die Monatsgrenze bleibt gewahrt, weil
+    nur die Differenz zur bereits gewährten Menge gutgeschrieben wird.
+    """
     if masterclass_active(user):
         return credit_doc
     month = _month_key()
+    balance = int(credit_doc.get("balance", 0) or 0)
+
     if credit_doc.get("refill_month") == month:
-        return credit_doc
-    new_balance = max(int(credit_doc.get("balance", 0) or 0), MONTHLY_FREE_REFILL)
+        granted = int(credit_doc.get("refill_amount") or PREVIOUS_MONTHLY_REFILL)
+        if granted >= MONTHLY_FREE_REFILL:
+            return credit_doc
+        new_balance = balance + (MONTHLY_FREE_REFILL - granted)
+    else:
+        new_balance = max(balance, MONTHLY_FREE_REFILL)
+
     await db.credits.update_one(
         {"user_id": credit_doc["user_id"]},
-        {"$set": {"balance": new_balance, "refill_month": month}},
+        {"$set": {"balance": new_balance, "refill_month": month,
+                  "refill_amount": MONTHLY_FREE_REFILL}},
     )
     credit_doc["balance"] = new_balance
+    credit_doc["refill_amount"] = MONTHLY_FREE_REFILL
     credit_doc["refill_month"] = month
     return credit_doc
 

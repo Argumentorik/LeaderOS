@@ -30,7 +30,7 @@ export const CreditsExhaustedDialog = ({ onClose, detail = null }) => {
   const { open: openPricing } = usePricing();
   const { totalUsed, usedByAction = {}, monthlyRefill, nextRefill } = useCredits();
 
-  const refill = detail?.monthly_refill ?? monthlyRefill ?? 20;
+  const refill = detail?.monthly_refill ?? monthlyRefill ?? 50;
   const refillDate = detail?.next_refill ?? nextRefill;
   const breakdown = Object.entries(usedByAction)
     .filter(([, v]) => v > 0)

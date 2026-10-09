@@ -1036,3 +1036,11 @@ Wunsch: „Soll ich dir einen kleinen Schalter bauen, mit dem du selbst jemanden
 **Frontend**: `components/admin/AdminRightsCard.js`, eingehängt in `AdminPage.js` neben „Nutzer verwalten". Eingabefeld + „Zum Admin machen", Liste mit „Entziehen" (mit Rückfrage), Block „Vorgemerkt" und Block „Entzogen" mit „Wieder geben".
 
 **Geprüft** (selbst, ohne Prüfagent): per curl alle Schutzregeln (eigenes Recht 400, unbekannt 404, ohne Anmeldung 401, geben/entziehen 200); per Datenbank, dass ein Entzug den Startabgleich UND die Beförderung bei der Anmeldung übersteht; in der Oberfläche der ganze Weg Entziehen (3→2, Block „Entzogen" erscheint) → Wieder geben (→3) → unbekannte Adresse zeigt „Zu dieser Adresse gibt es kein Konto."
+
+### Iter 192 · Freies Monatsguthaben von 20 auf 50 (09.10.2026)
+Wunsch: „bump the free user limit from 20 per month to 50".
+- `MONTHLY_FREE_REFILL` in `backend/routes/credits.py`: 20 → **50**. Wirkt überall, weil alle Antworten (`/api/credits`, Hinweistexte, Admin-Nachfüllung) auf diese Zahl zeigen.
+- **Nachzahlung für den laufenden Monat**: Das Nachfüllen lief nur einmal pro Monat (`refill_month`). Ohne Zusatz hätten alle, die diesen Monat schon ihre 20 bekamen, bis zum 1. warten müssen. Jetzt merkt sich jedes Konto in `refill_amount`, mit welcher Menge es aufgefüllt wurde; liegt sie unter dem neuen Wert, wird **nur die Differenz** gutgeschrieben (Konten ohne das Feld gelten als mit 20 aufgefüllt, siehe `PREVIOUS_MONTHLY_REFILL`). Die Monatsgrenze bleibt damit gewahrt, und wiederholte Aufrufe zahlen nicht doppelt.
+- Rückfallwert im Hinweis-Dialog (`CreditsExhaustedDialog.js`) und die Zusicherung in `tests/test_iter185_credits_video.py` auf 50 nachgezogen.
+- Geprüft: Konto mit Restguthaben 8 (Monat bereits aufgefüllt) → nach dem ersten Aufruf 38 (= 8 + 30), zweiter Aufruf bleibt bei 38, `monthly_refill: 50`, nächstes Nachfüllen „1. November 2026". In der Oberfläche zeigt die Guthaben-Anzeige 38 Credits.
+- Unberührt: Die Vorgabe „20" im Admin-Feld „Credits gutschreiben" ist eine Kulanz-Geste des Supports, kein Monatslimit.

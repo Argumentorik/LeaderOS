@@ -52,7 +52,7 @@ class TestCredits:
         r = s.get(f"{API}/credits")
         assert r.status_code == 200
         data = r.json()
-        assert data.get("monthly_refill") == 20, data
+        assert data.get("monthly_refill") == 50, data
         assert "next_refill" in data and isinstance(data["next_refill"], str)
 
     def test_admin_lookup(self, admin_session):
