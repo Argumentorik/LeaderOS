@@ -326,7 +326,7 @@ export default function CoachingPage() {
 
         {/* ── Support Footer ── */}
         <div className="text-center py-4 animate-fade-in stagger-6">
-          <p className="text-sm text-white/50 font-light">
+          <p className="text-sm text-muted-foreground">
             {de ? 'Noch Fragen? ' : 'Questions? '}
             <a
               href="mailto:support@leaderos.de"

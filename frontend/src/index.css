@@ -114,7 +114,6 @@
 .nav-label { color: hsl(var(--nav-label)); }
 .nav-label-active { color: hsl(var(--nav-fg-hover)); }
 
-
 @layer base {
   [data-debug-wrapper="true"] { display: contents !important; }
   [data-debug-wrapper="true"] > * {
@@ -243,6 +242,35 @@
 .typing-dot { animation: typingDot 1.4s infinite both; }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Iter 96: Claude-style thinking status — soft text shimmer sweep */
+.wlad-thinking-shimmer {
+  background: linear-gradient(90deg, currentColor 0%, currentColor 45%, rgba(191, 255, 0, 0.95) 50%, currentColor 55%, currentColor 100%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wladThinkingSweep 2.2s linear infinite;
+}
+@keyframes wladThinkingSweep {
+  0% { background-position: 100% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Accessibility + battery: respect user preference, freeze everything decorative. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe,
+  .animate-pulse-glow,
+  .animate-shimmer,
+  .animate-orbit,
+  .animate-cta-halo,
+  .animate-scroll-cue,
+  .animate-soft-float,
+  .animate-live-dot {
+    animation: none !important;
+  }
+}
 
 .stagger-1 { animation-delay: 0.1s; }
 .stagger-2 { animation-delay: 0.2s; }
@@ -656,4 +684,307 @@ summary:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   .btn-shine::after, .card-lift, .glow-lime { transition: none !important; }
   .card-lift:hover, .glow-lime:hover { transform: none !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   PREMIUM POLISH — Iter 93 ("godmode" push)
+   Light + dark parity primitives for the four flagship
+   surfaces (Login, Dashboard, Chat, Pricing). Everything
+   here is opt-in via class names; no global side-effects.
+   ══════════════════════════════════════════════════ */
+
+/* display-hero — Revolut/Linear-grade hero typography.
+   Scales 3.5rem → 6rem fluidly. Use on the single
+   highest-altitude H1 of a surface, never twice on one page.
+   Paired with Outfit (already the heading font). */
+.display-hero {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+.display-hero-script {
+  font-family: 'Instrument Serif', 'Outfit', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(2.2rem, 5.5vw + 1rem, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+/* gradient-border-anim — animated lime→cyan→lime ring
+   for hero cards. Pairs with .card-revolut. Self-positions
+   over the element it's applied to. */
+.gradient-border-anim {
+  position: relative;
+  isolation: isolate;
+}
+.gradient-border-anim::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(191, 255, 0, 0.0) 0%,
+    rgba(191, 255, 0, 0.55) 25%,
+    rgba(0, 212, 170, 0.45) 50%,
+    rgba(191, 255, 0, 0.55) 75%,
+    rgba(191, 255, 0, 0.0) 100%
+  );
+  background-size: 300% 300%;
+  animation: gradBorderSlide 8s ease-in-out infinite;
+  opacity: 0.65;
+}
+.dark .gradient-border-anim::before { opacity: 0.85; }
+@keyframes gradBorderSlide {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* kpi-glow — soft halo behind hero KPI numbers. Apply to
+   the wrapper of a tabular-nums stat element. */
+.kpi-glow {
+  position: relative;
+}
+.kpi-glow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 140%;
+  height: 140%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(191, 255, 0, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(20px);
+}
+:root .kpi-glow::after { opacity: 0.5; }
+
+/* hairline — premium accent line. Use as section dividers
+   or "WELCOME BACK"-style eyebrow underlines. */
+.hairline {
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, hsl(var(--brand)) 0%, transparent 100%);
+  vertical-align: middle;
+}
+.hairline-wide { width: 3.5rem; }
+
+/* premium-bg — subtle radial gradient backdrop for hero
+   sections. Already-set in dark via .bg-gradient-mesh, this
+   ports the same feel to light mode and amps it 30%. */
+.premium-bg {
+  background:
+    radial-gradient(at 18% 8%,  rgba(191, 255, 0, 0.06) 0px, transparent 45%),
+    radial-gradient(at 82% 12%, rgba(0, 212, 170, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 90%, rgba(191, 255, 0, 0.04) 0px, transparent 55%);
+}
+.dark .premium-bg {
+  background:
+    radial-gradient(at 18% 8%,  rgba(191, 255, 0, 0.05) 0px, transparent 45%),
+    radial-gradient(at 82% 12%, rgba(0, 212, 170, 0.04) 0px, transparent 50%),
+    radial-gradient(at 50% 90%, rgba(191, 255, 0, 0.025) 0px, transparent 55%);
+}
+
+/* surface-card — theme-aware replacement for the legacy
+   `bg-white/[0.02] border-white/[0.07]` pattern that only
+   reads on dark mode. Looks correct on both. */
+.surface-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border) / 0.6);
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.surface-card:hover {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+.dark .surface-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.dark .surface-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* brand-pill — the lime CTA pill used across CTAs. Now
+   theme-calibrated (darker lime on light bg for WCAG AA). */
+.brand-pill {
+  background: hsl(var(--brand));
+  color: hsl(var(--primary-foreground));
+  font-weight: 700;
+  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.brand-pill:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -8px hsl(var(--brand) / 0.55);
+}
+.dark .brand-pill { background: #BFFF00; color: #0A0A0A; }
+.dark .brand-pill:hover { background: #D4FF4D; }
+
+/* text-brand — the eyebrow/accent text. WCAG-safe across modes. */
+.text-brand { color: hsl(var(--brand)); }
+.dark .text-brand { color: #BFFF00; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-border-anim::before { animation: none !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   LANDING-PAGE POLISH (Direction A · Athletic Editorial)
+   Scroll behaviour + scroll-anchor offset for the nav,
+   plus a couple of motion-respect overrides.
+   ══════════════════════════════════════════════════ */
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Anchor sections compensate for the 64px sticky nav. */
+[id^='benefit-'], #hero, #final-cta {
+  scroll-margin-top: 80px;
+}
+
+/* Disable smooth-scroll inside scrollable widgets so chat lists don't lag. */
+.scroll-auto,
+[data-testid='chat-page'] *,
+[data-testid='dashboard-page'] {
+  scroll-behavior: auto;
+}
+
+/* ─── Newsroom Halftone Lime Image Treatment ─────────────────
+   Used on /journal newspaper-style hero images. Renders the
+   photo as a desaturated halftone with a lime overlay, like
+   the "Off-Crypto" style green-tinted news lede. */
+.newsroom-halftone {
+  position: relative;
+  overflow: hidden;
+}
+/* Art-print treatment (Oct 2026): monochrome photo, no colour tint. The
+   green multiply wash made every cover look like a filter instead of a
+   picture and killed label contrast; the halftone dots stay, but faint. */
+.newsroom-halftone img {
+  filter: grayscale(1) contrast(1.12) brightness(0.98);
+}
+.newsroom-halftone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.28), rgba(10,10,10,0) 45%);
+  pointer-events: none;
+}
+.newsroom-halftone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(0,0,0,0.5) 1px, transparent 1.4px);
+  background-size: 3.5px 3.5px;
+  mix-blend-mode: screen;
+  opacity: 0.14;
+  pointer-events: none;
+  z-index: 1;
+}
+.newsroom-halftone--ink::after { background: #0A0A0A; opacity: 0.78; }
+.newsroom-halftone--ink::before { mix-blend-mode: screen; opacity: 0.22; }
+
+/* Subtle newsroom paper texture — applied to /journal body bg */
+.newsroom-paper {
+  background-color: #F7F5EF;
+  background-image:
+    radial-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.018) 1px, transparent 1px);
+  background-size: 4px 4px, 11px 11px;
+  background-position: 0 0, 2px 2px;
+}
+
+/* ── CinematicHero (/webinar) · Vorlage-Keyframes, fill-mode both,
+   cubic-bezier(0.22,1,0.36,1). Elemente tragen die Klasse .ze; unter
+   prefers-reduced-motion werden sie sofort in den Endzustand gesetzt. */
+@keyframes zeRise       { from { opacity: 0; transform: translateY(110%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zeFadeUp     { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zeFadeDown   { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zeCardReveal { from { opacity: 0; transform: translateY(34px) scale(0.965); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes zeBloom      { 0% { opacity: 0; transform: scale(0.2) rotate(-90deg); } 60% { opacity: 1; transform: scale(1.12) rotate(8deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+@keyframes zePillPop    { 0% { opacity: 0; transform: translateY(14px) scale(0.85); } 65% { opacity: 1; transform: translateY(-2px) scale(1.03); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes zeArrowDrop  { 0% { opacity: 0; transform: translateY(-10px); } 55% { opacity: 1; transform: translateY(3px); } 100% { opacity: 1; transform: translateY(0); } }
+.ze { animation-fill-mode: both; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .ze { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+/* Webinar-Hero mobil: auf kurzen Displays (iPhone SE, 667 px) Headline und
+   Bild-Abstand an der Viewport-Höhe deckeln, damit der CTA im ersten
+   Viewport bleibt. Fallback ohne svh: nur Breiten-Skalierung. */
+.ze-mobile-h1 { font-size: clamp(54px, 17.5vw, 78px); }
+.ze-mobile-air { flex: 1; min-height: 80px; }
+@supports (height: 1svh) {
+  .ze-mobile-h1 { font-size: clamp(54px, min(17.5vw, 9.5svh), 78px); }
+  .ze-mobile-air { min-height: clamp(80px, 12svh, 140px); }
+}
+
+/* /frameworks · Kollektiva-Mechanik: Remount-Fade für Beschreibung und Name
+   (4 px Aufwärts-Settle, 500 ms). Eigener Name, weil `fadeIn` oben 8 px nutzt. */
+@keyframes kFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Iter 92.50 — WladBot "Live" presence (breathing + rotating aura ring) */
+@keyframes wladBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+@keyframes wladRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wladCaretBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wlad-breath, .wlad-ring-spin { animation: none !important; }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Iter 189 · Handy-Lesbarkeit (Zielgruppe Mitte 50)
+   Am Rechner bleiben die feinen Abstufungen; auf dem Handy hebt eine
+   Untergrenze jede Schriftgröße auf eine Größe, die man ohne Zoom liest.
+   Die Regeln greifen über die bereits vergebenen Tailwind-Klassen, damit
+   keine Seite einzeln angefasst werden muss.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Kleinstschrift (Etiketten, Augenbrauen-Zeilen) */
+  .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\] { font-size: 11.5px !important; }
+  /* Hilfstexte */
+  .text-\[11px\], .text-\[11\.5px\], .text-xs { font-size: 13px !important; line-height: 1.5 !important; }
+  /* Fließtext und Knopfbeschriftungen */
+  .text-\[12px\], .text-\[12\.5px\] { font-size: 14px !important; line-height: 1.55 !important; }
+  .text-\[13px\], .text-\[13\.5px\], .text-sm { font-size: 14.5px !important; line-height: 1.6 !important; }
+  .text-\[14px\] { font-size: 15px !important; }
+
+  /* Winzige Etiketten („Powered by …") bleiben klein, aber lesbar */
+  .text-\[7px\], .text-\[7\.5px\], .text-\[8px\], .text-\[8\.5px\] { font-size: 10.5px !important; }
+
+  /* Tippflächen: nichts Wichtiges unter 44 px Höhe (Daumenbreite) */
+  button, a[href], [role="button"], summary { touch-action: manipulation; }
+  .tap-target { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* Knöpfe und Reiter: die feinen Rechner-Höhen sind am Handy zu flach.
+     Nur <button>/<a> mit genau diesen Höhenklassen — Eingabefelder und
+     Bilder bleiben unberührt. */
+  button.h-8, button.h-9, button.h-10, a.h-8, a.h-9, a.h-10 {
+    min-height: 44px !important;
+    height: auto !important;
+  }
+  button.h-9.w-9, button.w-9.h-9, button.h-8.w-8, button.w-8.h-8 { min-width: 44px !important; }
+  [role="tab"] { min-height: 44px !important; }
 }

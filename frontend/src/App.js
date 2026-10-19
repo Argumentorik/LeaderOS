@@ -55,6 +55,15 @@ const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
 const EnterprisePage = lazyWithRetry(() => import("./pages/EnterprisePage"));
+const EnterpriseLandingPage = lazyWithRetry(() => import("./pages/EnterpriseLandingPage"));
+const LandingPage = lazyWithRetry(() => import("./pages/LandingPage"));
+const SpecimenStudio = lazyWithRetry(() => import("./pages/SpecimenStudio"));
+const AdStudio = lazyWithRetry(() => import("./pages/AdStudio"));
+const StudioHub = lazyWithRetry(() => import("./pages/StudioHub"));
+const SystemHealth = lazyWithRetry(() => import("./pages/SystemHealth"));
+const ThankYouPage = lazyWithRetry(() => import("./pages/ThankYouPage"));
+const WebinarThankYouPage = lazyWithRetry(() => import("./pages/WebinarThankYouPage"));
+const WebinarLivePage = lazyWithRetry(() => import("./pages/WebinarLivePage"));
 const Challenge30Page = lazyWithRetry(() => import("./pages/Challenge30Page"));
 const VideoGuidePage = lazyWithRetry(() => import("./pages/VideoGuidePage"));
 const CoursesPage = lazyWithRetry(() => import("./pages/CoursesPage"));
@@ -78,12 +87,22 @@ const LeaderOsTourPage = lazyWithRetry(() => import("./pages/LeaderOsTourPage"))
 const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
 const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
 const ArticlePage = lazyWithRetry(() => import("./features/content/pages/ArticlePage"));
-const LearningVideosPage = lazyWithRetry(() => import("./pages/LearningVideosPage"));
 const FreeVideosMembersPage = lazyWithRetry(() => import("./pages/FreeVideosMembersPage"));
 const LeaderOsSyncPage = lazyWithRetry(() => import("./pages/LeaderOsSyncPage"));
 const SalesRoomPage = lazyWithRetry(() => import("./pages/SalesRoomPage"));
 
 import { WladMark } from "./components/brand/WladMark";
+import { registerRoutePreloads, prefetchIdleRoutes } from "./lib/routePrefetch";
+
+registerRoutePreloads({
+  '/chat': ChatPage, '/tools': ToolsPage, '/simulations': SimulationsPage, '/missions': VideoChallengePage,
+  '/missions/archive': VideoArchivePage, '/challengers': ChallengersPage, '/tasks': TasksPage, '/playbooks': PlaybooksPage,
+  '/events': EventsPage, '/my-path': MyPathPage, '/community': CommunityPage,
+  '/coaching': CoachingPage, '/downloads': DownloadsPage, '/referral': ReferralPage, '/profile': ProfilePage,
+  '/challenge': Challenge30Page, '/video-guide': VideoGuidePage, '/kurse': CoursesPage, '/kurse/:slug': CourseDetailPage,
+  '/daily-checkin': DailyCheckinPage, '/leader-diagnose': LeaderDiagnosePage, '/enterprise': EnterprisePage,
+  '/wlad-control-x7k9q2': AdminPage,
+});
 import { CookieConsent } from "./components/legal/CookieConsent";
 import { trackGoogleAdsPageView } from "./lib/googleAds";
 import { trackBingPageView } from "./lib/bingUet";
@@ -166,6 +185,7 @@ function AppRouter() {
     if (location.hash) return;
     if (typeof window === 'undefined') return;
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on pathname change; hash is read, not a trigger
   }, [location.pathname]);
 
   // Smooth-scroll to in-page anchors (/#beratung, /#pricing, …).
@@ -244,12 +264,10 @@ function AppRouter() {
         <Route path="/f/:slug" element={<SharedFolderPage />} />
         <Route path="/progress" element={<Navigate to="/community" replace />} />
         <Route path="/community" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
-        <Route path="/lern-videos" element={<ProtectedRoute><LearningVideosPage /></ProtectedRoute>} />
         <Route path="/free-videos" element={<ProtectedRoute><FreeVideosMembersPage /></ProtectedRoute>} />
         {/* Internal sales enablement room · login-gated, deliberately no
             sidebar entry — the URL is shared internally with the sales team. */}
         <Route path="/sales-room" element={<ProtectedRoute><SalesRoomPage /></ProtectedRoute>} />
-        <Route path="/learning-videos" element={<Navigate to="/lern-videos" replace />} />
         {/* Admin route is intentionally hidden behind a non-guessable path. Backend require_admin() still gates all /api/admin/* */}
         <Route path="/wlad-control-x7k9q2" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         <Route path="/progress-old" element={<ProtectedRoute><ProgressPage /></ProtectedRoute>} />
@@ -276,6 +294,10 @@ function AppRouter() {
         <Route path="/teams" element={<Navigate to="/for-teams" replace />} />
         <Route path="/business" element={<Navigate to="/for-teams" replace />} />
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
+        <Route path="/video-guide" element={<ProtectedRoute><VideoGuidePage /></ProtectedRoute>} />
+        {/* Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto. */}
+        <Route path="/kurse" element={<CoursesPage />} />
+        <Route path="/kurse/:slug" element={<CourseDetailPage />} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />
         <Route path="/sicherheit" element={<TrustPage />} />
@@ -317,9 +339,6 @@ function AppRouter() {
         <Route path="/wlad" element={<Navigate to="/wlad-jachtchenko" replace />} />
         <Route path="/about" element={<Navigate to="/wlad-jachtchenko" replace />} />
         <Route path="/ueber-wlad" element={<Navigate to="/wlad-jachtchenko" replace />} />
-        {/* Public share routes · read-only showcase, no auth required */}
-        <Route path="/m/:slug" element={<SharedMissionPage />} />
-        <Route path="/f/:slug" element={<SharedFolderPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/studio" element={<StudioHub />} />
         <Route path="/specimens" element={<SpecimenStudio />} />
@@ -362,6 +381,9 @@ function App() {
                     <NetworkStatusBanner />
                     <AppRouter />
                     <FakeWladCall />
+                    <WladHelpButton />
+                    <UsageFeedbackPrompt />
+                    <FloatingWladBotDrawer />
                     <Toaster position="bottom-right" />
                     <CookieConsent />
                     <ReAuthModal />

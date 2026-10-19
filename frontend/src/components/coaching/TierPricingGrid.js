@@ -8,13 +8,14 @@ import { LeadershipOSInstallmentModal } from './LeadershipOSInstallmentModal';
 import { openStrategyCall } from '../../lib/calendly';
 
 /**
- * TierPricingGrid — 3-Tier-Pricing: Leadership OS | Leadership OS PLUS | Enterprise
+ * TierPricingGrid — 3-Tier Funnel Architecture (Iter 92.35, Mert):
  *
- * • Leadership OS €997/Jahr · 12 Videokurse Drip · 30-Tage Money-Back · Raten möglich (2× oder 12×)
- * • Leadership OS PLUS €4.447/Jahr · OS + 12 Einzelcoachings (je 299€)
- * • Enterprise · B2B · Volume-Discount auf 997€ Basis (10-50%)
+ *   Tier 1  Leadership OS    € 997 / Jahr   →  Stripe Checkout  (SOFORT Conversion)
+ *   Tier 2  Leadership OS+   € 4.797 / Jahr →  Cal.com Sales Call  (High-Ticket Close)
+ *   Tier 3  Enterprise       Auf Anfrage    →  Cal.com Sales Call  (Lead Qualifier)
+ *
+ * Bullets are user-supplied final landing-page copy.
  */
-
 const TIERS = [
   {
     id: 'leadership_os',
@@ -33,10 +34,14 @@ const TIERS = [
     flow: 'stripe',
     valueHint: '12 Monate Zugang · 30-Tage Geld-zurück · Raten möglich',
     features: [
-      { label: '12 Premium-Videokurse (1/Monat freigeschaltet)', has: true, bold: true },
-      { label: 'WladBot KI-Coach 24/7 (GPT-5.2)', has: true, highlight: true },
-      { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true, highlight: true },
-      { label: '30-Tage Leadership Sprint komplett', has: true },
+      { label: 'Zugriff auf alle Coaching-Module', has: true, bold: true },
+      { label: 'Alle 10 Kurse · 72 Folgen (je < 12 Min) ab 01.11.2026', has: true, highlight: true },
+      { label: 'KI-gestützte Analyse & Feedback', has: true, highlight: true },
+      { label: 'Video- & Speech-Coaching', has: true, highlight: true },
+      { label: '30-Tage Leadership Plan', has: true },
+      { label: 'Wlad RAG System Basiszugang', has: true },
+      { label: 'WladBot KI-Coach 24/7 (GPT-5.2)', has: true },
+      { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true },
       { label: 'Alle Frameworks & Playbooks', has: true },
       { label: 'License Key per E-Mail', has: true },
       { label: 'Live-Calls in der Startgruppe', has: false },
@@ -49,8 +54,8 @@ const TIERS = [
     pkgId: 'leadership_os_plus',
     tierKey: 'accelerator',
     name: 'Leadership OS PLUS',
-    subtitle: '1 Jahr · mit Coaches',
-    price: 4447,
+    subtitle: 'Für Leader, die echte Transformation wollen',
+    price: 4797,
     priceUnit: 'Jahr',
     icon: Crown,
     accent: 'border-[#BFFF00]/40 bg-gradient-to-b from-[#0A0A0A] to-[#1A1A2E] text-white',

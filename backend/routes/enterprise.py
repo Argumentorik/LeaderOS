@@ -3,10 +3,11 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 import html as _html
+import os
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from config import db
+from config import db, logger
 from services import get_current_user
 from services_actions import record_user_action
 from routes.auth import _get_client_ip
@@ -194,8 +195,14 @@ async def submit_enterprise_lead(data: EnterpriseLeadForm, request: Request):
         from services_email import send_email
         import asyncio
 
-        lead_name = (data.name or user.get("name", "")).strip() or "dort"
+        lead_name = _html.escape((data.name or user.get("name", "")).strip() or "dort")
         is_de = data.lang == "de"
+        # SEC-002 (HEAD): alle User-Strings vor dem HTML-Templating escapen.
+        e_company = _html.escape(data.company or "")
+        e_contact = _html.escape(data.name or user.get("name", "—") or "—")
+        e_email = _html.escape(data.email or "")
+        e_team = _html.escape(str(data.teamSize or ""))
+        e_msg = _html.escape(data.message or "—")
 
         # 1. Confirmation to the lead
         asyncio.create_task(send_email(
@@ -228,11 +235,11 @@ async def submit_enterprise_lead(data: EnterpriseLeadForm, request: Request):
                 f"<div style='font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;padding:24px'>"
                 f"<h2 style='font-size:20px;margin:0 0 16px'>New Enterprise Lead</h2>"
                 f"<table style='font-size:14px;line-height:1.7;border-collapse:collapse'>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Company</td><td>{data.company}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Contact</td><td>{data.name or user.get('name', '—')}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Email</td><td><a href='mailto:{data.email}'>{data.email}</a></td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Team size</td><td>{data.teamSize}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Message</td><td>{data.message or '—'}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Company</td><td>{e_company}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Contact</td><td>{e_contact}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Email</td><td><a href='mailto:{e_email}'>{e_email}</a></td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Team size</td><td>{e_team}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Message</td><td>{e_msg}</td></tr>"
                 f"<tr><td style='font-weight:600;padding-right:16px'>Lead ID</td><td><code>{lead_id}</code></td></tr>"
                 f"</table>"
                 f"<p style='font-size:13px;color:#666;margin-top:24px'>Reach out within 24h to maintain conversion velocity.</p>"
@@ -295,8 +302,11 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
         import asyncio
 
         contact = data.contact_email or user.get("email")
-        lead_name = (user.get("name", "") or "dort").split()[0] or "dort"
-        company = data.company_name or user.get("company", "deinem Unternehmen")
+        lead_name = _html.escape((user.get("name", "") or "dort").split()[0] or "dort")
+        company = _html.escape(data.company_name or user.get("company", "deinem Unternehmen") or "")
+        e_contact_mail = _html.escape(contact or "")
+        e_contact_name = _html.escape(user.get("name", "—") or "—")
+        e_team = _html.escape(str(data.team_size or ""))
         priority_emoji = {"hot": "🔥", "warm": "🌡️", "cold": "❄️"}.get(lead_doc["priority"], "📥")
 
         # 1. Confirmation to lead — bilingual depending on score (hot leads get urgency)
@@ -340,9 +350,9 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
                 f"<p style='color:#666;margin:0 0 20px'>Score: <strong>{score}/120</strong> · Source: 12-question diagnosis</p>"
                 f"<table style='font-size:14px;line-height:1.7;border-collapse:collapse;width:100%'>"
                 f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Company</td><td>{company}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Contact</td><td>{user.get('name', '—')}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Email</td><td><a href='mailto:{contact}'>{contact}</a></td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Team size</td><td>{data.team_size}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Contact</td><td>{e_contact_name}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Email</td><td><a href='mailto:{e_contact_mail}'>{e_contact_mail}</a></td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Team size</td><td>{e_team}</td></tr>"
                 f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Lead ID</td><td><code>{lead_id}</code></td></tr>"
                 f"</table>"
                 + (

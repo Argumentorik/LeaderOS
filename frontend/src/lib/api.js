@@ -24,9 +24,18 @@ export const API_BASE = (IS_LOCAL_DEV && RAW_BACKEND_URL && RAW_BACKEND_URL !== 
  */
 export const PUBLIC_PATHS = [
   '/', '/leadership-programm', '/leadership-lab', '/coaching', '/for-teams', '/teams', '/business',
-  '/impressum', '/datenschutz', '/agb', '/widerruf', '/changelog', '/kurse-uebersicht',
+  '/impressum', '/datenschutz', '/agb', '/widerruf', '/sicherheit', '/changelog', '/whats-new',
+  '/kurse-uebersicht',
   // Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto.
   '/kurse',
+  // Marketing-Seiten (leader-os.de / leader-check.de) — nie zum Login umleiten.
+  '/webinar', '/event', '/live', '/journal', '/kommunikation', '/training', '/ki-fuehrungskraft',
+  '/leaderos', '/fuehrung-beginnt-hier', '/gratis', '/free', '/videos', '/gratis-videos',
+  '/free-video-series', '/wlad-jachtchenko', '/wlad', '/about', '/ueber-wlad', '/thank-you',
+  '/frameworks', '/methodik',
+  // Öffentliche Share-Links, Auth- und E-Mail-Landings
+  '/m', '/f', '/login', '/signup', '/register', '/auth', '/auth-callback',
+  '/newsletter', '/email/unsubscribe',
 ];
 
 /**
@@ -41,7 +50,8 @@ export function notifyPaymentRequired(detail) {
   }));
 }
 
-const api = axios.create({  baseURL: API_BASE,
+const api = axios.create({
+  baseURL: API_BASE,
   withCredentials: true,
   // 120s: LLM endpoints (workflows, challenger finish, video jobs) regularly
   // take 30-90s — a 30s timeout made them fail while the backend kept working.
@@ -186,35 +196,36 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(false);
-        const onAuthPage = window.location.pathname.includes('/login') || window.location.hash.includes('session_id');
-        if (!onAuthPage) {
-          // Soft re-auth flow: keep the user on the current page, show modal.
-          // If a user object exists in cache → show ReAuthModal (preserves scroll/state).
-          // Otherwise (cold session) → hard redirect to /login.
-          const hasCachedUser = Boolean(sessionStorage.getItem('wladbot_user'));
-          if (hasCachedUser) {
-            // Wait for re-auth-success event, then retry the original request
-            return new Promise((resolve, reject) => {
-              const onSuccess = () => {
-                window.removeEventListener('wladbot:reauth-success', onSuccess);
-                window.removeEventListener('wladbot:reauth-cancelled', onCancel);
-                // Re-issue the original request — cookies are now fresh
-                api(originalRequest).then(resolve).catch(reject);
-              };
-              const onCancel = () => {
-                window.removeEventListener('wladbot:reauth-success', onSuccess);
-                window.removeEventListener('wladbot:reauth-cancelled', onCancel);
-                sessionStorage.removeItem('wladbot_user');
-                reject(error);
-              };
-              window.addEventListener('wladbot:reauth-success', onSuccess);
-              window.addEventListener('wladbot:reauth-cancelled', onCancel);
-              window.dispatchEvent(new CustomEvent('wladbot:reauth-required'));
-            });
-          }
-          sessionStorage.removeItem('wladbot_user');
-          window.location.href = '/login';
+        const p = window.location.pathname;
+        // Iter 185: Öffentliche Seiten dürfen NIE zum Anmeldeformular
+        // umgeleitet werden — wer über Suche, Ads oder KI-Empfehlung kommt,
+        // wäre sonst weg.
+        const onAuthPage = ['/login', '/signup', '/register', '/auth/', '/auth-callback'].some((r) => p.startsWith(r))
+          || window.location.hash.includes('session_id');
+        const onPublicPage = PUBLIC_PATHS.some((r) => p === r || p.startsWith(`${r}/`));
+        if (onAuthPage || onPublicPage) return Promise.reject(error);
+
+        // Distinguish "session truly expired" (refresh got 401/403) from "server
+        // momentarily down" (5xx / network). For the latter we keep the user
+        // logged in and surface a soft banner · yanking them to /login on a
+        // transient backend hiccup would be brutal.
+        const refreshStatus = refreshError?.response?.status;
+        const refreshIsAuthFailure = refreshStatus === 401 || refreshStatus === 403;
+        if (!refreshIsAuthFailure) {
+          window.dispatchEvent(new CustomEvent('wladbot:refresh-server-error', {
+            detail: { status: refreshStatus ?? null, message: refreshError?.message },
+          }));
+          return Promise.reject(error);
         }
+
+        // True auth failure: soft modal if we have a cached user (preserves
+        // scroll/state), else hard redirect (cold session).
+        const hasCachedUser = Boolean(sessionStorage.getItem('wladbot_user'));
+        if (hasCachedUser) return waitForReAuth(originalRequest, error);
+
+        sessionStorage.removeItem('wladbot_user');
+        window.location.href = '/login';
+        return Promise.reject(error);
       } finally {
         releaseRefreshLock();
         isRefreshing = false;

@@ -2,6 +2,7 @@
 from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 from pydantic import BaseModel, Field
 import asyncio
+import re
 import uuid
 import os
 import glob
@@ -14,7 +15,7 @@ from lib.llm_provider import LlmChat, UserMessage
 from lib.llm_provider import OpenAISpeechToText
 
 from config import db, EMERGENT_LLM_KEY, logger
-from services import get_current_user, get_user_memory, clean_ai_text
+from services import get_current_user, get_user_memory, clean_ai_text, WLAD_HARD_RULES
 from services_actions import record_user_action
 from services_tier import require_feature, resolve_user_tier
 from services_video_trial import get_video_trial_status, consume_video_trial
@@ -990,16 +991,6 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
             raise HTTPException(status_code=422, detail=problem)
 
         analysis = await _run_video_ai_analysis(challenge, transcript, prev_attempts, user_memory, rating_context)
-
-        # Erst ein fertiges Ergebnis kostet etwas: Stille, zu wenig Sprache und
-        # KI-Fehler verbrauchen weder Credit noch Test-Slot (vorher wurde
-        # beides schon vor Whisper abgebucht).
-        credit_result = await check_and_deduct_credit(user, "video_mission")
-        if not credit_result["allowed"]:
-            raise HTTPException(status_code=402, detail="no_credits")
-        if trial["active"]:
-            await consume_video_trial(user["user_id"])
-            used_trial_slot = True
 
         await _persist_video_analysis(user["user_id"], challenge_id, analysis, rating, len(prev_attempts) + 1)
         # Attach trial metadata for the UI banner (X / 3 remaining etc.)

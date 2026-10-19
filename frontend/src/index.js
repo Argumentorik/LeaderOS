@@ -8,13 +8,45 @@ import { bootstrapConsent, readConsent } from "@/lib/consent";
 // other code runs so we capture the very first log lines too.
 import "@/lib/consoleBuffer";
 import { installGlobalHandlers } from "@/lib/telemetry";
+import { maybeInitMetaPixel } from "@/lib/metaPixel";
+import { maybeInitLinkedIn } from "@/lib/linkedinInsight";
+import { maybeInitGoogleAds } from "@/lib/googleAds";
+import { maybeInitBingUet } from "@/lib/bingUet";
+import { redirectAppRoutesToAppTier } from "@/lib/tierRedirect";
 
-installGlobalHandlers();
+// Leader-Check → LeaderOS handoff · runs SYNCHRONOUSLY before anything else.
+// If a `sync_token` arrives on any path other than the dedicated receiver,
+// funnel it to /auth/sync (preserving the token + intended destination) so the
+// exchange happens before LandingPage's redirect logic can strip the query.
+// From a Landing host, redirectAppRoutesToAppTier() below then forwards
+// /auth/sync (with query intact) to the App host, where the cookie is valid.
+const _syncHandoff = () => {
+  if (typeof window === "undefined") return false;
+  const q = new URLSearchParams(window.location.search);
+  const token = q.get("sync_token");
+  if (!token || window.location.pathname === "/auth/sync") return false;
+  const next = q.get("next") || "/free-videos";
+  window.location.replace(
+    `/auth/sync?sync_token=${encodeURIComponent(token)}&next=${encodeURIComponent(next)}`,
+  );
+  return true;
+};
 
-// Bootstrap GDPR/TTDSG consent BEFORE any tracking SDK initializes.
-// Normalizes legacy consent shapes and defaults PostHog to opt-out until
-// the user explicitly accepts in the banner.
-bootstrapConsent();
+// Cross-tier guard · runs SYNCHRONOUSLY before anything else mounts.
+// If a visitor hits an App route (e.g. /login, /dashboard, /auth/magic)
+// on a Landing host (leader-os.de, leader-check.de), hard-redirect to
+// the matching App host (leaderos.de, leadercheck.de). Doing this here
+// instead of inside a useEffect avoids the brief flash of a non-functional
+// LoginPage on the wrong origin. Auth, magic-link cookies, and OAuth
+// callbacks must stay on a single origin to work.
+if (_syncHandoff()) {
+  // Browser is navigating to /auth/sync · abort module init.
+} else if (redirectAppRoutesToAppTier()) {
+  // Browser is navigating away · abort module init.
+  // (React, Sentry, PostHog all stay un-booted on the wrong origin.)
+} else {
+  installGlobalHandlers();
+  bootstrapConsent();
 
 const consent = readConsent();
 const replayConsented = Boolean(consent?.replays);

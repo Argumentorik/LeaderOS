@@ -67,8 +67,8 @@ export default function ReferralPage() {
 
   const shareLeaderScore = async (platform) => {
     const text = de
-      ? `Mein Leadership Score: ${certData?.leadership_score || 0}/100 — Level: ${certData?.level}. Teste deinen auf WladBot!`
-      : `My Leadership Score: ${certData?.leadership_score || 0}/100 — Level: ${certData?.level}. Test yours on WladBot!`;
+      ? `Mein Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Teste deinen auf WladBot!`
+      : `My Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Test yours on WladBot!`;
     const url = referralData?.share_url || LEADERCHECK_URL;
 
     const links = {

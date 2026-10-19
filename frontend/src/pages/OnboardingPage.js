@@ -323,9 +323,9 @@ export default function OnboardingPage() {
                   ))}
                 </div>
 
-                <Button variant="outline" className="w-full text-xs font-bold border-amber-300 hover:bg-amber-50 dark:border-amber-500/30 dark:hover:bg-amber-500/5"
-                  onClick={() => window.open('https://leader-check.de', '_blank', 'noopener,noreferrer')} data-testid="wladhub-onboarding-link">
-                  <ExternalLink size={12} className="mr-1.5" /> {de ? 'Noch keine Diagnose? Jetzt auf WladHub machen' : "No diagnosis yet? Do it on WladHub"}
+                <Button className="w-full text-xs font-black h-11 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:brightness-110 transition-all"
+                  onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')} data-testid="wladhub-onboarding-link">
+                  <ExternalLink size={13} className="mr-1.5" /> {de ? 'Kostenlose Diagnose jetzt starten' : 'Start free diagnosis now'}
                 </Button>
                 <p className="text-[10px] text-muted-foreground text-center mt-2 font-medium">
                   {de ? '10 Min · sofortiger Report · macht mein Coaching ab Tag 1 individueller' : '10 min · instant report · makes coaching more personal from day 1'}
@@ -346,19 +346,13 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Step 5: Strategy Call CTA — Cal.com (Iter 92.10: no "Free" wording, premium positioning) */}
-        {step === 5 && (
+        {/* Step 7: Strategy Call CTA — Cal.com */}
+        {step === 7 && (
           <div className="space-y-5 animate-fade-in" data-testid="onboarding-call-step">
             <div className="text-center">
               <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-black uppercase tracking-wider px-3 py-1">
                 {de ? '15 Min · Unverbindlich · 1:1' : '15 min · No strings · 1:1'}
               </Badge>
-              <h2 className="text-2xl font-black tracking-tight">{de ? 'Sicher den schnellsten Weg.' : 'Lock in the fastest path.'}</h2>
-              <p className="text-sm text-muted-foreground mt-1.5 max-w-md mx-auto">
-                {de
-                  ? 'Bevor du loslegst — sichere dir einen Termin mit unserem Argumentorik-Berater. 15 Min, in denen du klar bekommst: wo stehst du, wo blockierst du, was sind deine nächsten 30 Tage.'
-                  : 'Before you dive in — book a slot with our Argumentorik consultant. 15 min to find out where you stand, where you block yourself, what your next 30 days should be.'}
-              </p>
             </div>
 
             <Card className="overflow-hidden border-emerald-200/40 dark:border-emerald-500/20 bg-gradient-to-br from-emerald-50/40 to-[#BFFF00]/[0.04] dark:from-emerald-500/[0.04] dark:to-[#BFFF00]/[0.03]">
@@ -407,7 +401,7 @@ export default function OnboardingPage() {
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
                 data-testid="onboarding-skip-call-btn"
               >
-                {de ? 'Überspringen — ich starte direkt' : 'Skip — I want to start now'} →
+                {de ? 'Überspringen, ich starte direkt' : 'Skip, I want to start now'} →
               </button>
             </div>
           </div>

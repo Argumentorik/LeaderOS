@@ -256,8 +256,8 @@ export default function EventsPage() {
                   <h3 className="text-lg font-bold mb-1">{de ? 'Accelerator Zugang freischalten' : 'Unlock Accelerator Access'}</h3>
                   <p className="text-sm text-white/50">
                     {de
-                      ? 'Mastermind Calls, 1:1 Coaching mit Wlads Expertenteam, exklusive Workshops — nur für Accelerator-Mitglieder.'
-                      : 'Mastermind calls, 1:1 coaching with Wlad, exclusive workshops — Accelerator members only.'}
+                      ? 'Mastermind Calls, 1:1 Coaching mit Wlads Expertenteam, exklusive Workshops · nur für Accelerator-Mitglieder.'
+                      : 'Mastermind calls, 1:1 coaching with Wlad\'s expert team, exclusive workshops · Accelerator members only.'}
                   </p>
                 </div>
                 <Button onClick={() => navigate('/coaching')} className="bg-[#BFFF00] text-black hover:bg-[#D4FF4D] font-bold px-6 h-11 shrink-0" data-testid="upgrade-accelerator-btn">

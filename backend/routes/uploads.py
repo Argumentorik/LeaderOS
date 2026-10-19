@@ -5,18 +5,14 @@ import uuid
 import requests
 from datetime import datetime, timezone
 
-from config import db, logger
+from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user
-
-# Migration → lib.object_storage. Native Backend: Supabase-Storage
-# (Bucket `wladbot-uploads`) wenn SUPABASE_URL + SUPABASE_SERVICE_KEY
-# in ENV. Sonst Legacy Emergent-Objstore. API ist identisch zum
-# alten put_object/get_object — nur der Import schwenkt.
-from lib.object_storage import put_object, get_object
 
 router = APIRouter(prefix="/api", tags=["uploads"])
 
+STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
 APP_NAME = "wladbot"
+storage_key = None
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
@@ -84,6 +80,24 @@ def download_object(path: str, dest: str, chunk_size: int = 1024 * 1024) -> str:
                 if chunk:
                     f.write(chunk)
         return resp.headers.get("Content-Type", "application/octet-stream")
+
+
+@router.get("/uploads/health")
+async def uploads_health():
+    """Diagnostik (aus mvpcode übernommen) — welcher Storage-Backend ist aktiv?
+    Public, gibt keine Keys oder Bucket-Inhalte aus.
+
+    Diese Route nutzt den Emergent-Objstore direkt (siehe oben); lib/object_storage
+    (Supabase-Shim aus mvpcode) ist bewusst NICHT angeschlossen, weil bestehende
+    Objekte im Emergent-Storage liegen und ein ENV-getriebener Wechsel sie
+    unauffindbar machen würde.
+    """
+    return {
+        "backend": "emergent",
+        "url": STORAGE_URL,
+        "initialized": storage_key is not None,
+        "key_configured": bool(EMERGENT_LLM_KEY),
+    }
 
 
 @router.post("/upload/profile-picture")

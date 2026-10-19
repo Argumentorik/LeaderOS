@@ -18,7 +18,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { readConsent, writeConsent, CONSENT_DEFAULTS } from '../../lib/consent';
-import { Cookie } from 'lucide-react';
 
 export const CookieConsent = () => {
   const { lang } = useLanguage();
@@ -54,9 +53,9 @@ export const CookieConsent = () => {
   return (
     <div className="fixed inset-x-0 bottom-0 z-[9999] p-2.5 sm:p-6 pointer-events-none" data-testid="cookie-consent-banner">
       <div className="mx-auto max-w-3xl pointer-events-auto rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-2xl shadow-black/40 overflow-hidden">
-        <div className="p-5 sm:p-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-[#BFFF00] flex items-center justify-center shrink-0"><Cookie size={19} className="text-[#0A0A0A]" /></div>
+        <div className="p-3.5 sm:p-6">
+          <div className="flex items-start gap-3 mb-3 sm:mb-4">
+            <div className="hidden sm:flex w-10 h-10 rounded-xl bg-[#BFFF00] items-center justify-center shrink-0 text-[#0A0A0A] font-black text-lg">🍪</div>
             <div>
               <h3 className="text-white font-black text-[15px] sm:text-base mb-0.5 sm:mb-1">
                 {de ? 'Datenschutz & Cookies' : 'Privacy & Cookies'}

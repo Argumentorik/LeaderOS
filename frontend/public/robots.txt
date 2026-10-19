@@ -1,25 +1,41 @@
-# Leader-OS robots policy (leaderos.de)
-# Öffentliche Seiten für Suchmaschinen UND Antwort-Maschinen (ChatGPT, Perplexity, Claude, Gemini, Copilot) freigeben.
-# App-Routen (nur mit Login) und API werden nicht indexiert.
+# Default robots = leader-os.de (canonical Vercel landing).
+# leader-check.de is served `robots-leader-check.txt` via host-based
+# rewrite in vercel.json. See docs/DOMAIN_TOPOLOGY.md.
 
 User-agent: *
+Disallow: /preview/
 Allow: /
-Allow: /fragen/
-Allow: /wlad-jachtchenko/
-Allow: /kurse-uebersicht/
 Allow: /login
-Allow: /signup
-Allow: /for-teams
-Allow: /sicherheit
-Allow: /changelog
+Allow: /event
+Allow: /webinar
+Allow: /fuehrung-beginnt-hier
+Allow: /journal
+Allow: /journal/
+Allow: /fragen
+Allow: /start
+Allow: /os
+Allow: /app
+Allow: /wladbot
+Allow: /kurse
+Allow: /kommunikation
+Allow: /training
+Allow: /ki-fuehrungskraft
+Allow: /leaderos
+Allow: /wlad-jachtchenko
+Allow: /wlad
+Allow: /about
+Allow: /ueber-wlad
 Allow: /impressum
 Allow: /datenschutz
 Allow: /agb
 Allow: /widerruf
-Allow: /llms.txt
-Allow: /seo/
+Allow: /leadership-programm
+Allow: /kurse-uebersicht/
+Allow: /for-teams
+Allow: /sicherheit
+Allow: /changelog
 
-# Authentifizierte Bereiche
+# Authenticated areas — never index, never follow
 Disallow: /dashboard
 Disallow: /chat
 Disallow: /tools
@@ -33,9 +49,6 @@ Disallow: /my-path
 Disallow: /progress
 Disallow: /community
 Disallow: /coaching
-Disallow: /kurse
-Disallow: /lern-videos
-Disallow: /video-guide
 Disallow: /downloads
 Disallow: /referral
 Disallow: /enterprise
@@ -43,99 +56,175 @@ Disallow: /challenge
 Disallow: /profile
 Disallow: /payment-success
 Disallow: /onboarding
+Disallow: /auth/
 Disallow: /daily-checkin
 Disallow: /leader-diagnose
-Disallow: /auth/
+Disallow: /video-guide
+# Geteilte Missionen/Ordner (nutzergenerierte Inhalte) — nicht indexieren
 Disallow: /m/
 Disallow: /f/
 
-# API
+# API routes — never index
 Disallow: /api/
 
-# Admin
+# Newsletter double-opt-in confirmation surface — never index
+Disallow: /newsletter/
+
+# Admin — never index (path is also non-guessable but defense in depth)
 Disallow: /wlad-control-x7k9q2
 
-# ── Suchmaschinen ─────────────────────────────────────────────────────────
-# Kein Crawl-delay für Bing: ChatGPT-Search, Copilot und DuckDuckGo sitzen auf dem Bing-Index.
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
+# Bing bekommt VOLLE Crawl-Geschwindigkeit (Aug 2026).
+# Vorher stand hier `Crawl-delay: 5` — das ist ein Limit von max.
+# 17.280 Seiten/Tag und hat uns doppelt geschadet: (a) Bing selbst,
+# (b) ChatGPT-Search, Copilot und DuckDuckGo, die alle auf dem
+# Bing-Index sitzen. Crawl-Budget-Steuerung gehört in die Bing
+# Webmaster Tools (Crawl Control), nicht in robots.txt.
 User-agent: bingbot
 Allow: /
+Disallow: /dashboard
+Disallow: /api/
 
-User-agent: DuckDuckBot
-Allow: /
-
-# ── KI-/Antwort-Crawler — explizit erlaubt (AEO/GEO) ─────────────────────
-User-agent: GPTBot
+User-agent: msnbot
 Allow: /
 Disallow: /api/
-Disallow: /dashboard
 
-User-agent: ChatGPT-User
+# Yandex bleibt gedrosselt · kein relevanter Traffic für DACH-B2B,
+# aber aggressives Crawl-Verhalten.
+User-agent: YandexBot
+Crawl-delay: 10
+
+# ════════════════════════════════════════════════════════════════════
+# AI-Search crawlers · ALLOWED on purpose.
+# ════════════════════════════════════════════════════════════════════
+# McKinsey Oct 2025: 50% of consumers use AI-powered search today,
+# $750B in revenue flows through GEO by 2028. Blocking the LLM
+# training/inference crawlers = invisible to ChatGPT, Claude,
+# Perplexity, Google AI Overview, Gemini, Copilot. We explicitly
+# allow them on every public surface and disallow the same auth-
+# only surfaces we hide from generic crawlers above.
+#
+# Reference: https://platform.openai.com/docs/bots
+# Reference: https://docs.anthropic.com/en/docs/build-with-claude/web-bots
+# Reference: https://docs.perplexity.ai/guides/perplexity-bot
+
+User-agent: GPTBot
 Allow: /
+Allow: /journal/
+Disallow: /dashboard
+Disallow: /chat
+Disallow: /tools
+Disallow: /api/
+Disallow: /onboarding
+Disallow: /profile
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
 
 User-agent: ClaudeBot
 Allow: /
-Disallow: /api/
 Disallow: /dashboard
+Disallow: /api/
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /api/
 
 User-agent: Claude-Web
 Allow: /
-
-User-agent: Google-Extended
-Allow: /
 Disallow: /api/
-Disallow: /dashboard
-
-User-agent: Google-CloudVertexBot
-Allow: /
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /dashboard
+Disallow: /api/
 
 User-agent: Perplexity-User
 Allow: /
+Disallow: /api/
 
-User-agent: Applebot
+User-agent: Google-Extended
 Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+User-agent: GoogleOther
+Allow: /
+Disallow: /api/
 
 User-agent: Applebot-Extended
 Allow: /
-
-User-agent: DuckAssistBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: MistralBot
-Allow: /
+Disallow: /api/
 
 User-agent: CCBot
 Allow: /
-Disallow: /api/
 Disallow: /dashboard
-
-User-agent: FacebookBot
-Allow: /
-
-User-agent: meta-externalagent
-Allow: /
+Disallow: /chat
+Disallow: /api/
 
 User-agent: cohere-ai
 Allow: /
+Disallow: /api/
 
-# ── SEO-Scraper ohne Nutzen ──────────────────────────────────────────────
+User-agent: Bytespider
+Allow: /
+Disallow: /api/
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /api/
+
+User-agent: FacebookBot
+Allow: /
+Disallow: /api/
+
+User-agent: MistralBot
+Allow: /
+Disallow: /api/
+
+User-agent: DiffbotBot
+Allow: /
+Disallow: /api/
+
+# Apple Intelligence / Siri / Spotlight-Suggestions. Applebot-Extended
+# (oben) steuert nur das Training — Applebot selbst ist der Crawler,
+# der die Antworten ausliefert. Ohne ihn sind wir in Siri unsichtbar.
+User-agent: Applebot
+Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+# DuckDuckGo-Assist (sitzt auf Bing + eigenem Index)
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /api/
+
+# Amazon (Alexa+/Rufus-Antworten)
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+
+# Google Vertex-AI-Grounding · speist Gemini-Antworten mit Live-Quellen
+User-agent: Google-CloudVertexBot
+Allow: /
+Disallow: /api/
+
+# Microsoft Copilot (eigener Agent neben bingbot)
+User-agent: MicrosoftPreview
+Allow: /
+Disallow: /api/
+
+# ════════════════════════════════════════════════════════════════════
+# SEO-spam scrapers · still blocked.
+# ════════════════════════════════════════════════════════════════════
+# These crawl for competitive-intelligence resale or to feed
+# link-building spam farms · no value to us, blocked entirely.
+
 User-agent: AhrefsBot
 Disallow: /
 
@@ -151,4 +240,11 @@ Disallow: /
 User-agent: PetalBot
 Disallow: /
 
-Sitemap: https://leaderos.de/sitemap.xml
+# ════════════════════════════════════════════════════════════════════
+# Sitemap references · canonical index points at all sub-sitemaps.
+# ════════════════════════════════════════════════════════════════════
+Sitemap: https://leader-os.de/sitemap-index.xml
+Sitemap: https://leader-os.de/sitemap.xml
+Sitemap: https://leader-os.de/sitemap-articles.xml
+Sitemap: https://leader-os.de/sitemap-image.xml
+Sitemap: https://leader-os.de/sitemap-news.xml

@@ -201,64 +201,51 @@ export default function MyPathPage() {
         </div>
       </div>
     }>
-      <div className="p-6 lg:p-8 max-w-5xl" data-testid="my-path-page">
+      <div className="p-6 lg:p-8 xl:px-14 w-full" data-testid="my-path-page">
+        {/* Iter 92.28: Beratungs-Banner — tier-aware, fits naturally with the "Path" framing */}
+        <div className="mb-6">
+          <SmartConsultationBanner placement="mypath-top" />
+        </div>
+
         <div className="mb-6" data-anim="mypath-header">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles size={14} className="text-[#BFFF00]" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">MY PATH</span>
+            <Sparkles size={14} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">MEIN FORTSCHRITT</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-            Deine <span className="text-[#BFFF00]">Leadership</span> Journey
+            Deine <span className="text-[#6B8A00] dark:text-[#BFFF00]">Leadership</span> Journey
           </h1>
-          <p className="text-base sm:text-lg text-white/50 mt-6 max-w-xl leading-relaxed font-light">
-            Fünf Stufen der Führung. Jedes Level-Up bringt dir ein Zertifikat
-            und neue Fähigkeiten · von Teamplayer bis Visionär.
+          <p className="text-base text-muted-foreground mt-2 max-w-lg">
+            5 Stufen der Führung. Jedes Level-Up bringt dir ein Zertifikat und neue Fähigkeiten.
           </p>
         </div>
 
         <Tabs defaultValue="progress" className="w-full">
-          <TabsList
-            className="mb-10 lg:mb-12 bg-transparent border-b border-white/[0.06] rounded-none p-0 h-auto w-full justify-start gap-8"
-            data-testid="mypath-tabs"
-            data-anim="mypath-tabs"
-          >
+          <TabsList className="mb-8 bg-muted/40 p-1 h-auto w-full sm:w-auto" data-testid="mypath-tabs" data-anim="mypath-tabs">
             <TabsTrigger
               value="progress"
-              className="flex items-center gap-2 px-4 py-2 text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-card"
+              className="flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-card"
               data-testid="tab-progress"
             >
-              <TrendingUp size={14} strokeWidth={1.5} /> Mein Fortschritt
-            </TabsTrigger>
-            <TabsTrigger
-              value="videos"
-              className="flex items-center gap-2 px-4 py-2 text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-card"
-              data-testid="tab-videos"
-            >
-              <PlayCircle size={14} /> Lernvideos
+              <TrendingUp size={14} /> Mein Fortschritt
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="progress" className="mt-0" data-testid="tab-content-progress">
             {currentMeta && (
-              <div className="mb-12" data-anim="mypath-current-level">
-                <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] overflow-hidden">
-                  <div className="p-7 lg:p-8 flex items-center gap-6">
-                    <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center"
-                      style={{
-                        backgroundColor: `${currentMeta.color}14`,
-                        border: `1px solid ${currentMeta.color}30`,
-                      }}
-                    >
-                      {(() => { const I = LEVEL_ICONS[data.current_index]; return <I size={22} strokeWidth={1.5} style={{ color: currentMeta.color }} />; })()}
+              <div className="mb-8" data-anim="mypath-current-level">
+                <div className="rounded-2xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${currentMeta.color}15, ${currentMeta.color}05)`, border: `1px solid ${currentMeta.color}20` }}>
+                  <div className="p-5 flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: `linear-gradient(135deg, ${currentMeta.color}, ${currentMeta.color}CC)`, boxShadow: `0 8px 25px ${currentMeta.color}30` }}>
+                      {(() => { const I = LEVEL_ICONS[data.current_index]; return <I size={22} className="text-white" />; })()}
                     </div>
                     <div className="flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: currentMeta.color }}>Aktuelles Level</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: ink(currentMeta.color) }}>Aktuelles Level</p>
                       <h2 className="text-xl font-black">{data.current_level}</h2>
                       <p className="text-xs text-muted-foreground">{currentMeta.subtitle}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-2xl font-black" style={{ color: currentMeta.color }}>{data.xp}</p>
+                      <p className="text-2xl font-black" style={{ color: ink(currentMeta.color) }} data-testid="mypath-xp-value">{data.xp}</p>
                       <p className="text-[9px] text-muted-foreground">XP</p>
                     </div>
                   </div>
@@ -285,9 +272,9 @@ export default function MyPathPage() {
 
             <div className="flex items-center justify-center py-8 max-w-3xl" data-anim="mypath-trophy">
               <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl ${data.current_index === 4 ? 'bg-[#BFFF00]/10 border border-[#BFFF00]/20' : 'bg-muted/20 border border-border'}`}>
-                <Trophy size={18} className={data.current_index === 4 ? 'text-[#BFFF00]' : 'text-muted-foreground/30'} />
-                <span className={`text-sm font-bold ${data.current_index === 4 ? 'text-[#BFFF00]' : 'text-muted-foreground/40'}`}>
-                  {data.current_index === 4 ? 'Visionär erreicht! Du gestaltest die Zukunft der Führung.' : 'Werde Visionär — entwickle deine Zukunftsperspektive'}
+                <Trophy size={18} className={data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/30'} />
+                <span className={`text-sm font-bold ${data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/40'}`}>
+                  {data.current_index === 4 ? 'Visionär erreicht! Du gestaltest die Zukunft der Führung.' : 'Werde Visionär · entwickle deine Zukunftsperspektive'}
                 </span>
               </div>
             </div>

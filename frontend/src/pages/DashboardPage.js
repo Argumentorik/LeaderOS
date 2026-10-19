@@ -7,6 +7,8 @@ import { Button } from '../components/ui/button';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { OnboardingTour } from '../components/shared/OnboardingTour';
+import { OnboardingVideoModal } from '../components/onboarding/OnboardingVideoModal';
+import { StripeModeBanner } from '../components/admin/StripeModeBanner';
 import { AnimatedNumber } from '../components/dashboard/AnimatedNumber';
 import { StatCardsRow, QuickActionsGrid } from '../components/dashboard/StatCards';
 import { WladHubDiagnosisCard } from '../components/dashboard/WladHubCard';
@@ -138,6 +140,7 @@ export default function DashboardPage() {
       {/* pb-28: Platz für Support-Widget/Feedback-Hinweis unten rechts (Iter 185) */}
       <div className="p-6 lg:p-10 xl:px-14 pb-28 w-full min-h-screen cascade" data-testid="dashboard-page">
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
+        <OnboardingVideoModal />
 
         {/* ── 1 · Datum und Stand (Iter 185) ── */}
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -270,40 +273,40 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2">
                     <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground">{de ? 'Dein Leadership-Level' : 'Your Leadership Level'}</h3>
                   </div>
-                  <Badge className="text-[10px] font-bold bg-[#BFFF00]/15 text-brand border-0">
+                  <Badge className="text-[10px] font-bold bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] border-0">
                     LVL {levelIndex + 1} / 5
                   </Badge>
                 </div>
 
                 {/* Level name + descriptive label */}
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-xl bg-[#BFFF00] flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20 shrink-0">
                     <span className="text-2xl font-black text-[#0A0A0A]">{levelIndex + 1}</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-2xl tracking-tight truncate" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>{levelName}</p>
-                    <p className="text-[12px] text-muted-foreground font-light truncate mt-0.5">{levelLabel}</p>
+                    <p className="text-xl font-black tracking-tight truncate">{levelName}</p>
+                    <p className="text-[12px] text-muted-foreground font-medium truncate">{levelLabel}</p>
                   </div>
-                  <div className="text-right shrink-0 kpi-glow">
-                    <p className="text-3xl leading-none num-ticker" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}><AnimatedNumber value={xpCurrent} /></p>
-                    <p className="text-[10px] text-muted-foreground/70 font-medium mt-1 uppercase tracking-[0.15em]">XP</p>
+                  <div className="text-right shrink-0">
+                    <p className="text-2xl font-black leading-none"><AnimatedNumber value={xpCurrent} /></p>
+                    <p className="text-[10px] text-muted-foreground font-medium mt-0.5">XP</p>
                   </div>
                 </div>
 
                 {/* Progress to next */}
-                <div className="space-y-2">
-                  <div className="h-1.5 rounded-full bg-foreground/[0.08] overflow-hidden">
-                    <div className="h-full rounded-full bg-[#BFFF00] transition-all duration-1000"
+                <div className="space-y-1.5">
+                  <div className="h-2.5 rounded-full bg-gray-100 dark:bg-muted overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] transition-all duration-1000 shadow-[0_0_8px_rgba(191,255,0,0.4)]"
                       style={{ width: `${Math.min(100, levelProgress)}%` }} />
                   </div>
                   <div className="flex items-center justify-between text-[10px] font-semibold">
                     <span className="text-muted-foreground">{levelProgress}% {de ? 'zum nächsten Level' : 'to next level'}</span>
                     {nextLevel ? (
-                      <span className="text-brand">
+                      <span className="text-[#4A6200] dark:text-[#BFFF00]">
                         {xpToNext > 0 ? `${xpToNext} XP → ${nextLevel}` : nextLevel}
                       </span>
                     ) : (
-                      <span className="text-brand">{de ? 'MAX LEVEL' : 'MAX LEVEL'}</span>
+                      <span className="text-[#4A6200] dark:text-[#BFFF00]">{de ? 'MAX LEVEL' : 'MAX LEVEL'}</span>
                     )}
                   </div>
                 </div>
@@ -362,26 +365,26 @@ export default function DashboardPage() {
             {/* Wlad's Daily Motivation — demoted to sidebar (Iter 118 Godmode) */}
             <WladMotivationCard de={de} />
 
-            {/* This Week Calendar */}
-            <WeekCalendarCard de={de} onNavigate={navigate} />
+            {/* Next 3 Events — Donnerstag-Cohort (Iter 92.9) */}
+            <UpcomingEventsCard locale={de ? 'de' : 'en'} />
 
             {/* Referral Card */}
-            <Card className="surface-card card-lift" data-testid="referral-upsell-card" data-anim="dash-widget">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center"><Gift size={14} strokeWidth={1.5} className="text-brand" /></div>
+            <Card className="bg-[#0A0A0A] text-white border-0" data-testid="referral-upsell-card" data-anim="dash-widget">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#BFFF00]/15 flex items-center justify-center"><Gift size={13} className="text-[#BFFF00]" /></div>
                   <div>
-                    <p className="text-sm font-semibold">{de ? 'Freunde einladen' : 'Invite friends'}</p>
-                    <p className="text-[10px] text-muted-foreground font-light">{de ? 'Verdiene Rewards' : 'Earn rewards'}</p>
+                    <p className="text-xs font-bold">{de ? 'Freunde einladen' : 'Invite friends'}</p>
+                    <p className="text-[9px] text-white/40">{de ? 'Verdiene Rewards' : 'Earn rewards'}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={() => navigate('/referral')} size="sm" className="flex-1 bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] text-[10px] font-bold h-8" data-testid="referral-share-btn">
-                    <Share2 size={10} strokeWidth={1.5} className="mr-1" /> TEILEN
+                    <Share2 size={10} className="mr-1" /> TEILEN
                   </Button>
                   {referralCode && (
-                    <Button onClick={copyReferral} size="sm" variant="outline" className="border-border text-foreground hover:bg-foreground/5 text-[10px] h-8" data-testid="referral-copy-btn">
-                      <Copy size={10} strokeWidth={1.5} className="mr-1" /> {referralCode}
+                    <Button onClick={copyReferral} size="sm" variant="outline" className="border-white/15 text-white hover:bg-white/10 text-[10px] h-8" data-testid="referral-copy-btn">
+                      <Copy size={10} className="mr-1" /> {referralCode}
                     </Button>
                   )}
                 </div>

@@ -210,7 +210,6 @@ async def create_chat_session(data: ChatSessionCreate, request: Request):
             })
     await db.chat_sessions.insert_one(doc)
     return {"session_id": session_id, "title": data.title, "agent": data.agent, "folder_id": doc.get("folder_id"), "created_at": doc["created_at"]}
-    return {"session_id": session_id, "title": data.title, "agent": data.agent, "folder_id": doc.get("folder_id"), "created_at": doc["created_at"]}
 
 
 @router.get("/chat/sessions")
@@ -326,10 +325,6 @@ async def _ensure_session(session_id: str, user_id: str, message: str, agent: st
         "title": fix_brand_names(unescape_text(message)[:50]), "agent": agent,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
-    if folder_id:
-        doc["folder_id"] = folder_id
-    await db.chat_sessions.insert_one(doc)
     }
     if folder_id:
         doc["folder_id"] = folder_id

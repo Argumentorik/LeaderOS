@@ -7,24 +7,29 @@
         <meta name="color-scheme" content="dark light" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <!-- PRIMARY SEO — German-first, Leadership + KI focus                -->
-        <!-- Iter 92.41 (Mert): leaderos.de is the canonical platform domain. -->
-        <!-- Marketing landing pages live in a separate Vercel codebase.       -->
+        <!-- PRIMARY SEO · German-first, Leadership + KI focus                -->
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <title>Leader-OS — KI Leadership System für Führungskräfte von Wlad Jachtchenko</title>
-        <meta name="description" content="Werde KI-native Führungskraft in 30 Tagen. Leader-OS ist das KI Leadership Trainingssystem von Wlad Jachtchenko: AI Coach, Storytelling für Entscheider, EQ-Training, Video-Missionen mit KI-Analyse. Für Manager, CEOs und Teamleads." />
-        <meta name="keywords" content="KI Leadership, AI Leadership, Führungskräfte Training, KI für Manager, Leadership Kommunikation, Storytelling für Entscheider, EQ Training Führungskräfte, Leadership Management, Strategisches Denken, KI Coach, Führungstraining online, Leadership Skills, KI-native Führungskraft, Manager Coaching, Wlad Jachtchenko, Leadership Programm, Leadership OS, AI Coach Deutsch" />
+        <title>Führungskräftetraining online · KI-Coach WladBot · LeaderOS</title>
+        <meta name="description" content="Führung trainieren statt lernen: 10 Kurse, KI-Coach WladBot mit der Methodik von Wlad Jachtchenko, Simulationen und tägliche 15-Minuten-Drills. 14 Tage kostenlos, ohne Karte." />
+        <meta name="keywords" content="KI Leadership, AI Leadership, Führungskräfte Training, KI für Manager, Leadership Kommunikation, Boardroom Rhetorik, EQ Training Führungskräfte, Leadership Management, Strategisches Denken, KI Coach, Führungstraining online, Leadership Skills, KI-native Führungskraft, Manager Coaching, Wlad Jachtchenko, 30-Tage-Challenge Leadership, Leadership OS, AI Coach Deutsch" />
         <meta name="author" content="Wlad Jachtchenko" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
-        <meta name="google-site-verification" content="%REACT_APP_GSC_VERIFICATION%" />
-        <!-- Preview-/Staging-Hosts bleiben noindex (Google wertet per JS gesetzte robots-Metas aus). -->
-        <script>(function(){if(!/(^|\.)leaderos\.de$/.test(location.hostname)){var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m);}})();</script>
+        <!-- Preview-/Staging-Hosts bleiben noindex (Google wertet per JS gesetzte robots-Metas aus).
+             Indexierbar bleiben nur die Produktions-Hosts: leader-os.de, leaderos.de,
+             leader-check.de, leadercheck.de (jeweils optional mit www.). -->
+        <script>(function(){if(!/^(www\.)?leader-?(os|check)\.de$/i.test(location.hostname)){var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m);}})();</script>
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://leaderos.de/" />
-        <link rel="alternate" hreflang="de-DE" href="https://leaderos.de/" />
-        <link rel="alternate" hreflang="de-AT" href="https://leaderos.de/" />
-        <link rel="alternate" hreflang="de-CH" href="https://leaderos.de/" />
-        <link rel="alternate" hreflang="x-default" href="https://leaderos.de/" />
+        <link rel="canonical" href="https://leader-os.de/" />
+        <link rel="alternate" hreflang="de" href="https://leader-os.de/" />
+        <link rel="alternate" hreflang="x-default" href="https://leader-os.de/" />
+        <!-- LLM-discovery manifest (emerging convention) · gives ChatGPT,
+             Claude, Perplexity et al. a concise, structured summary of
+             the site they can pull on a single fetch. -->
+        <link rel="llms" href="/llms.txt" />
+        <!-- RSS feed · discoverable to Feedly + Inoreader + Mailchimp RSS-
+             to-email + Google Discover. Browsers auto-show the orange "feed
+             available" indicator when this link is present. -->
+        <link rel="alternate" type="application/rss+xml" title="LeaderOS Feldnotizen · Wlad Jachtchenko" href="https://leader-os.de/rss.xml" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
         <!-- OPEN GRAPH · LinkedIn, Facebook, Slack, Discord                  -->
@@ -33,11 +38,11 @@
         <meta property="og:site_name" content="LeaderOS" />
         <meta property="og:locale" content="de_DE" />
         <meta property="og:locale:alternate" content="en_US" />
-        <meta property="og:url" content="https://leaderos.de/" />
-        <meta property="og:title" content="Leader-OS — KI Leadership System für Führungskräfte" />
-        <meta property="og:description" content="Werde KI-native Führungskraft in 30 Tagen. Persönlicher KI-Coach, Video-Missionen mit KI-Analyse, Storytelling für Entscheider & EQ-Training — von Wlad Jachtchenko." />
-        <meta property="og:image" content="https://leaderos.de/og-default.jpg" />
-        <meta property="og:image:secure_url" content="https://leaderos.de/og-default.jpg" />
+        <meta property="og:url" content="https://leader-os.de/" />
+        <meta property="og:title" content="LeaderOS · 14 Tage kostenlos testen. Dein Führungs-OS mit Wlad." />
+        <meta property="og:description" content="Elf Frameworks. Ein KI-Coach. 14 Tage kostenlos · keine Karte · jederzeit kündbar. Wlad Jachtchenko · 3× SPIEGEL-Bestseller. Werde jetzt Teil von LeaderOS." />
+        <meta property="og:image" content="https://leader-os.de/og-home.jpg" />
+        <meta property="og:image:secure_url" content="https://leader-os.de/og-home.jpg" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -49,17 +54,14 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@WladTraining" />
         <meta name="twitter:creator" content="@WladTraining" />
-        <meta name="twitter:title" content="Leader-OS — KI Leadership System" />
-        <meta name="twitter:description" content="Werde KI-native Führungskraft in 30 Tagen. KI-Coach, Video-Missionen, Storytelling für Entscheider." />
-        <meta name="twitter:image" content="https://leaderos.de/og-default.jpg" />
-        <meta name="twitter:image:alt" content="Leader-OS — KI Leadership System" />
+        <meta name="twitter:title" content="LeaderOS · 14 Tage kostenlos testen." />
+        <meta name="twitter:description" content="Elf Frameworks. KI-Coach 24/7. Wlad Jachtchenko. 14 Tage kostenlos · keine Karte. Werde Teil von LeaderOS." />
+        <meta name="twitter:image" content="https://leader-os.de/og-home.jpg" />
+        <meta name="twitter:image:alt" content="LeaderOS · Führe besser. Jeden Tag. · 14 Tage kostenlos" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <!-- STRUCTURED DATA — Entity-Graph (Organization + Person + WebSite + App) -->
-        <!-- Seiten-spezifisches Schema (FAQPage, Course) liegt NICHT hier:     -->
-        <!-- die Shell wird auf JEDER Route ausgeliefert. FAQ/Kurse/Person →    -->
-        <!-- statische Seiten /fragen/, /kurse-uebersicht/, /wlad-jachtchenko/  -->
-        <!-- (generiert von backend/scripts_seo_pages.py).                      -->
+        <!-- STRUCTURED DATA · JSON-LD (Organization + Course + Person)       -->
+        <!-- Helps Google show rich snippets / knowledge panel                -->
         <!-- ════════════════════════════════════════════════════════════════ -->
         <script type="application/ld+json">
         {
@@ -67,132 +69,123 @@
           "@graph": [
             {
               "@type": "Organization",
-              "@id": "https://leaderos.de/#organization",
-              "name": "Leader-OS",
-              "legalName": "Argumentorik-Akademie GmbH",
-              "alternateName": [
-                "LeaderOS",
-                "Leader OS",
-                "WladBot",
-                "Argumentorik-Akademie"
-              ],
-              "url": "https://leaderos.de",
+              "@id": "https://leader-os.de/#organization",
+              "name": "LeaderOS",
+              "alternateName": ["LeaderOS", "Leader OS", "WladBot"],
+              "url": "https://leader-os.de",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://leaderos.de/icon-512.png",
+                "url": "https://leader-os.de/logo-512.png",
                 "width": 512,
                 "height": 512
               },
               "founder": {
-                "@id": "https://leaderos.de/#wlad"
+                "@id": "https://leader-os.de/#wlad"
               },
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Tölzer Str. 1",
-                "postalCode": "82031",
-                "addressLocality": "Grünwald",
-                "addressCountry": "DE"
-              },
-              "areaServed": [
-                "DE",
-                "AT",
-                "CH"
-              ],
-              "email": "support@leaderos.de",
               "sameAs": [
                 "https://www.linkedin.com/in/wladjachtchenko/",
-                "https://www.youtube.com/@WladTraining",
-                "https://argumentorik.com/"
+                "https://www.youtube.com/@WladTraining"
               ],
-              "description": "KI-Leadership-Trainingssystem für Führungskräfte im DACH-Raum — KI-Coach, Video-Missionen mit KI-Analyse, Kurs-Bibliothek, Interaktiver Wlad — auf Basis der Methodik von Wlad Jachtchenko."
+              "description": "KI Leadership Trainingssystem für Führungskräfte · AI Coach, Video-Missionen, Boardroom-Rhetorik und EQ-Training basierend auf der Leadership-Methodik von Wlad Jachtchenko."
             },
             {
               "@type": "Person",
-              "@id": "https://leaderos.de/#wlad",
+              "@id": "https://leader-os.de/#wlad",
+              "mainEntityOfPage": "https://leader-os.de/wlad-jachtchenko",
               "name": "Wlad Jachtchenko",
-              "alternateName": [
-                "Wladislaw Jachtchenko"
-              ],
-              "givenName": "Wladislaw",
+              "givenName": "Wlad",
               "familyName": "Jachtchenko",
-              "jobTitle": [
-                "Rhetorik-Trainer",
-                "Leadership-Coach",
-                "Keynote-Speaker",
-                "Bestseller-Autor"
-              ],
-              "description": "Rhetorik-Trainer, Leadership-Coach, Keynote-Speaker und dreifacher SPIEGEL-Bestseller-Autor (Weiße Rhetorik, Dunkle Rhetorik, Die 5 Rollen einer Führungskraft). Gründer der Argumentorik-Akademie; trainiert seit 2007 Führungskräfte aus DAX-Konzernen und Mittelstand.",
-              "url": "https://leaderos.de/wlad-jachtchenko/",
-              "image": "https://leaderos.de/og-default.jpg",
-              "worksFor": {
-                "@id": "https://leaderos.de/#organization"
-              },
+              "alternateName": ["Wladislaw Jachtchenko", "Wlad Jachtschenko", "Vlad Yachtchenko"],
+              "jobTitle": "Argumentations-Coach · Bestseller-Autor · Gründer",
+              "description": "Europas führender Argumentations-Coach. 3× SPIEGEL-Bestseller, 400 000+ trainierte Klienten, Coaching-Praxis seit 2007. Gründer der Argumentorik-Akademie und der KI-Coaching-Plattform LeaderOS.",
+              "url": "https://leader-os.de/wlad-jachtchenko",
+              "image": "https://leader-os.de/wlad/wlad-portrait.jpg",
+              "birthDate": "1985-01-11",
+              "birthPlace": { "@type": "Place", "name": "Dnipro, Ukraine" },
               "knowsAbout": [
-                "Rhetorik",
-                "Führungskräfte-Coaching",
-                "Leadership-Training",
+                "Boardroom-Rhetorik",
                 "Argumentation",
+                "Führungskräfte-Coaching",
                 "Verhandlungsführung",
-                "Storytelling für Entscheider",
-                "Executive Presence",
-                "KI-Coaching für Führungskräfte"
+                "Dunkle Rhetorik",
+                "Emotionale Intelligenz",
+                "KI Leadership",
+                "Harvard-Verhandlungsmethode",
+                "Schulz von Thun Kommunikationsmodell"
+              ],
+              "worksFor": [
+                { "@type": "Organization", "name": "LeaderOS", "url": "https://leader-os.de" },
+                { "@type": "EducationalOrganization", "name": "Argumentorik-Akademie", "url": "https://wlad-jachtchenko.com" }
               ],
               "sameAs": [
                 "https://www.linkedin.com/in/wladjachtchenko/",
                 "https://www.youtube.com/@WladTraining",
-                "https://www.wladislaw-jachtchenko.com/",
-                "https://argumentorik.com/",
-                "https://www.penguin.de/autoren/wladislaw-jachtchenko/624791",
-                "https://argumentorik.podbean.com/"
+                "https://wladjachtchenko.de",
+                "https://wladjachtchenko.de/buecher",
+                "https://podcast.wladjachtchenko.de"
               ]
             },
             {
-              "@type": "WebSite",
-              "@id": "https://leaderos.de/#website",
-              "url": "https://leaderos.de",
-              "name": "Leader-OS",
-              "publisher": {
-                "@id": "https://leaderos.de/#organization"
+              "@type": "Course",
+              "name": "LeaderOS · 30-Tage KI Leadership Challenge",
+              "description": "Persönlicher KI-Coach, 16 Video-Missionen mit KI-Bewertung, Boardroom-Rhetorik-Training und EQ-Entwicklung. 30 Tage transformierendes Leadership-Programm.",
+              "provider": {
+                "@id": "https://leader-os.de/#organization"
               },
-              "inLanguage": "de-DE"
-            },
-            {
-              "@type": "SoftwareApplication",
-              "@id": "https://leaderos.de/#app",
-              "name": "Leader-OS",
-              "applicationCategory": "EducationalApplication",
-              "operatingSystem": "Web",
+              "instructor": {
+                "@id": "https://leader-os.de/#wlad"
+              },
               "inLanguage": "de",
-              "author": {
-                "@id": "https://leaderos.de/#organization"
+              "educationalLevel": "Professional",
+              "audience": {
+                "@type": "EducationalAudience",
+                "audienceType": "Führungskräfte, Manager, CEOs, Teamleads"
               },
               "offers": [
-                {
-                  "@type": "Offer",
-                  "name": "Kostenlos",
-                  "price": "0",
-                  "priceCurrency": "EUR",
-                  "availability": "https://schema.org/InStock",
-                  "url": "https://leaderos.de/login"
-                },
                 {
                   "@type": "Offer",
                   "name": "Leadership OS",
                   "price": "997",
                   "priceCurrency": "EUR",
                   "availability": "https://schema.org/InStock",
-                  "url": "https://leaderos.de/coaching"
+                  "category": "Leadership Training"
                 },
                 {
                   "@type": "Offer",
                   "name": "Leadership OS PLUS",
                   "price": "4797",
-                  "price": "4797",
                   "priceCurrency": "EUR",
                   "availability": "https://schema.org/InStock",
-                  "url": "https://leaderos.de/coaching"
+                  "category": "Leadership Training + Coaching"
                 }
-              ]
+              ],
+              "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": "online",
+                "courseWorkload": "PT30D"
+              }
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://leader-os.de/#website",
+              "url": "https://leader-os.de",
+              "name": "LeaderOS",
+              "publisher": {
+                "@id": "https://leader-os.de/#organization"
+              },
+              "inLanguage": "de-DE"
+            },
+            {
+              "@type": "SoftwareApplication",
+              "name": "LeaderOS",
+              "applicationCategory": "EducationalApplication",
+              "operatingSystem": "Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "EUR",
+                "description": "14 Tage kostenlos testen, danach 30-Tage-Challenge ab 997 EUR"
+              }
             }
           ]
         }
@@ -210,10 +203,7 @@
         <link rel="manifest" href="/manifest.json" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <!-- PERFORMANCE — Preconnect + Preload fonts (kills FOUT)             -->
-        <!-- Iter 92.29 (Mert): MyPath headline ghosted because Outfit/Inter   -->
-        <!-- arrived 200ms after first paint. Preload + display:swap + DNS     -->
-        <!-- prefetch eliminate the serif-fallback flash.                       -->
+        <!-- PERFORMANCE · Preconnect to critical origins                     -->
         <!-- ════════════════════════════════════════════════════════════════ -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -221,19 +211,55 @@
         <!-- Eager TCP/TLS connect for the analytics + error stack so the first
              event fire (pageview, identify) doesn't pay the handshake. -->
         <link rel="dns-prefetch" href="https://eu.i.posthog.com" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-        <style>
-          /* Iter 92.29: zero-FOUT — define a system-sans fallback that closely
-             matches the metrics of Outfit so the swap is invisible. */
-          html, body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            font-display: swap;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-          }
-        </style>
+        <link rel="dns-prefetch" href="https://eu-assets.i.posthog.com" />
+        <link rel="dns-prefetch" href="https://browser.sentry-cdn.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
+        <!-- Social-share targets · users click these directly from ShareBar,
+             pre-resolving DNS makes the first click feel instant. -->
+        <link rel="dns-prefetch" href="https://www.linkedin.com" />
+        <link rel="dns-prefetch" href="https://twitter.com" />
+        <link rel="dns-prefetch" href="https://wa.me" />
+        <!-- App-tier handoff · most landing visitors who click 14-day-trial
+             land on leaderos.de · prefetch DNS so the cross-host nav is fast. -->
+        <link rel="dns-prefetch" href="https://leaderos.de" />
+        <link rel="dns-prefetch" href="https://leadercheck.de" />
+        <!-- Free-video funnel players · the lightbox embeds stream from
+             Drive today (Vimeo/YouTube-ready). Preconnect shaves the TLS
+             handshake off the first frame after the visitor hits play. -->
+        <link rel="preconnect" href="https://drive.google.com" />
+        <link rel="dns-prefetch" href="https://player.vimeo.com" />
+        <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
+        <!-- High-value internal next-routes · /journal is the second-most
+             visited page after /. Prefetch the bundle on idle so click is
+             instant. -->
+        <link rel="prefetch" href="/journal" as="document" />
+        <link rel="prefetch" href="/wlad-jachtchenko" as="document" />
+        <!-- LCP-critical · Wlad portrait is the hero avatar, the §04 chapter
+             photo, the lead-capture modal, and the appointment booking card.
+             Preload the 44KB WebP (was a 2.4MB mislabelled PNG) in parallel
+             with HTML parse. type-gated so only WebP-capable browsers fetch
+             it; the rare non-WebP browser loads the 97KB jpg via the img's
+             onError fallback chain. -->
+        <link rel="preload" as="image" href="/wlad/wlad-portrait.webp" type="image/webp" fetchpriority="high" />
+        <!-- Font payload trimmed from 6→3 weights per family · the brand DNA
+             uses 400 (body), 700 (semibold/labels), 900 (Outfit-Italic-Black
+             display headlines). Dropping the unused 500/600/800 cuts the
+             CSS + WOFF2 payload by ~40% with zero visual change. -->
+        <!-- Non-render-blocking font load · the stylesheet request itself was
+             render-blocking (~1.9s on mobile 4G per PageSpeed). Load it async
+             via the media-swap pattern so first paint uses the system-font
+             fallback immediately, then swaps to Outfit/Inter once ready
+             (display=swap already governs the FOUT). <noscript> keeps it
+             working with JS disabled. -->
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@300;400;500&family=Inter:wght@400;700;900&family=Outfit:ital,wght@0,400;0,700;1,900&family=Instrument+Serif:ital@0;1&display=swap"
+          media="print"
+          onload="this.media='all'"
+        />
+        <noscript>
+          <link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@300;400;500&family=Inter:wght@400;700;900&family=Outfit:ital,wght@0,400;0,700;1,900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+        </noscript>
 
         <!-- Harmless Chrome bug: silence DataCloneError on PerformanceServerTiming -->
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
@@ -306,28 +332,8 @@
             p(cal,ar);};})(window,"https://app.cal.com/embed/embed.js","init");
           Cal("init","beratung",{origin:"https://app.cal.com"});
           Cal.ns.beratung("ui",{
-            theme:"auto",
-            styles:{branding:{brandColor:"#BFFF00"}},
-            cssVarsPerTheme:{
-              light:{
-                "cal-brand":"#6B8A00",
-                "cal-brand-emphasis":"#5a7400",
-                "cal-brand-text":"#FFFFFF",
-                "cal-text":"#0A0A0A",
-                "cal-text-emphasis":"#000000",
-                "cal-bg-emphasis":"#F4F4F5",
-                "cal-bg":"#FFFFFF"
-              },
-              dark:{
-                "cal-brand":"#BFFF00",
-                "cal-brand-emphasis":"#D4FF4D",
-                "cal-brand-text":"#0A0A0A",
-                "cal-text":"#FFFFFF",
-                "cal-text-emphasis":"#FFFFFF",
-                "cal-bg-emphasis":"#1A1A1A",
-                "cal-bg":"#0A0A0A"
-              }
-            },
+            theme:"dark",
+            cssVarsPerTheme:{light:{"cal-brand":"#6B8A00"},dark:{"cal-brand":"#BFFF00"}},
             hideEventTypeDetails:false,
             layout:"month_view"
           });

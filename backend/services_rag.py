@@ -429,10 +429,6 @@ def _format_chunks_for_prompt(chunks: list[dict]) -> str:
             # Truncate the chunk to fit; better than dropping it entirely
             content = content[:budget_left].rsplit(" ", 1)[0] + " […]"
         snippet = header + content
-        if len(content) > budget_left:
-            # Truncate the chunk to fit; better than dropping it entirely
-            content = content[:budget_left].rsplit(" ", 1)[0] + " […]"
-        snippet = header + content
         lines.append(snippet)
         total += len(snippet)
     if not lines:
@@ -546,11 +542,6 @@ def invalidate_caches(reason: str = "") -> dict[str, int]:
     return {"queries_dropped": queries, "matrix_chunks_dropped": chunks}
 
 
-async def _noop_hits() -> list[dict]:
-    """Awaitable that yields no hits — lets gather() run when Voyage is down."""
-    return []
-
-
 def rag_status() -> dict[str, Any]:
     """Health-check for /api/rag-status or admin dashboards."""
     from services_embeddings import EMBED_MODEL_NAME, EMBED_PROVIDER, EMBEDDING_DIM, model_loaded
@@ -563,5 +554,4 @@ def rag_status() -> dict[str, Any]:
         "cache_size": len(_query_cache),
         "match_threshold": MATCH_THRESHOLD,
         "match_count": MATCH_COUNT,
-        "match_overfetch": MATCH_OVERFETCH,
     }

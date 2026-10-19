@@ -6,6 +6,7 @@ import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { FileText } from 'lucide-react';
 import { ModalityBadge } from './ModalityBadge';
+import { WladRichText } from './WladRichText';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
 import { unescapeText, deepUnescape } from '../../lib/textClean';
 

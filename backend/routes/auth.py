@@ -212,21 +212,6 @@ def _safe_user_output(user: dict) -> dict:
 
 # ========== REGISTER ==========
 
-MAX_REGISTER_ATTEMPTS = 5
-REGISTER_WINDOW_MINUTES = 60
-
-
-async def _check_register_rate_limit(ip: str) -> None:
-    cutoff = datetime.now(timezone.utc) - timedelta(minutes=REGISTER_WINDOW_MINUTES)
-    count = await db.login_attempts.count_documents({
-        "ip": ip,
-        "created_at": {"$gte": cutoff},
-        "method": "register",
-    })
-    if count >= MAX_REGISTER_ATTEMPTS:
-        raise HTTPException(status_code=429, detail="Too many registrations — try again later")
-
-
 @router.post("/register")
 async def register(data: UserRegister, request: Request, response: Response):
     # Abuse guard (pre-launch review): max 40 signups per IP per hour.
@@ -245,8 +230,6 @@ async def register(data: UserRegister, request: Request, response: Response):
     validate_password_strength(data.password)
     ctx = await _capture_login_context(request)
     ip_address = ctx["ip"]
-
-    await _check_register_rate_limit(ip_address)
 
     user_id = f"user_{uuid.uuid4().hex[:12]}"
     history_entry = _login_history_entry(ctx, method="register")
@@ -675,7 +658,9 @@ async def leader_os_sync(data: SyncExchange, request: Request, response: Respons
         import asyncio as _asyncio
         _asyncio.create_task(_send_signup_welcome(email, name or email.split("@")[0]))
 
-    token = create_jwt_token(user_id)
+    # HEAD: JWT trägt token_version (`tv`); bestehende Nutzer mit erhöhter
+    # Version würden sonst ein sofort ungültiges Token bekommen.
+    token = create_jwt_token(user_id, (existing or {}).get("token_version", 1))
     await _create_session(user_id, ip_address, response, method="leader_check")
 
     # Free-video funnel bridge: stop the email-only lead drip AND copy the

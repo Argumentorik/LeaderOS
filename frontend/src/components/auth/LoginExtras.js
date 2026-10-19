@@ -1,4 +1,4 @@
-import { Shield } from 'lucide-react';
+import { Shield, UserPlus, LogIn, ArrowRight } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -43,9 +43,11 @@ export const ModeSwitch = ({ mode, onSwitchMode, de }) => {
       <>
         <p className="text-[11px] text-white/25 mb-5 leading-relaxed">
           {de ? 'Mit der Erstellung akzeptierst du unsere ' : 'By creating an account, you agree to our '}
-          <span className="text-white/40 font-medium hover:text-[#BFFF00] transition-colors cursor-pointer">{de ? 'Nutzungsbedingungen' : 'Terms'}</span>
+          <a href="/agb" className="text-white/50 font-semibold hover:text-[#BFFF00] underline-offset-2 hover:underline transition-colors">{de ? 'Nutzungsbedingungen' : 'Terms'}</a>
           {de ? ' und ' : ' and '}
-          <span className="text-white/40 font-medium hover:text-[#BFFF00] transition-colors cursor-pointer">{de ? 'Datenschutz' : 'Privacy'}</span>
+          <a href="/datenschutz" className="text-white/50 font-semibold hover:text-[#BFFF00] underline-offset-2 hover:underline transition-colors">{de ? 'Datenschutz' : 'Privacy'}</a>
+          {' · '}
+          <a href="/sicherheit" className="text-white/50 font-semibold hover:text-[#BFFF00] underline-offset-2 hover:underline transition-colors" data-testid="trust-page-link">{de ? 'Sicherheit' : 'Security'}</a>
         </p>
         <button
           type="button"

@@ -257,9 +257,15 @@ async def send_magic_link_email(email: str, raw_token: str, base_url: str = "") 
     except Exception:
         next_event = None
 
-    base = _validate_base(base_url) or _frontend_base()
+    # Merge: HEAD übergibt bereits _frontend_url(request) (ENV oder trusted
+    # Origin, inkl. leader-os.de / Emergent-Previews). mvpcodes Allowlist
+    # (_validate_base) bleibt als erster Pfad; zusätzlich akzeptieren wir jede
+    # von services_email._trusted_origin anerkannte Origin, sonst Fallback.
+    from services_email import _trusted_origin
+    trusted = (base_url or "").rstrip("/") if base_url and _trusted_origin(base_url) else ""
+    base = (_validate_base(base_url) or trusted or _frontend_base()).rstrip("/")
     link = f"{base}/auth/magic?token={raw_token}"
-    html = _format_email_html(user_name, link)
+    html = _format_email_html(user_name, link, next_event, base)
     result = await send_email(
         to=email,
         subject="Dein 1-Klick-Login für WladBot",

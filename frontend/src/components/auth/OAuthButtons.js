@@ -1,5 +1,5 @@
 /**
- * Provider sign-in buttons · Google (real Google Identity Services),
+ * Provider sign-in buttons — Google (real Google Identity Services),
  * Apple (Sign In with Apple JS), Microsoft (MSAL via popup).
  *
  * Each button:
@@ -39,142 +39,44 @@ const MicrosoftBrand = ({ size = 18 }) => (
   </svg>
 );
 
-// Nike-DNA: weiß-mit-2px-Schwarz-Border, kein Shadow-Soup,
-// Hover→Lime-Tint, Touch→active-translate. h-14 macht Google/Apple/MS
-// klick-einladend prominent.
-const buttonClass = "group relative flex items-center justify-center gap-3 h-14 w-full bg-white hover:bg-brand/15 border-2 border-black transition-all font-bold text-[13px] tracking-[0.04em] text-black active:translate-y-px disabled:opacity-50 disabled:cursor-not-allowed";
+const buttonClass = "group relative flex items-center justify-center gap-3 h-12 w-full rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] transition-all font-semibold text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed";
 
 // ────────────────────────────────────────────────────────────────────────────
-// Google — Sign in with Google JS, rendered as our own button
+// Google — Emergent-managed OAuth. No Google Cloud Console config needed:
+// the user is redirected to auth.emergentagent.com, signs in with Google and
+// returns to {origin}/dashboard#session_id=… which AuthCallback exchanges via
+// POST /api/auth/google-session. This permanently fixes the origin_mismatch
+// problem of the old GIS popup flow.
+// REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 // ────────────────────────────────────────────────────────────────────────────
 
 export const GoogleSignInButton = ({ de = true, label }) => {
   const [loading, setLoading] = useState(false);
-  const [scriptStatus, setScriptStatus] = useState('loading'); // loading | ready | failed
-  const initialized = useRef(false);
-  const hiddenButtonRef = useRef(null);  // For Google's official renderButton fallback
-
-  const initGoogle = (resolveCallback) => {
-    if (!window.google?.accounts?.id) return;
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: async (resp) => {
-        if (!resp?.credential) return;
-        setLoading(true);
-        try {
-          const res = await api.post('/auth/google/callback', { credential: resp.credential });
-          onSuccess?.(res.data.user, 'google');
-        } catch (err) {
-          logger.error('Google sign-in backend error', err);
-          // Distinguish network vs auth vs server errors for clearer UX
-          let msg;
-          if (!err?.response) {
-            msg = de ? 'Keine Verbindung — bitte Internet prüfen.' : 'Network error — check your connection.';
-          } else if (err.response.status >= 500) {
-            msg = de ? 'Server-Fehler — bitte erneut versuchen.' : 'Server error — please retry.';
-          } else {
-            msg = err.response.data?.detail || (de ? 'Google-Login fehlgeschlagen.' : 'Google sign-in failed.');
-          }
-          onError?.(msg);
-        } finally {
-          setLoading(false);
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: true,
-      use_fedcm_for_prompt: true,
-    });
-    // Pre-render an invisible Google button — used as fallback when One-Tap is suppressed
-    if (hiddenButtonRef.current) {
-      try {
-        window.google.accounts.id.renderButton(hiddenButtonRef.current, {
-          type: 'standard', theme: 'outline', size: 'large', width: 320,
-        });
-      } catch (e) { logger.warn('Google renderButton failed', e); }
-    }
-    setScriptStatus('ready');
-    resolveCallback?.();
-  };
-
-  const tryLoadScript = () => {
-    setScriptStatus('loading');
-    loadGoogleScript()
-      .then(() => initGoogle())
-      .catch((e) => {
-        logger.warn('Google script load failed', e);
-        setScriptStatus('failed');
-      });
-  };
-
-  useEffect(() => {
-    if (!clientId || initialized.current) return;
-    initialized.current = true;
-    tryLoadScript();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientId]);
 
   const handleClick = () => {
-    if (scriptStatus === 'failed') {
-      // Retry script load
-      tryLoadScript();
-      return;
-    }
-    if (!window.google?.accounts?.id) {
-      onError?.(de ? 'Google-Login lädt noch — bitte einen Moment.' : 'Google sign-in is still loading…');
-      return;
-    }
-    // First try One-Tap prompt
-    window.google.accounts.id.prompt((notification) => {
-      if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
-        // One-Tap suppressed (user dismissed previously, FedCM blocked, etc.)
-        // → fall back to clicking the hidden official Google button which
-        // opens a popup directly. This is Google's recommended fallback.
-        logger.info('Google One Tap suppressed; falling back to popup');
-        const realBtn = hiddenButtonRef.current?.querySelector('div[role="button"]');
-        if (realBtn) {
-          realBtn.click();
-        } else {
-          onError?.(de
-            ? 'Google-Login wurde vom Browser blockiert. Bitte E-Mail-Login verwenden oder Cookies erlauben.'
-            : 'Google login was blocked by the browser. Please use email login or allow cookies.');
-        }
-      }
-    });
+    setLoading(true);
+    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    const redirectUrl = window.location.origin + '/dashboard';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
-  if (!clientId) return null;
-
-  // Different button states for clarity
-  const buttonText = scriptStatus === 'failed'
-    ? (de ? 'Google nicht erreichbar — Erneut versuchen' : 'Google unavailable — Retry')
-    : (label || (de ? 'Mit Google fortfahren' : 'Continue with Google'));
-
   return (
-    <>
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={loading || scriptStatus === 'loading'}
-        className={buttonClass}
-        data-testid="google-signin-btn"
-      >
-        {loading ? <Loader2 size={16} className="animate-spin" /> : <GoogleBrand />}
-        <span>{buttonText}</span>
-      </button>
-      {/* Hidden Google-rendered button — used as click-target fallback when
-          One-Tap is suppressed. Off-screen but in DOM so we can click() it. */}
-      <div
-        ref={hiddenButtonRef}
-        style={{ position: 'absolute', left: -10000, top: 'auto', width: 1, height: 1, overflow: 'hidden' }}
-        aria-hidden="true"
-      />
-    </>
+    <button
+      type="button"
+      onClick={handleClick}
+      disabled={loading}
+      className={buttonClass}
+      data-testid="google-signin-btn"
+    >
+      {loading ? <Loader2 size={16} className="animate-spin" /> : <GoogleBrand />}
+      <span>{label || (de ? 'Mit Google fortfahren' : 'Continue with Google')}</span>
+    </button>
   );
 };
 
 
 // ────────────────────────────────────────────────────────────────────────────
-// Apple · Sign In with Apple JS
+// Apple — Sign In with Apple JS
 // ────────────────────────────────────────────────────────────────────────────
 
 let _appleScriptPromise = null;
@@ -227,7 +129,7 @@ export const AppleSignInButton = ({ serviceId, onSuccess, onError, de = true }) 
       });
       onSuccess?.(res.data.user, 'apple');
     } catch (err) {
-      // The user closing the popup throws · don't surface it as an error
+      // The user closing the popup throws — don't surface it as an error
       if (err?.error === 'popup_closed_by_user') return;
       logger.error('Apple sign-in failed', err);
       onError?.(err?.response?.data?.detail || 'Apple-Login fehlgeschlagen.');
@@ -253,7 +155,7 @@ export const AppleSignInButton = ({ serviceId, onSuccess, onError, de = true }) 
 };
 
 // ────────────────────────────────────────────────────────────────────────────
-// Microsoft · MSAL.js via popup
+// Microsoft — MSAL.js via popup
 // ────────────────────────────────────────────────────────────────────────────
 
 let _msalScriptPromise = null;
@@ -333,7 +235,7 @@ export const MicrosoftSignInButton = ({ clientId, tenant = 'common', onSuccess, 
 };
 
 // ────────────────────────────────────────────────────────────────────────────
-// Combined provider stack · renders only the configured providers
+// Combined provider stack — renders only the configured providers
 // ────────────────────────────────────────────────────────────────────────────
 
 export const OAuthProviderStack = ({ providers, onSuccess, onError, de = true }) => {

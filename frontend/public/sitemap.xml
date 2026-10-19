@@ -1,134 +1,214 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Leader-OS sitemap — generiert von backend/scripts_seo_pages.py. Nur öffentlich lesbare Seiten; App-Routen (/dashboard, /chat, …) sind auth-only und nicht gelistet. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<!--
+  Page sitemap = leader-os.de static/canonical pages ONLY.
+
+  Journal articles live in sitemap-articles.xml (generated from the
+  content registry) so the two lists update independently and no URL is
+  ever listed twice across the sitemap index. Both are referenced by
+  sitemap-index.xml.
+
+  leader-check.de is served `sitemap-leader-check.xml` via host-based
+  rewrite in vercel.json. See docs/DOMAIN_TOPOLOGY.md.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
-    <loc>https://leaderos.de/leadership-programm/</loc>
+    <loc>https://leader-os.de/</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://leader-os.de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://leader-os.de/" />
+  </url>
+
+  <!-- 2026-06-26 · Canonical SERP-winner for "Wlad Jachtchenko" Person
+       searches. Highest priority because it's the answer-page Google
+       Knowledge Graph and AI Overview should cite. -->
+  <url>
+    <loc>https://leader-os.de/wlad-jachtchenko</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 2026-08-20 · Free live launch event · time-sensitive, high priority
+       until the event date. -->
+  <url>
+    <loc>https://leader-os.de/event</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Pillar + Kampagnen-Landing „KI-Führungskraft" (prerendert, FAQPage + Event). -->
+  <url>
+    <loc>https://leader-os.de/ki-fuehrungskraft</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- App-Tour: LeaderOS mit KI-Coach und Videokursen vorgestellt. -->
+  <url>
+    <loc>https://leader-os.de/leaderos</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Webinar squeeze page · free live webinar registration. -->
+  <url>
+    <loc>https://leader-os.de/webinar</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- "Führung beginnt hier" · free 4-video lead-magnet funnel · top-of-funnel opt-in. -->
+  <url>
+    <loc>https://leader-os.de/fuehrung-beginnt-hier</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/login</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/impressum</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/datenschutz</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/agb</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/widerruf</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Antwort-Seite (AEO) · vollständige Antworten im HTML, ohne JS
+       lesbar. Ziel: informationale Queries + Zitierbarkeit in
+       AI-Antworten. Hohe Priorität, weil sie die Frameworks trägt. -->
+  <url>
+    <loc>https://leader-os.de/fragen</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/start</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ══ Statische Kampagnen-Seiten (public/<name>/index.html) ══════════
+       Werden von Vercel vor dem SPA-Rewrite ausgeliefert, sind also
+       vollständig ohne JavaScript lesbar — der Grund, warum sie hier
+       hohe Priorität bekommen: für AI-Crawler (GPTBot, ClaudeBot,
+       PerplexityBot), die kein JS ausführen, sind sie die einzigen
+       Produktseiten mit komplettem Inhalt im HTML. -->
+  <url>
+    <loc>https://leader-os.de/os</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/app</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/wladbot</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 2026-10-05 · Kommunikations-Training, Live-Training und die statische
+       Kurs-Antwortseite (/kurse · public/kurse/index.html). -->
+  <url>
+    <loc>https://leader-os.de/kommunikation</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://leader-os.de/training</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leader-os.de/kurse</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Öffentliche App-Seiten aus emergent-update (Leadership-Programm,
+       statische Kursübersicht, Teams, Sicherheit, Changelog). -->
+  <url>
+    <loc>https://leader-os.de/leadership-programm</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/leadership-programm/"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/leadership-programm/"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/leadership-programm/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/leadership-programm/"/>
   </url>
   <url>
-    <loc>https://leaderos.de/fragen/</loc>
+    <loc>https://leader-os.de/kurse-uebersicht/</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/fragen/"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/fragen/"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/fragen/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/fragen/"/>
   </url>
   <url>
-    <loc>https://leaderos.de/wlad-jachtchenko/</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/wlad-jachtchenko/"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/wlad-jachtchenko/"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/wlad-jachtchenko/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/wlad-jachtchenko/"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/kurse-uebersicht/</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/kurse-uebersicht/"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/kurse-uebersicht/"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/kurse-uebersicht/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/kurse-uebersicht/"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/login</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/login"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/login"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/login"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/login"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/for-teams</loc>
+    <loc>https://leader-os.de/for-teams</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/for-teams"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/for-teams"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/for-teams"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/for-teams"/>
   </url>
   <url>
-    <loc>https://leaderos.de/sicherheit</loc>
+    <loc>https://leader-os.de/sicherheit</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/sicherheit"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/sicherheit"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/sicherheit"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/sicherheit"/>
   </url>
   <url>
-    <loc>https://leaderos.de/changelog</loc>
+    <loc>https://leader-os.de/changelog</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/changelog"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/changelog"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/changelog"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/changelog"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/impressum</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/impressum"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/impressum"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/impressum"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/impressum"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/datenschutz</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/datenschutz"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/datenschutz"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/datenschutz"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/datenschutz"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/agb</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/agb"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/agb"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/agb"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/agb"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/widerruf</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/widerruf"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/widerruf"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/widerruf"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/widerruf"/>
-  </url>
-  <url>
-    <loc>https://leaderos.de/llms.txt</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://leaderos.de/llms.txt"/>
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://leaderos.de/llms.txt"/>
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://leaderos.de/llms.txt"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leaderos.de/llms.txt"/>
   </url>
 </urlset>

@@ -206,8 +206,12 @@ class LlmChat:
                 # Behalte das alte Modell falls Provider gleich, sonst Default.
                 self._model = self._default_model(preferred) if preferred != provider_or_model else model
             else:
-                self._provider = provider_or_model
-                self._model = model
+                # Kein nativer Key in der ENV → Emergent-Wrapper behalten und
+                # Provider im Modell-String mitführen ("openai/gpt-5.2"). Vorher
+                # wurde hier auf "openai" umgeschaltet → KeyError auf
+                # OPENAI_API_KEY in reinen Emergent-Deployments.
+                self._provider = "emergent"
+                self._model = f"{provider_or_model}/{model}"
         return self
 
     def _build_adapter(self):
@@ -279,7 +283,8 @@ class OpenAISpeechToText:
 
     async def transcribe(self, file_path: Optional[str] = None, language: Optional[str] = None, *,
                          file=None, model: Optional[str] = None,
-                         response_format: Optional[str] = None, **_ignored) -> "_Transcript":
+                         response_format: Optional[str] = None, prompt: Optional[str] = None,
+                         **_ignored) -> "_Transcript":
         """STT aus Pfad **oder** offenem File-Objekt.
 
         Beide Signaturen sind gültig:
@@ -295,11 +300,11 @@ class OpenAISpeechToText:
         use_model = model or self._model
         if self._openai_key:
             if file is not None:
-                return _Transcript(await self._native(file, language, use_model))
+                return _Transcript(await self._native(file, language, use_model, prompt))
             with open(file_path, "rb") as fh:
-                return _Transcript(await self._native(fh, language, use_model))
+                return _Transcript(await self._native(fh, language, use_model, prompt))
         return _Transcript(await self._legacy(file if file is not None else file_path,
-                                              language, use_model, response_format))
+                                              language, use_model, response_format, prompt))
 
     async def transcribe_bytes(self, data: bytes, filename: str = "audio.webm",
                                language: Optional[str] = None) -> "_Transcript":
@@ -318,7 +323,8 @@ class OpenAISpeechToText:
             try: _os.unlink(path)
             except OSError: pass
 
-    async def _native(self, file_obj, language: Optional[str], model: Optional[str] = None) -> str:
+    async def _native(self, file_obj, language: Optional[str], model: Optional[str] = None,
+                      prompt: Optional[str] = None) -> str:
         try:
             from openai import AsyncOpenAI
         except ImportError as e:  # pragma: no cover
@@ -327,11 +333,13 @@ class OpenAISpeechToText:
         kwargs = {"model": model or self._model, "file": file_obj}
         if language:
             kwargs["language"] = language
+        if prompt:
+            kwargs["prompt"] = prompt
         resp = await client.audio.transcriptions.create(**kwargs)
         return getattr(resp, "text", "") or ""
 
     async def _legacy(self, file_or_path, language: Optional[str], model: Optional[str] = None,
-                      response_format: Optional[str] = None) -> str:
+                      response_format: Optional[str] = None, prompt: Optional[str] = None) -> str:
         # Explizite Fehlermeldung wenn weder OpenAI noch Emergent
         # verfügbar — sonst kracht's später irgendwo in der Emergent-
         # Library mit unverständlichem Stack-Trace.
@@ -355,6 +363,8 @@ class OpenAISpeechToText:
             kwargs = {"file": fh, "model": model or self._model, "response_format": response_format or "json"}
             if language:
                 kwargs["language"] = language
+            if prompt:
+                kwargs["prompt"] = prompt
             resp = await em.transcribe(**kwargs)
         finally:
             if is_path:

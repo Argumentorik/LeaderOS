@@ -351,7 +351,7 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
 
         # On 401 Unauthorized from ElevenLabs, drop cached client so next request
         # re-reads ELEVENLABS_API_KEY (handles rotation without pod restart).
-        if "401" in err_msg or "unauthorized" in err_msg or "invalid_api_key" in err_msg:
+        if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             logger.warning(f"ElevenLabs 401 — resetting client for next request: {e}")
             _reset_client()
         else:
@@ -602,8 +602,8 @@ async def _synthesize_or_cached(reply_text: str, persona_key: str, voice_config:
         from fastapi.concurrency import run_in_threadpool
         audio_bytes_out = await run_in_threadpool(_synthesize, reply_text, voice_config)
     except Exception as e:
-        err_msg = str(e).lower()
-        if "401" in err_msg or "unauthorized" in err_msg or "invalid_api_key" in err_msg:
+        err_msg = str(e)
+        if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             _reset_client()
         logger.error(f"Voice TTS failed: {e}")
         raise await ai_http_error(e, "voice_tts")
