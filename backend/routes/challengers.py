@@ -4,7 +4,8 @@ import uuid
 import json
 import re
 from datetime import datetime, timezone
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# Migration → lib.llm_provider (bit-identische API, Provider per ENV).
+from lib.llm_provider import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user, clean_ai_text

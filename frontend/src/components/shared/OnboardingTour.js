@@ -13,9 +13,9 @@ const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 const tourSteps = {
   de: [
     { icon: Sparkles, title: 'Willkommen bei WladBot!', desc: 'Dein persönliches AI Leadership Operating System. Lass mich dir kurz zeigen, wie alles funktioniert.' },
-    { icon: LayoutDashboard, title: 'Kommandozentrale', desc: 'Dein Dashboard zeigt deinen Leader Score, tägliche Aufgaben und deinen Fortschritt — alles auf einen Blick.' },
+    { icon: LayoutDashboard, title: 'Kommandozentrale', desc: 'Dein Dashboard zeigt deinen Leader Score, tägliche Aufgaben und deinen Fortschritt · alles auf einen Blick.' },
     { icon: PenLine, title: 'Täglicher Check-in', desc: 'Starte jeden Tag mit einem Leadership-Moment. Beschreibe eine Entscheidung oder Herausforderung und erhalte sofort KI-Feedback.' },
-    { icon: MessageSquareText, title: 'KI Coach mit 8 Agenten', desc: 'Wähle deinen Spezialisten — von Konflikt über EQ bis Strategie. Jeder Agent hat eigene Szenarien und Coaching-Stile.' },
+    { icon: MessageSquareText, title: 'KI Coach mit 8 Agenten', desc: 'Wähle deinen Spezialisten · von Konflikt über EQ bis Strategie. Jeder Agent hat eigene Szenarien und Coaching-Stile.' },
     { icon: Swords, title: 'Simulationen & Challengers', desc: 'Übe echte Leadership-Gespräche mit KI-Charakteren. Lass dich von Bezos, Musk oder Oprah herausfordern.' },
     { icon: Wrench, title: 'Geführte Workflows', desc: 'Schritt-für-Schritt Funnels für 1:1-Vorbereitung, E-Mail-Optimierung, Entscheidungsfindung und mehr.' },
     { icon: Video, title: 'Missionen & Playbooks', desc: 'Nimm dich auf, lass die KI deine Delivery bewerten. Absolviere interaktive Playbooks mit persönlichem Report.' },
@@ -24,9 +24,9 @@ const tourSteps = {
   ],
   en: [
     { icon: Sparkles, title: 'Welcome to WladBot!', desc: 'Your personal AI Leadership Operating System. Let me quickly show you how everything works.' },
-    { icon: LayoutDashboard, title: 'Command Center', desc: 'Your dashboard shows your Leader Score, daily tasks and progress — everything at a glance.' },
+    { icon: LayoutDashboard, title: 'Command Center', desc: 'Your dashboard shows your Leader Score, daily tasks and progress · everything at a glance.' },
     { icon: PenLine, title: 'Daily Check-in', desc: 'Start each day with a leadership moment. Describe a decision or challenge and get instant AI feedback.' },
-    { icon: MessageSquareText, title: 'AI Coach with 8 Agents', desc: 'Choose your specialist — from Conflict to EQ to Strategy. Each agent has unique scenarios and coaching styles.' },
+    { icon: MessageSquareText, title: 'AI Coach with 8 Agents', desc: 'Choose your specialist · from Conflict to EQ to Strategy. Each agent has unique scenarios and coaching styles.' },
     { icon: Swords, title: 'Simulations & Challengers', desc: 'Practice real leadership conversations with AI characters. Get challenged by Bezos, Musk or Oprah.' },
     { icon: Wrench, title: 'Guided Workflows', desc: 'Step-by-step funnels for 1:1 prep, email optimization, decision making and more.' },
     { icon: Video, title: 'Missions & Playbooks', desc: 'Record yourself, let AI score your delivery. Complete interactive playbooks with personal reports.' },

@@ -128,7 +128,7 @@ export default function DailyCheckinPage() {
                 <Mic size={20} className="text-[#6B8A00] dark:text-[#BFFF00]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-bold text-foreground">{lang === 'de' ? 'Sprich frei — unser KI-Agent hört zu' : 'Speak freely — our AI agent is listening'}</p>
+                <p className="text-[13px] font-bold text-foreground">{lang === 'de' ? 'Sprich frei · unser KI-Agent hört zu' : 'Speak freely · our AI agent is listening'}</p>
                 <p className="text-[11px] text-muted-foreground">{lang === 'de' ? 'Tippe den Mic-Button und reflektiere laut. Whisper transkribiert in Sekunden.' : 'Tap the mic button and reflect out loud. Whisper transcribes in seconds.'}</p>
               </div>
               <VoiceRecorder onTranscription={handleVoiceResult} disabled={loading} />

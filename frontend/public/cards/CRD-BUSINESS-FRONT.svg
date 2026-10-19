@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="340" height="220" aria-labelledby="cf">
+  <title id="cf">LeaderOS Business Card — Front · 85×55mm</title>
+  <defs>
+    <style>
+      .bg{fill:#FFFFFF}
+      .ink{fill:#0A0A0A}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.05em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="340" height="220"/>
+  <rect fill="none" stroke="#0A0A0A" stroke-width="2" x="1" y="1" width="338" height="218"/>
+
+  <text class="mono ink" x="16" y="22" font-size="7.5">▸ LEADER · OS</text>
+  <text class="mono ink" text-anchor="end" x="324" y="22" font-size="7.5" opacity="0.45">EST · 2026</text>
+
+  <text class="display ink" x="16" y="92" font-size="56">Werde</text>
+  <text class="display ink" x="16" y="142" font-size="56">KI-nativ<tspan class="lime">.</tspan></text>
+
+  <text class="mono ink" x="16" y="166" font-size="8.5" opacity="0.55">DAS OPERATING SYSTEM FÜR FÜHRUNGSKRÄFTE</text>
+
+  <g transform="translate(16 188)">
+    <rect class="lime" x="0" y="0" width="24" height="24"/>
+    <text class="display ink" x="12" y="20" text-anchor="middle" font-size="22">W</text>
+    <text class="display ink" x="32" y="18" font-size="16">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+
+  <text class="mono ink" text-anchor="end" x="324" y="205" font-size="7.5" opacity="0.55">LEADER-OS.DE</text>
+</svg>

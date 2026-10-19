@@ -32,7 +32,13 @@ from config import db
 logger = logging.getLogger("wladbot.magic_link")
 
 MAGIC_LINK_TTL_MIN = int(os.environ.get("MAGIC_LINK_TTL_MIN", "15"))
-_BASE_URL_DEFAULT = "https://leaderos.de"  # Iter 92.27: primary prod domain (no dash)
+# App-tier host by default (where /auth/magic resolves to the authenticated
+# React app with a working /dashboard). The hyphen-host `leader-os.de` is the
+# marketing landing on Vercel, which has no post-login surface. Each Emergent
+# project SHOULD set `FRONTEND_BASE_URL` explicitly to its own host
+# (leaderos.de for the main app, leadercheck.de for the diagnose app) so
+# cross-tenant logins return to the right surface.
+_BASE_URL_DEFAULT = "https://leaderos.de"
 
 
 def _hash_token(token: str) -> str:
@@ -42,6 +48,35 @@ def _hash_token(token: str) -> str:
 def _frontend_base(request=None) -> str:
     from services_email import _frontend_url
     return _frontend_url(request) or _BASE_URL_DEFAULT
+
+
+
+# Only these app hosts may receive a magic link (they have a post-login
+# surface). The marketing hyphen-hosts (leader-os.de / leader-check.de)
+# and any other origin are rejected — this is the allowlist that makes it
+# safe to trust the client-supplied origin instead of a fixed env var, and
+# blocks magic-link phishing via an attacker-controlled redirect_base.
+_ALLOWED_MAGIC_HOSTS = ("leaderos.de", "leadercheck.de")
+
+
+def _validate_base(base_url: Optional[str]) -> Optional[str]:
+    """Return a normalized https://<host> if base_url is an allowlisted app
+    host (apex or subdomain), else None. Drops any path/port/query so only
+    the bare scheme+host is ever used to build the link."""
+    if not base_url:
+        return None
+    try:
+        from urllib.parse import urlparse
+        parsed = urlparse(base_url.strip())
+        if parsed.scheme != "https" or not parsed.hostname:
+            return None
+        host = parsed.hostname.lower()
+        for allowed in _ALLOWED_MAGIC_HOSTS:
+            if host == allowed or host.endswith("." + allowed):
+                return f"https://{host}"
+    except Exception:
+        return None
+    return None
 
 
 async def ensure_indexes() -> None:
@@ -55,7 +90,14 @@ async def ensure_indexes() -> None:
 
 async def create_token(email: str, request_ip: str) -> Optional[str]:
     """Generate a fresh magic-link token for `email`. Returns the RAW token
-    (URL-safe) to embed in the email link, or None if user does not exist."""
+    (URL-safe) to embed in the email link, or None if user does not exist.
+
+    Invalidates ALL prior unused magic-links for the same email before
+    issuing the new one · so requesting a fresh link silently kills any
+    earlier link sitting unused in the user's inbox. Defends against a
+    common attack where a stolen unused link in an old inbox is replayed
+    while the legitimate user has since requested a new one.
+    """
     email = (email or "").strip().lower()
     if not email:
         return None
@@ -66,6 +108,15 @@ async def create_token(email: str, request_ip: str) -> Optional[str]:
 
     raw_token = secrets.token_urlsafe(48)
     now = datetime.now(timezone.utc)
+
+    # Kill all prior unused tokens for this email so only the newest link
+    # is valid. We mark them used_at=now rather than deleting so the audit
+    # trail (request_ip, created_at) survives until the TTL prunes the row.
+    await db.magic_links.update_many(
+        {"email": email, "used_at": None},
+        {"$set": {"used_at": now, "invalidated_reason": "superseded"}},
+    )
+
     await db.magic_links.insert_one({
         "_id": _hash_token(raw_token),
         "email": email,
@@ -177,7 +228,12 @@ def _format_email_html(user_name: str, link: str, next_event: dict | None = None
 
 
 async def send_magic_link_email(email: str, raw_token: str, base_url: str = "") -> bool:
-    """Build the verify URL and send via Resend. Returns True on send success."""
+    """Build the verify URL and send via Resend. Returns True on send success.
+
+    `base_url` is the visitor's own origin (e.g. https://leaderos.de). If it
+    passes the allowlist it is used so the link returns the user to the exact
+    app host they logged in from; otherwise we fall back to FRONTEND_BASE_URL.
+    """
     from services_email import send_email, is_enabled
 
     if not is_enabled():
@@ -201,9 +257,9 @@ async def send_magic_link_email(email: str, raw_token: str, base_url: str = "") 
     except Exception:
         next_event = None
 
-    base = (base_url or _frontend_base()).rstrip("/")
+    base = _validate_base(base_url) or _frontend_base()
     link = f"{base}/auth/magic?token={raw_token}"
-    html = _format_email_html(user_name, link, next_event, base)
+    html = _format_email_html(user_name, link)
     result = await send_email(
         to=email,
         subject="Dein 1-Klick-Login für WladBot",

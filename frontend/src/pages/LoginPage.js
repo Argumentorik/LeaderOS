@@ -40,8 +40,8 @@ export default function LoginPage({ initialMode = 'login' }) {
   // Google does not see three duplicates of the same shell (Iter 135).
   useSeo({
     path: '/login',
-    title: 'Leader-OS — KI Leadership System für Führungskräfte von Wlad Jachtchenko',
-    description: 'Anmelden bei Leader-OS: KI-Coach für Führungssituationen, 30-Tage-Programm, Rhetorik- und EQ-Training nach der Methodik von Wlad Jachtchenko.',
+    title: 'LeaderOS · KI Leadership System für Führungskräfte von Wlad Jachtchenko',
+    description: 'Anmelden bei LeaderOS: KI-Coach für Führungssituationen, 30-Tage-Programm, Rhetorik- und EQ-Training nach der Methodik von Wlad Jachtchenko.',
   });
   const { login, user: authedUser } = useAuth();
   const { lang, toggleLang } = useLanguage();
@@ -113,6 +113,13 @@ export default function LoginPage({ initialMode = 'login' }) {
   const switchMode = (newMode) => {
     setMode(newMode);
     setError('');
+    // Always clear password (security; avoids browser auto-filling the login
+    // password into a register form). Drop `name` when leaving register.
+    setForm(f => ({
+      ...f,
+      password: '',
+      name: newMode === 'register' ? f.name : '',
+    }));
   };
 
   const { trigger: triggerContinue, loading: continueLoading } = useContinueAs(lastAccount, {

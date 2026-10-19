@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>WladBot — Dein KI-Coach für Führung</title>
+<meta name="description" content="Sprich mit dem Coach, der niemals schläft: WladBot bringt Wlads Methodik als KI-Coach in dein Dashboard. Trag dich ein und starte kostenlos — Live-Webinar am 29.10."/>
+<link rel="canonical" href="https://leader-os.de/wladbot"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="LeaderOS"/>
+<meta property="og:url" content="https://leader-os.de/wladbot"/>
+<meta property="og:title" content="WladBot — Dein KI-Coach für Führung"/>
+<meta property="og:description" content="Sprich mit dem Coach, der niemals schläft. Trag dich ein und starte kostenlos."/>
+<meta property="og:image" content="https://leader-os.de/wlad/wladbot3.0.png"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<!--
+  /wladbot · Standalone-Ad-Landing (Auria-Hero-DNA) + Lead-Capture. V3:
+  Das Hero-Visual ist jetzt DAS ECHTE DASHBOARD von leaderos.de/dashboard
+  als originalgetreue HTML-Nachbildung (Struktur/Farben/Copy aus
+  src/pages/DashboardPage.js: Begrüßung, Streak-Pill, Challenge-Next-Step
+  mit Lime-CTA, XP/Level-Card, Coach-Button) in einem Browser-Frame, der
+  von unten in den Viewport wächst. Sichtbar als "DEMO-ANSICHT" gelabelt —
+  Beispieldaten, keine erfundenen Nutzerzahlen.
+
+  Funktionierend verifiziert (17.08.): leader-os.de/api/health → 200 über
+  den Vercel-Rewrite; das Formular postet auf den bestehenden
+  POST /api/leader-check/intent (source: wladbot-landing) → nurture_leads,
+  Welcome-Mail sofort, 7-Mail-Journey via Cron. Ehrliche Scarcity:
+  Countdown zum echten Webinar-Termin (29.10. 10:00, keine Aufzeichnung);
+  blendet sich nach dem Termin aus. Badge kanon-ehrlich.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{position:relative;min-height:100vh;min-height:100dvh;width:100%;overflow-x:hidden;
+  background:#02040c;font-family:"Instrument Serif",serif}
+
+/* Full-Bleed-Backdrop · der Avatar füllt den Viewport wie das Video im
+   Referenz-Prompt. 512px-Asset → bewusste Cinematic-Behandlung: leichter
+   Blur + Sättigung als Atmosphäre-Ebene, Scrim für Textkontrast. */
+.bg-face{position:fixed;inset:0;z-index:0;overflow:hidden}
+.bg-face img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  transform:scale(1.12);filter:blur(9px) saturate(1.15) brightness(.82)}
+/* Spotlight-Deblur · scharfe Kopie des Avatars, per radialer Maske nur
+   um den Cursor herum sichtbar — fährst du über das Gesicht, wird es
+   scharf. Variablen --mx/--my setzt das JS bei pointermove. */
+.bg-sharp{position:fixed;inset:0;z-index:0;overflow:hidden;opacity:0;transition:opacity .35s ease}
+.bg-sharp img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  transform:scale(1.12);filter:saturate(1.1) brightness(.92)}
+body.spot .bg-sharp{opacity:1;
+  -webkit-mask-image:radial-gradient(circle 190px at var(--mx,50%) var(--my,32%),#000 0 55%,transparent 100%);
+  mask-image:radial-gradient(circle 190px at var(--mx,50%) var(--my,32%),#000 0 55%,transparent 100%)}
+@media (prefers-reduced-motion:reduce){.bg-sharp{display:none}}
+.bg-scrim{position:fixed;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(2,4,12,.72) 0%,rgba(2,4,12,.42) 26%,rgba(2,4,12,.48) 55%,rgba(2,4,12,.88) 82%,#02040c 100%)}
+a{text-decoration:none;color:inherit}
+button{font:inherit;border:0;cursor:pointer}
+
+.col{position:relative;z-index:10;display:flex;min-height:100vh;min-height:100dvh;width:100%;flex-direction:column}
+
+/* nav */
+.nav-wrap{display:flex;width:100%;justify-content:center;padding:16px 16px 0}
+.nav{display:flex;width:100%;max-width:56rem;align-items:center;justify-content:space-between;
+  border-radius:16px;background:rgba(0,0,0,.4);padding:8px 8px 8px 20px;
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{height:26px;width:26px;display:block}
+.brand .wm{font-family:Outfit,Inter,sans-serif;font-weight:900;font-size:19px;letter-spacing:-.03em;color:rgba(255,255,255,.92)}
+.brand .wm em{font-style:normal;color:#BFFF00;margin:0 2px}
+.brand .sep{color:rgba(255,255,255,.35);font-family:Inter,sans-serif;font-size:13px}
+.brand .bot{font-size:17px;letter-spacing:.02em;color:rgba(255,255,255,.75)}
+.nav-cta{display:flex;align-items:center;gap:8px;border-radius:12px;background:#fff;padding:8px 16px;
+  font-family:Inter,sans-serif;font-size:12px;font-weight:500;letter-spacing:.025em;color:#000;transition:all .15s}
+.nav-cta:hover{background:rgba(255,255,255,.9)}
+.nav-cta img{height:16px;width:16px;border-radius:50%;object-fit:cover;display:block}
+
+/* hero copy */
+.hero{display:flex;flex-direction:column;align-items:center;padding:34px 24px 0;text-align:center}
+.badge{margin-bottom:18px;display:flex;align-items:center;gap:8px;border-radius:9999px;padding:6px 16px}
+.badge svg{height:16px;width:16px;color:#fbbf24}
+.badge span{font-family:Inter,sans-serif;font-size:12px;font-weight:500;letter-spacing:.05em;color:#fcd34d}
+h1{max-width:56rem;font-size:36px;line-height:.95;font-weight:400;color:#fff}
+h1 em{font-style:italic}
+.sub{margin:18px auto 0;max-width:36rem;font-family:Inter,sans-serif;font-size:14px;line-height:1.4;
+  font-weight:300;color:rgba(255,255,255,.7)}
+.br-sm{display:none}
+
+/* lead form + scarcity (unverändert funktional aus V2) */
+.lead{margin:24px auto 0;width:100%;max-width:30rem;padding:0 24px;font-family:Inter,sans-serif}
+.lead-form{display:flex;gap:8px;border-radius:16px;background:rgba(0,0,0,.45);padding:8px;
+  border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.lead-form input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#fff;font-size:15px;padding:10px 12px}
+.lead-form input::placeholder{color:rgba(255,255,255,.45)}
+.lead-form button{border-radius:11px;background:#BFFF00;color:#0c0f04;font-size:14px;font-weight:600;
+  letter-spacing:.02em;padding:12px 18px;white-space:nowrap;transition:all .15s}
+.lead-form button:hover{background:#d4ff4d}
+.lead-form button:disabled{opacity:.6;cursor:wait}
+.lead-note{margin-top:9px;text-align:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.lead-note a{color:rgba(255,255,255,.7);text-decoration:underline}
+.lead-success{display:none;text-align:center;border-radius:16px;border:1px solid rgba(191,255,0,.4);
+  background:rgba(191,255,0,.08);padding:20px}
+.lead-success p{color:#fff;font-size:15px;line-height:1.5;font-family:Inter,sans-serif}
+.lead-success a{display:inline-block;margin-top:12px;border-radius:11px;background:#fff;color:#000;
+  font-size:13.5px;font-weight:600;padding:10px 18px}
+.lead-error{display:none;margin-top:10px;text-align:center;font-size:12.5px;color:#fca5a5}
+
+.scarcity{margin:20px auto 0;display:flex;flex-direction:column;align-items:center;gap:9px;
+  padding:0 24px;font-family:Inter,sans-serif;text-align:center}
+.count{display:flex;gap:10px}
+.count div{min-width:60px;border-radius:12px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.45);padding:9px 8px;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.count b{display:block;font-size:22px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums;font-family:Inter,sans-serif}
+.count span{display:block;margin-top:2px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.scarcity p{font-size:12.5px;color:rgba(255,255,255,.6);max-width:28rem;line-height:1.5}
+.scarcity p b{color:#fcd34d;font-weight:600}
+.scarcity a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+
+/* ── DAS DASHBOARD · originalgetreue Nachbildung von leaderos.de/dashboard ── */
+.dash-stage{position:relative;margin-top:34px;display:flex;justify-content:center;padding:0 16px}
+.dash-glow{position:absolute;top:6%;left:50%;transform:translateX(-50%);width:min(760px,92vw);height:70%;
+  border-radius:40px;background:radial-gradient(ellipse,rgba(191,255,0,.14) 0%,transparent 70%);pointer-events:none}
+.browser{position:relative;width:100%;max-width:880px;border-radius:18px 18px 0 0;overflow:hidden;
+  border:1px solid rgba(255,255,255,.13);border-bottom:0;background:#0A0A0A;
+  box-shadow:0 -10px 80px rgba(191,255,0,.10),0 30px 90px rgba(0,0,0,.6)}
+.chrome{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#111318;
+  border-bottom:1px solid rgba(255,255,255,.08);font-family:Inter,sans-serif}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%}
+.dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.urlbar{flex:1;display:flex;align-items:center;gap:7px;border-radius:8px;background:rgba(255,255,255,.07);
+  padding:6px 12px;font-size:12px;color:rgba(255,255,255,.65)}
+.urlbar svg{width:11px;height:11px;flex:0 0 auto}
+.demo-chip{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 8px;white-space:nowrap}
+
+.dash{padding:26px 26px 0;font-family:Inter,sans-serif;color:#fff;background:
+  radial-gradient(120% 90% at 80% 0%,#12151d 0%,#0A0A0A 60%)}
+.dash-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.dash-greet h2{font-family:"Instrument Serif",serif;font-weight:400;font-size:30px;line-height:1.05}
+.dash-greet p{margin-top:5px;font-size:12.5px;color:rgba(255,255,255,.55)}
+.dash-pills{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 12px;font-size:11.5px;font-weight:600}
+.pill--coach{border:1px solid rgba(255,255,255,.18);color:#fff}
+.pill--streak{border:1px solid rgba(191,255,0,.25);background:rgba(191,255,0,.07);color:#fff}
+.pill--streak svg{width:12px;height:12px;color:#BFFF00}
+.pill--coach img{width:15px;height:15px;border-radius:50%;object-fit:cover}
+
+.next-card{margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);padding:20px 22px}
+.next-card .k{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#9db821;font-weight:700;font-family:ui-monospace,monospace}
+.next-card h3{margin-top:7px;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.next-card p{margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.6)}
+.btn-lime{display:inline-flex;align-items:center;gap:7px;border-radius:10px;background:#BFFF00;color:#0A0A0A;
+  font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:12px 18px;flex:0 0 auto}
+.btn-lime svg{width:12px;height:12px}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;padding-bottom:26px}
+.w-card{border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);padding:18px 20px}
+.w-card .k{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:700}
+.xp-row{display:flex;align-items:baseline;gap:8px;margin-top:10px}
+.xp-row b{font-size:34px;font-weight:700;letter-spacing:-.02em}
+.xp-row span{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.xp-bar{margin-top:12px;height:7px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
+.xp-bar i{display:block;height:100%;width:64%;border-radius:999px;background:linear-gradient(90deg,#9db821,#BFFF00)}
+.w-card .hint{margin-top:9px;font-size:11px;color:rgba(255,255,255,.5)}
+.chat-row{display:flex;align-items:center;gap:11px;margin-top:12px}
+.chat-row img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(191,255,0,.5)}
+.chat-bubble{flex:1;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);
+  padding:10px 12px;font-size:12px;line-height:1.45;color:rgba(255,255,255,.85)}
+
+@media (min-width:640px){
+  .nav-wrap{padding:24px 24px 0}
+  .nav{padding:10px 10px 10px 28px}
+  .brand img{height:28px;width:28px}
+  .brand span{font-size:20px}
+  .nav-cta{padding:10px 20px;font-size:14px}
+  .nav-cta img{height:20px;width:20px}
+  .hero{padding-top:44px}
+  .badge{margin-bottom:22px;padding:8px 20px}
+  .badge svg{height:20px;width:20px}
+  .badge span{font-size:14px}
+  h1{font-size:52px}
+  .sub{margin-top:22px;font-size:16px}
+  .br-sm{display:inline}
+  .dash-greet h2{font-size:34px}
+}
+@media (min-width:768px){h1{font-size:60px}.sub{font-size:17px}}
+@media (max-width:560px){.dash-grid{grid-template-columns:1fr}.dash{padding:20px 16px 0}}
+</style>
+<!-- Google Ads Conversion-Tracking + Consent Mode v2 · inaktiv, solange in
+     /js/consent-gtag.js noch die Platzhalter-AW-ID steht (docs/gtm/GOOGLE_ADS_SETUP.md §3). -->
+<script src="/js/consent-gtag.js" defer></script>
+</head>
+<body>
+  <div class="bg-face" aria-hidden="true">
+    <picture>
+      <source srcset="/wlad/wladbot3.0.webp" type="image/webp"/>
+      <img src="/wlad/wladbot3.0.png" alt=""/>
+    </picture>
+  </div>
+  <div class="bg-sharp" aria-hidden="true">
+    <picture>
+      <source srcset="/wlad/wladbot3.0.webp" type="image/webp"/>
+      <img src="/wlad/wladbot3.0.png" alt=""/>
+    </picture>
+  </div>
+  <div class="bg-scrim" aria-hidden="true"></div>
+
+  <div class="col">
+    <div class="nav-wrap">
+      <nav class="nav">
+        <a class="brand" href="/" aria-label="LeaderOS Startseite">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <linearGradient id="wb-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/>
+              </linearGradient>
+              <linearGradient id="wb-st" x1="2" y1="26" x2="30" y2="4" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0A0A0A" stop-opacity="0.92"/><stop offset="100%" stop-color="#0A0A0A"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="9.6" fill="url(#wb-bg)"/>
+            <g transform="translate(4.2 4.2) scale(0.7375)">
+              <path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke="url(#wb-st)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke="url(#wb-st)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+              <circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A"/>
+            </g>
+          </svg>
+          <span class="wm">Leader<em>·</em>OS</span>
+          <span class="sep">·</span>
+          <span class="bot">WladBot</span>
+        </a>
+        <a class="nav-cta" href="https://leaderos.de/signup?trial=14">
+          <img src="/wlad/wladbot3.0.webp" alt="" aria-hidden="true"/>
+          App starten
+        </a>
+      </nav>
+    </div>
+
+    <div class="hero">
+      <div class="badge">
+        <svg viewBox="0 0 22 22" fill="currentColor" aria-hidden="true">
+          <path d="M12.48 2.19 14.24 5.74c.24.5.88.97 1.42 1.06l3.19.54c2.04.34 2.52 1.83 1.05 3.3l-2.48 2.5c-.42.43-.65 1.24-.52 1.83l.71 3.09c.56 2.45-.73 3.4-2.88 2.12l-2.99-1.78c-.54-.33-1.43-.33-1.98 0l-2.99 1.78c-2.14 1.28-3.44.32-2.88-2.12l.71-3.09c.13-.59-.1-1.4-.52-1.83l-2.48-2.5C.14 9.17.61 7.68 2.65 7.34l3.19-.54c.53-.09 1.17-.56 1.41-1.06l1.76-3.55c.96-1.93 2.52-1.93 3.47 0Z"/>
+        </svg>
+        <span>3× SPIEGEL-Bestseller-Autor</span>
+      </div>
+
+      <h1>Sprich mit dem <em>Coach</em>,<br class="br-sm"/> der niemals schläft.</h1>
+
+      <p class="sub">
+        WladBot bringt Wlads Methodik als KI-Coach in dein Dashboard: Führung, Rhetorik und EQ.
+        <br class="br-sm"/> Trag dich ein und starte kostenlos.
+      </p>
+    </div>
+
+    <div class="lead">
+      <form class="lead-form" id="lead-form" novalidate>
+        <input type="email" id="lead-email" name="email" required autocomplete="email"
+               placeholder="Deine E-Mail-Adresse" aria-label="E-Mail-Adresse"/>
+        <button type="submit" id="lead-btn">Kostenlos starten</button>
+      </form>
+      <p class="lead-error" id="lead-error">Das hat nicht geklappt. Versuch es nochmal oder geh direkt <a href="/webinar" style="color:#fff;text-decoration:underline">zum Webinar</a>.</p>
+      <div class="lead-success" id="lead-success" role="status">
+        <p><b>Schau in dein Postfach.</b><br/>Deine erste Mail von Wlads Trainings-Serie ist unterwegs.</p>
+        <a href="/webinar">Jetzt noch den Live-Platz sichern →</a>
+      </div>
+      <p class="lead-note">Kein Spam. Jederzeit mit einem Klick abmeldbar. <a href="/datenschutz">Datenschutz</a></p>
+    </div>
+
+    <div class="scarcity" id="scarcity" hidden>
+      <div class="count" aria-hidden="true">
+        <div><b id="c-d">–</b><span>Tage</span></div>
+        <div><b id="c-h">–</b><span>Std</span></div>
+        <div><b id="c-m">–</b><span>Min</span></div>
+        <div><b id="c-s">–</b><span>Sek</span></div>
+      </div>
+      <p><b>Live-Webinar mit Wlad am 29.10. um 10 Uhr.</b> Keine Aufzeichnung, dafür Live-Q&amp;A.
+        <a href="/webinar">Platz sichern →</a></p>
+    </div>
+
+    <!-- Das echte Produkt: leaderos.de/dashboard als getreue Nachbildung -->
+    <div class="dash-stage">
+      <div class="dash-glow" aria-hidden="true"></div>
+      <div class="browser" role="img" aria-label="Das LeaderOS-Dashboard: Begrüßung, Tages-Streak, 30-Tage-Challenge mit nächstem Schritt, XP-Level und WladBot-Chat (Demo-Ansicht mit Beispieldaten)">
+        <div class="chrome">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="urlbar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            leaderos.de/dashboard
+          </span>
+          <span class="demo-chip" aria-hidden="true">Demo-Ansicht</span>
+        </div>
+        <div class="dash" aria-hidden="true">
+          <div class="dash-top">
+            <div class="dash-greet">
+              <h2>Guten Morgen, Andrea.</h2>
+              <p>Dein Training wartet · 15 Minuten bis zum nächsten Level.</p>
+            </div>
+            <div class="dash-pills">
+              <span class="pill pill--coach"><img src="/wlad/wladbot3.0.webp" alt=""/>Sprich mit deinem Coach</span>
+              <span class="pill pill--streak">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s1 3.2-1.5 5.7C8.2 10 7 12 7 14.5A5.5 5.5 0 0 0 12.5 20 5.5 5.5 0 0 0 18 14.5c0-2-1-3.6-2.2-4.9-.4 1-1.1 1.9-2.3 2.4.6-2.7-.3-6.3-1.5-8z"/></svg>
+                12 Tage Streak
+              </span>
+            </div>
+          </div>
+
+          <div class="next-card">
+            <div>
+              <p class="k">▸ DEIN NÄCHSTER SCHRITT</p>
+              <h3>Tag 13 deiner Challenge.</h3>
+              <p>Mache weiter mit Tag 13 deiner 30-Tage-Challenge · 10 interaktive Fragen warten.</p>
+            </div>
+            <span class="btn-lime">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+              Weitermachen
+            </span>
+          </div>
+
+          <div class="dash-grid">
+            <div class="w-card">
+              <p class="k">Level-Fortschritt</p>
+              <div class="xp-row"><b>1.840</b><span>XP</span></div>
+              <div class="xp-bar"><i></i></div>
+              <p class="hint">160 XP → Kommunikator Level 5</p>
+            </div>
+            <div class="w-card">
+              <p class="k">WladBot · dein Coach</p>
+              <div class="chat-row">
+                <img src="/wlad/wladbot3.0.webp" alt=""/>
+                <div class="chat-bubble">Dein Konfliktgespräch morgen: Lass uns die Eröffnung nach B-W-W bauen. Was hast du beobachtet?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  'use strict';
+  var form=document.getElementById('lead-form');
+  var input=document.getElementById('lead-email');
+  var btn=document.getElementById('lead-btn');
+  var ok=document.getElementById('lead-success');
+  var err=document.getElementById('lead-error');
+  /* Google-Ads-Attribution: utm_campaign aus der Ad-URL wird als
+     campaign an /api/leader-check/intent durchgereicht (Backend-Feld
+     max 64 Zeichen). Fallback 'wladbot-hero' für Direkt-Traffic. */
+  var qs=new URLSearchParams(window.location.search);
+  var campaign=(qs.get('utm_campaign')||'wladbot-hero').slice(0,64);
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=(input.value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){input.focus();return;}
+    btn.disabled=true;btn.textContent='Einen Moment…';err.style.display='none';
+    fetch('/api/leader-check/intent',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,source:'wladbot-landing',campaign:campaign})
+    }).then(function(r){
+      if(!r.ok)throw new Error('bad status');
+      window.location.href='/wladbot/danke';
+    }).catch(function(){
+      err.style.display='block';btn.disabled=false;btn.textContent='Kostenlos starten';
+    });
+  });
+
+  /* Spotlight-Deblur: Maus/Touch enthüllt die scharfe Avatar-Ebene */
+  var fine=window.matchMedia('(pointer:fine)').matches;
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!rm){
+    document.addEventListener('pointermove',function(e){
+      document.body.classList.add('spot');
+      document.body.style.setProperty('--mx',e.clientX+'px');
+      document.body.style.setProperty('--my',e.clientY+'px');
+    },{passive:true});
+    if(fine){document.addEventListener('pointerleave',function(){document.body.classList.remove('spot');});}
+  }
+
+  var T=new Date('2026-10-29T10:00:00+01:00').getTime();
+  var box=document.getElementById('scarcity');
+  function pad(n){return n<10?'0'+n:String(n);}
+  function tick(){
+    var d=T-Date.now();
+    if(d<=0){box.hidden=true;return;}
+    box.hidden=false;
+    document.getElementById('c-d').textContent=String(Math.floor(d/86400000));
+    document.getElementById('c-h').textContent=pad(Math.floor(d/3600000)%24);
+    document.getElementById('c-m').textContent=pad(Math.floor(d/60000)%60);
+    document.getElementById('c-s').textContent=pad(Math.floor(d/1000)%60);
+    setTimeout(tick,1000);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

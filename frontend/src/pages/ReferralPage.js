@@ -53,8 +53,8 @@ export default function ReferralPage() {
   const shareOn = async (platform) => {
     const url = referralData?.share_url || LEADERCHECK_URL;
     const text = de
-      ? `Ich nutze WladBot — das KI Leadership OS von Wlad Jachtchenko. Teste es kostenlos:`
-      : `I use WladBot — the AI Leadership OS by Wlad Jachtchenko. Try it free:`;
+      ? `Ich nutze WladBot, das KI Leadership OS von Wlad Jachtchenko. Teste es kostenlos:`
+      : `I use WladBot, the AI Leadership OS by Wlad Jachtchenko. Try it free:`;
 
     const links = {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
@@ -82,7 +82,7 @@ export default function ReferralPage() {
   const downloadCertificate = async () => {
     if (!certData) return;
     await generatePDF({
-      title: `Leadership Zertifikat — ${certData.name}`,
+      title: `Leadership Zertifikat · ${certData.name}`,
       overall_assessment: `${certData.name} hat das WladBot Leadership Programm erfolgreich durchlaufen und dabei ${certData.simulations_completed} Simulationen und ${certData.challenges_completed} Challenger-Interviews absolviert.`,
       score: certData.leadership_score,
       strengths: [
@@ -190,7 +190,7 @@ export default function ReferralPage() {
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-bold">{certData?.name}</p>
-                  <p className="text-xs text-muted-foreground">{certData?.level} — {certData?.xp || 0} XP</p>
+                  <p className="text-xs text-muted-foreground">{certData?.level} · {certData?.xp || 0} XP</p>
                 </div>
               </div>
               <div className="flex gap-2">

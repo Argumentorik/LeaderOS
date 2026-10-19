@@ -1,5 +1,5 @@
 /**
- * "Continue as [user]" — the signature premium-feel touch.
+ * "Continue as [user]" · the signature premium-feel touch.
  *
  * Shown above the standard auth form when a previous login is cached. Picks
  * up the avatar/name/provider from localStorage and offers a one-tap return.
@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { ArrowRight, X, KeyRound, Sparkles, Loader2 } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
-import { forgetLogin } from '../../lib/recentLogins';
+import { forgetLogin, displayEmail } from '../../lib/recentLogins';
 
 const providerLabel = {
   google: 'Google',
@@ -58,7 +58,8 @@ export const ContinueAsCard = ({
   de = true,
 }) => {
   if (!account) return null;
-  const { name, email, picture, provider } = account;
+  const { name, picture, provider } = account;
+  const masked = displayEmail(account);
 
   return (
     <button
@@ -66,7 +67,7 @@ export const ContinueAsCard = ({
       onClick={onClick}
       disabled={loading}
       data-testid="continue-as-card"
-      data-account-email={email}
+      data-account-initial={account.initial || ''}
       className="group relative w-full text-left rounded-2xl border border-[#BFFF00]/25 bg-gradient-to-br from-[#BFFF00]/[0.06] via-white/[0.02] to-transparent hover:border-[#BFFF00]/45 hover:from-[#BFFF00]/[0.10] transition-all p-4 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <div className="flex items-center gap-4">
@@ -78,7 +79,7 @@ export const ContinueAsCard = ({
             onError={(e) => { e.target.style.display = 'none'; }}
           />
         ) : (
-          <Initials name={name} email={email} />
+          <Initials name={name} email={masked} />
         )}
 
         <div className="flex-1 min-w-0">
@@ -91,8 +92,8 @@ export const ContinueAsCard = ({
               <ProviderIcon provider={provider} /> {providerLabel[provider] || provider}
             </span>
           </div>
-          <p className="text-sm font-bold text-white mt-0.5 truncate">{name || email}</p>
-          {name && <p className="text-[11px] text-white/40 truncate">{email}</p>}
+          <p className="text-sm font-bold text-white mt-0.5 truncate">{name || masked}</p>
+          {name && <p className="text-[11px] text-white/40 truncate">{masked}</p>}
         </div>
 
         <div className="shrink-0 flex items-center gap-2">
@@ -102,14 +103,14 @@ export const ContinueAsCard = ({
         </div>
       </div>
 
-      {/* "Not you?" — clears this account from the recent list */}
+      {/* "Not you?" · clears this account from the recent list */}
       {!loading && (
         <span
           role="button"
           tabIndex={0}
-          onClick={(e) => { e.stopPropagation(); onForget?.(email); }}
+          onClick={(e) => { e.stopPropagation(); onForget?.(account); }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onForget?.(email); }
+            if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onForget?.(account); }
           }}
           className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/[0.05] hover:bg-white/[0.12] text-white/40 hover:text-white/80 opacity-0 group-hover:opacity-100 transition-all"
           aria-label={de ? 'Konto entfernen' : 'Forget this account'}
@@ -136,12 +137,13 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
 
   const trigger = async () => {
     if (!account) return;
-    const { provider, email } = account;
+    const { provider } = account;
     setLoading(true);
     try {
       if (provider === 'magic_link') {
-        await api.post('/auth/magic-link/request', { email });
-        onMagicSent?.(email);
+        // Full email is no longer stored · ask user to re-enter it.
+        // The parent switches to login mode so the email field is shown.
+        onPrefill?.('', provider);
       } else if (provider === 'email') {
         // Godmode (Iter 117): one tap = instant 1-click link, no password typing.
         // Form is still prefilled underneath as a fallback.
@@ -173,8 +175,8 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
     }
   };
 
-  const forget = (email) => {
-    forgetLogin(email);
+  const forget = (entry) => {
+    forgetLogin(entry);
     // The parent should re-read recentLogins() to refresh the UI.
   };
 

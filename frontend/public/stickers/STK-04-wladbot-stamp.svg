@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" aria-labelledby="t04">
+  <title id="t04">STK-04 — WladBot 24/7 · v2 Nike Editorial Dark · 70×70mm</title>
+  <defs>
+    <style>
+      .bg{fill:#0A0A0A}
+      .ink{fill:#FFFFFF}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.05em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="280" height="280"/>
+
+  <text class="mono lime" x="16" y="22" font-size="8.5">▸ BENEFIT · 02 · IMMER WACH</text>
+  <text class="mono ink" text-anchor="end" x="264" y="22" font-size="8.5" opacity="0.45">LEADER-OS</text>
+
+  <!-- Massive headline -->
+  <text class="display ink" x="16" y="92" font-size="58">24 Stunden<tspan class="lime">.</tspan></text>
+  <text class="display ink" x="16" y="148" font-size="58">7 Tage<tspan class="lime">.</tspan></text>
+
+  <!-- Sub line in mono small caps -->
+  <text class="mono ink" x="16" y="172" font-size="9" opacity="0.55">DEIN KI-COACH WARTET NIE BIS MONTAG</text>
+
+  <!-- Lime circle CTA -->
+  <g transform="translate(186 196)">
+    <circle cx="0" cy="0" r="42" fill="#BFFF00"/>
+    <text x="-22" y="-4" font-family="'Outfit',sans-serif" font-weight="900" font-size="22" fill="#0A0A0A">+</text>
+    <text x="-22" y="14" font-family="'Outfit',sans-serif" font-weight="700" font-size="9" fill="#0A0A0A" text-decoration="underline" letter-spacing="-0.005em">WladBot starten</text>
+  </g>
+
+  <!-- Bottom W mark on dark -->
+  <g transform="translate(16 232)">
+    <rect class="lime" x="0" y="0" width="22" height="22"/>
+    <text class="display" fill="#0A0A0A" x="11" y="18" text-anchor="middle" font-size="20">W</text>
+    <text class="display ink" x="30" y="16" font-size="15">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+  <text class="mono ink" text-anchor="end" x="264" y="248" font-size="8" opacity="0.55">STK · 04 / 06</text>
+</svg>

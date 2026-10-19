@@ -1,0 +1,70 @@
+# Leader-Check robots policy (leader-check.de)
+# Diagnostic Marketing-Landing — Single-funnel. Diagnose-App selbst läuft
+# auf leadercheck.de (Emergent) — diese Domain hier ist nur die Vercel-Bridge.
+
+User-agent: *
+Allow: /
+Allow: /impressum
+Allow: /datenschutz
+Allow: /agb
+Allow: /widerruf
+
+# Authenticated + coaching-app routes existieren auf diesem Host technisch
+# nicht (anderer Landing-Branch in LandingPage.js), aber wir disallowen sie
+# explizit als Defense-in-Depth falls Routing-Audit irgendwann driftet.
+Disallow: /dashboard
+Disallow: /chat
+Disallow: /login
+Disallow: /tools
+Disallow: /simulations
+Disallow: /missions
+Disallow: /challengers
+Disallow: /tasks
+Disallow: /playbooks
+Disallow: /events
+Disallow: /my-path
+Disallow: /progress
+Disallow: /community
+Disallow: /coaching
+Disallow: /downloads
+Disallow: /referral
+Disallow: /enterprise
+Disallow: /challenge
+Disallow: /profile
+Disallow: /payment-success
+Disallow: /onboarding
+Disallow: /auth/
+
+# API routes — never index
+Disallow: /api/
+
+# Newsletter double-opt-in confirmation surface — never index
+Disallow: /newsletter/
+
+# Admin — never index
+Disallow: /wlad-control-x7k9q2
+
+# Slow down aggressive crawlers
+User-agent: bingbot
+Crawl-delay: 5
+
+User-agent: YandexBot
+Crawl-delay: 10
+
+# Bad bots — block entirely
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+Sitemap: https://leader-check.de/sitemap.xml

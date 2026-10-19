@@ -8,12 +8,12 @@ import { WladMark } from '../brand/WladMark';
  * - Per-flow presets (`flow` prop) OR custom `agents` override
  *
  * Props:
- *   isOpen     — bool
- *   flow       — 'checkin' | 'challenge' | 'challenger' | 'video' | 'diagnosis' | 'report' | 'generic'
- *   title      — override headline (optional)
- *   de         — language (default true)
- *   agents     — optional array of {name, status} to fully override preset
- *   stepDuration — ms per agent (default 2200)
+ *   isOpen     · bool
+ *   flow       · 'checkin' | 'challenge' | 'challenger' | 'video' | 'diagnosis' | 'report' | 'generic'
+ *   title      · override headline (optional)
+ *   de         · language (default true)
+ *   agents     · optional array of {name, status} to fully override preset
+ *   stepDuration · ms per agent (default 2200)
  */
 
 const QUOTES = [
@@ -21,7 +21,7 @@ const QUOTES = [
   { q: 'Kommunikation ist die wichtigste Führungsqualität.', a: 'Wlad Jachtchenko' },
   { q: 'Die Zukunft gehört denen, die die Möglichkeiten sehen, bevor sie offensichtlich werden.', a: 'John Sculley' },
   { q: 'Innovation unterscheidet Leader von Followern.', a: 'Steve Jobs' },
-  { q: 'Nicht weil es schwer ist, wagen wir es nicht — weil wir es nicht wagen, ist es schwer.', a: 'Seneca' },
+  { q: 'Nicht weil es schwer ist, wagen wir es nicht · weil wir es nicht wagen, ist es schwer.', a: 'Seneca' },
   { q: 'Ein guter Führer zeigt den Weg, indem er ihn geht.', a: 'Wlad Jachtchenko' },
   { q: 'Fragen sind die Antwort. Aktives Zuhören ist die Superkraft.', a: 'Wlad Jachtchenko' },
 ];
@@ -73,7 +73,7 @@ const FLOWS_DE = {
     title: 'WladHub-Diagnose wird geladen',
     agents: [
       { name: 'Supabase-Sync', status: 'Deine Diagnose wird abgerufen' },
-      { name: '3-Layer Analyse', status: 'KI-Reifegrad, Rhetorik, EQ' },
+      { name: '3-Dimensionen-Analyse', status: 'KI-Reifegrad, Rhetorik, EQ' },
       { name: 'Composite-Score', status: 'Gesamtbewertung wird berechnet' },
       { name: 'Action-Plan Agent', status: 'Personalisierte Empfehlungen' },
     ],
@@ -145,7 +145,7 @@ const FLOWS_EN = {
     title: 'Loading WladHub diagnosis',
     agents: [
       { name: 'Supabase Sync', status: 'Fetching your diagnosis' },
-      { name: '3-Layer Analysis', status: 'AI maturity, Rhetoric, EQ' },
+      { name: '3-Dimension Analysis', status: 'AI maturity, Rhetoric, EQ' },
       { name: 'Composite Score', status: 'Computing overall score' },
       { name: 'Action Plan Agent', status: 'Personalized recommendations' },
     ],
@@ -322,7 +322,7 @@ export function LoadingOverlay({
         {/* Rotating quote */}
         <div className="px-4 pt-1">
           <p className="text-[12px] text-white/35 italic leading-relaxed">"{quote.q}"</p>
-          <p className="text-[10px] text-white/20 mt-1">— {quote.a}</p>
+          <p className="text-[10px] text-white/20 mt-1">· {quote.a}</p>
         </div>
       </div>
     </div>

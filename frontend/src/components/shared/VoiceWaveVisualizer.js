@@ -1,5 +1,5 @@
 /**
- * VoiceWaveVisualizer — real-time audio waveform visualization.
+ * VoiceWaveVisualizer · real-time audio waveform visualization.
  *
  * Connects to an HTMLAudioElement via Web Audio API → AnalyserNode → Canvas.
  * Draws a centered mirrored-bar waveform that pulses with the actual audio
@@ -16,7 +16,7 @@ const BARS = 48;
 const BAR_GAP = 2;
 const BAR_RADIUS = 1.5;
 
-// Cache the audio context — Web Audio only allows ONE AudioContext per page
+// Cache the audio context · Web Audio only allows ONE AudioContext per page
 // (some browsers warn at ~6+). And only ONE MediaElementSource per audio el.
 const _ctxCache = { ctx: null, sources: new WeakMap() };
 
@@ -102,7 +102,7 @@ export const VoiceWaveVisualizer = ({
         // Map bar index to frequency bin (skip very-low/very-high bins that are usually silent)
         const binIdx = Math.floor(2 + (i / BARS) * (data.length * 0.7));
         const v = data[binIdx] / 255;
-        // Mirror smoothing — center bars get a small boost so wave looks centered
+        // Mirror smoothing · center bars get a small boost so wave looks centered
         const center = Math.abs(i - BARS / 2) / (BARS / 2);
         const boost = 1 - center * 0.3;
         const h = Math.max(2, v * height * 0.95 * boost);

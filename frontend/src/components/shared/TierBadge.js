@@ -41,7 +41,7 @@ const CONFIG = {
 };
 
 /**
- * TierBadge — shows user's current tier.
+ * TierBadge · shows user's current tier.
  * Variants: 'full' (icon+label), 'compact' (icon only), 'pill' (default)
  */
 export const TierBadge = ({ variant = 'pill', size = 'sm', showLabel = true, showFree = false }) => {

@@ -1,9 +1,9 @@
 /**
- * PricingContext — globaler Trigger fürs PricingModal.
+ * PricingContext · globaler Trigger fürs PricingModal.
  *
  * Jede Komponente kann `const { open } = usePricing();` aufrufen, um den
  * In-App-Stripe-Checkout-Pop-Up zu öffnen. Dadurch müssen keine
- * navigate('/coaching') Aufrufe mehr über die App verteilt sein —
+ * navigate('/coaching') Aufrufe mehr über die App verteilt sein ·
  * Conversion-Rate ↑.
  */
 import { createContext, useContext, useState, useCallback, useMemo } from 'react';

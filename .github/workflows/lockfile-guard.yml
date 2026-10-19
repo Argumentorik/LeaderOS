@@ -3,18 +3,24 @@ name: lockfile-guard
 # Prevents Vercel build crashes caused by package.json being modified without
 # the matching yarn.lock. Vercel installs with --frozen-lockfile, so any drift
 # results in a hard failure on deploy. This job is the cheapest possible
-# pre-merge gate to catch lockfile drift in PRs and on push to main.
+# pre-merge gate to catch lockfile drift in PRs and on push to mvpcode.
+#
+# History:
+#   - Iter 92.20a: this triggered on `branches: [main, master]` which never
+#     matched in this repo (production branch is mvpcode). The May 2026 gsap-
+#     lockfile incident slipped through because of that.
+#   - Iter 92.20b: PR-trigger had `paths: [frontend/package.json,
+#     frontend/yarn.lock]`. Because this job is also a required-status-check
+#     on mvpcode, backend-only PRs (like #43) stayed permanently "expected"
+#     and unmergeable — GitHub waits forever for a status that never reports.
+#     Dropped the PR path filter; the job is fast (yarn install with cache
+#     ~30s) so running it on every PR has no meaningful cost and it unblocks
+#     every backend / docs / config PR.
 
 on:
   push:
-    branches: [main, master]
-    paths:
-      - 'frontend/package.json'
-      - 'frontend/yarn.lock'
+    branches: [mvpcode]
   pull_request:
-    paths:
-      - 'frontend/package.json'
-      - 'frontend/yarn.lock'
 
 concurrency:
   group: lockfile-guard-${{ github.ref }}
@@ -28,8 +34,8 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
 

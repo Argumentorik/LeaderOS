@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Google News sitemap · only articles from the last 2 days are eligible
+  by Google policy. Rebuilt on publish for the fresh-content discovery
+  channel. Current batch: the 2026-07-02 Reels-Serie (5 articles).
+
+  Schema reference:
+    https://developers.google.com/search/docs/crawling-indexing/sitemaps/news-sitemap
+
+  Why news sitemap matters: Google News inclusion is a significant
+  ranking-boost trigger for topical queries · Google surfaces News-tab
+  results above Web-tab when News-eligible content exists. Without this
+  file we are invisible to that channel.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+
+  <url>
+    <loc>https://leader-os.de/journal/charisma-code-drei-signale-die-den-raum-entscheiden</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LeaderOS Feldnotizen</news:name>
+        <news:language>de</news:language>
+      </news:publication>
+      <news:publication_date>2026-07-02T06:00:00+02:00</news:publication_date>
+      <news:title>Der Charisma-Code: Drei Signale, die den Raum entscheiden</news:title>
+      <news:keywords>Charisma, charismatische Führung, Präsenz, Wlad Jachtchenko, Leadership, Führungskraft Ausstrahlung</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/elevator-pitch-fuer-fuehrungskraefte-die-30-sekunden-formel</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LeaderOS Feldnotizen</news:name>
+        <news:language>de</news:language>
+      </news:publication>
+      <news:publication_date>2026-07-02T06:00:00+02:00</news:publication_date>
+      <news:title>Elevator Pitch für Führungskräfte: Die 30-Sekunden-Formel</news:title>
+      <news:keywords>Elevator Pitch, Pitch Formel, Führungskräfte Kommunikation, Vorstand überzeugen, Wlad Jachtchenko</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/mitarbeiter-motivation-4-0-was-wirklich-zieht</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LeaderOS Feldnotizen</news:name>
+        <news:language>de</news:language>
+      </news:publication>
+      <news:publication_date>2026-07-02T06:00:00+02:00</news:publication_date>
+      <news:title>Mitarbeiter-Motivation 4.0: Was wirklich zieht</news:title>
+      <news:keywords>Mitarbeitermotivation, Team motivieren, Autonomie, Führung, Mitarbeiterbindung, Wlad Jachtchenko</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/die-ersten-sieben-sekunden-wie-fuehrung-wirkt-bevor-du-sprichst</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LeaderOS Feldnotizen</news:name>
+        <news:language>de</news:language>
+      </news:publication>
+      <news:publication_date>2026-07-02T06:00:00+02:00</news:publication_date>
+      <news:title>Die ersten sieben Sekunden: Wie Führung wirkt, bevor du sprichst</news:title>
+      <news:keywords>erster Eindruck, Wirkung, Auftreten Führungskraft, Präsenz, Körpersprache, Wlad Jachtchenko</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/koerpersprache-und-stimme-die-unterschaetzten-fuehrungswerkzeuge</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LeaderOS Feldnotizen</news:name>
+        <news:language>de</news:language>
+      </news:publication>
+      <news:publication_date>2026-07-02T06:00:00+02:00</news:publication_date>
+      <news:title>Körpersprache und Stimme: Die unterschätzten Führungswerkzeuge</news:title>
+      <news:keywords>Körpersprache, Stimme, nonverbale Kommunikation, Rhetorik, Führungskraft Auftritt, Wlad Jachtchenko</news:keywords>
+    </news:news>
+  </url>
+
+</urlset>

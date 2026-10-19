@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import * as Sentry from '@sentry/react';
 import api from '../lib/api';
 import logger from '../lib/logger';
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       // Don't clear cached user on network errors — let them keep browsing cached state.
       const status = err?.response?.status;
       if (!err?.response) {
-        logger.warn('Network error during auth check — assuming offline, keeping cached user');
+        logger.warn('Network error during auth check · assuming offline, keeping cached user');
         setNetworkError(true);
       } else if (status === 401 || status === 403) {
         logger.info('Auth check: no valid session');
@@ -85,19 +85,24 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('wladbot:network-error', handler);
   }, []);
 
-  // Proactive token refresh on tab focus — if the user has been away for >5 min,
+  // Proactive token refresh on tab focus · if the user has been away for >5 min,
   // silently refresh the access cookie BEFORE the page fires its parallel API calls.
   // Prevents the "7 transient 401s on dashboard mount" race that pollutes DevTools.
+  //
+  // useRef so the threshold survives across `user` updates (e.g. /auth/me hydrating
+  // a fresh profile). The previous let-in-useEffect would reset to Date.now() each
+  // time `user` changed, effectively disabling the 5-minute gate.
+  const lastRefreshAtRef = useRef(null);
   useEffect(() => {
-    let lastRefreshAt = Date.now();
+    if (lastRefreshAtRef.current === null) lastRefreshAtRef.current = Date.now();
     const REFRESH_THRESHOLD_MS = 5 * 60 * 1000;
     const refreshIfStale = async () => {
       if (!user) return;
       if (document.hidden) return;
-      if (Date.now() - lastRefreshAt < REFRESH_THRESHOLD_MS) return;
+      if (Date.now() - lastRefreshAtRef.current < REFRESH_THRESHOLD_MS) return;
       try {
         await api.post('/auth/refresh');
-        lastRefreshAt = Date.now();
+        lastRefreshAtRef.current = Date.now();
       } catch { /* refresh failed → next request will trigger ReAuthModal */ }
     };
     document.addEventListener('visibilitychange', refreshIfStale);
@@ -122,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       logger.error('Logout request failed:', err?.message || err);
     }
     sessionStorage.removeItem('wladbot_user');
-    // NOTE: We do NOT call forgetAllLogins() on a normal logout — the user
+    // NOTE: We do NOT call forgetAllLogins() on a normal logout · the user
     // likely wants "Continue as me" on next visit. Only clear on explicit
     // "Forget all accounts" action from the security tab.
     setUser(null);

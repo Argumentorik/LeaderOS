@@ -90,7 +90,7 @@ def _render_leader_score_card(
 
     # Top-left brand mark
     f_brand = _font(28, weight="bold")
-    draw.text((60, 50), "LEADER-OS", font=f_brand, fill=TEXT_WHITE)
+    draw.text((60, 50), "LEADEROS", font=f_brand, fill=TEXT_WHITE)
 
     f_brand_sub = _font(18, weight="regular")
     draw.text((60, 88), "KI Leadership System", font=f_brand_sub, fill=TEXT_DIM)
@@ -161,7 +161,7 @@ def _render_default_card() -> bytes:
         draw.line([(0, y), (WIDTH, y)], fill=(r, g, b))
 
     f_brand = _font(32, weight="bold")
-    draw.text((60, 50), "LEADER-OS", font=f_brand, fill=TEXT_WHITE)
+    draw.text((60, 50), "LEADEROS", font=f_brand, fill=TEXT_WHITE)
 
     # Main headline — bold, multi-line, lime accent
     f_main = _font(86, weight="bold")

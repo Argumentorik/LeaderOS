@@ -1,7 +1,7 @@
 import { Check, X, Star, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from '../../ui/button';
 
-// ── TierCardBadge — top-right "VIP" / "BELIEBT" badge ─────────────────────
+// ── TierCardBadge · top-right "VIP" / "BELIEBT" badge ─────────────────────
 export const TierCardBadge = ({ badge }) => {
   if (!badge) return null;
   const classes = badge === 'VIP'
@@ -14,7 +14,7 @@ export const TierCardBadge = ({ badge }) => {
   );
 };
 
-// ── TierCardHeader — icon + subtitle + name ───────────────────────────────
+// ── TierCardHeader · icon + subtitle + name ───────────────────────────────
 export const TierCardHeader = ({ tier }) => {
   const Icon = tier.icon;
   const iconBg = tier.isDark
@@ -38,7 +38,7 @@ export const TierCardHeader = ({ tier }) => {
   );
 };
 
-// ── TierPrice — big price + optional "or in X installments" link ──────────
+// ── TierPrice · big price + optional "or in X installments" link ──────────
 export const TierPrice = ({ tier, de, onOpenInstallments }) => {
   const unitColor = tier.isDark ? 'text-white/50' : 'text-muted-foreground';
   return (
@@ -62,7 +62,7 @@ export const TierPrice = ({ tier, de, onOpenInstallments }) => {
   );
 };
 
-// ── TierFeatureList — bullet list with check/x icons ──────────────────────
+// ── TierFeatureList · bullet list with check/x icons ──────────────────────
 const featureLabelClass = (feature, isDark) => {
   if (!feature.has) {
     return isDark ? 'text-white/30 line-through' : 'text-muted-foreground/50 line-through';
@@ -93,7 +93,7 @@ export const TierFeatureList = ({ features, isDark }) => (
   </ul>
 );
 
-// ── TierCTA — checkout button with loading + "current tier" states ────────
+// ── TierCTA · checkout button with loading + "current tier" states ────────
 const ctaButtonClass = (variant) => {
   if (variant === 'accelerator') return 'bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#9ACC00]';
   if (variant === 'primary')     return 'bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white hover:opacity-90';

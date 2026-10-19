@@ -15,7 +15,7 @@ const WLAD_QUOTES_DE = [
 ];
 
 const WLAD_QUOTES_EN = [
-  "Leadership doesn't start with a title. It starts with a decision. Decide today — to lead.",
+  "Leadership doesn't start with a title. It starts with a decision. Decide today · to lead.",
   "Your comfort zone is a nice place. But nothing grows there. Take one step out today.",
   "The best leaders listen more than they speak. Practice active listening in every meeting today.",
   "Consistency beats talent when talent isn't consistent. Take the small step today.",
@@ -25,7 +25,7 @@ const WLAD_QUOTES_EN = [
   "Feedback isn't criticism. It's a proof of love for growth. Give someone honest feedback today.",
 ];
 
-/** Rotating daily motivational quote from Wlad — tap to hear him speak it. */
+/** Rotating daily motivational quote from Wlad · tap to hear him speak it. */
 export const WladMotivationCard = ({ de = true }) => {
   const [quote, setQuote] = useState('');
 
@@ -53,20 +53,20 @@ export const WladMotivationCard = ({ de = true }) => {
       <CardContent className="p-5 relative">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-xl bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
-            <Quote size={14} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+            <Quote size={14} className="text-[#6B8A00] dark:text-brand" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[9px] font-black uppercase tracking-widest text-[#6B8A00] dark:text-[#BFFF00]">
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#6B8A00] dark:text-brand">
                 {de ? 'Wlads Zitat des Tages' : "Wlad's Quote of the Day"}
               </span>
-              <Sparkles size={10} className="text-[#BFFF00]" />
+              <Sparkles size={10} className="text-brand" />
             </div>
             <p className="text-[13px] font-semibold leading-snug text-foreground">
               &ldquo;{quote}&rdquo;
             </p>
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-[10px] text-muted-foreground italic">— Wlad Jachtchenko</span>
+              <span className="text-[10px] text-muted-foreground italic">· Wlad Jachtchenko</span>
               <VoicePlayButton
                 text={quote}
                 persona="wlad"

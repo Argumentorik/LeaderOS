@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LeaderOS Mobile — App Showcase</title>
+<meta name="description" content="LeaderOS auf dem Phone: Führung ist trainierbar. Onboarding und Pricing der App als Showcase — 30-Tage-Challenge und Leadership Plus."/>
+<link rel="canonical" href="https://leader-os.de/app"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="LeaderOS"/>
+<meta property="og:url" content="https://leader-os.de/app"/>
+<meta property="og:title" content="LeaderOS Mobile — App Showcase"/>
+<meta property="og:description" content="Führung ist trainierbar. Die LeaderOS-App im Device-Showcase: Onboarding, Features, Pricing."/>
+<meta property="og:image" content="https://leader-os.de/og-home.jpg"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<!--
+  /app · Device-Frame-Showcase fürs App-Marketing.
+  Layout/Typo/Animation exakt nach der Referenz-Spec (zwei iOS-Frames
+  370×790 auf #F4F4F4-Stage, ITC Garamond Narrow via Cloudinary,
+  loadeddata-gated Entrances); Copy, Preise und Links sind LeaderOS
+  (Kanon: docs/gtm/WLAD_CANON.md — Challenge 997 € einmalig, Leadership
+  Plus 4.797 €/Jahr inkl. 12 Videokursen im Wert von 2.388 €). Externe
+  Assets (Cloudinary-Fonts, CloudFront-Videos) sind in der CSP in
+  vercel.json freigegeben.
+-->
+<style>
+@font-face{font-family:"ITC Garamond Std Narrow";src:url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-LtNarrow_i2zcip.woff2") format("woff2"),url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-LtNarrow_soc5vc.woff") format("woff");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"ITC Garamond Std Narrow";src:url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrow_xjfoc0.woff2") format("woff2"),url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrow_wfoxm1.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"ITC Garamond Std Narrow";src:url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrowIta_hiy9ld.woff2") format("woff2"),url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrowIta_rlarxo.woff") format("woff");font-weight:400;font-style:italic;font-display:swap}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#F4F4F4;font-family:Inter,system-ui,-apple-system,sans-serif;overflow:hidden;display:grid;place-items:center}
+a{text-decoration:none;color:inherit}
+
+.ze-viewport{width:100vw;height:100vh;display:grid;place-items:center;padding:40px}
+.ze-stage{display:flex;gap:70px;transform-origin:center center}
+
+/* ── iOS frame ─────────────────────────────────────────── */
+.frame{position:relative;width:370px;height:790px;border-radius:48px;overflow:hidden;flex:0 0 auto;
+  box-shadow:0 40px 80px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.12)}
+.frame--light{background:#F2F2F7}
+.frame--dark{background:#000}
+.island{position:absolute;z-index:9;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:24px;background:#000}
+.statusbar{position:absolute;z-index:8;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:14px 30px 0}
+.sb-time{font-family:-apple-system,"SF Pro Text",Inter,sans-serif;font-weight:590;font-size:17px;color:#fff}
+.sb-icons{display:flex;align-items:center;gap:7px}
+.sb-icons svg{display:block}
+.homebar{position:absolute;z-index:9;bottom:8px;left:50%;transform:translateX(-50%);width:139px;height:5px;border-radius:100px}
+.frame--light .homebar{background:rgba(255,255,255,.7)}
+.frame--dark .homebar{background:rgba(255,255,255,.7)}
+
+/* ── screen 1 · onboarding ─────────────────────────────── */
+.s1{background:#02040c}
+.s1-inner{position:absolute;top:0;left:0;width:470px;height:1008px;transform:scale(.787234);transform-origin:top left}
+.s1-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;z-index:0}
+.s1-fade{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:1;
+  background:linear-gradient(to bottom,rgba(2,4,12,0) 0%,rgba(2,4,12,.35) 46%,rgba(2,4,12,.72) 100%)}
+.s1-logo{position:absolute;z-index:4;top:74px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:12px;
+  filter:drop-shadow(0 0 7px rgba(190,215,255,.28))}
+.s1-logo svg{width:52px;height:52px;display:block}
+.s1-logo .wordmark{font-family:Outfit,Inter,sans-serif;font-weight:900;font-size:30px;letter-spacing:-.03em;color:#fff;line-height:1}
+.s1-logo .wordmark em{font-style:normal;color:#BFFF00;margin:0 2px}
+.s1-title{position:absolute;z-index:4;top:618px;left:0;right:0;text-align:center;color:#fff;
+  font-family:"ITC Garamond Std Narrow","Playfair Display",serif;font-weight:300;font-size:66px;line-height:68px;letter-spacing:.2px;
+  text-shadow:0 0 34px rgba(255,255,255,.22),0 1px 2px rgba(0,0,0,.35)}
+.s1-title i{font-style:italic;font-weight:400;
+  text-shadow:0 0 10px rgba(255,255,255,.6),0 0 20px rgba(255,235,190,.5),0 0 40px rgba(255,210,140,.32)}
+.s1-sub{position:absolute;z-index:4;top:787px;left:0;right:0;text-align:center;white-space:pre-line;
+  font-family:Inter,sans-serif;font-size:16.5px;font-weight:400;line-height:26px;color:rgba(255,255,255,.52)}
+.s1-btn{position:absolute;z-index:4;top:874px;left:32px;width:406px;height:55px;border-radius:28px;background:#fff;
+  display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 26px rgba(0,0,0,.28);
+  font-family:"Helvetica Neue",Inter,sans-serif;font-size:18px;font-weight:500;color:#1a1a1a;-webkit-text-stroke:.6px #1a1a1a}
+.s1-terms{position:absolute;z-index:4;top:950px;left:0;right:0;text-align:center;
+  font-size:12px;font-weight:400;color:rgba(255,255,255,.42)}
+.s1-terms b{font-weight:400;color:rgba(255,255,255,.82)}
+
+/* ── screen 2 · unlock ─────────────────────────────────── */
+.s2{background:#14151d}
+.s2-video{position:absolute;left:0;top:-30%;width:370px;height:790px;object-fit:cover;z-index:0}
+.s2-fade{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(20,21,29,0) 0%,rgba(20,21,29,0) 40%,rgba(20,21,29,.55) 55%,rgba(20,21,29,.92) 66%,#14151d 74%,#14151d 100%)}
+.s2-head{position:absolute;z-index:4;left:28px;top:386px;color:#fff;
+  font-family:"ITC Garamond Std Narrow","Playfair Display",serif;font-weight:500;font-size:26px;line-height:1;letter-spacing:.2px;
+  text-shadow:0 0 18px rgba(120,180,220,.35)}
+.s2-divider{position:absolute;z-index:4;left:28px;top:418px;width:265px;height:1px;
+  background:linear-gradient(to right,rgba(255,255,255,.30) 0%,rgba(255,255,255,.30) 70%,rgba(255,255,255,0) 100%)}
+.s2-list{position:absolute;z-index:4;left:28px;top:429px;width:314px}
+.s2-row{display:flex;align-items:center;height:24px}
+.s2-row svg{flex:0 0 22px}
+.s2-row span{margin-left:4px;font-size:13.5px;font-weight:400;color:#fff}
+.s2-cards{position:absolute;z-index:4;left:28px;top:561px;width:314px;height:123px}
+.card-m{position:absolute;left:0;top:0;width:144px;height:123px;border-radius:14px;overflow:hidden;
+  background:linear-gradient(135deg,#33415e 0%,#1b2338 55%,#12172a 100%);border:1px solid rgba(255,255,255,.11);padding:14px 14px 15px 15px}
+.card-m p,.card-y p{text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.card-label{font-size:13px;font-weight:400;color:#fff}
+.card-price{font-size:19px;font-weight:500;letter-spacing:.3px;color:#fff;margin-top:6px}
+.card-bottom{position:absolute;left:15px;bottom:13px;font-size:12px;color:#fff}
+.card-y{position:absolute;left:154px;top:0;width:160px;height:123px;border-radius:14px;
+  background:#1e212a;border:1px solid rgba(255,255,255,.11);padding:14px 14px 15px 15px}
+.card-y .card-label,.card-y .card-bottom{color:rgba(255,255,255,.50)}
+.card-y .card-price{color:rgba(255,255,255,.62)}
+.save-badge{position:absolute;left:15px;top:66px;display:inline-flex;align-items:center;padding:5px 8px;border-radius:11px;
+  background:#4d5057;font-size:10.5px;font-weight:600;letter-spacing:.2px;color:rgba(255,255,255,.65);white-space:nowrap}
+.s2-btn{position:absolute;z-index:4;left:28px;top:709px;width:314px;height:50px;border-radius:26px;background:#fff;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-family:"Helvetica Neue",Inter,sans-serif;font-size:16px;font-weight:500;color:#0c0c0e;-webkit-text-stroke:.4px}
+
+/* ── entrance animations (gated on .ze-ready) ─────────── */
+@keyframes zeBgSettle{from{transform:scale(1.12);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes zeReveal{from{transform:translateY(26px) scale(.985);filter:blur(7px);opacity:0}to{transform:none;filter:blur(0);opacity:1}}
+@keyframes zeDrop{from{transform:translateY(-16px) scale(.90);opacity:0}to{transform:none;opacity:1}}
+@keyframes zeLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes zePop{0%{transform:translateY(8px) scale(.78);opacity:0}60%{transform:scale(1.07);opacity:1}100%{transform:none;opacity:1}}
+[data-anim]{opacity:0;animation-play-state:paused;animation-fill-mode:both;animation-timing-function:cubic-bezier(.16,1,.3,1)}
+.ze-ready [data-anim]{animation-play-state:running}
+[data-anim="bg"]{animation-name:zeBgSettle;animation-duration:1.7s}
+[data-anim="reveal"]{animation-name:zeReveal;animation-duration:.9s}
+[data-anim="drop"]{animation-name:zeDrop;animation-duration:.9s}
+[data-anim="line"]{animation-name:zeLine;animation-duration:.9s;transform-origin:left;opacity:1;transform:scaleX(0)}
+.ze-ready [data-anim="line"]{opacity:1}
+[data-anim="pop"]{animation-name:zePop;animation-duration:.7s;animation-timing-function:cubic-bezier(.34,1.56,.64,1)}
+@media (prefers-reduced-motion:reduce){
+  [data-anim]{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+}
+</style>
+<!-- Google Ads Conversion-Tracking + Consent Mode v2 · inaktiv, solange in
+     /js/consent-gtag.js noch die Platzhalter-AW-ID steht (docs/gtm/GOOGLE_ADS_SETUP.md §3). -->
+<script src="/js/consent-gtag.js" defer></script>
+</head>
+<body>
+<div class="ze-viewport" id="viewport">
+  <div class="ze-stage" id="stage">
+
+    <!-- ── Screen 1 · Onboarding (light frame) ── -->
+    <section class="frame frame--light s1" aria-label="LeaderOS Onboarding-Screen">
+      <div class="s1-inner">
+        <video class="s1-video" data-anim="bg" autoplay loop muted playsinline
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260710_114906_ad7cee37-9e56-434f-99bc-92d5bdc4f9fe.mp4"></video>
+        <div class="s1-fade"></div>
+        <div class="s1-logo" data-anim="drop" style="animation-delay:.45s" aria-label="LeaderOS">
+          <svg viewBox="0 0 32 32" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/>
+              </linearGradient>
+              <linearGradient id="lg-stroke" x1="2" y1="26" x2="30" y2="4" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0A0A0A" stop-opacity="0.92"/><stop offset="100%" stop-color="#0A0A0A"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="9.6" fill="url(#lg-bg)"/>
+            <rect x="0.4" y="0.4" width="31.2" height="31.2" rx="9.4" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+            <g transform="translate(4.6 4.6) scale(0.71)" opacity="0.18">
+              <path d="M3.2 5.2 L9 24.8 Q10.4 26 11.8 24.6 L15.6 10.4 Q16.6 9.4 17.6 10.4 L21 24.6 Q22.4 26 23.8 24.8 L29.4 4.6" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </g>
+            <g transform="translate(4.2 4.2) scale(0.7375)">
+              <path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke="url(#lg-stroke)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke="url(#lg-stroke)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+              <circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A"/>
+            </g>
+          </svg>
+          <span class="wordmark">Leader<em>·</em>OS</span>
+        </div>
+        <h1 class="s1-title" data-anim="reveal" style="animation-delay:.62s">Führung ist<br/><i>trainierbar</i></h1>
+        <p class="s1-sub" data-anim="reveal" style="animation-delay:.78s">Rhetorik, KI und EQ trainieren.
+15 Minuten am Tag.</p>
+        <a class="s1-btn" data-anim="reveal" style="animation-delay:.94s" href="https://leaderos.de/signup?trial=14">
+          <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+            <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+            <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34A21.9 21.9 0 0 0 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+            <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+          </svg>
+          Weiter mit Google
+        </a>
+        <p class="s1-terms" data-anim="reveal" style="animation-delay:1.06s">Mit dem Fortfahren akzeptierst du die <b>Nutzungsbedingungen</b></p>
+      </div>
+      <span class="island" aria-hidden="true"></span>
+      <div class="statusbar" aria-hidden="true">
+        <span class="sb-time">11:11</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12"><g fill="#fff"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12"><g stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M1.5 4.2a10.5 10.5 0 0 1 14 0"/><path d="M4 6.9a7 7 0 0 1 9 0"/><path d="M6.5 9.4a3.4 3.4 0 0 1 4 0"/></g><circle cx="8.5" cy="11" r="1.1" fill="#fff"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="0" width="22" height="12" rx="3.5" fill="none" stroke="#fff" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#fff" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+      <span class="homebar" aria-hidden="true"></span>
+    </section>
+
+    <!-- ── Screen 2 · Unlock (dark frame) ── -->
+    <section class="frame frame--dark s2" aria-label="LeaderOS Pricing-Screen">
+      <video class="s2-video" data-anim="bg" style="animation-delay:.12s" autoplay loop muted playsinline
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260710_115050_a1ba47d0-aedf-413c-9dea-14509599d3dd.mp4"></video>
+      <div class="s2-fade"></div>
+      <h2 class="s2-head" data-anim="reveal" style="animation-delay:.58s">Alles freischalten:</h2>
+      <div class="s2-divider" data-anim="line" style="animation-delay:.72s"></div>
+      <ul class="s2-list" style="list-style:none">
+        <li class="s2-row" data-anim="reveal" style="animation-delay:.80s">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg>
+          <span>11 Frameworks aus 13 Büchern</span>
+        </li>
+        <li class="s2-row" data-anim="reveal" style="animation-delay:.88s">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg>
+          <span>WladBot KI-Coach 24/7</span>
+        </li>
+        <li class="s2-row" data-anim="reveal" style="animation-delay:.96s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.988-8-13.083-8-5.096 0-5.096 8 0 8 5.095 0 7.988-8 13.083-8z"/></svg>
+          <span>Unbegrenzte Simulationen</span>
+        </li>
+        <li class="s2-row" data-anim="reveal" style="animation-delay:1.04s">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3c.4 3.6 1.4 4.6 5 5-3.6.4-4.6 1.4-5 5-.4-3.6-1.4-4.6-5-5 3.6-.4 4.6-1.4 5-5Z"/></svg>
+          <span>KI-Suche in Wlads Wissen</span>
+        </li>
+        <li class="s2-row" data-anim="reveal" style="animation-delay:1.12s">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"><circle cx="8.5" cy="8" r="3"/><path d="M2.5 19c.8-3.2 3.1-5 6-5s5.2 1.8 6 5"/><path d="M15.5 5.4a3 3 0 1 1 .6 5.5M17.5 14.2c2.2.5 3.6 2 4 4.3"/></svg>
+          <span>Community und 30-Tage-Challenge</span>
+        </li>
+      </ul>
+      <div class="s2-cards">
+        <div class="card-m" data-anim="reveal" style="animation-delay:1.22s">
+          <p class="card-label">Challenge</p>
+          <p class="card-price">997 €</p>
+          <p class="card-bottom">Einmalig</p>
+        </div>
+        <div class="card-y" data-anim="reveal" style="animation-delay:1.30s">
+          <p class="card-label">Leadership Plus</p>
+          <p class="card-price">4.797 €</p>
+          <span class="save-badge" data-anim="pop" style="animation-delay:1.55s">inkl. 2.388 € Kurse</span>
+          <p class="card-bottom">Jährlich</p>
+        </div>
+      </div>
+      <a class="s2-btn" data-anim="reveal" style="animation-delay:1.42s" href="https://leaderos.de/signup?trial=14">
+        Jetzt starten
+        <svg width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="#0c0c0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 1.5 7 7.5 1.5 13.5"/></svg>
+      </a>
+      <span class="island" aria-hidden="true"></span>
+      <div class="statusbar" aria-hidden="true">
+        <span class="sb-time">11:11</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12"><g fill="#fff"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12"><g stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M1.5 4.2a10.5 10.5 0 0 1 14 0"/><path d="M4 6.9a7 7 0 0 1 9 0"/><path d="M6.5 9.4a3.4 3.4 0 0 1 4 0"/></g><circle cx="8.5" cy="11" r="1.1" fill="#fff"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="0" width="22" height="12" rx="3.5" fill="none" stroke="#fff" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#fff" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+      <span class="homebar" aria-hidden="true"></span>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* stage auto-scale */
+  var stage=document.getElementById('stage');
+  var viewport=document.getElementById('viewport');
+  function fit(){
+    var pad=40;
+    var w=window.innerWidth-pad*2, h=window.innerHeight-pad*2;
+    stage.style.transform='none';
+    var r=stage.getBoundingClientRect();
+    var ratio=Math.min(w/r.width,h/r.height);
+    stage.style.transform='scale('+(Math.min(1,ratio)*0.95)+')';
+  }
+  fit();
+  window.addEventListener('resize',fit);
+
+  /* animation gate: both videos loadeddata + fonts ready, 5s safety timeout */
+  var videos=Array.prototype.slice.call(document.querySelectorAll('video'));
+  var pending=videos.length;
+  var started=false;
+  function start(){
+    if(started)return;
+    started=true;
+    viewport.classList.add('ze-ready');
+  }
+  function maybe(){
+    pending-=1;
+    if(pending<=0){
+      if(document.fonts&&document.fonts.ready){document.fonts.ready.then(start);}
+      else{start();}
+    }
+  }
+  videos.forEach(function(v){
+    if(v.readyState>=2){maybe();}
+    else{
+      v.addEventListener('loadeddata',maybe,{once:true});
+      v.addEventListener('error',maybe,{once:true});
+    }
+  });
+  setTimeout(start,5000);
+})();
+</script>
+</body>
+</html>

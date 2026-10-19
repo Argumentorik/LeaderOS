@@ -8,12 +8,17 @@
  * import from here so the shape stays in sync.
  *
  * Schema v1:
- *   { v: 1, ts: ISO8601, essential: true, analytics: bool, replays: bool }
+ *   { v: 1, ts: ISO8601, essential: true, analytics: bool, replays: bool,
+ *     marketing: bool }
  *
  * `essential` is always true and cannot be opted out of (login session, JWT).
  * `analytics` gates PostHog event capture.
  * `replays`  gates Sentry session-replay (alias kept for back-compat with
  *            older banners that wrote `session_replay`).
+ * `marketing` gates ad-platform pixels (Meta Pixel, see lib/metaPixel.js).
+ *            Added 2026-09; payloads written before that lack the key and
+ *            read as `false` — no re-prompt, pixels simply stay off until
+ *            the visitor decides again.
  */
 import logger from './logger';
 
@@ -25,6 +30,7 @@ const DEFAULT_OPT_OUT = {
   essential: true,
   analytics: false,
   replays: false,
+  marketing: false,
 };
 
 export const readConsent = () => {
@@ -57,7 +63,7 @@ export const writeConsent = (partial) => {
     localStorage.setItem(KEY, JSON.stringify(payload));
     window.dispatchEvent(new CustomEvent("lo:consent", { detail: payload }));
   } catch (err) {
-    // localStorage unavailable (private mode, SSR) — payload still returned so
+    // localStorage unavailable (private mode, SSR) · payload still returned so
     // callers can use it in-memory for the rest of the session.
     logger.warn('[consent] write failed:', err?.message);
   }
@@ -80,5 +86,7 @@ export const bootstrapConsent = () => {
   }
   return existing;
 };
+
+export const hasConsent = () => readConsent() !== null;
 
 export const CONSENT_DEFAULTS = DEFAULT_OPT_OUT;

@@ -1,5 +1,5 @@
 /**
- * PricingModal — Apple/Revolut-grade in-app pricing & Stripe checkout.
+ * PricingModal · Apple/Revolut-grade in-app pricing & Stripe checkout.
  *
  * Replaces the older PaywallModal upgrade UX. Shows all 4 packages
  * (Leadership OS one-time / 2× / 12× and OS PLUS) in a single elegant
@@ -11,7 +11,7 @@
  *      already wired to activate the tier and fire the welcome + receipt
  *      emails.
  *
- * Secondary CTA: cal.com Beratungsgespräch — same lime accent, no exit.
+ * Secondary CTA: cal.com Beratungsgespräch · same lime accent, no exit.
  */
 import { useState, useCallback } from 'react';
 import { X, CheckCircle2, Sparkles, Shield, ArrowRight, Loader2, Zap, Crown, Calendar, Lock } from 'lucide-react';
@@ -63,6 +63,7 @@ const PACKAGES = [
     name: 'Leadership OS PLUS',
     badge: 'VIP · meist gebucht',
     headline: '1 Jahr · inkl. 1:1 Coaching',
+    price: '4.797',
     price: '4.797',
     suffix: '€',
     sub: 'einmalig · 30 Tage Geld-zurück',
@@ -123,7 +124,7 @@ export const PricingModal = ({ onClose, defaultTier = 'leadership_os' }) => {
       });
       const url = res?.data?.url;
       if (!url) throw new Error('Kein Checkout-Link erhalten');
-      // Open Stripe in same tab — safer than popup blocker issues; the
+      // Open Stripe in same tab · safer than popup blocker issues; the
       // success page restores state. No-op on transactional pages.
       window.location.assign(url);
     } catch (e) {
@@ -150,7 +151,7 @@ export const PricingModal = ({ onClose, defaultTier = 'leadership_os' }) => {
               <Crown size={15} className="text-brand" />
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-brand font-black">Leader-OS · Pricing</div>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-brand font-black">LeaderOS · Pricing</div>
               <h2 className="text-base md:text-lg font-black text-foreground" style={{ ...OUTFIT, letterSpacing: '-0.02em' }}>
                 Wähle deinen Pfad
               </h2>
@@ -205,6 +206,8 @@ export const PricingModal = ({ onClose, defaultTier = 'leadership_os' }) => {
                 type="button"
                 onClick={() => setSelected(pkg.id)}
                 className={`relative text-left p-5 rounded-2xl border-2 transition-all btn-revolut group ${
+                  isVIP ? 'gradient-border-anim' : ''
+                } ${
                   isSelected
                     ? (isVIP
                         ? 'border-brand bg-brand/[0.04] shadow-[0_8px_28px_-12px_rgba(191,255,0,0.5)]'
@@ -273,7 +276,7 @@ export const PricingModal = ({ onClose, defaultTier = 'leadership_os' }) => {
           </div>
         )}
 
-        {/* Bottom alternate CTA — cal.com booking */}
+        {/* Bottom alternate CTA · cal.com booking */}
         <div className="px-6 md:px-8 py-5 border-t border-border bg-foreground/[0.02] flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="text-center md:text-left">
             <p className="text-[13px] font-bold text-foreground" style={OUTFIT}>

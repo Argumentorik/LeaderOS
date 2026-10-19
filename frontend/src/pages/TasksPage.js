@@ -93,7 +93,7 @@ export default function TasksPage() {
       <div className="p-4 rounded-2xl bg-gradient-to-br from-[#BFFF00]/[0.06] to-[#BFFF00]/[0.04] dark:from-[#BFFF00]/[0.04] dark:to-[#BFFF00]/[0.03] border border-[#BFFF00]/20 dark:border-[#BFFF00]/15">
         <Quote size={14} className="text-[#BFFF00] mb-2" />
         <p className="text-[12px] italic leading-relaxed text-foreground dark:text-foreground/80">"{quote.q}"</p>
-        <p className="text-[10px] text-[#6B8A00] dark:text-[#BFFF00] mt-1.5 font-semibold">— {quote.a}</p>
+        <p className="text-[10px] text-[#6B8A00] dark:text-[#BFFF00] mt-1.5 font-semibold">· {quote.a}</p>
       </div>
 
       {/* Stats */}

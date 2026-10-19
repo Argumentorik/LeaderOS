@@ -1,5 +1,5 @@
 """
-Iteration 92 — Backend testing for Leader-OS pre-launch polish.
+Iteration 92 — Backend testing for LeaderOS pre-launch polish.
 
 Validates:
   1. GET /api/events?tab=live returns events that are all on Thursday and >= 2026-07-02.

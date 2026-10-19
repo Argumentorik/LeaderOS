@@ -53,7 +53,7 @@ class TestPackages:
     def test_plus_amount(self, session):
         r = session.get(f"{API}/payments/packages")
         pkgs = {p["id"]: p for p in r.json()}
-        assert pkgs["leadership_os_plus"]["amount"] == 4447.00
+        assert pkgs["leadership_os_plus"]["amount"] == 4797.00
         assert pkgs["leadership_os_plus"]["tier"] == "accelerator"
 
 

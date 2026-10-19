@@ -1,0 +1,46 @@
+export default {
+  slug: 'die-5-rollen-einer-ki-nativen-fuehrungskraft',
+  type: 'guide',
+  status: 'published',
+  title: 'Die 5 Rollen einer KI-nativen Führungskraft.',
+  description:
+    'Wlads bewährtes 5-Rollen-Modell · aber jede Rolle neu gedacht mit ' +
+    'KI als Verstärker. Welche KI-Routine zu welcher Rolle gehört, ' +
+    'und warum jede Rolle ohne KI 2026 schon im Nachteil ist.',
+  author: 'Wlad Jachtchenko',
+  publishedAt: '2026-07-12',
+  cover: null,
+  tags: ['KI', 'Frameworks', 'Rollen', 'Strategie'],
+  body: [
+    { type: 'paragraph', text: 'Als Führungskraft spielst du fünf Rollen · egal ob du das willst oder nicht. Wer alle fünf gleich gewichtet, verzettelt sich. Wer eine ignoriert, baut blinde Flecken. Und wer 2026 in einer der fünf ohne KI agiert, lässt jede Woche zehn Stunden auf dem Tisch liegen.' },
+    { type: 'paragraph', text: 'Das 5-Rollen-Modell habe ich in über 400 000 Coachings geschärft. Hier zeige ich dir, wie KI in jeder einzelnen Rolle nicht ersetzt, sondern verstärkt. Eine Rolle, ein Satz Routine, ein konkreter Hebel.' },
+    { type: 'heading', level: 2, text: 'Rolle 01: Der Vorausschauer.' },
+    { type: 'paragraph', text: 'Du siehst Risiken und Chancen, bevor sie dein Team sieht. Das war früher Bauchgefühl plus Erfahrung. Heute ist es Bauchgefühl plus Erfahrung plus eine KI die 50 Marktreports gleichzeitig liest. Wer ohne KI vorausschaut, schaut zu spät voraus.' },
+    { type: 'framework', code: 'V·KI', title: 'Vorausschau-Routine', explanation: 'Jeden Montag: gib KI deine 3 wichtigsten strategischen Fragen + 5 News-Quellen aus deiner Branche. Antwort-Form: "3 Szenarien, je 80 Wörter, mit Wahrscheinlichkeit". Dauer 15 Minuten. Output: dein Wochen-Briefing das du im Kopf hast bevor das Team morgens reinkommt.' },
+    { type: 'heading', level: 2, text: 'Rolle 02: Der Entscheider.' },
+    { type: 'paragraph', text: 'Entscheidungen sind das eine Produkt das du jeden Tag lieferst. Schlechte Entscheidungen kosten dein Team Wochen. KI als Sparringspartner halbiert die Zeit bis zur Entscheidung · nicht weil sie entscheidet, sondern weil sie dich zwingt deine Optionen klar zu formulieren.' },
+    { type: 'framework', code: 'E·KI', title: 'Entscheider-Drill', explanation: 'Vor jeder größeren Entscheidung: paste die Situation in den WladBot, frage nach "drei Optionen, jede mit dem stärksten Gegen-Argument". Lies. Entscheide. Dauer 8 Minuten. Du wirst merken: du entscheidest schneller UND sauberer.' },
+    { type: 'heading', level: 2, text: 'Rolle 03: Der Kommunikator.' },
+    { type: 'paragraph', text: 'Du redest mehr als du baust. 80 Prozent deines Tages ist Kommunikation. Schlechte Kommunikation kostet dein Team Klarheit, dich Energie. Hier ist KI der größte unsichtbare Verstärker. Nicht weil sie für dich spricht, sondern weil sie dich zwingt klar zu sein bevor du es laut sagst.' },
+    { type: 'framework', code: 'K·KI', title: 'Kommunikator-Routine', explanation: 'Vor jedem wichtigen Gespräch: gib KI deinen Ziel-Satz, deinen Empfänger, dein Risiko. Lass dir drei Eröffnungs-Varianten geben: härter, weicher, neutral. Wähle. Geh ins Gespräch. Dauer 4 Minuten. Wirkung: du klingst überlegt statt impulsiv.' },
+    { type: 'heading', level: 2, text: 'Rolle 04: Der Verstärker.' },
+    { type: 'paragraph', text: 'Deine Aufgabe ist nicht, alles selbst zu liefern. Deine Aufgabe ist, deine Leute besser zu machen. Feedback, Coaching, Sparring · das ist deine eigentliche Arbeit. Und genau hier rutscht KI rein als Spiegel. Sie zeigt dir, wo dein Feedback hängen bleibt, wo es weichgespült ist, wo es ankommt.' },
+    { type: 'framework', code: 'V·KI', title: 'Verstärker-Drill', explanation: 'Nach jedem 1:1: notiere drei Sätze die du gesagt hast. Gib sie KI mit dem Prompt "wie wirkt das auf den Empfänger, was kann ich klarer sagen, welche Annahme habe ich gemacht die ich prüfen sollte". 5 Minuten. Du wirst dein Feedback in 4 Wochen nicht wiedererkennen.' },
+    { type: 'heading', level: 2, text: 'Rolle 05: Der Verteidiger.' },
+    { type: 'paragraph', text: 'Du schützt dein Team · vor schlechten Anfragen, unklaren Prioritäten, politischem Geräusch. Diese Rolle wird oft übersehen, ist aber die mit dem größten Stress. KI hilft dir, schneller zu erkennen wann etwas Angriff ist, wann etwas Rauschen ist, wann etwas echt ist.' },
+    { type: 'framework', code: 'V·KI', title: 'Verteidiger-Routine', explanation: 'Wöchentliche 10-Minuten-Routine: paste die schwierigste Email der Woche in KI mit "klassifiziere: politisch, sachlich, Angriff, Anfrage. Empfehle Antwort-Strategie in 3 Sätzen." Antwort meistens: "Das ist Rauschen, ignorieren". Du sparst Stunden.' },
+    { type: 'heading', level: 2, text: 'Was passiert wenn du ALLE fünf mit KI verstärkst.' },
+    { type: 'paragraph', text: 'Die Zahlen aus den letzten 30 Klienten die alle fünf Rollen mit KI durchziehen, 30 Tage Challenge: median 7-12 Stunden zurückgewonnene Zeit pro Woche, halbierte Entscheidungs-Zyklen, deutlich klarere Kommunikation laut Team-Feedback. Eine Rolle alleine bringt 1-2 Stunden. Alle fünf bringen einen kompletten Arbeitstag pro Woche.' },
+    { type: 'paragraph', text: 'Das ist nicht "KI nutzen". Das ist KI-nativ führen.' },
+    { type: 'callout', tone: 'lime', text: 'Genau diese fünf Rollen-Routinen sind in LeaderOS verbaut · als tägliche Mikro-Drills am echten Fall, nicht als Theorie. Plus elf drillbare Frameworks und WladBot 24/7. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte. Hier reinschauen: leader-os.de/#klassen' },
+  ],
+  seo: {
+    title: 'Die 5 Rollen einer KI-nativen Führungskraft · LeaderOS',
+    description: 'Die 5 Rollen einer KI-nativen Führungskraft: Vorausschauer, Entscheider, Kommunikator, Verstärker, Verteidiger — jede mit einer konkreten KI-Routine. Von Wlad Jachtchenko.',
+  },
+  related: [
+    'fuenf-rollen-der-fuehrung-nach-wlad-jachtchenko',
+    'ki-leadership-was-bedeutet-das-konkret',
+    'der-ki-sprint-was-dreissig-tage-strukturierte-anwendung-veraendern',
+  ],
+};

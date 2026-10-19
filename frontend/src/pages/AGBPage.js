@@ -1,5 +1,5 @@
 /**
- * AGB — Allgemeine Geschäftsbedingungen.
+ * AGB · Allgemeine Geschäftsbedingungen.
  *
  * ⚠️ ANWALTS-REVIEW PFLICHT INNERHALB VON 7 TAGEN.
  * Diese Version ist eine Basis-Vorlage und deckt nicht alle
@@ -56,6 +56,7 @@ export default function AGBPage() {
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li><strong className="text-white">Leadership OS</strong> (997,00 €): 12-monatiger Zugriff auf Coaching-Bot, Workflows, Daily Check-ins.</li>
+            <li><strong className="text-white">Leadership OS PLUS</strong> (4.797,00 €): Zusätzlich Video-Analyse, Simulationen, persönliches Onboarding.</li>
             <li><strong className="text-white">Leadership OS PLUS</strong> (4.797,00 €): Zusätzlich Video-Analyse, Simulationen, persönliches Onboarding.</li>
             <li><strong className="text-white">Enterprise</strong>: Individuelles Angebot nach Anfrage.</li>
           </ul>
@@ -130,7 +131,7 @@ export default function AGBPage() {
           </p>
         </Section>
 
-        <p className="text-white/40 text-[10px] mt-12">Stand: Mai 2026 · v1.0 (Vorläufige Fassung — Anwalts-Review ausstehend)</p>
+        <p className="text-white/40 text-[10px] mt-12">Stand: Mai 2026 · v1.0 (Vorläufige Fassung · Anwalts-Review ausstehend)</p>
       </div>
     </div>
   );

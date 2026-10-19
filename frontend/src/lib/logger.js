@@ -1,4 +1,4 @@
-/* Lightweight logger — silent in production, verbose in dev */
+/* Lightweight logger · silent in production, verbose in dev */
 const isDev = process.env.NODE_ENV === 'development';
 
 const logger = {

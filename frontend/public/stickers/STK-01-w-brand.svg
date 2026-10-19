@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" aria-labelledby="t01">
+  <title id="t01">STK-01 — Werde KI-nativ · v2 Nike Editorial · 70×70mm</title>
+  <defs>
+    <style>
+      .bg{fill:#FFFFFF}
+      .ink{fill:#0A0A0A}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.05em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="280" height="280"/>
+
+  <!-- Top eyebrow rail -->
+  <text class="mono ink" x="16" y="24" font-size="8.5">▸ STK · 01 / 06</text>
+  <text class="mono ink" text-anchor="end" x="264" y="24" font-size="8.5" opacity="0.45">EST · 2026</text>
+
+  <!-- Massive 4-line statement -->
+  <text class="display ink" x="16" y="92" font-size="58">Werde</text>
+  <text class="display ink" x="16" y="148" font-size="58">KI-nativ<tspan class="lime">.</tspan></text>
+
+  <!-- Body sub -->
+  <text class="display ink" x="16" y="186" font-size="22">Werde 10× produktiver<tspan class="lime">.</tspan></text>
+
+  <!-- Bottom wordmark with W mark -->
+  <g transform="translate(16 232)">
+    <rect class="lime" x="0" y="0" width="22" height="22"/>
+    <text class="display ink" x="11" y="18" text-anchor="middle" font-size="20">W</text>
+    <text class="display ink" x="30" y="16" font-size="15">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+
+  <text class="mono ink" text-anchor="end" x="264" y="248" font-size="8" opacity="0.55">LEADER-OS.DE</text>
+</svg>

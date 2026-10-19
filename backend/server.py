@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 #   - profiles_sample_rate  = 0.10
 #   - before_send           = filters out known noise (cancelled requests,
 #                              client-disconnects, 401/404s, healthchecks)
-#   - in-Sentry alert rules (configured in Sentry UI, mirrored in docs/SENTRY_ALERTS.md):
+#   - in-Sentry alert rules (configured in Sentry UI, mirrored in docs/ops/SENTRY_ALERTS.md):
 #       * P0: any 5xx error > 5 events in 1 min → PagerDuty / Email
 #       * P1: any new unique issue (first-seen) → Email
 #       * P1: API latency p95 > 3000ms over 5 min → Email
@@ -111,6 +111,7 @@ from routes.ki_news import router as ki_news_router
 from routes.my_path import router as my_path_router
 from routes.community import router as community_router
 from routes.admin import router as admin_router
+from routes.admin_quality import router as admin_quality_router
 from routes.profile import router as profile_router
 from routes.voice_tts import router as voice_tts_router
 from routes.monitoring import router as monitoring_router
@@ -118,10 +119,11 @@ from routes.telemetry import router as telemetry_router
 from routes.journey import router as journey_router
 from routes.gdpr import router as gdpr_router
 from routes.oauth import router as oauth_router
+from routes.folders import router as folders_router
+from routes.leader_check import router as leader_check_router
 from routes.license import router as license_router
 from routes.rag_admin import router as rag_admin_router
 from routes.support import router as support_router
-from routes.folders import router as folders_router
 
 app = FastAPI(title="WladBot API", version="5.0")
 
@@ -154,7 +156,9 @@ app.include_router(media_admin_router)
 app.include_router(ki_news_router)
 app.include_router(my_path_router)
 app.include_router(community_router)
+app.include_router(folders_router)
 app.include_router(admin_router)
+app.include_router(admin_quality_router)
 app.include_router(profile_router)
 app.include_router(voice_tts_router)
 app.include_router(monitoring_router)
@@ -163,6 +167,7 @@ app.include_router(journey_router)
 app.include_router(gdpr_router)
 app.include_router(support_router)
 app.include_router(folders_router)
+app.include_router(leader_check_router)
 
 # Internal sync layer (Supabase ↔ Mongo)
 from routes.sync import router as sync_router  # noqa: E402
@@ -191,6 +196,18 @@ app.include_router(ab_testing_router)
 # Email unsubscribe (HMAC-signed tokens, GDPR/CAN-SPAM compliant one-click)
 from routes.unsubscribe import router as unsubscribe_router  # noqa: E402
 app.include_router(unsubscribe_router)
+
+# Free-video funnel · durable lead capture + delivery (/gratis-videos squeeze page)
+from routes.free_videos import router as free_videos_router  # noqa: E402
+app.include_router(free_videos_router)
+
+# Webinar funnel · durable anonymous lead capture + confirmation/reminder emails (/webinar squeeze page)
+from routes.webinar import router as webinar_router  # noqa: E402
+app.include_router(webinar_router)
+
+# License-activation funnel · /frameworks lead capture + 5-mail nurture (+ optional webinar registration)
+from routes.license_activation import router as license_activation_router  # noqa: E402
+app.include_router(license_activation_router)
 
 # Premium-first feature rollout (off → premium → all)
 from routes.features import router as features_router  # noqa: E402

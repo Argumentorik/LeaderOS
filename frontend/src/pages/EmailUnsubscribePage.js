@@ -1,9 +1,9 @@
 /**
- * EmailUnsubscribePage — One-click unsubscribe landing page.
+ * EmailUnsubscribePage · One-click unsubscribe landing page.
  *
  * Hit when a user clicks the "Abbestellen" link in any lifecycle drip email.
  * The token is HMAC-signed by the backend so we can show the user's email
- * and category WITHOUT them logging in — frictionless GDPR-compliant opt-out.
+ * and category WITHOUT them logging in · frictionless GDPR-compliant opt-out.
  *
  * Flow:
  *   1. Component mounts → GET /api/unsubscribe/info?token=...
@@ -31,7 +31,7 @@ export default function EmailUnsubscribePage() {
 
   useEffect(() => {
     if (!token) {
-      setState({ phase: 'error', message: 'Link ungültig — kein Token gefunden.' });
+      setState({ phase: 'error', message: 'Link ungültig · kein Token gefunden.' });
       return;
     }
     api.get(`/unsubscribe/info?token=${encodeURIComponent(token)}`)
@@ -172,7 +172,7 @@ export default function EmailUnsubscribePage() {
                 className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10 font-semibold text-[12.5px]"
                 data-testid="unsubscribe-undo-btn"
               >
-                <RotateCcw size={12} /> War ein Versehen — wieder anmelden
+                <RotateCcw size={12} /> War ein Versehen · wieder anmelden
               </button>
               <Link
                 to="/dashboard"

@@ -1,0 +1,95 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+/* Set B · Die acht Higgsfield-Szenen (1980er Film-Look) erzählen den Paradigmenwechsel:
+   HF1 Prüfungssaal · HF2 Rednerpult · HF3 Schreibtisch auf der Wiese · HF4 Monitorwand
+   HF5 Archiv-Schubladen · HF6 Bauplan im Wind · HF7 Parkplatz mit identischen Autos · HF8 Bibliotheksleiter
+   Dazu Poster (landing/p-XX), Mockups (landing/hf-XX) und Journal-Fotos (ph/). */
+img.bg{width:100%;height:100%;object-fit:cover;object-position:center}
+img.bg.film{filter:saturate(.55) contrast(1.08) brightness(.92)}
+.slide.has-poster .mid{max-width:470px;margin-bottom:auto}
+.poster{position:absolute;z-index:5;right:64px;bottom:200px;width:430px;transform:rotate(5deg);border-radius:14px;box-shadow:0 50px 90px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.12),0 0 80px rgba(191,255,0,.18)}
+.poster img{display:block;width:100%;border-radius:14px}
+.poster .tag{position:absolute;left:-18px;top:-18px;transform:rotate(-5deg);background:#BFFF00;color:#0A0A0A;font-family:'DejaVu Sans Mono',monospace;font-size:14px;letter-spacing:.2em;font-weight:700;padding:10px 14px;border-radius:999px}
+.slide.lime-bg .poster{box-shadow:0 50px 90px rgba(0,0,0,.35),0 0 0 1px rgba(10,10,10,.2)} .slide.lime-bg .poster .tag{background:#0A0A0A;color:#BFFF00}
+.land{position:relative;z-index:6;margin-top:34px;width:54%;margin-left:auto;margin-right:-10px;border-radius:22px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14);transform:rotate(-1.5deg)}
+.land img{display:block;width:100%}
+.pill{display:inline-block;font-family:'DejaVu Sans Mono',monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#0A0A0A;background:#BFFF00;padding:10px 16px;border-radius:999px;margin-top:30px}
+.slide.lime-bg .pill{background:#0A0A0A;color:#BFFF00}
+.kv{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.kv .card{padding:24px 26px}
+.kv .card b{display:block;font-family:'Anton',Impact,sans-serif;text-transform:uppercase;font-weight:400;font-size:34px;line-height:1;margin-bottom:8px}
+.kv .card small{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:13px;letter-spacing:.2em;color:#BFFF00;margin-bottom:10px;text-transform:uppercase;font-weight:700}
+.kv .card span{font-size:22px;line-height:1.3;color:rgba(255,255,255,.8)}
+.slide.lime-bg .card{background:rgba(10,10,10,.08);border-color:rgba(10,10,10,.25);box-shadow:none}
+.slide.lime-bg .kv .card small{color:#0A0A0A} .slide.lime-bg .kv .card span{color:rgba(10,10,10,.8)}
+.slide.has-avatar .kv{max-width:540px;grid-template-columns:1fr}
+.ev{margin-top:40px;display:flex;flex-direction:column;gap:14px;max-width:780px}
+.ev .card{display:flex;gap:24px;align-items:center;padding:22px 28px}
+.ev .card .d{font-size:48px;color:#BFFF00;width:150px;flex:none;line-height:.95}
+.ev .card p{font-size:26px;line-height:1.3}
+.ev .card p small{display:block;font-family:'DejaVu Sans Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:6px}
+.scene{font-family:'DejaVu Sans Mono',monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:22px}
+.slide.lime-bg .scene{color:rgba(10,10,10,.5)}
+</style></head><body>
+<script>
+const WEB='Kostenloser Platz · 29.10.', TRIAL='14 Tage kostenlos', CALL='Gespräch ab 2.11. buchen';
+// Die acht Szenen: hf:N lädt hf/hf-N.png; fehlt die Datei, greift das Journal-Foto in FALLBACK.
+const SCENE={1:'Prüfungssaal · hunderte Plätze, drei besetzt',2:'Leeres Theater · ein Pult, ein Scheinwerfer',3:'Schreibtisch auf der Wiese',4:'Dreißig Monitore · ein Stuhl',5:'Archiv · endlose Schubladen',6:'Bauplan im Wind',7:'Parkplatz · hunderte identische Autos',8:'Bibliothek · ein Buch von der Leiter',9:'Sechs Anzüge · ein Telefon · Alpenwiese',10:'Laufbahn · ein Läufer · Dämmerung',11:'Kreisverkehr von oben',12:'Boxring im Feld · Schattenboxen'};
+const FALLBACK={1:'training-b',2:'stage',3:'remote',4:'ai',5:'writing',6:'time',7:'team-b',8:'solitude',9:'team',10:'sprint-b',11:'boardroom-b',12:'sprint'};
+const S=[
+// ── Woche 1 · Alles ändert sich ──
+{k:'Alles ändert sich 01',hf:7,h:'Alles ändert sich.<br><span class=lime>Führung auch.</span>',s:'Dein Team arbeitet mit KI. Deine Meetings sind remote. Deine Leute erwarten Antworten in Stunden. Nur die Führungsausbildung ist stehen geblieben: ein Seminar, einmal im Jahr, für alle gleich.',cta:WEB,size:'s'},
+{k:'Alles ändert sich 02',hf:5,h:'Wissen war der Engpass.<br><span class=lime>Jetzt ist es Übung.</span>',s:'Jedes Framework steht in einem Buch. Jede Führungskraft kann es nachschlagen. Was fehlt, ist die fünfte Wiederholung, bevor es zählt.',cta:WEB,size:'s'},
+{k:'Alles ändert sich 03',hf:1,h:'Die Prüfung kommt trotzdem<span class=lime>.</span>',s:'Montag, 10 Uhr: das Gespräch mit deinem Underperformer. Geübt hast du es: nie. Jedes Führungsgespräch ist eine Prüfung, auf die niemand dich vorbereitet hat. Das ändert sich.',cta:TRIAL,size:'s'},
+{k:'Alles ändert sich 04',hf:8,h:'Du hast das Buch gelesen.<br><span class=lime>Jetzt das Training.</span>',s:'Lesen hat noch niemanden zur Führungskraft gemacht. Wlads Methodik aus seinen Büchern steckt jetzt in einem System, das dich üben lässt: jeden Tag, an deinem Fall.',cta:TRIAL,size:'s'},
+{k:'Alles ändert sich 05',hf:10,h:'Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>',s:'Das ist der ganze Paradigmenwechsel in einem Satz. Nicht mehr Wissen sammeln. Reflexe aufbauen. Wie ein Athlet, nicht wie ein Student.',cta:WEB,size:'s'},
+{k:'Alles ändert sich 06',po:'p-01-wer-nicht-fuehrt',h:'Wer nicht führt,<br><span class=lime>wird geführt.</span>',s:'Vom Kalender. Von den Lautesten im Meeting. Von Entscheidungen, die andere für dich treffen. Eine Führungs-Generation hört auf zu warten.',cta:WEB,ph:'boardroom'},
+// ── Woche 2 · Klarheit ──
+{k:'Klarheit 01',v:'lime',h:'LeaderOS in einem Satz<span class=lime>.</span>',s:'Ein Trainingssystem für Führungskräfte: Kurse, ein KI-Coach mit Wlads Methodik, Simulationen mit Gegenüber und tägliche Drills. In einer App, 15 Minuten am Tag.',cta:TRIAL,size:'s'},
+{k:'Klarheit 02',hf:7,h:'Für wen das ist<span class=lime>.</span>',list:['Teamleads, die zum ersten Mal Menschen führen','Führungskräfte, die wissen, was sie tun sollten, und es nicht tun','Erfahrene, die ihre Reflexe auffrischen wollen, nicht ihre Theorie'],cta:TRIAL},
+{k:'Klarheit 03',hf:1,h:'Für wen das nicht ist<span class=lime>.</span>',list:['Wer ein Zertifikat will, ohne zu trainieren','Wer nur zuschauen will, ohne selbst zu üben','Wer 15 Minuten am Tag nicht aufbringt'],cta:WEB},
+{k:'Klarheit 04',hf:11,h:'Ein Tag im OS<span class=lime>.</span>',kv:[['01','Lektion','Eine Lektion aus einem Kurs. Kurz, mit dem Framework, das du heute brauchst.'],['02','Drill','Dasselbe Framework an deinem echten Fall. Nicht an einer Fallstudie.'],['03','Frage','Du fragst WladBot, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik.'],['04','Auswertung','Nach der Simulation: Struktur, Klarheit, Wirkung. Und der nächste Drill.']],cta:TRIAL,size:'s'},
+{k:'Klarheit 05',la:'hf-03',h:'Dreißig Tage.<br>Ein neues Du<span class=lime>.</span>',s:'Jeden Tag eine Frage. Jeden Tag ein Drill. Nach 30 Tagen sind es keine Notizen mehr, sondern Reflexe.',cta:TRIAL,size:'s'},
+{k:'Klarheit 06',hf:6,h:'Der Plan hält nicht.<br><span class=lime>Der Reflex schon.</span>',s:'Du kannst dir jeden Gesprächsleitfaden ausdrucken. Im Raum weht er dir weg. Was bleibt, ist das, was du fünfmal geübt hast.',cta:TRIAL,size:'s'},
+// ── Woche 3 · Kurse und Zugang ──
+{k:'Kurse 01 · Zugang',v:'lime',h:'Sechs Grundlagen-Kurse.<br><span class=lime>Ab Tag 1 drin.</span>',list:['Rhetorik-Grundlagen','Schwierige Gespräche meistern','Delegation wie ein Profi','Feedback-Formate','Storytelling im Boardroom','Meeting-Rhetorik'],cta:TRIAL,size:'xs'},
+{k:'Kurse 02 · K·01',hf:2,h:'Der Weg zum Pult<span class=lime>.</span>',s:'Rhetorik-Grundlagen: Körpersprache, Stimme, Wortwahl. Die drei Säulen, die entscheiden, was passiert, wenn du vorne stehst. Im 14-Tage-Test enthalten, mit Drill danach.',cta:TRIAL,size:'s'},
+{k:'Kurse 03 · K·02',hf:12,h:'Sparring vor dem Ernstfall<span class=lime>.</span>',s:'Schwierige Gespräche meistern: Konflikt, Kritik, Kündigung so führen, dass das Gespräch nicht kippt. Danach übst du es in der Simulation mit einem Gegenüber, das zurückredet. Bevor du es im Büro führst.',cta:TRIAL,size:'xs'},
+{k:'Kurse 04 · K·03',hf:6,h:'Abgeben ist ein Plan.<br><span class=lime>Loslassen ein Reflex.</span>',s:'Delegation wie ein Profi: Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement beenden. Der Kurs, den die meisten am dringendsten brauchen und am längsten aufschieben.',cta:TRIAL,size:'xs'},
+{k:'Kurse 05 · K·04',ph:'feedback',av:'small',h:'Feedback-Formate<span class=lime>.</span>',s:'Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WladBot, der dir den ersten Satz abnimmt.',cta:TRIAL,size:'s'},
+{k:'Kurse 06 · K·05 + K·06',ph:'boardroom',h:'Storytelling.<br>Meeting-Rhetorik<span class=lime>.</span>',s:'Komplexe Ideen in zwei Minuten erzählen. Meetings eröffnen, führen und zu einer Entscheidung bringen. Zwei Kurse, beide im Test enthalten.',cta:TRIAL,size:'s'},
+{k:'Kurse 07 · Master',hf:8,h:'Vier Master-Programme<span class=lime>.</span>',kv:[['M·01','KI-First Leadership','KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben.'],['M·02','Change Management','Veränderung so führen, dass das Team mitgeht.'],['M·03','Executive Presence','Raum einnehmen, bevor du sprichst.'],['M·04','Boardroom-Strategie','C-Level-Entscheidungen vorbereiten, präsentieren, durchsetzen.']],s2:'Im OS-Jahr · Leadership Plus Pro',cta:TRIAL,size:'s'},
+{k:'Kurse 08 · Auswertung',hf:4,h:'Kurs ansehen ist nicht Kurs können<span class=lime>.</span>',s:'Deshalb endet jeder Kurs im OS nicht mit einem Haken, sondern mit einem Drill an deinem Fall. Und mit einer Auswertung, die dir zeigt, was saß und was fehlte.',cta:TRIAL,size:'xs'},
+// ── Woche 4 · Events ──
+{k:'Live-Webinar · 29. Oktober',v:'photo',h:'Live mit Wlad<span class=lime>.</span>',s:'Donnerstag, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A.',cta:WEB,size:'s'},
+{k:'Live-Webinar · Ablauf',hf:2,h:'Wlad am Pult.<br>Du in der ersten Reihe<span class=lime>.</span>',list:['Der Charisma-Code, live demonstriert','Das Leadership Operating System, komplett','Ein echter Live-Case aus der Community','Q&A: deine Fragen, direkt beantwortet'],cta:WEB,size:'xs'},
+{k:'Termine · Was ansteht',hf:3,h:'Was ansteht<span class=lime>.</span>',ev:[['29.10.','Live-Webinar mit Wlad, 10:00 bis 11:30 Uhr<small>kostenlos · keine Aufzeichnung</small>'],['01.11.','LeaderOS offiziell online<small>App-Bibliothek · leader-os.de</small>'],['02.11.','Beratungsgespräche starten<small>30 Minuten · persönlich · kostenlos</small>']],cta:WEB,size:'s'},
+{k:'Termine · Beratung',ph:'listening',h:'Ab 2. November:<br>dein Gespräch<span class=lime>.</span>',s:'Dreißig Minuten, persönlich, kostenlos. Du bringst deinen Fall mit: das Team, das Gespräch, die Entscheidung. Wir schauen, ob das OS dafür das richtige Training ist.',cta:CALL,size:'s'},
+{k:'Termine · WladBot',hf:3,av:'small',h:'Dein Büro ist überall.<br><span class=lime>Dein Coach auch.</span>',s:'Im Zug, im Homeoffice, auf der Wiese. WladBot antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.',cta:TRIAL,size:'xs'},
+{k:'Termine · Live-Sessions',hf:9,h:'Monatlich live.<br>Ungeschnitten<span class=lime>.</span>',s:'Für Mitglieder im OS: jeden Monat eine Live-Session mit Wlad. Echte Fälle, echte Fragen, keine Folien. Dazu der monatliche Strategie-Call, klein und persönlich.',cta:TRIAL,size:'s'},
+// ── Woche 5 · Startnummer und Entscheidung ──
+{k:'Zertifikat · 0001',po:'p-06-bib-0001',ph:'sprint',h:'Deine Startnummer<span class=lime>.</span>',size:'xxs',s:'Jeder Sprint endet mit einem persönlichen Zertifikat und deiner Startnummer. Für LinkedIn, für den nächsten Arbeitgeber, für dich.',cta:TRIAL,size:'s'},
+{k:'System · WladBot',po:'p-07-dreibig-tage',ph:'ai-b',h:'Powered by WladBot.<br><span class=lime>Persönlich von Wlad.</span>',s:'Die Methodik aus Wlads Büchern und Trainings, als Coach in deiner Tasche. Und einmal im Monat Wlad selbst, live.',cta:TRIAL,size:'xs'},
+{k:'System · Frameworks',hf:5,h:'Elf Frameworks.<br>Nicht im Archiv.<br><span class=lime>Im Drill.</span>',s:'Harvard-Verhandlung, Feedbackformel, 5 Rollen, Dunkle Rhetorik, SEXIER, 10 Stufen des Zuhörens und mehr. Abgelegt nützt keins. Geübt jedes.',cta:TRIAL,size:'xs'},
+{k:'Entscheidung',hf:12,av:'big',h:'Entweder du trainierst.<br><span class=lime>Oder du hoffst.</span>',s:'14 Tage kostenlos, ohne Karte. Oder am 29.10. live dabei. Beides ohne Risiko.',cta:TRIAL,size:'xs'},
+];
+const bg=(x)=>x.v==='photo'?`<div class="bg photo" style="background-image:url('wlad-portrait.jpg');background-position:42% 30%;background-size:auto 1350px"></div>`
+ :x.hf?`<img class="bg photo film" src="hf/hf-${x.hf}.png" onerror="this.onerror=null;this.src='ph/${FALLBACK[x.hf]}.webp';this.dataset.fallback=1" alt="">`
+ :x.ph?`<div class="bg photo" style="background-image:url('ph/${x.ph}.webp')"></div>`:`<div class=bg></div>`;
+document.body.innerHTML=S.map((x,i)=>{
+ const body=x.list?`<div class=list>${x.list.map((t,j)=>`<div><b>${String(j+1).padStart(2,'0')}</b><span>${t}</span></div>`).join('')}</div>`
+  :x.kv?`<div class=kv>${x.kv.map(([c,t,d])=>`<div class=card><small>${c}</small><b>${t}</b><span>${d}</span></div>`).join('')}</div>${x.s2?`<span class=pill>${x.s2}</span>`:''}`
+  :x.ev?`<div class=ev>${x.ev.map(([d,t])=>`<div class=card><span class="d">${d}</span><p>${t}</p></div>`).join('')}</div>`
+  :x.la?`<p class=sub>${x.s}</p><div class=land><img src="landing/${x.la}.webp" alt=""></div>`
+  :`<p class=sub>${x.s}</p>`;
+ const cls=['slide',x.v==='lime'?'lime-bg':'',x.av!==undefined?'has-avatar':'',x.po?'has-poster':'',x.la?'has-land':''].join(' ');
+ return `<section class="${cls}" data-i="${i+1}" data-hf="${x.hf||''}">
+ ${bg(x)}<div class=bg2></div><div class=bg3></div><div class=bg4></div>
+ ${x.av!==undefined?`<div class=halo></div><div class="ring ${x.av}"></div><img class="avatar ${x.av}" src="avatar.png" alt="">`:''}
+ ${x.po?`<div class=poster><span class=tag>LEADER-OS · PRINT</span><img src="landing/${x.po}.webp" alt=""></div>`:''}
+ <div class=top><span class="mono lime">▸ ${x.k}</span><span class=mono style="opacity:.6">${String(i+1).padStart(2,'0')}/30</span></div>
+ <div class=mid style="${x.v==='photo'?'margin-top:auto;margin-bottom:40px':''}"><h1 class="d h ${x.size||''}">${x.h}</h1>${body}${x.hf?`<p class=scene>Szene ${String(x.hf).padStart(2,'0')} · ${SCENE[x.hf]}</p>`:''}</div>
+ <div class=bot><div class=wlad><img src="wlad-portrait.jpg" alt=""><span>Wlad Jachtchenko<br><span class=mono style="font-size:14px;letter-spacing:.16em">LeaderOS · leader-os.de</span></span></div><span class=cta>${x.cta} →</span></div>
+</section>`;}).join('');
+window.__COPY=S; window.__SCENE=SCENE;
+</script></body></html>

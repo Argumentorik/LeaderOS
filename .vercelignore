@@ -1,0 +1,37 @@
+# Vercel-ignore — Files die Vercel beim Build NICHT anfassen soll.
+# Default kopiert Vercel den ganzen Git-Tree in den Build-Container.
+# Bei viele Dot-Files / Tooling-Folder hilft eine explizite Ignore-Liste,
+# damit Vercel's Framework-Detection nicht durcheinander gerät.
+
+# Claude Code · Skills + Settings
+.claude/
+.mcp.json
+CLAUDE.md
+
+# Tooling-Caches
+.venv/
+__pycache__/
+*.pyc
+
+# Backend deployt nicht über Vercel (FastAPI auf Emergent, Rewrite in vercel.json).
+# Trotzdem im Repo wegen Mono-Repo. Vercel braucht es für den CRA-Build nicht.
+backend/
+
+# Supabase-Functions deployen über Supabase-CLI, nicht über Vercel.
+supabase/
+
+# Docs sind Markdown — nicht für Production nötig.
+docs/
+
+# Lokale Tools / Scripts — NUR das Root-Verzeichnis (Branch-Cleanup,
+# Smoke-Tests etc.). Ohne führenden Slash matcht das Pattern auch
+# frontend/scripts/ und prunt damit Build-Steps aus dem Deployment
+# (so ist das prerender-articles-Deploy am 14.08. gefailed, während die
+# CI mit vollem Checkout grün war). frontend/scripts/ MUSS deployen:
+# yarn build ruft node scripts/prerender-articles.mjs auf.
+/scripts/
+seed_test_users.py
+
+# Tests die nicht in Production landen müssen.
+**/tests/
+test_*.py

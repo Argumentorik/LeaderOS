@@ -6,8 +6,8 @@ export const WladHubHeader = ({ connected, isComputed, syncing, onSync, de }) =>
     <div className="flex items-center gap-2">
       <div className="w-5 h-5 rounded-md bg-[#BFFF00]/15 flex items-center justify-center">
         {connected
-          ? <CheckCircle2 size={10} className="text-[#6B8A00] dark:text-[#BFFF00]" />
-          : <Zap size={10} className="text-[#6B8A00] dark:text-[#BFFF00]" />}
+          ? <CheckCircle2 size={10} className="text-[#6B8A00] dark:text-brand" />
+          : <Zap size={10} className="text-[#6B8A00] dark:text-brand" />}
       </div>
       <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
         {connected ? 'Leader-Diagnose' : (de ? 'Leadership Profil' : 'Leadership Profile')}

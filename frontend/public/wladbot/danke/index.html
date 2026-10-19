@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Fast geschafft — dein Onboarding · WladBot</title>
+<meta name="description" content="Deine erste Mail ist unterwegs. Schritt 2: Mach den kostenlosen Leader-Check (10 Minuten, kein Login) und personalisiere dein Training."/>
+<link rel="canonical" href="https://leader-os.de/wladbot/danke"/>
+<meta name="robots" content="noindex, follow"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<!--
+  /wladbot/danke · Onboarding-Bestätigungsseite der Ad-Landing.
+  Ziel-Reihenfolge (Ascension): Mail bestätigt → LEADER-CHECK auf
+  leadercheck.de (der eigentliche Onboarding-Schritt, 10 Min, kein
+  Login) → Live-Webinar 29.10. Gleiche Design-DNA wie /wladbot
+  (Avatar-Backdrop, Frosted-Glass, Instrument Serif, Lime). noindex —
+  Bestätigungsseite, kein Suchziel.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{position:relative;min-height:100vh;min-height:100dvh;width:100%;overflow-x:hidden;
+  background:#02040c;font-family:"Instrument Serif",serif}
+a{text-decoration:none;color:inherit}
+.bg-face{position:fixed;inset:0;z-index:0;overflow:hidden}
+.bg-face img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;
+  transform:scale(1.12);filter:blur(9px) saturate(1.15) brightness(.82)}
+.bg-scrim{position:fixed;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(2,4,12,.78) 0%,rgba(2,4,12,.55) 30%,rgba(2,4,12,.72) 70%,#02040c 100%)}
+
+.col{position:relative;z-index:10;display:flex;min-height:100vh;min-height:100dvh;width:100%;
+  flex-direction:column;align-items:center;padding:0 20px 40px}
+
+.nav-wrap{display:flex;width:100%;justify-content:center;padding:16px 0 0}
+.nav{display:flex;width:100%;max-width:56rem;align-items:center;justify-content:space-between;
+  border-radius:16px;background:rgba(0,0,0,.4);padding:9px 16px 9px 20px;
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{height:26px;width:26px;display:block}
+.brand .wm{font-family:Outfit,Inter,sans-serif;font-weight:900;font-size:19px;letter-spacing:-.03em;color:rgba(255,255,255,.92)}
+.brand .wm em{font-style:normal;color:#BFFF00;margin:0 2px}
+.mail-chip{display:flex;align-items:center;gap:7px;font-family:Inter,sans-serif;font-size:11.5px;
+  color:rgba(255,255,255,.6)}
+.mail-chip i{width:8px;height:8px;border-radius:50%;background:#BFFF00;display:inline-block}
+
+.head{margin-top:44px;text-align:center}
+.head .avatar{width:74px;height:74px;border-radius:50%;object-fit:cover;object-position:50% 16%;
+  border:3px solid rgba(191,255,0,.55);box-shadow:0 0 44px rgba(191,255,0,.25)}
+.head h1{margin-top:18px;font-size:34px;line-height:1;font-weight:400;color:#fff}
+.head h1 em{font-style:italic}
+.head p{margin:14px auto 0;max-width:30rem;font-family:Inter,sans-serif;font-size:14px;line-height:1.5;
+  font-weight:300;color:rgba(255,255,255,.7)}
+
+.steps{margin-top:34px;display:flex;flex-direction:column;gap:12px;width:100%;max-width:34rem;
+  font-family:Inter,sans-serif}
+.step{display:flex;gap:14px;align-items:flex-start;border-radius:16px;padding:16px 18px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.45);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.step .nr{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-family:ui-monospace,monospace;font-size:12px;font-weight:700}
+.step--done .nr{background:rgba(191,255,0,.15);color:#BFFF00;border:1px solid rgba(191,255,0,.4)}
+.step--now .nr{background:#BFFF00;color:#0c0f04}
+.step--later .nr{border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
+.step h2{font-size:15px;font-weight:600;color:#fff}
+.step p{margin-top:4px;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.6)}
+.step--now{border-color:rgba(191,255,0,.45);box-shadow:0 0 34px rgba(191,255,0,.10)}
+.step a.mini{color:#fff;text-decoration:underline;text-underline-offset:3px;font-size:12.5px}
+
+.big-cta{margin-top:22px;display:inline-flex;align-items:center;gap:10px;border-radius:14px;
+  background:#BFFF00;color:#0c0f04;font-family:Inter,sans-serif;font-size:16px;font-weight:700;
+  letter-spacing:.01em;padding:16px 26px;transition:all .15s;
+  box-shadow:0 10px 40px rgba(191,255,0,.25)}
+.big-cta:hover{background:#d4ff4d;transform:translateY(-1px)}
+.big-cta svg{width:16px;height:16px}
+.cta-note{margin-top:10px;font-family:Inter,sans-serif;font-size:11.5px;color:rgba(255,255,255,.5);text-align:center}
+
+@media (min-width:640px){
+  .nav-wrap{padding-top:24px}
+  .head{margin-top:56px}
+  .head h1{font-size:44px}
+  .head p{font-size:15.5px}
+}
+</style>
+<!-- Google Ads Conversion-Tracking + Consent Mode v2 · inaktiv, solange in
+     /js/consent-gtag.js noch die Platzhalter-AW-ID steht (docs/gtm/GOOGLE_ADS_SETUP.md §3). -->
+<script src="/js/consent-gtag.js" defer></script>
+</head>
+<body>
+  <div class="bg-face" aria-hidden="true">
+    <picture>
+      <source srcset="/wlad/wladbot3.0.webp" type="image/webp"/>
+      <img src="/wlad/wladbot3.0.png" alt=""/>
+    </picture>
+  </div>
+  <div class="bg-scrim" aria-hidden="true"></div>
+
+  <div class="col">
+    <div class="nav-wrap">
+      <nav class="nav">
+        <a class="brand" href="/" aria-label="LeaderOS Startseite">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <linearGradient id="dk-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/>
+              </linearGradient>
+              <linearGradient id="dk-st" x1="2" y1="26" x2="30" y2="4" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0A0A0A" stop-opacity="0.92"/><stop offset="100%" stop-color="#0A0A0A"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="9.6" fill="url(#dk-bg)"/>
+            <g transform="translate(4.2 4.2) scale(0.7375)">
+              <path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke="url(#dk-st)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke="url(#dk-st)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+              <circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A"/>
+            </g>
+          </svg>
+          <span class="wm">Leader<em>·</em>OS</span>
+        </a>
+        <span class="mail-chip"><i></i>Mail unterwegs</span>
+      </nav>
+    </div>
+
+    <div class="head">
+      <img class="avatar" src="/wlad/wladbot3.0.webp" alt="WladBot"/>
+      <h1>Willkommen. Jetzt <em>personalisieren</em> wir.</h1>
+      <p>Deine erste Mail von Wlads Trainings-Serie ist unterwegs. Der wichtigste Schritt kommt jetzt:
+        In 10 Minuten weiß WladBot, wo du stehst.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step step--done">
+        <span class="nr">✓</span>
+        <div>
+          <h2>E-Mail eingetragen</h2>
+          <p>Schau in dein Postfach (auch Spam) — die Serie startet mit der B-W-W-Feedbackformel.</p>
+        </div>
+      </div>
+
+      <div class="step step--now">
+        <span class="nr">2</span>
+        <div>
+          <h2>Mach den kostenlosen Leader-Check</h2>
+          <p>10 Minuten, kein Login: Dein Score in KI, Rhetorik und EQ — und WladBot weiß danach genau,
+            welches Training dich am schnellsten besser macht.</p>
+        </div>
+      </div>
+
+      <div class="step step--later">
+        <span class="nr">3</span>
+        <div>
+          <h2>Live-Webinar am 29.10., 10 Uhr</h2>
+          <p>Wlad zeigt das komplette System live. Keine Aufzeichnung, dafür Live-Q&amp;A.
+            <a class="mini" href="/webinar">Platz sichern →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <a class="big-cta" href="https://leadercheck.de">
+      Leader-Check starten · 10 Min
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+    </a>
+    <p class="cta-note">Kostenlos · kein Login · sofort dein persönliches Führungs-Ergebnis</p>
+  </div>
+</body>
+</html>

@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pymongo import ReturnDocument
 
 from config import db
+from config import db
 from services import get_current_user
 
 router = APIRouter(prefix="/api/credits", tags=["credits"])

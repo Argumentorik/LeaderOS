@@ -153,8 +153,8 @@ export default function EventsPage() {
           </h1>
           <p className="text-base text-muted-foreground max-w-xl">
             {de
-              ? 'Live Workshops, Replays, Leadership Training Time — alles, um deine Leadership-Skills aktiv umzusetzen.'
-              : 'Live workshops, replays, leadership training time — everything to actively execute your leadership skills.'}
+              ? 'Live Workshops, Replays, Leadership Training Time · alles, um deine Leadership-Skills aktiv umzusetzen.'
+              : 'Live workshops, replays, leadership training time · everything to actively execute your leadership skills.'}
           </p>
         </div>
 

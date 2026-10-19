@@ -1,12 +1,12 @@
 /**
- * StripeModeBanner — Pre-Launch Health-Indicator für Admins/Mert.
+ * StripeModeBanner · Pre-Launch Health-Indicator für Admins/Mert.
  *
  * Iter 92.12: Mert berichtete "sehe immer noch sandbox". Dieser Banner
  * checkt `/api/payments/stripe-mode` und zeigt glasklar an, ob der pod
  * auf Live, Test oder Platform-Default läuft.
  *
  * Sichtbar NUR für admin/owner user (sonst stört's den normalen Funnel).
- * Erscheint nur wenn NICHT live — sobald sk_live_* aktiv ist, ist der
+ * Erscheint nur wenn NICHT live · sobald sk_live_* aktiv ist, ist der
  * Banner unsichtbar (no-noise principle).
  */
 import { useEffect, useState } from 'react';
@@ -69,7 +69,7 @@ export const StripeModeBanner = () => {
           </span>
         </div>
         <p className="text-[12.5px] font-bold text-amber-900 dark:text-amber-100 leading-snug">
-          Stripe läuft noch im Sandbox-Modus — echte Karten werden nicht belastet.
+          Stripe läuft noch im Sandbox-Modus · echte Karten werden nicht belastet.
         </p>
         <p className="text-[11px] text-amber-800/85 dark:text-amber-200/75 mt-1">
           {data.warning}

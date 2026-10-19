@@ -1,5 +1,5 @@
 /**
- * ReAuthModal — soft re-authentication overlay.
+ * ReAuthModal · soft re-authentication overlay.
  *
  * Triggered when an API call fails with 401 AFTER our refresh-token interceptor
  * has already tried to refresh once (i.e., the refresh token itself is expired).
@@ -53,7 +53,7 @@ export const ReAuthModal = () => {
     setOpen(false);
     setPassword('');
     setError('');
-    // Notify api.js interceptor that user dismissed reauth — it should reject
+    // Notify api.js interceptor that user dismissed reauth · it should reject
     // the pending request and clear the cached user.
     window.dispatchEvent(new CustomEvent('wladbot:reauth-cancelled'));
   }, []);

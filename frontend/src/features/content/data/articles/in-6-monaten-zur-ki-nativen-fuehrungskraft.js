@@ -1,0 +1,46 @@
+export default {
+  slug: 'in-6-monaten-zur-ki-nativen-fuehrungskraft',
+  type: 'guide',
+  status: 'published',
+  title: 'In 6 Monaten von KI-Skeptiker zur KI-nativen Führungskraft.',
+  description:
+    'Was Wlads 6-Monats-Ausbildung mit KI macht · und warum 30 Tage ' +
+    'Challenge plus 5 Monate Vertiefung mehr verändern als 50 ChatGPT-' +
+    'Webinare. Der konkrete Monatsplan plus messbare Etappen.',
+  author: 'Wlad Jachtchenko',
+  publishedAt: '2026-07-13',
+  cover: null,
+  tags: ['KI', 'Sprint', 'Karriere', 'Methodik'],
+  body: [
+    { type: 'paragraph', text: 'Ich werde oft gefragt: "Wlad, wie lange dauert das eigentlich · bis ich wirklich mit KI führe und nicht nur ChatGPT-Tabs offen habe?". Die ehrliche Antwort: in 30 Tagen siehst du den ersten echten Hebel. In 6 Monaten bist du eine andere Führungskraft. Wer das in einem Wochenend-Bootcamp verspricht, hat noch nie eine Transformation begleitet.' },
+    { type: 'paragraph', text: 'Hier ist der Pfad, den wir in LeaderOS gehen. Sechs Monate. Kein Wochenend-Hype, keine 8-Stunden-Video-Marathons. Sondern strukturiertes Training mit täglichem Coaching.' },
+    { type: 'heading', level: 2, text: 'Monat 1: Challenge 0001 · die KI-Routine baut sich auf.' },
+    { type: 'paragraph', text: '30 Tage täglicher Check-in, jeden Morgen 10 Minuten. Du installierst die Grundroutine: dein WladBot kennt deinen Job, deine Ziele, deinen Stil. Du lernst die vier Prompt-Patterns die in 90 Prozent aller Führungs-Situationen reichen. Am Tag 30 hast du eine Routine die hält.' },
+    { type: 'paragraph', text: 'Messbar: median 5-7 Stunden zurückgewonnene Zeit pro Woche. Erste Manager berichten dass Entscheidungs-Zyklen sich halbieren. Team-Feedback wird konkreter, weil du nicht mehr aus dem Bauch heraus antwortest.' },
+    { type: 'heading', level: 2, text: 'Monat 2: Die 5 Rollen · Vertiefung.' },
+    { type: 'paragraph', text: 'Jetzt gehen wir tief in mein 5-Rollen-Modell. Du lernst nicht "Führungs-Theorie" · du übst jede Rolle in deinem echten Alltag, mit KI als Sparringspartner. Vorausschauer, Entscheider, Kommunikator, Verstärker, Verteidiger. Eine Woche pro Rolle, eine Mikro-Drill pro Tag.' },
+    { type: 'paragraph', text: 'Am Ende von Monat 2 weißt du, in welcher Rolle du brillierst und in welcher du blinde Flecken hattest. Die meisten Klienten entdecken in dieser Phase: "Ich war 80 Prozent Entscheider und 20 Prozent Verstärker · und dachte, ich coache mein Team."' },
+    { type: 'heading', level: 2, text: 'Monat 3: Rhetorik im KI-Zeitalter.' },
+    { type: 'paragraph', text: 'KI macht dich nicht automatisch besser im Reden. Sie macht dich besser im Vor-Denken. Diesen Monat trainierst du Schlagfertigkeit, klare Argumentations-Strukturen, das Auflösen schwieriger Gespräche. Mit WladBot als Sparring vor jedem wichtigen Termin.' },
+    { type: 'paragraph', text: 'Drill: vor jedem 1:1 fünf Minuten Vorbereitung mit KI. Vor jeder Verhandlung zehn Minuten. Du wirst merken, dass die meisten Konflikte gar nicht erst entstehen, weil du klarer ankommst.' },
+    { type: 'heading', level: 2, text: 'Monat 4: Eigene Agenten bauen.' },
+    { type: 'paragraph', text: 'Jetzt wird es bauen. Du lernst, deine eigenen kleinen KI-Agenten zu bauen · für Email-Triage, Meeting-Vorbereitung, Wochen-Review. Nicht als Developer. Als Führungskraft die ihre Werkzeuge selbst formt.' },
+    { type: 'paragraph', text: 'Am Ende von Monat 4 hast du drei bis fünf eigene Agenten die jeden Tag für dich laufen. Das ist der Moment in dem die meisten Klienten sagen: "Ich kann mir nicht mehr vorstellen wie ich vorher gearbeitet habe."' },
+    { type: 'heading', level: 2, text: 'Monat 5: Multiplikator-Phase.' },
+    { type: 'paragraph', text: 'Bis hierhin hast du dich selbst verstärkt. Jetzt verstärkst du dein Umfeld. Wie führst du jemanden in die KI-Routine ein? Wie machst du aus drei skeptischen Senior-ICs drei aktive KI-Nutzer? Wie skalierst du das was du selbst gelernt hast · egal ob in einem Team, einer Audience oder einem Projekt.' },
+    { type: 'paragraph', text: 'Die LeaderOS-Community wird in dieser Phase wertvoll: du tauschst dich mit anderen Multiplikatoren aus die durch dieselbe Phase gehen. Echte Sparrings, keine Wohlfühl-Calls.' },
+    { type: 'heading', level: 2, text: 'Monat 6: Konsolidierung und Outcome.' },
+    { type: 'paragraph', text: 'Letzter Monat. Wir messen, was sich verändert hat. Zeit-Gewinn, Output-Qualität, Team-Feedback. Du machst einen persönlichen Vorher-Nachher-Vergleich mit konkreten Zahlen. Und du planst die nächsten 6 Monate · mit deinem Lifetime-Zugang zu LeaderOS gehst du einfach in die nächste Vertiefungs-Stufe.' },
+    { type: 'paragraph', text: 'Das ist der Moment in dem die meisten Klienten sagen, dass diese sechs Monate ihre wertvollste berufliche Investition waren · nicht weil sie ein Zertifikat haben, sondern weil sie nachweislich anders arbeiten als vorher.' },
+    { type: 'callout', tone: 'lime', text: 'Werde Teil von LeaderOS · 6 Monate strukturierte Ausbildung, alle Vorteile ab Tag 1, Lifetime-Zugang. 14 Tage kostenlos, ohne Karte: leader-os.de/#klassen' },
+  ],
+  seo: {
+    title: 'In 6 Monaten zur KI-nativen Führungskraft: Plan',
+    description: 'In 6 Monaten vom KI-Skeptiker zur KI-nativen Führungskraft: der konkrete Monatsplan mit Challenge, 5 Rollen, Rhetorik und eigenen Agenten — plus messbare Etappen. Von Wlad Jachtchenko.',
+  },
+  related: [
+    'der-ki-sprint-was-dreissig-tage-strukturierte-anwendung-veraendern',
+    'die-5-rollen-einer-ki-nativen-fuehrungskraft',
+    'warum-leader-os',
+  ],
+};

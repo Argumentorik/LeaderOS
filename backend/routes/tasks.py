@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Request
 import uuid
 from datetime import datetime, timezone
 
-from config import db, logger
+from config import db
 from models import TaskCreate, TaskUpdate
 from services import get_current_user
 from services_actions import record_user_action

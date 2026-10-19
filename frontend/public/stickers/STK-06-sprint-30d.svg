@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" aria-labelledby="t06">
+  <title id="t06">STK-06 — 30 Tage Sprint · v2 Nike Editorial · 70×70mm</title>
+  <defs>
+    <style>
+      .bg{fill:#FFFFFF}
+      .ink{fill:#0A0A0A}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.06em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="280" height="280"/>
+
+  <text class="mono ink" x="16" y="22" font-size="8.5">▸ BENEFIT · 03 · SPRINT</text>
+  <text class="mono ink" text-anchor="end" x="264" y="22" font-size="8.5" opacity="0.45">EIN NEUES DU</text>
+
+  <!-- Massive headline two lines -->
+  <text class="display ink" x="16" y="88" font-size="46">30<tspan class="lime">.</tspan></text>
+  <text class="display ink" x="16" y="134" font-size="46">Tage<tspan class="lime">.</tspan></text>
+  <text class="display ink" x="16" y="180" font-size="34" opacity="0.55">Ein neues Du<tspan class="lime">.</tspan></text>
+
+  <!-- Lime circle CTA -->
+  <g transform="translate(198 196)">
+    <circle cx="0" cy="0" r="40" fill="#BFFF00"/>
+    <text x="-20" y="-5" font-family="'Outfit',sans-serif" font-weight="900" font-size="22" fill="#0A0A0A">+</text>
+    <text x="-20" y="12" font-family="'Outfit',sans-serif" font-weight="700" font-size="9" fill="#0A0A0A" text-decoration="underline" letter-spacing="-0.005em">Sprint starten</text>
+  </g>
+
+  <!-- Bottom row -->
+  <g transform="translate(16 232)">
+    <rect class="lime" x="0" y="0" width="22" height="22"/>
+    <text class="display ink" x="11" y="18" text-anchor="middle" font-size="20">W</text>
+    <text class="display ink" x="30" y="16" font-size="15">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+  <text class="mono ink" text-anchor="end" x="264" y="248" font-size="8" opacity="0.55">STK · 06 / 06 · 997 €</text>
+</svg>

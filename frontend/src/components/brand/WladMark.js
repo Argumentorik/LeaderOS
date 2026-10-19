@@ -1,8 +1,8 @@
 /**
- * WladMark — Cool curvy "W" mark for Leader-OS (Iter 92.5).
+ * WladMark · Cool curvy "W" mark for LeaderOS (Iter 92.5).
  *
  * Design v3: The previous iteration was too geometric / chart-bar-y.
- * Mert wanted "cooler & geschwungen" — a flowing W that reads like a
+ * Mert wanted "cooler & geschwungen" · a flowing W that reads like a
  * confident signature, not a logo template.
  *
  * Geometry rationale:
@@ -11,13 +11,13 @@
  *   - Inner shadow ghost gives 3D float
  *   - One single pixel-dot (top right) is the signature accent
  *   - Hover: stroke-trace draws the W in 800ms
- *   - Idle: very subtle 4° sway every 6s — the mark feels alive but not busy
+ *   - Idle: very subtle 4° sway every 6s · the mark feels alive but not busy
  *
  * Modes:
- *   size           — pixel size (28 default)
- *   variant        — 'solid' (lime tile, dark glyph) | 'outline' (no bg, lime glyph)
- *   monogram       — render WITHOUT background tile, just the W on transparent
- *   animated       — adds idle-sway + hover-trace + accent-twinkle
+ *   size           · pixel size (28 default)
+ *   variant        · 'solid' (lime tile, dark glyph) | 'outline' (no bg, lime glyph)
+ *   monogram       · render WITHOUT background tile, just the W on transparent
+ *   animated       · adds idle-sway + hover-trace + accent-twinkle
  */
 import { forwardRef } from 'react';
 
@@ -40,7 +40,7 @@ export const WladMark = forwardRef(({
       style={{ width: size, height: size }}
       {...props}
     >
-      {/* Background tile — only for solid variant (not monogram) */}
+      {/* Background tile · only for solid variant (not monogram) */}
       {isSolid && (
         <span
           aria-hidden
@@ -89,7 +89,7 @@ export const WladMark = forwardRef(({
           fill="none"
         />
 
-        {/* MAIN CURVY W — clean W outline with smooth curves at valleys/peak */}
+        {/* MAIN CURVY W · clean W outline with smooth curves at valleys/peak */}
         <path
           className="wlad-mark-w"
           d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4"
@@ -100,7 +100,7 @@ export const WladMark = forwardRef(({
           fill="none"
         />
 
-        {/* Signature flick — extra curl off the right tip for asymmetry */}
+        {/* Signature flick · extra curl off the right tip for asymmetry */}
         <path
           className="wlad-mark-flick"
           d="M28.8 4 Q30.2 4.6 29.6 6.4"
@@ -110,7 +110,7 @@ export const WladMark = forwardRef(({
           fill="none"
         />
 
-        {/* Tiny accent dot — top-right tip, the "crown" */}
+        {/* Tiny accent dot · top-right tip, the "crown" */}
         <circle
           className="wlad-mark-pixel-b"
           cx="29.6"
@@ -119,7 +119,7 @@ export const WladMark = forwardRef(({
           fill={accentFill}
         />
 
-        {/* Faint second dot — bottom-left tip, off-axis */}
+        {/* Faint second dot · bottom-left tip, off-axis */}
         <circle
           className="wlad-mark-pixel-c"
           cx="2.8"
@@ -136,7 +136,7 @@ export const WladMark = forwardRef(({
 WladMark.displayName = 'WladMark';
 
 /**
- * Wordmark wrapper — Mark + brand text combo for nav headers.
+ * Wordmark wrapper · Mark + brand text combo for nav headers.
  */
 export const WladWordmark = ({ size = 30, tagline, onClick }) => (
   <button

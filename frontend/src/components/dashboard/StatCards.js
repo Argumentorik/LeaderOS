@@ -8,9 +8,9 @@ export const StatCardsRow = ({ aiReadiness, learningPct, c30, de }) => (
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-8 h-8 rounded-lg bg-[#BFFF00]/15 flex items-center justify-center">
-            <Brain size={16} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+            <Brain size={16} className="text-[#6B8A00] dark:text-brand" />
           </div>
-          <Badge className="bg-[#BFFF00]/10 text-[#6B8A00] dark:text-[#BFFF00] border-0 text-[9px] font-bold">+5</Badge>
+          <Badge className="bg-[#BFFF00]/10 text-[#6B8A00] dark:text-brand border-0 text-[9px] font-bold">+5</Badge>
         </div>
         <p className="text-3xl font-black">{aiReadiness}</p>
         <p className="text-sm text-muted-foreground">AI Readiness</p>
@@ -22,7 +22,7 @@ export const StatCardsRow = ({ aiReadiness, learningPct, c30, de }) => (
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-8 h-8 rounded-lg bg-[#BFFF00]/10 dark:bg-[#BFFF00]/[0.08] flex items-center justify-center">
-            <Target size={16} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+            <Target size={16} className="text-[#6B8A00] dark:text-brand" />
           </div>
         </div>
         <p className="text-3xl font-black">{learningPct}%</p>
@@ -41,7 +41,7 @@ export const StatCardsRow = ({ aiReadiness, learningPct, c30, de }) => (
           </div>
         </div>
         <p className="text-sm font-bold">{c30.started ? (de ? `Tag ${c30.current_day} abschließen` : `Complete Day ${c30.current_day}`) : (de ? 'Erste Challenge starten' : 'Start first challenge')}</p>
-        <p className="text-xs text-[#6B8A00] dark:text-[#BFFF00] font-semibold mt-1">{de ? 'Nächster Meilenstein' : 'Next Milestone'}</p>
+        <p className="text-xs text-[#6B8A00] dark:text-brand font-semibold mt-1">{de ? 'Nächster Meilenstein' : 'Next Milestone'}</p>
       </CardContent>
     </Card>
   </div>
@@ -54,7 +54,7 @@ export const StatCardsRow = ({ aiReadiness, learningPct, c30, de }) => (
 //   - One color system: lime base for the AI core surfaces, warm amber for streak/progress,
 //     deep indigo for community, off-brand colors removed
 const QUICK_ACTIONS = [
-  { icon: Sparkles,        path: '/chat',        color: 'bg-[#BFFF00]/15 dark:bg-[#BFFF00]/[0.10] text-[#6B8A00] dark:text-[#BFFF00]' },
+  { icon: Sparkles,        path: '/chat',        color: 'bg-[#BFFF00]/15 dark:bg-[#BFFF00]/[0.10] text-[#6B8A00] dark:text-brand' },
   { icon: Flame,           path: '/challenge',   color: 'bg-amber-50 dark:bg-amber-500/[0.10] text-amber-600 dark:text-amber-400' },
   { icon: Wrench,          path: '/tools',       color: 'bg-zinc-100 dark:bg-zinc-500/[0.12] text-zinc-700 dark:text-zinc-300' },
   { icon: Drama,           path: '/simulations', color: 'bg-rose-50 dark:bg-rose-500/[0.10] text-rose-600 dark:text-rose-400' },

@@ -27,10 +27,10 @@
         <link rel="alternate" hreflang="x-default" href="https://leaderos.de/" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
-        <!-- OPEN GRAPH — LinkedIn, Facebook, Slack, Discord                  -->
+        <!-- OPEN GRAPH · LinkedIn, Facebook, Slack, Discord                  -->
         <!-- ════════════════════════════════════════════════════════════════ -->
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Leader-OS" />
+        <meta property="og:site_name" content="LeaderOS" />
         <meta property="og:locale" content="de_DE" />
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:url" content="https://leaderos.de/" />
@@ -41,7 +41,7 @@
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Leader-OS — KI Leadership System" />
+        <meta property="og:image:alt" content="LeaderOS · Führe besser. Jeden Tag. · 14 Tage kostenlos testen" />
 
         <!-- ════════════════════════════════════════════════════════════════ -->
         <!-- X (Twitter) Cards                                                 -->
@@ -187,6 +187,7 @@
                   "@type": "Offer",
                   "name": "Leadership OS PLUS",
                   "price": "4797",
+                  "price": "4797",
                   "priceCurrency": "EUR",
                   "availability": "https://schema.org/InStock",
                   "url": "https://leaderos.de/coaching"
@@ -200,6 +201,8 @@
         <!-- ════════════════════════════════════════════════════════════════ -->
         <!-- FAVICONS + PWA                                                    -->
         <!-- ════════════════════════════════════════════════════════════════ -->
+        <link rel="icon" href="/favicon.ico" sizes="48x48"/>
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -215,6 +218,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://accounts.google.com" />
+        <!-- Eager TCP/TLS connect for the analytics + error stack so the first
+             event fire (pageview, identify) doesn't pay the handshake. -->
         <link rel="dns-prefetch" href="https://eu.i.posthog.com" />
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -233,9 +238,66 @@
         <!-- Harmless Chrome bug: silence DataCloneError on PerformanceServerTiming -->
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
 
-        <!-- Cal.com embed: booking modal for /wlad-universe + Coaching pages.
-             Theme follows the OS-level prefers-color-scheme so the modal blends
-             seamlessly with the surrounding Light/Dark UI. -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!-- CORE WEB VITALS · real-user perf monitoring → PostHog            -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!-- Captures LCP (Largest Contentful Paint), CLS (Cumulative Layout
+             Shift), and INP (Interaction to Next Paint) from real visitors
+             and fires them as PostHog events. Lets us see actual field data
+             instead of just Lighthouse lab numbers. Gated on consent: only
+             fires when posthog.__SV (initialized) is truthy. -->
+        <script>
+          (function(){
+            try {
+              if (!('PerformanceObserver' in window)) return;
+              var send = function(name, value, id){
+                try {
+                  if (window.posthog && window.posthog.__SV && window.posthog.capture) {
+                    window.posthog.capture('web_vital', {
+                      metric: name,
+                      value: Math.round(value),
+                      id: id,
+                      path: window.location.pathname,
+                    });
+                  }
+                } catch(_) { /* never block UX */ }
+              };
+              // LCP · largest above-fold paint
+              try {
+                new PerformanceObserver(function(list){
+                  var entries = list.getEntries();
+                  var last = entries[entries.length - 1];
+                  if (last) send('LCP', last.renderTime || last.loadTime || last.startTime);
+                }).observe({ type: 'largest-contentful-paint', buffered: true });
+              } catch(_) {}
+              // CLS · layout shift sum
+              try {
+                var cls = 0;
+                new PerformanceObserver(function(list){
+                  list.getEntries().forEach(function(e){
+                    if (!e.hadRecentInput) cls += e.value;
+                  });
+                  send('CLS', cls * 1000);
+                }).observe({ type: 'layout-shift', buffered: true });
+              } catch(_) {}
+              // INP · responsiveness (Chrome 96+)
+              try {
+                new PerformanceObserver(function(list){
+                  list.getEntries().forEach(function(e){
+                    if (e.duration > 40) send('INP', e.duration);
+                  });
+                }).observe({ type: 'event', durationThreshold: 40, buffered: true });
+              } catch(_) {}
+              // TTFB · server response time
+              try {
+                var nav = performance.getEntriesByType('navigation')[0];
+                if (nav) send('TTFB', nav.responseStart);
+              } catch(_) {}
+            } catch(_) {}
+          })();
+        </script>
+
+        <!-- Cal.com embed: booking modal for /wlad-universe + Coaching pages -->
         <script>
           (function(C,A,L){let p=function(a,ar){a.q.push(ar);};let d=C.document;C.Cal=C.Cal||function(){
             let cal=C.Cal,ar=arguments;if(!cal.loaded){cal.ns={};cal.q=cal.q||[];d.head.appendChild(d.createElement("script")).src=A;cal.loaded=true;}
@@ -274,8 +336,8 @@
     <body>
         <noscript>
             <div style="padding:32px;font-family:Inter,system-ui,sans-serif;text-align:center;background:#0A0A0A;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px">
-                <div style="font-size:24px;font-weight:800">Leader-OS</div>
-                <div style="color:#999;max-width:480px">Diese Anwendung benötigt JavaScript. Bitte aktiviere JavaScript in deinem Browser, um Leader-OS zu nutzen.</div>
+                <div style="font-size:24px;font-weight:800">LeaderOS</div>
+                <div style="color:#999;max-width:480px">Diese Anwendung benötigt JavaScript. Bitte aktiviere JavaScript in deinem Browser, um LeaderOS zu nutzen.</div>
             </div>
         </noscript>
         <div id="root"></div>
@@ -319,16 +381,29 @@
                     }),
                     (e.__SV = 1));
             })(document, window.posthog || []);
-            posthog.init("phc_xmMQneHWug8LVcr94h4vt8pVzDKstBXrYmSgu2moVdE8", {
-                api_host: "https://eu.i.posthog.com",
-                person_profiles: "identified_only",
-                capture_pageview: "history_change",
-                capture_pageleave: true,
-                session_recording: {
-                    recordCrossOriginIframes: true,
-                    capturePerformance: false,
-                },
-            });
+            // GDPR/TTDSG consent gate — DON'T init PostHog until the user
+            // has explicitly accepted analytics in the consent banner.
+            // The React app re-attempts init via maybeInitPostHog() in
+            // index.js whenever consent is granted (and on every reload
+            // if already granted). Defaulting to opt-out avoids fining-
+            // grade non-compliance and matches the Sentry replay gate.
+            try {
+                var __lo_c_raw = window.localStorage && localStorage.getItem("lo_consent_v1");
+                var __lo_c = __lo_c_raw ? JSON.parse(__lo_c_raw) : null;
+                if (__lo_c && __lo_c.analytics === true) {
+                    posthog.init("phc_xmMQneHWug8LVcr94h4vt8pVzDKstBXrYmSgu2moVdE8", {
+                        api_host: "https://eu.i.posthog.com",
+                        person_profiles: "identified_only",
+                        capture_pageview: "history_change",
+                        capture_pageleave: true,
+                        cross_subdomain_cookie: false,
+                        session_recording: {
+                            recordCrossOriginIframes: true,
+                            capturePerformance: false,
+                        },
+                    });
+                }
+            } catch (e) { /* localStorage blocked — stay opted-out */ }
         </script>
     </body>
 </html>

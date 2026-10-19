@@ -1,7 +1,10 @@
 """Authentication routes — Enterprise-grade security."""
+from typing import Optional
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
+import os
+import re
 import uuid
 import httpx
 import jwt
@@ -209,6 +212,21 @@ def _safe_user_output(user: dict) -> dict:
 
 # ========== REGISTER ==========
 
+MAX_REGISTER_ATTEMPTS = 5
+REGISTER_WINDOW_MINUTES = 60
+
+
+async def _check_register_rate_limit(ip: str) -> None:
+    cutoff = datetime.now(timezone.utc) - timedelta(minutes=REGISTER_WINDOW_MINUTES)
+    count = await db.login_attempts.count_documents({
+        "ip": ip,
+        "created_at": {"$gte": cutoff},
+        "method": "register",
+    })
+    if count >= MAX_REGISTER_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many registrations — try again later")
+
+
 @router.post("/register")
 async def register(data: UserRegister, request: Request, response: Response):
     # Abuse guard (pre-launch review): max 40 signups per IP per hour.
@@ -227,6 +245,8 @@ async def register(data: UserRegister, request: Request, response: Response):
     validate_password_strength(data.password)
     ctx = await _capture_login_context(request)
     ip_address = ctx["ip"]
+
+    await _check_register_rate_limit(ip_address)
 
     user_id = f"user_{uuid.uuid4().hex[:12]}"
     history_entry = _login_history_entry(ctx, method="register")
@@ -298,6 +318,11 @@ async def register(data: UserRegister, request: Request, response: Response):
     token = create_jwt_token(user_id)
     await _create_session(user_id, ip_address, response, method="register")
     await record_user_action(user_id, "register")
+
+    # Free-video funnel bridge: stop the email-only lead drip AND copy the
+    # lead's acquisition data (UTM, sources, referrer…) onto this user.
+    from routes.free_videos import bridge_lead_to_user
+    await bridge_lead_to_user(user_id, email)
 
     # Mirror to Supabase (fire-and-forget — does not block response)
     from services_supabase_sync import mirror_user_event_fire_and_forget
@@ -522,6 +547,158 @@ async def google_session(request: Request, response: Response):
     )
 
     return {"user": _safe_user_output(user), "token": token}
+
+
+# ========== LEADER-CHECK → LEADEROS SYNC HANDOFF ==========
+# The leader-check.de landing (separate Emergent backend) hands a signed,
+# short-lived `sync_token` to this product. We verify it here and mint a
+# first-party session — so a lead flows Landing → Product WITHOUT a second
+# login, and lands straight in the funnel (e.g. /free-videos).
+#
+# Contract with the leader-check side:
+#   - HS256 JWT signed with a SHARED secret. This product reads it from
+#     SYNC_JWT_SECRET (preferred) or REPORT_JWT_SECRET. If neither is set the
+#     endpoint fails safe with 503 (never mints a session on an unverifiable
+#     token).
+#   - Standard `exp` claim enforced (their token is ~10 min).
+#   - Email in one of: email / user_email / e / sub(if it's an email).
+#   - Optional `typ`/`purpose`/`scope`: if present it MUST be a sync purpose —
+#     this stops a `report_token` (different purpose) being replayed here.
+#   - Optional `jti`: if present, the token is single-use (replay-proof).
+
+SYNC_ALLOWED_PURPOSES = {"sync", "leader_os_sync", "leader-os-sync", "leaderos_sync"}
+
+
+def _sync_signing_secrets() -> list[str]:
+    return [s for s in (os.environ.get("SYNC_JWT_SECRET"), os.environ.get("REPORT_JWT_SECRET")) if s]
+
+
+def _decode_sync_token(token: str) -> Optional[dict]:
+    """Verify signature + expiry against the shared secret(s). None if invalid."""
+    for secret in _sync_signing_secrets():
+        try:
+            return jwt.decode(token, secret, algorithms=["HS256"], leeway=10)
+        except jwt.ExpiredSignatureError:
+            # Correct secret (signature passed) but expired → reject, don't retry.
+            return None
+        except jwt.InvalidTokenError:
+            # Wrong secret / malformed → try the next configured secret.
+            continue
+    return None
+
+
+def _sync_identity(payload: dict) -> tuple[Optional[str], str]:
+    """Extract (email_lower, name) from sync-token claims. email None if absent."""
+    email = ""
+    for k in ("email", "user_email", "e"):
+        if payload.get(k):
+            email = str(payload[k]).strip().lower()
+            break
+    if not email:
+        sub = str(payload.get("sub", "")).strip().lower()
+        if "@" in sub:
+            email = sub
+    name = ""
+    for k in ("name", "full_name", "n"):
+        if payload.get(k):
+            name = str(payload[k]).strip()
+            break
+    return (email or None), name
+
+
+class SyncExchange(BaseModel):
+    sync_token: str
+
+
+@router.post("/leader-os-sync")
+async def leader_os_sync(data: SyncExchange, request: Request, response: Response):
+    """Exchange a leader-check `sync_token` for a first-party LeaderOS session."""
+    if not _sync_signing_secrets():
+        # Fail safe — never mint a session when we can't verify the token.
+        raise HTTPException(status_code=503, detail="Leader-Check sync ist nicht konfiguriert.")
+
+    payload = _decode_sync_token(data.sync_token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Ungültiger oder abgelaufener Sync-Link.")
+
+    purpose = payload.get("typ") or payload.get("purpose") or payload.get("scope")
+    if purpose and str(purpose).lower() not in SYNC_ALLOWED_PURPOSES:
+        raise HTTPException(status_code=401, detail="Token-Zweck nicht gültig für Login.")
+
+    email, name = _sync_identity(payload)
+    if not email:
+        raise HTTPException(status_code=400, detail="Sync-Token enthält keine E-Mail.")
+
+    # Optional single-use enforcement (replay protection) when a jti is present.
+    jti = payload.get("jti")
+    if jti and await db.consumed_sync_tokens.find_one({"jti": jti}, {"_id": 1}):
+        raise HTTPException(status_code=401, detail="Dieser Sync-Link wurde bereits benutzt.")
+
+    ctx = await _capture_login_context(request)
+    ip_address = ctx["ip"]
+    now_iso = datetime.now(timezone.utc).isoformat()
+    history_entry = _login_history_entry(ctx, method="leader_check")
+
+    # Case-insensitive match so we never fork a duplicate on email casing.
+    existing = await db.users.find_one(
+        {"email": {"$regex": f"^{re.escape(email)}$", "$options": "i"}}, {"_id": 0}
+    )
+    if existing:
+        user_id = existing["user_id"]
+        await db.users.update_one({"user_id": user_id}, {
+            "$set": {
+                "name": name or existing.get("name"),
+                "email_lower": email,
+                "last_login_ip": ip_address,
+                "last_login_at": history_entry["at"],
+                "last_login_geo": ctx["geo"],
+                "last_login_ua": ctx["ua"],
+            },
+            "$addToSet": {"meta_tags": "leader-check"},
+            "$push": {"login_history": {"$each": [history_entry], "$slice": -50}},
+        })
+        sync_event = "user.updated"
+    else:
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        await db.users.insert_one({
+            "user_id": user_id, "email": email, "email_lower": email,
+            "name": name or email.split("@")[0],
+            "leadership_score": 0, "eq_score": 0, "communication_score": 0,
+            "level": "Emerging Leader", "xp": 0,
+            "source_platform": "leader-check", "meta_tags": ["leader-check"],
+            "signup_ip": ip_address, "signup_geo": ctx["geo"], "signup_ua": ctx["ua"],
+            "last_login_ip": ip_address, "last_login_geo": ctx["geo"], "last_login_ua": ctx["ua"],
+            "login_history": [history_entry],
+            "created_at": now_iso,
+        })
+        sync_event = "user.created"
+        import asyncio as _asyncio
+        _asyncio.create_task(_send_signup_welcome(email, name or email.split("@")[0]))
+
+    token = create_jwt_token(user_id)
+    await _create_session(user_id, ip_address, response, method="leader_check")
+
+    # Free-video funnel bridge: stop the email-only lead drip AND copy the
+    # lead's acquisition data onto this user (journey stays queryable).
+    from routes.free_videos import bridge_lead_to_user
+    await bridge_lead_to_user(user_id, email)
+
+    if jti:
+        await db.consumed_sync_tokens.insert_one({
+            "jti": jti, "used_at": now_iso,
+            "expires_at": datetime.now(timezone.utc) + timedelta(days=1),
+        })
+
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+
+    from services_supabase_sync import mirror_user_event_fire_and_forget
+    mirror_user_event_fire_and_forget(
+        mongo_user_id=user_id, email=email,
+        full_name=user.get("name") or "", event=sync_event,
+        extra={"auth_method": "leader_check_sync"},
+    )
+
+    return {"user": _safe_user_output(user), "token": token, "synced": True}
 
 
 # ========== SESSION MANAGEMENT ==========

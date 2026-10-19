@@ -1,56 +1,81 @@
-import { Card, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
 import { DashboardLayout } from '../layout/DashboardLayout';
-import { CheckCircle2, Star, XCircle, ArrowRight } from 'lucide-react';
 
+/**
+ * QuizResult · Nike Athletic-Editorial DNA.
+ *
+ * Riesige Score-Zahl als Anker, flat black/white, 2px-Borders,
+ * Lime-Akzent. Korrekt = schwarzer Haken, falsch = Lime-Pin ·
+ * kein Ampel-Grün/Rot-Gradient-Soup. Siehe frontend/DESIGN.md.
+ */
 export const QuizResult = ({ quizResult, setQuizResult, setQuizMode, setCurrentQ, setAnswers, de }) => {
+  const passed = quizResult.passed;
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-2xl mx-auto min-h-screen" data-testid="quiz-result">
-        <Card className="animate-fade-in">
-          <CardContent className="p-6 text-center space-y-5">
-            <div className={`w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-xl ${quizResult.passed ? 'bg-gradient-to-br from-emerald-400 to-green-500 shadow-emerald-500/20' : 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-500/20'}`}>
-              {quizResult.passed ? <CheckCircle2 size={36} className="text-white" /> : <Star size={36} className="text-white" />}
-            </div>
-            <div>
-              <p className="text-4xl font-black">{quizResult.score}%</p>
-              <p className="text-sm text-muted-foreground">{quizResult.correct}/{quizResult.total} {de ? 'richtig' : 'correct'}</p>
-            </div>
-            <Badge className={`${quizResult.passed ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} border-0 text-xs font-bold`}>
-              {quizResult.passed ? (de ? 'BESTANDEN' : 'PASSED') : (de ? 'WIEDERHOLEN EMPFOHLEN' : 'RETRY RECOMMENDED')} — +{quizResult.xp_earned} XP
-            </Badge>
-          </CardContent>
-        </Card>
+      <div className="bg-white text-black min-h-screen" data-testid="quiz-result">
+        <div className="max-w-2xl mx-auto px-5 md:px-6 py-12 md:py-16">
 
-        {/* Explanations */}
-        <div className="space-y-2 mt-5">
-          {quizResult.results?.map((r, rIdx) => (
-            <Card key={`res-${r.question?.slice(0, 20) || rIdx}`} className={`${r.correct ? 'border-emerald-200/30 dark:border-emerald-500/10' : 'border-red-200/30 dark:border-red-500/10'}`}>
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${r.correct ? 'bg-emerald-100 dark:bg-emerald-500/10' : 'bg-red-100 dark:bg-red-500/10'}`}>
-                    {r.correct ? <CheckCircle2 size={14} className="text-emerald-500" /> : <XCircle size={14} className="text-red-500" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold mb-1">{r.question}</p>
-                    <p className="text-[11px] text-muted-foreground">{r.explanation}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          {/* Score-Hero */}
+          <div className="border-2 border-black p-8 md:p-10 text-center animate-fade-in">
+            <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-brand font-mono mb-4">
+              ▸ {passed ? (de ? 'BESTANDEN' : 'PASSED') : (de ? 'WIEDERHOLEN EMPFOHLEN' : 'RETRY RECOMMENDED')}
+            </div>
+            <div
+              className="text-black leading-[0.82] tracking-[-0.04em]"
+              style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic', fontSize: 'clamp(96px, 22vw, 200px)' }}
+            >
+              {quizResult.score}<span className="text-brand">%</span>
+            </div>
+            <div className="mt-4 text-[12px] font-bold uppercase tracking-[0.18em] text-black/60 font-mono">
+              {quizResult.correct} / {quizResult.total} {de ? 'RICHTIG' : 'CORRECT'} · +{quizResult.xp_earned} XP
+            </div>
+          </div>
 
-        <div className="flex gap-3 mt-6">
-          {!quizResult.passed && (
-            <Button onClick={() => { setQuizResult(null); setCurrentQ(0); setAnswers({}); }} variant="outline" className="flex-1 font-semibold">
-              {de ? 'Nochmal versuchen' : 'Try Again'}
-            </Button>
+          {/* Explanations */}
+          {quizResult.results?.length > 0 && (
+            <div className="mt-8">
+              <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-black/45 font-mono mb-4">
+                ▸ AUFLÖSUNG
+              </div>
+              <ul className="border-2 border-black divide-y divide-black/15">
+                {quizResult.results.map((r, rIdx) => (
+                  <li key={`res-${r.question?.slice(0, 20) || rIdx}`} className="p-4 md:p-5">
+                    <div className="flex items-start gap-3">
+                      <span
+                        className={`shrink-0 mt-0.5 w-6 h-6 inline-flex items-center justify-center text-[13px] font-black ${
+                          r.correct ? 'bg-black text-brand' : 'bg-brand text-black'
+                        }`}
+                        aria-hidden
+                      >
+                        {r.correct ? '✓' : '✕'}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] font-bold leading-[1.3] text-black mb-1.5">{r.question}</p>
+                        <p className="text-[13px] leading-[1.5] text-black/65">{r.explanation}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
-          <Button onClick={() => { setQuizMode(null); setQuizResult(null); }} className="flex-1 bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold">
-            {de ? 'Weiter zum Plan' : 'Continue'} <ArrowRight size={14} className="ml-1" />
-          </Button>
+
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-8">
+            {!passed && (
+              <button
+                onClick={() => { setQuizResult(null); setCurrentQ(0); setAnswers({}); }}
+                className="flex-1 px-6 py-3.5 border-2 border-black text-black text-[12px] font-bold uppercase tracking-[0.18em] hover:bg-black hover:text-white transition-colors"
+              >
+                {de ? 'Nochmal versuchen' : 'Try Again'}
+              </button>
+            )}
+            <button
+              onClick={() => { setQuizMode(null); setQuizResult(null); }}
+              className="flex-1 px-6 py-3.5 bg-brand text-black text-[12px] font-bold uppercase tracking-[0.18em] shadow-[0_8px_24px_-8px_rgba(191,255,0,0.6)] hover:bg-brand/90 transition-colors"
+            >
+              {de ? 'Weiter zum Plan →' : 'Continue →'}
+            </button>
+          </div>
         </div>
       </div>
     </DashboardLayout>

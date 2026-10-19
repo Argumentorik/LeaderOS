@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Social Posts · Set 01 | LeaderOS</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&family=Condiment&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet"/>
+<!--
+  /social · Vorschau-Bühne für die erste Social-Post-Serie (Set 01).
+  noindex/nofollow: internes Asset-Werkzeug, keine Marketing-Seite und
+  bewusst nicht in sitemap.xml oder robots.txt eingetragen.
+
+  Aufbau exakt nach der vorgegebenen Vorlage: 3×2-Raster, 384×384 pro
+  Karte, 16 px Abstand, 12 px Radius, overflow-hidden, dieselben
+  Animationen (fadeInUp, fade-rise mit 0/0.2/0.4 s Versatz), dieselben
+  Liquid-Glass-Klassen inkl. mask-composite-Rand.
+
+  Zwei bewusste Abweichungen:
+  · Inhalte sind LeaderOS statt der Platzhaltermarken der Vorlage
+    (Corewave, Neuralyn, Stellar.ai, Velorah, Aethera) — das hier geht
+    als echter Post raus. Jede Zahl aus docs/gtm/WLAD_CANON.md.
+  · Akzentfarbe Lime (--brand) statt Amber, Schriftpaarungen an
+    frontend/DESIGN.md angelehnt. Ein Post in fremder Akzentfarbe wäre
+    genau die Markeninkonsistenz, die das Team schon bemängelt hat.
+
+  Das Hintergrundbild der Vorlage war nicht ladbar: die CleanShot-URL
+  ist signiert und am 08.04.2026 abgelaufen. Stattdessen eine Bühne aus
+  Markenfarben — bei Social-Karten ist die Karte der Inhalt.
+
+  Kein Tailwind: statische Seite in public/, die den CRA-Build nicht
+  durchläuft. Dieselben Werte als reines CSS.
+
+  Export: Karte im Browser auf 1080×1080 skalieren (Zoom 281 %) oder
+  per Screenshot bei 3× DPI aufnehmen.
+-->
+<link rel="stylesheet" href="/social/cards.css"/>
+</head>
+<body>
+<div class="grid">
+
+  <!-- ══ 1 · Webinar ═════════════════════════════════ -->
+  <article class="card c1">
+    <video class="vid" autoplay loop muted playsinline
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260407_080531_1fe9b14c-9396-4b78-9372-42f4ddbd74c7.mp4"></video>
+    <div class="scrim"></div>
+    <div class="top">
+      <div class="eyebrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10.7l-5.1 3.4L16 20l-4-3.2L8 20l1.1-5.9L4 10.7l6.1-1.9z"/></svg>
+        Live am 29. Oktober
+      </div>
+      <h2>Führe<br/>besser.<br/><span class="hl">Jeden Tag.</span></h2>
+    </div>
+    <div class="bot">
+      <p>90 Minuten live mit Wlad Jachtchenko: der Charisma-Code, das Leadership-Betriebssystem, ein echter Live-Case und deine Fragen. Keine Aufzeichnung.</p>
+      <div class="row">
+        <div class="badge">
+          <span class="dot">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BFFF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+          </span>
+          <span class="lbl">Kostenlos</span>
+        </div>
+        <span class="pill">
+          <span>Platz sichern</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </div>
+  </article>
+
+  <!-- ══ 2 · Positionierung ══════════════════════════ -->
+  <article class="card c2">
+    <video class="vid" autoplay loop muted playsinline
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260307_083826_e938b29f-a43a-41ec-a153-3d4730578ab8.mp4"></video>
+    <div class="scrim"></div>
+    <div class="in">
+      <div>
+        <div class="glass liquid-glass animate-fade-rise">
+          <span class="new">Neu</span>
+          <span class="txt">Die 30-Tage-Challenge ist da</span>
+        </div>
+        <h2 class="animate-fade-rise-delay">Seminare ändern<br/>Wissen. Verhalten<br/>ändert <em>Wiederholung.</em></h2>
+        <p class="sub animate-fade-rise-delay-2">Deshalb trainierst du bei LeaderOS 30 Tage lang täglich — statt zweimal im Jahr zwei Tage.</p>
+      </div>
+      <div class="foot animate-fade-rise-delay-2">
+        <span class="b">LeaderOS</span>
+        <span class="line"></span>
+        <span class="t">Methodik</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- ══ 3 · Leader-Check ════════════════════════════ -->
+  <article class="card c3">
+    <video class="vid" autoplay loop muted playsinline
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260330_153826_e9005cf7-a1c7-4c7d-886f-fea22d644a9c.mp4"></video>
+    <div class="fade"></div>
+    <div class="in">
+      <div class="top">
+        <div class="logo animate-fade-in-up">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#000"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+          <span>Leader-Check</span>
+        </div>
+        <h2 class="animate-fade-in-up">10 Minuten.<br/>Kein Login.<br/><span class="grad">Dein Ergebnis.</span></h2>
+        <p class="sub animate-fade-in-up">Wo stehst du in KI-Kompetenz, Rhetorik und emotionaler Intelligenz? Die kostenlose Standortbestimmung sagt es dir — ohne Konto.</p>
+      </div>
+      <div class="bot animate-fade-in-up">
+        <span class="pill">leadercheck.de · kostenlos, ohne Anmeldung</span>
+        <div class="dims"><span>KI</span><span>Rhetorik</span><span>EQ</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ══ 4 · SEXIER ══════════════════════════════════ -->
+  <article class="card c4">
+    <video class="vid" autoplay loop muted playsinline
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"></video>
+    <div class="scrim"></div>
+    <div class="in">
+      <h2 class="animate-fade-rise">Sechs Schritte,<br/>ein Argument.</h2>
+      <p class="animate-fade-rise-delay">Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal. Wer nur behauptet und begründet, hat erst die Hälfte gesagt — das Beispiel macht es erinnerbar, das Rebuttal nimmt den Einwand vorweg.</p>
+      <p class="brand animate-fade-rise-delay-2">Das SEXIER-Modell &nbsp;·&nbsp; aus „Weiße Rhetorik"</p>
+    </div>
+  </article>
+
+  <!-- ══ 5 · Feedbackformel ══════════════════════════ -->
+  <article class="card c5">
+    <div class="vidwrap">
+      <video id="c5v" autoplay muted playsinline style="opacity:0"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4"></video>
+    </div>
+    <div class="scrim"></div>
+    <div class="in">
+      <h2 class="animate-fade-rise">Beobachtung. <em>Wirkung.</em><br/>Und ein <em>Wunsch.</em></h2>
+      <p class="animate-fade-rise-delay">„Du bist unzuverlässig" ist eine Zuschreibung. „Die Zahlen kamen dreimal nach Deadline" ist überprüfbar. Über das eine kann man sprechen — über das andere nur streiten.</p>
+      <p class="brand animate-fade-rise-delay-2">Die Feedbackformel</p>
+    </div>
+  </article>
+
+  <!-- ══ 6 · Wlad / WladBot ══════════════════════════ -->
+  <article class="card c6">
+    <video class="vid" autoplay loop muted playsinline
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260315_073750_51473149-4350-4920-ae24-c8214286f323.mp4"></video>
+    <div class="scrim"></div>
+    <div class="in">
+      <div class="top">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10.7l-5.1 3.4L16 20l-4-3.2L8 20l1.1-5.9L4 10.7l6.1-1.9z"/></svg>
+        <span>3× SPIEGEL-Bestseller</span>
+      </div>
+      <div>
+        <h2 class="animate-fade-rise">Seit 2007.<br/><em>Über 400.000</em><br/>Klienten.</h2>
+        <p class="animate-fade-rise-delay">Wlad Jachtchenkos Methodik aus 13 Büchern — jetzt als KI-Coach, der deine Situation kennt und in Sekunden antwortet.</p>
+        <div class="pills animate-fade-rise-delay-2">
+          <span class="liquid-glass">WladBot</span>
+          <span class="liquid-glass">24/7</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  /* Karte 5 · Ein- und Ausblenden statt hartem Loop-Schnitt.
+     FADE_DURATION in Sekunden, gemessen an currentTime. */
+  var FADE = 0.5;
+  var v = document.getElementById('c5v');
+  if(!v) return;
+  function frame(){
+    var d = v.duration;
+    if(d && isFinite(d)){
+      var t = v.currentTime, o = 1;
+      if(t < FADE) o = t / FADE;
+      else if(t > d - FADE) o = Math.max(0, (d - t) / FADE);
+      v.style.opacity = String(o);
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  v.addEventListener('ended', function(){
+    v.style.opacity = '0';
+    setTimeout(function(){ v.currentTime = 0; var p = v.play(); if(p && p.catch) p.catch(function(){}); }, 100);
+  });
+  var p = v.play(); if(p && p.catch) p.catch(function(){});
+})();
+</script>
+</body>
+</html>

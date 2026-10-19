@@ -14,6 +14,7 @@ import { ChatEmpty } from '../components/chat/ChatEmpty';
 import { ChatUpsellModal } from '../components/chat/ChatUpsellModal';
 import { ChatInputBar } from '../components/chat/ChatInputBar';
 import { ChatInlineUpsell } from '../components/chat/ChatInlineUpsell';
+import { ChatHistorySidebar } from '../components/chat/ChatHistorySidebar';
 import { VoiceModeOverlay } from '../components/chat/VoiceModeOverlay';
 import { WladThinking } from '../components/chat/WladThinking';
 import { ChatHistoryPanel } from '../components/chat/ChatHistoryPanel';
@@ -102,6 +103,9 @@ export default function ChatPage() {
       const res = await api.get('/chat/sessions');
       setSessions(res.data || []);
       if (res.data.length > 0 && !currentSession) setCurrentSession(res.data[0].session_id);
+      // Trigger Sidebar-Reload (refreshKey bump) ohne Doppelladung des
+      // Sessions-Endpoints · die Sidebar holt selbst, wir signalisieren nur.
+      setHistoryRefreshKey((k) => k + 1);
     } catch (err) { logger.error('Failed to load sessions:', err); }
   }, [currentSession]);
 
@@ -283,6 +287,19 @@ export default function ChatPage() {
   };
 
   const handleVoice = (text) => setInput(prev => prev + ' ' + text);
+
+  const historyPanel = (
+    <ChatHistorySidebar
+      currentSessionId={currentSession}
+      onSelect={(sid) => {
+        setCurrentSession(sid);
+        setMessages([]);
+      }}
+      onNew={handleNewSession}
+      refreshKey={historyRefreshKey}
+      de={de}
+    />
+  );
 
   return (
     <DashboardLayout>

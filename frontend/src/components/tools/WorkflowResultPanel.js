@@ -45,7 +45,7 @@ const CounterCheckCard = ({ text, de }) => (
     <CardContent className="p-5 space-y-3">
       <div className="flex items-center gap-2">
         <ShieldCheck size={16} className="text-amber-600" />
-        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">{de ? 'Gegencheck — Devil\'s Advocate' : 'Counter-Check — Devil\'s Advocate'}</h4>
+        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">{de ? 'Gegencheck · Devil\'s Advocate' : 'Counter-Check · Devil\'s Advocate'}</h4>
       </div>
       <SmartText text={text} accent="#F59E0B" icon={ShieldCheck} />
     </CardContent>

@@ -28,7 +28,7 @@ export const NetworkStatusBanner = () => {
       data-testid="network-error-banner"
     >
       <WifiOff size={16} className="shrink-0" />
-      <span className="font-semibold">Keine Verbindung zum Server — bitte prüfe deine Internetverbindung oder lade die Seite neu.</span>
+      <span className="font-semibold">Keine Verbindung zum Server. Bitte prüfe deine Internetverbindung oder lade die Seite neu.</span>
       <button
         onClick={() => window.location.reload()}
         className="ml-2 px-2.5 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-xs font-bold"

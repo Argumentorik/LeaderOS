@@ -210,6 +210,7 @@ async def create_chat_session(data: ChatSessionCreate, request: Request):
             })
     await db.chat_sessions.insert_one(doc)
     return {"session_id": session_id, "title": data.title, "agent": data.agent, "folder_id": doc.get("folder_id"), "created_at": doc["created_at"]}
+    return {"session_id": session_id, "title": data.title, "agent": data.agent, "folder_id": doc.get("folder_id"), "created_at": doc["created_at"]}
 
 
 @router.get("/chat/sessions")
@@ -245,8 +246,8 @@ ROLE_MAP = {
     "Kommunikator": "Du agierst als KOMMUNIKATOR-Rolle. Fokus: Charismatisch auftreten und überzeugen. Nutze die 3 Säulen der Überzeugung (Logos, Ethos, Pathos), den Kommunikationsquadrant und die Feedbackformel.",
     "Manager": "Du agierst als MANAGER-Rolle. Fokus: Effektiver und effizienter arbeiten. Nutze die Entscheidungsmatrix, Delegations-Framework und Priorisierung nach Impact.",
     "Team-Leader": "Du agierst als TEAM-LEADER-Rolle. Fokus: Nachhaltig motivieren und besser delegieren. Nutze Delegation als Befähigung, aktives Zuhören und Motivation-Frameworks.",
-    "Psychologe": "Du agierst als PSYCHOLOGE-Rolle. Fokus: Jedem Mitarbeiter individuell und empathisch begegnen. Nutze aktives Zuhören (5 Ebenen), Emotionsregulation und empathische Gesprächsführung.",
-    "Problemlöser": "Du agierst als PROBLEMLÖSER-Rolle. Fokus: Konflikte managen und Veränderungen durchsetzen. Nutze die 4 Gesprächstypen, Schwarze Rhetorik Defense und Mediationstechniken.",
+    "Psychologe": "Du agierst als PSYCHOLOGE-Rolle. Fokus: Jedem Mitarbeiter individuell und empathisch begegnen. Nutze die 10 Stufen des Zuhörens (nicht \"5 Ebenen\"), Emotionsregulation und empathische Gesprächsführung.",
+    "Problemlöser": "Du agierst als PROBLEMLÖSER-Rolle. Fokus: Konflikte managen und Veränderungen durchsetzen. Nutze die 4 Gesprächstypen, Dunkle Rhetorik Defense und Mediationstechniken.",
 }
 
 
@@ -325,6 +326,10 @@ async def _ensure_session(session_id: str, user_id: str, message: str, agent: st
         "title": fix_brand_names(unescape_text(message)[:50]), "agent": agent,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if folder_id:
+        doc["folder_id"] = folder_id
+    await db.chat_sessions.insert_one(doc)
     }
     if folder_id:
         doc["folder_id"] = folder_id

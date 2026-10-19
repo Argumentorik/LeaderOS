@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import { deepUnescape } from './textClean';
 
 /**
- * Premium branded PDF generator — WladBot Leadership OS
+ * Premium branded PDF generator · WladBot Leadership OS
  * Supports all result types from workflows, playbooks, simulations
  */
 export async function generatePDF(rawReportData, filename = 'WladBot-Report') {
@@ -276,7 +276,7 @@ export async function generatePDF(rawReportData, filename = 'WladBot-Report') {
   }
 
   // High Impact Tasks
-  addSection('Hoher Impact — Sofort umsetzen', reportData.high_impact, blue);
+  addSection('Hoher Impact · Sofort umsetzen', reportData.high_impact, blue);
 
   // Development Plan
   addSection('Entwicklungsplan', reportData.development_plan, violet);

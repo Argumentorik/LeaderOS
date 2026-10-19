@@ -1,5 +1,5 @@
 /**
- * Wlad Jachtchenkos echte Themen-Bibliothek — direkt aus
+ * Wlad Jachtchenkos echte Themen-Bibliothek · direkt aus
  * wladislaw-jachtchenko.com gespiegelt. Drei Bücher, ein Podcast,
  * eine Masterclass und 13 Keynote-Themen, gruppiert in die offizielle
  * 3-Säulen-Taxonomie:
@@ -8,12 +8,12 @@
  *   2. Convince People     (Rhetorik, Schlagfertigkeit, Persuasion)
  *   3. Business Communication (Verhandlung, Effizienz, Change, Konflikt)
  *
- * Jedes Topic carrieth einen `prompt_de` — wird beim Klick in den
+ * Jedes Topic carrieth einen `prompt_de` · wird beim Klick in den
  * Chat-Input geschoben, sodass der User sofort mit WladBot in das
  * jeweilige Wlad-Framework einsteigt.
  *
  * KEINE Bücher die Wlad nicht geschrieben hat ("Die Kunst der
- * Kommunikation" existiert nicht — entfernt).
+ * Kommunikation" existiert nicht · entfernt).
  */
 
 export const WLAD_BOOKS = [
@@ -49,7 +49,7 @@ export const WLAD_STATS = [
   { value: '400.000+', label: 'Kunden in 20+ Ländern' },
   { value: '14.000.000+', label: 'Podcast & YouTube Views' },
   { value: '250.000+', label: 'Buchverkäufe in 8 Ländern' },
-  { value: '12', label: 'Bücher · 3 SPIEGEL Bestseller' },
+  { value: '13', label: 'Bücher · 3 SPIEGEL Bestseller' },
 ];
 
 // Die staatlich zertifizierte 6-Monats-Führungskräfte-Ausbildung
@@ -58,7 +58,7 @@ export const WLAD_AUSBILDUNG = {
   subtitle: '6 Monate · 5 Rollen · Live-Coachings + WladBot · ZFU-zertifiziert',
   url: 'https://www.argumentorik.com/fuehrungskraefte-ausbildung/',
   format: [
-    { title: '2× wöchentlich Live-Coachings', desc: '25 wichtigste Leadership-Themen, direkt mit Wlad & Team' },
+    { title: '2× wöchentlich Live-Coachings', desc: '25 wichtigste Leadership-Themen · live mit dem LeaderOS-Team' },
     { title: 'Wöchentliches 1:1-Feedback', desc: 'Du schickst Übungen ein, Wlad und Team antworten persönlich' },
     { title: 'Wöchentliche Übungs-Abende', desc: 'Harte Konflikte in geschütztem Raum durchspielen' },
     { title: 'Networking & Live-Events', desc: 'Vernetze dich mit Führungskräften ähnlicher Größenordnung' },
@@ -74,7 +74,7 @@ export const WLAD_AUSBILDUNG = {
 
 export const WLAD_PODCAST = {
   title: 'Menschen überzeugen',
-  subtitle: 'Wlads Podcast — Die effektivsten Überzeugungstechniken',
+  subtitle: 'Wlads Podcast · Die effektivsten Überzeugungstechniken',
   url: 'https://www.argumentorik.com/podcast/',
 };
 
@@ -171,7 +171,7 @@ export const WLAD_TOPIC_PILLARS = [
       {
         id: 'verhandlung',
         title: 'Erfolgreich verhandeln',
-        prompt_de: 'Bereite mich auf eine harte Gehaltsverhandlung vor — nutze Wlads Verhandlungs-Framework und stell mir die kritischen Fragen.',
+        prompt_de: 'Bereite mich auf eine harte Gehaltsverhandlung vor · nutze Wlads Verhandlungs-Framework und stell mir die kritischen Fragen.',
         url: 'https://www.wladislaw-jachtchenko.com/en/successful-negotiation/',
       },
       {
@@ -189,7 +189,7 @@ export const WLAD_TOPIC_PILLARS = [
       {
         id: 'konflikt',
         title: 'Konfliktmanagement',
-        prompt_de: 'Ich habe einen konkreten Teamkonflikt. Führe mich durch Wlads 5-Schritte-Konfliktgespräch — frag mich nach den Details.',
+        prompt_de: 'Ich habe einen konkreten Teamkonflikt. Führe mich durch Wlads 5-Schritte-Konfliktgespräch · frag mich nach den Details.',
         url: 'https://www.wladislaw-jachtchenko.com/en/conflict-management/',
       },
     ],
@@ -209,7 +209,7 @@ export const WLAD_5_ROLES = [
     id: 'kommunikator',
     role: 'Kommunikator',
     headline: 'Charismatisch auftreten · Souverän argumentieren',
-    description: 'Charismatisch auftreten, fesselnd präsentieren und souverän argumentieren — auch unter Druck.',
+    description: 'Charismatisch auftreten, fesselnd präsentieren und souverän argumentieren · auch unter Druck.',
     prompt_de: 'Trainier mit mir die Rolle „Kommunikator". Stell mir eine kritische Frage aus einem Vorstands-Meeting und werte meine Antwort gegen Wlads Charisma-Code aus.',
     colorDark: '#BFFF00',
     colorLight: '#5A7700',

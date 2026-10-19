@@ -1,5 +1,5 @@
 /**
- * RecordingCountdown — premium 3-2-1 overlay shown before recording starts.
+ * RecordingCountdown · premium 3-2-1 overlay shown before recording starts.
  *
  * Counts down from `from` (default 3) to "GO" then calls onComplete().
  * Sci-Fi look: huge digit pulse, animated ring, neon-lime accents.

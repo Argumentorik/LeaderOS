@@ -1,5 +1,5 @@
 /**
- * RecordingStudio — Sci-Fi cockpit recording UI.
+ * RecordingStudio · Sci-Fi cockpit recording UI.
  *
  * Flow:
  *   1. SETUP: title + description + rating config visible, big circular RECORD button
@@ -123,7 +123,7 @@ const BigTimer = ({ timer, max, recording }) => {
 };
 
 // ────────────────────────────────────────────────────────────────────────────
-// Prompt pill (visible bottom-left during recording — small, non-intrusive)
+// Prompt pill (visible bottom-left during recording · small, non-intrusive)
 // ────────────────────────────────────────────────────────────────────────────
 const PromptPill = ({ challenge, de }) => (
   <div
@@ -215,7 +215,7 @@ export const RecordingStudio = ({
           <ArrowLeft size={16} className="mr-1" /> {de ? 'Abbrechen' : 'Cancel'}
         </Button>
 
-        {/* Status pill — only visible in non-recording states */}
+        {/* Status pill · only visible in non-recording states */}
         {!recording && !counting && !analyzing && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/25 text-[10px] font-bold uppercase tracking-[0.2em] text-[#BFFF00]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#BFFF00]" />
@@ -224,7 +224,7 @@ export const RecordingStudio = ({
         )}
       </div>
 
-      {/* ── Title block — only when not recording (so the user focuses on the camera) ── */}
+      {/* ── Title block · only when not recording (so the user focuses on the camera) ── */}
       {!recording && !counting && (
         <div className="text-center mb-2" data-testid="recording-prompt-block">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#BFFF00]/80 mb-2">
@@ -277,7 +277,7 @@ export const RecordingStudio = ({
             }}
           />
 
-          {/* Big timer — only when recording (otherwise too noisy) */}
+          {/* Big timer · only when recording (otherwise too noisy) */}
           {(recording || counting) && (
             <BigTimer timer={timer} max={activeChallenge.time_limit} recording={recording} />
           )}
@@ -309,8 +309,8 @@ export const RecordingStudio = ({
               </p>
               <p className="text-sm text-white/55 max-w-sm text-center px-6">
                 {de
-                  ? 'Klarheit · Souveränität · Empathie · Struktur — Wlads Framework wird angewendet'
-                  : 'Clarity · Confidence · Empathy · Structure — applying Wlad\'s framework'}
+                  ? 'Klarheit · Souveränität · Empathie · Struktur · Wlads Framework wird angewendet'
+                  : 'Clarity · Confidence · Empathy · Structure · applying Wlad\'s framework'}
               </p>
             </div>
           )}

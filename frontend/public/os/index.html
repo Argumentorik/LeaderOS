@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>LeaderOS — Dein Führungs-OS</title>
+<meta name="description" content="Das KI-Betriebssystem für Führung: tägliche Drills, KI-Coach 24/7, Gesprächs-Simulationen, messbarer Fortschritt. 14 Tage kostenlos testen — und im kostenlosen Leader-Check sehen, wo du stehst."/>
+<link rel="canonical" href="https://leader-os.de/os"/>
+<meta name="robots" content="index, follow, max-image-preview:large"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="LeaderOS"/>
+<meta property="og:locale" content="de_DE"/>
+<meta property="og:url" content="https://leader-os.de/os"/>
+<meta property="og:title" content="LeaderOS — Dein Führungs-OS"/>
+<meta property="og:description" content="Werde die beste Kommunikatorin, der beste Kommunikator im Raum: tägliches Training, KI-Coach, Simulationen. Das ist dein Betriebssystem für Führung."/>
+<meta property="og:image" content="https://leader-os.de/og-home.jpg"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<!--
+  /os · Kampagnen-Landing "Du bekommst ein OS".
+  Design adaptiert vom Vitalis-Dashboard-Referenzframe (1448×1086, 1rem=16px):
+  Token, Geometrie, Karten-Komposition und Interaktionen übernommen; Copy,
+  Semantik und Ziele sind LeaderOS (Conversion → leaderos.de/signup +
+  leadercheck.de). Bewusste Abweichung von frontend/DESIGN.md für diese eine
+  Kampagnen-Seite auf explizite Team-Entscheidung. Zahlen: WLAD_CANON
+  (400.000+ Klienten, 3× SPIEGEL, Reflex-Zeit 90→22 Sek aus publizierter
+  Kohorte) · Dashboard-Werte sind sichtbar gelabelte Demo-Beispieldaten.
+-->
+<style>
+:root{
+  --bg:#f0f8fc; --surface:#ffffff; --ink:#000000; --ink-2:#3f4045;
+  --muted:#6b6c72; --muted-2:#8c8c91; --icon:#7f848c; --hair:#e6eef4;
+  --chip:#eef6fc; --blue:#3ea2e8; --blue-deep:#0179da; --blue-soft:#5db0e9;
+  --droplet:#055897; --lime:#d2e659; --lime-crown:#d7f17c; --olive:#929e08;
+  --olive-nav:#94a103; --track:#f3f3f3; --wave:#7ec3dd; --wave-soft:#dcecf3;
+  --shadow:0 .25rem 1.5rem rgba(21,71,110,.045);
+  --gap:1.125rem; --pad-l:1.5rem; --pad-r:1.0625rem; --pad-b:.8125rem;
+  --cpad-y:2.125rem; --cpad-x:1.9375rem; --glass:2.1875rem; --rail:6.875rem;
+  --r-lg:2.375rem; --r-md:2.25rem;
+}
+html{font-size:clamp(7px,min(100vw / 90.5,100dvh / 67.875),23px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  background:var(--bg);color:var(--ink);overflow:hidden;height:100dvh;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:.1875rem solid #0f7fd0;outline-offset:.125rem}
+.hero :focus-visible,.hydra :focus-visible{outline-color:#fff}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+.app{display:flex;width:100%;height:100dvh;border:1px solid rgba(174,183,189,.7);border-radius:2.5rem;background:var(--bg);overflow:hidden}
+
+/* ───────── rail ───────── */
+.rail{width:var(--rail);flex:0 0 var(--rail);background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:1rem;padding-bottom:1.4rem}
+.logo{width:2.8125rem;height:2.8125rem;margin-top:2.3125rem;flex:0 0 auto}
+.nav{display:flex;flex-direction:column;align-items:center;gap:.7rem;margin-top:1.6rem}
+.nav-b{width:3.25rem;height:3.25rem;border-radius:50%;display:grid;place-items:center;color:var(--icon);transition:background .15s,color .15s}
+.nav-b:hover{background:var(--chip)}
+.nav-b.is-active{background:var(--olive-nav);color:#fff;box-shadow:0 .375rem .875rem rgba(148,161,3,.32)}
+.nav-b svg{width:1.5rem;height:1.5rem}
+.nav-rule{width:2.1875rem;height:1px;background:#e3e8ec;margin:.4rem 0}
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:.7rem}
+.me{width:3.375rem;height:3.375rem;border-radius:50%;border:.1875rem solid var(--olive-nav);padding:.125rem}
+.me img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.nav-b--menu{display:none}
+
+/* ───────── main ───────── */
+.main{flex:1;display:grid;grid-template-rows:121fr 469fr 447fr;gap:var(--gap);padding:0 var(--pad-r) var(--pad-b) var(--pad-l);min-width:0}
+.row-a{display:grid;grid-template-columns:735fr 546fr;gap:1.0625rem;min-height:0}
+.row-b{display:grid;grid-template-columns:407fr 439fr 416fr;gap:var(--gap);min-height:0}
+.card{background:var(--surface);box-shadow:var(--shadow);border-radius:var(--r-md);overflow:hidden;position:relative;min-height:0}
+.card--lg{border-radius:var(--r-lg)}
+
+/* ───────── topbar ───────── */
+.topbar{display:flex;align-items:center;gap:1rem;min-height:0;padding-top:1.35rem}
+.tb-text h1{font-size:2.25rem;font-weight:700;line-height:1.15;letter-spacing:-.021em}
+.tb-text p{font-size:.96875rem;font-weight:400;color:var(--muted);margin-top:.15rem}
+.demo-chip{font-family:ui-monospace,monospace;font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--hair);border-radius:1rem;padding:.3rem .7rem;margin-left:.9rem;white-space:nowrap}
+.tb-spacer{flex:1}
+.search{display:flex;align-items:center;gap:.7rem;width:19.9375rem;height:4.125rem;border-radius:2.0625rem;background:var(--surface);border:1px solid var(--hair);padding:0 1.3rem;box-shadow:var(--shadow)}
+.search svg{width:1.25rem;height:1.25rem;color:var(--icon);flex:0 0 auto}
+.search input{border:0;outline:0;flex:1;font:inherit;font-size:1.125rem;color:var(--ink-2);background:transparent;min-width:0}
+.search input::placeholder{color:var(--muted-2)}
+.upgrade{display:flex;align-items:center;gap:.65rem;height:4.125rem;padding:0 1.6rem;border-radius:2.0625rem;background:var(--ink);color:var(--lime-crown);font-size:1.1875rem;font-weight:600;white-space:nowrap}
+.upgrade svg{width:1.35rem;height:1.35rem}
+.upgrade:hover{background:#1a1a1a}
+
+/* ───────── hero ───────── */
+.hero{background:#1599e5}
+.hero-photo{position:absolute;inset:0;background-image:url("https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260730_081846_b55b106b-17b3-4020-8473-cacf0dcc852f.png&w=1920&q=85");background-size:118.08% auto;background-position:42.16% 16.47%;background-repeat:no-repeat}
+.hero h2{position:absolute;left:2.5625rem;top:2.0625rem;font-size:3.25rem;font-weight:600;line-height:3.875rem;letter-spacing:-.032em;color:#fff;text-shadow:0 .125rem 1.5rem rgba(21,113,171,.55);max-width:10.95em}
+.play{position:absolute;left:51.4%;top:48.1%;transform:translate(-50%,-50%);width:3.75rem;height:3.75rem;border-radius:50%;background:rgba(255,255,255,.22);backdrop-filter:blur(.4rem);border:1px solid rgba(255,255,255,.65);display:grid;place-items:center}
+.play svg{width:1.3rem;height:1.3rem;fill:#fff;margin-left:.15rem}
+.play:hover{background:rgba(255,255,255,.34)}
+.explore{position:absolute;left:51.7%;top:58.8%;transform:translateX(-50%);color:#fff;font-size:1.4375rem;font-weight:500;text-shadow:0 .125rem 1rem rgba(21,113,171,.6)}
+.join{position:absolute;left:2.5625rem;bottom:1.9rem;color:#fff}
+.join p{font-size:1rem;font-weight:500;text-shadow:0 .0625rem .75rem rgba(21,113,171,.55)}
+.join-row{display:flex;align-items:center;gap:.9rem;margin-top:.7rem}
+.avatars{display:flex}
+.avatars img{width:3.375rem;height:3.375rem;border-radius:50%;border:.1875rem solid #fff;object-fit:cover}
+.avatars img+img{margin-left:-.875rem}
+.join-nums b{display:block;font-size:1.4rem;font-weight:700;line-height:1.1}
+.join-nums span{font-size:.95rem;opacity:.92}
+.trial{position:absolute;right:1.9rem;bottom:1.9rem;display:flex;align-items:center;gap:.9rem;height:4.375rem;padding:0 .55rem 0 1.9rem;border-radius:2.1875rem;background:var(--ink);color:#fff;font-size:1.25rem;font-weight:600;white-space:nowrap}
+.trial-arrow{width:3.25rem;height:3.25rem;border-radius:50%;background:#fff;display:grid;place-items:center}
+.trial-arrow svg{width:1.2rem;height:1.2rem;color:var(--ink)}
+.trial:hover{background:#161616}
+
+/* ───────── hydration → daily drills ───────── */
+.hydra{background:linear-gradient(145deg,#3199e5 0%,#3ea2e8 46%,#43a6ea 100%);color:#fff;padding:var(--cpad-y) var(--cpad-x);display:flex;flex-direction:column}
+.hydra-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+.hydra h3{font-size:1.25rem;font-weight:600}
+.hydra-body{font-size:.95rem;line-height:1.5;opacity:.95;margin-top:.55rem;max-width:21em}
+.welldone{display:inline-flex;align-items:center;gap:.5rem;background:var(--lime);color:#16180c;font-weight:600;font-size:.95rem;border-radius:1.4rem;padding:.65rem 1.1rem;white-space:nowrap}
+.welldone svg{width:1.05rem;height:1.05rem}
+.cups{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem .4rem;margin-top:1.4rem;max-width:17rem}
+.cups svg{width:2.1875rem;height:2.6875rem}
+.hydra-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem}
+.big-num{text-align:right;line-height:1}
+.big-num b{font-size:5.625rem;font-weight:300}
+.big-num span{font-size:2.125rem;font-weight:400}
+.ranges{display:flex;gap:.55rem}
+.range{width:3.875rem;height:3.875rem;border-radius:50%;display:grid;place-items:center;font-size:1.05rem;font-weight:600;color:#fff;background:rgba(255,255,255,.18)}
+.range[aria-pressed="true"]{background:#fff;color:var(--ink)}
+
+/* ───────── row B cards ───────── */
+.pcard{padding:var(--cpad-y) var(--cpad-x);display:flex;flex-direction:column;min-height:0}
+.chip-ic{width:2.9rem;height:2.9rem;border-radius:1rem;background:var(--chip);display:grid;place-items:center}
+.chip-ic svg{width:1.4rem;height:1.4rem;color:var(--ink)}
+
+/* sleep → simulations */
+.sim-avs{display:flex;margin-bottom:1rem}
+.sim-avs img{width:2.4375rem;height:2.4375rem;border-radius:50%;border:.15rem solid #fff;object-fit:cover;box-shadow:var(--shadow)}
+.sim-avs img+img{margin-left:-.7rem}
+.sim h3{font-size:1.6875rem;font-weight:500;line-height:2.1875rem;letter-spacing:-.01em}
+.sim-tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--ink);color:#fff;font-size:.9rem;font-weight:500;border-radius:1.3rem;padding:.5rem 1rem;margin:.9rem 0;align-self:flex-start}
+.sim-tag svg{width:1rem;height:1rem}
+.sim-body{font-size:.95rem;line-height:1.55;color:var(--muted)}
+.sim-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.pager-num{font-size:1.1rem;color:var(--muted)}
+.pager-num b{color:var(--ink);font-size:1.35rem}
+.pager{display:flex;gap:.5rem}
+.pager button{width:2.8rem;height:2.8rem;border-radius:50%;border:1px solid var(--hair);display:grid;place-items:center;color:var(--ink-2)}
+.pager button:hover{background:var(--chip)}
+.pager svg{width:1.05rem;height:1.05rem}
+
+/* calories → skill score */
+.cal-head{display:flex;align-items:center;gap:.9rem}
+.cal-head h3{font-size:1.25rem;font-weight:600;flex:1}
+.cal-val{font-size:1.15rem;color:var(--muted)}
+.cal-val b{color:var(--ink);font-size:1.45rem;font-weight:700}
+.cal-sub{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted-2);margin-top:.9rem}
+.cal-big{font-size:3.75rem;font-weight:700;letter-spacing:-.02em;margin-top:.4rem}
+.cal-big span{font-size:1.2rem;font-weight:400;color:var(--muted)}
+.cal-scale{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted-2);margin-top:.7rem}
+.bars{display:flex;gap:.28rem;align-items:stretch;height:3.875rem;margin-top:.4rem}
+.bars i{flex:1;max-width:.46875rem;border-radius:.46875rem;background:var(--track)}
+.bars i.on{background:var(--olive)}
+.macros{display:flex;justify-content:space-between;gap:.8rem;margin-top:auto;padding-top:1.1rem;font-size:.85rem;color:var(--muted)}
+.macros b{display:block;color:var(--ink);font-size:1.05rem}
+
+/* weight → progress */
+.wt-head{display:flex;align-items:center;gap:.9rem}
+.wt-head h3{font-size:1.25rem;font-weight:600;flex:1}
+.wt-val{font-size:1.15rem;color:var(--muted)}
+.wt-val b{color:var(--ink);font-size:1.45rem;font-weight:700}
+.wt-sub{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted-2);margin-top:.9rem}
+.spark{width:100%;height:auto;margin-top:.5rem}
+.wt-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem}
+.wt-big{font-size:7.4375rem;font-weight:700;line-height:.9;letter-spacing:-.04em}
+.wt-big span{font-size:1.6rem;font-weight:500;color:var(--muted)}
+.wt-note{text-align:right;font-size:.95rem;color:var(--muted);line-height:1.45}
+.wt-note b{color:var(--ink)}
+
+/* ───────── responsive ───────── */
+.me-top{display:none}
+@media (max-width:1180px) and (min-width:621px),(max-aspect-ratio:1/1) and (min-width:621px){
+  body{overflow:auto;height:auto}
+  .app{height:auto;border-radius:0;border:0}
+  .main{display:flex;flex-direction:column}
+  .row-a,.row-b{display:grid;grid-template-columns:1fr 1fr}
+  .hero{grid-column:1/-1;min-height:26rem}
+  .hydra{min-height:24rem}
+  .card{min-height:22rem}
+}
+@media (max-width:620px){
+  body{overflow:auto;height:auto}
+  .app{flex-direction:column;height:auto;border-radius:0;border:0}
+  .rail{position:fixed;left:.75rem;right:.75rem;bottom:.75rem;top:auto;width:auto;flex-direction:row;justify-content:space-around;padding:.5rem .8rem;border-radius:2rem;background:rgba(255,255,255,.72);backdrop-filter:blur(20px);box-shadow:0 .5rem 2rem rgba(21,71,110,.16);z-index:50}
+  .logo,.nav-rule,.rail-foot{display:none}
+  .nav{flex-direction:row;margin:0;gap:.3rem}
+  .nav-b[data-more]{display:none}
+  .rail.is-open .nav-b[data-more]{display:grid}
+  .nav-b--menu{display:grid}
+  .main{display:flex;flex-direction:column;padding:0 1rem 7.5rem;gap:1rem}
+  .topbar{position:sticky;top:0;background:rgba(240,248,252,.85);backdrop-filter:blur(14px);z-index:40;padding:.9rem 0;flex-wrap:wrap}
+  .tb-text h1{font-size:1.7rem}
+  .demo-chip{margin-left:0}
+  .search{width:100%;order:5}
+  .me-top{display:block;width:2.9rem;height:2.9rem;border-radius:50%;border:.15rem solid var(--olive-nav);overflow:hidden;margin-left:auto}
+  .me-top img{width:100%;height:100%;object-fit:cover}
+  .upgrade{display:none}
+  .card{min-height:auto}
+  .hero{display:flex;flex-direction:column;min-height:30rem}
+  .hero-photo{position:absolute;inset:0;background-size:cover;background-position:center}
+  .hero h2{position:static;margin:1.6rem 1.4rem 0;font-size:2rem;line-height:1.2;z-index:1}
+  .play{position:static;transform:none;margin:2.2rem auto .6rem;z-index:1}
+  .explore{position:static;transform:none;text-align:center;z-index:1}
+  .join{position:static;margin:1.6rem 1.4rem 1rem;z-index:1}
+  .trial{position:static;margin:0 1.4rem 1.6rem;justify-content:space-between;z-index:1}
+  .hydra{padding:1.6rem}
+  .cups{max-width:none}
+  .pcard{padding:1.6rem}
+  .wt-big{font-size:5rem}
+}
+@media (max-width:400px){
+  .hero h2{font-size:2rem}
+  .macros{flex-wrap:wrap}
+  .sim h3{font-size:1.4rem;line-height:1.3}
+}
+</style>
+<!-- Google Ads Conversion-Tracking + Consent Mode v2 · inaktiv, solange in
+     /js/consent-gtag.js noch die Platzhalter-AW-ID steht (docs/gtm/GOOGLE_ADS_SETUP.md §3). -->
+<script src="/js/consent-gtag.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cup" viewBox="0 0 35 43">
+    <path d="M3 2h29l-3.4 37.2c-.1 1.6-1.5 2.8-3.1 2.8H9.5c-1.6 0-3-1.2-3.1-2.8L3 2z"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <!-- rail -->
+  <aside class="rail" id="rail">
+    <svg class="logo" viewBox="0 0 45 45" aria-label="LeaderOS" role="img">
+      <g fill="#8f9f05">
+        <circle cx="22.5" cy="3.7" r="3.7"/><circle cx="13.1" cy="13.1" r="3.7"/>
+        <circle cx="22.5" cy="13.1" r="3.7"/><circle cx="31.9" cy="13.1" r="3.7"/>
+        <circle cx="3.7" cy="22.5" r="3.7"/><circle cx="13.1" cy="22.5" r="3.7"/>
+        <circle cx="22.5" cy="22.5" r="3.7"/><circle cx="31.9" cy="22.5" r="3.7"/>
+        <circle cx="41.3" cy="22.5" r="3.7"/><circle cx="13.1" cy="31.9" r="3.7"/>
+        <circle cx="22.5" cy="31.9" r="3.7"/><circle cx="31.9" cy="31.9" r="3.7"/>
+        <circle cx="22.5" cy="41.3" r="3.7"/>
+      </g>
+    </svg>
+    <nav class="nav" aria-label="Navigation">
+      <button class="nav-b is-active" aria-label="Home" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10.2V21h6.4v-5.2a2.6 2.6 0 1 1 5.2 0V21H21V10.2L12 3z"/><circle cx="12" cy="13.6" r="1.6" fill="var(--olive-nav)"/></svg>
+      </button>
+      <button class="nav-b" aria-label="Training">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><polyline points="7,14.5 10.2,10.5 13.2,13 17,8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="nav-b" data-more aria-label="Nachrichten">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4.2 3.4c-.4.3-.8 0-.8-.5V6.5z"/><line x1="8.2" y1="10.8" x2="15.8" y2="10.8" stroke-linecap="round"/></svg>
+      </button>
+      <span class="nav-rule" aria-hidden="true"></span>
+      <button class="nav-b" data-more aria-label="Benachrichtigungen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4a5.4 5.4 0 0 0-5.4 5.4c0 4.4-1.7 5.8-1.7 5.8h14.2s-1.7-1.4-1.7-5.8A5.4 5.4 0 0 0 12 4z" stroke-linejoin="round"/><path d="M10.2 18.6a2 2 0 0 0 3.6 0" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-b" data-more aria-label="Einstellungen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.06-.4.1-.8.1-1.2z" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="nav-b nav-b--menu" data-menu aria-label="Mehr anzeigen" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7" stroke-linecap="round"/><line x1="4" y1="12" x2="20" y2="12" stroke-linecap="round"/><line x1="4" y1="17" x2="20" y2="17" stroke-linecap="round"/></svg>
+      </button>
+    </nav>
+    <div class="rail-foot">
+      <button class="nav-b" aria-label="Abmelden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4H7.5A2.5 2.5 0 0 0 5 6.5v11A2.5 2.5 0 0 0 7.5 20H14" stroke-linecap="round"/><polyline points="16,8.5 20,12 16,15.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="20" y1="12" x2="10" y2="12" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-b" data-more aria-label="Hilfe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.9c-.7.3-1 .8-1 1.5v.4" stroke-linecap="round"/><circle cx="12" cy="16.8" r=".4" fill="currentColor"/></svg>
+      </button>
+      <span class="me"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&facepad=2.4&w=160&h=160&q=70" alt="Demo-Profil Andrea"/></span>
+    </div>
+  </aside>
+
+  <!-- main -->
+  <main class="main">
+    <!-- topbar -->
+    <header class="topbar">
+      <div class="tb-text">
+        <h1>Hi, Andrea!</h1>
+        <p>Dein tägliches Führungs-Training auf einen Blick.</p>
+      </div>
+      <span class="demo-chip">Demo-Ansicht · Beispieldaten</span>
+      <span class="tb-spacer"></span>
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><line x1="15.6" y1="15.6" x2="20" y2="20" stroke-linecap="round"/></svg>
+        <input type="search" placeholder="Suche Frameworks, Drills, Simulationen" aria-label="Suche"/>
+      </label>
+      <a class="upgrade" href="https://leaderos.de/signup?trial=14">
+        <svg viewBox="0 0 24 24" fill="#d7f17c" aria-hidden="true"><path d="M3 8.5 7.5 12 12 5l4.5 7L21 8.5 19.4 18H4.6L3 8.5z"/></svg>
+        Kostenlos starten
+      </a>
+      <span class="me-top"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&facepad=2.4&w=160&h=160&q=70" alt="Demo-Profil Andrea"/></span>
+    </header>
+
+    <!-- row A -->
+    <section class="row-a">
+      <article class="card card--lg hero">
+        <div class="hero-photo" role="img" aria-label="Führungskraft im Training"></div>
+        <h2>Werde die beste Stimme im Raum!</h2>
+        <a class="play" href="https://leadercheck.de" aria-label="Intro ansehen und Leader-Check starten">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+        </a>
+        <a class="explore" href="https://leadercheck.de">Leader-Check starten</a>
+        <div class="join">
+          <p>Trainiere mit Wlads Methodik:</p>
+          <div class="join-row">
+            <span class="avatars">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2.6&w=140&h=140&q=70" alt=""/>
+              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=facearea&facepad=2.6&w=140&h=140&q=70" alt=""/>
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=facearea&facepad=2.6&w=140&h=140&q=70" alt=""/>
+            </span>
+            <span class="join-nums"><b>400K+</b><span>Klienten seit 2007</span></span>
+          </div>
+        </div>
+        <a class="trial" href="https://leaderos.de/signup?trial=14">
+          14 Tage kostenlos testen
+          <span class="trial-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round"/><polyline points="13,6 19,12 13,18" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </article>
+
+      <article class="card card--lg hydra">
+        <div class="hydra-top">
+          <div>
+            <h3>Deine täglichen Drills</h3>
+            <p class="hydra-body">15 Minuten pro Tag statt einmal im Jahr Seminar.<br/>Kleine Wiederholungen, spürbar im nächsten Meeting.</p>
+          </div>
+          <span class="welldone">
+            <svg viewBox="0 0 24 24" fill="#16180c" aria-hidden="true"><path d="M7 10.5V20H4a1 1 0 0 1-1-1v-7.5a1 1 0 0 1 1-1h3zm2 9.5h8.4a2.5 2.5 0 0 0 2.45-2l1.05-5.2a2 2 0 0 0-1.96-2.4h-4.63l.63-3.14a2.1 2.1 0 0 0-3.7-1.75L9 10.5V20z"/></svg>
+            Stark!
+          </span>
+        </div>
+        <div class="cups" id="cups" role="img" aria-label="8 von 24 Drills diese Woche absolviert"></div>
+        <div class="hydra-bottom">
+          <div class="ranges" role="group" aria-label="Zeitraum">
+            <button class="range" aria-pressed="true">T</button>
+            <button class="range" aria-pressed="false">W</button>
+            <button class="range" aria-pressed="false">M</button>
+          </div>
+          <p class="big-num"><b>15Min</b><span>/Tag</span></p>
+        </div>
+      </article>
+    </section>
+
+    <!-- row B -->
+    <section class="row-b">
+      <article class="card pcard sim">
+        <span class="sim-avs">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=facearea&facepad=2.6&w=120&h=120&q=70" alt=""/>
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2.6&w=120&h=120&q=70" alt=""/>
+          <img src="https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=facearea&facepad=2.6&w=120&h=120&q=70" alt=""/>
+        </span>
+        <h3>Schwierige Gespräche ohne Herzklopfen</h3>
+        <span class="sim-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4.2 3.4c-.4.3-.8 0-.8-.5V6.5z"/></svg>
+          Simulation
+        </span>
+        <p class="sim-body">Kündigungsgespräch, Konflikt, Gehaltsverhandlung: Du übst mit dem KI-Coach, bekommst einen Score und gehst mit Plan ins echte Gespräch.</p>
+        <div class="sim-foot">
+          <span class="pager-num"><b>2</b>/5</span>
+          <span class="pager">
+            <button aria-label="Vorherige Simulation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="14,6 8,12 14,18" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button aria-label="Nächste Simulation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="10,6 16,12 10,18" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </span>
+        </div>
+      </article>
+
+      <article class="card pcard cal">
+        <div class="cal-head">
+          <span class="chip-ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2s1 3.2-1.5 5.7C8.2 10 7 12 7 14.5A5.5 5.5 0 0 0 12.5 20 5.5 5.5 0 0 0 18 14.5c0-2-1-3.6-2.2-4.9-.4 1-1.1 1.9-2.3 2.4.6-2.7-.3-6.3-1.5-8z"/></svg></span>
+          <h3>Skill-Score</h3>
+          <span class="cal-val"><b>2.350</b> Ziel</span>
+        </div>
+        <div class="cal-sub"><span>Kommunikation · Rhetorik · EQ</span><span>Wochenziel</span></div>
+        <p class="cal-big">2.040<span>/Punkte</span></p>
+        <div class="cal-scale"><span>0</span><span>2.350</span></div>
+        <div class="bars" id="bars" role="img" aria-label="21 von 30 Trainingseinheiten diese Woche"></div>
+        <div class="macros">
+          <span><b>11</b> Frameworks</span>
+          <span><b>16</b> Video-Missionen</span>
+          <span><b>24/7</b> KI-Coach</span>
+        </div>
+      </article>
+
+      <article class="card pcard wt">
+        <div class="wt-head">
+          <span class="chip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><polyline points="8,6 3.5,12 8,18" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,6 20.5,12 16,18" stroke-linecap="round" stroke-linejoin="round"/><line x1="3.5" y1="12" x2="20.5" y2="12" stroke-linecap="round"/></svg></span>
+          <h3>Fortschritt</h3>
+          <span class="wt-val"><b>30</b> Tage</span>
+        </div>
+        <div class="wt-sub"><span>Reflex-Zeit im Median: 90 → 22 Sekunden*</span><span>Challenge</span></div>
+        <svg class="spark" viewBox="0 0 351 116" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="w1" x1="0" y1="0" x2="351" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#6ec0da" stop-opacity=".15"/><stop offset=".35" stop-color="#6ec0da"/><stop offset="1" stop-color="#6ec0da" stop-opacity=".2"/>
+            </linearGradient>
+            <linearGradient id="w2" x1="0" y1="0" x2="351" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#dcecf3" stop-opacity=".4"/><stop offset=".5" stop-color="#dcecf3"/><stop offset="1" stop-color="#dcecf3" stop-opacity=".3"/>
+            </linearGradient>
+          </defs>
+          <path d="M2 96c34-8 52-40 81-58s57-26 88-16 46 44 78 52 68-6 100-30" stroke="url(#w2)" stroke-width="11" stroke-linecap="round"/>
+          <path d="M2 104c36-12 50-52 79-72s59-22 90-8 44 48 76 56 70-2 102-26" stroke="url(#w1)" stroke-width="11" stroke-linecap="round"/>
+          <circle cx="81" cy="14" r="7" fill="#83c5dd"/>
+        </svg>
+        <div class="wt-foot">
+          <p class="wt-big">82<span>%</span></p>
+          <p class="wt-note">des Wochenplans<br/>geschafft<br/><b>Weiter so!</b></p>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<p style="position:fixed;left:-9999px" aria-hidden="true">*Median aus einer anonymisierten Auswertung von 240 Challenge-Teilnehmern, publiziert im LeaderOS Journal.</p>
+
+<script>
+(function(){
+  'use strict';
+  /* 6×4 drill grid · exact fill pattern (8 of 24) */
+  var pattern=[[1,1,1,1,1,0],[1,0,1,0,1,0],[0,0,0,0,0,0],[0,0,0,0,0,0]];
+  var cups=document.getElementById('cups');
+  pattern.forEach(function(row){row.forEach(function(full){
+    var s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('viewBox','0 0 35 43');s.setAttribute('aria-hidden','true');
+    var u=document.createElementNS('http://www.w3.org/2000/svg','use');
+    u.setAttribute('href','#cup');
+    u.setAttribute('fill',full?'#055897':'rgba(255,255,255,.94)');
+    s.appendChild(u);cups.appendChild(s);
+  });});
+
+  /* 30 score bars · first 21 on */
+  var bars=document.getElementById('bars');
+  for(var i=0;i<30;i++){var b=document.createElement('i');if(i<21)b.className='on';bars.appendChild(b);}
+
+  /* T/W/M exclusive toggle */
+  var ranges=document.querySelectorAll('.range');
+  ranges.forEach(function(r){r.addEventListener('click',function(){
+    ranges.forEach(function(x){x.setAttribute('aria-pressed','false');});
+    r.setAttribute('aria-pressed','true');
+  });});
+
+  /* mobile menu */
+  var rail=document.getElementById('rail');
+  var menuBtn=document.querySelector('[data-menu]');
+  function closeMenu(){rail.classList.remove('is-open');menuBtn.setAttribute('aria-expanded','false');}
+  menuBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=rail.classList.toggle('is-open');
+    menuBtn.setAttribute('aria-expanded',open?'true':'false');
+  });
+  document.addEventListener('click',function(e){if(!rail.contains(e.target))closeMenu();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
+})();
+</script>
+</body>
+</html>

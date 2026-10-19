@@ -30,7 +30,7 @@ const sentryDsn = isLeaderCheck
   : process.env.REACT_APP_SENTRY_DSN_LEADER_OS;
 
 if (sentryDsn) {
-  // Sentry error tracking is always on (Art. 6(1)(f) DSGVO — legitimate
+  // Sentry error tracking is always on (Art. 6(1)(f) DSGVO · legitimate
   // interest in service stability, anonymized stacktraces, sendDefaultPii=false).
   // Session-Replay only activates when the user has explicitly consented.
   const integrations = [Sentry.browserTracingIntegration()];
@@ -43,6 +43,11 @@ if (sentryDsn) {
   Sentry.init({
     dsn: sentryDsn,
     environment: process.env.REACT_APP_SENTRY_ENV || "production",
+    // Release tag for deployment correlation · set REACT_APP_SENTRY_RELEASE
+    // in Vercel build env (e.g. `frontend@${VERCEL_GIT_COMMIT_SHA}`).
+    // Falls back to a stable string so we never accidentally collapse
+    // every release into the same "unknown" bucket.
+    release: process.env.REACT_APP_SENTRY_RELEASE || `leader-os@${process.env.REACT_APP_BUILD_ID || "dev"}`,
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: replayConsented ? 1.0 : 0,
@@ -65,22 +70,62 @@ const maybeInitPostHog = () => {
       autocapture: false,
       capture_pageview: true,
       persistence: "localStorage+cookie",
+      // No subdomain-shared cookies · the funnel deliberately spans
+      // leader-os.de ↔ leaderos.de (and leader-check.de ↔ leadercheck.de),
+      // which are different root domains. Cross-domain stitching happens
+      // via the ph_did URL param (passed by ArchetypeQuiz CTA) and via
+      // email_lower identify on signup. Sharing across www. subdomains
+      // is not a concern.
+      cross_subdomain_cookie: false,
     });
-  }).catch(() => { /* network blocked / extension blocked — silent */ });
+  }).catch(() => { /* network blocked / extension blocked · silent */ });
 };
 
-if (analyticsConsented) maybeInitPostHog();
+// Microsoft Clarity (heatmaps + session replay): consent-gated exactly like
+// PostHog — injected ONLY after the user grants analytics consent (on boot or
+// live via the lo:consent event), never blindly in <head>. Idempotent.
+const maybeInitClarity = () => {
+  if (typeof window === "undefined" || window.__clarityLoaded) return;
+  window.__clarityLoaded = true;
+  (function (c, l, a, r, i) {
+    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+    const t = l.createElement(r);
+    t.async = 1;
+    t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt";
+    const y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, "clarity", "script", "xfcxc35oau");
+};
+
+if (analyticsConsented) {
+  maybeInitPostHog();
+  maybeInitClarity();
+}
+
+// Ad-Pixel (Meta, LinkedIn): eigene Consent-Kategorie „Marketing", inert
+// bis zur echten ID (lib/metaPixel.js, lib/linkedinInsight.js). Beide
+// prüfen den Consent selbst, daher hier ohne Guard.
+maybeInitMetaPixel();
+maybeInitLinkedIn();
+maybeInitGoogleAds();   // Consent Mode v2: lädt mit „denied", bis Marketing zugestimmt wird
+maybeInitBingUet();
 
 if (typeof window !== "undefined") {
   window.addEventListener("lo:consent", (e) => {
     const c = e?.detail || {};
-    if (c.analytics) maybeInitPostHog();
+    if (c.analytics) {
+      maybeInitPostHog();
+      maybeInitClarity();
+    }
+    if (c.marketing) { maybeInitMetaPixel(); maybeInitLinkedIn(); maybeInitBingUet(); }
+    maybeInitGoogleAds();   // auch bei Rücknahme: consent update = denied
   });
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+}

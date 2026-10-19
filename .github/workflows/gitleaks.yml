@@ -1,0 +1,48 @@
+name: gitleaks
+# Secret scanning · catches accidentally-committed API keys, tokens, JWTs,
+# Stripe sk_live_*, Resend re_*, Google OAuth client secrets, etc.
+#
+# Runs on every PR + every push to mvpcode. A scan-failure (any leak found)
+# fails the job and blocks merge if this check is required-status.
+#
+# Configured to scan the ENTIRE git history on a push to mvpcode (defense
+# against a force-push smuggling secrets through), but only the PR diff on a
+# pull_request event (fast feedback, lower cost).
+
+on:
+  push:
+    branches: [mvpcode]
+  pull_request:
+    branches: [mvpcode]
+
+permissions:
+  contents: read
+  # gitleaks-action@v2 lists the PR's commits via the API on pull_request
+  # events; without this the call 403s ("Resource not accessible by
+  # integration") and the job fails even when no secret was found.
+  pull-requests: read
+
+jobs:
+  scan:
+    name: secret-leak scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history needed so the scanner can detect leaks added in old
+          # commits that were rebased/squashed into the PR diff.
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          # No GITLEAKS_LICENSE needed for public repos · this is the OSS
+          # path which is sufficient for our threat model.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # .gitleaks.toml erweitert das Standard-Regelset (~150 Muster:
+          # AWS, Stripe, Google, Resend, Slack, Supabase, JWTs, SSH-Keys …)
+          # via `[extend] useDefault = true` und nimmt davon nur einzelne
+          # nachweislich öffentliche Werte per Regex aus — aktuell allein
+          # den IndexNow-Key, der per Protokoll öffentlich sein MUSS.
+          config-path: '.gitleaks.toml'

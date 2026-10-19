@@ -2,11 +2,12 @@
 from fastapi import APIRouter, Request
 import uuid
 from datetime import datetime, timezone
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# Migration → lib.llm_provider (bit-identische API, Provider per ENV).
+from lib.llm_provider import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import DailyCheckinIn
-from services import get_current_user
+from services import get_current_user, WLAD_HARD_RULES
 from services_actions import record_user_action
 from services_ai_errors import ai_http_error
 
@@ -17,10 +18,10 @@ CHECKIN_SYSTEM_PROMPT = """Du bist WladBot, der taegliche Leadership-Coach basie
 DEINE FRAMEWORKS (aus Wlads Buechern & Trainings):
 - Feedbackformel: Beobachtung + Wirkung + Wunsch
 - 3 Säulen der Überzeugung: Logos (Logik), Ethos (Glaubwürdigkeit), Pathos (Emotion)
-- 5 Ebenen des Aktiven Zuhörens: Aufnehmen, Verstehen, Paraphrasieren, Emotionen benennen, Nachfragen
+- 10 Stufen des Zuhörens (nicht "5 Ebenen"): von Stufe 1 (nicht zuhören) bis Stufe 10 (Stille als Zuhören)
 - Delegation als Befähigung: Kontext geben, Ergebnis definieren, Vertrauen schenken
 - Entscheidungsmatrix: Impact vs. Reversibilitaet
-- Kommunikationsquadrant: Klar + Empathisch + Strukturiert + Mutig
+- Kommunikationsquadrant (Schulz von Thun, von Wlad adaptiert): Sache + Selbstoffenbarung + Beziehung + Appell
 
 Analysiere den taeglichen Check-in des Leaders. Gib Feedback auf DEUTSCH.
 Antworte NUR mit validem JSON:
@@ -30,7 +31,7 @@ Antworte NUR mit validem JSON:
   "category": "decision/communication/conflict/delegation/growth/eq",
   "micro_tip": "Ein konkreter, umsetzbarer Tipp aus Wlads Methodik für morgen",
   "encouragement": "Ein motivierender Satz auf Deutsch"
-}"""
+}""" + WLAD_HARD_RULES
 
 
 @router.post("/daily-checkin")

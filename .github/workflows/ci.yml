@@ -1,9 +1,21 @@
 name: ci
 
+# Frontend + backend gate. Runs on every PR (so it can be a required-status-check
+# on mvpcode) and on every push to mvpcode (so we catch drift introduced by
+# external bots that bypass PR review — e.g. Emergent's auto-commits push
+# directly to mvpcode and never hit the pull_request trigger. This job is the
+# only line of defense for those direct-to-prod pushes).
+#
+# Before the May 2026 ci-hardening sweep, this trigger was `push: paths:
+# ['frontend/package.json', 'frontend/yarn.lock']` with no PR coverage. That
+# narrow path filter + missing pull_request branch is exactly why the 12-hour
+# gsap lockfile incident slipped through — the trigger never fired for the
+# auto-commit that introduced the drift.
+
 on:
-  push:
-    branches: [main, master]
   pull_request:
+  push:
+    branches: [mvpcode]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,13 +29,13 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'yarn'
           cache-dependency-path: frontend/yarn.lock
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --frozen-lockfile --non-interactive
       - run: yarn build
         env:
           CI: 'false'                       # CRA treats warnings as errors when CI=true
@@ -34,8 +46,8 @@ jobs:
     name: backend syntax check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
       # `emergentintegrations` (in requirements.txt) is hosted on Emergent's
@@ -45,3 +57,18 @@ jobs:
       # in backend/. That catches the failure mode this job is shaped to
       # catch (broken Python on push) without needing the private wheel.
       - run: python -m compileall -q backend
+
+  public-urls:
+    name: sitemap + JSON-LD verweisen nur auf existierende Seiten
+    runs-on: ubuntu-latest
+    # Kein yarn install nötig — das Skript nutzt ausschließlich node:-Builtins.
+    # Hintergrund: eine SearchAction im JSON-LD zeigte auf /search, eine Route,
+    # die es nie gab. Google crawlte das Template wörtlich und meldete die
+    # Phantom-URL in der Abdeckung. Siehe docs/gtm/SEO_AEO_PLAYBOOK.md §2.
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - run: node scripts/check-public-urls.mjs
+        working-directory: frontend

@@ -1,5 +1,5 @@
 /**
- * Datenschutzerklärung — DSGVO-konforme Privacy Policy.
+ * Datenschutzerklärung · DSGVO-konforme Privacy Policy.
  *
  * ⚠️ Anwalts-Review innerhalb von 7 Tagen empfohlen. Diese Version deckt
  * das gesetzliche Minimum ab und nennt alle Auftragsverarbeiter.
@@ -57,8 +57,8 @@ export default function DatenschutzPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong className="text-white">{de ? 'Account-Daten' : 'Account data'}:</strong> E-Mail, Name, Passwort (gehasht).</li>
             <li><strong className="text-white">{de ? 'Nutzungs-Daten' : 'Usage data'}:</strong> Chat-Verläufe, Tagesfragen, Video-Antworten, Quiz-Ergebnisse, XP/Level.</li>
-            <li><strong className="text-white">{de ? 'Zahlungs-Daten' : 'Payment data'}:</strong> Wir speichern KEINE Kreditkarten — Stripe verarbeitet das direkt.</li>
-            <li><strong className="text-white">{de ? 'Technische Daten' : 'Technical data'}:</strong> IP-Adresse (anonymisiert), Browser, Gerätetyp — für Sicherheit und Performance.</li>
+            <li><strong className="text-white">{de ? 'Zahlungs-Daten' : 'Payment data'}:</strong> Wir speichern KEINE Kreditkarten · Stripe verarbeitet das direkt.</li>
+            <li><strong className="text-white">{de ? 'Technische Daten' : 'Technical data'}:</strong> IP-Adresse (anonymisiert), Browser, Gerätetyp · für Sicherheit und Performance.</li>
           </ul>
         </Section>
 
@@ -76,7 +76,7 @@ export default function DatenschutzPage() {
           <ProcessorRow name="PostHog (analytics)" country="EU (Frankfurt)" purpose="Produkt-Analytics" basis="Art. 6(1)(a) DSGVO (Einwilligung)" data="Event-Logs, anonymisiert" />
           <ProcessorRow name="Resend" country="USA (DPF-zertifiziert)" purpose="Transaktions-E-Mails" basis="Art. 6(1)(b) DSGVO" data="E-Mail, Name, Inhalt" />
           <ProcessorRow name="ElevenLabs Inc." country="USA" purpose="Voice-Mode (Sprachausgabe)" basis="Art. 6(1)(a) DSGVO (Einwilligung)" data="Text-Inhalte, kein Stimm-Material" />
-          <ProcessorRow name="OpenAI / Anthropic / Google (via Emergent LLM)" country="USA (DPF-zertifiziert)" purpose="KI-Coaching-Antworten" basis="Art. 6(1)(b) DSGVO" data="Chat-Anfragen, Daily-Check-Ins" />
+          <ProcessorRow name="Anthropic, OpenAI, Google" country="USA (DPF-zertifiziert)" purpose="KI-Coaching-Antworten" basis="Art. 6(1)(b) DSGVO" data="Chat-Anfragen, Daily-Check-Ins" />
         </Section>
 
         <Section title={de ? '4. Cookies & Tracking' : '4. Cookies & tracking'}>

@@ -234,7 +234,7 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
           </Badge>
         )}
         {parsed.insight && (
-          <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl px-4 py-3 shadow-sm">
+          <div className="surface-card rounded-2xl px-4 py-3 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <Lightbulb size={14} className="text-amber-500" />
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{de ? 'Leadership-Erkenntnis' : 'Leadership Insight'}</span>
@@ -243,33 +243,45 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
           </div>
         )}
         {parsed.strategy && (
-          <div className="bg-gradient-to-r from-blue-50 to-[#BFFF00]/[0.04] dark:from-blue-500/5 dark:to-[#BFFF00]/[0.03] border border-sky-200/30 dark:border-blue-500/10 rounded-2xl px-4 py-3">
+          <div className="surface-card gradient-border-anim rounded-2xl px-4 py-3">
             <div className="flex items-center gap-2 mb-2">
-              <Target size={14} className="text-sky-600" />
-              <span className="text-[10px] font-bold text-sky-600/70 uppercase tracking-wider">{de ? 'Strategie' : 'Strategy'}</span>
+              <Target size={14} className="text-brand" />
+              <span className="text-[10px] font-bold text-brand/80 uppercase tracking-wider">{de ? 'Strategie' : 'Strategy'}</span>
             </div>
             <SmartText text={parsed.strategy} variant="inline" accent="#0EA5E9" icon={Target} />
           </div>
         )}
         {parsed.action_steps?.length > 0 && (
-          <div className="bg-white dark:bg-card border border-black/[0.06] dark:border-white/[0.06] rounded-2xl px-4 py-3 shadow-sm">
+          <div className="surface-card rounded-2xl px-4 py-3 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
-              <ListChecks size={14} className="text-green-500" />
+              <ListChecks size={14} className="text-brand" />
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{de ? 'Nächste Schritte' : 'Action Steps'}</span>
             </div>
-            <ol className="text-sm space-y-1.5">
+            <ol className="text-sm space-y-2">
               {parsed.action_steps.map((s, i) => (
-                <li key={`step-${s.slice(0, 15)}-${i}`} className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
-                  <span>{s}</span>
+                <li key={`step-${s.slice(0, 15)}-${i}`} className="flex gap-3 items-start">
+                  <span
+                    className="w-5 h-5 rounded-full bg-brand text-[#0A0A0A] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_-2px_rgba(191,255,0,0.45)]"
+                    aria-hidden
+                  >
+                    {i + 1}
+                  </span>
+                  <div className="flex-1 min-w-0 leading-snug">
+                    <WladRichText text={s} testId={`msg-step-${i}`} />
+                  </div>
                 </li>
               ))}
             </ol>
           </div>
         )}
         {parsed.reflection && (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-500/5 dark:to-orange-500/5 border border-amber-200/30 dark:border-amber-500/10 rounded-2xl px-4 py-3">
-            <p className="text-sm italic text-muted-foreground">{parsed.reflection}</p>
+          <div className="surface-card rounded-2xl px-4 py-3 border-l-2 border-l-amber-500/60">
+            <span className="text-[10px] uppercase tracking-wider font-bold text-amber-600 dark:text-amber-400/90 block mb-1">
+              {de ? 'Reflexion' : 'Reflection'}
+            </span>
+            <div className="italic text-muted-foreground">
+              <WladRichText text={parsed.reflection} testId="msg-reflection" />
+            </div>
           </div>
         )}
         {parsed.tasks?.length > 0 && (

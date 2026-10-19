@@ -16,7 +16,7 @@ const formatTime = (date, de) =>
 
 export const ReminderUrgencyIcon = ({ urgency, isToday }) => (
   <div className={`w-9 h-9 rounded-xl ${urgency.bg} flex items-center justify-center shrink-0 ${urgency.pulse ? 'animate-pulse' : ''}`}>
-    <Bell size={16} className={isToday ? 'text-[#0A0A0A]' : 'text-white'} />
+    <Bell size={16} className={isToday ? 'text-[#0A0A0A]' : 'text-foreground'} />
   </div>
 );
 
@@ -27,7 +27,7 @@ export const ReminderContent = ({ event, de }) => {
   return (
     <div className="flex-1 min-w-0">
       <div className="flex items-center gap-2 mb-0.5">
-        <Badge className={`${urgency.bg} ${isToday ? 'text-[#0A0A0A]' : 'text-white'} text-[8px] font-bold border-0 px-1.5 py-0`}>
+        <Badge className={`${urgency.bg} ${isToday ? 'text-[#0A0A0A]' : 'text-foreground'} text-[8px] font-bold border-0 px-1.5 py-0`}>
           {de ? urgency.label_de : urgency.label_en}
         </Badge>
         <span className="text-[10px] text-muted-foreground">{event.event_type}</span>
@@ -57,7 +57,7 @@ export const ReminderActions = ({ event, de, onNavigate, onDismiss }) => (
     <Button
       size="sm"
       onClick={() => onNavigate('/events')}
-      className="bg-[#0A0A0A] dark:bg-white dark:text-[#0A0A0A] text-white text-[10px] font-bold h-7 px-3"
+      className="bg-[#0A0A0A] dark:bg-white dark:text-[#0A0A0A] text-foreground text-[10px] font-bold h-7 px-3"
       data-testid="reminder-go-events"
     >
       {de ? 'Ansehen' : 'View'} <ArrowRight size={10} className="ml-1" />

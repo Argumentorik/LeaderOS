@@ -1,5 +1,6 @@
 import "@/App.css";
 import { Suspense, useEffect } from "react";
+import { redirectAppRoutesToAppTier } from "@/lib/tierRedirect";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -21,7 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 
 // ── Lazy routes ─────────────────────────────────────────────────────────
-// Iter 92.11: wrapped in `lazyWithRetry` — survives stale-deploy chunk-404s
+// Iter 92.11: wrapped in `lazyWithRetry` · survives stale-deploy chunk-404s
 // by transparently retrying then forcing a single reload to pick up the
 // fresh index.html (and its new chunk hashes). See lib/lazyWithRetry.js.
 const MagicLinkVerifyPage = lazyWithRetry(() => import("./pages/MagicLinkVerifyPage"));
@@ -54,7 +55,6 @@ const OnboardingPage = lazyWithRetry(() => import("./pages/OnboardingPage"));
 const PaymentSuccessPage = lazyWithRetry(() => import("./pages/PaymentSuccessPage"));
 const ReferralPage = lazyWithRetry(() => import("./pages/ReferralPage"));
 const EnterprisePage = lazyWithRetry(() => import("./pages/EnterprisePage"));
-const EnterpriseLandingPage = lazyWithRetry(() => import("./pages/EnterpriseLandingPage"));
 const Challenge30Page = lazyWithRetry(() => import("./pages/Challenge30Page"));
 const VideoGuidePage = lazyWithRetry(() => import("./pages/VideoGuidePage"));
 const CoursesPage = lazyWithRetry(() => import("./pages/CoursesPage"));
@@ -66,20 +66,27 @@ const DatenschutzPage = lazyWithRetry(() => import("./pages/DatenschutzPage"));
 const WiderrufPage = lazyWithRetry(() => import("./pages/WiderrufPage"));
 const AGBPage = lazyWithRetry(() => import("./pages/AGBPage"));
 const EmailUnsubscribePage = lazyWithRetry(() => import("./pages/EmailUnsubscribePage"));
+const NewsletterConfirmedPage = lazyWithRetry(() => import("./pages/NewsletterConfirmedPage"));
+const JournalIndex = lazyWithRetry(() => import("./features/content/pages/JournalIndex"));
+const WladJachtchenkoPage = lazyWithRetry(() => import("./pages/WladJachtchenkoPage"));
+const EventPage = lazyWithRetry(() => import("./pages/EventPage"));
+const WebinarPage = lazyWithRetry(() => import("./pages/WebinarPage"));
+const TrainingLandingPage = lazyWithRetry(() => import("./pages/TrainingLandingPage"));
+const KommunikationPage = lazyWithRetry(() => import("./pages/KommunikationPage"));
+const KiFuehrungskraftPage = lazyWithRetry(() => import("./pages/KiFuehrungskraftPage"));
+const LeaderOsTourPage = lazyWithRetry(() => import("./pages/LeaderOsTourPage"));
+const FreeVideosPage = lazyWithRetry(() => import("./pages/FreeVideosPage"));
+const NotFoundPage = lazyWithRetry(() => import("./pages/NotFoundPage"));
+const ArticlePage = lazyWithRetry(() => import("./features/content/pages/ArticlePage"));
+const LearningVideosPage = lazyWithRetry(() => import("./pages/LearningVideosPage"));
+const FreeVideosMembersPage = lazyWithRetry(() => import("./pages/FreeVideosMembersPage"));
+const LeaderOsSyncPage = lazyWithRetry(() => import("./pages/LeaderOsSyncPage"));
+const SalesRoomPage = lazyWithRetry(() => import("./pages/SalesRoomPage"));
 
 import { WladMark } from "./components/brand/WladMark";
-import { registerRoutePreloads, prefetchIdleRoutes } from "./lib/routePrefetch";
-
-registerRoutePreloads({
-  '/chat': ChatPage, '/tools': ToolsPage, '/simulations': SimulationsPage, '/missions': VideoChallengePage,
-  '/missions/archive': VideoArchivePage, '/challengers': ChallengersPage, '/tasks': TasksPage, '/playbooks': PlaybooksPage,
-  '/events': EventsPage, '/my-path': MyPathPage, '/community': CommunityPage,
-  '/coaching': CoachingPage, '/downloads': DownloadsPage, '/referral': ReferralPage, '/profile': ProfilePage,
-  '/challenge': Challenge30Page, '/video-guide': VideoGuidePage, '/kurse': CoursesPage, '/kurse/:slug': CourseDetailPage,
-  '/daily-checkin': DailyCheckinPage, '/leader-diagnose': LeaderDiagnosePage, '/enterprise': EnterprisePage,
-  '/wlad-control-x7k9q2': AdminPage,
-});
 import { CookieConsent } from "./components/legal/CookieConsent";
+import { trackGoogleAdsPageView } from "./lib/googleAds";
+import { trackBingPageView } from "./lib/bingUet";
 import { ReAuthModal } from "./components/auth/ReAuthModal";
 import { FakeWladCall } from "./components/calls/FakeWladCall";
 import { WladHelpButton } from "./components/support/WladHelpButton";
@@ -131,6 +138,61 @@ function AppRouter() {
     startPageLoad(location.pathname);
   }, [location.pathname]);
 
+  // Ad-Tags: SPA-Routenwechsel als Pageview melden (Google Ads zählt die
+  // Conversion „webinar_signup" über den Pageview /webinar/danke). Beide
+  // Funktionen sind no-ops, solange die IDs nicht gesetzt sind.
+  useEffect(() => {
+    const path = location.pathname + location.search;
+    trackGoogleAdsPageView(path);
+    trackBingPageView(path);
+  }, [location.pathname, location.search]);
+
+  // Cross-tier guard · belt-and-suspenders for in-SPA navigation.
+  // The synchronous pass in index.js handles initial page loads (typed URL,
+  // bookmark, browser autocomplete). This useEffect catches the edge case
+  // where a Link or programmatic navigate() lands on an App route while
+  // the user is still on the Landing host. Same helper, same allowlist,
+  // so the two layers can never disagree.
+  useEffect(() => {
+    redirectAppRoutesToAppTier();
+  }, [location.pathname, location.search, location.hash]);
+
+  // Scroll-to-top on every pathname change. We skip when the URL has a
+  // hash (in-page anchor like /#pricing or /journal/foo#section) so
+  // anchor-driven scrolls keep landing on their target. Without this,
+  // navigating /journal/a → /journal/b preserves the previous article's
+  // scroll position — confusing UX, especially on long reads.
+  useEffect(() => {
+    if (location.hash) return;
+    if (typeof window === 'undefined') return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
+  // Smooth-scroll to in-page anchors (/#beratung, /#pricing, …).
+  // React Router performs no native hash jump on SPA navigation, and the
+  // landing sections are lazy/suspense-mounted — the target id may not be
+  // in the DOM yet on the first frame. Retry briefly (up to ~4s) so the
+  // nav CTA reliably lands on the Beratung section without layout shifts.
+  // location.key is in the deps so clicking the same anchor twice re-fires.
+  useEffect(() => {
+    if (!location.hash || typeof window === 'undefined') return undefined;
+    if (location.hash.includes('session_id=')) return undefined; // auth callback, not an anchor
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return undefined;
+    let tries = 0;
+    let timer;
+    const attempt = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (tries++ < 40) timer = window.setTimeout(attempt, 100);
+    };
+    attempt();
+    return () => window.clearTimeout(timer);
+  }, [location.pathname, location.hash, location.key]);
+
   if (location.hash?.includes('session_id=')) {
     return (
       <Suspense fallback={<RouteLoader />}>
@@ -149,6 +211,7 @@ function AppRouter() {
         <Route path="/signup" element={<LoginPage initialMode="register" />} />
         <Route path="/register" element={<LoginPage initialMode="register" />} />
         <Route path="/auth/magic" element={<MagicLinkVerifyPage />} />
+        <Route path="/auth/sync" element={<LeaderOsSyncPage />} />
         <Route path="/auth-callback" element={<AuthCallback />} />
         <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
@@ -181,6 +244,12 @@ function AppRouter() {
         <Route path="/f/:slug" element={<SharedFolderPage />} />
         <Route path="/progress" element={<Navigate to="/community" replace />} />
         <Route path="/community" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
+        <Route path="/lern-videos" element={<ProtectedRoute><LearningVideosPage /></ProtectedRoute>} />
+        <Route path="/free-videos" element={<ProtectedRoute><FreeVideosMembersPage /></ProtectedRoute>} />
+        {/* Internal sales enablement room · login-gated, deliberately no
+            sidebar entry — the URL is shared internally with the sales team. */}
+        <Route path="/sales-room" element={<ProtectedRoute><SalesRoomPage /></ProtectedRoute>} />
+        <Route path="/learning-videos" element={<Navigate to="/lern-videos" replace />} />
         {/* Admin route is intentionally hidden behind a non-guessable path. Backend require_admin() still gates all /api/admin/* */}
         <Route path="/wlad-control-x7k9q2" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         <Route path="/progress-old" element={<ProtectedRoute><ProgressPage /></ProtectedRoute>} />
@@ -207,20 +276,65 @@ function AppRouter() {
         <Route path="/teams" element={<Navigate to="/for-teams" replace />} />
         <Route path="/business" element={<Navigate to="/for-teams" replace />} />
         <Route path="/challenge" element={<ProtectedRoute><Challenge30Page /></ProtectedRoute>} />
-        <Route path="/video-guide" element={<ProtectedRoute><VideoGuidePage /></ProtectedRoute>} />
-        {/* Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto. */}
-        <Route path="/kurse" element={<CoursesPage />} />
-        <Route path="/kurse/:slug" element={<CourseDetailPage />} />
         {/* Public legal pages — no auth required (GDPR / German law) */}
         <Route path="/impressum" element={<ImpressumPage />} />
         <Route path="/sicherheit" element={<TrustPage />} />
         <Route path="/datenschutz" element={<DatenschutzPage />} />
         <Route path="/widerruf" element={<WiderrufPage />} />
         <Route path="/agb" element={<AGBPage />} />
-        {/* Public — opens via signed token in lifecycle drip emails */}
+        {/* Public · opens via signed token in lifecycle drip emails */}
         <Route path="/email/unsubscribe" element={<EmailUnsubscribePage />} />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        {/* Public · double-opt-in confirmation landing (newsletter-confirm fn redirects here) */}
+        <Route path="/newsletter/confirmed" element={<NewsletterConfirmedPage />} />
+        {/* Public · Feldnotizen / content engine */}
+        <Route path="/journal" element={<JournalIndex />} />
+        <Route path="/journal/:slug" element={<ArticlePage />} />
+        {/* Canonical SERP-winner for "Wlad Jachtchenko" searches · public, no auth */}
+        <Route path="/wlad-jachtchenko" element={<WladJachtchenkoPage />} />
+        {/* Public · dated free launch event · high-conversion signup */}
+        <Route path="/event" element={<EventPage />} />
+        <Route path="/live" element={<Navigate to="/event" replace />} />
+        {/* Seite entfernt · bestehende Ad-Links landen auf der Haupt-Ad-Landing */}
+        <Route path="/frameworks" element={<Navigate to="/kommunikation" replace />} />
+        <Route path="/methodik" element={<Navigate to="/kommunikation" replace />} />
+        {/* Squeeze funnel for the free live webinar */}
+        <Route path="/webinar" element={<WebinarPage />} />
+        <Route path="/webinar/danke" element={<WebinarThankYouPage />} />
+        {/* Waiting room · reminder emails (WEBINAR_JOIN_URL) point here */}
+        <Route path="/webinar/live" element={<WebinarLivePage />} />
+        {/* Ad-only · short-scroll, single-viewport variant, same 29.10. offer + register endpoint as /webinar and /event */}
+        <Route path="/training" element={<TrainingLandingPage />} />
+        {/* Ad-only · Kommunikation-first, Steadyflow-Mechanik mit Kanon-Inhalt (zehn Frameworks als Marquee) */}
+        <Route path="/kommunikation" element={<KommunikationPage />} />
+        {/* Kampagnen-Landing + SEO-Pillar „KI-Führungskraft" · 6 Kampagnen via ?k= · prerendert (scripts/prerender-landings.mjs) */}
+        <Route path="/ki-fuehrungskraft" element={<KiFuehrungskraftPage />} />
+        <Route path="/leaderos" element={<LeaderOsTourPage />} />
+        {/* Public · free 4-video lead-magnet funnel · "Führung beginnt hier" */}
+        <Route path="/fuehrung-beginnt-hier" element={<FreeVideosPage />} />
+        <Route path="/gratis" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
+        <Route path="/free" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
+        <Route path="/videos" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
+        <Route path="/wlad" element={<Navigate to="/wlad-jachtchenko" replace />} />
+        <Route path="/about" element={<Navigate to="/wlad-jachtchenko" replace />} />
+        <Route path="/ueber-wlad" element={<Navigate to="/wlad-jachtchenko" replace />} />
+        {/* Public share routes · read-only showcase, no auth required */}
+        <Route path="/m/:slug" element={<SharedMissionPage />} />
+        <Route path="/f/:slug" element={<SharedFolderPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/studio" element={<StudioHub />} />
+        <Route path="/specimens" element={<SpecimenStudio />} />
+        <Route path="/ads" element={<AdStudio />} />
+        <Route path="/system" element={<SystemHealth />} />
+        <Route path="/thank-you" element={<ThankYouPage />} />
+
+        {/* Legacy aliases for the free-video funnel · canonical page is
+            /fuehrung-beginnt-hier (see routes above with /gratis, /free, /videos). */}
+        <Route path="/gratis-videos" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
+        <Route path="/free-video-series" element={<Navigate to="/fuehrung-beginnt-hier" replace />} />
+        {/* Branded 404 instead of silent Navigate-to-/ · lets Search
+            Console flag broken external backlinks and gives users a
+            "did you mean" surface with the 5 highest-intent destinations. */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );
@@ -236,12 +350,18 @@ function App() {
               <TierProvider>
                 <PricingProvider>
                   <BrowserRouter>
+                    {/* Skip-to-content · WCAG 2.4.1 · visually hidden until
+                        keyboard-focused, then jumps a keyboard/screen-reader
+                        user past the nav straight into the page content. */}
+                    <a
+                      href="#main-content"
+                      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:px-4 focus:py-2 focus:bg-foreground focus:text-background focus:font-bold focus:text-sm focus:rounded-none focus:outline-none focus:ring-4 focus:ring-brand"
+                    >
+                      Zum Inhalt springen
+                    </a>
                     <NetworkStatusBanner />
                     <AppRouter />
                     <FakeWladCall />
-                    <WladHelpButton />
-                    <UsageFeedbackPrompt />
-                    <FloatingWladBotDrawer />
                     <Toaster position="bottom-right" />
                     <CookieConsent />
                     <ReAuthModal />

@@ -1,5 +1,5 @@
 /**
- * lazyWithRetry — resilient wrapper around React.lazy().
+ * lazyWithRetry · resilient wrapper around React.lazy().
  *
  * Why this exists (Iter 92.11 · Mert reported intermittent ErrorBoundary):
  * After every deploy, browsers that already have the app open hold cached
@@ -10,7 +10,7 @@
  * This wrapper:
  *   1. Retries the dynamic import once after a short backoff (covers
  *      transient network blips).
- *   2. If retry fails AND we haven't reloaded yet, force a full reload —
+ *   2. If retry fails AND we haven't reloaded yet, force a full reload ·
  *      browser then fetches the fresh `index.html` with the new chunk
  *      hash. We set a sessionStorage flag so we don't infinite-loop.
  *   3. If even the reload route fails, the original error bubbles up to
@@ -54,11 +54,11 @@ export const lazyWithRetry = (factory) => {
             if (!alreadyReloaded) {
               sessionStorage.setItem(RELOAD_FLAG, String(Date.now()));
               window.location.reload();
-              // Return a noop component while the page reloads — React
+              // Return a noop component while the page reloads · React
               // un-mounts in the meantime so this is essentially a tombstone.
               return { default: () => null };
             }
-          } catch { /* sessionStorage unavailable — fall through */ }
+          } catch { /* sessionStorage unavailable · fall through */ }
         }
         throw err2;
       }

@@ -1,0 +1,19 @@
+# Code owners for aiporator/SHIPOS
+# Order matters — last match wins.
+
+* @aiporator
+
+# Schema and runbook are highest-risk surfaces.
+/docs/SCHEMA.md      @aiporator
+/docs/RUNBOOK.md     @aiporator
+/docs/CHANGELOG.md   @aiporator
+
+# Claude Code + MCP wiring affects every future session in this repo.
+/CLAUDE.md           @aiporator
+/.mcp.json           @aiporator
+/.claude/            @aiporator
+/skills-lock.json    @aiporator
+
+# CI and repo hygiene.
+/.github/            @aiporator
+/.gitlab-ci.yml      @aiporator
