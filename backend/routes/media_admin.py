@@ -265,7 +265,14 @@ class InitIn(BaseModel):
     content_type: str | None = None
 
 
+UPLOAD_ID_RE = re.compile(r"up_[0-9a-f]{16}")
+
+
 def _session_path(upload_id: str) -> Path:
+    # upload_id kommt aus der URL — nur das selbst vergebene Format zulassen,
+    # damit kein Pfad außerhalb von UPLOAD_DIR erreichbar ist.
+    if not UPLOAD_ID_RE.fullmatch(upload_id or ""):
+        raise HTTPException(status_code=404, detail="Upload nicht gefunden — bitte neu starten.")
     return UPLOAD_DIR / f"{upload_id}.part"
 
 
@@ -408,7 +415,8 @@ async def cleanup_stale_uploads(max_age_hours: int = STALE_UPLOAD_HOURS) -> int:
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=max_age_hours)).isoformat()
     stale = await db.media_uploads.find({"created_at": {"$lt": cutoff}}, {"_id": 0, "upload_id": 1}).to_list(1000)
     for doc in stale:
-        _session_path(doc["upload_id"]).unlink(missing_ok=True)
+        if UPLOAD_ID_RE.fullmatch(doc.get("upload_id") or ""):
+            _session_path(doc["upload_id"]).unlink(missing_ok=True)
     if stale:
         await db.media_uploads.delete_many({"upload_id": {"$in": [d["upload_id"] for d in stale]}})
 

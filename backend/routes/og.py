@@ -18,6 +18,7 @@ import io
 import logging
 import os
 from typing import Optional
+from urllib.parse import quote
 
 from fastapi import APIRouter, Response
 from PIL import Image, ImageDraw, ImageFont
@@ -413,6 +414,9 @@ async def og_mission_html(slug: str):
     Everyone else reaches the SPA `/m/:slug` route directly.
     """
     share = await db.mission_shares.find_one({"share_slug": slug}, {"_id": 0})
+    # slug stammt aus der URL und landet in HTML/JS — URL-kodieren, damit nichts
+    # aus Attribut oder <script> ausbrechen kann (echte Slugs bleiben unverändert).
+    slug_q = quote(slug, safe="")
     if not share:
         title = "Leader-OS · KI Leadership Training"
         description = "Werde KI-native Führungskraft mit Wlad Jachtchenkos Frameworks."
@@ -435,9 +439,9 @@ async def og_mission_html(slug: str):
             f"{user_name} hat in der Mission „{chal_title}\u201c einen Score von "
             f"{score}/100 erreicht. Sieh dir Wlad Jachtchenkos KI-Analyse an — und probier es selbst."
         )
-        og_image = f"{OG_BASE_URL}/api/og/mission/{slug}"
+        og_image = f"{OG_BASE_URL}/api/og/mission/{slug_q}"
 
-    canonical_url = f"{OG_BASE_URL}/m/{slug}"
+    canonical_url = f"{OG_BASE_URL}/m/{slug_q}"
     # Lightweight HTML — crawlers parse <head>, ignore body. We still add a
     # human-readable fallback + a redirect <meta> so real users (if they
     # somehow land here) get bounced to the SPA.

@@ -36,6 +36,15 @@ const PUBLIC_DIR = join(__dirname, '..', 'public');
 const APP_FILE = join(__dirname, '..', 'src', 'App.js');
 const HOST = 'https://leader-os.de';
 
+/** Exakter Origin-Vergleich statt Präfix (sonst zählt auch https://leader-os.de.evil.com). */
+function isInternal(url) {
+  try {
+    return new URL(url).origin === HOST;
+  } catch {
+    return false;
+  }
+}
+
 const exists = (p) => access(p).then(() => true, () => false);
 
 /** Alle <Route path="…"> aus App.js, als Regex-Matcher. */
@@ -64,7 +73,7 @@ async function isValid(pathname, matchers) {
 /** Interne URLs aus einem JSON-LD-Objektbaum einsammeln. */
 function collectUrls(node, out = []) {
   if (typeof node === 'string') {
-    if (node.startsWith(HOST)) out.push(node);
+    if (isInternal(node)) out.push(node);
     return out;
   }
   if (Array.isArray(node)) {
@@ -88,7 +97,7 @@ async function main() {
   const sitemap = await readFile(join(PUBLIC_DIR, 'sitemap.xml'), 'utf8');
   const locs = [...sitemap.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/g)].map((m) => m[1]);
   for (const loc of locs) {
-    if (!loc.startsWith(HOST)) continue;
+    if (!isInternal(loc)) continue;
     const { pathname } = new URL(loc);
     if (!(await isValid(pathname, matchers))) {
       problems.push(`sitemap.xml listet ${loc} — weder statische Seite noch Route in App.js`);
