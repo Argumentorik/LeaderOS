@@ -155,3 +155,4 @@ credentials.json
 *.pem
 *.key
 .credentials
+backend/.env
