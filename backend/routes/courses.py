@@ -21,6 +21,9 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/courses", tags=["courses"])
 
 _BY_SLUG = {c["slug"]: c for c in COURSES}
+# Gültige Folgen-IDs aus dem Katalog (gleiches Schema wie course_view) — Upload-Pfade
+# entstehen nur aus diesen Werten, nie direkt aus der URL.
+_EPISODE_IDS = {f"{c['slug']}-{i}": f"{c['slug']}-{i}" for c in COURSES for i in range(1, len(c["episodes"]) + 1)}
 
 # Plan Iter 187: Das E-Mail-Tor gilt einmal, nicht pro Folge. Der Merker liegt
 # im Cookie, der Eintrag in `course_leads`.
@@ -306,6 +309,9 @@ async def set_episode_video(episode_id: str, data: VideoIn, request: Request):
 async def upload_episode_video(episode_id: str, request: Request, file: UploadFile = File(...)):
     """MP4 direkt hochladen (Object Storage) — für Wlads Aufnahmen."""
     await require_admin(request)
+    episode_id = _EPISODE_IDS.get(episode_id)
+    if not episode_id:
+        raise HTTPException(status_code=404, detail="Folge nicht gefunden")
     data = await file.read()
     if len(data) > 800 * 1024 * 1024:
         raise HTTPException(status_code=413, detail="Datei zu groß (max. 800 MB)")

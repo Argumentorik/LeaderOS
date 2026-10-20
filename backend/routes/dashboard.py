@@ -187,10 +187,9 @@ async def dashboard_bootstrap(request: Request, response: Response, fresh: int =
         # Iter 186 (Entscheidung 8a): die nächste OFFENE Aufgabe in der Reihenfolge.
         day = int(c30_status.get("next_open_day") or c30_status.get("current_day") or 1)
         from challenge30_criteria import done_criteria
-    entry = next((c for c in CHALLENGES if c.get("day") == day), None)
-    if entry:
-        entry = {**entry, **done_criteria(entry)}
+        entry = next((c for c in CHALLENGES if c.get("day") == day), None)
         if entry:
+            entry = {**entry, **done_criteria(entry)}
             today_task = {
                 "day": day, "total": 30,
                 "title_de": entry.get("title_de"), "title_en": entry.get("title_en"),

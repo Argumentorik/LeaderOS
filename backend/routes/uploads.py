@@ -15,7 +15,8 @@ STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
 APP_NAME = "wladbot"
 storage_key = None
 
-ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+IMAGE_EXT_BY_TYPE = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
+ALLOWED_IMAGE_TYPES = set(IMAGE_EXT_BY_TYPE)
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
@@ -128,9 +129,7 @@ async def upload_profile_picture(request: Request, file: UploadFile = File(...))
     if len(data) > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="Datei zu groß (max 5MB)")
 
-    ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
-    if not re.fullmatch(r"[A-Za-z0-9]{1,8}", ext):
-        ext = "jpg"
+    ext = IMAGE_EXT_BY_TYPE[file.content_type]
     path = f"{APP_NAME}/profiles/{user['user_id']}/{uuid.uuid4().hex[:12]}.{ext}"
 
     try:
@@ -189,7 +188,7 @@ async def serve_file(path: str, request: Request):
         raise HTTPException(status_code=404, detail="File not found")
 
     try:
-        data, content_type = get_object(path)
+        data, content_type = get_object(record["storage_path"])
         return Response(content=data, media_type=record.get("content_type", content_type))
     except Exception as e:
         logger.error(f"File serve error: {e}")

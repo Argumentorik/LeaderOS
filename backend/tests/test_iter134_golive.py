@@ -99,13 +99,14 @@ class TestLiveTestAdmin:
 
     def test_add_list_remove(self, auth):
         mail = ADMIN["email"]
-        assert requests.post(f"{API}/admin/livetest/buyers", headers=auth,
-                             json={"email": mail}, timeout=30).status_code == 200
+        added = requests.post(f"{API}/admin/livetest/buyers", headers=auth,
+                              json={"email": mail}, timeout=30)
+        assert added.status_code == 200
         listed = requests.get(f"{API}/admin/livetest/buyers", headers=auth, timeout=30).json()
         assert listed["activation_code"] == CODE
         assert mail in [b["email"] for b in listed["buyers"]]
-        assert requests.delete(f"{API}/admin/livetest/buyers/{mail}", headers=auth,
-                               timeout=30).status_code == 200
+        removed = requests.delete(f"{API}/admin/livetest/buyers/{mail}", headers=auth, timeout=30)
+        assert removed.status_code == 200
 
 
 class TestRagCoverage:

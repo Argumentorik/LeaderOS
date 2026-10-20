@@ -9,6 +9,7 @@ jederzeit möglich. Download ist admin-only (Kunden bekommen keinen).
 from __future__ import annotations
 
 import asyncio
+import os
 import re
 import tempfile
 import uuid
@@ -271,9 +272,11 @@ UPLOAD_ID_RE = re.compile(r"up_[0-9a-f]{16}")
 def _session_path(upload_id: str) -> Path:
     # upload_id kommt aus der URL — nur das selbst vergebene Format zulassen,
     # damit kein Pfad außerhalb von UPLOAD_DIR erreichbar ist.
-    if not UPLOAD_ID_RE.fullmatch(upload_id or ""):
+    base = os.path.realpath(UPLOAD_DIR)
+    full = os.path.realpath(os.path.join(base, f"{upload_id}.part"))
+    if not UPLOAD_ID_RE.fullmatch(upload_id or "") or not full.startswith(base + os.sep):
         raise HTTPException(status_code=404, detail="Upload nicht gefunden — bitte neu starten.")
-    return UPLOAD_DIR / f"{upload_id}.part"
+    return Path(full)
 
 
 @router.post("/upload/init")
