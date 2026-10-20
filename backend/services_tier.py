@@ -4,7 +4,7 @@ from fastapi import HTTPException
 
 from config import db
 
-# ── Canonical tier definitions (synced with leader-os.de pricing page) ─────────
+# ── Canonical tier definitions (synced with leaderos.de pricing page) ─────────
 
 TIER_CONFIG = {
     "free": {
@@ -283,6 +283,10 @@ async def activate_tier(user_id: str, tier: str, via_installment: bool = False, 
     if tier not in TIER_CONFIG:
         raise ValueError(f"Invalid tier: {tier}")
 
+    # Capture the prior tier so we can fire CRM events with from/to detail
+    prior = await db.users.find_one({"user_id": user_id}, {"_id": 0, "tier": 1, "email": 1, "name": 1})
+    prior_tier = (prior or {}).get("tier", "free")
+
     cfg = TIER_CONFIG[tier]
     now = datetime.now(timezone.utc)
     expires_at = None
@@ -367,3 +371,24 @@ async def activate_tier(user_id: str, tier: str, via_installment: bool = False, 
                 }},
                 upsert=True,
             )
+
+    # Iter 92.18: CRM webhook — let Wingman (or any wired CRM) know about the tier change
+    try:
+        import services_crm
+        crm_user = {
+            "user_id": user_id,
+            "email": (prior or {}).get("email"),
+            "name": (prior or {}).get("name"),
+            "tier": tier,
+        }
+        services_crm.tier_changed(
+            crm_user,
+            from_tier=prior_tier,
+            to_tier=tier,
+            reason="installment" if via_installment else "checkout",
+        )
+    except Exception as crm_err:
+        import logging
+        logging.getLogger("leader-os.tier").debug(
+            "CRM tier_changed emit failed (non-blocking): %s", crm_err
+        )

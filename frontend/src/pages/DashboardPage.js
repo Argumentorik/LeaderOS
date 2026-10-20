@@ -7,27 +7,40 @@ import { Button } from '../components/ui/button';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { OnboardingTour } from '../components/shared/OnboardingTour';
+import { OnboardingVideoModal } from '../components/onboarding/OnboardingVideoModal';
+import { StripeModeBanner } from '../components/admin/StripeModeBanner';
 import { AnimatedNumber } from '../components/dashboard/AnimatedNumber';
 import { StatCardsRow, QuickActionsGrid } from '../components/dashboard/StatCards';
 import { WladHubDiagnosisCard } from '../components/dashboard/WladHubCard';
-import { EventReminderBanner } from '../components/dashboard/EventReminder';
 import { WladMotivationCard } from '../components/dashboard/WladMotivationCard';
 import { FolderWorkspaceCards } from '../components/dashboard/FolderWorkspaceCards';
+import { ActionInbox } from '../components/dashboard/ActionInbox';
+import { JourneyCard } from '../components/dashboard/JourneyCard';
+import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrepCard';
+import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
+import { GuideClipsRow } from '../components/guide/GuideClipsRow';
+import {
+  Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard, MyTasksCard,
+  QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine, LabCard,
+} from '../components/dashboard/home/HomeSections';
 import api from '../lib/api';
-import { useCredits } from '../contexts/CreditContext';
-import { WeekCalendarCard } from '../components/dashboard/WeekCalendarCard';
+import { loadDashboardBootstrap } from '../lib/dashboardBootstrap';
+import { CreditBadge } from '../components/dashboard/CreditBadge';
+import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
+import { DashboardMore } from '../components/dashboard/DashboardMore';
 import { TierBadge } from '../components/shared/TierBadge';
 import { useTier } from '../contexts/TierContext';
 import {
-  Zap, ArrowRight, Flame, ChevronRight,
+  ArrowRight, Flame, ChevronRight,
   MessageSquareText, Sparkles, CheckCircle2, Star, Gift,
   Share2, Copy, Play, BarChart3
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { usePricing } from '../contexts/PricingContext';
 import { toast } from 'sonner';
+import { LEADERCHECK_URL } from '../lib/domains';
 
-import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
+import { WLAD_AVATAR } from '../lib/brand';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -36,24 +49,39 @@ export default function DashboardPage() {
   const { open: openPricing } = usePricing();
   const de = lang === 'de';
   const [data, setData] = useState(null);
+  const [bundle, setBundle] = useState(null);
+  const [aboutDone, setAboutDone] = useState(() => {
+    try { return localStorage.getItem('leaderos_about_you_skipped') === '1'; } catch { return false; }
+  });
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [referralCode, setReferralCode] = useState('');
-  const { balance, isPremium } = useCredits();
 
   const loadDashboard = useCallback(async () => {
     try {
-      const [dashRes, refRes] = await Promise.all([
-        api.get('/dashboard-v4').catch(() => api.get('/dashboard')),
-        api.get('/referral/code').catch(() => ({ data: {} })),
-      ]);
-      setData(dashRes.data);
-      setReferralCode(refRes.data?.code || '');
-    } catch (err) { logger.error('Dashboard load error:', err); } finally { setLoading(false); }
+      // Iter 168: ein Request für alles (Dashboard, Referral, Events, Videos, Clips, Ordner) — Widgets lesen ihre Scheibe aus dem Bündel
+      const b = await loadDashboardBootstrap();
+      setBundle(b);
+      setData(b.dashboard);
+      setReferralCode(b.referral?.code || '');
+    } catch (err) {
+      logger.warn('Dashboard bootstrap failed, falling back to single requests:', err?.message);
+      try {
+        const [dashRes, refRes] = await Promise.all([
+          api.get('/dashboard-v4').catch(() => api.get('/dashboard')),
+          api.get('/referral/code').catch(() => ({ data: {} })),
+        ]);
+        setData(dashRes.data);
+        setReferralCode(refRes.data?.code || '');
+      } catch (err2) { logger.error('Dashboard load error:', err2); }
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('wladbot_onboarding_done')) setShowOnboarding(true);
+    // Iter 92.34 (Mert Go-Live): "alle PopUps bitte erstmal weglassen" →
+    // 9-step Tour disabled. Auto-mark done so it never re-fires post-launch.
+    try { localStorage.setItem('wladbot_onboarding_done', '1'); } catch { /* noop */ }
+    setShowOnboarding(false);
     loadDashboard();
   }, [loadDashboard]);
 
@@ -65,7 +93,7 @@ export default function DashboardPage() {
   };
 
   const copyReferral = () => {
-    navigator.clipboard.writeText(`https://leadercheck.de?ref=${referralCode}`);
+    navigator.clipboard.writeText(`${LEADERCHECK_URL}?ref=${referralCode}`);
     toast.success(de ? 'Referral-Link kopiert!' : 'Referral link copied!');
   };
 
@@ -84,12 +112,24 @@ export default function DashboardPage() {
   const xpToNext = xpInfo.xp_to_next || 0;
   const aiReadiness = ls.composite || 0;
   const learningPct = c30.progress_pct || 0;
+  // Iter 185: Startseiten-Daten aus dem Bootstrap-Bündel
+  const todayTask = bundle?.challenge_today || null;
+  const checkinDone = Boolean(bundle?.checkin_today && bundle.checkin_today.checked_in !== false);
+  const coursesStatus = bundle?.courses_status || null;
+  const nextEvent = (bundle?.events_live || [])[0] || bundle?.events_reminders?.next_event || null;
+  const videosSeen = coursesStatus?.seen_total ?? 0;
+  const eventsAttended = data?.stats?.events_attended ?? 0;
+  const memberSince = ud.member_since || ud.created_at;
+  const daysIn = memberSince ? Math.max(1, Math.round((Date.now() - new Date(memberSince).getTime()) / 86400000)) : 1;
+  const aboutComplete = aboutDone || Boolean(ud.position && ud.team_size && ud.current_goal);
+  const challengeComplete = (todayTask?.completed_count || 0) >= 30;
+  const labEnrolled = Boolean(bundle?.lab_enrolled);
 
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="p-8 lg:p-14 max-w-6xl mx-auto" data-testid="dashboard-loading">
-          <div className="space-y-4">{[1,2,3,4].map(i => <div key={`sk-${i}`} className="h-28 rounded-xl skeleton-pulse" />)}</div>
+        <div className="p-6 lg:p-10 xl:px-14 w-full" data-testid="dashboard-loading">
+          <div className="space-y-4">{[1,2,3,4].map(i => <div key={`sk-${i}`} className="h-28 rounded-2xl skeleton-pulse" />)}</div>
         </div>
       </DashboardLayout>
     );
@@ -97,206 +137,254 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8 lg:p-14 max-w-6xl mx-auto min-h-screen cascade premium-bg" data-testid="dashboard-page">
+      {/* pb-28: Platz für Support-Widget/Feedback-Hinweis unten rechts (Iter 185) */}
+      <div className="p-6 lg:p-10 xl:px-14 pb-28 w-full min-h-screen cascade" data-testid="dashboard-page">
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
+        <OnboardingVideoModal />
 
-        {/* ── Greeting ── */}
-        <div className="flex items-end justify-between mb-12 lg:mb-16 gap-6" data-anim="dash-header">
-          <div>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="hairline-wide" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                {de ? 'WILLKOMMEN ZURÜCK' : 'WELCOME BACK'}
-              </span>
-            </div>
-            <h1 className="display-hero-script">
-              {getGreeting()}, <em className="not-italic text-brand">{ud.name || 'Leader'}</em>
-            </h1>
-            <div className="flex items-center gap-2 mt-6">
-              <TierBadge size="sm" />
-              {tierInfo?.inGracePeriod && (
-                <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
-                  {de ? 'Jetzt verlängern' : 'Renew now'}
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Button variant="outline" size="sm" onClick={() => navigate('/chat')} className="font-semibold text-xs h-9 gap-1.5" data-testid="talk-coach-btn">
-              <MessageSquareText size={14} strokeWidth={1.5} /> {de ? 'KI-Coach' : 'AI Coach'}
-            </Button>
-            {!isPremium && balance >= 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card" data-testid="credit-badge">
-                <Zap size={12} strokeWidth={1.5} className="text-brand" />
-                <span className="text-[11px] font-bold">{balance}</span>
-                <span className="text-[10px] text-muted-foreground">Credits</span>
-              </div>
+        {/* ── 1 · Datum und Stand (Iter 185) ── */}
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} />
+          <div className="flex items-center gap-2 flex-wrap pt-1">
+            <TierBadge size="sm" />
+            <CreditBadge de={de} />
+            {tierInfo?.inGracePeriod && (
+              <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
+                {de ? 'Jetzt verlängern' : 'Renew now'}
+              </button>
             )}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#BFFF00]/20 bg-[#BFFF00]/[0.06]" data-testid="streak-bar">
-              <Flame size={13} strokeWidth={1.5} className="text-brand" />
-              <span className="text-[12px] font-bold"><AnimatedNumber value={streak?.days || 0} duration={500} /></span>
-              <span className="text-[10px] text-muted-foreground font-medium">{de ? 'Tage' : 'days'}</span>
-            </div>
           </div>
         </div>
 
-        {/* ── Event Reminder ── */}
-        <EventReminderBanner de={de} />
+        <StripeModeBanner />
+        <ActionInbox de={de} />
 
-        {/* Wlad's Daily Motivation · click to hear Wlad speak via ElevenLabs */}
-        <div className="mb-5">
-          <WladMotivationCard de={de} />
+        {/* ── 2 · Die Aufgabe für heute ── */}
+        <Section id="task" title={de ? 'Die Aufgabe für heute' : "Today's task"}
+                 hint={de ? 'Eine Übung aus dem 30-Tage-Programm — kurz, konkret, für heute.' : 'One exercise from the 30-day program — short and concrete.'}>
+          <TodayTaskCard task={todayTask} de={de} navigate={navigate}
+                         openCount={todayTask?.open_count || 0}
+                         onStart={(day) => api.post(`/challenge30/start/${day}`).catch(() => {})} />
+        </Section>
+
+        {/* ── 3 · Check-in ── */}
+        <Section id="checkin" title={de ? 'Check-in (2 Minuten)' : 'Check-in (2 minutes)'}
+                 hint={de ? 'Kurz festhalten, was heute lief — daraus lernt dein Coach, was du brauchst.' : 'Note how today went — your coach learns from it.'}>
+          <CheckinRow done={checkinDone} de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 4 · Frag deinen Coach ── */}
+        <Section id="coach" title={de ? 'Frag deinen Coach' : 'Ask your coach'}
+                 hint={de ? 'WladBot antwortet auf deine Führungsfragen — mit Wlads Material und deinem Kontext.' : 'WladBot answers your leadership questions — from Wlad’s material and your context.'}>
+          <AskCoachCard de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 4b · Leadership LAB: erst nach den 30 Tagen der „nächste Schritt" (Iter 186) ── */}
+        {(challengeComplete || labEnrolled) && (
+          <Section id="lab" title="Leadership LAB"
+                   hint={de ? 'Die Weiterbildung nach dem Einstieg: Kurse, Live-Calls, eigene Anmeldung.' : 'The programme after the intro: courses, live calls, own enrolment.'}>
+            <LabCard enrolled={labEnrolled} de={de} navigate={navigate} />
+          </Section>
+        )}
+
+        {/* ── 5 · Kurse ── */}
+        <Section id="courses" title={de ? 'Kurse' : 'Courses'}
+                 hint={de ? 'Kurze Videofolgen von Wlad, jede unter 12 Minuten. Folge 1 jedes Kurses ist frei.' : 'Short video episodes from Wlad, each under 12 minutes. Episode 1 of each course is free.'}>
+          <CoursesCard status={coursesStatus} de={de} navigate={navigate} onUnlock={() => openPricing('leadership_os')} />
+        </Section>
+
+        {/* ── 6 · Meine Aufgaben (Iter 188: Menüpunkt bleibt draußen, hier ist der Ort) ── */}
+        <Section id="my-tasks" title={de ? 'Meine Aufgaben' : 'My tasks'}
+                 hint={de ? 'Was bei dir offen ist — direkt abhaken.' : 'What is open for you — tick it off right here.'}>
+          <MyTasksCard de={de} navigate={navigate} />
+        </Section>
+
+        {/* ── 7 · Eigene Aufgabe anlegen ── */}
+        <Section id="own-task" title={de ? 'Eigene Aufgabe anlegen' : 'Create your own task'}
+                 hint={de ? 'Alles, was du dir vornimmst, landet in deiner Aufgabenliste.' : 'Anything you take on lands in your task list.'}>
+          <QuickTaskCard de={de} />
+        </Section>
+
+        {/* ── 7 · Über dich ── */}
+        {!aboutComplete && (
+          <Section id="about-you" title={de ? 'Über dich' : 'About you'}
+                   hint={de ? 'Drei kurze Angaben, damit die Antworten zu deiner Lage passen. Jederzeit überspringbar.' : 'Three short answers so the advice fits your situation. Skippable anytime.'}>
+            <AboutYouCard user={ud} de={de}
+                          onSaved={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }}
+                          onSkip={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }} />
+          </Section>
+        )}
+
+        {/* ── 8 · Nächstes Live-Event ── */}
+        {nextEvent && (
+          <Section id="event" title={de ? 'Nächstes Live-Event' : 'Next live event'}
+                   hint={de ? 'Live mit Wlad: Fragen stellen, Sparring bekommen.' : 'Live with Wlad: ask questions, get sparring.'}>
+            <NextEventRow event={nextEvent} de={de} navigate={navigate} />
+          </Section>
+        )}
+
+        {/* ── 9 · Dein Weiterkommen ── */}
+        <Section id="progress" title={de ? 'Dein Weiterkommen' : 'Your progress'}
+                 hint={de ? 'Kein Ranking — nur, was du bisher gemacht hast.' : 'No ranking — just what you have done so far.'}>
+          <ProgressLine levelName={levelName} daysIn={daysIn} videosSeen={videosSeen} eventsAttended={eventsAttended} de={de} />
+        </Section>
+
+        {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
+        <DashboardMore de={de} count={tierInfo?.isAccelerator ? 9 : 10}>
+        {/* ── Verschoben nach „Mehr" (Iter 185): Journey, Kennzahlen, XP-Zahl ── */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 mb-4 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 w-fit" data-testid="streak-bar">
+          <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+          <span className="text-[12px] font-bold"><AnimatedNumber value={streak?.days || 0} duration={500} /></span>
+          <span className="text-[10px] text-muted-foreground font-medium">{de ? 'Tage Streak' : 'day streak'}</span>
         </div>
 
-        {/* ── Stat Cards Row ── */}
-        <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />
-
-        {/* ── YOUR NEXT STEP (DOMINANT) · editorial Specimen-Card ── */}
-        <Card className="surface-card card-lift mb-8 overflow-hidden" data-testid="next-step-cta" data-anim="dash-cta">
-          <div className="flex items-center justify-between px-5 py-2.5 border-b border-border/40 text-[9.5px] font-bold uppercase tracking-[0.22em] text-muted-foreground font-mono">
-            <span>▸ HEUTE · TAG {c30.current_day || '01'} / 30</span>
-            <span className="text-[#BFFF00]">BIB · 0001</span>
-          </div>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-5">
-              <img
-                src={WLAD_AVATAR}
-                onError={withFallback(WLAD_AVATAR_FALLBACKS)}
-                alt="Wlad"
-                className="w-14 h-14 rounded-full object-cover ring-1 ring-white/10 shrink-0"
-              />
-              <div className="flex-1">
-                <h3
-                  className="text-[28px] sm:text-[32px] leading-[1.02] tracking-[-0.025em] text-foreground"
-                  style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 900, fontStyle: 'italic' }}
-                >
-                  {de ? 'Dein nächster' : 'Your next'}{' '}
-                  <span className="text-muted-foreground">{de ? 'Schritt' : 'step'}</span>
-                  <span className="text-[#BFFF00] not-italic">.</span>
-                </h3>
-                <p className="text-[14px] text-muted-foreground mt-1.5 leading-relaxed">
-                  {!c30.started
-                    ? (de ? 'Starte deine 30-Tage KI-Leadership-Challenge und lerne die Grundlagen.' : 'Start your 30-day AI Leadership challenge and learn the fundamentals.')
-                    : (de ? `Mache weiter mit Tag ${c30.current_day} deiner Challenge · 10 interaktive Fragen warten.` : `Continue with Day ${c30.current_day} of your challenge · 10 interactive questions await.`)
-                  }
-                </p>
-              </div>
-              <Button onClick={() => navigate('/challenge')} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11 px-5 shrink-0 uppercase tracking-[0.14em] text-[12px]" data-testid="next-step-btn">
-                <Play size={14} strokeWidth={1.5} className="mr-1.5" /> {!c30.started ? (de ? 'Challenge starten' : 'Start Challenge') : (de ? 'Weitermachen' : 'Continue')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ── Workspaces ── briefing + open for each folder the user has built. */}
-        <div className="mb-8" data-anim="dash-widget">
-          <FolderWorkspaceCards de={de} />
-        </div>
-
-        {/* ── Main Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          {/* LEFT: Actions + Quick Access */}
-          <div className="lg:col-span-2 space-y-8">
-
-            {/* Quick Actions */}
-            <QuickActionsGrid de={de} navigate={navigate} />
-
-            {/* XP + Level Progress */}
-            <Card className="surface-card overflow-hidden" data-testid="level-progress" data-anim="dash-widget">
-              <CardContent className="p-6 relative">
-                <div className="flex items-center justify-between mb-5">
-                  <div className="flex items-center gap-3">
-                    <span className="h-px w-8 bg-[#BFFF00]/60" />
-                    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">{de ? 'DEIN LEADERSHIP-LEVEL' : 'YOUR LEADERSHIP LEVEL'}</h3>
+        {/* ── HEUTE: die eine Aktion — personalisiert (erste 7 Schritte), danach 30-Tage-Programm ── */}
+        <JourneyCard de={de} fallback={(
+          <Card className="bg-[#0A0A0A] text-white border-0 mb-6 overflow-hidden" data-testid="next-step-cta" data-anim="dash-cta">
+            <CardContent className="p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <img src={WLAD_AVATAR} alt="Wlad" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-white/10 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#BFFF00]/80">{de ? 'Heute' : 'Today'}</p>
+                    <h3 className="text-lg font-black">{de ? 'Dein nächster Schritt' : 'Your Next Step'}</h3>
+                    <p className="text-sm text-white/50 mt-0.5">
+                      {!c30.started
+                        ? (de ? 'Starte dein 30-Tage KI-Leadership Programm und lerne die Grundlagen.' : 'Start your 30-day AI Leadership program and learn the fundamentals.')
+                        : (de ? `Mache weiter mit Tag ${c30.current_day} deiner Challenge — 10 interaktive Fragen warten.` : `Continue with Day ${c30.current_day} of your challenge — 10 interactive questions await.`)
+                      }
+                    </p>
                   </div>
-                  <Badge className="text-[10px] font-bold bg-[#BFFF00]/15 text-brand border-0">
+                </div>
+                <Button onClick={() => navigate('/challenge')} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11 px-5 w-full sm:w-auto shrink-0 shadow-lg shadow-[#BFFF00]/20" data-testid="next-step-btn">
+                  <Play size={14} className="mr-1.5" /> {!c30.started ? (de ? 'Challenge starten' : 'Start Challenge') : (de ? 'Weitermachen' : 'Continue')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )} />
+
+        {/* ── FORTSCHRITT ── */}
+        <StatCardsRow aiReadiness={aiReadiness} learningPct={learningPct} c30={c30} de={de} />
+        <Card className="border-black/[0.04] dark:border-white/[0.06] overflow-hidden relative" data-testid="level-progress" data-anim="dash-widget">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#BFFF00]/[0.06] rounded-full blur-3xl pointer-events-none" />
+              <CardContent className="p-5 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground">{de ? 'Dein Leadership-Level' : 'Your Leadership Level'}</h3>
+                  </div>
+                  <Badge className="text-[10px] font-bold bg-[#BFFF00]/15 text-[#4A6200] dark:text-[#BFFF00] border-0">
                     LVL {levelIndex + 1} / 5
                   </Badge>
                 </div>
 
                 {/* Level name + descriptive label */}
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-xl bg-[#BFFF00] flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/20 shrink-0">
                     <span className="text-2xl font-black text-[#0A0A0A]">{levelIndex + 1}</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-2xl tracking-tight truncate" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>{levelName}</p>
-                    <p className="text-[12px] text-muted-foreground font-light truncate mt-0.5">{levelLabel}</p>
+                    <p className="text-xl font-black tracking-tight truncate">{levelName}</p>
+                    <p className="text-[12px] text-muted-foreground font-medium truncate">{levelLabel}</p>
                   </div>
-                  <div className="text-right shrink-0 kpi-glow">
-                    <p className="text-3xl leading-none num-ticker" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}><AnimatedNumber value={xpCurrent} /></p>
-                    <p className="text-[10px] text-muted-foreground/70 font-medium mt-1 uppercase tracking-[0.15em]">XP</p>
+                  <div className="text-right shrink-0">
+                    <p className="text-2xl font-black leading-none"><AnimatedNumber value={xpCurrent} /></p>
+                    <p className="text-[10px] text-muted-foreground font-medium mt-0.5">XP</p>
                   </div>
                 </div>
 
                 {/* Progress to next */}
-                <div className="space-y-2">
-                  <div className="h-1.5 rounded-full bg-foreground/[0.08] overflow-hidden">
-                    <div className="h-full rounded-full bg-[#BFFF00] transition-all duration-1000"
+                <div className="space-y-1.5">
+                  <div className="h-2.5 rounded-full bg-gray-100 dark:bg-muted overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] transition-all duration-1000 shadow-[0_0_8px_rgba(191,255,0,0.4)]"
                       style={{ width: `${Math.min(100, levelProgress)}%` }} />
                   </div>
                   <div className="flex items-center justify-between text-[10px] font-semibold">
                     <span className="text-muted-foreground">{levelProgress}% {de ? 'zum nächsten Level' : 'to next level'}</span>
                     {nextLevel ? (
-                      <span className="text-brand">
+                      <span className="text-[#4A6200] dark:text-[#BFFF00]">
                         {xpToNext > 0 ? `${xpToNext} XP → ${nextLevel}` : nextLevel}
                       </span>
                     ) : (
-                      <span className="text-brand">{de ? 'MAX LEVEL' : 'MAX LEVEL'}</span>
+                      <span className="text-[#4A6200] dark:text-[#BFFF00]">{de ? 'MAX LEVEL' : 'MAX LEVEL'}</span>
                     )}
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Upsell Banner */}
-            <Card className="surface-card gradient-border-anim overflow-hidden" data-testid="upsell-banner" data-anim="dash-widget">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center shrink-0">
-                    <Sparkles size={20} strokeWidth={1.5} className="text-brand" />
+
+        <GuideClipsRow de={de} />
+        <div className="mb-6"><ArgumentationPrepCard de={de} /></div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-5">
+            <QuickActionsGrid de={de} navigate={navigate} />
+            <FolderWorkspaceCards de={de} />
+
+            {/* Upsell Banner — tier-aware: hidden for OS PLUS, shows PLUS upgrade for Standard, shows OS for Free */}
+            {!tierInfo?.isAccelerator && (
+              <Card className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white border-0 overflow-hidden" data-testid="upsell-banner" data-anim="dash-widget">
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#BFFF00]/15 flex items-center justify-center shrink-0">
+                      <Sparkles size={22} className="text-[#BFFF00]" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold">
+                        {tierInfo?.tier === 'standard'
+                          ? (de ? 'Bereit für 1:1 Coaching mit Wlads Expertenteam?' : 'Ready for 1:1 Coaching with Wlad’s Expert Team?')
+                          : (de ? 'Schalte dein volles KI-Potenzial frei' : 'Unlock your full AI potential')}
+                      </p>
+                      <p className="text-xs text-white/40 mt-0.5">
+                        {tierInfo?.tier === 'standard'
+                          ? (de ? '12× Einzelcoaching · Mastermind · Video-Analyse unlimited.' : '12× 1:1 coaching · Mastermind · Unlimited video analysis.')
+                          : (de ? 'Alle 16 Missionen, 10 Workflows und persönliches Coaching.' : 'All 16 missions, 10 workflows and personal coaching.')}
+                      </p>
+                      <p className="text-[10px] text-white/25 mt-1"><Sparkles size={9} className="inline mr-0.5" /> {de ? '500+ Leader haben ihre Arbeitsweise transformiert' : '500+ leaders have transformed how they work'}</p>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <Button
+                        onClick={() => openPricing(tierInfo?.tier === 'standard' ? 'leadership_os_plus' : 'leadership_os')}
+                        className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold text-xs h-9 px-4 btn-revolut"
+                        data-testid="dashboard-upgrade-btn"
+                      >
+                        {tierInfo?.tier === 'standard'
+                          ? (de ? 'OS PLUS holen' : 'Get OS PLUS')
+                          : (de ? 'Direkt kaufen' : 'Buy Now')}
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-xl tracking-tight" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
-                      {de ? 'Schalte dein volles KI-Potenzial frei' : 'Unlock your full AI potential'}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1 font-light leading-relaxed">{de ? 'Alle 16 Missionen, 10 Workflows und persönliches Coaching.' : 'All 16 missions, 10 workflows and personal coaching.'}</p>
-                    <p className="text-[10px] text-muted-foreground/70 mt-2 font-light">{de ? '500+ Leader haben ihre Arbeitsweise transformiert' : '500+ leaders have transformed how they work'}</p>
-                  </div>
-                  <div className="flex gap-2 shrink-0">
-                    <Button onClick={() => openPricing('leadership_os')} className="bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold text-xs h-9 px-4 btn-revolut" data-testid="dashboard-upgrade-btn">
-                      {de ? 'Direkt kaufen' : 'Buy Now'}
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* RIGHT: Sidebar */}
-          <div className="space-y-8">
+          <div className="space-y-5">
 
-            {/* This Week Calendar */}
-            <WeekCalendarCard de={de} onNavigate={navigate} />
+            {/* Wlad's Daily Motivation — demoted to sidebar (Iter 118 Godmode) */}
+            <WladMotivationCard de={de} />
+
+            {/* Next 3 Events — Donnerstag-Cohort (Iter 92.9) */}
+            <UpcomingEventsCard locale={de ? 'de' : 'en'} />
 
             {/* Referral Card */}
-            <Card className="surface-card card-lift" data-testid="referral-upsell-card" data-anim="dash-widget">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#BFFF00]/10 border border-[#BFFF00]/20 flex items-center justify-center"><Gift size={14} strokeWidth={1.5} className="text-brand" /></div>
+            <Card className="bg-[#0A0A0A] text-white border-0" data-testid="referral-upsell-card" data-anim="dash-widget">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#BFFF00]/15 flex items-center justify-center"><Gift size={13} className="text-[#BFFF00]" /></div>
                   <div>
-                    <p className="text-sm font-semibold">{de ? 'Freunde einladen' : 'Invite friends'}</p>
-                    <p className="text-[10px] text-muted-foreground font-light">{de ? 'Verdiene Rewards' : 'Earn rewards'}</p>
+                    <p className="text-xs font-bold">{de ? 'Freunde einladen' : 'Invite friends'}</p>
+                    <p className="text-[9px] text-white/40">{de ? 'Verdiene Rewards' : 'Earn rewards'}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={() => navigate('/referral')} size="sm" className="flex-1 bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] text-[10px] font-bold h-8" data-testid="referral-share-btn">
-                    <Share2 size={10} strokeWidth={1.5} className="mr-1" /> TEILEN
+                    <Share2 size={10} className="mr-1" /> TEILEN
                   </Button>
                   {referralCode && (
-                    <Button onClick={copyReferral} size="sm" variant="outline" className="border-border text-foreground hover:bg-foreground/5 text-[10px] h-8" data-testid="referral-copy-btn">
-                      <Copy size={10} strokeWidth={1.5} className="mr-1" /> {referralCode}
+                    <Button onClick={copyReferral} size="sm" variant="outline" className="border-white/15 text-white hover:bg-white/10 text-[10px] h-8" data-testid="referral-copy-btn">
+                      <Copy size={10} className="mr-1" /> {referralCode}
                     </Button>
                   )}
                 </div>
@@ -307,7 +395,13 @@ export default function DashboardPage() {
             <WladHubDiagnosisCard wladhubScores={ud.wladhub_scores} de={de} onNavigate={navigate} />
           </div>
         </div>
+        </DashboardMore>
       </div>
+
+      {/* Iter 131.3: Guided first-run tour with speaking Wlad. Runs once
+          per user (localStorage flag) — user-triggerable via the profile
+          menu for a second walkthrough. */}
+      <DashboardFirstTour userTier={tierInfo?.tier || ud.tier || 'free'} />
     </DashboardLayout>
   );
 }

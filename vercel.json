@@ -95,6 +95,17 @@
       "destination": "/robots-leader-check.txt"
     },
     {
+      "source": "/m/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(.*(facebookexternalhit|Twitterbot|LinkedInBot|Slackbot|TelegramBot|WhatsApp|Discordbot|Pinterest|Embedly|Google-?Page-?Speed|bot|crawl|spider|prerender).*)"
+        }
+      ],
+      "destination": "https://leader-os.de/api/og/mission-html/:slug"
+    },
+    {
       "source": "/((?!api|static|favicon.ico|manifest.json|robots.txt|asset-manifest.json|.*\\..*).*)",
       "destination": "/index.html"
     }

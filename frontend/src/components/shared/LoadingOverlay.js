@@ -31,7 +31,7 @@ const FLOWS_DE = {
     title: 'Dein Check-in wird analysiert',
     agents: [
       { name: 'Kontext-Agent', status: 'Deine Check-in Historie wird gelesen' },
-      { name: 'Wlad-Methodik Engine', status: 'Passende Frameworks werden gewählt (SBI, Logos/Ethos/Pathos)' },
+      { name: 'Wlad-Methodik Engine', status: 'Passende Frameworks werden gewählt (SEXIER, SBI)' },
       { name: 'Emotions-Analyse', status: 'Dein mentaler Zustand wird erfasst' },
       { name: 'Personalisierungs-Agent', status: 'Mikro-Tipp für morgen wird generiert' },
       { name: 'Scoring-Agent', status: 'XP-Impact wird berechnet' },
@@ -62,7 +62,7 @@ const FLOWS_DE = {
     agents: [
       { name: 'Whisper-Agent', status: 'Audio wird in Text transkribiert' },
       { name: 'Kontext-Agent', status: 'Deine bisherigen Versuche werden geladen' },
-      { name: 'Rhetorik-Analyse', status: 'Klarheit, Struktur, Logos/Ethos/Pathos' },
+      { name: 'Rhetorik-Analyse', status: 'SEXIER-Modell: Statement, Explanation, eXample, Impact, Rebuttal' },
       { name: 'Sprach-Analyse', status: 'Füllwörter, Tempo, Schlüsselphrasen' },
       { name: 'Wlad-Assessment', status: 'Persönliches Feedback wird erstellt' },
       { name: 'Report-Generator', status: 'Übungs-Plan wird generiert' },
@@ -134,7 +134,7 @@ const FLOWS_EN = {
     agents: [
       { name: 'Whisper Agent', status: 'Transcribing audio to text' },
       { name: 'Context Agent', status: 'Loading previous attempts' },
-      { name: 'Rhetoric Analysis', status: 'Clarity, structure, Logos/Ethos/Pathos' },
+      { name: 'Rhetoric Analysis', status: 'SEXIER model: statement, explanation, example, impact, rebuttal' },
       { name: 'Speech Analysis', status: 'Filler words, pace, key phrases' },
       { name: 'Wlad Assessment', status: 'Crafting personal feedback' },
       { name: 'Report Generator', status: 'Generating practice plan' },
@@ -177,6 +177,8 @@ export function LoadingOverlay({
   de = true,
   agents: customAgents,
   stepDuration,
+  progressLabel,
+  minAgent = 0,
 }) {
   const preset = (de ? FLOWS_DE : FLOWS_EN)[flow] || (de ? FLOWS_DE : FLOWS_EN).generic;
   const agents = customAgents || preset.agents;
@@ -200,7 +202,8 @@ export function LoadingOverlay({
 
   if (!isOpen) return null;
 
-  const completedCount = activeAgent;
+  const shownAgent = Math.max(activeAgent, Math.min(minAgent, agents.length - 1));
+  const completedCount = shownAgent;
   const progressPct = Math.min(100, Math.round(((completedCount + 0.5) / agents.length) * 100));
 
   return (
@@ -233,6 +236,9 @@ export function LoadingOverlay({
           <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/30">
             {de ? 'Läuft seit' : 'Running for'} · {elapsed}s
           </p>
+          {progressLabel && (
+            <p className="text-[12px] font-semibold text-[#BFFF00]" data-testid="loading-overlay-progress">{progressLabel}</p>
+          )}
         </div>
 
         {/* Thin progress line */}
@@ -248,8 +254,8 @@ export function LoadingOverlay({
         {/* Agent status feed */}
         <div className="space-y-1.5">
           {agents.map((agent, i) => {
-            const done = i < activeAgent;
-            const active = i === activeAgent;
+            const done = i < shownAgent;
+            const active = i === shownAgent;
             return (
               <div
                 key={agent.name}

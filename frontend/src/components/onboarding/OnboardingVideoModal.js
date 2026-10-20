@@ -15,13 +15,14 @@
  * Video-Source: Vimeo 1197728183 (Mert lieferte den Link am 26.02.26).
  */
 import { useEffect, useRef, useState } from 'react';
-import { X, PlayCircle, Calendar, ArrowRight } from 'lucide-react';
+import { X, PlayCircle, Calendar, ArrowRight, Bot, Target, UserRound } from 'lucide-react';
 import gsap from 'gsap';
 import { useBookConsultation } from '../brand/BookConsultationButton';
-import { VideoPlayer } from '../shared/VideoPlayer';
+// Iter 92.32 (Mert): Vimeo embed entfernt — Privacy-Settings konnten den
+// Player blockieren ("Sorry, this video cannot be played here"). Stattdessen
+// beautiful benefit-cards die immer funktionieren.
 
 const STORAGE_KEY = 'wlad_onboarding_video_seen_v1';
-const VIMEO_ID = process.env.REACT_APP_ONBOARDING_VIMEO_ID || '1197728183';
 
 const HEADLINE_WORDS = ['Schau', 'dir', 'kurz', 'an,', 'wie', 'du', 'startest.'];
 
@@ -37,13 +38,9 @@ export const OnboardingVideoModal = () => {
   const subRef = useRef(null);
 
   useEffect(() => {
-    try {
-      if (localStorage.getItem(STORAGE_KEY)) return;
-      const t = setTimeout(() => setOpen(true), 1100);
-      return () => clearTimeout(t);
-    } catch {
-      return undefined;
-    }
+    // Iter 92.34 (Mert Go-Live): "alle PopUps bitte erstmal weglassen" →
+    // Onboarding-Modal komplett disabled für Launch-Phase. Re-enable via flag.
+    return undefined;
   }, []);
 
   // GSAP entrance choreography · runs when `open` flips true
@@ -171,23 +168,42 @@ export const OnboardingVideoModal = () => {
           </p>
         </div>
 
-        {/* Vimeo Player */}
-        <div ref={videoRef} className="relative px-6 sm:px-8" style={{ opacity: 0 }}>
-          <div className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
-            <VideoPlayer
-              vimeoId={VIMEO_ID}
-              autoplay
-              title="Wlads Onboarding-Video"
-            />
+        {/* ── Hero Benefits (Iter 92.32 launch-safe — replaces fragile Vimeo embed) ──
+            Vimeo "Privacy settings" konnten Embed blockieren → catastrophic UX.
+            Stattdessen: 3 Benefit-Cards die in 5 Sekunden zeigen WAS Leader-OS kann.
+            Wlad-Video bleibt zugänglich über die "WladBot hören" Card auf dem Dashboard. */}
+        <div ref={videoRef} className="relative px-6 sm:px-8 pb-2" style={{ opacity: 0 }}>
+          <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#BFFF00]/[0.08] via-white/[0.02] to-transparent border border-[#BFFF00]/20 p-6 sm:p-7">
+            <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full bg-[#BFFF00]/15 blur-[60px] pointer-events-none" aria-hidden />
+
+            <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { icon: Bot, title: '24/7 KI-Coach', desc: 'Stell deine Frage, erhalte Antworten aus Wlads Wissensbasis.' },
+                { icon: Target, title: '16 Video-Missionen', desc: '60 Sek Pitch aufnehmen → KI bewertet nach Wlads Framework.' },
+                { icon: UserRound, title: '1:1 Coaching', desc: 'Mit Wlads Expertenteam — direkt einen Slot wählen.' },
+              ].map((b, i) => (
+                <div
+                  key={b.title}
+                  className="flex flex-col items-start gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#BFFF00]/30 transition-colors"
+                  data-testid={`onboarding-benefit-${i}`}
+                >
+                  <b.icon size={22} className="text-[#BFFF00]" aria-hidden />
+                  <p className="text-[13px] font-bold text-white leading-tight" style={{ fontFamily: 'Outfit, Inter, sans-serif' }}>
+                    {b.title}
+                  </p>
+                  <p className="text-[11.5px] text-white/55 leading-snug">{b.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Action Row */}
+        {/* Action Row — Iter 92.18 mobile fix: h-12 forces touch-target, flex-1 entfernt für column-stack */}
         <div ref={ctaRef} className="relative flex flex-col sm:flex-row gap-3 p-6 sm:p-8 pt-5">
           <button
             type="button"
             onClick={handleBookCall}
-            className="btn-shine glow-lime flex-1 inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-[#BFFF00] text-[#0A0A0A] font-black text-sm hover:bg-[#D4FF4D] transition-all"
+            className="btn-shine glow-lime sm:flex-1 inline-flex items-center justify-center gap-2 h-12 min-h-12 px-6 rounded-xl bg-[#BFFF00] text-[#0A0A0A] font-black text-sm hover:bg-[#D4FF4D] transition-all"
             data-testid="onboarding-video-book-call"
             style={{ opacity: 0 }}
           >
@@ -198,7 +214,7 @@ export const OnboardingVideoModal = () => {
           <button
             type="button"
             onClick={dismiss}
-            className="inline-flex items-center justify-center h-12 px-6 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white/85 font-semibold text-sm transition-colors"
+            className="inline-flex items-center justify-center h-12 min-h-12 px-6 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white/85 font-semibold text-sm transition-colors"
             data-testid="onboarding-video-skip"
             style={{ opacity: 0 }}
           >
@@ -206,11 +222,11 @@ export const OnboardingVideoModal = () => {
           </button>
         </div>
 
-        {/* Trust strip · no "free" wording, just facts that build value */}
+        {/* Trust strip */}
         <div className="relative px-6 sm:px-8 pb-5 flex items-center flex-wrap gap-x-3 gap-y-1 text-[10px] text-white/35 font-semibold">
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            15 Min · 1:1 mit Wlads Team · Unverbindlich
+            15 Min · 1:1 mit Wlads Expertenteam · Unverbindlich
           </span>
           <span className="text-white/15">·</span>
           <span>Wird nur einmal angezeigt</span>

@@ -14,7 +14,7 @@ const PROD_ORIGIN = 'https://leaderos.de';
 
 /**
  * Build the canonical share URL for a user's leader-score.
- * Always returns a leaderos.de URL · never a preview/staging origin.
+ * Always returns a leaderos.de URL — never a preview/staging origin.
  */
 export const buildLeaderScoreShareUrl = (userId) => {
   const base = PROD_ORIGIN;

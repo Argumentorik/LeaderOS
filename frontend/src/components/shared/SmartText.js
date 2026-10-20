@@ -1,5 +1,5 @@
 /**
- * SmartText · premium markdown-lite renderer.
+ * SmartText — premium markdown-lite renderer.
  *
  * Why this exists:
  *   AI outputs (wlad_assessment, framework_feedback, rewrite_suggestion, etc.)
@@ -24,12 +24,12 @@
  *   - icon       Lucide icon component for ordered items (default Sparkles)
  *   - className  passthrough
  */
-import { Sparkles } from 'lucide-react';
 
-const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;
-const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
+import { unescapeText } from '../../lib/textClean';
 
-// Inline "1. … 2. … 3. …" · split a single line that hides a list.
+const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
+
+// Inline "1. … 2. … 3. …" — split a single line that hides a list.
 // We look for at least 2 occurrences before treating it as a list.
 function splitInlineNumbered(line) {
   // Match each "N. text-until-next-N.-or-end". Non-greedy so it doesn't gobble.
@@ -56,7 +56,9 @@ function renderInline(text) {
 
 function parseBlocks(text) {
   if (!text || typeof text !== 'string') return [];
-  const lines = text.split(/\r?\n/);
+  // Schutznetz (Iter 184): Rohzeichen (\n, \u201e) werden beim Darstellen
+  // bereinigt, statt sie dem Kunden zu zeigen.
+  const lines = unescapeText(text).split(/\r?\n/);
   const blocks = [];
   let buffer = null; // { type: 'list-ordered' | 'list-unordered' | 'paragraph', items: [] }
 
@@ -102,7 +104,7 @@ function parseBlocks(text) {
       continue;
     }
 
-    // Regular paragraph line · append to running paragraph block.
+    // Regular paragraph line — append to running paragraph block.
     if (!buffer || buffer.type !== 'paragraph') {
       flushBuffer();
       buffer = { type: 'paragraph', items: [] };
@@ -113,8 +115,8 @@ function parseBlocks(text) {
   return blocks;
 }
 
-const OrderedCard = ({ item, accent, Icon }) => (
-  <div className="group relative flex items-start gap-3 p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-tint)] transition-all"
+const OrderedCard = ({ item, accent }) => (
+  <div className="relative flex items-start gap-3 p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] cursor-text select-text"
        style={{ '--accent': accent, '--accent-tint': `${accent}14` }}>
     <span
       className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-black text-[12px] shadow-sm"
@@ -125,7 +127,6 @@ const OrderedCard = ({ item, accent, Icon }) => (
     <div className="flex-1 min-w-0">
       <p className="text-[13px] leading-relaxed text-foreground">{renderInline(item.text)}</p>
     </div>
-    <Icon size={12} className="text-muted-foreground/30 group-hover:text-[color:var(--accent)] shrink-0 mt-1 transition-colors" />
   </div>
 );
 
@@ -143,14 +144,13 @@ export const SmartText = ({
   text,
   variant = 'card',
   accent = '#BFFF00',
-  icon: Icon = Sparkles,
   className = '',
 }) => {
   if (!text) return null;
   const blocks = parseBlocks(text);
   if (blocks.length === 0) return null;
 
-  // Inline (compact) mode: keep typography small + tight · used in chat bubbles.
+  // Inline (compact) mode: keep typography small + tight — used in chat bubbles.
   const isInline = variant === 'inline';
   const listGap = isInline ? 'space-y-1.5' : 'space-y-2';
 
@@ -173,7 +173,7 @@ export const SmartText = ({
           return (
             <div key={`bl-${bIdx}`} className={listGap}>
               {b.items.map((it, i) => (
-                <OrderedCard key={`oi-${i}`} item={{ num: it.num ?? i + 1, text: it.text }} accent={accent} Icon={Icon} />
+                <OrderedCard key={`oi-${i}`} item={{ num: it.num ?? i + 1, text: it.text }} accent={accent} />
               ))}
             </div>
           );

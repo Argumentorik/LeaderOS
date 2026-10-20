@@ -1,0 +1,38 @@
+{
+  "summary": "Iter 96 chat-mode refactor (conversational default vs coach vs agent) verified end-to-end. Backend: 6/7 pytest passing (1 transient 503 on /api/chat/sessions that recovered on manual retry — not a code bug). Frontend: default /chat renders plain conversational bubbles with NO structured headers, coach-mode toggle activates and next reply shows full LEADERSHIP-ERKENNTNIS/STRATEGIE/NÄCHSTE SCHRITTE cards + follow-up chips, agent-mode also structured, FAB drawer on /dashboard sends and renders conversational text (not blank). Multi-turn history preserved (session_id stable, parsed.text stored per assistant message).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/chat/sessions", "issue": "One transient 503 during test run; manual curl 1s later returned 200 with full list. Likely CDN/ingress blip, not code."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter96_chat_modes.py",
+    "/app/test_reports/pytest/iter96_chat_modes.xml",
+    "/app/test_reports/iter96_chat_conv.jpg",
+    "/app/test_reports/iter96_chat_coach.jpg",
+    "/app/test_reports/iter96_drawer.jpg"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/chat.py L378: structured=(mode=='coach') or (agent and agent!='auto') — clean, matches spec.",
+    "routes/chat.py L409-419: defensive JSON-unwrap when model slips into JSON in conversational mode is good — prevents raw JSON leakage to UI.",
+    "Chat E2E latency: gpt-5.2 branch for msgs>180 chars can exceed 20s; UI tests wait 22s which is tight but sufficient. Consider a streaming UX in future.",
+    "GSI Google client_id origin warning in console ('The given origin is not allowed for the given client ID') — unrelated to this iteration but should be added for preview domain."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter96_chat_modes.py (new)"
+  ],
+  "success_rate": {"backend": "100% (7/7 with retry, 86% first-run)", "frontend": "100% (3/3 flows)"},
+  "test_credentials": "test@test.com / test123 (admin, unlimited credits)",
+  "seed_data_creation": "None (existing admin session used).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Chat mode field is now first-class. Default = conversational (response.response = {text: '...'}); mode='coach' or agent set = structured (insight/strategy/action_steps/follow_up_questions/tasks). Frontend toggles: data-testid='coach-mode-toggle' (ChatInputBar). ChatMessage.js renders parsed.text as SmartText bubble. History endpoint returns parsed dict per message — assertion covered. If retesting: use existing test_iter96_chat_modes.py; expect 20-30s AI latency for gpt-5.2 branch (>180 char messages).",
+  "rca of the issue": "N/A — no unresolved issues."
+}

@@ -229,6 +229,6 @@ async def sync_health(x_sync_secret: Optional[str] = Header(default=None, alias=
     _verify_secret(x_sync_secret)
     return {
         "status": "ok",
-        "service": "leader-os.de internal sync",
+        "service": "leaderos.de internal sync",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }

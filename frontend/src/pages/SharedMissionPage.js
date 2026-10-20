@@ -1,15 +1,15 @@
 /**
- * SharedMissionPage · Public showcase of a user's video-mission analysis.
+ * SharedMissionPage — Public showcase of a user's video-mission analysis.
  *
  * Mert (Iter 92.23, P2): User können ihre besten Mission-Scores teilen.
  * URL Format: /m/{slug}
  *
  * Page Goal:
  *   1. Social-Proof: zeige Score + Wlad's Einschätzung
- *   2. Conversion: prominenter CTA "Jetzt selbst testen → LeaderOS"
+ *   2. Conversion: prominenter CTA "Jetzt selbst testen → Leader-OS"
  *   3. Authenticity: Username + Avatar, Wlad-Logo Watermark
  *
- * Public route · no auth required. Backend redacts PII (no full transcript).
+ * Public route — no auth required. Backend redacts PII (no full transcript).
  */
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -86,7 +86,7 @@ export default function SharedMissionPage() {
               W
             </div>
             <div>
-              <p className="text-sm font-black tracking-tight">LEADEROS</p>
+              <p className="text-sm font-black tracking-tight">LEADER-OS</p>
               <p className="text-[9px] uppercase tracking-widest text-white/40">powered by WladBot</p>
             </div>
           </Link>
@@ -165,8 +165,24 @@ export default function SharedMissionPage() {
           </CardContent>
         </Card>
 
-        {/* 3 Pillars */}
-        {(data.logos_score || data.ethos_score || data.pathos_score) > 0 && (
+        {/* SEXIER (neu) — Fallback: 3 Säulen für Alt-Analysen */}
+        {data.sexier_scores ? (
+          <Card className="border-[#BFFF00]/15 bg-white/[0.02]">
+            <CardContent className="p-6">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#BFFF00] mb-4">
+                Wlads SEXIER-Analyse
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <ScoreTile label="S · Statement" value={data.sexier_scores.statement} color="#F59E0B" />
+                <ScoreTile label="E · Explanation" value={data.sexier_scores.explanation} color="#EC4899" />
+                <ScoreTile label="X · eXample" value={data.sexier_scores.example} color="#6366F1" />
+                <ScoreTile label="I · Impact" value={data.sexier_scores.impact} color="#0EA5E9" />
+                <ScoreTile label="E · Expl. of Impact" value={data.sexier_scores.impact_explanation} color="#8B5CF6" />
+                <ScoreTile label="R · Rebuttal" value={data.sexier_scores.rebuttal} color="#10B981" />
+              </div>
+            </CardContent>
+          </Card>
+        ) : (data.logos_score || data.ethos_score || data.pathos_score) > 0 && (
           <Card className="border-[#BFFF00]/15 bg-white/[0.02]">
             <CardContent className="p-6">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#BFFF00] mb-4">
@@ -188,7 +204,7 @@ export default function SharedMissionPage() {
               <div className="w-3.5 h-3.5 rounded-sm bg-[#BFFF00] flex items-center justify-center">
                 <span className="text-[7px] font-black text-black leading-none">W</span>
               </div>
-              <span className="text-[8px] font-black uppercase tracking-[0.15em] text-[#BFFF00] leading-none">LEADEROS</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.15em] text-[#BFFF00] leading-none">LEADER-OS</span>
             </div>
             <CardContent className="p-6 sm:p-8">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#BFFF00] mb-3">
@@ -239,7 +255,7 @@ export default function SharedMissionPage() {
           )}
         </div>
 
-        {/* Final CTA · the conversion driver */}
+        {/* Final CTA — the conversion driver */}
         <Card className="border-0 bg-gradient-to-r from-[#BFFF00] to-[#A8E600] text-black overflow-hidden">
           <CardContent className="p-8 sm:p-10 text-center">
             <Trophy size={32} className="mx-auto mb-3" />
@@ -267,7 +283,7 @@ export default function SharedMissionPage() {
               </Button>
             </div>
             <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mt-5">
-              Powered by LeaderOS · WladBot · KI-Coach
+              Powered by Leader-OS · WladBot · KI-Coach
             </p>
           </CardContent>
         </Card>

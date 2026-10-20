@@ -1,0 +1,48 @@
+{
+  "iteration": "92_23_8",
+  "summary": "Backend tests for WladBot folder-context injection (Iter 92.23.8). All 10 new test cases pass: folder_context_used=true with owned folder, false with no/foreign/non-existent folder, multi-turn injection works, chat session creation auto-stamps folder_id + creates folder_item, foreign folder_id silently ignored on session create, ?folder_id= filter works, regression on 92.23.7 folders intact.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_23_8_chat_folder_context.py",
+    "/app/test_reports/pytest/iter92_23_8_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/chat.py:289-356 — `check_and_deduct_credit` is called BEFORE folder context is resolved; if a user mis-types folder_id they still pay a credit even though context wasn't applied. Consider resolving folder context first and using the boolean as a UX hint to user (not blocking). Low-priority polish.",
+    "routes/chat.py:257-273 — `_ensure_session` stamps folder_id only on session CREATION; if the same session_id is reused later with a NEW folder_id, the session's folder_id is NOT updated (intentional per comment). However the chat itself still injects the new folder's context — this means session.folder_id can drift from the actually-injected context per turn. OK for now (per code comment) but worth a frontend warning if user switches folders mid-session.",
+    "routes/chat.py:166-184 — POST /api/chat/sessions silently ignores foreign folder_id (returns 200 with folder_id=None). Good for non-leakage, but the UI cannot tell the user 'that folder isn't yours'. Consider a 403 or a `folder_id_ignored: true` flag for future UX clarity. Not a security issue.",
+    "routes/chat.py:189-203 — GET /api/chat/sessions?folder_id=<foreign> returns [] (because user_id filter excludes foreign sessions) — clean, but worth a docstring note."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_23_8_chat_folder_context.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 new tests pass + 16/17 92.23.7 regression — 1 transient network timeout unrelated to 92.23.8)",
+    "frontend": "not tested (backend-only request per main agent)"
+  },
+  "test_credentials": "test@test.com / test123 (primary, free tier — 2 chat credits/day) and accelerator@wladbot.test / test123 (used for all 4 LLM-paid chat calls because free tier exhausts after 2). All 4 LLM calls executed exactly as budgeted (gpt-5.2 via emergentintegrations).",
+  "seed_data_creation": "Tests create TEST_-prefixed folders (auto-cleaned in module fixture) and one chat session per LLM-call test. The chat session created by accelerator survives in DB but is harmless (TEST_-titled).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.23.8 backend is fully covered by /app/backend/tests/test_iter92_23_8_chat_folder_context.py. The file budgets 4 LLM calls total (tests 03,04,05,06) — all 4 use the accelerator account because test@test.com (free tier) runs out of chat credits after 2 calls. Tests 01,02,07-10 are LLM-free. If running this twice in the same day the credit budget may need a top-up on the accelerator account. For Iter 92.23.7 folders regression, run /app/backend/tests/test_iter92_23_7_folders.py — 1 transient network timeout on /api/video-archive PATCH was observed (not deterministic, retry usually passes).",
+  "key_findings": [
+    "POST /api/chat with owned folder_id → folder_context_used=True ✅",
+    "POST /api/chat without folder_id → folder_context_used=False ✅ (backward-compat preserved)",
+    "POST /api/chat with foreign folder_id → folder_context_used=False, HTTP 200, no leak ✅",
+    "Multi-turn (same session + folder_id) → context still injected on turn 2 ✅",
+    "POST /api/chat/sessions with owned folder_id → session.folder_id stamped AND folder_items row of item_type=chat_session inserted, source_id=session_id ✅",
+    "POST /api/chat/sessions with foreign folder_id → 200 with folder_id=None, NO folder_item created (no info leak) ✅",
+    "GET /api/chat/sessions?folder_id=<owned> → returns only sessions tagged with that folder ✅",
+    "GET /api/chat/sessions (no filter) → returns ALL sessions (regression OK) ✅",
+    "GET /api/chat/sessions?folder_id=<nonexistent> → returns [] gracefully ✅",
+    "Folder CRUD endpoints from 92.23.7 unchanged ✅"
+  ]
+}

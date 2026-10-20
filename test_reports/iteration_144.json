@@ -1,0 +1,45 @@
+{
+  "summary": "Iter 144 (Multi-Shot Onboarding-Videos, öffentlicher Login-Teaser, Wlad-Minimax-TTS) end-to-end getestet. BACKEND: 38 pytest-Cases in /app/backend/tests/test_iter144_multishot.py — alle GRÜN. Abgedeckt: (a) GET /api/guide/public/teaser ohne Auth -> 200 mit slug 'teaser-spotlight', title, script, video_url, poster_url; video_url ohne Range -> 200 video/mp4 (1.437.672 B, Accept-Ranges: bytes), mit 'Range: bytes=0-1023' -> 206 + Content-Range 'bytes 0-1023/1437672' + exakt 1024 Bytes; poster_url -> 200 image/png. (b) GET /api/guide/admin/clips/start-1-willkommen (Admin) -> multi_shot=true, status 'video_ready', pipeline 'multishot', video_url gesetzt, shots[] = 4 (s1 walk / s2 talk / s3 broll / s4 talk); s1: preset loft_walk_in, duration '5', keyframe_url + raw_url gesetzt, kein Text; s2: keyframe/raw/audio/padded/synced gesetzt, audio_seconds numerisch; s3: screens ['dashboard','chat','video','challenge'], audio_url gesetzt, KEINE keyframe_url; s4: alle URLs gesetzt. Alle 13 vorhandenen Shot-Medien-URLs (/api/guide/media/{token}/shot/{id}/{kind}) OHNE Login -> 200 mit korrektem Content-Type (keyframe image/png, raw+synced video/mp4, audio+padded audio/mpeg); ungültige kind -> 404, shot s99 -> 404. (c) GET /api/guide/broll/{dashboard,chat,video,challenge,simulations} -> 200 image/png (PNG-Magic-Bytes verifiziert), /broll/foo -> 404. (d) /api/guide/admin/overview enthält broll_screens (Objekt mit genau diesen 5 Keys) + costs. (e) PUT .../shots Validierung ohne Nebenwirkungen: s1+text -> 400 'Der Walk-in-Shot ist stumm', s2 mit 30 Wörtern -> 400 'höchstens 26 Wörter', s3 screens [] -> 400, s9 -> 404, identische s3-screens -> 200 und s3.audio_url danach WEITER gesetzt (kein Audio-Verlust); nach allen Negativfällen ist der Clip unverändert video_ready mit allen Renderergebnissen. Unauthorized: PUT ohne Token -> 401, als free@wladbot.test -> 403. (f) POST render bzw. shot-keyframes auf start-2-so-sprichst-du -> je 400 'Zuerst die Shots planen', Clip-Status danach NICHT *_running (kein Job gestartet). (g) GET /api/voice/personas -> wlad vorhanden; POST /api/voice/tts {persona:'wlad'} -> 200, voice_id 'Voice6717536d1788310928', audio_url beginnt mit 'data:audio/mpeg;base64,', bytes > 5000 (~30 s Laufzeit); zweiter identischer Aufruf -> cached=true, gleiche voice_id. KEINE kostenpflichtigen Fal-Generierungsjobs ausgelöst. FRONTEND: /login (nicht eingeloggt, Cookie-Banner weggeklickt, 1920x800): 'login-teaser' sichtbar in der linken Brand-Spalte (x=80, innerhalb der linken Hälfte), 'login-teaser-video' ist ein <video> mit src .../api/guide/media/<token>/video, muted=true, autoplay+loop+playsInline, poster-Attribut gesetzt (Keyframe-URL); der bisherige Produkt-Loop wird NICHT zusätzlich gerendert (product-preview-loop count = 0). Klick auf 'login-teaser-sound' -> video.muted = false und 'login-teaser-sound-text' wechselt von 'Mit Ton abspielen' zu 'Ton aus'. Guide Studio (Admin-Login test@test.com -> /wlad-control-x7k9q2): Karte 'guide-clip-toggle-start-1-willkommen' aufklappbar, 'guide-shots-start-1-willkommen' sichtbar mit 4 Zeilen s1..s4, alle Status-Labels 'gerendert'; s1 Keyframe-Thumbnail vorhanden; s2/s4 Textarea + Wörterzähler ('20 Wörter · max 26 (≈ 9 s)'); s3 Screen-Chips dashboard/chat/video/challenge aktiv (lime #BFFF00), simulations inaktiv; Buttons: plan enabled 'Shots neu planen', save disabled, keyframes disabled 'Keyframes (0 × 0.04 $)', render enabled 'Film rendern (~0.00 $)'; Video-Preview 'guide-clip-video-preview-start-1-willkommen' vorhanden. Dirty-Test: ein Wort in s2-Textarea ergänzt -> save wird enabled, render wird disabled; danach Reload OHNE Speichern; anschließender Backend-Re-Run (35 Cases) bestätigt: keine Änderung persistiert. Light-Mode-Kontrast-Audit im Shots-Bereich: 0 Elemente unter 4.0:1. Keine JS-Fehler außer 2 vorbestehenden 401-Resource-Fehlern (unauthenticated Probe, auch auf /login ohne Teaser vorhanden).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Admin Guide Studio — Teaser-Karte 'Teaser: Ins Licht'",
+        "issues": [
+          "Grosse leere Fläche (~140 px) unterhalb des Audio-Players: die rechte Medien-Spalte (Video-Player + Keyframe-Bild untereinander) ist deutlich höher als die linke Inhalts-Spalte, dadurch entsteht ein sichtbares Loch in der Karte. Nur kosmetisch (items-start / auto-rows), Iter-143-Layout, nicht Iter-144-Regression."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter144_multishot.py",
+    "/app/test_reports/pytest/iter144_final.xml",
+    "/app/test_reports/pytest/iter144_voice.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/guide.py save_shots(): Validierung ist korrekt nebenwirkungsfrei (Mutation nur auf der lokalen by_id-Kopie, DB-Write erst nach der Schleife) — bitte beim Refactoring nicht auf _patch_shot-pro-Item umstellen, sonst würden Teil-Updates bei einem späteren 400 persistiert.",
+    "routes/guide.py: Das Talk-Shot-Wortlimit 26 ist als Magic Number im Endpoint hartkodiert, während SCRIPT_MIN_WORDS/TALK_MAX_SECONDS aus guide_content kommen — als TALK_MAX_WORDS nach guide_content.py ziehen, damit Backend-Limit und der Frontend-Zähler in GuideShotList.js (ebenfalls hartkodierte 26) nicht auseinanderlaufen.",
+    "routes/guide.py ist 938 Zeilen (>700) — Multi-Shot-Jobs (_job_shot_keyframes/_job_render/_tts_fitting) und die Admin-Produktions-Endpunkte liessen sich in routes/guide_jobs.py bzw. services_guide_jobs.py auslagern.",
+    "_job_render() lädt B-Roll-PNGs via BROLL_DIR.read_bytes() synchron im Event-Loop (Zeile ~714) statt via asyncio.to_thread wie alle anderen IO-Calls — bei 4 Screens unkritisch, aber inkonsistent.",
+    "LoginBrandPanel.js: hasTeaser startet false, dadurch wird ProductPreviewLoop für ~200-400 ms gerendert bevor der Teaser-Fetch antwortet (kurzer Layout-Flash). Optional hasTeaser als null-Tri-State initialisieren und bis zur Antwort keinen der beiden rendern."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter144_multishot.py"
+  ],
+  "success_rate": {
+    "backend": "100% (38/38)",
+    "frontend": "100% (alle geforderten Checks bestanden)"
+  },
+  "seed_data_creation": "Keine. Es wurden keine Daten angelegt oder verändert — alle Schreib-Requests waren Negativfälle (400/401/403/404) plus ein idempotenter PUT mit identischen s3-Screens.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Admin test@test.com/test123, Free free@wladbot.test/test123 (aus /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Iter 144 ist vollständig grün — nicht wiederholen. Regression-Suite: pytest /app/backend/tests/test_iter144_multishot.py (Marker -k 'not Voice' spart den ~30 s TTS-Call; der TTS-Case kostet Cent-Betrag). WICHTIG: /api/guide/admin/clips/*/plan, /shot-keyframes, /render, /keyframe, /cinematic, /voice, /video, /voice-clone lösen echte Fal.ai-Kosten aus — nur die 400-Guard-Negativfälle auf 'start-2-so-sprichst-du' verwenden. UMGEBUNGS-LIMIT: Das headless Chromium in dieser Umgebung hat keine H.264/avc1-Unterstützung — jedes <video> aus /api/guide/media/... liefert MediaError code 4 (readyState 0, currentTime bleibt 0). Tatsächliche Wiedergabe/Autoplay ist headless NICHT verifizierbar; MP4 ist per Download geprüft (1,4 MB, ftypisom/avc1, korrekte 206-Ranges). Nicht als App-Bug melden — nur src/muted/poster/loop-Attribute prüfen. Die 2 401-Console-Errors auf /login und im Admin-Panel sind vorbestehend (unauthenticated Probe-Request), kein Iter-144-Thema.",
+  "rca_of_the_issue": "Kein Defekt gefunden. Der einzige auffällige Befund (Teaser-Video spielt im Test-Browser nicht, MediaError 4) ist eine Codec-Limitierung des headless Chromium (kein H.264), nicht der Anwendung: das ausgelieferte MP4 ist ein valides ftypisom/avc1-File, wird mit korrektem Content-Type video/mp4 sowie korrekten 206-Range-Antworten (Content-Range, exakt 1024 Bytes) serviert, und das <video>-Element trägt src/poster/muted/autoplay/loop wie spezifiziert."
+}

@@ -9,6 +9,8 @@ Strategy:
 """
 from __future__ import annotations
 import os
+import asyncio as _asyncio
+import time
 import base64
 import hashlib
 import tempfile
@@ -20,9 +22,10 @@ from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
 from pydantic import BaseModel, Field
 
 from config import db, logger, EMERGENT_LLM_KEY
-from services import get_current_user, get_user_memory, WLAD_HARD_RULES
+from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT
 from services_actions import record_user_action
 from routes.admin import require_admin
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api/voice", tags=["voice"])
 
@@ -53,11 +56,22 @@ def _reset_client() -> None:
 # Voice IDs from ElevenLabs public library — curated to match each persona's tone.
 # Users can later override these per-persona via admin endpoint (future feature).
 VOICE_REGISTRY: dict[str, dict] = {
-    # Motivational German coach (the heart of the app)
+    # Motivational German coach (the heart of the app).
+    # Iter 92.23 (Mert: "Brian klingt zu hoch — standard AI voice, etwas tiefer"):
+    #   Default umgestellt auf "Adam" — deep, neutral, classic ElevenLabs
+    #   default voice. Klingt erkennbar als AI (genau was Mert will), aber
+    #   nicht piepsig. Stability auf 0.55 für mehr Natürlichkeit, style 0.30
+    #   damit Wlad nicht überdramatisch klingt.
+    #   Override via env `ELEVENLABS_WLAD_VOICE_ID=<id>` möglich.
     "wlad": {
-        "voice_id": "pNInz6obpgDQGcFmaJgB",  # "Adam" — deep, confident male
+        # Iter 174: Echtzeit = ElevenLabs-Klon (Flash, ~0,6 s). Minimax (Fal-Queue 20–50 s) nur noch,
+        # wenn WLAD_REALTIME_VOICE=minimax gesetzt ist (Videos im Guide Studio nutzen Minimax weiterhin direkt).
+        "voice_id": (os.environ.get("MINIMAX_WLAD_VOICE_ID") if os.environ.get("WLAD_REALTIME_VOICE") == "minimax" else None)
+                    or os.environ.get("ELEVENLABS_WLAD_VOICE_ID", "MHoXREP5Nx4gAbr3JhBr"),
+        "provider": "minimax" if os.environ.get("WLAD_REALTIME_VOICE") == "minimax" and os.environ.get("MINIMAX_WLAD_VOICE_ID") else "elevenlabs",
+        "realtime": True,
         "name": "Wlad Jachtchenko",
-        "stability": 0.55, "similarity_boost": 0.75, "style": 0.40,
+        "stability": 0.72, "similarity_boost": 0.80, "style": 0.12,
         "language": "de",
     },
     # 8 Challengers
@@ -82,7 +96,7 @@ VOICE_REGISTRY: dict[str, dict] = {
         "name": "Richard Branson", "stability": 0.50, "similarity_boost": 0.75, "style": 0.55, "language": "de",
     },
     "sandberg": {
-        "voice_id": "EXAVITQu4vr4xnSDxMaL",  # "Sarah" — German business professional female
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",  # "Sarah" — mature, reassuring, confident female
         "name": "Sheryl Sandberg", "stability": 0.60, "similarity_boost": 0.75, "style": 0.35, "language": "de",
     },
     "page": {
@@ -96,21 +110,80 @@ VOICE_REGISTRY: dict[str, dict] = {
 }
 
 MODEL_ID = "eleven_multilingual_v2"  # supports both DE + EN
+# Echtzeit-Modell für den Audio-Mode: Flash v2.5 liefert Deutsch in ~0,5 s (multilingual_v2: ~3 s).
+REALTIME_MODEL_ID = os.environ.get("ELEVENLABS_REALTIME_MODEL", "eleven_flash_v2_5")
+FALLBACK_VOICE_ID = os.environ.get("ELEVENLABS_FALLBACK_VOICE_ID", "pNInz6obpgDQGcFmaJgB")  # "Adam" — Standardstimme, immer verfügbar
+MAX_TEXT_LENGTH = 800  # ~60s of audio — enough for intros/quotes, protects cost
 
-# Fallback voice config used when a voice_id is no longer available on ElevenLabs
-DEFAULT_VOICE_CONFIG = {
-    "voice_id": "EXAVITQu4vr4xnSDxMaL",  # "Sarah" — reliable default
-    "stability": 0.55, "similarity_boost": 0.75, "style": 0.35, "language": "de",
+
+# ── Sparring-Personas (Iter 124.2 — Multi-Persona Voice-Sparring) ────────────
+# Each maps a sparring counterparty to a real ElevenLabs voice + attitude.
+# Voice IDs reuse the celebrity registry above so we don't burn extra slots.
+SPARRING_PERSONAS: dict[str, dict] = {
+    "cfo": {
+        "label": "CFO / Finanz-Chef",
+        "hint": "Zahlen · ROI · kalt · misstrauisch",
+        "voice_id": "JBFqnCBsd6RMkjVDRZzb",  # George — authoritative male
+        "stability": 0.62, "similarity_boost": 0.78, "style": 0.30,
+        "attitude": (
+            "Du BIST der CFO. Denke in Zahlen, ROI, Cashflow, Risiko. "
+            "Kurze, harte Sätze. Kein Fluff, keine Emotion. Wenn er "
+            "Zahlen bringt, greifst du sie an ('woher weißt du das?', "
+            "'was wenn es 20% weniger wird?'). Wenn er Emotion bringt, "
+            "sagst du 'das ist kein Argument'."
+        ),
+    },
+    "board": {
+        "label": "Board / Vorstand",
+        "hint": "Strategisch · gemessen · staatsmännisch",
+        "voice_id": "TX3LPaxmHKxFdv7VOQHJ",  # Liam — calm, commanding
+        "stability": 0.65, "similarity_boost": 0.75, "style": 0.28,
+        "attitude": (
+            "Du BIST ein skeptisches Board-Mitglied. Denke strategisch, "
+            "langfristig. Frage nach Wettbewerb, Skalierbarkeit, "
+            "Risiko-Adjusted-Return. Höflich aber unbeeindruckt. Ton: "
+            "gemessen, staatsmännisch, gefährlich ruhig."
+        ),
+    },
+    "customer": {
+        "label": "Verärgerter Kunde",
+        "hint": "Emotional · direkt · ungeduldig",
+        "voice_id": "VR6AewLTigWG4xSOukaG",  # Arnold — energetic, sharp
+        "stability": 0.42, "similarity_boost": 0.72, "style": 0.55,
+        "attitude": (
+            "Du BIST ein verärgerter Key-Account-Kunde. Du bist frustriert, "
+            "hast bereits eskaliert, denkst über Kündigung nach. Direkt, "
+            "emotional, ungeduldig. Unterbrich ruhig. Fokus: 'Was macht "
+            "ihr JETZT dagegen?'. Kein Small-Talk-Mode."
+        ),
+    },
+    "boss": {
+        "label": "Chef / Vorgesetzter",
+        "hint": "Zeitknapp · pragmatisch · leicht skeptisch",
+        "voice_id": "onwK4e9ZLuTAKqWW03F9",  # Daniel — precise, nerdy
+        "stability": 0.55, "similarity_boost": 0.78, "style": 0.35,
+        "attitude": (
+            "Du BIST sein direkter Vorgesetzter. Du magst ihn, aber du "
+            "trägst Verantwortung nach oben. Zeitknapp, pragmatisch. "
+            "Fragst 'wie viel Aufwand?', 'wer macht das?', 'wann ist "
+            "das durch?'. Skeptisch bei allem was mehr Arbeit für dich "
+            "bedeutet."
+        ),
+    },
+    "team": {
+        "label": "Team-Mitglied",
+        "hint": "Enttäuscht · verletzlich · sucht Warum",
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",  # Bella — warm female
+        "stability": 0.60, "similarity_boost": 0.80, "style": 0.42,
+        "attitude": (
+            "Du BIST ein Team-Mitglied das enttäuscht/verunsichert ist. "
+            "Emotional, ehrlich, verletzlich aber nicht schwach. Willst "
+            "verstehen warum. Fragst nach dem Warum, nicht nach dem Wie. "
+            "Wenn er nur Fakten bringt, sagst du 'das beantwortet mein "
+            "Gefühl nicht'."
+        ),
+    },
 }
-# Voice reply ceiling. ~6000 chars ≈ 1000 German words ≈ 6 minutes of audio at
-# the ElevenLabs Multi-Lingual v2 default rate. The /tts endpoint accepts up to
-# this cap, and the /conversation reply gets trimmed at the same limit so we
-# never silently overflow ElevenLabs' per-request cap. Was 800 chars (~120
-# words ~60s of audio) which made it impossible for WladBot to deliver
-# substantive answers — voice replies were forced into one-liner generic
-# coaching language. Bumped during Wlad's live PLUS walkthrough so voice mode
-# can actually carry the same Wlad-corpus weight as text chat.
-MAX_TEXT_LENGTH = 6000
 
 
 class TTSRequest(BaseModel):
@@ -146,8 +219,38 @@ async def _save_cached_audio(cache_key: str, persona: str, text: str, voice_id: 
     )
 
 
+def _normalize_wlad_name(text: str) -> str:
+    """Marken-Namen korrigieren (eine Quelle: `services_speech_text.fix_brand_names`).
+
+    Wirkt auf TTS-Eingaben, Transkripte und alles, was zurück ans Frontend geht:
+    „Vlad", „Vladimir", „Wladimir", „Flat" → „Wlad"; „Vlad Bot" → „WladBot".
+    """
+    from services_speech_text import fix_brand_names
+    return fix_brand_names(text)
+
+
+REALTIME_CLONE_BUDGET_S = int(os.environ.get("VOICE_CLONE_BUDGET_S", "6"))
+
+
 def _synthesize(text: str, voice_config: dict) -> bytes:
     """Blocking synthesis — returns raw MP3 bytes. Run inside run_in_threadpool."""
+    from services_speech_text import to_speakable
+
+    # Iter 180: Aussprache-Schicht („im" → „imm", „Lade" deutsch, Abkürzungen buchstabiert).
+    text = to_speakable(_normalize_wlad_name(text))
+    if voice_config.get("provider") == "minimax":
+        from services_fal import FalError, synthesize_speech
+
+        try:
+            # Echtzeit-Budget: Fal-Queue braucht oft 20–50 s → nach kurzem Warten sofort ElevenLabs,
+            # damit die Antwort im Audio-Mode unter dem Frontend-Timeout bleibt.
+            audio, _ = synthesize_speech(text, voice_config["voice_id"], fast=True,
+                                         timeout_seconds=voice_config.get("tts_timeout") or REALTIME_CLONE_BUDGET_S)
+            return audio
+        except FalError as e:
+            # Fal-Queue überlastet/ausgefallen -> ElevenLabs-Standardstimme statt Fehler beim Nutzer
+            logger.warning("Minimax-Klon nicht verfügbar (%s) — Fallback auf ElevenLabs %s", e, FALLBACK_VOICE_ID)
+            voice_config = {**voice_config, "voice_id": FALLBACK_VOICE_ID}
     client = _get_client()
     try:
         from elevenlabs import VoiceSettings
@@ -159,14 +262,26 @@ def _synthesize(text: str, voice_config: dict) -> bytes:
         style=voice_config.get("style", 0.0),
         use_speaker_boost=True,
     )
-    stream = client.text_to_speech.convert(
-        text=text,
-        voice_id=voice_config["voice_id"],
-        model_id=MODEL_ID,
-        voice_settings=settings,
-        output_format="mp3_44100_128",
-    )
-    return b"".join(chunk for chunk in stream)
+    realtime = bool(voice_config.get("realtime"))
+
+    def _convert(voice_id: str) -> bytes:
+        stream = client.text_to_speech.convert(
+            text=text,
+            voice_id=voice_id,
+            model_id=REALTIME_MODEL_ID if realtime else MODEL_ID,
+            voice_settings=settings,
+            output_format="mp3_44100_64" if realtime else "mp3_44100_128",
+        )
+        return b"".join(chunk for chunk in stream)
+
+    try:
+        return _convert(voice_config["voice_id"])
+    except Exception as e:
+        if voice_config["voice_id"] == FALLBACK_VOICE_ID:
+            raise
+        # Klon nicht verfügbar (z. B. Plan abgelaufen → 403) → Standardstimme statt Fehler
+        logger.warning("ElevenLabs-Stimme %s nicht verfügbar (%s) — Fallback auf %s", voice_config["voice_id"], str(e)[:160], FALLBACK_VOICE_ID)
+        return _convert(FALLBACK_VOICE_ID)
 
 
 # ── Endpoints ───────────────────────────────────────────────────────────────
@@ -209,37 +324,54 @@ async def text_to_speech(data: TTSRequest, request: Request) -> dict:
             "voice_id": voice_config["voice_id"],
         }
 
-    # 2. Synthesize
+    # 2. Synthesize — graceful degrade: quota/rate/voice errors return empty
+    #    audio_url instead of 502 (mirrors /voice/conversation behaviour).
     audio_bytes: bytes = b""  # pre-init to satisfy strict static analysis
     try:
         from fastapi.concurrency import run_in_threadpool
         audio_bytes = await run_in_threadpool(_synthesize, text, voice_config)
-    except HTTPException:
-        raise
     except Exception as e:
-        err_msg = str(e).lower()
+        err_msg = str(e)
+        low = err_msg.lower()
+        # Iter 135 (Audit): short, honest reason instead of a raw SDK header dump.
+        if "invalid_api_key" in low or "api key id used as api key" in low:
+            reason = "elevenlabs_invalid_api_key"
+        elif "subscription_required" in low or "only_for_creator" in low or "creator tier" in low:
+            # Wlads Stimme ist ein Professional Voice Clone → ElevenLabs verlangt
+            # dafür mindestens den Creator-Tarif.
+            reason = "elevenlabs_plan_too_low_for_professional_voice"
+        elif "missing_permissions" in low or "user_read" in low:
+            reason = "elevenlabs_key_missing_permissions"
+        elif "quota" in low or "429" in low:
+            reason = "elevenlabs_quota_or_rate_limit"
+        elif "401" in low or "unauthorized" in low:
+            reason = "elevenlabs_unauthorized"
+        else:
+            reason = "elevenlabs_unavailable"
+
         # On 401 Unauthorized from ElevenLabs, drop cached client so next request
         # re-reads ELEVENLABS_API_KEY (handles rotation without pod restart).
-        if "401" in err_msg or "unauthorized" in err_msg or "invalid_api_key" in err_msg:
+        if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             logger.warning(f"ElevenLabs 401 — resetting client for next request: {e}")
             _reset_client()
-            raise HTTPException(status_code=502, detail="Voice service authentication failed — key may have rotated")
-        # Fallback to default voice when a voice_id has been removed from ElevenLabs
-        if "voice_not_found" in err_msg or "was not found" in err_msg:
-            logger.warning(f"Voice {voice_config['voice_id']} not found — falling back to default: {e}")
-            try:
-                audio_bytes = await run_in_threadpool(_synthesize, text, DEFAULT_VOICE_CONFIG)
-            except Exception as fallback_err:
-                logger.error(f"Default voice fallback also failed: {fallback_err}")
-                raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {fallback_err}")
         else:
-            logger.error(f"ElevenLabs synthesis failed: {e}")
-            raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {e}")
+            logger.warning(f"ElevenLabs synthesis unavailable — returning empty audio: {e}")
+        return {
+            "audio_url": "",
+            "cached": False,
+            "persona": persona_key,
+            "voice_id": voice_config["voice_id"],
+            # Iter 135 (Audit): never a silent failure. The caller (and Ops)
+            # must be able to see WHY there is no audio.
+            "error": reason,
+        }
 
     audio_b64 = base64.b64encode(audio_bytes).decode("ascii")
 
-    # 3. Cache (only if under 250 KB — prevents collection bloat)
-    if len(audio_b64) < 250_000:
+    # 3. Cache (only if under 250 KB — prevents collection bloat).
+    #    Iter 141 (Code Review): leeres Audio NIE cachen, sonst bleibt diese
+    #    Text+Voice-Kombination dauerhaft stumm.
+    if audio_bytes and len(audio_b64) < 250_000:
         try:
             await _save_cached_audio(cache_key, persona_key, text, voice_config["voice_id"], audio_b64)
         except Exception as e:
@@ -262,7 +394,7 @@ async def clear_voice_cache(request: Request, persona: Optional[str] = None) -> 
     cached audio is cleared — useful after changing just one voice_id mapping).
     Without the query param, the entire cache is wiped.
     """
-    await require_admin(request)  # honours ADMIN_EMAILS whitelist + is_admin flag
+    await require_admin(request)  # trusted is_admin DB flag only
 
     query: dict = {}
     if persona:
@@ -282,42 +414,25 @@ async def clear_voice_cache(request: Request, persona: Optional[str] = None) -> 
 # ── Audio-Mode: Conversational Voice Endpoint ───────────────────────────────
 # ChatGPT/Claude-style voice mode: audio-in → transcript → LLM → audio-out.
 
-VOICE_CONVO_SYSTEM_PROMPT = """Du bist WladBot — ein deutschsprachiger Leadership-Coach im LIVE-VOICE-MODUS.
+VOICE_STYLE_BLOCK = """
 
-WICHTIG für Voice:
-- Antworte natürlich gesprochen, wie in einem echten Gespräch.
-- ANTWORTLÄNGE: passe an Themen-Komplexität an. Smalltalk: 1-2 Sätze. Eine konkrete
-  Leadership-Frage: 3-5 Sätze. Tiefe Wlad-Framework-Erklärung (z.B. SEXIER-Modell mit
-  Beispiel, oder schwieriges-Gespräch-Strategie): bis zu ~1000 Wörter wenn das
-  Thema es verlangt. Lieber substanziell und wertvoll als künstlich kurz.
-- Kein JSON, keine Listen mit Bullets, keine Aufzählungspunkte, keine Überschriften.
-- Keine Markdown-Formatierung, keine Sterne, keine Klammern.
-- Stelle gerne Rückfragen, halte den Dialog am Leben.
-- Sprich Deutsch, sei direkt, warm, charismatisch — wie Wlad Jachtchenko persönlich.
-- Wenn der User unklar spricht, frage präzise nach.
+--- LIVE-VOICE-MODUS: NUR DIE FORM ÄNDERT SICH, NICHT DIE QUALITÄT ---
+Dein Wissen, deine Frameworks und deine Genauigkeit sind im Sprechen IDENTISCH zum Schreiben.
+Du kürzt nur die Form — du vereinfachst NICHT den Inhalt.
+- Antworte natürlich gesprochen, 2–4 Sätze (60–110 Wörter), niemals länger.
+- Kein JSON, keine Listen, keine Aufzählungspunkte, keine Überschriften, keine Markdown-Zeichen.
+- Wenn du ein Framework anwendest, nenne es beim Namen (z. B. Feedbackformel, 3 Säulen der Überzeugung)
+  und gib EINEN konkreten Satz, den der Nutzer morgen wörtlich sagen kann.
+- Stelle am Ende höchstens eine kurze Rückfrage, wenn es das Gespräch weiterbringt.
+- Keine erfundenen Zahlen, Buchtitel, Studien oder Zitate. Wenn du etwas nicht weißt: sag es in einem Satz.
+- Wenn der Nutzer unklar spricht (Spracherkennung), frage präzise nach, statt zu raten.
 
-VOICE-SPEZIFISCHE FRAMEWORK-REGEL (NICHT VERHANDELBAR):
-In JEDER substanziellen Antwort MUSST du mindestens EIN konkretes Wlad-Framework
-beim Namen nennen UND erklären. Wlads Originalbezeichnungen (siehe
-docs/gtm/WLAD_CANON.md als Wahrheits-Quelle):
-- SEXIER-Modell aus "Weiße Rhetorik" — sechs Schritte:
-  Statement (Behauptung) / Explanation (Begründung) / eXample (Beispiel) /
-  Impact (Auswirkung) / Explanation of Impact (Erklärung der Auswirkung) /
-  Rebuttal (Widerlegung der Gegenargumente). R steht für Rebuttal, NICHT
-  für "Repeat". SEXIER ist Level 4 der 5 Argumentations-Levels.
-- 10 Stufen des Zuhörens (NICHT "5 Ebenen", NICHT "7 Stufen") — Stufe 1
-  nicht zuhören → Stufe 10 Stille als Zuhören.
-- 5 Rollen einer Führungskraft: Kommunikator / Manager / Team-Leader /
-  Psychologe / Problemlöser.
-- 3 Säulen der Überzeugung: Logos / Ethos / Pathos.
-- Feedbackformel: Beobachtung + Wirkung + Wunsch.
-- Kommunikationsquadrant · 4-Farben-Modell · Eisenhower-Matrix · ALPEN-Methode ·
-  Pareto-Prinzip · Dunkle Rhetorik Defense · Schlagfertigkeitstechnik Nr. X.
+NAMENSREGEL — STRIKT: Sein Name wird IMMER „Wlad" geschrieben (mit W), niemals „Vlad",
+niemals „Vladimir", niemals „Wladimir". Das Produkt heißt „Wladbot".
+"""
 
-Bei längeren Antworten: erkläre das Framework wie Wlad in seinen Trainings —
-mit konkretem Beispiel aus dem Business-Alltag. Gespräch flowig halten,
-aber substanziell. Wlad's Material ist tief — nutze die Tiefe.
-""" + WLAD_HARD_RULES
+# Alt-Name bleibt als Alias erhalten (wird an mehreren Stellen importiert).
+VOICE_CONVO_SYSTEM_PROMPT = WLADBOT_SYSTEM_PROMPT + VOICE_STYLE_BLOCK
 
 
 class VoiceConvoResponse(BaseModel):
@@ -326,19 +441,26 @@ class VoiceConvoResponse(BaseModel):
     response_text: str
     audio_url: str
     persona: str
+    timings: dict[str, int] = {}
 
 
 async def _transcribe_webm(audio_bytes: bytes) -> str:
-    """Whisper transcription. Auto-detects language but biases to DE."""
-    from lib.llm_provider import OpenAISpeechToText
+    """Whisper transcription. Auto-detects language but biases to DE.
+
+    Iter 183: Eigennamen werden Whisper vorab genannt (`prompt`) und danach zur
+    Sicherheit korrigiert — „Bei Vlad gibt es …" darf nirgends erscheinen.
+    """
+    from emergentintegrations.llm.openai import OpenAISpeechToText
+    from services_speech_text import SPEECH_NAME_HINT, fix_brand_names
     stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
     with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
         tmp.write(audio_bytes)
         tmp_path = tmp.name
     try:
         with open(tmp_path, "rb") as f:
-            response = await stt.transcribe(file=f, model="whisper-1", response_format="json", language="de")
-        return (response.text or "").strip()
+            response = await stt.transcribe(file=f, model="whisper-1", response_format="json",
+                                            language="de", prompt=SPEECH_NAME_HINT)
+        return fix_brand_names((response.text or "").strip())
     finally:
         try:
             os.unlink(tmp_path)
@@ -349,36 +471,73 @@ async def _transcribe_webm(audio_bytes: bytes) -> str:
 async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_memory: str) -> str:
     """Generate a short conversational reply for voice mode.
 
-    Iter 92.19: Voice mode now grounds its replies in Wlad's corpus exactly the
-    same way the text-chat path (/api/chat) does — `retrieve_context(transcript)`
-    pulls the top-K chunks and we append them to the system prompt before
-    handing off to the LLM. Without this, voice replies were stock GPT-style
-    coaching language that never cited Wlad's frameworks. Now Wlad's Killerphrasen,
-    3 Säulen, Kommunikationsquadrant, etc. surface in voice answers too.
-    """
-    # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-    from lib.llm_provider import LlmChat, UserMessage
+    Iter 92.20 (Mert): RAG-Injection + faster model + parallel context fetch
+    to keep total voice latency under the Cloudflare 30s edge timeout.
 
-    history = await db.chat_messages.find(
-        {"session_id": session_id}, {"_id": 0, "role": 1, "content": 1}
-    ).sort("created_at", 1).to_list(20)
+    Pipeline (~6-12s total):
+      - parallel: history fetch | RAG retrieve (local embed + Mongo top-K)
+      - gpt-4o-mini for the LLM step (2-3s vs gpt-5.2's 15-25s)
+      - Wlad's frameworks still grounded via RAG context block
+    """
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+
+    async def _fetch_history():
+        return await db.chat_messages.find(
+            {"session_id": session_id}, {"_id": 0, "role": 1, "content": 1}
+        ).sort("created_at", 1).to_list(20)
+
+    async def _fetch_rag():
+        try:
+            from services_rag import retrieve_context
+            return await retrieve_context(transcript)
+        except Exception as e:
+            logger.warning(f"Voice RAG failed (proceeding without): {e}")
+            return {"rag_active": False, "context_block": "", "chunks_count": 0}
+
+    history, rag_ctx = await _asyncio.gather(_fetch_history(), _fetch_rag())
 
     memory_block = f"\n\n--- USER MEMORY ---\n{user_memory}\n---" if user_memory else ""
-    system_msg = VOICE_CONVO_SYSTEM_PROMPT + memory_block
+    rag_block = ""
+    if rag_ctx.get("rag_active") and rag_ctx.get("context_block"):
+        rag_block = "\n\n" + rag_ctx["context_block"]
+        logger.info("Voice RAG: %d chunks injected", rag_ctx.get("chunks_count", 0))
 
-    # RAG: ground the voice reply in Wlad's corpus. Best-effort — falls back to
-    # the bare system prompt if Voyage/Supabase are unreachable.
+    # Iter 121: framework-aware Boost. Wenn der Nutzer per Voice ein Wlad-
+    # Framework anspricht (auch phonetisch verballhornt — "sexier" → SEXIER),
+    # geben wir dem LLM einen expliziten Hinweis, welches Framework der
+    # Nutzer WAHRSCHEINLICH meint.
+    framework_block = ""
     try:
-        from services_rag import retrieve_context
-        rag_ctx = await retrieve_context(transcript)
-        if rag_ctx.get("rag_active"):
-            system_msg = system_msg + rag_ctx["context_block"]
-            logger.info("Voice mode RAG: %d chunks injected", rag_ctx["chunks_count"])
+        from voice_framework_map import match_frameworks
+        matches = match_frameworks(transcript)
+        if matches:
+            names = ", ".join(f"{m['framework']} ({m['pillar']})" for m in matches)
+            framework_block = (
+                f"\n\n--- FRAMEWORK-KONTEXT (Voice-Match) ---\n"
+                f"Der User hat vermutlich diese Wlad-Frameworks erwähnt (auch bei "
+                f"unklarer Aussprache): {names}.\n"
+                f"Beziehe deine Antwort explizit auf dieses Framework und nenne "
+                f"es beim Namen.\n---"
+            )
     except Exception as e:
-        logger.warning(f"Voice RAG fetch failed (proceeding without): {e}")
+        logger.warning(f"Voice framework map skipped: {e}")
+
+    system_msg = VOICE_CONVO_SYSTEM_PROMPT + rag_block + framework_block + memory_block
+
+    # Iter 183: Verbindliche Definitionen (SEXIER & Co.) — identisch zum Text-Modus.
+    # Vorher hat das Modell im Sprechen E und X vertauscht und ein „Explore" erfunden.
+    try:
+        from wlad_canon import canon_block
+        system_msg += canon_block(transcript)
+    except Exception as e:
+        logger.warning(f"Canon block skipped: {e}")
 
     chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"voicemode_{session_id}", system_message=system_msg)
-    chat.with_model("openai", "gpt-5.2")
+    # gpt-4o-mini = ~10x schneller als gpt-5.2 für 2-3 Satz-Voice-Antworten.
+    # RAG-Block grounded ihn auf Wlads Frameworks → Qualität bleibt hoch.
+    # Voice quality (Tester-Feedback Iter 115): gpt-4o statt gpt-4o-mini —
+    # deutlich bessere Antworten, immer noch schnell genug für Voice (~3-5s).
+    chat.with_model("openai", "gpt-4o")
 
     # Build short context — only last 6 turns to keep TTS latency low
     ctx_lines = []
@@ -393,7 +552,8 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     prompt = f"{ctx}\nUser: {transcript}\nCoach:" if ctx else transcript
 
     reply = await chat.send_message(UserMessage(text=prompt))
-    return (reply or "").strip()
+    from services_speech_text import fix_brand_names, to_plain_speech
+    return to_plain_speech(fix_brand_names((reply or "").strip()))
 
 
 async def _ensure_voice_session(session_id: Optional[str], user_id: str, transcript: str) -> str:
@@ -404,7 +564,7 @@ async def _ensure_voice_session(session_id: Optional[str], user_id: str, transcr
     now = datetime.now(timezone.utc).isoformat()
     await db.chat_sessions.insert_one({
         "session_id": new_id, "user_id": user_id,
-        "title": transcript[:50], "agent": None, "mode": "voice",
+        "title": transcript[:50].strip() or "Sprach-Gespräch", "agent": None, "mode": "voice",
         "created_at": now, "updated_at": now,
     })
     return new_id
@@ -424,6 +584,9 @@ def _cap_reply_length(text: str) -> str:
     """Trim reply to TTS-safe length on a word boundary."""
     if not text:
         return "Sag das nochmal — habe ich nicht ganz verstanden."
+    # Iter 184: Rohzeichen (\n, \u201e) würden sonst vorgelesen werden.
+    from services_text_clean import unescape_text, unwrap_json_string
+    text = unescape_text(unwrap_json_string(text)).strip()
     if len(text) > MAX_TEXT_LENGTH:
         return text[:MAX_TEXT_LENGTH].rsplit(" ", 1)[0] + "."
     return text
@@ -439,24 +602,13 @@ async def _synthesize_or_cached(reply_text: str, persona_key: str, voice_config:
         from fastapi.concurrency import run_in_threadpool
         audio_bytes_out = await run_in_threadpool(_synthesize, reply_text, voice_config)
     except Exception as e:
-        err_msg = str(e).lower()
-        if "401" in err_msg or "unauthorized" in err_msg or "invalid_api_key" in err_msg:
+        err_msg = str(e)
+        if "401" in err_msg or "Unauthorized" in err_msg or "invalid_api_key" in err_msg.lower():
             _reset_client()
-            logger.error(f"Voice TTS failed: {e}")
-            raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {e}")
-        # Fallback to default voice when a voice_id has been removed from ElevenLabs
-        if "voice_not_found" in err_msg or "was not found" in err_msg:
-            logger.warning(f"Voice {voice_config['voice_id']} not found — falling back to default: {e}")
-            try:
-                audio_bytes_out = await run_in_threadpool(_synthesize, reply_text, DEFAULT_VOICE_CONFIG)
-            except Exception as fallback_err:
-                logger.error(f"Default voice fallback also failed: {fallback_err}")
-                raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {fallback_err}")
-        else:
-            logger.error(f"Voice TTS failed: {e}")
-            raise HTTPException(status_code=502, detail=f"Voice synthesis failed: {e}")
+        logger.error(f"Voice TTS failed: {e}")
+        raise await ai_http_error(e, "voice_tts")
     audio_b64 = base64.b64encode(audio_bytes_out).decode("ascii")
-    if len(audio_b64) < 250_000:
+    if audio_bytes_out and len(audio_b64) < 250_000:
         try:
             await _save_cached_audio(cache_key, persona_key, reply_text, voice_config["voice_id"], audio_b64)
         except Exception as e:
@@ -476,7 +628,7 @@ async def voice_conversation(
     Pipeline: Whisper STT → GPT-5.2 short reply → ElevenLabs TTS → persist turns.
     Credit is deducted only after a valid transcript exists.
     """
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     persona_key = persona.lower()
@@ -488,42 +640,78 @@ async def voice_conversation(
     if not audio_bytes:
         raise HTTPException(status_code=400, detail="Empty audio")
 
-    # 1. Transcribe BEFORE deducting credit (no credit burn on bad audio)
+    timings: dict[str, int] = {}
+    t0 = time.monotonic()
+
+    def _mark(key: str) -> None:
+        nonlocal t0
+        now = time.monotonic()
+        timings[key] = int((now - t0) * 1000)
+        t0 = now
+
+    # 1. Transcribe BEFORE deducting credit (no credit burn on bad audio) — Gedächtnis parallel laden
+    memory_task = _asyncio.create_task(get_user_memory(user["user_id"]))
     try:
         transcript = await _transcribe_webm(audio_bytes)
     except Exception as e:
+        memory_task.cancel()
         logger.error(f"Voice transcription failed: {e}")
-        raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")
+        raise await ai_http_error(e, "voice_transcribe")
+    _mark("stt_ms")
     if not transcript:
+        memory_task.cancel()
         raise HTTPException(status_code=400, detail="empty_transcript")
 
     # 2. Charge credit
     credit_result = await check_and_deduct_credit(user, "chat")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        memory_task.cancel()
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
 
     # 3. Session + user turn
     session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
     await _persist_voice_turn(session_id, user["user_id"], "user", transcript)
 
     # 4. LLM reply
-    user_memory = await get_user_memory(user["user_id"])
+    try:
+        user_memory = await memory_task
+    except Exception as e:
+        logger.warning(f"Voice memory failed (proceeding without): {e}")
+        user_memory = ""
     try:
         reply_text = await _voice_llm_reply(session_id, user["user_id"], transcript, user_memory)
     except Exception as e:
         logger.error(f"Voice LLM reply failed: {e}")
-        raise HTTPException(status_code=502, detail=f"AI reply failed: {e}")
+        # Refund the credit — the user paid but got no answer.
+        if not credit_result.get("is_premium"):
+            try:
+                from routes.credits import refund_credit
+                await refund_credit(user["user_id"])
+            except Exception as refund_err:
+                logger.warning(f"Credit refund failed: {refund_err}")
+        raise await ai_http_error(e, "voice_reply")
+    _mark("llm_ms")
     reply_text = _cap_reply_length(reply_text)
+    reply_text = _normalize_wlad_name(reply_text)
+    # Also normalise the transcript that goes back to the UI/Memory.
+    transcript = _normalize_wlad_name(transcript)
 
-    # 5. Persist assistant turn + bump session timestamp
-    await _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text)
-    await db.chat_sessions.update_one(
-        {"session_id": session_id},
-        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+    # 5. TTS zuerst (kritischer Pfad), Persistenz parallel dazu
+    persist_task = _asyncio.gather(
+        _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text),
+        db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}),
+        return_exceptions=True,
     )
-
-    # 6. TTS (cached)
-    audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+    try:
+        audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+        audio_url = f"data:audio/mpeg;base64,{audio_b64}"
+    except HTTPException as e:
+        logger.warning(f"TTS unavailable — returning text-only voice reply: {e.detail}")
+        audio_url = ""
+    _mark("tts_ms")
+    await persist_task
+    timings["total_ms"] = sum(timings.values())
+    logger.info("Voice turn %s: stt %sms · llm %sms · tts %sms", persona_key, timings.get("stt_ms"), timings.get("llm_ms"), timings.get("tts_ms"))
 
     try:
         await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "mode": "voice"})
@@ -534,6 +722,246 @@ async def voice_conversation(
         session_id=session_id,
         transcript=transcript,
         response_text=reply_text,
-        audio_url=f"data:audio/mpeg;base64,{audio_b64}",
+        audio_url=audio_url,
         persona=persona_key,
+        timings=timings,
     )
+
+
+# ── Voice Sparring (Iter 124 — Argumentations-Live-Coach) ────────────────────
+
+SPARRING_SYSTEM_PROMPT = """Du bist WLAD JACHTCHENKO — der Argumentations-Sparring-Partner.
+
+Der User hat eine SEXIER-Strategie vorbereitet und übt jetzt LIVE. Deine Rolle:
+
+1. Du spielst den GEGENÜBER — realistisch, spezifisch auf das Prep-Kontext.
+2. Du bringst einen der antizipierten Einwände (oder einen ähnlichen) — kurz, direkt, glaubwürdig.
+3. Du unterbrichst NICHT freundlich — du bist der schwierige CFO/Chef/Kunde/Board-Mitglied.
+4. Nach 2-3 User-Antworten wechselst du KURZ in Coach-Modus: 1 Satz konkretes Feedback ("Der Einstieg war stark, aber das Framing zum ROI hat gefehlt"), dann zurück ins Sparring.
+
+STIL:
+- Antwortlänge: 1-2 Sätze MAX (max 20 Wörter). Diese sind Voice-Antworten — MUSS kurz sein.
+- Direktes Deutsch, kein Fluff, keine Höflichkeitsfloskeln.
+- Emotionaler Ton passend zur Rolle (skeptisch/bissig/testend).
+- Kein Meta-Talk ("ich spiele jetzt X") — du BIST X.
+
+WICHTIG:
+- Nutze IMMER das Prep-Kontext (Ziel, Argumente, Einwände, verborgene Interessen).
+- Wenn User etwas Starkes sagt, greif es auf und challenge weiter.
+- Wenn User schwach ist, zeig es — aber baue dann Coach-Feedback ein.
+- Sprich Deutsch. Erwähne dich selbst als "Wlad" nur beim Coach-Feedback.
+"""
+
+
+@router.get("/sparring-personas")
+async def list_sparring_personas():
+    """Return the sparring-persona catalog for the frontend picker."""
+    return {
+        "personas": [
+            {"key": k, "label": v["label"], "hint": v.get("hint", "")}
+            for k, v in SPARRING_PERSONAS.items()
+        ],
+    }
+
+
+@router.post("/argumentation-sparring")
+async def argumentation_sparring(
+    request: Request,
+    file: UploadFile = File(...),
+    session_id: Optional[str] = Form(None),
+    prep_context: str = Form("{}"),
+    persona: str = Form("wlad"),
+    sparring_role: str = Form(""),
+):
+    """Live voice-sparring for a prepared SEXIER argumentation.
+
+    Pipeline: Whisper STT → GPT-4o coach/counterparty reply → ElevenLabs TTS.
+    prep_context is the JSON-serialised SEXIER prep data (goal, arguments,
+    anticipated objections, hidden interests, coaching_focus) that grounds
+    Wlad in the SPECIFIC scenario the user is training for.
+
+    sparring_role selects a counterparty persona (cfo, board, customer, boss,
+    team). When set, the persona's voice + attitude override the default Wlad
+    voice — user hears a distinct sparring partner instead of just Wlad.
+    """
+    from routes.credits import check_and_deduct_credit, no_credits_detail
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    import json as _json
+
+    user = await get_current_user(request)
+
+    # Choose voice: sparring_role wins if valid, else fall back to persona (wlad).
+    sparring_cfg = SPARRING_PERSONAS.get(sparring_role.lower()) if sparring_role else None
+    if sparring_cfg:
+        voice_config = {
+            "voice_id": sparring_cfg["voice_id"],
+            "stability": sparring_cfg["stability"],
+            "similarity_boost": sparring_cfg["similarity_boost"],
+            "style": sparring_cfg["style"],
+        }
+        persona_key = f"sparring_{sparring_role.lower()}"
+    else:
+        persona_key = persona.lower()
+        voice_config = VOICE_REGISTRY.get(persona_key)
+        if not voice_config:
+            raise HTTPException(status_code=400, detail=f"Unknown persona '{persona_key}'")
+
+    audio_bytes = await file.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="Empty audio")
+
+    # 1. Transcribe FIRST — no credit burn on empty/bad audio
+    try:
+        transcript = await _transcribe_webm(audio_bytes)
+    except Exception as e:
+        logger.error(f"Sparring STT failed: {e}")
+        raise await ai_http_error(e, "voice_transcribe")
+    if not transcript:
+        raise HTTPException(status_code=400, detail="empty_transcript")
+
+    # 2. Deduct credit
+    credit_result = await check_and_deduct_credit(user, "chat")
+    if not credit_result["allowed"]:
+        raise HTTPException(status_code=402, detail=no_credits_detail("chat", credit_result))
+
+    # 3. Session + user turn
+    session_id = await _ensure_voice_session(session_id, user["user_id"], transcript)
+    await _persist_voice_turn(session_id, user["user_id"], "user", transcript)
+
+    # 4. Parse prep context — build a compact grounding brief
+    try:
+        prep = _json.loads(prep_context) if prep_context else {}
+    except Exception:
+        prep = {}
+
+    def _line(label: str, val: str | None) -> str:
+        return f"- **{label}:** {val.strip()}" if val and val.strip() else ""
+
+    brief_lines = [
+        _line("Ziel des Users", prep.get("goal")),
+        _line("Kontext/Hintergrund", prep.get("background")),
+        _line("Gegenüber", prep.get("relationship")),
+        _line("User-Kernargumente", prep.get("main_points")),
+        _line("Antizipierte Einwände", prep.get("expected_objections")),
+        _line("Verborgene Interessen der Gegenseite", prep.get("hidden_interests")),
+        _line("Coaching-Fokus des Users", prep.get("coaching_focus")),
+    ]
+    grounding = "\n".join(ln for ln in brief_lines if ln)
+
+    # 5a. Fetch history + count user turns for escalation ladder (Iter 124.3)
+    history = await db.chat_messages.find(
+        {"session_id": session_id},
+        {"_id": 0, "role": 1, "content": 1},
+    ).sort("created_at", 1).to_list(20)
+    user_turns = [m for m in history if m.get("role") == "user"]
+    turn_no = len(user_turns) + 1  # this incoming turn included
+    # Extract compact "what user has already tried" summary — keeps escalation
+    # bounded even in long sessions. Just short-fragments, model reads them.
+    tried_snippets = []
+    for m in user_turns[-6:]:
+        c = (m.get("content") or "").strip()
+        if c:
+            tried_snippets.append(c[:110] + ("…" if len(c) > 110 else ""))
+    tried_block = ""
+    if tried_snippets:
+        tried_block = "\n".join(f"- {s}" for s in tried_snippets)
+
+    # Escalation ladder — Wlad wird bewusst schwerer je länger die Session läuft.
+    if turn_no <= 2:
+        escalation = "STUFE 1: normale Skepsis. Ein klarer Einwand pro Turn."
+    elif turn_no <= 4:
+        escalation = (
+            "STUFE 2: Werde härter. Bring einen zweiten Einwand direkt nach "
+            "dem ersten. Zeige, dass die ersten Antworten nicht überzeugt haben."
+        )
+    elif turn_no <= 6:
+        escalation = (
+            "STUFE 3: Ruthless. Attackiere Schwachstellen aus früheren "
+            "User-Antworten explizit ('vorhin sagtest du X — das widerspricht Y'). "
+            "Zeit-Druck aufbauen ('ich habe gleich das nächste Meeting')."
+        )
+    else:
+        escalation = (
+            "STUFE 4 (Boss-Mode): Wenn der User eine gute Antwort liefert, "
+            "gib EIN SATZ Coach-Feedback ('Der Turn war stark — du hast X endlich "
+            "sauber geframed'), dann ein neuer, härterer Angriff. Wenn schwach, "
+            "sag es direkt: 'Das reicht nicht — du wiederholst dich'."
+        )
+
+    # 5b. Compose system message: rules + role + prep + escalation + tried-list
+    if sparring_cfg:
+        system_msg = (
+            SPARRING_SYSTEM_PROMPT
+            + "\n\n--- ROLLE (SPRECHER JETZT) ---\n"
+            + sparring_cfg["attitude"]
+            + f"\nSprich als {sparring_cfg['label']}, NICHT als Wlad.\n---"
+        )
+    else:
+        system_msg = SPARRING_SYSTEM_PROMPT
+    if grounding:
+        system_msg += f"\n\n--- SPARRING-KONTEXT ---\n{grounding}\n---"
+    system_msg += (
+        f"\n\n--- DIALOG-STATUS ---\nTurn: #{turn_no}\n{escalation}\n"
+        + ("USER HAT BISHER PROBIERT (nicht wiederholen, greif konkret an):\n" + tried_block + "\n" if tried_block else "")
+        + "---"
+    )
+
+    # 5c. Recent conversation for continuity — keep last 6 turns tight
+    ctx_lines = []
+    for m in history[-6:]:
+        role = "User" if m.get("role") == "user" else "Wlad"
+        ctx_lines.append(f"{role}: {m.get('content', '')}")
+    ctx = "\n".join(ctx_lines)
+    prompt = f"{ctx}\nUser: {transcript}\nWlad:" if ctx else transcript
+
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"sparring_{session_id}",
+            system_message=system_msg,
+        )
+        chat.with_model("openai", "gpt-4o")
+        reply_text = await chat.send_message(UserMessage(text=prompt))
+    except Exception as e:
+        logger.error(f"Sparring LLM failed: {e}")
+        if not credit_result.get("is_premium"):
+            try:
+                from routes.credits import refund_credit
+                await refund_credit(user["user_id"])
+            except Exception:
+                pass
+        raise await ai_http_error(e, "voice_reply")
+
+    reply_text = _cap_reply_length(reply_text)
+    reply_text = _normalize_wlad_name(reply_text)
+    transcript = _normalize_wlad_name(transcript)
+
+    await _persist_voice_turn(session_id, user["user_id"], "assistant", reply_text)
+    await db.chat_sessions.update_one(
+        {"session_id": session_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat(), "mode": "sparring"}},
+    )
+
+    try:
+        audio_b64 = await _synthesize_or_cached(reply_text, persona_key, voice_config)
+        audio_url = f"data:audio/mpeg;base64,{audio_b64}"
+    except HTTPException as e:
+        logger.warning(f"Sparring TTS unavailable: {e.detail}")
+        audio_url = ""
+
+    try:
+        await record_user_action(user["user_id"], "argumentation_sparring_turn", metadata={"session_id": session_id})
+    except Exception:
+        pass
+
+    return {
+        "session_id": session_id,
+        "transcript": transcript,
+        "response_text": reply_text,
+        "audio_url": audio_url,
+        "persona": persona_key,
+        "turn_no": turn_no,
+        "escalation_stage": (
+            1 if turn_no <= 2 else 2 if turn_no <= 4 else 3 if turn_no <= 6 else 4
+        ),
+    }

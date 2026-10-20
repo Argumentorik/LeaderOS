@@ -3,6 +3,7 @@ import { Button } from '../ui/button';
 import { Check, Loader2, FileText } from 'lucide-react';
 import { WladBotAvatar } from '../shared/WladBotAvatar';
 import { PlaybookReport } from './PlaybookReport';
+import VoicePlayButton from '../shared/VoicePlayButton';
 
 export const PlaybookChatMessage = ({
   msg, adviceReport, onGenerateReport, generatingReport,
@@ -30,6 +31,16 @@ export const PlaybookChatMessage = ({
         <div className="chat-bubble-bot px-4 py-3">
           <p className="text-[13px] leading-relaxed">{msg.text}</p>
         </div>
+        {msg.text && !msg.isLoading && (
+          <VoicePlayButton
+            text={msg.text.slice(0, 790)}
+            persona="wlad"
+            size="xs"
+            variant="ghost"
+            label={de ? 'Anhören' : 'Listen'}
+            testId="playbook-msg-audio-btn"
+          />
+        )}
         {msg.keyPoints?.length > 0 && (
           <div className="bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/5 rounded-xl px-4 py-3 border border-[#BFFF00]/20 dark:border-[#BFFF00]/10">
             <p className="text-[10px] font-bold text-[#4A6200] dark:text-[#BFFF00] uppercase tracking-wider mb-2">{de ? 'Kernpunkte' : 'Key Points'}</p>

@@ -8,7 +8,7 @@ import {
   Play
 } from 'lucide-react';
 
-import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/brandAssets';
+const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 const tourSteps = {
   de: [

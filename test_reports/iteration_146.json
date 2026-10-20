@@ -1,0 +1,47 @@
+{
+  "summary": "Iter 146 (Video-Guide-Seite + Mission-Briefing) end-to-end getestet. BACKEND (13 pytest-Cases in /app/backend/tests/test_iter146_video_guide.py, 13/13 gruen, KEINE Fal-Endpunkte beruehrt): GET /api/guide/clips?kind=all als free@wladbot.test -> 13 Clips: genau 5 kind 'onboarding', 7 kind 'mission' (refs '1'..'7'), 1 kind 'teaser'; ALLE onboarding+mission haben video_url UND poster_url; total==len(clips), seen_count int, mission_autoplay bool; kein _id-Leak. Stichprobe Mission-Clip: video_url -> 200 video/mp4, poster_url -> 200 image/png. ?kind=bogus -> 400. GET /api/guide/clips/mission/1 -> {clip:{ref:'1', kind:'mission', video_url gesetzt, seen:bool}, mission_autoplay:bool}; /mission/99 -> {clip:null} 200. POST /api/guide/prefs {mission_autoplay:false} -> 200 {mission_autoplay:false}; danach liefern BEIDE Endpunkte (mission/1 und clips?kind=all) mission_autoplay=false; anschliessend wieder auf true gesetzt und verifiziert (Ausgangszustand wiederhergestellt). POST /prefs {} -> 422. Alle drei Endpunkte ohne Auth -> 401 (wichtig: dafuer eine cookie-freie Session verwenden, sonst authentisiert das httpOnly-Login-Cookie die 'ohne Auth'-Requests -> 200; Testdatei nutzt jetzt eine 'anon'-Fixture). FRONTEND (1920x1080, Cookie-Banner akzeptiert, tour/usage-feedback-Flags gesetzt): Login accelerator@wladbot.test -> Dashboard; Regression 'guide-clips-row' weiterhin sichtbar. 'sidebar-nav' enthaelt genau einen Eintrag 'Video-Guide' -> Klick navigiert auf /video-guide; 'video-guide-page' sichtbar, 'video-guide-progress' zeigt '0/12 gesehen', 12 Kacheln 'video-guide-tile-*' (5 unter 'video-guide-onboarding', 7 unter 'video-guide-missions'), alle 12 Poster-Bilder geladen (naturalWidth 1344), 'video-guide-player' vorhanden. Klick auf 'video-guide-tile-mission-day-4' -> URL ?clip=mission-day-4 und Player zeigt 'guide-clip-mission-day-4'. Direktaufruf /video-guide?clip=start-3-kontext -> Player zeigt 'guide-clip-start-3-kontext'. Keine Console-Errors, 0 Error-Elemente, Light-Mode-Kontrast ok (Eyebrow #5a7a00 auf weiss, Titel/Kachel-Titel schwarz auf weiss, Dauer-Badges weiss auf black/70). MISSION-BRIEFING POSITIVFALL mit frisch registriertem Tag-1-Account (iter146-mission@wladbot-testing.de / TestQa2026!, onboarding_completed per Mongo auf true gesetzt): /challenge -> 'mission-guide-modal' oeffnet AUTOMATISCH mit 'guide-clip-mission-day-1', kein Ton/kein Abspielen (in Headless-Chromium ohne H.264 greift der dokumentierte 'guide-text-fallback-mission-day-1'; GuideVideoPlayer setzt kein autoPlay -> Ton erst per 'guide-play-*'-Klick, konstruktiv verifiziert). 'mission-guide-autoplay-toggle' anhaken -> POST https://.../api/guide/prefs mit Body {\"mission_autoplay\":false} im Network belegt; 'mission-guide-close' schliesst das Modal (count 0); danach ist die Play-Zeile 'mission-guide-clip' im Kopf sichtbar ('WLADS BRIEFING · TAG 1 / Tag 1: Deine Baseline · 37 s'); Reload -> Modal oeffnet NICHT mehr automatisch (count 0), Klick auf 'mission-guide-clip' oeffnet es manuell (count 1); Toggle abschliessend wieder abgehakt -> POST /guide/prefs {\"mission_autoplay\":true}, Checkbox danach unchecked. Keine Console-Errors in diesem Flow.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "GuideVideoPlayer (auch im Video-Guide-Player und im Mission-Modal)",
+        "issue": "Weiterhin offen aus Iter 145: Script-Toggle-Label ist hart '(20 Sekunden)', die Clips laufen 31-47 s; das Play-Overlay zeigt clip.duration_seconds (Sprechdauer) waehrend die Kacheln auf /video-guide duration_seconds_video (z. B. 43 s) anzeigen -> zwei Laengenangaben fuer denselben Clip.",
+        "selector": "[data-testid^=\"guide-script-toggle-\"], [data-testid^=\"guide-play-\"]",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter146_video_guide.py",
+    "/app/test_reports/pytest/iter146.xml"
+  ],
+  "action_items": [
+    "Optional (LOW): GuideVideoPlayer-Dauer vereinheitlichen (duration_seconds_video statt duration_seconds im Play-Overlay, '(20 Sekunden)' dynamisch) — unveraendert aus Iter 145.",
+    "Optional (LOW): VideoGuidePage.select() ruft setParams({clip}) und verwirft damit alle anderen Query-Parameter; besser params.set('clip', slug) auf dem bestehenden Objekt.",
+    "Optional (LOW): MissionGuideClip setzt am <video> kein muted-Attribut — aktuell unkritisch, weil es kein autoPlay gibt; falls je autoPlay ergaenzt wird, muss muted mit gesetzt werden, sonst blockt der Browser."
+  ],
+  "critical_code_review_comments": [
+    "routes/guide.py ist weiter ~1035 Zeilen (>700) — Produktion/Jobs und Admin von den Nutzer-Endpunkten trennen (steht seit Iter 144 offen).",
+    "list_clips(kind='all') liefert auch den Teaser aus; die Filterung auf 'kein teaser' passiert nur im Frontend (VideoGuidePage.js:44). Ein zweiter Konsument wuerde den Login-Teaser mitzaehlen — besser serverseitig ein kind-Filter-Set (z. B. kind='user') anbieten.",
+    "SeenIn (routes/guide.py:204) ist ein leeres, ungenutztes Pydantic-Modell — entfernen."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter146_video_guide.py",
+    "/app/test_reports/iteration_146.json"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13)",
+    "frontend": "100% der geforderten Checks bestanden (1 nicht-blockierendes LOW-Finding aus Iter 145 unveraendert)"
+  },
+  "seed_data_creation": "Neuer Tag-1-Testaccount fuer den Mission-Briefing-Positivfall: iter146-mission@wladbot-testing.de / TestQa2026! (free, current_day 1, onboarding_completed via Mongo auf true gesetzt). guide_progress dieses Users hat mission_autoplay=true (zurueckgesetzt). free@wladbot.test: mission_autoplay nach dem Pref-Test wieder true.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "accelerator@wladbot.test/test123, free@wladbot.test/test123, Admin test@test.com/test123 + neu iter146-mission@wladbot-testing.de/TestQa2026!",
+  "context_for_next_testing_agent": "Regression: pytest /app/backend/tests/test_iter146_video_guide.py (13 Cases, keine Kosten) plus test_iter145_guide_rollout.py (-k 'not Voice' spart TTS-Cent). WICHTIG 1: requests.Session, die sich einloggt, behaelt das httpOnly-Auth-Cookie -> 401-Checks nur mit frischer Session (Fixture 'anon'). WICHTIG 2: Seed-Accounts stehen auf Challenge-Tag 10, das Mission-Briefing erscheint nur fuer Tag 1-7 -> iter146-mission@wladbot-testing.de nutzen (Tag 1). WICHTIG 3: Headless-Chromium hat kein H.264 -> jedes <video> feuert onError, GuideVideoPlayer schaltet auf 'guide-text-fallback-*'; damit existiert weder 'guide-video-*' noch 'guide-play-*' — nur src/poster/HTTP-Status pruefen, keine Wiedergabe. WICHTIG 4: Playwright-Skripte hier duerfen keine f-Strings mit Backslash/escaped quotes enthalten (Tool-Parser bricht ab) — Selektoren in Konstanten auslagern und mit + konkatenieren. Kostenpflichtig und NICHT anzufassen: /api/guide/admin/... plan|shot-keyframes|render|keyframe|cinematic|voice|video|voice-clone|bulk-produce.",
+  "rca_of_the_issue": "Keine funktionalen Defekte in Iter 146 gefunden. Die drei initialen 401-Testfehlschlaege waren ein Testartefakt: die geteilte requests.Session hatte beim Login das httpOnly-Session-Cookie erhalten, wodurch die 'ohne Auth'-Requests weiterhin authentisiert waren (200 statt 401). Nach Umstellung auf eine cookie-freie 'anon'-Session liefern alle drei Endpunkte korrekt 401."
+}

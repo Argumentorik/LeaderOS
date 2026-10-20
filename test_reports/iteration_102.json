@@ -1,0 +1,36 @@
+{
+  "summary": "Iter 102 — FINAL pre-deployment QA. Backend smoke 6/7 (1 rate-limit false-positive, endpoint itself OK). Magic-Link E2E works end-to-end (request 200 → token generated → /auth/magic?token=X verifies → dashboard → session persists on reload). Regression PASS: /login shows 3 tabs (Passwort/Magic Link/Lizenz-Key) + Google button, password login → dashboard with widgets, /tasks/missions/challengers/playbooks/sicherheit/admin all render, /chat shows previous AI conversation. CRITICAL BUG FOUND on Entscheidungshilfe workflow: axios global timeout is hardcoded at 30_000ms in /app/frontend/src/lib/api.js line 24 — LLM workflow calls take 30-60s → frontend consistently times out and shows workflow-error-box before backend response arrives. This same bug will affect Team-Event Planer whenever LLM > 30s (iter100 got lucky at ~24s). LoadingOverlay + rotating Wlad quote (author with '—' marker) + workflow-error-box + workflow-retry-btn all confirmed working AS DESIGNED — but the timeout is the root cause of user-visible failure.",
+  "backend_issues": {"critical": [], "minor": [
+    {"endpoint": "/api/auth/login (rate limit)", "issue": "10/15min rate limit shared across login attempts — testing agent hit 429 quickly with 3 logins in succession. Expected behaviour, but consider whether backend smoke tests need a bypass header for internal QA."}
+  ]},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "api (axios instance)", "issue": "GLOBAL 30s timeout too short for LLM workflow endpoints (/api/tools/{tool_id}). Consistently trips 'AxiosError: timeout of 30000ms exceeded' → user sees red 'Keine Verbindung zum Server' toast and workflow-error-box. Backend continues processing but response never reaches UI.", "selector": "/app/frontend/src/lib/api.js:24 (timeout: 30000)", "priority": "CRITICAL — BLOCKS DEPLOY"},
+      {"component": "MagicLinkVerifyPage", "issue": "React StrictMode double-fires the useEffect verify call in dev/preview. Race condition: whichever request hits server first consumes the (single-use) token, the other gets 401. UI usually still lands on success because cancelled=true prevents error-setState from the first cleaned-up call — but the flow is fragile. Production build (no StrictMode double-invoke) won't be affected. Recommend a useRef guard so verify only fires once.", "selector": "/app/frontend/src/pages/MagicLinkVerifyPage.js:14-38", "priority": "LOW (dev/preview only)"}
+    ],
+    "integration_issues": [
+      {"flow": "Entscheidungshilfe (decision-maker) workflow submit", "issue": "Fails 100% in preview because backend LLM takes >30s and axios global timeout is 30s. Error box + retry button appear correctly, quote in LoadingOverlay renders correctly — but the fundamental request cannot complete.", "affected_selectors": ["workflow-error-box","workflow-retry-btn","workflow-submit-btn"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_iter102_final_qa.py", "/app/test_reports/pytest/iter102.xml"],
+  "action_items": [
+    "🔴 CRITICAL BEFORE DEPLOY: Bump axios timeout for workflow endpoints. Options: (a) global timeout 90_000ms in /app/frontend/src/lib/api.js, or (b) per-call `api.post(url, data, { timeout: 90000 })` in ToolsPage.js handleSubmitWorkflow (also DeepAssistModal and any other LLM-generating call).",
+    "🟡 MEDIUM: Add useRef guard in MagicLinkVerifyPage to make verify effect fire only once — eliminates the visible 401 in dev/preview and hardens against React 19 StrictMode.",
+    "🟢 LOW: Consider adding a bypass or backoff between rate-limited login endpoints for internal test suite, or explicitly document the 10/15min limit."
+  ],
+  "critical_code_review_comments": [
+    "api.js default axios timeout 30_000ms is inappropriate for LLM endpoints. Standard pattern: default 30s for CRUD, per-endpoint override 60-120s for streaming/LLM.",
+    "MagicLinkVerifyPage relies solely on the cancelled closure to prevent double-consume side-effects — brittle. `useRef(false)` gated single-shot verify is the standard pattern.",
+    "LoadingOverlay quote+author rendering verified (line ~318 renders `p.italic '\"{quote.q}\"'` and `p — {quote.a}`), rotating quote is picked once per mount via useMemo — good.",
+    "ToolsPage handleSubmitWorkflow error-branch UI (lines 160-166) has all needed testids (workflow-error-box, workflow-retry-btn) and the retry re-submits with cached answers/persona — solid UX pattern once the timeout is fixed."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter102_final_qa.py"],
+  "success_rate": {"backend": "100% functional (6/6 real endpoints; the 7th failure is rate-limit collision in tests, not a code bug)", "frontend": "~85% — magic-link+regression PASS; Entscheidungshilfe blocked by axios timeout"},
+  "test_credentials": "test@test.com/test123 (Admin), accelerator@wladbot.test/test123",
+  "seed_data_creation": "Generated 2 magic-link tokens (both consumed during test). No other DB writes.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "PRIMARY BLOCKER: axios timeout 30s in /app/frontend/src/lib/api.js. Once main agent bumps this to 90s (or per-call in ToolsPage), retest Entscheidungshilfe and Team-Event Planer 4th-question flow. Magic link works — pattern to test it: (1) POST /api/auth/magic-link/request {email}, (2) shell: `python -c \"import asyncio,sys;sys.path.insert(0,'.');from services_magic_link import create_token;print(asyncio.get_event_loop().run_until_complete(create_token('test@test.com','127.0.0.1')))\"`, (3) open /auth/magic?token=X in browser. Regression flows already confirmed OK — no need to re-test unless main agent changes routing/layouts.",
+  "rca of the issue": "Root cause: Global axios timeout in /app/frontend/src/lib/api.js line 24 hardcoded to 30_000ms. Any HTTP call that takes longer (all LLM workflows: /api/tools/decision-maker, /api/tools/team-event-planner, /api/tools/meeting-builder, etc.) will fail with AxiosError timeout at exactly 30s, triggering the workflow-error-box UI. Backend request continues but response is discarded by axios. Reproduction: login accelerator@wladbot.test → /tools → Entscheidungshilfe → fill all 4 steps → submit → wait 30s → error box appears with retry button. Mitigation: raise timeout to 90_000ms globally OR pass `{timeout: 90000}` in ToolsPage.js line 54 `api.post(...)`. Test with the two heaviest LLM tools (decision-maker + team-event-planner) after fix."
+}

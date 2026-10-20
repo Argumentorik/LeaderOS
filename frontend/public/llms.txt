@@ -27,6 +27,11 @@ Was uns differenziert von ChatGPT, Coach-Apps oder generischen LMS-Plattformen:
 - [Kommunikations-Training · Überzeugen ist ein System](https://leader-os.de/kommunikation): Rhetorik, Argumentation und Gesprächsführung als trainierbares System mit Wlads Frameworks (SEXIER, Feedbackformel, 10 Stufen des Zuhörens) und Kurs-Bibliothek.
 - [Kostenloses Live-Training](https://leader-os.de/training): Einstiegsseite zum Live-Webinar mit dem Kernsatz „Führung wird nicht gelernt. Sie wird trainiert.“
 - [KI-Führungskraft werden · Führen mit KI](https://leader-os.de/ki-fuehrungskraft): Wlads Position in einem Satz: KI ersetzt keine Führungskraft – eine Führungskraft mit KI schon. KI übernimmt Vorbereitung, Analyse und Entwürfe; Menschen überzeugen, Orientierung geben, Konflikte lösen und durch Veränderung führen bleibt Führungsaufgabe. Mit Antworten auf „Ersetzt KI Führungskräfte?", „Was ist eine KI-Führungskraft?" und „Wie nutzen Führungskräfte KI im Alltag?".
+- [Leadership-Programm · Pakete & Preise](https://leader-os.de/leadership-programm): Ohne Login lesbare Verkaufsseite mit den Paketen Leadership OS und Leadership OS PLUS.
+- [Kurs-Bibliothek · Übersicht](https://leader-os.de/kurse-uebersicht/): Kurs-Bibliothek (10 Kurse, 72 Folgen, Titel & Dauer). Folge 1 jedes Kurses ist frei.
+- [LeaderOS für Teams & Unternehmen](https://leader-os.de/for-teams): Team-Angebot für Unternehmen · Anfrage ohne Login.
+- [Sicherheit & Datenschutz-Architektur](https://leader-os.de/sicherheit): Sicherheits- und Datenschutz-Architektur der Plattform, Export und Löschung der eigenen Daten.
+- [Changelog](https://leader-os.de/changelog): Öffentliches Änderungsprotokoll der Plattform („build in public“).
 
 ## Methodik
 

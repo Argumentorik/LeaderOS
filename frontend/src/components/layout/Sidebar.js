@@ -1,69 +1,103 @@
 import { useTheme } from '../../contexts/ThemeContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { SidebarNav } from './SidebarNav';
 import { SidebarFooter } from './SidebarFooter';
 import { WladMark } from '../brand/WladMark';
 import {
-  IconCommand, IconPulse, IconClipboard, IconBubble, IconBolt,
+  IconCommand, IconBubble, IconBolt,
   IconCrown, IconLayers, IconLens, IconFlow, IconGraph,
-  IconEvent, IconDiamond, IconFlame, IconChev, SBolt, STarget, SBrain,
+  IconEvent, IconDiamond, IconFlame, IconCamera, IconCourse, IconChev, SBolt, SBrain,
 } from './SidebarIcons';
+import { useAuth } from '../../contexts/AuthContext';
+import { useChallengeDay, useChallengeToday } from '../../lib/challengeDay';
+import { LEADERCHECK_URL } from '../../lib/domains';
+
+// Iter 92.34 (Mert Go-Live §C): items locked for Free tier — render with 🔒
+// icon and redirect to /coaching (upgrade page) when clicked.
+// Entscheidung Iter 185 (3a): /tasks ist offen — es zeigt nur eigene Aufgaben
+// und kostet keine KI-Leistung.
+const FREE_TIER_LOCKED = new Set([
+  '/simulations', '/playbooks', '/tools',
+  '/events',
+]);
 
 
 export const Sidebar = () => {
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang, t } = useLanguage();
+  const { user } = useAuth();
+  const userTier = (user?.tier || 'free').toLowerCase();
+  const isLockedPath = (path) => userTier === 'free' && FREE_TIER_LOCKED.has(path);
+  // Iter 185: Die 30-Tage-Herausforderung zeigt ihren Stand direkt im Menü.
+  const challengeDay = useChallengeDay();
+  const challengeToday = useChallengeToday();
   const navigate = useNavigate();
-  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
-  const navSections = [
-    {
-      id: 'today', label: t('nav.today'), badge: SBolt, badgeGrad: 'from-[#BFFF00] to-[#9ACC00]',
-      items: [
-        { path: '/dashboard', label: t('nav.commandCenter'), icon: IconCommand },
-        { path: '/challenge', label: lang === 'de' ? '30-Tage Challenge' : '30-Day Challenge', icon: IconFlame },
-        { path: '/daily-checkin', label: t('nav.dailyCheckin'), icon: IconPulse },
-        { path: '/tasks', label: t('nav.tasks'), icon: IconClipboard },
-        { path: '/chat', label: t('nav.aiCoach'), icon: IconBubble },
-      ]
-    },
-    {
-      id: 'growth', label: t('nav.growth'), badge: STarget, badgeGrad: 'from-emerald-500 to-[#00CC77]',
-      items: [
-        { path: '/simulations', label: t('nav.simulations'), icon: IconBolt },
-        { path: '/challengers', label: t('nav.challengers'), icon: IconCrown },
-        { path: '/playbooks', label: t('nav.playbooks'), icon: IconLayers },
-        { path: '/missions', label: t('nav.missions'), icon: IconLens },
-        { path: '/tools', label: t('nav.workflows'), icon: IconFlow },
-      ]
-    },
-    {
-      id: 'insights', label: t('nav.insights'), badge: SBrain, badgeGrad: 'from-[#FFB800] to-[#FF8C00]',
-      items: [
-        { path: '/my-path', label: lang === 'de' ? 'My Path' : 'My Path', icon: IconFlame },
-        { path: '/free-videos', label: lang === 'de' ? '4 Gratis-Videos' : '4 Free Videos', icon: IconLens },
-        { path: '/wlad-universe', label: lang === 'de' ? 'Wlad-Universum' : "Wlad's Universe", icon: IconLayers },
-        { path: '/progress', label: lang === 'de' ? 'Community' : 'Community', icon: IconGraph },
-        { path: '/events', label: t('nav.events'), icon: IconEvent },
-      ]
-    },
-    {
-      id: 'admin', label: lang === 'de' ? 'Admin' : 'Admin', badge: SBolt, badgeGrad: 'from-[#7B3FE4] to-[#4F1FE4]',
-      items: [
-        // Admin Panel is hidden entirely · owners reach it via the secret /wlad-control-* URL only.
-        { path: '/coaching', label: t('nav.coaching'), icon: IconDiamond },
-      ]
-    }
-  ].filter(section => section.items.length > 0);
+  // Plan Iter 187 (Wunsch Stefan · „3 + 1"): oben stehen vier Einträge.
+  // Dashboard und WladBot führen direkt zur Seite, die beiden anderen
+  // klappen ihre Inhalte auf.
+  const withLock = (it) => ({ ...it, locked: isLockedPath(it.path) });
 
-  const activeSection = navSections.find(s => s.items.some(i => location.pathname === i.path))?.id || 'today';
+  const mainItems = [
+    {
+      path: '/dashboard', label: lang === 'de' ? 'Dashboard' : 'Dashboard', icon: IconCommand,
+      subLine: challengeToday
+        ? `Tag ${challengeToday.day} / 30 · heute: ${challengeToday.title}`
+        : (lang === 'de' ? 'Heute, Mission und Check-in an einem Ort' : 'Today, mission and check-in in one place'),
+      badgeText: challengeDay ? `${lang === 'de' ? 'Tag' : 'Day'} ${challengeDay} / 30` : null,
+    },
+    {
+      path: '/chat', label: 'WladBot', icon: IconBubble,
+      subLine: lang === 'de' ? 'Dein Coach — fragen, wann du willst' : 'Your coach — ask any time',
+    },
+    {
+      id: 'toolbox', label: lang === 'de' ? 'Werkzeuge & Leitfäden' : 'Tools & playbooks', icon: IconFlow,
+      hint: lang === 'de' ? 'Fertige Vorlagen für deinen Arbeitsalltag.' : 'Ready-made templates for your working day.',
+      defaultOpen: true,
+      children: [
+        { path: '/tools', label: lang === 'de' ? 'Werkzeuge' : 'Tools', icon: IconFlow },
+        { path: '/playbooks', label: lang === 'de' ? 'Leitfäden' : 'Playbooks', icon: IconLayers },
+      ].map(withLock),
+    },
+    {
+      id: 'training', label: 'Training', icon: IconBolt, defaultOpen: true,
+      children: [
+        { path: '/simulations', label: lang === 'de' ? 'Gesprächs-Training' : 'Conversation training', icon: IconBolt },
+        { path: '/challengers', label: t('nav.challengers'), icon: IconCrown },
+        { path: '/missions', label: lang === 'de' ? 'Video-Analyse' : 'Video analysis', icon: IconLens },
+      ].map(withLock),
+    },
+  ].map((it) => (it.children ? it : withLock(it)));
+
+  const moreGroups = [
+    {
+      id: 'knowledge', label: lang === 'de' ? 'Wissen & Community' : 'Knowledge & community',
+      badge: SBrain, badgeGrad: 'from-[#BFFF00] to-[#9ACC00]',
+      items: [
+        { path: '/kurse', label: lang === 'de' ? 'Kurse (72 Folgen)' : 'Courses (72 episodes)', icon: IconCourse },
+        { path: '/challenge', label: lang === 'de' ? '30-Tage-Programm' : '30-day program', icon: IconFlame },
+        { path: '/video-guide', label: lang === 'de' ? 'Onboarding-Videos' : 'Onboarding videos', icon: IconCamera },
+        { path: '/events', label: lang === 'de' ? 'Live-Events' : 'Live events', icon: IconEvent },
+        { path: '/my-path', label: lang === 'de' ? 'Mein Fortschritt' : 'My progress', icon: IconGraph },
+        { path: '/community', label: 'Community', icon: IconDiamond },
+      ].map(withLock),
+    },
+    {
+      id: 'settings', label: lang === 'de' ? 'Admin & Einstellungen' : 'Admin & settings',
+      badge: SBolt, badgeGrad: 'from-[#BFFF00] to-[#9ACC00]',
+      items: [
+        { path: '/leadership-programm', label: lang === 'de' ? 'Leadership-Programm' : 'Leadership programme', icon: IconDiamond },
+        { path: '/profile', label: lang === 'de' ? 'Einstellungen' : 'Settings', icon: IconLayers },
+      ],
+    },
+  ];
 
   return (
     <aside data-testid="sidebar"
-      className={`${collapsed ? 'w-[64px]' : 'w-[244px]'} h-screen flex flex-col bg-white/95 dark:bg-card/95 backdrop-blur-xl border-r border-black/[0.04] dark:border-white/[0.04] transition-[width] duration-300 relative`}>
+      className={`${collapsed ? 'w-[64px]' : 'w-[244px]'} h-screen flex flex-col bg-white dark:bg-[#101010] border-r border-black/[0.04] dark:border-white/[0.04] transition-[width] duration-300 relative`}>
 
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 h-[56px] border-b border-black/[0.03] dark:border-white/[0.03]">
@@ -93,12 +127,15 @@ export const Sidebar = () => {
         <IconChev size={8} left={!collapsed} />
       </button>
 
-      <SidebarNav navSections={navSections} activeSection={activeSection} collapsed={collapsed} />
+      <SidebarNav mainItems={mainItems} moreGroups={moreGroups} collapsed={collapsed}
+        moreLabel={lang === 'de' ? 'Mehr' : 'More'}
+        moreHint={lang === 'de' ? 'Kurse, Live-Events, dein Profil und die Einstellungen.' : 'Courses, live events, your profile and settings.'} />
 
       {/* WladHub CTA */}
       {!collapsed && (
         <div className="px-2 pb-1">
-          <button onClick={() => window.open('https://leadercheck.de', '_blank', 'noopener,noreferrer')} data-testid="sidebar-wladhub-btn"
+          <button onClick={() => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer')} data-testid="sidebar-wladhub-btn"
+            data-tour-id="nav-diagnose"
             className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-[#BFFF00]/[0.08] border border-[#BFFF00]/20 hover:border-[#BFFF00]/40 transition-all text-left group">
             <div className="w-5 h-5 rounded-md bg-[#BFFF00] flex items-center justify-center shrink-0">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="black"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>

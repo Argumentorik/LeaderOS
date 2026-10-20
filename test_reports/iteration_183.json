@@ -1,0 +1,79 @@
+{
+  "summary": "Iter 183 frontend go-live checks (Thumbnails, Admin Poster-Health, Magic-Link happy+unhappy, Name 'Wlad', Voice-Mode Prosa) — all six review items pass on production URL.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "detailed_results": {
+    "thumbnails_desktop_1920x800": {
+      "/video-guide": "13/13 loaded, 0 broken, 0 fallback",
+      "/dashboard":  "3/3 loaded,  0 broken, 0 fallback",
+      "/challenge":  "9/9 loaded,  0 broken, 0 fallback",
+      "/kurse":      "16/16 loaded, 0 broken, 0 fallback",
+      "/missions":   "1/1 loaded,  0 broken, 0 fallback"
+    },
+    "thumbnails_mobile_390x844": {
+      "/video-guide": "12/13 loaded, 0 broken, 1 pending (lazy-loaded off-screen, resolves on scroll)",
+      "/dashboard":  "3/3 loaded, 0 broken",
+      "/challenge":  "8/9 loaded, 0 broken, 1 pending (lazy off-screen)",
+      "/kurse":      "15/16 loaded, 0 broken, 1 pending",
+      "/missions":   "0/1 loaded, 0 broken, 1 pending (hero image loads on scroll into view)"
+    },
+    "thumbnails_notes": "Zero broken images, zero fallback tiles rendered. All 'pending' are IntersectionObserver lazy-loaded images below the fold on mobile — they load correctly when scrolled in. No empty frames observed anywhere.",
+    "admin_poster_health": {
+      "card_visible": true,
+      "initial_text": "VORSCHAUBILDER — 21 dauerhaft gespeichert · 0 offen",
+      "backfill_click_1": "Neu erzeugt: 0 · unverändert: 22 (no cost)",
+      "backfill_click_2_3": "idempotent, no crash, no re-renders billed",
+      "poster_all_ready_testid": "visible with text 'Jedes Video hat sein Vorschaubild.'"
+    },
+    "magic_link_happy_path": {
+      "tab-magic-link": "present, clickable",
+      "email_input": "present (data-testid=magic-link-email-input)",
+      "submit": "works",
+      "magic-link-sent": "visible with text 'Link verschickt / Falls standard@wladbot.test bei uns existiert...'",
+      "resend": "present, disabled with 60s countdown ('Erneut senden in 58 s'), click during countdown blocked (no crash)",
+      "change-email": "present ('Andere E-Mail verwenden')"
+    },
+    "magic_link_bad_token": {
+      "url": "/auth/magic?token=kaputt",
+      "headline": "'Dieser Link geht nicht mehr' ✓",
+      "body": "'Link ist ungültig, abgelaufen oder wurde bereits verwendet.' + 'Jeder Link gilt 15 Minuten und nur einmal.'",
+      "cta_new_link": "'Neuen Link anfordern' ✓",
+      "cta_back_to_login": "'ZURÜCK ZUM LOGIN' ✓",
+      "no_white_screen": true,
+      "no_infinite_loading": true
+    },
+    "magic_link_unknown_email": {
+      "input": "nonexistent-xyz@example.com",
+      "response_text": "'Falls nonexistent-xyz@example.com bei uns existiert, ist eine E-Mail...' (generic, no info leak) ✓"
+    },
+    "name_wlad": {
+      "/chat": "0 'Vlad' hits",
+      "/video-guide": "0 'Vlad' hits",
+      "/missions": "0 'Vlad' hits"
+    },
+    "voice_mode_prose": {
+      "trigger": "interactive-wlad-open-* on /video-guide, then interactive-wlad-suggestion-0 ('Wie wende ich das morgen konkret an?')",
+      "answer_quoted": "„Wie wende ich das morgen konkret an?\" — Hallo! Morgen kannst du die Feedbackformel anwenden: Beobachtung, Wirkung, Wunsch. Sag deinem Mitarbeiter, was du beobachtet hast: „Ich habe bemerkt, dass du in den letzten Wochen weniger engagiert wirkst.\" Beschreibe die Wirkung auf das Team oder Projekte und äußere deinen Wunsch: „Ich wünsche mir, dass wir gemeinsam schauen, wie ich dich unterstützen kann.\" So kannst du ein offenes und konstruktives Gespräch initiieren. Worüber möchtest du im Detail noch sprechen?",
+      "markdown_stars_**": false,
+      "markdown_headings_##": false,
+      "markdown_bullets": false,
+      "vlad_hits_in_answer": 0,
+      "note": "Only ONE question fired to conserve credits, as instructed."
+    }
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped per request)", "frontend": "100%"},
+  "test_credentials": "test@test.com / test123 (admin), standard@wladbot.test / test123",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All six Iter-183 acceptance criteria confirmed on production preview URL: (1) thumbnails everywhere (desktop 100% loaded, mobile only lazy-below-fold pending, zero broken/fallback), (2) admin poster-health-card renders '21 gespeichert / 0 offen' with idempotent backfill + poster-all-ready message, (3) magic-link happy path shows sent confirmation + 60s countdown + change-email, (4) magic-link bad token & unknown email both show correct German copy with no info leak / no white screen, (5) 'Vlad' occurs 0 times in app-generated text on /chat, /video-guide, /missions, (6) voice overlay answer is clean prose (no **, no ##, no bullets). Env caveat holds: headless Chromium has no H.264/AAC so MP4 falls back to text — not a bug.",
+  "rca of the issue": "n/a — no issues found"
+}

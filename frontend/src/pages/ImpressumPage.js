@@ -6,7 +6,14 @@
  */
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { useSeo } from '../lib/seo';
 export default function ImpressumPage() {
+  useSeo({
+    path: '/impressum',
+    title: 'Impressum — Leader-OS',
+    description: 'Impressum und Anbieterkennzeichnung von Leader-OS.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
   return (

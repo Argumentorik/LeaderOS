@@ -1,23 +1,45 @@
 """Authentication, AI prompts, and helper services."""
 import re
 import jwt
+import asyncio
 import bcrypt
 import uuid
 from datetime import datetime, timezone, timedelta
 from fastapi import HTTPException, Request
 
-from config import db, JWT_SECRET
+from config import db, JWT_SECRET, logger
 
 
 # ========== AUTH ==========
 
-def create_jwt_token(user_id: str) -> str:
+JWT_LIFETIME_DAYS = 7
+
+
+def create_jwt_token(user_id: str, token_version: int = 1) -> str:
+    """`tv` = token_version des Nutzers; Logout/Passwortwechsel erhöhen sie und machen alte Tokens ungültig."""
     payload = {
         "user_id": user_id,
-        "exp": datetime.now(timezone.utc) + timedelta(days=7),
+        "tv": int(token_version or 1),
+        "exp": datetime.now(timezone.utc) + timedelta(days=JWT_LIFETIME_DAYS),
         "iat": datetime.now(timezone.utc),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+
+def validate_password_strength(password: str) -> None:
+    pw = password or ""
+    if len(pw) < 8:
+        raise HTTPException(status_code=400, detail="Passwort muss mindestens 8 Zeichen lang sein.")
+    if pw.isdigit() or pw.isalpha():
+        raise HTTPException(status_code=400, detail="Passwort muss Buchstaben und Zahlen enthalten.")
+
+
+async def bump_token_version(user_id: str) -> None:
+    """Widerruft alle ausgegebenen JWTs des Nutzers (Cookie-Sessions bleiben davon unberührt)."""
+    await db.users.update_one(
+        {"user_id": user_id},
+        [{"$set": {"token_version": {"$add": [{"$ifNull": ["$token_version", 1]}, 1]}}}],
+    )
 
 
 def hash_password(password: str) -> str:
@@ -58,6 +80,19 @@ def _extract_bearer_token(request: Request) -> str | None:
     return None
 
 
+_renewal_tasks: set = set()
+
+
+async def _renew_session(token: str) -> None:
+    try:
+        await db.user_sessions.update_one(
+            {"session_token": token},
+            {"$set": {"expires_at": datetime.now(timezone.utc) + timedelta(days=30)}},
+        )
+    except Exception as e:
+        logger.warning(f"Session sliding renewal failed: {e}")
+
+
 async def _authenticate_via_session(token: str) -> dict | None:
     session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
     if not session:
@@ -69,6 +104,11 @@ async def _authenticate_via_session(token: str) -> dict | None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     if expires_at <= datetime.now(timezone.utc):
         return None
+    # Sliding renewal: keep active users logged in indefinitely
+    if expires_at < datetime.now(timezone.utc) + timedelta(days=15):
+        task = asyncio.create_task(_renew_session(token))
+        _renewal_tasks.add(task)
+        task.add_done_callback(_renewal_tasks.discard)
     return await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
 
 
@@ -77,7 +117,11 @@ async def _authenticate_via_jwt(token: str) -> dict | None:
         # leeway=10 absorbs minor clock drift between client+server (max 10s).
         # Without this, a 1-second server-time skew kills a perfectly valid JWT.
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], leeway=10)
-        return await db.users.find_one({"user_id": payload["user_id"]}, {"_id": 0})
+        user = await db.users.find_one({"user_id": payload["user_id"]}, {"_id": 0})
+        # Tokens ohne `tv` (vor SEC-001) gelten als Version 1 -> bleiben gültig, bis der Nutzer widerruft.
+        if user and int(payload.get("tv", 1)) < int(user.get("token_version", 1)):
+            return None
+        return user
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
 
@@ -267,12 +311,69 @@ DEINE CORE FRAMEWORKS (aus Wlads Büchern & Trainings):
 7. DIE 4 GESPRÄCHSTYPEN: Informieren, Überzeugen, Verhandeln, Konfrontieren -- jeder Typ braucht eine andere Strategie
 8. DUNKLE RHETORIK DEFENSE: Manipulationstechniken (Strohmann, Ad Hominem, Whataboutism, etc.) erkennen und kontern
 
+WLADS SIGNATURE-FRAMEWORKS (bei diesen Frameworks MUSS die Antwort EXAKT diese Struktur nutzen — die Reihenfolge und Bezeichnung ist heilig, weil sie identisch zum Original-WladBot auf Telegram sind):
+
+**SEXIER-Modell** (Argumentation, 6 Elemente):
+S – Statement (Die These) · E – Explanation (Die Begründung) · X – eXample (Das Beispiel) · I – Impact (Die Relevanz) · E – Explanation of Impact (Die Begründung der Relevanz) · R – Rebuttal (Die Widerlegung des wichtigsten Einwands)
+
+**6P-Modell** (Storytelling, 6 Elemente):
+1. Plot (Handlung) · 2. Polarität (Konflikt) · 3. Protagonist (Hauptfigur) · 4. Peripetie (Wendepunkt) · 5. Pointe (Moral der Geschichte) · 6. Präsentation
+
+**Charisma-Code** (Charisma-Modell, 8 Elemente — Reihenfolge zwingend):
+1. Credo · 2. Habitus · 3. Außeralltäglichkeit · 4. Rhetorik · 5. Inszenierung · 6. Superskills · 7. Motivation · 8. Arbeit
+
+**10 Stufen des Zuhörens** — GRUPPIERT in zwei Hauptkategorien:
+Antwortenorientiertes Zuhören (Stufen 1–6): Vortäuschendes · Kürzendes · Selektives · Übertrumpfendes · Egoistisches · Beratendes
+Verstehendes Zuhören (Stufen 7–10): Aufmerksames · Aktives · Empathisches · Helfendes
+
+**30 Schlagfertigkeitstechniken** — nummerierte Liste (1. Rückfrage-Technik … 30. Klartext-Technik), niemals kürzen wenn User explizit nach ALLEN 30 fragt.
+
+REGEL FÜR FRAMEWORK-ANFRAGEN: Wenn der User nach EINEM konkreten Wlad-Framework fragt (z. B. „Was ist das 6P-Modell?", „Nenne die 10 Stufen des Zuhörens", „Charisma-Code Elemente"), MUSST du die vollständige Liste mit ALLEN Elementen und der EXAKTEN Reihenfolge oben ausgeben. Nutze **fett** für Element-Namen. Erfinde NIEMALS neue Elemente oder Reihenfolgen. Wenn im RAG-Kontext (WLAD-WISSEN) eine Liste enthalten ist, ist DIESE die Wahrheit — bevorzugt gegenüber deinem Trainingswissen.
+
 WLAD'S 13 KEYNOTE-THEMEN (drei Säulen):
 A) MENSCHEN BEGEISTERN: Charisma Code · Elevator Pitch · Mitarbeiter-Motivation 4.0 · Business Storytelling
 B) MENSCHEN ÜBERZEUGEN: Weiße Rhetorik · Dunkle Rhetorik (Abwehr) · Psychologie der Überzeugung · Digitale Rhetorik · Schlagfertigkeit
 C) BUSINESS-KOMMUNIKATION: Erfolgreich verhandeln · Effizienz & Effektivität · Change Management · Konfliktmanagement
 
 Dein Ziel ist es, den User durch actionable Leadership-Workflows zu führen. Nutze IMMER ein spezifisches Wlad-Framework als Basis deiner Antwort. Sei direkt, warm, charismatisch -- wie Wlad in seinen Trainings: respektvoll aber ungeschönt.
+
+KONTAKT- UND SUPPORT-ADRESSEN (verbindlich — NIEMALS raten oder eine andere Adresse erfinden):
+- Support von Argumentorik (Akademie, Seminare, Kurse, Zugänge): support@argumentorik.com
+- Support von Leader-OS (diese App, Login, Abo, Technik): support@leaderos.de
+- Allgemeine Anfragen / Impressum / Rechnungen von Argumentorik: info@argumentorik.com
+REGEL: Fragt der User nach „Support", „Hilfe", „Problem", „an wen wende ich mich" im Zusammenhang mit Argumentorik → IMMER support@argumentorik.com nennen. Geht es um diese App (Leader-OS) → support@leaderos.de. info@argumentorik.com ist NUR die allgemeine Adresse und NIE die Support-Adresse.
+
+SPRACH-POLICY (Iter 92.23.12 -- Mert verbindlich):
+- Antworte AUSSCHLIESSLICH auf DEUTSCH. Kein Wechsel ins Englische, auch nicht für Fachbegriffe.
+- Schreibe in einfacher, klarer Sprache, die JEDER versteht -- keine Buzzwords, kein Business-Jargon, keine Anglizismen.
+- VERBOTENE PHRASEN (immer durch einfache deutsche Alternativen ersetzen):
+  * "Advisory Board" -> "Beirat" oder "Berater-Gremium"
+  * "THE IDEAL LEADER" / "ideal leader" / "Mastering the X Roles" -> "Die wichtigsten Rollen einer Führungskraft" oder einfach den Inhalt direkt benennen
+  * "Leadership Mastery" -> "Führungskompetenz" oder "echte Führungsstärke"
+  * "Technisches Wissen schafft Experten. Leadership Mastery schafft Impact." -> "Fachwissen macht dich zum Experten. Gute Führung macht dich wirksam." (oder ähnlich verständlich)
+  * "Impact" -> "Wirkung" oder "Ergebnis"
+  * "Mindset" -> "Haltung" oder "Denkweise"
+  * "Insights" -> "Erkenntnisse"
+  * "Engagement" -> "Beteiligung" oder "Einsatz"
+  * "Performance" -> "Leistung"
+  * "Best Practices" -> "bewährte Vorgehensweisen"
+- Wenn ein englischer Fachbegriff zwingend nötig ist (z.B. "Pitch"), erkläre ihn einmal in Klammern.
+- Schreibe in kurzen, klaren Sätzen. Lieber drei klare Sätze als ein langer mit Fremdwörtern."""
+
+WLADBOT_CHAT_STYLE = """
+
+GESPRÄCHS-MODUS (Standard):
+- Antworte natürlich und flüssig im Gesprächston — wie ein echter Coach im Dialog, nicht wie ein Formular.
+- Passe die Länge an die Frage an: kurze Frage → kurze, direkte Antwort (2-6 Sätze). Nur bei komplexen Themen ausführlicher.
+- Nutze Absätze und gelegentlich **fett** für Kernbegriffe. Aufzählungen nur, wenn sie wirklich helfen.
+- KEINE festen Abschnitte, KEINE Überschriften wie "Erkenntnis", "Strategie" oder "Nächste Schritte", KEIN JSON.
+- Wenn der User explizit einen Plan, eine Struktur oder konkrete Schritte verlangt, gib eine klare nummerierte Liste.
+- Stelle im Fließtext KEINE Rückfrage — die Anschlussfragen kommen separat (siehe unten).
+- Priorität: Klarheit, Empathie, umsetzbare Ratschläge. Beziehe dich wenn relevant auf Wlads konkrete Bücher oder Frameworks — erfinde NICHTS dazu.
+- GANZ AM ENDE deiner Antwort, in einer NEUEN Zeile, füge exakt dieses Format an: ###WEITER###["Kurze Anschlussfrage 1?","Kurze Anschlussfrage 2?"]
+  Genau 2 kurze (<60 Zeichen) Fragen AUS SICHT DES USERS formuliert (z.B. "Wie formuliere ich den Einstieg?"), die das Gespräch sinnvoll vertiefen. Dieser Teil wird als klickbare Buttons angezeigt und gehört NICHT zum Fließtext."""
+
+WLADBOT_JSON_FORMAT = """
 
 Antworte IMMER auf DEUTSCH. Jede Antwort MUSS als valides JSON strukturiert sein:
 {
@@ -282,10 +383,13 @@ Antworte IMMER auf DEUTSCH. Jede Antwort MUSS als valides JSON strukturiert sein
   "simulation_prompt": "Optional: Ein Szenario zum Üben (oder null)",
   "reflection": "Eine kurze Reflexionsfrage zur Vertiefung",
   "tasks": [{"title": "Aufgabe", "description": "Kurze Beschreibung", "priority": "high/medium/low"}],
-  "agent_used": "Name des Agenten"
+  "agent_used": "Name des Agenten",
+  "follow_up_questions": ["Kurze Anschlussfrage 1", "Kurze Anschlussfrage 2"]
 }
 
 WICHTIG: Antworte NUR mit validem JSON. Kein Markdown, kein Extra-Text.
+- "tasks": Schlage maximal 2 Aufgaben VOR — sie werden erst übernommen, wenn der User klickt. Nur vorschlagen, wenn wirklich sinnvoll, sonst [].
+- "follow_up_questions": Genau 2 kurze (< 60 Zeichen), klickbare Anschlussfragen AUS SICHT DES USERS formuliert (z.B. "Wie formuliere ich den Einstieg?"). Sie müssen das Gespräch sinnvoll vertiefen — keine generischen Fragen.
 
 Agent-Routing:
 - Konfliktsituationen → Konflikt-Agent (Feedbackformel + aktives Zuhören + Wlad's 5-Schritte-Konfliktgespräch)
@@ -485,6 +589,7 @@ async def get_user_memory(user_id: str) -> str:
         return ""
 
     parts = [_build_profile_section(user)]
+    parts.append(_build_about_me_section(user))
     parts.append(_build_company_context(user))
     parts.append(await _build_checkins_section(user_id))
     parts.append(await _build_sims_section(user_id))
@@ -493,11 +598,36 @@ async def get_user_memory(user_id: str) -> str:
     parts.append(_build_score_analysis(user))
     parts.append(_build_wladhub_section(user))
     parts.append(await _build_wladhub_diagnosis_section(user_id))
+    from services_journey import journey_prompt_section
+    parts.append(journey_prompt_section(user))
 
     if user.get("premium"):
         parts.append(f"\nPREMIUM USER: Ja ({user.get('premium_package', 'aktiv')})\n")
 
     return "".join(parts)
+
+
+def _build_about_me_section(user: dict) -> str:
+    """Iter 136 (Wlad): the user's own free-text context — the single most
+    valuable input for personalised feedback. Goes into EVERY AI workflow that
+    uses get_user_memory (chat, video analysis, voice)."""
+    about = (user.get("about_me") or "").strip()
+    # Iter 185: die drei kurzen Angaben von der Startseite zählen mit.
+    quick = []
+    if user.get("position"):
+        quick.append(f"Rolle: {user['position']}")
+    if user.get("team_size"):
+        quick.append(f"Teamgröße: {user['team_size']}")
+    if user.get("current_goal"):
+        quick.append(f"Aktuelles Ziel: {user['current_goal']}")
+    quick_line = ("\nKURZANGABEN: " + " · ".join(quick) + "\n") if quick else ""
+    if not about:
+        return quick_line
+    return quick_line + (
+        "\nÜBER MICH (vom User selbst geschrieben — höchste Priorität für "
+        "Personalisierung; beziehe dich konkret darauf, statt allgemein zu "
+        f"antworten):\n{about[:6000]}\n"
+    )
 
 
 def _build_profile_section(user: dict) -> str:
@@ -607,6 +737,7 @@ def _build_wladhub_section(user: dict) -> str:
     lines.append(f"- Gesamt: {wladhub.get('overall_score', 0)}/100\n")
     if user.get("wladhub_leader_typ"):
         lines.append(f"- Leader-Typ: {user['wladhub_leader_typ']}\n")
+    lines.append("Wenn der User nach seinen Leader-Check/WladHub/Diagnose-Scores fragt, nenne IMMER die konkreten Zahlen und Dimensionen von oben.\n")
     return "".join(lines)
 
 

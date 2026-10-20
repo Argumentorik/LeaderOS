@@ -140,16 +140,11 @@ frontend/node_modules/.cache/default-development/57.pack
 # Allow committed templates and the public-by-design production env.
 !.env.example
 !.env.production
+# Allow per-service runtime .env files (auto-updated during Emergent deploys).
+backend/.env
+frontend/.env
 credentials.json
 *.pem
 *.key
 .credentials
 -e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials

@@ -1,0 +1,46 @@
+{
+  "summary": "Godmode regression of the Guide video features (disk-cache + Range streaming, atomic job lock) plus core user flows. Backend: 39/39 pytest cases green (30 new in test_iter149_guide_regression.py + 9 existing iter148). Verified public teaser, full/HEAD/Range/416/garbage-range/404 media semantics, poster keyframes, 10x parallel byte-identical streaming with negligible RSS growth, clips list per kind with seen flags + prefs, admin overview/single clip/403, 5x concurrent idempotent publish(true), logins for free/accelerator/admin, /api/auth/me and core dashboard endpoints (/api/dashboard-v4, /api/user/tier, /api/features, /api/challenge30/status) and a live /api/chat smoke (200, RAG active, 1.7s). Frontend: login teaser renders with poster + working sound toggle; /video-guide shows 12 published clips, all 12 posters load, clicking a tile loads the player and fires media requests; seen-progress + 'gesehen' badge update; mission day-1 briefing auto-opens for a day-1 user and the 'Briefings nicht mehr automatisch zeigen' preference persists across reload; dashboard 'Wlads Guide' row renders (1/5); nav smoke (dashboard, chat, challenge, video-guide) with zero console errors and zero API >=400 responses. NO Fal/generation endpoint and no script PUT was called.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/guide/media/{token}/{kind}", "issue": "No ETag/Last-Modified on media responses (only Cache-Control: public, max-age=86400) -> browsers/CDNs cannot revalidate with 304; every cache expiry re-downloads the whole 4-8 MB file."},
+      {"endpoint": "GET /api/guide/media/{token}/{kind} (poster/keyframe)", "issue": "Posters are served as raw PNGs of 0.85-1.4 MB each. /video-guide loads 12 of them (~15 MB per page view) and the public login page ships a 1.37 MB PNG poster. Scalability/UX risk at 1000 users -> re-encode to JPEG/WebP with a width cap."},
+      {"endpoint": "internal (WladHub sync)", "issue": "Recurring log line 'wladbot - ERROR - Supabase fetch error: ' with an EMPTY error message (222 occurrences, still firing today) - the exception detail is swallowed, making the failure undiagnosable. Pre-existing, unrelated to guide."},
+      {"endpoint": "process memory", "issue": "uvicorn worker idles at ~845-930 MB RSS right after startup (before any video traffic). Streaming itself only adds ~15-20 MB for 15 sequential + 10 parallel full-video fetches, so the new disk-cache/streaming path is confirmed NOT buffering; but the baseline footprint should be sized/limited for a 1000-customer deployment (single worker, heavy imports)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/video-guide", "issues": ["Poster PNGs are ~1.3 MB each; on a cold media cache the first paint shows black tiles for several seconds before posters appear (all 12 loaded after ~9 s). Consider small JPEG/WebP thumbnails + explicit loading skeleton.", "Support/feedback popup ('Du nutzt Leader-OS aktiv...') overlaps the bottom mission tiles (Tag 5-7) at 1920x1080."]},
+      {"screen": "/challenge (day > 7 users)", "issues": ["Users past challenge day 7 (e.g. free@wladbot.test at day 30) get no mission briefing at all - MissionGuideClip renders null. Expected with only 7 produced clips, but worth an explicit fallback/repeat link to /video-guide."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter149_guide_regression.py",
+    "/app/backend/tests/test_iter148_media_streaming.py",
+    "/app/test_reports/pytest/iter149.xml"
+  ],
+  "action_items": [
+    "Optional perf hardening for 1000 customers: add ETag/Last-Modified (304 support) to /api/guide/media responses and serve downscaled JPEG/WebP posters instead of 1-1.4 MB PNGs (login page + 12-tile grid).",
+    "Fix the empty 'Supabase fetch error:' log message (log the actual exception) - pre-existing noise that would hide real WladHub sync failures in production.",
+    "Consider a fallback in MissionGuideClip for users beyond day 7 (link to /video-guide) instead of rendering nothing."
+  ],
+  "critical_code_review_comments": [
+    "routes/guide.py _serve_object/_file_chunks/_local_media: reviewed and verified - single download per object, 1 MB chunked StreamingResponse, per-path threading lock + atomic .part->target rename, LRU eviction by atime with a 1.5 GB cap (/tmp/guide_media currently 99 MB / 28 files, disk 72 GB free). Deleting a file that is being streamed is safe on Linux (open fd). No RAM buffering confirmed empirically.",
+    "_parse_range: multi-range headers ('bytes=0-9,20-29') fall back to a full 200 response, which is spec-legal; garbage ranges also fall back to 200. 416 correctly carries 'Content-Range: bytes */<size>'. OK.",
+    "_MEDIA_LOCKS dict grows one lock per distinct object path and is never pruned - negligible (bounded by clip count) but technically unbounded if paths churn.",
+    "Media endpoints are intentionally unauthenticated (token-guarded). Tokens are unguessable per clip; note that a leaked token grants permanent public access since there is no expiry/rotation.",
+    "Disk cache lives in /tmp -> lost on every pod restart; the first viewer after a deploy pays the object-storage download latency. Acceptable, but a CDN in front of /api/guide/media would be the real 1000-customer answer.",
+    "routes/guide.py is ~1200 lines - above the 700-line guideline; splitting media serving / admin production / user endpoints into modules would help maintainability."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter149_guide_regression.py"],
+  "success_rate": {"backend": "100% (39/39 pytest)", "frontend": "100% of tested flows (video playback decoding not verifiable headless - see note)"},
+  "seed_data_creation": "No new accounts. Marked a few guide clips as 'seen' for accelerator@wladbot.test (progress data only) and reset iter146-mission@wladbot-testing.de mission_autoplay back to true after the persistence test.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "free@wladbot.test / test123, accelerator@wladbot.test / test123, test@test.com / test123 (admin), iter146-mission@wladbot-testing.de / TestQa2026! (challenge day 1 - required for the mission briefing flow)",
+  "context_for_next_testing_agent": "IMPORTANT: headless Chromium in this environment has NO H.264 decoder (video.canPlayType('video/mp4; codecs=avc1.42E01E') === ''), so every <video> with the guide MP4s raises MEDIA_ERR_SRC_NOT_SUPPORTED (code 4) and GuideVideoPlayer falls back to its text card ('ZUM LESEN'). That is an environment limitation, NOT an app bug - byte delivery was verified instead (browser fetch of a mid-file Range returns 206 with exact 1000 bytes, and 18 media requests fire on tile click). Do not report code 4 as a defect. Challenge route is /challenge (NOT /challenge30 - that path falls back to the dashboard); challenge status endpoint is /api/challenge30/status. MissionGuideClip only renders for challenge days 1-7, so use iter146-mission@wladbot-testing.de (day 1); free@wladbot.test is at day 30. Video-guide progress counts only non-teaser clips (12 of 14), so marking a teaser 'seen' does not move the counter. Never call Fal generation endpoints (voice/video/keyframe/cinematic/shot-keyframes/render/plan/bulk-produce/voice-clone) or PUT scripts; test_iter147_pro_regression.py DOES call bulk-produce and was therefore intentionally NOT executed this round.",
+  "rca_of_the_issue": "No functional defect found. Two initially failing assertions were test-side: (1) an absolute RSS ceiling of 150 MB is unreachable because the app's baseline footprint is ~850 MB at startup independent of video traffic - reworked into a delta assertion (10 parallel full-video streams must grow RSS by less than 10x file size; measured +15 MB for a 4.3 MB file, proving no in-RAM buffering); (2) /api/challenge/progress does not exist, the real endpoint is /api/challenge30/status. One transient 'broken poster' (naturalWidth 0) was cold-cache latency on a 1.3 MB PNG - all 12 posters load after ~9 s."
+}

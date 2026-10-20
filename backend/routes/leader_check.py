@@ -43,7 +43,14 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
 SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
 
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+EMAIL_RE = re.compile(r"^[^@\s]+@([^@\s]+)$")
+
+
+def _is_email(value: str) -> bool:
+    """Wie früher `^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$`, aber linear (kein ReDoS):
+    Domain muss einen Punkt enthalten, der weder erstes noch letztes Zeichen ist."""
+    m = EMAIL_RE.match(value)
+    return bool(m) and "." in m.group(1)[1:-1]
 
 
 def nurture_unsub_url(email_lower: str, app_url: str = "https://leaderos.de") -> str:
@@ -66,7 +73,7 @@ class IntentPayload(BaseModel):
 @router.post("/intent")
 async def capture_intent(payload: IntentPayload):
     email = payload.email.strip().lower()
-    if not EMAIL_RE.match(email):
+    if not _is_email(email):
         return {"ok": False, "error": "invalid_email"}
 
     name = (payload.name or "").strip()

@@ -1,0 +1,70 @@
+{
+  "summary": "Iter 145 (Wlad-Guide-Rollout) end-to-end getestet. BACKEND (22 pytest-Cases in /app/backend/tests/test_iter145_guide_rollout.py, 21 grün / 1 dokumentierter Bug): (a) GET /api/guide/public/teaser ohne Auth -> clip.slug 'teaser-login', video_url + poster_url gesetzt; poster_url hat die Form /api/guide/media/{token}/shot/s1/keyframe -> 200 image/png (PNG-Magic-Bytes); video_url -> 200 video/mp4, 1.36 MB (>1 MB), ftyp-Box vorhanden. (b) GET /api/guide/clips?kind=onboarding als free@wladbot.test -> genau 5 Clips, alle mit video_url + poster_url + duration_seconds_video (43/38/44/47/37 s, alle > 30); ?kind=mission -> 7 Clips mit ref '1'..'7', alle video_url + poster_url; /clips/mission/3 -> Clip ref '3'; ohne Token -> 401. POST /api/guide/clips/start-2-so-sprichst-du/seen -> 200 {ok:true}, danach seen=true in der Liste und seen_count +1. (c) GET /api/guide/admin/overview (Admin) -> 14 Clips: die 13 neuen multi_shot-Clips PLUS der Legacy-Cinematic-Clip 'teaser-spotlight'; ALLE 14 status 'video_ready' und published; settings.spent_usd = 23.63 (im Fenster 20-30); alle 13 multi_shot-Clips haben pipeline 'multishot' und aspect '9:16' (teaser-login) bzw. '16:9' (start-*/mission-*); kein _id-Leak (rekursiv geprüft). (d) POST /api/guide/admin/clips/bulk-produce {slugs:['start-1-willkommen','mission-day-7']} -> 200, started=[] und beide skipped (keine Kosten; spent_usd vor/nach unverändert 23.63); {slugs:['unknown']} -> skipped ['unknown'], started []; ohne Auth -> 401; als free-User -> 403; Status beider Clips danach weiter 'video_ready'. (e) PUT /api/guide/admin/clips/teaser-login mit dem aktuellen 44-Wort-Skript -> 200 {ok:true, words:44} (Multi-Shot-Limit 30-115 greift); mit 10 Wörtern -> 400 'Skript hat 10 Wörter — erlaubt sind 30 bis 115' und Skript unverändert. Der PUT setzt status auf 'script_ready' — die Test-Fixture stellt status+script danach direkt in Mongo wieder her (verifiziert: teaser-login ist wieder video_ready/published, public/teaser liefert weiterhin teaser-login). (f) Regression POST /api/voice/tts {text:'Kurzer Test.', persona:'wlad'} -> 200, audio_url data:audio/mpeg-Base64, voice_id 'Voice6717536d1788310928'. KEINE kostenpflichtige Fal-Generierung ausgelöst. FRONTEND: /login (1920x800, Cookie-Banner akzeptiert): 'login-teaser' sichtbar bei x=80/y=440 (y<600), 'login-teaser-video' src=.../api/guide/media/<token>/video + poster=.../shot/s1/keyframe, Poster gerendert, kein product-preview-loop (count 0); die Feature-Liste liegt unterhalb des Teasers (bei 800 px Höhe unter dem Fold, kein <li> im Viewport). Login free@wladbot.test mit entferntem 'leaderos_tour_v1_done' -> /dashboard zeigt 'tour-card-welcome' (Schritt 1/12) mit eingebettetem 'tour-intro-video' (src .../video, poster .../shot/s1/keyframe); Card-Box y=136, bottom=664 -> vollständig im 800px-Viewport; 'tour-close' schließt die Tour (dashboard-first-tour count 0). Dashboard (accelerator@wladbot.test, tour_done=1): 'guide-clips-row' sichtbar, 5 'guide-clip-thumb-*' mit geladenen Postern (naturalWidth 1344 bei allen 5), 'guide-clips-seen' = '0/5'; Klick auf 'guide-clip-thumb-start-3-kontext' öffnet 'guide-clips-player' mit 'guide-clip-start-3-kontext'; 'guide-clips-toggle' klappt die Reihe ein (thumbs 0). Challenge: free@ und accelerator@ sind beide auf 'Tag 10 aktiv' -> 'mission-guide-clip' korrekt NICHT vorhanden (Tag > 7). Positivfall zusätzlich mit neu registriertem Account (Tag 1) verifiziert: 'WLADS BRIEFING · TAG 1' + 'guide-clip-mission-day-1' vorhanden. Admin /wlad-control-x7k9q2: 'guide-bulk-produce-btn' vorhanden, DISABLED, Label 'Alle offenen Clips produzieren (0 · ≈ 0.00 $)'; alle 14 Karten zeigen 'Video fertig' + LIVE; guide-spent '23.63 $'; teaser-login-Karte ist per Default offen (open = kind==='teaser') und zeigt 4 Shots s1..s4, alle Status 'gerendert', s3-Screen-Chips chat/video/missions aktiv (rgb(191,255,0)), alle übrigen inaktiv. Nichts Renderndes geklickt.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "GET /api/guide/admin/overview + /api/guide/admin/clips/{slug}",
+        "issue": "word_limits ignoriert multi_shot: _admin_clip_view (routes/guide.py:304) liefert word_limits(kind), save_script (Zeile 474) erlaubt für multi_shot aber 30-115. Für teaser-login (kind teaser, 44 Wörter) kommt word_limits [6,30] zurück -> Admin-UI zeigt '44 Wörter · erlaubt 6-30' in Rot und der Speichern-Button ist dauerhaft disabled, obwohl der PUT das Skript akzeptiert. Fix: lo,hi = (30,115) if c.get('multi_shot') else word_limits(kind)."
+      },
+      {
+        "endpoint": "GET /api/guide/public/teaser",
+        "issue": "Zwei Teaser sind gleichzeitig published (teaser-login 9:16 und der Legacy-Clip teaser-spotlight 16:9/cinematic). Aktuell gewinnt teaser-login nur über sort order; wird teaser-login zurückgezogen oder die order geändert, landet ein 16:9-Cinematic-Clip im 9:16-Slot der Login-Seite. Legacy-Teaser entweder unpublishen oder public_teaser explizit auf slug/aspect filtern."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "GuideClipCard (Admin Guide Studio) — teaser-login",
+        "issue": "Wörterzähler zeigt rot '44 Wörter · erlaubt 6-30' und 'Speichern' ist disabled -> das Login-Teaser-Skript kann im Admin nicht bearbeitet/gespeichert werden. Ursache ist das Backend-word_limits (siehe backend_issues.minor).",
+        "selector": "[data-testid=\"guide-clip-words-teaser-login\"], [data-testid=\"guide-clip-save-teaser-login\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "GuideVideoPlayer",
+        "issue": "Hardcodierte Texte passen nicht zu den produzierten Clips: Script-Toggle sagt 'Text mitlesen (20 Sekunden)', die Clips sind 37-47 s lang; der Play-Overlay zeigt clip.duration_seconds (Sprechdauer, z. B. 35 s) während die Thumbnails in GuideClipsRow duration_seconds_video (43 s) anzeigen — zwei verschiedene Längen für denselben Clip.",
+        "selector": "[data-testid^=\"guide-script-toggle-\"], [data-testid^=\"guide-play-\"]",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Admin Guide Studio",
+        "issues": [
+          "Beide Teaser-Karten (teaser-login, teaser-spotlight) sind wegen open = kind==='teaser' beim Laden aufgeklappt; ein Klick auf 'guide-clip-toggle-teaser-login' KLAPPT die Karte also zu (nicht auf). Nur Erwartungs-/Testfalle, kein Defekt — für Automatisierung relevant.",
+          "Legacy-Layout-Loch unter dem Audio-Player der Teaser-Karte besteht weiter (siehe iteration_144.json, kosmetisch)."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter145_guide_rollout.py",
+    "/app/test_reports/pytest/iter145.xml"
+  ],
+  "action_items": [
+    "routes/guide.py:304 — word_limits im Admin-View am multi_shot-Flag ausrichten ((30,115) für multi_shot), sonst bleibt 'Speichern' für teaser-login im Guide Studio blockiert.",
+    "Legacy-Teaser 'teaser-spotlight' unpublishen ODER public_teaser deterministisch auf den 9:16-Login-Teaser einschränken.",
+    "GuideVideoPlayer: '(20 Sekunden)' dynamisch aus duration_seconds_video setzen und Play-Overlay auf dieselbe Dauer umstellen wie die Thumbnails."
+  ],
+  "critical_code_review_comments": [
+    "PUT /api/guide/admin/clips/{slug} setzt status unbedingt auf 'script_ready' — bei einem bereits fertigen Clip (video_ready, published) wird damit ein Live-Clip auf 'Skript bereit' zurückgesetzt, obwohl Video und Freigabe unverändert bleiben. Für Multi-Shot-Clips mit vorhandenem video_path den Status besser erhalten (oder nur bei tatsächlich geändertem Skript zurücksetzen).",
+    "Wortlimit-Logik ist an drei Stellen doppelt: (30,115) in save_script, word_limits(kind) im Admin-View, 26 Wörter/Shot in GuideShotList.js — nach guide_content.py (MULTISHOT_WORD_LIMITS / TALK_MAX_WORDS) ziehen.",
+    "routes/guide.py ist inzwischen 1000 Zeilen (>700) — Jobs/Admin-Produktion auslagern (bereits in Iter 144 angemerkt, unverändert)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter145_guide_rollout.py",
+    "/app/test_reports/iteration_145.json"
+  ],
+  "success_rate": {
+    "backend": "95% (21/22 — der einzige Fehlschlag dokumentiert den word_limits-Bug)",
+    "frontend": "100% der geforderten Checks bestanden (2 nicht-blockierende UI-Findings)"
+  },
+  "seed_data_creation": "Ein Konto neu registriert, um den Mission-Briefing-Positivfall (Tag 1-7) zu prüfen, weil alle Seed-Accounts auf Challenge-Tag 10 stehen: test_iter145_mission@test.com / TestPass145x! (Tag 1, free). Sonst keine Datenänderung — teaser-login wurde nach dem PUT-Test auf status 'video_ready' + Originalskript zurückgesetzt (verifiziert).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Admin test@test.com/test123, free@wladbot.test/test123, accelerator@wladbot.test/test123 (aus /app/memory/test_credentials.md) + neu: test_iter145_mission@test.com/TestPass145x!",
+  "context_for_next_testing_agent": "Regression: pytest /app/backend/tests/test_iter145_guide_rollout.py (der TTS-Case kostet Cent-Betrag; -k 'not Voice' spart ihn). WICHTIG: PUT /api/guide/admin/clips/{slug} setzt den Clip-Status auf script_ready — der Test stellt teaser-login danach per pymongo wieder her; nicht abbrechen (Ctrl-C) während TestMultishotScriptLimit läuft, sonst bleibt teaser-login auf script_ready. Kostenpflichtig und NICHT anzufassen: plan/shot-keyframes/render/keyframe/cinematic/voice/video/voice-clone und bulk-produce mit offenen Clips (aktuell 0 offen -> bulk ist ungefährlich). Umgebungslimit bleibt: headless Chromium ohne H.264 -> jedes <video> feuert onError, GuideVideoPlayer schaltet auf 'Zum Lesen'-Fallback (data-testid guide-text-fallback-*); daher nur src/poster/HTTP-Status prüfen, keine Wiedergabe. Admin: teaser-Karten sind per Default AUFGEKLAPPT, ein Toggle-Klick schließt sie. Challenge-Tag der Seed-Accounts ist 10 -> für Mission-Briefing-Tests einen frischen Account nutzen (test_iter145_mission@test.com).",
+  "rca_of_the_issue": "word_limits-Bug: _admin_clip_view (routes/guide.py:304) berechnet die UI-Limits ausschließlich aus clip.kind (word_limits('teaser') = 6-30), während save_script (Zeile 474) für multi_shot-Clips 30-115 erlaubt. teaser-login ist kind 'teaser' UND multi_shot mit 44 Wörtern -> das Frontend (GuideClipCard.js:34-35, wordsOk) hält das gültige Skript für ungültig, färbt den Zähler rot und deaktiviert 'Speichern'. Reproduktion: GET /api/guide/admin/clips/teaser-login -> word_limits [6,30] bei 44 Wörtern Skript; im Guide Studio ist der Speichern-Button der teaser-login-Karte disabled. Mitigation: dieselbe Limit-Berechnung wie in save_script verwenden (am besten zentral in guide_content.py)."
+}

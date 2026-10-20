@@ -1,0 +1,33 @@
+{
+  "summary": "Iter 143 Guide-Studio (Cinematic Wlad-Avatar) end-to-end getestet. Backend: 22 pytest-Cases in /app/backend/tests/test_iter143_guide_cinematic.py — alle GRÜN (Admin-Overview-Shape inkl. shot/word_limits/settings/costs, Auth 401/403, öffentliche Medien video/raw/keyframe/audio/padded/portrait/body + 404-Negativfälle, Wortgrenzen 6-30 bzw. 55-115, Scene/Motion-Override + Reset, Publish-Roundtrip inkl. video_url-Sichtbarkeit für Normaluser, Generierungs-Guards 400/404). Keine kostenpflichtigen Fal-Jobs ausgelöst. Frontend: Admin-Login + /wlad-control-x7k9q2 geprüft — guide-studio, Assets (Portrait/Body/Sample mit Bild bzw. Audio-Player), Voice-ID 'Voice6717536d1788310928', spent 2.18 $, Teaser-Karte aufgeklappt mit Video-Element (src gesetzt), MP4-Download-Link, alle 5 Aktions-Buttons, Live-Wörterzähler (3 Wörter -> text-rose-500 + Save disabled), Save-Klick ohne Fehler, start-2-Karte: Textarea da, Talking-Head-Button disabled, kein Keyframe/Cinematic-Button. Kontrast-Audit im Light-Mode: 0 Elemente unter 4.0:1.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "PUT /api/guide/admin/clips/{slug}", "issue": "Speichern setzt status hart auf 'script_ready' — auch wenn bereits ein fertiges Video existiert. Nach dem im Auftrag geforderten Abschluss-Speichern zeigte die Teaser-Karte 'Skript bereit' statt 'Video fertig', obwohl Video/Download/Freigeben weiter verfügbar waren. Entweder Status erhalten oder Video explizit als 'veraltet' markieren. (Status im Preview per Skript auf video_ready zurückgesetzt: /app/backend/tests/_iter143_restore_status.py)"}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Guide Studio · Teaser-Karte (Light Mode, 1920px)", "issues": ["Ca. 250 px leerer Weißraum in der linken Spalte unter dem Audio-Player, weil die rechte Medien-Spalte (9:16-Keyframe) viel höher ist — Karte wirkt unfertig", "Video-Vorschau (guide-clip-video-preview) rendert nur ~110 px hoch und schwarz mit Dauer 0:00, direkt darunter das große Keyframe-Bild — Hierarchie/Gewichtung verkehrt; poster/preload=metadata + gleiche Breite wie Keyframe würde helfen"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_iter143_guide_cinematic.py", "/app/test_reports/pytest/iter143.xml", "/app/backend/tests/_iter143_restore_status.py"],
+  "action_items": [
+    "PUT /api/guide/admin/clips/{slug}: Status bei vorhandenem Video nicht auf script_ready zurücksetzen (oder Video als 'veraltet' kennzeichnen)",
+    "Teaser-Karten-Layout: Weißraum-Lücke schließen und Video-Vorschau größer/mit Poster darstellen"
+  ],
+  "critical_code_review_comments": [
+    "routes/guide.py _admin_clip_view: Overrides via `c.get('scene_prompt') or preset[...]` — leerer String fällt korrekt auf Preset zurück (verifiziert), aber ein bewusst leeres Prompt ist damit nicht speicherbar; ok solange dokumentiert.",
+    "serve_media ist bewusst öffentlich (Token-basiert) — Token ist secrets.token_urlsafe(24), akzeptabel; Cache-Control public/86400 bedeutet aber, dass ein neu gerendertes Video unter neuem Pfad, aber gleicher URL (/media/{token}/video) bis 24 h im Browser-Cache alt bleiben kann. Versions-Query oder max-age reduzieren."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter143_guide_cinematic.py", "/app/backend/tests/_iter143_restore_status.py"],
+  "success_rate": {"backend": "100% (22/22)", "frontend": "100% der geprüften Selektoren/Flows"},
+  "seed_data_creation": "Keine neuen Daten. Teaser-Skript unverändert auf Originaltext, scene/motion-Overrides geleert (Preset aktiv), published=false, status auf video_ready restauriert.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Admin test@test.com/test123, User free@wladbot.test/test123",
+  "context_for_next_testing_agent": "Fal-Endpunkte (voice, keyframe, cinematic, video, voice-clone) NIEMALS auslösen — echtes Geld. Nur Negativfälle: cinematic auf start-2 -> 400, keyframe auf unknown-slug -> 404. Regressionsdatei: /app/backend/tests/test_iter143_guide_cinematic.py (läuft in ~9 s, benötigt produzierten Teaser 'teaser-spotlight'). Achtung: der PUT-Test setzt den Clip-Status auf script_ready — danach /app/backend/tests/_iter143_restore_status.py laufen lassen, sonst zeigt die UI 'Skript bereit'.",
+  "rca_of_the_issue": "Statuswechsel-Befund: save_script() in routes/guide.py setzt unbedingt patch['status']='script_ready'; da der Auftrag ein Abschluss-Speichern verlangt, kippt dadurch jede Karte mit fertigem Video zurück auf 'Skript bereit'."
+}

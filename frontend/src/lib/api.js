@@ -18,10 +18,44 @@ export const API_BASE = (IS_LOCAL_DEV && RAW_BACKEND_URL && RAW_BACKEND_URL !== 
   ? `${RAW_BACKEND_URL}/api`
   : '/api';
 
+/**
+ * Seiten, die ohne Login erreichbar sein MÜSSEN (Iter 185). Ein 401 auf
+ * diesen Seiten darf niemals hart zum Anmeldeformular umleiten.
+ */
+export const PUBLIC_PATHS = [
+  '/', '/leadership-programm', '/leadership-lab', '/coaching', '/for-teams', '/teams', '/business',
+  '/impressum', '/datenschutz', '/agb', '/widerruf', '/sicherheit', '/changelog', '/whats-new',
+  '/kurse-uebersicht',
+  // Plan Iter 187: Der Studienplan ist öffentlich — Folge 1 ohne Konto.
+  '/kurse',
+  // Marketing-Seiten (leader-os.de / leader-check.de) — nie zum Login umleiten.
+  '/webinar', '/event', '/live', '/journal', '/kommunikation', '/training', '/ki-fuehrungskraft',
+  '/leaderos', '/fuehrung-beginnt-hier', '/gratis', '/free', '/videos', '/gratis-videos',
+  '/free-video-series', '/wlad-jachtchenko', '/wlad', '/about', '/ueber-wlad', '/thank-you',
+  '/frameworks', '/methodik',
+  // Öffentliche Share-Links, Auth- und E-Mail-Landings
+  '/m', '/f', '/login', '/signup', '/register', '/auth', '/auth-callback',
+  '/newsletter', '/email/unsubscribe',
+];
+
+/**
+ * Iter 185: EINE Stelle, die „Guthaben leer" bzw. „Bereich gesperrt" meldet —
+ * auch für Wege, die nicht über axios laufen (SSE-Streaming via fetch).
+ */
+export function notifyPaymentRequired(detail) {
+  const kind = typeof detail === 'object' && detail ? detail.error : detail;
+  const name = kind === 'tier_required' ? 'wladbot:feature-locked' : 'wladbot:credits-empty';
+  window.dispatchEvent(new CustomEvent(name, {
+    detail: { path: window.location.pathname, info: typeof detail === 'object' ? detail : null },
+  }));
+}
+
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
-  timeout: 30000,
+  // 120s: LLM endpoints (workflows, challenger finish, video jobs) regularly
+  // take 30-90s — a 30s timeout made them fail while the backend kept working.
+  timeout: 120000,
 });
 
 // ··· Refresh single-flight (two layers) ···
@@ -122,9 +156,10 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 402 = paywall trigger
+    // 402 = Guthaben leer ODER Bereich gesperrt — Iter 185: zwei getrennte
+    // Meldungen, nie beide gleichzeitig, und kein ungefragtes Kauffenster.
     if (error.response?.status === 402) {
-      window.dispatchEvent(new CustomEvent('wladbot:paywall', { detail: { path: window.location.pathname } }));
+      notifyPaymentRequired(error.response?.data?.detail);
       return Promise.reject(error);
     }
 
@@ -161,9 +196,14 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(false);
-
-        const onAuthPage = window.location.pathname.includes('/login') || window.location.hash.includes('session_id');
-        if (onAuthPage) return Promise.reject(error);
+        const p = window.location.pathname;
+        // Iter 185: Öffentliche Seiten dürfen NIE zum Anmeldeformular
+        // umgeleitet werden — wer über Suche, Ads oder KI-Empfehlung kommt,
+        // wäre sonst weg.
+        const onAuthPage = ['/login', '/signup', '/register', '/auth/', '/auth-callback'].some((r) => p.startsWith(r))
+          || window.location.hash.includes('session_id');
+        const onPublicPage = PUBLIC_PATHS.some((r) => p === r || p.startsWith(`${r}/`));
+        if (onAuthPage || onPublicPage) return Promise.reject(error);
 
         // Distinguish "session truly expired" (refresh got 401/403) from "server
         // momentarily down" (5xx / network). For the latter we keep the user
@@ -178,7 +218,8 @@ api.interceptors.response.use(
           return Promise.reject(error);
         }
 
-        // True auth failure: soft modal if we have a cached user, else hard redirect.
+        // True auth failure: soft modal if we have a cached user (preserves
+        // scroll/state), else hard redirect (cold session).
         const hasCachedUser = Boolean(sessionStorage.getItem('wladbot_user'));
         if (hasCachedUser) return waitForReAuth(originalRequest, error);
 

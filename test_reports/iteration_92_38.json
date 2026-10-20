@@ -1,0 +1,52 @@
+{
+  "summary": "Iter 92.38 — SENDER_EMAIL rename to wlad@leaderos.de (NO dash) verified. All env, module-constant, template-render, support-route, and magic-link send-path checks pass (16/16 in new test_iter92_38 suite). Existing iter92_37 onboarding-email regression updated to assert the new sender and now passes (10/10 in TestOnboardingEmails class). NO new Resend 'domain not verified' errors appeared in backend.err.log AFTER the rename — last such error was at 12:05:13 on the OLD dashed sender; no new errors after backend restart at 12:30:10. Resend success cannot be DIRECTLY confirmed in preview because magic-link rate-limit (429, per-hour) blocks fresh sends — this is the expected per-IP guard, not a regression.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/magic-link/request", "issue": "Per-hour rate-limit (429) prevents directly observing a NEW Resend send after the SENDER_EMAIL switch. Not a code bug — rate-limit by design. Mert must verify on his Resend dashboard that leaderos.de is now a verified domain; the existing logs only contain pre-rename errors on leader-os.de (with dash)."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "verified_behaviours": [
+    ".env: SENDER_EMAIL=\"wlad@leaderos.de\" (no dash, exact match). reminders@leader-os.de fully removed.",
+    ".env.example: SENDER_EMAIL=wlad@leaderos.de; reminders@leader-os.de absent. (Note: line 13 webhook URL https://leader-os.de still references dashed domain but is a webhook path, NOT an email sender — out of scope.)",
+    "services_email.SENDER_EMAIL constant == 'wlad@leaderos.de' after module import (load_dotenv() picks up the fresh .env).",
+    "services_email line ~63 from-header constructs to 'WladBot <wlad@leaderos.de>' (BRAND_NAME=WladBot + SENDER_EMAIL).",
+    "signup_welcome_email('Mert', 'https://leader-os.de') renders → (subject, html) tuple; html length > 1000 chars; 'Mert' present in body.",
+    "tier_welcome_email(starter|standard|accelerator, 'Mert') renders → html > 1000 chars; 'Mert' in subject (template body uses generic 'du', name only in subject).",
+    "drip_day1_email / drip_day3_email / drip_day7_email all render → html > 1000 chars.",
+    "/app/backend/routes/support.py: grep -c 'support@leader-os.de' → 0 (was the OLD dashed). grep -c 'support@leaderos.de' → 8 (≥4 required).",
+    "POST /api/auth/magic-link/request {email: test@test.com} → 200 OK (when not rate-limited) / 429 (when limit hit). NEVER 5xx — proves send_email() template + From-header path does not crash with the new sender string.",
+    "Lint: /app/backend/services_email.py and /app/backend/routes/support.py → no Python lint errors.",
+    "Existing /app/backend/tests/test_iter92_37_pre_release_regression.py::TestOnboardingEmails — sender-email test was assertion-flipped from 'reminders@leader-os.de' → 'wlad@leaderos.de' (no dash). Whole TestOnboardingEmails class: 10/10 PASS.",
+    "Backend logs since 12:30:10 restart: zero new 'leader-os.de domain is not verified' errors. (Pre-restart errors at 12:05:13 are the OLD sender — last historical occurrence before the rename.)"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_38_sender_email_leaderos.py",
+    "/app/backend/tests/test_iter92_37_pre_release_regression.py",
+    "/app/test_reports/pytest/iter92_38.xml"
+  ],
+  "action_items": [
+    "USER-EXTERNAL (Mert) — Confirm on https://resend.com/domains that leaderos.de is now a VERIFIED domain (SPF + DKIM TXT records added on the leaderos.de DNS zone). Cannot be verified by agent — only Mert can see his Resend dashboard. Once verified, the very next magic-link / signup_welcome / tier_welcome / drip send to a real inbox will succeed.",
+    "OPTIONAL — Once Resend domain is verified, trigger a fresh signup via /api/auth/register on a brand-new email (not test@test.com — which is rate-limited) and tail backend.err.log to confirm no 'domain not verified' error appears. Status code 200 + absence of Resend ERROR log = sends are flowing.",
+    "OPTIONAL — Pre-existing test_iter92_37 issues (UNRELATED to iter92_38): (a) test_magic_link_request hits 429 when run within same hour as iter92_38; (b) test_chat_endpoint_10_stufen has AttributeError ('dict' has no attribute 'lower') — RAG response shape changed. Both are test-code bugs, not regressions."
+  ],
+  "critical_code_review_comments": [
+    "services_email.py:16 — SENDER_EMAIL falls back to 'onboarding@resend.dev' if env missing; that's Resend's shared sandbox sender (always works) so the fallback is safe. Good defensive default.",
+    "services_email.py:63 — from-header is constructed lazily per send; since SENDER_EMAIL is read at import time, any future .env change requires a backend restart (which Mert already did). Acceptable for a transactional service.",
+    ".env.example:13 has a comment URL still pointing to https://leader-os.de/api/webhook/stripe — purely doc, not behavior. Recommend a follow-up cleanup pass for full domain consistency but not blocking.",
+    ".env.example:46 commented CORS_ORIGINS still lists both leader-os.de AND leaderos.de — correct for backward compat during DNS cutover. No action.",
+    "No risk of regression to working flows: 51/53 tests pass; the 2 failures are pre-existing iter92_37 test bugs (rate-limit + RAG response shape) UNRELATED to this iter."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_38_sender_email_leaderos.py (NEW — 16 tests, 16 PASS)",
+    "/app/backend/tests/test_iter92_37_pre_release_regression.py (1 assertion flipped: old reminders@leader-os.de → new wlad@leaderos.de; test renamed test_sender_email_uses_dashed_domain → test_sender_email_uses_no_dash_domain)"
+  ],
+  "success_rate": {"backend": "100% on iter92_38-scoped (16/16) + 100% on iter92_37 TestOnboardingEmails (10/10). 96% overall iter92_37 (51/53) — 2 failures are pre-existing unrelated bugs.", "frontend": "N/A — backend-only iter."},
+  "test_credentials": "test@test.com / test123 (admin) — works. Note: per-hour magic-link rate-limit may yield 429 in quick succession.",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.38 is a 1-line env rename + sed across 2 files. ALL CODE VERIFIED CORRECT. The actual proof of Resend acceptance is EXTERNAL: Mert must confirm leaderos.de is verified on his Resend dashboard. Until then, agents cannot directly observe a successful Resend 200 in backend logs because the test-data email (test@test.com) is rate-limited per hour. If a fresh signup with a brand-new email triggers a 'domain not verified' error AFTER iter92.38, the error MUST now mention leaderos.de (not leader-os.de) — that's the diagnostic: if it still says leader-os.de, the .env wasn't reloaded; if it says leaderos.de, Mert hasn't completed Resend DNS verification yet. Pre-existing iter92_37 test bugs (rate-limit assumption + RAG response dict shape) are unrelated and tracked as optional follow-ups.",
+  "rca of the issue": "Original bug: Resend rejected every outgoing email because services_email loaded SENDER_EMAIL='reminders@leader-os.de' but only the no-dash domain 'leaderos.de' is being verified on the Resend dashboard. Fix: (1) /app/backend/.env SENDER_EMAIL → 'wlad@leaderos.de'; (2) sed-rename 'support@leader-os.de' → 'support@leaderos.de' and 'reminders@' → 'wlad@' in routes/support.py + .env.example; (3) supervisorctl restart backend. Verification: 16/16 dedicated iter92_38 tests + 10/10 iter92_37 onboarding-email tests pass. Remaining external action: Mert must finish DNS verification of leaderos.de on Resend (out of agent control). After that, all transactional mails will deliver."
+}

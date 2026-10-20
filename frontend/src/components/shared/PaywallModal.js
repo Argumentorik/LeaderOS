@@ -3,7 +3,9 @@ import { Card, CardContent } from '../ui/card';
 import { X, CheckCircle2, Flame, Brain, Video, Target, Calendar, Sparkles } from 'lucide-react';
 import { PricingModal } from './PricingModal';
 import { useBookConsultation } from '../brand/BookConsultationButton';
-import { WLAD_AVATAR as WLAD, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/brandAssets';
+import { withFallback, WLAD_AVATAR_FALLBACKS } from '../../lib/brandAssets';
+
+const WLAD = '/wladbot-avatar-clean.png';
 
 // Accessible lime color for text/icons on light surfaces
 const LIME_ACCENT = 'text-[#6B8A00] dark:text-[#BFFF00]';
@@ -19,7 +21,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
   };
 
   const features = [
-    { icon: Flame, label: '30-Tage KI-Leadership-Challenge' },
+    { icon: Flame, label: '30-Tage KI-Leadership Programm' },
     { icon: Brain, label: 'Unbegrenzter KI-Coach (24/7)' },
     { icon: Video, label: '16 Video-Missionen mit KI-Feedback' },
     { icon: Target, label: '10 Workflows + PDF-Reports' },

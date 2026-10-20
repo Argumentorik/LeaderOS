@@ -13,7 +13,6 @@ import logging
 import os
 from typing import Optional
 
-import httpx
 import jwt
 from jwt import PyJWKClient
 
@@ -28,7 +27,15 @@ logger = logging.getLogger("wladbot.oauth")
 # ────────────────────────────────────────────────────────────────────────────
 
 def google_client_id() -> Optional[str]:
-    return os.environ.get("GOOGLE_CLIENT_ID") or None
+    """GOOGLE_CLIENT_ID from env — defensively sanitized.
+
+    Strips accidental 'Client:' labels, quotes and whitespace that sneak in
+    when the value is copy-pasted out of the Google Cloud Console UI.
+    """
+    raw = (os.environ.get("GOOGLE_CLIENT_ID") or "").strip().strip('"').strip("'").strip()
+    if raw.lower().startswith("client:"):
+        raw = raw.split(":", 1)[1].strip()
+    return raw or None
 
 
 def verify_google_id_token(credential: str) -> dict:
@@ -207,9 +214,12 @@ def available_providers() -> dict:
     """Return which OAuth providers are configured on this server.
 
     The frontend calls this on the login screen to know which buttons to render.
+    Google is served via Emergent-managed OAuth (OAUTH_SESSION_URL) — no
+    Google Cloud Console client needed.
     """
+    import os
     return {
-        "google": bool(google_client_id()),
+        "google": bool(os.environ.get("OAUTH_SESSION_URL") or google_client_id()),
         "apple": bool(apple_service_id()),
         "microsoft": bool(microsoft_client_id()),
         "magic_link": True,

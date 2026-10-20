@@ -1,0 +1,22 @@
+{
+  "summary": "Frontend-only regression for Iter 163 Dashboard-Entschlackung. All 7 requested scenarios pass: (1) Free user dashboard above-the-fold shows next-step-cta with 'Heute' label, all 3 stat cards, level-progress, and dashboard-more-toggle labeled 'Mehr' with count badge (9); collapsed DOM excludes quick-* (0), upsell-banner (0), referral-upsell-card (0), dashboard-more-content (0). (2) Expanding Mehr reveals dashboard-more-content, quick-* (6), upsell-banner (1), referral-upsell-card (1); label flips to 'Weniger'; state persisted to localStorage (wladbot_dashboard_more_open) across reload; collapsing also persists. (3) ActionInbox aria-expanded=false by default, opens on click, state persisted for session via sessionStorage (leaderos_action_inbox_open). (4) next-step-btn → /challenge, talk-coach-btn → /chat. (5) Standard user sees 'Leadership OS PLUS (4.797 €)' with eyebrow 'STRATEGY-CALL · LEADERSHIP OS' and NO occurrence of 'Accelerator' anywhere on dashboard incl. Mehr. (6) Accelerator user: upsell-banner NOT rendered in Mehr (count=0). (7) Mobile 390x844: no horizontal page overflow (scrollWidth=clientWidth=390); Mehr toggle works after closing the first-run tour + cookie banner. No React console errors observed on /dashboard.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "DashboardMore + ActionInbox implementations look clean and minimal. Storage keys match spec (wladbot_dashboard_more_open / leaderos_action_inbox_open).",
+    "Minor UX nit (not blocking): On mobile the dashboard-first-tour overlay intercepts pointer events until closed; automated tests must dismiss both cookie banner and tour before interacting. Consider auto-dismissing tour if wladbot_onboarding_done=1 is already set (currently a separate tour flag is used)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "test_credentials": "free@wladbot.test / test123, standard@wladbot.test / test123, accelerator@wladbot.test / test123",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend has aggressive login rate limit (429 'Zu viele Anfragen'). When testing multiple tier accounts in one run, add ~20-30s sleeps between /api/auth/login calls. Dashboard has a first-run tour (data-testid dashboard-first-tour) whose overlay intercepts clicks; also cookie banner ('Nur notwendige'). Dismiss both before interacting on mobile. localStorage keys of note: wladbot_token, wladbot_onboarding_done, wladbot_dashboard_more_open. Session key: leaderos_action_inbox_open."
+}

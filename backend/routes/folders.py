@@ -43,8 +43,7 @@ from pydantic import BaseModel
 from config import db
 from services import get_current_user
 from services_folder_knowledge import build_folder_timeline, generate_briefing_prompt
-# Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 router = APIRouter(prefix="/api/folders", tags=["folders"])
 

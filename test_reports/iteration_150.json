@@ -1,0 +1,46 @@
+{
+  "summary": "Iter 150 security-audit verification (backend + frontend). Ran the developer's pytest suite (tests/test_iter150_security_fixes.py, 7/7 pass) plus a new independent suite (tests/test_iter150_verify.py, 17/17 pass) covering login/tv-claim/JWT lifetime, /auth/me via cookie+Bearer, 401 on unauthenticated security endpoints, register password policy, security/overview schema, acknowledge, wrong-current-password rejection, not-me token revocation vs. cookie survival, and free-user credits + admin-only credit reset. Frontend: verified Profile ?tab=security preselect, new-device banner (data-testid=new-device-alert, 3 entries incl. 'Firefox · Windows · Lagos, NG'), 'Das war ich' ack (toast + banner gone, persists after reload), 'Das war ich nicht' (toast, session kept, URL -> /profile?tab=account&focus=password), client-side password policy (no API call for weak pw), smoke of /dashboard, /video-guide, /challenge, /chat (no console/JS errors, no failing /api calls), sidebar logout + protected-route redirect + re-login. One real UI bug found: the account tab does NOT actually open after 'Das war ich nicht'.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/register", "issue": "Password 'kurz1' is rejected with 422 (Pydantic 'at least 6 characters') instead of the new 400 policy error ('min 8 chars, letters+digits'). Inconsistent status code/message vs. /auth/password/change which returns 400. Pydantic min_length should be raised to 8."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ProfilePage", "issue": "Tabs use uncontrolled `defaultValue={initialTab}` (line 447). After 'Das war ich nicht' the app navigates to /profile?tab=account&focus=password but the UI STAYS on the Sicherheit tab — no password form is shown (0 password inputs). Same for any in-app ?tab= change. Fix: make Tabs controlled (value + onValueChange synced with searchParams).", "selector": "[data-testid=\"profile-tabs\"]", "priority": "HIGH"},
+      {"component": "ProfileAccountTab", "issue": "`focus=password` query param is never consumed — no scroll/focus to the password form even on a fresh load of /profile?tab=account&focus=password.", "selector": "[data-testid=\"password-form\"]", "priority": "MEDIUM"},
+      {"component": "ProfileAccountTab", "issue": "New-password inputs still have minLength={6}; entering 'kurz1' is blocked by the browser's native validation tooltip, so the intended German toast 'Min. 8 Zeichen mit Buchstaben und Zahlen.' never appears (it does appear correctly for 'nurbuchstaben'). Set minLength={8} for a consistent message.", "selector": "[data-testid=\"password-new\"]", "priority": "LOW"},
+      {"component": "DashboardFirstTour", "issue": "The onboarding overlay [data-testid=\"dashboard-first-tour\"] (fixed inset-0 z-[9999]) intercepts pointer events on the whole app, blocking sidebar 'Abmelden' until closed. Expected for a modal, but note the support/feedback popup additionally overlaps the bottom-centre area of the Profile page content.", "selector": "[data-testid=\"dashboard-first-tour\"]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Profile (all tabs)", "issues": ["Persistent 'SUPPORT · DIREKTKONTAKT' feedback card sits over the tab content near the bottom of the viewport and overlaps action buttons of the new-device banner region at 1920x1080."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter150_verify.py",
+    "/app/backend/tests/test_iter150_security_fixes.py",
+    "/app/test_reports/pytest/iter150_verify.xml",
+    "/app/test_reports/pytest/iter150.xml"
+  ],
+  "action_items": [
+    "Make ProfilePage Tabs controlled by the ?tab search param so the 'Das war ich nicht' redirect actually lands the user on the Konto tab / password form (currently it stays on Sicherheit).",
+    "Honour ?focus=password (scroll + focus new-password field) in ProfileAccountTab.",
+    "Raise minLength 6 -> 8 on the new-password inputs and raise the register Pydantic password min_length to 8 so weak passwords return 400 with the policy message instead of 422."
+  ],
+  "critical_code_review_comments": [
+    "ProfilePage.js:447 `<Tabs defaultValue={initialTab}>` is uncontrolled — every in-app navigate('/profile?tab=...') is a no-op for the visible tab. This breaks the new not-me -> change-password flow.",
+    "routes/credits.py refund_credit() does an unconditional $inc balance +1 / total_used -1 with no upper bound — repeated refunds can push balance above the tier limit and total_used negative; guard with a filter (e.g. total_used > 0).",
+    "auth.py _new_device_logins(): a fingerprint whose FIRST history occurrence lies outside the 14-day/ack window is never flagged again even if it logs in today; acceptable but worth documenting.",
+    "Brute-force lockout is 10 failed attempts / 15 min per (email, ip) (auth.py:85) — the security playbook asks for 5; consider tightening."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter150_verify.py"],
+  "success_rate": {"backend": "100% (24/24 pytest cases across both iter-150 suites)", "frontend": "85% (banner/ack/not-me/policy/smoke/logout OK; tab switch after not-me broken)"},
+  "seed_data_creation": "Seeded foreign login_history entries for free@wladbot.test (fingerprints ff-demo-foreign/ff-demo-2, Lagos NG) and unset security_ack_at; re-seeded a fresh entry (ff-demo-foreign2) after testing so the banner is visible again. Temporary users sec150v_*@wladbot.test were created and deleted; verified 0 leftovers. NOTE: token_version of free@wladbot.test was bumped to 3 by the not-me tests — old bearer tokens for that account are invalid (cookie login unaffected).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "free@wladbot.test / test123 (unchanged), test@test.com / test123 (unchanged). Fresh users for revocation tests: sec150v_*@wladbot.test / Sicher1234x (deleted).",
+  "context_for_next_testing_agent": "Auth routes are rate-limited to 20/min/IP — use the _Retry wrapper in tests/test_iter150_verify.py. Login page identifier input is type=text with placeholder 'name@firma.de oder +49 170 1234567' (NOT input[type=email]). The dashboard first-tour overlay (data-testid=dashboard-first-tour) must be closed before any sidebar click. To make the new-device banner appear, push a login_history entry with a fresh fingerprint and $unset security_ack_at for the user in mongo test_database. Backend suites for iter 150: tests/test_iter150_security_fixes.py + tests/test_iter150_verify.py (~65s each due to rate-limit backoff).",
+  "rca_of_the_issue": "NewDeviceAlert calls navigate('/profile?tab=account&focus=password') after POST /auth/security/not-me. ProfilePage reads searchParams only once into `initialTab` and passes it to shadcn <Tabs defaultValue=...>, which is uncontrolled — a search-param change on the same route does not remount Tabs, so the active tab remains 'security'. The API call, revocation and toast all work correctly (verified: bearer token 401, cookie session 200); only the UI tab switch fails."
+}

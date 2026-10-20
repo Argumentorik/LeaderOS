@@ -1,0 +1,41 @@
+{
+  "summary": "Iter 167 Login-Teaser Walk-in + GODMODE — full backend + frontend regression PASS. All 7 unit tests (test_iter167_login_teaser_walkin.py) green. 3 new HTTP tests (test_iter167_teaser_http.py) green: /api/guide/public/teaser returns clip.slug='teaser-login', video_url returns 200 video/mp4 > 5MB (actual ~57s clip), poster_url returns 200 image/*. Admin GET /api/guide/admin/clips/teaser-login: status=video_ready, duration≈55.9s, shots=[s1 walk/studio_walk_in/kling-2.6-audio with raw_url, s2 talk/studio_medium/omnihuman], godmode.passed=11, single_take=true, walk_in=true, published=true, stale=false. PUT with original 123-word script → 200; 11-word script → 400 with 'erlaubt sind 30 bis 150'; restore idempotent. Frontend Desktop 1920x1080: H1 'Führe besser. / Jeden Tag.', subline starts with 'Kein Onlinekurs', teaser visible with video src ending /api/guide/media/<token>/video, title 'Warum Leader-OS', copy present. Initial state muted/loop/paused=true (headless blocks autoplay, that is expected). Click login-teaser-play-sound → muted=false, loop=false, overlay disappears, sound aria-label='Ton aus', sound-text 'Ton aus'. Click login-teaser-sound → muted=true, loop=true, overlay reappears, sound-text 'Von Anfang an mit Ton abspielen'. Text-button login-teaser-sound-text togglet ebenfalls (muted=false, loop=false). Right column login H2 'Schön, dass du wieder da bist.' + subline 'Dein nächster Schritt wartet…', WladBot 'Online · bereitet dich auf dein nächstes Gespräch vor'. Register mode via 'Kostenlos starten' → H2 'Fang heute an.' + 'Kostenlos, ohne Kreditkarte' present. Magic-Link tab → H2 'Login ohne Passwort'. Feature list contains 'Vor dem Gespräch vorbereitet, nicht danach schlauer', 'Üben, bis es sitzt', 'Zehn Minuten am Tag reichen'. Login test@test.com / test123 successful → redirect to /dashboard. Language toggle EN: H1 'Lead better. / Every day.', play-sound button shows 'Watch with sound' (verified in muted state on fresh load). Mobile 390x844: login-brand-panel hidden (hidden lg:flex, expected), scrollWidth==clientWidth==390 (no horizontal overflow from text), no elements overflowing viewport, H2 + form readable.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "passed_tests": [
+    "pytest test_iter167_login_teaser_walkin.py — 7/7 PASS",
+    "pytest test_iter167_teaser_http.py — 3/3 PASS (public teaser, admin metadata, script limits)",
+    "GET /api/guide/public/teaser returns clip.slug=teaser-login + video_url (200, video/mp4, >5MB) + poster_url (200, image/*)",
+    "GET /api/guide/admin/clips/teaser-login all fields match spec incl. shots (walk+talk), godmode.passed=11, single_take/walk_in/published=true, stale=false",
+    "PUT script with 123 words → 200; PUT with 11 words → 400 'erlaubt sind 30 bis 150'; original restored idempotently",
+    "Login page (desktop): H1, subline, teaser video, title, copy, play-sound overlay all correct",
+    "Play-sound button click flips muted/loop to false, overlay disappears, aria-label + text update to 'Ton aus'",
+    "Sound button click re-mutes (muted=true, loop=true), overlay reappears, text becomes 'Von Anfang an mit Ton abspielen'",
+    "login-teaser-sound-text togglet ebenfalls",
+    "Login mode H2 + subline + WladBot row correct; Register mode H2 'Fang heute an.'; Magic-Link H2 'Login ohne Passwort'",
+    "Feature-Liste zeigt 3 erwartete Items",
+    "Login via test@test.com/test123 redirects to /dashboard",
+    "EN toggle: H1 'Lead better. / Every day.', 'Watch with sound' im Play-Overlay",
+    "Mobile 390x844: brand-panel hidden, kein horizontaler Overflow"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter167_login_teaser_walkin.py",
+    "/app/backend/tests/test_iter167_teaser_http.py",
+    "/app/test_reports/iter167_login_desktop.jpg",
+    "/app/test_reports/iter167_login_mobile.jpg"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "LoginTeaserVideo.tryAutoplayWithSound calls el.play() twice on failure — the retry after re-muting is fine, but if the browser also blocks muted autoplay (extremely rare) the promise rejection is swallowed silently; consider logging to help future debugging.",
+    "No aria-pressed on the login-teaser-sound button to indicate mute state programmatically — only aria-label toggles. Adding aria-pressed=true/false would improve a11y/testability.",
+    "handleEnded resets currentTime=0 and calls play() but does not guard against the video being detached; benign but could throw during route transition."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter167_teaser_http.py"],
+  "success_rate": {"backend": "100% (10/10 tests)", "frontend": "100% (all 4 scenarios)"},
+  "test_credentials": "test@test.com / test123 (admin) — used, works",
+  "seed_data_creation": "None. PUT /api/guide/admin/clips/teaser-login was called with the CURRENT script (idempotent save); no render/produce/keyframe/plan endpoints called.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend HTTP tests live at /app/backend/tests/test_iter167_teaser_http.py — reusable for regressions. Public teaser API returns a tokenised media URL; do not hardcode. Headless-Chromium blocks autoplay (video.paused=true initially), that is expected — verify muted/loop state changes on clicks. Cookie banner: click 'Nur notwendige' before interacting. Mode switch is via 'Kostenlos starten' link (register) or the auth-mode-tabs (Passwort/Magic Link/Lizenz-Key). Language toggle is data-testid='login-lang-toggle' and its state persists across reloads (localStorage).",
+  "rca of the issue": "N/A — no defects."
+}

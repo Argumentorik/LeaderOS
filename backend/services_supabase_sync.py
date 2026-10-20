@@ -78,10 +78,15 @@ async def mirror_user_event(
     full_name: str,
     event: str,
     extra: Optional[dict] = None,
+    source_platform: Optional[str] = None,
 ) -> None:
     """Send user lifecycle event to Supabase. Safe to await OR fire-and-forget.
 
     `event` is a string like 'user.created', 'user.updated', 'subscription.changed'.
+    `source_platform` (Iter 92.24, Mert): funnel-of-origin — 'leader-check' for
+    users coming through leadercheck.de funnel, 'leader-os' for direct signups.
+    Maps to Supabase `users.source_platform` enum (first-touch attribution).
+
     Returns None — failures are logged but never raised so the caller flow continues.
     """
     if not _sync_enabled():
@@ -97,6 +102,8 @@ async def mirror_user_event(
         "full_name": (full_name or "").strip(),
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
+    if source_platform:
+        payload["source_platform"] = source_platform
     if extra:
         payload["extra"] = extra
 
@@ -112,6 +119,7 @@ def mirror_user_event_fire_and_forget(
     full_name: str,
     event: str,
     extra: Optional[dict] = None,
+    source_platform: Optional[str] = None,
 ) -> None:
     """Schedule mirror call without awaiting — for use in hot paths (signup, login).
 
@@ -121,7 +129,9 @@ def mirror_user_event_fire_and_forget(
     if not _sync_enabled():
         return
     try:
-        asyncio.create_task(mirror_user_event(mongo_user_id, email, full_name, event, extra))
+        asyncio.create_task(mirror_user_event(
+            mongo_user_id, email, full_name, event, extra, source_platform,
+        ))
     except RuntimeError:
         # No running event loop (e.g. called from sync context) — log and skip
         logger.warning(f"No event loop for mirror_user_event_fire_and_forget event={event}")

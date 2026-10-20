@@ -10,12 +10,12 @@ export const ToolsGrid = ({ tools, onSelectTool, onOpenDeepAssist, de }) => (
         <Wrench size={22} className="text-white" />
       </div>
       <div className="flex-1 min-w-[200px]">
-        <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Geführte Workflows' : 'Guided Workflows'}</h1>
-        <p className="text-sm text-muted-foreground font-medium">{de ? 'Schritt-für-Schritt KI-Workflows. Persona erstellen. Personalisierte Ergebnisse.' : 'Step-by-step AI workflows. Create persona. Get personalized results.'}</p>
+        <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Werkzeuge' : 'Tools'}</h1>
+        <p className="text-sm text-muted-foreground font-medium">{de ? 'Dein Werkzeugkasten für den Arbeitsalltag — Schritt für Schritt zum fertigen Ergebnis.' : 'Your toolbox for everyday work — step by step to a finished result.'}</p>
       </div>
       <Button
         onClick={onOpenDeepAssist}
-        className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20 font-bold"
+        className="min-h-[44px] w-full sm:w-auto bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20 font-bold"
         data-testid="open-deep-assist-btn"
       >
         <Sparkles size={14} className="mr-1.5" /> {de ? 'KI Deep-Assist' : 'AI Deep Assist'}

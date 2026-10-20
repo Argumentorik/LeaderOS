@@ -26,7 +26,7 @@ Project ref: `srujvjjncrszhaaxepxf` · Region: `eu-north-1`
 | Vault secret `service_role_key` (for `trigger_strategist`)            | Studio → Settings → Vault |
 | Auth: enable **Leaked Password Protection** (HaveIBeenPwned)          | Studio → Auth → Policies |
 | Edge functions: `supabase functions deploy <each of 4>`               | your Mac (commands below) |
-| Edge fn secrets: `ANTHROPIC_API_KEY`, `VOYAGE_API_KEY`                | `supabase secrets set ...` |
+| Edge fn secrets: `ANTHROPIC_API_KEY` (Embeddings laufen lokal im Backend, kein Embedding-Key) | `supabase secrets set ...` |
 | Vercel env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Vercel project settings |
 | PostHog EU wiring verified (see [Analytics](#analytics--posthog-eu))  | Live in frontend |
 | (Optional) pg_cron schedule for `select trigger_strategist(7|30)`     | Studio → SQL or `pg_cron` |
@@ -40,7 +40,7 @@ needs a browser) and the source bundle present. From the project root:
 supabase login                      # one-time, opens browser
 supabase link --project-ref srujvjjncrszhaaxepxf
 supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
-supabase secrets set VOYAGE_API_KEY=pa-...
+# Kein Embedding-Key nötig: RAG-Embeddings laufen lokal im FastAPI-Backend (MiniLM, 384 dim).
 
 # Public ingest endpoints (no JWT — guarded by edge fn auth)
 supabase functions deploy ingest-leader-check --no-verify-jwt

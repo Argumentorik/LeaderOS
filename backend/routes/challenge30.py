@@ -6,7 +6,9 @@ from datetime import datetime, timezone
 from config import db
 from services import get_current_user
 from services_actions import record_user_action
+from challenge30_criteria import done_criteria, next_open_day, open_days, with_criteria
 from quiz_bank import QUIZ_BANK
+from quiz_quality import shuffle_options
 
 router = APIRouter(prefix="/api/challenge30", tags=["challenge30"])
 
@@ -92,40 +94,75 @@ async def get_challenge_status(request: Request):
         await db.challenge30_progress.insert_one(progress)
     start = datetime.fromisoformat(progress["started_at"].replace("Z", "+00:00")) if isinstance(progress["started_at"], str) else progress["started_at"]
     current_day = min((datetime.now(timezone.utc) - start).days + 1, 30)
+    completed = progress.get("completed_days", [])
+    # Iter 186: „Erledigt ist, wenn …", angefangene Tage und offene (verpasste)
+    # Tage gehören zum Stand — verpasst heißt nachholbar, nicht verloren.
     return {
-        "challenges": CHALLENGES,
-        "completed_days": progress.get("completed_days", []),
+        "challenges": with_criteria(CHALLENGES),
+        "completed_days": completed,
+        "started_days": sorted(progress.get("started_days", [])),
         "current_day": current_day,
+        "open_days": open_days(CHALLENGES, completed, current_day),
+        "next_open_day": next_open_day(CHALLENGES, completed, current_day),
         "total_xp_earned": progress.get("total_xp_earned", 0),
         "quiz_scores": progress.get("quiz_scores", {}),
         "started_at": progress.get("started_at"),
-        "is_complete": len(progress.get("completed_days", [])) >= 30,
+        "is_complete": len(completed) >= 30,
     }
+
+
+@router.post("/start/{day}")
+async def start_challenge_day(day: int, request: Request):
+    """Angefangen-aber-nicht-fertig ist ein eigener Zustand (Iter 186).
+
+    Tage, die in einen anderen Bereich führen, gelten NICHT beim Antippen als
+    erledigt — sie gelten als begonnen, bis die Arbeit dort getan ist.
+    """
+    user = await get_current_user(request)
+    entry = next((c for c in CHALLENGES if c["day"] == day), None)
+    if not entry:
+        raise HTTPException(status_code=404, detail="Challenge nicht gefunden")
+    await db.challenge30_progress.update_one(
+        {"user_id": user["user_id"]},
+        {"$addToSet": {"started_days": day},
+         "$setOnInsert": {"started_at": datetime.now(timezone.utc).isoformat(),
+                          "completed_days": [], "total_xp_earned": 0, "quiz_scores": {}}},
+        upsert=True,
+    )
+    return {"day": day, "started": True, "path": entry.get("path"), **done_criteria(entry)}
 
 
 @router.get("/quiz/{day}")
 async def get_quiz(day: int, request: Request):
-    await get_current_user(request)
+    user = await get_current_user(request)
     if day < 1 or day > 30:
         raise HTTPException(status_code=400, detail="Tag muss zwischen 1 und 30 sein")
     challenge = next((c for c in CHALLENGES if c["day"] == day), None)
     if not challenge:
         raise HTTPException(status_code=404, detail="Challenge nicht gefunden")
     questions = get_quiz_for_day(day)
+    challenge = {**challenge, **done_criteria(challenge)}
     safe_questions = []
-    for q in questions:
+    for i, q in enumerate(questions):
         item = {"q": q["q"], "type": q.get("type", "mc")}
         if q.get("type") == "coach":
             item["path"] = q.get("path", "/chat")
         elif q.get("type") == "action":
             item["path"] = q.get("path", "/tools")
         else:
-            item["options"] = q.get("options", [])
+            # Iter 139: Positions-Bias raus. Deterministisch pro (User, Tag, Frage)
+            # geshuffelt — Reload behält die Reihenfolge, der Index der richtigen
+            # Antwort verlässt den Server NICHT.
+            shuffled, _correct = shuffle_options(
+                q.get("options", []), q.get("correct", -1),
+                user["user_id"], str(day), str(i),
+            )
+            item["options"] = shuffled
         safe_questions.append(item)
     return {"day": day, "challenge": challenge, "questions": safe_questions, "total": len(safe_questions)}
 
 
-def _score_quiz(questions: list, answers: dict) -> tuple:
+def _score_quiz(questions: list, answers: dict, user_id: str = "", day: int = 0) -> tuple:
     """Score quiz answers against questions. Returns (correct, total, results)."""
     correct = 0
     total_mc = 0
@@ -141,10 +178,21 @@ def _score_quiz(questions: list, answers: dict) -> tuple:
             results.append({"question": q["q"], "type": qtype, "correct": is_correct, "explanation": q.get("explanation", ""), "path": q.get("path", "")})
         else:
             total_mc += 1
-            is_correct = user_answer == q.get("correct", -1) if q.get("correct", -1) != -1 else True
+            # Iter 139: gleiche Shuffle-Permutation wie im GET → der eingereichte
+            # Index bezieht sich auf die geshuffelte Reihenfolge.
+            shuffled, shuffled_correct = shuffle_options(
+                q.get("options", []), q.get("correct", -1),
+                user_id, str(day), str(i),
+            )
+            is_correct = user_answer == shuffled_correct if shuffled_correct != -1 else True
             if is_correct:
                 correct += 1
-            results.append({"question": q["q"], "type": "mc", "correct": is_correct, "correct_answer": q.get("correct"), "user_answer": user_answer, "explanation": q.get("explanation", "")})
+            results.append({
+                "question": q["q"], "type": "mc", "correct": is_correct,
+                "correct_answer": shuffled_correct, "user_answer": user_answer,
+                "correct_text": shuffled[shuffled_correct] if 0 <= shuffled_correct < len(shuffled) else "",
+                "explanation": q.get("explanation", ""),
+            })
     return correct, total_mc, results
 
 
@@ -159,19 +207,19 @@ async def _get_or_create_progress(user_id: str) -> dict:
 
 @router.post("/quiz/{day}")
 async def submit_quiz(day: int, data: QuizSubmission, request: Request):
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "quiz")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("quiz", credit_result))
 
     questions = get_quiz_for_day(day)
     if not questions:
         raise HTTPException(status_code=404, detail="Keine Fragen für diesen Tag")
     challenge = next((c for c in CHALLENGES if c["day"] == day), None)
 
-    correct, total_mc, results = _score_quiz(questions, data.answers)
+    correct, total_mc, results = _score_quiz(questions, data.answers, user["user_id"], day)
     score = round((correct / max(total_mc, 1)) * 100)
     passed = score >= 60
     xp = challenge["xp"] if passed else challenge["xp"] // 2

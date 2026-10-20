@@ -7,6 +7,7 @@
  */
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { useSeo } from '../lib/seo';
 const Section = ({ num, title, children }) => (
   <section className="mb-8">
     <h2 className="text-white font-bold text-base mb-2">{num}. {title}</h2>
@@ -15,6 +16,12 @@ const Section = ({ num, title, children }) => (
 );
 
 export default function AGBPage() {
+  useSeo({
+    path: '/agb',
+    title: 'AGB — Leader-OS',
+    description: 'Allgemeine Geschäftsbedingungen für die Nutzung von Leader-OS.',
+  });
+
   const { lang } = useLanguage();
   const de = lang === 'de';
 
@@ -35,17 +42,17 @@ export default function AGBPage() {
       <div className="max-w-3xl mx-auto">
         <a href="/" className="inline-flex items-center gap-2 text-[#BFFF00] text-[12px] mb-6 hover:underline">← Zurück</a>
         <h1 className="text-3xl sm:text-4xl font-black mb-2">Allgemeine Geschäftsbedingungen</h1>
-        <p className="text-amber-300 text-[12px] mb-10">⚠️ Vorläufige Fassung · Anwalts-Review ausstehend</p>
+        <p className="text-amber-300 text-[12px] mb-10">Vorläufige Fassung — Anwalts-Review ausstehend</p>
 
         <Section num="1" title="Geltungsbereich">
           <p>
-            Diese AGB gelten für sämtliche Verträge zwischen der <strong>Argumentorik-Akademie GmbH</strong>, Tölzer Str. 1, 82031 Grünwald, vertreten durch den Geschäftsführer Wladislaw Jachtchenko (HRB München 279998, USt-IdNr. DE 357468654), nachfolgend „Anbieter" und seinen Kunden („Kunde") über die Nutzung der Plattform LeaderOS (leader-os.de). Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.
+            Diese AGB gelten für sämtliche Verträge zwischen der <strong>Argumentorik-Akademie GmbH</strong>, Tölzer Str. 1, 82031 Grünwald, vertreten durch den Geschäftsführer Wladislaw Jachtchenko (HRB München 279998, USt-IdNr. DE 357468654), nachfolgend „Anbieter" und seinen Kunden („Kunde") über die Nutzung der Plattform Leader-OS (leaderos.de). Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.
           </p>
         </Section>
 
         <Section num="2" title="Vertragsgegenstand">
           <p>
-            LeaderOS ist eine SaaS-Plattform für Leadership-Coaching, basierend auf KI-Technologien und Wlad Jachtchenkos Methodik. Der Funktionsumfang ergibt sich aus der jeweiligen Tier-Beschreibung auf leader-os.de/pricing.
+            Leader-OS ist eine SaaS-Plattform für Leadership-Coaching, basierend auf KI-Technologien und Wlad Jachtchenkos Methodik. Der Funktionsumfang ergibt sich aus der jeweiligen Tier-Beschreibung auf leaderos.de/pricing.
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li><strong className="text-white">Leadership OS</strong> (997,00 €): 12-monatiger Zugriff auf Coaching-Bot, Workflows, Daily Check-ins.</li>

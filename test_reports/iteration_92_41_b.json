@@ -1,0 +1,26 @@
+{
+  "summary": "Iter 92.41.b verified: removed the last `leader-os.de` reference from /app/frontend/public/index.html. Re-ran full test_iter92_39_domain_sweep.py — all 22/22 tests pass including the previously failing test_frontend_public_no_dashed_domain. Intentional CORS whitelist with both dashed/no-dash variants remains intact in server.py:196 and .env.example:46.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "verifications": {
+    "index_html_no_dashed_domain": "PASS — grep 'leader-os.de' /app/frontend/public/index.html returned 0 matches",
+    "index_html_canonical_intact": "PASS — <link rel=\"canonical\" href=\"https://leaderos.de/\" /> at line 20; SEO comment at line 11-13 rewritten correctly ('Marketing landing pages live in a separate Vercel codebase')",
+    "cors_whitelist_preserved_server_py": "PASS — server.py:196 still contains the dashed-domain comment (leaderos.de, leadercheck.de, leader-os.de, leader-check.de)",
+    "cors_whitelist_preserved_env_example": "PASS — .env.example:46 still lists both dashed + no-dash variants",
+    "test_frontend_public_no_dashed_domain": "PASS (previously failing in iter92.41)",
+    "full_pytest_run": "22 passed in 1.50s — including TestDomainSweep (6), TestSenderAndShare (4), TestEmailTemplates (8 parametrized), TestOG (1), TestAuthRegression (3)"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_39_domain_sweep.py",
+    "/app/test_reports/pytest/iter92_41b_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "100%"},
+  "test_credentials": "test@test.com / test123 (admin login verified end-to-end)",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iter 92.41.b is fully green. Pre-existing unrelated failures from iter92.24 + iter92.37 phone-required tests were intentionally not retested per main-agent instruction (known tech debt, out of scope for this iteration)."
+}

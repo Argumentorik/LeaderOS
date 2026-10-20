@@ -1,0 +1,23 @@
+{
+  "summary": "Iter 156 (Interaktiver Wlad Beta) end-to-end getestet: Backend pytest (13/13 grün, inkl. test_iter155 Regression), einmaliger echter Sprach-Turn + TTS mit Wlad-Klon (Minimax) erfolgreich, Frontend Free-Locked/Admin-Preview/Admin-Toggle/Overlay/Chat-Voice-Smoke alle grün. Beta ist am Ende garantiert gesperrt (enabled=false).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter156_interactive_wlad.py",
+    "/app/backend/tests/_iter156_paid_turn.py",
+    "/app/test_reports/pytest/iter156.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/guide_interactive.py sauber, kompakt (~160 Zeilen); Credit-Refund im Fehlerpfad korrekt implementiert.",
+    "InteractiveWladButton nutzt Modul-Level statusPromise als Cache; resetInteractiveStatus() wird vom Admin-Toggle korrekt aufgerufen — Free-User braucht jedoch Full-Reload/Nav, um Statuswechsel zu sehen (akzeptabel für Beta)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "test@test.com / test123 (Admin), free@wladbot.test / test123",
+  "seed_data_creation": "Keine neuen Seed-Daten. Beta-Toggle mehrfach hin/her geschaltet, Endzustand: enabled=false (verifiziert via /api/guide/interactive/status als Free-User).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Bezahlter Turn+TTS-Smoke wurde EINMAL ausgeführt (~$0.01) via /app/backend/tests/_iter156_paid_turn.py (Underscore-Prefix => nicht in pytest collection). Ergebnisse: Transcript deutsch ('Bevor du dir die Pakete ansiehst...'), response_text deutsch (Wlad-Ton), TTS voice=wlad-clone (Minimax), audio_url data:audio/mpeg;base64,... (472k Zeichen, 44s Latenz). Nicht wiederholen sofern nicht nötig. Beta-State am Ende: locked/enabled=false.",
+  "rca of the issue": "N/A"
+}

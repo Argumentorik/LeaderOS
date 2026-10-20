@@ -1,11 +1,16 @@
 """Dashboard & Progress routes with full scoring infrastructure."""
-from fastapi import APIRouter, Request
+import asyncio
+import logging
+import time
+
+from fastapi import APIRouter, Request, Response
 from datetime import datetime, timezone, timedelta
 
 from config import db
 from services import get_current_user, get_streak, calculate_level, get_user_memory, get_xp_info
 from data import AGENT_SCENARIOS
 
+logger = logging.getLogger("leaderos.dashboard")
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
 
@@ -126,6 +131,101 @@ async def get_dashboard_v4(request: Request):
         "upcoming_events": await db.events.find({}, {"_id": 0}).to_list(3),
         "challenge30": await _get_challenge30_summary(user["user_id"]),
     }
+
+
+_BOOTSTRAP_TTL = 8.0  # Sekunden: deckt Doppel-Mounts/schnelles Hin- und Hernavigieren ab, ohne Aktionen zu verschlucken
+_bootstrap_cache: dict[str, tuple[float, dict]] = {}
+
+
+async def _safe(coro, fallback):
+    try:
+        return await coro
+    except Exception as exc:  # ein kaputter Teil darf das Dashboard nicht blockieren
+        logger.warning(f"dashboard bootstrap slice failed: {exc}")
+        return fallback
+
+
+@router.get("/dashboard/bootstrap")
+async def dashboard_bootstrap(request: Request, response: Response, fresh: int = 0):
+    """Dashboard in einem Zug: alle Startdaten parallel in EINER Antwort (Iter 168).
+    Ersetzt 7 Einzelrequests beim Seitenaufbau; kurzer Cache je Nutzer (8 s), `?fresh=1` umgeht ihn."""
+    from routes.challenge30 import CHALLENGES, get_challenge_status
+    from routes.checkin import get_today_checkin
+    from routes.courses import list_courses
+    from routes.events import get_event_reminders, get_events
+    from routes.folders import list_folders
+    from routes.guide import list_clips
+    from routes.journey import get_journey
+    from routes.my_path import get_learning_videos
+    from routes.referral import get_referral_code
+
+    user = await get_current_user(request)
+    key = user["user_id"]
+    now = time.monotonic()
+    hit = _bootstrap_cache.get(key)
+    if hit and not fresh and now - hit[0] < _BOOTSTRAP_TTL:
+        response.headers["X-Bootstrap-Cache"] = "hit"
+        return hit[1]
+
+    dashboard, referral, reminders, events_live, videos, clips, folders, journey, c30_status, checkin_today, courses = await asyncio.gather(
+        get_dashboard_v4(request),
+        _safe(get_referral_code(request), {}),
+        _safe(get_event_reminders(request), {"reminders": [], "next_event": None}),
+        _safe(get_events(request, "live"), []),
+        _safe(get_learning_videos(request), None),
+        _safe(list_clips(request, "onboarding", False), {"clips": []}),
+        _safe(list_folders(request), []),
+        _safe(get_journey(request), None),
+        _safe(get_challenge_status(request), None),
+        _safe(get_today_checkin(request), None),
+        _safe(list_courses(request), None),
+    )
+    # Iter 185: Startseite beantwortet „was soll ich hier tun?" — Tagesaufgabe,
+    # Check-in und Kurs-Stand kommen im selben Zug mit.
+    today_task = None
+    if c30_status:
+        # Iter 186 (Entscheidung 8a): die nächste OFFENE Aufgabe in der Reihenfolge.
+        day = int(c30_status.get("next_open_day") or c30_status.get("current_day") or 1)
+        from challenge30_criteria import done_criteria
+        entry = next((c for c in CHALLENGES if c.get("day") == day), None)
+        if entry:
+            entry = {**entry, **done_criteria(entry)}
+            today_task = {
+                "day": day, "total": 30,
+                "title_de": entry.get("title_de"), "title_en": entry.get("title_en"),
+                "desc_de": entry.get("desc_de"), "desc_en": entry.get("desc_en"),
+                "duration": entry.get("duration"), "path": entry.get("path"),
+                "type": entry.get("type"), "xp": entry.get("xp"),
+                "done_de": entry.get("done_de"), "done_en": entry.get("done_en"),
+                "started": day in (c30_status.get("started_days") or []),
+                "open_count": len(c30_status.get("open_days") or []),
+                "done": day in (c30_status.get("completed_days") or []),
+                "completed_count": len(c30_status.get("completed_days") or []),
+            }
+    payload = {
+        "dashboard": dashboard, "referral": referral, "events_reminders": reminders, "events_live": events_live,
+        "my_path_videos": videos, "guide_clips": clips, "folders": folders, "journey": journey,
+        "challenge_today": today_task,
+        "lab_enrolled": bool(await db.lab_enrollments.find_one({"user_id": user["user_id"]}, {"_id": 1})),
+        "checkin_today": checkin_today,
+        "courses_status": ({
+            "tier": courses.get("tier"),
+            "total_episodes": courses.get("total_episodes"),
+            "seen_total": courses.get("seen_total"),
+            "unlocked_episodes": sum(1 for c in courses.get("courses", []) for e in c.get("episodes", []) if e.get("unlocked")),
+            "next_episode": next(({"course": c.get("title"), "slug": c.get("slug"), "id": e.get("id"),
+                                   "number": e.get("number"), "title": e.get("title"), "minutes": e.get("minutes")}
+                                  for c in courses.get("courses", []) for e in c.get("episodes", [])
+                                  if e.get("unlocked") and not e.get("seen")), None),
+        } if courses else None),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if len(_bootstrap_cache) > 2000:
+        _bootstrap_cache.clear()
+    _bootstrap_cache[key] = (now, payload)
+    response.headers["X-Bootstrap-Cache"] = "miss"
+    response.headers["Cache-Control"] = "private, no-store"
+    return payload
 
 
 @router.get("/xp-info")

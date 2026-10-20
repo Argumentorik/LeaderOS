@@ -1,5 +1,6 @@
 import { Card, CardContent } from '../ui/card';
 import { Check, X, Lightbulb, Star, Target } from 'lucide-react';
+import SmartText from '../shared/SmartText';
 
 const ResultSection = ({ title, gradient, children }) => (
   <Card className="bg-white/80 dark:bg-card/80 border-black/[0.04] dark:border-white/[0.06]">
@@ -46,7 +47,7 @@ const GuideQuestionsCard = ({ items, de }) => (
 
 const OptimizedTextCard = ({ text, tone, de }) => (
   <ResultSection title={de ? 'Optimierte Version' : 'Optimized Version'} gradient="from-cyan-500 to-blue-500">
-    <p className="text-sm whitespace-pre-wrap">{text}</p>
+    <SmartText text={text} accent="#06B6D4" icon={Lightbulb} />
     {tone && <p className="text-xs text-muted-foreground mt-2">{de ? 'Tonfall' : 'Tone'}: {tone}</p>}
   </ResultSection>
 );
@@ -201,14 +202,14 @@ export const ResultCards = ({ result, de }) => {
   if (result.recommendation) {
     cards.push(
       <ResultSection key="rec" title={de ? 'Empfehlung' : 'Recommendation'} gradient="from-[#BFFF00] to-[#9ACC00]">
-        <p className="text-sm">{result.recommendation}</p>
+        <SmartText text={result.recommendation} accent="#BFFF00" icon={Star} />
       </ResultSection>
     );
   }
   if (result.event_concept) {
     cards.push(
       <ResultSection key="ec" title={de ? 'Event-Konzept' : 'Event Concept'} gradient="from-emerald-500 to-green-500">
-        <p className="text-sm">{result.event_concept}</p>
+        <SmartText text={result.event_concept} accent="#10B981" icon={Target} />
       </ResultSection>
     );
   }
@@ -258,7 +259,7 @@ export const ResultCards = ({ result, de }) => {
   if (result.result && typeof result.result === 'string') {
     cards.push(
       <ResultSection key="fb" title={de ? 'Ergebnis' : 'Result'} gradient="from-[#0A0A0A] to-[#1A1A2E]">
-        <p className="text-sm whitespace-pre-wrap">{result.result}</p>
+        <SmartText text={result.result} accent="#BFFF00" icon={Lightbulb} />
       </ResultSection>
     );
   }

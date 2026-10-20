@@ -1,7 +1,7 @@
 /**
- * SharedFolderPage · public read-only view of a shared folder (Iter 92.23.9 P2).
+ * SharedFolderPage — public read-only view of a shared folder (Iter 92.23.9 P2).
  *
- * Mert: "Folder Sharing · Folder als read-only Link teilen
+ * Mert: "Folder Sharing — Folder als read-only Link teilen
  *        (z.B. 'Show Wlad my Q2 board prep')"
  *
  * Mounted under /f/:slug. No auth required. Renders folder metadata + a
@@ -157,7 +157,7 @@ export default function SharedFolderPage() {
             <h2 className="text-xl sm:text-2xl font-black tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
               Baue deinen eigenen Leadership-Workspace.
             </h2>
-            <p className="text-[13px] text-white/60 leading-relaxed">Video-Analysen, Chats und Reflektionen · gebündelt nach echten Projekten. Wlad's KI hat immer den vollen Kontext.</p>
+            <p className="text-[13px] text-white/60 leading-relaxed">Video-Analysen, Chats und Reflektionen — gebündelt nach echten Projekten. Wlad's KI hat immer den vollen Kontext.</p>
             <Link
               to="/signup"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#BFFF00] text-[#0A0A0A] text-[12px] font-black hover:bg-[#A8E600] transition-colors"
@@ -169,7 +169,7 @@ export default function SharedFolderPage() {
         </section>
 
         <footer className="text-center text-[10px] text-white/30 pt-4">
-          Geteilt am {(share?.created_at || '').slice(0, 10)} · <Link to="/" className="hover:text-[#BFFF00]">leader-os.de</Link>
+          Geteilt am {(share?.created_at || '').slice(0, 10)} · <Link to="/" className="hover:text-[#BFFF00]">leaderos.de</Link>
         </footer>
       </div>
     </div>

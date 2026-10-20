@@ -1,11 +1,13 @@
 import { Button } from '../ui/button';
-import { Check, ArrowRight, Download, Star } from 'lucide-react';
+import { Check, ArrowRight, Download, Star, Calendar } from 'lucide-react';
+import SmartText from '../shared/SmartText';
+import { openHeadCoachCall } from '../../lib/calendly';
 
 export const PlaybookReport = ({ adviceReport, onDownloadPDF, generatingPDF, de }) => (
   <div className="space-y-3 mt-2">
     {adviceReport.overall_assessment && (
       <div className="bg-white dark:bg-card rounded-xl p-4 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
-        <p className="text-[13px] leading-relaxed">{adviceReport.overall_assessment}</p>
+        <SmartText text={adviceReport.overall_assessment} accent="#BFFF00" icon={Star} />
       </div>
     )}
     {adviceReport.strengths?.length > 0 && (

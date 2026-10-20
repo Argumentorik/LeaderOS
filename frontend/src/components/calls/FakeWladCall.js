@@ -18,14 +18,21 @@
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Phone, PhoneOff, MessageCircle, Volume2, Gift } from 'lucide-react';
+import { Phone, MessageCircle, Gift } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBookConsultation } from '../brand/BookConsultationButton';
+import { useConsultationGate } from '../../hooks/useConsultationGate';
+import { useFeature } from '../../hooks/useFeature';
 import api from '../../lib/api';
 
 const SESSION_KEY = 'wlad_fake_call_count';
-const MAX_CALLS_PER_SESSION = 2;
-const TRIGGER_INTERVAL_MS = 3 * 60 * 1000;  // 3 minutes
+// Iter 92.16 (Mert): "Anrufe vom Beraterteam erstmal ausstellen oder nur einmal nach 5 min"
+// → reduziert von 2× pro Session auf 1×, Trigger von 3 → 5 Minuten, kein Re-Trigger.
+// Optional: komplett kill-switch via `?nocall=1` URL-param oder localStorage flag.
+const MAX_CALLS_PER_SESSION = 1;
+const TRIGGER_INTERVAL_MS = 5 * 60 * 1000;  // 5 minutes (was 3)
+// localStorage below holds only UI flags/timestamps and a public promo code — nothing sensitive.
+const KILL_SWITCH_KEY = 'wlad_fake_call_disabled';
 // Routes where we must NOT pop the call (already in a call-equivalent flow)
 const SUPPRESSED_PATHS = ['/chat', '/onboarding', '/payment-success', '/login', '/auth/magic', '/email/unsubscribe'];
 // Tiers that have already converted · they don't need conversion-pressure.
@@ -57,8 +64,11 @@ export const FakeWladCall = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const openBooking = useBookConsultation();
+  const gate = useConsultationGate();
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
+  // Iter 166: Event-Hinweis nur, wenn der Admin-Schalter „Event-Hinweise auf dem Dashboard“ an ist (Standard: aus).
+  const eventHints = useFeature('event_hints');
 
   const isSuppressed = SUPPRESSED_PATHS.some((p) => location.pathname.startsWith(p));
 
@@ -111,6 +121,19 @@ export const FakeWladCall = () => {
 
   useEffect(() => {
     if (!user) return undefined;
+    if (!eventHints.ready || !eventHints.enabled) return undefined;
+    // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Anrufen.
+    // Frische Free/Standard-User bekommen keinen Fake-Call bis Tag 10.
+    if (!gate.ready) return undefined;
+    // Iter 92.16: Hard kill-switch — if `localStorage.wlad_fake_call_disabled=1`
+    // or URL has `?nocall=1`, never trigger. Lets admins/Mert disable globally.
+    try {
+      if (localStorage.getItem(KILL_SWITCH_KEY) === '1') return undefined;
+      if (new URLSearchParams(window.location.search).get('nocall') === '1') {
+        localStorage.setItem(KILL_SWITCH_KEY, '1');
+        return undefined;
+      }
+    } catch { /* noop */ }
     if (isPro) {
       // Pro-Tier: fire once if 30 days since last shown, then never again
       // until next month rolls around.
@@ -129,7 +152,7 @@ export const FakeWladCall = () => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [user, scheduleNext, isPro]);
+  }, [user, scheduleNext, isPro, gate.ready, eventHints.ready, eventHints.enabled]);
 
   // Accept = book a real consultation via Cal.com.
   // The Wlad team takes the actual call there. Highest-value path.
@@ -167,144 +190,119 @@ export const FakeWladCall = () => {
 
   const callNumber = getCallCount();
 
+  // Iter 92.18 mobile-fix (Mert): WladHelp FAB sitzt auch bottom-right.
+  // Wenn der User auf einer FAB-Page ist, hochschieben so dass sich beide
+  // nicht überlappen. FAB-Pfade siehe WladHelpButton.ALLOWED_PATHS.
+  const fabPaths = ['/chat', '/coaching', '/my-path', '/playbooks', '/simulations', '/tools', '/missions', '/community', '/events', '/video-challenge', '/leader-diagnose', '/enterprise', '/daily-checkin'];
+  const fabActive = fabPaths.some((p) => typeof window !== 'undefined' && (window.location.pathname === p || window.location.pathname.startsWith(`${p}/`)));
+  // FAB is ~56×56 + 24px inset → reserve 96px when active, sonst klassische bottom-6
+  const positionClass = fabActive ? 'bottom-24 right-6' : 'bottom-6 right-6';
+
+  // Iter 92.16: NICHT fullscreen mehr — kompakte Toast-Karte unten rechts.
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center wlad-call-overlay wlad-call-fade-in"
+      className={`fixed ${positionClass} z-[150] max-w-[360px] w-[92vw] wlad-call-fade-in`}
       role="dialog"
-      aria-modal="true"
+      aria-modal="false"
+      aria-label="Eingehender Coaching-Anruf"
       data-testid="fake-wlad-call"
     >
       <div
-        className="relative flex flex-col items-center gap-7 px-8 py-12 max-w-[420px] w-full text-center wlad-call-slide-up"
+        className="relative rounded-2xl bg-gradient-to-br from-[#0F1610] via-[#161E13] to-[#0A0A0A] border border-white/[0.08] shadow-[0_24px_80px_-20px_rgba(0,0,0,0.7)] overflow-hidden wlad-call-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* "Eingehender Anruf" eyebrow */}
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-[10px] tracking-[0.32em] uppercase text-white/45 font-bold wlad-call-shimmer">
-            {isPro ? 'Monats-Update-Call' : 'Eingehender Anruf'}
-          </span>
-          <span className="text-[10px] tracking-[0.18em] uppercase text-white/30 font-semibold">
-            {isPro ? 'Dein Beraterteam meldet sich' : callNumber === 1 ? 'Erinnerung · jetzt' : 'Letzte Erinnerung · jetzt'}
-          </span>
-        </div>
+        {/* lime glow corner */}
+        <div className="pointer-events-none absolute -top-16 -left-16 w-40 h-40 rounded-full bg-[#BFFF00]/12 blur-3xl" aria-hidden />
 
-        {/* Avatar w/ animated rings */}
-        <div className="relative">
-          <div className="wlad-call-ring" />
-          <div className="wlad-call-ring r2" />
-          <div className="wlad-call-ring r3" />
-          <div
-            className="relative w-32 h-32 rounded-full wlad-call-avatar-glow overflow-hidden border-2 border-[#BFFF00]/45 bg-gradient-to-br from-[#1f2913] via-[#2e3b1e] to-[#0a0a0a] flex items-center justify-center"
-            data-testid="fake-call-avatar"
-          >
-            <span
-              className="text-[52px] font-black leading-none text-[#BFFF00] select-none"
-              style={{ fontFamily: 'Outfit, Inter, sans-serif', letterSpacing: '-0.04em' }}
+        {/* Close (X) — let user dismiss without "accept" or "decline" guilt */}
+        <button
+          type="button"
+          onClick={() => { setOpen(false); logEvent('dismiss', { variant }); }}
+          className="absolute top-2 right-2 z-10 w-7 h-7 rounded-full bg-white/[0.06] hover:bg-white/[0.14] text-white/55 hover:text-white flex items-center justify-center transition-colors"
+          aria-label="Anruf schließen"
+          data-testid="fake-call-dismiss"
+        >
+          <span className="text-[14px] leading-none">×</span>
+        </button>
+
+        <div className="flex items-center gap-3 px-4 pt-4 pb-2">
+          {/* Compact avatar with single pulsing ring */}
+          <div className="relative shrink-0">
+            <span className="absolute inset-0 rounded-full bg-[#BFFF00]/25 animate-ping" aria-hidden />
+            <div
+              className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#BFFF00]/45"
+              data-testid="fake-call-avatar"
             >
-              W
+              <img src="/wladbot-avatar-clean.png" alt="Wlad" className="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          {/* Caller name + label */}
+          <div className="flex-1 min-w-0">
+            <span className="block text-[9px] tracking-[0.22em] uppercase text-[#BFFF00]/75 font-black">
+              {isPro ? 'Monats-Update-Call' : 'Eingehender Anruf'}
             </span>
+            <h2
+              className="text-white text-[15px] font-black tracking-tight leading-tight mt-0.5 truncate"
+              style={{ fontFamily: 'Outfit, Inter, sans-serif', letterSpacing: '-0.025em' }}
+              data-testid="fake-call-name"
+            >
+              Beraterteam · Leader·OS
+            </h2>
+            <p className="text-white/45 text-[11px] font-semibold leading-tight truncate">
+              {isPro ? '1:1 Update · monatlich' : 'Strategie-Termin · 15 Min'}
+            </p>
           </div>
         </div>
 
-        {/* Caller */}
-        <div className="space-y-1">
-          <h2
-            className="text-white text-[26px] font-black tracking-tight leading-none"
-            style={{ fontFamily: 'Outfit, Inter, sans-serif', letterSpacing: '-0.025em' }}
-            data-testid="fake-call-name"
-          >
-            {isPro ? 'Beraterteam · Leader OS' : 'Wlad Jachtchenko'}
-          </h2>
-          <p className="text-white/55 text-[13px] font-semibold">
-            {isPro ? 'PLUS · 1:1 Update · monatlich' : 'mobil · Leadership Coaching'}
-          </p>
-        </div>
-
         {/* Subtle suggestion bubble */}
-        <div className="bg-white/[0.06] border border-white/[0.08] rounded-2xl px-4 py-2.5 backdrop-blur-sm">
-          <p className="text-white/75 text-[13px] leading-snug">
+        <div className="px-4 pb-2">
+          <p className="text-white/70 text-[12px] leading-snug">
             {isPro
-              ? '„Zeit für deinen Monats-Check-in. 30 Min, wo du gerade stehst."'
-              : '„Lass uns 30 Min reden · ich helf dir, deinen Pfad zu klären."'}
+              ? '„Zeit für deinen Monats-Check-in."'
+              : '„15 Min Strategie-Call gefällig?"'}
           </p>
         </div>
 
         {/* Bribe variant · 10% discount appears ONLY for non-pro treatment group */}
         {variant === 'bribe' && !isPro && (
           <div
-            className="flex items-center gap-2.5 bg-[#BFFF00]/[0.08] border border-[#BFFF00]/30 rounded-xl px-3.5 py-2 backdrop-blur-sm wlad-call-shimmer"
+            className="mx-4 mb-2 flex items-center gap-2 bg-[#BFFF00]/[0.10] border border-[#BFFF00]/30 rounded-lg px-3 py-1.5"
             data-testid="fake-call-bribe-banner"
           >
-            <Gift size={14} className="text-[#BFFF00] shrink-0" />
-            <span className="text-[#BFFF00] text-[11px] font-bold leading-tight">
-              <span className="text-white/80 font-semibold">Beim Annehmen:</span> 10% auf Leader OS · Code <span className="font-black tracking-widest">WLAD10</span>
+            <Gift size={11} className="text-[#BFFF00] shrink-0" />
+            <span className="text-[#BFFF00] text-[10px] font-bold leading-tight">
+              <span className="text-white/75 font-semibold">Beim Annehmen:</span> 10% · Code <span className="font-black tracking-widest">WLAD10</span>
             </span>
           </div>
         )}
 
-        {/* Action row */}
-        <div className="flex items-center justify-between w-full max-w-[280px] mt-3">
-          <CallAction
+        {/* Action row — kompakt, 2 Buttons (kein Volume-Dekoration mehr) */}
+        <div className="flex items-center gap-2 px-4 pb-3">
+          <button
+            type="button"
             onClick={decline}
-            color="#FF3B30"
-            label="Ablehnen"
-            sublabel="→ WladBot Chat"
-            testId="fake-call-decline"
-            icon={<PhoneOff size={26} className="text-white" />}
-          />
-          <div className="flex flex-col items-center gap-2 opacity-40 select-none">
-            <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center">
-              <Volume2 size={22} className="text-white/80" />
-            </div>
-            <span className="text-white/35 text-[10px] uppercase tracking-wider">Lautstärke</span>
-          </div>
-          <CallAction
+            data-testid="fake-call-decline"
+            className="flex-1 h-9 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white/85 text-[11.5px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <MessageCircle size={11} />
+            Lieber chatten
+          </button>
+          <button
+            type="button"
             onClick={accept}
-            color="#30D158"
-            label="Annehmen"
-            sublabel="→ Termin buchen"
-            testId="fake-call-accept"
-            pulse
-            icon={<Phone size={26} className="text-white" />}
-          />
+            data-testid="fake-call-accept"
+            className="flex-1 h-9 rounded-lg bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[11.5px] font-black inline-flex items-center justify-center gap-1.5 transition-colors shadow-[0_4px_14px_-4px_rgba(191,255,0,0.45)]"
+          >
+            <Phone size={11} />
+            Termin buchen
+          </button>
         </div>
-
-        {/* tiny tertiary · alternate fallback to chat */}
-        <button
-          type="button"
-          onClick={decline}
-          className="mt-2 text-[11px] text-white/55 hover:text-white transition-colors inline-flex items-center gap-1.5"
-          data-testid="fake-call-chat-fallback"
-        >
-          <MessageCircle size={11} /> Lieber kurz mit WladBot chatten
-        </button>
-        <p className="text-white/15 text-[9px] tracking-[0.32em] uppercase mt-1">
-          Leader OS · Wlad-Network
-        </p>
       </div>
     </div>
   );
 };
 
-const CallAction = ({ onClick, color, label, sublabel, icon, pulse = false, testId }) => (
-  <div className="flex flex-col items-center gap-2">
-    <button
-      type="button"
-      onClick={onClick}
-      data-testid={testId}
-      className={`w-16 h-16 rounded-full flex items-center justify-center transition-all active:scale-95 hover:scale-105 ${pulse ? 'wlad-call-accept-pulse' : ''}`}
-      style={{ background: color, boxShadow: `0 8px 24px -6px ${color}99` }}
-      aria-label={label}
-    >
-      {icon}
-    </button>
-    <span className="text-white/70 text-[12px] font-bold leading-none">{label}</span>
-    {sublabel && (
-      <span className="text-white/35 text-[10px] font-semibold tracking-wide leading-none -mt-1">
-        {sublabel}
-      </span>
-    )}
-  </div>
-);
+// CallAction component obsolete (Iter 92.16 toast-style refactor removed it).
 
 export default FakeWladCall;

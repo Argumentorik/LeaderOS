@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Iteration 45 - Code Refactoring Tests
 Tests to verify all existing functionality still works after:
@@ -9,7 +9,6 @@ Tests to verify all existing functionality still works after:
 import pytest
 import requests
 import os
-import time
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 

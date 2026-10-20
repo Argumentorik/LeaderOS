@@ -1,0 +1,49 @@
+{
+  "summary": "Iter 165 Academy /kurse rebuild — frontend-only regression. 9 of 10 review scenarios PASS. Only issue: horizontal overflow on /kurse/<slug> detail page at 390px viewport (mobile). All hero/categories/filters/cards/deep-links/progress/PLUS-lock/unknown-slug/sidebar/console-clean scenarios verified across free, standard, and accelerator users.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "CourseDetailPage @ 390x844 (mobile)",
+        "issues": [
+          "Horizontal overflow: document.scrollWidth = 533px vs clientWidth = 390px (~143px overflow). Overflowing elements all have width 517px starting at left=16 (course-episode-pending video, course-episode-title, course-episode-bullets, course-episode-list). The two-column layout (video/bullets + episode-list aside) does not collapse to single column below md breakpoint. /kurse index at 390px is fine (no overflow, single column). Only the detail page is affected.",
+          "Suggested fix: on CourseDetailPage.js main content grid, use `grid-cols-1 lg:grid-cols-[1fr_320px]` (or similar) instead of a fixed 2-col grid; ensure inner children set `min-w-0` to prevent grid blowout."
+        ]
+      }
+    ]
+  },
+  "passed_tests": [
+    "Free user /kurse renders: courses-page, courses-hero (courses-hero-start + courses-hero-browse + courses-progress showing '0 / 72'), courses-categories with course-category-{rhetorik,fuehrung,executive}, courses-list with courses-filters, exactly 10 course-card-<slug> cards, each with course-thumb-<slug>, course-free-badge-<slug>, course-locked-<slug>, course-start-<slug> ('Kostenlos starten'), course-details-<slug>. courses-upsell-banner + courses-upsell-cta present. courses-whats-inside + courses-more (chat/guide/challenge) present. course-new-rhetorik-grundlagen NEU badge present (expected).",
+    "Filters: courses-count '10 von 10' initial. course-category-executive tile → '4 von 10' + aria-pressed=true + 4 exec cards; click again → '10 von 10'. course-filter-cat-fuehrung → 3 cards, '3 von 10'. course-filter-status-locked → 10 cards (all locked for free). course-filter-status-started → 0 cards + courses-empty visible. course-filter-status-all resets to 10.",
+    "courses-hero-start navigates to /kurse/rhetorik-grundlagen?folge=1 (first course with no seen episodes). courses-hero-browse scrolls courses-list into view (top 663→24).",
+    "course-start-schwierige-gespraeche → /kurse/schwierige-gespraeche?folge=1. course-detail-page + course-header + course-detail-progress + course-detail-cta ('Folge 1 kostenlos ansehen') + course-episode-pending (video not recorded — acceptable per task) + course-episode-title + course-episode-bullets + course-ask-wlad-btn + course-episode-list + course-back all present.",
+    "Click course-episode-schwierige-gespraeche-3 → URL ?folge=3, course-episode-locked visible with course-upgrade-btn → navigates to /coaching. course-details-<slug> link opens detail page without ?folge (verified: /kurse/delegation).",
+    "Deep link /kurse/delegation?folge=2 as standard user → episode-title 'Die fünf Delegationsstufen', aria-current='true' on row 2, no course-episode-locked (unlocked for standard). course-ask-wlad-btn navigates to /chat.",
+    "PLUS course /kurse/ki-first-leadership?folge=2 as standard → course-episode-locked visible with text containing 'PLUS'. As accelerator user → NOT locked (unlocked).",
+    "Progress after marking delegation-1 seen: course-progress-delegation bar + course-seen-delegation text '1/4 gesehen'; course-start-delegation label 'Weiter mit Folge 2'; courses-progress hero shows '1 / 72'; course-filter-status-started → 1 card.",
+    "Unknown slug /kurse/does-not-exist → course-not-found + 'Zur Bibliothek' link back to /kurse.",
+    "Responsive /kurse at 390x844: no horizontal overflow, cards single column (grid-template-columns=358px), hero readable.",
+    "Sidebar 'Kurse' link href='/kurse'.",
+    "/courses/schwierige-gespraeche.jpg static asset returns HTTP 200 (thumbnails available; visually rendered in screenshots).",
+    "No console errors on /kurse or detail page (only expected 404 on /kurse/does-not-exist course-load AxiosError, which is the not-found path)."
+  ],
+  "test_report_links": ["/app/test_reports/iter165_kurse_free.jpg", "/app/test_reports/iter165_kurse_mobile.jpg"],
+  "action_items": [
+    "Fix mobile horizontal overflow on CourseDetailPage: collapse the two-column player/episode-list grid to single column below the lg breakpoint. Currently ~143px of the layout extends past a 390px viewport. Add min-w-0 to inner grid children and use responsive grid-template-columns."
+  ],
+  "critical_code_review_comments": [
+    "CourseDetailPage.js grid layout is not mobile-safe. Add responsive breakpoints; enforce min-w-0 on grid children to avoid intrinsic content pushing width beyond viewport.",
+    "courses-more-{chat,guide,challenge} are <button> with onClick navigate(). Consider using <Link> for better a11y and native href navigation, though functionally correct.",
+    "course-thumb-<slug> testid is on the <a> wrapper; the actual <img> child is not directly targeted. That's fine for click-tests but note images are lazy children — thumbnails render OK (verified visually and via static asset probe /courses/*.jpg → 200)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only)", "frontend": "90% (9/10 scenarios; 1 mobile design issue)"},
+  "test_credentials": "free@wladbot.test, standard@wladbot.test, accelerator@wladbot.test — all /test123",
+  "seed_data_creation": "POST /api/courses/episodes/delegation-1/seen for standard@wladbot.test (mark episode 1 seen for progress test).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Full /kurse Academy rebuild verified functionally. Only remaining item is a mobile CSS overflow on CourseDetailPage (~143px past 390px viewport). Standard user's delegation-1 seen state has been marked in DB via API — expect course-seen-delegation '1/4 gesehen' persisting. Login: POST /api/auth/login {identifier,password} → token in localStorage 'wladbot_token'. Dismiss cookie banner ('Nur notwendige') and support popup ('Nein danke').",
+  "rca of the issue": "Mobile overflow on /kurse/<slug>: the main content grid on CourseDetailPage retains its multi-column width (~517px per column) at 390px viewport because either (a) the grid uses fixed pixel/fr definitions that don't collapse below md, or (b) inner children lack min-w-0 and their intrinsic content (video 16:9, episode-list ASIDE) forces the grid to overflow. Reproduce: viewport 390x844, navigate /kurse/schwierige-gespraeche?folge=1; document.scrollWidth=533 vs 390. Fix: make the layout `grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px]` and add `min-w-0` to grid children."
+}

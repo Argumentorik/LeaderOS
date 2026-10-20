@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -32,7 +32,7 @@ const buildLeadershipReport = (user) => ({
 });
 
 const build30TagePlan = (user) => ({
-  title: '30-Tage Leadership-Challenge',
+  title: '30-Tage Leadership Programm',
   subtitle: 'Dein Aktionsplan',
   userName: user?.name,
   sections: [
@@ -92,7 +92,7 @@ const RESOURCES = [
   {
     id: '30_tage_plan',
     icon: Trophy,
-    title: '30-Tage Leadership-Challenge',
+    title: '30-Tage Leadership Programm',
     description: 'Wochenweise Aktionsplan zum Ausdrucken & Abhaken.',
     badge: 'Aktionsplan',
     free: true,
@@ -125,9 +125,11 @@ export default function DownloadsPage() {
   const [user, setUser] = useState(null);
 
   // Lazy-load user info for personalization
-  useState(() => {
-    api.get('/auth/me').then((r) => setUser(r.data)).catch((e) => logger.error('me err', e));
-  });
+  useEffect(() => {
+    let mounted = true;
+    api.get('/auth/me').then((r) => { if (mounted) setUser(r.data); }).catch((e) => logger.error('me err', e));
+    return () => { mounted = false; };
+  }, []);
 
   const handleDownload = async (resource) => {
     if (resource.requiresTier && tier === 'free') {

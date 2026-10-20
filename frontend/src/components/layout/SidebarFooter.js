@@ -4,9 +4,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTier } from '../../contexts/TierContext';
 import { usePricing } from '../../contexts/PricingContext';
 import { TierBadge } from '../shared/TierBadge';
-import { Crown, Settings } from 'lucide-react';
+import { Crown, Settings, Sparkles, Compass } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
+import { hasUnseenChangelog } from '../../lib/changelogMeta';
 import {
   IconGlobe, IconSun, IconMoon, IconLogout, IconCamera,
 } from './SidebarIcons';
@@ -40,6 +41,23 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
 
   return (
     <div className="border-t border-black/[0.03] dark:border-white/[0.03] p-2 space-y-0.5">
+
+      {/* Iter 92.49: "Was ist neu?" → /changelog. Lime pulse-dot until the
+          latest version was seen (localStorage, see lib/changelogMeta). */}
+      <button data-testid="sidebar-changelog-btn" onClick={() => navigate('/changelog')}
+        className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-gray-600 dark:text-muted-foreground/50 dark:hover:text-[#BFFF00] hover:bg-gray-50/50 dark:hover:bg-[#BFFF00]/[0.04] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
+        <span className="relative flex shrink-0">
+          <Sparkles size={14} />
+          {hasUnseenChangelog() && (
+            <span className="absolute -top-0.5 -right-1 w-[7px] h-[7px] rounded-full bg-[#BFFF00] shadow-[0_0_6px_rgba(191,255,0,0.8)] animate-pulse" data-testid="changelog-new-dot" />
+          )}
+        </span>
+        {!collapsed && (
+          <span className="flex items-center gap-1.5 flex-1">
+            <span className="font-medium">{lang === 'de' ? 'Was ist neu?' : "What's new?"}</span>
+          </span>
+        )}
+      </button>
       <button data-testid="lang-toggle-btn" onClick={toggleLang}
         className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-gray-600 dark:text-muted-foreground/50 dark:hover:text-foreground/70 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
         <IconGlobe size={14} />
@@ -57,24 +75,33 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
         {!collapsed && <span className="font-medium">{theme === 'dark' ? t('nav.lightMode') : t('nav.darkMode')}</span>}
       </button>
 
-      {/* Upgrade CTA · hidden for OS PLUS users */}
+      {/* Upgrade CTA — Iter 92.47 (Mert · GODMODE): premium mobile-safe layout.
+          Icon-only in collapsed sidebar, full label+chevron everywhere else.
+          Fixes: previously the mobile-drawer rendered a full-width lime bar
+          with no label because `collapsed` was inherited incorrectly. */}
       {user && !isAccelerator && (
         <button
           onClick={() => openPricing(tier === 'standard' ? 'leadership_os_plus' : 'leadership_os')}
           data-testid="sidebar-upgrade-btn"
-          className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] font-bold transition-all mt-1 ${
+          className={`group flex items-center gap-2.5 w-full rounded-xl text-[12px] font-black transition-all mt-1 ${
             collapsed
-              ? 'justify-center px-2 bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#9ACC00]'
-              : 'bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20'
+              ? 'justify-center h-9 w-9 mx-auto bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:scale-105 shadow-lg shadow-[#BFFF00]/25'
+              : 'px-3 py-2.5 bg-gradient-to-r from-[#BFFF00] via-[#B0E600] to-[#9ACC00] text-[#0A0A0A] hover:shadow-xl hover:shadow-[#BFFF00]/30 hover:scale-[1.02] shadow-md shadow-[#BFFF00]/20'
           }`}
-          title={tier === 'free' ? 'Leadership OS aktivieren' : 'Auf OS PLUS upgraden'}
+          title={tier === 'free' ? 'Leadership OS holen' : 'Auf OS PLUS upgraden'}
         >
-          <Crown size={14} strokeWidth={2.5} />
+          <span className={collapsed ? '' : 'flex items-center justify-center w-6 h-6 rounded-md bg-[#0A0A0A]/12'}>
+            <Crown size={collapsed ? 15 : 13} strokeWidth={2.5} fill={collapsed ? 'none' : 'currentColor'} />
+          </span>
           {!collapsed && (
-            <span className="truncate">
-              {tier === 'free' && 'Leadership OS holen'}
-              {tier === 'standard' && 'Auf OS PLUS upgraden'}
-            </span>
+            <>
+              <span className="flex-1 text-left tracking-tight">
+                {tier === 'free' ? 'Leadership OS holen' : 'Auf OS PLUS upgraden'}
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-80 group-hover:translate-x-0.5 transition-transform">
+                →
+              </span>
+            </>
           )}
         </button>
       )}
@@ -113,6 +140,17 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
           )}
         </div>
       )}
+      {/* Iter 131.4 (Wlad-Direktive): "Tour erneut ansehen" — user can
+          replay the guided dashboard walk-through any time. */}
+      <button
+        data-testid="restart-tour-btn"
+        onClick={() => restartDashboardTour(navigate)}
+        className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-[#4A6200] dark:text-muted-foreground/50 dark:hover:text-[#BFFF00] hover:bg-[#BFFF00]/[0.06] dark:hover:bg-[#BFFF00]/[0.04] transition-colors ${collapsed ? 'justify-center px-2' : ''}`}
+        title={lang === 'de' ? 'Dashboard-Tour erneut ansehen' : 'Replay the dashboard tour'}
+      >
+        <Compass size={14} />
+        {!collapsed && <span className="font-medium">{lang === 'de' ? 'Tour erneut ansehen' : 'Replay tour'}</span>}
+      </button>
       <button data-testid="logout-btn" onClick={handleLogout}
         className={`flex items-center gap-2.5 w-full px-3 py-[7px] rounded-[10px] text-[12px] text-gray-400 hover:text-rose-500 dark:text-muted-foreground/50 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-400/5 transition-colors ${collapsed ? 'justify-center px-2' : ''}`}>
         <IconLogout size={14} />
@@ -120,4 +158,16 @@ export const SidebarFooter = ({ theme, toggleTheme, lang, toggleLang, t, collaps
       </button>
     </div>
   );
+};
+
+/**
+ * Restart the Dashboard First-Tour. Iter 131.4 (Wlad-Direktive):
+ * exposed in the sidebar so users who dismissed the tour can re-play it.
+ * Wraps the localStorage-flag clear + navigation to /dashboard + reload.
+ */
+export const restartDashboardTour = (navigate) => {
+  try { localStorage.removeItem('leaderos_tour_v1_done'); } catch { /* ignore */ }
+  if (navigate) navigate('/dashboard');
+  // A short delay before reload lets the router settle first.
+  setTimeout(() => { try { window.location.reload(); } catch { /* ignore */ } }, 60);
 };

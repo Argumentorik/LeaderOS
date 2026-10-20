@@ -1,41 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Loader2, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
+import { postLoginRoute } from '../lib/postLoginRoute';
 
 export default function MagicLinkVerifyPage() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user: authedUser } = useAuth();
   const [state, setState] = useState('verifying'); // verifying | success | error
   const [errorMsg, setErrorMsg] = useState('');
+  const firedRef = useRef(false); // single-shot: token is single-use, StrictMode double-invoke must not consume it twice
 
   useEffect(() => {
     const token = params.get('token');
     if (!token) {
       setState('error');
       setErrorMsg('Kein Token im Link gefunden.');
-      return;
+      return undefined;
     }
+    if (firedRef.current) return undefined;
+    firedRef.current = true;
 
-    let cancelled = false;
     (async () => {
       try {
         const res = await api.post('/auth/magic-link/verify', { token });
-        if (cancelled) return;
         login(res.data.user);
         setState('success');
-        setTimeout(() => navigate('/dashboard', { replace: true }), 700);
+        setTimeout(() => navigate(postLoginRoute(res.data.user), { replace: true }), 700);
       } catch (err) {
-        if (cancelled) return;
         setState('error');
         setErrorMsg(err?.response?.data?.detail
           || 'Der Link ist ungültig oder bereits abgelaufen.');
       }
     })();
-    return () => { cancelled = true; };
+    return undefined;
   }, [params, login, navigate]);
+
+  // Link zweimal geklickt (z. B. Mail-Vorschau + Klick): Nutzer ist schon drin → einfach weiterleiten.
+  useEffect(() => {
+    if (state === 'error' && authedUser) navigate(postLoginRoute(authedUser), { replace: true });
+  }, [state, authedUser, navigate]);
 
   return (
     <div
@@ -82,17 +88,22 @@ export default function MagicLinkVerifyPage() {
         )}
 
         {state === 'error' && (
-          <div className="text-center py-6" data-testid="magic-verify-error">
+          <div className="text-center py-6" data-testid="magic-verify-error" role="alert" aria-live="assertive">
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-red-500/15">
               <AlertCircle size={28} className="text-red-400" strokeWidth={2.2} />
             </div>
-            <h1 className="text-xl font-semibold text-white">Link ungültig</h1>
+            <h1 className="text-xl font-semibold text-white">Dieser Link geht nicht mehr</h1>
             <p className="mt-2 text-sm text-white/50 leading-relaxed">{errorMsg}</p>
+            <p className="mt-2 text-[12px] text-white/35 leading-relaxed">Jeder Link gilt 15 Minuten und nur einmal. Fordere einfach einen neuen an – das dauert zehn Sekunden.</p>
             <Link
               to="/login"
+              state={{ mode: 'magic' }}
               className="inline-flex items-center justify-center mt-6 h-11 px-6 rounded-xl bg-[#BFFF00] hover:bg-[#BFFF00]/90 text-[#0A0A0A] font-bold text-sm transition-all shadow-lg shadow-[#BFFF00]/20"
-              data-testid="magic-verify-back-to-login"
+              data-testid="magic-verify-request-new"
             >
+              Neuen Link anfordern
+            </Link>
+            <Link to="/login" className="block mt-3 text-[11px] font-semibold uppercase tracking-wider text-white/40 hover:text-[#BFFF00] transition-colors" data-testid="magic-verify-back-to-login">
               Zurück zum Login
             </Link>
           </div>

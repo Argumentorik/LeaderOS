@@ -29,6 +29,11 @@ Allow: /impressum
 Allow: /datenschutz
 Allow: /agb
 Allow: /widerruf
+Allow: /leadership-programm
+Allow: /kurse-uebersicht/
+Allow: /for-teams
+Allow: /sicherheit
+Allow: /changelog
 
 # Authenticated areas — never index, never follow
 Disallow: /dashboard
@@ -52,6 +57,12 @@ Disallow: /profile
 Disallow: /payment-success
 Disallow: /onboarding
 Disallow: /auth/
+Disallow: /daily-checkin
+Disallow: /leader-diagnose
+Disallow: /video-guide
+# Geteilte Missionen/Ordner (nutzergenerierte Inhalte) — nicht indexieren
+Disallow: /m/
+Disallow: /f/
 
 # API routes — never index
 Disallow: /api/

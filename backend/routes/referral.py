@@ -1,6 +1,7 @@
 """Referral System — Billion-dollar level viral growth engine."""
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
+import os
 import uuid
 import hashlib
 from datetime import datetime, timezone
@@ -56,9 +57,13 @@ async def get_referral_code(request: Request):
             next_tier = t
             break
 
+    # Iter 92.27: referrals deliberately route to the FUNNEL domain (leadercheck.de),
+    # not the auth app — referred users should hit the quiz first to maximize conversion.
+    # Env var `REFERRAL_FUNNEL_URL` lets ops swap funnel domains without code changes.
+    _funnel = (os.environ.get("REFERRAL_FUNNEL_URL") or "https://leadercheck.de").rstrip("/")
     return {
         "code": code,
-        "share_url": f"https://leadercheck.de?ref={code}",
+        "share_url": f"{_funnel}?ref={code}",
         "referral_count": ref_count,
         "tier": tier,
         "next_tier": next_tier,

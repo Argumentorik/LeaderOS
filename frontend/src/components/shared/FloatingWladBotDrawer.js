@@ -1,8 +1,8 @@
 /**
- * FloatingWladBotDrawer · always-on agent drawer (Iter 92.23.8).
+ * FloatingWladBotDrawer — always-on agent drawer (Iter 92.23.8).
  *
  * Mert's vision (Iter 92.23.7):
- *   "the agent who is then always next to you" · like Wingman / OpenClaw but
+ *   "the agent who is then always next to you" — like Wingman / OpenClaw but
  *   for leaders.
  *
  * Behavior:
@@ -11,36 +11,39 @@
  *     the same /api/chat backend.
  *   - The drawer auto-picks the most-recently-active folder so the agent
  *     starts with the user's current context. Can be changed via dropdown.
- *   - Messages persist server-side as a regular chat session · user can later
+ *   - Messages persist server-side as a regular chat session — user can later
  *     "open in full chat" to continue with the deep UI.
  *
  * Why this is global:
  *   - Mounted once in DashboardLayout so it travels with the user across pages.
- *   - Light-weight: no full chat history, no PDF uploads, no role selector ·
+ *   - Light-weight: no full chat history, no PDF uploads, no role selector —
  *     just quick Q&A with folder context. The deep chat lives at /chat.
  */
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Sparkles, X, Send, Loader2, Folder, MessageSquareText, ChevronDown, Lightbulb, Target } from 'lucide-react';
+import { Sparkles, X, Send, Loader2, Folder, ChevronDown, Lightbulb, Target } from 'lucide-react';
+import { WladBotAvatar } from '../brand/WladBotAvatar';
 import api from '../../lib/api';
+import { stopMedia } from '../../lib/audioBus';
+import { streamChat } from '../../lib/chatStream';
 import logger from '../../lib/logger';
 import SmartText from './SmartText';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { subscribeWladBotOpen, subscribeWladBotClose, subscribeWladBotPageContext, getLastPageContext } from '../../lib/wladbotBus';
 
-// Hide the FAB on these routes · onboarding, auth, public, etc.
-const HIDDEN_ROUTES = ['/login', '/signup', '/onboarding', '/m/', '/f/', '/leader-os/welcome', '/leader-os/diagnose', '/auth-callback', '/auth/magic', '/chat'];
+// Hide the FAB on these routes — onboarding, auth, public, etc.
+const HIDDEN_ROUTES = ['/login', '/signup', '/register', '/onboarding', '/m/', '/f/', '/leader-os/welcome', '/leader-os/diagnose', '/auth-callback', '/auth/magic', '/chat'];
 
 const QUICK_PROMPTS_DE = [
   { label: 'Heute fokussieren', q: 'Was sollte ich heute als Priorität angehen, gegeben mein aktueller Kontext?' },
-  { label: 'Gespräch vorbereiten', q: 'Hilf mir, ein wichtiges Gespräch vorzubereiten · was sind die 3 Schlüsselsätze?' },
+  { label: 'Gespräch vorbereiten', q: 'Hilf mir, ein wichtiges Gespräch vorzubereiten — was sind die 3 Schlüsselsätze?' },
   { label: 'Reflektieren', q: 'Lass uns kurz reflektieren: Was lief diese Woche gut, was kann ich morgen besser machen?' },
 ];
 const QUICK_PROMPTS_EN = [
   { label: 'Focus today', q: 'What should I prioritize today, given my current context?' },
-  { label: 'Prep a talk', q: 'Help me prep a critical conversation · what are the 3 key sentences?' },
+  { label: 'Prep a talk', q: 'Help me prep a critical conversation — what are the 3 key sentences?' },
   { label: 'Reflect', q: "Let's reflect briefly: what went well this week, what can I do better tomorrow?" },
 ];
 
@@ -64,6 +67,9 @@ export const FloatingWladBotDrawer = () => {
   const scrollRef = useRef(null);
   const folderPickRef = useRef(null);
 
+  // Iter 185: Coach-Dialog hat Vorrang — laufende Videos werden pausiert.
+  useEffect(() => { if (open) stopMedia('coach-drawer-open'); }, [open]);
+
   // Iter 92.23.9: external open events (e.g. "Briefing"-Button in FolderRail).
   // Subscribers can pass {folderId, briefingMessage} → drawer opens, sets
   // activeFolderId, and seeds the first assistant message with a server-
@@ -78,7 +84,7 @@ export const FloatingWladBotDrawer = () => {
       }
       if (briefingMessage) {
         // Render as an assistant turn with an insight bubble so the SmartText
-        // styling already in the drawer applies. We do NOT round-trip to LLM ·
+        // styling already in the drawer applies. We do NOT round-trip to LLM —
         // the message is the briefing the parent computed.
         setMessages([{ role: 'assistant', parsed: { insight: briefingMessage } }]);
       }
@@ -90,7 +96,7 @@ export const FloatingWladBotDrawer = () => {
   // Don't render on hidden routes (and never for unauthenticated users).
   const isHidden = !user || HIDDEN_ROUTES.some(r => location.pathname.startsWith(r));
 
-  // Iter 92.23.11: keep page-context fresh · when the user navigates between
+  // Iter 92.23.11: keep page-context fresh — when the user navigates between
   // /missions, /chat, etc. the page publishes its active folder/entry/label.
   useEffect(() => {
     const off = subscribeWladBotPageContext((ctx) => setPageContext(ctx));
@@ -142,21 +148,49 @@ export const FloatingWladBotDrawer = () => {
   const activeFolder = folders.find(f => f.folder_id === activeFolderId);
   const isContextSuggested = activeFolderId && pageContext?.folderId === activeFolderId;
 
-  const send = async (overrideText) => {
+  const send = async (overrideText, modality = 'text') => {
     const text = (overrideText || input).trim();
     if (!text || sending) return;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: text }]);
+    setMessages(prev => [...prev, { role: 'user', content: text, modality }]);
     setSending(true);
     try {
-      const body = { message: text, session_id: sessionId };
+      const body = { message: text, session_id: sessionId, modality };
       if (activeFolderId) body.folder_id = activeFolderId;
-      const res = await api.post('/chat', body);
-      if (!sessionId) setSessionId(res.data.session_id);
-      setMessages(prev => [...prev, { role: 'assistant', content: '', parsed: res.data.response }]);
+      let draft = '';
+      let hadDelta = false;
+      await streamChat(body, {
+        onStart: (evt) => { if (!sessionId && evt.session_id) setSessionId(evt.session_id); },
+        onDelta: (chunk) => {
+          draft += chunk;
+          hadDelta = true;
+          setMessages(prev => {
+            const last = prev[prev.length - 1];
+            const msg = { role: 'assistant', streaming: true, content: draft, parsed: { text: draft }, modality };
+            return last?.streaming ? [...prev.slice(0, -1), msg] : [...prev, msg];
+          });
+        },
+        onDone: (data) => {
+          if (!sessionId) setSessionId(data.session_id);
+          setMessages(prev => [...prev.filter(m => !m.streaming), { role: 'assistant', content: '', parsed: data.response, modality: data.modality || modality }]);
+        },
+      });
+      if (!hadDelta) setMessages(prev => prev.filter(m => !m.streaming));
     } catch (err) {
       logger.error('drawer chat failed:', err);
-      setMessages(prev => [...prev, { role: 'assistant', content: de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.' }]);
+      setMessages(prev => prev.filter(m => !m.streaming));
+      const status = err?.response?.status ?? err?.status;
+      const noCredits = status === 402;
+      const detail = err?.response?.data?.detail ?? err?.data?.detail;
+      const backendMsg = typeof detail === 'string' ? detail : '';
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: noCredits
+          ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad.' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad.')
+          : ((status === 503 || status === 504 || status === 429) && backendMsg
+            ? backendMsg
+            : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.')),
+      }]);
     } finally {
       setSending(false);
     }
@@ -175,16 +209,16 @@ export const FloatingWladBotDrawer = () => {
 
   return createPortal(
     <>
-      {/* FAB · positioned ABOVE the WladHelp support button (which lives at bottom-6 right-6 z-[140]) */}
+      {/* FAB — positioned ABOVE the WladHelp support button (which lives at bottom-6 right-6 z-[140]) */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-6 z-[60] w-14 h-14 rounded-2xl bg-[#BFFF00] text-[#0A0A0A] shadow-2xl shadow-[#BFFF00]/30 ring-2 ring-white/10 hover:scale-105 active:scale-95 transition-transform flex items-center justify-center group"
+          className="fixed bottom-24 right-6 z-[60] rounded-full shadow-2xl shadow-black/40 ring-1 ring-white/10 hover:scale-105 hover:ring-[#BFFF00]/40 focus-visible:ring-2 focus-visible:ring-[#BFFF00] focus-visible:outline-none active:scale-95 transition-[transform,box-shadow] hidden md:flex items-center justify-center"
           data-testid="wladbot-fab"
           title={de ? 'WladBot fragen' : 'Ask WladBot'}
+          aria-label={de ? 'WladBot öffnen' : 'Open WladBot'}
         >
-          <Sparkles size={22} strokeWidth={2.5} className="group-hover:rotate-12 transition-transform" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-rose-500 ring-2 ring-[#0A0A0A] animate-pulse" aria-hidden />
+          <WladBotAvatar size={52} live />
         </button>
       )}
 
@@ -197,14 +231,9 @@ export const FloatingWladBotDrawer = () => {
             <header className="px-4 pt-4 pb-3 border-b border-white/[0.06]">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5">
-                  <div className="relative">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-md shadow-[#BFFF00]/30">
-                      <span className="text-[14px] font-black text-[#0A0A0A]" style={{ fontFamily: 'Outfit, sans-serif' }}>W</span>
-                    </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 ring-2 ring-[#0A0A0A]" aria-hidden />
-                  </div>
+                  <WladBotAvatar size={36} live />
                   <div>
-                    <p className="text-[13px] font-black text-white leading-tight">WladBot</p>
+                    <p className="text-[13px] font-black text-white leading-tight">WladBot <span className="px-1 py-px rounded bg-[#BFFF00]/15 text-[#BFFF00] text-[8px] font-black tracking-wider align-middle">3.0</span></p>
                     <p className="text-[9px] text-white/40 uppercase tracking-[0.18em] font-bold">{de ? 'IMMER NEBEN DIR' : 'ALWAYS WITH YOU'}</p>
                   </div>
                 </div>
@@ -218,7 +247,7 @@ export const FloatingWladBotDrawer = () => {
                 </button>
               </div>
 
-              {/* Folder picker · current context */}
+              {/* Folder picker — current context */}
               <div ref={folderPickRef} className="relative mt-3">
                 <button
                   onClick={() => setFolderPickerOpen(o => !o)}
@@ -273,10 +302,10 @@ export const FloatingWladBotDrawer = () => {
               {messages.length === 0 ? (
                 <div className="space-y-4 py-6" data-testid="wladbot-drawer-empty">
                   <div className="text-center space-y-2">
-                    <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-[#BFFF00]/15 to-[#BFFF00]/5 ring-1 ring-[#BFFF00]/20 items-center justify-center mb-1">
-                      <MessageSquareText size={18} className="text-[#BFFF00]" />
+                    <div className="inline-flex mb-1">
+                      <WladBotAvatar size={60} live />
                     </div>
-                    <p className="text-[13px] font-black text-white">{de ? 'Was beschäftigt dich gerade?' : "What's on your mind?"}</p>
+                    <p className="text-[13px] font-black text-white">{de ? `Was beschäftigt dich gerade${user?.name ? `, ${user.name.split(' ')[0]}` : ''}?` : "What's on your mind?"}</p>
                     <p className="text-[11px] text-white/40 leading-relaxed max-w-[280px] mx-auto">
                       {activeFolder
                         ? (de ? `Ich kenne deinen Kontext "${activeFolder.name}". Frag mich alles dazu.` : `I know your "${activeFolder.name}" context. Ask anything about it.`)
@@ -308,6 +337,11 @@ export const FloatingWladBotDrawer = () => {
                       </div>
                     ) : (
                       <div className="max-w-[88%] space-y-2">
+                        {m.parsed?.text && (
+                          <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-tl-sm px-3 py-2.5">
+                            <div className="[&_*]:!text-white/90"><SmartText text={m.parsed.text} variant="inline" accent="#BFFF00" /></div>
+                          </div>
+                        )}
                         {m.parsed?.insight && (
                           <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-tl-sm px-3 py-2.5">
                             <div className="flex items-center gap-1.5 mb-1.5">
@@ -336,7 +370,7 @@ export const FloatingWladBotDrawer = () => {
                   </div>
                 ))
               )}
-              {sending && (
+              {sending && !messages[messages.length - 1]?.streaming && (
                 <div className="flex">
                   <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl px-3 py-2 flex gap-1">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#BFFF00] typing-dot" />

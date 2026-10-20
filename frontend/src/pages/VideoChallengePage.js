@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -9,10 +10,19 @@ import { TierLockOverlay } from '../components/shared/TierLockOverlay';
 import { ChallengeList } from '../components/video/ChallengeList';
 import { RecordingStudio } from '../components/video/RecordingStudio';
 import { VideoUpsellModal } from '../components/video/VideoUpsellModal';
+import { VideoStudioSidebar } from '../components/video/VideoStudioSidebar';
+import { VideoTrialBanner } from '../components/video/VideoTrialBanner';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
+import { SmartConsultationBanner } from '../components/brand/SmartConsultationBanner';
 import api from '../lib/api';
+import { useVideoRecorder } from '../hooks/useVideoRecorder';
+import { useVideoAnalysis } from '../hooks/useVideoAnalysis';
 import { downloadHTMLReport } from '../lib/reportGenerator';
+import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
 
 const DEFAULT_RATING = { mode: 'hard', level: 'fortgeschritten', focus: [], audience: 'allgemein' };
+
+const STUDIO_CLIPS = ['bp-missionen', 'bp-video-analyse'];
 
 export default function VideoChallengePage() {
   const { lang } = useLanguage();
@@ -20,26 +30,54 @@ export default function VideoChallengePage() {
   const isAccelerator = tierCtx.hasFeature('video_analysis');
   const [challenges, setChallenges] = useState([]);
   const [activeChallenge, setActiveChallenge] = useState(null);
-  const [recording, setRecording] = useState(false);
-  const [recorded, setRecorded] = useState(false);
-  const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState(null);
-  const [timer, setTimer] = useState(0);
-  const [stream, setStream] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [ratingConfig, setRatingConfig] = useState(DEFAULT_RATING);
   const [trial, setTrial] = useState(null);
-  const videoRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const chunksRef = useRef([]);
-  const timerRef = useRef(null);
-  const blobRef = useRef(null);
-  const audioRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const audioBlobRef = useRef(null);
+  const [archive, setArchive] = useState([]);
+  const [archiveLoading, setArchiveLoading] = useState(false);
+  const [activeEntryId, setActiveEntryId] = useState(null);
+  const [activeFolderId, setActiveFolderId] = useState(null);
+  const [searchParams] = useSearchParams();
+  const submitRef = useRef(null); // MediaRecorder.onstop → auto-submit
 
-  // Trial-aware access: Accelerator always passes, others get 3 free in first 14 days.
+  const de = lang === 'de';
   const canAccess = isAccelerator || Boolean(trial?.active);
+
+  const recorder = useVideoRecorder({
+    onRecordingComplete: () => submitRef.current?.(),
+  });
+  const {
+    recording, recorded, timer, recordedVideoUrl, videoRef, blobRef,
+    startRecording, stopRecording, acquireStream, releaseStream,
+    clearRecordedVideo, resetRecorder, setRecorded, setTimer,
+  } = recorder;
+
+  const loadArchive = useCallback(async () => {
+    setArchiveLoading(true);
+    try {
+      const res = await api.get('/video-archive');
+      setArchive(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      logger.error('Failed to load video archive:', err);
+    } finally {
+      setArchiveLoading(false);
+    }
+  }, []);
+
+  const handleAnalysisComplete = useCallback((analysisResult) => {
+    setAnalysis(analysisResult);
+    setActiveEntryId(analysisResult?.entry_id || null);
+    if (analysisResult?._trial) setTrial(analysisResult._trial);
+    releaseStream();
+    loadArchive();
+  }, [releaseStream, loadArchive]);
+
+  const { analyzing, submitVideo, phase } = useVideoAnalysis({
+    blobRef, ratingConfig, de,
+    onComplete: handleAnalysisComplete,
+  });
+  submitRef.current = () => submitVideo(activeChallenge);
 
   const saveGlobalPrefs = useCallback(async (newConfig) => {
     setRatingConfig(newConfig);
@@ -69,59 +107,43 @@ export default function VideoChallengePage() {
     } catch (err) { logger.error('Failed to load challenges:', err); }
   }, []);
 
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
-    if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
-    setRecording(false);
-    clearInterval(timerRef.current);
-  }, [mediaRecorderRef, audioRecorderRef, timerRef]);
+  useEffect(() => { loadChallenges(); loadArchive(); }, [loadChallenges, loadArchive]);
 
-  const startRecording = useCallback(() => {
-    if (!stream) return;
-    chunksRef.current = [];
-    audioChunksRef.current = [];
-    const mr = new MediaRecorder(stream, { mimeType: 'video/webm' });
-    mediaRecorderRef.current = mr;
-    mr.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-    mr.onstop = () => {
-      blobRef.current = new Blob(chunksRef.current, { type: 'video/webm' });
-      setRecorded(true);
-    };
-    // Separate audio-only recorder for Whisper transcription (rejects muxed video/webm)
-    const audioTrack = stream.getAudioTracks()[0];
-    if (audioTrack) {
-      const audioStream = new MediaStream([audioTrack]);
-      const ar = new MediaRecorder(audioStream, { mimeType: 'audio/webm;codecs=opus' });
-      audioRecorderRef.current = ar;
-      ar.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
-      ar.onstop = () => {
-        audioBlobRef.current = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-      };
-      ar.start();
+  // Deep-link from Dashboard Workspaces — /missions?folder=fld_xxx
+  useEffect(() => {
+    const folderParam = searchParams.get('folder');
+    if (folderParam && folderParam !== activeFolderId) {
+      setActiveFolderId(folderParam);
     }
-    mr.start();
-    setRecording(true);
-    setTimer(0);
-    timerRef.current = setInterval(() => setTimer(t => t + 1), 1000);
-  }, [stream, mediaRecorderRef, chunksRef, audioChunksRef]);
+  }, [searchParams, activeFolderId]);
 
-  useEffect(() => { loadChallenges(); }, [loadChallenges]);
-  useEffect(() => { return () => { if (stream) stream.getTracks().forEach(t => t.stop()); }; }, [stream]);
   useEffect(() => {
     if (recording && timer >= (activeChallenge?.time_limit || 180)) stopRecording();
   }, [timer, recording, activeChallenge, stopRecording]);
 
+  // Publish page-context so the WladBot FAB drawer pre-selects folder/entry.
+  useEffect(() => {
+    const activeEntry = archive.find(e => e.entry_id === activeEntryId);
+    const resolvedFolderId = activeFolderId || activeEntry?.folder_id || null;
+    setWladBotPageContext({
+      folderId: resolvedFolderId,
+      entryId: activeEntryId || null,
+      entryTitle: activeEntry?.custom_title || activeChallenge?.title || null,
+      pageLabel: de ? 'Video Studio' : 'Video Studio',
+    });
+    return () => clearWladBotPageContext();
+  }, [activeFolderId, activeEntryId, archive, activeChallenge, de]);
+
   const startChallenge = async (challenge) => {
     setActiveChallenge(challenge);
-    setAnalysis(null); setRecorded(false); setTimer(0);
+    setAnalysis(null);
+    resetRecorder();
+    setActiveEntryId(null);
     try {
-      const s = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      setStream(s);
-      if (videoRef.current) { videoRef.current.srcObject = s; videoRef.current.muted = true; }
+      await acquireStream();
     } catch (err) {
       logger.error('Camera access denied:', err);
-      // Surface the failure so the user doesn't sit through a countdown that goes nowhere.
-      const msg = lang === 'de'
+      const msg = de
         ? 'Kamera-Zugriff verweigert. Bitte in deinen Browser-Einstellungen erlauben und neu laden.'
         : 'Camera access denied. Please allow it in browser settings and reload.';
       try { (await import('sonner')).toast.error(msg); }
@@ -129,46 +151,28 @@ export default function VideoChallengePage() {
     }
   };
 
-  const submitVideo = async () => {
-    if (!blobRef.current || !activeChallenge) return;
-    setAnalyzing(true);
-    try {
-      const formData = new FormData();
-      // Send audio-only blob for Whisper transcription (falls back to video blob if audio unavailable)
-      const uploadBlob = audioBlobRef.current || blobRef.current;
-      const uploadName = audioBlobRef.current ? 'challenge_audio.webm' : 'challenge.webm';
-      formData.append('file', uploadBlob, uploadName);
-      const params = new URLSearchParams();
-      params.set('rating_mode', ratingConfig.mode);
-      params.set('rating_level', ratingConfig.level);
-      if (ratingConfig.focus?.length) params.set('rating_focus', ratingConfig.focus.join(','));
-      params.set('rating_audience', ratingConfig.audience);
-      const res = await api.post(
-        `/video-challenges/${activeChallenge.challenge_id}/analyze?${params.toString()}`,
-        formData, { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      setAnalysis(res.data);
-      // Refresh trial counter from the response if backend attached it.
-      if (res.data?._trial) setTrial(res.data._trial);
-      if (stream) stream.getTracks().forEach(t => t.stop());
-      setStream(null);
-    } catch (err) {
-      logger.error('Analysis failed:', err);
-      const detail = err?.response?.data?.detail || (lang === 'de'
-        ? 'Analyse konnte nicht abgeschlossen werden. Bitte erneut aufnehmen.'
-        : 'Analysis could not be completed. Please record again.');
-      try {
-        const { toast } = await import('sonner');
-        toast.error(detail, { duration: 6000 });
-      } catch (toastErr) { logger.warn('toast unavailable:', toastErr?.message); }
+  // Iter 182: Eigenes Material (Meeting-Ausschnitt, Handy-Video) statt Live-Aufnahme.
+  const MAX_UPLOAD_BYTES = 150 * 1024 * 1024;
+  const handlePickFile = async (file) => {
+    if (file.size > MAX_UPLOAD_BYTES) {
+      const msg = de
+        ? 'Die Datei ist größer als 150 MB. Bitte einen kürzeren Ausschnitt hochladen (3 Minuten reichen).'
+        : 'File is larger than 150 MB. Please upload a shorter excerpt (3 minutes is plenty).';
+      try { (await import('sonner')).toast.error(msg, { duration: 6000 }); }
+      catch (toastErr) { logger.warn('toast unavailable:', toastErr?.message); }
+      return;
     }
-    finally { setAnalyzing(false); }
+    blobRef.current = file;
+    releaseStream();
+    submitVideo(activeChallenge);
   };
 
   const resetChallenge = () => {
-    setActiveChallenge(null); setAnalysis(null); setRecorded(false);
-    setRecording(false); setTimer(0);
-    if (stream) { stream.getTracks().forEach(t => t.stop()); setStream(null); }
+    setActiveChallenge(null);
+    setAnalysis(null);
+    resetRecorder();
+    setActiveEntryId(null);
+    releaseStream();
   };
 
   const handleDownloadReport = () => {
@@ -193,98 +197,132 @@ export default function VideoChallengePage() {
     });
   };
 
+  // Studio sidebar — pick a historical entry → load its analysis read-only.
+  const handlePickEntry = (entry) => {
+    if (recording) return; // don't yank the user out of a live recording
+    const challenge = challenges.find(c => c.challenge_id === entry.challenge_id) || {
+      title: entry.custom_title || 'Mission',
+      description: '',
+    };
+    setActiveChallenge(challenge);
+    setAnalysis(entry.analysis ? { ...entry.analysis, entry_id: entry.entry_id } : null);
+    setActiveEntryId(entry.entry_id);
+    setRecorded(false);
+    clearRecordedVideo(); // history entries have no local blob → no replay
+    releaseStream();
+  };
+
+  const handleRenameEntry = async (entryId, newTitle) => {
+    const title = (newTitle || '').trim();
+    if (!title) return;
+    setArchive(prev => prev.map(e => e.entry_id === entryId ? { ...e, custom_title: title } : e));
+    try {
+      await api.patch(`/video-archive/${entryId}`, { title });
+    } catch (err) {
+      logger.error('Rename failed:', err);
+      loadArchive();
+      try {
+        const { toast } = await import('sonner');
+        toast.error(de ? 'Umbenennen fehlgeschlagen' : 'Rename failed');
+      } catch (toastErr) { logger.warn('Toast unavailable after rename failure', toastErr); }
+    }
+  };
+
+  const handleDeleteEntry = async (entryId) => {
+    setArchive(prev => prev.filter(e => e.entry_id !== entryId));
+    if (activeEntryId === entryId) {
+      setAnalysis(null); setActiveEntryId(null);
+    }
+    try {
+      await api.delete(`/video-archive/${entryId}`);
+    } catch (err) {
+      logger.error('Delete failed:', err);
+      loadArchive();
+      try {
+        const { toast } = await import('sonner');
+        toast.error(de ? 'Löschen fehlgeschlagen' : 'Delete failed');
+      } catch (toastErr) { logger.warn('Toast unavailable after delete failure', toastErr); }
+    }
+  };
+
   return (
     <DashboardLayout>
-      {!canAccess && !tierCtx.loading && <TierLockOverlay feature="video_analysis" requiredTier="accelerator" de={lang === 'de'} />}
-      <LoadingOverlay isOpen={analyzing} flow="video" de={lang === 'de'} />
-      <div className="p-8 lg:p-14 max-w-6xl mx-auto min-h-screen" data-testid="video-challenge-page">
-        {showUpsell && <VideoUpsellModal onClose={() => setShowUpsell(false)} lang={lang} />}
+      {!canAccess && !tierCtx.loading && <TierLockOverlay feature="video_analysis" requiredTier="accelerator" de={de} />}
+      <LoadingOverlay isOpen={analyzing} flow="video" de={de}
+        progressLabel={phase.stage === 'upload' ? (de ? `Upload ${phase.pct} %` : `Upload ${phase.pct}%`) : phase.stage === 'queued' ? (de ? 'Upload fertig · Analyse startet' : 'Upload done · analysis starting') : phase.stage === 'transcribing' ? (de ? 'Transkription läuft' : 'Transcribing') : phase.stage === 'analyzing' ? (de ? 'Wlad analysiert deine Rede' : 'Wlad is analyzing your speech') : undefined}
+        minAgent={phase.stage === 'analyzing' ? 2 : 0} />
+      <div className="flex flex-col lg:flex-row-reverse min-h-screen" data-testid="video-studio-shell">
+        <VideoStudioSidebar
+          entries={archive}
+          challenges={challenges}
+          activeEntryId={activeEntryId}
+          loading={archiveLoading}
+          onPickEntry={handlePickEntry}
+          onNewMission={resetChallenge}
+          onRename={handleRenameEntry}
+          onDelete={handleDeleteEntry}
+          activeFolderId={activeFolderId}
+          onPickFolder={(f) => setActiveFolderId(f?.folder_id || null)}
+          de={de}
+        />
 
-        {/* Page Header */}
-        {!activeChallenge && !analysis && (
-          <div className="mb-12 lg:mb-16" data-testid="video-challenge-header">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="h-px w-8 bg-[#BFFF00]/60" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                {lang === 'de' ? 'VIDEO-MISSIONEN' : 'VIDEO MISSIONS'}
-              </span>
-            </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
-              {lang === 'de' ? 'Deine ' : 'Your '}<em className="not-italic text-[#BFFF00]">{lang === 'de' ? 'Bühne' : 'Stage'}</em>
-            </h1>
-            <p className="text-base sm:text-lg text-white/50 mt-6 max-w-xl leading-relaxed font-light">
-              {lang === 'de'
-                ? 'Übe deine Wirkung. Nimm dich auf, bekomm sofortiges KI-Feedback zu Klarheit, Souveränität und Empathie.'
-                : 'Train your presence. Record yourself and get instant AI feedback on clarity, confidence, and empathy.'}
-            </p>
+        {/* w-full: mx-auto schaltet in der Spalte (Handy) das Strecken ab — ohne w-full wird
+            die Spalte max-content breit (489 px) und der Inhalt läuft aus dem Bild. */}
+        <div className="flex-1 min-w-0 w-full p-6 lg:p-10 xl:px-14 bg-gradient-mesh" data-testid="video-challenge-page">
+          {showUpsell && <VideoUpsellModal onClose={() => setShowUpsell(false)} lang={lang} />}
+          <div className="mb-5">
+            <SmartConsultationBanner placement="missions-top" compact />
           </div>
-        )}
 
-        {/* Trial banner · visible for Free/Standard users with active trial */}
-        {!isAccelerator && trial?.eligible && (
-          <div className={`mb-8 rounded-xl border px-5 py-4 flex items-center gap-4 transition-colors ${trial.active ? 'border-[#BFFF00]/20 bg-[#BFFF00]/[0.06] hover:border-[#BFFF00]/30' : 'border-rose-500/20 bg-rose-500/[0.04] hover:border-rose-500/30'}`} data-testid="video-trial-banner">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${trial.active ? 'bg-[#BFFF00] text-[#0A0A0A]' : 'bg-rose-500/15 text-rose-500'}`}>
-              <span className="text-[14px] font-bold">{trial.remaining}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-semibold leading-tight" data-testid="video-trial-headline">
-                {trial.active
-                  ? (lang === 'de'
-                      ? `Du hast ${trial.remaining} von ${trial.total} kostenlosen Video-Analysen übrig`
-                      : `${trial.remaining} of ${trial.total} free video analyses remaining`)
-                  : (lang === 'de'
-                      ? 'Dein gratis Video-Analyse-Kontingent ist aufgebraucht'
-                      : 'Your free video analysis quota is used up')
-                }
-              </p>
-              <p className="text-[11px] text-white/50 mt-1 font-light leading-relaxed">
-                {trial.active
-                  ? (lang === 'de'
-                      ? `Probier-Phase läuft noch ${trial.days_left} Tage · danach exklusiv im Leadership OS PLUS.`
-                      : `Trial ends in ${trial.days_left} days · then PLUS exclusive.`)
-                  : (lang === 'de'
-                      ? 'Upgrade auf Leadership OS PLUS für unbegrenzte Analysen.'
-                      : 'Upgrade to Leadership OS PLUS for unlimited analyses.')
-                }
-              </p>
-            </div>
-          </div>
-        )}
+          {!isAccelerator && trial?.eligible && <VideoTrialBanner trial={trial} de={de} />}
 
-        {!activeChallenge && !analysis && (
-          <ChallengeList
-            challenges={challenges}
-            ratingConfig={ratingConfig}
-            onSaveRatingConfig={saveGlobalPrefs}
-            onStartChallenge={startChallenge}
-            lang={lang}
-          />
-        )}
+          {!activeChallenge && !analysis && <FeatureVideoSection slugs={STUDIO_CLIPS} de={de} />}
 
-        {activeChallenge && !analysis && (
-          <RecordingStudio
-            activeChallenge={activeChallenge}
-            recording={recording} recorded={recorded} analyzing={analyzing}
-            timer={timer} videoRef={videoRef}
-            ratingConfig={ratingConfig} onSaveRatingConfig={saveGlobalPrefs}
-            onCancel={resetChallenge}
-            onStartRecording={startRecording} onStopRecording={stopRecording}
-            onReset={() => { setRecorded(false); setTimer(0); }}
-            onSubmit={submitVideo}
-            lang={lang}
-          />
-        )}
+          {!activeChallenge && !analysis && (
+            <ChallengeList
+              challenges={challenges}
+              ratingConfig={ratingConfig}
+              onSaveRatingConfig={saveGlobalPrefs}
+              onStartChallenge={startChallenge}
+              lang={lang}
+            />
+          )}
 
-        {analysis && (
-          <AnalysisResults
-            analysis={analysis}
-            activeChallenge={activeChallenge}
-            resetChallenge={resetChallenge}
-            handleDownloadReport={handleDownloadReport}
-            setShowUpsell={setShowUpsell}
-            lang={lang}
-          />
-        )}
+          {activeChallenge && !analysis && (
+            <RecordingStudio
+              activeChallenge={activeChallenge}
+              recording={recording} recorded={recorded} analyzing={analyzing}
+              timer={timer} videoRef={videoRef}
+              ratingConfig={ratingConfig} onSaveRatingConfig={saveGlobalPrefs}
+              onCancel={resetChallenge}
+              onStartRecording={startRecording} onStopRecording={stopRecording}
+              onReset={() => { setRecorded(false); setTimer(0); }}
+              onSubmit={() => submitVideo(activeChallenge)}
+              onPickFile={handlePickFile}
+              lang={lang}
+            />
+          )}
+
+          {analysis && (
+            <AnalysisResults
+              analysis={analysis}
+              activeChallenge={activeChallenge}
+              resetChallenge={resetChallenge}
+              handleDownloadReport={handleDownloadReport}
+              setShowUpsell={setShowUpsell}
+              lang={lang}
+              isAccelerator={isAccelerator}
+              videoUrl={recordedVideoUrl}
+              onReplay={(challenge) => {
+                setAnalysis(null);
+                resetRecorder();
+                setActiveEntryId(null);
+                clearRecordedVideo();
+                if (challenge) startChallenge(challenge);
+              }}
+            />
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );

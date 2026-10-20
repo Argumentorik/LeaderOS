@@ -1,5 +1,5 @@
 /**
- * FolderRail · slim collapsible folder strip for the Video Studio (Iter 92.23.7).
+ * FolderRail — slim collapsible folder strip for the Video Studio (Iter 92.23.7).
  *
  * Wingman / OpenClaw-inspired: a always-visible knowledge container that lets
  * the user group missions, chats, and notes around a real-world context
@@ -113,7 +113,7 @@ const FolderRow = ({ folder, isActive, onPick, onRename, onDelete, onBriefing, o
       <span className="text-[11.5px] font-bold flex-1 truncate">{folder.name}</span>
       <span className="text-[9px] text-white/30 tabular-nums group-hover:hidden">{folder.item_count || 0}</span>
       <div className="hidden group-hover:flex items-center gap-0.5 shrink-0">
-        {/* Briefing CTA · Mert P1 Iter 92.23.9 */}
+        {/* Briefing CTA — Mert P1 Iter 92.23.9 */}
         <button
           onClick={async (e) => {
             e.stopPropagation();

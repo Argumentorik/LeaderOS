@@ -1,0 +1,26 @@
+{
+  "summary": "Iteration 177 frontend verification: 7/8 features fully pass, 1 partial. Verified sidebar order (desktop+mobile), 3 next-step navigations under video-guide player, missions section title link, tile poster images (12/12 use /api/guide/media/.../poster?v=), day-1 challenge briefing block with thumbnail+all-link → /video-guide, login teaser video poster attribute, and admin Guide Studio preview panel (6/6 multishot clips show guide-preview-<slug> + 'Als Vorschau rendern' button — no render clicks issued). Voice overlay renders correctly on /chat?voice=1 but the visible status text is the listening state ('Ich höre zu… · Tipp auf den Orb sendet sofort') rather than the specified idle text ('Tippe den Orb, um zu sprechen'), suggesting listening auto-starts.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "VoiceModeOverlay (/chat?voice=1)", "issue": "Idle status text 'Tippe den Orb, um zu sprechen' is not observed; the overlay immediately shows the listening/silence-countdown state ('Ich höre zu… · Tipp auf den Orb sendet sofort'). Overlay itself renders correctly (voice-mode-overlay, voice-mode-orb, voice-mode-status, voice-mode-close, voice-mode-pause, voice-mode-mute all present). Playwright default Chromium may auto-grant/skip mic prompt in this environment, but the visible idle-state copy specified in the request is not reachable via UI in this run.", "selector": "[data-testid=\"voice-mode-status\"]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Verify VoiceMode initial/idle status text: when getUserMedia has not resolved (permission pending / denied), voice-mode-status should show 'Tippe den Orb, um zu sprechen' before any recording state is entered. Currently the listening-state copy is rendered immediately in an automated Chromium context."
+  ],
+  "critical_code_review_comments": [
+    "Voice overlay: consider initializing status to the idle copy and only transitioning to 'Ich höre zu…' after the mic stream is actually ready and recording has started; otherwise headless/automated environments and users who deny mic access will not see the intended prompt."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "~95% (7/8 features pass; voice idle text is the only miss, overlay itself renders)"},
+  "test_credentials": "standard@wladbot.test / test123, iter177-day1@wladbot-testing.de / TestQa2026x, test@test.com / test123 (admin) — all worked",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Detailed pass matrix — Sidebar desktop order [nav-dashboard, nav-video-guide, nav-challenge] confirmed at indices 0,1,2 (same for mobile DOM). Next-step buttons: start-1-willkommen→/leader-diagnose ✓; start-3-kontext→/profile?edit=context with profile-context-section present ✓; mission-day-1→/challenge ✓. video-guide-missions-title text is exactly '30-Tage-Challenge · Briefings Tag 1–7' and navigates to /challenge ✓. 12 tile <img>s all use /api/guide/media/*/poster?v=* ✓. Login teaser video poster attr contains 'poster?v=' ✓. Challenge day-1 briefing block (challenge-day-briefing) contains mission-guide-thumb <img> (src /api/guide/media/.../poster?v=…) and mission-guide-all-link → /video-guide ✓. Admin Guide Studio: 18 guide-clip-toggle-* clips; the 6 multishot ones tested (start-1…start-5, mission-day-1) all expose guide-preview-<slug> + guide-preview-render-<slug> with text 'Als Vorschau rendern' ✓; 2 teaser clips (teaser-login, teaser-spotlight) intentionally have no preview panel (non-multishot). No render/apply/discard buttons were clicked. Voice overlay renders with all expected testids but idle text not observed — reported as minor UI issue.",
+  "rca of the issue": "Voice overlay idle-text miss: The React state that controls voice-mode-status likely transitions to the 'listening' branch as soon as the overlay mounts (e.g., useEffect calling startRecording()/getUserMedia immediately), so the idle prompt 'Tippe den Orb, um zu sprechen' is either never rendered or replaced within a few ms. Fix: keep status='idle' until getUserMedia resolves AND the user taps the orb; only then swap to the listening copy. Reproduction: open /chat?voice=1 in a headless browser (or with mic blocked); expected idle text; observed listening text."
+}

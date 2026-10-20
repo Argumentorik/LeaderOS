@@ -1,0 +1,45 @@
+{
+  "summary": "Nachtest Iter 190 (frontend-only, 390x844 + 1920x800). Alle vier Fixes aus Iter 189 bestaetigt GRUEN: (a) /tasks Abhak-Checkbox 44x44 px mobile, Tipp togglet state, nach Reload persistiert (true->click->false->reload->false, PUT /api/tasks 200), (b) /tasks delete-task 44x44 mobile, (c) /dashboard home-about-skip-btn 44 px mobile, (d) /tasks Kopfzeile am Handy voll lesbar — generate-ai-tasks-btn 154x44, task-filter 112x44, add-task-btn 162x44, hscroll=0. Desktop: /tasks-Checkbox 32x32 (nicht 44), Kopfzeile Elemente in einer Reihe, alle Routen 1920x800 ohne Overflow. Katalog /leadership-programm: 'catalog-package-all' vorhanden, 01.11.2026 Startdatum, kein 'Kurse 1-6/7-10' Text. 13 Mobile-Routen alle ohne horizontales Scrollen, kein Text <10.5 px (>=10 Zeichen).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "MyPathPage — 'Weiter trainieren'-Knopf",
+        "issue": "Mobile 390x844: der <button>'Weiter trainieren' (text-[11px] font-bold, keine min-h) ist nur 19.5 px hoch, deutlich unter 40 px. Kein data-testid. Nicht in iter 189 explizit genannt, aber greift die 40-px-Mobileregel.",
+        "selector": "button:has-text('Weiter trainieren') auf /my-path",
+        "priority": "LOW"
+      },
+      {
+        "component": "CourseDetailPage — 'Studienplan' Rueckweg-Link",
+        "issue": "Mobile /kurse/rhetorik-grundlagen: data-testid='course-back' ('Studienplan') ist 21.7 px hoch. Steht ueber dem Titel als Rueckweg-Verweis, nicht innerhalb eines Satzes.",
+        "selector": "[data-testid='course-back']",
+        "priority": "LOW"
+      },
+      {
+        "component": "LeadershipLabPage — Einwilligungs-Checkbox",
+        "issue": "Mobile /leadership-lab: data-testid='lab-enroll-consent' Checkbox nur 13 px hoch (Radix Default). Falls Nutzer sie direkt antippen soll, zu klein; Label-Click sollte aber auch funktionieren — bitte pruefen.",
+        "selector": "[data-testid='lab-enroll-consent']",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: Mobile-min-h-[44px] auf /my-path 'Weiter trainieren' und /kurse/<slug> 'course-back' setzen; sind keine Satz-internen Links.",
+    "Optional: 'lab-enroll-consent' Checkbox mit groesserer tap-area (Wrapper-Label min-h-[44px] gap-2 cursor-pointer) umgeben."
+  ],
+  "critical_code_review_comments": [
+    "/app/frontend/src/pages/TasksPage.js:280-281 ist jetzt sauber mit einem className ('h-8 w-8 shrink-0 rounded-md ...') — Fix bestaetigt. index.css @media (max-width:640px) hebt .h-8 Checkbox nicht; Groesse wird in TasksPage direkt gesetzt, funktioniert korrekt 44x44.",
+    "Welcome-Video-Dialog (Dashboard) laesst sich NICHT zuverlaessig per Escape schliessen — nur per X-Button. Fuer Testbarkeit sinnvoll, Escape-Handler zu ergaenzen."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100% (alle Pruefpunkte GRUEN)"},
+  "test_credentials": "standard@wladbot.test / test123",
+  "seed_data_creation": "keine",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Alle 6 Pruefpunkte aus Iter 190 bestanden. Checkbox-Fix TasksPage.js:280 (h-8 w-8 shrink-0) ergibt mit index.css-Mobile-Regel 44x44 px; Toggle+Reload persistiert via PUT /api/tasks/<id> 200. /tasks-Kopfzeile am Handy bricht korrekt um (flex-col sm:flex-row), auf Desktop in einer Reihe. 13 getestete Mobile-Routen (dashboard, tasks, kurse, kurse/rhetorik-grundlagen, tools, playbooks, my-path, events, challengers, chat, challenge, leadership-programm, leadership-lab) alle hscroll=0, kein Text <10.5 px. Desktop 1920 ebenfalls alle 5 getesteten Routen ohne Overflow. Nur 3 minor Low-Prio Findings fuer sehr kleine klickbare Elemente auf /my-path, /kurse/<slug> und /leadership-lab — keine Regression. Zum Testen: Welcome-Video-Dialog unbedingt per X-Button (NICHT nur Escape) schliessen, sonst blockiert overlay die home-task-done-Klicks.",
+  "rca of the issue": "Keine offenen Bugs — alle Iter 189 Action-Items umgesetzt und verifiziert."
+}

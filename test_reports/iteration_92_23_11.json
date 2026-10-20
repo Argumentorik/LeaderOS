@@ -1,0 +1,36 @@
+{
+  "iteration": "92_23_11",
+  "summary": "Backend regression-only check for Iter 92.23.11 (frontend-only iteration: FAB Drawer page-context auto-pre-select + Dashboard FolderWorkspaceCards). Per main agent's note, backend code was NOT modified — only ran the 41-test regression covering 92.23.7 (folder CRUD + linking), 92.23.8 (chat folder context + session filter), and 92.23.9 (folder briefing + public sharing). RESULT: 41/41 PASS in 160.71s against https://command-center-229.preview.emergentagent.com. Briefing endpoint (gpt-4o-mini LLM, paid) still returns valid output for owned + empty folders; share endpoint still idempotent; public GET share/{slug} still no-auth and PII-scrubbed; chat folder_context_used flag still set for owned folders. No new tests written (frontend iteration). No backend issues found. Frontend not tested per testing_type='backend only'.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": { "ui_bugs": [], "integration_issues": [], "design_issues": [] },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_23_7_folders.py",
+    "/app/backend/tests/test_iter92_23_8_chat_folder_context.py",
+    "/app/backend/tests/test_iter92_23_9_folder_briefing_share.py",
+    "/app/test_reports/pytest/iter92_23_11_regression.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "No new backend code in this iteration — open code-review items from Iter 92.23.9 still stand (see iteration_92_23_9.json lines 12-17): orphan folder_shares on folder DELETE, no unique index on folder_shares.slug/(folder_id,user_id), hardcoded gpt-4o-mini in briefing endpoint with no fallback, build_folder_timeline silently drops item_type='note'. None are blockers for this iteration.",
+    "Frontend file FloatingWladBotDrawer.js, FolderWorkspaceCards.js, wladbotBus.js, VideoChallengePage.js, ChatPage.js, DashboardPage.js were NOT reviewed in detail since testing_type='backend only'. Main agent confirms end-to-end browser screenshots show all 3 acceptance criteria (dashboard cards, /missions?folder= deep-link pre-selects rail, AUTO pill on FAB) working.",
+    "Test file test_iter92_23_8_chat_folder_context.py uses os.environ['REACT_APP_BACKEND_URL'] (hard KeyError if unset) instead of os.environ.get with a fail-fast assert + clear message — minor DX issue, all 3 iter92_23_* test files share this pattern. Workaround: export REACT_APP_BACKEND_URL before pytest. Not a bug, just brittle."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% (41/41 regression tests pass)",
+    "frontend": "not tested (backend-only request)"
+  },
+  "test_credentials": "accelerator@wladbot.test / test123 (primary — 4 paid LLM calls consumed: 2 briefings gpt-4o-mini + 2 chats gpt-5.2). test@test.com / test123 (foreign account for ownership tests). Both credentials valid per /app/memory/test_credentials.md.",
+  "seed_data_creation": "Existing test files create + auto-cleanup TEST_iter9223*_ prefixed folders. No new seed data needed for this iteration.",
+  "llm_budget_consumed": "4 paid LLM calls (re-running 92.23.9 regression which includes the 4 LLM-calling tests: briefing×2, chat×2). Same budget as iter 92.23.9.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.23.11 is verified backend-clean. To re-run regression: `export REACT_APP_BACKEND_URL=https://command-center-229.preview.emergentagent.com && cd /app/backend && pytest tests/test_iter92_23_7_folders.py tests/test_iter92_23_8_chat_folder_context.py tests/test_iter92_23_9_folder_briefing_share.py -v` (takes ~160s due to 4 LLM calls). Note: pytest run completed successfully in 160.71s but the bash wrapper timed out at 120s — increase timeout or split runs by file if needed. Frontend changes in this iter are all in: wladbotBus.js (event bus EV_PAGE_CONTEXT channel), FloatingWladBotDrawer.js (AUTO pill), VideoChallengePage.js (?folder= URL param + publish), ChatPage.js (publish on activeFolder), FolderWorkspaceCards.js (new), DashboardPage.js (mount). Main agent confirms via screenshots. If frontend testing is requested in a future iter, key data-testids to look for: dashboard FolderWorkspaceCards section ('DEINE WORKSPACES'), AUTO pill on FAB drawer context picker, briefing+open buttons per card.",
+  "key_findings": [
+    "Backend 100% unchanged from Iter 92.23.10 ✅ — confirmed by 41/41 regression pass",
+    "GET /api/folders, POST /api/folders, POST /api/folders/{id}/briefing all behave identically to Iter 92.23.10 ✅",
+    "?folder= URL param deep-link is a frontend-only change — no backend impact ✅",
+    "wladbotBus EV_PAGE_CONTEXT is a frontend-only window event bus — no backend impact ✅",
+    "Dashboard FolderWorkspaceCards reuses existing GET /api/folders + POST /api/folders/{id}/briefing endpoints — no new endpoint needed ✅"
+  ]
+}

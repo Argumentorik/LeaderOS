@@ -4,18 +4,21 @@ import logger from '../lib/logger';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { ScrollArea } from '../components/ui/scroll-area';
-import { PaywallModal } from '../components/shared/PaywallModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useCredits } from '../contexts/CreditContext';
 import api from '../lib/api';
+import { streamChat } from '../lib/chatStream';
 import { ChatMessage } from '../components/chat/ChatMessage';
 import { ChatRolesHeader } from '../components/chat/ChatRolesHeader';
 import { ChatEmpty } from '../components/chat/ChatEmpty';
 import { ChatUpsellModal } from '../components/chat/ChatUpsellModal';
 import { ChatInputBar } from '../components/chat/ChatInputBar';
 import { ChatInlineUpsell } from '../components/chat/ChatInlineUpsell';
-import { ChatHistorySidebar } from '../components/chat/ChatHistorySidebar';
 import { VoiceModeOverlay } from '../components/chat/VoiceModeOverlay';
+import { WladThinking } from '../components/chat/WladThinking';
+import { ChatHistoryPanel } from '../components/chat/ChatHistoryPanel';
+import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
+import { ListChecks } from 'lucide-react';
 
 const buildFullMessage = ({ text, messages, userContext, attachedPdf }) => {
   let fullMsg = text;
@@ -51,28 +54,54 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showContext, setShowContext] = useState(false);
+  const [aboutMe, setAboutMe] = useState('');
+
+  // Iter 137: Kontext wird GEFÜHRT — wer Rolle/Branche oder „Über mich" noch
+  // nicht ausgefüllt hat, bekommt das Panel beim ersten Chat-Besuch geöffnet.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await api.get('/profile/me');
+        if (cancelled) return;
+        setAboutMe(res.data.about_me || '');
+        setUserContext(prev => ({
+          role: prev.role || res.data.position || '',
+          company: prev.company || res.data.company || '',
+          industry: prev.industry || res.data.industry || '',
+        }));
+        const incomplete = !res.data.about_me || !res.data.position || !res.data.industry;
+        if (incomplete) setShowContext(true);
+      } catch (err) {
+        logger.warn('profile context load failed', err);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
   const [userContext, setUserContext] = useState({ role: '', company: '', industry: '' });
-  const [showPaywall, setShowPaywall] = useState(false);
   const [attachedPdf, setAttachedPdf] = useState(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [audioMode, setAudioMode] = useState(false);
-  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
-  const { isPremium, totalUsed, reload: reloadCredits } = useCredits();
+  const [coachMode, setCoachMode] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [folders, setFolders] = useState([]);
+  // Iter 92.23.8 (Mert): folder context — chat injected with folder.context_summary
+  const [activeFolder, setActiveFolder] = useState(null);
+  const { isPremium, reload: reloadCredits } = useCredits();
   const scrollRef = useRef(null);
   const navigate = useNavigate();
-  // searchParams kept to preserve deep-link behaviour (?session=... etc.)
-  void searchParams;
+  // searchParams used for ?prefill=... (deep-link from /missions Deep-Chat-CTA)
+  // and ?session=... (legacy deep-link). See effect below.
 
   const loadSessions = useCallback(async () => {
     try {
       const res = await api.get('/chat/sessions');
+      setSessions(res.data || []);
       if (res.data.length > 0 && !currentSession) setCurrentSession(res.data[0].session_id);
-      // Trigger Sidebar-Reload (refreshKey bump) ohne Doppelladung des
-      // Sessions-Endpoints · die Sidebar holt selbst, wir signalisieren nur.
-      setHistoryRefreshKey((k) => k + 1);
     } catch (err) { logger.error('Failed to load sessions:', err); }
   }, [currentSession]);
 
@@ -82,57 +111,156 @@ export default function ChatPage() {
   }, []);
 
   useEffect(() => { loadSessions(); }, [loadSessions]);
-  useEffect(() => { if (currentSession) loadHistory(currentSession); }, [currentSession, loadHistory]);
-  useEffect(() => { scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
-
-  // Pick up a starter prompt from /wlad-universe (or any other deep-link source)
-  // and pre-fill the input so the user lands directly in a focused conversation.
   useEffect(() => {
-    try {
-      const starter = sessionStorage.getItem('wlad_starter_prompt');
-      if (starter) {
-        setInput(starter);
-        sessionStorage.removeItem('wlad_starter_prompt');
-      }
-    } catch (e) { /* sessionStorage may be blocked */ }
+    api.get('/folders').then((res) => setFolders(res.data || [])).catch(() => {});
   }, []);
+  useEffect(() => { if (currentSession) loadHistory(currentSession); }, [currentSession, loadHistory]);
+  useEffect(() => {
+    const live = messages[messages.length - 1]?.streaming;
+    scrollRef.current?.scrollIntoView({ behavior: live ? 'auto' : 'smooth' });
+  }, [messages]);
+
+  // Iter 92.23.2 (Mert: "wenn man den Chat dann erweitern will sollte
+  // direkt das Wissen aufgegriffen werden und im Chat die Unterhaltung
+  // weitergehen") — handles ?prefill=... deep links from Mission Deep-Chat-CTA
+  // and other contextual entry-points. Auto-creates a fresh session AND
+  // auto-sends the prefilled message so the user lands on a streaming reply,
+  // not an empty input field.
+  // Iter 92.23.8 (Mert): if ?folder= is set, the chat is scoped to that folder
+  // and the folder's context_summary is injected into every system prompt.
+  useEffect(() => {
+    const folderParam = searchParams.get('folder');
+    if (!folderParam) return;
+    let alive = true;
+    api.get('/folders').then((res) => {
+      if (!alive) return;
+      const found = (res.data || []).find(f => f.folder_id === folderParam);
+      if (found) setActiveFolder(found);
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, [searchParams]);
+
+  // Iter 92.23.11: publish active folder context to the page-context bus so
+  // the FAB drawer pre-selects it.
+  useEffect(() => {
+    if (activeFolder) {
+      setWladBotPageContext({
+        folderId: activeFolder.folder_id,
+        pageLabel: de ? 'Chat' : 'Chat',
+      });
+    }
+    return () => clearWladBotPageContext();
+  }, [activeFolder, de]);
+
+  const prefillHandledRef = useRef(false);
+  // ?voice=1 (z. B. Tages-Challenge „Per Stimme üben“): Audio-Mode direkt öffnen
+  useEffect(() => {
+    if (searchParams.get('voice') === '1') {
+      setAudioMode(true);
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (prefillHandledRef.current) return;
+    const prefill = searchParams.get('prefill');
+    if (!prefill) return;
+    prefillHandledRef.current = true;
+    // Strip the query-param from the URL so a manual refresh doesn't re-fire it.
+    const cleanPath = window.location.pathname;
+    window.history.replaceState(null, '', cleanPath);
+    // Auto-send: bypass the input field entirely so the user sees Wlad's reply
+    // immediately, with the deep-feedback question already incorporated.
+    setTimeout(() => {
+      handleSendRef.current?.(prefill);
+    }, 250);
+  }, [searchParams]);
+
+  const handleSendRef = useRef(null);
 
   const handleNewSession = async () => {
     try {
-      const res = await api.post('/chat/sessions', { title: de ? 'Neues Gespräch' : 'New Conversation' });
+      const payload = { title: de ? 'Neues Gespräch' : 'New Conversation' };
+      if (activeFolder?.folder_id) payload.folder_id = activeFolder.folder_id;
+      const res = await api.post('/chat/sessions', payload);
       setCurrentSession(res.data.session_id);
       setMessages([]);
       loadSessions();
     } catch (err) { logger.error('Failed to create session:', err); }
   };
 
-  const handleSend = async (overrideMsg) => {
+  const handleSend = async (overrideMsg, overrideMode) => {
     const text = (overrideMsg || input).trim();
     if (!text || loading) return;
     setInput('');
     const fullMsg = buildFullMessage({ text, messages, userContext, attachedPdf });
+    const attachmentMeta = attachedPdf ? { filename: attachedPdf.filename, pages: attachedPdf.pages || null } : null;
     setMessages(prev => [...prev, {
       role: 'user', content: text,
-      pdf: attachedPdf ? { filename: attachedPdf.filename, pages: attachedPdf.pages } : null,
+      pdf: attachmentMeta,
     }]);
     setAttachedPdf(null);
     setLoading(true);
-    try {
-      const res = await api.post('/chat', { message: fullMsg, session_id: currentSession });
-      if (!currentSession) { setCurrentSession(res.data.session_id); loadSessions(); }
-      setMessages(prev => [...prev, { role: 'assistant', content: JSON.stringify(res.data.response), parsed: res.data.response }]);
+    setStreaming(false);
+    const mode = overrideMode || (coachMode ? 'coach' : 'chat');
+    const body = { message: fullMsg, session_id: currentSession, modality: 'text', mode, display_text: text };
+    if (attachmentMeta) body.attachment = attachmentMeta;
+    if (activeFolder?.folder_id) body.folder_id = activeFolder.folder_id;
+    const applyResult = (data) => {
+      if (!currentSession) { setCurrentSession(data.session_id); }
+      loadSessions();
+      setMessages(prev => {
+        const withoutDraft = prev.filter((m) => !m.streaming);
+        const base = withoutDraft.length
+          ? [...withoutDraft.slice(0, -1), { ...withoutDraft[withoutDraft.length - 1], modality: data.modality || 'text' }]
+          : [];
+        return [...base, { role: 'assistant', content: JSON.stringify(data.response), parsed: data.response, modality: data.modality || 'text' }];
+      });
       reloadCredits();
+    };
+    try {
+      if (mode === 'chat') {
+        let draft = '';
+        await streamChat(body, {
+          onDelta: (chunk) => {
+            draft += chunk;
+            setStreaming(true);
+            setMessages(prev => {
+              const last = prev[prev.length - 1];
+              const msg = { role: 'assistant', streaming: true, parsed: { text: draft, follow_up_questions: [] }, content: draft };
+              return last?.streaming ? [...prev.slice(0, -1), msg] : [...prev, msg];
+            });
+          },
+          onDone: applyResult,
+        });
+      } else {
+        const res = await api.post('/chat', body);
+        applyResult(res.data);
+      }
     } catch (err) {
-      if (err.response?.status === 402) {
-        setShowPaywall(true);
+      setMessages(prev => prev.filter((m) => !m.streaming));
+      const status = err.response?.status ?? err.status;
+      if (status === 402) {
+        // Iter 185: Die Meldung kommt zentral (DashboardLayout) — hier kein
+        // zweites Fenster mehr aufmachen.
         setMessages(prev => prev.slice(0, -1));
       } else {
         logger.error('Chat error:', err);
-        setMessages(prev => [...prev, { role: 'assistant', content: de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.' }]);
+        // Iter 141: Backend liefert bei KI-Ausfällen (Budget, Rate-Limit, Auth)
+        // eine fertige, ruhige Klartext-Meldung — die zeigen wir dem Nutzer.
+        const detail = err.response?.data?.detail ?? err.data?.detail;
+        const backendMsg = typeof detail === 'string' ? detail : '';
+        const friendly = (status === 503 || status === 504 || status === 429) && backendMsg
+          ? backendMsg
+          : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.');
+        setMessages(prev => [...prev, { role: 'assistant', content: friendly, isNotice: true }]);
       }
     }
-    finally { setLoading(false); }
+    finally { setLoading(false); setStreaming(false); }
   };
+  // Keep ref synced so the prefill effect (above) can call handleSend without
+  // referencing it in dependency arrays (would cause infinite loops).
+  handleSendRef.current = handleSend;
 
   const handlePdfUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -156,52 +284,70 @@ export default function ChatPage() {
 
   const handleVoice = (text) => setInput(prev => prev + ' ' + text);
 
-  const historyPanel = (
-    <ChatHistorySidebar
-      currentSessionId={currentSession}
-      onSelect={(sid) => {
-        setCurrentSession(sid);
-        setMessages([]);
-      }}
-      onNew={handleNewSession}
-      refreshKey={historyRefreshKey}
-      de={de}
-    />
-  );
-
   return (
-    <DashboardLayout rightPanel={historyPanel}>
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} creditsUsed={totalUsed} />}
-      <div className="flex flex-col h-screen" data-testid="chat-page">
+    <DashboardLayout>
+      <div className="flex h-screen" data-testid="chat-page">
+        <div className="flex flex-col flex-1 min-w-0">
         {showUpsell && <ChatUpsellModal onClose={() => setShowUpsell(false)} de={de} />}
 
         <ChatRolesHeader
-          showContext={showContext} setShowContext={setShowContext}
+          showContext={showContext} setShowContext={setShowContext} aboutMe={aboutMe}
           userContext={userContext} setUserContext={setUserContext}
           onNewSession={handleNewSession}
           lang={lang}
           de={de}
         />
 
-        <ScrollArea className="flex-1 px-6 py-4 premium-bg">
+        {/* Iter 92.23.8: active folder context pill */}
+        {activeFolder && (
+          <div className="px-6 pt-2 pb-1 flex items-center gap-2" data-testid="chat-folder-context-pill">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold border" style={{
+              background: `${activeFolder.color || '#BFFF00'}14`,
+              borderColor: `${activeFolder.color || '#BFFF00'}40`,
+              color: activeFolder.color || '#BFFF00',
+            }}>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: activeFolder.color || '#BFFF00' }} />
+              <span>{de ? 'Kontext' : 'Context'}: {activeFolder.name}</span>
+              <button
+                onClick={() => { setActiveFolder(null); navigate('/chat', { replace: true }); }}
+                className="ml-1 opacity-60 hover:opacity-100"
+                title={de ? 'Kontext entfernen' : 'Remove context'}
+                data-testid="chat-folder-clear-btn"
+              >×</button>
+            </div>
+            <span className="text-[10px] text-muted-foreground hidden sm:inline">{de ? 'WladBot kennt deinen Ordner-Kontext.' : 'WladBot knows your folder context.'}</span>
+          </div>
+        )}
+
+        <ScrollArea className="flex-1 px-6 py-4 bg-gradient-mesh">
           {messages.length === 0 && (
             <ChatEmpty setInput={setInput} lang={lang} de={de} />
           )}
           {messages.map((msg, i) => (
             <div key={`msg-${msg.role}-${i}`}>
-              <ChatMessage msg={msg} de={de} />
+              <ChatMessage
+                msg={msg} de={de} sessionId={currentSession}
+                onSuggest={i === messages.length - 1 && !loading ? (q) => handleSend(q) : undefined}
+              />
               {msg.role === 'assistant' && !isPremium && (i + 1) % 10 === 0 && (
                 <ChatInlineUpsell onNavigate={() => openPricing('leadership_os')} de={de} />
               )}
             </div>
           ))}
-          {loading && (
-            <div className="flex mb-4">
-              <div className="surface-card rounded-2xl px-4 py-3 flex gap-1 shadow-sm">
-                <div className="w-2 h-2 rounded-full bg-brand typing-dot" />
-                <div className="w-2 h-2 rounded-full bg-brand typing-dot" />
-                <div className="w-2 h-2 rounded-full bg-brand typing-dot" />
-              </div>
+          {loading && !streaming && <WladThinking de={de} />}
+          {!loading && messages.filter((m) => m.role === 'assistant').length >= 2 && (
+            <div className="flex justify-center mb-4 animate-fade-in">
+              <button
+                onClick={() => handleSend(
+                  de ? 'Fasse unser Gespräch kurz zusammen und erstelle daraus konkrete Aufgaben.' : 'Summarize our conversation briefly and create concrete tasks from it.',
+                  'coach'
+                )}
+                data-testid="chat-create-tasks-btn"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#BFFF00]/30 bg-[#BFFF00]/[0.06] text-[12px] font-semibold text-foreground/70 hover:bg-[#BFFF00]/[0.14] hover:text-foreground hover:-translate-y-0.5 transition-all"
+              >
+                <ListChecks size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />
+                {de ? 'Aufgaben aus dem Gespräch erstellen' : 'Create tasks from this chat'}
+              </button>
             </div>
           )}
           <div ref={scrollRef} />
@@ -214,6 +360,23 @@ export default function ChatPage() {
           uploadingPdf={uploadingPdf} onPdfUpload={handlePdfUpload}
           isPremium={isPremium} onOpenUpsell={() => openPricing('leadership_os')}
           onOpenAudioMode={() => setAudioMode(true)}
+          coachMode={coachMode} setCoachMode={setCoachMode}
+          de={de}
+        />
+        </div>
+
+        <ChatHistoryPanel
+          sessions={sessions}
+          folders={folders}
+          currentSession={currentSession}
+          activeFolder={activeFolder}
+          onSelectSession={(sid) => setCurrentSession(sid)}
+          onSelectFolder={(f) => setActiveFolder(f)}
+          onNewChat={handleNewSession}
+          onDeleted={(sid) => {
+            setSessions((prev) => prev.filter((s) => s.session_id !== sid));
+            if (sid === currentSession) { setCurrentSession(null); setMessages([]); }
+          }}
           de={de}
         />
       </div>

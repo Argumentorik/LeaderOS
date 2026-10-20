@@ -1,18 +1,19 @@
 /**
- * "Continue as [user]" · the signature premium-feel touch.
+ * "Continue as [user]" — the signature premium-feel touch.
  *
  * Shown above the standard auth form when a previous login is cached. Picks
  * up the avatar/name/provider from localStorage and offers a one-tap return.
  *
- * For OAuth providers we trigger the provider's native button (Google One-Tap
- * or MSAL/Apple popup); for email/password we prefill the email and focus the
- * password field; for magic_link we ping /api/auth/magic-link/request directly.
+ * For OAuth providers: Google → direct OAuth redirect (instant, no clicks);
+ * Apple/Microsoft → trigger the provider's native button. For email/password
+ * we send a 1-click magic link AND prefill the form as fallback; for
+ * magic_link we ping /api/auth/magic-link/request directly.
  */
 import { useState } from 'react';
 import { ArrowRight, X, KeyRound, Sparkles, Loader2 } from 'lucide-react';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
-import { forgetLogin, displayEmail } from '../../lib/recentLogins';
+import { forgetLogin } from '../../lib/recentLogins';
 
 const providerLabel = {
   google: 'Google',
@@ -57,8 +58,7 @@ export const ContinueAsCard = ({
   de = true,
 }) => {
   if (!account) return null;
-  const { name, picture, provider } = account;
-  const masked = displayEmail(account);
+  const { name, email, picture, provider } = account;
 
   return (
     <button
@@ -66,7 +66,7 @@ export const ContinueAsCard = ({
       onClick={onClick}
       disabled={loading}
       data-testid="continue-as-card"
-      data-account-initial={account.initial || ''}
+      data-account-email={email}
       className="group relative w-full text-left rounded-2xl border border-[#BFFF00]/25 bg-gradient-to-br from-[#BFFF00]/[0.06] via-white/[0.02] to-transparent hover:border-[#BFFF00]/45 hover:from-[#BFFF00]/[0.10] transition-all p-4 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <div className="flex items-center gap-4">
@@ -78,7 +78,7 @@ export const ContinueAsCard = ({
             onError={(e) => { e.target.style.display = 'none'; }}
           />
         ) : (
-          <Initials name={name} email={masked} />
+          <Initials name={name} email={email} />
         )}
 
         <div className="flex-1 min-w-0">
@@ -91,8 +91,8 @@ export const ContinueAsCard = ({
               <ProviderIcon provider={provider} /> {providerLabel[provider] || provider}
             </span>
           </div>
-          <p className="text-sm font-bold text-white mt-0.5 truncate">{name || masked}</p>
-          {name && <p className="text-[11px] text-white/40 truncate">{masked}</p>}
+          <p className="text-sm font-bold text-white mt-0.5 truncate">{name || email}</p>
+          {name && <p className="text-[11px] text-white/40 truncate">{email}</p>}
         </div>
 
         <div className="shrink-0 flex items-center gap-2">
@@ -102,14 +102,14 @@ export const ContinueAsCard = ({
         </div>
       </div>
 
-      {/* "Not you?" · clears this account from the recent list */}
+      {/* "Not you?" — clears this account from the recent list */}
       {!loading && (
         <span
           role="button"
           tabIndex={0}
-          onClick={(e) => { e.stopPropagation(); onForget?.(account); }}
+          onClick={(e) => { e.stopPropagation(); onForget?.(email); }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onForget?.(account); }
+            if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onForget?.(email); }
           }}
           className="absolute top-2 right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/[0.05] hover:bg-white/[0.12] text-white/40 hover:text-white/80 opacity-0 group-hover:opacity-100 transition-all"
           aria-label={de ? 'Konto entfernen' : 'Forget this account'}
@@ -125,27 +125,45 @@ export const ContinueAsCard = ({
 /**
  * Hook to handle "Continue as" click. Returns { trigger, loading, error }.
  * - For magic_link → sends a new link and shows success
- * - For email → returns 'prefill' so the parent can switch to login mode + prefill
- * - For google/apple/microsoft → returns 'oauth' so the parent triggers that provider's button
+ * - For email → sends a 1-click magic link directly (no password re-entry, Iter 117)
+ *   and prefills the login form as fallback
+ * - For google → redirects straight into the Google OAuth flow (active Google
+ *   session = instant login, no clicks, no password)
+ * - For apple/microsoft → returns 'oauth' so the parent triggers that provider's button
  */
 export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onError } = {}) => {
   const [loading, setLoading] = useState(false);
 
   const trigger = async () => {
     if (!account) return;
-    const { provider } = account;
+    const { provider, email } = account;
     setLoading(true);
     try {
       if (provider === 'magic_link') {
-        // Full email is no longer stored · ask user to re-enter it.
-        // The parent switches to login mode so the email field is shown.
-        onPrefill?.('', provider);
+        await api.post('/auth/magic-link/request', { email });
+        onMagicSent?.(email);
       } else if (provider === 'email') {
-        // Same: no stored email, switch to login mode with empty prefill.
-        onPrefill?.('');
-      } else if (provider === 'google' || provider === 'apple' || provider === 'microsoft') {
-        // OAuth doesn't need the email · the provider handles identity.
-        onPrefill?.('', provider);
+        // Godmode (Iter 117): one tap = instant 1-click link, no password typing.
+        // Form is still prefilled underneath as a fallback.
+        onPrefill?.(email);
+        await api.post('/auth/magic-link/request', { email });
+        onMagicSent?.(email);
+      } else if (provider === 'google') {
+        // Direct OAuth redirect — an active Google session logs in instantly.
+        const redirectUrl = window.location.origin + '/dashboard';
+        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+        return; // keep spinner until navigation
+      } else if (provider === 'license') {
+        // Iter 137: license customers came back to a dead green arrow — there was
+        // no branch for their provider at all. One tap = magic link (no key
+        // typing needed) + the license tab is opened underneath as a fallback.
+        onPrefill?.(email, 'license');
+        await api.post('/auth/magic-link/request', { email });
+        onMagicSent?.(email);
+      } else if (provider === 'apple' || provider === 'microsoft') {
+        // The actual sign-in is triggered by the provider button itself —
+        // we just signal the parent to focus/click it.
+        onPrefill?.(email, provider);
       }
     } catch (err) {
       logger.error('continueAs trigger failed', err);
@@ -155,8 +173,8 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
     }
   };
 
-  const forget = (entry) => {
-    forgetLogin(entry);
+  const forget = (email) => {
+    forgetLogin(email);
     // The parent should re-read recentLogins() to refresh the UI.
   };
 

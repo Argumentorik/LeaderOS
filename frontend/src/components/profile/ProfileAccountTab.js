@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Lock, Building2, Share2, Download, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
@@ -18,6 +18,13 @@ import { toast } from 'sonner';
  */
 export const ProfileAccountTab = ({ de }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const currentPwRef = useRef(null);
+  useEffect(() => {
+    if (searchParams.get('focus') !== 'password' || !currentPwRef.current) return;
+    currentPwRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    currentPwRef.current.focus();
+  }, [searchParams]);
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
   const [saving, setSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -28,8 +35,8 @@ export const ProfileAccountTab = ({ de }) => {
       toast.error(de ? 'Passwörter stimmen nicht überein.' : 'Passwords do not match.');
       return;
     }
-    if (pw.next.length < 6) {
-      toast.error(de ? 'Min. 6 Zeichen.' : 'Min. 6 characters.');
+    if (pw.next.length < 8 || !/\d/.test(pw.next) || !/[^\d]/.test(pw.next)) {
+      toast.error(de ? 'Min. 8 Zeichen mit Buchstaben und Zahlen.' : 'Min. 8 characters with letters and numbers.');
       return;
     }
     setSaving(true);
@@ -112,6 +119,7 @@ export const ProfileAccountTab = ({ de }) => {
               </Label>
               <Input
                 id="current_pw"
+                ref={currentPwRef}
                 type="password"
                 required
                 autoComplete="current-password"
@@ -130,7 +138,7 @@ export const ProfileAccountTab = ({ de }) => {
                   id="new_pw"
                   type="password"
                   required
-                  minLength={6}
+                  minLength={8}
                   autoComplete="new-password"
                   value={pw.next}
                   onChange={(e) => setPw({ ...pw, next: e.target.value })}
@@ -146,7 +154,7 @@ export const ProfileAccountTab = ({ de }) => {
                   id="confirm_pw"
                   type="password"
                   required
-                  minLength={6}
+                  minLength={8}
                   autoComplete="new-password"
                   value={pw.confirm}
                   onChange={(e) => setPw({ ...pw, confirm: e.target.value })}

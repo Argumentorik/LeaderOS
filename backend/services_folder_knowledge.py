@@ -1,7 +1,7 @@
 """Folder Knowledge service — second-layer "history" RAG.
 
 Mert (Iter 92.23.9):
-    "Folder Knowledge-RAG — neben dem Voyage-RAG auf Wlad-Corpus ein zweiter
+    "Folder Knowledge-RAG — neben dem Wissens-RAG auf Wlad-Corpus ein zweiter
     Mini-RAG nur ueber die Folder-Items, damit der Agent 'die Geschichte
     deines Themas' kennt"
 
@@ -128,6 +128,11 @@ async def generate_briefing_prompt(folder: dict, items: List[dict], lang: str = 
             "braucht ein 30-Sekunden-Briefing, wo er steht. Stil: warm, direkt, kein Fluff, keine Bullet-"
             "Suppe — fliessende Saetze wie ein Coach sie laut sagen wuerde. Erwaehne die wichtigsten "
             "Items kurz, hebe den EINEN naechsten Schritt heraus.\n\n"
+            "SPRACH-POLICY: Schreibe in einfacher, klarer Sprache. KEINE Anglizismen wie 'Advisory Board', "
+            "'Leadership Mastery', 'Impact', 'Mindset', 'Performance', 'Engagement'. Benutze stattdessen "
+            "'Beirat', 'Führungskompetenz', 'Wirkung', 'Haltung', 'Leistung', 'Beteiligung'. KEIN 'THE IDEAL "
+            "LEADER' / 'Mastering the X Roles' — sprich einfach von 'den wichtigsten Rollen einer Führungskraft'. "
+            "Lieber kurze, klare deutsche Saetze als ein langer mit Fremdwoertern.\n\n"
         )
 
     intro += f"ORDNER-KONTEXT: {summary or '(noch keine Zusammenfassung hinterlegt)'}\n\n"

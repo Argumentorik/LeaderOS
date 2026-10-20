@@ -1,5 +1,5 @@
 /**
- * VideoStudioSidebar · ChatGPT-style history sidebar for the Video Mission Studio.
+ * VideoStudioSidebar — ChatGPT-style history sidebar for the Video Mission Studio.
  *
  * What it does:
  *   - Lists every past video-mission attempt grouped by day (Heute / Gestern / dates)
@@ -198,7 +198,7 @@ export const VideoStudioSidebar = ({
         </button>
       </div>
 
-      {/* Folder Rail · Wingman-style knowledge containers (Iter 92.23.7) */}
+      {/* Folder Rail — Wingman-style knowledge containers (Iter 92.23.7) */}
       <FolderRail activeFolderId={activeFolderId} onPickFolder={onPickFolder} de={de} />
 
       {/* Search */}

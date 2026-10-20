@@ -70,8 +70,10 @@ export const VideoPlayer = ({
   const wrapper = `relative aspect-video rounded-2xl overflow-hidden bg-black ring-1 ring-white/[0.06] ${className}`;
 
   if (source.type === 'vimeo') {
-    // dnt=1 → privacy mode (no tracking by Vimeo), title=0 → hide title overlay
-    const vimeoSrc = `https://player.vimeo.com/video/${source.id}?dnt=1&title=0&byline=0&portrait=0${autoplay ? '&autoplay=1' : ''}`;
+    // Iter 92.22: Vimeo Embed mit allen Features (clipboard-write + web-share)
+    // damit der Player auf leaderos.de ohne 403 läuft. dnt=1 = privacy mode,
+    // badge=0 + autopause=0 matchen den canonical embed-code von Vimeo.
+    const vimeoSrc = `https://player.vimeo.com/video/${source.id}?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1&title=0&byline=0&portrait=0${autoplay ? '&autoplay=1' : ''}`;
     return (
       <div className={wrapper} data-testid="video-player-vimeo">
         {!loaded && (
@@ -83,7 +85,8 @@ export const VideoPlayer = ({
           src={vimeoSrc}
           title={title}
           loading="lazy"
-          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
           className="w-full h-full"
           onLoad={() => setLoaded(true)}

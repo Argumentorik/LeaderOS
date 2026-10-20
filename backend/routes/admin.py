@@ -1,21 +1,7 @@
-"""Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics.
-
-Admin access works in two layers (see docs/ops/APP_TAKEOVER_STEFAN.md §5):
-
-1. **Allowlist** — `ADMIN_EMAILS` below plus the comma-separated env var
-   `ADMIN_EMAILS` on Emergent. Good for founders; needs a redeploy to change.
-2. **`is_admin` flag on the user document** — set from the admin panel
-   (`POST /api/admin/admins`) by any existing admin. No deploy, takes effect
-   on the user's next request. This is how the support team gets in.
-
-`routes/auth.py::_safe_user_output` computes `is_admin` for the frontend from
-the same two sources, and `/wlad-control-x7k9q2` redirects everyone else to
-the dashboard.
-"""
-import os
+"""Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics."""
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from pydantic import BaseModel
 from datetime import datetime, timezone, timedelta
-from pydantic import BaseModel, EmailStr
 
 from config import db, logger
 from services import get_current_user
@@ -24,75 +10,182 @@ from services_lead_import import parse_lead_csv
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
-# Founder allowlist (code) + ops allowlist (env `ADMIN_EMAILS=a@x.de,b@y.de`).
-_CODE_ADMIN_EMAILS = {"test@test.com", "start@aiporate.com", "mert@wladbot.com", "mertzafermutlu@gmail.com"}
-_ENV_ADMIN_EMAILS = {e.strip().lower() for e in os.environ.get("ADMIN_EMAILS", "").split(",") if e.strip()}
-ADMIN_EMAILS = {e.lower() for e in _CODE_ADMIN_EMAILS} | _ENV_ADMIN_EMAILS
+# SEC-003: Bootstrap seed list — used ONLY at startup to set the is_admin DB
+# flag for EXISTING users. Runtime authorization is the DB flag alone; a
+# generic/claimable email must never grant admin at request time.
+ADMIN_SEED_EMAILS = {
+    "start@aiporate.com",
+    "mert@aiporate.com",
+    "mert@wladbot.com",
+    "mertzafermutlu@gmail.com",
+    "stefan@argumentorik.com",
+    "stefan.bachmann123@gmail.com",
+    "wj@argumentorik.com",
+    "ek@argumentorik.com",
+    "anja@argumentorik.com",
+    "carolin@argumentorik.com"
+}
 
 
-def is_admin_user(user: dict) -> bool:
-    """Single source of truth for 'is this account an admin'."""
-    email = (user.get("email") or "").lower()
-    return bool(user.get("is_admin")) or email in ADMIN_EMAILS
+async def seed_admin_flags() -> None:
+    """Idempotent startup seed: promote existing allowlisted users to is_admin.
+
+    Iter 191: `admin_revoked` beats the allowlist. Ohne diesen Vorbehalt würde
+    ein im Panel entzogenes Recht beim nächsten Start wieder auftauchen.
+    """
+    emails = [e.lower() for e in ADMIN_SEED_EMAILS]
+    res = await db.users.update_many(
+        {"$or": [{"email_lower": {"$in": emails}}, {"email": {"$in": emails}}],
+         "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True}},
+        {"$set": {"is_admin": True}},
+    )
+    if res.modified_count:
+        logger.info(f"Admin seed: promoted {res.modified_count} user(s) to is_admin")
 
 
 async def require_admin(request: Request) -> dict:
     user = await get_current_user(request)
-    if not is_admin_user(user):
+    if not user.get("is_admin"):
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
 
 
-# ---------------------------------------------------------------- admin grants
-class AdminGrant(BaseModel):
-    email: EmailStr
-    grant: bool = True
+# Collections that hold per-user data (keyed by user_id or email).
+_USER_DATA_COLLECTIONS = [
+    "user_sessions", "magic_links", "chat_sessions", "chat_messages",
+    "daily_checkins", "activity_log", "video_attempts", "email_log",
+    "wladhub_profiles", "tasks", "community_posts", "community_comments",
+    "login_attempts", "folders", "referrals",
+]
+
+
+@router.get("/sync-health")
+async def sync_health(request: Request) -> dict:
+    """leadercheck.de ↔ Leader-OS sync activity for the admin panel.
+
+    Iter 135 (Audit): the automatic login/signup sync now writes a log row per
+    attempt, so these numbers reflect reality instead of only manual syncs.
+    Statuses: completed (data written) · unchanged (already current) ·
+    not_found (no diagnose on leadercheck.de) · error (needs attention).
+    """
+    await require_admin(request)
+    now = datetime.now(timezone.utc)
+    cutoff = (now - timedelta(hours=24)).isoformat()
+
+    logs = await db.wladhub_sync_log.find(
+        {"created_at": {"$gte": cutoff}}, {"_id": 0}
+    ).sort("created_at", -1).to_list(500)
+
+    def _count(*statuses):
+        return sum(1 for e in logs if e.get("status") in statuses)
+
+    failed = [e for e in logs if e.get("status") == "error"]
+    last_success = await db.wladhub_sync_log.find_one(
+        {"status": "completed"}, {"_id": 0}, sort=[("created_at", -1)]
+    )
+    last_failure = await db.wladhub_sync_log.find_one(
+        {"status": "error"}, {"_id": 0}, sort=[("created_at", -1)]
+    )
+
+    return {
+        "window_hours": 24,
+        "syncs_24h": len(logs),
+        "completed_24h": _count("completed"),
+        "unchanged_24h": _count("unchanged"),
+        "not_found_24h": _count("not_found"),
+        "failed_24h": len(failed),
+        "incomplete_24h": len(logs) - _count("completed"),
+        "records_imported_24h": sum(int(e.get("records_imported") or 0) for e in logs),
+        "last_success_at": (last_success or {}).get("created_at"),
+        "last_failure_at": (last_failure or {}).get("created_at"),
+        "last_failure_reason": (last_failure or {}).get("error"),
+        "failure_reasons": [
+            {"email": e.get("email"), "error": (e.get("error") or "")[:160],
+             "at": e.get("created_at")}
+            for e in failed[:5]
+        ],
+        "total_diagnoses": await db.wladhub_diagnoses.count_documents({}),
+        "connected_users": len(await db.wladhub_diagnoses.distinct("user_id")),
+        "recent": logs[:10],
+        "computed_at": now.isoformat(),
+    }
+
+
+@router.post("/users/set-tier/{email}")
+async def admin_set_tier(email: str, request: Request, tier: str = "accelerator"):
+    """Grant a user full paid-tier access (admin panel / founder testing)."""
+    await require_admin(request)
+    email = email.strip().lower()
+    if tier not in TIER_CONFIG or tier == "free":
+        raise HTTPException(status_code=400, detail=f"Ungültiger Tier. Erlaubt: {[t for t in TIER_CONFIG if t != 'free']}")
+    user = await db.users.find_one(
+        {"$or": [{"email_lower": email}, {"email": email}]}, {"_id": 0, "user_id": 1}
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    from services_tier import activate_tier
+    await activate_tier(user["user_id"], tier)
+    return {"email": email, "tier": tier, "activated": True}
 
 
 @router.get("/admins")
-async def admin_list(request: Request) -> dict:
-    """Who can open the admin panel: allowlist (code/env) + flagged accounts."""
-    await require_admin(request)
-    flagged = await db.users.find(
-        {"is_admin": True}, {"_id": 0, "email": 1, "name": 1, "admin_granted_by": 1, "admin_granted_at": 1}
-    ).sort("admin_granted_at", -1).to_list(200)
-    return {"allowlist": sorted(ADMIN_EMAILS), "flagged": flagged}
+async def admin_list_admins(request: Request):
+    """Wer hat Admin-Recht? (Iter 191 — Schalter im Admin-Bereich)"""
+    me = await require_admin(request)
+    rows = await db.users.find(
+        {"is_admin": True},
+        {"_id": 0, "user_id": 1, "email": 1, "name": 1, "created_at": 1, "last_login_at": 1},
+    ).to_list(200)
+    seed = sorted(e.lower() for e in ADMIN_SEED_EMAILS)
+    for r in rows:
+        mail = (r.get("email") or "").lower()
+        r["on_allowlist"] = mail in seed
+        r["is_you"] = mail == (me.get("email") or "").lower()
+    rows.sort(key=lambda r: (not r["is_you"], r.get("email") or ""))
+    # Adressen der Liste, zu denen es (noch) kein Konto gibt: bekommen das Recht
+    # automatisch mit der ersten Anmeldung.
+    have = {(r.get("email") or "").lower() for r in rows}
+    revoked = await db.users.find(
+        {"admin_revoked": True}, {"_id": 0, "email": 1, "name": 1}
+    ).to_list(200)
+    return {
+        "admins": rows,
+        "count": len(rows),
+        "allowlist_pending": [e for e in seed if e not in have],
+        "revoked": revoked,
+    }
 
 
-@router.post("/admins")
-async def admin_grant(payload: AdminGrant, request: Request) -> dict:
-    """Grant or revoke admin access for an existing account.
+class AdminFlagIn(BaseModel):
+    is_admin: bool
 
-    The target must already have a leaderos.de account (sign up first), because
-    the flag lives on the user document. Allowlisted emails cannot be revoked
-    here and nobody can revoke themselves — that keeps at least one admin alive.
-    """
-    actor = await require_admin(request)
-    email = payload.email.strip().lower()
-    actor_email = (actor.get("email") or "").lower()
-    if not payload.grant and email == actor_email:
-        raise HTTPException(status_code=400, detail="cannot_revoke_self")
-    if not payload.grant and email in ADMIN_EMAILS:
-        raise HTTPException(status_code=400, detail="allowlisted_email_cannot_be_revoked")
-    target = await db.users.find_one({"email": email}, {"_id": 0, "email": 1, "name": 1})
-    if not target:
-        raise HTTPException(status_code=404, detail="no_account_for_email")
-    now = datetime.now(timezone.utc).isoformat()
-    update = (
-        {"$set": {"is_admin": True, "admin_granted_by": actor_email, "admin_granted_at": now}}
-        if payload.grant
-        else {"$set": {"is_admin": False, "admin_revoked_by": actor_email, "admin_revoked_at": now}}
+
+@router.put("/users/by-email/{email}/admin")
+async def admin_set_admin_flag(email: str, data: AdminFlagIn, request: Request):
+    """Admin-Recht geben oder entziehen. Das eigene Recht bleibt unberührt."""
+    me = await require_admin(request)
+    email = email.strip().lower()
+    if email == (me.get("email") or "").lower():
+        raise HTTPException(status_code=400, detail="cannot_change_own_admin")
+    user = await db.users.find_one(
+        {"$or": [{"email_lower": email}, {"email": email}]}, {"_id": 0, "user_id": 1, "email": 1}
     )
-    await db.users.update_one({"email": email}, update)
-    await db.system_events.insert_one({
-        "type": "admin_grant" if payload.grant else "admin_revoke",
-        "email": email, "actor": actor_email, "created_at": now,
-    })
-    logger.info("admin %s: %s by %s", "grant" if payload.grant else "revoke", email, actor_email)
-    return {"ok": True, "email": email, "is_admin": payload.grant, "name": target.get("name")}
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    update = (
+        {"$set": {"is_admin": True}, "$unset": {"admin_revoked": "", "admin_revoked_at": ""}}
+        if data.is_admin else
+        {"$set": {"is_admin": False, "admin_revoked": True,
+                  "admin_revoked_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    await db.users.update_one({"user_id": user["user_id"]}, update)
+    logger.warning("Admin %s setzt is_admin=%s für %s", me.get("email"), data.is_admin, email)
+    return {"email": user.get("email"), "is_admin": data.is_admin}
 
 
 # ----------------------------------------------------------- webinar CSV import
+# Aus mvpcode übernommen (Marketing). Admin-Rechte selbst laufen über HEADs
+# /admins + PUT /users/by-email/{email}/admin (Iter 191).
 @router.post("/webinar-leads/import")
 async def import_webinar_leads(request: Request, file: UploadFile = File(...), dry_run: bool = False) -> dict:
     """Upsert webinar leads from a CSV prepared by the support team.
@@ -148,6 +241,38 @@ async def import_webinar_leads(request: Request, file: UploadFile = File(...), d
         "ok": True, "dry_run": dry_run, "rows": len(valid), "inserted": inserted, "updated": updated,
         "invalid": len(invalid), "invalid_samples": invalid[:10],
     }
+
+
+@router.delete("/users/by-email/{email}")
+async def admin_delete_user(email: str, request: Request) -> dict:
+    """Hard-delete a user + all related data (Iter 92.52: clean re-test accounts).
+
+    Admin-only. Never deletes another admin account (safety guard).
+    """
+    admin = await require_admin(request)
+    email = email.strip().lower()
+    if email == (admin.get("email") or "").lower():
+        raise HTTPException(status_code=400, detail="cannot_delete_own_account")
+
+    user = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1, "is_admin": 1})
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    if user.get("is_admin"):
+        # Iter 130: allow deleting OTHER admin-flagged accounts (e.g. Wlad's
+        # old private mail) — only self-deletion stays blocked above.
+        logger.warning(f"Admin {admin.get('email')} deletes admin-flagged account {email}")
+    uid = user.get("user_id")
+
+    related: dict = {}
+    for col in _USER_DATA_COLLECTIONS:
+        try:
+            res = await db[col].delete_many({"$or": [{"user_id": uid}, {"email": email}]})
+            if res.deleted_count:
+                related[col] = res.deleted_count
+        except Exception:  # noqa: BLE001 — best-effort cleanup per collection
+            continue
+    await db.users.delete_one({"email": email})
+    return {"deleted_user": email, "user_id": uid, "related": related}
 
 
 async def _compute_user_stats(last_30: str, last_7: str) -> dict:
@@ -265,9 +390,44 @@ async def _count_rate_limit_triggers(cutoff_24h: datetime) -> int:
     return result[0]["rate_limited"] if result else 0
 
 
+def _auth_config_snapshot() -> tuple[dict, dict]:
+    """Env-driven provider flags + config fingerprints. NEVER leaks secrets."""
+    import os as _os
+    google_id = _os.environ.get("GOOGLE_CLIENT_ID") or ""
+    apple_id = _os.environ.get("APPLE_SERVICE_ID") or _os.environ.get("APPLE_CLIENT_ID") or ""
+    msft_id = _os.environ.get("MICROSOFT_CLIENT_ID") or ""
+    stripe = _os.environ.get("STRIPE_API_KEY") or ""
+    resend = _os.environ.get("RESEND_API_KEY") or ""
+    env_name = (_os.environ.get("ENV") or _os.environ.get("ENVIRONMENT") or "").lower()
+
+    enabled = {
+        "email_password": True,
+        "magic_link": bool(resend),
+        "google": bool(google_id),
+        "apple": bool(apple_id),
+        "microsoft": bool(msft_id),
+        "phone": True,  # phone-OR-email login (Iter 92.24)
+    }
+    config = {
+        "environment": env_name or "unknown",
+        "frontend_base_url": (_os.environ.get("FRONTEND_BASE_URL") or "") or "(missing)",
+        "google_client_id_set": bool(google_id),
+        "google_client_id_prefix": (google_id.split("-")[0] if "-" in google_id else google_id[:8]) if google_id else None,
+        "apple_service_id_set": bool(apple_id),
+        "microsoft_client_id_set": bool(msft_id),
+        "sentry_dsn_set": bool(_os.environ.get("SENTRY_DSN")),
+        "stripe_api_key_set": bool(stripe),
+        "stripe_mode": "live" if stripe.startswith("sk_live_") else ("test" if stripe.startswith("sk_test_") else "unknown"),
+        "resend_api_key_set": bool(resend),
+        "rag_embeddings": "local (multilingual MiniLM, 384-dim, keine externen Keys)",
+        "supabase_url_set": bool(_os.environ.get("SUPABASE_URL")),
+    }
+    return enabled, config
+
+
 @router.get("/auth-health")
 async def auth_health(request: Request) -> dict:
-    """Auth metrics for launch monitoring — last 24h."""
+    """Auth metrics + config-state snapshot for launch monitoring (last 24h)."""
     await require_admin(request)
     now = datetime.now(timezone.utc)
     cutoff_24h = now - timedelta(hours=24)
@@ -277,14 +437,17 @@ async def auth_health(request: Request) -> dict:
     logins = await _gather_login_stats(cutoff_24h)
     top_offenders = await _gather_top_offenders(cutoff_24h)
     rate_limit_triggers = await _count_rate_limit_triggers(cutoff_24h)
+    enabled, config = _auth_config_snapshot()
 
     return {
         "window_hours": 24,
         **regs,
         "logins_24h": logins,
         "rate_limit_triggers_24h": rate_limit_triggers,
-        "duplicate_email_blocks_24h": 0,  # placeholder — future: explicit error log
+        "duplicate_email_blocks_24h": 0,
         "top_offenders": top_offenders,
+        "enabled": enabled,
+        "config": config,
         "computed_at": now.isoformat(),
     }
 
@@ -385,57 +548,17 @@ async def community_leaderboard(request: Request, limit: int = 10):
 # Critical tool to spot knowledge gaps in the 609-chunk corpus before users do.
 # ─────────────────────────────────────────────────────────────────────────
 
-@router.post("/rag-debug")
-async def rag_debug(request: Request):
-    """For a given query, return top-N chunks + similarity + metadata coverage.
+async def _rag_fetch_chunks(embedding: list, match_threshold: float, match_count: int) -> list:
+    """Local Mongo vector-store match — same path as live chat retrieval."""
+    from services_rag import _match_local
+    chunks = await _match_local(embedding, threshold=match_threshold, count=match_count)
+    for i, c in enumerate(chunks):
+        c.setdefault("id", f"local_{i}")
+    return chunks
 
-    Body: { "query": str, "match_count": int=10, "match_threshold": float=0.0 }
-    Returns:
-      {
-        query, model, embedding_dim,
-        chunks: [{ id, content, similarity, metadata: {course, section, themes, layer} }],
-        coverage: { courses, sections, themes, layers, top_score, avg_score, low_score_warning },
-      }
-    """
-    await require_admin(request)
-    body = await request.json()
-    query = (body.get("query") or "").strip()
-    if not query or len(query) < 3:
-        raise HTTPException(status_code=400, detail="Query must be at least 3 characters")
-    match_count = max(1, min(int(body.get("match_count", 10)), 30))
-    match_threshold = max(0.0, min(float(body.get("match_threshold", 0.0)), 1.0))
 
-    from services_rag import _embed_query, VOYAGE_MODEL, EMBEDDING_DIM
-    import os
-    import httpx
-
-    embedding = await _embed_query(query)
-    if not embedding:
-        raise HTTPException(status_code=503, detail="Embedding service unavailable (Voyage)")
-
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not (url and key):
-        raise HTTPException(status_code=503, detail="Supabase keys not configured")
-
-    async with httpx.AsyncClient(timeout=12) as client:
-        r = await client.post(
-            f"{url}/rest/v1/rpc/match_wladbot_documents",
-            headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-            json={"query_embedding": embedding, "match_threshold": match_threshold, "match_count": match_count},
-        )
-        if r.status_code != 200:
-            raise HTTPException(status_code=502, detail=f"Supabase RPC failed: {r.text[:200]}")
-
-        chunks_raw = r.json() if isinstance(r.json(), list) else []
-
-        # Backfill metadata for any chunk where the RPC returned NULL (known RPC bug).
-        missing_ids = [c["id"] for c in chunks_raw if c.get("metadata") in (None, {})]
-        if missing_ids:
-            from services_rag import _backfill_metadata
-            await _backfill_metadata(client, url, key, chunks_raw, missing_ids)
-
-    # Build coverage breakdown
+def _rag_build_coverage(chunks_raw: list) -> tuple[list, dict]:
+    """Aggregate chunk metadata into UI-ready chunks + coverage breakdown."""
     courses: dict[str, int] = {}
     sections: dict[str, int] = {}
     themes: dict[str, int] = {}
@@ -462,68 +585,74 @@ async def rag_debug(request: Request):
             "id": c.get("id"),
             "similarity": round(sim, 4),
             "content": (c.get("content") or "")[:400],
-            "metadata": {
-                "course": course,
-                "section": section,
-                "layer": layer,
-                "themes": chunk_themes,
-            },
+            "metadata": {"course": course, "section": section, "layer": layer, "themes": chunk_themes},
         })
 
     top_score = max(similarities) if similarities else 0
     avg_score = (sum(similarities) / len(similarities)) if similarities else 0
+    coverage = {
+        "courses": dict(sorted(courses.items(), key=lambda x: -x[1])),
+        "sections": dict(sorted(sections.items(), key=lambda x: -x[1])[:8]),
+        "themes": dict(sorted(themes.items(), key=lambda x: -x[1])[:15]),
+        "layers": dict(sorted(layers.items(), key=lambda x: -x[1])),
+        "top_score": round(top_score, 4),
+        "avg_score": round(avg_score, 4),
+        "chunks_returned": len(chunks_out),
+    }
+    return chunks_out, coverage
 
-    # Heuristic warnings
-    warnings = []
+
+def _rag_warnings(chunks_out: list, top_score: float) -> list[str]:
     if not chunks_out:
-        warnings.append("ZERO_CHUNKS: query returned 0 chunks even at threshold=0.0 — embedding may be malformed.")
-    elif top_score < 0.40:
-        warnings.append(f"LOW_RELEVANCE: top similarity is only {top_score:.2f} — corpus likely lacks content for this topic. Consider adding source material.")
-    elif top_score < 0.55:
-        warnings.append(f"MEDIUM_RELEVANCE: top similarity {top_score:.2f} — answers will be loosely grounded. Stronger coverage would help.")
+        return ["ZERO_CHUNKS: query returned 0 chunks even at threshold=0.0 — embedding may be malformed."]
+    if top_score < 0.40:
+        return [f"LOW_RELEVANCE: top similarity is only {top_score:.2f} — corpus likely lacks content for this topic. Consider adding source material."]
+    if top_score < 0.55:
+        return [f"MEDIUM_RELEVANCE: top similarity {top_score:.2f} — answers will be loosely grounded. Stronger coverage would help."]
+    return []
+
+
+@router.post("/rag-debug")
+async def rag_debug(request: Request):
+    """For a given query, return top-N chunks + similarity + metadata coverage.
+
+    Body: { "query": str, "match_count": int=10, "match_threshold": float=0.0 }
+    """
+    await require_admin(request)
+    body = await request.json()
+    query = (body.get("query") or "").strip()
+    if not query or len(query) < 3:
+        raise HTTPException(status_code=400, detail="Query must be at least 3 characters")
+    match_count = max(1, min(int(body.get("match_count", 10)), 30))
+    match_threshold = max(0.0, min(float(body.get("match_threshold", 0.0)), 1.0))
+
+    from services_rag import _embed_query
+    from services_embeddings import EMBED_MODEL_NAME, EMBEDDING_DIM
+
+    embedding = await _embed_query(query)
+    if not embedding:
+        raise HTTPException(status_code=503, detail="Embedding service unavailable (local model)")
+
+    chunks_raw = await _rag_fetch_chunks(embedding, match_threshold, match_count)
+    chunks_out, coverage = _rag_build_coverage(chunks_raw)
 
     return {
         "query": query,
-        "model": VOYAGE_MODEL,
+        "model": EMBED_MODEL_NAME,
         "embedding_dim": EMBEDDING_DIM,
         "match_count": match_count,
         "match_threshold": match_threshold,
         "chunks": chunks_out,
-        "coverage": {
-            "courses": dict(sorted(courses.items(), key=lambda x: -x[1])),
-            "sections": dict(sorted(sections.items(), key=lambda x: -x[1])[:8]),
-            "themes": dict(sorted(themes.items(), key=lambda x: -x[1])[:15]),
-            "layers": dict(sorted(layers.items(), key=lambda x: -x[1])),
-            "top_score": round(top_score, 4),
-            "avg_score": round(avg_score, 4),
-            "chunks_returned": len(chunks_out),
-        },
-        "warnings": warnings,
+        "coverage": coverage,
+        "warnings": _rag_warnings(chunks_out, coverage["top_score"]),
     }
 
 
 @router.get("/rag-corpus-stats")
 async def rag_corpus_stats(request: Request):
-    """Overview of the entire 609-chunk corpus — which courses are best covered."""
+    """Overview of the local rag_chunks corpus — which courses are best covered."""
     await require_admin(request)
-    import os
-    import httpx
-
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not (url and key):
-        raise HTTPException(status_code=503, detail="Supabase not configured")
-
-    # Pull all metadata (lightweight — no embeddings, no content)
-    async with httpx.AsyncClient(timeout=20) as client:
-        r = await client.get(
-            f"{url}/rest/v1/wladbot_documents?select=id,metadata&limit=2000",
-            headers={"apikey": key, "Authorization": f"Bearer {key}"},
-        )
-    if r.status_code != 200:
-        raise HTTPException(status_code=502, detail=f"Supabase fetch failed: {r.text[:200]}")
-
-    rows = r.json() if isinstance(r.json(), list) else []
+    rows = await db.rag_chunks.find({}, {"_id": 0, "metadata": 1}).to_list(60000)
     courses: dict[str, int] = {}
     themes: dict[str, int] = {}
     layers: dict[str, int] = {}

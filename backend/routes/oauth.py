@@ -45,9 +45,10 @@ async def list_providers():
     NOT secrets; they're embedded in the OAuth redirect anyway).
     """
     import os
+    from services_oauth import google_client_id
     return {
         "providers": available_providers(),
-        "google_client_id": os.environ.get("GOOGLE_CLIENT_ID") or "",
+        "google_client_id": google_client_id() or "",
         "apple_service_id": os.environ.get("APPLE_SERVICE_ID") or os.environ.get("APPLE_CLIENT_ID") or "",
         "microsoft_client_id": os.environ.get("MICROSOFT_CLIENT_ID") or "",
         "microsoft_tenant": os.environ.get("MICROSOFT_TENANT", "common"),
@@ -114,6 +115,9 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
 
     # New user — create
     user_id = f"user_{uuid.uuid4().hex[:12]}"
+    # Iter 92.24 (Mert): tag funnel-of-origin for cross-platform attribution.
+    from routes.auth import detect_source_platform
+    source_platform = detect_source_platform(request)
     user_doc = {
         "user_id": user_id,
         "email": email,
@@ -128,6 +132,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
         "level": "Emerging Leader",
         "xp": 0,
         "premium": False,
+        "source_platform": source_platform,
         "oauth_providers": {provider: {"sub": profile["sub"], "linked_at": now_iso}},
         "last_login_provider": provider,
         "signup_ip": ctx["ip"],
@@ -151,6 +156,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
             full_name=user_doc["name"],
             event="user.created",
             extra={"auth_method": provider},
+            source_platform=source_platform,
         )
     except Exception as e:
         logger.warning("Supabase mirror failed (non-blocking): %s", e)
@@ -171,7 +177,7 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
 async def _issue_session(user: dict, request: Request, response: Response, method: str) -> dict:
     """Create JWT + session cookie and return the standard {token, user} payload."""
     from routes.auth import _create_session, _safe_user_output, _get_client_ip
-    token = create_jwt_token(user["user_id"])
+    token = create_jwt_token(user["user_id"], user.get("token_version", 1))
     await _create_session(user["user_id"], _get_client_ip(request), response, method=method)
     return {"token": token, "user": _safe_user_output(user)}
 

@@ -10,7 +10,6 @@ Full integration is covered by the curl-based smoke run during Iter 79
 (documented in /app/test_reports/iteration_79.json).
 """
 import os
-import secrets as pysecrets
 import pytest
 
 

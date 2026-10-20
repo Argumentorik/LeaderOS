@@ -8,8 +8,8 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import logging
+import os
 import re
-from typing import Optional
 
 import httpx
 
@@ -134,6 +134,28 @@ async def lookup_geo(ip: str) -> dict:
         return {}
 
 
+def get_client_ip(request) -> str:
+    """Client-IP nur vom vertrauenswürdigen Proxy-Hop.
+
+    `X-Forwarded-For` ist client-manipulierbar; der eigene Ingress hängt die echte
+    Absender-IP als LETZTEN Eintrag an. TRUSTED_PROXY_HOPS (Default 1) = Anzahl eigener
+    Proxys vor der App (z. B. 2 bei CDN + Ingress). `cf-connecting-ip` wird nur genutzt,
+    wenn TRUST_CF_CONNECTING_IP=true (Origin ausschließlich hinter Cloudflare erreichbar).
+    """
+    if os.environ.get("TRUST_CF_CONNECTING_IP", "").lower() in ("1", "true", "yes"):
+        cf_ip = (request.headers.get("cf-connecting-ip") or "").strip()
+        if cf_ip:
+            return cf_ip
+    try:
+        hops = max(1, int(os.environ.get("TRUSTED_PROXY_HOPS", "1")))
+    except ValueError:
+        hops = 1
+    xff = [p.strip() for p in (request.headers.get("x-forwarded-for") or "").split(",") if p.strip()]
+    if len(xff) >= hops:
+        return xff[-hops]
+    return request.client.host if request.client else "unknown"
+
+
 def geo_label(geo: dict) -> str:
     """Human-readable location label: 'Berlin, DE' or 'Unbekannter Standort'."""
     if not geo:
@@ -162,6 +184,10 @@ def is_known_device(login_history: list, fingerprint: str) -> bool:
 def _format_email_html(user_name: str, browser: str, os_name: str,
                       location: str, ip: str, at_iso: str) -> str:
     """Render a clean, branded HTML email body for the security alert."""
+    # Iter 92.27: env-driven URL so per-Vercel-project deploys (leaderos vs
+    # leadercheck) link back to the SAME domain the user logged in on.
+    _app_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    _app_domain = _app_url.replace("https://", "").replace("http://", "").rstrip("/")
     return f"""
 <!DOCTYPE html>
 <html lang="de">
@@ -184,11 +210,11 @@ def _format_email_html(user_name: str, browser: str, os_name: str,
     </div>
     <div style="padding:0 32px 24px;color:#cbd5e1;font-size:14px;line-height:1.6;">
       <p style="margin:0 0 12px;">Warst du das <strong>nicht</strong>? Dann ändere sofort dein Passwort:</p>
-      <a href="https://leaderos.de/profile?tab=security" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Konto sichern →</a>
+      <a href="{_app_url}/profile?tab=security" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Konto sichern →</a>
     </div>
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
-      Diese Benachrichtigung wurde automatisch von WladBot · LeaderOS gesendet.<br/>
-      Argumentorik-Akademie GmbH · leaderos.de
+      Diese Benachrichtigung wurde automatisch von WladBot · Leader-OS gesendet.<br/>
+      Argumentorik-Akademie GmbH · {_app_domain}
     </div>
   </div>
 </body>
@@ -238,3 +264,96 @@ def fire_and_forget_new_device_alert(**kwargs) -> None:
     except RuntimeError:
         # No running loop (rare — e.g. called from sync test fixture)
         asyncio.run(maybe_send_new_device_alert(**kwargs))
+
+
+def _format_not_me_email_html(user_name: str, sessions: list, suspicious: list, at_iso: str) -> str:
+    app_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    app_domain = app_url.replace("https://", "").replace("http://", "")
+
+    def row(label: str, value: str) -> str:
+        return (f'<div style="margin-bottom:8px;"><span style="color:#64748b;display:inline-block;width:110px;">{label}</span> '
+                f'<strong style="color:#fafafa;">{value}</strong></div>')
+
+    def block(title: str, rows: str) -> str:
+        return (f'<div style="margin:0 32px 20px;padding:18px 20px;background:#0d0d0d;border:1px solid #1f2937;border-radius:12px;font-size:14px;color:#94a3b8;">'
+                f'<div style="color:#BFFF00;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">{title}</div>{rows}</div>')
+
+    sus_rows = "".join(
+        row(f"{_esc(s.get('browser') or 'Unbekannt')} · {_esc(s.get('os') or '')}",
+            f"{_esc(geo_label({'city': s.get('city'), 'country_code': s.get('country_code')}))} · {_esc(s.get('ip') or '')} · {_esc(_fmt_at(s.get('at')))}")
+        for s in suspicious
+    ) or row("—", "keine Angaben")
+    sess_rows = "".join(
+        row(_esc(_fmt_at(s.get("created_at"))), f"{_esc(s.get('ip') or '')} · {_esc(s.get('method') or 'Login')}") for s in sessions
+    ) or row("—", "keine weiteren aktiven Geräte")
+
+    return f"""
+<!DOCTYPE html>
+<html lang="de">
+<body style="margin:0;padding:0;background:#0A0A0A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fafafa;">
+  <div style="max-width:560px;margin:40px auto;background:#111;border:1px solid #1f2937;border-radius:16px;overflow:hidden;">
+    <div style="padding:32px 32px 24px;border-bottom:1px solid #1f2937;">
+      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLADBOT · SECURITY</div>
+      <h1 style="margin:20px 0 0;font-size:26px;line-height:1.25;font-weight:700;">Dein Konto wurde gesichert</h1>
+    </div>
+    <div style="padding:24px 32px 8px;color:#cbd5e1;font-size:15px;line-height:1.6;">
+      <p style="margin:0 0 16px;">Hi {_esc(user_name)},</p>
+      <p style="margin:0 0 20px;">du hast am <strong style="color:#fafafa;">{at_iso}</strong> einen Login als <strong style="color:#BFFF00;">„Das war ich nicht“</strong> gemeldet.
+      Wir haben sofort <strong>{len(sessions)} andere Sitzung{'' if len(sessions) == 1 else 'en'}</strong> beendet und alle Zugriffs-Tokens widerrufen. Nur dein aktuelles Gerät ist noch angemeldet.</p>
+    </div>
+    {block("Gemeldete Logins", sus_rows)}
+    {block("Beendete Sitzungen", sess_rows)}
+    <div style="padding:0 32px 24px;color:#cbd5e1;font-size:14px;line-height:1.6;">
+      <p style="margin:0 0 12px;">Wichtigster nächster Schritt — <strong>ändere jetzt dein Passwort</strong>, damit der Zugriff dauerhaft gesperrt bleibt:</p>
+      <a href="{app_url}/profile?tab=account&amp;focus=password" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Passwort jetzt ändern →</a>
+      <p style="margin:16px 0 0;color:#94a3b8;font-size:13px;">Nutzt du dasselbe Passwort auch woanders? Dann ändere es dort ebenfalls.</p>
+    </div>
+    <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
+      Diese Benachrichtigung wurde automatisch von WladBot · Leader-OS gesendet.<br/>
+      Argumentorik-Akademie GmbH · {app_domain}
+    </div>
+  </div>
+</body>
+</html>
+""".strip()
+
+
+def _esc(value) -> str:
+    import html
+    return html.escape(str(value or ""))
+
+
+def _fmt_at(value) -> str:
+    from datetime import datetime
+    if not value:
+        return "–"
+    try:
+        dt = value if isinstance(value, datetime) else datetime.fromisoformat(str(value))
+        return dt.strftime("%d.%m.%Y · %H:%M UTC")
+    except ValueError:
+        return str(value)
+
+
+async def send_not_me_alert(*, user_email: str, user_name: str, sessions: list, suspicious: list) -> bool:
+    """Bestätigungs-Mail nach „Das war ich nicht“ — beendete Geräte + Link zum Passwortwechsel. Wirft nie."""
+    try:
+        from services_email import send_email, is_enabled
+        from datetime import datetime, timezone
+
+        if not is_enabled():
+            logger.info("Resend not configured — skipping not-me email for %s", user_email)
+            return False
+        at_iso = datetime.now(timezone.utc).strftime("%d.%m.%Y · %H:%M UTC")
+        html = _format_not_me_email_html(user_name or "there", sessions, suspicious, at_iso)
+        result = await send_email(to=user_email, subject="Dein WladBot-Konto wurde gesichert · bitte Passwort ändern", html=html)
+        return bool(result.get("sent"))
+    except Exception as e:
+        logger.warning("not-me alert failed for %s: %s", user_email, e)
+        return False
+
+
+def fire_and_forget_not_me_alert(**kwargs) -> None:
+    try:
+        asyncio.get_running_loop().create_task(send_not_me_alert(**kwargs))
+    except RuntimeError:
+        asyncio.run(send_not_me_alert(**kwargs))

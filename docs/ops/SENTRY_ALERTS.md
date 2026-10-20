@@ -62,7 +62,7 @@ Sampling:
 - **Action:** Email
 - **Why:** Slow API = User-Abbruch. Indikator für DB-Lock, externe API-Timeout, oder Memory-Pressure.
 
-**Rule: RAG/Voyage Errors**
+**Rule: RAG/Embedding Errors (lokales MiniLM)**
 - **Trigger:** `event.tags.module = "rag"` AND `event.level = "error"`
 - **Threshold:** `> 5 events` in `10 minutes`
 - **Action:** Email

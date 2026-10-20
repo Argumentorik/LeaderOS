@@ -1,12 +1,12 @@
 /**
- * AddToFolderButton · premium folder-picker popover used on the Analysis page.
+ * AddToFolderButton — premium folder-picker popover used on the Analysis page.
  *
  * Lets the user file the just-completed mission into a context folder so the
  * "Wlad-Agent" can reference the folder's summary later.
  *
  * Props:
- *   entryId   string  · video mission entry_id to link
- *   title     string  · display title (falls back to challenge title)
+ *   entryId   string  — video mission entry_id to link
+ *   title     string  — display title (falls back to challenge title)
  *   de        bool
  */
 import { useEffect, useRef, useState } from 'react';

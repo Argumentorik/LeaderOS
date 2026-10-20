@@ -1,14 +1,16 @@
 """Enterprise Funnel — 12-question diagnosis for team training leads."""
-from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel, EmailStr
 from typing import Optional
+import html as _html
 import os
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from config import db, logger
 from services import get_current_user
 from services_actions import record_user_action
+from routes.auth import _get_client_ip
 
 router = APIRouter(prefix="/api/enterprise", tags=["enterprise"])
 
@@ -61,6 +63,102 @@ QUESTIONS_EN = [
 ]
 
 
+# Public lead form — used by the marketing landing page (no auth required)
+class EnterprisePublicLeadForm(BaseModel):
+    company: str
+    name: Optional[str] = None
+    email: EmailStr
+    teamSize: Optional[str] = None
+    role: Optional[str] = None
+    goals: Optional[str] = None
+    wantsOwnRAG: Optional[bool] = False
+    lang: Optional[str] = "de"
+
+
+@router.post("/public-lead")
+async def submit_public_enterprise_lead(data: EnterprisePublicLeadForm, request: Request):
+    """Submit an enterprise lead from the public marketing landing page.
+
+    This endpoint is intentionally public (no auth) so the /for-teams landing
+    page can capture leads before a CEO or team-lead has created an account.
+    Rate-limited: max 5 submissions per IP per hour to prevent spam.
+    """
+    ip = _get_client_ip(request)
+
+    # Rate limit: 5 submissions/hour per IP (uses real client IP via
+    # cf-connecting-ip / x-forwarded-for → not the proxy's own address).
+    one_hour_ago = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+    recent = await db.enterprise_leads.count_documents({
+        "signup_ip": ip,
+        "created_at": {"$gte": one_hour_ago},
+    })
+    if recent >= 5:
+        raise HTTPException(status_code=429, detail="Zu viele Anfragen. Bitte in einer Stunde erneut versuchen.")
+
+    lead_id = f"lead_{uuid.uuid4().hex[:12]}"
+    lead_doc = {
+        "lead_id": lead_id,
+        "user_id": None,
+        "user_name": data.name or "",
+        "user_email": str(data.email),
+        "company_name": data.company,
+        "team_size": data.teamSize,
+        "role": data.role,
+        "goals": data.goals,
+        "wants_own_rag": bool(data.wantsOwnRAG),
+        "contact_email": str(data.email),
+        "lang": data.lang,
+        "source": "enterprise_landing_public",
+        "score": 60 if data.wantsOwnRAG else 50,
+        "priority": "hot" if data.wantsOwnRAG else "warm",
+        "status": "new",
+        "signup_ip": ip,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.enterprise_leads.insert_one(lead_doc)
+
+    # Best-effort auto-acknowledgment email to the lead
+    try:
+        import asyncio as _asyncio
+        from services_email import send_email, _base_layout, BRAND_COLOR
+        de = (data.lang or "de") == "de"
+        # Iter 131.1 (Security Audit SEC-002): escape ALL user-supplied strings
+        # before templating them into HTML email bodies.
+        safe_name = _html.escape((data.name or "").strip())
+        safe_company = _html.escape((data.company or "").strip())
+        display = safe_name or safe_company or "there"
+        subject = "Danke für dein Interesse — LeaderOS Enterprise" if de else "Thanks for your interest — LeaderOS Enterprise"
+        body = f"""
+<div style="background:linear-gradient(135deg,rgba(191,255,0,0.14),rgba(154,204,0,0.04));border:1px solid rgba(191,255,0,0.22);border-radius:14px;padding:18px 22px;margin-bottom:24px;">
+  <div style="font-size:10px;letter-spacing:0.2em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">
+    {"Anfrage eingegangen" if de else "Request received"}
+  </div>
+  <div style="font-size:22px;font-weight:900;line-height:1.2;">
+    {"Danke, "+display+"." if de else "Thanks, "+display+"."}
+  </div>
+</div>
+<p style="font-size:14px;color:rgba(255,255,255,0.78);line-height:1.65;margin:0 0 20px;">
+  {"Wir haben deine Anfrage für <b>"+ safe_company +"</b> erhalten und melden uns innerhalb von 24 Stunden mit einem Terminvorschlag." if de
+   else "We received your request for <b>"+ safe_company +"</b> and will get back to you within 24 hours with a time slot."}
+</p>
+<p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;margin:0;">
+  {"Falls du inzwischen etwas nachreichen möchtest — antworte einfach auf diese Mail." if de
+   else "If you want to add anything in the meantime — just reply to this email."}
+</p>
+"""
+        html = _base_layout(body, preheader="LeaderOS Enterprise — wir melden uns innerhalb von 24h.")
+        _asyncio.create_task(send_email(str(data.email), subject, html))
+    except Exception:  # pragma: no cover — never block lead capture on email failure
+        pass
+
+    return {
+        "lead_id": lead_id,
+        "message": "Danke! Das Team meldet sich innerhalb von 24 Stunden bei dir."
+                    if data.lang == "de"
+                    else "Thanks! The team will reach out within 24 hours.",
+    }
+
+
 @router.get("/questions")
 async def get_enterprise_questions(lang: str = "de"):
     return QUESTIONS_DE if lang == "de" else QUESTIONS_EN
@@ -97,8 +195,14 @@ async def submit_enterprise_lead(data: EnterpriseLeadForm, request: Request):
         from services_email import send_email
         import asyncio
 
-        lead_name = (data.name or user.get("name", "")).strip() or "dort"
+        lead_name = _html.escape((data.name or user.get("name", "")).strip() or "dort")
         is_de = data.lang == "de"
+        # SEC-002 (HEAD): alle User-Strings vor dem HTML-Templating escapen.
+        e_company = _html.escape(data.company or "")
+        e_contact = _html.escape(data.name or user.get("name", "—") or "—")
+        e_email = _html.escape(data.email or "")
+        e_team = _html.escape(str(data.teamSize or ""))
+        e_msg = _html.escape(data.message or "—")
 
         # 1. Confirmation to the lead
         asyncio.create_task(send_email(
@@ -131,11 +235,11 @@ async def submit_enterprise_lead(data: EnterpriseLeadForm, request: Request):
                 f"<div style='font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;padding:24px'>"
                 f"<h2 style='font-size:20px;margin:0 0 16px'>New Enterprise Lead</h2>"
                 f"<table style='font-size:14px;line-height:1.7;border-collapse:collapse'>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Company</td><td>{data.company}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Contact</td><td>{data.name or user.get('name', '—')}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Email</td><td><a href='mailto:{data.email}'>{data.email}</a></td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Team size</td><td>{data.teamSize}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px'>Message</td><td>{data.message or '—'}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Company</td><td>{e_company}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Contact</td><td>{e_contact}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Email</td><td><a href='mailto:{e_email}'>{e_email}</a></td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Team size</td><td>{e_team}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px'>Message</td><td>{e_msg}</td></tr>"
                 f"<tr><td style='font-weight:600;padding-right:16px'>Lead ID</td><td><code>{lead_id}</code></td></tr>"
                 f"</table>"
                 f"<p style='font-size:13px;color:#666;margin-top:24px'>Reach out within 24h to maintain conversion velocity.</p>"
@@ -198,8 +302,11 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
         import asyncio
 
         contact = data.contact_email or user.get("email")
-        lead_name = (user.get("name", "") or "dort").split()[0] or "dort"
-        company = data.company_name or user.get("company", "deinem Unternehmen")
+        lead_name = _html.escape((user.get("name", "") or "dort").split()[0] or "dort")
+        company = _html.escape(data.company_name or user.get("company", "deinem Unternehmen") or "")
+        e_contact_mail = _html.escape(contact or "")
+        e_contact_name = _html.escape(user.get("name", "—") or "—")
+        e_team = _html.escape(str(data.team_size or ""))
         priority_emoji = {"hot": "🔥", "warm": "🌡️", "cold": "❄️"}.get(lead_doc["priority"], "📥")
 
         # 1. Confirmation to lead — bilingual depending on score (hot leads get urgency)
@@ -243,9 +350,9 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
                 f"<p style='color:#666;margin:0 0 20px'>Score: <strong>{score}/120</strong> · Source: 12-question diagnosis</p>"
                 f"<table style='font-size:14px;line-height:1.7;border-collapse:collapse;width:100%'>"
                 f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Company</td><td>{company}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Contact</td><td>{user.get('name', '—')}</td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Email</td><td><a href='mailto:{contact}'>{contact}</a></td></tr>"
-                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Team size</td><td>{data.team_size}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Contact</td><td>{e_contact_name}</td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Email</td><td><a href='mailto:{e_contact_mail}'>{e_contact_mail}</a></td></tr>"
+                f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Team size</td><td>{e_team}</td></tr>"
                 f"<tr><td style='font-weight:600;padding-right:16px;vertical-align:top'>Lead ID</td><td><code>{lead_id}</code></td></tr>"
                 f"</table>"
                 + (
@@ -269,7 +376,13 @@ async def submit_enterprise_diagnosis(data: EnterpriseDiagnosis, request: Reques
 
 @router.get("/leads")
 async def get_enterprise_leads(request: Request):
-    """Get enterprise leads (admin)."""
-    await get_current_user(request)
+    """Get enterprise leads (admin-only).
+
+    Iter 131.1 (Security Audit SEC-001): previously exposed to any signed-in
+    user via `get_current_user`. Now gated by `require_admin` — enterprise
+    lead PII (company, contact, phone, message, quote) is confidential.
+    """
+    from routes.admin import require_admin
+    await require_admin(request)
     leads = await db.enterprise_leads.find({}, {"_id": 0}).sort("created_at", -1).to_list(50)
     return leads

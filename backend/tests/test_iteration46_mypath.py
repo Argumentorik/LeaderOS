@@ -1,4 +1,4 @@
-from tests.conftest import TEST_EMAIL, TEST_PASSWORD
+from conftest import TEST_EMAIL, TEST_PASSWORD
 """
 Iteration 46 - My Path Feature Tests
 Tests the new 'My Path' AI Journey 5 Levels progression system.

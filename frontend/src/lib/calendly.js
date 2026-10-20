@@ -16,6 +16,48 @@ const CAL_LINK = 'leaderos/beratung';
 const CAL_NAMESPACE = 'beratung';
 const CAL_URL = `https://cal.com/${CAL_LINK}`;
 
+const CONSULTATION_GATE_DAYS = 10;
+
+/**
+ * Iter 124.5 (Wlad Godmode): server-safe consultation gate for the plain
+ * (non-React) helpers below. Reads the cached user from sessionStorage
+ * (AuthContext writes it there on login/refresh) and returns true when
+ * the user may see the booking flow.
+ */
+const isConsultationReady = () => {
+  try {
+    const raw = sessionStorage.getItem('wladbot_user');
+    if (!raw) return false;
+    const u = JSON.parse(raw);
+    const tier = (u?.tier || 'free').toLowerCase();
+    if (tier === 'accelerator' || tier === 'enterprise') return true;
+    if (u?.is_admin || u?.consultation_unlocked) return true;
+    if (!u?.created_at) return false;
+    const ageDays = Math.floor((Date.now() - new Date(u.created_at).getTime()) / 86_400_000);
+    return ageDays >= CONSULTATION_GATE_DAYS;
+  } catch { return false; }
+};
+
+const daysUntilConsultation = () => {
+  try {
+    const raw = sessionStorage.getItem('wladbot_user');
+    if (!raw) return CONSULTATION_GATE_DAYS;
+    const u = JSON.parse(raw);
+    if (!u?.created_at) return CONSULTATION_GATE_DAYS;
+    const ageDays = Math.floor((Date.now() - new Date(u.created_at).getTime()) / 86_400_000);
+    return Math.max(0, CONSULTATION_GATE_DAYS - ageDays);
+  } catch { return CONSULTATION_GATE_DAYS; }
+};
+
+// Lazy toast import so we don't create a hard sonner dependency in non-UI code
+const _softInform = (msg, description) => {
+  try {
+    // eslint-disable-next-line global-require
+    const sonner = require('sonner');
+    sonner.toast?.info(msg, description ? { description, duration: 5000 } : { duration: 4000 });
+  } catch { /* running in non-UI context — silent noop */ }
+};
+
 const tryOpenModal = (prefill) => {
   if (typeof window === 'undefined') return false;
   const cal = window.Cal?.ns?.[CAL_NAMESPACE];
@@ -45,6 +87,15 @@ const buildTabUrl = (utmSource, prefill) => {
 };
 
 export const openStrategyCall = (utmSource = 'wladbot', prefill = undefined) => {
+  // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Anrufen.
+  if (!isConsultationReady()) {
+    const days = daysUntilConsultation();
+    _softInform(
+      `Persönliche Beratung ab Tag ${CONSULTATION_GATE_DAYS} · noch ${days} Tag${days === 1 ? '' : 'e'}`,
+      'Erst die App erleben — dann sprechen wir persönlich. Bis dahin bekommst du volle Wlad-Power über Chat & Voice.',
+    );
+    return;
+  }
   if (tryOpenModal(prefill)) return;
   window.open(buildTabUrl(utmSource, prefill), '_blank', 'noopener,noreferrer');
 };

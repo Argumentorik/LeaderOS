@@ -1,30 +1,114 @@
-import { Brain, Target, HeartHandshake, Star } from 'lucide-react';
-export { WLAD_AVATAR } from '../../lib/brandAssets';
+import { Brain, Sparkles, HeartHandshake } from 'lucide-react';
 
+export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
+
+// 3-Layer Leadership System (Iter 92.35 — Mert: high-converting landing copy)
+// KI · Rhetorik · EQ → user-supplied final headlines + bullets.
 export const getLayers = (de) => [
-  { number: '01', title: de ? 'KI-Kompetenz' : 'AI Competency', description: de ? 'KI als strategischen Hebel nutzen, um schnellere und bessere Entscheidungen zu treffen.' : 'Use AI as a strategic lever for faster, better decisions.', features: de ? ['Entscheidungen beschleunigen', 'Prozesse automatisieren', 'Wettbewerbsvorteile schaffen'] : ['Accelerate decisions', 'Automate processes', 'Create competitive edge'], gradient: '#6366F1, #8B5CF6', icon: Brain },
-  { number: '02', title: de ? 'Boardroom-Rhetorik' : 'Boardroom Rhetoric', description: de ? 'Autorität und Überzeugungskraft zeigen, wenn es darauf ankommt.' : 'Show authority and persuasion when it matters most.', features: de ? ['Argumentationsstruktur', 'Klare Kommunikation', 'Souveräne Präsenz'] : ['Argumentation structure', 'Clear communication', 'Confident presence'], gradient: '#EC4899, #F43F5E', icon: Target },
-  { number: '03', title: de ? 'Strategisches EQ' : 'Strategic EQ', description: de ? 'Empathie als Führungskraft-Verstärker einsetzen.' : 'Use empathy as a leadership amplifier.', features: de ? ['Teamdynamiken verstehen', 'Vertrauen aufbauen', 'Konflikte strategisch lösen'] : ['Understand team dynamics', 'Build trust', 'Resolve conflicts strategically'], gradient: '#10B981, #14B8A6', icon: HeartHandshake },
+  {
+    number: '01',
+    title: de ? 'KI — Klar denken' : 'AI — Think Clearly',
+    description: de
+      ? 'Strukturierte Analyse deiner Kommunikation in Echtzeit.'
+      : 'Real-time structured analysis of your communication.',
+    features: de
+      ? [
+          'Erkennung deiner Denk- & Sprachmuster',
+          'Sofort-Feedback auf Klarheit & Struktur',
+          'Adaptive Lernpfade basierend auf Verhalten',
+          'Kontextbasierte Coaching-Impulse',
+          'RAG-gestützte Wlad-Wissensintegration',
+        ]
+      : [
+          'Detect your thought & speech patterns',
+          'Instant feedback on clarity & structure',
+          'Adaptive learning paths from behavior',
+          'Context-aware coaching impulses',
+          'RAG-grounded Wlad knowledge integration',
+        ],
+    gradient: '#6366F1, #8B5CF6',
+    icon: Brain,
+  },
+  {
+    number: '02',
+    title: de ? 'Rhetorik — Klar sprechen' : 'Rhetoric — Speak Clearly',
+    description: de
+      ? 'Deine Worte werden zu einem Werkzeug für Einfluss.'
+      : 'Your words become tools of influence.',
+    features: de
+      ? [
+          'Verbesserung deiner Argumentationslogik',
+          'Storytelling-Optimierung in Echtzeit',
+          'Reduktion von Unsicherheit & Füllsprache',
+          'Strukturierte Rede-Frameworks (SEXIER)',
+          'Live Speech- & Video-Feedback',
+        ]
+      : [
+          'Sharpen your argumentation logic',
+          'Real-time storytelling optimization',
+          'Cut uncertainty & filler language',
+          'Structured speech frameworks (SEXIER)',
+          'Live speech & video feedback',
+        ],
+    gradient: '#EC4899, #F43F5E',
+    icon: Sparkles,
+  },
+  {
+    number: '03',
+    title: de ? 'EQ — Klar führen' : 'EQ — Lead Clearly',
+    description: de
+      ? 'Menschen lesen, Dynamiken verstehen, Vertrauen aufbauen.'
+      : 'Read people, understand dynamics, build trust.',
+    features: de
+      ? [
+          'Emotionale Muster in Gesprächen erkennen',
+          'Konflikt- & Drucksituationen meistern',
+          'Führungskommunikation auf C-Level Niveau',
+          'Wahrnehmung von Raum & Energie',
+          'Entscheidungsstärke unter Unsicherheit',
+        ]
+      : [
+          'Detect emotional patterns in conversations',
+          'Master conflict & pressure situations',
+          'C-level grade leadership communication',
+          'Room & energy awareness',
+          'Decision strength under uncertainty',
+        ],
+    gradient: '#10B981, #14B8A6',
+    icon: HeartHandshake,
+  },
 ];
 
-export const getCoachingPaths = (de, navigate, handleCheckout) => [
-  { id: 'personal', icon: Star, gradient: 'from-[#BFFF00] to-[#9ACC00]', title: de ? '1:1 Coaching mit Wlads Team' : "1:1 Coaching with Wlad's team", subtitle: de ? 'Persönliche Transformation' : 'Personal transformation', description: de ? 'Nichts ersetzt einen echten Experten. Wlads Team begleitet dich persönlich durch deine spezifischen Herausforderungen, nach Wlads Methodik.' : "Nothing replaces a real expert. Wlad's team guides you personally through your specific challenges, following Wlad's methodology.", cta: de ? 'Strategiegespräch buchen' : 'Book Strategy Call', action: () => handleCheckout('accelerator'), badge: de ? 'PREMIUM' : 'PREMIUM', badgeColor: 'bg-[#7B3FE4]' },
-];
+// Legacy paths grid — kept for back-compat (CoachingPathCard usage). The hero
+// + TierPricingGrid are now the dominant CTAs.
+export const getCoachingPaths = () => [];
 
 export const getPremiumFeatures = (de) => de
-  ? ['12 Wochen Intensiv-Coaching mit Wlads Team', 'Maßgeschneiderte Leadership-Strategie', 'Wöchentliche 1:1 Sessions (60 Min.)', 'Zugang zu allen Premium-KI-Features', 'Alle Frameworks aus Wlads Methodik', 'Prioritäts-Support & Accountability', 'Persönliche Advice Reports', 'Exklusiver Zugang zur Leader-Community']
-  : ["12 weeks intensive coaching with Wlad's team", 'Custom leadership strategy', 'Weekly 1:1 sessions (60 min)', 'Access to all premium AI features', "All frameworks from Wlad's methodology", 'Priority support & accountability', 'Personal advice reports', 'Exclusive access to leader community'];
+  ? ['12× Einzelcoaching mit Argumentorik-Coaches', 'Persönliche Strategie-Session', 'Individuelle Coaching-Pfade', 'Priority AI Feedback System', 'Erweiterte Wlad-Frameworks', 'Mastermind-Gruppe Zugang', 'Quartals-Reviews (4×/Jahr)', '30-Tage Geld-zurück-Garantie']
+  : ['12× 1:1 coaching with Argumentorik coaches', 'Personal strategy session', 'Custom coaching paths', 'Priority AI feedback', 'Extended Wlad frameworks', 'Mastermind group access', 'Quarterly reviews (4×/year)', '30-day money-back guarantee'];
 
+// FAQ — user-supplied final copy (5 questions).
 export const getFaqs = (de) => de ? [
-  { q: 'Was ist der Unterschied zwischen WladBot und dem persönlichen Coaching?', a: 'WladBot ist dein KI-Coach, der rund um die Uhr verfügbar ist und dir bei täglichen Führungsherausforderungen hilft. Das persönliche Coaching mit Wlads Team geht tiefer: maßgeschneiderte Strategien, Accountability und persönliche Begleitung durch komplexe Transformationen, nach Wlads Methodik.' },
-  { q: 'Was erhalte ich bei der Leadership-Diagnose?', a: 'Du erhältst einen detaillierten Report mit deinem 3-Dimensionen-Score (KI-Kompetenz, Boardroom-Rhetorik, Strategisches EQ), einer Analyse deiner 5+1 Führungsdimensionen, einem personalisierten 30-Tage-Aktionsplan und einer ROI-Prognose.' },
-  { q: 'Wie funktioniert das Strategiegespräch?', a: 'Das 15-minütige Strategiegespräch ist unverbindlich. Wlads Team analysiert deine aktuelle Situation, identifiziert deine größten Hebel und zeigt dir, wie du in 90 Tagen messbare Ergebnisse erzielst.' },
-  { q: 'Kann ich meine WladHub-Diagnose mit WladBot verbinden?', a: 'Ja! Deine Diagnose-Ergebnisse fließen direkt in dein WladBot-Profil ein. Der KI-Coach kennt deine Stärken und Schwächen und gibt dir personalisierte Empfehlungen basierend auf deinem Leadership-Profil.' },
-  { q: 'Für wen ist das Premium-Programm geeignet?', a: 'Das 12-Wochen-Programm ist ideal für Führungskräfte, die eine gezielte Transformation wollen. Typische Teilnehmer: Team-Leads die zum Director aufsteigen wollen, Manager die ihre Kommunikation transformieren wollen, oder Executives die ihre strategische Wirkung maximieren wollen.' },
+  { q: 'Für wen ist das System?', a: 'Für alle, die klarer führen, sprechen und entscheiden wollen — von Foundern bis Executives.' },
+  { q: 'Brauche ich Vorkenntnisse?', a: 'Nein, das System passt sich deinem Level automatisch an.' },
+  { q: 'Wie schnell sehe ich Ergebnisse?', a: 'Erste Veränderungen meist innerhalb der ersten 7 Tage.' },
+  { q: 'Ist das nur ein Coaching oder Software?', a: 'Es ist ein hybrides System aus KI, Coaching und Frameworks.' },
+  { q: 'Was unterscheidet es von anderen Coachings?', a: 'Es arbeitet mit deinem echten Verhalten (Speech, Video, Entscheidungen) — nicht mit Theorie.' },
 ] : [
-  { q: "What's the difference between WladBot and personal coaching?", a: "WladBot is your 24/7 AI coach for daily leadership challenges. Personal coaching with Wlad's team goes deeper: custom strategies, accountability, and personal guidance through complex transformations, following Wlad's methodology." },
-  { q: 'What do I get with the Leadership Diagnosis?', a: 'A detailed report with your 3-Dimension Score, analysis of 5+1 leadership dimensions, a personalized 30-day action plan, and ROI forecast.' },
-  { q: 'How does the Strategy Call work?', a: "The 15-minute call comes with no obligation. Wlad's team analyzes your situation, identifies leverage points, and shows how to achieve measurable results in 90 days." },
-  { q: 'Can I connect my WladHub diagnosis with WladBot?', a: 'Yes! Your diagnosis results flow into your WladBot profile. The AI coach knows your strengths and areas for improvement.' },
-  { q: 'Who is the Premium program for?', a: 'Ideal for leaders seeking targeted transformation: team leads becoming directors, managers improving communication, or executives maximizing strategic impact.' },
+  { q: 'Who is this system for?', a: 'For anyone who wants to lead, speak and decide more clearly — from founders to executives.' },
+  { q: 'Do I need prior experience?', a: 'No. The system adapts to your level automatically.' },
+  { q: 'How fast will I see results?', a: 'First shifts typically within the first 7 days.' },
+  { q: 'Is this just coaching or software?', a: 'It is a hybrid system: AI, coaching and frameworks.' },
+  { q: "What sets it apart from other coachings?", a: 'It works with your real behavior (speech, video, decisions) — not theory.' },
+];
+
+// Social-proof testimonials (Iter 92.35 — user-supplied copy).
+export const getTestimonials = (de) => de ? [
+  { quote: 'Ich habe meine Art zu sprechen komplett verändert.', author: 'Founder', role: 'Berlin' },
+  { quote: 'Das System zwingt dich zu Klarheit.', author: 'Team Lead', role: 'Tech' },
+  { quote: 'Wie ein Spiegel für mein Denken.', author: 'Consultant', role: 'Strategy' },
+] : [
+  { quote: 'I completely changed the way I speak.', author: 'Founder', role: 'Berlin' },
+  { quote: 'The system forces you to be clear.', author: 'Team Lead', role: 'Tech' },
+  { quote: 'Like a mirror for my thinking.', author: 'Consultant', role: 'Strategy' },
 ];

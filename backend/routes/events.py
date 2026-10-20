@@ -1,4 +1,5 @@
 """Events & Focus Time routes — Premium Event Hub for LeaderOS."""
+import os
 from fastapi import APIRouter, HTTPException, Request, BackgroundTasks
 from pydantic import BaseModel
 from typing import Optional
@@ -44,7 +45,9 @@ def _build_google_calendar_url(event: dict) -> str:
     end = start + timedelta(minutes=duration)
     fmt = "%Y%m%dT%H%M%SZ"
     dates = f"{start.strftime(fmt)}/{end.strftime(fmt)}"
-    details = f"{desc}\n\nJoin via LeaderOS: https://leaderos.de/events"
+    # Iter 92.27: env-driven prod URL (FRONTEND_BASE_URL set per Vercel project).
+    _events_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de").rstrip("/")
+    details = f"{desc}\n\nJoin via LeaderOS: {_events_url}/events"
 
     return (
         f"https://www.google.com/calendar/render?action=TEMPLATE"
@@ -69,7 +72,7 @@ def _build_ics_content(event: dict) -> str:
 
     end = start + timedelta(minutes=duration)
     fmt = "%Y%m%dT%H%M%SZ"
-    uid = f"{event.get('event_id', uuid.uuid4().hex)}@leader-os.de"
+    uid = f"{event.get('event_id', uuid.uuid4().hex)}@leaderos.de"
 
     return (
         "BEGIN:VCALENDAR\r\n"
@@ -126,7 +129,7 @@ EVENTS_SEED_V2 = [
             ],
             "event_type": "live", "duration": "60 min", "duration_minutes": 60,
             "max_participants": 500, "registered": 0, "host": "Wlad Jachtchenko",
-            "tags": ["LIVE", "KI", "Q&A", "jeden Donnerstag"], "access_level": "free", "featured": i == 0,
+            "tags": ["LIVE", "KI", "Q&A", "alle 2 Wochen"], "access_level": "free", "featured": i == 0,
             "category": "leadership", "status": "upcoming",
             "recurring": "weekly_thursday",
             # Date set dynamically below — Thursday 18:00 UTC, every week from first Thursday in July 2026
@@ -134,12 +137,12 @@ EVENTS_SEED_V2 = [
         for i in range(8)
     ],
 
-    # LIVE EVENTS (alle Thursday in Juli/August 2026 — Wlad's Cohort Launch)
+    # LIVE EVENTS (Season ab Mitte August 2026 — Wlad's Cohort Launch)
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "KI-gestützte Führung: Die Zukunft des Managements",
         "description": "Erfahre, wie du KI als strategisches Werkzeug in deinem Führungsalltag einsetzt.",
         "outcomes": ["KI-Tools für den Führungsalltag kennen", "Eigene KI-Strategie entwickeln", "Konkrete Workflows mitnehmen"],
-        "event_type": "live", "date": "2026-07-02T18:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "live", "date": "2026-08-18T18:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 200, "registered": 127, "host": "Wlad Jachtchenko",
         "tags": ["KI", "Strategie", "Innovation"], "access_level": "free", "featured": True,
         "category": "leadership", "status": "upcoming",
@@ -148,7 +151,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Executive Communication Masterclass",
         "description": "Überzeuge auf C-Level: Strukturierte Kommunikation, Storytelling und Präsenz.",
         "outcomes": ["Board-Ready Präsentationen bauen", "Storytelling-Framework anwenden", "Executive Presence steigern"],
-        "event_type": "workshop", "date": "2026-07-09T19:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "workshop", "date": "2026-08-25T19:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 50, "registered": 34, "host": "Wlad Jachtchenko",
         "tags": ["Kommunikation", "C-Level", "Präsentation"], "access_level": "standard", "featured": True,
         "category": "communication",
@@ -157,7 +160,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Schwierige Gespräche meistern",
         "description": "Feedback geben, Konflikte ansprechen, Kündigungen aussprechen — mit Struktur und Empathie.",
         "outcomes": ["Die Feedbackformel anwenden", "Schwierige Botschaften klar formulieren", "Emotionale Reaktionen managen"],
-        "event_type": "live", "date": "2026-07-16T18:30:00Z", "duration": "75 min", "duration_minutes": 75,
+        "event_type": "live", "date": "2026-09-01T18:30:00Z", "duration": "75 min", "duration_minutes": 75,
         "max_participants": 120, "registered": 64, "host": "Wlad Jachtchenko",
         "tags": ["Konflikt", "EQ", "Gespräche"], "access_level": "free",
         "category": "eq",
@@ -166,7 +169,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Leadership Scorecard: Deine Zahlen als Führungskraft",
         "description": "Lerne, wie du deinen Leadership-Score interpretierst und gezielt an Schwächen arbeitest.",
         "outcomes": ["Score-System verstehen", "Persönliche Wachstumsbereiche identifizieren", "90-Tage-Entwicklungsplan erstellen"],
-        "event_type": "live", "date": "2026-07-23T19:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "live", "date": "2026-09-08T19:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 100, "registered": 41, "host": "Wlad Jachtchenko",
         "tags": ["Daten", "Score", "Wachstum"], "access_level": "standard",
         "category": "leadership",
@@ -175,7 +178,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Delegation Deep Dive Workshop",
         "description": "Aufgaben richtig abgeben, Verantwortung übertragen und Mikromanagement überwinden.",
         "outcomes": ["Delegations-Matrix anwenden", "Mikromanagement erkennen und stoppen", "Team-Autonomie aufbauen"],
-        "event_type": "workshop", "date": "2026-07-30T14:00:00Z", "duration": "120 min", "duration_minutes": 120,
+        "event_type": "workshop", "date": "2026-09-15T14:00:00Z", "duration": "120 min", "duration_minutes": 120,
         "max_participants": 25, "registered": 14, "host": "Wlad Jachtchenko",
         "tags": ["Delegation", "Management", "Praxis"], "access_level": "standard",
         "category": "management",
@@ -184,7 +187,7 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Vision & Strategie Workshop",
         "description": "Entwickle deine 90-Tage-Vision mit dem WladBot Vision Framework.",
         "outcomes": ["Eigene Vision formulieren", "Strategische Prioritäten setzen", "Action-Plan für 90 Tage mitnehmen"],
-        "event_type": "workshop", "date": "2026-08-06T10:00:00Z", "duration": "150 min", "duration_minutes": 150,
+        "event_type": "workshop", "date": "2026-09-22T10:00:00Z", "duration": "150 min", "duration_minutes": 150,
         "max_participants": 20, "registered": 11, "host": "Wlad Jachtchenko",
         "tags": ["Vision", "Strategie"], "access_level": "standard",
         "category": "strategy",
@@ -194,16 +197,16 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Accelerator Mastermind: Q3 Strategy Call",
         "description": "Exklusiver Strategy Call für Accelerator-Mitglieder. Peer-Coaching, Hot Seats, direktes Feedback von Wlad.",
         "outcomes": ["Direktes Feedback auf deine Strategie", "Peer-Insights von Top-Leadern", "Accountability-Partner finden"],
-        "event_type": "mastermind", "date": "2026-08-13T17:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "mastermind", "date": "2026-08-21T17:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 12, "registered": 8, "host": "Wlad Jachtchenko",
         "tags": ["Mastermind", "Strategie", "Exklusiv"], "access_level": "accelerator", "featured": True,
         "category": "exclusive",
     },
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "1:1 Coaching-Slot: Executive Sparring",
-        "description": "30 Minuten 1:1 mit Wlad. Bringe dein wichtigstes Thema mit — Karriere, Konflikt, Strategie.",
+        "description": "30 Minuten 1:1 mit Wlads Expertenteam. Bringe dein wichtigstes Thema mit — Karriere, Konflikt, Strategie.",
         "outcomes": ["Persönliches Executive Coaching", "Konkreter Aktionsplan", "Follow-up Roadmap"],
-        "event_type": "coaching", "date": "2026-08-20T10:00:00Z", "duration": "30 min", "duration_minutes": 30,
+        "event_type": "coaching", "date": "2026-08-26T10:00:00Z", "duration": "30 min", "duration_minutes": 30,
         "max_participants": 1, "registered": 0, "host": "Wlad Jachtchenko",
         "tags": ["1:1", "Coaching", "Executive"], "access_level": "accelerator",
         "category": "exclusive",
@@ -245,12 +248,12 @@ EVENTS_SEED_V2 = [
         "tags": ["EQ", "Empathie", "Authentizität"], "access_level": "free",
         "category": "eq", "replay_url": "#",
     },
-    # FOCUS SESSIONS (recurring concept — Thursday in Juli 2026)
+    # FOCUS SESSIONS (Season ab Mitte August 2026)
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: Deep Work Leadership",
         "description": "90 Minuten geführte Deep-Work-Session. Gemeinsam fokussiert an deinen Leadership-Aufgaben arbeiten.",
         "outcomes": ["Fokussierte Arbeitszeit", "Accountability durch Gruppe", "Konkrete Ergebnisse in 90 min"],
-        "event_type": "focus_session", "date": "2026-07-02T09:00:00Z", "duration": "90 min", "duration_minutes": 90,
+        "event_type": "focus_session", "date": "2026-08-14T09:00:00Z", "duration": "90 min", "duration_minutes": 90,
         "max_participants": 30, "registered": 18, "host": "LeaderOS System",
         "tags": ["Deep Work", "Fokus", "Produktivität"], "access_level": "standard", "recurring": True,
         "category": "execution",
@@ -259,16 +262,16 @@ EVENTS_SEED_V2 = [
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: Wochenplanung & Reflexion",
         "description": "Strukturierte Session: Woche reflektieren, nächste Woche planen, Prioritäten setzen.",
         "outcomes": ["Woche reflektiert", "Prioritäten für nächste Woche gesetzt", "Klarheit über nächste Schritte"],
-        "event_type": "focus_session", "date": "2026-07-09T08:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "focus_session", "date": "2026-08-17T08:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 50, "registered": 24, "host": "LeaderOS System",
         "tags": ["Planung", "Reflexion", "Woche"], "access_level": "free", "recurring": True,
         "category": "execution",
     },
     {
-        "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: KI-Workflow Sprint",
+        "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Focus Session: KI-Workflows",
         "description": "60 Minuten: Gemeinsam KI-Workflows durcharbeiten und in den Führungsalltag integrieren.",
         "outcomes": ["1 neuen KI-Workflow implementiert", "Praxis-Erfahrung gesammelt", "Peer-Austausch"],
-        "event_type": "focus_session", "date": "2026-07-16T14:00:00Z", "duration": "60 min", "duration_minutes": 60,
+        "event_type": "focus_session", "date": "2026-08-19T14:00:00Z", "duration": "60 min", "duration_minutes": 60,
         "max_participants": 30, "registered": 12, "host": "LeaderOS System",
         "tags": ["KI", "Workflow", "Praxis"], "access_level": "standard", "recurring": True,
         "category": "execution",
@@ -276,122 +279,68 @@ EVENTS_SEED_V2 = [
 ]
 
 
-def _compute_weekly_thursday_dates(count: int = 8, hour_utc: int = 18) -> list:
-    """Return ISO date strings for `count` consecutive Thursdays at hour_utc,
-    starting from the first Thursday in July 2026 (or the next Thursday if we
-    are already past it). User-requested cohort schedule: weekly, every Thursday."""
-    cohort_start = datetime(2026, 7, 1, hour_utc, 0, 0, tzinfo=timezone.utc)
-    # advance to first Thursday on/after cohort_start (weekday(): Mon=0, Thu=3)
-    days_until_thu = (3 - cohort_start.weekday()) % 7
-    first_thu = cohort_start + timedelta(days=days_until_thu)
-
+def _biweekly_thursdays(count: int, start: Optional[datetime] = None) -> list:
+    """Return `count` datetimes on consecutive biweekly Thursdays (every 2 weeks),
+    starting on the first Thursday on/after October 1, 2026 (Wlad cohort season).
+    Rolls forward in 2-week steps so the sequence never starts in the past."""
+    start = start or datetime(2026, 10, 1, tzinfo=timezone.utc)
+    days_until_thu = (3 - start.weekday()) % 7  # weekday(): Mon=0, Thu=3
+    first_thu = start + timedelta(days=days_until_thu)
     now = datetime.now(timezone.utc)
-    # Roll forward past Thursdays so the list always starts in the future.
-    while first_thu < now:
-        first_thu += timedelta(weeks=1)
-
-    return [(first_thu + timedelta(weeks=i)).isoformat().replace("+00:00", "Z") for i in range(count)]
+    while first_thu.date() < now.date():
+        first_thu += timedelta(weeks=2)
+    return [first_thu + timedelta(weeks=2 * i) for i in range(count)]
 
 
-# Backward-compat alias (old code paths may still reference biweekly helper).
-_compute_biweekly_thursday_dates = _compute_weekly_thursday_dates
+def _preferred_hour_utc(event: dict) -> int:
+    """Time-of-day (UTC) per event type. LIVE calls 18:00 UTC (= 20:00 DE)."""
+    et = event.get("event_type")
+    if et in ("workshop", "coaching", "mastermind"):
+        return 14
+    if et == "focus_session":
+        return 10
+    return 18
+
+
+def _event_sort_key(event: dict):
+    """Stable ordering: recurring LIVE KI Calls first (by index), then others by id."""
+    if event.get("recurring") in ("weekly_thursday", "biweekly_thursday"):
+        try:
+            idx = int(str(event.get("event_id", "")).split("_")[-1])
+        except Exception:
+            idx = 0
+        return (0, idx, str(event.get("event_id", "")))
+    return (1, 0, str(event.get("event_id", "")))
+
+
+async def _normalize_event_schedule():
+    """Assign every non-replay event to a unique biweekly Thursday from Oct 2026.
+    Guarantees: (a) only dates >= October 2026, (b) 2-week spacing between events,
+    (c) no two events on the same calendar day. Deterministic & idempotent."""
+    events = await db.events.find(
+        {"event_type": {"$ne": "replay"}},
+        {"_id": 0, "event_id": 1, "event_type": 1, "recurring": 1},
+    ).to_list(500)
+    if not events:
+        return
+    events.sort(key=_event_sort_key)
+    thursdays = _biweekly_thursdays(len(events))
+    for evt, thu in zip(events, thursdays):
+        dt = thu.replace(hour=_preferred_hour_utc(evt), minute=0, second=0, microsecond=0)
+        await db.events.update_one(
+            {"event_id": evt["event_id"]},
+            {"$set": {"date": dt.isoformat().replace("+00:00", "Z"), "status": "upcoming"}},
+        )
 
 
 async def _seed_events_v2():
-    """Seed the database with V2 events if empty.
-    Re-seeds weekly LIVE KI Calls if they already exist (so dates roll forward over time).
-    """
+    """Seed events if the DB is empty, then normalize the schedule so all upcoming
+    events fall on unique biweekly Thursdays starting October 2026."""
     count = await db.events.count_documents({})
     if count == 0:
-        # Compute dates for the 8 recurring weekly LIVE KI Calls
-        thursday_dates = _compute_weekly_thursday_dates(8)
         for event in EVENTS_SEED_V2:
-            doc = {**event}
-            if doc.get("recurring") in ("weekly_thursday", "biweekly_thursday"):
-                # Index of this LIVE KI Call (uses the event_id suffix)
-                try:
-                    idx = int(doc["event_id"].split("_")[-1])
-                except Exception:
-                    idx = 0
-                doc["date"] = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-            await db.events.insert_one(doc)
-        return
-
-    # Roll-forward: keep weekly LIVE KI Calls fresh — re-stamp their dates if past
-    thursday_dates = _compute_weekly_thursday_dates(8)
-    weekly_count = await db.events.count_documents(
-        {"recurring": {"$in": ["weekly_thursday", "biweekly_thursday"]}}
-    )
-    if weekly_count == 0:
-        # First time these recurring events are introduced — insert all 8
-        for event in EVENTS_SEED_V2:
-            if event.get("recurring") not in ("weekly_thursday", "biweekly_thursday"):
-                continue
-            doc = {**event}
-            try:
-                idx = int(doc["event_id"].split("_")[-1])
-            except Exception:
-                idx = 0
-            doc["date"] = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-            await db.events.insert_one(doc)
-        return
-
-    # Migration: ensure all recurring events use the new weekly_thursday flag
-    await db.events.update_many(
-        {"recurring": "biweekly_thursday"},
-        {"$set": {"recurring": "weekly_thursday"}},
-    )
-
-    # Migration: bump pre-July-2026 upcoming events forward onto July+ Thursdays
-    # so the cohort schedule kicks in regardless of when DB was first seeded.
-    cohort_floor = datetime(2026, 7, 1, tzinfo=timezone.utc)
-    bump_dates_18 = _compute_weekly_thursday_dates(12, hour_utc=18)
-    bump_dates_14 = _compute_weekly_thursday_dates(12, hour_utc=14)
-    bump_dates_10 = _compute_weekly_thursday_dates(12, hour_utc=10)
-    bump_idx = 0
-    async for evt in db.events.find(
-        {"event_type": {"$nin": ["replay"]}, "recurring": {"$ne": "weekly_thursday"}},
-        {"_id": 0, "event_id": 1, "date": 1, "event_type": 1},
-    ):
-        try:
-            existing = datetime.fromisoformat(str(evt.get("date", "")).replace("Z", "+00:00"))
-        except Exception:
-            continue
-        if existing >= cohort_floor:
-            continue
-        # Pick a Thursday slot — workshops/coaching morning, live evening
-        if evt.get("event_type") in ("workshop", "coaching", "mastermind"):
-            new_date = bump_dates_14[bump_idx % len(bump_dates_14)]
-        elif evt.get("event_type") == "focus_session":
-            new_date = bump_dates_10[bump_idx % len(bump_dates_10)]
-        else:
-            new_date = bump_dates_18[bump_idx % len(bump_dates_18)]
-        bump_idx += 1
-        await db.events.update_one(
-            {"event_id": evt["event_id"]},
-            {"$set": {"date": new_date, "status": "upcoming"}},
-        )
-
-    async for evt in db.events.find(
-        {"recurring": "weekly_thursday"}, {"_id": 0, "event_id": 1, "date": 1}
-    ):
-        try:
-            existing = datetime.fromisoformat(str(evt.get("date", "")).replace("Z", "+00:00"))
-            # Cohort-floor migration: even if the existing date is in the future,
-            # bump it to the July 2026 cohort schedule.
-            if existing > datetime.now(timezone.utc) and existing >= cohort_floor:
-                continue
-        except Exception:
-            pass
-        try:
-            idx = int(evt["event_id"].split("_")[-1])
-        except Exception:
-            idx = 0
-        new_date = thursday_dates[idx] if idx < len(thursday_dates) else thursday_dates[0]
-        await db.events.update_one(
-            {"event_id": evt["event_id"]},
-            {"$set": {"date": new_date, "registered": 0, "status": "upcoming"}},
-        )
+            await db.events.insert_one({**event})
+    await _normalize_event_schedule()
 
 
 async def _attach_registration_status(events: list, request: Request) -> list:

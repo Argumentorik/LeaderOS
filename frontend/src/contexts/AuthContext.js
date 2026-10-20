@@ -39,15 +39,21 @@ export const AuthProvider = ({ children }) => {
       setSentryUser(res.data);
     } catch (err) {
       // Network error (backend unreachable, CORS blocked, offline) ≠ unauthorized.
-      // Don't clear cached user on network errors · let them keep browsing cached state.
+      // Don't clear cached user on network errors — let them keep browsing cached state.
+      const status = err?.response?.status;
       if (!err?.response) {
         logger.warn('Network error during auth check · assuming offline, keeping cached user');
         setNetworkError(true);
-      } else {
+      } else if (status === 401 || status === 403) {
         logger.info('Auth check: no valid session');
         sessionStorage.removeItem('wladbot_user');
         setUser(null);
         setNetworkError(false);
+      } else {
+        // Iter 178: 429 (Rate-Limit) oder 5xx sind KEIN Logout-Grund — sonst
+        // wirkt der Nutzer plötzlich abgemeldet, obwohl die Session gültig ist.
+        logger.warn(`Auth check failed with ${status} — keeping cached session`);
+        setNetworkError(true);
       }
     } finally {
       setLoading(false);

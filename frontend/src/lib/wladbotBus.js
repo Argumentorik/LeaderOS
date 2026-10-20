@@ -1,10 +1,10 @@
 /**
- * wladbotBus · tiny event bus for inter-component WladBot drawer triggers.
+ * wladbotBus — tiny event bus for inter-component WladBot drawer triggers.
  *
  * Why: the FolderRail (in the Video Studio Sidebar) needs to open the
  * globally-mounted FloatingWladBotDrawer with a specific folder + prefilled
  * briefing message. Both components are far apart in the tree, so a tiny
- * window-level event keeps them decoupled · no Context provider needed.
+ * window-level event keeps them decoupled — no Context provider needed.
  *
  * Events:
  *   - 'wladbot:open'    detail: { folderId?, briefingMessage? }
@@ -19,7 +19,7 @@ const EV_OPEN = 'wladbot:open';
 const EV_CLOSE = 'wladbot:close';
 const EV_PAGE_CONTEXT = 'wladbot:pagecontext';
 
-// Last-known page context · late subscribers (e.g. the drawer mounted after
+// Last-known page context — late subscribers (e.g. the drawer mounted after
 // the page rendered) can read this synchronously instead of waiting for the
 // next event.
 let _lastPageContext = null;

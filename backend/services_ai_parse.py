@@ -9,6 +9,8 @@ This helper handles:
   2. ```json ... ``` fenced code blocks
   3. ``` ... ``` (unlabelled) fenced code blocks
   4. Prose-prefixed JSON: "Hier kommt: {...}"  → extracts outer-most {...}
+  5. Iter 184: doppelt verpackte Antworten ("{\"insight\": \"…\\n…\"}") —
+     sonst landen `\n` / `\u201e` als Rohzeichen im Kundentext.
 
 Returns the parsed dict on success, or None if no valid JSON found.
 """
@@ -18,8 +20,16 @@ import json
 import re
 from typing import Any
 
+from services_text_clean import deep_unescape, unescape_text, unwrap_json_string
 
 _FENCE_PATTERN = re.compile(r"```(?:json|JSON)?\s*(\{.*?\})\s*```", re.DOTALL)
+
+
+def _brace_block(text: str) -> str | None:
+    first, last = text.find("{"), text.rfind("}")
+    if first != -1 and last > first:
+        return text[first:last + 1]
+    return None
 
 
 def parse_ai_json(text: str) -> dict[str, Any] | None:
@@ -32,24 +42,32 @@ def parse_ai_json(text: str) -> dict[str, Any] | None:
     if not text or not isinstance(text, str):
         return None
 
-    candidates: list[str] = [text]
+    # Doppelt verpackten JSON-String zuerst auspacken.
+    unwrapped = unwrap_json_string(text)
+    variants = [text]
+    if unwrapped != text:
+        variants.append(unwrapped)
+    # Fallback: Antwort war kein gültiger JSON-String, trägt aber Escapes
+    # (z. B. `{\"insight\": …}`) — einmal entschärfen und erneut versuchen.
+    escaped_free = unescape_text(text)
+    if escaped_free != text:
+        variants.append(escaped_free)
 
-    # Strip markdown fences
-    fence_match = _FENCE_PATTERN.search(text)
-    if fence_match:
-        candidates.append(fence_match.group(1))
-
-    # Outer-most {...} block
-    first_brace = text.find("{")
-    last_brace = text.rfind("}")
-    if first_brace != -1 and last_brace > first_brace:
-        candidates.append(text[first_brace:last_brace + 1])
+    candidates: list[str] = []
+    for variant in variants:
+        candidates.append(variant)
+        fence_match = _FENCE_PATTERN.search(variant)
+        if fence_match:
+            candidates.append(fence_match.group(1))
+        block = _brace_block(variant)
+        if block:
+            candidates.append(block)
 
     for c in candidates:
         try:
             parsed = json.loads(c)
-            if isinstance(parsed, dict):
-                return parsed
         except (json.JSONDecodeError, ValueError):
             continue
+        if isinstance(parsed, dict):
+            return deep_unescape(parsed)
     return None

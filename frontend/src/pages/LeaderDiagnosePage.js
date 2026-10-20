@@ -1,9 +1,9 @@
 /**
  * Leader-Diagnose Detail Page
  *
- * Premium in-app view of the user's leader-check.de diagnosis.
+ * Premium in-app view of the user's leadercheck.de diagnosis.
  * Replaces the previous behaviour where "Detailanalyse ansehen" opened
- * leader-check.de in a new tab · now everything stays inside the app.
+ * leadercheck.de in a new tab — now everything stays inside the app.
  *
  * Data source: GET /api/wladhub/diagnosis  →  returns the full diagnosis doc
  * including overall score, 3-layer breakdown, leader-typ, strengths,
@@ -22,6 +22,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { shareToLinkedIn, shareToX, shareNative } from '../lib/share';
 import { toast } from 'sonner';
+import { LEADERCHECK_URL } from '../lib/domains';
+import { LeaderCheckStart } from '../components/diagnose/LeaderCheckStart';
 
 const LAYER_META = {
   ki_kompetenz: {
@@ -178,16 +180,37 @@ export default function LeaderDiagnosePage() {
     try {
       const res = await api.post('/wladhub/sync', {});
       if (res.data.status === 'synced') {
-        toast.success(de ? 'Neue Daten aus leader-check.de synchronisiert.' : 'Synced new data from leader-check.de.');
+        toast.success(de
+          ? `✓ ${res.data.records_imported || ''} neue Diagnose-Daten aus leadercheck.de importiert.`.trim()
+          : `✓ Synced ${res.data.records_imported || ''} new records from leadercheck.de.`.trim());
         await load();
       } else if (res.data.status === 'no_data') {
-        toast.info(de ? 'Noch keine Diagnose auf leader-check.de gefunden.' : 'No diagnosis found yet on leader-check.de.');
+        // Iter 121: don't just silently redirect — clarify why sync returned
+        // no data and offer the diagnosis link INSIDE the toast action.
+        toast.info(
+          de
+            ? 'Für deine E-Mail wurde noch keine Diagnose auf leadercheck.de gefunden. Starte den kostenlosen Test dort — die Daten fließen automatisch zurück.'
+            : 'No diagnosis for your email on leadercheck.de yet. Take the free assessment there — data flows back automatically.',
+          {
+            duration: 8000,
+            action: {
+              label: de ? 'Diagnose starten' : 'Take assessment',
+              onClick: () => window.open(LEADERCHECK_URL, '_blank', 'noopener,noreferrer'),
+            },
+          },
+        );
+      } else if (res.data.status === 'local_data') {
+        toast.info(de
+          ? 'Deine lokale Diagnose ist aktuell — keine neuen Daten auf leadercheck.de.'
+          : 'Your local diagnosis is up-to-date — no new data on leadercheck.de.');
       } else {
         toast.info(de ? 'Daten sind aktuell.' : 'Data is up to date.');
       }
     } catch (err) {
       logger.error('Sync failed', err);
-      toast.error(de ? 'Synchronisation fehlgeschlagen.' : 'Sync failed.');
+      toast.error(de
+        ? 'Synchronisation fehlgeschlagen. Bitte prüfe deine Verbindung und versuche es nochmal.'
+        : 'Sync failed. Check your connection and retry.');
     } finally {
       setSyncing(false);
     }
@@ -204,7 +227,7 @@ export default function LeaderDiagnosePage() {
     if (platform === 'linkedin') shareToLinkedIn(params);
     else if (platform === 'x') shareToX(params);
     else await shareNative(params);
-    try { await api.post('/share', { platform, content_type: 'leader_diagnose' }); } catch {/* analytics best-effort */}
+    try { await api.post('/share', { platform, content_type: 'leader_diagnose' }); } catch (shareErr) { logger.warn('Share analytics failed (best-effort)', shareErr); }
   };
 
   if (loading) {
@@ -218,6 +241,25 @@ export default function LeaderDiagnosePage() {
   }
 
   const overall = data?.overall_score || 0;
+  if (!data?.has_diagnosis) {
+    return (
+      <DashboardLayout>
+        <div className="min-h-screen bg-[#0A0A0A]" data-testid="leader-diagnose-page">
+          <div className="mx-auto max-w-4xl px-6 pt-8 pb-16 lg:px-12">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="mb-8 flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-white/80"
+              data-testid="back-to-dashboard-btn"
+            >
+              <ArrowLeft size={16} /> Dashboard
+            </button>
+            <LeaderCheckStart de={de} email={user?.email || ''} onFound={load} />
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const ki = data?.ki_kompetenz || 0;
   const rhet = data?.boardroom_rhetorik || 0;
   const eq = data?.strategisches_eq || 0;
@@ -278,7 +320,7 @@ export default function LeaderDiagnosePage() {
                 data-testid="sync-diagnose-btn"
               >
                 <RefreshCw size={14} className={`mr-2 ${syncing ? 'animate-spin' : ''}`} />
-                {syncing ? (de ? 'Sync...' : 'Syncing...') : (de ? 'Mit leader-check.de syncen' : 'Sync with leader-check.de')}
+                {syncing ? (de ? 'Sync...' : 'Syncing...') : (de ? 'Mit leadercheck.de syncen' : 'Sync with leadercheck.de')}
               </Button>
               <Button
                 onClick={() => handleShare('linkedin')}

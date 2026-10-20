@@ -95,7 +95,7 @@ export default function EventsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-10 max-w-6xl mx-auto min-h-screen" data-testid="events-page">
+      <div className="p-6 lg:p-10 xl:px-14 w-full min-h-screen" data-testid="events-page">
         {/* Event Detail Modal */}
         {selectedEvent && (
           <EventDetailModal
@@ -164,7 +164,7 @@ export default function EventsPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-full text-sm font-semibold transition-all ${
                 activeTab === tab.id
                   ? 'bg-white dark:bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -184,7 +184,7 @@ export default function EventsPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
             {[1,2,3,4,5,6].map(i => (
               <div key={`sk-${i}`} className="h-52 rounded-2xl skeleton-pulse" />
             ))}
@@ -225,7 +225,7 @@ export default function EventsPage() {
                     ))}
                   </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
                   {(activeTab === 'live' ? regular : events.filter(e => !e.featured)).map(event => (
                     <EventCard key={event.event_id} event={event} de={de} onClick={() => setSelectedEvent(event)} />
                   ))}
@@ -249,15 +249,15 @@ export default function EventsPage() {
           <div className="mt-10 animate-fade-in">
             <Card className="bg-gradient-to-r from-[#0A0A0A] to-[#1A1A2E] text-white border-0 overflow-hidden">
               <CardContent className="p-8 flex items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-[#7B3FE4]/20 flex items-center justify-center shrink-0">
-                  <Lock size={24} className="text-[#A78BFA]" />
+                <div className="w-14 h-14 rounded-2xl bg-[#BFFF00]/12 border border-[#BFFF00]/25 flex items-center justify-center shrink-0">
+                  <Lock size={22} strokeWidth={2.4} className="text-[#BFFF00]" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold mb-1">{de ? 'Accelerator Zugang freischalten' : 'Unlock Accelerator Access'}</h3>
                   <p className="text-sm text-white/50">
                     {de
-                      ? 'Mastermind Calls, 1:1 Coaching mit Wlads Team, exklusive Workshops · nur für Accelerator-Mitglieder.'
-                      : 'Mastermind calls, 1:1 coaching with Wlad\'s team, exclusive workshops · Accelerator members only.'}
+                      ? 'Mastermind Calls, 1:1 Coaching mit Wlads Expertenteam, exklusive Workshops · nur für Accelerator-Mitglieder.'
+                      : 'Mastermind calls, 1:1 coaching with Wlad\'s expert team, exclusive workshops · Accelerator members only.'}
                   </p>
                 </div>
                 <Button onClick={() => navigate('/coaching')} className="bg-[#BFFF00] text-black hover:bg-[#D4FF4D] font-bold px-6 h-11 shrink-0" data-testid="upgrade-accelerator-btn">
@@ -349,7 +349,7 @@ function EventCard({ event, de, onClick }) {
               {event.outcomes.slice(0, 2).map((o, i) => (
                 <div key={`out-${i}`} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <CheckCircle2 size={10} className="text-emerald-500 shrink-0" />
-                  <span className="truncate">{o}</span>
+                  <span className="line-clamp-2 sm:truncate">{o}</span>
                 </div>
               ))}
             </div>

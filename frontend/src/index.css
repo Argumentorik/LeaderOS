@@ -38,6 +38,13 @@
     --chart-5: 200 80% 50%;
     --radius: 0.75rem;
 
+    /* Navigation tokens (Iter 139) — WCAG-AA Kontrast in BEIDEN Modes.
+       Vorher: text-gray-400 (2.6:1) bzw. muted-foreground/60 (2.4:1). */
+    --nav-fg: 0 0% 34%;          /* inaktiver Menüpunkt */
+    --nav-fg-hover: 0 0% 8%;
+    --nav-fg-muted: 0 0% 42%;    /* gesperrter Menüpunkt */
+    --nav-label: 0 0% 38%;       /* Sektions-Label */
+
     /* Brand tokens — light mode uses darker lime for WCAG contrast on white */
     --brand: 72 100% 27%;        /* #6B8A00 — WCAG AA on light bg */
     --brand-hex: #6B8A00;
@@ -72,6 +79,11 @@
     --chart-3: 24 90% 55%;
     --chart-4: 340 75% 60%;
     --chart-5: 200 80% 55%;
+    /* Navigation tokens (Iter 139) — auf #101010 Sidebar-Grund gemessen */
+    --nav-fg: 0 0% 76%;
+    --nav-fg-hover: 0 0% 98%;
+    --nav-fg-muted: 0 0% 66%;
+    --nav-label: 0 0% 68%;
     /* Dark mode: full neon lime */
     --brand: 72 100% 50%;
     --brand-hex: #BFFF00;
@@ -93,6 +105,14 @@
   }
   code, pre { font-family: 'JetBrains Mono', monospace; }
 }
+
+/* ── Navigation (Iter 139): Kontrast über Theme-Tokens, keine Einzel-Overrides ── */
+.nav-row { color: hsl(var(--nav-fg)); }
+.nav-row:hover, .nav-row:focus-visible { color: hsl(var(--nav-fg-hover)); }
+.nav-row-locked { color: hsl(var(--nav-fg-muted)); }
+.nav-row-locked:hover, .nav-row-locked:focus-visible { color: hsl(var(--nav-fg-hover)); }
+.nav-label { color: hsl(var(--nav-label)); }
+.nav-label-active { color: hsl(var(--nav-fg-hover)); }
 
 @layer base {
   [data-debug-wrapper="true"] { display: contents !important; }
@@ -208,6 +228,7 @@
 }
 
 .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+.wlad-breathe { animation: breathe 4.5s ease-in-out infinite; }
 .animate-fade-in { animation: fadeIn 0.5s ease-out both; }
 .animate-slide-up { animation: slideUp 0.6s ease-out both; }
 .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
@@ -221,6 +242,21 @@
 .typing-dot { animation: typingDot 1.4s infinite both; }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Iter 96: Claude-style thinking status — soft text shimmer sweep */
+.wlad-thinking-shimmer {
+  background: linear-gradient(90deg, currentColor 0%, currentColor 45%, rgba(191, 255, 0, 0.95) 50%, currentColor 55%, currentColor 100%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wladThinkingSweep 2.2s linear infinite;
+}
+@keyframes wladThinkingSweep {
+  0% { background-position: 100% 0; }
+  100% { background-position: -200% 0; }
+}
 
 /* Accessibility + battery: respect user preference, freeze everything decorative. */
 @media (prefers-reduced-motion: reduce) {
@@ -900,3 +936,55 @@ html {
 /* /frameworks · Kollektiva-Mechanik: Remount-Fade für Beschreibung und Name
    (4 px Aufwärts-Settle, 500 ms). Eigener Name, weil `fadeIn` oben 8 px nutzt. */
 @keyframes kFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Iter 92.50 — WladBot "Live" presence (breathing + rotating aura ring) */
+@keyframes wladBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+@keyframes wladRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wladCaretBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wlad-breath, .wlad-ring-spin { animation: none !important; }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Iter 189 · Handy-Lesbarkeit (Zielgruppe Mitte 50)
+   Am Rechner bleiben die feinen Abstufungen; auf dem Handy hebt eine
+   Untergrenze jede Schriftgröße auf eine Größe, die man ohne Zoom liest.
+   Die Regeln greifen über die bereits vergebenen Tailwind-Klassen, damit
+   keine Seite einzeln angefasst werden muss.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Kleinstschrift (Etiketten, Augenbrauen-Zeilen) */
+  .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\] { font-size: 11.5px !important; }
+  /* Hilfstexte */
+  .text-\[11px\], .text-\[11\.5px\], .text-xs { font-size: 13px !important; line-height: 1.5 !important; }
+  /* Fließtext und Knopfbeschriftungen */
+  .text-\[12px\], .text-\[12\.5px\] { font-size: 14px !important; line-height: 1.55 !important; }
+  .text-\[13px\], .text-\[13\.5px\], .text-sm { font-size: 14.5px !important; line-height: 1.6 !important; }
+  .text-\[14px\] { font-size: 15px !important; }
+
+  /* Winzige Etiketten („Powered by …") bleiben klein, aber lesbar */
+  .text-\[7px\], .text-\[7\.5px\], .text-\[8px\], .text-\[8\.5px\] { font-size: 10.5px !important; }
+
+  /* Tippflächen: nichts Wichtiges unter 44 px Höhe (Daumenbreite) */
+  button, a[href], [role="button"], summary { touch-action: manipulation; }
+  .tap-target { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* Knöpfe und Reiter: die feinen Rechner-Höhen sind am Handy zu flach.
+     Nur <button>/<a> mit genau diesen Höhenklassen — Eingabefelder und
+     Bilder bleiben unberührt. */
+  button.h-8, button.h-9, button.h-10, a.h-8, a.h-9, a.h-10 {
+    min-height: 44px !important;
+    height: auto !important;
+  }
+  button.h-9.w-9, button.w-9.h-9, button.h-8.w-8, button.w-8.h-8 { min-width: 44px !important; }
+  [role="tab"] { min-height: 44px !important; }
+}

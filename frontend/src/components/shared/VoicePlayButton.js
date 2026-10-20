@@ -4,6 +4,8 @@ import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { getTtsSpeed } from '../../lib/ttsSpeed';
 import { VoiceWaveVisualizer } from './VoiceWaveVisualizer';
+import { registerAudio } from '../../lib/audioBus';
+import { toast } from 'sonner';
 
 /**
  * VoicePlayButton · triggers ElevenLabs TTS synthesis + inline <audio> playback.
@@ -68,10 +70,25 @@ export default function VoicePlayButton({
     if (onStart) onStart();
     try {
       const res = await api.post('/voice/tts', { text: text.slice(0, 800), persona });
+      if (!res.data.audio_url) {
+        // Iter 135: never fail silently — the user pressed play and deserves a reason.
+        toast.error('Sprachausgabe ist gerade nicht verfügbar. Der Text steht dir weiterhin zur Verfügung.');
+        setLoading(false);
+        if (onEnd) onEnd();
+        return;
+      }
       const audio = new Audio(res.data.audio_url);
       audio.playbackRate = getTtsSpeed();
       audio.preservesPitch = false; // browsers default to true; false = "cooler" pitched-up feel
+      // Iter 92.23: keep TTS audio at native pitch — playbackRate-induced
+      // pitch shifts made Wlad sound chipmunk-y. We still respect the user's
+      // preferred speed (1.25× default) but no longer disable pitch
+      // preservation — modern browsers handle pitch-corrected time-stretching
+      // gracefully, and that's what Mert means by "standard AI sound".
+      audio.preservesPitch = true;
       audioRef.current = audio;
+      // Iter 121: sign in with the global audio bus so route-changes stop us.
+      const unregister = registerAudio(audio);
       setAudioVersion(v => v + 1);  // Trigger re-render so visualizer picks up new audio
       // Live-update playbackRate if user changes the global speed mid-playback.
       const onSpeedChange = (e) => {
@@ -80,13 +97,24 @@ export default function VoicePlayButton({
           audioRef.current.preservesPitch = false;
         }
       };
+      const onGlobalStop = () => {
+        try { audio.pause(); } catch { /* already gone */ }
+        audioRef.current = null;
+        setPlaying(false);
+        setLoading(false);
+      };
       window.addEventListener('wladbot:tts-speed', onSpeedChange);
+      window.addEventListener('leaderos:audio-stop-all', onGlobalStop, { once: true });
       audio.onended = () => {
         window.removeEventListener('wladbot:tts-speed', onSpeedChange);
+        window.removeEventListener('leaderos:audio-stop-all', onGlobalStop);
+        unregister();
         setPlaying(false); if (onEnd) onEnd();
       };
       audio.onerror = () => {
         window.removeEventListener('wladbot:tts-speed', onSpeedChange);
+        window.removeEventListener('leaderos:audio-stop-all', onGlobalStop);
+        unregister();
         setPlaying(false); setLoading(false);
       };
       audio.onplay = () => { setLoading(false); setPlaying(true); };

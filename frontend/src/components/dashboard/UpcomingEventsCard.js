@@ -11,6 +11,7 @@ import { Calendar, CalendarPlus, ChevronRight, Sparkles, Clock } from 'lucide-re
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import api from '../../lib/api';
+import { takeSlice } from '../../lib/dashboardBootstrap';
 import logger from '../../lib/logger';
 
 const OUTFIT = { fontFamily: 'Outfit, Inter, sans-serif' };
@@ -48,7 +49,8 @@ export const UpcomingEventsCard = ({ locale = 'de' }) => {
 
   useEffect(() => {
     let cancelled = false;
-    api.get('/events?tab=live')
+    const pre = takeSlice('events_live');
+    (pre ? Promise.resolve({ data: pre }) : api.get('/events?tab=live'))
       .then((r) => {
         if (cancelled) return;
         const list = Array.isArray(r.data) ? r.data : (r.data?.events || []);

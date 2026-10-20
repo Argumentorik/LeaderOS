@@ -1,5 +1,6 @@
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from typing import Optional
+import re
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -18,13 +19,73 @@ def _normalize_email(v: str) -> str:
         )
     except EmailNotValidError as e:
         raise ValueError(str(e))
-    return result.normalized
+    # Iter 141: email_validator kleinschreibt nur die Domain. Die Routen (auth.py)
+    # arbeiten durchgängig mit .lower() — hier gleich konsistent normalisieren.
+    return result.normalized.lower()
+
+
+# Iter 92.24 (Mert): phone-OR-email login. Helpers to normalize/detect identifier.
+def normalize_phone(v: str | None) -> str | None:
+    """Strip whitespace, dashes, parens, dots, slashes. Preserve leading '+'.
+    Returns canonical E.164-ish string ('+491701234567') or None when input
+    is empty/None. Does NOT validate country code — that's loose by design so
+    legacy German users can enter '0170…' or '+49170…'.
+    """
+    if v is None:
+        return None
+    v = str(v).strip()
+    if not v:
+        return None
+    has_plus = v.startswith("+")
+    digits = re.sub(r"[^\d]", "", v)
+    if not digits:
+        return None
+    return ("+" + digits) if has_plus else digits
+
+
+def phone_candidates(v: str | None) -> list[str]:
+    """All equivalent lookup keys for a phone input, so '0170…', '+49170…'
+    and '0049170…' all find the same account (German-default assumption)."""
+    n = normalize_phone(v)
+    if not n:
+        return []
+    cands = {n}
+    if n.startswith("+49"):
+        cands.add("0" + n[3:])
+    elif n.startswith("0049"):
+        cands.add("+49" + n[4:])
+        cands.add("0" + n[4:])
+    elif n.startswith("0") and not n.startswith("00"):
+        cands.add("+49" + n[1:])
+    return list(cands)
+
+
+def looks_like_phone(v: str) -> bool:
+    """True when the identifier looks like a phone number (starts with '+',
+    or is mostly digits with no '@'). Used to route login lookup."""
+    if not v:
+        return False
+    if "@" in v:
+        return False
+    if v.startswith("+"):
+        return True
+    digits = re.sub(r"[^\d]", "", v)
+    # Mostly digits + at least 5 of them = phone candidate
+    return len(digits) >= 5 and (len(digits) / max(len(v), 1)) >= 0.6
 
 
 class UserRegister(BaseModel):
     email: str
     password: str
     name: str
+    # Iter 92.34 (Mert Go-Live Checklist §10): phone now REQUIRED at signup.
+    # Used for Cal.com coaching confirmations + as a secondary login identifier
+    # (Iter 92.24 phone-OR-email login). Required = friction trade-off accepted
+    # for higher data quality + Cal.com pipeline reliability.
+    phone: str
+    # Iter 120: ad/campaign attribution (utm_*, gclid, referrer …) captured
+    # client-side at first visit and attached at signup. Optional, sanitized.
+    attribution: dict | None = None
 
     @field_validator("email")
     @classmethod
@@ -35,7 +96,9 @@ class UserRegister(BaseModel):
     @classmethod
     def _validate_password(cls, v: str) -> str:
         if not v or len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+            raise ValueError("Passwort muss mindestens 8 Zeichen lang sein.")
+        if v.isdigit() or v.isalpha():
+            raise ValueError("Passwort muss Buchstaben und Zahlen enthalten.")
         if len(v) > 128:
             raise ValueError("Password too long")
         return v
@@ -50,17 +113,64 @@ class UserRegister(BaseModel):
             raise ValueError("Name too long")
         return v
 
+    @field_validator("phone")
+    @classmethod
+    def _validate_phone(cls, v: str) -> str:
+        # Iter 92.34: phone is now MANDATORY — empty/null no longer allowed.
+        if v is None:
+            raise ValueError("Telefonnummer ist erforderlich")
+        v = str(v).strip()
+        if not v:
+            raise ValueError("Telefonnummer ist erforderlich")
+        if len(v) < 5 or len(v) > 32:
+            raise ValueError("Telefonnummer muss zwischen 5 und 32 Zeichen lang sein")
+        import re
+        if not re.match(r"^[+()\d\s\-./]+$", v):
+            raise ValueError("Telefonnummer enthält ungültige Zeichen")
+        return v
+
+
+# Iter 120: whitelist-sanitize attribution payloads (never trust the client)
+_ATTRIBUTION_KEYS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "gclid", "fbclid", "ttclid", "msclkid", "li_fat_id", "via", "ref",
+    "at", "landing", "referrer",
+}
+
+
+def clean_attribution(raw) -> dict | None:
+    if not isinstance(raw, dict):
+        return None
+    out: dict = {}
+    for touch in ("first_touch", "last_touch"):
+        t = raw.get(touch)
+        if isinstance(t, dict):
+            c = {k: str(v)[:300] for k, v in t.items()
+                 if k in _ATTRIBUTION_KEYS and isinstance(v, (str, int, float))}
+            if c:
+                out[touch] = c
+    return out or None
+
 
 class UserLogin(BaseModel):
-    email: str
+    # Iter 92.24 (Mert): accept EITHER email OR phone as login identifier.
+    # `identifier` is the canonical field; `email` kept for backwards-compat
+    # (old frontend builds still POST {email, password}). At least one must be set.
+    identifier: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
     password: str
 
-    @field_validator("email")
-    @classmethod
-    def _v_email(cls, v: str) -> str:
-        # Login: lenient — just lowercase+strip, no strict format check,
-        # so legacy accounts with unusual formats aren't locked out.
-        return (v or "").strip().lower()
+    @model_validator(mode="after")
+    def _ensure_identifier(self):
+        # Coalesce email/phone into identifier so handlers only read one field.
+        # Priority: explicit `identifier` > `phone` > `email`.
+        if not self.identifier:
+            self.identifier = self.phone or self.email or ""
+        self.identifier = (self.identifier or "").strip()
+        if not self.identifier:
+            raise ValueError("E-Mail oder Telefonnummer ist erforderlich")
+        return self
 
 
 class UserOut(BaseModel):
@@ -81,19 +191,23 @@ class ChatMessageIn(BaseModel):
     message: str
     session_id: Optional[str] = None
     agent: Optional[str] = None
-    # Iter 92.23.8: when a chat is started from inside a folder, the frontend
-    # forwards the folder_id so the backend can prepend the folder's
-    # context_summary + item timeline to the system prompt ("agent next to you").
+    # Iter 96 (Mert): 'chat' (default, natural ChatGPT/Grok-style conversation)
+    # or 'coach' (structured insight/strategy/steps output).
+    mode: Optional[str] = None
+    # Iter 92.23.8 (Mert): when a chat is started from inside a folder, the
+    # frontend forwards the folder_id so the backend can prepend the folder's
+    # context_summary to the system prompt — "agent always next to you".
     folder_id: Optional[str] = None
-    # Language hint from the frontend (e.g. LanguageContext). Used by the
-    # prompt-router service to pick the DE vs EN base prompt. Defaults to
-    # German if missing — Wlad's audience is DE-first.
-    lang: Optional[str] = None
-    # Brand selector for the prompt router. Default "wlad". Enables the
-    # same engine to host other personal-brand bots later by switching
-    # this value (and dropping a matching folder under
-    # backend/data/prompts/<brand>/).
-    brand: Optional[str] = "wlad"
+    # Iter 92.42 (Mert · Vibe-Security): client-declared input modality so the
+    # backend can stamp every chat response with what the user actually used.
+    # 'text' (default), 'speech' (audio transcribed via Whisper), 'video'
+    # (clip transcribed + SEXIER-analysed). Server still re-validates.
+    modality: Optional[str] = "text"
+    # Iter 137: der LLM-Prompt (message) enthält Dokument-Dump + [Kontext:…].
+    # display_text/attachment sind die für den User sichtbaren Werte, damit die
+    # Historie nach einem Reload lesbar bleibt (statt des Roh-Prompts).
+    display_text: Optional[str] = None
+    attachment: Optional[dict] = None
 
 
 class ChatSessionCreate(BaseModel):
@@ -118,10 +232,38 @@ class TaskUpdate(BaseModel):
 class SimulationStart(BaseModel):
     scenario: str
     difficulty: Optional[str] = "medium"
+    counterpart_style: Optional[str] = None
+    training_goal: Optional[str] = None
 
 
 class SimulationMessage(BaseModel):
     message: str
+
+
+# Iter 121.6 (Wlad-Feedback): guided argumentation-preparation replaces the
+# retired "Remote Team motivieren" scenario. Every field is optional so the
+# user can iterate — the AI coach fills gaps and produces a SEXIER strategy.
+class ArgumentationPrep(BaseModel):
+    # Context of the conversation
+    background: Optional[str] = None       # Was ist passiert / worum geht es?
+    goal: Optional[str] = None             # Was willst du erreichen?
+    relationship: Optional[str] = None     # Wer ist der Gegenüber, wie ist die Beziehung?
+    # My key arguments
+    main_points: Optional[str] = None      # Deine Kernargumente
+    evidence: Optional[str] = None         # Belege / Daten / Beispiele
+    prioritised: Optional[str] = None      # Reihenfolge / Prioritäten
+    # Likely arguments from the other side
+    expected_objections: Optional[str] = None
+    counterarguments: Optional[str] = None
+    hidden_interests: Optional[str] = None
+    # Coaching request
+    coaching_focus: Optional[str] = None   # e.g. "framing", "weaknesses", "rebuttals"
+
+
+class ArgumentationTemplateIn(BaseModel):
+    label: str
+    hint: Optional[str] = ""
+    data: ArgumentationPrep
 
 
 class PlaybookStart(BaseModel):

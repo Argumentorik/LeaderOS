@@ -8,6 +8,7 @@ import {
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
+import { NewDeviceAlert } from './NewDeviceAlert';
 
 const fmtDate = (iso) => {
   if (!iso) return '–';
@@ -104,6 +105,7 @@ export const ProfileSecurityTab = ({ de = true }) => {
 
   return (
     <div className="space-y-4" data-testid="security-tab">
+      <NewDeviceAlert devices={data?.new_devices || []} de={de} onDone={load} />
       {/* ─── Status Summary Card ─── */}
       <Card className="border-black/[0.04] dark:border-white/[0.06] bg-gradient-to-br from-[#BFFF00]/[0.04] to-transparent">
         <CardContent className="p-5">

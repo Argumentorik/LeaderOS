@@ -10,6 +10,7 @@ from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user
 from services_actions import record_user_action
 from data import TOOL_PROMPTS
+from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["tools"])
 
@@ -85,12 +86,12 @@ async def deep_assist(request: Request):
     """3-Step Workflow Assistant: Argumentation · Inhaltliche Tipps · Aktionsplan.
     Body: { situation: str, goal: str, tool_id?: str (optional) }
     Returns: { argumentation: str, tips: [str,...], action_plan: [{step,action,deadline}] }"""
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "workflow")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("workflow", credit_result))
 
     body = await request.json()
     situation = (body.get("situation") or "").strip()
@@ -112,18 +113,18 @@ async def deep_assist(request: Request):
         return parsed
     except Exception as e:
         logger.error(f"Deep assist error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "tools")
 
 
 @router.post("/tools/{tool_id}")
 async def use_tool(tool_id: str, request: Request):
-    from routes.credits import check_and_deduct_credit
+    from routes.credits import check_and_deduct_credit, no_credits_detail
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)
 
     credit_result = await check_and_deduct_credit(user, "workflow")
     if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail="no_credits")
+        raise HTTPException(status_code=402, detail=no_credits_detail("workflow", credit_result))
 
     body = await request.json()
     user_input = body.get("input", "")
@@ -164,5 +165,5 @@ async def use_tool(tool_id: str, request: Request):
         return {"result": parsed, "tool": tool["title"]}
     except Exception as e:
         logger.error(f"Tool error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise await ai_http_error(e, "tools")
 

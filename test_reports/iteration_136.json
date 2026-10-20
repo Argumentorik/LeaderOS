@@ -1,0 +1,40 @@
+{
+  "summary": "Frontend-only QA of Iter-136 fixes (Über mich, License re-login, Wlad panel colours/premium gating, premium copy, console sweep). Über mich end-to-end works and DEMONSTRABLY reaches the AI. License-key re-login works in the UI (redeemed key + same email + correct password → logged back in), wrong password gives a clean German error, invalid key gives a clean German error, form usable at 390x844. Premium copy is clean for standard@wladbot.test (no '500 Credits', no '16 Video-Missionen', no '12 Videokurse'), free user still gets the upsell. MAIN FINDING: BotMascot / BotMascotPanel / BotMascotRinging are NOT mounted anywhere in the app (dead code) — the Iter-136 isPremium pricing gating and the lime 'wlad-action-book' button live in a component the user never sees. The live floating widget is FakeWladCall (data-testid=fake-wlad-call).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/license/activate", "issue": "Raw Pydantic/email-validator message leaks to the UI in English when the email TLD is rejected: 'email: value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.' Should be a translated German error."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "BotMascot / BotMascotPanel / BotMascotRinging", "issue": "DEAD CODE — grep over frontend/src shows no import/usage outside their own files, so data-testid=bot-mascot-panel / bot-mascot-accept never render. The Iter-136 premium gating (!isPremium pricing block) and lime 'Strategiegespräch buchen' button therefore have zero user-facing effect. Either mount the component or move/verify the fix in the live widget (components/calls/FakeWladCall.js, rendered from App.js:207).", "selector": "[data-testid=\"bot-mascot-panel\"]", "priority": "HIGH"},
+      {"component": "BotMascot.js:20", "issue": "isPremium = ['standard','accelerator','enterprise'].includes(user.tier) omits tier 'plus' (test@test.com actually has tier='plus'). FakeWladCall's PRO_TIERS does include 'plus'. Inconsistent tier lists; prefer the backend flag (user.premium / credits is_premium) used everywhere else.", "selector": "n/a", "priority": "MEDIUM"},
+      {"component": "ProfilePage header badge", "issue": "test@test.com (tier 'plus', premium=false) shows 'PLUS MEMBER' in the profile hero while the sidebar footer badge shows 'FREE' — contradictory tier labelling for the same user.", "selector": "profile hero badge", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Login / Lizenz-Key tab (390x844)", "issues": ["Layout, key auto-formatting (1111-1111-1111-1111), error box and the lime submit button ('Key einlösen & starten', 350x48) are all fine on mobile — no issues found; note the CTA is a lime button with a ticket icon, not a green arrow."]}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_136.json"],
+  "action_items": [
+    "Mount BotMascot (or port the premium gating + lime book-button to the live FakeWladCall / WladHelp flow) — the Iter-136 fix for issues #3/#4 currently sits in unmounted dead code.",
+    "Align premium/tier detection: include 'plus' or switch BotMascot to the backend premium flag.",
+    "Fix the contradicting tier badges on /profile (PLUS MEMBER) vs sidebar (FREE).",
+    "Translate/normalise the license-activate email-validation error (currently raw English pydantic text)."
+  ],
+  "critical_code_review_comments": [
+    "components/shared/BotMascot*.js is unreferenced — dead code that produces false confidence in fixes; delete it or wire it into App.js.",
+    "Duplicate premium-tier definitions in BotMascot.js and FakeWladCall.js drift apart ('plus' missing in one). Centralise in one helper or use CreditContext.isPremium.",
+    "Cal.com brand colours are correctly set to lime (#BFFF00 / #6B8A00) in public/index.html cssVarsPerTheme — the purple booking button reported by the owner is covered there, not by BotMascotPanel."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "85%"},
+  "seed_data_creation": "Generated one admin license key (leadership_os) and redeemed it to create qa136-lic@wladbot-testing.de / TestQa2026x (tier standard, onboarding not completed) — used to prove license re-login. about_me of test@test.com was written during testing and restored afterwards to 'Neue Rolle: Bereichsleiter seit Oktober.'",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "test@test.com/test123 (admin, tier plus), standard@wladbot.test/test123, free@wladbot.test/test123, qa136-lic@wladbot-testing.de/TestQa2026x (license re-login)",
+  "context_for_next_testing_agent": "Verified in UI: (1) /profile about-me-card + about-me-edit-btn + profile-edit-about-me textarea + live counter (119/6000) work; save shows 'Profil gespeichert!', text persists after hard reload, editing replaces the old text (old text gone). (2) AI integration proven: with about_me='Ich bin CTO eines Fintech-Startups mit 40 Entwicklern. Meine Schwaeche: Delegation. Ziel: Serie-B-Runde in 2026.' the /chat answer to 'Was ist meine groesste Baustelle...' started with 'Deine größte Baustelle als Führungskraft scheint die Delegation zu sein...' — clearly personalised. (3) License tab: invalid key → 'Lizenz-Key nicht gefunden. Bitte prüfe die Eingabe.'; wrong password → 'Falsches Passwort für dieses Konto.'; redeemed key + same email + correct password → logged in and routed to /onboarding (no spinner hang). (4) standard@wladbot.test /profile (Konto tab) renders billing-section-paid, no credits cap / video-drip copy; free@wladbot.test renders billing-section-free with the 12-Videokurse upsell + billing-upgrade-btn. (5) Console sweep on /login, /profile, /chat, /dashboard: only one 401 on /login (unauthenticated /api/auth/me probe); no broken images anywhere. Rate limiting was avoided by pausing ~60s between login bursts. NOTE: bot-mascot-* testids cannot be tested until the component is mounted.",
+  "rca_of_the_issue": "BotMascotPanel (where the Iter-136 premium gating and lime booking button were implemented) is never imported: `grep -rn BotMascot frontend/src` matches only the three BotMascot* files themselves. App.js mounts FakeWladCall instead, whose 'Termin buchen' CTA is emerald (bg-emerald-500) and which contains no pricing block, so premium users do not see €997/€4.447 upsell in the live widget — but the shipped fix itself is unverifiable/ineffective as written."
+}

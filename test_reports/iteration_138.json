@@ -1,0 +1,27 @@
+{
+  "summary": "Iter 138 frontend-only RETEST of the 3 findings from iteration_137.json (Preview URL, 1920x900, standard@wladbot.test). ALL 3 FIXES PASS. (1) pdf-upload-btn live DOM title now contains the complete allowed list (PDF, Word (.docx), TXT, Markdown, CSV, Bilder, max. 20 MB, 40 Seiten) AND all unsupported formats (Excel, PowerPoint, ZIP, Audio, Video, passwortgeschützte/gescannte PDFs) - 0 missing keywords. (2) Attachment + readable user text survive a full page reload: fresh session, TXT upload -> pdf-attached chip -> send 'Fasse das kurz zusammen' -> chat-message-attachment visible; after F5 + reopening the session from chat-history-item the user bubble shows ONLY 'Fasse das kurz zusammen' (no '[Dokument: …]', no '[Kontext: …]') and chat-message-attachment count = 1. legacyClean() also works on the OLD raw-prompt session '[Bild angehängt: Screenshot 2026-04-01…]': 2 user bubbles, 0 raw dumps, attachment bubble reconstructed from the legacy prefix. (3) Voice overlay no longer flickers: during the whole LISTENING window (18 samples over ~7.2s) the h-14 slot height stayed constant at 56px, statusTop constant at 467px, voice-mode-hint rendered exclusively (countdown and hint never coexist), overlay closes via voice-mode-close, chat input usable afterwards, ZERO console errors. Regression OK: context-panel/context-progress/about-me-link/context-folders-info present, coach-mode-toggle -> label COACH + coach-mode-briefing, plain message without attachment sent and answered, user bubble shows the typed text unchanged.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Chat history sidebar", "issues": ["Session titles are still derived from the RAW prompt: the legacy entry is listed as '[Bild angehängt: Screenshot 2026-04-01…]'. Cosmetic only (bubbles are clean thanks to legacyClean); consider deriving new titles from display_text."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional/cosmetic: use display_text (not the raw prompt) for chat session titles so history entries don't read '[Bild angehängt: …]'."
+  ],
+  "critical_code_review_comments": [
+    "ChatPage.handleSend sets setAttachedPdf(null) before building `body.attachment`; it still works because the closure holds the old state value, but it is fragile - build the body first, then clear the state.",
+    "VoiceModeOverlay countdown text at text-sm inside max-w-xs can wrap to 2 lines; measured worst case (2 lines + 8px gap + 6px bar = ~54px) still fits the 56px h-14 slot, but any copy change could overflow - keep the slot height in sync with the copy or use text-xs."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "100% (3/3 fixes verified + regression block passing)"},
+  "seed_data_creation": "Reused standard@wladbot.test and /tmp/test_iter137.txt; created 1 new chat session 'Neues Gespräch' with a TXT attachment message + 1 voice-transcribed message.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "standard@wladbot.test / test123 (email = first input, cookie banner 'Alle akzeptieren' + support popup 'Nein danke' must be dismissed)",
+  "context_for_next_testing_agent": "Sidebar session selector is [data-testid^=chat-history-item-] (16 items for this account); the newest session is items.first. Voice test: the fake mic in this Chromium immediately produces speech -> the overlay may run one full turn (LISTENING -> THINKING -> IDLE with transcript) before settling back to LISTENING; only compare slot height/status position WITHIN the LISTENING state, otherwise the state transitions look like layout jumps. voice-silence-countdown still cannot be observed live (fake mic keeps resetting the silence timer); the <=4 gate + SILENCE_DURATION_MS-derived bar width were verified statically. ElevenLabs invalid-key fallback still not exercised (as agreed). Verified passing this run: FIX1 tooltip, FIX2 attachment+display_text persistence across reload incl. legacy session, FIX3 stable h-14 slot, plus context-panel/coach-mode/plain-chat regression.",
+  "rca_of_the_issue": "N/A - all previously reported defects are resolved: duplicate title removed from the upload label, display_text + attachment now persisted by /api/chat and re-rendered by ChatMessage (with legacyClean() fallback for old raw-prompt messages), and countdown/hint share a fixed-height (h-14) slot with the countdown gated at silenceLeft <= 4."
+}

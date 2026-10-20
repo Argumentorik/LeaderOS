@@ -1,4 +1,6 @@
 /**
+ * Security note: localStorage holds NO auth material (sessions are httpOnly cookies) — only non-sensitive
+ * consent flags (which cookie categories the visitor allowed); an XSS reader gains nothing exploitable beyond what the page already shows.
  * GDPR/TTDSG consent bootstrap and reader.
  *
  * Single source of truth for the `lo_consent_v1` localStorage payload.
@@ -18,6 +20,7 @@
  *            read as `false` — no re-prompt, pixels simply stay off until
  *            the visitor decides again.
  */
+import logger from './logger';
 
 const KEY = "lo_consent_v1";
 
@@ -42,8 +45,8 @@ export const readConsent = () => {
     }
     return p;
   } catch (err) {
-    // localStorage unavailable / corrupted JSON · treat as no consent given.
-    if (typeof console !== 'undefined') console.warn('[consent] read failed:', err?.message);
+    // localStorage unavailable / corrupted JSON — treat as no consent given.
+    logger.warn('[consent] read failed:', err?.message);
     return null;
   }
 };
@@ -62,7 +65,7 @@ export const writeConsent = (partial) => {
   } catch (err) {
     // localStorage unavailable (private mode, SSR) · payload still returned so
     // callers can use it in-memory for the rest of the session.
-    if (typeof console !== 'undefined') console.warn('[consent] write failed:', err?.message);
+    logger.warn('[consent] write failed:', err?.message);
   }
   return payload;
 };

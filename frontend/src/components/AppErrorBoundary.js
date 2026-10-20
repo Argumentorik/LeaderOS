@@ -13,36 +13,48 @@
  *     can tell us what happened in one click.
  */
 import * as Sentry from '@sentry/react';
-import { RefreshCw, Home, AlertTriangle, Send } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { RefreshCw, Home, AlertTriangle, Send, Mail } from 'lucide-react';
 import { WladMark } from './brand/WladMark';
+import { reportError, reportFeedback } from '../lib/telemetry';
 
 const ErrorFallback = ({ error, eventId, resetError }) => {
-  const handleReload = () => {
-    resetError();
-    window.location.reload();
-  };
-  const handleHome = () => {
-    resetError();
-    window.location.assign('/dashboard');
-  };
-  const showFeedback = () => {
-    if (eventId && Sentry.showReportDialog) {
-      try {
-        Sentry.showReportDialog({
-          eventId,
-          lang: 'de',
-          title: 'Etwas ist schiefgelaufen',
-          subtitle: 'Bitte beschreibe, was du gemacht hast · das hilft uns enorm.',
-          subtitle2: '',
-          labelName: 'Name',
-          labelEmail: 'E-Mail',
-          labelComments: 'Was ist passiert?',
-          labelSubmit: 'Absenden',
-          labelClose: 'Schließen',
-          successMessage: 'Vielen Dank · wir kümmern uns drum.',
-          errorGeneric: 'Konnte Feedback nicht senden. Bitte erneut versuchen.',
-        });
-      } catch { /* Sentry not configured or DSN missing */ }
+  // Iter 121.7 (Godmode): mirror the exception to our own telemetry
+  // endpoint. Sentry is our SaaS backup — the local `error_log` collection
+  // is what the admin dashboard reads.
+  const [diagId, setDiagId] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const diag = await reportError(error, {
+        source: 'react-boundary',
+        severity: 'fatal',
+        context: { sentry_event_id: eventId },
+      });
+      if (!cancelled && diag) setDiagId(diag);
+    })();
+    return () => { cancelled = true; };
+  }, [error, eventId]);
+
+  const shownId = diagId || eventId;
+  const supportSubject = `Leader-OS Fehler ${shownId || ''}`.trim();
+  const supportBody = `Diagnostic-ID: ${shownId || 'n/a'}%0AURL: ${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}%0A%0AWas wolltest du tun?%0A`;
+
+  const handleReload = () => { resetError(); window.location.reload(); };
+  const handleHome = () => { resetError(); window.location.assign('/dashboard'); };
+  const showFeedback = async () => {
+    // Prefer our lightweight in-app feedback (works even without Sentry SDK).
+    const message = window.prompt(
+      'Was ist genau passiert? Deine Antwort geht an unser Team — Diagnostic-ID + Konsole hängen automatisch dran.',
+      '',
+    );
+    if (!message) return;
+    const res = await reportFeedback({ message, category: 'bug' });
+    if (res.ok) {
+      window.alert('Danke — wir melden uns. Kontakt: start@aiporate.com');
+    } else if (eventId && Sentry.showReportDialog) {
+      // Sentry-fallback if our own telemetry endpoint refused.
+      try { Sentry.showReportDialog({ eventId, lang: 'de' }); } catch { /* no-op */ }
     }
   };
 
@@ -99,7 +111,7 @@ const ErrorFallback = ({ error, eventId, resetError }) => {
           </button>
         </div>
 
-        {eventId && (
+        {shownId && (
           <div className="mt-6 pt-5 border-t border-white/[0.06]">
             <button
               type="button"
@@ -109,9 +121,16 @@ const ErrorFallback = ({ error, eventId, resetError }) => {
             >
               <Send size={11} /> Sag uns, was passiert ist
             </button>
-            <p className="text-[10px] text-white/30 font-mono tracking-wider">
-              ID · {eventId.slice(0, 8)}…{eventId.slice(-4)}
+            <p className="text-[10px] text-white/30 font-mono tracking-wider" data-testid="error-diagnostic-id">
+              ID · {shownId}
             </p>
+            <a
+              href={`mailto:start@aiporate.com?subject=${encodeURIComponent(supportSubject)}&body=${supportBody}`}
+              className="mt-2 inline-flex items-center gap-1 text-[11px] text-[#BFFF00]/80 hover:text-[#BFFF00] transition-colors"
+              data-testid="error-boundary-mail"
+            >
+              <Mail size={10} /> start@aiporate.com
+            </a>
           </div>
         )}
 

@@ -1,0 +1,22 @@
+{
+  "summary": "Iter 121 Go-Live Lockdown fully verified. Backend (9/9 pytest passes) and frontend (5/5 UI flows) all green. Prelaunch lock enforces unlocked=false + locked_reason='prelaunch' on every my-path video; lern-videos + dashboard tiles + community are locked with the correct CTAs; /api/wladhub/sync + /sync/status expose the transparent signal payload; voice_framework_map maps 'sexier' → SEXIER-Argumentation and flags short recordings low_confidence; scripts_delete_test_accounts.py exits 0 with 'No matching accounts found' on preview DB.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter121.py",
+    "/app/test_reports/pytest/iter121.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "voice_framework_map.assess_transcript_quality regex `\\berkl(ä|ae)r\\b` requires trailing word-boundary, so common form 'erkläre' does NOT flag is_question=True. Consider `erkl(ä|ae)r\\w*` for broader coverage (non-blocking; question detection is a UX hint only).",
+    "scripts_delete_test_accounts.py runs load_dotenv AFTER importing config.db — dotenv values arrive too late for the Mongo client. Works today because backend/.env is loaded by supervisor already, but is fragile if the script is run in a bare shell."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "test@test.com / test123 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None. Preview DB has no wj@argumentorik / wlassassa* rows, as expected.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Login inputs on /login are data-testid='login-email-input' (type=text, name=email) and data-testid='login-password-input'. The Anmelden button is a plain <button> with visible text 'Anmelden'. Cookie banner does NOT block clicks. Auth token is stored via httpOnly cookie (localStorage 'wladbot_token' is empty). Dashboard learning-videos strip testid='dashboard-learning-videos', lock badges 'dashboard-video-lock-badge-<id>'. Lern-Videos cards 'learning-video-card-<id>' + 'video-locked-badge-<id>'. Community overlay 'community-locked-overlay' + CTA 'community-locked-overlay-cta'. Global audio stop event: window.dispatchEvent(new CustomEvent('leaderos:audio-stop-all')).",
+  "rca of the issue": "n/a — no regressions detected."
+}

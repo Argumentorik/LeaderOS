@@ -9,7 +9,7 @@ import { useCredits } from '../contexts/CreditContext';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import logger from '../lib/logger';
-import { CheckCircle2, Loader2, XCircle, ArrowRight, Zap, Crown, Flame, Brain, Video, Target, Users, Star } from 'lucide-react';
+import { CheckCircle2, Loader2, XCircle, ArrowRight, Zap, Crown, Flame, Brain, Video, Target, Users, Star, FileText, MessageCircle } from 'lucide-react';
 
 export default function PaymentSuccessPage() {
   const { lang } = useLanguage();
@@ -25,8 +25,13 @@ export default function PaymentSuccessPage() {
   useEffect(() => {
     if (!sessionId) { setStatus('error'); return; }
     let attempts = 0;
+    let cancelled = false;
 
+    // Stripe can take a few seconds to settle a card payment. Give it 60s
+    // before we tell the buyer anything is wrong — and never claim failure,
+    // only "still processing".
     const poll = async () => {
+      if (cancelled) return;
       try {
         const res = await api.get(`/payments/checkout/status/${sessionId}`);
         if (res.data.payment_status === 'paid') {
@@ -38,15 +43,19 @@ export default function PaymentSuccessPage() {
         }
         if (res.data.status === 'expired') { setStatus('expired'); return; }
         attempts++;
-        if (attempts < 5) setTimeout(poll, 2000);
-        else setStatus('timeout');
-      } catch {
+        if (attempts < 20) setTimeout(poll, 3000);
+        else setStatus('pending');
+      } catch (err) {
+        logger.warn('payment status poll failed', err);
+        // 404 = no transaction for this session → nothing to wait for.
+        if (err?.response?.status === 404) { setStatus('error'); return; }
         attempts++;
-        if (attempts < 5) setTimeout(poll, 2000);
-        else setStatus('error');
+        if (attempts < 20) setTimeout(poll, 3000);
+        else setStatus('pending');
       }
     };
     poll();
+    return () => { cancelled = true; };
   }, [sessionId, reloadCredits, checkAuth]);
 
   return (
@@ -72,17 +81,25 @@ export default function PaymentSuccessPage() {
                 <Crown size={14} className="mr-1" /> PREMIUM AKTIV
               </Badge>
               <h2 className="text-2xl font-black mt-2">{de ? 'Willkommen, Leader!' : 'Welcome, Leader!'}</h2>
-              <p className="text-white/50 text-sm mt-1">{de ? 'Dein Zugang ist freigeschaltet. Alle Features sind jetzt verfügbar.' : 'Your access is unlocked. All features are now available.'}</p>
+              <p className="text-white/50 text-sm mt-1">{paymentData?.package_name || (de ? 'Dein Zugang ist freigeschaltet.' : 'Your access is unlocked.')}</p>
             </div>
             <CardContent className="p-6 space-y-4">
-              {/* What's unlocked */}
+              {/* What's actually unlocked — mirrors TIER_CONFIG, no promises we don't keep */}
               <div className="space-y-2">
-                {[
-                  { icon: Flame, label: de ? '30-Tage KI-Leadership-Challenge' : '30-Day AI Leadership Challenge', unlocked: true },
-                  { icon: Brain, label: de ? 'Unbegrenzter KI-Coach' : 'Unlimited AI Coach', unlocked: true },
-                  { icon: Video, label: de ? '16 Video-Missionen' : '16 Video Missions', unlocked: true },
-                  { icon: Target, label: de ? '10 Geführte Workflows' : '10 Guided Workflows', unlocked: true },
-                ].map(item => (
+                {(paymentData?.tier === 'accelerator'
+                  ? [
+                    { icon: Flame, label: de ? '30-Tage Challenge komplett' : 'Full 30-day challenge' },
+                    { icon: Brain, label: de ? 'KI-Coach 24/7' : 'AI coach 24/7' },
+                    { icon: Video, label: de ? 'Video-Analyse & Video-Missionen' : 'Video analysis & missions' },
+                    { icon: Users, label: de ? '12× 1:1 Coaching mit Argumentorik-Coaches' : '12× 1:1 coaching with Argumentorik coaches' },
+                  ]
+                  : [
+                    { icon: Flame, label: de ? '30-Tage Challenge komplett' : 'Full 30-day challenge' },
+                    { icon: Brain, label: de ? 'KI-Coach 24/7' : 'AI coach 24/7' },
+                    { icon: Video, label: de ? '12 Videokurse & Playbooks' : '12 video courses & playbooks' },
+                    { icon: Target, label: de ? 'Playbooks, Workflows & Simulationen' : 'Playbooks, workflows & simulations' },
+                  ]
+                ).map(item => (
                   <div key={item.label} className="flex items-center gap-3 p-2.5 rounded-lg bg-[#BFFF00]/5 border border-[#BFFF00]/10">
                     <item.icon size={16} className="text-[#BFFF00] shrink-0" />
                     <span className="text-sm font-medium flex-1">{item.label}</span>
@@ -92,8 +109,26 @@ export default function PaymentSuccessPage() {
               </div>
 
               {paymentData && (
-                <div className="text-center py-1">
-                  <p className="text-xs text-muted-foreground">{paymentData.amount} {paymentData.currency?.toUpperCase()} · 2 Jahre Zugang</p>
+                <div className="text-center py-1 space-y-1.5" data-testid="payment-receipt-block">
+                  <p className="text-xs text-muted-foreground">
+                    {Number(paymentData.amount).toFixed(2).replace('.', ',')} {paymentData.currency?.toUpperCase()}
+                    {paymentData.invoice_number ? ` · ${de ? 'Rechnung' : 'Invoice'} ${paymentData.invoice_number}` : ''}
+                  </p>
+                  {paymentData.invoice_url ? (
+                    <a
+                      href={paymentData.invoice_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#4A6200] dark:text-[#BFFF00] hover:underline"
+                      data-testid="payment-invoice-link"
+                    >
+                      <FileText size={12} /> {de ? 'Rechnung ansehen (Stripe)' : 'View invoice (Stripe)'}
+                    </a>
+                  ) : (
+                    <p className="text-[11px] text-muted-foreground">
+                      {de ? 'Die Rechnung kommt in wenigen Minuten per E-Mail von Stripe.' : 'Your invoice arrives by email from Stripe within minutes.'}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -107,24 +142,43 @@ export default function PaymentSuccessPage() {
               {/* Quick PDF + Tools links */}
               <div className="grid grid-cols-2 gap-2 pt-2">
                 <Button onClick={() => navigate('/downloads')} variant="outline" className="text-xs h-10" data-testid="success-go-downloads">
-                  📄 {de ? 'PDF-Downloads' : 'PDF Downloads'}
+                  <FileText size={13} className="mr-1.5" /> {de ? 'PDF-Downloads' : 'PDF Downloads'}
                 </Button>
                 <Button onClick={() => navigate('/chat')} variant="outline" className="text-xs h-10" data-testid="success-go-chat">
-                  💬 {de ? 'KI-Coach starten' : 'Start AI Coach'}
+                  <MessageCircle size={13} className="mr-1.5" /> {de ? 'KI-Coach starten' : 'Start AI Coach'}
                 </Button>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {(status === 'error' || status === 'expired' || status === 'timeout') && (
+        {status === 'pending' && (
+          <Card className="w-full border-black/[0.04]" data-testid="payment-pending-card">
+            <CardContent className="p-8 text-center space-y-4">
+              <Loader2 size={40} className="mx-auto text-[#BFFF00] animate-spin" />
+              <h2 className="text-xl font-black">{de ? 'Zahlung wird noch verarbeitet' : 'Payment still processing'}</h2>
+              <p className="text-sm text-muted-foreground">
+                {de
+                  ? 'Deine Zahlung ist bei Stripe eingegangen, die Bestätigung steht noch aus. Lade diese Seite in einer Minute neu — dein Zugang wird automatisch freigeschaltet. Wenn nichts passiert, schreib uns an support@leaderos.de.'
+                  : 'Stripe has your payment, the confirmation is still pending. Reload this page in a minute — access unlocks automatically. If nothing happens, email support@leaderos.de.'}
+              </p>
+              <Button onClick={() => window.location.reload()} className="bg-[#0A0A0A] text-white font-bold" data-testid="payment-pending-reload">
+                {de ? 'Neu laden' : 'Reload'}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {(status === 'error' || status === 'expired') && (
           <Card className="w-full border-black/[0.04]">
             <CardContent className="p-8 text-center space-y-4">
               <XCircle size={40} className="mx-auto text-red-500" />
               <h2 className="text-xl font-black">{de ? 'Zahlung nicht abgeschlossen' : 'Payment not completed'}</h2>
-              <p className="text-sm text-muted-foreground">{de ? 'Bitte versuche es erneut.' : 'Please try again.'}</p>
-              <Button onClick={() => navigate('/coaching')} className="bg-[#0A0A0A] text-white font-bold">
-                {de ? 'Zurück' : 'Go Back'}
+              <p className="text-sm text-muted-foreground">
+                {de ? 'Es wurde nichts abgebucht. Du kannst den Kauf jederzeit erneut starten.' : 'Nothing was charged. You can start the purchase again anytime.'}
+              </p>
+              <Button onClick={() => navigate('/coaching')} className="bg-[#0A0A0A] text-white font-bold" data-testid="payment-retry-btn">
+                {de ? 'Zurück zum Kauf' : 'Back to checkout'}
               </Button>
             </CardContent>
           </Card>

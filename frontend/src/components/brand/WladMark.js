@@ -75,13 +75,7 @@ export const WladMark = forwardRef(({
         className="relative z-10 wlad-mark-glyph"
         shapeRendering="geometricPrecision"
       >
-        <defs>
-          {/* Lime → softer-lime gradient along the stroke (visible on monogram) */}
-          <linearGradient id="wm-stroke" x1="2" y1="26" x2="30" y2="4" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor={glyphFill} stopOpacity="0.92" />
-            <stop offset="100%" stopColor={glyphFill} />
-          </linearGradient>
-        </defs>
+        <defs />
 
         {/* Ghost shadow (offset for floating depth) */}
         <path
@@ -99,7 +93,7 @@ export const WladMark = forwardRef(({
         <path
           className="wlad-mark-w"
           d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4"
-          stroke="url(#wm-stroke)"
+          stroke={glyphFill}
           strokeWidth="3.0"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -110,7 +104,7 @@ export const WladMark = forwardRef(({
         <path
           className="wlad-mark-flick"
           d="M28.8 4 Q30.2 4.6 29.6 6.4"
-          stroke="url(#wm-stroke)"
+          stroke={glyphFill}
           strokeWidth="2.6"
           strokeLinecap="round"
           fill="none"

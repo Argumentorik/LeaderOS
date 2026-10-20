@@ -1,0 +1,28 @@
+{
+  "summary": "Iteration 97 — Google OAuth sanitizer fix + Simulation UX overhaul verified. Backend: 9/9 pytest passed (sanitizer strips 'Client:' prefix, quotes & whitespace; /api/auth/providers returns correct google_client_id 482961656741-v4s56...; /api/auth/google/callback with invalid credential returns clean 401 (not 500); /api/auth/login, /api/auth/me, magic-link, /api/chat, /api/simulations/scenarios, POST /api/simulations, POST /api/simulations/{id}/message all pass). Frontend E2E: login via password → /simulations → TRAINING ARENA hero present, German difficulty labels (Leicht/Mittel/Schwer) + duration chips render, scenario cards clickable → briefing modal opens → counterpart+goal chips select → simulation starts → simulation-input+send works → sim-typing-indicator visible during AI reply → end-simulation-btn → Bewerten confirmation → simulation-scores card renders → sim-restart-btn returns to arena grid. Google button 'Mit Google fortfahren' renders on /login without blocking console errors (GIS origin_mismatch expected in preview).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "SimulationsPage sim-round-counter", "issue": "Round counter stayed at 'Runde 1' after sending a user message AND receiving an AI reply. Expected to increment. Verify state update logic. Minor.", "selector": "[data-testid='sim-round-counter']", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_iter97_oauth_sim.py", "/app/test_reports/pytest/iter97_oauth.xml"],
+  "action_items": [
+    "OPTIONAL: Verify sim-round-counter increment logic on both user-send and AI-reply — visually observed no increment after one full exchange.",
+    "PROD DEPLOY: User must redeploy leaderos.de so the sanitized google_client_id() takes effect — production /api/auth/providers still shows 'Client: 482961656741...' prefix bug (read-only check, expected pre-deploy)."
+  ],
+  "critical_code_review_comments": [
+    "services_oauth.google_client_id() sanitizer is defensive and idempotent — good. Also covers quoted values.",
+    "routes/oauth.py /api/auth/providers now uses google_client_id() consistently — matches sanitized output.",
+    "Google callback error handling: ValueError → 401 with detail, unexpected → 500 with type name (no PII leak). OK."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter97_oauth_sim.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "test@test.com / test123 (Admin, is_admin DB flag)",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iter 97 confirms Google OAuth sanitizer works + Simulation UX overhaul fully E2E-verified in preview. Real Google OAuth E2E not possible in preview (origin_mismatch expected). Sim briefing modal requires selecting counterpart + goal chips (data-testid briefing-counterpart-*/briefing-goal-*) BEFORE briefing-start-btn becomes enabled. End-of-sim triggers a 'Bewerten' confirmation modal that must be confirmed before AI scoring runs (~15-30s). sim-round-counter increment behavior may need a look but is non-blocking."
+}

@@ -1,0 +1,47 @@
+{
+  "summary": "Iter 147 Regression der PRO-Neuproduktion (13 Wlad-Guide-Filme) — BACKEND 13/13 pytest gruen (/app/backend/tests/test_iter147_pro_regression.py), KEIN Fal-Generierungs-Endpunkt ausgeloest (bulk-produce nur OHNE reset). 30 s Wartezeit vor dem ersten Request eingehalten. (1) GET /api/guide/public/teaser ohne Auth -> clip.slug 'teaser-login', video_url endet auf /video, poster_url gesetzt, kein _id; video_url -> 200 video/mp4 (> 1 MB), poster_url -> 200 image/png. (2) GET /api/guide/clips?kind=all als free@wladbot.test -> genau 5 onboarding + 7 mission (+1 teaser), alle 12 Nutzer-Clips mit video_url + poster_url, duration_seconds_video zwischen 20 und 45 (22-40 s); alle 12 video_url mit Range 0-1023 -> 206 video/mp4, alle 12 poster_url -> 200 image/png. (3) GET /api/guide/admin/overview als test@test.com -> 13 multi_shot-Clips, alle status 'video_ready', quality 'pro', pipeline 'multishot', kein Feld 'stale' true; jeder talk-Shot engine 'omnihuman' + synced_url vorhanden, jeder walk-Shot engine 'kling-2.5-pro'; settings.spent_usd im Fenster 50-60; kein _id-Leak; free-User -> 403. (4) POST /api/guide/admin/clips/bulk-produce {slugs:['start-1-willkommen'], quality:'pro'} ohne reset -> {started: [], skipped: ['start-1-willkommen']} (keine Kosten). FRONTEND (Playwright): /login 1920x800 -> 'login-teaser-video' src = /api/guide/media/<token>/video und poster = .../shot/s1/keyframe (beides gesetzt, Poster rendert sichtbar). Login accelerator@wladbot.test mit gesetzten localStorage-Flags -> /dashboard, 'guide-clips-row' mit genau 5 Thumbnails, alle 5 Poster geladen (naturalWidth 1344). /video-guide -> 'video-guide-page', 12 Kacheln 'video-guide-tile-*', Progress '0/12 gesehen', Klick auf 'video-guide-tile-mission-day-2' -> URL ?clip=mission-day-2 und Player rendert 'guide-clip-mission-day-2'. Admin /wlad-control-x7k9q2 als test@test.com -> 'guide-bulk-produce-btn' disabled mit Label 'Alle offenen Clips produzieren (0 · = 0.00 $)', 14x 'Video fertig' (13 Multishot + Teaser), kein 'Video fehlgeschlagen'/'Video laeuft'. Keine Console-Errors (0) in allen Fluessen; nur erwartete net::ERR_ABORTED auf /video (Headless-Chromium ohne H.264).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "/video-guide + Dashboard 'guide-clips-row' (Poster-Payload)",
+        "issues": [
+          "Die Keyframe-Poster werden als unkomprimierte PNGs mit 1,17-1,40 MB pro Bild ausgeliefert (in-Browser gemessen: alle 12 -> 200 image/png, 1172646-1394084 Bytes). /video-guide laedt damit ~16 MB nur fuer Thumbnails; im ersten Messfenster hatten 4 von 12 Kacheln noch naturalWidth 0 (schwarze Kachel sichtbar, u.a. 'Clip 3 Kontext ist alles'), nach ~4 s waren alle da. Empfehlung: Poster serverseitig auf WebP/JPEG ~1280px (<150 KB) reduzieren bzw. eine separate Thumb-Variante ausliefern — funktional kein Defekt, aber sichtbarer Ladeflacker."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter147_pro_regression.py",
+    "/app/test_reports/pytest/iter147.xml"
+  ],
+  "action_items": [
+    "Optional (MEDIUM, Perf/UX): Poster-Keyframes komprimiert bzw. in kleinerer Thumb-Variante ausliefern (aktuell 1,2-1,4 MB PNG pro Kachel, ~16 MB auf /video-guide) — sonst kurzzeitig schwarze Kacheln.",
+    "Optional (LOW, unveraendert aus Iter 145/146): GuideVideoPlayer zeigt clip.duration_seconds im Play-Overlay und das Script-Toggle-Label ist hart '(20 Sekunden)', waehrend die Kacheln duration_seconds_video (22-40 s) anzeigen -> zwei Laengenangaben je Clip."
+  ],
+  "critical_code_review_comments": [
+    "routes/guide.py hat weiterhin ~1075 Zeilen (>700): Produktions-/Job-Teil und Admin-Endpunkte von den Nutzer-Endpunkten trennen (offen seit Iter 144).",
+    "list_clips(kind='all') liefert den Teaser mit; die Filterung passiert nur im Frontend (VideoGuidePage.js) — serverseitiges kind='user' waere robuster (offen aus Iter 146).",
+    "Leeres, ungenutztes Pydantic-Modell SeenIn (routes/guide.py:203) entfernen.",
+    "bulk_produce ueberspringt fertige Clips nur bei pipeline == 'multishot' (Zeile 1030); ein fertiger Clip mit pipeline 'cinematic'/'talking_head' wuerde ohne reset erneut kostenpflichtig produziert — Guard besser auf video_path + status 'video_ready' stuetzen."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter147_pro_regression.py",
+    "/app/test_reports/iteration_147.json"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13)",
+    "frontend": "100% der geforderten Checks bestanden (1 nicht-blockierendes Perf-Finding)"
+  },
+  "seed_data_creation": "Keine. Nur lesende Requests + 1 bulk-produce ohne reset (skipped, keine Kosten, kein DB-Write).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "test@test.com/test123 (Admin), free@wladbot.test/test123, accelerator@wladbot.test/test123",
+  "context_for_next_testing_agent": "Regression schnell: pytest /app/backend/tests/test_iter147_pro_regression.py (13 Cases, ~18 s, keine Fal-Kosten) + test_iter146_video_guide.py. WICHTIG 1: 401/403-Checks nur mit cookie-freier Session (Login setzt httpOnly-Cookie). WICHTIG 2: Headless-Chromium hat kein H.264 -> jedes <video> feuert onError, GuideVideoPlayer schaltet auf 'guide-text-fallback-*' (kein 'guide-video-*'/'guide-play-*'); /video-Requests erscheinen als net::ERR_ABORTED — erwartet, nicht als Bug melden. WICHTIG 3: Poster sind 1,2-1,4 MB PNGs mit loading='lazy' -> naturalWidth erst nach ~4 s + Scroll pruefen, sonst Falschmeldung 'Poster nicht geladen'; verlaesslicher ist ein fetch() der poster_url im Browser. WICHTIG 4: Admin-Guide-Karten stehen unter /wlad-control-x7k9q2 direkt in der Seite (kein Tab-Klick noetig), 'Video fertig' erscheint 14x (13 Multishot + Teaser). Kostenpflichtig und NICHT anzufassen: /api/guide/admin/... plan|shot-keyframes|render|keyframe|cinematic|voice|video|voice-clone sowie bulk-produce mit reset:true.",
+  "rca_of_the_issue": "Keine funktionalen Defekte. Die einzige initiale Fehlmeldung ('Poster nicht geladen', naturalWidth 0) war ein Messartefakt: die Poster sind 1,2-1,4 MB grosse PNGs mit loading='lazy'; ein in-Browser-fetch aller 12 poster_url gab durchgaengig 200 image/png. Daraus folgt lediglich das Perf-Finding zur Postergroesse."
+}

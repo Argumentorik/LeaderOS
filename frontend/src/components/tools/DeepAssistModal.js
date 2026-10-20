@@ -9,6 +9,7 @@ import {
   Sparkles, MessageSquare, Target, Loader2, CheckCircle2, X, Clock, Lightbulb,
   ChevronRight, Wand2,
 } from 'lucide-react';
+import SmartText from '../shared/SmartText';
 
 /**
  * DeepAssistModal · 3-Step AI Assistant (Argumentation / Tips / Action Plan).
@@ -107,7 +108,9 @@ export const DeepAssistModal = ({ open, onClose, toolId, de = true, defaultSitua
                   <div className="w-7 h-7 rounded-full bg-[#BFFF00] flex items-center justify-center text-[#0A0A0A] font-black text-[11px]">1</div>
                   <h3 className="text-[13px] font-black flex items-center gap-1.5"><MessageSquare size={13} /> {de ? 'Argumentation (Logos · Ethos · Pathos)' : 'Argumentation'}</h3>
                 </div>
-                <p className="text-[13px] leading-relaxed p-3.5 rounded-xl bg-gradient-to-br from-[#BFFF00]/[0.06] to-[#9ACC00]/[0.02] border border-[#BFFF00]/15">{result.argumentation}</p>
+                <div className="p-3.5 rounded-xl bg-gradient-to-br from-[#BFFF00]/[0.06] to-[#9ACC00]/[0.02] border border-[#BFFF00]/15">
+                  <SmartText text={result.argumentation} accent="#BFFF00" icon={MessageSquare} />
+                </div>
               </section>
 
               {/* 2. Tips */}

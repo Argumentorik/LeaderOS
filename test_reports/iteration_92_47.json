@@ -1,0 +1,51 @@
+{
+  "summary": "Iter 92.47 sidebar Upgrade CTA fix verified across free, standard, and accelerator tiers, plus expanded + collapsed variants.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_results": {
+    "free_tier_expanded": {
+      "btn_present": true,
+      "label_text": "Leadership OS holen",
+      "arrow_rendered": true,
+      "icon_tile_bg": "bg-[#0A0A0A]/12 present",
+      "click_opens_pricing_modal": true,
+      "pricing_target": "leadership_os"
+    },
+    "standard_tier_expanded": {
+      "btn_present": true,
+      "label_text": "Auf OS PLUS upgraden",
+      "arrow_rendered": true,
+      "icon_tile_bg": "bg-[#0A0A0A]/12 present",
+      "click_opens_pricing_modal": true,
+      "pricing_target": "leadership_os_plus (verified — modal shows PLUS card)"
+    },
+    "accelerator_tier": {
+      "btn_hidden": true,
+      "expected": true
+    },
+    "collapsed_variant": {
+      "size_wxh": "47x36 (~36 target — mobile-safe icon-only)",
+      "label_text_hidden": true,
+      "crown_icon_centered": true
+    }
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Fix is clean and correct: uses ternary `tier === 'free' ? '...' : '...'` guaranteeing string label, eliminating the empty-label bug when tier is undefined/unknown.",
+    "Minor: `title` attr uses 'Leadership OS aktivieren' whereas visible label is 'Leadership OS holen' — slight copy divergence but not a bug.",
+    "Icon-tile only rendered in expanded variant (as intended); collapsed uses bare Crown centered in 36×36 gradient tile."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "test_credentials": "free@wladbot.test / test123, standard@wladbot.test / test123, accelerator@wladbot.test / test123 (all working)",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.47 sidebar Upgrade CTA verified end-to-end via /api/auth/login (token) + localStorage injection at wladbot_token. data-testid='sidebar-upgrade-btn' + data-testid='sidebar-collapse-btn' work reliably. Lint clean on SidebarFooter.js.",
+  "rca of the issue": "Original bug used `{tier === 'free' && 'Leadership OS holen'} {tier === 'standard' && 'upgrade'}` which returned false for any other tier value, yielding empty label with full-width lime styling. Fix replaces with guaranteed-string ternary + adds icon-tile wrapper + arrow chevron + hover:scale + collapsed 36×36 variant. All tier states now render correctly."
+}

@@ -12,7 +12,9 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { useLanguage } from '../contexts/LanguageContext';
 import api from '../lib/api';
-import { ListChecks, Plus, Trash2, Sparkles, Target, CheckCircle2, Clock, Quote, CalendarDays, ArrowRight, Flame } from 'lucide-react';
+import { swrGet } from '../lib/swrCache';
+import { ListChecks, Plus, Trash2, Sparkles, Target, CheckCircle2, Clock, Quote, CalendarDays, ArrowRight, Flame, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { toast } from 'sonner';
 
 const QUOTES = [
   { q: 'Wer Menschen bewegen will, muss zuerst sich selbst bewegen.', a: 'Wlad Jachtchenko' },
@@ -28,9 +30,13 @@ export default function TasksPage() {
   const [showDialog, setShowDialog] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium', category: 'general', due_date: '' });
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+  const [generating, setGenerating] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  // Iter 139: Aufgabentexte waren abgeschnitten und nicht öffenbar.
+  const [expandedTask, setExpandedTask] = useState(null);
 
   const loadTasks = useCallback(async () => {
-    try { const res = await api.get('/tasks'); setTasks(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/tasks', setTasks, { onError: (err) => logger.error(err) });
   }, []);
 
   useEffect(() => { loadTasks(); }, [loadTasks]);
@@ -52,6 +58,26 @@ export default function TasksPage() {
   const deleteTask = async (taskId) => {
     try { await api.delete(`/tasks/${taskId}`); loadTasks(); } catch (err) { logger.error(err); }
   };
+
+  const generateAiTasks = async () => {
+    if (generating) return;
+    setGenerating(true);
+    try {
+      const res = await api.post('/tasks/generate');
+      toast.success(lang === 'de' ? `${res.data.created} KI-Aufgaben von WladBot erstellt` : `${res.data.created} AI tasks created by WladBot`);
+      loadTasks();
+    } catch (err) {
+      logger.error(err);
+      toast.error(err.response?.data?.detail || (lang === 'de' ? 'Generierung fehlgeschlagen' : 'Generation failed'));
+    } finally { setGenerating(false); }
+  };
+
+  // "Heute im Fokus" — top 3 open tasks: high priority first, then nearest due date
+  const PRIO_ORDER = { high: 0, medium: 1, low: 2 };
+  const focusTasks = [...tasks.filter(t => t.status === 'pending')]
+    .sort((a, b) => (PRIO_ORDER[a.priority] ?? 1) - (PRIO_ORDER[b.priority] ?? 1) || (a.due_date || '9999').localeCompare(b.due_date || '9999'))
+    .slice(0, 3);
+  const focusIds = new Set(focusTasks.map(t => t.task_id));
 
   const filtered = tasks.filter(t => filter === 'all' || t.status === filter);
   const pending = tasks.filter(t => t.status === 'pending');
@@ -115,19 +141,28 @@ export default function TasksPage() {
 
   return (
     <DashboardLayout rightPanel={<RightPanel />}>
-      <div className="p-6 lg:p-8 space-y-6 max-w-4xl" data-testid="tasks-page">
+      <div className="p-6 lg:p-8 xl:px-14 space-y-6 w-full" data-testid="tasks-page">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center shadow-lg shadow-black/10">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#1A1A2E] flex items-center justify-center shadow-lg shadow-black/10">
               <ListChecks size={22} className="text-white" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-2xl font-black tracking-tight">{lang === 'de' ? 'Aufgaben' : 'Tasks'}</h1>
               <p className="text-sm text-muted-foreground">{lang === 'de' ? 'Deine KI-generierten & manuellen Leadership-Aufgaben' : 'AI-generated & manual leadership tasks'}</p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              onClick={generateAiTasks}
+              disabled={generating}
+              className="bg-[#BFFF00] hover:bg-[#d4ff4d] text-[#0A0A0A] font-black shadow-sm btn-interactive"
+              data-testid="generate-ai-tasks-btn"
+            >
+              {generating ? <Loader2 size={15} className="mr-1 animate-spin" /> : <Sparkles size={15} className="mr-1" />}
+              {lang === 'de' ? 'KI-Aufgaben' : 'AI Tasks'}
+            </Button>
             <Select value={filter} onValueChange={setFilter}>
               <SelectTrigger className="w-28 h-9" data-testid="task-filter"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -171,29 +206,120 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Task List */}
+        {/* Heute im Fokus — die Top 3, mit denen ein Leader operiert */}
+        {filter !== 'completed' && focusTasks.length > 0 && (
+          <div data-testid="focus-tasks-section">
+            <div className="flex items-center gap-2 mb-3">
+              <Flame size={14} className="text-[#BFFF00]" />
+              <h2 className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                {lang === 'de' ? 'Heute im Fokus' : "Today's Focus"}
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {focusTasks.map((task, i) => (
+                <Card key={task.task_id} className="border-[#BFFF00]/25 bg-gradient-to-br from-[#BFFF00]/[0.05] to-transparent card-glow" data-testid={`focus-task-${i}`}>
+                  <CardContent className="p-4 flex flex-col gap-2 h-full">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[18px] font-black text-[#BFFF00]/60" style={{ fontFamily: 'Outfit, sans-serif' }}>{i + 1}</span>
+                      <Badge variant="outline" className={`text-[8px] px-1.5 py-0 h-4 ${priorityColor(task.priority)}`}>{priorityLabel(task.priority)}</Badge>
+                    </div>
+                    <p className="text-[13px] font-bold leading-snug flex-1 select-text break-words">{task.title}</p>
+                    {task.description && (
+                      <button
+                        type="button"
+                        onClick={() => setExpandedTask(expandedTask === task.task_id ? null : task.task_id)}
+                        aria-expanded={expandedTask === task.task_id}
+                        className="text-left select-text"
+                        data-testid={`focus-expand-${i}`}
+                      >
+                        <span className={`block text-[10.5px] text-muted-foreground ${expandedTask === task.task_id ? 'whitespace-pre-wrap break-words leading-relaxed' : 'line-clamp-2'}`}>
+                          {task.description}
+                        </span>
+                        <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#4A6200] dark:text-[#BFFF00]">
+                          {expandedTask === task.task_id
+                            ? <><ChevronUp size={11} /> {lang === 'de' ? 'Weniger' : 'Less'}</>
+                            : <><ChevronDown size={11} /> {lang === 'de' ? 'Mehr anzeigen' : 'Show more'}</>}
+                        </span>
+                      </button>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={() => toggleTask(task)}
+                      className="h-8 mt-1 bg-[#0A0A0A] hover:bg-[#1A1A2E] text-white text-[11px] font-bold w-full"
+                      data-testid={`focus-done-${i}`}
+                    >
+                      <CheckCircle2 size={12} className="mr-1.5" /> {lang === 'de' ? 'Erledigt' : 'Done'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Task List — compact: 5 visible, rest collapsible */}
         <div className="space-y-2">
+          {filtered.length > 0 && (
+            <h2 className="text-[11px] font-black uppercase tracking-widest text-muted-foreground pt-2">
+              {lang === 'de' ? 'Alle Aufgaben' : 'All Tasks'} <span className="opacity-50">({filtered.length})</span>
+            </h2>
+          )}
           {filtered.length === 0 && (
             <div className="text-center py-16 text-muted-foreground">
               <ListChecks size={40} className="mx-auto mb-3 opacity-20" />
-              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Starte eine KI-Coaching-Session!' : 'No tasks yet. Start an AI coaching session!'}</p>
+              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Lass WladBot welche für dich generieren!' : 'No tasks yet. Let WladBot generate some for you!'}</p>
+              <Button onClick={generateAiTasks} disabled={generating} className="mt-4 bg-[#BFFF00] text-[#0A0A0A] font-black" data-testid="empty-generate-btn">
+                {generating ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                {lang === 'de' ? 'KI-Aufgaben generieren' : 'Generate AI tasks'}
+              </Button>
             </div>
           )}
-          {filtered.map((task) => (
+          {(showAll ? filtered : filtered.slice(0, 5)).map((task) => (
             <Card key={task.task_id} className={`transition-all duration-200 card-glow ${task.status === 'completed' ? 'opacity-60' : ''}`} data-testid={`task-${task.task_id}`}>
               <CardContent className="p-4 flex items-center gap-4">
                 <Checkbox checked={task.status === 'completed'} onCheckedChange={() => toggleTask(task)} data-testid={`task-checkbox-${task.task_id}`}
-                  className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
+                  className="h-8 w-8 shrink-0 rounded-md data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className={`text-sm font-semibold ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
-                    {task.source === 'ai_coach' && (
-                      <span className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00] bg-[#BFFF00]/10 px-1.5 py-0.5 rounded-full border border-[#BFFF00]/20 shrink-0" data-testid="wladbot-task-badge">
-                        <Sparkles size={8} /> von WladBot
-                      </span>
-                    )}
-                  </div>
-                  {task.description && <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{task.description}</p>}
+                  {(() => {
+                    const isOpen = expandedTask === task.task_id;
+                    const hasMore = Boolean(task.description) || (task.title || '').length > 70;
+                    return (
+                      <div
+                        role={hasMore ? 'button' : undefined}
+                        tabIndex={hasMore ? 0 : undefined}
+                        aria-expanded={hasMore ? isOpen : undefined}
+                        aria-label={hasMore ? (lang === 'de' ? `Aufgabe ${isOpen ? 'zuklappen' : 'vollständig anzeigen'}` : `${isOpen ? 'Collapse' : 'Expand'} task`) : undefined}
+                        onClick={() => hasMore && setExpandedTask(isOpen ? null : task.task_id)}
+                        onKeyDown={(e) => {
+                          if (!hasMore) return;
+                          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedTask(isOpen ? null : task.task_id); }
+                        }}
+                        className={`select-text ${hasMore ? 'cursor-pointer' : ''} rounded-lg -mx-1 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#BFFF00]/50`}
+                        data-testid={`task-text-${task.task_id}`}
+                      >
+                        <div className="flex items-start gap-2">
+                          <p className={`text-sm font-semibold ${isOpen ? 'whitespace-pre-wrap break-words' : ''} ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
+                          {task.source === 'ai_coach' && (
+                            <span className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00] bg-[#BFFF00]/10 px-1.5 py-0.5 rounded-full border border-[#BFFF00]/20 shrink-0 mt-0.5" data-testid="wladbot-task-badge">
+                              <Sparkles size={8} /> von WladBot
+                            </span>
+                          )}
+                        </div>
+                        {task.description && (
+                          <p className={`text-[11px] text-muted-foreground mt-1 ${isOpen ? 'whitespace-pre-wrap break-words leading-relaxed' : 'line-clamp-2 sm:truncate'}`} data-testid={`task-desc-${task.task_id}`}>
+                            {task.description}
+                          </p>
+                        )}
+                        {hasMore && (
+                          <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-[#4A6200] dark:text-[#BFFF00]" data-testid={`task-expand-${task.task_id}`}>
+                            {isOpen
+                              ? <><ChevronUp size={11} /> {lang === 'de' ? 'Weniger' : 'Less'}</>
+                              : <><ChevronDown size={11} /> {lang === 'de' ? 'Mehr anzeigen' : 'Show more'}</>}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center gap-3 mt-1.5">
                     <Badge variant="outline" className={`text-[9px] px-1.5 py-0 h-4 ${priorityColor(task.priority)}`}>{priorityLabel(task.priority)}</Badge>
                     {task.category && task.category !== 'general' && <span className="text-[9px] text-muted-foreground">{task.category}</span>}
@@ -203,12 +329,23 @@ export default function TasksPage() {
                     {task.created_at && <span className="text-[9px] text-muted-foreground">{lang === 'de' ? 'Erstellt' : 'Created'}: {new Date(task.created_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'short' })}</span>}
                   </div>
                 </div>
-                <button onClick={() => deleteTask(task.task_id)} className="text-muted-foreground hover:text-red-400 transition-colors p-1" data-testid={`delete-task-${task.task_id}`}>
+                <button onClick={() => deleteTask(task.task_id)} className="shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted-foreground hover:text-red-400 transition-colors -mr-2" data-testid={`delete-task-${task.task_id}`}>
                   <Trash2 size={14} />
                 </button>
               </CardContent>
             </Card>
           ))}
+          {filtered.length > 5 && (
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="w-full py-2.5 rounded-xl border border-dashed border-black/10 dark:border-white/10 text-[11.5px] font-bold text-muted-foreground hover:text-foreground hover:border-[#BFFF00]/40 transition-colors flex items-center justify-center gap-1.5"
+              data-testid="toggle-all-tasks-btn"
+            >
+              {showAll
+                ? <><ChevronUp size={13} /> {lang === 'de' ? 'Weniger anzeigen' : 'Show less'}</>
+                : <><ChevronDown size={13} /> {lang === 'de' ? `Alle ${filtered.length} anzeigen` : `Show all ${filtered.length}`}</>}
+            </button>
+          )}
         </div>
       </div>
     </DashboardLayout>

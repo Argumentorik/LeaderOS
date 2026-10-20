@@ -4,6 +4,10 @@ import * as Sentry from "@sentry/react";
 import "@/index.css";
 import App from "@/App";
 import { bootstrapConsent, readConsent } from "@/lib/consent";
+// Iter 121.7 (Godmode Observability): install console-buffer BEFORE any
+// other code runs so we capture the very first log lines too.
+import "@/lib/consoleBuffer";
+import { installGlobalHandlers } from "@/lib/telemetry";
 import { maybeInitMetaPixel } from "@/lib/metaPixel";
 import { maybeInitLinkedIn } from "@/lib/linkedinInsight";
 import { maybeInitGoogleAds } from "@/lib/googleAds";
@@ -41,6 +45,7 @@ if (_syncHandoff()) {
   // Browser is navigating away · abort module init.
   // (React, Sentry, PostHog all stay un-booted on the wrong origin.)
 } else {
+  installGlobalHandlers();
   bootstrapConsent();
 
 const consent = readConsent();
@@ -51,7 +56,7 @@ const analyticsConsented = Boolean(consent?.analytics);
 // errors land in the correct project. Falls back to leader-os for preview,
 // localhost, and anything else.
 const hostname = typeof window !== "undefined" ? window.location.hostname : "";
-const isLeaderCheck = /(^|\.)leader-check\.de$/i.test(hostname);
+const isLeaderCheck = /(^|\.)leader-?check\.de$/i.test(hostname);
 const sentryDsn = isLeaderCheck
   ? process.env.REACT_APP_SENTRY_DSN_LEADER_CHECK
   : process.env.REACT_APP_SENTRY_DSN_LEADER_OS;

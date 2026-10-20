@@ -1,0 +1,44 @@
+{
+  "summary": "Iter 188 Frontend-Only Regressionstest — 8 Kundenkorrekturen validiert. 7/8 Punkte grün, 1 minor Abweichung an der Seitenüberschrift von /video-guide.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "VideoGuidePage (/video-guide)",
+        "issue": "Der Menüeintrag heißt korrekt 'Onboarding-Videos', aber die Seitenüberschrift auf /video-guide lautet weiterhin 'Wlad erklärt dir Leader-OS' statt 'Onboarding-Videos'. Der Kundenwunsch aus Iter 188 fordert die neue Überschrift auch auf der Seite selbst.",
+        "selector": "main h1/h2 auf /video-guide",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional (Iter 188 Punkt 5): Seitenüberschrift auf /video-guide von 'Wlad erklärt dir Leader-OS' auf 'Onboarding-Videos' angleichen — Menüeintrag ist bereits richtig."
+  ],
+  "critical_code_review_comments": [
+    "HomeSections.js Zeile 106: static data-testid='home-task-done-criteria' im TodayTaskCard kollidiert mit dem Präfix-Selektor für MyTasksCard-Checkboxen (data-testid^='home-task-done-'). Für stabile Automatisierung wäre 'home-today-done-criteria' oder 'home-task-criteria' sauberer — es hat den ersten Test-Klick-Versuch fehlgeleitet.",
+    "SidebarNav.js sauber implementiert: isOpen(id, defaultOpen) mit hasOwnProperty-Check speichert user-choice korrekt und trennt sie vom Default — funktioniert wie erwartet."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "95%"},
+  "test_credentials": "standard@wladbot.test / test123 (mit offenen Aufgaben), free@wladbot.test / test123",
+  "seed_data_creation": "keine",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Wichtig: Der data-testid 'home-task-done-criteria' im TodayTaskCard startet mit demselben Präfix wie die MyTasksCard-Checkboxen 'home-task-done-<id>'. Wenn du Präfix-Selektoren nutzt, schließe 'criteria' aus (z.B. [data-testid^='home-task-done-']:not([data-testid='home-task-done-criteria'])) oder verwende das row-scope 'home-task-row-<id>' zuerst. Video-Autoplay-Fehler ('demuxer error', H.264/AAC) im Preview-Browser sind erwartet. localStorage-Schlüssel für Menü-Reset: 'leaderos_nav_open'.",
+  "detailed_findings": {
+    "1_dashboard_bild": "PASS — home-wlad-portrait geladen (naturalWidth=440), home-coach-portrait geladen (naturalWidth=440), 'Wlad antwortet dir …' Text vorhanden.",
+    "2_dashboard_aufgaben": "PASS — home-my-tasks vorhanden, 3 Zeilen sichtbar, Klick auf home-task-done-<id> hakt Aufgabe ab, verschwindet aus Liste, bleibt nach Reload verschwunden, Toast 'Erledigt.' erscheint, home-my-tasks-all-btn navigiert (Klick registriert, Ziel /dashboard->/tasks).",
+    "3_dashboard_aufgaben_leer": "PASS — Nach Abhaken aller Free-User-Aufgaben erscheint home-my-tasks-empty mit 'Nichts offen' + Erklärungssatz + Knopf zu /tasks (home-my-tasks-all-empty-btn).",
+    "4_menu_erstzustand": "PASS — Bei geleertem localStorage sind nav-group-items-toolbox und nav-group-items-training beide vorhanden (Gruppen OFFEN), nav-more-panel count=0 (GESCHLOSSEN), nav-hint-toolbox = 'Dein Werkzeugkasten für den Arbeitsalltag.'",
+    "5_menu_zuklappen": "PASS — Auf /tools klappt nav-group-toolbox zu (Items count 1→0), localStorage speichert {\"toolbox\":false}, nach Reload bleibt zugeklappt. Auf /simulations funktioniert nav-group-training genauso.",
+    "6_begriffe": "PASS — Sidebar-Nav enthält NICHT 'Werkzeuge', enthält 'GODMODE' und 'Leitfäden'. /tools-Überschrift = 'GODMODE' mit Untertitel 'Dein Werkzeugkasten für den Arbeitsalltag'. Im Mehr-Panel: 'Onboarding-Videos' vorhanden, 'Video-Guide' nicht mehr.",
+    "7_was_ist_was": "PASS — sidebar-what-is-what-btn count=0 (entfernt). /was-ist-was direkt erreichbar, Seite lädt, enthält 'GODMODE' und kein 'Werkzeuge'.",
+    "8_challengers_volle_breite_1920": "PASS — main-Breite = 1676px (244px Sidebar + 1676 Content = 1920), keine leere Bandbreite, scrollWidth == viewportWidth (kein horizontales Überlaufen). Challenge-Start-Button für einzelne Challenger-Karten auf 1920px nicht per Textselektor 'Challenge starten' gefunden (Card hover erforderlich?), aber Layout-Breite bestätigt.",
+    "9_handy_390x844": "PASS — /dashboard: scrollWidth - innerWidth = 0 (kein horizontales Scrollen), 'Meine Aufgaben' einspaltig. Untere MobileHeroNav zeigt: Dashboard | WladBot | GODMODE | Mehr (GODMODE als dritter Eintrag). /challengers auf mobile ebenfalls ohne horizontales Scrollen.",
+    "10_regression": "PASS — /kurse enthält '10 Kurse', '72 Folgen' und '01.11.2026'. /chat lädt normal (SEXIER-Modell-Antwort funktioniert). Keine relevanten roten Konsolen-Fehler auf /dashboard, /tools, /challengers, /video-guide, /kurse, /chat (nur die erwarteten 401 auf initial /auth/refresh vor dem Login und die vom Auftrag ausgeschlossenen video demuxer errors).",
+    "11_video_guide_heading_MINOR": "MINOR — /video-guide Seitenüberschrift ist 'Wlad erklärt dir Leader-OS' statt 'Onboarding-Videos' wie in der Anforderung."
+  }
+}

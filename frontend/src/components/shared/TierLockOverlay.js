@@ -7,9 +7,9 @@ import { PricingModal } from './PricingModal';
 const FEATURE_LABELS = {
   video_analysis: {
     title: 'Video-Analyse ist exklusiv in Leadership OS PLUS',
-    subtitle: 'Nimm deine Rede auf · KI analysiert Rhetorik, Struktur, Pathos · Pro-Level Report',
+    subtitle: 'Nimm deine Rede auf · KI analysiert nach Wlads SEXIER-Modell · Pro-Level Report',
     benefits: [
-      'KI-basierte Redner-Analyse (Logos/Ethos/Pathos)',
+      'KI-Redner-Analyse nach Wlads SEXIER-Modell',
       'Füllwort-, Tempo- & Struktur-Check',
       'Persönliches Feedback von Wlad-Methodik',
       'Pro-Level Report als PDF-Download',
@@ -87,7 +87,7 @@ export const TierLockOverlay = ({
               ? 'bg-[#BFFF00] text-[#0A0A0A]'
               : 'bg-[#BFFF00]/15 text-[#BFFF00] border border-[#BFFF00]/30'
           }`}>
-            {isAccelerator ? '👑 OS PLUS EXCLUSIVE' : 'LEADERSHIP OS'}
+            {isAccelerator ? 'OS PLUS EXCLUSIVE' : 'LEADERSHIP OS'}
           </div>
           <h2 className="text-2xl font-black text-white tracking-tight leading-tight">{cfg.title}</h2>
           <p className="text-[13px] text-white/60">{cfg.subtitle}</p>
@@ -162,7 +162,7 @@ export const TierLockOverlay = ({
 
         <p className="text-[10px] text-white/30">
           {de ? 'Bereits OS PLUS?' : 'Already OS PLUS?'}{' '}
-          <a href="mailto:support@leader-os.de" className="text-[#BFFF00]/70 hover:text-[#BFFF00] underline">
+          <a href="mailto:support@leaderos.de" className="text-[#BFFF00]/70 hover:text-[#BFFF00] underline">
             <Mail size={10} className="inline -mt-0.5" /> {de ? 'Support kontaktieren' : 'contact support'}
           </a>
         </p>

@@ -1,0 +1,48 @@
+{
+  "iteration": "92_23_9",
+  "summary": "Backend tests for Iter 92.23.9 (Folder Briefing + Knowledge-RAG + Folder Sharing). All 14 new tests PASS, plus full regression on 92.23.7 (17 tests) and 92.23.8 (10 tests) — 41/41 green. Briefing endpoint (LLM call via emergentintegrations gpt-4o-mini) returns valid 4-sentence briefing for both populated and empty folders; foreign and non-existent folders correctly 404. Sharing endpoint is idempotent per folder, public GET works without auth, view counter increments on each fetch, items array is PII-scrubbed (only item_type/title/score/created_at for missions, item_type/title/created_at for chats — no transcript/wlad_assessment/strengths/improvements leak). Unshare cleanly removes the slug. Knowledge-RAG injection sets folder_context_used=true for both populated and empty owned folders without throwing.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": { "ui_bugs": [], "integration_issues": [], "design_issues": [] },
+  "test_report_links": [
+    "/app/backend/tests/test_iter92_23_9_folder_briefing_share.py",
+    "/app/test_reports/pytest/iter92_23_9_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routes/folders.py:329 — GET /api/folders/share/{slug} is mounted on the same APIRouter that uses prefix='/api/folders', so the public path is /api/folders/share/{slug}. This is safe because no /api/folders/* route requires auth at the router-level (each endpoint calls get_current_user manually). But it is fragile: if anyone later adds a router-wide Depends(get_current_user), the public share endpoint silently breaks. Consider moving share/{slug} to a separate router or adding an explicit comment + integration test.",
+    "routes/folders.py:387-390 — View counter increment is best-effort with a bare-except. If MongoDB momentarily fails, the request still returns 200 with view counter from BEFORE the increment but the response includes views+1 (line 405: `share.get('views', 0) + 1`). Minor inconsistency — for analytics-grade view counting consider returning the actual post-increment value via find_one_and_update with return_document=AFTER.",
+    "routes/folders.py:259-265 — Briefing endpoint always uses gpt-4o-mini hardcoded; there is no fallback model. If OpenAI gpt-4o-mini is temporarily unavailable the user gets 502. Acceptable for MVP but worth a graceful degradation (e.g. try gpt-4o, then return a deterministic fallback text built from items+context).",
+    "services_folder_knowledge.py:70-110 — `build_folder_timeline` ignores `item_type == 'note'` items (only video_mission + chat_session branch). Once notes are surfaced in the UI, the timeline silently drops them. Add an elif branch or a TODO comment.",
+    "routes/folders.py:337-345 — Public GET does not check whether the share/folder has been soft-deleted. Currently a hard DELETE removes folder_shares row → 404 (correct). But if a folder is deleted (line 147) the share row remains and returns 404 on the inner folder lookup. Cleaner: also delete folder_shares rows in delete_folder. Currently NOT done — orphan share rows can accumulate.",
+    "routes/folders.py:309 — folder_shares document is inserted without a unique index on (folder_id, user_id) or on slug. Race-condition between two concurrent /share calls could theoretically create two slug rows (the while-loop only checks slug uniqueness, not folder uniqueness). Add a partial unique index on slug + (folder_id, user_id) for production safety. Idempotency test passes because there is no concurrency in the test."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter92_23_9_folder_briefing_share.py (new — 14 tests)"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 new tests pass; 41/41 incl. 92.23.7+8 regression)",
+    "frontend": "not tested (backend-only request per main agent)"
+  },
+  "test_credentials": "accelerator@wladbot.test / test123 (primary — used for all 4 paid LLM calls: 2 briefings + 2 chats). test@test.com / test123 (foreign account for ownership tests).",
+  "seed_data_creation": "Tests create folders prefixed TEST_iter92239_ (full, empty, foreign). Module-level autouse fixture cleans up before AND after the run. Also creates 1-2 chat_sessions per chat-call test (these survive in DB but are TEST_-titled / harmless).",
+  "llm_budget_consumed": "4 paid LLM calls (gpt-4o-mini briefings × 2 + gpt-5.2 chats × 2). Within the ~3-4 call budget specified by main agent.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 92.23.9 backend is fully covered by /app/backend/tests/test_iter92_23_9_folder_briefing_share.py. Tests 01,02,11,12 each cost 1 LLM call (4 total — accelerator account). All other tests are LLM-free. The slug 'command-center-229' mentioned in the original prompt is actually the preview HOST name (REACT_APP_BACKEND_URL=https://command-center-229.preview.emergentagent.com), NOT a folder share slug — share slugs are 10-char uuid hex generated by _gen_slug(). Public GET /api/folders/share/{slug} returns 200 with no auth header (verified). For Iter 92.23.7+8 regression run: cd /app/backend && pytest tests/test_iter92_23_7_folders.py tests/test_iter92_23_8_chat_folder_context.py — currently 27/27 pass.",
+  "key_findings": [
+    "POST /api/folders/{id}/briefing on owned folder w/ item → 200, briefing 20+ chars, items_used>=0, generated_at present ✅",
+    "POST /api/folders/{id}/briefing on owned EMPTY folder → 200, items_used=0, briefing non-empty ✅",
+    "POST /api/folders/{foreign}/briefing → 404 ✅",
+    "POST /api/folders/{nonexistent}/briefing → 404 ✅",
+    "POST /api/folders/{id}/share twice → SAME slug (idempotent) ✅",
+    "POST /api/folders/{foreign}/share → 404 ✅",
+    "GET /api/folders/share/{slug} (NO auth header) → 200 with {folder, owner, items, share}; views counter increments per hit ✅",
+    "GET /api/folders/share/{nonexistent} → 404 ✅",
+    "Public items array is PII-scrubbed — only item_type/title/score/created_at (mission) or item_type/title/created_at (chat). NO transcript / wlad_assessment / strengths / improvements / full_text / analysis fields leak ✅",
+    "DELETE /api/folders/{id}/share → subsequent public GET → 404 ✅",
+    "POST /api/chat with owned folder_id (with items) → folder_context_used=true ✅ (Knowledge-RAG timeline injected into system prompt)",
+    "POST /api/chat with owned EMPTY folder_id → folder_context_used=true, no errors ✅ (summary-only injection, timeline absent — graceful)",
+    "Regression 92.23.7 (folder CRUD + linking): 17/17 ✅",
+    "Regression 92.23.8 (chat folder context + session filter): 10/10 ✅"
+  ]
+}

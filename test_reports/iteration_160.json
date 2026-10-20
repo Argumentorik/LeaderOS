@@ -1,0 +1,39 @@
+{
+  "summary": "Iter 160 (Admin GODMODE + Credit Transparency + Voice-Challenge + Workflow-Persona). Backend: 9/9 grün (POST /api/admin/rag/upload-knowledge-file .txt/.pdf happy paths inkl. sources listing + DELETE cleanup; 3 MB → 413; .exe/.jpg → 422; Free-User → 403; GET /api/credits Free liefert costs/used_by_action/recent(≤8, action+cost+at)/limit). Frontend: (1) /dashboard credit-badge → credit-popover (Portal) sichtbar mit '21 von 50 Credits übrig' + 'Wofür bisher' + 'Zuletzt' + 'Kosten', schließt bei Outside-Click ✅. (2) /chat?voice=1 öffnet voice-mode-overlay automatisch ✅. (3) /admin (Route: /wlad-control-x7k9q2) → RAG Control Center → 'Wissens-Quellen bearbeiten' aufgeklappt → knowledge-file-input accept='.txt,.md,.pdf,.docx', Button-Label 'Wissen hochladen (.txt/.md/.pdf/.docx · max 2 MB)' ✅. (4) Challenge30 start-action-voice-<day>: für standard@wladbot.test aktuell KEINE start-action-* Buttons auf /challenge sichtbar (Tag gesperrt/erledigt) — laut Review-Request akzeptiert; direktes /chat?voice=1 verifiziert (siehe 2). (5) ToolsPage Persona-Prefill nach Reload FAIL: Persona wird in localStorage geschrieben (Key 'wlad_workflow_persona_<user_id>'), aber nach Reload zeigt Rolle-Input '' statt 'QA Teamlead' — Bug im useState-Initializer (user ist auf Mount noch undefined ⇒ liest '..._anon'-Key statt echten User-Key).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "ToolsPage",
+        "issue": "Persona-Prefill nach Reload greift nicht. useState-Initializer nutzt personaKey mit user?.user_id — beim ersten Render ist user noch null → key='wlad_workflow_persona_anon', darin ist nichts gespeichert. Später wechselt personaKey auf echte user_id, aber useState wird nicht neu initialisiert. localStorage enthält den korrekten Eintrag (Test bestätigt), das Feld bleibt trotzdem leer.",
+        "selector": "[data-testid=\"persona-role\"]",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/tests/test_iter160_admin_upload_credits.py",
+    "/app/test_reports/pytest/iter160.xml"
+  ],
+  "action_items": [
+    "ToolsPage: Persona-Prefill fix — z. B. useEffect [user?.user_id] das setPersona setzt, sobald user geladen ist, oder useState verzögert bis user vorhanden. Vorschlag: nach useAuth-Load personaKey neu lesen und mergen (`useEffect(() => { const raw = localStorage.getItem(personaKey); if (raw) setPersona(p => ({ ...p, ...JSON.parse(raw) })); }, [personaKey])`).",
+    "Optional: Challenge30 — falls für Standard-User in Test-Env alle Tage entweder erledigt oder gesperrt, wird 'start-action-voice-*' nie sichtbar. Für sauberen Regression-Test evtl. Seed-Reset des Tages-Fortschritts oder Test-Endpoint."
+  ],
+  "critical_code_review_comments": [
+    "ToolsPage.js Zeile 42-52: useState-Initializer liest personaKey basierend auf user?.user_id, der beim ersten Render undefined ist. Ergebnis: Cache-Miss beim Reload trotz vorhandenem Eintrag. Muss auf einen useEffect umgebaut werden, der auf user reagiert.",
+    "KnowledgeSources: Upload-Bereich standardmäßig collapsed hinter 'knowledge-sources-toggle' — Testagent brauchte einen zusätzlichen Klick. Kein Bug, aber accept-Attribute + Label-Text erfüllen die Review-Anforderung ('.pdf/.docx · max 2 MB')."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "80% (4/5 ohne Blocker; 1 Bug in ToolsPage Persona-Prefill)"},
+  "test_credentials": "test@test.com / test123 (Admin, DB-Flag is_admin), free@wladbot.test / test123, standard@wladbot.test / test123 — alle funktionieren.",
+  "seed_data_creation": "Backend-Test lädt temporäres qa_upload_test.txt + qa_upload_test_pdf.pdf hoch, listet + löscht beide innerhalb desselben Testlaufs (Cleanup verifiziert).",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Admin-Route ist /wlad-control-x7k9q2 (nicht /admin — /admin redirected zum Dashboard). KnowledgeSources ist standardmäßig collapsed → 'knowledge-sources-toggle' klicken. ToolsPage Persona-Prefill Bug: localStorage-Eintrag ist da, aber useState liest den falschen Key beim initialen Render — die Reload-Persistenz greift nicht.",
+  "rca of the issue": "ToolsPage useState-Initializer: `const personaKey = \\`wlad_workflow_persona_${user?.user_id || 'anon'}\\`` — beim allerersten Render (SSR-freies React, aber user via async /api/auth/me) ist user noch null. useState läuft nur einmal. Also wird localStorage['wlad_workflow_persona_anon'] gelesen (leer) und der Rollen-State bleibt ''. Der spätere useEffect schreibt zwar in den echten User-Key, aber liest nichts neu. Fix: zusätzlichen useEffect([personaKey]) einbauen, der bei User-Wechsel den korrekten Cache-Eintrag lädt und in state mergt."
+}

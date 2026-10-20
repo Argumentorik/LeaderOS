@@ -16,7 +16,7 @@ import base64
 import json
 import os
 from datetime import datetime, timezone
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from config import db, logger
 
@@ -29,13 +29,17 @@ CATEGORIES = {
     "video_drip": "unsubscribed_video_drip",
     "drip": "unsubscribed_drip",
     "reminders": "unsubscribed_reminders",
+    "consultation_reminder": "unsubscribed_consultation_reminder",
+    "conversion": "unsubscribed_conversion",
     "all": "unsubscribed_all",
 }
 
 CATEGORY_LABELS = {
     "video_drip": "Lernvideo-Sequence (Woche 1-6)",
-    "drip": "Onboarding-Emails (Tag 1/3/7)",
+    "drip": "Wlads Framework-Serie (EP 01–07)",
     "reminders": "Trial- & Termin-Reminder",
+    "consultation_reminder": "Persönliche Beratungseinladung",
+    "conversion": "Masterclass → Leader-OS Serie (E-Mail 1–8)",
     "all": "ALLE Marketing-Emails",
 }
 
@@ -78,8 +82,15 @@ def verify_unsubscribe_token(token: str) -> dict | None:
         return None
 
 
-def unsubscribe_url(user_id: str, category: str, app_url: str = "https://leaderos.de") -> str:
-    """Helper used by email templates to embed one-click unsubscribe links."""
+def unsubscribe_url(user_id: str, category: str, app_url: str | None = None) -> str:
+    """Helper used by email templates to embed one-click unsubscribe links.
+
+    Iter 92.27: when `app_url` is omitted, resolve from `FRONTEND_BASE_URL` env
+    (per-Vercel-project) so the unsubscribe link points back to the same domain
+    the email was sent FROM.
+    """
+    if not app_url:
+        app_url = (os.environ.get("FRONTEND_BASE_URL") or "https://leaderos.de")
     token = make_unsubscribe_token(user_id, category)
     return f"{app_url.rstrip('/')}/email/unsubscribe?token={token}"
 

@@ -13,6 +13,7 @@ import {
   CheckCircle, Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { openStrategyCall } from '../lib/calendly';
 
 const RadarChart = ({ scores, size = 220 }) => {
   const center = size / 2;
@@ -227,8 +228,8 @@ export default function ProgressPage() {
         </div>
       ))}
       <div className="pt-3 border-t border-border">
-        <Button size="sm" onClick={() => navigate('/coaching')} className="w-full bg-[var(--cyan)] text-black hover:opacity-90" data-testid="progress-coaching-btn">
-          <Star size={14} className="mr-1" /> Coaching buchen
+        <Button size="sm" onClick={() => openStrategyCall('progress-leaderboard')} className="w-full bg-[var(--cyan)] text-black hover:opacity-90" data-testid="progress-coaching-btn">
+          <Star size={14} className="mr-1" /> Strategiegespräch buchen
         </Button>
       </div>
     </div>

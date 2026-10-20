@@ -8,6 +8,10 @@ import httpx
 from datetime import datetime, timezone
 
 from config import db, logger
+
+# Public funnel URL — both spellings (leadercheck.de / leadercheck.de) are ours.
+# Flip via env LEADERCHECK_URL once DNS for the non-hyphen domain is live.
+LEADERCHECK_URL = (os.environ.get("LEADERCHECK_URL") or "https://leadercheck.de").rstrip("/")
 from services import get_current_user
 from services_actions import record_user_action
 
@@ -38,7 +42,7 @@ class WladHubDiagnosis(BaseModel):
 
 
 class WladHubSyncRequest(BaseModel):
-    wladhub_email: Optional[str] = None
+    # SEC-002: sync is always bound to the caller's own account email.
     sync_scores: bool = True
     sync_action_plan: bool = True
 
@@ -49,39 +53,69 @@ class OnboardingData(BaseModel):
     primary_goal: Optional[str] = None
     experience_level: Optional[str] = None
     has_wladhub_diagnosis: bool = False
+    # Iter 92.45 (Mert · Riverside-style): where did the user hear about
+    # Leader-OS? Feeds marketing attribution + `source_platform` refinement.
+    heard_from: Optional[str] = None
 
 
 # ========== SUPABASE HELPERS ==========
 
+async def _resolve_supabase_user_id(client: httpx.AsyncClient, supabase_url: str, service_key: str, email: str) -> str | None:
+    """Resolve the Supabase auth user id for an email (paginated, max 1000 users)."""
+    email_l = (email or "").lower()
+    headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}"}
+    for page in range(1, 6):
+        resp = await client.get(
+            f"{supabase_url}/auth/v1/admin/users",
+            headers=headers,
+            params={"page": page, "per_page": 200},
+        )
+        if resp.status_code != 200:
+            break
+        users = resp.json().get("users", [])
+        for u in users:
+            if (u.get("email") or "").lower() == email_l:
+                return u["id"]
+        if len(users) < 200:
+            break
+    return None
+
+
 async def _fetch_supabase_insights(user_email: str) -> list:
-    """Fetch leadership_insights from Supabase for a given user email."""
+    """Fetch leadership_insights from Supabase for a given user email.
+
+    Iter 92.62 SECURITY FIX: if the email has no Supabase account we return []
+    — NEVER fall back to an unfiltered query (that leaked other users' data).
+    """
     supabase_url, service_key = _get_supabase_config()
     if not supabase_url or not service_key:
         return []
     try:
         async with httpx.AsyncClient(timeout=10) as client:
-            auth_resp = await client.get(
-                f"{supabase_url}/auth/v1/admin/users",
-                headers={"apikey": service_key, "Authorization": f"Bearer {service_key}"},
-                params={"per_page": 100},
+            # leadercheck.de schreibt insights mit der public.users-id → diese
+            # per E-Mail auflösen (Iter 92.63d); Auth-id nur als Fallback.
+            headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}"}
+            pub = await client.get(
+                f"{supabase_url}/rest/v1/users",
+                headers=headers,
+                params={"select": "id", "email_lower": f"eq.{(user_email or '').lower()}", "limit": "1"},
             )
-            supabase_user_id = None
-            if auth_resp.status_code == 200:
-                users = auth_resp.json().get("users", [])
-                for u in users:
-                    if u.get("email", "").lower() == user_email.lower():
-                        supabase_user_id = u["id"]
-                        break
-
-            query = f"{supabase_url}/rest/v1/leadership_insights?select=*&order=assessed_at.desc&limit=5"
-            if supabase_user_id:
-                query += f"&user_id=eq.{supabase_user_id}"
-
-            resp = await client.get(query, headers={"apikey": service_key, "Authorization": f"Bearer {service_key}"})
+            rows = pub.json() if pub.status_code == 200 else []
+            supabase_user_id = rows[0]["id"] if rows else None
+            if not supabase_user_id:
+                supabase_user_id = await _resolve_supabase_user_id(client, supabase_url, service_key, user_email)
+            if not supabase_user_id:
+                logger.info(f"Supabase: no account for {user_email} — skipping insights fetch")
+                return []
+            query = (
+                f"{supabase_url}/rest/v1/leadership_insights"
+                f"?select=*&order=assessed_at.desc&limit=5&user_id=eq.{supabase_user_id}"
+            )
+            resp = await client.get(query, headers=headers)
             if resp.status_code == 200:
                 return resp.json()
     except Exception as e:
-        logger.error(f"Supabase fetch error: {e}")
+        logger.error(f"Supabase fetch error: {type(e).__name__}: {e!r}")
     return []
 
 
@@ -109,8 +143,11 @@ async def _write_supabase_insight(user_id: str, campaign_id: str, scores: dict):
                     "assessed_at": datetime.now(timezone.utc).isoformat(),
                 },
             )
-            logger.info(f"Supabase write: status={resp.status_code} body={resp.text[:200]}")
-            return resp.status_code in (200, 201)
+            if resp.status_code in (200, 201):
+                logger.info(f"Supabase write OK: status={resp.status_code}")
+                return True
+            logger.error(f"Supabase write FAILED: status={resp.status_code} body={resp.text[:300]}")
+            return False
     except Exception as e:
         logger.error(f"Supabase write error: {e}")
     return False
@@ -130,6 +167,7 @@ async def _save_diagnosis_to_mongo(user_id: str, scores: dict, source: str = "ma
         "action_plan": scores.get("action_plan", []),
         "roi_forecast": scores.get("roi_forecast"),
         "diagnosis_date": scores.get("diagnosis_date") or datetime.now(timezone.utc).date().isoformat(),
+        "source_assessed_at": scores.get("source_assessed_at"),
         "imported_at": datetime.now(timezone.utc).isoformat(),
         "source": source,
         "fuehrungsdimensionen": scores.get("fuehrungsdimensionen"),
@@ -143,6 +181,9 @@ async def _save_diagnosis_to_mongo(user_id: str, scores: dict, source: str = "ma
         await db.wladhub_diagnoses.update_one({"user_id": user_id}, {"$set": diagnosis_doc})
     else:
         await db.wladhub_diagnoses.insert_one(diagnosis_doc)
+    # motor.insert_one mutates the dict to include ObjectId `_id` — strip it
+    # so the endpoint response stays JSON-serializable.
+    diagnosis_doc.pop("_id", None)
 
     await db.users.update_one({"user_id": user_id}, {"$set": {
         "wladhub_connected": True,
@@ -281,7 +322,9 @@ async def get_three_layer_score(request: Request) -> dict:
 async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
     """Sync data from Supabase WladHub database into LeaderOS."""
     user = await get_current_user(request)
-    email = data.wladhub_email or user.get("email", "")
+    # SEC-002: always sync the caller's own verified account email — a
+    # client-supplied email would allow reading other people's diagnoses.
+    email = user.get("email", "")
 
     # Log the sync attempt
     await db.wladhub_sync_log.insert_one({
@@ -308,7 +351,7 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
         return {
             "status": "no_data",
             "message": "Noch keine Leader-Diagnose gefunden. Starte die kostenlose Diagnose auf leadercheck.de",
-            "wladhub_url": "https://leadercheck.de",
+            "wladhub_url": LEADERCHECK_URL,
             "has_diagnosis": False,
         }
 
@@ -342,33 +385,125 @@ async def sync_wladhub_data(data: WladHubSyncRequest, request: Request):
         "message": f"WladHub-Daten erfolgreich importiert ({len(insights)} Einträge)",
         "has_diagnosis": True,
         "scores": scores,
+        "records_imported": len(insights),
         "last_sync": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@router.get("/sync/status")
+async def sync_status(request: Request):
+    """Iter 121: transparent health-check for the leadercheck.de sync.
+
+    Returns whether the Supabase bridge is configured, whether the caller's
+    email exists on leadercheck.de, and when the last sync happened. Used
+    by the diagnose page to show the user "sync bridge OK" instead of a
+    silent redirect.
+    """
+    user = await get_current_user(request)
+    email = user.get("email", "")
+    supabase_url, service_key = _get_supabase_config()
+    bridge_configured = bool(supabase_url and service_key)
+    has_remote = False
+    remote_row_count = 0
+    if bridge_configured and email:
+        try:
+            insights = await _fetch_supabase_insights(email)
+            has_remote = len(insights) > 0
+            remote_row_count = len(insights)
+        except Exception as e:
+            logger.warning(f"sync_status: remote lookup failed for {email}: {e}")
+    local = await db.wladhub_diagnoses.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return {
+        "bridge_configured": bridge_configured,
+        "email_used": email,
+        "leader_check_has_data": has_remote,
+        "leader_check_row_count": remote_row_count,
+        "has_local_diagnosis": bool(local),
+        "last_local_sync": user.get("wladhub_last_sync"),
+        "leadercheck_url": LEADERCHECK_URL,
     }
 
 
 @router.post("/push-to-supabase")
 async def push_scores_to_supabase(request: Request):
-    """Push LeaderOS scores back to Supabase for cross-platform sync."""
+    """Push LeaderOS scores back to Supabase for cross-platform sync.
+
+    Iter 92.62 FK-FIX: use the REAL Supabase auth user id (resolved by email,
+    auto-created if missing) instead of a SHA256-derived UUID that violated
+    the leadership_insights.user_id foreign key.
+    """
     user = await get_current_user(request)
     scores = user.get("wladhub_scores", {})
     if not scores:
         raise HTTPException(status_code=400, detail="No WladHub scores to push")
 
-    # Supabase expects UUID for user_id — generate a deterministic one from our user_id.
-    # SHA-256 is used here as a one-way hash for deterministic ID mapping (not for security/auth).
-    import hashlib
-    digest = hashlib.sha256(user["user_id"].encode()).hexdigest()[:32]
-    user_uuid = str(uuid.UUID(digest))
+    supabase_url, service_key = _get_supabase_config()
+    if not supabase_url or not service_key:
+        raise HTTPException(status_code=502, detail="Supabase not configured")
+
+    headers = {"apikey": service_key, "Authorization": f"Bearer {service_key}", "Content-Type": "application/json"}
+    async with httpx.AsyncClient(timeout=15) as client:
+        # Iter 92.63d: leadership_insights.user_id → public.users.id. Die Zeile
+        # kann bereits mit EIGENER id existieren (Auth-Trigger/CRM-Mirror) →
+        # IMMER zuerst per E-Mail auflösen, nur bei Fehlen anlegen.
+        insight_uid = None
+        pub = await client.get(
+            f"{supabase_url}/rest/v1/users",
+            headers=headers,
+            params={"select": "id", "email_lower": f"eq.{user['email'].lower()}", "limit": "1"},
+        )
+        rows = pub.json() if pub.status_code == 200 else []
+        if rows:
+            insight_uid = rows[0]["id"]
+        else:
+            sb_uid = await _resolve_supabase_user_id(client, supabase_url, service_key, user["email"])
+            if not sb_uid:
+                create = await client.post(
+                    f"{supabase_url}/auth/v1/admin/users",
+                    headers=headers,
+                    json={"email": user["email"], "email_confirm": True},
+                )
+                if create.status_code in (200, 201):
+                    sb_uid = create.json().get("id")
+                else:
+                    logger.error(f"Supabase user create failed: {create.status_code} {create.text[:200]}")
+            if sb_uid:
+                mirror = await client.post(
+                    f"{supabase_url}/rest/v1/users",
+                    headers={**headers, "Prefer": "return=representation"},
+                    json={
+                        "id": sb_uid,
+                        "email": user["email"],
+                        "source_platform": "leader-os",
+                    },
+                )
+                if mirror.status_code in (200, 201):
+                    insight_uid = sb_uid
+                else:
+                    logger.error(f"Supabase public.users mirror failed: {mirror.status_code} {mirror.text[:200]}")
+                    # Race/Trigger kann die Zeile inzwischen angelegt haben → re-lookup
+                    pub2 = await client.get(
+                        f"{supabase_url}/rest/v1/users",
+                        headers=headers,
+                        params={"select": "id", "email_lower": f"eq.{user['email'].lower()}", "limit": "1"},
+                    )
+                    rows2 = pub2.json() if pub2.status_code == 200 else []
+                    if rows2:
+                        insight_uid = rows2[0]["id"]
+        if not insight_uid:
+            raise HTTPException(status_code=409, detail="Kein leadercheck.de-Konto für diese E-Mail — Push nicht möglich")
 
     success = await _write_supabase_insight(
-        user_id=user_uuid,
+        user_id=insight_uid,
         campaign_id=f"leaderos_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
         scores=scores,
     )
 
     if success:
         return {"message": "Scores erfolgreich zu WladHub gepusht", "status": "success"}
-    raise HTTPException(status_code=502, detail="Supabase connection failed")
+    # 409 statt 502: Cloudflare ersetzt 5xx durch eigene HTML-Seite und
+    # verschluckt das JSON-Detail. Fehlkonfiguration ist ein Konflikt, kein Gateway-Fehler.
+    raise HTTPException(status_code=409, detail="Supabase write failed — siehe Backend-Log (leadership_insights)")
 
 
 @router.get("/supabase-status")
@@ -395,13 +530,21 @@ async def check_supabase_status(request: Request):
 async def save_onboarding_data(data: OnboardingData, request: Request):
     """Save user's onboarding preferences and goals."""
     user = await get_current_user(request)
-    await db.users.update_one({"user_id": user["user_id"]}, {"$set": {
+    update_fields = {
         "onboarding_completed": True,
+        "onboarding_completed_at": datetime.now(timezone.utc).isoformat(),
         "role": data.role,
         "team_size": data.team_size,
         "primary_goal": data.primary_goal,
         "experience_level": data.experience_level,
         "has_wladhub_diagnosis": data.has_wladhub_diagnosis,
-    }})
-    await record_user_action(user["user_id"], "onboarding_completed", metadata={"goal": data.primary_goal})
+    }
+    # Iter 92.45: persist marketing attribution (Riverside pattern)
+    if data.heard_from:
+        update_fields["heard_from"] = data.heard_from
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": update_fields})
+    await record_user_action(
+        user["user_id"], "onboarding_completed",
+        metadata={"goal": data.primary_goal, "heard_from": data.heard_from},
+    )
     return {"message": "Onboarding abgeschlossen", "xp_earned": 5}

@@ -81,6 +81,9 @@ if _sentry_dsn:
 
 from config import client, db, logger
 from middleware import RateLimitMiddleware, SecurityHeadersMiddleware
+import services_llm_async
+
+services_llm_async.install()
 
 from routes.auth import router as auth_router
 from routes.chat import router as chat_router
@@ -100,6 +103,10 @@ from routes.referral import router as referral_router
 from routes.enterprise import router as enterprise_router
 from routes.credits import router as credits_router
 from routes.challenge30 import router as challenge30_router
+from routes.guide import router as guide_router
+from routes.guide_interactive import router as guide_interactive_router
+from routes.courses import router as courses_router
+from routes.media_admin import router as media_admin_router
 from routes.ki_news import router as ki_news_router
 from routes.my_path import router as my_path_router
 from routes.community import router as community_router
@@ -108,16 +115,23 @@ from routes.admin_quality import router as admin_quality_router
 from routes.profile import router as profile_router
 from routes.voice_tts import router as voice_tts_router
 from routes.monitoring import router as monitoring_router
+from routes.telemetry import router as telemetry_router
+from routes.journey import router as journey_router
 from routes.gdpr import router as gdpr_router
 from routes.oauth import router as oauth_router
 from routes.folders import router as folders_router
 from routes.leader_check import router as leader_check_router
+from routes.license import router as license_router
+from routes.rag_admin import router as rag_admin_router
+from routes.support import router as support_router
 
 app = FastAPI(title="WladBot API", version="5.0")
 
 # Include all route modules
 app.include_router(auth_router)
 app.include_router(oauth_router)
+app.include_router(license_router)
+app.include_router(rag_admin_router)
 app.include_router(chat_router)
 app.include_router(tasks_router)
 app.include_router(simulations_router)
@@ -135,16 +149,23 @@ app.include_router(referral_router)
 app.include_router(enterprise_router)
 app.include_router(credits_router)
 app.include_router(challenge30_router)
+app.include_router(guide_router)
+app.include_router(guide_interactive_router)
+app.include_router(courses_router)
+app.include_router(media_admin_router)
 app.include_router(ki_news_router)
 app.include_router(my_path_router)
 app.include_router(community_router)
-app.include_router(folders_router)
 app.include_router(admin_router)
 app.include_router(admin_quality_router)
 app.include_router(profile_router)
 app.include_router(voice_tts_router)
 app.include_router(monitoring_router)
+app.include_router(telemetry_router)
+app.include_router(journey_router)
 app.include_router(gdpr_router)
+app.include_router(support_router)
+app.include_router(folders_router)
 app.include_router(leader_check_router)
 
 # Internal sync layer (Supabase ↔ Mongo)
@@ -158,6 +179,14 @@ app.include_router(og_router)
 # Lifecycle email crons (trial reminders + drip sequence)
 from routes.lifecycle_emails import router as lifecycle_emails_router  # noqa: E402
 app.include_router(lifecycle_emails_router)
+
+# Masterclass client management (admin direct-create + CSV import + expiry cron)
+from routes.masterclass_admin import router as masterclass_admin_router  # noqa: E402
+app.include_router(masterclass_admin_router)
+
+# Conversion Center — approval-gated 400-client email sequence (Iter 133)
+from routes.conversion_center import router as conversion_center_router  # noqa: E402
+app.include_router(conversion_center_router)
 
 # A/B testing endpoints (variant assignment + event logging + admin results)
 from routes.ab_testing import router as ab_testing_router  # noqa: E402
@@ -179,6 +208,14 @@ app.include_router(webinar_router)
 from routes.license_activation import router as license_activation_router  # noqa: E402
 app.include_router(license_activation_router)
 
+# Premium-first feature rollout (off → premium → all)
+from routes.features import router as features_router  # noqa: E402
+app.include_router(features_router)
+
+# Leadership LAB: eigene Anmeldung in zwei Stufen (Iter 186)
+from routes.lab import router as lab_router  # noqa: E402
+app.include_router(lab_router)
+
 
 @app.get("/api/")
 async def root() -> dict[str, str]:
@@ -194,25 +231,44 @@ async def health_check() -> dict[str, str]:
 async def rag_health() -> dict:
     """Diagnostic: is the WladBot RAG knowledge layer wired up correctly?
 
-    Returns config flags + cache size. Does NOT expose secret values.
-    Use this after rotating Voyage/Supabase keys to verify activation.
+    Embeddings run fully local (no external provider, no keys). Reports the
+    active provider/model/dimension AND what is actually stored, so a drift
+    between engine and vector store is visible at a glance.
     """
     from services_rag import rag_status
-    return rag_status()
+    status = rag_status()
+    sample = await db.rag_chunks.find_one({}, {"embedding": 1})
+    store_dim = len((sample or {}).get("embedding") or []) if sample else None
+    status["chunks"] = await db.rag_chunks.estimated_document_count()
+    status["store_dim"] = store_dim
+    status["consistent"] = store_dim is None or store_dim == status["dim"]
+    return status
 
 
 # CORS: `allow_credentials=True` (needed for httpOnly session cookie) is INCOMPATIBLE
 # with `allow_origins=["*"]` per the CORS spec — browsers block credentialed requests.
 # Strategy: if CORS_ORIGINS="*", use allow_origin_regex=".*" which works WITH credentials.
 # Otherwise: split env list into explicit origins (production-safe).
+#
+# Iter 92.26 (Mert architecture brief, Jun 2026): production whitelist is locked to
+# 4 domains + www variants (leaderos.de, leadercheck.de, leader-os.de, leadercheck.de).
+# When ENV=production AND CORS_ORIGINS is `*`/empty, we REFUSE to start so a
+# misconfigured deploy fails loudly instead of silently exposing the API.
 _raw_cors = os.environ.get("CORS_ORIGINS", "").strip()
+_env_name = os.environ.get("ENV", os.environ.get("ENVIRONMENT", "")).lower()
+if _env_name == "production" and _raw_cors in ("", "*"):
+    raise RuntimeError(
+        "CORS_ORIGINS must be an explicit comma-separated whitelist in production "
+        "(wildcard `*` is forbidden per architecture rules). Set it to the 4 "
+        "production domains (+ optional www) in Vercel env. See backend/.env.example."
+    )
 _cors_kwargs: dict = {
     "allow_credentials": True,
     "allow_methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
 }
 if _raw_cors in ("", "*"):
-    # Wildcard with credentials: must use regex form
+    # Wildcard with credentials: must use regex form. Dev/Preview only.
     _cors_kwargs["allow_origin_regex"] = r".*"
 else:
     _cors_kwargs["allow_origins"] = [o.strip() for o in _raw_cors.split(",") if o.strip()]
@@ -224,16 +280,65 @@ app.add_middleware(RateLimitMiddleware)
 
 @app.on_event("startup")
 async def startup() -> None:
+    # Warm the local embedding model so the first RAG query is instant
+    try:
+        import asyncio as _aio
+        from services_embeddings import preload
+        _aio.get_event_loop().create_task(preload())
+        # GODMODE (Iter 119): self-healing knowledge base — auto-ingest if the
+        # vector store is empty or holds legacy-dimension vectors.
+        from routes.rag_admin import ensure_rag_ready
+        _aio.get_event_loop().create_task(ensure_rag_ready())
+    except Exception as e:
+        logger.warning(f"Embedding preload deferred: {e}")
+
+    # Iter 186: Tages-Mails des 30-Tage-Programms laufen in der App selbst
+    # (7:00 deutsche Zeit, pro Tag einmal, gegen Doppelversand abgesichert).
+    try:
+        import asyncio as _aio2
+
+        from services_challenge_mailer import challenge_mail_loop
+        _aio2.create_task(challenge_mail_loop())
+    except Exception as e:
+        logger.warning(f"Tages-Mail-Schleife nicht gestartet: {e}")
+
     try:
         from routes.uploads import init_storage
         init_storage()
     except Exception as e:
         logger.warning(f"Storage init deferred: {e}")
 
+    # Guide-Jobs leben im Prozess: nach einem Neustart hängende "*_running"-Clips freigeben (Fal-Requests bleiben abholbar)
+    try:
+        from routes.guide import release_orphaned_jobs
+        await release_orphaned_jobs()
+    except Exception as e:
+        logger.warning(f"Guide job reconcile deferred: {e}")
+
+    # Iter 182: Video-Analysen und Chunk-Uploads leben im Prozess bzw. auf der Platte —
+    # nach einem Neustart aufräumen (Credit zurück, verwaiste Upload-Stücke löschen).
+    try:
+        from routes.video import release_orphaned_video_jobs
+        await release_orphaned_video_jobs()
+    except Exception as e:
+        logger.warning(f"Video job reconcile deferred: {e}")
+
+    try:
+        from routes.media_admin import cleanup_stale_uploads
+        await cleanup_stale_uploads()
+    except Exception as e:
+        logger.warning(f"Media upload cleanup deferred: {e}")
+
+    # SEC-003: promote allowlisted EXISTING users to is_admin (runtime auth = DB flag only)
+    try:
+        from routes.admin import seed_admin_flags
+        await seed_admin_flags()
+    except Exception as e:
+        logger.warning(f"Admin seed failed: {e}")
+
     # MongoDB TTL index — auto-delete expired sessions
     try:
-        from pymongo import ASCENDING
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         # Convert existing string expires_at to datetime for TTL to work
         async for sess in db.user_sessions.find({"expires_at": {"$type": "string"}}, {"_id": 1, "expires_at": 1}):
@@ -245,6 +350,14 @@ async def startup() -> None:
 
         await db.user_sessions.create_index("expires_at", expireAfterSeconds=0)
         logger.info("TTL index on user_sessions.expires_at created/verified")
+
+        # Hot-path indexes: session lookup on every authed request + chat history
+        await db.user_sessions.create_index("session_token", unique=True)
+        await db.chat_messages.create_index([("session_id", 1), ("created_at", 1)])
+        await db.chat_sessions.create_index([("user_id", 1), ("updated_at", -1)])
+        # Ladezeit-Telemetrie (Iter 168): 14 Tage aufheben, dann automatisch weg
+        await db.page_loads.create_index("expires_at", expireAfterSeconds=14 * 24 * 3600)
+        await db.page_loads.create_index([("created_at", -1)])
 
         # Enterprise-grade: case-insensitive unique email index (prevents duplicate accounts)
         # First, normalize existing emails to lowercase so the index can be built cleanly
@@ -260,6 +373,18 @@ async def startup() -> None:
         except Exception as idx_err:
             logger.warning(f"users.email unique index deferred (possible legacy dupes): {idx_err}")
 
+        # Iter 92.24 (Mert): phone-OR-email login. Sparse unique index so users
+        # without a phone (the majority pre-92.23.12) tolerate the null while
+        # newly-registered users get global uniqueness on phone_normalized.
+        try:
+            await db.users.create_index(
+                "phone_normalized", unique=True, sparse=True,
+                name="phone_normalized_unique_sparse",
+            )
+            logger.info("Sparse unique index on users.phone_normalized created/verified")
+        except Exception as idx_err:
+            logger.warning(f"users.phone_normalized unique index deferred: {idx_err}")
+
         # Rate-limit tracking: TTL on login_attempts
         await db.login_attempts.create_index("expires_at", expireAfterSeconds=0)
         await db.login_attempts.create_index([("email", 1), ("ip", 1)])
@@ -268,7 +393,28 @@ async def startup() -> None:
         await db.users.create_index([("xp", -1)])
         await db.chat_messages.create_index([("session_id", 1), ("created_at", 1)])
         await db.activity_log.create_index([("user_id", 1), ("created_at", -1)])
-        logger.info("Production query indexes ensured (users.xp, chat_messages.session_id, activity_log.user_id+created_at)")
+        # Iter 124.3 (Wlad Godmode Scale): argumentation prep + templates
+        await db.argumentation_strategies.create_index([("user_id", 1), ("created_at", -1)])
+        await db.argumentation_strategies.create_index("strategy_id", unique=True, sparse=True)
+        await db.argumentation_templates.create_index([("user_id", 1), ("created_at", -1)])
+        await db.argumentation_templates.create_index("template_id", unique=True, sparse=True)
+        await db.argumentation_templates.create_index("share_token", unique=True, sparse=True)
+        logger.info("Production query indexes ensured (users.xp, chat_messages.session_id, activity_log.user_id+created_at, argumentation_*)")
+
+        # Iter 135 (Audit · launch scale): hot paths that were still doing full
+        # collection scans. Checkout status is polled every 3s per buyer and the
+        # credit balance is read on every chat message — both were unindexed.
+        await db.payment_transactions.create_index("session_id", name="tx_session_id")
+        await db.payment_transactions.create_index([("user_id", 1), ("created_at", -1)], name="tx_user_recent")
+        await db.credits.create_index("user_id", name="credits_user_id")
+        await db.chat_sessions.create_index("session_id", name="chat_session_id")
+        await db.tasks.create_index([("user_id", 1), ("created_at", -1)], name="tasks_user_recent")
+        await db.folder_items.create_index([("folder_id", 1), ("user_id", 1)], name="folder_items_folder_user")
+        await db.wladhub_diagnoses.create_index("user_id", name="diag_user_id")
+        await db.wladhub_sync_log.create_index([("created_at", -1)], name="sync_log_recent")
+        await db.wladhub_sync_log.create_index([("status", 1), ("created_at", -1)], name="sync_log_status_recent")
+        await db.feature_rollout.create_index("feature_key", unique=True, name="feature_key_unique")
+        logger.info("Iter135 hot-path indexes ensured (payments, credits, chat_sessions, tasks, folders, wladhub, features)")
 
         # Supabase sync events — idempotency (unique event_id) + audit trail
         await db.sync_events.create_index("event_id", unique=True, name="sync_event_id_unique")
@@ -294,7 +440,15 @@ async def startup() -> None:
         await db.video_attempts.create_index([("user_id", 1), ("created_at", -1)], name="video_user_recent")
         # rate-limit auxiliary
         await db.login_attempts.create_index([("ip", 1), ("created_at", -1)], name="login_ip_recent")
-        logger.info("10k-user scaling indexes ensured (email_log, ab_test_events, events, chat_messages, video_attempts, login_attempts.ip)")
+        # Iter 92.15 (Mert): Community 10k-user hot-paths
+        await db.community_posts.create_index([("created_at", -1)], name="community_feed_recent")
+        await db.community_posts.create_index([("category", 1), ("created_at", -1)], name="community_category_recent")
+        await db.community_posts.create_index([("user_id", 1), ("created_at", -1)], name="community_user_posts")
+        await db.community_comments.create_index([("post_id", 1), ("created_at", 1)], name="community_post_comments")
+        await db.community_comments.create_index([("user_id", 1), ("created_at", -1)], name="community_user_comments")
+        # Support / WladHelp ticket archive (only if/when synthesized)
+        await db.support_messages.create_index([("user_id", 1), ("created_at", -1)], name="support_user_recent")
+        logger.info("10k-user scaling indexes ensured (email_log, ab_test_events, events, chat_messages, video_attempts, login_attempts.ip, community, support_messages)")
 
         # Magic-link TTL — auto-cleanup expired tokens
         from services_magic_link import ensure_indexes as ensure_magic_link_indexes

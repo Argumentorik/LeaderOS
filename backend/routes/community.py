@@ -22,13 +22,44 @@ class CommentIn(BaseModel):
 
 
 @router.get("/feed")
-async def get_feed(request: Request, category: Optional[str] = None, limit: int = 50):
-    """Return latest posts with author info + comment count + like status."""
+async def get_feed(
+    request: Request,
+    category: Optional[str] = None,
+    feed: Optional[str] = "all",
+    limit: int = 50,
+):
+    """Return latest posts with author info + comment count + like status.
+
+    Filters:
+      - category=all|win|question|challenge|general → standard category filter
+      - feed=all|top|mine|liked
+          * all   : default — latest first across the whole community
+          * top   : ranked by likes_count (most-liked posts) — community top-of-the-week feel
+          * mine  : only the requesting user's own posts (personal feed)
+          * liked : only posts the requesting user has liked (read-it-again)
+    """
     user = await get_current_user(request)
     query = {}
     if category and category != "all":
         query["category"] = category
-    posts = await db.community_posts.find(query, {"_id": 0}).sort("created_at", -1).to_list(limit)
+    if feed == "mine":
+        query["user_id"] = user["user_id"]
+    elif feed == "liked":
+        query["likes"] = user["user_id"]
+
+    sort = [("created_at", -1)]
+    if feed == "top":
+        # MongoDB can't sort by computed $size in find(); use aggregate.
+        pipeline = [
+            {"$match": query},
+            {"$addFields": {"likes_count": {"$size": {"$ifNull": ["$likes", []]}}}},
+            {"$sort": {"likes_count": -1, "created_at": -1}},
+            {"$limit": limit},
+            {"$project": {"_id": 0}},
+        ]
+        posts = await db.community_posts.aggregate(pipeline).to_list(limit)
+    else:
+        posts = await db.community_posts.find(query, {"_id": 0}).sort(sort).to_list(limit)
     # Enrich with author info
     user_ids = list({p["user_id"] for p in posts})
     users = {
@@ -57,6 +88,59 @@ async def get_feed(request: Request, category: Optional[str] = None, limit: int 
         p["likes_count"] = len(p.get("likes") or [])
         p.pop("likes", None)
     return posts
+
+
+@router.get("/me-stats")
+async def get_my_community_stats(request: Request):
+    """Personal Community-Profile: post count, total likes received, rank vs leaderboard.
+
+    Used by the personalized Community Page header so each user sees their own
+    standing prominently before scrolling into the public feed.
+    """
+    user = await get_current_user(request)
+    user_id = user["user_id"]
+
+    # Aggregate everyone's stats once, then locate this user's rank.
+    pipeline = [
+        {"$project": {
+            "user_id": 1,
+            "likes_count": {"$size": {"$ifNull": ["$likes", []]}},
+        }},
+        {"$group": {
+            "_id": "$user_id",
+            "post_count": {"$sum": 1},
+            "total_likes": {"$sum": "$likes_count"},
+        }},
+        {"$sort": {"total_likes": -1, "post_count": -1}},
+    ]
+    rows = await db.community_posts.aggregate(pipeline).to_list(10000)
+    total_leaders = len(rows)
+    my_rank = None
+    my_post_count = 0
+    my_total_likes = 0
+    for idx, r in enumerate(rows):
+        if r["_id"] == user_id:
+            my_rank = idx + 1
+            my_post_count = r["post_count"]
+            my_total_likes = r["total_likes"]
+            break
+
+    # Comments authored — secondary engagement metric.
+    my_comment_count = await db.community_comments.count_documents({"user_id": user_id})
+
+    return {
+        "user_id": user_id,
+        "name": user.get("name", "Leader"),
+        "picture": user.get("picture"),
+        "tier": user.get("tier", "free"),
+        "level": user.get("level", ""),
+        "xp": user.get("xp", 0),
+        "post_count": my_post_count,
+        "total_likes": my_total_likes,
+        "comment_count": my_comment_count,
+        "rank": my_rank,           # null if user has 0 posts (not on leaderboard yet)
+        "total_leaders": total_leaders,
+    }
 
 
 @router.post("/posts")

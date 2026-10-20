@@ -5,7 +5,7 @@ export const ChatInlineUpsell = ({ onNavigate, de }) => (
     <div className="bg-[#0A0A0A] text-white rounded-2xl px-4 py-3 max-w-md border border-[#BFFF00]/10">
       <p className="text-[11px] text-white/60 mb-2">
         <Zap size={10} className="inline mr-1 text-[#BFFF00]" />
-        {de ? 'Tipp: Schalte unbegrenztes Coaching frei und arbeite mit Wlad direkt.' : 'Tip: Unlock unlimited coaching and work with Wlad directly.'}
+        {de ? 'Tipp: Schalte unbegrenztes Coaching frei und arbeite mit Wlads Expertenteam.' : 'Tip: Unlock unlimited coaching and work with Wlad’s expert team.'}
       </p>
       <div className="flex gap-2">
         <button onClick={onNavigate} className="text-[10px] font-bold text-[#BFFF00] hover:text-[#D4FF4D] transition-colors">

@@ -2,11 +2,15 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import logger from '../lib/logger';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useLanguage } from '../contexts/LanguageContext';
+import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { generatePDF } from '../lib/pdfGenerator';
 import api from '../lib/api';
+import { swrGet } from '../lib/swrCache';
 import { BookOpen } from 'lucide-react';
 import { PlaybookListCard } from '../components/playbooks/PlaybookListCard';
 import { PlaybookChatView } from '../components/playbooks/PlaybookChatView';
+
+const PLAYBOOK_CLIPS = ['bp-playbooks'];
 
 export default function PlaybooksPage() {
   const { lang } = useLanguage();
@@ -24,7 +28,7 @@ export default function PlaybooksPage() {
   const scrollRef = useRef(null);
 
   const loadPlaybooks = useCallback(async () => {
-    try { const res = await api.get('/playbooks'); setPlaybooks(res.data); } catch (err) { logger.error(err); }
+    await swrGet('/playbooks', setPlaybooks, { onError: (err) => logger.error(err) });
   }, []);
 
   useEffect(() => { loadPlaybooks(); }, [loadPlaybooks]);
@@ -149,7 +153,7 @@ export default function PlaybooksPage() {
   if (!activePlaybook) {
     return (
       <DashboardLayout>
-        <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-6 bg-gradient-mesh min-h-screen" data-testid="playbooks-page">
+        <div className="p-6 lg:p-10 xl:px-14 w-full space-y-6 bg-gradient-mesh min-h-screen" data-testid="playbooks-page">
           <div className="flex items-center gap-4 animate-fade-in">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/15">
               <BookOpen size={22} className="text-white" />
@@ -160,7 +164,9 @@ export default function PlaybooksPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in stagger-1">
+          <FeatureVideoSection slugs={PLAYBOOK_CLIPS} de={de} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 animate-fade-in stagger-1">
             {playbooks.map((pb) => (
               <PlaybookListCard key={pb.playbook_id} pb={pb} onStart={startPlaybook} loading={loading} de={de} />
             ))}

@@ -1,0 +1,36 @@
+{
+  "summary": "Iter 137 frontend-only QA (Preview URL, 1920x900, standard@wladbot.test). Verified: (1) Chat-Kontext-Panel incl. 'Über mich'-Block, progress badge, folders-info accordion; (2) PDF/TXT upload UI + attachment chip + attachment bubble in the sent message; (3) Coach-Modus toggle/label/briefing/help-btn/placeholder; (4) Walkie-Talkie Voice-Overlay (5s silence logic, countdown, hint, close). 4 of 6 requested feature blocks pass fully. 2 defects found: pdf-upload-btn tooltip is overridden by a duplicate JSX `title` prop (allowed/unsupported format list never reaches the user), and the attachment bubble + clean user text are LOST after reload — history shows the raw buildFullMessage prompt (document dump + [Kontext:...]) inside the user bubble.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ChatInputBar.js (label for pdf-upload-btn)", "issue": "Duplicate `title` prop on the same <label>: the detailed tooltip (lines 73-75, listing PDF/Word/TXT/Markdown/CSV/images + NOT supported Excel/PowerPoint/ZIP/scanned PDFs) is overridden by the second `title` on line 78. Live DOM title = 'Dokument anhängen (PDF, Word, TXT, Bild)'. Missing keywords: Markdown, CSV, Excel, PowerPoint, ZIP. Requirement 3 FAILS. Fix: delete the short duplicate title on line 78 (React keeps the last prop).", "selector": "[data-testid=pdf-upload-btn]", "priority": "HIGH"},
+      {"component": "VoiceModeOverlay.js (SilenceCountdown / voice-mode-hint)", "issue": "Countdown block and hint line are mutually exclusive siblings with different heights, so on every micro-pause the UI flips between them (measured flapping every ~250ms with the fake mic, layout jumps ~2 lines + progress bar). Suggest a fixed-height slot and only showing the countdown once left <= 4 (i.e. after ~1s of silence) to avoid flicker during normal speech pauses.", "selector": "[data-testid=voice-silence-countdown], [data-testid=voice-mode-hint]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "PDF/Document attachment persistence", "issue": "ChatPage sends `fullMsg` (built by buildFullMessage: '[Dokument: name · Textdatei] --- <full file text> --- [Kontext: Meine Rolle: ...] <user text>') as the persisted message body, while the local optimistic message only stores the clean text + msg.pdf. After reload the restored user bubble displays the ENTIRE raw prompt (document dump + [Kontext:...]) and data-testid=chat-message-attachment count = 0. Claude-like behaviour therefore only survives until reload. Fix: persist the display text and attachment meta separately (e.g. send `message` = fullMsg but also `display_text` + `attachment` on /api/chat and render those on history load), or strip the [Dokument:]/[Kontext:] blocks when hydrating history.", "affected_selectors": ["[data-testid=chat-user-message]", "[data-testid=chat-message-attachment]"]}
+    ],
+    "design_issues": [
+      {"screen": "Voice overlay", "issues": ["Countdown/hint swap causes vertical layout shift (see ui_bugs)."]},
+      {"screen": "Chat context panel", "issues": ["No blocking issues: contrast, spacing, badge colours (amber 1/3 → emerald 3/3) all read fine in light mode."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "ChatInputBar.js: remove the duplicate short `title` on the pdf-upload label so the full allowed/unsupported-format tooltip is actually rendered.",
+    "Persist/rehydrate attachment metadata + clean user text so chat-message-attachment and the readable user message survive a reload (currently raw prompt is shown).",
+    "Optional: stabilise the voice countdown/hint slot to stop the ~250ms flicker & layout jump."
+  ],
+  "critical_code_review_comments": [
+    "React silently drops duplicate JSX props — the pdf-upload label carries two `title` attributes; add a lint rule (react/jsx-no-duplicate-props is part of eslint-plugin-react) to catch this class of bug.",
+    "SilenceCountdown hardcodes `/5` for the bar width while the hook owns SILENCE_DURATION_MS=5000 — export the constant and derive the width to keep them in sync.",
+    "buildFullMessage output is what gets persisted as the user message; any prompt-engineering prefix therefore leaks into the visible history. Separate 'prompt payload' from 'display message'."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "83% (5/6 feature blocks pass; 1 fails: upload tooltip; 1 partial: attachment bubble not persisted)"},
+  "seed_data_creation": "Used existing standard@wladbot.test. Created /tmp/test_iter137.txt (96 B) as upload fixture and one chat session 'Neues Gespräch' with one attachment message.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "standard@wladbot.test / test123 (worked; cookie banner 'Alle akzeptieren' + support popup 'Nein danke' must be dismissed first)",
+  "context_for_next_testing_agent": "VERIFIED PASSING: context-panel auto-opens on incomplete profile; context-role/company/industry retain input; context-progress 1/3 -> 3/3 and turns emerald; about-me-status-empty shown + about-me-link href=/profile; context-folders-info <details> expands to exactly 5 bullets; pdf-upload-btn + upload-info-dot visible; TXT upload -> pdf-attached chip ('TXT · 0.1k Zeichen · wird mitgesendet') + pdf-remove; placeholder switches to 'Was möchtest du zu dem PDF wissen?'; coach-mode-toggle label NORMAL<->COACH, coach-mode-briefing appears, placeholder switches to Coach text, coach-mode-help-btn re-shows briefing after dismissal; chat-message-attachment appears in the freshly sent user message ('test_iter137.txt · gelesen · von WladBot ausgewertet'). VOICE: audio-mode-btn opens voice-mode-overlay, getUserMedia succeeds in this Chromium (fake device, measured RMS min 0 / max 0.43 / avg 0.035), status stayed 'Ich höre dir zu…' for 16s+ and NEVER jumped to 'Wlad denkt nach…' -> premature-send regression is fixed. voice-silence-countdown renders (bar + 'Noch 5s'), voice-mode-hint renders while no silence timer runs, voice-mode-close closes cleanly, chat-input usable afterwards, ZERO console errors. Countdown decrement 5->1 could not be observed live because the fake mic beeps ~2x/s and resets the silence timer; verified statically in useVoiceMode.js (SILENCE_DURATION_MS=5000, silenceLeft exported, ceil((5000 - silentMs)/1000)). ElevenLabs invalid-key fallback was not exercised (no real speech) — as agreed, not evaluated.",
+  "rca_of_the_issue": "1) Upload tooltip: JSX object literal for props keeps the LAST duplicate key, so the second `title` (short version, ChatInputBar.js line 78) wins over the detailed one on lines 73-75 — the user never sees the allowed/unsupported format list. 2) Attachment persistence: ChatPage.handleSend posts `buildFullMessage(...)` to /api/chat while pushing a separate optimistic message that holds `pdf` meta and the clean text. Backend stores only the prompt string, so on history reload ChatMessage receives msg.content = raw prompt and msg.pdf = undefined -> raw document dump rendered, no attachment bubble."
+}

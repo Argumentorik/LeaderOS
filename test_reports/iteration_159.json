@@ -1,0 +1,32 @@
+{
+  "summary": "Iter 159 Code-Review-Fixes verifiziert. RAG-Titel: 55 Quellen via GET /api/admin/rag/sources geliefert, alle Title-Case, keine Unterstriche, keine ALL-CAPS-Fragmente (Bsp.: 'Du Bist Der Bessere Chef', 'Weiße Rhetorik', 'Führen Durch Gründe Am Stück'). Unit-Test clean_display_title (3 Assertions inkl. Live-Call + '(unnamed)') PASS. Check-in GET /api/daily-checkin/today als free@wladbot.test → 200 {checked_in:false}. pytest sequenziell (cwd /app/backend, no parallel): test_iter156_interactive_wlad (4/4), test_iter141_review_fixes (19/19), test_iter152_nonblocking_llm (2/2), test_iter148_media_streaming (9/9), test_iter155_coaching_clip (9/9) → alle grün. test_iter147_pro_regression: 10/13 grün; 3 Fails (test_thirteen_multishot_pro, test_shot_engines, test_spent_usd) alle bezogen auf 'start-1-willkommen' (render_running, no synced_url, spent=125.67) — laut Review-Request bekannt & akzeptiert (Fal-Render-Job läuft). Frontend (standard@wladbot.test): /video-guide → Button [interactive-wlad-open-start-1-willkommen] öffnet Overlay [interactive-wlad-overlay] mit Avatar, 3 Suggestion-Chips (0..2), Status-Text 'Ich höre dir zu…', BETA-Badge; Close-Button schließt sauber. /playbooks: [feature-video-section-bp-playbooks] vorhanden. /coaching: [coaching-video-section] vorhanden. 0 Console-Errors, 0 React-Key-Warnings (Equalizer-Balken mit stabilen Keys l2/l1/c/r1/r2 verifiziert im Code + Runtime).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/admin/pro/overview (indirekt via test_iter147)", "issue": "spent_usd=125.67 > erwartete 50-60 Range; multishot start-1-willkommen aktuell in render_running / kein synced_url s1. Laut Review-Request bekannter Zustand, kein Fix."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/pytest/iter159.xml",
+    "/app/backend/tests/test_iter156_interactive_wlad.py",
+    "/app/backend/tests/test_iter141_review_fixes.py",
+    "/app/backend/tests/test_iter147_pro_regression.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "rag_titles.py: _looks_curated Whitelist 'Live-Call' ist string-startswith; falls andere kuratierte Titel-Prefixes eingeführt werden, sollte die Liste konfigurierbar sein (aktuell hardcoded).",
+    "routes/checkin.py: Review-Request nennt '/api/checkin/today', tatsächlich implementiert unter '/api/daily-checkin/today' — Pfad-Namensinkonsistenz zwischen Router-Prefix und Feature-Name (kein Bug, nur Doku-Drift)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "94% (62/66, 3 Fails akzeptiert wg. laufendem Fal-Job, 1 spent_usd Drift)", "frontend": "100%"},
+  "test_credentials": "standard@wladbot.test / test123, free@wladbot.test / test123, test@test.com / test123 — alle wie erwartet.",
+  "seed_data_creation": "Keine.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fal-Render-Job start-1-willkommen läuft weiter (render_running, s1 kein synced_url, spent_usd=125.67). Keine Files in /app/backend anlegen/ändern (Hot-Reload würde Job killen). RAG-Titel-Refactor (rag_titles.py mit _looks_curated + _prettify_filename) funktioniert live. InteractiveWladOverlay-Equalizer-Keys sind stabil (l2/l1/c/r1/r2). Chips wurden NICHT geklickt (kosten Geld)."
+}

@@ -1,0 +1,41 @@
+{
+  "summary": "Godmode pre-launch auth verification. Tested /login (password + magic-link tabs), wrong password, valid login with accelerator@wladbot.test, session persistence on refresh, /login redirect for authed user, magic-link enumeration safety, registration flow, and /simulations page load. 6 of 8 checks PASS. Two auth issues found (1 P0, 1 P1) that must be fixed before 1000-client onboarding.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "Wrong-password response returns English literal 'Invalid credentials' as detail. UI has no German mapping for this, so the user sees English text on a German page. Either backend should return a translatable code (e.g. 'invalid_credentials') or frontend parseAuthError must map it to a German string."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "LoginPage", "issue": "P0: When an already-logged-in user navigates to /login (or /signup /register), they are NOT redirected to /dashboard. Page stays on /login and shows the login form. Missing useEffect that checks auth state and calls navigate(postLoginRoute(user)). This is a Godmode blocker for the launch.", "selector": "[data-testid=\"login-page\"]", "priority": "P0"},
+      {"component": "LoginPage / parseAuthError", "issue": "P1: Wrong-password error text shown to the user is 'Invalid credentials' (English) although app language is German. parseAuthError does not translate the backend detail. Requirement: 'clear German error toast/message'.", "selector": "[data-testid=\"auth-error\"]", "priority": "P1"}
+    ],
+    "integration_issues": [
+      {"flow": "Session token storage", "issue": "AuthContext relies on httpOnly cookie only - localStorage.getItem('wladbot_token') returns null after a successful login. Review request assumed 'session persists via localStorage token'. Persistence via refresh DOES work through the cookie. Please confirm cookie-only is intended; if yes, update /app/memory/test_credentials.md.", "affected_selectors": []}
+    ],
+    "design_issues": [
+      {"screen": "Global", "issues": ["Cookie-consent banner (data-testid=cookie-consent-banner, z-[9999]) intercepts pointer events on content behind it in some viewports - blocked ArgumentationPrepModal opener during automated test. Consider auto-hiding pointer-events on non-interactive wrapper or lowering banner z-index once the user is inside the app after login."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "P0: In LoginPage (and register/signup route), add useEffect that redirects to postLoginRoute(user) as soon as auth context resolves an authenticated user. Currently the /login route is reachable while logged in.",
+    "P1: Translate 'Invalid credentials' -> German ('E-Mail oder Passwort ist falsch.') either in backend response mapping or in frontend parseAuthError.",
+    "Clarify session storage strategy: cookie-only vs localStorage. Update docs or restore localStorage token write in AuthContext.login().",
+    "Consider ensuring cookie banner does not block critical UI elements after acceptance."
+  ],
+  "critical_code_review_comments": [
+    "LoginPage.js has no redirect-if-authenticated guard - this is the root cause of the P0 bug.",
+    "authErrors.parseAuthError likely returns backend detail verbatim; should map known English tokens ('Invalid credentials', 'User not found', etc.) to localized strings.",
+    "AuthContext appears to not persist an accessible token - cookie-only is fine but requires that all API calls use withCredentials=true and never fall back to a Bearer token from localStorage."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (frontend-only requested)", "frontend": "75%"},
+  "test_credentials": "accelerator@wladbot.test / test123 (used, works). Free tier: free@wladbot.test / test123.",
+  "seed_data_creation": "Created one throwaway registration account with email test_launch_<timestamp>@wladbot.test (goes to /onboarding). No cleanup performed.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes the P0 redirect and P1 German error, re-run: (1) log in accelerator@wladbot.test/test123 lands on /dashboard, (2) then manually visit /login and verify auto-redirect to /dashboard, (3) wrong password shows a German auth-error. ArgumentationPrepModal test failed only because of cookie-banner overlay; accept the cookie banner before interacting. All other auth flows (valid login, session persistence via refresh, magic-link enumeration-safe response, registration -> onboarding) already PASS.",
+  "rca of the issue": "P0 root cause: LoginPage.js (lines 35-145) never checks the AuthContext user state and never calls navigate on mount if already authed. Navigation only happens inside handleSubmit and handleOAuthSuccess. Fix: add `const { user } = useAuth(); useEffect(() => { if (user) navigate(postLoginRoute(user), { replace: true }); }, [user]);` near the top of the component. P1 root cause: backend /api/auth/login returns `{detail:'Invalid credentials'}` in English; frontend lib/authErrors parseAuthError falls through to returning detail verbatim without a German mapping."
+}
