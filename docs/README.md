@@ -88,6 +88,7 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`ops/SENTRY_ALERTS.md`](./ops/SENTRY_ALERTS.md) | Sentry alert rules |
 | [`ops/INTEGRATIONS.md`](./ops/INTEGRATIONS.md) | PostHog EU + Sentry + Supabase frontend wiring |
 | [`ops/EMERGENT_ADMIN_ONBOARDING.md`](./ops/EMERGENT_ADMIN_ONBOARDING.md) | **Emergent-Admin-Onboarding (Stefan)** — Topologie, GitHub↔Emergent-Drift, Env-Vars, Deploy + Smoke-Checks, Cron-Jobs, offene Incidents, First-Week-Checkliste |
+| [`ops/HANDOVER_STEFAN_2026-10-20.md`](./ops/HANDOVER_STEFAN_2026-10-20.md) | **Übergabe nach dem Repo-Umzug** — neue statische Seiten, Prerender, Webinar-Rebuild, Emergent-Deploy-Stand, Vercel/GitHub-App neu verlinken, Überschreib-Regeln |
 | [`ops/APP_TAKEOVER_STEFAN.md`](./ops/APP_TAKEOVER_STEFAN.md) | **App hand-over to Stefan** — what changed, first tasks done together, how Emergent works, PostHog/Sentry new setup, Supabase Disk IO, RAG without Voyage, admin-panel access for the support team |
 | [`ops/TECH_HANDBOOK.md`](./ops/TECH_HANDBOOK.md) | **How we treat the tech** — the system in one picture, principles, work flow, operating it, keeping the AI parts honest |
 | [`ops/TOOL_ACCESS.md`](./ops/TOOL_ACCESS.md) | **Wer hat wo Zugriff** — alle Tools, geprüfter Ist-Stand, Invite-Reihenfolge, offene Punkte für `mert@argumentorik.com` |
