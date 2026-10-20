@@ -51,7 +51,7 @@ DIESE zuerst geladen. Falls fehlen, fallback zu hf-XX.png Mockup.
 WIE ABLEGEN — schnellster Weg
 ================================
 
-1. https://github.com/aiporator/SHIPOS/upload/mvpcode/frontend/public/landing
+1. https://github.com/Argumentorik/LeaderOS/upload/mvpcode/frontend/public/landing
 2. Drag-and-drop die 5 JPGs in den Browser
 3. Commit-Message: "feat(landing): real poster designs"
 4. "Commit directly to the mvpcode branch"

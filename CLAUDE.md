@@ -1,6 +1,6 @@
 # LeaderOS — Claude Code briefing
 
-This repo (`aiporator/shipos`, branch **`mvpcode`**) is the single source of
+This repo (`Argumentorik/LeaderOS`, branch **`mvpcode`**) is the single source of
 truth for the LeaderOS product. Everything lives here:
 
 ```

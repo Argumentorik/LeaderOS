@@ -60,7 +60,7 @@ backend, so a backend outage also breaks the webinar signup form.
 
 ## 2. The one thing you must know: GitHub and Emergent have drifted
 
-GitHub (`aiporator/shipos`, branch **`mvpcode`**) is meant to be the
+GitHub (`Argumentorik/LeaderOS`, branch **`mvpcode`**) is meant to be the
 source of truth. **It is not identical to what runs on Emergent.** The
 evidence:
 
@@ -331,7 +331,7 @@ hosting.
 | Tool | Status |
 | --- | --- |
 | Emergent (incl. MongoDB) | ✅ Admin from 24.09. |
-| GitHub `aiporator/shipos` | ✅ write (`sbcodes`) → maintain requested |
+| GitHub `Argumentorik/LeaderOS` | ✅ write (`sbcodes`) → maintain requested |
 | Vercel `aiporators-projects` | ✅ Member |
 | Supabase, Sentry, PostHog, Resend, Stripe, ElevenLabs, Voyage | requested, see [`TOOL_ACCESS.md`](./TOOL_ACCESS.md) §3 |
 
