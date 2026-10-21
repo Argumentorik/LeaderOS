@@ -139,6 +139,7 @@ async def check_and_deduct_credit(user: dict, action: str) -> dict:
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
         credit_doc["refill_month"] = _month_key()
+        credit_doc["refill_amount"] = MONTHLY_FREE_REFILL
         await db.credits.insert_one(credit_doc)
     else:
         credit_doc = await _apply_monthly_refill(user, credit_doc)
