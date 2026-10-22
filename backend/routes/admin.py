@@ -33,10 +33,13 @@ async def seed_admin_flags() -> None:
     Iter 191: `admin_revoked` beats the allowlist. Ohne diesen Vorbehalt würde
     ein im Panel entzogenes Recht beim nächsten Start wieder auftauchen.
     """
+    # SEC-001: only promote allowlisted users whose mailbox is proven
+    # (email_verified). admin_revoked always wins.
     emails = [e.lower() for e in ADMIN_SEED_EMAILS]
     res = await db.users.update_many(
         {"$or": [{"email_lower": {"$in": emails}}, {"email": {"$in": emails}}],
-         "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True}},
+         "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True},
+         "email_verified": True},
         {"$set": {"is_admin": True}},
     )
     if res.modified_count:

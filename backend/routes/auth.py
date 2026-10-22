@@ -129,12 +129,16 @@ async def _create_session(user_id: str, ip_address: str, response: Response, met
     """Create a server-side session, set cookie, and clean up old sessions."""
     session_token = f"sess_{uuid.uuid4().hex}"
 
-    # Late-seed admin flag: allowlisted emails (ADMIN_SEED_EMAILS) get is_admin
-    # on ANY login — covers accounts created AFTER server startup (prod deploys).
+    # SEC-001: Late-seed admin flag for allowlisted emails (ADMIN_SEED_EMAILS).
+    # The allowlist is an ELIGIBILITY list, not proof of ownership — admin is
+    # granted ONLY once the mailbox is proven (email_verified via magic link or a
+    # provider-validated OAuth email). An unverified password register/login can
+    # never self-promote by claiming a founder address. `admin_revoked` always wins.
     from routes.admin import ADMIN_SEED_EMAILS
     seed_emails = [e.lower() for e in ADMIN_SEED_EMAILS]
     await db.users.update_one(
         {"user_id": user_id, "is_admin": {"$ne": True}, "admin_revoked": {"$ne": True},
+         "email_verified": True,
          "$or": [{"email_lower": {"$in": seed_emails}}, {"email": {"$in": seed_emails}}]},
         {"$set": {"is_admin": True}},
     )
@@ -473,6 +477,9 @@ async def google_session(request: Request, response: Response):
                 "last_login_at": history_entry["at"],
                 "last_login_geo": ctx["geo"],
                 "last_login_ua": ctx["ua"],
+                # SEC-001: Google asserts a verified email → proves ownership.
+                "email_verified": True,
+                "email_verified_via": "google",
             },
             "$push": {"login_history": {"$each": [history_entry], "$slice": -50}}
         })
@@ -498,6 +505,8 @@ async def google_session(request: Request, response: Response):
             "picture": google_data.get("picture"), "leadership_score": 0, "eq_score": 0,
             "communication_score": 0, "level": "Emerging Leader", "xp": 0,
             "source_platform": source_platform,
+            # SEC-001: Google asserts a verified email → proves ownership.
+            "email_verified": True, "email_verified_via": "google",
             "signup_ip": ip_address, "signup_geo": ctx["geo"], "signup_ua": ctx["ua"],
             "last_login_ip": ip_address, "last_login_geo": ctx["geo"], "last_login_ua": ctx["ua"],
             "login_history": [history_entry],
