@@ -93,6 +93,10 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
             set_doc["name"] = profile["name"]
         if not existing.get("picture") and profile.get("picture"):
             set_doc["picture"] = profile["picture"]
+        # SEC-001: a provider-validated OAuth email proves mailbox ownership.
+        if profile.get("email_verified") is True:
+            set_doc["email_verified"] = True
+            set_doc["email_verified_via"] = provider
 
         await db.users.update_one({"user_id": existing["user_id"]}, {
             "$set": set_doc,
@@ -135,6 +139,9 @@ async def _upsert_user_from_oauth(profile: dict, request: Request) -> dict:
         "source_platform": source_platform,
         "oauth_providers": {provider: {"sub": profile["sub"], "linked_at": now_iso}},
         "last_login_provider": provider,
+        # SEC-001: provider-validated OAuth email proves mailbox ownership.
+        "email_verified": profile.get("email_verified") is True,
+        "email_verified_via": provider if profile.get("email_verified") is True else None,
         "signup_ip": ctx["ip"],
         "signup_geo": ctx["geo"],
         "signup_ua": ctx["ua"],
