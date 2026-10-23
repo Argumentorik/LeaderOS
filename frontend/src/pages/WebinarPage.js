@@ -203,7 +203,7 @@ const RegisterForm = ({ idSuffix = '', inline = false, onInk = false, compact = 
     const referrer = typeof document !== 'undefined' ? document.referrer || null : null;
     const trimmed = email.trim();
 
-    let result = 'failed';
+    let result;
     try {
       result = await registerPrimary({
         email: trimmed,

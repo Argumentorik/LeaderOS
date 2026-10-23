@@ -17,7 +17,7 @@ const page_url = 'file://' + path.join(__dirname, 'poster.html');
   const ctx = await browser.newContext({ viewport: { width: 1080, height: 1350 }, deviceScaleFactor: 2 });
   if (fontCss) {
     const css = fs.readFileSync(fontCss, 'utf8');
-    await ctx.route(/fonts\.googleapis\.com/, (route) => route.fulfill({ status: 200, contentType: 'text/css', body: css }));
+    await ctx.route('https://fonts.googleapis.com/**', (route) => route.fulfill({ status: 200, contentType: 'text/css', body: css }));
   }
   const page = await ctx.newPage();
   await page.goto(page_url + '?i=0');
