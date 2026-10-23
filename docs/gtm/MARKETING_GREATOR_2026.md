@@ -95,7 +95,7 @@ für den jeweiligen Avatar funktioniert.
 > der entscheidet ob du Rede-Feedback oder Theorie-Antwort brauchst.
 > Alles auf Claude Haiku 4.5. Willst du den Source-Pfad sehen? Wir sind
 > nicht stolz auf Black-Box."*
-> → GitHub-Link `aiporator/SHIPOS`.
+> → GitHub-Link `Argumentorik/LeaderOS`.
 
 ### E) Burnout-survivor · "Ich will Persönlichkeit, nicht mehr Output"
 

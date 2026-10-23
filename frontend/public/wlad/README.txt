@@ -50,7 +50,7 @@ Wie ablegen
 ================================
 
 Option A — via GitHub Web-UI (am einfachsten):
-  1. https://github.com/aiporator/SHIPOS/tree/mvpcode/frontend/public/wlad
+  1. https://github.com/Argumentorik/LeaderOS/tree/mvpcode/frontend/public/wlad
   2. "Add file" → "Upload files"
   3. JPGs hier reinziehen
   4. Commit direkt auf mvpcode

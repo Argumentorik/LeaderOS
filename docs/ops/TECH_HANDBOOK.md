@@ -36,7 +36,7 @@
 - **One identity key everywhere: `email_lower`.** Mongo, Supabase
   `public.users`, PostHog `identify`, Sentry `setUser`. A user created
   without it is a duplicate waiting to happen.
-- **Source of truth is GitHub `aiporator/shipos`, branch `mvpcode`.** If a
+- **Source of truth is GitHub `Argumentorik/LeaderOS`, branch `mvpcode`.** If a
   change is not in GitHub, it does not exist, even if it runs on Emergent.
 
 ## 2. Principles — how we treat the tech

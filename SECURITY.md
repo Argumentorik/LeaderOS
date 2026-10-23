@@ -5,7 +5,7 @@
 **Do not open a public GitHub issue.**
 
 Report vulnerabilities privately via GitHub Security Advisories:
-<https://github.com/aiporator/SHIPOS/security/advisories/new>
+<https://github.com/Argumentorik/LeaderOS/security/advisories/new>
 
 We acknowledge receipt within **2 business days** and aim to resolve or
 mitigate within **14 days** for high-severity issues.

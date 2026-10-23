@@ -2,7 +2,7 @@
 
 > Audience: investors, new developers, CEO.
 > Last updated: 2026-05-25.
-> Repo: `aiporator/shipos`, branch `mvpcode`.
+> Repo: `Argumentorik/LeaderOS`, branch `mvpcode`.
 
 ---
 

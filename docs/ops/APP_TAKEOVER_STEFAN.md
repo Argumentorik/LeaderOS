@@ -59,7 +59,7 @@ Mert drives, you have the keyboard. After this list you own the app.
 **What it is.** Emergent is an AI-agent development platform that hosts the
 app it built: the FastAPI backend, MongoDB and an object store run inside
 one managed pod (project `command-center-229`). The agent iterated the app
-through ~180 "iterations"; the repo `aiporator/shipos` is the exported
+through ~180 "iterations"; the repo `Argumentorik/LeaderOS` is the exported
 state plus everything built since. That is why GitHub and Emergent have
 drifted: the agent sometimes committed to `mvpcode`, sometimes only to its
 own copy (§2 of `EMERGENT_ADMIN_ONBOARDING.md` lists the evidence).
@@ -415,7 +415,7 @@ days; weekly Mongo export.
 | Tool | Status | Action |
 | --- | --- | --- |
 | Emergent `command-center-229` (incl. MongoDB) | ✅ admin since 24.09. | — |
-| GitHub `aiporator/shipos` | ✅ write | ask for **maintain** to merge |
+| GitHub `Argumentorik/LeaderOS` | ✅ write | ask for **maintain** to merge |
 | Vercel project `leaderos` | ✅ member | — |
 | Stripe | ✅ you are on it | payouts to Argumentorik (§6) |
 | Supabase org `skawjzvddehhmkwiltui` | invite sent (Developer) | accept, 2FA; Disk IO fix (§7) |

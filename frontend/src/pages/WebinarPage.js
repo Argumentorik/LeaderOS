@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  motion, useInView, AnimatePresence, useScroll, useTransform, useReducedMotion,
-} from 'framer-motion';
-import {
-  ArrowUpRight, ArrowDown, Check, Star, PlayCircle, CalendarCheck,
-  MessageCircleQuestion, BellRing, ClipboardCheck, Video, BookOpen, X, Plus,
-} from 'lucide-react';
 import { applyPageMeta } from '../lib/pageMeta';
 import { isValidEmail } from '../features/newsletter/lib/newsletterClient';
 import {
@@ -15,149 +8,124 @@ import {
 import { WladMark } from '../components/brand/WladMark';
 import { BookShelf } from '../components/brand/BookShelf';
 import { LogoWall } from '../components/brand/LogoWall';
-import { CoursesLibrarySection } from '../components/landing/CoursesLibrarySection';
-import { CinematicHero } from '../components/webinar/CinematicHero';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
-import { AGENDA, WEBINAR_TS, FAQ, WEBINAR_SEO } from '../data/webinarEvent';
+import {
+  AGENDA, FAQ, WEBINAR_CAMPAIGN, WEBINAR_HERO, WEBINAR_SEO, WEBINAR_TS,
+} from '../data/webinarEvent';
 
 /**
- * WebinarPage · /webinar · Hormozi ascension funnel, motion-first build.
+ * WebinarPage · /webinar · die Conversion-Seite der Ads.
  *
- * 2026-09 hero rebuild: the hero is now CinematicHero — Wlad full-bleed,
- * the headline burned into the image, date/duration/0 € as facts, and the
- * registration panel inside the first viewport on desktop (right column)
- * and one swipe below it on phones. Everything below the hero is the
- * 2026-07 build:
+ * 2026-10 Rebuild in der Athletic-Editorial-DNA (frontend/DESIGN.md):
+ * Fotografie spricht, das Chrome hält sich zurück. Outfit-900-Kursiv-
+ * Lockups mit Lime-Punkt, Hairlines statt Karten, Mono-BIB-Codes statt
+ * Icons, Pill-CTAs, echte Fotos aus /journal/topics und das echte Wlad-
+ * Porträt. Keine Glas-Fenster, kein Flip-Countdown, kein Mauslicht, keine
+ * pulsierenden Buttons, keine Blur-Reveals.
  *
- * 2026-07 interaction overhaul (Apple × Linear × Stripe direction from the
- * team brief): every animation serves the conversion — blur scroll-reveals,
- * flip-clock countdown, pulsing primary CTA, mouse-follow glow, the
- * gray-out-vs-light-up system comparison, scroll-activated agenda, FAQ
- * accordion, subtle portrait parallax, and a sticky CTA bar with inline
- * email capture from ~20 % scroll. All built on framer-motion (already in
- * the bundle — no anime.js dependency added; same capabilities, zero
- * lockfile risk) and all gated by prefers-reduced-motion.
+ * Das Formular steht auf jeder Breite im ersten Viewport: mobil direkt
+ * unter der Headline im Hero, auf dem Desktop links neben Wlad.
  *
- * Deliberate deviation from the brief's palette: we keep the light
- * white/#fafafa canvas with the LeaderOS ink+lime accent system instead of
- * #050505 + blue/violet — the light funnel was an explicit product decision
- * (bright, friendly, approachable) and lime is the brand signature
- * (frontend/DESIGN.md). The ink StatementBands provide the dark moments.
+ * Lead-Erfassung mit Netz und doppeltem Boden (RegisterForm):
+ *   1. POST /api/webinar/register (FastAPI auf Emergent) – schreibt den
+ *      Lead, schickt Bestätigung + Erinnerungen, meldet an Meta CAPI.
+ *   2. Antwortet das Backend nicht oder ohne die Route (404 solange der
+ *      Emergent-Deploy hinterherhinkt), geht die Adresse an
+ *      /api/newsletter/subscribe – die Supabase-Edge-Function, unabhängig
+ *      vom Emergent-Backend – mit campaign=webinar-2026-10-29. Kein Lead
+ *      geht verloren; die Danke-Seite verspricht in dem Fall keine
+ *      Erinnerungs-Mails (?v=f).
  *
- * Honesty rules unchanged (docs/gtm/WEBINAR_FUNNEL.md): verified numbers only,
- * no invented testimonials, no fake scarcity, no fake exclusivity.
+ * Honesty rules unverändert (docs/gtm/WEBINAR_FUNNEL.md, WLAD_CANON.md):
+ * nur verifizierte Zahlen, keine erfundenen Zitate, keine Fake-Scarcity.
+ * Termin, Agenda und FAQ kommen aus data/webinarEvent.js – derselben
+ * Quelle wie das Build-Prerendering (scripts/prerender-landings.mjs).
  */
 
-// Marken-Typo wie /ki-fuehrungskraft und CinematicHero: Anton für Display, Geist für Titel.
-const DISPLAY = { fontFamily: "'Anton', 'Arial Narrow', Impact, sans-serif", fontWeight: 400, textTransform: 'uppercase', letterSpacing: '-0.005em' };
-const TITLE = { fontFamily: 'Geist, Inter, system-ui, sans-serif', fontWeight: 600, letterSpacing: '-0.015em' };
+const LIME = '#BFFF00';
 
-const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
-// Kurzform fürs 440-px-Formular-Panel im Hero — die Langform bricht dort um.
-const DATE_LINE_SHORT = 'DO 29. OKT 2026 · 10:00 UHR · LIVE';
+const DATE_LINE = 'Do 29. Oktober 2026 · 10:00–11:30 Uhr · Live · Online';
+const DATE_SHORT = 'Do 29. Okt · 10:00 Uhr';
 
-const STATS = [
-  ['400.000+', 'trainierte Klienten'],
-  ['20+', 'Länder'],
-  ['4,9/5', 'Trustpilot · 388 Bewertungen'],
-  ['3×', 'SPIEGEL-Bestseller · 13 Bücher'],
-  ['2007', 'im Coaching seit'],
-  ['Columbia', 'University · Master of Arts'],
+/** Inline-Kurzschreibweise für die Keyframes aus index.css (Name, Dauer, Delay). */
+const ze = (name, dur, delay) => ({ animation: `${name} ${dur}s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both` });
+
+// Headline als fester Vier-Zeilen-Block (Nike-Lockup), spiegelt WEBINAR_HERO.
+const HERO_LINES = ['Trainiere', 'Führung.', 'Nicht nur', 'Wissen'];
+const HERO_SUB_SHORT = '90 Minuten live mit Wlad Jachtchenko: wie Führung täglich trainierbar wird.';
+const HERO_SUB_LONG =
+  'Du weißt, wie gute Führung geht. Du kommst nur nicht dazu. Wlad Jachtchenko zeigt in 90 Minuten live, wie du sie täglich trainierst.';
+
+const FACTS = [['Termin', '29. Okt'], ['Start', '10:00'], ['Dauer', '90 Min'], ['Teilnahme', '0 €']];
+
+// Verifiziertes Set (docs/gtm/WEBINAR_FUNNEL.md). Keine weiteren Zahlen.
+const PROOF = [
+  ['400.000+', 'Klienten trainiert', null],
+  ['20+', 'Länder', null],
+  ['3×', 'SPIEGEL-Bestseller', null],
+  ['4,9', 'Trustpilot · 388 Bewertungen', 'https://uk.trustpilot.com/review/argumentorik.com'],
+  ['2007', 'im Coaching seit', null],
 ];
 
-const MEDIA = [
-  'DER SPIEGEL', 'BUSINESS INSIDER', 'SÜDDEUTSCHE ZEITUNG', 'RTL',
-  'ARD · DAS ERSTE', 'PROSIEBEN · GALILEO', 'TEDX', 'GREATOR',
-];
-
-const REVIEW_PLATFORMS = [
-  ['Trustpilot', '4,9', '388 Bewertungen', 'https://uk.trustpilot.com/review/argumentorik.com'],
-  ['Greator', '4,7', '995 Bewertungen', 'https://greator.com/coach/wlad-jachtchenko'],
+const REVIEWS = [
+  ['Trustpilot', '4,9/5 · 388 Bewertungen', 'https://uk.trustpilot.com/review/argumentorik.com'],
+  ['Greator', '4,7/5 · 995 Bewertungen', 'https://greator.com/coach/wlad-jachtchenko'],
 ];
 
 const WEEK = [
-  ['Montag', '„Diese Woche gebe ich endlich gutes Feedback."', false],
-  ['Dienstag', 'Stress. Drei Meetings. Ein Konflikt. Feedback verschoben.', false],
-  ['Mittwoch', 'Das schwierige Gespräch? „Nächste Woche wirklich."', false],
-  ['Donnerstag', 'Der Konflikt eskaliert — jetzt ist es ein Krisengespräch.', false],
-  ['Freitag', 'Vom letzten Seminar ist nichts mehr übrig außer den Folien.', true],
+  ['Mo', '„Diese Woche gebe ich endlich gutes Feedback."'],
+  ['Di', 'Stress. Drei Meetings. Ein Konflikt. Feedback verschoben.'],
+  ['Mi', 'Das schwierige Gespräch? „Nächste Woche wirklich."'],
+  ['Do', 'Der Konflikt eskaliert. Jetzt ist es ein Krisengespräch.'],
+  ['Fr', 'Vom letzten Seminar ist nichts mehr übrig außer den Folien.'],
 ];
 
-const SEMINAR_FLOW = ['Seminar', 'Notizen', 'Alltag', 'Vergessen'];
-const OS_FLOW = ['Täglich 15 Min', 'KI-Coach', 'Simulation', 'Feedback', 'Fortschritt'];
+const OLD_WAY = ['Seminar', 'Notizen', 'Alltag', 'Vergessen'];
+const NEW_WAY = ['Täglich 15 Minuten', 'KI-Coach', 'Simulation', 'Feedback', 'Fortschritt'];
 
-// Jede Karte mit Bild — eigene Assets (Wlad, WladBot-Avatar, Buchcover),
-// kein Stock. `fit` steuert, ob das Bild die Fläche füllt (Foto) oder
-// als Cover auf Ink-Fläche steht (Buch, Avatar).
-const LEARN_CARDS = [
-  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.', '/journal/topics/feedback.webp', 'photo'],
-  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst — an deinen echten Fällen.', '/wlad/wladbot3.0.webp', 'avatar'],
-  ['Simulationen', 'Realistische Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/journal/topics/app-b.webp', 'photo'],
-  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/journal/topics/sprint.webp', 'photo'],
-  ['Die Frameworks', 'Die Methoden aus der Arbeit mit 400.000+ Klienten — von SEXIER bis zur Feedbackformel.', '/wlad/books/weisse-rhetorik.jpg', 'book'],
-  ['Live-Q&A mit Wlad', 'Deine härteste Führungsfrage — ab 11:15 Uhr direkt von Wlad beantwortet, kein Skript.', '/wlad/wlad-portrait-640.jpg', 'cover'],
+// Jedes Thema mit eigenem Bild: Journal-Fotografie, das Wlad-Porträt und
+// der WladBot-Avatar. `pos` = object-position, `ink` = Avatar auf Ink.
+const LEARN = [
+  ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren: mit Skript statt Bauchgefühl.', '/journal/topics/feedback.webp', '50% 40%'],
+  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst, an deinen echten Fällen.', 'wladbot', 'ink'],
+  ['Simulationen', 'Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/journal/topics/conflict.webp', '50% 35%'],
+  ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/journal/topics/sprint.webp', '50% 50%'],
+  ['Die Frameworks', 'Die Methoden aus der Arbeit mit 400.000+ Klienten, von SEXIER bis zur Feedbackformel.', '/journal/topics/listening.webp', '50% 30%'],
+  ['Live-Q&A mit Wlad', 'Deine härteste Führungsfrage, ab 11:15 Uhr direkt von Wlad beantwortet.', 'wlad', '62% 12%'],
 ];
 
-// Presse- und Kunden-Logos: nur echte Logo-Dateien werden gezeigt, kein
-// Wordmark-Ersatz. Datei unter public/logos/press/<key>.svg ablegen — der
-// Eintrag erscheint dann automatisch; ohne Datei bleibt der Block leer.
-const MEDIA_LOGOS = {
-  'DER SPIEGEL': '/logos/press/der-spiegel.svg',
-  'BUSINESS INSIDER': '/logos/press/business-insider.svg',
-  'SÜDDEUTSCHE ZEITUNG': '/logos/press/sueddeutsche-zeitung.svg',
-  'RTL': '/logos/press/rtl.svg',
-  'ARD · DAS ERSTE': '/logos/press/ard-das-erste.svg',
-  'PROSIEBEN · GALILEO': '/logos/press/prosieben-galileo.svg',
-  'TEDX': '/logos/press/tedx.svg',
-  'GREATOR': '/logos/press/greator.svg',
-};
-/** Prüft per HEAD-Request, welche Logo-Dateien wirklich existieren —
- *  ein fehlendes SVG rendert sonst als kaputtes Bild. */
-const useExistingAssets = (paths) => {
-  const [existing, setExisting] = useState([]);
-  useEffect(() => {
-    let alive = true;
-    Promise.all(paths.map((p) => fetch(p, { method: 'HEAD' }).then((r) => (r.ok && /svg|image/.test(r.headers.get('content-type') || '') ? p : null)).catch(() => null)))
-      .then((res) => { if (alive) setExisting(res.filter(Boolean)); });
-    return () => { alive = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paths.join('|')]);
-  return existing;
-};
-
-const VALUE_STACK = [
-  [Video, 'Live-Demonstration', 'Das komplette Leadership Operating System, live gezeigt — kein Foliensatz.'],
-  [CalendarCheck, 'Der 30-Tage-Trainingsplan', 'Die Struktur der Challenge, mit der Führung zur täglichen Routine wird.'],
-  [MessageCircleQuestion, 'Live Q&A mit Wlad', 'Deine Fragen, live beantwortet — ab 11:15 Uhr fester Teil der Agenda.'],
-  [ClipboardCheck, 'Der kostenlose Leader-Check', 'Dein Führungsprofil in 10 Minuten — KI-Readiness, Rhetorik, EQ.'],
-  [PlayCircle, 'Die 4-teilige Videoserie', '„Führung beginnt hier" — schaltest du direkt nach der Anmeldung frei.'],
-  [BellRing, 'Kalender + Erinnerungen', 'Google-Calendar-Einladung sofort, Erinnerung 24h und 1h vor dem Start.'],
+const STACK = [
+  ['Live-Demonstration', 'Das komplette Leadership Operating System, live gezeigt. Kein Foliensatz.'],
+  ['Der 30-Tage-Trainingsplan', 'Die Struktur der Challenge, mit der Führung zur täglichen Routine wird.'],
+  ['Live-Q&A mit Wlad', 'Deine Fragen, live beantwortet. Ab 11:15 Uhr fester Teil der Agenda.'],
+  ['Der kostenlose Leader-Check', 'Dein Führungsprofil in 10 Minuten: KI-Readiness, Rhetorik, EQ.'],
+  ['Die 4-teilige Videoserie', '„Führung beginnt hier": schaltest du direkt nach der Anmeldung frei.'],
+  ['Kalender + Erinnerungen', 'Kalender-Einladung per Mail, Erinnerung 24 Stunden und 1 Stunde vor dem Start.'],
 ];
 
-const FREE_VIDEOS = [
+const VIDEOS = [
   ['Warum die meisten Führungskräfte unsichtbar bleiben', '8 Min'],
-  ['Natürliche Autorität — ohne lauter zu werden', '11 Min'],
+  ['Natürliche Autorität, ohne lauter zu werden', '11 Min'],
   ['Weniger arbeiten, mehr bewirken', '9 Min'],
   ['Dein 30-Tage-Plan zur KI-nativen Führungskraft', '12 Min'],
 ];
 
-const FRAMEWORK_PEEK = [
-  ['SEXIER-Modell', 'Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal — die sechsstufige Argumentations-Architektur für strittige Thesen.', '/journal/die-5-argumentations-levels-von-behauptung-bis-sexier'],
-  ['Feedbackformel B·W·W', 'Beobachtung + Wirkung + Wunsch. Nie „Du bist…", immer „Ich habe beobachtet, dass…" — das Skript für jedes schwierige Gespräch.', '/journal/die-feedback-formel-bww'],
-  ['10 Stufen des Zuhörens', 'Von Stufe 1 (nicht zuhören) bis Stufe 10 (Stille als Zuhören). 80 % aller Führungskräfte hängen auf Stufe 2 fest: auf die eigene Antwort warten.', '/journal/die-10-stufen-des-zuhoerens-wlads-modell-erklaert'],
-  ['Die 5 Rollen einer Führungskraft', 'Kommunikator · Manager · Team-Leader · Psychologe · Problemlöser — und warum die meisten eine der fünf systematisch weglassen.', '/journal/5-rollen-der-fuehrung-nach-wlad-jachtchenko'],
+const FRAMEWORKS = [
+  ['SEXIER-Modell', 'Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal. Die sechsstufige Argumentations-Architektur für strittige Thesen.', '/journal/die-5-argumentations-levels-von-behauptung-bis-sexier'],
+  ['Feedbackformel B·W·W', 'Beobachtung + Wirkung + Wunsch. Nie „Du bist…", immer „Ich habe beobachtet, dass…". Das Skript für jedes schwierige Gespräch.', '/journal/die-feedback-formel-bww'],
+  ['10 Stufen des Zuhörens', 'Von Stufe 1 (nicht zuhören) bis Stufe 10 (Stille als Zuhören). Die meisten Führungskräfte hängen auf Stufe 2 fest: auf die eigene Antwort warten.', '/journal/die-10-stufen-des-zuhoerens-wlads-modell-erklaert'],
+  ['Die 5 Rollen einer Führungskraft', 'Kommunikator · Manager · Team-Leader · Psychologe · Problemlöser. Und warum die meisten eine der fünf systematisch weglassen.', '/journal/5-rollen-der-fuehrung-nach-wlad-jachtchenko'],
 ];
 
 const LIVE_REASONS = [
-  'Keine Aufzeichnung — das Webinar ist bewusst live-only.',
+  'Keine Aufzeichnung. Das Webinar ist bewusst live-only.',
   'Deine Fragen kommen dran, nicht die aus dem Skript.',
   'Ein echter Live-Case wird gemeinsam durchgearbeitet.',
   'Die Videoserie schaltest du als Teilnehmer direkt frei.',
 ];
 
-// FAQ lebt in data/webinarEvent.js: dieselbe Liste rendert das Build-
-// Prerendering (scripts/prerender-landings.mjs) als statisches HTML + FAQPage.
+/* ── Tracking + UTM ───────────────────────────────────────────────────── */
 
 const track = (event, props = {}) => {
   if (typeof window !== 'undefined' && window.posthog?.capture) {
@@ -167,7 +135,7 @@ const track = (event, props = {}) => {
 
 /** UTM-Parameter der Anzeige: beim ersten Aufruf aus der URL gemerkt, damit
  * sie auch nach Scrollen/Navigieren im SPA noch am Lead hängen. Landet in
- * `webinar_leads.utm` (routes/webinar.py) — die Grundlage für CPL pro Ad. */
+ * `webinar_leads.utm` (routes/webinar.py), die Grundlage für CPL pro Ad. */
 const UTM_KEYS = ['source', 'medium', 'campaign', 'term', 'content'];
 const UTM_STORE = 'lo_webinar_utm';
 const captureUtm = () => {
@@ -181,584 +149,232 @@ const readUtm = () => {
   try { return JSON.parse(sessionStorage.getItem(UTM_STORE) || 'null'); } catch { return null; }
 };
 
-const useCountdown = (target) => {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const diff = Math.max(0, target - now);
-  return {
-    d: Math.floor(diff / 86400000),
-    h: Math.floor((diff % 86400000) / 3600000),
-    m: Math.floor((diff % 3600000) / 60000),
-    s: Math.floor((diff % 60000) / 1000),
-  };
+const daysLeft = () => Math.max(0, Math.ceil((WEBINAR_TS - Date.now()) / 86400000));
+const daysLabel = (d) => (d === 0 ? 'Heute' : d === 1 ? 'Morgen' : `Noch ${d} Tage`);
+
+/* ── Lead capture ─────────────────────────────────────────────────────── */
+
+/** Primärweg: FastAPI (Mongo, Bestätigungsmail, Erinnerungen, Meta CAPI). */
+const registerPrimary = async (payload) => {
+  const res = await fetch('/api/webinar/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (res.status === 400 && data?.error === 'invalid_email') return 'invalid';
+  return res.ok && data?.ok === true ? 'ok' : 'failed';
 };
 
-// Section-level reveal: opacity + translateY + blur, per the brief.
-const REVEAL = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
-  show: (i = 0) => ({
-    opacity: 1, y: 0, filter: 'blur(0px)',
-    transition: { duration: 0.7, delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] },
-  }),
+/** Fallback: Supabase-Edge-Function (vercel.json → newsletter-subscribe),
+ * unabhängig vom Emergent-Backend. Speichert E-Mail, source und campaign;
+ * der Lead ist damit identifizierbar, auch wenn die Webinar-Route fehlt. */
+const registerFallback = async (email, referrer) => {
+  try {
+    const res = await fetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'webinar-lp', campaign: WEBINAR_CAMPAIGN, referrer }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 };
 
-// Item-level reveal (no blur — cheaper for long staggered lists).
-const FADE_UP = {
-  hidden: { opacity: 0, y: 20 },
-  show: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.6, delay: 0.07 * i, ease: [0.16, 1, 0.3, 1] },
-  }),
-};
-
-/** Mouse-follow glow · a soft lime light that tracks the cursor. Desktop
- * pointer devices only, disabled for prefers-reduced-motion. */
-const MouseGlow = () => {
-  const ref = useRef(null);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) return undefined;
-    if (typeof window === 'undefined' || !window.matchMedia('(pointer: fine)').matches) return undefined;
-    const el = ref.current;
-    if (!el) return undefined;
-    let raf = 0;
-    const onMove = (e) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        el.style.background =
-          `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(191,255,0,0.10), transparent 260px)`;
-      });
-    };
-    window.addEventListener('mousemove', onMove, { passive: true });
-    return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); };
-  }, [reduced]);
-
-  if (reduced) return null;
-  return <div ref={ref} aria-hidden className="pointer-events-none fixed inset-0 z-30" />;
-};
-
-/** Primary CTA · pulsing lime glow (the button is never static), spring
- * hover lift. Used for the hero + sticky bar; secondary CTAs stay calm. */
-const CtaButton = ({ children, onClick, pulse = false, className = '' }) => {
-  const reduced = useReducedMotion();
-  return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      animate={pulse && !reduced ? {
-        scale: [1, 1.03],
-        boxShadow: ['0 0 0 rgba(191,255,0,0)', '0 0 42px rgba(191,255,0,0.45)'],
-      } : {}}
-      transition={pulse && !reduced ? { duration: 2.2, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : {}}
-      whileHover={{ y: -3, scale: 1.02, boxShadow: '0 14px 50px rgba(191,255,0,0.5)' }}
-      whileTap={{ scale: 0.97 }}
-      className={`h-14 px-8 rounded-full bg-[#111111] text-white hover:bg-[#BFFF00] hover:text-[#111111] font-bold text-[13px] uppercase tracking-[0.14em] transition-colors inline-flex items-center justify-center gap-2 ${className}`}
-    >
-      {children}
-    </motion.button>
-  );
-};
-
-/** Inline CTA after a section — objections handled, offer repeated. */
-const InlineCta = ({ label = 'Kostenlosen Platz sichern', onClick, caption }) => (
-  <motion.div
-    initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} variants={FADE_UP}
-    className="mt-10 flex flex-col items-center gap-3"
-  >
-    <CtaButton onClick={onClick}>{label} <ArrowUpRight size={16} /></CtaButton>
-    {caption && (
-      <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-[#9e9ea0]">{caption}</p>
-    )}
-  </motion.div>
-);
-
-/** Flip-clock digit pair · each unit flips on change (rotateX + blur). */
-const FlipUnit = ({ value, label }) => {
-  const reduced = useReducedMotion();
-  const display = String(value).padStart(2, '0');
-  return (
-    <div className="flex flex-col items-center justify-center w-[64px] h-[64px] sm:w-[76px] sm:h-[76px] rounded-2xl bg-white border border-[#111111]/10 shadow-[0_10px_30px_-18px_rgba(17,17,17,0.25)] overflow-hidden" style={{ perspective: 300 }}>
-      {reduced ? (
-        <span className="tabular-nums leading-none text-[#111111] text-[24px] sm:text-[30px]" style={DISPLAY}>{display}</span>
-      ) : (
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.span
-            key={display}
-            initial={{ rotateX: 90, opacity: 0, filter: 'blur(3px)' }}
-            animate={{ rotateX: 0, opacity: 1, filter: 'blur(0px)' }}
-            exit={{ rotateX: -90, opacity: 0, filter: 'blur(3px)' }}
-            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="tabular-nums leading-none text-[#111111] text-[24px] sm:text-[30px]"
-            style={{ ...DISPLAY, transformStyle: 'preserve-3d' }}
-          >
-            {display}
-          </motion.span>
-        </AnimatePresence>
-      )}
-      <span className="mt-1 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-[#707072]">{label}</span>
-    </div>
-  );
-};
-
-const Countdown = () => {
-  const { d, h, m, s } = useCountdown(WEBINAR_TS);
-  return (
-    <div className="flex gap-2.5 sm:gap-3" aria-label="Countdown bis zum Webinar">
-      <FlipUnit value={d} label="Tage" />
-      <FlipUnit value={h} label="Std" />
-      <FlipUnit value={m} label="Min" />
-      <FlipUnit value={s} label="Sek" />
-    </div>
-  );
-};
-
-/** Real registrant scarcity bar · fetched, never fabricated. */
-const ScarcityBar = () => {
-  const [stats, setStats] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/api/webinar/stats')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => { if (!cancelled && data) setStats(data); })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
-
-  // Erst ab 25 echten Anmeldungen zeigen: „0 bereits angemeldet" ist ehrlich,
-  // aber schadet der Anmeldung. Die Zahl selbst bleibt immer echt.
-  if (!stats || !stats.max_capacity || (stats.registered || 0) < 25) return null;
-  const pct = Math.min(100, Math.round((stats.registered / stats.max_capacity) * 100));
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="mt-6 w-full max-w-md"
-      data-testid="webinar-scarcity-bar"
-    >
-      <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.14em] text-[#707072] mb-1.5">
-        <span>{stats.registered} bereits angemeldet</span>
-        <span>{stats.spots_left} Plätze frei</span>
-      </div>
-      <div className="h-2 w-full rounded-full bg-[#111111]/8 overflow-hidden">
-        <motion.div
-          className="h-full rounded-full bg-[#BFFF00]"
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-        />
-      </div>
-    </motion.div>
-  );
-};
-
-/** `stacked`: Eingabe und Button untereinander auf jeder Breite — für das
- * 440-px-Formular-Panel im Desktop-Hero, wo nebeneinander nicht passt. */
-const RegisterForm = ({ idSuffix = '', compact = false, stacked = false }) => {
+/** `inline`: Eingabe und Button nebeneinander ab 640 px. `onInk`: Variante
+ * auf dunklem Grund (Hero, Schluss). `compact`: 44-px-Höhe für die Leiste. */
+const RegisterForm = ({ idSuffix = '', inline = false, onInk = false, compact = false, label = 'Platz sichern' }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [state, setState] = useState('idle');
-  const [focused, setFocused] = useState(false);
   const valid = isValidEmail(email);
 
   const submit = async (e) => {
     e.preventDefault();
     if (state === 'loading') return;
-    // Der Button ist nie ausgegraut: ein grauer CTA im Hero liest sich wie
-    // "geht nicht". Ungültige Eingabe wird beim Absenden erklärt.
+    // Der Button ist nie ausgegraut: ein grauer CTA liest sich wie „geht
+    // nicht". Ungültige Eingabe wird beim Absenden erklärt.
     if (!valid) { setState('invalid'); return; }
     setState('loading');
     track('webinar_register_submit', { form: idSuffix || 'default' });
     // Eine ID für Browser-Pixel UND Conversions API → Meta zählt den Lead einmal.
     const eventId = metaEventId();
+    const referrer = typeof document !== 'undefined' ? document.referrer || null : null;
+    const trimmed = email.trim();
+
+    let result;
     try {
-      const res = await fetch('/api/webinar/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          source: 'webinar-lp',
-          utm: readUtm(),
-          meta_event_id: eventId,
-          referrer: typeof document !== 'undefined' ? document.referrer || null : null,
-          landing_path: typeof window !== 'undefined' ? window.location.pathname : null,
-        }),
+      result = await registerPrimary({
+        email: trimmed,
+        source: 'webinar-lp',
+        utm: readUtm(),
+        meta_event_id: eventId,
+        referrer,
+        landing_path: typeof window !== 'undefined' ? window.location.pathname : null,
       });
-      const data = await res.json().catch(() => null);
-      const ok = res.ok && data?.ok;
-      track('webinar_register_result', { ok });
-      if (ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-10-29', content_category: 'webinar' }, eventId);
-        trackLinkedInLead();
-        navigate(`/webinar/danke?email=${encodeURIComponent(email)}`);
-        return;
-      }
-      setState('error');
     } catch {
-      setState('error');
-      track('webinar_register_result', { ok: false });
+      result = 'failed';
     }
+    if (result === 'invalid') { setState('invalid'); return; }
+
+    let via = 'api';
+    if (result !== 'ok') {
+      via = 'fallback';
+      result = (await registerFallback(trimmed, referrer)) ? 'ok' : 'failed';
+    }
+    track('webinar_register_result', { ok: result === 'ok', via });
+
+    if (result === 'ok') {
+      trackMeta('Lead', { content_name: WEBINAR_CAMPAIGN, content_category: 'webinar' }, eventId);
+      trackLinkedInLead();
+      navigate(`/webinar/danke?email=${encodeURIComponent(trimmed)}${via === 'fallback' ? '&v=f' : ''}`);
+      return;
+    }
+    setState('error');
   };
 
-  const inputH = compact ? 'h-12' : 'h-14';
-  const btnH = compact ? 'h-12 px-6' : 'h-14 px-7';
+  const cls = ['wb-form', inline ? 'inline' : '', onInk ? 'onink' : '', compact ? 'compact' : ''].filter(Boolean).join(' ');
 
   return (
-    <form onSubmit={submit} noValidate data-testid={`webinar-form${idSuffix}`} className="w-full">
-      <div className={`flex flex-col gap-3 ${stacked ? '' : 'sm:flex-row'}`}>
-        <div className="relative flex-1">
-          <input
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); if (state === 'invalid') setState('idle'); }}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder="Deine beste E-Mail-Adresse"
-            aria-label="E-Mail-Adresse"
-            className={`w-full ${inputH} px-5 rounded-full bg-white border border-[#111111]/15 focus:border-[#111111] outline-none text-[#111111] text-[15px] placeholder:text-[#9e9ea0] transition-colors shadow-[0_10px_30px_-20px_rgba(17,17,17,0.2)]`}
-          />
-          {/* Focus underline · scaleX sweep, per the brief's input animation */}
-          <motion.span
-            aria-hidden
-            initial={false}
-            animate={{ scaleX: focused ? 1 : 0, opacity: focused ? 1 : 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute -bottom-1 left-6 right-6 h-[2px] rounded-full bg-[#BFFF00] origin-left"
-          />
-        </div>
-        <motion.button
-          type="submit"
-          disabled={state === 'loading'}
-          whileHover={{ y: -3, scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-          className={`${btnH} ${stacked ? 'w-full' : ''} rounded-full bg-[#111111] hover:bg-[#BFFF00] hover:text-[#111111] disabled:opacity-60 disabled:cursor-wait text-white font-bold text-[13px] uppercase tracking-[0.14em] transition-colors inline-flex items-center justify-center gap-2 whitespace-nowrap`}
-        >
-          {state === 'loading' ? 'Wird reserviert…' : 'Jetzt kostenlos anmelden'}
-          {state !== 'loading' && <ArrowUpRight size={16} />}
-        </motion.button>
+    <form onSubmit={submit} noValidate data-testid={`webinar-form${idSuffix}`} className={cls}>
+      <div className="fields">
+        <input
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (state === 'invalid') setState('idle'); }}
+          placeholder="Deine beste E-Mail-Adresse"
+          aria-label="E-Mail-Adresse"
+        />
+        <button type="submit" disabled={state === 'loading'} className={`pill ${onInk ? 'lime' : 'ink'}`}>
+          {state === 'loading' ? 'Wird reserviert …' : label}
+          {state !== 'loading' && <span aria-hidden className="arrow">→</span>}
+        </button>
       </div>
       {!compact && (
-        <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#707072]">
-          Keine Kreditkarte · 100 % kostenlos · live · keine Aufzeichnung
-          {state === 'invalid' && (
-            <span className="block mt-1.5 tracking-normal normal-case text-[12px] text-red-600" role="alert">
-              Bitte eine gültige E-Mail-Adresse eingeben.
-            </span>
-          )}
-          {state === 'error' && (
-            <span className="block mt-1.5 tracking-normal normal-case text-[12px] text-red-600" role="alert">
-              Das hat nicht geklappt — bitte E-Mail prüfen und erneut senden.
-            </span>
-          )}
+        <p className="note">
+          <span className="short">Kostenlos · Live · Keine Aufzeichnung</span>
+          <span className="long">Kostenlos · Live · Keine Aufzeichnung · Keine Kreditkarte</span>
+          {state === 'invalid' && <span className="err" role="alert">Bitte eine gültige E-Mail-Adresse eingeben.</span>}
+          {state === 'error' && <span className="err" role="alert">Das hat nicht geklappt. Bitte E-Mail prüfen und erneut senden.</span>}
         </p>
       )}
-      {compact && state === 'invalid' && (
-        <p className="mt-2 text-[11.5px] text-red-600" role="alert">Bitte eine gültige E-Mail-Adresse eingeben.</p>
-      )}
-      {compact && state === 'error' && (
-        <p className="mt-2 text-[11.5px] text-red-600" role="alert">Bitte E-Mail prüfen und erneut senden.</p>
-      )}
+      {compact && state === 'invalid' && <p className="err" role="alert">Bitte eine gültige E-Mail-Adresse eingeben.</p>}
+      {compact && state === 'error' && <p className="err" role="alert">Bitte E-Mail prüfen und erneut senden.</p>}
     </form>
   );
 };
 
-/** Sticky CTA bar · slides in from ~20 % scroll depth on every breakpoint.
- * Compact email capture on sm+, button-only on phones. */
-/** Presse- und Kunden-Logos · rendert ausschließlich vorhandene Logo-
- *  Dateien (HEAD-Check), nie Text-Wordmarks. Fehlen alle Dateien einer
- *  Gruppe, fällt der Block komplett weg statt leer zu stehen. */
-const LogoBand = ({ eyebrow, names, logos, muted = false }) => {
-  const paths = names.map((n) => logos[n]).filter(Boolean);
-  const existing = useExistingAssets(paths);
-  const items = names.filter((n) => existing.includes(logos[n]));
-  if (!items.length) return null;
-  return (
-    <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center first:mt-0">
-      <motion.p
-        initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-        className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-[#9e9ea0] mb-5"
-      >
-        {eyebrow}
-      </motion.p>
-      <ul className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
-        {items.map((n, i) => (
-          <motion.li
-            key={n}
-            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-            className={muted ? 'opacity-55 hover:opacity-100 transition-opacity' : 'opacity-80 hover:opacity-100 transition-opacity'}
-          >
-            <img src={logos[n]} alt={n} loading="lazy" className="h-6 md:h-7 w-auto max-w-[140px] object-contain grayscale" />
-          </motion.li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+/* ── Bausteine ────────────────────────────────────────────────────────── */
 
-const LogoBands = () => (
-  <>
-    <LogoBand eyebrow="▸ Bekannt aus" names={MEDIA} logos={MEDIA_LOGOS} />
-    <div className="border-t border-[#111111]/8 mt-7 first:mt-0 -mx-5 md:-mx-10">
-      <LogoWall tone="light" compact eyebrow="Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" />
-    </div>
-  </>
+const Dot = () => <span className="p">.</span>;
+
+const Eyebrow = ({ children, light = false }) => (
+  <p className={`eyebrow bib ${light ? 'light' : ''}`}>{children}</p>
 );
 
-const TransparentHeader = ({ onCta }) => {
-  const [scrolled, setScrolled] = useState(false);
+/** Foto mit Mono-Bildunterschrift. Null Radius, null Schatten: das Foto ist die Karte. */
+const Photo = ({ src, alt = '', pos = '50% 50%', tag, ratio, fallbacks, className = '' }) => (
+  <figure className={`ph ${className}`} style={ratio ? { aspectRatio: ratio } : undefined}>
+    <img src={src} alt={alt} loading="lazy" decoding="async" style={{ objectPosition: pos }} onError={fallbacks ? withFallback(fallbacks) : undefined} />
+    {tag && <figcaption className="bib tag">{tag}</figcaption>}
+  </figure>
+);
+
+const Header = ({ onCta }) => {
+  const [solid, setSolid] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => setSolid(window.scrollY > 48);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-  const ink = scrolled;
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      data-testid="webinar-header"
-      className={`hidden min-[900px]:block fixed inset-x-0 top-0 z-30 transition-[background-color,border-color,backdrop-filter] duration-300 ${
-        ink ? 'bg-white/85 backdrop-blur-md border-b border-[#111111]/8' : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-[1280px] mx-auto px-10 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3" aria-label="LeaderOS Startseite">
-          <WladMark size={30} variant={ink ? 'solid' : 'outline'} />
-          <span
-            className={`font-black tracking-tight text-[19px] transition-colors ${ink ? 'text-[#111111]' : 'text-white'}`}
-            style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}
-          >
-            Leader<span className={ink ? 'text-[#5A7700]' : 'text-[#BFFF00]'}>·</span>OS
-          </span>
+    <header className={`wb-head ${solid ? 'solid' : ''}`} data-testid="webinar-header">
+      <div className="wrap">
+        <Link to="/" className="brand" aria-label="LeaderOS Startseite">
+          <WladMark size={28} variant={solid ? 'solid' : 'outline'} />
+          <span>Leader<span className="dot">·</span>OS</span>
         </Link>
-        <div className="flex items-center gap-3">
-          <motion.span
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] ${
-              ink ? 'bg-[#BFFF00]/25 text-[#111111]' : 'bg-white/10 text-white border border-white/20'
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full inline-block ${ink ? 'bg-[#111111]' : 'bg-[#BFFF00]'}`} />
-            {DATE_LINE_SHORT}
-          </motion.span>
-          <button
-            type="button"
-            onClick={onCta}
-            className={`inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-[11.5px] font-bold uppercase tracking-[0.14em] transition-colors ${
-              ink ? 'bg-[#111111] text-white hover:bg-[#333]' : 'bg-white text-[#111111] hover:bg-[#BFFF00]'
-            }`}
-          >
-            Platz sichern <ArrowUpRight size={14} />
-          </button>
+        <div className="right">
+          <span className="bib date">{DATE_SHORT}</span>
+          <button type="button" onClick={onCta} className="pill ink cta">Platz sichern</button>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 };
 
-const StickyCtaBar = ({ onCtaClick }) => {
-  const { scrollYProgress } = useScroll();
-  const [visible, setVisible] = useState(false);
-
+/** Leiste unten · erscheint, sobald das Hero-Formular aus dem Bild ist, und
+ * verschwindet wieder, wenn das Schlussformular sichtbar wird. */
+const StickyBar = ({ heroFormRef, finalRef, onCta }) => {
+  const [heroOut, setHeroOut] = useState(false);
+  const [finalIn, setFinalIn] = useState(false);
   useEffect(() => {
-    const unsub = scrollYProgress.on('change', (v) => setVisible(v > 0.2 && v < 0.96));
-    return () => unsub();
-  }, [scrollYProgress]);
-
+    if (typeof IntersectionObserver === 'undefined') return undefined;
+    const a = heroFormRef.current;
+    const b = finalRef.current;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.target === a) setHeroOut(!en.isIntersecting && en.boundingClientRect.top < 0);
+        if (en.target === b) setFinalIn(en.isIntersecting);
+      });
+    }, { threshold: 0.05 });
+    if (a) io.observe(a);
+    if (b) io.observe(b);
+    return () => io.disconnect();
+  }, [heroFormRef, finalRef]);
+  const on = heroOut && !finalIn;
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ y: 90, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 90, opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-[#111111]/10 shadow-[0_-12px_40px_-20px_rgba(17,17,17,0.3)]"
-          data-testid="webinar-sticky-cta"
-        >
-          <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
-            <div className="hidden md:block shrink-0">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#5A7700]">▸ Kostenloses Live-Webinar</p>
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#707072] mt-0.5">29. Oktober · 10 Uhr · Live</p>
-            </div>
-            <div className="hidden sm:block flex-1">
-              <RegisterForm idSuffix="-sticky" compact />
-            </div>
-            <div className="sm:hidden flex-1">
-              <button
-                onClick={onCtaClick}
-                className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-[#111111] text-white font-bold text-[12.5px] uppercase tracking-[0.14em]"
-              >
-                Jetzt Platz sichern <ArrowUpRight size={15} />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className={`wb-sticky ${on ? 'on' : ''}`} data-testid="webinar-sticky-cta" aria-hidden={!on}>
+      <div className="wrap">
+        <div className="txt">
+          <p className="bib lime">Kostenloses Live-Webinar</p>
+          <p className="bib mute">{DATE_SHORT}</p>
+        </div>
+        <div className="desk"><RegisterForm idSuffix="-sticky" inline compact /></div>
+        <div className="mobile">
+          <button type="button" onClick={onCta} className="pill ink full">Platz sichern · 29. Okt</button>
+        </div>
+      </div>
+    </div>
   );
 };
 
-/** Centered section header · balanced type, blur reveal. */
-const SectionHeader = ({ eyebrow, headline, intro }) => (
-  <div className="text-center mb-10 md:mb-12">
-    <motion.p
-      initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-      className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] mb-3 text-[#5A7700]"
-    >
-      {eyebrow}
-    </motion.p>
-    <motion.h2
-      initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-      className="text-balance mx-auto max-w-4xl text-[38px] sm:text-[54px] md:text-[68px] leading-[0.95] text-[#111111]"
-      style={DISPLAY}
-    >
-      {headline}
-    </motion.h2>
-    {intro && (
-      <motion.p
-        initial="hidden" whileInView="show" viewport={{ once: true }} custom={2} variants={FADE_UP}
-        className="text-balance mx-auto mt-5 max-w-2xl text-[17px] md:text-[19px] leading-[1.6] text-[#4b4b4d]"
-      >
-        {intro}
-      </motion.p>
-    )}
-  </div>
-);
-
-/** Full-bleed ink statement band. */
-const StatementBand = ({ eyebrow, children }) => (
-  <section className="bg-[#111111]">
-    <div className="max-w-[900px] mx-auto px-5 md:px-10 py-14 md:py-20 text-center">
-      {eyebrow && (
-        <motion.p
-          initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-          className="font-mono text-[10px] font-bold uppercase tracking-[0.26em] text-[#BFFF00] mb-5"
-        >
-          {eyebrow}
-        </motion.p>
-      )}
-      <motion.p
-        initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-        className="text-balance text-[32px] sm:text-[48px] md:text-[60px] leading-[0.96] text-white"
-        style={DISPLAY}
-      >
-        {children}
-      </motion.p>
-    </div>
-  </section>
-);
-
-/** FAQ accordion · height + opacity + blur, one open at a time. */
-const FaqAccordion = () => {
+const Faq = () => {
   const [open, setOpen] = useState(0);
   return (
-    <dl className="space-y-3 max-w-2xl mx-auto">
+    <div className="wb-faq">
       {FAQ.map(([q, a], i) => {
         const isOpen = open === i;
         return (
-          <motion.div
-            key={q}
-            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-            className={`rounded-2xl bg-[#fafafa] border transition-colors ${isOpen ? 'border-[#BFFF00]' : 'border-[#111111]/8'}`}
-          >
-            <dt>
-              <button
-                type="button"
-                onClick={() => setOpen(isOpen ? -1 : i)}
-                aria-expanded={isOpen}
-                className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
-              >
-                <span className="text-[16px] leading-[1.3] text-[#111111]" style={TITLE}>{q}</span>
-                <motion.span
-                  animate={{ rotate: isOpen ? 45 : 0 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="shrink-0 inline-flex w-7 h-7 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111]"
-                >
-                  <Plus size={15} strokeWidth={3} />
-                </motion.span>
+          <div key={q} className={`q ${isOpen ? 'open' : ''}`}>
+            <h3>
+              <button type="button" onClick={() => setOpen(isOpen ? -1 : i)} aria-expanded={isOpen} aria-controls={`wb-faq-${i}`}>
+                <span>{q}</span>
+                <span aria-hidden className="x">+</span>
               </button>
-            </dt>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.dd
-                  initial={{ height: 0, opacity: 0, filter: 'blur(4px)' }}
-                  animate={{ height: 'auto', opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ height: 0, opacity: 0, filter: 'blur(4px)' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
-                >
-                  <p className="px-6 pb-5 text-[14.5px] leading-[1.6] text-[#707072]">{a}</p>
-                </motion.dd>
-              )}
-            </AnimatePresence>
-          </motion.div>
+            </h3>
+            <div id={`wb-faq-${i}`} className="a" role="region">
+              <div><p>{a}</p></div>
+            </div>
+          </div>
         );
       })}
-    </dl>
-  );
-};
-
-/** Wlad portrait with subtle scroll parallax (translateY + scale + rotate). */
-const ParallaxPortrait = () => {
-  const ref = useRef(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [36, -36]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [-1.2, 1.2]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.02, 1, 1.02]);
-
-  return (
-    <div ref={ref} className="relative">
-      <div className="rounded-3xl overflow-hidden border border-[#111111]/10 shadow-[0_30px_60px_-35px_rgba(17,17,17,0.35)]">
-        <motion.img
-          style={reduced ? {} : { y, rotate, scale }}
-          src={WLAD_AVATAR}
-          onError={withFallback(WLAD_AVATAR_FALLBACKS)}
-          alt="Wlad Jachtchenko · Host des Webinars"
-          loading="lazy"
-          className="w-full aspect-[4/5] object-cover object-top"
-        />
-      </div>
-      {/* WladBot · der KI-Coach, der Wlads Methodik trägt — als zweites
-          Gesicht neben dem Host, nicht als Icon. */}
-      <motion.figure
-        initial={{ opacity: 0, y: 16, rotate: -4 }}
-        whileInView={{ opacity: 1, y: 0, rotate: -3 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -bottom-6 -right-3 sm:-right-6 w-[38%] max-w-[180px] rounded-2xl bg-[#111111] border-4 border-white shadow-[0_24px_50px_-20px_rgba(17,17,17,0.5)] overflow-hidden"
-        data-testid="webinar-host-wladbot"
-      >
-        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 40%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
-        <img
-          src={WLADBOT_AVATAR}
-          onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
-          alt="WladBot · der KI-Coach mit Wlads Methodik"
-          loading="lazy"
-          className="relative w-full aspect-square object-contain p-2"
-        />
-        <figcaption className="relative px-3 pb-2.5 font-mono text-[8.5px] font-bold uppercase tracking-[0.18em] text-[#BFFF00]">▸ WladBot · KI-Coach</figcaption>
-      </motion.figure>
     </div>
   );
 };
 
+/* ── Seite ────────────────────────────────────────────────────────────── */
+
 export default function WebinarPage() {
-  const formRef = useRef(null);
+  const pageRef = useRef(null);
+  const heroFormRef = useRef(null);
+  const finalRef = useRef(null);
+  const [days] = useState(daysLeft);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -766,7 +382,7 @@ export default function WebinarPage() {
     root.classList.remove('dark');
     captureUtm();
     track('webinar_view');
-    trackMeta('ViewContent', { content_name: 'webinar-2026-10-29', content_category: 'webinar' });
+    trackMeta('ViewContent', { content_name: WEBINAR_CAMPAIGN, content_category: 'webinar' });
 
     const restoreMeta = applyPageMeta(WEBINAR_SEO);
 
@@ -785,7 +401,7 @@ export default function WebinarPage() {
     ld.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Event',
-      name: 'Führe besser. Jeden Tag. · Das kostenlose LeaderOS Live-Webinar',
+      name: 'Trainiere Führung. Nicht nur Wissen. · Das kostenlose LeaderOS Live-Webinar',
       startDate: '2026-10-29T10:00:00+01:00',
       endDate: '2026-10-29T11:30:00+01:00',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
@@ -804,536 +420,364 @@ export default function WebinarPage() {
     ldFaq.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: FAQ.map(([q, a]) => ({
-        '@type': 'Question',
-        name: q,
-        acceptedAnswer: { '@type': 'Answer', text: a },
-      })),
+      mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
     });
     document.head.appendChild(ldFaq);
 
     return () => { restoreMeta(); ld.remove(); ldFaq.remove(); if (wasDark) root.classList.add('dark'); };
   }, []);
 
-  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Ruhige Scroll-Reveals: einmal einblenden, kein Blur, kein Stagger-Glow.
+  useEffect(() => {
+    const root = pageRef.current;
+    if (!root) return undefined;
+    const els = Array.from(root.querySelectorAll('.rv'));
+    if (typeof IntersectionObserver === 'undefined') { els.forEach((el) => el.classList.add('in')); return undefined; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const toFinal = () => {
+    track('webinar_cta_click', { target: 'final' });
+    finalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <div className="bg-white text-[#111111] min-h-[100dvh] antialiased" data-testid="webinar-page">
-      <MouseGlow />
-
-      {/* Squeeze chrome · transparent over the hero video, frosted white once
-          the hero is scrolled away. No nav exits. Mobile has its own header
-          row inside CinematicHero, so this one only renders from 900 px up. */}
-      <TransparentHeader onCta={scrollToForm} />
+    <div ref={pageRef} className="wb" data-testid="webinar-page">
+      <style>{CSS}</style>
+      <Header onCta={toFinal} />
 
       <main id="main-content">
-        {/* ── HOOK · headline → sub → CTA → trust → product ────────────── */}
-        {/* ── HERO · Wlad als Vollbild, Headline ins Bild gebrannt ──────
-            Desktop: Kopie links, Formular-Panel rechts — beides im ersten
-            Viewport. Mobil: ein Vollbild-Screen mit Termin, Dauer, 0 € und
-            CTA, Formular direkt darunter. Siehe components/webinar/CinematicHero.js. */}
-        <CinematicHero
-          onCta={scrollToForm}
-          formSlot={(
-            <div ref={formRef} className="scroll-mt-24 text-left" data-testid="webinar-form-block">
-              <p className="font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] text-[#5A7700] text-center whitespace-nowrap">
-                {DATE_LINE_SHORT}
-              </p>
-              <div className="mt-4 flex justify-center"><Countdown /></div>
-              <div className="w-full flex flex-col items-center"><ScarcityBar /></div>
-              <div className="mt-6 w-full"><RegisterForm idSuffix="-hero" stacked /></div>
-            </div>
-          )}
-        />
-
-        {/* ── BEWEIS · stats, press, clients — staggered in ────────────── */}
-        <section className="border-t border-[#111111]/8 bg-white">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-10 md:py-12">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 mb-10">
-              {STATS.map(([value, label], i) => (
-                <motion.div
-                  key={label}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-                  className="text-center"
-                >
-                  <div className="text-[24px] sm:text-[28px] text-[#111111]" style={DISPLAY}>
-                    <CountUpValue value={value} /><span className="text-[#5A7700] not-italic">.</span>
-                  </div>
-                  <div className="mt-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[#707072]">{label}</div>
-                </motion.div>
+        {/* ── HERO · Wlad, Headline, Formular. Alles im ersten Viewport. ── */}
+        <section className="wb-hero" data-testid="webinar-cinematic-hero">
+          <img className="bg" src={WLAD_AVATAR} onError={withFallback(WLAD_AVATAR_FALLBACKS)} alt="" aria-hidden />
+          <div className="scrim" aria-hidden />
+          <div className="inner">
+            <div className="air" aria-hidden />
+            <p className="bib kicker ze" style={ze('zeFadeUp', 0.8, 0.1)}>
+              <span className="led" aria-hidden />
+              <span className="short">Live-Webinar · 29. Okt · 10 Uhr · 0 €</span>
+              <span className="long">Kostenloses Live-Webinar · {DATE_LINE}</span>
+            </p>
+            <h1 className="disp" aria-label={`${WEBINAR_HERO.h1} ${WEBINAR_HERO.h1Accent}`}>
+              {HERO_LINES.map((line, i) => (
+                <span key={line} className="line" aria-hidden>
+                  <span className="ze" style={ze('zeRise', 0.9, 0.18 + i * 0.1)}>{line}{i === HERO_LINES.length - 1 && <Dot />}</span>
+                </span>
               ))}
+            </h1>
+            <p className="sub short ze" style={ze('zeFadeUp', 0.85, 0.55)}>{HERO_SUB_SHORT}</p>
+            <p className="sub long ze" style={ze('zeFadeUp', 0.85, 0.55)}>{HERO_SUB_LONG}</p>
+            <div ref={heroFormRef} className="formwrap ze" data-testid="webinar-form-block" style={ze('zeFadeUp', 0.85, 0.62)}>
+              <RegisterForm idSuffix="-hero" inline onInk />
             </div>
-            <LogoBands />
-            <div className="border-t border-[#111111]/8 mt-7 pt-7 text-center">
-              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2">
-                {REVIEW_PLATFORMS.map(([name, rating, count, href]) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[12.5px] text-[#4b4b4d] hover:text-[#111111] transition-colors py-2.5 -my-2.5"
-                  >
-                    <Star size={13} className="text-[#111111] fill-[#BFFF00]" />
-                    <span className="font-bold text-[#111111]">{rating}/5</span> {name} · {count} <ArrowUpRight size={11} />
-                  </a>
-                ))}
-              </div>
+            <div className="facts ze" style={ze('zeFadeUp', 0.85, 0.8)}>
+              {FACTS.map(([k, v]) => (
+                <div key={k}><span className="bib">{k}</span><b>{v}</b></div>
+              ))}
+              <div><span className="bib">Countdown</span><b>{daysLabel(days)}</b></div>
             </div>
           </div>
         </section>
 
-        {/* ── PROBLEM · the week as a scroll story ─────────────────────── */}
-        <section className="bg-[#fafafa] border-t border-[#111111]/8">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Das Problem"
-              headline={<>Du weißt längst, wie gute Führung geht. Du kommst nur nicht dazu, sie zu leben<span className="text-[#5A7700] not-italic">.</span></>}
-              intro="Du weißt, wie man Feedback gibt und Konflikte früh anspricht. Trotzdem passiert es im Alltag selten, denn Wissen wird erst durch Training zu Verhalten. Die Woche unten kennst du vermutlich auswendig."
-            />
-            <div className="max-w-2xl mx-auto relative">
-              {/* Timeline spine */}
-              <span aria-hidden className="absolute left-[13px] top-4 bottom-4 w-[2px] bg-[#111111]/10 hidden sm:block" />
-              <ol className="space-y-4">
-                {WEEK.map(([day, text, isPunchline], i) => (
-                  <motion.li
-                    key={day}
-                    initial={{ opacity: 0, x: -24, filter: 'blur(6px)' }}
-                    whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                    viewport={{ once: true, amount: 0.6 }}
-                    transition={{ duration: 0.55, delay: 0.18 * i, ease: [0.16, 1, 0.3, 1] }}
-                    className={`sm:ml-9 relative flex items-start gap-4 rounded-2xl px-5 py-4 border ${isPunchline ? 'bg-[#111111] border-[#111111]' : 'bg-white border-[#111111]/8'}`}
-                  >
-                    <span aria-hidden className={`hidden sm:block absolute -left-[32px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full ring-4 ring-[#fafafa] ${isPunchline ? 'bg-[#111111]' : 'bg-[#BFFF00]'}`} />
-                    <span className={`shrink-0 w-24 font-mono text-[10.5px] font-bold uppercase tracking-[0.16em] pt-0.5 ${isPunchline ? 'text-[#BFFF00]' : 'text-[#5A7700]'}`}>{day}</span>
-                    <span className={`text-[14.5px] leading-[1.5] ${isPunchline ? 'text-white font-semibold' : 'text-[#39393b]'}`}>{text}</span>
-                  </motion.li>
+        {/* ── BEWEIS · verifizierte Zahlen, Referenzen, Bewertungen ─────── */}
+        <section className="wb-proof" aria-label="Belege">
+          <div className="wrap">
+            <ul className="nums">
+              {PROOF.map(([v, l, href]) => (
+                <li key={l} className="num rv">
+                  <b>{v}<Dot /></b>
+                  {href ? <a href={href} target="_blank" rel="noopener noreferrer" className="bib">{l} ↗</a> : <span className="bib">{l}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <LogoWall tone="light" compact eyebrow="Führungskräfte dieser Unternehmen haben Wlads Trainings durchlaufen" />
+          <div className="wrap">
+            <p className="reviews">
+              {REVIEWS.map(([name, meta, href]) => (
+                <a key={name} href={href} target="_blank" rel="noopener noreferrer" className="bib">
+                  <b>{name}</b> {meta} ↗
+                </a>
+              ))}
+            </p>
+          </div>
+        </section>
+
+        {/* ── PROBLEM · die Woche, die jeder kennt ───────────────────────── */}
+        <section className="sec wb-problem">
+          <div className="wrap split">
+            <Photo src="/journal/topics/solitude.webp" pos="50% 40%" tag="Fig. 01 · Der Alltag" className="rv" />
+            <div>
+              <Eyebrow>Das Problem</Eyebrow>
+              <h2 className="disp h2 rv">Du weißt, wie Führung geht. Du kommst nur nicht dazu<Dot /></h2>
+              <p className="lead rv">
+                Feedback geben, Konflikte früh ansprechen, klar entscheiden: Du kennst die Theorie.
+                Im Alltag passiert sie trotzdem selten, denn Wissen wird erst durch Training zu Verhalten.
+                Die Woche unten kennst du vermutlich auswendig.
+              </p>
+              <ol className="rows week rv">
+                {WEEK.map(([day, text], i) => (
+                  <li key={day} className={`row ${i === WEEK.length - 1 ? 'punch' : ''}`}>
+                    <span className="bib day">{day}</span>
+                    <span className="txt">{text}</span>
+                  </li>
                 ))}
               </ol>
             </div>
-            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 29. Oktober · 10 Uhr · kostenlos" />
           </div>
         </section>
 
-        <StatementBand>
-          Seminare verändern Wissen,<br />noch kein Verhalten<span className="text-[#BFFF00] not-italic">.</span>
-        </StatementBand>
-
-        {/* ── NEUE OPPORTUNITY · gray-out vs light-up ──────────────────── */}
-        <section className="bg-white">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Die neue Möglichkeit"
-              headline={<>Führung ist trainierbar wie Fitness<span className="text-[#5A7700] not-italic">.</span></>}
-            />
-            
-            {/* THE graphic: old way grays out, LeaderOS lights up */}
-            <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-              <motion.div
-                initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} variants={REVEAL}
-                className="rounded-3xl border border-[#111111]/10 bg-[#fafafa] p-7"
-              >
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#9e9ea0] mb-5 flex items-center gap-2">
-                  <X size={13} className="text-red-500" /> Der alte Weg
-                </p>
-                <ol className="space-y-2">
-                  {SEMINAR_FLOW.map((step, i) => (
-                    <motion.li
-                      key={step}
-                      initial={{ opacity: 1, filter: 'grayscale(0)' }}
-                      whileInView={{ opacity: 0.42, filter: 'grayscale(1)' }}
-                      viewport={{ once: true, amount: 0.8 }}
-                      transition={{ duration: 0.6, delay: 0.35 + 0.28 * i }}
-                      className="flex flex-col items-start"
-                    >
-                      <span className={`text-[15.5px] font-bold ${i === SEMINAR_FLOW.length - 1 ? 'text-red-600' : 'text-[#4b4b4d]'}`} style={TITLE}>{step}</span>
-                      {i < SEMINAR_FLOW.length - 1 && <ArrowDown size={13} className="text-[#9e9ea0] my-1 ml-1" />}
-                    </motion.li>
-                  ))}
-                </ol>
-              </motion.div>
-              <motion.div
-                initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={1} variants={REVEAL}
-                className="rounded-3xl border-2 border-[#BFFF00] bg-white p-7 shadow-[0_24px_50px_-30px_rgba(17,17,17,0.3)]"
-              >
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#5A7700] mb-5 flex items-center gap-2">
-                  <Check size={13} strokeWidth={3} /> Mit LeaderOS
-                </p>
-                <ol className="space-y-2">
-                  {OS_FLOW.map((step, i) => (
-                    <motion.li
-                      key={step}
-                      initial={{ opacity: 0.3 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true, amount: 0.8 }}
-                      transition={{ duration: 0.5, delay: 0.35 + 0.24 * i }}
-                      className="flex flex-col items-start"
-                    >
-                      <motion.span
-                        initial={{ textShadow: '0 0 0px rgba(191,255,0,0)' }}
-                        whileInView={{ textShadow: ['0 0 0px rgba(191,255,0,0)', '0 0 18px rgba(191,255,0,0.9)', '0 0 0px rgba(191,255,0,0)'] }}
-                        viewport={{ once: true, amount: 0.8 }}
-                        transition={{ duration: 1.1, delay: 0.35 + 0.24 * i }}
-                        className={`text-[15.5px] font-bold ${i === OS_FLOW.length - 1 ? 'text-[#5A7700]' : 'text-[#111111]'}`}
-                        style={TITLE}
-                      >
-                        {step}
-                      </motion.span>
-                      {i < OS_FLOW.length - 1 && <ArrowDown size={13} className="text-[#5A7700] my-1 ml-1" />}
-                    </motion.li>
-                  ))}
-                </ol>
-              </motion.div>
-            </div>
-            <InlineCta onClick={scrollToForm} caption="▸ Keine Kreditkarte · jederzeit abmeldbar" />
-          </div>
+        <section className="wb-band" aria-label="These">
+          <div className="wrap"><p className="disp rv">Seminare verändern Wissen. Noch kein Verhalten<Dot /></p></div>
         </section>
 
-        {/* ── MECHANISMUS · learn cards ────────────────────────────────── */}
-        <section className="bg-[#fafafa] border-t border-[#111111]/8">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Inhalte"
-              headline={<>Das lernst du in 90 Minuten<span className="text-[#5A7700] not-italic">.</span></>}
-            />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {LEARN_CARDS.map(([title, desc, img, fit], i) => (
-                <motion.div
-                  key={title}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} custom={i} variants={FADE_UP}
-                  whileHover={{ y: -5, scale: 1.015 }}
-                  className="group rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] overflow-hidden transition-colors shadow-none hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
-                >
-                  <div className={`relative aspect-[16/10] overflow-hidden ${fit === 'cover' ? 'bg-[#111111]' : 'bg-[#111111]'}`}>
-                    {fit === 'photo' ? (
-                      <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-[1.04]" />
-                    ) : fit === 'cover' ? (
-                      <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
-                    ) : fit === 'avatar' ? (
-                      <>
-                        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(60% 70% at 50% 45%, rgba(191,255,0,0.35) 0%, rgba(17,17,17,0) 70%)' }} />
-                        <img src={img} alt="WladBot · dein KI-Coach" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.05]" />
-                      </>
-                    ) : (
-                      <>
-                        <img src={img} alt="" aria-hidden loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-[1.3] blur-xl opacity-40" />
-                        <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-contain p-5 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] transition-transform duration-700 group-hover:scale-[1.04]" />
-                      </>
-                    )}
-                    <span className="absolute left-4 top-4 inline-flex w-8 h-8 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111]">
-                      <Check size={15} strokeWidth={3} />
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-[17px] text-[#111111] mb-1.5" style={TITLE}>{title}</h3>
-                    <p className="text-[13.5px] leading-[1.55] text-[#707072]">{desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+        {/* ── NEUE MÖGLICHKEIT · alter Weg vs. Training ──────────────────── */}
+        <section className="sec wb-way">
+          <div className="wrap split rev">
+            <Photo src="/journal/topics/sprint-b.webp" pos="50% 55%" tag="Fig. 02 · Training" className="rv" />
+            <div>
+              <Eyebrow>Die neue Möglichkeit</Eyebrow>
+              <h2 className="disp h2 rv">Führung ist trainierbar. Wie Fitness<Dot /></h2>
+              <p className="lead rv">
+                Niemand wird fit von einem Vortrag über Fitness. Führung funktioniert genauso:
+                kurze, tägliche Einheiten an deinem echten Fall, mit Feedback, das sofort kommt.
+              </p>
+              <div className="ways rv">
+                <div className="old">
+                  <p className="bib head">Der alte Weg</p>
+                  <ol>{OLD_WAY.map((s, i) => <li key={s}><span className="bib">{String(i + 1).padStart(2, '0')}</span>{s}</li>)}</ol>
+                </div>
+                <div className="new">
+                  <p className="bib head">Mit LeaderOS</p>
+                  <ol>{NEW_WAY.map((s, i) => <li key={s}><span className="bib">{String(i + 1).padStart(2, '0')}</span>{s}</li>)}</ol>
+                </div>
+              </div>
+              <p className="more rv">
+                <a href="/kurse" target="_blank" rel="noopener" className="bib link">Alle Kurse in LeaderOS ↗</a>
+              </p>
             </div>
           </div>
         </section>
 
-        <StatementBand eyebrow="▸ Warum jetzt">
-          Wer täglich trainiert, überholt jeden, der einmal im Jahr ins Seminar geht<span className="text-[#BFFF00] not-italic">.</span>
-        </StatementBand>
-
-        <CoursesLibrarySection placement="webinar" />
-
-        {/* ── DETAILS · agenda, scroll-activated ───────────────────────── */}
-        <section className="bg-white">
-          <div className="max-w-[820px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Der genaue Ablauf · 90 Minuten"
-              headline={<>Die Agenda, Minute für Minute<span className="text-[#5A7700] not-italic">.</span></>}
-            />
-            <ol className="relative border-l-2 border-[#111111]/10 ml-3 space-y-0 max-w-xl mx-auto">
-              {AGENDA.map(([time, title, desc], i) => (
-                <motion.li
-                  key={time}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }} custom={i} variants={FADE_UP}
-                  className="relative pl-8 pb-8 last:pb-0"
-                >
-                  {/* Dot activates (scale + glow) as the row scrolls in */}
-                  <motion.span
-                    aria-hidden
-                    initial={{ scale: 0.5, backgroundColor: '#e5e5e5', boxShadow: '0 0 0 rgba(191,255,0,0)' }}
-                    whileInView={{ scale: 1, backgroundColor: '#BFFF00', boxShadow: '0 0 16px rgba(191,255,0,0.8)' }}
-                    viewport={{ once: true, amount: 0.9 }}
-                    transition={{ duration: 0.45, delay: 0.15 }}
-                    className="absolute -left-[9px] top-1 w-4 h-4 rounded-full ring-4 ring-white"
-                  />
-                  <span className="font-mono text-[12px] font-bold text-[#5A7700] tabular-nums">{time}</span>
-                  <p className="mt-0.5 text-[16.5px] text-[#111111]" style={TITLE}>{title}</p>
-                  <p className="mt-0.5 text-[14px] leading-[1.55] text-[#707072]">{desc}</p>
-                </motion.li>
-              ))}
-            </ol>
-            <InlineCta onClick={scrollToForm} label="Live dabei sein" caption="▸ 90 Minuten · Live-Q&A inklusive" />
-          </div>
-        </section>
-
-        {/* ── VALUE STACK ──────────────────────────────────────────────── */}
-        <section className="bg-[#fafafa] border-t border-[#111111]/8">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Value Stack"
-              headline={<>Im Webinar bekommst du Zugriff auf<span className="text-[#5A7700] not-italic">:</span></>}
-              intro="Andere verlangen für weniger ein Ticket. Du bekommst alles hier für nichts außer deiner E-Mail-Adresse."
-            />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {VALUE_STACK.map(([Icon, title, desc], i) => (
-                <motion.div
-                  key={title}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={i} variants={FADE_UP}
-                  whileHover={{ y: -4, scale: 1.015 }}
-                  className="group flex items-start gap-4 rounded-3xl bg-white border border-[#111111]/8 hover:border-[#BFFF00] p-6 transition-colors hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
-                >
-                  <motion.span
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    className="inline-flex w-11 h-11 shrink-0 items-center justify-center rounded-2xl bg-[#BFFF00]/25 text-[#111111] transition-transform group-hover:scale-105"
-                  >
-                    <Icon size={20} />
-                  </motion.span>
-                  <div>
-                    <h3 className="text-[15.5px] text-[#111111] mb-1" style={TITLE}>{title}</h3>
-                    <p className="text-[13px] leading-[1.55] text-[#707072]">{desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+        {/* ── INHALTE · sechs Themen, jedes mit Bild ─────────────────────── */}
+        <section className="sec wb-learn">
+          <div className="wrap">
+            <div className="head">
+              <Eyebrow>Inhalte · 90 Minuten live</Eyebrow>
+              <h2 className="disp h2 rv">Das nimmst du mit<Dot /></h2>
             </div>
-            <InlineCta onClick={scrollToForm} />
-          </div>
-        </section>
-
-        {/* ── REVEAL · die 4 kostenlosen Videos ────────────────────────── */}
-        <section className="bg-white border-t border-[#111111]/8">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Teilnehmer-Bonus"
-              headline={<>Dazu: die 4-teilige Videoserie<span className="text-[#5A7700] not-italic">.</span></>}
-              intro={'„Führung beginnt hier" — vier Videos von Wlad, ein Video pro Tag in dein Postfach. Als Webinar-Teilnehmer schaltest du die Serie direkt auf der Bestätigungsseite frei, damit du vorbereitet in den Termin gehst.'}
-            />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-              {FREE_VIDEOS.map(([title, duration], i) => (
-                <motion.div
-                  key={title}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={i} variants={FADE_UP}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="rounded-3xl bg-[#fafafa] border border-[#111111]/8 hover:border-[#BFFF00] p-6 transition-colors hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="inline-flex w-9 h-9 items-center justify-center rounded-full bg-[#111111] text-[#BFFF00] text-[13px] font-bold font-mono">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#9e9ea0]">{duration}</span>
-                  </div>
-                  <h3 className="text-[15px] leading-[1.3] text-[#111111]" style={TITLE}>{title}</h3>
-                </motion.div>
+            <ul className="grid">
+              {LEARN.map(([title, desc, img, pos], i) => (
+                <li key={title} className="item rv">
+                  {img === 'wladbot' ? (
+                    <Photo src={WLADBOT_AVATAR} fallbacks={WLADBOT_AVATAR_FALLBACKS} alt="WladBot, der KI-Coach mit Wlads Methodik" className="ink" ratio="3 / 2" />
+                  ) : img === 'wlad' ? (
+                    <Photo src={WLAD_AVATAR} fallbacks={WLAD_AVATAR_FALLBACKS} alt="Wlad Jachtchenko" pos={pos} ratio="3 / 2" />
+                  ) : (
+                    <Photo src={img} pos={pos} ratio="3 / 2" />
+                  )}
+                  <p className="bib code">L·{String(i + 1).padStart(2, '0')}</p>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
 
-        {/* ── ÜBER WLAD · Story mit Parallax-Portrait ──────────────────── */}
-        <section className="bg-[#fafafa] border-t border-[#111111]/8">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20 grid md:grid-cols-12 gap-10 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="md:col-span-4"
-            >
-              <ParallaxPortrait />
-            </motion.div>
-            <div className="md:col-span-8">
-              <motion.p
-                initial="hidden" whileInView="show" viewport={{ once: true }} variants={FADE_UP}
-                className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-[#5A7700] mb-3"
-              >
-                ▸ Dein Host · die Geschichte
-              </motion.p>
-              <motion.h2
-                initial="hidden" whileInView="show" viewport={{ once: true }} custom={1} variants={REVEAL}
-                className="text-balance text-[38px] sm:text-[56px] leading-[0.95] text-[#111111] mb-5"
-                style={DISPLAY}
-              >
-                Warum es LeaderOS gibt<span className="text-[#5A7700] not-italic">.</span>
-              </motion.h2>
-              <motion.div
-                initial="hidden" whileInView="show" viewport={{ once: true }} custom={2} variants={FADE_UP}
-                className="space-y-4 text-[16px] md:text-[17px] leading-[1.65] text-[#4b4b4d] max-w-2xl"
-              >
-                <p>
-                  Wlad Jachtchenko hat als UNO-Assistent gearbeitet, in München und an der
-                  Columbia University studiert und sich durch die K.-o.-Runden der europäischen
-                  Debating-Meisterschaften argumentiert. Seit 2007 trainiert er Führungskräfte —
-                  über 400.000 Klienten, 13 Bücher, drei davon SPIEGEL-Bestseller.
-                </p>
-                <p>
-                  Und irgendwann fiel ihm auf: Das Problem seiner Klienten war fast nie fehlendes
-                  Wissen. Nach jedem Seminar wussten alle, was zu tun ist. Sechs Wochen später
-                  war das Verhalten das alte. Wissen wird gelehrt — Verhalten wird trainiert.
-                </p>
-                <p>
-                  Genau dafür hat er mit seinem Team LeaderOS gebaut: seine komplette Methodik
-                  als tägliches Trainingssystem, mit einem KI-Coach, der seine 13 Bücher, Kurse
-                  und Vorträge kennt. Im Webinar zeigt er das System zum ersten Mal live — und
-                  beantwortet deine Fragen persönlich.
-                </p>
-              </motion.div>
-              <motion.ul
-                initial="hidden" whileInView="show" viewport={{ once: true }} custom={3} variants={FADE_UP}
-                className="mt-6 flex flex-wrap gap-2.5"
-              >
-                {['Seit 2007 im Coaching', '3× SPIEGEL-Bestseller', '3× TEDx', 'Gründer Argumentorik-Akademie'].map((chip) => (
-                  <li key={chip} className="rounded-full bg-white border border-[#111111]/10 px-4 py-2 text-[12.5px] font-semibold text-[#39393b]">
-                    {chip}
+        {/* ── ABLAUF · Minute für Minute ─────────────────────────────────── */}
+        <section className="sec wb-agenda">
+          <div className="wrap split rev">
+            <Photo src="/journal/topics/stage.webp" pos="50% 50%" tag="Fig. 03 · Live" className="rv" />
+            <div>
+              <Eyebrow light>Ablauf · {DATE_SHORT}</Eyebrow>
+              <h2 className="disp h2 rv">90 Minuten. Minute für Minute<Dot /></h2>
+              <ol className="rows rv">
+                {AGENDA.map(([time, title, desc]) => (
+                  <li key={time} className="row">
+                    <time>{time}</time>
+                    <div><h3>{title}</h3><p>{desc}</p></div>
                   </li>
                 ))}
-              </motion.ul>
-              <InlineCta onClick={scrollToForm} label="Live dabei sein" />
+              </ol>
             </div>
           </div>
         </section>
 
-        <StatementBand eyebrow="▸ Wlads Kernsatz">
-          „Führung ist Fähigkeit. Fähigkeit ist trainierbar<span className="text-[#BFFF00] not-italic">.</span>"
-          <span className="block mt-5 font-mono not-italic text-[10px] font-bold uppercase tracking-[0.26em] text-white/50">— Wlad Jachtchenko</span>
-        </StatementBand>
-
-        {/* ── BÜCHERREGAL · alle Bände als Beweis, ziehbar ────────────── */}
-        <BookShelf onTrack={(e, p) => track(`webinar_${e}`, p)} />
-
-        {/* ── BEWEIS II · framework cards ──────────────────────────────── */}
-        <section className="bg-white">
-          <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Die Methodik dahinter"
-              headline={<>Ein Vorgeschmack auf Wlads Frameworks<span className="text-[#5A7700] not-italic">.</span></>}
-              intro="Vier der Frameworks aus Wlads Büchern stehen hier offen, exakt so, wie sie im Webinar und in LeaderOS trainiert werden. Zum Nachlesen verlinkt; das Können kommt aus dem Drill."
-            />
-            <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
-              {FRAMEWORK_PEEK.map(([name, def, href], i) => (
-                <motion.div
-                  key={name}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} custom={i} variants={FADE_UP}
-                  whileHover={{ y: -5, scale: 1.01 }}
-                  className="group rounded-3xl bg-[#fafafa] border border-[#111111]/8 hover:border-[#BFFF00] p-7 transition-colors hover:shadow-[0_24px_50px_-28px_rgba(191,255,0,0.55)]"
-                >
-                  <motion.span whileHover={{ rotate: 8, scale: 1.1 }} className="inline-flex w-9 h-9 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] mb-4">
-                    <BookOpen size={16} />
-                  </motion.span>
-                  <h3 className="text-[17.5px] text-[#111111] mb-2" style={TITLE}>{name}</h3>
-                  <p className="text-[14px] leading-[1.6] text-[#4b4b4d] mb-4">{def}</p>
-                  <Link
-                    to={href}
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5A7700] hover:text-[#111111] transition-colors py-3 -my-3"
-                  >
-                    Zum Deep-Dive im Journal
-                    <span className="transition-transform group-hover:translate-x-1"><ArrowUpRight size={11} /></span>
-                  </Link>
-                </motion.div>
-              ))}
+        {/* ── WERT · alles inklusive ─────────────────────────────────────── */}
+        <section className="sec wb-stack">
+          <div className="wrap">
+            <div className="head">
+              <Eyebrow>Was du bekommst</Eyebrow>
+              <h2 className="disp h2 rv">Alles inklusive. Für 0 €<Dot /></h2>
+              <p className="lead rv">Andere verlangen für weniger ein Ticket. Du bezahlst mit nichts außer deiner E-Mail-Adresse.</p>
             </div>
-          </div>
-        </section>
-
-        {/* ── ECHTE SCARCITY ───────────────────────────────────────────── */}
-        <section className="bg-[#fafafa] border-t border-[#111111]/8">
-          <div className="max-w-[820px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Warum live dabei sein"
-              headline={<>Vier ehrliche Gründe<span className="text-[#5A7700] not-italic">.</span></>}
-            />
-            <ol className="space-y-3 mb-8 max-w-2xl mx-auto">
-              {LIVE_REASONS.map((reason, i) => (
-                <motion.li
-                  key={reason}
-                  initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.5 }} custom={i} variants={FADE_UP}
-                  className="flex items-start gap-4 rounded-2xl bg-white border border-[#111111]/8 px-5 py-4"
-                >
-                  <span className="shrink-0 inline-flex w-7 h-7 items-center justify-center rounded-full bg-[#BFFF00] text-[#111111] text-[12px] font-bold font-mono">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="text-[15px] leading-[1.5] text-[#39393b] pt-0.5">{reason}</span>
-                </motion.li>
+            <ol className="rows rv">
+              {STACK.map(([title, desc], i) => (
+                <li key={title} className="row">
+                  <span className="bib code">V·{String(i + 1).padStart(2, '0')}</span>
+                  <div><h3>{title}</h3><p>{desc}</p></div>
+                  <span className="bib inc">Inklusive</span>
+                </li>
               ))}
             </ol>
-            <motion.p
-              initial="hidden" whileInView="show" viewport={{ once: true }} custom={4} variants={FADE_UP}
-              className="text-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#9e9ea0] leading-[1.7]"
-            >
-              ▸ Du findest hier keinen „Nur noch 18 Plätze!"-Zähler. Die Kapazität oben ist echt —
-              sie kommt live aus der Anmelde-Datenbank.
-            </motion.p>
-          </div>
-        </section>
-
-        {/* ── FAQ · animated accordion ─────────────────────────────────── */}
-        <section className="bg-white border-t border-[#111111]/8">
-          <div className="max-w-[820px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <SectionHeader
-              eyebrow="▸ Häufige Fragen"
-              headline={<>Kurz beantwortet<span className="text-[#5A7700] not-italic">.</span></>}
-            />
-            <FaqAccordion />
-          </div>
-        </section>
-
-        {/* ── FINAL CTA ────────────────────────────────────────────────── */}
-        <section className="relative isolate overflow-hidden border-t border-[#111111]/8">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10"
-            style={{
-              backgroundImage:
-                'radial-gradient(at 50% 100%, rgba(191,255,0,0.18) 0px, transparent 55%), ' +
-                'linear-gradient(#ffffff, #fafafa)',
-            }}
-          />
-          <div className="max-w-[860px] mx-auto px-5 md:px-10 py-16 md:py-24 text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, filter: 'blur(8px)' }}
-              whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <h2 className="text-balance text-[36px] sm:text-[54px] md:text-[66px] leading-[0.95] text-[#111111]" style={DISPLAY}>
-                In einem Jahr wirst du sowieso geführt haben.
-                Die einzige Frage: mit System — oder mit Bauchgefühl<span className="text-[#5A7700] not-italic">?</span>
-              </h2>
-              <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.2em] text-[#707072] flex items-center justify-center gap-1.5">
-                <Star size={11} className="text-[#5A7700] fill-[#BFFF00]" /> {DATE_LINE}
-              </p>
-            </motion.div>
-            <div className="mt-8 flex justify-center"><Countdown /></div>
-            <div className="mt-8 max-w-xl mx-auto text-left">
-              <RegisterForm idSuffix="-final" />
-            </div>
-            <p className="mt-5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-[#9e9ea0]">
-              ▸ Kalender-Einladung kommt sofort per Mail · Erinnerung vor dem Start
+            <p className="cta rv">
+              <button type="button" onClick={toFinal} className="pill ink">Kostenlosen Platz sichern <span aria-hidden className="arrow">→</span></button>
+              <span className="bib mute">{DATE_LINE}</span>
             </p>
+          </div>
+        </section>
+
+        {/* ── BONUS · die Videoserie ─────────────────────────────────────── */}
+        <section className="sec wb-videos cloud">
+          <div className="wrap split">
+            <Photo src="/journal/topics/presence.webp" pos="50% 40%" tag="Fig. 04 · Präsenz" className="rv" />
+            <div>
+              <Eyebrow>Teilnehmer-Bonus</Eyebrow>
+              <h2 className="disp h2 rv">Dazu: vier Videos von Wlad<Dot /></h2>
+              <p className="lead rv">
+                „Führung beginnt hier": ein Video pro Tag in dein Postfach. Als Teilnehmer schaltest du
+                die Serie direkt nach der Anmeldung frei und gehst vorbereitet in den Termin.
+              </p>
+              <ol className="rows rv">
+                {VIDEOS.map(([title, dur], i) => (
+                  <li key={title} className="row">
+                    <span className="bib code">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="txt strong">{title}</span>
+                    <span className="bib dur">{dur}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* ── HOST · Wlad ────────────────────────────────────────────────── */}
+        <section className="sec wb-host">
+          <div className="wrap split">
+            <Photo src={WLAD_AVATAR} fallbacks={WLAD_AVATAR_FALLBACKS} alt="Wlad Jachtchenko, Host des Webinars" pos="62% 15%" tag="Wlad Jachtchenko · Host" className="rv" />
+            <div>
+              <Eyebrow>Dein Host</Eyebrow>
+              <h2 className="disp h2 rv">Wlad Jachtchenko<Dot /></h2>
+              <div className="prose rv">
+                <p>
+                  Wlad Jachtchenko hat in München und an der Columbia University in New York studiert
+                  (Master of Arts), ist Volljurist und war UNO-Assistent. Seit 2007 arbeitet er als
+                  Speaker, Rhetorik-Trainer und Leadership-Coach: über 400.000 Klienten in mehr als
+                  20 Ländern, drei SPIEGEL-Bestseller, Gründer der Argumentorik-Akademie.
+                </p>
+                <p>
+                  Dabei fiel ihm auf: Das Problem seiner Klienten war fast nie fehlendes Wissen. Nach
+                  jedem Seminar wussten alle, was zu tun ist. Sechs Wochen später war das Verhalten das
+                  alte. Wissen wird gelehrt, Verhalten wird trainiert.
+                </p>
+                <p>
+                  Genau dafür gibt es LeaderOS: seine Methodik als tägliches Trainingssystem, mit einem
+                  KI-Coach, der auf seinen Büchern, Kursen und Vorträgen aufbaut. Im Webinar zeigt er
+                  das System live und beantwortet deine Fragen persönlich.
+                </p>
+              </div>
+              <p className="bib facts rv">Seit 2007 · 3× SPIEGEL-Bestseller · 400.000+ Klienten · Argumentorik-Akademie</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="wb-band" aria-label="These">
+          <div className="wrap"><p className="disp rv">Wissen wird gelehrt. Verhalten wird trainiert<Dot /></p></div>
+        </section>
+
+        {/* ── BÜCHERREGAL · die Bände als Beweis, ziehbar ────────────────── */}
+        <BookShelf onTrack={(e, p) => track(`webinar_${e}`, p)} />
+
+        {/* ── METHODIK · vier Frameworks, offen gelegt ───────────────────── */}
+        <section className="sec wb-frameworks">
+          <div className="wrap">
+            <div className="head">
+              <Eyebrow>Die Methodik dahinter</Eyebrow>
+              <h2 className="disp h2 rv">Vier Frameworks. Offen gelegt<Dot /></h2>
+              <p className="lead rv">
+                Vier der Frameworks aus Wlads Büchern stehen hier offen, exakt so, wie sie im Webinar und
+                in LeaderOS trainiert werden. Zum Nachlesen verlinkt; das Können kommt aus dem Drill.
+              </p>
+            </div>
+            <ol className="rows rv">
+              {FRAMEWORKS.map(([name, def, href], i) => (
+                <li key={name} className="row">
+                  <span className="bib code">F·{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{name}</h3>
+                    <p>{def}</p>
+                    <Link to={href} className="bib link">Im Journal lesen ↗</Link>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* ── WARUM LIVE ─────────────────────────────────────────────────── */}
+        <section className="sec wb-live cloud">
+          <div className="wrap split rev">
+            <Photo src="/journal/topics/team-b.webp" pos="50% 40%" tag="Fig. 05 · Live-Case" className="rv" />
+            <div>
+              <Eyebrow>Warum live dabei sein</Eyebrow>
+              <h2 className="disp h2 rv">Keine Aufzeichnung. Mit Absicht<Dot /></h2>
+              <ol className="rows rv">
+                {LIVE_REASONS.map((r, i) => (
+                  <li key={r} className="row">
+                    <span className="bib code">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="txt">{r}</span>
+                  </li>
+                ))}
+              </ol>
+              <p className="bib mute rv">Kein „Nur noch 18 Plätze"-Zähler. Was hier steht, stimmt.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FAQ ────────────────────────────────────────────────────────── */}
+        <section className="sec wb-faqsec">
+          <div className="wrap narrow">
+            <Eyebrow>Häufige Fragen</Eyebrow>
+            <h2 className="disp h2 rv">Kurz beantwortet<Dot /></h2>
+            <div className="rv"><Faq /></div>
+          </div>
+        </section>
+
+        {/* ── SCHLUSS · Anmeldung ────────────────────────────────────────── */}
+        <section ref={finalRef} id="anmeldung" className="wb-final" data-testid="webinar-final">
+          <img className="bg" src="/journal/topics/boardroom-b.webp" alt="" aria-hidden loading="lazy" />
+          <div className="scrim" aria-hidden />
+          <div className="wrap inner">
+            <Eyebrow light>Anmeldung · {DATE_SHORT} · Live · {daysLabel(days)}</Eyebrow>
+            <h2 className="disp h2 rv">Sichere dir deinen Platz<Dot /></h2>
+            <p className="lead rv">
+              90 Minuten live mit Wlad Jachtchenko. Kostenlos, mit Q&A, ohne Aufzeichnung.
+            </p>
+            <div className="formwrap rv"><RegisterForm idSuffix="-final" inline onInk label="Jetzt kostenlos anmelden" /></div>
           </div>
         </section>
       </main>
 
-      <StickyCtaBar onCtaClick={scrollToForm} />
+      <StickyBar heroFormRef={heroFormRef} finalRef={finalRef} onCta={toFinal} />
 
-      {/* Squeeze footer · legal only. The full site footer (40 links, pricing,
-          newsletter) is a nav exit on a page whose single job is the form. */}
-      <footer className="bg-[#111111] text-white" data-testid="webinar-footer">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="LeaderOS Startseite">
-            <WladMark size={26} variant="outline" />
-            <span className="font-black tracking-tight text-[15px]" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
-              Leader<span className="text-[#BFFF00]">·</span>OS
-            </span>
+      {/* Squeeze-Footer · nur Pflichtlinks. Der volle Footer ist ein Ausgang
+          auf einer Seite, deren einzige Aufgabe das Formular ist. */}
+      <footer className="wb-foot" data-testid="webinar-footer">
+        <div className="wrap">
+          <Link to="/" className="brand" aria-label="LeaderOS Startseite">
+            <WladMark size={24} variant="outline" />
+            <span>Leader<span className="dot">·</span>OS</span>
           </Link>
-          <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/45 text-center">
-            © 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20 Länder
-          </p>
-          <nav className="flex items-center gap-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/60">
-            <Link to="/impressum" className="hover:text-white py-3 -my-3">Impressum</Link>
-            <Link to="/datenschutz" className="hover:text-white py-3 -my-3">Datenschutz</Link>
-            <Link to="/agb" className="hover:text-white py-3 -my-3 px-1">AGB</Link>
+          <p className="bib">© 2026 LeaderOS · Wlad Jachtchenko · 400.000+ Klienten · 20+ Länder</p>
+          <nav className="bib">
+            <Link to="/impressum">Impressum</Link>
+            <Link to="/datenschutz">Datenschutz</Link>
+            <Link to="/agb">AGB</Link>
           </nav>
         </div>
       </footer>
@@ -1341,30 +785,262 @@ export default function WebinarPage() {
   );
 }
 
-/** Animated stat counter · counts up once when scrolled into view. */
-function CountUpValue({ value }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const numeric = /^[\d.]+\+?$/.test(value.replace(/\./g, ''))
-    ? parseInt(value.replace(/[^\d]/g, ''), 10)
-    : null;
-  const [display, setDisplay] = useState(numeric === null ? value : '0');
+/* ── Styles · bewusst in der Datei, damit die Werte nachprüfbar bleiben ── */
 
-  useEffect(() => {
-    if (!inView || numeric === null) return undefined;
-    const started = performance.now();
-    const dur = 1200;
-    let raf;
-    const tick = (t) => {
-      const p = Math.min(1, (t - started) / dur);
-      const eased = 1 - Math.pow(1 - p, 3);
-      const n = Math.round(numeric * eased);
-      setDisplay(n.toLocaleString('de-DE') + (value.includes('+') ? '+' : ''));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, numeric, value]);
+const CSS = `
+.wb{--ink:#0A0A0A;--cloud:#f5f5f5;--mute:#707072;--stone:#9e9ea0;--hair:#e5e5e5;--lime:${LIME};--limeInk:#5A7700;
+  --disp:'Outfit','Inter',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  background:#fff;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+.wb *,.wb *::before,.wb *::after{box-sizing:border-box}
+.wb .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.wb .wrap.narrow{max-width:860px}
+.wb .sec{padding:clamp(64px,9vw,128px) 0}
+.wb .cloud{background:var(--cloud)}
+.wb .disp{font-family:var(--disp);font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.045em;line-height:.9;margin:0;text-wrap:balance}
+.wb .disp .p{color:var(--lime);font-style:normal}
+.wb .h2{font-size:clamp(38px,6vw,86px)}
+.wb .bib{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1.6}
+.wb .bib.lime{color:var(--limeInk)}
+.wb .bib.mute{color:var(--mute)}
+.wb .bib.link{color:var(--limeInk);text-decoration:none;display:inline-block;padding:6px 0}
+.wb .bib.link:hover{color:var(--ink)}
+.wb .eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 20px;color:var(--limeInk)}
+.wb .eyebrow::before{content:'';flex:none;width:7px;height:7px;border-radius:999px;background:var(--lime);box-shadow:0 0 0 3px rgba(191,255,0,.22)}
+.wb .eyebrow.light{color:var(--lime)}
+.wb .lead{font-size:clamp(16px,1.3vw,19px);line-height:1.55;color:#39393b;max-width:640px;margin:22px 0 0}
+.wb .head{max-width:820px;margin-bottom:clamp(32px,5vw,64px)}
+.wb .prose{margin-top:24px;max-width:640px}
+.wb .prose p{margin:0 0 16px;font-size:16.5px;line-height:1.65;color:#39393b}
+.wb .facts.bib{margin-top:24px;color:var(--mute)}
+.wb .more{margin:26px 0 0}
 
-  return <span ref={ref} className="tabular-nums">{numeric === null ? value : display}</span>;
+/* Reveal */
+.wb .rv{opacity:0;transform:translateY(18px);transition:opacity .75s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1)}
+.wb .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.wb .rv{opacity:1;transform:none;transition:none}}
+
+/* Pills */
+.wb .pill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 28px;border-radius:999px;border:0;cursor:pointer;
+  font-family:var(--body);font-weight:700;font-size:14.5px;letter-spacing:.01em;text-decoration:none;white-space:nowrap;
+  transition:background .25s,color .25s,transform .25s;-webkit-appearance:none}
+.wb .pill .arrow{font-weight:400;transition:transform .25s}
+.wb .pill:hover .arrow{transform:translateX(3px)}
+.wb .pill:active{transform:scale(.97)}
+.wb .pill.ink{background:var(--ink);color:#fff}
+.wb .pill.ink:hover{background:var(--lime);color:var(--ink)}
+.wb .pill.lime{background:var(--lime);color:var(--ink)}
+.wb .pill.lime:hover{background:#fff}
+.wb .pill.full{width:100%}
+.wb .pill:disabled{cursor:wait;opacity:.7}
+
+/* Formular */
+.wb-form{width:100%}
+.wb-form .fields{display:flex;flex-direction:column;gap:10px}
+@media(min-width:640px){.wb-form.inline .fields{flex-direction:row}}
+.wb-form input{flex:1 1 auto;width:100%;min-width:0;height:56px;padding:0 22px;border-radius:999px;border:1.5px solid rgba(10,10,10,.2);background:#fff;color:var(--ink);
+  font-family:var(--body);font-size:15.5px;font-weight:500;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.wb-form .fields .pill{flex:none}
+.wb-form input::placeholder{color:var(--stone)}
+.wb-form input:focus{border-color:var(--ink);box-shadow:0 0 0 4px rgba(191,255,0,.35)}
+.wb-form.onink input{border-color:transparent}
+.wb-form.onink input:focus{border-color:var(--lime);box-shadow:0 0 0 4px rgba(191,255,0,.28)}
+.wb-form.compact input,.wb-form.compact .pill{height:46px}
+.wb-form.compact .pill{padding:0 20px;font-size:13px}
+.wb-form .note{margin:12px 0 0;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);line-height:1.6}
+.wb-form .note .long{display:none}
+@media(min-width:640px){.wb-form .note .short{display:none}.wb-form .note .long{display:inline}}
+.wb-form.onink .note{color:rgba(255,255,255,.62)}
+.wb-form .err{display:block;margin-top:6px;font-family:var(--body);font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:#d30005;line-height:1.4}
+.wb-form.onink .err{color:#ffb4ad}
+.wb-form.compact .err{margin:8px 0 0}
+
+/* Header */
+.wb-head{position:fixed;top:0;left:0;right:0;z-index:40;height:60px;display:flex;align-items:center;color:#fff;transition:background .3s,color .3s,box-shadow .3s}
+.wb-head.solid{background:#fff;color:var(--ink);box-shadow:inset 0 -1px 0 var(--hair)}
+.wb-head .wrap{display:flex;align-items:center;justify-content:space-between;width:100%}
+.wb-head .brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:900;font-size:17px;letter-spacing:-.03em;text-decoration:none;color:inherit}
+.wb-head .brand .dot{color:var(--lime)}
+.wb-head.solid .brand .dot{color:var(--limeInk)}
+.wb-head .right{display:flex;align-items:center;gap:18px}
+.wb-head .date{display:none;color:inherit;opacity:.85}
+@media(min-width:640px){.wb-head .date{display:inline}}
+.wb-head .cta{display:none;height:40px;padding:0 18px;font-size:12.5px}
+.wb-head.solid .cta{display:inline-flex}
+@media(max-width:899px){.wb-head.solid .cta{display:none}}
+
+/* Hero */
+.wb-hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;min-height:100svh;display:flex;flex-direction:column}
+.wb-hero .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 0%;filter:saturate(.9)}
+.wb-hero .scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,#0A0A0A 0%,rgba(10,10,10,.97) 26%,rgba(10,10,10,.78) 44%,rgba(10,10,10,.25) 66%,rgba(10,10,10,.1) 82%,rgba(10,10,10,.45) 100%)}
+.wb-hero .inner{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;padding:72px 20px 22px}
+.wb-hero .air{flex:1;min-height:clamp(88px,17svh,240px)}
+.wb-hero .kicker{display:flex;align-items:center;gap:10px;color:var(--lime);margin:0 0 14px}
+.wb-hero .kicker .long{display:none}
+@media(min-width:900px){.wb-hero .kicker .short{display:none}.wb-hero .kicker .long{display:inline}}
+.wb-hero .led{flex:none;width:7px;height:7px;border-radius:999px;background:var(--lime);box-shadow:0 0 0 3px rgba(191,255,0,.25)}
+.wb-hero h1{font-size:clamp(44px,12vw,68px);color:#fff;line-height:.88}
+.wb-hero h1 .line{display:block;overflow:clip;overflow-clip-margin:.14em}
+.wb-hero h1 .line>span{display:block}
+.wb-hero .sub{margin:16px 0 0;max-width:560px;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.84)}
+.wb-hero .sub.long{display:none}
+.wb-hero .formwrap{margin-top:20px;max-width:640px;scroll-margin-top:80px}
+.wb-hero .facts{display:none}
+@media(min-width:900px){
+  .wb-hero{min-height:min(100svh,960px)}
+  .wb-hero .bg{object-position:0% 22%}
+  .wb-hero .scrim{background:linear-gradient(90deg,rgba(10,10,10,.97) 0%,rgba(10,10,10,.92) 30%,rgba(10,10,10,.55) 52%,rgba(10,10,10,.12) 74%,rgba(10,10,10,.5) 100%),
+    linear-gradient(to top,#0A0A0A 0%,rgba(10,10,10,.55) 16%,transparent 42%),linear-gradient(to bottom,rgba(10,10,10,.5) 0%,transparent 24%)}
+  .wb-hero .inner{justify-content:center;max-width:1280px;margin:0 auto;padding:108px 40px 56px}
+  .wb-hero .air{display:none}
+  .wb-hero .kicker{margin-bottom:20px;font-size:11px}
+  .wb-hero h1{font-size:clamp(72px,7.2vw,112px);max-width:900px}
+  .wb-hero .sub.short{display:none}
+  .wb-hero .sub.long{display:block;font-size:18px;max-width:640px;margin-top:24px}
+  .wb-hero .formwrap{margin-top:28px;max-width:620px}
+  .wb-hero .facts{display:flex;flex-wrap:wrap;gap:14px 0;margin-top:28px;max-width:760px;border-top:1px solid rgba(255,255,255,.18);padding-top:16px}
+  .wb-hero .facts div{padding-right:24px;margin-right:24px;border-right:1px solid rgba(255,255,255,.18)}
+  .wb-hero .facts div:last-child{border:0;margin:0;padding:0}
+  .wb-hero .facts .bib{display:block;color:rgba(255,255,255,.6)}
+  .wb-hero .facts b{display:block;font-family:var(--disp);font-weight:900;font-style:italic;font-size:28px;line-height:1;margin-top:6px;letter-spacing:-.03em;white-space:nowrap}
 }
+
+/* Beweis */
+.wb-proof{border-bottom:1px solid var(--hair)}
+.wb-proof .nums{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);column-gap:20px}
+.wb-proof .num{padding:26px 0 22px;border-bottom:1px solid var(--hair)}
+.wb-proof .num:last-child{grid-column:span 2}
+.wb-proof .num b{display:block;font-family:var(--disp);font-weight:900;font-style:italic;letter-spacing:-.04em;font-size:clamp(36px,3.6vw,56px);line-height:1}
+.wb-proof .num .bib{display:block;margin-top:10px;color:var(--mute);text-decoration:none}
+.wb-proof .num a.bib:hover{color:var(--ink)}
+@media(min-width:900px){.wb-proof .nums{grid-template-columns:repeat(5,1fr);column-gap:32px}.wb-proof .num{padding:34px 0 30px}.wb-proof .num:last-child{grid-column:auto}}
+.wb-proof .reviews{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:center;margin:0;padding:8px 0 28px}
+.wb-proof .reviews a{color:var(--mute);text-decoration:none}
+.wb-proof .reviews a b{color:var(--ink)}
+.wb-proof .reviews a:hover{color:var(--ink)}
+
+/* Split-Layouts + Fotos */
+.wb .split{display:grid;gap:36px}
+@media(min-width:900px){.wb .split{grid-template-columns:5fr 7fr;gap:clamp(48px,6vw,96px);align-items:center}.wb .split.rev{grid-template-columns:7fr 5fr}.wb .split.rev>.ph{order:2}}
+.wb .ph{position:relative;overflow:hidden;margin:0;background:var(--cloud);aspect-ratio:4/3}
+@media(min-width:900px){.wb .split>.ph{aspect-ratio:4/5}}
+.wb .ph img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.wb .ph:hover img{transform:scale(1.03)}
+.wb .ph.ink{background:var(--ink)}
+.wb .ph.ink img{object-fit:contain;padding:6%}
+.wb .ph .tag{position:absolute;left:14px;bottom:14px;margin:0;padding:7px 11px;background:rgba(10,10,10,.78);color:#fff;letter-spacing:.16em}
+
+/* Rows (Hairlines statt Karten) */
+.wb .rows{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid var(--hair)}
+.wb .row{display:grid;grid-template-columns:52px 1fr;gap:12px 16px;padding:18px 0;border-bottom:1px solid var(--hair);align-items:baseline}
+.wb .row .code{color:var(--limeInk)}
+.wb .row h3{margin:0 0 4px;font-family:var(--body);font-weight:700;font-size:17.5px;line-height:1.3;letter-spacing:-.01em}
+.wb .row p{margin:0;font-size:14.5px;line-height:1.55;color:var(--mute);max-width:640px}
+.wb .row .txt{font-size:15.5px;line-height:1.5;color:#39393b}
+.wb .row .txt.strong{font-weight:600;color:var(--ink)}
+.wb .row .link{margin-top:6px}
+
+/* Problem · Woche */
+.wb-problem .week .day{color:var(--limeInk);padding-top:3px}
+.wb-problem .week .punch{background:var(--ink);color:#fff;margin:0 -20px;padding:18px 20px;border-bottom-color:var(--ink)}
+.wb-problem .week .punch .day{color:var(--lime)}
+.wb-problem .week .punch .txt{color:#fff;font-weight:600}
+@media(min-width:900px){.wb-problem .week .punch{margin:0;padding:18px 16px}}
+
+/* Neue Möglichkeit */
+.wb-way .ways{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:30px;border-top:1px solid var(--hair);padding-top:22px}
+.wb-way .ways .head{margin:0 0 14px;color:var(--mute)}
+.wb-way .ways .new .head{color:var(--limeInk)}
+.wb-way .ways ol{list-style:none;margin:0;padding:0}
+.wb-way .ways li{display:flex;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:15.5px;font-weight:600}
+.wb-way .ways .old li{color:var(--stone);font-weight:500}
+.wb-way .ways .old li .bib{color:var(--stone)}
+.wb-way .ways .new li .bib{color:var(--limeInk)}
+.wb-way .ways .old li:last-child{color:#d30005}
+
+/* Inhalte */
+.wb-learn .grid{list-style:none;margin:0;padding:0;display:grid;gap:32px 20px}
+@media(min-width:640px){.wb-learn .grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.wb-learn .grid{grid-template-columns:repeat(3,1fr);gap:48px 28px}}
+.wb-learn .item .code{margin:14px 0 6px;color:var(--limeInk)}
+.wb-learn .item h3{margin:0 0 6px;font-family:var(--body);font-weight:700;font-size:19px;line-height:1.25;letter-spacing:-.01em}
+.wb-learn .item p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.55}
+.wb-learn .item .code+h3{margin-top:0}
+
+/* Ablauf (Ink) */
+.wb-agenda{background:var(--ink);color:#fff}
+.wb-agenda .rows{border-top-color:rgba(255,255,255,.16)}
+.wb-agenda .row{grid-template-columns:92px 1fr;border-bottom-color:rgba(255,255,255,.16);padding:22px 0}
+.wb-agenda .row time{font-family:var(--disp);font-weight:900;font-style:italic;font-size:30px;line-height:1;letter-spacing:-.03em;color:#fff}
+.wb-agenda .row h3{color:#fff}
+.wb-agenda .row p{color:rgba(255,255,255,.62)}
+.wb-agenda .ph{background:#1a1a1a}
+
+/* Wert */
+.wb-stack .row{grid-template-columns:52px 1fr auto}
+.wb-stack .row .inc{color:var(--limeInk);white-space:nowrap}
+@media(max-width:639px){.wb-stack .row{grid-template-columns:52px 1fr}.wb-stack .row .inc{grid-column:2;margin-top:-4px}}
+.wb-stack .cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin:36px 0 0}
+
+/* Videos */
+.wb-videos .row{grid-template-columns:40px 1fr auto}
+.wb-videos .row .dur{color:var(--stone);white-space:nowrap}
+
+/* Statement-Band */
+.wb-band{background:var(--ink);color:#fff;padding:clamp(56px,8vw,112px) 0}
+.wb-band .disp{font-size:clamp(34px,5.6vw,84px);max-width:1100px}
+
+/* Warum live */
+.wb-live .bib.mute{margin-top:22px}
+
+/* FAQ */
+.wb-faqsec .h2{margin-bottom:12px}
+.wb-faq{border-top:1px solid var(--hair);margin-top:28px}
+.wb-faq .q{border-bottom:1px solid var(--hair)}
+.wb-faq h3{margin:0;font:inherit}
+.wb-faq button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;background:none;border:0;cursor:pointer;text-align:left;
+  font-family:var(--body);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink)}
+.wb-faq .x{flex:none;width:32px;height:32px;border-radius:999px;border:1.5px solid var(--ink);display:grid;place-items:center;font-weight:400;font-size:20px;line-height:1;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),background .25s,color .25s}
+.wb-faq .q.open .x{transform:rotate(45deg);background:var(--ink);color:#fff}
+.wb-faq .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.8,.2,1)}
+.wb-faq .q.open .a{grid-template-rows:1fr}
+.wb-faq .a>div{overflow:hidden}
+.wb-faq .a p{margin:0;padding:0 56px 22px 0;color:#39393b;font-size:15.5px;line-height:1.6}
+
+/* Schluss */
+.wb-final{position:relative;overflow:hidden;background:var(--ink);color:#fff;scroll-margin-top:60px}
+.wb-final .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.55;filter:saturate(.85)}
+.wb-final .scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,#0A0A0A 0%,rgba(10,10,10,.9) 36%,rgba(10,10,10,.6) 100%)}
+.wb-final .inner{position:relative;padding:clamp(80px,12vw,160px) 20px}
+.wb-final .h2{font-size:clamp(48px,8vw,120px);color:#fff}
+.wb-final .lead{color:rgba(255,255,255,.78)}
+.wb-final .formwrap{margin-top:36px;max-width:640px}
+
+/* Sticky-Leiste */
+.wb-sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;box-shadow:inset 0 1px 0 var(--hair);transform:translateY(110%);visibility:hidden;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s linear .45s}
+.wb-sticky.on{transform:translateY(0);visibility:visible;transition-delay:0s}
+.wb-sticky .wrap{display:flex;align-items:center;gap:16px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.wb-sticky .txt{display:none;flex:none}
+.wb-sticky .txt p{margin:0}
+@media(min-width:900px){.wb-sticky .txt{display:block}}
+.wb-sticky .mobile{flex:1}
+.wb-sticky .desk{display:none;flex:1}
+@media(min-width:640px){.wb-sticky .mobile{display:none}.wb-sticky .desk{display:block}}
+
+/* Footer */
+.wb-foot{background:var(--ink);color:#fff;padding:32px 0 96px}
+@media(min-width:640px){.wb-foot{padding-bottom:40px}}
+.wb-foot .wrap{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+@media(min-width:900px){.wb-foot .wrap{flex-direction:row;justify-content:space-between;text-align:left}}
+.wb-foot .brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:900;font-size:15px;letter-spacing:-.03em;text-decoration:none;color:#fff}
+.wb-foot .brand .dot{color:var(--lime)}
+.wb-foot p.bib{margin:0;color:rgba(255,255,255,.45)}
+.wb-foot nav{display:flex;gap:18px}
+.wb-foot nav a{color:rgba(255,255,255,.6);text-decoration:none;padding:8px 0}
+.wb-foot nav a:hover{color:#fff}
+
+/* Header-Kompensation: der fixierte Header liegt über dem Hero */
+.wb-head{height:60px}
+`;

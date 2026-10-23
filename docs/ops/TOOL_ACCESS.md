@@ -19,7 +19,7 @@
 
 | Tool | Wofür | Owner / Admin | Weitere Mitglieder | `stefan@argumentorik.com` | Geprüft |
 | --- | --- | --- | --- | --- | --- |
-| **GitHub** `aiporator/shipos` | Code, CI, Deploy-Trigger | `aiporator` (start@aiporate.com) · admin | `sbcodes` (Stefan) · write | ✅ write (GitHub-Login `sbcodes`) — für Merges/Settings auf **maintain** anheben | ✅ API |
+| **GitHub** `Argumentorik/LeaderOS` | Code, CI, Deploy-Trigger | `aiporator` (start@aiporate.com) · admin | `sbcodes` (Stefan) · write | ✅ write (GitHub-Login `sbcodes`) — für Merges/Settings auf **maintain** anheben | ✅ API |
 | **Vercel** Team `aiporators-projects` (INHALE), Projekt `leaderos` | Hosting leader-os.de, Env-Vars, Domains | start@aiporate.com · OWNER | stefan@argumentorik.com · MEMBER · mighani@skillbyte.de · DEVELOPER | ✅ MEMBER — reicht für Deploys, Logs, Env-Vars | ✅ API |
 | ↳ Einladung `wj@argumentorik.com` | — | — | **Einladung vom 19.05. ist abgelaufen, nie angenommen** | — | ✅ API |
 | **Supabase** Projekt `srujvjjncrszhaaxepxf` (Org `skawjzvddehhmkwiltui`) | Postgres, Auth, Storage, RAG, pg_cron, Edge Functions | start@aiporate.com | ❓ | ❓ | ❌ nur Projekt lesbar, Mitglieder nicht |
@@ -66,7 +66,7 @@ In dieser Reihenfolge freischalten — jede Zeile ist ein Invite an
 | --- | --- | --- | --- | --- |
 | 1 | **Emergent** (inkl. MongoDB) — ✅ **erledigt 24.09., Admin** | Emergent → Projekt `command-center-229` → Settings → Team → Invite | Admin | App-Backend deployen, Env-Vars, **Mongo**; ohne das kann er Login-/Mail-Incidents nicht beheben |
 | 2 | **Supabase** | supabase.com/dashboard → Org `skawjzvddehhmkwiltui` → Team → Invite member | **Developer** (Owner nur, wenn er auch Billing sehen soll) | Postgres, pg_cron (die Jobs mit Timeouts am 16.09.), Auth, Storage |
-| 3 | **GitHub** | github.com/aiporator/shipos → Settings → Collaborators → `sbcodes` → Role | write → **maintain** | PRs mergen, Labels/Branches verwalten, ohne Repo löschen zu dürfen |
+| 3 | **GitHub** | github.com/Argumentorik/LeaderOS → Settings → Collaborators → `sbcodes` → Role | write → **maintain** | PRs mergen, Labels/Branches verwalten, ohne Repo löschen zu dürfen |
 | 4 | **Sentry** | sentry.io → Org `aiporate` → Settings → Members → Invite | Member (Team `leader-os` + `leader-check`) | Fehler aus Frontend/Backend sehen |
 | 5 | **PostHog EU** | eu.posthog.com → Organization settings → Members → Invite | Member | Funnels, Session Replays für Bug-Reports |
 | 6 | **Resend** | resend.com → Settings → Team → Invite | Member | Mail-Logs — Magic-Link-/Reminder-Zustellung prüfen |
