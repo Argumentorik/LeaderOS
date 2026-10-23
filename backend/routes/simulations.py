@@ -128,13 +128,10 @@ async def _process_simulation_completion(sim_id: str, user_id: str, scenario: di
 
 @router.post("/simulations/{sim_id}/message")
 async def simulation_message(sim_id: str, data: SimulationMessage, request: Request):
-    from routes.credits import check_and_deduct_credit, no_credits_detail
+    from routes.credits import charged_credit
     user = await get_current_user(request)
 
-    credit_result = await check_and_deduct_credit(user, "simulation")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("simulation", credit_result))
-
+    # 1.6: validate BEFORE charging so a 404 never costs a credit.
     sim = await db.simulations.find_one({"simulation_id": sim_id, "user_id": user["user_id"]}, {"_id": 0})
     if not sim:
         raise HTTPException(status_code=404, detail="Simulation not found")
@@ -145,61 +142,63 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
     )
 
     scenario = sim["scenario"]
-    try:
-        end_sim = data.message.lower().strip() in ["end simulation", "end", "finish"]
+    # 1.6: charged_credit refunds automatically if the AI call below raises.
+    async with charged_credit(user, "simulation"):
+        try:
+            end_sim = data.message.lower().strip() in ["end simulation", "end", "finish"]
 
-        # RAG: pull Wlad-corpus chunks ONLY on simulation-end (where scoring/feedback
-        # happens). During the role-play turns we want the AI to stay in-character,
-        # so we don't pollute the prompt with framework citations. End-state needs
-        # Wlad-grounding for the final assessment + scoring rubric.
-        rag_block = ""
-        if end_sim:
-            try:
-                from services_rag import retrieve_context
-                msgs_so_far = sim.get("messages", [])
-                user_lines = " ".join(
-                    m["content"][:200] for m in msgs_so_far if m["role"] == "user"
-                )[:600]
-                rag_query = f"{scenario.get('description', '')} Feedback Leadership Bewertung {user_lines}"
-                rag_ctx = await retrieve_context(rag_query)
-                if rag_ctx.get("rag_active"):
-                    rag_block = "\n\n" + rag_ctx["context_block"]
-            except Exception:
-                pass
+            # RAG: pull Wlad-corpus chunks ONLY on simulation-end (where scoring/feedback
+            # happens). During the role-play turns we want the AI to stay in-character,
+            # so we don't pollute the prompt with framework citations. End-state needs
+            # Wlad-grounding for the final assessment + scoring rubric.
+            rag_block = ""
+            if end_sim:
+                try:
+                    from services_rag import retrieve_context
+                    msgs_so_far = sim.get("messages", [])
+                    user_lines = " ".join(
+                        m["content"][:200] for m in msgs_so_far if m["role"] == "user"
+                    )[:600]
+                    rag_query = f"{scenario.get('description', '')} Feedback Leadership Bewertung {user_lines}"
+                    rag_ctx = await retrieve_context(rag_query)
+                    if rag_ctx.get("rag_active"):
+                        rag_block = "\n\n" + rag_ctx["context_block"]
+                except Exception:
+                    pass
 
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
-            system_message=(
-                SIMULATION_SYSTEM_PROMPT
-                + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}"
-                + sim.get("setup_block", "")
-                + rag_block
-            ),
-        )
-        chat.with_model("openai", "gpt-5.2")
+            chat = LlmChat(
+                api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
+                system_message=(
+                    SIMULATION_SYSTEM_PROMPT
+                    + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}"
+                    + sim.get("setup_block", "")
+                    + rag_block
+                ),
+            )
+            chat.with_model("openai", "gpt-5.2")
 
-        msgs = sim.get("messages", [])
-        context = "\n".join([f"{'Manager' if m['role'] == 'user' else 'Employee'}: {m['content']}" for m in msgs[-8:]])
+            msgs = sim.get("messages", [])
+            context = "\n".join([f"{'Manager' if m['role'] == 'user' else 'Employee'}: {m['content']}" for m in msgs[-8:]])
 
-        prompt = f"{context}\nManager: {data.message}"
-        if end_sim:
-            prompt += "\n\nThe simulation is now ending. Provide the JSON analysis with scores."
+            prompt = f"{context}\nManager: {data.message}"
+            if end_sim:
+                prompt += "\n\nThe simulation is now ending. Provide the JSON analysis with scores."
 
-        ai_response = await chat.send_message(UserMessage(text=prompt))
+            ai_response = await chat.send_message(UserMessage(text=prompt))
 
-        await db.simulations.update_one(
-            {"simulation_id": sim_id},
-            {"$push": {"messages": {"role": "assistant", "content": ai_response, "timestamp": datetime.now(timezone.utc).isoformat()}}},
-        )
+            await db.simulations.update_one(
+                {"simulation_id": sim_id},
+                {"$push": {"messages": {"role": "assistant", "content": ai_response, "timestamp": datetime.now(timezone.utc).isoformat()}}},
+            )
 
-        scores = None
-        if end_sim or '"completed"' in ai_response:
-            scores = await _process_simulation_completion(sim_id, user["user_id"], scenario, ai_response)
+            scores = None
+            if end_sim or '"completed"' in ai_response:
+                scores = await _process_simulation_completion(sim_id, user["user_id"], scenario, ai_response)
 
-        return {"response": clean_ai_text(ai_response), "scores": scores, "ended": scores is not None and scores.get("completed")}
-    except Exception as e:
-        logger.error(f"Simulation message error: {e}")
-        raise await ai_http_error(e, "simulations")
+            return {"response": clean_ai_text(ai_response), "scores": scores, "ended": scores is not None and scores.get("completed")}
+        except Exception as e:
+            logger.error(f"Simulation message error: {e}")
+            raise await ai_http_error(e, "simulations")
 
 
 @router.get("/simulations")

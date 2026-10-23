@@ -6,9 +6,10 @@ Premium users (€997+ paid) have unlimited credits.
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from datetime import datetime, timezone
+from contextlib import asynccontextmanager
 from pymongo import ReturnDocument
 
-from config import db
+from config import db, logger
 from services import get_current_user
 
 router = APIRouter(prefix="/api/credits", tags=["credits"])
@@ -177,12 +178,42 @@ async def check_credit_balance(user: dict) -> dict:
     return {"unlimited": False, "balance": int(doc.get("balance", 0) or 0)}
 
 
-async def refund_credit(user_id: str) -> None:
-    """Refund one deducted credit (compensation when the AI call fails)."""
+async def refund_credit(user_id: str, cost: int = 1) -> None:
+    """Refund deducted credit(s) — compensation when the AI call fails.
+
+    1.6: `cost` defaults to 1 (back-compat) but callers should pass the actual
+    action cost so multi-credit actions are fully refunded.
+    """
     await db.credits.update_one(
         {"user_id": user_id},
-        {"$inc": {"balance": 1, "total_used": -1}},
+        {"$inc": {"balance": cost, "total_used": -cost}},
     )
+
+
+@asynccontextmanager
+async def charged_credit(user: dict, action: str):
+    """1.6: Deduct a credit for `action`, yield the credit_result, and refund
+    AUTOMATICALLY on any exception inside the block.
+
+    Deduction happens on enter and raises HTTPException(402) when the user is
+    out of credits — so callers MUST validate inputs (400/404) BEFORE entering
+    this block, otherwise a bad request would still charge a credit.
+
+    Never refunds the non-charged cases: premium/paid/admin users, or the
+    guaranteed-first-free path (remaining == -1).
+    """
+    credit_result = await check_and_deduct_credit(user, action)
+    if not credit_result["allowed"]:
+        raise HTTPException(status_code=402, detail=no_credits_detail(action, credit_result))
+    try:
+        yield credit_result
+    except Exception:
+        if not credit_result.get("is_premium") and credit_result.get("remaining") != -1:
+            try:
+                await refund_credit(user["user_id"], CREDIT_COSTS.get(action, 1))
+            except Exception as refund_err:
+                logger.warning("charged_credit refund failed for %s: %s", user.get("user_id"), refund_err)
+        raise
 
 
 @router.get("")

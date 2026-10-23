@@ -125,17 +125,14 @@ FINISH_INSTRUCTION = (
 
 @router.post("/challengers/{challenger_id}/message")
 async def challenge_message(challenger_id: str, request: Request):
-    from routes.credits import check_and_deduct_credit, no_credits_detail
+    from routes.credits import charged_credit
     body = await request.json()
     message = body.get("message", "")
     challenge_id = body.get("challenge_id", "")
     finish = bool(body.get("finish"))
     user = await get_current_user(request)
 
-    credit_result = await check_and_deduct_credit(user, "roleplay")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("roleplay", credit_result))
-
+    # 1.6: validate BEFORE charging so a 404 never costs a credit.
     challenger = next((c for c in LEADERSHIP_CHALLENGERS if c["challenger_id"] == challenger_id), None)
     if not challenger:
         raise HTTPException(status_code=404, detail="Challenger not found")
@@ -148,51 +145,53 @@ async def challenge_message(challenger_id: str, request: Request):
             {"challenge_id": challenge_id},
             {"$push": {"messages": {"role": "user", "content": message, "timestamp": datetime.now(timezone.utc).isoformat()}}},
         )
-    try:
-        # During turns: hard-block self-termination. On finish: allow the verdict JSON.
-        system_message = challenger["test_prompt"] + ("" if finish else NO_SELF_END_INSTRUCTION)
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"chal_{challenge_id}", system_message=system_message)
-        chat.with_model("openai", "gpt-5.2")
-        msgs = chal.get("messages", [])
-        context = "\n".join(f"{'Interviewer' if m['role'] == 'assistant' else 'Candidate'}: {m['content']}" for m in msgs[-14:])
-        if finish:
-            prompt = f"{context}"
-            if message:
-                prompt += f"\nCandidate: {message}"
-            prompt += f"\n\n{FINISH_INSTRUCTION}"
-        else:
-            prompt = f"{context}\nCandidate: {message}"
-        ai_response = await chat.send_message(UserMessage(text=prompt))
+    # 1.6: charged_credit refunds automatically if the AI call below raises.
+    async with charged_credit(user, "roleplay"):
+        try:
+            # During turns: hard-block self-termination. On finish: allow the verdict JSON.
+            system_message = challenger["test_prompt"] + ("" if finish else NO_SELF_END_INSTRUCTION)
+            chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"chal_{challenge_id}", system_message=system_message)
+            chat.with_model("openai", "gpt-5.2")
+            msgs = chal.get("messages", [])
+            context = "\n".join(f"{'Interviewer' if m['role'] == 'assistant' else 'Candidate'}: {m['content']}" for m in msgs[-14:])
+            if finish:
+                prompt = f"{context}"
+                if message:
+                    prompt += f"\nCandidate: {message}"
+                prompt += f"\n\n{FINISH_INSTRUCTION}"
+            else:
+                prompt = f"{context}\nCandidate: {message}"
+            ai_response = await chat.send_message(UserMessage(text=prompt))
 
-        result = _parse_challenge_result(ai_response) if finish else None
-        if finish and result is None:
-            # One strict-reformat retry — the verdict must not get lost
-            retry = await chat.send_message(UserMessage(text=(
-                "Deine letzte Antwort war kein gültiges JSON. Antworte JETZT ausschließlich mit dem oben "
-                "spezifizierten JSON-Objekt inklusive \"hired\". Keine Codefences, kein Vorwort."
-            )))
-            result = _parse_challenge_result(retry)
+            result = _parse_challenge_result(ai_response) if finish else None
+            if finish and result is None:
+                # One strict-reformat retry — the verdict must not get lost
+                retry = await chat.send_message(UserMessage(text=(
+                    "Deine letzte Antwort war kein gültiges JSON. Antworte JETZT ausschließlich mit dem oben "
+                    "spezifizierten JSON-Objekt inklusive \"hired\". Keine Codefences, kein Vorwort."
+                )))
+                result = _parse_challenge_result(retry)
 
-        if not finish:
-            await db.challenges.update_one(
-                {"challenge_id": challenge_id},
-                {"$push": {"messages": {"role": "assistant", "content": ai_response, "timestamp": datetime.now(timezone.utc).isoformat()}}},
-            )
+            if not finish:
+                await db.challenges.update_one(
+                    {"challenge_id": challenge_id},
+                    {"$push": {"messages": {"role": "assistant", "content": ai_response, "timestamp": datetime.now(timezone.utc).isoformat()}}},
+                )
 
-        if result:
-            await db.challenges.update_one({"challenge_id": challenge_id}, {"$set": {"status": "completed", "result": result}})
-            score = result.get("score", 0)
-            await record_user_action(
-                user["user_id"],
-                "challenge_completed",
-                leadership_bonus=max(1, score // 20),
-                metadata={"challenge_id": challenge_id, "challenger": challenger_id, "score": score},
-            )
+            if result:
+                await db.challenges.update_one({"challenge_id": challenge_id}, {"$set": {"status": "completed", "result": result}})
+                score = result.get("score", 0)
+                await record_user_action(
+                    user["user_id"],
+                    "challenge_completed",
+                    leadership_bonus=max(1, score // 20),
+                    metadata={"challenge_id": challenge_id, "challenger": challenger_id, "score": score},
+                )
 
-        return {"response": clean_ai_text(ai_response) if not finish else "", "result": result}
-    except Exception as e:
-        logger.error(f"Challenge message error: {e}")
-        raise await ai_http_error(e, "challengers")
+            return {"response": clean_ai_text(ai_response) if not finish else "", "result": result}
+        except Exception as e:
+            logger.error(f"Challenge message error: {e}")
+            raise await ai_http_error(e, "challengers")
 
 
 @router.get("/challengers/history")

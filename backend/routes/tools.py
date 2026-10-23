@@ -85,13 +85,10 @@ async def deep_assist(request: Request):
     """3-Step Workflow Assistant: Argumentation · Inhaltliche Tipps · Aktionsplan.
     Body: { situation: str, goal: str, tool_id?: str (optional) }
     Returns: { argumentation: str, tips: [str,...], action_plan: [{step,action,deadline}] }"""
-    from routes.credits import check_and_deduct_credit, no_credits_detail
+    from routes.credits import charged_credit
     user = await get_current_user(request)
 
-    credit_result = await check_and_deduct_credit(user, "workflow")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("workflow", credit_result))
-
+    # 1.6: validate BEFORE charging; charged_credit auto-refunds on failure.
     body = await request.json()
     situation = (body.get("situation") or "").strip()
     goal = (body.get("goal") or "").strip()
@@ -102,14 +99,17 @@ async def deep_assist(request: Request):
     system_prompt, user_message = _build_deep_assist_prompts(situation, goal, tool_id)
 
     try:
-        parsed = await _run_deep_assist_ai(system_prompt, user_message)
-        await db.deep_assist_log.insert_one({
-            "usage_id": f"da_{uuid.uuid4().hex[:12]}", "user_id": user["user_id"],
-            "situation": situation, "goal": goal, "tool_id": tool_id,
-            "output": parsed, "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        await record_user_action(user["user_id"], "deep_assist", metadata={"tool_id": tool_id})
-        return parsed
+        async with charged_credit(user, "workflow"):
+            parsed = await _run_deep_assist_ai(system_prompt, user_message)
+            await db.deep_assist_log.insert_one({
+                "usage_id": f"da_{uuid.uuid4().hex[:12]}", "user_id": user["user_id"],
+                "situation": situation, "goal": goal, "tool_id": tool_id,
+                "output": parsed, "created_at": datetime.now(timezone.utc).isoformat(),
+            })
+            await record_user_action(user["user_id"], "deep_assist", metadata={"tool_id": tool_id})
+            return parsed
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Deep assist error: {e}")
         raise await ai_http_error(e, "tools")
@@ -117,14 +117,11 @@ async def deep_assist(request: Request):
 
 @router.post("/tools/{tool_id}")
 async def use_tool(tool_id: str, request: Request):
-    from routes.credits import check_and_deduct_credit, no_credits_detail
+    from routes.credits import charged_credit
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)
 
-    credit_result = await check_and_deduct_credit(user, "workflow")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("workflow", credit_result))
-
+    # 1.6: validate BEFORE charging so a bad request never costs a credit.
     body = await request.json()
     user_input = body.get("input", "")
     persona = body.get("persona", "")
@@ -134,34 +131,38 @@ async def use_tool(tool_id: str, request: Request):
     if not tool:
         raise HTTPException(status_code=404, detail="Tool not found")
     try:
-        persona_context = f"\n\nPERSONA-KONTEXT des Users:\n{persona}\nNutze diesen Kontext, um die Antwort maximal zu personalisieren." if persona else ""
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"tool_{uuid.uuid4().hex[:8]}", system_message=tool["system"] + persona_context)
-        chat.with_model("openai", "gpt-5.2")
-        ai_response = await chat.send_message(UserMessage(text=user_input))
+        async with charged_credit(user, "workflow"):
+            persona_context = f"\n\nPERSONA-KONTEXT des Users:\n{persona}\nNutze diesen Kontext, um die Antwort maximal zu personalisieren." if persona else ""
+            chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"tool_{uuid.uuid4().hex[:8]}", system_message=tool["system"] + persona_context)
+            chat.with_model("openai", "gpt-5.2")
+            ai_response = await chat.send_message(UserMessage(text=user_input))
 
-        # Robust JSON parse — strips markdown fences, prose-wrapping, etc.
-        parsed = parse_ai_json(ai_response)
-        if parsed is None:
-            # Retry once asking for strict JSON
-            logger.warning(f"Tool {tool_id} returned non-JSON, retrying with reformat hint")
-            reformat = await chat.send_message(UserMessage(text=(
-                "Deine letzte Antwort war kein gültiges JSON. Antworte JETZT ausschließlich mit "
-                "dem oben spezifizierten JSON-Schema. Keine Markdown-Codefences, kein Vorwort, "
-                "nur das reine JSON-Objekt."
-            )))
-            parsed = parse_ai_json(reformat)
+            # Robust JSON parse — strips markdown fences, prose-wrapping, etc.
+            parsed = parse_ai_json(ai_response)
+            if parsed is None:
+                # Retry once asking for strict JSON (same chat instance keeps the
+                # full prompt history, so the model has the schema context).
+                logger.warning(f"Tool {tool_id} returned non-JSON, retrying with reformat hint")
+                reformat = await chat.send_message(UserMessage(text=(
+                    "Deine letzte Antwort war kein gültiges JSON. Antworte JETZT ausschließlich mit "
+                    "dem oben spezifizierten JSON-Schema. Keine Markdown-Codefences, kein Vorwort, "
+                    "nur das reine JSON-Objekt."
+                )))
+                parsed = parse_ai_json(reformat)
 
-        if parsed is None:
-            # Final safety net — preserve raw text so user at least sees the content
-            parsed = {"raw_text": ai_response, "format_error": True}
+            if parsed is None:
+                # Final safety net — preserve raw text so user at least sees the content
+                parsed = {"raw_text": ai_response, "format_error": True}
 
-        await db.tool_usage.insert_one({
-            "usage_id": f"tool_{uuid.uuid4().hex[:12]}", "user_id": user["user_id"],
-            "tool_id": tool_id, "input": user_input, "output": parsed,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        await record_user_action(user["user_id"], "tool_used", metadata={"tool_id": tool_id})
-        return {"result": parsed, "tool": tool["title"]}
+            await db.tool_usage.insert_one({
+                "usage_id": f"tool_{uuid.uuid4().hex[:12]}", "user_id": user["user_id"],
+                "tool_id": tool_id, "input": user_input, "output": parsed,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            })
+            await record_user_action(user["user_id"], "tool_used", metadata={"tool_id": tool_id})
+            return {"result": parsed, "tool": tool["title"]}
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Tool error: {e}")
         raise await ai_http_error(e, "tools")

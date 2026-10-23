@@ -210,35 +210,44 @@ async def submit_quiz(day: int, data: QuizSubmission, request: Request):
     from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
-    credit_result = await check_and_deduct_credit(user, "quiz")
-    if not credit_result["allowed"]:
-        raise HTTPException(status_code=402, detail=no_credits_detail("quiz", credit_result))
-
     questions = get_quiz_for_day(day)
     if not questions:
         raise HTTPException(status_code=404, detail="Keine Fragen für diesen Tag")
     challenge = next((c for c in CHALLENGES if c["day"] == day), None)
+
+    # 1.6: load progress first — a quiz is charged (and XP awarded) only ONCE
+    # per day. Resubmits of the same day are free and don't re-award XP.
+    progress = await _get_or_create_progress(user["user_id"])
+    completed = progress.get("completed_days", [])
+    quiz_scores = progress.get("quiz_scores", {})
+    already_scored = str(day) in quiz_scores
+    already_passed = day in completed
+
+    if not already_scored:
+        credit_result = await check_and_deduct_credit(user, "quiz")
+        if not credit_result["allowed"]:
+            raise HTTPException(status_code=402, detail=no_credits_detail("quiz", credit_result))
 
     correct, total_mc, results = _score_quiz(questions, data.answers, user["user_id"], day)
     score = round((correct / max(total_mc, 1)) * 100)
     passed = score >= 60
     xp = challenge["xp"] if passed else challenge["xp"] // 2
 
-    progress = await _get_or_create_progress(user["user_id"])
-    completed = progress.get("completed_days", [])
-    quiz_scores = progress.get("quiz_scores", {})
     quiz_scores[str(day)] = score
-
-    if day not in completed and passed:
+    newly_passed = passed and not already_passed
+    if newly_passed:
         completed.append(day)
 
+    # 1.6: only grant XP on the FIRST pass of the day.
+    xp_delta = xp if newly_passed else 0
     await db.challenge30_progress.update_one(
         {"user_id": user["user_id"]},
-        {"$set": {"completed_days": completed, "quiz_scores": quiz_scores, "total_xp_earned": progress.get("total_xp_earned", 0) + xp}}
+        {"$set": {"completed_days": completed, "quiz_scores": quiz_scores, "total_xp_earned": progress.get("total_xp_earned", 0) + xp_delta}}
     )
-    await record_user_action(user["user_id"], "challenge30_quiz", xp_bonus=max(0, xp - 15), metadata={"day": day, "score": score})
+    if newly_passed:
+        await record_user_action(user["user_id"], "challenge30_quiz", xp_bonus=max(0, xp - 15), metadata={"day": day, "score": score})
 
-    return {"score": score, "correct": correct, "total": total_mc, "passed": passed, "xp_earned": xp, "results": results}
+    return {"score": score, "correct": correct, "total": total_mc, "passed": passed, "xp_earned": xp_delta, "results": results}
 
 
 @router.post("/complete/{day}")

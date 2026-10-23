@@ -52,8 +52,13 @@ def _ffmpeg_executable() -> str:
         raise RuntimeError(f"No ffmpeg binary available (tried PATH + imageio-ffmpeg): {e}")
 
 
-def _ffmpeg_extract_audio(input_path: str, output_path: str, bitrate: str = "64k") -> None:
-    """Strip video, downmix to mono 16 kHz MP3. Raises RuntimeError on failure."""
+async def _ffmpeg_extract_audio(input_path: str, output_path: str, bitrate: str = "64k") -> None:
+    """Strip video, downmix to mono 16 kHz MP3. Raises RuntimeError on failure.
+
+    1.4: runs ffmpeg via asyncio.create_subprocess_exec so the single-worker
+    event loop is NOT blocked for the whole conversion (blocking subprocess.run
+    froze every other request while ffmpeg ran).
+    """
     cmd = [
         _ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error",
         "-i", input_path,
@@ -64,9 +69,17 @@ def _ffmpeg_extract_audio(input_path: str, output_path: str, bitrate: str = "64k
         "-b:a", bitrate,
         output_path,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-    if result.returncode != 0 or not os.path.exists(output_path) or os.path.getsize(output_path) < 200:
-        raise RuntimeError(f"ffmpeg audio extraction failed: {result.stderr[-300:]}")
+    proc = await asyncio.create_subprocess_exec(
+        *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+    )
+    try:
+        _, stderr = await asyncio.wait_for(proc.communicate(), timeout=600)
+    except asyncio.TimeoutError:
+        proc.kill()
+        await proc.wait()
+        raise RuntimeError("ffmpeg audio extraction timed out")
+    if proc.returncode != 0 or not os.path.exists(output_path) or os.path.getsize(output_path) < 200:
+        raise RuntimeError(f"ffmpeg audio extraction failed: {stderr.decode('utf-8', 'ignore')[-300:]}")
 
 
 # Whisper hard limit per single API call (OpenAI: 25 MB). We chunk anything
@@ -123,8 +136,12 @@ async def release_orphaned_video_jobs() -> int:
 CHUNK_SECONDS = 600  # 10 minutes — well under 25 MB at 64 kbit/s mono
 
 
-def _ffmpeg_split_into_chunks(input_path: str, chunk_dir: str, seconds: int = CHUNK_SECONDS) -> list[str]:
-    """Split a normalised MP3 into N-second chunks. Returns sorted chunk paths."""
+async def _ffmpeg_split_into_chunks(input_path: str, chunk_dir: str, seconds: int = CHUNK_SECONDS) -> list[str]:
+    """Split a normalised MP3 into N-second chunks. Returns sorted chunk paths.
+
+    1.4: non-blocking ffmpeg (asyncio.create_subprocess_exec) — see note on
+    _ffmpeg_extract_audio.
+    """
     pattern = os.path.join(chunk_dir, "chunk_%03d.mp3")
     cmd = [
         _ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error",
@@ -135,9 +152,17 @@ def _ffmpeg_split_into_chunks(input_path: str, chunk_dir: str, seconds: int = CH
         "-reset_timestamps", "1",
         pattern,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-    if result.returncode != 0:
-        raise RuntimeError(f"ffmpeg segment failed: {result.stderr[-300:]}")
+    proc = await asyncio.create_subprocess_exec(
+        *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+    )
+    try:
+        _, stderr = await asyncio.wait_for(proc.communicate(), timeout=600)
+    except asyncio.TimeoutError:
+        proc.kill()
+        await proc.wait()
+        raise RuntimeError("ffmpeg segment timed out")
+    if proc.returncode != 0:
+        raise RuntimeError(f"ffmpeg segment failed: {stderr.decode('utf-8', 'ignore')[-300:]}")
     chunks = sorted(glob.glob(os.path.join(chunk_dir, "chunk_*.mp3")))
     if not chunks:
         raise RuntimeError("ffmpeg segment produced no chunks")
@@ -296,7 +321,7 @@ async def _transcribe_audio(file: UploadFile) -> str:
         # Stage 1: normalise to 64 kbit/s mono MP3
         mp3_path = raw_path.rsplit(".", 1)[0] + ".normalized.mp3"
         try:
-            _ffmpeg_extract_audio(raw_path, mp3_path, bitrate="64k")
+            await _ffmpeg_extract_audio(raw_path, mp3_path, bitrate="64k")
             audio_path = mp3_path
             mp3_size = os.path.getsize(mp3_path)
             logger.info("Whisper: ffmpeg-normalised %s → %s (%d bytes, raw=%d)",
@@ -315,7 +340,7 @@ async def _transcribe_audio(file: UploadFile) -> str:
         logger.info("Whisper: file %d bytes > %d → entering chunked transcription path",
                     mp3_size, WHISPER_MAX_BYTES)
         shrunk_path = raw_path.rsplit(".", 1)[0] + ".shrunk.mp3"
-        _ffmpeg_extract_audio(raw_path, shrunk_path, bitrate="32k")
+        await _ffmpeg_extract_audio(raw_path, shrunk_path, bitrate="32k")
         if mp3_path and os.path.exists(mp3_path) and mp3_path != shrunk_path:
             try:
                 os.unlink(mp3_path)
@@ -324,7 +349,7 @@ async def _transcribe_audio(file: UploadFile) -> str:
         mp3_path = shrunk_path
 
         chunk_dir = tempfile.mkdtemp(prefix="whisper_chunks_")
-        chunks = _ffmpeg_split_into_chunks(shrunk_path, chunk_dir, seconds=CHUNK_SECONDS)
+        chunks = await _ffmpeg_split_into_chunks(shrunk_path, chunk_dir, seconds=CHUNK_SECONDS)
         logger.info("Whisper: split into %d chunks for parallel transcription", len(chunks))
 
         # Pre-flight: ensure no chunk exceeds Whisper's limit (32 kbit/s × 10 min ≈ 2.4 MB,
@@ -896,6 +921,11 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
     from routes.credits import check_and_deduct_credit, no_credits_detail
     user = await get_current_user(request)
 
+    # 1.6: validate the challenge BEFORE any trial/credit side-effect.
+    challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
+    if not challenge:
+        raise HTTPException(status_code=404, detail="Challenge not found")
+
     # Trial-first: Free + Starter + Standard get 3 free analyses in their first 14 days.
     # Accelerator skips the trial entirely (require_feature returns immediately).
     tier_info = await resolve_user_tier(user)
@@ -906,21 +936,17 @@ async def analyze_video_challenge(challenge_id: str, request: Request, file: Upl
     first_free = await _is_first_analysis(user["user_id"])
     credit_result = {"allowed": True, "remaining": -1, "is_premium": False}
     if not first_free:
-        if trial["active"]:
-            # Inside trial window with quota remaining → bypass require_feature, consume slot.
-            await consume_video_trial(user["user_id"])
-            used_trial_slot = True
-        else:
-            # Either Accelerator (passes) or trial-ineligible/expired (raises 402 with upgrade detail).
+        # Gate access first (may 402 for trial-ineligible/expired) — no charge yet.
+        if not trial["active"]:
             await require_feature(user, "video_analysis")
-
+        # 1.6: deduct the credit BEFORE consuming a trial slot, so a 402 here
+        # never burns the user's trial slot.
         credit_result = await check_and_deduct_credit(user, "video_mission")
         if not credit_result["allowed"]:
             raise HTTPException(status_code=402, detail=no_credits_detail("video_mission", credit_result))
-
-    challenge = next((c for c in VIDEO_CHALLENGES if c["challenge_id"] == challenge_id), None)
-    if not challenge:
-        raise HTTPException(status_code=404, detail="Challenge not found")
+        if trial["active"]:
+            await consume_video_trial(user["user_id"])
+            used_trial_slot = True
 
     rating = _get_rating_params(request, user)
     rating_context = _build_rating_context(rating["mode"], rating["level"], rating["focus"], rating["audience"])
@@ -1070,13 +1096,14 @@ async def analyze_video_challenge_async(challenge_id: str, request: Request, fil
     used_trial_slot = False
     credit_result = {"allowed": True, "remaining": -1, "is_premium": False}
     if not first_free:
-        if trial["active"]:
-            await consume_video_trial(user["user_id"])
-            used_trial_slot = True
-
+        # 1.6: deduct the credit BEFORE consuming a trial slot, so a 402 here
+        # never burns the user's trial slot.
         credit_result = await check_and_deduct_credit(user, "video_mission")
         if not credit_result["allowed"]:
             raise HTTPException(status_code=402, detail=no_credits_detail("video_mission", credit_result))
+        if trial["active"]:
+            await consume_video_trial(user["user_id"])
+            used_trial_slot = True
 
     rating = _get_rating_params(request, user)
     rating_context = _build_rating_context(rating["mode"], rating["level"], rating["focus"], rating["audience"])

@@ -26,6 +26,11 @@ def _completion_params(provider: str, model: str, messages, api_key: str, extra_
 async def _execute_completion_async(self, messages):
     params = _completion_params(self.provider, self.model, messages, self.api_key, self.custom_headers)
     params.update(self.extra_params)
+    # 1.4: give every LlmChat call a hard request ceiling. Without this,
+    # non-streaming calls (video/tools/challengers/simulations) could hang
+    # indefinitely on a stalled upstream and tie up the worker. Per-call
+    # extra_params can still override via with_params(timeout=...).
+    params.setdefault("timeout", 120)
     return await litellm.acompletion(**params)
 
 
