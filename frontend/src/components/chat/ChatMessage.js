@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Badge } from '../ui/badge';
-import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight, Copy, Check } from 'lucide-react';
+import { Lightbulb, Target, ListChecks, CheckCircle2, Plus, Loader2, CornerDownRight, Copy, Check, RefreshCw } from 'lucide-react';
 import SmartText from '../shared/SmartText';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
@@ -167,7 +167,7 @@ const legacyClean = (content) => {
   return { text, pdf };
 };
 
-export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
+export const ChatMessage = ({ msg, de, onSuggest, sessionId, onRetry }) => {
   // Iter 141: Systemhinweis (KI kurz nicht erreichbar) — klar als Hinweis
   // erkennbar, nicht als Wlad-Antwort.
   if (msg.isNotice) {
@@ -175,6 +175,17 @@ export const ChatMessage = ({ msg, de, onSuggest, sessionId }) => {
       <div className="flex mb-4 animate-fade-in" data-testid="chat-notice">
         <div className="max-w-[80%] rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3">
           <p className="text-[13px] leading-relaxed text-amber-900 dark:text-amber-200 select-text">{unescapeText(msg.content)}</p>
+          {onRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              data-testid="chat-retry-btn"
+              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 h-8 rounded-full bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] text-[11.5px] font-bold transition-all hover:scale-[1.02] active:scale-[0.97]"
+            >
+              <RefreshCw size={12} strokeWidth={3} />
+              {de ? 'Erneut senden' : 'Resend'}
+            </button>
+          )}
         </div>
       </div>
     );

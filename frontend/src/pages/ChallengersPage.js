@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import logger from '../lib/logger';
+import { toast } from 'sonner';
 import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
@@ -90,14 +91,19 @@ export default function ChallengersPage() {
       const clean = cleanText(res.data.initial_message);
       setMessages([{ role: 'assistant', content: clean }]);
       if (ttsEnabled) speakPersona(clean, challengerId, api, lang);
-    } catch (err) { logger.error(err); } finally { setStarting(false); }
+    } catch (err) {
+      logger.error(err);
+      toast.error(lang === 'de' ? 'Start fehlgeschlagen. Bitte versuche es erneut.' : 'Could not start. Please try again.');
+    } finally { setStarting(false); }
   };
 
   const sendMessage = async (text) => {
     const msg = text || input.trim();
     if (!msg || loading || !activeChallenge) return;
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: msg }]);
+    // 1.7: Eingabe erst bei Erfolg leeren; bei Fehler Text zurücklegen + Toast.
+    const fromInput = !text;
+    const sendId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setMessages(prev => [...prev, { role: 'user', content: msg, _sendId: sendId }]);
     setLoading(true);
     try {
       const res = await api.post(`/challengers/${activeChallengerData.challenger_id}/message`, {
@@ -107,7 +113,16 @@ export default function ChallengersPage() {
       setMessages(prev => [...prev, { role: 'assistant', content: clean }]);
       if (res.data.result) setResult(res.data.result);
       else if (ttsEnabled) speakPersona(clean, activeChallengerData.challenger_id, api, lang);
-    } catch (err) { logger.error(err); } finally { setLoading(false); }
+      if (fromInput) setInput('');
+    } catch (err) {
+      logger.error(err);
+      setMessages(prev => prev.filter(m => m._sendId !== sendId));
+      if (fromInput) setInput(msg);
+      const detail = err?.response?.data?.detail;
+      toast.error(typeof detail === 'string' && detail
+        ? detail
+        : (lang === 'de' ? 'Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.' : 'Could not send message. Please try again.'));
+    } finally { setLoading(false); }
   };
 
   const endChallenge = async () => {
@@ -119,7 +134,10 @@ export default function ChallengersPage() {
         message: '', challenge_id: activeChallenge, finish: true
       });
       if (res.data.result) setResult(res.data.result);
-    } catch (err) { logger.error(err); } finally { setLoading(false); }
+    } catch (err) {
+      logger.error(err);
+      toast.error(lang === 'de' ? 'Auswertung fehlgeschlagen. Bitte versuche es erneut.' : 'Could not finish. Please try again.');
+    } finally { setLoading(false); }
   };
 
   const resetChallenge = () => {

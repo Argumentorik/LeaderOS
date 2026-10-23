@@ -192,12 +192,15 @@ export default function ChatPage() {
   const handleSend = async (overrideMsg, overrideMode) => {
     const text = (overrideMsg || input).trim();
     if (!text || loading) return;
-    setInput('');
+    // 1.1: Eingabe NICHT vorab leeren — erst bei Erfolg. Schlägt der Versand
+    // fehl, bleibt der Text erhalten (nur für Nachrichten aus dem Eingabefeld).
+    const fromInput = !overrideMsg;
+    const sendId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const fullMsg = buildFullMessage({ text, messages, userContext, attachedPdf });
     const attachmentMeta = attachedPdf ? { filename: attachedPdf.filename, pages: attachedPdf.pages || null } : null;
     setMessages(prev => [...prev, {
       role: 'user', content: text,
-      pdf: attachmentMeta,
+      pdf: attachmentMeta, _sendId: sendId,
     }]);
     setAttachedPdf(null);
     setLoading(true);
@@ -217,6 +220,7 @@ export default function ChatPage() {
         return [...base, { role: 'assistant', content: JSON.stringify(data.response), parsed: data.response, modality: data.modality || 'text' }];
       });
       reloadCredits();
+      if (fromInput) setInput('');
     };
     try {
       if (mode === 'chat') {
@@ -238,22 +242,23 @@ export default function ChatPage() {
         applyResult(res.data);
       }
     } catch (err) {
-      setMessages(prev => prev.filter((m) => !m.streaming));
       const status = err.response?.status ?? err.status;
+      // 1.1: fehlgeschlagene Nachricht (+ Stream-Entwurf) entfernen und den Text
+      // zurück ins Eingabefeld legen, damit nichts verloren geht.
+      setMessages(prev => prev.filter((m) => !m.streaming && m._sendId !== sendId));
+      if (fromInput) setInput(text);
       if (status === 402) {
         // Iter 185: Die Meldung kommt zentral (DashboardLayout) — hier kein
         // zweites Fenster mehr aufmachen.
-        setMessages(prev => prev.slice(0, -1));
       } else {
         logger.error('Chat error:', err);
-        // Iter 141: Backend liefert bei KI-Ausfällen (Budget, Rate-Limit, Auth)
-        // eine fertige, ruhige Klartext-Meldung — die zeigen wir dem Nutzer.
+        // Iter 141/1.2: Backend liefert bei KI-Ausfällen eine fertige Klartext-
+        // Meldung — die zeigen wir bei ALLEN Fehlercodes, nicht nur 503/504/429.
         const detail = err.response?.data?.detail ?? err.data?.detail;
         const backendMsg = typeof detail === 'string' ? detail : '';
-        const friendly = (status === 503 || status === 504 || status === 429) && backendMsg
-          ? backendMsg
-          : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.');
-        setMessages(prev => [...prev, { role: 'assistant', content: friendly, isNotice: true }]);
+        const friendly = backendMsg
+          || (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.');
+        setMessages(prev => [...prev, { role: 'assistant', content: friendly, isNotice: true, retryText: text }]);
       }
     }
     finally { setLoading(false); setStreaming(false); }
@@ -328,6 +333,10 @@ export default function ChatPage() {
               <ChatMessage
                 msg={msg} de={de} sessionId={currentSession}
                 onSuggest={i === messages.length - 1 && !loading ? (q) => handleSend(q) : undefined}
+                onRetry={msg.isNotice && msg.retryText && !loading ? () => {
+                  setMessages(prev => prev.filter((m) => m !== msg));
+                  handleSend(msg.retryText);
+                } : undefined}
               />
               {msg.role === 'assistant' && !isPremium && (i + 1) % 10 === 0 && (
                 <ChatInlineUpsell onNavigate={() => openPricing('leadership_os')} de={de} />

@@ -29,14 +29,25 @@ async def _execute_completion_async(self, messages):
     return await litellm.acompletion(**params)
 
 
-async def stream_completion(provider: str, model: str, messages, timeout: int = 120):
-    """Token-Stream (Text-Deltas) über denselben Emergent-Proxy wie LlmChat."""
+async def stream_completion(provider: str, model: str, messages, timeout: int = 120, idle_timeout: int = 30):
+    """Token-Stream (Text-Deltas) über denselben Emergent-Proxy wie LlmChat.
+
+    `timeout` begrenzt den Verbindungsaufbau; `idle_timeout` begrenzt die Pause
+    ZWISCHEN zwei Chunks. Hängt der Stream länger als `idle_timeout` Sekunden,
+    wird `asyncio.TimeoutError` ausgelöst — der Aufrufer beendet den Stream dann
+    sauber mit einem `error`-Event statt endlos offen zu bleiben.
+    """
     import asyncio
 
     params = _completion_params(provider, model, messages, EMERGENT_LLM_KEY, _default_headers())
     params["stream"] = True
     response = await asyncio.wait_for(litellm.acompletion(**params), timeout=timeout)
-    async for chunk in response:
+    aiter = response.__aiter__()
+    while True:
+        try:
+            chunk = await asyncio.wait_for(aiter.__anext__(), timeout=idle_timeout)
+        except StopAsyncIteration:
+            break
         choices = getattr(chunk, "choices", None) or []
         if not choices:
             continue

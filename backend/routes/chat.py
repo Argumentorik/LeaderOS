@@ -396,12 +396,17 @@ async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
             pages = data.attachment.get("pages")
             attachment = {"filename": filename, "pages": pages if isinstance(pages, int) else None}
 
+    # 1.1: persist the user message as "pending" BEFORE the LLM call and only
+    # finalize it on success (or delete it on failure) — so a retry after a
+    # failed/stalled call never duplicates the user's message.
+    user_msg_id = f"msg_{uuid.uuid4().hex[:12]}"
     await db.chat_messages.insert_one({
-        "message_id": f"msg_{uuid.uuid4().hex[:12]}", "session_id": session_id,
+        "message_id": user_msg_id, "session_id": session_id,
         "user_id": user["user_id"], "role": "user", "content": data.message,
         "display_text": (data.display_text or "")[:4000] or None,
         "attachment": attachment,
         "modality": msg_modality,
+        "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
@@ -443,7 +448,7 @@ async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
         "user": user, "credit_result": credit_result, "session_id": session_id, "modality": msg_modality,
         "structured": structured, "system_msg": system_msg, "model_name": model_name,
         "prompt": f"{context}\nUser: {data.message}", "rag_ctx": rag_ctx, "folder_context": folder_context,
-        "agent": data.agent,
+        "agent": data.agent, "user_msg_id": user_msg_id,
     }
 
 
@@ -500,6 +505,10 @@ async def _finalize_chat(prep: dict, ai_response: str) -> dict:
     })
     # Iter 92.58 (Mert): tasks are SUGGESTIONS now — persisted only after
     # the user clicks "übernehmen" (POST /chat/tasks/accept). No auto-save.
+    # 1.1: finalize the pending user message now that we have a real answer.
+    if prep.get("user_msg_id"):
+        await db.chat_messages.update_one(
+            {"message_id": prep["user_msg_id"]}, {"$set": {"status": "sent"}})
     await db.chat_sessions.update_one({"session_id": session_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
     await record_user_action(user["user_id"], "chat_message", metadata={"session_id": session_id, "agent": prep["agent"]})
     return {
@@ -514,6 +523,13 @@ async def _finalize_chat(prep: dict, ai_response: str) -> dict:
 
 
 async def _refund_after_failure(prep: dict) -> None:
+    # 1.1: drop the pending user message so a retry doesn't duplicate it.
+    uid = prep.get("user_msg_id")
+    if uid:
+        try:
+            await db.chat_messages.delete_one({"message_id": uid, "status": "pending"})
+        except Exception as del_err:
+            logger.warning(f"Pending user message cleanup failed: {del_err}")
     # Refund the credit — the user paid but got no answer.
     if not prep["credit_result"].get("is_premium"):
         try:

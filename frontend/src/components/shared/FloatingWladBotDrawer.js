@@ -151,8 +151,10 @@ export const FloatingWladBotDrawer = () => {
   const send = async (overrideText, modality = 'text') => {
     const text = (overrideText || input).trim();
     if (!text || sending) return;
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: text, modality }]);
+    // 1.1: Eingabe erst bei Erfolg leeren; bei Fehler Text zurücklegen.
+    const fromInput = !overrideText;
+    const sendId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setMessages(prev => [...prev, { role: 'user', content: text, modality, _sendId: sendId }]);
     setSending(true);
     try {
       const body = { message: text, session_id: sessionId, modality };
@@ -173,12 +175,15 @@ export const FloatingWladBotDrawer = () => {
         onDone: (data) => {
           if (!sessionId) setSessionId(data.session_id);
           setMessages(prev => [...prev.filter(m => !m.streaming), { role: 'assistant', content: '', parsed: data.response, modality: data.modality || modality }]);
+          if (fromInput) setInput('');
         },
       });
       if (!hadDelta) setMessages(prev => prev.filter(m => !m.streaming));
     } catch (err) {
       logger.error('drawer chat failed:', err);
-      setMessages(prev => prev.filter(m => !m.streaming));
+      // 1.1: fehlgeschlagene Nachricht entfernen, Text zurücklegen.
+      setMessages(prev => prev.filter(m => !m.streaming && m._sendId !== sendId));
+      if (fromInput) setInput(text);
       const status = err?.response?.status ?? err?.status;
       const noCredits = status === 402;
       const detail = err?.response?.data?.detail ?? err?.data?.detail;
@@ -187,9 +192,8 @@ export const FloatingWladBotDrawer = () => {
         role: 'assistant',
         content: noCredits
           ? (de ? 'Deine Free-Credits sind aufgebraucht. Hol dir das Leadership OS für unbegrenzte Chats mit Wlad.' : 'Your free credits are used up. Get the Leadership OS for unlimited chats with Wlad.')
-          : ((status === 503 || status === 504 || status === 429) && backendMsg
-            ? backendMsg
-            : (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.')),
+          : (backendMsg
+            || (de ? 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.' : 'An error occurred. Please try again.')),
       }]);
     } finally {
       setSending(false);

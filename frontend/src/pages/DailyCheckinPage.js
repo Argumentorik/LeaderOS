@@ -53,7 +53,14 @@ export default function DailyCheckinPage() {
       setTodayCheckin(res.data);
       setInput('');
       setLastInputMode(null);
-    } catch (err) { logger.error('Check-in failed:', err); }
+    } catch (err) {
+      logger.error('Check-in failed:', err);
+      const detail = err?.response?.data?.detail;
+      const { toast } = await import('sonner');
+      toast.error(typeof detail === 'string' && detail
+        ? detail
+        : (lang === 'de' ? 'Check-in fehlgeschlagen. Bitte versuche es erneut.' : 'Check-in failed. Please try again.'));
+    }
     finally { setLoading(false); }
   };
 
