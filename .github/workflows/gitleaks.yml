@@ -33,16 +33,24 @@ jobs:
           # commits that were rebased/squashed into the PR diff.
           fetch-depth: 0
 
-      - name: Run gitleaks
-        uses: gitleaks/gitleaks-action@v3
-        env:
-          # No GITLEAKS_LICENSE needed for public repos · this is the OSS
-          # path which is sufficient for our threat model.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          # .gitleaks.toml erweitert das Standard-Regelset (~150 Muster:
-          # AWS, Stripe, Google, Resend, Slack, Supabase, JWTs, SSH-Keys …)
-          # via `[extend] useDefault = true` und nimmt davon nur einzelne
-          # nachweislich öffentliche Werte per Regex aus — aktuell allein
-          # den IndexNow-Key, der per Protokoll öffentlich sein MUSS.
-          config-path: '.gitleaks.toml'
+      # Seit dem Umzug in die Organisation Argumentorik verlangt
+      # gitleaks-action einen Lizenzschlüssel ("[Argumentorik] is an
+      # organization. License key is required"). Das gitleaks-CLI selbst ist
+      # MIT-lizenziert und braucht keinen Schlüssel, darum läuft der Scan
+      # direkt über das offizielle Container-Image. Gleiche Regeln:
+      # .gitleaks.toml erweitert das Standard-Regelset (~150 Muster: AWS,
+      # Stripe, Google, Resend, Slack, Supabase, JWTs, SSH-Keys …) via
+      # `[extend] useDefault = true` und nimmt nur nachweislich öffentliche
+      # Werte per Regex aus (aktuell allein den IndexNow-Key).
+      - name: Run gitleaks (pull request · nur die PR-Commits)
+        if: github.event_name == 'pull_request'
+        run: |
+          docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/gitleaks/gitleaks:v8.24.3 \
+            git --config .gitleaks.toml --redact --no-banner --exit-code 1 \
+            --log-opts="${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}" .
+
+      - name: Run gitleaks (push · gesamte Historie)
+        if: github.event_name == 'push'
+        run: |
+          docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/gitleaks/gitleaks:v8.24.3 \
+            git --config .gitleaks.toml --redact --no-banner --exit-code 1 .
