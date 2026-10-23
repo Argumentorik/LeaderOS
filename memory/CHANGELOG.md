@@ -1,6 +1,14 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 194 · 22.06.26] Chat-Reliability Batch 1 (Plan 1.1 / 1.2 / 1.7)** — verifiziert via testing_agent (iteration_192.json, Frontend 100% 3/3) + Backend-Test + curl-Stream
+  - **1.1 Keine verlorene Nutzernachricht bei Fehler:** `ChatPage.js` + `FloatingWladBotDrawer.js` leeren das Eingabefeld nicht mehr vorab — nur bei Erfolg (und nur wenn der Text noch der gesendete ist, damit währenddessen Getipptes nicht verloren geht). Bei Fehler wird der Text zurückgelegt, die fehlgeschlagene Bubble (`_sendId`) entfernt und im Hinweis (`chat-notice`) ein **„Erneut senden"**-Button (`chat-retry-btn`, `ChatMessage.js`) gezeigt. Backend `chat.py`: Nutzer-Nachricht wird als `status:"pending"` gespeichert, bei Erfolg auf `sent` finalisiert, bei Fehler gelöscht → Retries duplizieren nicht mehr. Verifiziert: genau 1 Nutzer-Nachricht, Status `sent`.
+  - **1.2 Timeouts & Retries:** `services_llm_async.stream_completion` hat jetzt einen Per-Chunk-Idle-Timeout (30s) → hängende Streams enden mit `error`-Event. `chatStream.js`: AbortController-Idle-Timeout (45s) + genau ein Auto-Retry bei Netz-/Gateway-Fehler (502-504) VOR dem ersten Delta (kein Doppeltext). `ChatPage`/Drawer zeigen die Backend-Klartextmeldung bei ALLEN Fehlercodes (vorher nur 503/504/429).
+  - **1.7 Stille Fehler sichtbar machen:** `DailyCheckinPage.js` + `ChallengersPage.js` zeigen jetzt einen sonner-Toast bei Fehler (statt nur `logger.error`); `ChallengersPage.sendMessage` behält den Text bei Fehler und entfernt die fehlgeschlagene Bubble.
+  - **Bugfixes aus iteration_191:** (1) Input wird nach erfolgreichem Retry geleert; (2) WladBot-Drawer-Overlay auf `z-[150]` angehoben, damit der WladHelp-FAB (z-140) den Senden-Button nicht mehr verdeckt.
+  - **Offen (vom User gewählte Reihenfolge):** Batch 2 = 1.4 (Event-Loop: ffmpeg `subprocess.run` → async), 1.5 (JSON-Retry mit vollem Prompt), 1.6 (Credit-Refund-Contextmanager + Idempotenz). Batch 3 = 1.3 (generisches Async-Job-System `services_jobs.py` + `useAsyncJob.js` für Challenger/Tools/Simulationen/Check-in).
+
+
 - [x] **[Iter 193 · 22.06.26] Code-Review + Security-Audit Fixes (in diesem Workspace)** — verifiziert via gezielte Python-Tests + Backend-Health
   - **HIGH (Credits over-grant)** `routes/credits.py`: Insert-Pfad setzte `refill_month`, aber NICHT `refill_amount`. Beim nächsten Credit-Read nahm `_apply_monthly_refill` den alten Default 20 an und zahlte die Differenz auf 50 nach → neue Free-User hatten 80 statt 50 Credits. Fix: Insert setzt jetzt `refill_amount = MONTHLY_FREE_REFILL`. Test: neuer User endet bei 50 gesamt (balance 46 + used 4).
   - **MEDIUM (Dashboard-Crash)** `routes/dashboard.py`: Fehl-Indentation ließ `day`/Task-Block außerhalb von `if c30_status:` laufen → `NameError` → 500 auf `GET /api/dashboard/bootstrap` wenn der 30-Tage-Slice fehlschlug. Fix: Block korrekt in `if c30_status:` eingerückt, redundantes inneres `if entry:` entfernt.

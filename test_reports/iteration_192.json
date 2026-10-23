@@ -1,0 +1,20 @@
+{
+  "summary": "Focused frontend retest of the 2 fixes from iteration_191 + streaming-typing regression (free@wladbot.test, 1920x800, cookie banner dismissed). All 3 PASS. FIX1: forced 500 on /api/chat/stream -> user bubble removed, 'Fehlertest ABC' restored to chat-input, amber chat-notice ('Test') with chat-retry-btn shown; after unroute + retry click the assistant replied and chat-input was EMPTY. FIX2: on /daily-checkin opened wladbot-fab drawer, normal mouse click on wladbot-drawer-send succeeded (no interception by WladHelp FAB), user message + streamed reply appeared, drawer input cleared. REGRESSION: text typed into chat-input while the reply streamed ('Neuer Text beim Streamen') was still there after the reply finished.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Chat / all dashboard pages (1920x800)", "issues": ["Already known from iter 191: the 'Support · Direktkontakt' feedback nudge card in the bottom-right sits close to the chat send area. Not blocking."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": ["ChatPage applyResult and FloatingWladBotDrawer onDone now use the same conditional clear: setInput(prev => (fromInput || prev.trim() === text) ? '' : prev). This works. Small edge case: if the user retypes the exact same text while the reply streams, the input is cleared. Acceptable."],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100% (3/3)"},
+  "seed_data_creation": "None. Used about 3 AI credits of free@wladbot.test.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Force failures with page.route('**/api/chat/stream**') fulfilled with 500 {detail:'Test'}, then unroute and click chat-retry-btn. Start drawer tests on /daily-checkin. A normal click on the drawer send button now works (drawer z-[150] > WladHelp FAB z-[140]). Login testids: login-email-input, login-password-input, login-submit-btn. Cookie banner: consent-accept-all."
+}
