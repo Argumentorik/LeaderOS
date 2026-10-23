@@ -113,7 +113,7 @@ export default function ChallengersPage() {
       setMessages(prev => [...prev, { role: 'assistant', content: clean }]);
       if (res.data.result) setResult(res.data.result);
       else if (ttsEnabled) speakPersona(clean, activeChallengerData.challenger_id, api, lang);
-      if (fromInput) setInput('');
+      setInput(prev => (fromInput || prev.trim() === msg) ? '' : prev);
     } catch (err) {
       logger.error(err);
       setMessages(prev => prev.filter(m => m._sendId !== sendId));

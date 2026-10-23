@@ -220,7 +220,10 @@ export default function ChatPage() {
         return [...base, { role: 'assistant', content: JSON.stringify(data.response), parsed: data.response, modality: data.modality || 'text' }];
       });
       reloadCredits();
-      if (fromInput) setInput('');
+      // 1.1 fix: clear the input on success only if it still holds the text we
+      // just sent — covers normal sends AND 'Erneut senden' retries, without
+      // wiping anything the user typed while the reply streamed.
+      setInput(prev => (fromInput || prev.trim() === text) ? '' : prev);
     };
     try {
       if (mode === 'chat') {

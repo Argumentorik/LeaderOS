@@ -175,7 +175,7 @@ export const FloatingWladBotDrawer = () => {
         onDone: (data) => {
           if (!sessionId) setSessionId(data.session_id);
           setMessages(prev => [...prev.filter(m => !m.streaming), { role: 'assistant', content: '', parsed: data.response, modality: data.modality || modality }]);
-          if (fromInput) setInput('');
+          setInput(prev => (fromInput || prev.trim() === text) ? '' : prev);
         },
       });
       if (!hadDelta) setMessages(prev => prev.filter(m => !m.streaming));
@@ -228,7 +228,7 @@ export const FloatingWladBotDrawer = () => {
 
       {/* Drawer overlay */}
       {open && (
-        <div className="fixed inset-0 z-[70] flex justify-end" data-testid="wladbot-drawer">
+        <div className="fixed inset-0 z-[150] flex justify-end" data-testid="wladbot-drawer">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={() => setOpen(false)} />
           <aside className="relative w-full sm:w-[440px] bg-[#0A0A0A] border-l border-white/[0.08] flex flex-col h-screen shadow-2xl animate-slide-right">
             {/* Header */}

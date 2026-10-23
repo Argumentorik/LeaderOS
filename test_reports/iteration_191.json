@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend-only test of Batch 1 chat-reliability fixes (free@wladbot.test, 1920x800). Happy paths + failure paths (forced via Playwright page.route returning 500) all exercised. ChatPage: input clears on success, streaming bubble then final chat-ai-message render; on failure text restored, user bubble removed, chat-notice with backend detail + chat-retry-btn shown; retry succeeds. Drawer: send+stream works, input clears; failure restores text, removes bubble, shows message. Daily check-in: feedback in ~4s, input clears; failure keeps text + sonner toast, button re-enabled. Challengers: start (Bezos) + send + persona reply ~4s, input clears; failure keeps text, bubble removed, sonner toast. No freezes. Found 2 issues: (1) after a successful 'Erneut senden' retry, ChatPage input still holds the restored text (double-send risk); (2) WladHelp FAB covers the drawer send button.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "FloatingWladBotDrawer + WladHelp FAB", "issue": "The WladHelp support FAB (fixed bottom-6 right-6 z-[140]) sits on top of the open drawer (z-[70]) and covers the drawer send button, so mouse clicks on the button do not get through (Playwright click timed out: 'wladhelp-fab subtree intercepts pointer events'). Pressing Enter still sends. Fix: hide WladHelp FAB while the drawer is open, or raise the drawer z-index above 140, or add right padding to the input row.", "selector": "[data-testid='wladbot-drawer-send']", "priority": "HIGH"},
+      {"component": "ChatPage retry", "issue": "If a send fails, handleSend puts the text back in the input AND adds a notice with retryText. Clicking 'Erneut senden' calls handleSend(msg.retryText), so fromInput=false and setInput('') never runs on success. The input still shows 'Fehlertest Nachricht XYZ' after the retried message was answered, and the user can easily send it twice. Fix: clear the input on a successful retry if it still equals retryText, e.g. in applyResult: `setInput(prev => (fromInput || prev.trim() === text) ? '' : prev)`.", "selector": "[data-testid='chat-retry-btn'] / [data-testid='chat-input']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "All dashboard pages (1920x800)", "issues": ["The 'Support · Direktkontakt' feedback nudge card sits in the bottom-right and overlaps content and the sonner toasts (a toast rendered on top of the 'Feedback geben' button)", "On the first dashboard visit, a full-screen onboarding tour (dashboard-first-tour, z-9999) blocks all clicks, including the FAB, until it is dismissed (this is expected, but tests need to handle it)"]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Stop the WladHelp FAB from covering the WladBot drawer send button (hide it while the drawer is open, or fix the z-index)",
+    "ChatPage: clear the input after a successful retry from the chat-notice 'Erneut senden' button when the input still contains the retried text",
+    "Optional: SSE edits during an in-flight send are wiped by setInput('') on success. The input stays editable while sending, so text typed in the meantime is lost. Consider clearing only if input === sent text"
+  ],
+  "critical_code_review_comments": [
+    "ChatPage.handleSend/applyResult: unconditional setInput('') on success discards anything the user typed while the reply streamed (the input is no longer cleared up-front). Same pattern in FloatingWladBotDrawer.send and ChallengersPage.sendMessage.",
+    "ChatPage retry path: fromInput=false for retries, so the restored input is never cleared (confirmed in UI).",
+    "FloatingWladBotDrawer error branch shows a plain assistant message with no retry button (inconsistent with ChatPage). Acceptable, since the input is restored."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "90% - all 5 requested flows pass happy + failure paths; 1 overlay bug, 1 retry input-clear bug"},
+  "test_credentials": "free@wladbot.test / test123 (credits went from ~36 to ~31 during the run)",
+  "seed_data_creation": "Created a few chat sessions, 1 daily check-in and 1 Bezos challenger session for free@wladbot.test",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Force failures with page.route('**/api/chat/stream**') / '**/api/**checkin**' (POST) / '**/api/challengers/*/message' fulfilled with status 500 and {detail}. A fresh browser context shows the dashboard-first-tour on /dashboard, so start drawer tests on /daily-checkin. Drawer send: use Enter until the FAB overlay is fixed. Challenger card testids: challenger-bezos etc."
+}
