@@ -89,10 +89,13 @@ const AVAIL = 1080 - 152;
 const IG = new URLSearchParams(location.search).get('v') === 'ig';
 const LINK = IG ? 'Link in der Bio' : 'Link im ersten Kommentar';
 
-function chrome(c, s, n, light) {
+// Oben links steht die Feldnotiz (Nummer · Thema), nicht der Absender. Der
+// Absender (BYLINE) steht genau einmal pro Karussell: auf der CTA-Folie.
+function chrome(c, s, n, slide) {
   const id = `${c.id} · ${s + 1}/${n}`;
   const last = s === n - 1;
-  return `<div class="a m top-l">${esc(FOOT.toLowerCase())}</div><div class="a r top-r">${esc(id)}</div>` +
+  const topLeft = slide && slide.t === 'cta' ? BYLINE : c.tag;
+  return `<div class="a m top-l">${esc(topLeft.toLowerCase())}</div><div class="a r top-r">${esc(id)}</div>` +
     `<div class="foot">${esc(c.title)}</div>` +
     `<div class="swipe">${last ? esc(LINK.toLowerCase()) + ' <b>.</b>' : 'weiter <b>→</b>'}</div>`;
 }
@@ -144,21 +147,24 @@ function render(ci, si) {
     const r = rowsHtml(s.rows, 104, 720);
     html += r.html + `<div class="body">${s.p}</div>` +
       `<div class="photo"><img src="${s.photo}" style="object-position:${s.pos || '50% 50%'}" alt=""></div>` +
-      `<div class="sticker"><b>${esc(s.sticker[0])}</b><span>${esc(s.sticker[1])}</span></div>` + chrome(c, si, n);
+      `<div class="sticker"><b>${esc(s.sticker[0])}</b><span>${esc(s.sticker[1])}</span></div>` + chrome(c, si, n, s);
     sheet.innerHTML = html; annotate(s.rows, s.ann); fit(r.rowH, 196);
+    // Der Weiter-Hinweis liegt auf dem Foto: hell mit Schatten, sonst unsichtbar.
+    document.querySelector('.swipe').style.cssText = 'color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.7)';
+    document.querySelector('.swipe b').style.color = '#bfff00';
   } else if (s.t === 'statement') {
     const r = rowsHtml(s.rows, 150, 860);
-    html += r.html + chrome(c, si, n);
+    html += r.html + chrome(c, si, n, s);
     sheet.innerHTML = html; annotate(s.rows, s.ann); fit(r.rowH, 230);
   } else if (s.t === 'text') {
     html += `<div class="kicker">${esc(s.kicker)}</div><div class="h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
-      `<div class="para" id="para">${s.p}</div>` + chrome(c, si, n);
+      `<div class="para" id="para">${s.p}</div>` + chrome(c, si, n, s);
     sheet.innerHTML = html;
     const h = document.querySelector('.h').getBoundingClientRect();
     document.getElementById('para').style.top = Math.round(h.bottom - sheet.getBoundingClientRect().top + 54) + 'px';
   } else if (s.t === 'list') {
     html += `<div class="kicker">${esc(s.kicker)}</div><div class="h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
-      `<ul class="items" id="items">` + s.items.map(([t, d], i) => `<li><span class="n"><b>${String(i + 1).padStart(2, '0')}</b></span><div><h4>${esc(t)}</h4><p>${esc(d)}</p></div></li>`).join('') + '</ul>' + chrome(c, si, n);
+      `<ul class="items" id="items">` + s.items.map(([t, d], i) => `<li><span class="n"><b>${String(i + 1).padStart(2, '0')}</b></span><div><h4>${esc(t)}</h4><p>${esc(d)}</p></div></li>`).join('') + '</ul>' + chrome(c, si, n, s);
     sheet.innerHTML = html;
     const h = document.querySelector('.h').getBoundingClientRect();
     const ul = document.getElementById('items');
@@ -175,7 +181,7 @@ function render(ci, si) {
     sheet.className = 'sheet light';
     html = `<div class="full"><img src="${s.photo}" style="object-position:${s.pos || '50% 50%'}" alt=""></div><div class="frame"></div>` +
       `<div class="full-h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
-      (s.ann ? `<div class="a" style="left:76px;bottom:150px;color:rgba(255,255,255,.75)">${esc(s.ann)}</div>` : '') + chrome(c, si, n, true);
+      (s.ann ? `<div class="a" style="left:76px;bottom:150px;color:rgba(255,255,255,.75)">${esc(s.ann)}</div>` : '') + chrome(c, si, n, s);
     sheet.innerHTML = html;
   } else if (s.t === 'figure') {
     const word = s.word;
@@ -183,7 +189,7 @@ function render(ci, si) {
     html += `<div class="fade"><span>${esc(s.fade)}</span><span>${esc(s.fade)}</span><span>${esc(s.fade)}</span></div>` +
       (s.ann ? `<div class="a m" style="left:76px;top:500px">${esc(s.ann)}</div>` : '') +
       `<div class="big" id="big">${letters}<span class="p">.</span></div>` +
-      `<div class="vert">${esc(s.vert)}</div>` + chrome(c, si, n);
+      `<div class="vert">${esc(s.vert)}</div>` + chrome(c, si, n, s);
     sheet.innerHTML = html;
     if (s.letter >= 0) {
       // Der Innenraum des Buchstabens (das o) wird zum dunklen Hohlraum, die
@@ -204,7 +210,7 @@ function render(ci, si) {
     html += `<div class="kicker">${esc(s.kicker)}</div>` + r.html +
       `<div class="para" style="top:690px;right:76px;font-size:31px">${s.p.replace('Link im ersten Kommentar', LINK)}</div>` +
       `<div class="sticker" style="left:auto;right:96px;top:980px;transform:rotate(8deg)"><b>${esc(s.sticker[0])}</b><span>${esc(s.sticker[1])}</span></div>` +
-      `<div class="cta-note">${esc(s.note)}</div>` + chrome(c, si, n);
+      `<div class="cta-note">${esc(s.note)}</div>` + chrome(c, si, n, s);
     sheet.innerHTML = html; fit(r.rowH, 196);
   }
   document.title = `${c.id} · ${si + 1}/${n}`;

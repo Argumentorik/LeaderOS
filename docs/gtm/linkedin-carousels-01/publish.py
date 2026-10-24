@@ -39,5 +39,9 @@ for c in sorted(rendered, key=lambda c: c["id"]):
         "instagram": {"slides": [BASE + f for f in c["slides_instagram"]]},
     })
 
-(HERE / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+text = json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
+(HERE / "manifest.json").write_text(text)
+# Dieselbe Datei liegt öffentlich neben den Folien, damit eine Posting-API sie
+# direkt lesen kann: https://leader-os.de/preview/carousels-01/manifest.json
+(PUBLIC / "manifest.json").write_text(text)
 print(f"{len(manifest)} Karussells, {copied} Dateien nach {PUBLIC.relative_to(ROOT)}")
