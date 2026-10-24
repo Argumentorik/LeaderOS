@@ -50,8 +50,9 @@ html,body{background:#333}
 <div id="sheet" class="sheet"></div>
 <script>
 // Fünf Statements. Jede Zeile: [Wort(e), Ausrichtung, Annotation (gegenüber), Nummer, letzteZeile]
-// Fakten nur aus docs/gtm/WLAD_CANON.md (seit 2007, 400.000+ Klienten, 3× SPIEGEL-Bestseller).
-const TOP = 'wlad jachtchenko · leadership-coach seit 2007';
+// Fakten nur aus docs/gtm/WLAD_CANON.md. Keine Credentials auf den Postern:
+// oben links steht die Feldnotiz (Nummer · Thema), der Absender nur einmal,
+// im Fuß des CTA-Posters LI·05. Der Account zeigt den Namen ohnehin.
 const POSTS = [
   {
     id: 'LI·01', photo: '../../../frontend/public/journal/topics/training-b.webp',
@@ -63,8 +64,8 @@ const POSTS = [
     ],
     body: 'Nach jedem Seminar wissen alle, was zu tun ist. Sechs Wochen später ist das Verhalten das alte. Nicht, weil die Leute es nicht verstanden hätten. <b>Weil niemand trainiert hat.</b> Führung ist eine Fähigkeit. Fähigkeiten entstehen durch Wiederholung, nicht durch Folien.',
     sticker: ['W.', 'Führung trainieren'],
-    foot: 'Wlad Jachtchenko · seit 2007 · 400.000+ Klienten',
-    top: [TOP, 'leadership · 2026'],
+    foot: 'Feldnotizen · Serie 01 · 1 von 5',
+    top: ['feldnotiz 01 · wissen vs. training', 'leadership · 2026'],
   },
   {
     id: 'LI·02', photo: '../../../frontend/public/journal/topics/listening.webp',
@@ -76,8 +77,8 @@ const POSTS = [
     ],
     body: 'Zuhören hat zehn Stufen. Stufe 1: nicht zuhören. Stufe 2: <b>auf die eigene Antwort warten.</b> Dort bleiben die meisten Führungskräfte hängen, ein Leben lang. Ganz oben, auf Stufe 10, ist Stille selbst die Antwort. Der Weg dorthin beginnt mit einer Frage mehr und einem Satz weniger.',
     sticker: ['10', 'Stufen des Zuhörens'],
-    foot: 'Wlad Jachtchenko · die 10 Stufen des Zuhörens',
-    top: [TOP, 'aus: weiße rhetorik'],
+    foot: 'Feldnotizen · Serie 01 · 2 von 5',
+    top: ['feldnotiz 02 · zuhören', 'aus: weiße rhetorik'],
   },
   {
     id: 'LI·03', photo: '../../../frontend/public/journal/topics/feedback.webp',
@@ -89,8 +90,8 @@ const POSTS = [
     ],
     body: 'Die Feedbackformel hat drei Teile: <b>Beobachtung, Wirkung, Wunsch.</b> „Ich habe gesehen, dass du im Meeting dreimal unterbrochen hast. Auf das Team wirkt das, als zählten ihre Punkte nicht. Ich wünsche mir, dass du ausreden lässt." Drei Sätze. Kein Urteil über den Menschen, nur über die Situation.',
     sticker: ['B·W·W', 'Feedbackformel'],
-    foot: 'Wlad Jachtchenko · die Feedbackformel',
-    top: [TOP, 'skript für schwierige gespräche'],
+    foot: 'Feldnotizen · Serie 01 · 3 von 5',
+    top: ['feldnotiz 03 · feedback', 'skript für schwierige gespräche'],
   },
   {
     id: 'LI·04', photo: '../../../frontend/public/journal/topics/boardroom.webp',
@@ -103,8 +104,8 @@ const POSTS = [
     ],
     body: 'Ein vollständiges Argument hat sechs Schritte: <b>Statement, Explanation, Example, Impact, Explanation of Impact, Rebuttal.</b> Die meisten hören nach dem ersten auf und wundern sich, dass niemand folgt. Wer alle sechs geht, muss nicht lauter werden. Das SEXIER-Modell aus „Weiße Rhetorik".',
     sticker: ['6', 'Schritte · SEXIER'],
-    foot: 'Wlad Jachtchenko · 3× SPIEGEL-Bestseller',
-    top: [TOP, 'aus: weiße rhetorik'],
+    foot: 'Feldnotizen · Serie 01 · 4 von 5',
+    top: ['feldnotiz 04 · argumentieren', 'aus: weiße rhetorik'],
   },
   {
     id: 'LI·05', photo: '../../../frontend/public/wlad/wlad-portrait.jpg', pos: '68% 10%',
@@ -112,12 +113,12 @@ const POSTS = [
       ['Führung', 'left', null, '(01)'],
       ['ist', 'right', 'keine frage des talents', null],
       ['trainierbar.', 'left', null, '(02)'],
-      ['Wie Fitness', 'right', 'kostenlos · testgruppe · begrenzt', null, true],
+      ['Wie Fitness', 'right', 'beta · kostenlos · 50 plätze', null, true],
     ],
-    body: 'Niemand wird fit von einem Vortrag über Fitness. Führung funktioniert genauso: 15 Minuten am Tag, am echten Fall, mit Feedback. Genau dafür haben wir LeaderOS gebaut. <b>Für eine kleine Testgruppe öffnen wir den Zugang jetzt kostenlos.</b> Link im ersten Kommentar.',
-    sticker: ['50', 'Plätze · Testgruppe'],
-    foot: 'Wlad Jachtchenko · LeaderOS · Testgruppe',
-    top: ['kostenloser zugang · begrenzte testgruppe', 'leader-os.de'],
+    body: 'Niemand wird fit von einem Vortrag über Fitness. Führung funktioniert genauso: 15 Minuten am Tag, am echten Fall, mit Feedback. Genau dafür haben wir LeaderOS gebaut. <b>In der Beta öffnen wir den Zugang jetzt kostenlos: 50 Plätze, mit oder ohne Titel.</b> Link im ersten Kommentar.',
+    sticker: ['50', 'Plätze · Beta'],
+    foot: 'Wlad Jachtchenko · LeaderOS · Beta',
+    top: ['beta-phase · kostenloser zugang · 50 plätze', 'leader-os.de'],
   },
 ];
 
