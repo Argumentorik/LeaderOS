@@ -13,7 +13,12 @@ jeden Post vorab frei (Mail), Max postet oder Mert nach Freigabe der
 Inhaltsadmin-Rechte.
 
 **Reihenfolge und Takt:** LI-01 Do 23.10. · LI-02 Sa 25.10. · LI-03 Mo 27.10.
-· LI-05 Di 28.10. (Webinar-CTA, Tag vor dem Termin) · LI-04 Do 30.10.
+· LI-05 Di 28.10. (Testgruppen-CTA) · LI-04 Do 30.10.
+
+**CTA:** kein Webinar, kein Termin. Der Aufruf ist der kostenlose Zugang für
+eine begrenzte Testgruppe (Zahl auf dem Poster: 50, muss der echten
+Begrenzung entsprechen). Link für den ersten Kommentar: siehe
+`docs/gtm/linkedin-carousels-01/CAPTIONS.md`.
 Beste Zeiten: 7:30–8:30 Uhr oder 12:00–13:00 Uhr.
 
 ---
@@ -37,7 +42,7 @@ Was hast du aus deinem letzten Führungsseminar noch im Alltag? Ehrlich.
 
 #Leadership #Führung #Kommunikation #Training
 
-> Erster Kommentar: „Wie das Training konkret aussieht, zeige ich am 29.10. um 10 Uhr live, kostenlos: leader-os.de/webinar"
+> Erster Kommentar: „Wir öffnen LeaderOS für eine kleine Testgruppe, kostenlos: [Link]"
 
 ---
 
@@ -119,30 +124,22 @@ Welcher der sechs Schritte fehlt in deinem nächsten Meeting am ehesten?
 
 ---
 
-## LI-05 · Führung ist trainierbar. Wie Fitness. (Webinar-CTA, 28.10.)
+## LI-05 · Führung ist trainierbar. Wie Fitness. (Testgruppen-CTA)
 
-Morgen um 10 Uhr zeige ich zum ersten Mal live,
-wie Führung täglich trainierbar wird.
+Niemand wird fit von einem Vortrag über Fitness.
+Führung funktioniert genauso.
 
-Nicht als Vortrag. Als System.
+Kurze Einheiten, echte Situationen, Feedback, das sofort kommt. Nicht einmal im Jahr zwei Tage, sondern jeden Tag 15 Minuten, am Fall von morgen.
 
-90 Minuten, kostenlos, mit Q&A. Keine Aufzeichnung, das ist Absicht: Live kommen deine Fragen dran, nicht die aus dem Skript.
+Genau dafür haben wir LeaderOS gebaut: meine Methodik als tägliches Training. Die Frameworks aus den Büchern, ein KI-Coach, der sie kennt, Simulationen mit einem Gegenüber, das zurückredet.
 
-Worum es geht:
-· Warum Seminare Wissen verändern, aber kein Verhalten.
-· Wie 15 Minuten am Tag mehr bewegen als zwei Tage im Jahr.
-· Ein echter Führungsfall aus der Community, gemeinsam durchgearbeitet.
-· Die Frameworks dahinter: Feedbackformel, die 10 Stufen des Zuhörens, SEXIER.
-
-Für Führungskräfte und alle, die es werden wollen. Keine Vorkenntnisse nötig, nur eine E-Mail-Adresse.
-
-Donnerstag, 29. Oktober, 10:00 bis 11:30 Uhr, online. Link in den Kommentaren.
+Wir öffnen den Zugang jetzt für eine kleine Testgruppe von Führungskräften. Kostenlos, begrenzte Plätze, kein Abo. Wer dabei sein will: Link im ersten Kommentar.
 
 Wer ist dabei?
 
-#Leadership #Webinar #Führung #LeaderOS
+#Leadership #Führung #Training #LeaderOS
 
-> Erster Kommentar: „Hier anmelden, kostenlos: leader-os.de/webinar"
+> Erster Kommentar: „Testgruppe, kostenlos, begrenzte Plätze: [Link]"
 
 ---
 
