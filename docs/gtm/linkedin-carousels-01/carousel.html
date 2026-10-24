@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Karussells · Wlad Jachtchenko</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Karussell-System · 1080×1350 (4:5) · gleiche DNA wie die Poster-Serie:
+   weißes Blatt mit Linienraster und Rahmen, Outfit-Display, Mono-Annotationen,
+   s/w-Fotos, Lime nur als Punkt und Sticker. ?c=<index>&s=<index> wählt die Folie. */
+:root{--ink:#0a0a0a;--paper:#fff;--rule:#d9d9d9;--mute:#6b6b6b;--lime:#bfff00;
+  --disp:'Outfit',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#333}
+.sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--body)}
+.rules{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 107px,var(--rule) 107px,var(--rule) 108px);background-position:0 54px}
+.margin{position:absolute;top:0;bottom:0;left:60px;width:1px;background:var(--rule)}
+.frame{position:absolute;inset:36px;border:1px solid var(--ink);pointer-events:none}
+.a{position:absolute;font-family:var(--mono);font-size:17px;line-height:1.3;letter-spacing:.01em;white-space:nowrap;color:var(--ink)}
+.a.m{color:var(--mute)}
+.a.r{text-align:right}
+.top-l{left:76px;top:52px}
+.top-r{right:76px;top:52px}
+.foot{position:absolute;left:76px;bottom:56px;font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.swipe{position:absolute;right:76px;bottom:56px;font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.swipe b{color:var(--lime);font-weight:700}
+/* große Wörter */
+.rows{position:absolute;left:0;right:0}
+.row{position:relative}
+.w{position:absolute;top:0;font-family:var(--disp);font-weight:800;line-height:1;letter-spacing:-.05em;white-space:nowrap}
+.w.left{left:76px}.w.right{right:76px}
+.w .p{color:var(--lime)}
+.row .a{bottom:6px}
+/* Cover */
+.body{position:absolute;left:76px;top:876px;width:480px;font-size:23px;line-height:1.45;color:#2a2a2a}
+.body b{font-weight:600;color:var(--ink)}
+.photo{position:absolute;right:0;bottom:0;width:430px;height:520px;overflow:hidden;background:#111}
+.photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08)}
+.sticker{position:absolute;left:566px;top:808px;width:150px;height:150px;border-radius:999px;background:var(--lime);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-8deg);z-index:2}
+.sticker b{font-family:var(--disp);font-weight:800;font-size:54px;line-height:1;letter-spacing:-.04em}
+.sticker span{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:6px;text-align:center;line-height:1.3;max-width:120px}
+/* Text / Liste */
+.kicker{position:absolute;left:76px;top:150px;font-family:var(--mono);font-size:17px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:12px}
+.kicker::before{content:'';width:9px;height:9px;border-radius:999px;background:var(--lime);box-shadow:0 0 0 3px rgba(191,255,0,.25)}
+.h{position:absolute;left:76px;right:76px;top:214px;font-family:var(--disp);font-weight:800;font-size:92px;line-height:.98;letter-spacing:-.045em;text-wrap:balance}
+.h .p{color:var(--lime)}
+.para{position:absolute;left:76px;right:120px;font-size:34px;line-height:1.45;color:#242424}
+.para b{font-weight:600;color:var(--ink)}
+.items{position:absolute;left:76px;right:76px;list-style:none}
+.items li{display:grid;grid-template-columns:120px 1fr;gap:0 24px;padding:26px 0;border-top:1px solid var(--rule)}
+.items li:last-child{border-bottom:1px solid var(--rule)}
+.items .n{font-family:var(--mono);font-size:16px;letter-spacing:.16em;color:var(--lime);padding-top:10px;text-transform:uppercase}
+.items .n b{color:var(--ink);font-weight:700}
+.items h4{font-family:var(--disp);font-weight:800;font-size:40px;line-height:1.05;letter-spacing:-.035em;margin-bottom:8px}
+.items p{font-size:25px;line-height:1.42;color:#3a3a3a}
+/* Foto-Folie */
+.full{position:absolute;inset:0;background:#111}
+.full img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.06) brightness(.72)}
+.full-h{position:absolute;left:76px;right:76px;bottom:200px;font-family:var(--disp);font-weight:800;font-size:104px;line-height:.96;letter-spacing:-.045em;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.5);text-wrap:balance}
+.full-h .p{color:var(--lime)}
+.light .a,.light .foot,.light .swipe{color:#fff}
+.light .foot{color:rgba(255,255,255,.75)}
+.light .frame{border-color:rgba(255,255,255,.6)}
+/* Figur-Folie */
+.fade{position:absolute;left:76px;right:76px;top:150px;font-weight:600;font-size:62px;line-height:1.08;letter-spacing:-.025em}
+.fade span{display:block}
+.fade span:nth-child(2){opacity:.5}
+.fade span:nth-child(3){opacity:.22}
+.big{position:absolute;left:76px;top:560px;font-family:var(--disp);font-weight:800;font-size:380px;line-height:1;letter-spacing:-.06em;white-space:nowrap}
+.big .p{color:var(--lime)}
+.fig{position:absolute;z-index:3;filter:drop-shadow(0 0 3px rgba(255,255,255,1)) drop-shadow(0 0 12px rgba(255,255,255,.9))}
+.fig svg{display:block;fill:#fff}
+.vert{position:absolute;writing-mode:vertical-rl;font-family:var(--mono);font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);right:76px;top:560px}
+.vert b{color:var(--ink);font-weight:700}
+/* CTA */
+.cta-note{position:absolute;left:76px;top:1178px;font-family:var(--mono);font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet"></div>
+<script src="data.js"></script>
+<script>
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const SIT = '<svg viewBox="0 0 60 60"><circle cx="16" cy="8" r="7"/><path d="M9 16h14l3 22H11z"/><rect x="11" y="35" width="33" height="9" rx="2"/><rect x="37" y="42" width="9" height="15" rx="2"/><rect x="37" y="55" width="16" height="5" rx="2"/><path d="M22 20l12 14" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/></svg>';
+const AVAIL = 1080 - 152;
+
+// v=ig rendert die Instagram-Variante (Link in der Bio statt im ersten Kommentar)
+const IG = new URLSearchParams(location.search).get('v') === 'ig';
+const LINK = IG ? 'Link in der Bio' : 'Link im ersten Kommentar';
+
+function chrome(c, s, n, light) {
+  const id = `${c.id} · ${s + 1}/${n}`;
+  const last = s === n - 1;
+  return `<div class="a m top-l">${esc(FOOT.toLowerCase())}</div><div class="a r top-r">${esc(id)}</div>` +
+    `<div class="foot">${esc(c.title)}</div>` +
+    `<div class="swipe">${last ? esc(LINK.toLowerCase()) + ' <b>.</b>' : 'weiter <b>→</b>'}</div>`;
+}
+
+function rowsHtml(rows, top, height) {
+  const n = rows.length;
+  const rowH = Math.floor(height / n);
+  return { html: `<div class="rows" style="top:${top}px;height:${height}px">` + rows.map(([word, side, last]) => {
+    const dot = last ? '<span class="p">.</span>' : '';
+    return `<div class="row" style="height:${rowH}px"><div class="w ${side}">${esc(word)}${dot}</div></div>`;
+  }).join('') + '</div>', rowH };
+}
+function annotate(rows, anns) {
+  // Annotationen (Mono) gegenüber der Wörter: anns[0] in Zeile 2, anns[1] in der letzten Zeile
+  const els = document.querySelectorAll('.row');
+  const put = (i, text) => {
+    if (!els[i] || !text) return;
+    const side = rows[i][1] === 'left' ? 'right:76px' : 'left:76px';
+    els[i].insertAdjacentHTML('beforeend', `<div class="a m" style="${side}">${esc(text)}</div>`);
+  };
+  if (Array.isArray(anns)) { put(1, anns[0]); put(rows.length - 1, anns[1]); } else if (anns) put(rows.length - 1, anns);
+  // Nummern (01)/(02) auf Zeilen ohne Annotation, nie zwei Marken auf einer Seite
+  let k = 0;
+  [0, 2, 1, 3].forEach((i) => {
+    if (k >= 2 || !els[i] || els[i].querySelector('.a')) return;
+    const side = rows[i][1] === 'left' ? 'right:76px' : 'left:76px';
+    els[i].insertAdjacentHTML('beforeend', `<div class="a" style="${side}">(0${k + 1})</div>`);
+    k += 1;
+  });
+}
+function fit(rowH, base) {
+  const words = Array.from(document.querySelectorAll('.w'));
+  let size = Math.min(base, Math.floor(rowH * 0.92));
+  words.forEach((w) => { w.style.fontSize = size + 'px'; });
+  const widest = Math.max(...words.map((w) => w.getBoundingClientRect().width));
+  if (widest > AVAIL) size = Math.floor(size * (AVAIL / widest));
+  words.forEach((w) => { w.style.fontSize = size + 'px'; w.style.top = Math.max(0, Math.floor((rowH - size * 0.98) / 2) - 6) + 'px'; });
+}
+
+function render(ci, si) {
+  const c = CAROUSELS[ci];
+  const n = c.slides.length;
+  const s = c.slides[si];
+  const sheet = document.getElementById('sheet');
+  sheet.className = 'sheet';
+  let html = '<div class="rules"></div><div class="margin"></div><div class="frame"></div>';
+
+  if (s.t === 'cover') {
+    const r = rowsHtml(s.rows, 104, 720);
+    html += r.html + `<div class="body">${s.p}</div>` +
+      `<div class="photo"><img src="${s.photo}" style="object-position:${s.pos || '50% 50%'}" alt=""></div>` +
+      `<div class="sticker"><b>${esc(s.sticker[0])}</b><span>${esc(s.sticker[1])}</span></div>` + chrome(c, si, n);
+    sheet.innerHTML = html; annotate(s.rows, s.ann); fit(r.rowH, 196);
+  } else if (s.t === 'statement') {
+    const r = rowsHtml(s.rows, 150, 860);
+    html += r.html + chrome(c, si, n);
+    sheet.innerHTML = html; annotate(s.rows, s.ann); fit(r.rowH, 230);
+  } else if (s.t === 'text') {
+    html += `<div class="kicker">${esc(s.kicker)}</div><div class="h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
+      `<div class="para" id="para">${s.p}</div>` + chrome(c, si, n);
+    sheet.innerHTML = html;
+    const h = document.querySelector('.h').getBoundingClientRect();
+    document.getElementById('para').style.top = Math.round(h.bottom - sheet.getBoundingClientRect().top + 54) + 'px';
+  } else if (s.t === 'list') {
+    html += `<div class="kicker">${esc(s.kicker)}</div><div class="h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
+      `<ul class="items" id="items">` + s.items.map(([t, d], i) => `<li><span class="n"><b>${String(i + 1).padStart(2, '0')}</b></span><div><h4>${esc(t)}</h4><p>${esc(d)}</p></div></li>`).join('') + '</ul>' + chrome(c, si, n);
+    sheet.innerHTML = html;
+    const h = document.querySelector('.h').getBoundingClientRect();
+    const ul = document.getElementById('items');
+    ul.style.top = Math.round(h.bottom - sheet.getBoundingClientRect().top + 44) + 'px';
+    // Liste muss über dem Fuß enden: notfalls kompakter
+    let guard = 0;
+    while (ul.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top > 1210 && guard < 8) {
+      ul.querySelectorAll('li').forEach((li) => { li.style.padding = (26 - 3 * (guard + 1)) + 'px 0'; });
+      ul.querySelectorAll('h4').forEach((e) => { e.style.fontSize = (40 - 2 * (guard + 1)) + 'px'; });
+      ul.querySelectorAll('p').forEach((e) => { e.style.fontSize = (25 - 1 * (guard + 1)) + 'px'; });
+      guard += 1;
+    }
+  } else if (s.t === 'photo') {
+    sheet.className = 'sheet light';
+    html = `<div class="full"><img src="${s.photo}" style="object-position:${s.pos || '50% 50%'}" alt=""></div><div class="frame"></div>` +
+      `<div class="full-h">${esc(s.h).replace(/\.$/, '<span class="p">.</span>')}</div>` +
+      (s.ann ? `<div class="a" style="left:76px;bottom:150px;color:rgba(255,255,255,.75)">${esc(s.ann)}</div>` : '') + chrome(c, si, n, true);
+    sheet.innerHTML = html;
+  } else if (s.t === 'figure') {
+    const word = s.word;
+    const letters = word.split('').map((ch, i) => `<span data-i="${i}">${esc(ch)}</span>`).join('');
+    html += `<div class="fade"><span>${esc(s.fade)}</span><span>${esc(s.fade)}</span><span>${esc(s.fade)}</span></div>` +
+      (s.ann ? `<div class="a m" style="left:76px;top:500px">${esc(s.ann)}</div>` : '') +
+      `<div class="big" id="big">${letters}<span class="p">.</span></div>` +
+      `<div class="vert">${esc(s.vert)}</div>` + chrome(c, si, n);
+    sheet.innerHTML = html;
+    if (s.letter >= 0) {
+      // Der Innenraum des Buchstabens (das o) wird zum dunklen Hohlraum, die
+      // leuchtende Figur sitzt darin: „gefangen im eigenen Kopf".
+      const el = document.querySelector(`#big span[data-i="${s.letter}"]`);
+      const b = el.getBoundingClientRect(); const o = sheet.getBoundingClientRect();
+      const size = parseFloat(getComputedStyle(el).fontSize);
+      const cx = b.left - o.left + b.width / 2 + size * 0.01;
+      const cy = b.top - o.top + size * 0.665;           // Mitte der x-Höhe
+      const rx = size * 0.125, ry = size * 0.165;        // deckt den Innenraum des o
+      const w = Math.round(size * 0.15);
+      sheet.insertAdjacentHTML('beforeend',
+        `<div style="position:absolute;left:${Math.round(cx - rx)}px;top:${Math.round(cy - ry)}px;width:${Math.round(2 * rx)}px;height:${Math.round(2 * ry)}px;border-radius:50%;background:#0a0a0a;z-index:2"></div>` +
+        `<div class="fig" style="left:${Math.round(cx - w / 2)}px;top:${Math.round(cy - w * 0.45)}px;width:${w}px">${SIT}</div>`);
+    }
+  } else if (s.t === 'cta') {
+    const r = rowsHtml(s.rows, 214, 400);
+    html += `<div class="kicker">${esc(s.kicker)}</div>` + r.html +
+      `<div class="para" style="top:690px;right:76px;font-size:31px">${s.p.replace('Link im ersten Kommentar', LINK)}</div>` +
+      `<div class="sticker" style="left:auto;right:96px;top:980px;transform:rotate(8deg)"><b>${esc(s.sticker[0])}</b><span>${esc(s.sticker[1])}</span></div>` +
+      `<div class="cta-note">${esc(s.note)}</div>` + chrome(c, si, n);
+    sheet.innerHTML = html; fit(r.rowH, 196);
+  }
+  document.title = `${c.id} · ${si + 1}/${n}`;
+}
+const q = new URLSearchParams(location.search);
+const ci = Math.max(0, Math.min(CAROUSELS.length - 1, Number(q.get('c') || 0)));
+const si = Math.max(0, Math.min(CAROUSELS[ci].slides.length - 1, Number(q.get('s') || 0)));
+document.fonts.ready.then(() => render(ci, si));
+</script>
+</body>
+</html>
