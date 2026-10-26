@@ -35,7 +35,7 @@ const TIERS = [
     valueHint: '12 Monate Zugang · 30-Tage Geld-zurück · Raten möglich',
     features: [
       { label: 'Zugriff auf alle Coaching-Module', has: true, bold: true },
-      { label: 'Alle 10 Kurse · 72 Folgen (je < 12 Min) ab 01.11.2026', has: true, highlight: true },
+      { label: 'Alle 10 Kurse · 72 Folgen (je < 12 Min) ab 30.11.2026', has: true, highlight: true },
       { label: 'KI-gestützte Analyse & Feedback', has: true, highlight: true },
       { label: 'Video- & Speech-Coaching', has: true, highlight: true },
       { label: '30-Tage Leadership Plan', has: true },

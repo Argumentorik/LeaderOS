@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 from datetime import date, datetime, timezone
 
-DEFAULT_LAUNCH = "2026-11-01"
+DEFAULT_LAUNCH = "2026-11-30"
 
 
 def launch_date() -> date:

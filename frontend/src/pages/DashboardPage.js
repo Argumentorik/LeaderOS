@@ -20,14 +20,15 @@ import { ArgumentationPrepCard } from '../components/dashboard/ArgumentationPrep
 import { DashboardFirstTour } from '../components/onboarding/DashboardFirstTour';
 import { GuideClipsRow } from '../components/guide/GuideClipsRow';
 import {
-  Section, TodayHeader, TodayTaskCard, CheckinRow, AskCoachCard, CoursesCard, MyTasksCard,
-  QuickTaskCard, AboutYouCard, NextEventRow, ProgressLine, LabCard,
+  Section, CoursesCard, MyTasksCard,
+  QuickTaskCard, AboutYouCard, ProgressLine, LabCard,
 } from '../components/dashboard/home/HomeSections';
 import api from '../lib/api';
 import { loadDashboardBootstrap } from '../lib/dashboardBootstrap';
 import { CreditBadge } from '../components/dashboard/CreditBadge';
 import { UpcomingEventsCard } from '../components/dashboard/UpcomingEventsCard';
 import { DashboardMore } from '../components/dashboard/DashboardMore';
+import { BentoDashboard } from '../components/dashboard/BentoDashboard';
 import { TierBadge } from '../components/shared/TierBadge';
 import { useTier } from '../contexts/TierContext';
 import {
@@ -85,13 +86,6 @@ export default function DashboardPage() {
     loadDashboard();
   }, [loadDashboard]);
 
-  const getGreeting = () => {
-    const h = new Date().getHours();
-    if (h < 12) return de ? 'Guten Morgen' : 'Good Morning';
-    if (h < 17) return de ? 'Guten Tag' : 'Good Afternoon';
-    return de ? 'Guten Abend' : 'Good Evening';
-  };
-
   const copyReferral = () => {
     navigator.clipboard.writeText(`${LEADERCHECK_URL}?ref=${referralCode}`);
     toast.success(de ? 'Referral-Link kopiert!' : 'Referral link copied!');
@@ -142,95 +136,63 @@ export default function DashboardPage() {
         {showOnboarding && <OnboardingTour onComplete={() => setShowOnboarding(false)} />}
         <OnboardingVideoModal />
 
-        {/* ── 1 · Datum und Stand (Iter 185) ── */}
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <TodayHeader name={ud.name} greeting={getGreeting()} day={todayTask?.day} total={30} de={de} />
-          <div className="flex items-center gap-2 flex-wrap pt-1">
-            <TierBadge size="sm" />
-            <CreditBadge de={de} />
-            {tierInfo?.inGracePeriod && (
-              <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
-                {de ? 'Jetzt verlängern' : 'Renew now'}
-              </button>
-            )}
-          </div>
+        {/* ── Kopfzeile: nur Status-Badges — Begrüßung lebt in der Bento-Header-Karte ── */}
+        <div className="flex items-center justify-end gap-2 flex-wrap mb-5">
+          <TierBadge size="sm" />
+          <CreditBadge de={de} />
+          {tierInfo?.inGracePeriod && (
+            <button onClick={() => openPricing('leadership_os_plus')} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 hover:bg-rose-500/25 transition-colors" data-testid="grace-badge">
+              {de ? 'Jetzt verlängern' : 'Renew now'}
+            </button>
+          )}
         </div>
 
         <StripeModeBanner />
-        <ActionInbox de={de} />
 
-        {/* ── 2 · Die Aufgabe für heute ── */}
-        <Section id="task" title={de ? 'Die Aufgabe für heute' : "Today's task"}
-                 hint={de ? 'Eine Übung aus dem 30-Tage-Programm — kurz, konkret, für heute.' : 'One exercise from the 30-day program — short and concrete.'}>
-          <TodayTaskCard task={todayTask} de={de} navigate={navigate}
-                         openCount={todayTask?.open_count || 0}
-                         onStart={(day) => api.post(`/challenge30/start/${day}`).catch(() => {})} />
-        </Section>
-
-        {/* ── 3 · Check-in ── */}
-        <Section id="checkin" title={de ? 'Check-in (2 Minuten)' : 'Check-in (2 minutes)'}
-                 hint={de ? 'Kurz festhalten, was heute lief — daraus lernt dein Coach, was du brauchst.' : 'Note how today went — your coach learns from it.'}>
-          <CheckinRow done={checkinDone} de={de} navigate={navigate} />
-        </Section>
-
-        {/* ── 4 · Frag deinen Coach ── */}
-        <Section id="coach" title={de ? 'Frag deinen Coach' : 'Ask your coach'}
-                 hint={de ? 'WladBot antwortet auf deine Führungsfragen — mit Wlads Material und deinem Kontext.' : 'WladBot answers your leadership questions — from Wlad’s material and your context.'}>
-          <AskCoachCard de={de} navigate={navigate} />
-        </Section>
-
-        {/* ── 4b · Leadership LAB: erst nach den 30 Tagen der „nächste Schritt" (Iter 186) ── */}
-        {(challengeComplete || labEnrolled) && (
-          <Section id="lab" title="Leadership LAB"
-                   hint={de ? 'Die Weiterbildung nach dem Einstieg: Kurse, Live-Calls, eigene Anmeldung.' : 'The programme after the intro: courses, live calls, own enrolment.'}>
-            <LabCard enrolled={labEnrolled} de={de} navigate={navigate} />
-          </Section>
-        )}
-
-        {/* ── 5 · Kurse ── */}
-        <Section id="courses" title={de ? 'Kurse' : 'Courses'}
-                 hint={de ? 'Kurze Videofolgen von Wlad, jede unter 12 Minuten. Folge 1 jedes Kurses ist frei.' : 'Short video episodes from Wlad, each under 12 minutes. Episode 1 of each course is free.'}>
-          <CoursesCard status={coursesStatus} de={de} navigate={navigate} onUnlock={() => openPricing('leadership_os')} />
-        </Section>
-
-        {/* ── 6 · Meine Aufgaben (Iter 188: Menüpunkt bleibt draußen, hier ist der Ort) ── */}
-        <Section id="my-tasks" title={de ? 'Meine Aufgaben' : 'My tasks'}
-                 hint={de ? 'Was bei dir offen ist — direkt abhaken.' : 'What is open for you — tick it off right here.'}>
-          <MyTasksCard de={de} navigate={navigate} />
-        </Section>
-
-        {/* ── 7 · Eigene Aufgabe anlegen ── */}
-        <Section id="own-task" title={de ? 'Eigene Aufgabe anlegen' : 'Create your own task'}
-                 hint={de ? 'Alles, was du dir vornimmst, landet in deiner Aufgabenliste.' : 'Anything you take on lands in your task list.'}>
-          <QuickTaskCard de={de} />
-        </Section>
-
-        {/* ── 7 · Über dich ── */}
-        {!aboutComplete && (
-          <Section id="about-you" title={de ? 'Über dich' : 'About you'}
-                   hint={de ? 'Drei kurze Angaben, damit die Antworten zu deiner Lage passen. Jederzeit überspringbar.' : 'Three short answers so the advice fits your situation. Skippable anytime.'}>
-            <AboutYouCard user={ud} de={de}
-                          onSaved={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }}
-                          onSkip={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }} />
-          </Section>
-        )}
-
-        {/* ── 8 · Nächstes Live-Event ── */}
-        {nextEvent && (
-          <Section id="event" title={de ? 'Nächstes Live-Event' : 'Next live event'}
-                   hint={de ? 'Live mit Wlad: Fragen stellen, Sparring bekommen.' : 'Live with Wlad: ask questions, get sparring.'}>
-            <NextEventRow event={nextEvent} de={de} navigate={navigate} />
-          </Section>
-        )}
-
-        {/* ── 9 · Dein Weiterkommen ── */}
-        <Section id="progress" title={de ? 'Dein Weiterkommen' : 'Your progress'}
-                 hint={de ? 'Kein Ranking — nur, was du bisher gemacht hast.' : 'No ranking — just what you have done so far.'}>
-          <ProgressLine levelName={levelName} daysIn={daysIn} videosSeen={videosSeen} eventsAttended={eventsAttended} de={de} />
-        </Section>
+        {/* ── Bento-Dashboard: der eine Fokus auf heute (Iter 196 Redesign) ── */}
+        <BentoDashboard
+          de={de} name={ud.name} navigate={navigate}
+          todayTask={todayTask} c30={c30} checkinDone={checkinDone}
+          nextEvent={nextEvent} streak={streak}
+          onStartTask={(day) => api.post(`/challenge30/start/${day}`).catch(() => {})}
+        />
 
         {/* ── MEHR: alles Weitere, zugeklappt (Zustand gemerkt) ── */}
         <DashboardMore de={de} count={tierInfo?.isAccelerator ? 9 : 10}>
+        {/* Fokus-Entlastung (Iter 196): Backlog + Sekundäres liegt eingeklappt hier. */}
+        <div className="space-y-6 mb-6">
+          <ActionInbox de={de} />
+          <Section id="my-tasks" title={de ? 'Meine Aufgaben' : 'My tasks'}
+                   hint={de ? 'Was bei dir offen ist — direkt abhaken.' : 'What is open for you — tick it off right here.'}>
+            <MyTasksCard de={de} navigate={navigate} />
+          </Section>
+          <Section id="own-task" title={de ? 'Eigene Aufgabe anlegen' : 'Create your own task'}
+                   hint={de ? 'Alles, was du dir vornimmst, landet in deiner Aufgabenliste.' : 'Anything you take on lands in your task list.'}>
+            <QuickTaskCard de={de} />
+          </Section>
+          <Section id="courses-more" title={de ? 'Kurse' : 'Courses'}
+                   hint={de ? 'Kurze Videofolgen von Wlad, jede unter 12 Minuten. Folge 1 jedes Kurses ist frei.' : 'Short video episodes from Wlad, each under 12 minutes. Episode 1 of each course is free.'}>
+            <CoursesCard status={coursesStatus} de={de} navigate={navigate} onUnlock={() => openPricing('leadership_os')} />
+          </Section>
+          {(challengeComplete || labEnrolled) && (
+            <Section id="lab" title="Leadership LAB"
+                     hint={de ? 'Die Weiterbildung nach dem Einstieg: Kurse, Live-Calls, eigene Anmeldung.' : 'The programme after the intro: courses, live calls, own enrolment.'}>
+              <LabCard enrolled={labEnrolled} de={de} navigate={navigate} />
+            </Section>
+          )}
+          {!aboutComplete && (
+            <Section id="about-you" title={de ? 'Über dich' : 'About you'}
+                     hint={de ? 'Drei kurze Angaben, damit die Antworten zu deiner Lage passen. Jederzeit überspringbar.' : 'Three short answers so the advice fits your situation. Skippable anytime.'}>
+              <AboutYouCard user={ud} de={de}
+                            onSaved={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }}
+                            onSkip={() => { try { localStorage.setItem('leaderos_about_you_skipped', '1'); } catch { /* noop */ } setAboutDone(true); }} />
+            </Section>
+          )}
+          <Section id="progress" title={de ? 'Dein Weiterkommen' : 'Your progress'}
+                   hint={de ? 'Kein Ranking — nur, was du bisher gemacht hast.' : 'No ranking — just what you have done so far.'}>
+            <ProgressLine levelName={levelName} daysIn={daysIn} videosSeen={videosSeen} eventsAttended={eventsAttended} de={de} />
+          </Section>
+        </div>
         {/* ── Verschoben nach „Mehr" (Iter 185): Journey, Kennzahlen, XP-Zahl ── */}
         <div className="flex items-center gap-1.5 px-3 py-1.5 mb-4 rounded-full bg-[#BFFF00]/10 border border-[#BFFF00]/20 w-fit" data-testid="streak-bar">
           <Flame size={13} className="text-[#6B8A00] dark:text-[#BFFF00]" />

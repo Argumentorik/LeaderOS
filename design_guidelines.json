@@ -1,133 +1,221 @@
 {
-  "brand_identity": {
-    "name": "WladBot / Leader-OS",
-    "signature_color": "#BFFF00",
-    "theme_preference": "dark-first (with fully supported light mode)",
-    "vibe": "Elite, focused, 'Godmode' Command Center, premium coaching, high-performance"
+  "identity_and_mission": {
+    "persona": "E1 - Creative Anti-AI Designer & Senior UI/UX Architect",
+    "app_type": "Gamified Executive Leadership Habit App (Apple Fitness / Duolingo Style)",
+    "tone": "Professional, encouraging, high-performance coaching in German for mid-50s leaders. Zero slang, high clarity.",
+    "core_objective_1": "Zero Cognitive Overload: Collapse 28 open backlog tasks into DashboardMore drawer component.",
+    "core_objective_2": "Instant Action (Aha! Moment): Highlight 'Die Aufgabe für heute' with glowing high-contrast CTA button 'Folge starten' / 'Aufgabe starten'.",
+    "core_objective_3": "Apple Card Bento Grid: Premium rounded-2xl & rounded-3xl cards, subtle borders, glassmorphism, Apple Fitness-style SVG progress ring & streak tracker ('Tag 3 von 30')."
+  },
+  "theme_and_color_palette": {
+    "theme_mode": "System default with Dark/Light parity toggle (Obsidian Dark primary for executive gamification focus)",
+    "dark_theme": {
+      "background": "#0A0A0A",
+      "card_bg": "#121212",
+      "card_border": "rgba(255, 255, 255, 0.08)",
+      "primary_accent": "#BFFF00",
+      "primary_hover": "#D4FF4D",
+      "primary_text_on_accent": "#000000",
+      "foreground": "#F5F5F7",
+      "muted_foreground": "#A1A1AA"
+    },
+    "light_theme": {
+      "background": "#F4F4F6",
+      "card_bg": "#FFFFFF",
+      "card_border": "rgba(0, 0, 0, 0.06)",
+      "primary_accent": "#6B8A00",
+      "primary_accent_bright": "#BFFF00",
+      "primary_hover": "#546E00",
+      "primary_text_on_accent": "#FFFFFF",
+      "foreground": "#0F0F11",
+      "muted_foreground": "#52525B"
+    },
+    "contrast_rules": "All body text must satisfy minimum 4.5:1 WCAG AA and APCA requirements. Buttons must have explicit hover text color overrides. Neon lime (#BFFF00) used strictly for CTA triggers, active streaks, progress indicators, and status badges."
   },
   "typography": {
-    "strategy": "The 'Tech Executive' Pairing",
-    "headings": {
-      "family": "Outfit, system-ui, sans-serif",
-      "weight": "font-semibold to font-bold",
-      "tracking": "tracking-tight",
-      "usage": "Use for Greeting, Widget titles, stat numbers, and primary CTA buttons. Do not exceed text-4xl on the dashboard."
+    "heading_font": "Outfit, sans-serif (Font-weight: 700 / 800, tracking-tight)",
+    "body_font": "Inter, sans-serif (Font-weight: 400 / 500)",
+    "data_font": "JetBrains Mono, monospace (for numerical indicators, timestamps, and streak counters)",
+    "scale_hierarchy": {
+      "h1_greeting": "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight",
+      "h2_hero": "text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight",
+      "h3_card_title": "text-lg sm:text-xl font-semibold",
+      "body_text": "text-sm sm:text-base leading-relaxed",
+      "caption_badge": "text-xs font-mono uppercase tracking-wider"
     },
-    "body": {
-      "family": "Inter, system-ui, sans-serif",
-      "weight": "font-normal to font-medium",
-      "leading": "leading-relaxed",
-      "usage": "Use for challenge descriptions, tasks, dates, and secondary labels."
-    }
+    "font_ban": "Do NOT use Inter for main card headings. Headlines must use Outfit for distinctive brand authority."
   },
-  "colors": {
-    "dark_mode": {
-      "background": "bg-[#0A0A0A]",
-      "surface": "bg-[#141414] or bg-[#0A0A0A] with 1px border",
-      "surface_elevated": "bg-[#1E1E1E]",
-      "glass": "bg-[#141414]/70 backdrop-blur-xl",
-      "primary": "text-[#BFFF00] bg-[#BFFF00]",
-      "primary_hover": "bg-[#A5E600]",
-      "text_main": "text-white",
-      "text_muted": "text-neutral-400",
-      "border": "border-neutral-800",
-      "border_glow": "border-[#BFFF00]/30"
-    },
-    "light_mode": {
-      "background": "bg-[#F7F7F7]",
-      "surface": "bg-white",
-      "surface_elevated": "bg-[#FAFAFA]",
-      "glass": "bg-white/70 backdrop-blur-xl",
-      "primary": "text-[#0A0A0A] bg-[#BFFF00]",
-      "primary_hover": "bg-[#A5E600]",
-      "text_main": "text-[#0A0A0A]",
-      "text_muted": "text-neutral-500",
-      "border": "border-neutral-200",
-      "border_glow": "border-[#BFFF00]/50"
-    },
-    "rules": {
-      "primary_text_contrast": "CRITICAL: In Light Mode, text ON #BFFF00 buttons must be #0A0A0A. In Dark Mode, text ON #BFFF00 must also be #0A0A0A. Do not use white text on lime green.",
-      "accents": "Use #BFFF00 sparingly. It should highlight progress bars, active states, and primary CTAs. It should NOT be used as a large background or full gradient."
-    }
+  "bento_grid_layout_architecture": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6",
+    "grid_structure": "grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6 align-start",
+    "card_positions": [
+      {
+        "id": "header_streak_card",
+        "name": "Header & Streak Progress Card",
+        "grid_span": "col-span-12",
+        "radius": "rounded-3xl",
+        "description": "Greeting 'Guten Abend, Mert Mutlu' with Apple Fitness style SVG ring, streak counter 'Tag 3 von 30', and daily momentum metrics."
+      },
+      {
+        "id": "hero_mission_card",
+        "name": "Today's Mission Hero Card (Die Aufgabe für heute)",
+        "grid_span": "col-span-12 lg:col-span-7",
+        "radius": "rounded-3xl",
+        "description": "High priority focus card with subtitle 'Tag 3 · Kommunikation: Die 3 Säulen der Überzeugung (10 Min)' and glowing neon-lime CTA button 'Folge starten'."
+      },
+      {
+        "id": "wladbot_ai_coach_card",
+        "name": "AI Coach Card (WladBot)",
+        "grid_span": "col-span-12 lg:col-span-5",
+        "radius": "rounded-3xl",
+        "description": "Interactive AI Assistant with quick prompt pills ('Wie spreche ich schlechte Leistung an?') and instant chat trigger."
+      },
+      {
+        "id": "daily_checkin_card",
+        "name": "Daily 2-Minute Check-in Card",
+        "grid_span": "col-span-12 sm:col-span-6 lg:col-span-5",
+        "radius": "rounded-2xl",
+        "description": "Quick reflection prompt: 'Zwei Minuten: Wie ist dein Tag gelaufen?' with one-tap start button."
+      },
+      {
+        "id": "micro_learning_card",
+        "name": "Micro-Learning Card (Apple TV / Netflix style)",
+        "grid_span": "col-span-12 sm:col-span-6 lg:col-span-7",
+        "radius": "rounded-3xl",
+        "description": "Horizontal video thumbnail format for 'Rhetorik-Grundlagen · Folge 1' with progress overlay and play icon."
+      },
+      {
+        "id": "upcoming_live_event_card",
+        "name": "Upcoming Live Event Card",
+        "grid_span": "col-span-12",
+        "radius": "rounded-2xl",
+        "description": "Banner card featuring 'LIVE KI Call mit Wlad #1 — Do., 29. Okt., 19:00 Uhr' with RSVP toggle button."
+      },
+      {
+        "id": "hidden_tasks_drawer",
+        "name": "Collapsible Backlog Drawer (DashboardMore)",
+        "grid_span": "col-span-12",
+        "radius": "rounded-2xl",
+        "description": "Accordion component hiding 28 open tasks to eliminate cognitive clutter while preserving access when requested."
+      }
+    ]
   },
-  "dashboard_reorganization_strategy": {
-    "goal": "De-clutter the post-login experience. Make 'Daily Work' the hero. Consolidate promos.",
-    "layout_structure": "High-Density Command Center (Bento Grid) with a Left Sidebar.",
-    "zones": {
-      "top_bar": {
-        "content": "Greeting ('Willkommen zurück, {Name}'), Tier Badge, Streak Days, and 'KI-Coach' button.",
-        "design": "Sticky glassmorphic header, flex row, horizontal alignment to save vertical space. Minimalist."
+  "per_card_specifications": {
+    "header_streak_card": {
+      "wrapper_classes": "bg-card text-card-foreground border border-border/60 shadow-sm p-6 sm:p-8 rounded-3xl relative overflow-hidden backdrop-blur-xl",
+      "svg_ring_spec": {
+        "viewBox": "0 0 100 100",
+        "radius": 40,
+        "strokeWidth": 8,
+        "circumference": 251.32,
+        "strokeDashoffset": 175.92,
+        "strokeColor": "#BFFF00",
+        "backgroundColor": "rgba(191, 255, 0, 0.15)"
       },
-      "action_inbox_widget": {
-        "content": "Consolidated Promos: 1) LIVE KI Call, 2) Leader-Diagnose Sync, 3) Strategy-Call Upsell.",
-        "design": "Instead of 3 stacked full-width banners, create a single 'Aktionszentrum' (Action Center) card in the top-right of the dashboard grid, OR a sleek rotating horizontal ticker/carousel just below the header. The 'Bento Inbox' approach is preferred: A single card titled 'Deine nächsten Schritte' containing a compact, dismissible list (using Framer Motion AnimatePresence). Use neon-lime subtle accents for the 'Sync' task, minimal borders for the upsells."
-      },
-      "hero_bento_grid": {
-        "content": "Daily Challenge, Tasks (Aufgaben), and Stats (AI Readiness 81, Lernfortschritt 0%, Tag 30 Meilenstein).",
-        "design": "Grid layout (grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6). The 'Daily Challenge' and 'Lernfortschritt' take col-span-2 or 3 (dominant visual). Stats are col-span-1 summary blocks."
-      },
-      "quote_card": {
-        "content": "'Wlads Zitat des Tages' + 'Wlad hören' (TTS).",
-        "design": "Demote from a full-width block to a sleek, compact Bento square (col-span-1) with a soft gradient or dark card treatment and a subtle floating play button."
-      },
-      "sidebar": {
-        "content": "HEUTE, WACHSTUM, Was ist neu?, Language, Dark Mode, Upgrade, Profile, Logout.",
-        "design": "Clean, 240px fixed width (desktop). Group heavily. Use Phosphor Icons. Ensure the 'Auf OS PLUS upgraden' button is styled elegantly (e.g., ghost button with lime glowing border) rather than a massive block."
+      "copy": {
+        "greeting": "Guten Abend, Mert Mutlu",
+        "subheading": "Du bist auf einem 3-Tage-Streak! Bleib dran für dein Tagesziel.",
+        "streak_label": "Tag 3 von 30",
+        "progress_text": "10% des Programms absolviert"
+      }
+    },
+    "hero_mission_card": {
+      "wrapper_classes": "bg-gradient-to-br from-card via-card to-card/90 border border-primary/20 shadow-xl p-6 sm:p-8 rounded-3xl relative overflow-hidden group hover:border-primary/40 transition-all duration-300",
+      "cta_button_classes": "btn-brand glow-lime px-6 py-3.5 rounded-full font-extrabold text-black bg-[#BFFF00] hover:bg-[#D4FF4D] transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg shadow-[#BFFF00]/20",
+      "copy": {
+        "badge": "DIE AUFGABE FÜR HEUTE",
+        "title": "Kommunikation: Die 3 Säulen der Überzeugung",
+        "duration": "10 Min. Audio & Praxis-Impuls",
+        "cta": "Folge starten"
+      }
+    },
+    "wladbot_ai_coach_card": {
+      "wrapper_classes": "bg-card text-card-foreground border border-border/60 shadow-md p-6 rounded-3xl flex flex-col justify-between space-y-4",
+      "prompt_pills": [
+        "Wie spreche ich schlechte Leistung an?",
+        "Feedback nach OKR-Review formulieren",
+        "Konflikt im Team deeskalieren"
+      ],
+      "copy": {
+        "title": "WladBot KI Coach",
+        "subtitle": "Dein 24/7 Mentor für schwierige Führungsfragen",
+        "input_placeholder": "Stelle Wlad eine Frage zu deiner Führungssituation..."
+      }
+    },
+    "daily_checkin_card": {
+      "wrapper_classes": "bg-card text-card-foreground border border-border/60 shadow-sm p-6 rounded-2xl hover:border-border transition-all",
+      "copy": {
+        "title": "2-Minuten Check-in",
+        "question": "Zwei Minuten: Wie ist dein Tag gelaufen?",
+        "cta": "Jetzt reflektieren"
+      }
+    },
+    "micro_learning_card": {
+      "wrapper_classes": "bg-card text-card-foreground border border-border/60 shadow-md p-6 rounded-3xl space-y-4 overflow-hidden group",
+      "copy": {
+        "title": "Rhetorik-Grundlagen · Folge 1",
+        "category": "MICRO-LEARNING",
+        "duration": "4:30 Min",
+        "cta": "Video abspielen"
+      }
+    },
+    "upcoming_live_event_card": {
+      "wrapper_classes": "bg-card text-card-foreground border border-border/60 shadow-sm p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4",
+      "copy": {
+        "badge": "NÄCHSTES LIVE EVENT",
+        "title": "LIVE KI Call mit Wlad #1",
+        "date_time": "Do., 29. Okt., 19:00 Uhr",
+        "cta": "Teilnahme bestätigen"
+      }
+    },
+    "hidden_tasks_drawer": {
+      "component": "DashboardMore",
+      "wrapper_classes": "bg-card/50 border border-border/40 rounded-2xl p-4 transition-all",
+      "copy": {
+        "trigger_text": "Meine Aufgaben (28 offen)",
+        "subtitle": "Eingeklappt für mehr Fokus auf die heutige Mission"
       }
     }
   },
-  "component_guidelines": {
-    "cards": {
-      "style": "Neumorphic/Technical mix. Flat surface with a precise 1px border. NO heavy drop shadows in dark mode.",
-      "radius": "rounded-2xl",
-      "padding": "p-6 lg:p-8 (Generous spacing)",
-      "hover": "Hover state should subtly lift (-translate-y-0.5) and illuminate the border (border-neutral-700 dark mode / border-neutral-300 light mode).",
-      "godmode_feature": "For the 'Daily Challenge' card, implement the 'Tracing Beam' or subtle inner glow (inset shadow) to make it feel like the active command module."
-    },
-    "buttons": {
-      "primary": "Pill-shaped (rounded-full) or slightly rounded (rounded-lg). bg-[#BFFF00] text-[#0A0A0A] font-medium tracking-tight. Hover: bg-[#A5E600] scale-[1.02] transition-transform.",
-      "secondary": "Glass or Ghost style. bg-transparent border border-neutral-800 text-white (dark mode). Hover: bg-white/5."
-    },
-    "progress_bars": {
-      "style": "Ultra-thin (h-2), track: bg-neutral-800, indicator: bg-[#BFFF00] with a subtle drop-shadow-[0_0_8px_rgba(191,255,0,0.5)]."
-    },
-    "banners": {
-      "style": "If banners must be used, they are 48px height maximum, inline-flex, dismissible, with a subtle left-border accent of #BFFF00 rather than full background fills."
-    }
+  "component_usage_rules": {
+    "icon_library": "lucide-react strictly. DO NOT use emoji characters like 🤖🧠💭💡 for UI icons.",
+    "allowed_icons": [
+      "Play",
+      "CheckCircle2",
+      "Flame",
+      "Sparkles",
+      "MessageSquare",
+      "Calendar",
+      "Clock",
+      "ChevronDown",
+      "ChevronRight",
+      "ArrowRight",
+      "Target",
+      "Trophy"
+    ],
+    "shadcn_components": [
+      "Accordion / Collapsible (for DashboardMore)",
+      "Button",
+      "Badge",
+      "Card",
+      "Progress",
+      "Input",
+      "Tooltip"
+    ],
+    "testing_attribute": "CRITICAL: Every interactive button, input, tab, accordion trigger, and major metric must include a unique `data-testid` attribute (e.g., data-testid='hero-mission-start-button')."
   },
-  "motion_and_interactions": {
-    "page_load": "Staggered fade-up for Bento grid items (Framer Motion: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ staggerChildren: 0.1 }}).",
-    "hover_states": "All interactive elements MUST have a visible hover state (bg color shift or border glow). Transition duration: 200ms ease-out.",
-    "dismissing_promos": "Use AnimatePresence to smoothly collapse the height of a dismissed promo/upsell to 0 before removing it from the DOM."
+  "general_ui_ux_guidelines": {
+    "spacing_philosophy": "Generous Apple iOS spacing (p-6 to p-8 padding on cards, gap-5 to gap-6 on grid). Never let text touch borders.",
+    "micro_interactions": "Smooth transition-all on hover, subtle lift effect (translate-y-0.5), neon glow on high-priority buttons.",
+    "language": "100% German copy across all labels, buttons, tooltips, and badges.",
+    "cognitive_load_rule": "The user must see at a glance: 1. Their streak progress (Ring), 2. Their single mandatory action today (Hero CTA), 3. Quick assistance options (WladBot & Checkin)."
   },
-  "accessibility": {
-    "contrast": "Strict APCA/WCAG check. #BFFF00 on white is inaccessible for text. Always use it as a background with black text, or as a border/icon color.",
-    "focus": "focus-visible:ring-2 focus-visible:ring-[#BFFF00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
-  },
-  "testing": {
-    "requirements": "All interactive elements MUST include a data-testid attribute (e.g., data-testid='promo-dismiss-button', data-testid='start-daily-challenge')."
-  },
-  "instructions_to_main_agent": [
-    "Do NOT remove any existing features (Upsells, Sync, Quote, Stats). Reorganize them into the 'Action Inbox' and 'Bento Grid' to fix the 'too busy' layout.",
-    "Implement the 'Godmode' aesthetic: aggressive use of negative space (p-6/p-8 inside cards), 1px subtle borders, and #BFFF00 as the sole accent color on an otherwise monochrome (#0A0A0A) canvas.",
-    "Merge the 3 full-width banners (Event, Sync, Strategy Call) into a single compact 'Action Center' widget (a card with a stacked list) OR a minimalist top carousel.",
-    "Ensure the design works flawlessly in both dark and light modes using Tailwind dark: modifiers.",
-    "Use standard HTML+Tailwind for layout structure, and Shadcn for interactive components (dropdowns, dialogs).",
-    "Incorporate Framer Motion for smooth layout shifts when users dismiss the upsell/promos."
-  ],
-  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
-    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
-    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
-    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
-    "Create depth through layered design elements with z-index hierarchy.",
-    "Use glass-morphism effects with backdrop filters (12-24px blur).",
-    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific interactive elements.",
-    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
-    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
-    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons. Use proper icon libraries (lucide-react, phosphor-icons).",
-    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
-    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
-    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations separate good from extraordinary.",
-    "Use sonner for toasts, located in /app/src/components/ui/sonner.tsx (or equivalent)."
-  ]
+  "instructions_to_main_agent": {
+    "step_1": "Ensure src/pages/DashboardPage.js or main dashboard components render the updated Bento Grid layout adhering to the exact grid classes.",
+    "step_2": "Utilize existing brand tokens in index.css and tailwind.config.js for #BFFF00 neon lime accents and #0A0A0A obsidian dark cards.",
+    "step_3": "Incorporate SVG Apple Fitness style ring calculation in the Header Card for 'Tag 3 von 30'.",
+    "step_4": "Integrate WladBot prompt pills with interactive action handler.",
+    "step_5": "Keep all 28 backlog tasks hidden inside DashboardMore collapsible accordion.",
+    "step_6": "Attach `data-testid` attributes to all buttons, links, inputs, and card containers."
+  }
 }
