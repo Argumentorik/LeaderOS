@@ -1,7 +1,8 @@
-# LinkedIn · Wlad Jachtchenko · Poster-Serie 01 (fünf Posts)
+# LinkedIn · Wlad Jachtchenko · Poster-Serie 01 (sechs Posts)
 
-Stand 23.10.2026. Bilder: `LI-01.jpg` bis `LI-05.jpg` (2160×2700, 4:5), Quelle
-`poster.html`, Render `render.cjs`. Stil: Typo-Statement auf Linienraster,
+Stand 26.10.2026. Bilder: `LI-01.jpg` bis `LI-06.jpg` (2160×2700, 4:5), Quelle
+`poster.html`, Render `render.cjs`. LI-06 ist die Webinar-Ankündigung (Termin
+aus `frontend/src/data/webinarEvent.js`: Do 26.11.2026, 10:00–11:30 Uhr). Stil: Typo-Statement auf Linienraster,
 Mono-Annotationen, s/w-Foto, Lime nur als Punkt und Sticker (recycelt aus der
 Ledger-Poster-Vorlage, in LeaderOS-DNA).
 
@@ -12,8 +13,9 @@ Erste zwei Zeilen = Hook, der Rest liegt hinter „mehr anzeigen". Wlad gibt
 jeden Post vorab frei (Mail), Max postet oder Mert nach Freigabe der
 Inhaltsadmin-Rechte.
 
-**Reihenfolge und Takt:** LI-01 Do 23.10. · LI-02 Sa 25.10. · LI-03 Mo 27.10.
-· LI-05 Di 28.10. (Beta-CTA) · LI-04 Do 30.10.
+**Reihenfolge und Takt:** steht in `docs/gtm/linkedin-carousels-01/SCHEDULE.json`
+(Poster und Karussells in einem Plan, Zernio-fähig über
+`backend/scripts_post_carousel.py plan`).
 
 **CTA:** kein Webinar, kein Termin. Der Aufruf ist der kostenlose Zugang in
 der Beta-Phase (Zahl auf dem Poster: 50 Plätze, muss der echten Begrenzung
@@ -143,6 +145,25 @@ Wer ist dabei?
 #Leadership #Führung #Training #LeaderOS
 
 > Erster Kommentar: „LeaderOS Beta, kostenlos, 50 Plätze: [Link]"
+
+---
+
+## LI-06 · Führung live. Do, 26. November, 10 Uhr (Webinar)
+
+Niemand wird fit von einem Vortrag über Fitness.
+Deshalb zeige ich es diesmal live.
+
+Donnerstag, 26. November, 10:00 bis 11:30 Uhr: der Charisma-Code in Echtzeit, das Leadership Operating System mit KI-Coach und täglichen Drills, und ein echter Führungsfall aus der Community, gemeinsam durchgearbeitet.
+
+Kostenlos. Live. Mit Q&A. Keine Aufzeichnung, denn der Fall und die Fragen funktionieren nur live.
+
+Für alle, die ein Team, ein Projekt oder ein Gespräch führen, mit oder ohne Titel.
+
+Platz sichern: Link im ersten Kommentar.
+
+#Leadership #Führung #Webinar #Kommunikation
+
+> Erster Kommentar: „Kostenloser Platz im Live-Webinar am 26.11.: https://leader-os.de/webinar?utm_source=linkedin&utm_medium=organic&utm_campaign=webinar-2026-11-26"
 
 ---
 

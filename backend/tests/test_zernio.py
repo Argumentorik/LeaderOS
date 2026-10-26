@@ -205,3 +205,85 @@ def test_cli_post_without_key_fails_cleanly(capsys, monkeypatch):
     rc = cli.main(["post", "C01", "--platform", "instagram", "--account", "acc_1", "--now"])
     assert rc == 1
     assert "ZERNIO_API_KEY" in capsys.readouterr().err
+
+
+SAMPLE_POSTER_CAPTIONS = """# Poster
+
+## LI-06 · Führung live (Webinar)
+
+Hook.
+
+> Erster Kommentar: „Platz sichern: https://leader-os.de/webinar"
+
+---
+
+## Offene Punkte
+"""
+
+
+def test_parse_captions_accepts_poster_ids():
+    parsed = cli.parse_captions(SAMPLE_POSTER_CAPTIONS)
+    assert list(parsed) == ["LI-06"]
+    assert parsed["LI-06"]["title"] == "Führung live (Webinar)"
+    assert parsed["LI-06"]["first_comment"].startswith("Platz sichern")
+
+
+def test_resolve_poster_and_content_override():
+    posters = {"LI-06": {"title": "T", "caption": "Original", "first_comment": "Link"}}
+    media, caption = cli.resolve({"kind": "poster", "id": "LI-06", "platform": "linkedin", "content": "Neu\n"}, {}, {}, posters)
+    assert media == [{"url": "https://leader-os.de/preview/linkedin-01/LI-06.jpg", "type": "image"}]
+    assert caption["caption"] == "Neu"
+    assert caption["first_comment"] == "Link"
+    with pytest.raises(z.ZernioError, match="LI-09"):
+        cli.resolve({"kind": "poster", "id": "LI-09", "platform": "linkedin"}, {}, {}, posters)
+
+
+def test_build_plan_from_repo_schedule():
+    if not SERIES.exists():
+        pytest.skip("Repo-Checkout ohne docs/gtm")
+    schedule = cli.load_schedule()
+    manifest, captions = cli.load_series()
+    plan = cli.build_plan(schedule, schedule["accounts"], manifest, captions, cli.load_posters())
+    assert len(plan) == len(schedule["posts"])
+    assert all(i["account_missing"] for i in plan)
+    assert plan == sorted(plan, key=lambda i: (i["entry"]["date"], i["entry"]["time"]))
+    kinds = {i["entry"].get("kind", "carousel") for i in plan}
+    assert kinds == {"carousel", "poster"}
+    for i in plan:
+        p = i["payload"]
+        assert p["timezone"] == "Europe/Berlin"
+        assert p["scheduledFor"].startswith(i["entry"]["date"])
+        assert p["platforms"][0]["accountId"] == cli.PLACEHOLDER_ACCOUNT
+        if i["entry"]["platform"] == "linkedin" and i["entry"].get("kind", "carousel") == "carousel":
+            assert p["mediaItems"][0]["type"] == "document"
+        if i["entry"]["platform"] == "instagram":
+            assert p["content"].endswith("Link in der Bio.") or not i["first_comment"]
+    later = cli.build_plan(schedule, {}, manifest, captions, cli.load_posters(), start="2026-11-20")
+    assert 0 < len(later) < len(plan)
+
+
+def test_plan_cli_preview_and_send(capsys, monkeypatch):
+    if not SERIES.exists():
+        pytest.skip("Repo-Checkout ohne docs/gtm")
+    monkeypatch.delenv("ZERNIO_API_KEY", raising=False)
+    rc = cli.main(["plan", "--from", "2026-11-23"])
+    out = capsys.readouterr().out
+    assert rc == 0 and "Vorschau" in out and "accountId fehlt" in out
+
+    rc = cli.main(["plan", "--from", "2026-11-23", "--send", "--account-linkedin", "li_1"])
+    err = capsys.readouterr().err
+    assert rc == 1 and "instagram" in err
+
+    sent: list = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(json.loads(request.content))
+        return httpx.Response(201, json={"id": f"post_{len(sent)}"})
+
+    monkeypatch.setattr(cli.ZernioClient, "from_env", classmethod(lambda c: c(api_key="k", transport=httpx.MockTransport(handler))))
+    rc = cli.main(["plan", "--from", "2026-11-23", "--send", "--account-linkedin", "li_1", "--account-instagram", "ig_1"])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert len(sent) == len([e for e in cli.load_schedule()["posts"] if e["date"] >= "2026-11-23"])
+    assert {p["platforms"][0]["accountId"] for p in sent} == {"li_1", "ig_1"}
+    assert "post_1" in out
