@@ -27,6 +27,7 @@
 | `GOOGLE_CLIENT_ID` | ◻️ | Legacy-GIS-Erkennung (Provider-Discovery) |
 | `SENTRY_DSN` | ◻️ | Error-Monitoring |
 | `POSTHOG_API_KEY`, `POSTHOG_HOST` | ◻️ | Produkt-Analytics |
+| `ZERNIO_API_KEY` | ◻️ | Social-Posting-API (Karussells per `scripts_post_carousel.py` planen); ohne Key läuft nur `--dry-run` |
 | `CORS_ORIGINS` | ✅ | `*` oder Domain-Liste |
 | `RAG_EMBEDDINGS_DISABLED` | 🆘 | `1` = Notschalter: kein ONNX-Modell-Load (Keyword-RAG bleibt aktiv) |
 | `RAG_AUTO_INGEST` | 🆘 | `0` = Auto-Ingest beim Boot deaktivieren |
