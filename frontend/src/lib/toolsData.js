@@ -1,15 +1,14 @@
 import {
-  MessageSquareText, Mail, Scale, PartyPopper,
+  Mail, Scale, PartyPopper,
   LayoutList, BarChart3, ListTodo
 } from 'lucide-react';
 
 export const toolsDe = [
-  { id: 'conversation-prep', title: 'Gesprächsvorbereitung', desc: 'Mitarbeitergespräche mit KI-Struktur vorbereiten', icon: MessageSquareText, gradient: 'from-[#0A0A0A] to-[#1A1A2E]',
+  { id: 'decision-maker', title: 'Entscheidungshilfe', desc: 'Strukturierte Entscheidungsanalyse mit Bias-Erkennung', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
     steps: [
-      { q: 'Welche Art von Gespräch?', options: ['Feedback-Gespräch', 'Leistungsbeurteilung', 'Konfliktlösung', 'Karriereentwicklung', 'Schwierige Nachricht', 'Sonstiges'] },
-      { q: 'Mit wem sprichst du?', options: ['Direkter Mitarbeiter', 'Kollege', 'Dein Vorgesetzter', 'Kunde / Stakeholder', 'Neuer Mitarbeiter', 'Sonstiges'] },
-      { q: 'Was ist die Hauptherausforderung?', placeholder: 'Beschreibe die Situation, den Kontext und was du erreichen möchtest...' },
-      { q: 'Welches Ergebnis wünschst du?', options: ['Klare nächste Schritte', 'Verhaltensänderung', 'Zielabstimmung', 'Missverständnis klären', 'Vertrauen aufbauen', 'Sonstiges'] }
+      { q: 'Was entscheidest du?', placeholder: 'Beschreibe die Entscheidung, Optionen und was auf dem Spiel steht...' },
+      { q: 'Wie hoch ist die Auswirkung?', options: ['Hoch — betrifft Team/Unternehmen', 'Mittel — betrifft meine Abteilung', 'Niedrig — betrifft nur mich', 'Dringend — muss heute entschieden werden'] },
+      { q: 'Welche Informationen hast du?', options: ['Alle Daten verfügbar', 'Teilweise — einige Unbekannte', 'Sehr begrenzt — eher Bauchgefühl', 'Widersprüchliche Daten'] }
     ]
   },
   { id: 'email-optimizer', title: 'E-Mail Optimierer', desc: 'E-Mails klar, professionell und wirkungsvoll umschreiben', icon: Mail, gradient: 'from-[#00CC77] to-[#00AA66]',
@@ -19,14 +18,7 @@ export const toolsDe = [
       { q: 'Füge deinen E-Mail-Entwurf ein', placeholder: 'Füge die E-Mail ein, die du optimieren möchtest...' }
     ]
   },
-  { id: 'decision-maker', title: 'Entscheidungshilfe', desc: 'Strukturierte Entscheidungsanalyse mit Bias-Erkennung', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
-    steps: [
-      { q: 'Was entscheidest du?', placeholder: 'Beschreibe die Entscheidung, Optionen und was auf dem Spiel steht...' },
-      { q: 'Wie hoch ist die Auswirkung?', options: ['Hoch — betrifft Team/Unternehmen', 'Mittel — betrifft meine Abteilung', 'Niedrig — betrifft nur mich', 'Dringend — muss heute entschieden werden'] },
-      { q: 'Welche Informationen hast du?', options: ['Alle Daten verfügbar', 'Teilweise — einige Unbekannte', 'Sehr begrenzt — eher Bauchgefühl', 'Widersprüchliche Daten'] }
-    ]
-  },
-  { id: 'team-event-planner', title: 'Team-Event Planer', desc: 'Kreative Event-Ideen mit Agenda, Location-Tipps & Logistik', icon: PartyPopper, gradient: 'from-emerald-500 to-green-500',
+  { id: 'team-event-planner', title: 'Team Event Planner', desc: 'Kreative Event-Ideen mit Agenda, Location-Tipps & Logistik', icon: PartyPopper, gradient: 'from-emerald-500 to-green-500',
     steps: [
       { q: 'Welche Art von Event?', options: ['Teambuilding', 'Strategie-Offsite', 'Feier / Meilenstein', 'Workshop / Training', 'Kickoff-Meeting', 'Social / Spaß'] },
       { q: 'Teamgröße?', options: ['2-5 Personen', '6-15 Personen', '16-30 Personen', '30+ Personen'] },
@@ -34,7 +26,7 @@ export const toolsDe = [
       { q: 'Besondere Anforderungen?', placeholder: 'Budget, spezielle Wünsche, Ernährungseinschränkungen, Tageszeit...' }
     ]
   },
-  { id: 'meeting-builder', title: 'Meeting & Agenda', desc: 'Strukturierte Agenden mit Zeitblöcken & Zielen', icon: LayoutList, gradient: 'from-orange-500 to-amber-500',
+  { id: 'meeting-builder', title: 'Meeting und Agenda', desc: 'Strukturierte Agenden mit Zeitblöcken & Zielen', icon: LayoutList, gradient: 'from-orange-500 to-amber-500',
     steps: [
       { q: 'Welche Art von Meeting?', options: ['1:1 Check-in', 'Team Standup', 'Strategie / Planung', 'Brainstorming', 'Entscheidungs-Meeting', 'Retrospektive', 'All-Hands'] },
       { q: 'Meeting-Dauer?', options: ['15 Minuten', '30 Minuten', '45 Minuten', '1 Stunde', '90 Minuten', '2+ Stunden'] },
@@ -48,22 +40,21 @@ export const toolsDe = [
       { q: 'Beschreibe die Leistung', placeholder: 'Beschreibe den Mitarbeiter: Rolle, Leistungsbeobachtungen, Verhaltensmuster, Stärken und Bedenken...' }
     ]
   },
-  { id: 'priority-planner', title: 'CEO Prioritäten-Planer', desc: 'Impact-basierte Priorisierung & KI-Strategie', icon: ListTodo, gradient: 'from-amber-500 to-yellow-500',
+  { id: 'priority-planner', title: 'Prioritätenplaner', desc: 'Impact-basierte Priorisierung für deinen Führungsalltag', icon: ListTodo, gradient: 'from-amber-500 to-yellow-500',
     steps: [
-      { q: 'Was ist deine größte Herausforderung?', options: ['Zu viele Prioritäten', 'Unklare Strategie', 'Team-Kapazitätsprobleme', 'KI-Integration', 'Wachstum & Skalierung', 'Persönliche Entwicklung'] },
+      { q: 'Was ist deine größte Herausforderung?', options: ['Zu viele Prioritäten', 'Unklare Strategie', 'Team-Kapazitätsprobleme', 'Zusammenarbeit & Abstimmung', 'Wachstum & Skalierung', 'Persönliche Entwicklung'] },
       { q: 'Zeithorizont?', options: ['Diese Woche', 'Dieser Monat', 'Dieses Quartal (90 Tage)', 'Dieses Jahr'] },
-      { q: 'Liste deine aktuellen Aufgaben und Projekte', placeholder: 'Liste alles auf, was auf deinem Tisch liegt. Inklusive Deadlines, Team-Kapazität und KI-Initiativen...' }
+      { q: 'Liste deine aktuellen Aufgaben und Projekte', placeholder: 'Liste alles auf, was auf deinem Tisch liegt. Inklusive Deadlines und Team-Kapazität...' }
     ]
   },
 ];
 
 export const toolsEn = [
-  { id: 'conversation-prep', title: 'Conversation Prep', desc: 'Prepare employee conversations with structured guidance', icon: MessageSquareText, gradient: 'from-[#0A0A0A] to-[#1A1A2E]',
+  { id: 'decision-maker', title: 'Decision Maker', desc: 'Structured decision analysis with bias detection', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
     steps: [
-      { q: 'What type of conversation?', options: ['Feedback Conversation', 'Performance Review', 'Conflict Resolution', 'Career Development', 'Difficult News', 'Other'] },
-      { q: 'Who are you speaking with?', options: ['Direct Report', 'Peer / Colleague', 'Your Manager', 'Client / Stakeholder', 'New Hire', 'Other'] },
-      { q: 'What is the main challenge?', placeholder: 'Describe the situation, context, and what you want to achieve...' },
-      { q: 'What outcome do you want?', options: ['Clear next steps agreed', 'Behavior change', 'Alignment on goals', 'Resolve a misunderstanding', 'Build trust', 'Other'] }
+      { q: 'What are you deciding?', placeholder: 'Describe the decision, options, and stakes...' },
+      { q: 'What is the impact level?', options: ['High — affects whole team/company', 'Medium — affects my department', 'Low — affects only me', 'Urgent — needs decision today'] },
+      { q: 'What information do you have?', options: ['All data available', 'Partial information — some unknowns', 'Very limited — mostly gut feeling', 'Conflicting data'] }
     ]
   },
   { id: 'email-optimizer', title: 'Email Optimizer', desc: 'Rewrite emails to be clear, professional, and impactful', icon: Mail, gradient: 'from-[#00CC77] to-[#00AA66]',
@@ -71,13 +62,6 @@ export const toolsEn = [
       { q: 'What type of email?', options: ['Follow-up', 'Request / Ask', 'Bad News', 'Announcement', 'Feedback', 'Introduction', 'Escalation'] },
       { q: 'What tone do you need?', options: ['Direct & Professional', 'Diplomatic & Soft', 'Empathetic & Warm', 'Authoritative', 'Casual & Friendly'] },
       { q: 'Paste your current email draft', placeholder: 'Paste the email you want to optimize...' }
-    ]
-  },
-  { id: 'decision-maker', title: 'Decision Maker', desc: 'Structured decision analysis with bias detection', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
-    steps: [
-      { q: 'What are you deciding?', placeholder: 'Describe the decision, options, and stakes...' },
-      { q: 'What is the impact level?', options: ['High — affects whole team/company', 'Medium — affects my department', 'Low — affects only me', 'Urgent — needs decision today'] },
-      { q: 'What information do you have?', options: ['All data available', 'Partial information — some unknowns', 'Very limited — mostly gut feeling', 'Conflicting data'] }
     ]
   },
   { id: 'team-event-planner', title: 'Team Event Planner', desc: 'Creative event ideas with location tips, agenda & logistics', icon: PartyPopper, gradient: 'from-emerald-500 to-green-500',
@@ -88,7 +72,7 @@ export const toolsEn = [
       { q: 'Any special requirements?', placeholder: 'Budget range, special wishes, dietary restrictions, time of day...' }
     ]
   },
-  { id: 'meeting-builder', title: 'Meeting & Agenda', desc: 'Structured agendas with time blocks & goals', icon: LayoutList, gradient: 'from-orange-500 to-amber-500',
+  { id: 'meeting-builder', title: 'Meeting and Agenda', desc: 'Structured agendas with time blocks & goals', icon: LayoutList, gradient: 'from-orange-500 to-amber-500',
     steps: [
       { q: 'What type of meeting?', options: ['1:1 Check-in', 'Team Standup', 'Strategy / Planning', 'Brainstorming', 'Decision Meeting', 'Retrospective', 'All-Hands'] },
       { q: 'Meeting duration?', options: ['15 minutes', '30 minutes', '45 minutes', '1 hour', '90 minutes', '2+ hours'] },
@@ -102,11 +86,11 @@ export const toolsEn = [
       { q: 'Describe their performance', placeholder: 'Describe the employee: role, performance observations, behavior patterns, key strengths and concerns...' }
     ]
   },
-  { id: 'priority-planner', title: 'CEO Priority Planner', desc: 'Impact-based prioritization & AI strategy', icon: ListTodo, gradient: 'from-amber-500 to-yellow-500',
+  { id: 'priority-planner', title: 'Priority Planner', desc: 'Impact-based prioritization for your leadership day', icon: ListTodo, gradient: 'from-amber-500 to-yellow-500',
     steps: [
-      { q: 'What is your main challenge right now?', options: ['Too many priorities', 'Unclear strategy', 'Team capacity issues', 'AI integration', 'Growth & Scaling', 'Personal development'] },
+      { q: 'What is your main challenge right now?', options: ['Too many priorities', 'Unclear strategy', 'Team capacity issues', 'Collaboration & alignment', 'Growth & Scaling', 'Personal development'] },
       { q: 'Time horizon?', options: ['This week', 'This month', 'This quarter (90 days)', 'This year'] },
-      { q: 'List your current tasks and projects', placeholder: 'List everything on your plate. Include deadlines, team capacity, and any AI initiatives...' }
+      { q: 'List your current tasks and projects', placeholder: 'List everything on your plate. Include deadlines and team capacity...' }
     ]
   },
 ];

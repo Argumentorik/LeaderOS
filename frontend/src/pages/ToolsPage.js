@@ -10,7 +10,7 @@ import api from '../lib/api';
 import { generatePDF } from '../lib/pdfGenerator';
 import { toolsDe, toolsEn } from '../lib/toolsData';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { toast } from 'sonner';
 import { PersonaStep, StepContent } from '../components/tools/WorkflowSteps';
@@ -70,6 +70,15 @@ export default function ToolsPage() {
   const [showDeepAssist, setShowDeepAssist] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Deep-link: /tools?tool=<id> opens that tool's wizard directly (used by the
+  // Bonus-Tools cards on the Gesprächstraining page).
+  useEffect(() => {
+    const toolId = searchParams.get('tool');
+    if (!toolId) return;
+    const t = tools.find((x) => x.id === toolId);
+    if (t) { setActiveTool(t); setCurrentStep(-1); setAnswers({}); setResult(null); }
+  }, [searchParams, tools]);
 
   const handleSubmitWorkflow = async () => {
     if (loading || !activeTool) return;

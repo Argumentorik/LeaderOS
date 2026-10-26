@@ -114,6 +114,48 @@ PLAYBOOKS = [
             {"title": "Taktiken vorbereiten", "prompt": "Welche Verhandlungstaktiken nutzt du? Ankern, Spiegeln, strategisches Schweigen? Erkenne schwarze Rhetorik."},
             {"title": "Abschluss-Strategie", "prompt": "Wie schließt du die Verhandlung ab? Win-Win formulieren. Nächste Schritte vereinbaren."}
         ]
+    },
+    {
+        "playbook_id": "argumentation-training",
+        "title": "Argumentationstraining",
+        "description": "Baue überzeugende Argumente auf — mit Logos, Ethos und Pathos",
+        "category": "Kommunikation",
+        "agent": "Kommunikator",
+        "steps": [
+            {"title": "These festlegen", "prompt": "Was ist deine Kernaussage? Formuliere die These, die du überzeugend vertreten möchtest, in einem Satz."},
+            {"title": "Zielgruppe verstehen", "prompt": "Wen willst du überzeugen? Was sind deren Interessen, Einwände und Entscheidungskriterien?"},
+            {"title": "Argumente bauen", "prompt": "Nutze die 3 Säulen: Logos (Fakten/Daten), Ethos (Glaubwürdigkeit), Pathos (Emotion). Baue dein stärkstes Argument pro Säule."},
+            {"title": "Einwände entkräften", "prompt": "Welche Gegenargumente sind zu erwarten? Formuliere für jedes eine souveräne Entkräftung. Erkenne schwarze Rhetorik."},
+            {"title": "Schlagfertig abschließen", "prompt": "Lass uns deinen überzeugenden Abschluss formulieren — klar, einprägsam und mit konkretem Call-to-Action."}
+        ]
+    },
+    {
+        "playbook_id": "salary-negotiation",
+        "title": "Gehaltsverhandlung",
+        "description": "Verhandle dein Gehalt souverän — mit Vorbereitung, Ankern und klarer Strategie",
+        "category": "Strategie",
+        "agent": "Problemlöser",
+        "steps": [
+            {"title": "Marktwert bestimmen", "prompt": "Was ist deine Rolle am Markt wert? Sammle Fakten: Benchmarks, deine Leistungen, dein Mehrwert."},
+            {"title": "Zielzahl & Walk-Away", "prompt": "Was ist deine Wunschzahl, was dein Minimum (Walk-Away-Punkt)? Was ist deine BATNA, falls es scheitert?"},
+            {"title": "Argumente mit Belegen", "prompt": "Welche konkreten Erfolge und Zahlen untermauern deine Forderung? Baue 3 belegbare Leistungsargumente."},
+            {"title": "Ankern & Einwände", "prompt": "Wie startest du die Verhandlung (Anker)? Welche Einwände kommen — und wie reagierst du souverän?"},
+            {"title": "Simulation & Abschluss", "prompt": "Lass uns die Verhandlung simulieren. Ich spiele deine Führungskraft. Starte mit deiner Eröffnung."}
+        ]
+    },
+    {
+        "playbook_id": "board-pitch",
+        "title": "Board- oder Investor-Pitch",
+        "description": "Überzeuge Vorstand oder Investoren mit einem klaren, wirkungsvollen Pitch",
+        "category": "Strategie",
+        "agent": "Kommunikator",
+        "steps": [
+            {"title": "Kernbotschaft & Ziel", "prompt": "Was willst du erreichen (Budget, Freigabe, Investment)? Formuliere deine eine Kernbotschaft in einem Satz."},
+            {"title": "Publikum analysieren", "prompt": "Wer sitzt im Raum? Was interessiert Vorstand/Investoren wirklich — Rendite, Risiko, Wachstum, Strategie?"},
+            {"title": "Story & Struktur", "prompt": "Baue die Story: Problem → Lösung → Markt/Zahlen → Ask. Was ist der überzeugendste rote Faden?"},
+            {"title": "Zahlen & Risiken", "prompt": "Welche Kennzahlen belegen deinen Case? Welche Risiken sprichst du proaktiv an — und wie adressierst du sie?"},
+            {"title": "Q&A & Abschluss", "prompt": "Welche kritischen Rückfragen sind zu erwarten? Formuliere souveräne Antworten und einen klaren Call-to-Action."}
+        ]
     }
 ]
 
@@ -350,7 +392,7 @@ TOOL_PROMPTS = {
         "system": "Du bist WLADBOTs Leistungsanalyse-Tool. Erstelle ein strukturiertes Stärken/Schwächen-Profil mit konkretem Entwicklungsplan. Nutze Wlads Coaching-Methodik. Antworte IMMER auf DEUTSCH.\nGeneriere strukturierte Ausgabe als JSON:\n{\"strengths\": [...], \"weaknesses\": [...], \"development_areas\": [...], \"conversation_starters\": [...], \"development_plan\": [{\"goal\": \"...\", \"action\": \"...\", \"timeline\": \"...\"}], \"feedback_script\": \"...\"}"
     },
     "priority-planner": {
-        "title": "CEO Prioritäten-Planer",
-        "system": "Du bist WLADBOTs CEO-Prioritäten-Tool. Hilf bei der Priorisierung nach Impact statt Dringlichkeit. Nutze die Entscheidungsmatrix und KI-Strategien. Antworte IMMER auf DEUTSCH.\nGeneriere strukturierte Ausgabe als JSON:\n{\"high_impact\": [{\"task\": \"...\", \"why\": \"...\", \"time_needed\": \"...\"}], \"delegate\": [{\"task\": \"...\", \"to_whom\": \"...\", \"why\": \"...\"}], \"eliminate\": [{\"task\": \"...\", \"reason\": \"...\"}], \"schedule_later\": [...], \"daily_plan\": [{\"time_block\": \"...\", \"focus\": \"...\"}], \"weekly_themes\": [...]}"
+        "title": "Prioritätenplaner",
+        "system": "Du bist WLADBOTs Prioritäten-Tool für Führungskräfte und Teamleiter. Hilf bei der Priorisierung nach Impact statt Dringlichkeit. Nutze die Entscheidungsmatrix und praxisnahe Strategien für den mittleren Management-Alltag. Antworte IMMER auf DEUTSCH.\nGeneriere strukturierte Ausgabe als JSON:\n{\"high_impact\": [{\"task\": \"...\", \"why\": \"...\", \"time_needed\": \"...\"}], \"delegate\": [{\"task\": \"...\", \"to_whom\": \"...\", \"why\": \"...\"}], \"eliminate\": [{\"task\": \"...\", \"reason\": \"...\"}], \"schedule_later\": [...], \"daily_plan\": [{\"time_block\": \"...\", \"focus\": \"...\"}], \"weekly_themes\": [...]}"
     },
 }

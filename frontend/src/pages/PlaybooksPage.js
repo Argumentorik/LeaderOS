@@ -6,15 +6,26 @@ import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { generatePDF } from '../lib/pdfGenerator';
 import api from '../lib/api';
 import { swrGet } from '../lib/swrCache';
-import { BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Target, ArrowRight } from 'lucide-react';
+import { toolsDe, toolsEn } from '../lib/toolsData';
 import { PlaybookListCard } from '../components/playbooks/PlaybookListCard';
 import { PlaybookChatView } from '../components/playbooks/PlaybookChatView';
 
 const PLAYBOOK_CLIPS = ['bp-playbooks'];
 
+// Exakte Modul-Reihenfolge der NEUEN Gesprächstraining-Seite (10 Hauptmodule).
+const MAIN_MODULE_IDS = [
+  'difficult-conversation', 'argumentation-training', 'team-meeting', 'conflict-resolution',
+  'delegation', 'motivation-talk', 'crisis-communication', 'negotiation-strategy',
+  'salary-negotiation', 'board-pitch',
+];
+
 export default function PlaybooksPage() {
   const { lang } = useLanguage();
   const de = lang === 'de';
+  const navigate = useNavigate();
+  const tools = de ? toolsDe : toolsEn;
   const [playbooks, setPlaybooks] = useState([]);
   const [activePlaybook, setActivePlaybook] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -151,25 +162,54 @@ export default function PlaybooksPage() {
   };
 
   if (!activePlaybook) {
+    const orderedPlaybooks = MAIN_MODULE_IDS
+      .map((id) => playbooks.find((p) => p.playbook_id === id))
+      .filter(Boolean);
     return (
       <DashboardLayout>
-        <div className="p-6 lg:p-10 xl:px-14 w-full space-y-6 bg-gradient-mesh min-h-screen" data-testid="playbooks-page">
+        <div className="p-6 lg:p-10 xl:px-14 w-full space-y-8 bg-gradient-mesh min-h-screen" data-testid="gespraechstraining-page">
           <div className="flex items-center gap-4 animate-fade-in">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#BFFF00] to-[#9ACC00] flex items-center justify-center shadow-lg shadow-[#BFFF00]/15">
-              <BookOpen size={22} className="text-white" />
+              <Target size={22} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Leadership Playbooks' : 'Leadership Playbooks'}</h1>
+              <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Gesprächstraining' : 'Conversation Training'}</h1>
               <p className="text-sm text-muted-foreground font-medium">{de ? 'Interaktive Coaching-Sitzungen mit persönlichem Report' : 'Interactive coaching sessions with personal report'}</p>
             </div>
           </div>
 
           <FeatureVideoSection slugs={PLAYBOOK_CLIPS} de={de} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 animate-fade-in stagger-1">
-            {playbooks.map((pb) => (
-              <PlaybookListCard key={pb.playbook_id} pb={pb} onStart={startPlaybook} loading={loading} de={de} />
-            ))}
+          <div className="space-y-4">
+            <h2 className="text-base md:text-lg font-black tracking-tight" data-testid="main-modules-heading">{de ? 'Module' : 'Modules'}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 animate-fade-in stagger-1">
+              {orderedPlaybooks.map((pb) => (
+                <PlaybookListCard key={pb.playbook_id} pb={pb} onStart={startPlaybook} loading={loading} de={de} />
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-base md:text-lg font-black tracking-tight" data-testid="bonus-tools-heading">{de ? 'Bonus-Tools' : 'Bonus Tools'}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+              {tools.map((t) => (
+                <button key={t.id} type="button"
+                  onClick={() => navigate(`/tools?tool=${t.id}`)}
+                  data-testid={`bonus-tool-${t.id}`}
+                  className="text-left rounded-2xl border border-black/[0.04] dark:border-white/[0.06] bg-card hover:shadow-lg hover:shadow-black/[0.04] hover:-translate-y-0.5 transition-all duration-300 group p-5">
+                  <div className="flex items-start gap-4">
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${t.gradient} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-sm`}>
+                      <t.icon size={20} className="text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[15px] font-bold mb-0.5">{t.title}</h3>
+                      <p className="text-[12px] text-muted-foreground">{t.desc}</p>
+                    </div>
+                    <ArrowRight size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mt-1 shrink-0" />
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </DashboardLayout>

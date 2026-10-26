@@ -54,20 +54,11 @@ export const Sidebar = () => {
       subLine: lang === 'de' ? 'Dein Coach — fragen, wann du willst' : 'Your coach — ask any time',
     },
     {
-      id: 'toolbox', label: lang === 'de' ? 'Werkzeuge & Leitfäden' : 'Tools & playbooks', icon: IconFlow,
-      hint: lang === 'de' ? 'Fertige Vorlagen für deinen Arbeitsalltag.' : 'Ready-made templates for your working day.',
-      defaultOpen: true,
-      children: [
-        { path: '/tools', label: lang === 'de' ? 'Werkzeuge' : 'Tools', icon: IconFlow },
-        { path: '/playbooks', label: lang === 'de' ? 'Leitfäden' : 'Playbooks', icon: IconLayers },
-      ].map(withLock),
-    },
-    {
       id: 'training', label: 'Training', icon: IconBolt, defaultOpen: true,
       children: [
-        { path: '/simulations', label: lang === 'de' ? 'Gesprächs-Training' : 'Conversation training', icon: IconBolt },
+        { path: '/playbooks', label: lang === 'de' ? 'Gesprächstraining' : 'Conversation training', icon: IconBolt },
         { path: '/challengers', label: t('nav.challengers'), icon: IconCrown },
-        { path: '/missions', label: lang === 'de' ? 'Video-Analyse' : 'Video analysis', icon: IconLens },
+        { path: '/missions', label: lang === 'de' ? 'Videoanalyse' : 'Video analysis', icon: IconLens },
       ].map(withLock),
     },
   ].map((it) => (it.children ? it : withLock(it)));
@@ -80,10 +71,8 @@ export const Sidebar = () => {
         { path: '/kurse', label: lang === 'de' ? 'Kurse (72 Folgen)' : 'Courses (72 episodes)', icon: IconCourse },
         { path: '/challenge', label: lang === 'de' ? '30-Tage-Programm' : '30-day program', icon: IconFlame },
         { path: '/video-guide', label: lang === 'de' ? 'Onboarding-Videos' : 'Onboarding videos', icon: IconCamera },
-        { path: '/events', label: lang === 'de' ? 'Live-Events' : 'Live events', icon: IconEvent },
         { path: '/my-path', label: lang === 'de' ? 'Mein Fortschritt' : 'My progress', icon: IconGraph },
-        { path: '/community', label: 'Community', icon: IconDiamond },
-      ].map(withLock),
+      ].map(withLock).map((it) => (it.path === '/kurse' ? { ...it, locked: true } : it)),
     },
     {
       id: 'settings', label: lang === 'de' ? 'Admin & Einstellungen' : 'Admin & settings',
