@@ -1,6 +1,17 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 196 · 26.06.26] UI/IA-Umbau: 3 Kategorien + Gesprächstraining-Hub** — verifiziert via testing_agent (iteration_193.json, 7/7 Checks PASS) + curl
+  - **Navigation reduziert auf genau 3 Kategorien** (`Sidebar.js` Training-Gruppe): Gesprächstraining (→/playbooks), Challengers (→/challengers), Videoanalyse (→/missions). Die alte „Werkzeuge & Leitfäden"-Gruppe (toolbox) komplett entfernt.
+  - **Ausgeblendet:** Community, Live-Events und der „Was ist neu?"-Button (`SidebarFooter.js`). Mobile (`MobileHeroNav.js`): Hero = Dashboard · WladBot · Training; „Mehr" enthält Challengers + Videoanalyse, kein Community/Events/Werkzeuge/Leitfäden.
+  - **Kurse gesperrt:** `/kurse` zeigt jetzt immer ein Schloss-Icon (forced `locked:true`), Klick öffnet das Freischalt-Modal.
+  - **Seiten-Konsolidierung:** Alte Leitfäden-Seite (`PlaybooksPage.js`) ist die NEUE Gesprächstraining-Seite (`/playbooks`, data-testid `gespraechstraining-page`). Zeigt 10 Hauptmodule in fester Reihenfolge + darunter 6 Bonus-Tools.
+  - **10 Hauptmodule** = Playbooks (gefiltert/sortiert über `MAIN_MODULE_IDS`). 3 neue Playbooks in `backend/data.py` ergänzt: `argumentation-training` (Argumentationstraining), `salary-negotiation` (Gehaltsverhandlung), `board-pitch` (Board-/Investor-Pitch). `onboarding-leader` erscheint NICHT auf der Seite.
+  - **6 Bonus-Tools** (`toolsData.js`): Entscheidungshilfe, E-Mail Optimierer, Team Event Planner, Meeting und Agenda, Leistungsanalyse, Prioritätenplaner. „Gesprächsvorbereitung" entfernt; „CEO Prioritäten-Planer" → „Prioritätenplaner" (Backend-Titel + Prompt auf mittleres Management umgestellt). Bonus-Karten deep-linken via `/tools?tool=<id>` (`ToolsPage.js` liest den Query-Param und öffnet den Tool-Wizard direkt).
+  - **Konsistenz-Fixes nach Test:** `FREE_TIER_LOCKED` geleert (Gesprächstraining/Tools jetzt Desktop+Mobile gleich offen; KI weiterhin über Credits begrenzt); veraltete Copy entfernt (moreHint ohne „Live-Events", Gruppenlabel „Wissen & Fortschritt", Dashboard-ActionInbox-Subline ohne „Live-Events").
+  - **Hinweis:** Backend `TOOL_PROMPTS["conversation-prep"]` bleibt dormant im Code (nicht mehr im UI). `/simulations`-Route existiert noch (nicht mehr in der Navi). Alles nur in DIESEM Workspace, NICHT auf `mvpcode`.
+
+
 - [x] **[Iter 195 · 22.06.26] Chat-Reliability Batch 2 (Plan 1.4 / 1.5 / 1.6)** — Backend-only, verifiziert via curl-e2e + Unit-Tests (keine Frontend-Änderungen)
   - **1.4 Event-Loop entlasten:** `routes/video.py` `_ffmpeg_extract_audio` + `_ffmpeg_split_into_chunks` laufen jetzt über `asyncio.create_subprocess_exec` (+ `asyncio.wait_for` 600s) statt blockierendem `subprocess.run` → der 1-Worker-Loop friert während ffmpeg nicht mehr ein. Call-Sites awaiten. Verifiziert: `POST /api/voice/transcribe` mit echtem Audio → HTTP 200. Zusätzlich: `services_llm_async._execute_completion_async` setzt jetzt ein `timeout`-Default (120s) für alle `LlmChat`-Calls (video/tools/challengers/simulations hatten vorher KEIN Ceiling).
   - **1.5 JSON-Retry:** In DIESEM Workspace bereits korrekt — `emergentintegrations.LlmChat` hält `self.messages` über `send_message`-Calls hinweg, d.h. die Reformat-Retries (video/tools/challengers) senden den vollen Prompt-Kontext mit. Der Plan-Punkt betraf mvpcodes stateless `lib/llm_provider.py` (existiert hier nicht). Keine Änderung nötig.

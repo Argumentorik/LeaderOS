@@ -1,0 +1,39 @@
+{
+  "summary": "Frontend-only test of the nav restructure, the new Gesprächstraining page (/playbooks), module start and the bonus-tool deep-link. Ran on desktop 1920x800 (free + standard users) and mobile 390x844 (free). All 7 requested features PASS. Found 3 minor leftovers: stale copy, and the free-tier lock logic is inconsistent.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Free-tier gating of /playbooks and /tools", "issue": "Sidebar.js FREE_TIER_LOCKED still contains '/playbooks' and '/tools'. For free users the desktop sidebar shows Gesprächstraining as locked (nav-locked-playbooks), and clicking it opens the upgrade modal. But on mobile the 'Training' tab (mobile-nav-training) opens /playbooks without a lock, and a direct URL works too. From there the free user can start modules and open /tools?tool=... wizards. Desktop and mobile disagree. Decide whether Gesprächstraining is free or locked and make both match. '/events' in that set is now dead code.", "affected_selectors": ["nav-locked-playbooks", "mobile-nav-training", "bonus-tool-*"]}
+    ],
+    "design_issues": [
+      {"screen": "Sidebar 'Mehr' panel", "issues": ["moreHint text still says 'Kurse, Live-Events, dein Profil und die Einstellungen.' (Sidebar.js line 121), but Live-Events was removed", "Group label 'Wissen & Community' still mentions Community, which was removed"]},
+      {"screen": "Dashboard 'Deine nächsten Schritte'", "issues": ["Subline still lists 'Live-Events · Leader-Diagnose · 1:1-Coaching' even though Events is hidden from the nav"]}
+    ]
+  },
+  "passed_tests": [
+    "Desktop Training group has exactly 3 children: Gesprächstraining, Challengers, Videoanalyse. Standard user gets the nav-playbooks link, which leads to /playbooks. Free user gets nav-locked-playbooks.",
+    "No nav-tools / nav--tools / Werkzeuge / Leitfäden anywhere in the sidebar",
+    "nav-community, nav-events and sidebar-changelog-btn are absent, and the Mehr panel has no Community/Events items",
+    "Kurse renders as nav-locked-kurse with lock-kurse. Clicking it opens the 'Kurse freischalten' locked modal and the URL stays /dashboard.",
+    "/playbooks: gespraechstraining-page has h1 'Gesprächstraining'. main-modules-heading shows exactly 10 modules in the required order. bonus-tools-heading shows exactly 6 tools in the required order. No 'Leader Onboarding', 'Gesprächsvorbereitung' or 'CEO' text.",
+    "Gehaltsverhandlung 'Starten' switches to the chat view (1/5) with the welcome message and 'Schritt 1: Marktwert bestimmen'",
+    "bonus-tool-decision-maker goes to /tools?tool=decision-maker and the Entscheidungshilfe wizard opens directly at step 1",
+    "Mobile: the hero nav shows Dashboard | WladBot | Training | Mehr. Training goes to /playbooks. The Mehr sheet has Challengers and Videoanalyse and no Community, Live-Events, Werkzeuge or Leitfäden."
+  ],
+  "test_report_links": [],
+  "action_items": [
+    "Make free-tier gating consistent: either remove '/playbooks' (and '/tools') from FREE_TIER_LOCKED in Sidebar.js, or also lock the mobile Training tab, the direct route and the bonus-tool cards. Remove the dead '/events' entry.",
+    "Update the Sidebar moreHint copy (drop 'Live-Events') and rename the 'Wissen & Community' group label",
+    "Optional: remove the 'Live-Events' mention from the dashboard 'Deine nächsten Schritte' subline"
+  ],
+  "critical_code_review_comments": [
+    "Sidebar.js FREE_TIER_LOCKED is out of sync with the new IA: /playbooks is locked in the desktop sidebar only, MobileHeroNav has no lock logic, and /tools and /events are no longer nav entries"
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "skipped", "frontend": "100% of requested checks (3 minor copy/consistency issues)"},
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "The dashboard first-tour overlay (dashboard-first-tour) blocks clicks after login. Close it with [data-testid=tour-close]; setting localStorage leaderos_tour_v1 is not enough. Cookie banner: 'Alle akzeptieren'. The locked-feature modal has no role=dialog, so verify it by its text. Free users see nav-locked-playbooks; standard@wladbot.test/test123 sees nav-playbooks. Module cards have a 'Starten' button inside a card with the h3 title."
+}

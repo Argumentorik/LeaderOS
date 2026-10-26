@@ -49,7 +49,7 @@ export const ActionInbox = ({ de = true }) => {
             {de ? 'Deine nächsten Schritte' : 'Your next steps'}
           </span>
           <span className="block text-[10.5px] text-muted-foreground sm:truncate">
-            {de ? 'Live-Events · Leader-Diagnose · 1:1-Coaching' : 'Live events · Leader diagnosis · 1:1 coaching'}
+            {de ? 'Leader-Diagnose · 1:1-Coaching' : 'Leader diagnosis · 1:1 coaching'}
           </span>
         </span>
         <ChevronDown

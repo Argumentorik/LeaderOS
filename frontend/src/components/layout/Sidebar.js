@@ -16,12 +16,10 @@ import { LEADERCHECK_URL } from '../../lib/domains';
 
 // Iter 92.34 (Mert Go-Live §C): items locked for Free tier — render with 🔒
 // icon and redirect to /coaching (upgrade page) when clicked.
-// Entscheidung Iter 185 (3a): /tasks ist offen — es zeigt nur eigene Aufgaben
-// und kostet keine KI-Leistung.
-const FREE_TIER_LOCKED = new Set([
-  '/simulations', '/playbooks', '/tools',
-  '/events',
-]);
+// Nach IA-Umbau (3 Kategorien): Gesprächstraining (/playbooks) + Bonus-Tools (/tools)
+// sind auf Desktop UND Mobile offen — sonst widersprechen sich die Plattformen.
+// KI-Nutzung wird weiterhin über das Credit-System begrenzt.
+const FREE_TIER_LOCKED = new Set([]);
 
 
 export const Sidebar = () => {
@@ -65,7 +63,7 @@ export const Sidebar = () => {
 
   const moreGroups = [
     {
-      id: 'knowledge', label: lang === 'de' ? 'Wissen & Community' : 'Knowledge & community',
+      id: 'knowledge', label: lang === 'de' ? 'Wissen & Fortschritt' : 'Knowledge & progress',
       badge: SBrain, badgeGrad: 'from-[#BFFF00] to-[#9ACC00]',
       items: [
         { path: '/kurse', label: lang === 'de' ? 'Kurse (72 Folgen)' : 'Courses (72 episodes)', icon: IconCourse },
@@ -118,7 +116,7 @@ export const Sidebar = () => {
 
       <SidebarNav mainItems={mainItems} moreGroups={moreGroups} collapsed={collapsed}
         moreLabel={lang === 'de' ? 'Mehr' : 'More'}
-        moreHint={lang === 'de' ? 'Kurse, Live-Events, dein Profil und die Einstellungen.' : 'Courses, live events, your profile and settings.'} />
+        moreHint={lang === 'de' ? 'Kurse, dein Profil und die Einstellungen.' : 'Courses, your profile and settings.'} />
 
       {/* WladHub CTA */}
       {!collapsed && (
