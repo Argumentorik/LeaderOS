@@ -134,7 +134,7 @@ Angles sind ein A/B-Test, nicht drei Aussagen.
 
 ## 3. Produktionswellen
 
-Heute ist der **05.09.**, das Webinar am **29.10.** — 200 Assets sind bis
+Heute ist der **05.09.**, das Webinar am **26.11.** — 200 Assets sind bis
 dahin nicht zu schaffen und wären auch nicht nutzbar. Deshalb gestaffelt:
 
 | Welle | Zeitraum | Menge | Inhalt | Kumuliert |

@@ -15,7 +15,7 @@ Was fertig ist:
   Gesprächstypen, 5 Rollen, Delegation, 10 Stufen des Zuhörens, SEXIER,
   Motivation, KI für Führungskräfte, Schlagfertigkeit, Seminar vs. System,
   dazu Auftakt und Abschluss zum neuen Weg des Lernens.
-- 18 Einzelposts für die Tage danach, inklusive Webinar-Woche vor dem 29.10.
+- 18 Einzelposts für die Tage danach, inklusive Webinar-Woche vor dem 26.11.
 - 30 Stories (ein Prinzip pro Tag).
 - Ein Launch-Bild: WladBot stellt deinen Account vor.
 - Alle Captions mit Hashtags, als Zeitplan für Postproxy exportiert.

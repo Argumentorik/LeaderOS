@@ -83,7 +83,7 @@ export const FAQS = [
   {
     q: 'Gibt es ein kostenloses Webinar?',
     a:
-      'Ja. Am Donnerstag, 29. Oktober 2026, 10:00 bis 11:30 Uhr, zeigt Wlad Jachtchenko live den Charisma-Code, das Leadership Operating System und einen echten Führungsfall, mit Q&A. Kostenlos, ohne Karte, bewusst ohne Aufzeichnung.',
+      'Ja. Am Donnerstag, 26. November 2026, 10:00 bis 11:30 Uhr, zeigt Wlad Jachtchenko live den Charisma-Code, das Leadership Operating System und einen echten Führungsfall, mit Q&A. Kostenlos, ohne Karte, bewusst ohne Aufzeichnung.',
     links: [['/webinar', 'Platz im Live-Webinar sichern']],
   },
 ];

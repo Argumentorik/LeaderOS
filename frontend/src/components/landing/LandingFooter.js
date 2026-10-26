@@ -97,7 +97,7 @@ const COL_EXPLORE = [
   { label: 'Kurse · Katalog & Zugang',      href: '/kurse' },
   { label: 'Kommunikations-Training',       to: '/kommunikation' },
   { label: 'KI-Führungskraft',              to: '/ki-fuehrungskraft' },
-  { label: 'Live-Webinar · 29.10.',         to: '/webinar' },
+  { label: 'Live-Webinar · 26.11.',         to: '/webinar' },
 ];
 
 const COL_COMPANY = [

@@ -21,7 +21,7 @@ Two independent things happen on submit:
      genuine registration, not just a claim in an email.
 
 Nothing here is invented: the "reserved" code never expires, and the
-webinar-specific copy in the drip only fires while the 29.10. date is still
+webinar-specific copy in the drip only fires while the 26.11. date is still
 upcoming (services_email.license_activation_email `webinar_upcoming`).
 
 The nurture journey stops the moment the lead's email shows up in

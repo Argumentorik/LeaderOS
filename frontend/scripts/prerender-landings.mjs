@@ -310,7 +310,7 @@ console.log(`prerender-landings: ${kf.PATH} written to build${kf.PATH}/index.htm
     section('fragen', `<p style="${bib}">▸ Häufige Fragen</p><h2 style="${h2}">Kurz beantwortet.</h2>` +
       wp.FAQ.map(([q, a]) => `<h3 style="${h3}margin-top:22px;">${esc(q)}</h3><p style="${p}">${esc(a)}</p>`).join('')),
     section('start', `<p style="${bib}color:${LIME};">▸ Nächster Schritt</p><h2 style="${h2}color:#fff;">Trainiere mit Wlads Methodik.</h2>` +
-      `<p style="${p}color:rgba(255,255,255,.75);"><a href="https://leaderos.de/signup?trial=14" style="color:${LIME};">14 Tage kostenlos testen</a> · <a href="/webinar" style="color:${LIME};">Platz im Live-Webinar am 29.10. sichern</a></p>`, `background:${INK};`),
+      `<p style="${p}color:rgba(255,255,255,.75);"><a href="https://leaderos.de/signup?trial=14" style="color:${LIME};">14 Tage kostenlos testen</a> · <a href="/webinar" style="color:${LIME};">Platz im Live-Webinar am ${esc(ev.WEBINAR_DATE_NUM)} sichern</a></p>`, `background:${INK};`),
     `</main>`,
     `<footer style="${wrap}padding-top:24px;padding-bottom:40px;font-family:Inter,system-ui,sans-serif;font-size:13px;color:#5F6166;">`,
     `<a href="/" style="color:#5F6166;">LeaderOS</a> · <a href="/kurse" style="color:#5F6166;">Kurse</a> · <a href="/fragen" style="color:#5F6166;">Fragen &amp; Antworten</a> · <a href="/journal" style="color:#5F6166;">Journal</a> · <a href="/impressum" style="color:#5F6166;">Impressum</a> · <a href="/datenschutz" style="color:#5F6166;">Datenschutz</a>`,

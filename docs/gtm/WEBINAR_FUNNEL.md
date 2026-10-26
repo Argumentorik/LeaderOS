@@ -23,7 +23,7 @@ Opt-in                 (E-Mail · routes/webinar.py → Bestätigung + Kalender)
         ↓
 4 kostenlose Videos    (/fuehrung-beginnt-hier · 1 Video/Tag per Mail)
         ↓
-Live-Webinar 29.10.    (Live-Demo + Q&A + Leader-Check-Empfehlung)
+Live-Webinar 26.11.    (Live-Demo + Q&A + Leader-Check-Empfehlung)
         ↓
 Follow-up-Mail         (Tag danach · services_email.webinar_followup_email)
         ↓
@@ -54,7 +54,7 @@ Der Funnel verkauft hart, aber lügt nie:
   Erinnerungen, Meta CAPI). Antwortet das Backend nicht oder kennt die Route
   nicht (404, solange der Emergent-Deploy hinter `mvpcode` liegt), geht die
   Adresse an `/api/newsletter/subscribe` (Supabase-Edge-Function) mit
-  `source=webinar-lp`, `campaign=webinar-2026-10-29`. Die Danke-Seite bekommt
+  `source=webinar-lp`, `campaign=webinar-2026-11-26`. Die Danke-Seite bekommt
   dann `?v=f` und verspricht keine Mails, die niemand verschickt. Fallback-
   Leads vor dem Webinar manuell aus der Newsletter-Tabelle nachziehen.
 - **Keine Fake-Exklusivität bei den 4 Videos.** Die Serie ist frei über
@@ -137,7 +137,7 @@ Ticken, kein Glas, kein KI-generiertes Bildmaterial.
 
 1. **Hero** — echtes Wlad-Porträt, Vierzeiler "Trainiere Führung. Nicht nur
    Wissen.", E-Mail-Formular im ersten Viewport (mobil und Desktop),
-   Fakten-Zeile (29. Okt · 10:00 · 90 Min · 0 € · Noch N Tage)
+   Fakten-Zeile (26. Nov · 10:00 · 90 Min · 0 € · Noch N Tage)
 2. **Beweis** — fünf verifizierte Zahlen als Typo-Zeile, Kunden-Logowand,
    Review-Links (Trustpilot, Greator)
 3. **Problem** — "Du weißt, wie Führung geht. Du kommst nur nicht dazu." +

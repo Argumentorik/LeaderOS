@@ -51,6 +51,8 @@ function setTag(selector, attr, key, value) {
  * @param {string} [m.image]  · absolute OG image URL (defaults og-default)
  * @param {string} [m.type]   · og:type (default 'website')
  * @param {string} [m.imageAlt]
+ * @param {string} [m.robots]  · z. B. 'noindex, nofollow' für Danke-Seiten; der
+ *                               statische Wert aus index.html wird beim Verlassen wiederhergestellt
  * @returns {() => void} cleanup
  */
 export function applyPageMeta(m) {
@@ -61,6 +63,7 @@ export function applyPageMeta(m) {
   if (m.title) document.title = m.title;
 
   const restores = [
+    setTag('meta[name="robots"]', 'name', 'robots', m.robots),
     setTag('meta[name="description"]', 'name', 'description', m.description),
     setTag('meta[property="og:title"]', 'property', 'og:title', m.title),
     setTag('meta[property="og:description"]', 'property', 'og:description', m.description),

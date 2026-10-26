@@ -35,7 +35,7 @@ Alles ändert sich. Führung auch.
 
 Dein Team arbeitet mit KI. Deine Meetings sind remote. Deine Leute erwarten Antworten in Stunden. Nur die Führungsausbildung ist stehen geblieben: ein Seminar, einmal im Jahr, für alle gleich.
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 02 · Alles ändert sich 02  
 `leaderos-b-02.png` · Szene: HF5 · Archiv · endlose Schubladen
@@ -46,7 +46,7 @@ Wissen war der Engpass. Jetzt ist es Übung.
 
 Jedes Framework steht in einem Buch. Jede Führungskraft kann es nachschlagen. Was fehlt, ist die fünfte Wiederholung, bevor es zählt.
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 03 · Alles ändert sich 03  
 `leaderos-b-03.png` · Szene: HF1 · Prüfungssaal · hunderte Plätze, drei besetzt
@@ -79,7 +79,7 @@ Führung wird nicht gelernt. Sie wird trainiert.
 
 Das ist der ganze Paradigmenwechsel in einem Satz. Nicht mehr Wissen sammeln. Reflexe aufbauen. Wie ein Athlet, nicht wie ein Student.
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 06 · Alles ändert sich 06  
 `leaderos-b-06.png` · Print: p-01-wer-nicht-fuehrt · Foto: boardroom
@@ -90,7 +90,7 @@ Wer nicht führt, wird geführt.
 
 Vom Kalender. Von den Lautesten im Meeting. Von Entscheidungen, die andere für dich treffen. Eine Führungs-Generation hört auf zu warten.
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 
 ## Woche 2 · Klarheit: Was LeaderOS ist
@@ -130,7 +130,7 @@ Für wen das nicht ist.
 2. Wer nur zuschauen will, ohne selbst zu üben
 3. Wer 15 Minuten am Tag nicht aufbringt
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 10 · Klarheit 04  
 `leaderos-b-10.png` · Szene: HF11 · Kreisverkehr von oben
@@ -270,16 +270,16 @@ Deshalb endet jeder Kurs im OS nicht mit einem Haken, sondern mit einem Drill an
 
 ## Woche 4 · Events
 
-### 21 · Live-Webinar · 29. Oktober  
+### 21 · Live-Webinar · 26. November  
 `leaderos-b-21.png` · Foto: wlad-portrait
 
 **Caption**
 
 Live mit Wlad.
 
-Donnerstag, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A.
+Donnerstag, 26. November, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A.
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 22 · Live-Webinar · Ablauf  
 `leaderos-b-22.png` · Szene: HF2 · Leeres Theater · ein Pult, ein Scheinwerfer
@@ -293,7 +293,7 @@ Wlad am Pult. Du in der ersten Reihe.
 3. Ein echter Live-Case aus der Community
 4. Q&A: deine Fragen, direkt beantwortet
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 23 · Termine · Was ansteht  
 `leaderos-b-23.png` · Szene: HF3 · Schreibtisch auf der Wiese
@@ -302,11 +302,11 @@ Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
 
 Was ansteht.
 
-1. 29.10. Live-Webinar mit Wlad, 10:00 bis 11:30 Uhrkostenlos · keine Aufzeichnung
+1. 26.11. Live-Webinar mit Wlad, 10:00 bis 11:30 Uhrkostenlos · keine Aufzeichnung
 2. 01.11. LeaderOS offiziell onlineApp-Bibliothek · leader-os.de
 3. 02.11. Beratungsgespräche starten30 Minuten · persönlich · kostenlos
 
-Kostenloser Platz im Live-Webinar am 29.10.: Link im ersten Kommentar.
+Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 ### 24 · Termine · Beratung  
 `leaderos-b-24.png` · Foto: listening
@@ -384,6 +384,6 @@ Harvard-Verhandlung, Feedbackformel, 5 Rollen, Dunkle Rhetorik, SEXIER, 10 Stufe
 
 Entweder du trainierst. Oder du hoffst.
 
-14 Tage kostenlos, ohne Karte. Oder am 29.10. live dabei. Beides ohne Risiko.
+14 Tage kostenlos, ohne Karte. Oder am 26.11. live dabei. Beides ohne Risiko.
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.

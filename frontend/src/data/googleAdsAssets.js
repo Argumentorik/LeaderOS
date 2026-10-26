@@ -1,4 +1,4 @@
-// Google Ads · Text-Assets · Webinar 29.10.2026 + Evergreen-Search.
+// Google Ads · Text-Assets · Webinar 26.11.2026 + Evergreen-Search.
 //
 // Was hier steht, wird im Ad-Studio (/ads → „Google Text-Assets") mit
 // Zeichenzahl gegen die Google-Limits geprüft und per Klick kopiert.
@@ -45,7 +45,7 @@ export const GOOGLE_CAMPAIGNS = [
       'Webinar mit Wlad Jachtchenko',
       'Führung täglich trainierbar',
       'Kostenloses Live-Webinar',
-      '29. Oktober · 10 Uhr · live',
+      '26. November · 10 Uhr · live',
       '90 Minuten, echter Live-Case',
       'Deine Fragen im Q&A',
       'Keine Aufzeichnung, nur live',
@@ -61,7 +61,7 @@ export const GOOGLE_CAMPAIGNS = [
     descriptions: [
       'Wlad Jachtchenko zeigt live, wie Führung in 15 Minuten am Tag trainierbar wird. Kostenlos.',
       'Charisma-Code, Leadership-Betriebssystem und ein echter Live-Case aus der Community.',
-      '90 Minuten am 29. Oktober, 10 Uhr. Live, mit Q&A, ohne Aufzeichnung. Platz sichern.',
+      '90 Minuten am 26. November, 10 Uhr. Live, mit Q&A, ohne Aufzeichnung. Platz sichern.',
       'Seminare ändern Wissen, nicht Verhalten. Im Webinar: Führung, die täglich trainiert wird.',
     ],
   },
@@ -80,7 +80,7 @@ export const GOOGLE_CAMPAIGNS = [
     headlines: [
       'Wlad Jachtchenko: Live-Webinar',
       'Wlad Jachtchenko · LeaderOS',
-      'Live am 29. Oktober',
+      'Live am 26. November',
       'Kostenlos · 90 Minuten · Q&A',
       'Methodik als Trainingssystem',
       'Weiße Rhetorik, Feedbackformel',
@@ -90,7 +90,7 @@ export const GOOGLE_CAMPAIGNS = [
       'Führe besser. Jeden Tag.',
     ],
     descriptions: [
-      'Das Live-Webinar mit Wlad Jachtchenko: 29. Oktober, 10 Uhr, kostenlos, mit Q&A.',
+      'Das Live-Webinar mit Wlad Jachtchenko: 26. November, 10 Uhr, kostenlos, mit Q&A.',
       'Wlads komplette Methodik als tägliches Trainingssystem — zum ersten Mal live gezeigt.',
       'Keine Aufzeichnung. Deine Fragen kommen dran. Platz kostenlos sichern.',
       'LeaderOS: der KI-Coach, der Wlads Bücher kennt. 14 Tage kostenlos, ohne Karte.',
@@ -117,13 +117,13 @@ export const GOOGLE_CAMPAIGNS = [
       'Kritikgespräch ohne Drama',
       'Skript statt Bauchgefühl',
       'Von Wlad Jachtchenko',
-      'Live im Webinar am 29.10.',
+      'Live im Webinar am 26.11.',
       'Kostenlos nachlesen',
     ],
     descriptions: [
       'Beobachtung + Wirkung + Wunsch. Die Feedbackformel von Wlad Jachtchenko, mit Beispielen.',
       'Kritik äußern, ohne Vertrauen zu verlieren. Skript statt Bauchgefühl, zum Nachlesen.',
-      'Und am 29. Oktober live: die Formel an einem echten Fall, im kostenlosen Webinar.',
+      'Und am 26. November live: die Formel an einem echten Fall, im kostenlosen Webinar.',
       'Aus der Methodik hinter 400.000+ Coachings. Kostenlos, ohne Login.',
     ],
   },
@@ -139,17 +139,17 @@ export const GOOGLE_CAMPAIGNS = [
     headlines: [
       'Webinar mit Wlad Jachtchenko',
       'Führung täglich trainierbar',
-      'Kostenlos · 29. Okt · 10 Uhr',
+      'Kostenlos · 26. Nov · 10 Uhr',
       'Keine Aufzeichnung, nur live',
       '3× SPIEGEL-Bestseller-Autor',
     ],
-    longHeadline: 'Führe besser. Jeden Tag. Das kostenlose Live-Webinar mit Wlad Jachtchenko am 29.10.',
+    longHeadline: 'Führe besser. Jeden Tag. Das kostenlose Live-Webinar mit Wlad Jachtchenko am 26.11.',
     descriptions: [
       'Charisma-Code, Leadership-Betriebssystem, ein echter Live-Case. 90 Minuten, mit Q&A.',
       'Seminare ändern Wissen, nicht Verhalten. Im Webinar: Führung in 15 Minuten am Tag üben.',
       'Seit 2007 im Coaching, 400.000+ Klienten, 3× SPIEGEL-Bestseller. Erstmals live als System.',
       'Kostenlos, live, ohne Aufzeichnung. Platz sichern, Kalender-Einladung kommt sofort.',
-      'Wlad Jachtchenko beantwortet deine Fragen persönlich. 29. Oktober, 10 Uhr.',
+      'Wlad Jachtchenko beantwortet deine Fragen persönlich. 26. November, 10 Uhr.',
     ],
   },
   {
@@ -189,7 +189,7 @@ export const GOOGLE_CAMPAIGNS = [
 // Erweiterungen (Assets auf Konto-Ebene) · gelten für alle Search-Kampagnen.
 export const GOOGLE_EXTENSIONS = {
   sitelinks: [
-    { text: 'Live-Webinar 29.10.', desc1: 'Kostenlos, 90 Minuten, Q&A', desc2: 'Keine Aufzeichnung', url: 'https://leader-os.de/webinar' },
+    { text: 'Live-Webinar 26.11.', desc1: 'Kostenlos, 90 Minuten, Q&A', desc2: 'Keine Aufzeichnung', url: 'https://leader-os.de/webinar' },
     { text: 'Leader-Check', desc1: 'Dein Führungsprofil in 10 Min', desc2: 'Kostenlos, ohne Login', url: 'https://leader-check.de/' },
     { text: 'Feedbackformel lesen', desc1: 'Beobachtung, Wirkung, Wunsch', desc2: 'Kostenlos, ohne Login', url: 'https://leader-os.de/journal/feedback-geben-vorlage-bww-framework' },
     { text: 'Über Wlad Jachtchenko', desc1: '3× SPIEGEL-Bestseller', desc2: 'Seit 2007 im Coaching', url: 'https://leader-os.de/wlad-jachtchenko' },

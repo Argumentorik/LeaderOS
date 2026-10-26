@@ -94,7 +94,7 @@ export const KNOWS_ABOUT = [
 
 /** Wo man Wlad erlebt · interne Pfade, die Crawler ohne JS verfolgen. */
 export const WHERE = [
-  ['/webinar', 'Kostenloses Live-Webinar am 29. Oktober 2026', '90 Minuten live: Charisma-Code, das Leadership Operating System, ein echter Führungsfall, Q&A.'],
+  ['/webinar', 'Kostenloses Live-Webinar am 26. November 2026', '90 Minuten live: Charisma-Code, das Leadership Operating System, ein echter Führungsfall, Q&A.'],
   ['/kurse', 'Die Kurse in LeaderOS', 'Sechs Grundlagen-Kurse ab Tag 1, vier Master-Programme im OS-Jahr, elf Framework-Drills.'],
   ['/fragen', 'Fragen & Frameworks', 'Die kanonischen Definitionen von SEXIER, Feedbackformel und den 5 Rollen, kurz und zitierbar.'],
   ['/journal/wer-ist-wlad-jachtchenko', 'Wer ist Wlad Jachtchenko? (Journal)', 'Die ausführliche Feldnotiz zu Werdegang und Methodik.'],
@@ -113,7 +113,7 @@ export const FAQ = [
   ['Welche Methodik vertritt Wlad Jachtchenko?',
     'Führung wird nicht gelernt, sie wird trainiert. Statt Theorie drillbare Frameworks: das SEXIER-Modell, die Feedbackformel B·W·W, die 5 Rollen einer Führungskraft, die 10 Stufen des Zuhörens, die Harvard-Verhandlungsmethode, der Charisma-Code und die Abwehr Dunkler Rhetorik. Hart in der Sache, weich zur Person.'],
   ['Wo kann man Wlad Jachtchenko live erleben?',
-    'Im kostenlosen Live-Webinar am Donnerstag, 29. Oktober 2026, 10:00 bis 11:30 Uhr (leader-os.de/webinar), in den monatlichen Live-Sessions für Mitglieder von LeaderOS und in seinen Keynotes. Speaker- und Kooperationsanfragen: start@aiporate.com (Argumentorik-Akademie GmbH, Berlin).'],
+    'Im kostenlosen Live-Webinar am Donnerstag, 26. November 2026, 10:00 bis 11:30 Uhr (leader-os.de/webinar), in den monatlichen Live-Sessions für Mitglieder von LeaderOS und in seinen Keynotes. Speaker- und Kooperationsanfragen: start@aiporate.com (Argumentorik-Akademie GmbH, Berlin).'],
   ['Wann und wo wurde Wlad Jachtchenko geboren?',
     'Am 11. Januar 1985 in Dnipro. Er wuchs in Deutschland auf, studierte in München an der LMU und in New York an der Columbia University (Master of Arts).'],
 ];

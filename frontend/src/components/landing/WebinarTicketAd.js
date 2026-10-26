@@ -17,7 +17,7 @@ import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/bran
  * attributable separately from click-driven ones.
  */
 
-const WEBINAR_URL = 'https://leader-os.de/webinar?utm_source=qr&utm_medium=onsite&utm_campaign=webinar-2026-10-29';
+const WEBINAR_URL = 'https://leader-os.de/webinar?utm_source=qr&utm_medium=onsite&utm_campaign=webinar-2026-11-26';
 
 const BULLETS = [
   'Live: der Charisma-Code in Echtzeit demonstriert',

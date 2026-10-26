@@ -31,7 +31,7 @@ const STEPS = [
   },
   {
     nr: '02',
-    kicker: 'Do, 29. Oktober · 10:00',
+    kicker: 'Do, 26. November · 10:00',
     title: 'Live-Webinar',
     where: 'kostenlos, 90 Minuten',
     sub: 'Das System live im Einsatz: keine Theorie, sondern echte Hebel.',

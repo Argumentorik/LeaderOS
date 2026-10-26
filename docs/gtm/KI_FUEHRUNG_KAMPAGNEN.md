@@ -8,7 +8,7 @@
 ## Grundsatz: ein Angebot, sechs Versprechen
 
 Alle sechs Kampagnen verkaufen **dasselbe Angebot**: das kostenlose
-Live-Webinar am **Do 29.10.2026, 10:00–11:30 Uhr** (online, keine
+Live-Webinar am **Do 26.11.2026, 10:00–11:30 Uhr** (online, keine
 Aufzeichnung). Unterschiedlich ist nur, **welches Versprechen** die
 Anzeige macht. Die Kette ist bei jeder Kampagne identisch:
 
@@ -78,51 +78,51 @@ Alle Zahlen aus `WLAD_CANON.md`. Keine Greator-Zahlen (10.000+ Manager,
 werden nicht künstlich verknappt.
 
 ### K·01 · `ki` · Manifest
-- **Meta Primärtext:** KI ersetzt keine Führungskraft. Eine Führungskraft mit KI schon. Wlad Jachtchenko zeigt live, wie du KI für Vorbereitung und Training nutzt – und die Fähigkeiten stärkst, die keine KI ersetzt. Kostenlos, Do 29.10., 10 Uhr.
+- **Meta Primärtext:** KI ersetzt keine Führungskraft. Eine Führungskraft mit KI schon. Wlad Jachtchenko zeigt live, wie du KI für Vorbereitung und Training nutzt – und die Fähigkeiten stärkst, die keine KI ersetzt. Kostenlos, Do 26.11., 10 Uhr.
 - **Meta Headline:** Führen mit KI – live mit Wlad
-- **LinkedIn Intro:** Aufgaben verschwinden, Führung nicht. KI übernimmt Vorbereitung, Analyse und Entwürfe – überzeugen, Orientierung geben und Konflikte lösen bleibt dein Job. Im kostenlosen Live-Webinar am 29.10. zeigt Wlad Jachtchenko, wie du beides verbindest.
-- **Google Headlines:** KI-Führungskraft werden · Führen mit KI · Live-Webinar · Kostenlos am 29.10. um 10 Uhr
+- **LinkedIn Intro:** Aufgaben verschwinden, Führung nicht. KI übernimmt Vorbereitung, Analyse und Entwürfe – überzeugen, Orientierung geben und Konflikte lösen bleibt dein Job. Im kostenlosen Live-Webinar am 26.11. zeigt Wlad Jachtchenko, wie du beides verbindest.
+- **Google Headlines:** KI-Führungskraft werden · Führen mit KI · Live-Webinar · Kostenlos am 26.11. um 10 Uhr
 - **Google Descriptions:** KI übernimmt Aufgaben, nicht Führung. Lerne live, wie du beides verbindest. · 3× SPIEGEL-Bestseller-Autor Wlad Jachtchenko, 90 Minuten, kostenlos.
 - **Keywords:** ki führungskraft · führen mit ki · ki für führungskräfte · ersetzt ki führungskräfte · ki leadership
 
 ### K·02 · `zeit` · Vorbereitet in Minuten
-- **Meta Primärtext:** Feedback, Gehaltsgespräch, Board-Präsentation – und jedes Mal eine Stunde Vorbereitung? Der KI-Coach baut dein Gespräch nach Wlads SEXIER-Modell auf: Kontext, Argumente, Gegenseite, Coaching. Live gezeigt am 29.10.
+- **Meta Primärtext:** Feedback, Gehaltsgespräch, Board-Präsentation – und jedes Mal eine Stunde Vorbereitung? Der KI-Coach baut dein Gespräch nach Wlads SEXIER-Modell auf: Kontext, Argumente, Gegenseite, Coaching. Live gezeigt am 26.11.
 - **Meta Headline:** Vorbereitet in Minuten
 - **LinkedIn Intro:** Wie viel Zeit steckt in der Vorbereitung deines nächsten schwierigen Gesprächs? Wlad Jachtchenko zeigt live, wie Führungskräfte das mit einem KI-Coach in Minuten erledigen – strukturiert nach seinem SEXIER-Modell.
 - **Google Headlines:** Gespräche mit KI vorbereiten · In Minuten statt Stunden · Kostenloses Live-Webinar
-- **Google Descriptions:** Feedback, Gehalt, Präsentation: dein Gespräch nach SEXIER aufgebaut. · Wlad Jachtchenko zeigt den KI-Coach live. Do 29.10., 10 Uhr, kostenlos.
+- **Google Descriptions:** Feedback, Gehalt, Präsentation: dein Gespräch nach SEXIER aufgebaut. · Wlad Jachtchenko zeigt den KI-Coach live. Do 26.11., 10 Uhr, kostenlos.
 - **Keywords:** mitarbeitergespräch vorbereiten ki · gespräch vorbereiten ki · feedbackgespräch vorbereiten · ki tools führungskräfte
 
 ### K·03 · `gespraech` · Geprobt, bevor es passiert
-- **Meta Primärtext:** Das Gespräch mit dem Low Performer schiebst du seit Wochen? Spiel es vorher durch – mit einem KI-Coach, der Einwände bringt und dir danach sagt, welcher Satz trägt. Live-Case im Webinar am 29.10.
+- **Meta Primärtext:** Das Gespräch mit dem Low Performer schiebst du seit Wochen? Spiel es vorher durch – mit einem KI-Coach, der Einwände bringt und dir danach sagt, welcher Satz trägt. Live-Case im Webinar am 26.11.
 - **Meta Headline:** Proben statt hoffen
 - **LinkedIn Intro:** Low Performer, Konflikt im Team, Kritik an die Chefin: Die schwierigsten Gespräche führen wir ohne Probe. Im kostenlosen Live-Webinar arbeitet Wlad Jachtchenko einen echten Fall durch und zeigt, wie du solche Gespräche mit KI vorher trainierst.
 - **Google Headlines:** Schwierige Gespräche proben · Low Performer ansprechen · Live-Case mit Wlad
-- **Google Descriptions:** Simulation mit KI-Coach: Einwände, Gegenwind, Feedback danach. · Kostenloses Live-Webinar am 29.10. – mit echtem Führungsfall und Q&A.
+- **Google Descriptions:** Simulation mit KI-Coach: Einwände, Gegenwind, Feedback danach. · Kostenloses Live-Webinar am 26.11. – mit echtem Führungsfall und Q&A.
 - **Keywords:** schwierige gespräche führen · low performer ansprechen · kritikgespräch führen · konfliktgespräch vorbereiten
 
 ### K·04 · `wirkung` · Präsenz. Wärme. Kompetenz.
-- **Meta Primärtext:** Überzeugen hat nichts mit Lautstärke zu tun. Drei Signale entscheiden in Sekunden, ob ein Raum dir folgt: Präsenz, Wärme, Kompetenz. Wlad Jachtchenko zeigt den Charisma-Code live – am 29.10., kostenlos.
+- **Meta Primärtext:** Überzeugen hat nichts mit Lautstärke zu tun. Drei Signale entscheiden in Sekunden, ob ein Raum dir folgt: Präsenz, Wärme, Kompetenz. Wlad Jachtchenko zeigt den Charisma-Code live – am 26.11., kostenlos.
 - **Meta Headline:** Der Charisma-Code, live
 - **LinkedIn Intro:** Warum folgt ein Raum manchen Führungskräften sofort – und anderen nie? Wlad Jachtchenko, dreifacher SPIEGEL-Bestseller-Autor, demonstriert den Charisma-Code live. Danach zeigt dir die KI-Videoanalyse, wo du stehst.
 - **Google Headlines:** Überzeugen ohne lauter werden · Der Charisma-Code live · Wirkung als Führungskraft
-- **Google Descriptions:** Präsenz, Wärme, Kompetenz: die drei Signale, live demonstriert. · 90 Minuten mit Wlad Jachtchenko. Kostenlos, Do 29.10., 10 Uhr.
+- **Google Descriptions:** Präsenz, Wärme, Kompetenz: die drei Signale, live demonstriert. · 90 Minuten mit Wlad Jachtchenko. Kostenlos, Do 26.11., 10 Uhr.
 - **Keywords:** charisma führungskraft · souverän auftreten · überzeugend präsentieren · ausstrahlung führungskraft
 
 ### K·05 · `team` · Weniger Rückfragen
-- **Meta Primärtext:** Du bist der Engpass, weil jede Entscheidung bei dir landet? Delegieren, Erwartungen klären, Feedback, das ankommt: mit der Feedbackformel und einem KI-Coach, der dein nächstes 1:1 vorbereitet. Live am 29.10.
+- **Meta Primärtext:** Du bist der Engpass, weil jede Entscheidung bei dir landet? Delegieren, Erwartungen klären, Feedback, das ankommt: mit der Feedbackformel und einem KI-Coach, der dein nächstes 1:1 vorbereitet. Live am 26.11.
 - **Meta Headline:** Mehr Verantwortung im Team
 - **LinkedIn Intro:** Rückfragen, halbfertige Aufgaben, Kontrolle – das kostet Führungskräfte ihre halbe Woche. Im kostenlosen Live-Webinar zeigt Wlad Jachtchenko, wie du Verantwortung überträgst: mit der Feedbackformel und täglichem Training.
 - **Google Headlines:** Weniger Rückfragen im Team · Delegieren mit System · Feedback, das ankommt
-- **Google Descriptions:** Beobachtung, Wirkung, Wunsch: Feedback, das Verantwortung überträgt. · Live-Webinar mit Wlad Jachtchenko am 29.10., kostenlos und online.
+- **Google Descriptions:** Beobachtung, Wirkung, Wunsch: Feedback, das Verantwortung überträgt. · Live-Webinar mit Wlad Jachtchenko am 26.11., kostenlos und online.
 - **Keywords:** richtig delegieren · feedback geben führungskraft · mitarbeiter führen · verantwortung übertragen
 
 ### K·06 · `aufstieg` · Die offensichtliche Wahl
-- **Meta Primärtext:** Du lieferst, aber bei der Beförderung wird jemand anderes gesehen? Lerne die 5 Rollen einer Führungskraft, trainiere sie täglich mit KI – und mach deinen Beitrag sichtbar. Kostenloses Live-Webinar am 29.10.
+- **Meta Primärtext:** Du lieferst, aber bei der Beförderung wird jemand anderes gesehen? Lerne die 5 Rollen einer Führungskraft, trainiere sie täglich mit KI – und mach deinen Beitrag sichtbar. Kostenloses Live-Webinar am 26.11.
 - **Meta Headline:** Vom Leistungsträger zur Führung
 - **LinkedIn Intro:** Gute Arbeit allein bringt dich nicht in die Führungsrolle. Wlad Jachtchenko zeigt im kostenlosen Live-Webinar, welche 5 Rollen eine Führungskraft ausmachen und wie du sie trainierst, bevor die nächste Stelle vergeben wird.
 - **Google Headlines:** Führungskraft werden · Vom Leistungsträger zur Führung · Die 5 Rollen der Führung
-- **Google Descriptions:** Die 5 Rollen einer Führungskraft kennen und täglich mit KI trainieren. · Kostenloses Live-Webinar mit Wlad Jachtchenko, Do 29.10., 10 Uhr.
+- **Google Descriptions:** Die 5 Rollen einer Führungskraft kennen und täglich mit KI trainieren. · Kostenloses Live-Webinar mit Wlad Jachtchenko, Do 26.11., 10 Uhr.
 - **Keywords:** führungskraft werden · erste führungsposition · beförderung vorbereiten · vom kollegen zum chef
 
 ## SEO und AEO
@@ -133,7 +133,7 @@ Pillar-Seite für den Cluster „KI-Leadership" aus `SEO_KEYWORDS.md`:
 - **Prerendert** (`scripts/prerender-landings.mjs`): Google, Bing und die
   Antwort-Crawler (GPTBot, ClaudeBot, PerplexityBot) lesen den vollen Inhalt
   ohne JavaScript.
-- **Strukturierte Daten:** `WebPage`, `BreadcrumbList`, `Event` (29.10.,
+- **Strukturierte Daten:** `WebPage`, `BreadcrumbList`, `Event` (26.11.,
   kostenlos, online) und `FAQPage` mit 8 Fragen, wortgleich zum sichtbaren Text.
 - **Antwort zuerst:** „Was übernimmt KI in der Führung – und was nicht?" und
   die FAQ („Ersetzt KI Führungskräfte?", „Was ist eine KI-Führungskraft?",

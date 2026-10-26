@@ -43,8 +43,8 @@ from services_email import (
 
 router = APIRouter(prefix="/api", tags=["webinar"])
 
-WEBINAR_CAMPAIGN = "webinar-2026-10-29"
-WEBINAR_DATE_ISO = "2026-10-29T09:00:00Z"  # 10:00 CET (nach der Zeitumstellung)
+WEBINAR_CAMPAIGN = "webinar-2026-11-26"
+WEBINAR_DATE_ISO = "2026-11-26T09:00:00Z"  # Do 26.11.2026, 10:00 CET
 WEBINAR_DURATION_MIN = 90
 WEBINAR_MAX_CAPACITY = 500
 WEBINAR_JOIN_URL = os.environ.get("WEBINAR_JOIN_URL", "https://leader-os.de/webinar")

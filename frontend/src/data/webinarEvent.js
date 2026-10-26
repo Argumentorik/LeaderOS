@@ -11,23 +11,27 @@
  * Datei direkt in Node.
  */
 
-export const WEBINAR_START = '2026-10-29T10:00:00+01:00';
-export const WEBINAR_END = '2026-10-29T11:30:00+01:00';
+export const WEBINAR_START = '2026-11-26T10:00:00+01:00';
+export const WEBINAR_END = '2026-11-26T11:30:00+01:00';
 export const WEBINAR_TS = new Date(WEBINAR_START).getTime();
-export const WEBINAR_DATE_LABEL = 'Do, 29. Oktober 2026';
+export const WEBINAR_DATE_LABEL = 'Do, 26. November 2026';
+/** Kurzformen für Chrome-Zeilen, Share-Texte und Prerender-Links. */
+export const WEBINAR_DATE_SHORT = 'Do 26. Nov · 10:00 Uhr';
+export const WEBINAR_DATE_COMPACT = '26. Nov';
+export const WEBINAR_DATE_NUM = '26.11.';
 export const WEBINAR_TIME_LABEL = '10:00–11:30 Uhr';
-export const WEBINAR_CAMPAIGN = 'webinar-2026-10-29';
+export const WEBINAR_CAMPAIGN = 'webinar-2026-11-26';
 
 /** Seitentitel und Beschreibung von /webinar — identisch im SPA (applyPageMeta)
  * und im Build-Prerendering, damit Crawler und Browser dasselbe sehen. */
 export const WEBINAR_SEO = {
   title: 'Kostenloses Live-Webinar · Trainiere Führung. Nicht nur Wissen. · LeaderOS',
   description:
-    'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 29.10.2026 mit ' +
+    'Du weißt, wie gute Führung geht — du kommst nur nicht dazu. Live-Webinar am 26.11.2026 mit ' +
     'Wlad Jachtchenko (3× SPIEGEL-Bestseller): das erste Leadership Operating System, das Führung ' +
     'täglich in 15 Minuten trainierbar macht statt einmal im Jahr im Seminar. Kostenlos, live, mit Q&A.',
   url: 'https://leader-os.de/webinar',
-  image: 'https://leader-os.de/og-wlad.jpg',
+  image: 'https://leader-os.de/og-webinar.jpg',
 };
 
 export const WEBINAR_HERO = {
