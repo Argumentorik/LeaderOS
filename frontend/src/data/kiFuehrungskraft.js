@@ -29,7 +29,7 @@ export const SEO = {
   title: 'KI-Führungskraft werden: Führen mit KI · Live-Webinar mit Wlad Jachtchenko',
   description:
     'KI ersetzt keine Führungskraft – eine Führungskraft mit KI schon. Wie du mit KI-Coach und täglichem ' +
-    'Training Gespräche vorbereitest, überzeugst und dein Team führst. Kostenloses Live-Webinar am 29.10.2026.',
+    'Training Gespräche vorbereitest, überzeugst und dein Team führst. Kostenloses Live-Webinar am 26.11.2026.',
 };
 
 export const OFFER = {
@@ -72,7 +72,7 @@ export const CAMPAIGNS = {
     eyebrow: 'Der Charisma-Code, live demonstriert',
     h1: 'Überzeugen, ohne lauter zu werden.',
     h1Accent: 'Präsenz. Wärme. Kompetenz.',
-    sub: 'Drei Signale entscheiden in Sekunden, ob ein Raum dir folgt. Am 29. Oktober zeigt Wlad den Charisma-Code live – und die KI-Videoanalyse zeigt dir danach, wo du stehst.',
+    sub: 'Drei Signale entscheiden in Sekunden, ob ein Raum dir folgt. Am 26. November zeigt Wlad den Charisma-Code live – und die KI-Videoanalyse zeigt dir danach, wo du stehst.',
   },
   team: {
     bib: 'K·05 · Team',
@@ -168,7 +168,7 @@ export const FAQ = [
   ['Was ist eine KI-Führungskraft?', 'Eine KI-Führungskraft nutzt KI als Werkzeug für Vorbereitung, Analyse und Training – und investiert die gewonnene Zeit in das, was nur Menschen können: überzeugen, Vertrauen aufbauen und ein Team durch Veränderung führen. Sie arbeitet nicht mehr, sondern trainiert gezielter.'],
   ['Wie nutzen Führungskräfte KI im Alltag?', 'Am wirksamsten in vier Situationen: Gespräche vorbereiten (Argumente, Einwände, Formulierungen), schwierige Gespräche vorher simulieren, Feedback nach einer klaren Formel vorformulieren und die eigene Wirkung analysieren lassen, etwa eine Rede per Video. In LeaderOS übernimmt das der KI-Coach WladBot, ergänzt um kurze tägliche Drills.'],
   ['Was ist LeaderOS?', 'LeaderOS ist das KI-Leadership-Betriebssystem von Wlad Jachtchenko: seine Frameworks – darunter das SEXIER-Modell, die Feedbackformel und die 5 Rollen einer Führungskraft –, ein KI-Coach, der sie exakt so anwendet, und tägliches Training mit Simulationen und einer 30-Tage-Challenge.'],
-  ['Was passiert im Live-Webinar am 29. Oktober?', 'In 90 Minuten demonstriert Wlad den Charisma-Code live, zeigt, wie KI-Coach, tägliche Drills und die 11 Frameworks zusammenspielen, arbeitet einen echten Führungsfall durch und beantwortet deine Fragen im Q&A.'],
+  ['Was passiert im Live-Webinar am 26. November?', 'In 90 Minuten demonstriert Wlad den Charisma-Code live, zeigt, wie KI-Coach, tägliche Drills und die 11 Frameworks zusammenspielen, arbeitet einen echten Führungsfall durch und beantwortet deine Fragen im Q&A.'],
   ['Brauche ich technisches Wissen oder KI-Vorkenntnisse?', 'Nein. Du brauchst keine KI-Vorkenntnisse und kein technisches Wissen. Wenn du eine E-Mail schreiben kannst, kannst du den KI-Coach nutzen – er fragt nach, was er wissen muss.'],
   ['Muss ich bereits Führungskraft sein?', 'Nein. Das Webinar ist für Führungskräfte und für alle, die es werden wollen – Teamleads, Projektleitungen und Senior-Experten, die den nächsten Schritt vorbereiten.'],
   ['Was kostet die Teilnahme, und gibt es eine Aufzeichnung?', 'Die Teilnahme ist kostenlos, ohne Kreditkarte. Eine Aufzeichnung gibt es nicht: Das Webinar ist bewusst live, damit du deine Fragen direkt im Q&A stellen kannst.'],

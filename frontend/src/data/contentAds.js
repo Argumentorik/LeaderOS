@@ -339,7 +339,7 @@ export const AD_SERIES = [
   },
 ];
 
-// ─── Welle 1 · Webinar 29.10.2026 · 8 Angles × 3 Formate ────────────
+// ─── Welle 1 · Webinar 26.11.2026 · 8 Angles × 3 Formate ────────────
 //
 // Mengenplanung: docs/gtm/CREATIVE_MATRIX.md §3 (W1). Kampagnenstruktur,
 // Zielgruppen, Meta-Copy-Felder: docs/gtm/META_ADS_WEBINAR.md.
@@ -369,14 +369,14 @@ const WEBINAR_ANGLES = [
     key: 'D03', slug: 'webinar-live', quadrant: 'convert', palette: 'midnight',
     topText: 'LIVE-WEBINAR\n29. OKT.',
     titleText: 'FÜHRE BESSER.\nJEDEN TAG.',
-    bottomText: 'DO 29.10. · 10 UHR · 0 €',
+    bottomText: 'DO 26.11. · 10 UHR · 0 €',
     cta: 'PLATZ SICHERN',
     landing: 'https://leader-os.de/webinar',
     headline: 'Live-Webinar mit Wlad Jachtchenko',
-    description: '29. Okt · 10 Uhr · 90 Min',
+    description: '26. Nov · 10 Uhr · 90 Min',
     caption:
       'Du weißt, wie gute Führung geht. Du kommst nur nicht dazu, sie zu leben.\n\n' +
-      'Am 29. Oktober zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller, seit 2007 Coach ' +
+      'Am 26. November zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller, seit 2007 Coach ' +
       'für über 400.000 Klienten) live, wie Führung täglich trainierbar wird: der ' +
       'Charisma-Code, das Leadership-Betriebssystem und ein echter Live-Case aus der ' +
       'Community — mit deinen Fragen im Q&A.\n\n' +
@@ -391,13 +391,13 @@ const WEBINAR_ANGLES = [
     cta: 'LIVE DABEI',
     landing: 'https://leader-os.de/webinar',
     headline: 'Seminare ändern Wissen. Nicht Verhalten.',
-    description: '29. Okt · live · kostenlos',
+    description: '26. Nov · live · kostenlos',
     caption:
       'Kennst du das? Das Führungsseminar war wirklich gut. Drei Wochen später ist ' +
       'vom Feedback-Vorsatz nichts übrig außer den Folien.\n\n' +
       'Das ist kein Charakterfehler. Wissen wird gelehrt, Verhalten wird trainiert — ' +
       'und zweimal im Jahr ist kein Training.\n\n' +
-      'Im Live-Webinar am 29. Oktober zeigt Wlad Jachtchenko, wie Führung in 15 ' +
+      'Im Live-Webinar am 26. November zeigt Wlad Jachtchenko, wie Führung in 15 ' +
       'Minuten am Tag trainierbar wird. Kostenlos, live, mit Q&A.',
   },
   // ── A02 · Feedbackformel · Quadrant: educate ──────────────────────
@@ -405,7 +405,7 @@ const WEBINAR_ANGLES = [
     key: 'A02', slug: 'feedbackformel', quadrant: 'educate', palette: 'spark',
     topText: 'FEEDBACK\nOHNE DRAMA.',
     titleText: 'BEOBACHTUNG.\nWIRKUNG.\nWUNSCH.',
-    bottomText: 'FEEDBACKFORMEL · 29.10. LIVE',
+    bottomText: 'FEEDBACKFORMEL · 26.11. LIVE',
     cta: 'LIVE DABEI',
     landing: 'https://leader-os.de/webinar',
     headline: 'Drei Sätze für jedes schwierige Gespräch',
@@ -414,7 +414,7 @@ const WEBINAR_ANGLES = [
       'Nie „Du bist…". Immer „Ich habe beobachtet, dass…".\n\n' +
       'Beobachtung + Wirkung + Wunsch — mehr braucht kein Kritikgespräch. Mehr macht ' +
       'es kaputt. Das ist Wlads Feedbackformel, und sie ist eines der Frameworks, ' +
-      'die im Live-Webinar am 29. Oktober an einem echten Fall durchgespielt werden.\n\n' +
+      'die im Live-Webinar am 26. November an einem echten Fall durchgespielt werden.\n\n' +
       '90 Minuten, kostenlos, keine Aufzeichnung.',
   },
   // ── A01 · SEXIER · Quadrant: educate ──────────────────────────────
@@ -422,7 +422,7 @@ const WEBINAR_ANGLES = [
     key: 'A01', slug: 'sexier-modell', quadrant: 'educate', palette: 'rally',
     topText: 'SECHS SCHRITTE.\nEIN ARGUMENT.',
     titleText: 'STATEMENT.\nEXPLANATION.\nEXAMPLE.',
-    bottomText: 'SEXIER-MODELL · 29.10. LIVE',
+    bottomText: 'SEXIER-MODELL · 26.11. LIVE',
     cta: 'LIVE DABEI',
     landing: 'https://leader-os.de/webinar',
     headline: 'SEXIER: sechs Schritte, ein Argument',
@@ -432,22 +432,22 @@ const WEBINAR_ANGLES = [
       'Sechs Schritte, und ein Argument ist vollständig — mit Widerlegung der ' +
       'Gegenargumente, bevor jemand sie ausspricht. Das SEXIER-Modell aus Wlads ' +
       'SPIEGEL-Bestseller „Weiße Rhetorik".\n\n' +
-      'Live am 29. Oktober, mit deinen Fragen. Kostenlos.',
+      'Live am 26. November, mit deinen Fragen. Kostenlos.',
   },
   // ── C02 · 400.000+ seit 2007 · Quadrant: convert ──────────────────
   {
     key: 'C02', slug: 'seit-2007', quadrant: 'convert', palette: 'midnight',
     topText: 'SEIT 2007.\n400.000+ KLIENTEN.',
     titleText: 'JETZT LIVE.\nMIT DEINEN FRAGEN.',
-    bottomText: 'DO 29.10. · 10 UHR · KOSTENLOS',
+    bottomText: 'DO 26.11. · 10 UHR · KOSTENLOS',
     cta: 'PLATZ SICHERN',
     landing: 'https://leader-os.de/webinar',
-    headline: 'Wlad Jachtchenko · live am 29. Oktober',
+    headline: 'Wlad Jachtchenko · live am 26. November',
     description: '90 Min · Q&A · live',
     caption:
       'Seit 2007 trainiert Wlad Jachtchenko Führungskräfte — über 400.000 Klienten, ' +
       'dreifacher SPIEGEL-Bestseller-Autor.\n\n' +
-      'Am 29. Oktober zeigt er zum ersten Mal live, wie seine komplette Methodik ' +
+      'Am 26. November zeigt er zum ersten Mal live, wie seine komplette Methodik ' +
       'als tägliches Trainingssystem funktioniert. Und beantwortet deine Fragen ' +
       'persönlich.\n\n' +
       'Kostenlos. Live. Keine Aufzeichnung.',
@@ -457,16 +457,16 @@ const WEBINAR_ANGLES = [
     key: 'C01', slug: 'spiegel-bestseller', quadrant: 'convert', palette: 'paper',
     topText: '3× SPIEGEL-\nBESTSELLER.',
     titleText: 'LIVE. 90 MIN.\nKOSTENLOS.',
-    bottomText: 'WLAD JACHTCHENKO · 29.10.',
+    bottomText: 'WLAD JACHTCHENKO · 26.11.',
     cta: 'PLATZ SICHERN',
     landing: 'https://leader-os.de/webinar',
     headline: 'Der Autor von „Weiße Rhetorik" — live',
-    description: '29. Okt · 10 Uhr · kostenlos',
+    description: '26. Nov · 10 Uhr · kostenlos',
     caption:
       '„Weiße Rhetorik", „Dunkle Rhetorik", „Die 5 Rollen einer Führungskraft" — ' +
       'die Methodik aus Wlads Büchern, live an einem echten Führungsfall ' +
       'durchgearbeitet.\n\n' +
-      'Live-Webinar am 29. Oktober, 10 Uhr, 90 Minuten. Kostenlos, ohne ' +
+      'Live-Webinar am 26. November, 10 Uhr, 90 Minuten. Kostenlos, ohne ' +
       'Aufzeichnung, mit Q&A.',
   },
   // ── D01 · Leader-Check · Quadrant: educate/no budget → organic-first ─
@@ -744,27 +744,27 @@ AD_SERIES.push(...W2_ADS);
 
 const LI_COPY = {
   D03: {
-    liIntro: 'Kostenloses Live-Webinar am 29.10., 10 Uhr: Wlad Jachtchenko zeigt, wie Führung täglich trainierbar wird. 90 Min, Q&A, keine Aufzeichnung.',
-    liHeadline: 'Live-Webinar mit Wlad Jachtchenko · 29. Oktober · kostenlos',
+    liIntro: 'Kostenloses Live-Webinar am 26.11., 10 Uhr: Wlad Jachtchenko zeigt, wie Führung täglich trainierbar wird. 90 Min, Q&A, keine Aufzeichnung.',
+    liHeadline: 'Live-Webinar mit Wlad Jachtchenko · 26. November · kostenlos',
   },
   B01: {
-    liIntro: 'Das Seminar war gut. Drei Wochen später war alles wie vorher. Wissen wird gelehrt, Verhalten wird trainiert. Live am 29.10., kostenlos.',
-    liHeadline: 'Seminare ändern Wissen, nicht Verhalten. Live-Webinar am 29.10.',
+    liIntro: 'Das Seminar war gut. Drei Wochen später war alles wie vorher. Wissen wird gelehrt, Verhalten wird trainiert. Live am 26.11., kostenlos.',
+    liHeadline: 'Seminare ändern Wissen, nicht Verhalten. Live-Webinar am 26.11.',
   },
   A02: {
-    liIntro: 'Beobachtung + Wirkung + Wunsch. Wlads Feedbackformel, live an einem echten Fall durchgespielt. 29.10., 10 Uhr, kostenlos.',
+    liIntro: 'Beobachtung + Wirkung + Wunsch. Wlads Feedbackformel, live an einem echten Fall durchgespielt. 26.11., 10 Uhr, kostenlos.',
     liHeadline: 'Drei Sätze für jedes schwierige Gespräch · Live-Webinar',
   },
   A01: {
-    liIntro: 'Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal. Das SEXIER-Modell, live erklärt. 29.10., kostenlos.',
+    liIntro: 'Statement · Explanation · eXample · Impact · Explanation of Impact · Rebuttal. Das SEXIER-Modell, live erklärt. 26.11., kostenlos.',
     liHeadline: 'SEXIER: sechs Schritte, ein vollständiges Argument · live',
   },
   C02: {
-    liIntro: 'Seit 2007, 400.000+ Klienten, 3× SPIEGEL-Bestseller. Am 29.10. zeigt Wlad Jachtchenko live, wie seine Methodik als tägliches Training funktioniert.',
-    liHeadline: 'Wlad Jachtchenko live · 29. Oktober · 90 Minuten · kostenlos',
+    liIntro: 'Seit 2007, 400.000+ Klienten, 3× SPIEGEL-Bestseller. Am 26.11. zeigt Wlad Jachtchenko live, wie seine Methodik als tägliches Training funktioniert.',
+    liHeadline: 'Wlad Jachtchenko live · 26. November · 90 Minuten · kostenlos',
   },
   C01: {
-    liIntro: 'Die Methodik aus „Weiße Rhetorik" und „Die 5 Rollen einer Führungskraft", live an einem Führungsfall durchgearbeitet. 29.10., 10 Uhr.',
+    liIntro: 'Die Methodik aus „Weiße Rhetorik" und „Die 5 Rollen einer Führungskraft", live an einem Führungsfall durchgearbeitet. 26.11., 10 Uhr.',
     liHeadline: 'Der Autor von „Weiße Rhetorik" live · kostenloses Webinar',
   },
   D01: {
@@ -810,10 +810,10 @@ AD_SERIES.push(...LINKEDIN_ADS);
 
 const GOOGLE_IMAGE = {
   D03: { titleText: 'LIVE-WEBINAR\n29. OKT.', bottomText: '10:00 UHR · 90 MIN · 0 €' },
-  B01: { titleText: 'TRAINIEREN\nSTATT WISSEN.', bottomText: 'LIVE-WEBINAR · 29.10.' },
+  B01: { titleText: 'TRAINIEREN\nSTATT WISSEN.', bottomText: 'LIVE-WEBINAR · 26.11.' },
   A02: { titleText: 'BEOBACHTUNG.\nWIRKUNG. WUNSCH.', bottomText: 'FEEDBACKFORMEL · LIVE' },
   C02: { titleText: 'WLAD JACHTCHENKO\nLIVE.', bottomText: 'SEIT 2007 · 400.000+ KLIENTEN' },
-  C01: { titleText: '3× SPIEGEL-\nBESTSELLER.', bottomText: 'LIVE AM 29.10. · 0 €' },
+  C01: { titleText: '3× SPIEGEL-\nBESTSELLER.', bottomText: 'LIVE AM 26.11. · 0 €' },
   D01: { titleText: 'LEADER-CHECK.', bottomText: '10 MINUTEN · KEIN LOGIN' },
 };
 

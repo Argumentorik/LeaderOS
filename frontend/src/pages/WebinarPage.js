@@ -11,7 +11,8 @@ import { LogoWall } from '../components/brand/LogoWall';
 import { trackMeta, metaEventId } from '../lib/metaPixel';
 import { trackLinkedInLead } from '../lib/linkedinInsight';
 import {
-  AGENDA, FAQ, WEBINAR_CAMPAIGN, WEBINAR_HERO, WEBINAR_SEO, WEBINAR_TS,
+  AGENDA, FAQ, WEBINAR_CAMPAIGN, WEBINAR_DATE_COMPACT, WEBINAR_DATE_LABEL, WEBINAR_DATE_SHORT, WEBINAR_END, WEBINAR_HERO, WEBINAR_SEO,
+  WEBINAR_START, WEBINAR_TIME_LABEL, WEBINAR_TS,
 } from '../data/webinarEvent';
 
 /**
@@ -33,7 +34,7 @@ import {
  *   2. Antwortet das Backend nicht oder ohne die Route (404 solange der
  *      Emergent-Deploy hinterherhinkt), geht die Adresse an
  *      /api/newsletter/subscribe – die Supabase-Edge-Function, unabhängig
- *      vom Emergent-Backend – mit campaign=webinar-2026-10-29. Kein Lead
+ *      vom Emergent-Backend – mit campaign=webinar-2026-11-26. Kein Lead
  *      geht verloren; die Danke-Seite verspricht in dem Fall keine
  *      Erinnerungs-Mails (?v=f).
  *
@@ -45,8 +46,9 @@ import {
 
 const LIME = '#BFFF00';
 
-const DATE_LINE = 'Do 29. Oktober 2026 · 10:00–11:30 Uhr · Live · Online';
-const DATE_SHORT = 'Do 29. Okt · 10:00 Uhr';
+// Termin nur aus src/data/webinarEvent.js (eine Quelle für Seite, Prerender, Danke-Seite).
+const DATE_LINE = `${WEBINAR_DATE_LABEL} · ${WEBINAR_TIME_LABEL} · Live · Online`;
+const DATE_SHORT = WEBINAR_DATE_SHORT;
 
 /** Inline-Kurzschreibweise für die Keyframes aus index.css (Name, Dauer, Delay). */
 const ze = (name, dur, delay) => ({ animation: `${name} ${dur}s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both` });
@@ -57,7 +59,7 @@ const HERO_SUB_SHORT = '90 Minuten live mit Wlad Jachtchenko: wie Führung tägl
 const HERO_SUB_LONG =
   'Du weißt, wie gute Führung geht. Du kommst nur nicht dazu. Wlad Jachtchenko zeigt in 90 Minuten live, wie du sie täglich trainierst.';
 
-const FACTS = [['Termin', '29. Okt'], ['Start', '10:00'], ['Dauer', '90 Min'], ['Teilnahme', '0 €']];
+const FACTS = [['Termin', WEBINAR_DATE_COMPACT], ['Start', '10:00'], ['Dauer', '90 Min'], ['Teilnahme', '0 €']];
 
 // Verifiziertes Set (docs/gtm/WEBINAR_FUNNEL.md). Keine weiteren Zahlen.
 const PROOF = [
@@ -337,7 +339,7 @@ const StickyBar = ({ heroFormRef, finalRef, onCta }) => {
         </div>
         <div className="desk"><RegisterForm idSuffix="-sticky" inline compact /></div>
         <div className="mobile">
-          <button type="button" onClick={onCta} className="pill ink full">Platz sichern · 29. Okt</button>
+          <button type="button" onClick={onCta} className="pill ink full">Platz sichern · {WEBINAR_DATE_COMPACT}</button>
         </div>
       </div>
     </div>
@@ -402,8 +404,8 @@ export default function WebinarPage() {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: 'Trainiere Führung. Nicht nur Wissen. · Das kostenlose LeaderOS Live-Webinar',
-      startDate: '2026-10-29T10:00:00+01:00',
-      endDate: '2026-10-29T11:30:00+01:00',
+      startDate: WEBINAR_START,
+      endDate: WEBINAR_END,
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: { '@type': 'VirtualLocation', url: 'https://leader-os.de/webinar' },
@@ -459,7 +461,7 @@ export default function WebinarPage() {
             <div className="air" aria-hidden />
             <p className="bib kicker ze" style={ze('zeFadeUp', 0.8, 0.1)}>
               <span className="led" aria-hidden />
-              <span className="short">Live-Webinar · 29. Okt · 10 Uhr · 0 €</span>
+              <span className="short">Live-Webinar · 26. Nov · 10 Uhr · 0 €</span>
               <span className="long">Kostenloses Live-Webinar · {DATE_LINE}</span>
             </p>
             <h1 className="disp" aria-label={`${WEBINAR_HERO.h1} ${WEBINAR_HERO.h1Accent}`}>

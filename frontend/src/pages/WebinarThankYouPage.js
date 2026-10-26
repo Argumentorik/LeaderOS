@@ -5,7 +5,9 @@ import { WladMark } from '../components/brand/WladMark';
 import { applyPageMeta } from '../lib/pageMeta';
 import { trackGoogleAdsWebinarConversion } from '../lib/googleAds';
 import { trackBingWebinarLead } from '../lib/bingUet';
-import { WEBINAR_CAMPAIGN, WEBINAR_END, WEBINAR_START, WEBINAR_TS } from '../data/webinarEvent';
+import {
+  WEBINAR_CAMPAIGN, WEBINAR_DATE_LABEL, WEBINAR_DATE_NUM, WEBINAR_END, WEBINAR_START, WEBINAR_TIME_LABEL, WEBINAR_TS,
+} from '../data/webinarEvent';
 
 /**
  * WebinarThankYouPage · /webinar/danke · der Moment direkt nach der Anmeldung.
@@ -24,7 +26,7 @@ import { WEBINAR_CAMPAIGN, WEBINAR_END, WEBINAR_START, WEBINAR_TS } from '../dat
  * Gleiche Athletic-Editorial-DNA wie /webinar (frontend/DESIGN.md).
  */
 
-const DATE_SHORT = 'Do 29. Oktober 2026 · 10:00 Uhr · Live';
+const DATE_SHORT = `${WEBINAR_DATE_LABEL} · ${WEBINAR_TIME_LABEL} · Live`;
 
 const googleCalendarUrl = () => {
   const fmt = (d) => new Date(d).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -49,9 +51,9 @@ const VIDEOS = [
 
 const SHARE_URL = (src) => `https://leader-os.de/webinar?utm_source=share-${src}&utm_medium=referral&utm_campaign=${WEBINAR_CAMPAIGN}`;
 const SHARE = [
-  ['WhatsApp', `https://wa.me/?text=${encodeURIComponent(`Kostenloses Live-Webinar mit Wlad Jachtchenko (3× SPIEGEL-Bestseller) am 29.10.: Führung täglich trainieren statt einmal im Jahr Seminar. ${SHARE_URL('whatsapp')}`)}`],
+  ['WhatsApp', `https://wa.me/?text=${encodeURIComponent(`Kostenloses Live-Webinar mit Wlad Jachtchenko (3× SPIEGEL-Bestseller) am ${WEBINAR_DATE_NUM}: Führung täglich trainieren statt einmal im Jahr Seminar. ${SHARE_URL('whatsapp')}`)}`],
   ['LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SHARE_URL('linkedin'))}`],
-  ['E-Mail', `mailto:?subject=${encodeURIComponent('Kostenloses Live-Webinar: Führung wird trainiert')}&body=${encodeURIComponent(`Hi,\n\nam 29.10. um 10 Uhr zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller) live, wie Führung täglich trainierbar wird. Kostenlos, mit Q&A.\n\nHier anmelden: ${SHARE_URL('email')}`)}`],
+  ['E-Mail', `mailto:?subject=${encodeURIComponent('Kostenloses Live-Webinar: Führung wird trainiert')}&body=${encodeURIComponent(`Hi,\n\nam ${WEBINAR_DATE_NUM} um 10 Uhr zeigt Wlad Jachtchenko (3× SPIEGEL-Bestseller) live, wie Führung täglich trainierbar wird. Kostenlos, mit Q&A.\n\nHier anmelden: ${SHARE_URL('email')}`)}`],
 ];
 
 const daysLeft = () => Math.max(0, Math.ceil((WEBINAR_TS - Date.now()) / 86400000));
@@ -78,7 +80,10 @@ export default function WebinarThankYouPage() {
       title: 'Platz gesichert · Live-Webinar · LeaderOS',
       description: 'Dein Platz im kostenlosen LeaderOS Live-Webinar ist reserviert. Zum Kalender hinzufügen und direkt weitermachen.',
       url: 'https://leader-os.de/webinar/danke',
-      image: 'https://leader-os.de/og-wlad.jpg',
+      image: 'https://leader-os.de/og-webinar.jpg',
+      // Danke-Seite nie indexieren: sonst landen Suchende hier und die
+      // Conversion-Zählung (Google Ads, UET) bekommt Treffer ohne Anmeldung.
+      robots: 'noindex, nofollow',
     });
 
     // Conversion an Google Ads (Label) und Microsoft (UET) genau einmal pro
@@ -190,7 +195,7 @@ export default function WebinarThankYouPage() {
             </figure>
             <div>
               <p className="bib eyebrow">Schritt 2 · Wenn du nicht warten willst</p>
-              <h2 className="disp h2">Bis zum 29. Oktober: schon mal trainieren<Dot /></h2>
+              <h2 className="disp h2">Bis zum {WEBINAR_DATE_LABEL.replace(/^Do, /, '')}: schon mal trainieren<Dot /></h2>
               <p className="lead">
                 Das Webinar ist der Impuls. LeaderOS ist das System, das danach trägt: sechs
                 Grundlagen-Kurse, vier Master-Programme, elf Framework-Drills, Simulationen und

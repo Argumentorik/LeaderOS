@@ -20,7 +20,7 @@ import {
  * Eine Seite, sechs Kampagnen: die Anzeige verlinkt ?k=<key>, Hero und
  * hervorgehobene Hebel-Karte folgen dem Schlüssel, der Lead trägt ihn als
  * source + answers.kampagne. Angebot überall dasselbe: das kostenlose
- * Live-Webinar am 29.10. (Agenda aus src/data/webinarEvent.js — dieselbe
+ * Live-Webinar am 26.11. (Agenda aus src/data/webinarEvent.js — dieselbe
  * wie auf /webinar). Kampagnen-Matrix: docs/gtm/KI_FUEHRUNG_KAMPAGNEN.md.
  *
  * Mechanik aus /kommunikation (Pillen-Nav mit Scroll-Morph, Video-Hero mit
@@ -1037,7 +1037,7 @@ function StickyCta() {
           className="lg:hidden fixed inset-x-0 bottom-0 z-40" style={{ padding: '10px 14px calc(10px + env(safe-area-inset-bottom))' }}
         >
           <button type="button" onClick={() => goToForm('sticky')} className="w-full h-14 rounded-full flex items-center justify-center" style={{ ...BODY, fontWeight: 700, fontSize: 15, background: INK, color: '#fff', gap: 10, boxShadow: '0 12px 32px rgba(0,0,0,0.35)' }}>
-            <span className="rounded-full" style={{ width: 8, height: 8, background: LIME }} /> Kostenlos anmelden · 29.10.
+            <span className="rounded-full" style={{ width: 8, height: 8, background: LIME }} /> Kostenlos anmelden · 26.11.
           </button>
         </motion.div>
       )}

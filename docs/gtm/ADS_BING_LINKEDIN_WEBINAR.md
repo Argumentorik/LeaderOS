@@ -1,6 +1,6 @@
 # Ads · Bing + LinkedIn (nur Document Ads) · 8 Webinar-Posts
 
-> Stand 29.09.2026 · Webinar Do 29.10.2026, 10:00–11:30 Uhr · Ziel: die
+> Stand 29.09.2026 · Webinar Do 26.11.2026, 10:00–11:30 Uhr · Ziel: die
 > ersten Anmeldungen. Ergänzt `LINKEDIN_ADS_WEBINAR.md` (Struktur, Zielgruppe,
 > Regeln bleiben dort gültig) und `GOOGLE_ADS_SETUP.md`.
 >
@@ -46,7 +46,7 @@ schwarz/Lime, Wlad-Foto auf dem Cover.
 | 3 | SEXIER, alle sechs Schritte |
 | 4 | 10 Stufen des Zuhörens, Stufe 2 markiert (80 %) |
 | 5 | 4-Farben-Modell |
-| 6 | Webinar-CTA: Do 29. Oktober 2026 · 10:00–11:30 · kostenlos · live, keine Aufzeichnung · leader-os.de/webinar |
+| 6 | Webinar-CTA: Do 26. November 2026 · 10:00–11:30 · kostenlos · live, keine Aufzeichnung · leader-os.de/webinar |
 
 Alle Definitionen stehen wörtlich im Canon. Das Beispiel auf Seite 2 ist als
 „Beispiel" gekennzeichnet.
@@ -64,8 +64,8 @@ Alle Definitionen stehen wörtlich im Canon. Das Beispiel auf Seite 2 ist als
 
 | Ad | Intro (≤ 150) | Headline (≤ 70) |
 | --- | --- | --- |
-| `DOC-A` (Lehre) | 4 Frameworks von Wlad Jachtchenko für das Gespräch, das du aufschiebst. Am 29.10. live im kostenlosen Webinar. | Live-Webinar mit Wlad Jachtchenko · 29. Oktober · kostenlos |
-| `DOC-B` (Schmerz) | Seminare ändern Wissen, nicht Verhalten. 4 Frameworks zum Durchblättern und am 29.10. live im Webinar. | Führung trainieren statt wissen · Live-Webinar am 29.10. |
+| `DOC-A` (Lehre) | 4 Frameworks von Wlad Jachtchenko für das Gespräch, das du aufschiebst. Am 26.11. live im kostenlosen Webinar. | Live-Webinar mit Wlad Jachtchenko · 26. November · kostenlos |
+| `DOC-B` (Schmerz) | Seminare ändern Wissen, nicht Verhalten. 4 Frameworks zum Durchblättern und am 26.11. live im Webinar. | Führung trainieren statt wissen · Live-Webinar am 26.11. |
 
 Rotation die ersten 5 Tage gleichmäßig, dann optimiert. Pausieren, urteilen,
 nicht anfassen: Regeln aus `LINKEDIN_ADS_WEBINAR.md` §5.
@@ -96,7 +96,7 @@ Zahlen prüfen — diese Aussage ist eine Erfahrungsannahme, kein Beleg).
 
 | Text | Zeile 1 | Zeile 2 | URL |
 | --- | --- | --- | --- |
-| Live-Webinar 29.10. | Kostenlos, 90 Minuten, Q&A | Keine Aufzeichnung | `https://leader-os.de/webinar` |
+| Live-Webinar 26.11. | Kostenlos, 90 Minuten, Q&A | Keine Aufzeichnung | `https://leader-os.de/webinar` |
 | Feedbackformel lesen | Beobachtung, Wirkung, Wunsch | Kostenlos, ohne Login | `https://leader-os.de/journal/feedback-geben-vorlage-bww-framework` |
 | Leader-Check | Dein Führungsprofil in 10 Min | Kostenlos, ohne Login | `https://leader-check.de/` |
 | Über Wlad Jachtchenko | 3× SPIEGEL-Bestseller | Seit 2007 im Coaching | `https://leader-os.de/wlad-jachtchenko` |
@@ -135,9 +135,9 @@ Warum passiert es trotzdem nicht?
 
 Weil Führung nicht gelernt wird. Sie wird trainiert.
 
-Am 29. Oktober zeige ich live, wie das aussieht: 90 Minuten, kostenlos, mit Q&A. Ohne Aufzeichnung.
+Am 26. November zeige ich live, wie das aussieht: 90 Minuten, kostenlos, mit Q&A. Ohne Aufzeichnung.
 
-Do, 29.10., 10:00 Uhr
+Do, 26.11., 10:00 Uhr
 Link im ersten Kommentar.
 ```
 
@@ -154,7 +154,7 @@ Nie „Du bist unzuverlässig". Immer „Ich habe beobachtet, dass …".
 
 Das ist die Feedbackformel: ein Satz, der beschreibt. Einer, der die Wirkung zeigt. Einer, der die Richtung vorgibt.
 
-Am 29. Oktober zeige ich live, wie aus solchen Formeln ein Trainingssystem wird, inklusive eines echten Live-Cases. Kostenlos. Link im ersten Kommentar.
+Am 26. November zeige ich live, wie aus solchen Formeln ein Trainingssystem wird, inklusive eines echten Live-Cases. Kostenlos. Link im ersten Kommentar.
 ```
 
 ### Post 3 · indirekt · 10 Stufen des Zuhörens
@@ -179,13 +179,13 @@ Die Pyramide des Zuhörens hat zehn Stufen:
 
 Ehrliche Frage: Auf welcher Stufe warst du im letzten Meeting?
 
-Am 29. Oktober zeige ich live, wie man so etwas trainiert statt nur kennt. Kostenlos. Link im ersten Kommentar.
+Am 26. November zeige ich live, wie man so etwas trainiert statt nur kennt. Kostenlos. Link im ersten Kommentar.
 ```
 
 ### Post 4 · direkt · Agenda
 
 ```
-Do, 29. Oktober, 10:00 Uhr. 90 Minuten. Live.
+Do, 26. November, 10:00 Uhr. 90 Minuten. Live.
 
 Das passiert im Webinar:
 
@@ -213,7 +213,7 @@ R  Rebuttal: die Widerlegung der Gegenargumente
 
 Das R wird gern vergessen. Dabei entwaffnet es Einwände, bevor jemand sie ausspricht.
 
-SEXIER stammt aus „Weiße Rhetorik". Am 29. Oktober zeige ich live, wie aus Modellen wie diesem tägliches Training wird. Kostenlos, mit Q&A. Link im ersten Kommentar.
+SEXIER stammt aus „Weiße Rhetorik". Am 26. November zeige ich live, wie aus Modellen wie diesem tägliches Training wird. Kostenlos, mit Q&A. Link im ersten Kommentar.
 ```
 
 ### Post 6 · direkt · Kommentar-Aktion
@@ -223,7 +223,7 @@ Welches Gespräch schiebst du gerade auf?
 
 Das Feedback an den Mitarbeiter, der ständig zu spät liefert. Die Gehaltsverhandlung. Der Konflikt im Team, den alle sehen und keiner anspricht.
 
-Schreib „WEBINAR" in die Kommentare und du bekommst den Link zum kostenlosen Live-Webinar am 29. Oktober per Direktnachricht.
+Schreib „WEBINAR" in die Kommentare und du bekommst den Link zum kostenlosen Live-Webinar am 26. November per Direktnachricht.
 
 Und schreib dazu, um welches Gespräch es geht. Ich lese die Antworten und greife einige im Q&A auf.
 ```
@@ -241,7 +241,7 @@ Präsenz. Wärme. Kompetenz.
 
 Jedes davon ist trainierbar.
 
-Am 29. Oktober zeige ich den Charisma-Code live im kostenlosen Webinar. 90 Minuten, mit Q&A.
+Am 26. November zeige ich den Charisma-Code live im kostenlosen Webinar. 90 Minuten, mit Q&A.
 
 Link im ersten Kommentar.
 ```
@@ -249,7 +249,7 @@ Link im ersten Kommentar.
 ### Post 8 · direkt · Was passiert nach der Anmeldung
 
 ```
-Drei Dinge, die du vor der Anmeldung zum Webinar am 29. Oktober wissen solltest:
+Drei Dinge, die du vor der Anmeldung zum Webinar am 26. November wissen solltest:
 
 Kostet das etwas? Nein. Kostenlos.
 
@@ -257,7 +257,7 @@ Gibt es eine Aufzeichnung? Nein. Es ist live, mit Q&A und Live-Case.
 
 Was passiert nach der Anmeldung? Du bekommst sofort die Bestätigung mit Kalender-Einladung, vor dem Termin zwei Erinnerungen, und auf der Bestätigungsseite schaltest du die vierteilige Videoserie „Führung beginnt hier" frei.
 
-Do, 29.10., 10:00–11:30 Uhr. Link im ersten Kommentar.
+Do, 26.11., 10:00–11:30 Uhr. Link im ersten Kommentar.
 ```
 
 ---

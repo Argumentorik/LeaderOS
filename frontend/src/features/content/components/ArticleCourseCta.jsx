@@ -68,7 +68,7 @@ export const ArticleCourseCta = ({ article = null, placement = 'article' }) => {
             onClick={() => track('article_cta_webinar', { placement, article: slug })}
             className="inline-flex items-center h-12 px-2 text-white/75 hover:text-white underline underline-offset-4 text-[13.5px]"
           >
-            oder zum Live-Webinar am 29.10.
+            oder zum Live-Webinar am 26.11.
           </a>
         </div>
       </div>

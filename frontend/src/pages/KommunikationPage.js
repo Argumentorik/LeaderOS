@@ -768,7 +768,7 @@ function KommunikationsCheck() {
       });
       const data = await res.json().catch(() => null);
       if (res.ok && data?.ok) {
-        trackMeta('Lead', { content_name: 'webinar-2026-10-29', content_category: 'webinar' }, eventId);
+        trackMeta('Lead', { content_name: 'webinar-2026-11-26', content_category: 'webinar' }, eventId);
         trackLinkedInLead();
         window.location.assign(`/webinar/danke?email=${encodeURIComponent(email.trim())}&focus=${encodeURIComponent(focus)}`);
         return;
@@ -791,7 +791,7 @@ function KommunikationsCheck() {
             Welcher Ansatz ist für dich der erste?
           </h2>
           <p className="mt-3" style={{ ...BODY, fontSize: 17, color: MUTED }}>
-            Fünf Fragen, kein Login. Am Ende: dein Fokus-Framework — und dein Platz im Live-Webinar am 29. Oktober.
+            Fünf Fragen, kein Login. Am Ende: dein Fokus-Framework — und dein Platz im Live-Webinar am 26. November.
           </p>
         </motion.div>
 
@@ -835,7 +835,7 @@ function KommunikationsCheck() {
                   Wohin soll dein Ergebnis — und dein Platz im Webinar?
                 </h3>
                 <p className="mt-2" style={{ ...BODY, fontSize: 14, color: MUTED }}>
-                  Live am Do, 29. Oktober, 10:00 Uhr · 90 Minuten · kostenlos · Bestätigung + Kalender-Link kommen sofort.
+                  Live am Do, 26. November, 10:00 Uhr · 90 Minuten · kostenlos · Bestätigung + Kalender-Link kommen sofort.
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <input type="text" placeholder="Vorname" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name"

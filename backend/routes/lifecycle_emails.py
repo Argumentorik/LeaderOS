@@ -503,7 +503,7 @@ async def cron_license_nurture(request: Request):
     behaviour as /api/cron/lead-nurture. Skips (and marks) leads who have
     since converted to registered users — the user drips own them from then
     on. `webinar_upcoming` is computed once per run so a lead captured
-    months after 29.10. never gets a dead-event reference.
+    months after 26.11. never gets a dead-event reference.
     """
     require_cron_auth(request)
     if not email_enabled():

@@ -49,7 +49,7 @@ export const trackBingPageView = (path) => {
 export const trackBingWebinarLead = () => {
   if (!isBingActive() || !window.uetq) return false;
   try {
-    window.uetq.push('event', 'webinar_lead', { event_category: 'webinar', event_label: 'webinar-2026-10-29', revenue_value: 8, currency: 'EUR' });
+    window.uetq.push('event', 'webinar_lead', { event_category: 'webinar', event_label: 'webinar-2026-11-26', revenue_value: 8, currency: 'EUR' });
     return true;
   } catch { return false; }
 };

@@ -56,7 +56,7 @@ bis Wlad freigegeben hat.
 | Tage | Feed |
 | --- | --- |
 | 10.10. bis 21.10. | Carousel 01 bis 12 (Framework-Serie, täglich) |
-| 22.10. bis 08.11. | 18 Singles, abwechselnd Set A und Set B: Paradigmenwechsel, Realität, Frameworks, Webinar-Woche vor dem 29.10., danach LeaderOS |
+| 22.10. bis 08.11. | 18 Singles, abwechselnd Set A und Set B: Paradigmenwechsel, Realität, Frameworks, Webinar-Woche vor dem 26.11., danach LeaderOS |
 | täglich | eine Story: erst die zwölf Prinzip-Slides, dann 18 Statements |
 
 Launch-Story am 10.10. zusätzlich: `AVATAR-profile-9x16.png` mit
@@ -64,7 +64,7 @@ Link-Sticker auf `leader-os.de/kurse`. Der 4:5-Hero geht als Feed-Post am
 9. Oktober abends („morgen geht es los“) oder als Pinned Post.
 
 Nicht eingeplant, als Reserve für Reaktionen auf Kommentare: 14 Singles
-aus A (die Webinar-Serie A25 bis A30 gehört in die Woche vor dem 29.10.
+aus A (die Webinar-Serie A25 bis A30 gehört in die Woche vor dem 26.11.
 und ist eingeplant) und 16 Singles aus B.
 
 ## Postproxy-Anbindung
@@ -94,7 +94,7 @@ wieder verbunden ist.
 
 - Bio-Link auf `leader-os.de/kurse` setzen, Bio-Zeile: „Führung wird nicht
   gelernt. Sie wird trainiert. · KI-Coach WladBot · 6 Kurse · 11 Drills ·
-  Webinar 29.10.“
+  Webinar 26.11.“
 - Highlights anlegen: Frameworks, Webinar, LeaderOS.
 - Die 1.643 bestehenden Posts bleiben. Der neue Look beginnt mit Post 01;
   kein Löschen alter Beiträge.

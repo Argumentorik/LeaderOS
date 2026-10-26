@@ -37,8 +37,11 @@ sind der Hook. Drei bis vier Hashtags. Wlad gibt jeden Post vorab frei.
 Instagram: dieselben Folien, letzte Folie als `-ig.jpg` (Link in der Bio),
 Caption ohne „erster Kommentar".
 
-**Takt (Vorschlag):** zwei Karussells pro Woche, Di und Do, 7:30–8:30 Uhr.
-C01 · C07 · C02 · C03 · C08 · C04 · C05 · C06.
+**Takt:** `SCHEDULE.json` in diesem Ordner, zwei Karussells pro Woche (Di
+und Do, 7:30 Uhr LinkedIn, 12:00 Uhr Instagram), dazwischen die Poster der
+Serie 01 und die Webinar-Ankündigung LI-06 (Do 26.11.2026). Reihenfolge C01 ·
+C07 · C02 · C03 · C08 · C04 · C05 · C06. Planen mit
+`backend/scripts_post_carousel.py plan` (ohne `--send` nur Vorschau).
 
 ---
 

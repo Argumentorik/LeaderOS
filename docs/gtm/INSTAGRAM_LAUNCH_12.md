@@ -23,7 +23,7 @@ aus der Session und nicht im Repo.
 Fakten nur aus `WLAD_CANON.md` und dem verifizierten Set in
 `WEBINAR_FUNNEL.md`: 400.000+ Klienten, 20+ Länder, dreifacher
 SPIEGEL-Bestseller, Trustpilot 4,9 / 388, seit 2007, 2 212 Wlad-Inhalte im
-WladBot, Webinar 29.10. (live, ohne Aufzeichnung). Nicht verwenden: „13
+WladBot, Webinar 26.11. (live, ohne Aufzeichnung). Nicht verwenden: „13
 Bücher“, „14 Mio Views“, „3× TEDx“, Greator-Zahlen. Keine erfundenen
 Testimonials, keine Scarcity.
 
@@ -274,7 +274,7 @@ Themen-Tags: `#schlagfertigkeit #dunklerhetorik #manipulation #meeting #souverä
 ### Post 11 · Mo 20.10. · Warum nach dem Seminar nichts bleibt
 Pillar: Paradigmenwechsel (Seminar vs. System). Cover: S/W Training.
 Slides: Zeit → Inhalt → Übung → Danach → Ergebnis (Lime) → Prinzip
-(„Entweder du trainierst. Oder du hoffst.“) → CTA Webinar 29.10.
+(„Entweder du trainierst. Oder du hoffst.“) → CTA Webinar 26.11.
 
 Caption:
 > Das Seminar war nicht schlecht. Es war nur einmal.
@@ -288,7 +288,7 @@ Caption:
 >
 > Entweder du trainierst. Oder du hoffst.
 >
-> Sieh das System live: Donnerstag, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad zeigt den Charisma-Code, das Operating System und einen echten Fall. Kostenlos, live, ohne Aufzeichnung. Link in Bio.
+> Sieh das System live: Donnerstag, 26. November, 10:00 bis 11:30 Uhr. Wlad zeigt den Charisma-Code, das Operating System und einen echten Fall. Kostenlos, live, ohne Aufzeichnung. Link in Bio.
 
 Themen-Tags: `#führungskräfteentwicklung #seminar #weiterbildung #webinar #personalentwicklung #lernenneudenken`
 
@@ -332,7 +332,7 @@ Themen-Tags: `#leadershipos #führungstraining #kicoach #30tagechallenge #führu
 ## 4. Bio und Hub
 
 Bio-Zeile: „Führung wird nicht gelernt. Sie wird trainiert. · KI-Coach
-WladBot · 6 Kurse · 11 Drills · Webinar 29.10.“ Link: `leader-os.de/kurse`
+WladBot · 6 Kurse · 11 Drills · Webinar 26.11.“ Link: `leader-os.de/kurse`
 (dort Freischalt-Funnel und Webinar). Profilbild: Wlad-Porträt, nicht der
 Avatar, damit der Account als Person gelesen wird.
 
