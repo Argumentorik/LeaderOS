@@ -175,3 +175,49 @@ Backend env vars are documented in `backend/.env.example`.
 - [ ] CSP / `vercel.json` headers allow `eu.i.posthog.com`, `*.sentry.io`
       (currently no CSP header — fine, but if you add one later, don't break this)
 - [ ] Database advisor green per `docs/ops/RUNBOOK.md`
+
+---
+
+## 6. Zernio — social posting API (backend / CLI only)
+
+[Zernio](https://docs.zernio.com) schedules and publishes posts on connected
+social accounts (LinkedIn, Instagram, …) through one REST API. We use it to
+ship the carousel series from `docs/gtm/linkedin-carousels-01/` without
+touching each platform's own API. Quickstart: `https://zernio.com/agent-quickstart.md`.
+
+**Where it lives**
+
+| Piece | File | Notes |
+| ----- | ---- | ----- |
+| REST client | `backend/services_zernio.py` | `httpx` against `https://zernio.com/api/v1`, bearer auth, no SDK. Validates platform limits before sending (LinkedIn: one PDF *or* up to 20 images; Instagram: up to 10 images). |
+| CLI | `backend/scripts_post_carousel.py` | `accounts` (list connected accounts with their `accountId`), `show C01`, `post C01 --platform linkedin --account … --at 2026-10-28T07:30 [--tz Europe/Berlin] [--dry-run]`, `--now` to publish immediately. |
+| Inputs | `docs/gtm/linkedin-carousels-01/manifest.json`, `CAPTIONS.md` | Public slide/PDF URLs under `leader-os.de/preview/carousels-01/`; caption per carousel. The "first comment" line is printed, not posted (set it by hand after publishing). |
+| Tests | `backend/tests/test_zernio.py` | No network: `httpx.MockTransport`, caption parsing, payload validation, CLI dry-run. |
+
+**Env**
+
+| Name | Where | Notes |
+| ---- | ----- | ----- |
+| `ZERNIO_API_KEY` | Emergent backend env + local `.env` of whoever runs the CLI | Bearer token from the Zernio dashboard. **Never** a `REACT_APP_*` var, never in the repo, never in chat or tickets; rotate immediately if it was. Unset = the CLI only does `--dry-run`. |
+| `ZERNIO_BASE_URL` | optional | Default `https://zernio.com/api/v1`. |
+
+**Request shape we send** (from the Zernio docs, October 2026):
+
+```json
+{
+  "content": "caption text",
+  "platforms": [{ "platform": "linkedin", "accountId": "…" }],
+  "mediaItems": [{ "url": "https://leader-os.de/preview/carousels-01/C01.pdf", "type": "document" }],
+  "scheduledFor": "2026-10-28T07:30:00",
+  "timezone": "Europe/Berlin"
+}
+```
+
+`publishNow: true` replaces `scheduledFor` + `timezone`. Accounts are connected
+once in the Zernio dashboard; their `accountId` comes from `GET /accounts`.
+
+**Status:** the client and CLI are built against the documented API and covered
+by offline tests. They have not yet been exercised against the live Zernio API
+from this repo (the build sandbox cannot reach `zernio.com`). First real run:
+`python3 scripts_post_carousel.py accounts`, then one `post … --dry-run`, then
+one scheduled post, and check it in the Zernio dashboard.

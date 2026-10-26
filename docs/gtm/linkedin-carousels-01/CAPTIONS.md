@@ -8,7 +8,14 @@ Einzelbilder mit `-ig`-CTA-Folie). Quelle: `data.js` (Inhalte) +
 (kopiert nach `frontend/public/preview/carousels-01/`, schreibt das Manifest).
 Neue Karussells: Eintrag in `data.js`, rendern, veröffentlichen, fertig.
 Die Dateien liegen nach dem Deploy unter `leader-os.de/preview/carousels-01/`
-(nicht indexiert, `robots.txt`).
+(nicht indexiert, `robots.txt`), das Manifest unter
+`leader-os.de/preview/carousels-01/manifest.json`.
+
+**Posten per API (Zernio):** `backend/scripts_post_carousel.py` liest Manifest
+und diese Captions und plant ein Karussell auf einem verbundenen Konto
+(`accounts` zeigt die accountIds, `show C01` die Vorschau, `post C01 --platform
+linkedin --account … --at 2026-10-28T07:30` plant). Braucht `ZERNIO_API_KEY`
+in der Backend-Env; Details in `docs/ops/INTEGRATIONS.md` §6.
 
 **CTA in allen acht:** kostenloser Zugang in der Beta-Phase, begrenzte Plätze.
 Kein Webinar, kein Termin. Die Zahl `SEATS` in `data.js` (aktuell 50) muss der
