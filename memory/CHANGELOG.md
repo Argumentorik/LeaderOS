@@ -1,6 +1,14 @@
 # WladBot / LeaderOS — Changelog (ältere Iterationen)
 
 
+- [x] **[Iter 197 · 26.06.26] Dashboard-Redesign (Apple Bento) + Launch-Datum 30.11.2026** — verifiziert via testing_agent (iteration_194.json, Frontend 95% → Fixes nachgezogen) + Build
+  - **Launch-Datum** zentral von 01.11.2026 → **30.11.2026** (`backend/course_launch.py` DEFAULT_LAUNCH). Wirkt überall: „Aufnahme folgt · ab 30.11.2026", Countdown, Kurs-Curriculum, Pricing-Grid-Label (`TierPricingGrid.js`). Regressionstest `test_iter187_courses_university.py` auf das neue Datum aktualisiert.
+  - **Neues Bento-Dashboard** (`components/dashboard/BentoDashboard.js`, eingebunden in `DashboardPage.js`): Apple-Grade 12-Spalten-Bento-Grid mit (1) Header-/Streak-Karte mit Apple-Fitness-SVG-Fortschrittsring „Tag X / 30", (2) Hero „Die Aufgabe für heute" mit glühendem Lime-CTA „Aufgabe starten", (3) WladBot-Coach-Karte mit 3 Prompt-Pills, (4) 2-Minuten-Check-in, (5) Micro-Learning-Karte (Apple-TV-Stil) „Rhetorik-Grundlagen · Folge 1", (6) Live-Event-Karte (nur bei echtem Event). Alle CTAs navigieren korrekt (start→/challenge, coach→/chat, check-in→/daily-checkin, micro→/kurse, event→/events).
+  - **Zero Cognitive Overload:** Der Aufgaben-Backlog („Meine Aufgaben") + Sekundäres (Eigene Aufgabe, Kurse-Liste, Über dich, Fortschritt, ActionInbox) sind in den eingeklappten „Mehr"-Drawer (`DashboardMore`) verschoben. Hauptansicht zeigt nur den heutigen Fokus.
+  - **Design-Fixes nach Test:** Mobile-Truncation behoben (Begrüßung + Micro-Learning-Titel umbrechen statt abschneiden), gleiche Kartenhöhen pro Reihe (`items-stretch` + `h-full`), Live-Event-Karte rendert nur bei echtem Event (kein Fake-Datum mehr).
+  - Alles nur in DIESEM Workspace, NICHT auf `mvpcode`.
+
+
 - [x] **[Iter 196 · 26.06.26] UI/IA-Umbau: 3 Kategorien + Gesprächstraining-Hub** — verifiziert via testing_agent (iteration_193.json, 7/7 Checks PASS) + curl
   - **Navigation reduziert auf genau 3 Kategorien** (`Sidebar.js` Training-Gruppe): Gesprächstraining (→/playbooks), Challengers (→/challengers), Videoanalyse (→/missions). Die alte „Werkzeuge & Leitfäden"-Gruppe (toolbox) komplett entfernt.
   - **Ausgeblendet:** Community, Live-Events und der „Was ist neu?"-Button (`SidebarFooter.js`). Mobile (`MobileHeroNav.js`): Hero = Dashboard · WladBot · Training; „Mehr" enthält Challengers + Videoanalyse, kein Community/Events/Werkzeuge/Leitfäden.

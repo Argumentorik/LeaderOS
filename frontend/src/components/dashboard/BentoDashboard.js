@@ -50,7 +50,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
     : ['How do I address poor performance?', 'Phrase feedback after a review', 'De-escalate a team conflict'];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6 items-start" data-testid="bento-dashboard">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6 items-stretch" data-testid="bento-dashboard">
 
       {/* 1 · Header & Streak */}
       <CardShell className="col-span-12 rounded-3xl shadow-sm p-6 sm:p-8 relative overflow-hidden" data-testid="bento-header-card">
@@ -58,7 +58,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
         <div className="flex items-center gap-5 sm:gap-7 relative">
           <StreakRing pct={pct} day={day} total={total} />
           <div className="min-w-0 flex-1">
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight truncate">{greeting}{name ? `, ${name}` : ''}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight break-words">{greeting}{name ? `, ${name}` : ''}</h1>
             <p className="text-sm text-muted-foreground font-medium mt-1">
               {de ? `Du bist auf Tag ${day} von ${total}. Bleib dran für dein Tagesziel.` : `You're on day ${day} of ${total}. Keep going for today's goal.`}
             </p>
@@ -76,7 +76,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
       </CardShell>
 
       {/* 2 · Hero Mission */}
-      <div className="col-span-12 lg:col-span-7 rounded-3xl shadow-xl relative overflow-hidden group bg-[#0A0A0A] text-white border border-[#BFFF00]/20 hover:border-[#BFFF00]/40 transition-all duration-300 p-6 sm:p-8" data-testid="bento-hero-card">
+      <div className="col-span-12 lg:col-span-7 h-full rounded-3xl shadow-xl relative overflow-hidden group bg-[#0A0A0A] text-white border border-[#BFFF00]/20 hover:border-[#BFFF00]/40 transition-all duration-300 p-6 sm:p-8" data-testid="bento-hero-card">
         <div className="absolute -bottom-20 -right-16 w-72 h-72 bg-[#BFFF00]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#BFFF00]/[0.16] transition-colors" />
         <div className="relative flex flex-col h-full">
           <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#BFFF00]">{de ? 'Die Aufgabe für heute' : "Today's task"}</span>
@@ -93,7 +93,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
       </div>
 
       {/* 3 · WladBot AI Coach */}
-      <CardShell className="col-span-12 lg:col-span-5 rounded-3xl shadow-md p-6 flex flex-col" data-testid="bento-coach-card">
+      <CardShell className="col-span-12 lg:col-span-5 h-full rounded-3xl shadow-md p-6 flex flex-col" data-testid="bento-coach-card">
         <div className="flex items-center gap-3">
           <img src={WLAD_AVATAR} alt="Wlad" className="w-11 h-11 rounded-full object-cover ring-2 ring-[#BFFF00]/25 shrink-0" />
           <div className="min-w-0">
@@ -117,7 +117,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
       </CardShell>
 
       {/* 4 · Check-in */}
-      <CardShell className="col-span-12 sm:col-span-6 lg:col-span-5 rounded-2xl shadow-sm p-6 flex flex-col justify-between" data-testid="bento-checkin-card">
+      <CardShell className="col-span-12 sm:col-span-6 lg:col-span-5 h-full rounded-2xl shadow-sm p-6 flex flex-col justify-between" data-testid="bento-checkin-card">
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-[15px] font-bold">{de ? '2-Minuten Check-in' : '2-minute check-in'}</h3>
@@ -135,7 +135,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
 
       {/* 5 · Micro-Learning (Apple TV / Netflix Stil) */}
       <button onClick={() => navigate('/kurse')} data-testid="bento-microlearning-card"
-        className="col-span-12 sm:col-span-6 lg:col-span-7 rounded-3xl shadow-md overflow-hidden group text-left relative min-h-[150px] bg-[#0A0A0A] text-white border border-white/[0.07]">
+        className="col-span-12 sm:col-span-6 lg:col-span-7 h-full rounded-3xl shadow-md overflow-hidden group text-left relative min-h-[150px] bg-[#0A0A0A] text-white border border-white/[0.07]">
         <div className="absolute inset-0 bg-gradient-to-tr from-[#0A0A0A] via-[#0A0A0A]/80 to-[#1b2a00]" />
         <div className="absolute -top-10 right-6 w-40 h-40 bg-[#BFFF00]/15 rounded-full blur-3xl" />
         <div className="relative p-6 flex items-center gap-5 h-full">
@@ -144,14 +144,15 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
           </div>
           <div className="min-w-0 flex-1">
             <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#BFFF00]">{de ? 'Micro-Learning' : 'Micro-learning'}</span>
-            <h3 className="text-base sm:text-lg font-black mt-1 truncate">Rhetorik-Grundlagen · {de ? 'Folge 1' : 'Episode 1'}</h3>
+            <h3 className="text-base sm:text-lg font-black mt-1 leading-snug">Rhetorik-Grundlagen · {de ? 'Folge 1' : 'Episode 1'}</h3>
             <p className="text-[12px] text-white/50 mt-1 flex items-center gap-1.5"><GraduationCap size={13} /> {de ? 'Kurze Videofolge · unter 12 Min' : 'Short video · under 12 min'}</p>
           </div>
           <ArrowRight size={18} className="text-white/40 group-hover:text-[#BFFF00] group-hover:translate-x-1 transition-all shrink-0" />
         </div>
       </button>
 
-      {/* 6 · Nächstes Live-Event */}
+      {/* 6 · Nächstes Live-Event — nur wenn ein echtes Event vorliegt */}
+      {nextEvent && (
       <CardShell className="col-span-12 rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-testid="bento-event-card">
         <div className="flex items-center gap-4 min-w-0">
           <div className="w-11 h-11 rounded-2xl bg-[#BFFF00]/12 border border-[#BFFF00]/20 flex items-center justify-center shrink-0">
@@ -159,8 +160,8 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
           </div>
           <div className="min-w-0">
             <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">{de ? 'Nächstes Live-Event' : 'Next live event'}</span>
-            <h3 className="text-[15px] font-bold mt-0.5 truncate">{nextEvent?.title || 'LIVE KI Call mit Wlad #1'}</h3>
-            <p className="text-[12px] text-muted-foreground">{nextEvent?.when_label || nextEvent?.date_label || 'Do., 29. Okt., 19:00 Uhr'}</p>
+            <h3 className="text-[15px] font-bold mt-0.5 truncate">{nextEvent.title}</h3>
+            {(nextEvent.when_label || nextEvent.date_label) && <p className="text-[12px] text-muted-foreground">{nextEvent.when_label || nextEvent.date_label}</p>}
           </div>
         </div>
         <button onClick={() => navigate('/events')} data-testid="bento-event-btn"
@@ -168,6 +169,7 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
           {de ? 'Teilnahme bestätigen' : 'Confirm attendance'}
         </button>
       </CardShell>
+      )}
     </div>
   );
 };

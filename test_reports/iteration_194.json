@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend only. I tested the Bento dashboard redesign, CTA navigation, the 'Mehr' drawer that holds the backlog, and the launch-date label at desktop 1920x800 and mobile 390x844, logged in as free@wladbot.test. All requested features work. All 6 bento cards and every listed testid render and are visible. Greeting reads 'Guten Abend, Felix Free'. The streak ring SVG has 2 circles. The hero card shows 'Die Aufgabe für heute' and the lime 'Aufgabe starten' CTA. Cards do not overlap at either size, and there is no horizontal overflow at 390px (scrollWidth 390), including with the drawer open. All CTAs navigate correctly: start-task -> /challenge, coach-open -> /chat, pill-1 -> /chat, check-in -> /daily-checkin, micro-learning -> /kurse, event -> /events. 'Meine Aufgaben' (home-section-my-tasks) is not in the main view by default and appears after dashboard-more-toggle; the drawer holds my-tasks, own-task, courses-more, about-you and progress. /kurse/rhetorik-grundlagen shows 'Aufnahme folgt · ab 30.11.2026', and 01.11.2026 appears nowhere on the page. Two minor mobile issues: text is truncated on the header and micro-learning cards.",
+  "backend_issues": {"critical": [], "minor": [{"endpoint": "backend/tests/test_iter187_courses_university.py", "issue": "Out-of-date regression test: lines 36-37 and 56 still assert launch date '2026-11-01' / label '01.11.2026', so it will now fail. Update it to 2026-11-30 / 30.11.2026."}]},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "BentoDashboard header card (mobile 390px)", "issue": "The greeting h1 uses 'truncate' and sits next to the 108px ring, so it shows only 'Guten Abend…' and the user's name is cut off completely.", "selector": "[data-testid=bento-header-card] h1", "priority": "MEDIUM"},
+      {"component": "BentoDashboard micro-learning card (mobile 390px)", "issue": "The title is truncated to 'Rhetorik-Grundlagen·…', so the required 'Folge 1' is not visible on mobile. It is fine on desktop.", "selector": "[data-testid=bento-microlearning-card] h3", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Dashboard desktop", "issues": ["The grid uses items-start, so cards in the same row have different heights: hero 233px vs coach 242px, check-in 134px vs micro-learning 150px. The bottom edges do not line up; use items-stretch / h-full for a clean Bento look.", "The pre-existing 'Support · Direktkontakt' feedback popup (bottom-right) covers the 'Teilnahme bestätigen' event button at 1920x800 until it is dismissed."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Mobile header greeting: replace 'truncate' with wrapping (e.g. line-clamp-2 / break-words) or a smaller font / ring on small screens so the name is visible.",
+    "Mobile micro-learning title: allow wrapping so 'Folge 1' is visible.",
+    "Optional: items-stretch for equal-height cards in each Bento row.",
+    "Update backend/tests/test_iter187_courses_university.py to the new launch date 30.11.2026."
+  ],
+  "critical_code_review_comments": [
+    "BentoDashboard event card has hardcoded fallbacks ('LIVE KI Call mit Wlad #1', 'Do., 29. Okt., 19:00 Uhr'). With no events it would show a fake date; hide the card or show an empty state instead.",
+    "The hero falls back to the fixed title 'Die 3 Säulen der Überzeugung' when todayTask is missing, so it could show a task that does not match the user's day.",
+    "DashboardMore count badge is hardcoded (9/10) and does not match the real number of sections (5 Section blocks plus ActionInbox)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "skipped", "frontend": "95%"},
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Login free@wladbot.test/test123, cookie banner 'Alle akzeptieren', then close [data-testid=tour-close]. The drawer's open/closed state is saved in localStorage key 'wladbot_dashboard_more_open'; remove it before checking the default collapsed state. Drawer sections use testids home-section-{id}. The Rhetorik course is at /kurse/rhetorik-grundlagen."
+}

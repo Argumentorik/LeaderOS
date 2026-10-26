@@ -33,8 +33,8 @@ def test_list_courses_public_launch_and_totals():
     assert data["has_access"] is False
     assert data["lead_registered"] is False
     launch = data["launch"]
-    assert launch["date"] == "2026-11-01"
-    assert launch["label"] == "01.11.2026"
+    assert launch["date"] == "2026-11-30"
+    assert launch["label"] == "30.11.2026"
     assert launch["launched"] is False
     assert launch["days_until"] > 0
 
@@ -53,7 +53,7 @@ def test_get_single_course_public():
     assert r.status_code == 200, r.text
     data = r.json()
     assert data["slug"] == "rhetorik-grundlagen"
-    assert data["launch"]["date"] == "2026-11-01"
+    assert data["launch"]["date"] == "2026-11-30"
     assert data["lead_registered"] is False
     assert data["episodes"][0]["gate"] == "none"
     assert data["episodes"][1]["gate"] == "email"
