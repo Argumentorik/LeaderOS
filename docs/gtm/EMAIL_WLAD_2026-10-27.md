@@ -7,6 +7,9 @@ https://drive.google.com/drive/folders/1AMTKky_9KAdtEFp9lXt3VxpvJKj3SdZT
 Inhalt des Ordners: `00 · Überblick und Links`, `01 · YouTube-Plan und
 Demo-Skript` (= `YOUTUBE_PLAN_2026-11.md`), `02 · Captions Karussells`,
 `03 · Captions Poster`, `04 · Posting-Plan November` (= `SCHEDULE.json`),
+`05 · Alle Designs auf einen Blick` (alle sechs Poster und 52 Folien als
+Bilder im Doc, aus den öffentlichen Preview-URLs importiert, damit Wlad
+die neuen Designs ohne Klick sieht und direkt am Bild kommentieren kann),
 Unterordner `Rohmaterial` für Wlads Aufnahmen.
 
 **Offene Antworten von Wlad** (nachhalten):
