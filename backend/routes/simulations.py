@@ -14,6 +14,9 @@ from services_actions import record_user_action
 from data import SIMULATION_SCENARIOS
 from routes.argumentation_prep_pdf import render_strategy_pdf
 from services_ai_errors import ai_http_error
+from services_simulation import (
+    build_system_message, end_prompt_suffix, end_rag_query, is_scoring_turn, model_for_turn,
+)
 
 router = APIRouter(prefix="/api", tags=["simulations"])
 
@@ -90,9 +93,14 @@ async def start_simulation(data: SimulationStart, request: Request):
     try:
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
-            system_message=SIMULATION_SYSTEM_PROMPT + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}\nDifficulty: {data.difficulty}" + setup_block,
+            system_message=build_system_message(
+                SIMULATION_SYSTEM_PROMPT,
+                f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}\nDifficulty: {data.difficulty}",
+                scenario, setup_block=setup_block,
+            ),
         )
-        chat.with_model("openai", "gpt-5.2")
+        # Tempo: der Einstieg ist ein kurzer Rollenspiel-Zug, kein Scoring (siehe services_simulation).
+        chat.with_model(*model_for_turn(False))
         ai_response = await chat.send_message(UserMessage(text="Start the simulation. Introduce yourself as the employee and set the scene."))
 
         await db.simulations.update_one(
@@ -148,6 +156,11 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
     scenario = sim["scenario"]
     try:
         end_sim = data.message.lower().strip() in ["end simulation", "end", "finish"]
+        msgs = sim.get("messages", [])
+        # Scoring-Zug: Ende angefordert oder die achte Manager-Nachricht erreicht (ab da liefert
+        # die Figur laut Basis-Prompt die JSON-Auswertung). Alle anderen Züge sind kurze
+        # Rollenspiel-Antworten und laufen über das schnelle Modell.
+        scoring = is_scoring_turn(end_sim, sum(1 for m in msgs if m["role"] == "user"))
 
         # RAG: pull Wlad-corpus chunks ONLY on simulation-end (where scoring/feedback
         # happens). During the role-play turns we want the AI to stay in-character,
@@ -157,12 +170,10 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
         if end_sim:
             try:
                 from services_rag import retrieve_context
-                msgs_so_far = sim.get("messages", [])
                 user_lines = " ".join(
-                    m["content"][:200] for m in msgs_so_far if m["role"] == "user"
+                    m["content"][:200] for m in msgs if m["role"] == "user"
                 )[:600]
-                rag_query = f"{scenario.get('description', '')} Feedback Leadership Bewertung {user_lines}"
-                rag_ctx = await retrieve_context(rag_query)
+                rag_ctx = await retrieve_context(end_rag_query(scenario, user_lines))
                 if rag_ctx.get("rag_active"):
                     rag_block = "\n\n" + rag_ctx["context_block"]
             except Exception:
@@ -170,21 +181,19 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
 
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
-            system_message=(
-                SIMULATION_SYSTEM_PROMPT
-                + f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}"
-                + sim.get("setup_block", "")
-                + rag_block
+            system_message=build_system_message(
+                SIMULATION_SYSTEM_PROMPT,
+                f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}",
+                scenario, setup_block=sim.get("setup_block", ""), rag_block=rag_block, scoring=scoring,
             ),
         )
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model(*model_for_turn(scoring))
 
-        msgs = sim.get("messages", [])
         context = "\n".join([f"{'Manager' if m['role'] == 'user' else 'Employee'}: {m['content']}" for m in msgs[-8:]])
 
         prompt = f"{context}\nManager: {data.message}"
         if end_sim:
-            prompt += "\n\nThe simulation is now ending. Provide the JSON analysis with scores."
+            prompt += "\n\nThe simulation is now ending. Provide the JSON analysis with scores." + end_prompt_suffix(scenario)
 
         ai_response = await chat.send_message(UserMessage(text=prompt))
 

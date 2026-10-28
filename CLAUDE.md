@@ -21,6 +21,13 @@ Both surfaces are served by the same React app in `frontend/`. The FastAPI
 backend in `backend/` is hosted at `https://leader-os.de/api/*` and proxied
 through `vercel.json` rewrites.
 
+**Where things actually run.** Vercel serves the marketing and funnel pages
+(`leader-os.de`, `leader-check.de`: landings, `/webinar`, journal) and redirects
+the app routes (`/login`, `/dashboard`, `/chat`, `/simulations`, `/onboarding`,
+…) to **`leaderos.de`**, which is the **Emergent** deployment (frontend and
+backend). Emergent is deployed **manually from `mvpcode`**; a merged PR reaches
+`leaderos.de` only after that deploy (`docs/ops/APP_TAKEOVER_STEFAN.md`).
+
 **Supabase project ref:** `srujvjjncrszhaaxepxf` (region `eu-north-1`, Postgres 17).
 The Supabase MCP server is wired in `.mcp.json` scoped to that project.
 

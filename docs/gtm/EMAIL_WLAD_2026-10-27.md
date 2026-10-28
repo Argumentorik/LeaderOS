@@ -53,3 +53,16 @@ Noch zwei kurze Fragen zu Tools: Hast du einen Higgsfield-Account, den wir für 
 
 Viele Grüße
 Mert
+
+---
+
+## Wlads Antwort (28.10.2026)
+
+1. **Drive:** alles künftig über Google Workspace (Argumentorik) teilen, nicht aus einem privaten Drive. → Drive-Connector mit dem argumentorik.com-Konto verbinden, Ordner dort neu anlegen.
+2. **Webinar:** nicht vormittags; zuerst Evergreen-Marketing, das (kostenintensivere) Webinar erst, wenn die Plattform regelmäßig gutes Feedback bekommt. Strategie am Donnerstag 29.10. besprechen. → `WEBINAR_STRATEGIE_DONNERSTAG.md`.
+3. **Aufnahmen:** kein Problem, macht er ohnehin jede Woche. Details am Donnerstag.
+4. **Verknappung:** „Woher kommen die 50 Plätze?“ (Platzhalter von uns). Wlad würde Verknappung einbauen, „auch wenn sie nicht stimmt“, und trotzdem mehr Leute zulassen. → Nicht umsetzen (irreführend, gegen `WEBINAR_FUNNEL.md`); Alternative Wellen-Modell.
+5. **App:** „Ist das schon für alle live?“ Übersichtlich (gut). Mängel: WladBot-Antwortqualität, Argumentationstraining ohne SEXIER, Einführungs- und Onboarding-Videos nur noch Text, Gesprächstraining zu langsam. → `docs/app/WLAD_FEEDBACK_2026-10-28.md`.
+6. **Tools:** kein Higgsfield-Account, Loom ja, sonst nichts.
+
+Antwortentwurf (nicht gesendet): `EMAIL_WLAD_2026-10-28_ANTWORT_ENTWURF.md`.

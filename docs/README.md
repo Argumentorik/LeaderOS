@@ -69,6 +69,7 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`app/DOMAIN_TOPOLOGY.md`](./app/DOMAIN_TOPOLOGY.md) | Host-based routing: leader-os.de vs leader-check.de |
 | [`app/FINAL_TOPOLOGY.md`](./app/FINAL_TOPOLOGY.md) | Target topology |
 | [`app/RAG_KNOWLEDGE_FLOW.md`](./app/RAG_KNOWLEDGE_FLOW.md) | WladBot RAG pipeline (chunks, embeddings, match thresholds) |
+| [`app/WLAD_FEEDBACK_2026-10-28.md`](./app/WLAD_FEEDBACK_2026-10-28.md) | **Wlads Produkt-Feedback 28.10.** — Befund im Code, was geändert wurde (Tempo und SEXIER im Rollenspiel), was offen ist (Qualität, Videos, Deploy), Prüfliste nach dem Emergent-Deploy |
 | [`app/WLADBOT_OVERVIEW.md`](./app/WLADBOT_OVERVIEW.md) | WladBot product overview |
 | [`app/SUPABASE_SYNC_INTEGRATION.md`](./app/SUPABASE_SYNC_INTEGRATION.md) | Supabase ↔ Mongo sync handoff |
 
@@ -89,6 +90,8 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`ops/INTEGRATIONS.md`](./ops/INTEGRATIONS.md) | PostHog EU + Sentry + Supabase frontend wiring |
 | [`ops/EMERGENT_ADMIN_ONBOARDING.md`](./ops/EMERGENT_ADMIN_ONBOARDING.md) | **Emergent-Admin-Onboarding (Stefan)** — Topologie, GitHub↔Emergent-Drift, Env-Vars, Deploy + Smoke-Checks, Cron-Jobs, offene Incidents, First-Week-Checkliste |
 | [`gtm/linkedin-wlad-01/CAPTIONS.md`](./gtm/linkedin-wlad-01/CAPTIONS.md) | **LinkedIn-Poster-Serie 01 für Wlad** — fünf Typo-Statement-Poster (4:5) mit Captions, Takt und Freigabe-Fragen; Quelle `poster.html`, Render `render.cjs` |
+| [`gtm/WEBINAR_STRATEGIE_DONNERSTAG.md`](./gtm/WEBINAR_STRATEGIE_DONNERSTAG.md) | **Entscheidungsvorlage Webinar vs. Evergreen** für den Termin mit Wlad am 29.10. — drei Wege, Empfehlung, Wellen-Modell statt erfundener Verknappung, offene Entscheidungen |
+| [`gtm/EMAIL_WLAD_2026-10-28_ANTWORT_ENTWURF.md`](./gtm/EMAIL_WLAD_2026-10-28_ANTWORT_ENTWURF.md) | Antwortentwurf an Wlad auf sein Feedback vom 28.10. (nicht gesendet) |
 | [`gtm/YOUTUBE_PLAN_2026-11.md`](./gtm/YOUTUBE_PLAN_2026-11.md) | **Video-Plan November** — die drei Aufnahmen von Wlad (Demo 5–6 Min, Evergreen-Webinar, Micro-Demos), Demo-Skript, Aufnahme-Anleitung, Recycling-Baum YouTube → Shorts/LinkedIn/Karussell/Journal, Tool-Stack lean |
 | [`gtm/EMAIL_WLAD_2026-10-27.md`](./gtm/EMAIL_WLAD_2026-10-27.md) | Gesendete Mail an Wlad (Termin, Aufnahmen, Freigaben, Zernio, Tools) mit Drive-Ordner und offenen Antworten |
 | [`gtm/ADS_LAUNCH_2026-11.md`](./gtm/ADS_LAUNCH_2026-11.md) | **Ads-Launch Webinar 26.11.2026** — Go/No-Go-Checkliste: Zeitplan, Funnel-Status, Conversion-Tracking und Vercel-Env, UTM-Konvention, Creatives, Zernio-Plan, Pre-Flight |
