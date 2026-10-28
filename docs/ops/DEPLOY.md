@@ -27,6 +27,7 @@
 | `GOOGLE_CLIENT_ID` | ◻️ | Legacy-GIS-Erkennung (Provider-Discovery) |
 | `SENTRY_DSN` | ◻️ | Error-Monitoring |
 | `POSTHOG_API_KEY`, `POSTHOG_HOST` | ◻️ | Produkt-Analytics |
+| `SIM_TURN_MODEL` | ◻️ | Modell für die Rollenspiel-Züge im Gesprächstraining, Format `provider/model`. Standard `openai/gpt-4o` (3–5 s statt 15–25 s mit gpt-5.2); Alternativen `anthropic/claude-haiku-4-5-20251001` oder `openai/gpt-5.2` (alter Stand). Die JSON-Auswertung bleibt bei gpt-5.2 |
 | `ZERNIO_API_KEY` | ◻️ | Social-Posting-API (Karussells per `scripts_post_carousel.py` planen); ohne Key läuft nur `--dry-run` |
 | `CORS_ORIGINS` | ✅ | `*` oder Domain-Liste |
 | `RAG_EMBEDDINGS_DISABLED` | 🆘 | `1` = Notschalter: kein ONNX-Modell-Load (Keyword-RAG bleibt aktiv) |
