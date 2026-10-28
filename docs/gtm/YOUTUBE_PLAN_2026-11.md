@@ -40,8 +40,8 @@ Klienten, 10 Kurse, 11 Drills, Simulationen, WladBot.
 1. **Konto:** Demo-Login, den wir anlegen (kein echter Nutzer, keine echten
    Namen im Bild). Browser-Fenster 1920×1080, Lesezeichenleiste aus,
    Benachrichtigungen aus, Zoom 110 %.
-2. **Tool:** QuickTime (Mac: Bildschirmaufnahme + Mikrofon) oder Loom
-   (1080p, Kamera-Bubble rechts unten). Kein Zoom-Meeting-Mitschnitt.
+2. **Tool:** Loom (hat Wlad; 1080p, Kamera-Bubble rechts unten), alternativ
+   QuickTime (Mac: Bildschirmaufnahme + Mikrofon). Kein Zoom-Meeting-Mitschnitt.
 3. **Ton:** Headset oder Ansteckmikro, ruhiger Raum, 10 Sekunden Stille am
    Anfang (für die Rauschunterdrückung).
 4. **Tempo:** Langsamer klicken als normal, nach jedem Schritt eine Sekunde
@@ -77,7 +77,12 @@ Dienstag Timecodes und Entwürfe, Mittwoch Shorts, Donnerstag Karussell).
 | Mail | Resend (Transaktion), Newsletter via Supabase | jedes zweite Newsletter-Tool |
 | Termine | Cal.com (bereits eingebettet) | – |
 
-Entscheidung mit Wlad: welche Abos laufen auf seiner Seite (Canva, Descript,
+**Stand 28.10. (Wlads Antwort):** Loom hat er, Higgsfield-Account und die
+übrigen Tools (Canva, Descript, CapCut, Buffer) nicht. Bildschirmaufnahmen also
+mit Loom; kein Higgsfield nötig. Aufnehmen ist für ihn kein Problem, er macht
+jede Woche Videos.
+
+Ursprüngliche Frage: welche Abos laufen auf seiner Seite (Canva, Descript,
 CapCut, Loom, Higgsfield, Buffer/Hootsuite …), und welche davon fallen weg,
 sobald Zernio und unsere Renderer stehen.
 

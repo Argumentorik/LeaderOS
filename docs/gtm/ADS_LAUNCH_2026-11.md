@@ -1,5 +1,16 @@
 # Ads-Launch · Live-Webinar Do 26.11.2026 · Go/No-Go
 
+> **Stand 28.10.2026: Strategie offen, keine bezahlten Kampagnen.** Wlad will
+> zuerst Evergreen-Marketing und das Webinar nicht vormittags; die Entscheidung
+> fällt am Do 29.10. (Vorlage: `WEBINAR_STRATEGIE_DONNERSTAG.md`). Dieses
+> Dokument gilt für den Webinar-Pfad. Für beide Pfade gelten Pixel-Env,
+> Tracking-Test und Backend-Deploy. **Wo was läuft:** `leader-os.de` und
+> `leader-check.de` (Landings, `/webinar`, Journal) liegen auf Vercel; die App
+> hinter `/signup`, `/login`, `/dashboard` liegt auf **`leaderos.de` (Emergent)**.
+> Jeder Anzeigen-Klick auf „Test starten“ landet dort, und Änderungen sind dort
+> erst nach einem manuellen Emergent-Deploy aus `mvpcode` live
+> (`docs/app/WLAD_FEEDBACK_2026-10-28.md`).
+
 Stand 26.10.2026. Diese Seite ist die eine Checkliste für den Start der
 bezahlten Kampagnen auf `/webinar`. Die Detailpläne je Plattform bleiben:
 `META_ADS_WEBINAR.md`, `LINKEDIN_ADS_WEBINAR.md`, `GOOGLE_ADS_SETUP.md`,
