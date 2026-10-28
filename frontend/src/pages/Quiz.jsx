@@ -34,7 +34,7 @@ function WladBotChat({ onContinue }) {
       const res = await axios.post(`${API}/coach/chat`, {
         session_id: user.session_id || "demo",
         message: `[Vor-Report Gespräch] Der Nutzer hat gerade 20 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich. WICHTIG: Behaupte NIEMALS, dass du den Report gerade im Hintergrund erstellst oder von selbst eine E-Mail verschickst · das passiert erst, wenn der Nutzer unten auf den Button tippt. Weise am Ende deiner Antwort freundlich darauf hin, dass er unten auf den grünen Button tippt, um seinen Report jetzt zu erstellen. Nutzer-Nachricht: ${text}`,
-      });
+      }, { headers: { "X-Session-ID": user.session_id || "demo" } });
       setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
       setExchangeCount(c => c + 1);
     } catch {
@@ -216,7 +216,7 @@ export default function Quiz() {
     if (!sid) return;
     axios.post(`${API}/quiz/progress`, {
       session_id: sid, answers, current, total: questions.length,
-    }).catch(() => {});
+    }, { headers: { "X-Session-ID": sid } }).catch(() => {});
   }, [answers, current, questions.length]);
 
   useEffect(() => {

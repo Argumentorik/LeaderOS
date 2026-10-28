@@ -7,7 +7,7 @@ import logging
 from typing import Optional
 
 from models import QuizSubmit, CoachMessage, QuizProgressUpdate
-from services.security import issue_report_token, verify_report_token, issue_sync_token
+from services.security import issue_report_token, verify_report_token, issue_sync_token, session_rl_key
 
 logger = logging.getLogger(__name__)
 
@@ -166,11 +166,12 @@ async def generate_ai_narrative(llm_key, session_id, user, cat_avg, layer_avg, t
 
 def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> None:
 
-    def _rl(spec: str):
+    def _rl(spec: str, key=None):
         """Return a route-decorator that applies slowapi limits when limiter is
-        wired in. Falls back to identity in dev/tests where limiter is None."""
+        wired in. Falls back to identity in dev/tests where limiter is None.
+        `key` overrides the global IP key_func for specific routes."""
         if limiter:
-            return limiter.limit(spec)
+            return limiter.limit(spec, key_func=key) if key else limiter.limit(spec)
         return lambda fn: fn
 
     def _bearer_token(authorization: Optional[str]) -> str:
@@ -248,7 +249,7 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
         return {**report, "report_token": report_token, "sync_token": sync_token}
 
     @router.post("/quiz/progress")
-    @_rl("60/minute")
+    @_rl("120/minute", key=session_rl_key)
     async def save_quiz_progress(request: Request, data: QuizProgressUpdate) -> dict:
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
         if not user:
@@ -331,7 +332,7 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
         return report
 
     @router.post("/coach/chat")
-    @_rl("20/minute")
+    @_rl("60/minute", key=session_rl_key)
     async def coach_chat(request: Request, data: CoachMessage, authorization: Optional[str] = Header(None)) -> dict:
         # Auth model:
         #  · pre-report warmup chat (no report exists yet)  → allowed anonymously

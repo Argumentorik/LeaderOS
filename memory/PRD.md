@@ -1,3 +1,16 @@
+## 🔒 Iter 42b · Rate-Limit-Härtung (Jun 2026)
+**Problem (bestätigt via Diagnose-Log):** Der globale Limiter keyte auf den rechtesten X-Forwarded-For-Hop (`secure_client_ip`). In dieser Umgebung ist dieser Hop die **Ingress-IP** `35.186.245.91` (echter Client steht links: `34.170.12.145`) → **alle Nutzer teilten einen Bucket**. Gruppen-Tests lösten gegenseitige 429 aus; `/quiz/progress`-429 verwarfen stumm serverseitige Speicherungen.
+
+**Fix (User-Entscheidung: pro Nutzer statt pro IP):**
+- Neuer Key `session_rl_key` (`services/security.py`): liest `X-Session-ID`-Header (validiert, 1–256 Zeichen), Fallback = IP-Key.
+- Angewandt NUR auf High-Frequency-Non-Auth-Routen: `POST /api/quiz/progress` (120/min/Session), `POST /api/coach/chat` (60/min/Session).
+- **Unverändert IP-basiert** (Brute-Force-Schutz): `/user/create`, OTP/Login, `/quiz/generate-report`. ⚠️ Diese bucketen weiterhin global auf die Ingress-IP → bei großen Gruppen-Tests können legitime 429 bei Login/Create auftreten. Bewusst konservativ belassen.
+- Diagnose-Logging in `secure_client_ip`: loggt erste ~100 distinct IPs mit peer + XFF (keine Session-IDs) → zeigt in Prod, worauf der Key zeigt.
+- CORS: `X-Session-ID` zu `allow_headers` ergänzt (Preflight verifiziert 200).
+- Frontend: `X-Session-ID`-Header auf allen 3 Aufrufstellen (Quiz.jsx coach + progress, AICoach.jsx).
+- Verifiziert: 8 schnelle Progress-Saves → alle 200; coach/chat 200; OPTIONS-Preflight 200.
+- ⚠️ Redeploy nötig für Production.
+
 # Leader OS / Leader-Check — Product Requirements
 
 ## 🚀 Iter 42 · Report-Flow-Klarheit + Godmode-PDF + Quiz-Resume (Jun 2026)

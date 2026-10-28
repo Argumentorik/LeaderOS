@@ -102,7 +102,7 @@ app.add_middleware(
     allow_origin_regex=r"^https://.*\.preview\.emergentagent\.com$",  # allow preview subdomains
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Requested-With"],
+    allow_headers=["Authorization", "Content-Type", "X-Requested-With", "X-Session-ID"],
 )
 logger.info(f"[cors] allowlist = {CORS_ORIGINS}")
 

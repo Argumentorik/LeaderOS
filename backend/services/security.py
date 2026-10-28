@@ -180,17 +180,42 @@ async def verify_otp(db, email: str, code: str) -> bool:
 
 # ─── Rate-limit client key ────────────────────────────────────────────────
 
+logger = logging.getLogger(__name__)
+_seen_ip_keys: set[str] = set()  # bounded diagnostic de-dup (per worker)
+
+
 def secure_client_ip(request: Request) -> str:
     """Return the last (right-most) hop from X-Forwarded-For, which our
     ingress/proxy sets to the real client IP. Attackers can inject arbitrary
     values at the head of XFF, but not at the tail — the proxy always appends
     the real remote-addr. Falls back to `request.client.host`."""
     xff = request.headers.get("x-forwarded-for", "")
-    if xff:
-        parts = [p.strip() for p in xff.split(",") if p.strip()]
-        if parts:
-            return parts[-1]
-    return request.client.host if request.client else "unknown"
+    parts = [p.strip() for p in xff.split(",") if p.strip()]
+    peer = request.client.host if request.client else "unknown"
+    ip = parts[-1] if parts else peer
+    # Low-noise prod diagnostic: log the first ~100 distinct computed IPs with
+    # their raw peer + XFF so we can tell whether the ingress hop buckets all
+    # users into one shared key. Never logs session ids.
+    if ip not in _seen_ip_keys and len(_seen_ip_keys) < 100:
+        _seen_ip_keys.add(ip)
+        logger.info("[ratelimit-ip] computed_ip=%s peer=%s xff=%r", ip, peer, xff)
+    return ip or "unknown"
+
+
+def session_rl_key(request: Request) -> str:
+    """Per-session rate-limit key for high-frequency, non-auth routes
+    (quiz autosave, coach chat). Reads a server-issued session id from the
+    `X-Session-ID` header so that users behind a shared IP/NAT or ingress hop
+    do not share one bucket. Falls back to the anti-spoof IP key.
+
+    NOT for auth/OTP/report-generation — those stay IP-keyed so an attacker
+    cannot evade brute-force limits by rotating a client-presented id."""
+    sid = request.headers.get("X-Session-ID", "")
+    if sid:
+        sid = sid.strip()
+        if 1 <= len(sid) <= 256 and all(ord(c) >= 0x20 for c in sid):
+            return f"session:{sid}"
+    return f"ip:{secure_client_ip(request)}"
 
 
 # ─── HTML escape (re-export as service concern) ───────────────────────────
