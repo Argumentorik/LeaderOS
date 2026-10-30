@@ -7,6 +7,7 @@ import { applyPageMeta } from '../lib/pageMeta';
 import { isValidEmail } from '../features/newsletter/lib/newsletterClient';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAssets';
 import { WladMark } from '../components/brand/WladMark';
+import { AGENDA, WEBINAR_DATE_LABEL, WEBINAR_END, WEBINAR_START, WEBINAR_TIME_LABEL, WEBINAR_TS } from '../data/webinarEvent';
 
 /**
  * WebinarLivePage · /webinar/live · the waiting room.
@@ -22,19 +23,9 @@ import { WladMark } from '../components/brand/WladMark';
  * Light theme, same center axis as /webinar.
  */
 
-const WEBINAR_TS = new Date('2026-11-26T10:00:00+01:00').getTime();
-const DATE_LINE = 'DO 29. OKTOBER 2026 · 10:00 UHR · LIVE · ONLINE';
-
-const WEBINAR_START = new Date('2026-11-26T10:00:00+01:00');
-const WEBINAR_END = new Date('2026-11-26T11:30:00+01:00');
-
-const AGENDA = [
-  ['10:00', 'Check-in & Warm-up'],
-  ['10:05', 'Der Charisma-Code live'],
-  ['10:25', 'Das Leadership Operating System'],
-  ['10:55', 'Live-Case aus der Community'],
-  ['11:15', 'Q&A mit Wlad'],
-];
+// Termin und Agenda kommen aus data/webinarEvent.js, damit der Warteraum
+// nie ein anderes Datum nennt als /webinar.
+const DATE_LINE = `${WEBINAR_DATE_LABEL.replace(',', '')} · ${WEBINAR_TIME_LABEL} · LIVE · ONLINE`.toUpperCase();
 
 const googleCalendarUrl = () => {
   const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -44,7 +35,7 @@ const googleCalendarUrl = () => {
   return (
     'https://www.google.com/calendar/render?action=TEMPLATE' +
     '&text=' + encodeURIComponent('Führe besser. Jeden Tag. · Live-Webinar') +
-    `&dates=${fmt(WEBINAR_START)}/${fmt(WEBINAR_END)}` +
+    `&dates=${fmt(new Date(WEBINAR_START))}/${fmt(new Date(WEBINAR_END))}` +
     `&details=${details}` +
     '&location=' + encodeURIComponent('Online — LeaderOS')
   );

@@ -19,6 +19,11 @@
 // Platzhalter — was im Entwurf steht, geht irgendwann raus
 // (docs/gtm/CREATIVE_MATRIX.md §5). Neue Wlad-Shoots: Pfad hier tauschen.
 
+import { WEBINAR_DATE_COMPACT } from './webinarEvent';
+
+// Webinar-Datum für Ad-Texte, nur aus der einen Quelle (z. B. "26. NOV.").
+const WEBINAR_DAY = `${WEBINAR_DATE_COMPACT.toUpperCase()}.`;
+
 // Brand-Paletten · direkt im Netflix-Bites-Frequenzband, plus
 // Lime als unser Anker. Jede Palette: bg (riesiger Farbblock),
 // hi (Headline-Neon), lo (kleinere Caption / URL).
@@ -367,7 +372,7 @@ const WEBINAR_ANGLES = [
   // ── D03 · Das Angebot selbst · Quadrant: convert ──────────────────
   {
     key: 'D03', slug: 'webinar-live', quadrant: 'convert', palette: 'midnight',
-    topText: 'LIVE-WEBINAR\n29. OKT.',
+    topText: `LIVE-WEBINAR\n${WEBINAR_DAY}`,
     titleText: 'FÜHRE BESSER.\nJEDEN TAG.',
     bottomText: 'DO 26.11. · 10 UHR · 0 €',
     cta: 'PLATZ SICHERN',
@@ -515,7 +520,7 @@ const BOOK = (file) => `/wlad/books/${file}.jpg`;
 
 const VARIANTS = {
   D03: {
-    b: { palette: 'paper', topText: 'DO 29. OKT.\n10:00 UHR', titleText: '90 MINUTEN.\n0 €.' },
+    b: { palette: 'paper', topText: `DO ${WEBINAR_DAY}\n10:00 UHR`, titleText: '90 MINUTEN.\n0 €.' },
     c: { palette: 'spark', topText: 'KEINE\nAUFZEICHNUNG.', titleText: 'LIVE ODER\nGAR NICHT.' },
   },
   B01: {
@@ -809,7 +814,7 @@ AD_SERIES.push(...LINKEDIN_ADS);
 // Zoom 111 % aufnehmen, siehe GOOGLE_ADS_SETUP.md §6).
 
 const GOOGLE_IMAGE = {
-  D03: { titleText: 'LIVE-WEBINAR\n29. OKT.', bottomText: '10:00 UHR · 90 MIN · 0 €' },
+  D03: { titleText: `LIVE-WEBINAR\n${WEBINAR_DAY}`, bottomText: '10:00 UHR · 90 MIN · 0 €' },
   B01: { titleText: 'TRAINIEREN\nSTATT WISSEN.', bottomText: 'LIVE-WEBINAR · 26.11.' },
   A02: { titleText: 'BEOBACHTUNG.\nWIRKUNG. WUNSCH.', bottomText: 'FEEDBACKFORMEL · LIVE' },
   C02: { titleText: 'WLAD JACHTCHENKO\nLIVE.', bottomText: 'SEIT 2007 · 400.000+ KLIENTEN' },
