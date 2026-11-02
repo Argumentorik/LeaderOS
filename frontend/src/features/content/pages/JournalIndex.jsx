@@ -899,6 +899,11 @@ export default function JournalIndex() {
     <div className="newsroom-paper min-h-screen antialiased text-foreground" data-testid="journal-index">
       <LandingNav />
 
+      {/* Die Seite hatte nach dem Mounten keine h1 (die Lead-Story ist eine h2); die vorgerenderte Fassung hat eine. */}
+      <h1 className="sr-only">
+        LeaderOS Journal · Feldnotizen: {articles.length} Artikel über Führung, KI und Kommunikation
+      </h1>
+
       <Masthead totalArticles={articles.length} />
 
       <FrontPageLede
