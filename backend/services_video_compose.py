@@ -17,6 +17,11 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 FONT_REGULAR = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+_FONT_DIR = Path(__file__).resolve().parent / "assets" / "fonts"
+_FONT_FALLBACK = {
+    FONT_BOLD: str(_FONT_DIR / "LiberationSans-Bold.ttf"),
+    FONT_REGULAR: str(_FONT_DIR / "LiberationSans-Regular.ttf"),
+}
 LOGO_PATH = Path(__file__).resolve().parent.parent / "frontend" / "public" / "icon-512.png"
 LIME = (191, 255, 0, 255)
 
@@ -81,7 +86,16 @@ def subtitle_chunks(text: str, speech_start: float, speech_duration: float, max_
 
 
 def _font(path: str, size: int):
-    return ImageFont.truetype(path, size)
+    try:
+        return ImageFont.truetype(path, size)
+    except OSError:
+        fb = _FONT_FALLBACK.get(path)
+        if fb:
+            try:
+                return ImageFont.truetype(fb, size)
+            except OSError:
+                pass
+        return ImageFont.load_default()
 
 
 def _render_logo(width: int, height: int) -> Image.Image:
