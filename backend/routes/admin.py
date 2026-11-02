@@ -880,6 +880,47 @@ async def admin_update_learning_video(video_id: str, request: Request):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Objektspeicher-Diagnose — zeigt, welchen Schlüssel/Bucket DIESER Prozess
+# (Preview vs. Produktion) wirklich auflöst. Admin-only. Keine Rohschlüssel,
+# nur Fingerabdrücke, damit Preview und Prod verglichen werden können.
+# ?refresh=true erzwingt ein Re-Init des Speicher-Clients im laufenden Prozess.
+# ?path=... prüft, ob ein konkretes Objekt im aufgelösten Bucket existiert.
+# ─────────────────────────────────────────────────────────────────────────────
+@router.get("/storage/diag")
+async def storage_diag(request: Request, refresh: bool = False, path: str = "guide/video_teaser-login_133aa10b.mp4"):
+    import hashlib
+    from routes import uploads as up
+    await require_admin(request)
+
+    def sha12(s: str) -> str:
+        return hashlib.sha256((s or "").encode()).hexdigest()[:12]
+
+    k = up.EMERGENT_LLM_KEY or ""
+    out = {
+        "storage_url": up.STORAGE_URL,
+        "app_name": up.APP_NAME,
+        "emergent_key_len": len(k),
+        "emergent_key_last4": k[-4:],
+        "emergent_key_sha12": sha12(k),
+        "was_cached": up.storage_key is not None,
+    }
+    try:
+        sk = up.init_storage(force=refresh)
+        out["refreshed"] = bool(refresh)
+        out["storage_key_len"] = len(sk)
+        out["storage_key_last6"] = sk[-6:]
+        out["storage_key_sha12"] = sha12(sk)
+    except Exception as e:
+        out["init_error"] = str(e)
+    out["probe_path"] = path
+    try:
+        out["object_exists"] = up.object_exists(path)
+    except Exception as e:
+        out["object_exists_error"] = str(e)
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Datenbank-Backup — Admin lädt einen vollständigen, wiederherstellbaren Dump
 # der Produktionsdatenbank direkt aus der Live-Seite herunter (SEC: nur is_admin).
 # Primär: mongodump --archive --gzip (restore via `mongorestore --archive --gzip`).

@@ -18,9 +18,9 @@ ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
-def init_storage():
+def init_storage(force: bool = False):
     global storage_key
-    if storage_key:
+    if storage_key and not force:
         return storage_key
     resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_LLM_KEY}, timeout=30)
     resp.raise_for_status()

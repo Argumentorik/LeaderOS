@@ -836,3 +836,9 @@
 - **Neuer Admin-Download**: Karte „Datenbank-Backup" im Admin-Panel (`/wlad-control-x7k9q2`, data-testid `db-backup-card`) + Endpoint `GET /api/admin/backup/database` (admin-only via `require_admin`). Streamt ein vollständiges, wiederherstellbares `mongodump --archive --gzip` (Fallback: Extended-JSON `.json.gz`, falls mongodump-Binary fehlt). Wiederherstellen: `mongorestore --archive=datei.archive.gz --gzip`.
 - WICHTIG: Der Download liefert die DB der jeweiligen Umgebung. Für ein echtes PRODUKTIONS-Backup muss der Knopf auf der LIVE-Seite (www.leader-os.de) als eingeloggter Admin genutzt werden — die Vorschau nutzt die separate Preview-DB (`localhost/test_database`).
 - Verifiziert (Preview): Admin-Download 200 + gültiges, restore-fähiges Archiv (mongorestore --dryRun ok, 24 MB), Nicht-Admin 403, ohne Login 401.
+
+## Objektspeicher-Diagnose (Prod-Video-404) (02.11.26)
+- Beide fraglichen Pfade existieren im Bucket: `guide/video_teaser-login_133aa10b.mp4` (12.9 MB, 2026-09-12), `guide/sync_s1_teaser-login_23078d88.mp4` (6.85 MB). Insgesamt 72 `teaser-login`-Objekte. Gesamtbestand: 615 Objekte / ~2.2 GB.
+- `EMERGENT_LLM_KEY` ist `env_mode: shared` + managed universal_key → identischer Wert in Preview & Prod. Workspace-Fingerabdruck: key len=30 last4=93d4 sha12=38242171a136; Bucket last6=2019b8 sha12=eceefbeea588; object_exists=true.
+- Neuer Admin-Endpoint `GET /api/admin/storage/diag` (admin-only): zeigt key/bucket-Fingerabdruck + object_exists DES LAUFENDEN PROZESSES (zum Preview-vs-Prod-Vergleich). `?refresh=true` erzwingt Re-Init des Speicher-Clients ohne Neustart; `?path=` prüft ein konkretes Objekt. `init_storage(force=...)` ergänzt.
+- Prod liefert aktuell weiterhin 404 (Deploy noch nicht abgeschlossen). Nach Deploy: Prod-`/api/admin/storage/diag` aufrufen und Fingerabdruck mit Workspace vergleichen → entscheidet Key-Mismatch vs. Stale-Cache vs. Bucket-Inkonsistenz.
