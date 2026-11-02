@@ -21,7 +21,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from config import db, logger
-from routes.admin import require_admin
+from routes.admin import require_admin, _copy_auth
 from routes.guide import _active_video, _media_url, _render_version, ensure_poster, posters_backfill, posters_status
 from routes.uploads import download_object, put_object
 
@@ -227,9 +227,9 @@ async def posters_overview(request: Request):
 
 
 @router.post("/posters/backfill")
-async def posters_backfill_endpoint(request: Request, force: bool = False):
+async def posters_backfill_endpoint(request: Request, force: bool = False, token: str | None = None):
     """Alle fehlenden Vorschaubilder in einem Durchgang nachziehen (keine Render-Kosten)."""
-    await require_admin(request)
+    await _copy_auth(request, token)
     result = await posters_backfill(force=force)
     from routes.courses import ensure_episode_poster
 

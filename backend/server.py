@@ -211,6 +211,12 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.api_route("/health", methods=["GET", "HEAD"])
+async def root_health() -> dict[str, str]:
+    """Root health probe (GET + HEAD) for Emergent's localhost healthcheck."""
+    return {"status": "ok"}
+
+
 @app.get("/api/rag-status")
 async def rag_health() -> dict:
     """Diagnostic: is the WladBot RAG knowledge layer wired up correctly?
