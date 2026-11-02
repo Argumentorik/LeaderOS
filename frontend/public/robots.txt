@@ -4,6 +4,9 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /analyzing
+Disallow: /report
+Disallow: /roadmap
 Disallow: /payment-success
 Disallow: /auth/
 
