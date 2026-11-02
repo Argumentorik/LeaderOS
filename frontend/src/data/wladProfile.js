@@ -74,7 +74,7 @@ export const SAME_AS = [
   'https://de.wikipedia.org/wiki/Wladislaw_Jachtchenko',
   'https://www.linkedin.com/in/wladislawjachtchenko',
   'https://www.instagram.com/wlad.jachtchenko/',
-  'https://www.youtube.com/@WladTraining',
+  'https://www.youtube.com/@wlad.jachtchenko',
   'https://wlad-jachtchenko.com',
   'https://argumentorik.com',
   'https://www.linkedin.com/learning/instructors/wladislaw-jachtchenko',

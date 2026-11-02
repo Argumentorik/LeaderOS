@@ -16,7 +16,9 @@ from datetime import date
 from course_content import COURSES
 from services_tier import TIER_CONFIG
 
-ORIGIN = "https://leaderos.de"
+# Kanonischer Host der Marketing-Seiten (Vercel). Die App (Emergent) liegt auf leaderos.de;
+# Canonicals, hreflang und JSON-LD-@ids zeigen auf leader-os.de, so wie Sitemap und llms.txt.
+ORIGIN = "https://leader-os.de"
 PUBLIC = os.path.join(os.path.dirname(__file__), "..", "frontend", "public")
 TODAY = date.today().isoformat()
 OS_PRICE = int(TIER_CONFIG["standard"]["price_eur"])
@@ -121,7 +123,7 @@ def layout(*, path: str, title: str, description: str, h1: str, lead: str, body:
 <meta name="twitter:image" content="{ORIGIN}/og-default.jpg">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/seo/site.css">
-<script>(function(){{if(!/(^|\\.)leaderos\\.de$/.test(location.hostname)){{var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m);}}}})();</script>
+<script>(function(){{if(!/(^|\\.)(leader-os|leaderos)\\.de$/.test(location.hostname)){{var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m);}}}})();</script>
 <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False)}</script>
 </head>
 <body>
@@ -151,6 +153,7 @@ def layout(*, path: str, title: str, description: str, h1: str, lead: str, body:
 <footer class="foot">
   <p>Argumentorik-Akademie GmbH · Tölzer Str. 1 · 82031 Grünwald · Geschäftsführer Wladislaw Jachtchenko</p>
   <p><a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a> · <a href="/agb">AGB</a> · <a href="/widerruf">Widerruf</a> · <a href="/sicherheit">Sicherheit</a> · <a href="/llms.txt">llms.txt</a></p>
+  <p><a rel="me noopener" href="https://www.youtube.com/@wlad.jachtchenko">YouTube</a> · <a rel="me noopener" href="https://www.instagram.com/wlad.jachtchenko/">Instagram</a> · <a rel="me noopener" href="https://www.linkedin.com/in/wladjachtchenko/">LinkedIn</a></p>
   <p>Aktualisiert am {TODAY}</p>
 </footer>
 </body>
@@ -195,7 +198,8 @@ PERSON_LD = {
     "knowsLanguage": ["de", "en", "ru", "uk"],
     "sameAs": [
         "https://www.linkedin.com/in/wladjachtchenko/",
-        "https://www.youtube.com/@WladTraining",
+        "https://www.youtube.com/@wlad.jachtchenko",
+        "https://www.instagram.com/wlad.jachtchenko/",
         "https://www.wladislaw-jachtchenko.com/",
         "https://argumentorik.com/",
         "https://www.penguin.de/autoren/wladislaw-jachtchenko/624791",
@@ -215,7 +219,8 @@ ORG_LD = {
     "address": {"@type": "PostalAddress", "streetAddress": "Tölzer Str. 1", "postalCode": "82031", "addressLocality": "Grünwald", "addressCountry": "DE"},
     "areaServed": ["DE", "AT", "CH"],
     "email": "support@leaderos.de",
-    "sameAs": ["https://www.linkedin.com/in/wladjachtchenko/", "https://www.youtube.com/@WladTraining", "https://argumentorik.com/"],
+    "sameAs": ["https://www.linkedin.com/in/wladjachtchenko/", "https://www.youtube.com/@wlad.jachtchenko",
+        "https://www.instagram.com/wlad.jachtchenko/", "https://argumentorik.com/"],
 }
 
 
@@ -294,7 +299,7 @@ def page_kurse() -> str:
             "educationalLevel": "Professional",
             "audience": {"@type": "EducationalAudience", "audienceType": "Führungskräfte, Manager, Geschäftsführer, Teamleads"},
             "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online", "courseWorkload": f"PT{mins}M"},
-            "offers": {"@type": "Offer", "name": tier, "price": str(price), "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": f"{ORIGIN}/coaching"},
+            "offers": {"@type": "Offer", "name": tier, "price": str(price), "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": f"{ORIGIN}/leadership-programm"},
             "syllabusSections": [{"@type": "Syllabus", "name": e["title"], "timeRequired": f"PT{e['minutes']}M"} for e in c["episodes"]],
         })
     toc = " · ".join(f'<a href="#{c["slug"]}">{esc(c["title"])}</a>' for c in COURSES)

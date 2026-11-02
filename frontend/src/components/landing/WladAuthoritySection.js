@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Award, Mic, BookText, Users, Tv, GraduationCap } from 'lucide-react';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/brandAssets';
+import { SAME_AS } from '../../data/wladProfile';
 
 /**
  * WladAuthoritySection · die dedizierte Trust- und SEO-Authority-Sektion
@@ -84,12 +85,14 @@ const useWladJsonLd = () => {
     script.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
+      // Gleiche @id wie im Shell-Schema und auf der Wlad-Seite: eine Person, nicht drei.
+      '@id': 'https://leader-os.de/#wlad',
       name: 'Wlad Jachtchenko',
       alternateName: ['Wladislaw Jachtchenko', 'Wlad'],
-      jobTitle: 'Founder, LeaderOS · Top-Speaker · 3× SPIEGEL-Bestseller-Autor',
+      jobTitle: 'Gründer von LeaderOS · 3× SPIEGEL-Bestseller-Autor',
       description:
         'Wlad Jachtchenko ist 3× SPIEGEL-Bestseller-Autor, Gründer der Argumentorik-Akademie und Erfinder von LeaderOS. Über 400 000 Klienten in Rhetorik, Verhandlung und KI-nativem Führen ausgebildet.',
-      url: 'https://leader-os.de',
+      url: 'https://leader-os.de/wlad-jachtchenko',
       image: 'https://leader-os.de/wlad-headshot.jpg',
       knowsAbout: [
         'KI-natives Führen',
@@ -100,20 +103,13 @@ const useWladJsonLd = () => {
         'KI-Prompt Engineering für Führungskräfte',
         'Leadership Development',
       ],
-      sameAs: [
-        'https://argumentorik-akademie.de',
-        'https://leadercheck.de',
-        'https://leaderos.de',
-      ],
+      // Profile der Person (LinkedIn, YouTube, Instagram, Podcast …), nicht die eigenen Firmen-Hosts.
+      sameAs: SAME_AS,
       worksFor: {
         '@type': 'Organization',
         name: 'LeaderOS',
         url: 'https://leader-os.de',
       },
-      award: [
-        '3× SPIEGEL-Bestseller-Autor (Dunkle Rhetorik, Schwarze Rhetorik, Manipulationstechniken)',
-        'Top-Speaker 4.9/5.0 · über 500 Bühnen-Engagements',
-      ],
     });
     document.head.appendChild(script);
     return () => {

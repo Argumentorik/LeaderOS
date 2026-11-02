@@ -282,7 +282,7 @@ const ALSO_CALLED = [
 const PERSON_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  '@id': 'https://leader-os.de/wlad-jachtchenko#person',
+  '@id': 'https://leader-os.de/#wlad',
   name: 'Wlad Jachtchenko',
   givenName: 'Wlad',
   familyName: 'Jachtchenko',
@@ -379,14 +379,14 @@ const PERSON_JSON_LD = {
     isbn: b.isbn || undefined,
     image: `https://leader-os.de${bookCoverUrl(b)}`,
     url: 'https://wladjachtchenko.de/buecher',
-    author: { '@id': 'https://leader-os.de/wlad-jachtchenko#person' },
+    author: { '@id': 'https://leader-os.de/#wlad' },
   })),
   sameAs: [
     'https://de.wikipedia.org/wiki/Wladislaw_Jachtchenko',
     'https://www.linkedin.com/in/wladislawjachtchenko',
     'https://www.instagram.com/wlad.jachtchenko/',
     'https://www.facebook.com/wladislawjachtchenko',
-    'https://www.youtube.com/@WladTraining',
+    'https://www.youtube.com/@wlad.jachtchenko',
     'https://wlad-jachtchenko.com',
     'https://www.wladislaw-jachtchenko.com',
     'https://argumentorik.com',
@@ -571,48 +571,24 @@ export default function WladJachtchenkoPage() {
     ldFaq.textContent = JSON.stringify(FAQ_JSON_LD);
     document.head.appendChild(ldFaq);
 
-    // VideoObject schema for Wlad's TEDx talks · these are real,
-    // verifiable on TED.com / YouTube and rank in Google Video Search
-    // for "Wlad Jachtchenko TEDx" / "Wlad Jachtchenko Rhetorik" queries.
-    // Marking them up here makes /wlad-jachtchenko the page Google
-    // associates with the video carousel.
+    // VideoObject: nur Videos mit geprüfter URL. Der TED-Eintrag zu den 10 Stufen des
+    // Zuhörens ist belegt; die früheren Einträge zeigten auf eine Kanal-Startseite und
+    // hatten einen Platzhalter als Datum. Weitere Videos erst ergänzen, wenn die
+    // YouTube-ID aus dem Kanal @wlad.jachtchenko bekannt ist (Datum, Dauer, Beschreibung
+    // aus dem Video selbst).
     const ldVideos = document.createElement('script');
     ldVideos.type = 'application/ld+json';
     ldVideos.textContent = JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'ItemList',
-      itemListElement: [
-        {
-          '@type': 'VideoObject',
-          name: 'Weiße Rhetorik vs. Dunkle Rhetorik',
-          description: 'Wlad Jachtchenko erklärt bei TEDx, was eine Argumentation „dunkel" oder „weiß" macht und wie man Manipulation in Verhandlungen erkennt.',
-          thumbnailUrl: 'https://leader-os.de/wlad/wlad-portrait.jpg',
-          uploadDate: '2020-02-21',
-          contentUrl: 'https://www.ted.com/talks/wladislaw_jachtchenko_weisse_rhetorik_vs_dunkle_rhetorik',
-          publisher: { '@id': 'https://leader-os.de/#organization' },
-          author: { '@id': 'https://leader-os.de/wlad-jachtchenko#person' },
-        },
-        {
-          '@type': 'VideoObject',
-          name: 'Die 10 Stufen des Zuhörens',
-          description: 'Wlad Jachtchenko bei TEDxFreiburg über aktives Zuhören als Führungs-Skill.',
-          thumbnailUrl: 'https://leader-os.de/wlad/wlad-portrait.jpg',
-          uploadDate: '2019-11-23',
-          contentUrl: 'https://www.tedxfreiburg.com/',
-          publisher: { '@id': 'https://leader-os.de/#organization' },
-          author: { '@id': 'https://leader-os.de/wlad-jachtchenko#person' },
-        },
-        {
-          '@type': 'VideoObject',
-          name: 'How to find the right response within 3 seconds',
-          description: 'Wlad Jachtchenko teilt die Kunst der Schlagfertigkeit · einfache Techniken um in Sekunden die richtige Antwort zu finden.',
-          thumbnailUrl: 'https://leader-os.de/wlad/wlad-portrait.jpg',
-          uploadDate: '2021-01-01',
-          contentUrl: 'https://www.youtube.com/@WladTraining',
-          publisher: { '@id': 'https://leader-os.de/#organization' },
-          author: { '@id': 'https://leader-os.de/wlad-jachtchenko#person' },
-        },
-      ],
+      '@type': 'VideoObject',
+      name: 'Die 10 Stufen des Zuhörens',
+      description: 'Wlad Jachtchenko bei TEDxFreiburg über die 10 Stufen des Zuhörens: von „Nicht zuhören“ bis „Stille als Zuhören“.',
+      thumbnailUrl: 'https://leader-os.de/wlad/wlad-portrait.jpg',
+      uploadDate: '2019-11-23',
+      url: 'https://www.ted.com/talks/wladislaw_jachtchenko_die_10_stufen_des_zuhorens_wladislaw_jachtchenko_tedxfreiburg',
+      embedUrl: 'https://embed.ted.com/talks/wladislaw_jachtchenko_die_10_stufen_des_zuhorens_wladislaw_jachtchenko_tedxfreiburg',
+      publisher: { '@id': 'https://leader-os.de/#organization' },
+      author: { '@id': 'https://leader-os.de/#wlad' },
     });
     document.head.appendChild(ldVideos);
 
