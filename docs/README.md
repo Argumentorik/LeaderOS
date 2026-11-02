@@ -34,6 +34,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/SEO_KEYWORDS.md`](./gtm/SEO_KEYWORDS.md) | Keyword universe (DACH leadership/AI/communication) |
 | [`gtm/SEO_AEO_PLAYBOOK.md`](./gtm/SEO_AEO_PLAYBOOK.md) | **Technical visibility** — why CRA breaks AI crawlers, prerendering vs static pages, robots/IndexNow/Bing, rules for new pages |
 | [`gtm/SEO_AEO_GEO_AUDIT.md`](./gtm/SEO_AEO_GEO_AUDIT.md) | **Audit Oct 2026** — keyword gaps, Q&A framework (`faq` block, `/kurse`, `/fragen`), citation readiness, schema mapping, owner actions |
+| [`gtm/SEO_AEO_UPGRADE_2026-11.md`](./gtm/SEO_AEO_UPGRADE_2026-11.md) | **Upgrade Nov 2026** — Apex-vs-www-Befund, behobene Canonical-/Sitemap-/Schema-Fehler, Betreiber-Checkliste (Domain-Flip, GSC, Bing), YouTube- und Instagram-Plan |
 | [`gtm/GROWTH_LOOP.md`](./gtm/GROWTH_LOOP.md) | The growth loop: check → content → funnel → referral |
 | [`gtm/GREATOR_TAG2_LEADEROS.md`](./gtm/GREATOR_TAG2_LEADEROS.md) | **Greator-Event Tag 2 (27.09.)** — wo LeaderOS in Wlads Deck gehört (3 Live-Momente + Brücke), Demo-Regie mit Klickpfaden, Vorbereitung, Deck-Fixes, No-Gos |
 | [`gtm/KI_FUEHRUNG_KAMPAGNEN.md`](./gtm/KI_FUEHRUNG_KAMPAGNEN.md) | **6 Kampagnen, 1 Angebot** — Kohärenz-Matrix (Hook = H1 = Agenda = Produkt), Anzeigentexte Meta/LinkedIn/Google, URL-/UTM-Schema für `/ki-fuehrungskraft?k=`, SEO/AEO der Pillar-Seite |
