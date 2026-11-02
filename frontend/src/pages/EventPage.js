@@ -231,6 +231,10 @@ export default function EventPage() {
     root.classList.add('dark');
 
     const restoreMeta = applyPageMeta({
+      // Bis der Termin neu festgelegt ist: nicht indexieren. Text und Countdown nennen zwei
+      // verschiedene Termine (29.–30.10. und 26.11.), das Event-Schema hat ein Ende vor dem Start.
+      // Falsche Termine landen sonst in Suchergebnissen und Antworten von KI-Suchen.
+      robots: 'noindex, follow',
       title: 'LeaderOS LIVE · Das Leadership-Event mit Wlad Jachtchenko · 26.11.2026',
       description:
         'Kostenloses Live-Event am 29.–30.10.2026 mit Europas führendem Leadership-Coach ' +

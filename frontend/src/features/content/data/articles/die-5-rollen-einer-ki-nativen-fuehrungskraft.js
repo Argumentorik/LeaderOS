@@ -39,7 +39,7 @@ export default {
     description: 'Die 5 Rollen einer KI-nativen Führungskraft: Vorausschauer, Entscheider, Kommunikator, Verstärker, Verteidiger — jede mit einer konkreten KI-Routine. Von Wlad Jachtchenko.',
   },
   related: [
-    'fuenf-rollen-der-fuehrung-nach-wlad-jachtchenko',
+    '5-rollen-der-fuehrung-nach-wlad-jachtchenko',
     'ki-leadership-was-bedeutet-das-konkret',
     'der-ki-sprint-was-dreissig-tage-strukturierte-anwendung-veraendern',
   ],

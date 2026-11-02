@@ -15,7 +15,7 @@
 
   <url>
     <loc>https://leader-os.de/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="de" href="https://leader-os.de/" />
@@ -27,24 +27,16 @@
        Knowledge Graph and AI Overview should cite. -->
   <url>
     <loc>https://leader-os.de/wlad-jachtchenko</loc>
-    <lastmod>2026-06-26</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- 2026-08-20 · Free live launch event · time-sensitive, high priority
-       until the event date. -->
-  <url>
-    <loc>https://leader-os.de/event</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
 
   <!-- Pillar + Kampagnen-Landing „KI-Führungskraft" (prerendert, FAQPage + Event). -->
   <url>
     <loc>https://leader-os.de/ki-fuehrungskraft</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -67,24 +59,18 @@
   <!-- "Führung beginnt hier" · free 4-video lead-magnet funnel · top-of-funnel opt-in. -->
   <url>
     <loc>https://leader-os.de/fuehrung-beginnt-hier</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-08-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/journal</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <url>
-    <loc>https://leader-os.de/login</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
 
   <url>
     <loc>https://leader-os.de/impressum</loc>
@@ -119,14 +105,14 @@
        AI-Antworten. Hohe Priorität, weil sie die Frameworks trägt. -->
   <url>
     <loc>https://leader-os.de/fragen</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/start</loc>
-    <lastmod>2026-08-24</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -139,42 +125,28 @@
        Produktseiten mit komplettem Inhalt im HTML. -->
   <url>
     <loc>https://leader-os.de/os</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/app</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://leader-os.de/wladbot</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- 2026-10-05 · Kommunikations-Training, Live-Training und die statische
-       Kurs-Antwortseite (/kurse · public/kurse/index.html). -->
-  <url>
-    <loc>https://leader-os.de/kommunikation</loc>
-    <lastmod>2026-10-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://leader-os.de/training</loc>
-    <lastmod>2026-10-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
   <url>
     <loc>https://leader-os.de/kurse</loc>
-    <lastmod>2026-10-05</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -183,13 +155,13 @@
        statische Kursübersicht, Teams, Sicherheit, Changelog). -->
   <url>
     <loc>https://leader-os.de/leadership-programm</loc>
-    <lastmod>2026-06-16</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://leader-os.de/kurse-uebersicht/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -207,7 +179,7 @@
   </url>
   <url>
     <loc>https://leader-os.de/changelog</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>

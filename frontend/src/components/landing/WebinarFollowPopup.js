@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { WEBINAR_DATE_LABEL, WEBINAR_TIME_LABEL } from '../../data/webinarEvent';
 
 const STORAGE_KEY = 'leader_os_webinar_follow_seen_at';
 const COOLDOWN_MS = 1000 * 60 * 60 * 24 * 7; // max once per visitor per week
@@ -25,7 +26,7 @@ let shownThisSession = false;
  *
  * All claims verified against docs/gtm/WLAD_CANON.md + WebinarPage.js:
  * 400.000+ Klienten · 3× SPIEGEL-Bestseller · 4,9/5 Trustpilot (388) ·
- * webinar date DO 29. OKTOBER 2026 · 10:00 UHR.
+ * webinar date from data/webinarEvent.js.
  */
 export const WebinarFollowPopup = ({ armedAt = 0 }) => {
   const [open, setOpen] = useState(false);
@@ -144,7 +145,7 @@ export const WebinarFollowPopup = ({ armedAt = 0 }) => {
             {/* Body */}
             <div className="px-5 sm:px-7 py-6">
               <p className="font-mono text-[9.5px] font-bold uppercase tracking-[0.24em] text-brand-strong">
-                ▸ DO 29. OKTOBER 2026 · 10:00 UHR · LIVE
+                ▸ {`${WEBINAR_DATE_LABEL.replace(',', '')} · ${WEBINAR_TIME_LABEL} · LIVE`.toUpperCase()}
               </p>
 
               <h2

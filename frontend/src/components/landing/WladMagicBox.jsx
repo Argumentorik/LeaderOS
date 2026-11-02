@@ -215,9 +215,9 @@ export const WladMagicBox = () => {
                 })}
               </ul>
               <a
-                href="https://www.youtube.com/c/ArgumentorikRhetorikPers%C3%B6nlichkeit"
+                href="https://www.youtube.com/@wlad.jachtchenko"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="me noopener noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:text-brand transition-colors"
               >
                 Ganzer YouTube-Kanal <ArrowUpRight size={14} />
