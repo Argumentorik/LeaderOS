@@ -1,5 +1,9 @@
 """Admin Panel — Enterprise leads, referral analytics, coaching conversions, community metrics."""
+import os
+import asyncio
+import shutil
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from datetime import datetime, timezone, timedelta
 
@@ -703,7 +707,6 @@ async def rag_enrich_metadata(request: Request):
     dry_run = bool(body.get("dry_run", False))
     limit = int(body.get("limit", 1000))
 
-    import os
     import httpx
 
     url = os.environ.get("SUPABASE_URL")
@@ -777,7 +780,6 @@ async def rag_enrich_metadata(request: Request):
 async def rag_uncategorized_samples(request: Request, sample_size: int = 20):
     """Return sample chunks that have neither `course` nor `book` — useful to extend heuristics."""
     await require_admin(request)
-    import os
     import httpx
 
     url = os.environ.get("SUPABASE_URL")
@@ -875,3 +877,97 @@ async def admin_update_learning_video(video_id: str, request: Request):
     )
     row = await db.learning_videos.find_one({"id": video_id}, {"_id": 0})
     return {"updated": True, "video": row}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Datenbank-Backup — Admin lädt einen vollständigen, wiederherstellbaren Dump
+# der Produktionsdatenbank direkt aus der Live-Seite herunter (SEC: nur is_admin).
+# Primär: mongodump --archive --gzip (restore via `mongorestore --archive --gzip`).
+# Fallback: Extended-JSON .json.gz, falls das mongodump-Binary fehlt.
+# ─────────────────────────────────────────────────────────────────────────────
+@router.get("/backup/database")
+async def backup_database(request: Request):
+    admin = await require_admin(request)
+    mongo_url = os.environ["MONGO_URL"]
+    db_name = os.environ["DB_NAME"]
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+
+    await db.activity_log.insert_one({
+        "user_id": admin.get("user_id"),
+        "email": admin.get("email"),
+        "action": "admin_db_backup",
+        "db": db_name,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    if shutil.which("mongodump"):
+        filename = f"leaderos-backup-{db_name}-{ts}.archive.gz"
+        proc = await asyncio.create_subprocess_exec(
+            "mongodump", "--uri", mongo_url, "--db", db_name, "--archive", "--gzip",
+            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+        )
+
+        async def mongodump_stream():
+            try:
+                while True:
+                    chunk = await proc.stdout.read(65536)
+                    if not chunk:
+                        break
+                    yield chunk
+                await proc.wait()
+                if proc.returncode != 0:
+                    err = (await proc.stderr.read()).decode(errors="replace")[-500:]
+                    logger.error(f"DB backup mongodump failed rc={proc.returncode}: {err}")
+            finally:
+                if proc.returncode is None:
+                    try:
+                        proc.kill()
+                    except ProcessLookupError:
+                        pass
+
+        return StreamingResponse(
+            mongodump_stream(),
+            media_type="application/gzip",
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        )
+
+    # Fallback: portable Extended-JSON dump, gzip on the fly (no mongodump binary).
+    import gzip
+    from bson import json_util
+
+    filename = f"leaderos-backup-{db_name}-{ts}.json.gz"
+    names = await db.list_collection_names()
+
+    async def json_stream():
+        import io
+        buf = io.BytesIO()
+        gz = gzip.GzipFile(mode="wb", fileobj=buf)
+
+        def flush():
+            gz.flush()
+            data = buf.getvalue()
+            buf.seek(0)
+            buf.truncate(0)
+            return data
+
+        header = {"type": "meta", "db": db_name, "exported_at": datetime.now(timezone.utc).isoformat(), "collections": sorted(names)}
+        gz.write((json_util.dumps(header) + "\n").encode())
+        yield flush()
+        for name in sorted(names):
+            gz.write((json_util.dumps({"type": "collection", "name": name}) + "\n").encode())
+            cursor = db[name].find({})
+            async for doc in cursor:
+                gz.write((json_util.dumps({"type": "doc", "data": doc}) + "\n").encode())
+                chunk = flush()
+                if chunk:
+                    yield chunk
+        gz.close()
+        tail = buf.getvalue()
+        if tail:
+            yield tail
+
+    return StreamingResponse(
+        json_stream(),
+        media_type="application/gzip",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

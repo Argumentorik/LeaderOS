@@ -831,3 +831,8 @@
   - **Briefings umgezogen** (Nutzerwunsch): „30-Tage-Challenge · Briefings Tag 1–7" ist raus aus dem Video-Guide (dort nur noch ein Verweis) und lebt als `ChallengeBriefings` direkt in der 30-Tage-Challenge (7 Kacheln mit Poster, „heute"-Markierung, Player beim Antippen).
   - **Übergänge**: Vorschaubilder blenden weich ein (kein Aufblitzen/Springen), Play-Overlay des Players blendet aus statt zu verschwinden.
   - Verifiziert: `tests/test_iter180_voice_and_clips.py` 9/9 + `test_iter179_video_field.py` 8/8 (zusammen 17/17), Screenshots für Coaching-Katalog, Challenge-Briefings, Video-Guide-Verweis.
+
+## Admin-Datenbank-Backup (02.11.26)
+- **Neuer Admin-Download**: Karte „Datenbank-Backup" im Admin-Panel (`/wlad-control-x7k9q2`, data-testid `db-backup-card`) + Endpoint `GET /api/admin/backup/database` (admin-only via `require_admin`). Streamt ein vollständiges, wiederherstellbares `mongodump --archive --gzip` (Fallback: Extended-JSON `.json.gz`, falls mongodump-Binary fehlt). Wiederherstellen: `mongorestore --archive=datei.archive.gz --gzip`.
+- WICHTIG: Der Download liefert die DB der jeweiligen Umgebung. Für ein echtes PRODUKTIONS-Backup muss der Knopf auf der LIVE-Seite (www.leader-os.de) als eingeloggter Admin genutzt werden — die Vorschau nutzt die separate Preview-DB (`localhost/test_database`).
+- Verifiziert (Preview): Admin-Download 200 + gültiges, restore-fähiges Archiv (mongorestore --dryRun ok, 24 MB), Nicht-Admin 403, ohne Login 401.

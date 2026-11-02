@@ -13,6 +13,7 @@ import { AdminRightsCard } from '../components/admin/AdminRightsCard';
 import { CreditSupportCard } from '../components/admin/CreditSupportCard';
 import { FeatureRolloutPanel } from '../components/admin/FeatureRolloutPanel';
 import { OpsHandoverPanel } from '../components/admin/OpsHandoverPanel';
+import { DatabaseBackupCard } from '../components/admin/DatabaseBackupCard';
 import { AdminStatRows, CommunityStatsCard, TierDistributionCard, LeadsAndReferrals, RecentTransactions } from '../components/admin/AdminOverviewCards';
 import { AdminToolSections } from '../components/admin/AdminToolSections';
 
@@ -130,6 +131,7 @@ export default function AdminPage() {
           <UserManageCard de={de} />
           <AdminRightsCard de={de} />
           <CreditSupportCard />
+          <DatabaseBackupCard de={de} />
           <CommunityStatsCard community={data.community} de={de} />
         </div>
 
