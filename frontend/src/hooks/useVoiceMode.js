@@ -4,7 +4,7 @@ import logger from '../lib/logger';
 import { registerAudio, stopMedia } from '../lib/audioBus';
 
 /**
- * useVoiceMode — Hands-free voice conversation state machine.
+ * useVoiceMode · Hands-free voice conversation state machine.
  *
  * States: idle → listening → thinking → speaking → idle (auto-loops).
  * VAD: auto-stops recording after SILENCE_DURATION_MS of silence.
@@ -305,7 +305,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       const detail = err.response?.data?.detail;
       const isTimeout = err.code === 'ECONNABORTED' || /timeout/i.test(err.message || '');
       if (status === 402) {
-        setError(de ? 'Keine Credits mehr — Upgrade nötig.' : 'No credits left — upgrade required.');
+        setError(de ? 'Keine Credits mehr · Upgrade nötig.' : 'No credits left · upgrade required.');
         setState(VOICE_STATES.ERROR);
       } else if (status === 400 && detail === 'empty_transcript') {
         // Silently restart listening
@@ -316,7 +316,7 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
           : 'WladBot is taking longer than usual. Tap the orb to try again.');
         setState(VOICE_STATES.ERROR);
       } else {
-        setError(de ? 'Fehler beim Verarbeiten — versuche es erneut.' : 'Processing failed — try again.');
+        setError(de ? 'Fehler beim Verarbeiten · versuche es erneut.' : 'Processing failed · try again.');
         setState(VOICE_STATES.ERROR);
       }
     }
@@ -334,8 +334,8 @@ export const useVoiceMode = ({ initialSessionId, onSessionUpdate, persona = 'wla
       if (emptyRetryCountRef.current >= MAX_EMPTY_RETRIES) {
         emptyRetryCountRef.current = 0;
         setError(de
-          ? 'Keine Sprache erkannt — tippe den Orb und sprich deutlich.'
-          : 'No speech detected — tap the orb and speak clearly.');
+          ? 'Keine Sprache erkannt · tippe den Orb und sprich deutlich.'
+          : 'No speech detected · tap the orb and speak clearly.');
         setState(VOICE_STATES.ERROR);
         return;
       }

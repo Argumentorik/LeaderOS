@@ -1,0 +1,39 @@
+# Mirror of .github/workflows/ci.yml so the same hygiene checks run if
+# this repo is mirrored to GitLab. Keep in sync with the GitHub workflow.
+
+stages:
+  - validate
+
+variables:
+  EXPECTED_PROJECT_REF: "srujvjjncrszhaaxepxf"
+
+default:
+  image: python:3.12-slim
+
+validate:
+  stage: validate
+  before_script:
+    - apt-get update -qq && apt-get install -y --no-install-recommends git nodejs npm curl ca-certificates
+    - npm install -g markdownlint-cli2@0.13.0
+  script:
+    - |
+      set -euo pipefail
+      fail=0
+      for f in $(git ls-files '*.json'); do
+        if ! python3 -m json.tool "$f" > /dev/null; then
+          echo "Invalid JSON: $f"
+          fail=1
+        fi
+      done
+      [ "$fail" -eq 0 ]
+    - markdownlint-cli2 "**/*.md" "#node_modules"
+    - |
+      actual=$(python3 -c "import json; print(json.load(open('.mcp.json'))['mcpServers']['supabase']['url'])")
+      case "$actual" in
+        *"project_ref=$EXPECTED_PROJECT_REF"*) echo "OK: $actual" ;;
+        *) echo ".mcp.json project_ref drifted (expected $EXPECTED_PROJECT_REF): $actual"; exit 1 ;;
+      esac
+    - grep -q "$EXPECTED_PROJECT_REF" CLAUDE.md
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"

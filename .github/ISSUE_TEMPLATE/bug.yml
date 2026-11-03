@@ -1,0 +1,41 @@
+name: Bug report
+description: Something is broken in the schema, a dashboard view, or repo tooling.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug. Include the SQL or command that triggered it.
+      placeholder: |
+        Calling `select dashboard_summary(7)` returns null instead of the expected JSON.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: A JSON object with keys `users`, `sessions`, `insights`, ...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Minimal reproducible SQL or MCP calls.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: project-ref
+    attributes:
+      label: Supabase project ref
+      value: srujvjjncrszhaaxepxf
+    validations:
+      required: true
+  - type: textarea
+    id: advisors
+    attributes:
+      label: Output of `get_advisors`
+      description: Paste current security + performance advisor output if relevant.
+      render: shell

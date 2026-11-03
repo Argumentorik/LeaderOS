@@ -1,5 +1,5 @@
 /**
- * BookConsultationButton — Sexy, prefilled Cal.com booking trigger.
+ * BookConsultationButton · Sexy, prefilled Cal.com booking trigger.
  *
  * Improvements (Iter 92.2):
  *   - PREFILL via AuthContext: name + email auto-passed to Cal so the user
@@ -7,7 +7,7 @@
  *   - Premium visual: animated calendar tick + live availability shimmer
  *     ("Nächster Slot in 2h") + lime glow halo on hover.
  *   - Robust fallback: if Cal didn't load (ad-blocker, slow network), we
- *     open the canonical booking URL in a new tab — UI never breaks.
+ *     open the canonical booking URL in a new tab · UI never breaks.
  *   - Variants: `primary` (lime), `ghost` (subtle), `dark` (for dark heros).
  *
  * Pair with `<BookingTeaserCard />` for landing-section conversion blocks.
@@ -67,7 +67,7 @@ export const useBookConsultation = () => {
         });
         return;
       } catch (e) {
-        // fall through to canonical URL — never strand the user
+        // fall through to canonical URL · never strand the user
       }
     }
     const tabUrl = prefill
@@ -96,7 +96,7 @@ export const BookConsultationButton = ({
   // date" state via `showWhenGated`.
   if (!gate.ready && !showWhenGated) return null;
 
-  // Three visual variants — all share the smooth Revolut hover lift
+  // Three visual variants · all share the smooth Revolut hover lift
   const variantClasses = {
     primary:
       'bg-[#BFFF00] hover:bg-[#D4FF4D] text-[#0A0A0A] font-bold glow-lime',

@@ -1,0 +1,1973 @@
+{
+ "C": [
+  {
+   "id": "P01",
+   "name": "Führung wird trainiert",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 01 · Der neue Weg",
+     "h": "Führung wird nicht gelernt.<br>Sie wird trainiert<span class=lime>.</span>",
+     "s": "Warum die alte Art zu lernen bei Führungskräften nicht hält, und was stattdessen funktioniert. Wischen →",
+     "v": "lime",
+     "av": "big",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Das Problem",
+     "h": "Du weißt, was du tun solltest<span class=lime>.</span>",
+     "s": "Du hast die Bücher. Du warst im Seminar. Du kennst die Formel. Dein Team merkt trotzdem nichts. Das Problem war nie Wissen.",
+     "ph": "solitude",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Die Kurve",
+     "h": "Die Kurve, die jedes Seminar schlägt<span class=lime>.</span>",
+     "size": "xxs",
+     "cap": [
+      [
+       "E·01",
+       "Nach 20 Minuten",
+       "Rund 40 Prozent des Gelernten sind weg."
+      ],
+      [
+       "E·02",
+       "Nach einem Tag",
+       "Etwa 65 Prozent."
+      ],
+      [
+       "E·03",
+       "Nach einem Monat",
+       "Bis zu 80 Prozent. Ebbinghaus, seit über 130 Jahren belegt. Unabhängig davon, wie gut der Trainer war."
+      ]
+     ],
+     "ph": "time"
+    },
+    {
+     "t": "vs",
+     "k": "03 · Der Unterschied",
+     "h": "Lernen vs. Trainieren<span class=lime>.</span>",
+     "vs": [
+      [
+       "Lernen",
+       "Wissen sammeln",
+       "Zwei Tage im Jahr. Folien, Fallstudien, ein Ordner im Regal. Dein Team merkt nichts."
+      ],
+      [
+       "Trainieren",
+       "Verhalten bauen",
+       "15 Minuten am Tag. Dein echter Fall. Ein Gegenüber, das zurückredet. Dein Team merkt es in der ersten Woche."
+      ]
+     ],
+     "ph": "boardroom"
+    },
+    {
+     "t": "three",
+     "k": "04 · Der neue Weg",
+     "h": "Drei Schritte. Jeden Tag<span class=lime>.</span>",
+     "three": [
+      "Lektion: ein Framework, kurz. Das, das du heute brauchst.",
+      "Drill: dasselbe Framework an deinem echten Fall, nicht an einer Fallstudie.",
+      "Auswertung: was saß, was fehlte. Morgen der nächste Drill."
+     ],
+     "ph": "sprint",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "05 · Werden",
+     "h": "Werden statt wissen<span class=lime>.</span>",
+     "s": "Niemand wird Führungskraft, weil er mehr gelesen hat. Man wird es, weil man geübt hat, als es nicht zählte, damit es sitzt, wenn es zählt.",
+     "v": "photo",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "15 Minuten.<br>Jeden Tag.<br><span class=lime>An deinem Fall.</span>",
+     "s": "Das ist die ganze Methode. Der Rest ist Disziplin, und die nimmt dir das System ab.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Start",
+     "h": "Fang heute an<span class=lime>.</span>",
+     "s": "LeaderOS: Wlads Methodik als tägliches Training. Sechs Kurse, elf Drills, ein KI-Coach. 14 Tage kostenlos, ohne Karte. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "solitude"
+    }
+   ]
+  },
+  {
+   "id": "P02",
+   "name": "Feedbackformel B·W·W",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 02 · Feedback",
+     "h": "Feedback in drei Sätzen. Ohne dass es nach Vorwurf klingt<span class=lime>.</span>",
+     "s": "Die Feedbackformel B·W·W aus Wlads Trainings, Satz für Satz. Wischen →",
+     "ph": "feedback",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Warum es nicht ankommt",
+     "h": "„Du bist unzuverlässig.“",
+     "s": "Ein Urteil über die Person. Das Gegenüber verteidigt sich, statt zuzuhören. Ab diesem Satz ist es kein Feedback mehr, sondern ein Streit.",
+     "ph": "conflict",
+     "size": "xs"
+    },
+    {
+     "t": "three",
+     "k": "02 · Die Formel",
+     "h": "B · W · W<span class=lime>.</span>",
+     "three": [
+      "Beobachtung: „Ich habe beobachtet, dass …“ Nur, was man filmen könnte.",
+      "Wirkung: „Dadurch …“ Was es bei dir oder im Team auslöst.",
+      "Wunsch: „Ich wünsche mir …“ Konkret, in der Zukunft."
+     ],
+     "v": "lime",
+     "av": "small"
+    },
+    {
+     "t": "chat",
+     "k": "03 · So klingt es",
+     "h": "Ein Satz. Drei Teile<span class=lime>.</span>",
+     "size": "xs",
+     "chat": [
+      [
+       "Du",
+       "Ich habe beobachtet, dass der Bericht dreimal erst Freitagabend kam. Dadurch habe ich am Wochenende nachgearbeitet. Ich wünsche mir, dass er donnerstags um 12 bei mir liegt."
+      ],
+      [
+       "WladBot",
+       "Sauber. Kein „du bist“, kein „immer“. Jetzt die Pause: zehn Sekunden schweigen, bevor du weiterredest."
+      ]
+     ],
+     "note": "Beispiel · WladBot im LeaderOS",
+     "av": "small",
+     "ph": "writing"
+    },
+    {
+     "t": "cap",
+     "k": "04 · Die drei Fehler",
+     "h": "Woran es scheitert<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "F·01",
+       "Das Urteil",
+       "„Du bist …“ statt „Ich habe beobachtet …“. Urteile erzeugen Verteidigung."
+      ],
+      [
+       "F·02",
+       "Das Immer",
+       "„Immer“, „nie“, „ständig“. Ein Wort, und die Beobachtung ist angreifbar."
+      ],
+      [
+       "F·03",
+       "Der Rückzieher",
+       "„… aber sonst ist alles super.“ Der Nachsatz löscht den Wunsch."
+      ]
+     ],
+     "ph": "boardroom-b"
+    },
+    {
+     "t": "text",
+     "k": "05 · Die Regel",
+     "h": "Nie „du bist“.<br><span class=lime>Immer „ich habe beobachtet“.</span>",
+     "s": "Hart in der Sache, weich zur Person. Das ist der ganze Trick.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "text",
+     "k": "06 · Üben",
+     "h": "Üb den ersten Satz, bevor du ihn brauchst<span class=lime>.</span>",
+     "s": "Das Gespräch dauert 90 Sekunden. Es scheitert nie am Gespräch. Es scheitert am ersten Satz, den du nie laut gesagt hast.",
+     "ph": "solitude",
+     "size": "s"
+    },
+    {
+     "t": "cta",
+     "k": "07 · Drill",
+     "h": "Dein Feedback für morgen<span class=lime>.</span>",
+     "size": "xs",
+     "s": "Schreib deinen B·W·W-Satz in die Kommentare oder üb ihn mit WladBot, der zurückredet. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "feedback"
+    }
+   ]
+  },
+  {
+   "id": "P03",
+   "name": "Schwierige Gespräche",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 03 · Schwierige Gespräche",
+     "h": "Das Gespräch, das du seit drei Wochen aufschiebst<span class=lime>.</span>",
+     "s": "Wlads Sekunden-Diagnose vor jedem schwierigen Gespräch, plus das Skript. Wischen →",
+     "ph": "conflict-b",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Vor der Tür",
+     "h": "Die meisten Gespräche scheitern vor der Tür<span class=lime>.</span>",
+     "s": "Nicht an der Rhetorik. An der falschen Einschätzung, welcher Gesprächstyp das hier überhaupt ist.",
+     "ph": "boardroom",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Vier Typen",
+     "h": "Vier Gesprächstypen<span class=lime>.</span>",
+     "size": "xxs",
+     "cap": [
+      [
+       "T·01",
+       "Informieren",
+       "Fakten, keine Entscheidung offen. Klar, kurz, ohne Rechtfertigung."
+      ],
+      [
+       "T·02",
+       "Überzeugen",
+       "Eine Position, ein Ziel: Zustimmung. Kein Kompromiss."
+      ],
+      [
+       "T·03",
+       "Verhandeln",
+       "Beide Seiten haben Interessen. Der Kompromiss ist das Ziel."
+      ],
+      [
+       "T·04",
+       "Konfrontieren",
+       "Eine Grenze wird benannt. Nicht verhandelbar."
+      ]
+     ],
+     "ph": "time"
+    },
+    {
+     "t": "text",
+     "k": "03 · Der Fehler",
+     "h": "Verhandeln, wo konfrontiert werden müsste<span class=lime>.</span>",
+     "s": "Du gehst mit Kompromissbereitschaft in ein Grenzgespräch und kommst ohne Grenze wieder raus. Dein Team hat es gesehen.",
+     "ph": "conflict",
+     "size": "s"
+    },
+    {
+     "t": "three",
+     "k": "04 · Das Skript",
+     "h": "Konfrontieren in drei Zügen<span class=lime>.</span>",
+     "size": "xs",
+     "three": [
+      "Eröffne mit der Spannung, nicht mit dem Vorwurf: „Ich möchte über die Spannung zwischen uns reden.“",
+      "Drei vorbereitete B·W·W-Sätze. Nach jedem: zehn Sekunden schweigen.",
+      "Drei Optionen anbieten statt eine Lösung diktieren. Dann ein Datum."
+     ],
+     "v": "lime",
+     "av": "small"
+    },
+    {
+     "t": "cap",
+     "k": "05 · Anti-Patterns",
+     "h": "Drei Sätze, die alles kippen<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "A·01",
+       "„Wir müssen mal reden.“",
+       "Der Vorlauf, der das Gegenüber 24 Stunden anspannt."
+      ],
+      [
+       "A·02",
+       "„Ich finde, du …“",
+       "Das Ich am Anfang. Es wird ein Vorwurf."
+      ],
+      [
+       "A·03",
+       "„Wir kriegen das schon hin.“",
+       "Das Ende ohne Datum. Eine Geste, kein Ergebnis."
+      ]
+     ],
+     "ph": "listening"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Hart in der Sache.<br><span class=lime>Weich zur Person.</span>",
+     "s": "Die Grenze bleibt. Der Respekt auch.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Simulation",
+     "h": "Üb es, bevor es zählt<span class=lime>.</span>",
+     "s": "In LeaderOS führst du das Gespräch in der Simulation mit einem Gegenüber, das zurückredet. Mit Auswertung danach. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "conflict-b",
+     "size": "xs"
+    }
+   ]
+  },
+  {
+   "id": "P04",
+   "name": "Die 5 Rollen",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 04 · Die 5 Rollen",
+     "h": "Du hast nicht eine Rolle.<br>Du hast fünf<span class=lime>.</span>",
+     "s": "Wlads Kern-Framework aus „Die 5 Rollen einer Führungskraft“. Wischen →",
+     "ph": "presence",
+     "av": "small",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Der Denkfehler",
+     "h": "„Ich bin Führungskraft.“",
+     "s": "Das ist keine Rolle, das ist ein Titel. Welche Rolle gerade dran ist, entscheidet die Situation, nicht die Stellenbeschreibung.",
+     "ph": "boardroom-b",
+     "size": "xs"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Rollen 1 bis 3",
+     "h": "Sichtbar<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "R·01",
+       "Kommunikator",
+       "Charismatisch auftreten, souverän argumentieren. Präsenz, bevor der erste Satz fällt. Für viele der Default-Modus."
+      ],
+      [
+       "R·02",
+       "Manager",
+       "Entscheiden. Aus einer Diskussion einen Beschluss machen. Wer hier schwächelt, lässt Teams tagelang in der Schwebe."
+      ],
+      [
+       "R·03",
+       "Team-Leader",
+       "Die richtigen Leute finden, delegieren, motivieren. Wer nicht delegiert, wird zum Flaschenhals."
+      ]
+     ],
+     "ph": "stage"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Rollen 4 und 5",
+     "h": "Unbequem<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "R·04",
+       "Psychologe",
+       "Empathisch begegnen, Konflikte früh erkennen. Unsichtbar, wenn gut gespielt: die Krise, die gerade nicht passiert."
+      ],
+      [
+       "R·05",
+       "Problemlöser",
+       "Verhandeln, Kritikgespräche führen, Change tragen. Die Rolle, die am meisten vermieden wird, und die am meisten über Vertrauen entscheidet."
+      ]
+     ],
+     "ph": "conflict"
+    },
+    {
+     "t": "three",
+     "k": "04 · Selbst-Diagnose",
+     "h": "Drei Fragen<span class=lime>.</span>",
+     "three": [
+      "Welche Rolle hast du in den letzten drei Wochen am meisten gespielt? Vermutlich Kommunikator oder Manager.",
+      "Welche am wenigsten? Vermutlich Psychologe oder Problemlöser.",
+      "Welcher bist du gerade ausgewichen, weil sie unbequem ist?"
+     ],
+     "v": "lime",
+     "av": "small"
+    },
+    {
+     "t": "text",
+     "k": "05 · Der Hebel",
+     "h": "Die Rolle, die du unterspielst, ist dein größter Hebel<span class=lime>.</span>",
+     "s": "Das Framework heißt nicht „spiele alle fünf täglich“. Es heißt: erkenne, welche fehlt, und kompensiere bewusst.",
+     "ph": "solitude",
+     "size": "xxs"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Fünf Rollen.<br><span class=lime>Eine Person.</span>",
+     "s": "Kommunikator · Manager · Team-Leader · Psychologe · Problemlöser.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Diagnose",
+     "h": "Welche fehlt bei dir<span class=lime>.</span>",
+     "size": "xs",
+     "s": "In LeaderOS diagnostiziert WladBot deine Rollen-Verteilung an deinen echten Wochen und baut den Drill dazu. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "presence"
+    }
+   ]
+  },
+  {
+   "id": "P05",
+   "name": "Delegieren · 5 Stufen",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 05 · Delegieren",
+     "h": "Delegieren ist kein Ja oder Nein.<br>Es sind fünf Stufen<span class=lime>.</span>",
+     "s": "Warum Aufgaben zurückkommen, und wie du den Spielraum laut aussprichst. Wischen →",
+     "v": "lime",
+     "av": "big",
+     "size": "xxs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Rückdelegation",
+     "h": "Warum es wieder auf deinem Tisch landet<span class=lime>.</span>",
+     "s": "Du hast delegiert, aber nicht gesagt, wie viel Spielraum. Unklare Delegation kommt zurück. Immer. Meist freitags.",
+     "ph": "time",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Stufe 1 und 2",
+     "h": "Eng geführt<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "S·01",
+       "Mach genau das",
+       "So, wie gezeigt. Für die erste Quartalsauswertung einer neuen Kollegin."
+      ],
+      [
+       "S·02",
+       "Sammle Optionen",
+       "Du schlägst vor, ich entscheide. Für Aufgaben, bei denen der Schaden schwer zu korrigieren ist."
+      ]
+     ],
+     "ph": "writing"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Stufe 3 bis 5",
+     "h": "Frei geführt<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "S·03",
+       "Entscheide selbst",
+       "Hol dir vor der Umsetzung mein Okay."
+      ],
+      [
+       "S·04",
+       "Entscheide und setz um",
+       "Informiere mich danach."
+      ],
+      [
+       "S·05",
+       "Der Bereich gehört dir",
+       "Du informierst mich im festen Rhythmus, zum Beispiel im Wochenupdate."
+      ]
+     ],
+     "ph": "team"
+    },
+    {
+     "t": "three",
+     "k": "04 · Die Wahl",
+     "h": "Drei Fragen vor der Stufe<span class=lime>.</span>",
+     "three": [
+      "Wie gut kennt die Person die Aufgabe?",
+      "Wie groß ist der Schaden, wenn es schiefgeht, und wie leicht ist er zu korrigieren?",
+      "Wie viel Zeit ist zum Lernen da?"
+     ],
+     "v": "lime",
+     "av": "small"
+    },
+    {
+     "t": "chat",
+     "k": "05 · Laut aussprechen",
+     "h": "Laut aussprechen<span class=lime>.</span>",
+     "chat": [
+      [
+       "Du",
+       "Quartalsauswertung für die Geschäftsleitung, dein erstes Mal. Stufe 2: Du sammelst Optionen, ich entscheide. Mittwoch schauen wir gemeinsam drauf."
+      ],
+      [
+       "Gegenüber (Simulation)",
+       "Passt. Bis Mittwoch zwei Varianten mit Vor- und Nachteilen."
+      ]
+     ],
+     "note": "Beispiel · Simulation im LeaderOS",
+     "av": "small",
+     "ph": "boardroom"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Sprich die Stufe aus.<br><span class=lime>Und den Termin.</span>",
+     "s": "Wer Stufe und Kontrollpunkt nicht benennt, delegiert unklar. Und unklare Delegation ist keine.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Drill",
+     "h": "Deine nächste Übergabe<span class=lime>.</span>",
+     "size": "xs",
+     "s": "Nimm eine Aufgabe von dieser Woche, wähl die Stufe, sprich sie aus. Oder üb die Übergabe mit WladBot. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "team"
+    }
+   ]
+  },
+  {
+   "id": "P06",
+   "name": "10 Stufen des Zuhörens",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 06 · Zuhören",
+     "h": "80 Prozent aller Führungskräfte hören auf Stufe 2 zu<span class=lime>.</span>",
+     "s": "Wlads Modell der zehn Stufen des Zuhörens, von abwesend bis Stille. Wischen →",
+     "ph": "listening-b",
+     "size": "xxs"
+    },
+    {
+     "t": "cap",
+     "k": "01 · Stufe 1 bis 3",
+     "h": "Zuhören, das keins ist<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "Z·01",
+       "Nicht zuhören",
+       "Körperlich da, gedanklich im nächsten Meeting."
+      ],
+      [
+       "Z·02",
+       "Auf Antwort warten",
+       "Du hörst nur, um die Pause zu erwischen. Hier bleiben rund 80 Prozent hängen, ohne es zu merken."
+      ],
+      [
+       "Z·03",
+       "Selektiv zuhören",
+       "Du filterst nach dem, was deine Meinung bestätigt."
+      ]
+     ],
+     "ph": "boardroom-b"
+    },
+    {
+     "t": "text",
+     "k": "02 · Der Test",
+     "h": "Kannst du in einem Satz sagen, was dein Gegenüber wollte<span class=lime>.</span>",
+     "s": "Nicht, was du geantwortet hast. Wenn nein, warst du auf Stufe 1 bis 3.",
+     "ph": "solitude",
+     "size": "xxs"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Stufe 4 bis 6",
+     "h": "Verstehen statt reagieren<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "Z·04",
+       "Empathisch",
+       "Du hörst die Emotion hinter den Worten. „Läuft schon“ klingt müde anders als zuversichtlich."
+      ],
+      [
+       "Z·05",
+       "Aktiv",
+       "Nachfragen, paraphrasieren, spiegeln: „Wenn ich dich richtig verstehe …“"
+      ],
+      [
+       "Z·06",
+       "Strukturell",
+       "Du hörst, was nicht gesagt wird. Die ausgelassene Zahl, das übersprungene Thema."
+      ]
+     ],
+     "ph": "listening"
+    },
+    {
+     "t": "cap",
+     "k": "04 · Stufe 7 bis 10",
+     "h": "Das tiefe Zuhören<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "Z·07",
+       "Systemisch",
+       "Nicht nur die Person, das System um sie herum: Team-Dynamik, Prozess, Anreize."
+      ],
+      [
+       "Z·08",
+       "Diagnostisch",
+       "Das wiederkehrende Muster über mehrere Gespräche, nicht das einzelne Symptom."
+      ],
+      [
+       "Z·09",
+       "Generativ",
+       "Du hilfst dem Gegenüber, klarer zu denken, ohne die Antwort vorzugeben."
+      ],
+      [
+       "Z·10",
+       "Stille",
+       "Du sagst nichts und hältst Raum. Manche Probleme lösen sich nur im Schweigen."
+      ]
+     ],
+     "ph": "time"
+    },
+    {
+     "t": "text",
+     "k": "05 · Die Schwelle",
+     "h": "Ab Stufe 4 beginnt Führung<span class=lime>.</span>",
+     "s": "Davor reagierst du. Danach verstehst du. Dazwischen liegt die Schwelle, an der aus Reflex Führungsarbeit wird.",
+     "ph": "presence",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Zuhören ist keine Fähigkeit.<br><span class=lime>Es sind zehn.</span>",
+     "s": "Und jede lässt sich trainieren, eine Stufe pro Woche.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Drill",
+     "h": "Dein nächstes 1:1<span class=lime>.</span>",
+     "size": "xs",
+     "s": "Nach dem Gespräch: fass in einem Satz zusammen, was dein Gegenüber wollte. Dann bewerte deine Stufe. Oder lass WladBot mithören. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "listening-b"
+    }
+   ]
+  },
+  {
+   "id": "P07",
+   "name": "SEXIER · Argumentieren",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 07 · Rhetorik",
+     "h": "Warum dein Vorstand nicht überzeugt ist<span class=lime>.</span>",
+     "s": "Das SEXIER-Modell aus „Weiße Rhetorik“: sechs Schritte für ein Argument, das hält. Wischen →",
+     "ph": "stage",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Der Fehler",
+     "h": "Du argumentierst immer gleich<span class=lime>.</span>",
+     "s": "Für den Kaffeeautomaten wie für die Millionen-Investition. Je strittiger die These, desto höher das Level, das du brauchst. Das falsche Level ist der häufigste Fehler, in beide Richtungen.",
+     "ph": "boardroom",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · S · E · X",
+     "h": "Die erste Hälfte<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "S",
+       "Statement",
+       "Die Behauptung. Ein Satz, klar und angreifbar."
+      ],
+      [
+       "E",
+       "Explanation",
+       "Die Begründung. Warum stimmt das?"
+      ],
+      [
+       "X",
+       "eXample",
+       "Das Beispiel. Konkret, nachprüfbar, aus der Welt deines Gegenübers."
+      ]
+     ],
+     "ph": "writing"
+    },
+    {
+     "t": "cap",
+     "k": "03 · I · E · R",
+     "h": "Die zweite Hälfte<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "I",
+       "Impact",
+       "Die Auswirkung. Was folgt daraus, für genau diese Zuhörer?"
+      ],
+      [
+       "E",
+       "Explanation of Impact",
+       "Warum diese Auswirkung zählt."
+      ],
+      [
+       "R",
+       "Rebuttal",
+       "Der Einwand, den du selbst vorwegnimmst, bevor ihn jemand anderes bringt."
+      ]
+     ],
+     "ph": "presence"
+    },
+    {
+     "t": "three",
+     "k": "04 · Die Level-Regel",
+     "h": "Welches Level wann<span class=lime>.</span>",
+     "three": [
+      "Konsens-Thema: Behauptung plus ein „weil“. Mehr wirkt belehrend.",
+      "Leichter Widerstand: Behauptung, Begründung, Beispiel.",
+      "Strittige Entscheidung: SEXIER. Alle sechs Schritte, jeder Pflicht."
+     ],
+     "v": "lime",
+     "av": "small"
+    },
+    {
+     "t": "text",
+     "k": "05 · Der Rebuttal",
+     "h": "Der Schritt, den alle auslassen<span class=lime>.</span>",
+     "s": "Der Einwand kommt sowieso. Wer ihn selbst nennt und entkräftet, wirkt souverän. Wer ihn abwartet, wirkt getroffen.",
+     "ph": "conflict-b",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Nicht das perfekte Argument.<br><span class=lime>Das richtige Level.</span>",
+     "s": "Zur richtigen Zeit, vor den richtigen Leuten.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Drill",
+     "h": "Dein nächster Pitch in SEXIER<span class=lime>.</span>",
+     "s": "Nimm die These von nächster Woche und bau sie in sechs Schritten. WladBot prüft, ob der Rebuttal fehlt. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "stage",
+     "size": "xs"
+    }
+   ]
+  },
+  {
+   "id": "P08",
+   "name": "Motivation 4.0",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 08 · Motivation",
+     "h": "Niemand hat je für einen Obstkorb eine Extrameile gemacht<span class=lime>.</span>",
+     "s": "Die drei Hebel, die tatsächlich tragen, und das 15-Minuten-Ritual dazu. Wischen →",
+     "ph": "team",
+     "size": "xxs"
+    },
+    {
+     "t": "text",
+     "k": "01 · Der Denkfehler",
+     "h": "Motivation ist keine Zahlung<span class=lime>.</span>",
+     "s": "Bonus, Kicker, Benefits: Milliarden jedes Jahr, und die Energie sinkt trotzdem. Motivation ist ein Zustand aus drei Erlebnissen, die kein Budget ersetzt.",
+     "ph": "remote",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Die drei Hebel",
+     "h": "Was wirklich zieht<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "M·01",
+       "Autonomie",
+       "Das Wie gehört dem Team, das Wohin der Führung."
+      ],
+      [
+       "M·02",
+       "Fortschritt",
+       "Nichts motiviert stärker als sichtbare eigene Bewegung. Jede Woche ein Moment, der sie zeigt."
+      ],
+      [
+       "M·03",
+       "Zugehörigkeit",
+       "„Wir hier“ muss wahr sein. Entsteht in kleinen Momenten von Rückendeckung, nicht auf Team-Events."
+      ]
+     ],
+     "ph": "team-b"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Woran du es erkennst",
+     "h": "Welcher Hebel fehlt<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "Fehlt Autonomie",
+       "Das Team fragt bei Kleinigkeiten nach Freigabe. Nicht aus Unsicherheit. Aus Selbstschutz."
+      ],
+      [
+       "Fehlt Fortschritt",
+       "Die Energie sinkt mitten im Projekt, obwohl objektiv alles läuft. Niemand sieht die Bewegung."
+      ],
+      [
+       "Fehlt Zugehörigkeit",
+       "Im Meeting vorsichtig, im Flur ehrlich. Das Team schützt sich vor dem Raum."
+      ]
+     ],
+     "ph": "boardroom-b"
+    },
+    {
+     "t": "three",
+     "k": "04 · Das Wochen-Ritual",
+     "h": "15 Minuten pro Woche<span class=lime>.</span>",
+     "size": "xs",
+     "three": [
+      "Montag: eine Entscheidung explizit ans Team geben. Mit Rahmen, ohne Rückversicherung.",
+      "Mittwoch: fünf Minuten „Was ist seit letzter Woche konkret besser?“ Sammeln, nicht kommentieren.",
+      "Freitag: eine Person, die Rückendeckung gebraucht hätte, bekommt sie. Öffentlich, ohne Aber."
+     ],
+     "v": "lime"
+    },
+    {
+     "t": "text",
+     "k": "05 · Nach vier Wochen",
+     "h": "Nach vier Wochen merkst du es<span class=lime>.</span>",
+     "s": "Daran, was dein Team sagt, wenn du nicht im Raum bist. Kein Kickoff, kein Poster. Drei kleine Rituale, sichtbar für alle.",
+     "ph": "solitude",
+     "size": "xs"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Für Vertrauen schon.<br><span class=lime>Für einen Obstkorb nie.</span>",
+     "s": "Autonomie · Fortschritt · Zugehörigkeit.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Drill",
+     "h": "Lass dein letztes Protokoll gegenlesen<span class=lime>.</span>",
+     "size": "xs",
+     "s": "WladBot liest dein Team-Meeting gegen die drei Hebel: „Wo habe ich diese Woche Autonomie genommen statt gegeben?“ 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "team"
+    }
+   ]
+  },
+  {
+   "id": "P09",
+   "name": "KI für Führungskräfte",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 09 · KI-Führung",
+     "h": "KI ohne Methodik ist Slop<span class=lime>.</span>",
+     "s": "Drei Use-Cases, die heute funktionieren, und die eine Regel, die den Unterschied macht. Wischen →",
+     "v": "lime",
+     "av": "big",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "01 · Zwei falsche Antworten",
+     "h": "„Alles“ oder „noch zu früh“<span class=lime>.</span>",
+     "s": "Beides falsch. KI ist ein Werkzeug, kein Strategiewechsel. Sie ersetzt nicht deine Methodik. Sie nimmt dir Zeit weg von den Aufgaben, die am meisten Zeit fressen.",
+     "ph": "ai",
+     "size": "xs"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Use-Case 1",
+     "h": "Das Gespräch von morgen<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "U·01",
+       "Vorbereitung",
+       "Du tippst die Situation ein, fragst nach drei Eröffnungssätzen im B·W·W-Format und gehst mit einem Skript rein. Statt 30 Minuten grübeln im Auto."
+      ],
+      [
+       "Regel",
+       "Keine Namen",
+       "Keine personenbezogenen Daten in öffentliche Tools. Vorname und Rolle reichen."
+      ]
+     ],
+     "ph": "ai-b"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Use-Case 2",
+     "h": "Die Rede in SEXIER<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "U·02",
+       "Struktur",
+       "16 Bullets im Doc, kein roter Faden. KI sortiert sie in sechs Schritte. 15 Minuten statt zwei Stunden."
+      ],
+      [
+       "Regel",
+       "Substanz bleibt bei dir",
+       "Nur du kannst das Beispiel mit einer echten Zahl aus deinem Quartal füllen. Wer das umdreht, klingt nach generischem Slide-Deck."
+      ]
+     ],
+     "ph": "stage"
+    },
+    {
+     "t": "cap",
+     "k": "04 · Use-Case 3",
+     "h": "Das Freitag-Coaching<span class=lime>.</span>",
+     "size": "xs",
+     "cap": [
+      [
+       "U·03",
+       "Reflexion",
+       "Drei Fragen an einen Coach, der deine Drills und deinen Score kennt: Was war meine schwächste Reaktion diese Woche? Welches Framework hätte sie gelöst?"
+      ],
+      [
+       "Regel",
+       "Ehrlich statt höflich",
+       "Die Antwort ist regelmäßig unbequem und immer nützlich."
+      ]
+     ],
+     "ph": "remote"
+    },
+    {
+     "t": "vs",
+     "k": "05 · Die Trennlinie",
+     "h": "KI vs. Du<span class=lime>.</span>",
+     "vs": [
+      [
+       "KI",
+       "Strukturieren",
+       "Sortieren, formatieren, Varianten liefern, um 22:47 Uhr verfügbar."
+      ],
+      [
+       "Du",
+       "Substanz",
+       "Das Beispiel, die Zahl, der Tonfall, die Entscheidung. Das gibt niemand ab."
+      ]
+     ],
+     "ph": "boardroom"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "KI macht die Struktur.<br><span class=lime>Du machst die Substanz.</span>",
+     "s": "Werkzeug ohne Methodik ist Slop. Methodik mit Werkzeug ist ein Vorsprung.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Start",
+     "h": "Ein Coach, der Wlads Bücher kennt<span class=lime>.</span>",
+     "size": "xs",
+     "s": "WladBot antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "ai"
+    }
+   ]
+  },
+  {
+   "id": "P10",
+   "name": "Schlagfertigkeit",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 10 · Schlagfertigkeit",
+     "h": "Nie wieder sprachlos im Meeting<span class=lime>.</span>",
+     "s": "Drei Manipulationstricks, die du jede Woche erlebst, und je eine Verteidigung in fünf Sekunden. Wischen →",
+     "ph": "boardroom-b",
+     "size": "s"
+    },
+    {
+     "t": "chat",
+     "k": "01 · Schuldumkehr",
+     "h": "Trick 1<span class=lime>.</span>",
+     "size": "s",
+     "chat": [
+      [
+       "Du",
+       "Das Projekt ist zwei Wochen hinter Plan."
+      ],
+      [
+       "Gegenüber",
+       "Naja, du hast die Anforderungen ja auch nicht klar genug kommuniziert."
+      ],
+      [
+       "Verteidigung",
+       "„Beobachtbar bleibt: zwei Wochen Verzug. Lass uns schauen, was ihn verursacht hat. Das hilft mehr als Schuld.“ Zurück zur Sache."
+      ]
+     ],
+     "note": "Re-Frame zur Sache",
+     "ph": "conflict"
+    },
+    {
+     "t": "chat",
+     "k": "02 · Falsche Dichotomie",
+     "h": "Trick 2<span class=lime>.</span>",
+     "size": "s",
+     "chat": [
+      [
+       "Gegenüber",
+       "Entweder wir investieren jetzt 200K in das Tool, oder wir verlieren den Kunden."
+      ],
+      [
+       "Verteidigung",
+       "„Bevor ich zwischen den beiden wähle: Was wäre ein dritter Weg? Eine Light-Version, ein kürzerer Vertrag?“ Die Frage sprengt das Entweder-oder."
+      ]
+     ],
+     "note": "Dritte Option erzwingen",
+     "ph": "negotiation"
+    },
+    {
+     "t": "chat",
+     "k": "03 · Personalisierung",
+     "h": "Trick 3<span class=lime>.</span>",
+     "size": "s",
+     "chat": [
+      [
+       "Gegenüber",
+       "Du als Quereinsteiger kannst das vielleicht nicht ganz beurteilen."
+      ],
+      [
+       "Verteidigung",
+       "„Lass uns auf die Sache zurückkommen. Die konkrete Frage ist: … Was ist deine Antwort?“ Ignorieren, nicht kontern. Wer kontert, gibt dem Angriff Energie."
+      ]
+     ],
+     "note": "Sache wiederholen, Person ignorieren",
+     "ph": "presence"
+    },
+    {
+     "t": "three",
+     "k": "04 · Zusammengefasst",
+     "h": "Drei Verteidigungen<span class=lime>.</span>",
+     "size": "xs",
+     "three": [
+      "Schuldumkehr: „Beobachtbar bleibt …“",
+      "Falsche Dichotomie: „Was wäre ein dritter Weg?“",
+      "Personalisierung: zurück zur Sache, ohne Konter."
+     ],
+     "v": "lime"
+    },
+    {
+     "t": "text",
+     "k": "05 · Was Schlagfertigkeit ist",
+     "h": "Nicht schnell kontern.<br>Den Boden halten<span class=lime>.</span>",
+     "s": "Unter Druck kommt der Reflex, den du geübt hast. Hast du keinen geübt, kommt der falsche.",
+     "ph": "solitude",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Üb es, bevor es zählt.<br><span class=lime>Sonst zählt es, bevor du übst.</span>",
+     "s": "Aus „Dunkle Rhetorik erkennen und kontern“.",
+     "v": "lime",
+     "size": "xxs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Simulation",
+     "h": "Halt den Boden<span class=lime>.</span>",
+     "size": "xs",
+     "s": "In LeaderOS spielt die Simulation den Angreifer, du hältst den Boden. Mit Auswertung. 14 Tage kostenlos. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "boardroom-b"
+    }
+   ]
+  },
+  {
+   "id": "P11",
+   "name": "Seminar vs. System",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 11 · Seminar vs. System",
+     "h": "Warum nach dem Seminar nichts bleibt<span class=lime>.</span>",
+     "s": "Fünf Unterschiede zwischen der alten und der neuen Art, Führung zu lernen. Wischen →",
+     "ph": "training",
+     "size": "xs"
+    },
+    {
+     "t": "vs",
+     "k": "01 · Zeit",
+     "h": "Zeit<span class=lime>.</span>",
+     "vs": [
+      [
+       "Seminar",
+       "2 Tage im Jahr",
+       "Dann 363 Tage ohne Training. Nichts, was du einmal im Jahr tust, wird zur Gewohnheit."
+      ],
+      [
+       "System",
+       "15 Minuten am Tag",
+       "Jeden Werktag ein Drill. Nach 30 Tagen ist der neue Reflex da, nicht nur die Erinnerung."
+      ]
+     ],
+     "ph": "time"
+    },
+    {
+     "t": "vs",
+     "k": "02 · Inhalt",
+     "h": "Inhalt<span class=lime>.</span>",
+     "vs": [
+      [
+       "Seminar",
+       "Folien und Fallstudien",
+       "Beispiele von anderen. Interessant, aber nicht dein Montag."
+      ],
+      [
+       "System",
+       "Dein echter Fall",
+       "Dein Mitarbeiter, dein Konflikt, deine Verhandlung. Du bringst den Fall, das System den Drill."
+      ]
+     ],
+     "ph": "boardroom"
+    },
+    {
+     "t": "vs",
+     "k": "03 · Übung",
+     "h": "Übung<span class=lime>.</span>",
+     "vs": [
+      [
+       "Seminar",
+       "Rollenspiel mit Kollegen",
+       "Einmal, vor Publikum, mit jemandem, der nett sein will."
+      ],
+      [
+       "System",
+       "Simulation mit Gegenüber",
+       "So oft du willst, mit einem Gegenüber, das widerspricht und ausweicht. Mit Auswertung danach."
+      ]
+     ],
+     "ph": "conflict-b"
+    },
+    {
+     "t": "vs",
+     "k": "04 · Danach",
+     "h": "Danach<span class=lime>.</span>",
+     "vs": [
+      [
+       "Seminar",
+       "Ein Ordner im Regal",
+       "Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch."
+      ],
+      [
+       "System",
+       "Ein Coach in der Tasche",
+       "WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
+      ]
+     ],
+     "ph": "ai"
+    },
+    {
+     "t": "vs",
+     "k": "05 · Ergebnis",
+     "h": "Ergebnis<span class=lime>.</span>",
+     "vs": [
+      [
+       "Seminar",
+       "Wissen",
+       "Du weißt mehr. Dein Team merkt nichts."
+      ],
+      [
+       "System",
+       "Verhalten",
+       "Du führst anders. Dein Team merkt es in der ersten Woche."
+      ]
+     ],
+     "v": "lime"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Entweder du trainierst.<br><span class=lime>Oder du hoffst.</span>",
+     "s": "Das Seminar war nicht schlecht. Es war nur einmal.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Live",
+     "h": "Sieh das System live<span class=lime>.</span>",
+     "size": "xs",
+     "s": "Do, 29. Oktober, 10:00 bis 11:30 Uhr: Wlad zeigt den Charisma-Code, das Operating System und einen echten Fall. Kostenlos, live, mit Q&A. Link in Bio.",
+     "cta": "Kostenloser Platz · 29.10.",
+     "av": "big",
+     "ph": "stage"
+    }
+   ]
+  },
+  {
+   "id": "P12",
+   "name": "Werden statt wissen",
+   "slides": [
+    {
+     "t": "cover",
+     "k": "Post 12 · LeaderOS",
+     "h": "Werden statt wissen<span class=lime>.</span>",
+     "s": "Was LeaderOS ist, was drin ist, und wie du morgen anfängst. Wischen →",
+     "ph": "sprint-b",
+     "av": "big",
+     "size": "s"
+    },
+    {
+     "t": "text",
+     "k": "01 · Die Idee",
+     "h": "Nicht noch ein Tool.<br>Ein System<span class=lime>.</span>",
+     "s": "Kurse, KI-Coach, Simulationen, Drills und Auswertung greifen ineinander. Deshalb heißt es Operating System, nicht App.",
+     "ph": "app",
+     "size": "s"
+    },
+    {
+     "t": "cap",
+     "k": "02 · Was drin ist",
+     "h": "Ab Tag 1<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "K·01",
+       "Sechs Grundlagen-Kurse",
+       "Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik."
+      ],
+      [
+       "K·02",
+       "WladBot 24/7",
+       "Antwortet auf 2 212 authentischen Wlad-Inhalten. Text und Stimme."
+      ],
+      [
+       "K·03",
+       "Simulationen und Drills",
+       "Ein Gegenüber, das zurückredet. 15 Minuten am Tag, an deinem Fall."
+      ]
+     ],
+     "ph": "app-b"
+    },
+    {
+     "t": "cap",
+     "k": "03 · Weiter",
+     "h": "Wenn du tiefer willst<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "K·04",
+       "30-Tage-Challenge",
+       "Elf Frameworks gedrillt, Zertifikat mit Startnummer, 12 Monate Mitgliedschaft."
+      ],
+      [
+       "K·05",
+       "OS-Jahr",
+       "Vier Master-Programme, monatliche Live-Sessions mit Wlad, Video-Analyse."
+      ]
+     ],
+     "ph": "boardroom-b"
+    },
+    {
+     "t": "cap",
+     "k": "04 · Wer dahintersteht",
+     "h": "Wlad Jachtchenko<span class=lime>.</span>",
+     "size": "s",
+     "cap": [
+      [
+       "seit 2007",
+       "Rhetorik-Trainer und Leadership-Coach",
+       "400.000+ Klienten in über 20 Ländern. Dreifacher SPIEGEL-Bestseller-Autor. Trustpilot 4,9 von 5."
+      ]
+     ],
+     "v": "photo"
+    },
+    {
+     "t": "text",
+     "k": "05 · Warum jetzt",
+     "h": "Die Art, wie Führung gelernt wird, ändert sich gerade<span class=lime>.</span>",
+     "s": "Weg vom Seminar, hin zum täglichen Training mit einem Coach in der Tasche. Wer jetzt anfängt, hat in 30 Tagen Reflexe, die andere in Jahren nicht bekommen.",
+     "ph": "sprint",
+     "size": "xxs"
+    },
+    {
+     "t": "text",
+     "k": "06 · Das Prinzip",
+     "h": "Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>",
+     "s": "Fang heute an. Nicht nächstes Quartal.",
+     "v": "lime",
+     "size": "xs",
+     "av": ""
+    },
+    {
+     "t": "cta",
+     "k": "07 · Start",
+     "h": "14 Tage.<br>Keine Karte<span class=lime>.</span>",
+     "s": "Anmeldung auf leaderos.de, voller Zugang, jederzeit kündbar. Oder erst live sehen: Webinar mit Wlad am 29.10. Link in Bio.",
+     "cta": "14 Tage kostenlos",
+     "av": "big",
+     "ph": "solitude"
+    }
+   ]
+  }
+ ],
+ "SA": [
+  {
+   "k": "Paradigmenwechsel 01",
+   "h": "Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>",
+   "s": "Niemand wird fit, weil er ein Buch über Fitness gelesen hat. Bei Führung tun wir genau das. Seit 20 Jahren.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo"
+  },
+  {
+   "k": "Paradigmenwechsel 02",
+   "h": "<span class=strike>Wissen</span><br>Reps<span class=lime>.</span>",
+   "s": "Jede Führungskraft weiß, dass man Feedback geben sollte. Fast keine tut es gut. Der Unterschied ist nicht Wissen. Es sind Wiederholungen.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "ph": "training-b"
+  },
+  {
+   "k": "Paradigmenwechsel 03",
+   "h": "Ein Seminar im Jahr.<br>365 Gespräche<span class=lime>.</span>",
+   "s": "Das ist das Verhältnis, mit dem die meisten Führungskräfte arbeiten. Und dann wundern sie sich, dass nichts hängen bleibt.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "size": "s"
+  },
+  {
+   "k": "Paradigmenwechsel 04",
+   "h": "Du brauchst keinen neuen Kurs.<br><span class=lime>Du brauchst ein Training.</span>",
+   "s": "Kurs: einmal durchschauen, abhaken, vergessen. Training: jeden Tag 15 Minuten, bis das Verhalten sitzt. LeaderOS ist das Zweite.",
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "size": "xs",
+   "ph": "sprint"
+  },
+  {
+   "k": "Paradigmenwechsel 05",
+   "h": "Das alte Modell<span class=lime>.</span>",
+   "s": "",
+   "list": [
+    "Seminar buchen",
+    "Zwei Tage Notizen",
+    "Montag: alles wie vorher",
+    "In 12 Monaten wieder"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "ph": "training"
+  },
+  {
+   "k": "Paradigmenwechsel 06",
+   "h": "Das neue Modell<span class=lime>.</span>",
+   "s": "",
+   "list": [
+    "Jeden Tag ein Drill, 15 Minuten",
+    "Das echte Gespräch vorher üben",
+    "KI-Coach, der Wlads Methodik kennt",
+    "Nach 30 Tagen: neues Verhalten"
+   ],
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "size": "s",
+   "av": "small"
+  },
+  {
+   "k": "Realität 01",
+   "h": "Welches Gespräch schiebst du gerade auf<span class=lime>?</span>",
+   "s": "Das Feedback. Die Gehaltsfrage. Der Konflikt, den alle sehen. Aufschieben kostet jede Woche mehr als das Gespräch selbst.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "xs",
+   "ph": "conflict"
+  },
+  {
+   "k": "Realität 02",
+   "h": "Dein letztes Führungs&shy;seminar<span class=lime>.</span><br>Was ist davon übrig?",
+   "s": "Ehrlich. Nicht die Erinnerung an den Kaffee. Welches Verhalten hat sich geändert?",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "size": "xs"
+  },
+  {
+   "k": "Realität 03",
+   "h": "80 % hören auf Stufe 2 zu<span class=lime>.</span>",
+   "s": "Stufe 2 heißt: auf die eigene Antwort warten. Die Pyramide des Zuhörens hat zehn Stufen. Die meisten Führungskräfte kennen nicht einmal die dritte.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "num": "2",
+   "ph": "listening"
+  },
+  {
+   "k": "Realität 04",
+   "h": "Du hast recht.<br>Und überzeugst trotzdem niemanden<span class=lime>.</span>",
+   "s": "Logos ist die Logik. Ethos die Glaubwürdigkeit. Pathos die Emotion. Wer nur Logos bringt, gewinnt die Diskussion und verliert den Raum.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "size": "xs"
+  },
+  {
+   "k": "Realität 05",
+   "h": "„Meine Tür steht immer offen.“",
+   "s": "Heißt übersetzt: Ich warte, bis ihr kommt. Niemand kommt. Führung, die wartet, ist keine Führung.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "ph": "solitude"
+  },
+  {
+   "k": "Realität 06",
+   "h": "Niemand sagt dir, wenn du schlecht führst<span class=lime>.</span>",
+   "s": "Deine Mitarbeiter nicht. Dein Chef nicht. Dein Kalender schon: Er zeigt, welche Gespräche du seit Wochen verschiebst.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "size": "xs"
+  },
+  {
+   "k": "Framework · Feedbackformel",
+   "h": "Drei Sätze.<br>Jedes schwierige Gespräch<span class=lime>.</span>",
+   "s": "",
+   "list": [
+    "Beobachtung: „Ich habe beobachtet, dass …“",
+    "Wirkung: „Dadurch …“",
+    "Wunsch: „Ich wünsche mir …“"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "ph": "feedback"
+  },
+  {
+   "k": "Framework · SEXIER",
+   "h": "Dein Argument hat fünf Schritte.<br><span class=lime>Es braucht sechs.</span>",
+   "s": "Statement, Explanation, eXample, Impact, Explanation of Impact. Und das R: Rebuttal. Die Gegenargumente widerlegen, bevor jemand sie ausspricht.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "size": "xs"
+  },
+  {
+   "k": "Framework · 5 Rollen",
+   "h": "Du antwortest in der falschen Rolle<span class=lime>.</span>",
+   "s": "Kommunikator, Manager, Team-Leader, Psychologe, Problemlöser. Die meisten Führungsprobleme entstehen, weil jemand als Problemlöser auf eine Psychologen-Frage antwortet.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "ph": "team"
+  },
+  {
+   "k": "Framework · 4 Farben",
+   "h": "Ein Argument.<br>Ein Viertel des Raums<span class=lime>.</span>",
+   "s": "Rot will das Ergebnis. Gelb die Beziehung. Grün die Sicherheit. Blau die Daten. Wer immer gleich argumentiert, erreicht immer dieselben.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "size": "xs"
+  },
+  {
+   "k": "Framework · Dunkle Rhetorik",
+   "h": "Strohmann. Ad hominem. Whataboutism<span class=lime>.</span>",
+   "s": "Du erlebst sie jede Woche im Meeting. Die Frage ist nur, ob du sie erkennst, bevor sie wirken. Die Antwort ist immer dieselbe: hart in der Sache, weich zur Person.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "xs",
+   "ph": "negotiation"
+  },
+  {
+   "k": "Framework · Charisma-Code",
+   "h": "Präsenz. Wärme. Kompetenz<span class=lime>.</span>",
+   "s": "Drei Signale, die in Sekunden entscheiden, ob ein Raum dir folgt. Jedes davon ist trainierbar. Keines davon ist Talent.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "size": "s"
+  },
+  {
+   "k": "LeaderOS 01",
+   "h": "Ein Coach, der Wlads Bücher kennt.<br><span class=lime>24/7.</span>",
+   "s": "WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "size": "xs",
+   "av": "",
+   "ph": "boardroom-b"
+  },
+  {
+   "k": "LeaderOS 02",
+   "h": "Üb das Gespräch,<br>bevor es zählt<span class=lime>.</span>",
+   "s": "Simulation: Du führst das Kündigungsgespräch, das Feedback, die Verhandlung. Mit einem Gegenüber, das zurückredet. Dann erst im echten Raum.",
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "size": "s",
+   "av": "",
+   "ph": "time"
+  },
+  {
+   "k": "LeaderOS 03",
+   "h": "15 Minuten am Tag<span class=lime>.</span>",
+   "s": "Mehr braucht ein Drill nicht. Weniger bringt ein Seminar. Dreißig Tage davon verschieben Verhalten von „weiß ich“ zu „mache ich“.",
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "size": "h",
+   "av": ""
+  },
+  {
+   "k": "LeaderOS 04",
+   "h": "6 Grundlagen-Kurse.<br>4 Master-Programme<span class=lime>.</span>",
+   "s": "",
+   "list": [
+    "Rhetorik-Grundlagen",
+    "Schwierige Gespräche meistern",
+    "Delegation wie ein Profi",
+    "Feedback-Formate",
+    "Storytelling im Boardroom",
+    "Meeting-Rhetorik"
+   ],
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "size": "xs",
+   "ph": "app"
+  },
+  {
+   "k": "LeaderOS 05",
+   "h": "Nicht noch ein Tool.<br><span class=lime>Ein System.</span>",
+   "s": "Kurse, KI-Coach, Simulationen, tägliche Drills. Nicht nebeneinander, sondern ineinander. Deshalb heißt es Operating System.",
+   "cta": "14 Tage kostenlos",
+   "v": "dark",
+   "size": "s",
+   "av": "",
+   "ph": "solitude"
+  },
+  {
+   "k": "LeaderOS 06",
+   "h": "14 Tage.<br>Keine Karte.<br>Kein Risiko<span class=lime>.</span>",
+   "s": "Teste das System mit deinem echten nächsten Gespräch. Wenn es nichts verändert, hast du 14 Tage verloren. Wenn doch, ein Jahr gewonnen.",
+   "cta": "14 Tage kostenlos",
+   "v": "lime",
+   "size": "s",
+   "av": ""
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Live mit Wlad<span class=lime>.</span>",
+   "s": "Do, 29. Oktober, 10:00 bis 11:30 Uhr. Kostenlos. Keine Aufzeichnung, denn Live-Case und Q&A funktionieren nur live.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "size": "h"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Was in 90 Minuten passiert<span class=lime>.</span>",
+   "s": "",
+   "list": [
+    "Der Charisma-Code, live demonstriert",
+    "Das Leadership Operating System",
+    "Ein echter Live-Case aus der Community",
+    "Q&A: deine Fragen, direkt beantwortet"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "s",
+   "ph": "stage"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Keine Auf&shy;zeichnung<span class=lime>.</span>",
+   "s": "Bewusst. Wer live dabei ist, bringt seinen Fall mit und bekommt seine Antwort. Eine Aufzeichnung kann beides nicht.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "lime",
+   "size": "s"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "3× SPIEGEL-Bestseller.<br>Seit 2007 im Coaching.<br>400.000+ Klienten<span class=lime>.</span>",
+   "s": "Zum ersten Mal zeigt Wlad Jachtchenko seine komplette Methodik als tägliches Trainingssystem. Live, kostenlos.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "xs",
+   "ph": "presence"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Bring dein Gespräch mit<span class=lime>.</span>",
+   "s": "Das Feedback, die Verhandlung, der Konflikt. Im Q&A werden echte Fälle besprochen. Deiner kann dabei sein.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "photo",
+   "size": "s"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "h": "Entweder du trainierst Führung.<br><span class=lime>Oder du hoffst.</span>",
+   "s": "Do, 29.10., 10 Uhr. 90 Minuten, die den Unterschied zwischen beidem zeigen. Kostenloser Platz: leader-os.de/webinar",
+   "cta": "Kostenloser Platz · 29.10.",
+   "v": "dark",
+   "size": "xs",
+   "ph": "boardroom-b"
+  }
+ ],
+ "SB": [
+  {
+   "k": "Alles ändert sich 01",
+   "hf": 7,
+   "h": "Alles ändert sich.<br><span class=lime>Führung auch.</span>",
+   "s": "Dein Team arbeitet mit KI. Deine Meetings sind remote. Deine Leute erwarten Antworten in Stunden. Nur die Führungsausbildung ist stehen geblieben: ein Seminar, einmal im Jahr, für alle gleich.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "s"
+  },
+  {
+   "k": "Alles ändert sich 02",
+   "hf": 5,
+   "h": "Wissen war der Engpass.<br><span class=lime>Jetzt ist es Übung.</span>",
+   "s": "Jedes Framework steht in einem Buch. Jede Führungskraft kann es nachschlagen. Was fehlt, ist die fünfte Wiederholung, bevor es zählt.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "s"
+  },
+  {
+   "k": "Alles ändert sich 03",
+   "hf": 1,
+   "h": "Die Prüfung kommt trotzdem<span class=lime>.</span>",
+   "s": "Montag, 10 Uhr: das Gespräch mit deinem Underperformer. Geübt hast du es: nie. Jedes Führungsgespräch ist eine Prüfung, auf die niemand dich vorbereitet hat. Das ändert sich.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Alles ändert sich 04",
+   "hf": 8,
+   "h": "Du hast das Buch gelesen.<br><span class=lime>Jetzt das Training.</span>",
+   "s": "Lesen hat noch niemanden zur Führungskraft gemacht. Wlads Methodik aus seinen Büchern steckt jetzt in einem System, das dich üben lässt: jeden Tag, an deinem Fall.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Alles ändert sich 05",
+   "hf": 10,
+   "h": "Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>",
+   "s": "Das ist der ganze Paradigmenwechsel in einem Satz. Nicht mehr Wissen sammeln. Reflexe aufbauen. Wie ein Athlet, nicht wie ein Student.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "s"
+  },
+  {
+   "k": "Alles ändert sich 06",
+   "po": "p-01-wer-nicht-fuehrt",
+   "h": "Wer nicht führt,<br><span class=lime>wird geführt.</span>",
+   "s": "Vom Kalender. Von den Lautesten im Meeting. Von Entscheidungen, die andere für dich treffen. Eine Führungs-Generation hört auf zu warten.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "ph": "boardroom"
+  },
+  {
+   "k": "Klarheit 01",
+   "v": "lime",
+   "h": "LeaderOS in einem Satz<span class=lime>.</span>",
+   "s": "Ein Trainingssystem für Führungskräfte: Kurse, ein KI-Coach mit Wlads Methodik, Simulationen mit Gegenüber und tägliche Drills. In einer App, 15 Minuten am Tag.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Klarheit 02",
+   "hf": 7,
+   "h": "Für wen das ist<span class=lime>.</span>",
+   "list": [
+    "Teamleads, die zum ersten Mal Menschen führen",
+    "Führungskräfte, die wissen, was sie tun sollten, und es nicht tun",
+    "Erfahrene, die ihre Reflexe auffrischen wollen, nicht ihre Theorie"
+   ],
+   "cta": "14 Tage kostenlos"
+  },
+  {
+   "k": "Klarheit 03",
+   "hf": 1,
+   "h": "Für wen das nicht ist<span class=lime>.</span>",
+   "list": [
+    "Wer ein Zertifikat will, ohne zu trainieren",
+    "Wer nur zuschauen will, ohne selbst zu üben",
+    "Wer 15 Minuten am Tag nicht aufbringt"
+   ],
+   "cta": "Kostenloser Platz · 29.10."
+  },
+  {
+   "k": "Klarheit 04",
+   "hf": 11,
+   "h": "Ein Tag im OS<span class=lime>.</span>",
+   "kv": [
+    [
+     "01",
+     "Lektion",
+     "Eine Lektion aus einem Kurs. Kurz, mit dem Framework, das du heute brauchst."
+    ],
+    [
+     "02",
+     "Drill",
+     "Dasselbe Framework an deinem echten Fall. Nicht an einer Fallstudie."
+    ],
+    [
+     "03",
+     "Frage",
+     "Du fragst WladBot, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik."
+    ],
+    [
+     "04",
+     "Auswertung",
+     "Nach der Simulation: Struktur, Klarheit, Wirkung. Und der nächste Drill."
+    ]
+   ],
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Klarheit 05",
+   "la": "hf-03",
+   "h": "Dreißig Tage.<br>Ein neues Du<span class=lime>.</span>",
+   "s": "Jeden Tag eine Frage. Jeden Tag ein Drill. Nach 30 Tagen sind es keine Notizen mehr, sondern Reflexe.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Klarheit 06",
+   "hf": 6,
+   "h": "Der Plan hält nicht.<br><span class=lime>Der Reflex schon.</span>",
+   "s": "Du kannst dir jeden Gesprächsleitfaden ausdrucken. Im Raum weht er dir weg. Was bleibt, ist das, was du fünfmal geübt hast.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Kurse 01 · Zugang",
+   "v": "lime",
+   "h": "Sechs Grundlagen-Kurse.<br><span class=lime>Ab Tag 1 drin.</span>",
+   "list": [
+    "Rhetorik-Grundlagen",
+    "Schwierige Gespräche meistern",
+    "Delegation wie ein Profi",
+    "Feedback-Formate",
+    "Storytelling im Boardroom",
+    "Meeting-Rhetorik"
+   ],
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Kurse 02 · K·01",
+   "hf": 2,
+   "h": "Der Weg zum Pult<span class=lime>.</span>",
+   "s": "Rhetorik-Grundlagen: Körpersprache, Stimme, Wortwahl. Die drei Säulen, die entscheiden, was passiert, wenn du vorne stehst. Im 14-Tage-Test enthalten, mit Drill danach.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Kurse 03 · K·02",
+   "hf": 12,
+   "h": "Sparring vor dem Ernstfall<span class=lime>.</span>",
+   "s": "Schwierige Gespräche meistern: Konflikt, Kritik, Kündigung so führen, dass das Gespräch nicht kippt. Danach übst du es in der Simulation mit einem Gegenüber, das zurückredet. Bevor du es im Büro führst.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Kurse 04 · K·03",
+   "hf": 6,
+   "h": "Abgeben ist ein Plan.<br><span class=lime>Loslassen ein Reflex.</span>",
+   "s": "Delegation wie ein Profi: Aufgaben richtig abgeben, Vertrauen aufbauen, Mikromanagement beenden. Der Kurs, den die meisten am dringendsten brauchen und am längsten aufschieben.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Kurse 05 · K·04",
+   "ph": "feedback",
+   "av": "small",
+   "h": "Feedback-Formate<span class=lime>.</span>",
+   "s": "Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WladBot, der dir den ersten Satz abnimmt.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Kurse 06 · K·05 + K·06",
+   "ph": "boardroom",
+   "h": "Storytelling.<br>Meeting-Rhetorik<span class=lime>.</span>",
+   "s": "Komplexe Ideen in zwei Minuten erzählen. Meetings eröffnen, führen und zu einer Entscheidung bringen. Zwei Kurse, beide im Test enthalten.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Kurse 07 · Master",
+   "hf": 8,
+   "h": "Vier Master-Programme<span class=lime>.</span>",
+   "kv": [
+    [
+     "M·01",
+     "KI-First Leadership",
+     "KI in Entscheidungen und Teamabläufe einbauen, ohne das eigene Urteil abzugeben."
+    ],
+    [
+     "M·02",
+     "Change Management",
+     "Veränderung so führen, dass das Team mitgeht."
+    ],
+    [
+     "M·03",
+     "Executive Presence",
+     "Raum einnehmen, bevor du sprichst."
+    ],
+    [
+     "M·04",
+     "Boardroom-Strategie",
+     "C-Level-Entscheidungen vorbereiten, präsentieren, durchsetzen."
+    ]
+   ],
+   "s2": "Im OS-Jahr · Leadership Plus Pro",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Kurse 08 · Auswertung",
+   "hf": 4,
+   "h": "Kurs ansehen ist nicht Kurs können<span class=lime>.</span>",
+   "s": "Deshalb endet jeder Kurs im OS nicht mit einem Haken, sondern mit einem Drill an deinem Fall. Und mit einer Auswertung, die dir zeigt, was saß und was fehlte.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Live-Webinar · 29. Oktober",
+   "v": "photo",
+   "h": "Live mit Wlad<span class=lime>.</span>",
+   "s": "Donnerstag, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A.",
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "s"
+  },
+  {
+   "k": "Live-Webinar · Ablauf",
+   "hf": 2,
+   "h": "Wlad am Pult.<br>Du in der ersten Reihe<span class=lime>.</span>",
+   "list": [
+    "Der Charisma-Code, live demonstriert",
+    "Das Leadership Operating System, komplett",
+    "Ein echter Live-Case aus der Community",
+    "Q&A: deine Fragen, direkt beantwortet"
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "xs"
+  },
+  {
+   "k": "Termine · Was ansteht",
+   "hf": 3,
+   "h": "Was ansteht<span class=lime>.</span>",
+   "ev": [
+    [
+     "29.10.",
+     "Live-Webinar mit Wlad, 10:00 bis 11:30 Uhr<small>kostenlos · keine Aufzeichnung</small>"
+    ],
+    [
+     "01.11.",
+     "LeaderOS offiziell online<small>App-Bibliothek · leader-os.de</small>"
+    ],
+    [
+     "02.11.",
+     "Beratungsgespräche starten<small>30 Minuten · persönlich · kostenlos</small>"
+    ]
+   ],
+   "cta": "Kostenloser Platz · 29.10.",
+   "size": "s"
+  },
+  {
+   "k": "Termine · Beratung",
+   "ph": "listening",
+   "h": "Ab 2. November:<br>dein Gespräch<span class=lime>.</span>",
+   "s": "Dreißig Minuten, persönlich, kostenlos. Du bringst deinen Fall mit: das Team, das Gespräch, die Entscheidung. Wir schauen, ob das OS dafür das richtige Training ist.",
+   "cta": "Gespräch ab 2.11. buchen",
+   "size": "s"
+  },
+  {
+   "k": "Termine · WladBot",
+   "hf": 3,
+   "av": "small",
+   "h": "Dein Büro ist überall.<br><span class=lime>Dein Coach auch.</span>",
+   "s": "Im Zug, im Homeoffice, auf der Wiese. WladBot antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Termine · Live-Sessions",
+   "hf": 9,
+   "h": "Monatlich live.<br>Ungeschnitten<span class=lime>.</span>",
+   "s": "Für Mitglieder im OS: jeden Monat eine Live-Session mit Wlad. Echte Fälle, echte Fragen, keine Folien. Dazu der monatliche Strategie-Call, klein und persönlich.",
+   "cta": "14 Tage kostenlos",
+   "size": "s"
+  },
+  {
+   "k": "Zertifikat · 0001",
+   "po": "p-06-bib-0001",
+   "ph": "sprint",
+   "h": "Deine Startnummer<span class=lime>.</span>",
+   "size": "s",
+   "s": "Jeder Sprint endet mit einem persönlichen Zertifikat und deiner Startnummer. Für LinkedIn, für den nächsten Arbeitgeber, für dich.",
+   "cta": "14 Tage kostenlos"
+  },
+  {
+   "k": "System · WladBot",
+   "po": "p-07-dreibig-tage",
+   "ph": "ai-b",
+   "h": "Powered by WladBot.<br><span class=lime>Persönlich von Wlad.</span>",
+   "s": "Die Methodik aus Wlads Büchern und Trainings, als Coach in deiner Tasche. Und einmal im Monat Wlad selbst, live.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "System · Frameworks",
+   "hf": 5,
+   "h": "Elf Frameworks.<br>Nicht im Archiv.<br><span class=lime>Im Drill.</span>",
+   "s": "Harvard-Verhandlung, Feedbackformel, 5 Rollen, Dunkle Rhetorik, SEXIER, 10 Stufen des Zuhörens und mehr. Abgelegt nützt keins. Geübt jedes.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  },
+  {
+   "k": "Entscheidung",
+   "hf": 12,
+   "av": "big",
+   "h": "Entweder du trainierst.<br><span class=lime>Oder du hoffst.</span>",
+   "s": "14 Tage kostenlos, ohne Karte. Oder am 29.10. live dabei. Beides ohne Risiko.",
+   "cta": "14 Tage kostenlos",
+   "size": "xs"
+  }
+ ],
+ "SCENE": {
+  "1": "Prüfungssaal · hunderte Plätze, drei besetzt",
+  "2": "Leeres Theater · ein Pult, ein Scheinwerfer",
+  "3": "Schreibtisch auf der Wiese",
+  "4": "Dreißig Monitore · ein Stuhl",
+  "5": "Archiv · endlose Schubladen",
+  "6": "Bauplan im Wind",
+  "7": "Parkplatz · hunderte identische Autos",
+  "8": "Bibliothek · ein Buch von der Leiter",
+  "9": "Sechs Anzüge · ein Telefon · Alpenwiese",
+  "10": "Laufbahn · ein Läufer · Dämmerung",
+  "11": "Kreisverkehr von oben",
+  "12": "Boxring im Feld · Schattenboxen"
+ }
+}

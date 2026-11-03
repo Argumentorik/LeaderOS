@@ -7,8 +7,8 @@ export const toolsDe = [
   { id: 'decision-maker', title: 'Entscheidungshilfe', desc: 'Strukturierte Entscheidungsanalyse mit Bias-Erkennung', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
     steps: [
       { q: 'Was entscheidest du?', placeholder: 'Beschreibe die Entscheidung, Optionen und was auf dem Spiel steht...' },
-      { q: 'Wie hoch ist die Auswirkung?', options: ['Hoch — betrifft Team/Unternehmen', 'Mittel — betrifft meine Abteilung', 'Niedrig — betrifft nur mich', 'Dringend — muss heute entschieden werden'] },
-      { q: 'Welche Informationen hast du?', options: ['Alle Daten verfügbar', 'Teilweise — einige Unbekannte', 'Sehr begrenzt — eher Bauchgefühl', 'Widersprüchliche Daten'] }
+      { q: 'Wie hoch ist die Auswirkung?', options: ['Hoch · betrifft Team/Unternehmen', 'Mittel · betrifft meine Abteilung', 'Niedrig · betrifft nur mich', 'Dringend · muss heute entschieden werden'] },
+      { q: 'Welche Informationen hast du?', options: ['Alle Daten verfügbar', 'Teilweise · einige Unbekannte', 'Sehr begrenzt · eher Bauchgefühl', 'Widersprüchliche Daten'] }
     ]
   },
   { id: 'email-optimizer', title: 'E-Mail Optimierer', desc: 'E-Mails klar, professionell und wirkungsvoll umschreiben', icon: Mail, gradient: 'from-[#00CC77] to-[#00AA66]',
@@ -53,8 +53,8 @@ export const toolsEn = [
   { id: 'decision-maker', title: 'Decision Maker', desc: 'Structured decision analysis with bias detection', icon: Scale, gradient: 'from-[#BFFF00] to-[#9ACC00]',
     steps: [
       { q: 'What are you deciding?', placeholder: 'Describe the decision, options, and stakes...' },
-      { q: 'What is the impact level?', options: ['High — affects whole team/company', 'Medium — affects my department', 'Low — affects only me', 'Urgent — needs decision today'] },
-      { q: 'What information do you have?', options: ['All data available', 'Partial information — some unknowns', 'Very limited — mostly gut feeling', 'Conflicting data'] }
+      { q: 'What is the impact level?', options: ['High · affects whole team/company', 'Medium · affects my department', 'Low · affects only me', 'Urgent · needs decision today'] },
+      { q: 'What information do you have?', options: ['All data available', 'Partial information · some unknowns', 'Very limited · mostly gut feeling', 'Conflicting data'] }
     ]
   },
   { id: 'email-optimizer', title: 'Email Optimizer', desc: 'Rewrite emails to be clear, professional, and impactful', icon: Mail, gradient: 'from-[#00CC77] to-[#00AA66]',

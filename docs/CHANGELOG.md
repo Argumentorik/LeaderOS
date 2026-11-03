@@ -1,6 +1,6 @@
 # Changelog
 
-All notable Supabase + repo changes for Leader-OS, in the order applied.
+All notable Supabase + repo changes for LeaderOS, in the order applied.
 Migrations are recorded by name in the Supabase project's migration history.
 
 ## Database migrations
@@ -16,7 +16,7 @@ Migrations are recorded by name in the Supabase project's migration history.
 | 7 | `lock_ops_dashboard_views_to_service_role` (20260517195842) | Revoked `anon`/`authenticated` on `dash_rag` + `dash_activity_feed` and set both to `security_invoker = true`. Cleared the two remaining advisor ERRORs (2 → 0). Mirrored in `supabase/migrations/`. |
 
 After migration 7 the security advisor reports three WARNs, all reviewed and
-non-blocking — see `docs/LAUNCH_FIX.md §6`:
+non-blocking — see `docs/archive/LAUNCH_FIX.md §6`:
 
 1. `upsert_incomplete_attempt` callable by `anon` — **intentional** (funnel capture).
 2. `is_admin()` callable by `authenticated` — **safe** (boolean-returning, no escalation surface).
@@ -28,7 +28,7 @@ non-blocking — see `docs/LAUNCH_FIX.md §6`:
 |--------|------|
 | `Add Supabase MCP server config`        | `.mcp.json` for project-scoped Supabase MCP. |
 | `Add Supabase agent skills`             | `.claude/skills/supabase`, `.claude/skills/supabase-postgres-best-practices`, `skills-lock.json`. |
-| `Add Leader-OS docs (CLAUDE.md, ...)`   | `CLAUDE.md`, `docs/SCHEMA.md`, `docs/DASHBOARD.md`, `docs/RUNBOOK.md`. |
+| `Add LeaderOS docs (CLAUDE.md, ...)`   | `CLAUDE.md`, `docs/app/SCHEMA.md`, `docs/app/DASHBOARD.md`, `docs/ops/RUNBOOK.md`. |
 | `Enable Vercel Claude Code plugin`      | `.claude/settings.json` enabling `vercel@claude-plugins-official`. |
 | `docs: pre-launch readiness + CHANGELOG` | This file + RUNBOOK status update. |
 
@@ -46,6 +46,6 @@ non-blocking — see `docs/LAUNCH_FIX.md §6`:
 ## What still requires you
 
 - **Vault**: store `service_role_key` so `trigger_strategist()` works.
-- **Edge functions**: deploy 4 of them with `supabase functions deploy` (commands in `docs/RUNBOOK.md`).
+- **Edge functions**: deploy 4 of them with `supabase functions deploy` (commands in `docs/ops/RUNBOOK.md`).
 - **Auth**: enable HaveIBeenPwned leaked-password protection.
 - **Vercel**: confirm `NEXT_PUBLIC_SUPABASE_URL` / anon key are set.

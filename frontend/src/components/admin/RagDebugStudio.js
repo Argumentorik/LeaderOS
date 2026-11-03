@@ -1,5 +1,5 @@
 /**
- * RAG Debug Studio — admin-only diagnostic tool for the WladBot knowledge base.
+ * RAG Debug Studio · admin-only diagnostic tool for the WladBot knowledge base.
  *
  * Lets the operator (Mert) feed any user-style query through the same local
  * embedding → Mongo vector pipeline that powers WladBot chat, and see:
@@ -292,7 +292,7 @@ export const RagDebugStudio = () => {
               <div>
                 <p className="text-[10px] text-foreground/50 uppercase tracking-wider mb-1">Top Score</p>
                 <p className="text-2xl font-black" style={{ color: simColor(result.coverage.top_score), fontFamily: 'Outfit, sans-serif' }}>
-                  {result.coverage.top_score?.toFixed(3) || '—'}
+                  {result.coverage.top_score?.toFixed(3) || '·'}
                 </p>
               </div>
               <div>

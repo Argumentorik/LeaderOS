@@ -1,0 +1,65 @@
+# fly.toml — LeaderOS Python backend
+# Drop at the repo root (or wherever `fly launch` is run from).
+# Assumes backend/ contains your FastAPI app and a Dockerfile.
+#
+# Setup:
+#   1. Install flyctl: curl -L https://fly.io/install.sh | sh
+#   2. fly auth login
+#   3. fly launch --no-deploy   (creates the app, then edit this file)
+#   4. fly secrets set \
+#        SENTRY_DSN="..." \
+#        ELEVENLABS_API_KEY="..." \
+#        STRIPE_SECRET_KEY="..." \
+#        STRIPE_WEBHOOK_SECRET="..." \
+#        SUPABASE_URL="https://srujvjjncrszhaaxepxf.supabase.co" \
+#        SUPABASE_SERVICE_ROLE_KEY="..." \
+#        OPENAI_API_KEY="..." \
+#        RESEND_API_KEY="..."
+#   5. fly deploy
+
+app = "leader-os-api"
+primary_region = "arn"   # Stockholm — same as your Supabase eu-north-1
+
+[build]
+  dockerfile = "backend/Dockerfile"
+
+[env]
+  PORT = "8001"
+  PYTHONUNBUFFERED = "1"
+  ENVIRONMENT = "production"
+
+[http_service]
+  internal_port = 8001
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "10s"
+  method = "GET"
+  path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+  cpus = 1
+
+[processes]
+  app = "uvicorn server:app --host 0.0.0.0 --port 8001 --workers 1"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8001
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true

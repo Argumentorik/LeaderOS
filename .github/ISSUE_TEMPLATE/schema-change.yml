@@ -1,0 +1,40 @@
+name: Schema change
+description: Tracked DDL change applied via Supabase MCP `apply_migration`.
+labels: ["schema"]
+body:
+  - type: input
+    id: migration-name
+    attributes:
+      label: Proposed migration name (snake_case)
+      placeholder: add_index_on_sessions_user_id_created_at
+    validations:
+      required: true
+  - type: textarea
+    id: ddl
+    attributes:
+      label: DDL
+      render: sql
+    validations:
+      required: true
+  - type: checkboxes
+    id: invariants
+    attributes:
+      label: Invariants checked
+      options:
+        - label: Views are `security_invoker = true`
+        - label: Trigger functions revoke from `public, anon, authenticated`; grant only `service_role`
+        - label: Functions set `search_path`
+        - label: New FKs have backing indexes
+        - label: Does not bypass `email_lower` for user dedup
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Reverse migration (rollback)
+      render: sql
+    validations:
+      required: true
+  - type: textarea
+    id: advisors
+    attributes:
+      label: Expected advisor delta
+      description: Will any new WARN/ERROR be introduced? If yes, justify.

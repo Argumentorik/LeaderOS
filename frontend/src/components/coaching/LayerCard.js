@@ -19,7 +19,7 @@ export const LayerCard = ({ number, title, description, features, gradient, icon
         {/* min-w-0 is critical: lets flex-child shrink so long words wrap instead of overflowing the card */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Layer {number}</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Bereich {number}</span>
           </div>
           <h3 className="text-lg font-black leading-tight break-words hyphens-auto" lang="de">
             {title}

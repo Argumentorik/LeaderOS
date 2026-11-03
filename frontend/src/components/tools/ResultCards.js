@@ -68,7 +68,7 @@ const ProConCards = ({ pros, cons }) => (
 );
 
 const HighImpactCard = ({ items, de }) => (
-  <ResultSection title={de ? 'Hoher Impact — Sofort umsetzen' : 'High Impact — Do First'} gradient="from-[#0A0A0A] to-[#1A1A2E]">
+  <ResultSection title={de ? 'Hoher Impact · Sofort umsetzen' : 'High Impact · Do First'} gradient="from-[#0A0A0A] to-[#1A1A2E]">
     {items.map((t, i) => (
       <div key={`hi-${i}`} className="p-2.5 rounded-xl bg-sky-50 dark:bg-sky-500/10 border border-sky-200/30 dark:border-blue-500/10">
         <p className="text-sm font-medium">{t.task}</p>
@@ -83,7 +83,7 @@ const DevelopmentPlanCard = ({ items, de }) => (
     {items.map((d, i) => (
       <div key={`dp-${i}`} className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-500/5">
         <p className="text-sm font-medium">{d.goal}</p>
-        <p className="text-xs text-muted-foreground">{d.action} — {d.timeline}</p>
+        <p className="text-xs text-muted-foreground">{d.action} · {d.timeline}</p>
       </div>
     ))}
   </ResultSection>

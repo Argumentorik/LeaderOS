@@ -1,0 +1,29 @@
+# gitleaks configuration · LeaderOS
+#
+# Wir erweitern das Standard-Regelset (~150 Secret-Muster: AWS, Stripe,
+# Google, Resend, Slack, Supabase, JWTs, SSH-Keys …) und nehmen davon
+# nur einzelne, nachweislich öffentliche Werte aus.
+#
+# Regel für diese Datei: NIEMALS ganze Pfade allowlisten. Immer den
+# konkreten Wert per Regex freigeben — sonst rutscht ein echtes Secret,
+# das später in dieselbe Datei geschrieben wird, unbemerkt durch.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+IndexNow-Key. Der Wert ist per Protokoll-Definition öffentlich: er MUSS
+unter https://leader-os.de/<key>.txt für jeden abrufbar sein, sonst
+antwortet die IndexNow-API mit 403. Er authentifiziert nichts und gibt
+keinen Zugriff auf irgendetwas — er beweist nur, dass wer URLs meldet,
+auch Schreibzugriff auf die Domain hat. Da er wie ein generischer
+32-stelliger Hex-API-Key aussieht, schlägt die generic-api-key-Regel an.
+
+Vorkommen: frontend/public/57d353bdcebaa0a63677822fd59447f8.txt,
+frontend/scripts/indexnow-submit.mjs, .github/workflows/indexnow.yml.
+Siehe docs/gtm/SEO_AEO_PLAYBOOK.md §1.
+"""
+regexes = [
+  '''57d353bdcebaa0a63677822fd59447f8''',
+]

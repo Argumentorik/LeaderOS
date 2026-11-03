@@ -1,6 +1,7 @@
 """File upload routes - Profile picture + file storage."""
 from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 from fastapi.responses import Response
+import re
 import uuid
 import requests
 from datetime import datetime, timezone
@@ -14,7 +15,8 @@ STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
 APP_NAME = "wladbot"
 storage_key = None
 
-ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+IMAGE_EXT_BY_TYPE = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
+ALLOWED_IMAGE_TYPES = set(IMAGE_EXT_BY_TYPE)
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
@@ -29,10 +31,26 @@ def init_storage(force: bool = False):
     return storage_key
 
 
+_UNSAFE_PATH_CHARS = re.compile(r"[?#%\\\x00-\x1f\x7f]")
+
+
+def _object_url(path: str) -> str:
+    """Objekt-URL nur auf dem festen STORAGE_URL-Host — Pfad darf weder Query/Fragment
+    noch Traversal (`..`) einschleusen."""
+    if (
+        not path
+        or path.startswith("/")
+        or _UNSAFE_PATH_CHARS.search(path)
+        or any(seg in ("", ".", "..") for seg in path.split("/"))
+    ):
+        raise ValueError(f"invalid storage path: {path!r}")
+    return f"{STORAGE_URL}/objects/{path}"
+
+
 def put_object(path: str, data: bytes, content_type: str) -> dict:
     key = init_storage()
     resp = requests.put(
-        f"{STORAGE_URL}/objects/{path}",
+        _object_url(path),
         headers={"X-Storage-Key": key, "Content-Type": content_type},
         data=data, timeout=120,
     )
@@ -42,7 +60,7 @@ def put_object(path: str, data: bytes, content_type: str) -> dict:
 
 def get_object(path: str):
     key = init_storage()
-    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    resp = requests.get(_object_url(path), headers={"X-Storage-Key": key}, timeout=60)
     resp.raise_for_status()
     return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
@@ -59,27 +77,45 @@ def object_exists(path: str) -> bool:
     key = init_storage()
     try:
         resp = requests.get(
-            f"{STORAGE_URL}/objects/{path}",
+            _object_url(path),
             headers={"X-Storage-Key": key, "Range": "bytes=0-64"},
             timeout=20, stream=True,
         )
         ok = resp.status_code < 400
         resp.close()
         return ok
-    except requests.RequestException:
+    except (requests.RequestException, ValueError):
         return False
 
 
 def download_object(path: str, dest: str, chunk_size: int = 1024 * 1024) -> str:
     """Objekt gestreamt auf die Platte schreiben (nie komplett im RAM)."""
     key = init_storage()
-    with requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=120, stream=True) as resp:
+    with requests.get(_object_url(path), headers={"X-Storage-Key": key}, timeout=120, stream=True) as resp:
         resp.raise_for_status()
         with open(dest, "wb") as f:
             for chunk in resp.iter_content(chunk_size=chunk_size):
                 if chunk:
                     f.write(chunk)
         return resp.headers.get("Content-Type", "application/octet-stream")
+
+
+@router.get("/uploads/health")
+async def uploads_health():
+    """Diagnostik (aus mvpcode übernommen) — welcher Storage-Backend ist aktiv?
+    Public, gibt keine Keys oder Bucket-Inhalte aus.
+
+    Diese Route nutzt den Emergent-Objstore direkt (siehe oben); lib/object_storage
+    (Supabase-Shim aus mvpcode) ist bewusst NICHT angeschlossen, weil bestehende
+    Objekte im Emergent-Storage liegen und ein ENV-getriebener Wechsel sie
+    unauffindbar machen würde.
+    """
+    return {
+        "backend": "emergent",
+        "url": STORAGE_URL,
+        "initialized": storage_key is not None,
+        "key_configured": bool(EMERGENT_LLM_KEY),
+    }
 
 
 @router.post("/upload/profile-picture")
@@ -93,7 +129,7 @@ async def upload_profile_picture(request: Request, file: UploadFile = File(...))
     if len(data) > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="Datei zu groß (max 5MB)")
 
-    ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+    ext = IMAGE_EXT_BY_TYPE[file.content_type]
     path = f"{APP_NAME}/profiles/{user['user_id']}/{uuid.uuid4().hex[:12]}.{ext}"
 
     try:
@@ -152,7 +188,7 @@ async def serve_file(path: str, request: Request):
         raise HTTPException(status_code=404, detail="File not found")
 
     try:
-        data, content_type = get_object(path)
+        data, content_type = get_object(record["storage_path"])
         return Response(content=data, media_type=record.get("content_type", content_type))
     except Exception as e:
         logger.error(f"File serve error: {e}")

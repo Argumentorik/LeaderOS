@@ -12,14 +12,14 @@ import {
 import SmartText from '../shared/SmartText';
 
 /**
- * DeepAssistModal — 3-Step AI Assistant (Argumentation / Tips / Action Plan).
+ * DeepAssistModal · 3-Step AI Assistant (Argumentation / Tips / Action Plan).
  * Invoked via a "KI-Assistent" button anywhere in the app (Tools, Workflows, Simulations).
  *
  * Props:
- *   open, onClose — modal state
- *   toolId — optional workflow ID context
- *   de — language
- *   defaultSituation — optional pre-filled situation
+ *   open, onClose · modal state
+ *   toolId · optional workflow ID context
+ *   de · language
+ *   defaultSituation · optional pre-filled situation
  */
 export const DeepAssistModal = ({ open, onClose, toolId, de = true, defaultSituation = '' }) => {
   const [situation, setSituation] = useState(defaultSituation);

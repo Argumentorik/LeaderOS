@@ -306,7 +306,7 @@ async def _activate_from_package(user_id: str, package_id: str):
                 if tx:
                     receipt_sub, receipt_html = stripe_receipt_email(
                         name=name,
-                        package_name=tx.get("package_name") or pkg.get("name", "Leader-OS"),
+                        package_name=tx.get("package_name") or pkg.get("name", "LeaderOS"),
                         amount=float(tx.get("amount") or pkg.get("amount", 0)),
                         currency=tx.get("currency") or pkg.get("currency", "eur"),
                         tier=tier,

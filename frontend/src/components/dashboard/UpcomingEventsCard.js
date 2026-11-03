@@ -1,7 +1,7 @@
 /**
- * UpcomingEventsCard — Dashboard surface for the next 3 upcoming events.
+ * UpcomingEventsCard · Dashboard surface for the next 3 upcoming events.
  *
- * Iter 92.10 (Mert): GSAP-choreographed entrance — header drops in, then
+ * Iter 92.10 (Mert): GSAP-choreographed entrance · header drops in, then
  * each row slide-reveals from the right with a staggered back-out easing.
  * Hover micro-interaction lifts each row 2px with a soft shadow halo.
  * Respects `prefers-reduced-motion` (skips animation entirely).
@@ -17,7 +17,7 @@ import logger from '../../lib/logger';
 const OUTFIT = { fontFamily: 'Outfit, Inter, sans-serif' };
 
 const formatEventDate = (iso, locale = 'de') => {
-  if (!iso) return { dayLabel: '—', timeLabel: '', relative: null };
+  if (!iso) return { dayLabel: '·', timeLabel: '', relative: null };
   try {
     const d = new Date(iso);
     const now = new Date();
@@ -34,7 +34,7 @@ const formatEventDate = (iso, locale = 'de') => {
         ? (locale === 'de' ? `in ${Math.round(diffH / 24)} Tagen` : `in ${Math.round(diffH / 24)} days`)
         : null;
     return { dayLabel, timeLabel, relative };
-  } catch { return { dayLabel: '—', timeLabel: '', relative: null }; }
+  } catch { return { dayLabel: '·', timeLabel: '', relative: null }; }
 };
 
 const prefersReduce = () =>
@@ -71,7 +71,7 @@ export const UpcomingEventsCard = ({ locale = 'de' }) => {
     return () => { cancelled = true; };
   }, []);
 
-  // GSAP entrance — fire once data resolved
+  // GSAP entrance · fire once data resolved
   useEffect(() => {
     if (!rootRef.current || events === null || prefersReduce()) return undefined;
     let ctx;
@@ -89,7 +89,7 @@ export const UpcomingEventsCard = ({ locale = 'de' }) => {
           '-=0.2');
         if (see) tl.fromTo(see, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, '-=0.15');
       }, rootRef);
-    } catch { /* gsap target missing — degrade gracefully to instant render */ }
+    } catch { /* gsap target missing · degrade gracefully to instant render */ }
     return () => { try { ctx?.revert(); } catch { /* noop */ } };
   }, [events]);
 
@@ -116,7 +116,7 @@ export const UpcomingEventsCard = ({ locale = 'de' }) => {
       className="rounded-2xl bg-card border border-border overflow-hidden relative"
       data-testid="upcoming-events-card"
     >
-      {/* Subtle aurora glow behind the header — premium polish */}
+      {/* Subtle aurora glow behind the header · premium polish */}
       <div className="pointer-events-none absolute -top-20 -left-20 w-48 h-48 rounded-full bg-brand/[0.06] blur-3xl" aria-hidden />
       <Header de={de} />
       <div className="px-3 pb-3 space-y-1.5 relative" data-testid="upcoming-events-list">
@@ -160,7 +160,7 @@ const Header = ({ de }) => (
 const EventRow = ({ event, de }) => {
   const dt = formatEventDate(event.date, de ? 'de' : 'en');
 
-  // Iter 92.11: Pure-CSS hover-lift via Tailwind transform classes —
+  // Iter 92.11: Pure-CSS hover-lift via Tailwind transform classes ·
   // GSAP-based addEventListener pattern was prone to null-ref races
   // when the parent re-renders while the cursor is mid-hover.
   return (
@@ -172,7 +172,7 @@ const EventRow = ({ event, de }) => {
     >
       <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-brand/15 text-brand shrink-0 group-hover:bg-brand/25 transition-colors">
         <span className="text-[15px] font-black leading-none" style={OUTFIT}>
-          {(dt.dayLabel || '').match(/\d+/)?.[0] || '—'}
+          {(dt.dayLabel || '').match(/\d+/)?.[0] || '·'}
         </span>
         <span className="text-[8px] uppercase tracking-wider font-bold opacity-70">
           {(dt.dayLabel || '').split(' ').pop()?.slice(0, 3)}

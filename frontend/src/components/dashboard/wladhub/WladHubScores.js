@@ -16,7 +16,7 @@ export const WladHubOverallScore = ({ overall, leaderTyp, connected, de }) => (
   <div className="flex items-center gap-3">
     <div className="relative w-14 h-14 shrink-0">
       <svg viewBox="0 0 48 48" className="w-full h-full -rotate-90">
-        <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" className="text-gray-100 dark:text-white/[0.06]" strokeWidth="4" />
+        <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" className="text-gray-100 dark:text-foreground/[0.06]" strokeWidth="4" />
         <circle cx="24" cy="24" r="20" fill="none" stroke="#BFFF00" strokeWidth="4" strokeLinecap="round"
           strokeDasharray={`${(overall / 100) * 125.6} 125.6`} />
       </svg>

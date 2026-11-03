@@ -1,15 +1,15 @@
 /**
- * Video-Archive Page — historical analytics of all video-mission attempts.
+ * Video-Archive Page · historical analytics of all video-mission attempts.
  *
  * Backend: GET /api/video-archive  (already exposed in routes/video.py via the
- * existing `db.video_challenges.find({user_id})` pattern — we expose it here).
+ * existing `db.video_challenges.find({user_id})` pattern · we expose it here).
  *
  * Premium presentation:
  *  - Hero: total attempts, best-overall, average score, progression sparkline
  *  - Per-challenge timeline cards with score progression
  *  - Click row → expand full analysis (uses existing analysis json)
  *
- * "Nothing gets lost" — every analysis the user has ever done is recoverable here.
+ * "Nothing gets lost" · every analysis the user has ever done is recoverable here.
  */
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -192,8 +192,8 @@ export default function VideoArchivePage() {
             </h1>
             <p className="text-white/50 max-w-lg leading-relaxed mb-10">
               {de
-                ? 'Deine komplette Video-Mission-Historie. Alle Analysen, alle Scores, alle Rewrites — bleiben dir erhalten.'
-                : 'Your complete video-mission history. Every analysis, every score, every rewrite — preserved.'}
+                ? 'Deine komplette Video-Mission-Historie. Alle Analysen, alle Scores, alle Rewrites · bleiben dir erhalten.'
+                : 'Your complete video-mission history. Every analysis, every score, every rewrite · preserved.'}
             </p>
 
             {stats && (

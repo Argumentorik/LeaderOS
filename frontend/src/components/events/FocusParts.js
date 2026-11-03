@@ -61,7 +61,7 @@ export const WeekGrid = ({ slots, onRemove, de }) => (
                 </div>
               );
             })}
-            {!hasSlot && <div className="text-[10px] text-muted-foreground/30 pt-4">—</div>}
+            {!hasSlot && <div className="text-[10px] text-muted-foreground/30 pt-4">·</div>}
           </div>
         </div>
       );

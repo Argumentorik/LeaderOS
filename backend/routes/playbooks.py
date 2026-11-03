@@ -2,10 +2,11 @@
 from fastapi import APIRouter, HTTPException, Request
 import uuid
 from datetime import datetime, timezone
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# Migration → lib.llm_provider (bit-identische API, Provider per ENV).
+from lib.llm_provider import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
-from services import get_current_user
+from services import get_current_user, WLAD_HARD_RULES
 from services_actions import record_user_action
 from data import PLAYBOOKS
 from services_ai_errors import ai_http_error
@@ -74,6 +75,7 @@ async def playbook_step(playbook_id: str, data_in: dict, request: Request):
                 f"basierend auf Wlad Jachtchenkos Leadership-Frameworks. Antworte IMMER auf DEUTSCH. "
                 f"Antworte als JSON: {{\"advice\": \"...\", \"key_points\": [...], \"next_action\": \"...\"}}"
                 + rag_block
+                + WLAD_HARD_RULES
             )
         )
         chat.with_model("openai", "gpt-5.2")
@@ -112,7 +114,10 @@ async def generate_advice_report(playbook_id: str, request: Request):
         raise HTTPException(status_code=404, detail="No completed session found")
     responses_text = "\n".join([f"Step {r.get('step', i)}: {r.get('input', '')}" for i, r in enumerate(session.get("responses", []))])
     try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"report_{uuid.uuid4().hex[:8]}", system_message="Du bist WLADBOT und erstellst einen persönlichen Leadership Advice Report basierend auf Wlad Jachtchenkos Methoden. Antworte NUR mit validem JSON auf DEUTSCH. Sei detailliert und thematisiere das spezifische Playbook-Thema.")
+        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"report_{uuid.uuid4().hex[:8]}", system_message=(
+            "Du bist WLADBOT und erstellst einen persönlichen Leadership Advice Report basierend auf Wlad Jachtchenkos Methoden. Antworte NUR mit validem JSON auf DEUTSCH. Sei detailliert und thematisiere das spezifische Playbook-Thema."
+            + WLAD_HARD_RULES
+        ))
         chat.with_model("openai", "gpt-5.2")
         msg = UserMessage(text=f"""Erstelle einen persönlichen Advice Report für das '{playbook['title']}' Playbook.
 User-Antworten: {responses_text}

@@ -1,0 +1,38 @@
+name: canonical-host
+
+# Täglicher Wächter über die Annahme, auf der das gesamte SEO-Setup steht:
+# liefert der Host, auf den unsere Canonicals zeigen, überhaupt 200?
+#
+# Im August 2026 tat er das monatelang nicht — Vercel hatte `www` als
+# Primary, der Apex antwortete mit 308, während alle 153 Artikel-Canonicals
+# auf den Apex zeigten. Ergebnis laut Search Console: 80 Artikel als "Seite
+# mit Weiterleitung", 67 als "Discovered – not indexed", Überschneidung
+# null. 147 von 153 Artikeln, also 96 % des Journals, waren wegen einer
+# einzigen Domain-Einstellung unsichtbar. Kein einziger Test hat
+# angeschlagen, weil kein Test diese Frage gestellt hat.
+#
+# Bewusst NICHT Teil der PR-CI: das Problem sitzt in der
+# Domain-Konfiguration, nicht im Diff. Ein roter PR-Check würde nur Merges
+# blockieren, die damit nichts zu tun haben. Als eigener täglicher Lauf ist
+# es ein sichtbares Signal, das niemand wegklicken kann.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'      # 08:00 Berlin (CEST) / 07:00 (CET)
+  workflow_dispatch:
+
+concurrency:
+  group: canonical-host
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Kanonischen Host prüfen
+        working-directory: frontend
+        run: node scripts/check-canonical-host.mjs

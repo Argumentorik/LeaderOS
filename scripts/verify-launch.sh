@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Launch-day smoke test for Leader-OS.
+# Launch-day smoke test for LeaderOS.
 #
 # Hits the key public endpoints + a few internal checks, reports pass/fail
 # per probe, exits non-zero on any failure so it can run as a CI gate.
@@ -80,7 +80,7 @@ probe_contains() {
 }
 
 echo "════════════════════════════════════════════════════════════════"
-echo "  Leader-OS launch verification"
+echo "  LeaderOS launch verification"
 echo "  Base URL: $BASE_URL"
 echo "════════════════════════════════════════════════════════════════"
 echo
@@ -145,6 +145,6 @@ if [[ $FAIL -eq 0 ]]; then
 else
   echo -e "${RED}✗ ${FAIL} probe(s) failed out of $((PASS + FAIL)).${RESET}  Fix before launching."
   echo
-  echo "See docs/INCIDENT_RUNBOOK.md for symptom-by-symptom remediation."
+  echo "See docs/ops/INCIDENT_RUNBOOK.md for symptom-by-symptom remediation."
   exit 1
 fi

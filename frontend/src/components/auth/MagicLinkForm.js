@@ -68,7 +68,12 @@ export const MagicLinkForm = ({ de = true, initialEmail = '' }) => {
     setError('');
     setLoading(true);
     try {
-      await api.post('/auth/magic-link/request', { email: email.trim() });
+      await api.post('/auth/magic-link/request', {
+        email: email.trim(),
+        // Send our own origin so the magic link returns to the exact app host
+        // the user is on (leaderos.de). Validated against an allowlist server-side.
+        redirect_base: typeof window !== 'undefined' ? window.location.origin : undefined,
+      });
       setSent(true);
       setCooldown(RESEND_COOLDOWN);
     } catch (err) {

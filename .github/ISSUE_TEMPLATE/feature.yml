@@ -1,0 +1,30 @@
+name: Feature request
+description: A new schema object, dashboard view, function, or doc.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this needed?
+      description: What user problem or operational gap does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: |
+        - For schema changes: outline the migration (tables, columns, constraints, RLS, grants).
+        - For views: name, columns, `security_invoker = true`, what it fixes.
+        - For functions: signature, language, `set search_path`, grant target.
+    validations:
+      required: true
+  - type: checkboxes
+    id: cross-platform
+    attributes:
+      label: Cross-platform impact
+      options:
+        - label: Touches `users` / `email_lower` dedup
+        - label: Touches `meta_tags` maintenance
+        - label: Affects both `leader-check` and `leader-os` callers
+        - label: Anonymous (`anon`) callable — needs explicit justification

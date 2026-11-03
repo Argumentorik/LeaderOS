@@ -4,6 +4,7 @@ import io
 import os
 import zipfile
 from datetime import datetime, timezone
+from urllib.parse import urlsplit
 
 import httpx
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
@@ -30,6 +31,26 @@ async def rag_handbook(request: Request):
     return {"markdown": text, "updated_at": datetime.fromtimestamp(os.path.getmtime(path), tz=timezone.utc).isoformat()}
 
 DEFAULT_ZIP_URL = "https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/8k335gkq_unchunked.zip"
+# SSRF-Schutz: Wissens-ZIPs nur von bekannten Hosts laden (https). Weitere Hosts
+# per ENV RAG_ZIP_ALLOWED_HOSTS (kommagetrennt) freischalten.
+_ZIP_ALLOWED_HOSTS = {"customer-assets.emergentagent.com"} | {
+    h.strip().lower() for h in os.environ.get("RAG_ZIP_ALLOWED_HOSTS", "").split(",") if h.strip()
+}
+
+
+def _check_zip_url(url: str) -> str:
+    parts = urlsplit((url or "").strip())
+    if parts.scheme != "https" or (parts.hostname or "").lower() not in _ZIP_ALLOWED_HOSTS:
+        raise HTTPException(status_code=400, detail="ZIP-URL nicht erlaubt (nur https von freigegebenen Hosts).")
+    return parts.geturl()
+
+
+async def _fetch_zip(url: str) -> bytes:
+    url = _check_zip_url(url)
+    async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+        r = await client.get(url)
+        r.raise_for_status()
+    return r.content
 
 
 @router.get("/local-status")
@@ -68,14 +89,12 @@ async def _run_ingest(zip_url: str):
     await db.rag_ingest_jobs.delete_many({})
     await db.rag_ingest_jobs.insert_one({**job})
     try:
-        async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
-            r = await client.get(zip_url)
-            r.raise_for_status()
+        content = await _fetch_zip(zip_url)
         target = "/tmp/rag_ingest_src"
         import shutil
         shutil.rmtree(target, ignore_errors=True)
         os.makedirs(target, exist_ok=True)
-        with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
+        with zipfile.ZipFile(io.BytesIO(content)) as zf:
             for name in zf.namelist():
                 if name.endswith(".txt") and "__MACOSX" not in name:
                     data = zf.read(name)
@@ -100,6 +119,7 @@ async def _run_ingest(zip_url: str):
 @router.post("/reingest")
 async def reingest(body: ReingestBody, request: Request):
     admin = await require_admin(request)
+    _check_zip_url(body.zip_url)  # früh mit 400 ablehnen statt still im Hintergrund-Job
     running = await db.rag_ingest_jobs.find_one({"status": "running"})
     if running:
         # Stale-job guard: a backend restart mid-ingest leaves the job "running"
@@ -322,10 +342,8 @@ async def list_knowledge_sources(request: Request):
 async def corpus_coverage(request: Request, zip_url: str = DEFAULT_ZIP_URL):
     await require_admin(request)
 
-    async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
-        r = await client.get(zip_url)
-        r.raise_for_status()
-    with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
+    content = await _fetch_zip(zip_url)
+    with zipfile.ZipFile(io.BytesIO(content)) as zf:
         expected = sorted({
             os.path.basename(n) for n in zf.namelist()
             if n.endswith(".txt") and "__MACOSX" not in n and os.path.basename(n)

@@ -7,7 +7,7 @@ import { FeatureBriefing } from './FeatureBriefing';
 
 const AttachedPreview = ({ attachedPdf, onRemove, de }) => (
   <div className="max-w-4xl mx-auto mb-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#BFFF00]/8 border border-[#BFFF00]/20" data-testid="pdf-attached">
-    <FileText size={14} className="text-[#6B8A00] dark:text-[#BFFF00] shrink-0" />
+    <FileText size={14} className="text-brand shrink-0" />
     <div className="flex-1 min-w-0">
       <p className="text-[11px] font-bold truncate">{attachedPdf.filename}</p>
       <p className="text-[9px] text-muted-foreground">
@@ -83,7 +83,7 @@ export const ChatInputBar = ({
       >
         {uploadingPdf
           ? <Loader2 size={15} className="animate-spin text-[#6B8A00] dark:text-[#BFFF00]" />
-          : <Paperclip size={15} className="text-[#6B8A00] dark:text-[#BFFF00]" />}
+          : <Paperclip size={15} className="text-brand" />}
         <input
           type="file"
           accept=".pdf,.docx,.txt,.md,.csv,.png,.jpg,.jpeg,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*"
@@ -165,8 +165,8 @@ export const ChatInputBar = ({
     )}
     {!isPremium && (
       <div className="flex items-center justify-center mt-2">
-        <button onClick={onOpenUpsell} className="text-[10px] text-muted-foreground hover:text-[#BFFF00] transition-colors font-medium" data-testid="upsell-mini-btn">
-          <Zap size={9} className="inline mr-0.5 text-[#BFFF00]" /> Premium ab €997
+        <button onClick={onOpenUpsell} className="text-[10px] text-muted-foreground hover:text-brand transition-colors font-medium" data-testid="upsell-mini-btn">
+          <Zap size={9} className="inline mr-0.5 text-brand" /> Premium ab €997
         </button>
       </div>
     )}

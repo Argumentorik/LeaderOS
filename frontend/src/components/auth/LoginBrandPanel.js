@@ -81,8 +81,8 @@ export const LoginBrandPanel = ({ features, de, onStartRegister }) => {
 
           <p className="text-[13.5px] text-white/45 leading-relaxed max-w-sm mb-2 brand-rise" style={{ animationDelay: '560ms' }} data-testid="login-brand-subline">
             {de
-              ? 'Kein Onlinekurs, den du abarbeitest. Kein Chatbot, der dir Allgemeinplätze liefert. Leader-OS ist das, was dir im Alltag fehlt: jemand, der dich vor dem schwierigen Gespräch vorbereitet – zehn Minuten, jeden Tag.'
-              : 'Not an online course you grind through. Not a chatbot handing you platitudes. Leader-OS is what your workday is missing: someone who prepares you before the hard conversation – ten minutes, every day.'}
+              ? 'Kein Onlinekurs, den du abarbeitest. Kein Chatbot, der dir Allgemeinplätze liefert. LeaderOS ist das, was dir im Alltag fehlt: jemand, der dich vor dem schwierigen Gespräch vorbereitet – zehn Minuten, jeden Tag.'
+              : 'Not an online course you grind through. Not a chatbot handing you platitudes. LeaderOS is what your workday is missing: someone who prepares you before the hard conversation – ten minutes, every day.'}
           </p>
 
           {/* Wlad-Teaser (freigegeben) direkt unter der Headline — Conversion first */}

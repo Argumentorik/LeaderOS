@@ -1,74 +1,106 @@
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
-import { Brain, MessageSquareText, CheckCircle2, Zap, Wrench } from 'lucide-react';
+/**
+ * QuestionTypes · Nike Athletic-Editorial DNA.
+ *
+ * Drei Frage-Typen (Coach · Action · MultipleChoice). Flat black/white,
+ * 2px-Borders, Lime-Akzent für aktive States, Mono-Eyebrows statt
+ * bunter Gradient-Badges. Buchstaben-Marker A/B/C/D als schwarze
+ * Quadrate. Siehe frontend/DESIGN.md.
+ */
 
-export const CoachQuestion = ({ q, currentQ, answers, selectAnswer, de }) => (
+const TaskBlock = ({ q, currentQ, answers, selectAnswer, de, eyebrow, ctaLabel }) => (
   <>
-    <Badge className="bg-[#7B3FE4]/10 text-[#6B21A8] dark:bg-[#7B3FE4]/10 dark:text-[#A78BFA] border-0 text-[10px] font-bold">
-      <Brain size={10} className="mr-1" /> KI-COACH AUFGABE
-    </Badge>
-    <h3 className="text-base font-bold leading-relaxed">{q.q}</h3>
-    <div className="p-4 rounded-xl bg-gradient-to-r from-[#BFFF00]/[0.04] to-[#BFFF00]/[0.06] dark:from-[#BFFF00]/[0.04] dark:to-[#BFFF00]/5 border border-[#BFFF00]/15 space-y-3">
-      <p className="text-sm text-muted-foreground">{de ? 'Öffne den KI-Coach in einem neuen Tab und führe die Aufgabe durch. Komm danach hierher zurück.' : 'Open the AI Coach in a new tab and complete the task. Come back here after.'}</p>
-      <div className="flex gap-2">
-        <Button onClick={() => window.open(q.path, '_blank')}
-          className="flex-1 bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-bold" data-testid="coach-task-btn">
-          <MessageSquareText size={14} className="mr-1.5" /> {de ? 'KI-Coach öffnen' : 'Open AI Coach'}
-        </Button>
-        <Button onClick={() => selectAnswer(currentQ, 1)} variant="outline" className="font-bold" data-testid="coach-done-btn">
+    <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand font-mono">
+      ▸ {eyebrow}
+    </div>
+    <h3
+      className="text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.015em] text-black"
+      style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}
+    >
+      {q.q}
+    </h3>
+    <div className="border border-black/15 p-4 space-y-4 bg-[#FAFAF7]">
+      <p className="text-[13.5px] leading-[1.5] text-black/65">
+        {de
+          ? 'Öffne in einem neuen Tab, führe die Aufgabe durch, komm danach zurück und markiere als erledigt.'
+          : 'Open in a new tab, complete the task, come back and mark as done.'}
+      </p>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <button
+          onClick={() => window.open(q.path, '_blank')}
+          className="flex-1 px-4 py-3 bg-black text-white text-[12px] font-bold uppercase tracking-[0.16em] hover:bg-black/85 transition-colors"
+          data-testid="task-open-btn"
+        >
+          {ctaLabel}
+        </button>
+        <button
+          onClick={() => selectAnswer(currentQ, 1)}
+          className="px-5 py-3 border-2 border-black text-black text-[12px] font-bold uppercase tracking-[0.16em] hover:bg-brand hover:border-brand transition-colors"
+          data-testid="task-done-btn"
+        >
           {de ? 'Erledigt' : 'Done'}
-        </Button>
+        </button>
       </div>
       {answers[currentQ] !== undefined && (
-        <p className="text-xs text-emerald-600 font-bold flex items-center gap-1"><CheckCircle2 size={12} /> {de ? 'Aufgabe als erledigt markiert!' : 'Task marked as done!'}</p>
+        <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-black font-mono flex items-center gap-2">
+          <span className="w-4 h-4 bg-black text-brand inline-flex items-center justify-center text-[10px] font-black">✓</span>
+          {de ? 'Als erledigt markiert' : 'Marked as done'}
+        </p>
       )}
     </div>
   </>
 );
 
-export const ActionQuestion = ({ q, currentQ, answers, selectAnswer, de }) => (
-  <>
-    <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border-0 text-[10px] font-bold">
-      <Zap size={10} className="mr-1" /> PRAXIS-AUFGABE
-    </Badge>
-    <h3 className="text-base font-bold leading-relaxed">{q.q}</h3>
-    <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-500/5 dark:to-orange-500/5 border border-amber-200/30 space-y-3">
-      <p className="text-sm text-muted-foreground">{de ? 'Öffne das Tool in einem neuen Tab. Komm danach zurück und markiere als erledigt.' : 'Open the tool in a new tab. Come back and mark as done.'}</p>
-      <div className="flex gap-2">
-        <Button onClick={() => window.open(q.path, '_blank')}
-          className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold" data-testid="action-task-btn">
-          <Wrench size={14} className="mr-1.5" /> {de ? 'Tool öffnen' : 'Open Tool'}
-        </Button>
-        <Button onClick={() => selectAnswer(currentQ, 1)} variant="outline" className="font-bold" data-testid="action-done-btn">
-          {de ? 'Erledigt' : 'Done'}
-        </Button>
-      </div>
-      {answers[currentQ] !== undefined && (
-        <p className="text-xs text-emerald-600 font-bold flex items-center gap-1"><CheckCircle2 size={12} /> {de ? 'Aufgabe als erledigt markiert!' : 'Task marked as done!'}</p>
-      )}
-    </div>
-  </>
+export const CoachQuestion = (props) => (
+  <TaskBlock
+    {...props}
+    eyebrow="KI-COACH AUFGABE"
+    ctaLabel={props.de ? 'KI-Coach öffnen' : 'Open AI Coach'}
+  />
+);
+
+export const ActionQuestion = (props) => (
+  <TaskBlock
+    {...props}
+    eyebrow="PRAXIS-AUFGABE"
+    ctaLabel={props.de ? 'Tool öffnen' : 'Open Tool'}
+  />
 );
 
 export const MultipleChoiceQuestion = ({ q, currentQ, answers, selectAnswer }) => (
   <>
-    <h3 className="text-base font-bold leading-relaxed">{q.q}</h3>
-    <div className="space-y-2">
-      {q.options?.map((opt, optIdx) => (
-        <button key={`q${currentQ}-opt${optIdx}`} onClick={() => selectAnswer(currentQ, optIdx)}
-          className={`w-full p-4 rounded-xl text-sm font-medium text-left transition-all border ${
-            answers[currentQ] === optIdx
-              ? 'bg-[#BFFF00]/[0.06] dark:bg-[#BFFF00]/10 border-[#BFFF00]/30 dark:border-[#BFFF00]/20 text-[#4A6200] dark:text-[#BFFF00] shadow-sm'
-              : 'bg-white dark:bg-card border-black/[0.06] dark:border-white/[0.06] hover:border-[#BFFF00]/30 dark:hover:border-[#BFFF00]/20'
-          }`} data-testid={`quiz-option-${optIdx}`}>
-          <div className="flex items-center gap-3">
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${
-              answers[currentQ] === optIdx ? 'bg-[#BFFF00] text-black' : 'bg-gray-100 dark:bg-white/[0.06] text-muted-foreground'
-            }`}>{String.fromCharCode(65 + optIdx)}</div>
-            {opt}
-          </div>
-        </button>
-      ))}
+    <h3
+      className="text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.015em] text-black"
+      style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}
+    >
+      {q.q}
+    </h3>
+    <div className="space-y-2.5">
+      {q.options?.map((opt, optIdx) => {
+        const active = answers[currentQ] === optIdx;
+        return (
+          <button
+            key={`q${currentQ}-opt${optIdx}`}
+            onClick={() => selectAnswer(currentQ, optIdx)}
+            data-testid={`quiz-option-${optIdx}`}
+            className={`w-full p-4 text-left transition-all border-2 ${
+              active
+                ? 'border-black bg-brand/15'
+                : 'border-black/15 bg-white hover:border-black/50'
+            }`}
+          >
+            <div className="flex items-center gap-3.5">
+              <span
+                className={`w-8 h-8 inline-flex items-center justify-center text-[13px] font-black shrink-0 transition-colors ${
+                  active ? 'bg-black text-brand' : 'bg-black/[0.06] text-black/55'
+                }`}
+              >
+                {String.fromCharCode(65 + optIdx)}
+              </span>
+              <span className="text-[14.5px] leading-[1.4] font-medium text-black">{opt}</span>
+            </div>
+          </button>
+        );
+      })}
     </div>
   </>
 );

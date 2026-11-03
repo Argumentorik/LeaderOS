@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Image sitemap for Google Image Search.
+
+  Why this matters: Google Image Search drives 10-20% of total Google
+  traffic at enterprise scale, and it's the second-strongest signal
+  Google uses to rank a Person (after Wikipedia + own bio). Most B2B
+  sites never ship one and lose the traffic by default. Each <url> below
+  bundles the page URL with the Wlad-portrait image so Image Search
+  knows the photo IS Wlad and ranks it for queries like "Wlad
+  Jachtchenko Bild" / "Wlad Jachtchenko Portrait".
+
+  Schema reference:
+    https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://leader-os.de/wlad-jachtchenko</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/wlad/wlad-portrait.jpg</image:loc>
+      <image:title>Wlad Jachtchenko · Argumentations-Coach · 3× SPIEGEL-Bestseller</image:title>
+      <image:caption>Wlad Jachtchenko, Europas führender Argumentations-Coach und Gründer der Argumentorik-Akademie sowie der KI-Coaching-Plattform LeaderOS. Drei SPIEGEL-Bestseller-Autor mit 420 000+ trainierten Klienten.</image:caption>
+      <image:license>https://leader-os.de/impressum</image:license>
+    </image:image>
+    <image:image>
+      <image:loc>https://leader-os.de/og-wlad.jpg</image:loc>
+      <image:title>Wlad Jachtchenko · Share-Card · LeaderOS</image:title>
+      <image:caption>Wlad Jachtchenko · 3× SPIEGEL-Bestseller · 420 000+ Klienten · Argumentations-Coach · LeaderOS Person-Card.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/wlad/wlad-portrait.jpg</image:loc>
+      <image:title>Wlad Jachtchenko · LeaderOS Gründer</image:title>
+      <image:caption>Wlad Jachtchenko, Gründer der KI-Coaching-Plattform LeaderOS für Führungskräfte.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://leader-os.de/og-home.jpg</image:loc>
+      <image:title>LeaderOS · Führung ist Skill · 14 Tage kostenlos testen</image:title>
+      <image:caption>LeaderOS Share-Card · Führung ist Skill, Skill ist trainierbar · 14 Tage kostenlos · Wlads Methodik · KI-Coach 24/7.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/wer-ist-wlad-jachtchenko</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/wlad/wlad-portrait.jpg</image:loc>
+      <image:title>Wer ist Wlad Jachtchenko · Biographie</image:title>
+      <image:caption>Wlad Jachtchenko Bio: 3× SPIEGEL-Bestseller, 400 000+ Klienten, Argumentorik-Akademie Gründer.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/was-ist-eine-ki-native-fuehrungskraft</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/wlad/wlad-portrait.jpg</image:loc>
+      <image:title>KI-native Führungskraft · Definition von Wlad Jachtchenko</image:title>
+      <image:caption>Definition und fünf Merkmale einer KI-nativen Führungskraft, erklärt von Wlad Jachtchenko.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://leader-os.de/journal/leader-os-vs-chatgpt-claude-perplexity</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/wlad/wlad-portrait.jpg</image:loc>
+      <image:title>LeaderOS vs ChatGPT vs Claude vs Perplexity · Vergleich</image:title>
+      <image:caption>Ehrlicher Tool-Vergleich für Führungskräfte von Wlad Jachtchenko.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Landing posters · brand poster images carry strong topical signals
+       for "LeaderOS Plattform" / "KI Leadership System" image searches. -->
+  <url>
+    <loc>https://leader-os.de/</loc>
+    <image:image>
+      <image:loc>https://leader-os.de/landing/p-01-wer-nicht-fuehrt.png</image:loc>
+      <image:title>Wer nicht führt, wird geführt · LeaderOS §01</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://leader-os.de/landing/p-02-zeit-zu-fuehren.png</image:loc>
+      <image:title>Zeit zu führen · LeaderOS §02</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://leader-os.de/landing/p-03-fuehrungs-sprint.png</image:loc>
+      <image:title>30-Tage Führungs-Sprint · LeaderOS §03</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://leader-os.de/landing/p-06-bib-0001.png</image:loc>
+      <image:title>LeaderOS BIB · Startnummer-Plate</image:title>
+    </image:image>
+  </url>
+</urlset>

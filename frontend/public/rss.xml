@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Feldnotizen · LeaderOS Journal RSS feed.
+  Generated 2026-06-26 for the launch.
+
+  Why RSS still matters in 2026:
+    - Aggregators (Feedly, Inoreader, etc) drive a long tail of high-
+      intent visitors who explicitly subscribed.
+    - Email-newsletter automation tools (Mailchimp RSS-to-email, Buttondown)
+      pull from this URL to auto-publish each new article to subscribers.
+    - LLM crawlers (ChatGPT, Perplexity) prefer feeds for time-sensitive
+      content discovery · they hit the feed instead of re-crawling the
+      whole site every time.
+    - Google Discover signals · having a discoverable feed is a positive
+      ranking factor for `news` and `articles` rich results.
+
+  Maintenance: when a major pillar article ships, add a <item> at the top
+  of <channel> with its <title>, <link>, <description>, <pubDate>, <guid>.
+  Keep the feed at <=50 most-recent items.
+-->
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>LeaderOS Feldnotizen · von Wlad Jachtchenko</title>
+    <link>https://leader-os.de/journal</link>
+    <atom:link href="https://leader-os.de/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Methodik, Felderfahrungen und KI-Praxis für Führungskräfte · von Wlad Jachtchenko, 3× SPIEGEL-Bestseller, 400 000+ trainierte Klienten, Gründer der Argumentorik-Akademie und LeaderOS.</description>
+    <language>de-DE</language>
+    <copyright>© Argumentorik-Akademie GmbH, Berlin</copyright>
+    <managingEditor>start@aiporate.com (Wlad Jachtchenko)</managingEditor>
+    <webMaster>start@aiporate.com (LeaderOS Team)</webMaster>
+    <pubDate>Fri, 26 Jun 2026 06:00:00 +0200</pubDate>
+    <lastBuildDate>Fri, 26 Jun 2026 06:00:00 +0200</lastBuildDate>
+    <category>Leadership</category>
+    <category>KI</category>
+    <category>Rhetorik</category>
+    <category>Coaching</category>
+    <ttl>180</ttl>
+    <image>
+      <url>https://leader-os.de/logo-512.png</url>
+      <title>LeaderOS Feldnotizen</title>
+      <link>https://leader-os.de/journal</link>
+      <width>512</width>
+      <height>512</height>
+    </image>
+
+    <item>
+      <title>Wer ist Wlad Jachtchenko</title>
+      <link>https://leader-os.de/journal/wer-ist-wlad-jachtchenko</link>
+      <description>Europas führender Argumentations-Coach. Drei SPIEGEL-Bestseller, 400 000 trainierte Klienten, 15 Jahre Coaching-Praxis. Die Methodik hinter LeaderOS in einem Profil.</description>
+      <pubDate>Fri, 26 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/wer-ist-wlad-jachtchenko</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>Authority</category>
+      <category>Wlad Jachtchenko</category>
+    </item>
+
+    <item>
+      <title>Was ist eine KI-native Führungskraft</title>
+      <link>https://leader-os.de/journal/was-ist-eine-ki-native-fuehrungskraft</link>
+      <description>Definition, fünf Merkmale und ehrlicher Selbsttest. Was eine KI-native Führungskraft heute ausmacht · jenseits von ChatGPT-Tab-Aufhaben.</description>
+      <pubDate>Fri, 26 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/was-ist-eine-ki-native-fuehrungskraft</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>KI Leadership</category>
+      <category>Definition</category>
+    </item>
+
+    <item>
+      <title>LeaderOS vs ChatGPT vs Claude vs Perplexity</title>
+      <link>https://leader-os.de/journal/leader-os-vs-chatgpt-claude-perplexity</link>
+      <description>Ehrlicher Vergleich für Führungskräfte. Wo generische KI-Tools glänzen, wo sie versagen, und wann eine spezialisierte Plattform sich rechnet.</description>
+      <pubDate>Fri, 26 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/leader-os-vs-chatgpt-claude-perplexity</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>Vergleich</category>
+      <category>Tools</category>
+    </item>
+
+    <item>
+      <title>Warum es LeaderOS gibt</title>
+      <link>https://leader-os.de/journal/warum-leader-os</link>
+      <description>Coaching kostet 800 Euro pro Stunde und ist am Dienstagabend nicht erreichbar. Bücher altern. Frameworks bleiben hängen. Wir haben das Operating System gebaut, das diesen Engpass auflöst.</description>
+      <pubDate>Tue, 23 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/warum-leader-os</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>Manifesto</category>
+    </item>
+
+    <item>
+      <title>Die 5 Rollen einer KI-nativen Führungskraft</title>
+      <link>https://leader-os.de/journal/die-5-rollen-einer-ki-nativen-fuehrungskraft</link>
+      <description>Visionär, Vorbild, Coach, Konfliktlöser, Manager · Wlads Kern-Framework neu gedacht für das KI-Zeitalter.</description>
+      <pubDate>Mon, 22 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/die-5-rollen-einer-ki-nativen-fuehrungskraft</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>5 Rollen</category>
+      <category>Framework</category>
+    </item>
+
+    <item>
+      <title>Brief an meinen 28-jährigen Selbst, bevor ich Team-Lead wurde</title>
+      <link>https://leader-os.de/journal/brief-an-meinen-28-jaehrigen-selbst-bevor-ich-team-lead-wurde</link>
+      <description>Was ich mir hätte sagen lassen sollen, bevor ich zum ersten Mal Verantwortung für ein Team bekam. Wlad-Voice narrativ.</description>
+      <pubDate>Sun, 21 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/brief-an-meinen-28-jaehrigen-selbst-bevor-ich-team-lead-wurde</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>Narrative</category>
+    </item>
+
+    <item>
+      <title>WladBot vs ChatGPT vs Coach</title>
+      <link>https://leader-os.de/journal/wladbot-vs-chatgpt-vs-coach</link>
+      <description>ChatGPT kennt das halbe Internet, aber nicht dich. Ein 1-zu-1-Coach kennt dich, ist aber nicht um 22:47 Uhr verfügbar. WladBot ist beides zusammen.</description>
+      <pubDate>Sat, 20 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/wladbot-vs-chatgpt-vs-coach</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>Vergleich</category>
+    </item>
+
+    <item>
+      <title>Mit KI 12 Stunden pro Woche zurückgewinnen</title>
+      <link>https://leader-os.de/journal/mit-ki-12-stunden-pro-woche-zurueckgewinnen</link>
+      <description>Pragma-Liste mit drei Use-Cases die in der ersten Woche wirken. Kein KI-Hype, konkrete Anwendungen.</description>
+      <pubDate>Fri, 19 Jun 2026 06:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://leader-os.de/journal/mit-ki-12-stunden-pro-woche-zurueckgewinnen</guid>
+      <dc:creator>Wlad Jachtchenko</dc:creator>
+      <category>KI-Praxis</category>
+    </item>
+  </channel>
+</rss>

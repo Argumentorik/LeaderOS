@@ -1,5 +1,5 @@
 /**
- * BookingTeaserCard — Apple/Revolut-grade pre-booking conversion block.
+ * BookingTeaserCard · Apple/Revolut-grade pre-booking conversion block.
  *
  * Sits ABOVE a Cal.com CTA on landing/closer sections. Instead of a bland
  * "Buche ein Gespräch" link, the user sees:
@@ -26,7 +26,7 @@ const DEFAULT_BULLETS = [
 
 /**
  * Compute a plausible "next available slot" hint. Cal.com slots are real but
- * we don't want to call their API on every page render — this gives a Revolut-
+ * we don't want to call their API on every page render · this gives a Revolut-
  * style live signal that updates every minute and feels alive.
  */
 const useNextSlotHint = () => {
@@ -56,7 +56,7 @@ function computeHint() {
 export const BookingTeaserCard = ({
   eyebrow = 'Persönliche Beratung',
   title = '30 Minuten, die deinen Pfad klären.',
-  subtitle = 'Sprich mit einem Argumentorik-Berater. Wir hören zu, analysieren deinen Status — und sagen dir ehrlich, welcher Weg zu dir passt.',
+  subtitle = 'Sprich mit einem Argumentorik-Berater. Wir hören zu, analysieren deinen Status · und sagen dir ehrlich, welcher Weg zu dir passt.',
   bullets = DEFAULT_BULLETS,
   className = '',
 }) => {

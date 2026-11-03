@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Master sitemap index for leader-os.de.
+
+  Search engines (Google, Bing, Yandex) hit /sitemap-index.xml first when
+  it exists, then crawl every <sitemap> child in parallel. This lets us
+  split the data by type and update each independently without rebuilding
+  one giant XML file.
+
+  Children:
+    sitemap.xml          · static/canonical pages ONLY (landing, wlad,
+                           journal index, login, legal) — no articles
+    sitemap-articles.xml · EVERY published journal article ·
+                           generated from the content registry by
+                           scripts/generate-sitemap-articles.mjs so it
+                           can never drift out of sync with the app
+    sitemap-image.xml    · image-sitemap for Google Image Search ·
+                           drives ~10-20% of total Google traffic at
+                           enterprise scale, currently leaves money on
+                           the table because we never published one
+    sitemap-news.xml     · Google News inclusion · time-sensitive content
+                           discovery for fresh journal posts
+
+  NOTE · leader-check.de is a DIFFERENT root domain served
+  sitemap-leader-check.xml via host rewrite in vercel.json. It is
+  intentionally NOT a child here — a sitemap index must only list
+  sitemaps for the same host. leader-check submits its own file.
+
+  robots.txt references THIS file (and each child, belt-and-suspenders).
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://leader-os.de/sitemap.xml</loc>
+    <lastmod>2026-08-21</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://leader-os.de/sitemap-articles.xml</loc>
+    <lastmod>2026-07-01</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://leader-os.de/sitemap-image.xml</loc>
+    <lastmod>2026-06-26</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://leader-os.de/sitemap-news.xml</loc>
+    <lastmod>2026-06-26</lastmod>
+  </sitemap>
+</sitemapindex>

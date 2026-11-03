@@ -61,7 +61,7 @@ export default function EnterprisePage() {
             </div>
           </div>
         ) : (
-          /* ═══ EXPLORE VIEW — Education + Trust + CTA ═══ */
+          /* ═══ EXPLORE VIEW · Education + Trust + CTA ═══ */
           <div className="p-6 lg:p-10 space-y-8 animate-fade-in">
 
             {/* Hero */}
@@ -172,7 +172,7 @@ export default function EnterprisePage() {
   );
 }
 
-// ── ROI Calculator — simple slider-based revenue projection ────────────────
+// ── ROI Calculator · simple slider-based revenue projection ────────────────
 const EnterpriseROICalculator = ({ de }) => {
   const [teamSize, setTeamSize] = useState(25);
   const [salary, setSalary] = useState(85000); // avg leader annual salary EUR

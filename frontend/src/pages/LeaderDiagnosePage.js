@@ -45,8 +45,8 @@ const LAYER_META = {
   strategisches_eq: {
     label_de: 'Strategisches EQ',
     label_en: 'Strategic EQ',
-    desc_de: 'Emotionale Intelligenz als strategische Waffe — nicht als Soft-Skill.',
-    desc_en: 'Emotional intelligence as a strategic weapon — not a soft skill',
+    desc_de: 'Emotionale Intelligenz als strategische Waffe · nicht als Soft-Skill.',
+    desc_en: 'Emotional intelligence as a strategic weapon · not a soft skill',
     color: '#FFB800',
     icon: Heart,
   },
@@ -298,8 +298,8 @@ export default function LeaderDiagnosePage() {
                 </h1>
                 <p className="text-white/50 mt-4 max-w-lg leading-relaxed">
                   {de
-                    ? 'Wo du heute stehst — basierend auf 3 Layern: KI-Kompetenz, Boardroom-Rhetorik und Strategisches EQ.'
-                    : 'Where you stand today — across 3 dimensions: AI competence, boardroom rhetoric, and strategic EQ.'}
+                    ? 'Wo du heute stehst · basierend auf 3 Layern: KI-Kompetenz, Boardroom-Rhetorik und Strategisches EQ.'
+                    : 'Where you stand today · across 3 dimensions: AI competence, boardroom rhetoric, and strategic EQ.'}
                 </p>
               </div>
 
@@ -409,7 +409,7 @@ export default function LeaderDiagnosePage() {
             </section>
           )}
 
-          {/* Führungsdimensionen — if present */}
+          {/* Führungsdimensionen · if present */}
           {Object.keys(fuehrung).length > 0 && (
             <section data-testid="fuehrungsdimensionen-section">
               <h2 className="text-xs font-bold text-white/40 tracking-wider uppercase mb-4">{de ? 'Führungsdimensionen' : 'Leadership Dimensions'}</h2>

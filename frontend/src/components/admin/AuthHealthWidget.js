@@ -91,7 +91,7 @@ export const AuthHealthWidget = ({ health, de }) => {
           </p>
           {!hasOffenders ? (
             <p className="text-[10px] text-muted-foreground/60">
-              {de ? 'Keine Auffälligkeiten — alles ruhig 🟢' : 'No offenders — all quiet 🟢'}
+              {de ? 'Keine Auffälligkeiten · alles ruhig 🟢' : 'No offenders · all quiet 🟢'}
             </p>
           ) : (
             <div className="space-y-1">

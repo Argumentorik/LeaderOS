@@ -39,7 +39,7 @@ export const PlaybookReport = ({ adviceReport, onDownloadPDF, generatingPDF, de 
         </div>
         <div className="flex-1">
           <p className="text-[12px] font-bold">{de ? 'Termin mit Wlads Head Coach buchen' : 'Book a session with Wlad\'s Head Coach'}</p>
-          <p className="text-[10px] text-muted-foreground">{de ? 'Setze die Erkenntnisse mit Expertenbegleitung um — Erstgespräch 1:1' : 'Implement insights with expert guidance — 1:1 onboarding call'}</p>
+          <p className="text-[10px] text-muted-foreground">{de ? 'Setze die Erkenntnisse mit Expertenbegleitung um · Erstgespräch 1:1' : 'Implement insights with expert guidance · 1:1 onboarding call'}</p>
         </div>
         <Button size="sm" onClick={() => openHeadCoachCall('playbook-report')}
           className="bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] font-semibold shrink-0" data-testid="playbook-coach-btn">

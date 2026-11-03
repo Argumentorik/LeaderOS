@@ -1,5 +1,5 @@
 /**
- * AGB — Allgemeine Geschäftsbedingungen.
+ * AGB · Allgemeine Geschäftsbedingungen.
  *
  * ⚠️ ANWALTS-REVIEW PFLICHT INNERHALB VON 7 TAGEN.
  * Diese Version ist eine Basis-Vorlage und deckt nicht alle
@@ -130,7 +130,7 @@ export default function AGBPage() {
           </p>
         </Section>
 
-        <p className="text-white/40 text-[10px] mt-12">Stand: Mai 2026 · v1.0 (Vorläufige Fassung — Anwalts-Review ausstehend)</p>
+        <p className="text-white/40 text-[10px] mt-12">Stand: Mai 2026 · v1.0 (Vorläufige Fassung · Anwalts-Review ausstehend)</p>
       </div>
     </div>
   );

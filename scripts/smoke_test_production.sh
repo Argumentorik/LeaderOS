@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ────────────────────────────────────────────────────────────────────────────
-# Leader-OS · Post-Deploy Smoke Test (Production)
+# LeaderOS · Post-Deploy Smoke Test (Production)
 #
 # Usage:
 #   API_BASE=https://leader-os.de bash /app/scripts/smoke_test_production.sh
@@ -27,7 +27,7 @@ FAILS=0
 
 echo ""
 echo "═══════════════════════════════════════════════════════════════"
-echo "  Leader-OS Production Smoke Test · $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo "  LeaderOS Production Smoke Test · $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "  Target: $API_BASE"
 echo "═══════════════════════════════════════════════════════════════"
 

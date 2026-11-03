@@ -11,7 +11,7 @@ import logger from '../lib/logger';
 import { toast } from 'sonner';
 
 /**
- * DownloadsPage — Central PDF library: Leadership Reports, 30-Tage-Plan,
+ * DownloadsPage · Central PDF library: Leadership Reports, 30-Tage-Plan,
  * Wlad's Book, Coaching-Reports. Free users see locked items with upgrade hint.
  */
 
@@ -25,7 +25,7 @@ const buildLeadershipReport = (user) => ({
     { label: 'EQ', value: user?.eq_score || 0, color: '#9ACC00' },
   ],
   sections: [
-    { title: 'Aktueller Status', content: `Du befindest dich auf Level "${user?.level || 'Emerging Leader'}" mit ${user?.xp || 0} XP. Deine Top-Stärke ist deutlich erkennbar — nutze sie aktiv.`, type: 'info' },
+    { title: 'Aktueller Status', content: `Du befindest dich auf Level "${user?.level || 'Emerging Leader'}" mit ${user?.xp || 0} XP. Deine Top-Stärke ist deutlich erkennbar · nutze sie aktiv.`, type: 'info' },
     { title: 'Empfehlungen für die nächsten 30 Tage', content: ['Tägliche 5-Minuten Check-ins für EQ-Aufbau', 'Mindestens 2 Video-Missionen pro Woche', '1 Simulation pro Tag mit unterschiedlichen Agenten'], type: 'success' },
   ],
   footer: 'WladBot Leader OS · Powered by Wlad Jachtchenko Methodik',
@@ -36,10 +36,10 @@ const build30TagePlan = (user) => ({
   subtitle: 'Dein Aktionsplan',
   userName: user?.name,
   sections: [
-    { title: 'Woche 1 — Foundation', content: 'Etabliere deine 5-Minuten-Check-in-Routine. Starte täglich mit einer klaren Intention. Beende den Tag mit einer Reflexion über die wichtigste Entscheidung.', type: 'info' },
-    { title: 'Woche 2 — Communication', content: 'Übe 3 Konversationen mit dem Kommunikator-Agenten. Halte 1 echtes Gespräch pro Tag mit aktivem Zuhören (5 Ebenen).', type: 'info' },
-    { title: 'Woche 3 — Decisions', content: 'Nutze die Entscheidungsmatrix für 2 reale Entscheidungen. Delegiere 3 Aufgaben mit klarem Befähigungs-Briefing.', type: 'success' },
-    { title: 'Woche 4 — Mastery', content: 'Mache 2 Video-Missionen mit voller Selbstaufnahme. Reviewe deine Scores. Setze 1 großes Q1-Ziel.', type: 'success' },
+    { title: 'Woche 1 · Foundation', content: 'Etabliere deine 5-Minuten-Check-in-Routine. Starte täglich mit einer klaren Intention. Beende den Tag mit einer Reflexion über die wichtigste Entscheidung.', type: 'info' },
+    { title: 'Woche 2 · Communication', content: 'Übe 3 Konversationen mit dem Kommunikator-Agenten. Halte 1 echtes Gespräch pro Tag mit aktivem Zuhören (10 Stufen des Zuhörens).', type: 'info' },
+    { title: 'Woche 3 · Decisions', content: 'Nutze die Entscheidungsmatrix für 2 reale Entscheidungen. Delegiere 3 Aufgaben mit klarem Befähigungs-Briefing.', type: 'success' },
+    { title: 'Woche 4 · Mastery', content: 'Mache 2 Video-Missionen mit voller Selbstaufnahme. Reviewe deine Scores. Setze 1 großes Q1-Ziel.', type: 'success' },
   ],
 });
 
@@ -51,7 +51,7 @@ const buildWladBook = (user) => ({
     { title: 'Die 3 Säulen der Überzeugung (Argumentorik)', content: 'Logos (Logik): Klare Argumente und Daten. Ethos (Glaubwürdigkeit): Kompetenz und Authentizität. Pathos (Emotion): Storytelling und emotionale Verbindung. Wahre Überzeugungskraft entsteht im Zusammenspiel aller drei.' },
     { title: 'Der Kommunikationsquadrant', content: '1. Sachebene: Was ist die Information? 2. Selbstoffenbarung: Was sage ich über mich? 3. Beziehungsebene: Wie steht es um uns? 4. Appell: Was will ich erreichen?' },
     { title: 'Die Feedbackformel', content: 'Beobachtung (was genau habe ich gesehen) + Wirkung (wie hat es auf mich gewirkt) + Wunsch (was wünsche ich mir konkret) = klares, nicht verletzendes Feedback.' },
-    { title: 'Aktives Zuhören (5 Ebenen)', content: '1. Ignorieren · 2. So tun als ob · 3. Selektiv · 4. Aufmerksam · 5. Empathisch (gefühlte Bedeutung). Ziel ist immer Stufe 5.' },
+    { title: 'Die 10 Stufen des Zuhörens', content: '1. Nicht zuhören · 2. Auf Antwort warten (80% aller Führungskräfte bleiben hier) · 3. Selektiv zuhören · 4. Empathisch zuhören · 5. Aktives Zuhören · 6. Strukturelles Zuhören · 7. Systemisches Zuhören · 8. Diagnostisches Zuhören · 9. Generatives Zuhören · 10. Stille als Zuhören.' },
     { title: 'Die 4 Gesprächstypen', content: 'Informieren · Überzeugen · Verhandeln · Konfrontieren. Wer den richtigen Typ identifiziert, gewinnt das Gespräch.' },
     { title: 'Die 5 Rollen einer Führungskraft', content: '1. Überzeugender Kommunikator · 2. Effektiver Manager · 3. Motivierender Team-Leader · 4. Empathischer Psychologe · 5. Strukturierter Problemlöser. Jede Rolle hat ihre eigenen Drills.' },
   ],
@@ -63,12 +63,12 @@ const buildLeadershipManifest = () => ({
   subtitle: '12 Prinzipien KI-nativer Führung',
   sections: [
     { title: 'Die 12 Prinzipien', content: [
-      '1. Konsistenz schlägt Intensität — täglich besser ist mehr als monatlich brillant.',
-      '2. Klarheit ist der ultimative Multiplikator — unklare Briefings produzieren unklares Output.',
+      '1. Konsistenz schlägt Intensität · täglich besser ist mehr als monatlich brillant.',
+      '2. Klarheit ist der ultimative Multiplikator · unklare Briefings produzieren unklares Output.',
       '3. Aktives Zuhören ist die seltenste Führungsfähigkeit.',
       '4. Delegation ist Befähigung, nicht Abschiebung.',
       '5. Feedback ohne Wunsch ist Kritik. Feedback mit Wunsch ist Führung.',
-      '6. Emotion erzeugt Bewegung — Logik erzeugt Verstehen. Du brauchst beides.',
+      '6. Emotion erzeugt Bewegung · Logik erzeugt Verstehen. Du brauchst beides.',
       '7. Du bist die Summe deiner 5 engsten Berater. Wähle bewusst.',
       '8. KI ist der Hebel. Disziplin ist der Drehpunkt.',
       '9. Transparenz schafft Vertrauen schneller als jede PR-Maßnahme.',
@@ -102,7 +102,7 @@ const RESOURCES = [
     id: 'wlad_book',
     icon: BookOpen,
     title: 'Wlads Methodik · Kern-Frameworks',
-    description: '3 Säulen · Kommunikationsquadrant · Feedbackformel · 5 Ebenen · 5 Rollen.',
+    description: '3 Säulen · Kommunikationsquadrant · Feedbackformel · 10 Stufen des Zuhörens · 5 Rollen.',
     badge: 'Wlad-Kompendium',
     requiresTier: false,
     free: true,
@@ -143,7 +143,7 @@ export default function DownloadsPage() {
       toast.success('PDF wird heruntergeladen…');
     } catch (e) {
       logger.error('download err', e);
-      toast.error('Fehler beim PDF-Erstellen — bitte erneut versuchen.');
+      toast.error('Fehler beim PDF-Erstellen · bitte erneut versuchen.');
     } finally {
       setGenerating(null);
     }

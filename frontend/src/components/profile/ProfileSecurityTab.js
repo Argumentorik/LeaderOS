@@ -29,7 +29,7 @@ const methodLabel = (method, de) => {
     refresh:    'Refresh',
     register:   de ? 'Registrierung' : 'Sign-up',
   };
-  return m[method] || method || '—';
+  return m[method] || method || '·';
 };
 
 const locationLabel = (city, cc, de) => {

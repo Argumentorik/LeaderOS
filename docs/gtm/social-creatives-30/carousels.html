@@ -1,0 +1,75 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.slide.t-cover .h{font-size:124px}
+.slide.has-avatar .mid{margin-bottom:auto}
+.slide.has-avatar.t-cta .mid{max-width:470px}
+.slide.t-chat .mid h1,.slide.t-vs .mid h1{font-size:92px}
+.cardwrap{margin-top:36px}
+.slide.has-avatar .chat,.slide.has-avatar .cap{max-width:560px}
+.bigword{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;font-size:300px;line-height:.85;color:#BFFF00;text-shadow:0 10px 60px rgba(0,0,0,.5)}
+.slide.lime-bg .bigword{color:#0A0A0A;text-shadow:none}
+.three{margin-top:40px;display:grid;gap:16px}
+.three .card{display:flex;gap:26px;align-items:center;padding:24px 30px}
+.three .card b{font-family:'Anton',Impact,sans-serif;font-size:64px;font-weight:400;color:#BFFF00;width:80px;flex:none;line-height:1}
+.three .card p{font-size:30px;line-height:1.3}
+.slide.lime-bg .card{background:rgba(10,10,10,.08);border-color:rgba(10,10,10,.25);box-shadow:none}
+.slide.lime-bg .card.ai{background:rgba(10,10,10,.9);color:#fff;border-color:#0A0A0A}
+.slide.lime-bg .card.user{background:rgba(255,255,255,.55)}
+.slide.lime-bg .card .who{color:rgba(10,10,10,.6)} .slide.lime-bg .card.ai .who{color:#BFFF00}
+.slide.lime-bg .three .card b{color:#0A0A0A}
+.slide.lime-bg .cap .card span{color:rgba(10,10,10,.8)} .slide.lime-bg .cap .card b small{color:#0A0A0A}
+.slide.lime-bg .vs .card p{color:rgba(10,10,10,.82)} .slide.lime-bg .vs .card .tag{color:rgba(10,10,10,.55)} .slide.lime-bg .vs .card.new{background:rgba(10,10,10,.9);color:#fff} .slide.lime-bg .vs .card.new p{color:rgba(255,255,255,.85)} .slide.lime-bg .vs .card.new .tag{color:#BFFF00}
+</style></head><body>
+<script>
+const WEB='Kostenloser Platz · 29.10.', TRIAL='14 Tage kostenlos';
+const C=[
+{id:'C1',name:'Was WladBot wirklich kann',slides:[
+ {t:'cover',k:'Carousel 01 · WladBot',h:'Ein Coach, der Wlads Bücher kennt<span class=lime>.</span>',s:'Acht Dinge, die WladBot im LeaderOS für dich tut. Wischen →',av:'big',ph:'boardroom-b'},
+ {t:'chat',k:'01 · Fragen, bevor es zählt',h:'Frag ihn vor dem Gespräch<span class=lime>.</span>',size:'xs',chat:[['Du','Mein Mitarbeiter liefert zum dritten Mal zu spät. Wie spreche ich das an, ohne dass es eskaliert?'],['WladBot','Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?']],note:'Beispiel-Dialog',av:'small',ph:'time'},
+ {t:'cap',k:'02 · Text und Stimme',h:'Sprich mit ihm<span class=lime>.</span>',cap:[['K·02','Voice','Im Auto, vor dem Meeting, auf dem Flur. Du sprichst, er antwortet. Mit Wlads Frameworks, nicht mit Allgemeinplätzen.'],['K·03','Kontext','Er kennt deine Challenge-Historie. Die Antwort passt zu deinem Fall, nicht zu irgendeinem.']],av:'',ph:'listening'},
+ {t:'cap',k:'03 · Simulation',h:'Üb das Gespräch mit einem Gegenüber, das zurückredet<span class=lime>.</span>',size:'xxs',cap:[['K·04','Simulation','Kündigungsgespräch, Gehaltsverhandlung, Feedback: Du führst es, bevor es zählt. Das Gegenüber reagiert, weicht aus, widerspricht.']],av:'',ph:'conflict-b'},
+ {t:'cap',k:'04 · Auswertung',h:'Danach: Was saß, was fehlte<span class=lime>.</span>',size:'xs',cap:[['K·05','Score','Nach jeder Simulation eine Auswertung: Struktur, Klarheit, Wirkung. Und der nächste Drill dazu.'],['K·06','Drills','15 Minuten am Tag, 30 Tage lang. An deinen echten Fällen, nicht an Fallstudien.']],av:'small',ph:'boardroom-b'},
+ {t:'cap',k:'05 · Bibliothek',h:'6 Grundlagen-Kurse. 4 Master-Programme<span class=lime>.</span>',size:'xxs',cap:[['K·07','Kurse','Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik. Dazu KI-First Leadership, Change, Executive Presence, Boardroom-Strategie.'],['K·08','Playbooks','Skripte für die Gespräche, die jede Führungskraft führen muss.']],av:'',ph:'app'},
+ {t:'cap',k:'06 · Video-Analyse',h:'Nimm dich auf. Bekomm Feedback<span class=lime>.</span>',size:'xs',cap:[['K·09','Video-Analyse','Eine Minute Pitch oder Townhall-Opening aufnehmen. Du bekommst Feedback zu Struktur, Wirkung und Wortwahl, ohne dass ein Kollege zuschauen muss.']],av:'',ph:'stage'},
+ {t:'text',k:'07 · Das Prinzip',h:'Nicht noch ein Tool.<br><span class=lime>Ein System.</span>',s:'Kurse, KI-Coach, Simulationen, Drills und Auswertung greifen ineinander. Deshalb heißt es Operating System, nicht App.',v:'lime',av:'',size:'s'},
+ {t:'cta',k:'08 · Start',h:'14 Tage.<br>Keine Karte<span class=lime>.</span>',s:'Teste WladBot mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 29.10., kostenlos.',cta:TRIAL,av:'big',ph:'solitude'},
+]},
+{id:'C2',name:'Das Gespräch, das du aufschiebst',slides:[
+ {t:'cover',k:'Carousel 02 · Das Gespräch',h:'Das Gespräch, das du seit drei Wochen aufschiebst<span class=lime>.</span>',s:'Du weißt genau, welches. Wischen →',ph:'conflict',size:'xs'},
+ {t:'text',k:'01',h:'Du weißt, was du sagen müsstest<span class=lime>.</span>',s:'Das Problem war nie Wissen. Du hast das Buch gelesen. Du warst im Seminar. Du kennst die Formel.',ph:'solitude',size:'s'},
+ {t:'text',k:'02',h:'Warum du es trotzdem nicht tust<span class=lime>:</span>',s:'Du hast es nie geübt. Kein Mensch macht etwas zum ersten Mal gut, wenn es zählt. Deshalb schiebst du.',ph:'time',size:'s'},
+ {t:'three',k:'03 · Die Formel',h:'Drei Sätze<span class=lime>.</span>',three:['Beobachtung: „Ich habe beobachtet, dass …“','Wirkung: „Dadurch …“','Wunsch: „Ich wünsche mir …“'],v:'lime',av:'small'},
+ {t:'chat',k:'04 · Der Unterschied',h:'Sag es zuerst zu jemandem, der zurückredet<span class=lime>.</span>',size:'xxs',chat:[['Du','Ich habe beobachtet, dass der Bericht zum dritten Mal erst Freitagabend kam.'],['Gegenüber (Simulation)','Ich hatte diese Woche drei andere Prioritäten von dir. Welche soll ich dafür fallen lassen?'],['WladBot','Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal.']],note:'Beispiel · Simulation im LeaderOS',av:'small',ph:'writing'},
+ {t:'text',k:'05 · Reps',h:'Fünf Durchläufe.<br>Dann der echte Raum<span class=lime>.</span>',s:'Beim fünften Mal stolperst du nicht mehr über den ersten Satz. Das Gespräch dauert 90 Sekunden. Es war nie das Gespräch. Es war der erste Satz.',ph:'boardroom',size:'s'},
+ {t:'text',k:'06 · Das Prinzip',h:'Führung wird nicht gelernt.<br><span class=lime>Sie wird trainiert.</span>',s:'Jede Führungskraft weiß, was sie tun sollte. Die wenigsten haben es je geübt.',v:'lime',size:'xs',av:''},
+ {t:'cta',k:'07 · Start',h:'Üb es heute.<br>Führ es morgen<span class=lime>.</span>',s:'14 Tage kostenlos, ohne Karte. Oder live am 29.10.: Wlad zeigt die Feedbackformel an einem echten Fall.',cta:TRIAL,av:'big',ph:'solitude'},
+]},
+{id:'C3',name:'Seminar vs. System',slides:[
+ {t:'cover',k:'Carousel 03 · Seminar vs. System',h:'Seminar<br>vs. System<span class=lime>.</span>',s:'Sechs Unterschiede, die erklären, warum nach dem Seminar nichts bleibt. Wischen →',ph:'training'},
+ {t:'vs',k:'01 · Zeit',h:'Zeit<span class=lime>.</span>',vs:[['Seminar','2 Tage im Jahr','Dann 363 Tage ohne Training. Nichts, was du einmal im Jahr tust, wird zur Gewohnheit.'],['System','15 Minuten am Tag','Jeden Werktag ein Drill. Nach 30 Tagen ist der neue Reflex da, nicht nur die Erinnerung.']],ph:'time'},
+ {t:'vs',k:'02 · Inhalt',h:'Inhalt<span class=lime>.</span>',vs:[['Seminar','Folien und Fallstudien','Beispiele von anderen. Interessant, aber nicht dein Montag.'],['System','Dein echter Fall','Dein Mitarbeiter, dein Konflikt, deine Verhandlung. Du bringst den Fall mit, das System den Drill.']],ph:'boardroom'},
+ {t:'vs',k:'03 · Übung',h:'Übung<span class=lime>.</span>',vs:[['Seminar','Rollenspiel mit Kollegen','Einmal, vor Publikum, mit jemandem, der nett sein will.'],['System','Simulation mit Gegenüber','So oft du willst, mit einem Gegenüber, das widerspricht und ausweicht. Mit Auswertung danach.']],ph:'conflict-b'},
+ {t:'vs',k:'04 · Danach',h:'Danach<span class=lime>.</span>',vs:[['Seminar','Ein Ordner im Regal','Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch.'],['System','Ein Coach in der Tasche','WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar.']],ph:'ai'},
+ {t:'vs',k:'05 · Ergebnis',h:'Ergebnis<span class=lime>.</span>',vs:[['Seminar','Wissen','Du weißt mehr. Dein Team merkt nichts.'],['System','Verhalten','Du führst anders. Dein Team merkt es in der ersten Woche.']],v:'lime'},
+ {t:'text',k:'06 · Live sehen',h:'Sieh das System live<span class=lime>.</span>',s:'Do, 29. Oktober, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A, keine Aufzeichnung.',v:'photo',size:'s'},
+ {t:'cta',k:'07 · Start',h:'Entweder du trainierst.<br><span class=lime>Oder du hoffst.</span>',s:'Platz im Webinar sichern oder direkt 14 Tage kostenlos testen. Beides ohne Karte.',cta:WEB,av:'big',ph:'solitude',size:'xs'},
+]},
+];
+const bg=(x)=>x.v==='photo'?`<div class="bg photo" style="background-image:url('wlad-portrait.jpg');background-position:42% 30%;background-size:auto 1350px"></div>`:x.ph?`<div class="bg photo" style="background-image:url('ph/${x.ph}.webp')"></div>`:`<div class=bg></div>`;
+let html='';
+C.forEach((c)=>{const n=c.slides.length;c.slides.forEach((x,i)=>{
+ const body=
+  x.t==='chat'?`<div class=chat>${x.chat.map(([w,m])=>`<div class="card ${w==='Du'?'user':w==='WladBot'?'ai':''}"><span class=who>${w}</span><p>${m}</p></div>`).join('')}</div>${x.note?`<p class=note>${x.note}</p>`:''}`:
+  x.t==='cap'?`<div class=cap>${x.cap.map(([c,t,d])=>`<div class=card><b><small>${c}</small>${t}</b><span>${d}</span></div>`).join('')}</div>`:
+  x.t==='three'?`<div class=three>${x.three.map((t,j)=>`<div class=card><b>${j+1}</b><p>${t}</p></div>`).join('')}</div>`:
+  x.t==='vs'?`<div class=vs>${x.vs.map(([tag,t,d],j)=>`<div class="card ${j?'new':'old'}"><span class=tag>${tag}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`:
+  x.s?`<p class=sub>${x.s}</p>`:'';
+ html+=`<section class="slide ${c.id} t-${x.t} ${x.v==='lime'?'lime-bg':''} ${x.av!==undefined?'has-avatar':''}" data-c="${c.id}" data-i="${i+1}">
+ ${bg(x)}<div class=bg2></div><div class=bg3></div><div class=bg4></div>
+ ${x.av!==undefined?`<div class=halo></div><div class="ring ${x.av}"></div><img class="avatar ${x.av}" src="avatar.png" alt="">`:''}
+ <div class=top><span class="mono lime">▸ ${x.k}</span><span class=pager>${String(i+1).padStart(2,'0')}/${String(n).padStart(2,'0')}</span></div>
+ <div class=mid style="${x.v==='photo'||x.t==='cover'?'margin-top:auto;margin-bottom:40px':''}"><h1 class="d h ${x.size||(x.t==='vs'?'s':'')}">${x.h}</h1>${body}</div>
+ <div class=bot><div class=wlad><img src="wlad-portrait.jpg" alt=""><span>Wlad Jachtchenko<br><span class=mono style="font-size:14px;letter-spacing:.16em">LeaderOS · leader-os.de</span></span></div>${x.t==='cta'?`<span class=cta>${x.cta} →</span>`:`<span class=swipe>${i+1<n?'Wischen →':'Link im Kommentar'}</span>`}</div>
+</section>`;});});
+document.body.innerHTML=html; window.__C=C;
+</script></body></html>

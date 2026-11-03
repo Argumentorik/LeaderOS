@@ -51,7 +51,7 @@ export const SmartPopups = ({ userData }) => {
       }, delay);
     };
 
-    // Popup 1: Re-engagement — nur nach 5+ Sessions ohne Streak
+    // Popup 1: Re-engagement · nur nach 5+ Sessions ohne Streak
     if (!dismissed.reeng || now - dismissed.reeng > cooldown) {
       const streak = userData.streak?.days || 0;
       if (streak === 0 && sessions > 5) {
@@ -59,7 +59,7 @@ export const SmartPopups = ({ userData }) => {
         return;
       }
     }
-    // Popup 2: Achievement — nur 1× pro Session, nach 8 Sessions
+    // Popup 2: Achievement · nur 1× pro Session, nach 8 Sessions
     if (!dismissed.achieve || now - dismissed.achieve > cooldown) {
       const xp = userData.xp || 0;
       if (xp > 0 && xp % 250 < 30 && sessions > 8) {
@@ -67,7 +67,7 @@ export const SmartPopups = ({ userData }) => {
         return;
       }
     }
-    // Popup 3: Premium nudge — nur nach 7 TAGEN aktiver Nutzung + 8+ Sessions
+    // Popup 3: Premium nudge · nur nach 7 TAGEN aktiver Nutzung + 8+ Sessions
     if (!dismissed.premium || now - dismissed.premium > cooldown * 2) {
       if (!userData.premium && sessions >= 8 && hoursSinceSignup >= 7 * 24) {
         trigger('premium', 12000);
@@ -100,7 +100,7 @@ export const SmartPopups = ({ userData }) => {
               <p className="text-center text-[10px] font-bold text-white/40 uppercase tracking-wider">Wlad sagt</p>
             </div>
             <CardContent className="p-5 text-center space-y-3">
-              <p className="text-sm font-semibold leading-relaxed">"Konsistenz schlägt Talent. Jeden Tag ein kleiner Schritt — das unterscheidet echte Leader."</p>
+              <p className="text-sm font-semibold leading-relaxed">"Konsistenz schlägt Talent. Jeden Tag ein kleiner Schritt · das unterscheidet echte Leader."</p>
               <p className="text-xs text-muted-foreground">Deine Challenge wartet auf dich.</p>
               <Button onClick={() => { dismiss('reeng'); navigate('/challenge'); }} className="w-full bg-[#0A0A0A] text-white font-bold h-11" data-testid="popup-reeng-cta">
                 <Flame size={14} className="mr-1.5 text-[#BFFF00]" /> Jetzt weitermachen <ArrowRight size={14} className="ml-1.5" />
@@ -121,7 +121,7 @@ export const SmartPopups = ({ userData }) => {
             </div>
             <CardContent className="p-5 text-center space-y-3">
               <p className="text-sm font-semibold">Du machst echten Fortschritt!</p>
-              <p className="text-xs text-muted-foreground">Bleib dran — deine nächste Challenge wartet.</p>
+              <p className="text-xs text-muted-foreground">Bleib dran · deine nächste Challenge wartet.</p>
               <Button onClick={() => { dismiss('achieve'); navigate('/challenge'); }} className="w-full bg-[#0A0A0A] text-white font-bold h-11" data-testid="popup-achieve-cta">
                 <Flame size={14} className="mr-1.5 text-[#BFFF00]" /> Nächste Challenge starten <ArrowRight size={14} className="ml-1.5" />
               </Button>
@@ -140,7 +140,7 @@ export const SmartPopups = ({ userData }) => {
               <p className="text-lg font-black">Launch-Preis sichern</p>
             </div>
             <CardContent className="p-5 text-center space-y-3">
-              <p className="text-sm text-muted-foreground">Du nutzt WladBot aktiv — schalte 16 Video-Missionen, 300 Challenge-Fragen und unbegrenztes Coaching frei.</p>
+              <p className="text-sm text-muted-foreground">Du nutzt WladBot aktiv · schalte 16 Video-Missionen, 300 Challenge-Fragen und unbegrenztes Coaching frei.</p>
               <p className="text-2xl font-black">€997 <span className="text-sm font-normal text-muted-foreground">/ Jahr</span></p>
               <Button onClick={() => { dismiss('premium'); navigate('/coaching'); }} className="w-full bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11" data-testid="popup-premium-cta">
                 Premium werden <ArrowRight size={14} className="ml-1.5" />

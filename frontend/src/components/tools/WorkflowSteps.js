@@ -16,7 +16,7 @@ export const PersonaStep = ({ persona, setPersona, activeTool, personaComplete, 
           <User size={10} className="mr-1" /> {de ? 'DEIN PROFIL' : 'YOUR PROFILE'}
         </Badge>
       </div>
-      <h3 className="text-lg font-bold">{de ? 'Erzähl uns über dich — für bessere Ergebnisse' : 'Tell us about yourself — for better results'}</h3>
+      <h3 className="text-lg font-bold">{de ? 'Erzähl uns über dich · für bessere Ergebnisse' : 'Tell us about yourself · for better results'}</h3>
       <p className="text-sm text-muted-foreground">{de ? 'Je mehr wir über dich wissen, desto personalisierter werden die Ergebnisse.' : 'The more we know, the more personalized the results.'}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -1,0 +1,77 @@
+name: indexnow
+
+# Pingt Bing / Yandex / Seznam / Naver per IndexNow, sobald sich auf
+# mvpcode etwas an den öffentlichen Inhalten ändert. Bing indexiert
+# gepingte URLs typischerweise in Minuten statt Tagen — und weil
+# ChatGPT-Search, Copilot und DuckDuckGo auf dem Bing-Index sitzen, ist
+# das gleichzeitig der schnellste AEO-Hebel, den wir haben.
+#
+# Google nimmt an IndexNow nicht teil — dort zählen Sitemap + Search
+# Console (siehe docs/gtm/SEO_AEO_PLAYBOOK.md).
+#
+# Der Job wartet bewusst 3 Minuten, damit Vercel den neuen Deploy live
+# hat, bevor die Crawler anklopfen. Kein Secret nötig: der IndexNow-Key
+# ist per Definition öffentlich (er liegt als /<key>.txt auf der Domain).
+
+on:
+  push:
+    branches: [mvpcode]
+    paths:
+      - 'frontend/public/sitemap*.xml'
+      - 'frontend/src/features/content/data/articles/**'
+      - 'frontend/public/**/index.html'
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Optional · einzelne URLs (Leerzeichen-getrennt). Leer = alle aus den Sitemaps.'
+        required: false
+        default: ''
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Wait for Vercel deploy to go live
+        if: github.event_name == 'push'
+        run: sleep 180
+
+      # Ermittelt den Host, der die Key-Datei tatsächlich mit 200
+      # ausliefert. Aktuell ist in Vercel `www` Primary, der Apex
+      # antwortet mit 308 — deshalb wird dem Redirect gefolgt (-L) und
+      # der Zielhost als Meldehost verwendet. IndexNow verlangt, dass
+      # keyLocation und die gemeldeten URLs auf demselben Host liegen.
+      # Nach dem Domain-Flip auf den Apex liefert dieselbe Logik wieder
+      # `leader-os.de` — hier ist dann nichts anzupassen.
+      - name: Resolve effective host + verify key file
+        id: host
+        run: |
+          KEY=57d353bdcebaa0a63677822fd59447f8
+          BODY=$(curl -sSL --max-time 20 -w '\n%{url_effective}' "https://leader-os.de/$KEY.txt" || true)
+          EFFECTIVE_URL=$(printf '%s' "$BODY" | tail -n1)
+          CONTENT=$(printf '%s' "$BODY" | head -n1)
+          if [ "$CONTENT" != "$KEY" ]; then
+            echo "::error::Key-Datei liefert nicht den Key (bekommen: '${CONTENT:0:60}', via ${EFFECTIVE_URL}). Ist der Deploy durch?"
+            exit 1
+          fi
+          HOST=$(printf '%s' "$EFFECTIVE_URL" | sed -E 's#^https?://([^/]+)/.*#\1#')
+          echo "host=$HOST" >> "$GITHUB_OUTPUT"
+          echo "Key-Datei OK · Meldehost: $HOST"
+          if [ "$HOST" != "leader-os.de" ]; then
+            echo "::notice::Gemeldet wird an '$HOST', weil der Apex dorthin weiterleitet. Nach dem Vercel-Domain-Flip (leader-os.de als Primary) wechselt das automatisch zurück — siehe docs/gtm/SEO_AEO_PLAYBOOK.md §4."
+          fi
+
+      - name: Submit URLs
+        working-directory: frontend
+        env:
+          INDEXNOW_HOST: ${{ steps.host.outputs.host }}
+        run: node scripts/indexnow-submit.mjs ${{ github.event.inputs.urls }}

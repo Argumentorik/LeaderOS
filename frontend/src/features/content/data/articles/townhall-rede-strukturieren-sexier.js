@@ -1,0 +1,41 @@
+export default {
+  slug: 'townhall-rede-strukturieren-sexier',
+  type: 'guide',
+  status: 'published',
+  title: 'Firmenrede strukturieren mit SEXIER.',
+  description:
+    'Sechs Bausteine aus Wlads Buch "Weiße Rhetorik". Wie du mit der ' +
+    'SEXIER-Methode deine nächste Quartals-Firmenrede so strukturierst, ' +
+    'dass keine Alignment-Welle danach kommt.',
+  author: 'Wlad Jachtchenko',
+  publishedAt: '2026-06-28',
+  cover: null,
+  tags: ['Rhetorik', 'Framework', 'Firmenrede'],
+  body: [
+    { type: 'paragraph', text: 'Eine gute Firmenrede erkennst du nicht am Applaus. Du erkennst sie an der Stille danach. Wenn die Alignment-Welle ausbleibt, wenn die 1:1-Anfragen zur Roadmap nicht hochgehen, wenn der Slack-Channel "Verständnisfragen" nicht explodiert · dann hast du sie richtig strukturiert.' },
+    { type: 'heading', level: 2, text: 'Die sechs SEXIER-Bausteine.' },
+    { type: 'framework', code: 'SEXIER', title: 'Argumentations-Modell (aus "Weiße Rhetorik")', explanation: 'S · Statement, E · Explanation, X · eXample, I · Impact, E · Explanation of Impact, R · Rebuttal. Jeder Baustein hat eine klare Rolle. Wer einen weglässt, lässt eine Frage offen die als 1:1-Anfrage zurückkommt.' },
+    { type: 'heading', level: 2, text: 'S · Statement in einem Satz.' },
+    { type: 'paragraph', text: 'Die meisten Firmenreden starten mit einer Begrüßung und einer Story. Falsch. Sie starten mit der Behauptung: was ist die Entscheidung, die Kernaussage, der Claim dieser Rede. Ein Satz. Wer länger braucht, hat noch kein klares Statement im Kopf.' },
+    { type: 'heading', level: 2, text: 'E · Explanation der Logik.' },
+    { type: 'paragraph', text: 'Die Explanation ist NICHT die Strategie. Sie ist der Gedanken-Faden zwischen Statement und Entscheidung — die Begründung, warum das Statement stimmt. "Weil X passiert, müssen wir Y prüfen, und das führt zu Z." Wenn deine Begründung mehr als drei Schritte hat, ist sie zu komplex.' },
+    { type: 'heading', level: 2, text: 'X · eXample mit echter Zahl.' },
+    { type: 'paragraph', text: 'Hier verlieren die meisten Redner. Sie nutzen generische Beispiele ("ein Unternehmen unserer Branche..."). Falsch. Du brauchst eine echte Zahl aus deinem letzten Quartal, die dein Statement belegt. "Unser Net Revenue Retention liegt bei 87 Prozent. Bei den drei Wettbewerbern sind es 92 bis 96 Prozent."' },
+    { type: 'heading', level: 2, text: 'I · Impact — die Auswirkung.' },
+    { type: 'paragraph', text: 'Was ändert sich, wenn das Statement stimmt und niemand handelt? Der Impact ist die Konsequenz im Raum stehen lassen — nicht beschönigt, nicht dramatisiert. Bei 87 Prozent Retention und sinkendem Trend ist der Impact zum Beispiel: das Umsatzwachstum des nächsten Jahres steht infrage.' },
+    { type: 'heading', level: 2, text: 'E · Explanation of Impact — warum das für DICH zählt.' },
+    { type: 'paragraph', text: 'Jetzt drehst du den Impact auf die Perspektive deiner Zuhörer: warum ist diese Auswirkung für sie konkret relevant · nicht das Unternehmen abstrakt, sondern ihr Wochenfluss in den nächsten drei Monaten. Das ist der Satz, der aus Zahlen eine persönliche Betroffenheit macht.' },
+    { type: 'heading', level: 2, text: 'R · Rebuttal — die Einwand-Vorwegnahme.' },
+    { type: 'paragraph', text: 'Liste die drei wahrscheinlichsten Einwände aus dem Raum und widerlege sie BEVOR sie gefragt werden. Wenn du Einwände erst in der Q&A bekommst, hast du den Anker verloren — Rebuttal ist kein Nachtrag, sondern Teil der Rede.' },
+    { type: 'callout', tone: 'lime', text: 'Sechzehn Minuten reichen für vollständiges SEXIER. Wer eine Stunde redet, hat entweder zu viele eXamples oder das Statement ist nicht klar.' },
+    { type: 'heading', level: 2, text: 'Nach SEXIER: der Anker.' },
+    { type: 'paragraph', text: 'SEXIER liefert den Inhalt, nicht den Abschluss. Die letzten dreißig Sekunden bleiben trotzdem entscheidend: ein Satz Resümee, gefolgt vom konkreten nächsten Schritt — welcher Slack-Channel, welcher Termin, welche Slide. Wer ohne Anker schließt, hat die Rede verschenkt.' },
+    { type: 'paragraph', text: 'In der Challenge baust du SEXIER an deinen echten Roadmaps mit Live-Korrektur. Im Plus-Plus probst du die Firmenrede einmal mit Wlad selbst, ungeschnitten, dreißig Minuten Feedback.' },
+  ],
+  seo: {
+    title: 'Firmenrede strukturieren: SEXIER-Methode · LeaderOS',
+    description: 'Firmenrede strukturieren mit SEXIER: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal · sechzehn Minuten, keine Alignment-Welle danach. Von Wlad Jachtchenko.',
+    keywords: ['Firmenrede vorbereiten', 'Firmenrede Struktur', 'SEXIER Methode', 'Quartalsansprache vorbereiten', 'Rede vor der ganzen Firma', 'Public Speaking Manager'],
+  },
+  related: ['wie-lena-ihr-townhall-drehte', 'die-feedback-formel-bww'],
+};

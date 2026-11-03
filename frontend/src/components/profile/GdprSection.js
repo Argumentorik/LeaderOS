@@ -1,5 +1,5 @@
 /**
- * GDPR-Rights panel — Auskunft (export) + Löschung (delete) für Profile-Tab.
+ * GDPR-Rights panel · Auskunft (export) + Löschung (delete) für Profile-Tab.
  *
  * Backend:
  *   GET  /api/gdpr/export   → JSON download (rate-limited 1/h)
@@ -32,7 +32,7 @@ export const GdprSection = ({ de }) => {
       a.download = `leader-os-data-export-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      toast.success(de ? 'Export erstellt — Download startet' : 'Export created — download started');
+      toast.success(de ? 'Export erstellt · Download startet' : 'Export created · download started');
     } catch (e) {
       if (e?.response?.status === 429) {
         toast.error(de ? 'Bitte 1 Stunde warten zwischen Exports' : 'Please wait 1 hour between exports');
@@ -52,7 +52,7 @@ export const GdprSection = ({ de }) => {
       toast.success(de ? 'Konto gelöscht. Auf Wiedersehen.' : 'Account deleted. Farewell.');
       setTimeout(() => logout(), 1500);
     } catch {
-      toast.error(de ? 'Löschung fehlgeschlagen — bitte Support kontaktieren' : 'Deletion failed — contact support');
+      toast.error(de ? 'Löschung fehlgeschlagen · bitte Support kontaktieren' : 'Deletion failed · contact support');
       setDeleting(false);
     }
   };
@@ -67,7 +67,7 @@ export const GdprSection = ({ de }) => {
           </p>
         </div>
 
-        {/* Export — Art. 20 DSGVO */}
+        {/* Export · Art. 20 DSGVO */}
         <div className="flex items-start justify-between gap-4 p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-muted/20">
           <div className="min-w-0">
             <p className="text-[13px] font-bold">{de ? 'Meine Daten exportieren' : 'Export my data'}</p>
@@ -78,7 +78,7 @@ export const GdprSection = ({ de }) => {
           </Button>
         </div>
 
-        {/* Delete — Art. 17 DSGVO */}
+        {/* Delete · Art. 17 DSGVO */}
         <div className="p-4 rounded-xl border border-rose-500/20 bg-rose-500/[0.04]" data-testid="gdpr-delete-zone">
           <div className="flex items-start gap-3 mb-3">
             <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />

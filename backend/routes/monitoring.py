@@ -94,3 +94,13 @@ async def monitoring_health(request: Request):
         "posthog": bool(os.environ.get("POSTHOG_KEY") or os.environ.get("POSTHOG_API_KEY")),
         "env": os.environ.get("SENTRY_ENV", "preview"),
     }
+
+
+@router.get("/system")
+async def system_health():
+    """Provider-Status für alle Backend-Subsysteme (LLM, STT, Stripe,
+    Storage, Supabase, Sentry). Nennt nur Provider-Namen, keine Keys —
+    sicher öffentlich.
+    """
+    from lib.system_health import collect
+    return collect()

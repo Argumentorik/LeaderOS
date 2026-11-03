@@ -1,5 +1,5 @@
 /**
- * Impressum — Anbieterkennzeichnung nach § 5 TMG und § 18 Abs. 2 MStV.
+ * Impressum · Anbieterkennzeichnung nach § 5 TMG und § 18 Abs. 2 MStV.
  *
  * ⚠️ TODO Mert: Fülle die Felder mit deinen offiziellen Geschäftsdaten aus
  * (Adresse, USt-IdNr., Telefon). Aktuelle Werte sind Platzhalter.

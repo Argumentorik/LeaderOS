@@ -1,8 +1,8 @@
 /**
- * OnboardingVideoModal — Welcome-Video von Wlad nach erstem Login.
+ * OnboardingVideoModal · Welcome-Video von Wlad nach erstem Login.
  *
  * Iter 92.10 (Mert): Vimeo-Embed statt Drive, GSAP-Choreography statt
- * pure CSS, "FREE/Free"-Wording komplett ausgemerzt — wir verkaufen
+ * pure CSS, "FREE/Free"-Wording komplett ausgemerzt · wir verkaufen
  * keine Free-Calls, wir verkaufen Wlads Zeit (unverbindlich, 15 Min).
  *
  * Logik:
@@ -43,7 +43,7 @@ export const OnboardingVideoModal = () => {
     return undefined;
   }, []);
 
-  // GSAP entrance choreography — runs when `open` flips true
+  // GSAP entrance choreography · runs when `open` flips true
   useEffect(() => {
     if (!open) return undefined;
     if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
@@ -78,7 +78,7 @@ export const OnboardingVideoModal = () => {
           { y: 16, autoAlpha: 0 },
           { y: 0, autoAlpha: 1, duration: 0.45, stagger: 0.08, ease: 'back.out(1.6)' }, '-=0.25');
       });
-    } catch { /* GSAP target missing — modal still visible via fallback opacity:0→default styles */ }
+    } catch { /* GSAP target missing · modal still visible via fallback opacity:0→default styles */ }
     return () => { try { ctx?.revert(); } catch { /* noop */ } };
   }, [open]);
 
@@ -93,7 +93,7 @@ export const OnboardingVideoModal = () => {
       gsap.to(cardRef.current, { y: 30, scale: 0.97, autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
       gsap.to(overlayRef.current, { autoAlpha: 0, duration: 0.3, delay: 0.05, onComplete: () => setOpen(false) });
     } catch {
-      // GSAP threw (refs went null mid-animation) — just close the modal
+      // GSAP threw (refs went null mid-animation) · just close the modal
       setOpen(false);
     }
   };
@@ -121,7 +121,7 @@ export const OnboardingVideoModal = () => {
         onClick={(e) => e.stopPropagation()}
         style={{ opacity: 0 }}
       >
-        {/* Aurora glow layers — purely decorative */}
+        {/* Aurora glow layers · purely decorative */}
         <div className="pointer-events-none absolute -top-40 -left-40 w-[28rem] h-[28rem] rounded-full bg-[#BFFF00]/15 blur-3xl" aria-hidden />
         <div className="pointer-events-none absolute -bottom-40 -right-40 w-[28rem] h-[28rem] rounded-full bg-[#7B3FE4]/18 blur-3xl" aria-hidden />
         {/* Grain texture for premium feel */}
@@ -164,7 +164,7 @@ export const OnboardingVideoModal = () => {
           </h2>
           <p ref={subRef} className="text-sm text-white/55 mt-2.5 max-w-md" style={{ opacity: 0 }}>
             90 Sekunden von Wlad: was du als Erstes anpackst, wie du in 30 Tagen messbar weiter
-            kommst — und warum ein 15-Min-Termin mit unserem Team der schnellste Hebel ist.
+            kommst · und warum ein 15-Min-Termin mit unserem Team der schnellste Hebel ist.
           </p>
         </div>
 

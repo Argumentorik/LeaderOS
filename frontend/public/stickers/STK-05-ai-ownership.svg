@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" aria-labelledby="t05">
+  <title id="t05">STK-05 — AI Ownership · v2 Nike Editorial Dark Premium · 70×70mm</title>
+  <defs>
+    <style>
+      .bg{fill:#0A0A0A}
+      .ink{fill:#FFFFFF}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.06em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="280" height="280"/>
+
+  <text class="mono lime" x="16" y="22" font-size="8.5">▸ STUFE 5 · AI OWNERSHIP</text>
+  <text class="mono ink" text-anchor="end" x="264" y="22" font-size="8.5" opacity="0.45">ENTERPRISE</text>
+
+  <!-- Massive 3-line headline -->
+  <text class="display ink" x="16" y="90" font-size="54">AI</text>
+  <text class="display ink" x="16" y="148" font-size="54">Owner-</text>
+  <text class="display ink" x="16" y="206" font-size="54">ship<tspan class="lime">.</tspan></text>
+
+  <!-- Sub -->
+  <text class="mono ink" x="16" y="226" font-size="8.5" opacity="0.55">NICHT SAAS · DEINE INFRASTRUKTUR</text>
+
+  <!-- Bottom W mark on dark -->
+  <g transform="translate(16 244)">
+    <rect class="lime" x="0" y="0" width="22" height="22"/>
+    <text class="display" fill="#0A0A0A" x="11" y="18" text-anchor="middle" font-size="20">W</text>
+    <text class="display ink" x="30" y="16" font-size="15">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+  <text class="mono ink" text-anchor="end" x="264" y="260" font-size="8" opacity="0.55">STK · 05 / 06</text>
+</svg>

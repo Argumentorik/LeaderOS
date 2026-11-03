@@ -1,12 +1,12 @@
 /**
- * Universal video player — supports Vimeo, YouTube, MP4/WebM.
+ * Universal video player · supports Vimeo, YouTube, MP4/WebM.
  *
  * Pass any video URL or video object with `vimeo_id`/`video_url`. Component
  * auto-detects the source type and renders the correct embed.
  *
  * Designed for the Leadership-Lessons / Video-Missionen flow: as soon as Mert
  * fills `vimeo_id` (or `vimeo_url`) on a learning_video row in MongoDB, the UI
- * picks it up automatically — no code change needed.
+ * picks it up automatically · no code change needed.
  *
  * Premium presentation:
  *  - 16:9 aspect ratio, rounded-2xl, subtle inner ring

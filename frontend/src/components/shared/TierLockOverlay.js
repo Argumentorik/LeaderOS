@@ -48,11 +48,11 @@ const FEATURE_LABELS = {
 };
 
 /**
- * TierLockOverlay — blurred overlay on locked features with clear upgrade CTA.
+ * TierLockOverlay · blurred overlay on locked features with clear upgrade CTA.
  * Props:
- *   feature — key from FEATURE_LABELS (video_analysis | video_missions | ai_coach | one_on_one_calls)
- *   requiredTier — 'standard' | 'accelerator'
- *   de — language
+ *   feature · key from FEATURE_LABELS (video_analysis | video_missions | ai_coach | one_on_one_calls)
+ *   requiredTier · 'standard' | 'accelerator'
+ *   de · language
  */
 export const TierLockOverlay = ({
   feature = 'video_analysis',

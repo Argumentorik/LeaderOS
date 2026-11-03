@@ -1,6 +1,6 @@
 name: cron-jobs
 
-# Replaces SHIP_CHECKLIST §2 "Cron-Jobs (täglich extern triggern)":
+# Replaces docs/archive/SHIP_CHECKLIST.md §2 "Cron-Jobs (täglich extern triggern)":
 #   - installments-due → daily 09:00 Europe/Berlin (≈ 07:00–08:00 UTC depending on DST)
 #   - monthly-scorecard → 1st of month, 09:00 Europe/Berlin
 # Endpoints are public idempotent POSTs that no-op when there's nothing due.
@@ -19,6 +19,9 @@ on:
         options:
           - installments-due
           - monthly-scorecard
+          - free-video-drip
+          - lead-nurture
+          - license-nurture
 
 env:
   BACKEND_URL: ${{ vars.BACKEND_URL || 'https://leader-os.de' }}
@@ -55,6 +58,116 @@ jobs:
               title: `cron: installments-due failed (${new Date().toISOString().slice(0,10)})`,
               labels: ['cron-failure', 'priority:high'],
               body: `Scheduled run failed. Backend may be down, the secret may be wrong, or the endpoint regressed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
+            });
+
+  free-video-drip:
+    # Daily · sends the next of the 4 free CTA videos (Day 1-4) to new signups.
+    # Idempotent: each user gets each day exactly once; slots with no video are skipped.
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'free-video-drip')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: POST /api/cron/free-video-drip
+        id: post
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error \
+               -X POST "${BACKEND_URL%/}/api/cron/free-video-drip" \
+               -H 'Accept: application/json' \
+               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
+
+      - name: Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `cron: free-video-drip failed (${new Date().toISOString().slice(0,10)})`,
+              labels: ['cron-failure', 'priority:high'],
+              body: `The daily free-video drip failed — new signups will NOT receive their next free video until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
+            });
+
+  lead-nurture:
+    # Daily · sends the next of the 7 lead-nurture mails (Day 0-12 journey) to
+    # landing-page email captures who haven't registered yet.
+    # Idempotent: each lead gets each step exactly once (nurture_steps_sent);
+    # unsubscribed + converted leads are skipped.
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lead-nurture')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: POST /api/cron/lead-nurture
+        id: post
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error \
+               -X POST "${BACKEND_URL%/}/api/cron/lead-nurture" \
+               -H 'Accept: application/json' \
+               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
+
+      - name: Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `cron: lead-nurture failed (${new Date().toISOString().slice(0,10)})`,
+              labels: ['cron-failure', 'priority:high'],
+              body: `The daily lead-nurture drip failed — new leads will NOT receive their next nurture mail until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
+            });
+
+  license-nurture:
+    # Daily · sends the next of the 5 license-activation mails (Day 0-7
+    # journey, /frameworks leads in db.license_leads) — step 1 is normally
+    # sent instantly at capture time, this catches up backlog + steps 2-5.
+    # Idempotent: each lead gets each step exactly once (license_steps_sent);
+    # unsubscribed + converted (real account exists) leads are skipped.
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'license-nurture')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: POST /api/cron/license-nurture
+        id: post
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error \
+               -X POST "${BACKEND_URL%/}/api/cron/license-nurture" \
+               -H 'Accept: application/json' \
+               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
+
+      - name: Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `cron: license-nurture failed (${new Date().toISOString().slice(0,10)})`,
+              labels: ['cron-failure', 'priority:high'],
+              body: `The daily license-activation drip failed — /frameworks leads will NOT receive their next nurture mail until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
             });
 
   monthly-scorecard:

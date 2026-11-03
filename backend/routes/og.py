@@ -15,9 +15,12 @@ Font fallback: tries /app/backend/assets/fonts/* first, falls back to PIL defaul
 from __future__ import annotations
 
 import io
+import json
 import logging
+from html import escape as html_escape
 import os
 from typing import Optional
+from urllib.parse import quote
 
 from fastapi import APIRouter, Response
 from PIL import Image, ImageDraw, ImageFont
@@ -90,7 +93,7 @@ def _render_leader_score_card(
 
     # Top-left brand mark
     f_brand = _font(28, weight="bold")
-    draw.text((60, 50), "LEADER-OS", font=f_brand, fill=TEXT_WHITE)
+    draw.text((60, 50), "LEADEROS", font=f_brand, fill=TEXT_WHITE)
 
     f_brand_sub = _font(18, weight="regular")
     draw.text((60, 88), "KI Leadership System", font=f_brand_sub, fill=TEXT_DIM)
@@ -161,7 +164,7 @@ def _render_default_card() -> bytes:
         draw.line([(0, y), (WIDTH, y)], fill=(r, g, b))
 
     f_brand = _font(32, weight="bold")
-    draw.text((60, 50), "LEADER-OS", font=f_brand, fill=TEXT_WHITE)
+    draw.text((60, 50), "LEADEROS", font=f_brand, fill=TEXT_WHITE)
 
     # Main headline — bold, multi-line, lime accent
     f_main = _font(86, weight="bold")
@@ -413,11 +416,15 @@ async def og_mission_html(slug: str):
     Everyone else reaches the SPA `/m/:slug` route directly.
     """
     share = await db.mission_shares.find_one({"share_slug": slug}, {"_id": 0})
+    # Der Slug aus der URL landet nie im HTML: nur der gespeicherte Slug einer
+    # existierenden Freigabe, URL-kodiert und HTML-escaped.
     if not share:
         title = "Leader-OS · KI Leadership Training"
         description = "Werde KI-native Führungskraft mit Wlad Jachtchenkos Frameworks."
         og_image = f"{OG_BASE_URL}/api/og/default"
+        canonical_url = f"{OG_BASE_URL}/"
     else:
+        slug_q = quote(str(share.get("share_slug") or ""), safe="")
         doc = await db.video_challenges.find_one({"entry_id": share["entry_id"]}, {"_id": 0})
         analysis = (doc or {}).get("analysis") or {}
         score = analysis.get("overall_score") or 0
@@ -435,9 +442,12 @@ async def og_mission_html(slug: str):
             f"{user_name} hat in der Mission „{chal_title}\u201c einen Score von "
             f"{score}/100 erreicht. Sieh dir Wlad Jachtchenkos KI-Analyse an — und probier es selbst."
         )
-        og_image = f"{OG_BASE_URL}/api/og/mission/{slug}"
+        og_image = f"{OG_BASE_URL}/api/og/mission/{slug_q}"
+        canonical_url = f"{OG_BASE_URL}/m/{slug_q}"
 
-    canonical_url = f"{OG_BASE_URL}/m/{slug}"
+    og_image = html_escape(og_image)
+    canonical_js = json.dumps(canonical_url).replace("<", "\\u003c")
+    canonical_url = html_escape(canonical_url)
     # Lightweight HTML — crawlers parse <head>, ignore body. We still add a
     # human-readable fallback + a redirect <meta> so real users (if they
     # somehow land here) get bounced to the SPA.
@@ -469,7 +479,7 @@ async def og_mission_html(slug: str):
 <p>{_escape(description)}</p>
 <a href="{canonical_url}">Mission ansehen auf Leader-OS</a>
 </noscript>
-<script>window.location.replace({canonical_url!r});</script>
+<script>window.location.replace({canonical_js});</script>
 </body>
 </html>"""
     return Response(

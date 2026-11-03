@@ -1,0 +1,83 @@
+name: constants-drift
+
+# Catches the failure mode that ate ~3 hours of debugging on June 3 2026:
+# the same magic constant (RAG match threshold) lived in three places —
+# backend/services_rag.py (0.25, correct), supabase/functions/wladbot-chat
+# (0.55, stale), supabase/functions/wladbot-chat-emergent (0.55, stale) —
+# and Iter 92.6 updated only the Python source. Users got generic chat
+# answers for weeks because the EFs silently filtered out every match.
+#
+# Rule: every constant in this list may appear in exactly ONE file (its
+# canonical home). Any duplicate is a CI failure with the offending file
+# and a pointer to the canonical location.
+#
+# Add a new entry whenever you catch yourself copy-pasting a tuning knob
+# across files. The cost of one regex line < the cost of one silent
+# production drift.
+
+on:
+  pull_request:
+  push:
+    branches: [mvpcode]
+
+concurrency:
+  group: constants-drift-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rag-threshold:
+    name: RAG match threshold lives only in services_rag.py
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: enforce single source
+        run: |
+          set -euo pipefail
+          # canonical: backend/services_rag.py defines MATCH_THRESHOLD.
+          # Anyone else hard-coding 0.25 / 0.55 as a threshold against
+          # the Wlad corpus is drift waiting to happen.
+          offenders=$(grep -rnE 'MATCH_THRESHOLD\s*=\s*0\.[0-9]+|match_threshold:\s*0\.[0-9]+' \
+            --include='*.py' --include='*.ts' --include='*.tsx' --include='*.js' \
+            backend/ supabase/functions/ frontend/ 2>/dev/null \
+            | grep -v 'backend/services_rag.py' \
+            | grep -v '/_shared/' \
+            | grep -v 'frontend/src/components/admin/RagDebugStudio.js' \
+            || true)
+          # RagDebugStudio is whitelisted: it's an admin UI that lets ops tune
+          # the threshold interactively, not a production constant.
+          if [ -n "$offenders" ]; then
+            echo "::error::RAG MATCH_THRESHOLD must only be declared in backend/services_rag.py."
+            echo "Offending occurrences:"
+            echo "$offenders"
+            echo
+            echo "Fix: import from backend/constants.py (Python) or pass through"
+            echo "as an RPC parameter (TypeScript). See Iter 92.14 retire-EF refactor"
+            echo "for the canonical pattern."
+            exit 1
+          fi
+          echo "RAG threshold canonical in services_rag.py — no drift."
+
+  voyage-model:
+    name: Voyage embedding model name lives only in services_rag.py
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: enforce single source
+        run: |
+          set -euo pipefail
+          offenders=$(grep -rnE '"voyage-3[a-z0-9-]*"|'\''voyage-3[a-z0-9-]*'\''' \
+            --include='*.py' --include='*.ts' --include='*.tsx' --include='*.js' \
+            backend/ supabase/functions/ frontend/ 2>/dev/null \
+            | grep -v 'backend/services_rag.py' \
+            | grep -v 'backend/routes/admin.py' \
+            || true)
+          if [ -n "$offenders" ]; then
+            echo "::error::Voyage model name must only be hard-coded in backend/services_rag.py (VOYAGE_MODEL constant)."
+            echo "Offending occurrences:"
+            echo "$offenders"
+            echo
+            echo "If a Supabase Edge Function needs to embed, pass VOYAGE_MODEL via env or import"
+            echo "it from a shared TypeScript constants module — do not hard-code."
+            exit 1
+          fi
+          echo "Voyage model canonical in services_rag.py — no drift."

@@ -10,7 +10,7 @@ import logger from '../../lib/logger';
 import { toast } from 'sonner';
 
 /**
- * ProfileAccountTab — Account & security settings:
+ * ProfileAccountTab · Account & security settings:
  * - Password change
  * - Quick access to Enterprise, Referrals, Downloads
  *

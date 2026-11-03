@@ -1,0 +1,41 @@
+export default {
+  slug: 'output-messen-im-ki-zeitalter',
+  type: 'guide',
+  status: 'published',
+  title: 'Output messen im KI-Zeitalter.',
+  description:
+    'Fünf Metriken die dir zeigen ob deine KI-Investition wirklich Effekt ' +
+    'hat. Plus drei Metriken die nichts sagen aber überall genutzt werden.',
+  author: 'Wlad Jachtchenko',
+  publishedAt: '2026-07-08',
+  cover: null,
+  tags: ['KI-Paradox', 'Messung', 'ROI'],
+  body: [
+    { type: 'paragraph', text: 'Die meisten KI-Diskussionen 2026 messen das Falsche. "Wie viele Stunden mit KI gearbeitet" ist Input. "Wie viele Tokens verbraucht" ist Verbrauch. Beides sagt nichts über Effekt. Hier sind die Metriken die wirklich tragen.' },
+    { type: 'heading', level: 2, text: 'Output-Metrik 01: Zurückgewonnene Deep-Work-Stunden pro Woche.' },
+    { type: 'paragraph', text: 'Vorher: du hast Stand-up-Vorbereitung in dreißig Minuten gemacht. Nachher: in zwölf Minuten dank strukturierten Prompt. Differenz: achtzehn Minuten pro Tag, neunzig Minuten pro Woche. Hochgerechnet auf eine VP-Stunde (200 EUR fully-loaded) sind das 1 500 EUR pro Monat.' },
+    { type: 'heading', level: 2, text: 'Output-Metrik 02: Reflex-Zeit für Standard-Skripte.' },
+    { type: 'paragraph', text: 'Wie lange brauchst du um einen B-W-W-Feedback-Eingang zu formulieren? Wenn du zu Beginn 90 Sekunden brauchtest und nach drei Wochen Challenge 22 Sekunden, hast du eine messbare Skill-Verbesserung. Diese Metrik wird selten getrackt · und ist die einzige die ehrlich zeigt ob du wirklich gelernt hast oder nur theoretisch.' },
+    { type: 'heading', level: 2, text: 'Output-Metrik 03: 1:1-Alignment-Anfragen nach Firmenreden.' },
+    { type: 'paragraph', text: 'Verringert sich die Welle der "kannst du mir noch erklären was du gemeint hast"-Anfragen nach deinen Firmenreden? Wenn ja, ist deine SEXIER-Strukturierung wirksam. Wenn nicht, ist sie nicht.' },
+    { type: 'heading', level: 2, text: 'Output-Metrik 04: Stale-Konversations-Quote.' },
+    { type: 'paragraph', text: 'Wie viele deiner 1:1s der letzten vier Wochen führen zu einer konkreten nächsten Aktion? Wenn weniger als 70 Prozent, hat dein 1:1-Setup ein Output-Problem. KI sollte das schließen helfen · wenn nicht, ist KI in deinem 1:1-Setup nicht der Hebel.' },
+    { type: 'heading', level: 2, text: 'Output-Metrik 05: Sharing-Rate.' },
+    { type: 'paragraph', text: 'Wie viele deiner besten Prompts hast du diese Woche an mindestens eine Person geteilt? Ohne Sharing-Rate baust du nie einen System-Effekt. Mit Sharing-Rate über zwei pro Woche entsteht ein Team-Multiplikator nach drei Monaten.' },
+    { type: 'heading', level: 2, text: 'Drei Metriken die du ignorieren kannst.' },
+    { type: 'list', style: 'bullet', items: [
+      'Stunden in KI-Tools. Input, nicht Output. Mehr Stunden = nicht automatisch mehr Effekt.',
+      'Anzahl genutzter Tools. Ein Tool mit Methodik schlägt fünf Tools ohne.',
+      'Subjektives "ich fühle mich klarer". Sagt nichts über echten Output.',
+    ] },
+    { type: 'framework', code: '5+3', title: 'Output statt Input', explanation: 'Fünf Output-Metriken (Deep-Work-Zeit, Reflex-Zeit, Alignment-Welle, Stale-Quote, Sharing-Rate) plus drei Anti-Metriken (Stunden, Tool-Anzahl, Selbst-Bewertung) die du explizit ignorieren musst.' },
+    { type: 'callout', tone: 'lime', text: 'Wer das Richtige misst, optimiert das Richtige. Wer Stunden misst, baut Stunden-Wirtschaft. Wer Output misst, baut Output-Wirtschaft.' },
+    { type: 'paragraph', text: 'In der Challenge führen wir für dich die fünf Output-Metriken über dreißig Tage. Du siehst nach der Challenge schwarz auf weiß welche der fünf bei dir den stärksten Lift hatte.' },
+  ],
+  seo: {
+    title: 'Output messen im KI-Zeitalter: 5 Metriken · LeaderOS',
+    description: 'Output messen im KI-Zeitalter: fünf Metriken, die zählen · zurückgewonnene Stunden, Reflex-Zeit, Alignment, Stale-Quote, Sharing-Rate · plus drei, die nichts sagen. Von Wlad Jachtchenko.',
+    keywords: ['KI Output Messen', 'ChatGPT ROI', 'KI Produktivität messen', 'KI Effekt quantifizieren', 'Output Metriken Manager'],
+  },
+  related: ['der-business-case-fuer-leader-os', 'das-ki-produktivitaets-paradox'],
+};

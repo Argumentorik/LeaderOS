@@ -2,7 +2,7 @@
 import os
 import asyncio
 import shutil
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from datetime import datetime, timezone, timedelta
@@ -10,6 +10,7 @@ from datetime import datetime, timezone, timedelta
 from config import db, logger
 from services import get_current_user
 from services_tier import TIER_CONFIG
+from services_lead_import import parse_lead_csv
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -187,6 +188,66 @@ async def admin_set_admin_flag(email: str, data: AdminFlagIn, request: Request):
     await db.users.update_one({"user_id": user["user_id"]}, update)
     logger.warning("Admin %s setzt is_admin=%s für %s", me.get("email"), data.is_admin, email)
     return {"email": user.get("email"), "is_admin": data.is_admin}
+
+
+# ----------------------------------------------------------- webinar CSV import
+# Aus mvpcode übernommen (Marketing). Admin-Rechte selbst laufen über HEADs
+# /admins + PUT /users/by-email/{email}/admin (Iter 191).
+@router.post("/webinar-leads/import")
+async def import_webinar_leads(request: Request, file: UploadFile = File(...), dry_run: bool = False) -> dict:
+    """Upsert webinar leads from a CSV prepared by the support team.
+
+    Columns: email (required), name, company — any order, any case, comma /
+    semicolon / tab separated. Existing leads keep their data; new ones get
+    `sources: ['csv-import']`. **No emails are sent** by this endpoint; the
+    reminder/follow-up crons pick the leads up like any other registration.
+    `?dry_run=true` only validates and reports counts.
+    """
+    actor = await require_admin(request)
+    raw = await file.read()
+    if len(raw) > 2_000_000:
+        raise HTTPException(status_code=413, detail="csv_too_large")
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        text = raw.decode("latin-1")
+    valid, invalid = parse_lead_csv(text)
+    if not valid:
+        raise HTTPException(status_code=422, detail="no_valid_rows")
+    inserted = updated = 0
+    if not dry_run:
+        now = datetime.now(timezone.utc).isoformat()
+        for lead in valid:
+            set_fields = {"email": lead["email"], "email_lower": lead["email"], "last_seen_at": now, "imported_by": actor.get("email")}
+            if lead.get("name"):
+                set_fields["name"] = lead["name"]
+            if lead.get("company"):
+                set_fields["company"] = lead["company"]
+            res = await db.webinar_leads.update_one(
+                {"email_lower": lead["email"]},
+                {
+                    "$set": set_fields,
+                    "$setOnInsert": {
+                        "created_at": now, "unsubscribed": False, "confirmation_sent": False,
+                        "reminder_24h_sent": False, "reminder_1h_sent": False, "followup_sent": False,
+                        "optin_count": 0,
+                    },
+                    "$addToSet": {"sources": "csv-import"},
+                },
+                upsert=True,
+            )
+            if res.upserted_id is not None:
+                inserted += 1
+            else:
+                updated += 1
+        await db.system_events.insert_one({
+            "type": "webinar_leads_import", "actor": actor.get("email"), "rows": len(valid),
+            "inserted": inserted, "updated": updated, "invalid": len(invalid), "created_at": now,
+        })
+    return {
+        "ok": True, "dry_run": dry_run, "rows": len(valid), "inserted": inserted, "updated": updated,
+        "invalid": len(invalid), "invalid_samples": invalid[:10],
+    }
 
 
 @router.delete("/users/by-email/{email}")
@@ -658,10 +719,10 @@ HEURISTIC_RULES = [
     (lambda m, c: isinstance(m.get("role"), int) and 1 <= m["role"] <= 5,
      "Die 5 Rollen einer Führungskraft"),
     # 3-Layer Elite-Leader framework foundational chunks
-    (lambda m, c: m.get("framework") == "3layer", "Leader-OS Framework"),
-    # Other Leader-OS meta frameworks (diagnostic / ecosystem / agents)
+    (lambda m, c: m.get("framework") == "3layer", "LeaderOS Framework"),
+    # Other LeaderOS meta frameworks (diagnostic / ecosystem / agents)
     (lambda m, c: m.get("framework") in {"diagnostic", "ecosystem", "agents"},
-     "Leader-OS Framework"),
+     "LeaderOS Framework"),
     # WladBot-expansion library (synthetic enrichment chunks)
     (lambda m, c: m.get("author") == "wladbot_expansion", "WladBot Expansion Library"),
     # Meta / resource pointers

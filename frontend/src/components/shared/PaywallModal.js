@@ -3,6 +3,7 @@ import { Card, CardContent } from '../ui/card';
 import { X, CheckCircle2, Flame, Brain, Video, Target, Calendar, Sparkles } from 'lucide-react';
 import { PricingModal } from './PricingModal';
 import { useBookConsultation } from '../brand/BookConsultationButton';
+import { withFallback, WLAD_AVATAR_FALLBACKS } from '../../lib/brandAssets';
 
 const WLAD = '/wladbot-avatar-clean.png';
 
@@ -36,7 +37,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
               <X size={16} />
             </button>
             <div className="flex items-center gap-2.5 mb-3">
-              <img src={WLAD} alt="Wlad" className="w-9 h-9 rounded-full object-cover ring-2 ring-[#BFFF00]/20 shrink-0" />
+              <img src={WLAD} onError={withFallback(WLAD_AVATAR_FALLBACKS)} alt="Wlad" className="w-9 h-9 rounded-full object-cover ring-2 ring-[#BFFF00]/20 shrink-0" />
               <div className="min-w-0">
                 <p className="text-[9px] font-bold text-[#BFFF00]/80 uppercase tracking-wider">Wlad Jachtchenko</p>
                 <p className="text-[12px] font-bold text-white/95 leading-tight">
@@ -65,7 +66,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
             </div>
           </div>
 
-          {/* Body — tighter spacing */}
+          {/* Body · tighter spacing */}
           <div className="p-5 space-y-3.5">
             <div className="text-center">
               <h3 className="text-[15px] font-black leading-tight">Dein komplettes Leader OS</h3>
@@ -85,7 +86,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
               ))}
             </div>
 
-            {/* Pricing — compact */}
+            {/* Pricing · compact */}
             <div className="grid grid-cols-2 gap-2 pt-1">
               <button
                 onClick={() => handlePick('leadership_os')}
@@ -108,7 +109,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
               </button>
             </div>
 
-            {/* Secondary CTAs — pricing details + cal.com */}
+            {/* Secondary CTAs · pricing details + cal.com */}
             <div className="flex gap-2 pt-1">
               <button
                 onClick={() => setShowPricing(true)}
@@ -137,7 +138,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
               </button>
             )}
 
-            {/* Trust row — minimal */}
+            {/* Trust row · minimal */}
             <div className="flex items-center justify-center gap-2 text-[9px] text-muted-foreground/40 pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
               <span>1.000+ Leader</span>
               <span>·</span>

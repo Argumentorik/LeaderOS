@@ -1,5 +1,5 @@
 /**
- * Social share helpers — LinkedIn, X (Twitter), Web Share API.
+ * Social share helpers · LinkedIn, X (Twitter), Web Share API.
  *
  * Every share uses the dynamic OG image route on our own domain so:
  *  - No "Built with Emergent" leakage in previews
@@ -31,9 +31,9 @@ export const buildOgImageUrl = (userId) => {
 
 const buildText = ({ score, tierLabel, lang = 'de' }) => {
   if (lang === 'de') {
-    return `Mein Leader-Score: ${score}/100 — ${tierLabel}. 🚀\n\nGetestet mit Leader-OS, dem KI Leadership System von Wlad Jachtchenko. Werde KI-native Führungskraft in 30 Tagen.`;
+    return `Mein Leader-Score: ${score}/100 · ${tierLabel}. 🚀\n\nGetestet mit LeaderOS, dem KI Leadership System von Wlad Jachtchenko. Werde KI-native Führungskraft in 30 Tagen.`;
   }
-  return `My Leader-Score: ${score}/100 — ${tierLabel}. 🚀\n\nTested with Leader-OS, the AI Leadership System by Wlad Jachtchenko. Become an AI-native leader in 30 days.`;
+  return `My Leader-Score: ${score}/100 · ${tierLabel}. 🚀\n\nTested with LeaderOS, the AI Leadership System by Wlad Jachtchenko. Become an AI-native leader in 30 days.`;
 };
 
 /**
@@ -43,7 +43,7 @@ export const shareToLinkedIn = ({ userId, score, tierLabel, lang = 'de' }) => {
   const shareUrl = buildLeaderScoreShareUrl(userId);
   const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
   window.open(url, 'linkedin-share', 'width=600,height=600,noopener,noreferrer');
-  // LinkedIn ignores `text` param in this endpoint — user types their own caption.
+  // LinkedIn ignores `text` param in this endpoint · user types their own caption.
   // We rely on og:image + og:description scraped from our OG endpoint.
   return { platform: 'linkedin', shareUrl };
 };
@@ -60,7 +60,7 @@ export const shareToX = ({ userId, score, tierLabel, lang = 'de' }) => {
 };
 
 /**
- * Native Web Share API — best on mobile (uses native iOS/Android sheet).
+ * Native Web Share API · best on mobile (uses native iOS/Android sheet).
  * Falls back to copy-to-clipboard if Web Share unavailable.
  */
 export const shareNative = async ({ userId, score, tierLabel, lang = 'de' }) => {
@@ -76,13 +76,13 @@ export const shareNative = async ({ userId, score, tierLabel, lang = 'de' }) => 
       });
       return { platform: 'native', shareUrl };
     } catch (err) {
-      // User cancelled — not an error
+      // User cancelled · not an error
       if (err.name !== 'AbortError') throw err;
       return null;
     }
   }
 
-  // Fallback — copy to clipboard
+  // Fallback · copy to clipboard
   await navigator.clipboard.writeText(`${text}\n\n${shareUrl}`);
   return { platform: 'clipboard', shareUrl };
 };
@@ -94,5 +94,5 @@ export const shareNative = async ({ userId, score, tierLabel, lang = 'de' }) => 
 export const trackShare = async (api, { platform, contentType = 'leader_score' }) => {
   try {
     await api.post('/share', { platform, content_type: contentType });
-  } catch { /* silent — analytics is best-effort */ }
+  } catch { /* silent · analytics is best-effort */ }
 };

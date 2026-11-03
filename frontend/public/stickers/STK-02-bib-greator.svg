@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" aria-labelledby="t02">
+  <title id="t02">STK-02 — BIB 0001 Greator · v2 Racing Plate · 70×70mm</title>
+  <defs>
+    <style>
+      .bg{fill:#FFFFFF}
+      .ink{fill:#0A0A0A}
+      .lime{fill:#BFFF00}
+      .mono{font-family:'SF Mono','Menlo','Consolas',monospace;font-weight:700;letter-spacing:0.22em;text-transform:uppercase}
+      .display{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:-0.06em}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="280" height="280"/>
+
+  <!-- Top eyebrow -->
+  <text class="mono ink" x="16" y="22" font-size="8.5">▸ BIB · LIMITED · 100</text>
+  <text class="mono ink" text-anchor="end" x="264" y="22" font-size="8.5" opacity="0.45">GREATOR 2026</text>
+
+  <!-- Racing BIB plate -->
+  <g transform="translate(28 44)">
+    <!-- Plate body — pure white with 2.5px black border -->
+    <rect x="0" y="0" width="224" height="170" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="3" rx="4"/>
+
+    <!-- Four mounting holes -->
+    <circle cx="14" cy="14" r="4" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+    <circle cx="210" cy="14" r="4" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+    <circle cx="14" cy="156" r="4" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+    <circle cx="210" cy="156" r="4" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+
+    <!-- Plate header -->
+    <text class="mono ink" x="112" y="34" text-anchor="middle" font-size="8.5">LEADER · OS &#160;&#160;LANXESS · 2026</text>
+
+    <!-- Massive number — straight Outfit Italic Black, single line -->
+    <text class="display ink" x="112" y="125" text-anchor="middle" font-size="100">0001</text>
+
+    <!-- Plate footer -->
+    <text class="mono ink" x="112" y="151" text-anchor="middle" font-size="6.5">STARTNUMMER · GREATOR FESTIVAL · KÖLN</text>
+  </g>
+
+  <!-- Bottom row: W mark + url -->
+  <g transform="translate(16 232)">
+    <rect class="lime" x="0" y="0" width="22" height="22"/>
+    <text class="display ink" x="11" y="18" text-anchor="middle" font-size="20">W</text>
+    <text class="display ink" x="30" y="16" font-size="15">Leader<tspan class="lime">·</tspan>OS</text>
+  </g>
+  <text class="mono ink" text-anchor="end" x="264" y="248" font-size="8" opacity="0.55">STK · 02 / 06</text>
+</svg>

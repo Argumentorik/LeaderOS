@@ -1,0 +1,46 @@
+name: GTM — campaign / content / funnel
+description: A go-to-market work request — campaign, content batch, funnel change, channel experiment.
+labels: ["gtm"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type
+      options:
+        - Campaign (ads / social)
+        - Content (journal / newsletter / video)
+        - Funnel change (landing / webinar / emails)
+        - Channel experiment
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal & metric
+      description: What should move, and how do we measure it (PostHog event, signups, webinar registrations, leads)?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: |
+        Which surfaces/files are touched? (e.g. LandingPage sections, WebinarPage,
+        journal articles, backend/services_email.py, ad assets)
+    validations:
+      required: true
+  - type: checkboxes
+    id: canon
+    attributes:
+      label: Honesty check
+      options:
+        - label: All numbers/claims verified against docs/gtm/WLAD_CANON.md (no invented testimonials, no fake scarcity)
+          required: true
+        - label: Terminology checked — "30-Tage-Challenge" (not "Sprint"), "1:1 mit Wlads Team"
+          required: true
+  - type: textarea
+    id: deadline
+    attributes:
+      label: Timing
+      description: Launch date / event dependency (e.g. webinar on 20.08.)

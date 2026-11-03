@@ -84,7 +84,7 @@ const LevelNode = ({ level, isLast, navigate }) => {
           )}
           {level.is_current && (
             <div className="mt-3 flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              <FileText size={10} /> {level.certificate} — in Arbeit
+              <FileText size={10} /> {level.certificate} · in Arbeit
             </div>
           )}
           {(locked || level.is_next) && (
@@ -274,7 +274,7 @@ export default function MyPathPage() {
               <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl ${data.current_index === 4 ? 'bg-[#BFFF00]/10 border border-[#BFFF00]/20' : 'bg-muted/20 border border-border'}`}>
                 <Trophy size={18} className={data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/30'} />
                 <span className={`text-sm font-bold ${data.current_index === 4 ? 'text-[#5A7A00] dark:text-[#BFFF00]' : 'text-muted-foreground/40'}`}>
-                  {data.current_index === 4 ? 'Visionär erreicht! Du gestaltest die Zukunft der Führung.' : 'Werde Visionär — entwickle deine Zukunftsperspektive'}
+                  {data.current_index === 4 ? 'Visionär erreicht! Du gestaltest die Zukunft der Führung.' : 'Werde Visionär · entwickle deine Zukunftsperspektive'}
                 </span>
               </div>
             </div>

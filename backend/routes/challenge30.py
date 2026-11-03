@@ -39,7 +39,7 @@ CHALLENGES = [
     {"day": 10, "week": 2, "title_de": "Eisenhower + ALPEN + SMART", "title_en": "Eisenhower + ALPEN + SMART", "type": "quiz", "path": "/challenge", "xp": 20, "category": "methoden", "agent": "Task-Agent", "duration": "10 Min",
      "desc_de": "Priorisierung meistern — 10 Framework-Fragen.", "desc_en": "Master prioritization."},
     {"day": 11, "week": 2, "title_de": "Aktives Zuhören meistern", "title_en": "Master active listening", "type": "quiz", "path": "/challenge", "xp": 25, "category": "methoden", "agent": "Simulations-Agent", "duration": "10 Min",
-     "desc_de": "Die 5 Ebenen des Zuhörens — 10 Praxis-Fragen.", "desc_en": "The 5 levels of listening."},
+     "desc_de": "Die 10 Stufen des Zuhörens — 10 Praxis-Fragen.", "desc_en": "The 10 stages of listening."},
     {"day": 12, "week": 2, "title_de": "Challenger: Jeff Bezos", "title_en": "Challenger: Jeff Bezos", "type": "action", "path": "/challengers", "xp": 30, "category": "methoden", "agent": "Coach-Agent", "duration": "10 Min",
      "desc_de": "Stell dich den Fragen von Jeff Bezos.", "desc_en": "Face Jeff Bezos."},
     {"day": 13, "week": 2, "title_de": "Feedbackformel in der Praxis", "title_en": "Feedback formula in practice", "type": "quiz", "path": "/challenge", "xp": 25, "category": "methoden", "agent": "Coach-Agent", "duration": "10 Min",

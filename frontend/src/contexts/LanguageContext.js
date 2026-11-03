@@ -61,12 +61,12 @@ const translations = {
     'checkin.impact': 'Impact',
     'checkin.recent': 'Letzte Check-ins',
     'checkin.prompts': [
-      'Wlad sagt: "Die Qualität deiner Führung zeigt sich in der Qualität deiner Gespräche." — Welches Gespräch hat dich heute herausgefordert?',
-      'Framework "Feedbackformel": Beobachtung + Wirkung + Wunsch — Hast du heute Feedback gegeben oder erhalten?',
-      'Wlad: "Delegation ist kein Abgeben, sondern Befähigen." — Was hast du heute delegiert?',
-      'Die 3 Säulen der Überzeugung: Logos, Ethos, Pathos — Musstest du heute jemanden überzeugen?',
-      'Wlad: "Ein Leader entscheidet. Nicht-Entscheiden ist die schlechteste Entscheidung." — Welche Entscheidung stand heute an?',
-      'Aktives Zuhören: Paraphrasieren, Emotionen benennen, nachfragen — Wie gut hast du heute zugehört?',
+      'Wlad sagt: "Die Qualität deiner Führung zeigt sich in der Qualität deiner Gespräche." · Welches Gespräch hat dich heute herausgefordert?',
+      'Framework "Feedbackformel": Beobachtung + Wirkung + Wunsch · Hast du heute Feedback gegeben oder erhalten?',
+      'Wlad: "Delegation ist kein Abgeben, sondern Befähigen." · Was hast du heute delegiert?',
+      'Die 3 Säulen der Überzeugung: Logos, Ethos, Pathos · Musstest du heute jemanden überzeugen?',
+      'Wlad: "Ein Leader entscheidet. Nicht-Entscheiden ist die schlechteste Entscheidung." · Welche Entscheidung stand heute an?',
+      'Aktives Zuhören: Paraphrasieren, Emotionen benennen, nachfragen · Wie gut hast du heute zugehört?',
     ],
 
     // Chat
@@ -156,12 +156,12 @@ const translations = {
     'report.finalizing': 'Finalisiere Report',
 
     // Upsell - Enhanced with Wlad Jachtchenko
-    'upsell.title': 'Premium Leadership Programm mit Wlad',
-    'upsell.subtitle': 'Erhalte personalisiertes 1:1 Coaching von Wlad Jachtchenko, erweiterte KI-Simulationen und deinen kompletten Leadership-Transformationsplan.',
+    'upsell.title': 'Premium Leadership Programm mit Wlads Team',
+    'upsell.subtitle': 'Erhalte personalisiertes 1:1 Coaching von Wlads Team, erweiterte KI-Simulationen und deinen kompletten Leadership-Transformationsplan.',
     'upsell.cta': 'Transformation starten',
     'upsell.noCreditCard': 'Strategiegespräch buchen',
     'upsell.features': [
-      'Persönliche 1:1 Coaching Sessions mit Wlad',
+      'Persönliche 1:1 Coaching Sessions mit Wlads Team',
       'Alle Frameworks aus "Die Kunst der Überzeugung"',
       'Erweiterte KI-Simulationen & Analyse',
       'Lebenslanger Zugang zu allen Premium-Features',
@@ -181,7 +181,7 @@ const translations = {
     'funnel.q2': 'Was ist deine größte Herausforderung als Führungskraft?',
     'funnel.q2opts': ['Schwierige Gespräche führen', 'Strategische Entscheidungen treffen', 'Team motivieren & binden', 'KI im Führungsalltag nutzen', 'Delegation & Loslassen', 'Sichtbarkeit & Überzeugungskraft'],
     'funnel.q3': 'Wie gut nutzt du KI bereits als Führungskraft?',
-    'funnel.q3opts': ['Gar nicht — ich weiß nicht, wo ich anfangen soll', 'Grundlagen — ich nutze ChatGPT gelegentlich', 'Fortgeschritten — KI ist Teil meiner Workflows', 'Profi — ich integriere KI strategisch'],
+    'funnel.q3opts': ['Gar nicht · ich weiß nicht, wo ich anfangen soll', 'Grundlagen · ich nutze ChatGPT gelegentlich', 'Fortgeschritten · KI ist Teil meiner Workflows', 'Profi · ich integriere KI strategisch'],
     'funnel.q4': 'Was beschreibt deinen Kommunikationsstil am besten?',
     'funnel.q4opts': ['Direkt & sachlich', 'Diplomatisch & empathisch', 'Inspirierend & visionär', 'Analytisch & datengetrieben'],
     'funnel.q5': 'Was ist dein wichtigstes Ziel in den nächsten 90 Tagen?',
@@ -369,7 +369,7 @@ const translations = {
     'funnel.q2': 'What is your biggest leadership challenge?',
     'funnel.q2opts': ['Having difficult conversations', 'Making strategic decisions', 'Motivating & retaining team', 'Using AI in leadership', 'Delegation & letting go', 'Visibility & persuasion'],
     'funnel.q3': 'How well do you use AI as a leader?',
-    'funnel.q3opts': ["Not at all — I don't know where to start", "Basics — I use ChatGPT occasionally", 'Advanced — AI is part of my workflows', 'Pro — I integrate AI strategically'],
+    'funnel.q3opts': ["Not at all · I don't know where to start", "Basics · I use ChatGPT occasionally", 'Advanced · AI is part of my workflows', 'Pro · I integrate AI strategically'],
     'funnel.q4': 'What best describes your communication style?',
     'funnel.q4opts': ['Direct & factual', 'Diplomatic & empathetic', 'Inspiring & visionary', 'Analytical & data-driven'],
     'funnel.q5': 'What is your most important goal in the next 90 days?',

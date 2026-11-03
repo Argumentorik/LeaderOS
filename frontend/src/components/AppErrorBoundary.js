@@ -1,11 +1,11 @@
 /**
- * AppErrorBoundary — Catches uncaught React render errors and reports them
+ * AppErrorBoundary · Catches uncaught React render errors and reports them
  * to Sentry while showing a premium, branded recovery screen.
  *
  * Design rationale (Iter 92.5):
  *   - Uses Sentry.ErrorBoundary directly (auto-reports + provides eventId
  *     for the user to reference in support tickets).
- *   - The fallback UI is intentionally calm — no panic alert. Dark Revolut-
+ *   - The fallback UI is intentionally calm · no panic alert. Dark Revolut-
  *     style card with: lime W mark, "Es tut uns leid"-headline, the Sentry
  *     event id (small, for support), one primary CTA ("Seite neu laden"),
  *     one secondary ("Zurück zum Dashboard").
@@ -64,7 +64,7 @@ const ErrorFallback = ({ error, eventId, resetError }) => {
       data-testid="app-error-boundary"
       role="alert"
     >
-      {/* Aurora background glow — even error screens stay premium */}
+      {/* Aurora background glow · even error screens stay premium */}
       <div aria-hidden className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-[#BFFF00]/[0.04] blur-[140px]" />
         <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] rounded-full bg-rose-500/[0.04] blur-[160px]" />
@@ -88,7 +88,7 @@ const ErrorFallback = ({ error, eventId, resetError }) => {
         </h1>
 
         <p className="text-white/65 text-[14px] leading-relaxed mb-7 max-w-sm mx-auto">
-          Keine Sorge — wir wurden automatisch benachrichtigt und schauen es uns an.
+          Keine Sorge · wir wurden automatisch benachrichtigt und schauen es uns an.
           Versuch's einfach nochmal.
         </p>
 
