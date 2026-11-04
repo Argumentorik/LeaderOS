@@ -7,14 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@500;600&family=JetBrains+Mono:wght@400;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <style>
 /* F01 "Fenster" · fünf Folien · 1080×1350 (4:5) · Teaser für LeaderOS.
-   Ein Portrait, fünfmal. Auf den Folien 1 bis 4 liegt ein scharfes, senkrechtes
-   Fenster über der linken Gesichtshälfte, der Rest ist unscharf, dunkel und
-   körnig, und wird von Folie zu Folie klarer (je öfter wiederholt, desto
-   schärfer). Die Headline teilt sich links und rechts um das Fenster.
-   Folie 5 zeigt das ganze Bild scharf, mit QR-Code und der Begrenzung.
+   Jede Folie hat ein eigenes Bild (Einzelbilder aus dem echten Intro-Video,
+   siehe src/README.txt). Der Fokus wandert: Folie 1 die linke Gesichtshälfte
+   (senkrechtes Fenster), Folie 2 der Blick (Streifen über den Augen), Folie 3
+   die Hände (Streifen über der Geste), Folie 4 die WladBot-Oberfläche (nach
+   FloatingWladBotDrawer.js). Der Rest ist unscharf, dunkel und körnig und wird
+   von Folie zu Folie klarer (je öfter wiederholt, desto schärfer). Die Headline
+   teilt sich um das Fenster. Folie 5 zeigt das ganze Bild scharf, mit QR-Code
+   und der Begrenzung.
    Kein Name auf den Folien (der Post kommt vom LinkedIn-Konto), keine
-   Credentials. Fotoebenen und QR kommen aus build_assets.py (build/);
-   die Fenstergeometrie unten muss mit WIN in diesem Skript übereinstimmen. */
+   Credentials. Fotoebenen und QR kommen aus build_assets.py (build/); die
+   Fenstergeometrie (`win` je Folie) muss mit SLIDES dort übereinstimmen. */
 :root{--lime:#bfff00;--ink:#0a0a0a;
   --disp:'Outfit',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',serif;
   --win-x:336px;--win-y:205px;--win-w:290px;--win-h:880px;--gap:28px;--pad:60px}
@@ -33,20 +36,44 @@ html,body{background:#222}
 .tag.r{right:var(--pad)}
 
 /* Geteilte Headline um das Fenster */
-.hl{position:absolute;top:318px;font-family:var(--body);font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.022em;color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.6),0 0 2px rgba(0,0,0,.25)}
+.hl{position:absolute;top:calc(var(--win-y) + 113px);font-family:var(--body);font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.022em;color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.6),0 0 2px rgba(0,0,0,.25)}
 .hl.l{right:calc(1080px - var(--win-x) + var(--gap));text-align:right}
 .hl.r{left:calc(var(--win-x) + var(--win-w) + var(--gap));text-align:left}
 .p,.d{color:var(--lime)}
 
 /* Unten: Zeile in Serifenkursiv (Folie 1), Fließtext (2, 3) oder drei BIB-Zeilen (4) */
 .serif{position:absolute;left:var(--pad);bottom:64px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:70px;line-height:1.02;letter-spacing:-.01em;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.5)}
-.body{position:absolute;left:var(--pad);right:var(--pad);bottom:72px;font-weight:500;font-size:34px;line-height:1.38;letter-spacing:-.003em;color:rgba(255,255,255,.86);text-shadow:0 2px 20px rgba(0,0,0,.5);text-wrap:balance}
+.body{position:absolute;left:var(--pad);right:var(--pad);bottom:72px;font-weight:500;font-size:34px;line-height:1.38;letter-spacing:-.003em;color:rgba(255,255,255,.88);text-shadow:0 2px 20px rgba(0,0,0,.55);text-wrap:balance}
 .body b{font-weight:600;color:#fff}
 .items{position:absolute;left:var(--pad);right:var(--pad);bottom:64px}
 .it{display:flex;align-items:baseline;gap:22px;padding:11px 0;border-top:1px solid rgba(255,255,255,.24);font-weight:500;font-size:28px;line-height:1.3;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5)}
 .it:last-child{border-bottom:1px solid rgba(255,255,255,.24)}
 .it i{font-style:normal;font-family:var(--mono);font-weight:700;font-size:17px;letter-spacing:.2em;color:var(--lime);flex:none}
 .it i::before{content:'';display:inline-block;margin-right:12px;border-left:9px solid var(--lime);border-top:5.5px solid transparent;border-bottom:5.5px solid transparent}
+
+/* WladBot im Fokus (Folie 4): die Oberfläche des Chats im Fenster, nach
+   FloatingWladBotDrawer.js (dunkle Fläche, lime Nutzerblase, Bot-Blase mit Rand,
+   Eingabe "Frag mich…", lime Senden-Taste). Texte vergrößert für die Folie. */
+.ui{position:absolute;left:var(--win-x);top:var(--win-y);width:var(--win-w);height:var(--win-h);background:#0a0a0a;display:flex;flex-direction:column;overflow:hidden}
+.ui-h{flex:none;display:flex;align-items:center;gap:12px;padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ui .av{position:relative;width:50px;height:50px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#bfff00,#9acc00);box-shadow:0 0 0 2px rgba(191,255,0,.42),0 4px 18px rgba(191,255,0,.25);flex:none}
+.ui .av img{width:100%;height:100%;object-fit:cover;display:block}
+.ui .nm{font-weight:600;font-size:22px;line-height:1.05;letter-spacing:-.01em;color:#fff}
+.ui .nm .v{margin-left:6px;padding:1px 5px;border-radius:5px;background:rgba(191,255,0,.15);font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--lime);vertical-align:middle}
+.ui .sb{margin-top:5px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.44)}
+.ui .ex{margin-left:auto;align-self:flex-start;margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.ui-m{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:13px;padding:20px 16px}
+.ui .u{align-self:flex-end;max-width:88%;background:var(--lime);color:#0a0a0a;font-weight:600;font-size:20px;line-height:1.26;padding:13px 16px;border-radius:18px 18px 4px 18px}
+.ui .b{max-width:96%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:18px 18px 18px 4px;padding:14px 16px;font-weight:500;font-size:19px;line-height:1.34;color:rgba(255,255,255,.9)}
+.ui .b b{color:#fff;font-weight:600}
+.ui .b .q{margin-top:12px;padding-left:13px;border-left:3px solid var(--lime);color:rgba(255,255,255,.76)}
+.ui .chip{display:inline-block;margin-top:14px;padding:4px 9px;border-radius:6px;background:rgba(191,255,0,.14);border:1px solid rgba(191,255,0,.28);font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.ui .dots{display:flex;gap:7px;padding-left:8px}
+.ui .dots i{display:block;width:9px;height:9px;border-radius:50%;background:var(--lime)}
+.ui .dots i:nth-child(2){opacity:.6}.ui .dots i:nth-child(3){opacity:.3}
+.ui-i{flex:none;display:flex;align-items:center;gap:10px;padding:14px 14px 18px;border-top:1px solid rgba(255,255,255,.08)}
+.ui-i span{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:14px 15px;font-weight:500;font-size:19px;color:rgba(255,255,255,.36)}
+.ui-i b{display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:13px;background:var(--lime)}
 
 /* Marke: lime Kachel (Favicon) und Wortmarke */
 .brand{position:absolute;bottom:62px;display:flex;align-items:flex-end;gap:20px}
@@ -62,15 +89,15 @@ html,body{background:#222}
 .brand.l .wm{font-size:38px}
 
 /* Folie 5: Begrenzung und QR-Code */
-.cta-hl{position:absolute;left:var(--pad);top:826px;font-weight:600;font-size:70px;line-height:1.03;letter-spacing:-.03em;color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.55)}
-.seats{position:absolute;left:var(--pad);top:1066px}
-.seats .g{display:grid;grid-template-columns:repeat(10,14px);gap:6px}
-.seats .g span{display:block;width:14px;height:14px;background:var(--lime)}
-.seats .c{margin-top:14px;font-family:var(--mono);font-size:15px;letter-spacing:.08em;color:rgba(255,255,255,.82);white-space:nowrap}
+.cta-hl{position:absolute;left:var(--pad);top:826px;font-weight:600;font-size:66px;line-height:1.03;letter-spacing:-.03em;color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.55)}
+.seats{position:absolute;left:var(--pad);top:1050px}
+.seats .g{display:grid;grid-template-columns:repeat(15,9px);gap:4px}
+.seats .g span{display:block;width:9px;height:9px;background:var(--lime)}
+.seats .c{margin-top:14px;font-family:var(--mono);font-size:15px;letter-spacing:.08em;color:rgba(255,255,255,.84);white-space:nowrap}
 .qrcard{position:absolute;right:var(--pad);top:826px;width:392px;padding:32px 32px 22px;background:#fff;border-radius:26px;box-shadow:0 18px 60px rgba(0,0,0,.55)}
 .qrcard img{display:block;width:328px;height:328px}
 .qrcard .c{margin-top:18px;text-align:center;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.2em;color:var(--ink);text-transform:uppercase}
-.qrnote{position:absolute;right:var(--pad);top:1264px;width:392px;text-align:center;font-family:var(--mono);font-size:15px;letter-spacing:.08em;color:rgba(255,255,255,.82)}
+.qrnote{position:absolute;right:var(--pad);top:1264px;width:392px;text-align:center;font-family:var(--mono);font-size:15px;letter-spacing:.08em;color:rgba(255,255,255,.84)}
 </style>
 </head>
 <body>
@@ -78,24 +105,28 @@ html,body{background:#222}
 <script>
 // Die Zahl der Plätze muss der echten Begrenzung entsprechen: die Aufnahme
 // stoppt bei dieser Zahl (technisch durchgesetzt), sonst ist die Knappheit
-// erfunden und verstößt gegen docs/gtm/WEBINAR_FUNNEL.md. Gleiche Zahl wie
-// SEATS in docs/gtm/linkedin-carousels-01/data.js.
-const SEATS = 50;
+// erfunden und verstößt gegen docs/gtm/WEBINAR_FUNNEL.md. 150 laut Mert
+// (04.11.2026); die älteren Karussells (linkedin-carousels-01) und LI-05
+// nennen noch 50 und müssen bei einem Post angeglichen werden.
+const SEATS = 150;
 
 const tag = (n, topic) => ({ tagL: `feldnotiz 09 · ${topic}`, tagR: `0${n} / 05` });
+const WIN = [336, 205, 290, 880];          // Standardfenster (x, y, w, h), wie WIN in build_assets.py
 
 // Fakten nur aus docs/gtm/WLAD_CANON.md und den freigegebenen Serien-Texten.
 const SLIDES = [
-  { id: 'F01-01', photo: 'build/fenster-1.png', frame: true, ...tag(1, 'führung trainieren'), tagR: '01 / 05 · wischen →',
+  { id: 'F01-01', photo: 'build/fenster-1.png', win: WIN, frame: true, ...tag(1, 'führung trainieren'), tagR: '01 / 05 · wischen →',
     left: 'Führung<br>wird nicht<br>gelernt.', right: 'Sie wird<br>trainiert<span class="p">.</span>',
     serif: 'Nach dem Seminar<br>ist vor dem Alltag.', brand: 'r' },
-  { id: 'F01-02', photo: 'build/fenster-2.png', frame: true, ...tag(2, 'das muster'),
-    left: 'Montag:<br>alle<br>motiviert.', right: 'Sechs Wochen<br>später: alles<br>beim Alten<span class="p">.</span>',
+  { id: 'F01-02', photo: 'build/fenster-2.png', win: [90, 520, 900, 160], frame: true, ...tag(2, 'das muster'),
+    hls: [{ style: 'left:60px;top:268px', html: 'Montag: alle<br>motiviert.' },
+          { style: 'right:60px;top:744px;text-align:right', html: 'Sechs Wochen später:<br>alles beim Alten<span class="p">.</span>' }],
     body: 'Nach dem Seminar wissen alle, was zu tun ist. Das Problem ist nicht das Wissen. <b>Es hat nur niemand geübt.</b>' },
-  { id: 'F01-03', photo: 'build/fenster-3.png', frame: true, ...tag(3, 'die methode'),
-    left: 'Wie beim<br>Sport:', right: 'Wiederholen.<br>Am Ernstfall.<br>Mit Feedback<span class="p">.</span>',
-    body: 'Niemand wird fit von einem Vortrag über Fitness. Führung ist eine Fähigkeit, und Fähigkeiten entstehen <b>durch Training.</b>' },
-  { id: 'F01-04', photo: 'build/fenster-4.png', frame: true, ...tag(4, 'das system'),
+  { id: 'F01-03', photo: 'build/fenster-3.png', win: [90, 565, 900, 345], frame: true, ...tag(3, 'die methode'),
+    hls: [{ style: 'right:60px;top:140px;text-align:right', html: 'Wie beim<br>Sport:' },
+          { style: 'left:60px;top:952px', html: 'Wiederholen.<br>Am Ernstfall.<br>Mit Feedback<span class="p">.</span>' }],
+    body: 'Niemand wird fit von einem Vortrag über Fitness. <b>Führung auch nicht.</b>' },
+  { id: 'F01-04', photo: 'build/fenster-4.png', win: [311, 125, 340, 880], frame: true, ui: true, ...tag(4, 'das system'),
     left: 'Training<br>als<br>System.', right: 'Das ist<br>Leader<span class="d">·</span>OS<span class="p">.</span>',
     items: [['01', 'KI-Coach, der die Methodik kennt'], ['02', 'Simulationen mit einem Gegenüber, das zurückredet'], ['03', '15 Minuten am Tag, am Fall von morgen']] },
   { id: 'F01-05', photo: 'build/fenster-5.png', frame: false, ...tag(5, 'jetzt'), cta: true },
@@ -105,12 +136,32 @@ window.SLIDES = SLIDES.map((s) => ({ id: s.id }));
 const TILE = `<svg class="tile" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="fb" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/></linearGradient></defs><rect width="32" height="32" rx="9.6" fill="url(#fb)"/><g transform="translate(4.2 4.2) scale(0.7375)" fill="none" stroke="#0A0A0A" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke-width="3"/><path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke-width="2.6"/><circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A" stroke="none"/></g></svg>`;
 const brand = (side) => `<div class="brand ${side}">${side === 'r' ? '' : TILE}<div class="txt"><div class="wm">Leader<span class="d">·</span>OS</div>${side === 'r' ? '<div class="beta">Beta · kostenlos</div>' : ''}</div>${side === 'r' ? TILE : ''}</div>`;
 
+// WladBot-Oberfläche im Fenster von Folie 4. Beispiel-Anfrage, als solche gekennzeichnet;
+// die Antwort nennt nur die Feedbackformel aus dem Canon (Beobachtung, Wirkung, Wunsch).
+const UI = `<div class="ui">
+  <div class="ui-h"><span class="av"><img src="../../../frontend/public/wladbot-avatar-clean.png" alt=""></span>
+    <div><div class="nm">WladBot<span class="v">3.0</span></div><div class="sb">immer neben dir</div></div><span class="ex">beispiel</span></div>
+  <div class="ui-m">
+    <div class="u">Mein Teamlead blockt jeden Vorschlag ab. Was sage ich?</div>
+    <div class="b"><p>Nutze die Feedbackformel: <b>Beobachtung, Wirkung, Wunsch.</b></p>
+      <p class="q">„Mir ist aufgefallen, dass du meine Vorschläge sofort abbrichst. Das bremst das Team. Ich wünsche mir, dass du erst zu Ende hörst."</p>
+      <span class="chip">Feedbackformel</span></div>
+    <div class="u">Und wenn er trotzdem blockt?</div>
+    <div class="b"><p>Sprich die Wirkung an, nicht die Person: <b>hart in der Sache, weich zur Person.</b></p></div>
+  </div>
+  <div class="ui-i"><span>Frag mich…</span><b><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></b></div>
+</div>`;
+
 function render(s, ig, seats) {
+  const sheet = document.getElementById('sheet');
+  if (s.win) sheet.style.cssText = `--win-x:${s.win[0]}px;--win-y:${s.win[1]}px;--win-w:${s.win[2]}px;--win-h:${s.win[3]}px`;
   let h = `<img class="photo" src="${s.photo}" alt="">`;
   if (!s.cta) h += '<div class="shade"></div>';
   if (s.frame) h += '<div class="frame"></div>';
+  if (s.ui) h += UI;
   h += `<div class="tag l">${s.tagL}</div><div class="tag r">${s.tagR}</div>`;
   if (s.left) h += `<div class="hl l">${s.left}</div><div class="hl r">${s.right}</div>`;
+  if (s.hls) h += s.hls.map((b) => `<div class="hl" style="${b.style}">${b.html}</div>`).join('');
   if (s.serif) h += `<div class="serif">${s.serif}</div>`;
   if (s.body) h += `<div class="body">${s.body}</div>`;
   if (s.items) h += `<div class="items">${s.items.map(([n, t]) => `<div class="it"><i>${n}</i><span>${t}</span></div>`).join('')}</div>`;
@@ -122,7 +173,7 @@ function render(s, ig, seats) {
     h += `<div class="qrnote">${ig ? 'oder Link in der Bio' : 'oder Link im ersten Kommentar'}</div>`;
     h += brand('l');
   }
-  document.getElementById('sheet').innerHTML = h;
+  sheet.innerHTML = h;
 }
 
 const q = new URLSearchParams(location.search);
