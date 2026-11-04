@@ -58,4 +58,7 @@ WORKDIR /app/backend
 # Runs as root: Railway volumes mount root-owned, and the guide media cache /
 # chunked uploads live on the volume via TMPDIR (plan Phase 1c).
 EXPOSE 8001
-CMD ["sh", "-c", "mkdir -p \"${TMPDIR:-/tmp}\" && exec uvicorn server:app --host 0.0.0.0 --port ${PORT:-8001} --workers 1"]
+# --host "" binds one IPv4 and one IPv6 socket, so the web service can reach it
+# over Railway's private network either way. ("::" alone is IPv6-only: asyncio
+# sets IPV6_V6ONLY.)
+CMD ["sh", "-c", "mkdir -p \"${TMPDIR:-/tmp}\" && exec uvicorn server:app --host '' --port ${PORT:-8001} --workers 1"]

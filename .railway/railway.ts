@@ -1,4 +1,4 @@
-import { defineRailway, github, mongo, preserve, project, service, volume } from "railway/iac";
+import { defineRailway, github, mongo, preserve, project, service, volume, type VariableValue } from "railway/iac";
 // This repository manages only its own resources in the environment. Other
 // repositories export their own partial name.
 // See https://docs.railway.com/infrastructure-as-code#multi-repo-projects
@@ -20,7 +20,7 @@ export default defineRailway((ctx) => {
   // whatever is set via `railway variable set`. Staging deliberately has no
   // live Stripe/Resend keys and no Supabase write access, so the copy can't
   // charge, email or write leads into production systems.
-  const prodOnlySecrets = staging
+  const prodOnlySecrets: Record<string, VariableValue> = staging
     ? {}
     : {
         STRIPE_API_KEY: preserve(),
@@ -40,11 +40,15 @@ export default defineRailway((ctx) => {
     networking: { privateNetworkEndpoint: "leaderos" },
     volumeMounts: { "/data": data },
     env: {
+      // Fixed so LeaderOS-web can proxy to leaderos.railway.internal:8001.
+      PORT: "8001",
       MONGO_URL: db.env.MONGO_URL,
       DB_NAME: "leadership_os",
       TMPDIR: "/data/tmp",
       ENV: staging ? "staging" : "production",
       SENTRY_ENV: staging ? "staging" : "production",
+      // Email links, Stripe return URLs etc. — code defaults to leaderos.de.
+      FRONTEND_BASE_URL: staging ? "https://leaderos-web-staging.up.railway.app" : "https://leaderos.de",
       // server.py refuses to boot with ENV=production and no explicit whitelist.
       CORS_ORIGINS: staging
         ? "*"
@@ -75,8 +79,40 @@ export default defineRailway((ctx) => {
     },
   });
 
+  // Ad/analytics IDs are baked into the build. Staging builds without them so
+  // soak traffic never reaches the ad platforms or production analytics.
+  const prodOnlyWebIds: Record<string, VariableValue> = staging
+    ? {}
+    : {
+        REACT_APP_POSTHOG_KEY: preserve(),
+        REACT_APP_POSTHOG_HOST: preserve(),
+        REACT_APP_SENTRY_DSN_LEADER_OS: preserve(),
+        REACT_APP_META_PIXEL_ID: preserve(),
+        REACT_APP_LINKEDIN_PARTNER_ID: preserve(),
+        REACT_APP_LINKEDIN_LEAD_CONVERSION_ID: preserve(),
+        REACT_APP_GOOGLE_ADS_ID: preserve(),
+        REACT_APP_GOOGLE_ADS_WEBINAR_LABEL: preserve(),
+        REACT_APP_BING_UET_ID: preserve(),
+      };
+
+  // CRA build served by Caddy, which proxies /api/* to LeaderOS over the
+  // private network — same origin for the app, as on Emergent (frontend/Caddyfile).
+  const LeaderOSWeb = service("LeaderOS-web", {
+    source: github("Argumentorik/LeaderOS", { branch: "railway-base", checkSuites: false }),
+    rootDirectory: "frontend",
+    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile", watchPatterns: ["/frontend/**"] },
+    healthcheck: "/",
+    replicas: { [REGION]: 1 },
+    networking: { privateNetworkEndpoint: "leaderos-web" },
+    env: {
+      BACKEND_URL: "http://leaderos.railway.internal:8001",
+      REACT_APP_SENTRY_ENV: staging ? "staging" : "production",
+      ...prodOnlyWebIds,
+    },
+  });
+
   return project("leaderos", {
     variables: { managed: true },
-    resources: [LeaderOS, db, data],
+    resources: [LeaderOS, db, data, LeaderOSWeb],
   });
 });

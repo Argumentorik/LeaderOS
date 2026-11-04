@@ -1,0 +1,78 @@
+# LeaderOS web — serves the CRA build and proxies the API, same-origin like Emergent.
+# Mirrors the app-relevant parts of /vercel.json (newsletter → Supabase, OG HTML
+# for crawlers on /m/:slug, SPA fallback, /static caching, security headers).
+
+{
+	admin off
+	servers {
+		# Keep Railway's edge X-Forwarded-For chain intact (Caddy appends its peer).
+		# Safe because the backend picks the client IP by hop count from the right
+		# (TRUSTED_PROXY_HOPS=2: Railway edge + this proxy), not from the left.
+		trusted_proxies static 0.0.0.0/0 ::/0
+	}
+}
+
+:{$PORT:8080} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(self), microphone=(self), geolocation=(), payment=(self)"
+		-Server
+	}
+
+	# Newsletter double opt-in lives in Supabase edge functions, not the backend.
+	handle /api/newsletter/subscribe {
+		rewrite * /functions/v1/newsletter-subscribe
+		reverse_proxy https://srujvjjncrszhaaxepxf.supabase.co {
+			header_up Host {upstream_hostport}
+		}
+	}
+	handle /api/newsletter/confirm {
+		rewrite * /functions/v1/newsletter-confirm
+		reverse_proxy https://srujvjjncrszhaaxepxf.supabase.co {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	# Link-preview bots get server-rendered OG HTML for shared missions.
+	@og_bot {
+		path_regexp mission ^/m/([^/]+)$
+		header_regexp User-Agent (?i)(facebookexternalhit|Twitterbot|LinkedInBot|Slackbot|TelegramBot|WhatsApp|Discordbot|Pinterest|Embedly|Google-?Page-?Speed|bot|crawl|spider|prerender)
+	}
+	handle @og_bot {
+		rewrite * /api/og/mission-html/{re.mission.1}
+		reverse_proxy {$BACKEND_URL}
+	}
+
+	handle /api/* {
+		reverse_proxy {$BACKEND_URL} {
+			# Chat answers stream as SSE; never buffer them.
+			flush_interval -1
+		}
+	}
+
+	handle {
+		root * /srv
+
+		@static path /static/*
+		header @static Cache-Control "public, max-age=31536000, immutable"
+		@not_static not path /static/*
+		header @not_static Cache-Control "no-cache"
+
+		# Prerendered landings/articles live at <path>/index.html; everything
+		# else is the SPA.
+		try_files {path} {path}/index.html {path}.html /index.html
+		file_server {
+			disable_canonical_uris
+		}
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

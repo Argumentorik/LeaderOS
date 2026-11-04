@@ -1,0 +1,64 @@
+# frontend/Dockerfile — LeaderOS web (CRA build served by Caddy) for Railway
+#
+# Build context is frontend/ (rootDirectory in .railway/railway.ts). Caddy serves
+# the build and proxies /api/* to the backend over Railway's private network,
+# so the app stays same-origin exactly like on Emergent (see Caddyfile).
+
+FROM node:22-bookworm-slim AS build
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --network-timeout 600000
+
+COPY . .
+
+# CRA bakes REACT_APP_* in at build time. Railway passes service variables as
+# build args only when declared here. REACT_APP_BACKEND_URL stays empty: the
+# app calls same-origin /api, and media URLs become relative.
+ARG REACT_APP_BACKEND_URL=""
+ARG REACT_APP_SHOW_QUICK_LOGIN="false"
+ARG REACT_APP_LEADERCHECK_URL
+ARG REACT_APP_POSTHOG_KEY
+ARG REACT_APP_POSTHOG_HOST
+ARG REACT_APP_SENTRY_DSN_LEADER_OS
+ARG REACT_APP_SENTRY_DSN_LEADER_CHECK
+ARG REACT_APP_SENTRY_ENV
+ARG REACT_APP_META_PIXEL_ID
+ARG REACT_APP_LINKEDIN_PARTNER_ID
+ARG REACT_APP_LINKEDIN_LEAD_CONVERSION_ID
+ARG REACT_APP_GOOGLE_ADS_ID
+ARG REACT_APP_GOOGLE_ADS_WEBINAR_LABEL
+ARG REACT_APP_BING_UET_ID
+ARG RAILWAY_GIT_COMMIT_SHA
+
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL \
+    REACT_APP_SHOW_QUICK_LOGIN=$REACT_APP_SHOW_QUICK_LOGIN \
+    REACT_APP_LEADERCHECK_URL=$REACT_APP_LEADERCHECK_URL \
+    REACT_APP_POSTHOG_KEY=$REACT_APP_POSTHOG_KEY \
+    REACT_APP_POSTHOG_HOST=$REACT_APP_POSTHOG_HOST \
+    REACT_APP_SENTRY_DSN_LEADER_OS=$REACT_APP_SENTRY_DSN_LEADER_OS \
+    REACT_APP_SENTRY_DSN_LEADER_CHECK=$REACT_APP_SENTRY_DSN_LEADER_CHECK \
+    REACT_APP_SENTRY_ENV=$REACT_APP_SENTRY_ENV \
+    REACT_APP_SENTRY_RELEASE=$RAILWAY_GIT_COMMIT_SHA \
+    REACT_APP_BUILD_ID=$RAILWAY_GIT_COMMIT_SHA \
+    REACT_APP_META_PIXEL_ID=$REACT_APP_META_PIXEL_ID \
+    REACT_APP_LINKEDIN_PARTNER_ID=$REACT_APP_LINKEDIN_PARTNER_ID \
+    REACT_APP_LINKEDIN_LEAD_CONVERSION_ID=$REACT_APP_LINKEDIN_LEAD_CONVERSION_ID \
+    REACT_APP_GOOGLE_ADS_ID=$REACT_APP_GOOGLE_ADS_ID \
+    REACT_APP_GOOGLE_ADS_WEBINAR_LABEL=$REACT_APP_GOOGLE_ADS_WEBINAR_LABEL \
+    REACT_APP_BING_UET_ID=$REACT_APP_BING_UET_ID \
+    GENERATE_SOURCEMAP=false \
+    NODE_OPTIONS=--max-old-space-size=4096
+
+RUN yarn build
+
+
+FROM caddy:2.10-alpine
+
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/build /srv
+
+# PORT comes from Railway; BACKEND_URL points at the backend's private address.
+ENV PORT=8080
+EXPOSE 8080
