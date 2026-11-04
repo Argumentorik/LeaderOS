@@ -44,7 +44,8 @@ def test_valid_sync_token_decodes_and_extracts_identity(monkeypatch):
 def test_wrong_secret_and_expired_are_rejected(monkeypatch):
     auth = _mod(monkeypatch)
     assert auth._decode_sync_token(_jwt({"email": "a@b.de"}, secret="nope")) is None
-    expired = _jwt({"email": "a@b.de", "exp": int(time.time()) - 5})
+    # Past the 10 s leeway in _decode_sync_token.
+    expired = _jwt({"email": "a@b.de", "exp": int(time.time()) - 60})
     assert auth._decode_sync_token(expired) is None
 
 

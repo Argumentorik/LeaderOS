@@ -1,0 +1,14 @@
+# Docker build context = repo root (backend/Dockerfile via .railway/railway.ts).
+# Ship only the backend plus the single frontend asset it reads.
+*
+!backend/
+!frontend/public/icon-512.png
+
+backend/.env
+backend/.env.*
+backend/.venv/
+backend/tests/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/.ruff_cache/
