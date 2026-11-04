@@ -1440,7 +1440,7 @@ def lead_nurture_email(step: int, name: str, unsubscribe_link: str | None = None
     case_article_url = "https://leader-os.de/journal/der-ki-sprint-was-dreissig-tage-strukturierte-anwendung-veraendern"
     webinar_url = "https://leader-os.de/webinar"
     trial_url = "https://leaderos.de/signup?trial=14"
-    beratung_url = "https://www.leader-os.de/#beratung"
+    beratung_url = "https://leader-os.de/#beratung"
 
     unsub = (
         f'<p style="font-size:10px;color:rgba(255,255,255,0.3);margin:24px 0 0;text-align:center;">'
@@ -1882,7 +1882,7 @@ def beratung_checklist_email(name: str, unsubscribe_link: str | None = None) -> 
     Not wired to a cron — call this from an admin/broadcast route when
     you actually want to send it, same as launch_announcement_email.
     """
-    beratung_url = "https://www.leader-os.de/#beratung"
+    beratung_url = "https://leader-os.de/#beratung"
     article_url = "https://leader-os.de/journal/warum-inhouse-trainings-nach-sechs-wochen-verpuffen"
 
     subject = f"{name}, ein 30-Minuten-Gespräch kann mehr klären als drei Wochen Grübeln"
