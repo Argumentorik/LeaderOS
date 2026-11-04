@@ -6,17 +6,22 @@ Einzelbilder zeigt LinkedIn als Raster, ein Dokument als Karussell. Dazu zwei
 Varianten der letzten Folie: `F01-05-open.jpg` (ohne Platzzahl, siehe unten) und
 `F01-05-ig.jpg` (Instagram, Link in der Bio statt im Kommentar).
 
-**Idee:** Ein Portrait, fünfmal. Auf den Folien 1 bis 4 liegt ein scharfes,
-senkrechtes Fenster über der linken Gesichtshälfte, der Rest ist unscharf,
-dunkel und körnig und wird von Folie zu Folie klarer: je öfter wiederholt,
-desto schärfer. Folie 5 zeigt das ganze Bild scharf, mit QR-Code. Stil nach der
-Vorlage „Fenster": unscharfes s/w-Gesicht, scharfes Fenster mit dünnem weißem
-Rahmen, Headline links und rechts davon geteilt. **Kein Name auf den Folien**
+**Idee:** Jede Folie hat ein eigenes Bild, und der Fokus wandert: Gesicht, Blick,
+Hände, WladBot, alles. Der Rest des Bildes ist unscharf, dunkel und körnig und
+wird von Folie zu Folie schärfer: je öfter wiederholt, desto klarer. Stil nach
+der Vorlage „Fenster": scharfer Ausschnitt mit dünnem weißem Rahmen im
+unscharfen s/w-Bild, Headline um das Fenster geteilt. **Kein Name auf den Folien**
 (der Post kommt von Wlads Konto), keine Credentials, kein Termin.
 
-**Quellen und Neu-Bauen:** `carousel.html` (Texte, Layout), `build_assets.py`
-(Foto-Ebenen und QR-Code, Pillow + numpy + `qrcode`), `render.cjs` (Playwright),
-PDF mit `../linkedin-carousels-01/build_pdf.py`.
+**Bilder:** Einzelbilder aus dem echten Intro-Video
+(`frontend/public/videos/wlad-intro.mp4`, 2560×1440), fünf verschiedene
+Momente, abgelegt in `src/` (siehe `src/README.txt`). Keine erzeugten Gesichter.
+Der WladBot erscheint mit seinem bestehenden Produkt-Avatar
+(`frontend/public/wladbot-avatar-clean.png`), nicht als neues Bild.
+
+**Quellen und Neu-Bauen:** `carousel.html` (Texte, Layout, WladBot-Oberfläche),
+`build_assets.py` (Foto-Ebenen und QR-Code, Pillow + numpy + `qrcode`),
+`render.cjs` (Playwright), PDF mit `../linkedin-carousels-01/build_pdf.py`.
 
 ```
 PYTHONPATH=<dir mit qrcode> python3 build_assets.py
@@ -26,13 +31,20 @@ python3 -I ../linkedin-carousels-01/build_pdf.py .
 
 ## Die fünf Folien
 
-| # | Links vom Fenster | Rechts vom Fenster | Unten |
+| # | Bild (Video) | Fokus | Text |
 |---|---|---|---|
-| 1 | Führung wird nicht gelernt. | Sie wird trainiert. | Nach dem Seminar ist vor dem Alltag. · Marke |
-| 2 | Montag: alle motiviert. | Sechs Wochen später: alles beim Alten. | Nach dem Seminar wissen alle, was zu tun ist. Das Problem ist nicht das Wissen. Es hat nur niemand geübt. |
-| 3 | Wie beim Sport: | Wiederholen. Am Ernstfall. Mit Feedback. | Niemand wird fit von einem Vortrag über Fitness. Führung ist eine Fähigkeit, und Fähigkeiten entstehen durch Training. |
-| 4 | Training als System. | Das ist Leader·OS. | KI-Coach, der die Methodik kennt · Simulationen mit einem Gegenüber, das zurückredet · 15 Minuten am Tag, am Fall von morgen |
-| 5 | Beta. Kostenlos. 50 Plätze. | QR-Code, „scannen · beta starten" | 50 Kästchen, „50 plätze insgesamt · aufnahme stoppt bei 50" · „oder Link im ersten Kommentar" · Marke |
+| 1 | ruhiger Blick | linke Gesichtshälfte, senkrechtes Fenster | Führung wird nicht gelernt. · Sie wird trainiert. · Nach dem Seminar ist vor dem Alltag. |
+| 2 | Nahaufnahme, sprechend | der Blick, schmaler Streifen | Montag: alle motiviert. · Sechs Wochen später: alles beim Alten. · Nach dem Seminar wissen alle, was zu tun ist. Das Problem ist nicht das Wissen. Es hat nur niemand geübt. |
+| 3 | Hände offen, Geste | die Hände, Streifen | Wie beim Sport: · Wiederholen. Am Ernstfall. Mit Feedback. · Niemand wird fit von einem Vortrag über Fitness. Führung auch nicht. |
+| 4 | sprechend, Hände vor der Brust | der WladBot, Chat im Fenster | Training als System. · Das ist Leader·OS. · KI-Coach, der die Methodik kennt · Simulationen mit einem Gegenüber, das zurückredet · 15 Minuten am Tag, am Fall von morgen |
+| 5 | freundlich, spricht in die Kamera | alles scharf | Beta. Kostenlos. 150 Plätze. · QR-Code · „aufnahme stoppt bei 150" · „oder Link im ersten Kommentar" |
+
+Der Chat auf Folie 4 ist als „beispiel" gekennzeichnet und folgt der echten
+Oberfläche (`FloatingWladBotDrawer.js`: dunkle Fläche, lime Nutzerblase,
+Bot-Blase mit Rand, „Frag mich…", lime Senden-Taste). Die Antworten nennen nur
+Canon-Inhalte: Feedbackformel (Beobachtung, Wirkung, Wunsch) und „hart in der
+Sache, weich zur Person". Es ist kein Zitat von Wlad, sondern eine Beispiel-
+Antwort des Bots.
 
 Alle Aussagen stammen aus den freigegebenen Serien-Texten
 (`../linkedin-wlad-01/CAPTIONS.md`, `../linkedin-carousels-01/CAPTIONS.md`) und
@@ -41,21 +53,27 @@ und den Plätzen auf Folie 5.
 
 ## Vor dem Posten: die Begrenzung muss echt sein
 
-Folie 5 nennt 50 Plätze und „aufnahme stoppt bei 50". Das stimmt nur, wenn die
-Aufnahme technisch bei 50 stoppt (`docs/gtm/WEBINAR_FUNNEL.md`: keine
+Folie 5 nennt **150 Plätze** und „aufnahme stoppt bei 150". Das stimmt nur, wenn
+die Aufnahme technisch bei 150 stoppt (`docs/gtm/WEBINAR_FUNNEL.md`: keine
 Fake-Scarcity). **Stand heute ist das nicht gebaut.** Der QR-Link führt in den
 allgemeinen 14-Tage-Zugang (`/signup?trial=14`), der für alle offen ist und
 nirgends gezählt wird. Zwei ehrliche Wege:
 
-- **A · Begrenzung bauen, dann Folie 5 mit Zahl posten.** Atomarer Zähler
-  (Mongo `find_one_and_update` mit `$lt`-Bedingung), in jedem Registrierungsweg
-  (`/api/auth/register`, OAuth, Magic Link), ein Status-Endpunkt
-  (`GET /api/beta/seats`) und ein „Beta ist voll"-Zustand auf der Signup-Seite.
-  Danach Emergent-Deploy von `mvpcode`. Die Zahl steht in `SEATS`
-  (`carousel.html`, identisch mit `../linkedin-carousels-01/data.js`).
+- **A · Begrenzung bauen, dann Folie 5 mit Zahl posten.** Zuerst festlegen, was
+  die 150 zählen: ein eigener Beta-Zugang (zum Beispiel Anmeldungen über diesen
+  Link), nicht der allgemeine Trial, sonst wäre der Webinar-Funnel nach 150
+  Anmeldungen dicht. Dann ein atomarer Zähler (Mongo `find_one_and_update` mit
+  `$lt`-Bedingung) in jedem Registrierungsweg (`/api/auth/register`, OAuth,
+  Magic Link), ein Status-Endpunkt (`GET /api/beta/seats`) und ein „Beta ist
+  voll"-Zustand auf der Signup-Seite. Danach Emergent-Deploy von `mvpcode`. Die
+  Zahl steht in `SEATS` (`carousel.html`).
 - **B · Heute ohne Begrenzung posten.** Folie 5 gegen `F01-05-open.jpg` tauschen
   (Headline „Beta. Kostenlos. Jetzt starten.", keine Zahl), das PDF mit
   `SEATS = 0` neu bauen, und in der Caption den markierten Absatz streichen.
+
+**Angleichen:** LI-05 und die acht Karussells in `../linkedin-carousels-01`
+(`SEATS` in `data.js`) nennen noch 50 Plätze. Es gibt nur eine Begrenzung, die
+Zahl muss überall gleich sein, bevor etwas davon gepostet wird.
 
 ## Caption (Wlad, erste Person)
 
@@ -70,7 +88,7 @@ Deshalb haben wir LeaderOS gebaut: meine Methodik als tägliches Training. Ein K
 
 Die Beta ist kostenlos, für alle, die ein Team, ein Projekt oder ein Gespräch führen, mit oder ohne Titel. Auf dem letzten Bild ist der QR-Code, den Link findet ihr im ersten Kommentar.
 
-[nur mit Begrenzung] Wir starten mit 50 Plätzen. Wenn sie vergeben sind, ist die Beta zu.
+[nur mit Begrenzung] Wir starten mit 150 Plätzen. Wenn sie vergeben sind, ist die Beta zu.
 
 Welchen Fall würdest du als Erstes trainieren?
 
@@ -83,16 +101,15 @@ Instagram: dieselben Folien, letzte Folie `F01-05-ig.jpg`, Caption ohne
 
 ## Alt-Texte (LinkedIn, je Folie)
 
-1. Schwarzweiß-Portrait eines Mannes im Sakko. Die rechte Gesichtshälfte ist dunkel und unscharf, ein senkrechtes Fenster zeigt die linke Hälfte scharf. Links davon steht „Führung wird nicht gelernt", rechts davon „Sie wird trainiert". Unten links: „Nach dem Seminar ist vor dem Alltag", unten rechts das Zeichen von LeaderOS.
-2. Dasselbe Portrait, der Hintergrund etwas schärfer. Links vom Fenster: „Montag: alle motiviert". Rechts: „Sechs Wochen später: alles beim Alten". Darunter: „Nach dem Seminar wissen alle, was zu tun ist. Das Problem ist nicht das Wissen. Es hat nur niemand geübt."
-3. Das Portrait noch schärfer. Links: „Wie beim Sport". Rechts: „Wiederholen. Am Ernstfall. Mit Feedback." Darunter: „Niemand wird fit von einem Vortrag über Fitness. Führung ist eine Fähigkeit, und Fähigkeiten entstehen durch Training."
-4. Das Portrait fast ganz scharf. Links: „Training als System". Rechts: „Das ist LeaderOS". Darunter drei Zeilen: KI-Coach, der die Methodik kennt. Simulationen mit einem Gegenüber, das zurückredet. 15 Minuten am Tag, am Fall von morgen.
-5. Das Portrait ganz scharf. Links der Text „Beta. Kostenlos. 50 Plätze." mit 50 grünen Kästchen und dem Hinweis, dass die Aufnahme bei 50 stoppt. Rechts ein QR-Code zum Beta-Zugang. Unten links das Zeichen von LeaderOS. (Variante ohne Begrenzung: „Beta. Kostenlos. Jetzt starten.", ohne Kästchen.)
+1. Schwarzweiß-Porträt eines Mannes in Großaufnahme, im Hintergrund unscharf. Ein senkrechtes, scharfes Fenster zeigt die linke Gesichtshälfte. Links davon steht „Führung wird nicht gelernt", rechts davon „Sie wird trainiert". Unten links: „Nach dem Seminar ist vor dem Alltag", unten rechts das Zeichen von LeaderOS.
+2. Dasselbe Gesicht als Nahaufnahme, unscharf. Ein schmaler, scharfer Streifen zeigt nur die Augen. Darüber: „Montag: alle motiviert". Darunter: „Sechs Wochen später: alles beim Alten". Ganz unten: „Nach dem Seminar wissen alle, was zu tun ist. Das Problem ist nicht das Wissen. Es hat nur niemand geübt."
+3. Der Mann gestikuliert mit beiden Händen, das Bild ist unscharf. Ein scharfer Streifen zeigt die Hände. Oben rechts: „Wie beim Sport". Darunter links: „Wiederholen. Am Ernstfall. Mit Feedback." Ganz unten: „Niemand wird fit von einem Vortrag über Fitness. Führung auch nicht."
+4. Der Mann im unscharfen Hintergrund. Im scharfen Fenster steht eine Chat-Oberfläche des WladBot mit einer Beispiel-Frage („Mein Teamlead blockt jeden Vorschlag ab. Was sage ich?") und einer Antwort zur Feedbackformel. Links: „Training als System", rechts: „Das ist LeaderOS". Unten drei Zeilen: KI-Coach, der die Methodik kennt. Simulationen mit einem Gegenüber, das zurückredet. 15 Minuten am Tag, am Fall von morgen.
+5. Das Porträt jetzt ganz scharf, der Mann spricht in die Kamera. Links der Text „Beta. Kostenlos. 150 Plätze." mit 150 grünen Kästchen und dem Hinweis, dass die Aufnahme bei 150 stoppt. Rechts ein QR-Code zum Beta-Zugang. Unten links das Zeichen von LeaderOS. (Variante ohne Begrenzung: „Beta. Kostenlos. Jetzt starten.", ohne Kästchen.)
 
 ## Offene Punkte
 
-1. **Freigabe durch Wlad** (Mail): Bilder und Caption.
-2. **Begrenzung** (Weg A oder B oben). Ohne Entscheidung nicht posten.
+1. **Freigabe durch Wlad** (Mail): Bilder und Caption, auch die Beispiel-Antworten des WladBot auf Folie 4.
+2. **Begrenzung** (Weg A oder B oben) und die Zahl überall gleichziehen. Ohne Entscheidung nicht posten.
 3. **QR-Ziel prüfen:** `https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=qr&utm_campaign=beta-fenster`. Der Code liest sich aus dem gerenderten Bild bis 400 Pixel Breite korrekt aus. Vor dem Posten einmal mit dem Handy scannen und bis zur Anmeldung durchklicken (`leaderos.de` war aus der Build-Umgebung nicht erreichbar, der Pfad ist derselbe wie bei den Landing-CTAs). Auf dem Handy scannt man das eigene Display nicht; deshalb steht der Link zusätzlich im ersten Kommentar.
-4. **Foto:** `frontend/public/wlad/wlad-portrait.jpg` hat nur 1376×768 Pixel, das Gesicht ist darin gut 170 Pixel breit. Ein Originalportrait in voller Auflösung macht Fenster und Folie 5 deutlich klarer (`SRC` und die Ausschnitte `BOX_A`/`BOX_B` in `build_assets.py` anpassen, neu rendern).
-5. **Takt:** nicht in `../linkedin-carousels-01/SCHEDULE.json` eingetragen, die Zernio-Konten sind noch nicht verbunden. Beste Zeiten: 7:30 bis 8:30 Uhr oder 12:00 bis 13:00 Uhr.
+4. **Takt:** nicht in `../linkedin-carousels-01/SCHEDULE.json` eingetragen, die Zernio-Konten sind noch nicht verbunden. Beste Zeiten: 7:30 bis 8:30 Uhr oder 12:00 bis 13:00 Uhr.
