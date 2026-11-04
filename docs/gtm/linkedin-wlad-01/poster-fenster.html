@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>LinkedIn-Poster LI·07 · Wlad Jachtchenko · Fenster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@500;600&family=JetBrains+Mono:wght@400;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+/* LI·07 "Fenster" · 1080×1350 (4:5) · Teaser für LeaderOS.
+   Wlads Portrait zweimal: unscharf, dunkel und körnig als Hintergrund, und
+   darüber ein scharfes, senkrechtes Fenster auf der linken Gesichtshälfte.
+   Die Headline teilt sich um das Fenster: links davon "Führung wird nicht
+   gelernt.", rechts davon die Auflösung "Sie wird trainiert." Name unten
+   links, Marke unten rechts. Keine Zahlen, keine Credentials.
+   Das Foto kommt aus build_fenster_assets.py (build/li07-photo.png); die
+   Fenstergeometrie unten muss mit WIN in diesem Skript übereinstimmen. */
+:root{--lime:#bfff00;--ink:#0a0a0a;
+  --disp:'Outfit',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',serif;
+  --win-x:336px;--win-w:290px;--gap:28px;--pad:60px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+.sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--ink);color:#fff;font-family:var(--body)}
+.photo{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* Lesbarkeit: weicher Verlauf unten, damit Name und Marke stehen */
+.shade{position:absolute;left:0;right:0;bottom:0;height:430px;background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,0))}
+
+/* Mono-Annotationen oben, wie in der Poster-Serie */
+.tag{position:absolute;top:50px;font-family:var(--mono);font-size:18px;letter-spacing:.06em;color:rgba(255,255,255,.78);text-transform:lowercase;white-space:nowrap}
+.tag.l{left:var(--pad)}
+.tag.r{right:var(--pad)}
+
+/* Geteilte Headline um das Fenster */
+.hl{position:absolute;top:318px;font-family:var(--body);font-weight:600;font-size:52px;line-height:1.08;letter-spacing:-.022em;color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.6),0 0 2px rgba(0,0,0,.25)}
+.hl.l{right:calc(1080px - var(--win-x) + var(--gap));text-align:right}
+.hl.r{left:calc(var(--win-x) + var(--win-w) + var(--gap));text-align:left}
+.hl .p{color:var(--lime)}
+
+/* Name + Rolle unten links */
+.who{position:absolute;left:var(--pad);bottom:58px}
+.name{font-family:var(--serif);font-style:italic;font-weight:400;font-size:92px;line-height:.95;letter-spacing:-.01em;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.role{margin-top:18px;font-weight:500;font-size:24px;line-height:1.42;color:rgba(255,255,255,.82);letter-spacing:.002em}
+
+/* Marke unten rechts */
+.brand{position:absolute;right:var(--pad);bottom:62px;display:flex;align-items:flex-end;gap:20px}
+.brand .txt{text-align:right;padding-bottom:4px}
+.wm{font-family:var(--disp);font-weight:700;font-size:44px;line-height:1;letter-spacing:-.03em;color:#fff;-webkit-text-stroke:.7px #fff}
+.wm .d{color:var(--lime);-webkit-text-stroke:.7px var(--lime);margin:0 2px}
+.beta{margin-top:12px;font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.24em;color:var(--lime);text-transform:uppercase;white-space:nowrap}
+.tile{width:88px;height:88px;display:block;flex:none;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet">
+  <img class="photo" src="build/li07-photo.png" alt="">
+  <div class="shade"></div>
+
+  <div class="tag l">feldnotiz 07 · führung trainieren</div>
+  <div class="tag r">leadership · 2026</div>
+
+  <div class="hl l">Führung<br>wird nicht<br>gelernt.</div>
+  <div class="hl r">Sie wird<br>trainiert<span class="p">.</span></div>
+
+  <div class="who">
+    <div class="name">Wlad Jachtchenko</div>
+    <div class="role">Rhetorik-Trainer und Leadership-Coach.<br>Seine Methodik, jetzt als tägliches Training.</div>
+  </div>
+
+  <div class="brand">
+    <div class="txt">
+      <div class="wm">Leader<span class="d">·</span>OS</div>
+      <div class="beta">Beta · kostenlos</div>
+    </div>
+    <!-- Marke: Favicon (frontend/public/favicon.svg), lime Kachel mit geschwungenem W -->
+    <svg class="tile" viewBox="0 0 32 32" aria-hidden="true">
+      <defs>
+        <linearGradient id="fb" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/>
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="9.6" fill="url(#fb)"/>
+      <g transform="translate(4.2 4.2) scale(0.7375)" fill="none" stroke="#0A0A0A" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke-width="3"/>
+        <path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke-width="2.6"/>
+        <circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A" stroke="none"/>
+      </g>
+    </svg>
+  </div>
+</div>
+</body>
+</html>

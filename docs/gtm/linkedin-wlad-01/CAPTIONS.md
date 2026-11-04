@@ -1,7 +1,9 @@
-# LinkedIn · Wlad Jachtchenko · Poster-Serie 01 (sechs Posts)
+# LinkedIn · Wlad Jachtchenko · Poster-Serie 01 (sieben Posts)
 
-Stand 26.10.2026. Bilder: `LI-01.jpg` bis `LI-06.jpg` (2160×2700, 4:5), Quelle
-`poster.html`, Render `render.cjs`. LI-06 ist die Webinar-Ankündigung (Termin
+Stand 04.11.2026. Bilder: `LI-01.jpg` bis `LI-07.jpg` (2160×2700, 4:5), Quelle
+`poster.html`, Render `render.cjs`. LI-07 (Fenster) hat eigene Quellen:
+`poster-fenster.html`, `build_fenster_assets.py` (Foto-Ebene, erst ausführen),
+`render-fenster.cjs`. LI-06 ist die Webinar-Ankündigung (Termin
 aus `frontend/src/data/webinarEvent.js`: Do 26.11.2026, 10:00–11:30 Uhr). Stil: Typo-Statement auf Linienraster,
 Mono-Annotationen, s/w-Foto, Lime nur als Punkt und Sticker (recycelt aus der
 Ledger-Poster-Vorlage, in LeaderOS-DNA).
@@ -167,9 +169,39 @@ Platz sichern: Link im ersten Kommentar.
 
 ---
 
+## LI-07 · Führung wird nicht gelernt. Sie wird trainiert. (Teaser LeaderOS, Fenster)
+
+Bild: `LI-07.jpg`. Wlads Portrait als unscharfer, körniger s/w-Hintergrund, die
+linke Gesichtshälfte scharf in einem senkrechten Fenster, die Headline um das
+Fenster geteilt. Unten links Name und Rolle, unten rechts die Marke mit „Beta ·
+kostenlos". Keine Zahlen, keine Credentials, kein Termin.
+
+Führung wird nicht gelernt.
+Sie wird trainiert.
+
+Seit 2007 gebe ich Trainings, und ich kenne den Moment danach. Alle sind begeistert, alle nehmen sich etwas vor. Ein paar Wochen später ist das Verhalten das alte.
+
+Nicht, weil das Wissen fehlt. Weil niemand täglich übt.
+
+Deshalb haben wir LeaderOS gebaut: meine Methodik als tägliches Training. Die Frameworks aus meinen Büchern, ein KI-Coach, der sie kennt, Simulationen mit einem Gegenüber, das zurückredet, und jeden Tag 15 Minuten am Fall von morgen.
+
+Wir öffnen den Zugang jetzt in der Beta, kostenlos. Für alle, die ein Team, ein Projekt oder ein Gespräch führen, mit oder ohne Titel. Der Link steht im ersten Kommentar.
+
+Was willst du zuerst trainieren: das schwierige Gespräch, das Feedback oder die Entscheidung?
+
+#Leadership #Führung #Training #LeaderOS
+
+> Erster Kommentar: „LeaderOS Beta, kostenlos: https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=poster&utm_campaign=beta&utm_content=li-07-fenster"
+
+> Alt-Text: „Schwarzweiß-Portrait von Wlad Jachtchenko. Die rechte Gesichtshälfte ist dunkel und unscharf, ein senkrechtes Fenster zeigt die linke Hälfte scharf. Links davon steht der Satz Führung wird nicht gelernt, rechts davon Sie wird trainiert. Unten links der Name, unten rechts das Zeichen von LeaderOS."
+
+---
+
 ## Offene Punkte für Wlad
 
-1. Freigabe aller fünf Texte und Bilder (Antwort per Mail reicht, Änderungen gern direkt im Text).
+1. Freigabe aller sieben Texte und Bilder (Antwort per Mail reicht, Änderungen gern direkt im Text).
 2. LI-01: „seit 2007 in jedem Training" steht bewusst ohne Zahl. Falls Wlad die 400.000 nennen will, dann nur hier im Text, nicht auf dem Poster.
 3. LI-04: Das Buchzitat „Weiße Rhetorik" ist korrekt (SEXIER stammt daraus); falls das Modell inzwischen anders heißt, bitte sagen.
 4. Inhaltsadmin-Rechte auf der LinkedIn-Seite für Mert (Wlad oder Erkan), sonst postet Max nach Freigabe.
+5. LI-07: „Beta · kostenlos" auf dem Bild und der Link im ersten Kommentar (führt in den 14-Tage-Zugang) müssen zum echten Angebot passen.
+6. LI-07: Das scharfe Fenster ist so scharf wie das Foto. `frontend/public/wlad/wlad-portrait.jpg` hat nur 1376×768 Pixel, das Gesicht ist darin gut 170 Pixel breit. Ein Originalportrait in voller Auflösung würde das Fenster deutlich klarer machen (dann `SRC` in `build_fenster_assets.py` tauschen und neu rendern).
