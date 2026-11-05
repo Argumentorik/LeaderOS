@@ -1,0 +1,44 @@
+[
+  {
+    "id": "W01",
+    "slug": "teamlead-blockt",
+    "title": "Dein Teamlead blockt jeden Vorschlag ab.",
+    "slides": [
+      "W01-01.jpg",
+      "W01-02.jpg",
+      "W01-03.jpg",
+      "W01-04.jpg",
+      "W01-05.jpg"
+    ],
+    "slide_open": "W01-05-open.jpg",
+    "pdf": "W01.pdf"
+  },
+  {
+    "id": "W02",
+    "slug": "argument-zerlegt",
+    "title": "WladBot zerlegt dein Argument.",
+    "slides": [
+      "W02-01.jpg",
+      "W02-02.jpg",
+      "W02-03.jpg",
+      "W02-04.jpg",
+      "W02-05.jpg"
+    ],
+    "slide_open": "W02-05-open.jpg",
+    "pdf": "W02.pdf"
+  },
+  {
+    "id": "W03",
+    "slug": "rollenspiel-budget",
+    "title": "Dein Chef sagt: „Dafür ist kein Budget da.“",
+    "slides": [
+      "W03-01.jpg",
+      "W03-02.jpg",
+      "W03-03.jpg",
+      "W03-04.jpg",
+      "W03-05.jpg"
+    ],
+    "slide_open": "W03-05-open.jpg",
+    "pdf": "W03.pdf"
+  }
+]
