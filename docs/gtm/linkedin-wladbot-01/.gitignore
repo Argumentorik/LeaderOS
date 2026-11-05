@@ -1,0 +1,4 @@
+# Zwischenstand der Bild-Bausteine, wird von build_assets.py neu erzeugt
+build/
+# Kontaktblaetter zur Sichtpruefung
+contact-*.jpg
