@@ -1,8 +1,12 @@
-"""Seed 5 test users covering all tiers for QA.
+"""Seed test users covering all tiers (free, standard, accelerator, enterprise)
+plus one admin for QA. The admin's password is SEED_ADMIN_PASSWORD, or random
+and printed once.
 
 Run: cd /app/backend && python3 seed_test_users.py
 """
 import asyncio
+import os
+import secrets
 import sys
 from datetime import datetime, timezone, timedelta
 import uuid
@@ -31,14 +35,14 @@ TEST_USERS = [
         "communication_score": 48,
     },
     {
-        "label": "Starter (€199 Videos)",
-        "email": "starter@wladbot.test",
+        "label": "Enterprise",
+        "email": "enterprise@wladbot.test",
         "password": "test123",
-        "name": "Sara Starter",
-        "position": "Projektleiterin",
+        "name": "Erik Enterprise",
+        "position": "Head of People",
         "company": "BitBolt AG",
         "industry": "Industrial",
-        "tier": "starter",
+        "tier": "enterprise",
         "xp": 340,
         "level": "Emerging Leader",
         "leadership_score": 52,
@@ -93,6 +97,20 @@ TEST_USERS = [
         "eq_score": 72,
         "communication_score": 80,
     },
+    {
+        # Not test123: an admin can reach the whole admin panel (incl. the DB
+        # download), and staging is on a public URL.
+        "label": "Admin",
+        "email": "admin@wladbot.test",
+        "password": os.environ.get("SEED_ADMIN_PASSWORD") or secrets.token_urlsafe(16),
+        "name": "Ada Admin",
+        "position": "Operations",
+        "company": "Leader OS",
+        "industry": "Coaching",
+        "tier": "accelerator",
+        "is_admin": True,
+        "xp": 0,
+    },
 ]
 
 
@@ -134,6 +152,7 @@ async def seed() -> list[dict]:
             "last_login_ip": "127.0.0.1",
             "login_history": [],
             "test_account": True,
+            "is_admin": spec.get("is_admin", False),
         }
         await db.users.insert_one(user_doc)
 
