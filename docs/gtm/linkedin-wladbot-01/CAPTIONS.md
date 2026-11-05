@@ -6,6 +6,11 @@ wischbare Karussell: mehrere Einzelbilder zeigt LinkedIn als Raster, ein
 Dokument als Karussell. Dazu je Karussell `W0x-05-open.jpg`, die letzte Folie
 ohne Platzzahl (siehe „Vor dem Posten").
 
+**Gestaltung:** minimalistisch. Schwarzer Grund, weiße Schrift, Limette als einziger
+Akzent. Keine Grautöne, keine Kästen oder Rahmen, keine Zähler, Fortschrittsbalken
+oder Effekte; Hierarchie nur über Größe und Gewicht. Der Bot spricht in Linien-Blasen
+(weiße Linie), der Nutzer in Limette.
+
 **Idee:** Der WladBot ist die Hauptfigur, nicht Wlad. Jedes Karussell weckt
 Neugier mit einem Fall, den alle kennen, lässt den Bot mit einer Gegenfrage oder
 einem Urteil antworten und löst mit einem Canon-Framework auf. Die letzte Folie
@@ -16,7 +21,7 @@ erzeugt. Die Chat-Texte sind Beispiele und so gekennzeichnet, keine Zitate von
 Wlad.
 
 **Quellen und Neu-Bauen:** `carousel.html` (alle Folien und Texte), `build_assets.py`
-(Freisteller, Filmkorn, QR-Codes; Pillow, numpy, scipy, `qrcode`), `render.cjs`
+(Freisteller, QR-Codes; Pillow, numpy, scipy, `qrcode`), `render.cjs`
 (Playwright), PDFs mit `../linkedin-carousels-01/build_pdf.py`.
 
 ```
@@ -143,7 +148,7 @@ LeaderOS ist meine Methodik als tägliches Training: ein KI-Coach, der sie kennt
 
 **W02**
 1. Titelbild. WladBot zerlegt dein Argument. Der Beispielsatz „Wir müssen das Projekt stoppen.“ ist in drei Teile zerschnitten. Der WladBot sagt: Das ist ein Satz. Kein Argument.
-2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“ Darunter die Buchstaben S E X I E R, nur das S leuchtet. WladBot: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
+2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“ Darunter die Buchstaben S E X I E R, nur das S ist gefüllt. WladBot: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
 3. Die sechs Schritte des SEXIER-Modells: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal, jeweils mit einer Zeile Erklärung.
 4. Dasselbe Argument, neu gebaut, in sechs Zeilen zu S, E, X, I, E, R, als Beispiel gekennzeichnet. Unten: Sechs Schritte, zwei Minuten. Das Argument trägt sich selbst.
 5. Schlussfolie: Frag WladBot selbst. Sprechblase: Gib mir dein Argument. 150 Plätze, Beta, kostenlos, QR-Code.

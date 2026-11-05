@@ -4,7 +4,7 @@ W-Serie "WladBot" · Bild-Bausteine für carousel.html
 
 Der WladBot ist die Hauptfigur der Karussells. Aus dem bestehenden Produkt-Bild
 (frontend/public/wlad/wladbot3.0.png, 512×512 auf hellem Grund) entsteht ein
-sauberer Freisteller; dazu ein Filmkorn-Tile und je Karussell ein QR-Code.
+sauberer Freisteller; dazu je Karussell ein QR-Code.
 Es wird nichts neu erzeugt: kein neues Gesicht, nur das vorhandene Maskottchen.
 
     /usr/bin/python3 build_assets.py [outDir]
@@ -15,7 +15,6 @@ PYTHONPATH=<dir>).
 
 Ausgabe in outDir (Standard: ./build, nicht eingecheckt):
   mascot.png            Freisteller 1024×1024 (RGBA)
-  grain.png             Filmkorn-Tile 512×512 (Graustufen, Mittelwert 128)
   qr-w01.svg … qr-w03.svg   QR-Codes (Vektor, transparent), je mit eigenem utm_content
 """
 import os
@@ -55,12 +54,6 @@ def mascot(path):
     out.resize((1024, 1024), Image.LANCZOS).save(path)
 
 
-def grain(path):
-    rng = np.random.default_rng(1107)
-    n = rng.normal(128, 38, (512, 512)).clip(0, 255).astype(np.uint8)
-    Image.fromarray(n, 'L').save(path)
-
-
 def make_qr(path, uid):
     try:
         import qrcode
@@ -92,9 +85,8 @@ def make_qr(path, uid):
 def main():
     os.makedirs(OUT, exist_ok=True)
     mascot(os.path.join(OUT, 'mascot.png'))
-    grain(os.path.join(OUT, 'grain.png'))
     info = [make_qr(os.path.join(OUT, f'qr-{uid.replace("w", "w0")}.svg'), uid) for uid in QR_IDS]
-    print(f'wrote mascot.png, grain.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')
+    print(f'wrote mascot.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')
 
 
 if __name__ == '__main__':
