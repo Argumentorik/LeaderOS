@@ -1,0 +1,49 @@
+# Leader-Check web — serves the CRA build and proxies the API, same-origin like Emergent.
+
+{
+	admin off
+	servers {
+		# Accept Railway's edge X-Forwarded-For (otherwise Caddy drops it).
+		trusted_proxies static 0.0.0.0/0 ::/0
+	}
+}
+
+:{$PORT:8080} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(self)"
+		-Server
+	}
+
+	handle /api/* {
+		reverse_proxy {$BACKEND_URL} {
+			# services/security.secure_client_ip takes the RIGHT-most XFF entry
+			# (one ingress hop, as on Emergent). Forward Railway's header as-is
+			# instead of appending the edge's address, or every visitor would
+			# share one rate-limit bucket.
+			header_up X-Forwarded-For {header.X-Forwarded-For}
+		}
+	}
+
+	handle {
+		root * /srv
+
+		@static path /static/*
+		header @static Cache-Control "public, max-age=31536000, immutable"
+		@not_static not path /static/*
+		header @not_static Cache-Control "no-cache"
+
+		try_files {path} /index.html
+		file_server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

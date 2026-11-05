@@ -1,0 +1,320 @@
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { getQuestionsForRole, CATEGORIES, CATEGORY_COLORS } from "../data/questions";
+import { ChevronLeft, ChevronRight, Check, Bot, Send, Sparkles, ArrowRight } from "lucide-react";
+import axios from "axios";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+function WladBotChat({ onContinue }) {
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Dieses kurze Gespräch ist komplett optional. Wenn du magst, erzähl mir: Was ist gerade deine größte Leadership-Herausforderung? Sobald du bereit bist, tippst du unten auf den grünen Button · dann wird dein Report erstellt."
+    }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [exchangeCount, setExchangeCount] = useState(0);
+  const bottomRef = useRef(null);
+  const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = async (text) => {
+    if (!text.trim() || loading) return;
+    const userMsg = { role: "user", text };
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const res = await axios.post(`${API}/coach/chat`, {
+        session_id: user.session_id || "demo",
+        message: `[Vor-Report Gespräch] Der Nutzer hat gerade 20 Diagnose-Fragen beantwortet. Sei nahbar, empathisch und wie ein erfahrener Freund (Wlad). Antworte kurz (2-3 Sätze) und persönlich. WICHTIG: Behaupte NIEMALS, dass du den Report gerade im Hintergrund erstellst oder von selbst eine E-Mail verschickst · das passiert erst, wenn der Nutzer unten auf den Button tippt. Weise am Ende deiner Antwort freundlich darauf hin, dass er unten auf den grünen Button tippt, um seinen Report jetzt zu erstellen. Nutzer-Nachricht: ${text}`,
+      }, { headers: { "X-Session-ID": user.session_id || "demo" } });
+      setMessages(prev => [...prev, { role: "assistant", text: res.data.response }]);
+      setExchangeCount(c => c + 1);
+    } catch {
+      setMessages(prev => [...prev, { role: "assistant", text: "Danke fürs Teilen! Tipp jetzt unten auf den grünen Button · dann erstelle ich deinen Report." }]);
+      setExchangeCount(c => c + 1);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleContinue = () => {
+    // Only pass the real, non-intro turns to the report generator
+    const chatContext = messages.filter((m, i) => !(i === 0 && m.role === "assistant"));
+    onContinue(chatContext);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a]" data-testid="wladbot-q20">
+      <div className="max-w-2xl mx-auto px-5 pt-28 pb-12">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 rounded-2xl bg-[#C8FF00]/[0.08] border border-[#C8FF00]/15 flex items-center justify-center mx-auto mb-5">
+            <Bot className="w-10 h-10 text-[#C8FF00]" />
+          </div>
+          <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-2">
+            WladBot möchte dich kennenlernen
+          </h2>
+          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.06]">
+            <span className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
+            <span className="font-inter text-xs text-[#C8FF00] font-semibold tracking-wide uppercase">Optional · du kannst direkt weiter</span>
+          </div>
+          <p className="font-inter text-sm text-slate-500 max-w-md mx-auto">
+            Ein kurzes Gespräch, wenn du magst. Deinen Report bekommst du direkt danach · sobald du unten auf den Button tippst.
+          </p>
+        </div>
+
+        {/* Chat */}
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 mb-6" style={{ maxHeight: "380px", overflowY: "auto" }}>
+          <div className="space-y-5">
+            {messages.map((msg, i) => (
+              <div key={`msg-${i}-${msg.role}`} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                {msg.role === "assistant" && (
+                  <div className="w-9 h-9 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
+                    <Bot className="w-4 h-4 text-[#C8FF00]" />
+                  </div>
+                )}
+                <div className={`max-w-[80%] px-4 py-3 font-inter text-sm leading-relaxed rounded-2xl ${
+                  msg.role === "user"
+                    ? "bg-[#C8FF00]/10 text-white border border-[#C8FF00]/15 rounded-tr-md"
+                    : "bg-white/[0.04] text-slate-200 border border-white/[0.06] rounded-tl-md"
+                }`}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="flex gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center shrink-0">
+                  <Bot className="w-4 h-4 text-[#C8FF00]" />
+                </div>
+                <div className="bg-white/[0.04] border border-white/[0.06] px-5 py-3.5 rounded-2xl rounded-tl-md flex items-center gap-1.5">
+                  {[0, 1, 2].map(i => (
+                    <span key={i} className="w-2 h-2 rounded-full bg-[#C8FF00] analyzing-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+        </div>
+
+        {/* Input */}
+        <div className="flex items-center gap-3 mb-8">
+          <input
+            data-testid="wladbot-input"
+            type="text"
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
+            placeholder="Schreib Wlad etwas..."
+            disabled={loading}
+            className="flex-1 h-14 px-5 rounded-xl bg-white/[0.03] border border-white/[0.08] font-inter text-sm text-white placeholder:text-slate-600 focus:border-[#C8FF00]/30 focus:outline-none transition-colors"
+          />
+          <button
+            data-testid="wladbot-send"
+            onClick={() => sendMessage(input)}
+            disabled={loading || !input.trim()}
+            className="w-14 h-14 rounded-xl bg-[#C8FF00] flex items-center justify-center hover:bg-[#d4ff33] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <Send className="w-5 h-5 text-black" />
+          </button>
+        </div>
+
+        {/* Continue — the ONE clear next action */}
+        <button
+          data-testid="wladbot-continue"
+          onClick={handleContinue}
+          className="w-full py-5 rounded-2xl bg-[#C8FF00] text-[#0a0a0a] font-manrope font-extrabold text-lg md:text-xl flex items-center justify-center gap-3 hover:bg-[#d4ff33] transition-all shadow-xl shadow-[#C8FF00]/25 hover:scale-[1.01]"
+        >
+          <Sparkles className="w-6 h-6" />
+          Meinen Report jetzt erstellen
+          <ArrowRight className="w-6 h-6" />
+        </button>
+
+        <p className="font-inter text-xs text-slate-600 text-center mt-4">
+          Kostenlos · dein persönlicher Leadership-Report erscheint direkt danach
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function Quiz() {
+  const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+  const [current, setCurrent] = useState(() => {
+    const saved = parseInt(localStorage.getItem("quiz_current") || "0", 10);
+    return isNaN(saved) ? 0 : saved;
+  });
+  const [answers, setAnswers] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("quiz_answers") || "{}"); }
+    catch { return {}; }
+  });
+  const [selected, setSelected] = useState(null);
+  const [animating, setAnimating] = useState(false);
+  const [showWladBot, setShowWladBot] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const resumeSid = params.get("resume");
+      let stored = localStorage.getItem("emergent_user");
+      let serverAnswers = null;
+
+      // Cross-device / cross-browser resume via the personal link in the reminder mail.
+      if (resumeSid) {
+        try {
+          const { data: p } = await axios.get(`${API}/quiz/progress/${resumeSid}`);
+          if (p && p.session_id) {
+            if (!stored) {
+              const u = { session_id: p.session_id, user_id: p.session_id, name: p.name, email: p.email, role: p.role };
+              localStorage.setItem("emergent_user", JSON.stringify(u));
+              stored = JSON.stringify(u);
+            }
+            if (p.answers && Object.keys(p.answers).length) serverAnswers = p.answers;
+          }
+        } catch { /* fall back to local */ }
+      }
+
+      if (!stored) { navigate("/diagnose"); return; }
+      const userData = JSON.parse(stored);
+      const role = userData.role || 'selbststaendige';
+      const qs = getQuestionsForRole(role);
+
+      // Prefer whichever source has more answers (server wins on new device).
+      let localAnswers = {};
+      try { localAnswers = JSON.parse(localStorage.getItem("quiz_answers") || "{}"); } catch { /* */ }
+      const merged = (serverAnswers && Object.keys(serverAnswers).length >= Object.keys(localAnswers).length)
+        ? serverAnswers : localAnswers;
+      if (Object.keys(merged).length) {
+        localStorage.setItem("quiz_answers", JSON.stringify(merged));
+        setAnswers(merged);
+      }
+
+      // Resume exactly at the first UNANSWERED question — no re-answering.
+      const firstUnanswered = qs.findIndex(q => merged[q.id] === undefined);
+      setQuestions(qs);
+      setCurrent(firstUnanswered === -1 ? qs.length - 1 : firstUnanswered);
+    };
+    init();
+  }, [navigate]);
+
+  // Auto-save every answer immediately — localStorage AND server (best-effort).
+  useEffect(() => {
+    if (Object.keys(answers).length === 0 || questions.length === 0) return;
+    localStorage.setItem("quiz_answers", JSON.stringify(answers));
+    const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+    const sid = user.session_id || user.user_id;
+    if (!sid) return;
+    axios.post(`${API}/quiz/progress`, {
+      session_id: sid, answers, current, total: questions.length,
+    }, { headers: { "X-Session-ID": sid } }).catch(() => {});
+  }, [answers, current, questions.length]);
+
+  useEffect(() => {
+    localStorage.setItem("quiz_current", String(current));
+  }, [current]);
+
+  const question = questions[current];
+  const progress = questions.length > 0 ? ((current + 1) / questions.length) * 100 : 0;
+
+  const handleSelect = (option) => {
+    if (animating || selected !== null) return;
+    setSelected(option.id);
+    setTimeout(() => {
+      setAnswers(prev => ({
+        ...prev,
+        [question.id]: { question_id: question.id, category: question.category, layer: question.layer, score: option.score }
+      }));
+      if (current < questions.length - 1) {
+        setAnimating(true);
+        setTimeout(() => { setCurrent(c => c + 1); setSelected(null); setAnimating(false); }, 300);
+      } else {
+        setTimeout(() => { setSelected(null); setShowWladBot(true); }, 300);
+      }
+    }, 400);
+  };
+
+  const handleSubmit = (chatContext) => {
+    const answersArray = Object.values(answers);
+    const user = JSON.parse(localStorage.getItem("emergent_user") || "{}");
+    // NOTE: quiz_answers/quiz_current are intentionally NOT cleared here.
+    // They are cleared in Analyzing.jsx only AFTER the report was successfully
+    // generated and persisted — so a failed/interrupted generation never
+    // sends the user back to question 1.
+    navigate("/analyzing", {
+      state: {
+        answers: answersArray,
+        session_id: user.session_id || user.user_id,
+        chat_context: Array.isArray(chatContext) ? chatContext : null,
+      },
+    });
+  };
+
+  if (!question) return null;
+  const catColor = CATEGORY_COLORS[question.category] || "#C8FF00";
+  const answeredCount = Object.keys(answers).length;
+
+  if (showWladBot) {
+    return <WladBotChat onContinue={handleSubmit} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] pt-20 px-4 pb-12" data-testid="quiz-page">
+      <div className="fixed top-16 left-0 right-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.04]">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+          <span className="font-inter text-xs text-slate-500">Frage {current + 1} von {questions.length}</span>
+          <span className="badge-blue px-3 py-1 text-xs" style={{ borderColor: `${catColor}30`, background: `${catColor}10`, color: catColor }}>
+            {CATEGORIES[question.category]}
+          </span>
+        </div>
+        <div className="h-1 bg-white/[0.04]">
+          <div className="h-full bg-[#C8FF00] transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto pt-16" style={{ opacity: animating ? 0 : 1, transform: animating ? 'translateX(-20px)' : 'translateX(0)', transition: "all 0.3s ease" }}>
+        <div className="glass-card-subtle p-5 mb-6" data-testid="question-scenario">
+          <span className="font-inter text-xs text-slate-500 uppercase tracking-wider mb-2 block">Szenario</span>
+          <p className="font-inter text-slate-300 leading-relaxed">{question.scenario}</p>
+        </div>
+        <h2 className="font-manrope font-bold text-xl md:text-2xl text-white mb-8" data-testid="question-text">{question.question}</h2>
+        <div className="space-y-3 mb-10" data-testid="question-options">
+          {question.options.map((option) => {
+            const isSelected = selected === option.id;
+            return (
+              <button key={option.id} data-testid={`option-${option.id}`} onClick={() => handleSelect(option)} disabled={selected !== null}
+                className={`quiz-option w-full flex items-start gap-4 p-5 border text-left ${isSelected ? "border-[#C8FF00]/40 bg-[#C8FF00]/[0.06]" : "border-white/[0.06] bg-white/[0.02]"}`}>
+                <span className={`font-manrope font-bold text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-[#C8FF00] text-[#0a0a0a]" : "bg-white/[0.04] text-slate-500 border border-white/[0.08]"}`}>
+                  {isSelected ? <Check className="w-4 h-4" /> : option.id.toUpperCase()}
+                </span>
+                <span className={`font-inter text-sm leading-relaxed pt-1 ${isSelected ? "text-white" : "text-slate-300"}`}>{option.text}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-between">
+          <button data-testid="quiz-prev" onClick={() => { if (current > 0) { setCurrent(c => c - 1); setSelected(null); } }} disabled={current === 0}
+            className="flex items-center gap-2 font-inter text-sm text-slate-500 hover:text-white transition-colors disabled:opacity-30 rounded-full px-4 py-2 hover:bg-white/5">
+            <ChevronLeft className="w-4 h-4" /> Zurück
+          </button>
+          <span className="font-inter text-xs text-slate-600">{answeredCount} / {questions.length} beantwortet</span>
+          {current < questions.length - 1 && answers[question.id] !== undefined && (
+            <button data-testid="quiz-next" onClick={() => { setCurrent(c => c + 1); setSelected(null); }}
+              className="flex items-center gap-2 font-inter text-sm text-slate-400 hover:text-white transition-colors rounded-full px-4 py-2 hover:bg-white/5">
+              Weiter <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -33,7 +33,7 @@ export default defineRailway((ctx) => {
 
   const LeaderOS = service("LeaderOS", {
     source: github("Argumentorik/LeaderOS", { branch: "railway-base", checkSuites: false }),
-    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "backend/Dockerfile", watchPatterns: ["backend/**"] },
+    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "backend/Dockerfile", watchPatterns: ["/backend/**"] },
     healthcheck: "/api/health",
     healthcheckTimeout: 300,
     replicas: { [REGION]: 1 },
@@ -74,6 +74,8 @@ export default defineRailway((ctx) => {
       PUBLIC_BASE_URL: preserve(),
       WEBINAR_JOIN_URL: preserve(),
       TRUSTED_PROXY_HOPS: preserve(),
+      // Verifies Leader-Check's sync tokens; must equal LeaderCheck's value.
+      REPORT_JWT_SECRET: preserve(),
 
       ...prodOnlySecrets,
     },
@@ -111,8 +113,57 @@ export default defineRailway((ctx) => {
     },
   });
 
+  // --- Leader-Check (leadercheck.de) — separate app in leadercheck/, own DB on
+  // the same Mongo server. Same backend + Caddy layout as LeaderOS.
+  const leaderCheckProdSecrets: Record<string, VariableValue> = staging
+    ? {}
+    : {
+        STRIPE_API_KEY: preserve(),
+        STRIPE_WEBHOOK_SECRET: preserve(),
+        RESEND_API_KEY: preserve(),
+      };
+
+  const LeaderCheck = service("LeaderCheck", {
+    source: github("Argumentorik/LeaderOS", { branch: "railway-base", checkSuites: false }),
+    rootDirectory: "leadercheck/backend",
+    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile", watchPatterns: ["/leadercheck/backend/**"] },
+    healthcheck: "/api/",
+    // Email drip scheduler + Stripe self-healing loop run in-process: 1 replica.
+    replicas: { [REGION]: 1 },
+    networking: { privateNetworkEndpoint: "leadercheck" },
+    env: {
+      PORT: "8001",
+      MONGO_URL: db.env.MONGO_URL,
+      DB_NAME: "leadercheck",
+      CORS_ORIGINS: staging
+        ? "https://leadercheck-web-staging.up.railway.app"
+        : "https://leadercheck.de,https://www.leadercheck.de",
+      SENDER_EMAIL: "wlad@leaderos.de",
+      // Same Emergent account key as LeaderOS (quiz report LLM).
+      EMERGENT_LLM_KEY: "${{LeaderOS.EMERGENT_LLM_KEY}}",
+
+      ADMIN_JWT_SECRET: preserve(),
+      ADMIN_PASSWORD: preserve(),
+      REPORT_JWT_SECRET: preserve(),
+
+      ...leaderCheckProdSecrets,
+    },
+  });
+
+  const LeaderCheckWeb = service("LeaderCheck-web", {
+    source: github("Argumentorik/LeaderOS", { branch: "railway-base", checkSuites: false }),
+    rootDirectory: "leadercheck/frontend",
+    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile", watchPatterns: ["/leadercheck/frontend/**"] },
+    healthcheck: "/",
+    replicas: { [REGION]: 1 },
+    networking: { privateNetworkEndpoint: "leadercheck-web" },
+    env: {
+      BACKEND_URL: "http://leadercheck.railway.internal:8001",
+    },
+  });
+
   return project("leaderos", {
     variables: { managed: true },
-    resources: [LeaderOS, db, data, LeaderOSWeb],
+    resources: [LeaderOS, db, data, LeaderOSWeb, LeaderCheck, LeaderCheckWeb],
   });
 });
