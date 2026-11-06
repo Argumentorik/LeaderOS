@@ -450,7 +450,7 @@ async def _transcribe_webm(audio_bytes: bytes) -> str:
     Iter 183: Eigennamen werden Whisper vorab genannt (`prompt`) und danach zur
     Sicherheit korrigiert — „Bei Vlad gibt es …" darf nirgends erscheinen.
     """
-    from emergentintegrations.llm.openai import OpenAISpeechToText
+    from lib.llm_provider import OpenAISpeechToText
     from services_speech_text import SPEECH_NAME_HINT, fix_brand_names
     stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
     with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
@@ -479,7 +479,7 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
       - gpt-4o-mini for the LLM step (2-3s vs gpt-5.2's 15-25s)
       - Wlad's frameworks still grounded via RAG context block
     """
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    from lib.llm_provider import LlmChat, UserMessage
 
     async def _fetch_history():
         return await db.chat_messages.find(
@@ -785,7 +785,7 @@ async def argumentation_sparring(
     voice — user hears a distinct sparring partner instead of just Wlad.
     """
     from routes.credits import check_and_deduct_credit, no_credits_detail
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    from lib.llm_provider import LlmChat, UserMessage
     import json as _json
 
     user = await get_current_user(request)

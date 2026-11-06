@@ -46,7 +46,7 @@ if RESEND_API_KEY and RESEND_API_KEY != "your_resend_api_key_here":
     resend.api_key = RESEND_API_KEY
 
 config = {
-    "llm_key": os.environ.get('EMERGENT_LLM_KEY', ''),
+    "llm_key": os.environ.get('ANTHROPIC_API_KEY', ''),
     "stripe_key": os.environ.get('STRIPE_API_KEY', ''),
     "resend_key": RESEND_API_KEY if RESEND_API_KEY != "your_resend_api_key_here" else "",
     "sender_email": SENDER_EMAIL,

@@ -7,6 +7,9 @@
 > HR/People Ops · Produkt: Kurse, KI-Coach WladBot, Simulationen, tägliche
 > Drills; Einstieg über 14-Tage-Test und das Live-Webinar am 29.10.2026.
 >
+> **Update 02.11.2026:** Folge-Audit mit Host-Befund und Betreiber-Checkliste in
+> `SEO_AEO_UPGRADE_2026-11.md`. Der Webinar-Termin ist inzwischen der 26.11.2026.
+>
 > Technische Grundlage und Regeln stehen in `SEO_AEO_PLAYBOOK.md`; das
 > Keyword-Universum in `SEO_KEYWORDS.md`. Dieses Dokument hält fest, was im
 > Audit gefunden wurde, was davon **im Code umgesetzt** ist und was nur der

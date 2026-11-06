@@ -7,7 +7,7 @@ import base64
 import asyncio
 from datetime import datetime, timezone
 from typing import Optional
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from lib.llm_provider import LlmChat, UserMessage
 import pypdf
 import docx
 

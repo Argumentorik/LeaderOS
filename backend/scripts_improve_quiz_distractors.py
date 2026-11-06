@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage  # noqa: E402
+from lib.llm_provider import LlmChat, UserMessage  # noqa: E402
 from quiz_bank import QUIZ_BANK_RAW  # noqa: E402
 from quiz_quality import validate_question  # noqa: E402
 
@@ -50,9 +50,9 @@ Antworte AUSSCHLIESSLICH mit JSON:
 
 
 async def rewrite_question(q: dict, attempt: int) -> dict | None:
-    key = os.environ.get("EMERGENT_LLM_KEY", "")
+    key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not key:
-        raise RuntimeError("EMERGENT_LLM_KEY missing")
+        raise RuntimeError("ANTHROPIC_API_KEY missing")
     chat = LlmChat(api_key=key, session_id=f"quiz-rewrite-{attempt}", system_message=RULES_PROMPT).with_model(
         "openai", "gpt-4o-mini"
     )

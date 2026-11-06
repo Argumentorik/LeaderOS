@@ -67,7 +67,7 @@ export default function CoachingPage() {
           ? 'KI-Coach, Videokurse, Gesprächs-Training und Video-Analyse für Führungskräfte — plus persönliches Coaching.'
           : 'AI coach, video courses, conversation training and video analysis for leaders — plus personal coaching.',
         inLanguage: de ? 'de' : 'en',
-        provider: { '@type': 'Organization', name: 'Leader-OS', url: 'https://leaderos.de' },
+        provider: { '@type': 'Organization', name: 'Leader-OS', url: 'https://leader-os.de' },
       },
     ],
   }), [de]);

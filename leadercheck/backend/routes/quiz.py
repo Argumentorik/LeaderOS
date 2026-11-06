@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request, Header
 from datetime import datetime, timezone
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from services.llm import LlmChat, UserMessage
 import json
 import uuid
 import logging

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -217,7 +218,7 @@ async def run_rag_quality_audit(request: Request, body: Optional[AuditRequest] =
     across all answers (the "uses ALL of them" check).
     """
     await require_admin(request)
-    if not EMERGENT_LLM_KEY:
+    if not os.environ.get("ANTHROPIC_API_KEY"):
         raise HTTPException(status_code=503, detail="LLM key not configured")
 
     opts = body or AuditRequest()

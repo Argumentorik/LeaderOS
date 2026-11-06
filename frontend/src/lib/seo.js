@@ -1,14 +1,17 @@
 /**
  * seo.js — per-route head tags for the SPA (Iter 135 audit).
  *
- * index.html ships ONE canonical (https://leaderos.de/) for every route, so
+ * index.html ships ONE canonical (https://leader-os.de/) for every route, so
  * Google treated /login, /for-teams, /changelog … as duplicates of the root.
  * Google renders JS, so setting title/description/canonical/og at runtime is
  * enough — no SSR needed for our handful of public pages.
  */
 import { useEffect } from 'react';
 
-const ORIGIN = 'https://leaderos.de';
+// Kanonischer Host der öffentlichen Seiten ist die Marketing-Domain (Sitemap, llms.txt, Anzeigen).
+// Die App-Domain leaderos.de darf hier nicht stehen: sonst erklärt jede Seite mit useSeo
+// ihr Gegenstück auf der App-Domain zum Original.
+const ORIGIN = 'https://leader-os.de';
 
 const setMeta = (selector, attr, value) => {
   const el = document.head.querySelector(selector);

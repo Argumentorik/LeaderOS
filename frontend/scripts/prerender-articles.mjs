@@ -44,6 +44,9 @@ const esc = (s = '') =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+// Titel je Slug für die „Weiterlesen“-Links; wird nach dem Laden gefüllt.
+let TITLE_BY_SLUG = new Map();
+
 // ---------------------------------------------------------------- articles
 async function loadArticles() {
   const files = (await readdir(ARTICLES_DIR)).filter((f) => f.endsWith('.js'));
@@ -129,8 +132,11 @@ function articleBodyHtml(a) {
   const date = a.publishedAt
     ? new Date(`${a.publishedAt}T00:00:00Z`).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
     : '';
+  // Anchor-Text ist der Artikeltitel (nicht der Slug mit Leerzeichen); unbekannte Slugs
+  // werden nicht verlinkt, damit kein interner Link ins Leere zeigt.
   const related = (a.related || [])
-    .map((slug) => `<li style="margin:0 0 .5em;"><a href="/journal/${esc(slug)}" style="color:#000;">${esc(slug.replace(/-/g, ' '))}</a></li>`)
+    .filter((slug) => TITLE_BY_SLUG.has(slug))
+    .map((slug) => `<li style="margin:0 0 .5em;"><a href="/journal/${esc(slug)}" style="color:#000;">${esc(TITLE_BY_SLUG.get(slug))}</a></li>`)
     .join('');
   return (
     `<div style="max-width:720px;margin:0 auto;padding:40px 20px;font-family:Inter,system-ui,sans-serif;background:#fff;">` +
@@ -229,6 +235,7 @@ function renderPage(template, { title, description, url, ogType, jsonLd, rootHtm
 // ------------------------------------------------------------------ main
 const template = await readFile(join(BUILD_DIR, 'index.html'), 'utf8');
 const articles = await loadArticles();
+TITLE_BY_SLUG = new Map(articles.map((a) => [a.slug, a.title]));
 
 let written = 0;
 for (const a of articles) {

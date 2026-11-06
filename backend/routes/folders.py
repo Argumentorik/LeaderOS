@@ -43,7 +43,7 @@ from pydantic import BaseModel
 from config import db
 from services import get_current_user
 from services_folder_knowledge import build_folder_timeline, generate_briefing_prompt
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from lib.llm_provider import LlmChat, UserMessage
 
 router = APIRouter(prefix="/api/folders", tags=["folders"])
 
@@ -276,7 +276,7 @@ async def folder_briefing(folder_id: str, request: Request):
     items, _timeline = await build_folder_timeline(folder_id, user["user_id"], limit=5)
     prompt = await generate_briefing_prompt(folder, items, lang="de")
 
-    api_key = os.environ.get("EMERGENT_LLM_KEY") or os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         # No LLM key at all — use deterministic fallback so the feature still works.
         return {

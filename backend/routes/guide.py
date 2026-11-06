@@ -18,7 +18,7 @@ import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from lib.llm_provider import LlmChat, UserMessage
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel

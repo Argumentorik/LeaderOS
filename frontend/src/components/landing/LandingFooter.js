@@ -108,6 +108,8 @@ const COL_COMPANY = [
   { label: 'Referral · Empfehlung',  href: 'https://leaderos.de/referral',   external: true },
   { label: 'Enterprise',             href: 'https://leaderos.de/enterprise', external: true },
   { label: 'Wlad auf LinkedIn',      href: 'https://www.linkedin.com/in/wladislawjachtchenko', external: true },
+  { label: 'Wlad auf YouTube',       href: 'https://www.youtube.com/@wlad.jachtchenko', external: true, me: true },
+  { label: 'Wlad auf Instagram',     href: 'https://www.instagram.com/wlad.jachtchenko/', external: true, me: true },
   { label: 'start@aiporate.com',     href: 'mailto:start@aiporate.com' },
   { label: 'Impressum',              to: '/impressum' },
   { label: 'Datenschutz',            to: '/datenschutz' },
@@ -134,7 +136,7 @@ const SitemapLink = ({ link }) => {
     <a
       href={link.href}
       target={link.external ? '_blank' : undefined}
-      rel={link.external ? 'noopener noreferrer' : undefined}
+      rel={link.external ? (link.me ? 'me noopener noreferrer' : 'noopener noreferrer') : undefined}
       className={className}
     >
       {link.label}

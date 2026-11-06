@@ -10,9 +10,8 @@ Failover: if classification call fails, defaults to 'general_coaching' (safe).
 """
 from __future__ import annotations
 import json
-import os
 from typing import Literal, Optional
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from lib.llm_provider import FAST_MODEL, LlmChat, UserMessage
 
 Intent = Literal[
     "speech_coaching",      # "Ich habe morgen eine Präsentation"
@@ -80,13 +79,10 @@ async def classify_intent(message: str, override: Optional[Intent] = None) -> di
         }
 
     try:
-        key = os.environ.get("EMERGENT_LLM_KEY", "")
-        if not key:
-            raise RuntimeError("EMERGENT_LLM_KEY missing")
-        # gpt-4o-mini chosen for cost + speed; classification doesn't need GPT-5.
+        # Fast model for cost + speed; classification doesn't need Opus.
         chat = (
-            LlmChat(api_key=key, session_id="intent-classify", system_message=CLASSIFY_PROMPT)
-            .with_model("openai", "gpt-4o-mini")
+            LlmChat(session_id="intent-classify", system_message=CLASSIFY_PROMPT)
+            .with_model("anthropic", FAST_MODEL)
         )
         raw = await chat.send_message(UserMessage(text=message.strip()[:600]))
         # Strip any accidental code fences

@@ -33,7 +33,7 @@ async def create_task(data: TaskCreate, request: Request):
 @router.post("/tasks/generate")
 async def generate_ai_tasks(request: Request):
     """WladBot generates 5 personalised leadership tasks from the user's profile."""
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    from lib.llm_provider import LlmChat, UserMessage
     from config import EMERGENT_LLM_KEY
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)

@@ -1,4 +1,4 @@
-import { defineRailway, github, mongo, preserve, project, service, volume, type VariableValue } from "railway/iac";
+import { database, defineRailway, github, preserve, project, service, volume, type VariableValue } from "railway/iac";
 // This repository manages only its own resources in the environment. Other
 // repositories export their own partial name.
 // See https://docs.railway.com/infrastructure-as-code#multi-repo-projects
@@ -10,7 +10,9 @@ const REGION = "europe-west4-drams3a";
 export default defineRailway((ctx) => {
   const staging = ctx.isEnvironment("staging");
 
-  const db = mongo("MongoDB", { region: REGION });
+  // mongo() pins mongo:8, which won't start on Linux kernels >= 6.19. Same
+  // resource, older image. (Staging FCV was lowered to 7.0 before the switch.)
+  const db = database("MongoDB", "mongo", { image: "mongo:7", output: "MONGO_URL", defaultMountPath: "/data/db", region: REGION });
 
   // Disk cache for guide media + chunked admin uploads (TMPDIR below).
   // Volumes pin the service to 1 replica, which challenge_mail_loop needs anyway.
@@ -59,7 +61,11 @@ export default defineRailway((ctx) => {
       CRON_SHARED_SECRET: preserve(),
       INBOUND_SYNC_SECRET: preserve(),
 
+      // LLM: Anthropic only (lib/llm_provider.py). Opus by default, Haiku for the classifier.
+      ANTHROPIC_API_KEY: preserve(),
+
       // Shared provider config, copied from the Emergent production env.
+      // EMERGENT_LLM_KEY still backs FAL (services_fal) and the objstore until those move.
       EMERGENT_LLM_KEY: preserve(),
       INTEGRATION_PROXY_URL: preserve(),
       OAUTH_SESSION_URL: preserve(),
@@ -139,8 +145,8 @@ export default defineRailway((ctx) => {
         ? "https://leadercheck-web-staging.up.railway.app"
         : "https://leadercheck.de,https://www.leadercheck.de",
       SENDER_EMAIL: "wlad@leaderos.de",
-      // Same Emergent account key as LeaderOS (quiz report LLM).
-      EMERGENT_LLM_KEY: "${{LeaderOS.EMERGENT_LLM_KEY}}",
+      // Quiz narrative + coach chat (services/llm.py); same key as LeaderOS.
+      ANTHROPIC_API_KEY: "${{LeaderOS.ANTHROPIC_API_KEY}}",
 
       ADMIN_JWT_SECRET: preserve(),
       ADMIN_PASSWORD: preserve(),

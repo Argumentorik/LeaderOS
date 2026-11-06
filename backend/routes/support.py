@@ -20,7 +20,7 @@ from typing import Optional, List
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from lib.llm_provider import LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user

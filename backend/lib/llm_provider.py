@@ -1,53 +1,71 @@
 """
-llm_provider — Compat-Shim für `emergentintegrations.llm.chat`.
+llm_provider — LLM- und STT-Zugang ohne Emergent.
 
-Das Problem
------------
-12 backend/routes/* Files binden direkt `emergentintegrations.llm.chat`:
+Ersetzt `emergentintegrations.llm.chat` mit derselben Aufruf-Kette, damit die
+Routes unverändert bleiben:
 
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
-    chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=…, system_message=…)
+    from lib.llm_provider import LlmChat, UserMessage
+    chat = LlmChat(api_key=…, session_id=…, system_message=…)
     chat.with_model("openai", "gpt-5.2")
     resp = await chat.send_message(UserMessage(text="…"))
 
-Wir wollen weg von Emergent, ohne die 12 Routes auf einmal umzuschreiben
-und in Produktion einen Halbtag stillzustehen. Dieser Shim emuliert die
-Emergent-API mit nativen SDKs:
+Provider ist ausschließlich Anthropic (`ANTHROPIC_API_KEY`, workspace-scoped
+`sk-ant-api…`). Kein stiller Provider-Wechsel mehr über ENV.
 
-    from lib.llm_provider import LlmChat, UserMessage
-    chat = LlmChat(api_key=ANTHROPIC_KEY, session_id=…, system_message=…)
-    chat.with_model("anthropic", "claude-haiku-4-5-20251001")
-    resp = await chat.send_message(UserMessage(text="…"))
+Modellwahl
+----------
+- `LLM_MODEL`      (Default `claude-opus-5-5`)  — alle Routes.
+- `LLM_FAST_MODEL` (Default `claude-haiku-5-5`) — nur explizit angefordert
+  (services_classifier).
+Die alten OpenAI-Modellnamen an den Callsites ("gpt-5.2", "gpt-4o-mini", …)
+werden auf `LLM_MODEL` abgebildet; ein explizites `claude-*` gewinnt.
+`api_key` und `session_id` werden nur noch aus Kompatibilität angenommen.
 
-Routes ändern sich mit nur 2 Zeilen:
-
-    -from emergentintegrations.llm.chat import LlmChat, UserMessage
-    +from lib.llm_provider import LlmChat, UserMessage
-    …
-    -chat.with_model("openai", "gpt-5.2")
-    +chat.with_model("anthropic", "claude-haiku-4-5-20251001")
-
-Provider-Auswahl per Env
-------------------------
-- `ANTHROPIC_API_KEY` gesetzt  → Anthropic-Pfad (Claude)
-- `OPENAI_API_KEY` gesetzt     → OpenAI-Pfad (GPT)
-- sonst `EMERGENT_LLM_KEY`     → Emergent-Pfad (alt, Wrapper)
-
-Die `with_model("provider", "model")`-Aufrufe override den Provider explizit.
+STT
+---
+`OpenAISpeechToText` behält Namen und Signatur, transkribiert aber über
+ElevenLabs Scribe (`ELEVENLABS_API_KEY`) — es gibt keinen OpenAI-Key.
 """
 
-import os
+import io
 import logging
+import os
 from typing import Optional
 
 logger = logging.getLogger("wladbot.llm")
 
+MODEL = os.environ.get("LLM_MODEL", "claude-opus-5-5")
+FAST_MODEL = os.environ.get("LLM_FAST_MODEL", "claude-haiku-5-5")
+MAX_TOKENS = int(os.environ.get("LLM_MAX_TOKENS", "8192"))
+# Harte Obergrenze pro Aufruf, damit ein hängender Upstream keinen Worker blockiert.
+TIMEOUT_S = 120
+
+_client = None
+
+
+def anthropic_client():
+    """Ein geteilter AsyncAnthropic-Client (Connection-Pool) für Shim und Streaming."""
+    global _client
+    if _client is None:
+        import anthropic
+        key = os.environ.get("ANTHROPIC_API_KEY")
+        if not key:
+            raise RuntimeError("ANTHROPIC_API_KEY is not set")
+        _client = anthropic.AsyncAnthropic(api_key=key, timeout=TIMEOUT_S, max_retries=2)
+    return _client
+
+
+def resolve_model(model: Optional[str]) -> str:
+    """Callsite-Modell → Claude-Modell. Nur `claude-*` wird durchgereicht."""
+    if model and model.startswith("claude-"):
+        return model
+    return MODEL
+
 
 # ─── User-Message ──────────────────────────────────────────────────
-# Drop-in für `emergentintegrations.llm.chat.UserMessage`.
 
 class UserMessage:
-    """Einfacher Container, exakt wie Emergent-UserMessage."""
+    """Drop-in für `emergentintegrations.llm.chat.UserMessage`."""
 
     def __init__(self, text: str = "", files: Optional[list] = None):
         self.text = text
@@ -57,105 +75,10 @@ class UserMessage:
         return f"<UserMessage text={self.text[:40]!r}…>"
 
 
-# ─── Provider-Adapters ─────────────────────────────────────────────
-
-class _AnthropicAdapter:
-    """Direkter Pfad → official `anthropic` SDK."""
-
-    def __init__(self, api_key: str, model: str, system_message: str):
-        try:
-            import anthropic  # noqa: E402
-        except ImportError as e:  # pragma: no cover — wir installieren das SDK
-            raise RuntimeError(
-                "anthropic SDK not installed. Add `anthropic>=0.39` to requirements.txt."
-            ) from e
-        self._client = anthropic.AsyncAnthropic(api_key=api_key)
-        self._model = model
-        self._system = system_message
-
-    async def send(self, user_text: str) -> str:
-        msg = await self._client.messages.create(
-            model=self._model,
-            max_tokens=4096,
-            system=self._system,
-            messages=[{"role": "user", "content": user_text}],
-        )
-        # claude antwortet als Liste von Content-Blocks; wir mergen text-only.
-        parts = [b.text for b in msg.content if getattr(b, "type", "") == "text"]
-        return "".join(parts)
-
-
-class _OpenAIAdapter:
-    """Direkter Pfad → official `openai` SDK (bereits in requirements.txt)."""
-
-    def __init__(self, api_key: str, model: str, system_message: str):
-        try:
-            from openai import AsyncOpenAI
-        except ImportError as e:  # pragma: no cover
-            raise RuntimeError("openai SDK not installed.") from e
-        self._client = AsyncOpenAI(api_key=api_key)
-        self._model = model
-        self._system = system_message
-
-    async def send(self, user_text: str) -> str:
-        resp = await self._client.chat.completions.create(
-            model=self._model,
-            messages=[
-                {"role": "system", "content": self._system},
-                {"role": "user", "content": user_text},
-            ],
-            max_tokens=4096,
-        )
-        return resp.choices[0].message.content or ""
-
-
-class _EmergentAdapter:
-    """Legacy-Pfad → emergentintegrations. Nur aktiv solange wir die
-    Migration nicht abgeschlossen haben. Wird gelöscht zusammen mit
-    der Dependency."""
-
-    def __init__(self, api_key: str, model: str, system_message: str, session_id: str):
-        from emergentintegrations.llm.chat import LlmChat  # type: ignore
-        self._chat = LlmChat(
-            api_key=api_key,
-            session_id=session_id,
-            system_message=system_message,
-        )
-        # Emergent will provider + model getrennt.
-        provider, model_id = self._parse(model)
-        self._chat.with_model(provider, model_id)
-
-    @staticmethod
-    def _parse(model: str) -> tuple[str, str]:
-        # Modell-Strings im Format "openai/gpt-5.2" oder "openai:gpt-5.2"
-        # mappen wir auf (provider, model_id). Default-Provider openai.
-        for sep in ("/", ":"):
-            if sep in model:
-                p, m = model.split(sep, 1)
-                return p, m
-        return "openai", model
-
-    async def send(self, user_text: str) -> str:
-        from emergentintegrations.llm.chat import UserMessage as EmUserMessage  # type: ignore
-        return await self._chat.send_message(EmUserMessage(text=user_text))
-
-
-# ─── LlmChat — public, identische Signatur wie Emergent ───────────
+# ─── LlmChat ───────────────────────────────────────────────────────
 
 class LlmChat:
-    """Drop-in für `emergentintegrations.llm.chat.LlmChat`.
-
-    Behält die Methoden-Kette der Emergent-API:
-
-        chat = LlmChat(api_key=..., session_id=..., system_message=...)
-        chat.with_model("anthropic", "claude-haiku-4-5-20251001")
-        resp = await chat.send_message(UserMessage(text="..."))
-
-    `api_key` wird wegen Backward-Compat akzeptiert, aber bei
-    Anthropic / OpenAI von ENV überschrieben. Dadurch können
-    Routes weiter `EMERGENT_LLM_KEY` übergeben, ohne dass das
-    den Provider wechselt — der ENV-Switch steuert.
-    """
+    """Drop-in für `emergentintegrations.llm.chat.LlmChat` (single-turn)."""
 
     def __init__(
         self,
@@ -163,108 +86,40 @@ class LlmChat:
         session_id: Optional[str] = None,
         system_message: str = "",
     ):
-        self._api_key = api_key
         self._session_id = session_id or "ad-hoc"
         self._system = system_message
-        self._provider = self._default_provider()
-        # Default-Modelle, werden überschrieben durch `with_model(...)`.
-        self._model = self._default_model(self._provider)
-        self._adapter = None  # lazy — erst beim ersten send() instanziieren
-
-    @staticmethod
-    def _default_provider() -> str:
-        if os.environ.get("ANTHROPIC_API_KEY"):
-            return "anthropic"
-        if os.environ.get("OPENAI_API_KEY"):
-            return "openai"
-        return "emergent"
-
-    @staticmethod
-    def _default_model(provider: str) -> str:
-        return {
-            "anthropic": "claude-haiku-4-5-20251001",
-            "openai":    "gpt-4o-mini",
-            "emergent":  "openai/gpt-5.2",
-        }[provider]
+        self._model = MODEL
 
     def with_model(self, provider_or_model: str, model: Optional[str] = None) -> "LlmChat":
-        """
-        Akzeptiert beide Signaturen:
-          - with_model("anthropic", "claude-haiku-4-5-20251001")
-          - with_model("openai/gpt-5.2")
-        Damit bleiben alte Emergent-Callsites unverändert.
-        """
-        if model is None:
-            # Emergent ließ auch `with_model("openai/gpt-5.2")` zu.
-            self._model = provider_or_model
-        else:
-            # Wenn ein Env-Native-Provider verfügbar ist, bleiben wir dort —
-            # `with_model("openai", "...")` wechselt nicht zurück auf Emergent.
-            preferred = self._default_provider()
-            if preferred in ("anthropic", "openai"):
-                self._provider = preferred
-                # Behalte das alte Modell falls Provider gleich, sonst Default.
-                self._model = self._default_model(preferred) if preferred != provider_or_model else model
-            else:
-                # Kein nativer Key in der ENV → Emergent-Wrapper behalten und
-                # Provider im Modell-String mitführen ("openai/gpt-5.2"). Vorher
-                # wurde hier auf "openai" umgeschaltet → KeyError auf
-                # OPENAI_API_KEY in reinen Emergent-Deployments.
-                self._provider = "emergent"
-                self._model = f"{provider_or_model}/{model}"
+        """Akzeptiert `with_model("openai", "gpt-5.2")` und `with_model("openai/gpt-5.2")`."""
+        self._model = resolve_model(model if model is not None else provider_or_model.split("/")[-1])
         return self
 
-    def _build_adapter(self):
-        if self._provider == "anthropic":
-            return _AnthropicAdapter(
-                api_key=os.environ["ANTHROPIC_API_KEY"],
-                model=self._model,
-                system_message=self._system,
-            )
-        if self._provider == "openai":
-            return _OpenAIAdapter(
-                api_key=os.environ["OPENAI_API_KEY"],
-                model=self._model,
-                system_message=self._system,
-            )
-        # Legacy fallback
-        return _EmergentAdapter(
-            api_key=self._api_key or os.environ.get("EMERGENT_LLM_KEY", ""),
-            model=self._model,
-            system_message=self._system,
-            session_id=self._session_id,
-        )
-
     async def send_message(self, message: UserMessage) -> str:
-        if self._adapter is None:
-            self._adapter = self._build_adapter()
+        kwargs = {
+            "model": self._model,
+            "max_tokens": MAX_TOKENS,
+            "messages": [{"role": "user", "content": message.text}],
+        }
+        if self._system:
+            kwargs["system"] = self._system
         try:
-            return await self._adapter.send(message.text)
+            msg = await anthropic_client().messages.create(**kwargs)
         except Exception as e:
-            logger.error("llm_provider send failed (provider=%s model=%s): %s",
-                         self._provider, self._model, e)
+            logger.error("llm_provider send failed (model=%s session=%s): %s",
+                         self._model, self._session_id, e)
             raise
+        return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
 
 
-# ─── OpenAISpeechToText — Drop-in für emergentintegrations STT ─────
-#
-# Emergent stellt eine kleine STT-Klasse bereit, video.py und voice_tts.py
-# nutzen sie. Die OpenAI-API spricht das direkt — wir kapseln es so dass
-# der Callsite identisch bleibt:
-#
-#     stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
-#     text = await stt.transcribe(file_path) | .transcribe_bytes(b)
-#
-# Wenn OPENAI_API_KEY in der ENV ist, geht das direkt zu OpenAI. Sonst
-# fällt es auf emergentintegrations zurück (übergangsweise).
+# ─── OpenAISpeechToText → ElevenLabs Scribe ────────────────────────
 
 class _Transcript(str):
     """Transkript als `str` **mit** `.text`.
 
-    Die Aufrufer im Code nutzen zwei Stile: `text = await stt.transcribe(path)`
-    und `resp = await stt.transcribe(file=f, …); resp.text` (Emergent-/OpenAI-
-    Stil, u. a. routes/video.py, routes/voice_tts.py). Ein str mit `.text`
-    bedient beide, ohne die Aufrufer anzufassen.
+    Die Aufrufer nutzen zwei Stile: `text = await stt.transcribe(path)` und
+    `resp = await stt.transcribe(file=f, …); resp.text` (routes/video.py,
+    routes/voice_tts.py). Ein str mit `.text` bedient beide.
     """
 
     @property
@@ -275,98 +130,41 @@ class _Transcript(str):
 class OpenAISpeechToText:
     """Drop-in für `emergentintegrations.llm.openai.OpenAISpeechToText`."""
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "whisper-1"):
-        self._legacy_key = api_key
+    URL = "https://api.elevenlabs.io/v1/speech-to-text"
+
+    def __init__(self, api_key: Optional[str] = None, model: str = "scribe_v1"):
         self._model = model
-        # ENV gewinnt — eigener OpenAI-Key überschreibt den Emergent-Key.
-        self._openai_key = os.environ.get("OPENAI_API_KEY")
 
     async def transcribe(self, file_path: Optional[str] = None, language: Optional[str] = None, *,
-                         file=None, model: Optional[str] = None,
-                         response_format: Optional[str] = None, prompt: Optional[str] = None,
-                         **_ignored) -> "_Transcript":
-        """STT aus Pfad **oder** offenem File-Objekt.
-
-        Beide Signaturen sind gültig:
-          await stt.transcribe("a.mp3", language="de")                     → str
-          await stt.transcribe(file=f, model="whisper-1",
-                               response_format="json", language="de")     → .text
-        Vorher akzeptierte der Shim nur (file_path, language) — die Aufrufe mit
-        file=… endeten in einem TypeError, d. h. Video-Analyse und Voice-Mode
-        wären nach einem Deploy dieses Codes ausgefallen.
-        """
+                         file=None, **_ignored) -> "_Transcript":
+        """STT aus Pfad **oder** offenem File-Objekt. OpenAI-Parameter
+        (model=whisper-1, response_format, prompt) werden ignoriert."""
         if file is None and not file_path:
             raise TypeError("transcribe() braucht file_path oder file=")
-        use_model = model or self._model
-        if self._openai_key:
-            if file is not None:
-                return _Transcript(await self._native(file, language, use_model, prompt))
-            with open(file_path, "rb") as fh:
-                return _Transcript(await self._native(fh, language, use_model, prompt))
-        return _Transcript(await self._legacy(file if file is not None else file_path,
-                                              language, use_model, response_format, prompt))
+        if file is not None:
+            return _Transcript(await self._scribe(file.read(), getattr(file, "name", "audio"), language))
+        with open(file_path, "rb") as fh:
+            return _Transcript(await self._scribe(fh.read(), os.path.basename(file_path), language))
 
     async def transcribe_bytes(self, data: bytes, filename: str = "audio.webm",
                                language: Optional[str] = None) -> "_Transcript":
         """STT aus rohen Bytes (Voice-Mode-Recording)."""
-        import io
-        if self._openai_key:
-            f = io.BytesIO(data); f.name = filename
-            return _Transcript(await self._native(f, language, self._model))
-        # Legacy-Pfad braucht ein File — temporär schreiben.
-        import tempfile, os as _os
-        with tempfile.NamedTemporaryFile(delete=False, suffix=_os.path.splitext(filename)[1] or ".webm") as tf:
-            tf.write(data); path = tf.name
-        try:
-            return _Transcript(await self._legacy(path, language, self._model, None))
-        finally:
-            try: _os.unlink(path)
-            except OSError: pass
+        return _Transcript(await self._scribe(data, filename, language))
 
-    async def _native(self, file_obj, language: Optional[str], model: Optional[str] = None,
-                      prompt: Optional[str] = None) -> str:
-        try:
-            from openai import AsyncOpenAI
-        except ImportError as e:  # pragma: no cover
-            raise RuntimeError("openai SDK not installed.") from e
-        client = AsyncOpenAI(api_key=self._openai_key)
-        kwargs = {"model": model or self._model, "file": file_obj}
+    async def _scribe(self, data: bytes, filename: str, language: Optional[str]) -> str:
+        import httpx
+        key = os.environ.get("ELEVENLABS_API_KEY")
+        if not key:
+            raise RuntimeError("Speech-to-text requires ELEVENLABS_API_KEY.")
+        form = {"model_id": self._model}
         if language:
-            kwargs["language"] = language
-        if prompt:
-            kwargs["prompt"] = prompt
-        resp = await client.audio.transcriptions.create(**kwargs)
-        return getattr(resp, "text", "") or ""
-
-    async def _legacy(self, file_or_path, language: Optional[str], model: Optional[str] = None,
-                      response_format: Optional[str] = None, prompt: Optional[str] = None) -> str:
-        # Explizite Fehlermeldung wenn weder OpenAI noch Emergent
-        # verfügbar — sonst kracht's später irgendwo in der Emergent-
-        # Library mit unverständlichem Stack-Trace.
-        em_key = self._legacy_key or os.environ.get("EMERGENT_LLM_KEY", "")
-        if not em_key:
-            raise RuntimeError(
-                "Voice-Mode (STT) requires OPENAI_API_KEY for native Whisper, "
-                "or EMERGENT_LLM_KEY for the legacy wrapper. Neither is set — "
-                "disable Voice-Mode in the UI or set one of the keys."
+            form["language_code"] = language
+        async with httpx.AsyncClient(timeout=TIMEOUT_S) as http:
+            resp = await http.post(
+                self.URL,
+                headers={"xi-api-key": key},
+                data=form,
+                files={"file": (os.path.basename(str(filename)), io.BytesIO(data))},
             )
-        from emergentintegrations.llm.openai import (  # type: ignore
-            OpenAISpeechToText as _EmSTT,
-        )
-        em = _EmSTT(api_key=em_key)
-        # Die Emergent-Lib erwartet den OpenAI-Stil (file=…, model=…,
-        # response_format=…) und liefert ein Objekt mit .text — so ruft es
-        # auch der Live-Code auf Emergent auf.
-        is_path = isinstance(file_or_path, (str, bytes, os.PathLike))
-        fh = open(file_or_path, "rb") if is_path else file_or_path
-        try:
-            kwargs = {"file": fh, "model": model or self._model, "response_format": response_format or "json"}
-            if language:
-                kwargs["language"] = language
-            if prompt:
-                kwargs["prompt"] = prompt
-            resp = await em.transcribe(**kwargs)
-        finally:
-            if is_path:
-                fh.close()
-        return (getattr(resp, "text", None) if not isinstance(resp, str) else resp) or ""
+        resp.raise_for_status()
+        return resp.json().get("text", "") or ""
