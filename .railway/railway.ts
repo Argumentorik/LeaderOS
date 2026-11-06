@@ -20,12 +20,12 @@ export default defineRailway((ctx) => {
 
   // Secret values live in Railway, never in this file: preserve() keeps
   // whatever is set via `railway variable set`. Staging deliberately has no
-  // live Stripe/Resend keys and no Supabase write access, so the copy can't
-  // charge, email or write leads into production systems.
+  // Resend key and no Supabase write access, so the copy can't email or write
+  // leads into production systems. STRIPE_API_KEY is per environment:
+  // sk_live_ in production, sk_test_ in staging.
   const prodOnlySecrets: Record<string, VariableValue> = staging
     ? {}
     : {
-        STRIPE_API_KEY: preserve(),
         RESEND_API_KEY: preserve(),
         SUPABASE_ANON_KEY: preserve(),
         SUPABASE_SERVICE_KEY: preserve(),
@@ -82,6 +82,7 @@ export default defineRailway((ctx) => {
       TRUSTED_PROXY_HOPS: preserve(),
       // Verifies Leader-Check's sync tokens; must equal LeaderCheck's value.
       REPORT_JWT_SECRET: preserve(),
+      STRIPE_API_KEY: preserve(),
 
       ...prodOnlySecrets,
     },
@@ -124,8 +125,6 @@ export default defineRailway((ctx) => {
   const leaderCheckProdSecrets: Record<string, VariableValue> = staging
     ? {}
     : {
-        STRIPE_API_KEY: preserve(),
-        STRIPE_WEBHOOK_SECRET: preserve(),
         RESEND_API_KEY: preserve(),
       };
 
@@ -151,6 +150,10 @@ export default defineRailway((ctx) => {
       ADMIN_JWT_SECRET: preserve(),
       ADMIN_PASSWORD: preserve(),
       REPORT_JWT_SECRET: preserve(),
+      // Per environment: live key + live webhook in production, Stripe test
+      // mode (own test webhook endpoint) in staging.
+      STRIPE_API_KEY: preserve(),
+      STRIPE_WEBHOOK_SECRET: preserve(),
 
       ...leaderCheckProdSecrets,
     },

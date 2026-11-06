@@ -8,9 +8,6 @@ handlers small and testable.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends
 from datetime import datetime, timezone, timedelta
-from emergentintegrations.payments.stripe.checkout import (
-    StripeCheckout, CheckoutStatusResponse,
-)
 import asyncio
 import logging
 import resend
@@ -211,9 +208,9 @@ def register_checkout_routes(router: APIRouter, db, app_config):
 
         # Fallback / one-time payment path
         charge_amount = package.get("total_amount") if mode == "subscription" else package["amount"]
-        session = await create_one_time_session(app_config["stripe_key"], req, package, charge_amount, mode == "subscription")
+        session = await create_one_time_session(req, package, charge_amount, mode == "subscription")
         await db.payment_transactions.insert_one(build_one_time_tx(session, req, package, charge_amount, mode == "subscription"))
-        return {"url": session.url, "session_id": session.session_id, "mode": "payment"}
+        return {"url": session.url, "session_id": session.id, "mode": "payment"}
 
     @router.get("/payments/status/{session_id}")
     async def get_payment_status(session_id: str):
@@ -223,9 +220,8 @@ def register_checkout_routes(router: APIRouter, db, app_config):
         if tx:
             return tx
         try:
-            stripe_client = StripeCheckout(api_key=app_config["stripe_key"])
-            status = await stripe_client.get_checkout_status(session_id)
-            return {"session_id": session_id, "payment_status": status.payment_status, "status": status.status}
+            session = await asyncio.to_thread(stripe_sdk.checkout.Session.retrieve, session_id)
+            return {"session_id": session_id, "payment_status": session.payment_status, "status": session.status}
         except Exception:
             return {"session_id": session_id, "payment_status": "unknown", "status": "unknown"}
 

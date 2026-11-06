@@ -37,14 +37,6 @@ async def stripe_mode():
             "warning": "STRIPE_API_KEY not set — checkout will fail.",
             "key_prefix": None,
         }
-    if key == "sk_test_emergent":
-        return {
-            "configured": True,
-            "mode": "platform_default",
-            "live": False,
-            "warning": "Using Emergent's shared sandbox key (sk_test_emergent). Replace with your own sk_live_… key in backend/.env before going live.",
-            "key_prefix": "sk_test_e…",
-        }
     if key.startswith("sk_live_"):
         return {
             "configured": True,
@@ -164,8 +156,6 @@ INVOICE_SELLER = "Argumentorik-Akademie GmbH"
 
 def _configure_stripe():
     stripe.api_key = STRIPE_API_KEY
-    if "sk_test_emergent" in (STRIPE_API_KEY or ""):
-        stripe.api_base = "https://integrations.emergentagent.com/stripe"
     return stripe
 
 

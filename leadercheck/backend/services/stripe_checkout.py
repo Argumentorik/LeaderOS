@@ -11,9 +11,6 @@ import asyncio
 import logging
 
 import stripe as stripe_sdk
-from emergentintegrations.payments.stripe.checkout import (
-    StripeCheckout, CheckoutSessionRequest,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +18,8 @@ logger = logging.getLogger(__name__)
 # ─── helpers ───────────────────────────────────────────────────────────────
 
 def is_real_stripe_key(key: str) -> bool:
-    """Detect real Stripe keys vs the Emergent placeholder 'sk_test_emergent'."""
+    """True for sk_live_/sk_test_ account keys; False for empty or placeholder values
+    (e.g. the old Emergent 'sk_test_emergent')."""
     if not key or key == "sk_test_emergent":
         return False
     return key.startswith("sk_live_") or (key.startswith("sk_test_") and len(key) > 20)
@@ -105,11 +103,11 @@ async def apply_subscription_cancel_at(sub_id: str) -> None:
         logger.error(f"apply cancel_at failed for {sub_id}: {e}")
 
 
-async def create_one_time_session(stripe_key: str, req: Any, package: dict, charge_amount: float, was_subscription: bool):
-    """One-time Stripe Checkout via emergentintegrations.
+async def create_one_time_session(req: Any, package: dict, charge_amount: float, was_subscription: bool):
+    """One-time Stripe Checkout (mode=payment) via the stripe SDK.
 
-    IMPORTANT: CheckoutSessionRequest.amount is in MAJOR currency units (EUR),
-    not cents — the library converts internally.
+    `charge_amount` is in MAJOR currency units (EUR); converted to cents here.
+    Uses the module-level stripe_sdk.api_key set in register_checkout_routes.
     """
     if not (1 <= charge_amount <= 100000):
         from fastapi import HTTPException
@@ -118,12 +116,21 @@ async def create_one_time_session(stripe_key: str, req: Any, package: dict, char
             detail=f"Invalid charge amount {charge_amount} EUR (must be 1–100000)"
         )
 
-    stripe_client = StripeCheckout(api_key=stripe_key)
     success_url = f"{req.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{req.origin_url}/close"
-    checkout_req = CheckoutSessionRequest(
-        amount=round(float(charge_amount), 2),
-        currency=package["currency"],
+    return await asyncio.to_thread(
+        stripe_sdk.checkout.Session.create,
+        mode="payment",
+        payment_method_types=["card"],
+        line_items=[{
+            "price_data": {
+                "currency": package["currency"],
+                "product_data": {"name": package["name"]},
+                "unit_amount": int(round(float(charge_amount) * 100)),
+            },
+            "quantity": 1,
+        }],
+        customer_email=req.email or None,
         success_url=success_url,
         cancel_url=cancel_url,
         metadata={
@@ -133,7 +140,6 @@ async def create_one_time_session(stripe_key: str, req: Any, package: dict, char
             "fallback_from_subscription": "true" if was_subscription else "false",
         },
     )
-    return await stripe_client.create_checkout_session(checkout_req)
 
 
 # ─── transaction builders ─────────────────────────────────────────────────
@@ -159,7 +165,7 @@ def build_subscription_tx(session, req: Any, package: dict) -> dict:
 def build_one_time_tx(session, req: Any, package: dict, charge_amount: float, was_subscription: bool) -> dict:
     now = datetime.now(timezone.utc).isoformat()
     return {
-        "session_id": session.session_id, "package_id": req.package_id,
+        "session_id": session.id, "package_id": req.package_id,
         "package_name": package["name"],
         "amount": charge_amount, "total_amount": charge_amount,
         "currency": package["currency"], "plan": package["plan"],

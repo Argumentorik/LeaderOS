@@ -94,10 +94,6 @@ def _stripe_status() -> dict:
     if not key:
         return {"status": "down", "mode": None,
                 "note": "STRIPE_API_KEY not set — checkout will fail"}
-    if key.strip() == "sk_test_emergent":
-        return {"status": "degraded", "mode": "emergent_sandbox",
-                "note": "Using Emergent's shared sandbox token — "
-                        "set your own sk_live_… for production charges"}
     if key.startswith("sk_live_"):
         return {"status": "go", "mode": "live",
                 "key_prefix": key[:7] + "…",

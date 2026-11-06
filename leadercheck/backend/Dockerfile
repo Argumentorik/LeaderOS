@@ -11,11 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /tmp/requirements.txt
-# emergentintegrations (LLM in routes/quiz.py, Stripe checkout) is not on PyPI —
-# it comes from Emergent's package index. Drop the extra index once decoupled.
-RUN pip install --no-cache-dir --prefix=/install \
-        --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/ \
-        -r /tmp/requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r /tmp/requirements.txt
 
 
 FROM python:3.11-slim-bookworm
