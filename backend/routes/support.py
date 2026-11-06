@@ -20,7 +20,7 @@ from typing import Optional, List
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user
@@ -181,7 +181,7 @@ async def support_ask(data: SupportAskIn, request: Request):
                 session_id=session_id,
                 system_message=SUPPORT_SYSTEM_PROMPT,
             )
-            chat.with_model("openai", "gpt-5.2")
+            chat.with_model("anthropic", MODEL)
             llm_response = await chat.send_message(UserMessage(text=msg))
             answer = (llm_response or "").strip()
             if not answer:

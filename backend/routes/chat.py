@@ -7,7 +7,7 @@ import base64
 import asyncio
 from datetime import datetime, timezone
 from typing import Optional
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 import pypdf
 import docx
 
@@ -441,7 +441,9 @@ async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
     msg_len = len(data.message or "")
     has_attachment = "[Dokument:" in (data.message or "") or "[Bild angehängt:" in (data.message or "")
     use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"
-    model_name = "gpt-5.2" if use_deep_model else "gpt-4o-mini"
+    # Seit dem Wechsel zu Anthropic laufen beide Pfade über LLM_MODEL (Opus);
+    # use_deep_model bleibt als Merkmal, falls der Split zurückkommt.
+    model_name = MODEL
     context = "".join(f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content']}\n" for m in history[-10:])
 
     return {
@@ -544,7 +546,7 @@ async def send_chat_message(data: ChatMessageIn, request: Request):
     prep = await _prepare_chat(data, request)
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"wladbot_{prep['session_id']}", system_message=prep["system_msg"])
-        chat.with_model("openai", prep["model_name"])
+        chat.with_model("anthropic", prep["model_name"])
         ai_response = await asyncio.wait_for(chat.send_message(UserMessage(text=prep["prompt"])), timeout=120)
         return await _finalize_chat(prep, ai_response)
     except Exception as e:
@@ -583,7 +585,7 @@ async def send_chat_message_stream(data: ChatMessageIn, request: Request):
         full, sent = "", 0
         try:
             messages = [{"role": "system", "content": prep["system_msg"]}, {"role": "user", "content": prep["prompt"]}]
-            async for delta in stream_completion("openai", prep["model_name"], messages, timeout=120):
+            async for delta in stream_completion("anthropic", prep["model_name"], messages, timeout=120):
                 full += delta
                 if prep["structured"]:
                     continue

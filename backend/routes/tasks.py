@@ -33,7 +33,7 @@ async def create_task(data: TaskCreate, request: Request):
 @router.post("/tasks/generate")
 async def generate_ai_tasks(request: Request):
     """WladBot generates 5 personalised leadership tasks from the user's profile."""
-    from lib.llm_provider import LlmChat, UserMessage
+    from lib.llm_provider import MODEL, LlmChat, UserMessage
     from config import EMERGENT_LLM_KEY
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)
@@ -62,7 +62,7 @@ async def generate_ai_tasks(request: Request):
                 '"priority": "high"|"medium"|"low", "category": "kommunikation"|"führung"|"team"|"selbstmanagement"}]}'
             ),
         )
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         raw = await chat.send_message(UserMessage(text=f"PROFIL: {profile}\nBEREITS OFFEN: {'; '.join(open_titles) or 'keine'}"))
         parsed = parse_ai_json(raw) or {}
         items = parsed.get("tasks") or []

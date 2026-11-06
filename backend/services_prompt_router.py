@@ -97,10 +97,10 @@ async def classify_query(
     """
     if llm_call is None:
         # Lazy import keeps tests light and avoids circular imports.
-        from lib.llm_provider import LlmChat, UserMessage  # noqa: F401
+        from lib.llm_provider import FAST_MODEL, LlmChat, UserMessage
 
         async def llm_call(system: str, user: str) -> str:  # type: ignore[misc]
-            chat = LlmChat(system_message=system, model="claude-haiku-4-5-20251001")
+            chat = LlmChat(system_message=system).with_model("anthropic", FAST_MODEL)
             response = await chat.send_message(UserMessage(text=user))
             return getattr(response, "text", str(response))
 

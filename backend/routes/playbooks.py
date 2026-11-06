@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Request
 import uuid
 from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user, WLAD_HARD_RULES
@@ -78,7 +78,7 @@ async def playbook_step(playbook_id: str, data_in: dict, request: Request):
                 + WLAD_HARD_RULES
             )
         )
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         ai_response = await chat.send_message(UserMessage(text=f"Step: {step['title']}\nPrompt: {step['prompt']}\nUser input: {user_input}"))
 
         try:
@@ -118,7 +118,7 @@ async def generate_advice_report(playbook_id: str, request: Request):
             "Du bist WLADBOT und erstellst einen persönlichen Leadership Advice Report basierend auf Wlad Jachtchenkos Methoden. Antworte NUR mit validem JSON auf DEUTSCH. Sei detailliert und thematisiere das spezifische Playbook-Thema."
             + WLAD_HARD_RULES
         ))
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         msg = UserMessage(text=f"""Erstelle einen persönlichen Advice Report für das '{playbook['title']}' Playbook.
 User-Antworten: {responses_text}
 Aktuelle Scores: Leadership={user.get('leadership_score',0)}, EQ={user.get('eq_score',0)}, Kommunikation={user.get('communication_score',0)}

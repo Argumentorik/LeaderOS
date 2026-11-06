@@ -5,7 +5,7 @@ import uuid
 import re
 from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import SimulationStart, SimulationMessage, ArgumentationPrep, ArgumentationTemplateIn
@@ -393,7 +393,7 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
             session_id=strategy_id,
             system_message=ARGUMENTATION_PREP_PROMPT,
         )
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         strategy = await chat.send_message(UserMessage(text=(
             "Der User hat folgenden Vorbereitungs-Brief eingereicht. "
             "Baue daraus die vollständige SEXIER-Argumentations-Strategie nach "

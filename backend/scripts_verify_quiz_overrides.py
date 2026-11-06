@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-from lib.llm_provider import LlmChat, UserMessage  # noqa: E402
+from lib.llm_provider import MODEL, LlmChat, UserMessage  # noqa: E402
 from quiz_bank import QUIZ_BANK_RAW  # noqa: E402
 
 OVERRIDES_PATH = Path(__file__).resolve().parent / "quiz_overrides.json"
@@ -36,7 +36,7 @@ Antworte ausschließlich mit JSON: {"answer": <Index 0-3>, "eindeutig": true|fal
 async def solve(question: str, options: list) -> tuple[int, bool]:
     key = os.environ["ANTHROPIC_API_KEY"]
     chat = LlmChat(api_key=key, session_id="quiz-solver", system_message=SOLVER_PROMPT).with_model(
-        "openai", "gpt-4o-mini"
+        "anthropic", MODEL
     )
     raw = await chat.send_message(UserMessage(text=json.dumps({"frage": question, "optionen": options}, ensure_ascii=False)))
     body = raw.strip()

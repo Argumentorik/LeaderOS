@@ -11,7 +11,7 @@ import tempfile
 import subprocess
 from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import FAST_MODEL, MODEL, LlmChat, UserMessage
 from lib.llm_provider import OpenAISpeechToText
 
 from config import db, EMERGENT_LLM_KEY, logger
@@ -568,7 +568,7 @@ async def _classify_video_transcript(transcript: str) -> str:
                 'Antworte NUR mit JSON: {"type": "speech"} oder {"type": "theory_question"}'
             ),
         )
-        chat.with_model("openai", "gpt-4o-mini")
+        chat.with_model("anthropic", FAST_MODEL)
         raw = await chat.send_message(UserMessage(text=transcript[:800]))
         from services_ai_parse import parse_ai_json
         parsed = parse_ai_json(raw) or {}
@@ -600,7 +600,7 @@ async def _answer_theory_question(transcript: str) -> dict:
             "Kein Rede-Feedback, keine Bewertung — nur die inhaltliche Antwort." + rag_block
         ),
     )
-    chat.with_model("openai", "gpt-5.2")
+    chat.with_model("anthropic", MODEL)
     answer = await chat.send_message(UserMessage(text=transcript))
     return {
         "type": "theory_answer",
@@ -662,7 +662,7 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
         # die gesprochene Erklärung können sich damit nicht widersprechen.
         + _canon_for_analysis() + (f"\n\nUSER PROFIL:\n{user_memory}" if user_memory else ""),
     )
-    chat.with_model("openai", "gpt-5.2")
+    chat.with_model("anthropic", MODEL)
 
     ai_response = await chat.send_message(UserMessage(text=prompt_text))
 

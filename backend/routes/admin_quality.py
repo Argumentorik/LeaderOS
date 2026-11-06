@@ -26,7 +26,7 @@ from typing import Any, Optional
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import WLADBOT_SYSTEM_PROMPT
@@ -39,8 +39,8 @@ router = APIRouter(prefix="/api/admin", tags=["admin-quality"])
 # sequential model calls (generate + judge); 4 in flight keeps a full run fast
 # without risking rate limits.
 _MAX_CONCURRENCY = 4
-_MODEL_PROVIDER = "openai"
-_MODEL_NAME = "gpt-5.2"
+_MODEL_PROVIDER = "anthropic"
+_MODEL_NAME = MODEL
 
 # Pass thresholds — a query passes only if the answer actually applies a
 # framework, is grounded in the injected corpus, and reads as real coaching.

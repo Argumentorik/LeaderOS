@@ -22,19 +22,19 @@ def _clean_env(monkeypatch):
     monkeypatch.delenv("SIM_TURN_MODEL", raising=False)
 
 
-def test_turn_model_default_is_the_fast_model():
-    assert sim.turn_model() == ("openai", "gpt-4o")
+def test_turn_model_default_is_llm_model():
+    assert sim.turn_model() == ("anthropic", sim.MODEL)
 
 
 @pytest.mark.parametrize(
     "raw, expected",
     [
         ("anthropic/claude-haiku-4-5-20251001", ("anthropic", "claude-haiku-4-5-20251001")),
-        ("openai:gpt-5.2", ("openai", "gpt-5.2")),
-        ("gpt-4o-mini", ("openai", "gpt-4o-mini")),
-        ("  openai/gpt-4o  ", ("openai", "gpt-4o")),
-        ("", ("openai", "gpt-4o")),
-        ("   ", ("openai", "gpt-4o")),
+        ("anthropic:claude-opus-5-5", ("anthropic", "claude-opus-5-5")),
+        ("claude-haiku-5-5", ("anthropic", "claude-haiku-5-5")),
+        ("  anthropic/claude-haiku-5-5  ", ("anthropic", "claude-haiku-5-5")),
+        ("", ("anthropic", sim.MODEL)),
+        ("   ", ("anthropic", sim.MODEL)),
     ],
 )
 def test_turn_model_env_override(monkeypatch, raw, expected):
@@ -51,11 +51,11 @@ def test_scoring_turn_boundaries():
 
 
 def test_model_for_turn_splits_roleplay_and_scoring(monkeypatch):
-    assert sim.model_for_turn(True) == ("openai", "gpt-5.2")
-    assert sim.model_for_turn(False) == ("openai", "gpt-4o")
-    monkeypatch.setenv("SIM_TURN_MODEL", "openai/gpt-5.2")
-    assert sim.model_for_turn(False) == ("openai", "gpt-5.2")
-    assert sim.model_for_turn(True) == ("openai", "gpt-5.2")
+    assert sim.model_for_turn(True) == ("anthropic", sim.MODEL)
+    assert sim.model_for_turn(False) == ("anthropic", sim.MODEL)
+    monkeypatch.setenv("SIM_TURN_MODEL", "anthropic/claude-haiku-5-5")
+    assert sim.model_for_turn(False) == ("anthropic", "claude-haiku-5-5")
+    assert sim.model_for_turn(True) == ("anthropic", sim.MODEL)
 
 
 def test_roleplay_turn_gets_style_and_for_argumentation_the_sexier_focus():

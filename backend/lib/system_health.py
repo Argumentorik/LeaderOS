@@ -21,8 +21,9 @@ def _present(name: str) -> bool:
 
 def _llm_status() -> dict:
     if _present("ANTHROPIC_API_KEY"):
+        from lib.llm_provider import FAST_MODEL, MODEL
         return {"status": "go", "provider": "anthropic",
-                "model": "claude-haiku-4-5-20251001",
+                "model": MODEL, "fast_model": FAST_MODEL,
                 "note": "Native Anthropic SDK"}
     if _present("OPENAI_API_KEY"):
         return {"status": "go", "provider": "openai",
@@ -40,6 +41,11 @@ def _stt_status() -> dict:
     # STT ist optional — wer kein Voice-Mode braucht, lässt OPENAI_API_KEY
     # einfach leer. `optional: True` heißt: zieht den Overall-Status
     # nicht runter wenn DOWN.
+    # lib/llm_provider transkribiert über ElevenLabs Scribe.
+    if _present("ELEVENLABS_API_KEY"):
+        return {"status": "go", "provider": "elevenlabs",
+                "optional": True, "model": "scribe_v1",
+                "note": "ElevenLabs Scribe"}
     if _present("OPENAI_API_KEY"):
         return {"status": "go", "provider": "openai",
                 "model": "whisper-1",

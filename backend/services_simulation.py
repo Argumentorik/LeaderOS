@@ -23,10 +23,14 @@ from __future__ import annotations
 
 import os
 
+from lib.llm_provider import MODEL
+
 # Rollenspiel-Zug: schnelles Modell. Format "provider/model" oder "provider:model".
-DEFAULT_TURN_MODEL = "openai/gpt-4o"
+# Seit dem Wechsel zu Anthropic: LLM_MODEL (Opus) für Züge und Auswertung,
+# SIM_TURN_MODEL kann die Züge weiter auf ein anderes claude-* legen.
+DEFAULT_TURN_MODEL = f"anthropic/{MODEL}"
 # Auswertung (Scores + Feedback als JSON): Qualität vor Tempo, wie bisher.
-SCORING_MODEL: tuple[str, str] = ("openai", "gpt-5.2")
+SCORING_MODEL: tuple[str, str] = ("anthropic", MODEL)
 
 # Nach so vielen Manager-Nachrichten soll die Figur laut Basis-Prompt selbst die
 # JSON-Auswertung liefern. Ab da läuft der Zug über das Scoring-Modell.
@@ -76,7 +80,7 @@ def turn_model() -> tuple[str, str]:
             provider, model = raw.split(sep, 1)
             if provider.strip() and model.strip():
                 return provider.strip(), model.strip()
-    return "openai", raw
+    return "anthropic", raw
 
 
 def is_argumentation_scenario(scenario: dict | None) -> bool:

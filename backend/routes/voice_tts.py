@@ -479,7 +479,7 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
       - gpt-4o-mini for the LLM step (2-3s vs gpt-5.2's 15-25s)
       - Wlad's frameworks still grounded via RAG context block
     """
-    from lib.llm_provider import LlmChat, UserMessage
+    from lib.llm_provider import MODEL, LlmChat, UserMessage
 
     async def _fetch_history():
         return await db.chat_messages.find(
@@ -537,7 +537,7 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     # RAG-Block grounded ihn auf Wlads Frameworks → Qualität bleibt hoch.
     # Voice quality (Tester-Feedback Iter 115): gpt-4o statt gpt-4o-mini —
     # deutlich bessere Antworten, immer noch schnell genug für Voice (~3-5s).
-    chat.with_model("openai", "gpt-4o")
+    chat.with_model("anthropic", MODEL)
 
     # Build short context — only last 6 turns to keep TTS latency low
     ctx_lines = []
@@ -785,7 +785,7 @@ async def argumentation_sparring(
     voice — user hears a distinct sparring partner instead of just Wlad.
     """
     from routes.credits import check_and_deduct_credit, no_credits_detail
-    from lib.llm_provider import LlmChat, UserMessage
+    from lib.llm_provider import MODEL, LlmChat, UserMessage
     import json as _json
 
     user = await get_current_user(request)
@@ -920,7 +920,7 @@ async def argumentation_sparring(
             session_id=f"sparring_{session_id}",
             system_message=system_msg,
         )
-        chat.with_model("openai", "gpt-4o")
+        chat.with_model("anthropic", MODEL)
         reply_text = await chat.send_message(UserMessage(text=prompt))
     except Exception as e:
         logger.error(f"Sparring LLM failed: {e}")

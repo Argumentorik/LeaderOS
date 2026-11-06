@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request
 import uuid
 from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from models import DailyCheckinIn
@@ -44,7 +44,7 @@ async def submit_daily_checkin(data: DailyCheckinIn, request: Request):
 
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"checkin_{checkin_id}", system_message=CHECKIN_SYSTEM_PROMPT)
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         ai_response = await chat.send_message(UserMessage(text=f"Daily check-in from leader: {data.content}"))
 
         try:

@@ -5,7 +5,7 @@ import json
 import re
 from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 from config import db, EMERGENT_LLM_KEY, logger
 from services import get_current_user, clean_ai_text
@@ -51,7 +51,7 @@ async def start_challenge(challenger_id: str, request: Request):
 
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"chal_{challenge_id}", system_message=challenger["test_prompt"])
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         ai_response = await chat.send_message(UserMessage(text="Start the interview. Introduce yourself briefly and ask the first question."))
         await db.challenges.update_one(
             {"challenge_id": challenge_id},
@@ -152,7 +152,7 @@ async def challenge_message(challenger_id: str, request: Request):
             # During turns: hard-block self-termination. On finish: allow the verdict JSON.
             system_message = challenger["test_prompt"] + ("" if finish else NO_SELF_END_INSTRUCTION)
             chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"chal_{challenge_id}", system_message=system_message)
-            chat.with_model("openai", "gpt-5.2")
+            chat.with_model("anthropic", MODEL)
             msgs = chal.get("messages", [])
             context = "\n".join(f"{'Interviewer' if m['role'] == 'assistant' else 'Candidate'}: {m['content']}" for m in msgs[-14:])
             if finish:

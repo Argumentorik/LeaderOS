@@ -43,7 +43,7 @@ from pydantic import BaseModel
 from config import db
 from services import get_current_user
 from services_folder_knowledge import build_folder_timeline, generate_briefing_prompt
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 
 router = APIRouter(prefix="/api/folders", tags=["folders"])
 
@@ -290,12 +290,12 @@ async def folder_briefing(folder_id: str, request: Request):
 
     response_text = None
     used_model = None
-    for model in ("gpt-4o-mini", "gpt-4o"):
+    for model in (MODEL,):
         session_id = f"briefing_{uuid.uuid4().hex[:10]}"
         chat = LlmChat(
             api_key=api_key, session_id=session_id,
             system_message="Du bist WladBot, Senior Leadership-Coach. Antworte praezise und warm.",
-        ).with_model("openai", model)
+        ).with_model("anthropic", model)
         try:
             response_text = await chat.send_message(UserMessage(text=prompt))
             used_model = model

@@ -18,7 +18,7 @@ import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 
-from lib.llm_provider import LlmChat, UserMessage
+from lib.llm_provider import MODEL, LlmChat, UserMessage
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
@@ -931,7 +931,7 @@ async def suggest_script(slug: str, data: ScriptSuggestIn, request: Request):
         context += f"\nWlads Anweisung: {data.hint}"
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"guide_{slug}", system_message=SCRIPT_PROMPT)
-        chat.with_model("openai", "gpt-5.2")
+        chat.with_model("anthropic", MODEL)
         text = await chat.send_message(UserMessage(text=context))
     except Exception as e:
         raise await ai_http_error(e, "guide_script")
