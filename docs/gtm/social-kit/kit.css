@@ -1,0 +1,89 @@
+/* Social-Kit · "Glass" · gemeinsame Bausteine für Karussells und Instagram-Feed.
+   Blatt 1080×1350 (4:5). Dunkler Grund, ein echtes Bühnenfoto als Bildwelt,
+   mattes Glas als Oberfläche (so sieht das Produkt aus), Limette als einziger
+   Akzent. Schrift: Inter Display (leicht, enge Laufweite) in zwei Tönen,
+   Mono nur für Kleinstes. Kein Grau als Fläche: Glas nimmt die Farbe des Fotos
+   dahinter an. Maße in CSS-Pixeln; render.cjs rendert mit Maßstab 1,5. */
+:root{
+  --bg:#06080c;--lime:#bfff00;--ink:#0a0c10;--w:#fff;
+  --mut:rgba(255,255,255,.5);
+  --sans:'Inter Display','Inter',system-ui,sans-serif;
+  --txt:'Inter',system-ui,sans-serif;
+  --disp:'Outfit',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --serif:'Instrument Serif',serif;
+  --pad:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111}
+.sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--bg);color:var(--w);font-family:var(--txt);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+.sheet>*{position:absolute}
+.lay{left:0;top:0;width:1080px;height:1350px}
+
+/* Bildgrund */
+.amb{left:0;top:0;width:1080px;height:1350px;background-size:cover;background-position:center}
+/* Lichtgrund: wohin das Scheinwerferlicht fällt (Quelle hat es oben links) */
+.amb.tl{background-size:140% auto;background-position:0 0}
+.amb.tr{transform:scaleX(-1);background-size:140% auto;background-position:0 0}
+.amb.bl{transform:scaleY(-1);background-size:140% auto;background-position:0 0}
+.amb.br{transform:scale(-1,-1);background-size:140% auto;background-position:0 0}
+.ph{overflow:hidden}
+.ph img{position:absolute;display:block;max-width:none}
+.vig{left:0;top:0;width:1080px;height:1350px;background:radial-gradient(125% 95% at 50% 38%,transparent 52%,rgba(2,3,6,.62) 100%)}
+.grain{left:0;top:0;width:1080px;height:1350px;background:url(../social-kit/build/grain.png);background-size:256px 256px;mix-blend-mode:overlay;opacity:.4;pointer-events:none}
+.sk{border-radius:50%;filter:blur(48px);mix-blend-mode:screen;pointer-events:none}
+
+/* Schrift */
+.hd{font-family:var(--sans);font-weight:400;letter-spacing:-.042em;line-height:.99;color:var(--w);text-shadow:0 2px 36px rgba(0,0,0,.4)}
+.hd .m{color:var(--mut)}
+.hd .lm,.lm{color:var(--lime)}
+.tag{font:500 21px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.66);white-space:nowrap}
+.tag b{font-weight:500;color:var(--lime)}
+.bt{width:56px;height:56px;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+mark{background:var(--lime);color:var(--ink);padding:.02em .22em .04em;border-radius:.3em;font-weight:600;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* Glas: hell (Standard, dunkle Schrift) und dunkel (.d, helle Schrift) */
+.g{color:#0b0d12;border-radius:44px;
+  background:linear-gradient(165deg,rgba(255,255,255,.97),rgba(252,252,255,.85));
+  -webkit-backdrop-filter:blur(34px) saturate(1.8);backdrop-filter:blur(34px) saturate(1.8);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.95),inset 0 0 0 1.5px rgba(255,255,255,.55),0 34px 80px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.3)}
+.g.d{color:var(--w);
+  background:linear-gradient(165deg,rgba(255,255,255,.2),rgba(255,255,255,.05)),rgba(10,12,18,.44);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 0 0 1.5px rgba(255,255,255,.14),0 34px 80px rgba(0,0,0,.5),0 6px 16px rgba(0,0,0,.35)}
+.g.w{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+.g.l{color:var(--ink);background:var(--lime);-webkit-backdrop-filter:none;backdrop-filter:none;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 30px 80px rgba(191,255,0,.2),0 22px 50px rgba(0,0,0,.45)}
+.ghost{filter:blur(9px);opacity:.5}
+
+/* Mitteilung des WladBot */
+.note{display:flex;gap:24px;padding:28px 34px 32px 28px;align-items:flex-start}
+.av{flex:none;display:block;width:76px;height:76px;border-radius:50%;overflow:hidden;background:var(--lime);box-shadow:0 0 0 2.5px rgba(255,255,255,.85),0 6px 16px rgba(0,0,0,.3)}
+.av img{display:block;width:100%;height:100%;object-fit:cover}
+.note .nb{flex:1;min-width:0}
+.note .nt{display:flex;align-items:baseline;justify-content:space-between;gap:20px;font:600 30px/1 var(--txt);letter-spacing:-.01em}
+.note .nt i{font:500 21px/1 var(--mono);font-style:normal;opacity:.42}
+.note p{margin-top:10px;font:400 34px/1.25 var(--txt);letter-spacing:-.018em;color:rgba(10,12,16,.84)}
+.note p b{font-weight:600;color:#0a0c10}
+.g.d.note p{color:rgba(255,255,255,.82)}.g.d.note p b{color:#fff}
+
+/* Chat */
+.bub{padding:30px 38px 34px;border-radius:44px 44px 44px 12px;font:400 44px/1.22 var(--txt);letter-spacing:-.022em}
+.bub.u{background:var(--lime);color:var(--ink);border-radius:44px 44px 12px 44px;font-weight:500;box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 24px 60px rgba(191,255,0,.16),0 18px 40px rgba(0,0,0,.4)}
+.bub.b b{font-weight:600}
+.bub .big{display:block;font:500 80px/1.0 var(--sans);letter-spacing:-.045em}
+.bub .sub{display:block;margin-top:22px;font:400 48px/1.18 var(--txt);letter-spacing:-.025em}
+.input{display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 44px;font:400 36px var(--txt);letter-spacing:-.015em;color:rgba(255,255,255,.55)}
+.send{width:84px;height:84px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center}
+.send svg,.rb svg{width:40px;height:40px;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.send svg{stroke:var(--ink)}
+.rb{width:128px;height:128px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.rb svg{stroke:#fff;width:46px;height:46px}
+
+/* Markierungen auf dem Foto */
+.chip{display:inline-flex;align-items:center;gap:12px;padding:16px 30px;border-radius:999px;font:500 28px/1 var(--txt);letter-spacing:-.012em;white-space:nowrap}
+.chip.d{font-size:26px;padding:14px 26px}
+.chip .av{width:44px;height:44px;margin:-8px 0 -8px -14px;box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+.mono{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+
+/* Maske für Karten */
+.card{border-radius:56px;box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1.5px rgba(255,255,255,.12)}

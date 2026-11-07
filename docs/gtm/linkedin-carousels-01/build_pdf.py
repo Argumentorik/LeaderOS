@@ -4,6 +4,8 @@
 
 Liest manifest.json aus outDir, schreibt <ID>.pdf daneben (1080×1350 pt
 Seiten, JPEG-Qualität 85) und ein Kontaktblatt contact-<ID>.jpg zur Sichtprüfung.
+Hat ein Eintrag zusätzlich "slides_open" und "pdf_open" (Fassung ohne Platzzahl),
+entsteht auch diese PDF.
 """
 import json
 import sys
@@ -28,3 +30,8 @@ for c in manifest:
         sheet.paste(t, (i * w, 0))
     sheet.save(out / f"contact-{c['id']}.jpg", quality=80)
     print(c["id"], len(pages), "pages ->", pdf.name, f"{pdf.stat().st_size // 1024} KB")
+    if c.get("slides_open") and c.get("pdf_open"):
+        pages_open = [Image.open(out / f).convert("RGB") for f in c["slides_open"]]
+        pdf_open = out / c["pdf_open"]
+        pages_open[0].save(pdf_open, save_all=True, append_images=pages_open[1:], quality=85, resolution=200)
+        print(c["id"], len(pages_open), "pages ->", pdf_open.name, f"{pdf_open.stat().st_size // 1024} KB")

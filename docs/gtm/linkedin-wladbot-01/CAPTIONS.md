@@ -1,37 +1,45 @@
-# LinkedIn-Karussells W01 bis W03 · WladBot · LeaderOS-Teaser (je fünf Folien)
+# Karussells W01 bis W03 · WladBot · LeaderOS-Teaser (je fünf Folien)
 
-Stand 05.11.2026. Je Karussell fünf Folien `W0x-01.jpg` bis `W0x-05.jpg`
-(1620×2025, 4:5) und das LinkedIn-Dokument `W0x.pdf`. Das PDF ist das
-wischbare Karussell: mehrere Einzelbilder zeigt LinkedIn als Raster, ein
-Dokument als Karussell. Dazu je Karussell `W0x-05-open.jpg`, die letzte Folie
-ohne Platzzahl (siehe „Vor dem Posten").
+Stand 07.11.2026. Je Karussell fünf Folien `W0x-01.jpg` bis `W0x-05.jpg`
+(1620×2025, 4:5) und das LinkedIn-Dokument `W0x.pdf` (mit Platzzahl) sowie
+`W0x-open.pdf` (ohne). Das PDF ist das wischbare Karussell: mehrere
+Einzelbilder zeigt LinkedIn als Raster, ein Dokument als Karussell. Dieselben Folien laufen auf Instagram als Karussell
+(Captions in `../instagram-feed-01/CAPTIONS.md`).
 
-**Gestaltung:** minimalistisch. Schwarzer Grund, weiße Schrift, Limette als einziger
-Akzent. Keine Grautöne, keine Kästen oder Rahmen, keine Zähler, Fortschrittsbalken
-oder Effekte; Hierarchie nur über Größe und Gewicht. Der Bot spricht in Linien-Blasen
-(weiße Linie), der Nutzer in Limette.
+Die letzte Folie gibt es in vier Fassungen:
 
-**Idee:** Der WladBot ist die Hauptfigur, nicht Wlad. Jedes Karussell weckt
-Neugier mit einem Fall, den alle kennen, lässt den Bot mit einer Gegenfrage oder
-einem Urteil antworten und löst mit einem Canon-Framework auf. Die letzte Folie
-ist immer der Beta-Zugang mit QR-Code. **Kein Name auf den Folien**, keine
-Credentials, kein Termin. Die Figur ist das bestehende Produkt-Maskottchen
-(`frontend/public/wlad/wladbot3.0.png`, als Freisteller), es wurde nichts neu
-erzeugt. Die Chat-Texte sind Beispiele und so gekennzeichnet, keine Zitate von
-Wlad.
+| Datei | Wofür | Inhalt |
+|---|---|---|
+| `W0x-05.jpg` | LinkedIn, mit Begrenzung | „150 Plätze", QR-Code |
+| `W0x-05-open.jpg` | LinkedIn, ohne Begrenzung | „Beta · Offen", QR-Code |
+| `W0x-05-ig.jpg` | Instagram, mit Begrenzung | „150 Plätze", „Link in Bio" statt QR |
+| `W0x-05-ig-open.jpg` | Instagram, ohne Begrenzung | „Beta · Offen", „Link in Bio" |
 
-**Quellen und Neu-Bauen:** `carousel.html` (alle Folien und Texte), `build_assets.py`
-(Freisteller, QR-Codes; Pillow, numpy, scipy, `qrcode`), `render.cjs`
-(Playwright), PDFs mit `../linkedin-carousels-01/build_pdf.py`.
+Welche Fassung gilt, entscheidet das Gate unten.
+
+**Gestaltung:** dunkler Grund, ein echtes Bühnenfoto als Bildwelt, mattes Glas
+als Oberfläche (so sieht auch das Produkt aus), Limette als einziger Akzent.
+Zeilen in zwei Tönen (Inter Display, hell und gedämpft), Mono nur für
+Kleinstes. Das Glas nimmt die Farbe des Lichts dahinter an; der Lichtgrund
+stammt aus dem unscharfen Scheinwerfer desselben Fotos, je Folie in einer
+Farbfamilie (Amber, Blaugrün, Limette). Der WladBot erscheint als
+Mitteilung (Avatar, Name, Text) und als Figur; Markierungen mit Punkt und Linie
+sitzen dort, wo das Bild etwas zeigt (offene Hand, „Gegenfrage"). Kein Name auf
+den Folien, keine Credentials, kein Termin. Die Figur ist das bestehende
+Produkt-Maskottchen (`frontend/public/wlad/wladbot3.0.png`, als Freisteller),
+das Foto das echte Bühnenfoto; es wurde nichts erzeugt und kein Videostandbild
+verwendet. Chat-Texte sind Beispiele und so gekennzeichnet, keine Zitate von Wlad.
+
+**Quellen und Neu-Bauen:** `carousel.html` (alle Folien und Texte),
+`../social-kit/` (Bausteine `kit.css`, `kit.js`, Bilder `build_assets.py`,
+Foto `src/wlad-stage.webp`), `render.cjs` (Playwright), PDFs mit
+`../linkedin-carousels-01/build_pdf.py`.
 
 ```
-PYTHONPATH=<dir mit qrcode, scipy> python3 build_assets.py
+PYTHONPATH=<dir mit qrcode, scipy> /usr/bin/python3 ../social-kit/build_assets.py
 NODE_PATH=/opt/node22/lib/node_modules node render.cjs
 python3 -I ../linkedin-carousels-01/build_pdf.py .
 ```
-
-Eine Alternative mit Einzelbildern aus dem Intro-Video (Wlad statt Bot) liegt in
-`../linkedin-fenster-01`.
 
 ## Die drei Karussells
 
@@ -44,11 +52,11 @@ Eine Alternative mit Einzelbildern aus dem Intro-Video (Wlad statt Bot) liegt in
 W03 ist als Kommentar-Köder gebaut: die Optionen stehen in der Caption, die
 Auflösung nur im Karussell. Der Chat in W01 und die Verdikte in W03 sind
 Beispiele, kein aufgezeichnetes Gespräch. Das „erfundene" Projekt in W02 ist als
-„beispiel" markiert.
+Beispiel markiert.
 
 ## Vor dem Posten: die Begrenzung muss echt sein
 
-Folie 5 nennt **150 Plätze** und „aufnahme stoppt bei 150". Das stimmt nur, wenn
+Folie 5 nennt **150 Plätze** und „Aufnahme stoppt bei 150". Das stimmt nur, wenn
 die Aufnahme technisch bei 150 stoppt (`docs/gtm/WEBINAR_FUNNEL.md`: keine
 Fake-Scarcity). **Stand heute ist das nicht gebaut.** Der QR-Link führt in den
 allgemeinen 14-Tage-Zugang (`/signup?trial=14`), der für alle offen ist und
@@ -62,15 +70,15 @@ nirgends gezählt wird. Zwei ehrliche Wege:
   (`GET /api/beta/seats`) und ein „Beta ist voll"-Zustand auf der Signup-Seite.
   Danach Emergent-Deploy von `mvpcode`. Die Zahl steht in `SEATS`
   (`carousel.html`).
-- **B · Heute ohne Begrenzung posten.** Folie 5 gegen `W0x-05-open.jpg` tauschen
-  („Beta. Kostenlos. Jetzt starten.", keine Zahl), das PDF mit `SEATS = 0` neu
-  bauen, und in der Caption den markierten Absatz streichen.
+- **B · Heute ohne Begrenzung posten.** Auf LinkedIn das Dokument `W0x-open.pdf`
+  statt `W0x.pdf` hochladen, auf Instagram die Folien 1 bis 4 plus
+  `W0x-05-ig-open.jpg`, und in der Caption den markierten Absatz streichen.
 
 **Angleichen:** LI-05 und die acht Karussells in `../linkedin-carousels-01`
-(`SEATS` in `data.js`) nennen noch 50 Plätze, `../linkedin-fenster-01` nennt 150.
-Es gibt nur eine Begrenzung, die Zahl muss überall gleich sein.
+(`SEATS` in `data.js`) nennen noch 50 Plätze. Es gibt nur eine Begrenzung, die
+Zahl muss überall gleich sein.
 
-## Captions (Wlad, erste Person)
+## Captions LinkedIn (Wlad, erste Person)
 
 Der Absatz mit `[nur mit Begrenzung]` entfällt bei Weg B. Kein Link im Post-Text.
 
@@ -137,32 +145,33 @@ LeaderOS ist meine Methodik als tägliches Training: ein KI-Coach, der sie kennt
 
 > Erster Kommentar: „LeaderOS Beta, kostenlos: https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=comment&utm_campaign=wladbot&utm_content=w3"
 
-## Alt-Texte (LinkedIn, je Folie)
+## Alt-Texte (je Folie, LinkedIn und Instagram)
 
 **W01**
-1. Dunkles Titelbild. Text: Dein Teamlead blockt jeden Vorschlag ab. Der WladBot, eine gezeichnete Figur im grünen Samtsakko, sagt in einer Sprechblase: Ich stelle dir erst eine Gegenfrage.
-2. Chat mit dem WladBot. Frage: Er sagt bei jeder Idee, haben wir schon probiert. Wie überzeuge ich ihn? Antwort: Falsche Frage. Besser: Was verliert er, wenn du recht hast?
-3. Text: Hinter einem Nein steckt fast immer ein Interesse. WladBot: Oft Risiko, Mehrarbeit oder Gesichtsverlust. Frag danach, nicht nach Zustimmung.
-4. Beispielsatz in drei farbig markierten Teilen: Beobachtung, Wirkung, Wunsch. Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden. Das kostet uns Ideen. Ich wünsche mir, dass wir eine davon gemeinsam durchspielen.
-5. Schlussfolie: Frag WladBot selbst. 150 Plätze, Beta, kostenlos. QR-Code zum Beta-Zugang, Aufnahme stoppt bei 150.
+1. Dunkles Titelbild mit Foto: Ein Redner mit Headset steht im Scheinwerferlicht auf einer Bühne, die offene Hand zeigt nach vorn, markiert mit dem Wort „Gegenfrage". Text: Dein Teamlead blockt jeden Vorschlag ab. Mitteilung des WladBot: Ich stelle dir erst eine Gegenfrage.
+2. Chat mit dem WladBot, als Beispiel gekennzeichnet. Frage: Er sagt bei jeder Idee: „Haben wir schon probiert.“ Wie überzeuge ich ihn? Antwort: Falsche Frage. Besser: Was verliert er, wenn du recht hast?
+3. Text: Hinter einem Nein steckt fast immer ein Interesse. Darunter ein Foto der gestikulierenden Hände des Redners. Mitteilung des WladBot: Oft Risiko, Mehrarbeit oder Gesichtsverlust. Frag danach, nicht nach Zustimmung.
+4. Der erste Satz in drei Karten. Beobachtung: Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden. Wirkung: Das kostet uns Ideen. Wunsch: Ich wünsche mir, dass wir eine davon gemeinsam durchspielen. Darunter: Nie „du bist …“, immer „mir ist aufgefallen …“.
+5. Schlussfolie: Frag WladBot selbst. Der WladBot, eine gezeichnete Figur im grünen Samtsakko, sagt: Stell mir deine Frage. Beta, kostenlos, 150 Plätze, Aufnahme stoppt bei 150. QR-Code zum Beta-Zugang (Instagram: Link in Bio).
 
 **W02**
-1. Titelbild. WladBot zerlegt dein Argument. Der Beispielsatz „Wir müssen das Projekt stoppen.“ ist in drei Teile zerschnitten. Der WladBot sagt: Das ist ein Satz. Kein Argument.
-2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“ Darunter die Buchstaben S E X I E R, nur das S ist gefüllt. WladBot: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
-3. Die sechs Schritte des SEXIER-Modells: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal, jeweils mit einer Zeile Erklärung.
-4. Dasselbe Argument, neu gebaut, in sechs Zeilen zu S, E, X, I, E, R, als Beispiel gekennzeichnet. Unten: Sechs Schritte, zwei Minuten. Das Argument trägt sich selbst.
-5. Schlussfolie: Frag WladBot selbst. Sprechblase: Gib mir dein Argument. 150 Plätze, Beta, kostenlos, QR-Code.
+1. Titelbild: WladBot zerlegt dein Argument. Der Beispielsatz „Wir müssen das Projekt stoppen.“ steht auf einer Karte, eine leuchtende Linie schneidet ihn in der Mitte durch. Der WladBot sagt: Das ist ein Satz. Kein Argument.
+2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“, darunter die Buchstaben S E X I E R, nur das S ist hervorgehoben. WladBot: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
+3. Die sechs Schritte des SEXIER-Modells aus Weiße Rhetorik: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal, je mit einer Zeile Erklärung.
+4. Dasselbe Argument, neu gebaut, in sechs Zeilen zu S, E, X, I, E, R, als Beispiel gekennzeichnet. Unten: Sechs Schritte, zwei Minuten.
+5. Schlussfolie: Frag WladBot selbst. Mitteilung: Gib mir dein Argument. 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
 
 **W03**
-1. Titelbild. Dein Chef sagt: „Dafür ist kein Budget da.“ Was sagst du? WladBot in der Sprechblase: Ich spiele deinen Chef. Du hast einen Satz.
-2. Drei Antworten zur Wahl. A: Okay, verstehe. B: Was müsste passieren, damit es im nächsten Quartal geht? C: Das ist unfair. Andere kriegen es auch.
-3. WladBot wertet. A schwach: Du gibst auf, bevor das Gespräch beginnt. B stark: Rückfrage-Technik, aus dem Nein wird ein Weg. C schwach: Du greifst die Person an, nicht das Problem.
-4. Hart in der Sache. Weich zur Person. WladBot: Und setz direkt den Termin: Wann schauen wir uns das gemeinsam an?
-5. Schlussfolie: Frag WladBot selbst. Sprechblase: Wie klingt dein Chef? 150 Plätze, Beta, kostenlos, QR-Code.
+1. Titelbild. Text: Dein Chef sagt: „Dafür ist kein Budget da.“ Was sagst du? Der WladBot sagt in einer Mitteilung: Ich spiele deinen Chef. Du hast einen Satz.
+2. Wähle, bevor du weiterwischst. A: Okay, verstehe. B: Was müsste passieren, damit es im nächsten Quartal geht? C: Das ist unfair. Andere kriegen es auch.
+3. WladBot wertet. A schwach: Du gibst auf, bevor das Gespräch beginnt. B stark, hervorgehoben: Rückfrage-Technik, aus dem Nein wird ein Weg. C schwach: Du greifst die Person an, nicht das Problem.
+4. Hart in der Sache. Weich zur Person. Daneben ein Foto des Redners im Scheinwerferlicht. WladBot: Und setz direkt den Termin: Wann schauen wir uns das gemeinsam an?
+5. Schlussfolie: Frag WladBot selbst. Mitteilung: Wie klingt dein Chef? 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
 
 ## Offene Punkte
 
 1. **Freigabe durch Wlad** (Mail): Bilder, Captions und die Beispiel-Antworten des Bots. Das Maskottchen ist der bestehende Produkt-Avatar, in den Folien aber deutlich größer als im Produkt.
-2. **Begrenzung** (Weg A oder B oben) und die Zahl überall gleichziehen. Ohne Entscheidung nicht posten.
-3. **QR-Ziele prüfen:** `https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=qr&utm_campaign=wladbot&utm_content=w1` (und `w2`, `w3`). Die Codes lesen sich aus den gerenderten Bildern bis 400 Pixel Breite korrekt aus. Vor dem Posten einmal mit dem Handy scannen und bis zur Anmeldung durchklicken (`leaderos.de` war aus der Build-Umgebung nicht erreichbar, der Pfad ist derselbe wie bei den Landing-CTAs). Auf dem Handy scannt man das eigene Display nicht; deshalb steht der Link zusätzlich im ersten Kommentar.
-4. **Reihenfolge und Takt:** Vorschlag W01, dann W03, dann W02 (erst der Fall, den alle kennen, dann der Kommentar-Köder, dann das Lehrstück). Nicht in `../linkedin-carousels-01/SCHEDULE.json` eingetragen, die Zernio-Konten sind noch nicht verbunden. Beste Zeiten: 7:30 bis 8:30 Uhr oder 12:00 bis 13:00 Uhr.
+2. **Foto:** Das Bühnenfoto (`../social-kit/src/wlad-stage.webp`) kam über den Chat und ist nur 1342×1076 Pixel groß. Quelle, Nutzungsrecht und Fotografenhinweis klären und, wenn möglich, das Original besorgen; das Ersetzen der Datei und ein neuer Build genügen, alle Ausschnitte folgen automatisch.
+3. **Begrenzung** (Weg A oder B oben) und die Zahl überall gleichziehen. Ohne Entscheidung nicht posten.
+4. **QR-Ziele prüfen:** `https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=qr&utm_campaign=wladbot&utm_content=w1` (und `w2`, `w3`). Die Codes lesen sich aus den gerenderten Bildern (LinkedIn-Fassungen, 1620, 1080 und 540 Pixel Breite) korrekt aus. Vor dem Posten einmal mit dem Handy scannen und bis zur Anmeldung durchklicken (`leaderos.de` war aus der Build-Umgebung nicht erreichbar, der Pfad ist derselbe wie bei den Landing-CTAs). Auf dem Handy scannt man das eigene Display nicht; deshalb steht der Link zusätzlich im ersten Kommentar.
+5. **Reihenfolge und Takt:** Vorschlag W01, dann W03, dann W02 (erst der Fall, den alle kennen, dann der Kommentar-Köder, dann das Lehrstück). Beste Zeiten: 7:30 bis 8:30 Uhr oder 12:00 bis 13:00 Uhr.

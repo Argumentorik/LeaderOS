@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Instagram-Feed 01 · WladBot · LeaderOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
+<style>
+/* Instagram-Feed 01 · zwölf Kacheln als Mosaik (3 Spalten × 4 Reihen, 4:5, 1080×1350).
+   Drei Kacheln sind die Titelfolien der W-Karussells (../linkedin-wladbot-01),
+   neun entstehen hier. Gleiche Bausteine wie die Karussells (../social-kit):
+   Bühnenfoto, Glas, Maskottchen, Limette. Dazu hell/dunkel im Wechsel, damit
+   der Feed als Mosaik gelesen wird. Einzelposts sind für sich vollständig. */
+.wht{background:#fff;color:#0a0c10}
+.wht .hd{color:#0a0c10;text-shadow:none}.wht .hd .m{color:rgba(10,12,16,.4)}
+.wht .tag{color:rgba(10,12,16,.55)}.wht .tag b{color:#0a0c10}
+.blk{background:#0a0c10;color:#fff;border-radius:40px;box-shadow:0 26px 54px rgba(10,12,16,.22)}
+.badge{flex:none;width:68px;height:68px;border-radius:22px;background:var(--lime);color:var(--ink);font:700 40px/68px var(--disp);text-align:center}
+.s6{display:flex;gap:20px;align-items:center;padding:0 28px 0 22px;height:112px}
+.lmt{background:radial-gradient(90% 70% at 15% 0%,#dcff66,#bfff00 55%,#aae800)}
+.lmt .hd{color:#0a0c10;text-shadow:none}.lmt .hd .m{color:rgba(10,12,16,.45)}
+.lmt .tag{color:rgba(10,12,16,.62)}
+.wm{font:700 36px/1 var(--disp);letter-spacing:-.03em;color:#0a0c10}.wm i{font-style:normal;margin:0 2px}
+.rule{height:2px;background:rgba(10,12,16,.16)}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet"></div>
+<script src="../social-kit/kit.js"></script>
+<script>
+const HEAD = (top, html, size = 100, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const ph = (sx, sy, sw, l, t, w, h) => K.photo(sx, sy, sw, l, t, w, h, 'border-radius:56px;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1.5px rgba(255,255,255,.14)');
+const TAG = 'LeaderOS <b>·</b> WladBot';
+const HEADL = (top, html, size = 100, extra = '') => `<div class="hd" style="--mut:rgba(10,12,16,.42);color:#0a0c10;text-shadow:none;left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const CHROMEL = (label) => `<div style="left:72px;top:64px">${K.TILE}</div><div class="tag" style="left:144px;top:82px;color:rgba(10,12,16,.55)">${label}</div>`;
+
+// Position im Raster (von links oben nach rechts unten): 02 03 · 04 · 06 · 07 · 09 10 11 12 entstehen hier,
+// 01, 05, 08 sind die Titelfolien von W01, W02, W03 aus ../linkedin-wladbot-01.
+const TILES = [
+  // 02 · SEXIER (hell)
+  { id: 'IG-02', slug: 'sexier', title: 'Ein Argument, sechs Schritte', html: () => `
+    <div class="lay" style="background:radial-gradient(90% 60% at 100% 100%,rgba(191,255,0,.3),rgba(191,255,0,0) 62%),#fff"></div>
+    ${CHROMEL(TAG)}
+    ${HEADL(170, 'Ein Argument,<br><span class="m">sechs Schritte.</span>', 104)}
+    <div style="left:72px;top:480px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      ${[['S', 'Statement', 'Die These.'], ['E', 'Explanation', 'Warum so.'], ['X', 'eXample', 'Ein Fall.'], ['I', 'Impact', 'Was folgt.'], ['E', 'Explanation of Impact', 'Warum es zählt.'], ['R', 'Rebuttal', 'Der stärkste Einwand.']]
+        .map(([l, t, d]) => `<div class="blk" style="padding:30px 30px 32px"><div class="badge">${l}</div><div style="margin-top:22px;font:600 33px/1.1 var(--txt);letter-spacing:-.02em">${t}</div><div style="margin-top:8px;font:400 26px/1.25 var(--txt);color:rgba(255,255,255,.62)">${d}</div></div>`).join('')}
+    </div>
+    <div class="tag" style="left:72px;top:1262px;color:rgba(10,12,16,.55)">SEXIER <b style="color:#0a0c10">·</b> aus „Weiße Rhetorik“</div>
+    ${K.grain}` },
+  // 03 · Maskottchen (Limette)
+  { id: 'IG-03', slug: 'wartet-nie-bis-montag', title: 'Dein KI-Coach wartet nie bis Montag', html: () => `
+    ${K.amb('amb-lime', 'br', 'background-size:170% auto')}${K.dim(0.12, 0.5)}
+    <div class="sk" style="left:260px;top:620px;width:900px;height:640px;background:radial-gradient(closest-side,rgba(191,255,0,.5),rgba(191,255,0,0))"></div>
+    ${K.vig}
+    ${K.mascot('right:-250px;top:470px;width:1040px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.6))')}
+    ${K.chrome(TAG)}
+    ${HEAD(170, 'Dein KI-Coach<br>wartet nie<br><span class="m">bis Montag.</span>', 108)}
+    ${K.note('left:72px;top:1040px;width:560px', 'Schwieriges Gespräch morgen? <b>Üb es jetzt.</b>')}
+    ${K.grain}` },
+  // 04 · Zitat
+  { id: 'IG-04', slug: 'hart-in-der-sache', title: 'Hart in der Sache. Weich zur Person.', html: () => `
+    ${K.amb('amb-cool', 'tr')}${K.dim(0.1, 0.5)}${K.vig}
+    ${K.chrome(TAG)}
+    <div style="left:72px;top:110px;font:italic 400 300px/1 var(--serif);color:var(--lime)">„</div>
+    <div class="hd" style="left:72px;top:540px;width:936px;font:italic 400 128px/1.02 var(--serif);letter-spacing:-.02em">Hart in der Sache.<br><span class="m">Weich zur Person.</span></div>
+    <div class="tag" style="left:72px;top:1262px">Harvard-Prinzip <b>·</b> Verhandeln</div>
+    ${K.grain}` },
+  // 06 · Foto, Gesicht (Charisma-Code)
+  { id: 'IG-06', slug: 'praesenz-waerme-kompetenz', title: 'Präsenz. Wärme. Kompetenz.', html: () => `
+    ${K.amb('amb-warm', 'bl')}${K.dim(0.1, 0.5)}${K.vig}
+    ${K.chrome(TAG)}
+    ${HEAD(170, 'Präsenz.<br>Wärme.<br><span class="m">Kompetenz.</span>', 116)}
+    ${ph(570, 40, 420, 72, 560, 578, 740)}
+    <div class="g" style="left:500px;top:1030px;width:508px;padding:30px 36px 34px;border-radius:44px"><div class="tag" style="color:rgba(10,12,16,.5)">Charisma-Code</div><div style="margin-top:12px;font:400 33px/1.25 var(--txt);letter-spacing:-.018em;color:rgba(10,12,16,.86)">Drei Signale entscheiden in Sekunden, <b style="font-weight:600;color:#0a0c10">ob ein Raum jemandem folgt.</b></div></div>
+    ${K.grain}` },
+  // 07 · Feedbackformel (Limette)
+  { id: 'IG-07', slug: 'beobachtung-wirkung-wunsch', title: 'Beobachtung. Wirkung. Wunsch.', html: () => `
+    <div class="lay lmt"></div>
+    <div style="left:72px;top:62px" class="wm">Leader<i>·</i>OS</div><div class="tag" style="left:292px;top:80px;color:rgba(10,12,16,.62)">WladBot</div>
+    ${HEADL(196, 'Beobachtung.', 150, 'letter-spacing:-.05em')}${HEADL(386, 'Wirkung.', 150, 'letter-spacing:-.05em')}${HEADL(576, 'Wunsch.', 150, 'letter-spacing:-.05em')}
+    <div class="rule" style="left:72px;top:372px;width:936px"></div><div class="rule" style="left:72px;top:562px;width:936px"></div>
+    <div class="tag" style="left:930px;top:250px;color:rgba(10,12,16,.55)">01</div><div class="tag" style="left:930px;top:440px;color:rgba(10,12,16,.55)">02</div><div class="tag" style="left:930px;top:630px;color:rgba(10,12,16,.55)">03</div>
+    <div class="blk" style="left:72px;top:900px;width:936px;padding:36px 42px 40px;border-radius:48px;display:flex;gap:26px;align-items:flex-start">${K.av()}<div><div style="font:600 30px/1 var(--txt)">WladBot</div><div style="margin-top:12px;font:400 40px/1.22 var(--txt);letter-spacing:-.025em;color:rgba(255,255,255,.88)">Feedback ohne Streit: <b style="color:#fff;font-weight:600">nie „du bist …“, immer „mir ist aufgefallen …“</b></div></div></div>
+    <div class="tag" style="left:72px;top:1262px;color:rgba(10,12,16,.62)">Feedbackformel <b style="color:#0a0c10">·</b> Beispiel</div>
+    ${K.grain}` },
+  // 09 · Beta offen
+  { id: 'IG-09', slug: 'beta-ist-offen', title: 'Beta ist offen', html: () => `
+    ${K.amb('amb-lime', 'tr', 'background-size:170% auto')}${K.dim(0.2, 0.62)}
+    <div class="sk" style="left:-200px;top:820px;width:900px;height:600px;background:radial-gradient(closest-side,rgba(191,255,0,.4),rgba(191,255,0,0))"></div>
+    ${K.vig}
+    ${K.chrome(TAG)}
+    ${HEAD(190, 'Beta<br><span class="lm">ist offen.</span>', 190)}
+    <div class="g d" style="left:72px;top:820px;width:936px;height:200px;border-radius:100px;display:flex;align-items:center;gap:34px;padding:0 40px 0 40px">${K.av('width:120px;height:120px')}<div style="flex:1"><div style="font:600 54px/1.05 var(--txt);letter-spacing:-.03em">Link in Bio</div><div style="margin-top:8px;font:400 30px/1.2 var(--txt);color:rgba(255,255,255,.66)">Kostenlos. Für alle, die Gespräche führen.</div></div><div class="g l" style="width:116px;height:116px;border-radius:50%;display:flex;align-items:center;justify-content:center"><span class="send" style="background:none;width:auto;height:auto">${K.ARROW_UR}</span></div></div>
+    ${K.grain}` },
+  // 10 · Foto, Hände (Rückfrage)
+  { id: 'IG-10', slug: 'aus-dem-nein-wird-ein-weg', title: 'Aus dem Nein wird ein Weg', html: () => `
+    ${K.amb('amb-warm', 'br')}${K.dim(0.1, 0.5)}${K.vig}
+    ${K.chrome(TAG)}
+    ${HEAD(170, 'Aus dem Nein<br><span class="m">wird ein Weg.</span>', 112)}
+    ${ph(300, 520, 740, 72, 480, 936, 640)}
+    ${K.anchors([{ x: 236, y: 796, cx: 236, cy: 676, side: 't', label: 'Rückfrage', d: true }, { x: 755, y: 733, cx: 790, cy: 610, side: 't', label: 'Termin', d: true }])}
+    ${K.note('left:72px;top:1040px;width:760px', 'Rückfrage-Technik: <b>Frag, was passieren müsste, statt dich zu verteidigen.</b>')}
+    ${K.grain}` },
+  // 11 · Die fünf Rollen (hell)
+  { id: 'IG-11', slug: 'fuenf-rollen', title: 'Du hast nicht eine Rolle. Du hast fünf.', html: () => `
+    <div class="lay" style="background:radial-gradient(90% 60% at 0% 100%,rgba(191,255,0,.3),rgba(191,255,0,0) 62%),#fff"></div>
+    ${CHROMEL(TAG)}
+    ${HEADL(170, 'Du hast nicht<br>eine Rolle.<br><span class="m">Du hast fünf.</span>', 108)}
+    <div style="left:72px;top:560px;width:936px;display:flex;flex-direction:column;gap:14px">
+      ${[['Kommunikator', 'Präsenz, Argument'], ['Manager', 'Klare Entscheidungen'], ['Team-Leader', 'Delegieren, motivieren'], ['Psychologe', 'Konflikte früh erkennen'], ['Problemlöser', 'Verhandeln, Change']]
+        .map(([t, d], i) => `<div class="blk s6"><div class="badge" style="width:64px;height:64px;line-height:64px;font-size:38px">${i + 1}</div><b style="font:600 40px/1 var(--txt);letter-spacing:-.025em">${t}</b><span style="margin-left:auto;font:400 25px/1.2 var(--txt);color:rgba(255,255,255,.6);text-align:right">${d}</span></div>`).join('')}
+    </div>
+    <div class="tag" style="left:72px;top:1262px;color:rgba(10,12,16,.55)">Aus „Die 5 Rollen einer Führungskraft“</div>
+    ${K.grain}` },
+  // 12 · WladBot stellt sich vor
+  { id: 'IG-12', slug: 'das-ist-wladbot', title: 'Das ist WladBot', html: () => `
+    ${K.amb('amb-cool', 'br')}${K.dim(0.1, 0.5)}
+    <div class="sk" style="left:380px;top:760px;width:800px;height:560px;background:radial-gradient(closest-side,rgba(191,255,0,.28),rgba(191,255,0,0))"></div>
+    ${K.vig}
+    ${K.chrome(TAG)}
+    ${HEAD(170, 'Das ist<br><span class="m">WladBot.</span>', 130)}
+    <div class="g d" style="left:72px;top:600px;width:936px;height:560px;border-radius:56px;padding:46px 50px">
+      <div style="display:flex;align-items:center;gap:32px">${K.av('width:168px;height:168px;box-shadow:0 0 0 4px rgba(255,255,255,.85),0 12px 30px rgba(0,0,0,.4)')}<div><div style="font:600 64px/1 var(--txt);letter-spacing:-.035em">WladBot</div><div style="margin-top:14px;font:400 32px/1.25 var(--txt);color:rgba(255,255,255,.7);letter-spacing:-.015em">KI-Coach für Gespräche,<br>Argumente und Feedback.</div></div></div>
+      <div style="margin-top:44px;display:flex;gap:14px">${['Feedback', 'Argument', 'Rollenspiel'].map((t) => `<span class="g chip" style="position:relative">${t}</span>`).join('')}</div>
+      <div class="g d input" style="position:absolute;left:50px;right:50px;bottom:46px;height:104px;border-radius:52px">Frag mich …<span class="send">${K.ARROW_UP}</span></div>
+    </div>
+    <div class="tag" style="left:72px;top:1262px">Der KI-Coach, der zurückredet</div>
+    ${K.grain}` },
+];
+window.TILES = TILES.map((t) => ({ id: t.id, slug: t.slug, title: t.title }));
+const q = new URLSearchParams(location.search);
+document.getElementById('sheet').innerHTML = TILES[Number(q.get('t') || 0)].html();
+</script>
+</body>
+</html>
