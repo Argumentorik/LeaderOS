@@ -1,15 +1,18 @@
 // Rendert alle Folien der W-Serie (carousel.html) als JPG (1620×2025, 4:5 bei
-// Maßstab 1,5) und je Karussell die Ersatz-CTA-Folie ohne Platzzahl (-open),
-// dazu manifest.json mit den Dateinamen. Die PDFs (LinkedIn-Dokument) baut
-// ../linkedin-carousels-01/build_pdf.py aus dem Manifest.
+// Maßstab 1,5), je Karussell die CTA-Folie in drei weiteren Fassungen
+// (-open ohne Platzzahl, -ig für Instagram mit "Link in Bio", -ig-open) und
+// manifest.json mit den Dateinamen. Die PDFs (LinkedIn-Dokument, mit und ohne
+// Platzzahl) baut ../linkedin-carousels-01/build_pdf.py aus dem Manifest.
 //
-//   PYTHONPATH=<dir mit qrcode, scipy> /usr/bin/python3 build_assets.py   (erzeugt build/)
+//   PYTHONPATH=<dir mit qrcode, scipy> /usr/bin/python3 ../social-kit/build_assets.py   (erzeugt ../social-kit/build/)
 //   NODE_PATH=/opt/node22/lib/node_modules node render.cjs [outDir] [fontCssFile] [only=W02]
 //   python3 -I ../linkedin-carousels-01/build_pdf.py [outDir]
 //
 // outDir ist standardmäßig dieser Ordner (Folien, PDFs und Manifest werden eingecheckt).
 // Ohne Netz zu Google Fonts (Sandbox) kann eine lokale @font-face-CSS-Datei
-// übergeben werden, die statt fonts.googleapis.com ausgeliefert wird.
+// übergeben werden (Outfit 700, Instrument Serif kursiv), die statt
+// fonts.googleapis.com ausgeliefert wird; Inter und JetBrains Mono kommen dann
+// aus den System-Schriften.
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
@@ -28,6 +31,7 @@ const pageUrl = 'file://' + path.join(__dirname, 'carousel.html');
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  page.on('requestfailed', (r) => { if (!r.url().includes('fonts.g')) errors.push('REQFAIL ' + r.url()); });
   await page.goto(pageUrl);
   const meta = await page.evaluate(() => window.CAROUSELS);
   const shoot = async (query, file) => {
@@ -39,15 +43,19 @@ const pageUrl = 'file://' + path.join(__dirname, 'carousel.html');
   const manifest = [];
   for (let c = 0; c < meta.length; c += 1) {
     if (only && only !== meta[c].id) continue;
+    const id = meta[c].id;
+    const last = meta[c].n - 1;
     const slides = [];
     for (let s = 0; s < meta[c].n; s += 1) {
-      slides.push(`${meta[c].id}-0${s + 1}.jpg`);
+      slides.push(`${id}-0${s + 1}.jpg`);
       await shoot(`?c=${c}&s=${s}`, slides[s]);
     }
-    const openFile = `${meta[c].id}-0${meta[c].n}-open.jpg`;
-    await shoot(`?c=${c}&s=${meta[c].n - 1}&seats=0`, openFile);
-    manifest.push({ id: meta[c].id, slug: meta[c].slug, title: meta[c].title, slides, slide_open: openFile, pdf: `${meta[c].id}.pdf` });
-    console.log('rendered', meta[c].id, slides.length, 'slides');
+    const files = { slide_open: `${id}-0${meta[c].n}-open.jpg`, slide_ig: `${id}-0${meta[c].n}-ig.jpg`, slide_ig_open: `${id}-0${meta[c].n}-ig-open.jpg` };
+    await shoot(`?c=${c}&s=${last}&seats=0`, files.slide_open);
+    await shoot(`?c=${c}&s=${last}&ig=1`, files.slide_ig);
+    await shoot(`?c=${c}&s=${last}&ig=1&seats=0`, files.slide_ig_open);
+    manifest.push({ id, slug: meta[c].slug, title: meta[c].title, slides, ...files, pdf: `${id}.pdf`, slides_open: [...slides.slice(0, last), files.slide_open], pdf_open: `${id}-open.pdf` });
+    console.log('rendered', id, slides.length, 'slides +', Object.keys(files).length, 'Varianten');
   }
   await browser.close();
   if (errors.length) console.log('PAGE ERRORS', errors);

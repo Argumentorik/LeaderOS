@@ -11,7 +11,17 @@
       "W01-05.jpg"
     ],
     "slide_open": "W01-05-open.jpg",
-    "pdf": "W01.pdf"
+    "slide_ig": "W01-05-ig.jpg",
+    "slide_ig_open": "W01-05-ig-open.jpg",
+    "pdf": "W01.pdf",
+    "slides_open": [
+      "W01-01.jpg",
+      "W01-02.jpg",
+      "W01-03.jpg",
+      "W01-04.jpg",
+      "W01-05-open.jpg"
+    ],
+    "pdf_open": "W01-open.pdf"
   },
   {
     "id": "W02",
@@ -25,7 +35,17 @@
       "W02-05.jpg"
     ],
     "slide_open": "W02-05-open.jpg",
-    "pdf": "W02.pdf"
+    "slide_ig": "W02-05-ig.jpg",
+    "slide_ig_open": "W02-05-ig-open.jpg",
+    "pdf": "W02.pdf",
+    "slides_open": [
+      "W02-01.jpg",
+      "W02-02.jpg",
+      "W02-03.jpg",
+      "W02-04.jpg",
+      "W02-05-open.jpg"
+    ],
+    "pdf_open": "W02-open.pdf"
   },
   {
     "id": "W03",
@@ -39,6 +59,16 @@
       "W03-05.jpg"
     ],
     "slide_open": "W03-05-open.jpg",
-    "pdf": "W03.pdf"
+    "slide_ig": "W03-05-ig.jpg",
+    "slide_ig_open": "W03-05-ig-open.jpg",
+    "pdf": "W03.pdf",
+    "slides_open": [
+      "W03-01.jpg",
+      "W03-02.jpg",
+      "W03-03.jpg",
+      "W03-04.jpg",
+      "W03-05-open.jpg"
+    ],
+    "pdf_open": "W03-open.pdf"
   }
 ]

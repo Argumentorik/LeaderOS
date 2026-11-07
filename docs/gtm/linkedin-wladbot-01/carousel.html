@@ -2,106 +2,48 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>LinkedIn-Karussells W01 bis W03 · WladBot · LeaderOS</title>
+<title>Karussells W01 bis W03 · WladBot · LeaderOS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@500;600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
 <style>
-/* W-Serie "WladBot" · drei Karussells à fünf Folien · 1080×1350 (4:5).
-   Minimalistisch: schwarzer Grund, weiße Schrift, Limette als einziger Akzent,
-   der WladBot als Figur (bestehendes Produkt-Maskottchen als Freisteller,
-   build/mascot.png). Keine Grautöne, keine Kästen oder Rahmen, kein Glanz, kein
-   Korn, keine Zähler oder Fortschrittsbalken. Hierarchie nur über Größe und
-   Gewicht. Jedes Karussell weckt Neugier mit einem Fall, den alle kennen, und
-   löst ihn mit einem Canon-Framework auf (Feedbackformel, SEXIER,
-   Rückfrage-Technik). Die letzte Folie ist der Beta-Zugang mit QR-Code. Alle
-   Chat-Antworten sind Beispiele und so gekennzeichnet; sie sind keine Zitate
-   von Wlad. Kein Name, keine Credentials, kein Termin. Bausteine kommen aus
-   build_assets.py (build/). */
-:root{--lime:#bfff00;--ink:#0a0a0a;--w:#fff;
-  --body:'Inter',sans-serif;--disp:'Outfit',sans-serif;--serif:'Instrument Serif',serif;--pad:64px}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#222}
-.sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--ink);color:var(--w);font-family:var(--body)}
-.mascot{position:absolute;z-index:10}
-
-/* Typografie */
-.h1{position:absolute;z-index:20;font-weight:600;font-size:104px;line-height:1.0;letter-spacing:-.04em}
-.h2{position:absolute;z-index:20;font-weight:600;font-size:92px;line-height:1.02;letter-spacing:-.04em}
-.lm{color:var(--lime)}
-
-/* Blasen: Bot = weiße Linie, Nutzer = Limette */
-.bub{position:absolute;z-index:30;padding:26px 34px 28px;border-radius:38px 38px 38px 10px;border:2px solid var(--w);font-size:42px;line-height:1.24;font-weight:500;letter-spacing:-.012em;background:var(--ink)}
-.bub b{font-weight:600;color:var(--lime)}
-.bub.u{background:var(--lime);border-color:var(--lime);color:var(--ink);border-radius:38px 38px 10px 38px;font-weight:600}
-.bub.tail::after{content:'';position:absolute;right:-14px;top:74px;width:26px;height:26px;background:var(--ink);border-top:2px solid var(--w);border-right:2px solid var(--w);transform:rotate(45deg)}
-.bub.tail.l::after{right:auto;left:-14px;transform:rotate(-135deg)}
-.bub.tail.d::after{right:auto;left:90px;top:auto;bottom:-14px;transform:rotate(135deg)}
-
-/* Chat-Folien */
-.chead{position:absolute;z-index:30;left:var(--pad);right:var(--pad);top:96px;display:flex;align-items:center;gap:22px}
-.av{display:block;flex:none;width:92px;height:92px;border-radius:50%;overflow:hidden;background:var(--lime)}
-.av img{display:block;width:100%;height:100%;object-fit:cover}
-.chead .nm{font-weight:600;font-size:46px;line-height:1;letter-spacing:-.02em}
-.chead .ex{margin-left:auto;font-size:28px;font-weight:500}
-.msgs{position:absolute;z-index:30;left:var(--pad);right:var(--pad);top:250px;display:flex;flex-direction:column;gap:26px}
-.msgs .bub{position:relative}
-.msgs .bub.u{align-self:flex-end;max-width:80%}
-.msgs .bub.b{align-self:flex-start;max-width:94%}
-.msgs .xl{font-size:68px;line-height:1.06;letter-spacing:-.03em;font-weight:600;padding:36px 44px 40px}
-.msgs .xl small{display:block;margin-top:20px;font-size:46px;line-height:1.2;font-weight:500;letter-spacing:-.015em}
-
-/* Zitat-Folien */
-.quote{position:absolute;z-index:20;left:var(--pad);right:var(--pad);font-family:var(--serif);font-style:italic;font-size:74px;line-height:1.28;letter-spacing:-.01em}
-.seg{-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.seg.s1{border-bottom:5px solid var(--w)}
-.seg.s2{border-bottom:5px solid var(--lime)}
-.seg.s3{background:var(--lime);color:var(--ink);padding:0 10px;border-radius:10px}
-.legend{position:absolute;z-index:20;left:var(--pad);right:var(--pad);display:flex;gap:44px;font-size:36px;font-weight:600;letter-spacing:-.01em}
-.legend span{display:inline-block;line-height:1.35}
-.legend .s1{border-bottom:5px solid var(--w)}.legend .s2{border-bottom:5px solid var(--lime)}.legend .s3{background:var(--lime);color:var(--ink);padding:0 12px;border-radius:10px}
-.note{position:absolute;z-index:20;left:var(--pad);right:var(--pad);font-size:40px;line-height:1.25;font-weight:500;letter-spacing:-.015em}
-
-/* SEXIER */
-.stmt{position:absolute;z-index:20;left:var(--pad);right:var(--pad);font-weight:600;font-size:88px;line-height:1.04;letter-spacing:-.04em}
-.meter{position:absolute;z-index:20;left:var(--pad);right:var(--pad);display:flex;gap:14px}
-.meter span{flex:1;height:120px;display:flex;align-items:center;justify-content:center;border-radius:26px;border:2px solid var(--w);font-family:var(--disp);font-weight:700;font-size:64px}
-.meter span.on{background:var(--lime);border-color:var(--lime);color:var(--ink)}
-.steps{position:absolute;z-index:20;left:var(--pad);right:var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:64px 40px}
-.steps div{position:relative;padding-left:118px;min-height:210px}
-.steps div i{position:absolute;left:0;top:-14px;font-style:normal;font-family:var(--disp);font-weight:700;font-size:118px;line-height:1.1;color:var(--lime)}
-.steps div b{display:block;font-size:38px;line-height:1.1;font-weight:600;letter-spacing:-.02em}
-.steps div span{display:block;margin-top:12px;font-size:30px;line-height:1.28;font-weight:500}
-.rows{position:absolute;z-index:20;left:var(--pad);right:var(--pad);display:flex;flex-direction:column;gap:46px}
-.rows div{display:flex;align-items:center;gap:30px;font-size:42px;line-height:1.2;font-weight:500;letter-spacing:-.015em}
-.rows div i{flex:none;display:flex;align-items:center;justify-content:center;width:82px;height:82px;border-radius:22px;background:var(--lime);color:var(--ink);font-style:normal;font-family:var(--disp);font-weight:700;font-size:48px}
-
-/* Rollenspiel */
-.opts{position:absolute;z-index:20;left:var(--pad);right:var(--pad);display:flex;flex-direction:column;gap:70px}
-.opt{position:relative;display:flex;align-items:center;gap:36px}
-.opt .l{flex:none;display:flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;border:3px solid var(--w);font-family:var(--disp);font-weight:700;font-size:56px}
-.opt .t{font-size:50px;line-height:1.18;font-weight:500;letter-spacing:-.02em}
-.opt .t small{display:block;margin-top:12px;font-size:32px;line-height:1.25;font-weight:500;letter-spacing:0}
-.opt.no .t > span{text-decoration:line-through;text-decoration-thickness:3px}
-.opt.yes{padding:30px 36px;margin:-30px -36px;border:3px solid var(--lime);border-radius:44px}
-.opt.yes .l{background:var(--lime);border-color:var(--lime);color:var(--ink)}
-.opt.yes small b{color:var(--lime)}
-
-/* Marke und Beta */
-.brand{position:absolute;z-index:30;display:flex;align-items:center;gap:16px}
-.brand .wm{font-family:var(--disp);font-weight:700;font-size:40px;line-height:1;letter-spacing:-.03em;color:var(--w)}
-.brand .wm .d{color:var(--lime);margin:0 2px}
-.tile{display:block;width:60px;height:60px}
-.cta-h{position:absolute;z-index:30;left:var(--pad);top:150px;font-weight:600;font-size:106px;line-height:1.0;letter-spacing:-.045em}
-.hero{position:absolute;z-index:30;left:560px;top:392px;font-family:var(--disp);font-weight:700;font-size:210px;line-height:1;letter-spacing:-.05em;color:var(--lime)}
-.herotxt{position:absolute;z-index:30;left:564px;top:622px;font-size:40px;line-height:1.25;font-weight:600;letter-spacing:-.015em;white-space:nowrap}
-.herotxt span{display:block;margin-top:6px;font-weight:500;font-size:31px}
-.qrcard{position:absolute;z-index:30;right:var(--pad);width:392px;padding:32px;background:#fff;border-radius:26px}
-.qrcard img{display:block;width:328px;height:328px}
-.qrnote{position:absolute;z-index:30;right:var(--pad);width:392px;text-align:center;font-size:26px;font-weight:500;white-space:nowrap}
+/* W-Serie "WladBot" · drei Karussells à fünf Folien · 1080×1350 (4:5), für LinkedIn
+   (PDF) und Instagram. Bildwelt und Bausteine: ../social-kit (Bühnenfoto, Glas,
+   Maskottchen). Jedes Karussell weckt Neugier mit einem Fall, den alle kennen,
+   und löst ihn mit einem Canon-Framework auf (Feedbackformel, SEXIER,
+   Rückfrage-Technik). Die letzte Folie ist der Beta-Zugang (QR bei LinkedIn,
+   "Link in Bio" bei Instagram). Chat-Antworten sind Beispiele und so
+   gekennzeichnet; sie sind keine Zitate von Wlad. Kein Name, keine Credentials,
+   kein Termin. */
+.rowc{display:flex;align-items:center;gap:30px;padding:0 38px 0 24px;height:124px;border-radius:40px}
+.badge{flex:none;width:76px;height:76px;border-radius:24px;background:var(--lime);color:var(--ink);font:700 46px/76px var(--disp);text-align:center}
+.rowc b{display:block;font:600 36px/1.1 var(--txt);letter-spacing:-.02em}
+.rowc span.s{display:block;margin-top:6px;font:400 28px/1.25 var(--txt);color:rgba(255,255,255,.66)}
+.doc{padding:20px 40px;border-radius:52px}
+.doc .r{display:flex;align-items:center;gap:30px;padding:24px 0;border-bottom:1.5px solid rgba(10,12,16,.1);font:500 38px/1.2 var(--txt);letter-spacing:-.022em}
+.doc .r:last-child{border-bottom:0}
+.doc .r .badge{width:68px;height:68px;font-size:40px;line-height:68px;border-radius:21px}
+.mp{display:flex;align-items:center;justify-content:center;width:144px;height:108px;border-radius:34px;font:700 54px var(--disp);color:rgba(255,255,255,.8)}
+.mp.on{background:var(--lime);color:var(--ink);box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 24px 60px rgba(191,255,0,.28),0 18px 40px rgba(0,0,0,.4)}
+.opt{display:flex;align-items:center;gap:34px;padding:34px 46px 34px 34px;border-radius:56px}
+.opt .l{flex:none;width:96px;height:96px;border-radius:50%;background:var(--ink);color:#fff;font:700 52px/96px var(--disp);text-align:center}
+.opt .t{font:500 46px/1.16 var(--txt);letter-spacing:-.025em}
+.opt .t small{display:block;margin-top:14px;font:400 31px/1.28 var(--txt);letter-spacing:-.01em;opacity:.78}
+.opt.no{opacity:.84}.opt.no .l{background:rgba(255,255,255,.16)}.opt.no .t>span{text-decoration:line-through;text-decoration-thickness:2.5px;text-decoration-color:rgba(255,255,255,.55)}
+.opt.yes .l{background:var(--lime);color:var(--ink)}
+.opt.yes{box-shadow:inset 0 2px 0 rgba(255,255,255,.95),0 0 0 4px var(--lime),0 34px 90px rgba(191,255,0,.22),0 6px 16px rgba(0,0,0,.3)}
+.verd{display:inline-block;margin-right:12px;padding:5px 16px 6px;border-radius:999px;font:600 25px/1.2 var(--txt);letter-spacing:0;vertical-align:2px;background:rgba(255,255,255,.18);color:#fff}
+.opt.yes .verd{background:var(--ink);color:var(--lime)}
+.herocard{padding:34px 40px 38px;border-radius:48px}
+.herocard .k{font:500 20px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.herocard .n{margin-top:14px;font:700 156px/.95 var(--disp);letter-spacing:-.05em;color:var(--lime)}
+.herocard .a{margin-top:12px;font:600 38px/1.15 var(--txt);letter-spacing:-.02em}
+.herocard .b{margin-top:8px;font:400 28px/1.3 var(--txt);color:rgba(255,255,255,.64)}
 </style>
 </head>
 <body>
 <div id="sheet" class="sheet"></div>
+<script src="../social-kit/kit.js"></script>
 <script>
 // Die Zahl der Plätze muss der echten Begrenzung entsprechen: die Aufnahme
 // stoppt bei dieser Zahl (technisch durchgesetzt), sonst ist die Knappheit
@@ -109,113 +51,210 @@ html,body{background:#222}
 // (04.11.2026); LI-05 und linkedin-carousels-01 nennen noch 50.
 const SEATS = 150;
 
-const TILE = `<svg class="tile" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="fb" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#D4FF4D"/><stop offset="55%" stop-color="#BFFF00"/><stop offset="100%" stop-color="#A8E600"/></linearGradient></defs><rect width="32" height="32" rx="9.6" fill="url(#fb)"/><g transform="translate(4.2 4.2) scale(0.7375)" fill="none" stroke="#0A0A0A" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 4.8 L8.6 24.4 Q10 25.8 11.4 24.2 L15.4 9.8 Q16.4 8.8 17.4 9.8 L20.8 24.2 Q22.2 25.8 23.6 24.4 L28.8 4" stroke-width="3"/><path d="M28.8 4 Q30.2 4.6 29.6 6.4" stroke-width="2.6"/><circle cx="29.6" cy="6.4" r="1.2" fill="#0A0A0A" stroke="none"/></g></svg>`;
-const AVATAR = '../../../frontend/public/wladbot-avatar-clean.png';
-const av = `<span class="av"><img src="${AVATAR}" alt=""></span>`;
-const brand = (style) => `<div class="brand" style="${style}">${TILE}<div class="wm">Leader<span class="d">·</span>OS</div></div>`;
-const mascot = (style) => `<img class="mascot" src="build/mascot.png" style="${style}" alt="">`;
-const head = () => `<div class="chead">${av}<div class="nm">WladBot</div><span class="ex">Beispiel</span></div>`;
+const HEAD = (top, html, size = 100, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const ph = (sx, sy, sw, l, t, w, h) => K.photo(sx, sy, sw, l, t, w, h, 'border-radius:56px;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1.5px rgba(255,255,255,.14)');
 
-// Fakten nur aus docs/gtm/WLAD_CANON.md (Feedbackformel, SEXIER, Rückfrage-Technik,
-// hart in der Sache, weich zur Person) und den freigegebenen Serien-Texten.
+// Letzte Folie: Beta-Zugang. ig = Instagram ("Link in Bio" statt QR), seats = 0 ohne Platzzahl
+const cta = (s, c, o) => `
+  ${K.amb('amb-lime', 'bl', 'background-size:175% auto')}
+  ${K.dim(0.25, 0.6)}
+  <div class="sk" style="left:-200px;top:700px;width:820px;height:560px;background:radial-gradient(closest-side,rgba(191,255,0,.5),rgba(191,255,0,0))"></div>
+  ${K.vig}
+  ${K.mascot('left:-190px;top:520px;width:880px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.6))')}
+  ${K.chrome(c.tag)}
+  ${HEAD(170, 'Frag WladBot<br><span class="lm">selbst.</span>', 118)}
+  ${K.note('left:72px;top:430px;width:440px', s.bubbleText)}
+  <div class="g d herocard" style="left:560px;top:440px;width:448px">
+    <div class="k">${o.seats > 0 ? 'Beta · kostenlos' : 'Beta · kostenlos'}</div>
+    <div class="n">${o.seats > 0 ? o.seats : 'Offen'}</div>
+    <div class="a">${o.seats > 0 ? 'Plätze.' : 'Jetzt starten.'}</div>
+    <div class="b">${o.seats > 0 ? 'Aufnahme stoppt bei ' + o.seats + '.' : 'Zugang ohne Warteliste.'}</div>
+  </div>
+  ${o.ig
+    ? `<div class="g d" style="left:560px;top:830px;width:448px;height:250px;padding:44px 44px;border-radius:48px">
+         <div style="font:600 56px/1.04 var(--txt);letter-spacing:-.03em">Link<br>in Bio</div>
+         <div class="g l" style="position:absolute;right:36px;bottom:36px;width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center"><span class="send" style="background:none;width:auto;height:auto">${K.ARROW_UR}</span></div>
+       </div>`
+    : `<div class="g w" style="left:608px;top:826px;width:400px;padding:35px;border-radius:44px"><img src="${c.qr}" style="display:block;width:330px;height:330px" alt="QR-Code zum Beta-Zugang"></div>
+       <div class="tag" style="left:560px;top:1258px;width:448px;text-align:right">oder Link im ersten Kommentar</div>`}
+  ${K.grain}`;
+
 const CAROUSELS = [
   // ───────── W01 · Der Teamlead, der alles abblockt ─────────
-  { id: 'W01', slug: 'teamlead-blockt', title: 'Dein Teamlead blockt jeden Vorschlag ab.', qr: 'build/qr-w01.svg',
+  { id: 'W01', slug: 'teamlead-blockt', title: 'Dein Teamlead blockt jeden Vorschlag ab.', qr: '../social-kit/build/qr-w01.svg', tag: 'WladBot <b>·</b> Feedback',
     slides: [
-      { t: 'cover', mascot: 'right:-100px;bottom:-110px;width:940px',
-        h: 'Dein Teamlead <span class="lm">blockt</span> jeden Vorschlag ab.',
-        bub: 'left:64px;top:640px;width:450px', bubble: 'Ich stelle dir erst eine <b>Gegenfrage.</b>' },
-      { t: 'chat', mascot: 'right:-70px;bottom:-130px;width:640px',
-        msgs: [{ w: 'u', h: 'Er sagt bei jeder Idee: „Haben wir schon probiert.“' }, { w: 'u', h: 'Wie überzeuge ich ihn?' },
-               { w: 'b', xl: true, h: 'Falsche Frage.<small>Besser: <b>Was verliert er, wenn du recht hast?</b></small>' }] },
-      { t: 'say', mascot: 'left:-110px;bottom:-120px;width:640px;transform:scaleX(-1)',
-        h: 'Hinter einem Nein steckt fast immer ein <span class="lm">Interesse.</span>', hs: 'left:64px;top:150px;width:952px',
-        bub: 'right:64px;top:700px;width:520px', bubble: 'Oft: Risiko, Mehrarbeit oder Gesichtsverlust. <b>Frag danach, nicht nach Zustimmung.</b>' },
-      { t: 'script', title: 'Dein erster Satz.',
-        quote: '<span class="seg s1">Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden.</span> <span class="seg s2">Das kostet uns Ideen.</span> <span class="seg s3">Ich wünsche mir, dass wir eine davon gemeinsam durchspielen.</span>',
-        legend: [['s1', 'Beobachtung'], ['s2', 'Wirkung'], ['s3', 'Wunsch']], note: 'Nie „du bist …“, immer „mir ist aufgefallen …“' },
-      { t: 'cta', mascot: 'left:-190px;bottom:-60px;width:860px', bubbleText: 'Stell mir <b>deine</b> Frage.' },
+      // 1 · Foto in voller Höhe, Überschrift darunter, Anker an der offenen Hand
+      () => `
+        ${K.photo(330, 0, 820, 260, 0, 820, 1076)}
+        <div style="left:260px;top:0;width:90px;height:1076px;background:linear-gradient(to right,var(--bg),rgba(6,8,12,0))"></div>
+        <div style="left:0;top:830px;width:1080px;height:246px;background:linear-gradient(to bottom,rgba(6,8,12,0),var(--bg))"></div>
+        ${K.vig}
+        ${K.chrome('WladBot <b>·</b> Feedback')}
+        ${K.note('left:72px;top:176px;width:500px', 'Ich stelle dir erst eine <b>Gegenfrage.</b>')}
+        ${K.anchors([{ x: 375, y: 775, cx: 288, cy: 775, side: 'l', label: 'Gegenfrage', d: true }])}
+        ${HEAD(1000, '<span class="m">Dein Teamlead</span><br>blockt jeden<br>Vorschlag ab.', 96)}
+        ${K.rb(880, 1112, 'wischen')}
+        ${K.grain}`,
+      // 2 · Chat
+      () => `
+        ${K.amb('amb-warm', 'tr')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Feedback')}
+        <div style="left:72px;top:176px;width:936px;display:flex;align-items:center;gap:24px">${K.av('width:96px;height:96px')}<span style="font:600 46px var(--txt);letter-spacing:-.02em">WladBot</span><span class="g chip" style="margin-left:auto;font-size:24px;padding:12px 24px">Beispiel</span></div>
+        <div style="left:72px;top:340px;width:936px;display:flex;flex-direction:column;gap:28px">
+          <div class="bub u" style="align-self:flex-end;max-width:84%">Er sagt bei jeder Idee: „Haben wir schon probiert.“</div>
+          <div class="bub u" style="align-self:flex-end">Wie überzeuge ich ihn?</div>
+          <div class="g bub b" style="align-self:flex-start;max-width:97%"><span class="big">Falsche Frage.</span><span class="sub">Besser: <b>Was verliert er, wenn du recht hast?</b></span></div>
+        </div>
+        <div class="g d input" style="left:72px;top:1146px;width:936px;height:116px;border-radius:58px">Frag mich …<span class="send">${K.ARROW_UP}</span></div>
+        ${K.grain}`,
+      // 3 · Aussage, darunter die Hände im Foto, Mitteilung über dem Kartenrand
+      () => `
+        ${K.amb('amb-cool', 'br')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Feedback')}
+        ${HEAD(170, '<span class="m">Hinter einem Nein<br>steckt fast immer</span><br>ein Interesse.', 100)}
+        ${ph(300, 520, 740, 72, 540, 936, 640)}
+        ${K.note('left:150px;top:1040px;width:760px', 'Oft: Risiko, Mehrarbeit oder Gesichtsverlust. <b>Frag danach, nicht nach Zustimmung.</b>')}
+        ${K.grain}`,
+      // 4 · Der erste Satz in drei Teilen
+      () => `
+        ${K.amb('amb-warm', 'tr')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Feedback')}
+        ${HEAD(170, '<span class="m">Dein erster</span><br>Satz.', 100)}
+        <div style="left:72px;top:440px;width:936px;display:flex;flex-direction:column;gap:22px">
+          <div class="g d" style="padding:34px 42px 38px;border-radius:44px"><div class="tag" style="color:var(--lime)">01 · Beobachtung</div><div style="margin-top:16px;font:400 42px/1.2 var(--txt);letter-spacing:-.025em">Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden.</div></div>
+          <div class="g d" style="padding:34px 42px 38px;border-radius:44px"><div class="tag" style="color:var(--lime)">02 · Wirkung</div><div style="margin-top:16px;font:400 42px/1.2 var(--txt);letter-spacing:-.025em">Das kostet uns Ideen.</div></div>
+          <div class="g l" style="padding:34px 42px 38px;border-radius:44px"><div class="tag" style="color:rgba(10,12,16,.62)">03 · Wunsch</div><div style="margin-top:16px;font:500 42px/1.2 var(--txt);letter-spacing:-.025em">Ich wünsche mir, dass wir eine davon gemeinsam durchspielen.</div></div>
+        </div>
+        <div style="left:72px;top:1200px;width:936px;font:400 32px/1.3 var(--txt);color:rgba(255,255,255,.62);letter-spacing:-.01em">Nie „du bist …“, immer „mir ist aufgefallen …“</div>
+        ${K.grain}`,
+      (c, o) => cta({ bubbleText: 'Stell mir <b>deine</b> Frage.' }, c, o),
     ] },
   // ───────── W02 · SEXIER: das Argument wird zerlegt ─────────
-  { id: 'W02', slug: 'argument-zerlegt', title: 'WladBot zerlegt dein Argument.', qr: 'build/qr-w02.svg',
+  { id: 'W02', slug: 'argument-zerlegt', title: 'WladBot zerlegt dein Argument.', qr: '../social-kit/build/qr-w02.svg', tag: 'WladBot <b>·</b> Argument',
     slides: [
-      { t: 'cover', mascot: 'left:-200px;bottom:-110px;width:900px;transform:scaleX(-1)',
-        h: 'WladBot <span class="lm">zerlegt</span> dein Argument.',
-        card: '<div style="position:absolute;z-index:25;right:64px;top:430px;width:670px;font-family:var(--serif);font-style:italic;font-size:80px;line-height:1.14;white-space:nowrap">„Wir müssen das<div style="height:4px;margin:22px -40px 22px -40px;background:var(--lime)"></div><div style="padding-left:96px">Projekt stoppen.“</div></div>',
-        bub: 'right:64px;top:900px;width:540px', bubble: 'Das ist ein Satz. <b>Kein Argument.</b>', tailL: true },
-      { t: 'meter', title: 'Schritt 1 von 6.', quote: 'Wir müssen das Projekt stoppen.', on: 1,
-        bubble: 'Mehr steckt nicht drin. Wer hier aufhört, bekommt <b>Nicken und keine Bewegung.</b>', mascot: 'right:-90px;bottom:-130px;width:560px' },
-      { t: 'steps', title: 'Die sechs Schritte.', items: [
-        ['S', 'Statement', 'Die These, ein Satz.'], ['E', 'Explanation', 'Warum das so ist.'], ['X', 'eXample', 'Ein Fall, den alle kennen.'],
-        ['I', 'Impact', 'Was passiert, wenn wir es tun oder lassen.'], ['E', 'Explanation of Impact', 'Warum diese Folge für genau diese Zuhörer zählt.'], ['R', 'Rebuttal', 'Der stärkste Einwand, selbst vorweggenommen.'] ] },
-      { t: 'rebuild', title: 'Dasselbe Argument, neu gebaut.', rows: [
-        ['S', 'Wir sollten das Projekt stoppen.'], ['E', 'Es bindet drei Leute und erreicht keine Kunden.'], ['X', 'Wie die Plattform vom letzten Jahr.'],
-        ['I', 'Wir gewinnen ein Quartal.'], ['E', 'Das brauchen wir für den Launch.'], ['R', 'Ja, bisherige Arbeit geht verloren. Aber sie läuft ohnehin ins Leere.'] ],
-        note: 'Beispiel. Sechs Schritte, zwei Minuten.' },
-      { t: 'cta', mascot: 'left:-190px;bottom:-60px;width:860px', bubbleText: 'Gib mir <b>dein</b> Argument.' },
+      // 1 · Aussage wird zerlegt
+      () => `
+        ${K.amb('amb-cool', 'br')}
+        ${K.dim(0.12, 0.45)}
+        <div class="sk" style="left:-260px;top:880px;width:820px;height:560px;background:radial-gradient(closest-side,rgba(191,255,0,.28),rgba(191,255,0,0))"></div>
+        ${K.vig}
+        ${K.chrome('WladBot <b>·</b> Argument')}
+        ${HEAD(170, '<span class="m">WladBot zerlegt</span><br>dein Argument.', 108)}
+        <div class="g d ghost" style="left:640px;top:440px;width:520px;height:380px;transform:rotate(7deg)"></div>
+        <div class="g" style="left:72px;top:500px;width:936px;height:340px;border-radius:56px"></div>
+        <div style="left:72px;top:500px;width:936px;height:340px;display:flex;flex-direction:column;justify-content:center;padding:0 64px;font:italic 400 96px/1.1 var(--serif);color:#0b0d12;white-space:nowrap">„Wir müssen das<br>Projekt stoppen.“</div>
+        <div style="left:34px;top:668px;width:1012px;height:4px;background:var(--lime);box-shadow:0 0 28px rgba(191,255,0,.8)"></div>
+        <div style="left:24px;top:656px;width:28px;height:28px;border-radius:50%;background:var(--lime)"></div>
+        <div style="left:1028px;top:656px;width:28px;height:28px;border-radius:50%;background:var(--lime)"></div>
+        ${K.mascot('left:-150px;top:800px;width:700px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6))')}
+        ${K.note('left:330px;top:880px;width:678px', 'Das ist ein Satz. <b>Kein Argument.</b>')}
+        ${K.rb(880, 1112, 'wischen')}
+        ${K.grain}`,
+      // 2 · Schritt 1 von 6
+      () => `
+        ${K.amb('amb-warm', 'tr')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Argument')}
+        ${HEAD(170, 'Schritt 1<br><span class="m">von 6.</span>', 108)}
+        <div class="g d" style="left:72px;top:470px;width:936px;padding:46px 54px 50px;border-radius:52px;font:400 74px/1.06 var(--sans);letter-spacing:-.04em">„Wir müssen das Projekt stoppen.“</div>
+        <div style="left:72px;top:760px;width:936px;display:flex;gap:14px">${['S', 'E', 'X', 'I', 'E', 'R'].map((l, i) => `<div class="g d mp${i < 1 ? ' on' : ''}" style="border-radius:34px">${l}</div>`).join('')}</div>
+        ${K.mascot('right:-70px;top:900px;width:620px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6))')}
+        ${K.note('left:72px;top:930px;width:700px', 'Mehr steckt nicht drin. Wer hier aufhört, bekommt <b>Nicken und keine Bewegung.</b>')}
+        ${K.grain}`,
+      // 3 · Die sechs Schritte
+      () => `
+        ${K.amb('amb-cool', 'tr')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Argument')}
+        ${HEAD(160, 'Die sechs<br><span class="m">Schritte.</span>', 100)}
+        <div style="left:72px;top:440px;width:936px;display:flex;flex-direction:column;gap:14px">
+          ${[['S', 'Statement', 'Die These, ein Satz.'], ['E', 'Explanation', 'Warum das so ist.'], ['X', 'eXample', 'Ein Fall, den alle kennen.'],
+             ['I', 'Impact', 'Was passiert, wenn wir es tun oder lassen.'], ['E', 'Explanation of Impact', 'Warum diese Folge für genau diese Zuhörer zählt.'], ['R', 'Rebuttal', 'Der stärkste Einwand, selbst vorweggenommen.']]
+            .map(([l, t, d]) => `<div class="g d rowc"><div class="badge">${l}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
+        </div>
+        <div class="tag" style="left:72px;top:1296px">SEXIER <b>·</b> aus „Weiße Rhetorik“</div>
+        ${K.grain}`,
+      // 4 · Dasselbe Argument, neu gebaut
+      () => `
+        ${K.amb('amb-warm', 'br')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Argument')}
+        ${HEAD(160, '<span class="m">Dasselbe Argument,</span><br>neu gebaut.', 92)}
+        <div class="g doc" style="left:72px;top:400px;width:936px">
+          ${[['S', 'Wir sollten das Projekt stoppen.'], ['E', 'Es bindet drei Leute und erreicht keine Kunden.'], ['X', 'Wie die Plattform vom letzten Jahr.'],
+             ['I', 'Wir gewinnen ein Quartal.'], ['E', 'Das brauchen wir für den Launch.'], ['R', 'Ja, bisherige Arbeit geht verloren. Aber sie läuft ohnehin ins Leere.']]
+            .map(([l, t]) => `<div class="r"><div class="badge">${l}</div><span>${t}</span></div>`).join('')}
+        </div>
+        <div class="tag" style="left:72px;top:1262px">Beispiel <b>·</b> sechs Schritte, zwei Minuten</div>
+        ${K.grain}`,
+      (c, o) => cta({ bubbleText: 'Gib mir <b>dein</b> Argument.' }, c, o),
     ] },
   // ───────── W03 · Rollenspiel: „Kein Budget“ ─────────
-  { id: 'W03', slug: 'rollenspiel-budget', title: 'Dein Chef sagt: „Dafür ist kein Budget da.“', qr: 'build/qr-w03.svg',
+  { id: 'W03', slug: 'rollenspiel-budget', title: 'Dein Chef sagt: „Dafür ist kein Budget da.“', qr: '../social-kit/build/qr-w03.svg', tag: 'WladBot <b>·</b> Rollenspiel',
     slides: [
-      { t: 'cover', mascot: 'right:-110px;bottom:-130px;width:900px',
-        h: '<span style="font-size:60px;font-weight:500">Dein Chef sagt:</span><br>„Dafür ist kein<br>Budget da.“<br><span class="lm">Was sagst du?</span>', hs: 'font-size:92px;line-height:1.07',
-        bub: 'left:64px;top:740px;width:450px', bubble: 'Ich spiele <b>deinen Chef.</b> Du hast einen Satz.' },
-      { t: 'options', title: 'Wähle, bevor du weiterwischst.', opts: [
-        ['A', 'Okay, verstehe.'], ['B', 'Was müsste passieren, damit es im nächsten Quartal geht?'], ['C', 'Das ist unfair. Andere kriegen es auch.'] ] },
-      { t: 'verdict', title: 'WladBot wertet.', opts: [
-        ['A', 'Okay, verstehe.', 'no', '<b>Schwach.</b> Du gibst auf, bevor das Gespräch beginnt.'],
-        ['B', 'Was müsste passieren, damit es im nächsten Quartal geht?', 'yes', '<b>Stark.</b> Rückfrage-Technik: Aus dem Nein wird ein Weg.'],
-        ['C', 'Das ist unfair. Andere kriegen es auch.', 'no', '<b>Schwach.</b> Du greifst die Person an, nicht das Problem.'] ] },
-      { t: 'say', mascot: 'right:-120px;bottom:-120px;width:640px',
-        h: 'Hart in der Sache. <span class="lm">Weich zur Person.</span>', hs: 'left:64px;top:150px;width:952px;font-size:100px',
-        bub: 'left:64px;top:760px;width:560px', bubble: 'Und setz direkt den Termin: <b>„Wann schauen wir uns das gemeinsam an?“</b>' },
-      { t: 'cta', mascot: 'left:-190px;bottom:-60px;width:860px', bubbleText: 'Wie klingt <b>dein</b> Chef?' },
+      // 1 · Der Chef-Satz
+      () => `
+        ${K.amb('amb-warm', 'bl')}
+        ${K.dim(0.12, 0.45)}
+        <div class="sk" style="left:380px;top:760px;width:820px;height:560px;background:radial-gradient(closest-side,rgba(191,255,0,.3),rgba(191,255,0,0))"></div>
+        ${K.vig}
+        ${K.chrome('WladBot <b>·</b> Rollenspiel')}
+        ${HEAD(170, '<span class="m" style="font-size:62px;letter-spacing:-.03em">Dein Chef sagt:</span><br>„Dafür ist kein<br>Budget da.“<br><span class="lm">Was sagst du?</span>', 100)}
+        ${K.mascot('right:-210px;top:560px;width:980px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.65))')}
+        ${K.note('left:72px;top:900px;width:520px', 'Ich spiele <b>deinen Chef.</b> Du hast einen Satz.')}
+        ${K.rb(72, 1112, '')}
+        ${K.grain}`,
+      // 2 · Optionen
+      () => `
+        ${K.amb('amb-cool', 'br')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Rollenspiel')}
+        ${HEAD(160, 'Wähle,<br><span class="m">bevor du weiterwischst.</span>', 92)}
+        ${K.mascot('right:-110px;top:820px;width:640px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6))')}
+        <div style="left:72px;top:420px;width:936px;display:flex;flex-direction:column;gap:26px">
+          ${[['A', 'Okay, verstehe.'], ['B', 'Was müsste passieren, damit es im nächsten Quartal geht?'], ['C', 'Das ist unfair. Andere kriegen es auch.']]
+            .map(([l, t]) => `<div class="g opt"><span class="l">${l}</span><span class="t"><span>${t}</span></span></div>`).join('')}
+        </div>
+        ${K.grain}`,
+      // 3 · Wertung
+      () => `
+        ${K.amb('amb-warm', 'tr')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Rollenspiel')}
+        ${HEAD(160, '<span class="m">WladBot</span><br>wertet.', 100)}
+        <div style="left:72px;top:440px;width:936px;display:flex;flex-direction:column;gap:24px">
+          ${[['A', 'Okay, verstehe.', 'no', '<span class="verd">Schwach</span>Du gibst auf, bevor das Gespräch beginnt.'],
+             ['B', 'Was müsste passieren, damit es im nächsten Quartal geht?', 'yes', '<span class="verd">Stark</span>Rückfrage-Technik: Aus dem Nein wird ein Weg.'],
+             ['C', 'Das ist unfair. Andere kriegen es auch.', 'no', '<span class="verd">Schwach</span>Du greifst die Person an, nicht das Problem.']]
+            .map(([l, t, v, cm]) => `<div class="g ${v === 'yes' ? '' : 'd '}opt ${v}"><span class="l">${l}</span><span class="t"><span>${t}</span><small>${cm}</small></span></div>`).join('')}
+        </div>
+        ${K.grain}`,
+      // 4 · Prinzip, Gesicht im Foto
+      () => `
+        ${K.amb('amb-cool', 'bl')}
+        ${K.dim(0.12, 0.45)}${K.vig}
+        ${K.chrome('WladBot <b>·</b> Rollenspiel')}
+        ${HEAD(170, '<span class="m">Hart in der Sache.</span><br>Weich zur Person.', 100)}
+        ${ph(570, 40, 420, 430, 500, 578, 780)}
+        ${K.note('left:72px;top:1030px;width:600px', 'Und setz direkt den Termin: <b>„Wann schauen wir uns das gemeinsam an?“</b>')}
+        ${K.grain}`,
+      (c, o) => cta({ bubbleText: 'Wie klingt <b>dein</b> Chef?' }, c, o),
     ] },
 ];
 window.CAROUSELS = CAROUSELS.map((c) => ({ id: c.id, slug: c.slug, title: c.title, n: c.slides.length }));
 
-const T = {
-  cover: (s) => `${mascot(s.mascot)}${s.card || ''}
-    <div class="h1" style="left:64px;top:150px;width:952px;${s.hs || ''}">${s.h}</div>
-    <div class="bub tail${s.tailL ? ' l' : ''}" style="${s.bub}">${s.bubble}</div>`,
-  chat: (s) => `${head()}<div class="msgs">${s.msgs.map((m) => `<div class="bub ${m.w}${m.xl ? ' xl' : ''}">${m.h}</div>`).join('')}</div>${mascot(s.mascot)}`,
-  say: (s) => `<div class="h2" style="${s.hs}">${s.h}</div><div class="bub" style="${s.bub}">${s.bubble}</div>${mascot(s.mascot)}`,
-  script: (s) => `<div class="h2" style="left:64px;top:130px;font-size:92px">${s.title}</div>
-    <div class="quote" style="top:330px">${s.quote}</div>
-    <div class="legend" style="top:1010px">${s.legend.map(([c, t]) => `<span class="${c}">${t}</span>`).join('')}</div>
-    <div class="note" style="top:1140px">${s.note}</div>`,
-  meter: (s) => `<div class="h2" style="left:64px;top:130px;font-size:92px">${s.title}</div>
-    <div class="stmt" style="top:330px">„${s.quote}“</div>
-    <div class="meter" style="top:640px">${['S', 'E', 'X', 'I', 'E', 'R'].map((l, i) => `<span class="${i < s.on ? 'on' : ''}">${l}</span>`).join('')}</div>
-    <div class="bub" style="left:64px;top:860px;width:640px">${s.bubble}</div>${mascot(s.mascot)}`,
-  steps: (s) => `<div class="h2" style="left:64px;top:130px;font-size:92px">${s.title}</div>
-    <div class="steps" style="top:350px">${s.items.map(([l, t, d]) => `<div><i>${l}</i><b>${t}</b><span>${d}</span></div>`).join('')}</div>`,
-  rebuild: (s) => `<div class="h2" style="left:64px;top:130px;font-size:80px;width:952px">${s.title}</div>
-    <div class="rows" style="top:340px">${s.rows.map(([l, t]) => `<div><i>${l}</i><span>${t}</span></div>`).join('')}</div>
-    <div class="note" style="top:1230px;font-size:34px">${s.note}</div>`,
-  options: (s) => `<div class="h2" style="left:64px;top:130px;font-size:92px;width:952px">${s.title}</div>
-    <div class="opts" style="top:420px">${s.opts.map(([l, t]) => `<div class="opt"><span class="l">${l}</span><span class="t"><span>${t}</span></span></div>`).join('')}</div>${mascot('right:-80px;bottom:-140px;width:560px')}`,
-  verdict: (s) => `<div class="h2" style="left:64px;top:130px;font-size:92px;width:952px">${s.title}</div>
-    <div class="opts" style="top:400px;gap:70px">${s.opts.map(([l, t, v, c]) => `<div class="opt ${v}"><span class="l">${l}</span><span class="t"><span>${t}</span><small>${c}</small></span></div>`).join('')}</div>`,
-  cta: (s, c, ig, seats) => `${mascot(s.mascot)}
-    <div class="cta-h">Frag WladBot<br><span class="lm">selbst.</span></div>
-    ${brand('right:64px;top:168px')}
-    <div class="bub tail d" style="left:64px;top:436px;width:420px;padding:22px 30px 24px;font-size:38px">${s.bubbleText}</div>
-    <div class="hero">${seats > 0 ? seats : 'Beta'}</div>
-    <div class="herotxt">${seats > 0 ? 'Plätze in der Beta.<span>Kostenlos.</span><span>Aufnahme stoppt bei ' + seats + '.</span>' : 'Kostenlos.<span>Jetzt starten.</span>'}</div>
-    <div class="qrcard" style="top:800px"><img src="${c.qr}" alt="QR-Code zum Beta-Zugang"></div>
-    <div class="qrnote" style="top:1222px">oder Link im ersten Kommentar</div>`,
-};
-
-function render(ci, si, seats) {
+function render(ci, si, o) {
   const c = CAROUSELS[ci];
-  const s = c.slides[si];
-  document.getElementById('sheet').innerHTML = T[s.t](s, c, false, seats);
+  document.getElementById('sheet').innerHTML = c.slides[si](c, o);
 }
 
 const q = new URLSearchParams(location.search);
 // ?seats=0 rendert die Folie 5 ohne Begrenzung (Ersatz, solange die Aufnahme nicht technisch bei SEATS stoppt)
-render(Number(q.get('c') || 0), Number(q.get('s') || 0), q.has('seats') ? Number(q.get('seats')) : SEATS);
+// ?ig=1 rendert die Folie 5 für Instagram: "Link in Bio" statt QR-Code
+render(Number(q.get('c') || 0), Number(q.get('s') || 0), { seats: q.has('seats') ? Number(q.get('seats')) : SEATS, ig: q.get('ig') === '1' });
 </script>
 </body>
 </html>
