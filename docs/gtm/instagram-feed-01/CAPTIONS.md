@@ -46,13 +46,12 @@ danach bewerben.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Position im Raster | 12 | 11 | 10 | 09 | 08 | 07 | 06 | 05 | 04 | 03 | 02 | 01 |
 
-## Entwürfe in Metricool (Stand 08.11.2026)
+## Terminvorschlag (Platzhalter)
 
-Alle 15 Beiträge liegen als **Entwurf** in der geteilten Marke `wlad.argumentorik` (die einzige mit
-verbundenen Konten: Instagram `wlad.jachtchenko`, LinkedIn-Profil, Facebook, TikTok, YouTube). Nichts ist
-freigegeben oder veröffentlicht. Die Termine sind Platzhalter, Zeitzone Europe/Berlin. Texte, erste
-Kommentare (Hashtags bei Instagram, Link mit UTM bei LinkedIn) und Alt-Texte sind gesetzt. Alle Schlussfolien
-sind die Fassung **ohne Platzzahl**; die Texte enthalten den Absatz mit der Begrenzung nicht.
+Am 08.11.2026 waren die Beiträge kurz als Entwürfe in einer geteilten Metricool-Marke angelegt. Das war
+nicht gewollt, sie werden dort gelöscht. Neu angelegt wird erst, wenn die eigenen Konten verbunden sind.
+Zeitzone Europe/Berlin. Alle Schlussfolien sind die Fassung **ohne Platzzahl**; die Texte enthalten den
+Absatz mit der Begrenzung nicht.
 
 | Datum | Netzwerk | Beitrag |
 |---|---|---|
