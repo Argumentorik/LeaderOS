@@ -46,6 +46,36 @@ danach bewerben.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Position im Raster | 12 | 11 | 10 | 09 | 08 | 07 | 06 | 05 | 04 | 03 | 02 | 01 |
 
+## Entwürfe in Metricool (Stand 08.11.2026)
+
+Alle 15 Beiträge liegen als **Entwurf** in der geteilten Marke `wlad.argumentorik` (die einzige mit
+verbundenen Konten: Instagram `wlad.jachtchenko`, LinkedIn-Profil, Facebook, TikTok, YouTube). Nichts ist
+freigegeben oder veröffentlicht. Die Termine sind Platzhalter, Zeitzone Europe/Berlin. Texte, erste
+Kommentare (Hashtags bei Instagram, Link mit UTM bei LinkedIn) und Alt-Texte sind gesetzt. Alle Schlussfolien
+sind die Fassung **ohne Platzzahl**; die Texte enthalten den Absatz mit der Begrenzung nicht.
+
+| Datum | Netzwerk | Beitrag |
+|---|---|---|
+| Mo 09.11. 08:00 | Instagram | 12 · Das ist WladBot |
+| Di 10.11. 08:00 | Instagram | 11 · Fünf Rollen |
+| Di 10.11. 12:00 | LinkedIn | W01 als Dokument |
+| Mi 11.11. 08:00 | Instagram | 10 · Aus dem Nein wird ein Weg |
+| Do 12.11. 08:00 | Instagram | 09 · Beta ist offen |
+| Do 12.11. 12:00 | LinkedIn | W03 als Dokument |
+| Fr 13.11. 08:00 | Instagram | 08 · W03, Karussell mit 5 Bildern |
+| Sa 14.11. 08:00 | Instagram | 07 · Beobachtung. Wirkung. Wunsch. |
+| So 15.11. 08:00 | Instagram | 06 · Präsenz. Wärme. Kompetenz. |
+| Mo 16.11. 08:00 | Instagram | 05 · W02, Karussell mit 5 Bildern |
+| Di 17.11. 08:00 | Instagram | 04 · Hart in der Sache. Weich zur Person. |
+| Di 17.11. 12:00 | LinkedIn | W02 als Dokument |
+| Mi 18.11. 08:00 | Instagram | 03 · Dein KI-Coach wartet nie bis Montag |
+| Do 19.11. 08:00 | Instagram | 02 · SEXIER |
+| Fr 20.11. 08:00 | Instagram | 01 · W01, Karussell mit 5 Bildern |
+
+Der Raster-Look steht damit am Freitag vor dem Webinar am 26.11. Mit Begrenzung (Weg A in
+`../linkedin-wladbot-01/CAPTIONS.md`) die Schlussfolie `W0x-05-ig.jpg` beziehungsweise das PDF `W0x.pdf`
+tauschen und den Absatz mit der Begrenzung in die Caption setzen.
+
 ## Vor dem Posten
 
 1. **Begrenzung:** Die Karussell-Schlussfolien in der Fassung „mit Zahl" nennen 150 Plätze.
@@ -104,7 +134,7 @@ Aus dem Nein wird ein Weg.
 
 Ein Nein ist selten das Ende. Die Rückfrage-Technik: nicht verteidigen, sondern fragen, was passieren müsste, damit es doch geht. Und danach direkt den Termin setzen.
 
-Das ganze Rollenspiel dazu haben wir als Karussell gebaut. Link in Bio.
+Das passende Rollenspiel kommt in den nächsten Tagen als Karussell. Link in Bio.
 
 > Erster Kommentar: `#schlagfertigkeit #verhandlung #kommunikation #rhetorik #leaderos #wladbot`
 
