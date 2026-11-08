@@ -1,0 +1,54 @@
+[
+  {
+    "id": "S01",
+    "slug": "prompts-zum-kopieren",
+    "title": "Kopiere diese 5 Prompts",
+    "slides": [
+      "S01-01.jpg",
+      "S01-02.jpg",
+      "S01-03.jpg",
+      "S01-04.jpg",
+      "S01-05.jpg",
+      "S01-06.jpg",
+      "S01-07.jpg",
+      "S01-08.jpg"
+    ],
+    "slide_ig": "S01-08-ig.jpg",
+    "pdf": "S01.pdf"
+  },
+  {
+    "id": "S02",
+    "slug": "sechs-fragen-vor-dem-gespraech",
+    "title": "Bevor du ins schwierige Gespräch gehst: 6 Fragen",
+    "slides": [
+      "S02-01.jpg",
+      "S02-02.jpg",
+      "S02-03.jpg",
+      "S02-04.jpg",
+      "S02-05.jpg",
+      "S02-06.jpg",
+      "S02-07.jpg",
+      "S02-08.jpg",
+      "S02-09.jpg"
+    ],
+    "slide_ig": "S02-09-ig.jpg",
+    "pdf": "S02.pdf"
+  },
+  {
+    "id": "S03",
+    "slug": "leaderos-vorgestellt",
+    "title": "Ein Coach, der um 23 Uhr noch antwortet",
+    "slides": [
+      "S03-01.jpg",
+      "S03-02.jpg",
+      "S03-03.jpg",
+      "S03-04.jpg",
+      "S03-05.jpg",
+      "S03-06.jpg",
+      "S03-07.jpg",
+      "S03-08.jpg"
+    ],
+    "slide_ig": "S03-08-ig.jpg",
+    "pdf": "S03.pdf"
+  }
+]

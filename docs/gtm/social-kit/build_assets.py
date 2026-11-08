@@ -42,6 +42,11 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'build')
 QR_BASE = 'https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=qr&utm_campaign=wladbot&utm_content='
 QR_IDS = ['w1', 'w2', 'w3']
 
+# S-Serie (Speichern und Kommentieren): derselbe 14-Tage-Zugang, eigene Kampagne "save",
+# je Karussell ein eigenes utm_content. Kein Webinar-Link. Version 6 (41×41 Module).
+QR_SAVE_BASE = 'https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=qr&utm_campaign=save&utm_content='
+QR_SAVE_IDS = ['s01', 's02', 's03']
+
 
 def grade(img):
     """Kühle Schatten, warme Lichter, sanfte S-Kurve."""
@@ -149,13 +154,13 @@ def mascot(path):
     out.resize((1024, 1024), Image.LANCZOS).save(path)
 
 
-def make_qr(path, uid):
+def make_qr(path, uid, base=None):
     try:
         import qrcode
     except ImportError:
         sys.exit('qrcode fehlt: pip install --target <dir> qrcode==8.2 und PYTHONPATH=<dir> setzen')
     qr = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=1, border=0)
-    qr.add_data(QR_BASE + uid)
+    qr.add_data((base or QR_BASE) + uid)
     qr.make(fit=True)
     matrix = qr.get_matrix()
     n = len(matrix)
@@ -183,6 +188,7 @@ def main():
     grain(os.path.join(OUT, 'grain.png'))
     mascot(os.path.join(OUT, 'mascot.png'))
     info = [make_qr(os.path.join(OUT, f'qr-{uid.replace("w", "w0")}.svg'), uid) for uid in QR_IDS]
+    info += [make_qr(os.path.join(OUT, f'qr-{uid}.svg'), uid, QR_SAVE_BASE) for uid in QR_SAVE_IDS]
     print(f'wrote stage.jpg (+ ice, smoke), 3 Lichtgründe, grain.png, mascot.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')
 
 

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Karussells S01 bis S03 · zum Speichern und Kommentieren · LeaderOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
+<style>
+/* S-Serie · drei Karussells zum Speichern, Kommentieren und Kennenlernen von LeaderOS.
+   S01 fünf Prompts zum Kopieren (die Prompts stehen zusätzlich als Text in der Caption,
+   denn Text in Bildern lässt sich nicht kopieren), S02 sechs Fragen vor jedem schwierigen
+   Gespräch (Checkliste), S03 LeaderOS in vier Einsatzfällen. Je Karussell eine Farbwelt
+   (Eis, Warm, Limette), gleiche Bausteine wie ../social-kit. Letzte Folie: Kommentarfrage,
+   Speichern-Zeichen und der 14-Tage-Test von LeaderOS (QR bei LinkedIn, "Link in Bio" bei
+   Instagram). Kein Webinar in dieser Serie. Alle Oberflächen sind schematisch und als
+   Beispiel gekennzeichnet. Kein Name auf den Folien, keine Zahl der Plätze, Fakten nur aus
+   WLAD_CANON.md und den Produktseiten (14 Tage kostenlos, ohne Karte). */
+.ic{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pane{top:0;height:100%;-webkit-backdrop-filter:blur(40px) saturate(1.05) brightness(1.1);backdrop-filter:blur(40px) saturate(1.05) brightness(1.1)}
+.pane.ice{background:linear-gradient(90deg,rgba(172,204,236,.2),rgba(198,224,246,.34));box-shadow:inset -2px 0 0 rgba(255,255,255,.62),inset -9px 0 14px -8px rgba(255,255,255,.22),24px 0 70px -8px rgba(0,8,24,.42)}
+.pgrain{top:0;height:100%;background:url(../social-kit/build/grain.png);background-size:256px 256px;mix-blend-mode:soft-light;opacity:.42;pointer-events:none}
+.pcard{border-radius:44px;overflow:hidden;background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.03)),rgba(5,8,13,.72)!important}
+.pcard .bar{display:flex;align-items:center;gap:12px;padding:22px 30px;border-bottom:1.5px solid rgba(255,255,255,.12)}
+.pcard .bar i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.28)}
+.pcard .bar span{margin-left:14px;font:500 20px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.pcard .bar b{margin-left:auto;padding:10px 18px;border-radius:999px;background:var(--lime);color:var(--ink);font:600 19px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.pcard pre{padding:32px 38px 38px;font:400 30px/1.48 var(--mono);color:rgba(255,255,255,.92);white-space:pre-wrap;letter-spacing:-.012em}
+.pcard pre em{font-style:normal;color:var(--ink);background:var(--lime);padding:0 .3em;border-radius:.28em;font-weight:500}
+.row3{display:flex;align-items:center;gap:30px;padding:30px 38px 32px 32px;border-radius:44px}
+.row3 .nn{flex:none;width:92px;height:92px;border-radius:30px;background:var(--lime);color:var(--ink);font:700 54px/92px var(--disp);text-align:center}
+.row3 b{display:block;font:600 42px/1.1 var(--sans);letter-spacing:-.03em}
+.row3 span.s{display:block;margin-top:10px;font:400 30px/1.3 var(--txt);color:rgba(255,255,255,.72)}
+.tcard{padding:28px 32px 30px;border-radius:38px;min-height:176px}
+.tcard b{display:block;font:600 42px/1.1 var(--sans);letter-spacing:-.03em}
+.tcard span{display:block;margin-top:10px;font:400 28px/1.3 var(--txt);color:rgba(255,255,255,.72)}
+.bx{flex:none;display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:2.5px solid rgba(255,255,255,.55);color:var(--ink)}
+.bx.on{background:var(--lime);border-color:var(--lime)}
+.uhead{display:flex;align-items:center;justify-content:space-between;padding:22px 32px;border-bottom:1.5px solid rgba(255,255,255,.12);font:500 21px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.uhead b{padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.14);font-weight:500;font-size:17px;letter-spacing:.16em;color:#fff}
+.urow{display:flex;gap:26px;align-items:baseline;padding:26px 32px;border-bottom:1.5px solid rgba(255,255,255,.08)}
+.urow:last-child{border-bottom:0}
+.urow label{flex:none;width:190px;font:500 19px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.urow p{font:400 32px/1.28 var(--txt);letter-spacing:-.015em;color:rgba(255,255,255,.92)}
+.sbadge{display:flex;flex-direction:column;align-items:center;gap:16px}
+.sbadge .c{display:flex;align-items:center;justify-content:center;width:168px;height:168px;border-radius:50%;font-size:64px}
+.sbadge .c .ic{width:1em;height:1em;stroke-width:2}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet"></div>
+<script src="../social-kit/kit.js"></script>
+<script>
+const B = '../social-kit/build/';
+const FACE = { x: 770, y: 232 };                                   // Gesichtsmitte im Foto (Quellpixel)
+const SRC = { ice: 'stage-ice.jpg', smoke: 'stage-smoke.jpg', warm: 'stage.jpg' };
+const IC = {
+  copy: '<svg class="ic" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>',
+  mark: '<svg class="ic" viewBox="0 0 24 24"><path d="M6.5 4h11v16.5l-5.5-3.8-5.5 3.8z"/></svg>',
+  chat: '<svg class="ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  check: '<svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  cross: '<svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  play: '<svg class="ic" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>',
+  up: '<svg class="ic" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg>',
+};
+const HEAD = (top, html, size = 88, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const gphoto = (grade, k, fx, fy, fade) => {
+  const top = fy - FACE.y * k;
+  const mask = fade ? `-webkit-mask-image:linear-gradient(to bottom,transparent ${top}px,#000 ${top + fade}px);mask-image:linear-gradient(to bottom,transparent ${top}px,#000 ${top + fade}px)` : '';
+  return `<div class="lay ph" style="${mask}"><img src="${B}${SRC[grade]}" style="left:${fx - FACE.x * k}px;top:${top}px;width:${1342 * k}px;height:${1076 * k}px" alt=""></div>`;
+};
+// Kopf (Marke, Reihe, Zähler) und Fortschrittslinie
+const frame = (i, n, label) => `
+  <div style="left:72px;top:64px">${K.TILE}</div><div class="tag" style="left:144px;top:82px">${label}</div>
+  <div class="tag" style="right:72px;top:82px;color:rgba(255,255,255,.55)">${String(i).padStart(2, '0')} / ${String(n).padStart(2, '0')}</div>
+  <div style="left:72px;right:72px;bottom:56px;height:4px;border-radius:2px;background:rgba(255,255,255,.16)"><i style="display:block;height:100%;width:${(i / n) * 100}%;border-radius:2px;background:var(--lime);box-shadow:0 0 16px rgba(191,255,0,.6)"></i></div>`;
+const hl = (t) => t.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>');
+const pcard = (title, body, top) => `<div class="g d pcard" style="left:72px;top:${top}px;width:936px"><div class="bar"><i></i><i></i><i></i><span>${title}</span><b>${IC.copy} Kopieren</b></div><pre>${hl(body)}</pre></div>`;
+const bg = (plate, pos, a = 0.1, b = 0.5) => `${K.amb(plate, pos)}${K.dim(a, b)}${K.vig}`;
+
+// Letzte Folie: Kommentarfrage, Speichern, 14-Tage-Test. ig = "Link in Bio" statt QR-Code
+const finalSlide = (c, o, f) => `
+  ${bg(f.plate, f.pos)}
+  ${frame(c.n, c.n, f.tag)}
+  ${HEAD(150, f.head, 88, 'width:640px')}
+  <div class="sbadge" style="right:72px;top:150px"><div class="g d c">${IC.mark}</div><div class="tag" style="color:#fff">Speichern</div></div>
+  <div class="g" style="left:72px;top:${f.commentTop || 560}px;width:936px;border-radius:48px;padding:34px 40px 38px;display:flex;gap:30px;align-items:center">
+    <span style="flex:none;display:flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:50%;background:var(--lime);color:var(--ink);font-size:46px">${IC.chat}</span>
+    <div><div style="font:500 42px/1.14 var(--sans);letter-spacing:-.03em;color:#0a0c10">${f.q}</div><div style="margin-top:12px;font:400 30px/1.3 var(--txt);color:rgba(10,12,16,.7)">${f.qs}</div></div>
+  </div>
+  <div class="g d" style="left:72px;top:${(f.commentTop || 560) + 270}px;width:936px;height:392px;border-radius:52px;padding:40px 44px">
+    <div class="tag" style="color:var(--lime)">LeaderOS ausprobieren</div>
+    <div style="margin-top:18px;font:600 50px/1.08 var(--sans);letter-spacing:-.035em">14 Tage<br>kostenlos testen</div>
+    <div style="margin-top:22px;font:500 23px/1.55 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78)">WladBot · Kurse · Drills<br>Ohne Karte${o.ig ? '' : '<br><span style="color:var(--lime)">Link im ersten Kommentar</span>'}</div>
+    ${o.ig
+      ? `<div class="g l" style="position:absolute;right:44px;top:104px;width:330px;height:150px;border-radius:75px;display:flex;align-items:center;justify-content:center;gap:16px;font:600 40px/1 var(--sans);letter-spacing:-.03em">Link in Bio ${IC.up}</div>
+         <div class="tag" style="position:absolute;right:44px;top:276px;width:330px;text-align:center;font-size:18px">Kostenlos starten</div>`
+      : `<div class="g w" style="position:absolute;right:40px;top:30px;width:332px;padding:26px;border-radius:36px"><img src="${c.qr}" style="display:block;width:280px;height:280px" alt="QR-Code zum 14-Tage-Test von LeaderOS"></div>
+         <div class="tag" style="position:absolute;right:40px;top:372px;width:332px;text-align:center;font-size:16px;display:none">oder Link im ersten Kommentar</div>`}
+  </div>
+  ${K.grain}`;
+
+/* ───────── S01 · Prompts zum Kopieren (Eis) ───────── */
+const PROMPTS = [
+  { tag: 'Prompt 1 · Feedback', head: '<span class="m">Feedback,</span> das nicht nach Vorwurf klingt.', when: 'Du musst etwas ansprechen, ohne dass es kippt.', fw: 'Feedbackformel',
+    text: `Du bist mein Kommunikationscoach.
+Ich muss [Name/Rolle] Feedback geben:
+[Situation in 2 Sätzen]
+
+Formuliere es als Feedbackformel:
+1. Beobachtung: nur, was man filmen könnte
+2. Wirkung: was es bei mir oder im Team auslöst
+3. Wunsch: konkret, in der Zukunft
+
+Kein „du bist“, kein „immer“, kein „nie“.
+Frag nach, wenn dir Fakten fehlen.` },
+  { tag: 'Prompt 2 · Argument', head: '<span class="m">Dein Argument prüfen,</span> bevor du es sagst.', when: 'Du willst überzeugen, nicht nur Recht haben.', fw: 'SEXIER-Modell',
+    text: `Prüfe mein Argument mit dem SEXIER-Modell:
+Statement, Explanation, eXample,
+Impact, Explanation of Impact, Rebuttal.
+
+Mein Argument:
+[Argument in 1–2 Sätzen]
+
+Zeige mir, welche Schritte fehlen.
+Baue es dann in sechs kurzen Sätzen neu.
+Nenne den stärksten Einwand dagegen.
+Frag nach, wenn dir Fakten fehlen.` },
+  { tag: 'Prompt 3 · Rückfrage', head: '<span class="m">Aus einem Nein</span> ein Interesse machen.', when: 'Dein Gegenüber blockt ab und du weißt nicht warum.', fw: 'Rückfrage-Technik',
+    text: `Mein Gegenüber sagt: „[Nein-Satz]“
+
+Gib mir drei Rückfragen, die das Interesse
+hinter diesem Nein finden.
+Jede Rückfrage: ein Satz, offen, ohne
+Rechtfertigung.
+
+Sag mir danach, welche ich zuerst stellen
+sollte und warum.
+Frag nach, wenn dir Fakten fehlen.` },
+  { tag: 'Prompt 4 · Rollenspiel', head: '<span class="m">Das Gespräch</span> vorher durchspielen.', when: 'Du gehst morgen hinein und willst nicht improvisieren.', fw: 'Hart in der Sache, weich zur Person',
+    text: `Spiele [Chef/Mitarbeiterin/Kunde] in diesem
+Gespräch: [Situation]
+Mein Ziel: [Ziel in einem Satz]
+
+Bring realistische Einwände, keine Strohmänner.
+Antworte immer nur mit einem Satz und warte.
+Bewerte nach jeder Antwort von mir kurz, ob ich
+hart in der Sache und weich zur Person war.
+
+Frag vorher nach, wenn dir Fakten fehlen.
+Starte dann mit dem ersten Satz.` },
+  { tag: 'Prompt 5 · Gesprächstyp', head: '<span class="m">Welches Gespräch</span> ist das eigentlich?', when: 'Verhandeln, überzeugen oder konfrontieren? Das entscheidet alles.', fw: 'Die vier Gesprächstypen',
+    text: `Ordne dieses Gespräch einem Typ zu:
+Informieren, Überzeugen, Verhandeln oder
+Konfrontieren.
+Situation: [Situation in 2 Sätzen]
+
+Begründe in zwei Sätzen. Gib mir dann:
+1. mein Ziel in einem Satz
+2. den ersten Satz zum Einstieg
+3. den größten Fehler, den ich vermeiden sollte
+Frag nach, wenn dir Fakten fehlen.` },
+];
+const promptSlide = (p, i) => () => `
+  ${bg('amb-cool', ['tr', 'br', 'tr', 'br', 'tr'][i])}
+  ${frame(i + 3, 8, 'LeaderOS · Prompts')}
+  <div style="left:72px;top:150px;width:936px;display:flex;flex-direction:column;gap:24px">
+    <div class="hd" style="font-size:78px">${p.head}</div>
+    <div style="font:400 32px/1.3 var(--txt);color:rgba(255,255,255,.72)">${p.when}</div>
+  </div>
+  ${pcard(p.tag, p.text, 480)}
+  <div class="tag" style="left:72px;top:1240px">Framework <b>·</b> ${p.fw}</div>
+  ${K.grain}`;
+
+/* ───────── S02 · Checkliste (Warm) ───────── */
+const qSlide = (n, head, body) => () => `
+  ${bg('amb-warm', ['tr', 'br', 'tr', 'br', 'tr', 'br'][n - 1])}
+  ${frame(n + 1, 9, 'LeaderOS · Checkliste')}
+  <div style="left:72px;top:140px;font:700 190px/1 var(--disp);letter-spacing:-.05em;color:var(--lime)">${n}<span style="font-size:64px;color:rgba(255,255,255,.4);letter-spacing:-.02em"> / 6</span></div>
+  ${HEAD(350, head, 80)}
+  ${body}
+  ${K.grain}`;
+const warn = (t, top) => `<div style="left:72px;top:${top}px;width:936px;font:500 36px/1.5 var(--txt);letter-spacing:-.02em">${t}</div>`;
+
+/* ───────── S03 · LeaderOS vorstellen (Limette) ───────── */
+const uSlide = (num, head, sub, mock, extra = '') => () => `
+  ${bg('amb-lime', ['tr', 'br', 'tr', 'br'][num - 1], 0.25, 0.6)}
+  ${frame(num + 3, 8, 'LeaderOS · Vorstellung')}
+  <div class="tag" style="left:72px;top:150px;color:var(--lime)">Einsatz ${num} von 4</div>
+  <div style="left:72px;top:196px;width:936px;display:flex;flex-direction:column;gap:22px">
+    <div class="hd" style="font-size:84px">${head}</div>
+    <div style="font:400 32px/1.3 var(--txt);color:rgba(255,255,255,.76);width:860px">${sub}</div>
+  </div>
+  ${mock}${extra}
+  ${K.grain}`;
+
+const CAROUSELS = [
+  /* ───────── S01 ───────── */
+  { id: 'S01', slug: 'prompts-zum-kopieren', title: 'Kopiere diese 5 Prompts', n: 8, qr: '../social-kit/build/qr-s01.svg',
+    slides: [
+      () => `
+        <div class="lay" style="background:#050a12"></div>
+        ${gphoto('ice', 1.5, 620, 430, 170)}
+        <div class="lay" style="background:radial-gradient(60% 40% at 86% 8%,rgba(160,200,255,.28),rgba(160,200,255,0))"></div>
+        <div class="vig"></div>
+        <div class="pane ice" style="left:0;width:620px"></div><div class="pgrain" style="left:0;width:620px"></div>
+        <div class="lay" style="background:linear-gradient(to top,rgba(2,6,14,.94) 0%,rgba(2,6,14,.6) 26%,rgba(2,6,14,0) 54%)"></div>
+        ${frame(1, 8, 'LeaderOS · Prompts')}
+        ${HEAD(236, 'Kopiere<br>diese 5<br><span class="m">Prompts.</span>', 124, 'width:540px')}
+        <div style="left:72px;top:630px;width:480px;font:400 36px/1.3 var(--txt);letter-spacing:-.015em;color:rgba(255,255,255,.88);text-shadow:0 1px 14px rgba(0,0,0,.5)">Für dein nächstes schwieriges Gespräch.</div>
+        <div style="left:72px;top:812px;display:flex;gap:14px"><span class="g chip d">${IC.copy} Zum Kopieren</span><span class="g chip d">${IC.mark} Zum Speichern</span></div>
+        <div class="g d pcard" style="left:72px;top:920px;width:936px"><div class="bar"><i></i><i></i><i></i><span>Prompt 1 · Feedback</span></div><pre style="padding-bottom:30px">${hl('Du bist mein Kommunikationscoach.\nIch muss [Name/Rolle] Feedback geben:\n[Situation in 2 Sätzen]')}<span style="color:var(--lime)">▍</span></pre></div>
+        ${K.grain}`,
+      () => `
+        ${bg('amb-cool', 'tr')}
+        ${frame(2, 8, 'LeaderOS · Prompts')}
+        ${HEAD(150, '<span class="m">So nutzt du</span><br>die Prompts.', 96)}
+        <div style="left:72px;top:470px;width:936px;display:flex;flex-direction:column;gap:22px">
+          ${[['1', 'Kopieren', 'Alle fünf Prompts stehen in der Caption, zum Markieren und Einfügen.'], ['2', 'Anpassen', 'Ersetze jede [Klammer] durch deine Situation.'], ['3', 'Nachfragen lassen', 'Jeder Prompt lässt die KI zurückfragen, wenn ihr Fakten fehlen.']]
+            .map(([n, t, d]) => `<div class="g d row3"><div class="nn">${n}</div><div><b>${t}</b><span class="s">${hl(d)}</span></div></div>`).join('')}
+        </div>
+        <div class="g" style="left:72px;top:1130px;width:936px;border-radius:38px;padding:26px 36px;font:500 32px/1.3 var(--txt);letter-spacing:-.02em;color:#0a0c10">Funktioniert in jeder KI: ChatGPT, Claude, Gemini.</div>
+        ${K.grain}`,
+      ...PROMPTS.map(promptSlide),
+      (c, o) => finalSlide(c, o, { plate: 'amb-cool', pos: 'br', tag: 'LeaderOS · Prompts', head: '<span class="m">Ein Prompt<br>ist der Anfang.</span><br>Training ist<br>der Rest.', q: 'Welche Situation soll Prompt 6 lösen?', qs: 'Schreib sie in die Kommentare.' }),
+    ] },
+  /* ───────── S02 ───────── */
+  { id: 'S02', slug: 'sechs-fragen-vor-dem-gespraech', title: 'Bevor du ins schwierige Gespräch gehst: 6 Fragen', n: 9, qr: '../social-kit/build/qr-s02.svg',
+    slides: [
+      () => { const cx = 600, cy = 470, r = 400; return `
+        <div class="lay" style="background:#0d0a09"></div>
+        <div class="lay ph" style="filter:blur(34px) brightness(1.5) contrast(.85) saturate(1.7)"><img src="${B}stage.jpg" style="left:${540 - FACE.x * 2.4}px;top:${560 - FACE.y * 2.4}px;width:${1342 * 2.4}px;height:${1076 * 2.4}px" alt=""></div>
+        <div class="lay" style="background:radial-gradient(70% 45% at 14% 8%,rgba(255,225,190,.34),rgba(255,225,190,0) 70%),linear-gradient(180deg,rgba(255,160,80,.26),rgba(150,60,20,.2) 60%,rgba(20,8,4,.78))"></div>
+        <div class="lay" style="clip-path:circle(${r}px at ${cx}px ${cy}px);background:#0a0706"><div style="position:absolute;left:0;top:0;width:1080px;height:1350px">${gphoto('warm', 1.3, cx - 10, 440, 150)}</div></div>
+        <div style="left:${cx - r}px;top:${cy - r}px;width:${r * 2}px;height:${r * 2}px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.78),0 0 0 14px rgba(255,255,255,.1),0 0 120px rgba(255,235,210,.25),inset 0 0 90px rgba(0,0,0,.5),inset 0 -150px 110px -70px rgba(0,0,0,.55);background:radial-gradient(90% 90% at 24% 14%,rgba(255,255,255,.2),rgba(255,255,255,0) 42%)"></div>
+        <div class="vig"></div>
+        ${frame(1, 9, 'LeaderOS · Checkliste')}
+        <div class="g d" style="left:72px;top:690px;width:540px;padding:26px 30px;border-radius:38px;display:flex;flex-direction:column;gap:18px;font:500 28px/1 var(--txt);letter-spacing:-.01em">
+          ${[['Gesprächstyp', 1], ['Ziel in einem Satz', 1], ['Beobachtung', 0]].map(([t, on]) => `<div style="display:flex;align-items:center;gap:18px"><span class="bx${on ? ' on' : ''}">${on ? IC.check : ''}</span>${t}</div>`).join('')}
+        </div>
+        ${HEAD(930, '<span class="m">Bevor du ins schwierige<br>Gespräch gehst:</span><br>6 Fragen.', 78)}
+        <div style="left:72px;top:1180px;display:flex;gap:14px"><span class="g chip d">${IC.mark} Zum Speichern</span><span class="g chip d">5 Minuten</span></div>
+        ${K.grain}`; },
+      qSlide(1, '<span class="m">Welcher</span><br>Gesprächstyp<br>ist das?', `
+        <div style="left:72px;top:650px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          ${[['Informieren', 'Fakten, keine Entscheidung offen.'], ['Überzeugen', 'Eine Position, Zustimmung.'], ['Verhandeln', 'Beide Seiten gewinnen.'], ['Konfrontieren', 'Eine Grenze, nicht verhandelbar.']].map(([t, d]) => `<div class="g d tcard" style="min-height:214px"><b>${t}</b><span>${d}</span></div>`).join('')}
+        </div>
+        ${warn('Wer den Typ nicht erkennt, wählt <mark>oft die falsche Strategie.</mark>', 1130)}`),
+      qSlide(2, '<span class="m">Was soll danach</span><br>anders sein?', `
+        <div class="g" style="left:72px;top:650px;width:936px;border-radius:48px;padding:40px 44px;font:500 52px/1.2 var(--sans);letter-spacing:-.035em;color:#0a0c10">Nach dem Gespräch soll <span style="display:inline-block;width:150px;border-bottom:4px solid #0a0c10"></span> anders sein.</div>
+        <div style="left:72px;top:930px;display:flex;gap:14px"><span class="g chip d">${IC.check} Ein Satz: Ziel</span><span class="g chip d">${IC.cross} Ein Absatz: Thema</span></div>
+        <div class="g d" style="left:72px;top:1030px;width:936px;border-radius:40px;padding:30px 38px"><div class="tag" style="color:var(--lime)">Beispiel</div><div style="margin-top:14px;font:400 36px/1.3 var(--txt);letter-spacing:-.02em">Nach dem Gespräch ist klar, wer den Bericht bis Freitag liefert.</div></div>`),
+      qSlide(3, '<span class="m">Was habe ich</span><br>beobachtet?', `
+        <div class="g d" style="left:72px;top:650px;width:936px;border-radius:40px;padding:30px 38px;opacity:.8"><div class="tag">${IC.cross} Statt</div><div style="margin-top:14px;font:400 44px/1.2 var(--sans);letter-spacing:-.03em;text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:rgba(255,255,255,.5)">„Du bist unzuverlässig.“</div></div>
+        <div class="g" style="left:72px;top:850px;width:936px;border-radius:40px;padding:30px 38px;box-shadow:inset 0 2px 0 rgba(255,255,255,.95),0 0 0 4px var(--lime),0 34px 90px rgba(191,255,0,.2),0 6px 16px rgba(0,0,0,.3)"><div class="tag" style="color:rgba(10,12,16,.6)">${IC.check} Besser: Beobachtung</div><div style="margin-top:14px;font:500 44px/1.2 var(--sans);letter-spacing:-.03em;color:#0a0c10">„Der Bericht kam dreimal nach dem Termin.“</div></div>
+        ${warn('Beobachtung heißt: nur, was man filmen könnte.', 1130)}`),
+      qSlide(4, '<span class="m">Welches Interesse</span><br>steckt hinter<br>dem Nein?', `
+        <div style="left:72px;top:650px;width:936px;display:flex;flex-direction:column;gap:18px">
+          ${['Was müsste passieren, damit es geht?', 'Was verlierst du, wenn wir es lassen?', 'Woran merkst du, dass es funktioniert?'].map((t, i) => `<div class="g d" style="display:flex;gap:26px;align-items:center;padding:28px 34px;border-radius:40px"><span style="flex:none;font:700 54px/1 var(--disp);color:var(--lime)">${i + 1}</span><span style="font:500 38px/1.2 var(--sans);letter-spacing:-.025em">„${t}“</span></div>`).join('')}
+        </div>
+        ${warn('Rückfrage-Technik: nach dem Interesse fragen, nicht nach Zustimmung.', 1120)}`),
+      qSlide(5, '<span class="m">Bin ich hart in der Sache</span><br>und weich zur Person?', `
+        <div style="left:72px;top:650px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div class="g d tcard" style="min-height:470px"><div class="tag" style="color:var(--lime)">Hart in der Sache</div><div style="margin-top:22px;display:flex;flex-direction:column;gap:22px;font:500 36px/1.2 var(--sans);letter-spacing:-.025em"><div>Ziel klar nennen</div><div>Fakten statt Urteile</div><div>Grenze benennen</div></div></div>
+          <div class="g tcard" style="min-height:470px;color:#0a0c10"><div class="tag" style="color:rgba(10,12,16,.6)">Weich zur Person</div><div style="margin-top:22px;display:flex;flex-direction:column;gap:22px;font:500 36px/1.2 var(--sans);letter-spacing:-.025em"><div>Erst zuhören</div><div>Respekt in der Wortwahl</div><div>Gesicht wahren lassen</div></div></div>
+        </div>`),
+      qSlide(6, '<span class="m">Wie lautet</span><br>mein erster Satz?', `
+        <div class="g d" style="left:72px;top:650px;width:936px;border-radius:44px;padding:40px 44px;font:400 44px/1.3 var(--txt);letter-spacing:-.025em">${hl('Ich möchte mit dir über [Thema] sprechen, weil mir aufgefallen ist, dass [Beobachtung]. Mir ist wichtig, [Ziel].')}</div>
+        <div style="left:72px;top:1010px;display:flex;gap:14px"><span class="g chip d">Einmal laut sprechen</span><span class="g chip d">Dann erst das Gespräch</span></div>`),
+      () => `
+        ${bg('amb-warm', 'tr')}
+        ${frame(8, 9, 'LeaderOS · Checkliste')}
+        ${HEAD(150, '<span class="m">Die 6 Fragen</span><br>auf einen Blick.', 96)}
+        <div style="left:72px;top:420px;width:936px;display:flex;flex-direction:column;gap:14px">
+          ${['Welcher Gesprächstyp ist das?', 'Was soll danach anders sein?', 'Was habe ich beobachtet?', 'Welches Interesse steckt hinter dem Nein?', 'Hart in der Sache, weich zur Person?', 'Wie lautet mein erster Satz?'].map((t, i) => `<div class="g d" style="display:flex;align-items:center;gap:26px;padding:0 34px 0 26px;height:118px;border-radius:36px"><span class="bx" style="width:54px;height:54px"></span><span style="font:700 40px/1 var(--disp);color:var(--lime);width:34px">${i + 1}</span><span style="font:500 36px/1.15 var(--sans);letter-spacing:-.025em">${t}</span></div>`).join('')}
+        </div>
+        <div style="left:72px;top:1204px;display:flex;gap:14px"><span class="g chip d">${IC.mark} Speichern oder Screenshot</span></div>
+        ${K.grain}`,
+      (c, o) => finalSlide(c, o, { plate: 'amb-warm', pos: 'br', tag: 'LeaderOS · Checkliste', head: '<span class="m">Welches<br>Gespräch</span><br>schiebst du<br>auf?', q: '1 Kritik · 2 Gehalt · 3 Konflikt · 4 Nein sagen', qs: 'Schreib die Zahl in die Kommentare.' }),
+    ] },
+  /* ───────── S03 ───────── */
+  { id: 'S03', slug: 'leaderos-vorgestellt', title: 'Ein Coach, der um 23 Uhr noch antwortet', n: 8, qr: '../social-kit/build/qr-s03.svg',
+    slides: [
+      () => `
+        ${K.photo(330, 0, 820, 260, 0, 820, 1076)}
+        <div style="left:260px;top:0;width:90px;height:1076px;background:linear-gradient(to right,var(--bg),rgba(6,8,12,0))"></div>
+        <div style="left:0;top:830px;width:1080px;height:246px;background:linear-gradient(to bottom,rgba(6,8,12,0),var(--bg))"></div>
+        <div class="sk" style="left:420px;top:900px;width:760px;height:520px;background:radial-gradient(closest-side,rgba(191,255,0,.3),rgba(191,255,0,0))"></div>
+        ${K.vig}
+        ${frame(1, 8, 'LeaderOS · Vorstellung')}
+        ${K.note('left:72px;top:176px;width:520px', 'Dein Gespräch ist morgen früh? <b>Fangen wir an.</b>', { time: '23:04' })}
+        ${K.anchors([{ x: 375, y: 775, cx: 288, cy: 775, side: 'l', label: 'Frag mich', d: true, av: true }])}
+        ${HEAD(950, '<span class="m">Ein Coach, der</span><br>um 23 Uhr noch<br>antwortet.', 92)}
+        ${K.grain}`,
+      () => `
+        ${bg('amb-lime', 'tr', 0.25, 0.6)}
+        ${frame(2, 8, 'LeaderOS · Vorstellung')}
+        ${HEAD(150, '<span class="m">Seminare ändern Wissen.</span><br>Nicht Verhalten.', 86)}
+        <div style="left:72px;top:420px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div class="g d tcard" style="min-height:400px;opacity:.84;padding:34px 34px 36px"><div class="tag">Einmal im Jahr</div><div style="margin-top:28px;font:600 74px/1.02 var(--sans);letter-spacing:-.04em">Seminar</div><span style="margin-top:20px;font-size:34px;line-height:1.3">Du verlässt den Raum mit Wissen.</span></div>
+          <div class="g tcard" style="min-height:400px;padding:34px 34px 36px;color:#0a0c10;box-shadow:inset 0 2px 0 rgba(255,255,255,.95),0 0 0 4px var(--lime),0 34px 90px rgba(191,255,0,.22),0 6px 16px rgba(0,0,0,.3)"><div class="tag" style="color:rgba(10,12,16,.6)">Jeden Tag</div><div style="margin-top:28px;font:600 74px/1.02 var(--sans);letter-spacing:-.04em">Training</div><span style="margin-top:20px;font-size:34px;line-height:1.3;color:rgba(10,12,16,.72)">15 Minuten. Du wendest es an.</span></div>
+        </div>
+        <div style="left:72px;top:930px;width:936px;font:500 72px/1.12 var(--sans);letter-spacing:-.04em">Dir fehlt nicht Wissen.<br><span style="color:var(--lime)">Dir fehlt Übung.</span></div>
+        ${K.grain}`,
+      () => `
+        ${bg('amb-lime', 'br', 0.25, 0.6)}
+        ${frame(3, 8, 'LeaderOS · Vorstellung')}
+        ${HEAD(150, '<span class="m">Das ist</span><br>LeaderOS.', 108)}
+        <div style="left:72px;top:440px;width:880px;font:400 36px/1.3 var(--txt);color:rgba(255,255,255,.8)">Das Betriebssystem, das Führung täglich trainiert statt einmal im Jahr zu lehren.</div>
+        <div style="left:72px;top:660px;width:936px;display:flex;flex-direction:column;gap:26px">
+          ${[['1', 'Kurse', 'Sechs Grundlagen-Kurse für den Führungsalltag.'], ['2', 'WladBot', 'Der KI-Coach mit Wlads Methodik, per Text und Stimme.'], ['3', 'Training', 'Simulationen, 15-Minuten-Drills, elf Frameworks.']]
+            .map(([n, t, d]) => `<div class="g d row3"><div class="nn">${n}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
+        </div>
+        ${K.grain}`,
+      uSlide(1, '<span class="m">Gespräche</span><br>vorbereiten.', 'In Minuten statt Stunden: Kontext, Argumente, Gegenseite, Coaching.', `
+        <div class="g d" style="left:72px;top:540px;width:936px;border-radius:48px;overflow:hidden">
+          <div class="uhead"><span>Gehaltsgespräch · Vorbereitung</span><b>Beispiel</b></div>
+          ${[['Kontext', 'Drei Jahre im Team, zwei Projekte verantwortet.'], ['Argumente', 'Mehr Verantwortung, belegbare Ergebnisse, Marktvergleich.'], ['Gegenseite', 'Erwartet: „Das Budget ist ausgeschöpft.“'], ['Coaching', 'Starte mit dem Ergebnis, nicht mit dem Wunsch.']].map(([l, t]) => `<div class="urow"><label>${l}</label><p>${t}</p></div>`).join('')}
+        </div>`),
+      uSlide(2, '<span class="m">Schwierige Gespräche</span><br>proben.', 'Der Coach spielt dein Gegenüber, mit Einwänden und Gegenwind.', `
+        <div style="left:72px;top:540px;width:936px;display:flex;flex-direction:column;gap:22px">
+          <div class="g d bub" style="align-self:flex-start;max-width:80%"><span class="k" style="display:block;margin-bottom:8px;font:500 17px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;opacity:.6">Chef · gespielt</span>Dafür ist kein Budget da.</div>
+          <div class="bub u" style="align-self:flex-end;max-width:86%">Was müsste passieren, damit es im nächsten Quartal geht?</div>
+        </div>
+        ${K.note('left:72px;top:1010px;width:860px', '<b>Stark.</b> Rückfrage-Technik: Aus dem Nein wird ein Weg. Beispiel.')}`),
+      uSlide(3, '<span class="m">Feedback</span><br>formulieren.', 'Beobachtung, Wirkung, Wunsch: nach der Formel vorformuliert.', `
+        <div class="g d" style="left:72px;top:540px;width:936px;border-radius:48px;overflow:hidden">
+          <div class="uhead"><span>Feedbackformel</span><b>Beispiel</b></div>
+          ${[['Beobachtung', 'Der Bericht kam dreimal nach dem Termin.'], ['Wirkung', 'Das Team plant mit falschen Zahlen.'], ['Wunsch', 'Ich wünsche mir, dass er künftig freitags vorliegt.']].map(([l, t]) => `<div class="urow"><label>${l}</label><p>${t}</p></div>`).join('')}
+        </div>`, `
+        ${K.note('left:72px;top:1000px;width:860px', 'Kein „du bist“ im Satz. <b>Das trägt.</b> Beispiel.')}`),
+      uSlide(4, '<span class="m">Täglich</span><br>üben.', 'Ein Framework als Drill: erklärt, an deinem Fall geübt, ausgewertet.', `
+        <div class="g d" style="left:72px;top:540px;width:936px;border-radius:48px;overflow:hidden">
+          <div class="uhead"><span>Framework-Drill · SEXIER</span><b>Beispiel</b></div>
+          ${[['Erklärt', 'Ein Argument hat sechs Schritte, von der Behauptung bis zur Widerlegung.'], ['Geübt', 'Du baust dein Argument für das Budgetgespräch in sechs Sätzen.'], ['Ausgewertet', 'Schritt 3 fehlt noch: ein Beispiel, das deine Zahl belegt.']].map(([l, t]) => `<div class="urow"><label>${l}</label><p>${t}</p></div>`).join('')}
+        </div>`, `
+        ${K.note('left:72px;top:1070px;width:860px', '<b>Fast.</b> Ein Beispiel fehlt, dann trägt das Argument. Beispiel.')}`),
+      (c, o) => finalSlide(c, o, { plate: 'amb-lime', pos: 'br', tag: 'LeaderOS · Vorstellung', head: '<span class="m">Was testest<br>du zuerst?</span>', q: 'A WladBot · B Rollenspiel · C Drill', qs: 'Schreib den Buchstaben in die Kommentare.', commentTop: 520 }),
+    ] },
+];
+window.CAROUSELS = CAROUSELS.map((c) => ({ id: c.id, slug: c.slug, title: c.title, n: c.slides.length }));
+
+const q = new URLSearchParams(location.search);
+const ci = Number(q.get('c') || 0), si = Number(q.get('s') || 0);
+document.getElementById('sheet').innerHTML = CAROUSELS[ci].slides[si](CAROUSELS[ci], { ig: q.get('ig') === '1' });
+</script>
+</body>
+</html>
