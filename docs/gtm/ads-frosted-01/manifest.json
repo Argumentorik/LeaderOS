@@ -1,0 +1,46 @@
+[
+  {
+    "id": "AD-FR01",
+    "slug": "hinter-dem-nein",
+    "title": "Was hinter dem Nein steckt",
+    "dest": "webinar",
+    "files": {
+      "4x5": "AD-FR01-4x5-a.jpg",
+      "9x16": "AD-FR01-9x16-a.jpg",
+      "1x1": "AD-FR01-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-FR02",
+    "slug": "bessere-gespraeche",
+    "title": "Bessere Gespräche",
+    "dest": "webinar",
+    "files": {
+      "4x5": "AD-FR02-4x5-a.jpg",
+      "9x16": "AD-FR02-9x16-a.jpg",
+      "1x1": "AD-FR02-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-FR03",
+    "slug": "wie-gut-liest-du-menschen",
+    "title": "Wie gut liest du Menschen?",
+    "dest": "check",
+    "files": {
+      "4x5": "AD-FR03-4x5-a.jpg",
+      "9x16": "AD-FR03-9x16-a.jpg",
+      "1x1": "AD-FR03-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-FR04",
+    "slug": "proben-statt-hoffen",
+    "title": "Proben statt hoffen",
+    "dest": "ki",
+    "files": {
+      "4x5": "AD-FR04-4x5-a.jpg",
+      "9x16": "AD-FR04-9x16-a.jpg",
+      "1x1": "AD-FR04-1x1-a.jpg"
+    }
+  }
+]

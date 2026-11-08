@@ -7,6 +7,8 @@ Alles, was nach Foto aussieht, stammt aus dem echten Bühnenfoto
 Videostandbilder. Aus dem Foto entstehen
 
   stage.jpg        das Foto in Farbkorrektur (kühle Schatten, warme Lichter), 1,5-fach hochgerechnet
+  stage-ice.jpg    dasselbe Foto als Eis-Duoton (Marine bis Eisblau), für die Anzeigen
+  stage-smoke.jpg  dasselbe Foto in Rauchgrau (neutral, hell abgesetzt), für die Anzeigen
   amb-warm.jpg     unscharfer Lichtgrund aus dem Scheinwerfer, Verlauf Burgund bis Amber
   amb-cool.jpg     derselbe Lichtgrund, Verlauf Marine bis Blaugrün
   amb-lime.jpg     derselbe Lichtgrund, Verlauf Dunkelgrün bis Limette (für die CTA)
@@ -90,12 +92,30 @@ def ambient(src, box, sigma, ramp, flip=False, gamma=1.45):
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)).resize((1080, 1350), Image.BICUBIC)
 
 
+GRADES = {
+    'ice': [(0.00, (4, 9, 18)), (0.22, (16, 38, 62)), (0.50, (78, 120, 158)), (0.78, (184, 210, 230)), (1.00, (246, 251, 255))],
+    'smoke': [(0.00, (12, 11, 11)), (0.28, (58, 54, 52)), (0.58, (146, 138, 132)), (0.84, (222, 216, 210)), (1.00, (252, 249, 245))],
+}
+
+
+def gradient_map(img, name, gamma=0.88):
+    """Helligkeit des Fotos auf einen Farbverlauf legen (Duoton-Look der Anzeigen)."""
+    a = np.asarray(img.convert('RGB')).astype(np.float32) / 255.0
+    lum = np.clip(0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2], 0, 1) ** gamma
+    ramp = GRADES[name]
+    xs = np.array([p for p, _ in ramp], dtype=np.float32)
+    out = np.stack([np.interp(lum, xs, np.array([c[i] for _, c in ramp], dtype=np.float32)) for i in range(3)], axis=-1)
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
+
+
 def stage_and_plates():
     src = Image.open(STAGE_SRC).convert('RGB')
     graded = grade(src)
     big = graded.resize((int(src.width * 1.5), int(src.height * 1.5)), Image.LANCZOS)
     big = big.filter(ImageFilter.UnsharpMask(radius=1.4, percent=55, threshold=2))
     big.save(os.path.join(OUT, 'stage.jpg'), quality=93, optimize=True)
+    for name in GRADES:
+        gradient_map(big, name).save(os.path.join(OUT, f'stage-{name}.jpg'), quality=93, optimize=True)
 
     # Lichtgründe: Scheinwerfer und Vorhang rechts neben dem Kopf (ohne Gesicht), nur defokussiert
     light = (930, 0, 1342, 509)
@@ -163,7 +183,7 @@ def main():
     grain(os.path.join(OUT, 'grain.png'))
     mascot(os.path.join(OUT, 'mascot.png'))
     info = [make_qr(os.path.join(OUT, f'qr-{uid.replace("w", "w0")}.svg'), uid) for uid in QR_IDS]
-    print(f'wrote stage.jpg, 4 Lichtgründe, grain.png, mascot.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')
+    print(f'wrote stage.jpg (+ ice, smoke), 3 Lichtgründe, grain.png, mascot.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')
 
 
 if __name__ == '__main__':
