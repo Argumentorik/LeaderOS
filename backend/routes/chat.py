@@ -11,7 +11,7 @@ from lib.llm_provider import MODEL, LlmChat, UserMessage
 import pypdf
 import docx
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from models import ChatMessageIn, ChatSessionCreate
 from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT, WLADBOT_CHAT_STYLE, WLADBOT_JSON_FORMAT
 from services_actions import record_user_action
@@ -440,7 +440,7 @@ async def _prepare_chat(data: ChatMessageIn, request: Request) -> dict:
     #   nuanced advice, playbook building, strategic breakdowns.
     msg_len = len(data.message or "")
     has_attachment = "[Dokument:" in (data.message or "") or "[Bild angehängt:" in (data.message or "")
-    use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"
+    use_deep_model = msg_len > 180 or has_attachment or msg_modality != "text"  # noqa: F841 — kept for when the split returns
     # Seit dem Wechsel zu Anthropic laufen beide Pfade über LLM_MODEL (Opus);
     # use_deep_model bleibt als Merkmal, falls der Split zurückkommt.
     model_name = MODEL
@@ -545,7 +545,7 @@ async def _refund_after_failure(prep: dict) -> None:
 async def send_chat_message(data: ChatMessageIn, request: Request):
     prep = await _prepare_chat(data, request)
     try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"wladbot_{prep['session_id']}", system_message=prep["system_msg"])
+        chat = LlmChat(session_id=f"wladbot_{prep['session_id']}", system_message=prep["system_msg"])
         chat.with_model("anthropic", prep["model_name"])
         ai_response = await asyncio.wait_for(chat.send_message(UserMessage(text=prep["prompt"])), timeout=120)
         return await _finalize_chat(prep, ai_response)

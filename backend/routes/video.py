@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from lib.llm_provider import FAST_MODEL, MODEL, LlmChat, UserMessage
 from lib.llm_provider import OpenAISpeechToText
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from services import get_current_user, get_user_memory, clean_ai_text, WLAD_HARD_RULES
 from services_actions import record_user_action
 from services_tier import require_feature, resolve_user_tier
@@ -329,7 +329,7 @@ async def _transcribe_audio(file: UploadFile) -> str:
     still return a single transcript — Whisper's per-call 25 MB limit no
     longer caps recording length.
     """
-    stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
+    stt = OpenAISpeechToText()
     contents = await file.read()
     if not contents:
         raise HTTPException(status_code=400, detail="Empty audio file received")
@@ -557,7 +557,6 @@ async def _classify_video_transcript(transcript: str) -> str:
         return "speech"
     try:
         chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
             session_id=f"vidcls_{uuid.uuid4().hex[:6]}",
             system_message=(
                 "Klassifiziere das Transkript einer Video-Aufnahme in EXAKT eine Kategorie:\n"
@@ -591,7 +590,6 @@ async def _answer_theory_question(transcript: str) -> dict:
         logger.warning(f"Theory-answer RAG fetch failed (proceeding without): {e}")
 
     chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
         session_id=f"vidqa_{uuid.uuid4().hex[:8]}",
         system_message=(
             "Du bist WladBot — Wlad Jachtchenkos digitaler Zwilling und Leadership-Experte. "
@@ -655,7 +653,6 @@ async def _run_video_ai_analysis(challenge: dict, transcript: str, prev_attempts
         logger.warning(f"Video RAG fetch failed (proceeding without): {e}")
 
     chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
         session_id=f"vid_{uuid.uuid4().hex[:8]}",
         system_message=VIDEO_ANALYSIS_PROMPT + rating_context + rag_block
         # Iter 183: SEXIER steht wörtlich im Prompt — die Panels der Analyse und

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Key, ArrowRight, Check, AlertCircle, Loader2, ExternalLink } from "lucide-react";
+import { LEADER_OS_URL } from "../config";
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -61,7 +62,7 @@ export default function ActivateKey() {
 
       // Redirect to leaderos.de after 4 seconds
       setTimeout(() => {
-        window.location.href = data.redirect_url || "https://leaderos.de";
+        window.location.href = LEADER_OS_URL;
       }, 4000);
     } catch (err) {
       setStatus("error");
@@ -102,7 +103,7 @@ export default function ActivateKey() {
             </div>
 
             <a
-              href="https://leaderos.de"
+              href={LEADER_OS_URL}
               data-testid="redirect-link"
               className="btn-primary px-8 py-4 text-base font-semibold inline-flex items-center gap-3"
             >

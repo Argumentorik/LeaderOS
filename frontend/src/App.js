@@ -26,7 +26,6 @@ import DashboardPage from "./pages/DashboardPage";
 // by transparently retrying then forcing a single reload to pick up the
 // fresh index.html (and its new chunk hashes). See lib/lazyWithRetry.js.
 const MagicLinkVerifyPage = lazyWithRetry(() => import("./pages/MagicLinkVerifyPage"));
-const AuthCallback = lazyWithRetry(() => import("./pages/AuthCallback"));
 const DailyCheckinPage = lazyWithRetry(() => import("./pages/DailyCheckinPage"));
 const ChatPage = lazyWithRetry(() => import("./pages/ChatPage"));
 const SimulationsPage = lazyWithRetry(() => import("./pages/SimulationsPage"));
@@ -196,7 +195,6 @@ function AppRouter() {
   // location.key is in the deps so clicking the same anchor twice re-fires.
   useEffect(() => {
     if (!location.hash || typeof window === 'undefined') return undefined;
-    if (location.hash.includes('session_id=')) return undefined; // auth callback, not an anchor
     const id = decodeURIComponent(location.hash.slice(1));
     if (!id) return undefined;
     let tries = 0;
@@ -213,14 +211,6 @@ function AppRouter() {
     return () => window.clearTimeout(timer);
   }, [location.pathname, location.hash, location.key]);
 
-  if (location.hash?.includes('session_id=')) {
-    return (
-      <Suspense fallback={<RouteLoader />}>
-        <AuthCallback />
-      </Suspense>
-    );
-  }
-
   return (
     <Suspense fallback={<RouteLoader />}>
       <Routes>
@@ -232,7 +222,6 @@ function AppRouter() {
         <Route path="/register" element={<LoginPage initialMode="register" />} />
         <Route path="/auth/magic" element={<MagicLinkVerifyPage />} />
         <Route path="/auth/sync" element={<LeaderOsSyncPage />} />
-        <Route path="/auth-callback" element={<AuthCallback />} />
         <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/daily-checkin" element={<ProtectedRoute><DailyCheckinPage /></ProtectedRoute>} />

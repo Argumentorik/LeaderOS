@@ -61,10 +61,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (window.location.hash?.includes('session_id=')) {
-      setLoading(false);
-      return;
-    }
     // Show cached user immediately while verifying in background
     const storedUser = sessionStorage.getItem('wladbot_user');
     if (storedUser) {

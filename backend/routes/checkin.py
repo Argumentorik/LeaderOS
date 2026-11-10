@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
 from lib.llm_provider import MODEL, LlmChat, UserMessage
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from models import DailyCheckinIn
 from services import get_current_user, WLAD_HARD_RULES
 from services_actions import record_user_action
@@ -43,7 +43,7 @@ async def submit_daily_checkin(data: DailyCheckinIn, request: Request):
     existing = await db.daily_checkins.find_one({"user_id": user["user_id"], "date": today}, {"_id": 0})
 
     try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"checkin_{checkin_id}", system_message=CHECKIN_SYSTEM_PROMPT)
+        chat = LlmChat(session_id=f"checkin_{checkin_id}", system_message=CHECKIN_SYSTEM_PROMPT)
         chat.with_model("anthropic", MODEL)
         ai_response = await chat.send_message(UserMessage(text=f"Daily check-in from leader: {data.content}"))
 

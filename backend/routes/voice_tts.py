@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
 from pydantic import BaseModel, Field
 
-from config import db, logger, EMERGENT_LLM_KEY
+from config import db, logger
 from services import get_current_user, get_user_memory, WLADBOT_SYSTEM_PROMPT
 from services_actions import record_user_action
 from routes.admin import require_admin
@@ -452,7 +452,7 @@ async def _transcribe_webm(audio_bytes: bytes) -> str:
     """
     from lib.llm_provider import OpenAISpeechToText
     from services_speech_text import SPEECH_NAME_HINT, fix_brand_names
-    stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
+    stt = OpenAISpeechToText()
     with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
         tmp.write(audio_bytes)
         tmp_path = tmp.name
@@ -532,7 +532,7 @@ async def _voice_llm_reply(session_id: str, user_id: str, transcript: str, user_
     except Exception as e:
         logger.warning(f"Canon block skipped: {e}")
 
-    chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"voicemode_{session_id}", system_message=system_msg)
+    chat = LlmChat(session_id=f"voicemode_{session_id}", system_message=system_msg)
     # gpt-4o-mini = ~10x schneller als gpt-5.2 für 2-3 Satz-Voice-Antworten.
     # RAG-Block grounded ihn auf Wlads Frameworks → Qualität bleibt hoch.
     # Voice quality (Tester-Feedback Iter 115): gpt-4o statt gpt-4o-mini —
@@ -916,7 +916,6 @@ async def argumentation_sparring(
 
     try:
         chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
             session_id=f"sparring_{session_id}",
             system_message=system_msg,
         )

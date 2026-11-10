@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle2, XCircle, Loader2, ArrowRight, Bot, Sparkles } from "lucide-react";
+import { LEADER_OS_URL } from "../config";
 
 const API = process.env.REACT_APP_BACKEND_URL;
-const LEADER_OS_URL = "https://leaderos.de";
 const REDIRECT_SECONDS = 5;
 
 export default function PaymentSuccess() {

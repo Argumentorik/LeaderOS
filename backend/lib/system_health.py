@@ -25,38 +25,21 @@ def _llm_status() -> dict:
         return {"status": "go", "provider": "anthropic",
                 "model": MODEL, "fast_model": FAST_MODEL,
                 "note": "Native Anthropic SDK"}
-    if _present("OPENAI_API_KEY"):
-        return {"status": "go", "provider": "openai",
-                "model": "gpt-4o-mini",
-                "note": "Native OpenAI SDK"}
-    if _present("EMERGENT_LLM_KEY"):
-        return {"status": "degraded", "provider": "emergent",
-                "model": "openai/gpt-5.2",
-                "note": "Legacy wrapper — set ANTHROPIC_API_KEY to migrate"}
     return {"status": "down", "provider": None,
-            "note": "No LLM provider configured"}
+            "note": "ANTHROPIC_API_KEY not set — all AI features fail"}
 
 
 def _stt_status() -> dict:
-    # STT ist optional — wer kein Voice-Mode braucht, lässt OPENAI_API_KEY
-    # einfach leer. `optional: True` heißt: zieht den Overall-Status
+    # STT ist optional — `optional: True` heißt: zieht den Overall-Status
     # nicht runter wenn DOWN.
     # lib/llm_provider transkribiert über ElevenLabs Scribe.
     if _present("ELEVENLABS_API_KEY"):
         return {"status": "go", "provider": "elevenlabs",
                 "optional": True, "model": "scribe_v1",
                 "note": "ElevenLabs Scribe"}
-    if _present("OPENAI_API_KEY"):
-        return {"status": "go", "provider": "openai",
-                "model": "whisper-1",
-                "note": "Native OpenAI Whisper"}
-    if _present("EMERGENT_LLM_KEY"):
-        return {"status": "degraded", "provider": "emergent",
-                "optional": True,
-                "note": "Legacy wrapper — Voice-Mode works but on emergent"}
     return {"status": "down", "provider": None,
             "optional": True,
-            "note": "Voice-Mode disabled — set OPENAI_API_KEY to enable"}
+            "note": "Voice-Mode disabled — set ELEVENLABS_API_KEY to enable"}
 
 
 def _tts_status() -> dict:

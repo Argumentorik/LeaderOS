@@ -16,7 +16,14 @@ COPY . .
 # REACT_APP_BACKEND_URL stays empty: every call is `${BACKEND_URL}/api/...`,
 # which becomes same-origin /api.
 ARG REACT_APP_BACKEND_URL=""
+# Railway passes service variables as build args only when declared here.
+ARG REACT_APP_LEADER_OS_URL
+ARG REACT_APP_POSTHOG_KEY
+ARG REACT_APP_POSTHOG_HOST
 ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL \
+    REACT_APP_LEADER_OS_URL=$REACT_APP_LEADER_OS_URL \
+    REACT_APP_POSTHOG_KEY=$REACT_APP_POSTHOG_KEY \
+    REACT_APP_POSTHOG_HOST=$REACT_APP_POSTHOG_HOST \
     GENERATE_SOURCEMAP=false \
     NODE_OPTIONS=--max-old-space-size=4096
 

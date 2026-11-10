@@ -276,14 +276,24 @@
                     }),
                     (e.__SV = 1));
             })(document, window.posthog || []);
-            posthog.init("phc_xAvL2Iq4tFmANRE7kzbKwaSqp1HJjN7x48s3vr0CMjs", {
-                api_host: "https://us.i.posthog.com",
-                person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well,
-                session_recording: {
-                    recordCrossOriginIframes: true,
-                    capturePerformance: false,
-                },
-            });
+            // LeaderOS PostHog project, production builds only (key comes from
+            // REACT_APP_POSTHOG_KEY; staging builds without it, so nothing loads).
+            // Cookieless: persistence "memory" stores nothing on the device and
+            // session recording is off, so no cookie consent is needed here.
+            // Visitors are tied to their email when they submit the quiz form.
+            (function () {
+                var key = "%REACT_APP_POSTHOG_KEY%";
+                var host = "%REACT_APP_POSTHOG_HOST%";
+                if (key.indexOf("phc_") !== 0) return;
+                posthog.init(key, {
+                    api_host: host.indexOf("https://") === 0 ? host : "https://eu.i.posthog.com",
+                    persistence: "memory",
+                    person_profiles: "identified_only",
+                    disable_session_recording: true,
+                    capture_pageview: "history_change",
+                    capture_pageleave: true,
+                });
+            })();
         </script>
     </body>
 </html>

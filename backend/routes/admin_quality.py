@@ -28,7 +28,7 @@ from pydantic import BaseModel, Field
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
 from lib.llm_provider import MODEL, LlmChat, UserMessage
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from services import WLADBOT_SYSTEM_PROMPT
 from services_rag import retrieve_context
 from routes.admin import require_admin
@@ -124,7 +124,6 @@ def _safe_json(raw: str) -> Optional[dict]:
 async def _generate_answer(query: str, system_msg: str) -> str:
     """Run the exact production generation step (GPT-5.2 with the real prompt)."""
     chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
         session_id=f"qaudit_gen_{uuid.uuid4().hex[:8]}",
         system_message=system_msg,
     )
@@ -135,7 +134,6 @@ async def _generate_answer(query: str, system_msg: str) -> str:
 async def _judge_answer(query: str, expect: str, context_block: str, answer: str) -> dict[str, Any]:
     """Score one answer with a strict, JSON-only judge call."""
     chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
         session_id=f"qaudit_judge_{uuid.uuid4().hex[:8]}",
         system_message=_JUDGE_SYSTEM,
     )

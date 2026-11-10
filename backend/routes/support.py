@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field
 
 from lib.llm_provider import MODEL, LlmChat, UserMessage
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from services import get_current_user
 
 router = APIRouter(prefix="/api/support", tags=["support"])
@@ -177,7 +177,6 @@ async def support_ask(data: SupportAskIn, request: Request):
         # 2) LLM fallback for novel questions
         try:
             chat = LlmChat(
-                api_key=EMERGENT_LLM_KEY,
                 session_id=session_id,
                 system_message=SUPPORT_SYSTEM_PROMPT,
             )

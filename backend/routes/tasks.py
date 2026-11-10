@@ -34,7 +34,6 @@ async def create_task(data: TaskCreate, request: Request):
 async def generate_ai_tasks(request: Request):
     """WladBot generates 5 personalised leadership tasks from the user's profile."""
     from lib.llm_provider import MODEL, LlmChat, UserMessage
-    from config import EMERGENT_LLM_KEY
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)
 
@@ -51,7 +50,6 @@ async def generate_ai_tasks(request: Request):
     )
     try:
         chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
             session_id=f"taskgen_{uuid.uuid4().hex[:8]}",
             system_message=(
                 "Du bist WladBot — Wlad Jachtchenkos Leadership-Coach. Generiere GENAU 5 konkrete, sofort umsetzbare "

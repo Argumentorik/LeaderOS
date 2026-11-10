@@ -63,6 +63,11 @@ export default function UserForm() {
         consent_marketing: false
       });
 
+      // PostHog (cookieless, see public/index.html): tie this visitor to the
+      // email, the same identity key LeaderOS uses, so quiz -> purchase -> app
+      // is one person. A no-op when PostHog isn't initialised (staging).
+      try { window.posthog?.__loaded && window.posthog.identify(res.data.email); } catch { /* analytics never blocks */ }
+
       localStorage.setItem("emergent_user", JSON.stringify({
         session_id: res.data.session_id,
         name: res.data.name,

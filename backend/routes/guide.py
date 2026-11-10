@@ -24,7 +24,7 @@ from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
 
-from config import EMERGENT_LLM_KEY, db, logger
+from config import db, logger
 from guide_content import (
     BROLL_SCREENS, CLIP_SCREENS, CLIP_SETTING, FRAMES, SCRIPT_MAX_WORDS, SCRIPT_MIN_WORDS, SHOT_PRESETS,
     TALK_LEAD_AFTER_WALK_SECONDS, TALK_LEAD_SECONDS, TALK_MAX_SECONDS, TALK_MAX_SECONDS_PRO, TALK_MAX_SECONDS_SINGLE,
@@ -930,7 +930,7 @@ async def suggest_script(slug: str, data: ScriptSuggestIn, request: Request):
     if data.hint:
         context += f"\nWlads Anweisung: {data.hint}"
     try:
-        chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"guide_{slug}", system_message=SCRIPT_PROMPT)
+        chat = LlmChat(session_id=f"guide_{slug}", system_message=SCRIPT_PROMPT)
         chat.with_model("anthropic", MODEL)
         text = await chat.send_message(UserMessage(text=context))
     except Exception as e:

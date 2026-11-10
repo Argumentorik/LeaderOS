@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
 from lib.llm_provider import MODEL, LlmChat, UserMessage
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from services import get_current_user
 from services_actions import record_user_action
 from data import TOOL_PROMPTS
@@ -64,7 +64,7 @@ Erstelle jetzt Argumentation, Inhaltliche Tipps und einen konkreten Aktionsplan.
 async def _run_deep_assist_ai(system_prompt: str, user_message: str) -> dict:
     """Call the LLM and parse its JSON response (tolerant of markdown fencing).
     Raises HTTPException(422) if the model returned non-JSON after cleanup."""
-    chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"assist_{uuid.uuid4().hex[:8]}", system_message=system_prompt)
+    chat = LlmChat(session_id=f"assist_{uuid.uuid4().hex[:8]}", system_message=system_prompt)
     chat.with_model("anthropic", MODEL)
     raw = await chat.send_message(UserMessage(text=user_message))
     try:
@@ -134,7 +134,7 @@ async def use_tool(tool_id: str, request: Request):
     try:
         async with charged_credit(user, "workflow"):
             persona_context = f"\n\nPERSONA-KONTEXT des Users:\n{persona}\nNutze diesen Kontext, um die Antwort maximal zu personalisieren." if persona else ""
-            chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"tool_{uuid.uuid4().hex[:8]}", system_message=tool["system"] + persona_context)
+            chat = LlmChat(session_id=f"tool_{uuid.uuid4().hex[:8]}", system_message=tool["system"] + persona_context)
             chat.with_model("anthropic", MODEL)
             ai_response = await chat.send_message(UserMessage(text=user_input))
 

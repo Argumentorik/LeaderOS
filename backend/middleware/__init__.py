@@ -39,7 +39,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         "/api/auth/register",
         "/api/auth/magic-link",
         "/api/auth/license",
-        "/api/auth/google-session",
         "/api/auth/google/callback",
         "/api/auth/apple/callback",
         "/api/auth/microsoft/callback",

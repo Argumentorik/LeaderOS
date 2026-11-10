@@ -39,7 +39,7 @@ from fastapi import APIRouter, Request, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
 import httpx
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from services import get_current_user
 
 router = APIRouter(prefix="/api", tags=["telemetry"])
@@ -250,21 +250,20 @@ async def _check_resend() -> dict:
 
 
 async def _check_llm() -> dict:
-    if not EMERGENT_LLM_KEY:
-        return {"ok": False, "configured": False, "note": "EMERGENT_LLM_KEY missing"}
-    # Cheap probe — check the auth endpoint of the Emergent gateway (no actual completion).
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        return {"ok": False, "configured": False, "note": "ANTHROPIC_API_KEY missing"}
+    # Cheap probe — list models (authenticated, no completion, no cost).
     t0 = time.perf_counter()
     try:
         async with httpx.AsyncClient(timeout=5) as c:
-            # Use the well-known integrations health endpoint if present.
             r = await c.get(
-                "https://integrations.emergentagent.com/health",
-                headers={"Authorization": f"Bearer {EMERGENT_LLM_KEY}"},
+                "https://api.anthropic.com/v1/models",
+                headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
             )
-            return {"ok": r.status_code < 500, "status": r.status_code, "latency_ms": round((time.perf_counter() - t0) * 1000, 1)}
+        return {"ok": r.status_code == 200, "status": r.status_code, "latency_ms": round((time.perf_counter() - t0) * 1000, 1)}
     except Exception as e:
-        # Fallback: key is set — assume warmable but degraded.
-        return {"ok": True, "configured": True, "warn": str(e)[:120]}
+        return {"ok": False, "configured": True, "error": str(e)[:120]}
 
 
 async def _check_supabase() -> dict:

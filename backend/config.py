@@ -19,7 +19,6 @@ if not JWT_SECRET:
         "every /api/auth/login would return 500. "
         "Set a cryptographically random 64+ char value in backend/.env."
     )
-OAUTH_SESSION_URL = os.environ.get('OAUTH_SESSION_URL')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

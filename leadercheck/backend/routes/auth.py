@@ -2,11 +2,10 @@ from fastapi import APIRouter, HTTPException, Request, Response
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import uuid
-import httpx
 import logging
 import asyncio
 
-from models import AuthSession, UserCreate
+from models import UserCreate
 from services.security import (
     create_otp, verify_otp,
     issue_report_token, issue_sync_token, verify_sync_token,
@@ -38,38 +37,6 @@ async def get_current_user(db, request: Request) -> Optional[dict]:
         return None
     user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
     return user
-
-
-async def fetch_auth_data(session_id: str):
-    async with httpx.AsyncClient() as http_client:
-        resp = await http_client.get(
-            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-            headers={"X-Session-ID": session_id}
-        )
-        if resp.status_code != 200:
-            raise HTTPException(status_code=401, detail="Invalid session")
-        return resp.json()
-
-
-async def upsert_user(db, auth_data: dict) -> str:
-    email = (auth_data.get("email") or "").lower().strip()
-    name = auth_data.get("name")
-    picture = auth_data.get("picture", "")
-    existing_user = await db.users.find_one({"email": email}, {"_id": 0})
-    if existing_user:
-        user_id = existing_user.get("user_id") or existing_user.get("session_id")
-        await db.users.update_one(
-            {"email": email},
-            {"$set": {"name": name, "picture": picture, "user_id": user_id, "updated_at": datetime.now(timezone.utc).isoformat()}}
-        )
-    else:
-        user_id = f"user_{uuid.uuid4().hex[:12]}"
-        await db.users.insert_one({
-            "user_id": user_id, "email": email, "name": name, "picture": picture,
-            "role": None, "consent_privacy": True, "consent_marketing": False,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-    return user_id
 
 
 async def create_session(db, user_id: str, response: Response) -> str:
@@ -230,17 +197,6 @@ def register_auth_routes(router: APIRouter, db, config: Optional[dict] = None, l
 
     def _rl(spec: str):
         return limiter.limit(spec) if limiter else (lambda fn: fn)
-
-    @router.post("/auth/session")
-    async def exchange_session(data: AuthSession, response: Response):
-        try:
-            auth_data = await fetch_auth_data(data.session_id)
-        except Exception as e:
-            logger.error(f"Auth error: {e}")
-            raise HTTPException(status_code=401, detail="Authentication failed")
-        user_id = await upsert_user(db, auth_data)
-        await create_session(db, user_id, response)
-        return await db.users.find_one({"user_id": user_id}, {"_id": 0})
 
     @router.get("/auth/me")
     async def get_me(request: Request):

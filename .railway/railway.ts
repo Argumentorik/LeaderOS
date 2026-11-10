@@ -68,8 +68,6 @@ export default defineRailway((ctx) => {
       // EMERGENT_LLM_KEY still backs the objstore (lib/object_storage) until the files move.
       // FAL (image/video generation) is off until a FAL_KEY is set.
       EMERGENT_LLM_KEY: preserve(),
-      INTEGRATION_PROXY_URL: preserve(),
-      OAUTH_SESSION_URL: preserve(),
       GOOGLE_CLIENT_ID: preserve(),
       ELEVENLABS_API_KEY: preserve(),
       ELEVENLABS_API_KEY_ID: preserve(),
@@ -143,7 +141,7 @@ export default defineRailway((ctx) => {
       DB_NAME: "leadercheck",
       CORS_ORIGINS: staging
         ? "https://leadercheck-web-staging.up.railway.app"
-        : "https://leadercheck.de,https://www.leadercheck.de",
+        : "https://leadercheck.de,https://www.leadercheck.de,https://leader-check.de,https://www.leader-check.de",
       SENDER_EMAIL: "wlad@leaderos.de",
       // Quiz narrative + coach chat (services/llm.py); same key as LeaderOS.
       ANTHROPIC_API_KEY: "${{LeaderOS.ANTHROPIC_API_KEY}}",
@@ -173,6 +171,15 @@ export default defineRailway((ctx) => {
     networking: { privateNetworkEndpoint: "leadercheck-web" },
     env: {
       BACKEND_URL: "http://leadercheck.railway.internal:8001",
+      // Payment success / key activation send buyers here (src/config.js).
+      REACT_APP_LEADER_OS_URL: staging ? "https://leaderos-web-staging.up.railway.app" : "https://leaderos.de",
+      // Same PostHog project as LeaderOS (identity = email). Production only.
+      ...(staging
+        ? {}
+        : {
+            REACT_APP_POSTHOG_KEY: "${{LeaderOS-web.REACT_APP_POSTHOG_KEY}}",
+            REACT_APP_POSTHOG_HOST: "${{LeaderOS-web.REACT_APP_POSTHOG_HOST}}",
+          }),
     },
   });
 

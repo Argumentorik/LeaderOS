@@ -6,11 +6,10 @@ from pymongo.errors import DuplicateKeyError
 import os
 import re
 import uuid
-import httpx
 import jwt
 from datetime import datetime, timezone, timedelta
 
-from config import db, OAUTH_SESSION_URL, logger
+from config import db, logger
 from models import UserRegister, UserLogin, normalize_phone, looks_like_phone, phone_candidates
 from services import (
     JWT_SECRET, bump_token_version, create_jwt_token, hash_password, validate_password_strength, verify_password, get_current_user,
@@ -436,109 +435,6 @@ async def login(data: UserLogin, request: Request, response: Response):
     _maybe_reconcile_payments(user)
 
     return {"token": token, "user": _safe_user_output(user)}
-
-
-# ========== GOOGLE AUTH ==========
-
-@router.post("/google-session")
-async def google_session(request: Request, response: Response):
-    body = await request.json()
-    session_id = body.get("session_id")
-    if not session_id:
-        raise HTTPException(status_code=400, detail="session_id required")
-
-    # Guard against missing OAuth config — fail with a friendly 503 instead
-    # of a Python TypeError that swamps the logs.
-    if not OAUTH_SESSION_URL:
-        raise HTTPException(
-            status_code=503,
-            detail="Google login is not configured on this environment. Use email/password.",
-        )
-
-    async with httpx.AsyncClient() as http_client:
-        resp = await http_client.get(OAUTH_SESSION_URL, headers={"X-Session-ID": session_id})
-        if resp.status_code != 200:
-            raise HTTPException(status_code=401, detail="Invalid session")
-        google_data = resp.json()
-
-    email = google_data["email"]
-    ctx = await _capture_login_context(request)
-    ip_address = ctx["ip"]
-
-    existing = await db.users.find_one({"email": email}, {"_id": 0})
-    history_entry = _login_history_entry(ctx, method="google")
-    if existing:
-        user_id = existing["user_id"]
-        await db.users.update_one({"user_id": user_id}, {
-            "$set": {
-                "name": google_data.get("name", existing.get("name")),
-                "picture": google_data.get("picture", existing.get("picture")),
-                "last_login_ip": ip_address,
-                "last_login_at": history_entry["at"],
-                "last_login_geo": ctx["geo"],
-                "last_login_ua": ctx["ua"],
-                # SEC-001: Google asserts a verified email → proves ownership.
-                "email_verified": True,
-                "email_verified_via": "google",
-            },
-            "$push": {"login_history": {"$each": [history_entry], "$slice": -50}}
-        })
-        sync_event = "user.updated"
-        _maybe_autosync_wladhub(existing)
-        _maybe_reconcile_payments(existing)
-        # New-device email for existing Google user
-        fire_and_forget_new_device_alert(
-            user_email=email,
-            user_name=existing.get("name") or "",
-            ip=ip_address,
-            ua_parsed=ctx["ua"],
-            geo=ctx["geo"],
-            fingerprint=ctx["fingerprint"],
-            login_history=(existing.get("login_history") or []) + [history_entry],
-            method="google",
-        )
-    else:
-        user_id = f"user_{uuid.uuid4().hex[:12]}"
-        source_platform = detect_source_platform(request)
-        await db.users.insert_one({
-            "user_id": user_id, "email": email, "name": google_data.get("name", "User"),
-            "picture": google_data.get("picture"), "leadership_score": 0, "eq_score": 0,
-            "communication_score": 0, "level": "Emerging Leader", "xp": 0,
-            "source_platform": source_platform,
-            # SEC-001: Google asserts a verified email → proves ownership.
-            "email_verified": True, "email_verified_via": "google",
-            "signup_ip": ip_address, "signup_geo": ctx["geo"], "signup_ua": ctx["ua"],
-            "last_login_ip": ip_address, "last_login_geo": ctx["geo"], "last_login_ua": ctx["ua"],
-            "login_history": [history_entry],
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        sync_event = "user.created"
-        # Autosync leadercheck.de diagnosis for Google signups too (Iter 92.62 —
-        # was only wired for classic register before).
-        import asyncio as _asyncio
-        from services_wladhub_autosync import auto_sync_wladhub_on_signup
-        _asyncio.create_task(auto_sync_wladhub_on_signup(user_id=user_id, email=email))
-        # Fire welcome email for new Google user (fire-and-forget)
-        _asyncio.create_task(_send_signup_welcome(email, google_data.get("name") or email.split("@")[0], _frontend_url_for(request)))
-
-    # Generate a real JWT token (not the session_token)
-    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
-    token = create_jwt_token(user_id, (user or {}).get("token_version", 1))
-    await _create_session(user_id, ip_address, response, method="google")
-
-
-    # Mirror to Supabase (fire-and-forget)
-    from services_supabase_sync import mirror_user_event_fire_and_forget
-    mirror_user_event_fire_and_forget(
-        mongo_user_id=user_id,
-        email=email,
-        full_name=user.get("name") or "",
-        event=sync_event,
-        extra={"auth_method": "google"},
-        source_platform=user.get("source_platform") or detect_source_platform(request),
-    )
-
-    return {"user": _safe_user_output(user), "token": token}
 
 
 # ========== LEADER-CHECK → LEADEROS SYNC HANDOFF ==========

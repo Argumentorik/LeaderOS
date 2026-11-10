@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 # Migration → lib.llm_provider (bit-identische API, Provider per ENV).
 from lib.llm_provider import MODEL, LlmChat, UserMessage
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
 from models import SimulationStart, SimulationMessage, ArgumentationPrep, ArgumentationTemplateIn
 from services import get_current_user, clean_ai_text, SIMULATION_SYSTEM_PROMPT
 from services_actions import record_user_action
@@ -92,7 +92,7 @@ async def start_simulation(data: SimulationStart, request: Request):
 
     try:
         chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
+            session_id=f"sim_{sim_id}",
             system_message=build_system_message(
                 SIMULATION_SYSTEM_PROMPT,
                 f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}\nDifficulty: {data.difficulty}",
@@ -179,7 +179,7 @@ async def simulation_message(sim_id: str, data: SimulationMessage, request: Requ
                     pass
 
             chat = LlmChat(
-                api_key=EMERGENT_LLM_KEY, session_id=f"sim_{sim_id}",
+                session_id=f"sim_{sim_id}",
                 system_message=build_system_message(
                     SIMULATION_SYSTEM_PROMPT,
                     f"\n\nScenario: {scenario.get('description', '')}\nYou are playing: {scenario.get('character', 'an employee')}",
@@ -389,7 +389,6 @@ async def argumentation_prep(data: ArgumentationPrep, request: Request):
 
     try:
         chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
             session_id=strategy_id,
             system_message=ARGUMENTATION_PREP_PROMPT,
         )

@@ -14,7 +14,6 @@ import ActivateKey from "./pages/ActivateKey";
 import Admin from "./pages/Admin";
 import Kurse from "./pages/Kurse";
 import Login from "./pages/Login";
-import AuthCallback from "./pages/AuthCallback";
 import AICoach from "./components/AICoach";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -134,7 +133,6 @@ function AppContent() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/kurse" element={<Kurse />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
       {showCoach && <AICoach />}
     </div>

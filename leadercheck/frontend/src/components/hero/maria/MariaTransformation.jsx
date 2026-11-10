@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { DottedGlowBackground } from "../../ui/dotted-glow-background";
+import { LEADER_OS_URL } from "../../../config";
 
 const TRANSFORMATION = [
   "2 Minuten Training",
@@ -60,7 +61,7 @@ export const MariaTransformation = () => {
           <ArrowRight className="w-5 h-5" /> Jetzt Leader OS öffnen
         </button>
         <p className="text-xs text-slate-500 mt-5">
-          <a href="https://leaderos.de/login" className="text-[#C8FF00] underline">leaderos.de</a> · mit derselben E-Mail wie hier
+          <a href={`${LEADER_OS_URL}/login`} className="text-[#C8FF00] underline">leaderos.de</a> · mit derselben E-Mail wie hier
         </p>
       </div>
     </div>

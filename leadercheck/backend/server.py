@@ -80,9 +80,9 @@ app.add_middleware(SlowAPIMiddleware)
 # Wildcard + allow_credentials=True was reflected by Starlette on any Origin,
 # letting attacker sites read logged-in users' data. Now: explicit allowlist,
 # extendable via CORS_ORIGINS env (comma-separated).
+# The web app calls /api same-origin through Caddy, so CORS only matters for
+# other origins; production/staging domains come from CORS_ORIGINS (railway.ts).
 _default_origins = [
-    "https://exec-eval.emergent.host",                               # production
-    "https://role-assessment-lab.preview.emergentagent.com",         # preview
     "http://localhost:3000",                                         # dev
 ]
 # Explicit override via CORS_ORIGINS env — comma-separated list. Wildcards ("*")
@@ -99,7 +99,6 @@ CORS_ORIGINS = list({*_default_origins, *_env_origins})
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
-    allow_origin_regex=r"^https://.*\.preview\.emergentagent\.com$",  # allow preview subdomains
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-Requested-With", "X-Session-ID"],

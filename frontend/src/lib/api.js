@@ -120,7 +120,7 @@ const waitForOtherTabRefresh = () => new Promise((resolve) => {
 });
 
 const isNetworkError = (error) => !error.response && error.message !== 'canceled';
-const isAuthEndpoint = (url) => /\/(auth\/login|auth\/refresh|auth\/me|auth\/register|auth\/magic-link\/(request|verify)|auth\/google-session)/.test(url || '');
+const isAuthEndpoint = (url) => /\/(auth\/login|auth\/refresh|auth\/me|auth\/register|auth\/magic-link\/(request|verify))/.test(url || '');
 
 const waitForReAuth = (originalRequest, originalError) => new Promise((resolve, reject) => {
   const cleanup = () => {
