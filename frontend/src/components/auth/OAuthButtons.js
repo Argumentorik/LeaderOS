@@ -109,7 +109,9 @@ export const GoogleSignInButton = ({ clientId, onSuccess, onError, de = true, la
 
   return (
     <div className="relative flex justify-center min-h-[44px] w-full" data-testid="google-signin-btn">
-      <div ref={slot} className="w-full flex justify-center" aria-label={label || (de ? 'Mit Google fortfahren' : 'Continue with Google')} />
+      {/* colorScheme light: our page is dark, Google's iframe is light; a
+          mismatch makes browsers paint the iframe on an opaque white box. */}
+      <div ref={slot} className="w-full flex justify-center" style={{ colorScheme: 'light' }} aria-label={label || (de ? 'Mit Google fortfahren' : 'Continue with Google')} />
       {(!ready || loading) && (
         <div className="absolute inset-0 flex items-center justify-center">
           <Loader2 size={16} className="animate-spin text-white/60" />
