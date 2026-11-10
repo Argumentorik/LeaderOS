@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../lib/api';
 import logger from '../../lib/logger';
 import { toast } from 'sonner';
+import { useAuth } from '../../contexts/AuthContext';
 
 /**
  * ProfileAccountTab · Account & security settings:
@@ -19,12 +20,20 @@ import { toast } from 'sonner';
 export const ProfileAccountTab = ({ de }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user, checkAuth } = useAuth();
+  // No password yet (e.g. account from a Leader-Check purchase) or just signed
+  // in via magic link ("forgot password"): the backend accepts a new password
+  // without the current one, so the field is hidden.
+  const resetMode = !!user?.can_reset_password;
+  const hasPassword = user?.has_password !== false;
   const currentPwRef = useRef(null);
+  const newPwRef = useRef(null);
   useEffect(() => {
-    if (searchParams.get('focus') !== 'password' || !currentPwRef.current) return;
-    currentPwRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    currentPwRef.current.focus();
-  }, [searchParams]);
+    const el = resetMode ? newPwRef.current : currentPwRef.current;
+    if (searchParams.get('focus') !== 'password' || !el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.focus();
+  }, [searchParams, resetMode]);
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
   const [saving, setSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -42,10 +51,11 @@ export const ProfileAccountTab = ({ de }) => {
     setSaving(true);
     try {
       await api.post('/auth/password/change', {
-        current_password: pw.current,
+        current_password: resetMode ? null : pw.current,
         new_password: pw.next,
       });
       setPw({ current: '', next: '', confirm: '' });
+      checkAuth?.();  // reset window closes server-side; refresh has_password/can_reset_password
       setShowSuccess(true);
       toast.success(de ? 'Passwort geändert.' : 'Password changed.');
       setTimeout(() => setShowSuccess(false), 4000);
@@ -98,9 +108,17 @@ export const ProfileAccountTab = ({ de }) => {
               <Lock size={14} className="text-[#BFFF00]" />
             </div>
             <div>
-              <h3 className="text-sm font-black">{de ? 'Passwort ändern' : 'Change password'}</h3>
+              <h3 className="text-sm font-black">
+                {!hasPassword
+                  ? (de ? 'Passwort festlegen' : 'Set a password')
+                  : resetMode
+                    ? (de ? 'Neues Passwort festlegen' : 'Set a new password')
+                    : (de ? 'Passwort ändern' : 'Change password')}
+              </h3>
               <p className="text-[11px] text-muted-foreground">
-                {de ? 'Andere Sessions werden nach Erfolg abgemeldet.' : 'Other sessions are logged out on success.'}
+                {resetMode && hasPassword
+                  ? (de ? 'Du hast dich per Magic Link angemeldet — das alte Passwort brauchst du jetzt nicht.' : 'You signed in with a magic link, so your old password isn’t needed now.')
+                  : (de ? 'Andere Sessions werden nach Erfolg abgemeldet.' : 'Other sessions are logged out on success.')}
               </p>
             </div>
           </div>
@@ -113,6 +131,7 @@ export const ProfileAccountTab = ({ de }) => {
           )}
 
           <form onSubmit={handlePasswordChange} className="space-y-3" data-testid="password-form">
+            {!resetMode && (
             <div>
               <Label htmlFor="current_pw" className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                 {de ? 'Aktuelles Passwort' : 'Current password'}
@@ -129,6 +148,7 @@ export const ProfileAccountTab = ({ de }) => {
                 data-testid="password-current"
               />
             </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label htmlFor="new_pw" className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -136,6 +156,7 @@ export const ProfileAccountTab = ({ de }) => {
                 </Label>
                 <Input
                   id="new_pw"
+                  ref={newPwRef}
                   type="password"
                   required
                   minLength={8}

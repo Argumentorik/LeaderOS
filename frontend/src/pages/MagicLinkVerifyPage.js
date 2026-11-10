@@ -4,6 +4,7 @@ import { Loader2, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import { postLoginRoute } from '../lib/postLoginRoute';
+import { toast } from 'sonner';
 
 export default function MagicLinkVerifyPage() {
   const [params] = useSearchParams();
@@ -28,6 +29,17 @@ export default function MagicLinkVerifyPage() {
         const res = await api.post('/auth/magic-link/verify', { token });
         login(res.data.user);
         setState('success');
+        // Magic link = "forgot password" path: for 15 min a new password can
+        // be set without the old one (backend: PASSWORD_RESET_WINDOW).
+        if (res.data.user?.can_reset_password) {
+          toast(res.data.user.has_password ? 'Passwort vergessen?' : 'Noch kein Passwort?', {
+            description: res.data.user.has_password
+              ? 'Du kannst jetzt 15 Minuten lang ohne altes Passwort ein neues festlegen.'
+              : 'Lege ein Passwort fest, dann kannst du dich auch ohne E-Mail-Link anmelden.',
+            duration: 12000,
+            action: { label: 'Festlegen', onClick: () => navigate('/profile?tab=account&focus=password') },
+          });
+        }
         setTimeout(() => navigate(postLoginRoute(res.data.user), { replace: true }), 700);
       } catch (err) {
         setState('error');

@@ -208,9 +208,31 @@ def _safe_user_output(user: dict) -> dict:
     Computes `is_admin` server-side from the trusted DB flag only (SEC-003).
     """
     is_admin = bool(user.get("is_admin"))
-    safe = {k: v for k, v in user.items() if k not in ("password_hash", "_id", "login_history", "signup_ip", "last_login_ip")}
+    safe = {k: v for k, v in user.items() if k not in (
+        "password_hash", "_id", "login_history", "signup_ip", "last_login_ip", "password_reset_until")}
     safe["is_admin"] = is_admin
+    # Profile shows "set password" without the current one when this is true
+    # (no password yet, or just signed in via magic link — see change_password).
+    safe["has_password"] = bool(user.get("password_hash"))
+    safe["can_reset_password"] = _password_reset_open(user)
     return safe
+
+
+# A magic-link sign-in proves email ownership. For this long afterwards the
+# user may set a new password without the old one ("forgot password").
+PASSWORD_RESET_WINDOW = timedelta(minutes=15)
+
+
+def _password_reset_open(user: dict) -> bool:
+    if not user.get("password_hash"):
+        return True
+    until = user.get("password_reset_until")
+    if not until:
+        return False
+    try:
+        return datetime.fromisoformat(until) > datetime.now(timezone.utc)
+    except ValueError:
+        return False
 
 
 # ========== REGISTER ==========
@@ -748,7 +770,9 @@ async def logout(request: Request, response: Response):
 # ── Password change (authenticated) ───────────────────────────────────────
 
 class PasswordChangeRequest(BaseModel):
-    current_password: str
+    # Optional only while _password_reset_open(): no password yet, or within
+    # PASSWORD_RESET_WINDOW of a magic-link sign-in.
+    current_password: Optional[str] = None
     new_password: str
 
 
@@ -756,25 +780,32 @@ class PasswordChangeRequest(BaseModel):
 async def change_password(data: PasswordChangeRequest, request: Request):
     """Authenticated user changes their own password.
 
-    Requires current password to prevent CSRF/session-hijack lateral attacks.
+    Requires the current password to prevent CSRF/session-hijack lateral
+    attacks — except while _password_reset_open() (no password yet, e.g. an
+    account created by a Leader-Check purchase, or within 15 min of a
+    magic-link sign-in, which proves email ownership = "forgot password").
     Invalidates all OTHER sessions on success (keeps current cookie alive).
     """
     user = await get_current_user(request)
 
     validate_password_strength(data.new_password)
-    if data.new_password == data.current_password:
-        raise HTTPException(status_code=400, detail="Neues Passwort darf nicht identisch zum aktuellen sein.")
 
-    full_user = await db.users.find_one({"user_id": user["user_id"]}, {"password_hash": 1, "_id": 0})
-    if not full_user or not verify_password(data.current_password, full_user.get("password_hash", "")):
-        raise HTTPException(status_code=401, detail="Aktuelles Passwort ist falsch.")
+    full_user = await db.users.find_one(
+        {"user_id": user["user_id"]}, {"password_hash": 1, "password_reset_until": 1, "_id": 0}) or {}
+    if not _password_reset_open(full_user):
+        if not data.current_password:
+            raise HTTPException(status_code=400, detail="Bitte gib dein aktuelles Passwort ein.")
+        if data.new_password == data.current_password:
+            raise HTTPException(status_code=400, detail="Neues Passwort darf nicht identisch zum aktuellen sein.")
+        if not verify_password(data.current_password, full_user.get("password_hash", "")):
+            raise HTTPException(status_code=401, detail="Aktuelles Passwort ist falsch.")
 
     await db.users.update_one(
         {"user_id": user["user_id"]},
         {"$set": {
             "password_hash": hash_password(data.new_password),
             "password_changed_at": datetime.now(timezone.utc).isoformat(),
-        }},
+        }, "$unset": {"password_reset_until": ""}},
     )
 
     # Invalidate OTHER sessions (everywhere except current cookie/JWT)
@@ -876,12 +907,15 @@ async def magic_link_verify(data: MagicLinkVerify, request: Request, response: R
 
     ctx = await _capture_login_context(request)
     history_entry = _login_history_entry(ctx, method="magic_link")
+    reset_until = (datetime.now(timezone.utc) + PASSWORD_RESET_WINDOW).isoformat()
+    user["password_reset_until"] = reset_until  # so the response reports can_reset_password
     await db.users.update_one({"user_id": user["user_id"]}, {
         "$set": {
             "last_login_ip": ctx["ip"],
             "last_login_at": history_entry["at"],
             "last_login_geo": ctx["geo"],
             "last_login_ua": ctx["ua"],
+            "password_reset_until": reset_until,
         },
         "$push": {"login_history": {"$each": [history_entry], "$slice": -50}}
     })
