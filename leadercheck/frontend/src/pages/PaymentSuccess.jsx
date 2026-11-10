@@ -14,6 +14,20 @@ export default function PaymentSuccess() {
   const [paymentData, setPaymentData] = useState(null);
   const [countdown, setCountdown] = useState(REDIRECT_SECONDS);
   const [redirectPaused, setRedirectPaused] = useState(false);
+  // Staging only: one-time LeaderOS login link (backend returns null elsewhere).
+  const [loginUrl, setLoginUrl] = useState(null);
+
+  useEffect(() => {
+    if (status !== "success" || !sessionId) return;
+    fetch(`${API}/api/payments/leaderos-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId }),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d?.url) setLoginUrl(d.url); })
+      .catch(() => { /* plain link stays */ });
+  }, [status, sessionId]);
 
   useEffect(() => {
     if (!sessionId) { setStatus("error"); return; }
@@ -53,12 +67,12 @@ export default function PaymentSuccess() {
   useEffect(() => {
     if (status !== "success" || redirectPaused) return;
     if (countdown <= 0) {
-      window.location.href = LEADER_OS_URL;
+      window.location.href = loginUrl || LEADER_OS_URL;
       return;
     }
     const timer = setTimeout(() => setCountdown(c => c - 1), 1000);
     return () => clearTimeout(timer);
-  }, [status, countdown, redirectPaused]);
+  }, [status, countdown, redirectPaused, loginUrl]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4" data-testid="payment-success-page">
@@ -158,7 +172,7 @@ export default function PaymentSuccess() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 data-testid="go-to-leader-os"
-                href={LEADER_OS_URL}
+                href={loginUrl || LEADER_OS_URL}
                 className="btn-primary px-8 py-4 font-semibold inline-flex items-center gap-2"
               >
                 Jetzt zu leaderos.de

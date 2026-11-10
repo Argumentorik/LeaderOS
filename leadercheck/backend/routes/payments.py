@@ -228,6 +228,20 @@ def register_checkout_routes(router: APIRouter, db, app_config):
         except Exception:
             return {"session_id": session_id, "payment_status": "unknown", "status": "unknown"}
 
+    @router.post("/payments/leaderos-login")
+    async def leaderos_login(body: dict) -> dict:
+        """Staging only: the payment success button logs the buyer straight into
+        LeaderOS (no emails on staging). Needs the paid checkout's session_id;
+        returns {"url": None} when disabled, so the button keeps its plain link."""
+        from services.leaderos_sync import login_link
+        tx = await db.payment_transactions.find_one(
+            {"session_id": str(body.get("session_id") or ""), "payment_status": "paid"},
+            {"_id": 0, "email": 1, "leaderos_access": 1},
+        )
+        if not tx or (tx.get("leaderos_access") or {}).get("status") != "granted":
+            return {"url": None}
+        return {"url": await login_link(tx.get("email") or "")}
+
     @router.post("/webhook/stripe")
     async def stripe_webhook(request: Request) -> dict:
         """Stripe webhook: signature verification + event idempotency (SEC-001).

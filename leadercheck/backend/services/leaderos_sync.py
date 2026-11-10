@@ -109,3 +109,20 @@ async def retry_pending_grants(db, limit: int = 50) -> int:
         if (await grant_for_transaction(db, tx)).get("status") == "granted":
             granted += 1
     return granted
+
+
+async def login_link(email: str) -> str | None:
+    """Staging only (LEADEROS_LOGIN_HANDOFF=1): one-time LeaderOS login URL for
+    `email`, minted by LeaderOS /api/internal/sync/login-link. None if disabled
+    or unavailable — the caller falls back to the plain LeaderOS URL."""
+    url, secret = _config()
+    if os.environ.get("LEADEROS_LOGIN_HANDOFF") != "1" or not (url and secret and email):
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT_S) as client:
+            r = await client.post(f"{url}/api/internal/sync/login-link",
+                                  headers={"X-Sync-Secret": secret}, json={"email": email})
+        return r.json().get("url") if r.status_code == 200 else None
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"[leaderos-sync] login link failed: {e}")
+        return None

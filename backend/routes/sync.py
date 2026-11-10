@@ -237,3 +237,30 @@ async def sync_health(x_sync_secret: Optional[str] = Header(default=None, alias=
         "service": "leaderos.de internal sync",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
+
+
+# ── Staging only: login link for Leader-Check's "to LeaderOS" button ─────────
+# On staging no emails go out, so a buyer can't receive a magic link. Leader-
+# Check asks for one here and sends the buyer straight in. Production refuses
+# (404): the checkout email is typed by the buyer and never verified, so a link
+# minted from it could log someone into another person's existing account.
+
+
+class LoginLinkPayload(BaseModel):
+    email: str
+
+
+@router.post("/login-link")
+async def login_link(
+    payload: LoginLinkPayload,
+    x_sync_secret: Optional[str] = Header(default=None, alias="X-Sync-Secret"),
+):
+    _verify_secret(x_sync_secret)
+    if os.environ.get("ENV") != "staging":
+        raise HTTPException(status_code=404, detail="not_found")
+    from services_magic_link import create_token
+    token = await create_token(payload.email, "leadercheck-handoff")
+    if not token:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    base = (os.environ.get("FRONTEND_BASE_URL") or "").rstrip("/")
+    return {"url": f"{base}/auth/magic?token={token}"}

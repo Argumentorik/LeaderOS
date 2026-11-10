@@ -149,6 +149,9 @@ export default defineRailway((ctx) => {
       // over the private network with LeaderOS's inbound sync secret.
       LEADEROS_SYNC_URL: "http://leaderos.railway.internal:8001",
       LEADEROS_SYNC_SECRET: "${{LeaderOS.INBOUND_SYNC_SECRET}}",
+      // Staging only: payment success button = one-time LeaderOS login link
+      // (no emails on staging). LeaderOS refuses it outside ENV=staging anyway.
+      ...(staging ? { LEADEROS_LOGIN_HANDOFF: "1" } : {}),
 
       ADMIN_JWT_SECRET: preserve(),
       ADMIN_PASSWORD: preserve(),
