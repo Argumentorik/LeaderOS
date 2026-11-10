@@ -65,7 +65,8 @@ export default defineRailway((ctx) => {
       ANTHROPIC_API_KEY: preserve(),
 
       // Shared provider config, copied from the Emergent production env.
-      // EMERGENT_LLM_KEY still backs FAL (services_fal) and the objstore until those move.
+      // EMERGENT_LLM_KEY still backs the objstore (lib/object_storage) until the files move.
+      // FAL (image/video generation) is off until a FAL_KEY is set.
       EMERGENT_LLM_KEY: preserve(),
       INTEGRATION_PROXY_URL: preserve(),
       OAUTH_SESSION_URL: preserve(),
@@ -146,6 +147,10 @@ export default defineRailway((ctx) => {
       SENDER_EMAIL: "wlad@leaderos.de",
       // Quiz narrative + coach chat (services/llm.py); same key as LeaderOS.
       ANTHROPIC_API_KEY: "${{LeaderOS.ANTHROPIC_API_KEY}}",
+      // Paid checkout -> LeaderOS account + tier (services/leaderos_sync.py),
+      // over the private network with LeaderOS's inbound sync secret.
+      LEADEROS_SYNC_URL: "http://leaderos.railway.internal:8001",
+      LEADEROS_SYNC_SECRET: "${{LeaderOS.INBOUND_SYNC_SECRET}}",
 
       ADMIN_JWT_SECRET: preserve(),
       ADMIN_PASSWORD: preserve(),

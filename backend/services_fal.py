@@ -1,6 +1,9 @@
-"""fal.ai über den Emergent Universal Key (Iter 142).
+"""fal.ai — Queue-Inferenz direkt gegen queue.fal.run mit eigenem Key (FAL_KEY).
 
-Nur Queue-Inferenz über den Emergent-Integration-Proxy — keine Fal-Platform-APIs.
+Ohne FAL_KEY ist die Bild-/Video-/Klonstimmen-Generierung deaktiviert: jeder Aufruf
+endet sofort mit FalDisabled (eine FalError), die Aufrufer zeigen die Meldung bzw.
+fallen auf ElevenLabs zurück. Der frühere Weg über den Emergent-Integration-Proxy
+(EMERGENT_LLM_KEY) ist entfernt.
 Verwendete Endpoints (Contracts wurden vor der Implementierung live geprüft):
 
   fal-ai/minimax/voice-clone   audio_url            -> custom_voice_id
@@ -29,14 +32,12 @@ TALKING_VIDEO_ENDPOINT = "fal-ai/sadtalker"
 QUEUE_ORIGIN = "https://queue.fal.run"
 
 
-def _control_base() -> str:
-    base = os.environ.get("INTEGRATION_PROXY_URL", "https://integrations.emergentagent.com").rstrip("/")
-    return f"{base}/api/v1/fal"
+def _key() -> str | None:
+    return (os.environ.get("FAL_KEY") or "").strip() or None
 
 
-def _direct_key() -> str | None:
-    """Optional: eigener Fal-Key (FAL_KEY) -> direkt gegen queue.fal.run statt über den geteilten Emergent-Proxy."""
-    return os.environ.get("FAL_KEY") or None
+def fal_enabled() -> bool:
+    return _key() is not None
 
 
 class FalError(Exception):
@@ -47,27 +48,19 @@ class FalInsufficientCredits(FalError):
     pass
 
 
+class FalDisabled(FalError):
+    pass
+
+
 def _headers(extra: Optional[dict] = None) -> dict:
-    if _direct_key():
-        return {"Authorization": f"Key {_direct_key()}", "Content-Type": "application/json", **(extra or {})}
-    headers = {
-        "Authorization": f"Bearer {os.environ['EMERGENT_LLM_KEY']}",
-        "Content-Type": "application/json",
-    }
-    job_id = os.environ.get("job_id")
-    if job_id:
-        headers["X-App-ID"] = job_id
-        headers["X-Job-ID"] = job_id
-    env_id = os.environ.get("run_id")
-    if env_id:
-        headers["X-Environment-ID"] = env_id
-    if extra:
-        headers.update(extra)
-    return headers
+    key = _key()
+    if not key:
+        raise FalDisabled("Bild- und Videogenerierung ist vorübergehend deaktiviert (kein FAL_KEY gesetzt).")
+    return {"Authorization": f"Key {key}", "Content-Type": "application/json", **(extra or {})}
 
 
 def _trusted_queue_url(value: str) -> str:
-    queue_base = urlparse(QUEUE_ORIGIN if _direct_key() else f"{_control_base()}/queue")
+    queue_base = urlparse(QUEUE_ORIGIN)
     candidate = urlparse(value)
     prefix = queue_base.path.rstrip("/") + "/"
     if (
@@ -78,7 +71,7 @@ def _trusted_queue_url(value: str) -> str:
         or candidate.fragment
         or not candidate.path.startswith(prefix)
     ):
-        raise FalError("Proxy lieferte eine nicht vertrauenswürdige Queue-URL")
+        raise FalError("Fal lieferte eine nicht vertrauenswürdige Queue-URL")
     return value
 
 
@@ -112,11 +105,11 @@ class FalTimeout(FalError):
 def submit_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> dict[str, Any]:
     """Ein Submit (nie automatisch wiederholt — Fal könnte den Job schon angenommen haben).
     Liefert den Queue-Body (request_id, status_url, response_url) zum späteren Abholen."""
-    direct = _direct_key()
+    headers = _headers()  # FalDisabled ohne FAL_KEY — vor jedem Netzwerkaufruf
     for attempt in range(4):
         submit = requests.post(
-            f"{QUEUE_ORIGIN}/{endpoint_id}" if direct else f"{_control_base()}/proxy",
-            headers=_headers(None if direct else {"X-Fal-Target-Url": f"{QUEUE_ORIGIN}/{endpoint_id}"}),
+            f"{QUEUE_ORIGIN}/{endpoint_id}",
+            headers=headers,
             json=payload,
             timeout=min(60, max(10, timeout_seconds)),
         )
@@ -127,7 +120,7 @@ def submit_fal(endpoint_id: str, payload: dict, timeout_seconds: int = 900) -> d
             continue
         break
     if submit.status_code == 402:
-        raise FalInsufficientCredits("Universal-Key-Guthaben reicht für diese Generierung nicht")
+        raise FalInsufficientCredits("Fal-Guthaben reicht für diese Generierung nicht")
     if submit.status_code >= 400:
         raise FalError(f"Fal-Submit fehlgeschlagen ({submit.status_code}): {submit.text[:300]}")
     body = submit.json()

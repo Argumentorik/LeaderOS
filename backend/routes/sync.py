@@ -28,6 +28,11 @@ PLAN_TO_TIER = {
     "leadership_os_plus": "accelerator",
     "leadership_os_enterprise": "enterprise",
     "free": "free",
+    # Leader-Check plan names (leadercheck/backend/services/leaderos_sync.py)
+    "leader_os": "standard",
+    "leader_os_plus": "accelerator",
+    "leader_os_enterprise": "enterprise",
+    "fasttrack": "accelerator",
     # Aliases for flexibility
     "standard": "standard",
     "accelerator": "accelerator",

@@ -267,4 +267,9 @@ async def start_self_healing_loop(db, interval_seconds: int = 3600) -> None:
             await cancel_stale_pending_checkouts(db)
         except Exception as e:  # noqa: BLE001
             logger.error(f"[stripe-self-heal] loop iteration failed: {e}")
+        try:
+            from services.leaderos_sync import retry_pending_grants
+            await retry_pending_grants(db)
+        except Exception as e:  # noqa: BLE001
+            logger.error(f"[leaderos-sync] retry failed: {e}")
         await asyncio.sleep(interval_seconds)

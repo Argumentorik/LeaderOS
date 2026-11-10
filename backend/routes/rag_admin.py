@@ -2,6 +2,7 @@
 import asyncio
 import io
 import os
+import unicodedata
 import zipfile
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
@@ -30,12 +31,20 @@ async def rag_handbook(request: Request):
         text = fh.read()
     return {"markdown": text, "updated_at": datetime.fromtimestamp(os.path.getmtime(path), tz=timezone.utc).isoformat()}
 
-DEFAULT_ZIP_URL = "https://customer-assets.emergentagent.com/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/8k335gkq_unchunked.zip"
-# SSRF-Schutz: Wissens-ZIPs nur von bekannten Hosts laden (https). Weitere Hosts
-# per ENV RAG_ZIP_ALLOWED_HOSTS (kommagetrennt) freischalten.
-_ZIP_ALLOWED_HOSTS = {"customer-assets.emergentagent.com"} | {
+# Standard-Wissenspaket = die .txt-Dateien in backend/rag_corpus/ (im Repo,
+# im Image unter /app/backend/rag_corpus). Früher eine ZIP auf Emergents CDN.
+# Unterordner (z. B. wlad_frameworks/) gehören nicht zum Korpus.
+LOCAL_CORPUS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "rag_corpus")
+LOCAL_CORPUS_LABEL = "repo:backend/rag_corpus"
+# SSRF-Schutz: eigene Wissens-ZIPs nur von freigeschalteten Hosts laden (https),
+# per ENV RAG_ZIP_ALLOWED_HOSTS (kommagetrennt). Ohne ENV ist nur das Repo-Paket erlaubt.
+_ZIP_ALLOWED_HOSTS = {
     h.strip().lower() for h in os.environ.get("RAG_ZIP_ALLOWED_HOSTS", "").split(",") if h.strip()
 }
+
+
+def _local_corpus_files() -> list[str]:
+    return sorted(f for f in os.listdir(LOCAL_CORPUS_DIR) if f.endswith(".txt"))
 
 
 def _check_zip_url(url: str) -> str:
@@ -81,26 +90,32 @@ async def local_rag_status(request: Request):
 
 
 class ReingestBody(BaseModel):
-    zip_url: str = DEFAULT_ZIP_URL
+    # Leer = Repo-Paket (backend/rag_corpus); sonst eine ZIP von einem freigeschalteten Host.
+    zip_url: str | None = None
 
 
-async def _run_ingest(zip_url: str):
-    job = {"status": "running", "started_at": datetime.now(timezone.utc).isoformat(), "zip_url": zip_url}
+async def _run_ingest(zip_url: str | None = None):
+    """zip_url None → Repo-Paket (LOCAL_CORPUS_DIR); sonst ZIP laden und entpacken."""
+    job = {"status": "running", "started_at": datetime.now(timezone.utc).isoformat(),
+           "zip_url": zip_url or LOCAL_CORPUS_LABEL}
     await db.rag_ingest_jobs.delete_many({})
     await db.rag_ingest_jobs.insert_one({**job})
     try:
-        content = await _fetch_zip(zip_url)
-        target = "/tmp/rag_ingest_src"
-        import shutil
-        shutil.rmtree(target, ignore_errors=True)
-        os.makedirs(target, exist_ok=True)
-        with zipfile.ZipFile(io.BytesIO(content)) as zf:
-            for name in zf.namelist():
-                if name.endswith(".txt") and "__MACOSX" not in name:
-                    data = zf.read(name)
-                    fname = os.path.basename(name)
-                    if fname:
-                        open(os.path.join(target, fname), "wb").write(data)
+        if zip_url:
+            content = await _fetch_zip(zip_url)
+            target = "/tmp/rag_ingest_src"
+            import shutil
+            shutil.rmtree(target, ignore_errors=True)
+            os.makedirs(target, exist_ok=True)
+            with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                for name in zf.namelist():
+                    if name.endswith(".txt") and "__MACOSX" not in name:
+                        data = zf.read(name)
+                        fname = os.path.basename(name)
+                        if fname:
+                            open(os.path.join(target, fname), "wb").write(data)
+        else:
+            target = LOCAL_CORPUS_DIR
         from scripts_ingest_local_rag import main as ingest_folder
         await ingest_folder(target)
         from services_rag import invalidate_caches
@@ -119,7 +134,8 @@ async def _run_ingest(zip_url: str):
 @router.post("/reingest")
 async def reingest(body: ReingestBody, request: Request):
     admin = await require_admin(request)
-    _check_zip_url(body.zip_url)  # früh mit 400 ablehnen statt still im Hintergrund-Job
+    if body.zip_url:
+        _check_zip_url(body.zip_url)  # früh mit 400 ablehnen statt still im Hintergrund-Job
     running = await db.rag_ingest_jobs.find_one({"status": "running"})
     if running:
         # Stale-job guard: a backend restart mid-ingest leaves the job "running"
@@ -235,7 +251,7 @@ async def ensure_rag_ready():
             {"_id": "last_attempt", "at": datetime.now(timezone.utc).isoformat(), "status": "running"},
             upsert=True,
         )
-        await _run_ingest(DEFAULT_ZIP_URL)
+        await _run_ingest()
         await db.rag_auto_heal.update_one({"_id": "last_attempt"}, {"$set": {"status": "done"}})
     except Exception as e:
         logger.error(f"RAG auto-ingest check failed: {e}")
@@ -339,20 +355,24 @@ async def list_knowledge_sources(request: Request):
 
 
 @router.get("/coverage")
-async def corpus_coverage(request: Request, zip_url: str = DEFAULT_ZIP_URL):
+async def corpus_coverage(request: Request, zip_url: str | None = None):
     await require_admin(request)
 
-    content = await _fetch_zip(zip_url)
-    with zipfile.ZipFile(io.BytesIO(content)) as zf:
-        expected = sorted({
-            os.path.basename(n) for n in zf.namelist()
-            if n.endswith(".txt") and "__MACOSX" not in n and os.path.basename(n)
-        })
+    nfc = lambda name: unicodedata.normalize("NFC", name)  # noqa: E731 — macOS liefert Umlaute als NFD
+    if zip_url:
+        content = await _fetch_zip(zip_url)
+        with zipfile.ZipFile(io.BytesIO(content)) as zf:
+            expected = sorted({
+                nfc(os.path.basename(n)) for n in zf.namelist()
+                if n.endswith(".txt") and "__MACOSX" not in n and os.path.basename(n)
+            })
+    else:
+        expected = sorted({nfc(f) for f in _local_corpus_files()})
 
     rows = await db.rag_chunks.aggregate([
         {"$group": {"_id": "$metadata.source_file", "chunks": {"$sum": 1}}},
     ]).to_list(2000)
-    ingested = {r["_id"]: r["chunks"] for r in rows if r["_id"]}
+    ingested = {nfc(r["_id"]): r["chunks"] for r in rows if r["_id"]}
 
     missing = [f for f in expected if f not in ingested]
     extra = sorted([f for f in ingested if f not in expected])
@@ -362,7 +382,7 @@ async def corpus_coverage(request: Request, zip_url: str = DEFAULT_ZIP_URL):
         key=lambda x: x["chunks"],
     )
     return {
-        "zip_url": zip_url,
+        "zip_url": zip_url or LOCAL_CORPUS_LABEL,
         "expected_files": len(expected),
         "ingested_files": len([f for f in expected if f in ingested]),
         "total_chunks": sum(ingested.values()),

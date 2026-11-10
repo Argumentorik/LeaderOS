@@ -61,6 +61,9 @@ async def _handle_paid_webhook(db, app_config, session_id):
     await db.payment_transactions.update_one(
         {"session_id": session_id}, {"$set": {"license_key": key}}
     )
+    # Grant the purchased plan in LeaderOS (account by email). Never raises.
+    from services.leaderos_sync import grant_for_transaction
+    await grant_for_transaction(db, tx)
     if email:
         asyncio.create_task(send_payment_email_background(db, app_config, email, name, plan, tx.get("amount", 997)))
         # Stop drip nurture for this buyer

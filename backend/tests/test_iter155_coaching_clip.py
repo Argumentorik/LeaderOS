@@ -73,8 +73,8 @@ def test_admin_shot_cap_message_uses_preset_budget():
 
 def test_fal_timeout_keeps_request_for_resume():
     import services_fal as f
-    req = {"endpoint": "x", "request_id": "r1", "status_url": f"{f._control_base()}/queue/x/requests/r1/status",
-           "response_url": f"{f._control_base()}/queue/x/requests/r1"}
+    req = {"endpoint": "x", "request_id": "r1", "status_url": f"{f.QUEUE_ORIGIN}/x/requests/r1/status",
+           "response_url": f"{f.QUEUE_ORIGIN}/x/requests/r1"}
 
     class _Res:
         status_code = 200
@@ -95,14 +95,18 @@ def test_fal_timeout_keeps_request_for_resume():
         f._get_with_retry = original
 
 
-def test_direct_fal_key_switches_auth_and_queue_origin(monkeypatch):
+def test_fal_key_auth_and_disabled_without_key(monkeypatch):
     import services_fal as f
     monkeypatch.setenv("FAL_KEY", "k-test")
-    assert f._headers()["Authorization"] == "Key k-test"
+    assert f.fal_enabled() and f._headers()["Authorization"] == "Key k-test"
     assert f._trusted_queue_url("https://queue.fal.run/fal-ai/x/requests/1/status").startswith("https://queue.fal.run/")
     monkeypatch.delenv("FAL_KEY")
-    monkeypatch.setenv("EMERGENT_LLM_KEY", "e")
-    assert f._headers()["Authorization"] == "Bearer e"
+    assert not f.fal_enabled()
+    try:
+        f.submit_fal("fal-ai/x", {})
+        raise AssertionError("expected FalDisabled")
+    except f.FalDisabled as e:
+        assert isinstance(e, f.FalError)
 
 
 def test_shot_view_hides_fal_request_but_flags_pending():
