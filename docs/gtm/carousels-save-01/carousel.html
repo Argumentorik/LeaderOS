@@ -91,7 +91,7 @@ const finalSlide = (c, o, f) => `
   <div class="g d" style="left:72px;top:${(f.commentTop || 560) + 270}px;width:936px;height:392px;border-radius:52px;padding:40px 44px">
     <div class="tag" style="color:var(--lime)">LeaderOS ausprobieren</div>
     <div style="margin-top:18px;font:600 50px/1.08 var(--sans);letter-spacing:-.035em">14 Tage<br>kostenlos testen</div>
-    <div style="margin-top:22px;font:500 23px/1.55 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78)">WladBot · Kurse · Drills<br>Ohne Karte${o.ig ? '' : '<br><span style="color:var(--lime)">Link im ersten Kommentar</span>'}</div>
+    <div style="margin-top:22px;font:500 23px/1.55 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78)">WLAD AI · Kurse · Drills<br>Ohne Karte${o.ig ? '' : '<br><span style="color:var(--lime)">Link im ersten Kommentar</span>'}</div>
     ${o.ig
       ? `<div class="g l" style="position:absolute;right:44px;top:104px;width:330px;height:150px;border-radius:75px;display:flex;align-items:center;justify-content:center;gap:16px;font:600 40px/1 var(--sans);letter-spacing:-.03em">Link in Bio ${IC.up}</div>
          <div class="tag" style="position:absolute;right:44px;top:276px;width:330px;text-align:center;font-size:18px">Kostenlos starten</div>`
@@ -308,7 +308,7 @@ const CAROUSELS = [
         ${HEAD(150, '<span class="m">Das ist</span><br>LeaderOS.', 108)}
         <div style="left:72px;top:440px;width:880px;font:400 36px/1.3 var(--txt);color:rgba(255,255,255,.8)">Das Betriebssystem, das Führung täglich trainiert statt einmal im Jahr zu lehren.</div>
         <div style="left:72px;top:660px;width:936px;display:flex;flex-direction:column;gap:26px">
-          ${[['1', 'Kurse', 'Sechs Grundlagen-Kurse für den Führungsalltag.'], ['2', 'WladBot', 'Der KI-Coach mit Wlads Methodik, per Text und Stimme.'], ['3', 'Training', 'Simulationen, 15-Minuten-Drills, elf Frameworks.']]
+          ${[['1', 'Kurse', 'Sechs Grundlagen-Kurse für den Führungsalltag.'], ['2', 'WLAD AI', 'Der KI-Coach mit Wlads Methodik, per Text und Stimme.'], ['3', 'Training', 'Simulationen, 15-Minuten-Drills, elf Frameworks.']]
             .map(([n, t, d]) => `<div class="g d row3"><div class="nn">${n}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
         </div>
         ${K.grain}`,
@@ -335,7 +335,7 @@ const CAROUSELS = [
           ${[['Erklärt', 'Ein Argument hat sechs Schritte, von der Behauptung bis zur Widerlegung.'], ['Geübt', 'Du baust dein Argument für das Budgetgespräch in sechs Sätzen.'], ['Ausgewertet', 'Schritt 3 fehlt noch: ein Beispiel, das deine Zahl belegt.']].map(([l, t]) => `<div class="urow"><label>${l}</label><p>${t}</p></div>`).join('')}
         </div>`, `
         ${K.note('left:72px;top:1070px;width:860px', '<b>Fast.</b> Ein Beispiel fehlt, dann trägt das Argument. Beispiel.')}`),
-      (c, o) => finalSlide(c, o, { plate: 'amb-lime', pos: 'br', tag: 'LeaderOS · Vorstellung', head: '<span class="m">Was testest<br>du zuerst?</span>', q: 'A WladBot · B Rollenspiel · C Drill', qs: 'Schreib den Buchstaben in die Kommentare.', commentTop: 520 }),
+      (c, o) => finalSlide(c, o, { plate: 'amb-lime', pos: 'br', tag: 'LeaderOS · Vorstellung', head: '<span class="m">Was testest<br>du zuerst?</span>', q: 'A WLAD AI · B Rollenspiel · C Drill', qs: 'Schreib den Buchstaben in die Kommentare.', commentTop: 520 }),
     ] },
 ];
 window.CAROUSELS = CAROUSELS.map((c) => ({ id: c.id, slug: c.slug, title: c.title, n: c.slides.length }));

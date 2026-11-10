@@ -18,7 +18,7 @@ drei Farbwelten, kein Stock, kein KI-Gesicht (`../social-kit`).
 | **FR01** Hinter dem Nein | Scheibe links trägt fünf typische Absagen, Gesicht halb verdeckt | Eis (Marine bis Eisblau) | Was steckt dahinter? |
 | **FR02** Bessere Gespräche | Kreislinse schärft nur das Gesicht, Rest ist Rauchglas, Fokus-Klammern | Rauch (Schwarzweiß) | Wer ist das, was kann er? |
 | **FR03** Wie gut liest du Menschen? | Scheibe links trägt fünf Emotionen, Gesicht halb verdeckt | Warm (Amber) | Erkenne ich, was mein Team fühlt? |
-| **FR04** Proben statt hoffen | Scheibe links trägt ein Rollenspiel, WladBot halb verdeckt | Limette | Was antworte ich dem Chef? |
+| **FR04** Proben statt hoffen | Scheibe links trägt ein Rollenspiel, WLAD AI halb verdeckt | Limette | Was antworte ich dem Chef? |
 
 ## Zuordnung zu Kampagnen (bestehende Pakete, keine neuen Ziele)
 

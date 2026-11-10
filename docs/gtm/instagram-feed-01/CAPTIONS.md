@@ -1,7 +1,7 @@
 # Instagram-Feed 01 · der neue Feed (zwölf Kacheln als Mosaik)
 
 Stand 07.11.2026. Ein Profil, das beim ersten Besuch als Mosaik gelesen wird:
-Foto, Glas-Oberfläche, helle Karten, eine Limetten-Kachel, der WladBot. Gleiche
+Foto, Glas-Oberfläche, helle Karten, eine Limetten-Kachel, WLAD AI. Gleiche
 Bausteine wie die Karussells (`../social-kit`). Der Look löst die
 Beige-und-Braun-Optik aus `INSTAGRAM_LAUNCH_12.md` ab (dort steht der alte
 Feed-Plan mit acht Folien pro Post; Themen und Captions daraus bleiben nutzbar).
@@ -18,16 +18,16 @@ alle Inhalte liegen mindestens 72 Pixel vom Rand).
 |---|---|---|---|
 | 01 | `../linkedin-wladbot-01/W01-01.jpg` … | Karussell, 5 Bilder | Dein Teamlead blockt jeden Vorschlag ab (Feedbackformel) |
 | 02 | `IG-02.jpg` | Einzelbild, hell | Ein Argument, sechs Schritte (SEXIER) |
-| 03 | `IG-03.jpg` | Einzelbild, WladBot | Dein KI-Coach wartet nie bis Montag |
+| 03 | `IG-03.jpg` | Einzelbild, WLAD AI | Dein KI-Coach wartet nie bis Montag |
 | 04 | `IG-04.jpg` | Einzelbild, Zitat | Hart in der Sache. Weich zur Person. |
-| 05 | `../linkedin-wladbot-01/W02-01.jpg` … | Karussell, 5 Bilder | WladBot zerlegt dein Argument (SEXIER) |
+| 05 | `../linkedin-wladbot-01/W02-01.jpg` … | Karussell, 5 Bilder | WLAD AI zerlegt dein Argument (SEXIER) |
 | 06 | `IG-06.jpg` | Einzelbild, Foto | Präsenz. Wärme. Kompetenz. (Charisma-Code) |
 | 07 | `IG-07.jpg` | Einzelbild, Limette | Beobachtung. Wirkung. Wunsch. |
 | 08 | `../linkedin-wladbot-01/W03-01.jpg` … | Karussell, 5 Bilder | Dein Chef sagt: „Dafür ist kein Budget da.“ (Rückfrage-Technik) |
 | 09 | `IG-09.jpg` | Einzelbild, CTA | Beta ist offen. |
 | 10 | `IG-10.jpg` | Einzelbild, Foto | Aus dem Nein wird ein Weg. |
 | 11 | `IG-11.jpg` | Einzelbild, hell | Du hast nicht eine Rolle. Du hast fünf. |
-| 12 | `IG-12.jpg` | Einzelbild, Profilkarte | Das ist WladBot. |
+| 12 | `IG-12.jpg` | Einzelbild, Profilkarte | Das ist WLAD AI. |
 
 Die Karussells bestehen aus den Folien 1 bis 4 (`W0x-01.jpg` bis `W0x-04.jpg`) und
 der Instagram-Fassung der letzten Folie: `W0x-05-ig.jpg` (mit „150 Plätze") oder
@@ -55,7 +55,7 @@ Absatz mit der Begrenzung nicht.
 
 | Datum | Netzwerk | Beitrag |
 |---|---|---|
-| Mo 09.11. 08:00 | Instagram | 12 · Das ist WladBot |
+| Mo 09.11. 08:00 | Instagram | 12 · Das ist WLAD AI |
 | Di 10.11. 08:00 | Instagram | 11 · Fünf Rollen |
 | Di 10.11. 12:00 | LinkedIn | W01 als Dokument |
 | Mi 11.11. 08:00 | Instagram | 10 · Aus dem Nein wird ein Weg |
@@ -99,11 +99,11 @@ tauschen und den Absatz mit der Begrenzung in die Caption setzen.
 Aufbau: erste Zeile = Hook (sichtbar vor „mehr"), dann kurze Zeilen, am Ende die
 Frage oder der Hinweis auf den Link. Hashtags als erster Kommentar (fünf bis acht
 pro Post statt zwölf: weniger, dafür passender). Basis: `#führung #leadership
-#kommunikation #leaderos #wladbot`.
+#kommunikation #leaderos #wladai`.
 
-### 12 · Das ist WladBot (Post 1)
+### 12 · Das ist WLAD AI (Post 1)
 
-Das ist WladBot.
+Das ist WLAD AI.
 
 Ein KI-Coach, der zurückredet. Du übst das schwierige Gespräch, das Argument oder das Feedback, bevor es zählt.
 
@@ -113,7 +113,7 @@ In den nächsten Tagen zeigen wir hier, wie das aussieht. Ein Beispiel pro Post.
 
 Die Beta ist kostenlos. Link in Bio.
 
-> Erster Kommentar: `#wladbot #leaderos #kicoach #führung #leadership #kommunikation`
+> Erster Kommentar: `#wladai #leaderos #kicoach #führung #leadership #kommunikation`
 
 ### 11 · Fünf Rollen
 
@@ -123,9 +123,9 @@ Du hast nicht eine Rolle. Du hast fünf.
 
 Welche Rolle spielst du am liebsten, welche schiebst du auf?
 
-Üb sie mit WladBot. Link in Bio.
+Üb sie mit WLAD AI. Link in Bio.
 
-> Erster Kommentar: `#führung #führungskraft #teamführung #leadership #leaderos #wladbot`
+> Erster Kommentar: `#führung #führungskraft #teamführung #leadership #leaderos #wladai`
 
 ### 10 · Aus dem Nein wird ein Weg
 
@@ -135,7 +135,7 @@ Ein Nein ist selten das Ende. Die Rückfrage-Technik: nicht verteidigen, sondern
 
 Das passende Rollenspiel kommt in den nächsten Tagen als Karussell. Link in Bio.
 
-> Erster Kommentar: `#schlagfertigkeit #verhandlung #kommunikation #rhetorik #leaderos #wladbot`
+> Erster Kommentar: `#schlagfertigkeit #verhandlung #kommunikation #rhetorik #leaderos #wladai`
 
 ### 09 · Beta ist offen
 
@@ -147,7 +147,7 @@ Kostenlos testen. Link in Bio.
 
 [nur mit Begrenzung] Wir starten mit 150 Plätzen. Wenn sie vergeben sind, ist die Beta zu.
 
-> Erster Kommentar: `#leaderos #wladbot #kicoach #führung #leadership #kommunikation`
+> Erster Kommentar: `#leaderos #wladai #kicoach #führung #leadership #kommunikation`
 
 ### 08 · W03 · Rollenspiel „Kein Budget" (Karussell)
 
@@ -157,11 +157,11 @@ A: „Okay, verstehe.“
 B: „Was müsste passieren, damit es im nächsten Quartal geht?“
 C: „Das ist unfair. Andere kriegen es auch.“
 
-Schreib deinen Tipp in die Kommentare, bevor du weiterwischst. Im Karussell spielt WladBot deinen Chef und wertet alle drei.
+Schreib deinen Tipp in die Kommentare, bevor du weiterwischst. Im Karussell spielt WLAD AI deinen Chef und wertet alle drei.
 
 Die Beta ist kostenlos. Link in Bio.
 
-> Erster Kommentar: `#verhandlung #gehaltsgespräch #führung #leadership #leaderos #wladbot`
+> Erster Kommentar: `#verhandlung #gehaltsgespräch #führung #leadership #leaderos #wladai`
 
 ### 07 · Beobachtung. Wirkung. Wunsch.
 
@@ -173,9 +173,9 @@ Beobachtung: nur, was man filmen könnte. Wirkung: was es auslöst. Wunsch: konk
 
 Beispiel: „Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden. Das kostet uns Ideen. Ich wünsche mir, dass wir eine davon gemeinsam durchspielen.“
 
-Schreib deinen Satz für das nächste Gespräch in die Kommentare. Üb ihn vorher mit WladBot. Link in Bio.
+Schreib deinen Satz für das nächste Gespräch in die Kommentare. Üb ihn vorher mit WLAD AI. Link in Bio.
 
-> Erster Kommentar: `#feedback #feedbackgeben #mitarbeitergespräch #führung #leaderos #wladbot`
+> Erster Kommentar: `#feedback #feedbackgeben #mitarbeitergespräch #führung #leaderos #wladai`
 
 ### 06 · Präsenz. Wärme. Kompetenz.
 
@@ -185,7 +185,7 @@ Das sind die drei Signale des Charisma-Codes. In Sekunden entscheiden sie, ob ei
 
 Welches der drei fällt dir am leichtesten, welches am schwersten? Schreib es in die Kommentare.
 
-> Erster Kommentar: `#charisma #präsenz #führung #leadership #leaderos #wladbot`
+> Erster Kommentar: `#charisma #präsenz #führung #leadership #leaderos #wladai`
 
 ### 05 · W02 · Das Argument wird zerlegt (Karussell)
 
@@ -193,11 +193,11 @@ Welches der drei fällt dir am leichtesten, welches am schwersten? Schreib es in
 
 Die meisten Argumente bestehen aus einer Behauptung. Das ist Schritt eins von sechs. Wer dort aufhört, bekommt Nicken und keine Bewegung.
 
-Im Karussell baut WladBot den Satz Schritt für Schritt neu, nach dem SEXIER-Modell aus „Weiße Rhetorik“. Das Beispiel ist erfunden, das Modell nicht.
+Im Karussell baut WLAD AI den Satz Schritt für Schritt neu, nach dem SEXIER-Modell aus „Weiße Rhetorik“. Das Beispiel ist erfunden, das Modell nicht.
 
 Welcher Schritt fehlt in deinem nächsten Meeting am ehesten? Die Beta ist kostenlos. Link in Bio.
 
-> Erster Kommentar: `#rhetorik #argumentation #überzeugen #kommunikation #leaderos #wladbot`
+> Erster Kommentar: `#rhetorik #argumentation #überzeugen #kommunikation #leaderos #wladai`
 
 ### 04 · Hart in der Sache. Weich zur Person.
 
@@ -209,19 +209,19 @@ Im Gehaltsgespräch, im Streit ums Budget, im Konflikt mit dem Teamlead: Du kann
 
 In welchem Gespräch brauchst du das als Nächstes? Schreib es in die Kommentare.
 
-> Erster Kommentar: `#verhandlung #konfliktlösung #kommunikation #führung #leaderos #wladbot`
+> Erster Kommentar: `#verhandlung #konfliktlösung #kommunikation #führung #leaderos #wladai`
 
 ### 03 · Dein KI-Coach wartet nie bis Montag
 
 Dein KI-Coach wartet nie bis Montag.
 
-Das schwierige Gespräch ist morgen früh? Dann musst du nicht auf das nächste Seminar warten. WladBot ist da, wenn du ihn brauchst: abends, am Wochenende, vor dem Meeting.
+Das schwierige Gespräch ist morgen früh? Dann musst du nicht auf das nächste Seminar warten. WLAD AI ist da, wenn du ihn brauchst: abends, am Wochenende, vor dem Meeting.
 
 Du schreibst, was du sagen willst. Er fragt nach, wertet und baut es mit dir neu.
 
 Die Beta ist kostenlos. Link in Bio.
 
-> Erster Kommentar: `#kicoach #führung #leadership #kommunikation #leaderos #wladbot`
+> Erster Kommentar: `#kicoach #führung #leadership #kommunikation #leaderos #wladai`
 
 ### 02 · SEXIER
 
@@ -236,35 +236,35 @@ R: Rebuttal, der stärkste Einwand, selbst vorweggenommen.
 
 Das SEXIER-Modell stammt aus Wlads Buch „Weiße Rhetorik“. Speichern und vor dem nächsten Meeting durchgehen.
 
-Üb es mit WladBot, der zurückredet. Link in Bio.
+Üb es mit WLAD AI, der zurückredet. Link in Bio.
 
-> Erster Kommentar: `#rhetorik #argumentation #überzeugen #weißerhetorik #leaderos #wladbot`
+> Erster Kommentar: `#rhetorik #argumentation #überzeugen #weißerhetorik #leaderos #wladai`
 
 ### 01 · W01 · Der Teamlead, der alles abblockt (Karussell)
 
 Dein Teamlead blockt jeden Vorschlag ab. Die meisten fragen: Wie überzeuge ich ihn?
 
-WladBot stellt erst eine Gegenfrage: Was verliert er, wenn du recht hast?
+WLAD AI stellt erst eine Gegenfrage: Was verliert er, wenn du recht hast?
 
 Hinter einem Nein steckt fast immer ein Interesse. Wer danach fragt, statt um Zustimmung zu kämpfen, kommt weiter. Der erste Satz dafür folgt der Feedbackformel: Beobachtung, Wirkung, Wunsch.
 
 Wisch durch und speichere dir den Satz. Die Beta ist kostenlos. Link in Bio.
 
-> Erster Kommentar: `#feedback #teamführung #führung #leadership #leaderos #wladbot`
+> Erster Kommentar: `#feedback #teamführung #führung #leadership #leaderos #wladai`
 
 ## Alt-Texte (Einzelbilder)
 
 Die Alt-Texte der Karussell-Folien stehen in `../linkedin-wladbot-01/CAPTIONS.md`.
 
 - **IG-02:** Weiße Kachel: Ein Argument, sechs Schritte. Sechs schwarze Karten mit den Schritten des SEXIER-Modells: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal.
-- **IG-03:** Dunkelgrüne Kachel: Dein KI-Coach wartet nie bis Montag. Der WladBot, eine gezeichnete Figur im grünen Samtsakko, lächelt. Mitteilung: Schwieriges Gespräch morgen? Üb es jetzt.
+- **IG-03:** Dunkelgrüne Kachel: Dein KI-Coach wartet nie bis Montag. WLAD AI, eine gezeichnete Figur im grünen Samtsakko, lächelt. Mitteilung: Schwieriges Gespräch morgen? Üb es jetzt.
 - **IG-04:** Dunkelblaue Kachel mit einem Zitat in kursiver Serifenschrift: Hart in der Sache. Weich zur Person. Darunter: Harvard-Prinzip, Verhandeln.
 - **IG-06:** Kachel mit einem Foto des Redners im Scheinwerferlicht und den Worten Präsenz. Wärme. Kompetenz. Hinweis: Drei Signale entscheiden in Sekunden, ob ein Raum jemandem folgt (Charisma-Code).
-- **IG-07:** Limettengrüne Kachel: Beobachtung. Wirkung. Wunsch. Darunter eine schwarze Mitteilung des WladBot: Feedback ohne Streit: nie „du bist …“, immer „mir ist aufgefallen …“.
-- **IG-09:** Dunkelgrüne Kachel: Beta ist offen. Eine Glas-Schaltfläche mit dem WladBot: Link in Bio. Kostenlos.
-- **IG-10:** Foto der gestikulierenden Hände des Redners mit den Markierungen Rückfrage und Termin. Text: Aus dem Nein wird ein Weg. Mitteilung des WladBot: Rückfrage-Technik, frag, was passieren müsste, statt dich zu verteidigen.
+- **IG-07:** Limettengrüne Kachel: Beobachtung. Wirkung. Wunsch. Darunter eine schwarze Mitteilung von WLAD AI: Feedback ohne Streit: nie „du bist …“, immer „mir ist aufgefallen …“.
+- **IG-09:** Dunkelgrüne Kachel: Beta ist offen. Eine Glas-Schaltfläche mit WLAD AI: Link in Bio. Kostenlos.
+- **IG-10:** Foto der gestikulierenden Hände des Redners mit den Markierungen Rückfrage und Termin. Text: Aus dem Nein wird ein Weg. Mitteilung von WLAD AI: Rückfrage-Technik, frag, was passieren müsste, statt dich zu verteidigen.
 - **IG-11:** Weiße Kachel: Du hast nicht eine Rolle. Du hast fünf. Fünf schwarze Karten: Kommunikator, Manager, Team-Leader, Psychologe, Problemlöser.
-- **IG-12:** Dunkelblaue Kachel: Das ist WladBot. Eine Profilkarte mit dem WladBot, Untertitel KI-Coach für Gespräche, Argumente und Feedback, drei Schlagworten und einem Eingabefeld „Frag mich".
+- **IG-12:** Dunkelblaue Kachel: Das ist WLAD AI. Eine Profilkarte mit WLAD AI, Untertitel KI-Coach für Gespräche, Argumente und Feedback, drei Schlagworten und einem Eingabefeld „Frag mich".
 
 ## Neu-Bauen
 

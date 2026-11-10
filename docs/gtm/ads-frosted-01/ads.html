@@ -153,7 +153,7 @@ const ADS = [
         ${f === '9x16' ? '' : `<div class="info">10 Min · kostenlos · keine Kreditkarte</div>`}
       </div>
       <div class="grain"></div>`; } },
-  // FR04 · KI-Führungskraft (k=gespraech) · "Proben statt hoffen" · Limette, Scheibe mit Chat, WladBot
+  // FR04 · KI-Führungskraft (k=gespraech) · "Proben statt hoffen" · Limette, Scheibe mit Chat, WLAD AI
   { id: 'FR04', slug: 'proben-statt-hoffen', title: 'Proben statt hoffen', dest: 'ki',
     html: (f) => { const l = L[f]; const m = { '4x5': { w: 980, top: 230 }, '9x16': { w: 1040, top: 470 }, '1x1': { w: 800, top: 120 } }[f];
       return `
@@ -164,12 +164,12 @@ const ADS = [
       <div class="vig"></div>
       <div class="pane lime" style="left:0;width:${l.seam}px"></div>${finish(l, 0, l.seam)}
       ${scrim(.7)}
-      ${brand(l.brandY, 'LeaderOS · WladBot', 'Live-Webinar')}${topInfo(l, f, 'Live-Webinar · Do 26.11. · 10 Uhr')}
+      ${brand(l.brandY, 'LeaderOS · WLAD AI', 'Live-Webinar')}${topInfo(l, f, 'Live-Webinar · Do 26.11. · 10 Uhr')}
       ${vlabel(l, 'Rollenspiel · Beispiel')}${dots(l, 3)}
       <div style="left:72px;top:${l.listY - (f === '1x1' ? 20 : 40)}px;width:${l.seam - 72 - 40}px;display:flex;flex-direction:column;gap:${f === '9x16' ? 28 : 18}px">
         <div class="bub"><span class="k">Chef</span>Dafür ist kein Budget da.</div>
         <div class="bub u"><span class="k">Du</span>Was müsste passieren, damit es im nächsten Quartal geht?</div>
-        ${f === '1x1' ? '' : `<div class="bub l"><span class="k">WladBot · wertet</span><b style="font-weight:600">Stark.</b> Rückfrage-Technik.</div>`}
+        ${f === '1x1' ? '' : `<div class="bub l"><span class="k">WLAD AI · wertet</span><b style="font-weight:600">Stark.</b> Rückfrage-Technik.</div>`}
       </div>
       <div class="stack" style="left:0;width:100%;bottom:${l.bottom}px;gap:${l.gap}px">
         <div class="sh" style="font-size:${l.hs * 1.6}px">Proben statt<br>hoffen.</div>

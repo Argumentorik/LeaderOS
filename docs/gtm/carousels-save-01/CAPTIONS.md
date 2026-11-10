@@ -19,7 +19,7 @@ W-Serie (`../linkedin-wladbot-01`) bleibt Reserve, ihre Folie 5 hängt an der of
 |---|---|---|---|---|---|
 | S01 | Kopiere diese 5 Prompts | 8 | Speichern, Kopieren | Eis | Welche Situation soll Prompt 6 lösen? |
 | S02 | Bevor du ins schwierige Gespräch gehst: 6 Fragen | 9 | Speichern, Screenshot | Warm | 1 Kritik, 2 Gehalt, 3 Konflikt, 4 Nein sagen |
-| S03 | Ein Coach, der um 23 Uhr noch antwortet | 8 | LeaderOS vorstellen | Limette | A WladBot, B Rollenspiel, C Drill |
+| S03 | Ein Coach, der um 23 Uhr noch antwortet | 8 | LeaderOS vorstellen | Limette | A WLAD AI, B Rollenspiel, C Drill |
 
 Dateien je Karussell (1620×2025 Pixel, 4:5): die Folien `S0x-01.jpg` und so weiter, das
 LinkedIn-Dokument `S0x.pdf` (LinkedIn zeigt ein PDF als wischbares Karussell, mehrere
@@ -35,8 +35,8 @@ Gesprächstyp (die vier Gesprächstypen) · 8 Kommentarfrage und 14-Tage-Test.
 eine Checkliste) · 2 bis 7 je eine Frage mit einem Beispiel · 8 alle sechs Fragen auf einen
 Blick (die Folie zum Screenshotten) · 9 Kommentarfrage und 14-Tage-Test.
 
-**S03 · LeaderOS (Limette, 8 Folien).** 1 Titel mit Mitteilung des WladBot um 23:04 · 2 Seminar
-gegen Training · 3 Das ist LeaderOS (Kurse, WladBot, Training) · 4 bis 7 vier Einsatzfälle
+**S03 · LeaderOS (Limette, 8 Folien).** 1 Titel mit Mitteilung von WLAD AI um 23:04 · 2 Seminar
+gegen Training · 3 Das ist LeaderOS (Kurse, WLAD AI, Training) · 4 bis 7 vier Einsatzfälle
 (Gespräche vorbereiten, schwierige Gespräche proben, Feedback formulieren, täglich üben) ·
 8 Kommentarfrage und 14-Tage-Test. Die Oberflächen und Chat-Texte sind Beispiele, schematisch
 gezeichnet (in den Einsatz-Folien steht „Beispiel" dabei), keine Screenshots, keine Zitate von Wlad.
@@ -80,7 +80,7 @@ dort nicht.
    verlangt. leaderos.de ist das Emergent-Deployment, das manuell aus `mvpcode` gebaut wird
    (`docs/ops/APP_TAKEOVER_STEFAN.md`); welche Version dort läuft, ist nicht geprüft.
 4. **Produktumfang.** Die Folien zeigen nur, was laut `frontend/public/kurse/index.html` zum
-   14-Tage-Test gehört: Kurse, WladBot, Simulationen, tägliche Drills, elf Frameworks. Die
+   14-Tage-Test gehört: Kurse, WLAD AI, Simulationen, tägliche Drills, elf Frameworks. Die
    KI-Videoanalyse (laut `backend/services_tier.py` dem PLUS-Tarif vorbehalten) und die
    30-Tage-Challenge (kostenpflichtig) kommen deshalb nicht vor. Die Beispiele in S03 sind
    schematisch und nicht der echte Bildschirm; wenn jemand sie mit der App vergleicht, sollte
@@ -188,13 +188,13 @@ Begründe in zwei Sätzen. Gib mir dann:
 3. den größten Fehler, den ich vermeiden sollte
 Frag nach, wenn dir Fakten fehlen.
 
-Ein Prompt ist der Anfang. Training ist der Rest: LeaderOS mit WladBot als KI-Coach, Kursen und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Link in Bio.
+Ein Prompt ist der Anfang. Training ist der Rest: LeaderOS mit WLAD AI als KI-Coach, Kursen und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Link in Bio.
 
 Speichern, dann hast du die Prompts vor dem nächsten Gespräch zur Hand.
 Welche Situation soll Prompt 6 lösen? Schreib sie in die Kommentare.
 ```
 
-Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladbot #ki #prompts #feedback`
+Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladai #ki #prompts #feedback`
 
 **LinkedIn** (2207 von 3000 Zeichen)
 
@@ -266,7 +266,7 @@ Begründe in zwei Sätzen. Gib mir dann:
 3. den größten Fehler, den ich vermeiden sollte
 Frag nach, wenn dir Fakten fehlen.
 
-Ein Prompt ist der Anfang. Training ist der Rest: LeaderOS mit WladBot als KI-Coach, Kursen und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Den Link findest du im ersten Kommentar.
+Ein Prompt ist der Anfang. Training ist der Rest: LeaderOS mit WLAD AI als KI-Coach, Kursen und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Den Link findest du im ersten Kommentar.
 
 Speichern, dann hast du die Prompts vor dem nächsten Gespräch zur Hand.
 Welche Situation soll Prompt 6 lösen? Schreib sie in die Kommentare.
@@ -305,10 +305,10 @@ Welches Gespräch schiebst du gerade auf?
 4 Nein sagen
 Schreib die Zahl in die Kommentare.
 
-Wer die Fragen nicht nur lesen, sondern üben will: LeaderOS trainiert genau das, mit WladBot als KI-Coach und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Link in Bio.
+Wer die Fragen nicht nur lesen, sondern üben will: LeaderOS trainiert genau das, mit WLAD AI als KI-Coach und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Link in Bio.
 ```
 
-Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladbot #gesprächsführung #checkliste`
+Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladai #gesprächsführung #checkliste`
 
 **LinkedIn** (912 von 3000 Zeichen)
 
@@ -331,7 +331,7 @@ Welches Gespräch schiebst du gerade auf?
 4 Nein sagen
 Schreib die Zahl in die Kommentare.
 
-Wer die Fragen nicht nur lesen, sondern üben will: LeaderOS trainiert genau das, mit WladBot als KI-Coach und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Den Link findest du im ersten Kommentar.
+Wer die Fragen nicht nur lesen, sondern üben will: LeaderOS trainiert genau das, mit WLAD AI als KI-Coach und täglichen Drills. 14 Tage kostenlos testen, ohne Karte. Den Link findest du im ersten Kommentar.
 
 #Leadership #Führung #Gesprächsführung #Kommunikation #LeaderOS
 ```
@@ -356,7 +356,7 @@ Seminare ändern Wissen. Nicht Verhalten. Dir fehlt nicht Wissen, dir fehlt Übu
 LeaderOS ist das Betriebssystem, das Führung täglich trainiert, statt sie einmal im Jahr zu lehren:
 
 Gespräche vorbereiten: Kontext, Argumente, Gegenseite, Coaching
-Schwierige Gespräche proben: WladBot spielt dein Gegenüber
+Schwierige Gespräche proben: WLAD AI spielt dein Gegenüber
 Feedback formulieren: Beobachtung, Wirkung, Wunsch
 Täglich üben: ein Framework als Drill, erklärt, an deinem Fall geübt, ausgewertet
 
@@ -365,13 +365,13 @@ Die Oberflächen und Chat-Texte im Karussell sind Beispiele, schematisch gezeich
 14 Tage kostenlos testen, ohne Karte. Link in Bio.
 
 Was testest du zuerst?
-A WladBot
+A WLAD AI
 B Rollenspiel
 C Drill
 Schreib den Buchstaben in die Kommentare.
 ```
 
-Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladbot #ki #führungskräfte`
+Erster Kommentar Instagram: `#führung #leadership #kommunikation #leaderos #wladai #ki #führungskräfte`
 
 **LinkedIn** (789 von 3000 Zeichen)
 
@@ -383,7 +383,7 @@ Seminare ändern Wissen. Nicht Verhalten. Dir fehlt nicht Wissen, dir fehlt Übu
 LeaderOS ist das Betriebssystem, das Führung täglich trainiert, statt sie einmal im Jahr zu lehren:
 
 Gespräche vorbereiten: Kontext, Argumente, Gegenseite, Coaching
-Schwierige Gespräche proben: WladBot spielt dein Gegenüber
+Schwierige Gespräche proben: WLAD AI spielt dein Gegenüber
 Feedback formulieren: Beobachtung, Wirkung, Wunsch
 Täglich üben: ein Framework als Drill, erklärt, an deinem Fall geübt, ausgewertet
 
@@ -392,12 +392,12 @@ Die Oberflächen und Chat-Texte im Karussell sind Beispiele, schematisch gezeich
 14 Tage kostenlos testen, ohne Karte. Den Link findest du im ersten Kommentar.
 
 Was testest du zuerst?
-A WladBot
+A WLAD AI
 B Rollenspiel
 C Drill
 Schreib den Buchstaben in die Kommentare.
 
-#Leadership #Führung #KI #WladBot #LeaderOS
+#Leadership #Führung #KI #WLADAI #LeaderOS
 ```
 
 Erster Kommentar LinkedIn:
@@ -440,7 +440,7 @@ dort markieren und kopieren. Speichern geht über das Lesezeichen."
 
 | Buchstabe | Antwort |
 |---|---|
-| A WladBot | „Beschreib ihm das Gespräch von morgen in zwei Sätzen und lass dir den ersten Satz geben." |
+| A WLAD AI | „Beschreib ihm das Gespräch von morgen in zwei Sätzen und lass dir den ersten Satz geben." |
 | B Rollenspiel | „Such dir das Gespräch, das du am längsten aufschiebst, und spiel es einmal durch, bevor es zählt." |
 | C Drill | „Such dir das Framework, das du gerade brauchst, und üb es an einem echten Fall." |
 
@@ -474,14 +474,14 @@ vollen Prompt-Texte stehen in der Caption, deshalb fassen die Alt-Texte sie zusa
 9. Schlussfolie: Welches Gespräch schiebst du auf? 1 Kritik, 2 Gehalt, 3 Konflikt, 4 Nein sagen. Schreib die Zahl in die Kommentare. Ein Lesezeichen-Zeichen steht für Speichern. Angebot: LeaderOS 14 Tage kostenlos testen, ohne Karte, mit QR-Code (LinkedIn) oder Knopf „Link in Bio“ (Instagram).
 
 **S03**
-1. Titelbild: Ein Mann im dunklen Anzug steht im Scheinwerferlicht auf einer Bühne, eine Hand offen nach vorn. Oben links eine Mitteilung des WladBot um 23:04: Dein Gespräch ist morgen früh? Fangen wir an. Eine Markierung „Frag mich“. Text: Ein Coach, der um 23 Uhr noch antwortet.
+1. Titelbild: Ein Mann im dunklen Anzug steht im Scheinwerferlicht auf einer Bühne, eine Hand offen nach vorn. Oben links eine Mitteilung von WLAD AI um 23:04: Dein Gespräch ist morgen früh? Fangen wir an. Eine Markierung „Frag mich“. Text: Ein Coach, der um 23 Uhr noch antwortet.
 2. Seminare ändern Wissen. Nicht Verhalten. Zwei Karten: Seminar, einmal im Jahr, du verlässt den Raum mit Wissen. Training, jeden Tag, 15 Minuten, du wendest es an. Darunter: Dir fehlt nicht Wissen. Dir fehlt Übung.
-3. Das ist LeaderOS, das Betriebssystem, das Führung täglich trainiert statt einmal im Jahr zu lehren. Drei Bausteine: 1 Kurse, sechs Grundlagen-Kurse für den Führungsalltag. 2 WladBot, der KI-Coach mit Wlads Methodik, per Text und Stimme. 3 Training: Simulationen, 15-Minuten-Drills, elf Frameworks.
+3. Das ist LeaderOS, das Betriebssystem, das Führung täglich trainiert statt einmal im Jahr zu lehren. Drei Bausteine: 1 Kurse, sechs Grundlagen-Kurse für den Führungsalltag. 2 WLAD AI, der KI-Coach mit Wlads Methodik, per Text und Stimme. 3 Training: Simulationen, 15-Minuten-Drills, elf Frameworks.
 4. Einsatz 1 von 4, Gespräche vorbereiten. Beispiel Gehaltsgespräch in vier Zeilen: Kontext, Argumente, Gegenseite, Coaching.
-5. Einsatz 2 von 4, schwierige Gespräche proben. Beispiel-Dialog: Der Coach spielt den Chef: Dafür ist kein Budget da. Antwort: Was müsste passieren, damit es im nächsten Quartal geht? WladBot: Stark. Rückfrage-Technik: Aus dem Nein wird ein Weg.
-6. Einsatz 3 von 4, Feedback formulieren. Beispiel nach der Feedbackformel. Beobachtung: Der Bericht kam dreimal nach dem Termin. Wirkung: Das Team plant mit falschen Zahlen. Wunsch: Ich wünsche mir, dass er künftig freitags vorliegt. WladBot: Kein „du bist“ im Satz. Das trägt.
-7. Einsatz 4 von 4, täglich üben. Beispiel eines Framework-Drills zum SEXIER-Modell in drei Zeilen. Erklärt: Ein Argument hat sechs Schritte, von der Behauptung bis zur Widerlegung. Geübt: Du baust dein Argument für das Budgetgespräch in sechs Sätzen. Ausgewertet: Schritt 3 fehlt noch, ein Beispiel, das deine Zahl belegt. WladBot: Fast. Ein Beispiel fehlt, dann trägt das Argument.
-8. Schlussfolie: Was testest du zuerst? A WladBot, B Rollenspiel, C Drill. Schreib den Buchstaben in die Kommentare. Ein Lesezeichen-Zeichen steht für Speichern. Angebot: LeaderOS 14 Tage kostenlos testen, ohne Karte, mit QR-Code (LinkedIn) oder Knopf „Link in Bio“ (Instagram).
+5. Einsatz 2 von 4, schwierige Gespräche proben. Beispiel-Dialog: Der Coach spielt den Chef: Dafür ist kein Budget da. Antwort: Was müsste passieren, damit es im nächsten Quartal geht? WLAD AI: Stark. Rückfrage-Technik: Aus dem Nein wird ein Weg.
+6. Einsatz 3 von 4, Feedback formulieren. Beispiel nach der Feedbackformel. Beobachtung: Der Bericht kam dreimal nach dem Termin. Wirkung: Das Team plant mit falschen Zahlen. Wunsch: Ich wünsche mir, dass er künftig freitags vorliegt. WLAD AI: Kein „du bist“ im Satz. Das trägt.
+7. Einsatz 4 von 4, täglich üben. Beispiel eines Framework-Drills zum SEXIER-Modell in drei Zeilen. Erklärt: Ein Argument hat sechs Schritte, von der Behauptung bis zur Widerlegung. Geübt: Du baust dein Argument für das Budgetgespräch in sechs Sätzen. Ausgewertet: Schritt 3 fehlt noch, ein Beispiel, das deine Zahl belegt. WLAD AI: Fast. Ein Beispiel fehlt, dann trägt das Argument.
+8. Schlussfolie: Was testest du zuerst? A WLAD AI, B Rollenspiel, C Drill. Schreib den Buchstaben in die Kommentare. Ein Lesezeichen-Zeichen steht für Speichern. Angebot: LeaderOS 14 Tage kostenlos testen, ohne Karte, mit QR-Code (LinkedIn) oder Knopf „Link in Bio“ (Instagram).
 
 ## Quellen und Neu-Bauen
 

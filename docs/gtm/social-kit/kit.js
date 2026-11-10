@@ -24,8 +24,8 @@ const K = (() => {
     grain: '<div class="grain"></div>',
     chrome: (label) => `<div style="left:72px;top:64px">${TILE}</div><div class="tag" style="left:144px;top:82px">${label}</div>`,
     mascot: (style) => `<img src="${B}mascot.png" style="${style}" alt="">`,
-    /* Mitteilung des WladBot (helles Glas, .d = dunkles Glas) */
-    note: (style, html, o = {}) => `<div class="g${o.d ? ' d' : ''} note" style="${style}">${av()}<div class="nb"><div class="nt"><span>WladBot</span><i>${o.time || 'jetzt'}</i></div><p>${html}</p></div></div>`,
+    /* Mitteilung von WLAD AI (helles Glas, .d = dunkles Glas) */
+    note: (style, html, o = {}) => `<div class="g${o.d ? ' d' : ''} note" style="${style}">${av()}<div class="nb"><div class="nt"><span>WLAD AI</span><i>${o.time || 'jetzt'}</i></div><p>${html}</p></div></div>`,
     /* Runder Glasknopf mit Pfeil und kleiner Beschriftung darunter */
     rb: (l, t, label) => `<div class="g d rb" style="left:${l}px;top:${t}px">${ARROW}</div>${label ? `<div class="tag" style="left:${l - 30}px;top:${t + 148}px;width:188px;text-align:center">${label}</div>` : ''}`,
     /* Markierungen: Punkt (x, y) auf dem Bild, Linie zum Chip bei (cx, cy); side = Seite des Chips zum Anker */

@@ -1,4 +1,4 @@
-# Karussells W01 bis W03 · WladBot · LeaderOS-Teaser (je fünf Folien)
+# Karussells W01 bis W03 · WLAD AI · LeaderOS-Teaser (je fünf Folien)
 
 Stand 07.11.2026. Je Karussell fünf Folien `W0x-01.jpg` bis `W0x-05.jpg`
 (1620×2025, 4:5) und das LinkedIn-Dokument `W0x.pdf` (mit Platzzahl) sowie
@@ -22,7 +22,7 @@ als Oberfläche (so sieht auch das Produkt aus), Limette als einziger Akzent.
 Zeilen in zwei Tönen (Inter Display, hell und gedämpft), Mono nur für
 Kleinstes. Das Glas nimmt die Farbe des Lichts dahinter an; der Lichtgrund
 stammt aus dem unscharfen Scheinwerfer desselben Fotos, je Folie in einer
-Farbfamilie (Amber, Blaugrün, Limette). Der WladBot erscheint als
+Farbfamilie (Amber, Blaugrün, Limette). WLAD AI erscheint als
 Mitteilung (Avatar, Name, Text) und als Figur; Markierungen mit Punkt und Linie
 sitzen dort, wo das Bild etwas zeigt (offene Hand, „Gegenfrage"). Kein Name auf
 den Folien, keine Credentials, kein Termin. Die Figur ist das bestehende
@@ -46,7 +46,7 @@ python3 -I ../linkedin-carousels-01/build_pdf.py .
 | ID | Hook (Folie 1) | Wendung | Auflösung | Canon |
 |---|---|---|---|---|
 | W01 | Dein Teamlead blockt jeden Vorschlag ab. | Bot: „Falsche Frage. Besser: Was verliert er, wenn du recht hast?" | Hinter einem Nein steckt fast immer ein Interesse; erster Satz als Beobachtung, Wirkung, Wunsch | Feedbackformel |
-| W02 | WladBot zerlegt dein Argument. | Bot: „Das ist ein Satz. Kein Argument." | Schritt 1 von 6, die sechs Schritte, dasselbe Argument neu gebaut | SEXIER (Weiße Rhetorik) |
+| W02 | WLAD AI zerlegt dein Argument. | Bot: „Das ist ein Satz. Kein Argument." | Schritt 1 von 6, die sechs Schritte, dasselbe Argument neu gebaut | SEXIER (Weiße Rhetorik) |
 | W03 | Dein Chef sagt: „Dafür ist kein Budget da.“ Was sagst du? | A, B oder C zur Wahl, vor dem Wischen tippen | B gewinnt: Rückfrage statt Aufgeben oder Angriff, danach direkt den Termin setzen | Rückfrage-Technik, hart in der Sache, weich zur Person |
 
 W03 ist als Kommentar-Köder gebaut: die Optionen stehen in der Caption, die
@@ -87,11 +87,11 @@ Der Absatz mit `[nur mit Begrenzung]` entfällt bei Weg B. Kein Link im Post-Tex
 Dein Teamlead blockt jeden Vorschlag ab.
 Die meisten fragen: Wie überzeuge ich ihn?
 
-WladBot stellt erst eine Gegenfrage: Was verliert er, wenn du recht hast?
+WLAD AI stellt erst eine Gegenfrage: Was verliert er, wenn du recht hast?
 
 Hinter einem Nein steckt fast immer ein Interesse. Wer danach fragt, statt um Zustimmung zu kämpfen, kommt weiter. Der erste Satz dafür folgt meiner Feedbackformel: Beobachtung, Wirkung, Wunsch. Nie „du bist …“, immer „mir ist aufgefallen …“.
 
-Das ist ein Beispiel aus LeaderOS. WladBot ist der KI-Coach mit meiner Methodik, jederzeit für den Fall von morgen.
+Das ist ein Beispiel aus LeaderOS. WLAD AI ist der KI-Coach mit meiner Methodik, jederzeit für den Fall von morgen.
 
 Die Beta ist kostenlos. Auf dem letzten Bild ist der QR-Code, den Link findet ihr im ersten Kommentar.
 
@@ -112,7 +112,7 @@ Die meisten Argumente bestehen aus einer Behauptung. Das ist Schritt eins von se
 
 Aus meinem Buch „Weiße Rhetorik“: das SEXIER-Modell. Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal. Sechs Schritte, zwei Minuten.
 
-Im Karussell baut WladBot einen schwachen Satz Schritt für Schritt neu. Das Beispiel ist erfunden, das Modell nicht.
+Im Karussell baut WLAD AI einen schwachen Satz Schritt für Schritt neu. Das Beispiel ist erfunden, das Modell nicht.
 
 Die Beta von LeaderOS ist kostenlos. Auf dem letzten Bild ist der QR-Code, den Link findet ihr im ersten Kommentar.
 
@@ -133,7 +133,7 @@ A: „Okay, verstehe.“
 B: „Was müsste passieren, damit es im nächsten Quartal geht?“
 C: „Das ist unfair. Andere kriegen es auch.“
 
-Schreib deinen Tipp in die Kommentare, bevor du weiterwischst. Im Karussell spielt WladBot deinen Chef und wertet die drei Antworten.
+Schreib deinen Tipp in die Kommentare, bevor du weiterwischst. Im Karussell spielt WLAD AI deinen Chef und wertet die drei Antworten.
 
 Hart in der Sache, weich zur Person: das gilt auch, wenn es um Geld geht.
 
@@ -148,25 +148,25 @@ LeaderOS ist meine Methodik als tägliches Training: ein KI-Coach, der sie kennt
 ## Alt-Texte (je Folie, LinkedIn und Instagram)
 
 **W01**
-1. Dunkles Titelbild mit Foto: Ein Redner mit Headset steht im Scheinwerferlicht auf einer Bühne, die offene Hand zeigt nach vorn, markiert mit dem Wort „Gegenfrage". Text: Dein Teamlead blockt jeden Vorschlag ab. Mitteilung des WladBot: Ich stelle dir erst eine Gegenfrage.
-2. Chat mit dem WladBot, als Beispiel gekennzeichnet. Frage: Er sagt bei jeder Idee: „Haben wir schon probiert.“ Wie überzeuge ich ihn? Antwort: Falsche Frage. Besser: Was verliert er, wenn du recht hast?
-3. Text: Hinter einem Nein steckt fast immer ein Interesse. Darunter ein Foto der gestikulierenden Hände des Redners. Mitteilung des WladBot: Oft Risiko, Mehrarbeit oder Gesichtsverlust. Frag danach, nicht nach Zustimmung.
+1. Dunkles Titelbild mit Foto: Ein Redner mit Headset steht im Scheinwerferlicht auf einer Bühne, die offene Hand zeigt nach vorn, markiert mit dem Wort „Gegenfrage". Text: Dein Teamlead blockt jeden Vorschlag ab. Mitteilung von WLAD AI: Ich stelle dir erst eine Gegenfrage.
+2. Chat mit WLAD AI, als Beispiel gekennzeichnet. Frage: Er sagt bei jeder Idee: „Haben wir schon probiert.“ Wie überzeuge ich ihn? Antwort: Falsche Frage. Besser: Was verliert er, wenn du recht hast?
+3. Text: Hinter einem Nein steckt fast immer ein Interesse. Darunter ein Foto der gestikulierenden Hände des Redners. Mitteilung von WLAD AI: Oft Risiko, Mehrarbeit oder Gesichtsverlust. Frag danach, nicht nach Zustimmung.
 4. Der erste Satz in drei Karten. Beobachtung: Mir ist aufgefallen, dass meine Vorschläge im Meeting sofort abgelehnt werden. Wirkung: Das kostet uns Ideen. Wunsch: Ich wünsche mir, dass wir eine davon gemeinsam durchspielen. Darunter: Nie „du bist …“, immer „mir ist aufgefallen …“.
-5. Schlussfolie: Frag WladBot selbst. Der WladBot, eine gezeichnete Figur im grünen Samtsakko, sagt: Stell mir deine Frage. Beta, kostenlos, 150 Plätze, Aufnahme stoppt bei 150. QR-Code zum Beta-Zugang (Instagram: Link in Bio).
+5. Schlussfolie: Frag WLAD AI selbst. WLAD AI, eine gezeichnete Figur im grünen Samtsakko, sagt: Stell mir deine Frage. Beta, kostenlos, 150 Plätze, Aufnahme stoppt bei 150. QR-Code zum Beta-Zugang (Instagram: Link in Bio).
 
 **W02**
-1. Titelbild: WladBot zerlegt dein Argument. Der Beispielsatz „Wir müssen das Projekt stoppen.“ steht auf einer Karte, eine leuchtende Linie schneidet ihn in der Mitte durch. Der WladBot sagt: Das ist ein Satz. Kein Argument.
-2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“, darunter die Buchstaben S E X I E R, nur das S ist hervorgehoben. WladBot: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
+1. Titelbild: WLAD AI zerlegt dein Argument. Der Beispielsatz „Wir müssen das Projekt stoppen.“ steht auf einer Karte, eine leuchtende Linie schneidet ihn in der Mitte durch. WLAD AI sagt: Das ist ein Satz. Kein Argument.
+2. Schritt 1 von 6. Der Satz „Wir müssen das Projekt stoppen.“, darunter die Buchstaben S E X I E R, nur das S ist hervorgehoben. WLAD AI: Mehr steckt nicht drin. Wer hier aufhört, bekommt Nicken und keine Bewegung.
 3. Die sechs Schritte des SEXIER-Modells aus Weiße Rhetorik: Statement, Explanation, eXample, Impact, Explanation of Impact, Rebuttal, je mit einer Zeile Erklärung.
 4. Dasselbe Argument, neu gebaut, in sechs Zeilen zu S, E, X, I, E, R, als Beispiel gekennzeichnet. Unten: Sechs Schritte, zwei Minuten.
-5. Schlussfolie: Frag WladBot selbst. Mitteilung: Gib mir dein Argument. 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
+5. Schlussfolie: Frag WLAD AI selbst. Mitteilung: Gib mir dein Argument. 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
 
 **W03**
-1. Titelbild. Text: Dein Chef sagt: „Dafür ist kein Budget da.“ Was sagst du? Der WladBot sagt in einer Mitteilung: Ich spiele deinen Chef. Du hast einen Satz.
+1. Titelbild. Text: Dein Chef sagt: „Dafür ist kein Budget da.“ Was sagst du? WLAD AI sagt in einer Mitteilung: Ich spiele deinen Chef. Du hast einen Satz.
 2. Wähle, bevor du weiterwischst. A: Okay, verstehe. B: Was müsste passieren, damit es im nächsten Quartal geht? C: Das ist unfair. Andere kriegen es auch.
-3. WladBot wertet. A schwach: Du gibst auf, bevor das Gespräch beginnt. B stark, hervorgehoben: Rückfrage-Technik, aus dem Nein wird ein Weg. C schwach: Du greifst die Person an, nicht das Problem.
-4. Hart in der Sache. Weich zur Person. Daneben ein Foto des Redners im Scheinwerferlicht. WladBot: Und setz direkt den Termin: Wann schauen wir uns das gemeinsam an?
-5. Schlussfolie: Frag WladBot selbst. Mitteilung: Wie klingt dein Chef? 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
+3. WLAD AI wertet. A schwach: Du gibst auf, bevor das Gespräch beginnt. B stark, hervorgehoben: Rückfrage-Technik, aus dem Nein wird ein Weg. C schwach: Du greifst die Person an, nicht das Problem.
+4. Hart in der Sache. Weich zur Person. Daneben ein Foto des Redners im Scheinwerferlicht. WLAD AI: Und setz direkt den Termin: Wann schauen wir uns das gemeinsam an?
+5. Schlussfolie: Frag WLAD AI selbst. Mitteilung: Wie klingt dein Chef? 150 Plätze, Beta, kostenlos, QR-Code (Instagram: Link in Bio).
 
 ## Offene Punkte
 
