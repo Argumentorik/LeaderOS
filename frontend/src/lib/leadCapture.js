@@ -52,8 +52,6 @@ export async function captureFreeVideoLead({ email, name = '', source = 'free-vi
         ...(utm.source ? { initial_utm_source: utm.source } : {}),
       });
       window.posthog.capture('lead_captured', {
-        email: trimmed,
-        name: cleanName || undefined,
         source,
         campaign,
         surface: 'leader-os',

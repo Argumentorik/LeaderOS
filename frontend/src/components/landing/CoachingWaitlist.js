@@ -29,9 +29,8 @@ export const CoachingWaitlist = () => {
 
     if (typeof window !== 'undefined' && window.posthog?.capture) {
       try {
-        window.posthog.identify(trimmed.toLowerCase());
+        window.posthog.identify(trimmed.toLowerCase(), { email: trimmed });
         window.posthog.capture('lead_captured', {
-          email: trimmed,
           source: 'coaching-waitlist',
           campaign: 'leader-os-launch',
           surface: 'leader-os',

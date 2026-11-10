@@ -161,9 +161,8 @@ export const LeadCaptureModal = () => {
 
     if (typeof window !== 'undefined' && window.posthog?.capture) {
       try {
-        window.posthog.identify(trimmed.toLowerCase());
+        window.posthog.identify(trimmed.toLowerCase(), { email: trimmed });
         window.posthog.capture('lead_captured', {
-          email: trimmed,
           source: 'landing-popup',
           campaign: 'leader-os-launch',
           surface: 'leader-os',

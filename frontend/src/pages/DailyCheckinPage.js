@@ -9,6 +9,8 @@ import { VoiceRecorder } from '../components/shared/VoiceRecorder';
 import { LoadingOverlay } from '../components/shared/LoadingOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
 import api from '../lib/api';
+import { capture } from '../lib/analytics';
+import posthogLogger from '../lib/posthogLogger';
 import {
   PenLine, Send, Loader2, CheckCircle2,
   Lightbulb, Sparkles, TrendingUp, Mic
@@ -46,15 +48,24 @@ export default function DailyCheckinPage() {
 
   const handleSubmit = async () => {
     if (!input.trim() || loading) return;
+    const inputMode = lastInputMode || 'text';
     setLoading(true);
+    posthogLogger.info('daily_checkin_submission_started', { input_mode: inputMode });
     try {
-      const res = await api.post('/daily-checkin', { content: input.trim(), checkin_type: lastInputMode || 'text' });
+      const res = await api.post('/daily-checkin', { content: input.trim(), checkin_type: inputMode });
+      capture('daily_checkin_submitted', { input_mode: inputMode });
+      posthogLogger.info('daily_checkin_submission_completed', { input_mode: inputMode });
       setFeedback(res.data.feedback);
       setTodayCheckin(res.data);
       setInput('');
       setLastInputMode(null);
-    } catch (err) { logger.error('Check-in failed:', err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      posthogLogger.error('daily_checkin_submission_failed', {
+        input_mode: inputMode,
+        http_status: err?.response?.status || 'network_error',
+      });
+      logger.error('Check-in failed:', err);
+    } finally { setLoading(false); }
   };
 
   const handleVoiceResult = (text) => {

@@ -13,6 +13,7 @@ import { WelcomeStep, FeaturesStep } from '../components/onboarding/OnboardingIn
 import { useBookConsultation } from '../components/brand/BookConsultationButton';
 import api from '../lib/api';
 import { LEADERCHECK_URL } from '../lib/domains';
+import { capture } from '../lib/analytics';
 import {
   ArrowRight, Sparkles, Users, Target, Brain,
   MessageSquareText, Zap, Shield, ChevronRight,
@@ -121,6 +122,12 @@ export default function OnboardingPage() {
 
       const res = await api.get('/auth/me');
       setUser(res.data);
+      capture('onboarding_completed', {
+        role: data.role,
+        primary_goal: data.primary_goal,
+        heard_from: data.heard_from || 'not_provided',
+        has_wladhub_diagnosis: data.has_wladhub_diagnosis,
+      });
       navigate('/dashboard');
     } catch (err) {
       navigate('/dashboard');

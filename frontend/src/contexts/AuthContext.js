@@ -48,6 +48,8 @@ export const AuthProvider = ({ children }) => {
         logger.info('Auth check: no valid session');
         sessionStorage.removeItem('wladbot_user');
         setUser(null);
+        resetIdentity();
+        setSentryUser(null);
         setNetworkError(false);
       } else {
         // Iter 178: 429 (Rate-Limit) oder 5xx sind KEIN Logout-Grund — sonst

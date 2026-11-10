@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import * as Sentry from "@sentry/react";
+import posthog from "posthog-js";
 import "@/index.css";
 import App from "@/App";
 import { bootstrapConsent, readConsent } from "@/lib/consent";
@@ -13,6 +14,7 @@ import { maybeInitLinkedIn } from "@/lib/linkedinInsight";
 import { maybeInitGoogleAds } from "@/lib/googleAds";
 import { maybeInitBingUet } from "@/lib/bingUet";
 import { redirectAppRoutesToAppTier } from "@/lib/tierRedirect";
+import { identifyByUser } from "@/lib/analytics";
 
 // Leader-Check → LeaderOS handoff · runs SYNCHRONOUSLY before anything else.
 // If a `sync_token` arrives on any path other than the dedicated receiver,
@@ -88,29 +90,69 @@ if (sentryDsn) {
   });
 }
 
-// PostHog: late-init when the user toggles analytics consent ON without
-// requiring a page reload. Dynamic import keeps it out of the critical-path
-// bundle when consent is denied.
+// PostHog remains consent-gated and is initialized once when analytics
+// consent is available, including when consent is granted without a reload.
 const maybeInitPostHog = () => {
   const key = process.env.REACT_APP_POSTHOG_KEY;
-  if (!key) return;
-  import("posthog-js").then(({ default: posthog }) => {
-    if (posthog.__loaded) return;
-    const host = process.env.REACT_APP_POSTHOG_HOST || "https://eu.i.posthog.com";
-    posthog.init(key, {
-      api_host: host,
-      autocapture: false,
-      capture_pageview: true,
-      persistence: "localStorage+cookie",
-      // No subdomain-shared cookies · the funnel deliberately spans
-      // leader-os.de ↔ leaderos.de (and leader-check.de ↔ leadercheck.de),
-      // which are different root domains. Cross-domain stitching happens
-      // via the ph_did URL param (passed by ArchetypeQuiz CTA) and via
-      // email_lower identify on signup. Sharing across www. subdomains
-      // is not a concern.
-      cross_subdomain_cookie: false,
-    });
-  }).catch(() => { /* network blocked / extension blocked · silent */ });
+  const host = process.env.REACT_APP_POSTHOG_HOST;
+
+  if (!key || !host) {
+    if (process.env.NODE_ENV !== "production") {
+      if (!key) {
+        // eslint-disable-next-line no-console
+        console.error("REACT_APP_POSTHOG_KEY variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once REACT_APP_POSTHOG_KEY is configured");
+      }
+      if (!host) {
+        // eslint-disable-next-line no-console
+        console.error("REACT_APP_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once REACT_APP_POSTHOG_HOST is configured");
+      }
+    }
+    return;
+  }
+
+  if (posthog.__loaded) {
+    posthog.opt_in_capturing();
+    return;
+  }
+
+  posthog.init(key, {
+    api_host: host,
+    person_profiles: "identified_only",
+    capture_pageview: "history_change",
+    capture_pageleave: true,
+    // Capture errors that escape the app globally; console errors remain out
+    // of scope to avoid ingesting diagnostic noise.
+    capture_exceptions: {
+      capture_unhandled_errors: true,
+      capture_unhandled_rejections: true,
+      capture_console_errors: false,
+    },
+    persistence: "localStorage+cookie",
+    // No subdomain-shared cookies · the funnel deliberately spans
+    // leader-os.de ↔ leaderos.de (and leader-check.de ↔ leadercheck.de),
+    // which are different root domains. Cross-domain stitching happens
+    // via the ph_did URL param (passed by ArchetypeQuiz CTA) and via
+    // email_lower identify on signup. Sharing across www. subdomains
+    // is not a concern.
+    cross_subdomain_cookie: false,
+    session_recording: {
+      recordCrossOriginIframes: true,
+      capturePerformance: false,
+    },
+  });
+
+  posthog.opt_in_capturing();
+  window.posthog = posthog;
+
+  // Consent can be granted after AuthProvider has already restored a session.
+  // Hydrate that established identity as soon as PostHog becomes available so
+  // subsequent events and captured exceptions inherit the stable user id.
+  try {
+    const storedUser = sessionStorage.getItem("wladbot_user");
+    if (storedUser) identifyByUser(JSON.parse(storedUser));
+  } catch {
+    // AuthProvider owns cache recovery; analytics must never interrupt boot.
+  }
 };
 
 // Microsoft Clarity (heatmaps + session replay): consent-gated exactly like
@@ -148,6 +190,8 @@ if (typeof window !== "undefined") {
     if (c.analytics) {
       maybeInitPostHog();
       maybeInitClarity();
+    } else if (posthog.__loaded) {
+      posthog.opt_out_capturing();
     }
     if (c.marketing) { maybeInitMetaPixel(); maybeInitLinkedIn(); maybeInitBingUet(); }
     maybeInitGoogleAds();   // auch bei Rücknahme: consent update = denied
