@@ -1,5 +1,6 @@
 // Rendert das Takeover "WLAD AI übernimmt":
 //   post.html     Karussell T01, acht Folien, 1620×2025 (4:5 bei Maßstab 1,5)  -> T01-01.jpg …
+//                 dazu T01-08-li.jpg, die Schlussfolie für die LinkedIn-PDF
 //   stories.html  Stories je Tag, 1080×1920 (9:16)                             -> stories/D01-1.jpg …
 //                 dazu die Vorschau mit eingezeichneten Sticker-Zonen          -> _guide/D01-1.jpg …
 // und schreibt manifest.json (für das LinkedIn-PDF) und stories.json (Dateien je Tag).
@@ -51,7 +52,10 @@ const pad = (n) => String(n).padStart(2, '0');
       slides.push(`T01-${pad(s + 1)}.jpg`);
       await shoot(page, url('post.html') + `?s=${s}`, path.join(outDir, slides[s]));
     }
-    fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify([{ id: 'T01', slug: 'wlad-ai-uebernimmt', title: 'WLAD AI übernimmt', slides, pdf: 'T01.pdf' }], null, 2) + '\n');
+    // Schlussfolie für LinkedIn: dort gibt es keine automatische Nachricht, der Link kommt als Antwort.
+    await shoot(page, url('post.html') + `?s=${n - 1}&li=1`, path.join(outDir, 'T01-08-li.jpg'));
+    const pdfSlides = [...slides.slice(0, -1), 'T01-08-li.jpg'];
+    fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify([{ id: 'T01', slug: 'wlad-ai-uebernimmt', title: 'WLAD AI übernimmt', slides: pdfSlides, slide_ig: slides[n - 1], pdf: 'T01.pdf' }], null, 2) + '\n');
     console.log('rendered T01', slides.length, 'Folien');
     await page.context().close();
   }

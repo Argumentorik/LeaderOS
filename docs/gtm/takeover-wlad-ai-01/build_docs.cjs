@@ -13,8 +13,14 @@ const storiesOf = (d) => d.stories || [{ t: 'fall', ...d.fall }, { t: 'vote', ..
 const TRIAL = 'https://leaderos.de/signup?trial=14';
 const link = (medium, n) => `${TRIAL}&utm_source=instagram&utm_medium=${medium}&utm_campaign=wlad-ai&utm_content=d${pad(n)}`;
 
-const TIMES_FIRST = ['07:30', '08:05', '08:05', '08:05', '12:30', '17:30', '17:30', '20:00'];
-const TIMES = ['07:30', '07:30', '12:30', '18:00', '18:00'];
+// Zeiten wie im Metricool-Planer. Der Starttag beginnt um 16 Uhr (Entscheidung vom 10.11.2026).
+// Folgen zwei Stories aufeinander, liegt die zweite eine Minute später, damit die Reihenfolge stimmt.
+const TIMES_FIRST = ['16:00', '16:10', '16:11', '16:12', '17:30', '19:30', '19:31', '20:30'];
+const TIMES = ['07:30', '07:31', '12:30', '18:00', '18:01'];
+const POST_TIME = (d) => (d.n === 1 ? '16:05' : '08:00');
+// Stories mit Sticker kann kein Planungstool fertig veröffentlichen: Sie kommen als Erinnerung
+// in die Metricool-App und werden von Hand gepostet. Alle anderen gehen automatisch live.
+const byHand = (s) => Boolean(s.sticker);
 const BOOKS = { 'weisse-rhetorik': '„Weiße Rhetorik“', 'die-5-rollen-einer-fuehrungskraft': '„Die 5 Rollen einer Führungskraft“', 'dunkle-rhetorik': '„Dunkle Rhetorik“' };
 const NAMES = { alert: 'Ankündigung', reveal: 'Vorstellung', origin: 'Warum es mich gibt', inside: 'Was in mir steckt', fall: 'Fall', vote: 'Abstimmung', answer: 'Antwort', drill: 'Drill', next: 'Weiter', reply: 'Vorlage' };
 
@@ -47,19 +53,20 @@ const sticker = (s, d) => {
 
 let md = `# Stories zum Takeover · Tag für Tag
 
-Erzeugt aus \`days.js\` mit \`build_docs.cjs\`. Die Uhrzeiten sind ein Vorschlag (Europe/Berlin), keine
-Messwerte. „In Instagram einfügen" heißt: Die Bilddatei lässt an der Stelle Platz, den Sticker setzt
+Erzeugt aus \`days.js\` mit \`build_docs.cjs\`. Die Uhrzeiten (Europe/Berlin) sind die im
+Metricool-Planer. „In Instagram einfügen" heißt: Die Bilddatei lässt an der Stelle Platz, den Sticker setzt
 man beim Posten in der App. Wie die Zone aussieht, zeigt die Vorschau in \`_guide/\` (wird beim Rendern
-erzeugt, nicht eingecheckt).
+erzeugt, nicht eingecheckt). Spalte „Metricool": **automatisch** geht von selbst live, **von Hand** kommt
+als Erinnerung in die Metricool-App und wird in Instagram mit dem Sticker gepostet.
 
 `;
 for (const d of DAYS) {
   const list = storiesOf(d);
   const times = d.n === 1 ? TIMES_FIRST : TIMES;
-  md += `## Tag ${d.n} · ${d.date} · ${d.theme}\n\nFeed-Post um 08:00 Uhr: **${d.post}** · ${d.postTitle}\n\n`;
-  md += '| Nr. | Datei | Uhrzeit | Art | Text im Bild | In Instagram einfügen |\n|---|---|---|---|---|---|\n';
+  md += `## Tag ${d.n} · ${d.date} · ${d.theme}\n\nFeed-Post um ${POST_TIME(d)} Uhr: **${d.post}** · ${d.postTitle}\n\n`;
+  md += '| Nr. | Datei | Uhrzeit | Art | Text im Bild | In Instagram einfügen | Metricool |\n|---|---|---|---|---|---|---|\n';
   list.forEach((s, i) => {
-    md += `| ${i + 1} | \`stories/D${pad(d.n)}-${i + 1}.jpg\` | ${times[i]} | ${NAMES[s.t]} | ${text(s).replace(/\|/g, '/')} | ${sticker(s, d)} |\n`;
+    md += `| ${i + 1} | \`stories/D${pad(d.n)}-${i + 1}.jpg\` | ${times[i]} | ${NAMES[s.t]} | ${text(s).replace(/\|/g, '/')} | ${sticker(s, d)} | ${byHand(s) ? 'von Hand' : 'automatisch'} |\n`;
   });
   md += '\n';
 }
