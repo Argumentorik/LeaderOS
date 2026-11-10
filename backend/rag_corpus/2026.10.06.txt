@@ -1,0 +1,1275 @@
+Ladies and Gentleman. Herzlich willkommen zu einer Session, in der es etwas emotional werden wird. Emotional, weil wir alle diese Menschen kennen die sogenannten Low Performer. Wir fragen uns.
+
+Warum macht ihr nicht die Sachen, so wie ich es euch gesagt habe, und die Low Performer, die sagen: I Don't
+
+Wir konnten nicht besser, Wir wollten nicht besser, und dieses Thema sorgt häufig für Emotionen, denn wir alle, wir Führungskräfte hatten schon mal mindestens einen von ihnen kennengelernt. Du kannst mir Mal ganz kurz zum Start der Session den Anfangsbuchstaben des Mitarbeiters reinschreiben, der aus deiner Sicht ein Low performer ist. und du wüsstest gerne, wie kriegst du diesen Low Performer.
+
+denn in die Leistung und ansonsten bei der Gelegenheit auch herzlich willkommen an die neuen, die jetzt relativ frisch und neu aus dem Workshop dazugekommen sind.
+
+Highly Welcome in dieser Session. und nochmal, die Aufgabe schreit mal bitte den Anfangsbuchstaben.
+
+und da sehe ich ganz viele Buchstaben S. und C. und M. und F. und Sani sagt, ich habe keine Low Performer, dann sanni tipp, an. Alle, die keine Low Performer haben.
+
+nutzt es als Freizeit, Also Nicht alle Themen sind für alle relevant.
+
+Alle, die sagen, ich habe keinen Low-performer, und ich weiß, wie man mit ihnen in Zukunft umgehen soll. Ihr seid natürlich auch angehalten, mehr Netflix zu schauen. Aber Spaß beiseite, Früher oder später, Selbst wenn ihr jetzt keine Low-performer habt, werdet ihr einen bekommen. und dazu eine Frage an alle: Warum denkt ihr, sind Menschen? Denn Low Performer?
+
+Bevor ich meine Präsentation mit euch teile, Was ist denn da los? Also keiner steht ja irgendwie morgens auf und sagt, Ich möchte Low-performer sein, sondern bei den Leuten passiert. Ja, irgendwas Falsches.
+
+Also, Leo schreibt Motivation.
+
+andere Prioritäten, Unsicherheit, kein Bock Überforderung, Fühlung fehle der Anerkennung, keine Perspektive. und übrigens, denkt daran, euch stumm zu schalten. Wenn ihr in der Session seid falscher Job. Desinteresse werde nicht abgeholt, unzufriedener mit dem Unternehmen
+
+fehlende Wertschätzung unterfordert nicht wertgeschätzt. Motivation
+
+mentale Belastung ausgebrannt. Also ihr sagt das ganz richtig. Es gibt 1.000 Wege.
+
+warum Menschen in die Low Performance kommen, aber nur einige wenige Wege, um die Menschen in die Top Performance zu bringen. und genau darum geht es ja heute, dass ich euch einige Wege aus der Low performance zeige und frage habe ich die heutige Präsentation mit Ki erstellt? Ja, oder? Ja.
+
+Ihr lacht schon. Natürlich. Warum sollte ich mir die Mühe machen. Wenn Claude für mich die Mühe sich machen kann, das, was ich sozusagen machen muss, ist Court nochmal zu kontrollieren wie einen Mitarbeiter, aber es ist echt bequem. Ich mach mir einen Tee. und dann komme ich zurück.
+
+und dann hat Quad schon ein paar Slides für mich fertig. Ja. und ich hatte auch einigen von euch, die auch im Workshop dabei waren, hatte ich ja gezeigt, auch mal live vor Ort. und das möchte ich hier zum Einstieg nochmal machen.
+
+dass ich ganz gerne für Präsentation, Also, ich nutze am meisten Chatgpt oder Anthropic, diese sogenannte Cloud extension nutze. und diese Extension, die kann man sich, wenn man den ca. 20$ Plan hat, kann man die in die Powerpoint Präsentation
+
+einbauen lassen. und wenn ihr sagt, cool, schreibt mal kurz cool, dann erzähle ich ein bisschen mehr dazu, wie diese Präsentation mit Ki gebaut wurde. und wenn ihr sagt, Boah, ich nutze schon seit 30 Jahren die Cord Extension Light. Ich brauche das nicht.
+
+Ich kann das besser als als Quad. Dann sage ich da kurz ein paar Sachen dazu.
+
+Sehr gut. Also, ganz ganz viele Leute sagen das auch. und wenn ihr gerade hier meine Präsentation seht.
+
+dann ist z. B. diese Vorschau. Also, ich habe das bewusst jetzt noch nicht auf Fullscreen gemacht. Was ich jetzt Claude gesagt habe, ist also meine normale Präsentation von vor 18 Monaten sah so aus. Das war mein erstes Slide.
+
+und dann war das meine zweite Slide.
+
+und was habe ich jetzt Claude gesagt? Ich hab Claude gesagt, Bitte übernimm den Stil
+
+meiner Präsentation. Aber füge noch 3 Slides hinzu.
+
+die die Relevanz des Themas für meine Master größer machen. und wie funktioniert das? Also Ich Zeig euch das mal ganz kurz. und zwar gehe ich hier mal aus dem Kommentarfeld raus. und wir gehen gleich auch los ins Thema. Ich wollte aber auch die, die am Wochenende nicht da waren.
+
+dabei waren kurz zeigen, wie das läuft. und z. B. klicke ich jetzt auf diese Quote Extension. und hier kann ich dann meine Eingabemin prompt eingeben. und was gefällt euch z. B. an diesem Slide nicht? So gut.
+
+Soll claude Farbe verändern, Soll er die Grafik größer machen, Soll er den Strich auf der linken Seite wegnehmen? Stimmt mal kurz ab im Chat. Was soll claude für uns machen?
+
+Also, gelb könnte Augenkrebs verursachen. Alles. 3 2.024 ist lang her.
+
+3d Grafik zu machen. Ja. und theoretisch kann man jetzt alles, was ihr da reinschreibt, kann man natürlich
+
+hier sagen. Also, ihr mögt ja gelb nicht. d. h. Also hier ist dieses Command Feld. und ich schalte euch mal wieder auf. Stumm. Also nochmal, Denkt daran, bitte, dass ihr euch stumm schaltet in der Masterclass und sage beispielsweise
+
+auf Slide 2. Hast du den mittleren Balken Gelb gemacht? Mach ihn bitte stattdessen rot?
+
+Sehr gut. Was wollen wir noch?
+
+Wir wollen sagen: 2.024 ist ein bisschen zu alt.
+
+und gib mir bitte eine Statistik aus dem Jahr 2.025 statt. 2.024. Meine Masterklässler finden, dass alles viel zu alt ist. 2.024
+
+genau. und das reicht uns schon mal. Ich wollte euch ja nur den Grundsatz geben. und vielleicht habt ihr gerade gesehen, diesen Text hier, den ich in den prompt eingebaut habe, Den habe ich nicht getippt, weil im Durchschnitt schreibt mir mal kurz in den Chat. Wie viele Wörter könnt Ihr pro Minute
+
+tippen?
+
+Habt ihr das mal gezählt?
+
+Wörter pro Minute. Was schätzt Ihr Leute schreiben 20 Wörter.
+
+40 Wörter, 50 ist schon gut, 100 ist 10 Finger.
+
+Also, 100 machen dann schon die Profis. Aber jeder Mensch spricht circa 2 bis dreimal so schnell, als er tippt. Wenn ich also mit Ki arbeite, dann gebe ich die prompts immer in der Sprachfunktion.
+
+Dann geht es einfach viel schneller. und was dann passiert ist ein bisschen Magie durch diese Quarte Extension. Ich gebe das dem System, und ich habe ihm gesagt, er soll jetzt Slide 2 verändern.
+
+und jetzt fängt er an zu denken, Das seht ihr dann hier. und er denkt dann meistens auch auf Englisch und sagt: Checking oder der sagt: Let me rep the Chart and the Tax Shapes to understand they 2 force Statistic. Also, d. h., im ersten Schritt liest er sich jetzt diese zweite Slide durch
+
+und versucht zu verstehen, was da ungefähr der Kontext ist.
+
+und währenddessen kannst du dir einen Kaffee machen.
+
+Das ist doch schön.
+
+und dann sagt Claude Engagement Index, Before i Swap in 25, d. h. also, er geht jetzt in das Jahr 2.025
+
+und wird jetzt dieses Slide mit den neuen Zahlen von 2.025 aktualisieren. Schreib mir mal ganz kurz, Wow, Wenn das das erste Mal ist, dass du das siehst, wie eine Ki Das kann natürlich auch genauso Chatgpt machen, eine Slide laufend verändert, während du dir Kaffee kochst.
+
+und was ich jetzt sozusagen mache, mit den Slides. Wir nutzen Ja, wir haben ja 75 Themen, und alle 18 Monate wiederholt sich das Thema.
+
+und an der Stelle muss ich mal ganz kurz die Beschriftung für euch deaktivieren. Ansonsten mal haltet ihr mir schöne rote Dinger hier rein. und die Idee ist, dass ich sozusagen die alte Präsentation nehme, und das durch Cloud aktualisiere.
+
+und das mache ich gar nicht mehr selbst.
+
+und das kann man natürlich auch mit Copilot machen. und schaut mal, was passiert ist. Ihr habt es wahrscheinlich gerade gesehen. Dieser Balken ist von gelb gerade auf rot gesprungen.
+
+ist cool. und wir haben hier auch schon das Jahr 2.025 drin, weil da war vorher 2.024 drin.
+
+auch cool. und jetzt sagt er quasi, was er gemacht hat. Er sagt mittlerer Balken, Dienst nach Vorschrift von Gelb auf rot ungefärbt, top
+
+zahlen auf 2.025 aktualisiert. Top Beschriftung und Quelle sagen, jetzt auch 2.025 Top.
+
+Ein Hinweis: Die gelbe Akzentfarbe im Merksatzkasten rechts habe ich bewusst gelassen. Du hattest nur den Balken genannt, Sag Bescheid, wenn die Zahlen dort auch rot verändert werden sollen oder ob es so passt.
+
+und natürlich, wenn du jetzt mit der ganzen Präsentation arbeitest. und ihr habt ja auch vorlagen, die ihr gerne für euch nutzt, kannst du natürlich zu jedem Slide deine prompts mitgeben und dann wird Claude ein bisschen länger brauchen als 40 s pro Slide. und das ist die neue Welt. Ladies und Gentleman. Also wer heutzutage noch Präsentationen selber baut.
+
+Der ist nicht sehr effizient.
+
+Lass doch die Kid das machen.
+
+Dafür ist sie doch da und mir tun ein bisschen die Grafikdesigner. Leid.
+
+Also, ich habe selbst eine Grafikerin und die sagt: irgendwie buchst du mich nicht mehr. Was ist denn los? und Ich sag: ja, Quad ist einfach schneller und günstiger. und leider brauche ich dich nicht mehr.
+
+Das ist halt die neue Realität. Also einige Jobs verschwinden einfach.
+
+und da kannst du sozusagen hin und her, prompten so viel, wie du willst. und hier gibt es noch die Möglichkeit, Anhänge reinzupacken. d. h. also, wenn du selber bestimmte Spreadsheets hast, bestimmte Excel-dateien, kannst du sie hier über das plus Symbol anhängen und hier kannst du ihm sagen, ob er dich immer rückfragen soll.
+
+Also, bei jeder kleinen Änderung meldet er sich, dann heißt das bei ihm. Ask before Edits Also dann meldet er sich und sagt.
+
+Darf ich das machen? und dann sagst du ja oder nein?
+
+Aber bei mir ist das schon so eingespielt, dass ich hier die Voreinstellung treffe: Accept All Edits. Das bedeutet, er fragt mich nicht zwischendurch, sondern macht es einfach.
+
+und falls jemand sagt, boah, aber ich habe voll Angst, dass er mir die komplette Präsentation kaputt macht, oder löscht gar kein Problem, weil dann könnt ihr ja eine Kopie machen von der Präsentation, und die z. B. Quad Präsentation benennen. und dann packt ihr nur die Quad-präsentation.
+
+Das hatte ich vorher tatsächlich auch, wo ich gedacht habe. mein Gott, was ist, wenn er alles löscht, dann ist meine alte Präsentation im Arsch. Aber mittlerweile sehe ich, wie stark die Ki geworden ist.
+
+und das Ganze funktioniert mit Ki und diese ersten 3 Slides. Deswegen auch dieser Vorschaumodus. Also das ganze hier, das war ein prompt von mir. Wo ich gesagt habe, bitte, gib mir auf Slide 2 3 und 4 neue Inhalte.
+
+die die Relevanz des Themas für die Masterklässler deutlich machen.
+
+Nice.
+
+und dann trinke ich Tee Nice.
+
+und das Ganze funktioniert mit der Cloud Erweiterung, Nice.
+
+und wenn ihr nachher Fragen dazu habt, können wir gerne auch ein paar Fragen dazu beantworten. Aber ich wollte nur kurz zeigen, was alles schon möglich ist, und wir Führungskräfte möchten oder müssen ja ganz ganz viel machen. und natürlich kann das Copilot und das kann Gemini. Also, es können ja
+
+alle Kis können das machen. Wichtig ist, dass wir langsam so richtig schön in die Nutzung der Ki dann auch kommen.
+
+Das war also ein kleines Präludium zum Thema Ki. und wie gesagt, fragen die mich nachher dran. Erst Mal möchte ich Dorota in die Präsentation reingehen, also die nächsten 15, 20 min, gibt es jetzt die Präsentation, und dann gibt es Rückfragen dazu. Low Performer sind offensichtlich ein Problem. Deswegen sind Sie bei mir in dem 5 Rollen Modell, was sie jetzt alle kennt.
+
+beim Problemlöser angesiedelt.
+
+und das ist unser neues Slide. Low Performance ist kein Randphänomen. Galap-studie. Ihr wolltet 2.025. Ihr habt die Zahlen 20 25 77% der Mitarbeiter machen Dienst nach Vorschrift.
+
+13% haben innerlich gekündigt und nur 10% der Mitarbeiter sind hoch an das Unternehmen gebunden. Emotional d. h. also, 10% sind voll engagiert und 90% haben entweder keinen Bock oder so richtig keinen Bock. und wenn man sich diese Zahlen mal anguckt.
+
+dann weiß man kein Wunder, dass Deutschland
+
+ein wenig in der Rezession sich befindet, zweites Slide, und zwar Mitarbeiterengagement, weltweit, engagiert, nicht engagiert, aktiv
+
+unengagiert. Hier haben wir die Statistik von 2.024 und der geschätzte Produktivitätsverlust pro Jahr weltweit
+
+wird auf 9 eine Milliarde Dollar, also 8 Billionen Dollar. d. h., wir haben 135 eine Milliarde in Deutschland, und das sind 8 Billionen. Also, das ist eine Zahl mit 9 Nullen. Billionen ist in Zahl mit 12 Nullen.
+
+und das kostet natürlich jedes Unternehmen ganz viel Geld, wenn Leute keinen Bock haben
+
+und warum Menschen zu low. Performern, werden abstrakt gesprochen. 3 Gründe einmal. Sie können es einfach nicht. Also, die Fähigkeiten sind nicht da, sie wurden nicht richtig eingearbeitet oder sind überfordert in der falschen Rolle.
+
+oder sie wollen nicht fehlende Anerkennung, Kein Sinn, keine Perspektive, geringe Motivation oder sie dürfen nicht schwache Führung, unklare Ziele und Erwartungen, schlechte Prozesse und Konflikte.
+
+und rund 70% der Unterschiede im Teamengagement gehen auf die Führungskraft zurück. d. h. also, wir müssen in die Verantwortung gehen, wenn unser Team nicht performt. Leider die schlechte Nachricht.
+
+Wir sind hauptsächlich dafür verantwortlich, wenn wir aber dafür verantwortlich sind, heißt das natürlich auch, dass wir das verändern können. und eine Führungsweisheit hätte ich für Euch ein Mitarbeiterproblem, das länger als 3 Monate dauert, ist in Wirklichkeit ein Führungsproblem.
+
+Weil am Anfang in den ersten paar Wochen ist klar: der Mitarbeiter ist neu, der Mitarbeiter weiß nicht, wie die Werte sind. Der Mitarbeiter kennt nicht die Ziele, aber für jedes Mitarbeiterproblem, was länger andauert als 3 Monate, und es ist immer noch da habt ihr offensichtlich noch nicht.
+
+Aber Aber in der Ausbildung soll es ja auch hin und wieder mal ein bisschen weh.
+
+Was haben wir heute vor? Was sind überhaupt low performer? Was sind die Gründe und was tun? und Gibt es eine Prävention. und hier noch ein paar Begriffsbestimmungen. Also, wir sprechen ja über Low Performer, das sind sogenannte C-mitarbeiter, und auf Deutsch nennt man die Low-performer minder Leister.
+
+Also, wenn ihr große Fans von deutschen Wörtern seid.
+
+dann könnt ihr natürlich gerne auch von Minderleistern sprechen, und da sind auch 10 Mitarbeiter. Dann gibt es die 9 to fiver. So werden Sie in den Usa genannt, also 9 to fiverr sind Leute, die Dienst nach Vorschrift machen. Also, die sind einfach da, von 9 bis 17 Uhr, und das ist auch gut so. und die meisten Mitarbeiter Die befinden sich ja hier. Also. Heute sprechen wir
+
+über die 10 bis 20% der Problemfälle. und wahrscheinlich befinden sich so
+
+circa 80% Hier und Topperformer gibt es vielleicht zwischen 5 und 10% im Unternehmen. Die machen uns aber keine Probleme. Deswegen sind die High Performer und die Topperformer auch nicht Teil unserer Ausbildung, sondern Probleme haben wir ja eher mit denen hier und vor allem auch mit der hier. und die spannende Frage ist ja auch: Was ist denn der Maßstab?
+
+Also wie und wann können wir denn sagen, dass die Leute Low-performer sind low bezogen zu was. Also, meine Mathe-skills sind, gut bezogen auf Fünftklässler. Ich kann Dreisatz. Das ist gut verglichen mit einem Viertklässler.
+
+Aber verglichen mit jemandem Mathe Abi Leistungskurs sind meine Mathe Skills Low Performer. Ich kann keine Mathe Beweise, das macht man im Leistungskurs. Ich kann das nicht, Oder auch im Studium. und womit vergleicht man das ja? Also, wenn du sozusagen den Fisch daran bemisst, wie gut er Bäume hochklettern kann.
+
+dann ist der Fisch natürlich ein Low Performer ist klar.
+
+Aber wenn du den Fisch da bemisst, wie schnell er schwimmen kann.
+
+dann ist es eher angemessener. und die Frage ist natürlich, dass wir sehr, sehr gute Referenzwerte haben, und den Bereich, wo die High oder Low Performance gemessen wird, die auch untereinander unterscheiden. und hier deswegen auch die Slides: In welchem Bereich ist jemand Low Performer z. B., bezogen auf die Ziele, die gesetzt werden, Kann jemand ein Low Performer sein oder auf die negative Arbeits
+
+Einstellung oder Motivation? Kann jemand Low Performer sein. Also, jemand kann die Leistung bringen, aber die ganze Zeit rumheulen öh ist alles so schlecht. Nee: Es gefällt mir nicht, aber trotzdem die Leistung bringen.
+
+Cool oder unkooperatives Verhalten haben, Konflikte im Team herstellen oder keine Entwicklung haben. Trotz langjähriger Arbeit im Unternehmen
+
+oder fehlende Eigeninitiative oder keine Einhaltung von Richtlinien und Prozessen oder chaotische Arbeitsweise. d. h. also, wir müssen als Führungskraft natürlich im ersten Schritt genauer analysieren. In welchem Bereich liegt denn die Low Performance vor? Das können wir natürlich auch in der Masterclass mal ganz kurz machen, indem wir z. B. fragen: Wer ist denn ein Topperformer in der Masterclass?
+
+Das sind Leute. Die Dienstag: Mittwoch, Donnerstag: da sind und die jedes Wochenende pünktlich die Umsetzungsaufgabe machen. und jetzt kannst du mal ganz kurz ich reinschreiben. Wenn das auf dich zutrifft.
+
+machen wir das immer ganz praktisch, weil Natürlich ist es immer einfach, auf die Mitarbeiter draufzuhauen, die meinen es nicht. und die können das nicht. Aber wer von euch ist Dienstag? Mittwoch, Donnerstag da und Postet am Wochenende die Umsetzungsaufgabe.
+
+Okay, Da sind jetzt ein paar Seelen drin, Ein paar Top Performer, noch nicht habt ihr sehr gut.
+
+nicht immer
+
+genau. und was ist so ein 9-to-fiver, Also ein 9-to-fiverr ist jemand der einmal in der Woche da ist. Die meisten Leute sind ja immer Dienstags Da Mich überrascht übrigens, warum er nicht mehr donnerstags kommt, muss ich euch ganz ehrlich sagen.
+
+Weil Donnerstag: Da gibt's doch die Rollenspiele, wo ich euch richtig durch durchkneten kann.
+
+und die kommt immer zur Theorie, Habt ihr Angst vor mir.
+
+Ich bin doch so nett, ich lächle auch sogar ein bisschen.
+
+Also, ich hätte gerne mehr Leute am Donnerstag. Weil, da sieht man mal wieder für die Theorie. Kommen Sie die Masterklässler, aber für die Praxis, für die Rollenspiele, nicht, So
+
+könnt ihr selber sehen. und wer ist So ein 9-to-fiver, also ein 9-to-fiver kommt einmal zu einer Live-session. Meistens Dienstag und macht seine Umsetzungsaufgabe mit Ach und Krach innerhalb der 7 Tage. Aber auch das
+
+so ein bisschen halbherzig. Aber er postet sie trotzdem. Wer würde jetzt ehrlich sagen, ich bin in der Masterclass Nine to Fiver Schreib mal ich rein.
+
+Hier gibt es dann gleich ganz ganz viele Ichs. Also, ich bin einmal in der Woche, live, meistens, Dienstag oder Donnerstag. und ich mach mit Ach und Krach, doch irgendwie last Minute in 2 min die Umsetzungsaufgabe, und plötzlich sehe ich viel mehr. Ich
+
+und jetzt machen wir das ultimative Monster. Spiel. Wer von euch ist denn aktuell in der Masterclass ein Low-performer. d. h., für mich ist es ein Low Performer, der nicht die Umsetzungsaufgaben macht.
+
+Weil Theorie kann man sich anhören, super, man kann mir zuhören und meine Hemden begutachten, die ich anhabe. Aber wer macht denn keine Umsetzungsaufgaben?
+
+What What happened
+
+ich leider aktuell. Ich und so wird das Thema Low Performer plötzlich ganz anders, oder? Weil ihr dachtet. Wir hauen jetzt auf die Mitarbeiter drauf.
+
+Ja, blood, lass uns zusammen die Mitarbeiter fertig machen. Das sind doch alles loser. und low, performer Nee. Nee, liebe Leute, Also auch bei uns gibt es ein paar low Performer in der Ausbildung. und natürlich habt ihr große Ziele und mein Ich meine, natürlich ist es ein etwas provokanter Staat
+
+in diese Session. Heute, aber ich wollte euch einfach mal deutlich machen, Wenn Ihr coole Erfolge haben wollt, dann ist natürlich die Umsetzungsaufgabe das Wichtigste. und für mich ist jemand, der die Umsetzungsaufgaben nicht macht.
+
+Ihr wisst schon, wer?
+
+Ja.
+
+Ich glaube, das ist gut klar geworden.
+
+Sehr gut, Also, Gründe.
+
+das hatten wir Ganz kurz. Also ein Grund könnte sein, jemand weiß es nicht, Jemand kann es nicht. Jemand will es nicht. Jemand schafft es zeitlich nicht, oder wir haben nach 3, 4 Monaten auch die Erkenntnis: Die Führungskraft ist einfach nicht gut genug.
+
+Also, die Führungskraft ist etwas
+
+ja überfordert oder hat vergessen, den Low Performer anzusprechen. und jetzt habe ich für euch eine sehr schöne, kleine 3-schritte Methode.
+
+und die 3 Schritte, ach so. Vielleicht kommen wir nochmal, weil Friederike so eine schöne Ausrede schreibt. Liebe, Low, Performer. und alle, die nicht die Umsetzungsaufgaben machen, schreibt mir mal gerne eure Ausrede rein.
+
+also, die schon etwas länger dabei sind, Warum schafft ihr es nicht jede Woche eine Umsetzungsaufgabe zu machen? Friederike sagt, Mir kommt das Leben dazwischen, finde ich eine gute Ausrede
+
+persönliche Herausforderung, finde ich auch eine gute Ausrede.
+
+Habt ihr noch, welche Oktoberfest auch eine gute Ausrede.
+
+Harry zu faul, Find: ich auch Danielas Schiss find ich gut keine Zeit, iß gut bin. Anfänger
+
+ist auch gut, ein bisschen faul, keine Zecke, Kinder mit Vollzeitjob, zu viel im Job Früher war besser.
+
+genau, vergessen falsche Prioritäten. Ich find diese Ausreden: Super, Wisst ihr, warum? Was sind genau die Ausreden, die eure Mitarbeiter auch nutzen?
+
+Das Thema? Ich hatte keine Zeit, sagen eure Mitarbeiter auch
+
+das Thema zu wenig Struktur schreibt. Falk oder Perfektionismus schreibt, meike also. d. h., alle Leute
+
+haben die gleichen Ausreden Nur in unterschiedlichem Kontext. Das finde ich besonders witzig. Am Ende wollen wir alles tun, nur nicht in die Umsetzung gehen, weil Umsetzung ist ein bisschen schwierig. Schritt Nummer 1. Also, wir brauchen eine klare Erwartung
+
+von dem Mitarbeiter. d. h. also, wir müssen dem Mitarbeiter sagen: Wie sieht eigentlich erfolgreiche Arbeit aus? Also, wenn wir beispielsweise sagen, lieber Peter, ich brauche von Dir einen ausführlichen Marktbericht.
+
+dann ist das natürlich nicht sehr genau, nicht sehr präzise delegiert. Wie ausführlich soll der Marktbericht denn sein?
+
+Soll er Quellen, wissenschaftliche Zitate drin haben, oder soll er aus Grafiken bestehen, oder soll er nur 3 Seiten lang sein, oder soll der Marktbericht in Form einer Powerpoint-präsentation fertiggestellt werden? Diese Fragen müssen natürlich bearbeitet werden, und ich möchte euch eine Sache verraten.
+
+als ich angefangen habe, Mitarbeiter einzustellen. Früher war ich Solo preneur, ziemlich lange Zeit und hab dann angefangen zu sagen: Okay, so circa vor
+
+9 Jahren. Ich möchte jetzt nicht nur als Coach tätig sein, sondern auch wirklich Menschen bei mir fest anstellen und nicht nur mit Freelancern zusammenarbeiten, und ich habe häufig gar nicht diesen Punkt selber beachtet, dass ich den Leuten genau erklärt habe: Wie sieht für mich erfolgreiche Arbeit aus. d. h., auch ich habe es vergessen.
+
+Ich hab s einfach angenommen, weil ich ja weiß, was ich mit Marktbericht. Meine war meine Delegation auch nicht präzise.
+
+Ja.
+
+d. h., ich bin ja keine perfekte Führungskraft, sondern ich habe den Fehler auch gemacht: Wie sieht ein perfekter Marktbericht aus?
+
+Wie soll eine Wettbewerbsanalyse aussehen? Wie viel Zeit soll der Mitarbeiter investieren? Was für Tools soll er Dafür, nutzen. Das habe ich häufig auch nicht gedacht. und das ist Sunni, kein Senderempfänger Problem, sondern nur ein Senderproblem.
+
+Ich hatte es nicht präzise genug formuliert.
+
+weil ich davon ausgegangen bin, so wie ich denke, denken ja alle.
+
+aber ich habe festgestellt, so wie ich denke, denkt fast niemand.
+
+Deswegen muss ich diese Gedanken auch explizit dem Mitarbeiter mitgeben. und je präziser ihr das angibt, d. h. also, genau sagt, wie erfolgreiche Arbeit aussieht, wie das Ergebnis aussehen soll, desto erfolgreicher seid ihr dann
+
+dann? Die Frage Kennt der Mitarbeiter, die Tools und die Methoden, mit denen er das Ganze machen kann. Jetzt haben wir beispielsweise im Unternehmen
+
+Claude eingeführt, und natürlich müssen Mitarbeiter erst mal wissen, wie Claude funktioniert, und zufällig haben wir auch morgen um 12 Uhr ein Teammeeting zum Thema Ki nutzen.
+
+d. h. also, wir müssen natürlich diese Methoden und neuen Methoden den Mitarbeitern weitergeben.
+
+Genau welchen Werten soll die Arbeit folgen? Geht es eher um Geschwindigkeit oder um Qualität. Also beispielsweise
+
+in dieser Session. Hier könnte es darum gehen, dass ich Qualität liefere. Das bedeutet in jedes Thema sehr tief reingehe oder Geschwindigkeit, dass ich Euch einen guten Rundumblick über das Thema mache.
+
+und ich entscheide mich meistens für einen schönen Rundumblick. Das bedeutet, ich habe jetzt keine wissenschaftlichen Auswertungen für euch zum Thema Low Performance, sondern ich möchte euch Quick and Dirty, die Tipps mitgeben, die ihr sofort ab morgen umsetzen könnt.
+
+Wenn ich dazu ein Buch schreiben würde. Mit dem Titel Low Performer würde ich natürlich viel tiefer in die Wissenschaft gehen.
+
+und Katharina fragt: Gibt es eine Aufzeichnung. Es gibt immer auch eine Aufzeichnung für euch. Es gibt auch immer die Präsentation als Pdf, Was nicht immer da ist, ist das schwarze Hemd. Manchmal ist es weiß
+
+genau, d. h., ihr bekommt Aufzeichnungen und die Präsentation in Pdf. Dann das Thema: welche Ziele und bis wann?
+
+Ja, Also, wenn der Mitarbeiter gerade voll ist, müssen wir natürlich auch sagen, in welcher Priorität möchtest du das Ganze haben? Ihr kennt. Ja, Oder einige von euch haben ja Eduard oder kennen Eduard. und beispielsweise haben wir mit Eduard heute. Er hat nämlich gesagt, bei ihm liegt sehr viel auf dem Tisch, Haben wir heute die Aufgaben gemeinsam priorisiert.
+
+Was soll in der Prio 1 passieren? Worauf soll sich Eduard die nächsten 3 Tage fokussieren. Was kommt als Prio 2? Was kommt als Prio 3: Das muss man immer wieder machen, vor allem wenn neue Aufgaben neu reinkommen. und was kann man tun bei Problemen also, wenn du Probleme hast.
+
+dann ist die Lösung z. B. bei uns sogenannte Success Manager
+
+und Success Manager sind magische Menschen. und ich habe den Holger schon gesehen, magische Menschen, die dafür da sind, um mit euch Probleme zu besprechen.
+
+bedeutet also, wenn ihr dann ein Problem habt, dann könnt ihr Holger. Ich hab dich gesehen, kannst dir kurz mal nochmal kurz vorstellen für die, die Dich noch nicht live gesehen haben und nicht kennen. Aber bei uns, wenn du im Programm Probleme hast, und diese Probleme möchtest du im 1 zu 1 klären. Also es geht jetzt nicht darum, dass dir ein Zugang fehlt, dann schreibst du uns eine Mail oder du hast vergessen, wie dein Passwort ist, dann schreibst du uns eine Mail.
+
+sondern wenn du wirklich mal menschliche psychische Überlastungsprobleme hast.
+
+dann ist es natürlich am besten, wenn du mit einem Menschen dazu sprichst und Holger, Genau das ist ja unsere Lösung in der Ausbildung. Deswegen nehme ich dich gleich dran, bevor ich das tue, noch einen ganz wichtigen Satz, und zwar: Du kannst nicht erwarten, was du nicht kommuniziert hast.
+
+und da diese Regel muss ich auch lernen, als ich den ersten Eduard war. Übrigens, ich habe die Frage gesehen. Wer war Eduard? Wer ist Eduard? Mein erster Mitarbeiter Eduard, der ist schon ganz ganz lange an meiner Seite. und obwohl wir uns schon so lange kennen, müssen wir natürlich immer wieder uns zusammensetzen und besprechen, was die Prioritäten sind
+
+Deswegen für uns alle und auch für mich selber ein Learning gewesen.
+
+dass wir mit den Mitarbeitern regelmäßig über Priorisierungen und erfolgreiche Arbeit uns austauschen müssen. und jetzt, lieber Holger bist du dran. und zwar habe ich ja schon gesehen, dass du was reingepostet hast, und zwar.
+
+was kann man denn tun bei Problemen, und Was ist dein magischer Calendrik, wo die Leute dich anzapfen können, deine Motivation, dein Mindset und deine gute Laune.
+
+Hallo zusammen und wunderschönen guten Abend. Natürlich habe ich im Chat ein bisschen mit gespickt. und ja, Ausreden mag es geben. Bisweilen mögen es auch gute Gründe sein, aber ich habe schon mit reingeschrieben, keinen Motivationscail zu buchen, wenn es Umsetzungsschwierigkeiten gibt. Wenn jemand beim Video hängt also, wenn er mehr Zeit braucht als wie wirklich nötig.
+
+Dafür gibt es eigentlich keine Ausrede, weil das kann natürlich ein guter Zeitersparnisfaktor sein.
+
+Das sprechen wir z. B. durch oder auch Umsetzungssachen oder auch mal Motivationstief oder auch mal Zeitmanagement, also was immer jetzt nicht technisch vertraglich organisatorisch ist in der Masterclass, wo der Customer support gerne dafür da ist.
+
+Das darf gerne zu mir, und da schauen wir uns das an. Ich rufe einfach an zum gewünschten Termin oder im Fall der Fälle machen wir auch gern 1 zu 1 zoom-call, und wie kommt ihr jetzt zum Motivationscall? Ganz einfach. In der Online-akademie? Gibt es hier oben, die schönen Portale. Da ist auch das Dashboard drin und ganz unten, bei Support und Hilfe Motivationscall mit Holger buchen, oder wenn ich hier im live Call mit dabei bin stelle, ich auch immer gern mal den Link in den Chat mit rein.
+
+wie vorhin auch schon zweimal kann ich jetzt gerne auch gleich nochmal machen
+
+und dann einfach call buchen. Ich rufe euch an zur gewünschten Zeit.
+
+und dann schauen wir uns das jeweilige Thema an und klären es auf die Schnelle, damit er wirklich gut durch den Kurs durchkommt, maximal profitieren könnt und damit es natürlich auch Spaß macht, nach wie vor. Denn was Spaß macht, machen wir, und da bleiben wir dran. und da sorge ich auch gerne mit, dafür, dass es auch im successcall Spaß macht und dass natürlich hinterher auch die Ergebnisse stimmen.
+
+Also wenn es irgendwo Unterstützung
+
+es bedarf, gibt dann jederzeit gerne melden, und ich nehme mir super gerne Zeit für dich. Viel Spaß noch heute abend. und wenn das ist, just call.
+
+Sehr schön holger. und nochmal für euch. Zur Erinnerung. Also, einige, gerade die neu dazugekommen sind, haben Angst. mein Gott muss ich dafür bezahlen. Das ist Teil des Services, bedeutet Also, der Call kostet nur mich etwas, aber nicht dich etwas.
+
+das ist sozusagen unser Bonus für euch. und vielleicht bevor Holger du den Link rein postest Frage an euch die schon mal bei Holger waren. Wie fandet ihr den.
+
+weil einige von euch haben ja schon mit dem Holger gesprochen. Was hat er bei euch bewirkt? War das motivierend? War das erlösend? Oder war das langweilig? Jetzt ist die Zeit, das zu Sagen. und wie gesagt, dieser Call ist für euch
+
+in der Masterclass in Begriffen und normalerweise, und das weiß ich. Deswegen holger arbeiten wir schon so lange zusammen.
+
+Ist das Feedback Sehr, Sehr gut. Also, Ihr seht es selbst motivierend, einfach, Top hilfreich. Super, klärend, empfehlenswert, tritt in den Hintern. Jawoll Maria brauchen wir auch guter Call. Befreiend du Bist ein guter Motivator. Hab schon gebucht. Sehr gut. d. h. also, die Idee ist: wenn Ihr mal, weil dieser gruppencall, da will man jetzt vielleicht nicht
+
+die ganz persönlichen Probleme teilen, aber im Holger Call. Könnt ihr das machen? Nicht mal ich bekomme exakt mit, was besprochen wird, sondern Holger berichtet, manchmal anonymisiert, wie gerade so bei den Teilnehmern die Stimmung ist, d. h., das bleibt ganz professionell bei Holger, und wenn es nötig ist, gibt er mir das anonymisiert weiter.
+
+Bucht euch den Call. und jetzt, glaube ich Holger. Kannst du den Link gut reinstellen, wenn es da Schwierigkeiten gibt und wenn du gerade in der ersten oder zweiten Woche bist, und du sagst, meine Motivation ist aber der Hammer. Was soll ich mit dem Holger im Motivationscall? Das ist natürlich auch für dich da. In 2 Monaten, in 4 Monaten, in 6 Monaten, in 8 Monaten, weil es ja natürlich ist, dass die Motivation etwas nachlässt und dass die Probleme.
+
+die kommen, ja bestimmt. Ja, das ist ja das Schöne am Leben. Probleme gehen nie zu Ende. Sie ändern nur ihre Form.
+
+egal wie alt wir sind, egal, männlich, weiblich, egal ob Chef oder Mitarbeiter, das ist das Schöne und deswegen Holger
+
+cool, dass wir diesen Service anbieten und dass du dann den Leuten auch im 1 zu 1 helfen kannst. Ich komme also nochmal zurück: Was tun einfachen Frameworks, die beispielsweise ein Thomas Orosz
+
+sofort ab morgen anwenden kann. Schritt 1, klare Erwartungen formulieren.
+
+d. h., wenn wir Low Performer haben, müssen wir für diese Person ganz genau die Erwartungen formulieren.
+
+und dann kommt an Schritt 2: nachdem wir die Erwartungen formuliert haben und gesagt haben: wie sieht erfolgreiche Arbeit aus, dass wir diese Leistung auch kontinuierlich messen. Damit wir sehen, ist der on track, macht er gute Arbeit oder nicht.
+
+Es geht also um Sichtbarkeit der Arbeit und der Leistung. What is maasure can be managed. Das ist ein ganz alter Leitspruch von Peter Drücker. Was wir messen können. Können Wir auch managen, und deswegen ist es wichtig, bei Low Performern sich nicht auf das Gefühl zu verlassen.
+
+sondern dass die Zahlen da sind. und ein Beispiel, wie man das machen kann, ist, dass der Low Performer. Ich nenne ihn mal.
+
+Lassalle. So heißt niemand von euch, dass Lassalle uns eine Tageszusammenfassung gibt. Am Ende des Tages, bevor er den Laptop schließt
+
+und dass er uns immer einen Wochenbericht Ende der Woche macht und dass er uns vielleicht seine Kpis, also seine wichtigen Kennzahlen, in eine Excel Datei reinschreibt, Wichtig für Führungskräfte wichtig für euch ist.
+
+Der Mitarbeiter soll sich selbst tracken? Was sind die 2 Gründe dafür? Weil häufig tracken wir
+
+den Lassalle, den mit der Leister 2 Gründe: Warum soll sich Lassalle selber tracken, wenn er sich selber trackt und das selber eingibt, ist für ihn natürlich viel sichtbarer, wo er gerade selber steht.
+
+Also wie viel? z. B. Anrufer, hat er getätigt? Wie viele Slides hat er gebaut? Im Marketing. Wie viele Posts hat er bei Instagram abgesägt. Also, man kann ja alles heutzutage gut messen. und der zweite Grund ist: Ihr habt dafür keine Zeit.
+
+also auch bei meinen Mitarbeitern.
+
+Warum sollte ich hinterher laufen und von denen irgendwas holen, wenn die selber das machen können in ihrer Arbeitszeit, Das ist ja ganz einfach Die Zeit des Geschäftsführers ist ja mehr wert als die Zeit eines einfachen Mitarbeiters. Deswegen soll der einfache Mitarbeiter das selber machen, weil seine Zeit günstiger ist. Ein rein ökonomisches Prinzip.
+
+und Christopher fragt: Lassalle
+
+ist einfach ein Beispiel. Name, wo wir niemanden hier drin haben, weil, wenn ich den Natalia nennen würde, dann wäre Natalya voll Sauer, dass ich Natali als Beispiel Name für Low Performance nehme. Deswegen habe ich bewusst einen
+
+random französischen Namen genannt, und als Führungskraft. Da greifen wir bei Bedarf ein. Aber wenn die täglichen Zusammenfassungen ganz gut aussehen und wenn auch der Wochenbericht ganz gut aussieht, dann kann man das doch weiter laufen lassen und dadurch durch Schritt 2 bringen wir Objektivität rein, und Für beide Parteien ist es ja wichtig, wo man dann steht. d. h. also
+
+im ersten Schritt, Ich gehe noch mal kurz zurück, im ersten Schritt. Wie soll der Erfolg aussehen?
+
+Im zweiten Schritt wollen wir diesen Erfolg messen? und im dritten Schritt, was wir regelmäßig tun, mit low performern.
+
+Wir fühlen regelmäßig Gespräche. Wir bleiben im Gespräch, z. B. alle 14 Tage. Man kann es natürlich auch einmal in der Woche machen. Am Anfang loben wir den low Performer für seinen kleinen Fortschritt
+
+oder seine kleinen Fortschritte geben ihm sogenannte feed forwards, was das übrigens heißt das, erwartet euch Next Friday. und zwar haben wir hier in der Masterclass
+
+einen Meister der Feed Forwards, nämlich Joe Petermann, und der wird nächsten Freitag um 18 Uhr euch sagen, was das Ganze bedeutet, aber nur kurz vorab zusammengefasst: Feed Forward bedeutet also, ich sag nicht, was du schlecht gemacht hattest.
+
+sondern ich sage, was du in Zukunft besser machen kannst.
+
+und sowas kommt psychologisch bei Mitarbeitern viel besser an, wenn das Feedback zukunftsorientiert formuliert ist und wie das genau geht, Dazu gibt es natürlich auch eine Aufzeichnung, Bekommt ihr von Jo. und wisst ihr, was diesen Freitag passiert, um 18 Uhr.
+
+Das ist so ein Bonust Termin, gerade für die neuen. Was passiert diesen Freitag? Um 18 Uhr wisst ihr es.
+
+was ist da Feierabend, richtig
+
+nach oben, die Hände Wochenende auch richtig, sondern da geht Adriana ganz richtig um die Videoangst. Es gibt tatsächlich noch ein paar Masterklässler. Hier, die schon ein paar Wochen drin sind, vielleicht sogar ein, 2 Monate, und die immer noch kein Video gepostet haben.
+
+Will sich jemand kurz outen? Dann Schreib mal kurz ein ich rein.
+
+und diese Menschen denken boah, jetzt bin ich ja schon 2 Monate da.
+
+Jetzt ist es zu spät.
+
+und was sage ich zu? Jetzt ist es zu spät. Liebe Leute. und danke, dass ihr euch ganz ehrlich meldet. Kerli z. B. ist schon ein bisschen dabei. Jana Marina. Was sagen wir zu? Es ist zu spät.
+
+Was ist das richtige Mindset Karin? Es ist nie zu spät.
+
+So ist es.
+
+Das. Heißt also, mir ist es egal, ob ihr das Video 2 Monate oder 4 Monate oder 3 Monate später postet. Wir brauchen euer Video
+
+Das wird bei Euch ein kleiner Durchbruch sein, weil, wenn das erste Video gepostet ist, ist das zweite Video natürlich viel einfacher.
+
+und auch hier habt ihr, wenn ihr Freitag nicht genug bekommen Habt von Tabea, werdet ihr auch nächste Woche euch gerne einen Termin Buchen Bei Holger und bei Holger gibt es unter anderem auch eine Videogarantie. Ich weiß nicht, wie er es macht. Wahrscheinlich hat er eine sehr lange Peitsche, sodass er euch ins Video reinbringt.
+
+d. h., Ich fasse nochmal zusammen: Es gibt Schritt 1: klare Erwartungen formulieren, Schritt 2: Leistung auch messen, also ob die Erwartungen auch erfüllt werden und Schritt Nummer 3: regelmäßig im Austausch bleiben, nur konstruktives Feedback geben. Also was konkret wäre besser. und wenn es ganz schlimm wird, natürlich auch externe Hilfe holen, also einen externen Coach oder Schulungen anbieten.
+
+und, was wichtig ist, natürlich auch hier die 4 Farben des Mitarbeiters beachten und mit ihm farbgerecht kommunizieren. Also dem Roten, kann man eher schnell und kurz und bündig Das Feedback geben dem blauen, eher ausführlich und langsam
+
+und detailliert und den gelben und grünen ein bisschen emphatischer und ein bisschen fröhlicher und ein bisschen optimistischer.
+
+weil das sind emotionale Leute wenn man da nur mit Zahlen, Daten, Fakten kommt, dann fühlen die sich nicht abgeholt. und das ist grob gesprochen, Mein sehr kurzes und sehr prägnantes 3 Schritte: Modell für Low Performer.
+
+und natürlich gibt es auch Momente, wo wir sagen, und nach diesem Slide machen wir gerne auch eine kleine Fragerunde zu dem, was bisher geschah, wenn nicht mal das hilft.
+
+Das kann ja sein, dass meine 3 Schritte euch nicht helfen, dann habe ich für euch 5 praktische Lösungen. Natürlich kann man der Person in eine andere Position versetzen, andere Aufgaben geben. Anderes Projekt, anderes Team. Man kann, wenn man die Möglichkeit hat, dem Konzern z. B. eine andere Führungskraft vorsetzen. Dann gibt es auch Performance Improvement Plants. Vielleicht kommen wir dazu ganz am Ende der Session.
+
+und wenn gar nichts, gar nichts, gar nichts kommt. und der Mitarbeiter bockt nur rum und macht das auch nicht. Dann gibt es natürlich immer die harten Bandagen des Arbeitsrecht, also Abmahnungen, Kündigungen oder Aufhebungsvertrag. Aber so weit muss es dann
+
+hoffentlich nicht kommen. Deswegen jetzt unsere kleine Fragerunde, und zwar am Donnerstag, könnt ihr mich ja alles fragen, auch meine Sockenfarbe und Wann Selensky und Putin sich einigen werden.
+
+Aber heute bitte nur Fragen zum Thema, also dienstags, bleiben wir dann beim Thema des Tages.
+
+und das ist heute das Thema Low Performance, und ich habe auch ein paar Fragen schon im Chat gesehen. d. h., wenn ihr eure Frage gesehen habt Also, jetzt ist die Zeit für Fragen gekommen.
+
+Dann könnt ihr gerne eure Frage reinstellen. und nach dieser ersten kleinen Fragerunde, da passiert etwas Dramatisches, und zwar versetze ich euch in sogenannte Breakout Sessions.
+
+Gerade für die Neuen. Da müsst ihr keine Angst haben. Da kommt ihr mit 3 anderen oder 4 anderen Masterclass in Austausch, denn die Idee der Masterclass ist es auch, dass ihr voneinander lernt, also nicht nur von mir oder auch bei Georg, sondern dass ihr auch voneinander lehrt in kleinen Gruppen. d. h. also, wir haben jetzt nicht nur diese Frontalberieselung.
+
+sondern auch Breakout-sessions. und was häufig passiert ist, die grünen haben Angst.
+
+Liebe. Grüne habt keine Angst.
+
+geht da einfach mit rein. Das ist eine kleine Gruppe. Das wird übrigens nicht aufgezeichnet. Also alles, was in der Breakout-session nachher passiert, bleibt unter euch. und ihr profitiert vom Programm natürlich viel mehr, wenn ihr bei der Breakout-session nicht reinkommt und wenn es wirklich gar nicht gar nicht geht, psychologisch, dass ihr da mit anderen Leuten in Kontakt kommt.
+
+und dann kommt gerne nach der Breakout-session wieder in den Zoom dazu. Die meisten machen, zum Glück mit, Aber ich wollte die Grünen mal extra angesprochen haben, weil die blauen, die Gelben und die Roten.
+
+die sind da. Die Grünen sind manchmal ein bisschen ein bisschen ein bisschen. Wie soll ich sagen, schüchtern, Genau dann gehe ich mal ausnahmsweise erst mal auf den Chat an. und dann? Daniela, kommst du dran. und zwar haben wir
+
+eine Frage Nummer 1 von Anna Leistung messen: Wie schaffe ich es, Wenn es nicht wie Micromanagement aussieht, könnte das nicht zu Low Performance führen?
+
+und das ist eine gute Frage. und jetzt sage ich etwas, was ich von Brian Cheski gelernt habe, kennt ihr Brian. Cheski
+
+Who is that who is bry.
+
+Das ist der Gründer von Airbnb. Habt ihr schon mal Airbnb genutzt. Also statt Hotel mal eine Wohnung gemietet
+
+über Airbnb. Ja, Sehr gut. und Brian Cheski sagt, Micromanagement hat zu Unrecht eine schlechte Reputation. Gerade wenn etwas nicht gut läuft, müssen wir doch als Führungskräfte da reingehen. Wenn alles gut läuft. Klasse muss man nichts machen, aber Wenn etwas schiefläuft, dann ist Micromanagement super. und ich dachte früher auch Micromanagement ist nicht so gut.
+
+aber das ist unsere Aufgabe als Führungskraft. Wir müssen die Ergebnisse herbekommen. und das habe ich von Brian gelernt. Wenn etwas nicht läuft, dann gehe ich als Führungskraft da rein und mache ein bisschen Micromanagement.
+
+und wenn es wieder läuft, dann gehe ich ja raus. Aber allgemein Micromanagement zu verteufeln, ist falsch.
+
+Sehr gut, Dann fragt ihr, wie Marina. Wie gehe ich jetzt habe ich weggeklickt. Wie gehe ich mit einem Low-performer Supervisor, um.
+
+also egal ob der Low Performer Supervisor ist, oder Low-performer, Bauträger oder Low-performer Anwalt, Gleiche Schritte für alle Low Performance. Gibt Es überall sogar in der Masterclass.
+
+d. h. Also wenn ich da reingehen würde, ist es egal, ob es ein Low Performer Supervisor ist oder nicht, und wenn du jetzt sagst, na Ja, wie genau gehe ich das? Denn? Kommunikativ Ran, wenn das mein Supervisor ist, oder meine direkte Führungskraft.
+
+Du kannst, es ja freundlicher machen, also jetzt nicht mit Weisungsbefugnis, so Liebes Führungskräftchen, mein Schäffchen. Ich hab heute gelernt, dass wir dich Micromanagen, müssen. Sondern da machst du es natürlich sehr weich und sagst: Hey, lieber Supervisor. Was hältst du eigentlich davon, wenn wir gemeinsam mal uns anschauen, was wollen wir als Ergebnis haben.
+
+d. h., all das, was ich euch gerade im Urteilsmodus vorgestellt habe, so machen wir es lieber, Mitarbeiter, Machst du als Fragezeichen mit dem Supervisor gibt es einen Kurs zur Einführung der Ki. Den Annemarie gibt es aktuell noch nicht, aber Georg und ich haben uns vorgenommen, in jeder Session ein paar Ki-tipps zu droppen, weil das mittlerweile zeitgemäß ist. d. h., es gibt
+
+keinen separaten Kurs, wäre aber natürlich eine Idee, irgendwann so eine Art Grundlagenkurs über Ki zu machen.
+
+Wahrscheinlich mache ich das irgendwann. Aber jetzt ist erst mal so die Idee, dass wir euch Random Ki-tipps mitgeben. und ich lerne ja auch ständig dazu. Jetzt hat ja Chatgpt Openai vor 5, 6 Tagen diese Dots gelauncht und die habe ich z. B. noch gar nicht ausprobiert.
+
+d. h., auch ich entwickle mich weiter. und das Problem an so einem Ki-kurs ist der ist ja gefühlt, in 4 Wochen schon veraltet, weil die Sachen sich einfach so schnell entwickeln. Ja. Also 23 24 war die Ki langsam. Aber jetzt
+
+keine Ahnung gefühlt, Jede 2 Wochen gibt es dann irgendein krasses neues Tool, was noch viel produktiver ist als das andere Stefanie. Was tun bei Dauerkranken je nachdem? Das hängt natürlich von der Situation ab, je nachdem, ob die Dauerkranken auch richtig gute Arbeit machen, oder ob die Dauerkranken vielleicht simulieren oder ob die Dauerkranken wirklich krank sind. Also das ist eine zu allgemeine Frage.
+
+Da wird es spezifischer nachhaken.
+
+Sofie fragt: wie Umgehen mit den Lows, die aggressiv werden. Genau also dazu haben wir natürlich eine eigene Rolle.
+
+Wenn Menschen aggressiv werden. Das ist dann eher das Thema schwierige Mitarbeitergespräche. Wenn Ihr das aber schnell haben wollt Sophie, Das ist jetzt nicht das Thema der Aggressivität im Mitarbeitergespräch.
+
+Dann schaut euch den online Kurs, schwierige Gespräche meistern. An Den Kurs findet ihr in der Online Bibliothek. Das führt jetzt natürlich ein komplett neues Thema
+
+aufmachen, Genau, was habt ihr dann noch für Fragen?
+
+Johannes? Wie gehe ich mit Low Performern um die 60 Jahre alt sind und schon seit 20 Jahren in der Firma sind und somit zu teuer sind, zum Kündigen.
+
+je nachdem, was deine Rolle ist. Aber ich würde mal sagen, Low Performer, Das Problem ist ja, es geht nicht nur um die Low-performer, sondern die
+
+leider stecken, die auch die Normalperformer an, und dann werden mehr normal Performer 9-to-fi als Low-performer. Also, ich zahle lieber Geld, um einen Low-performer rauszubringen, statt ihn im Unternehmen zu halten. Das wäre also der beste Tipp.
+
+Was ist ein Pip Performance Improvement Plan? Dazu kommen wir ganz zum Schluss der heutigen Session, was das genau bedeutet.
+
+Was tun mit destruktiven Mitarbeitern, die die Stiftungs Stimmung runterziehen. Genau das ist nicht heutiges Thema, also Gerne zum Thema des Abends Fragen stellen. Diese anderen Fragen, darauf gehe ich aber gerne am Donnerstag ein. Also Donnerstag, könnt ihr mich alle fragen, heute bitte nur zu den Slides, die ich gebracht habe.
+
+Alexander Hohn: Wie groß ist die Gefahr, dass beim Micromanager die Mitarbeiter sich zurückziehen? Also, die Idee ist nochmal, Brian Cheski, dass wir Micromanagement nicht als was Negatives empfinden, sondern wir verkaufen die Mitarbeiter Alexander das Micromanagement Als Unterstützung.
+
+Wir sagen ja nicht, Weil du zu blöd bist, muss ich jetzt leider meine Zeit dafür aufopfern, um dir nochmal alles von A bis z. Zu erklären.
+
+Das wäre vielleicht die Wahrheit, aber so kommunizieren wir nicht sondern ich, möchte dir in den nächsten 2 Wochen intensiver helfen, Aufgabe x zu erledigen, und deswegen, lass mal gemeinsam erst mal schauen, wie können wir es besser machen als bisher?
+
+Das ist die gleiche Botschaft nur: Die eine ist ehrlich, und die andere ist geschminkt.
+
+und wenn ihr mich fragt, bin ich eigentlich geschminkt. Die Antwort ist Nein. Aber ist meine Kommunikation geschminkt? Die Antwort ist: jeden Tag.
+
+Jeden Tag. Wenn ich mit meinen Mitarbeitern kommuniziere, packe ich schminke aber nicht über mein Gesicht, sondern über meine Worte.
+
+Wenn ich das sagen würde, was ich denke, dann könnte es zu Reibungen kommen.
+
+Aber wenn ich Dinge schminke, dann wird es gut wahrgenommen. Deswegen liebe Frauen. Ich bin so wie ihr. Ich verschönere die Welt durch Schminke.
+
+Genau, dann gehen wir nochmal auf letzte 2 Fragen im Chat ein. und dann gehen wir mal zu euch, die sich live melden.
+
+Genau wie gehe ich mit Low Performan im Ehrenamt. Um Also, Manuela, Genau das Gleiche gilt für alle Bereiche: Ehrenamt, Polizei, Lehrer, öffentlicher Dienst, Bauträger, die Regeln für Low Performer sind zum Glück die gleichen.
+
+Dann die vorletzte Frage aus dem Chat, damit auch hier die Live-fragen dran kommen.
+
+Was ist, wenn man selber als Führungskraft. Ein Low-performer ist, dieselben Schritte anwenden. Also, Georg ich würde dann empfehlen, weil du als Führungskraft
+
+könntest, dir den Online-kurs Selbstmotivation, Motivation ohne Checker anschauen. Bei meiner ist es ja tatsächlich, sodass wir in die Low Performance abrutschen, als Führungskraft oder auch als Unternehmer daddeln. Am Handy schauen uns die ganze Zeit Tiktok-videos an.
+
+wo Katzen und Hunde zusammen sprechen. d. h., ich würde euch auf jeden Fall empfehlen und Kirsten muss auf jeden Fall stumm geschaltet werden.
+
+dass wir auch selber uns motivieren, und das ist ein anderer Abend als heute Abend genau. und letzte Frage Aus dem Trend. Janine fragt der Low Performer delegiert die von mir gegebenen Aufgaben weiter. Wie gehe ich damit um
+
+genauso wie Du mit Quad umgehen würdest, dass er die Aufgabe selber ausführt. d. h., du sagst ihm bitte also bei deiner Delegation delegiere diese Aufgabe nicht weiter. Ich möchte, dass Du diese Aufgabe persönlich ablieferst und dann auch noch mal kurz erklärst, warum.
+
+und das Schöne ist. Mit Claude Prompten ist eigentlich auch Lernen wie unpräzise eure Kommunikation ist, weil dann macht Claude, was Falsches, Aber dadurch, dass Claude eine Maschine ist, werdet ihr selber merken. Shit: Mein Prompt. Meine Delegation war nicht präzise genug, und das ist ein weiterer schöner Grund, Neben der Zeiteffizienz.
+
+damit ihr immer mehr in das Thema Ki
+
+umarmt und auch merkt, wie unpräzise eure Delegation manchmal ist, genau, Aber jetzt gehe ich Mal zur Abwechslung in die live Fragen. Solveig Deine Frage, bitte schön.
+
+Ja sehr gerne, Also erst mal. Vielen Dank für den Überblick. In Schritt 2 hattest du ja gesagt, dass es wichtig ist, dass der Mitarbeiter sich selber trägt, und dazu habe ich jetzt mal. Das finde ich eine super Idee. Habe ich auch gute Erfahrungen mitgemacht, und zwar auch, weil er dann ja selber auch merkt, ob er das erreicht.
+
+Meine Frage dazu. Manchmal haben ja verschiedene Mitarbeiter, aber auch Schwierigkeiten damit. Was hältst du davon, wenn man vielleicht auch so etwas wie budding oder Mentoring mit einem anderen Mitarbeiter macht, der eben besser performt? Oder ist das eher kontraproduktiv?
+
+Gibt es da überhaupt eine allgemeine Aussage dazu? Oder wäre das durchaus auch etwas, was man machen könnte.
+
+Genau. Also, ich würde allgemein beantworten, Erst mal soll er es versuchen, alleine hinzubekommen, weil, wenn Du ihm einen guten Mitarbeiter als Buddy zur Verfügung steht, was passiert dann ökonomisch? Der Wert des anderen guten Mitarbeiters? und der Output ist geringer, weil er jetzt Kinderbetreuung machen muss.
+
+Ja.
+
+Dass ich das aus eigener Kraft. Ich habe mich getrackt. Ich bin langsam besser geworden. In 3 Wochen funktioniert alles, würde ich also nicht als ersten Schritt machen. Aber wenn das nicht klappt, könntest du entweder du der Buddy sein
+
+Führungskraft oder du könntest Mitarbeiter einstellen.
+
+Ich habe nur gedacht, das könnte ja auch gerade was Gutes sein, dass man einem anderen sagt, Du kannst auch mal gerne Führungs also noch weitere Führungsaufgaben schon mal sozusagen so machen, also dass man das quasi für jemand anderen auch als Highlight hat, dann habe ich quasi ein bisschen dafür gesorgt, dass beide vielleicht Happy sind, dass Sie da.
+
+Es gibt ja Leute, die sagen, bitte
+
+keine Interaktion mit Menschen Also beispielsweise, wenn wir die Breakout Session starten und dann 13, 14, 15 Leute sofort verschwinden.
+
+Das sind Menschen, die sagen, Ich will das gar nicht. d. h., vorausgesetzt, du möchtest jemanden zu einer Führungskraft entwickeln.
+
+ist es natürlich eine tolle Geschichte. Aber wir müssen immer beachten, dass circa 60%, 70% der Menschen gar keine Führungskraft sein wollen, sondern die sagen: Ich will einfach nur meine Arbeit machen. und jetzt habe ich so einen Babysitter Job von Solvay bekommen und ich habe voll keinen Bock drauf. Lass mich in Ruhe.
+
+Okay, Danke.
+
+Deswegen habe ich das sozusagen nicht von mir aus in die Präsentation. Aber gut, dass du die Frage gestellt hast, weil, so konnte ich das, Weil es gibt ja diese 2 Wege. Es gibt ja einmal diesen Weg in die Führung zu gehen und einmal den Weg immer größerer Fachexperte in die Tiefe zu gehen. und wir müssen immer bedenken, nur weil wir Führungskräfte sein wollen.
+
+dass wir das Projizieren auf andere, die das vielleicht gar nicht wollen. Christian: Deine Frage, bitte schön.
+
+Ja, meine Frage ist: Wie gehst du denn mit jemandem um, der eigentlich, wenn er was tut.
+
+gar kein C-mitarbeiter oder Low Performer ist. Also wenn er denn was tut, ist eigentlich schon produktiv, aber sich gerne in Gespräche Privatgespräche verwickeln lässt und das wirklich oft.
+
+Ja. Also, für mich ist das auch ein Low-performer. Weil ich mach dir mal ein Beispiel. Stell dir vor, ich habe den besten Grafiker der Welt und der Macht für mich die besten Grafiken der Welt. Aber 3 von 8 h quatscht er in der Küche und im Keller und draußen mit der Raucherpause
+
+bedeutet ja, dass ich fast die Hälfte seiner Arbeitszeit einfach for free ihm Geld überweise.
+
+d. h., für mich ist auch ein Low-performer. Wer kann, aber nicht tut.
+
+Also nach meiner Definition, weil ich möchte einen ganz bestimmten Output haben, und weil die Person nur die Hälfte der Arbeit
+
+Arbeitszeit arbeitet, dann fehlt mir diese Arbeitszeit. Ich würde Ihnen so einen Menschen vielleicht nicht sofort als C Mitarbeiter einkategorisieren, weil er macht, ja die Arbeit sehr gut, aber er macht zu wenig davon. Vielleicht würde ich ihn in der Praxis eher sogar als B. Mitarbeiter, so eine Art Schnitt von A und C einordnen.
+
+Aber das wird mir auf gar keinen Fall gefallen, und ich würde auch irgendwie dafür sorgen, dass diese Interaktionen mit anderen dann auch geringer werden. Also wie das Ganze passiert, ist natürlich sehr einzelfallbezogen. Aber wir müssen, wenn jemand schon gut ist natürlich das meiste aus ihm rausholen. Dafür sind wir Führungskräfte.
+
+Gibt es aber einen online Kurs, der das ein bisschen behandelt, noch oder da noch ein bisschen tiefer reingeht oder.
+
+Das ist ja ne.
+
+Es ist schwierig.
+
+Ist ja eine super spezifische Frage. Also, wenn ich zu jedem Randthema des Unterthem.
+
+Ja.
+
+Ich gebe dir mal ein Beispiel. Angenommen, er unterhält sich bei der Mittagspause statt 60 min 90 min mit den Kollegen, und dadurch zieht er die anderen vielleicht sogar mit.
+
+und normalerweise arbeitet der von 9 bis 17 Uhr, und die Mittagspause ist von 13 bis 14 Uhr würde ich meinem Mitarbeiter sagen, Hey, Peter. Mir ist aufgefallen, dass deine Mittagspause immer 90 min ist, d. h., ab Heute arbeitest du einfach bis 17, 30.
+
+und dann sagt er: ja, Aber wie. Aber meine Arbeitszeit ist ja, bis 17 Uhr Ja, gut. Aber deine Mittagspause ist ja auch eine halbe Stunde länger, oder magst du die Mittagspause vielleicht doch auf eine Stunde kürzen. und da die meisten Leute ja früher nach Hause gehen wollen, wird er natürlich sagen. Yoe, Dann achte ich mal drauf und dann sagst du und ich habe ein Auge drauf.
+
+und wenn das sich wiederholt, dann sagst du bitte. Komm auch immer um 13 Uhr kurz ins Büro, damit ich Bescheid weiß, dass du raus bist aus der Kantine. Also wie gesagt, ein bisschen Micromanagement rein. Das dürfen wir, weil wenn sich Mitarbeiter wie Kinder benehmen, dürfen wir sie auch wie Kinder behandeln.
+
+Vielen Dank.
+
+und Yvonne Deine Frage, bitte.
+
+Hallo alle zusammen. Ich habe eine Frage, und zwar habe ich im Team 2 Low Performer. Der eine, die eine die hört jetzt 2 Jahre vor der Rente.
+
+und die sind beide extrem. Low Performer
+
+jedoch stellen Sie sich nicht als Low Performer dar, sondern sagen zu mir, Sie kriegen das alles hin. Da ich noch nicht so lange in Betrieb bin, habe ich das jetzt noch nicht so genau prüfen können, was die tatsächlich alles machen. Jedoch ist der Ruf der beiden vorausgeeilt, und ich sitz jetzt so ein bisschen in der Zwickmühle, weil ich nicht weiß,
+
+wie ich jetzt damit umgehen soll, Eigentlich gebe ich 100% immer.
+
+dass ich selber versuche, die Menschen kennenzulernen. Aber der Ruf eilt schon so viele Jahre voraus, dass ich irgendwie selber jetzt in der Zwickmühle stecke und wollte eben fragen, was ich da am besten machen kann. Die zweite Low-performerin, Die ist immer krank. Also die ist 2 Tage krank, kommt dann wieder. Sie hat wirklich auch Krankheiten.
+
+Aber wenn sie dann anwesend ist, dann weiß ich definitiv, dass Sie nicht die produktivste Mitarbeiterin, also extrem low performt.
+
+Genau. und da würde ich genau diese 3-schritte Methode anwenden. Also, ich habe ja gesagt: egal ob es Frauen oder Männer sind, egal, ob sie weiblich oder männlich, alt oder jung sind. Das ist natürlich die erste Aufgabe.
+
+einen Standard zu setzen, weil es ist ja nicht fair, von Low Performance zu sprechen, wenn die Mitarbeiterinnen nicht genau wissen, Was ist denn der Erfolg? Wie sieht der Erfolg.
+
+Ja.
+
+Aus. und wenn du das z. B. definiert, dass du sagst.
+
+Ja noch richtig.
+
+Keine Ahnung. Du bearbeitest z. B. in der Verwaltung, und du sagst pro Woche brauche ich von dir 7 Verwaltungsakte.
+
+Das ist der.
+
+Vorausgeeilt ist. Das ist der Standard der 7, die sie erreichen muss, und sehr häufig vergessen, die Führungskräfte genau zu sagen, was eine Standard
+
+Yvonne, Wenn Mitarbeiter dann sagen, ich will eine Gehaltserhöhung.
+
+da kann man ja, wenn man Standards gesetzt hat, auch sagen: Ja. Gut. Normalerweise habe ich gesagt, wir machen pro Woche 7 Verwaltungsakte. Du kommst im Schnitt auf 65 pro Woche, heißt also du hast deine Rolle nicht ganz erfüllt, heißt also, Gehaltserhöhung ist leider nicht drin.
+
+d. h. also, wenn wir in der Rolle dessen sind, der die abschmettern muss. Manchmal sind wir ja auch in der Rolle. Wir wollen selber eine Gehaltserhöhung haben, aber in der Kommunikation nach unten helfen uns klare Standards ja natürlich auch dabei, weil Mitarbeiter überschätzen sich ständig. Also, das ist ganz normal. Es gibt eine over Confidence Bias in der Psychologie.
+
+Die meisten hier im Raum denken, sie sind besser, als sie wirklich sind.
+
+So funktioniert unsere Psyche, und dagegen können wir einfach Standards setzen, und die Standards sollten natürlich auch fair sein. Also das geht ja nicht, dass wir sagen, Okay, und liebe Susanne, Ich möchte, damit du die Gehaltserhöhung bekommst. 21 überspringst.
+
+Hat noch keine Frau jemals in der Welt bei Olympia geschafft. d. h. also, die Standards sollten wir schon fair setzen über die Organisation hinweg, aber Es ist den beiden bisher noch bestimmt nicht klar, und das ist der erste Schritt klar: den Standard zu setzen in Form von Zahlen, Daten, Fakten
+
+Sehr schön. Danke, Yvonne, für Deine Frage. Dann nehmen wir noch die Irina dran.
+
+Hallo, Vielen Dank. Kurze Frage. Ich habe eine Mitarbeiterin. Die ist sehr selbstbewusst in ihrem Auftreten, spricht gleichzeitig aber schlecht über die Kollegen
+
+liefert. Schlechte Ergebnisse, verteilt dabei ihre Aufgaben an das gesamte Team, und wenn ich Sie darauf anspreche, fühlt sie sich angegriffen.
+
+Was würdest du mir empfehlen?
+
+Ich würde dir eine diplomatischere Kritik empfehlen, weil, wenn die Mitarbeiterin sich angegriffen fühlt, heißt, es dass du sie bestimmt mit irgendwelchen Adjektiven belegst oder zu Hart Formulierst, dass du noch weicher bist in deiner Kommunikation.
+
+und dass du sogar vielleicht eine ganz clevere Frage stellst Irina, und zwar: Wie kann ich eine Kritik dir gegenüber formulieren, die für dich nicht angreifend ist?
+
+Stell dir irgendwas vor, was nicht gut lief. Egal, was es ist, mir geht es nur darum zu lernen, wie ich als Führungskraft mit dir besser kommunizieren kann, und dann ist sie in der Falle Irina.
+
+weil dann gibt sie genau die Formulierung vor, mit der du sie kritisieren darfst, und dann nimmst du einfach diese Formulierung fertig, und wenn sie sagt: ja, ich möchte auch noch keine Kritik, Dann sagst du ja Also, wir sind im Business. So funktioniert die Welt nicht. Also im Kindergarten kriegst du keine Kritik sogar da. Manchmal. Aber hier bekommst du jeden Monat Geld überwiesen, oder möchtest du vielleicht.
+
+dass wir das für ein paar Monate aussetzen?
+
+Da sagt der Mitarbeiter auf gar keinen Fall. Auf gar keinen Fall. Ich brauche mein Geld. Ich bin Angestellter. Ich verdiene mein Geld, okay, cool. Dann musst du dich auch kritisieren lassen, und ich mache das gerne in Zukunft in der Art und Weise, wie du es mir vorgibst.
+
+Einfach mal.
+
+Ich
+
+da sage ich, okay, welches Beispiel könnte ich denn nehmen? Ja, das könntest du nehmen, Okay, Dann nehme ich das Beispiel
+
+bei mir ist ja nur das Ergebnis wichtig. Nicht die Art und Weise, wie welches Beispiel ich für was nehme, sondern ich möchte einfach nur die Mitarbeiter in ein Ergebnis bringen. und manchmal ist es natürlich auch eine kleine Ausrede. Manchmal ist es einfach ein Grund. Manchmal ist es auch wirklich, sodass die Menschen ein Begriff oder ein Beispiel stört.
+
+Dann sind wir aber so pragmatisch und tauschen das einfach aus.
+
+Danke Dir.
+
+Sehr gut, Dann Claudia und Natalia, und danach gehen wir in eine berühmte Breakout Session.
+
+Gibt es noch mehr, oder bin ich gemein?
+
+Genau die Claudia Cailin Whatsapp.
+
+Mann: Das ist das erste Mal, dass jemand den Namen richtig ausspricht.
+
+Ja,
+
+Ich habe in meinem Team 2 Fälle, eine
+
+eigentlich meine willigste Mitarbeiterin, die also
+
+ausdrücklich sagt, ich möchte genau das machen, weil ich hatte ihr eine andere Rolle angedacht, und Sie hat gesagt: Nein, dafür habe ich mich beworben. Dafür bin ich in der Abteilung. Das habe ich gelernt, das will ich tun.
+
+und Sie macht unfassbar viele Fehler.
+
+Ich kann sie sehr gut ansprechen. Sie sieht sie dann auch ein und sagt: Ja, Gib es mir nochmal zurück. Ich mach das noch mal.
+
+aber es verbessert sich die der Output überhaupt nicht.
+
+Es ist jede Woche, was Neues falsch oder das gleiche falsch. und das geht nicht im Controlling. Ich brauche Zahlen, die Stimmen, und mir fällt nichts mehr ein. Also, mein Geschäftsführer hat gesagt, Ich möchte, die nie wieder sehen. Lasst die nicht mehr mit mir sprechen.
+
+und
+
+ich kündige Sie persönlich nicht mit ihr. Also wenn du sie die Dinge machen lässt ungeprüft. Das ist also eine ganz beschissene Situation.
+
+Der hat auch der Personalabteilung schon die Info gegeben.
+
+dass wir besprochen haben, dass sie gehen muss, und die haben mich angerufen und gesagt: zu welchem Monat sollen wir die Kündigung machen?
+
+und der zweite.
+
+den ich wollte, dass er ihr hilft, die Daten zu kontrollieren, und dass er mit seinem Seniorblick, der 60, den habe ich extra bewusst eingestellt mit viel Erfahrung.
+
+der sagt, ich wollte bewusst in die zweite Reihe. Ich wollte keine Verantwortung mehr übernehmen. Er war selber kaufmännischer Leiter, viele Jahre und
+
+hat daraus für sich den Schluss gezogen. Keine Verantwortung übernehmen bedeutet auch keine Qualitätskontrolle der eigenen Arbeit.
+
+und er macht genauso viele Fehler und so signifikant in Millionenhöhe, ohne das zu sehen, und reagiert auf jedes Ansprechen von also ganz Konkretes Aufzeigen. Ich bin wahnsinnig faktenorientiert. Ich bin ganz schlimm, rot
+
+und blaue Zahlen.
+
+Das musst du sehen. Das darf dir nicht passieren.
+
+Er wird bockig und sagt: Ja, Wenn ich das nicht verstehe, dann mache ich es halt nicht mehr. Klapp ich jetzt den Rechner zu.
+
+Du hast ja gerade schön gesagt, wenn sie sich wie Kinder verhalten, was muss man dann den Lolli wegnehmen.
+
+Lolli ist ja das Gehalt genau erst mal kurz generell zum Thema Fragen stellen. Claudia: Wenn du eine Frage stellst, und die ist super lang, und die besteht sogar aus 2 Unterfragen. Dann haben wir die Gefahr, dass der Raum hier abgeschaltet hat.
+
+d. h. also ein Tipp für euch für alle. Also, wir machen es für uns alle angenehmer. Wenn die Frage kurz knackig ist und sich auf ein Thema bezieht. und dann könnt ihr euch ja gerne nochmal melden oder? Am Donnerstag nochmal kommen, ansonsten gucken alle so ich guck gerade in die Gesichter. Was hat da die Klaue? Was ist der erste der Macht Fehler? Der zweite macht auch Fehler, aber will 2 dreie.
+
+d. h. also immer schön, eine Frage und auch in Meetings, Wenn ihr mit Leuten in Meetings drin seid, ich stelle auch fest, dass auch bei meinen Mitarbeitern auch generell auch bei meinen Seminarteilnehmern die Konzentration wirklich sinkt. d. h. Tiktokisierung der Gesellschaft. Wir können nicht mehr lange Sätze und 2 Themen separat voneinander wahrnehmen. Ich habe das lange im Debattieren geübt, aber teilweise geht uns das verloren.
+
+Erste Frage war
+
+Eine Kollegin Controlling macht ständig Fehler mit Zahlen, und dazu habe ich auch eine ganz klare Meinung.
+
+ist nicht schlimm, weil seine Aufgabe ist, ja schöne Bildchen zu machen. Umgekehrt, Wenn ich jemanden habe, der für mich Mails schreibt und der Macht ständig Rechtschreibfehler ist ja seine Schwäche relevant für seine Leistung.
+
+und dann wird es für den Mitarbeiter gefährlich. Ich muss davon ausgehen, dass die Kernkompetenz richtig gut läuft.
+
+Wenn also die Controllerin beispielsweise Gedichte von Goethe schwach interpretieren würde. d. h., Ihr geht Weihnachtsfeier. Ihr geht jetzt einfach mal Faust 2 durch und interpretiert in einer Vocation gemeinsam, wie das Altern des alten Faust sich auf sein Verhältnis zu Mephisto auswirkt.
+
+dann würde ich sagen: egal.
+
+Aber wenn die Controllerin mit Zahlen falsch hantiert, dann ist es für mich. Da bin ich tatsächlich beim Geschäftsführer. Ein rotes Tuch bedeutet. Also ich würde eine andere Controllerin suchen.
+
+d. h., eine Kernkompetenz darf nicht zur Schwäche werden. Vielleicht war sie früher mal gut, Vielleicht hat sie vergessen, wie 1, 1 funktioniert. Aber wenn eine Kernkompetenz zur Schwäche wird, dann müssen wir also versuchen, erst mal die 3 Schritte durchzugehen, die ich heute ausgeführt habe, weil heute ist sie ja Low-performerin.
+
+das kannst du ja trotzdem nochmal probieren. Claudia, nach dieser Session, aber danach würde ich auch die Person eher aus der Firma rausnehmen. und einen zweiten Typen alter Mann, der sagt, ich wollte nicht mehr in die Verantwortung. Ja, gut, d. h. ja nicht, dass du komplett gar nichts mehr für uns machst. Du bist ja nur die zweite Garde, die kontrolliert. Ich würde also ein Refraiming machen.
+
+d. h. also, du bist ja gar nicht in der Verantwortung. Du kontrollierst ja nur
+
+jemand anders, steht an der Front und liefert uns die Zahlen und deine Aufgabe mit deiner Erfahrung ist, sie zu kontrollieren. d. h., ich würde bei ihm im Kopf die Interpretation umdrehen, was die Kontrolle bedeutet. Kontrolle bedeutet nicht Verantwortung, sondern Kontrolle bedeutet 4 Augen Prinzip, und damit ist er in seiner Interpretation aus dem Schneider
+
+Sehr gut. Dann nehme ich Nochmal Claudia, Natalia rein, und wie gesagt, vertiefen, und alle möglichen Fragen können wir gerne dann auch am Donnerstag.
+
+Natalia kämpft noch mit dem Mikro.
+
+Ja. Habe ich geschafft. Hallo.
+
+Die.
+
+Endlich sehnt dich live und rede mit dir cool.
+
+Ich habe das nur ein Gegenteil wie bei Irina.
+
+Wir haben großen Themen bei uns im Betrieb, und wir haben verschiedene Abteilungen
+
+bei uns. Wir versuchen jetzt, die ganzen aller Abteilungen
+
+der Teamwechsel ist, und Wir haben eine Mitarbeiterin, die bringt gute Ergebnisse. Die ist mehrjährige Mitarbeiterin, mittlerweile sie schon in der Rente, Aber trotzdem kommt 3 Tage in der Woche 8 h liefert.
+
+und wie gesagt, dem Team, wo Sie arbeiten, in einem Bereich sie ist ziemlich streng.
+
+Manchmal böse, redet manchmal nicht so gut, und die anderen Mitarbeiter
+
+zieht sie mit. z. B., Wenn ein Meeting Mitarbeiter Meeting gibt, kritisiert sind alles
+
+ja und ja. und dann ist es jetzt für uns. Natürlich. Wenn ich zu ihr komme, frage wie sie geht und was sie gerne würde, vielleicht Feedback nicht geben. und das, und das sie redet nicht. Sie sagt nur kurze Worte.
+
+Ja.
+
+und das ist nur für uns die Spalte, die ganzen Abteilungen, und das ist ja auch wenn neue Mitarbeiter kommt, und wir bringen mal dahin. Das ist nun mal zu mir anarbeitet.
+
+dann kriegen wir schon gleich so. Ich will in der Abteilung nicht arbeiten. Das ist meine Frage: Wie kann ich mit so einer Person hingehen.
+
+Das hat mir auch gefallen. Weiche Kommunikation.
+
+Yes.
+
+Genau also. Es klingt für mich, wenn ihr meinen Meeting Zug kennt. Einige von euch sind ja schon ein bisschen länger dabei. So eine Mitarbeiterin, die sehr kurzsilbig ist und kritisch und alle rumkritisiert und eher negativ ist in meinem Meeting, zu welche Person ist das, was für ein Tier ist. Das ist das ein Hund? Ist es eine Gazelle?
+
+Ist das ein Fuchs, und ihr habt reingeschrieben, dass einige haben es richtig gesagt: In meiner Terminologie ist das ein Igel, weil der Hund, der bellt, der redet, ganz viel der ist extrovertiert, und der Igel ist immer pessimistisch und negativ.
+
+und was ich empfehlen würde, dass wir bei dieser Person also so ein Igel, ist auch gut, dass man auch sich die pessimistische Seite anhört.
+
+Wir können Igel nicht verändern, d. h., Igel bleibt Igel: Wir können den Igel nicht ins Fitnessstudio schicken. und dann wird aus dem Igel ein Frosch.
+
+meistens Die Person ist ja schon ein bisschen älter. Wir können vielleicht noch auf Kinder einwirken.
+
+aber wenn wir dann so 18, 20 25 sind, verändert sich der Igel nicht mehr großartig, der bleibt, für den Rest seines Lebens ein Igel. Das bedeutet also, ihr könnt zumindest mit den Personen, die euch vertraut sind, einfach mal diese Terminologie annehmen und sagen. Also, dieser Igel bleibt auf jeden Fall kurzsilbig und kritisch.
+
+Das ist so, so ist sie drauf.
+
+aber was wir verändern, ist unser Mindset, und zwar nehmen wir das dankend auf.
+
+weil uns die pessimistische Sicht manchmal weiterbringt. Ich hab bewusst einen Tigel in meinem Team und nicht jeder Wortbeitrag von ihm ist wirklich schlau, aber jeder Wortbeitrag von ihm ist pessimistisch.
+
+Trotzdem behalte ich ihn gerne im Team, weil Manchmal hat er mit seinem Pessimismus genau Recht
+
+bedeutet also, ich würde im Team die Einstellung zu dem Igel verändern. Der Igel ist gut, Also, mindestens ein Igel sollte da sein.
+
+aber nicht, dass ihr euch ärgert und versucht, den Igel umzuerziehen, zu einem Pferd oder einer Gazelle, sondern ihn eher positiv wahrnehmen als jemand, der auch mal was Kritisches und Unschönes sagt, und das ist auch gut so, weil im Leben in der Wirtschaft ist natürlich nicht alles Hallelujja und mehr Infos. Zu meinem Meeting. Zoo, Das findest du und das finden alle anderen in meinem Onlinekurs produktive Meetings.
+
+Da stelle ich noch mal etwas ausführlicher den Igel und auch die anderen Tiere vor, und letztlich ist ein Gentleman
+
+geht es in die berühmt berüchtigten Breakout Sessions. Wie funktioniert das? Ihr habt jetzt eine Praxisrunde, wo ihr die ersten 2 min, weil auch Neue dabei sind. Jetzt einfach mal euch kurz vorstellt, so 30 s pro Person. Also wer seid ihr? Wo lebt ihr in welcher Branche arbeitet ihr so richtig schnell, zackig.
+
+und dann Frage Nummer 2: Wie bist du bisher mit Low Performern umgegangen?
+
+Also, ganz offen Gibt es so eine Art Erlebnisbericht, und welche 2, 3 Punkte wirst du in Zukunft anders machen. Also eine kritische Selbstreflexion zu dem, was du heute gelernt hast.
+
+bedeutet also pro Person also, Ihr habt gleich insgesamt 18 min Zeit. d. h. pro Person, wenn ihr gleich z. B. zu Viert seid. Habt ihr pro Person ungefähr 4 min? Meistens aus Erfahrung, reden die Leute auch eher so 2 bis 3 min über das Thema. Jemand von euch fängt Halt an, der sagt: ich würde mal gerne anfangen mit meinem Bericht.
+
+und dann stellt es sich kurz vor, dann: wie bist du bisher mit Low Performern umgegangen, und welche? 2, 3 Punkte wirst du in Zukunft anders machen, und gleichzeitig ist es auch ein kleines Training, um schnell auf den Punkt zu kommen und verständlich zu sein.
+
+weil gerade vielleicht hast du es Natalia gesehen, haben, viele Leute in den Chat reingeschrieben. Was ist denn die Frage?
+
+d. h. ganz lange. Haben die Menschen nicht verstanden, was eigentlich die Frage ist. und diesen Breakout Sessions wollen wir auch üben, wie die Klarheit der Kommunikation dann aussieht. und während ich sage, dass wir bald in die breakout Sessions kommen.
+
+Verlass mich grad schon 15 grüne. nein.
+
+da kann ich nichts machen, selbst wenn ich sie freundlich einlade dazubleiben, Also, liebe Grüne seid tapfer und alle anderen. Ihr kriegt das sicher gut hin, achtet bitte auch darauf, dass die Redeanteile ungefähr gleich sind. Weil die Grünen haben natürlich etwas Angst zu unterbrechen, wenn der Gelbe plötzlich 10 min rumqu.
+
+Der Frosch.
+
+d. h., achtet selber als Gruppe, dass wir gemeinsam ungefähr gleiche Redeanteile von circa 3 bis 4 min haben. Ansonsten wünsche ich euch ein schönes gegenseitiges.
+
+und wir sehen uns dann in 18 min, d. h. um 19 Uhr 35. Dann sind wir wieder hier in unserem
+
+und ansonsten wünsche ich euch jetzt viel Spaß mit den anderen Teilnehmern in der Breakout Session. und falls ihr nicht dabei sein wollt, macht einfach nur kurz die Kamera aus
+
+und dann kriegt ihr ja mit wann es weitergeht, oder ihr geht aus dem Zoom-Meeting raus. und für alle, die mitmachen, Viel Spaß klickt jetzt auf den Button beitreten.
+
+und dann werdet ihr in so einen Zoom rausgejagt. und wir sehen uns in 18 min
+
+Hella bist du rausgeflogen aus Nem Raum.
+
+Sag mal Daumen hoch oder runter, weil dein Mikrofon ist ausgeschaltet.
+
+Ich glaube, wie schön, dass du mich siehst. Ja, meine Partnerin musste weiter. und ich hatte nur eine.
+
+Da bin ich.
+
+Okay, in welchem Raum warst du.
+
+28.
+
+Genau, dann weiß ich dich noch neu zu. Es gibt ja noch 3 Minütchen.
+
+Meinst du, das lohnt sich noch.
+
+Ist.
+
+Ich kann.
+
+Genau genau denke ich auch. Okay, Dann viel Spaß in Raum, 30.
+
+Danke.
+
+Ladies in Gentleman willkommen zurück. Die ersten sind schon wieder da aus dieser Breakout-session und gerade an die Neuen, die also heute zum ersten oder zweiten Mal dabei sind. Kurz mal die Frage: Wie war es für euch
+
+mit anderen Führungskräften in einer Gruppe zu sein. Was schön
+
+was romantisch gab es Liebe? Wie war es für euch.
+
+Schreibe das mal kurz in den Chat rein.
+
+So. Also, Viola schreibt, super, motivierend. Sehr gut war spannend. und übrigens, ich schaltet euch mal kurz alle auf stumm. Immer wenn ihr aus einer Breakout-session reinkommt, wieder in den Hauptraum.
+
+Denkt immer daran, euch stumm zu schalten. Also, es war schön. Es war spannend fand's gut. Tolle Leute hat Spaß gemacht? Sehr schön. Ja, und da haben wir
+
+eingebaut. Also, es war übrigens eine Idee von Georg, weil
+
+ihr müsst ein großes Geheimnis wissen. Ich als Trainer bin eher blau und der Georg ist eher gelb. Deswegen kam die Idee der Breakout Sessions nicht von mir.
+
+Mir würde das niemals einfallen. Hä: ich bin Blau. Ich habe euch Slides für Slides Theorie Fragen Slides und Georg sagt Nein, nein. Die Leute sollen erstens zusammenwachsen, und zwar im Gespräch.
+
+neue Ideen entwickeln, und deswegen danke Georg an dich in Abwesenheit, dass du auch für Gelbe, ganz ganz wichtige Impulse hast, und natürlich auch für Rote, also für unsere extrovertierten
+
+Menschen. und jetzt, bevor wir jetzt zum Schlusspunkt kommen und ich noch ein paar Fragen beantworte. Solange die Zeit bis 20 Uhr reicht, haben wir natürlich für euch 3 Aufgaben, und zwar diesmal eine Textaufgabe in unserer Gruppe, die lautet.
+
+Wie hätte ich in der Vergangenheit besser mit einem Low Performer umgehen sollen? Was konkret hättest du heute anders gemacht. Bitte 5 bis 8 Sätze, Selbstreflexion
+
+zu einer konkreten Person und Situation, und ihr müsst die Person ja nicht mit dem Namen benennen, wie sie wirklich hieß, falls Ihr Datenschutzbedenken habt. Ihr könnt ja den Peter Paul nennen oder den Paul Paula. Also uns geht es jetzt nicht um den Namen und das Unternehmen, sondern das, was natürlich immer sehr viel uns weiterbringt, ist eine Selbstreflexion mit dem Wissen von heute und der heutigen Session.
+
+Was habe ich damals falsch gemacht? und was hätte ich heute anders gemacht? und jede Woche gibt es einen Hashtag, das werden die Neuen auch sehen. In der Gruppe der Hashtag für diese Woche lautet Low unterstrich Argumentorik, So können wir nämlich
+
+Hausaufgaben voneinander abgrenzen, und diese Woche ist das der Hashtag der Woche wer vertiefen möchte. Es gibt immer optional also diese erste Aufgabe, diese Praxisaufgabe, wo ihr dann selber was schreiben oder sagen müsst.
+
+die anderen 2 wären.
+
+und wo wir uns auch immer freuen, ist der Teamgedanke, dass du auch ein, 2 Posts Der anderen Masterclass kommentierst
+
+die freuen sich, und natürlich ist man auch eher geneigter deine Posts zu kommentieren Wenn du selber ein guter Kommentator bist, und die ganzen Posts, Wo finde ich sie. Christopher. Da wirst du jetzt im Laufe der nächsten Tage in unsere Gruppe kommen und eingeladen werden. und vielleicht zeige ich euch mal, weil wir heute ja ein paar neue Leute dabei haben.
+
+wie sowas funktioniert, damit ihr
+
+das auch gleich wisst. und zwar haben wir in unserer online Bibliothek, zu der ihr schon alle Zugang habt, haben wir unterschiedliche Kurse. und wenn man jetzt hier oben auf Portale klickt.
+
+dann passiert etwas Magisches, dann kommt ihr auf ein Dashboard. und bei den meisten von euch. Also, die, die im Mentoring drin sind, haben 2 Dashboards, Aber die meisten von euch haben Ein Dashboard. und dieses Dashboard heißt Führungskräfteausbildung. und hier seht ihr gerade für die Neuen ganz interessant.
+
+Die Dinge, die gerade anstehen, also beispielsweise Bonus Sessions, die wir hin und wieder haben z. B. diese Woche mit Tabea zum Thema Videoaufgabe nächste Woche. Mit Joe übernächste Woche ist unser Motivations Holger am Start. Das ist auch optional.
+
+Aber ich mach mal ein Spiley dran, weil, ihr seid ja alles high Performer. Deswegen kommt ihr natürlich auch zu der Bonus Session.
+
+und dann folgt ihr den Anweisungen, die dort drin stehen. und dann kommt ihr in unsere Facebook Gruppe. und dann könnt ihr dort eure Umsetzungsaufgaben, inklusive
+
+Vorstellungsvideo für die neuen Posten. und jetzt gehen wir mal zurück in die Präsentation
+
+zu der zweiten kurzen Q, A, und zwar diese Slides beispielsweise. Da habe ich Claude gesagt. Bitte mach mir ein paar vertiefende Slides zu dem Thema Low Performer. d. h., alles, was jetzt kommt, war ich an. Wo war ich
+
+in der Küche, beim Teetrinken, d. h., diese Slides kommen wollen und dürfen?
+
+und hier nochmal, ein Multiplikationszeichen. und Ki schreibt Das Ganze ergibt Leistung. Also, wenn ich können multipliziert mal wollen mal dürfen, mache, bedeutet Das Leistung fehlt. Ein Faktor bricht die gesamte Leistung ein, nicht nur einen Teil. und da gibt es sogar 2 wissenschaftliche Studien von Campbell und von Bloomberg pringle.
+
+weil ich immer der Ki sage, wenn Du ein Slide machst, mach das bitte mit einem wissenschaftlichen Beleg. d. h. also kurze Zusammenfassung können wollen dürfen, ist wichtig.
+
+Der arme Mitarbeiter der ist meistens unschuldig, sondern 94% der Leistungsprobleme Wurzeln im System in Prozessen oder in der Führung und nicht in dem Armen. Wie habe ich ihn genannt? Lassalle.
+
+in dem armen Low Performer, sondern der macht tatsächlich die Minderheit aus Schätzung nach Mister Demming aus dem Bereich des Qualitätsmanagements, was uns nochmal in die Verantwortung bringt, Diese Systeme und die Standards selber festzulegen. Führung erklärt der Unterschied
+
+Krankheitstage pro Jahr nach emotionaler Bindung.
+
+Wenn jemand also hoch an das Unternehmen emotional gebunden ist, dann ist diese Person seltener krank ist. Klar, Wenn jemand nicht so gering gebunden ist, dann ist er häufiger krank. und wenn jemand innerlich gekündigt hat, Im Durchschnitt ist er natürlich häufiger krank. Bei einigen von euch ist vielleicht sogar 10 Tage, 15 Tage, 20 Tage. Es gibt natürlich auch Leute mit einem schwachen Immunsystem. Die werden einfach wirklich krank.
+
+Aber natürlich sind die, die keinen Bock haben, häufiger
+
+Kranke in Anführungsstrichen nur 21% Vertrauen ihrer Führungskraft voll und ganz Führung erklärt. 70% der Teamunterschiede, also das soll uns auch in die Verantwortung bringen, dass wir zu einer besseren Führungskraft werden, damit die Krankheitstage weniger werden und klare Ziele steigern die Leistung, und zwar kennt ihr bestimmt diese Smart Methode, und ich hatte ja vorhin gesagt, am Anfang der Session.
+
+Es ist super wichtig, dass wir diese Standards Wie sieht Erfolg aus, dass wir diese Standards auch klar und deutlich.
+
+und die Smart Methode sagt ja, die Lösung oder bzw. die Ansprüche. Die Maßstäbe sollten spezifisch sein, messbar sein, attraktiv, realistisch und terminiert. Warum Ziele wirken
+
+spezifische, anspruchsvolle Ziele, schlagen vage Ziele lenken. Fokus und Anstrengung. Fortschrittsfeedback ist Entscheidend Commitment verstärkt die Wirkung.
+
+d. h. also unsere große Aufgabe, und das habe ich als Führungskraft gerade in meinen Anfangsjahren selber verpasst, zu tun, dass ich ganz genau die Erwartungen definiere, was ich von den unterschiedlichen Mitarbeitern und Abteilungen erwarte. und das Thema Feedback
+
+ist auch ganz interessant: 38% der Feedbacks senken die Leistung, statt sie zu steigern. Nach einer Studie von Kruger und den Nisi.
+
+und genau dazu habt ihr dann nächsten Freitag Also, Next Friday mit unserem König des Feeds Forwards Joe, habt ihr da nochmal ein paar schöne Tipps, wie ihr richtig Feedback gebt. Aber Ich glaube, diese Zahl, die überrascht uns alle.
+
+Hä, ich gebe Feedback und der Mensch, der funktioniert dann noch schneller, weil er noch weniger Bock hat, bzw. weil er beleidigt ist, von dem, wie wir das Feedback formuliert haben, und ansonsten ein letztes Slide nochmal zum Pip.
+
+wie er so schön in Amerika heißt zum performance improvement Plan. Also, wenn die Leute schlau sind und ihr einen Pip mitbringt, dann wisst ihr eigentlich? das geht auf jeden Fall Richtung Kündigung, weil, wenn man so einen formalen performance improvement Plan aufsetzt.
+
+dann ist es eigentlich eher für die Gerichte da, dass ihr also wirklich diese objektiven Ziele festgehalten habt und die Erwartungen sie richtig gut, objektiv messbar gemacht Habt die Person gecoacht habt, Checkpoints hattet und dann bewertet. und normalerweise gibt man der Person halt zwischen ein und 3 Monaten, sich zu verbessern. Aber die Leute, die z. B. im Konzern arbeiten.
+
+oder die Leute, die so ein bisschen erfahrener sind, die wissen, Wenn meine Führungskraft mit einem Pip um die Gegend kommt, dann geht es eigentlich nur darum, objektiv meine Minderleistung festzuhalten und mich dann aus dem Unternehmen rauszubekommen, weil ihr wisst selber, es ist gar nicht so einfach, Mitarbeiter rauszuschmeißen ab einer bestimmten Betriebsgröße. Es gibt das schöne Kündigungsschutzgesetz, was ich im Jurastudium netterweise studieren durfte.
+
+und bei Pip. Also, wie gesagt, das ist das Mittel der Wahl. Wenn es um einen Pip geht, Kurzer Hinweis, dann ist
+
+die Guillotine für Euch vorbereitet. und Euer Kopf muss nur noch
+
+hindurch. Genau das war es also für heute mit der heutigen Session zum Thema
+
+Low Performance. und jetzt haben wir noch ein bisschen Zeit, um auf spontane Fragen von euch einzugehen. und wie gesagt, ausführlich haben wir Zeit dann für alle Themen am Donnerstag. Deswegen meldet euch jetzt gerne bzw., schreibt mir eure Frage in den Chat. und wer jetzt sagt.
+
+Boah Blatt. Ich bin heute kurz angebunden. Ich will zur Tagesschau, dann könnt ihr jetzt offiziell auch das Meeting verlassen. Es kommen also offiziell keine neuen Slides, keine neuen Infos. und ich bin immer jemand.
+
+der dann relativ pünktlich Schluss macht. d. h. also, 5 min kann ich manchmal länger machen, aber ich versuche auch euch früh in die Freizeit zu entlassen. Ich sehe schon 2 Meldungen, und zwar Jael und dann Hakan: Bitteschön.
+
+Gut. Ich habe eine Frage zu den Schritten, und zwar wenn
+
+so viele Konflikte, so Respektlosigkeiten usw.,
+
+Wie kann man das denn? Im Schritt 2 haben wir ja, dass man das trackt?
+
+und wie kann man das dann tracken.
+
+sich so verhalten? Wie kann man so verhalten.
+
+Ja sehr, gut, sehr gute Frage. Jael, weil gerade diese menschlichen Skills und diese menschlichen Standards sind eigentlich noch schwerer zu definieren, als z. B. bei einem Vertriebler. Die Anzahl der netto calls definiert nach länger als 30 s, sondern was bedeutet denn kooperativ?
+
+Das Problem der Arschlöcher. Ihr kennt ja bestimmt auch Arschlöcher aus dem Privatleben, Schreibt mal kurz ein A, Wenn ihr schon mal ein Arschlöcher getroffen habt.
+
+Wahrscheinlich schon, Ja, privat oder beruflich.
+
+Also unkooperativ ist ja ein diplomatischer Ausdruck für Arschloch. d. h. also, wenn jemand komplett unkooperativ. Ist.
+
+Leider wissen die Arschlöcher häufig nicht, dass sie Arschlöcher sind, d. h., die Selbstreflexion der Arschlöcher ist sehr eingeschränkt. Es gibt wenige, die wissen, dass sie Arschloch sind. Also die so ganz bewusst, z. B. Psychopathen sind und richtig allen Ausnutzen und kaltblütig. Aber die meisten Arschlöcher wissen es gar nicht. Die sind einfach von Natur aus Arschloch.
+
+geboren, als Arsch
+
+oder erzogen zum Arsch oder durch die Umwelt geprägt zum Arsch, und deswegen ist es bei diesen menschlichen Skills besonders wichtig. Diese Begriffe wie kooperativ zu definieren bedeutet also
+
+wirklich runterzubrechen, was dieser Begriff bedeutet. Ich gebe dir ein Beispiel: Du bist unkooperativ in Meetings. Ich würde mich freuen, dass du mehr Teamplayer wirst.
+
+Versteht ein Arschloch. 0.
+
+Was bedeutet das? Du musst wirklich sagen, was Teamplayer für dich bedeutet. z. B., wenn es heißt, ihr habt neuen Praktikanten und der wird natürlich von allen so ein bisschen eingearbeitet, nur nicht von unserem Arschloch. Also sagst du, liebes Arschloch.
+
+Ich würd mir wünschen, dass du ab nächster Woche mindestens eine Stunde mit unserem Praktikanten verbringst und ihm zeigst, wie Du Abc machst.
+
+und du darfst natürlich gerne entscheiden, wann das ist, und du darfst ihm das auch vorgeben, weil der Praktikant, der hat ja immer Zeit, der hat ja keine Meetings. und wenn du das machst mit einer Stunde, dann machst du einen richtig guten Job. und wenn du eine richtig starke Woche hast und sagst, Boah, ich will jetzt zum Teamplayer werden. Nummer 1, Dann machst du mit dem Praktikanten sogar einen halben Tag.
+
+d. h. also, man kann diese Stunde, die jemand mit einem Praktikanten verbringt, tracken. und dadurch machst du auch menschliches Verhalten messbar.
+
+Das hilft also nicht, wenn man jemandem sagt, sei nicht so unfreundlich.
+
+sondern du sagst immer dann wenn du deinen Kollegen sagst, ihre Vorschläge sind hirnrissig.
+
+sind Menschen persönlich beleidigt das Wort hirnrissig, ist ein sehr emotional beladenes Wort. Ich würde dich bitten, dieses Wort im Arbeitskontext nicht wieder zu benutzen.
+
+dann versteht jemand, dass er dieses Wort nicht umsetzen soll, bedeutet also versucht jetzt nicht mit diesen Allgemeinplätzen.
+
+Du solltest edler deinen Kollegen gegenübertreten, Ihnen höflicher begegnen und ein guter Mensch sein. Was ist das also? Ein Arschloch sagt das nie, sondern das menschliche Verhalten soll sehr konkret sein
+
+und messbar hakan, da eine Frage.
+
+Ja. Hallo zusammen,
+
+Also, ich stelle direkte Frage: Ab wann sollte man die Personalabteilung dazu nehmen.
+
+Also auf einem Slide. Gerade eben stand 30 bis 90 Tage, würde ich einer Person auf jeden Fall eine Chance geben, weil die Leute sind ja in ihrer Routine drin, und je nachdem, wie sehr du persönlich oder deine Abteilung am Mitarbeiter hängt.
+
+aber Wenn man wirklich Ziele genau, also die Erwartungen, ganz genau definiert hat.
+
+die dann auch getrackt werden, und dann bist Du regelmäßig alle 2 Wochen mit dem Mitarbeiter im Gespräch.
+
+Wir sind ja nicht im Kindergarten, Also, da finde ich 3 Monate, d. h., 6 Mitarbeitergespräche und 90 Tage Tracking wäre für mich schon das Maximum eher, und wenn du sowieso sagst, der Mitarbeiter ist relativ neu. Ich mag den gar nicht.
+
+er ist auch so ein bisschen Arsch oder Assi autoritär, selbstverliebt oder inkompetent, dann kannst du diese Phase natürlich etwas kürzer halten, aber ich würde abstrakt sagen 30 bis 90 Tage.
+
+Sehr gut Fantastico. Dann gucke ich nochmal kurz in den Chat.
+
+Wie kann ich erfolgreiche Arbeit definieren, wenn der Mitarbeiter vielfältige Aufgaben hat.
+
+und da hat Roland sehr gut darauf geantwortet, dass natürlich die einzelnen Aufgaben messbar machen. Also, ich mache ja auch unterschiedliche Aufgaben. Manchmal bin ich in der Masterclass. Manchmal bin ich im Mentoring. Manchmal bin ich bei Netflix.
+
+und insofern müsste man jeden Arbeitsschritt. Jede Aufgabe halt nochmal in messbare Zahlen
+
+und besonders schwierig wird Das eben bei diesen menschlichen Dingen. Aber da hat Jael diese gute Frage gestellt, dass wir auch die Höflichkeit definieren oder auch die Teamarbeit so definieren, dass sie dann messbar wird.
+
+Lübo fragt und was, wenn sich A weigert, den neuen Mitarbeiter einzuarbeiten, mit dem Argument, dass es nicht zu seinen Aufgaben gehört. Also, das Schöne ist Ja, als Führungskraft haben wir ja die Weisungsbefugnis.
+
+d. h. also, wir können sagen, das ist jetzt eine Weisung von mir. Also, das ist jetzt nichts, wo wir groß diskutieren müssen. und wenn du jetzt keine disziplinarische Weisungsbefugnis hast.
+
+dann ist das einfachste. Wenn du zu deinem Vorgesetzten gehst der sie hat und mit dem das besprichst, dass es sozusagen eine Weisung ist von oben nach unten, denn das ist ja das Schöne in der Führungskräfteausbildung. Die meisten von euch sind ja Führungskräfte. und das ist unsere Macht. d. h. also, wir können einfach eine Weisung aussprechen.
+
+das ist jetzt deine Aufgabe.
+
+und wenn du es nicht machst, Also, wir formulieren es natürlich weicher, dann könnte es Mitarbeitergespräche geben, und ich möchte natürlich die Abmahnungen mit aller Kraft vermeiden. Lieber Peter.
+
+also, man deutet Konsequenzen an. Aber das ist ja das Schöne bei Mitarbeitern. Wir sind ja nicht deine Mitarbeiterausbildung, sondern eine Führungskräfteausbildung, dass ihr auch von eurem Schwert und Eurem Schild Gebrauch macht, und das auch in aller Deutlichkeit, weil der Mitarbeiter muss verstehen, dass er ein Untergebener ist.
+
+Sehr schön.
+
+Was sollte der Vorteil von C-mitarbeitern sein, Roland
+
+oder ist es allgemein sodass C-mitarbeiter lieber gehen sollen, auf jeden Fall Zweti. Also ich würde sagen, C-mitarbeiter gehören nicht ins Unternehmen die sind ja übrigens nicht für alle Aufgaben C-mitarbeiter, sondern vielleicht sind sie einfach in der falschen Abteilung oder im falschen Unternehmen.
+
+Ja, nehmen wir z. B. irgendeinen Marketer. Vielleicht muss jemand Marketing machen für Rollstühle.
+
+aber eigentlich mache ich ihm keinen Spaß. und wenn er aber Marketing nehmen würde für
+
+Steroide, weil er selber gerne trainiert und sich Steroide spritzt, dann ist er plötzlich viel besser.
+
+d. h. also, der C-mitarbeiter ist ja nicht für alle Zeit C-mitarbeiter, sondern man muss manchmal auch einen Vogel freilassen, so einen C-mitarbeiter in die Freiheit begeben, ihn freistellen, damit er in einem anderen Unternehmen, vielleicht sogar B oder A sein möchte.
+
+Helene fragt: Wie kann man Führung einer Führungskraft tracken?
+
+Ja, da gibt es sogar eine Antwort von Leo Anzahl des Lobens Anzahl der Gespräche, Neubewerbungen, genau, also letztlich, wie ich die Führung tracken würde, Ihr kennt ja mein 5-rollen-modell. Ich würde auf jeden Fall eine Führungskraft anhand der 5 Rollen einer Führungskraft bewerten.
+
+Ja, Also, das wäre jetzt. Mein Vorschlag. Wie das genau funktioniert, wird jetzt ein bisschen den Rahmen Sprengen.
+
+Yes: Ich glaube, ich habe sogar alles beantwortet.
+
+1.956. Also Ich habe noch 4 min, Zeit, liebe High Performer.
+
+Ich seh Christian heute sogar 2 Fragen. Wow. Das ist Ne Medaille.
+
+Vielen Dank.
+
+Ich finde es für mich im Moment etwas schwierig, weil ich fachliche Führungskraft bin und keine disziplinarische Du sagtest gerade eben, dann kann man das an diese disziplinarische Führungskraft weitergeben.
+
+Aber gleichzeitig bin ich halt derjenige, der im Team sitzt und quasi nicht nur mitbekommt, dass ein low performer Low performt, sondern
+
+mich ja quasi auch abhält von dem, was ich zu tun habe, Aber ja
+
+ist natürlich schwierig auf eine. Ich habe keine konkrete Frage jetzt eigentlich gestellt, sondern nur die Situation beschrieben
+
+darauf, aber hast du sowas in deinem Team, dass jemand nur eine fachliche Führung hat, und hat er dann
+
+trotzdem eine disziplinarische Weisungsbefugnis, Oder hat er das dann nicht.
+
+Jetzt hat Christian eigentlich so eine Pseudo Frage reingeschmuggelt, die eigentlich gar keinen Sinn macht.
+
+Ja.
+
+Er wollte
+
+nicht da so dastehen, dass er jetzt gar keine Frage hat. Also klar, Christian: Bei uns gibt es auch Leute mit fachlicher und disziplinarischer Führung und auch diesen fachlichen Führungskräften empfehle ich dann halt zu mir zu kommen und sagen, dass ich dann beispielsweise etwas härter oder deutlicher mit denen spreche, ansonsten weiß jemand nicht, wie man die Hand hebt. Habe ich gerade gesehen.
+
+also die Hand heben. Tut dir über die
+
+Funktion reagieren. Also, bei einigen steht sofort Handheben und bei einigen steht reagieren. und dann könnt ihr mir entweder ein Herz geben.
+
+wenn ihr wollt, Frau hetzen freue mich immer oder so ein bisschen Feierlaune.
+
+und dann habt ihr so Symbole, oder? Aber ihr könnt dann die Hand heben. und dann könnt ihr wieder die Hand senken. Erika: Du hast dich schon vor der Breakout gemeldet, Bitteschön
+
+und Mikro nicht vergessen.
+
+Ja jetzt so, Ich grüße zusammen. Mein Problem ist, da ich als Lehrer mit unterschwelligen Menschen arbeite, d. h.,
+
+am Anfang konnten sie weder schreiben noch lesen, und natürlich selbstverständlich auch kein Deutsch.
+
+mittlerweile nach fast 2 Jahren sind wir doch schon ein paar Schritte weiter. Aber dennoch
+
+gibt es einige Leute, die weigern sich die Buchstaben zu lernen. Stellt euch mal vor, also so viele Motivationen. Nach so vielen Motivationen habe ich
+
+sie immer noch nicht geschafft, dazu zu bringen, dass Sie da mitmachen.
+
+Also, die sitzen, wenn Sie schon brav sind da. Sitzen Sie da und hören zu.
+
+Erika ich kurz mal ein bisschen ab. Was ist die Frage.
+
+Ja, Frage ist: Wie bringe ich die unterschwelligen Leute, um trotz Motivation zur Mitarbeit.
+
+Sehr gut. Also, es gibt ganz grob 2 Wege, die Lehrer anwenden können, nämlich eine Karotte oder die Peitsche.
+
+Die Karotte bedeutet, dass du als Lehrerin sagst, wenn ihr diese Übung macht und diese Hausaufgabe macht, dann gebe ich morgen allen eine Brezel.
+
+d. h., du gibst einen positiven Anreiz, und die Peitsche wäre zu sagen, wenn Ihr die Hausaufgabe oder wer morgen die Hausfrau gar nicht macht, der kriegt eine 5. und als Lehrerin kannst du ja über Noten mitentscheiden, und Noten sind natürlich auch ein sehr starkes Mittel, und das können wir immer machen.
+
+Das wird nicht gemacht. Absolute nicht gemacht, und Hausaufgaben werden einfach schlicht ignoriert. Also so viel, wie viel ich dann
+
+in den Unterrichtseinheiten schaffe. Das ist ja. und nächsten Tag wiederhole ich noch mal. und so geht das.
+
+Das habe ich immer noch nicht geschafft.
+
+Genau. Also, probier mal dir auszudenken, was eine gute Strafe wäre, Belohnung wäre und.
+
+Das ist.
+
+Eine Aufgabe Erika für dich, damit wir auch die nächsten Fragen dran nehmen. Du bist ja eine schlaue Frau. Überleg: dir willst du den als Belohnung Brezel mitnehmen, und welche Strafe willst du ihnen mitgeben, damit sie in die Handlung kommen.
+
+Ja, ich habe das schon mal probiert mit. z. B. waren Sie ganz aktiv.
+
+Dann habe ich längere Pause gegeben, und da haben Sie sich dann toll gefreut, denn Sie finden die 15 min Pause. Viel zu kurz.
+
+Sehr gut. Das ist doch schon mal ein guter und kostenloser Weg. Yvonne dich hatten wir schon. Ich nehme immer die Leute am liebsten, die heute noch nichts gesagt haben. Ich hoffe, ihr habt dafür Verständnis. Der Dietmar hat noch Nix gefragt, und Alessio Martone kommt dann als Letzter dran.
+
+Ja. Hallo, ich habe eine spezielle Frage zu Smart, und zwar Ich kenne das bei uns in der Firma. Es werden Ziele definiert, wo wir alle wissen. Sie sind unrealistisch.
+
+Im Sheet. Davor hattest du das mal das mal. Das gibt es sowas Ähnliches, auch bei Smart, also, sprich, wenn ein Teil von Smart nicht richtig definiert ist, dass dann auch die Leistung dementsprechend
+
+extrem absinkt.
+
+Ja, klar. Auf jeden Fall. Also dieses das Mal das mal. Das das war ja die Idee von der Ki. Da gehe ich aber tatsächlich schon mit, dass natürlich ein Faktor, wenn das Ziel z. B. unrealistisch ist, dass dieser Faktor dann zur Demotivation führt. Da ist aber natürlich die Verantwortung desjenigen, der das gemerkt hat, sich zu melden und zu sagen, das Ziel ist ja völlig unrealistisch, Weil das Problem, was ich häufig wahrnehme, ist.
+
+die Mitarbeiter haben Angst, sich zu melden, weil die Führungskraft sie platt macht.
+
+und da muss es quasi von 2 Seiten idealerweise eine Lösung geben. Der Mitarbeiter sollte mutiger sein, sein. Mindset stärken.
+
+und die Führungskraft sollte offener sein für Kritik und auch ein bisschen realistischer. Aber irgendjemand muss den Anfang machen. Ansonsten, wenn es z. B. zu unrealistisch ist, dann denken ja, alle, Was ist das denn für ein Arsch das Ziel? Deswegen sagen wir beispielsweise auch bei der Ausbildung.
+
+Wir sagen nicht, hey, ihr habt nach 3 Tagen 10% Gehaltserhöhung.
+
+Das ist halt unmöglich. Also, in 3 Tagen kann man sich ja nicht verbessern, aber nach 6 Monaten, da haben viele Leute 10 bis 15%. und ich habe beispielsweise heute mit einem gesprochen, mit einem Kai. Der hat jetzt 3 000€ mehr Gehalt für sich rausgeholt.
+
+Das hat aber 6 Monate gedauert. und das ist cool. Deswegen wäre das quasi total demotivierend, wenn ich euch erzählen würde. Man kann ja sofort viel Geld verdienen und das Invest in 3 Tagen zurückholen.
+
+Das passt ja auch nicht zu meinem Sternzeichen. Ich als Steinbock bin, ein stetiger Typ, der langsam nach oben geht. und deswegen verspreche ich auch keine unrealistischen Sachen, sonst würden sie euch demotivieren, aber ein halbes Jahr dran bleiben.
+
+dann kann man richtig coole Sachen machen. und wenn ihr 18 Monate dabei seid, dann könnt ihr gleich das besser machen als Friedrich Merz.
+
+Ich.
+
+Sehr gut. und Alessio deine Frage. Zum Schluss.
+
+Hallo
+
+High Performer in meinem Team, vielleicht die allerbeste Mitarbeiterin. Die kann außer körperliche Aufgaben, natürlich im Vergleich mit Männern
+
+alles machen. und wenn sie was macht, ist 99%, richtig? d. h., kann man sich verlassen.
+
+Sie hat eine steht ein Wurm in den Apfel bzw., sie ist sehr autonom.
+
+und sie hat Schwierigkeiten, im Team zu arbeiten, besonders wenn irgendwie Führungsrollen nehmen muss.
+
+Meine Frage ist da noch ein Hinweis bzw. eine Information für dich für deine Antwort.
+
+sie als solche Verhalten.
+
+Wenn was gefragt wird, sagt sie Nein.
+
+und dann, irgendwie kindisch, sag ich mal, versteckt, macht sie das doch
+
+unbedingt Ergebnis. Also alles total spannend, ist die Art und Weise, wie an diese Wirkung oder an diesem Ergebnis kommt. Das ist unfassbar nach 18 Jahren, die bei mir arbeitet.
+
+d. h., jetzt ist mein Team wieder größer.
+
+und ich muss delegieren, Sie ist die perfekte Person dafür, weil sie kann alles.
+
+Wie kann man so ein Verhalten, wenn ich es genügend gut geschrieben beschrieben habe, ja ändern, umstellen.
+
+Ja gute Frage. Das war eine ähnliche Frage zum Igel, wo jemand unsympathisch und pessimistisch war. Da hatte ich ja gesagt, da lässt sich so einen Igel. Kannst du nicht umerziehen, zu einem superpositiven Menschen. und ich würde Alessio tatsächlich als Führungskraft
+
+immer das Mindset haben. Mir geht es um das Ergebnis. und selbst wenn die so ein bisschen autonom sagt: Nee, das finde ich blöd. Das ist nicht gut. Es gibt einfach Leute, die sind immer trotz Menschen.
+
+Sie trotzen immer, gehen immer in den Widerstand, Aber wenn Sie die Aufgabe trotzdem gut macht, würde ich mir dazu denken. Egal, sie wird es trotzdem gut machen. Ich glaube nämlich, dass an der Situation dich das eher nervlich stört.
+
+Aber das Ergebnis ist ja gut, und deswegen würde ich das einfach mitnehmen und sagen ich: Alessio bin als Führungskraft nur auf Ergebnisse fokussiert. und wenn das Ergebnis da ist.
+
+lasse ich die Frau auch ein bisschen autonom sein, weil nach 18 Jahren wirst du sie wahrscheinlich nicht verändern können. Aber Alessio, wen du verändern kannst.
+
+das bist du und wessen Mindset du verändern kannst, Das kannst auch du und es gibt Leute. Ich mach mal ein politisches Symbol. Egal oder ein Beispiel: Egal was die Regierung macht, die sind, dagegen
+
+Wenn z. B. die Regierung Corona-maßnahmen macht, sind, die dagegen, Wenn die Regierung Ukraine unterstützt, sind sie dagegen. Wenn die Regierung Trump unterstützt sind, die dagegen, Wenn die Regierung das Rentenalter anhebt, sind die dagegen. Wenn die Regierung eine Rente ab 62 möglich sagt sind sie dagegen. d. h., also, diese Art von Menschen. Die sind einfach da.
+
+Ich würde mal sagen, das sind so ungefähr 5 bis 10% der Gesellschaft. Die sind einfach immer dagegen und die Frage als Führungskraft ist, nur bekommst du dann das Ergebnis? und manchmal ist die Kommunikation auch bei mir im Team nicht immer optimal. Also, die Leute können natürlich nicht alle diplomatisch so diplomatisch sprechen wie ich.
+
+aber das ist ja auch nicht deren Aufgabe, sondern deren Aufgabe ist es, Ergebnisse zu liefern. Deswegen mein Vorschlag: Lasst uns immer darauf besinnen, dass wir die Ergebnisse brauchen und wie sie irgendwie zustande kommen. Vielleicht sind wir auch ein bisschen genervt.
+
+Da müssen wir es runterschlucken und einfach auf die Ergebnisse schauen, das wäre mein ganz, ganz konkreter Vorschlag, und vielleicht hilft euch ja diese Metapher von Leuten, die immer dagegen sind. Bei jeder Wahl sind sie immer gegen die Regierung sind immer
+
+in der Opposition sehr schön, Ladies und Gentlemen, damit wir nicht zu lange überziehen. Wir.
+
+Danke.
+
+Auch den schönen Donnerstag mit der Q. Da gibt es auch Rollenspiele. Da könnt ihr auch Fragen stellen außerhalb des Themas der Low Performance. und ich möchte mich bei euch bedanken, Ihr High Performer. Ich hoffe, ihr nehmt den wichtigsten Mint Satz der Session mit
+
+ihr könnt jede Woche die Umsetzungsaufgabe machen, und in meinen Augen seid ihr dann die high Performer. Okay. Also egal ob ihr die Aufzeichnung schaut oder nicht, ist fast wurscht, Egal, ob Ihr hier 90 min oder 20 min dabei seid, ist fast wurscht aber diese Umsetzungsaufgabe.
+
+weil ich kenne ja alle Masterklässler. Das bedeutet also, ich weiß, dass diejenigen, die viel Posten auch diejenigen sind, die Ergebnisse bekommen, aus der Masterclass seid. Also keine passiven Zuhörer. Euer Hübsches Lächeln hilft nicht weiter.
+
+sondern eure Umsetzungsaufgabe. und in diesem Sinn, danke euch, dass ihr da wart. Ich hoffe, euch hat die Session gefallen. und wir sehen uns, wenn ihr wollt, schon übermorgen bei der questions answers and Coaching Adios
+
+bis bald.

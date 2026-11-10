@@ -1,0 +1,1379 @@
+Weiß ich auch nicht, dann ist man in irgendwelchen Gruppen und Labert da irgendwas rum.
+
+Ja.
+
+Hallo.
+
+Doch
+
+Hallo euch noch hier richtig benennen.
+
+und los geht's mit unserem Qac zum Thema Stakeholder.
+
+Ich habe euch gesagt, Wir können auch Konfliktfälle einbringen. Wir könnten auch mit jemand von euch Mal bezogen auf ihre Situation diese Stakeholdermatrix ausfüllen. und dann habe ich euch noch so ein paar Inspirationen mitgebracht. Zum Thema Ki und Stakeholder.
+
+und ja, noch so 2, 3 Ideen. Maike hat sich schon mal gemeldet, sehr gut Maike.
+
+Genau. Ich habe eine ganz kurze Frage. Ich möchte immer gerne wissen, ob du einen Buchtipp hast, und dann hätte ich noch eine zweite Frage daran, Anschließend.
+
+Ja, also tatsächlich. Beim Thema Stakeholder habe ich keinen direkten Buchtipp. Hätte ich euch.
+
+Manchmal kann es auch sein, dass man es vergessen hätte, oder so. Aber dann hätte ich ihn euch den auch rein gegeben. Ich kann das aber noch mal mitnehmen. Maike für dich, Ob ich
+
+so aus dem Umfeld nochmal sage, Hey, da gibt es, was was wirklich für dieses Thema besonders gut ist. Manchmal gibt es auch vielleicht den einen oder anderen Aufsatz, der hilfreich nimmt. Lass mich das nur
+
+hier kurz notieren, damit ich das nicht vergesse? und deine zweite Frage.
+
+Wenn ich das einfach nochmal irgendwo vertiefen könnte. Die andere Frage wäre tatsächlich.
+
+Wir sind jetzt kein klassisches, produzierendes Unternehmen. Also, wir stellen keine Autos her und keine Kühlschränke oder so was ähnliches. Deswegen haben wir auch nicht den klassischen Kunden, der bei uns was kauft, und wir haben auch nicht diese klassischen Stakeholder, wie ich mir, die jetzt erst mal so vorgestellt habe. Wir sind
+
+also Fach oder Interessensverband, wie auch immer man das nennen möchte, für Menschen mit Behinderungen, also ein Sozialverband oder freie Wohlfahrtspflege, die Richtung. und da wollte ich auch noch mal wissen. Hast du da eine Vorstellung? Ist das mit den Stakeholdern da anders zu bewerten? Bei uns sind halt Stake
+
+irgendwelche Behörden, und.
+
+ja, wir versuchen natürlich da auf Gesetzgebungsverfahren Einfluss zu nehmen. Richter, wir haben mit Richtern zu tun.
+
+das sind eher so Abläufe, die ja ganz anders sind als wenn ich in der Privatwirtschaft bin. und unsere Klienten sind natürlich auch unsere Stakeholder, aber die haben auch nicht so diesen Einfluss, wie das beim Kunden ist. Der Kunde kann halt einfach sagen. Naja, wenn mir der Laden nicht gefällt, dann kaufe ich halt woanders.
+
+Aber unsere Klienten sind ja oft sehr stark darauf angewiesen, auf unsere Dienstleistungen und haben, wenn Sie Glück haben, ein bisschen Auswahl, Aber die Auswahl hält sich sehr in Grenzen. Wenn man heutzutage einen Kurzzeitpflegeplatz für jemanden sucht.
+
+dann muss man eigentlich den Erstbesten nehmen. Da hat man keine Wahl, irgendwo nachzufragen und sich den Besten auszusuchen.
+
+Gibt es da Besonderheiten, die du jetzt sagen würdest, die.
+
+Naja, es ist ja immer. Also, Die erste Überlegung ist ja immer, was ist das Ziel meiner Stakeholderanalyse? und dadurch unterscheidet sich natürlich
+
+grundsätzlich oft gar nicht so sehr, weil ich sage: Ja, ich will meine Stakeholder möglichst gut eingebunden bekommen, um die Entscheidungen, die ich durchsetzen möchte, zu erreichen.
+
+egal ob Privatwirtschaft oder bei euch. Aber du hast natürlich
+
+andere. Also Ich habe deswegen auch Solveig immer wieder reingenommen, weil sie so diesen schönen Konzernblick hat. Sie ist, glaube ich, auch heute drin. Solveig, ich habe dich schon gesehen, und da hast du sozusagen ähnlich wie bei euch. Ja, Ihr müsst so im Umfeld
+
+Stakeholder beachten, die also, gerade wenn der Gesetzgeber zu beachten ist, ja die andere Entscheidungskriterien haben, die andere Entscheidungsabläufe haben, und da liegt, glaube ich, eher die Spezialität drinnen
+
+sich jetzt auch immer mehr Ki-tools rauszusuchen, die die Spezialität dieser Bedürfnisse
+
+z. B. eben der gesetzlichen Stakeholder sehr gut untersuchen.
+
+Nichtsdestotrotz kannst du das, ich werde nach erinnert mich, wenn wir das noch nicht gemacht haben. Ich habe euch mal einen Chat vorbereitet, weil bei der ganzen Ki kommt, ja immer mehr das Thema Agentic agentische Ki rein.
+
+und im Prinzip war das ja erst mal so, Das muss ich programmieren. Aber auch das läuft ja mittlerweile dialogisch. d. h.,
+
+du kannst dir z. B. einen Agenten programmieren, der dir jede Woche Veränderungen in der Gesetzeslage, auf die in der Stakeholder Kommunikation reagiert werden muss.
+
+auf den Tisch bringt. Ja, und das musst du heute gar nicht mehr einprogrammieren, sondern da kannst du einfach in einem prompt sagen, mache mir das suche mir alle relevanten Plattformen
+
+durch und schicke mir diese Änderungen. Beim Agent geht es ja teilweise sogar weiter, dass Du dann sagen könntest.
+
+lieber Agent und schicke schon mal an, die und die und die Zielgruppen ein.
+
+Ich schicke nochmal an, die und die Zielgruppen ein Update dazu oder eine Meinung dazu.
+
+und wenn ich es nur kurz und weiß, gerade nochmal im Chat gesehen habe. Ich unterbreche nur ganz kurz mal. Es ist der Kurs über Zeuge im Gespräch, den Bitte nehmen, ja nur diesen Kurs bitte nehmen, weil Manuela berechtigterweise nochmal gefragt hat. Da war ein Fehler, in der
+
+allerdings ja, Maike, Also, deswegen ist
+
+für euch also immer erst mal: Was ist mein Ziel, das wirklich sehr, sehr klar zu haben? Das kannst du ja alle Stakeholder, aber auch für eine bestimmte Gruppe.
+
+dann sich einen Agenten zu holen, der dafür sehr viel hilft und wenn es weitergeht. Vielleicht haben wir heute auch kurz mal Zeit. Ich habe das selber noch nicht so Firm probiert. Aber das kommt wahrscheinlich immer mehr. Da gibt es die sogenannte Habermas Machine.
+
+und die haben sich darauf spezialisiert. Das ist eigentlich von Google ist so ein Tool.
+
+wo du hergehst. Was mache ich eigentlich, wenn ich unterschiedliche Stakeholder Positionen habe? Der Gesetzgeber sagt so aber vielleicht eure Dienstleistungslieferanten sagen so und dann eure Kundengruppe sagt so.
+
+und das Ziel dieser Habermass-maschine ist, dass sie besser als wir Menschen quasi die Win-win-lösung findet.
+
+Ja, und da ist die so darauf spezialisiert, die bearbeitet dann Vorschläge, die kannst du dann wieder an deine Stakeholder-gruppe ausgewähltermaßen schicken, kriegst die, bewertet zurück. und so kommst du immer besser und schneller zu dem gemeinsamen Schnittmengenlösungen.
+
+und das könnte auch für euch ganz interessant sein. Das ist natürlich für alle interessant, ist jetzt vielleicht nicht so interessant, wenn ich
+
+das für mich mache als selbstständiger. und mach so eine Stakeholder-analyse, vor allem im Sinne: Wer kann mir da weiterhelfen? und wer würde mich total rausbremsen, wo du jetzt nicht so viel Meinungs und Konsensbildung hast.
+
+aber in öffentlichen Prozessen und mit öffentlichen
+
+Gesetzgebern, Dienstleistern etc. Könnte das z. B. auch eine Rolle spielen.
+
+Okay.
+
+Gut waren ein paar gute Ideen für mich. Dabei bringt mich schon mal ein Stück weiter.
+
+Sehr gut. Ja, sehr gut.
+
+Solveig hat wahrscheinlich auch noch einen Tipp, weil sie ja viel mit den öffentlichen Stellen zu tun hatte.
+
+Ich wollte mal fragen, ganz genau, was du so für Leute hast, weil, wenn du sagst, du weißt gar nicht genau, was so Stakeholder sein könnte. Also ich will nur mal ein bisschen Anregung geben, was mir jetzt so spontan einfällt.
+
+Es sind ja einmal sozusagen Eure direkten Personen, mit denen ihr arbeitet, also Menschen mit Behinderung. Aber das können dann natürlich dann auch Ich weiß nicht, ob Ihr Pflegekräfte oder irgendwelche Fachkräfte. Habt dann bei euch die mit denen arbeiten?
+
+Das sind dann vielleicht auch Angehörige, Mitarbeiter, ehrenamtliche.
+
+von eurer Organisation, erst mal die gesamte Hierarchie, also irgendwie Leitung, vorstand. Ich weiß nicht, ob ihr vielleicht einen Aufsichtsrat habt oder so etwas oder einen Betriebsrat und dann natürlich die ganzen Externen. Das sind jetzt nicht nur Angehörige oder gesetzliche Betreuerinnen, sondern natürlich auch die Kostenträger, also so etwas wie Krankenkassen oder Pflegekassen oder Wiedereingliederungskassen etc.
+
+und natürlich dann irgendwelche Behörden, die natürlich dann auch gucken, auch in Pflegeheimen. Ist Das ja oft so
+
+ordnungsgemäß ist, oder wo man dann halt auch gucken kann, ob man da noch irgendwelche Sachen in Anspruch nehmen kann und natürlich, was du schon gesagt hattest, halt auch Politik oder Politiker, wo ja auch bestimmte Forderungen durchgesetzt werden sollen, und dazu gibt es natürlich dann auch noch Interessenvertretungen, die sich sicherlich auch überschneiden. und wenn ihr das macht, habt ihr sicherlich dann
+
+auch irgendwie. Ich weiß nicht Catering, also irgendwas an Lieferanten.
+
+die natürlich für eure Firma, auch oder für eure Organisation dann auch wichtig sind. Das bedeutet, das sind alles Stakeholder und natürlich ganz wichtig noch, wenn es Wettbewerb gibt, mit anderen. Das wird oft für immer vergessen. Es sind auch Stakeholder, weil mit denen kann man in bestimmten Dingen z. B. Forderungen durchsetzen für irgendwelche
+
+mehr Geld für bestimmte Sachen, die man dann eben auch umsetzen kann
+
+Mit seinen Klienten also in eurem Fall dann Menschen mit Behinderung
+
+die ziehen ja dann am gleichen Strang, während sie bei anderen dann vielleicht dann eher eine andere. Also, wo ja dann mehr im Wettbewerb steht. Aber
+
+für bestimmte Aktionen könnte das durchaus sein, Dass das dann halt hilfreich wäre und die alle abzubilden, mit all ihren unterschiedlichen Interessen, und dann halt zu gucken, was das ist. Das ist schon eine ganze Menge. Also, das ist wirklich vollkommen unabhängig. Was für ein Unternehmen oder Organisation da das ist.
+
+Das hängt nicht damit zusammen, dass das jetzt eine super große
+
+Organisation sein muss, oder multinational, dass man wirklich viele Stakeholder hat.
+
+und
+
+die Menschen mit Behinderung selber haben in der Regel kein Geld, um uns bezahlen zu können. d. h., es wird halt einfach finanziert von der Sozialhilfe. und das ist dann auch genau dieser Punkt, dass man, da wir sind, tatsächlich heute auf einer überörtlichen Arbeitsgemeinschaft gewesen, wo all diese Akteure dann zusammengekommen sind. Das war jetzt spannend zu dieser Woche, da habe ich die alle mal irgendwie live gesehen und jetzt gedacht, das sind alles. Meine Stakeholders war mir
+
+vorher nicht so bewusst.
+
+Ja.
+
+und man.
+
+Hat natürlich eine andere Art der Einflussnahme dort, weil viel über Gesetzgebungsverfahren funktioniert.
+
+Gesetzgebung Einfluss zu nehmen, was nicht direkt über die Politiker oder über Parteien passiert, sondern über Ministerien, über Interessenverbände und solche Geschichten.
+
+Das ist genau der Punkt. Du musst rausfinden, wo sozusagen die Influencer sind, die genau diese Entscheidung in der Politik beeinflussen.
+
+Man könnte auch Lobbyismus dazu sagen. Das ist nur ein anderes Wort, aber das ist ja auch legitim, dass man versucht, die Interessen der eigenen Organisationen für seine eigenen Kunden seine eigenen Mitarbeiter durchzusetzen. Nichts anderes ist das ja
+
+legitim, auch sich dabei Unterstützung zu suchen, weil Es gibt ja noch sehr viel mehr Pflegedienste oder auch Organisationen mit Behinderten, die vielleicht eine ähnliche Schwierigkeiten haben, bestimmte Dinge zu bezahlen, und Es ist immer hilfreich, wenn man dann eben nicht alleine ist, sondern möglichst viele hat, die eben ein gleiches Anliegen haben, weil dann muss die Politik zuhören.
+
+Herr.
+
+Das war halt meine Vermutung, dass gerade in diesen Sozialunternehmen dieses Stakeholdermanagement noch nicht wirklich richtig angekommen ist.
+
+Ist aber extrem wirksam. Wenn man eine bestimmte Größe hat, und dadurch, dass es eben so viele Pflegefälle gibt.
+
+sind es ja zusammen noch mit Angehörigen oder so eigentlich ziemlich viele. und das kann man ja dann auch zeigen, indem man z. B. offene Briefe macht, Petitionen macht, oder was auch immer.
+
+Dadurch kannst du schon ziemlich viel Druck erzeugen. und wenn du weißt, jetzt steht kurz vorher, Irgendwie muss man mal hochrechnen, irgendwie eine wichtige Entscheidung an Gesetzgebungsverfahren etc, wo vielleicht dann gestrichen werden soll oder es darum geht, irgendwas dann zu haben.
+
+muss man sich halt wirklich hinsetzen. Überlegen. Okay, wen brauche ich denn damit das durchgeht? Wer muss wen vorher ansprechen? Wir sprechen.
+
+Okay, wir haben schon ein bisschen. jetzt ein bisschen zu sehr zwischen euch. Beiden. Ich nehme mal Maike, wenn du magst.
+
+Ich gebe mal für euch alle so einen Basis-prompt, den man nehmen könnte für einen Agenten. und wir spielen das mal durch, wie das für deinen Fall wäre.
+
+damit sozusagen jeder für sich lernen kann.
+
+Was Wie werde ich es denn formulieren, wenn ich mir jetzt Mal so einen Agenten bauen lasse, via Chat
+
+und dazu Maike der passt jetzt nicht für dich. Ich habe jetzt einfach mal so einen ganz allgemeinen Text. und wir gucken mal, was du verändern würdest.
+
+und dann kannst du das ja auch gegebenenfalls eingeben bzw. kann ich es
+
+vielleicht auch hier verändern. Ihr seht jetzt hoffentlich alle meinen ja.
+
+Die Präsentation mit dem Text für einen
+
+so. Ich schau mal, dass ich mich noch Hier einbau. Dass ihr mich auch sehen könnt, nehme ich mal hier oben hin.
+
+So, dann müsst ihr den anderen für sich ganz gut sehen können.
+
+mach ich auch mich etwas kleiner. So.
+
+Jetzt siehst du den Maike oder.
+
+Ja. Okay.
+
+Genau. und jetzt würde man mal sagen.
+
+Oder.
+
+Bitte.
+
+Er war in der Präsentation.
+
+Aber das ist jetzt sozusagen mal wirklich für die Q und das Ki-thema spezifisch vorbereitet. Das hatte ich jetzt dann noch gemacht, damit wir heute, unabhängig davon, was ihr für Fragen habt.
+
+Ich kann aber ich könnte hergehen. Ich könnte natürlich hergehen und sagen, ich
+
+ich weiß, das sind wahrscheinlich mehr als 1.000 Zeichen. Das ist leider im Chat immer das Problem
+
+ein bisschen bei.
+
+Wir können mal gucken, ob er
+
+in den Chat geht. er geht gerade rein.
+
+Er geht gerade rein. Dann habt ihr ihn auch im Chat.
+
+Wie gesagt, Basis prompt. und jetzt, guck! Aber jetzt geht es eher darum, dass wir
+
+uns unterhalten. Was würdest du verändern und die anderen sozusagen, Was würde ich denn bei mir auf so einem Basisch-chat? Wenn ich mir so einen Agenten organisieren will? Was würde ich daran verändern? Die können ja nicht. Die können jetzt an deinem Fall zwar teilhaben, aber sie sollen das ja auch
+
+für sich machen, die anderen und dass wir, dass wir beide das quasi mal durchgehen. Das so als als Idee.
+
+ich mach es mal wieder, obwohl ich lasse.
+
+Ich muss in der halben.
+
+Warst du gerade vom Ton weg. Sag nochmal, Was musst du.
+
+Würden.
+
+Hört ihr Maike auch gerade verzerrt.
+
+Du bist gerade verzerrt gewesen. Wir haben dich gerade nicht gehört, Du musst es nochmal wiederholen und vielleicht gut ans Mikro rangehen.
+
+Okay. Also ich hab gesagt, dass ich in einer halben Stunde noch mal fort muss.
+
+Ja. Ok, das schaffen wir vorher. Das schaffen wir.
+
+Kannst du anderen auch noch mal die Chance geben.
+
+Ja, sehr gut, Sehr gut. Ja, nein, das machen wir jetzt hier auch. Letztendlich du bist jetzt stellvertretend. Die anderen machen das jetzt für sich. Das ist jetzt also quasi nicht hier, was zwischen uns, sondern jeder kann ja mal für sich anhand dieses Thema. High, wenn ich im Dialog mit so einem
+
+Agenten baue, also dein Ziel ist es. Wie würdest du das jetzt formulieren?
+
+Ich mach's mal auf einer, sodass wir
+
+das hier an der Folie machen, die
+
+wir die alte behalten, dein Ziel. Also, du sagst jetzt der Ki, Deinem Ki-agenten. Dein Ziel ist es.
+
+Eine gute Arbeit zu leisten bei unseren betreuten.
+
+Die Ki ist ja der Agent. Du sagst jetzt, was das Ziel für diesen Agenten ist, weil der muss ja sagen, Worauf ziele ich alles ab, was ich jetzt für dich erledigen soll.
+
+Was würdest du jetzt formulieren.
+
+Ist, mich darin zu unterstützen, einfach die Stakeholder
+
+überhaupt Mal zu erfassen und die Einflussnahmen für mich sichtbar zu machen.
+
+Okay. Also dein Ziel ist es, meine oder unsere Stakeholder, meine Stakeholder zu erfassen.
+
+Ich tue meine Tastatur hin, dann tue ich mich leichter. Die ist gerade noch weggeschoben. Dann kann ich schneller Reintippen
+
+zu erfassen und.
+
+Einflussmöglichkeiten zu erkennen
+
+und dann schlussendlich auch eine Datenbasis zu haben für Einflussnahmen auf Gesetzgebungsvorhaben und ähnliches. Also das fand ich ein guter Gesichtspunkt, den du gerade gebracht hast, dass man den Agenten ja so programmieren kann, dass er einem auch
+
+Informationen über geplante Veränderungen zukommen lässt, dass man dazu Stellungnahmen schreiben kann und Ähnliches.
+
+Datenbasis für gesetzliche Entwicklungen oder Veränderungen.
+
+Zu haben.
+
+Das lässt sich ja auch noch verändern.
+
+So
+
+willst du dem Ganzen hier noch sagen, sozusagen, Es ist ein bestimmtes Projekt um das geht, Oder ist das hier nicht so relevant? und ihr macht es mal wirklich ihr anderen durch, das wo ihr das braucht
+
+Karin, Hakan. Sunni Manuela Stefan, so wie ich euch alle sehe, dass ihr mal für euch sagt: Hä: Wo kann ich so einen Agenten so 007 im Internet
+
+für mich einsetzen? und wie würde ich den prompt dafür formulieren? Hast Du
+
+braucht es einen Projektnamen, oder ist das jetzt gar nicht relevant.
+
+Ich selber arbeite in einem Betreuungsverein. Das ist eine kleine Abteilung bei uns im Unternehmen. Wir haben so ungefähr 800 Mitarbeiter. Aber unsere Abteilung speziell besteht nur aus 5 Personen.
+
+Das ist natürlich wirklich noch mal ein bisschen spezieller, und da geht es ums Betreuungswesen, allgemein rechtliche Betreuung.
+
+Wir können ja Ki, System oder Unterstützung schreiben für unser Unternehmen im Bereich.
+
+Im Bereich der Interessenverband der Behindertenhilfe.
+
+Im Bereich Interessenverband.
+
+Besondere.
+
+Hilfe, okay?
+
+Genau.
+
+So?
+
+Wer sind die relevanten Stakeholder.
+
+Stakeholder sind natürlich jetzt bei uns im Betrieb selber Aufsichtsrat und Geschäftsführung.
+
+Ja.
+
+Unsere Mitarbeiter logischerweise
+
+das Controlling natürlich, die, die das Budget letztlich planen.
+
+Ja.
+
+Aber dann unsere Klienten?
+
+Die Klienten sind halt. Die Menschen, die von uns rechtlich betreut werden, die unter Betreuung stehen, uns vom Gericht zugewiesen werden
+
+und alle Akteure, drumherum, sprich Betreuungsgericht, Betreuungsstelle. Dann, okay, wird das.
+
+Das wirst du dann, wenn du es machst. Noch mal jetzt ganz spezifisch. Aber ich glaube, da haben wir jetzt schon mal viel drin
+
+Klienten Wie nennt, was ist der offizielle Begriff für Eure Klienten.
+
+Menschen mit Behinderung, oder wie nennt sich das.
+
+Menschen, die unter Betreuung stehen. Also betreute.
+
+Menschen, die unter Betreuung stehen.
+
+Also, dieser Begriff kommt ja von früher von der Vormundschaft. Das, was früher Vormundschaft war, heißt heute Betreuung für Erwachsene.
+
+So. und jetzt sagst du deinem Agenten.
+
+was er tun soll und in welchen Schritten.
+
+Also was.
+
+Jetzt mal.
+
+Das Ziel haben wir ja oben gesagt. Er soll die Stakeholder erfassen. Also vielleicht soll er dir erst mal eine Stakeholdermatrix erstellen. Du kannst ihm ja dann auch immer sagen und stelle mir
+
+überall dort fragen, wo dir Informationen fehlen oder du noch was brauchst. Das könntest du bei jedem könntest du ganz grundsätzlich nochmal hinzufügen. Dann bringt er dich nochmal im Dialog mehr auf den Punkt.
+
+Du kannst, aber eben auch direkt Sorgen erstelle. Eine Stakeholdermatrix mit Einflussinteressen und möglichen Widerständen. Jetzt wird er das natürlich machen, so wie er fantasiert, wenn du ihm nicht Vorgaben machst. Aber das kannst du ja auch mit der Zeit füllen. Der Unterschied jetzt dazu zu, mit der Excel in der Excel.
+
+Wenn du das da einträgst, dann hilft es ja dir sehr genau. Erstens mal deine Gedanken zu ordnen
+
+und sehr spezifisch dran zu sein. Das hier wäre so, hey, ich brauche erst mal eine Grundlage, an der ich mich entlanghangeln kann. Das kannst du mir auch theoretisch sagen: Erstelle eines stakeholder Holdings, mit Einflussinteressen und möglichen Widerständen baue dazu eine Excel Datei mit den entsprechenden
+
+Spaltenüberschriften, die Du für sinnvoll hältst, dann kannst du natürlich so schon mal deinen Basisschritt. Aber die Idee von der Excel-datei, die ich euch mitgegeben habe, ist ja, wirklich, Wenn ihr es selber macht, dann seid ihr einfach nochmal, Sehr direkt drin und viel spezifischer. Okay.
+
+Also was sagen wir jetzt da? Was ist der erste Schritt?
+
+Was schreibt ihr rein für euren ersten Schritt, Marco Sabine Dietmar.
+
+So, was schreibst du rein, Was sollen wir da willst du eine Stakeholder Matrix? Erst mal haben.
+
+Also fände ich schon mal gut, Ja.
+
+Dann lassen wir mal den Punkt zu, und du, wenn du es machst, kannst der noch spezifischere Anweisungen geben, was er da machen soll? Ja.
+
+Ergänzen. Was mir fehlt. Also in die Ki hatte ich schon mal eingegeben, wer unsere Stakeholder eigentlich sind.
+
+Ja.
+
+und die Matrix hilft einfach oft. Oder die Excel Datei, weil du diese.
+
+wenn du jetzt nicht ein riesen Programm schreiben Willst du so schön filtern kannst, nach allen Kriterien, was ich euch ja gezeigt habe, mit den Dreiecken da über den jeweiligen Positionen. und dann kann ich immer meine gerade aktuelle Fragestellung kann ich sehr schnell rausfiltern aus diesen riesen Daten
+
+Volumen, Was ich da in der Datei habe. Das macht es einfach schön handhabbar. Gut.
+
+Sind.
+
+Wie können wir jetzt ganz konkret Einfluss nehmen Durch Stellungnahmen auf Entwicklungsprozesse.
+
+die gerade ja dann in Behörden überwiegend stattfinden, und im Gesetzgebungsverfahren. Das sind ja eigentlich so diese Risikofaktoren, die wir schwer beeinflussen können, z. B., Wie hoch ist unsere Vergütung? Wir können nicht einfach
+
+die in der freien Wirtschaft bestimmen, wie viel Geld wir für eine Leistung nehmen, sondern das ist ja oftmals. Also bei uns ist es ganz konkret gesetzlich vorgeschrieben, wie viel wir bezahlt bekommen.
+
+und in Zeiten von Inflation bringt uns das dann schon immer schnell an unsere Grenzen.
+
+Okay.
+
+Ich habe es geschrieben und schreibe zu jedem Risiko.
+
+wie wir Einfluss nehmen können. Auch das wirst du dann auch dialogisch merken, wo du noch was auf den Punkt bringen musst, wo du noch?
+
+Aber das Ziel ist Ja, im Unterschied beim Chat stelle ich eine Frage. und dann kriege ich irgendein Ergebnis. Jetzt will ich ja einen Prozess starten mit dem Agenten. Da will ich ja was machen, wo ich sage, Das werde ich immer mehr auf den Punkt bringen, aber das läuft das ganze Jahr dann durch, z. B., weil ich dann montags immer
+
+die Ergänzungen Kriege oder die neuen Handlungsvorschläge oder die neuen Einflussmöglichkeiten etc.
+
+Okay, dann schau mal
+
+weiter Nächster Punkt: Das wäre ja so ein bisschen, wie wir Einfluss nehmen. Das hängt ja schon fast mit dem man könnte hier sozusagen 3 eigentlich
+
+es auch so machen, dass man diesen Punkt hier zusammenfasst.
+
+Ja.
+
+So ne.
+
+Wäre für mich auch wichtig, dass der Agent mir zusammenstellt, welche Änderungen gerade im sozialen Bereich
+
+meine Arbeit beeinflussen. Ein Beispiel ist jetzt z. B. diese geplante. Wie heißt die Pflegereform, die da kommt.
+
+Pflegeneuordnungsgesetz oder irgendwie sowas, da mir einfach die relevanten
+
+Gesetzesänderungen für mich zusammenzufassen und zusammenzuschreiben.
+
+Genau da kannst du natürlich jetzt bei deinem Agenten auch sagen, wie er das machen soll. Das ist dann wieder Fleißaufgabe für dich oder für die anderen. Wenn ihr so einen Punkt habt, Ihr könnt dem Agenten immer sagen, wie er sowas machen soll.
+
+noch, was was wichtig ist.
+
+Genau und dann eben auch tatsächlich Stellungnahmen zu verfassen, die man bei Ministerien einreichen kann.
+
+damit die für uns auf solche Prozesse dann auch Einfluss nehmen können.
+
+Erstelle.
+
+Engagiert. Georg, Wo.
+
+Sehr gut, erstelle mir Stellungnahmen, die.
+
+Die an Ministerien, an Ministerien verschickt werden können.
+
+Mach es mal ticken, kleiner hier.
+
+und wir haben es dann ja auch gelegentlich mal die an Ministerien verschickt werden können. und jetzt, mach noch irgendwelche Arbeitsanweisungen, weil der Rest kannst du ja dann noch ergänzen, wenn noch wichtige Dinge sind, aber so baut ihr euch so einen Agenten erstellt mir Stellungnahme, die an Ministerien
+
+ja
+
+verschickt werden können.
+
+und jetzt noch irgendeine besondere Arbeitsanweisung. Also hier z. B. haben wir ja die. Aber
+
+was wären jetzt? Deine wichtigen Arbeitsanweisungen für diesen agenten?
+
+Wahlkampf?
+
+Einfach zu schauen, dass unsere Arbeit auch kostendeckend erledigt werden kann, und das als Hintergrund miteinzubeziehen.
+
+die Risiken für unser Unternehmen zu minimieren.
+
+mir also diese Stellschrauben zu identifizieren.
+
+Das macht er. Ja. Also was soll er das mit Kosten bewerten und dann die kostengünstigste Einflussnahme identifizieren, Oder
+
+wie genau. Also das würde ich ihm schon genau sagen, im Agenten, sonst, glaube ich, kannst du so ein bisschen so Wishiwaschi: Allgemein bekommen.
+
+und
+
+so stelle ich mir das vor.
+
+Wie Du es kostenmäßig einschätzt? Ja.
+
+Ja, genau.
+
+Hier dazu machen.
+
+Das.
+
+Kostenmäßig einschätzt.
+
+wie wir Einfluss nehmen können und was diese Einflussnahme vermutlich kostet.
+
+Ja.
+
+Genau, und das dann einfach als monatliches Update.
+
+dass man die Entwicklung dann nachvollziehen kann, in welche Richtung sich das Ganze bewegt.
+
+Genau erstelle mir jetzt eine Erstversion
+
+und liefere mir immer am Anfang des Monats ein Update.
+
+Was.
+
+Alle wichtigen Entwicklungen mit aufnimmt.
+
+Auch eine Prognose für die nächsten 3, 4, 5 Jahre.
+
+in welche Richtung sich das Betreuungswesen insgesamt.
+
+Wie gesagt, das sind jetzt alles Sachen, die du dann spezifisch machen kannst, dann?
+
+Wer hat denn mal jetzt selber für sich schon so einen kleinen oder ein bisschen größeren Agenten geschrieben, nebenher
+
+guckt das mal, was ihr, ich gebe es mal rein. Ja, Das ist natürlich jetzt noch ein bisschen auf die ich schau mal, was jetzt Chatgpt hier bei mir sagen würde, wenn ich jetzt einfach diesen Dings. Wahrscheinlich kommen erst mal noch nachfragen.
+
+Aber wir können es ja gerne mal gucken.
+
+Eine Sekunde. Warum macht er das nicht
+
+so? Jetzt denkt Chatgpt nach, wir können mal gucken, ob er da schon, wie weit er damit schon kommt. So gucken wir mal, was ihr sagt.
+
+Wer hat denn so einen Chat gerade geschrieben und sagt: da kommt gerade noch für mich eine Frage auf, so in der Agenten
+
+bzw. auch andere Fragen, die ihr jetzt habt.
+
+Stefan, Du bist so. Stefan Schierer, du bist doch gerade schon so am Tipp: machst du nicht gerade, baust du nicht gerade schon
+
+Oder tippst du gerade, was anderes?
+
+Die Ki verwendet, um herauszufinden, wie die Struktur meines Unternehmen ist, und.
+
+Wir führen dich gerade sehr schlecht. Du musst entweder das Mikro ganz nah machen oder mal kurz vielleicht das Laptop nehmen.
+
+Ja.
+
+so ist es jetzt besser.
+
+Ja, jetzt ist sehr gut.
+
+Okay, gut.
+
+Ich habe jetzt gerade mal selber in der Küche nachgefragt, wie die Organisationsstruktur bei uns im Unternehmen genau ausschaut.
+
+wo meine Abteilung in dieser Struktur drinnen ist und
+
+wer da jetzt meine Stakeholder sein könnten, genau.
+
+Noch keinen Agenten.
+
+Was wäre so deine erste Idee.
+
+Wofür könntest du einen Agenten nutzen.
+
+Da muss ich erst gucken, was genau ein Kind ist.
+
+Ja, dann gebe ich dir einfach, weil Karin hat er sich gemeldet, gebe ich dir ein bisschen Zeit. und sobald du eine erste Idee hast, sonst könnt ihr das auch gleich dialogisch machen. Dann kann ich sozusagen dein Sparringspartner sein, dafür wo du gegebenenfalls einen Agenten nutzen könntest, aber du mach dir ruhig Gedanken. und derweil nehme ich mal Karin schon dran.
+
+Ja, ich habe ein neues Thema quasi ne.
+
+Macht ja nichts.
+
+Ich.
+
+und dann kommen manchmal so elendslange Antworten. Da habe ich schon gar keine Lust, das alles zu lesen.
+
+Ich habe mir jetzt angewöhnt, das schrittweise zu machen, zwar ausreichend Kontext zu geben, aber dann wirklich nur eine bis maximal 2 Aufgaben an die Ki zu geben und sich dann quasi im Gespräch mit meinem Ki gegenüber am Thema weiter entlang zu hangeln. Damit fahre ich ganz gut.
+
+und Leo hat auch schon ergänzt. Manchmal kommen von der Ki komplett neue Aspekte dazu, auf, die ich gar nicht gekommen wäre und die wahrscheinlich auch nicht kommen. Wenn ich erst mal so einen langen prompt in die Ki
+
+reinschmeiße.
+
+würde ich nur ergänzen. Also, da muss glaube ich jeder so ein bisschen seine eigenen Erfahrungen machen, wie er im Umgang mit der Ki gut vorwärts kommt.
+
+Absolut 2 Anmerkungen dazu. Also, zum einen.
+
+und ihr könnt ja immer der Ki so grundsätzliche Anweisungen geben und sagen: Hey, wenn du mit mir zusammenarbeitest.
+
+in dem Moment, wo das mehr als 3.000 Zeichen sind, mach mir am Anfang eine Executive Zusammenfassung mit dem allerwichtigsten, und dann kannst du nämlich immer entscheiden, Lese jetzt noch den langen Text oder nicht.
+
+und das zweite ist Karin.
+
+Weißt du, was ein Second Brain ist.
+
+Spontan nicht nötig.
+
+So, Das hat der Andre Karpati. Das ist so, der war Lange glaube ich, bei Antropic auch für die grundsätzliche Ki-strategie zuständig. Ich war, glaube ich auch mal bei Open Ai. Ich bin mir nicht ganz sicher, aber ist jedenfalls so ein Vordenker was die Ki betrifft.
+
+und der hat im April diesen Jahres das Konzept des Second Brains reingebracht. Könnt Ihr googeln? Ich habe mir ich kann mal gucken nachher, wenn ich euch vielleicht The Breakout schicke, oder mal kurz eine Pause habe. Ich habe das mir einfach von einem Jonas Keil habe ich mir diesen prompt runtergeholt.
+
+wie man sich ein Second Brain aufbauen kann. Was ist die Grundidee dabei? Du hast quasi über die Ki ein zweites Gehirn, was für dich mitarbeitet, so wie eben die Ki arbeitet.
+
+und da kannst du Daten reingeben, deine Dateien reingeben, erlernt aus jedem Chat, den du innerhalb dieses Second Brains
+
+reingibst, immer besser, Wie du denkst, was du brauchst, wie er das quer vernetzen muss. Also, im Prinzip ist es so in gewisser Weise ein Turbo. und wenn der z. B. dann öfters gemerkt hat, Hey, ich kann für die Karin nicht so lange Texte machen.
+
+dann lernt er das selbstständig, immer mehr. Das ist sozusagen wirklich die Grundidee. Man baut sich noch mal wie ein zweites eigenes Gehirn auf.
+
+und ich mache das schon. Ich bin da auch noch in der Experimentierphase, Offen gesprochen, aber für euch alle, die ihr sagt: Hey.
+
+sowas will ich bauen, hat natürlich auch so ein bisschen Datenschutzthematiken, Also, wie viel gebe ich ihm dann? Was habe ich lokal liegen? Das kann man auch sogar in die Cloud legen, wenn man das möchte.
+
+Aber ich habe so bestimmte Daten nur reingegeben, weil ich jetzt meine ganz spezifischen Finanzdaten oder sowas, das will ich jetzt nicht da reingeben.
+
+Aber du kannst dir dann eben auch lokal so ein Daten
+
+machen. und jetzt nur ganz am Rande, damit jetzt niemanden verwirren. Aber wenn jemand sich wirklich sagt, Ich will da tief rein, Da gibt es eine
+
+Firma Obsidian z. B., die verschlüsseln alle Daten. Also das ist wie so ein Tresor, und wenn das dann um auf deinem eigenen Rechner ist alles nochmal verschlüsselt, sodass, wenn jemand wirklich
+
+an die Daten rankommt, dass es nochmal sehr viel schwieriger wird, damit Schindluder zu treiben. Aber das nur am Rande! Das ist nur für die Ganzen, die es jetzt, da so ganz tief reingehen wollen. Aber dieses Thema, Second Brain, könnt ihr euch gerade, wenn ihr da so sagt? Hey, ich will
+
+die Ki immer mehr nutzen und
+
+für mich spezifisch aufbauen und das Problem so minimieren, was du gerade gesagt hast, ewig lange prompt, ewig lange antworten. Klar, Ich habe jetzt ja auch das von Maike mal reingegeben. Da kommt dann natürlich jetzt erst mal mit Nachfragen, also klar, auch logischerweise, d. h. Maike. Wenn du den Prozess machst, musst du darauf einstellen.
+
+der versucht, dich dann auf den Punkt zu bringen, und du kannst ihm ja auch sagen. Stell mir da immer noch mal eine Nachfrage, bis das, und das kommt
+
+genau sonst noch. Was Karin.
+
+Robert auch einfach sagen.
+
+Fassen wir das mal zusammen, oder weniger Text oder maximal so und so viel Wörter oder so? Das werde ich.
+
+Ist.
+
+und.
+
+Schreib rein, fasse mir grundsätzlich das Immer zusammen wenn ein Text so und so lang wird.
+
+so also gerade die Roten Unter euch, spinnst du Karriere. Ihr habt nicht die Zeit, mir hier
+
+5.000 Zeichen am Stück durchzulesen, die wollen immer die Executive Summar haben, und dann kannst du ihn auch drauf trainieren, wie er die machen soll. Das meine ich auch, unabhängig davon, ob du jetzt ein Second Brain machst. Aber schon, wenn du in dem Work-modus bist.
+
+und was hast du für ein Akram, hast du Chatgpt Cloud, oder Was machst du Karin.
+
+Ich.
+
+Ich habe noch eine Frage zu dem Second Brain Ist es quasi sind das Meta-informationen, die ich dann der Ki dauerhaft mitgebe, Also, sowas wie mach.
+
+Damit dieses Second Brain immer schon auf dem Stand zumindest agiert. und ich meine ganz einfach könnte ja, wenn er jetzt z. B. ein bestimmtes Foliendesign hat, dann gebt ihr, das müsst ihr ja nicht in Second Brain. Aber es hilft vielleicht auch nochmal, Das könnt ihr natürlich prinzipiell auch in den Chats reingeben.
+
+Aber wenn ihr jetzt keinen Plus account habt, bei Chatgpt. Irgendwann ist das dann auch wieder verloren, weil so lange her ewig halten, die auch nicht die Chat-distolen, Wenn ihr einen plus Account habt oder gar den Profi Account den Pro-account dann hält es auch die Chats.
+
+Aber da kannst du mit so einem Second brain dich auch noch mal unabhängig machen, weil das dann sozusagen ja auch funktioniert. Egal, was Chatgp auf seinen Servern findet, sondern es verknüpft deinen lokalen Inhalt, ja da auch immer mit rein.
+
+Ich, Guck mal, was der Unterschied ist.
+
+Ja und wie gesagt wird, nicht für jeden von euch Sinn machen. Aber ich wollte euch schon mal den Hinweis geben, weil das so eine Entwicklung ist, die wahrscheinlich immer mehr kommen wird. Anke hatte eine Frage.
+
+Ja, danke für die Hinweise. Wo kann man sich über diese Secd Brain Strategie noch mehr informieren?
+
+Also, da kannst du natürlich immer. Ich. Guck mal gerade, dass ich euch mal da habe ich es jetzt gemacht. Eine Sekunde Da müsste jetzt ganz kurz warten
+
+und wie es immer so schön ist. Jetzt will ich es gerade hier das Video bei Youtube Raussuchen, dann erst mal wieder anmelden.
+
+Aber ich habe, glaube ich, gleich den.
+
+Der hat 2 Videos gemacht, der hat einmal Second Brain. Aber es unterscheidet sich auch nicht sehr, Wenn du es jetzt Chatgpt nutzt und einmal, wenn Du Claude nutzt, was jetzt so wahrscheinlich die besten Plattformen dafür sind
+
+Eine Sekunde. Ich muss hier parallel tippen.
+
+So, dann kann ich.
+
+Also, ich gebe euch jetzt mal das von
+
+für Claude rein. Schon mal in den Chat müsstet ihr gleich sehen.
+
+Aber da kannst du viel natürlich dann drum rum. Aber am Ende des Tages ist es so ein Basisprompt, den eben der Andre Karpati mal formuliert hat. und dann wirst Du viel, was die Leute so drumherum sagen kannst dich nochmal vertiefend gucken. Ich kann mal schauen, dass ich
+
+vielleicht noch das für Chatgpt finde.
+
+und
+
+und diejenigen, die jetzt da nicht so tief reingehen wollen, also lasst euch nicht davon verwirren. Das ist jetzt nichts, was ihr machen müsst. Aber wir sind ja hier eine Führungskräfte-masterclass. und manche sind weiter. Manche sagen, Hey, das bringt mir schon was, und es ist schon gut zu wissen, dass es solche Entwicklungen gibt.
+
+Das wäre auch nochmal zu diesem Obsidian Thema. Da könnt ihr auch nochmal gucken, weil das wird auf uns immer mehr auch zukommen.
+
+Wie halten wir bei all dieser Vernetzung die Daten sicher? Ich habe mittlerweile Chatgpt relativ viel Rechte gegeben, d. h., ich kann. Mit einer bestimmten Tastenkombination.
+
+Wenn ich auf dem Apple bin, ist es einfach
+
+Command und Command. Egal wo ich jetzt bin, gerade macht den Screenshot postet, den schon gleich rein bei Jetgpt. und dann kann ich sagen: prüfe mal bei diesem Screenshot bei diesem Thema Xy. Ich muss den also nicht Ekkopieren in Chatgpt reingehen
+
+und sagen: so chatgpt mach jetzt das dazu, sondern das läuft automatisch ab, ist nur so ein kleines Ding.
+
+wo aber die Gefahr ist: Wie viel will ich jetzt wirklich Chatgpt freigeben? Weil, wenn jetzt irgendjemand diese Rechte hat, irgendwann manipuliert, der meinen Rechner, d. h., diese Fragen werden wir uns alle auch in gewisser Weise stellen müssen.
+
+Hast du noch eine Frage Anke.
+
+Ja. Ich wollte einfach noch einen Gedanken aussprechen. Also, ich spreche mit meinen, also mit Chatgpt, so wie mit einer Sekretärin. Ich mach's als Tabelle. Mach's kurz, machst
+
+so oder so oder so. und dadurch bekomme ich und sage dann auch: nein, das hast du falsch gemacht, Mach Nochmal.
+
+ganz genau.
+
+und dann kommen auch nicht Lawinen, sondern strukturierst und mach es erst, wenn du gefragt hast, nochmal oder ergänze.
+
+Das wollte ich so sagen.
+
+Absolut. und ich mach das auch so und mach es halt mal im Sprachmodus mal im geschriebenen Modus.
+
+Kann.
+
+Genommen.
+
+Okay. Stefan hat mittlerweile 2 Agenten programmiert und gibt uns gleich noch. Tipps schieß los.
+
+Die, und unsere. Ki hat Zugriff auf unsere gesamten Dokumente. Es ist für die Firma eigens gebeut worden.
+
+und da Wär z. B. eine Zusammenfassung: Welche User Stories wurden umgesetzt? Welche Features in der Software
+
+auf Knopfdruck liefern lässt.
+
+Absolut, und ihr merkt, das sind so Sachen, wo gerade für die internen Sachen da sagt man, hey, super, du kannst ja mittlerweile auch Agenten sagen. und hier ist meine die Adressliste meiner Kunden.
+
+und bitte schick eine Brief in dem Stil, wo du schon von mir gelernt hast, wie ich Kunden über sowas informiere, raus, sobald das neue Release rausgekommen ist. und das sind dann So Sachen, wo du nochmal sagst.
+
+das mache ich erst, das möchte ich freigeben. Da sage ich, Vielleicht bereitet es vor. Aber zeig mir nochmal den Brief. Zeig mir nochmal die Adressliste. Was auch immer, dann sagst du deinem Agenten
+
+mach es, sodass du mir dann alles präsentierst. Aber ich muss es noch freigeben. Das wäre dann so die nächste Stufe. Ich muss auch nach außen.
+
+Ja, das ist dann auch auch wichtig.
+
+aber sehr gut, schreibt doch mal in den Chat, Nur, wir müssen es ja gar nicht verstehen, Aber so die Überschrift vom Thema, Wenn ihr sagt. Jetzt habe ich mir überlegt, dafür könnte ich jetzt einen Ki-agenten künftig einsetzen.
+
+Schreibt es doch mal in den Chat, damit wir auch so, weil es kann ja auch für andere inspirierend sein, wo ihr sagt: Ja, ich nutze das z. B. für die Kostenüberprüfung. Oder ich nutze es für tatsächlich Mailings, die rausgehen oder was auch immer, dass wir so eine Idee auch kriegen, wo ihr da steht.
+
+Schauen wir mal, was ihr da sagt. Vielleicht seid ihr ja bei Änderungen von wichtigen Normen, Richtlinien. Sehr schön: Angebotserstellung, Super
+
+Monitoring von Messwerten. Super.
+
+Ja. Also probiert es wirklich aus, weil wer früh dabei ist, ist, früher weiter
+
+Projekte, Rechnungserstellung, Prüfung von Angeboten im Vergleich zu Lastenheften, Aufbau und Storyline von Workshops. Super. Also gib mir da immer wieder Ideen.
+
+Schick mir jeden Montag dein Konzept dafür. Stakehone Analyse für die Einführung einer Softwareentwicklung, Klasse, Marketinganalyse sehe ich
+
+spitze Prozessoptimierungen sehr, sehr gut.
+
+Vorbereitung für die Erstellung von Stellenbeschreibungen, Berichte Verfassen
+
+Ablauf der Coaching-session. Marianne, wie machst du da? Also was würdest du, wenn du sagst, dein Ablauf oder Coaching? Was würde dir der Agent da helfen? Weil, jetzt, würde ich normalerweise davon ausgehen. Irgendwann hat man so einen Basisablauf, der muss gar nicht irgendwie groß aktualisiert werden. Das wäre für mich jetzt noch eher so im Chat, Aber vielleicht
+
+habe ich da einen Denkfehler, Marianne Ziegler.
+
+und wenn das Thema, auf den
+
+es für Sie noch mehr verkörpern, also ganz speziell auf Ihre Problemsituation.
+
+und dann lasse ich mir dann so Ideen erstellen, von dem ich.
+
+Agent heißt ja, der Macht auch was im Hintergrund. Also, Chat, wäre, ja, ich stelle ihm dann jedes Mal, Jetzt war das. und jetzt gib mir deine Antwort zurück. und Agent heißt ja, der geht sozusagen los, sucht mir Informationen zusammen, kommt dann wieder zurück, damit eine Woche später oder 3 Tage, d. h., erledigt mehrere Aufgaben im Hintergrund.
+
+Okay.
+
+und gibt mir dann das Ergebnis. Aber das ist für mich, was du sagst. Aber vielleicht habe ich es nur noch nicht ganz richtig erfasst. Das wäre noch so klassischer Chat.
+
+von der, denke her.
+
+Im Hintergrund, aber vielleicht lässt sich das.
+
+Also, ich Spinn mal, ja, Marianne: Du könntest natürlich hergehen, wenn du jetzt ein anonymisiertes Coaching Protokoll hättest
+
+von jeder Session, aber sodass es wirklich allen Datenschutz und sonstigen Recht würde. Also, um Gottes willen muss man schon auch echt aufpassen. Aber jetzt, Wir sind jetzt hypothetisch. und dann sagst du deinem Agenten. Ich gebe dir jedes Mal in der Woche so die Sessions.
+
+und du sagst mir, Was wären aus deiner Sicht noch schlauere, noch bessere Interventionen gewesen?
+
+und das soll er dir
+
+immer einmal pro Woche zur Verfügung stellen und sagst. Da optimiere ich mich, das wäre so eher die Agentendenke.
+
+Im Endeffekt, so der Ablauf der Sessions.
+
+Genau. z. B., dass er eben solche Infos von dir kriegt. und dann eben im Hintergrund der guckt halt dann sozusagen auf verschiedenen Coaching-portalen. Was gibt es denn da für Interventionen? Schaut er sich den Fall an und sagt keine Ahnung. Dann hast du vielleicht mit
+
+einem Feed Forward gearbeitet, und dann sagt er ja, in dem Falle wäre eine paradoxe Intervention, die noch Schlauere aus meiner Sicht, und dann nimmst du halt.
+
+Ja, ich glaube wirklich, oder? Du sagst ja, der kennt jetzt ein paar Hintergründe nicht. Das ist auch wenn wir, wenn wir wir können, ja auch nochmal so ein Fallbeispiel von euch machen.
+
+da musst du dich ja nicht dem Urteil der Ki unterwerfen, Wenn die dann sagt, es wäre besser, dass das wirklich besser ist. Ja? Oder gibt dir dann eine Note von, und du sagst Ja, liebe Ki, ich. Das war schon richtig. Gut, was ich da gemacht habe, aber das konntest du jetzt nicht einlassen.
+
+Wirklich so. Nach dem Feed forward prinzip. Dadurch kriege ich nochmal Informationen, die mich besser machen, und kann es ja selber entscheiden, ob mir das hilft. Aber eben Agenten.
+
+der geht los, sucht irgendwas im Hintergrund, nicht nur einmal für den Chat, sondern so als grundsätzliche Aufgabe. und das meinte ich eben so
+
+da könnt ihr, dann könnt ihr.
+
+und analysieren wir das, oder was Sie machen? Vielleicht da noch? Was wären wir Ideale Oder im Hintergrund gewesen?
+
+Ja
+
+ja genau genau so. und du kannst eben auch immer sagen: Hey, du könntest ja auch sagen, das wäre jetzt so ein bisschen fast schon so second Brain, denke ich. Ich tue mir meine Protokolle auf meinen Rechner. Die sind schon genügend anonymisiert. Ich schmeiße dir mal in eine Datei rein. und dann sagst du
+
+schau immer einmal täglich in diese Datei rein
+
+und erarbeite mir diese Vorschläge. und sobald du sie hast, schick Sie mir, oder schick Sie mir einmal die Woche oder so noch mal, was vereinfacht.
+
+Ja.
+
+Das ist sehr schön. Danke, Marianne. Wenn man da so diesen Unterschied zwischen Chat denke und Agenten gut klar machen konnte. Karin.
+
+und so fort.
+
+und das wäre ein typischer Chat. und wenn ich aber der Ki sage, bitte buche mir die Reise gleich, dann ist es natürlich eine Aufgabe, die die Ki für mich erledigt. Also dann ist es nicht nur Informationen sammeln, sondern in Aktion treten und die Reise für mich gleich zu buchen
+
+und.
+
+Oder suche mir jetzt jeden Tag die besten Reisepreise raus in den nächsten 2 Wochen.
+
+und wenn es den Preis unterschrieben hat, Buche direkt für mich.
+
+und.
+
+Super, Ja. Sehr gut. Sehr, Sehr gut. Hakan.
+
+Ja. Also
+
+seitdem wir Halt angefangen haben, über das Thema Ki zu sprechen, war ich dabei, nach einer Datei bei mir auf dem Laptop zu suchen.
+
+Jetzt habe ich es rausgefunden.
+
+Also, ich hatte da mal eine Schulung gehabt über Linkedin über Ki für Führungskräfte.
+
+und was ist deine.
+
+Was du uns beibringen willst oder sagen willst.
+
+Also, mit Hilfe dieser Schulung habe ich das gesehen, Also, wie umfangreich das ist, Also, Ke als Führungskraft zu nutzen. Ich habe dann also, ich glaube, 52 prompt habe ich drin
+
+und über Meetings oder Leadership, Entwicklungen usw. Ich habe dann auch diese Datei in Ki eingegeben. Jetzt habe ich dann alles dann so zusammengefasst. Also, für welches Thema? Welche prompts kann ich halt verwenden, wenn jemand Halt Interesse für sowas hat, kann ich halt gerne zur Verfügung stellen.
+
+Ja, super. Also, ihr könnt den Hakan ja direkt hier im Chat anschreiben und sagen, Hey, hätte ich also, ich müsste es gar nicht in dem allgemeinen Chat machen, sondern Ihr könnt ihn persönlich ja anschreiben. Habt den Chat zwischen euch.
+
+Wenn jetzt Sabine Koroch sagt Super Hakan, dann schreibst du einfach den Hakan direkt an und sagst Gib mir Liste.
+
+kriegst du lächeln von mir.
+
+Mir bitte persönliche E-Mail Adressen, dann kann ich direkt an die E-Mail Adresse diese beiden Dateien schicken.
+
+Super. Ihr kennt ja mein Motto miteinander füreinander. Mein Herz geht auf Hakan. Das finde ich super, weil man einfach, wenn wir uns gegenseitig so als Gruppe so bauen, dass wir
+
+immer stärker immer besser werden. Anja, Dumschat.
+
+Bevor wir weitergehen, würde ich gerne mit dir, weil du hast gesagt, ich nutze noch keine Agenten und lass mich doch gerne mal dein Sparringspartner sein. Für was du einen Agenten dir bauen könntest.
+
+Wenn du magst. Wenn du nicht magst, dann gib mir ein Zeichen und Schreib in den Chat. Nein, oder ich Seh dich im Moment noch nicht auf der.
+
+So schön freigeschaltet, mit Video: Du hörst mich auch nicht.
+
+Jetzt höre ich dich. Na super. Jetzt werde ich dich super. Sehr schön.
+
+Ja. Sollen wir mal kurz drüber sprechen und ihr anderen, Ihr seid auch ganz aufmerksam, weil ihr schreibt dann, wenn Anja sagt, sie möchte das, dann schreibt ihr Ideen, dafür könntest du doch einen Chat nutzen. Dazu müsstest du, wenn du magst Anja, kurz sagen, was so deine Grundsituation ist und was dein Grundproblem ist und was das Ziel dafür ist.
+
+Jetzt Jetzt höre ich dich nicht warte. Jetzt bist du gerade.
+
+Ich gehe mal wandern. Ich gehe mal in ein anderes.
+
+Ja, aber ich.
+
+Immer trotzdem in ein anderes Zimmer.
+
+Weil Neubauten sind immer sehr gut geschützt, Ist es jetzt hier besser.
+
+Perfekt. So ist super. Wenn es so bleibt, dann sind wir alle Happy.
+
+Okay, also bei mir ist das jetzt aktuell schwer, Meine leider letzte Firma, jetzt
+
+das Wort letzte ist das Wort. Leider hatte selber eine Ki erstellt, also so wie ihr sagt als Agent
+
+und haben es aber versäumt, uns mit reinzunehmen. Also, ich habe nur gelernt, mit Chat Chpd zu chatten.
+
+Also, meine E-mails habe
+
+so.
+
+Was noch gar nicht dein Problem ist, sondern so eine.
+
+und dann warten wir alle so ein bisschen drauf. Ja, Wann sagt sie es denn? Wenn du uns erst dein Problem sagst und was deine Lösung ist, und dann die Hintergründe lieferst, folgen wir dir besser.
+
+Da muss ich mich rausziehen. Ich habe aktuell nichts.
+
+Also bei mir.
+
+Wofür bist du denn In der Masterclass.
+
+Ich möchte mich weiterentwickeln und.
+
+Weiterentwickeln. Auf was also was welche Führungsfähigkeiten im besonderen.
+
+Ich bin schon Managerin. Ich möchte aber in der Persönlichkeit noch viel besser mit meinen Mitarbeiter umgehen können und vor allem besser argumentieren, gegenüber den Vorgesetzten
+
+und
+
+das, was wir jetzt gerade machen. Mit Stakeholder gebe ich ganz ehrlich zu, bin ich jetzt ein kleines bisschen überfordert, weil ich in diese Richtung
+
+Manuel gearbeitet habe.
+
+Ja, und damit.
+
+Überfordert.
+
+Ja, aber das könnten wir ja sozusagen. Wir könnten, auch wenn du willst. Aber das ist jetzt für dich wahrscheinlich so einschlägig mit dir einmal die Excel-matricks, die ich euch mitgegeben habe, durchgehen. Aber ich glaube, das können ja eh viele auch selbst machen, Aber wenn jemand da das Bedürfnis hat, Sehr gerne. Aber anja, wenn du das Ziel hast, dann könntest du ja
+
+sagen. Hey, Gib mir mal am Anfang der Woche.
+
+einen herausfordernden Case, einen herausfordernden Fall, an dem ich
+
+meine kommunikativen Fähigkeiten, meine rhetorischen Fähigkeiten, was auch immer mit dir üben kann. d. h., dann benutzt du die Ki als Baringspartner. Das ist jetzt noch so ein bisschen zwischendrin zwischen Agent und Ding. Aber
+
+das kann ja auch immer mehr darauf hinauslaufen. und schau jedes Mal, sagen wir mal, bei den bekannten psychologischen Universitäten, ob sich da ganz neue Methoden auftun. Das wäre jetzt noch, wenn du ganz spezifisch, sozusagen das Agentische reinbringen willst.
+
+Du kannst ja die Ki zum Sparringspartner für dich machen.
+
+dass sie das eben lernt. Das wäre genau sowas. Also
+
+wir können nachher mal. Ich will jetzt nochmal so ein bisschen reinhören. Mathilde Anas hatte sich auch gemeldet, was sie haben. Aber vielleicht können wir nachher auch, je nachdem ich habe so ein kleines Stakeholder Prompt-rollenspiel vorbereitet, was wir machen könnten. Aber wir könnten auch genau sowas mit dir simulieren.
+
+Hab's mal im Hinterkopf. Aber das wäre z. B. So eine klassische Idee, die du dafür nutzen kannst. Da brauchst du.
+
+Sehr gut, weil man denkt, manchmal nur in China, anstatt mal ein bisschen weiter
+
+zu denken. Na klar, man kann es ja auch persönlich nutzen. Man muss es ja nicht immer alles für die Arbeit nutzen.
+
+Das ist sehr, sehr gut anas.
+
+Danke Dir.
+
+Gerne.
+
+Ich hätte mal hier einen Fall, wo ich einen Agent brauche, und zwar ist es bei uns, sodass wir monatlich bestimmte Abrechnungen erstellen und dir einen Versicherer rausschicken.
+
+und das Problem ist, diese Aufgabe ist eine Routine, aber ein richtiger Zeitaufresser, weil wir da über unterschiedlichen Programmen
+
+die Abrechnung zusammenfriemeln und die als Badge danach an die Versicherer rausschicken.
+
+und ich glaube, Agents wären sehr hilfreich. Bei Routinenaufgaben.
+
+Ja, das ist ein ganz klassisches Agenten, sag's mal jetzt in einem Satz.
+
+Ich brauche einen Agenten, der.
+
+Vielen Dank der Dokumente zusammen, fast aus unterschiedlichen Programmen und an einen Versicherer rausschickt.
+
+Brauchst du davor noch mal eine Kontrolle, wenn es an den Versicherer geht oder nicht?
+
+Für den Anfang. Schon wir haben spezifische Versicherer Bei ein paar machen wir ein Offset, also eine Verrechnung zwischen den Prämien und den Schäden.
+
+und bei anderen zahlen wir nur Prämien aus und erwarten die Zahlung von den Schäden.
+
+Aber die kann ich auch spezifisch in einer Exit-datei vielleicht auch reinfüttern.
+
+Also fasse mir die Dokumente aus den Software Xy zusammen, dann wirst du die eingeben.
+
+Formuliere daraus ein Dokument. Was an folgende Versichererliste geht oder an einen spezifischen Versicherer bevor dieses Schreiben rausgeht, mache.
+
+Gib mir eine Freigabe: Man könnte im Prinzip auch so nach einem Ampelprinzip sagen: Grün: Das kannst du auch alles immer, wo ich Grünen Doppelpunkt vorschreibe, da kannst du völlig eigenständig handeln, Orange, da brauche ich immer eine Freigabe und Rot.
+
+Das darfst du gar nicht eigenständig machen, sondern da musst du mich ganz grundsätzlich fragen, ob du überhaupt sowas anfangen Darfst
+
+Rot! Doppelpunkt: Gründoppelpunkt: Da kannst du auch dein Ki für dich etwas erziehen. Nach so einem Ampelprinzip.
+
+Ja, ich bin in der Agent-welt noch nicht so tief drin. Aber ist das quasi so wie ein Makro in excel Das Ding kopiert sich oder schaut sich an, welche Bewegung und welche Reihenfolge ich bestimmte Sachen mach
+
+und macht das gleich oder optimiert sogar den Prozess.
+
+Ja, also aus meiner Sicht, da ist es wahrscheinlich. Aber aus meiner Sicht ist eben tatsächlich, was ein Agent macht. Er arbeitet im Hintergrund für dich
+
+Dinge ab.
+
+Ganz banal formuliert, So würde ich es definieren.
+
+Vielleicht haben wir jemanden hier, der ganz Hardcore-programmierer ist und sagt: Ja, ich definiere es aber so. und das ist eben genau der Unterschied. Weil beim Chat passiert das? Ja, Ich gebe rein Kriege? Antwort
+
+beim Agent. Ich gebe rein Agent, arbeitet vielleicht sogar die ganze Woche, liefert mir dann ein Ergebnis und beauftragt
+
+verschiedene, gegebenenfalls, wenn man es so nennen würde, Unteragenten. Also, der eine sagt: Checke, die wissenschaftliche Forschung zu dem Thema. Das ist so ein Unterauftrag.
+
+Der nächste ist Gucke die Kostenzusammenstellungen von den Anbietern an. und der dritte Aufgaben. und dann fasst er das so zusammen, wie du das von ihm haben willst.
+
+und deswegen sage ich das einfach. Der große Unterschied ist, dass Dinge zeitlich versetzt im Hintergrund bearbeitet werden, und dann führt das, wie, wenn du eben mehrere Mitarbeiter losschickst und sagst.
+
+der eine soll eine Marketingaufgabe erledigen. Der nächste soll eine controllingbezogene Aufgabe erledigen, und dann wird das alles in deinem Projekt zusammengeführt.
+
+Das ist eigentlich kein großes Hexenwerk, aber am Ende des Tages, Wir haben uns noch nicht so dran gewöhnt, dass wir das quasi über ein Gespräch mit einem Rechner machen. Wenn man ein Mensch aus dem Jahr 1.970 das sieht, der Würde sagen, ist der geisteskrank, der Typ da, und für uns wird das jetzt gerade erst zur Normalität.
+
+ja.
+
+Klasse.
+
+Gerne gerne so.
+
+Wer hat noch eine Frage, Oder Wer hat eine Frage
+
+Anja, das haben wir dich angefixt.
+
+und zwar: kann man denn auch so.
+
+ist der Agent denn besser als Makro, was ich ja vorher gearbeitet habe, und Excel. Also, ich kann dann geht dann automatisch auch auf links. Also, die ich ihm dann freigebe.
+
+Also kann ich sozusagen Verknüpfungen auch mit dem Agenten machen.
+
+Ein Agent kann natürlich viel, viel mehr, weil, du kannst ja im Prinzip schon im Chat sagen: z. B.
+
+führe dieses Makro in der Excel-datei aus, Oder erstelle mir ein Makro. Was Folgendes kann für diese Excel-datei? Das ist noch kein Agent. Das ist einfach eine reine Chataufgabe und dafür übrigens am Rande gesagt.
+
+Ich glaube, der Blood hat das bei dem letzten Wochenendevent mal gezeigt. Wenn ihr z. B. Powerpoint-folien habt
+
+und ihr wollt was verändern, Dann Könnt ihr natürlich hergehen und sagen: Hey, findet mir ein Bild bei Jetgpt, dann nehmt ihr. Dieses Bild macht eure Powerpoint auf. Baut dieses neue geformte Bild händisch in die Powerpoint-folie ein.
+
+und dann ist es so weit. Ihr könnt. Aber wenn ihr euch das als Add-in
+
+bei Powerpoint z. B. reinzieht, dann könnt ihr wenn ihr in der Powerpoint Am arbeiten seid. Ich kann euch das ja mal hier zeigen. Also wenn ich jetzt
+
+hergehen würde, jetzt bin ich am falschen Rechner. Auf meinem Apple Rechner habe ich Das hier, müsste ich es mir jetzt gleich noch reinziehen. Dann könnt ihr sagen: Habt ihr so einen kleinen Button Chatgpt, dann klickt darauf. Mach für diese Aufgabe folgendes.
+
+und dann könnt ihr in der Präsentation in der gleichen Situation weiter arbeiten, was ihr da tut. Er macht es im Hintergrund und es ist, ihr seht zum Schluss das Ergebnis: Es ist fertig. Ihr müsst gar nichts mehr von irgendwo reinziehen. Das macht es auch nochmal leichter zum Arbeiten.
+
+und diese Add-ins Könnt ihr euch für Excel für Word. Also wenn ihr jetzt in der Microsoft-welt seid da einfach reinziehen. Ich habe es, ehrlich gesagt, für die Apple-welt noch nicht probiert, weiß das, jemand
+
+ob man bei Keynote und
+
+den entsprechenden Apple-programmen. Aber kann man sich das wahrscheinlich ganz genauso reinziehen. Das müsste ich auch nochmal tun. Solbike: Du wolltest, glaube ich dazu.
+
+Ich habe eine Stunde, nachdem S Blood gezeigt hat, gemacht, es funktioniert bei Apple hervorragend in.
+
+Ich
+
+stimmt, Nee Quatsch, wo du sagst, ich habe es für meine Microsoft-programme auf dem Apple-rechner gemacht, weil ich mit dem am meisten arbeite. Aber ich habe nicht, weil ich arbeite tendenziell was mehr mit den Microsoft-programmen interessanterweise auf dem, Apple, was manchmal gar nicht so das cleverste ist.
+
+Aber ich arbeite deswegen seltener mit Keynote, Pages und den anderen. Okay, Aber dann müsst ihr das so. Anja, Ich wollte dich nicht. Du hattest noch was. Anja.
+
+Ja.
+
+Ne: Du hast meine Frage beantwortet. Danke.
+
+Ja. Perfekt. So, ja, da
+
+gebe ich euch nur, das hatte ich euch vorher gesagt, damit ihr es nur mal. Seht
+
+Ups, Jetzt habe ich hier. Das ja, doch ist wunderbar. Also, ihr seht hier oben, www. Habermas: Machine Ai: Das könnte für dich Solveig auch interessant sein, weil das ist dieses Projekt.
+
+das versucht, wirklich Lösungen rauszufinden. Das ist jetzt hier mal so ein Beispiel prompt. Wenn ihr merkt. Ich muss mehrere auf einem größeren Eben. Ich muss mehrere Stakeholder unterschiedliche Meinungen zusammenbringen. Das ist dieses letztendlich Google-projekt dazu, und da könnt ihr.
+
+wenn ihr so ein Thema habt, könntet ihr natürlich auch sagen, hey, ich hab in meinem
+
+Team 3, 4 verschiedene Meinungen, aber da könnt ihr es ja schon fast als Chat direkt machen. Allerdings ist diese Habermas Machine darauf spezialisiert, und vielleicht liefert sie euch dann auch nochmal bessere Lösungen als wenn ihr das nur in einem Chat mit
+
+Chatgpt macht.
+
+Aber anke, ich hatte das gesagt. Ich hatte das spezifisch, Mal jetzt noch kurzfristig für die heutige Session als Ki Input
+
+vorbereitet. Aber ich würde das anke noch reinstellen, sodass eine aktualisierte Version von der Pdf drin ist, wo dann die Ki-folie nochmal von heute drin sind. Wer also sagt, Hey, die hätte ich gerne, kriegt, die auf die Weise. Das ist, spätestens übermorgen
+
+drinnen passt. Danke.
+
+Dann gib mir so ein Däumchen hoch.
+
+Sehr gut.
+
+Vielen Dank.
+
+Wer hat denn so einen Anwendungsfall für diese Habermaß. Machine.
+
+Also, so weit bei euch würde ich es vermuten. Das ist klassischerweise so ein und
+
+gut passender Anwendungsfall für sowas.
+
+Uta auch. Ja, Also guckt euch das ruhig mal an.
+
+Solberg: Du musst was sagen, noch dazu.
+
+Ja, ich hätte noch einen anderen Anwendungsfall, und zwar, ich bin jetzt gerade dabei, in den Quartieren quasi einen Konsens zu haben, dass wir hier eine klimaneutrale Wärmeversorgung haben, und da gibt es natürlich unfassbar viele Beteiligte, die alle natürlich so ihre eigene Meinung und Vorschläge und Vorstellungen haben.
+
+Also ich würde sagen, immer, wenn man sehr unterschiedliche Stakeholdergruppen hat und versucht da was zusammen zu machen, und bei mir wäre es halt. Wir wollen hier eine klimaneutrale Wärmeversorgung machen und wollen das halt so verlegen, wie es quasi den meisten Konsens gibt. und dafür werde ich das sicherlich mal ausprobieren, weil das ja genau
+
+darum geht, dass man quasi die bestmögliche, demokratischste Option irgendwie rausfiltern kann. und wenn man da schon was vorbereiten kann, ist das sicherlich hilfreich. Also vielen Dank für den Tipp Georg.
+
+Ja, und ich glaube sogar.
+
+ich weiß gar nicht, ob es dann sozusagen die demokratischste ist. Ich glaube, auch der Grundgedanke von Google ist. Konsensfindung ist ein ganz
+
+starkes gesellschaftliches Problem.
+
+und also da haben die schon erste Untersuchungen das ist alles noch nicht wissenschaftlich, aber dass zumindest mal ein Gutteil der Teilnehmer dann gesagt hat.
+
+Die Ki-lösung hat uns da sogar besser gefallen, als was wir in einem Konsensprozess gemacht haben. und wenn es dahin läuft, dann ist es eigentlich doof. Eigentlich müssten wir doch schlauer sein als so eine Ki. Wir Menschen und müssten eine bessere Lösung haben. Aber das Gute ist des besseren Feind.
+
+Ja. und wenn die Ki dem besser den Konsens hinkriegt, weil das tut ja sehr not, auf unserer Welt, dass wir guten Konsens in den verschiedensten Zusammenhängen hinbekommen.
+
+dann hilft es vielleicht schon mehr einen Planeten zu bauen, auf dem, anstatt irgendwie sich zu bekämpfen, sich zu fördern, und wir einfach einen besseren Raum hinkriegen. und wenn das dafür dient, wäre es super, also würde ich mich sehr freuen, auch Solveig, wenn du sagst, wie du das Ergebnis dann bewertest, davon.
+
+Mir an, und dann sage ich Bescheid. Danke.
+
+Sehr gut. Sehr gut. Sehr gut.
+
+Gut.
+
+Wer hat einen Fall, Wer hat eine Frage, Sonst würde ich euch mal jetzt, dass ihr euch mal die ganzen vielen Ideen weil hier ist natürlich frontal und viel von mir, aber ihr habt ja untereinander So viel auch Erfahrungen und Gruppen. Da würde ich euch tatsächlich auch in einem Breakout geben, wo ihr ein bisschen mehr in der Gruppe seid, weil ich glaube, bei dem Thema ist es ganz hilfreich.
+
+wenn ein paar mehr zusammenkommen, weil dann doch immer einer dabei ist, der nochmal eine ganz neue Idee reinbringen kann oder die eine ganz neue Idee reinbringen kann.
+
+gibt es im Moment ein Ilse
+
+schöner Hintergrund. Ilse Das sieht nach japanischem Garten aus war. Ich schalte dich mal. Jetzt hören wir dich.
+
+Ja, ich.
+
+Ich habe so ein bisschen eine Frage: die Hoffnung, dass du mir dann wirklich helfen kannst. und zwar, Ich habe jetzt im privaten Bereich eine ganz neue Aufgabe irgendwie übernommen. Wir haben eine Energiesanierung zu tätigen, im etwas größeren Haus.
+
+was wir auch selber verwalten. und da habe ich dann gemerkt, das ist so komplex. Diese Aufgabe, und ich habe das jetzt bisher gelöst, mit Excel-tabellen, weil es einfach vieles zu
+
+zu beachten und gab
+
+habe. Allerdings, wir sind schon so weit, dass wir, dass das Konzept eingesteht, die Handwerkermine mehr oder weniger anvisiert sind oder festgelegt sind. Schon zum Teil hängt von der Sparte ab.
+
+und die Aufgaben, die einzelnen habe ich jetzt in der Excel Tabelle einfach zusammengefasst und habe sie einzelnen Personen zugewiesen bzw. wir haben sie gemeinsam dann
+
+beschlossen oder haben sie unter uns verteilt. Mehr oder weniger.
+
+Es fällt mir schwer, ein bisschen den Überblick zu behalten, muss ich ehrlicherweise sagen, weil es sehr viele kleinere Aufgaben auch sind und eine Riesen
+
+Do-liste bzw. Liste einfach gibt, was noch eventuell zu beachten wäre, was noch an Fragen im Raum steht.
+
+und
+
+könnte mir da so ein Agent eventuell auch helfen, denn so eine excel Liste ist natürlich schon mal ganz gut, Da läute ich ab.
+
+aber.
+
+Was natürlich nur, wenn du.
+
+Oben drauf.
+
+Wenn du jetzt so klassische Projektmanagement-software hast, die senden dir dann natürlich entsprechend Alarme und ihr anderen. Ihr habt jetzt auch den Fall von der Ilse gehört. Ich stell dir jetzt mal eine Frage, aber vielleicht habt ihr ja noch eine viel bessere Frage, wie man
+
+das Problem von ihr auf den Punkt bringen kann, weil ich glaube, Ilse, du hast
+
+ein Problem. Es ist wahnsinnig viele Aufgaben
+
+und dein größtes Prozessproblem ist. Ich verliere die Wieso im Cockpit. Ich verliere die Übersicht. Was ist denn schon erledigt? Was ist nicht erledigt, Wenn das noch nicht erledigt ist, was hat es dann für Folgewirkungen? Weil dann hängt nämlich wieder der Handwerker, weil der sagt: Ja, aber Das Material ist noch nicht geliefert worden.
+
+Im Rahmen dieses Energiemanagement oder Energiesystem einbauen
+
+oder Eeg Sanierungsprojekt ist es richtig? Was ich sage, ist also die Frage: was ist das Hauptproblem? Das ist für mich erst mal die absolute Kernfrage. und jetzt kannst du natürlich hergehen und sagen.
+
+mache mir eine bildliche Darstellung im Sinne eines Cockpits, wo ich alle Aufgaben mit einer Überschrift ziehe.
+
+und nach dem Ampelprinzip ist angestoßen.
+
+Es wäre. z. B. Orange Rot ist noch gar nicht angegangen und grün ist erledigt oder so. und da kannst du natürlich auch andere Dinge sagen? und sagst du so? Das könnte ja z. B. aus deiner Datenbasis sich rausziehen und immer Erinnerungen an Leute z. B. schicken, Wenn da eine Aufgabe. Die ist jetzt dem Hans zugeteilt, der Hans hätte bei dem Energiesystem bestellen sollen
+
+und
+
+keine Ahnung irgendwelche Lampen oder sonst irgendwas. und dann schickt der Agent an den Hans eine E-Mail und sagt.
+
+Hast du die Lampen schon bestellt?
+
+Ja, und je nachdem, wie weit du gehst. Wenn du jetzt z. B.
+
+Chatgpt auch erlaubst, deine E-mails zu checken, dann könnte der Agent checken.
+
+da ist ja jetzt eine Antwort vom Hans gekommen. Was steht denn da drin?
+
+Da steht drin, leider noch nicht.
+
+und wenn du es jetzt noch sehr weiter spinnst, dann könnte es so sagen: Wenn dann steht noch leider noch nicht lege, diese Aufgabe auf Wiederprüfung
+
+binnen einer Woche, und dann macht es weiter. Das ist so, da wirst du dich rantasten müssen, wie du den Agenten baust. Aber ich glaube, dafür ist es ganz ganz wichtig.
+
+dieses Zielbild zu haben. Das war jetzt mein Zielbild, dass ich sage: Ich will wie so ein Flugkapitän. Ich will ein Cockpit haben, in dem ich alle Aufgaben mit Ampelstatus sehe.
+
+Das ist ja letztendlich auch im Excel machbar, ein bisschen aufwendig, wenn du es händisch machst. Aber auch das könntest du ja sagen. Programmier mir meine Excel, so
+
+zeige mir alle mit dem Status Rot einmal am Morgen, wenn ich die Excel aufmache an.
+
+Ja.
+
+dann kommst du in so eine ähnliche Variante. Also ich will damit sagen, du kannst dir das auf. Viele Weisen bauen. Ein Agent. Kann dir da Mega viel helfen. Aus meiner Sicht, weil das so eine
+
+klassische, mit vorhandenen Daten operieren. Aufgabe ist.
+
+aber es hängt eben von deinem Zielbild ab. Also, ich habe jetzt 2 Varianten gegeben. Das eine ist wirklich Bau mir dieses Cockpit. Wenn es
+
+30 Aufgaben sind, dann kann er dir das ja bauen, und ob du das jetzt direkt im Excel machen soll oder ob das nochmal extra ist. und er baut dir das quasi immer, bildlich, oder wie auch immer, das hängt dann davon ab, wie du den prompt mit ihm führst.
+
+Auch da. Ilse wäre schön, wenn du das mal angegangen bist, nach einer Zeit uns die Rückmeldung zu geben. Hey, Das hat gut funktioniert. Da habe ich dann ein Problem gehabt, weil dann lernen wir auch im Fortlauf und können auch das Team für dich sein und sagen: Hey Ilse, da haben wir noch eine Idee, wie du es besser hinkriegen kannst, Weil das ist ja auch
+
+die Masterclass soll ja auch eine gegenseitig helfen. Umgebung sein.
+
+Ja, vielen Dank und.
+
+Gerne,
+
+und ich mach es mittlerweile auch schon, sodass ich
+
+natürlich noch in diesem Chat-system auch arbeite, mich dann auch korrigieren lasse durchaus mal so ein Fallbeispiel auch nenne und das dann auch analysieren lasse, und dann auch frage, welche anderen Möglichkeiten
+
+es gegeben hätte, oder wie ich. Das hätte auch noch anders angehen können und gebe aber das, was ich zu der anderen Person weiß,
+
+an Eigenschaften. Ich habe noch ein ganzes System, das auf jungem Design basiert, d. h. sehr viel Persönlichkeitsmerkmal, die man auch mit eingeben kann, und lass es daraufhin korrigieren.
+
+und da.
+
+jetzt Aber auch vielen Dank für diese Idee, bin ich jetzt auf die Idee gekommen, dass man das natürlich noch wesentlich spezifischer machen könnte, mit so einem Agenten.
+
+Ja, und das sind wir alle eben gerade dabei zu lernen, dass wir mit Zugriff auf das Weltwissen, ja jedes mal, Ach Mensch, das könnt ihr auch noch machen, das wäre noch schlauer. Dann kriege ich noch. und das Ergebnis ist der Maßstab. Wenn das Ergebnis euch weiterbringt als ohne dieses Ergebnis, dann habt ihr das richtig gemacht.
+
+Bevor wir jetzt ich euch mal den.
+
+Danke.
+
+Gerne, bevor ich euch noch jetzt in
+
+Gruppe schicke, wo ihr auch nochmal sagt, Hey, was habe ich so für Fragen Ideen für die anderen. Was das Thema Stakeholdermanagement betrifft: Was das Thema Stakeholdermanagement und Ki betrifft, könnt ihr euch da nochmal austauschen könnt, gebe ich euch nochmal. Ich habe die jetzt noch nicht im Einzelnen geprüft, weil es so ganz neue Wellen sind. Ich gebe es mal als
+
+Folie rein, nur als Idee für euch. da gibt es ja noch, was was ich prüfen kann. Vielleicht hat jemand auch schon mal sowas genutzt und kann uns einen Erfahrungsbericht geben. Jetzt seht ihr es hier.
+
+Das sind so, Wenn man mal die Ki fragt: was Gibt es denn eigentlich für Ki-systeme, die so die.
+
+das, was jetzt so eine normale Ki mir für Stakeholdermanagement liefern kann, nochmal besser macht. und ihr seht
+
+also, wenn z. B. öffentliche Stimmungen wichtig sind, dann schaue ich mir mal so eine Quitt an, die sich darauf spezialisiert haben, dieses Thema Ki-basiert
+
+besonders gut
+
+bearbeiten zu können. Das ist jetzt das hier. Dieses, hier. Da habe ich jetzt z. B. mal drauf, Oder wenn ich politische Stakeholder stark beachten muss, dann gucke ich eben mal. Was liefert mir Panales, oder? Wenn ich widerstände Risiken früh erkennen muss, dann gucke ich mal, ob mir dieses Borealis hilft.
+
+Also, ich will damit nur sagen, es gibt mittlerweile Tools, die sich zum Ziel gesetzt haben. Wir nutzen die Ki schlauer als die Ki selber ist, sprich chatgpt, weil wir sie weiterentwickelt haben auf eine bestimmte Fragestellung.
+
+und das ist, wenn ihr so einen Anwendungsfall habt, Vielleicht auch nochmal für diejenigen interessant zu sagen, da gucke ich nochmal, vielleicht bringt mich das weiter als die reine Nutzung, das reine Programmieren eines Agenten mit Chatgpt, mit Claude, mit Perplexity oder was auch immer ihr dann da arbeitet.
+
+hat jemand irgendwie schon mal so ein Tool im Einsatz, wo er uns sagen kann? Hey, ich nutze schon das, und ich habe die und die Erfahrung damit gemacht.
+
+dann gerne mal da Rückmeldung geben. Wenn es für euch neu ist, dann könnt ihr euch
+
+die mal als Beispiel nehmen. Aber wir können auch sagen, hey, ich habe im Bereich Stakeholder Folgen Eine ganz besondere Anforderung: Gibt es da eigentlich schon einen spezialisierten Anbieter, der mehr kann als die normale Ki und kann da auch nochmal gucken.
+
+Ja, Leo hat sehr schön guckt, da gern mal rein zu den verschiedenen Kis und aktualisiert sich regelmäßig Artificial Analysis Ai.
+
+Das sieht er im Chat noch mal. Danke, Leo. Für den Hinweis.
+
+Hat sonst jemand noch was, wo er sagt? Hey.
+
+das gefällt mir heute, richtig? Gut, weil wir uns alle so mit wissen, irgendwie anregen. Das ist, so finde ich, eine schöne Führungswelt, die wir hier gemeinsam kreieren.
+
+Okay, Dann schicke ich euch nochmal in die Breakout
+
+Aufgabe wäre, wirklich, Wo habe ich Themen, die ich mich gerade frage, bei meinem Stakeholdermanagement und die anderen in der Gruppe können mir Ideen geben. Wo habe ich Themen mit Stakeholder und Ki und die anderen können mir Ideen geben.
+
+Könnt ihr euch dazu entsprechend austauschen? und dann kommen wir nochmal zu einer Schlussrunde zusammen. Da könnt ihr nochmal ein Rollenspiel machen. Für jemanden, der sagt: hey, ich möchte mal so einen Stakeholder-dialog simulieren, wenn das jemand hat, das könnten wir dann noch machen, wenn ihr aus der Breakout zurückkommt.
+
+und dann gebe ich euch mal in die Breakout-session.
+
+Los geht's.
+
+Sehr schön. Da seid ihr wieder zurück.
+
+und bevor wir uns auf die 20 Uhr Zeit vloatz Tagesschau Zeit konzentrieren.
+
+möchte ich euch noch einmal ein paar kennen das natürlich schon, aber ich möchte trotzdem, Es sind ja doch einige dabei, die das noch nicht so für Rollenspiele nutzen.
+
+und er findet dann in den Ki-folien. Ist das einfach mal nur so ein Beispiel. Prompt sehr allgemein gehalten, um damit so ein Rollenspiel zu initiieren. Das würde ich jetzt gleich machen.
+
+Dann führen wir das kurz durch. und dann gibt es vielleicht noch so ein, 2 Ideen. Wo sagt Hey, das ist noch meine best practice bei Rollenspielen, wenn ich das mit der Ki mache.
+
+aber um bei, euch das einfach auch nochmal
+
+den Impuls zu geben, dass das immer selbstverständlicher wird, das einfach so zu nutzen.
+
+Deswegen geh ich mal rein. und jetzt müsstet ihr mein Gpt hier sehen. Korrekt.
+
+Seht ihr das Erika? Siehst du das gerade? Jenny? Siehst du? S: Sehr gut so.
+
+Immer.
+
+Sehr gut. und dann seht ihr ja hier ist dieses neben dem Mikrofon. Dieses neuen Sprachchat starten.
+
+Da gebe ich jetzt mal den Vorbereiteten prompt. und es geht jetzt gar nicht. Darum mache ich da gleich die beste Reaktion, wie ich das mache, sondern wirklich nur das durchspielen. Deswegen lasst euch da auch nicht verunsichern. Wenn dann, da irgendwelche Dinge gesagt werden oder Bewertungen kommen.
+
+ist nicht optimal, sondern es geht jetzt wirklich erst mal nur darum, wie ihr das prinzipiell nutzt, wenn ihr mit der Ki euch über so ein Rollenspiel vorbereitet.
+
+Also, ihr hört mich ja, und ihr solltet dann auch hoffentlich gleich die Ki hören, wenn sie spricht. Jenny, du sagst mir da mal gleich. Ich spreche jetzt gleich. und wenn du dann die Ki auch sprechen hörst, dann gibst du mir einfach nur so einen Daumen Hoch Jenny geht das perfekt um.
+
+Okay.
+
+sprach Chat starten. und los geht's.
+
+Du spielst.
+
+Audio shared by Georg: Ein.
+
+Einflussreichen skeptischen Bereichsleiter.
+
+Ich bin ein Projektleiter und will dich für die Einführung eines Ki-gestützten Systems gewinnen.
+
+Du befürchtest Machtverlust zusätzlichen Aufwand und den Verlust von Entscheidungshoheit
+
+Reagiere realistisch, anspruchsvoll und gelegentlich emotional gib deine wahren Interessen nicht sofort Preis, stell immer nur eine Frage
+
+nach dem Signal: Stopp, analysierst du die Gesprächsführung hinsichtlich Interessenklärung, Empathie, Überzeugungskraft, konkreter Vereinbarungen gibt 3 Verbesserungsvorschläge.
+
+Audio shared by Georg: Ganz ehrlich, ich seh da gerade vor allem, dass wir noch ein Tool mehr bekommen. und am Ende bleibt alles. An meinem Team hängen. Ich soll dann Verantwortung abgeben, aber wenn's schief geht, steh ich trotzdem gerade. Warum sollte ich mir das ans Bein binden.
+
+Audio shared by Georg: Was genau habe ich davon persönlich und für meinen Bereich.
+
+Also die Bedenken verstehe ich sehr, sehr gut, und die.
+
+glaube ich, können wir sehr, sehr gut entkräften, denn das soll ja nur der Entlastung dienen, und es soll auch nicht so sein, dass die Einführung dieses Ki-systems als Verantwortung auf
+
+sie abgeladen wird, sondern wir bestimmen gemeinsam, was wir machen, und wir stehen auch gemeinsam in der Verantwortung, dass das funktioniert.
+
+Auf die Frage: was genau habe ich davon. Die Mitarbeiter werden entlasteter, werden dadurch weniger Stress haben, weil in die Karie ein Bereich einfach ihre Arbeitslast abnimmt
+
+und ihr insoweit mehr Potenzial habt für
+
+Dinge, die ihr in der Abteilung sagt: Ja, die wollen wir auch sonst erledigen, aber das können wir gar nicht, weil wir
+
+die Kapazität nicht haben.
+
+Audio shared by Georg: Ist.
+
+Audio shared by Georg: Das klingt nett, aber ich habe solche Versprechen schon gehört.
+
+Audio shared by Georg: Am Ende messen mich alle an Zahlen, die ich nicht mehr voll kontrolliere. und wenn die Leute dann frustriert sind, weil die Ki Quatsch macht, landen sie bei mir im Büro. Wie verhinderst du genau das konkret?
+
+Also, das werden wir nicht machen. Wir werden dich dann eben nicht entsprechend verantwortlich machen, sondern wir gehen da gemeinsam rein, und das ist auch kein Versprechen. Wir werden das gemeinsam messen. und wenn etwas noch nicht so gut funktioniert.
+
+werden Sie auch die Hoheit haben zu sagen: Was müssen wir jetzt verbessern, damit es funktioniert.
+
+Also, da wird überhaupt nicht der Druck gemacht, sondern wir ziehen da an einem Strang.
+
+Audio shared by Georg: Moment. Hoheit klingt gut, Aber heißt das wirklich, dass ich ein Vetorecht habe, wenn es meinem Bereich schadet, oder ist das nur mitreden ohne echte Wirkung. und wer entscheidet am Ende, wenn wir unterschiedlicher Meinung sind? Du, ich oder irgendein Lenkungskreis, den ich nicht im Griff habe.
+
+Stopp.
+
+Audio shared by Georg: Alles klar. Ich sperte das kurz aus.
+
+Du.
+
+Audio shared by Georg: Warst durchgehend, sachlich und lösungsorientiert, aber du hast die Bedenken zu schnell beruhigen wollen und dadurch nicht klar herausgearbeitet, was wirklich auf dem Spiel steht. Einfluss, Kontrolle Schutz des Teams. Deine Empathie war sichtbar, wirkte aber pauschal durch schnelle Zusicherungen.
+
+Audio shared by Georg: 3 Verbesserungen. Erstens, zuerst das Interesse erfragen, Etwa welche Entscheidungen müssen aus Ihrer Sicht unbedingt bei ihnen bleiben?
+
+Audio shared by Georg: Zweitens, das Dilemma spiegeln, bevor du Lösungen anbietest, also seine Sorge um Verantwortung ohne Kontrolle in eigenen Worten zurückgeben. Drittens, einen begrenzten Pilot mit klaren Regeln anbieten: Kriterien, Aufwandsgrenze, Prüftermin und Entscheidungsrechte.
+
+Audio shared by Georg: Wichtig ist auch Vereinbarungen konkret und ehrlicherweise benennen, statt mehr zu versprechen, als du halten kannst.
+
+und wie gesagt, da geht es jetzt ja nicht darum zu sagen, Ey, da habe ich jetzt die Ki in den Senkel gestellt, sondern
+
+könnt ihr was mitnehmen. Von den Verbesserungsvorschlägen könnt ihr was sagen? Okay, ja, das passt für meine Situation, passt nicht, aber ihr seht, es ist relativ niederschwellig, so ein Rollenspiel zu initiieren. und da kann man natürlich sagen: hat der prompt optimal gepasst.
+
+wie hätte ich sonst vielleicht reagiert, aber das so zum
+
+Alltag werden zu lassen. Das ist so. Die Botschaft, die ich euch da einfach noch mitgeben wollte. Für diejenigen, die das noch nicht so nutzen. und vielleicht hat jemand noch so ganz zum Abschluss. Wieso jetzt? z. B., die sich tierisch gefreut haben. Das kennt der Kiowa war auch nicht an Auf dem Deckel. Hier
+
+schmeißt hier mal die Verbesserungsvorschläge so schnell raus. Aber hast du noch was, bevor wir auseinander gehen, wo du sagst. Hey, das ist nochmal so. Was ich zum Thema Rollenspiel den anderen mitgeben möchte.
+
+Audio shared by Georg: Eine Sache. Vielleicht noch: mach Dir vorher ganz klar.
+
+So eine Sekunde. Die, machen wir mal. Jetzt ist gut. Ki: Ja, ich meine, du weißt, du bist sehr lösungsorientiert. Aber ich mach dich jetzt mal.
+
+Jetzt ist sie.
+
+So, los geht's.
+
+Kunden.
+
+und da stehe ich im im E-Mail Kontakt.
+
+und ich habe mir heute von der Ki helfen lassen, also einmal kulturell. Zweitens, wie Formuliere E-Mail Verlauf mit reingegeben und habe so die Situation geschildert, was bisher auch lief, die Waren zu Besuch. Wir haben die betreut.
+
+Bla bla, bla bla bla. Also diese ganzen Rahmenbedingungen, und das berücksichtigt die dann alles, und anhand dessen habe ich heute eine E-Mail
+
+auch meinem Sprachgebrauch entspricht. Also das kann man, der auch vorgeben, damit es dann nicht irgendwie so stocksteif rüberkommt oder irgendwie zu locker. Also, das ist schon ganz nett. Das Tool. Man kann das schon sehr, sehr vielfältig verwenden.
+
+und für dich so. Also, da ist tatsächlich eben Richtung Second Brain Second. Brain lernt auf ganz vielen Ebenen, wie du arbeitest, wie du tickst, wie du eine Mail formulierst, aber auch vielleicht, wie du einen Prozess angehst. Oder so kannst du auch nochmal, Es könnte vielleicht vertiefen, was für dich sein
+
+Marianne. Ich glaube, du hast heute fast das letzte Wort, weil es geht so Richtung 20 Uhr.
+
+Ja, vielen Dank.
+
+Die ist, die riecht immer sehr verschwitzt. Also die.
+
+Es ist natürlich so ein persönliches Thema. Also das Ihr mal auf eine Art mitzuteilen, ohne dass sie sich gleich angegriffen fühlt. und so, und da habe ich dieses Gespräch mal mit der Ki geübt, also zum einen, dass sie vielleicht ganz neutral reagiert. und dann habe ich der Ki auch gesagt, sie soll mal sehr empfindlich und auf der Beziehungsebene sehr.
+
+sehr sensibel reagiert und dann mehrere unterschiedliche Durchgänge übt, wie ihr eigentlich ja auf wertvolle oder wertschätzende.
+
+ja, dass es ihr einfach mitgeteilt wird, ohne dass hier beziehungsmäßig was zu Bruche geht. und das war ganz hilfreich. Also, da war die Ki manchmal ganz empfindlich. und dann durftest du dir da überlegen, wie du reagierst. Ja. Also einfach die unterschiedlichen Nuancen auch auszuprobieren, fand ich sehr hilfreich.
+
+Genau. Also, du kannst eben auch steuern, sozusagen dir ganz verschiedene Persönlichkeiten geben. Also.
+
+es bimmelt 8 Uhr gleich ans nächste Rollenspiel. und dann guckt ihr, was da rauskommt. Viel Spaß hat mir Freude gemacht. und lasst uns alle voranbringen, dass wir
+
+die künstliche Intelligenz nutzen, dass wir noch intelligenter werden.
+
+In diesem Sinne
+
+habt eine Klasse Woche. und diejenigen, die noch in Breakouts gehen wollen, Ich gebe euch wieder. und wenn ihr allein seid, dann bringe ich euch mit anderen zusammen.
+
+Vielen Dank.
+
+Tschüss.
+
+So.

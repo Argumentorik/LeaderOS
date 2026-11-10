@@ -214,12 +214,11 @@ def available_providers() -> dict:
     """Return which OAuth providers are configured on this server.
 
     The frontend calls this on the login screen to know which buttons to render.
-    Google is served via Emergent-managed OAuth (OAUTH_SESSION_URL) — no
-    Google Cloud Console client needed.
+    Google needs GOOGLE_CLIENT_ID (our own client in Google Cloud); the
+    frontend renders Google Identity Services with it.
     """
-    import os
     return {
-        "google": bool(os.environ.get("OAUTH_SESSION_URL") or google_client_id()),
+        "google": bool(google_client_id()),
         "apple": bool(apple_service_id()),
         "microsoft": bool(microsoft_client_id()),
         "magic_link": True,

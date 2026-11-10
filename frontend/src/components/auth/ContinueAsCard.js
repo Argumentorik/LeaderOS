@@ -148,11 +148,6 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
         onPrefill?.(email);
         await api.post('/auth/magic-link/request', { email });
         onMagicSent?.(email);
-      } else if (provider === 'google') {
-        // Direct OAuth redirect — an active Google session logs in instantly.
-        const redirectUrl = window.location.origin + '/dashboard';
-        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
-        return; // keep spinner until navigation
       } else if (provider === 'license') {
         // Iter 137: license customers came back to a dead green arrow — there was
         // no branch for their provider at all. One tap = magic link (no key
@@ -160,7 +155,7 @@ export const useContinueAs = (account, { de = true, onPrefill, onMagicSent, onEr
         onPrefill?.(email, 'license');
         await api.post('/auth/magic-link/request', { email });
         onMagicSent?.(email);
-      } else if (provider === 'apple' || provider === 'microsoft') {
+      } else if (provider === 'google' || provider === 'apple' || provider === 'microsoft') {
         // The actual sign-in is triggered by the provider button itself —
         // we just signal the parent to focus/click it.
         onPrefill?.(email, provider);

@@ -81,8 +81,8 @@ export const ReAuthModal = () => {
     }
   };
 
-  const handleGoogleSuccess = (userData) => finishReAuth(userData, 'google'); // eslint-disable-line no-unused-vars
-  const handleGoogleError = (msg) => setError(msg); // eslint-disable-line no-unused-vars
+  const handleGoogleSuccess = (userData) => finishReAuth(userData, 'google');
+  const handleGoogleError = (msg) => setError(msg);
 
   if (!open) return null;
 
@@ -126,6 +126,9 @@ export const ReAuthModal = () => {
         {googleClientId && (
           <div className="mb-4">
             <GoogleSignInButton
+              clientId={googleClientId}
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
               de={de}
               label={de ? 'Mit Google bestätigen' : 'Confirm with Google'}
             />
