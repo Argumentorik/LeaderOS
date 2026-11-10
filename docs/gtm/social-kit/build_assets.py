@@ -145,13 +145,76 @@ def mascot(path):
     fg = ndi.binary_fill_holes(~bg)
     lab2, n2 = ndi.label(fg)
     fg = lab2 == (1 + int(np.argmax(ndi.sum(fg, lab2, range(1, n2 + 1)))))
-    # Rand entfärben: Randpixel nehmen die Farbe des nächsten Kernpixels (kein heller Saum auf dunklem Grund)
-    core = ndi.binary_erosion(fg, iterations=3)
+    # Rand entfärben: Randpixel nehmen die Farbe des nächsten Kernpixels (kein heller Saum auf dunklem Grund).
+    # Helle, unbunte Reste des Hintergrunds am Haaransatz (oberes Fünftel, nahe am Rand) zählen nicht zum
+    # Kern. Weiter unten bleibt alles, wie es ist: dort ist Helles der Hemdkragen.
+    near_edge = ndi.distance_transform_edt(fg) < 16
+    bgish = ((a.max(2) - a.min(2)) < 34) & (a.min(2) > 130)
+    hair = (np.arange(a.shape[0]) < a.shape[0] * 0.2)[:, None]
+    core = ndi.binary_erosion(fg, iterations=3) & ~(bgish & near_edge & hair)
     idx = ndi.distance_transform_edt(~core, return_distances=False, return_indices=True)
     rgb = np.where(core[..., None], a, a[idx[0], idx[1]])
     alpha = np.clip((ndi.gaussian_filter(fg.astype(np.float32), 1.1) - 0.35) / 0.4, 0, 1)
     out = Image.fromarray(np.dstack([rgb, alpha * 255]).astype(np.uint8), 'RGBA')
     out.resize((1024, 1024), Image.LANCZOS).save(path)
+
+
+# Weitere echte Fotos von Wlad (10.11.2026 über den Chat gekommen, 463 bis 800 Pixel breit)
+EXTRA = {'coaching': 'wlad-coaching.png', 'arena': 'wlad-arena.png', 'seminar': 'wlad-seminar.jpg', 'talk': 'wlad-talk.png'}
+
+
+def photos():
+    """Gleiche Farbstimmung wie das Bühnenfoto, doppelte Größe, leicht geschärft. Mehr als doppelt
+    trägt die Auflösung nicht: die Fotos nur als Karte oder Ausschnitt einsetzen, nicht formatfüllend."""
+    for name, f in EXTRA.items():
+        src = Image.open(os.path.join(HERE, 'src', f)).convert('RGB')
+        big = grade(src).resize((src.width * 2, src.height * 2), Image.LANCZOS)
+        big = big.filter(ImageFilter.UnsharpMask(radius=1.6, percent=60, threshold=2))
+        big.save(os.path.join(OUT, f'{name}.jpg'), quality=92, optimize=True)
+
+
+def portrait(path):
+    """Porträt freistellen (1000×1000). Der Studiohintergrund ist ein glatter, exakt neutraler Verlauf
+    (R = G = B), das Hemd hat einen Blaustich: so lässt sich der Hintergrund sicher finden. Die Kante
+    wird nicht ausgestanzt, sondern gerechnet: Deckkraft aus dem Abstand zur Hintergrundfarbe an der
+    Stelle, danach wird der Hintergrundanteil aus der Randfarbe herausgerechnet (kein heller Saum)."""
+    src = Image.open(os.path.join(HERE, 'src', 'wlad-portrait.jpg')).convert('RGB')
+    big = src.resize((src.width * 2, src.height * 2), Image.BICUBIC).filter(ImageFilter.UnsharpMask(radius=1.4, percent=40, threshold=2))
+    a = np.asarray(big).astype(np.float32)
+    spread = a.max(2) - a.min(2)
+    bg_like = (spread < 8) & (a.min(2) > 185)
+    lab, _ = ndi.label(ndi.binary_erosion(bg_like, iterations=3, border_value=1))
+    edge = np.unique(np.concatenate([lab[0, :], lab[:, 0], lab[:, -1]]))
+    bg = ndi.binary_dilation(np.isin(lab, edge[edge > 0]), iterations=5) & ((spread < 14) & (a.min(2) > 170))
+    fg = ndi.binary_fill_holes(~bg)
+    lab2, n2 = ndi.label(fg)
+    sizes = ndi.sum(fg, lab2, range(1, n2 + 1))
+    fg = np.isin(lab2, 1 + np.flatnonzero(sizes > fg.size * 0.01))      # Kopf und Sakko, keine Krümel
+    disk = ndi.generate_binary_structure(2, 2)
+    fg = ndi.binary_closing(np.pad(fg, 16, mode='edge'), structure=disk, iterations=7)[16:-16, 16:-16]
+
+    # Hintergrundfarbe an jeder Stelle: weich aus den sicheren Hintergrundpixeln fortgesetzt
+    sure_bg = ndi.binary_erosion(~fg, iterations=4, border_value=1)
+    w = ndi.gaussian_filter(sure_bg.astype(np.float32), 26)
+    bgmap = np.dstack([ndi.gaussian_filter(a[..., c] * sure_bg, 26) / np.maximum(w, 1e-4) for c in range(3)])
+    bgmap = np.where((w > 1e-3)[..., None], bgmap, 230.0)
+    dist = np.abs(a - bgmap).max(2)
+    soft = np.clip((dist - 14.0) / 42.0, 0, 1)
+    soft = ndi.gaussian_filter(ndi.minimum_filter(soft, size=3), 0.9)       # einen Pixel nach innen, weich
+    inner = ndi.binary_erosion(fg, structure=disk, iterations=7, border_value=1)      # sicher Motiv (auch das helle Hemd)
+    outer = ndi.binary_dilation(fg, structure=disk, iterations=2)                      # außerhalb davon nichts
+    alpha = np.where(inner, 1.0, np.where(outer, soft, 0.0))
+    # Im Randband darf nichts durchsichtig werden, was klar zum Motiv gehört (dunkles Haar, Sakko)
+    alpha = np.where(ndi.binary_erosion(fg, structure=disk, iterations=2, border_value=1) & (dist > 70), 1.0, alpha)
+    alpha = ndi.gaussian_filter(alpha.astype(np.float32), 0.8)
+    rim = np.zeros(fg.shape, bool)
+    rim[:14, :] = rim[:, :14] = rim[:, -14:] = True
+    alpha[rim & (spread < 14) & (a.min(2) > 150)] = 0
+    # Hintergrundanteil herausrechnen
+    al = np.clip(alpha, 0.12, 1)[..., None]
+    rgb = np.clip((a - (1 - al) * bgmap) / al, 0, 255)
+    rgb = np.where((alpha >= 0.999)[..., None], a, rgb)
+    Image.fromarray(np.dstack([rgb, alpha * 255]).astype(np.uint8), 'RGBA').save(path)
 
 
 def make_qr(path, uid, base=None):
@@ -187,6 +250,8 @@ def main():
     stage_and_plates()
     grain(os.path.join(OUT, 'grain.png'))
     mascot(os.path.join(OUT, 'mascot.png'))
+    photos()
+    portrait(os.path.join(OUT, 'portrait.png'))
     info = [make_qr(os.path.join(OUT, f'qr-{uid.replace("w", "w0")}.svg'), uid) for uid in QR_IDS]
     info += [make_qr(os.path.join(OUT, f'qr-{uid}.svg'), uid, QR_SAVE_BASE) for uid in QR_SAVE_IDS]
     print(f'wrote stage.jpg (+ ice, smoke), 3 Lichtgründe, grain.png, mascot.png, {len(info)} QR-Codes (Version/Module {info}) nach {OUT}')

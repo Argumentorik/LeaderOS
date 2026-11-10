@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Takeover T01 · WLAD AI übernimmt · Karussell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
+<link rel="stylesheet" href="takeover.css">
+<style>
+/* T01 · "WLAD AI übernimmt" · acht Folien, 1080×1350 (4:5), für Instagram (Karussell)
+   und LinkedIn (PDF). WLAD AI spricht in der ersten Person. Erzählbogen: wer ich bin (1, 2),
+   warum es mich gibt (3), was in mir steckt (4), was mich unterscheidet (5), ein Beispiel (6),
+   was du mit mir machst (7), der Aufruf (8). Einziger Aufruf: "Kommentiere WLAD AI" (der
+   Link kommt per Nachricht). Kein Webinar, keine Platzzahl. Zahlen nur aus dem verifizierten
+   Set (docs/gtm/WEBINAR_FUNNEL.md: 400.000+ Klienten, 20+ Länder, 3× SPIEGEL-Bestseller,
+   seit 2007 im Coaching), Frameworks aus WLAD_CANON.md, Produktaussagen aus den Produktseiten.
+   Fotos und Buchcover sind echt; der Chat auf Folie 6 ist ein Beispiel und so gekennzeichnet. */
+.days{display:flex;gap:8px}
+.days span{flex:1;height:60px;border-radius:17px;display:flex;align-items:center;justify-content:center;font:500 21px/1 var(--mono);letter-spacing:.02em;color:rgba(255,255,255,.62);background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.1)}
+.days span.on{background:var(--lime);color:var(--ink);font-weight:600;box-shadow:0 0 30px rgba(191,255,0,.45)}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet"></div>
+<script src="../social-kit/kit.js"></script>
+<script src="tk.js"></script>
+<script>
+const N = 8;
+const HEAD = (top, html, size = 100, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const frame = (i) => `
+  <div style="left:72px;top:64px">${K.TILE}</div><div class="tag" style="left:144px;top:82px">WLAD AI <b>·</b> Übernahme</div>
+  <div class="tag" style="right:72px;top:82px;color:rgba(255,255,255,.55)">${String(i).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>
+  <div style="left:72px;right:72px;bottom:56px;height:4px;border-radius:2px;background:rgba(255,255,255,.16)"><i style="display:block;height:100%;width:${(i / N) * 100}%;border-radius:2px;background:var(--lime);box-shadow:0 0 16px rgba(191,255,0,.6)"></i></div>`;
+const bg = (plate, pos, a = 0.12, b = 0.55) => `${K.amb(plate, pos)}${K.dim(a, b)}${K.vig}`;
+const CARD = 'border-radius:52px;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1.5px rgba(255,255,255,.16)';
+
+const SLIDES = [
+  /* 1 · Titel: links Wlad (Porträt), rechts hinter Glas die KI im selben Sakko */
+  () => `
+    <div class="lay" style="background:#070908"></div>
+    <div class="lay" style="background:radial-gradient(62% 46% at 24% 32%,rgba(255,240,222,.2),rgba(255,240,222,0) 72%)"></div>
+    ${TK.portrait('left:-52px;top:262px;width:684px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 66%,transparent 95%);mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 66%,transparent 95%)')}
+    <div class="pane" style="left:540px;width:540px;height:1350px"></div><div class="pgrain" style="left:540px;width:540px;height:1350px"></div>
+    <div class="lay" style="background:radial-gradient(52% 40% at 78% 34%,rgba(191,255,0,.22),rgba(191,255,0,0))"></div>
+    ${K.mascot('left:414px;top:246px;width:732px;filter:drop-shadow(0 40px 70px rgba(0,0,0,.6));-webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 97%);mask-image:linear-gradient(to bottom,#000 74%,transparent 97%)')}
+    <div class="scan" style="left:538px;top:0;height:1350px"></div>
+    <div class="lay" style="background:linear-gradient(to top,rgba(3,6,3,.97) 0%,rgba(3,6,3,.9) 20%,rgba(3,6,3,.5) 36%,rgba(3,6,3,0) 52%)"></div>
+    ${frame(1)}
+    ${TK.stat('Online', 'right:72px;top:150px')}
+    <span class="g chip d" style="left:72px;top:806px;font-size:26px;padding:14px 26px">Wlad</span>
+    ${K.note('left:462px;top:770px;width:546px', 'Ab heute antworte <b>ich.</b>')}
+    <div style="left:72px;top:952px">${TK.wm(168)}</div>
+    ${HEAD(1140, 'übernimmt.', 128)}
+    <div class="tag" style="right:72px;top:1226px;color:#fff">11.11. bis 25.11.</div>
+    ${K.grain}`,
+
+  /* 2 · Vorstellung */
+  () => `
+    ${bg('amb-lime', 'tr', 0.2, 0.62)}
+    ${HEAD(150, 'Hallo.<br><span class="m">Ich bin</span> <span class="wm2" style="font-size:.9em;vertical-align:-.02em">WLAD<i>AI</i></span>', 116)}
+    <div style="left:72px;top:420px;width:880px;font:400 40px/1.3 var(--txt);letter-spacing:-.018em;color:rgba(255,255,255,.84)">Der KI-Coach mit Wlads Methodik.<br>Für Führung, Rhetorik und EQ.</div>
+    <div class="sk" style="left:160px;top:760px;width:760px;height:560px;background:radial-gradient(closest-side,rgba(191,255,0,.3),rgba(191,255,0,0))"></div>
+    ${K.mascot('left:110px;top:560px;width:860px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.6))')}
+    ${K.anchors([
+      { x: 470, y: 760, cx: 330, cy: 660, side: 'l', label: 'Wlads Methodik', d: true },
+      { x: 640, y: 852, cx: 790, cy: 730, side: 'r', label: 'Rund um die Uhr', d: true },
+      { x: 540, y: 978, cx: 330, cy: 1090, side: 'l', label: 'Text und Stimme', d: true },
+    ])}
+    ${frame(2)}
+    ${K.grain}`,
+
+  /* 3 · Warum es mich gibt: Wlad im Coaching, die Zahlen, dann die Wendung */
+  () => `
+    ${bg('amb-warm', 'tr')}
+    ${frame(3)}
+    ${HEAD(150, '<span class="m">Wlad kann nicht in jedem</span><br>deiner Gespräche sitzen.', 84)}
+    ${TK.pic('coaching', 250, 60, 550, 72, 372, 440, 590, CARD)}
+    <div style="left:548px;top:372px;width:460px;height:590px;display:flex;flex-direction:column;gap:16px">
+      ${[['Im Coaching seit', '2007'], ['Klienten', '400.000+'], ['Länder', '20+']].map(([l, n]) => `<div class="g d num" style="flex:1"><span>${l}</span><b>${n}</b></div>`).join('')}
+    </div>
+    <div style="left:72px;top:1010px;font:500 132px/1 var(--sans);letter-spacing:-.05em;color:var(--lime)">Ich schon.</div>
+    <div style="left:72px;top:1166px;width:936px;font:400 40px/1.3 var(--txt);letter-spacing:-.018em;color:rgba(255,255,255,.84)">Mit seiner Methodik. Rund um die Uhr.</div>
+    ${K.grain}`,
+
+  /* 4 · Was in mir steckt: Bücher, Frameworks, Coachings */
+  () => `
+    ${bg('amb-lime', 'tr', 0.25, 0.64)}
+    ${frame(4)}
+    ${HEAD(150, '<span class="m">Was in mir</span><br>steckt.', 108)}
+    ${TK.book('weisse-rhetorik', 'left:84px;top:432px;width:262px;transform:rotate(-3deg)')}
+    ${TK.book('die-5-rollen-einer-fuehrungskraft', 'left:409px;top:420px;width:262px')}
+    ${TK.book('dunkle-rhetorik', 'left:734px;top:432px;width:262px;transform:rotate(3deg)')}
+    <div class="tag" style="left:72px;top:860px;color:#fff">Seine Bücher <b>·</b> 3× SPIEGEL-Bestseller-Autor</div>
+    <div style="left:72px;top:918px;width:936px;display:flex;flex-direction:column;gap:18px">
+      ${[['11', 'Seine Frameworks', 'SEXIER, Feedbackformel, fünf Rollen und mehr.'], ['400.000+', 'Seine Coachings', 'Die Erfahrung aus der Arbeit seit 2007.']]
+        .map(([n, t, d]) => `<div class="g d row" style="padding:26px 36px 28px 28px"><div class="nn w">${n}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
+    </div>
+    ${K.grain}`,
+
+  /* 5 · Was mich unterscheidet */
+  () => `
+    ${bg('amb-cool', 'tr')}
+    ${frame(5)}
+    ${HEAD(150, '<span class="m">Allgemeine KI weiß von allem etwas.</span> Ich kenne eine Methodik ganz.', 80)}
+    <div style="left:72px;top:520px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="g d vs" style="opacity:.86"><div class="tag">Allgemeiner Chatbot</div><div class="ln"><div>Weiß von allem etwas</div><div>Antwortet auf deine Frage</div><div>Erklärt</div></div></div>
+      <div class="g vs" style="color:#0a0c10;box-shadow:inset 0 2px 0 rgba(255,255,255,.95),0 0 0 4px var(--lime),0 34px 90px rgba(191,255,0,.22),0 6px 16px rgba(0,0,0,.3)"><div style="display:flex;align-items:center;height:21px">${TK.wm(34, 'k')}</div><div class="ln"><div>Kennt Wlads Methodik</div><div>Fragt nach und bringt Einwände</div><div>Trainiert mit dir</div></div></div>
+    </div>
+    <div style="left:72px;top:1010px;width:936px;font:500 80px/1.08 var(--sans);letter-spacing:-.04em">Ein Coach. <span class="lm">Kein Ja-Sager.</span></div>
+    <div style="left:72px;top:1124px;width:936px;font:400 38px/1.3 var(--txt);letter-spacing:-.018em;color:rgba(255,255,255,.8)">Training an deinem Fall: Drill, Simulation, Auswertung.</div>
+    ${K.grain}`,
+
+  /* 6 · Beispiel-Chat */
+  () => `
+    ${bg('amb-warm', 'tr')}
+    ${frame(6)}
+    <div style="left:72px;top:168px;width:936px;display:flex;align-items:center;gap:24px">${K.av('width:96px;height:96px')}${TK.wm(52)}<span class="g chip" style="margin-left:auto;font-size:24px;padding:12px 24px">Beispiel</span></div>
+    <div style="left:72px;top:330px;width:936px;display:flex;flex-direction:column;gap:28px">
+      <div class="bub u" style="align-self:flex-end;max-width:84%">Mein Teamlead blockt jeden Vorschlag ab. Wie überzeuge ich ihn?</div>
+      <div class="g bub b" style="align-self:flex-start;max-width:90%"><span class="big">Falsche Frage.</span><span class="sub">Besser: <b>Was verliert er, wenn du recht hast?</b></span></div>
+    </div>
+    ${K.note('left:72px;top:880px;width:760px', 'Hinter einem Nein steckt fast immer <b>ein Interesse.</b>', { d: true })}
+    <div class="g d input" style="left:72px;top:1090px;width:936px;height:112px;border-radius:56px">Frag mich …<span class="send">${K.ARROW_UP}</span></div>
+    ${K.grain}`,
+
+  /* 7 · Einsätze und der Ablauf bis 25.11. */
+  () => `
+    ${bg('amb-lime', 'br', 0.25, 0.62)}
+    ${frame(7)}
+    ${HEAD(150, '<span class="m">Was du</span><br>mit mir machst.', 108)}
+    <div style="left:72px;top:440px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      ${[['Gespräche vorbereiten', 'Kontext, Argumente, Gegenseite, Coaching.'], ['Schwierige Gespräche proben', 'Ich spiele dein Gegenüber.'], ['Feedback formulieren', 'Beobachtung, Wirkung, Wunsch.'], ['Argumente prüfen', 'Sechs Schritte nach dem SEXIER-Modell.']]
+        .map(([t, d], i) => `<div class="g d tile" style="min-height:296px"><div class="tag" style="color:var(--lime)">0${i + 1}</div><b style="margin-top:22px">${t}</b><span>${d}</span></div>`).join('')}
+    </div>
+    <div class="tag" style="left:72px;top:1094px;color:#fff">Bis 25.11. <b>·</b> jeden Tag ein Fall in der Story</div>
+    <div class="days" style="left:72px;top:1138px;width:936px">${Array.from({ length: 15 }, (_, i) => `<span class="${i === 0 ? 'on' : ''}">${11 + i}</span>`).join('')}</div>
+    ${K.grain}`,
+
+  /* 8 · Aufruf */
+  () => `
+    ${K.amb('amb-lime', 'bl', 'background-size:175% auto')}${K.dim(0.22, 0.6)}${K.vig}
+    ${HEAD(150, 'Kommentiere', 118)}
+    <div style="left:72px;top:292px">${TK.wm(176)}</div>
+    <div class="g d field" style="left:72px;top:540px;width:936px;height:156px"><span class="ty">WLAD AI<u></u></span><span class="send" style="width:120px;height:120px">${K.ARROW_UP}</span></div>
+    <div style="left:72px;top:760px;width:560px;font:500 48px/1.16 var(--sans);letter-spacing:-.034em">Ich schicke dir den Link per Nachricht.</div>
+    <div style="left:72px;top:900px;width:520px;font:400 34px/1.3 var(--txt);color:rgba(255,255,255,.78)">14 Tage kostenlos testen. Ohne Karte.</div>
+    ${K.mascot('right:-150px;top:700px;width:760px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.6))')}
+    <div class="tag" style="left:118px;top:500px;color:var(--lime)">Dein Kommentar</div>
+    ${frame(8)}
+    ${K.grain}`,
+];
+window.SLIDES_N = SLIDES.length;
+const q = new URLSearchParams(location.search);
+document.getElementById('sheet').innerHTML = SLIDES[Number(q.get('s') || 0)]();
+</script>
+</body>
+</html>

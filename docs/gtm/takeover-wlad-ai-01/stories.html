@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Takeover · WLAD AI übernimmt · Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
+<link rel="stylesheet" href="takeover.css">
+<style>
+/* Stories 1080×1920. Aufruf: ?d=<Tag>&s=<Nr.>[&guide=1]. Tag 0 = Vorlagen.
+   Texte kommen aus days.js. Inhalte liegen zwischen y=270 und y=1540. Mit guide=1 werden
+   die Zonen eingezeichnet, in die man in Instagram den Sticker setzt; ohne guide bleibt
+   die Fläche frei (das ist die Datei zum Posten). */
+.opt.s{padding:20px 34px 22px 22px;gap:26px;border-radius:40px}
+.opt.s .l{width:72px;height:72px;font-size:40px;line-height:72px}
+.opt.s .t{font-size:38px;line-height:1.18}
+.opt.s.x .t{font-size:34px}
+.opt.s.x small{font-size:30px}
+.big{font:700 620px/1 var(--disp);letter-spacing:-.06em;color:rgba(255,255,255,.05)}
+.zb{position:relative;width:100%;flex:none}
+.zb .zone{position:absolute;inset:0}
+.pmt{border-radius:40px;padding:34px 38px 38px;font:400 35px/1.48 var(--mono);letter-spacing:-.012em;color:rgba(255,255,255,.92)}
+.txt{font:400 42px/1.3 var(--txt);letter-spacing:-.02em;color:rgba(255,255,255,.88)}
+.sub{font:400 46px/1.26 var(--txt);letter-spacing:-.02em;color:rgba(255,255,255,.86)}
+.why{left:72px;top:1474px;width:936px;white-space:normal;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet st"></div>
+<script src="../social-kit/kit.js"></script>
+<script src="tk.js"></script>
+<script src="days.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const GUIDE = q.get('guide') === '1';
+const pad = (n) => String(n).padStart(2, '0');
+const PL = { lime: 'amb-lime', cool: 'amb-cool', warm: 'amb-warm' };
+const TOTAL = DAYS.length;
+const storiesOf = (d) => d.stories || [{ t: 'fall', ...d.fall }, { t: 'vote', ...d.vote }, { t: 'answer', ...d.answer }, { t: 'drill', ...d.drill }, { t: 'next', ...d.next }];
+
+const bg = (plate, pos, a = 0.16, b = 0.6) => `${K.amb(PL[plate], pos)}${K.dim(a, b)}${K.vig}`;
+const frame = (day, label) => `
+  <div style="left:72px;top:288px">${K.TILE}</div><div class="tag" style="left:144px;top:306px">WLAD AI <b>·</b> Übernahme</div>
+  ${day.n ? `<div class="tag" style="right:72px;top:306px;color:rgba(255,255,255,.62)">Tag ${pad(day.n)} / ${TOTAL}</div>` : ''}
+  ${label ? TK.stat(label, 'left:72px;top:388px') : ''}`;
+const HEAD = (top, html, size, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const hd = (html, size) => `<div class="hd" style="font-size:${size}px">${html}</div>`;
+const col = (top, items, gap = 34, extra = '') => `<div style="left:72px;top:${top}px;width:936px;display:flex;flex-direction:column;gap:${gap}px;${extra}">${items.filter(Boolean).join('')}</div>`;
+const chips = (list) => `<div style="display:flex;flex-wrap:wrap;gap:14px">${list.map((t) => `<span class="g chip d" style="font-size:30px;padding:18px 30px">${t}</span>`).join('')}</div>`;
+const speaks = () => `<div style="left:72px;top:392px;display:flex;align-items:center;gap:22px">${K.av('width:88px;height:88px')}${TK.wm(44)}<span class="tag" style="position:static;color:#fff">antwortet</span></div>`;
+
+/* Sticker: Attrappe für die Vorschau und Zone, in die er gehört */
+const ZL = { poll: 'Umfrage einfügen', quiz: 'Quiz einfügen', question: 'Fragen-Sticker einfügen', link: 'Link-Sticker einfügen', post: 'Beitrag als Sticker teilen', answer: 'Antwort auf die Frage einfügen' };
+const mock = (st) => {
+  if (st.kind === 'poll' || st.kind === 'quiz') {
+    const letters = st.opts.every((o) => o.length === 1);
+    return `<div class="mk"><div class="mq">${st.q}</div><div class="mo">${st.opts.map((o, i) => `<span class="${st.kind === 'quiz' && i === st.right ? 'ok' : ''}">${st.kind === 'quiz' && !letters ? `<i>${'ABCD'[i]}</i>` : ''}${o}${st.kind === 'quiz' && i === st.right ? ' (richtig)' : ''}</span>`).join('')}</div></div>`;
+  }
+  if (st.kind === 'question') return `<div class="mk"><div class="mq">${st.q}</div><div class="mi">Tippe etwas …</div></div>`;
+  if (st.kind === 'link') return `<div class="mk lnk">${TK.IC.link} ${st.q}</div>`;
+  if (st.kind === 'post') return `<div class="mk pst">${st.q}<br>hier einfügen</div>`;
+  return `<div class="mk"><div class="mq">Frage aus dem Sticker</div><div class="mi">Antwort des Followers</div></div>`;
+};
+const natural = (st) => (st.kind === 'poll' || st.kind === 'quiz' ? 100 + st.opts.length * 84 + 30 : st.kind === 'question' ? 230 : st.kind === 'link' ? 90 : 0);
+const zoneBox = (st, h, w = 936) => {
+  const n = natural(st);
+  const k = n ? Math.min(1, (h - 50) / n) : 1;
+  return `<div class="zb" style="height:${h}px">${GUIDE ? `<div class="zone" style="left:${(936 - w) / 2}px;right:${(936 - w) / 2}px"><div class="zl">${ZL[st.kind]}</div><div style="width:100%;display:flex;justify-content:center;transform:scale(${k.toFixed(3)})">${mock(st)}</div></div>` : ''}</div>`;
+};
+
+const RENDER = {
+  /* Tag 1 · 1: die Scheibe schiebt sich über das Foto */
+  alert: (s, day) => `
+    <div class="lay" style="background:#050805"></div>
+    ${TK.photo('warm', 1.95, 612, 700, { fade: 260 })}
+    <div class="pane" style="left:0;width:600px;height:1920px"></div><div class="pgrain" style="left:0;width:600px;height:1920px"></div>
+    <div class="scan" style="left:598px;top:0;height:1920px"></div>
+    <div class="lay" style="background:linear-gradient(to top,rgba(3,6,3,.98) 0%,rgba(3,6,3,.92) 24%,rgba(3,6,3,.5) 40%,rgba(3,6,3,0) 56%),linear-gradient(to bottom,rgba(3,6,3,.72),rgba(3,6,3,0) 26%)"></div>
+    ${frame(day, s.label)}
+    ${HEAD(1040, s.head, 116)}
+    <div class="tag" style="left:72px;top:1452px;color:#fff">11.11. <b>·</b> Weiter tippen</div>
+    ${K.rb(880, 1400, '')}
+    ${K.grain}`,
+
+  /* Tag 1 · 2: WLAD AI stellt sich vor */
+  reveal: (s, day) => `
+    ${bg('lime', 'tr', 0.2, 0.6)}
+    <div class="sk" style="left:140px;top:1150px;width:800px;height:640px;background:radial-gradient(closest-side,rgba(191,255,0,.36),rgba(191,255,0,0))"></div>
+    ${K.mascot('left:90px;top:1104px;width:900px;filter:drop-shadow(0 44px 80px rgba(0,0,0,.6))')}
+    <div class="lay" style="background:linear-gradient(to top,rgba(3,6,3,.92) 0%,rgba(3,6,3,0) 14%)"></div>
+    ${frame(day, s.label)}
+    ${HEAD(500, 'Hallo.<br><span class="m">Ich bin</span>', 132)}
+    <div style="left:72px;top:780px">${TK.wm(168)}</div>
+    <div class="sub" style="left:72px;top:984px;width:900px">${s.sub}</div>
+    ${K.grain}`,
+
+  /* Tag 1 · 3: warum es mich gibt (Wlad im Coaching, Zahlen aus dem verifizierten Set, Wendung) */
+  origin: (s, day) => `
+    ${bg('warm', 'tr')}
+    ${frame(day, s.label)}
+    ${HEAD(500, s.head, 88)}
+    ${TK.pic('coaching', 130, 120, 670, 72, 800, 936, 520, 'border-radius:56px;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1.5px rgba(255,255,255,.16)')}
+    <div style="left:72px;top:1276px;width:936px;display:flex;gap:12px;justify-content:center">${s.chips.map((t) => `<span class="g chip d" style="font-size:27px;padding:16px 24px">${t}</span>`).join('')}</div>
+    <div style="left:72px;top:1392px;font:500 132px/1 var(--sans);letter-spacing:-.05em;color:var(--lime)">${s.punch}</div>
+    ${K.grain}`,
+
+  /* Tag 1 · 4: was in mir steckt (echte Buchcover, Kurse, Coachings) */
+  inside: (s, day) => `
+    ${bg('lime', 'tr', 0.22, 0.62)}
+    ${frame(day, s.label)}
+    ${HEAD(500, s.head, 100)}
+    ${TK.book(s.books[0], 'left:86px;top:872px;width:276px;transform:rotate(-3deg)')}
+    ${TK.book(s.books[1], 'left:402px;top:858px;width:276px')}
+    ${TK.book(s.books[2], 'left:718px;top:872px;width:276px;transform:rotate(3deg)')}
+    <div style="left:72px;top:1318px;width:936px;display:flex;gap:12px">${s.chips.map((t) => `<span class="g chip d" style="font-size:28px;padding:17px 26px">${t}</span>`).join('')}</div>
+    <div class="sub" style="left:72px;top:1424px;width:936px">${s.sub}</div>
+    ${K.grain}`,
+
+  /* Fall des Tages: Szene (Text) oder Zitat (Sprechblase) */
+  fall: (s, day) => `
+    ${bg(day.plate, 'tl')}
+    <div class="big" style="right:36px;top:1010px">${pad(day.n)}</div>
+    ${frame(day, s.label || 'Fall des Tages')}
+    ${s.quote
+      ? col(560, [`<div class="tag" style="position:static;color:var(--lime);white-space:normal;line-height:1.5">${s.who}</div>`,
+          `<div class="g" style="align-self:flex-start;max-width:100%;border-radius:64px 64px 64px 16px;padding:50px 56px 58px;font:500 ${s.quote.length > 36 ? 70 : 88}px/1.06 var(--sans);letter-spacing:-.04em;color:#0a0c10">„${s.quote}“</div>`,
+          `<div class="sub" style="margin-top:14px">${s.sub}</div>`], 30)
+      : col(560, [hd(s.head, 100), `<div class="sub" style="margin-top:10px">${s.sub}</div>`], 34)}
+    <div class="tag" style="left:72px;top:1452px;color:#fff">${s.hint || 'Was würdest du tun?'}</div>
+    ${K.rb(880, 1400, '')}
+    ${K.grain}`,
+
+  /* Abstimmung: Frage, bei langen Antworten die Optionen im Bild, darunter die Sticker-Zone */
+  vote: (s, day) => `
+    ${bg(day.plate, 'br')}
+    ${frame(day, s.label || 'Deine Wahl')}
+    ${col(500, [hd(s.head, s.size || (s.rows ? 96 : 112)),
+      s.rows ? `<div style="display:flex;flex-direction:column;gap:16px">${s.rows.map((t, i) => `<div class="g d opt s"><span class="l">${'ABC'[i]}</span><span class="t">${t}</span></div>`).join('')}</div>` : '',
+      s.rows ? zoneBox(s.sticker, 300, 700) : `<div style="margin:auto 0">${zoneBox(s.sticker, 520, 840)}</div>`,
+      `<div class="tag" style="position:static;text-align:center">Tippe auf deine Antwort</div>`], 34, s.rows ? '' : 'height:1010px')}
+    ${K.grain}`,
+
+  /* WLAD AI antwortet */
+  answer: (s, day) => `
+    ${bg(day.plate, 'tr')}
+    ${frame(day)}
+    ${speaks()}
+    ${col(540, [hd(`${s.letter ? `<span class="lm">${s.letter}.</span> ` : ''}${s.head}`, 100),
+      s.body ? `<div class="txt">${s.body}</div>` : '',
+      s.bubble ? `<div class="bub u" style="align-self:flex-start;max-width:100%">„${s.bubble}“</div>` : '',
+      s.prompt ? `<div class="g d pmt">${s.prompt}</div>` : '',
+      s.tags ? `<div style="display:flex;flex-wrap:wrap;gap:14px">${s.tags.map((t, i) => `<span class="g chip ${i === s.on ? 'l' : 'd'}" style="font-size:32px;padding:18px 30px">${t}</span>`).join('')}</div>` : '',
+      s.list ? `<div style="display:flex;flex-direction:column;gap:18px">${s.list.map(([t, d]) => `<div class="g d row"><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}</div>` : '',
+      s.wrong ? `<div style="display:flex;flex-direction:column;gap:14px">${s.wrong.map(([l, t]) => `<div class="g d opt s x"><span class="l">${l}</span><span class="t">${t}</span></div>`).join('')}</div>` : '',
+      `<div class="src" style="margin-top:8px">${s.book ? TK.book(s.book) : ''}<div class="tag" style="position:static;white-space:normal;line-height:1.6"><b>${s.whyLabel || 'Prinzip'}</b> &nbsp;${s.why}</div></div>`,
+      s.more ? `<span class="g chip d" style="align-self:flex-start;font-size:30px;padding:18px 30px">${TK.IC.next} ${s.more}</span>` : ''], 32)}
+    ${K.grain}`,
+
+  /* Drill: ein Satz zum Ausfüllen */
+  drill: (s, day) => `
+    ${bg(day.plate, 'bl')}
+    ${frame(day, 'Drill · 20 Sekunden')}
+    ${col(520, [hd(s.head || 'Dein Satz<br><span class="m">für heute.</span>', 116), `<div class="g tpl" style="margin-top:10px">${TK.hl(s.tpl)}</div>`, chips(s.chips)], 34)}
+    <div class="tag why">Screenshot machen <b>·</b> dann hast du ihn dabei</div>
+    ${K.grain}`,
+
+  /* Weiter: Frage an WLAD AI, Stichwort, Link oder Verweis auf den Post */
+  next: (s, day) => {
+    const size = s.size || 108;
+    if (s.kind === 'ask') return `
+      ${bg(day.plate, 'tr')}
+      ${frame(day, 'Frag WLAD AI')}
+      ${col(520, [hd(s.head, size), `<div style="margin:auto 0">${zoneBox(s.sticker, 440, 840)}</div>`, `<div class="sub">${s.sub}</div>`], 40, 'height:990px')}
+      ${K.grain}`;
+    if (s.kind === 'post') return `
+      ${bg(day.plate, 'tr')}
+      ${frame(day, 'Neuer Post')}
+      ${col(520, [hd(s.head, size), `<div class="sub">${s.sub}</div>`, zoneBox(s.sticker, 560, 520)], 34)}
+      ${K.grain}`;
+    return `
+      ${K.amb('amb-lime', 'bl')}${K.dim(0.2, 0.6)}${K.vig}
+      <div class="sk" style="left:420px;top:1180px;width:760px;height:620px;background:radial-gradient(closest-side,rgba(191,255,0,.34),rgba(191,255,0,0))"></div>
+      ${K.mascot('right:-130px;top:1130px;width:760px;filter:drop-shadow(0 44px 80px rgba(0,0,0,.6))')}
+      <div class="lay" style="background:linear-gradient(to top,rgba(3,6,3,.92) 0%,rgba(3,6,3,0) 14%)"></div>
+      ${frame(day, s.kind === 'link' ? 'Jetzt testen' : 'Mehr über mich')}
+      ${s.kind === 'link'
+        ? col(520, [hd(s.head, size), `<div class="sub">${s.sub}</div>`, zoneBox(s.sticker, 200, 760)], 38)
+        : col(520, [hd(s.head, size),
+            `<div class="tag" style="position:static;margin-top:16px;color:var(--lime)">Deine Antwort auf diese Story</div>`,
+            `<div class="g d field" style="height:170px;margin-top:-10px"><span class="ty" style="font-size:70px">WLAD AI<u></u></span><span class="send" style="width:130px;height:130px">${K.ARROW_UP}</span></div>`,
+            `<div class="sub" style="width:640px">${s.sub}</div>`], 34)}
+      ${K.grain}`;
+  },
+
+  /* Vorlage: Antwort auf eine echte Frage (Text tippt man in Instagram) */
+  reply: (s, day) => `
+    ${bg(s.plate, 'tr')}
+    ${frame(day)}
+    ${speaks()}
+    ${col(540, [zoneBox({ kind: 'answer' }, 330, 820),
+      `<div class="g d" style="height:560px;border-radius:52px;display:flex;align-items:center;justify-content:center;font:500 34px/1.3 var(--txt);color:rgba(255,255,255,.5)">${GUIDE ? 'Antwort von WLAD AI hier in Instagram eintippen' : ''}</div>`], 40)}
+    ${K.grain}`,
+};
+
+const ALL = [TEMPLATES, ...DAYS];
+window.META = ALL.map((d) => ({ n: d.n, date: d.date, theme: d.theme, post: d.post, stories: storiesOf(d).map((s) => ({ type: s.t + (s.kind ? ':' + s.kind : ''), sticker: s.sticker || null })) }));
+const day = ALL.find((d) => d.n === Number(q.get('d') || 1));
+const list = storiesOf(day);
+const story = list[Number(q.get('s') || 1) - 1];
+document.getElementById('sheet').innerHTML = RENDER[story.t](story, day);
+</script>
+</body>
+</html>

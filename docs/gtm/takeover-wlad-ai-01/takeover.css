@@ -1,0 +1,72 @@
+/* Takeover "WLAD AI übernimmt" · Zusätze zum Social-Kit (../social-kit/kit.css).
+   Karussell 1080×1350 (post.html) und Stories 1080×1920 (stories.html, Blatt .st).
+   Stories: oben 270 px und unten 380 px bleiben frei für die Instagram-Oberfläche;
+   Sticker (Umfrage, Quiz, Frage, Link) setzt man in Instagram, die Zonen dafür sind
+   nur in der Vorschau (?guide=1) eingezeichnet. */
+.sheet.st{height:1920px}
+.st .lay,.st .vig,.st .grain,.st .amb{height:1920px}
+.st .amb{background-size:auto 118%}
+.st .vig{background:radial-gradient(130% 80% at 50% 42%,transparent 50%,rgba(2,3,6,.66) 100%)}
+.ic{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Wortmarke: WLAD in Weiß, AI als Limetten-Pille */
+.wm2{display:inline-flex;align-items:center;gap:.14em;font-family:var(--disp);font-weight:700;line-height:1;letter-spacing:-.025em;text-transform:uppercase;color:#fff;white-space:nowrap}
+.wm2 i{font-style:normal;display:inline-block;padding:.05em .2em .07em;border-radius:.26em;background:var(--lime);color:var(--ink);letter-spacing:-.01em;box-shadow:0 .14em .5em rgba(191,255,0,.28)}
+.wm2.k{color:var(--ink)}.wm2.k i{background:var(--ink);color:var(--lime);box-shadow:none}
+
+/* Statuszeile */
+.stat{display:inline-flex;align-items:center;gap:16px;padding:15px 26px 15px 20px;border-radius:999px;font:500 21px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.dot{flex:none;width:14px;height:14px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 6px rgba(191,255,0,.2),0 0 20px rgba(191,255,0,.95)}
+
+/* Milchglas-Scheibe über dem Foto */
+.pane{top:0;-webkit-backdrop-filter:blur(42px) saturate(1.1) brightness(1.08);backdrop-filter:blur(42px) saturate(1.1) brightness(1.08);background:linear-gradient(90deg,rgba(210,255,120,.1),rgba(225,255,170,.2));box-shadow:inset -2px 0 0 rgba(235,255,190,.75),inset -10px 0 16px -8px rgba(220,255,150,.3),26px 0 80px -8px rgba(0,8,4,.5)}
+.pgrain{top:0;background:url(../social-kit/build/grain.png);background-size:256px 256px;mix-blend-mode:soft-light;opacity:.42;pointer-events:none}
+.scan{width:4px;background:var(--lime);box-shadow:0 0 22px 4px rgba(191,255,0,.8),0 0 70px 12px rgba(191,255,0,.35)}
+
+/* Zeilen und Karten */
+.row{display:flex;align-items:center;gap:30px;padding:30px 38px 32px 30px;border-radius:44px}
+.row .nn{flex:none;width:88px;height:88px;border-radius:28px;background:var(--lime);color:var(--ink);font:700 50px/88px var(--disp);text-align:center}
+.row .nn.o{background:rgba(255,255,255,.14);color:#fff}
+.row b{display:block;font:600 42px/1.1 var(--sans);letter-spacing:-.03em}
+.row span.s{display:block;margin-top:10px;font:400 31px/1.3 var(--txt);color:rgba(255,255,255,.74)}
+.g:not(.d) .row span.s,.row.lt span.s{color:rgba(10,12,16,.7)}
+.tile{padding:32px 34px 34px;border-radius:44px}
+.tile b{display:block;font:600 44px/1.08 var(--sans);letter-spacing:-.034em}
+.tile span{display:block;margin-top:14px;font:400 30px/1.3 var(--txt);color:rgba(255,255,255,.72)}
+.opt{display:flex;align-items:center;gap:30px;padding:28px 40px 30px 28px;border-radius:48px}
+.opt .l{flex:none;width:88px;height:88px;border-radius:50%;background:var(--lime);color:var(--ink);font:700 48px/88px var(--disp);text-align:center}
+.opt .t{font:500 43px/1.18 var(--txt);letter-spacing:-.024em}
+.opt.x{opacity:.86}.opt.x .l{background:rgba(255,255,255,.16);color:#fff}
+.opt.x .t{font-size:36px;line-height:1.22}
+.opt.x .t s{text-decoration-thickness:2.5px;text-decoration-color:rgba(255,255,255,.5)}
+.opt.x small{display:block;margin-top:8px;font:400 30px/1.25 var(--txt);opacity:.8;letter-spacing:-.01em}
+.field{display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 46px;border-radius:999px}
+.field .ty{font:600 62px/1 var(--disp);letter-spacing:-.01em;text-transform:uppercase;color:#fff}
+.field .ty u{text-decoration:none;display:inline-block;width:5px;height:.95em;margin-left:10px;vertical-align:-.12em;background:var(--lime);box-shadow:0 0 14px rgba(191,255,0,.9)}
+.tpl{border-radius:52px;padding:46px 50px 50px;font:400 50px/1.3 var(--txt);letter-spacing:-.026em;color:#0a0c10}
+.tpl em{font-style:normal;background:var(--lime);padding:.02em .26em .06em;border-radius:.28em;font-weight:500;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.g.d em.ph{font-style:normal;background:var(--lime);color:var(--ink);padding:.02em .26em .06em;border-radius:.28em;font-weight:500}
+
+/* Sticker-Zonen: nur in der Vorschau */
+.zone{border:3px dashed rgba(191,255,0,.9);border-radius:44px;display:flex;align-items:center;justify-content:center;background:rgba(191,255,0,.05)}
+.zone .zl{position:absolute;left:28px;top:-17px;padding:7px 16px;border-radius:999px;background:var(--lime);color:var(--ink);font:600 19px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.mk{width:86%;border-radius:34px;background:#fff;color:#111;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);font-family:var(--txt)}
+.mk .mq{padding:28px 30px 24px;font:700 38px/1.15 var(--txt);letter-spacing:-.02em;text-align:center}
+.mk .mo{display:flex;flex-direction:column;gap:12px;padding:0 24px 26px}
+.mk .mo span{display:flex;align-items:center;gap:18px;padding:20px 26px;border-radius:20px;background:#eef0f3;font:600 32px/1.1 var(--txt);letter-spacing:-.015em}
+.mk .mo span.ok{background:#d8f7c4}
+.mk .mo span i{font-style:normal;flex:none;width:44px;height:44px;border-radius:50%;background:#111;color:#fff;font:700 24px/44px var(--txt);text-align:center}
+.mk .mi{margin:0 24px 26px;padding:22px 26px;border-radius:20px;background:#eef0f3;font:500 30px/1 var(--txt);color:#8a8f98;text-align:center}
+.mk.lnk{width:auto;border-radius:999px;padding:22px 40px;display:flex;align-items:center;gap:16px;font:700 34px/1 var(--txt);letter-spacing:.01em;color:#1466ff;text-transform:uppercase}
+.mk.pst{width:74%;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);color:#fff;font:600 30px/1.3 var(--txt);text-align:center;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
+
+/* Buchcover und Kennzahlen */
+.bk{display:block;border-radius:10px;box-shadow:0 30px 60px rgba(0,0,0,.55),0 6px 14px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.12)}
+.num{padding:26px 32px 28px;border-radius:40px;display:flex;flex-direction:column;justify-content:center}
+.num b{display:block;margin-top:14px;font:700 82px/1 var(--disp);letter-spacing:-.04em}
+.num span{display:block;font:500 21px/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.row .nn.w{width:auto;min-width:88px;padding:0 22px;font-size:40px}
+.vs{padding:34px 36px 40px;border-radius:48px;min-height:430px}
+.vs .ln{display:flex;flex-direction:column;gap:28px;margin-top:34px;font:500 41px/1.14 var(--sans);letter-spacing:-.03em}
+.src{display:flex;align-items:center;gap:22px}
+.src .bk{width:74px;border-radius:7px;box-shadow:0 14px 30px rgba(0,0,0,.5)}

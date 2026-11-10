@@ -1,0 +1,688 @@
+[
+  {
+    "day": 0,
+    "date": "Vorlage",
+    "theme": "Antwort auf eine echte Frage",
+    "post": "",
+    "stories": [
+      {
+        "file": "stories/D00-1.jpg",
+        "type": "reply",
+        "sticker": null
+      },
+      {
+        "file": "stories/D00-2.jpg",
+        "type": "reply",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 1,
+    "date": "Mi 11.11.",
+    "theme": "Übernahme",
+    "post": "T01",
+    "stories": [
+      {
+        "file": "stories/D01-1.jpg",
+        "type": "alert",
+        "sticker": null
+      },
+      {
+        "file": "stories/D01-2.jpg",
+        "type": "reveal",
+        "sticker": null
+      },
+      {
+        "file": "stories/D01-3.jpg",
+        "type": "origin",
+        "sticker": null
+      },
+      {
+        "file": "stories/D01-4.jpg",
+        "type": "inside",
+        "sticker": null
+      },
+      {
+        "file": "stories/D01-5.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Was sagst du?",
+          "opts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D01-6.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D01-7.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Welches Gespräch schiebst du auf?"
+        }
+      },
+      {
+        "file": "stories/D01-8.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 2,
+    "date": "Do 12.11.",
+    "theme": "Feedbackformel",
+    "post": "IG-07",
+    "stories": [
+      {
+        "file": "stories/D02-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D02-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Wie fängst du an?",
+          "opts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D02-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D02-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D02-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Welches Feedback schiebst du auf?"
+        }
+      }
+    ]
+  },
+  {
+    "day": 3,
+    "date": "Fr 13.11.",
+    "theme": "Rückfrage-Technik",
+    "post": "W03",
+    "stories": [
+      {
+        "file": "stories/D03-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D03-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Was sagst du?",
+          "opts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D03-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D03-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D03-5.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 4,
+    "date": "Sa 14.11.",
+    "theme": "Charisma-Code",
+    "post": "IG-06",
+    "stories": [
+      {
+        "file": "stories/D04-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D04-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Dein stärkstes Signal?",
+          "opts": [
+            "Präsenz",
+            "Wärme",
+            "Kompetenz"
+          ]
+        }
+      },
+      {
+        "file": "stories/D04-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D04-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D04-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Wo wirkst du unsicher?"
+        }
+      }
+    ]
+  },
+  {
+    "day": 5,
+    "date": "So 15.11.",
+    "theme": "Vorbereitung",
+    "post": "S01",
+    "stories": [
+      {
+        "file": "stories/D05-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D05-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Wie bereitest du dich vor?",
+          "opts": [
+            "Im Kopf",
+            "Schriftlich",
+            "Gar nicht"
+          ]
+        }
+      },
+      {
+        "file": "stories/D05-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D05-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D05-5.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 6,
+    "date": "Mo 16.11.",
+    "theme": "SEXIER-Modell",
+    "post": "W02",
+    "stories": [
+      {
+        "file": "stories/D06-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D06-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Was fehlt?",
+          "opts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D06-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D06-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D06-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Dein Argument in einem Satz"
+        }
+      }
+    ]
+  },
+  {
+    "day": 7,
+    "date": "Di 17.11.",
+    "theme": "Vier Gesprächstypen",
+    "post": "S02",
+    "stories": [
+      {
+        "file": "stories/D07-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D07-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Welcher Gesprächstyp?",
+          "opts": [
+            "Informieren",
+            "Überzeugen",
+            "Verhandeln",
+            "Konfrontieren"
+          ],
+          "right": 3
+        }
+      },
+      {
+        "file": "stories/D07-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D07-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D07-5.jpg",
+        "type": "next:post",
+        "sticker": {
+          "kind": "post",
+          "q": "Beitrag S02"
+        }
+      }
+    ]
+  },
+  {
+    "day": 8,
+    "date": "Mi 18.11.",
+    "theme": "Fünf Rollen",
+    "post": "IG-11",
+    "stories": [
+      {
+        "file": "stories/D08-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D08-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Welche Rolle ist das?",
+          "opts": [
+            "Manager",
+            "Team-Leader",
+            "Psychologe",
+            "Problemlöser"
+          ],
+          "right": 3
+        }
+      },
+      {
+        "file": "stories/D08-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D08-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D08-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Welche Rolle fällt dir schwer?"
+        }
+      }
+    ]
+  },
+  {
+    "day": 9,
+    "date": "Do 19.11.",
+    "theme": "Das Interesse hinter dem Nein",
+    "post": "W01",
+    "stories": [
+      {
+        "file": "stories/D09-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D09-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Welche Frage?",
+          "opts": [
+            "A",
+            "B"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D09-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D09-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D09-5.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 10,
+    "date": "Fr 20.11.",
+    "theme": "LeaderOS",
+    "post": "S03",
+    "stories": [
+      {
+        "file": "stories/D10-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D10-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Was brauchst du jetzt?",
+          "opts": [
+            "Vorbereitung",
+            "Eine Probe"
+          ]
+        }
+      },
+      {
+        "file": "stories/D10-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D10-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D10-5.jpg",
+        "type": "next:link",
+        "sticker": {
+          "kind": "link",
+          "q": "LeaderOS testen"
+        }
+      }
+    ]
+  },
+  {
+    "day": 11,
+    "date": "Sa 21.11.",
+    "theme": "Zuhören",
+    "post": "IG-03",
+    "stories": [
+      {
+        "file": "stories/D11-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D11-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Was machst du?",
+          "opts": [
+            "Lösung sagen",
+            "Weiter zuhören"
+          ]
+        }
+      },
+      {
+        "file": "stories/D11-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D11-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D11-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Bei wem fällt dir Zuhören schwer?"
+        }
+      }
+    ]
+  },
+  {
+    "day": 12,
+    "date": "So 22.11.",
+    "theme": "Rückfrage im Verkauf",
+    "post": "IG-10",
+    "stories": [
+      {
+        "file": "stories/D12-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D12-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Was sagst du?",
+          "opts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "right": 1
+        }
+      },
+      {
+        "file": "stories/D12-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D12-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D12-5.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 13,
+    "date": "Mo 23.11.",
+    "theme": "SEXIER: der Einwand",
+    "post": "IG-02",
+    "stories": [
+      {
+        "file": "stories/D13-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D13-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Selbst ansprechen?",
+          "opts": [
+            "Ja",
+            "Nein"
+          ]
+        }
+      },
+      {
+        "file": "stories/D13-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D13-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D13-5.jpg",
+        "type": "next:ask",
+        "sticker": {
+          "kind": "question",
+          "q": "Welcher Einwand macht dir Sorgen?"
+        }
+      }
+    ]
+  },
+  {
+    "day": 14,
+    "date": "Di 24.11.",
+    "theme": "Dunkle Rhetorik erkennen",
+    "post": "IG-04",
+    "stories": [
+      {
+        "file": "stories/D14-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D14-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "quiz",
+          "q": "Welcher Trick ist das?",
+          "opts": [
+            "Strohmann",
+            "Whataboutism",
+            "Ad Hominem"
+          ],
+          "right": 0
+        }
+      },
+      {
+        "file": "stories/D14-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D14-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D14-5.jpg",
+        "type": "next:keyword",
+        "sticker": null
+      }
+    ]
+  },
+  {
+    "day": 15,
+    "date": "Mi 25.11.",
+    "theme": "Abschluss",
+    "post": "IG-12",
+    "stories": [
+      {
+        "file": "stories/D15-1.jpg",
+        "type": "fall",
+        "sticker": null
+      },
+      {
+        "file": "stories/D15-2.jpg",
+        "type": "vote",
+        "sticker": {
+          "kind": "poll",
+          "q": "Was nutzt du ab jetzt?",
+          "opts": [
+            "Feedbackformel",
+            "Rückfrage",
+            "SEXIER",
+            "Gesprächstypen"
+          ]
+        }
+      },
+      {
+        "file": "stories/D15-3.jpg",
+        "type": "answer",
+        "sticker": null
+      },
+      {
+        "file": "stories/D15-4.jpg",
+        "type": "drill",
+        "sticker": null
+      },
+      {
+        "file": "stories/D15-5.jpg",
+        "type": "next:link",
+        "sticker": {
+          "kind": "link",
+          "q": "LeaderOS testen"
+        }
+      }
+    ]
+  }
+]
