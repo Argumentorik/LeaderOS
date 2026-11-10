@@ -65,3 +65,53 @@ In der Browser-Konsole der Live-Seite:
 `window.dataLayer` (Google), `window.fbq` (Meta), `window.lintrk`
 (LinkedIn), `window.uetq` (Microsoft). Fehlt eines trotz gesetzter
 Variable: Redeploy vergessen, oder Consent nicht erteilt.
+
+## 6. Metricool · Website-Besuche (kein Ad-Tag)
+
+> Stand 10.11.2026. Gebaut und inert, wie die Ad-Tags.
+
+Metricool zeigt die Besuche einer Website neben den Social-Zahlen einer
+Marke. Der Pixel-Code aus Metricool (Verbindungen → Web verbinden) ist ein
+1×1-Bild: `https://tracker.metricool.com/c3po.jpg?hash=<Hash>`.
+
+| Variable | Woher | Format | Ohne sie |
+| --- | --- | --- | --- |
+| `REACT_APP_METRICOOL_HASH` | Metricool → Verbindungen → Web verbinden → Wert hinter `hash=` | 20–40 Hex-Zeichen | kein Abruf |
+
+**Der Hash bestimmt die Marke.** Die Besuche erscheinen in der
+Metricool-Marke, aus der der Hash stammt, und sind für alle sichtbar, die
+Zugriff auf diese Marke haben. Vor dem Setzen klären: Ist es die richtige
+Marke, und besteht für diesen Empfänger eine Vereinbarung zur
+Auftragsverarbeitung? Der Hash steht bewusst nicht im Repository.
+
+Was `frontend/src/lib/metricool.js` tut:
+
+- Es sendet nur mit Analyse-Consent (`lo_consent_v1.analytics`), beim
+  Laden der Seite oder sobald der Consent kommt.
+- Ein Abruf je Seitenaufruf. Kein fremdes Skript, kein Cookie von uns.
+- Übertragen werden IP-Adresse, Browser-Kennung und als Herkunft nur die
+  Domain (Referrer-Policy `strict-origin-when-cross-origin`), also kein
+  Pfad und keine Query-Parameter.
+- Nur auf `leader-os.de`, `leader-check.de`, `leaderos.de` und
+  `leadercheck.de`. Preview-Deployments und localhost senden nicht.
+- Nur für Besucher ohne Login. Angemeldete Nutzer und Login-Links
+  (`/auth/…`, `/auth-callback`) zählen nicht als Website-Besuch.
+
+Grenzen:
+
+- Metricool bekommt damit Besuche je Domain, keine einzelnen Seiten und
+  keine Herkunftsquellen. Metricool bietet dafür eine Skript-Variante an.
+  Sie führt fremden Code auf der Seite aus und ist nicht eingebaut. Der
+  Code war aus der Entwicklungsumgebung nicht abrufbar und ist ungeprüft.
+- Statische Seiten ohne React-Bundle (`/kurse`, `/kurse-uebersicht`,
+  `/fragen`, `/start`, `/os`, `/app`, `/wladbot`, `/wlad-jachtchenko`)
+  senden nichts. Dort gibt es keinen Consent-Banner.
+- `vercel.json` erlaubt `https://tracker.metricool.com` in `img-src`. Auf
+  `leaderos.de` (Emergent) gilt die CSP der dortigen Auslieferung und der
+  Build nutzt eigene Variablen: `REACT_APP_METRICOOL_HASH` muss auch dort
+  gesetzt sein.
+
+Test nach dem Redeploy: `https://leader-os.de/` im privaten Fenster,
+Banner → „Alle akzeptieren“, DevTools → Network → Filter `metricool`.
+Erwartet ist genau ein Abruf von `c3po.jpg` mit dem Hash. Ohne Zustimmung
+keiner. Datenschutz §3 und §4 nennen Metricool.

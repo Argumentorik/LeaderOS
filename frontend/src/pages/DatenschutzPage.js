@@ -74,6 +74,7 @@ export default function DatenschutzPage() {
           <ProcessorRow name="Stripe Payments Europe Ltd." country="Irland" purpose="Zahlungsabwicklung" basis="Art. 6(1)(b) DSGVO" data="Name, E-Mail, Karte (durch Stripe)" />
           <ProcessorRow name="Sentry (functional)" country="EU (Frankfurt)" purpose="Fehler-Tracking" basis="Art. 6(1)(f) DSGVO" data="Stacktraces, anonymisierte IP" />
           <ProcessorRow name="PostHog (analytics)" country="EU (Frankfurt)" purpose="Produkt-Analytics" basis="Art. 6(1)(a) DSGVO (Einwilligung)" data="Event-Logs, anonymisiert" />
+          <ProcessorRow name="Metricool Software, S.L. (analytics)" country="Spanien (EU, Madrid)" purpose="Zählung der Website-Besuche" basis="Art. 6(1)(a) DSGVO (Einwilligung)" data="IP-Adresse, Browser, Domain der Seite" />
           <ProcessorRow name="Resend" country="USA (DPF-zertifiziert)" purpose="Transaktions-E-Mails" basis="Art. 6(1)(b) DSGVO" data="E-Mail, Name, Inhalt" />
           <ProcessorRow name="ElevenLabs Inc." country="USA" purpose="Voice-Mode (Sprachausgabe)" basis="Art. 6(1)(a) DSGVO (Einwilligung)" data="Text-Inhalte, kein Stimm-Material" />
           <ProcessorRow name="Anthropic, OpenAI, Google" country="USA (DPF-zertifiziert)" purpose="KI-Coaching-Antworten" basis="Art. 6(1)(b) DSGVO" data="Chat-Anfragen, Daily-Check-Ins" />
@@ -84,6 +85,11 @@ export default function DatenschutzPage() {
             {de
               ? 'Wir setzen technisch notwendige Cookies (Login-Session) automatisch. Analyse-Cookies (PostHog) und Session-Replay (Sentry) nur mit deiner aktiven Einwilligung über unseren Cookie-Banner. Du kannst deine Einwilligung jederzeit unter "Profil → Datenschutz" widerrufen.'
               : 'We set strictly necessary cookies (login session) automatically. Analytics (PostHog) and session replay (Sentry) only with your active consent via our cookie banner. You can withdraw consent anytime under "Profile → Privacy".'}
+          </p>
+          <p>
+            {de
+              ? 'Mit derselben Einwilligung zur Analyse zählen wir Besuche der Website über ein Zählbild von Metricool. Dabei werden deine IP-Adresse, Angaben zum Browser und die Domain der Seite übertragen, nicht die einzelne Unterseite. Wir setzen dafür kein Cookie. Gezählt werden nur Besuche ohne Login.'
+              : 'With the same analytics consent we count visits to the website through a counting pixel from Metricool. Your IP address, browser details and the domain of the page are transmitted, not the individual page. We set no cookie for this. Only visits without a login are counted.'}
           </p>
         </Section>
 
@@ -115,7 +121,7 @@ export default function DatenschutzPage() {
           </p>
         </Section>
 
-        <p className="text-white/40 text-[10px] mt-12">{de ? 'Stand' : 'Last updated'}: Mai 2026 · v1.0</p>
+        <p className="text-white/40 text-[10px] mt-12">{de ? 'Stand' : 'Last updated'}: November 2026 · v1.1</p>
       </div>
     </div>
   );

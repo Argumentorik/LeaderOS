@@ -106,6 +106,7 @@ registerRoutePreloads({
 import { CookieConsent } from "./components/legal/CookieConsent";
 import { trackGoogleAdsPageView } from "./lib/googleAds";
 import { trackBingPageView } from "./lib/bingUet";
+import { settleMetricoolVisitor } from "./lib/metricool";
 import { ReAuthModal } from "./components/auth/ReAuthModal";
 import { FakeWladCall } from "./components/calls/FakeWladCall";
 import { WladHelpButton } from "./components/support/WladHelpButton";
@@ -142,9 +143,17 @@ const ProtectedRoute = ({ children }) => {
 
 function AppRouter() {
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => { if (user) prefetchIdleRoutes(); }, [user]);
+
+  // Metricool-Zählpixel: ein Website-Besuch je Seitenaufruf, nur für Besucher
+  // ohne Login. Der erste feststehende Login-Status entscheidet; die Funktion
+  // ist ein No-op ohne Hash, ohne Analyse-Consent und außerhalb der
+  // Produktiv-Domains (lib/metricool.js).
+  useEffect(() => {
+    if (!loading) settleMetricoolVisitor(!user);
+  }, [loading, user]);
 
   // Iter 92.11: once we successfully reach any route after a reload, clear
   // the chunk-reload guard so future deploys can retry-then-reload again.

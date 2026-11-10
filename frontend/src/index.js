@@ -12,6 +12,7 @@ import { maybeInitMetaPixel } from "@/lib/metaPixel";
 import { maybeInitLinkedIn } from "@/lib/linkedinInsight";
 import { maybeInitGoogleAds } from "@/lib/googleAds";
 import { maybeInitBingUet } from "@/lib/bingUet";
+import { maybeSendMetricoolVisit } from "@/lib/metricool";
 import { redirectAppRoutesToAppTier } from "@/lib/tierRedirect";
 
 // Leader-Check → LeaderOS handoff · runs SYNCHRONOUSLY before anything else.
@@ -148,6 +149,9 @@ if (typeof window !== "undefined") {
     if (c.analytics) {
       maybeInitPostHog();
       maybeInitClarity();
+      // Metricool-Zählpixel: beim Boot stößt ihn App.js an, sobald der
+      // Login-Status feststeht; hier nur der Fall „Consent kommt später“.
+      maybeSendMetricoolVisit();
     }
     if (c.marketing) { maybeInitMetaPixel(); maybeInitLinkedIn(); maybeInitBingUet(); }
     maybeInitGoogleAds();   // auch bei Rücknahme: consent update = denied

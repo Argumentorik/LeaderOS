@@ -98,6 +98,7 @@ export default function DatenschutzPage() {
             <tr className="border-b border-white/5"><td className="py-2 pr-4">Supabase Inc.</td><td className="py-2 pr-4">Datenbank, Authentifizierung</td><td className="py-2">EU (Stockholm)</td></tr>
             <tr className="border-b border-white/5"><td className="py-2 pr-4">Stripe Payments Europe</td><td className="py-2 pr-4">Zahlungsabwicklung</td><td className="py-2">EU (Irland)</td></tr>
             <tr className="border-b border-white/5"><td className="py-2 pr-4">PostHog Inc.</td><td className="py-2 pr-4">Nutzungsanalyse (nach Einwilligung)</td><td className="py-2">EU</td></tr>
+            <tr className="border-b border-white/5"><td className="py-2 pr-4">Metricool Software, S.L.</td><td className="py-2 pr-4">Zählung der Website-Besuche (nach Einwilligung)</td><td className="py-2">EU (Spanien)</td></tr>
             <tr className="border-b border-white/5"><td className="py-2 pr-4">Functional Software, Inc. (Sentry)</td><td className="py-2 pr-4">Fehler-Monitoring</td><td className="py-2">EU (Frankfurt)</td></tr>
             <tr className="border-b border-white/5"><td className="py-2 pr-4">Resend (Drei Eichen Capital LLC)</td><td className="py-2 pr-4">Transaktions-E-Mails</td><td className="py-2">EU/USA mit SCCs</td></tr>
             <tr className="border-b border-white/5"><td className="py-2 pr-4">Anthropic, OpenAI, Google</td><td className="py-2 pr-4">KI-gestützte Coaching-Antworten</td><td className="py-2">EU/USA mit SCCs</td></tr>
@@ -115,13 +116,20 @@ export default function DatenschutzPage() {
           (berechtigtes Interesse).
         </p>
 
-        <h3>5.2 Analyse und Komfort (PostHog)</h3>
+        <h3>5.2 Analyse und Komfort (PostHog, Metricool)</h3>
         <p>
           Wir verwenden PostHog (EU-Region) zur Analyse der Nutzung unserer
           Plattform. PostHog erstellt Nutzungsstatistiken und – nach
           ausdrücklicher Einwilligung – Session Recordings, bei denen Ihre
           Interaktionen pseudonymisiert aufgezeichnet werden, um die
           Plattform zu verbessern. Eingaben in Formulare werden dabei maskiert.
+        </p>
+        <p>
+          Mit derselben Einwilligung zählen wir Besuche der Website über ein
+          Zählbild von Metricool (Metricool Software, S.L., Madrid, Spanien).
+          Dabei werden Ihre IP-Adresse, Angaben zum Browser und die Domain der
+          Seite übertragen, nicht die einzelne Unterseite. Wir setzen dafür
+          kein Cookie. Gezählt werden nur Besuche ohne Login.
         </p>
         <p>
           Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO,

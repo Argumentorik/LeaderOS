@@ -74,7 +74,7 @@ export const CookieConsent = () => {
             <div className="space-y-2 mb-4 bg-white/[0.03] rounded-xl p-3" data-testid="consent-customize-panel">
               {[
                 { k: 'essential', t_de: 'Technisch notwendig', t_en: 'Strictly necessary', desc_de: 'Login, Session · kann nicht deaktiviert werden', desc_en: 'Login, session · cannot be disabled', locked: true },
-                { k: 'analytics', t_de: 'Analyse (PostHog)', t_en: 'Analytics (PostHog)', desc_de: 'Anonyme Nutzungs-Statistiken', desc_en: 'Anonymous usage stats' },
+                { k: 'analytics', t_de: 'Analyse (PostHog, Metricool)', t_en: 'Analytics (PostHog, Metricool)', desc_de: 'Anonyme Nutzungs-Statistiken und Besuchszählung', desc_en: 'Anonymous usage stats and visit counting' },
                 { k: 'replays', t_de: 'Session-Replay (Sentry)', t_en: 'Session replay (Sentry)', desc_de: 'Für gezielte Fehler-Reproduktion', desc_en: 'For targeted bug repro' },
                 { k: 'marketing', t_de: 'Marketing (Meta, Google Ads, LinkedIn, Microsoft)', t_en: 'Marketing (Meta, Google Ads, LinkedIn, Microsoft)', desc_de: 'Misst, welche Anzeige dich hergebracht hat', desc_en: 'Measures which ad brought you here' },
               ].map(({ k, t_de, t_en, desc_de, desc_en, locked }) => (

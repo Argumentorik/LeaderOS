@@ -12,7 +12,8 @@
  *     marketing: bool }
  *
  * `essential` is always true and cannot be opted out of (login session, JWT).
- * `analytics` gates PostHog event capture.
+ * `analytics` gates PostHog event capture, Microsoft Clarity (index.js) and
+ *            the Metricool visit pixel (lib/metricool.js).
  * `replays`  gates Sentry session-replay (alias kept for back-compat with
  *            older banners that wrote `session_replay`).
  * `marketing` gates ad-platform pixels (Meta Pixel, see lib/metaPixel.js).

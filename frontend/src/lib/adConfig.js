@@ -13,6 +13,9 @@
  * REACT_APP_GOOGLE_ADS_WEBINAR_LABEL    Conversion „webinar_signup“ → Tag einrichten → Label (optional;
  *                                       ohne Label zählt Google über den Pageview /webinar/danke)
  * REACT_APP_BING_UET_ID                 Microsoft Advertising → Tools → UET-Tag (Tag-ID, Ziffern)
+ * REACT_APP_METRICOOL_HASH              Metricool → Verbindungen → Web verbinden → Wert hinter „hash=“
+ *                                       (kein Ad-Tag: Zählpixel für Website-Besuche, lib/metricool.js;
+ *                                       der Hash bestimmt die Metricool-Marke, in der sie erscheinen)
  *
  * Siehe docs/ops/ADS_TRACKING_GO_LIVE.md.
  */
@@ -26,11 +29,14 @@ export const LINKEDIN_LEAD_CONVERSION_ID = clean(process.env.REACT_APP_LINKEDIN_
 export const GOOGLE_ADS_ID = clean(process.env.REACT_APP_GOOGLE_ADS_ID);
 export const GOOGLE_ADS_WEBINAR_LABEL = clean(process.env.REACT_APP_GOOGLE_ADS_WEBINAR_LABEL);
 export const BING_UET_ID = clean(process.env.REACT_APP_BING_UET_ID);
+export const METRICOOL_HASH = clean(process.env.REACT_APP_METRICOOL_HASH);
 
 export const META_CONFIGURED = /^\d{15,16}$/.test(META_PIXEL_ID);
 export const LINKEDIN_CONFIGURED = /^\d{6,10}$/.test(LINKEDIN_PARTNER_ID);
 export const GOOGLE_ADS_CONFIGURED = /^AW-\d{9,12}$/.test(GOOGLE_ADS_ID);
 export const BING_CONFIGURED = /^\d{6,12}$/.test(BING_UET_ID);
+// Nur Hex-Zeichen: der Wert wandert unverändert in die Pixel-URL.
+export const METRICOOL_CONFIGURED = /^[0-9a-f]{20,40}$/i.test(METRICOOL_HASH);
 
 /** Für /api/health-artige Checks und die Konsole: welche Tags sind scharf. */
 export const adTrackingStatus = () => ({
@@ -40,4 +46,5 @@ export const adTrackingStatus = () => ({
   googleAds: GOOGLE_ADS_CONFIGURED,
   googleAdsWebinarLabel: Boolean(GOOGLE_ADS_WEBINAR_LABEL),
   bing: BING_CONFIGURED,
+  metricool: METRICOOL_CONFIGURED,
 });
