@@ -85,8 +85,32 @@ Führungskraft" am Tag 8, „Dunkle Rhetorik" am Tag 14. So sieht man immer wied
 | 18:00 | Story 4 und 5: Drill und Weiter | ein Satz zum Mitnehmen, dann Stichwort, Frage oder Link |
 | laufend | Stichwort beantworten, Fragen aus dem Sticker sammeln | das Versprechen „du bekommst den Link" einlösen |
 
-Der Starttag weicht ab (acht Stories, siehe `STORIES.md`). Die Uhrzeiten sind ein Vorschlag ohne
-Datenbasis; wenn die Zahlen von Wlads Konto andere Zeiten nahelegen, gelten die.
+Der Starttag weicht ab: Er beginnt um 16:00 Uhr (Story), der Feed-Post folgt um 16:05, die letzte
+Story um 20:30 (acht Stories, siehe `STORIES.md`). Folgen zwei Stories aufeinander, liegt die zweite
+eine Minute später.
+
+## Stand in Metricool (10.11.2026)
+
+Alles liegt in der Metricool-Marke `wlad.argumentorik`, fest geplant, nicht als Entwurf: 100 Einträge.
+
+| Was | Anzahl | Veröffentlichung |
+|---|---|---|
+| Feed-Posts Instagram | 15 | automatisch, Tag 1 um 16:05, sonst 08:00, Hashtags als erster Kommentar, Alt-Texte gesetzt |
+| Stories ohne Sticker | 53 | automatisch |
+| Stories mit Sticker | 25 | Erinnerung in der Metricool-App, von Hand in Instagram mit Sticker posten |
+| LinkedIn-PDFs | 7 | automatisch, Tag 1 um 16:15, sonst 11:00 (laut Metricool die stärkste Stunde) |
+
+- Wer die Stories mit Sticker postet, braucht die Metricool-App mit Mitteilungen. Bleibt eine
+  Abstimmung aus, erscheint die Antwort um 12:30 trotzdem, dann ohne Frage davor.
+- Die Agentur plant im selben Zeitraum eigene Reels, bisher am 11., 12., 14. und 16.11. zwischen
+  16:15 und 17:16. Am Starttag läuft ihr Reel um 16:28, also 23 Minuten nach dem Start-Post.
+- Sechs alte Entwürfe vom 08.11. mit dem Namen WladBot (16. bis 20.11.) sind mit den neuen
+  Fassungen überschrieben. Löschen kann die Schnittstelle nichts; das geht nur im Planer.
+- LinkedIn: Tag 1 hat einen eigenen Text (dort gibt es keine Stories und keine automatische
+  Nachricht) und die Schlussfolie `T01-08-li.jpg`.
+- Instagram hat nach Metricool abends zwischen 18 und 20 Uhr die meisten Follower online, morgens
+  um 8 Uhr rund zwei Drittel davon. Der Feed-Post bleibt trotzdem morgens, weil die Antwort-Story
+  um 12:30 an mehreren Tagen auf ihn verweist.
 
 ## Kalender
 
