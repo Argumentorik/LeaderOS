@@ -6,6 +6,7 @@ import { FeatureVideoSection } from '../components/guide/FeatureVideoSection';
 import { generatePDF } from '../lib/pdfGenerator';
 import api from '../lib/api';
 import { swrGet } from '../lib/swrCache';
+import { capture } from '../lib/analytics';
 import { BookOpen } from 'lucide-react';
 import { PlaybookListCard } from '../components/playbooks/PlaybookListCard';
 import { PlaybookChatView } from '../components/playbooks/PlaybookChatView';
@@ -38,6 +39,7 @@ export default function PlaybooksPage() {
     setLoading(true);
     try {
       await api.post(`/playbooks/${playbook.playbook_id}/start`);
+      capture('playbook_started', { playbook_id: playbook.playbook_id, step_count: playbook.steps.length });
       setActivePlaybook(playbook);
       setCurrentStep(0);
       setCompleted(false);
@@ -70,6 +72,7 @@ export default function PlaybooksPage() {
       setChatMessages(prev => [...prev, { from: 'wlad', text: adviceText, keyPoints: aiResp?.key_points }]);
 
       if (res.data.completed) {
+        capture('playbook_completed', { playbook_id: activePlaybook.playbook_id, step_count: activePlaybook.steps.length });
         setCompleted(true);
         setChatMessages(prev => [...prev, {
           from: 'wlad',
@@ -89,6 +92,7 @@ export default function PlaybooksPage() {
           }]);
         }, 600);
       } else {
+        capture('playbook_completed', { playbook_id: activePlaybook.playbook_id, step_count: activePlaybook.steps.length });
         setCompleted(true);
         setChatMessages(prev => [...prev, {
           from: 'wlad',
@@ -114,6 +118,7 @@ export default function PlaybooksPage() {
     }]);
     try {
       const res = await api.post(`/playbooks/${activePlaybook.playbook_id}/report`);
+      capture('playbook_report_generated', { playbook_id: activePlaybook.playbook_id });
       setAdviceReport(res.data);
       setChatMessages(prev => prev.filter(m => !m.isLoading).concat({
         from: 'wlad',

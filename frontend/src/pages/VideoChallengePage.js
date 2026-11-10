@@ -19,6 +19,7 @@ import { useVideoRecorder } from '../hooks/useVideoRecorder';
 import { useVideoAnalysis } from '../hooks/useVideoAnalysis';
 import { downloadHTMLReport } from '../lib/reportGenerator';
 import { setWladBotPageContext, clearWladBotPageContext } from '../lib/wladbotBus';
+import { capture } from '../lib/analytics';
 
 const DEFAULT_RATING = { mode: 'hard', level: 'fortgeschritten', focus: [], audience: 'allgemein' };
 
@@ -66,12 +67,17 @@ export default function VideoChallengePage() {
   }, []);
 
   const handleAnalysisComplete = useCallback((analysisResult) => {
+    capture('video_analysis_completed', {
+      challenge_id: activeChallenge?.challenge_id || 'unknown',
+      analysis_entry_id: analysisResult?.entry_id || 'unknown',
+      overall_score: analysisResult?.overall_score ?? null,
+    });
     setAnalysis(analysisResult);
     setActiveEntryId(analysisResult?.entry_id || null);
     if (analysisResult?._trial) setTrial(analysisResult._trial);
     releaseStream();
     loadArchive();
-  }, [releaseStream, loadArchive]);
+  }, [activeChallenge, releaseStream, loadArchive]);
 
   const { analyzing, submitVideo, phase } = useVideoAnalysis({
     blobRef, ratingConfig, de,
@@ -135,6 +141,7 @@ export default function VideoChallengePage() {
   }, [activeFolderId, activeEntryId, archive, activeChallenge, de]);
 
   const startChallenge = async (challenge) => {
+    capture('video_challenge_started', { challenge_id: challenge.challenge_id, rating_mode: ratingConfig.mode, rating_level: ratingConfig.level });
     setActiveChallenge(challenge);
     setAnalysis(null);
     resetRecorder();

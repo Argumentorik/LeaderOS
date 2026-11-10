@@ -8,20 +8,18 @@
  * (PostHog + Sentry) MUST use the same id to keep funnels stable across
  * email changes, account merges, and OAuth provider linking.
  *
- * PostHog is loaded as an inline snippet in public/index.html, so `window.posthog`
- * is available globally. These helpers are defensive: they no-op if PostHog
- * isn't loaded (e.g. local dev, ad-blocked).
+ * PostHog is initialized in src/index.js and exposed as `window.posthog` for
+ * the existing call-site convention. These helpers are defensive: they no-op
+ * if PostHog isn't loaded (e.g. local dev, ad-blocked).
  */
 import logger from './logger';
 
 function getPosthog() {
   if (typeof window === 'undefined') return null;
   const ph = window.posthog;
-  // Das Snippet setzt __SV sofort, die Methoden (capture, identify, alias …)
-  // entstehen aber erst mit posthog.init(). Ohne Consent („Nur notwendige")
-  // läuft init nie: dann war ph.capture undefined und warf — die Seite fiel
-  // in die Error-Boundary. Nur ein initialisiertes PostHog zählt.
-  return ph && ph.__SV && typeof ph.capture === 'function' && typeof ph.identify === 'function' ? ph : null;
+  // Ohne Consent („Nur notwendige") läuft init nie: nur ein bereits
+  // initialisiertes PostHog darf Identität und Events verarbeiten.
+  return ph && ph.__loaded && typeof ph.capture === 'function' && typeof ph.identify === 'function' ? ph : null;
 }
 
 /**

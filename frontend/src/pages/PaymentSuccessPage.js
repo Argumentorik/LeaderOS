@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { Card, CardContent } from '../components/ui/card';
@@ -9,6 +9,7 @@ import { useCredits } from '../contexts/CreditContext';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../lib/api';
 import logger from '../lib/logger';
+import { capture } from '../lib/analytics';
 import { CheckCircle2, Loader2, XCircle, ArrowRight, Zap, Crown, Flame, Brain, Video, Target, Users, Star, FileText, MessageCircle } from 'lucide-react';
 
 export default function PaymentSuccessPage() {
@@ -20,6 +21,7 @@ export default function PaymentSuccessPage() {
   const { checkAuth } = useAuth();
   const [status, setStatus] = useState('checking');
   const [paymentData, setPaymentData] = useState(null);
+  const capturedPaymentSession = useRef(null);
   const sessionId = searchParams.get('session_id');
 
   useEffect(() => {
@@ -35,6 +37,15 @@ export default function PaymentSuccessPage() {
       try {
         const res = await api.get(`/payments/checkout/status/${sessionId}`);
         if (res.data.payment_status === 'paid') {
+          if (capturedPaymentSession.current !== sessionId) {
+            capture('payment_completed', {
+              tier: res.data.tier || 'unknown',
+              package_name: res.data.package_name || 'unknown',
+              amount: Number(res.data.amount) || 0,
+              currency: res.data.currency || 'unknown',
+            });
+            capturedPaymentSession.current = sessionId;
+          }
           setStatus('success');
           setPaymentData(res.data);
           reloadCredits();

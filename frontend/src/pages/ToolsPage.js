@@ -19,6 +19,7 @@ import { ToolsUpsellModal } from '../components/tools/ToolsUpsellModal';
 import { ToolsGrid } from '../components/tools/ToolsGrid';
 import { StepIndicator } from '../components/tools/StepIndicator';
 import { WorkflowResultPanel } from '../components/tools/WorkflowResultPanel';
+import { capture } from '../lib/analytics';
 
 const WORKFLOW_CLIPS = ['bp-workflows'];
 
@@ -79,6 +80,7 @@ export default function ToolsPage() {
     const inputText = activeTool.steps.map((step, i) => `${step.q}: ${answers[i] || 'Nicht angegeben'}`).join('\n');
     try {
       const res = await api.post(`/tools/${activeTool.id}`, { input: inputText, persona: buildPersonaText(persona) });
+      capture('workflow_completed', { workflow_id: activeTool.id, step_count: activeTool.steps.length });
       setResult(res.data.result);
       setCurrentStep(activeTool.steps.length);
     } catch (err) {

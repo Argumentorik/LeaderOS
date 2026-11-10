@@ -15,9 +15,8 @@ const persistLead = async ({ email, archetype, source }) => {
 
   if (typeof window !== 'undefined' && window.posthog?.capture) {
     try {
-      window.posthog.identify(trimmed.toLowerCase());
+      window.posthog.identify(trimmed.toLowerCase(), { email: trimmed });
       window.posthog.capture('archetype_quiz_lead_captured', {
-        email: trimmed,
         archetype,
         source,
         campaign: 'leader-os-launch',

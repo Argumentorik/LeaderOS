@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { EventDetailModal } from '../components/events/EventDetailModal';
 import { FocusTimeSetup } from '../components/events/FocusTimeSetup';
+import { capture } from '../lib/analytics';
 
 const TABS = [
   { id: 'live', label: { de: 'Live Events', en: 'Live Events' }, icon: Zap },
@@ -64,6 +65,12 @@ export default function EventsPage() {
   const handleRegister = async (eventId) => {
     try {
       const res = await api.post(`/events/${eventId}/register`);
+      const event = events.find((item) => item.event_id === eventId);
+      capture('event_registered', {
+        event_id: eventId,
+        event_type: event?.event_type || 'unknown',
+        access_level: event?.access_level || 'unknown',
+      });
       toast.success(de ? 'Angemeldet!' : 'Registered!');
       loadEvents();
       if (selectedEvent?.event_id === eventId) {
@@ -81,6 +88,12 @@ export default function EventsPage() {
   const handleUnregister = async (eventId) => {
     try {
       await api.post(`/events/${eventId}/unregister`);
+      const event = events.find((item) => item.event_id === eventId);
+      capture('event_unregistered', {
+        event_id: eventId,
+        event_type: event?.event_type || 'unknown',
+        access_level: event?.access_level || 'unknown',
+      });
       toast.success(de ? 'Abgemeldet' : 'Unregistered');
       loadEvents();
       if (selectedEvent?.event_id === eventId) {
