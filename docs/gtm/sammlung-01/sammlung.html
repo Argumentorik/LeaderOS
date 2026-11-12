@@ -157,7 +157,7 @@ const S = [
     <img src="${B}mascot.png" style="left:700px;top:330px;width:330px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))">
     <div class="b" style="left:72px;top:500px;width:600px">${c.ai}</div>
     <div class="rows" style="left:72px;top:740px;width:936px;height:330px">${INDEX.map(([n, t]) => `<div class="row c" style="${n === c.no ? '' : 'opacity:.42'}"><div class="no">${n}</div><div><b>${t}</b></div></div>`).join('')}</div>
-    <div class="b" style="left:72px;top:1104px;width:936px;font-size:35px;color:var(--ink)">Kommentiere <b style="font-weight:600;color:var(--lime)">WLAD AI</b>. ${LI ? 'Ich antworte dir mit dem Link.' : 'Ich schicke dir den Link per Nachricht.'}<br><span style="color:var(--mut)">14 Tage kostenlos testen, ohne Karte.</span></div>${foot(8)}`,
+    <div class="b" style="left:72px;top:1104px;width:936px;font-size:35px;color:var(--ink)">Jetzt Account erstellen: <b style="font-weight:600;color:var(--lime)">leaderos.de</b><br><span style="color:var(--mut)">14 Tage kostenlos testen, ohne Karte.</span></div>${foot(8)}`,
 ];
 window.SLIDES_N = N; window.IDS = Object.keys(C);
 document.getElementById('sheet').innerHTML = S[Number(q.get('s') || 0)]();
