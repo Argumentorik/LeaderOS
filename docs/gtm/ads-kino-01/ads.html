@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Anzeigen „Kino“ · LeaderOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Anzeigenserie "Kino": Filmplakat für die App. Hintergründe aus build_bg.py (echtes Foto hinter
+   Riffelglas). Aufruf: ads.html?a=K01&f=4x5 (4x5, 9x16, 1x1).
+   Produktaussagen nur, was die 14 Tage enthalten. Kein Webinar, keine Platzzahl. */
+:root{--lime:#bfff00;--ink:#f4f2ea;--serif:'Instrument Serif',Georgia,serif;--sans:'Inter Display','Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+#ad{position:relative;width:1080px;overflow:hidden;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;background:#000 center/cover}
+#ad>*{position:absolute;left:0;width:1080px;text-align:center}
+.top{font:400 30px/1.25 var(--serif);letter-spacing:.14em;text-transform:uppercase}
+.top small{display:block;font:500 16px/1 var(--sans);letter-spacing:.3em;color:var(--lime);margin-bottom:12px}
+.T{font:400 250px/.84 var(--serif);letter-spacing:.005em;text-transform:uppercase;text-shadow:0 6px 50px rgba(0,0,0,.55)}
+.sub{font:500 64px/1 var(--sans);letter-spacing:-.035em}
+.cred{font:500 15px/1.9 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:rgba(244,242,234,.78);padding:0 90px}
+.cta{display:inline-flex;align-items:center;gap:16px;height:84px;padding:0 14px 0 40px;border-radius:999px;background:var(--lime);color:#0a0c08;font:600 31px/1 var(--sans);letter-spacing:-.02em;box-shadow:0 14px 50px rgba(191,255,0,.28)}
+.cta i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#0a0c08;color:var(--lime);font-style:normal;font-size:28px}
+.note{font:500 18px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--lime)}
+</style>
+</head>
+<body>
+<div id="ad"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const MOTIVE = [
+  { id: 'K01', T: 'Üben', sub: 'bevor es zählt', line: 'Das schwierige Gespräch ist morgen. Spiel es heute durch.' },
+  { id: 'K02', T: '23 Uhr', sub: 'und dein Coach antwortet', line: 'WLAD AI ist da, wenn sonst niemand erreichbar ist.' },
+  { id: 'K03', T: '15 Min', sub: 'jeden Tag ein Drill', line: 'Führung lernt man nicht an einem Seminartag.' },
+  { id: 'K04', T: 'Wlad AI', sub: 'Wlads Methodik in einer App', line: 'Dreifacher SPIEGEL-Bestseller-Autor. Seit 2007 im Coaching.' },
+];
+const F = { '4x5': { H: 1350, top: 60, t: 910, ts: 250, bottom: 60 }, '9x16': { H: 1920, top: 280, t: 1190, ts: 250, bottom: 360 }, '1x1': { H: 1080, top: 44, t: 690, ts: 190, bottom: 40, compact: true } };
+const a = MOTIVE.find((x) => x.id === (q.get('a') || 'K01')); const fk = q.get('f') || '4x5'; const f = F[fk];
+const el = document.getElementById('ad'); el.style.height = f.H + 'px'; el.style.backgroundImage = `url(bg-${a.id}-${fk}.jpg)`;
+const ts = a.T.length > 6 ? f.ts * .82 : f.ts;
+el.innerHTML = `
+  <div class="top" style="top:${f.top}px"><small>LeaderOS zeigt</small>Die Coaching-App für Führungskräfte</div>
+  <div class="T" style="top:${f.t - ts * .84}px;font-size:${ts}px">${a.T}</div>
+  <div class="sub" style="top:${f.t + 14}px;${f.compact ? 'font-size:52px' : ''}">${a.sub}</div>
+  <div style="bottom:${f.bottom}px;display:flex;flex-direction:column;align-items:center;gap:${f.compact ? 18 : 24}px">
+    <div class="cred">${a.line}<br>Mit WLAD AI, dem KI-Coach mit Wlads Methodik · Per Text und Stimme${f.compact ? '' : '<br>Kurse · Simulationen · Tägliche Drills · Elf Frameworks'}</div>
+    <div class="cta">14 Tage kostenlos testen<i>→</i></div>
+    <div class="note">Ohne Karte · leader-os.de</div>
+  </div>`;
+window.ADS = MOTIVE.map((x) => ({ id: x.id, formats: Object.keys(F) }));
+</script>
+</body>
+</html>

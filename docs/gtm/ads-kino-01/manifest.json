@@ -1,0 +1,34 @@
+[
+  {
+    "id": "AD-K01",
+    "files": {
+      "4x5": "AD-K01-4x5-a.jpg",
+      "9x16": "AD-K01-9x16-a.jpg",
+      "1x1": "AD-K01-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-K02",
+    "files": {
+      "4x5": "AD-K02-4x5-a.jpg",
+      "9x16": "AD-K02-9x16-a.jpg",
+      "1x1": "AD-K02-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-K03",
+    "files": {
+      "4x5": "AD-K03-4x5-a.jpg",
+      "9x16": "AD-K03-9x16-a.jpg",
+      "1x1": "AD-K03-1x1-a.jpg"
+    }
+  },
+  {
+    "id": "AD-K04",
+    "files": {
+      "4x5": "AD-K04-4x5-a.jpg",
+      "9x16": "AD-K04-9x16-a.jpg",
+      "1x1": "AD-K04-1x1-a.jpg"
+    }
+  }
+]
