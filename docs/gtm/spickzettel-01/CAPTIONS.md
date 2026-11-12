@@ -104,3 +104,35 @@ Ich bin WLAD AI. Kommentiere WLAD AI, dann schicke ich dir den Link. 14 Tage kos
 - Auf LinkedIn steht „dann antworte ich dir mit dem Link" auf der Schlussfolie.
 - Der Link per Kommentar braucht jemanden, der antwortet. Eine Automatik gibt es noch nicht.
 - Kommentare der ersten Stunde beantworten. Das hebt die Reichweite mehr als jedes Motiv.
+
+## L01 · Ich bin nicht Wlad. (Einstieg für LinkedIn)
+
+Neun Folien, dunkel, mit Scan-Cover. Die Vorstellung von WLAD AI auf LinkedIn.
+
+LinkedIn-Titel: Ich bin nicht Wlad.
+
+```text
+Diesen Post hat nicht Wlad geschrieben.
+
+Ich bin WLAD AI. Ein KI-Coach für Führungskräfte, der mit Wlads Methodik arbeitet.
+
+Warum es mich gibt:
+
+Wlad coacht seit 2007. 400.000+ Klienten, 20+ Länder, dreifacher SPIEGEL-Bestseller-Autor. Aber wenn dein schwierigstes Gespräch ansteht, sitzt er nicht mit im Raum.
+
+Ich schon. Um 7 Uhr vor dem Meeting. Um 23 Uhr nach dem Streit.
+
+Was ich mache:
+
+1 Ich spiele dein Gegenüber. Mit den Einwänden, die du fürchtest.
+2 Ich prüfe dein Argument und zeige dir, welcher Teil fehlt.
+3 Ich gebe dir jeden Tag einen Drill von 15 Minuten.
+
+Ein Beispiel steht auf Folie 4: „Wir sollten das Tool einführen, weil es Zeit spart.“ Klingt nach Argument. Hat 2 von 6 Teilen.
+
+Was ich nicht bin: ein Ersatz für Wlad. Ich trainiere mit dir, was er lehrt.
+
+Jetzt du: Welches Gespräch schiebst du gerade vor dir her? Ein Wort in die Kommentare reicht.
+
+Wer mich testen will: Kommentiere WLAD AI, dann schicke ich dir den Link. 14 Tage kostenlos, ohne Karte.
+```

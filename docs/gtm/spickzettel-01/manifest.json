@@ -1,5 +1,21 @@
 [
   {
+    "id": "L01",
+    "slides": [
+      "L01-01.jpg",
+      "L01-02.jpg",
+      "L01-03.jpg",
+      "L01-04.jpg",
+      "L01-05.jpg",
+      "L01-06.jpg",
+      "L01-07.jpg",
+      "L01-08.jpg",
+      "L01-09-li.jpg"
+    ],
+    "slide_ig": "L01-09.jpg",
+    "pdf": "L01.pdf"
+  },
+  {
     "id": "P01",
     "slides": [
       "P01-01.jpg",
