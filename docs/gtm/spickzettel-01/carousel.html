@@ -32,6 +32,18 @@ html,body{background:#222}
 .row .no{flex:none;width:100px;font:500 76px/1 var(--sans);letter-spacing:-.05em}
 .row b{display:block;font:500 46px/1.06 var(--sans);letter-spacing:-.04em}
 .row span{display:block;margin-top:8px;font:400 29px/1.22 var(--sans);letter-spacing:-.015em;color:#474b41}
+.scanbg{inset:0;background:#0b0c0c}
+.gr{inset:0;background:url(../social-kit/build/grain.png);opacity:.6;mix-blend-mode:overlay;pointer-events:none}
+.ln{background:rgba(255,255,255,.5)}
+.mono{font:500 16px/1.45 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#f3f1ea}
+.bx{border:1.5px solid rgba(255,255,255,.85)}
+.bx i{position:absolute;left:-1.5px;top:-26px;font:500 15px/1 var(--mono);font-style:normal;letter-spacing:.1em;color:var(--lime)}
+.xw{display:inline-block;white-space:nowrap;position:relative;border:2px solid rgba(255,255,255,.85);padding:.02em .12em .06em;margin:0 .04em}
+.xw i{position:absolute;left:-2px;top:-30px;font:500 18px/1 var(--mono);font-style:normal;letter-spacing:.1em;color:var(--lime)}
+.xr{display:flex;align-items:baseline;gap:18px;padding:17px 0;border-top:1.5px dashed rgba(255,255,255,.3);color:#f3f1ea}
+.xr b{font:500 20px/1 var(--mono);color:var(--lime);width:44px}
+.xr span{font:500 32px/1.15 var(--sans);letter-spacing:-.025em;flex:none;width:520px}
+.xr em{font:500 17px/1.35 var(--mono);font-style:normal;letter-spacing:.1em;text-transform:uppercase;flex:1;text-align:right}
 .wm{font:600 30px/1 var(--sans);letter-spacing:-.03em}
 .wm i{font-style:normal;background:var(--ink);color:var(--lime);padding:.04em .2em .06em;border-radius:.2em;margin-left:.12em}
 </style>
@@ -50,9 +62,15 @@ const ph = (t) => t.replace(/\[([^\]]+)\]/g, '<span class="ph">$1</span>');
 const LINK = `Die Prompts laufen in WLAD AI, dem KI-Coach mit Wlads Methodik. 14 Tage kostenlos, ohne Karte. Kommentiere <b>WLAD AI</b>, ${LI ? 'dann antworte ich dir mit dem Link.' : 'dann schicke ich dir den Link.'}`;
 const P = { stage: { photo: 'stage.jpg', asp: 2013 / 1614, fx: .575, fy: .2, fh: .16 }, talk: { photo: 'talk.jpg', asp: 926 / 1134, fx: .5, fy: .27, fh: .2 }, coaching: { photo: 'coaching.jpg', asp: 1, fx: .69, fy: .31, fh: .2 }, mascot: { photo: 'mascot.png', asp: 1, fx: .5, fy: .36, fh: .42, flat: true } };
 
+const SCAN = {
+  stage: { photo: 'stage.jpg', w: 1325, h: 1062, l: -157, t: -23 },
+  talk: { photo: 'talk.jpg', w: 817, h: 1000, l: 191, t: -40 },
+  coaching: { photo: 'coaching.jpg', w: 1100, h: 1100, l: -60, t: -90 },
+};
 const C = {
   P01: { tag: 'Überzeugen', world: 'lime', p: 'stage', slides: [
-    { t: 'cover', big: '3 Prompts,', rest: 'um deinen Chef<br>zu überzeugen', sub: 'Kopieren, grüne Stellen ersetzen, üben.' },
+    { t: 'scan', big: '3 Prompts,', rest: 'um deinen Chef<br>zu überzeugen', sub: 'Kopieren. Ersetzen. Üben.', ann: [[605, 179, 770, 96, 'Kopf<br>Argument bauen'], [664, 635, 800, 540, 'Stimme<br>Laut üben'], [254, 742, 60, 560, 'Hand<br>Nachfragen statt<br>rechtfertigen']] },
+    { t: 'xray', k: 'Scan · ein typisches Argument', seg: [['Wir sollten das Tool einführen', '01'], [', '], ['weil es Zeit spart', '02'], ['.']], rows: [['01', 'Behauptung', 'vorhanden', 1], ['02', 'Begründung', 'vorhanden', 1], ['03', 'Beispiel', 'fehlt'], ['04', 'Auswirkung', 'fehlt'], ['05', 'Erklärung der Auswirkung', 'fehlt'], ['06', 'Widerlegung', 'fehlt']], res: '2 von 6 Teilen.' },
     { t: 'text', k: 'Warum', h: 'Dein Chef sagt nicht nein zur Idee.', b: 'Er sagt nein zu einem halben Argument. Und zu Einwänden, auf die du nicht vorbereitet warst. Diese drei Prompts schließen beide Lücken.' },
     { t: 'prompt', n: '1', h: 'Bau mein Argument', when: 'Am Abend vorher', p: 'Ich will meinen Chef von [Vorhaben] überzeugen. Bau daraus ein Argument nach SEXIER: Behauptung, Begründung, Beispiel, Auswirkung, Erklärung der Auswirkung, Widerlegung. Frag nach, wenn dir ein Teil fehlt.' },
     { t: 'prompt', n: '2', h: 'Spiel meinen Chef', when: 'Laut üben, nicht nur lesen', p: 'Spiel meinen Chef. So ist er: [Beschreibung]. Ich stelle ihm [Vorhaben] vor. Bring die drei Einwände, die er am ehesten bringt, einen nach dem anderen. Bewerte danach meine Antworten.' },
@@ -61,7 +79,8 @@ const C = {
     { t: 'cta', h: 'Welchen nimmst du zuerst?', b: 'Schreib 1, 2 oder 3 in die Kommentare.' },
   ] },
   P02: { tag: 'Schlagfertig', world: 'paper', p: 'talk', slides: [
-    { t: 'cover', big: '5 Sätze', rest: 'deines Chefs.<br>5 Antworten.', sub: 'Eine Rückfrage schlägt jede Rechtfertigung.' },
+    { t: 'scan', big: '5 Sätze', rest: 'deines Chefs.<br>5 Antworten.', sub: 'Rückfrage schlägt Rechtfertigung.', ann: [[469, 240, 70, 130, 'Ohr<br>Erst zuhören'], [681, 330, 70, 400, 'Mund<br>Rückfrage statt<br>Rechtfertigung'], [779, 740, 330, 690, 'Hände<br>Ruhig bleiben']] },
+    { t: 'xray', k: 'Scan · ein Satz, drei Stellen', seg: [['Dafür', '01'], [' ist '], ['kein Budget', '02'], [' '], ['da', '03'], ['.']], rows: [['01', 'Dafür', 'Für ein anderes Vorhaben vielleicht'], ['02', 'Kein Budget', 'Oder keine Priorität'], ['03', 'Da', 'Jetzt nicht. Später vielleicht']], res: 'Drei Stellen zum Nachfragen.', note: 'Mögliche Lesarten' },
     { t: 'pair', n: '1', a: '„Dafür ist kein Budget da.“', r: '„Was müsste passieren, damit es im nächsten Quartal geht?“' },
     { t: 'pair', n: '2', a: '„Das haben wir schon probiert.“', r: '„Was war damals anders als heute?“' },
     { t: 'pair', n: '3', a: '„Das passt gerade nicht.“', r: '„Wann passt es? Ich trage es ein.“' },
@@ -79,7 +98,8 @@ const C = {
     { t: 'cta', h: 'Was soll ich als Nächstes erklären?', b: 'Schreib dein Thema in die Kommentare.', link: `14 Tage kostenlos testen, ohne Karte. Kommentiere <b>WLAD AI</b>, ${LI ? 'dann antworte ich dir mit dem Link.' : 'dann schicke ich dir den Link.'}` },
   ] },
   P04: { tag: 'Feedback', world: 'paper', p: 'coaching', slides: [
-    { t: 'cover', big: '3 Prompts', rest: 'für dein nächstes<br>Kritikgespräch', sub: 'Hart in der Sache, weich zur Person.' },
+    { t: 'scan', big: '3 Prompts', rest: 'für dein nächstes<br>Kritikgespräch', sub: 'Hart in der Sache. Weich zur Person.', ann: [[699, 251, 800, 80, 'Blick<br>Zur Person'], [303, 405, 60, 150, 'Gegenüber<br>Erst verstehen'], [853, 614, 520, 720, 'Hand<br>Angebot, kein<br>Zeigefinger']] },
+    { t: 'xray', k: 'Scan · ein typisches Feedback', seg: [['Du bist', '01'], [' '], ['immer', '02'], [' '], ['unzuverlässig', '03'], ['.']], rows: [['01', 'Du bist', 'Person statt Sache'], ['02', 'Immer', 'Verallgemeinerung'], ['03', 'Unzuverlässig', 'Wertung statt Beobachtung']], res: 'Kein Teil der Feedbackformel.' },
     { t: 'text', k: 'Warum', h: 'Die meisten schieben es auf. Oder platzen damit heraus.', b: 'Beides hat denselben Grund: Der erste Satz fehlt. Die Feedbackformel gibt ihn dir. Beobachtung, Wirkung, Wunsch.' },
     { t: 'prompt', n: '1', h: 'Formuliere mein Feedback', when: 'Vor dem Gespräch', p: 'Ich muss [Person] Feedback geben. Es geht um [Verhalten]. Formuliere es nach der Feedbackformel: Beobachtung, Wirkung, Wunsch. Ohne Wertung, ohne „immer“ und „nie“.' },
     { t: 'prompt', n: '2', h: 'Spiel mein Gegenüber', when: 'Laut üben', p: 'Spiel [Person]. Ich gebe dir jetzt mein Feedback. Reagiere so, wie ich es befürchte: [Reaktion]. Sag mir danach, an welcher Stelle ich die Sache verlassen habe.' },
@@ -113,6 +133,29 @@ const T = {
     <div class="b" style="left:72px;top:1100px;width:800px;font-size:36px">${s.sub}</div>
     <div class="k" style="left:72px;top:1276px">Wischen</div><div class="k" style="right:72px;top:1276px">01 / ${String(N).padStart(2, '0')}</div>`;
   },
+  scan: () => {
+    const p = SCAN[c.p]; const X = 36; const Y = 36; const W = 1008; const H = 790;
+    return `<div class="scanbg"></div>
+    <div style="left:${X}px;top:${Y}px;width:${W}px;height:${H}px;overflow:hidden;background:#000"><img src="${B}${p.photo}" style="position:absolute;max-width:none;left:${p.l}px;top:${p.t}px;width:${p.w}px;height:${p.h}px;filter:grayscale(1) contrast(1.25) brightness(.92)"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 30%,transparent 70%,rgba(11,12,12,.7))"></div></div>
+    <div class="ln" style="left:${X}px;top:0;width:1px;height:1350px"></div><div class="ln" style="left:${X + W}px;top:0;width:1px;height:1350px"></div>
+    <div class="ln" style="left:0;top:${Y}px;width:1080px;height:1px"></div><div class="ln" style="left:0;top:${Y + H}px;width:1080px;height:1px"></div>
+    <svg style="left:0;top:0" width="1080" height="1350">${s.ann.map(([x, y, tx, ty]) => `<line x1="${X + x}" y1="${Y + y}" x2="${X + tx + (tx > x ? -14 : 150)}" y2="${Y + ty + 30}" stroke="rgba(255,255,255,.75)" stroke-width="1.5"/><rect x="${X + x - 5}" y="${Y + y - 5}" width="10" height="10" fill="#fff"/>`).join('')}</svg>
+    ${s.ann.map(([x, y, tx, ty, t], k) => `<div class="bx" style="left:${X + x - 62}px;top:${Y + y - 62}px;width:124px;height:124px"><i>0${k + 1}</i></div><div class="mono" style="left:${X + tx}px;top:${Y + ty}px;width:260px;text-shadow:0 1px 12px #000"><span style="color:var(--lime)">0${k + 1}</span> ${t}</div>`).join('')}
+    <div class="mono bx" style="left:${X}px;top:${Y}px;padding:12px 18px;font-size:22px;letter-spacing:.02em;text-transform:none;border-color:rgba(255,255,255,.5)">WLAD AI Notes</div>
+    <div class="mono" style="right:56px;top:54px;text-align:right">Spickzettel<br>${c.tag}</div>
+    <div class="H" style="left:56px;top:862px;width:980px;font-size:150px;letter-spacing:-.065em;color:#f6f4ec">${s.big}</div>
+    <div class="H" style="left:56px;top:1012px;width:980px;font-size:86px;color:#f6f4ec">${s.rest}</div>
+    <div class="ln" style="left:0;top:1012px;width:520px;height:1px;opacity:.5"></div><div class="ln" style="left:56px;top:${Y + H}px;width:1px;height:440px;opacity:.5"></div>
+    <div class="mono" style="left:56px;top:1222px;color:var(--lime)">${s.sub}</div>
+    <div class="mono" style="left:56px;top:1284px">Wischen · Zum Speichern</div><div class="mono" style="right:56px;top:1284px">01 / ${String(N).padStart(2, '0')}</div><div class="gr"></div>`;
+  },
+  xray: () => `<div class="scanbg"></div><div style="inset:0;background:radial-gradient(60% 34% at 50% 30%,rgba(255,255,255,.1),transparent)"></div>
+    <div class="ln" style="left:36px;top:0;width:1px;height:1350px;opacity:.5"></div><div class="ln" style="left:1044px;top:0;width:1px;height:1350px;opacity:.5"></div><div class="ln" style="left:0;top:140px;width:1080px;height:1px;opacity:.5"></div>
+    <div class="mono" style="left:72px;top:74px">${s.k}</div><div class="mono" style="right:72px;top:74px;color:var(--lime)">${s.note || 'Beispiel'}</div>
+    <div class="H" style="left:72px;top:230px;width:936px;font-size:${s.seg.map((x) => x[0]).join('').length > 40 ? 66 : 112}px;line-height:${s.seg.map((x) => x[0]).join('').length > 40 ? 1.9 : 1.42};color:#f6f4ec">„${s.seg.map(([t, n]) => (n ? `<span class="xw"><i>${n}</i>${t}</span>` : t)).join('')}“</div>
+    <div style="left:72px;top:${s.rows.length > 4 ? 610 : 720}px;width:936px">${s.rows.map(([n, a, b, ok]) => `<div class="xr"><b>${n}</b><span>${a}</span><em style="color:${ok ? 'var(--lime)' : s.rows.length > 4 ? '#ff6b57' : '#f3f1ea'}">${b}</em></div>`).join('')}</div>
+    <div class="H" style="left:72px;top:1120px;width:936px;font-size:76px;color:var(--lime)">${s.res}</div>
+    <div class="wm" style="left:72px;top:1268px;color:#f6f4ec">WLAD<i style="background:var(--lime);color:#0a0c08">AI</i></div><div class="mono" style="right:72px;top:1276px">Speichern · ${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div><div class="gr"></div>`,
   text: () => `${head(s.k)}<div class="H" style="left:72px;top:190px;width:940px;font-size:${s.h.length > 40 ? 96 : 116}px">${s.h}</div>
     <div class="b" style="left:72px;bottom:170px;width:880px;font-size:44px">${s.b}</div>${foot()}`,
   prompt: () => `${head('Prompt ' + (s.n === '→' ? '' : s.n), '<span class="pill">Kopieren</span>')}

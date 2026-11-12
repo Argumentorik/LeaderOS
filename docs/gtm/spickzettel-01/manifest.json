@@ -8,9 +8,10 @@
       "P01-04.jpg",
       "P01-05.jpg",
       "P01-06.jpg",
-      "P01-07-li.jpg"
+      "P01-07.jpg",
+      "P01-08-li.jpg"
     ],
-    "slide_ig": "P01-07.jpg",
+    "slide_ig": "P01-08.jpg",
     "pdf": "P01.pdf"
   },
   {
@@ -22,9 +23,10 @@
       "P02-04.jpg",
       "P02-05.jpg",
       "P02-06.jpg",
-      "P02-07-li.jpg"
+      "P02-07.jpg",
+      "P02-08-li.jpg"
     ],
-    "slide_ig": "P02-07.jpg",
+    "slide_ig": "P02-08.jpg",
     "pdf": "P02.pdf"
   },
   {
@@ -50,9 +52,10 @@
       "P04-04.jpg",
       "P04-05.jpg",
       "P04-06.jpg",
-      "P04-07-li.jpg"
+      "P04-07.jpg",
+      "P04-08-li.jpg"
     ],
-    "slide_ig": "P04-07.jpg",
+    "slide_ig": "P04-08.jpg",
     "pdf": "P04.pdf"
   }
 ]

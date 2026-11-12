@@ -1,11 +1,11 @@
 # Spickzettel · Serie 01
 
-Vier Karussells mit je sieben Folien. Ziel: speichern und kommentieren. Jedes Blatt gibt etwas
+Vier Karussells mit sieben oder acht Folien. Ziel: speichern und kommentieren. Jedes Blatt gibt etwas
 zum Kopieren mit und endet mit einer Frage, die sich in einem Wort beantworten lässt.
-Heller Fokus-Stil wie `../ads-fokus-01`. Frameworks aus `../WLAD_CANON.md`. Prompts und
+Innenfolien im hellen Fokus-Stil wie `../ads-fokus-01`. P01, P02 und P04 beginnen mit einem dunklen Scan-Cover (Foto mit Messpunkten) und einer Scan-Folie, die einen typischen Satz zerlegt. P03 behält das helle Cover. Frameworks aus `../WLAD_CANON.md`. Prompts und
 Antwortsätze sind Beispiele von uns, keine Zitate von Wlad.
 
-Dateien: `P0x-01..07.jpg` für Instagram, `P0x.pdf` für LinkedIn (Schlussfolie `P0x-07-li.jpg`).
+Dateien: `P0x-01..0n.jpg` für Instagram, `P0x.pdf` für LinkedIn (Schlussfolie `P0x-0n-li.jpg`, siehe `manifest.json`).
 
 ```bash
 NODE_PATH=/opt/node22/lib/node_modules node render.cjs . <fonts-local.css>
@@ -28,7 +28,7 @@ Drei Prompts zum Kopieren:
 2 Spiel meinen Chef. Mit den drei Einwänden, die er am ehesten bringt.
 3 Was hinter dem Nein steckt. Drei Rückfragen statt einer Rechtfertigung.
 
-Die vollen Texte stehen auf Folie 3 bis 5. Speichern, bevor das nächste Gespräch ansteht.
+Die vollen Texte stehen auf Folie 4 bis 6. Speichern, bevor das nächste Gespräch ansteht.
 
 Welchen nimmst du zuerst? Schreib 1, 2 oder 3 in die Kommentare.
 
