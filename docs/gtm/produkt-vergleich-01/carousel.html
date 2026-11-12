@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Produkt-Vergleich · WLAD AI · Karussells</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../social-kit/kit.css">
+<link rel="stylesheet" href="../takeover-wlad-ai-01/takeover.css">
+<style>
+/* Zwei Karussells im Stil der Übernahme (Glas, Scanlinie, Limette), Fokus auf das Produkt.
+   V01: WLAD AI neben Kurs, Buch und Seminar. V02: WLAD AI neben ChatGPT und Co.
+   Aufruf: carousel.html?c=V01&s=0[&li=1], je acht Folien 1080×1350.
+   Regeln: Die App enthält selbst Kurse, also kein Schlechtreden von Kursen. Aussagen über
+   allgemeine KI bleiben allgemein und überprüfbar. Zahlen nur aus dem verifizierten Set,
+   Produktaussagen nur, was die 14 Tage enthalten. Chats sind Beispiele und so gekennzeichnet. */
+.txt{font:400 40px/1.3 var(--txt);letter-spacing:-.018em;color:rgba(255,255,255,.84)}
+.big{font:500 92px/1.02 var(--sans);letter-spacing:-.045em}
+</style>
+</head>
+<body>
+<div id="sheet" class="sheet"></div>
+<script src="../social-kit/kit.js"></script>
+<script src="../takeover-wlad-ai-01/tk.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const cid = q.get('c') || 'V01';
+const N = 8;
+const LABEL = { V01: 'Kurs und Training', V02: 'KI und Coach' }[cid];
+const HEAD = (top, html, size = 100, extra = '') => `<div class="hd" style="left:72px;top:${top}px;width:936px;font-size:${size}px;${extra}">${html}</div>`;
+const frame = (i) => `
+  <div style="left:72px;top:64px">${K.TILE}</div><div class="tag" style="left:144px;top:82px">WLAD AI <b>·</b> ${LABEL}</div>
+  <div class="tag" style="right:72px;top:82px;color:rgba(255,255,255,.55)">${String(i).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>
+  <div style="left:72px;right:72px;bottom:56px;height:4px;border-radius:2px;background:rgba(255,255,255,.16)"><i style="display:block;height:100%;width:${(i / N) * 100}%;border-radius:2px;background:var(--lime);box-shadow:0 0 16px rgba(191,255,0,.6)"></i></div>`;
+const bg = (plate, pos, a = 0.12, b = 0.55) => `${K.amb(plate, pos)}${K.dim(a, b)}${K.vig}`;
+const cover = (chip, note, l1, l2) => `
+    <div class="lay" style="background:#070908"></div>
+    <div class="lay" style="background:radial-gradient(62% 46% at 24% 32%,rgba(255,240,222,.2),rgba(255,240,222,0) 72%)"></div>
+    ${TK.portrait('left:-52px;top:232px;width:684px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 66%,transparent 95%);mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 66%,transparent 95%)')}
+    <div class="pane" style="left:540px;width:540px;height:1350px"></div><div class="pgrain" style="left:540px;width:540px;height:1350px"></div>
+    <div class="lay" style="background:radial-gradient(52% 40% at 78% 34%,rgba(191,255,0,.22),rgba(191,255,0,0))"></div>
+    ${K.mascot('left:414px;top:216px;width:732px;filter:drop-shadow(0 40px 70px rgba(0,0,0,.6));-webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 97%);mask-image:linear-gradient(to bottom,#000 74%,transparent 97%)')}
+    <div class="scan" style="left:538px;top:0;height:1350px"></div>
+    <div class="lay" style="background:linear-gradient(to top,rgba(3,6,3,.97) 0%,rgba(3,6,3,.92) 24%,rgba(3,6,3,.55) 40%,rgba(3,6,3,0) 56%)"></div>
+    ${frame(1)}
+    ${TK.stat('Vergleich', 'right:72px;top:150px')}
+    <span class="g chip d" style="left:72px;top:746px;font-size:26px;padding:14px 26px">${chip}</span>
+    ${K.note('left:462px;top:710px;width:546px', note)}
+    ${HEAD(900, l1, 128)}
+    ${HEAD(1040, `<span class="lm">${l2}</span>`, 128)}
+    <div class="tag" style="left:72px;top:1226px;color:#fff">Wischen <b>·</b> zum Speichern</div>
+    ${K.grain}`;
+const story = (i, plate, a, b) => `
+    ${bg(plate, 'tr')}${frame(i)}
+    ${HEAD(170, a, 88)}
+    <div style="left:72px;bottom:150px;width:936px;font:500 104px/1 var(--sans);letter-spacing:-.05em;color:var(--lime)">${b}</div>
+    ${K.grain}`;
+const vs = (i, head, lt, l, r, claim, sub) => `
+    ${bg('amb-cool', 'tr')}${frame(i)}
+    ${HEAD(150, head, 76)}
+    <div style="left:72px;top:480px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="g d vs" style="opacity:.86"><div class="tag">${lt}</div><div class="ln">${l.map((x) => `<div>${x}</div>`).join('')}</div></div>
+      <div class="g vs" style="color:#0a0c10;box-shadow:inset 0 2px 0 rgba(255,255,255,.95),0 0 0 4px var(--lime),0 34px 90px rgba(191,255,0,.22),0 6px 16px rgba(0,0,0,.3)"><div style="display:flex;align-items:center;height:21px">${TK.wm(34, 'k')}</div><div class="ln">${r.map((x) => `<div>${x}</div>`).join('')}</div></div>
+    </div>
+    <div style="left:72px;top:1040px;width:936px;font:500 80px/1.08 var(--sans);letter-spacing:-.04em">${claim}</div>
+    <div class="txt" style="left:72px;top:1150px;width:936px;font-size:36px">${sub}</div>
+    ${K.grain}`;
+const tiles = (i, head, list, foot) => `
+    ${bg('amb-lime', 'br', 0.25, 0.62)}${frame(i)}
+    ${HEAD(150, head, 104)}
+    <div style="left:72px;top:440px;width:936px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      ${list.map(([t, d], k) => `<div class="g d tile" style="min-height:296px"><div class="tag" style="color:var(--lime)">0${k + 1}</div><b style="margin-top:22px">${t}</b><span>${d}</span></div>`).join('')}
+    </div>
+    <div class="tag" style="left:72px;top:1120px;color:#fff">${foot}</div>
+    ${K.grain}`;
+const cta = () => `
+    ${K.amb('amb-lime', 'bl', 'background-size:175% auto')}${K.dim(0.22, 0.6)}${K.vig}
+    ${HEAD(150, 'Kommentiere', 118)}
+    <div style="left:72px;top:292px">${TK.wm(176)}</div>
+    <div class="g d field" style="left:72px;top:540px;width:936px;height:156px"><span class="ty">WLAD AI<u></u></span><span class="send" style="width:120px;height:120px">${K.ARROW_UP}</span></div>
+    <div style="left:72px;top:760px;width:560px;font:500 48px/1.16 var(--sans);letter-spacing:-.034em">${q.get('li') === '1' ? 'Ich antworte dir mit dem Link.' : 'Ich schicke dir den Link per Nachricht.'}</div>
+    <div style="left:72px;top:900px;width:520px;font:400 34px/1.3 var(--txt);color:rgba(255,255,255,.78)">14 Tage kostenlos testen. Ohne Karte.</div>
+    ${K.mascot('right:-150px;top:700px;width:760px;filter:drop-shadow(0 44px 70px rgba(0,0,0,.6))')}
+    <div class="tag" style="left:118px;top:500px;color:var(--lime)">Dein Kommentar</div>
+    ${frame(8)}${K.grain}`;
+const chatHead = `<div style="left:72px;top:168px;width:936px;display:flex;align-items:center;gap:24px">${K.av('width:96px;height:96px')}${TK.wm(52)}<span class="g chip" style="margin-left:auto;font-size:24px;padding:12px 24px">Beispiel</span></div>`;
+
+const SETS = {
+  V01: [
+    () => cover('Kurs geschaut', 'Wissen ist noch <b>kein Können.</b>', 'Kurs geschaut.', 'Und dann?'),
+    () => story(2, 'amb-warm', '<span class="m">Du hast den Kurs geschaut. Das Buch gelesen. Das Seminar besucht.</span>', 'Und im Gespräch war alles weg.'),
+    () => `${bg('amb-cool', 'tr')}${frame(3)}
+      ${HEAD(170, 'Reden lernt man nicht <span class="m">durch Zuhören.</span>', 112)}
+      <div class="txt" style="left:72px;top:640px;width:860px;font-size:46px">Ein Kurs erklärt dir das Werkzeug. Benutzen lernst du es erst, wenn jemand widerspricht.</div>
+      ${K.note('left:72px;top:1000px;width:760px', 'Dafür gibt es <b>mich.</b>', { d: true })}${K.grain}`,
+    () => vs(4, '<span class="m">Ein Kurs erklärt.</span> Ich trainiere.', 'Kurs, Buch, Seminar', ['Erklärt das Werkzeug', 'Für alle gleich', 'Endet mit der letzten Lektion', 'Du hörst zu'], ['Übt es mit dir', 'An deinem Fall', 'Jeden Tag 15 Minuten', 'Du sprichst'], 'Wissen. <span class="lm">Und Training.</span>', 'Du brauchst beides. In der App ist beides.'),
+    () => tiles(5, '<span class="m">Was in der</span><br>App ist.', [['Kurse', 'Die Grundlagen von Wlad.'], ['WLAD AI', 'Dein Coach, per Text und Stimme.'], ['Simulationen', 'Ich spiele dein Gegenüber.'], ['Tägliche Drills', '15 Minuten, ein Werkzeug.']], 'LeaderOS <b>·</b> elf Frameworks <b>·</b> eine App'),
+    () => `${bg('amb-warm', 'tr')}${frame(6)}${chatHead}
+      <div style="left:72px;top:330px;width:936px;display:flex;flex-direction:column;gap:28px">
+        <div class="bub u" style="align-self:flex-end;max-width:84%">Ich habe den Kurs zu Feedback durch. Morgen muss ich es wirklich sagen.</div>
+        <div class="g bub b" style="align-self:flex-start;max-width:90%"><span class="big">Dann sag es mir zuerst.</span><span class="sub">Ich bin dein Mitarbeiter. <b>Fang an.</b></span></div>
+      </div>
+      ${K.note('left:72px;top:930px;width:760px', 'Einmal laut gesagt ist <b>halb gewonnen.</b>', { d: true })}
+      <div class="g d input" style="left:72px;top:1110px;width:936px;height:112px;border-radius:56px">Frag mich …<span class="send">${K.ARROW_UP}</span></div>${K.grain}`,
+    () => `${bg('amb-lime', 'tr', 0.25, 0.64)}${frame(7)}
+      ${HEAD(150, '<span class="m">Drei Schritte,</span><br>bis es sitzt.', 108)}
+      <div style="left:72px;top:470px;width:936px;display:flex;flex-direction:column;gap:18px">
+        ${[['1', 'Verstehen', 'Der Kurs erklärt dir das Werkzeug.'], ['2', 'Üben', 'Ich spiele dein Gegenüber, mit Einwänden.'], ['3', 'Wiederholen', 'Jeden Tag ein Drill von 15 Minuten.']].map(([n, t, d]) => `<div class="g d row" style="padding:30px 36px 32px 28px"><div class="nn w">${n}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
+      </div>
+      <div class="tag" style="left:72px;top:1150px;color:#fff">Die meisten hören nach Schritt 1 auf</div>${K.grain}`,
+    cta,
+  ],
+  V02: [
+    () => cover('KI gefragt', 'Tipps hast du <b>genug.</b>', 'Zwölf Tipps.', 'Null Übung.'),
+    () => story(2, 'amb-cool', '<span class="m">Du fragst eine KI, wie du dein Team überzeugst. Du bekommst eine Liste.</span>', 'Sie passt auf jeden. Also auf niemanden.'),
+    () => vs(3, '<span class="m">ChatGPT und Co. wissen von allem etwas.</span> Ich kenne eine Methodik ganz.', 'Allgemeine KI', ['Weiß von allem etwas', 'Antwortet auf deine Frage', 'Du baust den Prompt', 'Kein Plan für morgen'], ['Kennt Wlads Methodik', 'Fragt nach deinem Fall', 'Simulationen sind fertig', 'Jeden Tag ein Drill'], 'Ein Coach. <span class="lm">Kein Lexikon.</span>', 'Training an deinem Fall: Drill, Simulation, Auswertung.'),
+    () => `${bg('amb-warm', 'tr')}${frame(4)}
+      <div style="left:72px;top:168px;width:936px;display:flex;align-items:center;gap:24px"><div class="tag" style="color:#fff">Dieselbe Frage <b>·</b> zwei Antworten</div><span class="g chip" style="margin-left:auto;font-size:24px;padding:12px 24px">Beispiel</span></div>
+      <div style="left:72px;top:270px;width:936px;display:flex;flex-direction:column;gap:26px">
+        <div class="bub u" style="align-self:flex-end;max-width:84%">Wie überzeuge ich meinen Teamlead?</div>
+        <div class="g d bub b" style="align-self:flex-start;max-width:88%;opacity:.8"><span class="sub" style="margin:0"><b>Allgemeine KI:</b> Hier sind 7 Tipps für überzeugende Kommunikation. 1. Sei klar. 2. Hör aktiv zu. 3. …</span></div>
+        <div class="g bub b" style="align-self:flex-start;max-width:92%"><span class="big">Bevor ich antworte:</span><span class="sub">Was verliert er, <b>wenn du recht hast?</b></span></div>
+      </div>
+      ${K.note('left:72px;top:960px;width:760px', 'Eine Liste hilft dir nicht <b>im Raum.</b>', { d: true })}
+      <div style="left:72px;top:1120px;width:936px;font:500 64px/1.05 var(--sans);letter-spacing:-.04em">Erst dein Fall. <span class="lm">Dann die Antwort.</span></div>${K.grain}`,
+    () => `${bg('amb-lime', 'tr', 0.25, 0.64)}${frame(5)}
+      ${HEAD(150, '<span class="m">Was in mir</span><br>steckt.', 108)}
+      ${TK.book('weisse-rhetorik', 'left:84px;top:432px;width:262px;transform:rotate(-3deg)')}
+      ${TK.book('die-5-rollen-einer-fuehrungskraft', 'left:409px;top:420px;width:262px')}
+      ${TK.book('dunkle-rhetorik', 'left:734px;top:432px;width:262px;transform:rotate(3deg)')}
+      <div class="tag" style="left:72px;top:860px;color:#fff">Seine Bücher <b>·</b> 3× SPIEGEL-Bestseller-Autor</div>
+      <div style="left:72px;top:918px;width:936px;display:flex;flex-direction:column;gap:18px">
+        ${[['11', 'Seine Frameworks', 'SEXIER, Feedbackformel, fünf Rollen und mehr.'], ['400.000+', 'Seine Coachings', 'Die Erfahrung aus der Arbeit seit 2007.']].map(([n, t, d]) => `<div class="g d row" style="padding:26px 36px 28px 28px"><div class="nn w">${n}</div><div><b>${t}</b><span class="s">${d}</span></div></div>`).join('')}
+      </div>${K.grain}`,
+    () => tiles(6, '<span class="m">Wofür du</span><br>mich nimmst.', [['Gespräche vorbereiten', 'Kontext, Argumente, Gegenseite.'], ['Schwierige Gespräche proben', 'Ich spiele dein Gegenüber.'], ['Feedback formulieren', 'Beobachtung, Wirkung, Wunsch.'], ['Argumente prüfen', 'Sechs Teile nach dem SEXIER-Modell.']], 'Per Text und Stimme <b>·</b> rund um die Uhr'),
+    () => `${bg('amb-cool', 'tr')}${frame(7)}
+      ${HEAD(170, '<span class="m">Ehrlich:</span> Für E-Mails und Tabellen nimm die anderen.', 88)}
+      <div class="txt" style="left:72px;top:640px;width:860px;font-size:44px">Dafür bin ich nicht gebaut.</div>
+      <div style="left:72px;bottom:150px;width:936px;font:500 84px/1.04 var(--sans);letter-spacing:-.045em;color:var(--lime)">Ich bin für das eine Gespräch gebaut, vor dem du dich drückst.</div>${K.grain}`,
+    cta,
+  ],
+};
+window.SLIDES_N = N; window.IDS = Object.keys(SETS);
+document.getElementById('sheet').innerHTML = SETS[cid][Number(q.get('s') || 0)]();
+</script>
+</body>
+</html>

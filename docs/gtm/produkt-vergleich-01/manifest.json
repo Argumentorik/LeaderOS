@@ -1,0 +1,32 @@
+[
+  {
+    "id": "V01",
+    "slides": [
+      "V01-01.jpg",
+      "V01-02.jpg",
+      "V01-03.jpg",
+      "V01-04.jpg",
+      "V01-05.jpg",
+      "V01-06.jpg",
+      "V01-07.jpg",
+      "V01-08-li.jpg"
+    ],
+    "slide_ig": "V01-08.jpg",
+    "pdf": "V01.pdf"
+  },
+  {
+    "id": "V02",
+    "slides": [
+      "V02-01.jpg",
+      "V02-02.jpg",
+      "V02-03.jpg",
+      "V02-04.jpg",
+      "V02-05.jpg",
+      "V02-06.jpg",
+      "V02-07.jpg",
+      "V02-08-li.jpg"
+    ],
+    "slide_ig": "V02-08.jpg",
+    "pdf": "V02.pdf"
+  }
+]
