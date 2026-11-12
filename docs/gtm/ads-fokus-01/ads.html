@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Anzeigen „Fokus“ · LeaderOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Anzeigenserie "Fokus": echtes Foto hinter Rasterglas in unseren Farben, ein scharfes Fenster
+   auf dem Gesicht, daneben ein Stück App. Aufruf: ads.html?a=F01&f=4x5 (4x5, 9x16, 1x1).
+   Produktaussagen nur, was die 14 Tage enthalten. Zahlen nur aus dem verifizierten Set.
+   App-Ausschnitte sind nachgebaut und als Beispiel gekennzeichnet. Kein Webinar. */
+:root{--lime:#bfff00;--ink:#0a0c08;--paper:#f3f1ea;--sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+#ad{position:relative;width:1080px;overflow:hidden;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#ad>*{position:absolute}
+.ph{max-width:none}
+.dots{inset:0;background-image:radial-gradient(circle,rgba(10,12,8,.26) 1.3px,transparent 1.9px);background-size:8px 8px;mix-blend-mode:multiply}
+.veil{inset:0}
+.k{font:500 17px/1.25 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.win{overflow:hidden;outline:2.5px solid #fff}
+.hd{width:18px;height:18px;border:2.5px solid #fff;background:rgba(255,255,255,.12)}
+.cross{width:30px;height:30px}
+.cross:before,.cross:after{content:'';position:absolute;background:#fff}
+.cross:before{left:14px;top:0;width:2px;height:30px}.cross:after{top:14px;left:0;height:2px;width:30px}
+.H{font:500 92px/.98 var(--sans);letter-spacing:-.05em}
+.cl{font:500 31px/1.28 var(--sans);letter-spacing:-.022em}
+.cta{display:inline-flex;align-items:center;gap:16px;height:84px;padding:0 14px 0 38px;border-radius:999px;font:600 31px/1 var(--sans);letter-spacing:-.02em}
+.cta i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;font-style:normal;font-size:28px}
+.card{border-radius:26px;padding:22px 24px 24px;background:rgba(255,255,255,.9);box-shadow:0 30px 60px rgba(10,20,0,.28),0 2px 0 rgba(255,255,255,.9) inset;color:#0a0c08}
+.card .k{font-size:14px;color:#5d6257;display:flex;justify-content:space-between}
+.bub{margin-top:12px;padding:14px 18px;border-radius:18px;font:500 25px/1.25 var(--sans);letter-spacing:-.02em}
+.bub small{display:block;font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-bottom:6px}
+.feat{display:flex;flex-wrap:wrap;gap:8px 10px}
+.feat span{padding:9px 15px 10px;border-radius:999px;font:500 19px/1 var(--sans);letter-spacing:-.01em;border:1.5px solid currentColor}
+.wm{font:600 30px/1 var(--sans);letter-spacing:-.03em;display:flex;align-items:center;gap:10px}
+.wm b{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--lime);font:700 22px/1 var(--sans)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="duo-lime" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .5 .17 0 0 .33 .5 .17 0 0 .33 .5 .17 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".16 .55 .78 .95"/><feFuncG type="table" tableValues=".27 .80 1 1"/><feFuncB type="table" tableValues="0 0 .10 .62"/></feComponentTransfer></filter>
+  <filter id="duo-paper" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .5 .17 0 0 .33 .5 .17 0 0 .33 .5 .17 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".30 .66 .88 .98"/><feFuncG type="table" tableValues=".32 .68 .89 .98"/><feFuncB type="table" tableValues=".33 .66 .86 .95"/></feComponentTransfer></filter>
+</defs></svg>
+<div id="ad"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const B = '../social-kit/build/';
+const FEAT = ['Kurse', 'WLAD AI per Text und Stimme', 'Simulationen', 'Tägliche Drills', 'Elf Frameworks'];
+const CLAR = 'LeaderOS ist die Coaching-App für Führungskräfte. Mit WLAD AI, dem KI-Coach mit Wlads Methodik.';
+const wave = () => `<div style="display:flex;align-items:center;gap:5px;height:74px;margin-top:14px">${[18, 34, 52, 30, 66, 44, 72, 38, 58, 26, 48, 68, 36, 54, 22, 42, 62, 30, 46, 20].map((h, i) => `<span style="width:8px;height:${h}px;border-radius:4px;background:${i < 12 ? '#0a0c08' : '#b9bdb2'}"></span>`).join('')}</div>`;
+const MOTIVE = [
+  { id: 'F01', world: 'lime', photo: 'stage.jpg', asp: 2013 / 1614, fx: .575, fy: .2, fh: .16, head: 'Übe das Gespräch,<br>bevor es zählt.',
+    card: `<div class="k"><span>Simulation</span><span>Beispiel</span></div><div class="bub" style="background:#e9ebe4"><small>Dein Chef</small>„Dafür ist kein Budget da.“</div><div class="bub" style="background:#bfff00"><small>Du</small>„Was müsste passieren, damit es im nächsten Quartal geht?“</div><div class="bub" style="background:#0a0c08;color:#fff"><small>WLAD AI</small>Stark. Jetzt kommt sein Einwand.</div>` },
+  { id: 'F02', world: 'paper', photo: 'talk.jpg', asp: 926 / 1134, fx: .5, fy: .27, fh: .3, zoom: 1.5, head: 'Dein Coach antwortet.<br>Auch um 23 Uhr.',
+    card: `<div class="k"><span>WLAD AI · Stimme</span><span>Beispiel</span></div>${wave()}<div class="bub" style="background:#0a0c08;color:#fff"><small>WLAD AI</small>Erzähl mir von dem Gespräch morgen. Wer sitzt dir gegenüber?</div>` },
+  { id: 'F03', world: 'lime', photo: 'coaching.jpg', asp: 1, fx: .69, fy: .31, fh: .2, head: '15 Minuten am Tag.<br>Ein Drill, der sitzt.',
+    card: `<div class="k"><span>Drill des Tages</span><span>Beispiel</span></div><div style="font:500 40px/1.05 var(--sans);letter-spacing:-.04em;margin-top:16px">Die Feedbackformel</div><div class="bub" style="background:#e9ebe4">Beobachtung</div><div class="bub" style="background:#e9ebe4">Wirkung</div><div class="bub" style="background:#bfff00">Wunsch</div><div class="k" style="margin-top:16px"><span>15 Minuten</span><span>Tag 3 von 14</span></div>` },
+  { id: 'F04', world: 'paper', photo: 'stage-smoke.jpg', asp: 2013 / 1614, fx: .575, fy: .2, fh: .16, head: 'Wlads Methodik.<br>In einer App.',
+    card: `<div class="k"><span>Was drin steckt</span><span>LeaderOS</span></div>${[['3×', 'SPIEGEL-Bestseller'], ['400.000+', 'Klienten'], ['20+', 'Länder'], ['2007', 'im Coaching seit']].map(([a, b]) => `<div style="display:flex;align-items:baseline;gap:14px;margin-top:13px;padding-top:12px;border-top:1.5px solid #d9dbd3"><b style="font:500 42px/1 var(--sans);letter-spacing:-.045em;min-width:190px">${a}</b><span style="font:500 21px/1.1 var(--sans);color:#4b5046">${b}</span></div>`).join('')}` },
+];
+const F = {
+  '4x5': { H: 1350, top: 60, win: [556, 150, 452, 560], card: [72, 210, 400], bottom: 64, hs: 96, cz: 1.14 },
+  '9x16': { H: 1920, top: 270, win: [540, 370, 468, 620], card: [72, 440, 380], bottom: 350, hs: 100, cz: 1.18 },
+  '1x1': { H: 1080, top: 52, win: [640, 120, 368, 430], card: [72, 150, 440], bottom: 52, hs: 76, cz: 1, compact: true },
+};
+const a = MOTIVE.find((x) => x.id === (q.get('a') || 'F01')); const f = F[q.get('f') || '4x5'];
+const lime = a.world === 'lime';
+const [wx, wy, ww, wh] = f.win;
+const imgH = Math.max(wh * .6 / a.fh * (a.zoom || 1), f.H * 1.02); const imgW = imgH * a.asp;
+const cx = wx + ww / 2; const cy = wy + wh * .44;
+let iL = cx - a.fx * imgW; let iT = cy - a.fy * imgH;
+iT = Math.min(0, Math.max(iT, f.H - imgH));
+const img = (extra) => `<img class="ph" src="${B}${a.photo}" style="position:absolute;left:${iL}px;top:${iT}px;width:${imgW}px;height:${imgH}px;${extra}">`;
+const ink = '#0a0c08';
+const el = document.getElementById('ad'); el.style.height = f.H + 'px'; el.style.background = lime ? '#4a7400' : '#6b6e70';
+el.innerHTML = `
+  <div style="inset:-40px">${''}</div>
+  <div style="inset:0;overflow:hidden">${img(`filter:url(#duo-${a.world}) blur(15px);transform:scale(1.03)`)}</div>
+  <div class="dots"></div>
+  <div class="veil" style="background:linear-gradient(180deg,transparent 46%,${lime ? 'rgba(191,255,0,.86)' : 'rgba(243,241,234,.9)'} 72%)"></div>
+  <div class="win" style="left:${wx}px;top:${wy}px;width:${ww}px;height:${wh}px"><div style="position:absolute;left:${-wx}px;top:${-wy}px;width:1080px;height:${f.H}px">${img('')}</div></div>
+  ${[[0, 0], [1, 0], [0, 1], [1, 1]].map(([i, j]) => `<div class="hd" style="left:${wx + i * ww - 9}px;top:${wy + j * wh - 9}px"></div>`).join('')}
+  <div class="cross" style="left:${wx + ww * .62}px;top:${wy + wh * .52}px"></div>
+  <div class="wm" style="left:72px;top:${f.top}px"><b>W</b>LeaderOS</div>
+  <div class="k" style="right:72px;top:${f.top + 10}px;">Die App mit WLAD AI</div>
+  <div class="card" style="left:${f.card[0] / f.cz}px;top:${f.card[1] / f.cz}px;width:${f.card[2]}px;zoom:${f.cz}">${a.card}</div>
+  <div style="left:72px;right:72px;bottom:${f.bottom}px;display:flex;flex-direction:column;gap:${f.compact ? 20 : 26}px">
+    <div class="H" style="font-size:${f.hs}px;max-width:940px">${a.head}</div>
+    <div class="cl" style="max-width:880px;${f.compact ? 'font-size:27px' : ''}">${CLAR}</div>
+    ${f.compact ? '' : `<div class="feat">${FEAT.map((t) => `<span>${t}</span>`).join('')}</div>`}
+    <div style="display:flex;align-items:center;gap:26px;margin-top:6px">
+      <div class="cta" style="background:${ink};color:#fff">14 Tage kostenlos testen<i style="background:var(--lime);color:${ink}">→</i></div>
+      <div class="k" style="font-size:16px">Ohne Karte<br>leader-os.de</div>
+    </div>
+  </div>`;
+window.ADS = MOTIVE.map((x) => ({ id: x.id, formats: Object.keys(F) }));
+</script>
+</body>
+</html>
