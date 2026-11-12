@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Spickzettel · WLAD AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* "Spickzettel": Karussells zum Speichern und Kommentieren. Heller Fokus-Stil (Limette, Papier,
+   Rasterglas, scharfes Fenster). Blatt 1080×1350. Aufruf: carousel.html?c=P01&s=0[&li=1]
+   Frameworks nur aus docs/gtm/WLAD_CANON.md. Prompts und Antworten sind Beispiele, keine Zitate.
+   Produktaussagen nur, was die 14 Tage enthalten. Kein Webinar, keine Platzzahl. */
+:root{--lime:#bfff00;--ink:#0a0c08;--paper:#f3f1ea;--mut:#6d7166;--sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+#sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#sheet>*{position:absolute}
+.dots{inset:0;background-image:radial-gradient(circle,rgba(10,12,8,.24) 1.3px,transparent 1.9px);background-size:8px 8px;mix-blend-mode:multiply}
+.k{font:500 17px/1.25 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.H{font:500 118px/.95 var(--sans);letter-spacing:-.055em}
+.b{font:500 40px/1.25 var(--sans);letter-spacing:-.025em}
+.win{overflow:hidden;outline:2.5px solid #fff}
+.hd{width:18px;height:18px;border:2.5px solid #fff;background:rgba(255,255,255,.14)}
+.pill{display:inline-block;padding:10px 18px 11px;border-radius:999px;background:var(--ink);color:var(--lime);font:500 17px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.card{border-radius:34px;padding:40px 42px 44px;background:#fff;box-shadow:0 30px 70px rgba(10,20,0,.16),0 0 0 1.5px rgba(10,12,8,.06)}
+.card p{font:500 43px/1.3 var(--sans);letter-spacing:-.028em}
+.ph{background:var(--lime);padding:0 .16em;border-radius:.14em;white-space:nowrap}
+.bub{border-radius:38px;padding:40px 44px 46px;font:500 72px/1.06 var(--sans);letter-spacing:-.04em}
+.bub small{display:block;font:500 16px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;opacity:.6;margin-bottom:16px}
+.rows{display:flex;flex-direction:column}
+.row{flex:1;display:flex;gap:28px;align-items:center;border-top:2px solid var(--ink)}
+.row:last-child{border-bottom:2px solid var(--ink)}
+.row .no{flex:none;width:100px;font:500 76px/1 var(--sans);letter-spacing:-.05em}
+.row b{display:block;font:500 46px/1.06 var(--sans);letter-spacing:-.04em}
+.row span{display:block;margin-top:8px;font:400 29px/1.22 var(--sans);letter-spacing:-.015em;color:#474b41}
+.wm{font:600 30px/1 var(--sans);letter-spacing:-.03em}
+.wm i{font-style:normal;background:var(--ink);color:var(--lime);padding:.04em .2em .06em;border-radius:.2em;margin-left:.12em}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="duo-lime" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .5 .17 0 0 .33 .5 .17 0 0 .33 .5 .17 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".16 .55 .78 .95"/><feFuncG type="table" tableValues=".27 .80 1 1"/><feFuncB type="table" tableValues="0 0 .10 .62"/></feComponentTransfer></filter>
+  <filter id="duo-paper" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .5 .17 0 0 .33 .5 .17 0 0 .33 .5 .17 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".30 .66 .88 .98"/><feFuncG type="table" tableValues=".32 .68 .89 .98"/><feFuncB type="table" tableValues=".33 .66 .86 .95"/></feComponentTransfer></filter>
+</defs></svg>
+<div id="sheet"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const LI = q.get('li') === '1';
+const B = '../social-kit/build/';
+const ph = (t) => t.replace(/\[([^\]]+)\]/g, '<span class="ph">$1</span>');
+const LINK = `Die Prompts laufen in WLAD AI, dem KI-Coach mit Wlads Methodik. 14 Tage kostenlos, ohne Karte. Kommentiere <b>WLAD AI</b>, ${LI ? 'dann antworte ich dir mit dem Link.' : 'dann schicke ich dir den Link.'}`;
+const P = { stage: { photo: 'stage.jpg', asp: 2013 / 1614, fx: .575, fy: .2, fh: .16 }, talk: { photo: 'talk.jpg', asp: 926 / 1134, fx: .5, fy: .27, fh: .2 }, coaching: { photo: 'coaching.jpg', asp: 1, fx: .69, fy: .31, fh: .2 }, mascot: { photo: 'mascot.png', asp: 1, fx: .5, fy: .36, fh: .42, flat: true } };
+
+const C = {
+  P01: { tag: 'Überzeugen', world: 'lime', p: 'stage', slides: [
+    { t: 'cover', big: '3 Prompts,', rest: 'um deinen Chef<br>zu überzeugen', sub: 'Kopieren, grüne Stellen ersetzen, üben.' },
+    { t: 'text', k: 'Warum', h: 'Dein Chef sagt nicht nein zur Idee.', b: 'Er sagt nein zu einem halben Argument. Und zu Einwänden, auf die du nicht vorbereitet warst. Diese drei Prompts schließen beide Lücken.' },
+    { t: 'prompt', n: '1', h: 'Bau mein Argument', when: 'Am Abend vorher', p: 'Ich will meinen Chef von [Vorhaben] überzeugen. Bau daraus ein Argument nach SEXIER: Behauptung, Begründung, Beispiel, Auswirkung, Erklärung der Auswirkung, Widerlegung. Frag nach, wenn dir ein Teil fehlt.' },
+    { t: 'prompt', n: '2', h: 'Spiel meinen Chef', when: 'Laut üben, nicht nur lesen', p: 'Spiel meinen Chef. So ist er: [Beschreibung]. Ich stelle ihm [Vorhaben] vor. Bring die drei Einwände, die er am ehesten bringt, einen nach dem anderen. Bewerte danach meine Antworten.' },
+    { t: 'prompt', n: '3', h: 'Was hinter dem Nein steckt', when: 'Nach der Absage', p: 'Mein Chef hat [Vorhaben] abgelehnt. Sein Satz war: [sein Satz]. Welches Interesse kann dahinterstecken? Gib mir drei Rückfragen, mit denen ich es herausfinde.' },
+    { t: 'list', k: 'Reihenfolge', h: 'So nutzt du sie', rows: [['1', 'Vorher', 'Das Argument bauen, bis kein Teil fehlt'], ['2', 'Davor', 'Das Gespräch einmal laut durchspielen'], ['3', 'Danach', 'Aus dem Nein die nächste Frage machen']] },
+    { t: 'cta', h: 'Welchen nimmst du zuerst?', b: 'Schreib 1, 2 oder 3 in die Kommentare.' },
+  ] },
+  P02: { tag: 'Schlagfertig', world: 'paper', p: 'talk', slides: [
+    { t: 'cover', big: '5 Sätze', rest: 'deines Chefs.<br>5 Antworten.', sub: 'Eine Rückfrage schlägt jede Rechtfertigung.' },
+    { t: 'pair', n: '1', a: '„Dafür ist kein Budget da.“', r: '„Was müsste passieren, damit es im nächsten Quartal geht?“' },
+    { t: 'pair', n: '2', a: '„Das haben wir schon probiert.“', r: '„Was war damals anders als heute?“' },
+    { t: 'pair', n: '3', a: '„Das passt gerade nicht.“', r: '„Wann passt es? Ich trage es ein.“' },
+    { t: 'pair', n: '4', a: '„Das bringt nichts.“', r: '„Woran würden wir merken, dass es etwas bringt?“' },
+    { t: 'pair', n: '5', a: '„Später.“', r: '„Was fehlt noch, damit später ein Datum bekommt?“' },
+    { t: 'cta', h: 'Welchen Satz hörst du am häufigsten?', b: 'Schreib ihn in die Kommentare. Fehlt einer, schreib ihn dazu.', link: `Mit WLAD AI übst du die Antwort, bis sie sitzt. 14 Tage kostenlos, ohne Karte. Kommentiere <b>WLAD AI</b>, ${LI ? 'dann antworte ich dir mit dem Link.' : 'dann schicke ich dir den Link.'}` },
+  ] },
+  P03: { tag: 'Steckbrief', world: 'lime', p: 'mascot', slides: [
+    { t: 'cover', big: 'Wer ist', rest: 'WLAD AI?', sub: 'Sieben Folien, dann kennst du mich.' },
+    { t: 'text', k: 'Kurz gesagt', h: 'Ich bin ein KI-Coach für Führungskräfte.', b: 'Ich arbeite mit Wlads Methodik. Du schreibst oder sprichst mit mir, und ich trainiere mit dir an deinem Fall.' },
+    { t: 'list', k: 'Was ich kann', h: 'Vier Dinge', rows: [['1', 'Dein Gegenüber spielen', 'Chef, Mitarbeiter, Kunde. Mit Einwänden'], ['2', 'Dein Argument prüfen', 'Ich zeige dir, welcher Teil fehlt'], ['3', 'Jeden Tag ein Drill', '15 Minuten, ein Werkzeug'], ['4', 'Text und Stimme', 'Du wählst, wie du übst']] },
+    { t: 'list', k: 'Was in mir steckt', h: 'Wlads Methodik', rows: [['3×', 'SPIEGEL-Bestseller', 'Die Bücher'], ['400.000+', 'Klienten in 20+ Ländern', 'Die Coachings seit 2007'], ['11', 'Frameworks', 'SEXIER, Feedbackformel, fünf Rollen und mehr']], wide: true },
+    { t: 'list', k: 'Ehrlich', h: 'Was ich nicht bin', rows: [['1', 'Kein Ersatz für Wlad', 'Ich trainiere mit dir, was er lehrt'], ['2', 'Kein Tippgeber', 'Ich arbeite an deinem Fall'], ['3', 'Kein Zuschauer', 'Ich widerspreche, wenn dein Argument wackelt']] },
+    { t: 'prompt', n: '→', h: 'Dein erster Satz an mich', when: 'Drei Angaben reichen', p: 'Mein Gegenüber ist [wer]. Es geht um [Thema]. Ich will erreichen, dass [Ziel].' },
+    { t: 'cta', h: 'Was soll ich als Nächstes erklären?', b: 'Schreib dein Thema in die Kommentare.', link: `14 Tage kostenlos testen, ohne Karte. Kommentiere <b>WLAD AI</b>, ${LI ? 'dann antworte ich dir mit dem Link.' : 'dann schicke ich dir den Link.'}` },
+  ] },
+  P04: { tag: 'Feedback', world: 'paper', p: 'coaching', slides: [
+    { t: 'cover', big: '3 Prompts', rest: 'für dein nächstes<br>Kritikgespräch', sub: 'Hart in der Sache, weich zur Person.' },
+    { t: 'text', k: 'Warum', h: 'Die meisten schieben es auf. Oder platzen damit heraus.', b: 'Beides hat denselben Grund: Der erste Satz fehlt. Die Feedbackformel gibt ihn dir. Beobachtung, Wirkung, Wunsch.' },
+    { t: 'prompt', n: '1', h: 'Formuliere mein Feedback', when: 'Vor dem Gespräch', p: 'Ich muss [Person] Feedback geben. Es geht um [Verhalten]. Formuliere es nach der Feedbackformel: Beobachtung, Wirkung, Wunsch. Ohne Wertung, ohne „immer“ und „nie“.' },
+    { t: 'prompt', n: '2', h: 'Spiel mein Gegenüber', when: 'Laut üben', p: 'Spiel [Person]. Ich gebe dir jetzt mein Feedback. Reagiere so, wie ich es befürchte: [Reaktion]. Sag mir danach, an welcher Stelle ich die Sache verlassen habe.' },
+    { t: 'prompt', n: '3', h: 'Prüf meinen Text', when: 'Vor dem Absenden', p: 'Hier ist meine Nachricht: [Text]. Wo greife ich die Person an statt die Sache? Schreib die Stellen um. Hart in der Sache, weich zur Person.' },
+    { t: 'list', k: 'Die Feedbackformel', h: 'Drei Teile', rows: [['1', 'Beobachtung', 'Was du gesehen hast, ohne Wertung'], ['2', 'Wirkung', 'Was es bei dir oder im Team auslöst'], ['3', 'Wunsch', 'Was du dir ab jetzt wünschst']] },
+    { t: 'cta', h: 'Welches Gespräch schiebst du gerade?', b: 'Ein Wort in die Kommentare reicht.' },
+  ] },
+};
+
+const cid = q.get('c') || 'P01'; const c = C[cid]; const N = c.slides.length; const i = Number(q.get('s') || 0); const s = c.slides[i];
+const lime = c.world === 'lime';
+const foot = (dark) => `<div class="wm" style="left:72px;top:1268px">WLAD<i>AI</i></div>
+  <div class="k" style="left:250px;top:1276px;color:${dark ? 'var(--ink)' : 'var(--mut)'}">Spickzettel · ${c.tag}</div>
+  <div class="k" style="right:72px;top:1276px">${i < N - 1 ? 'Speichern · ' : ''}${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>`;
+const head = (l, r) => `<div class="k" style="left:72px;top:74px">${l}</div>${r ? `<div style="right:72px;top:60px">${r}</div>` : ''}`;
+const T = {
+  cover: () => {
+    const p = P[c.p]; const [wx, wy, ww, wh] = [596, 150, 412, 500];
+    const imgH = Math.max(wh * .6 / p.fh, p.flat ? 0 : 1380); const imgW = imgH * p.asp;
+    const iL = wx + ww / 2 - p.fx * imgW; const iT = Math.min(0, wy + wh * .44 - p.fy * imgH);
+    const img = (x) => `<img src="${B}${p.photo}" style="position:absolute;max-width:none;left:${iL}px;top:${p.flat ? wy + wh * .44 - p.fy * imgH : iT}px;width:${imgW}px;height:${imgH}px;${x}">`;
+    return `<div style="inset:0;background:${lime ? '#9bd400' : '#bdbfbc'}"></div><div style="inset:0;overflow:hidden">${img(`filter:url(#duo-${c.world}) blur(15px)`)}</div><div class="dots"></div>
+    <div style="inset:0;background:linear-gradient(180deg,transparent 40%,${lime ? 'rgba(191,255,0,.9)' : 'rgba(243,241,234,.93)'} 62%)"></div>
+    <div class="win" style="left:${wx}px;top:${wy}px;width:${ww}px;height:${wh}px;${p.flat ? 'background:#e9f7b8' : ''}"><div style="position:absolute;left:${-wx}px;top:${-wy}px;width:1080px;height:1350px">${img('')}</div></div>
+    ${[[0, 0], [1, 0], [0, 1], [1, 1]].map(([a, b]) => `<div class="hd" style="left:${wx + a * ww - 9}px;top:${wy + b * wh - 9}px"></div>`).join('')}
+    <div class="wm" style="left:72px;top:64px">WLAD<i>AI</i></div>
+    <div style="left:72px;top:170px"><span class="pill">Zum Speichern</span></div>
+    <div class="k" style="left:72px;top:232px;width:420px">Spickzettel<br>${c.tag}</div>
+    <div class="H" style="left:72px;top:700px;width:960px;font-size:168px;letter-spacing:-.065em">${s.big}</div>
+    <div class="H" style="left:72px;top:868px;width:960px;font-size:96px">${s.rest}</div>
+    <div class="b" style="left:72px;top:1100px;width:800px;font-size:36px">${s.sub}</div>
+    <div class="k" style="left:72px;top:1276px">Wischen</div><div class="k" style="right:72px;top:1276px">01 / ${String(N).padStart(2, '0')}</div>`;
+  },
+  text: () => `${head(s.k)}<div class="H" style="left:72px;top:190px;width:940px;font-size:${s.h.length > 40 ? 96 : 116}px">${s.h}</div>
+    <div class="b" style="left:72px;bottom:170px;width:880px;font-size:44px">${s.b}</div>${foot()}`,
+  prompt: () => `${head('Prompt ' + (s.n === '→' ? '' : s.n), '<span class="pill">Kopieren</span>')}
+    <div class="H" style="left:72px;top:${s.n === '→' ? 190 : 150}px;font-size:${s.n === '→' ? 130 : 230}px;color:${lime ? '#86c400' : '#a8aaa4'}">${s.n}</div>
+    <div class="H" style="left:${s.n.length > 0 ? 250 : 72}px;top:196px;width:760px;font-size:${s.h.length > 20 ? 68 : 78}px;line-height:1">${s.h}</div>
+    <div class="k" style="left:254px;top:${s.h.length > 20 ? 352 : 300}px;color:var(--mut)">${s.when}</div>
+    <div class="card" style="left:56px;top:440px;width:968px"><p style="${s.p.length < 120 ? 'font-size:74px;line-height:1.2' : s.p.length > 215 ? 'font-size:50px;line-height:1.28' : 'font-size:54px;line-height:1.28'}">${ph(s.p)}</p></div>
+    <div class="k" style="left:72px;top:1204px;color:var(--mut)">Grün markiert = deine Situation</div>${foot()}`,
+  pair: () => `${head('Satz ' + s.n + ' von 5', '<span class="pill">Beispiel</span>')}
+    <div class="bub" style="left:56px;top:180px;width:860px;background:#e2e3dc"><small>Dein Chef</small>${s.a}</div>
+    <div class="bub" style="right:56px;top:${s.a.length > 26 ? 600 : 500}px;width:900px;background:var(--lime);font-size:${s.r.length > 44 ? 78 : 92}px"><small>Du</small>${s.r}</div>
+    <div class="b" style="left:72px;top:1130px;width:900px;font-size:30px;color:var(--mut)">Die Rückfrage holt das Interesse hinter dem Nein auf den Tisch.</div>${foot()}`,
+  list: () => `${head(s.k, '<span class="pill">Speichern</span>')}<div class="H" style="left:72px;top:150px;width:940px;font-size:108px">${s.h}</div>
+    <div class="rows" style="left:72px;top:${s.rows.length > 3 ? 330 : 400}px;width:936px;height:${s.rows.length > 3 ? 870 : 800}px">${s.rows.map(([a, b, d]) => `<div class="row"><div class="no" style="${s.wide ? 'width:300px;font-size:64px' : ''}">${a}</div><div><b>${b}</b><span>${d}</span></div></div>`).join('')}</div>${foot()}`,
+  cta: () => `<div style="inset:0;background:var(--lime)"></div><div class="dots" style="opacity:.5"></div>${head('Deine Antwort', '<span class="pill">Kommentieren</span>')}
+    <div class="H" style="left:72px;top:170px;width:940px;font-size:${s.h.length > 30 ? 104 : 124}px">${s.h}</div>
+    <div class="b" style="left:72px;top:${s.h.length > 30 ? 620 : 560}px;width:620px;font-size:48px">${s.b}</div>
+    <img src="${B}mascot.png" style="left:700px;top:560px;width:330px;filter:drop-shadow(0 26px 34px rgba(20,40,0,.35))">
+    <div class="card" style="left:56px;top:940px;width:968px;padding:30px 36px 34px"><p style="font-size:31px;line-height:1.32;font-weight:500">${s.link || LINK}</p></div>${foot(true)}`,
+};
+window.IDS = Object.keys(C); window.COUNTS = Object.fromEntries(Object.entries(C).map(([k, v]) => [k, v.slides.length]));
+document.getElementById('sheet').innerHTML = T[s.t]();
+</script>
+</body>
+</html>
