@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Scherben · Fünf Rollen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Motiv "Scherben" · 1080×1350. Hintergrund aus build_bg.py (echtes Porträt hinter Glasscherben).
+   Aussage: die fünf Rollen einer Führungskraft (docs/gtm/WLAD_CANON.md). */
+:root{--lime:#bfff00;--ink:#f6f4ec;--sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+#sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:#040505 url(scherben-bg.jpg) center/cover;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#sheet>*{position:absolute}
+.m{font:500 17px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;text-shadow:0 1px 14px #000,0 0 4px #000}
+.m b{color:var(--lime);font-weight:500}
+.H{font:500 112px/.94 var(--sans);letter-spacing:-.055em}
+.wm{font:600 30px/1 var(--sans);letter-spacing:-.03em}
+.wm i{font-style:normal;background:var(--lime);color:#0a0c08;padding:.04em .2em .06em;border-radius:.2em;margin-left:.12em}
+</style>
+</head>
+<body>
+<div id="sheet">
+  <div class="m" style="left:150px;top:310px"><b>01</b> Kommunikator</div>
+  <div class="m" style="left:720px;top:352px"><b>02</b> Manager</div>
+  <div class="m" style="left:36px;top:662px"><b>03</b> Team-Leader</div>
+  <div class="m" style="left:850px;top:742px"><b>04</b> Psychologe</div>
+  <div class="m" style="left:100px;top:996px"><b>05</b> Problemlöser</div>
+  <div class="H" style="left:60px;top:1040px;width:980px">Du bist nicht einer.<br><span style="color:var(--lime)">Du bist fünf.</span></div>
+  <div class="wm" style="left:60px;top:1284px">WLAD<i>AI</i></div>
+  <div class="m" style="right:60px;top:1290px">Die fünf Rollen einer Führungskraft</div>
+</div>
+</body>
+</html>
