@@ -136,3 +136,32 @@ Jetzt du: Welches Gespräch schiebst du gerade vor dir her? Ein Wort in die Komm
 
 Wer mich testen will: Kommentiere WLAD AI, dann schicke ich dir den Link. 14 Tage kostenlos, ohne Karte.
 ```
+
+## LC01 · Wie gut führst du wirklich? (Leader-Check)
+
+Fünf Folien, dunkel, mit Scan-Cover. Ziel ist der kostenlose Selbsttest auf leader-check.de.
+
+LinkedIn-Titel: Wie gut führst du wirklich?
+
+```text
+Du bekommst Feedback zu deinen Zahlen. Zu deinen Projekten. Zu deinem Budget.
+
+Aber wann hat dir zuletzt jemand gesagt, wie du führst?
+
+Wie du argumentierst. Wie du zuhörst. Wie du mit KI arbeitest. Das sagt dir im Alltag kaum jemand.
+
+Der Leader-Check sagt es dir. In 10 Minuten, in drei Bereichen:
+
+1 KI-Readiness. Wie bereit bist du für Führung mit KI?
+2 Rhetorik. Wie überzeugend argumentierst du?
+3 Emotionale Intelligenz. Wie gut liest du Menschen?
+
+Am Ende steht eine persönliche Auswertung mit Sofort-Ergebnis. Kostenlos, ohne Kreditkarte.
+
+Welchen Wert willst du zuerst wissen: KI, Rhetorik oder EQ? Schreib es in die Kommentare.
+
+Hier geht es zum Check:
+https://leader-check.de/?utm_source=linkedin&utm_medium=social&utm_campaign=leader-check&utm_content=lc01
+
+#Leadership #Führung #KI #LeaderOS
+```

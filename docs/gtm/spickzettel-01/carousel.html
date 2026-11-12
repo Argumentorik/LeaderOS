@@ -73,6 +73,13 @@ const SCAN = {
   coaching: { photo: 'coaching.jpg', w: 1100, h: 1100, l: -60, t: -90 },
 };
 const C = {
+  LC01: { tag: 'Leader-Check', series: 'Selbsttest', world: 'dark', p: 'stage', slides: [
+    { t: 'scan', big: 'Wie gut', rest: 'führst du wirklich?', restSize: 100, sub: '10 Minuten. 3 Bereiche. Kostenlos.', ann: [[605, 179, 770, 96, 'KI-Readiness<br>Wert: ?'], [664, 635, 800, 540, 'Rhetorik<br>Wert: ?'], [254, 742, 60, 560, 'Emotionale<br>Intelligenz<br>Wert: ?']] },
+    { t: 'text', k: 'Die ehrliche Frage', h: 'Du bekommst Feedback zu Zahlen. Selten zu dir.', b: 'Wie du argumentierst, wie du zuhörst, wie du mit KI arbeitest: Das sagt dir im Alltag kaum jemand. Der Leader-Check schon.' },
+    { t: 'list', k: 'Der Leader-Check', h: 'Drei Bereiche', rows: [['1', 'KI-Readiness', 'Wie bereit bist du für Führung mit KI?'], ['2', 'Rhetorik', 'Wie überzeugend argumentierst du?'], ['3', 'Emotionale Intelligenz', 'Wie gut liest du Menschen?']] },
+    { t: 'list', k: 'Was du bekommst', h: 'In 10 Minuten', rows: [['10', 'Minuten', 'So lange dauert der Check'], ['0 €', 'Kostenlos', 'Ohne Kreditkarte'], ['1', 'Auswertung', 'Persönlich, mit Sofort-Ergebnis']], wide: true },
+    { t: 'cta', h: 'Welchen Wert willst du zuerst wissen?', b: 'KI, Rhetorik oder EQ? Schreib es in die Kommentare.', cta: 'Jetzt den Check machen: <b style="font-size:1.25em">leader-check.de</b><br>10 Minuten, kostenlos, mit Sofort-Ergebnis.' },
+  ] },
   L01: { tag: 'Vorstellung', world: 'dark', p: 'stage', slides: [
     { t: 'scan', big: 'Ich bin', rest: 'nicht Wlad.', restSize: 150, sub: 'Ich bin WLAD AI. Das hier ist meine Vorstellung.', ann: [[605, 179, 770, 96, 'Wlad<br>Seit 2007 im Coaching'], [664, 635, 800, 540, '400.000+<br>Klienten, 20+ Länder'], [254, 742, 60, 560, '3× SPIEGEL<br>Bestseller-Autor']] },
     { t: 'text', k: 'Das Problem', h: 'Wlad kann nicht in jedem deiner Gespräche sitzen.', b: 'Seit 2007 coacht er Führungskräfte. 400.000+ Klienten in 20+ Ländern. Aber wenn dein schwierigstes Gespräch ansteht, ist er nicht im Raum.' },
@@ -128,7 +135,7 @@ const C = {
 const cid = q.get('c') || 'P01'; const c = C[cid]; const N = c.slides.length; const i = Number(q.get('s') || 0); const s = c.slides[i];
 const lime = c.world === 'lime'; const dark = c.world === 'dark';
 const foot = (dark) => `<div class="wm" style="left:72px;top:1268px">WLAD<i>AI</i></div>
-  <div class="k" style="left:250px;top:1276px;color:${dark ? 'var(--ink)' : 'var(--mut)'};opacity:.7">Spickzettel · ${c.tag}</div>
+  <div class="k" style="left:250px;top:1276px;color:${dark ? 'var(--ink)' : 'var(--mut)'};opacity:.7">${c.series || 'Spickzettel'} · ${c.tag}</div>
   <div class="k" style="right:72px;top:1276px">${i < N - 1 ? 'Speichern · ' : ''}${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>`;
 const head = (l, r) => `<div class="k" style="left:72px;top:74px">${l}</div>${r ? `<div style="right:72px;top:60px">${r}</div>` : ''}`;
 const T = {
@@ -158,7 +165,7 @@ const T = {
     <svg style="left:0;top:0" width="1080" height="1350">${s.ann.map(([x, y, tx, ty]) => `<line x1="${X + x}" y1="${Y + y}" x2="${X + tx + (tx > x ? -14 : 150)}" y2="${Y + ty + 30}" stroke="rgba(255,255,255,.75)" stroke-width="1.5"/><rect x="${X + x - 5}" y="${Y + y - 5}" width="10" height="10" fill="#fff"/>`).join('')}</svg>
     ${s.ann.map(([x, y, tx, ty, t], k) => `<div class="bx" style="left:${X + x - 62}px;top:${Y + y - 62}px;width:124px;height:124px"><i>0${k + 1}</i></div><div class="mono" style="left:${X + tx}px;top:${Y + ty}px;width:260px;text-shadow:0 1px 12px #000"><span style="color:var(--lime)">0${k + 1}</span> ${t}</div>`).join('')}
     <div class="mono bx" style="left:${X}px;top:${Y}px;padding:12px 18px;font-size:22px;letter-spacing:.02em;text-transform:none;border-color:rgba(255,255,255,.5)">WLAD AI Notes</div>
-    <div class="mono" style="right:56px;top:54px;text-align:right">Spickzettel<br>${c.tag}</div>
+    <div class="mono" style="right:56px;top:54px;text-align:right">${c.series || 'Spickzettel'}<br>${c.tag}</div>
     <div class="H" style="left:56px;top:862px;width:980px;font-size:150px;letter-spacing:-.065em;color:#f6f4ec">${s.big}</div>
     <div class="H" style="left:56px;top:1012px;width:980px;font-size:${s.restSize || 86}px;color:#f6f4ec">${s.rest}</div>
     <div class="ln" style="left:0;top:1012px;width:520px;height:1px;opacity:.5"></div><div class="ln" style="left:56px;top:${Y + H}px;width:1px;height:440px;opacity:.5"></div>
@@ -190,7 +197,7 @@ const T = {
     <div class="H" style="left:72px;top:170px;width:940px;font-size:${s.h.length > 30 ? 104 : 124}px">${s.h}</div>
     <div class="b" style="left:72px;top:${s.h.length > 30 ? 620 : 560}px;width:620px;font-size:48px">${s.b}</div>
     <img src="${B}mascot.png" style="left:700px;top:560px;width:330px;filter:drop-shadow(0 26px 34px rgba(20,40,0,.35))">
-    <div class="card" style="left:56px;top:940px;width:968px;padding:30px 36px 34px"><p style="font-size:31px;line-height:1.32;font-weight:500">Jetzt Account erstellen: <b style="font-size:1.25em">leaderos.de</b><br>14 Tage kostenlos testen, ohne Karte. Mit WLAD AI, dem KI-Coach mit Wlads Methodik.</p></div>${foot(true)}`,
+    <div class="card" style="left:56px;top:940px;width:968px;padding:30px 36px 34px"><p style="font-size:31px;line-height:1.32;font-weight:500">${s.cta ? s.cta : `Jetzt Account erstellen: <b style="font-size:1.25em">leaderos.de</b><br>14 Tage kostenlos testen, ohne Karte. Mit WLAD AI, dem KI-Coach mit Wlads Methodik.`}</p></div>${foot(true)}`,
 };
 window.IDS = Object.keys(C); window.COUNTS = Object.fromEntries(Object.entries(C).map(([k, v]) => [k, v.slides.length]));
 if (dark && s.t !== 'cta') document.getElementById('sheet').classList.add('dk');
