@@ -7,9 +7,12 @@
       "M01-03.jpg",
       "M01-04.jpg",
       "M01-05.jpg",
-      "M01-06-li.jpg"
+      "M01-06.jpg",
+      "M01-07.jpg",
+      "M01-08.jpg",
+      "M01-09-li.jpg"
     ],
-    "slide_ig": "M01-06.jpg",
+    "slide_ig": "M01-09.jpg",
     "pdf": "M01.pdf"
   },
   {
@@ -20,9 +23,12 @@
       "M02-03.jpg",
       "M02-04.jpg",
       "M02-05.jpg",
-      "M02-06-li.jpg"
+      "M02-06.jpg",
+      "M02-07.jpg",
+      "M02-08.jpg",
+      "M02-09-li.jpg"
     ],
-    "slide_ig": "M02-06.jpg",
+    "slide_ig": "M02-09.jpg",
     "pdf": "M02.pdf"
   },
   {
@@ -33,9 +39,12 @@
       "M03-03.jpg",
       "M03-04.jpg",
       "M03-05.jpg",
-      "M03-06-li.jpg"
+      "M03-06.jpg",
+      "M03-07.jpg",
+      "M03-08.jpg",
+      "M03-09-li.jpg"
     ],
-    "slide_ig": "M03-06.jpg",
+    "slide_ig": "M03-09.jpg",
     "pdf": "M03.pdf"
   },
   {
@@ -46,9 +55,12 @@
       "M04-03.jpg",
       "M04-04.jpg",
       "M04-05.jpg",
-      "M04-06-li.jpg"
+      "M04-06.jpg",
+      "M04-07.jpg",
+      "M04-08.jpg",
+      "M04-09-li.jpg"
     ],
-    "slide_ig": "M04-06.jpg",
+    "slide_ig": "M04-09.jpg",
     "pdf": "M04.pdf"
   }
 ]

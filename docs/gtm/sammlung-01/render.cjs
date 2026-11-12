@@ -1,5 +1,5 @@
 // Rendert "Die Sammlung": je Blatt sechs Folien 1620×2025 und die LinkedIn-Schlussfolie.
-//   NODE_PATH=/opt/node22/lib/node_modules node render.cjs [outDir] [fontCss]
+//   NODE_PATH=/opt/node22/lib/node_modules node render.cjs [outDir] [fontCss]   (fontCss: lokale @font-face-Datei mit Instrument Serif, aufrecht und kursiv)
 //   /usr/bin/python3 -I ../linkedin-carousels-01/build_pdf.py [outDir]
 const { chromium } = require('playwright'); const path = require('path'); const fs = require('fs');
 const [, , outDir = __dirname, fontCss] = process.argv;

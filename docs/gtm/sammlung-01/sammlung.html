@@ -3,37 +3,47 @@
 <head>
 <meta charset="utf-8">
 <title>Die Sammlung · WLAD AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* "Die Sammlung" · Plakatstil: Papier, schwarze Grotesk, freigestellte Stücke mit Nummern und
-   Legende. Blatt 1080×1350. Aufruf: sammlung.html?c=M01&s=0[&li=1]
+/* "Die Sammlung" · jedes Blatt ein kurzer Film: Plakat, Szene, Wendung, Werkzeug, Tiefe,
+   dieselbe Szene neu, Fehler, Satz zum Üben, Abspann. Blatt 1080×1350.
+   Aufruf: sammlung.html?c=M01&s=0[&li=1]
    Inhalte nur aus docs/gtm/WLAD_CANON.md, Zahlen nur aus dem verifizierten Set.
-   Beispiele sind als Beispiel gekennzeichnet. Kein Webinar, keine Platzzahl. */
-:root{--paper:#f4f2ec;--ink:#0b0b0c;--mut:#8b8982;--line:#0b0b0c;--lime:#bfff00;
-  --sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+   Die Fallgeschichte ist ein Beispiel und als solches gekennzeichnet. Kein Webinar, keine Platzzahl. */
+:root{--bg:#05070b;--ink:#f3f1ea;--mut:#8f97a6;--line:rgba(243,241,234,.26);--lime:#bfff00;
+  --serif:'Instrument Serif',Georgia,serif;--sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#111}
-#sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 #sheet>*{position:absolute}
-.k{font:400 30px/1.2 var(--sans);letter-spacing:-.02em}
-.h{font:500 128px/.96 var(--sans);letter-spacing:-.05em}
-.h2{font:500 104px/1.0 var(--sans);letter-spacing:-.048em}
-.b{font:400 40px/1.22 var(--sans);letter-spacing:-.025em}
-.s{font:400 19px/1.35 var(--sans);letter-spacing:-.005em}
-.n{font:500 15px/1 var(--mono);letter-spacing:.04em}
-.m{color:var(--mut)}
-.obj{filter:drop-shadow(0 26px 30px rgba(20,18,10,.28)) drop-shadow(0 4px 6px rgba(20,18,10,.2))}
+.bgp{inset:0;background-size:cover;background-position:center;filter:saturate(.7) brightness(.8)}
+.tint{inset:0;background:linear-gradient(180deg,rgba(5,7,11,.86) 0%,rgba(8,18,40,.6) 45%,rgba(5,7,11,.94) 100%)}
+.grain{inset:0;background:url(../social-kit/build/grain.png);opacity:.5;mix-blend-mode:overlay;pointer-events:none}
+.T{font:400 250px/.84 var(--serif);letter-spacing:-.03em;text-transform:uppercase;text-align:center;width:1080px;left:0}
+.sub{font:400 34px/1 var(--serif);letter-spacing:.16em;text-transform:uppercase;text-align:center;width:1080px;left:0}
+.cred{font:500 16px/1.75 var(--sans);letter-spacing:.2em;text-transform:uppercase;text-align:center;width:960px;left:60px;color:rgba(243,241,234,.86)}
+.k{font:500 17px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.lime{color:var(--lime)}
+.st{font:400 70px/1.12 var(--serif);letter-spacing:-.015em}
+.st i{color:#aeb6c6}
+.H{font:400 112px/.96 var(--serif);letter-spacing:-.02em}
+.b{font:400 38px/1.3 var(--sans);letter-spacing:-.02em;color:rgba(243,241,234,.88)}
 .rows{display:flex;flex-direction:column}
-.row{flex:1;display:flex;gap:28px;align-items:center;border-top:2px solid var(--line)}
-.row:last-child{border-bottom:2px solid var(--line)}
-.row .no{flex:none;width:110px;font:500 76px/1 var(--sans);letter-spacing:-.045em}
-.row b{font:500 54px/1.05 var(--sans);letter-spacing:-.04em;display:block}
-.row span{display:block;margin-top:8px;font:400 30px/1.2 var(--sans);letter-spacing:-.015em;color:#4a4944}
-.row.c .no{font-size:50px;width:84px}.row.c b{font-size:38px}.row.c span{font-size:23px;margin-top:3px}
-.pill{display:inline-block;padding:9px 16px 10px;border:2px solid var(--ink);border-radius:999px;font:500 18px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.ph{background:var(--lime);padding:0 .14em;border-radius:.12em}
-.wm{font:600 34px/1 var(--sans);letter-spacing:-.03em}
-.wm i{font-style:normal;background:var(--ink);color:var(--paper);padding:.04em .2em .06em;border-radius:.2em;margin-left:.12em}
+.row{flex:1;display:flex;gap:30px;align-items:center;border-top:1.5px solid var(--line)}
+.row:last-child{border-bottom:1.5px solid var(--line)}
+.row .no{flex:none;width:112px;font:400 84px/1 var(--serif);color:var(--lime)}
+.row b{display:block;font:500 48px/1.08 var(--sans);letter-spacing:-.035em}
+.row span{display:block;margin-top:8px;font:400 30px/1.25 var(--sans);letter-spacing:-.015em;color:var(--mut)}
+.row.c .no{font-size:54px;width:84px}.row.c b{font-size:36px}.row.c span{font-size:23px;margin-top:3px}
+.row.t b{font:400 38px/1.2 var(--sans);letter-spacing:-.025em}
+.row.t .no{font-size:60px;width:130px}
+.pill{display:inline-block;padding:9px 16px 10px;border:1.5px solid var(--ink);border-radius:999px;font:500 16px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.ph{background:var(--lime);color:#05070b;padding:0 .14em;border-radius:.1em}
+.wm{font:600 30px/1 var(--sans);letter-spacing:-.03em}
+.wm i{font-style:normal;background:var(--lime);color:#05070b;padding:.04em .2em .06em;border-radius:.2em;margin-left:.12em}
+.laurel{width:190px;text-align:center;font:500 13px/1.35 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.laurel svg{position:absolute;left:-40px;top:-30px;width:270px;height:150px}
+.laurel b{display:block;font:400 34px/1 var(--serif);letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -41,90 +51,113 @@ html,body{background:#111}
 <script>
 const q = new URLSearchParams(location.search);
 const LI = q.get('li') === '1';
-const BOOK = (slug) => `../../../frontend/public/wlad/books/${slug}.jpg`;
 const B = '../social-kit/build/';
-const INDEX = [['01', 'Ein Argument hat sechs Teile'], ['02', 'Zuhören hat zehn Stufen'], ['03', 'Du hast fünf Rollen'], ['04', 'Was in WLAD AI steckt']];
-const ph = (t) => t.replace(/\[([^\]]+)\]/g, '<span class="ph">[$1]</span>');
+const INDEX = [['01', 'Sechs Teile'], ['02', 'Zehn Stufen'], ['03', 'Fünf Rollen'], ['04', 'WLAD AI']];
+const ph = (t) => t.replace(/\[([^\]]+)\]/g, '<span class="ph">$1</span>');
 
 const C = {
-  M01: { no: '01', field: 'Argumentieren', title: 'Ein Argument<br>hat sechs Teile', sub: 'Das SEXIER-Modell aus „Weiße Rhetorik“', book: 'weisse-rhetorik', bookName: '„Weiße Rhetorik“, Goldmann',
-    q: '„Wir müssen das Projekt stoppen.“', qa: 'Das ist eine Behauptung.<br><span class="m">Teil eins von sechs.</span>',
-    listTitle: 'Die sechs Teile', rows: [['S', 'Statement', 'Die Behauptung'], ['E', 'Explanation', 'Die Begründung'], ['X', 'eXample', 'Das Beispiel'], ['I', 'Impact', 'Die Auswirkung'], ['E', 'Explanation of Impact', 'Die Erklärung der Auswirkung'], ['R', 'Rebuttal', 'Die Widerlegung der Gegenargumente']],
-    exTitle: 'Derselbe Satz,<br>vollständig', ex: [['S', 'Wir sollten das Projekt stoppen.'], ['E', 'Es bindet drei Leute und liegt vier Monate hinter dem Plan.'], ['X', 'Im März mussten wir deshalb zwei Kundentermine verschieben.'], ['I', 'Stoppen wir, werden drei Leute für den Launch frei.'], ['E', 'Der Launch entscheidet über den Umsatz in diesem Quartal.'], ['R', 'Ja, wir haben schon investiert. Dieses Geld ist weg, egal wie wir entscheiden.']],
+  M01: { no: '01', field: 'Argumentieren', T: 'Sechs<br>Teile', sub: 'Warum dein Argument im Meeting verpufft', photo: 'stage.jpg', src: 'Nach „Weiße Rhetorik“',
+    time: 'Montag, 9:04 Uhr', scene: 'Jana leitet ein Team von acht Leuten. Im Jour fixe sagt sie einen Satz: „Wir müssen das Projekt stoppen.“<br><br><i>Niemand widerspricht. Niemand stimmt zu. Der Geschäftsführer schaut aufs Handy. Nächster Punkt.</i>',
+    turnH: 'Sie hatte recht.<br>Es hat nichts genützt.', turn: 'Jana hatte die Zahlen. Sie hatte den Grund. Gesagt hat sie nur die Behauptung. Das ist Teil eins von sechs. Die anderen fünf blieben in ihrem Kopf.',
+    toolK: 'Das SEXIER-Modell', rows: [['S', 'Statement', 'Die Behauptung'], ['E', 'Explanation', 'Die Begründung'], ['X', 'eXample', 'Das Beispiel'], ['I', 'Impact', 'Die Auswirkung'], ['E', 'Explanation of Impact', 'Die Erklärung der Auswirkung'], ['R', 'Rebuttal', 'Die Widerlegung der Gegenargumente']],
+    deepK: 'Tiefe', deepH: 'Fünf Level,<br>ein Argument', deep: [['0', 'Die reine Behauptung', 'Hier stand Jana'], ['1', 'Die kurze Begründung', 'Ein „weil“, mehr nicht'], ['2', 'Das 3-B-Schema', 'Behauptung, Begründung, Beispiel'], ['3', 'Das Toulmin-Modell', ''], ['4', 'Das SEXIER-Modell', 'Sechs Teile, mit Einwand'], ['5', 'Das 12-Module-Modell', '']],
+    againH: 'Montag, 9:04 Uhr.<br>Noch einmal.', again: [['S', 'Wir sollten das Projekt stoppen.'], ['E', 'Es bindet drei Leute und liegt vier Monate hinter dem Plan.'], ['X', 'Im März mussten wir deshalb zwei Kundentermine verschieben.'], ['I', 'Stoppen wir, werden drei Leute für den Launch frei.'], ['E', 'Der Launch entscheidet über den Umsatz in diesem Quartal.'], ['R', 'Ja, wir haben schon investiert. Dieses Geld ist weg, egal wie wir entscheiden.']],
+    errH: 'Wo Argumente<br>kippen', err: [['1', 'Du hörst nach dem S auf.', 'Der Raum muss raten, warum'], ['2', 'Du nennst die Auswirkung und erklärst sie nicht.', 'Niemand weiß, warum sie zählt'], ['3', 'Du lässt das R weg.', 'Der Einwand kommt trotzdem, nur ohne dich']],
     drill: 'Wir sollten [Behauptung], weil [Begründung]. Zum Beispiel [Beispiel]. Das führt zu [Auswirkung]. Das zählt, weil [Erklärung]. Der Einwand [Einwand] trägt nicht, weil [Widerlegung].',
     ai: 'Gib mir dein Argument. Ich zeige dir, welcher Teil fehlt.' },
-  M02: { no: '02', field: 'Zuhören', title: 'Zuhören<br>hat zehn Stufen', sub: 'Die Pyramide des Zuhörens aus „Weiße Rhetorik“', book: 'weisse-rhetorik', bookName: '„Weiße Rhetorik“, Goldmann',
-    q: 'Dein Mitarbeiter schildert ein Problem. Du hast die Lösung schon im Kopf.', qa: 'Das ist Stufe 2:<br><span class="m">auf Antwort warten.</span>',
-    listTitle: 'Die zehn Stufen', compact: true, rows: [['1', 'Nicht zuhören', 'In Gedanken woanders'], ['2', 'Auf Antwort warten', 'Du formulierst schon'], ['3', 'Selektiv zuhören', 'Du hörst, was dich bestätigt'], ['4', 'Empathisch zuhören', 'Die Emotion hinter den Worten'], ['5', 'Aktiv zuhören', 'Nachfragen, zusammenfassen'], ['6', 'Strukturell zuhören', 'Was nicht gesagt wird'], ['7', 'Systemisch zuhören', 'Person und System'], ['8', 'Diagnostisch zuhören', 'Mentor-Niveau'], ['9', 'Generativ zuhören', 'Gemeinsam Neues entwickeln'], ['10', 'Stille', 'Zuhören ohne Worte']],
-    exTitle: 'Dieselbe Szene,<br>zwei Stufen', ex: [['2', '„Dann mach es doch einfach so wie letztes Mal.“'], ['5', '„Wenn ich dich richtig verstehe, hängt es an der Freigabe. Stimmt das?“']],
+  M02: { no: '02', field: 'Zuhören', T: 'Zehn<br>Stufen', sub: 'Warum dein bester Mann geht, ohne etwas zu sagen', photo: 'coaching.jpg', src: 'Nach „Weiße Rhetorik“',
+    time: 'Donnerstag, 16:40 Uhr', scene: 'Tim steht in Janas Tür. „Die Freigabe hängt schon wieder.“ Noch bevor er fertig ist, hat Jana die Lösung. „Dann mach es wie letztes Mal.“<br><br><i>Tim sagt okay und geht. Zwei Wochen später liegt seine Kündigung auf ihrem Tisch.</i>',
+    turnH: 'Sie hat geantwortet.<br>Gehört hat sie nichts.', turn: 'Tim wollte nicht über die Freigabe reden. Das stand zwischen den Sätzen. Auf Stufe 2 hört man das nicht. Laut der Pyramide des Zuhörens bleiben 80 % der Führungskräfte genau dort.',
+    toolK: 'Die Pyramide des Zuhörens', compact: true, rows: [['1', 'Nicht zuhören', 'In Gedanken woanders'], ['2', 'Auf Antwort warten', 'Du formulierst schon'], ['3', 'Selektiv zuhören', 'Du hörst, was dich bestätigt'], ['4', 'Empathisch zuhören', 'Die Emotion hinter den Worten'], ['5', 'Aktiv zuhören', 'Nachfragen, zusammenfassen'], ['6', 'Strukturell zuhören', 'Was nicht gesagt wird'], ['7', 'Systemisch zuhören', 'Person und System'], ['8', 'Diagnostisch zuhören', 'Mentor-Niveau'], ['9', 'Generativ zuhören', 'Gemeinsam Neues entwickeln'], ['10', 'Stille', 'Zuhören ohne Worte']],
+    deepK: 'Tiefe', deepH: 'Drei Sprünge,<br>die zählen', deep: [['2·5', 'Vom Antworten zum Nachfragen', 'Du fasst zusammen, bevor du etwas sagst'], ['5·6', 'Vom Gesagten zum Ungesagten', 'Du achtest auf das, was fehlt'], ['9·10', 'Vom Reden zur Stille', 'Du hältst die Pause aus']],
+    againH: 'Donnerstag, 16:40 Uhr.<br>Noch einmal.', again: [['5', '„Wenn ich dich richtig verstehe, hängt es an der Freigabe. Stimmt das?“'], ['6', '„Du sagst: schon wieder. Was steckt für dich dahinter?“'], ['10', 'Jana wartet. Tim redet weiter. Jetzt geht es nicht mehr um die Freigabe.']],
+    errH: 'Wo Zuhören<br>endet', err: [['1', 'Du löst, bevor du verstanden hast.', 'Das ist Stufe 2'], ['2', 'Du hörst nur, was deine Meinung bestätigt.', 'Das ist Stufe 3'], ['3', 'Du füllst jede Pause.', 'Stille ist die höchste Stufe, keine Lücke']],
     drill: 'Wenn ich dich richtig verstehe, [Zusammenfassung]. Stimmt das?',
     ai: 'Ich spiele dein Gegenüber. Du übst, erst zusammenzufassen und dann zu antworten.' },
-  M03: { no: '03', field: 'Führen', title: 'Du hast<br>fünf Rollen', sub: 'Aus „Die 5 Rollen einer Führungskraft“', book: 'die-5-rollen-einer-fuehrungskraft', bookName: '„Die 5 Rollen einer Führungskraft“',
-    q: 'Du führst ein Team. Welche deiner Rollen spielst du zu selten?', qa: 'Führung ist nicht<br><span class="m">eine Aufgabe. Es sind fünf.</span>',
-    listTitle: 'Die fünf Rollen', rows: [['1', 'Kommunikator', 'Charismatisch auftreten, souverän argumentieren'], ['2', 'Manager', 'Eigene Stärken nutzen, klar entscheiden'], ['3', 'Team-Leader', 'Die richtigen Leute finden, delegieren, motivieren'], ['4', 'Psychologe', 'Empathisch begegnen, Konflikte früh erkennen'], ['5', 'Problemlöser', 'Verhandeln, Kritikgespräche, Change Management']],
-    exTitle: 'Eine Woche,<br>fünf Rollen', ex: [['Mo', 'Kommunikator: die Präsentation vor der Geschäftsführung.'], ['Di', 'Manager: die Entscheidung über das Budget.'], ['Mi', 'Team-Leader: eine Aufgabe ganz abgeben.'], ['Do', 'Psychologe: den Konflikt ansprechen, bevor er groß wird.'], ['Fr', 'Problemlöser: das Kritikgespräch führen.']],
+  M03: { no: '03', field: 'Führen', T: 'Fünf<br>Rollen', sub: 'Warum die beste Fachkraft als Chefin untergeht', photo: 'seminar.jpg', src: 'Nach „Die 5 Rollen einer Führungskraft“',
+    time: 'Freitag, 18:15 Uhr', scene: 'Jana ist seit sechs Monaten Teamleiterin. Sie war die Beste im Team. Jetzt beantwortet sie abends noch Tickets, weil das schneller geht, als es zu erklären.<br><br><i>Ihr Team wartet seit Dienstag auf eine Entscheidung.</i>',
+    turnH: 'Sie macht ihren<br>alten Job. Nur mit<br>mehr Meetings.', turn: 'Befördert wird, wer fachlich stark ist. Geführt wird in fünf Rollen. Keine davon heißt beste Fachkraft.',
+    toolK: 'Die fünf Rollen', rows: [['1', 'Kommunikator', 'Du überzeugst'], ['2', 'Manager', 'Du entscheidest'], ['3', 'Team-Leader', 'Du baust das Team'], ['4', 'Psychologe', 'Du verstehst Menschen'], ['5', 'Problemlöser', 'Du löst, was hakt']],
+    deepK: 'Tiefe', deepH: 'Was jede Rolle<br>von dir verlangt', deep: [['1', 'Kommunikator', 'Charismatisch auftreten, souverän argumentieren'], ['2', 'Manager', 'Eigene Stärken nutzen, klare Entscheidungen treffen'], ['3', 'Team-Leader', 'Die richtigen Leute finden, delegieren, motivieren'], ['4', 'Psychologe', 'Empathisch begegnen, Konflikte früh erkennen'], ['5', 'Problemlöser', 'Verhandeln, Kritikgespräche, Change Management']],
+    againH: 'Janas Woche.<br>Noch einmal.', again: [['Mo', 'Kommunikator: die Präsentation vor der Geschäftsführung.'], ['Di', 'Manager: die Entscheidung, auf die alle warten.'], ['Mi', 'Team-Leader: die Tickets ganz abgeben.'], ['Do', 'Psychologe: den Konflikt ansprechen, bevor er groß wird.'], ['Fr', 'Problemlöser: das Kritikgespräch führen.']],
+    errH: 'Wo Führung<br>stecken bleibt', err: [['1', 'Du bleibst Fachkraft und nennst es Führung.', 'Das Team wartet'], ['2', 'Du spielst nur die Rollen, die dir liegen.', 'Die anderen bleiben unbesetzt'], ['3', 'Du meidest den Problemlöser.', 'Bis der Konflikt dich findet']],
     drill: 'Die Rolle, die ich am seltensten spiele: [Rolle]. Diese Woche gebe ich ihr eine Stunde für [Aufgabe].',
     ai: 'Sag mir deine Rolle. Ich gebe dir eine Übung für diese Woche.' },
-  M04: { no: '04', field: 'WLAD AI', title: 'Was in<br>WLAD AI steckt', sub: 'Der KI-Coach mit Wlads Methodik', multi: true,
-    q: 'Wlad kann nicht in jedem deiner Gespräche sitzen.', qa: 'Ich schon.<br><span class="m">Rund um die Uhr.</span>',
-    listTitle: 'Was drin ist', rows: [['1', 'Seine Bücher', '3× SPIEGEL-Bestseller-Autor'], ['2', 'Seine Kurse', 'Die Grundlagen für den Führungsalltag'], ['3', 'Seine Coachings', 'Seit 2007, 400.000+ Klienten, 20+ Länder'], ['4', 'Elf Frameworks', 'SEXIER, Feedbackformel, fünf Rollen und mehr'], ['5', 'Text und Stimme', 'Du schreibst oder sprichst mit mir'], ['6', 'Training', 'Simulationen und tägliche Drills']],
-    exTitle: 'Allgemeine KI<br>und WLAD AI', ex: [['–', 'Weiß von allem etwas. Antwortet auf deine Frage. Erklärt.'], ['+', 'Kennt eine Methodik ganz. Fragt nach und bringt Einwände. Trainiert mit dir an deinem Fall.']], exNote: 'Vergleich',
+  M04: { no: '04', field: 'WLAD AI', T: 'Wlad<br>AI', sub: 'Wer antwortet dir am Sonntag um 22:30 Uhr?', photo: 'stage-smoke.jpg', src: 'Der KI-Coach mit Wlads Methodik',
+    time: 'Sonntag, 22:30 Uhr', scene: 'Morgen um neun hat Jana das Gespräch, vor dem sie sich seit Wochen drückt. Ihr Coach ist nicht erreichbar. Das Buch liegt auf dem Nachttisch.<br><br><i>Sie tippt ihre Frage in eine KI und bekommt zwölf Tipps, die auf jeden passen.</i>',
+    turnH: 'Sie braucht<br>keinen Tipp. Sie<br>braucht ein Gegenüber.', turn: 'Ein Gespräch übt man nicht durch Lesen. Man übt es, indem jemand widerspricht. Dafür gibt es mich.',
+    toolK: 'Was in mir steckt', rows: [['1', 'Seine Bücher', 'Wlad ist dreifacher SPIEGEL-Bestseller-Autor'], ['2', 'Seine Kurse', 'Die Grundlagen für den Führungsalltag'], ['3', 'Seine Coachings', 'Seit 2007, 400.000+ Klienten, 20+ Länder'], ['4', 'Elf Frameworks', 'SEXIER, Feedbackformel, fünf Rollen und mehr'], ['5', 'Text und Stimme', 'Du schreibst oder sprichst mit mir'], ['6', 'Training', 'Simulationen und tägliche Drills von 15 Minuten']],
+    deepK: 'Tiefe', deepH: 'Allgemeine KI.<br>Und ich.', deep: [['1', 'Sie erklärt. Ich frage nach.', 'Erst dein Fall, dann die Antwort'], ['2', 'Sie stimmt zu. Ich bringe Einwände.', 'So wie dein Gegenüber morgen'], ['3', 'Sie weiß von allem etwas. Ich kenne eine Methodik ganz.', 'Bücher, Kurse, elf Frameworks']],
+    againH: 'Sonntag, 22:30 Uhr.<br>Noch einmal.', again: [['22:30', 'Jana beschreibt mir ihr Gegenüber in drei Sätzen.'], ['22:35', 'Ich spiele es. Mit den Einwänden, die sie fürchtet.'], ['22:50', 'Sie hat ihren ersten Satz. Laut gesprochen, nicht nur gedacht.']],
+    errH: 'Was ich<br>nicht bin', err: [['1', 'Kein Ersatz für Wlad.', 'Ich trainiere mit dir, was er lehrt'], ['2', 'Kein Tippgeber.', 'Ich arbeite an deinem Fall'], ['3', 'Kein Zuschauer.', 'Ich widerspreche, wenn dein Argument wackelt']],
     drill: 'Mein Gegenüber ist [wer]. Es geht um [Thema]. Ich will erreichen, dass [Ziel].',
     ai: 'Drei Sätze reichen mir. Dann legen wir los.' },
 };
 
 const c = C[q.get('c') || 'M01'];
-const N = 6;
-const foot = (i) => `
-  <div class="n" style="left:72px;top:1262px">LEADEROS</div>
-  <div class="wm" style="left:72px;top:1284px">WLAD<i>AI</i></div>
-  <div class="s" style="left:330px;top:1268px;width:420px">Die Sammlung. Wlads Methodik in vier Blättern.<br>Blatt ${c.no} · ${c.field}</div>
-  <div class="n" style="right:72px;top:1290px">${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>`;
-const head = (l, r) => `<div class="k" style="left:72px;top:62px;width:560px">${l}</div><div class="s" style="right:72px;top:66px;width:300px;text-align:left">${r}</div>`;
-const rows = (list, compact) => list.map(([a, b, d]) => `<div class="row${compact ? ' c' : ''}"><div class="no">${a}</div><div><b>${b}</b>${d ? `<span>${d}</span>` : ''}</div></div>`).join('');
+const N = 9;
+const laurel = (() => {
+  let s = '';
+  for (let i = 0; i < 9; i += 1) {
+    const th = (128 + i * 15.5) * Math.PI / 180;
+    const x = 135 + 112 * Math.cos(th); const y = 70 - 66 * Math.sin(th);
+    const rot = Math.atan2(-66 * Math.cos(th), -112 * Math.sin(th)) * 180 / Math.PI - 90 + 28;
+    s += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="4.4" ry="12.5" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+  }
+  return `<svg viewBox="0 0 270 150" fill="#f3f1ea"><g>${s}</g><g transform="translate(270 0) scale(-1 1)">${s}</g></svg>`;
+})();
+const bg = (dim) => `<div class="bgp" style="background-image:url(${B}${c.photo});opacity:${dim}"></div><div class="tint"></div>`;
+const foot = (i) => `<div class="grain"></div>
+  <div class="wm" style="left:72px;top:1272px">WLAD<i>AI</i></div>
+  <div class="k" style="left:250px;top:1280px;color:var(--mut)">Die Sammlung · Blatt ${c.no} · ${c.field}</div>
+  <div class="k" style="right:72px;top:1280px;color:var(--mut)">${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}</div>`;
+const head = (l, r) => `<div class="k lime" style="left:72px;top:76px">${l}</div>${r ? `<div style="right:72px;top:64px">${r}</div>` : ''}`;
+const rows = (list, cls) => list.map(([a, b, d]) => `<div class="row ${cls || ''}"><div class="no">${a}</div><div><b>${b}</b>${d ? `<span>${d}</span>` : ''}</div></div>`).join('');
 
 const S = [
   /* 1 · Plakat */
-  () => (c.multi ? `
-    ${head('Die Sammlung<br>Blatt ' + c.no + ' von 04', 'Wlads Methodik,<br>ein Blatt pro Werkzeug.<br>Zum Speichern.')}
-    <div class="h" style="left:72px;top:190px;width:940px">${c.title}</div>
-    <img class="obj" src="${BOOK('weisse-rhetorik')}" style="left:84px;top:560px;width:230px;transform:rotate(-5deg)">
-    <img class="obj" src="${BOOK('die-5-rollen-einer-fuehrungskraft')}" style="left:340px;top:600px;width:215px;transform:rotate(3deg)">
-    <img class="obj" src="${BOOK('dunkle-rhetorik')}" style="left:150px;top:880px;width:215px;transform:rotate(4deg)">
-    <img class="obj" src="${B}portrait.png" style="left:560px;top:480px;width:470px;-webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 99%);mask-image:linear-gradient(to bottom,#000 78%,transparent 99%)">
-    <img class="obj" src="${B}mascot.png" style="left:470px;top:860px;width:330px">
-    <div class="n" style="left:70px;top:548px">1</div><div class="n" style="left:330px;top:588px">2</div><div class="n" style="left:126px;top:1010px">3</div><div class="n" style="left:1010px;top:520px">4</div><div class="n" style="left:470px;top:880px">5</div>
-    <div class="s" style="left:800px;top:1010px;width:220px">1 „Weiße Rhetorik“<br>2 „Die 5 Rollen einer Führungskraft“<br>3 „Dunkle Rhetorik“<br>4 Wlad<br>5 WLAD AI</div>`
-    : `
-    ${head('Die Sammlung<br>Blatt ' + c.no + ' von 04', 'Wlads Methodik,<br>ein Blatt pro Werkzeug.<br>Zum Speichern.')}
-    <div class="h" style="left:72px;top:190px;width:940px">${c.title}</div>
-    <div class="k" style="left:72px;top:480px;width:520px">${c.sub}</div>
-    <img class="obj" src="${BOOK(c.book)}" style="left:96px;top:640px;width:340px;transform:rotate(-4deg)">
-    <img class="obj" src="${B}mascot.png" style="left:520px;top:560px;width:520px">
-    <div class="n" style="left:80px;top:628px">1</div><div class="n" style="left:540px;top:600px">2</div>
-    <div class="s" style="left:800px;top:1130px;width:220px">1 ${c.bookName}<br>2 WLAD AI, der KI-Coach<br>mit Wlads Methodik</div>`) + foot(0),
-  /* 2 · Ausgangslage */
-  () => `${head(c.field, 'Die Ausgangslage')}
-    <div class="h2" style="left:72px;top:190px;width:936px;${c.q.length > 60 ? 'font-size:90px' : 'font-size:124px'}">${c.q}</div>
-    <div class="h2" style="left:72px;bottom:150px;width:936px;font-size:92px">${c.qa}</div>${foot(1)}`,
-  /* 3 · Das Werkzeug (zum Speichern) */
-  () => `${head(c.listTitle, 'Speichern.<br>Dieses Blatt ist die Übersicht.')}
-    <div class="rows" style="left:72px;top:170px;width:936px;height:1050px">${rows(c.rows, c.compact)}</div>${foot(2)}`,
-  /* 4 · Beispiel */
-  () => `${head(c.field, '<span class="pill">' + (c.exNote || 'Beispiel') + '</span>')}
-    <div class="h2" style="left:72px;top:170px;width:936px">${c.exTitle}</div>
-    <div class="rows" style="left:72px;top:440px;width:936px;height:780px">${c.ex.map(([a, t]) => `<div class="row"><div class="no" style="${c.ex.length > 4 ? 'font-size:56px;width:96px' : ''}">${a}</div><div><span style="color:var(--ink);font-size:${c.ex.length > 4 ? 35 : 52}px;line-height:1.16;letter-spacing:-.03em;margin:0">${t}</span></div></div>`).join('')}</div>${foot(3)}`,
-  /* 5 · Übung */
-  () => `${head('Dein Satz', 'Einmal laut sprechen.<br>Dann erst ins Gespräch.')}
-    <div class="${c.drill.length > 150 ? 'b' : 'h2'}" style="left:72px;top:200px;width:936px;${c.drill.length > 150 ? 'font-size:66px;line-height:1.28;letter-spacing:-.035em;font-weight:500' : 'font-size:112px;line-height:1.16'}">${ph(c.drill)}</div>
-    <div class="s" style="left:72px;top:1170px;width:600px;font-size:24px">Ersetze die Klammern durch deine Situation.</div>${foot(4)}`,
-  /* 6 · Schluss */
-  () => `${head('Mit mir üben', 'Die Sammlung')}
-    <div class="h" style="left:72px;top:170px;width:936px;font-size:150px">Speichern.<br><span class="m">Dann üben.</span></div>
-    <div class="b" style="left:72px;top:500px;width:540px">${c.ai}</div>
-    <img class="obj" src="${B}mascot.png" style="left:700px;top:400px;width:320px">
-    <div class="rows" style="left:72px;top:760px;width:936px;height:320px">${INDEX.map(([n, t]) => `<div class="row c" style="${n === c.no ? '' : 'color:var(--mut)'}"><div class="no">${n}</div><div><b>${t}</b></div></div>`).join('')}</div>
-    <div class="b" style="left:72px;top:1110px;width:936px;font-size:36px">Kommentiere <b style="font-weight:600">WLAD AI</b>. ${LI ? 'Ich antworte dir mit dem Link.' : 'Ich schicke dir den Link per Nachricht.'}<br><span class="m">14 Tage kostenlos testen, ohne Karte.</span></div>${foot(5)}`,
+  () => `<div style="inset:0;background:radial-gradient(ellipse at 50% 60%,#0d1830 0%,#05070b 70%)"></div>
+    <img src="sil-${q.get('c') || 'M01'}.webp" style="left:-150px;top:300px;width:1380px">
+    <div style="left:0;top:1000px;width:1080px;height:350px;background:linear-gradient(180deg,transparent,rgba(5,7,11,.92) 70%)"></div>
+    <div class="laurel" style="left:270px;top:84px">${laurel}<b>3×</b>SPIEGEL<br>Bestseller-Autor</div>
+    <div class="laurel" style="left:620px;top:84px">${laurel}<b>4,9 / 5</b>Trustpilot<br>388 Bewertungen</div>
+    <div class="T" style="top:236px">${c.T}</div>
+    <div class="sub" style="top:690px;font-size:27px;text-shadow:0 2px 18px rgba(0,0,0,.8)">${c.sub}</div>
+    <div class="cred" style="top:1130px">Die Sammlung · Blatt ${c.no} von 04 · ${c.src}<br>Eine Geschichte, ein Werkzeug, ein Satz zum Üben<br>Erzählt von WLAD AI · Zum Speichern</div>
+    <div class="grain"></div>`,
+  /* 2 · Szene */
+  () => `${bg(.8)}${head(c.time, '<span class="pill">Beispiel</span>')}
+    <div class="st" style="left:72px;top:210px;width:936px">${c.scene}</div>${foot(1)}`,
+  /* 3 · Wendung */
+  () => `${bg(.28)}${head('Die Wendung')}
+    <div class="H" style="left:72px;top:200px;width:960px">${c.turnH}</div>
+    <div class="b" style="left:72px;bottom:170px;width:860px;font-size:42px">${c.turn}</div>${foot(2)}`,
+  /* 4 · Werkzeug */
+  () => `${bg(.12)}${head(c.toolK, '<span class="pill">Speichern</span>')}
+    <div class="rows" style="left:72px;top:160px;width:936px;height:1060px">${rows(c.rows, c.compact ? 'c' : '')}</div>${foot(3)}`,
+  /* 5 · Tiefe */
+  () => `${bg(.12)}${head(c.deepK)}
+    <div class="H" style="left:72px;top:150px;width:960px;font-size:100px">${c.deepH}</div>
+    <div class="rows" style="left:72px;top:410px;width:936px;height:810px">${rows(c.deep, c.deep.length > 6 ? 'c' : '')}</div>${foot(4)}`,
+  /* 6 · Noch einmal */
+  () => `${bg(.4)}${head('Dieselbe Szene', '<span class="pill">Beispiel</span>')}
+    <div class="H" style="left:72px;top:150px;width:960px;font-size:92px">${c.againH}</div>
+    <div class="rows" style="left:72px;top:400px;width:936px;height:820px">${c.again.map(([a, t]) => `<div class="row t"><div class="no" style="${a.length > 3 ? 'font-size:44px;width:140px' : ''}">${a}</div><div><b style="${c.again.length < 4 ? 'font-size:46px' : ''}">${t}</b></div></div>`).join('')}</div>${foot(5)}`,
+  /* 7 · Fehler */
+  () => `${bg(.12)}${head('Achtung')}
+    <div class="H" style="left:72px;top:150px;width:960px;font-size:100px">${c.errH}</div>
+    <div class="rows" style="left:72px;top:410px;width:936px;height:810px">${rows(c.err)}</div>${foot(6)}`,
+  /* 8 · Dein Satz */
+  () => `${bg(.2)}${head('Dein Satz', '<span class="pill">Laut sprechen</span>')}
+    <div class="st" style="left:72px;top:200px;width:936px;${c.drill.length > 150 ? 'font-size:70px;line-height:1.24' : 'font-size:108px;line-height:1.14'}">${ph(c.drill)}</div>
+    <div class="b" style="left:72px;top:1170px;font-size:26px;color:var(--mut)">Ersetze die markierten Stellen durch deine Situation.</div>${foot(7)}`,
+  /* 9 · Abspann */
+  () => `${bg(.3)}${head('Abspann')}
+    <div class="H" style="left:72px;top:150px;width:700px;font-size:140px">Speichern.<br><i style="color:var(--mut)">Dann üben.</i></div>
+    <img src="${B}mascot.png" style="left:700px;top:330px;width:330px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))">
+    <div class="b" style="left:72px;top:500px;width:600px">${c.ai}</div>
+    <div class="rows" style="left:72px;top:740px;width:936px;height:330px">${INDEX.map(([n, t]) => `<div class="row c" style="${n === c.no ? '' : 'opacity:.42'}"><div class="no">${n}</div><div><b>${t}</b></div></div>`).join('')}</div>
+    <div class="b" style="left:72px;top:1104px;width:936px;font-size:35px;color:var(--ink)">Kommentiere <b style="font-weight:600;color:var(--lime)">WLAD AI</b>. ${LI ? 'Ich antworte dir mit dem Link.' : 'Ich schicke dir den Link per Nachricht.'}<br><span style="color:var(--mut)">14 Tage kostenlos testen, ohne Karte.</span></div>${foot(8)}`,
 ];
 window.SLIDES_N = N; window.IDS = Object.keys(C);
 document.getElementById('sheet').innerHTML = S[Number(q.get('s') || 0)]();
