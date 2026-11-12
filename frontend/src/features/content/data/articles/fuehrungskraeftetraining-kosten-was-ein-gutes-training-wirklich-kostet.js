@@ -122,7 +122,7 @@ export default {
       text:
         'LeaderOS bedient genau den Nachhaltigkeits-Hebel, ohne den Preis der klassischen 1:1-Betreuung zu ' +
         'verlangen. Die 30-Tage-Challenge kostet einen Bruchteil eines Tagessatzes für Präsenz-Coaching, läuft aber ' +
-        'über vier Wochen mit täglichen Mikro-Drills statt einem Einmal-Event — und WladBot ist rund um die Uhr ' +
+        'über vier Wochen mit täglichen Mikro-Drills statt einem Einmal-Event — und WLAD AI ist rund um die Uhr ' +
         'verfügbar, nicht nur am Seminartag.',
     },
   ],

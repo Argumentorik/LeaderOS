@@ -69,7 +69,7 @@ export default {
     { type: 'callout', tone: 'neutral', text:
       'Die unbequeme Wahrheit: führen ohne Weisungsbefugnis ist HÄRTER als disziplinarische Führung, nicht weicher. Du musst jeden Tag neu überzeugen, was ein Vorgesetzter einfach anordnen könnte. Genau deshalb sind gute laterale Führungskräfte so selten · und so wertvoll.' },
     { type: 'paragraph', text:
-      'Die gute Nachricht: das alles ist reine Skill-Arbeit · Vertrauen, Verhandlung, Kommunikation. Und Skills lassen sich drillen. In LeaderOS übst du die Interessen-Technik, die Feedback-Formel und Konflikt-Skripte an deinen echten Projektsituationen · mit WladBot als Sparring für das Gespräch, das morgen ansteht.' },
+      'Die gute Nachricht: das alles ist reine Skill-Arbeit · Vertrauen, Verhandlung, Kommunikation. Und Skills lassen sich drillen. In LeaderOS übst du die Interessen-Technik, die Feedback-Formel und Konflikt-Skripte an deinen echten Projektsituationen · mit WLAD AI als Sparring für das Gespräch, das morgen ansteht.' },
     { type: 'diagnostic', prompt: 'Wo hängst du gerade fest?', options: [
       { label: 'Niemand zieht mit, ich kann nichts anordnen', category: 'conflict' },
       { label: 'Ich muss überzeugen statt delegieren', category: 'delegation' },

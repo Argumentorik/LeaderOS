@@ -658,7 +658,7 @@ Das ist jetzt eine komplett andere Frage. Die kannst Du mir gerne nachher stelle
 
 die clever sind, und das ist ja nicht schlimm, z. B. bei Solva, wenn man ein Gespräch schiefläuft, oder auch bei Maria, aber trotzdem sich überlegen, welche Fragen sollte ich stellen? und Natürlich könnt ihr auch die Ki dazu nutzen.
 
-der Ki die Situation mitgeben, so wie Maria mir die Situation gegeben hat, und dann die Ki Fragen, Chatgpt oder Claude oder auch den neuen Wladbot 3: 0, dass man sagt.
+der Ki die Situation mitgeben, so wie Maria mir die Situation gegeben hat, und dann die Ki Fragen, Chatgpt oder Claude oder auch den neuen WLAD AI 3: 0, dass man sagt.
 
 welche 5 bis 10 Fragen
 
@@ -872,7 +872,7 @@ Also, ich bin erst mal sehr überrascht und auch ein bisschen enttäuscht.
 
 Ich gebe dir also einen Bonustester, damit Du mehr Feedback bekommst.
 
-weil ich ja genau weiß, wie es schwierig es ist, Menschen zum Testen zu animieren. Ich hatte erst vor kurzem auch in meinem eigenen Projekt ein Wladbot 3, 0 gestartet und habe dafür Tester in einer Testumgebung eingeladen. und es ist sehr schwer.
+weil ich ja genau weiß, wie es schwierig es ist, Menschen zum Testen zu animieren. Ich hatte erst vor kurzem auch in meinem eigenen Projekt ein WLAD AI 3, 0 gestartet und habe dafür Tester in einer Testumgebung eingeladen. und es ist sehr schwer.
 
 Die Leute sind faul. und insofern dachte ich, dass wir mit dem Tester vielleicht sogar schneller vorankommen.
 

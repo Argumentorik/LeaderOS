@@ -25,7 +25,7 @@ class TestHealthAndRoot:
         assert response.status_code == 200
         data = response.json()
         assert "message" in data
-        assert "WladBot" in data["message"]
+        assert "WLAD AI" in data["message"]
         print(f"✓ API root returns: {data['message']}")
 
 

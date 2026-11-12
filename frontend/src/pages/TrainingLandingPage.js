@@ -61,7 +61,7 @@ function useCountdown(targetIso) {
 }
 
 const NAV_LINKS = [
-  { label: 'WladBot', href: '/wladbot' },
+  { label: 'WLAD AI', href: '/wladbot' },
   { label: 'Journal', href: '/journal' },
 ];
 

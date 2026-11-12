@@ -26,7 +26,7 @@ const TIERS = [
     audience: 'Für alle, die LeaderOS erst testen wollen',
     bullets: [
       'Komplette LeaderOS-Plattform',
-      'WladBot 24/7 in deiner Tasche',
+      'WLAD AI 24/7 in deiner Tasche',
       'Elf Frameworks zum Ausprobieren',
       'Kein Abo, keine Karte, kein Risiko',
     ],
@@ -66,7 +66,7 @@ const TIERS = [
     audience: 'Für Leads, die in 30 Tagen echte Bewegung wollen',
     bullets: [
       'Alle elf Wlad-Frameworks gedrillt',
-      'WladBot 24/7 in deiner Tasche',
+      'WLAD AI 24/7 in deiner Tasche',
       '12 Monate Mitgliedschaft inkludiert',
       'Tägliche Lernvideos · Wöchen-Drills',
       'Zertifikat für dein LinkedIn',
@@ -84,13 +84,13 @@ const TIERS = [
     price: '4 797 €',
     priceSub: 'oder 3 × 1 599 €',
     outcome: 'Challenge + Drill-Channel + Live-Sessions',
-    packageLine: 'Das OS-Jahr: alle Kurse, Live-Formate, Drill-Channel, Community und WladBot — als ein System, 12 Monate lang.',
+    packageLine: 'Das OS-Jahr: alle Kurse, Live-Formate, Drill-Channel, Community und WLAD AI — als ein System, 12 Monate lang.',
     audience: 'Für Führungskräfte, die volles Enablement wollen',
     bullets: [
       'Alles aus der Challenge',
       'Monatliche Live-Sessions im kleinen Kreis',
       'Drill-Channel: Theorie sofort am echten Fall',
-      'Challenge-Historie als Kontext für WladBot',
+      'Challenge-Historie als Kontext für WLAD AI',
       'Vorrang für 1:1-Mentoring Warteliste',
     ],
     cta: 'Leadership Plus Pro starten',
@@ -142,9 +142,9 @@ const TIERS = [
     duration: 'Custom Track',
     price: 'ab 44 000 €',
     priceSub: 'individuell skaliert',
-    outcome: 'Inhouse-WladBot · Team-Lizenz · Custom-Curriculum',
+    outcome: 'Inhouse-WLAD AI · Team-Lizenz · Custom-Curriculum',
     bullets: [
-      'Custom-WladBot auf eurer Infrastruktur',
+      'Custom-WLAD AI auf eurer Infrastruktur',
       'Bis 200+ User-Lizenzen',
       '12-Monate Challenge-Curriculum auf eure Industry',
       '6 × Quarterly Strategy-Reviews',
@@ -352,7 +352,7 @@ export const PricingLadder = () => {
         </div>
         <div className="md:col-span-5 md:pt-6 text-center md:text-left">
           <p className="text-[15px] md:text-[17px] leading-[1.55] text-black/70">
-            Vierzehn Tage. Ohne Karte. Voller Plattform-Zugang. WladBot 24/7,
+            Vierzehn Tage. Ohne Karte. Voller Plattform-Zugang. WLAD AI 24/7,
             elf Frameworks, alle Lernvideos. Erst wenn es für dich passt,
             wandelst du in die 30-Tage-Challenge mit 12 Monate Mitgliedschaft.
             <span className="text-black font-bold"> Trial zuerst, immer.</span>

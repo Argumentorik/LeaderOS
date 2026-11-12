@@ -38,7 +38,7 @@ def test_episode_renders(slug):
     assert "Mert" in out["html"] or "Mert" in out["subject"]
     # No em-dashes (AI-Slop check)
     assert "—" not in out["html"]
-    # WladBot avatar uses Logo Mark
+    # WLAD AI avatar uses Logo Mark
     assert "leaderos-mark.png" in out["html"] or "leaderos-logo-dark.png" in out["html"]
 
 

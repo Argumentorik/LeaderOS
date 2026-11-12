@@ -1,4 +1,4 @@
-# MA-Feedback WladBot 3.0 / LeaderOS · Triage & To-dos
+# MA-Feedback WLAD AI / LeaderOS · Triage & To-dos
 
 > Quelle: [MA-Feedback-Doc](https://docs.google.com/document/d/1zL4VnvrI__602GZh2iGEXIYeMVTuEqPxJVVnnWOdW_I/edit)
 > (Feedback-Frist 21.08.2026). Ausgewertet am 24.08.2026.
@@ -6,7 +6,7 @@
 > **Teilnehmer:** Bennet, Dominik, Selina, Manuel, Lars, Carolin, Elias,
 > Julia, Danny — 9 mit Feedback, Niklas ohne Eintrag.
 >
-> Ziel laut Wlad: kritisches Feedback **bevor** WladBot 3.0 an die
+> Ziel laut Wlad: kritisches Feedback **bevor** WLAD AI an die
 > Masterclässler geht. Dieses Dokument ist die Arbeitsliste dafür.
 
 ## Wie diese Liste zu lesen ist
@@ -103,8 +103,8 @@ mehr Wörtern nicht.
 
 ### 5. Elias: 10 Kernfunktionen ohne Antwort 🔍
 
-Elias meldet in Folge: WladBot antwortet nicht (mit und ohne Kontext),
-Playbook „Schwieriges Mitarbeitergespräch", WladBot-Icon unten rechts,
+Elias meldet in Folge: WLAD AI antwortet nicht (mit und ohne Kontext),
+Playbook „Schwieriges Mitarbeitergespräch", WLAD AI-Icon unten rechts,
 Check-In, KI-Aufgabe generieren, Simulationen (SEXIER), Challengers-Chat,
 Videoanalyse, Workflow. Danny bestätigt zwei davon.
 
@@ -154,7 +154,7 @@ erklärt nicht ausreichend".
       Stellen aufgerufen (Zeile 426 und 459). Fix: Unique-Index auf
       `event_id` + `update_one(..., upsert=True)` statt `insert_one`
 - [ ] **Dark Mode: Schrift im Menü kaum sichtbar** (Lars) — Kontrastfehler
-- [ ] **Falsche Support-Adresse:** WladBot nennt `info@argumentorik.com`,
+- [ ] **Falsche Support-Adresse:** WLAD AI nennt `info@argumentorik.com`,
       richtig ist `support@argumentorik.com` (Carolin). Steht **nicht** im
       Repo-Code → sitzt im RAG-Korpus oder System-Prompt. Korpus prüfen
       (`docs/app/RAG_KNOWLEDGE_FLOW.md`)
@@ -169,7 +169,7 @@ erklärt nicht ausreichend".
 
 - [ ] Onboarding Seite 2: die vier Felder „Wlad. Immer an deiner Seite."
       sehen aus wie Auswahlkacheln
-- [ ] Chat: einzelne WladBot-Antworten wirken selektierbar/anklickbar
+- [ ] Chat: einzelne WLAD AI-Antworten wirken selektierbar/anklickbar
 
 ---
 
@@ -180,7 +180,7 @@ erklärt nicht ausreichend".
 Selina, Elias, Danny und Lars sagen unabhängig dasselbe: zu viel auf
 einmal, unklar wann man welchen Tab benutzt.
 
-- Selina: „nicht eindeutig, wann ich WladBot, wann Coaching, wann
+- Selina: „nicht eindeutig, wann ich WLAD AI, wann Coaching, wann
   Simulation nutze" — sie kam über *Coaching → rechts Simulation* dorthin
 - Elias: „cleaneres/minimalistischeres Design, ggf. weniger Inhalte, dafür
   ein runderes Gesamtpaket"
@@ -188,7 +188,7 @@ einmal, unklar wann man welchen Tab benutzt.
   zusammenstellen
 - Lars/Manuel: Antworten sind ein „Overload", weniger ist mehr
 
-- [ ] Informationsarchitektur überarbeiten: klare Trennung WladBot /
+- [ ] Informationsarchitektur überarbeiten: klare Trennung WLAD AI /
       Coaching / Simulation, statt drei Einstiege in dasselbe
 - [ ] Sidebar-Einträge ein-/ausblendbar (Danny)
 - [ ] **Antwortlänge und Sprachniveau an den Nutzer anpassen** (Manuel:

@@ -4,7 +4,7 @@ Stand: Iter 167 (08.09.2026). Zielgruppe: Stefan / Entwickler, die Wlads Wissens
 
 ## 1. Was RAG hier bedeutet (1 Minute)
 
-Jede Chat-Antwort von WladBot bekommt vor dem LLM-Aufruf passende Textstücke („Chunks“) aus Wlads Büchern, Skripten und Trainings in den System-Prompt gelegt. Das LLM (GPT-4o / GPT-5.2) antwortet dann mit Wlads Frameworks statt mit Allgemeinwissen.
+Jede Chat-Antwort von WLAD AI bekommt vor dem LLM-Aufruf passende Textstücke („Chunks“) aus Wlads Büchern, Skripten und Trainings in den System-Prompt gelegt. Das LLM (GPT-4o / GPT-5.2) antwortet dann mit Wlads Frameworks statt mit Allgemeinwissen.
 
 **Alles läuft lokal auf dem Backend — kein externer Embedding-Anbieter, kein API-Key, keine Kosten pro Anfrage.**
 

@@ -69,7 +69,7 @@ export default {
       type: 'callout',
       tone: 'lime',
       text:
-        'Video-Drill in LeaderOS: Nimm deine ersten sieben Sekunden vor der Kamera auf — WladBot analysiert ' +
+        'Video-Drill in LeaderOS: Nimm deine ersten sieben Sekunden vor der Kamera auf — WLAD AI analysiert ' +
         'Haltung, Blickführung und Tempo und gibt dir die zwei Korrekturen mit dem größten Hebel.',
     },
     {

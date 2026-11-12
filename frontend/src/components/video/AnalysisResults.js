@@ -129,7 +129,7 @@ export const AnalysisResults = ({
       <ScoreStrip analysis={analysis} de={de} />
       <AnalysisMagicBoxes analysis={analysis} de={de} />
 
-      {/* Deep-dive CTA — chat with WladBot */}
+      {/* Deep-dive CTA — chat with WLAD AI */}
       <Card className="border-0 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A2E] to-[#0A0A0A] text-white overflow-hidden shadow-xl shadow-black/20" data-testid="deep-feedback-card">
         <CardContent className="p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -145,8 +145,8 @@ export const AnalysisResults = ({
               </p>
               <p className="text-xs sm:text-[13px] text-white/60 leading-snug mt-1">
                 {de
-                  ? 'WladBot kennt deine Analyse und arbeitet konkret mit dir an deinen 3 Verbesserungen.'
-                  : "WladBot has your full analysis and will work with you on your 3 improvements."}
+                  ? 'WLAD AI kennt deine Analyse und arbeitet konkret mit dir an deinen 3 Verbesserungen.'
+                  : "WLAD AI has your full analysis and will work with you on your 3 improvements."}
               </p>
             </div>
             <Button

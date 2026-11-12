@@ -13,9 +13,9 @@ QUIZ_DONE = (
 
 BY_PATH = {
     "/chat": (
-        "Erledigt ist, wenn du WladBot deine Situation geschildert und eine Antwort mit "
+        "Erledigt ist, wenn du WLAD AI deine Situation geschildert und eine Antwort mit "
         "konkreten Schritten erhalten hast.",
-        "Done when you have described your situation to WladBot and received concrete steps.",
+        "Done when you have described your situation to WLAD AI and received concrete steps.",
     ),
     "/challengers": (
         "Erledigt ist, wenn du ein Rollenspiel bis zum Ende geführt und die Auswertung gelesen hast.",

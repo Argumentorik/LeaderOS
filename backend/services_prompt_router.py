@@ -1,4 +1,4 @@
-"""Prompt router for the WladBot (and any future personal brand bot).
+"""Prompt router for the WLAD AI (and any future personal brand bot).
 
 Architecture (from the napkin sketch the user shared):
 

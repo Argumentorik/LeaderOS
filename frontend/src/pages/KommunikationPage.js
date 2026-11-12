@@ -209,7 +209,7 @@ const FROSTED = {
 const HABITS = [
   { emoji: '🗣', title: 'SEXIER-Drill', sub: 'Ein Argument, sechs Schritte', pct: 85, ratio: '12/14', done: true },
   { emoji: '💬', title: 'Feedback vorbereiten', sub: 'B-W-W für das 1:1 um 14:00', pct: 100, ratio: '9/9', done: true },
-  { emoji: '🎙', title: 'Firmenrede-Struktur', sub: 'Sparring mit WladBot', pct: 67, ratio: '6/9', done: false },
+  { emoji: '🎙', title: 'Firmenrede-Struktur', sub: 'Sparring mit WLAD AI', pct: 67, ratio: '6/9', done: false },
 ];
 
 function PhoneMockup() {
@@ -480,7 +480,7 @@ function Ansaetze() {
 const APP_CARDS = [
   {
     key: 'coach',
-    eyebrow: 'KI-Coach WladBot',
+    eyebrow: 'KI-Coach WLAD AI',
     title: 'Dein Coach kennt die Methode.',
     dark: true,
     points: [

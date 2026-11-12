@@ -1,8 +1,8 @@
 /**
- * RAG Debug Studio · admin-only diagnostic tool for the WladBot knowledge base.
+ * RAG Debug Studio · admin-only diagnostic tool for the WLAD AI knowledge base.
  *
  * Lets the operator (Mert) feed any user-style query through the same local
- * embedding → Mongo vector pipeline that powers WladBot chat, and see:
+ * embedding → Mongo vector pipeline that powers WLAD AI chat, and see:
  *   - top-N chunks + similarity scores
  *   - which courses / sections / themes / layers are hit
  *   - coverage warnings (zero hits, low relevance)
@@ -171,7 +171,7 @@ export const RagDebugStudio = () => {
                 <BookOpen size={16} className="text-[#6B8A00] dark:text-[#BFFF00]" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground">WladBot Knowledge Corpus</h3>
+                <h3 className="font-bold text-foreground">WLAD AI Knowledge Corpus</h3>
                 <p className="text-[11px] text-muted-foreground">{corpusStats.total_chunks} Chunks · {corpusStats.unique_courses} Kurse · {corpusStats.unique_themes} Themen</p>
               </div>
             </div>
@@ -239,7 +239,7 @@ export const RagDebugStudio = () => {
           </div>
           <div>
             <h3 className="font-bold text-foreground">RAG Query Debugger</h3>
-            <p className="text-[11px] text-muted-foreground">Teste welche Chunks WladBot für eine bestimmte Frage retrievt.</p>
+            <p className="text-[11px] text-muted-foreground">Teste welche Chunks WLAD AI für eine bestimmte Frage retrievt.</p>
           </div>
         </div>
 

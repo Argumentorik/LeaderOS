@@ -1,7 +1,7 @@
 # LeaderOS Growth Loop — Data Model + Event Tracking Spec
 
 > The self-reinforcing system that turns SEO traffic into captured leadership
-> problems, problems into WladBot solutions, and solution data back into the
+> problems, problems into WLAD AI solutions, and solution data back into the
 > next round of content. This doc is the buildable contract: the event schema,
 > the DB model, and the loops — not just the strategy.
 
@@ -10,7 +10,7 @@
         │                                                      │
         ▼                                                      │
    1. ACQUISITION            2. PROBLEM CAPTURE        3. SOLUTION
-   SEO pillars + clusters →  WladBot funnel +      →   WladBot diagnosis →
+   SEO pillars + clusters →  WLAD AI funnel +      →   WLAD AI diagnosis →
    internal links + schema   inline diagnostics        framework → 3 steps →
         ▲                    (normalized intent)        escalation to app
         │                          │                          │
@@ -53,9 +53,9 @@ submits a leadership problem on any marketing surface.
 
 | Value                 | Surface                                                        |
 | --------------------- | ------------------------------------------------------------- |
-| `article-right-rail`  | Sticky WladBot mini-card in the article right rail.           |
+| `article-right-rail`  | Sticky WLAD AI mini-card in the article right rail.           |
 | `article-diagnostic`  | Inline "Which situation are you in?" block inside body copy.  |
-| `wladbot-card`        | Standalone WladBot funnel card (journal index / landing).     |
+| `wladbot-card`        | Standalone WLAD AI funnel card (journal index / landing).     |
 | `unknown`             | Fallback when a caller forgets to pass `opts.source`.         |
 
 **Person-property roll-up.** On capture, when the category resolves (not
@@ -84,7 +84,7 @@ and every downstream query keeps working. Don't rename fields; only add.
 ## Layer 3 — solution routing
 
 `wladbotUrlForIntent(intent, articleTitle)` builds the deep-link into the app's
-WladBot (`https://leaderos.de/chat`) carrying the captured intent so the bot
+WLAD AI (`https://leaderos.de/chat`) carrying the captured intent so the bot
 opens with a category-tuned diagnosis instead of a blank prompt:
 
 ```
@@ -164,8 +164,8 @@ leadership problem with the keywords to target.
 | Loop | Name              | Mechanic                                                                 |
 | ---- | ----------------- | ------------------------------------------------------------------------ |
 | A    | Acquisition       | Pillar ranks → cluster articles internal-link to it → topical authority rises → pillar ranks higher. |
-| B    | Capture→Solve     | Every article has a capture block → intent → WladBot deep-link with attribution → conversation → conversion. |
-| C    | Solution quality  | WladBot answers (diagnosis/framework/steps) feed back which framings convert → tighten the prompts. |
+| B    | Capture→Solve     | Every article has a capture block → intent → WLAD AI deep-link with attribution → conversation → conversion. |
+| C    | Solution quality  | WLAD AI answers (diagnosis/framework/steps) feed back which framings convert → tighten the prompts. |
 | D    | Content feedback  | Clustered intents → `content_gaps` → write the cluster article → it captures more intent in that category. |
 
 The flywheel: more traffic → more captured problems → better content map →
@@ -182,7 +182,7 @@ more traffic. Each turn is cheaper than the last because the content compounds.
 - ✅ `leadership_intent_captured` PostHog event + person roll-up.
 - ✅ Inline diagnostic block (`InlineDiagnostic.jsx`) + `diagnostic` block type
   in `BlockRenderer.jsx`, wired into all four leadership-development pillars.
-- ✅ WladBot right-rail card routed through the normalized capture.
+- ✅ WLAD AI right-rail card routed through the normalized capture.
 
 **Proposed (next):**
 

@@ -5,7 +5,7 @@ import { topicThemeFor } from '../utils/topicCovers';
  * RelatedArticles · „Weiter lesen" unter jedem Artikel.
  *
  * Jede Karte zeigt ein Foto passend zum Thema (utils/topicCovers.js), keine
- * WladBot-Sprechblasen. Teilen sich zwei Karten ein Thema, bekommt die zweite
+ * WLAD AI-Sprechblasen. Teilen sich zwei Karten ein Thema, bekommt die zweite
  * die andere Bildvariante, damit nie zweimal dasselbe Foto nebeneinander steht.
  */
 export const RelatedArticles = ({ articles }) => {

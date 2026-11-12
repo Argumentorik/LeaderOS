@@ -19,7 +19,7 @@ single SaaS product based on the methodology of Wlad Jachtchenko
 | Surface | Domain | Auth | Purpose |
 |---|---|---|---|
 | **leader-check** | `leader-check.de` | Anonymous | Free diagnostic funnel -- KI score, Rhetoric score, EQ score. Captures leads, links them to the paid platform via `email_lower`. |
-| **leader-os** | `leader-os.de` | Authenticated | Full coaching app: AI coach (WladBot), video courses, 30-day challenge, simulations, playbooks, community, and the AI Strategist. |
+| **leader-os** | `leader-os.de` | Authenticated | Full coaching app: AI coach (WLAD AI), video courses, 30-day challenge, simulations, playbooks, community, and the AI Strategist. |
 
 Both domains serve the same React application. The backend API lives at
 `https://leader-os.de/api/*` and is proxied through Vercel rewrites.
@@ -105,7 +105,7 @@ AI credits/month.
 | `/auth/magic` | MagicLinkVerifyPage | Public |
 | `/onboarding` | OnboardingPage | Protected |
 | `/dashboard` | DashboardPage | Protected |
-| `/chat` | ChatPage (WladBot AI coach) | Protected |
+| `/chat` | ChatPage (WLAD AI AI coach) | Protected |
 | `/missions` | VideoChallengePage | Protected |
 | `/simulations` | SimulationsPage | Protected |
 | `/playbooks` | PlaybooksPage | Protected |
@@ -121,7 +121,7 @@ AI credits/month.
 
 | Aspect | Detail |
 |---|---|
-| Framework | FastAPI v5.0 ("WladBot API") |
+| Framework | FastAPI v5.0 ("WLAD AI API") |
 | Python | 3.11 |
 | Hosting | Emergent pod, supervisor-managed |
 | Port | 8001 |
@@ -581,7 +581,7 @@ first 2 weeks post-launch, then weekly.
 | URL | Purpose |
 |---|---|
 | `GET /api/health` | Backend liveness (returns `{"status": "ok"}`) |
-| `GET /api/` | Version check (returns `WladBot API v5.0`) |
+| `GET /api/` | Version check (returns `WLAD AI API v5.0`) |
 | `GET /api/payments/packages` | Public package listing (also serves as integration smoke test) |
 
 ### Incident Response

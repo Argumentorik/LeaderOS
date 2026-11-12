@@ -29,7 +29,7 @@ def build_email() -> tuple[str, str]:
         card("Neu", "Godmode-Onboarding für neue User",
              "Neue Kunden sehen beim ersten Login sofort, was sie bekommen: \u201eWlad — immer an deiner Seite\u201c — dein Wissen, Video-Feedback wie im 1:1, tägliches Wachstum, mobil überall. Danach kalibriert sich der Coach in 60 Sekunden auf jeden User."),
         card("Neu", "E-Mail-Serie: EP 01/07 – EP 07/07 mit deinen Frameworks",
-             "Statt Marketing-Storys lernen die User in 7 Episoden je EIN Framework von dir — SEXIER, Feedback-Formel (SBI+WWW), Delegations-Matrix, DESC, Storytelling für Entscheider, dein 30-Tage-System — inkl. direkter Übung in der App. Neues Design mit deinem WladBot 3.0 Avatar in jeder Mail."),
+             "Statt Marketing-Storys lernen die User in 7 Episoden je EIN Framework von dir — SEXIER, Feedback-Formel (SBI+WWW), Delegations-Matrix, DESC, Storytelling für Entscheider, dein 30-Tage-System — inkl. direkter Übung in der App. Neues Design mit deinem WLAD AI Avatar in jeder Mail."),
         card("Bereit", "Lizenz-Key-System für die 400 Masterclass-Kunden",
              "Keys werden im Admin-Panel generiert, Einlösung dauert unter 60 Sekunden: Key eingeben → Konto aktiv → Onboarding → ab Tag 1 die Framework-Serie. Zahlungen (Stripe live), DSGVO, Trust-Center — alles steht."),
     ])
@@ -42,7 +42,7 @@ def build_email() -> tuple[str, str]:
 Hallo Wlad,<br><br>
 das Warten hat sich gelohnt: Wir haben dein gesamtes Material — <b>25 Kurse + 28 Live-Call-Transkripte</b> — in
 <b style="color:{BRAND_COLOR};">7.439 Wissens-Bausteine</b> verwandelt und direkt in Leader-OS integriert.
-Der WladBot antwortet jetzt zu 100% auf Basis deiner Original-Inhalte.
+Der WLAD AI antwortet jetzt zu 100% auf Basis deiner Original-Inhalte.
 </p>
 
 {cards}
@@ -51,7 +51,7 @@ Der WladBot antwortet jetzt zu 100% auf Basis deiner Original-Inhalte.
   <div style="font-size:9px;letter-spacing:0.18em;color:{BRAND_COLOR};font-weight:900;text-transform:uppercase;margin-bottom:6px;">Deine 5 Minuten — der finale Check</div>
   <p style="font-size:14px;color:#fff;margin:0 0 6px;line-height:1.7;">
     <b>1.</b> Auf leaderos.de mit Google einloggen<br>
-    <b>2.</b> WladBot 2–3 Fachfragen stellen (z.B. „Erkläre die Weiße Rhetorik", „Wie setze ich einen Anker in der Verhandlung?")<br>
+    <b>2.</b> WLAD AI 2–3 Fachfragen stellen (z.B. „Erkläre die Weiße Rhetorik", „Wie setze ich einen Anker in der Verhandlung?")<br>
     <b>3.</b> Prüfen: Entsprechen die Antworten deinem Standard?<br>
     <b>4.</b> Kurz antworten — ein Satz Feedback reicht.
   </p>

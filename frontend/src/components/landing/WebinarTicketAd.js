@@ -21,7 +21,7 @@ const WEBINAR_URL = 'https://leader-os.de/webinar?utm_source=qr&utm_medium=onsit
 
 const BULLETS = [
   'Live: der Charisma-Code in Echtzeit demonstriert',
-  'Das Leadership Operating System · WladBot, 11 Frameworks',
+  'Das Leadership Operating System · WLAD AI, 11 Frameworks',
   'Offenes Q&A · bring deine härteste Führungsfrage mit',
 ];
 

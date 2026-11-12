@@ -29,7 +29,7 @@ const FADE_UP = {
 
 const BENEFITS = [
   ['SEATS', 'Team-Staffel ab 10 Lizenzen · Rabatt wächst mit der Größe'],
-  ['BOT', 'Custom-WladBot · auf eurer Infrastruktur, euer Kontext'],
+  ['BOT', 'Custom-WLAD AI · auf eurer Infrastruktur, euer Kontext'],
   ['SSO', 'SSO + Audit-Logs · IT-freundlich ab Tag 1'],
   ['ROLL', 'Rollout mit Reporting · Leader-Check als Team-Diagnose'],
 ];
@@ -125,7 +125,7 @@ export const LicenseKeySection = () => {
           </h2>
           <p className="mt-6 max-w-xl text-[15px] md:text-[16.5px] leading-[1.6] text-white/72">
             Ab zehn Führungskräften wird LeaderOS zur Team-Lizenz: ein Rollout, eine Diagnose-Baseline,
-            ein Reporting — und WladBot mit dem Kontext eures Unternehmens. Beantrage den Key,
+            ein Reporting — und WLAD AI mit dem Kontext eures Unternehmens. Beantrage den Key,
             wir melden uns <span className="text-white font-bold">innerhalb von 24 Stunden</span> mit eurem Angebot.
           </p>
 

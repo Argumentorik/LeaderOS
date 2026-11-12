@@ -67,7 +67,7 @@ Ein Versuch für dich heute: starte das nächste wichtige Gespräch mit deinem P
 8 Sekunden, bis dein Gegenüber zuhört oder abschaltet.
 Statement zuerst.
 
-**CTA**: WladBot starten · *Asset*: `hf-02.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-02.png`
 
 ---
 
@@ -148,7 +148,7 @@ Letzter Satz: Erinnerung.
 Mittelteil: Nebel.
 Plan beide.
 
-**CTA**: WladBot starten · *Asset*: `hf-05.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-05.png`
 
 ---
 
@@ -256,7 +256,7 @@ Wenn dich Kollegen „die Datenbank" nennen, bist du Experte. Komplett legitim. 
 Experte verliert nicht das Argument.
 Er verliert den Raum.
 
-**CTA**: WladBot starten · *Asset*: Carousel-Cover
+**CTA**: WLAD AI starten · *Asset*: Carousel-Cover
 
 ---
 
@@ -333,7 +333,7 @@ Aktivist allein = Crash.
 Aktivist + Visionär = Mission.
 Aktivist + Hüter = Resilienz.
 
-**CTA**: WladBot starten · *Asset*: `hf-03.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-03.png`
 
 ---
 
@@ -435,7 +435,7 @@ Beobachtung = Kamera.
 Etikett = Vorurteil.
 Eins führt zu Reflexion. Eins zu Streit.
 
-**CTA**: WladBot starten · *Asset*: `hf-07.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-07.png`
 
 ---
 
@@ -517,7 +517,7 @@ BWW ist mächtig.
 Religiös angewendet ist es schwach.
 Werkzeuge wählen ≠ Werkzeuge wiederholen.
 
-**CTA**: WladBot starten · *Asset*: `hf-03.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-03.png`
 
 ---
 
@@ -624,7 +624,7 @@ Wahrheit: nach 7 Minuten erinnert sich keiner mehr an deine 12 Datenpunkte. An d
 Drei Datenpunkte.
 Mehr ist Lärm.
 
-**CTA**: WladBot starten · *Asset*: `hf-06.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-06.png`
 
 ---
 
@@ -707,7 +707,7 @@ Improvisation funktioniert — wenn die 80% vorbereitet sind.
 100% spontan wirken.
 Das ist Vorbereitung, nicht Talent.
 
-**CTA**: WladBot starten · *Asset*: `hf-02.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-02.png`
 
 ---
 
@@ -806,7 +806,7 @@ Ignorieren · Vortäuschen · Selektiv.
 Drei Arten, nicht zuzuhören.
 Beobachte dich heute.
 
-**CTA**: WladBot starten · *Asset*: `hf-05.png`
+**CTA**: WLAD AI starten · *Asset*: `hf-05.png`
 
 ---
 
@@ -824,7 +824,7 @@ Beobachte dich heute.
 🟪 IG: Slides: 1) Stufe 5 · 2) Wiederholen · 3) Spiegeln · 4) Klären · 5) → leader-check.de
 🟦FB: Verständnis bewiesen ≠ Verständnis behauptet. Klingt klein. Verändert Beziehungen.
 ⬛ X: Aktives Zuhören = Beweis, dass du verstanden hast. Vor Antwort.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D33 · Fr · Stufe 6 — Empathisch
 🟦 LI: Empathie ≠ Mitleid. Empathie = du verstehst seine Innenseite. „Klingt, als hätte dich das Meeting frustriert." Drei Wörter: klingt-als-hätte. Öffnet jeden Raum. Profis bleiben hier 20% ihrer Konversationen.
@@ -865,7 +865,7 @@ Beobachte dich heute.
 🟪 IG: Slides Sach-Ebene + Dauer-Test · 5) → leader-check.de
 🟦FB: Sach-Konversation > 15 Min = nicht Sach. Ebenenwechsel diagnostizieren.
 ⬛ X: Sach > 15 Min = nicht Sach.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D38 · Mi · Selbstoffenbarung (Thread)
 🟦 LI: Jeder Satz zeigt etwas von dir. Auch der vermeintlich neutrale. Profis hören Selbstoffenbarung *zuerst* — sie ist die schnellste Diagnose des Gegenübers. Drei Marker: Wortwahl, Reihenfolge, was *fehlt*. Was er weglässt, sagt mehr als was er sagt.
@@ -886,7 +886,7 @@ Beobachte dich heute.
 🟪 IG: Appell-Klarheit · 5) → leader-check.de
 🟦FB: 50% E-Mail-Müll = unklarer Appell. Heute eine E-Mail mit klarem Appell schreiben.
 ⬛ X: Unklarer Appell = Antwort rät. Antwort rät meistens falsch.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D41 · Sa · Quadrat-Drill
 🟦 LI (kurz): Drill: nimm eine Konversation der letzten Woche, in der's gekippt ist. Schreib alle 4 Ebenen auf, beide Seiten. Du wirst sehen, wer auf welcher Ebene gesendet/empfangen hat. Klarste Lehre der Woche.
@@ -918,7 +918,7 @@ Beobachte dich heute.
 🟪 IG: Slides Dilemma · Konter-Frage · 5) → leader-check.de
 🟦FB: Heute Lauschpost: zähl, wie oft „entweder X oder Y" in Meetings fällt. Du wirst staunen.
 ⬛ X: „Entweder X oder Y" — meistens drittes Y existiert.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D45 · Mi · Technik 2 — Strohmann
 🟦 LI: Strohmann = du sagst A, er beantwortet B (eine extreme Karikatur von A) und gewinnt scheinbar. „Du willst also alle Mitarbeiter feuern?" wenn du gesagt hast „wir sollten Effizienz prüfen". Konter: „Das habe ich nicht gesagt. Ich habe X gesagt. Reagiert bitte auf X."
@@ -939,10 +939,10 @@ Beobachte dich heute.
 🟪 IG: Slides 3-Wochen-Drill · 5) → leader-check.de
 🟦FB: Dunkle Rhetorik erkennen ist wie Bewegungsmelder im Garten. Aufmerksamkeit steigt, Stress sinkt.
 ⬛ X: Erkennen > Anwenden. Immer.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D48 · Sa · Buch-Drop (Wlad SPIEGEL)
-🟦 LI (kurz): Wlads „Dunkle Rhetorik" war Wochen auf SPIEGEL-Liste. 80.000 Verkäufe. Wenn du die Techniken vertiefen willst — das Buch ist der Klassiker. Wer's lieber kompakt mag: WladBot kennt jeden Chunk.
+🟦 LI (kurz): Wlads „Dunkle Rhetorik" war Wochen auf SPIEGEL-Liste. 80.000 Verkäufe. Wenn du die Techniken vertiefen willst — das Buch ist der Klassiker. Wer's lieber kompakt mag: WLAD AI kennt jeden Chunk.
 🟪 IG Story: Buch-Drop
 🟦FB: Wlad hat 13 Bücher geschrieben. Drei davon SPIEGEL. Wer das Original will: hier.
 ⬛ X: Buch oder Bot. Beides Wlad.
@@ -971,7 +971,7 @@ Beobachte dich heute.
 🟪 IG: Slides Rot · 5) → leader-check.de
 🟦FB: Wenn dein Chef ungeduldig wirkt: er ist nicht unhöflich, er ist Rot.
 ⬛ X: Rot will: Ergebnis. Jetzt.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D52 · Mi · GELB (Thread)
 🟦 LI: Gelb will Vision. Story. Emotion. Zahlen langweilen ihn. Sende gelb: bilderreich, energetisch, mit „wenn wir das schaffen…"-Sätzen. Gelb braucht keine 5 Datenpunkte — er braucht ein Plakat im Kopf.
@@ -992,7 +992,7 @@ Beobachte dich heute.
 🟪 IG: Slides Blau · 5) → leader-check.de
 🟦FB: Blau ist CFO, Ingenieur, Rechtsabteilung. Sende präzise, oder schweige.
 ⬛ X: Blau vertraut, wenn du Limitationen *selbst* nennst.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D55 · Sa · Mix-Drill
 🟦 LI (kurz): Drill für's Wochenende: schreib denselben Pitch in vier Versionen — rot, gelb, grün, blau. 5 Minuten. Du wirst nie wieder einen einseitigen Pitch halten.
@@ -1024,7 +1024,7 @@ Beobachte dich heute.
 🟪 IG: Slides RK · 5) → leader-check.de
 🟦FB: Drei Sekunden zu kaufen ist Profi-Sport. Rückwärts-Kompliment kauft sie.
 ⬛ X: „Sehr offene Frage — danke." 3 Sek Bonus.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D59 · Mi · Technik „Reframe" (Thread)
 🟦 LI: Jemand wirft dir Eigenschaft X vor. Reframe: „Stimmt — ich nenne das…" und gib dem Vorwurf einen positiven Namen. „Sie sind aggressiv." → „Stimmt — ich nenne das verbindlich." Vorwurf entwaffnet, ohne ihn zu leugnen.
@@ -1047,7 +1047,7 @@ Beobachte dich heute.
 🟪 IG: Slides Witz · 5) → leader-check.de
 🟦FB: Selbst-Ironie immer. Witz auf andere — nie im Office.
 ⬛ X: Lacht der Raum, hast du gewonnen.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D62 · Sa · Technik „Bühnen-Pause"
 🟦 LI (kurz): Schweige 3 Sekunden. Es fühlt sich wie 30 an. Aber: Schweigen ist Macht. Das Gegenüber wird unruhig, klärt sich oft selbst. Pause vor harten Sätzen verdoppelt Wirkung.
@@ -1079,7 +1079,7 @@ Beobachte dich heute.
 🟪 IG: Slides A · 5) → leader-check.de
 🟦FB: Brain-Dump morgens. Mehr nicht. Reicht für 80%.
 ⬛ X: Hirn entlasten = Aufgaben aufschreiben.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D66 · Mi · L = Länge (Thread)
 🟦 LI: Schätze für jede Aufgabe die Länge. Sei realistisch — du bist optimistisch. Profi-Trick: nimm dein Bauchgefühl × 1,5. Wer eine 30-Min-Aufgabe als 30-Min plant, scheitert. Plane sie als 45-Min und gewinne.
@@ -1100,7 +1100,7 @@ Beobachte dich heute.
 🟪 IG: Slides Entscheidung · 5) → leader-check.de
 🟦FB: Max 3 Top-Tasks. Mehr ist Selbstbetrug.
 ⬛ X: 3 Top-Tasks. Rest delegieren · planen · löschen.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D69 · Sa · N = Nachkontrolle
 🟦 LI (kurz): Abends 5 Min Review. Was geschafft, was nicht, warum. Nicht für Schuld — für Lerndaten. Über 30 Tage siehst du, wo du systematisch falsch schätzt. Dort liegt deine größte Stunde.
@@ -1132,7 +1132,7 @@ Beobachte dich heute.
 🟪 IG: Slides Mensch≠Sache · 5) → leader-check.de
 🟦FB: Hart in Sache, weich am Mensch. Klingt Sprichwort. Ist Profi-Skill.
 ⬛ X: Hart-Sache · Weich-Mensch.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D73 · Mi · Interessen statt Positionen (Thread)
 🟦 LI: Position = was er fordert. Interesse = warum er es fordert. Verhandle Interessen, nicht Positionen. „Ich will 60K mehr Gehalt." (Position) → „Warum jetzt 60K?" → „Weil ich Wertschätzung sehe." → Wertschätzung ist verhandelbar in vielen Währungen.
@@ -1153,7 +1153,7 @@ Beobachte dich heute.
 🟪 IG: Slides Objektiv · 5) → leader-check.de
 🟦FB: „Marktpreis ist X" > „Ich will X". Objektive Anker entwaffnen.
 ⬛ X: Objektiver Maßstab > „weil ich".
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D76 · Sa · BATNA (Bonus)
 🟦 LI (kurz): BATNA = Best Alternative To Negotiated Agreement. Kenne sie. Sie ist deine wahre Macht. Verhandeln ohne BATNA = blind verhandeln.
@@ -1185,13 +1185,13 @@ Beobachte dich heute.
 🟪 IG: Slides Druckprüfung · 5) → leader-check.de
 🟦FB: 10 Min Sparring mit KI vor schweren Entscheidungen. Probieren.
 ⬛ X: KI = geduldiger Sparringspartner ohne Ego.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
-### D80 · Mi · WladBot-Demo (Thread)
-🟦 LI: WladBot beantwortet nicht generisch — sondern in Wlads Stimme, mit Wlads Frameworks. Beispiel: „Wie strukturiere ich ein hartes 1:1?" → BWW-Formel + Kontext-Frage + konkrete Sätze. Nicht „kommt drauf an" — sondern „mach X, Y, Z".
-🟪 IG: Slides WladBot-Demo · 5) → leader-check.de
-🟦FB: WladBot ist kein ChatGPT mit Logo. Er ist Wlads Methodik, ohne Wlads Kalender.
-⬛ X Thread: 1/ Frage WladBot 2/ Frameworks, nicht Floskeln 3/ Wladstimme.
+### D80 · Mi · WLAD AI-Demo (Thread)
+🟦 LI: WLAD AI beantwortet nicht generisch — sondern in Wlads Stimme, mit Wlads Frameworks. Beispiel: „Wie strukturiere ich ein hartes 1:1?" → BWW-Formel + Kontext-Frage + konkrete Sätze. Nicht „kommt drauf an" — sondern „mach X, Y, Z".
+🟪 IG: Slides WLAD AI-Demo · 5) → leader-check.de
+🟦FB: WLAD AI ist kein ChatGPT mit Logo. Er ist Wlads Methodik, ohne Wlads Kalender.
+⬛ X Thread: 1/ Frage WLAD AI 2/ Frameworks, nicht Floskeln 3/ Wladstimme.
 **CTA**: Sprint 0001
 
 ### D81 · Do · Was KI nicht ist
@@ -1206,7 +1206,7 @@ Beobachte dich heute.
 🟪 IG: Slides KI-Team · 5) → leader-check.de
 🟦FB: KI im Team = Vorbild + Sicherheit + Wins. Reihenfolge zählt.
 ⬛ X: Vorbild · Sicherheit · Wins.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D83 · Sa · Selbst-Audit
 🟦 LI (kurz): Wochenend-Audit: Wo hast du diese Woche KI eingesetzt? Wo nicht — obwohl du sollten? Top 3 Use-Cases für nächste Woche aufschreiben.
@@ -1227,9 +1227,9 @@ Beobachte dich heute.
 ## WOCHE 13 · TRUST + SPRINT-RECAP
 
 ### D85 · Mo · Wer ist Wlad
-🟦 LI: 400.000 Kunden weltweit. 3× SPIEGEL-Bestseller. 14M Views auf Podcast + YouTube. Staatlich zertifizierte Argumentorik-Ausbildung. 13 Bücher. Genau diese Methodik hat er in WladBot gegossen — nicht als generisches LLM, sondern als RAG auf 2.212 authentischen Wlad-Chunks.
+🟦 LI: 400.000 Kunden weltweit. 3× SPIEGEL-Bestseller. 14M Views auf Podcast + YouTube. Staatlich zertifizierte Argumentorik-Ausbildung. 13 Bücher. Genau diese Methodik hat er in WLAD AI gegossen — nicht als generisches LLM, sondern als RAG auf 2.212 authentischen Wlad-Chunks.
 🟪 IG: Slides Wer-Wlad · 5) → leader-check.de
-🟦FB: Wlad live nur 30 Mal pro Jahr buchbar. WladBot 24/7. Mathematik.
+🟦FB: Wlad live nur 30 Mal pro Jahr buchbar. WLAD AI 24/7. Mathematik.
 ⬛ X: 400K · 14M · 3×SPIEGEL · 13 Bücher · 1 Bot.
 **CTA**: leader-check.de
 
@@ -1238,10 +1238,10 @@ Beobachte dich heute.
 🟪 IG: Slides Stimmen · 5) → leader-check.de
 🟦FB: Drei O-Töne von Kohorte 01. Klingt vielleicht klein. Ist Karriere.
 ⬛ X: „Mandat geholt." „Drama-frei." „Stufe-3-Schock." Kohorte 01.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D87 · Mi · Sprint-Mechanik (Thread)
-🟦 LI: Sprint 0001 — 30 Tage Mechanik: jeden Tag 1 Frage von WladBot, 1 Drill, 1 Reflexion in 15 Min. Sonntags 30 Min Wochen-Review mit Wlad-Audio. Tag 30: Zertifikat plus „Mehr lernen oder Aufbau-Sprint"-Gabel.
+🟦 LI: Sprint 0001 — 30 Tage Mechanik: jeden Tag 1 Frage von WLAD AI, 1 Drill, 1 Reflexion in 15 Min. Sonntags 30 Min Wochen-Review mit Wlad-Audio. Tag 30: Zertifikat plus „Mehr lernen oder Aufbau-Sprint"-Gabel.
 🟪 IG: Slides Sprint-Mechanik · 5) → leader-check.de
 🟦FB: 15 Min am Tag. 30 Tage. Verändert Führungs-Identität, nicht nur Skill.
 ⬛ X Thread: 1/ 15 Min/Tag 2/ 30 Tage 3/ Zertifikat 4/ Identität, nicht Skill.
@@ -1255,11 +1255,11 @@ Beobachte dich heute.
 **CTA**: leader-check.de
 
 ### D89 · Fr · FAQ-Block
-🟦 LI: Drei häufige Fragen: 1) Funktioniert WladBot auf Englisch? Ja, DE + EN. 2) Datenschutz? EU-Server, GDPR, kein Training mit deinen Daten. 3) Was wenn ich abbreche? Sprint ist self-paced, du verlierst nichts. Mehr in der Diagnose-Mail.
+🟦 LI: Drei häufige Fragen: 1) Funktioniert WLAD AI auf Englisch? Ja, DE + EN. 2) Datenschutz? EU-Server, GDPR, kein Training mit deinen Daten. 3) Was wenn ich abbreche? Sprint ist self-paced, du verlierst nichts. Mehr in der Diagnose-Mail.
 🟪 IG: Slides FAQ · 5) → leader-check.de
 🟦FB: Top-3-Fragen beantwortet. Mehr in der Mail nach Diagnose.
 ⬛ X: DE+EN · EU-Server · self-paced.
-**CTA**: WladBot starten
+**CTA**: WLAD AI starten
 
 ### D90 · Sa · Last Call
 🟦 LI (kurz): Heute Tag 90 von 90. Wer mit-gelesen hat: respect. Wer noch nicht losgelegt hat: heute starten. Diagnose 5 Min. Sprint 30 Tage. OS lebenslang.
@@ -1285,11 +1285,11 @@ Danke fürs Lesen. Jetzt führen.
 - **91 Tage** vollständig getextet
 - **364 Posts** (91 × 4 Plattformen)
 - **13 Frameworks** abgedeckt (alle Wlad-Methoden + KI-native Leadership)
-- **3 CTAs** rotierend (leader-check.de · WladBot starten · Sprint 0001)
+- **3 CTAs** rotierend (leader-check.de · WLAD AI starten · Sprint 0001)
 - **Asset-Plan**: 7 Higgsfield-Bilder rotieren im Specimen-Frame; Story-Tage benötigen kein Hero-Asset
 
 Generierungs-Workflow: jeder Post-Body lässt sich 1:1 in den Buffer / Hootsuite / Latergram laden. Lokalisierung
-(DE→EN) via WladBot mit Prompt „Übersetze in Wlads englischen Ton, ohne Idiome zu verlieren."
+(DE→EN) via WLAD AI mit Prompt „Übersetze in Wlads englischen Ton, ohne Idiome zu verlieren."
 
 Ads & 3 zusätzliche Funnels: siehe `docs/gtm/ADS_90D.md`.
 

@@ -19,7 +19,7 @@ export default {
     { type: 'framework', code: 'V·KI', title: 'Vorausschau-Routine', explanation: 'Jeden Montag: gib KI deine 3 wichtigsten strategischen Fragen + 5 News-Quellen aus deiner Branche. Antwort-Form: "3 Szenarien, je 80 Wörter, mit Wahrscheinlichkeit". Dauer 15 Minuten. Output: dein Wochen-Briefing das du im Kopf hast bevor das Team morgens reinkommt.' },
     { type: 'heading', level: 2, text: 'Rolle 02: Der Entscheider.' },
     { type: 'paragraph', text: 'Entscheidungen sind das eine Produkt das du jeden Tag lieferst. Schlechte Entscheidungen kosten dein Team Wochen. KI als Sparringspartner halbiert die Zeit bis zur Entscheidung · nicht weil sie entscheidet, sondern weil sie dich zwingt deine Optionen klar zu formulieren.' },
-    { type: 'framework', code: 'E·KI', title: 'Entscheider-Drill', explanation: 'Vor jeder größeren Entscheidung: paste die Situation in den WladBot, frage nach "drei Optionen, jede mit dem stärksten Gegen-Argument". Lies. Entscheide. Dauer 8 Minuten. Du wirst merken: du entscheidest schneller UND sauberer.' },
+    { type: 'framework', code: 'E·KI', title: 'Entscheider-Drill', explanation: 'Vor jeder größeren Entscheidung: paste die Situation in den WLAD AI, frage nach "drei Optionen, jede mit dem stärksten Gegen-Argument". Lies. Entscheide. Dauer 8 Minuten. Du wirst merken: du entscheidest schneller UND sauberer.' },
     { type: 'heading', level: 2, text: 'Rolle 03: Der Kommunikator.' },
     { type: 'paragraph', text: 'Du redest mehr als du baust. 80 Prozent deines Tages ist Kommunikation. Schlechte Kommunikation kostet dein Team Klarheit, dich Energie. Hier ist KI der größte unsichtbare Verstärker. Nicht weil sie für dich spricht, sondern weil sie dich zwingt klar zu sein bevor du es laut sagst.' },
     { type: 'framework', code: 'K·KI', title: 'Kommunikator-Routine', explanation: 'Vor jedem wichtigen Gespräch: gib KI deinen Ziel-Satz, deinen Empfänger, dein Risiko. Lass dir drei Eröffnungs-Varianten geben: härter, weicher, neutral. Wähle. Geh ins Gespräch. Dauer 4 Minuten. Wirkung: du klingst überlegt statt impulsiv.' },
@@ -32,7 +32,7 @@ export default {
     { type: 'heading', level: 2, text: 'Was passiert wenn du ALLE fünf mit KI verstärkst.' },
     { type: 'paragraph', text: 'Die Zahlen aus den letzten 30 Klienten die alle fünf Rollen mit KI durchziehen, 30 Tage Challenge: median 7-12 Stunden zurückgewonnene Zeit pro Woche, halbierte Entscheidungs-Zyklen, deutlich klarere Kommunikation laut Team-Feedback. Eine Rolle alleine bringt 1-2 Stunden. Alle fünf bringen einen kompletten Arbeitstag pro Woche.' },
     { type: 'paragraph', text: 'Das ist nicht "KI nutzen". Das ist KI-nativ führen.' },
-    { type: 'callout', tone: 'lime', text: 'Genau diese fünf Rollen-Routinen sind in LeaderOS verbaut · als tägliche Mikro-Drills am echten Fall, nicht als Theorie. Plus elf drillbare Frameworks und WladBot 24/7. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte. Hier reinschauen: leader-os.de/#klassen' },
+    { type: 'callout', tone: 'lime', text: 'Genau diese fünf Rollen-Routinen sind in LeaderOS verbaut · als tägliche Mikro-Drills am echten Fall, nicht als Theorie. Plus elf drillbare Frameworks und WLAD AI 24/7. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte. Hier reinschauen: leader-os.de/#klassen' },
   ],
   seo: {
     title: 'Die 5 Rollen einer KI-nativen Führungskraft · LeaderOS',

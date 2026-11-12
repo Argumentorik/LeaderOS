@@ -134,7 +134,7 @@ export default {
       text:
         'LeaderOS löst diese Entscheidung anders, indem es beides gleichzeitig kann: die Frameworks sind ' +
         'standardisiert und geprüft (aus über 400.000 Coaching-Fällen), aber jede Anwendung im täglichen Drill ' +
-        'läuft ausschließlich an den echten, vertraulichen Fällen der einzelnen Führungskraft — mit WladBot als ' +
+        'läuft ausschließlich an den echten, vertraulichen Fällen der einzelnen Führungskraft — mit WLAD AI als ' +
         'Sparringspartner, der nur diese eine Person sieht.',
     },
   ],

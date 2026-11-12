@@ -72,7 +72,7 @@ export const WladMotivationCard = ({ de = true }) => {
                 persona="wlad"
                 size="sm"
                 variant="pill"
-                label={de ? 'WladBot hören' : 'Hear Wlad'}
+                label={de ? 'WLAD AI hören' : 'Hear Wlad'}
                 testId="wlad-daily-voice"
               />
             </div>

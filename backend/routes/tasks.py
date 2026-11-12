@@ -32,7 +32,7 @@ async def create_task(data: TaskCreate, request: Request):
 
 @router.post("/tasks/generate")
 async def generate_ai_tasks(request: Request):
-    """WladBot generates 5 personalised leadership tasks from the user's profile."""
+    """WLAD AI generates 5 personalised leadership tasks from the user's profile."""
     from lib.llm_provider import MODEL, LlmChat, UserMessage
     from services_ai_parse import parse_ai_json
     user = await get_current_user(request)
@@ -52,7 +52,7 @@ async def generate_ai_tasks(request: Request):
         chat = LlmChat(
             session_id=f"taskgen_{uuid.uuid4().hex[:8]}",
             system_message=(
-                "Du bist WladBot — Wlad Jachtchenkos Leadership-Coach. Generiere GENAU 5 konkrete, sofort umsetzbare "
+                "Du bist WLAD AI — Wlad Jachtchenkos Leadership-Coach. Generiere GENAU 5 konkrete, sofort umsetzbare "
                 "Leadership-Aufgaben für diese Woche, zugeschnitten auf das Profil des Users. Jede Aufgabe: klarer "
                 "Titel (max 10 Wörter, beginnt mit Verb), 1-2 Sätze Beschreibung mit Wlad-Methodik-Bezug. "
                 "Keine Duplikate zu den bereits offenen Aufgaben. Deutsch.\n"

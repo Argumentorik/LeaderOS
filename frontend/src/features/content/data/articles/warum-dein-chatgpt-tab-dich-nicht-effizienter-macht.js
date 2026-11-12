@@ -25,7 +25,7 @@ export default {
     { type: 'paragraph', text: 'Dein Team profitiert nicht von deinen besten Prompts. Du baust einen privaten Effizienz-Hebel statt einen System-Effekt. Konter: ein wöchentlicher Slack-Channel oder Notion-Seite "Prompt der Woche". Multiplikator-Effekt.' },
     { type: 'framework', code: '5 ANTI', title: 'Fünf Versickerungs-Muster', explanation: 'Falsche Aufgaben · Iterations-Spirale statt Strukturierung · fehlender Kontext · keine Wiederverwendung · fehlendes Teilen. Wer alle fünf gleichzeitig hat, verbrennt etwa 60-70 Prozent seiner KI-Zeit. Wer drei adressiert, gewinnt zwei Stunden pro Woche zurück.' },
     { type: 'callout', tone: 'lime', text: 'Effizienz aus KI entsteht nicht durch mehr Nutzung · sie entsteht durch strukturierte Nutzung. Drei Stunden pro Woche mit Methodik schlagen acht Stunden ohne.' },
-    { type: 'paragraph', text: 'In der Challenge trainierst du die Konter für alle fünf Anti-Muster an deinen echten Cases. WladBot zeigt dir nach jedem geschriebenen Prompt welches Muster gerade aktiv war.' },
+    { type: 'paragraph', text: 'In der Challenge trainierst du die Konter für alle fünf Anti-Muster an deinen echten Cases. WLAD AI zeigt dir nach jedem geschriebenen Prompt welches Muster gerade aktiv war.' },
   ],
   seo: {
     title: 'ChatGPT effizient nutzen: 5 Fehler die Zeit kosten',

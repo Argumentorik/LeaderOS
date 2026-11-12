@@ -10,7 +10,7 @@ anything novel goes through GPT-5.2 with a tight system prompt that:
   • Saves the message + answer in `support_messages` for follow-up auditing
 
 Why not just the existing /api/chat?
-  /api/chat is WladBot (leadership coaching mode). It doesn't know our
+  /api/chat is WLAD AI (leadership coaching mode). It doesn't know our
   pricing tiers, payment troubleshooting, or refund policy. WladHelp is
   the support-shaped sister-agent.
 """
@@ -29,7 +29,7 @@ router = APIRouter(prefix="/api/support", tags=["support"])
 
 SUPPORT_SYSTEM_PROMPT = """Du bist WladHelp — der Support-Agent für Leader-OS, die KI-native Leadership-Plattform basierend auf Wlad Jachtchenkos Argumentorik-Methoden.
 
-ROLLE: Du beantwortest Support-Fragen in 2-4 Sätzen, freundlich aber prägnant. Du bist KEIN Coach (dafür gibt es WladBot/Chat). Du bist Retention + Activation Agent.
+ROLLE: Du beantwortest Support-Fragen in 2-4 Sätzen, freundlich aber prägnant. Du bist KEIN Coach (dafür gibt es WLAD AI/Chat). Du bist Retention + Activation Agent.
 
 KERN-MISSION:
 • Fokussiere auf AI-Weiterbildung und Upgrade-Möglichkeiten
@@ -39,7 +39,7 @@ KERN-MISSION:
 WAS DU WEISST:
 • Tiers: Free (limitiert) · Leadership OS €997/Jahr · OS PLUS €4.797/Jahr (mit 12 Einzelcoachings durch Wlads Expertenteam)
 • Bezahlung: Stripe, einmalig oder Rate (2x oder 12x). 30-Tage-Geld-zurück-Garantie EXISTIERT, aber NICHT proaktiv erwähnen.
-• Features: WladBot Chat 24/7 · 30-Tage-Programm mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
+• Features: WLAD AI Chat 24/7 · 30-Tage-Programm mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
 • AI-Mastery Track: 16 strukturierte Missionen die zeigen wie man GPT/Claude/Gemini als Leadership-Multiplier nutzt
 • Support-Email: support@leaderos.de (Leader-OS · diese App)
 • Support-Email Argumentorik (Akademie, Seminare, Kurse): support@argumentorik.com — info@argumentorik.com ist NUR die allgemeine Adresse, NIE die Support-Adresse
@@ -56,7 +56,7 @@ WIE DU ANTWORTEST:
 
 NIEMALS:
 • Refund-Anleitung im UI (auch wenn explizit gefragt → IMMER zu support@email leiten)
-• Long-form Coaching geben (das ist WladBots Job)
+• Long-form Coaching geben (das ist WLAD AIs Job)
 • Versprechen die nicht abgedeckt sind (z.B. Custom Pricing ohne Enterprise-Form)
 • Andere Anbieter empfehlen
 • Negative Framing von Cancel/Refund
@@ -113,10 +113,10 @@ FAQ_SHORTCUTS = [
     },
     {
         "triggers": ["ki lernen", "ai weiterbildung", "ai skills", "ai training", "wie nutze ich ai", "wie nutze ich ki", "prompt engineering"],
-        "answer": "Im MyPath findest du den AI-Mastery Track — 16 strukturierte Missionen die dir Schritt-für-Schritt zeigen wie du GPT/Claude/Gemini als Leadership-Multiplier nutzt. Plus täglich neuer Tip von WladBot direkt im Chat.",
+        "answer": "Im MyPath findest du den AI-Mastery Track — 16 strukturierte Missionen die dir Schritt-für-Schritt zeigen wie du GPT/Claude/Gemini als Leadership-Multiplier nutzt. Plus täglich neuer Tip von WLAD AI direkt im Chat.",
         "actions": [
             {"label": "Zu /my-path", "type": "internal", "value": "/my-path"},
-            {"label": "WladBot starten", "type": "internal", "value": "/chat"},
+            {"label": "WLAD AI starten", "type": "internal", "value": "/chat"},
         ],
     },
     {
@@ -139,7 +139,7 @@ FAQ_SHORTCUTS = [
     {
         # Iter 92.17: NEW — direct Learning-Path upsell
         "triggers": ["was bringt mir", "warum leader-os", "warum kaufen", "lohnt sich", "value", "vorteil"],
-        "answer": "Leader-OS macht aus dir einen AI-fluenten Leader: ein 30-Tage-Programm, 16 Missionen, 24/7 WladBot Chat, Video-Analyse deiner Pitches, monatliche Updates. Mit OS PLUS dazu 12× 1:1 Coaching mit Wlads Expertenteam — €4.447/Jahr, 30-Tage Geld-zurück.",
+        "answer": "Leader-OS macht aus dir einen AI-fluenten Leader: ein 30-Tage-Programm, 16 Missionen, 24/7 WLAD AI Chat, Video-Analyse deiner Pitches, monatliche Updates. Mit OS PLUS dazu 12× 1:1 Coaching mit Wlads Expertenteam — €4.447/Jahr, 30-Tage Geld-zurück.",
         "actions": [
             {"label": "Pakete ansehen", "type": "internal", "value": "/coaching"},
             {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},

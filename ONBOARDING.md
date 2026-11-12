@@ -57,7 +57,7 @@ answered by it.
 |---                |---      |---        |---                                          |---                   |
 | **leader-os.de**  | yes     | Vercel    | Marketing landing (the funnel)              | `frontend/src/pages/LandingPage.js` |
 | **leader-check.de** | yes   | Vercel    | Marketing landing for the free diagnose      | `frontend/src/pages/LeaderCheckLanding.js` |
-| **leaderos.de**   | no      | Emergent  | The actual app (login, dashboard, WladBot…) | `frontend/` app routes, served by Emergent |
+| **leaderos.de**   | no      | Emergent  | The actual app (login, dashboard, WLAD AI…) | `frontend/` app routes, served by Emergent |
 | **leadercheck.de** | no     | Emergent  | The free 10-min diagnose app (anonymous)    | Emergent |
 
 Rules of thumb:
@@ -239,7 +239,7 @@ concern:
 | Var | What |
 |---|---|
 | `EMERGENT_LLM_KEY` | LLM gateway key (all agents share it) |
-| `VOYAGE_API_KEY` | embeddings for RAG (WladBot knowledge) |
+| `VOYAGE_API_KEY` | embeddings for RAG (WLAD AI knowledge) |
 | `RAG_MATCH_THRESHOLD` / `RAG_MATCH_COUNT` / `RAG_MATCH_OVERFETCH` | RAG tuning |
 
 **Ops:**
@@ -328,7 +328,7 @@ you edit code on a feature branch
 | the domain/host routing | `README.md`, `docs/app/DOMAIN_TOPOLOGY.md`, `docs/app/FINAL_TOPOLOGY.md` |
 | the database schema | `docs/app/SCHEMA.md` |
 | cross-platform user identity | `docs/app/IDENTITY_ARCHITECTURE.md` |
-| WladBot / RAG knowledge | `docs/app/WLADBOT_OVERVIEW.md`, `docs/app/RAG_KNOWLEDGE_FLOW.md` |
+| WLAD AI / RAG knowledge | `docs/app/WLADBOT_OVERVIEW.md`, `docs/app/RAG_KNOWLEDGE_FLOW.md` |
 | what's production-ready (with code refs) | `docs/ops/PRODUCTION_READINESS.md` |
 | auth troubleshooting (magic-link / OAuth) | `docs/archive/LAUNCH_AUTH_FIX_FRIDAY.md` |
 | an incident is happening right now | `docs/ops/INCIDENT_RUNBOOK.md` |

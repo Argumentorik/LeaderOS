@@ -13,8 +13,8 @@ export const MasterclassAccessCard = ({ de }) => {
   const pct = Math.min(100, Math.round((used / limit) * 100));
 
   const included = de
-    ? ['WladBot KI-Coach (Wlads komplettes Kurswissen)', '30-Tage KI-Leadership Programm', 'Argumentations-Vorbereitung inkl. PDF-Export', 'Täglicher Check-in + Leader-Diagnose Sync', 'Live-Events & Community (Prelaunch)']
-    : ['WladBot AI coach (Wlad\'s full course knowledge)', '30-day AI leadership program', 'Argumentation prep incl. PDF export', 'Daily check-in + leader diagnosis sync', 'Live events & community (prelaunch)'];
+    ? ['WLAD AI KI-Coach (Wlads komplettes Kurswissen)', '30-Tage KI-Leadership Programm', 'Argumentations-Vorbereitung inkl. PDF-Export', 'Täglicher Check-in + Leader-Diagnose Sync', 'Live-Events & Community (Prelaunch)']
+    : ['WLAD AI AI coach (Wlad\'s full course knowledge)', '30-day AI leadership program', 'Argumentation prep incl. PDF export', 'Daily check-in + leader diagnosis sync', 'Live events & community (prelaunch)'];
 
   return (
     <section className="max-w-3xl mx-auto" data-testid="masterclass-access-card">

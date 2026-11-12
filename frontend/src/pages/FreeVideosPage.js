@@ -86,7 +86,7 @@ const FAQ = [
   ['Kostet das wirklich nichts?', 'Ja, komplett kostenlos. Keine Kreditkarte, kein Abo, keine versteckten Kosten. Wlad wird sonst für 10.000 € Tagessatz gebucht — diese 4 Videos sind ein echtes Geschenk, damit du siehst, wie er arbeitet.'],
   ['Für wen sind die Videos?', 'Für alle, die fachlich stark sind, aber als Führungspersönlichkeit endlich gesehen werden wollen — Teamleads, Projektmanager, Senior-Experten und alle, die es werden wollen. Auch für introvertierte, authentische Menschen, die ohne Manipulation führen.'],
   ['Bekomme ich jetzt Spam?', 'Nein. Du bekommst die 4 Videos plus gelegentlich echte Impulse. Ein Klick, und du bist wieder raus — jederzeit, in jeder Mail.'],
-  ['Was passiert nach den 4 Videos?', 'Du kennst dann das Fundament von Wlads Methodik. Wenn du sie täglich mit WladBot drillen willst, kannst du LeaderOS 14 Tage kostenlos testen — musst du aber nicht.'],
+  ['Was passiert nach den 4 Videos?', 'Du kennst dann das Fundament von Wlads Methodik. Wenn du sie täglich mit WLAD AI drillen willst, kannst du LeaderOS 14 Tage kostenlos testen — musst du aber nicht.'],
   ['Wie viel Zeit brauche ich?', '8 bis 12 Minuten pro Video, eins pro Tag. Die Serie ist bewusst so gebaut, dass sie in einen vollen Führungskalender passt — ein Prinzip pro Tag statt Binge-Watching ohne Umsetzung.'],
   ['Ich habe keine KI-Vorkenntnisse. Ist das ein Problem?', 'Nein. Video 1 bis 3 sind reine Führungspraxis — Sichtbarkeit, Autorität, Delegation. Video 4 übersetzt das ins KI-Zeitalter, ohne dass du je ein Tool bedient haben musst.'],
   ['Ich führe seit Jahren. Lohnt sich das trotzdem?', 'Gerade dann. Die ersten drei Videos sind ein Systematik-Check für Dinge, die du intuitiv machst — und Video 4 gibt dir den KI-Fahrplan, den es vor zwei Jahren schlicht noch nicht gab.'],
@@ -624,7 +624,7 @@ export default function FreeVideosPage() {
           </div>
         </section>
 
-        {/* WladBot 3.0 · the character who accompanies the series. His face
+        {/* WLAD AI · the character who accompanies the series. His face
             + three coach-style tips in chat bubbles → "text him" CTA. Stacks
             cleanly on mobile (avatar on top, bubbles below). */}
         <section className="relative isolate overflow-hidden border-t-2 border-foreground/12">
@@ -638,20 +638,20 @@ export default function FreeVideosPage() {
                 <img
                   src={WLADBOT_AVATAR}
                   onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
-                  alt="WladBot 3.0 · dein KI-Coach in LeaderOS"
+                  alt="WLAD AI · dein KI-Coach in LeaderOS"
                   loading="lazy"
                   decoding="async"
                   className="relative w-full aspect-square rounded-full object-cover object-[50%_14%] bg-[#0A0A0A] ring-2 ring-brand shadow-[0_40px_90px_-40px_rgba(191,255,0,0.5)]"
                 />
                 <span className="absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 bg-[#0A0A0A]/90 px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-brand whitespace-nowrap">
-                  <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" /> WladBot 3.0 · online
+                  <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" /> WLAD AI · online
                 </span>
               </div>
             </div>
             <div className="md:col-span-8">
               <p className="font-mono text-[10.5px] font-bold uppercase tracking-[0.28em] text-brand mb-4">▸ Dein Begleiter durch die Serie</p>
               <h2 className="text-[28px] sm:text-[38px] md:text-[48px] leading-[1.0] tracking-[-0.03em] text-foreground" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontStyle: 'italic' }}>
-                Das ist WladBot<span className="text-brand not-italic">.</span>
+                Das ist WLAD AI<span className="text-brand not-italic">.</span>
               </h2>
               <p className="mt-4 max-w-2xl text-[15px] leading-[1.6] text-foreground/70">
                 Trainiert auf Wlads kompletter Methodik — 13 Bücher, 15 Jahre Coaching. In LeaderOS
@@ -678,7 +678,7 @@ export default function FreeVideosPage() {
                 onClick={() => track('free_videos_wladbot_cta')}
                 className="mt-7 inline-flex items-center justify-center gap-2 h-12 px-6 bg-[#BFFF00] hover:bg-white text-[#0A0A0A] font-bold text-[12.5px] uppercase tracking-[0.14em] transition-colors"
               >
-                Schreib WladBot <ArrowUpRight size={15} />
+                Schreib WLAD AI <ArrowUpRight size={15} />
               </a>
             </div>
           </div>
@@ -890,7 +890,7 @@ export default function FreeVideosPage() {
             {unlocked ? (
               <>
                 <p className="mt-5 text-[15px] sm:text-[17px] leading-[1.55] text-foreground/70 max-w-xl mx-auto">
-                  Willst du die komplette Methodik täglich mit WladBot drillen? Teste LeaderOS 14 Tage kostenlos.
+                  Willst du die komplette Methodik täglich mit WLAD AI drillen? Teste LeaderOS 14 Tage kostenlos.
                 </p>
                 <a
                   href="https://leaderos.de/signup?trial=14"

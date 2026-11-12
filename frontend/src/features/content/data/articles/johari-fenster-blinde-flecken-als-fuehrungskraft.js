@@ -162,7 +162,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du den schwersten Teil üben: das Gespräch, in dem du um Feedback bittest und es aushältst. WladBot spielt das Gegenüber, ' +
+        'Im LeaderOS kannst du den schwersten Teil üben: das Gespräch, in dem du um Feedback bittest und es aushältst. WLAD AI spielt das Gegenüber, ' +
         'das zögert oder nur Andeutungen macht, und du trainierst, nachzufragen, ohne dich zu rechtfertigen. ' +
         'In täglichen 15-Minuten-Drills wiederholst du die Fragen und die Antworten, bis sie sich natürlich anfühlen. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

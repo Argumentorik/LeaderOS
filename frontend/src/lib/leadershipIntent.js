@@ -1,7 +1,7 @@
 /**
  * leadershipIntent · the Intent Schema Layer (Growth-Loop Layer 2 + 4).
  *
- * Every raw leadership problem a visitor types — into the WladBot funnel
+ * Every raw leadership problem a visitor types — into the WLAD AI funnel
  * card, an in-article diagnostic block, the lead modal — gets normalized
  * HERE into one machine-readable shape, then fired as a single canonical
  * PostHog event. That uniformity is the whole point: one event name, one
@@ -167,7 +167,7 @@ export function captureLeadershipIntent(rawProblem, opts = {}) {
 }
 
 /**
- * Build the WladBot deep-link for a captured intent · routes the visitor
+ * Build the WLAD AI deep-link for a captured intent · routes the visitor
  * into the Solution Layer (Layer 3) with their problem + category so the
  * bot can open with a category-tuned diagnosis instead of a blank prompt.
  */

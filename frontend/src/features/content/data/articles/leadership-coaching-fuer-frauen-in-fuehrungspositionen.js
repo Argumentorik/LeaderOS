@@ -132,7 +132,7 @@ export default {
       type: 'paragraph',
       text:
         'In LeaderOS trainierst du genau solche Situationen in der 30-Tage-Challenge an deinen eigenen, echten Fällen. ' +
-        'WladBot ist ein privater, urteilsfreier Raum, um eine schwierige Formulierung vor einem wichtigen ' +
+        'WLAD AI ist ein privater, urteilsfreier Raum, um eine schwierige Formulierung vor einem wichtigen ' +
         'Gespräch durchzuspielen, und die Drills lassen sich gezielt auf die wiederkehrenden Situationen zuschneiden, ' +
         'die tatsächlich anstehen, statt auf ein generisches Programm für alle.',
     },

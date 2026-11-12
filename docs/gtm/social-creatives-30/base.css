@@ -43,7 +43,7 @@ body{background:#222;font-family:'Liberation Sans',Arial,Helvetica,sans-serif;co
 .slide.lime-bg .strike{text-decoration-color:#0A0A0A;color:rgba(10,10,10,.5)}
 .num{font-family:'Anton',Impact,sans-serif;font-size:420px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(191,255,0,.4);position:absolute;right:60px;top:120px;z-index:4}
 .slide.lime-bg .num{-webkit-text-stroke:2px rgba(10,10,10,.25)}
-/* Avatar-Figur (WladBot) */
+/* Avatar-Figur (WLAD AI) */
 .halo{z-index:4;background:radial-gradient(38% 30% at 74% 66%,rgba(191,255,0,.42),rgba(191,255,0,.08) 55%,transparent 72%)}
 .slide.lime-bg .halo{background:radial-gradient(38% 30% at 74% 66%,rgba(255,255,255,.55),rgba(255,255,255,.1) 55%,transparent 72%)}
 .ring{position:absolute;z-index:4;width:640px;height:640px;border-radius:999px;border:2px solid rgba(191,255,0,.45);right:-60px;bottom:120px;box-shadow:0 0 0 40px rgba(191,255,0,.06),0 0 0 110px rgba(191,255,0,.03)}

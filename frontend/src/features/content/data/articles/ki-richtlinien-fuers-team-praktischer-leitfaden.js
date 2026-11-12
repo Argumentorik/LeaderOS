@@ -174,7 +174,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Regeln sind nur die eine Hälfte, die andere ist das Gespräch. Im LeaderOS kannst du es üben: WladBot spielt die Mitarbeiterin, die zugibt, Kundendaten in ein Tool kopiert zu haben, ' +
+        'Regeln sind nur die eine Hälfte, die andere ist das Gespräch. Im LeaderOS kannst du es üben: WLAD AI spielt die Mitarbeiterin, die zugibt, Kundendaten in ein Tool kopiert zu haben, ' +
         'und du trainierst, ruhig, klar und ohne Vorwurf zu reagieren. In täglichen 15-Minuten-Drills wiederholst du solche Gespräche, bis sie dir leichter fallen. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

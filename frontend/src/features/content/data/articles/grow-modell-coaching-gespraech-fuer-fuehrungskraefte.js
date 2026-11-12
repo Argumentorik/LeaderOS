@@ -206,7 +206,7 @@ export default {
       type: 'paragraph',
       text:
         'Coaching-Fragen klingen einfach und fallen im Gespräch doch schwer, vor allem das Schweigen und das Zurückhalten eigener Lösungen. Im LeaderOS übst du das ' +
-        'mit WladBot, der das Gegenüber spielt, etwa die Mitarbeiterin, die nur „Ich weiß nicht“ sagt. In täglichen 15-Minuten-Drills kannst du jede Phase einzeln wiederholen. ' +
+        'mit WLAD AI, der das Gegenüber spielt, etwa die Mitarbeiterin, die nur „Ich weiß nicht“ sagt. In täglichen 15-Minuten-Drills kannst du jede Phase einzeln wiederholen. ' +
         'Dabei hilft auch Wlads Modell der Stufen des Zuhörens, denn gute Fragen entstehen aus gutem Zuhören. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },
     {

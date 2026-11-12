@@ -18,7 +18,7 @@ export const FAQS = [
   {
     q: 'Was ist LeaderOS?',
     a:
-      'LeaderOS ist ein Trainingssystem für Führungskräfte: zehn Kurse mit der Methodik von Wlad Jachtchenko, der KI-Coach WladBot, Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem echten Fall. Führung wird nicht gelernt, sie wird trainiert. Deshalb heißt es Operating System, nicht Kurs.',
+      'LeaderOS ist ein Trainingssystem für Führungskräfte: zehn Kurse mit der Methodik von Wlad Jachtchenko, der KI-Coach WLAD AI, Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem echten Fall. Führung wird nicht gelernt, sie wird trainiert. Deshalb heißt es Operating System, nicht Kurs.',
     links: [['/kurse', 'Alle Kurse und der Zugang'], ['/fragen', 'Fragen & Frameworks']],
   },
   {
@@ -33,41 +33,41 @@ export const FAQS = [
     links: [['/kurse', 'Kurs-Katalog ansehen']],
   },
   {
-    q: 'Wie hilft mir WladBot in einer echten Situation?',
+    q: 'Wie hilft mir WLAD AI in einer echten Situation?',
     a:
-      'WladBot gibt dir vor dem Gespräch den nächsten Satz, nicht zehn Tipps. Beispiel: Dienstag, 22:47 Uhr, morgen früh zum dritten Mal dasselbe Feedback an einen Senior-Mitarbeiter. Du beschreibst die Situation, er antwortet mit der Feedbackformel (Beobachtung, Wirkung, Wunsch), abgestimmt auf deine bisherigen Drills. Du gehst mit einem Skript ins Gespräch, nicht mit Bauchschmerzen.',
-    links: [['/fragen#f04', 'WladBot vs. ChatGPT']],
+      'WLAD AI gibt dir vor dem Gespräch den nächsten Satz, nicht zehn Tipps. Beispiel: Dienstag, 22:47 Uhr, morgen früh zum dritten Mal dasselbe Feedback an einen Senior-Mitarbeiter. Du beschreibst die Situation, er antwortet mit der Feedbackformel (Beobachtung, Wirkung, Wunsch), abgestimmt auf deine bisherigen Drills. Du gehst mit einem Skript ins Gespräch, nicht mit Bauchschmerzen.',
+    links: [['/fragen#f04', 'WLAD AI vs. ChatGPT']],
   },
   {
     q: 'Wie unterscheidet sich das von ChatGPT oder einem Coaching?',
     a:
-      'ChatGPT kennt das halbe Internet, aber nicht dich und nicht die Methodik. Ein 1:1-Coach kennt dich, ist aber nicht um 22:47 Uhr erreichbar. WladBot ist beides: trainiert auf 2 212 authentische Wlad-Chunks aus Büchern, Podcasts und Trainings, mit einer Kontext-Schicht, die deine Challenge-Historie und deine letzten Drills kennt.',
+      'ChatGPT kennt das halbe Internet, aber nicht dich und nicht die Methodik. Ein 1:1-Coach kennt dich, ist aber nicht um 22:47 Uhr erreichbar. WLAD AI ist beides: trainiert auf 2 212 authentische Wlad-Chunks aus Büchern, Podcasts und Trainings, mit einer Kontext-Schicht, die deine Challenge-Historie und deine letzten Drills kennt.',
   },
   {
     q: 'Wie viel Zeit brauche ich pro Tag?',
     a:
-      '15 Minuten am Tag: eine kurze Lektion, ein Drill an deinem Fall, eine Frage an WladBot oder eine Simulation, dann die Auswertung. Die 30-Tage-Challenge ist so gebaut, dass sie in jeden Arbeitstag passt, statt zwei Tage im Jahr aus dem Kalender zu schneiden.',
+      '15 Minuten am Tag: eine kurze Lektion, ein Drill an deinem Fall, eine Frage an WLAD AI oder eine Simulation, dann die Auswertung. Die 30-Tage-Challenge ist so gebaut, dass sie in jeden Arbeitstag passt, statt zwei Tage im Jahr aus dem Kalender zu schneiden.',
   },
   {
     q: 'Was bekomme ich am Ende der 30 Tage?',
     a:
-      'Reflexe statt Notizen: dreißig Drills an deinen echten Fällen, elf Frameworks, die du in jedem 1:1, jeder Verhandlung und jeder Rede abrufen kannst, einen WladBot, der deine Historie kennt, und ein persönliches Zertifikat mit deiner Startnummer für LinkedIn.',
+      'Reflexe statt Notizen: dreißig Drills an deinen echten Fällen, elf Frameworks, die du in jedem 1:1, jeder Verhandlung und jeder Rede abrufen kannst, einen WLAD AI, der deine Historie kennt, und ein persönliches Zertifikat mit deiner Startnummer für LinkedIn.',
   },
   {
     q: 'Was kostet LeaderOS?',
     a:
-      'Der Einstieg ist 14 Tage kostenlos, ohne Karte, jederzeit kündbar, mit allen sechs Grundlagen-Kursen, WladBot und den Drills. Danach die 30-Tage-Challenge mit 12 Monaten Mitgliedschaft für 997 € einmalig oder das OS-Jahr Leadership Plus Pro mit monatlichen Live-Sessions für 4 797 € einmalig (oder drei Raten). Kein Abo, keine automatische Verlängerung. Die Diagnose auf leadercheck.de bleibt kostenlos.',
+      'Der Einstieg ist 14 Tage kostenlos, ohne Karte, jederzeit kündbar, mit allen sechs Grundlagen-Kursen, WLAD AI und den Drills. Danach die 30-Tage-Challenge mit 12 Monaten Mitgliedschaft für 997 € einmalig oder das OS-Jahr Leadership Plus Pro mit monatlichen Live-Sessions für 4 797 € einmalig (oder drei Raten). Kein Abo, keine automatische Verlängerung. Die Diagnose auf leadercheck.de bleibt kostenlos.',
     links: [['/fragen#f08', 'Preise im Detail']],
   },
   {
     q: 'Was passiert nach den 30 Tagen?',
     a:
-      'Die Mitgliedschaft läuft 12 Monate weiter: alle Frameworks, WladBot rund um die Uhr und die Kurs-Bibliothek bleiben offen. Die Challenge ist das Onboarding, das OS dein Werkzeug für das Jahr. Wer die volle Begleitung mit monatlichen Live-Sessions und Strategie-Call will, wechselt in Leadership Plus Pro.',
+      'Die Mitgliedschaft läuft 12 Monate weiter: alle Frameworks, WLAD AI rund um die Uhr und die Kurs-Bibliothek bleiben offen. Die Challenge ist das Onboarding, das OS dein Werkzeug für das Jahr. Wer die volle Begleitung mit monatlichen Live-Sessions und Strategie-Call will, wechselt in Leadership Plus Pro.',
   },
   {
     q: 'Warum sollte ich für Leader-Check und LeaderOS dieselbe E-Mail nutzen?',
     a:
-      'Weil die Diagnose auf leadercheck.de und die App auf leaderos.de dieselbe Identität über die E-Mail-Adresse erkennen. Deine Diagnose-Scores fließen in deinen Challenge-Plan ein, WladBot kennt ab Tag 1 deine Schwachstellen. Eine andere E-Mail bedeutet zwei Profile und keine Personalisierung.',
+      'Weil die Diagnose auf leadercheck.de und die App auf leaderos.de dieselbe Identität über die E-Mail-Adresse erkennen. Deine Diagnose-Scores fließen in deinen Challenge-Plan ein, WLAD AI kennt ab Tag 1 deine Schwachstellen. Eine andere E-Mail bedeutet zwei Profile und keine Personalisierung.',
   },
   {
     q: 'Wie sicher sind meine Daten?',

@@ -124,7 +124,7 @@ export default {
       type: 'paragraph',
       text:
         'Ich habe über 400.000 Klienten begleitet, bevor ich LeaderOS gebaut habe — und genau an diesem Engpass ' +
-        'gescheitert: Nachbereitung skaliert nicht über einen einzelnen Trainer. Die 30-Tage-Challenge und WladBot sind ' +
+        'gescheitert: Nachbereitung skaliert nicht über einen einzelnen Trainer. Die 30-Tage-Challenge und WLAD AI sind ' +
         'meine Antwort darauf, nicht die einzig mögliche. Wer intern trainiert, kann dasselbe Prinzip mit eigenen ' +
         'Tools bauen — die drei Phasen bleiben gleich, egal welches System dahinter steht.',
     },

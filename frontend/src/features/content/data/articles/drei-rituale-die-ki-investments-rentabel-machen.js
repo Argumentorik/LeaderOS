@@ -23,7 +23,7 @@ export default {
     { type: 'heading', level: 2, text: 'Warum 22 Minuten und nicht eine Stunde.' },
     { type: 'paragraph', text: 'Eine Stunde pro Woche zusätzlich findet niemand. 22 Minuten in drei Mikro-Slots schon. Das ist der Trick: niedrige Energie-Kosten, hohe Wiederholungs-Rate, kleine sichtbare Symbolik. Genau die drei Eigenschaften die Kleinen Hebel rentabel machen.' },
     { type: 'callout', tone: 'lime', text: 'Wer diese drei Rituale baut, braucht die Challenge nicht zwingend · die Rituale sind die Anwendung der Challenge-Mechanik. Wer die Challenge absolviert, hat die Rituale danach systematisch implementiert.' },
-    { type: 'paragraph', text: 'In der Challenge wird ein Wochen-Slot in Plus-Plus zu einem Ritual-Aufbau-Drill. Du nutzt drei Wochen um diese drei Rituale in deinen Kalender zu schreiben, mit WladBot-Korrektur am ersten Versuch.' },
+    { type: 'paragraph', text: 'In der Challenge wird ein Wochen-Slot in Plus-Plus zu einem Ritual-Aufbau-Drill. Du nutzt drei Wochen um diese drei Rituale in deinen Kalender zu schreiben, mit WLAD AI-Korrektur am ersten Versuch.' },
   ],
   seo: {
     title: 'KI Rituale: 3 Routinen, die Investments rentabel machen',

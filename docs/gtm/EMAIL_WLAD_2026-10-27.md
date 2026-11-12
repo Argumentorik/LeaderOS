@@ -38,7 +38,7 @@ Passt der Tag? Wenn nicht, nenn mir einen anderen Donnerstag, wir ändern es an 
 2. Drei Aufnahmen von dir (Reihenfolge nach Wichtigkeit)
 - Demo "Warum LeaderOS", 5 bis 6 Minuten: Bildschirmaufnahme der App mit deiner Stimme, Kamera optional. Skript, Ablauf und Aufnahme-Anleitung liegen im Drive (Doc 01). Bis 10. November wäre ideal.
 - Evergreen-Version des Webinars, 20 bis 30 Minuten, ohne Datum im Bild. Damit steht der Funnel auch, wenn der Live-Termin mal kippt, und nach dem 26.11. läuft die Seite damit weiter. Bis 20. November.
-- Drei kurze Micro-Demos "WladBot in 3 Minuten" (Feedbackgespräch, Gehaltsgespräch, Konflikt im Team), eine pro Woche ab 3. November.
+- Drei kurze Micro-Demos "WLAD AI in 3 Minuten" (Feedbackgespräch, Gehaltsgespräch, Konflikt im Team), eine pro Woche ab 3. November.
 Aus jedem Video machen wir YouTube-Video, Shorts, LinkedIn-Video, Karussell, Journal-Artikel und Ads-Creatives. Der Recycling-Plan steht in Doc 01. Rohdateien einfach in den Unterordner "Rohmaterial".
 
 3. Neuer Content zur Freigabe und Posten über deine Accounts
@@ -62,7 +62,7 @@ Mert
 2. **Webinar:** nicht vormittags; zuerst Evergreen-Marketing, das (kostenintensivere) Webinar erst, wenn die Plattform regelmäßig gutes Feedback bekommt. Strategie am Donnerstag 29.10. besprechen. → `WEBINAR_STRATEGIE_DONNERSTAG.md`.
 3. **Aufnahmen:** kein Problem, macht er ohnehin jede Woche. Details am Donnerstag.
 4. **Verknappung:** „Woher kommen die 50 Plätze?“ (Platzhalter von uns). Wlad würde Verknappung einbauen, „auch wenn sie nicht stimmt“, und trotzdem mehr Leute zulassen. → Nicht umsetzen (irreführend, gegen `WEBINAR_FUNNEL.md`); Alternative Wellen-Modell.
-5. **App:** „Ist das schon für alle live?“ Übersichtlich (gut). Mängel: WladBot-Antwortqualität, Argumentationstraining ohne SEXIER, Einführungs- und Onboarding-Videos nur noch Text, Gesprächstraining zu langsam. → `docs/app/WLAD_FEEDBACK_2026-10-28.md`.
+5. **App:** „Ist das schon für alle live?“ Übersichtlich (gut). Mängel: WLAD AI-Antwortqualität, Argumentationstraining ohne SEXIER, Einführungs- und Onboarding-Videos nur noch Text, Gesprächstraining zu langsam. → `docs/app/WLAD_FEEDBACK_2026-10-28.md`.
 6. **Tools:** kein Higgsfield-Account, Loom ja, sonst nichts.
 
 Antwortentwurf (nicht gesendet): `EMAIL_WLAD_2026-10-28_ANTWORT_ENTWURF.md`.

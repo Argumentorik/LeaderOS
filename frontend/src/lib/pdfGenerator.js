@@ -2,10 +2,10 @@ import jsPDF from 'jspdf';
 import { deepUnescape } from './textClean';
 
 /**
- * Premium branded PDF generator · WladBot Leadership OS
+ * Premium branded PDF generator · WLAD AI Leadership OS
  * Supports all result types from workflows, playbooks, simulations
  */
-export async function generatePDF(rawReportData, filename = 'WladBot-Report') {
+export async function generatePDF(rawReportData, filename = 'WLAD AI-Report') {
   // Iter 184: keine Rohzeichen (\n, \u201e) im exportierten PDF.
   const reportData = deepUnescape(rawReportData) || {};
   const doc = new jsPDF('p', 'mm', 'a4');

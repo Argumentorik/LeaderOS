@@ -91,10 +91,10 @@ export default function HeroATF({ onCtaClick }) {
         </div>
       </div>
 
-      {/* CTA · WladBot pushes you to click */}
+      {/* CTA · WLAD AI pushes you to click */}
       <div className="opacity-0 anim-fade-up delay-4 text-center">
         <div className="relative inline-flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-5">
-          {/* WladBot Magic — no bg, floating with lime aura */}
+          {/* WLAD AI Magic — no bg, floating with lime aura */}
           <div className="relative group order-2 md:order-1" data-testid="hero-wladbot">
             {/* Lime glow aura */}
             <div
@@ -116,7 +116,7 @@ export default function HeroATF({ onCtaClick }) {
             </div>
             <img
               src="/wladbot-3-nobg.png"
-              alt="WladBot — dein KI-Leadership-Coach"
+              alt="WLAD AI — dein KI-Leadership-Coach"
               className="relative w-28 md:w-36 h-auto anim-float"
               style={{ filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.4)) drop-shadow(0 0 30px rgba(200,255,0,0.2))" }}
             />

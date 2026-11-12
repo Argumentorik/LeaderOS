@@ -149,7 +149,7 @@ Long-Tail zuerst). Struktur:
 
 ```
 Konto
-└── Kampagne S-01 · Search · WladBot (20 €/Tag)
+└── Kampagne S-01 · Search · WLAD AI (20 €/Tag)
     ├── AdGroup "ki-coach"      → kw: ki coach führung, ai coaching deutsch,
     │                              ki führungskräfte training
     ├── AdGroup "rhetorik"      → kw: rhetorik coach online, argumentation
@@ -184,7 +184,7 @@ Headlines (je ≤ 30 Zeichen):
   Führung ist trainierbar
   Kostenlos starten
 Descriptions (je ≤ 90 Zeichen):
-  WladBot kennt die Methodik von Wlad Jachtchenko. Frag ihn, was dich
+  WLAD AI kennt die Methodik von Wlad Jachtchenko. Frag ihn, was dich
   gerade blockiert.
   400.000+ Klienten seit 2007. Jetzt als KI-Coach in deiner Tasche.
   Kostenlos testen.

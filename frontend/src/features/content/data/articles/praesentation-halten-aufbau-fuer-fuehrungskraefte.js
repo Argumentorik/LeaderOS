@@ -169,7 +169,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS trainierst du das Sprechen, nicht das Folienbauen. WladBot spielt das Publikum, etwa einen skeptischen Bereichsleiter, der nach deiner Kernaussage ' +
+        'Im LeaderOS trainierst du das Sprechen, nicht das Folienbauen. WLAD AI spielt das Publikum, etwa einen skeptischen Bereichsleiter, der nach deiner Kernaussage ' +
         'unterbricht, und du übst, ruhig zu bleiben und zum Punkt zurückzukehren. In täglichen 15-Minuten-Drills wiederholst du Einstieg, Kernaussage und Schluss. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

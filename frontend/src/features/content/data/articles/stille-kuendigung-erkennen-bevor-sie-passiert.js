@@ -33,7 +33,7 @@ export default {
       'Woche 2: eine konkrete, kleine, sofort umsetzbare Veränderung anbieten · nicht ein großes Versprechen für "nächstes Quartal". Kleine, schnelle Beweise, dass die Rückmeldung etwas bewirkt hat, sind wirksamer als große Ankündigungen.',
     ] },
     { type: 'callout', tone: 'lime', text: 'Stille Kündigung ist kein Charakterproblem des Mitarbeiters. Sie ist ein Frühwarnsystem des Teams · wer früh genug hinhört, kann noch etwas ändern.' },
-    { type: 'paragraph', text: 'In der LeaderOS-Challenge übst du genau dieses frühe, unstrukturierte 1:1 anhand echter Fälle aus deinem Team · WladBot hilft dir, die BWW-Formel korrekt zu formulieren, bevor das Gespräch überhaupt stattfindet.' },
+    { type: 'paragraph', text: 'In der LeaderOS-Challenge übst du genau dieses frühe, unstrukturierte 1:1 anhand echter Fälle aus deinem Team · WLAD AI hilft dir, die BWW-Formel korrekt zu formulieren, bevor das Gespräch überhaupt stattfindet.' },
   ],
   seo: {
     title: 'Stille Kündigung erkennen: Frühwarnsignale & Sofortplan',

@@ -173,7 +173,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS trainierst du Fragen praktisch: Du beschreibst eine echte Situation, WladBot spielt den Mitarbeiter, ' +
+        'Im LeaderOS trainierst du Fragen praktisch: Du beschreibst eine echte Situation, WLAD AI spielt den Mitarbeiter, ' +
         'und du übst, nur Fragen zu stellen, statt Ratschläge zu geben. In den täglichen 15-Minuten-Drills reicht eine Situation pro Tag. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

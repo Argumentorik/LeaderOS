@@ -11,7 +11,7 @@
 |---|---|---|---|
 | **`leader-os.de`** | Vercel | Claude-Code Nike-DNA Marketing-Landing | ✅ Live |
 | **`www.leader-os.de`** | Vercel | Redirect zu `leader-os.de` | ✅ Live |
-| **`app.leader-os.de`** | Emergent | Login + Dashboard + WladBot (User-Bereich) | ⏳ Subdomain einrichten |
+| **`app.leader-os.de`** | Emergent | Login + Dashboard + WLAD AI (User-Bereich) | ⏳ Subdomain einrichten |
 | **`leader-check.de`** | Vercel | Claude-Code Light-Nike Marketing-Landing | ⏳ DNS gerade in Arbeit |
 | **`start.leader-check.de`** | Emergent | Diagnose-Quiz / Role-Assessment-App | ⏳ Subdomain einrichten |
 | **`command-center-229.emergent.host`** | Emergent | Roh-URL, finaler Fallback | ✅ Existiert |
@@ -23,7 +23,7 @@ USER LANDET HIER             KLICKT                LANDET DANN HIER
 ─────────────────────────────────────────────────────────────────
 leader-os.de            →    "Diagnose starten"  →  start.leader-check.de
 leader-os.de            →    "Login"             →  app.leader-os.de/login
-leader-os.de            →    "WladBot starten"   →  app.leader-os.de/chat
+leader-os.de            →    "WLAD AI starten"   →  app.leader-os.de/chat
                                                     (nach Login)
 
 leader-check.de         →    "Diagnose starten"  →  start.leader-check.de

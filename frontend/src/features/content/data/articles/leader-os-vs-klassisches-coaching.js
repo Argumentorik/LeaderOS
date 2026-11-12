@@ -15,13 +15,13 @@ export default {
   tags: ['LeaderOS', 'Vergleich', 'Coaching'],
   body: [
     { type: 'paragraph', text:
-      'Wer LeaderOS bewertet, vergleicht es entweder mit ChatGPT (falsche Trennlinie · siehe "WladBot vs ' +
+      'Wer LeaderOS bewertet, vergleicht es entweder mit ChatGPT (falsche Trennlinie · siehe "WLAD AI vs ' +
       'ChatGPT vs Coach") oder mit klassischem 1:1-Coaching. Dieser zweite Vergleich ist der interessantere. ' +
       'Hier sind die echten Trennlinien.' },
     { type: 'heading', level: 2, text: 'Stelle 01: Verfügbarkeit.' },
     { type: 'paragraph', text:
       'Klassisches Coaching: ein Termin alle zwei Wochen, vereinbart per E-Mail, kostet 300-800 EUR pro Stunde. ' +
-      'LeaderOS: 24/7-Zugang zu WladBot, drei bis fünf Minuten Antwortzeit, Challenge-Plan im Hintergrund. Wenn ' +
+      'LeaderOS: 24/7-Zugang zu WLAD AI, drei bis fünf Minuten Antwortzeit, Challenge-Plan im Hintergrund. Wenn ' +
       'du Dienstagabend 22:47 Uhr eine Skript-Korrektur brauchst, gewinnt LeaderOS klar.' },
     { type: 'heading', level: 2, text: 'Stelle 02: Methodische Konsistenz.' },
     { type: 'paragraph', text:
@@ -40,7 +40,7 @@ export default {
       'für die methodische Tiefe und für die tägliche Skill-Wiederholung gewinnt LeaderOS. Punkt.' },
     { type: 'heading', level: 2, text: 'Stelle 04 wo Coaching gewinnt: Identitäts-Arbeit.' },
     { type: 'paragraph', text:
-      'WladBot wird dich nicht zurückspiegeln "du wirst aktuell zur Führungskraft, die du nicht sein wolltest". ' +
+      'WLAD AI wird dich nicht zurückspiegeln "du wirst aktuell zur Führungskraft, die du nicht sein wolltest". ' +
       'Ein echter Coach kann das. Wenn deine Frage nicht "wie öffne ich morgen das 1:1" sondern "warum will ' +
       'ich überhaupt diese Rolle haben" ist, brauchst du keinen Drill-Partner. Du brauchst einen menschlichen ' +
       'Spiegel der dich über Quartale begleitet.' },

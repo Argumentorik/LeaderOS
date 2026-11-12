@@ -53,7 +53,7 @@ FRAMEWORKS_LOCKED = [
     ("6P-Modell (Storytelling)", "Plot · Polarität · Protagonist · Peripetie · Pointe · Präsentation — die 6 Elemente jeder guten Story."),
     ("Charisma-Code (8 Elemente)", "Credo · Habitus · Außeralltäglichkeit · Rhetorik · Inszenierung · Superskills · Motivation · Arbeit."),
     ("10 Stufen des Zuhörens", "Antwortenorientiert (1-6): Vortäuschend, Kürzend, Selektiv, Übertrumpfend, Egoistisch, Beratend. Verstehend (7-10): Aufmerksam, Aktiv, Empathisch, Helfend."),
-    ("30 Schlagfertigkeitstechniken", "Komplette nummerierte Liste (1. Rückfrage-Technik … 30. Klartext-Technik) — der Bot listet sie exakt so wie im Original-WladBot."),
+    ("30 Schlagfertigkeitstechniken", "Komplette nummerierte Liste (1. Rückfrage-Technik … 30. Klartext-Technik) — der Bot listet sie exakt so wie im Original-WLAD AI."),
 ]
 
 KEY_FACTS = [
@@ -61,7 +61,7 @@ KEY_FACTS = [
     ("384", "Dimensionen pro Vector (MiniLM-Multilingual, 50+ Sprachen)"),
     ("< 50 ms", "p95-Latenz für Vector-Match (In-Memory numpy, kein Netzwerk-Hop)"),
     ("€ 0", "Kosten pro Query — kein externer Embedding-Provider"),
-    ("5", "Signature-Frameworks 1:1 identisch zum Original-WladBot auf Telegram"),
+    ("5", "Signature-Frameworks 1:1 identisch zum Original-WLAD AI auf Telegram"),
 ]
 
 
@@ -212,7 +212,7 @@ def render_html() -> str:
               🎯 &nbsp; Locked-In Frameworks
             </div>
             <h2 style="margin:0 0 8px 0;font-size:22px;color:#0A0A0A;font-weight:900;letter-spacing:-0.01em;">
-              5 Signature-Frameworks — 1:1 wie im Original-WladBot
+              5 Signature-Frameworks — 1:1 wie im Original-WLAD AI
             </h2>
             <p style="margin:0 0 18px 0;font-size:13px;line-height:1.55;color:#64748B;font-weight:500;">
               Diese Frameworks sind fest verdrahtet. Egal wie ein Nutzer sie erwähnt (auch phonetisch verballhornt) — der Bot listet sie IMMER mit exakter Wortwahl und Reihenfolge auf. Verifiziert gegen deine Screenshots.
@@ -277,7 +277,7 @@ def render_html() -> str:
         <tr>
           <td style="padding:0 40px 32px 40px;text-align:center;">
             <div style="font-size:11px;color:#94A3B8;font-weight:600;letter-spacing:0.02em;line-height:1.6;">
-              Leader-OS &nbsp;·&nbsp; Powered by WladBot &nbsp;·&nbsp; {today}<br />
+              Leader-OS &nbsp;·&nbsp; Powered by WLAD AI &nbsp;·&nbsp; {today}<br />
               <a href="{FRONTEND}" style="color:#94A3B8;text-decoration:underline;">leaderos.de</a>
               &nbsp;·&nbsp;
               <a href="{FRONTEND}/admin" style="color:#94A3B8;text-decoration:underline;">Admin · Knowledge</a>

@@ -30,7 +30,7 @@ export default {
       'Wenn du unsicher bist, welcher Typ vorliegt, benenn es offen im Gespräch selbst: "Ich will hier keine Verhandlung, ich will eine klare Grenze setzen." Das nimmt Verwirrung raus, bevor sie entsteht.',
     ] },
     { type: 'callout', tone: 'lime', text: 'Die zehn Sekunden Diagnose vor dem Gespräch entscheiden mehr über den Ausgang als die zehn Minuten Vorbereitung deiner Argumente.' },
-    { type: 'paragraph', text: 'In der LeaderOS-Challenge drillst du genau diese Vorab-Diagnose an echten Fällen aus deinem Alltag · WladBot fragt vor jedem simulierten Gespräch, welchen Typ du gerade vor dir hast, und korrigiert, wenn deine gewählte Strategie nicht zum Typ passt.' },
+    { type: 'paragraph', text: 'In der LeaderOS-Challenge drillst du genau diese Vorab-Diagnose an echten Fällen aus deinem Alltag · WLAD AI fragt vor jedem simulierten Gespräch, welchen Typ du gerade vor dir hast, und korrigiert, wenn deine gewählte Strategie nicht zum Typ passt.' },
   ],
   seo: {
     title: 'Die 4 Gesprächstypen erklärt: welche Strategie wann?',

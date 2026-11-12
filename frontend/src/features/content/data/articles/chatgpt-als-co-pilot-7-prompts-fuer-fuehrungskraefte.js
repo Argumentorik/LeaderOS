@@ -48,7 +48,7 @@ export default {
 
     { type: 'paragraph', text: 'Wer alle sieben Prompts 30 Tage am Stück nutzt, hat seinen Job-Coach-Reflex umgebaut. Statt zu reagieren, fragst du. Statt zu warten, drehst du. Statt im Bauchgefühl, mit System.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS hat all sieben Prompts vorinstalliert und kennt deinen Challenge-Kontext. Statt jeden Prompt manuell zu tippen, fragst du einmal: "Mitarbeitergespräch mit Lisa, übliche Situation" · und WladBot zieht deinen Kontext, deine bisherigen Drills, deinen Stil. 30 Sekunden statt 90. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS hat all sieben Prompts vorinstalliert und kennt deinen Challenge-Kontext. Statt jeden Prompt manuell zu tippen, fragst du einmal: "Mitarbeitergespräch mit Lisa, übliche Situation" · und WLAD AI zieht deinen Kontext, deine bisherigen Drills, deinen Stil. 30 Sekunden statt 90. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'chatgpt-als-sparring-partner-fuenf-skripte',

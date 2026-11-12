@@ -323,7 +323,7 @@ export default function ChatPage() {
                 data-testid="chat-folder-clear-btn"
               >×</button>
             </div>
-            <span className="text-[10px] text-muted-foreground hidden sm:inline">{de ? 'WladBot kennt deinen Ordner-Kontext.' : 'WladBot knows your folder context.'}</span>
+            <span className="text-[10px] text-muted-foreground hidden sm:inline">{de ? 'WLAD AI kennt deinen Ordner-Kontext.' : 'WLAD AI knows your folder context.'}</span>
           </div>
         )}
 

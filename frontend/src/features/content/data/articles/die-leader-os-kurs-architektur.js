@@ -14,7 +14,7 @@ export default {
   body: [
     { type: 'paragraph', text: 'LeaderOS ist kein einzelner Kurs. Es ist eine Architektur aus mehreren Lern-Pfaden, die zueinander passen. Hier ist die Karte.' },
     { type: 'heading', level: 2, text: 'Pfad 01: Die 30-Tage-Challenge (Eingang).' },
-    { type: 'paragraph', text: 'Dreißig Tage strukturierter Drill, fokussiert auf deine zwei größten Hebel-Frameworks (basierend auf deiner Diagnose). Inklusive aller elf Frameworks als Bibliothek, WladBot 24/7, Zertifikat. Einmal-Investment 997 EUR, lebenslanger Zugriff.' },
+    { type: 'paragraph', text: 'Dreißig Tage strukturierter Drill, fokussiert auf deine zwei größten Hebel-Frameworks (basierend auf deiner Diagnose). Inklusive aller elf Frameworks als Bibliothek, WLAD AI 24/7, Zertifikat. Einmal-Investment 997 EUR, lebenslanger Zugriff.' },
     { type: 'heading', level: 2, text: 'Pfad 02: Plus-Plus (Continuous Drill).' },
     { type: 'paragraph', text: 'Challenge plus 12 Monate Begleitung. Monatliche Live-Sessions mit Wlad, Drill-Channel für Cases zwischendurch, Challenge-Historie als Context-Layer. Für Senior-Manager die methodische Tiefe UND menschliche Identitäts-Arbeit wollen. 4 797 EUR einmalig.' },
     { type: 'heading', level: 2, text: 'Pfad 03: Spezial-Kurse (Vertiefung).' },

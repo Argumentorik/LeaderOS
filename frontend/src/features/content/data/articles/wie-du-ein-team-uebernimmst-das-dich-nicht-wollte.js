@@ -27,7 +27,7 @@ export default {
     { type: 'paragraph', text: 'Das ist der eigentliche Hebel bei einem Team, das dich nicht wollte: du musst nicht beweisen, dass du besser bist als die Erwartung. Du musst beweisen, dass Argumente bei dir mehr zählen als Hierarchie. Das ist eine niedrigere Hürde, als sich anfühlt · und eine, die du in echten Momenten beweist, nicht in einer Antritts-Rede.' },
     { type: 'callout', tone: 'lime', text: 'Du gewinnst ein widerständiges Team nicht durch die Rede in Woche eins. Du gewinnst es durch zwanzig kleine, konsistente Beweise über zwölf Wochen.' },
     { type: 'paragraph', text: 'Sechs Monate später leitete der interne Kandidat bei meiner Klientin das größte Projekt des Jahres · mit ihrer vollen Rückendeckung. Der Konflikt, den beide am ersten Tag im Raum gespürt hatten, war zur Grundlage einer echten Arbeitsbeziehung geworden. Nicht, weil sie sich besonders angestrengt hatte, nett zu sein. Weil sie konsequent verlässlich war, wo es zählte.' },
-    { type: 'paragraph', text: 'In der LeaderOS-Challenge arbeiten wir mit genau solchen Übernahme-Szenarien als echten Drill-Cases · WladBot simuliert die schwierigen ersten Gespräche, bevor du sie live führst, damit der erste echte Versuch nicht der einzige ist.' },
+    { type: 'paragraph', text: 'In der LeaderOS-Challenge arbeiten wir mit genau solchen Übernahme-Szenarien als echten Drill-Cases · WLAD AI simuliert die schwierigen ersten Gespräche, bevor du sie live führst, damit der erste echte Versuch nicht der einzige ist.' },
   ],
   seo: {
     title: 'Ein Team übernehmen, das dich nicht wollte',

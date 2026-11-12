@@ -28,7 +28,7 @@ const buildLeadershipReport = (user) => ({
     { title: 'Aktueller Status', content: `Du befindest dich auf Level "${user?.level || 'Emerging Leader'}" mit ${user?.xp || 0} XP. Deine Top-Stärke ist deutlich erkennbar · nutze sie aktiv.`, type: 'info' },
     { title: 'Empfehlungen für die nächsten 30 Tage', content: ['Tägliche 5-Minuten Check-ins für EQ-Aufbau', 'Mindestens 2 Video-Missionen pro Woche', '1 Simulation pro Tag mit unterschiedlichen Agenten'], type: 'success' },
   ],
-  footer: 'WladBot Leader OS · Powered by Wlad Jachtchenko Methodik',
+  footer: 'WLAD AI Leader OS · Powered by Wlad Jachtchenko Methodik',
 });
 
 const build30TagePlan = (user) => ({

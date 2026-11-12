@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
-BRAND_NAME = "WladBot"
+BRAND_NAME = "WLAD AI"
 # Absender-Name im Postfach (Wunsch Stefan): "Wlad von Leader OS"
 SENDER_NAME = os.environ.get("SENDER_NAME", "Wlad von Leader OS")
 BRAND_COLOR = "#BFFF00"
@@ -212,12 +212,12 @@ async def send_email(
 
 def _base_layout(body_html: str, preheader: str = "", badge: str = "",
                  bib_code: str = "") -> str:
-    """Wrap content in the WladBot 3.0 branded email shell.
+    """Wrap content in the WLAD AI branded email shell.
 
-    Iter 107 (Mert · GODMODE): round WladBot 3.0 avatar with lime ring, "3.0"
-    pill, optional episode badge (e.g. "EP 07 / 07") top-right with guaranteed
+    Iter 107 (Mert · GODMODE): round WLAD AI avatar with lime ring,
+    optional episode badge (e.g. "EP 07 / 07") top-right with guaranteed
     spacing to the logo, divider line, and mobile media-queries for small
-    screens. `alt="WladBot"` keeps the tile branded if images are blocked.
+    screens. `alt="WLAD AI"` keeps the tile branded if images are blocked.
     """
     # Merge mvpcode ⇄ emergent-update: die Funnel-Mails aus mvpcode (Free-
     # Video-Drip, Lead-Nurture, License-Activation, Webinar-Follow-up, …)
@@ -241,7 +241,7 @@ def _base_layout(body_html: str, preheader: str = "", badge: str = "",
     return f"""<!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WladBot</title>
+<title>WLAD AI</title>
 <style>
   @media only screen and (max-width:480px) {{
     .wb-outer {{ padding: 16px 8px !important; }}
@@ -264,10 +264,10 @@ def _base_layout(body_html: str, preheader: str = "", badge: str = "",
       <td style="vertical-align:middle;">
         <table role="presentation" cellpadding="0" cellspacing="0"><tr>
           <td style="vertical-align:middle;">
-            <img src="{avatar_url}" alt="WladBot" width="46" height="46" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid {BRAND_COLOR};background:{BRAND_COLOR};" />
+            <img src="{avatar_url}" alt="WLAD AI" width="46" height="46" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid {BRAND_COLOR};background:{BRAND_COLOR};" />
           </td>
           <td style="vertical-align:middle;padding-left:12px;">
-            <div style="font-weight:900;color:#fff;font-size:16px;letter-spacing:-0.02em;line-height:1.1;">WladBot&nbsp;<span style="display:inline-block;background:{BRAND_COLOR};color:{BRAND_DARK};font-size:9px;font-weight:900;padding:2px 6px;border-radius:6px;vertical-align:middle;letter-spacing:0.04em;">3.0</span></div>
+            <div style="font-weight:900;color:#fff;font-size:16px;letter-spacing:-0.02em;line-height:1.1;">WLAD AI</div>
             <div style="font-size:10px;color:rgba(255,255,255,0.4);font-weight:600;margin-top:3px;">Dein Leadership-Coach · immer an deiner Seite</div>
           </td>
         </tr></table>
@@ -280,7 +280,7 @@ def _base_layout(body_html: str, preheader: str = "", badge: str = "",
   <tr><td class="wb-footer" style="padding:20px 32px 28px;border-top:1px solid rgba(255,255,255,0.06);">
     <p style="font-size:10px;color:rgba(255,255,255,0.35);margin:0;line-height:1.7;">
       {footer_reason}<br>
-      WladBot · Leadership Operating System · basiert auf den Frameworks von Wlad Jachtchenko.
+      WLAD AI · Leadership Operating System · basiert auf den Frameworks von Wlad Jachtchenko.
     </p>
   </td></tr>
 </table></td></tr></table></body></html>"""
@@ -381,7 +381,7 @@ den ersten Meilenstein. Wir melden uns in 3 Tagen wieder.""",
         "subject": "Willkommen im Leadership System, {name} 🔑",
         "headline": "Dein Lizenzschlüssel ist aktiv. 1 Jahr Vollzugang.",
         "body": """Ab sofort nutzt du:<br>
-• WladBot AI Coach 24/7<br>
+• WLAD AI AI Coach 24/7<br>
 • Das komplette 30-Tage-Programm<br>
 • Alle Playbooks, Frameworks & Simulationen<br>
 • Die AI Leadership Community<br><br>
@@ -503,7 +503,7 @@ Du hast gerade dein <b>Leadership Operating System</b> aktiviert — die KI-Plat
 <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:20px;">
   <p style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;margin:0 0 14px;">
     <b>1.</b> Mache deinen Leader-Diagnose-Check (3 Minuten)<br>
-    <b>2.</b> Stelle WladBot deine erste Führungsfrage<br>
+    <b>2.</b> Stelle WLAD AI deine erste Führungsfrage<br>
     <b>3.</b> Starte den Daily Check-in für deine XP-Streak
   </p>
   <div style="text-align:center;padding-top:6px;">
@@ -513,7 +513,7 @@ Du hast gerade dein <b>Leadership Operating System</b> aktiviert — die KI-Plat
 
 <h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:28px 0 12px;">Was du als Free-User schon bekommst</h3>
 <table role="presentation" width="100%" style="margin-bottom:20px;"><tr>
-<td valign="top" style="padding:6px 12px 6px 0;width:50%;"><div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;height:100%;"><div style="font-size:10px;letter-spacing:0.15em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:4px;">WladBot</div><div style="font-size:13px;color:#fff;line-height:1.45;">Dein KI-Coach. 24/7 erreichbar. Trainiert auf 600+ Wlad-Lektionen.</div></div></td>
+<td valign="top" style="padding:6px 12px 6px 0;width:50%;"><div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;height:100%;"><div style="font-size:10px;letter-spacing:0.15em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:4px;">WLAD AI</div><div style="font-size:13px;color:#fff;line-height:1.45;">Dein KI-Coach. 24/7 erreichbar. Trainiert auf 600+ Wlad-Lektionen.</div></div></td>
 <td valign="top" style="padding:6px 0 6px 12px;width:50%;"><div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;height:100%;"><div style="font-size:10px;letter-spacing:0.15em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:4px;">3 Gratis Analysen</div><div style="font-size:13px;color:#fff;line-height:1.45;">14 Tage lang: 3 kostenlose Video-Analysen für dein Selbst-Feedback.</div></div></td>
 </tr></table>
 
@@ -544,14 +544,14 @@ Wenn du das hier liest, dann bist du bei uns nicht neu — du bist Teil der Mast
 </p>
 
 <p style="font-size:14px;color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 18px;">
-Du hast <b>250 Credits</b> auf deinem Account. Das reicht für richtig viel: Argumentations-Vorbereitungen, WladBot-Coaching, Video-Feedback, PDF-Strategien. Nutze sie — jedes Gespräch, das du hier vorbereitest, macht dich in der echten Welt schärfer.
+Du hast <b>250 Credits</b> auf deinem Account. Das reicht für richtig viel: Argumentations-Vorbereitungen, WLAD AI-Coaching, Video-Feedback, PDF-Strategien. Nutze sie — jedes Gespräch, das du hier vorbereitest, macht dich in der echten Welt schärfer.
 </p>
 
 <h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:26px 0 12px;">Womit ich anfangen würde</h3>
 <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 22px;margin-bottom:22px;">
   <p style="font-size:13.5px;color:rgba(255,255,255,0.88);line-height:1.7;margin:0 0 14px;">
     <b>1.</b> Öffne die <b>SEXIER-Prep</b> und bereite dein nächstes wichtiges Gespräch vor.<br>
-    <b>2.</b> Frag den WladBot deine ehrlichste Führungsfrage. Er kennt meine Frameworks besser als ich sie zu 4 Uhr morgens erklären könnte.<br>
+    <b>2.</b> Frag den WLAD AI deine ehrlichste Führungsfrage. Er kennt meine Frameworks besser als ich sie zu 4 Uhr morgens erklären könnte.<br>
     <b>3.</b> Mach den <b>Leader-Diagnose-Check</b> — 3 Minuten, Standortbestimmung.
   </p>
   <div style="text-align:center;padding-top:6px;">
@@ -599,7 +599,7 @@ def masterclass_invite_email(name: str, months: int, expires_label: str,
 </div>
 
 <p style="font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.7;margin:0 0 18px;">
-Als Teil der Masterclass hast du ab sofort persönlichen Zugang zu <b>Leader-OS</b> — meiner kompletten Methodik als KI, rund um die Uhr an deiner Seite. Dein Zugang läuft <b>{months} Monate</b> (bis {expires_label}) und beinhaltet <b>250 Credits</b> für Argumentations-Vorbereitungen, WladBot-Coaching, Video-Feedback und PDF-Strategien.
+Als Teil der Masterclass hast du ab sofort persönlichen Zugang zu <b>Leader-OS</b> — meiner kompletten Methodik als KI, rund um die Uhr an deiner Seite. Dein Zugang läuft <b>{months} Monate</b> (bis {expires_label}) und beinhaltet <b>250 Credits</b> für Argumentations-Vorbereitungen, WLAD AI-Coaching, Video-Feedback und PDF-Strategien.
 </p>
 
 <h3 style="font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin:26px 0 12px;">So loggst du dich ein — ohne Passwort</h3>
@@ -821,8 +821,8 @@ FRAMEWORK_EPISODES = [
             "Formuliere sie als konkrete Frage (nicht „Wie werde ich besser?“, sondern „Wie eröffne ich das Gehaltsgespräch mit Lisa?“).",
             "Hol dir Wlads Antwort — präzise, aus seiner Methodik, in Sekunden.",
         ],
-        "practice": "Stell WladBot jetzt deine echte Führungsfrage. Er kennt Wlads komplette Methodik — und ab heute auch dich.",
-        "cta_label": "Erste Frage an WladBot stellen",
+        "practice": "Stell WLAD AI jetzt deine echte Führungsfrage. Er kennt Wlads komplette Methodik — und ab heute auch dich.",
+        "cta_label": "Erste Frage an WLAD AI stellen",
         "cta_path": "/chat",
     },
     {
@@ -866,8 +866,8 @@ FRAMEWORK_EPISODES = [
             "Delegiere mit Kontext: Warum ist es wichtig? Wie sieht „fertig“ aus? Wann sprechen wir?",
             "Kontrolliere Ergebnisse, nicht Methoden — sonst delegierst du nur zum Schein.",
         ],
-        "practice": "Beschreib WladBot deine aktuelle Aufgabenliste — er wendet die Matrix mit dir an und erstellt daraus direkt deine Aufgaben in Leader-OS.",
-        "cta_label": "Delegations-Check mit WladBot",
+        "practice": "Beschreib WLAD AI deine aktuelle Aufgabenliste — er wendet die Matrix mit dir an und erstellt daraus direkt deine Aufgaben in Leader-OS.",
+        "cta_label": "Delegations-Check mit WLAD AI",
         "cta_path": "/chat",
     },
     {
@@ -1309,7 +1309,7 @@ Hallo {name},
 </p>
 <p style="font-size:15px;color:rgba(255,255,255,0.85);line-height:1.6;margin:0 0 18px;">
 danke fürs Dabeisein. Das Webinar war der Impuls — die eigentliche Arbeit passiert nicht an einem Vormittag,
-sondern in den 30 Tagen danach. Genau dafür ist LeaderOS gebaut: WladBot als 24/7-Coach, tägliche
+sondern in den 30 Tagen danach. Genau dafür ist LeaderOS gebaut: WLAD AI als 24/7-Coach, tägliche
 Mikro-Drills statt Einmal-Event, dieselbe Methodik, die du gerade live gesehen hast.
 </p>
 
@@ -1334,7 +1334,7 @@ def launch_announcement_email(
     app_url: str = "https://leaderos.de",
 ) -> tuple[str, str]:
     """One-shot announcement to Wlad's existing audience that leader-os.de
-    is live and WladBot is open for testing.
+    is live and WLAD AI is open for testing.
 
     Voice: direct, premium, no fluff — same Nike-DNA template family as the
     rest of the lifecycle emails. Funnel: scan QR (or click) → leadercheck.de
@@ -1356,7 +1356,7 @@ fünfzehn Jahre Methodik, zweitausendzweihundert Lektionen, drei SPIEGEL-Bestsel
 </p>
 
 <p style="font-size:14.5px;color:rgba(255,255,255,0.78);line-height:1.6;margin:0 0 28px;">
-<strong style="color:#ffffff;">WladBot ist live.</strong> Trainiert auf meiner Methodik, beantwortet dir um zweiundzwanzig Uhr siebenundvierzig was du sonst mich gefragt hättest. In Wlads Ton. Mit deinem Kontext.
+<strong style="color:#ffffff;">WLAD AI ist live.</strong> Trainiert auf meiner Methodik, beantwortet dir um zweiundzwanzig Uhr siebenundvierzig was du sonst mich gefragt hättest. In Wlads Ton. Mit deinem Kontext.
 </p>
 
 <!-- Three concrete things -->
@@ -1372,7 +1372,7 @@ fünfzehn Jahre Methodik, zweitausendzweihundert Lektionen, drei SPIEGEL-Bestsel
     <tr><td style="padding:7px 0;vertical-align:top;">
       <span style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:{BRAND_COLOR};font-weight:800;letter-spacing:0.08em;">§02</span>
     </td><td style="padding:7px 0;font-size:14px;color:#ffffff;font-weight:700;line-height:1.4;">
-      WladBot fragen was du sonst mich fragen würdest
+      WLAD AI fragen was du sonst mich fragen würdest
     </td></tr>
     <tr><td style="padding:7px 0;vertical-align:top;">
       <span style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:{BRAND_COLOR};font-weight:800;letter-spacing:0.08em;">§03</span>
@@ -1409,7 +1409,7 @@ P.S. — Die Diagnose dauert wirklich nur fünf Minuten. Drei Dimensionen: KI, R
 """
     return subject, _base_layout(
         body,
-        preheader=f"WladBot ist live, {name}. Fünf-Minuten-Diagnose. Sofort dein Score.",
+        preheader=f"WLAD AI ist live, {name}. Fünf-Minuten-Diagnose. Sofort dein Score.",
         bib_code="LIVE",
     )
 
@@ -1608,7 +1608,7 @@ def lead_nurture_email(step: int, name: str, unsubscribe_link: str | None = None
 
     elif step == 6:
         subject = "Ein Blick in LeaderOS — 14 Tage, kostenlos"
-        preheader = "WladBot 24/7, Simulationen, 30-Tage-Challenge, 11 Frameworks — teste alles 14 Tage."
+        preheader = "WLAD AI 24/7, Simulationen, 30-Tage-Challenge, 11 Frameworks — teste alles 14 Tage."
         body = f"""
 {_kicker("LEADER·OS")}
 {_headline("Das System von innen")}
@@ -1620,7 +1620,7 @@ def lead_nurture_email(step: int, name: str, unsubscribe_link: str | None = None
     <tr>
       <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.10);border-right:1px solid rgba(255,255,255,0.10);width:50%;vertical-align:top;">
         <div style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:0.18em;color:{BRAND_COLOR};font-weight:800;text-transform:uppercase;margin-bottom:6px;">24/7</div>
-        <div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:4px;">WladBot</div>
+        <div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:4px;">WLAD AI</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.45;">Dein KI-Coach auf Wlads Methodik — antwortet auch um 22:47.</div>
       </td>
       <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.10);width:50%;vertical-align:top;">
@@ -1786,7 +1786,7 @@ def license_activation_email(
 {_headline(f"Willkommen, {name}")}
 <p {p}>dein persönlicher LeaderOS-Zugangscode ist reserviert:</p>
 {_code_plate()}
-<p {p}>Aktiviert wird er in unter zwei Minuten: Account anlegen, direkt loslegen. <b style="color:#fff;">14 Tage kostenlos, keine Kreditkarte</b> — mit WladBot, Simulationen und den acht Frameworks, die du gerade gesehen hast.</p>
+<p {p}>Aktiviert wird er in unter zwei Minuten: Account anlegen, direkt loslegen. <b style="color:#fff;">14 Tage kostenlos, keine Kreditkarte</b> — mit WLAD AI, Simulationen und den acht Frameworks, die du gerade gesehen hast.</p>
 {webinar_line}
 {_cta(activate_url, "Code jetzt aktivieren")}
 {unsub}
@@ -1805,7 +1805,7 @@ def license_activation_email(
   <div {mono_label}>▸ {fw_role}</div>
   <p style="font-size:14px;color:#ffffff;line-height:1.6;margin:0;">{fw_text}</p>
 </div>
-<p {p}>In LeaderOS trainierst du genau das jeden Tag mit WladBot — an deinen echten Fällen, nicht an Theorie.</p>
+<p {p}>In LeaderOS trainierst du genau das jeden Tag mit WLAD AI — an deinen echten Fällen, nicht an Theorie.</p>
 {_cta(activate_url, "Code aktivieren · 14 Tage kostenlos")}
 {unsub}
 """
@@ -1841,7 +1841,7 @@ def license_activation_email(
   <div {mono_label}>▸ {fw_role}</div>
   <p style="font-size:13.5px;color:#ffffff;line-height:1.6;margin:0;">{fw_text}</p>
 </div>
-<p {p}>Dein Code <b style="color:{BRAND_COLOR};">{reserved_code}</b> gibt dir vollen Zugriff auf alle acht Frameworks, WladBot und die 30-Tage-Challenge.</p>
+<p {p}>Dein Code <b style="color:{BRAND_COLOR};">{reserved_code}</b> gibt dir vollen Zugriff auf alle acht Frameworks, WLAD AI und die 30-Tage-Challenge.</p>
 {_cta(activate_url, "Zugang aktivieren")}
 {unsub}
 """
@@ -1941,13 +1941,13 @@ def beratung_checklist_email(name: str, unsubscribe_link: str | None = None) -> 
         "deine aktuelle Führungssituation von außen einzuordnen",
         "herauszufinden, welches der 11 Frameworks für deinen Fall greift",
         "zu klären, ob 30-Tage-Challenge oder Leadership Plus besser passt",
-        "offene Fragen zu WladBot &amp; KI im Führungsalltag zu klären",
+        "offene Fragen zu WLAD AI &amp; KI im Führungsalltag zu klären",
         "einen konkreten nächsten Schritt mitzunehmen — ohne Kaufzwang",
     ])
 
     trust = _checklist("DAS UNTERSCHEIDET DAS GESPRÄCH", [
         "<b style=\"color:#fff;\">400.000+ trainierte Klienten seit 2007</b>, 13 Bücher, 3× SPIEGEL-Bestseller — nicht neu im Geschäft",
-        "<b style=\"color:#fff;\">Dieselbe Methodik läuft 24/7 in WladBot</b> — Chat, Sprache, Video-Analyse, ein Kanon, keine Version verwässert",
+        "<b style=\"color:#fff;\">Dieselbe Methodik läuft 24/7 in WLAD AI</b> — Chat, Sprache, Video-Analyse, ein Kanon, keine Version verwässert",
         "<b style=\"color:#fff;\">Am Telefon sitzt das Team, das das System baut</b> — kein Callcenter-Skript, keine Verkaufsvorgabe",
     ])
 

@@ -47,7 +47,7 @@ export default {
 
     { type: 'paragraph', text: 'Wer diese drei drauf hat, verliert in keinem Meeting mehr den Boden unter den Füßen. Schlagfertigkeit ist nicht "schnell kontern". Schlagfertigkeit ist DEN BODEN HALTEN unter Druck · und souverän die Diskussion zurück zur Sache lenken.' },
 
-    { type: 'callout', tone: 'dark', text: 'In LeaderOS ist Schlagfertigkeit ein eigenes Modul. WladBot simuliert echte Manipulations-Situationen, du übst Counter, bis sie Reflex sind. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
+    { type: 'callout', tone: 'dark', text: 'In LeaderOS ist Schlagfertigkeit ein eigenes Modul. WLAD AI simuliert echte Manipulations-Situationen, du übst Counter, bis sie Reflex sind. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
   ],
   related: [
     'dunkle-rhetorik-erkennen-und-abwehren',

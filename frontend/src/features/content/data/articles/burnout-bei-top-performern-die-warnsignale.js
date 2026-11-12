@@ -47,7 +47,7 @@ export default {
 
     { type: 'framework', code: 'B·5', title: 'Selbst-Check nach Signal 3.', explanation: 'Wenn du drei oder mehr Signale gleichzeitig erkennst: ruf einen Coach an, ruf einen Freund an, blocke dir 3 Tage. Tu eine Sache pro Tag die NICHT mit Output zu tun hat. Wenn du das nicht aushältst · wenn die "Pause" sich furchtbar anfühlt · ist das die Diagnose. Du musst RAUS aus dem System, nicht hardener werden im System.' },
 
-    { type: 'callout', tone: 'dark', text: 'In LeaderOS läuft eine wöchentliche Burnout-Selbstcheck mit WladBot · vier Fragen, 2 Minuten. Wer drei Wochen lang Auffälligkeiten zeigt, kriegt von Wlad persönlich eine Nachricht. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
+    { type: 'callout', tone: 'dark', text: 'In LeaderOS läuft eine wöchentliche Burnout-Selbstcheck mit WLAD AI · vier Fragen, 2 Minuten. Wer drei Wochen lang Auffälligkeiten zeigt, kriegt von Wlad persönlich eine Nachricht. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
   ],
   related: [
     'drei-burnouts-eine-lektion',

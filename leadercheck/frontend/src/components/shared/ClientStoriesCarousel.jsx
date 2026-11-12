@@ -8,7 +8,7 @@ export const CLIENT_STORIES = [
     src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200&q=85&auto=format&fit=crop",
     quote: "Plötzlich kommt der Kunde von alleine zum Ja.",
     body:
-      "Andreas leitet B2B-Sales. Vor jedem Closing-Call 5 Minuten mit WladBot: Einwände durchspielen, Pricing verteidigen, Schweigen aushalten. Nach 21 Tagen Routine ist seine Abschlussquote um 42 % gestiegen. Nicht weil er ein neues Tool hat. Weil er sich anders zeigt.",
+      "Andreas leitet B2B-Sales. Vor jedem Closing-Call 5 Minuten mit WLAD AI: Einwände durchspielen, Pricing verteidigen, Schweigen aushalten. Nach 21 Tagen Routine ist seine Abschlussquote um 42 % gestiegen. Nicht weil er ein neues Tool hat. Weil er sich anders zeigt.",
     result: "Ergebnis: +42 % Closing-Quote in einem Quartal.",
   },
   {
@@ -17,7 +17,7 @@ export const CLIENT_STORIES = [
     src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=85&auto=format&fit=crop",
     quote: "Sie wollte gehen. Sie blieb.",
     body:
-      "Lena, GF eines 80-Personen-Unternehmens. Ihre stärkste Mitarbeiterin reichte die Kündigung ein. Lena übte das Gespräch 30 Minuten mit WladBot. Drei Szenarien. Drei Antworten. Sie führte das Gespräch am nächsten Tag. Die Mitarbeiterin blieb.",
+      "Lena, GF eines 80-Personen-Unternehmens. Ihre stärkste Mitarbeiterin reichte die Kündigung ein. Lena übte das Gespräch 30 Minuten mit WLAD AI. Drei Szenarien. Drei Antworten. Sie führte das Gespräch am nächsten Tag. Die Mitarbeiterin blieb.",
     result: "Ergebnis: 80k € Recruiting-Kosten gespart. Schlüsselperson gehalten.",
   },
   {
@@ -35,7 +35,7 @@ export const CLIENT_STORIES = [
     src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=1200&q=85&auto=format&fit=crop",
     quote: "Mein Boss hat gefragt, was sich geändert hat.",
     body:
-      "Sandra wollte VP werden. Wusste fachlich alles. Wirkte aber nicht. 6 Monate Leader OS, 3 Sessions Sparring pro Woche, jedes Quartals-Meeting vorher mit WladBot durchgespielt. Im zweiten Halbjahr kam das Angebot. Ohne dass sie danach fragen musste.",
+      "Sandra wollte VP werden. Wusste fachlich alles. Wirkte aber nicht. 6 Monate Leader OS, 3 Sessions Sparring pro Woche, jedes Quartals-Meeting vorher mit WLAD AI durchgespielt. Im zweiten Halbjahr kam das Angebot. Ohne dass sie danach fragen musste.",
     result: "Ergebnis: VP-Position. +28 % Gehalt.",
   },
   {
@@ -44,7 +44,7 @@ export const CLIENT_STORIES = [
     src: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1200&q=85&auto=format&fit=crop",
     quote: "Ich habe das Gespräch geführt · ohne dass es eskaliert ist.",
     body:
-      "Anna ist HR-Direktorin. Zwei Führungskräfte im Dauerstreit, niemand wollte das Gespräch führen. 28 Tage Vorbereitung mit WladBot: Eskalation entschärfen, Grenzen setzen, Position halten. Das eine schwierige Gespräch dauerte 47 Minuten. Beide Führungskräfte arbeiten heute wieder zusammen.",
+      "Anna ist HR-Direktorin. Zwei Führungskräfte im Dauerstreit, niemand wollte das Gespräch führen. 28 Tage Vorbereitung mit WLAD AI: Eskalation entschärfen, Grenzen setzen, Position halten. Das eine schwierige Gespräch dauerte 47 Minuten. Beide Führungskräfte arbeiten heute wieder zusammen.",
     result: "Ergebnis: Team-Konflikt gelöst · ohne Reorg, ohne Abgang.",
   },
 ];

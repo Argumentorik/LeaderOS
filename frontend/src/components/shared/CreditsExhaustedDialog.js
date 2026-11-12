@@ -17,7 +17,7 @@ import { usePricing } from '../../contexts/PricingContext';
  */
 
 const ACTION_LABELS = {
-  chat: { label: 'Gespräche mit WladBot', icon: MessageCircle },
+  chat: { label: 'Gespräche mit WLAD AI', icon: MessageCircle },
   video_mission: { label: 'Video-Auswertungen', icon: Video },
   simulation: { label: 'Gesprächs-Training', icon: Target },
   roleplay: { label: 'Challenger-Rollenspiele', icon: Mic },

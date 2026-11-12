@@ -70,9 +70,9 @@ const TOUR_STEPS = [
     id: 'wladbot',
     target: 'nav-wladbot',
     kicker: 'Frag den Coach',
-    title: 'WladBot: 24/7 Sparring.',
+    title: 'WLAD AI: 24/7 Sparring.',
     body: 'Jede Antwort basiert auf Wlad Jachtchenkos Büchern, Vorträgen und Coaching-Praxis. Stell die Frage, die du sonst niemandem stellen würdest.',
-    speak: 'WladBot. Frag mich alles, jede Antwort basiert auf Wlad Jachtchenkos Büchern und Coaching-Praxis.',
+    speak: 'WLAD AI. Frag mich alles, jede Antwort basiert auf Wlad Jachtchenkos Büchern und Coaching-Praxis.',
   },
   {
     id: 'simulations',

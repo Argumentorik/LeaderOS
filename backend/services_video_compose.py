@@ -110,7 +110,7 @@ def _render_logo(width: int, height: int) -> Image.Image:
     tx = x + size + int(size * 0.3)
     draw.text((tx, y + int(size * 0.08)), "LEADER-OS", font=font, fill=(255, 255, 255, 235))
     small = _font(FONT_BOLD, int(size * 0.2))
-    _spaced(draw, (tx, y + int(size * 0.62)), "POWERED BY WLADBOT", small, LIME, int(size * 0.045))
+    _spaced(draw, (tx, y + int(size * 0.62)), "POWERED BY WLAD AI", small, LIME, int(size * 0.045))
     return canvas
 
 
@@ -267,7 +267,7 @@ def render_farewell_card(width: int, height: int, farewell: str, next_step: str 
 
 
 def render_end_card(width: int, height: int, seconds: float = 2.6) -> bytes:
-    """Abbinder: W-Mark, LEADER-OS, POWERED BY WLADBOT auf Schwarz — mit Stille-Tonspur."""
+    """Abbinder: W-Mark, LEADER-OS, POWERED BY WLAD AI auf Schwarz — mit Stille-Tonspur."""
     canvas = Image.new("RGB", (width, height), (10, 10, 10))
     size = int(min(width, height) * 0.16)
     mark = Image.open(LOGO_PATH).convert("RGBA").resize((size, size), Image.LANCZOS)
@@ -279,7 +279,7 @@ def render_end_card(width: int, height: int, seconds: float = 2.6) -> bytes:
     draw.text(((width - w) / 2, cy + int(size * 0.18)), "LEADER-OS", font=font, fill=(255, 255, 255))
     small = _font(FONT_BOLD, int(size * 0.17))
     tracking = int(size * 0.05)
-    text = "POWERED BY WLADBOT"
+    text = "POWERED BY WLAD AI"
     tw = sum(draw.textlength(c, font=small) + tracking for c in text) - tracking
     _spaced(draw, ((width - tw) / 2, cy + int(size * 0.78)), text, small, LIME[:3], tracking)
     with tempfile.TemporaryDirectory() as tmp:

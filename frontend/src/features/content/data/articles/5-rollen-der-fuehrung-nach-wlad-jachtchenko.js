@@ -31,7 +31,7 @@ export default {
       'Welche bist du gerade gewichen, weil sie unbequem ist? (Meistens Problemlöser, wenn ein Konflikt seit Wochen unangesprochen bleibt.)',
     ] },
     { type: 'callout', tone: 'lime', text: 'Das Framework ist nicht "spiele alle fünf täglich". Es ist "erkenne welche du gerade unterspielst und kompensiere bewusst".' },
-    { type: 'paragraph', text: 'In der Challenge diagnostizieren wir deine Rollen-Verteilung an dreißig deiner echten Wochen-Snapshots. WladBot zeigt dir wo du systematisch eine Rolle weglässt · und welcher Mikro-Experiment-Pfad das ändert.' },
+    { type: 'paragraph', text: 'In der Challenge diagnostizieren wir deine Rollen-Verteilung an dreißig deiner echten Wochen-Snapshots. WLAD AI zeigt dir wo du systematisch eine Rolle weglässt · und welcher Mikro-Experiment-Pfad das ändert.' },
   ],
   seo: {
     title: 'Fünf Rollen der Führung: das Modell von Wlad Jachtchenko',

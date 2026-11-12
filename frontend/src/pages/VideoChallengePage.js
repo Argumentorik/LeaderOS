@@ -121,7 +121,7 @@ export default function VideoChallengePage() {
     if (recording && timer >= (activeChallenge?.time_limit || 180)) stopRecording();
   }, [timer, recording, activeChallenge, stopRecording]);
 
-  // Publish page-context so the WladBot FAB drawer pre-selects folder/entry.
+  // Publish page-context so the WLAD AI FAB drawer pre-selects folder/entry.
   useEffect(() => {
     const activeEntry = archive.find(e => e.entry_id === activeEntryId);
     const resolvedFolderId = activeFolderId || activeEntry?.folder_id || null;

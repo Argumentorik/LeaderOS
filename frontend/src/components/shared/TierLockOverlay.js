@@ -26,7 +26,7 @@ const FEATURE_LABELS = {
     ],
   },
   ai_coach: {
-    title: 'WladBot AI Coach ist in Leadership OS inklusive',
+    title: 'WLAD AI AI Coach ist in Leadership OS inklusive',
     subtitle: 'Unbegrenzter 24/7 Zugriff ab Leadership OS Tier',
     benefits: [
       '24/7 KI-Coach trainiert auf Wlads Methoden',

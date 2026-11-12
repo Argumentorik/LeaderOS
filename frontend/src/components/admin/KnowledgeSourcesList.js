@@ -5,9 +5,9 @@ export const STRINGS = {
   de: {
     toggle: 'Wissens-Quellen bearbeiten', toggleSub: 'Hochladen · Ansehen · Entfernen',
     choose: 'Dateien wählen (mehrere möglich)', embedding: 'Wird eingebettet…',
-    dropHint: 'Oder mehrere PDFs/DOCX/TXT/MD hierher ziehen · max. 2 MB je Datei · sofort im WladBot-Wissen.',
+    dropHint: 'Oder mehrere PDFs/DOCX/TXT/MD hierher ziehen · max. 2 MB je Datei · sofort im WLAD AI-Wissen.',
     allowed: 'Erlaubt: .txt, .md, .pdf, .docx', tooLarge: (mb) => `Zu groß (${mb} MB, max. 2 MB)`, uploadFailed: 'Upload fehlgeschlagen',
-    success: (n) => `${n} ${n === 1 ? 'Datei' : 'Dateien'} eingebettet — WladBot kennt sie sofort.`,
+    success: (n) => `${n} ${n === 1 ? 'Datei' : 'Dateien'} eingebettet — WLAD AI kennt sie sofort.`,
     confirmRemove: (name, chunks) => `„${name}" (${chunks} Chunks) wirklich aus dem Wissen entfernen?`, removed: 'Quelle entfernt', removeTitle: 'Quelle entfernen',
     done: 'fertig', failed: 'Fehler', pending: 'offen', clear: 'Liste leeren',
     status: { queued: 'Wartet', uploading: 'Lädt hoch', embedding: 'Extrahiert & bettet ein', done: 'Fertig', error: 'Fehler' },

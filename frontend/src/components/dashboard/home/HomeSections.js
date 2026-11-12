@@ -186,7 +186,7 @@ export const AskCoachCard = ({ de, navigate }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') go(); }}
-          placeholder={de ? 'Deine Frage an WladBot…' : 'Your question for WladBot…'}
+          placeholder={de ? 'Deine Frage an WLAD AI…' : 'Your question for WLAD AI…'}
           className="h-11"
           data-testid="home-coach-input"
         />

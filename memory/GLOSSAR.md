@@ -15,7 +15,7 @@ Wer Text schreibt, nimmt die linke Spalte. Die rechte Spalte ist verbrannt.
 | Startgruppe | Kohorte, Batch |
 | Live-Call | Zoom-Termin, Webinar |
 | Kurse · Folge | Module, Lektion, Episode (deutschsprachig: Folge) |
-| WladBot | der Coach, die KI, der Bot |
+| WLAD AI | der Coach, die KI, der Bot |
 | Video-Erlebnis / Voll freigeschaltet | GODMODE |
 | Gesprächs-Training | Simulationen, Simulations |
 | Leitfäden | Playbooks |

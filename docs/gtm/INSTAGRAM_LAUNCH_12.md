@@ -23,7 +23,7 @@ aus der Session und nicht im Repo.
 Fakten nur aus `WLAD_CANON.md` und dem verifizierten Set in
 `WEBINAR_FUNNEL.md`: 400.000+ Klienten, 20+ Länder, dreifacher
 SPIEGEL-Bestseller, Trustpilot 4,9 / 388, seit 2007, 2 212 Wlad-Inhalte im
-WladBot, Webinar 26.11. (live, ohne Aufzeichnung). Nicht verwenden: „13
+WLAD AI, Webinar 26.11. (live, ohne Aufzeichnung). Nicht verwenden: „13
 Bücher“, „14 Mio Views“, „3× TEDx“, Greator-Zahlen. Keine erfundenen
 Testimonials, keine Scarcity.
 
@@ -34,7 +34,7 @@ Testimonials, keine Scarcity.
 Instagram zeigt den neuesten Post oben links. Die Lime-Cover liegen auf
 Post 01, 05, 09 und erzeugen eine Diagonale von unten rechts nach oben
 links; alle anderen Cover sind Schwarz-Weiß-Editorial mit weißem
-Anton-Lockup. WladBot (Avatar) erscheint auf 01, 04, 05, 09, 12, also nie
+Anton-Lockup. WLAD AI (Avatar) erscheint auf 01, 04, 05, 09, 12, also nie
 zweimal nebeneinander.
 
 ```
@@ -87,7 +87,7 @@ Themen-Tags: `#lernen #gewohnheiten #ebbinghaus #training #mindset #neuesführen
 
 ### Post 02 · Sa 11.10. · Feedback in drei Sätzen
 Pillar: Framework (Feedbackformel B·W·W). Cover: S/W-Foto Feedback.
-Slides: „Du bist unzuverlässig“ → B·W·W → Beispiel-Dialog mit WladBot →
+Slides: „Du bist unzuverlässig“ → B·W·W → Beispiel-Dialog mit WLAD AI →
 drei Fehler (Urteil, Immer, Rückzieher) → Prinzip → üben → CTA.
 
 Caption:
@@ -102,7 +102,7 @@ Caption:
 >
 > Drill: Schreib deinen B·W·W-Satz für dein nächstes Gespräch in die Kommentare. Wir lesen jeden.
 >
-> Link in Bio: Üb ihn vorher mit WladBot, der zurückredet.
+> Link in Bio: Üb ihn vorher mit WLAD AI, der zurückredet.
 
 Themen-Tags: `#feedback #feedbackgeben #feedbackkultur #mitarbeitergespräch #kritikgespräch #gesprächsführung`
 
@@ -204,7 +204,7 @@ Caption:
 >
 > Der Rebuttal ist der Schritt, den fast alle auslassen. Der Einwand kommt sowieso. Wer ihn selbst nennt, wirkt souverän. Wer ihn abwartet, wirkt getroffen.
 >
-> Drill: Bau die These von nächster Woche in sechs Schritten. Link in Bio, WladBot prüft, ob der Rebuttal fehlt.
+> Drill: Bau die These von nächster Woche in sechs Schritten. Link in Bio, WLAD AI prüft, ob der Rebuttal fehlt.
 
 Themen-Tags: `#argumentieren #überzeugen #präsentation #weißerhetorik #sexier #pitch #vorstand`
 
@@ -233,7 +233,7 @@ Themen-Tags: `#mitarbeitermotivation #motivation #teamkultur #mitarbeiterbindung
 Pillar: KI für Führungskräfte. Cover: Lime, Avatar.
 Slides: „alles“ oder „zu früh“ → Use-Case 1 (Gespräch von morgen) →
 Use-Case 2 (Rede in SEXIER) → Use-Case 3 (Freitag-Coaching) → KI vs. Du →
-Prinzip („KI macht die Struktur. Du machst die Substanz.“) → CTA WladBot.
+Prinzip („KI macht die Struktur. Du machst die Substanz.“) → CTA WLAD AI.
 
 Caption:
 > Wie nutze ich KI als Führungskraft? Die zwei üblichen Antworten: „alles“ oder „noch zu früh“. Beide falsch.
@@ -245,7 +245,7 @@ Caption:
 >
 > Die Trennlinie: KI macht die Struktur. Du machst die Substanz. Wer das umdreht, klingt nach generischem Slide-Deck.
 >
-> WladBot antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. Link in Bio, 14 Tage kostenlos.
+> WLAD AI antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. Link in Bio, 14 Tage kostenlos.
 
 Themen-Tags: `#kiführung #künstlicheintelligenz #chatgpt #kiimunternehmen #digitalleadership #aileadership #wladbot`
 
@@ -267,7 +267,7 @@ Caption:
 >
 > Welchen Trick hörst du am häufigsten? 1, 2 oder 3.
 >
-> Link in Bio: In der Simulation spielt WladBot den Angreifer.
+> Link in Bio: In der Simulation spielt WLAD AI den Angreifer.
 
 Themen-Tags: `#schlagfertigkeit #dunklerhetorik #manipulation #meeting #souveränität #rhetoriktraining`
 
@@ -294,14 +294,14 @@ Themen-Tags: `#führungskräfteentwicklung #seminar #weiterbildung #webinar #per
 
 ### Post 12 · Di 21.10. · Werden statt wissen
 Pillar: Das System (LeaderOS). Cover: S/W Sprint, Avatar.
-Slides: nicht noch ein Tool → ab Tag 1 (sechs Kurse, WladBot, Simulationen)
+Slides: nicht noch ein Tool → ab Tag 1 (sechs Kurse, WLAD AI, Simulationen)
 → wenn du tiefer willst (Challenge, OS-Jahr) → wer dahintersteht
 (Wlad-Foto) → warum jetzt → Prinzip → CTA 14 Tage.
 
 Caption:
 > Zwölf Posts, elf Frameworks, ein Satz: Führung wird nicht gelernt. Sie wird trainiert.
 >
-> LeaderOS ist kein weiteres Tool, sondern ein System: sechs Grundlagen-Kurse ab Tag 1, WladBot rund um die Uhr (antwortet auf 2 212 authentischen Wlad-Inhalten), Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem Fall.
+> LeaderOS ist kein weiteres Tool, sondern ein System: sechs Grundlagen-Kurse ab Tag 1, WLAD AI rund um die Uhr (antwortet auf 2 212 authentischen Wlad-Inhalten), Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem Fall.
 >
 > Wer tiefer will: die 30-Tage-Challenge mit Zertifikat und 12 Monaten Mitgliedschaft, oder das OS-Jahr mit vier Master-Programmen und Live-Sessions mit Wlad.
 >
@@ -332,7 +332,7 @@ Themen-Tags: `#leadershipos #führungstraining #kicoach #30tagechallenge #führu
 ## 4. Bio und Hub
 
 Bio-Zeile: „Führung wird nicht gelernt. Sie wird trainiert. · KI-Coach
-WladBot · 6 Kurse · 11 Drills · Webinar 26.11.“ Link: `leader-os.de/kurse`
+WLAD AI · 6 Kurse · 11 Drills · Webinar 26.11.“ Link: `leader-os.de/kurse`
 (dort Freischalt-Funnel und Webinar). Profilbild: Wlad-Porträt, nicht der
 Avatar, damit der Account als Person gelesen wird.
 
@@ -388,20 +388,20 @@ Was das für uns heißt:
   Formulierungen und nicht unsere in den Slides stehen. Das ist die
   Grundlage für die Montagsrunde: Wlad prüft gegen seine eigene Folge.
 
-## 7. WladBot-Avatar-Videos auf YouTube
+## 7. WLAD AI-Avatar-Videos auf YouTube
 
-Auf dem Kanal sollen zusätzlich Videos mit dem WladBot-Avatar erscheinen.
+Auf dem Kanal sollen zusätzlich Videos mit dem WLAD AI-Avatar erscheinen.
 Vorschlag für den Start, damit es neben Wlads Talking-Head-Folgen
 funktioniert und nicht konkurriert:
 
-- Format: „WladBot erklärt“ · 45 bis 90 Sekunden, 9:16 für Shorts und
+- Format: „WLAD AI erklärt“ · 45 bis 90 Sekunden, 9:16 für Shorts und
   Reels, 16:9-Schnitt für den Kanal. Der Avatar spricht das Lime-Prinzip
   und die drei Kernpunkte eines Carousels, Wlads Porträt und Name bleiben
   im Abspann als Quelle („aus Wlads Folge 501“).
 - Stimme: Nur mit Wlads ausdrücklicher Freigabe als Stimm-Klon, sonst eine
   neutrale deutsche Stimme. Der Avatar ist eine Cartoon-Figur, kein
   KI-Gesicht von Wlad (Regel aus `WLAD_CANON.md`).
-- Kennzeichnung: in Titel oder erstem Satz „WladBot, der KI-Coach aus
+- Kennzeichnung: in Titel oder erstem Satz „WLAD AI, der KI-Coach aus
   LeaderOS“. Keine Verwechslung mit Wlad selbst.
 - Rhythmus: eins pro Woche, jeweils zum Carousel der Woche, Veröffentlichung
   Donnerstag, damit es Wlads Montagsfolge nicht überlagert.
@@ -416,7 +416,7 @@ funktioniert und nicht konkurriert:
    Instagram zuerst laufen?
 3. Welche Zahlen gelten: Kanalbeschreibung (seit 2012, 115.000) oder Kanon
    (seit 2007, 400.000+)?
-4. Darf WladBot mit deiner geklonten Stimme sprechen, oder neutrale Stimme?
+4. Darf WLAD AI mit deiner geklonten Stimme sprechen, oder neutrale Stimme?
 5. Welche Rollenspiel-Folgen dürfen wir als Reels schneiden, und wer liefert
    die Rohdateien: Max oder YouTube-Download?
 6. Montagsrunde 12:00: Teams, Zoom oder Kommentare im Google Doc?

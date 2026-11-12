@@ -92,12 +92,12 @@ export const BentoDashboard = ({ de, name, navigate, todayTask, c30, checkinDone
         </div>
       </div>
 
-      {/* 3 · WladBot AI Coach */}
+      {/* 3 · WLAD AI AI Coach */}
       <CardShell className="col-span-12 lg:col-span-5 h-full rounded-3xl shadow-md p-6 flex flex-col" data-testid="bento-coach-card">
         <div className="flex items-center gap-3">
           <img src={WLAD_AVATAR} alt="Wlad" className="w-11 h-11 rounded-full object-cover ring-2 ring-[#BFFF00]/25 shrink-0" />
           <div className="min-w-0">
-            <h3 className="text-[15px] font-bold leading-tight">{de ? 'WladBot KI-Coach' : 'WladBot AI coach'}</h3>
+            <h3 className="text-[15px] font-bold leading-tight">{de ? 'WLAD AI KI-Coach' : 'WLAD AI AI coach'}</h3>
             <p className="text-[12px] text-muted-foreground">{de ? 'Dein Mentor für schwierige Führungsfragen' : 'Your mentor for tough leadership questions'}</p>
           </div>
         </div>

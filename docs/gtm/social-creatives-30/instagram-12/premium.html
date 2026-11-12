@@ -12,7 +12,7 @@ function photo(x){
   return `<div class="studio"></div>`;
 }
 function body(x){
-  if(x.t==='chat') return `<div class=chat>${x.chat.map(([w,m])=>`<div class="card ${w==='Du'?'user':(w==='WladBot'||w==='Verteidigung')?'ai':''}"><span class=who>${w}</span><p>${m}</p></div>`).join('')}</div>${x.note?`<p class=note>${x.note}</p>`:''}`;
+  if(x.t==='chat') return `<div class=chat>${x.chat.map(([w,m])=>`<div class="card ${w==='Du'?'user':(w==='WLAD AI'||w==='Verteidigung')?'ai':''}"><span class=who>${w}</span><p>${m}</p></div>`).join('')}</div>${x.note?`<p class=note>${x.note}</p>`:''}`;
   if(x.t==='cap') return `<div class=cap>${x.cap.map(([c,t,d])=>d===undefined?`<div class=card><b>${c}</b><span>${t}</span></div>`:`<div class=card><b><small>${c}</small>${t}</b><span>${d}</span></div>`).join('')}</div>`;
   if(x.t==='three') return `<div class=three>${x.three.map((t,j)=>`<div class=card><b>${j+1}</b><p>${t}</p></div>`).join('')}</div>`;
   if(x.t==='vs') return `<div class=vs>${x.vs.map(([tag,t,d],j)=>`<div class="card ${j?'new':'old'}"><span class=tag2>${tag}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;

@@ -29,7 +29,7 @@ export default {
     { type: 'list', style: 'numbered', items: [
       '5 Min: einer der Pilot-Teilnehmer beschreibt seine letzten 30 Tage konkret. Kein Demo-Theater, eine echte Stimme.',
       '15 Min: Wlad live (über Cal.com) oder vorab-aufgenommen, Q&A zu Methodik und Erwartungen.',
-      '15 Min: Plattform-Walkthrough vom Team · Login, Challenge-Plan, WladBot in Action.',
+      '15 Min: Plattform-Walkthrough vom Team · Login, Challenge-Plan, WLAD AI in Action.',
       '10 Min: Diagnose-Aufruf für alle. Jeder macht die Diagnose direkt im Kickoff-Raum, sieht seinen Score live.',
     ] },
     { type: 'callout', tone: 'lime', text:
@@ -41,14 +41,14 @@ export default {
       'Pro Person eine 30-Tage-Challenge, parallel laufend. Drei zusätzliche Anker:' },
     { type: 'list', style: 'bullet', items: [
       'Wöchentlicher 15-Min-Standup (optional, ohne Pflicht) · drei der Teilnehmer beschreiben ihren größten Drill der Woche.',
-      'Slack-Channel mit WladBot-Snippets · wer einen besonders guten Reflex hatte, postet ihn. Soziales Lernen ohne Performance-Druck.',
+      'Slack-Channel mit WLAD AI-Snippets · wer einen besonders guten Reflex hatte, postet ihn. Soziales Lernen ohne Performance-Druck.',
       'Wlad-Live-Session in Woche 3 (Plus-Plus-Tier) · 60 Minuten Q&A zu echten Cases aus deiner Kohorte.',
     ] },
     { type: 'heading', level: 2, text: 'Woche 5: Reflexions-Runde + Plus-Plus-Entscheidung.' },
     { type: 'paragraph', text:
       'Nach den 30 Tagen sammelt dein L&D-Team das standardisierte Ende-Challenge-Survey ein. Die Personen die ' +
       'mehr wollen, upgraden auf Plus-Plus für die folgenden 12 Monate. Die anderen behalten lebenslangen ' +
-      'Zugriff auf die elf Frameworks und WladBot.' },
+      'Zugriff auf die elf Frameworks und WLAD AI.' },
     { type: 'framework', code: 'ROLLOUT', title: 'Vier-Wochen-Plan',
       explanation:
         'Woche -2: Pilot. Woche 0: Kickoff + freiwillige Diagnose. Woche 1-4: parallele Challenges + drei ' +

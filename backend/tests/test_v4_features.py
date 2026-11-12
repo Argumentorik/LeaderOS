@@ -1,5 +1,5 @@
 """
-WladBot V4 Backend API Tests
+WLAD AI V4 Backend API Tests
 Tests for: Daily Check-in, Leader Score, Dashboard V4 endpoints
 """
 import pytest

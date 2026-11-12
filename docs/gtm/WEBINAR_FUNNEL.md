@@ -105,7 +105,7 @@ der Stimme, Schnittbilder optional (Bühne/Training), Untertitel einbrennen
 Screencapture-Tour mit Voice-over, keine Standbilder. Shot-List:
 
 1. Dashboard (Öffnen, Tagesüberblick)
-2. WladBot-Chat (echte Frage → Antwort mit Framework)
+2. WLAD AI-Chat (echte Frage → Antwort mit Framework)
 3. Simulation (Konfliktgespräch durchspielen)
 4. Feedback/Score nach der Simulation
 5. 30-Tage-Challenge (Tagesansicht)

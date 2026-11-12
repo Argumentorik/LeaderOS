@@ -154,7 +154,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du das Jahresgespräch vorab durchspielen: WladBot übernimmt die Rolle deines Mitarbeiters, ' +
+        'Im LeaderOS kannst du das Jahresgespräch vorab durchspielen: WLAD AI übernimmt die Rolle deines Mitarbeiters, ' +
         'und du übst deine Eröffnung und deine Beispiele. In den täglichen ' +
         '15-Minuten-Drills übst du einzelne Bausteine wie die Brücke zwischen Rückblick und Zielbild. Das Gespräch ' +
         'selbst führst du trotzdem selbst. Wenn du das ausprobieren willst, kannst du LeaderOS 14 Tage kostenlos testen.',

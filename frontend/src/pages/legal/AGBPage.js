@@ -40,7 +40,7 @@ export default function AGBPage() {
         </p>
         <ul>
           <li>Zugang zu interaktiven Coaching-Modulen und Videokursen</li>
-          <li>KI-gestützten Coaching-Bot („WladBot")</li>
+          <li>KI-gestützten Coaching-Bot („WLAD AI")</li>
           <li>Selbst-Diagnose-Tools auf leader-check.de</li>
           <li>Übungsaufgaben und Fortschritts-Tracking</li>
           <li>Community-Funktionen</li>

@@ -15,11 +15,11 @@ window.C=[
  {t:'cover',k:'Post 02 · Feedback',h:'Feedback in drei Sätzen. Ohne dass es nach Vorwurf klingt'+L,s:'Die Feedbackformel B·W·W aus Wlads Trainings, Satz für Satz. Wischen →',ph:'feedback',size:'xs'},
  {t:'text',k:'01 · Warum es nicht ankommt',h:'„Du bist unzuverlässig.“',s:'Ein Urteil über die Person. Das Gegenüber verteidigt sich, statt zuzuhören. Ab diesem Satz ist es kein Feedback mehr, sondern ein Streit.',ph:'conflict',size:'xs'},
  {t:'three',k:'02 · Die Formel',h:'B · W · W'+L,three:['Beobachtung: „Ich habe beobachtet, dass …“ Nur, was man filmen könnte.','Wirkung: „Dadurch …“ Was es bei dir oder im Team auslöst.','Wunsch: „Ich wünsche mir …“ Konkret, in der Zukunft.'],v:'lime',av:'small'},
- {t:'chat',k:'03 · So klingt es',h:'Ein Satz. Drei Teile'+L,size:'xs',chat:[['Du','Ich habe beobachtet, dass der Bericht dreimal erst Freitagabend kam. Dadurch habe ich am Wochenende nachgearbeitet. Ich wünsche mir, dass er donnerstags um 12 bei mir liegt.'],['WladBot','Sauber. Kein „du bist“, kein „immer“. Jetzt die Pause: zehn Sekunden schweigen, bevor du weiterredest.']],note:'Beispiel · WladBot im LeaderOS',av:'small',ph:'writing'},
+ {t:'chat',k:'03 · So klingt es',h:'Ein Satz. Drei Teile'+L,size:'xs',chat:[['Du','Ich habe beobachtet, dass der Bericht dreimal erst Freitagabend kam. Dadurch habe ich am Wochenende nachgearbeitet. Ich wünsche mir, dass er donnerstags um 12 bei mir liegt.'],['WLAD AI','Sauber. Kein „du bist“, kein „immer“. Jetzt die Pause: zehn Sekunden schweigen, bevor du weiterredest.']],note:'Beispiel · WLAD AI im LeaderOS',av:'small',ph:'writing'},
  {t:'cap',k:'04 · Die drei Fehler',h:'Woran es scheitert'+L,size:'xs',cap:[['F·01','Das Urteil','„Du bist …“ statt „Ich habe beobachtet …“. Urteile erzeugen Verteidigung.'],['F·02','Das Immer','„Immer“, „nie“, „ständig“. Ein Wort, und die Beobachtung ist angreifbar.'],['F·03','Der Rückzieher','„… aber sonst ist alles super.“ Der Nachsatz löscht den Wunsch.']],ph:'boardroom-b'},
  {t:'text',k:'05 · Die Regel',h:'Nie „du bist“.<br><span class=lime>Immer „ich habe beobachtet“.</span>',s:'Hart in der Sache, weich zur Person. Das ist der ganze Trick.',v:'lime',size:'xs',av:''},
  {t:'text',k:'06 · Üben',h:'Üb den ersten Satz, bevor du ihn brauchst'+L,s:'Das Gespräch dauert 90 Sekunden. Es scheitert nie am Gespräch. Es scheitert am ersten Satz, den du nie laut gesagt hast.',ph:'solitude',size:'s'},
- {t:'cta',k:'07 · Drill',h:'Dein Feedback für morgen'+L,size:'xs',s:'Schreib deinen B·W·W-Satz in die Kommentare oder üb ihn mit WladBot, der zurückredet. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'feedback'},
+ {t:'cta',k:'07 · Drill',h:'Dein Feedback für morgen'+L,size:'xs',s:'Schreib deinen B·W·W-Satz in die Kommentare oder üb ihn mit WLAD AI, der zurückredet. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'feedback'},
 ]},
 {id:'P03',name:'Schwierige Gespräche',slides:[
  {t:'cover',k:'Post 03 · Schwierige Gespräche',h:'Das Gespräch, das du seit drei Wochen aufschiebst'+L,s:'Wlads Sekunden-Diagnose vor jedem schwierigen Gespräch, plus das Skript. Wischen →',ph:'conflict-b',size:'xs'},
@@ -39,7 +39,7 @@ window.C=[
  {t:'three',k:'04 · Selbst-Diagnose',h:'Drei Fragen'+L,three:['Welche Rolle hast du in den letzten drei Wochen am meisten gespielt? Vermutlich Kommunikator oder Manager.','Welche am wenigsten? Vermutlich Psychologe oder Problemlöser.','Welcher bist du gerade ausgewichen, weil sie unbequem ist?'],v:'lime',av:'small'},
  {t:'text',k:'05 · Der Hebel',h:'Die Rolle, die du unterspielst, ist dein größter Hebel'+L,s:'Das Framework heißt nicht „spiele alle fünf täglich“. Es heißt: erkenne, welche fehlt, und kompensiere bewusst.',ph:'solitude',size:'xxs'},
  {t:'text',k:'06 · Das Prinzip',h:'Fünf Rollen.<br><span class=lime>Eine Person.</span>',s:'Kommunikator · Manager · Team-Leader · Psychologe · Problemlöser.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Diagnose',h:'Welche fehlt bei dir'+L,size:'xs',s:'In LeaderOS diagnostiziert WladBot deine Rollen-Verteilung an deinen echten Wochen und baut den Drill dazu. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'presence'},
+ {t:'cta',k:'07 · Diagnose',h:'Welche fehlt bei dir'+L,size:'xs',s:'In LeaderOS diagnostiziert WLAD AI deine Rollen-Verteilung an deinen echten Wochen und baut den Drill dazu. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'presence'},
 ]},
 {id:'P05',name:'Delegieren · 5 Stufen',slides:[
  {t:'cover',k:'Post 05 · Delegieren',h:'Delegieren ist kein Ja oder Nein.<br>Es sind fünf Stufen'+L,s:'Warum Aufgaben zurückkommen, und wie du den Spielraum laut aussprichst. Wischen →',v:'lime',av:'big',size:'xxs'},
@@ -49,7 +49,7 @@ window.C=[
  {t:'three',k:'04 · Die Wahl',h:'Drei Fragen vor der Stufe'+L,three:['Wie gut kennt die Person die Aufgabe?','Wie groß ist der Schaden, wenn es schiefgeht, und wie leicht ist er zu korrigieren?','Wie viel Zeit ist zum Lernen da?'],v:'lime',av:'small'},
  {t:'chat',k:'05 · Laut aussprechen',h:'Laut aussprechen'+L,chat:[['Du','Quartalsauswertung für die Geschäftsleitung, dein erstes Mal. Stufe 2: Du sammelst Optionen, ich entscheide. Mittwoch schauen wir gemeinsam drauf.'],['Gegenüber (Simulation)','Passt. Bis Mittwoch zwei Varianten mit Vor- und Nachteilen.']],note:'Beispiel · Simulation im LeaderOS',av:'small',ph:'boardroom'},
  {t:'text',k:'06 · Das Prinzip',h:'Sprich die Stufe aus.<br><span class=lime>Und den Termin.</span>',s:'Wer Stufe und Kontrollpunkt nicht benennt, delegiert unklar. Und unklare Delegation ist keine.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Drill',h:'Deine nächste Übergabe'+L,size:'xs',s:'Nimm eine Aufgabe von dieser Woche, wähl die Stufe, sprich sie aus. Oder üb die Übergabe mit WladBot. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'team'},
+ {t:'cta',k:'07 · Drill',h:'Deine nächste Übergabe'+L,size:'xs',s:'Nimm eine Aufgabe von dieser Woche, wähl die Stufe, sprich sie aus. Oder üb die Übergabe mit WLAD AI. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'team'},
 ]},
 {id:'P06',name:'10 Stufen des Zuhörens',slides:[
  {t:'cover',k:'Post 06 · Zuhören',h:'80 Prozent aller Führungskräfte hören auf Stufe 2 zu'+L,s:'Wlads Modell der zehn Stufen des Zuhörens, von abwesend bis Stille. Wischen →',ph:'listening-b',size:'xxs'},
@@ -59,7 +59,7 @@ window.C=[
  {t:'cap',k:'04 · Stufe 7 bis 10',h:'Das tiefe Zuhören'+L,size:'xs',cap:[['Z·07','Systemisch','Nicht nur die Person, das System um sie herum: Team-Dynamik, Prozess, Anreize.'],['Z·08','Diagnostisch','Das wiederkehrende Muster über mehrere Gespräche, nicht das einzelne Symptom.'],['Z·09','Generativ','Du hilfst dem Gegenüber, klarer zu denken, ohne die Antwort vorzugeben.'],['Z·10','Stille','Du sagst nichts und hältst Raum. Manche Probleme lösen sich nur im Schweigen.']],ph:'time'},
  {t:'text',k:'05 · Die Schwelle',h:'Ab Stufe 4 beginnt Führung'+L,s:'Davor reagierst du. Danach verstehst du. Dazwischen liegt die Schwelle, an der aus Reflex Führungsarbeit wird.',ph:'presence',size:'s'},
  {t:'text',k:'06 · Das Prinzip',h:'Zuhören ist keine Fähigkeit.<br><span class=lime>Es sind zehn.</span>',s:'Und jede lässt sich trainieren, eine Stufe pro Woche.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Drill',h:'Dein nächstes 1:1'+L,size:'xs',s:'Nach dem Gespräch: fass in einem Satz zusammen, was dein Gegenüber wollte. Dann bewerte deine Stufe. Oder lass WladBot mithören. Link in Bio.',cta:TRIAL,av:'big',ph:'listening-b'},
+ {t:'cta',k:'07 · Drill',h:'Dein nächstes 1:1'+L,size:'xs',s:'Nach dem Gespräch: fass in einem Satz zusammen, was dein Gegenüber wollte. Dann bewerte deine Stufe. Oder lass WLAD AI mithören. Link in Bio.',cta:TRIAL,av:'big',ph:'listening-b'},
 ]},
 {id:'P07',name:'SEXIER · Argumentieren',slides:[
  {t:'cover',k:'Post 07 · Rhetorik',h:'Warum dein Vorstand nicht überzeugt ist'+L,s:'Das SEXIER-Modell aus „Weiße Rhetorik“: sechs Schritte für ein Argument, das hält. Wischen →',ph:'stage',size:'xs'},
@@ -69,7 +69,7 @@ window.C=[
  {t:'three',k:'04 · Die Level-Regel',h:'Welches Level wann'+L,three:['Konsens-Thema: Behauptung plus ein „weil“. Mehr wirkt belehrend.','Leichter Widerstand: Behauptung, Begründung, Beispiel.','Strittige Entscheidung: SEXIER. Alle sechs Schritte, jeder Pflicht.'],v:'lime',av:'small'},
  {t:'text',k:'05 · Der Rebuttal',h:'Der Schritt, den alle auslassen'+L,s:'Der Einwand kommt sowieso. Wer ihn selbst nennt und entkräftet, wirkt souverän. Wer ihn abwartet, wirkt getroffen.',ph:'conflict-b',size:'s'},
  {t:'text',k:'06 · Das Prinzip',h:'Nicht das perfekte Argument.<br><span class=lime>Das richtige Level.</span>',s:'Zur richtigen Zeit, vor den richtigen Leuten.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Drill',h:'Dein nächster Pitch in SEXIER'+L,s:'Nimm die These von nächster Woche und bau sie in sechs Schritten. WladBot prüft, ob der Rebuttal fehlt. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'stage',size:'xs'},
+ {t:'cta',k:'07 · Drill',h:'Dein nächster Pitch in SEXIER'+L,s:'Nimm die These von nächster Woche und bau sie in sechs Schritten. WLAD AI prüft, ob der Rebuttal fehlt. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'stage',size:'xs'},
 ]},
 {id:'P08',name:'Motivation 4.0',slides:[
  {t:'cover',k:'Post 08 · Motivation',h:'Niemand hat je für einen Obstkorb eine Extrameile gemacht'+L,s:'Die drei Hebel, die tatsächlich tragen, und das 15-Minuten-Ritual dazu. Wischen →',ph:'team',size:'xxs'},
@@ -79,7 +79,7 @@ window.C=[
  {t:'three',k:'04 · Das Wochen-Ritual',h:'15 Minuten pro Woche'+L,size:'xs',three:['Montag: eine Entscheidung explizit ans Team geben. Mit Rahmen, ohne Rückversicherung.','Mittwoch: fünf Minuten „Was ist seit letzter Woche konkret besser?“ Sammeln, nicht kommentieren.','Freitag: eine Person, die Rückendeckung gebraucht hätte, bekommt sie. Öffentlich, ohne Aber.'],v:'lime'},
  {t:'text',k:'05 · Nach vier Wochen',h:'Nach vier Wochen merkst du es'+L,s:'Daran, was dein Team sagt, wenn du nicht im Raum bist. Kein Kickoff, kein Poster. Drei kleine Rituale, sichtbar für alle.',ph:'solitude',size:'xs'},
  {t:'text',k:'06 · Das Prinzip',h:'Für Vertrauen schon.<br><span class=lime>Für einen Obstkorb nie.</span>',s:'Autonomie · Fortschritt · Zugehörigkeit.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Drill',h:'Lass dein letztes Protokoll gegenlesen'+L,size:'xxs',s:'WladBot liest dein Team-Meeting gegen die drei Hebel: „Wo habe ich diese Woche Autonomie genommen statt gegeben?“ 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'team',size:'xs'},
+ {t:'cta',k:'07 · Drill',h:'Lass dein letztes Protokoll gegenlesen'+L,size:'xxs',s:'WLAD AI liest dein Team-Meeting gegen die drei Hebel: „Wo habe ich diese Woche Autonomie genommen statt gegeben?“ 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'team',size:'xs'},
 ]},
 {id:'P09',name:'KI für Führungskräfte',slides:[
  {t:'cover',k:'Post 09 · KI-Führung',h:'KI ohne Methodik ist Slop'+L,s:'Drei Use-Cases, die heute funktionieren, und die eine Regel, die den Unterschied macht. Wischen →',v:'lime',av:'big',size:'s'},
@@ -89,7 +89,7 @@ window.C=[
  {t:'cap',k:'04 · Use-Case 3',h:'Das Freitag-Coaching'+L,size:'xs',cap:[['U·03','Reflexion','Drei Fragen an einen Coach, der deine Drills und deinen Score kennt: Was war meine schwächste Reaktion diese Woche? Welches Framework hätte sie gelöst?'],['Regel','Ehrlich statt höflich','Die Antwort ist regelmäßig unbequem und immer nützlich.']],ph:'remote'},
  {t:'vs',k:'05 · Die Trennlinie',h:'KI vs. Du'+L,vs:[['KI','Strukturieren','Sortieren, formatieren, Varianten liefern, um 22:47 Uhr verfügbar.'],['Du','Substanz','Das Beispiel, die Zahl, der Tonfall, die Entscheidung. Das gibt niemand ab.']],ph:'boardroom'},
  {t:'text',k:'06 · Das Prinzip',h:'KI macht die Struktur.<br><span class=lime>Du machst die Substanz.</span>',s:'Werkzeug ohne Methodik ist Slop. Methodik mit Werkzeug ist ein Vorsprung.',v:'lime',size:'xs',av:''},
- {t:'cta',k:'07 · Start',h:'Ein Coach, der Wlads Bücher kennt'+L,size:'xs',s:'WladBot antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'ai'},
+ {t:'cta',k:'07 · Start',h:'Ein Coach, der Wlads Bücher kennt'+L,size:'xs',s:'WLAD AI antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. 14 Tage kostenlos. Link in Bio.',cta:TRIAL,av:'big',ph:'ai'},
 ]},
 {id:'P10',name:'Schlagfertigkeit',slides:[
  {t:'cover',k:'Post 10 · Schlagfertigkeit',h:'Nie wieder sprachlos im Meeting'+L,s:'Drei Manipulationstricks, die du jede Woche erlebst, und je eine Verteidigung in fünf Sekunden. Wischen →',ph:'boardroom-b',size:'s'},
@@ -106,7 +106,7 @@ window.C=[
  {t:'vs',k:'01 · Zeit',h:'Zeit'+L,vs:[['Seminar','2 Tage im Jahr','Dann 363 Tage ohne Training. Nichts, was du einmal im Jahr tust, wird zur Gewohnheit.'],['System','15 Minuten am Tag','Jeden Werktag ein Drill. Nach 30 Tagen ist der neue Reflex da, nicht nur die Erinnerung.']],ph:'time'},
  {t:'vs',k:'02 · Inhalt',h:'Inhalt'+L,vs:[['Seminar','Folien und Fallstudien','Beispiele von anderen. Interessant, aber nicht dein Montag.'],['System','Dein echter Fall','Dein Mitarbeiter, dein Konflikt, deine Verhandlung. Du bringst den Fall, das System den Drill.']],ph:'boardroom'},
  {t:'vs',k:'03 · Übung',h:'Übung'+L,vs:[['Seminar','Rollenspiel mit Kollegen','Einmal, vor Publikum, mit jemandem, der nett sein will.'],['System','Simulation mit Gegenüber','So oft du willst, mit einem Gegenüber, das widerspricht und ausweicht. Mit Auswertung danach.']],ph:'conflict-b'},
- {t:'vs',k:'04 · Danach',h:'Danach'+L,vs:[['Seminar','Ein Ordner im Regal','Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch.'],['System','Ein Coach in der Tasche','WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar.']],ph:'ai'},
+ {t:'vs',k:'04 · Danach',h:'Danach'+L,vs:[['Seminar','Ein Ordner im Regal','Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch.'],['System','Ein Coach in der Tasche','WLAD AI, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar.']],ph:'ai'},
  {t:'vs',k:'05 · Ergebnis',h:'Ergebnis'+L,vs:[['Seminar','Wissen','Du weißt mehr. Dein Team merkt nichts.'],['System','Verhalten','Du führst anders. Dein Team merkt es in der ersten Woche.']],v:'lime'},
  {t:'text',k:'06 · Das Prinzip',h:'Entweder du trainierst.<br><span class=lime>Oder du hoffst.</span>',s:'Das Seminar war nicht schlecht. Es war nur einmal.',v:'lime',size:'xs',av:''},
  {t:'cta',k:'07 · Live',h:'Sieh das System live'+L,size:'xs',s:'Do, 29. Oktober, 10:00 bis 11:30 Uhr: Wlad zeigt den Charisma-Code, das Operating System und einen echten Fall. Kostenlos, live, mit Q&A. Link in Bio.',cta:WEB,av:'big',ph:'stage'},
@@ -114,7 +114,7 @@ window.C=[
 {id:'P12',name:'Werden statt wissen',slides:[
  {t:'cover',k:'Post 12 · LeaderOS',h:'Werden statt wissen'+L,s:'Was LeaderOS ist, was drin ist, und wie du morgen anfängst. Wischen →',ph:'sprint-b',av:'big',size:'s'},
  {t:'text',k:'01 · Die Idee',h:'Nicht noch ein Tool.<br>Ein System'+L,s:'Kurse, KI-Coach, Simulationen, Drills und Auswertung greifen ineinander. Deshalb heißt es Operating System, nicht App.',ph:'app',size:'s'},
- {t:'cap',k:'02 · Was drin ist',h:'Ab Tag 1'+L,size:'s',cap:[['K·01','Sechs Grundlagen-Kurse','Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik.'],['K·02','WladBot 24/7','Antwortet auf 2 212 authentischen Wlad-Inhalten. Text und Stimme.'],['K·03','Simulationen und Drills','Ein Gegenüber, das zurückredet. 15 Minuten am Tag, an deinem Fall.']],ph:'app-b'},
+ {t:'cap',k:'02 · Was drin ist',h:'Ab Tag 1'+L,size:'s',cap:[['K·01','Sechs Grundlagen-Kurse','Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik.'],['K·02','WLAD AI 24/7','Antwortet auf 2 212 authentischen Wlad-Inhalten. Text und Stimme.'],['K·03','Simulationen und Drills','Ein Gegenüber, das zurückredet. 15 Minuten am Tag, an deinem Fall.']],ph:'app-b'},
  {t:'cap',k:'03 · Weiter',h:'Wenn du tiefer willst'+L,size:'s',cap:[['K·04','30-Tage-Challenge','Elf Frameworks gedrillt, Zertifikat mit Startnummer, 12 Monate Mitgliedschaft.'],['K·05','OS-Jahr','Vier Master-Programme, monatliche Live-Sessions mit Wlad, Video-Analyse.']],ph:'boardroom-b'},
  {t:'cap',k:'04 · Wer dahintersteht',h:'Wlad Jachtchenko'+L,size:'s',cap:[['seit 2007','Rhetorik-Trainer und Leadership-Coach','400.000+ Klienten in über 20 Ländern. Dreifacher SPIEGEL-Bestseller-Autor. Trustpilot 4,9 von 5.']],v:'photo'},
  {t:'text',k:'05 · Warum jetzt',h:'Die Art, wie Führung gelernt wird, ändert sich gerade'+L,s:'Weg vom Seminar, hin zum täglichen Training mit einem Coach in der Tasche. Wer jetzt anfängt, hat in 30 Tagen Reflexe, die andere in Jahren nicht bekommen.',ph:'sprint',size:'xxs'},

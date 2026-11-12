@@ -37,10 +37,10 @@ export const RoadmapCTA = ({ filledCount }) => {
         Plan steht. Zeit für den Sprint.
       </h3>
       <p className="font-inter text-sm text-slate-500 mb-2 max-w-lg mx-auto">
-        30 Tage Sprint · 11 Frameworks · WladBot 24/7 · 12 Monate Plattform
+        30 Tage Sprint · 11 Frameworks · WLAD AI 24/7 · 12 Monate Plattform
       </p>
       <p className="font-inter text-xs text-[#C8FF00]/60 mb-6">
-        ▸ Volle Plattform · 11 Frameworks · WladBot 24/7 · 14 Tage Geld-zurück
+        ▸ Volle Plattform · 11 Frameworks · WLAD AI 24/7 · 14 Tage Geld-zurück
       </p>
       {filledCount < 6 ? (
         <div data-testid="journal-gate">
@@ -88,7 +88,7 @@ export const RoadmapUpsellPopup = ({ onClose }) => {
             <Rocket className="w-7 h-7 text-[#C8FF00]" />
           </div>
           <h3 className="font-manrope font-extrabold text-xl text-white mb-2">Werde Teil der Leader-OS Bewegung.</h3>
-          <p className="font-inter text-sm text-slate-400">30-Tage-Sprint mit Wlad. 11 Frameworks. WladBot 24/7. 12 Monate Plattform inkludiert.</p>
+          <p className="font-inter text-sm text-slate-400">30-Tage-Sprint mit Wlad. 11 Frameworks. WLAD AI 24/7. 12 Monate Plattform inkludiert.</p>
         </div>
         <div className="text-center mb-4">
           <div className="font-manrope font-extrabold text-3xl text-white">997 EUR <span className="text-slate-500 text-base font-normal">einmalig</span></div>

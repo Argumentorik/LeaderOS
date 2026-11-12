@@ -1,4 +1,4 @@
-"""ElevenLabs Voice Integration — WladBot motivational voice + 8 Challengers persona voices.
+"""ElevenLabs Voice Integration — WLAD AI motivational voice + 8 Challengers persona voices.
 
 Strategy:
 - Each persona maps to an ElevenLabs pre-made voice_id that matches the vibe (personality, gender, tone).
@@ -223,7 +223,7 @@ def _normalize_wlad_name(text: str) -> str:
     """Marken-Namen korrigieren (eine Quelle: `services_speech_text.fix_brand_names`).
 
     Wirkt auf TTS-Eingaben, Transkripte und alles, was zurück ans Frontend geht:
-    „Vlad", „Vladimir", „Wladimir", „Flat" → „Wlad"; „Vlad Bot" → „WladBot".
+    „Vlad", „Vladimir", „Wladimir", „Flat" → „Wlad"; „Vlad Bot" → „WLAD AI".
     """
     from services_speech_text import fix_brand_names
     return fix_brand_names(text)
@@ -428,7 +428,7 @@ Du kürzt nur die Form — du vereinfachst NICHT den Inhalt.
 - Wenn der Nutzer unklar spricht (Spracherkennung), frage präzise nach, statt zu raten.
 
 NAMENSREGEL — STRIKT: Sein Name wird IMMER „Wlad" geschrieben (mit W), niemals „Vlad",
-niemals „Vladimir", niemals „Wladimir". Das Produkt heißt „Wladbot".
+niemals „Vladimir", niemals „Wladimir". Das Produkt heißt „WLAD AI".
 """
 
 # Alt-Name bleibt als Alias erhalten (wird an mehreren Stellen importiert).

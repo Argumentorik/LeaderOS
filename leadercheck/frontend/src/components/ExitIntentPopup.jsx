@@ -89,7 +89,7 @@ export default function ExitIntentPopup() {
         </h3>
 
         <p className="font-inter text-sm text-slate-400 leading-relaxed mb-5">
-          Du hast deinen Score. Jetzt der nächste Schritt: Teil der Leader-OS Bewegung werden. Volle Plattform · 11 Wlad-Frameworks · WladBot 24/7 · KI-Tools. <span className="text-white font-medium">14 Tage Geld-zurück</span> · ohne Diskussion.
+          Du hast deinen Score. Jetzt der nächste Schritt: Teil der Leader-OS Bewegung werden. Volle Plattform · 11 Wlad-Frameworks · WLAD AI 24/7 · KI-Tools. <span className="text-white font-medium">14 Tage Geld-zurück</span> · ohne Diskussion.
         </p>
 
         <div className="flex items-center justify-center gap-3 mb-5 p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
@@ -102,7 +102,7 @@ export default function ExitIntentPopup() {
         <div className="space-y-2 mb-6">
           {[
             "Sprint 997 EUR · 30 Tage + 12 Monate Plattform",
-            "11 Wlad-Frameworks · WladBot · 91 Lektionen",
+            "11 Wlad-Frameworks · WLAD AI · 91 Lektionen",
             "14 Tage Geld-zurück · ohne Diskussion",
           ].map((line) => (
             <div key={line} className="flex items-start gap-2">

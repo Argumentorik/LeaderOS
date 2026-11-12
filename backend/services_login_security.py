@@ -194,12 +194,12 @@ def _format_email_html(user_name: str, browser: str, os_name: str,
 <body style="margin:0;padding:0;background:#0A0A0A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fafafa;">
   <div style="max-width:560px;margin:40px auto;background:#111;border:1px solid #1f2937;border-radius:16px;overflow:hidden;">
     <div style="padding:32px 32px 24px;border-bottom:1px solid #1f2937;">
-      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLADBOT · SECURITY</div>
+      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLAD AI · SECURITY</div>
       <h1 style="margin:20px 0 0;font-size:26px;line-height:1.25;font-weight:700;">Neuer Login auf deinem Konto</h1>
     </div>
     <div style="padding:24px 32px 8px;color:#cbd5e1;font-size:15px;line-height:1.6;">
       <p style="margin:0 0 16px;">Hi {user_name},</p>
-      <p style="margin:0 0 20px;">wir haben gerade einen <strong style="color:#BFFF00;">Login von einem neuen Gerät oder Ort</strong> auf deinem WladBot-Konto registriert. Wenn du das selbst warst, kannst du diese Mail ignorieren.</p>
+      <p style="margin:0 0 20px;">wir haben gerade einen <strong style="color:#BFFF00;">Login von einem neuen Gerät oder Ort</strong> auf deinem WLAD AI-Konto registriert. Wenn du das selbst warst, kannst du diese Mail ignorieren.</p>
     </div>
     <div style="margin:0 32px 24px;padding:20px;background:#0d0d0d;border:1px solid #1f2937;border-radius:12px;font-size:14px;color:#94a3b8;">
       <div style="margin-bottom:10px;"><span style="color:#64748b;display:inline-block;width:90px;">Browser</span> <strong style="color:#fafafa;">{browser}</strong></div>
@@ -213,7 +213,7 @@ def _format_email_html(user_name: str, browser: str, os_name: str,
       <a href="{_app_url}/profile?tab=security" style="display:inline-block;padding:12px 22px;background:#BFFF00;color:#0A0A0A;font-weight:700;text-decoration:none;border-radius:10px;">Konto sichern →</a>
     </div>
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
-      Diese Benachrichtigung wurde automatisch von WladBot · Leader-OS gesendet.<br/>
+      Diese Benachrichtigung wurde automatisch von WLAD AI · Leader-OS gesendet.<br/>
       Argumentorik-Akademie GmbH · {_app_domain}
     </div>
   </div>
@@ -248,7 +248,7 @@ async def maybe_send_new_device_alert(
         at_iso = datetime.now(timezone.utc).strftime("%d.%m.%Y · %H:%M UTC")
 
         html = _format_email_html(user_name or "there", browser, os_name, location, ip, at_iso)
-        subject = f"Neuer Login auf deinem WladBot-Konto · {location}"
+        subject = f"Neuer Login auf deinem WLAD AI-Konto · {location}"
         result = await send_email(to=user_email, subject=subject, html=html)
         return bool(result.get("sent"))
     except Exception as e:
@@ -293,7 +293,7 @@ def _format_not_me_email_html(user_name: str, sessions: list, suspicious: list, 
 <body style="margin:0;padding:0;background:#0A0A0A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fafafa;">
   <div style="max-width:560px;margin:40px auto;background:#111;border:1px solid #1f2937;border-radius:16px;overflow:hidden;">
     <div style="padding:32px 32px 24px;border-bottom:1px solid #1f2937;">
-      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLADBOT · SECURITY</div>
+      <div style="display:inline-block;padding:6px 14px;background:#BFFF00;color:#0A0A0A;font-weight:700;font-size:12px;letter-spacing:0.08em;border-radius:999px;">WLAD AI · SECURITY</div>
       <h1 style="margin:20px 0 0;font-size:26px;line-height:1.25;font-weight:700;">Dein Konto wurde gesichert</h1>
     </div>
     <div style="padding:24px 32px 8px;color:#cbd5e1;font-size:15px;line-height:1.6;">
@@ -309,7 +309,7 @@ def _format_not_me_email_html(user_name: str, sessions: list, suspicious: list, 
       <p style="margin:16px 0 0;color:#94a3b8;font-size:13px;">Nutzt du dasselbe Passwort auch woanders? Dann ändere es dort ebenfalls.</p>
     </div>
     <div style="padding:20px 32px;border-top:1px solid #1f2937;color:#64748b;font-size:12px;line-height:1.5;">
-      Diese Benachrichtigung wurde automatisch von WladBot · Leader-OS gesendet.<br/>
+      Diese Benachrichtigung wurde automatisch von WLAD AI · Leader-OS gesendet.<br/>
       Argumentorik-Akademie GmbH · {app_domain}
     </div>
   </div>
@@ -345,7 +345,7 @@ async def send_not_me_alert(*, user_email: str, user_name: str, sessions: list, 
             return False
         at_iso = datetime.now(timezone.utc).strftime("%d.%m.%Y · %H:%M UTC")
         html = _format_not_me_email_html(user_name or "there", sessions, suspicious, at_iso)
-        result = await send_email(to=user_email, subject="Dein WladBot-Konto wurde gesichert · bitte Passwort ändern", html=html)
+        result = await send_email(to=user_email, subject="Dein WLAD AI-Konto wurde gesichert · bitte Passwort ändern", html=html)
         return bool(result.get("sent"))
     except Exception as e:
         logger.warning("not-me alert failed for %s: %s", user_email, e)

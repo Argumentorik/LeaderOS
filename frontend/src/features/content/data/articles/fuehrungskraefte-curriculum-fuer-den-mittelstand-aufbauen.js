@@ -26,7 +26,7 @@ export default {
     ] },
     { type: 'paragraph', text: 'Alles Weitere – strategisches Denken, Change-Management, Employer-Branding-Themen für Führungskräfte – kann in Modul vier bis sechs folgen, sobald das Grundgerüst steht und erste Erfolge sichtbar sind. Das schafft auch intern die Legitimation, im nächsten Jahr mehr Budget zu beantragen.' },
     { type: 'quote', text: 'Ein Curriculum, das aus Angst vor Unvollständigkeit nie startet, entwickelt niemanden.', attribution: 'Wlad, Argumentorik-Akademie 2024' },
-    { type: 'paragraph', text: 'Für Mittelständler ohne eigenes L&D-Team ist genau das der Punkt, an dem LeaderOS ansetzt: ein fertiges Curriculum statt eines leeren Blattes. Die 30-Tage-Challenge deckt die drei priorisierten Module – Feedback, Delegation, Kommunikation – strukturiert ab, WladBot begleitet jede Führungskraft einzeln, und HR muss weder Trainer suchen noch Termine koordinieren, um trotzdem allen zwanzig Führungskräften ein echtes Curriculum zu geben.' },
+    { type: 'paragraph', text: 'Für Mittelständler ohne eigenes L&D-Team ist genau das der Punkt, an dem LeaderOS ansetzt: ein fertiges Curriculum statt eines leeren Blattes. Die 30-Tage-Challenge deckt die drei priorisierten Module – Feedback, Delegation, Kommunikation – strukturiert ab, WLAD AI begleitet jede Führungskraft einzeln, und HR muss weder Trainer suchen noch Termine koordinieren, um trotzdem allen zwanzig Führungskräften ein echtes Curriculum zu geben.' },
   ],
   seo: {
     title: 'Führungskräfte-Curriculum im Mittelstand aufbauen · LeaderOS',

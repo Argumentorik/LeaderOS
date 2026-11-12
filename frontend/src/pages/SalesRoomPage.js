@@ -19,7 +19,7 @@ import { WladMark } from '../components/brand/WladMark';
 // ── Copy-ready pitch (P-P-N) ─────────────────────────────────────────────────
 const PITCH_30S = `Führungskräfte verlieren heute Stunden pro Woche an Reaktions-Modus — und alle reden über KI, aber niemand zeigt ihnen, was das für IHRE Führung konkret heißt.
 
-LeaderOS ist das Betriebssystem dafür: Wlads komplette Methodik — 3× SPIEGEL-Bestseller, 400.000+ Klienten — als tägliches System. WladBot coacht 24/7 in Wlads Ton, 11 Frameworks, Video-Analyse, 30-Tage-Challenge mit Zertifikat.
+LeaderOS ist das Betriebssystem dafür: Wlads komplette Methodik — 3× SPIEGEL-Bestseller, 400.000+ Klienten — als tägliches System. WLAD AI coacht 24/7 in Wlads Ton, 11 Frameworks, Video-Analyse, 30-Tage-Challenge mit Zertifikat.
 
 Der Einstieg kostet nichts: 14 Tage voller Zugang, ohne Karte. Wollen Sie es einmal live sehen?`;
 
@@ -38,8 +38,8 @@ const DEMO_FLOW = [
     href: 'https://leadercheck.de',
   },
   {
-    nr: '03', label: 'KERN', title: 'WladBot · der 24/7-Coach',
-    say: 'Das Herzstück: WladBot antwortet in Wlads Methodik und Ton — trainiert auf über 2.200 Wlad-Lektionen. Fragen Sie ihn etwas aus Ihrem echten Alltag.',
+    nr: '03', label: 'KERN', title: 'WLAD AI · der 24/7-Coach',
+    say: 'Das Herzstück: WLAD AI antwortet in Wlads Methodik und Ton — trainiert auf über 2.200 Wlad-Lektionen. Fragen Sie ihn etwas aus Ihrem echten Alltag.',
     show: 'Chat öffnen · Prospect eine ECHTE Frage stellen lassen (stärkster Moment der Demo)',
     href: '/chat',
   },
@@ -75,7 +75,7 @@ const PROOF = [
   ['3×', 'SPIEGEL-Bestseller · 13 Bücher'],
   ['14M', 'Views · Podcast + YouTube'],
   ['4.9/5', 'Trustpilot · 388 Bewertungen'],
-  ['2.200+', 'Wlad-Lektionen im WladBot'],
+  ['2.200+', 'Wlad-Lektionen im WLAD AI'],
   ['11', 'Frameworks · drillbar'],
   ['24/7', 'Coach-Verfügbarkeit'],
   ['3×', 'TEDx-Speaker'],
@@ -102,7 +102,7 @@ const OBJECTIONS = [
   },
   {
     q: '„ChatGPT reicht uns doch."',
-    a: 'ChatGPT ist ein leeres Werkzeug — brillant, aber ohne Methodik, ohne Gedächtnis für Ihre Führungssituation, ohne System. WladBot ist auf 2.200+ Lektionen einer erprobten Methodik trainiert, antwortet in einem konsistenten Coaching-Rahmen und ist eingebettet in Drills, Simulationen und die 30-Tage-Challenge. Der Unterschied ist derselbe wie zwischen einem Klavier und einem Klavierlehrer.',
+    a: 'ChatGPT ist ein leeres Werkzeug — brillant, aber ohne Methodik, ohne Gedächtnis für Ihre Führungssituation, ohne System. WLAD AI ist auf 2.200+ Lektionen einer erprobten Methodik trainiert, antwortet in einem konsistenten Coaching-Rahmen und ist eingebettet in Drills, Simulationen und die 30-Tage-Challenge. Der Unterschied ist derselbe wie zwischen einem Klavier und einem Klavierlehrer.',
   },
   {
     q: '„Unsere Leute haben keine Zeit."',
@@ -122,7 +122,7 @@ const OBJECTIONS = [
   },
   {
     q: '„Funktioniert das wirklich remote / im Alltag?"',
-    a: 'Es funktioniert NUR im Alltag — das ist der Designkern. Browser, Handy, 24/7. Der beste Beweis ist die Demo: Lassen Sie den Prospect im Call selbst eine echte Frage an WladBot stellen. Diese 60 Sekunden schlagen jede Folie.',
+    a: 'Es funktioniert NUR im Alltag — das ist der Designkern. Browser, Handy, 24/7. Der beste Beweis ist die Demo: Lassen Sie den Prospect im Call selbst eine echte Frage an WLAD AI stellen. Diese 60 Sekunden schlagen jede Folie.',
   },
   {
     q: '„Ich muss das intern erst abstimmen."',
@@ -255,7 +255,7 @@ export default function SalesRoomPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
-            Goldene Regel: Schritt 03 nie überspringen — der Prospect muss WladBot SELBST etwas fragen.
+            Goldene Regel: Schritt 03 nie überspringen — der Prospect muss WLAD AI SELBST etwas fragen.
           </p>
         </Section>
 
@@ -350,14 +350,14 @@ export default function SalesRoomPage() {
           </p>
         </Section>
 
-        {/* LIVE Q&A · WladBot as co-pilot */}
+        {/* LIVE Q&A · WLAD AI as co-pilot */}
         <section className="border-t border-white/10">
           <div className="max-w-[1180px] mx-auto px-5 md:px-10 py-14 md:py-16">
             <div className="border-2 border-brand bg-brand/[0.06] p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-6">
               <div className="flex-1">
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-brand mb-2">▸ WENN DER PROSPECT ETWAS FRAGT, DAS HIER NICHT STEHT</p>
                 <h3 className="text-[22px] md:text-[26px] font-black tracking-tight" style={{ fontFamily: 'Outfit, Inter, sans-serif', fontStyle: 'italic' }}>
-                  WladBot ist dein Co-Pilot im Call<span className="text-brand not-italic">.</span>
+                  WLAD AI ist dein Co-Pilot im Call<span className="text-brand not-italic">.</span>
                 </h3>
                 <p className="mt-2 text-[14px] leading-[1.6] text-white/70 max-w-2xl">
                   Zweiten Tab offen halten. Fachfrage zur Methodik, zu einem Framework, zu einem Use-Case?

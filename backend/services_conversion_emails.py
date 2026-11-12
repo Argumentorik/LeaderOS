@@ -77,7 +77,7 @@ SEQUENCE = [
         "headline": "So sieht es von innen aus.",
         "paragraphs": [
             "keine vagen KI-Versprechen — hier ist, was du nach dem Login konkret vor dir hast:",
-            "<b>1 · Gesprächsvorbereitung (SEXIER-Prep).</b> Situation rein, Strategie raus. Argumente, Einwände, Antworten — als Dokument fürs Meeting.<br><br><b>2 · WladBot.</b> Meine Bücher, Kurse und Live-Calls als durchsuchbares Coaching. Stell die Frage, die du mir im Seminar stellen würdest — er antwortet mit meiner Methodik, nicht mit Internet-Allgemeinplätzen.<br><br><b>3 · Video-Feedback.</b> Kamera an, 60 Sekunden sprechen — strukturiertes Feedback nach dem SEXIER-Schema. Wie ein 1:1 mit mir, jederzeit wiederholbar.<br><br><b>4 · Leader-Diagnose.</b> Standortbestimmung in 3 Minuten: wo du in Kommunikation, Führung und EQ gerade stehst.",
+            "<b>1 · Gesprächsvorbereitung (SEXIER-Prep).</b> Situation rein, Strategie raus. Argumente, Einwände, Antworten — als Dokument fürs Meeting.<br><br><b>2 · WLAD AI.</b> Meine Bücher, Kurse und Live-Calls als durchsuchbares Coaching. Stell die Frage, die du mir im Seminar stellen würdest — er antwortet mit meiner Methodik, nicht mit Internet-Allgemeinplätzen.<br><br><b>3 · Video-Feedback.</b> Kamera an, 60 Sekunden sprechen — strukturiertes Feedback nach dem SEXIER-Schema. Wie ein 1:1 mit mir, jederzeit wiederholbar.<br><br><b>4 · Leader-Diagnose.</b> Standortbestimmung in 3 Minuten: wo du in Kommunikation, Führung und EQ gerade stehst.",
             "Dein Masterclass-Zugang deckt all das ab — mit 250 Credits, genug für Wochen echten Trainings.",
         ],
         "cta_label": "Jetzt einloggen und ansehen →",
@@ -189,7 +189,7 @@ SEQUENCE = [
         "headline": "Dein Fahrplan für Woche 1.",
         "paragraphs": [
             "willkommen bei Leader-OS — schön, dass du dabei bist. Damit aus dem Kauf ein System wird, das für dich arbeitet, hier dein Fahrplan für die erste Woche:",
-            "<b>Tag 1 · Onboarding abschließen (5 Min).</b> Rolle, Ziel, Ausgangslage — damit jede Antwort des Systems auf dich zugeschnitten ist.<br><br><b>Tag 2 · Erstes Gespräch vorbereiten.</b> Nimm einen echten Termin aus deinem Kalender. Die Strategie nimmst du mit ins Meeting.<br><br><b>Tag 3-7 · Eine Frage pro Tag an den WladBot.</b> Die Frage, die dich gerade wirklich beschäftigt — nicht die höfliche Version davon.",
+            "<b>Tag 1 · Onboarding abschließen (5 Min).</b> Rolle, Ziel, Ausgangslage — damit jede Antwort des Systems auf dich zugeschnitten ist.<br><br><b>Tag 2 · Erstes Gespräch vorbereiten.</b> Nimm einen echten Termin aus deinem Kalender. Die Strategie nimmst du mit ins Meeting.<br><br><b>Tag 3-7 · Eine Frage pro Tag an den WLAD AI.</b> Die Frage, die dich gerade wirklich beschäftigt — nicht die höfliche Version davon.",
             "Wenn irgendwo etwas hakt: antworte auf diese Mail. Ein Mensch liest das und hilft.",
         ],
         "cta_label": "Onboarding abschließen →",

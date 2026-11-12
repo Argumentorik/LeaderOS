@@ -25,7 +25,7 @@ export const WelcomeStep = ({ de, firstName, videoRef, videoStarted, setVideoSta
     </div>
     <div>
       <p className="text-[10px] font-black tracking-[0.22em] uppercase text-[#6B8A00] dark:text-[#BFFF00] mb-1">
-        WladBot · trainiert auf Wlad Jachtchenkos Material
+        WLAD AI · trainiert auf Wlad Jachtchenkos Material
       </p>              <h1 className="text-3xl font-black tracking-tight">
         {de ? `Hi ${firstName}, schön, dass du da bist.` : `Hi ${firstName}, glad you're here.`}
       </h1>

@@ -56,7 +56,7 @@ http_status() {
 # ── HEADER ────────────────────────────────────────────────
 echo ""
 echo "════════════════════════════════════════════════════════════"
-echo "  $(c_cyan 'WLADBOT PRE-LAUNCH SMOKE TEST')"
+echo "  $(c_cyan 'WLAD AI PRE-LAUNCH SMOKE TEST')"
 echo "════════════════════════════════════════════════════════════"
 echo "  API:     $API_URL"
 echo "  User:    $TEST_EMAIL"

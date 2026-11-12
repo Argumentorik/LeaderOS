@@ -32,7 +32,7 @@ export default {
       'Baue eine Team-Regel statt eines Verbots. Nicht "KI ist erlaubt/verboten", sondern konkret: wofür ja, wofür nein, was muss offengelegt werden. Klarheit schlägt Vage-Vorsicht immer.',
     ] },
     { type: 'callout', tone: 'lime', text: 'Die Führungskraft, die als Erste offen über die eigene KI-Nutzung spricht, bekommt als Erste ehrliche Antworten von ihrem Team zurück.' },
-    { type: 'paragraph', text: 'Genau diese Kultur bildet LeaderOS technisch ab: WladBot ist kein heimliches Tool, das man vor dem Team verstecken muss, sondern ein offen im Coaching-System sichtbarer Sparring-Partner · verfügbar für jeden im 14-tägigen kostenlosen Trial. Wer als Führungskraft selbst erlebt, wie sich strukturierte, offene KI-Nutzung anfühlt, führt sein Team automatisch anders in dieses Thema hinein.' },
+    { type: 'paragraph', text: 'Genau diese Kultur bildet LeaderOS technisch ab: WLAD AI ist kein heimliches Tool, das man vor dem Team verstecken muss, sondern ein offen im Coaching-System sichtbarer Sparring-Partner · verfügbar für jeden im 14-tägigen kostenlosen Trial. Wer als Führungskraft selbst erlebt, wie sich strukturierte, offene KI-Nutzung anfühlt, führt sein Team automatisch anders in dieses Thema hinein.' },
   ],
   seo: {
     title: 'Schatten-KI im Team erkennen und offen adressieren',

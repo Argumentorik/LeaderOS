@@ -6,7 +6,7 @@ import { registerMedia, stopMedia } from '../lib/audioBus';
  * Ton-Aus-Schalter an.
  *
  * Kundenmeldung (Iter 185): „Video läuft, man klickt weg oder will mit
- * WladBot sprechen — der Ton läuft weiter."
+ * WLAD AI sprechen — der Ton läuft weiter."
  *
  * Damit gilt: Es läuft immer nur eine Tonquelle. Startet dieses Video, werden
  * alle anderen pausiert. Wird es zugeklappt/geschlossen (Unmount), der

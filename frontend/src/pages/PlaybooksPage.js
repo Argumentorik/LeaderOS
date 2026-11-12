@@ -147,7 +147,7 @@ export default function PlaybooksPage() {
         improvements: adviceReport.improvements,
         next_steps: adviceReport.next_steps,
         leadership_recommendations: adviceReport.leadership_recommendations,
-      }, `WladBot-${activePlaybook?.title?.replace(/\s+/g, '-') || 'Report'}`);
+      }, `WLAD AI-${activePlaybook?.title?.replace(/\s+/g, '-') || 'Report'}`);
     } catch (err) { logger.error('PDF generation error:', err); }
     finally { setGeneratingPDF(false); }
   };

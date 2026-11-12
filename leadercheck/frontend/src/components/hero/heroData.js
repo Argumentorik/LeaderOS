@@ -212,7 +212,7 @@ export const kursTopics = [
 ];
 
 export const freeCreditsBullets = [
-  "WladBot · dein KI-Coach für schwierige Gespräche",
+  "WLAD AI · dein KI-Coach für schwierige Gespräche",
   "Schwierige Meetings durchspielen · bevor sie passieren",
   "Persönlicher Report als PDF herunterladen",
   "30-Tage-Aktionsplan sofort starten",

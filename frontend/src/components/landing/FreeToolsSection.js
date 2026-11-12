@@ -64,7 +64,7 @@ const TOOLS = [
   {
     bib: '04',
     icon: Sparkles,
-    title: 'WladBot Lite',
+    title: 'WLAD AI Lite',
     subtitle: 'Frag Wlad. Direkt aus der Landing.',
     body:
       'Ein erster Geschmack auf den persönlichen KI-Coach. Stell deine ' +
@@ -183,7 +183,7 @@ export const FreeToolsSection = () => (
         <p className="mt-6 text-[16px] md:text-[18px] leading-[1.6] text-foreground/70">
           Vier kostenlose Werkzeuge die dich nicht nur testen · sie bringen dir
           direkt Wert. Mach den Archetyp-Check, finde deinen Hebel, frag den
-          WladBot. Onboarding ohne Reibung. Wenn du tiefer willst, ist LeaderOS
+          WLAD AI. Onboarding ohne Reibung. Wenn du tiefer willst, ist LeaderOS
           der nächste Schritt.
         </p>
       </div>

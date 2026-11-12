@@ -157,7 +157,7 @@
    "kv": [
     "01 Lektion: Eine Lektion aus einem Kurs. Kurz, mit dem Framework, das du heute brauchst.",
     "02 Drill: Dasselbe Framework an deinem echten Fall. Nicht an einer Fallstudie.",
-    "03 Frage: Du fragst WladBot, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik.",
+    "03 Frage: Du fragst WLAD AI, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik.",
     "04 Auswertung: Nach der Simulation: Struktur, Klarheit, Wirkung. Und der nächste Drill."
    ],
    "ev": null,
@@ -262,7 +262,7 @@
    "file": "leaderos-b-17.png",
    "k": "Kurse 05 · K·04",
    "h": "Feedback-Formate.",
-   "s": "Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WladBot, der dir den ersten Satz abnimmt.",
+   "s": "Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WLAD AI, der dir den ersten Satz abnimmt.",
    "list": null,
    "kv": null,
    "ev": null,
@@ -386,9 +386,9 @@
   },
   {
    "file": "leaderos-b-25.png",
-   "k": "Termine · WladBot",
+   "k": "Termine · WLAD AI",
    "h": "Dein Büro ist überall. Dein Coach auch.",
-   "s": "Im Zug, im Homeoffice, auf der Wiese. WladBot antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.",
+   "s": "Im Zug, im Homeoffice, auf der Wiese. WLAD AI antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.",
    "list": null,
    "kv": null,
    "ev": null,
@@ -428,8 +428,8 @@
   },
   {
    "file": "leaderos-b-28.png",
-   "k": "System · WladBot",
-   "h": "Powered by WladBot. Persönlich von Wlad.",
+   "k": "System · WLAD AI",
+   "h": "Powered by WLAD AI. Persönlich von Wlad.",
    "s": "Die Methodik aus Wlads Büchern und Trainings, als Coach in deiner Tasche. Und einmal im Monat Wlad selbst, live.",
    "list": null,
    "kv": null,

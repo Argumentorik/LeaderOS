@@ -167,7 +167,7 @@ export const WebinarFollowPopup = ({ armedAt = 0 }) => {
               <ul className="mt-5 space-y-3 border-y-2 border-foreground py-4">
                 {[
                   ['01', 'Schwierige Gespräche', 'Kritik äußern, ohne Vertrauen zu verlieren — mit Skript statt Bauchgefühl.'],
-                  ['02', 'KI-Coach & Simulationen', 'Live-Demo: täglich mit WladBot trainieren und Führungssituationen durchspielen, bevor sie passieren.'],
+                  ['02', 'KI-Coach & Simulationen', 'Live-Demo: täglich mit WLAD AI trainieren und Führungssituationen durchspielen, bevor sie passieren.'],
                   ['03', '30-Tage-Challenge', 'Der Trainingsplan + die Frameworks hinter 400.000+ Coachings — von SEXIER bis zur Feedbackformel.'],
                 ].map(([nr, title, desc]) => (
                   <li key={nr} className="flex items-start gap-3">

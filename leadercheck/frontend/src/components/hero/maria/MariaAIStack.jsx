@@ -8,7 +8,7 @@ import {
 } from "../../ui/skeleton-card";
 
 const AI_BULLETS = [
-  "Multi-Model: Claude, GPT, Gemini · WladBot wählt selbst.",
+  "Multi-Model: Claude, GPT, Gemini · WLAD AI wählt selbst.",
   "11 Frameworks aus Wlads Praxis (SEXIER, Harvard, EQ-Quadrant).",
   "Antworten im Wlad-Stil. Nicht generisch.",
   "Privacy: deine Sessions bleiben deine.",
@@ -25,7 +25,7 @@ export const MariaAIStack = () => (
         <span className="text-[#C8FF00]">besten KI-Hebeln</span>.
       </h3>
       <p className="text-base md:text-lg text-slate-400 leading-relaxed mb-6 max-w-[520px]">
-        WladBot orchestriert mehrere KI-Modelle und Frameworks im Hintergrund. Du tippst eine Situation rein, WladBot wählt das richtige Modell, antwortet im Wlad-Stil.
+        WLAD AI orchestriert mehrere KI-Modelle und Frameworks im Hintergrund. Du tippst eine Situation rein, WLAD AI wählt das richtige Modell, antwortet im Wlad-Stil.
       </p>
       <ul className="space-y-2.5">
         {AI_BULLETS.map((b, i) => (
@@ -43,9 +43,9 @@ export const MariaAIStack = () => (
         <CardSkeletonContainer>
           <AIStackSkeleton />
         </CardSkeletonContainer>
-        <SkCardTitle>WladBot · der Stack hinter dem Sparring.</SkCardTitle>
+        <SkCardTitle>WLAD AI · der Stack hinter dem Sparring.</SkCardTitle>
         <SkCardDescription>
-          Claude, GPT, Gemini und Wlads 11 Frameworks · orchestriert in einer Oberfläche. Du chattest. WladBot übersetzt.
+          Claude, GPT, Gemini und Wlads 11 Frameworks · orchestriert in einer Oberfläche. Du chattest. WLAD AI übersetzt.
         </SkCardDescription>
       </SkCard>
     </div>

@@ -157,7 +157,7 @@ export default {
       text: 'Die gute Nachricht: Jede der vier Dimensionen ist trainierbar. In LeaderOS findest du ' +
         'drillbare Mikro-Drills pro Dimension — kurze, konkrete Übungen für genau die Situationen ' +
         'aus diesem Artikel: das schwierige 1:1, die hinterfragte Idee, das sinnstiftende Standup. ' +
-        'Und wenn du um 23 Uhr vor einem heiklen Gespräch sitzt, sparrt der WladBot 24/7 mit dir, ' +
+        'Und wenn du um 23 Uhr vor einem heiklen Gespräch sitzt, sparrt der WLAD AI 24/7 mit dir, ' +
         'bis dein Einstieg sitzt.',
     },
     {

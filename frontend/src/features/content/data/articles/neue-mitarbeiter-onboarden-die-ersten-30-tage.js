@@ -143,7 +143,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Das Onboarding ist im Kern eine Serie von Gesprächen: die Erwartungsklärung, das Feedback, das Bilanzgespräch. Im LeaderOS kannst du diese Gespräche vorher üben. WladBot spielt die neue Kollegin oder den neuen Kollegen, reagiert verunsichert oder fragt nach, und du trainierst in täglichen 15-Minuten-Drills, klar und freundlich zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
+        'Das Onboarding ist im Kern eine Serie von Gesprächen: die Erwartungsklärung, das Feedback, das Bilanzgespräch. Im LeaderOS kannst du diese Gespräche vorher üben. WLAD AI spielt die neue Kollegin oder den neuen Kollegen, reagiert verunsichert oder fragt nach, und du trainierst in täglichen 15-Minuten-Drills, klar und freundlich zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
     },
     {
       type: 'faq',

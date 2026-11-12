@@ -1,4 +1,4 @@
-"""WladBot API v5.0 - Leadership Operating System (Modular Architecture)."""
+"""WLAD AI API v5.0 - Leadership Operating System (Modular Architecture)."""
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 import os
@@ -123,7 +123,7 @@ from routes.license import router as license_router
 from routes.rag_admin import router as rag_admin_router
 from routes.support import router as support_router
 
-app = FastAPI(title="WladBot API", version="5.0")
+app = FastAPI(title="WLAD AI API", version="5.0")
 
 # Include all route modules
 app.include_router(auth_router)
@@ -218,7 +218,7 @@ app.include_router(lab_router)
 
 @app.get("/api/")
 async def root() -> dict[str, str]:
-    return {"message": "WladBot API v5.0 - Leadership OS (Modular)"}
+    return {"message": "WLAD AI API v5.0 - Leadership OS (Modular)"}
 
 
 @app.get("/api/health")
@@ -234,7 +234,7 @@ async def root_health() -> dict[str, str]:
 
 @app.get("/api/rag-status")
 async def rag_health() -> dict:
-    """Diagnostic: is the WladBot RAG knowledge layer wired up correctly?
+    """Diagnostic: is the WLAD AI RAG knowledge layer wired up correctly?
 
     Embeddings run fully local (no external provider, no keys). Reports the
     active provider/model/dimension AND what is actually stored, so a drift

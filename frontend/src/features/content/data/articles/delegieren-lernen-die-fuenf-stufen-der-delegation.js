@@ -181,7 +181,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du das Delegationsgespräch mit WladBot üben. WladBot spielt das Gegenüber, das ' +
+        'Im LeaderOS kannst du das Delegationsgespräch mit WLAD AI üben. WLAD AI spielt das Gegenüber, das ' +
         'nachfragt, zögert oder dir sagt „Kannst du das nicht lieber selbst machen?“, und du übst, bei deiner ' +
         'Stufe zu bleiben. In den täglichen 15-Minuten-Drills wiederholst du die Formulierungen, bis sie im ' +
         'echten Gespräch ohne Nachdenken kommen. Du kannst LeaderOS 14 Tage kostenlos testen.',

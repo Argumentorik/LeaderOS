@@ -104,7 +104,7 @@ const ARCHETYPES = {
     ],
     platform: [
       { title: 'Daily Check-in',          body: 'Strukturiertes 10-Minuten-Ritual jeden Morgen · KI macht deinen Tagesplan, du entscheidest.' },
-      { title: 'WladBot als Sparring',    body: 'Dein persönlicher KI-Coach kennt deine Ziele, deine Themen, deinen Stil.' },
+      { title: 'WLAD AI als Sparring',    body: 'Dein persönlicher KI-Coach kennt deine Ziele, deine Themen, deinen Stil.' },
       { title: 'Challenge 0001 · 30 Tage',   body: 'Strukturierter Pfad vom Reflex-Nutzer zum System-Operator. Klare Tagesziele, klare Drills.' },
     ],
   },
@@ -126,7 +126,7 @@ const ARCHETYPES = {
     ],
     platform: [
       { title: '15-Minuten Mikro-Drills', body: 'Tägliche, fokussierte Übungen die hängen bleiben · nicht Theorie, sondern Muskel.' },
-      { title: 'WladBot lernt deine DNA', body: 'Je länger du auf der Plattform bist, desto mehr klingt KI nach dir, nicht nach Standard.' },
+      { title: 'WLAD AI lernt deine DNA', body: 'Je länger du auf der Plattform bist, desto mehr klingt KI nach dir, nicht nach Standard.' },
       { title: 'Kreator-Community',       body: 'Lerne mit anderen Creatorn und Solo-Foundern, die KI als Verstärker ihrer Stimme nutzen.' },
     ],
   },

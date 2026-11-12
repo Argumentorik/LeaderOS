@@ -41,7 +41,7 @@ verdrahte ich sie wo sinnvoll:
 
   wlad-podcast.jpg     — am Mic, 16:9
   wlad-book.jpg        — Buch hochhaltend, 4:5
-  wlad-phone.jpg       — Phone mit WladBot-Screen, 4:5
+  wlad-phone.jpg       — Phone mit WLAD AI-Screen, 4:5
   wlad-crowd.jpg       — vor Publikum, 16:9
   wlad-laptop.jpg      — coding/working, 4:5
 

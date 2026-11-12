@@ -68,7 +68,7 @@ export default {
       'Das jüngste Format kombiniert, was die anderen einzeln können · drillbare Frameworks plus einen KI-Coach, der deine echte Situation kennt. Genau dort setzt LeaderOS an: nicht noch mehr Input, sondern strukturierte Wiederholung, bis Methode zu Reflex wird.' },
     { type: 'list', style: 'bullet', items: [
       'Drillbare Frameworks statt Theorie-Sammlung · Feedback-Formel, Harvard-Verhandlung, die 5 Rollen, wieder und wieder geübt.',
-      'WladBot als KI-Coach, der deinen echten Fall kennt · 24/7 erreichbar, Antwort in Sekunden, genau im Moment des Bedarfs.',
+      'WLAD AI als KI-Coach, der deinen echten Fall kennt · 24/7 erreichbar, Antwort in Sekunden, genau im Moment des Bedarfs.',
       'Wiederholung über Wochen statt Einmal-Event · täglicher Mikro-Drill, der den Stoff verankert und den Transfer-Gap schließt.',
       'Trainiert auf Wlad Jachtchenkos Methodik aus über 420 000 Coachings · konsistent statt Mischmasch aus drei Schulen.',
     ] },

@@ -1,5 +1,5 @@
 /**
- * wladbotBus — tiny event bus for inter-component WladBot drawer triggers.
+ * wladbotBus — tiny event bus for inter-component WLAD AI drawer triggers.
  *
  * Why: the FolderRail (in the Video Studio Sidebar) needs to open the
  * globally-mounted FloatingWladBotDrawer with a specific folder + prefilled

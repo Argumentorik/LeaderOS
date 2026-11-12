@@ -9,13 +9,13 @@ import { BookText, Layers, MessagesSquare, Compass, Zap, Crown } from 'lucide-re
  * Sechs konkrete Quellen die in der Plattform leben:
  *   - 3 SPIEGEL-Bestseller (Rhetorik-Frameworks)
  *   - 100+ Akademie-Kurse
- *   - 400 000 Coaching-Stunden (verdichtet als WladBot-Trainingsdaten)
+ *   - 400 000 Coaching-Stunden (verdichtet als WLAD AI-Trainingsdaten)
  *   - 11 Leader-Frameworks
  *   - 30-Tage Sprint-Methodik
  *   - Lifetime-Lernpfad mit allen Vorteilen ab Tag 1
  *
  * Keine Theorie, keine Buchhülle · alles in tägliche Routinen, Drills,
- * Sprint-Etappen und WladBot-Sparring übersetzt.
+ * Sprint-Etappen und WLAD AI-Sparring übersetzt.
  */
 
 const SOURCES = [
@@ -43,8 +43,8 @@ const SOURCES = [
     title: 'Aus 400 000 Coachings.',
     body:
       'Was Wlad in 10+ Jahren live in 1:1-Sessions, Live-Workshops und ' +
-      'Inhouse-Programmen gelernt hat · als Antwort-Logik im WladBot.',
-    artifact: 'WladBot kennt deinen Kontext · antwortet in Wlads Sprache',
+      'Inhouse-Programmen gelernt hat · als Antwort-Logik im WLAD AI.',
+    artifact: 'WLAD AI kennt deinen Kontext · antwortet in Wlads Sprache',
   },
   {
     icon: Compass,
@@ -178,7 +178,7 @@ export const WladKnowledgeInsideSection = () => (
           </div>
           <p className="text-[13.5px] leading-[1.55] text-foreground/70">
             Wlad selbst ist nur 1× verfügbar. Sein Wissen ist es jetzt
-            jederzeit · als System, als WladBot, ab Tag 1 für dich offen.
+            jederzeit · als System, als WLAD AI, ab Tag 1 für dich offen.
           </p>
         </div>
       </div>

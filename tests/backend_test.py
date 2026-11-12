@@ -113,7 +113,7 @@ class WladBotAPITester:
                 "POST", 
                 "auth/register",
                 200,
-                data={"email": fallback_email, "password": "TestPass123!", "name": "Test User WladBot"}
+                data={"email": fallback_email, "password": "TestPass123!", "name": "Test User WLAD AI"}
             )
             if success and 'token' in response:
                 self.token = response['token']
@@ -514,7 +514,7 @@ class WladBotAPITester:
 
     def run_all_tests(self):
         """Run complete test suite"""
-        print(f"🚀 Starting WladBot API Tests")
+        print(f"🚀 Starting WLAD AI API Tests")
         print(f"🌐 Backend URL: {self.base_url}")
         print(f"🕒 Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
@@ -694,7 +694,7 @@ class WladBotAPITester:
 
     def run_v3_tests(self):
         """Run all V3 specific tests"""
-        print("🚀 Starting WladBot V3 Backend Testing...")
+        print("🚀 Starting WLAD AI V3 Backend Testing...")
         print("=" * 50)
         
         # Test authentication first

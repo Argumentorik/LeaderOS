@@ -25,7 +25,7 @@ export default function FinalCTASection({ onCtaClick }) {
           Finde es heraus. <span className="text-white font-medium">Kostenlos. In 7 Minuten.</span>
         </p>
         <p className="font-inter text-sm text-[#C8FF00]/70 mb-10">
-          + 50 Free Credits für deinen WladBot · Report als PDF · 30-Tage-Plan
+          + 50 Free Credits für deinen WLAD AI · Report als PDF · 30-Tage-Plan
         </p>
         <button
           data-testid="hero-cta-bottom"

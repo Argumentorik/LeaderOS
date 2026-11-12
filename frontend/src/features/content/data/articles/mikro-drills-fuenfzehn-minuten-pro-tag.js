@@ -24,7 +24,7 @@ export default {
     { type: 'heading', level: 2, text: 'Was in den 15 Minuten passiert.' },
     { type: 'list', style: 'numbered', items: [
       '3 Min: Lektion lesen oder hören.',
-      '7 Min: einen deiner echten Cases im Format der Lektion bearbeiten. WladBot drillt mit.',
+      '7 Min: einen deiner echten Cases im Format der Lektion bearbeiten. WLAD AI drillt mit.',
       '3 Min: Korrektur lesen, Lerning notieren.',
       '2 Min: Tomorrow-Anker schreiben · was machst du morgen anders.',
     ] },

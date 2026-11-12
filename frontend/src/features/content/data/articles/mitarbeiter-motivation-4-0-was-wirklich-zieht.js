@@ -64,7 +64,7 @@ export default {
       type: 'callout',
       tone: 'lime',
       text:
-        'KI-Verstärkung: Lass WladBot dein letztes Team-Meeting-Protokoll gegen die drei Hebel lesen — „Wo habe ' +
+        'KI-Verstärkung: Lass WLAD AI dein letztes Team-Meeting-Protokoll gegen die drei Hebel lesen — „Wo habe ' +
         'ich diese Woche Autonomie genommen statt gegeben?" Die Antwort ist regelmäßig unbequem und immer nützlich.',
     },
     {

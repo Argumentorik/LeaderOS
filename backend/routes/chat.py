@@ -350,7 +350,7 @@ class TasksAcceptIn(BaseModel):
 
 @router.post("/chat/tasks/accept")
 async def accept_suggested_tasks(data: TasksAcceptIn, request: Request):
-    """Iter 92.58: tasks suggested by WladBot are created only on user click."""
+    """Iter 92.58: tasks suggested by WLAD AI are created only on user click."""
     user = await get_current_user(request)
     clean = [deep_unescape(t) for t in (data.tasks or []) if isinstance(t, dict) and t.get("title")][:5]
     if not clean:

@@ -157,8 +157,8 @@ export default function Challenge30Page() {
                   {de ? '30-Tage Leader' : '30-Day Leader'} <span style={{ color: weekAccent }}>Challenge</span>
                 </h1>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/55">
-                  {de ? 'Jeden Tag eine Einheit. Vier Wochen. Von Awareness zur strategischen Dominanz — mit WladBot an deiner Seite.'
-                      : 'One unit a day. Four weeks. From awareness to strategic dominance — with WladBot at your side.'}
+                  {de ? 'Jeden Tag eine Einheit. Vier Wochen. Von Awareness zur strategischen Dominanz — mit WLAD AI an deiner Seite.'
+                      : 'One unit a day. Four weeks. From awareness to strategic dominance — with WLAD AI at your side.'}
                 </p>
                 <JourneyFocusLine de={de} className="mt-5 max-w-2xl" />
               </div>
@@ -271,7 +271,7 @@ export default function Challenge30Page() {
                         )}
                         {canStart && !isQuiz && String(c.path || '').startsWith('/chat') && (
                           <Button size="sm" variant="outline" onClick={() => startAction(c.day, `${c.path}${c.path.includes('?') ? '&' : '?'}voice=1`)}
-                            className="h-9 rounded-full px-3.5 text-[12px] font-bold" title={de ? 'Übung im Sprachmodus mit WladBot' : 'Practice by voice with WladBot'}
+                            className="h-9 rounded-full px-3.5 text-[12px] font-bold" title={de ? 'Übung im Sprachmodus mit WLAD AI' : 'Practice by voice with WLAD AI'}
                             data-testid={`start-action-voice-${c.day}`}>
                             <Mic size={12} className="mr-1" />
                             {de ? 'Per Stimme' : 'By voice'}

@@ -143,7 +143,7 @@ export default function FreeVideosMembersPage() {
             Bereit, das ganze System zu nutzen?
           </h3>
           <p className="text-sm sm:text-base text-background/70 mt-3 max-w-xl">
-            Die Videos sind der Anfang. LeaderOS gibt dir WladBot 24/7, 11 Frameworks und deinen
+            Die Videos sind der Anfang. LeaderOS gibt dir WLAD AI 24/7, 11 Frameworks und deinen
             persönlichen Lernpfad — 14 Tage kostenlos.
           </p>
           <div className="flex flex-wrap gap-3 mt-5">

@@ -8,14 +8,14 @@
 //   hf-04  §04 AUTHENTIZITÄT   Wlads Methodik. Live.          (Wlad-Portrait)
 //   hf-05  §05 TRUST           400 Tausend. 14 Millionen.    (Big numbers)
 //   hf-06  §06 ZERTIFIKAT      Zertifikat 0001.              (Urkunde)
-//   hf-07  §07 TECH-STACK      Powered by WladBot.           (3D-Voxel-Kopf)
+//   hf-07  §07 TECH-STACK      Powered by WLAD AI.           (3D-Voxel-Kopf)
 //
 // VISUAL VARIANTS (siehe BenefitVisual.js):
 //   'photo' · Editorial-Foto im Specimen-Frame
 //   'bib'   · Marathon-Startnummer 0001 (typografisch, kein Foto)
 //   'trust' · Riesen 400 · 14 mit TAUSEND / MILLIONEN-Caption
 //   'cert'  · Zertifikat-Plate mit Goldsiegel-Hint
-//   'voxel' · WladBot-Voxel-Kopf-Hint (typografisch, lime auf schwarz)
+//   'voxel' · WLAD AI-Voxel-Kopf-Hint (typografisch, lime auf schwarz)
 //
 // WLAD-FOTOS:
 //   /wlad/wlad-portrait.jpg + /wlad/wlad-stage.jpg sollen vom Studio
@@ -102,7 +102,7 @@ export const HOW_IT_WORKS = [
     title: 'Dein personalisierter Plan.',
     body:
       'Basierend auf deiner Diagnose: jeden Tag eine Aufgabe, ' +
-      'ein Framework, ein Drill. WladBot begleitet dich mit Wlads ' +
+      'ein Framework, ein Drill. WLAD AI begleitet dich mit Wlads ' +
       'Methodik. Am Ende: dein Zertifikat.',
     cta: 'Challenge kennenlernen',
     href: 'https://leadercheck.de',
@@ -115,7 +115,7 @@ export const HOW_IT_WORKS = [
     title: 'Dein Operating System.',
     body:
       'Nach der Challenge: voller Zugriff auf alle elf Frameworks, ' +
-      'WladBot 24/7, monatliche Live-Sessions und das ' +
+      'WLAD AI 24/7, monatliche Live-Sessions und das ' +
       'LeaderOS-Netzwerk.',
     cta: 'OS erkunden',
     href: 'https://leaderos.de/login',
@@ -172,7 +172,7 @@ export const LANDING_BENEFITS = [
     headlineAccent: '7 Tage.',
     subline: 'Andere Coaches schlafen. Deiner nicht.',
     body:
-      'WladBot ist dein persönlicher KI-Coach, trainiert auf 15 ' +
+      'WLAD AI ist dein persönlicher KI-Coach, trainiert auf 15 ' +
       'Jahren Wlad-Methodik, 600+ Lektionen, drei SPIEGEL-Bestseller. ' +
       'Du fragst ihn was du sonst Wlad selbst fragen würdest: ' +
       '"Wie eröffne ich diese schwierige Konversation?", "Wie ' +
@@ -182,9 +182,9 @@ export const LANDING_BENEFITS = [
       ['HRS', 'VERFÜGBARKEIT',  '24 / 7 / 365'],
       ['LNG', 'SPRACHE',        'Deutsch · English'],
       ['LAG', 'ANTWORTZEIT',    '< 3 Sekunden'],
-      ['VOI', 'VOICE-CHAT',     'Live-Telefonat mit WladBot'],
+      ['VOI', 'VOICE-CHAT',     'Live-Telefonat mit WLAD AI'],
     ],
-    cta: 'WladBot starten',
+    cta: 'WLAD AI starten',
     href: 'https://leadercheck.de',
     variant: 'photo',
     photo: local('p-02-zeit-zu-fuehren.webp'),
@@ -269,7 +269,7 @@ export const LANDING_BENEFITS = [
     ],
     cta: 'Mehr Beweise',
     href: 'https://leadercheck.de',
-    // WladBot 3.0 card (avatar + pixel scan-grid + live status). The old
+    // WLAD AI card (avatar + pixel scan-grid + live status). The old
     // numbers poster just duplicated the headline and cropped badly in the
     // 4:5 frame (user feedback) — the numbers live in headline + specimen
     // table, the card now shows WHO is behind them.
@@ -307,7 +307,7 @@ export const LANDING_BENEFITS = [
     nr: '07',
     code: 'KOMPLETT',
     eyebrow: 'BENEFIT 07 · KOMPLETTBEGLEITUNG',
-    headline: 'Powered by WladBot.',
+    headline: 'Powered by WLAD AI.',
     headlineAccent: 'Persönlich von Wlad.',
     subline: 'Lernen ist nicht genug. Umsetzen entscheidet.',
     dark: true,
@@ -315,11 +315,11 @@ export const LANDING_BENEFITS = [
       'Plus-Plus ist kein Online-Kurs den du wegklickst. Es ist ' +
       'echtes Enablement: tägliche Lernvideos, Live-Sessions im kleinen Kreis ' +
       'persönlich, der Drill-Channel in dem du das Gelernte sofort ' +
-      'auf deinen echten Führungsalltag anwendest, und WladBot der ' +
+      'auf deinen echten Führungsalltag anwendest, und WLAD AI der ' +
       'deine Challenge-Historie kennt. Du lernst nicht 11 Bücher, du ' +
       'setzt sie um.',
     detail: [
-      ['BOT',  'WLADBOT',        'Dein 24/7 Coach in Wlads Stimme'],
+      ['BOT',  'WLAD AI',        'Dein 24/7 Coach in Wlads Stimme'],
       ['VID',  'LERNVIDEOS',     'Jeden Tag eine neue Lektion'],
       ['LIV',  'LIVE-SESSIONS',  'Monatlich · live · ungeschnitten'],
       ['DRL',  'DRILL-CHANNEL',  'Theorie sofort am echten Fall umsetzen'],

@@ -100,7 +100,7 @@ const FAQ = [
   {
     q: 'Was hat das mit LeaderOS zu tun?',
     a: 'Das Event ist der Live-Auftakt zu LeaderOS · Wlads KI-Coaching-Plattform. Du ' +
-       'erlebst die Methodik live und kannst sie danach täglich mit WladBot weitertrainieren ' +
+       'erlebst die Methodik live und kannst sie danach täglich mit WLAD AI weitertrainieren ' +
        '· 14 Tage kostenlos, ohne Karte.',
   },
 ];

@@ -154,7 +154,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Das Schwierigste an Teamkonflikten ist oft nicht die Methode, sondern der erste Satz. Im LeaderOS kannst du ihn üben: WladBot spielt Teammitglieder, die abblocken, widersprechen oder schweigen, und du trainierst in täglichen Drills von 15 Minuten, bei deiner Beobachtung zu bleiben. Die ersten 14 Tage sind kostenlos.',
+        'Das Schwierigste an Teamkonflikten ist oft nicht die Methode, sondern der erste Satz. Im LeaderOS kannst du ihn üben: WLAD AI spielt Teammitglieder, die abblocken, widersprechen oder schweigen, und du trainierst in täglichen Drills von 15 Minuten, bei deiner Beobachtung zu bleiben. Die ersten 14 Tage sind kostenlos.',
     },
     {
       type: 'faq',

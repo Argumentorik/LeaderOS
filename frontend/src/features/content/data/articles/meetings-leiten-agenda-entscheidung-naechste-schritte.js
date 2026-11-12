@@ -198,7 +198,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS trainierst du die Moderation in kurzen Drills. WladBot spielt die Teilnehmenden: den, der ' +
+        'Im LeaderOS trainierst du die Moderation in kurzen Drills. WLAD AI spielt die Teilnehmenden: den, der ' +
         'abschweift, die, die nichts sagt, und den, der deine Entscheidung nach dem Meeting wieder infrage ' +
         'stellt. Du übst deine drei Einstiegssätze und die Abschlussrunde, bis sie sitzen. Die Drills dauern ' +
         'täglich rund 15 Minuten, und du kannst LeaderOS 14 Tage kostenlos testen.',

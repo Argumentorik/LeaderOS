@@ -25,9 +25,9 @@ export default {
     { type: 'paragraph', text:
       'Wenn deine Diagnose noch nicht gemacht wurde, läuft sie jetzt · zehn Minuten, dreißig Fragen, sofort ' +
       'der Plan. Wenn sie schon gemacht wurde, springst du direkt zu Minute 10.' },
-    { type: 'heading', level: 2, text: 'Minute 10 bis 25: Setup-Gespräch mit WladBot.' },
+    { type: 'heading', level: 2, text: 'Minute 10 bis 25: Setup-Gespräch mit WLAD AI.' },
     { type: 'paragraph', text:
-      'Der erste echte Drill ist kein Drill. Es ist ein Setup-Gespräch. WladBot fragt dich nach drei realen ' +
+      'Der erste echte Drill ist kein Drill. Es ist ein Setup-Gespräch. WLAD AI fragt dich nach drei realen ' +
       'Situationen aus den letzten zwei Wochen · ein 1:1, eine Firmenrede, eine Verhandlung. Du beschreibst sie ' +
       'in deinen eigenen Worten. Der Bot speichert sie als Trainings-Cases für die restliche Challenge.' },
     { type: 'callout', tone: 'lime', text:
@@ -37,7 +37,7 @@ export default {
     { type: 'paragraph', text:
       'Lektion 1 aus deinem ersten Hebel-Framework. Wlad spricht direkt mit dir, sieben Minuten Video, ' +
       'transkribiert, ohne Soft-Talk. Danach ein direkter Drill: einer deiner drei Cases vom Setup-Gespräch ' +
-      'wird gegen die gerade gelernte Methodik gespiegelt. Du schreibst, WladBot korrigiert.' },
+      'wird gegen die gerade gelernte Methodik gespiegelt. Du schreibst, WLAD AI korrigiert.' },
     { type: 'heading', level: 2, text: 'Minute 45 bis 60: Reflexion + Tomorrow-Anker.' },
     { type: 'paragraph', text:
       'Am Ende der Stunde: drei Minuten Reflexion (was hast du gelernt, was hat überrascht), gefolgt von ' +
@@ -47,7 +47,7 @@ export default {
     { type: 'list', style: 'numbered', items: [
       'Login + Challenge-Plan (5 Min)',
       'Diagnose falls noch nicht gemacht (10 Min, optional)',
-      'Setup-Gespräch mit WladBot, drei echte Cases (15 Min)',
+      'Setup-Gespräch mit WLAD AI, drei echte Cases (15 Min)',
       'Lektion 1 + erster Drill am eigenen Case (20 Min)',
       'Reflexion + Tomorrow-Anker (10 Min)',
     ] },
@@ -65,9 +65,9 @@ export default {
   seo: {
     title: 'LeaderOS Onboarding: dein erster Tag in 60 Minuten',
     description:
-      'LeaderOS Onboarding Schritt für Schritt: Login, Challenge-Plan, Setup-Gespräch mit WladBot, erste ' +
+      'LeaderOS Onboarding Schritt für Schritt: Login, Challenge-Plan, Setup-Gespräch mit WLAD AI, erste ' +
       'Lektion und erster Drill am eigenen Case. 60 Minuten, kein Marketing-Theater. Von Wlad Jachtchenko.',
-    keywords: ['LeaderOS Onboarding', 'Challenge Tag 1', 'Wlad Challenge Ablauf', 'Leadership Onboarding 30 Tage', 'WladBot Setup'],
+    keywords: ['LeaderOS Onboarding', 'Challenge Tag 1', 'Wlad Challenge Ablauf', 'Leadership Onboarding 30 Tage', 'WLAD AI Setup'],
   },
   related: ['was-in-leader-os-drin-ist', 'leader-os-im-team-rollout'],
 };

@@ -159,7 +159,7 @@ export default {
       type: 'paragraph',
       text:
         'Im LeaderOS trainierst du das in kurzen Einheiten: Du schreibst einen Lobsatz für eine echte Situation aus ' +
-        'deiner Woche, und WladBot spielt die Person, die ihn hört. So hörst du, ob der Satz konkret klingt oder ' +
+        'deiner Woche, und WLAD AI spielt die Person, die ihn hört. So hörst du, ob der Satz konkret klingt oder ' +
         'nach Floskel. Die täglichen 15-Minuten-Drills sind dafür gedacht, dass aus dem Vorsatz eine Gewohnheit wird. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

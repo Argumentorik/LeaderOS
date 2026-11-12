@@ -6,8 +6,8 @@ import { captureLeadershipIntent, wladbotUrlForIntent } from '../../../lib/leade
  * InlineDiagnostic · the in-article problem-capture block (Growth-Loop
  * Layer 2). Renders inside long-form articles via a `diagnostic` body
  * block. The reader picks the situation they're actually in (or types
- * it), which flows through the SAME Intent Schema Layer as the WladBot
- * card — one normalized event stream — and routes them into WladBot with
+ * it), which flows through the SAME Intent Schema Layer as the WLAD AI
+ * card — one normalized event stream — and routes them into WLAD AI with
  * a category-tuned prompt.
  *
  * Why inside the article and not just the rail: a reader 60% through a
@@ -63,7 +63,7 @@ export const InlineDiagnostic = ({ block, articleSlug, articleTitle }) => {
         {(block?.prompt || 'In welcher Situation steckst du gerade?').replace(/\?$/, '')}<span className="text-brand not-italic">?</span>
       </h3>
 
-      {/* Quick-select · each routes into WladBot with a category-tuned prompt */}
+      {/* Quick-select · each routes into WLAD AI with a category-tuned prompt */}
       <div className="flex flex-wrap gap-2 mb-4">
         {options.map((o) => (
           <button
@@ -95,7 +95,7 @@ export const InlineDiagnostic = ({ block, articleSlug, articleTitle }) => {
           className="h-11 px-5 inline-flex items-center justify-center gap-1.5 bg-brand hover:bg-foreground hover:text-background text-[#0A0A0A] font-bold text-[12px] uppercase tracking-[0.12em] transition-colors"
           data-testid="diagnostic-cta"
         >
-          {custom.trim() ? 'Lösung holen' : 'WladBot fragen'} <ArrowRight size={14} />
+          {custom.trim() ? 'Lösung holen' : 'WLAD AI fragen'} <ArrowRight size={14} />
         </button>
       </div>
       <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.18em] text-foreground/45">

@@ -39,7 +39,7 @@ mit `render_premium.cjs` (Playwright, 1080 × 1350 und 1080 × 1920).
 | 30 Singles A | `A01.png` … `A30.png` | Paradigmenwechsel, Realität, Frameworks, LeaderOS, Webinar (Set aus `SOCIAL_CREATIVES_30.md`) |
 | 30 Singles B | `B01.png` … `B30.png` | „Alles ändert sich“, Kurse, Events, Paradigmenwechsel (Set B) |
 | 30 Stories | `ST01.png` … `ST30.png` (9:16) | 12 Prinzip-Slides der Carousels plus 18 Statements aus Set A |
-| 2 Hero | `AVATAR-profile-4x5.png`, `AVATAR-profile-9x16.png` | WladBot-Avatar mit schwebender Profilkarte (1.643 Beiträge, 77,8K Follower, Bio, Folgen-Button) für Launch-Post und Story |
+| 2 Hero | `AVATAR-profile-4x5.png`, `AVATAR-profile-9x16.png` | WLAD AI-Avatar mit schwebender Profilkarte (1.643 Beiträge, 77,8K Follower, Bio, Folgen-Button) für Launch-Post und Story |
 
 Dazu `feed-grid-12.jpg` (Feed nach Post 12), `sheet-P01.jpg` …
 `sheet-P12.jpg`, `sheet-A-30.jpg`, `sheet-B-30.jpg`, `sheet-stories-30.jpg`
@@ -93,7 +93,7 @@ wieder verbunden ist.
 ## Was noch von Hand passiert
 
 - Bio-Link auf `leader-os.de/kurse` setzen, Bio-Zeile: „Führung wird nicht
-  gelernt. Sie wird trainiert. · KI-Coach WladBot · 6 Kurse · 11 Drills ·
+  gelernt. Sie wird trainiert. · KI-Coach WLAD AI · 6 Kurse · 11 Drills ·
   Webinar 26.11.“
 - Highlights anlegen: Frameworks, Webinar, LeaderOS.
 - Die 1.643 bestehenden Posts bleiben. Der neue Look beginnt mit Post 01;

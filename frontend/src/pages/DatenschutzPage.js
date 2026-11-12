@@ -90,8 +90,8 @@ export default function DatenschutzPage() {
         <Section title={de ? '5. Automatisierte Entscheidungsfindung' : '5. Automated decision-making'}>
           <p>
             {de
-              ? 'Unser KI-Coach (WladBot) generiert personalisierte Antworten basierend auf deinen Eingaben. Diese sind beratend, treffen aber KEINE rechtsverbindlichen Entscheidungen über dich (z.B. Krediteinstufung). Du kannst die KI-Antworten jederzeit ignorieren und menschliches Coaching (per E-Mail) anfordern.'
-              : 'Our AI Coach (WladBot) generates personalized responses based on your inputs. These are advisory and do NOT make legally binding decisions about you. You can ignore AI responses anytime and request human coaching via email.'}
+              ? 'Unser KI-Coach (WLAD AI) generiert personalisierte Antworten basierend auf deinen Eingaben. Diese sind beratend, treffen aber KEINE rechtsverbindlichen Entscheidungen über dich (z.B. Krediteinstufung). Du kannst die KI-Antworten jederzeit ignorieren und menschliches Coaching (per E-Mail) anfordern.'
+              : 'Our AI Coach (WLAD AI) generates personalized responses based on your inputs. These are advisory and do NOT make legally binding decisions about you. You can ignore AI responses anytime and request human coaching via email.'}
           </p>
         </Section>
 

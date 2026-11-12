@@ -29,7 +29,7 @@ Veraltete Namen, die **nirgends mehr** auftauchen sollen: „Starter“ (199 €
 
 ## Funktionsumfang (Stand Iter 162)
 
-- **WladBot KI-Coach** — GPT-5.2, Streaming (SSE), Session-Memory, Persona-Prefill aus Profil
+- **WLAD AI KI-Coach** — GPT-5.2, Streaming (SSE), Session-Memory, Persona-Prefill aus Profil
 - **Lokales Hybrid-RAG** — MiniLM 384 dim + Keyword-RRF, 7.400+ Chunks (Bücher, Kurse, Live-Calls, Wlad-Canon), Admin-Upload .txt/.md/.pdf/.docx bis 2 MB je Datei, Bulk-Import mit Fortschritt je Datei, Konsistenz-Check `GET /api/rag-status`
 - **Video-Missionen** — Whisper-Transkription + SEXIER-Analyse, Archiv, Sharing
 - **Kurs-Bibliothek** — 10 Kurse / 72 Folgen, Folge 1 frei, Video-Upload per Admin

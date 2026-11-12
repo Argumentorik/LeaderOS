@@ -4,7 +4,7 @@
  *   CEO/business-owner focused landing page. Sells the story of empowering
  *   teams with AI + Communication + Leadership skills, plus the "Bring Your
  *   Own RAG" story (companies upload their books/SOPs/onboarding material
- *   and get a private internal WladBot for their people).
+ *   and get a private internal WLAD AI for their people).
  *
  *   Non-authenticated — captures leads via /api/enterprise/public-lead.
  */
@@ -232,8 +232,8 @@ const BringYourOwnRAG = ({ de }) => (
         </h2>
         <p className="text-white/65 leading-relaxed mb-8 text-[15px]">
           {de
-            ? 'Lade deine Bücher, Playbooks, SOPs, Onboarding-Dokumente, Verkaufsscripts oder Führungsleitlinien hoch. LeaderOS baut daraus einen privaten Company-Bot — im gleichen Stil wie WladBot, aber ausschließlich mit deinem Wissen. Deine Mitarbeiter fragen ihn 24/7 im Alltag. Skalierbares Onboarding, konsistente Antworten, keine Lernkurve.'
-            : 'Upload your books, playbooks, SOPs, onboarding docs, sales scripts, or leadership guidelines. LeaderOS turns them into a private company bot — same feel as WladBot, but built entirely from your own material. Your people ask it 24/7. Scalable onboarding, consistent answers, no learning curve.'}
+            ? 'Lade deine Bücher, Playbooks, SOPs, Onboarding-Dokumente, Verkaufsscripts oder Führungsleitlinien hoch. LeaderOS baut daraus einen privaten Company-Bot — im gleichen Stil wie WLAD AI, aber ausschließlich mit deinem Wissen. Deine Mitarbeiter fragen ihn 24/7 im Alltag. Skalierbares Onboarding, konsistente Antworten, keine Lernkurve.'
+            : 'Upload your books, playbooks, SOPs, onboarding docs, sales scripts, or leadership guidelines. LeaderOS turns them into a private company bot — same feel as WLAD AI, but built entirely from your own material. Your people ask it 24/7. Scalable onboarding, consistent answers, no learning curve.'}
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mb-8">
           {RAG_FEATURES.map((f, i) => {

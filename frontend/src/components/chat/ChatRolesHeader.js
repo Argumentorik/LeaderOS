@@ -11,8 +11,8 @@ const ContextPanel = ({ userContext, setUserContext, de, aboutMe, onClose }) => 
           <p className="text-[13px] font-black">{de ? 'Dein Kontext' : 'Your context'}</p>
           <p className="text-[11px] text-muted-foreground leading-relaxed max-w-lg">
             {de
-              ? 'Ohne diese drei Angaben antwortet WladBot allgemein. Mit ihnen rechnet er mit deiner Rolle, deinem Unternehmen und deiner Branche.'
-              : 'Without these three, WladBot answers generically. With them it reasons about your role, company and industry.'}
+              ? 'Ohne diese drei Angaben antwortet WLAD AI allgemein. Mit ihnen rechnet er mit deiner Rolle, deinem Unternehmen und deiner Branche.'
+              : 'Without these three, WLAD AI answers generically. With them it reasons about your role, company and industry.'}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -63,10 +63,10 @@ const ContextPanel = ({ userContext, setUserContext, de, aboutMe, onClose }) => 
         </div>
         <p className="text-[10.5px] text-muted-foreground leading-relaxed mt-1">
           {aboutMe
-            ? (de ? 'WladBot kennt deine Stärken, Baustellen, Ziele und dein Umfeld und bezieht sich in jeder Antwort darauf.'
-                  : 'WladBot knows your strengths, blockers, goals and environment and refers to them in every answer.')
-            : (de ? 'Hier trägst du frei ein, was zu dir gehört: Persönlichkeit, Stärken, Schwächen, Erfahrungen, Kompetenzen, Vorlieben, Umfeld, Beruf, Verantwortung, Ziele. Der Text darf sich jederzeit ändern — WladBot nutzt immer die aktuelle Version.'
-                  : 'Write freely about yourself: personality, strengths, weaknesses, experience, skills, preferences, environment, job, responsibility, goals. Edit it anytime — WladBot always uses the latest version.')}
+            ? (de ? 'WLAD AI kennt deine Stärken, Baustellen, Ziele und dein Umfeld und bezieht sich in jeder Antwort darauf.'
+                  : 'WLAD AI knows your strengths, blockers, goals and environment and refers to them in every answer.')
+            : (de ? 'Hier trägst du frei ein, was zu dir gehört: Persönlichkeit, Stärken, Schwächen, Erfahrungen, Kompetenzen, Vorlieben, Umfeld, Beruf, Verantwortung, Ziele. Der Text darf sich jederzeit ändern — WLAD AI nutzt immer die aktuelle Version.'
+                  : 'Write freely about yourself: personality, strengths, weaknesses, experience, skills, preferences, environment, job, responsibility, goals. Edit it anytime — WLAD AI always uses the latest version.')}
         </p>
         <a href="/profile" className="tap-target inline-flex items-center gap-1 mt-1 py-2 text-[11px] font-bold text-[#4A6200] dark:text-[#BFFF00] hover:underline" data-testid="about-me-link">
           {aboutMe ? (de ? 'Über mich bearbeiten' : 'Edit about me') : (de ? 'Jetzt „Über mich" ausfüllen' : 'Fill in "About me" now')} →
@@ -81,13 +81,13 @@ const ContextPanel = ({ userContext, setUserContext, de, aboutMe, onClose }) => 
         <ul className="mt-2 space-y-1.5 pl-1">
           {(de ? [
             'Ein Ordner = ein Thema, nicht ein Tag. Zum Beispiel „Gehaltsgespräch Müller" oder „Reorg Vertrieb".',
-            'Alles, was du in diesem Ordner besprichst, hochlädst oder als Strategie speicherst, bleibt zusammen — WladBot kennt die Vorgeschichte beim nächsten Mal.',
+            'Alles, was du in diesem Ordner besprichst, hochlädst oder als Strategie speicherst, bleibt zusammen — WLAD AI kennt die Vorgeschichte beim nächsten Mal.',
             'Vor einem wichtigen Gespräch: Ordner öffnen, Dokument hochladen, dann fragen. Die Antwort bezieht sich dann auf euren konkreten Fall.',
             'Themen nicht mischen. Zwei Konflikte in einem Ordner machen die Antworten unscharf.',
             'Erledigt? Ordner archivieren statt löschen — die Historie bleibt dir erhalten.',
           ] : [
             'One folder = one topic, not a tag. E.g. "Salary talk Müller" or "Sales reorg".',
-            'Everything you discuss, upload or save in that folder stays together — WladBot knows the history next time.',
+            'Everything you discuss, upload or save in that folder stays together — WLAD AI knows the history next time.',
             'Before an important conversation: open the folder, upload the document, then ask.',
             'Do not mix topics. Two conflicts in one folder blur the answers.',
             'Done? Archive the folder instead of deleting it — the history stays.',
@@ -115,7 +115,7 @@ export const ChatRolesHeader = ({
           <div className="flex items-center gap-3">
             <WladBotAvatar size={38} live />
             <div>
-              <h2 className="text-lg font-black">WladBot</h2>
+              <h2 className="text-lg font-black">WLAD AI</h2>
               <p className="text-[11px] text-muted-foreground font-medium">{de ? 'Dein KI Leadership Coach' : 'Your AI Leadership Coach'}</p>
             </div>
           </div>

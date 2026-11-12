@@ -15,7 +15,7 @@ Minimal. Elegant. Large typography. Premium cards. Whitespace.
   3. The Pattern We Found         (1 revealed + 2 locked)
   4. Your Biggest Opportunity     (Gap + impact teaser)
   5. Your 30-Day Challenge        (W1 unlocked, W2-4 teased)
-  6. Your Personal AI Coach       (WladBot prompt examples)
+  6. Your Personal AI Coach       (WLAD AI prompt examples)
   7. Your Leadership Journey      (Roadmap + CTAs)
 """
 from __future__ import annotations
@@ -874,7 +874,7 @@ def _page5_30day_challenge(c: canvas.Canvas, ctx: dict, total: int):
     _icon_text_centered(c, w / 2, 30 * mm, "arrow", "IN LEADEROS WEITERMACHEN", 9.5, LIME, LIME)
     c.setFillColor(SLATE_MUTED)
     c.setFont("Helvetica", 8.5)
-    c.drawCentredString(w / 2, 24 * mm, "Wochen 2–4 mit täglichen Missionen · personalisierten Übungen · WladBot-Sparring.")
+    c.drawCentredString(w / 2, 24 * mm, "Wochen 2–4 mit täglichen Missionen · personalisierten Übungen · WLAD AI-Sparring.")
 
     c.showPage()
 
@@ -884,7 +884,7 @@ def _page6_ai_coach(c: canvas.Canvas, ctx: dict, total: int):
     _page_bg(c)
     _page_chrome(c, 6, total, "Your AI Leadership Coach")
 
-    _eyebrow(c, "Section 06 · WladBot", 20 * mm, h - 32 * mm)
+    _eyebrow(c, "Section 06 · WLAD AI", 20 * mm, h - 32 * mm)
 
     c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 28)
@@ -922,7 +922,7 @@ def _page6_ai_coach(c: canvas.Canvas, ctx: dict, total: int):
     # Bottom hook
     c.setFillColor(SLATE)
     c.setFont("Helvetica-Oblique", 9.5)
-    c.drawCentredString(w / 2, 32 * mm, "Dies sind nur Beispiele. WladBot lernt deinen Kontext · in LeaderOS.")
+    c.drawCentredString(w / 2, 32 * mm, "Dies sind nur Beispiele. WLAD AI lernt deinen Kontext · in LeaderOS.")
     c.setFillColor(LIME)
     c.setFont("Helvetica-Bold", 9.5)
     _icon_text_centered(c, w / 2, 25 * mm, "arrow", "50 GRATIS-CREDITS WARTEN AUF DICH", 9.5, LIME, LIME)
@@ -966,7 +966,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     c.setFillColor(SLATE)
     c.setFont("Helvetica", 10)
     c.drawString(30 * mm, hero_y + hero_h - 33 * mm, "Jede Anfrage kostet 2–3 Credits · je nach Tiefe.")
-    c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "WladBot ist online · 24/7 · in Wlads Sprache.")
+    c.drawString(30 * mm, hero_y + hero_h - 39 * mm, "WLAD AI ist online · 24/7 · in Wlads Sprache.")
 
     # Primary CTA pill inside hero — CLICKABLE
     cta_w = 80 * mm
@@ -1003,7 +1003,7 @@ def _page7_journey(c: canvas.Canvas, ctx: dict, total: int):
     steps = [
         ("01", "Diagnose", True),
         ("02", "Dashboard", False),
-        ("03", "WladBot · Daily", False),
+        ("03", "WLAD AI · Daily", False),
         ("04", "30-Tage-Plan", False),
     ]
     step_w = (w - 50 * mm) / 4

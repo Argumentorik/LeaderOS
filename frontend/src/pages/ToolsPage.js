@@ -121,7 +121,7 @@ export default function ToolsPage() {
       budget_estimate: result.budget_estimate,
       tips: result.tips,
       strengths: result.strengths, improvements: result.improvements || result.weaknesses,
-    }, `WladBot-${activeTool.title.replace(/\s+/g, '-')}`);
+    }, `WLAD AI-${activeTool.title.replace(/\s+/g, '-')}`);
   };
 
   // Persona bleibt beim Wechsel/Neustart erhalten (Tester-Feedback: „Daten immer neu eingeben“)

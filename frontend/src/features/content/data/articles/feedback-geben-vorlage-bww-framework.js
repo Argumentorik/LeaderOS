@@ -26,7 +26,7 @@ export default {
     { type: 'heading', level: 2, text: 'Anlass 6: Onboarding-Korrektur.' },
     { type: 'paragraph', text: 'Bei neuen Hires darf der Wunsch detaillierter sein. Sie haben den Kontext noch nicht. Beispiel: "Du hast die Slack-Channel für Engineering-Standups in #general gepostet (Beobachtung). Das hat die Conversation zerfasert und Senior-Engineers haben Updates verpasst (Wirkung). Postet in #eng-standup und ping nur in #general bei wirklich teamübergreifenden Themen (Wunsch)."' },
     { type: 'framework', code: 'B-W-W', title: 'Sechs-Anlässe-Vorlage', explanation: 'Lob: Beobachtung spezifisch · Wirkung positiv · Wunsch "weiter so". Kritik: faktisch · operativ · Zukunft. Beförderung: breit · strategisch · Rolle. Konflikt: Spannungsachse · System · Folge-Termin. Quartals-Review: gebündelt über Zeit. Onboarding: detailliert mit Kontext.' },
-    { type: 'callout', tone: 'lime', text: 'In der Challenge drillst du B-W-W an dreißig deiner echten Anlässe · von Lob bis Konflikt. WladBot kennt deine Cases und passt jede Variante an.' },
+    { type: 'callout', tone: 'lime', text: 'In der Challenge drillst du B-W-W an dreißig deiner echten Anlässe · von Lob bis Konflikt. WLAD AI kennt deine Cases und passt jede Variante an.' },
   ],
   seo: {
     title: 'Feedback geben: die B-W-W-Vorlage + Beispiele',

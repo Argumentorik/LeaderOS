@@ -69,7 +69,7 @@ const TICKER = [
   { label: 'BESTSELLER', value: '3 SPIEGEL' },
   { label: 'BÜCHER',   value: '8 LÄNDER' },
   { label: 'PODCAST',  value: '10M+',  tone: 'up' },
-  { label: 'WLADBOT',  value: '24/7' },
+  { label: 'WLAD AI',  value: '24/7' },
 ];
 
 const Masthead = ({ totalArticles }) => (
@@ -287,7 +287,7 @@ const FROM_WLAD = [
   {
     label: 'WERDE TEIL',
     title: 'Alle Vorteile ab Tag 1.',
-    description: 'Volle Plattform, WladBot 24/7, elf Frameworks. 14 Tage kostenlos · ohne Karte. Werde Teil von LeaderOS.',
+    description: 'Volle Plattform, WLAD AI 24/7, elf Frameworks. 14 Tage kostenlos · ohne Karte. Werde Teil von LeaderOS.',
     cta: 'Jetzt dabei sein',
     to: '/#beratung',
     external: false,
@@ -725,8 +725,8 @@ const FREE_TOOLS = [
   {
     code: 'T·03',
     icon: Bot,
-    title: 'WladBot Public Demo',
-    body: '5 freie Fragen an WladBot ohne Login. Stell ihm deine schwierigste Führungs-Frage der Woche.',
+    title: 'WLAD AI Public Demo',
+    body: '5 freie Fragen an WLAD AI ohne Login. Stell ihm deine schwierigste Führungs-Frage der Woche.',
     cta: 'Probieren',
     href: 'https://leaderos.de/demo',
     external: true,

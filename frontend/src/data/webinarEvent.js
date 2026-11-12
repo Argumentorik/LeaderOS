@@ -49,13 +49,13 @@ export const FAQ = [
   ['Gibt es eine Aufzeichnung?', 'Nein, das Webinar ist live. Genau deshalb lohnt es sich: du kannst deine Fragen direkt im Q&A stellen.'],
   ['Brauche ich Vorkenntnisse?', 'Nein. Für Führungskräfte und alle, die es werden wollen — Teamleads, Projektmanager, Senior-Experten. Keine KI-Vorkenntnisse nötig.'],
   ['Kann ich Fragen stellen?', 'Ja — das Q&A ist fester Teil der Agenda (ab 11:15 Uhr). Wlad beantwortet live.'],
-  ['Was ist ein Leadership Operating System?', 'Ein Trainingssystem, das Führung täglich übt statt einmal im Jahr zu lehren: Kurse mit Wlads Frameworks, ein KI-Coach (WladBot), Simulationen mit einem Gegenüber, das zurückredet, und 15-Minuten-Drills an deinem echten Fall.'],
+  ['Was ist ein Leadership Operating System?', 'Ein Trainingssystem, das Führung täglich übt statt einmal im Jahr zu lehren: Kurse mit Wlads Frameworks, ein KI-Coach (WLAD AI), Simulationen mit einem Gegenüber, das zurückredet, und 15-Minuten-Drills an deinem echten Fall.'],
 ];
 
 export const AGENDA = [
   ['10:00', 'Check-in & Warm-up', 'Kurz ankommen — worum es in den nächsten 90 Minuten geht.'],
   ['10:05', 'Der Charisma-Code live', 'Präsenz · Wärme · Kompetenz — die drei Signale, in Echtzeit demonstriert.'],
-  ['10:25', 'Das Leadership Operating System', 'Wie WladBot, tägliche Drills und die 11 Frameworks zusammenspielen.'],
+  ['10:25', 'Das Leadership Operating System', 'Wie WLAD AI, tägliche Drills und die 11 Frameworks zusammenspielen.'],
   ['10:55', 'Live-Case aus der Community', 'Eine echte Führungssituation, gemeinsam durchgearbeitet.'],
   ['11:15', 'Q&A mit Wlad', 'Deine Fragen, direkt beantwortet.'],
 ];

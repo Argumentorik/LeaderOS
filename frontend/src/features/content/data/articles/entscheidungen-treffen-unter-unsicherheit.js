@@ -200,7 +200,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du Entscheidungskommunikation trainieren. WladBot spielt das skeptische Gegenüber, ' +
+        'Im LeaderOS kannst du Entscheidungskommunikation trainieren. WLAD AI spielt das skeptische Gegenüber, ' +
         'das deine Entscheidung hinterfragt, und du übst, Ergebnis, Gründe und Unbekanntes knapp zu nennen. ' +
         'Die täglichen 15-Minuten-Drills sind dafür gedacht, dass du die Formulierungen im Ernstfall abrufen ' +
         'kannst. Du kannst LeaderOS 14 Tage kostenlos testen.',

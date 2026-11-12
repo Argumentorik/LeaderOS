@@ -191,10 +191,10 @@ def _format_email_html(user_name: str, link: str, next_event: dict | None = None
       <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
         <tr>
           <td style="padding-right:14px;vertical-align:middle;">
-            <img src="{base}/wladbot-avatar-clean.png" alt="WladBot" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
+            <img src="{base}/wladbot-avatar-clean.png" alt="WLAD AI" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:2px solid #BFFF00;" />
           </td>
           <td style="vertical-align:middle;">
-            <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WladBot <span style="font-size:9px;font-weight:800;color:#BFFF00;background:#1c2a08;padding:2px 6px;border-radius:6px;vertical-align:middle;">3.0</span></div>
+            <div style="font-weight:800;font-size:15px;color:#fafafa;letter-spacing:0.02em;">WLAD AI</div>
             <div style="font-weight:700;font-size:10px;letter-spacing:0.14em;color:#BFFF00;margin-top:3px;">LEADER-OS · MAGIC LINK</div>
           </td>
         </tr>
@@ -268,7 +268,7 @@ async def send_magic_link_email(email: str, raw_token: str, base_url: str = "") 
     html = _format_email_html(user_name, link, next_event, base)
     result = await send_email(
         to=email,
-        subject="Dein 1-Klick-Login für WladBot",
+        subject="Dein 1-Klick-Login für WLAD AI",
         html=html,
     )
     return bool(result.get("sent"))

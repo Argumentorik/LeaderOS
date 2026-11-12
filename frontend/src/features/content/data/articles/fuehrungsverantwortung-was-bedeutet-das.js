@@ -95,7 +95,7 @@ export default {
     },
     {
       type: 'paragraph',
-      text: 'Diese Ebenen lassen sich nicht durch Lesen lernen, sondern nur durch Üben — am besten in echten Situationen mit echtem Feedback. Genau dafür ist LeaderOS gebaut: Du trainierst die Skills der Verantwortung — delegieren, Ergebnisse einfordern, Menschen entwickeln, unbequeme Gespräche führen — in konkreten Szenarien aus deinem Alltag. Und der WladBot steht dir 24/7 zur Seite, wenn du gerade vor einer Entscheidung sitzt und einen klaren Kopf brauchst.',
+      text: 'Diese Ebenen lassen sich nicht durch Lesen lernen, sondern nur durch Üben — am besten in echten Situationen mit echtem Feedback. Genau dafür ist LeaderOS gebaut: Du trainierst die Skills der Verantwortung — delegieren, Ergebnisse einfordern, Menschen entwickeln, unbequeme Gespräche führen — in konkreten Szenarien aus deinem Alltag. Und der WLAD AI steht dir 24/7 zur Seite, wenn du gerade vor einer Entscheidung sitzt und einen klaren Kopf brauchst.',
     },
     {
       type: 'diagnostic',

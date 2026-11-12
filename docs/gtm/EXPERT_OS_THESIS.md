@@ -9,7 +9,7 @@
 
 ## 1. Die These in einem Satz
 
-LeaderOS ist kein „WladBot mit Extra-Features" — es ist ein **Engine, der
+LeaderOS ist kein „WLAD AI mit Extra-Features" — es ist ein **Engine, der
 einer beliebigen Methodik eine feste, halluzinationsresistente Stimme über
 jede KI-Oberfläche hinweg gibt.** Wlad ist der erste Kunde dieser Engine,
 nicht ihr Zweck.

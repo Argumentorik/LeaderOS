@@ -438,7 +438,7 @@ const FAQ_JSON_LD = {
       acceptedAnswer: {
         '@type': 'Answer',
         text:
-          'LeaderOS ist die 2026 von Wlad Jachtchenko gegründete KI-Coaching-Plattform für Führungskräfte. Sie bündelt seine fünfzehnjährige Coaching-Methodik in elf drillbaren Frameworks plus WladBot · einen 24/7-KI-Coach trainiert auf 2 212 authentische Wlad-Lektionen.',
+          'LeaderOS ist die 2026 von Wlad Jachtchenko gegründete KI-Coaching-Plattform für Führungskräfte. Sie bündelt seine fünfzehnjährige Coaching-Methodik in elf drillbaren Frameworks plus WLAD AI · einen 24/7-KI-Coach trainiert auf 2 212 authentische Wlad-Lektionen.',
       },
     },
     {
@@ -447,7 +447,7 @@ const FAQ_JSON_LD = {
       acceptedAnswer: {
         '@type': 'Answer',
         text:
-          'Direkter Kontakt über start@aiporate.com (Argumentorik-Akademie GmbH, Berlin). Für Coaching-Anfragen gibt es LeaderOS · die Plattform ersetzt seine ausgebuchten 1:1-Slots durch WladBot und monatliche Live-Sessions in Leadership Plus Pro. Speaker-Anfragen für Keynotes laufen ebenfalls über die Email.',
+          'Direkter Kontakt über start@aiporate.com (Argumentorik-Akademie GmbH, Berlin). Für Coaching-Anfragen gibt es LeaderOS · die Plattform ersetzt seine ausgebuchten 1:1-Slots durch WLAD AI und monatliche Live-Sessions in Leadership Plus Pro. Speaker-Anfragen für Keynotes laufen ebenfalls über die Email.',
       },
     },
     {
@@ -913,7 +913,7 @@ export default function WladJachtchenkoPage() {
             </h2>
             <p className="mt-4 text-[14.5px] md:text-[15.5px] leading-[1.6] text-foreground/70">
               Du kennst die Methodik aus Büchern, Masterclass oder Podcast. In
-              LeaderOS drillst du sie täglich mit WladBot · 24/7, in 10 Minuten
+              LeaderOS drillst du sie täglich mit WLAD AI · 24/7, in 10 Minuten
               pro Tag, bis Führung Reflex wird statt Theorie.
             </p>
           </div>
@@ -921,7 +921,7 @@ export default function WladJachtchenkoPage() {
             {[
               { name: 'LeaderOS',
                 sub: 'KI-Coaching-Plattform · seit 2026',
-                desc: 'Wlads komplette Methodik als tägliches Training. WladBot 24/7, 11 drillbare Frameworks, messbarer Fortschritt. 14 Tage kostenlos, ohne Karte.',
+                desc: 'Wlads komplette Methodik als tägliches Training. WLAD AI 24/7, 11 drillbare Frameworks, messbarer Fortschritt. 14 Tage kostenlos, ohne Karte.',
                 href: 'https://leaderos.de/signup?trial=14',
                 cta: '14 Tage kostenlos testen',
                 featured: true },
@@ -1018,7 +1018,7 @@ export default function WladJachtchenkoPage() {
               Natürliche Autorität, charismatische Ausstrahlung, Teams die von
               allein Verantwortung übernehmen · weniger arbeiten, mehr bewirken.
               Genau die Methodik, die Wlad DAX-Vorständen für 10.000 € Tagessatz
-              vermittelt · in LeaderOS drillst du sie täglich mit WladBot, für
+              vermittelt · in LeaderOS drillst du sie täglich mit WLAD AI, für
               den Preis eines Mittagessens.
             </p>
             <div className="mt-9 flex flex-col sm:flex-row flex-wrap gap-3">

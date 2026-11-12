@@ -56,7 +56,7 @@ const ROUTE_META = {
   },
   "/kurse": {
     title: "Wlad's Methodik · 91 Lektionen | Leader OS",
-    description: "11 Frameworks, 91 Lektionen, WladBot 24/7. Die Methodik hinter Leader-Check.",
+    description: "11 Frameworks, 91 Lektionen, WLAD AI 24/7. Die Methodik hinter Leader-Check.",
   },
   "/activate": {
     title: "License Key aktivieren · Leader-Check",

@@ -117,14 +117,14 @@ async def generate_briefing_prompt(folder: dict, items: List[dict], lang: str = 
 
     if lang == "en":
         intro = (
-            f"You are WladBot, a senior leadership coach. The user is opening folder '{name}' and "
+            f"You are WLAD AI, a senior leadership coach. The user is opening folder '{name}' and "
             "needs a 30-second briefing on where they stand. Style: warm, direct, no fluff, no bullet "
             "soup — flowing sentences a coach would say out loud. Reference the most relevant items, "
             "highlight the single most important next step.\n\n"
         )
     else:
         intro = (
-            f"Du bist WladBot, ein Senior Leadership-Coach. Der User oeffnet gerade den Ordner '{name}' und "
+            f"Du bist WLAD AI, ein Senior Leadership-Coach. Der User oeffnet gerade den Ordner '{name}' und "
             "braucht ein 30-Sekunden-Briefing, wo er steht. Stil: warm, direkt, kein Fluff, keine Bullet-"
             "Suppe — fliessende Saetze wie ein Coach sie laut sagen wuerde. Erwaehne die wichtigsten "
             "Items kurz, hebe den EINEN naechsten Schritt heraus.\n\n"

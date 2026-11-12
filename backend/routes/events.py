@@ -185,7 +185,7 @@ EVENTS_SEED_V2 = [
     },
     {
         "event_id": f"evt_{uuid.uuid4().hex[:8]}", "title": "Vision & Strategie Workshop",
-        "description": "Entwickle deine 90-Tage-Vision mit dem WladBot Vision Framework.",
+        "description": "Entwickle deine 90-Tage-Vision mit dem WLAD AI Vision Framework.",
         "outcomes": ["Eigene Vision formulieren", "Strategische Prioritäten setzen", "Action-Plan für 90 Tage mitnehmen"],
         "event_type": "workshop", "date": "2026-09-22T10:00:00Z", "duration": "150 min", "duration_minutes": 150,
         "max_participants": 20, "registered": 11, "host": "Wlad Jachtchenko",

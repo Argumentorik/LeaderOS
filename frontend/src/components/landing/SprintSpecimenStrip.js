@@ -32,7 +32,7 @@ const CELL_REVEAL = {
 const SPECS = [
   { tag: 'EINSTIEG', value: '0 €', display: true },
   { tag: 'DAUER', value: '14 Tage', display: true },
-  { tag: 'INHALT', value: 'Volle Plattform', sub: 'WLADBOT 24/7 · 11 FRAMEWORKS' },
+  { tag: 'INHALT', value: 'Volle Plattform', sub: 'WLAD AI 24/7 · 11 FRAMEWORKS' },
   { tag: 'KARTE', value: 'Nicht nötig', sub: 'JEDERZEIT KÜNDBAR' },
 ];
 

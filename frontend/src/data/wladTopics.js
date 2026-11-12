@@ -9,7 +9,7 @@
  *   3. Business Communication (Verhandlung, Effizienz, Change, Konflikt)
  *
  * Jedes Topic carrieth einen `prompt_de` · wird beim Klick in den
- * Chat-Input geschoben, sodass der User sofort mit WladBot in das
+ * Chat-Input geschoben, sodass der User sofort mit WLAD AI in das
  * jeweilige Wlad-Framework einsteigt.
  *
  * KEINE Bücher die Wlad nicht geschrieben hat ("Die Kunst der
@@ -55,14 +55,14 @@ export const WLAD_STATS = [
 // Die staatlich zertifizierte 6-Monats-Führungskräfte-Ausbildung
 export const WLAD_AUSBILDUNG = {
   title: 'Die staatlich zertifizierte Führungskräfte-Ausbildung',
-  subtitle: '6 Monate · 5 Rollen · Live-Coachings + WladBot · ZFU-zertifiziert',
+  subtitle: '6 Monate · 5 Rollen · Live-Coachings + WLAD AI · ZFU-zertifiziert',
   url: 'https://www.argumentorik.com/fuehrungskraefte-ausbildung/',
   format: [
     { title: '2× wöchentlich Live-Coachings', desc: '25 wichtigste Leadership-Themen · live mit dem LeaderOS-Team' },
     { title: 'Wöchentliches 1:1-Feedback', desc: 'Du schickst Übungen ein, Wlad und Team antworten persönlich' },
     { title: 'Wöchentliche Übungs-Abende', desc: 'Harte Konflikte in geschütztem Raum durchspielen' },
     { title: 'Networking & Live-Events', desc: 'Vernetze dich mit Führungskräften ähnlicher Größenordnung' },
-    { title: 'WladBot 24/7 als Co-Pilot', desc: 'Konflikt-Simulation, Video-Feedback, Rollenspiele -- jederzeit' },
+    { title: 'WLAD AI 24/7 als Co-Pilot', desc: 'Konflikt-Simulation, Video-Feedback, Rollenspiele -- jederzeit' },
   ],
   outcomes: [
     'Selbstvertrauen & Gelassenheit beim Führen',

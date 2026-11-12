@@ -117,7 +117,7 @@ TEST_USERS = [
 async def seed() -> list[dict]:
     now: datetime = datetime.now(timezone.utc)
     print("=" * 72)
-    print("  WladBot Test User Seeding")
+    print("  WLAD AI Test User Seeding")
     print("=" * 72)
 
     created: list[dict] = []

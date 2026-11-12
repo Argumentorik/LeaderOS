@@ -29,7 +29,7 @@ export default {
     ] },
     { type: 'quote', text: 'Führung ist Fähigkeit. Fähigkeit ist trainierbar.', attribution: 'Wlad Jachtchenko' },
     { type: 'paragraph', text: 'Auch der Umgang mit Einsamkeit ist eine trainierbare Fähigkeit, keine Charaktereigenschaft, die man hat oder nicht hat. Der konkrete erste Schritt für diese Woche: blockiere heute 20 Minuten im Kalender · nicht für ein weiteres Meeting, sondern für eine ehrliche Bestandsaufnahme, wem du in den letzten drei Monaten tatsächlich etwas Echtes anvertraut hast. Wenn die Liste kurz ist, ist das keine Schwäche. Es ist eine Diagnose · und Diagnosen lassen sich behandeln.' },
-    { type: 'paragraph', text: 'In LeaderOS ist WladBot bewusst kein Ersatz für menschliche Nähe · aber er ist um 23 Uhr verfügbar, wenn keine Peer-Gruppe erreichbar ist, und ohne jedes Risiko, dass Unsicherheit gegen dich verwendet wird. Ein Baustein von mehreren, nicht die ganze Antwort.' },
+    { type: 'paragraph', text: 'In LeaderOS ist WLAD AI bewusst kein Ersatz für menschliche Nähe · aber er ist um 23 Uhr verfügbar, wenn keine Peer-Gruppe erreichbar ist, und ohne jedes Risiko, dass Unsicherheit gegen dich verwendet wird. Ein Baustein von mehreren, nicht die ganze Antwort.' },
   ],
   seo: {
     title: 'Führungs-Einsamkeit: warum niemand darüber spricht',

@@ -44,7 +44,7 @@ export default {
 
     { type: 'framework', code: 'KI·3', title: 'Welche KI wann.', explanation: 'Lange Dokumente, Analyse, ehrliche Kritik → Claude. Sparring, Rollenspiel, schnelle Drafts → ChatGPT (Voice für mündlich). Aktuelle Recherche, Marktdaten, Faktencheck → Gemini. Niemand zahlt für alle drei · aber wer das System verstanden hat, wechselt bewusst statt blind das eine Tool zu nutzen das er gerade aufhat.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS macht die Wahl unsichtbar · er routet deine Frage automatisch zum passenden Modell und kennt zusätzlich Wlads gesamte Methodik. Du fragst nicht "welche KI" · du fragst die Frage. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS macht die Wahl unsichtbar · er routet deine Frage automatisch zum passenden Modell und kennt zusätzlich Wlads gesamte Methodik. Du fragst nicht "welche KI" · du fragst die Frage. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'ki-tools-fuer-fuehrungskraefte-2026',

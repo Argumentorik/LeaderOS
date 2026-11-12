@@ -87,7 +87,7 @@ export default function SharedMissionPage() {
             </div>
             <div>
               <p className="text-sm font-black tracking-tight">LEADER-OS</p>
-              <p className="text-[9px] uppercase tracking-widest text-white/40">powered by WladBot</p>
+              <p className="text-[9px] uppercase tracking-widest text-white/40">powered by WLAD AI</p>
             </div>
           </Link>
           <Button
@@ -283,7 +283,7 @@ export default function SharedMissionPage() {
               </Button>
             </div>
             <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mt-5">
-              Powered by Leader-OS · WladBot · KI-Coach
+              Powered by Leader-OS · WLAD AI · KI-Coach
             </p>
           </CardContent>
         </Card>

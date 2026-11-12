@@ -41,7 +41,7 @@ export const ArticleCourseCta = ({ article = null, placement = 'article' }) => {
           {course.title}<span className="text-[#BFFF00]">.</span>
         </h3>
         <p className="mt-3 max-w-xl text-[15px] md:text-[16.5px] leading-[1.55] text-white/80">
-          {course.desc} Der Kurs ist Teil der Bibliothek in LeaderOS, zusammen mit WladBot und den Simulationen, in denen du das Gespräch übst.
+          {course.desc} Der Kurs ist Teil der Bibliothek in LeaderOS, zusammen mit WLAD AI und den Simulationen, in denen du das Gespräch übst.
         </p>
         <p className="mt-3 inline-flex items-center gap-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.16em] text-white/70">
           {isMaster ? <Lock size={12} aria-hidden /> : <Play size={12} aria-hidden />}

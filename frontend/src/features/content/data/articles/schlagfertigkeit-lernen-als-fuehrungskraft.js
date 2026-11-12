@@ -29,7 +29,7 @@ export default {
     { type: 'callout', tone: 'lime', text: 'Schlagfertigkeit liegt in der Ruhe vor der Antwort, nicht in der Pointe der Antwort. Wer die drei Sekunden Pause beherrscht, gewinnt die Hälfte der Räume schon dort.' },
     { type: 'heading', level: 2, text: 'Übung für diese Woche.' },
     { type: 'paragraph', text: 'Notiere dir drei harte Bemerkungen die du in den letzten Wochen bekommen hast. Schreibe für jede die drei Antwort-Varianten (Reframing, Pause, Drei-Wort). Probier sie laut. Du wirst merken: nicht jede Variante passt zu jeder Bemerkung. Erfahrung sagt dir welche.' },
-    { type: 'paragraph', text: 'In der Challenge trainierst du Schlagfertigkeit an dreißig deiner echten Cases. WladBot simuliert den Angriff mit den wahrscheinlichsten Varianten und drillt dich auf die Drei-Sekunden-Pause.' },
+    { type: 'paragraph', text: 'In der Challenge trainierst du Schlagfertigkeit an dreißig deiner echten Cases. WLAD AI simuliert den Angriff mit den wahrscheinlichsten Varianten und drillt dich auf die Drei-Sekunden-Pause.' },
   ],
   seo: {
     title: 'Schlagfertigkeit lernen als Führungskraft: 3 Techniken',

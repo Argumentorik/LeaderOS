@@ -264,7 +264,7 @@ async def folder_briefing(folder_id: str, request: Request):
 
     Mert: "Klick erstellt 30-Sekunden-Briefing aus den letzten 5 Missionen+
     Chats des Folders". Returns a single flowing summary the user can read
-    or listen to via the WladBot drawer.
+    or listen to via the WLAD AI drawer.
 
     Resilience (Iter 92.23.9 code-review): tries gpt-4o-mini first, falls
     back to gpt-4o, and finally to a deterministic locally-generated briefing
@@ -294,7 +294,7 @@ async def folder_briefing(folder_id: str, request: Request):
         session_id = f"briefing_{uuid.uuid4().hex[:10]}"
         chat = LlmChat(
             api_key=api_key, session_id=session_id,
-            system_message="Du bist WladBot, Senior Leadership-Coach. Antworte praezise und warm.",
+            system_message="Du bist WLAD AI, Senior Leadership-Coach. Antworte praezise und warm.",
         ).with_model("anthropic", model)
         try:
             response_text = await chat.send_message(UserMessage(text=prompt))

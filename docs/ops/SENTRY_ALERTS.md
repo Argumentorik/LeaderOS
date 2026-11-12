@@ -66,7 +66,7 @@ Sampling:
 - **Trigger:** `event.tags.module = "rag"` AND `event.level = "error"`
 - **Threshold:** `> 5 events` in `10 minutes`
 - **Action:** Email
-- **Why:** RAG-Down = WladBot antwortet generic statt Wlad-style.
+- **Why:** RAG-Down = WLAD AI antwortet generic statt Wlad-style.
 
 ### 📊 P2 — Info (Slack only, low-priority)
 

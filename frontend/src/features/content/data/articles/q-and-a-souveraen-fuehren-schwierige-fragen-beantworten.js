@@ -183,7 +183,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du genau diese Situation trainieren. WladBot spielt das Gegenüber mit der ' +
+        'Im LeaderOS kannst du genau diese Situation trainieren. WLAD AI spielt das Gegenüber mit der ' +
         'unbequemen Frage, und du übst Wiederholen, kurze Antwort und „Das weiß ich nicht“ in der Sprache, in ' +
         'der du wirklich sprichst. In den täglichen 15-Minuten-Drills wiederholst du die schwierigsten Fragen, ' +
         'bis die ersten Sätze ohne Nachdenken kommen. Du kannst LeaderOS 14 Tage kostenlos testen.',

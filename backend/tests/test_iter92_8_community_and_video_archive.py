@@ -174,7 +174,7 @@ class TestVideoArchiveRenameDelete:
         assert match and match.get("custom_title") == new_title, "rename not persisted"
 
         # Restore original title (cleanup)
-        restore = original_title or "WladBot Video Mission"
+        restore = original_title or "WLAD AI Video Mission"
         requests.patch(
             f"{BASE_URL}/api/video-archive/{entry_id}",
             headers=h, json={"title": restore}, timeout=15,

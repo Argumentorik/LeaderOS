@@ -69,7 +69,7 @@ _NARRATIVE_FALLBACK = {
 
 
 def _extract_user_voice(chat_context) -> list:
-    """Pull only the user's own messages from the WladBot chat transcript."""
+    """Pull only the user's own messages from the WLAD AI chat transcript."""
     if not chat_context:
         return []
     turns = []
@@ -85,7 +85,7 @@ def _build_voice_block(turns: list) -> str:
     if not turns:
         return ""
     return (
-        "\n\nZUSATZLICH - EIGENE WORTE DES NUTZERS (aus dem Pre-Report-Gespräch mit WladBot):\n"
+        "\n\nZUSATZLICH - EIGENE WORTE DES NUTZERS (aus dem Pre-Report-Gespräch mit WLAD AI):\n"
         + "\n".join(f'- "{t}"' for t in turns)
         + "\n\nWICHTIG: Beziehe dich DIREKT und KONKRET auf diese selbst geschilderten Herausforderungen. "
         "Verwende den Namen der Herausforderung oder das Thema wörtlich in mindestens einem Satz des executive_summary "
@@ -343,12 +343,12 @@ def register_quiz_routes(router: APIRouter, db, config: dict, limiter=None) -> N
             verify_report_token(token, expected_sid=data.session_id)
 
         if not config["llm_key"]:
-            return {"response": "Der WLADBOT ist derzeit nicht verfügbar."}
+            return {"response": "Der WLAD AI ist derzeit nicht verfügbar."}
         user = await db.users.find_one({"session_id": data.session_id}, {"_id": 0})
         if not user:
             user = await db.users.find_one({"user_id": data.session_id}, {"_id": 0})
 
-        context = f"""Du bist der WladBot – ein motivierender AI Leadership-Coach. 
+        context = f"""Du bist der WLAD AI – ein motivierender AI Leadership-Coach. 
 Du sprichst auf Deutsch. Du bist nahbar, direkt und ehrlich. Du duzt den Benutzer. Halte deine Antworten kurz (2-4 Sätze).
 
 Benutzer: {user.get('name', 'Leader') if user else 'Leader'}

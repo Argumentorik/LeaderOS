@@ -1,5 +1,5 @@
 /**
- * WladBotAvatar · Voxel-Charakter-System für WladBot.
+ * WladBotAvatar · Voxel-Charakter-System für WLAD AI.
  *
  * Eine 16×24 Minecraft-DNA-Figur in 8 Posen, jede als eigene React-
  * Komponente exportiert. Die Figur trägt grünes Samt-Sakko (matched

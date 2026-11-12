@@ -117,7 +117,7 @@ export default {
       type: 'paragraph',
       text:
         'Genau das ist der Grund, warum die 30-Tage-Challenge in LeaderOS kein Einmal-Event ist. Jedes Muster wird ' +
-        'über mehrere Tage in unterschiedlichen Situationen wieder aufgerufen, WladBot erinnert daran ohne dass ' +
+        'über mehrere Tage in unterschiedlichen Situationen wieder aufgerufen, WLAD AI erinnert daran ohne dass ' +
         'jemand manuell nachfassen muss, und nach dreißig Tagen ist die Wiederholung eingebaut statt nachträglich ' +
         'organisiert.',
     },

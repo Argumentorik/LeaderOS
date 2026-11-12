@@ -216,7 +216,7 @@
    "file": "leaderos-creative-19.png",
    "k": "LeaderOS 01",
    "h": "Ein Coach, der Wlads Bücher kennt. 24/7.",
-   "s": "WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
+   "s": "WLAD AI antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
    "list": null,
    "cta": "14 Tage kostenlos",
    "v": "dark",
@@ -360,14 +360,14 @@
  "carousels": [
   {
    "id": "C1",
-   "name": "Was WladBot wirklich kann",
+   "name": "Was WLAD AI wirklich kann",
    "slides": [
     {
      "file": "C1-01.png",
      "t": "cover",
-     "k": "Carousel 01 · WladBot",
+     "k": "Carousel 01 · WLAD AI",
      "h": "Ein Coach, der Wlads Bücher kennt.",
-     "s": "Acht Dinge, die WladBot im LeaderOS für dich tut. Wischen →",
+     "s": "Acht Dinge, die WLAD AI im LeaderOS für dich tut. Wischen →",
      "chat": null,
      "cap": null,
      "three": null,
@@ -383,7 +383,7 @@
      "s": "",
      "chat": [
       "Du: Mein Mitarbeiter liefert zum dritten Mal zu spät. Wie spreche ich das an, ohne dass es eskaliert?",
-      "WladBot: Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?"
+      "WLAD AI: Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?"
      ],
      "cap": null,
      "three": null,
@@ -487,7 +487,7 @@
      "t": "cta",
      "k": "08 · Start",
      "h": "14 Tage. Keine Karte.",
-     "s": "Teste WladBot mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 26.11., kostenlos.",
+     "s": "Teste WLAD AI mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 26.11., kostenlos.",
      "chat": null,
      "cap": null,
      "three": null,
@@ -566,7 +566,7 @@
      "chat": [
       "Du: Ich habe beobachtet, dass der Bericht zum dritten Mal erst Freitagabend kam.",
       "Gegenüber (Simulation): Ich hatte diese Woche drei andere Prioritäten von dir. Welche soll ich dafür fallen lassen?",
-      "WladBot: Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal."
+      "WLAD AI: Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal."
      ],
      "cap": null,
      "three": null,
@@ -691,7 +691,7 @@
      "three": null,
      "vs": [
       "Seminar · Ein Ordner im Regal: Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch.",
-      "System · Ein Coach in der Tasche: WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
+      "System · Ein Coach in der Tasche: WLAD AI, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
      ],
      "cta": null,
      "avatar": false

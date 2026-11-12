@@ -41,7 +41,7 @@ DIESE zuerst geladen. Falls fehlen, fallback zu hf-XX.png Mockup.
     Format: JPG, ≤ 600 KB
 
   p-07-dreibig-tage.jpg
-    §07 KOMPLETT (Powered by WladBot. Persönlich von Wlad.)
+    §07 KOMPLETT (Powered by WLAD AI. Persönlich von Wlad.)
     Inhalt: "DREIBIG TAGE FÜHRUNGSPLAN" — Frau-Speaker B&W,
              "WLAD JACHTCHENKO METHODIK · KI-NATIVES COACHING"
     Aspect: 4:5 hochkant

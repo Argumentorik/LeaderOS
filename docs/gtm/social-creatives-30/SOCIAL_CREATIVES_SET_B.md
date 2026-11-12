@@ -8,7 +8,7 @@
 
 > - **HF1** Prüfungssaal · hunderte Plätze, drei besetzt → Jedes Führungsgespräch ist eine Prüfung, auf die niemand geübt hat.
 > - **HF2** Leeres Theater · ein Pult, ein Scheinwerfer → Der Moment vor dem Auftritt: Rhetorik, Präsenz, das Webinar mit Wlad.
-> - **HF3** Schreibtisch auf der Wiese → Führung passiert überall: der Coach auch (WladBot, Voice, remote).
+> - **HF3** Schreibtisch auf der Wiese → Führung passiert überall: der Coach auch (WLAD AI, Voice, remote).
 > - **HF4** Dreißig Monitore · ein Stuhl → Auswertung: Du siehst, was saß und was fehlte.
 > - **HF5** Archiv · endlose Schubladen → Wissen auf Vorrat: alles abgelegt, nichts geübt.
 > - **HF6** Bauplan im Wind → Der Plan hält nicht, der Reflex schon: Drills, Delegation.
@@ -141,7 +141,7 @@ Ein Tag im OS.
 
 1. 01 Lektion: Eine Lektion aus einem Kurs. Kurz, mit dem Framework, das du heute brauchst.
 2. 02 Drill: Dasselbe Framework an deinem echten Fall. Nicht an einer Fallstudie.
-3. 03 Frage: Du fragst WladBot, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik.
+3. 03 Frage: Du fragst WLAD AI, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik.
 4. 04 Auswertung: Nach der Simulation: Struktur, Klarheit, Wirkung. Und der nächste Drill.
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.
@@ -227,7 +227,7 @@ Delegation wie ein Profi: Aufgaben richtig abgeben, Vertrauen aufbauen, Mikroman
 
 Feedback-Formate.
 
-Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WladBot, der dir den ersten Satz abnimmt.
+Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WLAD AI, der dir den ersten Satz abnimmt.
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.
 
@@ -319,14 +319,14 @@ Dreißig Minuten, persönlich, kostenlos. Du bringst deinen Fall mit: das Team, 
 
 Gespräch ab 2. November buchen: Link im ersten Kommentar.
 
-### 25 · Termine · WladBot  
+### 25 · Termine · WLAD AI  
 `leaderos-b-25.png` · Szene: HF3 · Schreibtisch auf der Wiese · Avatar
 
 **Caption**
 
 Dein Büro ist überall. Dein Coach auch.
 
-Im Zug, im Homeoffice, auf der Wiese. WladBot antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.
+Im Zug, im Homeoffice, auf der Wiese. WLAD AI antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.
 
@@ -355,12 +355,12 @@ Jeder Sprint endet mit einem persönlichen Zertifikat und deiner Startnummer. F�
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.
 
-### 28 · System · WladBot  
+### 28 · System · WLAD AI  
 `leaderos-b-28.png` · Print: p-07-dreibig-tage · Foto: ai-b
 
 **Caption**
 
-Powered by WladBot. Persönlich von Wlad.
+Powered by WLAD AI. Persönlich von Wlad.
 
 Die Methodik aus Wlads Büchern und Trainings, als Coach in deiner Tasche. Und einmal im Monat Wlad selbst, live.
 

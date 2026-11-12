@@ -19,7 +19,7 @@ import { WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS } from '../../lib/brandAssets'
 const MESSAGES = [
   { eyebrow: '▸ JETZT', big: '50 FREE', small: 'CREDITS' },
   { eyebrow: '▸ 10 MIN', big: 'DIAGNOSE', small: 'KOSTENLOS' },
-  { eyebrow: '▸ FRAG', big: 'WLADBOT', small: '24 / 7' },
+  { eyebrow: '▸ FRAG', big: 'WLAD AI', small: '24 / 7' },
   { eyebrow: '▸ START', big: 'WERDE', small: 'TEIL' },
 ];
 
@@ -68,7 +68,7 @@ const PixelWlad = () => (
   </svg>
 );
 
-// WladBot 3.0 · the Pixar-style render replaces the old pixel mascot.
+// WLAD AI · the Pixar-style render replaces the old pixel mascot.
 // Falls back to the pixel figure if the asset is missing (build-safe).
 const WladBotFigure = () => {
   const [failed, setFailed] = useState(false);
@@ -76,7 +76,7 @@ const WladBotFigure = () => {
   return (
     <img
       src={WLADBOT_AVATAR}
-      alt="WladBot · dein KI-Coach"
+      alt="WLAD AI · dein KI-Coach"
       width={64}
       height={64}
       loading="lazy"

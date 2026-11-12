@@ -51,7 +51,7 @@ def test_brand_name_fix() -> None:
     from services_speech_text import fix_brand_names, to_plain_speech
 
     assert fix_brand_names("Bei VLAD gibt es das Modell") == "Bei Wlad gibt es das Modell"
-    assert fix_brand_names("Vlad Bot und Wladimir") == "WladBot und Wlad"
+    assert fix_brand_names("Vlad Bot und Wladimir") == "WLAD AI und Wlad"
     assert fix_brand_names("Frag Flat mal") == "Frag Wlad mal"
     assert fix_brand_names("leader os und leadercheck") == "Leader-OS und LeaderCheck"
     assert fix_brand_names("Wlad bleibt Wlad") == "Wlad bleibt Wlad"
@@ -212,7 +212,7 @@ def test_magic_link_email_contains_verify_link(loop) -> None:
         from services_magic_link import _format_email_html
         html = _format_email_html("Stefan", "https://leaderos.de/auth/magic?token=abc", None, "https://leaderos.de")
         assert "/auth/magic?token=abc" in html
-        assert "WladBot" in html and "Vlad" not in html
+        assert "WLAD AI" in html and "Vlad" not in html
         assert "Minuten" in html  # Gültigkeitshinweis
 
     loop.run_until_complete(run())

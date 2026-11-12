@@ -199,7 +199,7 @@ class TestGenerateReport:
 
 
 class TestCoachChat:
-    """WladBot coach chat tests"""
+    """WLAD AI coach chat tests"""
     
     def test_coach_chat(self, client, session_id):
         """Test coach chat returns response"""
@@ -211,7 +211,7 @@ class TestCoachChat:
         data = resp.json()
         assert "response" in data
         assert len(data["response"]) > 0
-        print(f"WladBot response: {data['response'][:100]}...")
+        print(f"WLAD AI response: {data['response'][:100]}...")
 
 
 class TestEmailSend:

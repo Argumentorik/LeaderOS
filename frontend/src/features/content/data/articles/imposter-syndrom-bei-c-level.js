@@ -41,7 +41,7 @@ export default {
 
     { type: 'framework', code: 'I·3', title: 'Drei Praktiken für lebenslange Imposter-Resistenz.', explanation: 'Imposter-Buch (Sonntag 10 Min, drei Negative + drei Positive). Peer-Sprechstunde (monatlich 30 Min mit einem externen C-Level-Kontakt, nur über Zweifel). Drill (drei Atemzüge + Handlungs-Frage statt Gefühls-Spirale). Funktioniert nicht beim ersten Mal. Funktioniert ab Monat drei verlässlich.' },
 
-    { type: 'callout', tone: 'dark', text: 'In LeaderOS ist das Imposter-Buch ein Standard-Drill. WladBot fragt dich jeden Sonntag um 20 Uhr ob du es geschrieben hast · und reflektiert mit dir wenn ja. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
+    { type: 'callout', tone: 'dark', text: 'In LeaderOS ist das Imposter-Buch ein Standard-Drill. WLAD AI fragt dich jeden Sonntag um 20 Uhr ob du es geschrieben hast · und reflektiert mit dir wenn ja. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
   ],
   related: [
     'drei-burnouts-eine-lektion',

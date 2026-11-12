@@ -43,7 +43,7 @@ export default {
 
     { type: 'framework', code: 'T·7', title: 'Die 7-Minuten-Firmenrede.', explanation: 'Total: 7 Minuten Sprecher-Zeit. Akt 1 Hook (2 Min). Akt 2 drei Botschaften (3 Min). Akt 3 Call (2 Min). Danach Q&A · 15-20 Minuten. Wer länger als 7 Minuten am Stück sprechen will, hat zu wenig vorbereitet, nicht zu viel zu sagen. Üben mit Stoppuhr. Das ist Drill, nicht Talent.' },
 
-    { type: 'callout', tone: 'dark', text: 'In LeaderOS übst du deine eigenen Firmenreden mit WladBot als Test-Audience. Sprich, KI hört zu, gibt Feedback in Wlads Ton. Bis Minute 7 sitzt, dauert im Schnitt 12 Drill-Sessions. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
+    { type: 'callout', tone: 'dark', text: 'In LeaderOS übst du deine eigenen Firmenreden mit WLAD AI als Test-Audience. Sprich, KI hört zu, gibt Feedback in Wlads Ton. Bis Minute 7 sitzt, dauert im Schnitt 12 Drill-Sessions. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte.' },
   ],
   related: [
     'townhall-rede-strukturieren-sexier',

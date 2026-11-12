@@ -74,7 +74,7 @@ export const CoursesLibrarySection = ({ id = 'kurse', placement = 'landing', hea
             </h2>
             <p className="mt-5 text-[15px] md:text-[17px] leading-[1.6] text-white/75 max-w-2xl">
               Sechs Grundlagen-Kurse, vier Master-Programme und elf Framework-Drills.
-              Dazu im selben System: WladBot als KI-Coach und Simulationen, in denen
+              Dazu im selben System: WLAD AI als KI-Coach und Simulationen, in denen
               du das schwierige Gespräch vorher übst.
             </p>
           </div>

@@ -42,7 +42,7 @@ export const BIO = [
   'Seit 2007 als Speaker, Rhetorik-Trainer und Leadership-Coach tätig. Seine Methodik hat er in Büchern wie „Weiße ' +
     'Rhetorik“, „Dunkle Rhetorik“ und „Die 5 Rollen einer Führungskraft“ festgehalten und in der Argumentorik-Akademie, ' +
     'einer sechsmonatigen Ausbildung zum Argumentations-Coach, weitergegeben.',
-  'Mit LeaderOS hat er diese Methodik 2026 in ein Trainingssystem übersetzt: zehn Kurse, der KI-Coach WladBot, ' +
+  'Mit LeaderOS hat er diese Methodik 2026 in ein Trainingssystem übersetzt: zehn Kurse, der KI-Coach WLAD AI, ' +
     'Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills. Sein Satz dazu: Führung wird ' +
     'nicht gelernt, sie wird trainiert.',
 ];
@@ -109,7 +109,7 @@ export const FAQ = [
   ['Was ist die Argumentorik-Akademie?',
     'Die Argumentorik-Akademie ist die von Wlad Jachtchenko gegründete sechsmonatige Ausbildung zum Argumentations-Coach. Sie steht hinter den Trainings, auf denen LeaderOS aufbaut.'],
   ['Was ist LeaderOS, und welche Rolle spielt Wlad Jachtchenko?',
-    'LeaderOS ist das 2026 von Wlad Jachtchenko gegründete Trainingssystem für Führungskräfte: zehn Kurse mit seiner Methodik, der KI-Coach WladBot, der auf 2 212 authentischen Wlad-Inhalten aus Büchern, Podcasts und Trainings antwortet, Simulationen und tägliche Drills. Wlad ist Gründer, Autor der Methodik und Gastgeber der monatlichen Live-Sessions.'],
+    'LeaderOS ist das 2026 von Wlad Jachtchenko gegründete Trainingssystem für Führungskräfte: zehn Kurse mit seiner Methodik, der KI-Coach WLAD AI, der auf 2 212 authentischen Wlad-Inhalten aus Büchern, Podcasts und Trainings antwortet, Simulationen und tägliche Drills. Wlad ist Gründer, Autor der Methodik und Gastgeber der monatlichen Live-Sessions.'],
   ['Welche Methodik vertritt Wlad Jachtchenko?',
     'Führung wird nicht gelernt, sie wird trainiert. Statt Theorie drillbare Frameworks: das SEXIER-Modell, die Feedbackformel B·W·W, die 5 Rollen einer Führungskraft, die 10 Stufen des Zuhörens, die Harvard-Verhandlungsmethode, der Charisma-Code und die Abwehr Dunkler Rhetorik. Hart in der Sache, weich zur Person.'],
   ['Wo kann man Wlad Jachtchenko live erleben?',

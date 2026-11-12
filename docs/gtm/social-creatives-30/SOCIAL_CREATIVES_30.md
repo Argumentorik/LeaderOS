@@ -1,6 +1,6 @@
 # 30 Social-Creatives + 3 Carousels · Webinar-Launch (Stand 01.10.2026)
 
-> 1080 × 1350 (4:5) für Instagram-Feed und LinkedIn. Quellen in diesem Ordner: `slides.html` (30 Einzelposts), `carousels.html` (3 Carousels), `base.css` (Tiefen-System). Alle Zahlen aus `WLAD_CANON.md`; keine erfundenen Studien, keine KI-Gesichter echter Personen. Die Avatar-Figur ist der bestehende WladBot-Charakter aus `frontend/public/wlad/wladbot3.0.png`.
+> 1080 × 1350 (4:5) für Instagram-Feed und LinkedIn. Quellen in diesem Ordner: `slides.html` (30 Einzelposts), `carousels.html` (3 Carousels), `base.css` (Tiefen-System). Alle Zahlen aus `WLAD_CANON.md`; keine erfundenen Studien, keine KI-Gesichter echter Personen. Die Avatar-Figur ist der bestehende WLAD AI-Charakter aus `frontend/public/wlad/wladbot3.0.png`.
 
 > **Gestaltung:** Jede Fläche hat vier Ebenen: L1 Foto oder dunkles Mesh, L2 Farbverlauf + Lime-Glow, L3 Punktraster + Hairlines (nach oben rechts maskiert), L4 Korn + Vignette. Avatar-Slides zeigen die Figur in Halo + Ring; dahinter liegen bewusst gesichtsfreie Fotos (Boardroom-Flur, Silhouette, Notizbuch), damit keine zweite Person mit der Figur konkurriert. Rendering: Playwright-Screenshot je `.slide`.
 
@@ -235,7 +235,7 @@ Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 
 Ein Coach, der Wlads Bücher kennt. 24/7.
 
-WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.
+WLAD AI antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.
 
 14 Tage kostenlos testen, ohne Karte: Link im ersten Kommentar.
 
@@ -375,15 +375,15 @@ Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 ## Carousels (Instagram + LinkedIn, je ein PDF/Bilderset)
 
 
-### C1 · Was WladBot wirklich kann (9 Slides)
+### C1 · Was WLAD AI wirklich kann (9 Slides)
 
-Ziel: zeigen, was WladBot im LeaderOS konkret tut (Capabilities). Erstes Bild ist der Hook, letztes Bild der Trial-CTA.
+Ziel: zeigen, was WLAD AI im LeaderOS konkret tut (Capabilities). Erstes Bild ist der Hook, letztes Bild der Trial-CTA.
 
 **Caption**
 
 Ein Coach, der Wlads Bücher kennt.
 
-Acht Dinge, die WladBot im LeaderOS für dich tut.
+Acht Dinge, die WLAD AI im LeaderOS für dich tut.
 
 Im Carousel: Fragen, bevor es zählt · Text und Stimme · Simulation · Auswertung · Bibliothek · Video-Analyse · Das Prinzip.
 
@@ -391,15 +391,15 @@ Im Carousel: Fragen, bevor es zählt · Text und Stimme · Simulation · Auswert
 
 **Slides**
 
-- `C1-01.png` · Carousel 01 · WladBot · **Ein Coach, der Wlads Bücher kennt.** Acht Dinge, die WladBot im LeaderOS für dich tut. Wischen →
-- `C1-02.png` · 01 · Fragen, bevor es zählt · **Frag ihn vor dem Gespräch.** Du: Mein Mitarbeiter liefert zum dritten Mal zu spät. Wie spreche ich das an, ohne dass es eskaliert? / WladBot: Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?
+- `C1-01.png` · Carousel 01 · WLAD AI · **Ein Coach, der Wlads Bücher kennt.** Acht Dinge, die WLAD AI im LeaderOS für dich tut. Wischen →
+- `C1-02.png` · 01 · Fragen, bevor es zählt · **Frag ihn vor dem Gespräch.** Du: Mein Mitarbeiter liefert zum dritten Mal zu spät. Wie spreche ich das an, ohne dass es eskaliert? / WLAD AI: Nimm die Feedbackformel: Beobachtung, Wirkung, Wunsch. Erster Satz: „Ich habe beobachtet, dass der Bericht dreimal erst freitagabends kam.“ Willst du den zweiten Satz jetzt üben?
 - `C1-03.png` · 02 · Text und Stimme · **Sprich mit ihm.** Voice: Im Auto, vor dem Meeting, auf dem Flur. Du sprichst, er antwortet. Mit Wlads Frameworks, nicht mit Allgemeinplätzen. / Kontext: Er kennt deine Challenge-Historie. Die Antwort passt zu deinem Fall, nicht zu irgendeinem.
 - `C1-04.png` · 03 · Simulation · **Üb das Gespräch mit einem Gegenüber, das zurückredet.** Simulation: Kündigungsgespräch, Gehaltsverhandlung, Feedback: Du führst es, bevor es zählt. Das Gegenüber reagiert, weicht aus, widerspricht.
 - `C1-05.png` · 04 · Auswertung · **Danach: Was saß, was fehlte.** Score: Nach jeder Simulation eine Auswertung: Struktur, Klarheit, Wirkung. Und der nächste Drill dazu. / Drills: 15 Minuten am Tag, 30 Tage lang. An deinen echten Fällen, nicht an Fallstudien.
 - `C1-06.png` · 05 · Bibliothek · **6 Grundlagen-Kurse. 4 Master-Programme.** Kurse: Rhetorik, schwierige Gespräche, Delegation, Feedback, Storytelling, Meeting-Rhetorik. Dazu KI-First Leadership, Change, Executive Presence, Boardroom-Strategie. / Playbooks: Skripte für die Gespräche, die jede Führungskraft führen muss.
 - `C1-07.png` · 06 · Video-Analyse · **Nimm dich auf. Bekomm Feedback.** Video-Analyse: Eine Minute Pitch oder Townhall-Opening aufnehmen. Du bekommst Feedback zu Struktur, Wirkung und Wortwahl, ohne dass ein Kollege zuschauen muss.
 - `C1-08.png` · 07 · Das Prinzip · **Nicht noch ein Tool. Ein System.** Kurse, KI-Coach, Simulationen, Drills und Auswertung greifen ineinander. Deshalb heißt es Operating System, nicht App.
-- `C1-09.png` · 08 · Start · **14 Tage. Keine Karte.** Teste WladBot mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 26.11., kostenlos. · CTA: 14 Tage kostenlos
+- `C1-09.png` · 08 · Start · **14 Tage. Keine Karte.** Teste WLAD AI mit deinem nächsten echten Gespräch. Oder sieh das System live: Webinar mit Wlad am 26.11., kostenlos. · CTA: 14 Tage kostenlos
 
 
 ### C2 · Das Gespräch, das du aufschiebst (8 Slides)
@@ -422,7 +422,7 @@ Im Carousel: 01 · 02 · Die Formel · Der Unterschied · Reps · Das Prinzip.
 - `C2-02.png` · 01 · **Du weißt, was du sagen müsstest.** Das Problem war nie Wissen. Du hast das Buch gelesen. Du warst im Seminar. Du kennst die Formel.
 - `C2-03.png` · 02 · **Warum du es trotzdem nicht tust:** Du hast es nie geübt. Kein Mensch macht etwas zum ersten Mal gut, wenn es zählt. Deshalb schiebst du.
 - `C2-04.png` · 03 · Die Formel · **Drei Sätze.** Beobachtung: „Ich habe beobachtet, dass …“ / Wirkung: „Dadurch …“ / Wunsch: „Ich wünsche mir …“
-- `C2-05.png` · 04 · Der Unterschied · **Sag es zuerst zu jemandem, der zurückredet.** Du: Ich habe beobachtet, dass der Bericht zum dritten Mal erst Freitagabend kam. / Gegenüber (Simulation): Ich hatte diese Woche drei andere Prioritäten von dir. Welche soll ich dafür fallen lassen? / WladBot: Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal.
+- `C2-05.png` · 04 · Der Unterschied · **Sag es zuerst zu jemandem, der zurückredet.** Du: Ich habe beobachtet, dass der Bericht zum dritten Mal erst Freitagabend kam. / Gegenüber (Simulation): Ich hatte diese Woche drei andere Prioritäten von dir. Welche soll ich dafür fallen lassen? / WLAD AI: Guter Einwand. Bleib bei Wirkung und Wunsch, statt dich zu rechtfertigen. Noch mal.
 - `C2-06.png` · 05 · Reps · **Fünf Durchläufe. Dann der echte Raum.** Beim fünften Mal stolperst du nicht mehr über den ersten Satz. Das Gespräch dauert 90 Sekunden. Es war nie das Gespräch. Es war der erste Satz.
 - `C2-07.png` · 06 · Das Prinzip · **Führung wird nicht gelernt. Sie wird trainiert.** Jede Führungskraft weiß, was sie tun sollte. Die wenigsten haben es je geübt.
 - `C2-08.png` · 07 · Start · **Üb es heute. Führ es morgen.** 14 Tage kostenlos, ohne Karte. Oder live am 26.11.: Wlad zeigt die Feedbackformel an einem echten Fall. · CTA: 14 Tage kostenlos
@@ -448,7 +448,7 @@ Kostenloser Platz im Live-Webinar am 26.11.: Link im ersten Kommentar.
 - `C3-02.png` · 01 · Zeit · **Zeit.** Seminar · 2 Tage im Jahr: Dann 363 Tage ohne Training. Nichts, was du einmal im Jahr tust, wird zur Gewohnheit. / System · 15 Minuten am Tag: Jeden Werktag ein Drill. Nach 30 Tagen ist der neue Reflex da, nicht nur die Erinnerung.
 - `C3-03.png` · 02 · Inhalt · **Inhalt.** Seminar · Folien und Fallstudien: Beispiele von anderen. Interessant, aber nicht dein Montag. / System · Dein echter Fall: Dein Mitarbeiter, dein Konflikt, deine Verhandlung. Du bringst den Fall mit, das System den Drill.
 - `C3-04.png` · 03 · Übung · **Übung.** Seminar · Rollenspiel mit Kollegen: Einmal, vor Publikum, mit jemandem, der nett sein will. / System · Simulation mit Gegenüber: So oft du willst, mit einem Gegenüber, das widerspricht und ausweicht. Mit Auswertung danach.
-- `C3-05.png` · 04 · Danach · **Danach.** Seminar · Ein Ordner im Regal: Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch. / System · Ein Coach in der Tasche: WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar.
+- `C3-05.png` · 04 · Danach · **Danach.** Seminar · Ein Ordner im Regal: Die Notizen. Der Trainer ist weg. Die Frage kommt am Mittwoch. / System · Ein Coach in der Tasche: WLAD AI, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar.
 - `C3-06.png` · 05 · Ergebnis · **Ergebnis.** Seminar · Wissen: Du weißt mehr. Dein Team merkt nichts. / System · Verhalten: Du führst anders. Dein Team merkt es in der ersten Woche.
 - `C3-07.png` · 06 · Live sehen · **Sieh das System live.** Do, 26. November, 10:00 bis 11:30 Uhr. Wlad Jachtchenko zeigt den Charisma-Code, das Operating System und einen echten Live-Case. Kostenlos, mit Q&A, keine Aufzeichnung.
 - `C3-08.png` · 07 · Start · **Entweder du trainierst. Oder du hoffst.** Platz im Webinar sichern oder direkt 14 Tage kostenlos testen. Beides ohne Karte. · CTA: Kostenloser Platz · 26.11.

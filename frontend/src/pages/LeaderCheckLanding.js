@@ -11,7 +11,7 @@ import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../lib/brandAs
  * Router-Branch in LandingPage.js). Bewusst MAGER: ein einziger
  * Funnel-Zweck · kostenlose 10-Minuten-Diagnose starten · plus die
  * kritische Bridge-Message: "Nutze die gleiche Email wie auf
- * leader-os.de damit dein WladBot deinen Score kennt".
+ * leader-os.de damit dein WLAD AI deinen Score kennt".
  *
  * Kein langer Pitch, keine Frameworks, keine Preise. Wer hier
  * landet soll genau eine Sache tun: die Diagnose starten. Alles
@@ -297,7 +297,7 @@ export default function LeaderCheckLanding() {
                   leaderos.de
                 </a>{' '}
                 weitermachen willst, nimm dort einfach die gleiche E-Mail
-                wie hier. Dann erkennt dich WladBot wieder, kennt deine
+                wie hier. Dann erkennt dich WLAD AI wieder, kennt deine
                 Scores schon und sagt dir vom ersten Tag an: „Hey, das hier
                 ist genau dein Hebel."
               </p>
@@ -724,7 +724,7 @@ export default function LeaderCheckLanding() {
         </a>
       </div>
 
-      {/* Readiness-Vorprüfung als WladBot-Mini-Funnel rechts unten ·
+      {/* Readiness-Vorprüfung als WLAD AI-Mini-Funnel rechts unten ·
           erkundet KI / Rhetorik / EQ / Feedback in 4 Mikro-Fragen
           und routet in die volle 30-Fragen-Diagnose. */}
       <LandingChatPod mode="readiness" />

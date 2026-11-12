@@ -45,7 +45,7 @@ export const WladBotMotivation = () => (
         <Bot className="w-6 h-6 text-[#C8FF00]" />
       </div>
       <div>
-        <div className="font-manrope font-bold text-white mb-1">WladBot</div>
+        <div className="font-manrope font-bold text-white mb-1">WLAD AI</div>
         <p className="font-inter text-sm text-slate-300 leading-relaxed mb-3">
           Stark! Du hast dir die Zeit genommen und ehrlich reflektiert · das machen die wenigsten.
           Jetzt kommt der spannende Teil: Nimm dir die nächsten 30 Tage und arbeite die Kurse durch.

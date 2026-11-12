@@ -32,7 +32,7 @@ const HALO = { textShadow: '0 0 10px #fff, 0 0 4px #fff, 0 0 1px #fff' };
 // Sechs App-Bausteine auf der Bahn. Reihenfolge = Reihenfolge im Fokus.
 const ORBIT = [
   { src: '/wlad/wlad-portrait-640.jpg', label: 'Videokurse mit Wlad', sub: 'Seine Methode, Lektion für Lektion' },
-  { src: '/wlad/wladbot3.0.webp', label: 'KI-Coach WladBot', sub: 'Antwortet mit Wlads Frameworks, 24/7' },
+  { src: '/wlad/wladbot3.0.webp', label: 'KI-Coach WLAD AI', sub: 'Antwortet mit Wlads Frameworks, 24/7' },
   { src: '/journal/topics/feedback.webp', label: 'Simulationen', sub: 'Schwierige Gespräche proben' },
   { src: '/journal/topics/presence.webp', label: 'Video-Analyse', sub: 'Score, 3 Stärken, 3 Hebel' },
   { src: '/journal/topics/negotiation.webp', label: 'Leadership Challengers', sub: 'KI-Interviews im Stil der Besten' },
@@ -71,7 +71,7 @@ export default function LeaderOsTourPage() {
     const restoreMeta = applyPageMeta({
       title: 'LeaderOS · Wlads Methode als App: KI-Coach, Videokurse, Training',
       description:
-        'LeaderOS ist Wlad Jachtchenkos Methode als App: Videokurse, KI-Coach WladBot, Simulationen, ' +
+        'LeaderOS ist Wlad Jachtchenkos Methode als App: Videokurse, KI-Coach WLAD AI, Simulationen, ' +
         'Video-Analyse und die 30-Tage-Challenge. 15 Minuten am Tag. 14 Tage kostenlos testen.',
       url: 'https://leader-os.de/leaderos',
       image: 'https://leader-os.de/og-wlad.jpg',

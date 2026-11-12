@@ -33,7 +33,7 @@ const PACKAGES = [
     sub: 'einmalig · Mehrwertsteuer inkl.',
     bullets: [
       '12 Videokurse · 1/Monat freigeschaltet (Wert 2.388€)',
-      'WladBot AI Coach · 24/7 unlimited',
+      'WLAD AI AI Coach · 24/7 unlimited',
       '30-Tage Leadership Programm · KI-personalisiert',
       'Alle 13 Wlad-Frameworks · Verhandeln · Rhetorik · Konflikt',
       'Video-Analyse · 5 frische Slots bei Kauf',

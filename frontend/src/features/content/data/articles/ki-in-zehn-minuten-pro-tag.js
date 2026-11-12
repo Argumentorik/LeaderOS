@@ -30,7 +30,7 @@ export default {
     ] },
     { type: 'framework', code: '10 MIN', title: 'Drei-Block-Variante', explanation: 'Morgens 3 Min Prompt schreiben · zwischen Meetings 3 Min ausführen · abends 3 Min reflektieren. Insgesamt 9 Min effektiv. Funktioniert während Phasen wo 15-Min-Slots unmöglich sind.' },
     { type: 'callout', tone: 'lime', text: 'Zehn Minuten an einem Tag schlagen null Minuten. Challenge-Pause kostet dich zwei bis drei Wochen Rück-Schritt. Mini-Routine in der Krise hält den Drill am Laufen.' },
-    { type: 'paragraph', text: 'WladBot erkennt eingebaut wenn du eine Krise-Phase signalisierst und schlägt automatisch die Zehn-Minuten-Variante vor · ohne dass du es bewusst einstellen musst.' },
+    { type: 'paragraph', text: 'WLAD AI erkennt eingebaut wenn du eine Krise-Phase signalisierst und schlägt automatisch die Zehn-Minuten-Variante vor · ohne dass du es bewusst einstellen musst.' },
   ],
   seo: {
     title: 'KI in 10 Minuten pro Tag · LeaderOS',

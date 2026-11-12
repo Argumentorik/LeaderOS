@@ -16,7 +16,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 // Plan Iter 187: dieselben vier Anker wie am Rechner — Rest liegt unter „Mehr".
 const HERO_ITEMS = [
   { path: '/dashboard', icon: LayoutDashboard, label_de: 'Dashboard', label_en: 'Dashboard', testId: 'mobile-nav-dashboard' },
-  { path: '/chat',      icon: MessagesSquare,  label_de: 'WladBot',   label_en: 'WladBot',   testId: 'mobile-nav-chat' },
+  { path: '/chat',      icon: MessagesSquare,  label_de: 'WLAD AI',   label_en: 'WLAD AI',   testId: 'mobile-nav-chat' },
   { path: '/playbooks', icon: Target,          label_de: 'Training',  label_en: 'Training',  testId: 'mobile-nav-training' },
 ];
 

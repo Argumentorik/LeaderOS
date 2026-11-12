@@ -1,4 +1,4 @@
-# WladBot Leader OS — Technical Requirements & QA Checklist
+# WLAD AI Leader OS — Technical Requirements & QA Checklist
 ## Version 7.3 · Deploy-Ready · Stand: 13. Februar 2026
 
 ---

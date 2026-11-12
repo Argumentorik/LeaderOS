@@ -96,7 +96,7 @@ export const DeepAssistModal = ({ open, onClose, toolId, de = true, defaultSitua
                 className="w-full bg-gradient-to-r from-[#BFFF00] to-[#9ACC00] text-[#0A0A0A] hover:shadow-lg hover:shadow-[#BFFF00]/20 font-bold h-11"
                 data-testid="da-run-btn"
               >
-                {loading ? <><Loader2 size={14} className="mr-2 animate-spin" /> {de ? 'WladBot analysiert...' : 'WladBot analyzing...'}</>
+                {loading ? <><Loader2 size={14} className="mr-2 animate-spin" /> {de ? 'WLAD AI analysiert...' : 'WLAD AI analyzing...'}</>
                 : <><Sparkles size={14} className="mr-2" /> {de ? 'Deep-Assist starten (kostet 1 Credit)' : 'Start Deep Assist (1 credit)'}</>}
               </Button>
             </>

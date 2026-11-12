@@ -103,7 +103,7 @@ Vier Long-Forms im Monat, Rollenspiele aus den Webinaren als Format.
 | Format | Länge | Rhythmus | Quelle | Wer |
 | --- | --- | --- | --- | --- |
 | Shorts aus der Folge | 30 bis 60 s, Untertitel, Lime-Prinzip-Karte am Ende | 3 pro Folge, Di/Mi/Do | Rollenspiele und Kernsätze der Montagsfolge | Max schneidet, wir liefern Timecodes und Endkarte |
-| „WladBot erklärt“ | 45 bis 90 s, 9:16 und 16:9 | 1 pro Woche, Donnerstag | Slides 3 bis 7 des Carousels der Woche, Ich-Form des Avatars | wir (Skript, Avatar), Stimme nach Wlads Entscheidung |
+| „WLAD AI erklärt“ | 45 bis 90 s, 9:16 und 16:9 | 1 pro Woche, Donnerstag | Slides 3 bis 7 des Carousels der Woche, Ich-Form des Avatars | wir (Skript, Avatar), Stimme nach Wlads Entscheidung |
 | Carousel-Spiegel | Community-Post mit 3 Bildern | 2 pro Woche | Cover plus Prinzip-Slide | wir |
 | Journal-Artikel | 900 bis 1 400 Wörter, FAQ-Block | 1 pro Folge | Transkript der Folge | wir, Wlad gibt frei |
 
@@ -114,7 +114,7 @@ Vier Long-Forms im Monat, Rollenspiele aus den Webinaren als Format.
    an Max, Artikel-Entwurf.
 3. Mittwoch: Shorts live, Artikel im Journal, Carousel in der
    Freigaberunde.
-4. Donnerstag: WladBot-Video, Carousel live.
+4. Donnerstag: WLAD AI-Video, Carousel live.
 5. Freitag: Zahlen (Views, Saves, Klicks auf leader-os.de) in die
    Montagsnotiz.
 
@@ -122,7 +122,7 @@ Vier Long-Forms im Monat, Rollenspiele aus den Webinaren als Format.
 Folgentitel („5 Rhetorikregeln, die dich sofort überzeugender machen“).
 Keine Clickbait-Fragen ohne Antwort im Video.
 
-**Kennzeichnung Avatar:** erster Satz „Ich bin WladBot, der KI-Coach aus
+**Kennzeichnung Avatar:** erster Satz „Ich bin WLAD AI, der KI-Coach aus
 LeaderOS“, Abspann mit Wlads Porträt und Folgennummer als Quelle. Kein
 KI-Gesicht von Wlad. Stimme nur mit seiner schriftlichen Freigabe.
 

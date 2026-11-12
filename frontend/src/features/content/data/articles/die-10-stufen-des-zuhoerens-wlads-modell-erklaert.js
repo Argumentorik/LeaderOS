@@ -39,7 +39,7 @@ export default {
     { type: 'heading', level: 2, text: 'Warum gerade Stufe 2 die teuerste Falle ist.' },
     { type: 'paragraph', text: 'Stufe 2 fühlt sich für die Führungskraft selbst nicht wie ein Problem an · man hört ja "zu", man ist höflich, man nickt. Für das Gegenüber fühlt es sich trotzdem sofort fremd an: das Gespräch wirkt wie ein Wartesaal, in dem die eigene Aussage nur die Lücke bis zur nächsten Wortmeldung des Chefs ist. Das ist der Grund, warum Mitarbeiter aufhören, echte Probleme zu melden · nicht, weil sie kein Vertrauen haben, sondern weil sie merken, dass Zuhören hier Show ist.' },
     { type: 'paragraph', text: 'Der Sprung von Stufe 2 auf Stufe 5 ist keine Charakterfrage, sondern reine Übungssache: eine einzige Gewohnheit · nach jeder Aussage des Gegenübers erst paraphrasieren, dann erst antworten · reicht, um in wenigen Wochen spürbar höher zu klettern.' },
-    { type: 'paragraph', text: 'In der LeaderOS-Challenge wird genau diese Stufe pro echtem 1:1-Transkript gemessen: WladBot markiert, auf welcher der zehn Stufen deine Antworten tatsächlich lagen · nicht auf welcher du dachtest, zu sein.' },
+    { type: 'paragraph', text: 'In der LeaderOS-Challenge wird genau diese Stufe pro echtem 1:1-Transkript gemessen: WLAD AI markiert, auf welcher der zehn Stufen deine Antworten tatsächlich lagen · nicht auf welcher du dachtest, zu sein.' },
   ],
   seo: {
     title: '10 Stufen des Zuhörens: Wlads Modell komplett erklärt',

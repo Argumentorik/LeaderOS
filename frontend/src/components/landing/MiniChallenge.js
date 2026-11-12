@@ -281,7 +281,7 @@ export const MiniChallenge = () => {
                   ▸ UNLOCKED
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-black font-mono mb-3">
-                  ▸ BELOHNUNG · WLADBOT
+                  ▸ BELOHNUNG · WLAD AI
                 </div>
                 <h3
                   className="leading-[0.88] tracking-[-0.04em] text-black"
@@ -290,7 +290,7 @@ export const MiniChallenge = () => {
                   50 FREE<br />CREDITS<span className="text-black not-italic">.</span>
                 </h3>
                 <p className="mt-5 text-[14.5px] leading-[1.5] text-black/85 max-w-md">
-                  Genug für ~25 Sprachen-Sessions mit dem WladBot zu deinem Hebel-Thema,
+                  Genug für ~25 Sprachen-Sessions mit dem WLAD AI zu deinem Hebel-Thema,
                   oder ein voller 1:1-Drill mit der {weakest.drill}.
                 </p>
                 <button

@@ -159,7 +159,7 @@ export default function PaymentSuccess() {
                   "Dein License Key wird in Kürze per E-Mail zugesendet",
                   "Du hast sofortigen Zugang zu allen Kursen & Agenten",
                   "Dein 30-Tage-Plan startet heute",
-                  "Bei Fragen ist der WladBot 24/7 für dich da",
+                  "Bei Fragen ist der WLAD AI 24/7 für dich da",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <CheckCircle2 className="w-4 h-4 text-[#C8FF00] shrink-0" />

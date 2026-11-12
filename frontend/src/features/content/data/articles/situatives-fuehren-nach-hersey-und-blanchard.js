@@ -141,7 +141,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS trainierst du vor allem den schwierigen Teil, nämlich das Gespräch selbst: WladBot spielt das Gegenüber, etwa die Mitarbeiterin, ' +
+        'Im LeaderOS trainierst du vor allem den schwierigen Teil, nämlich das Gespräch selbst: WLAD AI spielt das Gegenüber, etwa die Mitarbeiterin, ' +
         'die eine Aufgabe „schon kann“, und du übst, enger zu führen, ohne Misstrauen zu signalisieren, oder loszulassen, ohne dich zu verabschieden. ' +
         'In täglichen 15-Minuten-Drills wiederholst du die Formulierungen, bis sie im echten Gespräch verfügbar sind. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

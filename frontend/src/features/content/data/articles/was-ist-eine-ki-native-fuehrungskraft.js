@@ -66,8 +66,8 @@ export default {
       'Drei Schritte, in der Reihenfolge.' },
     { type: 'list', style: 'numbered', items: [
       'Diagnose. 10 Minuten kostenloser Check auf leadercheck.de in drei Dimensionen (KI-Readiness, Rhetorik, EQ). Ergebnis ist dein Startpunkt, nicht dein Urteil.',
-      'Challenge. 30 Tage mit System: täglich 15 Minuten an einem Framework drillen, WladBot als 24/7-Sparring, wöchentlicher Drill am echten Fall. Output: elf Frameworks die du auch im Stress abrufst.',
-      'Plattform. 12 Monate Plus-Plus Begleitung mit monatlichen Live-Sessions, Drill-Channel, Challenge-Historie als WladBot-Context. Hier verfestigt sich der Reflex.',
+      'Challenge. 30 Tage mit System: täglich 15 Minuten an einem Framework drillen, WLAD AI als 24/7-Sparring, wöchentlicher Drill am echten Fall. Output: elf Frameworks die du auch im Stress abrufst.',
+      'Plattform. 12 Monate Plus-Plus Begleitung mit monatlichen Live-Sessions, Drill-Channel, Challenge-Historie als WLAD AI-Context. Hier verfestigt sich der Reflex.',
     ] },
     { type: 'callout', tone: 'lime', text:
       'Weiterführend: Methodik im Detail in Die 5 Rollen einer KI-nativen Führungskraft · Selbsttest-Frage 4 erklärt in Output messen im KI-Zeitalter · Tool-Frage in Wenn KI dich verlangsamt.' },

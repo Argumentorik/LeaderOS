@@ -29,8 +29,8 @@ canonical source.
 
 | Surface | Frontend trigger | Backend route | Whisper? | `retrieve_context`? | `WLAD_HARD_RULES`? | TTS reply? |
 | --- | --- | --- | :-: | :-: | :-: | :-: |
-| **WladBot text chat** | `/chat` page → `POST /api/chat` | `routes/chat.py:243` | — | ✅ `chat.py:244` | ✅ via `WLADBOT_SYSTEM_PROMPT` (`services.py`) | — |
-| **WladBot voice conversation** (godmode 2-min input → ≤1000-word reply) | `VoiceRecorder.js` → `POST /api/voice/transcribe` then `POST /api/voice/converse` | `routes/voice_tts.py:362` | ✅ OpenAI Whisper-1 on input | ✅ `voice_tts.py:363` (added in PR #43) | ✅ via `VOICE_CONVO_SYSTEM_PROMPT` | ✅ OpenAI TTS (8 personas) |
+| **WLAD AI text chat** | `/chat` page → `POST /api/chat` | `routes/chat.py:243` | — | ✅ `chat.py:244` | ✅ via `WLADBOT_SYSTEM_PROMPT` (`services.py`) | — |
+| **WLAD AI voice conversation** (godmode 2-min input → ≤1000-word reply) | `VoiceRecorder.js` → `POST /api/voice/transcribe` then `POST /api/voice/converse` | `routes/voice_tts.py:362` | ✅ OpenAI Whisper-1 on input | ✅ `voice_tts.py:363` (added in PR #43) | ✅ via `VOICE_CONVO_SYSTEM_PROMPT` | ✅ OpenAI TTS (8 personas) |
 | **Video analysis** (incl. Challenge30 video missions on day 18 & 28) | Upload form → `POST /api/video/analyze` | `routes/video.py:336` | ✅ Whisper-1 after ffmpeg extracts audio (150 MB raw / 25 MB Whisper post-extract) | ✅ `video.py:338` | ✅ via `VIDEO_ANALYSIS_PROMPT` | — |
 | **Playbook generation** (multi-step coaching plan + final report) | `/playbooks` → `POST /api/playbooks/{id}/step` + `/report` | `routes/playbooks.py:61` | — | ✅ `playbooks.py:63` (called per step *and* per report) | ✅ appended to both inline system messages | — |
 | **Simulation / roleplay feedback** | `/simulations` → `POST /api/simulations/{id}/feedback` | `routes/simulations.py:106` | — | ✅ `simulations.py:112` | ✅ via `SIMULATION_SYSTEM_PROMPT` | — |

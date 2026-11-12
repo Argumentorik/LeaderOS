@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { WladBotAvatar } from '../brand/WladBotAvatar';
 
 const PHASES_DE = [
-  'WladBot denkt nach…',
+  'WLAD AI denkt nach…',
   'Analysiert deine Situation…',
   'Greift auf Wlads Frameworks zu…',
   'Formuliert die Antwort…',
 ];
 const PHASES_EN = [
-  'WladBot is thinking…',
+  'WLAD AI is thinking…',
   'Analyzing your situation…',
   'Consulting Wlad\u2019s frameworks…',
   'Crafting the reply…',

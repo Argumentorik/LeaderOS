@@ -4,7 +4,7 @@
 > **LeaderOS** (Argumentorik-Akademie GmbH, Berlin) · Nische: Führungskräfte-
 > Training als KI-gestütztes Trainingssystem (B2B/B2C, DACH, Deutsch) ·
 > Zielgruppe: neue Teamleads, erfahrene Führungskräfte, Mittelstands-CEOs,
-> HR/People Ops · Produkt: Kurse, KI-Coach WladBot, Simulationen, tägliche
+> HR/People Ops · Produkt: Kurse, KI-Coach WLAD AI, Simulationen, tägliche
 > Drills; Einstieg über 14-Tage-Test und das Live-Webinar am 29.10.2026.
 >
 > **Update 02.11.2026:** Folge-Audit mit Host-Befund und Betreiber-Checkliste in
@@ -47,7 +47,7 @@ als „Seite mit Weiterleitung“.
 | Keyword (DE) | Intent | Vorher | Jetzt |
 | --- | --- | --- | --- |
 | führungskräftetraining online | kommerziell | nur Artikel „Formate im Vergleich“ | Startseiten-Title + `/kurse` |
-| ki coach führungskräfte / ki coaching führung | kommerziell | WladBot-Seite ohne Keyword im Title | Startseiten-Title und -Description |
+| ki coach führungskräfte / ki coaching führung | kommerziell | WLAD AI-Seite ohne Keyword im Title | Startseiten-Title und -Description |
 | leadership kurse online / führungskräfte kurs | kommerziell | keine | `/kurse` (statisch, Course-Schema) |
 | leadership operating system | navigational/informational | nur im Fließtext | `/fragen` FRG-12, Webinar-FAQ |
 | webinar führung kostenlos | kommerziell | SPA-Shell | `/webinar` prerendert mit Event + FAQ |
@@ -58,8 +58,8 @@ als „Seite mit Weiterleitung“.
 **Startseite** (`frontend/public/index.html`)
 
 - Vorher: `LeaderOS · KI Leadership System · 14 Tage kostenlos testen`
-- Jetzt: `Führungskräftetraining online · KI-Coach WladBot · LeaderOS` (59 Zeichen)
-- Description: `Führung trainieren statt lernen: 10 Kurse, KI-Coach WladBot mit der Methodik von Wlad Jachtchenko, Simulationen und tägliche 15-Minuten-Drills. 14 Tage kostenlos, ohne Karte.`
+- Jetzt: `Führungskräftetraining online · KI-Coach WLAD AI · LeaderOS` (59 Zeichen)
+- Description: `Führung trainieren statt lernen: 10 Kurse, KI-Coach WLAD AI mit der Methodik von Wlad Jachtchenko, Simulationen und tägliche 15-Minuten-Drills. 14 Tage kostenlos, ohne Karte.`
 
 **/kurse** (neu): `Kurse in LeaderOS · Katalog, Zugang und Ablauf | LeaderOS`
 

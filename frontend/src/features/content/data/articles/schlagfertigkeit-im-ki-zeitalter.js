@@ -19,7 +19,7 @@ export default {
     { type: 'paragraph', text: 'KI-Übung: gib KI 20 typische harte Bemerkungen die in deinem Job vorkommen. Lass dir jeweils drei Antwort-Varianten generieren: aggressiv, neutral, souverän. Übe die souveräne Variante laut. Drei Wochen, jeden Morgen 5 Minuten. Du wirst dich anders hören.' },
     { type: 'heading', level: 2, text: 'Drill 02: Das B-W-W-Skript.' },
     { type: 'paragraph', text: 'Beobachtung, Wirkung, Wunsch. Das ist mein Standard-Skript für jedes schwierige Feedback. "Mir ist aufgefallen, dass… Das hat zur Folge, dass… Ich wünsche mir, dass…". Drei Sätze, faktisch, ohne Vorwurfs-Ton. Funktioniert in 95 Prozent aller Mitarbeitergespräche.' },
-    { type: 'paragraph', text: 'KI-Übung: paste die Situation in den WladBot, frage nach drei B-W-W-Varianten. Wähle die klarste. Geh ins Gespräch. Vorher 4 Minuten Vorbereitung, danach 50 Prozent weniger Stress. Wirklich.' },
+    { type: 'paragraph', text: 'KI-Übung: paste die Situation in den WLAD AI, frage nach drei B-W-W-Varianten. Wähle die klarste. Geh ins Gespräch. Vorher 4 Minuten Vorbereitung, danach 50 Prozent weniger Stress. Wirklich.' },
     { type: 'heading', level: 2, text: 'Drill 03: Der Vorwand-Brecher.' },
     { type: 'paragraph', text: 'Wenn dir jemand mit einem Vorwand kommt · "ich hatte keine Zeit", "das ist nicht meine Aufgabe", "das funktioniert hier nicht" · antworte mit drei Sätzen: Anerkennung + konkrete Frage + Mini-Commitment. "Verstehe. Was würde es brauchen, damit es bis Freitag klappt? Was kann ich dir abnehmen, damit die ersten 30 Minuten möglich sind?".' },
     { type: 'paragraph', text: 'KI-Übung: liste die fünf häufigsten Vorwände die du diese Woche gehört hast. Lass KI dir jeweils drei Vorwand-Brecher-Varianten generieren. Übe sie. Du wirst merken: die Vorwände hören auf, weil du sie nicht mehr stehen lässt.' },
@@ -27,7 +27,7 @@ export default {
     { type: 'paragraph', text: 'Klienten die diese drei Drills 30 Tage durchziehen berichten: weniger eskalierte Gespräche, klareres Team-Feedback "du bist viel ruhiger geworden", schnellere Lösungs-Findung in Konflikten. Das ist nicht Magic. Das ist die Folge von 30 Tagen täglich 15 Minuten Übung mit dem schnellsten Sparring-Partner den es gibt.' },
     { type: 'heading', level: 2, text: 'Was du NICHT mit KI üben solltest.' },
     { type: 'paragraph', text: 'KI ist Sparring, nicht Bühne. Sie ersetzt nicht das Live-Üben mit echten Menschen. Was sie aber tut: sie macht jedes Live-Üben fünf Mal effizienter, weil du vorbereitet ankommst. Wer das verstanden hat, hat den größten Hebel der heutigen Rhetorik-Praxis gefunden.' },
-    { type: 'callout', tone: 'lime', text: 'Genau diese drei Drills sind Teil von LeaderOS · der KI-natives-Führen-Challenge von Wlad. 30 Tage, tägliches Coaching, WladBot als Sparring-Partner. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte. leader-os.de/#klassen' },
+    { type: 'callout', tone: 'lime', text: 'Genau diese drei Drills sind Teil von LeaderOS · der KI-natives-Führen-Challenge von Wlad. 30 Tage, tägliches Coaching, WLAD AI als Sparring-Partner. Werde Teil von LeaderOS · 14 Tage kostenlos, ohne Karte. leader-os.de/#klassen' },
   ],
   seo: {
     title: 'Schlagfertigkeit im KI-Zeitalter: 3 Drills · LeaderOS',

@@ -36,7 +36,7 @@ const TIMELINE_DATA = [
         testid="maria-week-1"
         eyebrow="Tag 1 → 7 · Klarheit im Kopf"
         title={<>Den Lärm abstellen.<br />Den Hebel finden.</>}
-        body="Erste Woche: jeden Morgen 3 Minuten Sparring mit WladBot. Was ist heute wirklich wichtig? Wo fließt deine Energie hin · und wo sollte sie hinfließen? Plötzlich entscheidest du schneller. Mit weniger Selbstzweifeln."
+        body="Erste Woche: jeden Morgen 3 Minuten Sparring mit WLAD AI. Was ist heute wirklich wichtig? Wo fließt deine Energie hin · und wo sollte sie hinfließen? Plötzlich entscheidest du schneller. Mit weniger Selbstzweifeln."
       >
         <WeekQuote>«Ab Tag 3 wusste ich morgens, was zählt. Und was Lärm war.»</WeekQuote>
         <WeekStats stats={[
@@ -54,7 +54,7 @@ const TIMELINE_DATA = [
         testid="maria-week-2"
         eyebrow="Tag 8 → 14 · Kommunikation mit Kollegen"
         title={<>Die Gespräche, vor denen<br />du dich gedrückt hast.</>}
-        body="Es gibt dieses eine Gespräch, das du seit Wochen aufschiebst. Das schwierige Feedback. Der konstruktive Konflikt. Das «Nein» an die Kollegin. Du übst es 5 Minuten mit WladBot. Drei Varianten. Du gehst rein. Es läuft."
+        body="Es gibt dieses eine Gespräch, das du seit Wochen aufschiebst. Das schwierige Feedback. Der konstruktive Konflikt. Das «Nein» an die Kollegin. Du übst es 5 Minuten mit WLAD AI. Drei Varianten. Du gehst rein. Es läuft."
       >
         <WeekQuote>«Mein Team merkt einen Unterschied. Ich auch.»</WeekQuote>
         <WeekStats stats={[

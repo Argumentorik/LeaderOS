@@ -937,7 +937,7 @@ html {
    (4 px Aufwärts-Settle, 500 ms). Eigener Name, weil `fadeIn` oben 8 px nutzt. */
 @keyframes kFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Iter 92.50 — WladBot "Live" presence (breathing + rotating aura ring) */
+/* Iter 92.50 — WLAD AI "Live" presence (breathing + rotating aura ring) */
 @keyframes wladBreath {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.035); }

@@ -78,7 +78,7 @@ export default function LandingPage() {
   const [chatOpen, setChatOpen] = useState(false);
 
   // Custom-event bridge for cross-section "open chat" triggers
-  // (FreeToolsSection's WladBot-Lite tool, future tools, share-targets…).
+  // (FreeToolsSection's WLAD AI-Lite tool, future tools, share-targets…).
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
     const onOpen = () => setChatOpen(true);

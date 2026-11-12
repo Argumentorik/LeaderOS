@@ -37,7 +37,7 @@ export default {
     { type: 'heading', level: 2, text: 'Mikro-Übung für diese Woche.' },
     { type: 'paragraph', text: 'In deinem nächsten 1:1: stelle die erste Frage und dann SCHWEIGE für vollständige fünfzehn Sekunden, egal was passiert. Du wirst merken: die meisten füllen die Stille mit ihrer eigentlichen Antwort. Du wirst mehr lernen als sonst in dreißig Minuten.' },
     { type: 'callout', tone: 'lime', text: 'Eine Stufe pro Woche ist optimistisch. Eine Stufe pro Monat ist die Challenge-Realität · und reicht, um in einem Jahr von Stufe 3 auf Stufe 6 oder 7 zu kommen.' },
-    { type: 'paragraph', text: 'In der Challenge diagnostizieren wir deine aktuelle Stufe und drillen dich auf die nächste. WladBot zeigt dir nach jedem geschriebenen 1:1-Transkript, welche Stufe deine Antworten hatten.' },
+    { type: 'paragraph', text: 'In der Challenge diagnostizieren wir deine aktuelle Stufe und drillen dich auf die nächste. WLAD AI zeigt dir nach jedem geschriebenen 1:1-Transkript, welche Stufe deine Antworten hatten.' },
   ],
   seo: {
     title: 'Zehn Stufen des Zuhörens: aktives Zuhören lernen',

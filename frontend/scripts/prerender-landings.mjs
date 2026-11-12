@@ -202,7 +202,7 @@ console.log(`prerender-landings: ${kf.PATH} written to build${kf.PATH}/index.htm
     section('agenda', `<p style="${bib}">▸ Ablauf · ${esc(ev.WEBINAR_DATE_LABEL)}</p><h2 style="${h2}">90 Minuten. Live.</h2><ol style="${p}padding-left:1.2em;">` +
       ev.AGENDA.map(([t, title, d]) => `<li style="margin:0 0 10px;"><b>${esc(t)} · ${esc(title)}</b> – ${esc(d)}</li>`).join('') + '</ol>'),
     section('system', `<p style="${bib}">▸ Was du siehst</p><h2 style="${h2}">Das Leadership Operating System.</h2>` +
-      `<p style="${p}">Ein Trainingssystem statt eines Seminars: Kurse mit den Frameworks von Wlad Jachtchenko, der KI-Coach WladBot, Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem echten Fall. Im Webinar zeigt Wlad das System zum ersten Mal komplett.</p>` +
+      `<p style="${p}">Ein Trainingssystem statt eines Seminars: Kurse mit den Frameworks von Wlad Jachtchenko, der KI-Coach WLAD AI, Simulationen mit einem Gegenüber, das zurückredet, und tägliche 15-Minuten-Drills an deinem echten Fall. Im Webinar zeigt Wlad das System zum ersten Mal komplett.</p>` +
       `<p style="${p}"><a href="/kurse" style="color:${INK};">Alle Kurse und der Zugang im Überblick</a> · <a href="/fragen" style="color:${INK};">Fragen &amp; Frameworks</a></p>`),
     section('', `<p style="${bib}">▸ Dein Gastgeber</p><h2 style="${h2}">${esc(kf.HOST.name)}</h2><p style="${p}"><b>${esc(kf.HOST.role)}.</b> ${esc(kf.HOST.bio)}</p>` +
       `<p style="${p}">${kf.STATS.map(([v, l]) => `${esc(v)} ${esc(l)}`).join(' · ')} · <a href="/wlad-jachtchenko" style="color:${INK};">Über Wlad Jachtchenko</a></p>`),

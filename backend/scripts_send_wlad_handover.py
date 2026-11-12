@@ -176,7 +176,7 @@ def render_html() -> str:
         <tr>
           <td style="padding:0 40px 32px 40px;text-align:center;">
             <div style="font-size:11px;color:#94A3B8;font-weight:600;letter-spacing:0.02em;line-height:1.6;">
-              Leader-OS &nbsp;·&nbsp; Powered by WladBot &nbsp;·&nbsp; {today}<br />
+              Leader-OS &nbsp;·&nbsp; Powered by WLAD AI &nbsp;·&nbsp; {today}<br />
               <a href="{FRONTEND}" style="color:#94A3B8;text-decoration:underline;">leaderos.de</a>
               &nbsp;·&nbsp;
               <a href="{FRONTEND}/leader-diagnose" style="color:#94A3B8;text-decoration:underline;">Leader-Diagnose</a>

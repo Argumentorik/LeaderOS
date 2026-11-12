@@ -1,4 +1,4 @@
-"""Iter 184 — Kundenmeldung: „komische Abkürzungen" (\\n, \\u201e) in WladBot-Antworten.
+"""Iter 184 — Kundenmeldung: „komische Abkürzungen" (\\n, \\u201e) in WLAD AI-Antworten.
 
 Der Weg der Kundin: Frage stellen → im Gespräch nachfragen („vertiefe das") →
 in der Antwort standen Rohzeichen mitten in den nummerierten Schritten.

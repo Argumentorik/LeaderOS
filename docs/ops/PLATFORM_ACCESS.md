@@ -112,7 +112,7 @@ In dieser Reihenfolge, im Browser auf leader-os.de:
 2. Login UI           → https://leader-os.de/login           ✅ 200
 3. Login mit Google   → Redirect → /dashboard                ✅
 4. Dashboard lädt     → User-Daten erscheinen                ✅
-5. WladBot-Chat       → erste Antwort in <3s                 ✅
+5. WLAD AI-Chat       → erste Antwort in <3s                 ✅
 6. /api/health        → https://leader-os.de/api/health      ✅ {"status":"ok"}
 7. /api/monitoring/system → JSON overall:"go"                ✅
 ```
@@ -126,7 +126,7 @@ Wenn alle 7 grün — Platform läuft komplett über die neue Domain.
 | Login: "redirect_to not allowed" | Supabase Redirect URL fehlt | Allowlist erweitern (siehe oben §1) |
 | Login OK, Dashboard leer | Cookie nicht gesetzt (CORS) | CORS_ORIGINS in Emergent prüfen |
 | Magic-Link führt nach Emergent | Email-Template alt | Template updaten |
-| WladBot-Chat 401 | Auth-Token nicht weitergereicht | `withCredentials:true` in api.js — sollte schon drin sein |
+| WLAD AI-Chat 401 | Auth-Token nicht weitergereicht | `withCredentials:true` in api.js — sollte schon drin sein |
 | Stripe-Checkout 404 | Stripe-Webhook auf alte Domain | Stripe Dashboard → Webhooks → URL auf leader-os.de/api/webhook/stripe |
 | Uploads 403 | Supabase Storage Bucket-Policy | Bucket-Policy in Supabase prüfen |
 

@@ -42,7 +42,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
                 <p className="text-[9px] font-bold text-[#BFFF00]/80 uppercase tracking-wider">Wlad Jachtchenko</p>
                 <p className="text-[12px] font-bold text-white/95 leading-tight">
                   {isSoftPause
-                    ? 'Du nutzt WladBot aktiv. Bereit fürs volle Erlebnis?'
+                    ? 'Du nutzt WLAD AI aktiv. Bereit fürs volle Erlebnis?'
                     : 'Echten Fortschritt gemacht. Jetzt alles freischalten.'}
                 </p>
               </div>

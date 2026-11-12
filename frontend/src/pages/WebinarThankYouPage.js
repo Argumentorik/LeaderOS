@@ -199,7 +199,7 @@ export default function WebinarThankYouPage() {
               <p className="lead">
                 Das Webinar ist der Impuls. LeaderOS ist das System, das danach trägt: sechs
                 Grundlagen-Kurse, vier Master-Programme, elf Framework-Drills, Simulationen und
-                WladBot als KI-Coach mit Wlads Methodik. Die ersten 14 Tage sind kostenlos.
+                WLAD AI als KI-Coach mit Wlads Methodik. Die ersten 14 Tage sind kostenlos.
               </p>
               <div className="actions">
                 <a

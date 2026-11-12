@@ -1,5 +1,5 @@
 /**
- * WladRichText · Lite-Markdown renderer for WladBot's `insight` / `strategy`
+ * WladRichText · Lite-Markdown renderer for WLAD AI's `insight` / `strategy`
  * / `reflection` text fields. Matches the OUTPUT-STIL contract in
  * `backend/services.py` WLAD_HARD_RULES (Rule 7):
  *

@@ -46,7 +46,7 @@ def _auth(token):
 
 class TestChatUploadDocument:
     def test_txt_valid(self, token_accel):
-        files = {"file": ("notes.txt", b"Hello WladBot leadership test.", "text/plain")}
+        files = {"file": ("notes.txt", b"Hello WLAD AI leadership test.", "text/plain")}
         r = requests.post(f"{BASE_URL}/api/chat/upload-document",
                           headers=_auth(token_accel), files=files, timeout=20)
         assert r.status_code == 200, r.text
@@ -54,7 +54,7 @@ class TestChatUploadDocument:
         assert body["filename"] == "notes.txt"
         assert body["type"] == "txt"
         assert body["chars"] > 0
-        assert "Hello WladBot" in body["full_text"]
+        assert "Hello WLAD AI" in body["full_text"]
 
     def test_md_valid(self, token_accel):
         files = {"file": ("readme.md", b"# Heading\ntext body", "text/markdown")}

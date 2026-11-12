@@ -2,21 +2,21 @@ import { Bot } from "lucide-react";
 import { wladbotFeatures } from "./heroData";
 
 /**
- * WladBotSection — WladBot chat preview with feature bullets.
+ * WladBotSection — WLAD AI chat preview with feature bullets.
  */
 export default function WladBotSection() {
   return (
     <section className="py-24 border-t border-white/[0.04]">
       <div className="max-w-5xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          {/* WLADBOT Preview */}
+          {/* WLAD AI Preview */}
           <div className="rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 order-2 lg:order-1">
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/[0.04]">
               <div className="w-10 h-10 rounded-xl bg-[#C8FF00]/[0.08] flex items-center justify-center">
                 <Bot className="w-5 h-5 text-[#C8FF00]" />
               </div>
               <div>
-                <div className="font-manrope font-bold text-sm text-white">WLADBOT</div>
+                <div className="font-manrope font-bold text-sm text-white">WLAD AI</div>
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
                   <span className="font-inter text-xs text-slate-500">Online</span>
@@ -39,7 +39,7 @@ export default function WladBotSection() {
 
           <div className="order-1 lg:order-2">
             <span className="inline-block mb-6 font-mono text-[11px] tracking-[0.28em] text-[#C8FF00]/80 uppercase font-semibold">
-              ▸ Der WladBot
+              ▸ Der WLAD AI
             </span>
             <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-6">
               <span className="block text-3xl md:text-4xl lg:text-5xl">

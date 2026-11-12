@@ -87,10 +87,10 @@ const OLD_WAY = ['Seminar', 'Notizen', 'Alltag', 'Vergessen'];
 const NEW_WAY = ['Täglich 15 Minuten', 'KI-Coach', 'Simulation', 'Feedback', 'Fortschritt'];
 
 // Jedes Thema mit eigenem Bild: Journal-Fotografie, das Wlad-Porträt und
-// der WladBot-Avatar. `pos` = object-position, `ink` = Avatar auf Ink.
+// der WLAD AI-Avatar. `pos` = object-position, `ink` = Avatar auf Ink.
 const LEARN = [
   ['Schwierige Gespräche', 'Wie du Kritik äußerst, ohne Vertrauen zu verlieren: mit Skript statt Bauchgefühl.', '/journal/topics/feedback.webp', '50% 40%'],
-  ['Der KI-Coach', 'Wie du mit WladBot jeden Tag 15 Minuten trainierst, an deinen echten Fällen.', 'wladbot', 'ink'],
+  ['Der KI-Coach', 'Wie du mit WLAD AI jeden Tag 15 Minuten trainierst, an deinen echten Fällen.', 'wladbot', 'ink'],
   ['Simulationen', 'Führungssituationen durchspielen, bevor sie im echten Meeting passieren.', '/journal/topics/conflict.webp', '50% 35%'],
   ['Die 30-Tage-Challenge', 'Der Trainingsplan, der aus einem Vormittag Impuls eine tägliche Routine macht.', '/journal/topics/sprint.webp', '50% 50%'],
   ['Die Frameworks', 'Die Methoden aus der Arbeit mit 400.000+ Klienten, von SEXIER bis zur Feedbackformel.', '/journal/topics/listening.webp', '50% 30%'],
@@ -576,7 +576,7 @@ export default function WebinarPage() {
               {LEARN.map(([title, desc, img, pos], i) => (
                 <li key={title} className="item rv">
                   {img === 'wladbot' ? (
-                    <Photo src={WLADBOT_AVATAR} fallbacks={WLADBOT_AVATAR_FALLBACKS} alt="WladBot, der KI-Coach mit Wlads Methodik" className="ink" ratio="3 / 2" />
+                    <Photo src={WLADBOT_AVATAR} fallbacks={WLADBOT_AVATAR_FALLBACKS} alt="WLAD AI, der KI-Coach mit Wlads Methodik" className="ink" ratio="3 / 2" />
                   ) : img === 'wlad' ? (
                     <Photo src={WLAD_AVATAR} fallbacks={WLAD_AVATAR_FALLBACKS} alt="Wlad Jachtchenko" pos={pos} ratio="3 / 2" />
                   ) : (

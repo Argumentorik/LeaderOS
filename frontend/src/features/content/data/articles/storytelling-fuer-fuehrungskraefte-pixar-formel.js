@@ -43,7 +43,7 @@ export default {
 
     { type: 'framework', code: 'P·6', title: 'Pixar-Formel als Drehbuch-Block.', explanation: 'Vor jeder wichtigen Präsentation: schreib die sechs Sätze auf einen Index-Karton. ZUERST die Sätze ausdrücken, DANN die Slides bauen. Niemals umgekehrt. Slides sind Begleitung, nicht Skript. Wer mit Slides anfängt, landet in Bullet-Point-Hölle. Wer mit der Pixar-Formel anfängt, hat eine Geschichte die ankommt.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS kann jede deiner Präsentationen durch die Pixar-Formel testen. Paste deinen Pitch, kriegst zurück: hier ist deine Disruption, hier deine Auflösung, das ist die Lücke. In 30 Sekunden ein Story-Audit das sonst 60 Min Coaching dauert. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS kann jede deiner Präsentationen durch die Pixar-Formel testen. Paste deinen Pitch, kriegst zurück: hier ist deine Disruption, hier deine Auflösung, das ist die Lücke. In 30 Sekunden ein Story-Audit das sonst 60 Min Coaching dauert. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'townhall-speeches-die-7-minuten-regel',

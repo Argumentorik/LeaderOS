@@ -15,7 +15,7 @@
 //   '9x16'→ 1080×1920  Stories · Reels · TikTok · YouTube-Shorts
 //
 // Fotos: ausschließlich eigene Assets (/wlad/wlad-portrait.jpg, Buchcover
-// unter /wlad/books/, WladBot-Screen). Kein Stock, auch nicht als
+// unter /wlad/books/, WLAD AI-Screen). Kein Stock, auch nicht als
 // Platzhalter — was im Entwurf steht, geht irgendwann raus
 // (docs/gtm/CREATIVE_MATRIX.md §5). Neue Wlad-Shoots: Pfad hier tauschen.
 
@@ -119,13 +119,13 @@ export const AD_SERIES = [
     palette: 'blaze',
     topText: 'FIRMENREDE\nOHNE ANGST.',
     titleText: 'KLARE SKRIPTE\nSTATT BAUCH.',
-    bottomText: 'WLADBOT · 24/7 · IN DEINER TASCHE',
+    bottomText: 'WLAD AI · 24/7 · IN DEINER TASCHE',
     cta: 'LEADER-OS.DE',
     photo: '/wlad/wlad-portrait.jpg',
     photoFit: 'cover',
     caption:
       'Du brauchst kein größeres Talent. Du brauchst das richtige ' +
-      'Skript für den Moment. WladBot gibt dir den nächsten Satz.',
+      'Skript für den Moment. WLAD AI gibt dir den nächsten Satz.',
   },
 
   // ─── C · Trust (Bestseller, 400k, Zahlen) ───────────────────────
@@ -174,13 +174,13 @@ export const AD_SERIES = [
     platform: 'meta',
     palette: 'spark',
     topText: 'CHATGPT KENNT\nDAS INTERNET.',
-    titleText: 'WLADBOT KENNT\nDICH.',
+    titleText: 'WLAD AI KENNT\nDICH.',
     bottomText: '2 212 WLAD-CHUNKS · CONTEXT-LAYER',
     cta: 'LEADER-OS.DE',
     photo: '/wlad/wladbot3.0.png',
     photoFit: 'cover',
     caption:
-      'ChatGPT kennt das halbe Internet. WladBot kennt deine Challenge, ' +
+      'ChatGPT kennt das halbe Internet. WLAD AI kennt deine Challenge, ' +
       'deine Frameworks-Historie, deinen Ton. Der Unterschied zwischen ' +
       'einem Tipp und der nächsten Antwort.',
   },

@@ -284,7 +284,7 @@ export default function HighTicketClose() {
               ▸ <span className="text-[#C8FF00]">50 Free Credits</span> beim Start
             </div>
             <p className="font-inter text-xs text-slate-400">
-              Jedes Paket startet mit 50 Free Credits für WladBot, KI-Tools & Simulationen · risikofrei testen, dann entscheiden.
+              Jedes Paket startet mit 50 Free Credits für WLAD AI, KI-Tools & Simulationen · risikofrei testen, dann entscheiden.
             </p>
           </div>
         </div>

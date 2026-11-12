@@ -132,7 +132,7 @@ export const GuideStudio = () => {
     <div className="space-y-4" data-testid="guide-studio">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <AssetTile kind="portrait" label="Avatar-Gesicht (3D)" url={s.portrait_url} endpoint="/guide/admin/portrait"
-                   accept="image/*" onDone={load} hint="Referenz 1 für den Keyframe — das WladBot-Gesicht, das der Clip übernimmt." />
+                   accept="image/*" onDone={load} hint="Referenz 1 für den Keyframe — das WLAD AI-Gesicht, das der Clip übernimmt." />
         <AssetTile kind="body" label="Körper & Haltung" url={s.body_url} endpoint="/guide/admin/body"
                    accept="image/*" onDone={load} hint="Referenz 2 — Ganzkörperfoto für Proportionen und Bühnenhaltung." />
         <AssetTile kind="sample" label="Stimmprobe" url={s.voice_sample_url} endpoint="/guide/admin/voice-sample"

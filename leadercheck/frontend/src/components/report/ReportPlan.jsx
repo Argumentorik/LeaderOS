@@ -99,7 +99,7 @@ export const ReportCTAs = () => {
         </button>
       </div>
       <p className="font-inter text-xs text-slate-600 text-center mt-4">
-        14 Tage Geld-zurück · 12 Monate Plattform · WladBot 24/7 · Zertifikat 0001
+        14 Tage Geld-zurück · 12 Monate Plattform · WLAD AI 24/7 · Zertifikat 0001
       </p>
     </div>
   );

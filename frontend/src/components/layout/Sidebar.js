@@ -35,7 +35,7 @@ export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   // Plan Iter 187 (Wunsch Stefan · „3 + 1"): oben stehen vier Einträge.
-  // Dashboard und WladBot führen direkt zur Seite, die beiden anderen
+  // Dashboard und WLAD AI führen direkt zur Seite, die beiden anderen
   // klappen ihre Inhalte auf.
   const withLock = (it) => ({ ...it, locked: isLockedPath(it.path) });
 
@@ -48,7 +48,7 @@ export const Sidebar = () => {
       badgeText: challengeDay ? `${lang === 'de' ? 'Tag' : 'Day'} ${challengeDay} / 30` : null,
     },
     {
-      path: '/chat', label: 'WladBot', icon: IconBubble,
+      path: '/chat', label: 'WLAD AI', icon: IconBubble,
       subLine: lang === 'de' ? 'Dein Coach — fragen, wann du willst' : 'Your coach — ask any time',
     },
     {
@@ -101,7 +101,7 @@ export const Sidebar = () => {
                 Leader<span className="opacity-40">·</span>OS
               </span>
               <span className="text-[7.5px] text-muted-foreground/45 font-bold tracking-[0.22em] uppercase mt-[3px]">
-                Powered by WladBot
+                Powered by WLAD AI
               </span>
             </div>
           )}

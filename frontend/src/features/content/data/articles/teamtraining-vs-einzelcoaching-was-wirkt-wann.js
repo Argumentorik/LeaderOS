@@ -124,7 +124,7 @@ export default {
         'LeaderOS ersetzt keine System-Intervention und auch kein echtes Team-Offsite, wenn das Problem strukturell ' +
         'ist. Aber wenn die Diagnose "Person" bei mehreren Führungskräften im Team gleichzeitig lautet, ändert sich ' +
         'die Rechnung: statt fünf oder zehn 1:1-Coachings zu je 300 bis 800 € pro Stunde einzeln zu buchen, ' +
-        'bekommt jede Führungskraft im Team eine eigene 30-Tage-Challenge mit WladBot als persönlichem Coach — zu ' +
+        'bekommt jede Führungskraft im Team eine eigene 30-Tage-Challenge mit WLAD AI als persönlichem Coach — zu ' +
         'einem Bruchteil der Kosten, ohne die Individualisierung zu verlieren.',
     },
   ],

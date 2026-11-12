@@ -16,7 +16,7 @@ ANMELDUNG = [
     ("1. Login ohne Passwort (Magic Link)",
      "Gehe auf leaderos.de/login, klicke oben auf den Tab \u201eMagic Link\u201c, gib wj@argumentorik.com ein und klicke auf \u201eLink senden\u201c. Du bekommst innerhalb von Sekunden eine E-Mail mit einem sicheren 1-Klick-Login-Link \u2014 kein Passwort n\u00f6tig. Alternativ funktioniert auch \u201eMit Google fortfahren\u201c."),
     ("2. Dein Account hat automatisch Admin-Rechte",
-     "Sobald du dich mit wj@argumentorik.com einloggst, wird dein Konto automatisch mit vollen Admin-Rechten ausgestattet. Du landest zuerst auf deinem pers\u00f6nlichen Dashboard mit WladBot 3.0, dem 30-Tage-Sprint und allen Features."),
+     "Sobald du dich mit wj@argumentorik.com einloggst, wird dein Konto automatisch mit vollen Admin-Rechten ausgestattet. Du landest zuerst auf deinem pers\u00f6nlichen Dashboard mit WLAD AI, dem 30-Tage-Sprint und allen Features."),
     ("3. Admin-Bereich \u00f6ffnen",
      "Der Admin-Bereich liegt bewusst auf einer nicht \u00f6ffentlichen URL: leaderos.de/wlad-control-x7k9q2 \u2014 dort siehst du Umsatz (MRR/ARR), alle User, Transaktionen, Sync-Status und ganz unten die Lizenz-Key-Verwaltung."),
 ]
@@ -32,7 +32,7 @@ LIZENZ = [
 ]
 
 HIGHLIGHTS = [
-    ("\U0001F916 WladBot 3.0 \u2014 dein digitaler Zwilling",
+    ("\U0001F916 WLAD AI \u2014 dein digitaler Zwilling",
      "Ein KI-Coach, der deine komplette Methodik kennt: alle Kurse, Frameworks und Inhalte sind als durchsuchbares Wissen hinterlegt (RAG mit semantischer Wissens-Suche). Antwortet 24/7 im Stil von Wlad \u2014 mit Coaching-Modus, Chat-Verlauf und Ordnern wie bei ChatGPT."),
     ("\U0001F3AF 30-Tage KI-Leadership Sprint",
      "300 Fragen, t\u00e4gliche Challenges und echtes Momentum: Jeden Tag eine Aufgabe, die den Teilnehmer als Leader sch\u00e4rft \u2014 gamifiziert mit XP, Levels und Fortschritts-Tracking."),
@@ -41,7 +41,7 @@ HIGHLIGHTS = [
     ("\U0001F94A KI-Simulations-Arena",
      "Realistische Roleplays f\u00fcr schwierige F\u00fchrungssituationen (K\u00fcndigungsgespr\u00e4ch, Gehaltsverhandlung, Konflikt im Team). Mit Briefing-Wizard: Gegen\u00fcber-Typ und Trainingsziel w\u00e4hlbar."),
     ("\U0001F4CA Leadership-Diagnose + leadercheck.de Sync",
-     "Wer auf leadercheck.de den Test macht, bekommt seine Scores automatisch ins Leader-OS synchronisiert \u2014 WladBot kennt die Ergebnisse und coacht gezielt auf die Schw\u00e4chen."),
+     "Wer auf leadercheck.de den Test macht, bekommt seine Scores automatisch ins Leader-OS synchronisiert \u2014 WLAD AI kennt die Ergebnisse und coacht gezielt auf die Schw\u00e4chen."),
     ("\U0001F4B3 Stripe Live-Payments mit Ratenzahlung",
      "4 Pakete live und getestet: Leadership OS (997\u20ac), 2\u00d7-Rate, 12\u00d7-Rate (99\u20ac/Monat) und PLUS (4.797\u20ac). Automatische Freischaltung, Rechnungs- und Willkommens-Mails inklusive."),
     ("\U0001F39F\uFE0F Lizenz-Key-System f\u00fcr Sales",
@@ -51,7 +51,7 @@ HIGHLIGHTS = [
     ("\U0001F6E1\uFE0F Enterprise-Security \u2014 4 bestandene Audits",
      "Magic-Link-Login, Brute-Force-Schutz, Ger\u00e4te-Erkennung mit Sicherheits-Mail bei neuem Login, Passwort-Mindestst\u00e4rke, DSGVO-konform. Der letzte Security-Audit kam ohne einen einzigen Befund zur\u00fcck."),
     ("\U0001F4C8 Admin-Cockpit f\u00fcr den vollen \u00dcberblick",
-     "Umsatz in Echtzeit (MRR/ARR), User- und Tier-Verwaltung, Transaktionen, Sync-Health, RAG-Wissens-Studio (zeigt, welche deiner Inhalte WladBot pro Frage nutzt) und die Lizenz-Key-Verwaltung."),
+     "Umsatz in Echtzeit (MRR/ARR), User- und Tier-Verwaltung, Transaktionen, Sync-Health, RAG-Wissens-Studio (zeigt, welche deiner Inhalte WLAD AI pro Frage nutzt) und die Lizenz-Key-Verwaltung."),
 ]
 
 
@@ -87,7 +87,7 @@ def build_docx(path: str) -> None:
         doc.add_paragraph(body)
 
     doc.add_paragraph()
-    footer = doc.add_paragraph("Fragen? Mert erreicht das Team jederzeit \u2014 und WladBot beantwortet den Rest. \U0001F680")
+    footer = doc.add_paragraph("Fragen? Mert erreicht das Team jederzeit \u2014 und WLAD AI beantwortet den Rest. \U0001F680")
     footer.runs[0].font.italic = True
     doc.save(path)
 
@@ -95,7 +95,7 @@ def build_docx(path: str) -> None:
 EMAIL_HTML = """
 <div style="max-width:640px;margin:0 auto;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#0A0A0A;color:#f5f5f5;border-radius:16px;overflow:hidden">
   <div style="padding:28px 32px;border-bottom:1px solid rgba(255,255,255,0.08)">
-    <p style="margin:0;font-size:13px;letter-spacing:2px;color:#BFFF00;font-weight:700">LEADER\u00b7OS &middot; POWERED BY WLADBOT 3.0</p>
+    <p style="margin:0;font-size:13px;letter-spacing:2px;color:#BFFF00;font-weight:700">LEADER\u00b7OS &middot; POWERED BY WLAD AI</p>
     <h1 style="margin:10px 0 0;font-size:24px;color:#ffffff">Hallo Wlad \u2014 dein Zugang steht! \U0001F680</h1>
     <p style="margin:8px 0 0;font-size:14px;color:rgba(255,255,255,0.6)">Alles Wichtige in dieser Mail \u2014 die ausf\u00fchrliche Version findest du zus\u00e4tzlich als Word-Datei im Anhang.</p>
   </div>

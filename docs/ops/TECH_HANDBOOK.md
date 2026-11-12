@@ -46,7 +46,7 @@
    counter hides itself below 25 registrations. Every claim about Wlad
    comes from `docs/gtm/WLAD_CANON.md`; if it is not there, we do not say it.
 2. **The product is the training loop.** Course lesson → drill on the
-   user's real case → WladBot before the conversation → simulation with
+   user's real case → WLAD AI before the conversation → simulation with
    pushback → evaluation. Features that do not feed this loop are
    candidates for removal, decided by usage data (PostHog), not taste.
 3. **Boring, observable infrastructure.** Health endpoint, Sentry alerts,
@@ -119,7 +119,7 @@ tried.
 
 ## 5. The AI parts, and how we keep them honest
 
-- **WladBot** answers with retrieval over Wlad's corpus (`services_rag.py`,
+- **WLAD AI** answers with retrieval over Wlad's corpus (`services_rag.py`,
   hybrid vector + lexical) and `WLAD_HARD_RULES` appended to every prompt
   (`services.py`): name spelling, use the corpus when provided, no invented
   books. Which surface uses which guardrail: `docs/app/RAG_KNOWLEDGE_FLOW.md`.
@@ -269,13 +269,13 @@ And the card itself:
 5. What are the three parts of every billing guardrail? (§10)
 6. A `402 no_credits` shows as an endless spinner. Is that a limit or a bug?
    (§5)
-7. Who decides a WladBot wording change? Who decides a feature cut, and on
+7. Who decides a WLAD AI wording change? Who decides a feature cut, and on
    what basis? (§5, §2.2)
 8. The incident runbook time budget is exceeded twice. What do you do?
    (§7.5)
 
 **Answer key.** 1 GitHub `mvpcode`; a hot-fix not in GitHub is deleted by
-the next deploy. 2 Lesson → drill on the real case → WladBot before the
+the next deploy. 2 Lesson → drill on the real case → WLAD AI before the
 conversation → simulation with pushback → evaluation. 3 Consent: analytics
 only runs after the banner was accepted. 4 Usage (Disk IO, size, egress),
 Query Performance, Cron failures, Auth logs, API errors, Advisors, Backups;

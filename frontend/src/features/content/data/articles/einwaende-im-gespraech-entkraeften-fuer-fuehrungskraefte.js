@@ -177,7 +177,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du Einwände gezielt trainieren: WladBot spielt das Gegenüber und hält dir Einwände ' +
+        'Im LeaderOS kannst du Einwände gezielt trainieren: WLAD AI spielt das Gegenüber und hält dir Einwände ' +
         'entgegen, und du übst, nachzufragen statt zu kontern. Die täglichen 15-Minuten-Drills sind dafür gedacht, dass die Rückfrage zum Reflex wird. ' +
         'Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

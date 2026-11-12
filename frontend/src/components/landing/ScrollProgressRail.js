@@ -7,7 +7,7 @@ const ITEMS = [
   { id: 'benefit-02',   n: '03', label: 'Coach' },
   { id: 'benefit-03',   n: '04', label: 'Wlad' },
   { id: 'benefit-04',   n: '05', label: 'Zertifikat' },
-  { id: 'benefit-05',   n: '06', label: 'WladBot' },
+  { id: 'benefit-05',   n: '06', label: 'WLAD AI' },
   { id: 'final-cta',    n: '07', label: 'Start' },
 ];
 

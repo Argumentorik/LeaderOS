@@ -29,7 +29,7 @@ export default {
     { type: 'paragraph', text: 'Wenn du dein Senior-Team mappst, siehst du oft Cluster: drei Rote, kein Grüner. Das macht Konsens-Findung schwer. Bewusst sein heißt nicht "Grüne einstellen" · sondern wissen wo Spannung systematisch entsteht und kompensieren.' },
     { type: 'framework', code: '4 FARBEN', title: 'Defaults statt Typen', explanation: 'Rot will Klarheit, Gelb will Vision, Grün will Sicherheit, Blau will Daten. Niemand ist nur eine Farbe · aber jeder hat einen Stress-Default. Wer ihn kennt, kompensiert bewusst.' },
     { type: 'callout', tone: 'lime', text: 'Vier Farben ist KEIN Typisierungs-Tool. Es ist ein Diagnose-Tool für deinen eigenen Default-Modus. Wer es als "ich bin Rot und kann nicht anders" liest, hat es missverstanden.' },
-    { type: 'paragraph', text: 'In der Challenge baust du deinen Default und deine Sekundär-Farbe. Du trainierst Skript-Varianten für die drei Farben die dir nicht liegen. WladBot zeigt dir bei jeder geschriebenen Konversation welche Farbe gerade dominiert und welche du verdrängst.' },
+    { type: 'paragraph', text: 'In der Challenge baust du deinen Default und deine Sekundär-Farbe. Du trainierst Skript-Varianten für die drei Farben die dir nicht liegen. WLAD AI zeigt dir bei jeder geschriebenen Konversation welche Farbe gerade dominiert und welche du verdrängst.' },
   ],
   seo: {
     title: 'Vier-Farben-Modell: Persönlichkeiten im Team führen',

@@ -42,7 +42,7 @@ in `lazyWithRetry` so stale-deploy chunk-404s self-recover.
 | `/dashboard` | DashboardPage | Post-login home |
 | `/my-path` | MyPathPage | User journey + progress |
 | `/coaching` | CoachingPage | 1:1 booking surface |
-| `/chat` | ChatPage | WladBot text chat |
+| `/chat` | ChatPage | WLAD AI text chat |
 | `/missions` | VideoChallengePage | Record + analyze video |
 | `/simulations` | SimulationsPage | Role-play with AI employee |
 | `/playbooks` | PlaybooksPage | Guided multi-step coaching |
@@ -87,7 +87,7 @@ prefixed `/api`. Frontend reaches the backend via the Vercel
 | File | Endpoints | Purpose |
 |---|---|---|
 | `auth.py` | session, OAuth callbacks, magic-link verify | Cookie + JWT auth |
-| `chat.py` | `/api/chat` | WladBot text chat (RAG-grounded) |
+| `chat.py` | `/api/chat` | WLAD AI text chat (RAG-grounded) |
 | `video.py` | `/api/video-challenges/.../analyze`, `/api/voice/transcribe` | Whisper + RAG |
 | `voice_tts.py` | `/api/voice/conversation`, `/api/tts` | Audio-in→AI→audio-out |
 | `simulations.py` | `/api/simulations/...` | Role-play (RAG at end) |
@@ -134,7 +134,7 @@ to GPT-5.2 + Whisper without direct OpenAI billing), `imageio-ffmpeg`
 | Collection | Holds |
 |---|---|
 | `users` | Canonical user (`mongo_user_id` as PK) |
-| `chat_sessions` | All WladBot conversations |
+| `chat_sessions` | All WLAD AI conversations |
 | `chat_messages` | Per-turn messages |
 | `video_challenges` | Analysis results + transcripts |
 | `simulations` | Role-play sessions |

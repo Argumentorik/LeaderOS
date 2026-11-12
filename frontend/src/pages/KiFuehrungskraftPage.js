@@ -786,9 +786,9 @@ function Host() {
               <span className="absolute left-4 top-4 text-[10px] rounded-full" style={{ ...MONO, fontWeight: 700, padding: '5px 10px', background: INK, color: LIME }}>Host</span>
             </div>
             <div className="absolute -right-2 sm:-right-5 -bottom-6 flex items-center bg-white" style={{ borderRadius: 999, padding: '8px 16px 8px 8px', gap: 10, boxShadow: PILL_SHADOW }}>
-              <img src="/wlad/wladbot3.0.webp" alt="WladBot, der KI-Coach" loading="lazy" className="rounded-full object-cover" style={{ width: 44, height: 44 }} />
+              <img src="/wlad/wladbot3.0.webp" alt="WLAD AI, der KI-Coach" loading="lazy" className="rounded-full object-cover" style={{ width: 44, height: 44 }} />
               <div>
-                <div className="text-[10px]" style={{ ...MONO, color: OLIVE, fontWeight: 700 }}>+ WladBot</div>
+                <div className="text-[10px]" style={{ ...MONO, color: OLIVE, fontWeight: 700 }}>+ WLAD AI</div>
                 <div className="text-[13px]" style={{ ...BODY, fontWeight: 600, color: INK }}>Wlads Methodik als KI-Coach</div>
               </div>
             </div>

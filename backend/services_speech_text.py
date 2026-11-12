@@ -42,7 +42,7 @@ _WORD_RE = re.compile(r"[A-Za-zÄÖÜäöüß]+")
 # Iter 183: Der Name kommt aus der Spracherkennung häufig falsch zurück („Bei Vlad gibt es …").
 # Eine Stelle für alle Wege: Transkripte, Antworten, Gesprächstitel, Analyse-Texte.
 _BRAND_FIXES: tuple[tuple[re.Pattern[str], str], ...] = (
-    (re.compile(r"\b[vwfb]lad[\s-]?bot\b", re.IGNORECASE), "WladBot"),
+    (re.compile(r"\b[vwfb]lad[\s-]?bot\b", re.IGNORECASE), "WLAD AI"),
     (re.compile(r"\b(?:vladimir|wladimir|vladimier)\b", re.IGNORECASE), "Wlad"),
     (re.compile(r"\b(?:vlad|vlat|blad|flad)\b", re.IGNORECASE), "Wlad"),
     (re.compile(r"\b(?:Flat|Wlat)\b"), "Wlad"),
@@ -53,7 +53,7 @@ _BRAND_FIXES: tuple[tuple[re.Pattern[str], str], ...] = (
 
 # Whisper-Hinweis: Eigennamen vorab nennen, damit sie richtig geschrieben ankommen.
 SPEECH_NAME_HINT = (
-    "Wlad Jachtchenko, WladBot, Leader-OS, LeaderCheck, Argumentorik, "
+    "Wlad Jachtchenko, WLAD AI, Leader-OS, LeaderCheck, Argumentorik, "
     "SEXIER-Modell, Weiße Rhetorik, Dunkle Rhetorik, Charisma-Code, Peripetie."
 )
 

@@ -53,8 +53,8 @@ export default function ReferralPage() {
   const shareOn = async (platform) => {
     const url = referralData?.share_url || LEADERCHECK_URL;
     const text = de
-      ? `Ich nutze WladBot, das KI Leadership OS von Wlad Jachtchenko. Teste es kostenlos:`
-      : `I use WladBot, the AI Leadership OS by Wlad Jachtchenko. Try it free:`;
+      ? `Ich nutze WLAD AI, das KI Leadership OS von Wlad Jachtchenko. Teste es kostenlos:`
+      : `I use WLAD AI, the AI Leadership OS by Wlad Jachtchenko. Try it free:`;
 
     const links = {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
@@ -67,8 +67,8 @@ export default function ReferralPage() {
 
   const shareLeaderScore = async (platform) => {
     const text = de
-      ? `Mein Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Teste deinen auf WladBot!`
-      : `My Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Test yours on WladBot!`;
+      ? `Mein Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Teste deinen auf WLAD AI!`
+      : `My Leadership Score: ${certData?.leadership_score || 0}/100 · Level: ${certData?.level}. Test yours on WLAD AI!`;
     const url = referralData?.share_url || LEADERCHECK_URL;
 
     const links = {
@@ -83,7 +83,7 @@ export default function ReferralPage() {
     if (!certData) return;
     await generatePDF({
       title: `Leadership Zertifikat · ${certData.name}`,
-      overall_assessment: `${certData.name} hat das WladBot Leadership Programm erfolgreich durchlaufen und dabei ${certData.simulations_completed} Simulationen und ${certData.challenges_completed} Challenger-Interviews absolviert.`,
+      overall_assessment: `${certData.name} hat das WLAD AI Leadership Programm erfolgreich durchlaufen und dabei ${certData.simulations_completed} Simulationen und ${certData.challenges_completed} Challenger-Interviews absolviert.`,
       score: certData.leadership_score,
       strengths: [
         `Level: ${certData.level}`,
@@ -96,7 +96,7 @@ export default function ReferralPage() {
         'Lade 3 Kollegen ein und werde Connector',
         'Starte das nächste Playbook für dein Wachstum',
       ],
-    }, `WladBot-Zertifikat-${certData.name?.replace(/\s+/g, '-')}`);
+    }, `WLAD AI-Zertifikat-${certData.name?.replace(/\s+/g, '-')}`);
   };
 
   const tierColors = { Starter: 'text-gray-500', Connector: 'text-sky-500', Influencer: 'text-purple-500', Ambassador: 'text-amber-500', Legend: 'text-rose-500' };
@@ -118,7 +118,7 @@ export default function ReferralPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{de ? 'Empfehlen & Verdienen' : 'Refer & Earn'}</h1>
-            <p className="text-sm text-muted-foreground font-medium">{de ? 'Teile WladBot. Verdiene Rewards. Steige im Tier auf.' : 'Share WladBot. Earn rewards. Level up your tier.'}</p>
+            <p className="text-sm text-muted-foreground font-medium">{de ? 'Teile WLAD AI. Verdiene Rewards. Steige im Tier auf.' : 'Share WLAD AI. Earn rewards. Level up your tier.'}</p>
           </div>
         </div>
 

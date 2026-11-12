@@ -213,8 +213,8 @@ def report_email(name: str, report: dict) -> dict:
 <tr><td style="padding:8px 0 8px 0;">
 <div style="background:linear-gradient(135deg, rgba(200,255,0,0.10), rgba(200,255,0,0.03));border-radius:14px;padding:22px 26px;border:1px solid rgba(200,255,0,0.30);">
 <p style="font-size:10px;color:{BRAND['lime']};margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.18em;font-weight:700;">▸ Dein Bonus · Sofort aktivierbar</p>
-<p style="font-size:18px;color:{BRAND['white']};margin:0 0 6px 0;line-height:1.4;font-weight:700;">50 Free Credits für deinen <span style="color:{BRAND['lime']}">WladBot</span> warten.</p>
-<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;font-weight:700;">leaderos.de</a> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · je nach Tiefe. Stelle WladBot deine erste schwere Frage.</p>
+<p style="font-size:18px;color:{BRAND['white']};margin:0 0 6px 0;line-height:1.4;font-weight:700;">50 Free Credits für deinen <span style="color:{BRAND['lime']}">WLAD AI</span> warten.</p>
+<p style="font-size:13px;color:{BRAND['gray']};margin:0 0 16px 0;line-height:1.6;">Logge dich in <a href="https://leaderos.de/login" style="color:{BRAND['lime']};text-decoration:underline;font-weight:700;">leaderos.de</a> ein · dein Account wurde automatisch erstellt · 50 Credits sind bereits gutgeschrieben. <strong style="color:{BRAND['lime']}">2–3 Credits pro Anfrage</strong> · je nach Tiefe. Stelle WLAD AI deine erste schwere Frage.</p>
 <a href="https://leaderos.de/login" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['bg']};font-size:13px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">→ Auf leaderos.de einloggen</a>
 </div>
 </td></tr>
@@ -313,7 +313,7 @@ def _payment_details(plan_name: str, amount: float, plan: str) -> str:
 
 def _payment_features(plan: str) -> str:
     items = [
-        "WladBot 24/7 ist freigeschaltet · in Wlads Stimme",
+        "WLAD AI 24/7 ist freigeschaltet · in Wlads Stimme",
         "30-Tage-Sprint startet heute · 1 Aufgabe pro Tag",
         "11 Wlad-Frameworks sofort einsetzbar",
         "12 Monate Plattform-Zugang auf leaderos.de",

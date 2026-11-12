@@ -1,10 +1,10 @@
-"""WladBot RAG — retrieval-augmented generation with LOCAL embeddings (Iter 116).
+"""WLAD AI RAG — retrieval-augmented generation with LOCAL embeddings (Iter 116).
 
 Architecture:
   1. User query → local multilingual MiniLM embedding (384-dim, in-process, no API)
   2. Cosine match against MongoDB `rag_chunks` (in-memory numpy matrix, <50ms)
   3. Parallel keyword scan + Reciprocal Rank Fusion for proper-noun frameworks
-  4. Inject top chunks as additional context into the WladBot system prompt
+  4. Inject top chunks as additional context into the WLAD AI system prompt
 
 Graceful degradation:
   - Embedding model fails to load → keyword retrieval still works
@@ -44,7 +44,7 @@ _query_cache: dict[str, tuple[float, list[dict]]] = {}
 # rely on semantic search alone (e.g. core Wlad models that must always be
 # grounded verbatim). Each entry: {keywords, content, metadata}.
 MANUAL_CHUNKS: list[dict] = [
-    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WladBot (Telegram) ────
+    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WLAD AI (Telegram) ────
     # Wörtlich aus den `theory.txt` / Screenshots von Wlad übernommen, damit
     # unser Bot exakt dieselben Listen liefert wie der Referenz-Bot.
     # ⚠️ Der ältere "listening_10_stages"-Eintrag wurde in Iter 121.1
@@ -52,7 +52,7 @@ MANUAL_CHUNKS: list[dict] = [
     # Generativ-/Transformativ-Zuhören) und WIDERSPRACH damit dem
     # Original-Framework unten (antwortsüchtig vs. verstehend). Nie mehr
     # zurückführen ohne Wlads explizite Freigabe.
-    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WladBot (Telegram) ────
+    # ── Iter 121.1: Wlad-Frameworks aus dem Original-WLAD AI (Telegram) ────
     # Wörtlich aus den `theory.txt` / Screenshots von Wlad übernommen, damit
     # unser Bot exakt dieselben Listen liefert wie der Referenz-Bot.
     {

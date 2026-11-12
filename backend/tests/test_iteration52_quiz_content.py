@@ -278,7 +278,7 @@ class TestAPIHealth:
         response = requests.get(f"{BASE_URL}/api/")
         assert response.status_code == 200, f"Expected 200, got {response.status_code}"
         data = response.json()
-        assert "message" in data or "version" in data or "WladBot" in str(data), "API should return version info"
+        assert "message" in data or "version" in data or "WLAD AI" in str(data), "API should return version info"
         print(f"PASS: API root returns: {data}")
     
     def test_login_with_valid_credentials(self):

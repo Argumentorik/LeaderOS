@@ -146,11 +146,11 @@
        "Ich habe beobachtet, dass der Bericht dreimal erst Freitagabend kam. Dadurch habe ich am Wochenende nachgearbeitet. Ich wünsche mir, dass er donnerstags um 12 bei mir liegt."
       ],
       [
-       "WladBot",
+       "WLAD AI",
        "Sauber. Kein „du bist“, kein „immer“. Jetzt die Pause: zehn Sekunden schweigen, bevor du weiterredest."
       ]
      ],
-     "note": "Beispiel · WladBot im LeaderOS",
+     "note": "Beispiel · WLAD AI im LeaderOS",
      "av": "small",
      "ph": "writing"
     },
@@ -200,7 +200,7 @@
      "k": "07 · Drill",
      "h": "Dein Feedback für morgen<span class=lime>.</span>",
      "size": "xs",
-     "s": "Schreib deinen B·W·W-Satz in die Kommentare oder üb ihn mit WladBot, der zurückredet. 14 Tage kostenlos. Link in Bio.",
+     "s": "Schreib deinen B·W·W-Satz in die Kommentare oder üb ihn mit WLAD AI, der zurückredet. 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "feedback"
@@ -420,7 +420,7 @@
      "k": "07 · Diagnose",
      "h": "Welche fehlt bei dir<span class=lime>.</span>",
      "size": "xs",
-     "s": "In LeaderOS diagnostiziert WladBot deine Rollen-Verteilung an deinen echten Wochen und baut den Drill dazu. 14 Tage kostenlos. Link in Bio.",
+     "s": "In LeaderOS diagnostiziert WLAD AI deine Rollen-Verteilung an deinen echten Wochen und baut den Drill dazu. 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "presence"
@@ -535,7 +535,7 @@
      "k": "07 · Drill",
      "h": "Deine nächste Übergabe<span class=lime>.</span>",
      "size": "xs",
-     "s": "Nimm eine Aufgabe von dieser Woche, wähl die Stufe, sprich sie aus. Oder üb die Übergabe mit WladBot. 14 Tage kostenlos. Link in Bio.",
+     "s": "Nimm eine Aufgabe von dieser Woche, wähl die Stufe, sprich sie aus. Oder üb die Übergabe mit WLAD AI. 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "team"
@@ -661,7 +661,7 @@
      "k": "07 · Drill",
      "h": "Dein nächstes 1:1<span class=lime>.</span>",
      "size": "xs",
-     "s": "Nach dem Gespräch: fass in einem Satz zusammen, was dein Gegenüber wollte. Dann bewerte deine Stufe. Oder lass WladBot mithören. Link in Bio.",
+     "s": "Nach dem Gespräch: fass in einem Satz zusammen, was dein Gegenüber wollte. Dann bewerte deine Stufe. Oder lass WLAD AI mithören. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "listening-b"
@@ -769,7 +769,7 @@
      "t": "cta",
      "k": "07 · Drill",
      "h": "Dein nächster Pitch in SEXIER<span class=lime>.</span>",
-     "s": "Nimm die These von nächster Woche und bau sie in sechs Schritten. WladBot prüft, ob der Rebuttal fehlt. 14 Tage kostenlos. Link in Bio.",
+     "s": "Nimm die These von nächster Woche und bau sie in sechs Schritten. WLAD AI prüft, ob der Rebuttal fehlt. 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "stage",
@@ -876,7 +876,7 @@
      "k": "07 · Drill",
      "h": "Lass dein letztes Protokoll gegenlesen<span class=lime>.</span>",
      "size": "xs",
-     "s": "WladBot liest dein Team-Meeting gegen die drei Hebel: „Wo habe ich diese Woche Autonomie genommen statt gegeben?“ 14 Tage kostenlos. Link in Bio.",
+     "s": "WLAD AI liest dein Team-Meeting gegen die drei Hebel: „Wo habe ich diese Woche Autonomie genommen statt gegeben?“ 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "team"
@@ -993,7 +993,7 @@
      "k": "07 · Start",
      "h": "Ein Coach, der Wlads Bücher kennt<span class=lime>.</span>",
      "size": "xs",
-     "s": "WladBot antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. 14 Tage kostenlos. Link in Bio.",
+     "s": "WLAD AI antwortet auf 2 212 authentischen Wlad-Inhalten, nicht auf einem generischen Modell. 14 Tage kostenlos. Link in Bio.",
      "cta": "14 Tage kostenlos",
      "av": "big",
      "ph": "ai"
@@ -1190,7 +1190,7 @@
       [
        "System",
        "Ein Coach in der Tasche",
-       "WladBot, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
+       "WLAD AI, 24/7, mit Wlads Methodik. Die Antwort kommt vor dem Gespräch, nicht nach dem Seminar."
       ]
      ],
      "ph": "ai"
@@ -1268,7 +1268,7 @@
       ],
       [
        "K·02",
-       "WladBot 24/7",
+       "WLAD AI 24/7",
        "Antwortet auf 2 212 authentischen Wlad-Inhalten. Text und Stimme."
       ],
       [
@@ -1515,7 +1515,7 @@
   {
    "k": "LeaderOS 01",
    "h": "Ein Coach, der Wlads Bücher kennt.<br><span class=lime>24/7.</span>",
-   "s": "WladBot antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
+   "s": "WLAD AI antwortet mit Wlads Frameworks, nicht mit Allgemeinplätzen. Vor dem Gespräch, nicht danach.",
    "cta": "14 Tage kostenlos",
    "v": "dark",
    "size": "xs",
@@ -1732,7 +1732,7 @@
     [
      "03",
      "Frage",
-     "Du fragst WladBot, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik."
+     "Du fragst WLAD AI, bevor das Gespräch ansteht. Er antwortet in Wlads Methodik."
     ],
     [
      "04",
@@ -1803,7 +1803,7 @@
    "ph": "feedback",
    "av": "small",
    "h": "Feedback-Formate<span class=lime>.</span>",
-   "s": "Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WladBot, der dir den ersten Satz abnimmt.",
+   "s": "Regelmäßig, an Fakten gebunden, wirksam. Mit der Feedbackformel: Beobachtung, Wirkung, Wunsch. Und mit WLAD AI, der dir den ersten Satz abnimmt.",
    "cta": "14 Tage kostenlos",
    "size": "s"
   },
@@ -1904,11 +1904,11 @@
    "size": "s"
   },
   {
-   "k": "Termine · WladBot",
+   "k": "Termine · WLAD AI",
    "hf": 3,
    "av": "small",
    "h": "Dein Büro ist überall.<br><span class=lime>Dein Coach auch.</span>",
-   "s": "Im Zug, im Homeoffice, auf der Wiese. WladBot antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.",
+   "s": "Im Zug, im Homeoffice, auf der Wiese. WLAD AI antwortet, wo du gerade führst. Per Text oder Stimme, mit Wlads Methodik.",
    "cta": "14 Tage kostenlos",
    "size": "xs"
   },
@@ -1930,10 +1930,10 @@
    "cta": "14 Tage kostenlos"
   },
   {
-   "k": "System · WladBot",
+   "k": "System · WLAD AI",
    "po": "p-07-dreibig-tage",
    "ph": "ai-b",
-   "h": "Powered by WladBot.<br><span class=lime>Persönlich von Wlad.</span>",
+   "h": "Powered by WLAD AI.<br><span class=lime>Persönlich von Wlad.</span>",
    "s": "Die Methodik aus Wlads Büchern und Trainings, als Coach in deiner Tasche. Und einmal im Monat Wlad selbst, live.",
    "cta": "14 Tage kostenlos",
    "size": "xs"

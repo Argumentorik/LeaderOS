@@ -68,6 +68,6 @@ export default {
     { type: 'paragraph', text:
       'Das ist nicht ChatGPT mit Persona-Layer. Das ist eine Plattform mit elf drillbaren Frameworks, einer Context-Schicht die deine Challenge kennt, und einer LeaderOS-Community für alle Mitglieder die das System mit Wlad zusammen formen.' },
     { type: 'callout', tone: 'lime', text:
-      'Mehr zur Methodik im Pillar-Artikel Warum es LeaderOS gibt · zur Plattform-Struktur im Artikel Was in LeaderOS drin ist · zur ehrlichen Vergleichsfrage im Artikel WladBot vs ChatGPT vs Coach.' },
+      'Mehr zur Methodik im Pillar-Artikel Warum es LeaderOS gibt · zur Plattform-Struktur im Artikel Was in LeaderOS drin ist · zur ehrlichen Vergleichsfrage im Artikel WLAD AI vs ChatGPT vs Coach.' },
   ],
 };

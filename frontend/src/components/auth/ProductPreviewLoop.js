@@ -28,7 +28,7 @@ const ChatPreview = ({ de }) => (
         </p>
       </div>
     </div>
-    {/* WladBot reply with SEXIER framework callout */}
+    {/* WLAD AI reply with SEXIER framework callout */}
     <div className="flex gap-2">
       <div className="w-7 h-7 rounded-lg bg-[#BFFF00] flex items-center justify-center shrink-0 shadow-lg shadow-[#BFFF00]/30">
         <Sparkles size={13} className="text-[#0A0A0A]" />

@@ -174,7 +174,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du den Einstieg üben: WladBot spielt einen Mitarbeiter im ersten 1:1, und du übst, ' +
+        'Im LeaderOS kannst du den Einstieg üben: WLAD AI spielt einen Mitarbeiter im ersten 1:1, und du übst, ' +
         'mit Stille und Nachfragen umzugehen, statt die Lücke mit eigenen Themen zu füllen. Die täglichen 15-Minuten-Drills eignen sich für einzelne Bausteine, etwa die erste Frage ' +
         'oder das Abschlussritual. Das echte Gespräch bleibt deines. Du kannst LeaderOS 14 Tage kostenlos testen.',
     },

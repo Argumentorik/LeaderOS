@@ -28,7 +28,7 @@ export default {
     { type: 'heading', level: 2, text: 'Schritt 7: Tomorrow-Anker.' },
     { type: 'paragraph', text: 'Vereinbart konkret was bis wann passiert. Ohne Tomorrow-Anker bleibt das Konfliktgespräch eine Geste. "Wir checken in zwei Wochen ob die neue Ablauf-Variante funktioniert."' },
     { type: 'callout', tone: 'lime', text: 'Drei Anti-Patterns: kein "wir müssen mal reden" als Vorlauf · das macht den Empfänger angespannt. Kein "ich" am Anfang · Beobachtungs-Eröffnung. Kein "wir können das doch klären" am Ende · konkreter Tomorrow-Anker.' },
-    { type: 'paragraph', text: 'In der Challenge drillst du Konfliktgespräche an drei deiner echten Spannungs-Beziehungen. WladBot spielt das Gegenüber, korrigiert deine Eröffnung, prüft ob du wirklich zehn Sekunden schweigen kannst.' },
+    { type: 'paragraph', text: 'In der Challenge drillst du Konfliktgespräche an drei deiner echten Spannungs-Beziehungen. WLAD AI spielt das Gegenüber, korrigiert deine Eröffnung, prüft ob du wirklich zehn Sekunden schweigen kannst.' },
   ],
   seo: {
     title: 'Konfliktgespräch führen: Skript in 7 Schritten',

@@ -76,8 +76,8 @@ export const ChatInputBar = ({
       </button>
       <label
         title={de
-          ? 'Erlaubt: PDF, Word (.docx), TXT, Markdown, CSV und Bilder (PNG/JPG/WEBP) — max. 20 MB, bis 40 Seiten werden gelesen. WladBot liest den Inhalt und nutzt ihn nur für diese Unterhaltung. Nicht möglich: Excel, PowerPoint, ZIP, Audio, Video, passwortgeschützte oder gescannte PDFs ohne Textebene.'
-          : 'Allowed: PDF, Word (.docx), TXT, Markdown, CSV and images (PNG/JPG/WEBP) — max 20 MB, up to 40 pages are read. WladBot reads the content and uses it for this conversation only. Not supported: Excel, PowerPoint, ZIP, audio, video, password-protected or scanned PDFs without a text layer.'}
+          ? 'Erlaubt: PDF, Word (.docx), TXT, Markdown, CSV und Bilder (PNG/JPG/WEBP) — max. 20 MB, bis 40 Seiten werden gelesen. WLAD AI liest den Inhalt und nutzt ihn nur für diese Unterhaltung. Nicht möglich: Excel, PowerPoint, ZIP, Audio, Video, passwortgeschützte oder gescannte PDFs ohne Textebene.'
+          : 'Allowed: PDF, Word (.docx), TXT, Markdown, CSV and images (PNG/JPG/WEBP) — max 20 MB, up to 40 pages are read. WLAD AI reads the content and uses it for this conversation only. Not supported: Excel, PowerPoint, ZIP, audio, video, password-protected or scanned PDFs without a text layer.'}
         className={`relative cursor-pointer flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#BFFF00]/10 hover:bg-[#BFFF00]/20 border border-[#BFFF00]/20 transition-colors shrink-0 ${(loading || uploadingPdf) ? 'opacity-50 pointer-events-none' : ''}`}
         data-testid="pdf-upload-btn"
       >
@@ -147,8 +147,8 @@ export const ChatInputBar = ({
         placeholder={attachedPdf
           ? (de ? 'Was möchtest du zu dem PDF wissen?' : 'What do you want to know about the PDF?')
           : coachMode
-            ? (de ? 'Coach-Modus: WladBot antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
-            : (de ? 'Frag WladBot alles über Leadership…' : 'Ask WladBot anything about leadership…')}
+            ? (de ? 'Coach-Modus: WLAD AI antwortet mit Strategie & Schritten…' : 'Coach mode: Wlad replies with strategy & steps…')
+            : (de ? 'Frag WLAD AI alles über Leadership…' : 'Ask WLAD AI anything about leadership…')}
         className="flex-1 min-w-0 resize-none min-h-[46px] max-h-32 py-[13px] leading-5 bg-gray-50 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 text-base sm:text-sm focus-visible:ring-2 focus-visible:ring-[#BFFF00]/40 focus-visible:border-[#BFFF00]/50 transition-shadow" rows={1} />
       <Button data-testid="chat-send-btn" onClick={onSend} disabled={!input.trim() || loading || blocked}
         title={hint}

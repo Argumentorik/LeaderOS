@@ -81,7 +81,7 @@ export default {
       'Häufiger Fehler: fachliche Führungskräfte versuchen, disziplinarische Macht zu simulieren (drohen, Druck machen, über Köpfe hinweg eskalieren). Das funktioniert nie und kostet Vertrauen. Fachliche Führung gewinnt über Klarheit und Kompetenz, nicht über geliehene Härte.' },
     { type: 'heading', level: 2, text: 'Beide Rollen besser machen.' },
     { type: 'paragraph', text:
-      'Egal ob du disziplinarisch, fachlich oder beides führst · die Kern-Skills sind dieselben: klar kommunizieren, Feedback geben, Konflikte lösen, Menschen entwickeln. In LeaderOS trainierst du genau diese Skills an deinen echten Fällen, mit WladBot als Sparring für die Situation, in der die Rollen-Trennung gerade Reibung erzeugt.' },
+      'Egal ob du disziplinarisch, fachlich oder beides führst · die Kern-Skills sind dieselben: klar kommunizieren, Feedback geben, Konflikte lösen, Menschen entwickeln. In LeaderOS trainierst du genau diese Skills an deinen echten Fällen, mit WLAD AI als Sparring für die Situation, in der die Rollen-Trennung gerade Reibung erzeugt.' },
     { type: 'diagnostic', prompt: 'Welche Rollen-Reibung erlebst du gerade?', options: [
       { label: 'Fachlich verantwortlich, keine Macht', category: 'delegation' },
       { label: 'Mitarbeiter hört auf den Linien-Chef', category: 'conflict' },

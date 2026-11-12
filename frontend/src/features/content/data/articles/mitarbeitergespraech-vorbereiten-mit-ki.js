@@ -24,7 +24,7 @@ export default {
     { type: 'paragraph', text: 'Notiere dir den konkreten nächsten Schritt · was passiert NACH dem Gespräch? Termin für Folgegespräch, geänderter Prozess, Ressource. Ohne Tomorrow-Anker ist das Gespräch eine Geste, kein Hebel.' },
     { type: 'framework', code: 'B-W-W', title: 'Feedback-Formel', explanation: 'Beobachtung (faktisch), Wirkung (operativ oder emotional), Wunsch (konkret, zukunftsgerichtet). Drei Sätze maximal. Wer mehr als drei Sätze braucht, hat noch eine Interpretation im Skript.' },
     { type: 'callout', tone: 'lime', text: 'Wichtig: keine identifizierenden Daten in öffentliche KI-Tools. Erstvorname und Rolle reichen.' },
-    { type: 'paragraph', text: 'Diese zwölf Minuten ersetzen weder den menschlichen Tiefgang noch die Beziehungs-Arbeit. Sie ersetzen das improvisierte Mitarbeitergespräch, das beide Seiten ungut zurücklässt. In der LeaderOS-Challenge trainierst du B-W-W an dreißig deiner echten Cases mit Live-Korrektur durch WladBot.' },
+    { type: 'paragraph', text: 'Diese zwölf Minuten ersetzen weder den menschlichen Tiefgang noch die Beziehungs-Arbeit. Sie ersetzen das improvisierte Mitarbeitergespräch, das beide Seiten ungut zurücklässt. In der LeaderOS-Challenge trainierst du B-W-W an dreißig deiner echten Cases mit Live-Korrektur durch WLAD AI.' },
   ],
   seo: {
     title: 'Mitarbeitergespräch vorbereiten: mit KI in 12 Minuten',

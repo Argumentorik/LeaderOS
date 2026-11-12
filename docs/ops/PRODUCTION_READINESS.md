@@ -147,7 +147,7 @@ If you find a row whose evidence doesn't match the claim, that's a bug — open 
 
 | Surface | Route | LLM | RAG | Session |
 |---------|-------|-----|-----|---------|
-| WladBot Chat | `/api/chat` | GPT-5.2 | ✅ `retrieve_context` | `chat_{session_id}` |
+| WLAD AI Chat | `/api/chat` | GPT-5.2 | ✅ `retrieve_context` | `chat_{session_id}` |
 | Daily Check-in | `/api/checkin` | GPT-5.2 | ❌ (intentional, kurz) | `checkin_{checkin_id}` |
 | Playbooks (Frame) | `/api/playbooks` | GPT-5.2 | ✅ `retrieve_context` | `pb_{session_id}` |
 | Playbook Report | `/api/playbooks/report` | GPT-5.2 | ❌ (uses prior playbook ctx) | `report_{uuid}` |

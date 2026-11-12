@@ -40,7 +40,7 @@ import { WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback } from '../../li
  *   variant: 'bib'    → 0001 startnummer plate, centered on photo
  *   variant: 'trust'  → 400/14 stat block, centered on photo
  *   variant: 'cert'   → goldfolie seal, centered on photo
- *   variant: 'voxel'  → WladBot scan-grid pattern, centered on photo
+ *   variant: 'voxel'  → WLAD AI scan-grid pattern, centered on photo
  *
  * Dark variant (chapter 07): inverts bg to ink, text to white.
  */
@@ -125,7 +125,7 @@ const VoxelOverlay = () => (
   <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
     <div className="bg-[#0A0A0A] border-2 border-brand px-5 py-4 shadow-[6px_6px_0_0_rgba(191,255,0,0.55)] w-full max-w-[240px]">
       <div className="text-[9px] font-bold uppercase tracking-[0.26em] text-brand font-mono mb-3">
-        ▸ WLADBOT · 24/7
+        ▸ WLAD AI · 24/7
       </div>
       <div className="grid grid-cols-8 gap-[3px]" aria-hidden>
         {Array.from({ length: 32 }).map((_, i) => (
@@ -168,17 +168,17 @@ const VariantOverlay = ({ variant, trustNumbers }) => {
 // sentence that describes the visible asset AND the chapter's claim.
 const ALT_BY_CODE = {
   INHALT:        'LeaderOS Inhalt · elf Frameworks von Wlad Jachtchenko in einer Plattform',
-  WLADBOT:       'WladBot · KI-Coach 24/7 in Wlads Stimme · trainiert auf 2 212 Wlad-Lektionen',
+  WLAD AI:       'WLAD AI · KI-Coach 24/7 in Wlads Stimme · trainiert auf 2 212 Wlad-Lektionen',
   SPRINT:        '30-Tage-Challenge · LeaderOS Startnummer Plate · deine Führungs-Evolution',
   WLAD:          'Wlad Jachtchenko · Argumentations-Coach, 3× SPIEGEL-Bestseller-Autor, Gründer LeaderOS',
   TRUST:         '400 000 Klienten, 14 Millionen Views · Wlad Jachtchenko Autorität-Beweis · LeaderOS',
   ZERTIFIKAT:    'LeaderOS Zertifikat 0001 · personalisierte Startnummer von Wlad Jachtchenko',
-  KOMPLETT:      'Wlad Jachtchenko Voxel-Avatar mit OS-Würfel · WladBot Komplettbegleitung',
+  KOMPLETT:      'Wlad Jachtchenko Voxel-Avatar mit OS-Würfel · WLAD AI Komplettbegleitung',
 };
 
-// WladBot 3.0 card body · §05 TRUST. Replaces the old numbers-poster (it
+// WLAD AI card body · §05 TRUST. Replaces the old numbers-poster (it
 // duplicated the section headline and cropped badly in the 4:5 frame).
-// Instead: the WladBot 3.0 render on a pixel scan-grid with live status —
+// Instead: the WLAD AI render on a pixel scan-grid with live status —
 // the trust NUMBERS stay in the headline + specimen table where they belong.
 const WladBot30Body = () => (
   <div className="absolute inset-0 bg-[#0A0A0A]">
@@ -199,13 +199,13 @@ const WladBot30Body = () => (
       style={{ background: 'radial-gradient(58% 42% at 50% 40%, rgba(191,255,0,0.18), transparent 70%)' }}
     />
 
-    {/* Avatar · WladBot 3.0 render with the shared fallback chain */}
+    {/* Avatar · WLAD AI render with the shared fallback chain */}
     <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 flex justify-center">
       <div className="relative w-[58%] max-w-[220px] aspect-square">
         <img
           src={WLADBOT_AVATAR}
           onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
-          alt="WladBot 3.0 · dein KI-Coach in Wlads Stimme · LeaderOS"
+          alt="WLAD AI · dein KI-Coach in Wlads Stimme · LeaderOS"
           loading="lazy"
           decoding="async"
           className="w-full h-full rounded-full object-cover object-[50%_16%] bg-black ring-4 ring-brand shadow-[0_20px_60px_-15px_rgba(191,255,0,0.5)]"
@@ -222,7 +222,7 @@ const WladBot30Body = () => (
         className="text-white leading-none"
         style={{ fontFamily: 'Outfit, Inter, sans-serif', fontWeight: 900, fontStyle: 'italic', fontSize: 'clamp(26px, 4vw, 36px)', letterSpacing: '-0.02em' }}
       >
-        WladBot <span className="text-brand not-italic">3.0</span>
+        WLAD AI
       </div>
       <div className="mt-2.5 font-mono text-[8.5px] font-bold uppercase tracking-[0.2em] text-white/55">
         400K+ KUNDEN · 14M VIEWS · 3× SPIEGEL

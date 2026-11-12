@@ -74,7 +74,7 @@ export const ChallengerResult = ({ result, p, de, onReset }) => (
       <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]" data-testid="result-wladbot-nudge">
         <WladBotAvatar size={40} live />
         <div className="flex-1 min-w-0">
-          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WladBot 3.0</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WLAD AI</p>
           <p className="text-[12px] text-white/70 leading-relaxed">
             {de
               ? '„Stark, dass du dich der Challenge gestellt hast. Leader, die jetzt ein Strategiegespräch buchen, setzen ihr Feedback 3× schneller um — 15 Minuten, die sich lohnen."'

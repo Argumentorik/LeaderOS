@@ -551,7 +551,7 @@ async def community_leaderboard(request: Request, limit: int = 10):
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# RAG Debug — see exactly which Wlad-chunks WladBot retrieves for any query.
+# RAG Debug — see exactly which Wlad-chunks WLAD AI retrieves for any query.
 # Critical tool to spot knowledge gaps in the 609-chunk corpus before users do.
 # ─────────────────────────────────────────────────────────────────────────
 
@@ -684,7 +684,7 @@ async def rag_corpus_stats(request: Request):
 
 # ── RAG Metadata Enrichment ────────────────────────────────────────────────
 # Maps the legacy `book` field (and content heuristics) to the canonical
-# `course` field used by the WladBot UI + Admin RAG Studio.
+# `course` field used by the WLAD AI UI + Admin RAG Studio.
 
 BOOK_TO_COURSE = {
     "verhandlung":          "Verhandlungstraining",
@@ -723,8 +723,8 @@ HEURISTIC_RULES = [
     # Other LeaderOS meta frameworks (diagnostic / ecosystem / agents)
     (lambda m, c: m.get("framework") in {"diagnostic", "ecosystem", "agents"},
      "LeaderOS Framework"),
-    # WladBot-expansion library (synthetic enrichment chunks)
-    (lambda m, c: m.get("author") == "wladbot_expansion", "WladBot Expansion Library"),
+    # WLAD AI-expansion library (synthetic enrichment chunks)
+    (lambda m, c: m.get("author") == "wladbot_expansion", "WLAD AI Expansion Library"),
     # Meta / resource pointers
     (lambda m, c: m.get("topic") in {"weiterführende_ressourcen", "weiterfuehrende_ressourcen"},
      "Empfehlungen & Ressourcen"),

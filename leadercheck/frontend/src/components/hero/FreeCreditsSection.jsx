@@ -17,12 +17,12 @@ export default function FreeCreditsSection({ onCtaClick }) {
               <h2 className="font-manrope font-extrabold text-white leading-[1.15] tracking-tight mb-5">
                 <span className="block text-2xl md:text-4xl">50 Free Credits für deinen</span>
                 <span className="block text-2xl md:text-4xl mt-1 text-[#C8FF00] italic font-semibold">
-                  WladBot &amp; KI-Coach.
+                  WLAD AI &amp; KI-Coach.
                 </span>
               </h2>
               <p className="font-inter text-sm text-slate-400 mb-6 leading-relaxed">
                 Als Belohnung für deine Diagnose erhältst du{" "}
-                <span className="text-white font-medium">50 kostenlose Credits</span> für den WladBot und alle KI-Tools
+                <span className="text-white font-medium">50 kostenlose Credits</span> für den WLAD AI und alle KI-Tools
                 innerhalb von Leader OS. Schwierige Gespräche durchspielen, Argumente strukturieren, Entscheidungen schärfen ·
                 in Wlads Sprache.
               </p>
@@ -53,7 +53,7 @@ export default function FreeCreditsSection({ onCtaClick }) {
                     <Bot className="w-5 h-5 text-[#C8FF00]" />
                   </div>
                   <div>
-                    <div className="font-manrope font-bold text-sm text-white">WladBot · 50 Credits</div>
+                    <div className="font-manrope font-bold text-sm text-white">WLAD AI · 50 Credits</div>
                     <div className="font-inter text-xs text-slate-500">KI-Coach in Wlads Sprache</div>
                   </div>
                 </div>

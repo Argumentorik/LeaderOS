@@ -190,7 +190,7 @@ Do, 26. November, 10:00 Uhr. 90 Minuten. Live.
 Das passiert im Webinar:
 
 10:05  Der Charisma-Code live: Präsenz, Wärme, Kompetenz
-10:25  Das Leadership Operating System: wie WladBot, tägliche Drills und die 11 Frameworks zusammenspielen
+10:25  Das Leadership Operating System: wie WLAD AI, tägliche Drills und die 11 Frameworks zusammenspielen
 10:55  Ein Live-Case aus der Community, gemeinsam durchgearbeitet
 11:15  Q&A: deine Fragen, direkt beantwortet
 

@@ -23,9 +23,9 @@ const SECTIONS = [
     render: (de) => <PageLoadOverview de={de} />,
   },
   {
-    key: 'rag-debug', mt: 'mt-2', title: (de) => (de ? 'WladBot Wissens-Studio' : 'WladBot Knowledge Studio'),
-    de: 'Sieh genau welche Wlad-Chunks WladBot für jede Frage findet — Coverage-Lücken vor den Usern entdecken.',
-    en: 'See exactly which Wlad chunks WladBot retrieves for any question — spot coverage gaps before users do.',
+    key: 'rag-debug', mt: 'mt-2', title: (de) => (de ? 'WLAD AI Wissens-Studio' : 'WLAD AI Knowledge Studio'),
+    de: 'Sieh genau welche Wlad-Chunks WLAD AI für jede Frage findet — Coverage-Lücken vor den Usern entdecken.',
+    en: 'See exactly which Wlad chunks WLAD AI retrieves for any question — spot coverage gaps before users do.',
     render: () => <RagDebugStudio />,
   },
   {

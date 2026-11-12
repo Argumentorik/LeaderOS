@@ -141,7 +141,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'In der 30-Tage-Challenge trainierst du B-W-W an dreißig deiner echten Situationen. WladBot bekommt deinen Kontext ' +
+        'In der 30-Tage-Challenge trainierst du B-W-W an dreißig deiner echten Situationen. WLAD AI bekommt deinen Kontext ' +
         '(Rolle, Team, dein Challenge-Score) und korrigiert jeden ersten Satz live. Nach den dreißig Tagen ist es kein ' +
         'Werkzeug mehr, das du anwendest. Es ist dein Default.',
     },

@@ -26,7 +26,7 @@ const CTA = {
   t: 'cta',
   kicker: 'Beta-Phase · kostenloser Zugang',
   rows: [['Beta.', 'left'], ['Für alle,', 'right'], ['die führen', 'left', true]],
-  p: `LeaderOS geht in die Beta: ${SEATS} Plätze, kostenlos, kein Abo. Alle Kurse, die Simulationen und WladBot, der KI-Coach mit meiner Methodik. Für alle, die ein Team, ein Projekt oder ein Gespräch führen, <b>mit oder ohne Titel.</b> Wer dabei sein will: <b>Link im ersten Kommentar.</b>`,
+  p: `LeaderOS geht in die Beta: ${SEATS} Plätze, kostenlos, kein Abo. Alle Kurse, die Simulationen und WLAD AI, der KI-Coach mit meiner Methodik. Für alle, die ein Team, ein Projekt oder ein Gespräch führen, <b>mit oder ohne Titel.</b> Wer dabei sein will: <b>Link im ersten Kommentar.</b>`,
   sticker: [`${SEATS}`, 'Plätze · Beta'],
   note: 'beta · kostenlos · kein abo · solange plätze frei sind',
 };

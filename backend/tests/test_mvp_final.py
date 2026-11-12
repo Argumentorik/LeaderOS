@@ -1,6 +1,6 @@
 from conftest import TEST_EMAIL, TEST_PASSWORD
 """
-WladBot Leadership OS - MVP Final Testing
+WLAD AI Leadership OS - MVP Final Testing
 Tests all critical endpoints for the MVP-ready final release.
 """
 import pytest

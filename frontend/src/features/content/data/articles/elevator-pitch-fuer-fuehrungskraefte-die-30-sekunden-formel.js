@@ -78,7 +78,7 @@ export default {
       type: 'callout',
       tone: 'lime',
       text:
-        'In der LeaderOS-Challenge ist der Elevator Pitch ein eigener Tages-Drill: WladBot spielt den ungeduldigen ' +
+        'In der LeaderOS-Challenge ist der Elevator Pitch ein eigener Tages-Drill: WLAD AI spielt den ungeduldigen ' +
         'Vorstand und unterbricht nach Sekunde 20. Wer das dreimal überlebt hat, pitcht überall.',
     },
   ],

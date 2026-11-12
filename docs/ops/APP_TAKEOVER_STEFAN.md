@@ -154,7 +154,7 @@ change. Identity = `identifyByEmail(email_lower)` on login/rehydrate,
 already fire: `web_vital`, funnel events with `surface`/`funnel`.
 
 **First dashboards** (feed §10.3): unique users per app route (30 days);
-activation funnel signup → first WladBot message → first drill → day-7
+activation funnel signup → first WLAD AI message → first drill → day-7
 return; replays filtered on console errors.
 
 ---
@@ -389,14 +389,14 @@ in the admin panel with one dry-run import; the P0 list below.
 
 1. Four weeks after the PostHog reset: unique users per app route, 30 days.
 2. Candidates from the feedback: three entry points into the same thing
-   (WladBot chat, Coaching, Simulation), Challengers, Workflows/Tools,
+   (WLAD AI chat, Coaching, Simulation), Challengers, Workflows/Tools,
    Wlad-Universe, Community/Progress, Events, Referral.
 3. Rule: under 5 % of weekly active users → hide behind a sidebar toggle
    first, remove a month later if nobody asks.
 4. Protect the core loop, it is what we sell: course lesson → drill on the
-   user's real case → ask WladBot before the conversation → simulation with
+   user's real case → ask WLAD AI before the conversation → simulation with
    pushback → evaluation.
-5. Shorter WladBot answers: length and reading level are prompt settings
+5. Shorter WLAD AI answers: length and reading level are prompt settings
    in `services.py` (`WLAD_HARD_RULES`), not a redesign. Wording changes
    get Wlad's OK.
 
@@ -430,7 +430,7 @@ Full matrix and the billing hand-over: [`TOOL_ACCESS.md`](./TOOL_ACCESS.md).
 ## 12. People
 
 - Wlad Jachtchenko `wj@argumentorik.com` — product and content owner; every
-  WladBot wording change gets his OK. Enters billing cards or delegates to
+  WLAD AI wording change gets his OK. Enters billing cards or delegates to
   Eduard.
 - Eduard `ek@argumentorik.com` — Google Workspace, mailboxes, billing.
 - Mert `start@aiporate.com` → `mert@argumentorik.com` — previous owner of
@@ -458,7 +458,7 @@ read the section again before the hand-over call.
 7. A support colleague opens `leaderos.de/wlad-control-x7k9q2` and lands on
    the dashboard. What are the two ways to fix that, and which one needs
    no deploy? (§8)
-8. `VOYAGE_API_KEY` is missing on Emergent. Does WladBot still use Wlad's
+8. `VOYAGE_API_KEY` is missing on Emergent. Does WLAD AI still use Wlad's
    corpus? Which retriever runs? (§9)
 9. Which five smoke checks run after every deploy? (§3.4)
 10. Stripe webhooks all return 400. Most likely cause? (§6)

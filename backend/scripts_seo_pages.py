@@ -212,7 +212,7 @@ ORG_LD = {
     "@id": f"{ORIGIN}/#organization",
     "name": "Leader-OS",
     "legalName": "Argumentorik-Akademie GmbH",
-    "alternateName": ["LeaderOS", "Leader OS", "WladBot", "Argumentorik-Akademie"],
+    "alternateName": ["LeaderOS", "Leader OS", "WLAD AI", "Argumentorik-Akademie"],
     "url": ORIGIN,
     "logo": {"@type": "ImageObject", "url": f"{ORIGIN}/icon-512.png", "width": 512, "height": 512},
     "founder": {"@id": f"{ORIGIN}/#wlad"},

@@ -112,7 +112,7 @@ export default {
         'Genau deshalb ist tägliches, kleinteiliges Training remote-tauglicher als der klassische Zwei-Tage-Workshop: ' +
         'es passt in denselben asynchronen Rhythmus, den hybride Teams ohnehin schon leben. In der 30-Tage-Challenge übt man ' +
         'Remote-Situationen — das schwierige asynchrone Feedback, das 1:1 ohne Körpersprache — direkt am eigenen Fall, ' +
-        'mit WladBot als täglichem Sparringspartner statt einem Präsenz-Workshop, der die hybride Realität ohnehin nicht abbildet.',
+        'mit WLAD AI als täglichem Sparringspartner statt einem Präsenz-Workshop, der die hybride Realität ohnehin nicht abbildet.',
     },
   ],
   seo: {

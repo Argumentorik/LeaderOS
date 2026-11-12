@@ -13,7 +13,7 @@ from services_ai_errors import ai_http_error
 
 router = APIRouter(prefix="/api", tags=["checkin"])
 
-CHECKIN_SYSTEM_PROMPT = """Du bist WladBot, der taegliche Leadership-Coach basierend auf den Methoden von Wlad Jachtchenko.
+CHECKIN_SYSTEM_PROMPT = """Du bist WLAD AI, der taegliche Leadership-Coach basierend auf den Methoden von Wlad Jachtchenko.
 
 DEINE FRAMEWORKS (aus Wlads Buechern & Trainings):
 - Feedbackformel: Beobachtung + Wirkung + Wunsch

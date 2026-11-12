@@ -11,7 +11,7 @@ Alle CTAs landen auf `leader-check.de/?utm_source=…&utm_medium=…&utm_campaig
 ### Meta (FB/IG) — 1:1 Square + 9:16 Reel
 ```
 HEADLINE: 24 Stunden. 7 Tage.
-PRIMARY  : WladBot kennt die Methodik von 3× SPIEGEL-Bestseller Wlad
+PRIMARY  : WLAD AI kennt die Methodik von 3× SPIEGEL-Bestseller Wlad
            Jachtchenko. Antwort in < 3 Sek. Auf Deutsch + Englisch.
 DESC     : 5-Min-Diagnose. Kostenlos. Kohorte 02 öffnet bald.
 CTA-BTN  : Diagnose starten
@@ -28,7 +28,7 @@ CTA-BTN : Diagnose starten
 
 ### LinkedIn Video Ad (15 Sek Storyboard)
 ```
-0–2s   Close-Up Handy, WladBot-Chat öffnet sich
+0–2s   Close-Up Handy, WLAD AI-Chat öffnet sich
 2–5s   Texteinblendung: „24 Stunden. 7 Tage."
 5–10s  Quick-Cuts: Frage tippen → Antwort in Wlads Stimme
 10–13s WLAD-Brand-Mark, Tagline „KI-nativ führen."
@@ -46,14 +46,14 @@ CTA-BTN : Diagnose starten
 Card 1: COVER „Weiße Rhetorik"      | Tag: Wlad's Klassiker
 Card 2: COVER „Dunkle Rhetorik"     | Tag: 80.000 Verkäufe
 Card 3: COVER „5 Rollen"            | Tag: Identitäts-Framework
-Card 4: WLADBOT-Chat-Screen         | Tag: Jetzt als KI-Coach
+Card 4: WLAD AI-Chat-Screen         | Tag: Jetzt als KI-Coach
 Card 5: CTA „leader-check.de"
 ```
 
 ### LinkedIn Single Image
 ```
 HEADLINE: Die Methodik aus 3 SPIEGEL-Bestsellern. Jetzt 24/7.
-PRIMARY : Wlad Jachtchenko hat seine Bücher in WladBot gegossen.
+PRIMARY : Wlad Jachtchenko hat seine Bücher in WLAD AI gegossen.
           2212 RAG-Chunks, GPT-5.2, Voyage-3 Embeddings.
           Antwort in Wlads Stimme. Auf deine Situation.
 CTA-BTN : Mehr erfahren
@@ -78,7 +78,7 @@ Seite 5: CTA + leader-check.de
 ```
 VISUAL : Schwarze BIB-Plate „0001" auf weißem Hintergrund (Mockup-Style)
 HEADLN : Dreißig Tage. Ein neues Du.
-PRIMARY: Sprint 0001 = 30 Tage Wlad-Methodik mit WladBot als Coach.
+PRIMARY: Sprint 0001 = 30 Tage Wlad-Methodik mit WLAD AI als Coach.
          Tägliche Drills. Zertifikat 0001. LinkedIn-ready.
 CTA-BTN: Startnummer holen
 ```
@@ -87,7 +87,7 @@ CTA-BTN: Startnummer holen
 ```
 0–3s   BIB-Plate „0001" Animation (Zoom-In)
 3–7s   Text: „Jeden Tag 1 Frage. 1 Drill. 1 Reflexion."
-7–11s  Quick-Cuts: Phone + WladBot-Chat
+7–11s  Quick-Cuts: Phone + WLAD AI-Chat
 11–13s Zertifikat-Mockup mit Wlad-Unterschrift
 13–15s CTA „leader-check.de"
 ```
@@ -95,7 +95,7 @@ CTA-BTN: Startnummer holen
 ### LinkedIn Sponsored Content
 ```
 HEADLINE: Sprint 0001 — Startnummer für deine Führungs-Evolution.
-INTRO   : 30 Tage. Wlads Methodik. WladBot als 24/7-Coach.
+INTRO   : 30 Tage. Wlads Methodik. WLAD AI als 24/7-Coach.
           Zertifikat 0001. Kohorte 01 voll, Kohorte 02 startet bald.
 CTA-BTN : Frühzugang sichern
 ```
@@ -152,7 +152,7 @@ Generierungs-Workflow:
 - Specimen-Frame-Vorlage aus `frontend/src/components/landing/BenefitVisual.js`
 - Hero-Bilder via Higgsfield (Brand-Prompt im Style-Guide)
 - Video-Cuts via Personal Clipper (Higgsfield Tool)
-- Copy via WladBot mit Prompt „Schreibe Ad-Copy für Funnel X, Hook Y"
+- Copy via WLAD AI mit Prompt „Schreibe Ad-Copy für Funnel X, Hook Y"
 
 ## Compliance & Brand-Safety
 

@@ -44,7 +44,7 @@ const COL_SYSTEM = [
   { label: 'Führung beginnt hier · 4 Videos', to: '/fuehrung-beginnt-hier', focal: true },
   { label: 'KI-Führungskraft werden',     to: '/ki-fuehrungskraft', focal: true },
   { label: 'Diagnose · 10 Min',            href: 'https://leadercheck.de', external: true },
-  { label: 'WladBot · 24/7 Sparring',      to: '/#platform' },
+  { label: 'WLAD AI · 24/7 Sparring',      to: '/#platform' },
   { label: '11 Frameworks',                to: '/#platform' },
   { label: '6-Monats-Curriculum',          to: '/journal/in-6-monaten-zur-ki-nativen-fuehrungskraft' },
   { label: 'Die 5 Rollen',                 to: '/journal/die-5-rollen-einer-ki-nativen-fuehrungskraft' },
@@ -63,7 +63,7 @@ const COL_PLATTFORM = [
   { label: '30-Tage Challenge',  href: 'https://leaderos.de/challenge',     external: true },
   { label: 'Täglicher Check-in', href: 'https://leaderos.de/daily-checkin', external: true },
   { label: 'Aufgaben',           href: 'https://leaderos.de/tasks',         external: true },
-  { label: 'WladBot · Chat',     href: 'https://leaderos.de/chat',          external: true },
+  { label: 'WLAD AI · Chat',     href: 'https://leaderos.de/chat',          external: true },
   { label: 'Simulationen',       href: 'https://leaderos.de/simulations',   external: true },
   { label: 'Challengers',        href: 'https://leaderos.de/challengers',   external: true },
   { label: 'Playbooks',          href: 'https://leaderos.de/playbooks',     external: true },
@@ -199,7 +199,7 @@ export const LandingFooter = () => (
                 Leader<span className="text-brand mx-0.5">·</span>OS
               </div>
               <div className="mt-1 text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/45 font-mono">
-                POWERED BY WLADBOT
+                POWERED BY WLAD AI
               </div>
             </div>
           </Link>

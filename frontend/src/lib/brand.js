@@ -2,14 +2,14 @@
  * brand.js — Central Wlad / Leader-OS brand assets.
  *
  * Iter 135.1 (Wlad-Direktive):
- *   EIN Avatar überall: der WladBot-Charakter von leadercheck.de, aber als
+ *   EIN Avatar überall: der WLAD AI-Charakter von leadercheck.de, aber als
  *   sauberer Kopf-Ausschnitt auf ruhigem Hintergrund. Das transparente
  *   Ganzkörper-PNG wurde in kleinen runden Rahmen (Chat, 32 px) zu einem
  *   dunklen Punkt — deshalb liegt hier der zugeschnittene Face-Crop.
  *   Quelle: leadercheck.de/wladbot-3-nobg.png → public/wladbot-avatar-clean.png
  */
 
-/** WladBot-Avatar — sauberer Gesichts-Ausschnitt, gleiche Figur wie leadercheck.de. */
+/** WLAD AI-Avatar — sauberer Gesichts-Ausschnitt, gleiche Figur wie leadercheck.de. */
 export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 // Iter 188: festes Standbild aus dem vorhandenen Videomaterial (Ausschnitt
 // Gesicht + Schultern). Liegt in der App, ist damit für jedes Konto sofort da.

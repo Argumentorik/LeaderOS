@@ -64,7 +64,7 @@ export const LeaderOSIntro = () => {
               <span className="text-[#C8FF00]">50 kostenlose</span><br />Credits.
             </p>
             <p className="font-inter text-base text-slate-400 mt-3 mb-7">
-              WladBot ist online. Du musst nur einloggen.
+              WLAD AI ist online. Du musst nur einloggen.
             </p>
             <div className="flex items-end gap-4 mb-2">
               <button
@@ -77,7 +77,7 @@ export const LeaderOSIntro = () => {
               <div className="relative">
                 <img
                   src="/wladbot-3-nobg.png"
-                  alt="WladBot"
+                  alt="WLAD AI"
                   className="w-28 md:w-32 h-auto anim-float"
                   style={{ filter: "drop-shadow(0 20px 25px rgba(0,0,0,0.5)) drop-shadow(0 0 40px rgba(200,255,0,0.15))" }}
                 />

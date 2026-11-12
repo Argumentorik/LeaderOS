@@ -174,7 +174,7 @@ export const FakeWladCall = () => {
     openBooking();
   };
 
-  // Decline = fallback to chat with WladBot so the user gets value
+  // Decline = fallback to chat with WLAD AI so the user gets value
   // immediately without committing to a calendar slot.
   const decline = () => {
     setOpen(false);

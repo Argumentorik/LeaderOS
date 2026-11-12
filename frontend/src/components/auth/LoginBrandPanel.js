@@ -46,7 +46,7 @@ export const LoginBrandPanel = ({ features, de, onStartRegister }) => {
                 Leader<span className="opacity-40">·</span>OS
               </span>
               <span className="text-[8px] tracking-[0.22em] uppercase font-bold text-white/35 mt-1">
-                Powered by WladBot
+                Powered by WLAD AI
               </span>
             </div>
           </div>

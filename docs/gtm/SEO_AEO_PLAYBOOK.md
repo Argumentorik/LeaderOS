@@ -96,7 +96,7 @@ also immer zuerst diese Frage stellen.
 
 - **`/fragen`** (`frontend/public/fragen/index.html`) — 9 vollständige
   Antworten als statisches HTML: LeaderOS, Wlad Jachtchenko,
-  Leader-Check, WladBot-vs-ChatGPT, SEXIER-Modell, Feedbackformel, die 5
+  Leader-Check, WLAD AI-vs-ChatGPT, SEXIER-Modell, Feedbackformel, die 5
   Rollen, Preise, "warum Seminare nicht wirken". `FAQPage`- und
   `BreadcrumbList`-Schema, **wortgleich zum sichtbaren Text** (Googles
   Regel für strukturierte Daten — und die Bedingung dafür, dass

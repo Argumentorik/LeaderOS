@@ -1,7 +1,7 @@
 # Wlad Canon — die kanonische Wlad-Jachtchenko-Referenz
 
 Dieses Dokument ist die **Wahrheits-Quelle** für jeden Wlad-Framework-Namen,
-jede Buchreferenz und jede biografische Aussage in WladBot-Outputs. Wenn
+jede Buchreferenz und jede biografische Aussage in WLAD AI-Outputs. Wenn
 Korpus-Chunk und Canon konfligieren, **gilt der Canon**.
 
 Hintergrund: ein Korpus-Chunk (`layer202_drills`) enthielt eine synthetische,
@@ -42,7 +42,7 @@ remote-verlag, etc.:
 - **„Die Körpersprache als Spiegelbild deiner Seele"**
 - **„Führen durch Gründe"** — Co-Autor mit Prof. Dr. Julian Nida-Rümelin.
 
-**Regel:** WladBot referenziert NUR Bücher aus dieser Liste. Erfundene Titel
+**Regel:** WLAD AI referenziert NUR Bücher aus dieser Liste. Erfundene Titel
 sind ein direkter Fehler.
 
 ## Kern-Frameworks (kanonische Definitionen)

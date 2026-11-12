@@ -29,20 +29,20 @@ export default {
       'Jeder Framework ist eine Mikro-Bibliothek aus Video-Lektion, Skript-Beispielen, Drill-Übungen und ' +
       'einer Anti-Patterns-Liste. Du wählst nicht "welches Buch lese ich nächstes", du wählst "welchen ' +
       'Framework drille ich diese Woche".' },
-    { type: 'heading', level: 2, text: 'Schicht 2: WladBot.' },
+    { type: 'heading', level: 2, text: 'Schicht 2: WLAD AI.' },
     { type: 'paragraph', text:
       'Der 24/7-Sparrings-Partner. Trainiert auf 2.212 Wlad-Lektionen, drei SPIEGEL-Bestsellern, fünfzehn ' +
       'Jahren Coaching-Transkripten. Spricht Deutsch und Englisch, Latenz unter drei Sekunden, antwortet ' +
       'in Wlads Tonalität ohne dass du es einrichten musst.' },
     { type: 'paragraph', text:
-      'Der entscheidende Unterschied zu generischem ChatGPT: WladBot kennt deinen aktuellen Challenge-Score, ' +
+      'Der entscheidende Unterschied zu generischem ChatGPT: WLAD AI kennt deinen aktuellen Challenge-Score, ' +
       'deine zuletzt gedrillten Frameworks und deinen Schreibstil aus den letzten zwei Wochen. Wenn du um ' +
       '22:47 Uhr fragst "wie öffne ich dieses 1:1 morgen", bekommst du keinen Standard-Tipp. Du bekommst ' +
       'den nächsten Satz, im Format das du gerade trainierst, in deinem Ton.' },
     { type: 'heading', level: 2, text: 'Schicht 3: Die 30-Tage-Challenge.' },
     { type: 'paragraph', text:
       'Die Mechanik die aus Wissen einen Reflex macht. Jeden Tag eine Aufgabe, ein Framework, ein Drill am ' +
-      'echten Fall aus deinem Backlog. WladBot begleitet dich, korrigiert wo du zu vage wirst, schlägt vor ' +
+      'echten Fall aus deinem Backlog. WLAD AI begleitet dich, korrigiert wo du zu vage wirst, schlägt vor ' +
       'wo dein Skript zu lang ist.' },
     { type: 'framework', code: 'SPRINT', title: 'Die 30-Tage-Mechanik',
       explanation:
@@ -52,7 +52,7 @@ export default {
     { type: 'heading', level: 2, text: 'Was du behältst, lebenslang.' },
     { type: 'list', style: 'bullet', items: [
       'Voller Zugriff auf alle elf Frameworks, auch nach der Challenge.',
-      'WladBot 24/7 · keine monatliche Abo-Schranke.',
+      'WLAD AI 24/7 · keine monatliche Abo-Schranke.',
       'Lernvideo-Bibliothek (600+ Wlad-Lektionen) bleibt freigeschaltet.',
       'Challenge-Historie als Context-Layer für jede zukünftige Bot-Konversation.',
     ] },
@@ -66,9 +66,9 @@ export default {
   seo: {
     title: 'Was ist in LeaderOS drin? Die 3 Schichten erklärt',
     description:
-      'Was steckt in LeaderOS? Drei Schichten: elf Wlad-Frameworks, WladBot als 24/7-KI-Coach, ' +
+      'Was steckt in LeaderOS? Drei Schichten: elf Wlad-Frameworks, WLAD AI als 24/7-KI-Coach, ' +
       '30-Tage-Challenge. Plus lebenslanger Zugriff. Von Wlad Jachtchenko.',
-    keywords: ['LeaderOS Inhalt', 'LeaderOS Frameworks', 'WladBot', '30-Tage Challenge Wlad', 'Leadership Operating System Inhalt'],
+    keywords: ['LeaderOS Inhalt', 'LeaderOS Frameworks', 'WLAD AI', '30-Tage Challenge Wlad', 'Leadership Operating System Inhalt'],
   },
   related: ['warum-leader-os', 'dein-erster-tag-mit-leader-os'],
 };

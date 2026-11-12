@@ -206,17 +206,17 @@ export default function CoachingPage() {
                 </span>
               </div>
 
-              {/* WladBot 3.0 — conversion anchor (Iter 92.56) */}
+              {/* WLAD AI — conversion anchor (Iter 92.56) */}
               <div className="flex items-start gap-3 mt-5 p-4 rounded-2xl bg-[#0A0A0A] border border-white/[0.08] shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)] max-w-xl" data-testid="coaching-wladbot-strip">
                 <WladBotAvatar size={46} live />
                 <div className="flex-1 min-w-0">
                   <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#BFFF00] mb-1">
-                    {de ? 'WladBot 3.0 · Dein Coach ab Tag 1' : 'WladBot 3.0 · Your coach from day one'}
+                    {de ? 'WLAD AI · Dein Coach ab Tag 1' : 'WLAD AI · Your coach from day one'}
                   </p>
                   <p className="text-[12.5px] text-white/70 leading-relaxed">
                     {de
-                      ? 'Starte kostenlos — keine Kreditkarte. WladBot antwortet auf Basis von Wlads Kursen und Frameworks.'
-                      : 'Start free — no credit card. WladBot answers based on Wlad\'s courses and frameworks.'}
+                      ? 'Starte kostenlos — keine Kreditkarte. WLAD AI antwortet auf Basis von Wlads Kursen und Frameworks.'
+                      : 'Start free — no credit card. WLAD AI answers based on Wlad\'s courses and frameworks.'}
                   </p>
                 </div>
               </div>

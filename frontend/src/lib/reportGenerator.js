@@ -1,5 +1,5 @@
 /**
- * Premium Leadership Report Generator — WladBot Leader OS (Iter 92.23.7).
+ * Premium Leadership Report Generator — WLAD AI Leader OS (Iter 92.23.7).
  *
  * What changed vs the previous version:
  *  - Dark-mode magazine layout (Tesla/Apple/Revolut feel) instead of generic

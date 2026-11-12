@@ -7,7 +7,7 @@ import { WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback } from '../../..
  * Every card gets one of ten on-brand abstract textures (black canvas +
  * lime accents · /journal/covers/cover-NN.webp), picked deterministically
  * from the title so the blog reads as a varied, image-rich set — plus,
- * layered on top, the actual WladBot mascot "saying something": his avatar
+ * layered on top, the actual WLAD AI mascot "saying something": his avatar
  * in a lime-ringed badge next to a speech-bubble carrying a real excerpt
  * from the article (its description, truncated). That's the strong,
  * consistent visual identity every card needs instead of a bare texture +
@@ -15,7 +15,7 @@ import { WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback } from '../../..
  *
  * Props:
  *   - title:       article title (headline text on the cover)
- *   - description: article excerpt · becomes WladBot's speech-bubble line
+ *   - description: article excerpt · becomes WLAD AI's speech-bubble line
  *   - eyebrow:      small mono label (default 'LEADER·OS')
  *   - showText:     false → texture-only tile (no headline overlay)
  */
@@ -69,7 +69,7 @@ export const WladBotThumbnail = ({
         }}
       />
 
-      {/* WladBot "saying something" · avatar + speech bubble, the strong
+      {/* WLAD AI "saying something" · avatar + speech bubble, the strong
           visual anchor every card needs regardless of texture. Anchored
           to the top independently of the headline block below so the
           layout never depends on card height/aspect ratio. */}

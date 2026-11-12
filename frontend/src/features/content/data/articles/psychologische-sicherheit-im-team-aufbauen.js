@@ -146,7 +146,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Das alles ist weniger Wissen als Gewohnheit, und Gewohnheiten ändern sich durch Wiederholung. Im LeaderOS kannst du die Momente üben, in denen es darauf ankommt: WladBot spielt das Teammitglied, das widerspricht oder einen Fehler meldet, und du trainierst in täglichen Drills von 15 Minuten, nicht sofort zu verteidigen, sondern nachzufragen. Die ersten 14 Tage sind kostenlos.',
+        'Das alles ist weniger Wissen als Gewohnheit, und Gewohnheiten ändern sich durch Wiederholung. Im LeaderOS kannst du die Momente üben, in denen es darauf ankommt: WLAD AI spielt das Teammitglied, das widerspricht oder einen Fehler meldet, und du trainierst in täglichen Drills von 15 Minuten, nicht sofort zu verteidigen, sondern nachzufragen. Die ersten 14 Tage sind kostenlos.',
     },
     {
       type: 'faq',

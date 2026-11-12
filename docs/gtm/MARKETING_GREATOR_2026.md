@@ -37,7 +37,7 @@ Vier Referenzen verschmelzen — jede mit klarem Job:
 | 2 | **Plus-Plus** (Enablement-Marathon) | 12 Monate | 4 797 € | Sprint + Drill-Channel + Live mit Wlad |
 | 3 | **Mentoring 6** | 6 Monate | 14 800 € | Plus-Plus + 6× 90-Min mit Wlad direkt |
 | 4 | **Mentoring 12** | 12 Monate | 24 600 € | Plus-Plus + 12× 90-Min · Quarterly Review |
-| 5 | **AI Ownership · Enterprise** | Custom | ab 44 000 € | Inhouse-WladBot · Team-Lizenz · 1:1 Custom-Track |
+| 5 | **AI Ownership · Enterprise** | Custom | ab 44 000 € | Inhouse-WLAD AI · Team-Lizenz · 1:1 Custom-Track |
 
 **Positioning:**
 - Sprint = der Marathon-Trainingsplan
@@ -65,13 +65,13 @@ für den jeweiligen Avatar funktioniert.
 > Du fragst 'Wie eröffne ich diese schwierige Konversation?' — Antwort
 > in unter 3 Sekunden. In Wlads Ton. Mit deinem Kontext. Willst du es
 > testen?"*
-> → Pull out iPad, lade `leader-os.de/chat` mit echtem WladBot.
+> → Pull out iPad, lade `leader-os.de/chat` mit echtem WLAD AI.
 
 ### B) Solo-Founder · "Ich will skalieren"
 
 > *"Du musst gerade von 'tun' zu 'führen' wechseln. Du hast 1 000 Sachen
 > im Kopf — Pitch-Decks, Hiring-Gespräche, das Investor-Update, das
-> schwierige Mitarbeitergespräch. WladBot kennt 11 Frameworks für genau
+> schwierige Mitarbeitergespräch. WLAD AI kennt 11 Frameworks für genau
 > diese Situationen. Sprint sind 30 Tage, 997 €, und du hast dann ein
 > System statt 200 Tabs. Diagnose ist kostenlos — willst du mal sehen
 > wo du stehst?"*
@@ -80,7 +80,7 @@ für den jeweiligen Avatar funktioniert.
 ### C) Personalleitung · "Mein Team braucht KI-Skills"
 
 > *"Wir haben LeaderOS so gebaut dass es auch im Unternehmens-Kontext
-> funktioniert. Wir hosten einen WladBot der nur eure Frameworks und
+> funktioniert. Wir hosten einen WLAD AI der nur eure Frameworks und
 > eure Tonalität kennt — auf eurer Infrastruktur, mit Audit-Logs und
 > Single-Sign-On. AI Ownership statt SaaS-Abhängigkeit. Lass uns kurz
 > einen Termin machen, dann zeig ich dir Demo am Bildschirm — du
@@ -108,7 +108,7 @@ für den jeweiligen Avatar funktioniert.
 
 ### F) Enterprise Decision-Maker · "Was kostet das für 200 Personen?"
 
-> *"AI Ownership Enterprise startet bei 44 000 €. Das umfasst: Custom-WladBot
+> *"AI Ownership Enterprise startet bei 44 000 €. Das umfasst: Custom-WLAD AI
 > auf eurer Infra, 200 User-Lizenzen, ein 12-Monate-Sprint-Curriculum
 > angepasst auf eure Industry, 6× Quarterly-Review-Calls direkt mit
 > Wlad, Mitarbeiter-Onboarding-Material. Wir machen jetzt das
@@ -127,11 +127,11 @@ für den jeweiligen Avatar funktioniert.
 ### H) Der Skeptiker · "ChatGPT macht das doch auch"
 
 > *"ChatGPT kennt das halbe Internet, aber nicht dich und nicht Wlad.
-> WladBot ist auf 2 200 echten Wlad-Lektionen trainiert plus einer
+> WLAD AI ist auf 2 200 echten Wlad-Lektionen trainiert plus einer
 > Context-Schicht die deine letzten 30 Tage Sprint-Historie kennt. Das
 > ist der Unterschied zwischen 'generischer Tipp' und 'spezifischer
 > nächster Schritt'. Hier — frag beiden parallel die gleiche Frage."*
-> → Demo-iPad mit Split-Screen ChatGPT vs WladBot.
+> → Demo-iPad mit Split-Screen ChatGPT vs WLAD AI.
 
 ---
 
@@ -146,7 +146,7 @@ Alle Designs in Nike+xAI+Tesla+Cactus-Jack-DNA. Schwarz-Weiß plus Lime.
 | **STK-01** | `W` Brand-Mark + "LEADER · OS" + "▸ AI-NATIVE" | Laptop-Lid, Schwarzkern |
 | **STK-02** | Tachymeter-Kreis "0001" + "BIB · GREATOR 2026" | Limited-Drop · Sammler-Item |
 | **STK-03** | Outfit-Italic "WERDE 10×" mit lime Period | Bold statement |
-| **STK-04** | "WLADBOT 24/7" als Mono-Stempel | Tech-Crowd |
+| **STK-04** | "WLAD AI 24/7" als Mono-Stempel | Tech-Crowd |
 | **STK-05** | Cactus-Jack-style scribble "AI OWNERSHIP" | Enterprise-Booth-Treat |
 | **STK-06** | "SPRINT START 30D" als Countdown | Conversion-Trigger |
 
@@ -154,7 +154,7 @@ Alle Designs in Nike+xAI+Tesla+Cactus-Jack-DNA. Schwarz-Weiß plus Lime.
 
 | ID | Front | Back |
 |---|---|---|
-| **CRD-PERSONA-A** | "Communication" + Lime QR | "leader-os.de · WladBot in 60 Sek" |
+| **CRD-PERSONA-A** | "Communication" + Lime QR | "leader-os.de · WLAD AI in 60 Sek" |
 | **CRD-PERSONA-B** | "Solo-Founder" + Lime QR | "leader-check.de · Diagnose in 5 Min" |
 | **CRD-PERSONA-C** | "Enterprise" + Lime QR | "cal.com/leaderos/beratung" |
 | **CRD-PREMIUM** | Hand-numbered 001/100 | Cal.com mit Wlad direkt |

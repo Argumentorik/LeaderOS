@@ -17,7 +17,7 @@ Was fertig ist:
   dazu Auftakt und Abschluss zum neuen Weg des Lernens.
 - 18 Einzelposts für die Tage danach, inklusive Webinar-Woche vor dem 26.11.
 - 30 Stories (ein Prinzip pro Tag).
-- Ein Launch-Bild: WladBot stellt deinen Account vor.
+- Ein Launch-Bild: WLAD AI stellt deinen Account vor.
 - Alle Captions mit Hashtags, als Zeitplan für Postproxy exportiert.
 
 Der Look ist dunkel, warm, editorial: Film-Grading, feine Linien, deine
@@ -34,7 +34,7 @@ Deine sechs Entscheidungen, am besten bis Donnerstag, 9. Oktober:
    unseren Worten.
 3. Zahlen: Deine Kanalbeschreibung sagt „seit 2012, 115.000“, unser Kanon
    „seit 2007, 400.000+“. Was gilt überall?
-4. WladBot-Videos auf YouTube: mit deiner geklonten Stimme oder neutrale
+4. WLAD AI-Videos auf YouTube: mit deiner geklonten Stimme oder neutrale
    Stimme? Wir kennzeichnen ihn immer als KI-Coach aus LeaderOS.
 5. Deine Rollenspiel-Folgen 499, 501 und 502 sind perfekt für Reels. Dürfen
    wir schneiden, und liefert Max die Rohdateien?

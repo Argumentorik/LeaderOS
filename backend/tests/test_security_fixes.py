@@ -1,6 +1,6 @@
 from conftest import TEST_EMAIL, TEST_PASSWORD
 """
-Test Security Fixes for WladBot Leadership OS
+Test Security Fixes for WLAD AI Leadership OS
 - httpOnly cookies for session_token
 - sessionStorage instead of localStorage (frontend)
 - Login/Register return JWT token AND set httpOnly cookie

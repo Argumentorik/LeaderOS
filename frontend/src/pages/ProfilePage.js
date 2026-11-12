@@ -213,10 +213,10 @@ const EditProfileForm = ({ profile, onSave, onCancel, saving }) => {
           </span>
         </div>
         <p className="text-[11px] text-muted-foreground leading-relaxed">
-          Alles, was WladBot über dich wissen sollte, um dir konkret statt allgemein zu antworten:
+          Alles, was WLAD AI über dich wissen sollte, um dir konkret statt allgemein zu antworten:
           Position und Verantwortung, Team und Umfeld, deine Stärken und Baustellen, aktuelle Projekte
           und Herausforderungen, Ziele, Arbeits- und Kommunikationsstil, Erfahrungen, Vorlieben.
-          Schreib frei, so viel oder so wenig du willst. Du kannst das jederzeit ändern — WladBot nutzt
+          Schreib frei, so viel oder so wenig du willst. Du kannst das jederzeit ändern — WLAD AI nutzt
           immer die aktuelle Version.
         </p>
         <Textarea
@@ -406,7 +406,7 @@ export default function ProfilePage() {
           </Card>
         )}
 
-        {/* ─── ÜBER MICH (read view) — Kontext für WladBot (Iter 136) ─── */}
+        {/* ─── ÜBER MICH (read view) — Kontext für WLAD AI (Iter 136) ─── */}
         {!editing && (
           <Card className={profile.about_me ? '' : 'border-[#BFFF00]/30'} data-testid="about-me-card">
             <CardContent className="p-5">
@@ -415,8 +415,8 @@ export default function ProfilePage() {
                   <p className="text-sm font-black">{de ? 'Über mich' : 'About me'}</p>
                   <p className="text-[11px] text-muted-foreground">
                     {de
-                      ? 'Dieser Kontext fließt in jede WladBot-Antwort ein — Chat, Video-Feedback, Strategien.'
-                      : 'This context flows into every WladBot answer — chat, video feedback, strategies.'}
+                      ? 'Dieser Kontext fließt in jede WLAD AI-Antwort ein — Chat, Video-Feedback, Strategien.'
+                      : 'This context flows into every WLAD AI answer — chat, video feedback, strategies.'}
                   </p>
                 </div>
                 <Button size="sm" variant="outline" onClick={() => setEditing(true)} className="h-8 text-[11px] shrink-0" data-testid="about-me-edit-btn">

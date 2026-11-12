@@ -406,7 +406,7 @@ export const TrackFieldVisual = ({ className = '' }) => (
       </g>
     </g>
 
-    {/* "MIT WLADBOT" Pill · sitzt oberhalb des Läufers, sauber freigestellt.
+    {/* "MIT WLAD AI" Pill · sitzt oberhalb des Läufers, sauber freigestellt.
         Outer <g> hält die Position, inner <g> macht das Bob via CSS-keyframes
         (sonst überschreibt die CSS-transform-Animation das SVG-transform-Attribut).
         Pille ist absichtlich 112×26 (Text + 0.16em letter-spacing ≈ 86px,
@@ -425,7 +425,7 @@ export const TrackFieldVisual = ({ className = '' }) => (
           textAnchor="middle"
           style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '0.16em' }}
         >
-          MIT WLADBOT
+          MIT WLAD AI
         </text>
         {/* Pfeil zeigt nach unten auf den Läufer (Brust bei x≈790 absolut → 62 relativ) */}
         <polygon points="58,26 66,26 62,33" fill="#0A0A0A" />
@@ -437,7 +437,7 @@ export const TrackFieldVisual = ({ className = '' }) => (
       ▸ LEADER · OS · STADIUM
     </text>
     <text x="860" y="345" fill="#0A0A0A" fontSize="8" fontWeight="700" textAnchor="end" opacity="0.55" style={{ fontFamily: 'monospace', letterSpacing: '0.22em' }}>
-      ERSTE GRUPPE · WLADBOT IM RENNEN
+      ERSTE GRUPPE · WLAD AI IM RENNEN
     </text>
   </svg>
 );

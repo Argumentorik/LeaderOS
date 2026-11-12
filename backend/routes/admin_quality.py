@@ -1,6 +1,6 @@
 """RAG answer-quality audit.
 
-Proves that WladBot's output is genuinely *grounded in Wlad's corpus* and
+Proves that WLAD AI's output is genuinely *grounded in Wlad's corpus* and
 *applies his frameworks* — rather than producing generic coaching language.
 
 Design principle: this runs the **real production path** — the same
@@ -79,7 +79,7 @@ SIGNATURE_QUERIES: list[dict[str, str]] = [
 ]
 
 
-_JUDGE_SYSTEM = """Du bist ein strenger QA-Prüfer für Leadership-Coaching-Antworten von "WladBot".
+_JUDGE_SYSTEM = """Du bist ein strenger QA-Prüfer für Leadership-Coaching-Antworten von "WLAD AI".
 Du bewertest, ob eine Antwort echtes, in Wlad Jachtchenkos Material verankertes Coaching ist
 — oder generische KI-Ratgeber-Sprache.
 

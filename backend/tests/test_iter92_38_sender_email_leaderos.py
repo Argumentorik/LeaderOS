@@ -61,14 +61,14 @@ class TestServicesEmailModule:
     def test_brand_name_is_wladbot(self):
         import services_email as se
         importlib.reload(se)
-        assert se.BRAND_NAME == "WladBot"
+        assert se.BRAND_NAME == "WLAD AI"
 
     def test_from_header_string(self):
         """Reproduces line ~63: from_email default = f'{BRAND_NAME} <{SENDER_EMAIL}>'."""
         import services_email as se
         importlib.reload(se)
         from_header = f"{se.BRAND_NAME} <{se.SENDER_EMAIL}>"
-        assert from_header == "WladBot <wlad@leaderos.de>", \
+        assert from_header == "WLAD AI <wlad@leaderos.de>", \
             f"From-header constructs to {from_header!r}"
 
     def test_signup_welcome_renders(self):

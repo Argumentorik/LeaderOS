@@ -22,7 +22,7 @@ const CARDS = [
     code: 'LAB-01',
     tint: '#ffffff',
     cover: '/journal/covers/cover-01.webp',
-    title: 'WladBot · der KI-Coach',
+    title: 'WLAD AI · der KI-Coach',
     line: 'Sparring um 22:47 Uhr, geprüft gegen Wlads Kanon.',
     href: 'https://leaderos.de/signup?trial=14',
     cta: 'Im Trial testen',

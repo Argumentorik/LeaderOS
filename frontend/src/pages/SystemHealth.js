@@ -22,7 +22,7 @@ const STATUS_STYLE = {
 };
 
 const SUBSYSTEM_META = {
-  llm:      { title: 'LLM · Chat',         eyebrow: 'WLADBOT · KERN' },
+  llm:      { title: 'LLM · Chat',         eyebrow: 'WLAD AI · KERN' },
   stt:      { title: 'Speech-to-Text',     eyebrow: 'VOICE-MODE' },
   stripe:   { title: 'Stripe · Checkout',  eyebrow: 'PAYMENTS' },
   storage:  { title: 'Object Storage',     eyebrow: 'UPLOADS · AVATARE' },

@@ -27,7 +27,7 @@ export default {
       'Claude vs ChatGPT für Führung',
       'Perplexity Führungskräfte',
       'KI Tools Manager 2026',
-      'WladBot vs ChatGPT',
+      'WLAD AI vs ChatGPT',
       'AI Leadership Tools',
       'KI-Coaching App',
       'Beste KI für Führungskräfte',
@@ -55,7 +55,7 @@ export default {
     ] },
     { type: 'heading', level: 2, text: 'Was LeaderOS dazu liefert.' },
     { type: 'list', style: 'bullet', items: [
-      'WladBot kennt deine Challenge, deine Diagnose-Scores, deine letzten Drills. Trainiert auf 2 212 authentische Wlad-Chunks und antwortet in Wlads Ton.',
+      'WLAD AI kennt deine Challenge, deine Diagnose-Scores, deine letzten Drills. Trainiert auf 2 212 authentische Wlad-Chunks und antwortet in Wlads Ton.',
       'Elf Frameworks · kuratiert, nicht zehntausend. B·W·W, Harvard-Verhandlung, Schulz von Thun, ALPEN, 5-Rollen. Du lernst eine Methode, drillst sie, hast sie verfügbar.',
       '30-Tage-Challenge mit täglichen 15-Minuten-Übungen an deinen echten Fällen. Strukturierte Progression statt freier Spielwiese.',
       'Live-Sessions mit Wlad persönlich (Plus-Plus). Drill-Channel für sofortige Anwendung. LeaderOS-Community mit Peer-Sparring.',
@@ -75,6 +75,6 @@ export default {
       'LeaderOS Plus-Plus · 4 797 € einmalig · Challenge + monatliche Wlad-Live + Drill-Channel.',
     ] },
     { type: 'callout', tone: 'lime', text:
-      'Tiefer in den Vergleich: methodische Differenzierung in WladBot vs ChatGPT vs Coach · Tool-Stack-Strategie in KI-Tools für Führungskräfte 2026 · Effizienz-Fokus in Mit KI 12 Stunden pro Woche zurückgewinnen.' },
+      'Tiefer in den Vergleich: methodische Differenzierung in WLAD AI vs ChatGPT vs Coach · Tool-Stack-Strategie in KI-Tools für Führungskräfte 2026 · Effizienz-Fokus in Mit KI 12 Stunden pro Woche zurückgewinnen.' },
   ],
 };

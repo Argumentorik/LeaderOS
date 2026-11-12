@@ -53,7 +53,7 @@ export const EventReminderBanner = ({ de }) => {
   const isToday = event.urgency === 'today';
 
   // Iter 92.57 (Branding/FOMO): when there is no urgent reminder, show the
-  // next live event as a branded dark hero strip with WladBot + countdown.
+  // next live event as a branded dark hero strip with WLAD AI + countdown.
   if (!topReminder && nextEvent) {
     let daysLeft = null;
     try {

@@ -194,7 +194,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Im LeaderOS kannst du das Gespräch vorher üben. WladBot spielt das Gegenüber, das sich rechtfertigt, ' +
+        'Im LeaderOS kannst du das Gespräch vorher üben. WLAD AI spielt das Gegenüber, das sich rechtfertigt, ' +
         'auf andere zeigt oder schweigt, und du übst, bei Beobachtung, Wirkung und Wunsch zu bleiben. Die ' +
         'täglichen 15-Minuten-Drills helfen dir, die ersten Sätze sicher zu haben, wenn es darauf ankommt. Du ' +
         'kannst LeaderOS 14 Tage kostenlos testen.',

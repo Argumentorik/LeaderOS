@@ -71,7 +71,7 @@ export const ReportHeader = ({ report, displayUser, emailSent, avg_total, scoreC
       </div>
     )}
 
-    {/* Personal Response: PROOF that WladBot listened */}
+    {/* Personal Response: PROOF that WLAD AI listened */}
     {report.user_challenge && (
       <div className="glass-card p-6 md:p-8 mb-10 border border-[#C8FF00]/15 bg-[#C8FF00]/[0.03]" data-testid="report-personal-response">
         <div className="flex items-start gap-4">

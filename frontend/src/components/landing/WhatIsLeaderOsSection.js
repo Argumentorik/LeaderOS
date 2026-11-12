@@ -10,7 +10,7 @@ import { WLADBOT_AVATAR, WLADBOT_AVATAR_FALLBACKS, withFallback } from '../../li
  *   1. Was ist LeaderOS? (kein Kurs / keine Bibliothek / kein Chatbot →
  *      begleitet dich bei echten Führungs-Situationen)
  *   2. Situation-Demo: "Morgen hast du ein schwieriges Feedbackgespräch.
- *      Frag WladBot." (the feature translated into a moment)
+ *      Frag WLAD AI." (the feature translated into a moment)
  *   3. Ergebnisse statt Frameworks ("Du lernst nie wieder Theorie.")
  *   4. Transformation Von → Zu
  */
@@ -89,14 +89,14 @@ export const WhatIsLeaderOsSection = () => (
           </ul>
         </div>
 
-        {/* Beat 2 · Situation demo · dark card, WladBot's face on it */}
+        {/* Beat 2 · Situation demo · dark card, WLAD AI's face on it */}
         <div className="md:col-span-7">
           <div className="bg-[#0A0A0A] text-white border-2 border-black p-6 md:p-9 shadow-[8px_8px_0_0_rgba(191,255,0,0.9)]">
             <div className="flex items-center gap-3 mb-5">
               <img
                 src={WLADBOT_AVATAR}
                 onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
-                alt="WladBot · dein Leadership-Coach"
+                alt="WLAD AI · dein Leadership-Coach"
                 loading="lazy"
                 className="w-12 h-12 rounded-full object-cover object-[50%_16%] bg-[#0A0A0A] ring-2 ring-brand"
               />
@@ -112,7 +112,7 @@ export const WhatIsLeaderOsSection = () => (
               Morgen hast du ein schwieriges Feedbackgespräch<span className="text-brand not-italic">.</span>
             </h3>
             <p className="mt-3 text-[15px] leading-[1.55] text-white/70">
-              Frag WladBot. In Sekunden bekommst du:
+              Frag WLAD AI. In Sekunden bekommst du:
             </p>
             <ul className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
               {BOT_DELIVERS.map((d) => (

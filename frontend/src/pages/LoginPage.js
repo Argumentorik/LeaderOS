@@ -199,7 +199,7 @@ export default function LoginPage({ initialMode = 'login' }) {
             <span className="font-black text-[13px] text-white" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.025em' }}>
               Leader<span className="opacity-40">·</span>OS
             </span>
-            <span className="text-[8px] text-[#BFFF00]/70 font-bold tracking-[0.2em] uppercase mt-[2px]">Powered by WladBot</span>
+            <span className="text-[8px] text-[#BFFF00]/70 font-bold tracking-[0.2em] uppercase mt-[2px]">Powered by WLAD AI</span>
           </div>
         </div>
 
@@ -208,12 +208,12 @@ export default function LoginPage({ initialMode = 'login' }) {
           <div className="lg:hidden mb-5" data-testid="login-teaser-mobile">
             <LoginTeaserVideo de={de} compact onStartRegister={() => switchMode('register')} />
           </div>
-          {/* WladBot 3.0 trust anchor — he's here, live (Iter 92.50) */}
+          {/* WLAD AI trust anchor — he's here, live (Iter 92.50) */}
           <div className="flex items-center gap-3 mb-5" data-testid="login-wladbot-trust">
             <WladBotAvatar size={42} live />
             <div className="leading-tight">
               <p className="text-[12.5px] font-bold text-white flex items-center gap-1.5">
-                WladBot <span className="px-1.5 py-px rounded-md bg-[#BFFF00]/15 text-[#BFFF00] text-[9px] font-black tracking-wider">3.0</span>
+                WLAD AI
               </p>
               <p className="text-[10.5px] text-white/40 mt-0.5">
                 {de ? 'Online · bereitet dich auf dein nächstes Gespräch vor' : 'Online · prepares you for your next conversation'}

@@ -158,7 +158,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Den Wechsel von „ich gebe Aufgaben“ zu „ich übergebe Ergebnisse“ merkst du erst, wenn du das Zurücknehmen bewusst unterlässt. Im LeaderOS kannst du solche Übergabegespräche üben: WladBot spielt das Gegenüber, das nachfragt, zögert oder dir die Entscheidung zurückschiebt, und du trainierst in täglichen Drills von etwa 15 Minuten, ruhig beim Ergebnis zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
+        'Den Wechsel von „ich gebe Aufgaben“ zu „ich übergebe Ergebnisse“ merkst du erst, wenn du das Zurücknehmen bewusst unterlässt. Im LeaderOS kannst du solche Übergabegespräche üben: WLAD AI spielt das Gegenüber, das nachfragt, zögert oder dir die Entscheidung zurückschiebt, und du trainierst in täglichen Drills von etwa 15 Minuten, ruhig beim Ergebnis zu bleiben. Die ersten 14 Tage kannst du kostenlos testen.',
     },
     {
       type: 'faq',

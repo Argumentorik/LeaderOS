@@ -149,7 +149,7 @@ export default function EnterprisePage() {
                   {[1,2,3,4,5].map(i => <Star key={i} size={16} className="text-amber-500 fill-amber-500" />)}
                 </div>
                 <blockquote className="text-sm font-medium italic text-muted-foreground max-w-lg mx-auto">
-                  {de ? '"WladBot hat die Art und Weise verändert, wie unser Leadership-Team Entscheidungen trifft. Die KI-Workflows sparen uns 15+ Stunden pro Woche."' : '"WladBot has changed how our leadership team makes decisions. The AI workflows save us 15+ hours per week."'}
+                  {de ? '"WLAD AI hat die Art und Weise verändert, wie unser Leadership-Team Entscheidungen trifft. Die KI-Workflows sparen uns 15+ Stunden pro Woche."' : '"WLAD AI has changed how our leadership team makes decisions. The AI workflows save us 15+ hours per week."'}
                 </blockquote>
                 <p className="text-xs font-bold mt-3">{de ? 'CEO, Tech-Startup (200 MA)' : 'CEO, Tech Startup (200 employees)'}</p>
               </CardContent>

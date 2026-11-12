@@ -36,10 +36,10 @@ export const WLAD_AVATAR_FALLBACKS = [LOCAL_PORTRAIT_JPG];
 export const WLAD_STAGE = LOCAL_STAGE;
 export const WLAD_STAGE_FALLBACKS = [LOCAL_PORTRAIT_JPG];
 
-// WladBot avatar · single source of truth for the bot's face across the
+// WLAD AI avatar · single source of truth for the bot's face across the
 // chat avatar, the floating mascot and the branded blog thumbnail.
 //
-// The dedicated Pixar-style WladBot render, now self-hosted: re-encoded
+// The dedicated Pixar-style WLAD AI render, now self-hosted: re-encoded
 // from the 1.4 MB source PNG to a 13 KB 512² WebP. Fallback chain drops to
 // the original PNG, then the real Wlad portrait · never a broken frame.
 export const WLADBOT_AVATAR = '/wlad/wladbot3.0.webp';

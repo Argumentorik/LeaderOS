@@ -125,7 +125,7 @@ Tests: `cd /app/backend && REACT_APP_BACKEND_URL=<url> python3 -m pytest tests/t
 
 ## 6. Nachtrag Iter 135.1 — Avatar & Sprachausgabe
 
-**Avatar**: Es gibt genau EINE Quelle: `public/wladbot-avatar-clean.png` (Gesichts-Ausschnitt des WladBot-Charakters von leadercheck.de, 512×512, ruhiger Hintergrund). Referenziert über `WLAD_AVATAR` in `src/lib/brand.js` und `AVATAR_SRC` in `components/brand/WladBotAvatar.js`; E-Mails/Magic-Link nutzen dieselbe Datei. Neuen Avatar einsetzen = diese Datei ersetzen, sonst nichts.
+**Avatar**: Es gibt genau EINE Quelle: `public/wladbot-avatar-clean.png` (Gesichts-Ausschnitt des WLAD AI-Charakters von leadercheck.de, 512×512, ruhiger Hintergrund). Referenziert über `WLAD_AVATAR` in `src/lib/brand.js` und `AVATAR_SRC` in `components/brand/WladBotAvatar.js`; E-Mails/Magic-Link nutzen dieselbe Datei. Neuen Avatar einsetzen = diese Datei ersetzen, sonst nichts.
 Grund für den Crop: das transparente Ganzkörper-PNG wurde in 28–32-px-Kreisen (Chat, FAB) zu einem dunklen Punkt.
 
 **Sprachausgabe (ElevenLabs) ist AKTUELL TOT**: `ELEVENLABS_API_KEY` in `backend/.env` enthält eine Key-**ID**, keinen API-Key. ElevenLabs-Keys beginnen mit `sk_`. API antwortet `invalid_api_key`.

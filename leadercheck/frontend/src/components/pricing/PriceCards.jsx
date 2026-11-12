@@ -20,7 +20,7 @@ export function PriceCards({
         onClick={onSelectOS}
         className={`glass-card p-7 cursor-pointer transition-all duration-300 hover:translate-y-[-4px] ${selectedPlan === "leader_os" ? "border-[#C8FF00]/25 ring-1 ring-[#C8FF00]/10" : "border-white/[0.06]"}`}
       >
-        <CardHeader badge="SPRINT" subBadge="30 TAGE + 12 MONATE" title="Sprint mit Wlad." desc="11 Frameworks · WladBot 24/7 · Zertifikat 0001" />
+        <CardHeader badge="SPRINT" subBadge="30 TAGE + 12 MONATE" title="Sprint mit Wlad." desc="11 Frameworks · WLAD AI 24/7 · Zertifikat 0001" />
         <PriceBlock
           price="997"
           accent="white"

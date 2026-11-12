@@ -5,7 +5,7 @@ Leader OS — Episode Design System v2
 Apple / Linear / Notion + Duolingo Vibe.
 - 56-64px Hero Headlines (E-Mail-Client safe)
 - Light/Dark Section Mix
-- WladBot Avatar (Lime Circle)
+- WLAD AI Avatar (Lime Circle)
 - XP Badges (+50 XP)
 - Streak Dots
 - Leader Level Progress
@@ -97,9 +97,9 @@ def _seven_day_strip(active_day: int = 1) -> str:
 </td></tr>"""
 
 
-# ─── NEW: WladBot Bot Card (Right column, dark, with flow) ─
+# ─── NEW: WLAD AI Bot Card (Right column, dark, with flow) ─
 
-def _wladbot_card(headline: str, body: str, flow_steps: list[str] = None, cta_label: str = "→ Marias Routine in WladBot starten", cta_url: str = None) -> str:
+def _wladbot_card(headline: str, body: str, flow_steps: list[str] = None, cta_label: str = "→ Marias Routine in WLAD AI starten", cta_url: str = None) -> str:
     if cta_url is None:
         cta_url = LEADEROS_LOGIN
     flow_html = ""
@@ -118,10 +118,10 @@ def _wladbot_card(headline: str, body: str, flow_steps: list[str] = None, cta_la
 <tr><td style="padding:24px 24px 24px 24px;">
 <table role="presentation" cellspacing="0" cellpadding="0"><tr>
 <td valign="top" style="width:80px;">
-<img src="{WLADBOT_3D_URL}" alt="WladBot" width="64" style="display:block;border:0;outline:none;width:64px;height:auto;" />
+<img src="{WLADBOT_3D_URL}" alt="WLAD AI" width="64" style="display:block;border:0;outline:none;width:64px;height:auto;" />
 </td>
 <td valign="top" style="padding-left:6px;">
-<p style="font-size:11px;color:{BRAND['lime']};margin:0 0 6px 0;letter-spacing:0.16em;text-transform:uppercase;font-weight:800;">WladBot ist online</p>
+<p style="font-size:11px;color:{BRAND['lime']};margin:0 0 6px 0;letter-spacing:0.16em;text-transform:uppercase;font-weight:800;">WLAD AI ist online</p>
 <p style="font-size:18px;color:{BRAND['white']};margin:0;line-height:1.35;font-weight:700;letter-spacing:-0.01em;">{headline}</p>
 </td></tr></table>
 <p style="font-size:14px;color:{BRAND['gray_dark']};line-height:1.65;margin:18px 0 0 0;">{body}</p>
@@ -234,13 +234,13 @@ def _what_is_leaderos_block() -> str:
 <tr><td style="padding:22px 22px 22px 22px;">
 <p style="font-size:10px;color:{BRAND['gray_dark']};letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin:0 0 8px 0;">🎁 Dein Bonus ist aktiv</p>
 <p style="font-size:22px;color:{BRAND['white']};font-weight:800;margin:0 0 4px 0;letter-spacing:-0.015em;line-height:1.2;"><span style="color:{BRAND['lime']}">50 kostenlose</span><br>Credits.</p>
-<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0 0 16px 0;line-height:1.5;">WladBot ist online. Jetzt starten.</p>
+<p style="font-size:13px;color:{BRAND['gray_dark']};margin:0 0 16px 0;line-height:1.5;">WLAD AI ist online. Jetzt starten.</p>
 <table role="presentation" cellspacing="0" cellpadding="0"><tr>
 <td valign="middle">
 <a href="{LEADEROS_LOGIN}" style="display:inline-block;background:{BRAND['lime']};color:{BRAND['ink']};font-size:13px;font-weight:800;padding:11px 18px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;">Jetzt starten →</a>
 </td>
 <td valign="middle" style="padding-left:14px;">
-<img src="{WLADBOT_PIXEL_URL}" alt="WladBot" width="48" style="width:48px;height:auto;display:block;border:0;outline:none;" />
+<img src="{WLADBOT_PIXEL_URL}" alt="WLAD AI" width="48" style="width:48px;height:auto;display:block;border:0;outline:none;" />
 </td>
 </tr></table>
 </td></tr></table>
@@ -248,13 +248,13 @@ def _what_is_leaderos_block() -> str:
 </td></tr>"""
 
 
-# ─── Atom: WladBot Avatar (lime circle with mark) ─────────
+# ─── Atom: WLAD AI Avatar (lime circle with mark) ─────────
 
 def _wladbot_avatar(size: int = 56) -> str:
-    """Round lime avatar containing the LeaderOS mark · acts as 'WladBot pixel'."""
+    """Round lime avatar containing the LeaderOS mark · acts as 'WLAD AI pixel'."""
     return f"""<table role="presentation" cellspacing="0" cellpadding="0" style="display:inline-block;">
 <tr><td style="background:{BRAND['lime']};width:{size}px;height:{size}px;border-radius:{size//2}px;text-align:center;vertical-align:middle;">
-<img src="{LOGO_MARK_URL}" alt="WladBot" width="{int(size*0.55)}" height="{int(size*0.55)}" style="display:inline-block;border:0;outline:none;vertical-align:middle;" />
+<img src="{LOGO_MARK_URL}" alt="WLAD AI" width="{int(size*0.55)}" height="{int(size*0.55)}" style="display:inline-block;border:0;outline:none;vertical-align:middle;" />
 </td></tr></table>"""
 
 
@@ -392,7 +392,7 @@ def _step_stack(steps: list[tuple[str, str]], on_dark: bool = True) -> str:
     return f"""<table role="presentation" width="100%" cellspacing="0" cellpadding="0">{rows}</table>"""
 
 
-# ─── Atom: Inline Wladbot Says ────────────────────────────
+# ─── Atom: Inline WLAD AI Says ────────────────────────────
 
 def _wlad_says(text: str, on_dark: bool = True) -> str:
     fg = BRAND["white"] if on_dark else BRAND["ink"]
@@ -400,7 +400,7 @@ def _wlad_says(text: str, on_dark: bool = True) -> str:
     return f"""<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
 <tr><td valign="top" style="width:64px;">{_wladbot_avatar(48)}</td>
 <td valign="top" style="padding-left:14px;">
-<p style="font-size:11px;color:{sub};margin:0 0 4px 0;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;">WladBot sagt</p>
+<p style="font-size:11px;color:{sub};margin:0 0 4px 0;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;">WLAD AI sagt</p>
 <p style="font-size:15px;color:{fg};margin:0;line-height:1.6;font-weight:500;">{text}</p>
 </td></tr></table>"""
 
@@ -546,7 +546,7 @@ def episode_01_first_win(name: str, weakest_label: str = "Rhetorik", email: str 
 <tr><td>
 {_mission_card(
     num=1,
-    title="Stell WladBot heute Abend genau eine Frage.",
+    title="Stell WLAD AI heute Abend genau eine Frage.",
     body=f"Geh auf leaderos.de · log dich ein · 50 Credits liegen schon da. Frag ihn: «Wo ist mein {weakest_label}-Hebel diese Woche am größten?» · Das ist alles. Eine Frage. Eine Antwort. Dein erster Sieg.",
     time_label="3 min",
 )}
@@ -555,7 +555,7 @@ def episode_01_first_win(name: str, weakest_label: str = "Rhetorik", email: str 
 {_stat_row([
     ("50", "Credits aktiv"),
     ("2-3", "Credits pro Frage"),
-    ("24/7", "WladBot online"),
+    ("24/7", "WLAD AI online"),
 ], on_dark=False)}
 </td></tr>
 """)
@@ -612,7 +612,7 @@ def episode_02_boss_answer(name: str, email: str = "") -> dict:
 {_mission_card(
     num=2,
     title="Wende S·E·X·I·E·R auf dein nächstes Argument an.",
-    body="Du hast diese Woche garantiert ein Argument im Kopf, das du noch nicht ausgesprochen hast. Tipp es in WladBot ein · «Mach mir aus diesem Argument ein sauberes S·E·X·I·E·R.» Du bekommst's in 30 Sekunden aufgeräumt zurück.",
+    body="Du hast diese Woche garantiert ein Argument im Kopf, das du noch nicht ausgesprochen hast. Tipp es in WLAD AI ein · «Mach mir aus diesem Argument ein sauberes S·E·X·I·E·R.» Du bekommst's in 30 Sekunden aufgeräumt zurück.",
     time_label="4 min",
 )}
 </td></tr>
@@ -626,7 +626,7 @@ def episode_02_boss_answer(name: str, email: str = "") -> dict:
 
     cta = _cta_section(
         eyebrow="Mission 02 · +50 XP",
-        headline="Dein Argument. WladBot. 30 Sekunden.",
+        headline="Dein Argument. WLAD AI. 30 Sekunden.",
         cta_label="→ Mission starten",
         cta_url=LEADEROS_LOGIN,
         hint="Sag im Chat: «Wende S·E·X·I·E·R an auf folgendes Argument: …»",
@@ -641,7 +641,7 @@ def episode_02_boss_answer(name: str, email: str = "") -> dict:
 
 
 # ─── EP 03 · T+6d · Warum Maria plötzlich jeder zuhörte ───
-# NEW DESIGN · Following the Mock Screenshot (Maria portrait + Timeline + WladBot card + 7-Day Strip + What-is-LeaderOS)
+# NEW DESIGN · Following the Mock Screenshot (Maria portrait + Timeline + WLAD AI card + 7-Day Strip + What-is-LeaderOS)
 
 def episode_03_maria(name: str, email: str = "") -> dict:
     maria_portrait = "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=800&q=80&auto=format&fit=crop"
@@ -653,7 +653,7 @@ def episode_03_maria(name: str, email: str = "") -> dict:
         quote=(
             "Sie war fachlich die Beste im Raum. Trotzdem hörten alle zu, sobald der CFO sprach. "
             "Sie wusste die Antworten. Aber niemand wartete auf ihre Meinung. "
-            "Dann loggte sie sich bei Leader OS ein. 30 Tage. 50 Credits. Jeden Tag 10 Minuten Sparring mit WladBot. "
+            "Dann loggte sie sich bei Leader OS ein. 30 Tage. 50 Credits. Jeden Tag 10 Minuten Sparring mit WLAD AI. "
             "Am Tag 31 fragte ihr Team: «Hast du heimlich ein Executive Coaching gemacht?». "
             "Ihre Antwort: «Nein. Ich habe einfach jeden Tag mit Wlad trainiert.»"
         ),
@@ -663,7 +663,7 @@ def episode_03_maria(name: str, email: str = "") -> dict:
         episode_num=3,
     )
 
-    # Two-column section: Maria-Timeline left, WladBot card right
+    # Two-column section: Maria-Timeline left, WLAD AI card right
     timeline_phases = [
         ("Woche 1",  "△",  "SEXIER vor jedem Meeting · «Ab Tag 3 fühlte es sich natürlich an»"),
         ("Woche 2",  "💬", "Schwierige Mitarbeiter-Gespräche vorher simuliert · keine Unsicherheit mehr"),
@@ -679,7 +679,7 @@ def episode_03_maria(name: str, email: str = "") -> dict:
 </td>
 <td valign="top" width="48%">
 {_wladbot_card(
-    headline=f"WladBot ist online.<br>Deine <span style='color:{BRAND['lime']}'>50 Credits</span> warten.",
+    headline=f"WLAD AI ist online.<br>Deine <span style='color:{BRAND['lime']}'>50 Credits</span> warten.",
     body="Maria hat ihre 50 Credits genutzt. Deine warten bereits auf dich. Mit 2-3 Credits pro Session reichen sie für 15-25 echte Führungssituationen. Nicht zum Lernen. Zum Trainieren. Für Meetings, die morgen stattfinden.",
     flow_steps=["2-3 Credits", "1 Session", "Bessere Ergebnisse"],
     cta_label="→ Marias Routine starten",
@@ -737,8 +737,8 @@ def episode_04_hardest_sentence(name: str, email: str = "") -> dict:
 <tr><td style="padding:40px 0 0 0;">
 {_mission_card(
     num=4,
-    title="Probiere den Satz in WladBot durch.",
-    body="Sag: «Spiel mir ein schwieriges Meeting durch · ich übe Defensive Backward Pressure.» · Du bekommst 3 Übungs-Szenarien zurück. Wähl eines. Antworte. WladBot gibt Feedback.",
+    title="Probiere den Satz in WLAD AI durch.",
+    body="Sag: «Spiel mir ein schwieriges Meeting durch · ich übe Defensive Backward Pressure.» · Du bekommst 3 Übungs-Szenarien zurück. Wähl eines. Antworte. WLAD AI gibt Feedback.",
     time_label="6 min",
 )}
 </td></tr>
@@ -749,7 +749,7 @@ def episode_04_hardest_sentence(name: str, email: str = "") -> dict:
         headline="Üb den Satz. Bevor du ihn brauchst.",
         cta_label="→ Mission starten",
         cta_url=LEADEROS_LOGIN,
-        hint="3 Übungs-Szenarien direkt im WladBot · keine Folien · nur Reps",
+        hint="3 Übungs-Szenarien direkt im WLAD AI · keine Folien · nur Reps",
         xp_reward=75,
     )
 
@@ -792,8 +792,8 @@ def episode_05_cfo_test(name: str, email: str = "") -> dict:
 <tr><td style="padding:40px 0 0 0;">
 {_mission_card(
     num=5,
-    title="Lass WladBot deinen CFO-Pitch zerreißen.",
-    body="Schreib deine 3 Sätze in WladBot. Sag: «Sei mein CFO. Sei skeptisch. Stell mir die 3 härtesten Rückfragen.» · Du übst gegen eine Wand · und stehst nächstes Mal wie ein Profi.",
+    title="Lass WLAD AI deinen CFO-Pitch zerreißen.",
+    body="Schreib deine 3 Sätze in WLAD AI. Sag: «Sei mein CFO. Sei skeptisch. Stell mir die 3 härtesten Rückfragen.» · Du übst gegen eine Wand · und stehst nächstes Mal wie ein Profi.",
     time_label="8 min",
 )}
 </td></tr>
@@ -804,7 +804,7 @@ def episode_05_cfo_test(name: str, email: str = "") -> dict:
         headline="Pitch in 3 Sätzen. Heute. Nicht morgen.",
         cta_label="→ Mission starten",
         cta_url=LEADEROS_LOGIN,
-        hint="WladBot als CFO-Sparring · 2-3 Credits pro Runde",
+        hint="WLAD AI als CFO-Sparring · 2-3 Credits pro Runde",
         xp_reward=100,
     )
 
@@ -832,8 +832,8 @@ def episode_06_three_min(name: str, email: str = "") -> dict:
 </td></tr>
 <tr><td>
 {_step_stack([
-    ("Min 1 · Scan", "Was ist heute das wichtigste Gespräch? Ein Satz an WladBot."),
-    ("Min 2 · Prep", "WladBot spielt dir die schwierigste Rückfrage durch. Eine."),
+    ("Min 1 · Scan", "Was ist heute das wichtigste Gespräch? Ein Satz an WLAD AI."),
+    ("Min 2 · Prep", "WLAD AI spielt dir die schwierigste Rückfrage durch. Eine."),
     ("Min 3 · Anchor", "Du schreibst dir die eine Antwort auf. Handy zu. Tag start."),
 ], on_dark=False)}
 </td></tr>
@@ -849,7 +849,7 @@ def episode_06_three_min(name: str, email: str = "") -> dict:
 {_mission_card(
     num=6,
     title="Starte deinen Streak. Heute Morgen oder morgen früh.",
-    body="Setze dir 3 Minuten in den Kalender · zwischen Kaffee und erstem Meeting. WladBot öffnen · ein Satz reicht. 7 Tage am Stück = du bekommst 25 Credits geschenkt.",
+    body="Setze dir 3 Minuten in den Kalender · zwischen Kaffee und erstem Meeting. WLAD AI öffnen · ein Satz reicht. 7 Tage am Stück = du bekommst 25 Credits geschenkt.",
     time_label="3 min/Tag",
 )}
 </td></tr>
@@ -860,7 +860,7 @@ def episode_06_three_min(name: str, email: str = "") -> dict:
         headline="Tag 1 deines Streaks. Jetzt.",
         cta_label="→ Streak starten",
         cta_url=LEADEROS_LOGIN,
-        hint="3 Min/Tag · 7 Tage = +25 Credits Bonus · WladBot ist online",
+        hint="3 Min/Tag · 7 Tage = +25 Credits Bonus · WLAD AI ist online",
         xp_reward=150,
     )
 
@@ -901,8 +901,8 @@ def episode_07_executive_mode(name: str, email: str = "") -> dict:
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr>
 <td style="padding:0 0 12px 0;">{_xp_pill(500, "XP UNLOCK")}</td>
 </tr></table>
-<p style="font-size:22px;font-weight:800;color:{BRAND['white']};margin:0 0 14px 0;line-height:1.25;letter-spacing:-0.015em;">Sprint · 30 Tage · 11 Frameworks · WladBot unbegrenzt</p>
-<p style="font-size:14px;color:{BRAND['gray_dark']};line-height:1.65;margin:0 0 20px 0;">Alles aus den 7 Episoden · plus 11 Wlad-Frameworks, unbegrenzter WladBot, Zertifikat, Klasse 0001 Peer-Kreis, 14 Tage Geld-zurück.</p>
+<p style="font-size:22px;font-weight:800;color:{BRAND['white']};margin:0 0 14px 0;line-height:1.25;letter-spacing:-0.015em;">Sprint · 30 Tage · 11 Frameworks · WLAD AI unbegrenzt</p>
+<p style="font-size:14px;color:{BRAND['gray_dark']};line-height:1.65;margin:0 0 20px 0;">Alles aus den 7 Episoden · plus 11 Wlad-Frameworks, unbegrenzter WLAD AI, Zertifikat, Klasse 0001 Peer-Kreis, 14 Tage Geld-zurück.</p>
 <p style="font-size:13px;color:{BRAND['lime']};font-weight:700;margin:0;letter-spacing:0.02em;">997 EUR einmalig · oder 12 × 99 EUR</p>
 </td></tr>
 </table>

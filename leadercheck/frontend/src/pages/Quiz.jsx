@@ -10,7 +10,7 @@ function WladBotChat({ onContinue }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, ich bin der WladBot! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Dieses kurze Gespräch ist komplett optional. Wenn du magst, erzähl mir: Was ist gerade deine größte Leadership-Herausforderung? Sobald du bereit bist, tippst du unten auf den grünen Button · dann wird dein Report erstellt."
+      text: "Hi, ich bin der WLAD AI! Glückwunsch · du hast gerade alle 20 Fragen durchgezogen. Respekt. Dieses kurze Gespräch ist komplett optional. Wenn du magst, erzähl mir: Was ist gerade deine größte Leadership-Herausforderung? Sobald du bereit bist, tippst du unten auf den grünen Button · dann wird dein Report erstellt."
     }
   ]);
   const [input, setInput] = useState("");
@@ -60,7 +60,7 @@ function WladBotChat({ onContinue }) {
             <Bot className="w-10 h-10 text-[#C8FF00]" />
           </div>
           <h2 className="font-manrope font-extrabold text-2xl md:text-3xl text-white mb-2">
-            WladBot möchte dich kennenlernen
+            WLAD AI möchte dich kennenlernen
           </h2>
           <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.06]">
             <span className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />

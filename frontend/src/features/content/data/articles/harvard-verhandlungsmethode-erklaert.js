@@ -29,7 +29,7 @@ export default {
       'Stakeholder-Eskalation Sales vs Product: Interesse "Q4-Revenue-Ziel", Optionen "Feature-Subset live / Beta-Group / vorgezogene Customer-Calls", objektive Kriterien "Pipeline-Daten", BATNA "Q4-Ziel reduzieren und kommunizieren".',
     ] },
     { type: 'callout', tone: 'lime', text: 'Harvard funktioniert nicht weil sie schlau ist · sondern weil sie kollaborativ ist. Wer Gegenüber als Partner für ein gemeinsames Problem behandelt, kommt zu besseren Ergebnissen als wer "härter" verhandelt.' },
-    { type: 'paragraph', text: 'In der Challenge trainierst du Harvard an deinen drei realsten Verhandlungs-Cases. WladBot spielt das Gegenüber mit den wahrscheinlichen Einwänden und drillt dich gegen schwache Argumente.' },
+    { type: 'paragraph', text: 'In der Challenge trainierst du Harvard an deinen drei realsten Verhandlungs-Cases. WLAD AI spielt das Gegenüber mit den wahrscheinlichen Einwänden und drillt dich gegen schwache Argumente.' },
   ],
   seo: {
     title: 'Harvard-Verhandlungsmethode: erklärt + 3 Beispiele',

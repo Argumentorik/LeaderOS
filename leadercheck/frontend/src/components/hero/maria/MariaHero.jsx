@@ -39,7 +39,7 @@ export const MariaHero = () => {
           <div className="mt-4 space-y-1">
             <p className="text-white/90 text-base md:text-lg font-semibold">30 Tage.</p>
             <p className="text-white/90 text-base md:text-lg font-semibold">50 Credits.</p>
-            <p className="text-white/90 text-base md:text-lg font-semibold">Jeden Tag 10 Minuten Sparring mit WladBot.</p>
+            <p className="text-white/90 text-base md:text-lg font-semibold">Jeden Tag 10 Minuten Sparring mit WLAD AI.</p>
           </div>
         </div>
 

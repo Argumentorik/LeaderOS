@@ -47,7 +47,7 @@ const FEATURES = {
     benefits: [
       '72 Folgen · 10 Kurse',
       'Folge 1 jedes Kurses gratis',
-      'Mit WladBot-Chat & Missionen verknüpft',
+      'Mit WLAD AI-Chat & Missionen verknüpft',
     ],
   },
   '/events': {

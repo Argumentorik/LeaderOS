@@ -32,7 +32,7 @@ export default {
       'Frag dich nach jedem wichtigen Gespräch aktiv: "Was wurde nicht gesagt?" Das ist eine Frage, die kein Transkript für dich beantwortet.',
     ] },
     { type: 'callout', tone: 'lime', text: 'Ein Transkript kann dir sagen, was gesagt wurde. Nur du kannst hören, was gemeint war.' },
-    { type: 'paragraph', text: 'WladBot in LeaderOS ist bewusst so gebaut, dass er die unteren Stufen des Zuhörens entlastet · Struktur, Zusammenfassung, Vorbereitung · ohne dir die oberen Stufen abzunehmen. In der Challenge wird deine tatsächliche Zuhör-Stufe pro 1:1-Transkript gemessen, nicht nur die Vollständigkeit deiner Notizen.' },
+    { type: 'paragraph', text: 'WLAD AI in LeaderOS ist bewusst so gebaut, dass er die unteren Stufen des Zuhörens entlastet · Struktur, Zusammenfassung, Vorbereitung · ohne dir die oberen Stufen abzunehmen. In der Challenge wird deine tatsächliche Zuhör-Stufe pro 1:1-Transkript gemessen, nicht nur die Vollständigkeit deiner Notizen.' },
   ],
   seo: {
     title: 'Warum KI dich zum schlechteren Zuhörer macht',

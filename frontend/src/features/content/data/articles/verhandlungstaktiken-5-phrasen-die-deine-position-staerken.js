@@ -47,7 +47,7 @@ export default {
 
     { type: 'framework', code: 'V·5', title: 'Die fünf Phrasen in einer Verhandlung.', explanation: 'Start: Phrase 01 ("Was ist dein Ziel?"). Wenn Gegner sich verbeißt: Phrase 02 ("Gutes Outcome?"). Wenn hartes Argument kommt: Phrase 03 ("Erzähl mir mehr"). Wenn du was zurückgeben willst: Phrase 04 ("Mein Vorschlag, skizziert"). Bei Überraschung: Phrase 05 ("Lass mich nachdenken"). Fünf Werkzeuge, jede Verhandlung, jeden Tag.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS kann jede Verhandlung vor dem Termin simulieren. Paste die Situation, er simuliert den Gegner · du übst Phrasen 01-05 in safe space, dann gehst du in echtes Gespräch. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS kann jede Verhandlung vor dem Termin simulieren. Paste die Situation, er simuliert den Gegner · du übst Phrasen 01-05 in safe space, dann gehst du in echtes Gespräch. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'harvard-verhandlungsmethode-erklaert',

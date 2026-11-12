@@ -43,7 +43,7 @@ export default {
       'EQ-stark und Rhetorik-schwach war. Die volle Geschichte steht im Case Study "Wie Lena ihre Firmenrede drehte".' },
     { type: 'heading', level: 2, text: 'Wie sich die Challenge an Engineering-Rhythmus anpasst.' },
     { type: 'list', style: 'bullet', items: [
-      'On-Call-Wochen sind erkannt: WladBot reduziert in dieser Phase die tägliche Drill-Dauer auf fünf Minuten.',
+      'On-Call-Wochen sind erkannt: WLAD AI reduziert in dieser Phase die tägliche Drill-Dauer auf fünf Minuten.',
       'Challenge-Reviews werden synchron zu deinen Engineering-Sprint-Endpunkten gelegt, nicht zu generischen Sonntagsterminen.',
       'Code-Review-Slots werden NICHT als Drill-Zeit angeschlagen. Wir respektieren technische Deep-Work-Blöcke.',
     ] },

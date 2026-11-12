@@ -45,7 +45,7 @@ The single most important file is the **canon**: every public claim
 | [`gtm/INSTAGRAM_30_DAY_PLAN.md`](./gtm/INSTAGRAM_30_DAY_PLAN.md) | 30-day Instagram plan (design-ready) |
 | [`gtm/INSTAGRAM_LAUNCH_12.md`](./gtm/INSTAGRAM_LAUNCH_12.md) | Instagram-Start: die ersten 12 Carousel-Posts (Feed-Lock), Captions, Hashtags, Tages-Routine |
 | [`gtm/INSTAGRAM_30D_READY.md`](./gtm/INSTAGRAM_30D_READY.md) | 30 Tage Instagram ab 10.10.: 188 gerenderte Assets, Postproxy-Zeitplan, Look, Freigabe |
-| [`gtm/CONTENT_TOPICS_YOUTUBE.md`](./gtm/CONTENT_TOPICS_YOUTUBE.md) | Themen-Backlog (48 Carousels) für Wlad, YouTube-Strategie mit Shorts, WladBot-Videos, Wochen-Pipeline |
+| [`gtm/CONTENT_TOPICS_YOUTUBE.md`](./gtm/CONTENT_TOPICS_YOUTUBE.md) | Themen-Backlog (48 Carousels) für Wlad, YouTube-Strategie mit Shorts, WLAD AI-Videos, Wochen-Pipeline |
 | [`gtm/MARKETING_GREATOR_2026.md`](./gtm/MARKETING_GREATOR_2026.md) | Greator 2026 campaign |
 | [`gtm/VIMEO_WORKFLOW.md`](./gtm/VIMEO_WORKFLOW.md) | Video hosting workflow |
 | [`gtm/REMOTION_VIDEO.md`](./gtm/REMOTION_VIDEO.md) | Programmatic video rendering |
@@ -64,14 +64,14 @@ lead-nurture emails (`backend/services_email.py` + `/api/cron/lead-nurture`).
 | [`app/SYSTEM_OVERVIEW.md`](./app/SYSTEM_OVERVIEW.md) | The whole system on one page |
 | [`app/APP_ARCHITECTURE.md`](./app/APP_ARCHITECTURE.md) | Frontend + backend architecture deep-dive |
 | [`app/SCHEMA.md`](./app/SCHEMA.md) | **Postgres schema** — tables, triggers, RPCs, `email_lower` contract |
-| [`app/FEEDBACK_BACKLOG.md`](./app/FEEDBACK_BACKLOG.md) | **MA-Feedback WladBot 3.0 · Triage + To-dos** (P0/P1/P2) + Sizing der Supabase-Migration |
+| [`app/FEEDBACK_BACKLOG.md`](./app/FEEDBACK_BACKLOG.md) | **MA-Feedback WLAD AI · Triage + To-dos** (P0/P1/P2) + Sizing der Supabase-Migration |
 | [`app/DASHBOARD.md`](./app/DASHBOARD.md) | Supabase Studio dashboard views |
 | [`app/IDENTITY_ARCHITECTURE.md`](./app/IDENTITY_ARCHITECTURE.md) | Cross-platform identity (`email_lower`, meta_tags, PostHog stitching) |
 | [`app/DOMAIN_TOPOLOGY.md`](./app/DOMAIN_TOPOLOGY.md) | Host-based routing: leader-os.de vs leader-check.de |
 | [`app/FINAL_TOPOLOGY.md`](./app/FINAL_TOPOLOGY.md) | Target topology |
-| [`app/RAG_KNOWLEDGE_FLOW.md`](./app/RAG_KNOWLEDGE_FLOW.md) | WladBot RAG pipeline (chunks, embeddings, match thresholds) |
+| [`app/RAG_KNOWLEDGE_FLOW.md`](./app/RAG_KNOWLEDGE_FLOW.md) | WLAD AI RAG pipeline (chunks, embeddings, match thresholds) |
 | [`app/WLAD_FEEDBACK_2026-10-28.md`](./app/WLAD_FEEDBACK_2026-10-28.md) | **Wlads Produkt-Feedback 28.10.** — Befund im Code, was geändert wurde (Tempo und SEXIER im Rollenspiel), was offen ist (Qualität, Videos, Deploy), Prüfliste nach dem Emergent-Deploy |
-| [`app/WLADBOT_OVERVIEW.md`](./app/WLADBOT_OVERVIEW.md) | WladBot product overview |
+| [`app/WLADBOT_OVERVIEW.md`](./app/WLADBOT_OVERVIEW.md) | WLAD AI product overview |
 | [`app/SUPABASE_SYNC_INTEGRATION.md`](./app/SUPABASE_SYNC_INTEGRATION.md) | Supabase ↔ Mongo sync handoff |
 
 ---

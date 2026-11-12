@@ -14,7 +14,7 @@ const AREAS_DE = [
   { path: '/dashboard', name: 'Startseite', text: 'Deine Aufgabe für heute, der Check-in und dein Stand — alles auf einen Blick.' },
   { path: '/challenge', name: '30-Tage-Programm', text: 'Eine kurze Führungsübung pro Tag, 30 Tage lang. Kein Vorwissen nötig.' },
   { path: '/daily-checkin', name: 'Check-in', text: 'Zwei Minuten am Tag festhalten, was lief — daraus lernt dein Coach, was du brauchst.' },
-  { path: '/chat', name: 'WladBot (Coach)', text: 'Stelle jede Führungsfrage. Die Antwort kommt aus Wlads Material und passt zu deiner Lage.' },
+  { path: '/chat', name: 'WLAD AI (Coach)', text: 'Stelle jede Führungsfrage. Die Antwort kommt aus Wlads Material und passt zu deiner Lage.' },
   { path: '/kurse', name: 'Kurse', text: 'Kurze Videofolgen von Wlad, jede unter 12 Minuten. Folge 1 jedes Kurses ist frei.' },
   { path: '/simulations', name: 'Gesprächs-Training', text: 'Übe schwierige Gespräche mit einem KI-Gegenüber, das zurückredet — ohne echtes Risiko.' },
   { path: '/challengers', name: 'Challengers', text: 'Bekannte Persönlichkeiten stellen dir unangenehme Fragen. Gutes Training für Druck.' },
@@ -36,7 +36,7 @@ export default function WhatIsWhatPage() {
     path: '/was-ist-was',
     title: de ? 'Was ist was? · Leader-OS' : 'What is what? · Leader-OS',
     description: de
-      ? 'Ein Satz pro Bereich: Startseite, 30-Tage-Programm, WladBot, Kurse, Gesprächs-Training und mehr.'
+      ? 'Ein Satz pro Bereich: Startseite, 30-Tage-Programm, WLAD AI, Kurse, Gesprächs-Training und mehr.'
       : 'One sentence per area of Leader-OS.',
   });
   const areas = de ? AREAS_DE : AREAS_EN;

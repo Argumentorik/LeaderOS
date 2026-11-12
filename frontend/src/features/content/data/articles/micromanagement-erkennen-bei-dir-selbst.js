@@ -29,7 +29,7 @@ export default {
     { type: 'heading', level: 2, text: 'Der konkrete Test für diese Woche.' },
     { type: 'paragraph', text: 'Wähle eine einzige Aufgabe, die du diese Woche normalerweise engmaschig begleiten würdest. Delegiere sie mit klarem Ergebnis und Deadline · und vereinbare genau einen Check-in-Punkt, nicht mehr. Halte dich strikt daran, auch wenn sich die Unruhe meldet. Das Ergebnis ist meistens überraschend: schlechter als dein eigener Feinschliff, aber besser als du erwartet hast · und dein Mitarbeiter hat in dieser einen Woche mehr echte Verantwortung übernommen als in den drei Monaten davor.' },
     { type: 'callout', tone: 'lime', text: 'Kontrolle fühlt sich für dich an wie Sicherheit. Für dein Team fühlt sie sich an wie Misstrauen. Beides ist gleichzeitig wahr · deshalb ändert sich nichts, bis du es aktiv adressierst.' },
-    { type: 'paragraph', text: 'In der LeaderOS-Challenge wird Delegationsverhalten gezielt anhand echter Aufgaben aus deinem Alltag trainiert · WladBot spiegelt dir, an welcher Stelle deine Aufträge noch Methode statt Ergebnis vorgeben, bevor du sie überhaupt losschickst.' },
+    { type: 'paragraph', text: 'In der LeaderOS-Challenge wird Delegationsverhalten gezielt anhand echter Aufgaben aus deinem Alltag trainiert · WLAD AI spiegelt dir, an welcher Stelle deine Aufträge noch Methode statt Ergebnis vorgeben, bevor du sie überhaupt losschickst.' },
   ],
   seo: {
     title: 'Micromanagement bei sich selbst erkennen: 6 Anzeichen',

@@ -33,7 +33,7 @@ export default {
     ] },
     { type: 'framework', code: 'GEHALT', title: 'Beide-Seiten-Skript', explanation: 'Mitarbeiter: drei Daten-Quellen, Eröffnung mit Daten nicht Wunsch, konkreter Vorschlag. Führungskraft: zwei Tage Bedenkzeit, Daten-Prüfung, Antwort mit konkretem Plan (Ja / Nein / Gegenvorschlag) · niemals improvisiert.' },
     { type: 'callout', tone: 'lime', text: 'Gehaltsgespräche sind nicht emotionale Verhandlungen · sie sind Daten-Verhandlungen mit emotionaler Konsequenz. Wer Daten ignoriert, scheitert. Wer Emotionen ignoriert, scheitert ebenfalls.' },
-    { type: 'paragraph', text: 'In der Challenge drillst du Gehaltsgespräche an deinen drei realsten Cases · als Mitarbeiter ODER als Führungskraft je nach Diagnose-Profil. WladBot spielt das Gegenüber mit den wahrscheinlichen Einwänden.' },
+    { type: 'paragraph', text: 'In der Challenge drillst du Gehaltsgespräche an deinen drei realsten Cases · als Mitarbeiter ODER als Führungskraft je nach Diagnose-Profil. WLAD AI spielt das Gegenüber mit den wahrscheinlichen Einwänden.' },
   ],
   seo: {
     title: 'Gehaltsgespräch vorbereiten: Skript für beide Seiten',

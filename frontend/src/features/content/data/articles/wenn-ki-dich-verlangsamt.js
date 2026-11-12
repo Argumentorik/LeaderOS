@@ -29,7 +29,7 @@ export default {
       'Du fühlst dich generischer im Output. Dein Team merkt es als "die Firmenrede klang heute anders".',
     ] },
     { type: 'callout', tone: 'lime', text: 'Bewusste Nicht-Nutzung ist genauso wichtig wie bewusste Nutzung. Wer alles in KI verlagert, verliert seine eigene Stimme.' },
-    { type: 'paragraph', text: 'In der Challenge trainierst du explizit diese Trennlinie. WladBot wird dich aktiv warnen wenn du gerade einen Anti-Slot in ein Drill schiebst · und dir vorschlagen statt KI eine menschliche Konversation zu führen.' },
+    { type: 'paragraph', text: 'In der Challenge trainierst du explizit diese Trennlinie. WLAD AI wird dich aktiv warnen wenn du gerade einen Anti-Slot in ein Drill schiebst · und dir vorschlagen statt KI eine menschliche Konversation zu führen.' },
   ],
   seo: {
     title: 'Wann KI dich verlangsamt: 4 Situationen ohne KI',

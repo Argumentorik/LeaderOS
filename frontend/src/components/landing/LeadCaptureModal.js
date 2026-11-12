@@ -313,7 +313,7 @@ export const LeadCaptureModal = () => {
 
               <p className="mt-4 text-[14px] md:text-[14.5px] leading-[1.55] text-foreground/75 text-center md:text-left">
                 Du loggst dich ein, du arbeitest mit dem System, du entscheidest.{' '}
-                <span className="text-foreground font-bold">11 Frameworks, WladBot 24/7, voller Plattform-Zugang</span> · vierzehn Tage lang.
+                <span className="text-foreground font-bold">11 Frameworks, WLAD AI 24/7, voller Plattform-Zugang</span> · vierzehn Tage lang.
                 Erst wenn es für dich passt, machst du weiter.
               </p>
 
@@ -321,7 +321,7 @@ export const LeadCaptureModal = () => {
               <div className="mt-5 grid grid-cols-3 gap-2 border-y-2 border-foreground py-3.5">
                 {[
                   { nr: '01', label: 'TRIAL',      value: '14 TAGE',  sub: 'KOSTENLOS', highlight: true },
-                  { nr: '02', label: 'COACH',      value: '24/7',     sub: 'WLADBOT' },
+                  { nr: '02', label: 'COACH',      value: '24/7',     sub: 'WLAD AI' },
                   { nr: '03', label: 'ZERTIFIKAT', value: '0001',     sub: 'LINKEDIN' },
                 ].map(({ nr, label, value, sub, highlight }) => (
                   <div key={nr} className={`text-center px-1 py-1 ${highlight ? 'bg-brand/10 border border-brand' : ''}`}>

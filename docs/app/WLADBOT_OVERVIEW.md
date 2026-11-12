@@ -1,6 +1,6 @@
-# WladBot — How It Works (One-Page Overview)
+# WLAD AI — How It Works (One-Page Overview)
 
-> Du fragst → WladBot weiß was er ist (Theory oder Speech) → holt Wlads
+> Du fragst → WLAD AI weiß was er ist (Theory oder Speech) → holt Wlads
 > echtes Wissen aus der Datenbank → antwortet in Wlads Ton.
 
 ## Der Flow in 4 Schritten
@@ -141,7 +141,7 @@ User:   Maria's tatsächliche Frage
 
 → Claude Haiku 4.5 → Antwort in unter 3 Sekunden.
 
-## Wo WladBot überall lebt
+## Wo WLAD AI überall lebt
 
 | Surface | Endpoint | Datei | Status |
 |---|---|---|---|

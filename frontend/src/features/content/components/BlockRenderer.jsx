@@ -182,7 +182,7 @@ export const BlockRenderer = ({ block, articleSlug, articleUrl, articleTitle }) 
     );
   }
   // Embedded problem-capture block (Growth-Loop Layer 2) · routes the
-  // reader's situation through the Intent Schema Layer into WladBot.
+  // reader's situation through the Intent Schema Layer into WLAD AI.
   if (block.type === 'diagnostic') {
     const { InlineDiagnostic } = require('./InlineDiagnostic');
     return (

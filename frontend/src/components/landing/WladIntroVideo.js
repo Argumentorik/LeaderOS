@@ -20,7 +20,7 @@ const CUES = [
   { start: 0.5,  end: 5.0,  eyebrow: '▸ 3× SPIEGEL-BESTSELLER-AUTOR', headline: 'Hi, ich bin',       accent: 'Wlad' },
   { start: 5.5,  end: 11,   eyebrow: '▸ WAS WIR LÖSEN',              headline: 'KI bestimmt das Tempo.', accent: 'Du den Kurs.' },
   { start: 11.5, end: 18,   eyebrow: '▸ ZEHN MINUTEN',               headline: 'Diagnose.',         accent: 'Kostenlos.' },
-  { start: 18.5, end: 24,   eyebrow: '▸ POWERED BY',                 headline: 'WladBot.',          accent: '24 / 7' },
+  { start: 18.5, end: 24,   eyebrow: '▸ POWERED BY',                 headline: 'WLAD AI.',          accent: '24 / 7' },
 ];
 
 const Cue = ({ cue }) => (

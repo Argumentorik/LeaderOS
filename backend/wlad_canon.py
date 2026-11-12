@@ -125,7 +125,7 @@ CANON: list[dict] = [
 _MAX_ENTRIES = 3
 
 _NAME_RULE = (
-    "NAMENSREGEL: Der Coach heißt „Wlad\" (Wlad Jachtchenko), das Produkt „WladBot\". "
+    "NAMENSREGEL: Der Coach heißt „Wlad\" (Wlad Jachtchenko), das Produkt „WLAD AI\". "
     "Schreibe NIEMALS „Vlad\", „Vladimir\" oder „Wladimir\" — auch nicht, wenn die "
     "Spracherkennung es so geliefert hat."
 )

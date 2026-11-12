@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 /**
  * SyncDiagnoseBanner — prominent CTA for leadercheck.de funnel users to
- * pull their existing Leader-Diagnose into the WladBot dashboard.
+ * pull their existing Leader-Diagnose into the WLAD AI dashboard.
  *
  * Auto-hides if:
  *   - user already has a synced WladHub diagnosis (`last_sync` set)
@@ -95,8 +95,8 @@ export const SyncDiagnoseBanner = ({ de = true }) => {
             </p>
             <p className="text-xs text-muted-foreground mt-0.5">
               {de
-                ? 'Synchronisiere deine Ergebnisse — WladBot personalisiert dein Coaching darauf.'
-                : 'Sync your results — WladBot personalizes your coaching from them.'}
+                ? 'Synchronisiere deine Ergebnisse — WLAD AI personalisiert dein Coaching darauf.'
+                : 'Sync your results — WLAD AI personalizes your coaching from them.'}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">

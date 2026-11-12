@@ -73,7 +73,7 @@ ohne dass der Feed wie Werbung wirkt.
 | 23 | Reel | Schlagfertigkeit im KI-Zeitalter | Eine Angriffs-Phrase, eine Verteidigung, live gespielt | `/journal/schlagfertigkeit-im-ki-zeitalter` |
 | 24 | Static-Zahl | 3× TEDx · 3× SPIEGEL-Bestseller | Chrome-Badge-Grafik, minimal, Autoritäts-Anker | **Funnel-CTA:** `/fuehrung-beginnt-hier` |
 | 25 | Reel | Storytelling für Führungskräfte | Die Pixar-Formel in 30 Sekunden erklärt | `/journal/storytelling-fuer-fuehrungskraefte-pixar-formel` |
-| 26 | Carousel | Der 30-Tage-Sprint erklärt | Was in LeaderOS drinsteckt — 11 Frameworks, WladBot 24/7, Zertifikat 0001 | `/#pricing` (Sprint-Karte) |
+| 26 | Carousel | Der 30-Tage-Sprint erklärt | Was in LeaderOS drinsteckt — 11 Frameworks, WLAD AI 24/7, Zertifikat 0001 | `/#pricing` (Sprint-Karte) |
 | 27 | Reel | Vier-Farben-Modell | Wie du in 10 Sekunden erkennst, mit welchem Typ du sprichst | `/journal/vier-farben-modell-personalities` |
 | 28 | Carousel | 30 Tage in Zahlen | Recap-Karussell: alle 4 Wochen-Themen in 8 Slides — „Was du jetzt kannst" | `/fuehrung-beginnt-hier` |
 | 29 | Reel | Die häufigste Frage der letzten 30 Tage | Community-Frage aus den Kommentaren beantworten (Social Proof durch echten Dialog) | Journal-Artikel passend zur Frage |

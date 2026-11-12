@@ -9,12 +9,12 @@ import { ArrowUpRight } from 'lucide-react';
  * band so the claim never rests on our own words.
  *
  * Copy discipline: no personal-delivery promises ("mit Wlad") — the
- * product is the system: courses, WladBot, live formats, access.
+ * product is the system: courses, WLAD AI, live formats, access.
  */
 
 const DELIVERABLES = [
   ['K·01', 'KURSE', '11 Framework-Kurse', 'Alle elf Wlad-Frameworks als drillbare Kurse · Harvard-Verhandlung, BWW-Feedback, 5 Rollen, Dunkle-Rhetorik-Defensive u. a.'],
-  ['K·02', 'KI-COACH', 'WladBot 24/7', 'Trainiert auf 13 Büchern und 15 Jahren Methodik · Text + Voice, Antwort in Sekunden, kennt deine Challenge-Historie.'],
+  ['K·02', 'KI-COACH', 'WLAD AI 24/7', 'Trainiert auf 13 Büchern und 15 Jahren Methodik · Text + Voice, Antwort in Sekunden, kennt deine Challenge-Historie.'],
   ['K·03', 'VIDEO', 'Lernvideo-Bibliothek', 'Tägliche Lernvideos plus die komplette Kurs-Bibliothek · strukturierte Pfade statt Playlist-Chaos.'],
   ['K·04', 'LIVE', 'Monatliche Live-Sessions', 'Geschlossene Live-Sessions im kleinen Kreis · echte Fälle, Q&A, ungeschnitten.'],
   ['K·05', 'DRILL', 'Drill-Channel', 'Theorie sofort am echten Fall: deine Situationen werden im Channel seziert und gedrillt.'],

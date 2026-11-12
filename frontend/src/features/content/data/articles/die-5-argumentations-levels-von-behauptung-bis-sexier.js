@@ -45,7 +45,7 @@ export default {
     { type: 'paragraph', text:
       'Stell dir vor jeder wichtigen Aussage eine Frage: Wie viel Widerstand erwarte ich? Nicken alle — Level 1, weiter im Text. Zögert die Hälfte — Level 2 mit einem starken Beispiel. Steht eine Entscheidung auf dem Spiel, bei der jemand etwas verliert — Level 4, vollständig durchgezogen. Und wenn jemand öffentlich seine Meinung ändern soll: Level 5, gut vorbereitet, nie improvisiert.' },
     { type: 'paragraph', text:
-      'In der LeaderOS-Challenge drillst du die Level-Wahl an deinen echten Fällen: WladBot fragt nach deiner These, schätzt mit dir den Widerstand ein und baut das Argument auf dem passenden Level — inklusive Rebuttal auf den Einwand, der in deinem Meeting wirklich kommen wird.' },
+      'In der LeaderOS-Challenge drillst du die Level-Wahl an deinen echten Fällen: WLAD AI fragt nach deiner These, schätzt mit dir den Widerstand ein und baut das Argument auf dem passenden Level — inklusive Rebuttal auf den Einwand, der in deinem Meeting wirklich kommen wird.' },
   ],
   seo: {
     title: 'Die 5 Argumentations-Levels nach Wlad Jachtchenko',

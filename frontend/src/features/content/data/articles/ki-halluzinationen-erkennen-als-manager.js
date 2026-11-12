@@ -42,7 +42,7 @@ export default {
 
     { type: 'paragraph', text: 'In meiner Praxis: 1 von 8 Coaching-Sessions hat irgendwann den Moment wo der Klient mir eine "Statistik" vorliest die die KI erfunden hat. Sie wirken plausibel, sind aber Müll. Ein Klient hat in einem Investor-Pitch eine Zahl gebracht die nicht existierte · der Investor wusste es. Das war das Ende des Pitches.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS ist auf Methodik-Wissen aus Wlads tatsächlichen 600 Lektionen trainiert, mit Source-Pointers. Wenn er nicht weiß, sagt er nicht "ich glaube" · er sagt "ich kann das nicht verifizieren". Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS ist auf Methodik-Wissen aus Wlads tatsächlichen 600 Lektionen trainiert, mit Source-Pointers. Wenn er nicht weiß, sagt er nicht "ich glaube" · er sagt "ich kann das nicht verifizieren". Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'ki-tools-fuer-fuehrungskraefte-2026',

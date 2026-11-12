@@ -247,15 +247,15 @@ export const POST_SERIES = [
     format: 'square',
     platform: 'instagram',
     variant: 'headline',
-    bib: 'WLADBOT · 0001',
+    bib: 'WLAD AI · 0001',
     eyebrow: 'BENEFIT 02 · IMMER WACH',
     headline: '24 Stunden.',
     accent: '7 Tage.',
     body: 'Dein KI-Coach wartet nicht bis Montag.',
-    foot: 'WladBot · leader-check.de',
+    foot: 'WLAD AI · leader-check.de',
     caption:
       '24 Stunden. 7 Tage. Dein KI-Coach wartet nicht bis Montag.\n\n' +
-      'WladBot kennt Wlads Methodik in- und auswendig. Antwortet in ' +
+      'WLAD AI kennt Wlads Methodik in- und auswendig. Antwortet in ' +
       'Wlads Stimme, mit Wlads Frameworks, auf deine konkrete ' +
       'Leadership-Situation · in unter 3 Sekunden.\n\n' +
       'Kostenlose Probe auf leader-check.de.',
@@ -291,7 +291,7 @@ export const POST_SERIES = [
     accent: 'Du wirst Teil von etwas.',
     body: 'Sechs Bausteine. Eine Begleitung.',
     rows: [
-      ['BOT', 'WLADBOT',        '24/7 Coach in Wlads Stimme'],
+      ['BOT', 'WLAD AI',        '24/7 Coach in Wlads Stimme'],
       ['VID', 'LERNVIDEOS',     'Jeden Tag eine neue Lektion'],
       ['LIV', 'LIVE-SESSIONS',  'Monatlich · live · ungeschnitten'],
       ['CLS', 'COMMUNITY',       'Privater Channel · für alle Mitglieder'],
@@ -301,7 +301,7 @@ export const POST_SERIES = [
     foot: 'leader-os.de',
     caption:
       'Du lernst nicht allein. Du wirst Teil von etwas.\n\n' +
-      'WladBot ist der Anfang. Dahinter: tägliche Lernvideos, Live-' +
+      'WLAD AI ist der Anfang. Dahinter: tägliche Lernvideos, Live-' +
       'Sessions mit Wlad, die Community im privaten Channel, ' +
       'monatliche Strategie-Calls · und ein Zertifikat, das zeigt, ' +
       'wer du geworden bist.\n\n' +

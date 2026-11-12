@@ -52,7 +52,7 @@ const CopyMessageButton = ({ text, de }) => {
   );
 };
 
-/* Iter 92.58: tasks are opt-in — WladBot suggests, the user clicks to accept. */
+/* Iter 92.58: tasks are opt-in — WLAD AI suggests, the user clicks to accept. */
 const TasksSuggestion = ({ tasks, sessionId, de }) => {
   const [state, setState] = useState('idle'); // idle | saving | done
   const accept = async () => {
@@ -97,7 +97,7 @@ const TasksSuggestion = ({ tasks, sessionId, de }) => {
 };
 
 /* Iter 92.58 (Grok-style): clickable follow-up questions — one click deepens
-   the conversation, WladBot has already "prepared" the direction. */
+   the conversation, WLAD AI has already "prepared" the direction. */
 const FollowUpChips = ({ questions, onSuggest, de }) => (
   <div className="flex flex-wrap gap-2 pt-1" data-testid="chat-followup-chips">
     {questions.slice(0, 3).map((q, i) => (
@@ -118,14 +118,14 @@ const UserMessage = ({ content, modality, pdf }) => (
   <div className="flex justify-end mb-4 animate-fade-in" data-testid="chat-user-message">
     <div className="flex flex-col items-end gap-1 max-w-[70%]">
       {/* Iter 137: das Dokument haengt sichtbar an der Nachricht — der User
-          sieht, dass WladBot es wirklich gelesen hat. */}
+          sieht, dass WLAD AI es wirklich gelesen hat. */}
       {pdf && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#BFFF00]/10 border border-[#BFFF00]/25" data-testid="chat-message-attachment">
           <FileText size={13} className="text-[#6B8A00] dark:text-[#BFFF00] shrink-0" />
           <div className="min-w-0">
             <p className="text-[11px] font-bold truncate max-w-[220px]">{pdf.filename}</p>
             <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">
-              {pdf.pages ? `${pdf.pages} Seiten gelesen` : 'gelesen'} · von WladBot ausgewertet
+              {pdf.pages ? `${pdf.pages} Seiten gelesen` : 'gelesen'} · von WLAD AI ausgewertet
             </p>
           </div>
         </div>

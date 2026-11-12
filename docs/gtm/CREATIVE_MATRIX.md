@@ -93,7 +93,7 @@ sind) und als Cold-Ads (Autorität ohne Werbeversprechen).
 | --- | --- |
 | C01 | 3× SPIEGEL-Bestseller, 13 Bücher |
 | C02 | Über 400.000 Klienten seit 2007 |
-| C03 | WladBot zitiert aus Wlads Werk — nicht aus dem Internet |
+| C03 | WLAD AI zitiert aus Wlads Werk — nicht aus dem Internet |
 
 ### D · Produkt · 3 Angles → Hot
 

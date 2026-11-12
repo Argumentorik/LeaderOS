@@ -64,7 +64,7 @@ export default function TasksPage() {
     setGenerating(true);
     try {
       const res = await api.post('/tasks/generate');
-      toast.success(lang === 'de' ? `${res.data.created} KI-Aufgaben von WladBot erstellt` : `${res.data.created} AI tasks created by WladBot`);
+      toast.success(lang === 'de' ? `${res.data.created} KI-Aufgaben von WLAD AI erstellt` : `${res.data.created} AI tasks created by WLAD AI`);
       loadTasks();
     } catch (err) {
       logger.error(err);
@@ -267,7 +267,7 @@ export default function TasksPage() {
           {filtered.length === 0 && (
             <div className="text-center py-16 text-muted-foreground">
               <ListChecks size={40} className="mx-auto mb-3 opacity-20" />
-              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Lass WladBot welche für dich generieren!' : 'No tasks yet. Let WladBot generate some for you!'}</p>
+              <p className="font-medium">{lang === 'de' ? 'Noch keine Aufgaben. Lass WLAD AI welche für dich generieren!' : 'No tasks yet. Let WLAD AI generate some for you!'}</p>
               <Button onClick={generateAiTasks} disabled={generating} className="mt-4 bg-[#BFFF00] text-[#0A0A0A] font-black" data-testid="empty-generate-btn">
                 {generating ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
                 {lang === 'de' ? 'KI-Aufgaben generieren' : 'Generate AI tasks'}
@@ -301,7 +301,7 @@ export default function TasksPage() {
                           <p className={`text-sm font-semibold ${isOpen ? 'whitespace-pre-wrap break-words' : ''} ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
                           {task.source === 'ai_coach' && (
                             <span className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-wider text-[#4A6200] dark:text-[#BFFF00] bg-[#BFFF00]/10 px-1.5 py-0.5 rounded-full border border-[#BFFF00]/20 shrink-0 mt-0.5" data-testid="wladbot-task-badge">
-                              <Sparkles size={8} /> von WladBot
+                              <Sparkles size={8} /> von WLAD AI
                             </span>
                           )}
                         </div>

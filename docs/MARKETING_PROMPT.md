@@ -11,7 +11,7 @@
 
 ## 🚀 Was Leader-OS heute kann (Iter 92.24 · Juni 2026)
 
-### 1. **WladBot — Dein 24/7 KI-Leadership-Coach**
+### 1. **WLAD AI — Dein 24/7 KI-Leadership-Coach**
 - GPT-5.2-powered Chat-Agent, der Wlads komplette Methodik (1.605 RAG-Chunks aus Büchern, Live-Calls, Frameworks) kennt: **3 Säulen (Logos/Ethos/Pathos)**, **SEXIER-Format**, **Kommunikationsquadrant**, **Schwarze & Weiße Rhetorik**, **Eisenhower**, **ALPEN**, **5 Argumentorik-Rollen**.
 - **Voice-Mode** mit ElevenLabs "Adam"-Stimme — Wlad spricht zu dir natürlich, kein Chipmunk-Effekt.
 - **Folder-System** (Wingman-/OpenClaw-Style): Strukturierte Workspaces pro Thema ("Boardroom Q2", "Diversity-Pitch", "Schwieriges Mitarbeitergespräch"). Der Agent kennt den Kontext **bevor du fragst**.
@@ -111,7 +111,7 @@ SEO: Keyword im H1, in den ersten 100 Wörtern und in min. 2 H2s. Internal-Link 
 
 ### C. **Midjourney / Nano-Banana Image-Prompt**
 ```
-Premium dark-mode UI screenshot, brand color neon lime #BFFF00 on deep black #0A0A0A, glass-morphism cards with 18px backdrop blur, Aurora glow in lime + soft violet (#7C3AED at 8% opacity) behind a centered hero card. Outfit Display typography for big numbers (score 87/100), Inter for body. NO purple-gradient cliché. NO stock photo people. Show: WladBot W-mark logo top-left, real German leader using a video-recording mission, score-tile grid with 3 lime accents. Aspect ratio 16:9, 4K, Apple/Tesla product page aesthetic. Style refs: Linear.app dashboard + Vercel landing page + Revolut metal card.
+Premium dark-mode UI screenshot, brand color neon lime #BFFF00 on deep black #0A0A0A, glass-morphism cards with 18px backdrop blur, Aurora glow in lime + soft violet (#7C3AED at 8% opacity) behind a centered hero card. Outfit Display typography for big numbers (score 87/100), Inter for body. NO purple-gradient cliché. NO stock photo people. Show: WLAD AI W-mark logo top-left, real German leader using a video-recording mission, score-tile grid with 3 lime accents. Aspect ratio 16:9, 4K, Apple/Tesla product page aesthetic. Style refs: Linear.app dashboard + Vercel landing page + Revolut metal card.
 ```
 
 ### D. **Sora 2 / Video Brief**

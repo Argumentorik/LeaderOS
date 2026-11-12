@@ -1,7 +1,7 @@
 import { Sparkles } from 'lucide-react';
 
 /**
- * WladBotAvatar — the ONE avatar users see everywhere WladBot speaks.
+ * WladBotAvatar — the ONE avatar users see everywhere WLAD AI speaks.
  *
  * Iter 92.48: global rollout (chat, emails, challengers).
  * Iter 92.50 (Mert · GODMODE): `live` variant — realistic presence:
@@ -17,7 +17,7 @@ import { Sparkles } from 'lucide-react';
  *   <WladBotAvatar size={64} pulse />    → typing pulse
  *   <WladBotAvatar size={56} live />     → "he's really here" presence
  */
-// Iter 135.1 (Wlad-Direktive): sauberer Gesichts-Ausschnitt des WladBot-
+// Iter 135.1 (Wlad-Direktive): sauberer Gesichts-Ausschnitt des WLAD AI-
 // Charakters von leadercheck.de. Das transparente Ganzkörper-PNG wurde in
 // kleinen Rahmen (Chat, 28-32 px) zu einem dunklen Punkt.
 const AVATAR_SRC = '/wladbot-avatar-clean.png';
@@ -28,7 +28,7 @@ export const WladBotAvatar = ({
   pulse = false,
   live = false,
   className = '',
-  alt = 'WladBot',
+  alt = 'WLAD AI',
 }) => {
   const px = `${size}px`;
   const ringCls = ring ? 'ring-2 ring-[#BFFF00]/40' : '';

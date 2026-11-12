@@ -36,7 +36,7 @@ Ohne Bindestrich    →  App (echte Action)   →  Emergent  →  Emergent-Proje
 |---|---|---|---|
 | `leader-os.de` | Vercel | Nike-DNA Marketing-Landing | shipos `mvpcode` |
 | `leader-check.de` | Vercel | Diagnostic Marketing-Landing | shipos `mvpcode` |
-| `leaderos.de` | Emergent | App: Login + Dashboard + WladBot + Coaching | Emergent Projekt A |
+| `leaderos.de` | Emergent | App: Login + Dashboard + WLAD AI + Coaching | Emergent Projekt A |
 | `leadercheck.de` | Emergent | App: Diagnose-Quiz + Score + Lead-Capture | Emergent Projekt B |
 
 ## CTA-Fluss
@@ -86,7 +86,7 @@ nicht von der React-Landing serviert, sondern von Emergent direkt.
 | "Diagnose starten" | überall im Funnel | `https://leadercheck.de/` |
 | "Login" | LandingNav | `https://leaderos.de/login` |
 | "Sprint starten" | Pricing, Final-CTA | `https://leaderos.de/checkout?tier=sprint` |
-| "WladBot starten" | Hero-Sub-CTA | `https://leaderos.de/chat` |
+| "WLAD AI starten" | Hero-Sub-CTA | `https://leaderos.de/chat` |
 
 ## Supabase Auth Allowlist
 

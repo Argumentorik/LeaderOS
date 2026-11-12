@@ -30,7 +30,7 @@ export default {
     { type: 'heading', level: 2, text: 'Anwendung im Kunden-Call.' },
     { type: 'paragraph', text: 'Ein Kunden-Einwand "Ihr seid zu teuer" ist selten reine Sache. Selbstoffenbarung "ich muss mein Budget verteidigen". Beziehung "ich will dir vertrauen können". Appell "gib mir einen Grund dich zu wählen". Wer nur den Preis rechtfertigt, hat den Call verloren.' },
     { type: 'callout', tone: 'lime', text: 'Wer als Führungskraft die vier Ebenen aktiv liest, kommuniziert nicht bewusster · er hört bewusster. Das ist der eigentliche Hebel.' },
-    { type: 'paragraph', text: 'In der Challenge übst du die Vier-Ebenen-Diagnose an dreißig deiner echten Konversationen. WladBot zeigt dir wo deine letzte Botschaft auf welcher Ebene gelandet ist · und wo du eine andere Ebene hättest priorisieren sollen.' },
+    { type: 'paragraph', text: 'In der Challenge übst du die Vier-Ebenen-Diagnose an dreißig deiner echten Konversationen. WLAD AI zeigt dir wo deine letzte Botschaft auf welcher Ebene gelandet ist · und wo du eine andere Ebene hättest priorisieren sollen.' },
   ],
   seo: {
     title: 'Schulz von Thun: Kommunikationsquadrat + Beispiele',

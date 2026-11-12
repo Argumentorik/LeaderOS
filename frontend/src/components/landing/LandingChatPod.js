@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 /**
- * LandingChatPod · editorial WladBot-Mini, eingebettet als Funnel.
+ * LandingChatPod · editorial WLAD AI-Mini, eingebettet als Funnel.
  *
  * KEIN echter Chat-mit-LLM. Ein scripted Funnel im Specimen-Stil,
  * der den Besucher in 4–6 Mikro-Fragen qualifiziert und am Ende
@@ -31,7 +31,7 @@ import { AnimatePresence, motion } from 'framer-motion';
  *   - Editorial Specimen-Pod: schwarze Canvas, Hairline-Borders,
  *     Mono BIB-Header, Outfit-Italic-Headline, Lime-Akzent.
  *   - Floating Launcher rechts unten · pulsierender Lime-Punkt +
- *     "▸ FRAG WLADBOT" Mono-Caption.
+ *     "▸ FRAG WLAD AI" Mono-Caption.
  *   - Drawer von rechts auf Desktop, Bottom-Sheet auf Mobile.
  *   - Tippen-Indikator: 3 Lime-Punkte mit Stagger.
  *   - Answer-Chips als Pills (kein Free-Text bis am Ende E-Mail).
@@ -43,7 +43,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const FLOWS = {
   lead: {
-    bib: 'WLADBOT · MINI · LEAD',
+    bib: 'WLAD AI · MINI · LEAD',
     opener: 'Kurz: 4 Fragen. Dann sag ich dir, was dein nächster Schritt ist.',
     steps: [
       {
@@ -118,7 +118,7 @@ const FLOWS = {
     ],
   },
   readiness: {
-    bib: 'WLADBOT · MINI · READINESS',
+    bib: 'WLAD AI · MINI · READINESS',
     opener: '4 schnelle Fragen · dann zeige ich dir wo du startest.',
     steps: [
       {
@@ -232,7 +232,7 @@ const BotBubble = ({ children }) => (
     className="max-w-[88%] mr-auto"
   >
     <div className="text-[8.5px] font-bold uppercase tracking-[0.22em] text-brand font-mono mb-1.5">
-      ▸ WLADBOT
+      ▸ WLAD AI
     </div>
     <div className="px-4 py-3 border border-white/[0.12] bg-white/[0.02] text-[14px] leading-[1.5] text-white/90">
       {children}
@@ -381,7 +381,7 @@ export const LandingChatPod = ({ mode = 'lead' }) => {
               <span className="relative w-2.5 h-2.5 rounded-full bg-brand" />
             </span>
             <span className="text-[11px] font-black uppercase tracking-[0.24em] font-mono text-left leading-tight">
-              ▸ FRAG WLADBOT<br />
+              ▸ FRAG WLAD AI<br />
               <span className="text-white/80 tracking-[0.2em] font-bold">
                 {mode === 'readiness' ? 'Readiness in 60 Sek.' : 'Was passt zu dir?'}
               </span>
@@ -427,7 +427,7 @@ export const LandingChatPod = ({ mode = 'lead' }) => {
                     className="text-[20px] leading-[1.05] tracking-[-0.02em] mb-2 text-white"
                     style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontStyle: 'italic' }}
                   >
-                    Hi, ich bin WladBot<span className="text-brand">.</span>
+                    Hi, ich bin WLAD AI<span className="text-brand">.</span>
                   </p>
                   <p className="text-white/75">{flow.opener}</p>
                 </BotBubble>

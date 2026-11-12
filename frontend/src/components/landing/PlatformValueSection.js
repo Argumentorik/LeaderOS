@@ -22,7 +22,7 @@ const FEATURES = [
   {
     bib: 'P·01',
     icon: Bot,
-    title: 'WladBot · 24/7',
+    title: 'WLAD AI · 24/7',
     headline: 'Dein KI-Sparring-Partner.',
     body:
       'Trainiert auf Wlads Methodik aus 400 000 Coachings. Verfügbar ' +
@@ -204,7 +204,7 @@ export const PlatformValueSection = () => (
               <span className="text-brand not-italic">.</span>
             </h3>
             <p className="mt-4 text-[14.5px] md:text-[16px] leading-[1.6] text-white/75 max-w-2xl mx-auto md:mx-0">
-              Volle Plattform · alle sechs Module · WladBot 24/7 · keine Karte
+              Volle Plattform · alle sechs Module · WLAD AI 24/7 · keine Karte
               nötig. Du loggst dich ein, du arbeitest mit dem System, du
               entscheidest. Erst wenn es für dich passt, geht es in die Challenge.
             </p>

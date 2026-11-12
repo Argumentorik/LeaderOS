@@ -32,18 +32,18 @@ export default {
     { type: 'heading', level: 2, text: 'Was LeaderOS ist.' },
     { type: 'paragraph', text:
       'LeaderOS ist kein Kurs. Es ist ein Operating System für Führungskräfte. Drei Schichten greifen ineinander: ' +
-      'die elf Wlad-Frameworks als Methodik, der WladBot als 24/7-Sparrings-Partner, eine 30-Tage-Challenge die diese ' +
+      'die elf Wlad-Frameworks als Methodik, der WLAD AI als 24/7-Sparrings-Partner, eine 30-Tage-Challenge die diese ' +
       'beiden in einen Reflex verwandelt. Jede Schicht alleine ist hilfreich. Erst zusammen entsteht das System.' },
     { type: 'framework', code: 'OS', title: 'Drei Schichten',
       explanation:
         'Schicht 1: Methodik. Elf Frameworks von SEXIER bis ALPEN, jeder ist im echten Coaching erprobt. ' +
-        'Schicht 2: KI-Coach. WladBot ist auf 2200 Wlad-Lektionen trainiert und kennt deinen Challenge-Score. ' +
+        'Schicht 2: KI-Coach. WLAD AI ist auf 2200 Wlad-Lektionen trainiert und kennt deinen Challenge-Score. ' +
         'Schicht 3: Challenge. 30 Tage täglicher Drill, der die Frameworks in deine Reflex-Bibliothek brennt.' },
     { type: 'heading', level: 2, text: 'Was LeaderOS nicht ist.' },
     { type: 'list', style: 'bullet', items: [
       'Kein Selbsthilfe-Kurs mit Videos die du nie öffnest.',
       'Kein Coaching-Marketplace mit anonymen Coaches und schwankender Qualität.',
-      'Kein Chatbot der dir gefällige Antworten gibt · WladBot drillt dich gegen Wlads Methodik, auch wenn es unbequem wird.',
+      'Kein Chatbot der dir gefällige Antworten gibt · WLAD AI drillt dich gegen Wlads Methodik, auch wenn es unbequem wird.',
       'Kein Tool für Anfänger ohne Verantwortung. Wir bauen für Menschen die heute schon Teams führen und morgen mehr verlangen.',
     ] },
     { type: 'callout', tone: 'lime', text:

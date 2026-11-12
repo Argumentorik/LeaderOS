@@ -236,7 +236,7 @@ async def get_rating_preferences(request: Request):
     })
     return prefs
 
-VIDEO_ANALYSIS_PROMPT = """Du bist WLADBOT Video-Analyse-Engine, entwickelt von Wlad Jachtchenko -- Europas führendem Kommunikations- und Leadership-Coach.
+VIDEO_ANALYSIS_PROMPT = """Du bist WLAD AI Video-Analyse-Engine, entwickelt von Wlad Jachtchenko -- Europas führendem Kommunikations- und Leadership-Coach.
 
 DEIN PRIMÄRES FRAMEWORK -- WLADS SEXIER-MODELL (verbindliche Original-Definition):
 Verwende SEXIER als HAUPT-Bewertungsmuster für die Argumentation des Sprechers.
@@ -523,7 +523,7 @@ Antworte als JSON:
   "rewrite_suggestion": "Überarbeitete Version der Rede (2-3 Absätze).",
   "practice_exercises": ["Übung 1", "Übung 2", "Übung 3"],
   "improvement_vs_previous": "Vergleich mit vorherigen Versuchen (falls vorhanden)",
-  "deep_feedback_prompt": "Eine konkrete Frage, die der User dem WladBot-Chat stellen könnte, um tiefer in das Thema einzusteigen (z.B. 'Wie baue ich in mein nächstes Team-Meeting mehr Storytelling nach dem SEXIER-Modell ein?')."
+  "deep_feedback_prompt": "Eine konkrete Frage, die der User dem WLAD AI-Chat stellen könnte, um tiefer in das Thema einzusteigen (z.B. 'Wie baue ich in mein nächstes Team-Meeting mehr Storytelling nach dem SEXIER-Modell ein?')."
 }}
 
 WICHTIG: strengths MUSS exakt 3 Einträge haben, improvements MUSS exakt 3 Einträge haben — keine 2, keine 4."""
@@ -592,7 +592,7 @@ async def _answer_theory_question(transcript: str) -> dict:
     chat = LlmChat(
         session_id=f"vidqa_{uuid.uuid4().hex[:8]}",
         system_message=(
-            "Du bist WladBot — Wlad Jachtchenkos digitaler Zwilling und Leadership-Experte. "
+            "Du bist WLAD AI — Wlad Jachtchenkos digitaler Zwilling und Leadership-Experte. "
             "Der User hat dir per Video eine Wissens-Frage gestellt. Beantworte sie klar, strukturiert und "
             "im Stil von Wlad: direkt, praxisnah, mit nummerierten Listen wo sinnvoll. Deutsch. Max 300 Wörter. "
             "Kein Rede-Feedback, keine Bewertung — nur die inhaltliche Antwort." + rag_block
@@ -858,7 +858,7 @@ async def delete_video_entry(entry_id: str, request: Request):
 
 # ── Shared Mission Replay Links (Iter 92.23) ──────────────────────────────
 # Mert wants users to share their best video analyses as public landing pages.
-# Use case: "Look — I scored 88/100 on the Boardroom challenge in WladBot!"
+# Use case: "Look — I scored 88/100 on the Boardroom challenge in WLAD AI!"
 # Drives conversion via authentic social proof + opt-in only.
 
 class ShareMissionIn(BaseModel):

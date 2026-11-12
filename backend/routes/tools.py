@@ -26,7 +26,7 @@ def _build_deep_assist_prompts(situation: str, goal: str, tool_id: str | None) -
     if tool_id and tool_id in TOOL_PROMPTS:
         context_hint = f"Dieser Assistent ist eingebettet in den Workflow: '{TOOL_PROMPTS[tool_id]['title']}'."
 
-    system_prompt = f"""Du bist der WladBot — Leadership-Experte trainiert auf Wlad Jachtchenkos Methoden.
+    system_prompt = f"""Du bist der WLAD AI — Leadership-Experte trainiert auf Wlad Jachtchenkos Methoden.
 Deine Aufgabe: Ein 3-teiliges Deep-Assist für den User.
 {context_hint}
 

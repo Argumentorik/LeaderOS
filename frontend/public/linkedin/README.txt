@@ -4,8 +4,8 @@ LinkedIn Profile Cover · Wlad Jachtchenko
 linkedin-cover-wlad.png — 1584×396, LinkedIn's exact cover-photo spec.
 
 Content: deliberately NO photo of Wlad — the profile picture already
-shows him, so the cover instead features WladBot (wladbot3.0.png) in a
-speech-bubble moment ("WladBot kennt deine Methodik. Frag mich, 24/7."),
+shows him, so the cover instead features WLAD AI (wladbot3.0.png) in a
+speech-bubble moment ("WLAD AI kennt deine Methodik. Frag mich, 24/7."),
 a giant low-opacity "W" brand-mark watermark bleeding off the top-right
 as background texture, the "Führung ist Fähigkeit." headline, and
 verified stat badges (13 Bücher, 400k+ Klienten, Trustpilot 4,9/5,

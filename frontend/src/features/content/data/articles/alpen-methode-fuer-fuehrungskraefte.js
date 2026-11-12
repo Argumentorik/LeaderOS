@@ -30,7 +30,7 @@ export default {
     { type: 'heading', level: 2, text: 'Nachkontrolle in fünf Minuten.' },
     { type: 'paragraph', text: 'Am Ende des Tages: was lief gut, was lief schlecht, was probiere ich morgen anders. Nicht 30 Minuten Reflexion. Fünf Minuten schriftlich. Wer das eine Woche durchhält, sieht Muster die er sonst nie sieht.' },
     { type: 'callout', tone: 'lime', text: 'ALPEN macht aus Tagesplanung Führungs-Arbeit. Der entscheidende Schritt ist E · und das ist auch der unbequemste.' },
-    { type: 'paragraph', text: 'In der Challenge trainierst du ALPEN als eine deiner dreißig Drill-Cases. Du protokollierst eine Woche, WladBot identifiziert deine drei häufigsten Streich-Vermeidungs-Muster und schlägt konkrete Mikro-Experimente vor.' },
+    { type: 'paragraph', text: 'In der Challenge trainierst du ALPEN als eine deiner dreißig Drill-Cases. Du protokollierst eine Woche, WLAD AI identifiziert deine drei häufigsten Streich-Vermeidungs-Muster und schlägt konkrete Mikro-Experimente vor.' },
   ],
   seo: {
     title: 'ALPEN-Methode: Anleitung für Führungskräfte · LeaderOS',

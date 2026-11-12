@@ -1,4 +1,4 @@
-"""Iter 92.23.8 — WladBot chat folder-context injection backend tests.
+"""Iter 92.23.8 — WLAD AI chat folder-context injection backend tests.
 
 Covers:
  - POST /api/chat with folder_id (owned) → folder_context_used == True

@@ -8,8 +8,8 @@ import { VoiceControls } from './VoiceControls';
 const statusLabel = (state, error, de) => ({
   [VOICE_STATES.IDLE]: de ? 'Tippe den Orb, um zu sprechen' : 'Tap the orb to speak',
   [VOICE_STATES.LISTENING]: de ? 'Ich höre zu… · Tipp auf den Orb sendet sofort' : 'Listening… · tap the orb to send now',
-  [VOICE_STATES.THINKING]: de ? 'WladBot denkt nach…' : 'WladBot is thinking…',
-  [VOICE_STATES.SPEAKING]: de ? 'WladBot spricht' : 'WladBot is speaking',
+  [VOICE_STATES.THINKING]: de ? 'WLAD AI denkt nach…' : 'WLAD AI is thinking…',
+  [VOICE_STATES.SPEAKING]: de ? 'WLAD AI spricht' : 'WLAD AI is speaking',
   [VOICE_STATES.ERROR]: error || (de ? 'Fehler aufgetreten' : 'Error occurred'),
 }[state]);
 

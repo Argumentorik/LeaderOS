@@ -181,7 +181,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Viele dieser Gespräche sind ungewohnt, etwa die Frage nach Einsamkeit oder die Ansage, was du erwartest. Im LeaderOS kannst du sie vorher üben: WladBot spielt das Gegenüber, und du trainierst in täglichen Drills von 15 Minuten, deine Sätze klar und ruhig zu formulieren. Die ersten 14 Tage sind kostenlos.',
+        'Viele dieser Gespräche sind ungewohnt, etwa die Frage nach Einsamkeit oder die Ansage, was du erwartest. Im LeaderOS kannst du sie vorher üben: WLAD AI spielt das Gegenüber, und du trainierst in täglichen Drills von 15 Minuten, deine Sätze klar und ruhig zu formulieren. Die ersten 14 Tage sind kostenlos.',
     },
     {
       type: 'faq',

@@ -16,7 +16,7 @@ def word_limits(kind: str) -> tuple[int, int]:
     return WORD_LIMITS.get(kind, (SCRIPT_MIN_WORDS, SCRIPT_MAX_WORDS))
 
 
-# ── Cinematic-Look (Iter 143): 3D-Wlad im Stil des WladBot-Avatars ──────────
+# ── Cinematic-Look (Iter 143): 3D-Wlad im Stil des WLAD AI-Avatars ──────────
 WLAD_STYLE_PROMPT = (
     "High-end Pixar-style 3D animated character of the man in the first reference image: keep his exact "
     "face, dark side-parted hair, short stubble beard, warm brown eyes and friendly confident expression. "
@@ -279,7 +279,7 @@ SHOT_PRESETS = {
 # B-Roll: echte App-Screens (Playwright-Screenshots in backend/assets/broll; *_m.png = Mobile für 9:16)
 BROLL_SCREENS = {
     "dashboard": "Dashboard",
-    "chat": "WladBot-Chat",
+    "chat": "WLAD AI-Chat",
     "video": "Video-Analyse",
     "challenge": "30-Tage-Challenge",
     "simulations": "Simulationen",
@@ -331,7 +331,7 @@ FEATURE_CLIPS = [
     {"slug": "bp-simulationen", "order": 305, "title": "Simulationen: so sparrst du richtig", "single_take": True},
 ]
 
-# Vorschlagsfragen für „Mit WladBot sprechen“ (Fallback: generisch)
+# Vorschlagsfragen für „Mit WLAD AI sprechen“ (Fallback: generisch)
 CLIP_QUESTIONS = {
     "bp-playbooks": ["Welches Playbook passt zu meinem Gespräch nächste Woche?", "Wie formuliere ich das Ziel in einem Satz?", "Was mache ich mit dem Advice Report?"],
     "bp-missionen": ["Welche Mission sollte ich zuerst machen?", "Wie fange ich die ersten zehn Sekunden an?", "Was ändere ich im zweiten Versuch?"],

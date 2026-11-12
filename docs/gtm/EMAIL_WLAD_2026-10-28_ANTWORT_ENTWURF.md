@@ -22,7 +22,7 @@ danke für das ausführliche Feedback. Kurz zu allem.
 **Zur App.** Danke, genau diese Punkte brauchen wir.
 - Tempo: Das Rollenspiel antwortet jetzt über ein schnelleres Modell und kürzer. Die Auswertung am Ende bleibt beim großen Modell. Kommt mit dem nächsten Update [Stefan deployt]; sag mir bitte, wie es sich anfühlt.
 - SEXIER: In den Rollenspielen zu Gehalt, Beförderung, Veränderung und Feedback nach oben hakt die Figur jetzt nach, wenn ein Schritt fehlt, und das Feedback am Ende bewertet nach SEXIER. In der Argumentations-Vorbereitung und im Video-Feedback ist SEXIER fest drin. Falls du dort etwas anderes gesehen hast, schick mir bitte kurz einen Screenshot.
-- Antwortqualität: Damit ich es nachstellen kann, schick mir bitte drei bis fünf Fragen, bei denen WladBot falsch lag, samt Antwort. Dann prüfen wir sie gezielt.
+- Antwortqualität: Damit ich es nachstellen kann, schick mir bitte drei bis fünf Fragen, bei denen WLAD AI falsch lag, samt Antwort. Dann prüfen wir sie gezielt.
 - Videos: [Die habe ich zum Start auf Text umgestellt, weil der Vimeo-Player bei uns blockiert wurde und ich keine Popups wollte. Das war zu vorsichtig.] Ich bringe sie zurück. Dafür brauche ich in Vimeo eine Freigabe für unsere Domains oder die Clips auf deinem YouTube-Kanal. Welche Videos vermisst du genau?
 - Ob es für alle live ist: Die Registrierung ist offen. Stefan spielt gerade die aktuelle Version ein.
 

@@ -31,11 +31,11 @@ export default {
     { type: 'paragraph', text: 'Wir haben zwei Tiers · Challenge und Plus-Plus. Hier ehrlich, ohne Sales-Sprache, wer welchen Pfad nehmen soll.' },
 
     { type: 'heading', level: 2, text: 'Challenge · 997 € · 30 Tage + 12 Monate Mitgliedschaft.' },
-    { type: 'paragraph', text: 'Du bekommst: 30 Tage intensiver Drill mit allen 11 Frameworks, WladBot 24/7, Daily-Lernvideos, LeaderOS-Community als Peer-Kreis (Lifetime). Danach 12 Monate Mitgliedschaft · voller Plattform-Zugang, WladBot bleibt, Updates ohne Aufpreis.' },
+    { type: 'paragraph', text: 'Du bekommst: 30 Tage intensiver Drill mit allen 11 Frameworks, WLAD AI 24/7, Daily-Lernvideos, LeaderOS-Community als Peer-Kreis (Lifetime). Danach 12 Monate Mitgliedschaft · voller Plattform-Zugang, WLAD AI bleibt, Updates ohne Aufpreis.' },
     { type: 'paragraph', text: 'Die Challenge passt für dich wenn: du ein konkretes Methodik-Problem hast und in 30 Tagen substantielle Bewegung willst, ohne dass du LIVE mit Wlad sprechen musst. Du bist Disziplin-getrieben, brauchst nicht das wöchentliche Coaching-Push.' },
 
     { type: 'heading', level: 2, text: 'Plus-Plus · 4 797 € · OS-Jahr mit Live-Sessions.' },
-    { type: 'paragraph', text: 'Alles aus der Challenge, plus: monatliche Live-Session mit Wlad persönlich (90 Min, Gruppen-Format), Drill-Channel (deine echten Fälle werden live von Wlad reviewt), Challenge-Historie als Kontext für WladBot, Vorrang für 1:1-Mentoring-Warteliste.' },
+    { type: 'paragraph', text: 'Alles aus der Challenge, plus: monatliche Live-Session mit Wlad persönlich (90 Min, Gruppen-Format), Drill-Channel (deine echten Fälle werden live von Wlad reviewt), Challenge-Historie als Kontext für WLAD AI, Vorrang für 1:1-Mentoring-Warteliste.' },
     { type: 'paragraph', text: 'Plus-Plus passt für dich wenn: du externe Sparring brauchst, sonst in Trott zurückfällst. Du willst LIVE mit Wlad sprechen, nicht nur mit dem Bot. Du investierst aktiv in deine Methodik-Tiefe · über mehrere Monate, nicht nur 30 Tage.' },
 
     { type: 'heading', level: 2, text: 'Der ehrliche Entscheidungs-Test.' },

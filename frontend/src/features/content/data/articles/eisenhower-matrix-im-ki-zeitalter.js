@@ -41,7 +41,7 @@ export default {
 
     { type: 'framework', code: 'E·4', title: 'Drill: Sonntag-Planung in 8 Minuten.', explanation: 'Setz dich Sonntagabend hin. Schreib alle 12-15 To-dos der nächsten Woche auf. Markiere jedes mit Q1/Q2/Q3/Q4. Für jedes Q2: schreib in eine zweite Spalte den KI-Auftrag · was die KI vorbereiten soll, sodass du am Mittwoch nur noch 30 Min polieren brauchst. Das ist das wichtigste Wochen-Ritual deines KI-nativen Führungs-Lebens.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS unterstützt das Sonntag-Planungs-Ritual: Du paste deine 15 To-dos, er sortiert in Quadranten, schlägt für Q2 konkrete Vor-Drills vor. Im Schnitt: 6 Q2-Aufgaben pro Woche, die ohne KI nie passieren würden. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS unterstützt das Sonntag-Planungs-Ritual: Du paste deine 15 To-dos, er sortiert in Quadranten, schlägt für Q2 konkrete Vor-Drills vor. Im Schnitt: 6 Q2-Aufgaben pro Woche, die ohne KI nie passieren würden. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'alpen-methode-fuer-fuehrungskraefte',

@@ -130,7 +130,7 @@ export const GuideVideoPlayer = ({ clip, de = true, onSeen, autoFocus = false, c
                 className="tap-target inline-flex items-center gap-1.5 py-2 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors"
                 data-testid={`guide-ask-wlad-${clip.slug}`}
               >
-                <MessageCircle size={12} /> {de ? 'Frag WladBot dazu' : 'Ask WladBot about this'}
+                <MessageCircle size={12} /> {de ? 'Frag WLAD AI dazu' : 'Ask WLAD AI about this'}
               </Link>
               <InteractiveWladButton clip={clip} de={de} />
         </div>

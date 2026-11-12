@@ -30,11 +30,11 @@ nicht ein.
 
 | Key | Zielgruppe | Versprechen (= Anzeigen-Hook = H1) | Eingelöst im Webinar | Trainiert in LeaderOS | Framework |
 | --- | --- | --- | --- | --- | --- |
-| `ki` (Standard) | Führungskräfte + Nachwuchs, KI-verunsichert | KI ersetzt keine Führungskraft. Eine Führungskraft mit KI schon. | 10:25 Leadership OS (KI-Coach + Drills) | WladBot, 30-Tage-Challenge | 11 Frameworks |
+| `ki` (Standard) | Führungskräfte + Nachwuchs, KI-verunsichert | KI ersetzt keine Führungskraft. Eine Führungskraft mit KI schon. | 10:25 Leadership OS (KI-Coach + Drills) | WLAD AI, 30-Tage-Challenge | 11 Frameworks |
 | `zeit` | Führungskräfte mit Meeting-/Gesprächslast | Vorbereitet in Minuten. Nicht in Stunden. | 10:25 Leadership OS · Live-Demo Vorbereitung | Gespräch vorbereiten (SEXIER-Prep) | SEXIER |
 | `gespraech` | Teamleads mit Konflikten, Low Performern | Das schwierige Gespräch. Geprobt, bevor es passiert. | 10:55 Live-Case | Simulationen | Hart in der Sache, weich zur Person |
 | `wirkung` | Führungskräfte, die präsentieren/überzeugen müssen | Überzeugen, ohne lauter zu werden. Präsenz. Wärme. Kompetenz. | 10:05 Charisma-Code live | Video-Analyse (Missionen) | Charisma-Code |
-| `team` | Führungskräfte im operativen Hamsterrad | Weniger Rückfragen. Mehr Verantwortung im Team. | 10:25 Frameworks · 10:55 Live-Case | 1:1-Vorbereitung mit WladBot | Feedbackformel B-W-W, Die 5 Rollen |
+| `team` | Führungskräfte im operativen Hamsterrad | Weniger Rückfragen. Mehr Verantwortung im Team. | 10:25 Frameworks · 10:55 Live-Case | 1:1-Vorbereitung mit WLAD AI | Feedbackformel B-W-W, Die 5 Rollen |
 | `aufstieg` | Leistungsträger vor dem ersten Führungsjob | Vom Leistungsträger zur offensichtlichen Wahl. | Video „Warum die meisten Führungskräfte unsichtbar bleiben" (Danke-Seite) + Q&A | 30-Tage-Challenge | Die 5 Rollen |
 
 **Für Wlad:** Kampagne `ki` verspricht, dass im Webinar klar wird, *was KI

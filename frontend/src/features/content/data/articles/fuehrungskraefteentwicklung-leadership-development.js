@@ -68,7 +68,7 @@ export default {
     { type: 'list', style: 'bullet', items: [
       'Klassisches Seminar (Haufe, Akademien): gut für den ersten Wissens-Input und Networking. Schwäche: der Transfer in den Alltag · genau hier verpufft der Effekt ohne Folge-Struktur.',
       '1:1-Coaching: stärkster Transfer, aber teuer (300–800 €/Std) und nicht 24/7 verfügbar. Die Zeit des Coaches ist der Engpass.',
-      'KI-gestützte Plattform (LeaderOS): kombiniert beides · drillbare Frameworks plus ein KI-Coach (WladBot), der deine Situation kennt und 24/7 verfügbar ist. Trainiert auf Wlad Jachtchenkos Methodik aus 420 000 Coachings. Schließt genau den Transfer-Gap, an dem Seminare scheitern.',
+      'KI-gestützte Plattform (LeaderOS): kombiniert beides · drillbare Frameworks plus ein KI-Coach (WLAD AI), der deine Situation kennt und 24/7 verfügbar ist. Trainiert auf Wlad Jachtchenkos Methodik aus 420 000 Coachings. Schließt genau den Transfer-Gap, an dem Seminare scheitern.',
     ] },
     { type: 'quote', text:
       'Coaching kostet 800 Euro pro Stunde und ist am Dienstagabend nicht erreichbar. Bücher altern. Frameworks bleiben hängen. Wir haben das Operating System gebaut, das diesen Engpass auflöst.',
@@ -86,7 +86,7 @@ export default {
       'Führungskräfteentwicklung ist kein Zertifikat, das man abhakt · es ist eine Praxis. Die beste Investition ist nicht das teuerste Seminar, sondern das Format, das dich täglich übt und im Moment des Bedarfs begleitet.' },
     { type: 'heading', level: 2, text: 'Der nächste Schritt.' },
     { type: 'paragraph', text:
-      'LeaderOS ist Führungskräfteentwicklung als Operating System: elf drillbare Frameworks, WladBot als 24/7-Coach, tägliche Mikro-Drills an deinen echten Fällen, eine Diagnose, die dir zeigt wo du stehst. Vierzehn Tage kostenlos testen, ohne Karte. Oder starte mit dem kostenlosen 10-Minuten-Leader-Check.' },
+      'LeaderOS ist Führungskräfteentwicklung als Operating System: elf drillbare Frameworks, WLAD AI als 24/7-Coach, tägliche Mikro-Drills an deinen echten Fällen, eine Diagnose, die dir zeigt wo du stehst. Vierzehn Tage kostenlos testen, ohne Karte. Oder starte mit dem kostenlosen 10-Minuten-Leader-Check.' },
     { type: 'diagnostic', prompt: 'Was willst du als Führungskraft als Erstes verbessern?', options: [
       { label: 'Feedback & schwierige Gespräche', category: 'communication' },
       { label: 'Delegieren & Zeit zurückgewinnen', category: 'delegation' },

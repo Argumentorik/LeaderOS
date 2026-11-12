@@ -107,7 +107,7 @@ export default {
     {
       type: 'paragraph',
       text:
-        'Lena übte die drei Korrekturen weitere zwei Tage. Tag 29 las sie das Skript zum letzten Mal vor dem WladBot, ' +
+        'Lena übte die drei Korrekturen weitere zwei Tage. Tag 29 las sie das Skript zum letzten Mal vor dem WLAD AI, ' +
         'der korrigierte zwei Wort-Wahl-Details. Tag 30 war die echte Firmenrede.',
     },
     {

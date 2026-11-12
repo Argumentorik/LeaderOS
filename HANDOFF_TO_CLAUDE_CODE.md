@@ -130,7 +130,7 @@ Detail-Matrix: `/app/docs/PRODUCTION_READINESS.md`
 │   ├── routes/
 │   │   ├── auth.py                # /api/auth/* — login, register, refresh, callback
 │   │   ├── payments.py            # /api/payments/* — checkout, stripe-mode, webhook
-│   │   ├── chat.py                # /api/chat — WladBot
+│   │   ├── chat.py                # /api/chat — WLAD AI
 │   │   ├── video.py               # /api/video/* — analyze + trial
 │   │   ├── playbooks.py           # /api/playbooks/* — framework-driven sessions
 │   │   ├── simulations.py         # /api/simulations/* — role-play scenarios
@@ -168,7 +168,7 @@ Detail-Matrix: `/app/docs/PRODUCTION_READINESS.md`
 │   │   ├── pages/
 │   │   │   ├── LoginPage.js, DashboardPage.js (eager, im main bundle)
 │   │   │   ├── MyPathPage.js      # Lernpfad mit UpcomingEvents-Card
-│   │   │   ├── ChatPage.js        # WladBot chat
+│   │   │   ├── ChatPage.js        # WLAD AI chat
 │   │   │   ├── CoachingPage.js    # Coaching hub mit Cal.com booking
 │   │   │   ├── OnboardingPage.js  # 7-step onboarding (incl. strategy call step)
 │   │   │   ├── PaymentSuccessPage.js
@@ -355,7 +355,7 @@ curl https://leader-os.de/api/payments/stripe-mode
 # → wenn mode: "test": STRIPE_API_KEY ist sk_test_, muss sk_live_ werden
 ```
 
-### "WladBot zitiert kein Wlad-Wissen"
+### "WLAD AI zitiert kein Wlad-Wissen"
 ```bash
 # Check RAG threshold
 grep MATCH_THRESHOLD /app/backend/services_rag.py

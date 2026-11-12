@@ -70,7 +70,7 @@ async def playbook_step(playbook_id: str, data_in: dict, request: Request):
         chat = LlmChat(
             session_id=f"pb_{session['session_id']}",
             system_message=(
-                f"Du bist WLADBOT und führst den User durch das '{playbook['title']}' Playbook. "
+                f"Du bist WLAD AI und führst den User durch das '{playbook['title']}' Playbook. "
                 f"Aktueller Schritt: {step['title']}. Gib umsetzbare, strukturierte Ratschläge "
                 f"basierend auf Wlad Jachtchenkos Leadership-Frameworks. Antworte IMMER auf DEUTSCH. "
                 f"Antworte als JSON: {{\"advice\": \"...\", \"key_points\": [...], \"next_action\": \"...\"}}"
@@ -115,7 +115,7 @@ async def generate_advice_report(playbook_id: str, request: Request):
     responses_text = "\n".join([f"Step {r.get('step', i)}: {r.get('input', '')}" for i, r in enumerate(session.get("responses", []))])
     try:
         chat = LlmChat(session_id=f"report_{uuid.uuid4().hex[:8]}", system_message=(
-            "Du bist WLADBOT und erstellst einen persönlichen Leadership Advice Report basierend auf Wlad Jachtchenkos Methoden. Antworte NUR mit validem JSON auf DEUTSCH. Sei detailliert und thematisiere das spezifische Playbook-Thema."
+            "Du bist WLAD AI und erstellst einen persönlichen Leadership Advice Report basierend auf Wlad Jachtchenkos Methoden. Antworte NUR mit validem JSON auf DEUTSCH. Sei detailliert und thematisiere das spezifische Playbook-Thema."
             + WLAD_HARD_RULES
         ))
         chat.with_model("anthropic", MODEL)

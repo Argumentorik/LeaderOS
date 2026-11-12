@@ -12,7 +12,7 @@ const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 
 const tourSteps = {
   de: [
-    { icon: Sparkles, title: 'Willkommen bei WladBot!', desc: 'Dein persönliches AI Leadership Operating System. Lass mich dir kurz zeigen, wie alles funktioniert.' },
+    { icon: Sparkles, title: 'Willkommen bei WLAD AI!', desc: 'Dein persönliches AI Leadership Operating System. Lass mich dir kurz zeigen, wie alles funktioniert.' },
     { icon: LayoutDashboard, title: 'Kommandozentrale', desc: 'Dein Dashboard zeigt deinen Leader Score, tägliche Aufgaben und deinen Fortschritt · alles auf einen Blick.' },
     { icon: PenLine, title: 'Täglicher Check-in', desc: 'Starte jeden Tag mit einem Leadership-Moment. Beschreibe eine Entscheidung oder Herausforderung und erhalte sofort KI-Feedback.' },
     { icon: MessageSquareText, title: 'KI Coach mit 8 Agenten', desc: 'Wähle deinen Spezialisten · von Konflikt über EQ bis Strategie. Jeder Agent hat eigene Szenarien und Coaching-Stile.' },
@@ -23,7 +23,7 @@ const tourSteps = {
     { icon: Sparkles, title: "Los geht's!", desc: 'Dein Leadership-Journey beginnt jetzt. Starte mit dem täglichen Check-in oder sprich direkt mit deinem KI-Coach.', isFinal: true },
   ],
   en: [
-    { icon: Sparkles, title: 'Welcome to WladBot!', desc: 'Your personal AI Leadership Operating System. Let me quickly show you how everything works.' },
+    { icon: Sparkles, title: 'Welcome to WLAD AI!', desc: 'Your personal AI Leadership Operating System. Let me quickly show you how everything works.' },
     { icon: LayoutDashboard, title: 'Command Center', desc: 'Your dashboard shows your Leader Score, daily tasks and progress · everything at a glance.' },
     { icon: PenLine, title: 'Daily Check-in', desc: 'Start each day with a leadership moment. Describe a decision or challenge and get instant AI feedback.' },
     { icon: MessageSquareText, title: 'AI Coach with 8 Agents', desc: 'Choose your specialist · from Conflict to EQ to Strategy. Each agent has unique scenarios and coaching styles.' },

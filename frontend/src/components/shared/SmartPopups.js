@@ -140,7 +140,7 @@ export const SmartPopups = ({ userData }) => {
               <p className="text-lg font-black">Launch-Preis sichern</p>
             </div>
             <CardContent className="p-5 text-center space-y-3">
-              <p className="text-sm text-muted-foreground">Du nutzt WladBot aktiv · schalte 16 Video-Missionen, 300 Challenge-Fragen und unbegrenztes Coaching frei.</p>
+              <p className="text-sm text-muted-foreground">Du nutzt WLAD AI aktiv · schalte 16 Video-Missionen, 300 Challenge-Fragen und unbegrenztes Coaching frei.</p>
               <p className="text-2xl font-black">€997 <span className="text-sm font-normal text-muted-foreground">/ Jahr</span></p>
               <Button onClick={() => { dismiss('premium'); navigate('/coaching'); }} className="w-full bg-[#BFFF00] text-[#0A0A0A] hover:bg-[#D4FF4D] font-bold h-11" data-testid="popup-premium-cta">
                 Premium werden <ArrowRight size={14} className="ml-1.5" />

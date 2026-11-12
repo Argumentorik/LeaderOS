@@ -41,7 +41,7 @@ export default {
 
     { type: 'framework', code: 'BWW·3', title: 'Der eine Satz den 90% falsch machen.', explanation: 'Bei der WIRKUNG: keine moralische Bewertung. Nicht "das war respektlos" · sondern "das hat zur Folge dass [konkrete Konsequenz]". Wirkung ist KAUSAL, nicht moralisch. Wer moralische Wirkung formuliert, kriegt Streit über Werte. Wer kausale Wirkung formuliert, kriegt Einsicht über Ergebnisse.' },
 
-    { type: 'callout', tone: 'dark', text: 'WladBot in LeaderOS hat die B-W-W-Vorlage als Quick-Action. Paste eine Situation, kriegst in 20 Sekunden drei Varianten · und einen Pushback-Simulator der zeigt was wahrscheinlich zurückkommt. Buch ein unverbindliches Beratungsgespräch.' },
+    { type: 'callout', tone: 'dark', text: 'WLAD AI in LeaderOS hat die B-W-W-Vorlage als Quick-Action. Paste eine Situation, kriegst in 20 Sekunden drei Varianten · und einen Pushback-Simulator der zeigt was wahrscheinlich zurückkommt. Buch ein unverbindliches Beratungsgespräch.' },
   ],
   related: [
     'die-feedback-formel-bww',

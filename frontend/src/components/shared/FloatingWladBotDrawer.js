@@ -219,8 +219,8 @@ export const FloatingWladBotDrawer = () => {
           onClick={() => setOpen(true)}
           className="fixed bottom-24 right-6 z-[60] rounded-full shadow-2xl shadow-black/40 ring-1 ring-white/10 hover:scale-105 hover:ring-[#BFFF00]/40 focus-visible:ring-2 focus-visible:ring-[#BFFF00] focus-visible:outline-none active:scale-95 transition-[transform,box-shadow] hidden md:flex items-center justify-center"
           data-testid="wladbot-fab"
-          title={de ? 'WladBot fragen' : 'Ask WladBot'}
-          aria-label={de ? 'WladBot öffnen' : 'Open WladBot'}
+          title={de ? 'WLAD AI fragen' : 'Ask WLAD AI'}
+          aria-label={de ? 'WLAD AI öffnen' : 'Open WLAD AI'}
         >
           <WladBotAvatar size={52} live />
         </button>
@@ -237,7 +237,7 @@ export const FloatingWladBotDrawer = () => {
                 <div className="flex items-center gap-2.5">
                   <WladBotAvatar size={36} live />
                   <div>
-                    <p className="text-[13px] font-black text-white leading-tight">WladBot <span className="px-1 py-px rounded bg-[#BFFF00]/15 text-[#BFFF00] text-[8px] font-black tracking-wider align-middle">3.0</span></p>
+                    <p className="text-[13px] font-black text-white leading-tight">WLAD AI</p>
                     <p className="text-[9px] text-white/40 uppercase tracking-[0.18em] font-bold">{de ? 'IMMER NEBEN DIR' : 'ALWAYS WITH YOU'}</p>
                   </div>
                 </div>

@@ -614,7 +614,7 @@ def _file_chunks(file_path: Path, start: int, end: int):
             yield chunk
 
 
-KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "WladBot für dich", "coaching": "Coaching"}
+KICKERS = {"onboarding": "Onboarding", "mission": "Mission-Briefing", "teaser": "WLAD AI für dich", "coaching": "Coaching"}
 
 
 def _frame_from_video(video: Path, at: float = 1.5) -> Path:

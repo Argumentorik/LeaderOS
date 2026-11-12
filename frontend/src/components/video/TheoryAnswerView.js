@@ -22,7 +22,7 @@ export const TheoryAnswerView = ({ analysis, de, resetChallenge, navigate }) => 
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WladBot 3.0</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#BFFF00] mb-1">WLAD AI</p>
               <p className="text-[12px] text-white/50">
                 {de
                   ? 'Das war eine Wissens-Frage — hier ist Wlads Antwort statt eines Rede-Feedbacks:'

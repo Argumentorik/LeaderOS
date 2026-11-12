@@ -74,7 +74,7 @@ export default {
     { type: 'callout', tone: 'neutral', text:
       'Kompetenz zeigt sich nicht im Seminarraum, wo alles glattläuft. Sie zeigt sich im Dienstag-22-Uhr-Gespräch, wenn der Mitarbeiter kündigen will und du keine Vorlage hast. Dafür trainierst du · nicht für das Zertifikat.' },
     { type: 'paragraph', text:
-      'In LeaderOS ist jede dieser acht Kompetenzen ein drillbarer Pfad: du bekommst pro Kompetenz wöchentliche Mikro-Drills an deinen echten Fällen, eine Diagnose, die zeigt wo du gerade stehst, und WladBot als 24/7-Sparring für die Gespräche, die sich nicht aufschieben lassen. Nicht mehr Wissen ansammeln · sondern eine Kompetenz nach der anderen zum Reflex machen.' },
+      'In LeaderOS ist jede dieser acht Kompetenzen ein drillbarer Pfad: du bekommst pro Kompetenz wöchentliche Mikro-Drills an deinen echten Fällen, eine Diagnose, die zeigt wo du gerade stehst, und WLAD AI als 24/7-Sparring für die Gespräche, die sich nicht aufschieben lassen. Nicht mehr Wissen ansammeln · sondern eine Kompetenz nach der anderen zum Reflex machen.' },
     { type: 'diagnostic', prompt: 'Welche Führungskompetenz willst du als Erstes stärken?', options: [
       { label: 'Konflikte früher und klarer ansprechen', category: 'conflict' },
       { label: 'Endlich wirksam delegieren', category: 'delegation' },

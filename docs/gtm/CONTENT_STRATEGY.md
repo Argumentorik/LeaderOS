@@ -33,7 +33,7 @@ Jede Plattform **eine eigene Übersetzung** desselben Insights:
 **Universal-CTA-Reihenfolge** (jeder Tag rotiert):
 
 1. `→ leader-check.de` (kostenlose 5-Min-Diagnose)
-2. `→ WladBot starten` (auf leader-os.de — wenn Account existiert)
+2. `→ WLAD AI starten` (auf leader-os.de — wenn Account existiert)
 3. `→ Sprint 0001 freischalten` (nach Diagnose-Abschluss)
 
 ## 13-Wochen Themenarc

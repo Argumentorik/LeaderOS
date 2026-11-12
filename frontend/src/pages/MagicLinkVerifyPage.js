@@ -73,7 +73,7 @@ export default function MagicLinkVerifyPage() {
           </div>
           <div>
             <div className="font-bold text-white text-sm tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              WLADBOT
+              WLAD AI
             </div>
             <div className="text-[9px] text-[#BFFF00]/70 font-semibold tracking-[0.2em] uppercase">
               Magic Link

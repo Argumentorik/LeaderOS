@@ -70,7 +70,7 @@ export default {
     { type: 'callout', tone: 'neutral', text:
       'Die fachliche Führung gewinnt über Klarheit und Kompetenz, nicht über geliehene Härte. Dein Hebel ist nicht „ich kann dir schaden", sondern „mit mir kommst du fachlich weiter". Das ist langsamer aufzubauen · und unendlich tragfähiger.' },
     { type: 'paragraph', text:
-      'Weil fachliche Führung ohne Macht reine Skill-Arbeit ist (Klarheit, Feedback, die saubere Trennung der Ebenen), lässt sie sich gezielt drillen. In LeaderOS übst du genau diese Gespräche an deinen echten Fällen · das Qualitäts-Feedback, das morgen ansteht, oder die Abstimmung mit der disziplinarischen Führungskraft. WladBot ist dein Sparring für die Rollen-Reibung, bevor du sie real austrägst.' },
+      'Weil fachliche Führung ohne Macht reine Skill-Arbeit ist (Klarheit, Feedback, die saubere Trennung der Ebenen), lässt sie sich gezielt drillen. In LeaderOS übst du genau diese Gespräche an deinen echten Fällen · das Qualitäts-Feedback, das morgen ansteht, oder die Abstimmung mit der disziplinarischen Führungskraft. WLAD AI ist dein Sparring für die Rollen-Reibung, bevor du sie real austrägst.' },
     { type: 'diagnostic', prompt: 'Welche Rollen-Reibung erlebst du gerade?', options: [
       { label: 'Niemand zieht mit, ich habe keine Macht', category: 'conflict' },
       { label: 'Reibung mit der disziplinarischen Führungskraft', category: 'identity' },

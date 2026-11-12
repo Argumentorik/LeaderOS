@@ -29,7 +29,7 @@ Content-Teaser als Soft-CTA für alle, die noch nicht bereit sind.
 Übernommen ist nur die **Struktur**, kein Wording und keine fremde
 Behauptung — jeder Fakt im Trust-Block ist canon-verifiziert
 (`WLAD_CANON.md`): 400.000+ Klienten seit 2007, 13 Bücher, 3×
-SPIEGEL-Bestseller, die Multi-Surface-Parität von WladBot (siehe
+SPIEGEL-Bestseller, die Multi-Surface-Parität von WLAD AI (siehe
 `EXPERT_OS_THESIS.md` §3). Keine erfundenen Testimonials, keine
 Fake-Urgency — gleiche Ehrlichkeits-Regeln wie `WEBINAR_FUNNEL.md`.
 

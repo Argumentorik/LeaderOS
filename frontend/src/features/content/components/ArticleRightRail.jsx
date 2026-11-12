@@ -79,7 +79,7 @@ const WebinarCard = () => {
  *      Wlad-letter. Marked with data-newsletter-zone so the global
  *      exit-intent popup respects it (don't show two captures at once).
  *
- *   3. Related-action · "Frag den WladBot" deep-link into the chat with
+ *   3. Related-action · "Frag den WLAD AI" deep-link into the chat with
  *      a pre-filled question from the article's topic. Opens leaderos.de
  *      chat so the user lands in the actual app.
  *
@@ -328,7 +328,7 @@ const NewsletterMini = ({ articleSlug }) => {
 // Problem-first funnel · instead of a passive "ask the bot" link, we ask
 // the reader to name their actual leadership problem right here. The
 // moment they type (or tap a suggestion) they've invested · the button
-// then deep-links into WladBot with their problem pre-filled, so they
+// then deep-links into WLAD AI with their problem pre-filled, so they
 // land on a tailored answer, not an empty chat. That "I already got
 // value before signing up" feeling is what converts.
 const PROBLEM_SUGGESTIONS = [
@@ -345,7 +345,7 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
   // Every submission flows through the Intent Schema Layer · it
   // normalizes the text into {category, level, urgency, clarity,
   // keywords}, fires the canonical `leadership_intent_captured` event
-  // (Growth-Loop Layer 4), and builds the category-tuned WladBot link
+  // (Growth-Loop Layer 4), and builds the category-tuned WLAD AI link
   // (Layer 3). See lib/leadershipIntent.js + docs/GROWTH_LOOP.md.
   const go = (text) => {
     const intent = captureLeadershipIntent(text, {
@@ -366,7 +366,7 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
           <img
             src={WLADBOT_AVATAR}
             onError={withFallback(WLADBOT_AVATAR_FALLBACKS)}
-            alt="WladBot · dein KI-Coach"
+            alt="WLAD AI · dein KI-Coach"
             loading="lazy"
             className="w-11 h-11 rounded-full object-cover object-[50%_16%] bg-[#0A0A0A] ring-2 ring-brand"
           />
@@ -375,14 +375,14 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
         <div>
           <div className="flex items-center gap-1.5">
             <MessageCircle size={14} className="text-brand" />
-            <span className="font-mono text-[11px] font-black uppercase tracking-[0.22em] text-brand">WladBot · live</span>
+            <span className="font-mono text-[11px] font-black uppercase tracking-[0.22em] text-brand">WLAD AI · live</span>
           </div>
           <div className="text-[15px] font-bold text-background leading-tight mt-1">Frag Wlads KI-Coach</div>
         </div>
       </div>
       <p className="text-[13.5px] leading-[1.5] text-background/90 mb-3">
         Was ist gerade deine größte Führungs-Herausforderung? Tipp sie
-        ein · WladBot gibt dir den nächsten Schritt nach Wlads Methodik.
+        ein · WLAD AI gibt dir den nächsten Schritt nach Wlads Methodik.
       </p>
 
       <textarea
@@ -417,7 +417,7 @@ const WladBotMini = ({ articleSlug, articleTitle }) => {
         className="w-full inline-flex items-center justify-center gap-1.5 bg-brand hover:bg-white text-[#0A0A0A] font-bold text-[11.5px] uppercase tracking-[0.14em] h-10 transition-colors"
         data-testid="wladbot-funnel-cta"
       >
-        {problem.trim() ? 'Lösung holen' : 'WladBot fragen'} <ArrowRight size={13} />
+        {problem.trim() ? 'Lösung holen' : 'WLAD AI fragen'} <ArrowRight size={13} />
       </button>
       <p className="mt-2.5 font-mono text-[9px] uppercase tracking-[0.18em] text-background/70 text-center">
         ▸ Antwort in 30 Sek · kostenlos starten

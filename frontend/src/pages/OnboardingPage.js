@@ -77,7 +77,7 @@ export default function OnboardingPage() {
 
   const next = () => setStep(s => Math.min(s + 1, STEPS.length - 1));
 
-  // ── WladBot speaks — reacts to previous answers (Fabulous-style guide) ──
+  // ── WLAD AI speaks — reacts to previous answers (Fabulous-style guide) ──
   const roleLabel = roles.find(r => r.id === data.role)?.label;
   const goalLabel = goals.find(g => g.id === data.primary_goal)?.label;
   const guideMessages = de ? {
@@ -157,7 +157,7 @@ export default function OnboardingPage() {
           </div>
         </div>
 
-        {/* WladBot guides every step (2-7) */}
+        {/* WLAD AI guides every step (2-7) */}
         {step >= 2 && step <= 7 && (
           <div className="mb-6">
             <WladGuide message={guideMessages[step]} />

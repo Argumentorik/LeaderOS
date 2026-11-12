@@ -101,7 +101,7 @@ export default {
     },
     {
       type: 'paragraph',
-      text: 'Matrix-Führung lernst du nicht aus einer Liste, sondern an echten Situationen — am Prioritätskonflikt, der morgen auf deinem Tisch liegt, am Gespräch mit dem anderen Vorgesetzten, das du heute noch scheust. Genau dafür ist LeaderOS gebaut: Du übst Verhandlungs- und Konflikt-Skripte an deinen konkreten Matrix-Situationen und sparrst mit dem WladBot, bis die schwierige Abstimmung sitzt — bevor sie real wird.',
+      text: 'Matrix-Führung lernst du nicht aus einer Liste, sondern an echten Situationen — am Prioritätskonflikt, der morgen auf deinem Tisch liegt, am Gespräch mit dem anderen Vorgesetzten, das du heute noch scheust. Genau dafür ist LeaderOS gebaut: Du übst Verhandlungs- und Konflikt-Skripte an deinen konkreten Matrix-Situationen und sparrst mit dem WLAD AI, bis die schwierige Abstimmung sitzt — bevor sie real wird.',
     },
     {
       type: 'diagnostic',

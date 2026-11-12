@@ -114,12 +114,12 @@ const VideoMissionMock = () => (
 const ContextLayerMock = () => (
   <div className="aspect-[4/3] bg-white text-black border border-foreground/15 overflow-hidden flex flex-col">
     <div className="flex items-center justify-between px-4 py-2.5 border-b border-foreground/10 text-[9px] font-bold uppercase tracking-[0.22em] text-foreground/55 font-mono">
-      <span>WLADBOT · CONTEXT-LAYER</span>
+      <span>WLAD AI · CONTEXT-LAYER</span>
       <span className="text-brand">PRIVAT · NUR DU</span>
     </div>
     <div className="flex-1 p-4 grid grid-cols-12 gap-3">
       <div className="col-span-12">
-        <div className="text-[9px] font-mono uppercase tracking-[0.22em] text-foreground/45 mb-1">▸ WAS WLADBOT ÜBER DICH WEISS</div>
+        <div className="text-[9px] font-mono uppercase tracking-[0.22em] text-foreground/45 mb-1">▸ WAS WLAD AI ÜBER DICH WEISS</div>
         <div
           className="text-[16px] sm:text-[18px] leading-[1.1] tracking-[-0.02em]"
           style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontStyle: 'italic' }}
@@ -175,7 +175,7 @@ const TILES = [
   {
     code: 'CONTEXT',
     label: 'Der Coach, der dich kennt.',
-    body: 'WladBot antwortet nicht generisch. Er kennt deinen Check-Score, deine Rolle, deine Drills, deinen Ton. Jede Antwort liegt auf dieser Schicht.',
+    body: 'WLAD AI antwortet nicht generisch. Er kennt deinen Check-Score, deine Rolle, deine Drills, deinen Ton. Jede Antwort liegt auf dieser Schicht.',
     Mock: ContextLayerMock,
   },
 ];

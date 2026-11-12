@@ -595,7 +595,7 @@ export function generateReportPDF(report, user) {
 
   const sprintBullets = [
     "11 Wlad-Frameworks sofort einsetzbar",
-    "WladBot 24/7 - in Wlads Stimme",
+    "WLAD AI 24/7 - in Wlads Stimme",
     "12 Monate Plattform-Zugang inkludiert",
     "Zertifikat 0001 - LinkedIn-ready",
   ];

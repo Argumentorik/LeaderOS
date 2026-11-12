@@ -72,7 +72,7 @@ export default {
       type: 'callout',
       tone: 'lime',
       text:
-        'Drill-Verstärkung: WladBot kann jedes dieser Gespräche vorher mit dir simulieren — Rolle, Widerstand, ' +
+        'Drill-Verstärkung: WLAD AI kann jedes dieser Gespräche vorher mit dir simulieren — Rolle, Widerstand, ' +
         'Eskalation. Fünf Minuten Simulation schlagen dreißig Minuten Grübeln.',
     },
     {

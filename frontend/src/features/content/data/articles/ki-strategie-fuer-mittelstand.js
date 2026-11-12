@@ -24,7 +24,7 @@ export default {
       'Kunden-Support-Erst-Triage. Höchster ROI im Mittelstand, sechs Wochen Implementierung, klare Daten-Hoheit.',
       'Angebots- und Vertragsvorlagen mit KI-Erstellung + menschlicher Endkontrolle. Vier Stunden gespart pro Angebot in Maschinenbau und Beratungs-Branchen.',
       'Wissensmanagement und Onboarding. Neue Mitarbeiter bekommen einen KI-Trainer auf deiner internen Doku. Time-to-Productivity sinkt typischerweise 30 Prozent.',
-      'Strategische Reflexion für Senior-Team. Ein KI-Sparrings-Partner wie WladBot für die fünf wichtigsten Senior-Manager. Niedriger Setup-Aufwand, hoher Multiplikator.',
+      'Strategische Reflexion für Senior-Team. Ein KI-Sparrings-Partner wie WLAD AI für die fünf wichtigsten Senior-Manager. Niedriger Setup-Aufwand, hoher Multiplikator.',
     ] },
     { type: 'heading', level: 2, text: 'Die Trennlinie: Tool vs Operating Model.' },
     { type: 'paragraph', text: 'Tool-Kauf alleine ändert nichts. Du baust auf bestehende Prozesse einen KI-Layer drauf, am Ende des Quartals nutzen drei Leute das Tool zweimal pro Woche. Wer aber sein Operating Model bewusst anpasst · wer welche Aufgabe in welcher Qualität in welcher Frequenz mit KI macht · gewinnt Zeit und Output.' },

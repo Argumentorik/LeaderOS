@@ -2,9 +2,9 @@
 const isDev = process.env.NODE_ENV === 'development';
 
 const logger = {
-  error: (...args) => { if (isDev) console.error('[WladBot]', ...args); },
-  warn: (...args) => { if (isDev) console.warn('[WladBot]', ...args); },
-  info: (...args) => { if (isDev) console.info('[WladBot]', ...args); },
+  error: (...args) => { if (isDev) console.error('[WLAD AI]', ...args); },
+  warn: (...args) => { if (isDev) console.warn('[WLAD AI]', ...args); },
+  info: (...args) => { if (isDev) console.info('[WLAD AI]', ...args); },
 };
 
 export default logger;

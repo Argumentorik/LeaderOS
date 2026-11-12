@@ -40,7 +40,7 @@ const TIERS = [
       { label: 'Video- & Speech-Coaching', has: true, highlight: true },
       { label: '30-Tage Leadership Plan', has: true },
       { label: 'Wlad RAG System Basiszugang', has: true },
-      { label: 'WladBot KI-Coach 24/7 (GPT-5.2)', has: true },
+      { label: 'WLAD AI KI-Coach 24/7 (GPT-5.2)', has: true },
       { label: 'Audio-Mode Voice-Chat (ElevenLabs)', has: true },
       { label: 'Alle Frameworks & Playbooks', has: true },
       { label: 'License Key per E-Mail', has: true },

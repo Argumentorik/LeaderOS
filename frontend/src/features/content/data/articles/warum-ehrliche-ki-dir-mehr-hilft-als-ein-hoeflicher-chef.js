@@ -10,7 +10,7 @@ export default {
   author: 'Wlad Jachtchenko',
   publishedAt: '2026-07-15',
   cover: null,
-  tags: ['KI', 'Feedback', 'WladBot', 'Kommunikation'],
+  tags: ['KI', 'Feedback', 'WLAD AI', 'Kommunikation'],
   seo: {
     title: 'Ehrliche KI vs. höflicher Chef: warum Direktheit gewinnt',
     description:
@@ -33,7 +33,7 @@ export default {
 
     { type: 'heading', level: 2, text: 'Warum eine KI diese Reibung nicht hat.' },
     { type: 'paragraph', text: 'Ein KI-Coach hat kein Ego, das geschützt werden muss. Er muss morgen nicht wieder mit dir im selben Meeting sitzen. Er fürchtet keine Retourkutsche, keine schlechte Stimmung im Team, keinen Karriereschaden. Das heißt nicht, dass eine KI grob oder gefühllos sein sollte · gute KI-Coaches formulieren durchaus respektvoll. Aber sie muss die Wahrheit nicht gegen ihre eigene soziale Position abwägen. Das ist der eigentliche strukturelle Vorteil: die Direktheit kostet die KI nichts, während sie einen Menschen echtes soziales Kapital kosten kann.' },
-    { type: 'paragraph', text: 'Genau dieses Prinzip steckt hinter WladBot in LeaderOS. Wenn du ihm eine E-Mail zur Prüfung gibst, die du gerade an einen unzufriedenen Kunden schreiben willst, sagt er dir nicht "klingt gut, vielleicht kannst du noch ein bisschen wärmer formulieren". Er sagt dir, wenn Satz drei widersprüchlich zu Satz eins ist. Er sagt dir, wenn dein Ton nach Rechtfertigung klingt statt nach Führung. Das ist unbequem im Moment · und genau deshalb wertvoll.' },
+    { type: 'paragraph', text: 'Genau dieses Prinzip steckt hinter WLAD AI in LeaderOS. Wenn du ihm eine E-Mail zur Prüfung gibst, die du gerade an einen unzufriedenen Kunden schreiben willst, sagt er dir nicht "klingt gut, vielleicht kannst du noch ein bisschen wärmer formulieren". Er sagt dir, wenn Satz drei widersprüchlich zu Satz eins ist. Er sagt dir, wenn dein Ton nach Rechtfertigung klingt statt nach Führung. Das ist unbequem im Moment · und genau deshalb wertvoll.' },
 
     { type: 'heading', level: 2, text: 'Was das nicht bedeutet.' },
     { type: 'paragraph', text: 'Hier muss ich präzise sein, weil dieser Punkt oft missverstanden wird: KI-Coaching ersetzt keine menschlichen Beziehungen. Es ergänzt sie an einer spezifischen Stelle, an der Menschen strukturell schwächer sind · nämlich bei der reinen, ungefilterten Rückmeldung ohne Beziehungskosten. Dein Team, dein Mentor, dein Chef bleiben unersetzlich für Vertrauen, Kontext, gemeinsame Geschichte, Empathie in echten Krisen. Eine KI kann dir keine Hand auf die Schulter legen, wenn du gerade eine schwere Woche hattest. Was sie kann: dir 20 Minuten vor einem schwierigen Gespräch sagen, dass dein Argument in sich zusammenfällt, ohne dabei Rücksicht auf eure gemeinsame Geschichte zu nehmen.' },
@@ -44,7 +44,7 @@ export default {
       'Beides ersetzt sich nicht gegenseitig · das eine liefert Beziehung, das andere liefert unverzerrtes Signal.',
     ] },
 
-    { type: 'callout', tone: 'lime', text: 'WladBot in LeaderOS ist rund um die Uhr verfügbar und hat kein Interesse daran, dir zu gefallen · nur daran, dass deine nächste Entscheidung besser wird. 14 Tage kostenlos testen, direkt in der App.' },
+    { type: 'callout', tone: 'lime', text: 'WLAD AI in LeaderOS ist rund um die Uhr verfügbar und hat kein Interesse daran, dir zu gefallen · nur daran, dass deine nächste Entscheidung besser wird. 14 Tage kostenlos testen, direkt in der App.' },
 
     { type: 'heading', level: 2, text: 'Der eigentliche Test.' },
     { type: 'paragraph', text: 'Frag dich ehrlich: Wann hat dir zuletzt jemand ohne Umschweife gesagt, dass eine deiner Ideen schwach war? Wenn dir kein Beispiel aus den letzten Wochen einfällt, ist das kein gutes Zeichen für die Qualität deiner Umgebung · es ist ein Zeichen dafür, dass alle um dich herum höflich geworden sind. Höflichkeit ist angenehm. Sie macht dich aber nicht besser. Was dich besser macht, ist ein Signal, das nicht erst durch drei Schichten sozialer Rücksichtnahme gefiltert wurde, bevor es bei dir ankommt.' },
