@@ -90,17 +90,12 @@ def _stripe_status() -> dict:
 
 
 def _storage_status() -> dict:
-    if _present("SUPABASE_URL") and _present("SUPABASE_SERVICE_KEY"):
-        return {"status": "go", "backend": "supabase",
-                "bucket": os.environ.get("SUPABASE_STORAGE_BUCKET",
-                                         "wladbot-uploads"),
-                "note": "Native Supabase Storage"}
-    if _present("EMERGENT_LLM_KEY"):
-        return {"status": "degraded", "backend": "emergent",
-                "note": "Legacy wrapper — set SUPABASE_URL + "
-                        "SUPABASE_SERVICE_KEY to migrate"}
+    from lib import media_bucket
+    if media_bucket.is_configured():
+        return {"status": "go", "backend": "railway-bucket",
+                "bucket": media_bucket.bucket_name(), "note": "Railway object storage"}
     return {"status": "down", "backend": None,
-            "note": "No storage backend — uploads will fail"}
+            "note": "MEDIA_S3_* not set — uploads and guide media will fail"}
 
 
 def _supabase_db_status() -> dict:

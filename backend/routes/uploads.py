@@ -1,19 +1,24 @@
-"""File upload routes - Profile picture + file storage."""
+"""File upload routes - Profile picture + file storage.
+
+Storage: the private part of the Railway `media` bucket (lib/media_bucket.py).
+Object keys are the storage paths kept in the DB (`wladbot/profiles/…`,
+`guide/…`, `posters/guide/…`, `uploads/…`, `courses/…`) — the same keys the
+Emergent object store used, so the migrated objects resolve unchanged.
+`public/` is reserved for routes/media.py and never written here.
+"""
 from fastapi import APIRouter, HTTPException, Request, UploadFile, File
 from fastapi.responses import Response
 import re
 import uuid
-import requests
 from datetime import datetime, timezone
 
-from config import db, EMERGENT_LLM_KEY, logger
+from config import db, logger
+from lib import media_bucket
 from services import get_current_user
 
 router = APIRouter(prefix="/api", tags=["uploads"])
 
-STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
 APP_NAME = "wladbot"
-storage_key = None
 
 IMAGE_EXT_BY_TYPE = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
 ALLOWED_IMAGE_TYPES = set(IMAGE_EXT_BY_TYPE)
@@ -21,48 +26,45 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
 def init_storage(force: bool = False):
-    global storage_key
-    if storage_key and not force:
-        return storage_key
-    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_LLM_KEY}, timeout=30)
-    resp.raise_for_status()
-    storage_key = resp.json()["storage_key"]
-    logger.info("Object storage initialized")
-    return storage_key
+    """Startup check (server.py): logs whether the bucket is configured."""
+    if media_bucket.is_configured():
+        logger.info("Object storage: Railway bucket %s", media_bucket.bucket_name())
+    else:
+        logger.warning("Object storage not configured (MEDIA_S3_*) — uploads and guide media will fail")
 
 
 _UNSAFE_PATH_CHARS = re.compile(r"[?#%\\\x00-\x1f\x7f]")
 
 
-def _object_url(path: str) -> str:
-    """Objekt-URL nur auf dem festen STORAGE_URL-Host — Pfad darf weder Query/Fragment
-    noch Traversal (`..`) einschleusen."""
+def _key(path: str) -> str:
+    """Validated object key — no query/fragment, traversal or `public/` area."""
     if (
         not path
         or path.startswith("/")
+        or path.startswith("public/")
         or _UNSAFE_PATH_CHARS.search(path)
         or any(seg in ("", ".", "..") for seg in path.split("/"))
     ):
         raise ValueError(f"invalid storage path: {path!r}")
-    return f"{STORAGE_URL}/objects/{path}"
+    return path
+
+
+def _s3():
+    s3 = media_bucket.client()
+    if s3 is None:
+        raise RuntimeError("Object storage not configured (MEDIA_S3_*)")
+    return s3
 
 
 def put_object(path: str, data: bytes, content_type: str) -> dict:
-    key = init_storage()
-    resp = requests.put(
-        _object_url(path),
-        headers={"X-Storage-Key": key, "Content-Type": content_type},
-        data=data, timeout=120,
-    )
-    resp.raise_for_status()
-    return resp.json()
+    key = _key(path)
+    _s3().put_object(Bucket=media_bucket.bucket_name(), Key=key, Body=data, ContentType=content_type)
+    return {"path": key, "size": len(data)}
 
 
 def get_object(path: str):
-    key = init_storage()
-    resp = requests.get(_object_url(path), headers={"X-Storage-Key": key}, timeout=60)
-    resp.raise_for_status()
-    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
+    obj = _s3().get_object(Bucket=media_bucket.bucket_name(), Key=_key(path))
+    return obj["Body"].read(), obj.get("ContentType") or "application/octet-stream"
 
 
 def object_exists(path: str) -> bool:
@@ -74,48 +76,27 @@ def object_exists(path: str) -> bool:
     """
     if not path:
         return False
-    key = init_storage()
     try:
-        resp = requests.get(
-            _object_url(path),
-            headers={"X-Storage-Key": key, "Range": "bytes=0-64"},
-            timeout=20, stream=True,
-        )
-        ok = resp.status_code < 400
-        resp.close()
-        return ok
-    except (requests.RequestException, ValueError):
+        _s3().head_object(Bucket=media_bucket.bucket_name(), Key=_key(path))
+        return True
+    except Exception:  # noqa: BLE001 — 404, bad path, storage down: all "not there"
         return False
 
 
 def download_object(path: str, dest: str, chunk_size: int = 1024 * 1024) -> str:
     """Objekt gestreamt auf die Platte schreiben (nie komplett im RAM)."""
-    key = init_storage()
-    with requests.get(_object_url(path), headers={"X-Storage-Key": key}, timeout=120, stream=True) as resp:
-        resp.raise_for_status()
-        with open(dest, "wb") as f:
-            for chunk in resp.iter_content(chunk_size=chunk_size):
-                if chunk:
-                    f.write(chunk)
-        return resp.headers.get("Content-Type", "application/octet-stream")
+    obj = _s3().get_object(Bucket=media_bucket.bucket_name(), Key=_key(path))
+    with open(dest, "wb") as f:
+        for chunk in obj["Body"].iter_chunks(chunk_size=chunk_size):
+            if chunk:
+                f.write(chunk)
+    return obj.get("ContentType") or "application/octet-stream"
 
 
 @router.get("/uploads/health")
 async def uploads_health():
-    """Diagnostik (aus mvpcode übernommen) — welcher Storage-Backend ist aktiv?
-    Public, gibt keine Keys oder Bucket-Inhalte aus.
-
-    Diese Route nutzt den Emergent-Objstore direkt (siehe oben); lib/object_storage
-    (Supabase-Shim aus mvpcode) ist bewusst NICHT angeschlossen, weil bestehende
-    Objekte im Emergent-Storage liegen und ein ENV-getriebener Wechsel sie
-    unauffindbar machen würde.
-    """
-    return {
-        "backend": "emergent",
-        "url": STORAGE_URL,
-        "initialized": storage_key is not None,
-        "key_configured": bool(EMERGENT_LLM_KEY),
-    }
+    """Diagnostik — welcher Storage-Backend ist aktiv? Public, keine Keys."""
+    return {"backend": "railway-bucket", "configured": media_bucket.is_configured()}
 
 
 @router.post("/upload/profile-picture")

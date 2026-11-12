@@ -1,4 +1,4 @@
-import { database, defineRailway, github, preserve, project, service, volume, type VariableValue } from "railway/iac";
+import { bucket, database, defineRailway, github, preserve, project, service, volume, type VariableValue } from "railway/iac";
 // This repository manages only its own resources in the environment. Other
 // repositories export their own partial name.
 // See https://docs.railway.com/infrastructure-as-code#multi-repo-projects
@@ -17,6 +17,11 @@ export default defineRailway((ctx) => {
   // Disk cache for guide media + chunked admin uploads (TMPDIR below).
   // Volumes pin the service to 1 replica, which challenge_mail_loop needs anyway.
   const data = volume("backend-data", { region: REGION, sizeMB: 50000 });
+
+  // S3-compatible object storage (Amsterdam). Public media (e.g. Wlad's
+  // welcome video) under public/, served by LeaderOS /api/media/* via
+  // presigned redirects; later also the uploads moved off Emergent.
+  const media = bucket("media", { region: "ams" });
 
   // Secret values live in Railway, never in this file: preserve() keeps
   // whatever is set via `railway variable set`. Staging deliberately has no
@@ -65,9 +70,7 @@ export default defineRailway((ctx) => {
       ANTHROPIC_API_KEY: preserve(),
 
       // Shared provider config, copied from the Emergent production env.
-      // EMERGENT_LLM_KEY still backs the objstore (lib/object_storage) until the files move.
       // FAL (image/video generation) is off until a FAL_KEY is set.
-      EMERGENT_LLM_KEY: preserve(),
       GOOGLE_CLIENT_ID: preserve(),
       ELEVENLABS_API_KEY: preserve(),
       ELEVENLABS_API_KEY_ID: preserve(),
@@ -82,6 +85,12 @@ export default defineRailway((ctx) => {
       // Verifies Leader-Check's sync tokens; must equal LeaderCheck's value.
       REPORT_JWT_SECRET: preserve(),
       STRIPE_API_KEY: preserve(),
+      // Media bucket (routes/media.py) — references, no secrets in this file.
+      MEDIA_S3_ENDPOINT: "${{media.ENDPOINT}}",
+      MEDIA_S3_BUCKET: "${{media.BUCKET}}",
+      MEDIA_S3_REGION: "${{media.REGION}}",
+      MEDIA_S3_ACCESS_KEY_ID: "${{media.ACCESS_KEY_ID}}",
+      MEDIA_S3_SECRET_ACCESS_KEY: "${{media.SECRET_ACCESS_KEY}}",
 
       ...prodOnlySecrets,
     },
@@ -188,6 +197,6 @@ export default defineRailway((ctx) => {
 
   return project("leaderos", {
     variables: { managed: true },
-    resources: [LeaderOS, db, data, LeaderOSWeb, LeaderCheck, LeaderCheckWeb],
+    resources: [LeaderOS, db, data, media, LeaderOSWeb, LeaderCheck, LeaderCheckWeb],
   });
 });

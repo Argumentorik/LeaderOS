@@ -16,8 +16,8 @@ export const WLAD_AVATAR = '/wladbot-avatar-clean.png';
 export const WLAD_PORTRAIT = '/wlad-portrait.jpg';
 
 /** Wlad's personal welcome video, shown right before the onboarding starts. */
-export const WLAD_WELCOME_VIDEO =
-  'https://customer-assets-eiarnc6j.emergentagent.net/job_dd3457c0-3be5-4c4c-bc34-5b0e823b9278/artifacts/gwj6ejp2_YouTube%20Video%2005.mp4';
+// Railway `media` bucket (public/welcome-video.mp4, 1080p), via backend/routes/media.py.
+export const WLAD_WELCOME_VIDEO = '/api/media/welcome-video.mp4';
 
 /** Tatsächliche Länge des Welcome-Clips (mvhd-Atom: 34,84s) — Fallback, wenn
  *  der Browser keine Video-Metadaten liefert. */

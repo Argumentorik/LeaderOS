@@ -83,6 +83,7 @@ from config import client, db, logger
 from middleware import RateLimitMiddleware, SecurityHeadersMiddleware
 
 from routes.auth import router as auth_router
+from routes.media import router as media_router
 from routes.chat import router as chat_router
 from routes.tasks import router as tasks_router
 from routes.simulations import router as simulations_router
@@ -126,6 +127,7 @@ app = FastAPI(title="WladBot API", version="5.0")
 
 # Include all route modules
 app.include_router(auth_router)
+app.include_router(media_router)
 app.include_router(oauth_router)
 app.include_router(license_router)
 app.include_router(rag_admin_router)

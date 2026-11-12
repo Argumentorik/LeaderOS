@@ -19,7 +19,8 @@ import {
   Flame, CheckCircle2, Lock, ArrowRight, Play, RotateCcw, Crown, Mic
 } from 'lucide-react';
 
-const HERO_IMG = 'https://static.prod-images.emergentagent.com/jobs/dd3457c0-3be5-4c4c-bc34-5b0e823b9278/images/02d966222d58fb69dc61882571863588f7b507b00513e790a26d658a206acd36.png';
+// Railway `media` bucket (public/challenge30-hero.png), via backend/routes/media.py.
+const HERO_IMG = '/api/media/challenge30-hero.png';
 
 const WEEKS = {
   1: { title: 'Awareness & Foundation', sub: 'Dein Standort. Dein Startpunkt.', accent: '#BFFF00' },
