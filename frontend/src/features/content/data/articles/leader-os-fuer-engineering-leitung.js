@@ -51,9 +51,7 @@ export default {
       'Wenn du heute Engineering-Verantwortung trägst und das Gefühl hast deine kommunikative Bandbreite ' +
       'wächst nicht im Tempo deiner Org-Reichweite, ist die Challenge genau dafür gebaut.' },
     { type: 'paragraph', text:
-      'Du bist nicht alleine: über 30 Prozent der Challenge-Teilnehmer kommen aus Engineering. Wenn du die ' +
-      'Plattform an einem Engineering-Case sehen willst, buch eine 20-Min-Demo. Wir nehmen einen Case aus ' +
-      'deinem Backlog und gehen Live durch den ersten Drill.' },
+      'Du bist nicht alleine: über 30 Prozent der Challenge-Teilnehmer kommen aus Engineering.' },
   ],
   seo: {
     title: 'LeaderOS für Engineering-Leitung: CTO, VP, Tech-Lead',

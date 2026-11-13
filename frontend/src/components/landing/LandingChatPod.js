@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BERATUNG_URL, DEMO_URL } from '../../lib/calendly';
+import { BERATUNG_URL } from '../../lib/calendly';
 
 /**
  * LandingChatPod · editorial WLAD AI-Mini, eingebettet als Funnel.
  *
  * KEIN echter Chat-mit-LLM. Ein scripted Funnel im Specimen-Stil,
  * der den Besucher in 4–6 Mikro-Fragen qualifiziert und am Ende
- * eine Route empfiehlt: Diagnose · Demo · Beratung. Das macht ihn
+ * eine Route empfiehlt: Diagnose · Beratung. Das macht ihn
  * ehrlich (kein Fake-AI-Theater), schnell (keine Latenz, keine
  * Token-Kosten) und konsistent (jeder Besucher kommt durch).
  *
@@ -17,7 +17,7 @@ import { BERATUNG_URL, DEMO_URL } from '../../lib/calendly';
  *                 Erkundet Rolle, größte Leadership-Baustelle,
  *                 Zeit-Horizont, Team-Größe. Berechnet FIT-Score
  *                 und schlägt vor: Diagnose (low fit) → leadercheck.de
- *                 · Demo (mid) → Google booking page · Beratung (high) → Google booking page.
+ *                 · Beratung (high) → Google booking page.
  *
  *   'readiness' · fires on leader-check.de (Vercel marketing landing).
  *                 Erkundet KI-Nutzung, Argumentations-Sicherheit,
@@ -96,15 +96,6 @@ const FLOWS = {
           'Bei deinem Setup macht es wenig Sinn, mit der Diagnose anzufangen · ' +
           'wir setzen direkt mit einer 30-Min-Beratung an deinem konkreten Fall an.',
         primary: { label: 'Beratung buchen · 30 Min', href: BERATUNG_URL },
-        secondary: { label: 'Lieber doch Demo · 20 Min', href: DEMO_URL },
-      },
-      {
-        min: 7,
-        title: 'Live-Demo.',
-        body:
-          'Du kennst deine Baustelle · schau dir LeaderOS am eigenen Use-Case an. ' +
-          '20 Minuten, Live, mit dem Team.',
-        primary: { label: 'Demo buchen · 20 Min', href: DEMO_URL },
         secondary: { label: 'Erst Diagnose machen', href: 'https://leadercheck.de' },
       },
       {
@@ -114,7 +105,7 @@ const FLOWS = {
           'Genau für deinen Punkt gemacht: 10 Minuten, 30 Fragen, sofort dein Score und ' +
           'eine konkrete Empfehlung. Kostenlos, ohne Kreditkarte.',
         primary: { label: 'Diagnose starten · 10 Min', href: 'https://leadercheck.de' },
-        secondary: { label: 'Trotzdem Demo · 20 Min', href: DEMO_URL },
+        secondary: { label: 'Direkt Beratung · 30 Min', href: BERATUNG_URL },
       },
     ],
   },

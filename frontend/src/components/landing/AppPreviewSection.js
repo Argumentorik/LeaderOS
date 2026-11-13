@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion';
-import { PlusCircleCTA } from './PlusCircleCTA';
-import { DEMO_URL } from '../../lib/calendly';
 
 /**
  * AppPreviewSection · "Was siehst du, wenn du drinnen bist?".
@@ -244,20 +242,6 @@ export const AppPreviewSection = () => (
         ))}
       </div>
 
-      <div className="mt-16 md:mt-20 pt-8 border-t border-foreground/10 flex flex-wrap items-center justify-between gap-x-10 gap-y-6">
-        <p className="max-w-xl text-[14px] leading-[1.55] text-foreground/65">
-          Wenn du sehen willst wie das in deiner Realität aussieht,
-          buch dir 20 Minuten mit dem Team. Live-Demo, deine Fragen,
-          dein Use-Case.
-        </p>
-        <PlusCircleCTA
-          href={DEMO_URL}
-          testId="app-preview-demo"
-          halo={false}
-        >
-          Demo buchen · 20 Min
-        </PlusCircleCTA>
-      </div>
     </div>
   </section>
 );

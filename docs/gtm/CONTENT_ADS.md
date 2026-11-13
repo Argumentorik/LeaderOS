@@ -54,7 +54,6 @@
 | AD-B-01  | 1x1    | rally    | DREI SÄTZE REICHEN.               |
 | AD-B-02  | 9x16   | blaze    | KLARE SKRIPTE STATT BAUCH.        |
 | AD-C-01  | 1x1    | paper    | 14 MIO VIEWS.                     |
-| AD-D-01  | 4x5    | midnight | DEIN USE-CASE. NICHT UNSERER.     |
 
 ## Wording-Regeln (für alle Ads)
 

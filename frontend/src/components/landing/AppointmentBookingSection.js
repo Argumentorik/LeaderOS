@@ -13,7 +13,6 @@
  *                       + Wlad-Trust-Strip mit Avatar + Social-Proof
  *        Right (5/12) · Slot-Preview-Card mit den 5 kommenden Werktagen,
  *                       Verfügbarkeit pro Slot, Cal.com-CTA
- *   4. Demo-Fallback als kleiner Link unten ("Oder lieber erst Demo?")
  *
  * Slot-Daten:
  *   Wir zeigen die ersten 5 Werktage ab BOOKING_START als Zeitfenster.
@@ -24,9 +23,9 @@
  */
 
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/brandAssets';
-import { BERATUNG_URL, DEMO_URL, openBookingPage } from '../../lib/calendly';
+import { BERATUNG_URL, openBookingPage } from '../../lib/calendly';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Slot generation · stable pseudo-availability based on date
@@ -333,28 +332,6 @@ export const AppointmentBookingSection = () => {
           </motion.div>
         </div>
 
-        {/* Demo fallback · secondary intent */}
-        <div className="mt-14 pt-7 border-t border-foreground/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <div className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-foreground/55 mb-1">
-              ▸ ALTERNATIV
-            </div>
-            <p className="text-[14.5px] leading-[1.5] text-foreground/70">
-              Lieber erst die Plattform live sehen?
-              <span className="text-foreground"> 20 Minuten App-Tour</span> mit dem Team.
-            </p>
-          </div>
-          <a
-            href={DEMO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="beratung-demo-cta"
-            className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-foreground/75 hover:text-brand-strong border-b border-foreground/30 hover:border-brand-strong pb-1 transition-colors whitespace-nowrap"
-          >
-            Demo buchen · 20 Min
-            <ArrowUpRight size={14} />
-          </a>
-        </div>
       </div>
     </section>
   );

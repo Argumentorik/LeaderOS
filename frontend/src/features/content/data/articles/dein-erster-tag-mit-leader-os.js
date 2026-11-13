@@ -58,9 +58,6 @@ export default {
     { type: 'callout', tone: 'neutral', text:
       'Wenn du am ersten Tag keine 60 Minuten investierst, verschiebt sich die Challenge einfach. Wir zwingen ' +
       'nichts. Wir warten bis du startklar bist, der Plan wartet auf dich.' },
-    { type: 'paragraph', text:
-      'Wer den Challenge-Tag-1 vor dem Kauf sehen will, bucht eine 20-Min-Demo. Wir gehen dir mit dem Team durch ' +
-      'die Plattform und du siehst Tag 1 in real-time, an einem Case aus deinem Backlog.' },
   ],
   seo: {
     title: 'LeaderOS Onboarding: dein erster Tag in 60 Minuten',

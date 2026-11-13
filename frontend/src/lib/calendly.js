@@ -11,7 +11,6 @@
  * `components/brand/BookConsultationButton.js` (gleiche Seite, mit Gate-Toast).
  */
 export const BERATUNG_URL = 'https://calendly.com/simonmeindl/wlad-jachtchenko-analysegesprach-klon';
-export const DEMO_URL = 'https://calendly.com/simonmeindl/wlad-jachtchenko-analysegesprach-klon';
 
 export const openBookingPage = (url = BERATUNG_URL) =>
   window.open(url, '_blank', 'noopener,noreferrer');

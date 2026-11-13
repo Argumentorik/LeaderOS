@@ -40,7 +40,7 @@ Standard-Events die wir feuern sollten:
 | `Lead`             | Email im LeadCaptureModal eingetragen             |
 | `CompleteRegistration` | Diagnose-Quiz abgeschlossen                   |
 | `Purchase`         | Stripe-Checkout-success Webhook                   |
-| `Schedule`         | Cal.com Booking (Demo/Beratung) bestätigt         |
+| `Schedule`         | Cal.com Booking (Beratung) bestätigt         |
 
 `Lead` und `Schedule` kommen client-side. `Purchase` muss zwingend
 über die Conversions-API serverseitig — sonst halluziniert der
@@ -99,7 +99,7 @@ kannst du deutlich höheren CPL akzeptieren weil der Deal größer ist.
   - Job-Title-Liste: "Head of Engineering, VP Sales, CTO, …"
   - Company-Size-Filter: 50–500 Employees (Mittelstand).
   - Account-List-Targeting: wenn ihr 200 Ziel-Unternehmen habt.
-- Format-Preset: `4x5` (mehr Real-Estate) → AD-A-02, AD-D-01, AD-G-01,
+- Format-Preset: `4x5` (mehr Real-Estate) → AD-A-02, AD-G-01,
   AD-G-02.
 - Budget: 50 €/Tag pro Campaign reicht für erste Tests.
 

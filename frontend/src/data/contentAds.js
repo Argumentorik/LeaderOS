@@ -148,24 +148,6 @@ export const AD_SERIES = [
       'Diese Methodik landet jetzt in deiner Tasche.',
   },
 
-  // ─── D · Retarget (Demo / Beratung) ─────────────────────────────
-  {
-    id: 'AD-D-01',
-    slug: 'demo-buchen',
-    format: '4x5',
-    platform: 'meta',
-    palette: 'midnight',
-    topText: 'LIVE-DEMO\n20 MINUTEN',
-    titleText: 'DEIN USE-CASE.\nNICHT UNSERER.',
-    bottomText: 'LEADER-OS.DE',
-    cta: 'TERMIN BUCHEN',
-    photo: '/wlad/wlad-portrait.jpg',
-    photoFit: 'cover',
-    caption:
-      'Keine Slide-Deck-Show. 20 Min live, deine Frage zuerst, das ' +
-      'Tool danach. leader-os.de',
-  },
-
   // ─── E · KI-Native Hooks ────────────────────────────────────────
   {
     id: 'AD-E-01',

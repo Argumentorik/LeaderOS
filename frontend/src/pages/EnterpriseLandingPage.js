@@ -252,7 +252,7 @@ const BringYourOwnRAG = ({ de }) => (
         </div>
         <a href="#lead-form" data-testid="byo-rag-cta">
           <Button className="bg-white text-[#0A0A0A] hover:bg-[#BFFF00] font-black h-11 px-5 transition-all active:scale-[0.98]">
-            {de ? 'BYO-RAG demo anfragen' : 'Request BYO-RAG demo'}
+            {de ? 'BYO-RAG anfragen' : 'Ask about BYO-RAG'}
             <ArrowRight size={15} className="ml-2" />
           </Button>
         </a>
