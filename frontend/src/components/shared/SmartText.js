@@ -13,7 +13,8 @@
  *
  * Detection rules:
  *   - Lines like "N. xxx" (N=1-99) → ordered list item.
- *   - Lines starting with "-", "•", "*" → unordered list item.
+ *   - Lines starting with "-", "•", "*", "▸", "→" → unordered list item.
+ *   - Lines starting with "»" → example-script callout.
  *   - Inline "1. x 2. y 3. z" on a single line → also split into list items.
  *   - Consecutive list items collapse into a single card-stack.
  *
@@ -28,7 +29,12 @@
 import { unescapeText } from '../../lib/textClean';
 import { renderInlineMarkdown } from '../../lib/inlineMarkdown';
 
-const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
+const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;
+// `▸` / `→` are the Wlad-Markdown bullets from the OUTPUT-STIL rule
+// (backend/services.py WLAD_HARD_RULES, Regel 7), used in coach-mode fields.
+const BULLET_LINE_RE = /^\s*[-•*▸→]\s+(.+)$/;
+// `»` = example script the user can say word for word (same rule).
+const QUOTE_LINE_RE = /^\s*»\s*(.+)$/;
 
 // Inline "1. … 2. … 3. …" — split a single line that hides a list.
 // We look for at least 2 occurrences before treating it as a list.
@@ -75,6 +81,17 @@ function parseBlocks(text) {
         buffer = { type: 'list-ordered', items: [] };
       }
       buffer.items.push({ num: parseInt(orderedMatch[1], 10), text: orderedMatch[2] });
+      continue;
+    }
+
+    // Example-script lines (`» …`) → one callout block.
+    const quoteMatch = QUOTE_LINE_RE.exec(line);
+    if (quoteMatch) {
+      if (!buffer || buffer.type !== 'quote') {
+        flushBuffer();
+        buffer = { type: 'quote', items: [] };
+      }
+      buffer.items.push({ text: quoteMatch[1] });
       continue;
     }
 
@@ -169,6 +186,22 @@ export const SmartText = ({
                 <OrderedCard key={`oi-${i}`} item={{ num: it.num ?? i + 1, text: it.text }} accent={accent} />
               ))}
             </div>
+          );
+        }
+        if (b.type === 'quote') {
+          return (
+            <blockquote
+              key={`bl-${bIdx}`}
+              className="pl-3 border-l-2 rounded-r-md py-1.5 pr-2 space-y-1"
+              style={{ borderColor: accent, background: `${accent}0D` }}
+              data-testid="smart-text-quote"
+            >
+              {b.items.map((it, i) => (
+                <p key={`q-${i}`} className="text-[13px] leading-relaxed italic text-foreground/90">
+                  {renderInline(it.text)}
+                </p>
+              ))}
+            </blockquote>
           );
         }
         if (b.type === 'list-unordered') {
