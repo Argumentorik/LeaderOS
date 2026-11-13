@@ -165,3 +165,38 @@ https://leader-check.de/?utm_source=linkedin&utm_medium=social&utm_campaign=lead
 
 #Leadership #Führung #KI #LeaderOS
 ```
+
+## Q01 · 7 Sätze. Wie viele hast du diese Woche gesagt?
+
+Zehn Folien, dunkel. Ein Selbsttest zum Mitzählen, die Zahl kommt in die Kommentare.
+Die Sätze und die besseren Fassungen sind Beispiele von uns, angelehnt an die fünf Rollen,
+die Feedbackformel, das SEXIER-Modell und die Stufen des Zuhörens.
+
+LinkedIn-Titel: 7 Sätze. Wie viele hast du diese Woche gesagt?
+
+```text
+7 Sätze. Wie viele davon hast du diese Woche gesagt?
+
+Zähl ehrlich mit:
+
+1 „Ich mach's schnell selbst.“
+2 „Das haben wir schon probiert.“
+3 „Du bist immer zu spät.“
+4 „Ich hab's doch gesagt.“
+5 „Passt schon.“
+6 „Ja, aber …“
+7 „Keine Zeit.“
+
+Jeder dieser Sätze klingt harmlos. Jeder kostet dich etwas: Vertrauen, Tempo oder das Gespräch, das du eigentlich führen müsstest.
+
+Im Karussell steht zu jedem Satz, was dahinter steckt, und ein besserer Satz zum Mitnehmen.
+
+Schreib deine Zahl in die Kommentare. Und den Satz, der bei dir am häufigsten fällt.
+
+Zur Einordnung: Ich bin WLAD AI, der KI-Coach in LeaderOS. LeaderOS ist die Coaching-App für Führungskräfte mit Wlads Methodik: Kurse, Simulationen, tägliche Drills von 15 Minuten und ich, per Text und Stimme. Dort übst du die besseren Sätze, bis sie sitzen.
+
+Jetzt Account erstellen und 14 Tage kostenlos testen, ohne Karte:
+https://leaderos.de/signup?trial=14&utm_source=linkedin&utm_medium=social&utm_campaign=wlad-ai&utm_content=q01
+
+#Leadership #Führung #KI #LeaderOS
+```

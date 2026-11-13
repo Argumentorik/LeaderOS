@@ -73,6 +73,18 @@ const SCAN = {
   coaching: { photo: 'coaching.jpg', w: 1100, h: 1100, l: -60, t: -90 },
 };
 const C = {
+  Q01: { tag: '7 Sätze', series: 'Der 30-Sekunden-Test', world: 'dark', p: 'stage', slides: [
+    { t: 'scan', big: '7 Sätze.', rest: 'Wie viele hast du<br>diese Woche gesagt?', restSize: 84, sub: 'Zähl mit. Die Auflösung steht am Ende.', ann: [[605, 179, 770, 96, 'Schritt 1<br>Lesen'], [664, 635, 800, 540, 'Schritt 2<br>Ehrlich zählen'], [254, 742, 60, 560, 'Schritt 3<br>Zahl in die<br>Kommentare']] },
+    { t: 'satz', n: 1, q: "Ich mach's schnell selbst.", d: 'Du bleibst Fachkraft. Die Rolle Team-Leader bleibt unbesetzt.', bes: 'Ich zeige es dir einmal. Dann ist es deins.' },
+    { t: 'satz', n: 2, q: 'Das haben wir schon probiert.', d: 'Du beendest das Gespräch, statt nachzufragen.', bes: 'Was wäre diesmal anders?' },
+    { t: 'satz', n: 3, q: 'Du bist immer zu spät.', d: 'Eine Wertung. Keine Beobachtung. Dein Gegenüber sucht das Gegenbeispiel.', bes: 'Du warst diese Woche zweimal nach neun da.' },
+    { t: 'satz', n: 4, q: "Ich hab's doch gesagt.", d: 'Gesagt ist nicht begründet. Eine Behauptung ist Teil eins von sechs.', bes: 'Ich sage es noch einmal. Mit dem Grund dazu.' },
+    { t: 'satz', n: 5, q: 'Passt schon.', d: 'Du weichst dem Konflikt aus. Er wird dadurch nicht kleiner.', bes: 'Mich stört etwas. Hast du zehn Minuten?' },
+    { t: 'satz', n: 6, q: 'Ja, aber …', d: 'Du wartest auf deine Antwort. Das ist Stufe 2 von 10 beim Zuhören.', bes: 'Wenn ich dich richtig verstehe, …' },
+    { t: 'satz', n: 7, q: 'Keine Zeit.', d: 'Kein Nein, keine Zusage. Dein Gegenüber weiß nicht, woran es ist.', bes: 'Diese Woche nicht. Donnerstag um zehn?' },
+    { t: 'list', k: 'Auflösung', h: 'Deine Zahl', rows: [['0–2', 'Selten', 'Du führst bewusst. Halte das fest'], ['3–5', 'Normal', 'Hier liegt dein größter Hebel'], ['6–7', 'Alltag', 'Du bist nicht allein. Und es ist trainierbar']], wide: true },
+    { t: 'cta', h: 'Wie viele waren es? Schreib deine Zahl.', b: 'Und welcher Satz war der häufigste?', cta: 'Diese sieben Sätze trainierst du in LeaderOS, der Coaching-App mit WLAD AI.<br>Jetzt Account erstellen: <b style="font-size:1.2em">leaderos.de</b> · 14 Tage kostenlos, ohne Karte.' },
+  ] },
   LC01: { tag: 'Leader-Check', series: 'Selbsttest', world: 'dark', p: 'stage', slides: [
     { t: 'notes', label: 'Leader Notes', h: 'Wie gut führst<br>du wirklich?', pts: [[605, 131], [655, 518], [307, 608]], notes: [['KI-Readiness', 'Wie bereit bist du für Führung mit KI? Der Kopf entscheidet, was du abgibst und was du selbst machst.'], ['Rhetorik', 'Wie überzeugend argumentierst du? Ein Argument trägt nur, wenn es vollständig ist.'], ['Emotionale Intelligenz', 'Wie gut liest du Menschen? Das Wichtigste wird selten ausgesprochen.']], foot: '10 Minuten · kostenlos · leader-check.de' },
     { t: 'text', k: 'Die ehrliche Frage', h: 'Du bekommst Feedback zu Zahlen. Selten zu dir.', b: 'Wie du argumentierst, wie du zuhörst, wie du mit KI arbeitest: Das sagt dir im Alltag kaum jemand. Der Leader-Check schon.' },
@@ -188,6 +200,12 @@ const T = {
     <div style="left:60px;top:1040px;width:960px;display:flex;gap:30px">${s.notes.map(([a, b], n) => `<div class="mono" style="flex:1;font-size:14.5px;line-height:1.5;text-align:left"><span style="color:var(--lime)">0${n + 1}</span><br>${a}.<br><span style="opacity:.75">${b}</span></div>`).join('')}</div>
     <div class="mono" style="left:60px;top:1258px;font-size:19px;background:#141515;padding:6px 10px 6px 0">${s.foot}</div><div class="mono" style="right:60px;top:1262px;background:#141515;padding:4px 0 4px 10px">01 / ${String(N).padStart(2, '0')}</div><div class="gr"></div>`;
   },
+  satz: () => `${head('Satz ' + s.n + ' von 7', '<span class="pill">Mitzählen</span>')}
+    <div class="H" style="left:72px;top:150px;font-size:210px;color:var(--lime)">${s.n}</div>
+    <div class="H" style="left:72px;top:400px;width:940px;font-size:${s.q.length > 18 ? 104 : 128}px">„${s.q}“</div>
+    <div class="k" style="left:72px;top:${s.q.length > 18 ? 700 : 620}px;color:#a9ada2">Was dahinter steckt</div>
+    <div class="b" style="left:72px;top:${s.q.length > 18 ? 736 : 656}px;width:900px;font-size:40px;color:#e9e7df">${s.d}</div>
+    <div class="bub" style="left:56px;top:960px;width:968px;background:var(--lime);color:var(--ink);font-size:${s.bes.length > 40 ? 56 : 64}px;padding:32px 40px 38px"><small>Besser</small>„${s.bes}“</div>${foot()}`,
   xray: () => `<div class="scanbg"></div><div style="inset:0;background:radial-gradient(60% 34% at 50% 30%,rgba(255,255,255,.1),transparent)"></div>
     <div class="ln" style="left:36px;top:0;width:1px;height:1350px;opacity:.5"></div><div class="ln" style="left:1044px;top:0;width:1px;height:1350px;opacity:.5"></div><div class="ln" style="left:0;top:140px;width:1080px;height:1px;opacity:.5"></div>
     <div class="mono" style="left:72px;top:74px">${s.k}</div><div class="mono" style="right:72px;top:74px;color:var(--lime)">${s.note || 'Beispiel'}</div>
