@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Rauschen · LeaderOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Einzelpost "Rauschen" · 1080×1350. Echtes Porträt in Schwarzweiß, unscharf und körnig, ein schmales
+   scharfes Fenster. Die Wörter ringsum sind der Lärm des Tages, das Fenster ist das eine Gespräch.
+   Kein erzeugtes Gesicht, keine KI-Schärfung: dasselbe Foto, einmal weichgezeichnet, einmal nicht. */
+:root{--lime:#bfff00;--ink:#f3f1ea;--sans:'Inter Display','Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#222}
+#sheet{position:relative;width:1080px;height:1350px;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#5a5b5d 0%,#2a2b2d 55%,#141516 100%);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#sheet>*,#in>*{position:absolute}
+.p{max-width:none;left:-230px;top:70px;width:1540px;height:1540px;filter:grayscale(1) contrast(1.15) brightness(.82)}
+.w{font:400 27px/1 var(--sans);letter-spacing:-.005em;color:rgba(243,241,234,.78)}
+.k{font:500 17px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.gr{inset:0;background:url(../social-kit/build/grain.png);opacity:.95;mix-blend-mode:overlay}
+</style>
+</head>
+<body>
+<div id="sheet"><div id="in" style="left:0;top:0;width:1080px;height:1350px">
+  <img class="p" src="../social-kit/build/portrait.png" style="filter:grayscale(1) contrast(1.15) brightness(.82) blur(20px)">
+  <div style="left:0;top:0;width:1080px;height:1700px;background:linear-gradient(180deg,transparent 0%,transparent 50%,rgba(10,10,11,.9) 68%,#101112 80%)"></div>
+  <div style="left:402px;top:395px;width:150px;height:440px;overflow:hidden;outline:1.5px solid rgba(255,255,255,.85);background:#2a2b2d"><img class="p" src="../social-kit/build/portrait.png" style="position:absolute;left:-632px;top:-325px"></div>
+  <svg style="left:457px;top:612px" width="40" height="40"><path d="M20 0V40M0 20H40" stroke="#fff" stroke-width="1.5"/></svg>
+  <div class="w" style="left:170px;top:400px">Meetings</div>
+  <div class="w" style="left:120px;top:690px">Budget</div>
+  <div class="w" style="left:800px;top:330px">Deadline</div>
+  <div class="w" style="left:770px;top:800px">Statuscall</div>
+  <div class="w" style="left:230px;top:960px">Mails</div>
+  <div class="w" style="left:578px;top:606px;color:var(--lime);font-weight:600;font-size:31px;text-shadow:0 0 18px rgba(0,0,0,.9)">das eine Gespräch</div>
+  <div class="k" style="left:60px;top:60px">LeaderOS</div><div class="k" style="right:60px;top:60px">WLAD AI</div>
+  <div style="left:60px;top:1060px;width:960px;font:500 86px/.98 var(--sans);letter-spacing:-.05em">Alles andere<br>ist Rauschen.</div>
+  <div class="k" style="left:60px;top:1272px">13-11-2026 17:15:00</div><div class="k" style="right:60px;top:1272px;color:var(--lime)">leaderos.de</div>
+  </div><div class="gr"></div><div class="gr" style="opacity:.5"></div>
+</div>
+<script>
+// ?f=story rendert 1080×1920: derselbe Aufbau, senkrecht eingemittet.
+if (new URLSearchParams(location.search).get('f') === 'story') { document.getElementById('sheet').style.height = '1920px'; document.getElementById('in').style.top = '250px'; }
+</script>
+</body>
+</html>
