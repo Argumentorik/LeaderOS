@@ -1,39 +1,43 @@
-# Cron Schedule — leader-os.de
+# Cron Schedule — LeaderOS
 
-> Externe Scheduler (cron-job.org / GitHub Actions / Vercel Cron) müssen diese
-> Endpoints periodisch aufrufen. Alle sind über `X-Cron-Secret` Header
-> abgesichert (Env-Var `CRON_SHARED_SECRET`).
-
----
-
-## Endpoints + Empfohlener Schedule
-
-| Endpoint | Schedule (UTC) | Was | Why |
-|---|---|---|---|
-| `POST /api/cron/trial-reminders` | `0 9 * * *` (täglich 09:00) | Sendet Trial-Ablauf-Reminder 3 Tage vor Ende | Free-Trial Reaktivierung |
-| `POST /api/cron/drip-sequence` | `0 10 * * *` (täglich 10:00) | Day 1 / 3 / 7 Drip-Emails an neue User | Onboarding-Aktivierung |
-| `POST /api/cron/video-drip` | `0 11 * * 1` (montags 11:00) | Wöchentliche Video-Drip (Woche 1-6) | Lead-Magnet Lernvideo-Serie |
-| `POST /api/cron/webinar-reminders` | `*/15 * * * *` (alle 15 min, mindestens 27.–29.10.) | 24h-Reminder (12–24,5 h vorher) + 1h-Reminder (0–2 h vorher) an alle Webinar-Leads, je Lead einmal | Show-up-Rate Webinar 29.10. |
-| `POST /api/cron/webinar-followup` | `0 8 * * *` (täglich) | „Starte deinen Trial"-Mail ab 20 h nach dem Webinar, je Lead einmal | Webinar → Trial |
-| `POST /api/cron/license-nurture` | `0 7 * * *` (täglich, via GitHub Actions `cron-jobs`) | 5-Mail-Serie über 7 Tage an `/frameworks`-Leads (`db.license_leads`) — Zugangscode-Aktivierung + optionaler Webinar-Bonus | `/frameworks`-Funnel → Account-Erstellung |
-
-> **Webinar-Crons:** GitHub-Action `webinar-cron.yml` ruft beide nur in den
-> Fenstern um den Termin auf — **als Backup**. Geplante GitHub-Läufe starten
-> hier bis zu 5 h verspätet (siehe `cron-jobs`, 07:00 → ~12:30 UTC). Primär
-> deshalb bei cron-job.org einen 15-min-Job für `webinar-reminders` anlegen
-> (Setup unten). Doppelte Aufrufe sind unkritisch.
+> All schedules live in the repo: `.github/workflows/cron.yml` (daily/monthly)
+> and `.github/workflows/webinar-cron.yml` (October webinar, fixed dates).
+> They call `POST {BACKEND_URL}/api/cron/<job>` with header `X-Cron-Secret`
+> (`CRON_SHARED_SECRET`, GitHub secret + Railway env). `BACKEND_URL` defaults to
+> `https://leaderos.de`, which follows DNS (Emergent today, Railway after cutover).
+> Every endpoint is idempotent, so a second caller never double-sends.
+>
+> **Pause:** repo variable `CRON_PAUSED=true` skips all scheduled runs
+> (manual runs still work). **Run one by hand:** Actions → cron-jobs → Run workflow.
+>
+> cron-job.org (Emergent era) is being retired. Its job list was never in the
+> repo; compare it against the table below before cancelling it.
 
 ---
 
-## Cron-Job.org Setup (empfohlen)
+## Endpoints
 
-1. https://cron-job.org/en/ → Account anlegen
-2. **Create cronjob** für jedes Endpoint:
-   - **URL:** `https://leader-os.de/api/cron/video-drip`
-   - **Schedule:** `Every Monday at 11:00 UTC`
-   - **Headers:** `X-Cron-Secret: <CRON_SHARED_SECRET aus Emergent .env>`
-   - **Notifications:** Email on failure
-3. Status testen: erstes Trigger sollte JSON `{"sent": 0, ...}` zurückgeben
+| Endpoint | Schedule | Was |
+|---|---|---|
+| `installments-due` | daily 07:00 UTC | Fällige Ratenzahlungen |
+| `free-video-drip` | daily 07:00 UTC | 4 Gratis-Videos (Tag 1–4) an neue Signups |
+| `lead-nurture` | daily 07:00 UTC | Lead-Nurture-Serie |
+| `license-nurture` | daily 07:00 UTC | 5-Mail-Serie an `/frameworks`-Leads (s. u.) |
+| `trial-reminders` | daily 07:00 UTC | Trial-Ablauf-Reminder 3 Tage vor Ende |
+| `video-drip` | daily 07:00 UTC | Lernvideo-Drip Woche 1–6 nach Signup-Alter |
+| `monthly-scorecard` | 1st of month 07:00 UTC | Monats-Scorecard |
+| `challenge-daily` | in-app (`challenge_mail_loop`, 07:00 Berlin) | Tages-Mail 30-Tage-Programm |
+| `drip-sequence` | — (no-op since Iter 186) | in `challenge-daily` aufgegangen |
+| `webinar-reminders` / `webinar-followup` | `webinar-cron.yml`, fixed dates | Webinar 29.10. |
+| `day-10-consultation` | **manual only** (not verified) | Beratungs-Reminder ~Tag 10. Bookings are no longer tracked (Google booking pages), so it reaches people who already booked — once each. |
+| `course-launch` | **manual only** (not verified) | Kurs-Start-Erinnerung 7 + 1 Tag vorher |
+| `masterclass-conversion` | **manual only** (not verified) | Freigegebene Conversion-Sequenz |
+| `masterclass-expiry` | **manual only** (not verified) | 7-Tage-Reminder + **Downgrade** abgelaufener Masterclass-Kunden |
+| `event-reminders` | **manual only** (not verified) | 24h/1h-Event-Reminder; braucht 15-min-Takt (±15 min Fenster) — GitHub-Schedules können Stunden zu spät sein |
+
+"Manual only" = in the workflow's job list, not scheduled. Before scheduling one,
+check whether cron-job.org ran it: if it never ran, the first run sends the
+whole backlog (or downgrades every expired masterclass client at once).
 
 ---
 
@@ -103,10 +107,10 @@ Sequence ausklinken. Frontend: `/profile` → Email-Settings (TODO future).
 
 ```bash
 # Health-Check
-curl https://leader-os.de/api/lifecycle/status
+curl https://leaderos.de/api/lifecycle/status
 
 # Manuelle Trigger (testweise, mit Secret-Header)
-curl -X POST https://leader-os.de/api/cron/video-drip \
+curl -X POST https://leaderos.de/api/cron/video-drip \
   -H "X-Cron-Secret: <SECRET>"
 ```
 

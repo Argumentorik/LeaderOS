@@ -109,7 +109,7 @@ export const PaywallModal = ({ onClose, creditsUsed = 10, isSoftPause = false })
               </button>
             </div>
 
-            {/* Secondary CTAs · pricing details + cal.com */}
+            {/* Secondary CTAs · pricing details + booking page */}
             <div className="flex gap-2 pt-1">
               <button
                 onClick={() => setShowPricing(true)}

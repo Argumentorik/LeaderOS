@@ -1,5 +1,5 @@
 /**
- * BookConsultationButton · Sexy, prefilled Cal.com booking trigger.
+ * BookConsultationButton · booking trigger (Google appointment page, new tab).
  *
  * Improvements (Iter 92.2):
  *   - PREFILL via AuthContext: name + email auto-passed to Cal so the user
@@ -12,16 +12,12 @@
  *
  * Pair with `<BookingTeaserCard />` for landing-section conversion blocks.
  */
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Calendar, ArrowRight, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
-import { useAuth } from '../../contexts/AuthContext';
 import { useConsultationGate, CONSULTATION_GATE_DAYS } from '../../hooks/useConsultationGate';
-
-const CAL_LINK = 'leaderos/beratung';
-const CAL_URL = `https://cal.com/${CAL_LINK}`;
-const CAL_NAMESPACE = 'beratung';
+import { BERATUNG_URL, openBookingPage } from '../../lib/calendly';
 
 /**
  * Hook returning a memoised `openBooking()` function. The user's name + email
@@ -32,16 +28,7 @@ const CAL_NAMESPACE = 'beratung';
  * Cal.com — user gets pushed back into the product to explore first.
  */
 export const useBookConsultation = () => {
-  const { user } = useAuth();
   const gate = useConsultationGate();
-
-  const prefill = useMemo(() => {
-    if (!user?.email) return undefined;
-    return {
-      name: user.name || user.email.split('@')[0],
-      email: user.email,
-    };
-  }, [user]);
 
   return useCallback(() => {
     if (!gate.ready) {
@@ -54,27 +41,8 @@ export const useBookConsultation = () => {
       );
       return;
     }
-    const cal = typeof window !== 'undefined' ? window.Cal?.ns?.[CAL_NAMESPACE] : null;
-    if (cal) {
-      try {
-        cal('modal', {
-          calLink: CAL_LINK,
-          config: {
-            layout: 'month_view',
-            theme: 'dark',
-            ...(prefill ? { name: prefill.name, email: prefill.email } : {}),
-          },
-        });
-        return;
-      } catch (e) {
-        // fall through to canonical URL · never strand the user
-      }
-    }
-    const tabUrl = prefill
-      ? `${CAL_URL}?email=${encodeURIComponent(prefill.email)}&name=${encodeURIComponent(prefill.name)}`
-      : CAL_URL;
-    window.open(tabUrl, '_blank', 'noopener,noreferrer');
-  }, [prefill, gate.ready, gate.daysUntilReady]);
+    openBookingPage(BERATUNG_URL);
+  }, [gate.ready, gate.daysUntilReady]);
 };
 
 export const BookConsultationButton = ({

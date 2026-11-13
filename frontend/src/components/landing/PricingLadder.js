@@ -1,4 +1,5 @@
 import { useGsapScrollIn } from './motion/useGsapScrollIn';
+import { BERATUNG_URL } from '../../lib/calendly';
 
 /**
  * PricingLadder · Sprint → Plus-Plus → Mentoring → AI Ownership.
@@ -152,7 +153,7 @@ const TIERS = [
       'SSO + Audit-Logs + Compliance-Reports',
     ],
     cta: 'Erstgespräch buchen',
-    href: 'https://cal.com/leaderos/beratung',
+    href: BERATUNG_URL,
     accent: false,
     dark: true,
     badge: 'AI OWNERSHIP',

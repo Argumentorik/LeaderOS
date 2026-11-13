@@ -33,7 +33,7 @@ on:
           - webinar-followup
 
 env:
-  BACKEND_URL: ${{ vars.BACKEND_URL || 'https://leader-os.de' }}
+  BACKEND_URL: ${{ vars.BACKEND_URL || 'https://leaderos.de' }}
 
 jobs:
   run:

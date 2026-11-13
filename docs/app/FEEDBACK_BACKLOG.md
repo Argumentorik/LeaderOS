@@ -146,7 +146,7 @@ erklärt nicht ausreichend".
 - [ ] **KI-Aufgaben generieren funktioniert nicht** (Elias, Julia)
 - [ ] **Termin/Beratungsgespräch nicht buchbar** (Selina, Dominik) — Button
       meldet „noch nicht verfügbar"; Dominik zusätzlich: falsche
-      Farbhinterlegung beim 15-Min-Strategiegespräch-Button
+      Farbhinterlegung beim 30-Min-Strategiegespräch-Button
 - [ ] **Ergebnisse der Leadership-Diagnose werden nicht angezeigt** (Dominik)
 - [ ] **Event doppelt in der Liste** (Selina) — ✅ plausible Ursache
       gefunden: `backend/routes/events.py` seedet mit `insert_one` ohne

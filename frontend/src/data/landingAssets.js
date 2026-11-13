@@ -42,7 +42,7 @@ export const LANDING_META = {
   bib: 'BIB · 0001',
   cta: {
     // Funnel (preferred order): (1) Beratungsgespräch · the consultative
-    // conversion we lead with · scrolls to the cal.com booking section.
+    // conversion we lead with · scrolls to the booking page section.
     // (2) Leader-Check · the free 10-min diagnose on leadercheck.de, the
     // low-friction lead-magnet at the top of the funnel. (3) leaderos.de ·
     // the app itself · 14 Tage kostenlos for visitors who want to start

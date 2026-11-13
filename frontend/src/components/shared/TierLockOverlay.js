@@ -3,6 +3,7 @@ import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { PricingModal } from './PricingModal';
+import { BERATUNG_URL, openBookingPage } from '../../lib/calendly';
 
 const FEATURE_LABELS = {
   video_analysis: {
@@ -138,13 +139,7 @@ export const TierLockOverlay = ({
           </Button>
           <div className="flex gap-2">
             <button
-              onClick={() => {
-                if (typeof window !== 'undefined' && window.Cal?.ns?.beratung) {
-                  window.Cal.ns.beratung('modal', { calLink: 'leaderos/beratung' });
-                } else {
-                  window.open('https://cal.com/leaderos/beratung', '_blank', 'noopener,noreferrer');
-                }
-              }}
+              onClick={() => openBookingPage(BERATUNG_URL)}
               className="flex-1 flex items-center justify-center gap-1.5 text-[11px] font-semibold text-white/50 hover:text-white/80 py-2 transition-colors"
               data-testid="book-call-btn"
             >

@@ -157,13 +157,13 @@ export const AD_SERIES = [
     palette: 'midnight',
     topText: 'LIVE-DEMO\n20 MINUTEN',
     titleText: 'DEIN USE-CASE.\nNICHT UNSERER.',
-    bottomText: 'CAL.COM/LEADEROS/DEMO',
+    bottomText: 'LEADER-OS.DE',
     cta: 'TERMIN BUCHEN',
     photo: '/wlad/wlad-portrait.jpg',
     photoFit: 'cover',
     caption:
       'Keine Slide-Deck-Show. 20 Min live, deine Frage zuerst, das ' +
-      'Tool danach. cal.com/leaderos/demo',
+      'Tool danach. leader-os.de',
   },
 
   // ─── E · KI-Native Hooks ────────────────────────────────────────
@@ -247,13 +247,13 @@ export const AD_SERIES = [
     palette: 'paper',
     topText: '30 MINUTEN.\nKEIN PITCH.',
     titleText: 'DEIN FALL.\nUNSER PLAN.',
-    bottomText: 'CAL.COM/LEADEROS/BERATUNG',
+    bottomText: 'LEADER-OS.DE',
     cta: 'TERMIN BUCHEN',
     photo: '/wlad/wlad-portrait.jpg',
     photoFit: 'cover',
     caption:
       'Du beschreibst die Situation, wir setzen einen klaren nächsten ' +
-      'Schritt. Keine Verkaufs-Show. cal.com/leaderos/beratung',
+      'Schritt. Keine Verkaufs-Show. leader-os.de',
   },
   {
     id: 'AD-G-02',

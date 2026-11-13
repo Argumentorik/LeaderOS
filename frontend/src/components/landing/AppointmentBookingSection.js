@@ -26,6 +26,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
 import { WLAD_AVATAR, WLAD_AVATAR_FALLBACKS, withFallback } from '../../lib/brandAssets';
+import { BERATUNG_URL, DEMO_URL, openBookingPage } from '../../lib/calendly';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Slot generation · stable pseudo-availability based on date
@@ -137,7 +138,7 @@ const SlotPreview = ({ availability, onPickSlot }) => (
 
     <div className="mt-6 pt-4 border-t border-foreground/15 text-center">
       <a
-        href="https://cal.com/leaderos/beratung"
+        href={BERATUNG_URL}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => {
@@ -219,14 +220,8 @@ export const AppointmentBookingSection = () => {
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.capture('beratung_slot_pick', { day: day.ddmm, time: slot.time });
     }
-    // Cal.com supports ?date=YYYY-MM-DD&month=YYYY-MM to deep-link.
-    const iso = `${day.date.getFullYear()}-${String(day.date.getMonth() + 1).padStart(2, '0')}-${String(day.date.getDate()).padStart(2, '0')}`;
-    const month = iso.slice(0, 7);
-    window.open(
-      `https://cal.com/leaderos/beratung?date=${iso}&month=${month}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
+    // Google booking pages take no date parameter: open the page, the user picks there.
+    openBookingPage(BERATUNG_URL);
   };
 
   return (
@@ -350,7 +345,7 @@ export const AppointmentBookingSection = () => {
             </p>
           </div>
           <a
-            href="https://cal.com/leaderos/demo"
+            href={DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
             data-testid="beratung-demo-cta"

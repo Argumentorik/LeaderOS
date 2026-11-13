@@ -27,6 +27,10 @@ from services import get_current_user
 
 router = APIRouter(prefix="/api/support", tags=["support"])
 
+# Google Calendar appointment schedule (same link as frontend/src/lib/calendly.js BERATUNG_URL).
+# TODO(booking): paste the real calendar.app.google link.
+BERATUNG_URL = "https://calendly.com/simonmeindl/wlad-jachtchenko-analysegesprach-klon"
+
 SUPPORT_SYSTEM_PROMPT = """Du bist WladHelp — der Support-Agent für Leader-OS, die KI-native Leadership-Plattform basierend auf Wlad Jachtchenkos Argumentorik-Methoden.
 
 ROLLE: Du beantwortest Support-Fragen in 2-4 Sätzen, freundlich aber prägnant. Du bist KEIN Coach (dafür gibt es WLAD AI/Chat). Du bist Retention + Activation Agent.
@@ -39,11 +43,11 @@ KERN-MISSION:
 WAS DU WEISST:
 • Tiers: Free (limitiert) · Leadership OS €997/Jahr · OS PLUS €4.797/Jahr (mit 12 Einzelcoachings durch Wlads Expertenteam)
 • Bezahlung: Stripe, einmalig oder Rate (2x oder 12x). 30-Tage-Geld-zurück-Garantie EXISTIERT, aber NICHT proaktiv erwähnen.
-• Features: WLAD AI Chat 24/7 · 30-Tage-Programm mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · Cal.com Coaching · Donnerstag-Cohort-Events · Community
+• Features: WLAD AI Chat 24/7 · 30-Tage-Programm mit 16 Missionen · Video-Analyse · Playbooks · Simulationen · 1:1 Coaching · Donnerstag-Cohort-Events · Community
 • AI-Mastery Track: 16 strukturierte Missionen die zeigen wie man GPT/Claude/Gemini als Leadership-Multiplier nutzt
 • Support-Email: support@leaderos.de (Leader-OS · diese App)
 • Support-Email Argumentorik (Akademie, Seminare, Kurse): support@argumentorik.com — info@argumentorik.com ist NUR die allgemeine Adresse, NIE die Support-Adresse
-• Strategiegespräch buchen: cal.com/leaderos/beratung (15 Min · 1:1 · unverbindlich)
+• Strategiegespräch buchen: {BERATUNG_URL} (30 Min · 1:1 · unverbindlich)
 
 WIE DU ANTWORTEST:
 • Direkt, ohne Floskeln, max 4 Sätze
@@ -64,7 +68,7 @@ NIEMALS:
 POSITIVES FRAMING ist Pflicht:
 • Statt „Refund machst du so:" → „Lass uns kurz reden — oft gibt's einen besseren Weg"
 • Statt „Wir können das nicht" → „Hier ist die schnellste Lösung"
-"""
+""".replace("{BERATUNG_URL}", BERATUNG_URL)
 
 
 class SupportAskIn(BaseModel):
@@ -95,20 +99,20 @@ FAQ_SHORTCUTS = [
         "answer": "Schreib uns direkt an support@leaderos.de mit deinem Anliegen — wir melden uns innerhalb 24h persönlich. Häufig finden wir eine bessere Lösung als Cancel (z.B. Pause, Tier-Wechsel, oder eine kurze Coaching-Session die dich weiterbringt).",
         "actions": [
             {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
-            {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
+            {"label": "30-Min Gespräch", "type": "external", "value": BERATUNG_URL},
         ],
     },
     {
         "triggers": ["coaching buchen", "strategie", "termin buch", "book a call", "appointment", "beratung"],
-        "answer": "Buch dein 15-Min Strategiegespräch auf cal.com/leaderos/beratung. 1:1 mit unserem Argumentorik-Berater, unverbindlich.",
-        "actions": [{"label": "Termin buchen", "type": "external", "value": "https://cal.com/leaderos/beratung"}],
+        "answer": "Buch dein 30-Min Strategiegespräch hier: " + BERATUNG_URL + ". 1:1 mit unserem Argumentorik-Berater, unverbindlich.",
+        "actions": [{"label": "Termin buchen", "type": "external", "value": BERATUNG_URL}],
     },
     {
         "triggers": ["upgrade", "plus kaufen", "leadership os holen", "tier wechsel", "upgrade auf plus", "wie kaufe ich"],
         "answer": "Upgrade läuft über die /coaching Page — wähle dein Paket → Stripe-Checkout. OS PLUS gibt dir 12× 1:1 Coaching mit Wlads Expertenteam plus alle 35 Kurse + unbegrenzte AI-Sessions.",
         "actions": [
             {"label": "Zu /coaching", "type": "internal", "value": "/coaching"},
-            {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
+            {"label": "30-Min Gespräch", "type": "external", "value": BERATUNG_URL},
         ],
     },
     {
@@ -142,7 +146,7 @@ FAQ_SHORTCUTS = [
         "answer": "Leader-OS macht aus dir einen AI-fluenten Leader: ein 30-Tage-Programm, 16 Missionen, 24/7 WLAD AI Chat, Video-Analyse deiner Pitches, monatliche Updates. Mit OS PLUS dazu 12× 1:1 Coaching mit Wlads Expertenteam — €4.447/Jahr, 30-Tage Geld-zurück.",
         "actions": [
             {"label": "Pakete ansehen", "type": "internal", "value": "/coaching"},
-            {"label": "15-Min Gespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
+            {"label": "30-Min Gespräch", "type": "external", "value": BERATUNG_URL},
         ],
     },
 ]
@@ -187,18 +191,18 @@ async def support_ask(data: SupportAskIn, request: Request):
                 raise RuntimeError("Empty LLM response")
             # Always offer book-a-call + email as fallback actions
             suggested = [
-                {"label": "15 Min Strategiegespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
+                {"label": "30 Min Strategiegespräch", "type": "external", "value": BERATUNG_URL},
                 {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
             ]
             source = "llm"
         except Exception as e:
             logger.error(f"WladHelp LLM error: {e}")
             answer = ("Ich konnte deine Frage gerade nicht beantworten. "
-                      "Schreib uns kurz auf support@leaderos.de oder buch ein 15-Min Strategiegespräch — "
+                      "Schreib uns kurz auf support@leaderos.de oder buch ein 30-Min Strategiegespräch — "
                       "wir melden uns innerhalb von 24h.")
             suggested = [
                 {"label": "Email an Support", "type": "mailto", "value": "support@leaderos.de"},
-                {"label": "15 Min Strategiegespräch", "type": "external", "value": "https://cal.com/leaderos/beratung"},
+                {"label": "30 Min Strategiegespräch", "type": "external", "value": BERATUNG_URL},
             ]
             source = "fallback"
 

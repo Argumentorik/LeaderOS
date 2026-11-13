@@ -1,20 +1,20 @@
 /**
- * Strategy-Call Helper · Cal.com (NICHT Calendly).
+ * Booking links · Google Calendar appointment schedules.
  *
- * Iter 92.9 (Mert): wir haben Calendly komplett verlassen. Alle "Termin
- * buchen" CTAs landen jetzt auf cal.com/leaderos/beratung · das gleiche
- * 15-Min Strategiegespräch (unverbindlich, 1:1 mit Wlads Team), aber jetzt
- * in unserer eigenen Pipeline.
+ * Every "Termin buchen" CTA opens one of these booking pages in a new tab.
+ * Google's pages take no prefill or date parameters and send no webhook,
+ * so the app does not learn about bookings (users.consultation_booked
+ * stays unset).
  *
  * Public-utility-style export (NICHT hook-based) damit auch nicht-React
- * Helpers (z.B. analytics events, email-callbacks) sie aufrufen können.
- * Wenn du innerhalb React bist, bevorzuge `useBookConsultation()` aus
- * `components/brand/BookConsultationButton.js` · das öffnet das Cal-Modal
- * mit AuthContext-Prefill direkt in der App, kein neuer Tab nötig.
+ * Helpers sie aufrufen können. Innerhalb React: `useBookConsultation()` aus
+ * `components/brand/BookConsultationButton.js` (gleiche Seite, mit Gate-Toast).
  */
-const CAL_LINK = 'leaderos/beratung';
-const CAL_NAMESPACE = 'beratung';
-const CAL_URL = `https://cal.com/${CAL_LINK}`;
+export const BERATUNG_URL = 'https://calendly.com/simonmeindl/wlad-jachtchenko-analysegesprach-klon';
+export const DEMO_URL = 'https://calendly.com/simonmeindl/wlad-jachtchenko-analysegesprach-klon';
+
+export const openBookingPage = (url = BERATUNG_URL) =>
+  window.open(url, '_blank', 'noopener,noreferrer');
 
 const CONSULTATION_GATE_DAYS = 10;
 
@@ -58,35 +58,7 @@ const _softInform = (msg, description) => {
   } catch { /* running in non-UI context — silent noop */ }
 };
 
-const tryOpenModal = (prefill) => {
-  if (typeof window === 'undefined') return false;
-  const cal = window.Cal?.ns?.[CAL_NAMESPACE];
-  if (!cal) return false;
-  try {
-    cal('modal', {
-      calLink: CAL_LINK,
-      config: {
-        layout: 'month_view',
-        theme: 'dark',
-        ...(prefill ? { name: prefill.name, email: prefill.email } : {}),
-      },
-    });
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const buildTabUrl = (utmSource, prefill) => {
-  const params = new URLSearchParams();
-  if (utmSource) params.set('utm_source', utmSource);
-  if (prefill?.email) params.set('email', prefill.email);
-  if (prefill?.name) params.set('name', prefill.name);
-  const qs = params.toString();
-  return qs ? `${CAL_URL}?${qs}` : CAL_URL;
-};
-
-export const openStrategyCall = (utmSource = 'wladbot', prefill = undefined) => {
+export const openStrategyCall = () => {
   // Iter 124.5 (Wlad Godmode): 10-Tage-Cooldown vor Berater-Anrufen.
   if (!isConsultationReady()) {
     const days = daysUntilConsultation();
@@ -96,13 +68,11 @@ export const openStrategyCall = (utmSource = 'wladbot', prefill = undefined) => 
     );
     return;
   }
-  if (tryOpenModal(prefill)) return;
-  window.open(buildTabUrl(utmSource, prefill), '_blank', 'noopener,noreferrer');
+  openBookingPage(BERATUNG_URL);
 };
 
-// Backwards-compat: same Cal-link for head-coach paths.
-export const openHeadCoachCall = (utmSource = 'wladbot', prefill = undefined) =>
-  openStrategyCall(utmSource, prefill);
+// Backwards-compat: same booking page for head-coach paths.
+export const openHeadCoachCall = () => openStrategyCall();
 
-export const STRATEGY_CALL_URL = CAL_URL;
-export const HEAD_COACH_URL = CAL_URL;
+export const STRATEGY_CALL_URL = BERATUNG_URL;
+export const HEAD_COACH_URL = BERATUNG_URL;

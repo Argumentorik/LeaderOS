@@ -1,13 +1,32 @@
 name: cron-jobs
 
-# Replaces docs/archive/SHIP_CHECKLIST.md §2 "Cron-Jobs (täglich extern triggern)":
-#   - installments-due → daily 09:00 Europe/Berlin (≈ 07:00–08:00 UTC depending on DST)
-#   - monthly-scorecard → 1st of month, 09:00 Europe/Berlin
-# Endpoints are public idempotent POSTs that no-op when there's nothing due.
+# Calls the LeaderOS cron endpoints (POST /api/cron/<job>, header X-Cron-Secret).
+# Every endpoint is idempotent (email_log / per-lead flags), so a re-run or a
+# second scheduler calling the same job never sends twice.
+#
+# Scheduled workflows only run from the default branch (mvpcode).
+#
+# BACKEND_URL defaults to https://leaderos.de. Today that host is Emergent; after
+# the DNS switch it is Railway — no change needed here at cutover.
+#
+# Pause switch: set the repo variable CRON_PAUSED=true (Settings → Variables)
+# to skip all scheduled runs, e.g. during the cutover maintenance window.
+# Manual runs (workflow_dispatch) ignore it.
+#
+# Not scheduled here on purpose:
+#   drip-sequence        no-op since Iter 186 (merged into challenge-daily)
+#   challenge-daily      runs inside the app (services_challenge_mailer.challenge_mail_loop)
+#   webinar-*            webinar-cron.yml (October webinar, fixed dates)
+#   event-reminders      needs a reliable 15-min cadence (±15 min window);
+#                        GitHub schedules can be hours late
+# Manual-only until checked against the old cron-job.org setup (first run may
+# send a backlog of mails or downgrade expired masterclass clients):
+#   day-10-consultation, course-launch, masterclass-conversion, masterclass-expiry,
+#   event-reminders
 
 on:
   schedule:
-    - cron: '0 7 * * *'     # 09:00 Berlin (CEST) / 08:00 Berlin (CET)
+    - cron: '0 7 * * *'     # daily, 08:00/09:00 Berlin
     - cron: '0 7 1 * *'     # 1st of month, same window
   workflow_dispatch:
     inputs:
@@ -18,31 +37,57 @@ on:
         type: choice
         options:
           - installments-due
-          - monthly-scorecard
           - free-video-drip
           - lead-nurture
           - license-nurture
+          - trial-reminders
+          - video-drip
+          - monthly-scorecard
+          - day-10-consultation
+          - course-launch
+          - masterclass-conversion
+          - masterclass-expiry
+          - event-reminders
+          - challenge-daily
 
 env:
-  BACKEND_URL: ${{ vars.BACKEND_URL || 'https://leader-os.de' }}
+  BACKEND_URL: ${{ vars.BACKEND_URL || 'https://leaderos.de' }}
 
 jobs:
-  installments-due:
-    if: |
-      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'installments-due')
+  pick:
+    if: github.event_name == 'workflow_dispatch' || vars.CRON_PAUSED != 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      jobs: ${{ steps.pick.outputs.jobs }}
+    steps:
+      - id: pick
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo 'jobs=["${{ github.event.inputs.job }}"]' >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "0 7 1 * *" ]; then
+            echo 'jobs=["monthly-scorecard"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'jobs=["installments-due","free-video-drip","lead-nurture","license-nurture","trial-reminders","video-drip"]' >> "$GITHUB_OUTPUT"
+          fi
+
+  run:
+    needs: pick
     runs-on: ubuntu-latest
     permissions:
       issues: write
+    strategy:
+      fail-fast: false
+      matrix:
+        job: ${{ fromJson(needs.pick.outputs.jobs) }}
     steps:
-      - name: POST /api/cron/installments-due
-        id: post
+      - name: POST /api/cron/${{ matrix.job }}
         env:
           CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          JOB: ${{ matrix.job }}
         run: |
           set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-               -X POST "${BACKEND_URL%/}/api/cron/installments-due" \
+          curl --fail-with-body --silent --show-error --max-time 300 \
+               -X POST "${BACKEND_URL%/}/api/cron/${JOB}" \
                -H 'Accept: application/json' \
                ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
 
@@ -55,150 +100,7 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `cron: installments-due failed (${new Date().toISOString().slice(0,10)})`,
+              title: `cron: ${{ matrix.job }} failed (${new Date().toISOString().slice(0,10)})`,
               labels: ['cron-failure', 'priority:high'],
-              body: `Scheduled run failed. Backend may be down, the secret may be wrong, or the endpoint regressed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
-            });
-
-  free-video-drip:
-    # Daily · sends the next of the 4 free CTA videos (Day 1-4) to new signups.
-    # Idempotent: each user gets each day exactly once; slots with no video are skipped.
-    if: |
-      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'free-video-drip')
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: POST /api/cron/free-video-drip
-        id: post
-        env:
-          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-               -X POST "${BACKEND_URL%/}/api/cron/free-video-drip" \
-               -H 'Accept: application/json' \
-               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
-
-      - name: Open issue on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `cron: free-video-drip failed (${new Date().toISOString().slice(0,10)})`,
-              labels: ['cron-failure', 'priority:high'],
-              body: `The daily free-video drip failed — new signups will NOT receive their next free video until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
-            });
-
-  lead-nurture:
-    # Daily · sends the next of the 7 lead-nurture mails (Day 0-12 journey) to
-    # landing-page email captures who haven't registered yet.
-    # Idempotent: each lead gets each step exactly once (nurture_steps_sent);
-    # unsubscribed + converted leads are skipped.
-    if: |
-      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lead-nurture')
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: POST /api/cron/lead-nurture
-        id: post
-        env:
-          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-               -X POST "${BACKEND_URL%/}/api/cron/lead-nurture" \
-               -H 'Accept: application/json' \
-               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
-
-      - name: Open issue on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `cron: lead-nurture failed (${new Date().toISOString().slice(0,10)})`,
-              labels: ['cron-failure', 'priority:high'],
-              body: `The daily lead-nurture drip failed — new leads will NOT receive their next nurture mail until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
-            });
-
-  license-nurture:
-    # Daily · sends the next of the 5 license-activation mails (Day 0-7
-    # journey, /frameworks leads in db.license_leads) — step 1 is normally
-    # sent instantly at capture time, this catches up backlog + steps 2-5.
-    # Idempotent: each lead gets each step exactly once (license_steps_sent);
-    # unsubscribed + converted (real account exists) leads are skipped.
-    if: |
-      (github.event_name == 'schedule' && github.event.schedule == '0 7 * * *') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'license-nurture')
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: POST /api/cron/license-nurture
-        id: post
-        env:
-          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-               -X POST "${BACKEND_URL%/}/api/cron/license-nurture" \
-               -H 'Accept: application/json' \
-               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
-
-      - name: Open issue on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `cron: license-nurture failed (${new Date().toISOString().slice(0,10)})`,
-              labels: ['cron-failure', 'priority:high'],
-              body: `The daily license-activation drip failed — /frameworks leads will NOT receive their next nurture mail until this is fixed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
-            });
-
-  monthly-scorecard:
-    if: |
-      (github.event_name == 'schedule' && github.event.schedule == '0 7 1 * *') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'monthly-scorecard')
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: POST /api/cron/monthly-scorecard
-        id: post
-        env:
-          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-               -X POST "${BACKEND_URL%/}/api/cron/monthly-scorecard" \
-               -H 'Accept: application/json' \
-               ${CRON_SHARED_SECRET:+-H "X-Cron-Secret: ${CRON_SHARED_SECRET}"}
-
-      - name: Open issue on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `cron: monthly-scorecard failed (${new Date().toISOString().slice(0,7)})`,
-              labels: ['cron-failure', 'priority:high'],
-              body: `Monthly scorecard run failed. Customers who should receive their scorecard email this month are NOT going to until this is fixed and re-triggered.\n\nRun: ${runUrl}\n\nTo manually re-trigger after the fix:\n\`\`\`\ngh workflow run cron-jobs --field job=monthly-scorecard\n\`\`\`\n\nThis issue was opened automatically.`
+              body: `Scheduled run of /api/cron/${{ matrix.job }} failed. Backend may be down, the secret may be wrong, or the endpoint regressed.\n\nRun: ${runUrl}\n\nLikely first check: \`curl -sI ${{ env.BACKEND_URL }}/api/health\`.\n\nThis issue was opened automatically; close it once the next scheduled run is green.`
             });

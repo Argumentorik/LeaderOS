@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { BERATUNG_URL, DEMO_URL } from '../../lib/calendly';
 
 /**
  * LandingChatPod · editorial WLAD AI-Mini, eingebettet als Funnel.
@@ -16,7 +17,7 @@ import { AnimatePresence, motion } from 'framer-motion';
  *                 Erkundet Rolle, größte Leadership-Baustelle,
  *                 Zeit-Horizont, Team-Größe. Berechnet FIT-Score
  *                 und schlägt vor: Diagnose (low fit) → leadercheck.de
- *                 · Demo (mid) → cal.com · Beratung (high) → cal.com.
+ *                 · Demo (mid) → Google booking page · Beratung (high) → Google booking page.
  *
  *   'readiness' · fires on leader-check.de (Vercel marketing landing).
  *                 Erkundet KI-Nutzung, Argumentations-Sicherheit,
@@ -94,8 +95,8 @@ const FLOWS = {
         body:
           'Bei deinem Setup macht es wenig Sinn, mit der Diagnose anzufangen · ' +
           'wir setzen direkt mit einer 30-Min-Beratung an deinem konkreten Fall an.',
-        primary: { label: 'Beratung buchen · 30 Min', href: 'https://cal.com/leaderos/beratung' },
-        secondary: { label: 'Lieber doch Demo · 20 Min', href: 'https://cal.com/leaderos/demo' },
+        primary: { label: 'Beratung buchen · 30 Min', href: BERATUNG_URL },
+        secondary: { label: 'Lieber doch Demo · 20 Min', href: DEMO_URL },
       },
       {
         min: 7,
@@ -103,7 +104,7 @@ const FLOWS = {
         body:
           'Du kennst deine Baustelle · schau dir LeaderOS am eigenen Use-Case an. ' +
           '20 Minuten, Live, mit dem Team.',
-        primary: { label: 'Demo buchen · 20 Min', href: 'https://cal.com/leaderos/demo' },
+        primary: { label: 'Demo buchen · 20 Min', href: DEMO_URL },
         secondary: { label: 'Erst Diagnose machen', href: 'https://leadercheck.de' },
       },
       {
@@ -113,7 +114,7 @@ const FLOWS = {
           'Genau für deinen Punkt gemacht: 10 Minuten, 30 Fragen, sofort dein Score und ' +
           'eine konkrete Empfehlung. Kostenlos, ohne Kreditkarte.',
         primary: { label: 'Diagnose starten · 10 Min', href: 'https://leadercheck.de' },
-        secondary: { label: 'Trotzdem Demo · 20 Min', href: 'https://cal.com/leaderos/demo' },
+        secondary: { label: 'Trotzdem Demo · 20 Min', href: DEMO_URL },
       },
     ],
   },
@@ -166,7 +167,7 @@ const FLOWS = {
           'Du hast Basics drin. Die 30-Fragen-Diagnose zeigt dir die feinen ' +
           'Lücken · und LeaderOS schließt sie systematisch in 30 Tagen.',
         primary: { label: 'Volle Diagnose · 10 Min', href: 'https://leadercheck.de' },
-        secondary: { label: 'Direkt Beratung · 30 Min', href: 'https://cal.com/leaderos/beratung' },
+        secondary: { label: 'Direkt Beratung · 30 Min', href: BERATUNG_URL },
       },
       {
         min: 7,

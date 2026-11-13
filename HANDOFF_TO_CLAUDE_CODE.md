@@ -432,7 +432,7 @@ Bitte:
 4. **GSAP** muss in `gsap.context(...)` + try-catch + null-ref-guards (siehe Iter 92.11)
 5. **lazyWithRetry** für alle code-split Routes (keine pure `lazy()` mehr in App.js)
 6. **Tier-aware Pricing**: PricingModal versteckt schon gekaufte Pakete automatisch
-7. **"Free/Free"-Wording** ist verboten in der UI — "Strategiegespräch · 15 Min · Unverbindlich"
+7. **"Free/Free"-Wording** ist verboten in der UI — "Strategiegespräch · 30 Min · Unverbindlich"
 8. **RAG threshold 0.25** (nicht 0.6!) — sonst keine Wlad-Context im Output
 9. **Backend reloads** automatisch bei Code-changes (uvicorn --reload), nur bei .env-Änderung supervisor-restart nötig
 10. **MongoDB Indexes** werden bei jedem Startup idempotent erstellt — keine manuelle Migration nötig

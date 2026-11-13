@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { PlusCircleCTA } from './PlusCircleCTA';
+import { DEMO_URL } from '../../lib/calendly';
 
 /**
  * AppPreviewSection · "Was siehst du, wenn du drinnen bist?".
@@ -250,7 +251,7 @@ export const AppPreviewSection = () => (
           dein Use-Case.
         </p>
         <PlusCircleCTA
-          href="https://cal.com/leaderos/demo"
+          href={DEMO_URL}
           testId="app-preview-demo"
           halo={false}
         >
