@@ -122,7 +122,7 @@ export default defineRailway((ctx) => {
     replicas: { [REGION]: 1 },
     networking: { privateNetworkEndpoint: "leaderos-web" },
     env: {
-      BACKEND_URL: "http://leaderos.railway.internal:8001",
+      BACKEND_URL: "http://${{LeaderOS.RAILWAY_PRIVATE_DOMAIN}}:8001",
       REACT_APP_SENTRY_ENV: staging ? "staging" : "production",
       ...prodOnlyWebIds,
     },
@@ -156,7 +156,7 @@ export default defineRailway((ctx) => {
       ANTHROPIC_API_KEY: "${{LeaderOS.ANTHROPIC_API_KEY}}",
       // Paid checkout -> LeaderOS account + tier (services/leaderos_sync.py),
       // over the private network with LeaderOS's inbound sync secret.
-      LEADEROS_SYNC_URL: "http://leaderos.railway.internal:8001",
+      LEADEROS_SYNC_URL: "http://${{LeaderOS.RAILWAY_PRIVATE_DOMAIN}}:8001",
       LEADEROS_SYNC_SECRET: "${{LeaderOS.INBOUND_SYNC_SECRET}}",
       // Staging only: payment success button = one-time LeaderOS login link
       // (no emails on staging). LeaderOS refuses it outside ENV=staging anyway.
@@ -182,7 +182,7 @@ export default defineRailway((ctx) => {
     replicas: { [REGION]: 1 },
     networking: { privateNetworkEndpoint: "leadercheck-web" },
     env: {
-      BACKEND_URL: "http://leadercheck.railway.internal:8001",
+      BACKEND_URL: "http://${{LeaderCheck.RAILWAY_PRIVATE_DOMAIN}}:8001",
       // Payment success / key activation send buyers here (src/config.js).
       REACT_APP_LEADER_OS_URL: staging ? "https://leaderos-web-staging.up.railway.app" : "https://leaderos.de",
       // Same PostHog project as LeaderOS (identity = email). Production only.
