@@ -9,7 +9,7 @@
  *
  *   This component parses any plain string and renders detected lists as
  *   premium icon-cards (Tesla/Linear style), while remaining text becomes
- *   clean paragraphs with **bold** + `code` micro-support.
+ *   clean paragraphs with **bold** + *italic* (nested too).
  *
  * Detection rules:
  *   - Lines like "N. xxx" (N=1-99) → ordered list item.
@@ -26,6 +26,7 @@
  */
 
 import { unescapeText } from '../../lib/textClean';
+import { renderInlineMarkdown } from '../../lib/inlineMarkdown';
 
 const ORDERED_LINE_RE = /^\s*(\d{1,2})[.)]\s+(.+)$/;const BULLET_LINE_RE = /^\s*[-•*]\s+(.+)$/;
 
@@ -43,16 +44,8 @@ function splitInlineNumbered(line) {
   return items.length >= 2 ? items : null;
 }
 
-// Render **bold** spans inside a plain string.
-function renderInline(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((p, i) => {
-    if (p.startsWith('**') && p.endsWith('**')) {
-      return <strong key={`b-${i}`} className="font-bold text-foreground">{p.slice(2, -2)}</strong>;
-    }
-    return <span key={`t-${i}`}>{p}</span>;
-  });
-}
+// **bold** / *italic* (also nested) — lib/inlineMarkdown.js.
+const renderInline = (text) => renderInlineMarkdown(text, 'st');
 
 function parseBlocks(text) {
   if (!text || typeof text !== 'string') return [];

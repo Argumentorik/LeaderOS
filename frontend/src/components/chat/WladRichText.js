@@ -4,6 +4,7 @@
  * `backend/services.py` WLAD_HARD_RULES (Rule 7):
  *
  *   **bold**          →  <strong> (lime in dark, ink in light)
+ *   *italic*          →  <em> (also inside bold)
  *   ▸ at line start   →  premium lime-marker bullet
  *   → at line start   →  consequence arrow bullet
  *   » at line start   →  example-script callout (indented, brand-tinted)
@@ -16,30 +17,10 @@
  *
  * Zero external deps · keeps yarn.lock frozen.
  */
+import { renderInlineMarkdown } from '../../lib/inlineMarkdown';
 
-const RE_BOLD = /\*\*([^*]+)\*\*/g;
-
-// Render a single line's inline content (currently: **bold** only).
-const renderInline = (text, baseKey) => {
-  const out = [];
-  let last = 0;
-  let idx = 0;
-  text.replace(RE_BOLD, (match, inner, offset) => {
-    if (offset > last) out.push(text.slice(last, offset));
-    out.push(
-      <strong
-        key={`${baseKey}-b-${idx++}`}
-        className="font-bold text-foreground"
-      >
-        {inner}
-      </strong>
-    );
-    last = offset + match.length;
-    return match;
-  });
-  if (last < text.length) out.push(text.slice(last));
-  return out.length === 1 && typeof out[0] === 'string' ? out[0] : out;
-};
+// **bold** / *italic* (also nested) — lib/inlineMarkdown.js.
+const renderInline = (text, baseKey) => renderInlineMarkdown(text, baseKey);
 
 const Bullet = ({ marker, children }) => {
   // ▸ → premium lime bullet ; → → lime arrow ; everything else → soft dot
